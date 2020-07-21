@@ -68,7 +68,7 @@
 <span class="sourceLineNo">056</span><a id="line.56">    private double expected = 0.5;</a>
 <span class="sourceLineNo">057</span><a id="line.57"></a>
 <span class="sourceLineNo">058</span><a id="line.58">    // These are tied to expected, and must change when it does.</a>
-<span class="sourceLineNo">059</span><a id="line.59">    private double offset = 0.0;</a>
+<span class="sourceLineNo">059</span><a id="line.59">    private double offset;</a>
 <span class="sourceLineNo">060</span><a id="line.60">    private double range = 1.0;</a>
 <span class="sourceLineNo">061</span><a id="line.61">    /**</a>
 <span class="sourceLineNo">062</span><a id="line.62">     * When positive, makes the generator more likely to generate values close to the average (bell curve).</a>
@@ -76,7 +76,7 @@
 <span class="sourceLineNo">064</span><a id="line.64">     * When negative, makes the generator swing more toward extremes rather than gravitate toward the average.</a>
 <span class="sourceLineNo">065</span><a id="line.65">     * Values are typically between -100 and 100, but can go as low as -200 or as high as 200 (stopping there).</a>
 <span class="sourceLineNo">066</span><a id="line.66">     */</a>
-<span class="sourceLineNo">067</span><a id="line.67">    private double centrality = 0.0;</a>
+<span class="sourceLineNo">067</span><a id="line.67">    private double centrality;</a>
 <span class="sourceLineNo">068</span><a id="line.68"></a>
 <span class="sourceLineNo">069</span><a id="line.69"></a>
 <span class="sourceLineNo">070</span><a id="line.70">    // This lets us avoid a conversion to double every time we generate a number.</a>

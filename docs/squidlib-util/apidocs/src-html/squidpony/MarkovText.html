@@ -90,7 +90,7 @@
 <span class="sourceLineNo">078</span><a id="line.78">//        working.add(new IntVLA(links));</a>
 <span class="sourceLineNo">079</span><a id="line.79"></a>
 <span class="sourceLineNo">080</span><a id="line.80">        matcher.setTarget(corpus);</a>
-<span class="sourceLineNo">081</span><a id="line.81">        int current = 0, pair = 0, pre = 0, post;</a>
+<span class="sourceLineNo">081</span><a id="line.81">        int current, pair = 0, pre = 0, post;</a>
 <span class="sourceLineNo">082</span><a id="line.82">        while (matcher.find())</a>
 <span class="sourceLineNo">083</span><a id="line.83">        {</a>
 <span class="sourceLineNo">084</span><a id="line.84">            current = body.addOrIndex(matcher.group());</a>
@@ -246,7 +246,7 @@
 <span class="sourceLineNo">234</span><a id="line.234">     * @return a String generated from the analyzed corpus text's word placement, usually a small sentence</a>
 <span class="sourceLineNo">235</span><a id="line.235">     */</a>
 <span class="sourceLineNo">236</span><a id="line.236">    public String chain(long seed, int maxLength) {</a>
-<span class="sourceLineNo">237</span><a id="line.237">        int before = 0, pair = 0;</a>
+<span class="sourceLineNo">237</span><a id="line.237">        int before, pair = 0;</a>
 <span class="sourceLineNo">238</span><a id="line.238">        boolean later;</a>
 <span class="sourceLineNo">239</span><a id="line.239">        long state;</a>
 <span class="sourceLineNo">240</span><a id="line.240">        StringBuilder sb = new StringBuilder(1000);</a>

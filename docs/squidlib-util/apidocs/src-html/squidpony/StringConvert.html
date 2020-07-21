@@ -174,7 +174,7 @@
 <span class="sourceLineNo">162</span><a id="line.162">    public static final CrossHash.IHasher spaceIgnoringHasher = new CrossHash.IHasher() {</a>
 <span class="sourceLineNo">163</span><a id="line.163">        @Override</a>
 <span class="sourceLineNo">164</span><a id="line.164">        public int hash(Object data) {</a>
-<span class="sourceLineNo">165</span><a id="line.165">            if (data == null || !(data instanceof StringConvert || data instanceof CharSequence))</a>
+<span class="sourceLineNo">165</span><a id="line.165">            if (!(data instanceof StringConvert || data instanceof CharSequence))</a>
 <span class="sourceLineNo">166</span><a id="line.166">                return 0;</a>
 <span class="sourceLineNo">167</span><a id="line.167">            final CharSequence s;</a>
 <span class="sourceLineNo">168</span><a id="line.168">            if(data instanceof StringConvert) s = ((StringConvert) data).getName();</a>

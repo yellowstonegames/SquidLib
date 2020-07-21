@@ -233,8 +233,8 @@
 <span class="sourceLineNo">221</span><a id="line.221">    }</a>
 <span class="sourceLineNo">222</span><a id="line.222"></a>
 <span class="sourceLineNo">223</span><a id="line.223">    /**</a>
-<span class="sourceLineNo">224</span><a id="line.224">     * @param ics</a>
-<span class="sourceLineNo">225</span><a id="line.225">     * @return {@code ics} filtered according to {@link #filter(Object)}. May be</a>
+<span class="sourceLineNo">224</span><a id="line.224">     * @param ics an IColoredString, often produced by {@link GDXMarkup#colorString(CharSequence)}.</a>
+<span class="sourceLineNo">225</span><a id="line.225">     * @return {@code ics} filtered according to {@link #filter(Color)}. May be</a>
 <span class="sourceLineNo">226</span><a id="line.226">     * {@code ics} itself if unchanged.</a>
 <span class="sourceLineNo">227</span><a id="line.227">     */</a>
 <span class="sourceLineNo">228</span><a id="line.228">    @Override</a>
@@ -753,7 +753,7 @@
 <span class="sourceLineNo">741</span><a id="line.741">     */</a>
 <span class="sourceLineNo">742</span><a id="line.742">    public ArrayList&lt;Color&gt; gradient(Color fromColor, Color toColor, int steps, Interpolation interpolation)</a>
 <span class="sourceLineNo">743</span><a id="line.743">    {</a>
-<span class="sourceLineNo">744</span><a id="line.744">        ArrayList&lt;Color&gt; colors = new ArrayList&lt;&gt;((steps &gt; 1) ? steps : 1);</a>
+<span class="sourceLineNo">744</span><a id="line.744">        ArrayList&lt;Color&gt; colors = new ArrayList&lt;&gt;(Math.max(steps, 1));</a>
 <span class="sourceLineNo">745</span><a id="line.745">        colors.add(filter(fromColor));</a>
 <span class="sourceLineNo">746</span><a id="line.746">        if(steps &lt; 2)</a>
 <span class="sourceLineNo">747</span><a id="line.747">            return colors;</a>
@@ -832,7 +832,7 @@
 <span class="sourceLineNo">820</span><a id="line.820">     */</a>
 <span class="sourceLineNo">821</span><a id="line.821">    public ArrayList&lt;Color&gt; rainbow(float saturation, float value, float opacity, int steps)</a>
 <span class="sourceLineNo">822</span><a id="line.822">    {</a>
-<span class="sourceLineNo">823</span><a id="line.823">        steps = (steps &gt; 1) ? steps : 1;</a>
+<span class="sourceLineNo">823</span><a id="line.823">        steps = Math.max(steps, 1);</a>
 <span class="sourceLineNo">824</span><a id="line.824">        ArrayList&lt;Color&gt; colors = new ArrayList&lt;&gt;(steps);</a>
 <span class="sourceLineNo">825</span><a id="line.825">        for (float i = 0; i &lt; 1f - 0.5f / steps; i+= 1.0f / steps) {</a>
 <span class="sourceLineNo">826</span><a id="line.826">            colors.add(filter(getHSV(i, saturation, value, opacity)));</a>
@@ -891,7 +891,7 @@
 <span class="sourceLineNo">879</span><a id="line.879">    public ArrayList&lt;Color&gt; zigzagGradient(Color fromColor, Color toColor, int steps)</a>
 <span class="sourceLineNo">880</span><a id="line.880">    {</a>
 <span class="sourceLineNo">881</span><a id="line.881">        CoordPacker.init();</a>
-<span class="sourceLineNo">882</span><a id="line.882">        ArrayList&lt;Color&gt; colors = new ArrayList&lt;&gt;((steps &gt; 1) ? steps : 1);</a>
+<span class="sourceLineNo">882</span><a id="line.882">        ArrayList&lt;Color&gt; colors = new ArrayList&lt;&gt;(Math.max(steps, 1));</a>
 <span class="sourceLineNo">883</span><a id="line.883">        colors.add(filter(fromColor));</a>
 <span class="sourceLineNo">884</span><a id="line.884">        if(steps &lt; 2)</a>
 <span class="sourceLineNo">885</span><a id="line.885">            return colors;</a>

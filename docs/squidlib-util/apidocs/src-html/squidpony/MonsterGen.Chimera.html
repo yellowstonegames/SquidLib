@@ -365,9 +365,9 @@
 <span class="sourceLineNo">353</span><a id="line.353">            List&lt;String&gt; otherParts = other.parts.get(other.name),</a>
 <span class="sourceLineNo">354</span><a id="line.354">                    p2 = rng.randomPortion(otherParts, (int)Math.round(otherParts.size() * otherInfluence * 0.5));</a>
 <span class="sourceLineNo">355</span><a id="line.355">            next.parts.put(other.name, p2);</a>
-<span class="sourceLineNo">356</span><a id="line.356">            String[] unsaid = other.unsaidAdjectives.toArray(new String[other.unsaidAdjectives.size()]),</a>
-<span class="sourceLineNo">357</span><a id="line.357">                    talentAdj = other.powerAdjectives.toArray(new String[other.powerAdjectives.size()]),</a>
-<span class="sourceLineNo">358</span><a id="line.358">                    talentPhr = other.powerPhrases.toArray(new String[other.powerPhrases.size()]);</a>
+<span class="sourceLineNo">356</span><a id="line.356">            String[] unsaid = other.unsaidAdjectives.toArray(new String[0]),</a>
+<span class="sourceLineNo">357</span><a id="line.357">                    talentAdj = other.powerAdjectives.toArray(new String[0]),</a>
+<span class="sourceLineNo">358</span><a id="line.358">                    talentPhr = other.powerPhrases.toArray(new String[0]);</a>
 <span class="sourceLineNo">359</span><a id="line.359">            unsaid = portion(rng, unsaid, (int)Math.round(unsaid.length * otherInfluence));</a>
 <span class="sourceLineNo">360</span><a id="line.360">            talentAdj = portion(rng, talentAdj, (int)Math.round(talentAdj.length * otherInfluence));</a>
 <span class="sourceLineNo">361</span><a id="line.361">            talentPhr = portion(rng, talentPhr, (int)Math.round(talentPhr.length * otherInfluence));</a>

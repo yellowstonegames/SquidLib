@@ -11,21 +11,21 @@
 <main role="main">
 <div class="sourceContainer">
 <pre><span class="sourceLineNo">001</span><a id="line.1">package squidpony.squidmath;</a>
-<span class="sourceLineNo">002</span><a id="line.2">/*******************************************************************************</a>
-<span class="sourceLineNo">003</span><a id="line.3"> * Copyright 2011 See AUTHORS file.</a>
-<span class="sourceLineNo">004</span><a id="line.4"> *</a>
-<span class="sourceLineNo">005</span><a id="line.5"> * Licensed under the Apache License, Version 2.0 (the "License");</a>
-<span class="sourceLineNo">006</span><a id="line.6"> * you may not use this file except in compliance with the License.</a>
-<span class="sourceLineNo">007</span><a id="line.7"> * You may obtain a copy of the License at</a>
-<span class="sourceLineNo">008</span><a id="line.8"> *</a>
-<span class="sourceLineNo">009</span><a id="line.9"> *   http://www.apache.org/licenses/LICENSE-2.0</a>
-<span class="sourceLineNo">010</span><a id="line.10"> *</a>
-<span class="sourceLineNo">011</span><a id="line.11"> * Unless required by applicable law or agreed to in writing, software</a>
-<span class="sourceLineNo">012</span><a id="line.12"> * distributed under the License is distributed on an "AS IS" BASIS,</a>
-<span class="sourceLineNo">013</span><a id="line.13"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</a>
-<span class="sourceLineNo">014</span><a id="line.14"> * See the License for the specific language governing permissions and</a>
-<span class="sourceLineNo">015</span><a id="line.15"> * limitations under the License.</a>
-<span class="sourceLineNo">016</span><a id="line.16"> ******************************************************************************/</a>
+<span class="sourceLineNo">002</span><a id="line.2">/******************************************************************************</a>
+<span class="sourceLineNo">003</span><a id="line.3"> Copyright 2011 See AUTHORS file.</a>
+<span class="sourceLineNo">004</span><a id="line.4"></a>
+<span class="sourceLineNo">005</span><a id="line.5"> Licensed under the Apache License, Version 2.0 (the "License");</a>
+<span class="sourceLineNo">006</span><a id="line.6"> you may not use this file except in compliance with the License.</a>
+<span class="sourceLineNo">007</span><a id="line.7"> You may obtain a copy of the License at</a>
+<span class="sourceLineNo">008</span><a id="line.8"></a>
+<span class="sourceLineNo">009</span><a id="line.9"> http://www.apache.org/licenses/LICENSE-2.0</a>
+<span class="sourceLineNo">010</span><a id="line.10"></a>
+<span class="sourceLineNo">011</span><a id="line.11"> Unless required by applicable law or agreed to in writing, software</a>
+<span class="sourceLineNo">012</span><a id="line.12"> distributed under the License is distributed on an "AS IS" BASIS,</a>
+<span class="sourceLineNo">013</span><a id="line.13"> WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</a>
+<span class="sourceLineNo">014</span><a id="line.14"> See the License for the specific language governing permissions and</a>
+<span class="sourceLineNo">015</span><a id="line.15"> limitations under the License.</a>
+<span class="sourceLineNo">016</span><a id="line.16"> */</a>
 <span class="sourceLineNo">017</span><a id="line.17"></a>
 <span class="sourceLineNo">018</span><a id="line.18">/** Delaunay triangulation. Adapted from Paul Bourke's triangulate: http://paulbourke.net/papers/triangulate/</a>
 <span class="sourceLineNo">019</span><a id="line.19"> * @author Nathan Sweet */</a>
@@ -84,7 +84,7 @@
 <span class="sourceLineNo">072</span><a id="line.72">            if (value &gt; ymax) ymax = value;</a>
 <span class="sourceLineNo">073</span><a id="line.73">        }</a>
 <span class="sourceLineNo">074</span><a id="line.74">        double dx = xmax - xmin, dy = ymax - ymin;</a>
-<span class="sourceLineNo">075</span><a id="line.75">        double dmax = (dx &gt; dy ? dx : dy) * 20f;</a>
+<span class="sourceLineNo">075</span><a id="line.75">        double dmax = (Math.max(dx, dy)) * 20f;</a>
 <span class="sourceLineNo">076</span><a id="line.76">        double xmid = (xmax + xmin) / 2f, ymid = (ymax + ymin) / 2f;</a>
 <span class="sourceLineNo">077</span><a id="line.77"></a>
 <span class="sourceLineNo">078</span><a id="line.78">        // Setup the super triangle, which contains all points.</a>

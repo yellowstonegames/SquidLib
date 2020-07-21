@@ -244,11 +244,11 @@
 <span class="sourceLineNo">232</span><a id="line.232">                for (int i = 4; i &lt; cs.length; i += 5) {</a>
 <span class="sourceLineNo">233</span><a id="line.233">                        cs[i] = (i + 1) % w5 == 0 ? '\n' : ' ';</a>
 <span class="sourceLineNo">234</span><a id="line.234">                }</a>
-<span class="sourceLineNo">235</span><a id="line.235">                final int vs = vertexMap.size();</a>
+<span class="sourceLineNo">235</span><a id="line.235">                final int vs = vertexMap.size(), rid = algorithms.lastRunID();</a>
 <span class="sourceLineNo">236</span><a id="line.236">                Node&lt;Coord&gt; nc;</a>
 <span class="sourceLineNo">237</span><a id="line.237">                for (int i = 0; i &lt; vs; i++) {</a>
 <span class="sourceLineNo">238</span><a id="line.238">                        nc = vertexMap.getAt(i);</a>
-<span class="sourceLineNo">239</span><a id="line.239">                        if(!nc.seen || nc.distance &gt;= 9999.5)</a>
+<span class="sourceLineNo">239</span><a id="line.239">                        if(!nc.seen || nc.lastRunID != rid || nc.distance &gt;= 9999.5)</a>
 <span class="sourceLineNo">240</span><a id="line.240">                                continue;</a>
 <span class="sourceLineNo">241</span><a id="line.241">                        int d = (int) (nc.distance + 0.5), x = nc.object.x * 5, y = nc.object.y;</a>
 <span class="sourceLineNo">242</span><a id="line.242">                        cs[y * w5 + x    ] = (d &gt;= 1000) ? (char) ('0' + d / 1000) : ' ';</a>

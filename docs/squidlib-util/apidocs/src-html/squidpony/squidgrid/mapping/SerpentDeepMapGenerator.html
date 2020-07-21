@@ -103,8 +103,8 @@
 <span class="sourceLineNo">091</span><a id="line.91">        int rs = height - rsum;</a>
 <span class="sourceLineNo">092</span><a id="line.92">        int cs2 = cs, rs2 = rs, cs3 = cs, rs3 = rs;</a>
 <span class="sourceLineNo">093</span><a id="line.93">        for (int i = 0; i &lt;= 7; i++) {</a>
-<span class="sourceLineNo">094</span><a id="line.94">            cs2= cs2 * i / 7;</a>
-<span class="sourceLineNo">095</span><a id="line.95">            rs2 = rs2 * i / 7;</a>
+<span class="sourceLineNo">094</span><a id="line.94">            cs2= 0;</a>
+<span class="sourceLineNo">095</span><a id="line.95">            rs2 = 0;</a>
 <span class="sourceLineNo">096</span><a id="line.96">            columns[i] -= cs2;</a>
 <span class="sourceLineNo">097</span><a id="line.97">            rows[i] -= rs2;</a>
 <span class="sourceLineNo">098</span><a id="line.98">        }</a>
@@ -126,311 +126,310 @@
 <span class="sourceLineNo">114</span><a id="line.114">        int r = random.between(12, 33);</a>
 <span class="sourceLineNo">115</span><a id="line.115">        m += r;</a>
 <span class="sourceLineNo">116</span><a id="line.116">        for (int i = 0; i &lt; 0x800 * numLayers; r = random.between(12, 33), i += r, m = (m + r) % (0x800 * numLayers)) {</a>
-<span class="sourceLineNo">117</span><a id="line.117">            tz = z;</a>
-<span class="sourceLineNo">118</span><a id="line.118">            int tx = x, ty = y;</a>
-<span class="sourceLineNo">119</span><a id="line.119">            do {</a>
-<span class="sourceLineNo">120</span><a id="line.120">                List&lt;Coord&gt; cl = new ArrayList&lt;&gt;(4);</a>
-<span class="sourceLineNo">121</span><a id="line.121"></a>
-<span class="sourceLineNo">122</span><a id="line.122">                for (int j = 0;</a>
-<span class="sourceLineNo">123</span><a id="line.123">                     j &lt; 2;</a>
-<span class="sourceLineNo">124</span><a id="line.124">                     j++) {</a>
-<span class="sourceLineNo">125</span><a id="line.125">                    int x2 = random.between(Math.max(0, tx - 2), tx);</a>
-<span class="sourceLineNo">126</span><a id="line.126">                    int x3 = random.between(tx + 1, Math.min(tx + 3, 15));</a>
-<span class="sourceLineNo">127</span><a id="line.127">                    int y2 = random.between(Math.max(0, ty - 2), ty);</a>
-<span class="sourceLineNo">128</span><a id="line.128">                    int y3 = random.between(ty + 1, Math.min(ty + 3, 15));</a>
-<span class="sourceLineNo">129</span><a id="line.129">                    if (x3 &lt; 16 &amp;&amp; random.nextBoolean())</a>
-<span class="sourceLineNo">130</span><a id="line.130">                        x2 = x3;</a>
-<span class="sourceLineNo">131</span><a id="line.131">                    if (y3 &lt; 16 &amp;&amp; random.nextBoolean())</a>
-<span class="sourceLineNo">132</span><a id="line.132">                        y2 = y3;</a>
-<span class="sourceLineNo">133</span><a id="line.133">                    cl.add(Coord.get(columns[x2], rows[y2]));</a>
-<span class="sourceLineNo">134</span><a id="line.134">                    if (random.nextDouble() &gt;= branchingChance)</a>
-<span class="sourceLineNo">135</span><a id="line.135">                        break;</a>
-<span class="sourceLineNo">136</span><a id="line.136">                }</a>
-<span class="sourceLineNo">137</span><a id="line.137"></a>
-<span class="sourceLineNo">138</span><a id="line.138">                List&lt;Coord&gt; connect = connections.get(tz).get(Coord.get(columns[tx], rows[ty]));</a>
-<span class="sourceLineNo">139</span><a id="line.139">                if(connect != null)</a>
-<span class="sourceLineNo">140</span><a id="line.140">                    connections.get(tz).get(Coord.get(columns[tx], rows[ty])).addAll(cl);</a>
-<span class="sourceLineNo">141</span><a id="line.141">                else</a>
-<span class="sourceLineNo">142</span><a id="line.142">                    connections.get(tz).put(Coord.get(columns[tx], rows[ty]), new ArrayList&lt;&gt;(cl));</a>
-<span class="sourceLineNo">143</span><a id="line.143"></a>
-<span class="sourceLineNo">144</span><a id="line.144">                x = CoordPacker.getXMoore3D(m, numLayers);</a>
-<span class="sourceLineNo">145</span><a id="line.145">                y = CoordPacker.getYMoore3D(m, numLayers);</a>
-<span class="sourceLineNo">146</span><a id="line.146">                z = (int)Math.floor(CoordPacker.getZMoore3D(m, numLayers) * depth / (8f * numLayers));</a>
-<span class="sourceLineNo">147</span><a id="line.147">                if(z != tz)</a>
-<span class="sourceLineNo">148</span><a id="line.148">                    cl.clear();</a>
-<span class="sourceLineNo">149</span><a id="line.149">                cl.add(Coord.get(columns[x], rows[y]));</a>
-<span class="sourceLineNo">150</span><a id="line.150"></a>
-<span class="sourceLineNo">151</span><a id="line.151">                if (tz == z) {</a>
-<span class="sourceLineNo">152</span><a id="line.152">                    List&lt;Coord&gt; conn = connections.get(z).get(Coord.get(columns[tx], rows[ty]));</a>
-<span class="sourceLineNo">153</span><a id="line.153">                    if(conn != null)</a>
-<span class="sourceLineNo">154</span><a id="line.154">                        connections.get(z).get(Coord.get(columns[tx], rows[ty])).addAll(cl);</a>
-<span class="sourceLineNo">155</span><a id="line.155">                    else</a>
-<span class="sourceLineNo">156</span><a id="line.156">                        connections.get(z).put(Coord.get(columns[tx], rows[ty]), new ArrayList&lt;&gt;(cl));</a>
-<span class="sourceLineNo">157</span><a id="line.157">                    break;</a>
-<span class="sourceLineNo">158</span><a id="line.158">                }</a>
-<span class="sourceLineNo">159</span><a id="line.159">                else {</a>
-<span class="sourceLineNo">160</span><a id="line.160">                    if (z &gt; tz) {</a>
-<span class="sourceLineNo">161</span><a id="line.161">                        linksDown.get(tz).add(Coord.get(tx, ty));</a>
-<span class="sourceLineNo">162</span><a id="line.162">                        tz++;</a>
-<span class="sourceLineNo">163</span><a id="line.163">                        linksUp.get(tz).add(Coord.get(tx, ty));</a>
-<span class="sourceLineNo">164</span><a id="line.164">                    }</a>
-<span class="sourceLineNo">165</span><a id="line.165">                    else</a>
-<span class="sourceLineNo">166</span><a id="line.166">                    {</a>
-<span class="sourceLineNo">167</span><a id="line.167">                        linksUp.get(tz).add(Coord.get(tx, ty));</a>
-<span class="sourceLineNo">168</span><a id="line.168">                        tz--;</a>
-<span class="sourceLineNo">169</span><a id="line.169">                        linksDown.get(tz).add(Coord.get(tx, ty));</a>
-<span class="sourceLineNo">170</span><a id="line.170">                    }</a>
-<span class="sourceLineNo">171</span><a id="line.171">                }</a>
-<span class="sourceLineNo">172</span><a id="line.172">            }while (true);</a>
-<span class="sourceLineNo">173</span><a id="line.173">        }</a>
-<span class="sourceLineNo">174</span><a id="line.174"></a>
-<span class="sourceLineNo">175</span><a id="line.175">        do {</a>
-<span class="sourceLineNo">176</span><a id="line.176">            List&lt;Coord&gt; cl = new ArrayList&lt;&gt;(4);</a>
-<span class="sourceLineNo">177</span><a id="line.177"></a>
-<span class="sourceLineNo">178</span><a id="line.178">            for (int j = 0;</a>
-<span class="sourceLineNo">179</span><a id="line.179">                 j &lt; 2;</a>
-<span class="sourceLineNo">180</span><a id="line.180">                 j++) {</a>
-<span class="sourceLineNo">181</span><a id="line.181">                int x2 = random.between(Math.max(0, x - 2), x);</a>
-<span class="sourceLineNo">182</span><a id="line.182">                int x3 = random.between(x + 1, Math.min(x + 3, 15));</a>
-<span class="sourceLineNo">183</span><a id="line.183">                int y2 = random.between(Math.max(0, y - 2), y);</a>
-<span class="sourceLineNo">184</span><a id="line.184">                int y3 = random.between(y + 1, Math.min(y + 3, 15));</a>
-<span class="sourceLineNo">185</span><a id="line.185">                if (x3 &lt; 16 &amp;&amp; random.nextBoolean())</a>
-<span class="sourceLineNo">186</span><a id="line.186">                    x2 = x3;</a>
-<span class="sourceLineNo">187</span><a id="line.187">                if (y3 &lt; 16 &amp;&amp; random.nextBoolean())</a>
-<span class="sourceLineNo">188</span><a id="line.188">                    y2 = y3;</a>
-<span class="sourceLineNo">189</span><a id="line.189">                cl.add(Coord.get(columns[x2], rows[y2]));</a>
-<span class="sourceLineNo">190</span><a id="line.190">                if (Math.min(random.nextDouble(), random.nextDouble()) &gt;= branchingChance)</a>
-<span class="sourceLineNo">191</span><a id="line.191">                    break;</a>
-<span class="sourceLineNo">192</span><a id="line.192">            }</a>
-<span class="sourceLineNo">193</span><a id="line.193"></a>
-<span class="sourceLineNo">194</span><a id="line.194">            List&lt;Coord&gt; connect = connections.get(tz).get(Coord.get(columns[x], rows[y]));</a>
-<span class="sourceLineNo">195</span><a id="line.195">            if(connect != null)</a>
-<span class="sourceLineNo">196</span><a id="line.196">                connections.get(tz).get(Coord.get(columns[x], rows[y])).addAll(cl);</a>
-<span class="sourceLineNo">197</span><a id="line.197">            else</a>
-<span class="sourceLineNo">198</span><a id="line.198">                connections.get(tz).put(Coord.get(columns[x], rows[y]), new ArrayList&lt;&gt;(cl));</a>
-<span class="sourceLineNo">199</span><a id="line.199"></a>
-<span class="sourceLineNo">200</span><a id="line.200">            if(sz != tz)</a>
-<span class="sourceLineNo">201</span><a id="line.201">                cl.clear();</a>
-<span class="sourceLineNo">202</span><a id="line.202">            cl.add(Coord.get(columns[x], rows[y]));</a>
-<span class="sourceLineNo">203</span><a id="line.203"></a>
-<span class="sourceLineNo">204</span><a id="line.204">            if (tz == sz) {</a>
-<span class="sourceLineNo">205</span><a id="line.205">                connections.get(sz).get(Coord.get(columns[x], rows[y])).add(</a>
-<span class="sourceLineNo">206</span><a id="line.206">                        Coord.get(columns[sx], rows[sy]));</a>
-<span class="sourceLineNo">207</span><a id="line.207">                break;</a>
-<span class="sourceLineNo">208</span><a id="line.208">            }</a>
-<span class="sourceLineNo">209</span><a id="line.209">            else {</a>
-<span class="sourceLineNo">210</span><a id="line.210">                if (sz &gt; tz) {</a>
-<span class="sourceLineNo">211</span><a id="line.211">                    linksDown.get(tz).add(Coord.get(x, y));</a>
-<span class="sourceLineNo">212</span><a id="line.212">                    tz++;</a>
-<span class="sourceLineNo">213</span><a id="line.213">                    linksUp.get(tz).add(Coord.get(x, y));</a>
-<span class="sourceLineNo">214</span><a id="line.214">                }</a>
-<span class="sourceLineNo">215</span><a id="line.215">                else</a>
-<span class="sourceLineNo">216</span><a id="line.216">                {</a>
-<span class="sourceLineNo">217</span><a id="line.217">                    linksUp.get(tz).add(Coord.get(x, y));</a>
-<span class="sourceLineNo">218</span><a id="line.218">                    tz--;</a>
-<span class="sourceLineNo">219</span><a id="line.219">                    linksDown.get(tz).add(Coord.get(x, y));</a>
-<span class="sourceLineNo">220</span><a id="line.220">                }</a>
-<span class="sourceLineNo">221</span><a id="line.221">            }</a>
-<span class="sourceLineNo">222</span><a id="line.222">        }while (true);</a>
-<span class="sourceLineNo">223</span><a id="line.223"></a>
-<span class="sourceLineNo">224</span><a id="line.224">        mix = new MixedGenerator[depth];</a>
-<span class="sourceLineNo">225</span><a id="line.225">        for (int i = 0; i &lt; depth; i++) {</a>
-<span class="sourceLineNo">226</span><a id="line.226">            mix[i] = new MixedGenerator(width, height, random, connections.get(i), 0.35f);</a>
-<span class="sourceLineNo">227</span><a id="line.227">        }</a>
-<span class="sourceLineNo">228</span><a id="line.228">    }</a>
-<span class="sourceLineNo">229</span><a id="line.229">    /**</a>
-<span class="sourceLineNo">230</span><a id="line.230">     * Changes the number of "carvers" that will create caves from one room to the next. If count is 0 or less, no caves</a>
-<span class="sourceLineNo">231</span><a id="line.231">     * will be made. If count is at least 1, caves are possible, and higher numbers relative to the other carvers make</a>
-<span class="sourceLineNo">232</span><a id="line.232">     * caves more likely. Carvers are shuffled when used, then repeat if exhausted during generation. Since typically</a>
-<span class="sourceLineNo">233</span><a id="line.233">     * about 30-40 rooms are carved, large totals for carver count aren't really needed; aiming for a total of 10</a>
-<span class="sourceLineNo">234</span><a id="line.234">     * between the count of putCaveCarvers(), putBoxRoomCarvers(), and putRoundRoomCarvers() is reasonable.</a>
-<span class="sourceLineNo">235</span><a id="line.235">     * @see MixedGenerator</a>
-<span class="sourceLineNo">236</span><a id="line.236">     * @param count the number of carvers making caves between rooms; only matters in relation to other carvers</a>
-<span class="sourceLineNo">237</span><a id="line.237">     */</a>
-<span class="sourceLineNo">238</span><a id="line.238">    public void putCaveCarvers(int count)</a>
-<span class="sourceLineNo">239</span><a id="line.239">    {</a>
-<span class="sourceLineNo">240</span><a id="line.240">        for (int i = 0; i &lt; depth; i++) {</a>
-<span class="sourceLineNo">241</span><a id="line.241">            mix[i].putCaveCarvers(count);</a>
-<span class="sourceLineNo">242</span><a id="line.242">        }</a>
-<span class="sourceLineNo">243</span><a id="line.243">    }</a>
-<span class="sourceLineNo">244</span><a id="line.244">    /**</a>
-<span class="sourceLineNo">245</span><a id="line.245">     * Changes the number of "carvers" that will create right-angle corridors from one room to the next, create rooms</a>
-<span class="sourceLineNo">246</span><a id="line.246">     * with a random size in a box shape at the start and end, and a small room at the corner if there is one. If count</a>
-<span class="sourceLineNo">247</span><a id="line.247">     * is 0 or less, no box-shaped rooms will be made. If count is at least 1, box-shaped rooms are possible, and higher</a>
-<span class="sourceLineNo">248</span><a id="line.248">     * numbers relative to the other carvers make box-shaped rooms more likely. Carvers are shuffled when used, then</a>
-<span class="sourceLineNo">249</span><a id="line.249">     * repeat if exhausted during generation. Since typically about 30-40 rooms are carved, large totals for carver</a>
-<span class="sourceLineNo">250</span><a id="line.250">     * count aren't really needed; aiming for a total of 10 between the count of putCaveCarvers(), putBoxRoomCarvers(),</a>
-<span class="sourceLineNo">251</span><a id="line.251">     * and putRoundRoomCarvers() is reasonable.</a>
-<span class="sourceLineNo">252</span><a id="line.252">     * @see MixedGenerator</a>
-<span class="sourceLineNo">253</span><a id="line.253">     * @param count the number of carvers making box-shaped rooms and corridors between them; only matters in relation</a>
-<span class="sourceLineNo">254</span><a id="line.254">     *              to other carvers</a>
-<span class="sourceLineNo">255</span><a id="line.255">     */</a>
-<span class="sourceLineNo">256</span><a id="line.256">    public void putBoxRoomCarvers(int count)</a>
-<span class="sourceLineNo">257</span><a id="line.257">    {</a>
-<span class="sourceLineNo">258</span><a id="line.258">        for (int i = 0; i &lt; depth; i++) {</a>
-<span class="sourceLineNo">259</span><a id="line.259">            mix[i].putBoxRoomCarvers(count);</a>
-<span class="sourceLineNo">260</span><a id="line.260">        }</a>
-<span class="sourceLineNo">261</span><a id="line.261">    }</a>
-<span class="sourceLineNo">262</span><a id="line.262">    /**</a>
-<span class="sourceLineNo">263</span><a id="line.263">     * Changes the number of "carvers" that will create right-angle corridors from one room to the next, create rooms</a>
-<span class="sourceLineNo">264</span><a id="line.264">     * with a random size in a box shape at the start and end, and a small room at the corner if there is one. This also</a>
-<span class="sourceLineNo">265</span><a id="line.265">     * ensures walls will be placed around the room, only allowing corridors and small cave openings to pass. If count</a>
-<span class="sourceLineNo">266</span><a id="line.266">     * is 0 or less, no box-shaped rooms will be made. If count is at least 1, box-shaped rooms are possible, and higher</a>
-<span class="sourceLineNo">267</span><a id="line.267">     * numbers relative to the other carvers make box-shaped rooms more likely. Carvers are shuffled when used, then</a>
-<span class="sourceLineNo">268</span><a id="line.268">     * repeat if exhausted during generation. Since typically about 30-40 rooms are carved, large totals for carver</a>
-<span class="sourceLineNo">269</span><a id="line.269">     * count aren't really needed; aiming for a total of 10 between the count of putCaveCarvers(), putBoxRoomCarvers(),</a>
-<span class="sourceLineNo">270</span><a id="line.270">     * and putRoundRoomCarvers() is reasonable.</a>
-<span class="sourceLineNo">271</span><a id="line.271">     * @see MixedGenerator</a>
-<span class="sourceLineNo">272</span><a id="line.272">     * @param count the number of carvers making box-shaped rooms and corridors between them; only matters in relation</a>
-<span class="sourceLineNo">273</span><a id="line.273">     *              to other carvers</a>
-<span class="sourceLineNo">274</span><a id="line.274">     */</a>
-<span class="sourceLineNo">275</span><a id="line.275">    public void putWalledBoxRoomCarvers(int count)</a>
-<span class="sourceLineNo">276</span><a id="line.276">    {</a>
-<span class="sourceLineNo">277</span><a id="line.277">        for (int i = 0; i &lt; depth; i++) {</a>
-<span class="sourceLineNo">278</span><a id="line.278">            mix[i].putWalledBoxRoomCarvers(count);</a>
-<span class="sourceLineNo">279</span><a id="line.279">        }</a>
-<span class="sourceLineNo">280</span><a id="line.280">    }</a>
-<span class="sourceLineNo">281</span><a id="line.281">    /**</a>
-<span class="sourceLineNo">282</span><a id="line.282">     * Changes the number of "carvers" that will create right-angle corridors from one room to the next, create rooms</a>
-<span class="sourceLineNo">283</span><a id="line.283">     * with a random size in a circle shape at the start and end, and a small circular room at the corner if there is</a>
-<span class="sourceLineNo">284</span><a id="line.284">     * one. If count is 0 or less, no circular rooms will be made. If count is at least 1, circular rooms are possible,</a>
-<span class="sourceLineNo">285</span><a id="line.285">     * and higher numbers relative to the other carvers make circular rooms more likely. Carvers are shuffled when used,</a>
-<span class="sourceLineNo">286</span><a id="line.286">     * then repeat if exhausted during generation. Since typically about 30-40 rooms are carved, large totals for carver</a>
-<span class="sourceLineNo">287</span><a id="line.287">     * count aren't really needed; aiming for a total of 10 between the count of putCaveCarvers(), putBoxRoomCarvers(),</a>
-<span class="sourceLineNo">288</span><a id="line.288">     * and putRoundRoomCarvers() is reasonable.</a>
-<span class="sourceLineNo">289</span><a id="line.289">     * @see MixedGenerator</a>
-<span class="sourceLineNo">290</span><a id="line.290">     * @param count the number of carvers making circular rooms and corridors between them; only matters in relation</a>
-<span class="sourceLineNo">291</span><a id="line.291">     *              to other carvers</a>
-<span class="sourceLineNo">292</span><a id="line.292">     */</a>
-<span class="sourceLineNo">293</span><a id="line.293">    public void putRoundRoomCarvers(int count)</a>
-<span class="sourceLineNo">294</span><a id="line.294">    {</a>
-<span class="sourceLineNo">295</span><a id="line.295">        for (int i = 0; i &lt; depth; i++) {</a>
-<span class="sourceLineNo">296</span><a id="line.296">            mix[i].putRoundRoomCarvers(count);</a>
-<span class="sourceLineNo">297</span><a id="line.297">        }</a>
-<span class="sourceLineNo">298</span><a id="line.298">    }</a>
-<span class="sourceLineNo">299</span><a id="line.299"></a>
-<span class="sourceLineNo">300</span><a id="line.300">    /**</a>
-<span class="sourceLineNo">301</span><a id="line.301">     * Changes the number of "carvers" that will create right-angle corridors from one room to the next, create rooms</a>
-<span class="sourceLineNo">302</span><a id="line.302">     * with a random size in a circle shape at the start and end, and a small circular room at the corner if there is</a>
-<span class="sourceLineNo">303</span><a id="line.303">     * one. This also ensures walls will be placed around the room, only allowing corridors and small cave openings to</a>
-<span class="sourceLineNo">304</span><a id="line.304">     * pass. If count is 0 or less, no circular rooms will be made. If count is at least 1, circular rooms are possible,</a>
-<span class="sourceLineNo">305</span><a id="line.305">     * and higher numbers relative to the other carvers make circular rooms more likely. Carvers are shuffled when used,</a>
-<span class="sourceLineNo">306</span><a id="line.306">     * then repeat if exhausted during generation. Since typically about 30-40 rooms are carved, large totals for carver</a>
-<span class="sourceLineNo">307</span><a id="line.307">     * count aren't really needed; aiming for a total of 10 between the count of putCaveCarvers(), putBoxRoomCarvers(),</a>
-<span class="sourceLineNo">308</span><a id="line.308">     * and putRoundRoomCarvers() is reasonable.</a>
-<span class="sourceLineNo">309</span><a id="line.309">     * @see MixedGenerator</a>
-<span class="sourceLineNo">310</span><a id="line.310">     * @param count the number of carvers making circular rooms and corridors between them; only matters in relation</a>
-<span class="sourceLineNo">311</span><a id="line.311">     *              to other carvers</a>
-<span class="sourceLineNo">312</span><a id="line.312">     */</a>
-<span class="sourceLineNo">313</span><a id="line.313">    public void putWalledRoundRoomCarvers(int count)</a>
-<span class="sourceLineNo">314</span><a id="line.314">    {</a>
-<span class="sourceLineNo">315</span><a id="line.315">        for (int i = 0; i &lt; depth; i++) {</a>
-<span class="sourceLineNo">316</span><a id="line.316">            mix[i].putWalledRoundRoomCarvers(count);</a>
-<span class="sourceLineNo">317</span><a id="line.317">        }</a>
-<span class="sourceLineNo">318</span><a id="line.318">    }</a>
-<span class="sourceLineNo">319</span><a id="line.319"></a>
-<span class="sourceLineNo">320</span><a id="line.320">    /**</a>
-<span class="sourceLineNo">321</span><a id="line.321">     * This generates a new map by stretching a 32x32x(multiple of 8) grid of potential rooms to fit the width, height,</a>
-<span class="sourceLineNo">322</span><a id="line.322">     * and depth passed to the constructor, randomly expanding columns and rows before contracting the whole to fit</a>
-<span class="sourceLineNo">323</span><a id="line.323">     * perfectly. This uses the Moore Curve, a space-filling curve that loops around on itself, to guarantee that the</a>
-<span class="sourceLineNo">324</span><a id="line.324">     * rooms will always have a long path through the dungeon, going up and down as well as north/south/east/west, that,</a>
-<span class="sourceLineNo">325</span><a id="line.325">     * if followed completely, will take you back to your starting room. Some small branches are possible, and large</a>
-<span class="sourceLineNo">326</span><a id="line.326">     * rooms may merge with other rooms nearby. This uses MixedGenerator.</a>
-<span class="sourceLineNo">327</span><a id="line.327">     * @see MixedGenerator</a>
-<span class="sourceLineNo">328</span><a id="line.328">     * @return a char[][][] where the outermost array is layers, then inside that are x and y in order (z x y)</a>
-<span class="sourceLineNo">329</span><a id="line.329">     */</a>
-<span class="sourceLineNo">330</span><a id="line.330">    public char[][][] generate()</a>
-<span class="sourceLineNo">331</span><a id="line.331">    {</a>
-<span class="sourceLineNo">332</span><a id="line.332">        char[][][] dungeon = new char[depth][][];</a>
-<span class="sourceLineNo">333</span><a id="line.333">        short[][] floors = new short[depth][];</a>
-<span class="sourceLineNo">334</span><a id="line.334">        int dlimit = (height + width) / 3;</a>
-<span class="sourceLineNo">335</span><a id="line.335">        for (int i = 0; i &lt; depth; i++) {</a>
-<span class="sourceLineNo">336</span><a id="line.336">            dungeon[i] = mix[i].generate();</a>
-<span class="sourceLineNo">337</span><a id="line.337">            floors[i] = CoordPacker.pack(dungeon[i], '.');</a>
-<span class="sourceLineNo">338</span><a id="line.338">        }</a>
-<span class="sourceLineNo">339</span><a id="line.339">        //using actual dungeon space per layer, not row/column 3D grid space</a>
-<span class="sourceLineNo">340</span><a id="line.340">        ArrayList&lt;OrderedSet&lt;Coord&gt;&gt; ups = new ArrayList&lt;&gt;(depth),</a>
-<span class="sourceLineNo">341</span><a id="line.341">                downs = new ArrayList&lt;&gt;(depth);</a>
-<span class="sourceLineNo">342</span><a id="line.342">        for (int i = 0; i &lt; depth; i++) {</a>
-<span class="sourceLineNo">343</span><a id="line.343">            ups.add(new OrderedSet&lt;Coord&gt;(40));</a>
-<span class="sourceLineNo">344</span><a id="line.344">            downs.add(new OrderedSet&lt;Coord&gt;(40));</a>
-<span class="sourceLineNo">345</span><a id="line.345">            OrderedSet&lt;Coord&gt; above = null;</a>
-<span class="sourceLineNo">346</span><a id="line.346">            if (i &gt; 0) {</a>
-<span class="sourceLineNo">347</span><a id="line.347">                above = new OrderedSet&lt;&gt;(linksDown.get(i - 1));</a>
-<span class="sourceLineNo">348</span><a id="line.348">                if(above.size() == 0)</a>
-<span class="sourceLineNo">349</span><a id="line.349">                    continue;</a>
-<span class="sourceLineNo">350</span><a id="line.350">                Coord higher = above.randomItem(random);//random.getRandomElement(above.toArray(new Coord[above.size()]));</a>
-<span class="sourceLineNo">351</span><a id="line.351">                while(above.size() &gt; 0)</a>
-<span class="sourceLineNo">352</span><a id="line.352">                {</a>
-<span class="sourceLineNo">353</span><a id="line.353">                    short[] nearAbove = CoordPacker.flood(floors[i - 1],</a>
-<span class="sourceLineNo">354</span><a id="line.354">                            CoordPacker.packOne(columns[higher.x], rows[higher.y]),</a>
-<span class="sourceLineNo">355</span><a id="line.355">                            dlimit);</a>
-<span class="sourceLineNo">356</span><a id="line.356">                    short[] near = CoordPacker.intersectPacked(nearAbove, CoordPacker.flood(floors[i],</a>
-<span class="sourceLineNo">357</span><a id="line.357">                            CoordPacker.packOne(columns[higher.x], rows[higher.y]),</a>
-<span class="sourceLineNo">358</span><a id="line.358">                            dlimit));</a>
-<span class="sourceLineNo">359</span><a id="line.359">                    ArrayList&lt;Coord&gt; subLinks = CoordPacker.randomPortion(near, 1, random);</a>
-<span class="sourceLineNo">360</span><a id="line.360">                    ups.get(i).addAll(subLinks);</a>
-<span class="sourceLineNo">361</span><a id="line.361">                    downs.get(i-1).addAll(subLinks);</a>
-<span class="sourceLineNo">362</span><a id="line.362">                    for(Coord abv : linksDown.get(i-1))</a>
-<span class="sourceLineNo">363</span><a id="line.363">                    {</a>
-<span class="sourceLineNo">364</span><a id="line.364">                        if(CoordPacker.queryPacked(nearAbove, columns[abv.x], rows[abv.y])) //scannedAbove[columns[abv.x]][rows[abv.y]] &lt;= dlimit</a>
-<span class="sourceLineNo">365</span><a id="line.365">                            above.remove(abv);</a>
-<span class="sourceLineNo">366</span><a id="line.366">                    }</a>
-<span class="sourceLineNo">367</span><a id="line.367">                    if(above.isEmpty())</a>
-<span class="sourceLineNo">368</span><a id="line.368">                        break;</a>
-<span class="sourceLineNo">369</span><a id="line.369">                    higher = above.randomItem(random);//random.getRandomElement(above.toArray(new Coord[above.size()]));</a>
-<span class="sourceLineNo">370</span><a id="line.370">                }</a>
-<span class="sourceLineNo">371</span><a id="line.371">            }</a>
-<span class="sourceLineNo">372</span><a id="line.372">        }</a>
-<span class="sourceLineNo">373</span><a id="line.373"></a>
-<span class="sourceLineNo">374</span><a id="line.374">        for (int i = 0; i &lt; depth; i++) {</a>
-<span class="sourceLineNo">375</span><a id="line.375">            OrderedMap&lt;Coord, Integer&gt; used = new OrderedMap&lt;&gt;(128);</a>
-<span class="sourceLineNo">376</span><a id="line.376">            for(Coord up : ups.get(i))</a>
-<span class="sourceLineNo">377</span><a id="line.377">            {</a>
-<span class="sourceLineNo">378</span><a id="line.378">                Integer count = used.get(up);</a>
-<span class="sourceLineNo">379</span><a id="line.379">                if(count != null &amp;&amp; count &gt; 1)</a>
-<span class="sourceLineNo">380</span><a id="line.380">                    continue;</a>
-<span class="sourceLineNo">381</span><a id="line.381">                dungeon[i][up.x][up.y] = '&lt;';</a>
-<span class="sourceLineNo">382</span><a id="line.382"></a>
-<span class="sourceLineNo">383</span><a id="line.383">                used.put(up, (count == null) ? 1 : count + 1);</a>
-<span class="sourceLineNo">384</span><a id="line.384">            }</a>
-<span class="sourceLineNo">385</span><a id="line.385">            used.clear();</a>
-<span class="sourceLineNo">386</span><a id="line.386">            for(Coord down : downs.get(i))</a>
-<span class="sourceLineNo">387</span><a id="line.387">            {</a>
-<span class="sourceLineNo">388</span><a id="line.388">                Integer count = used.get(down);</a>
-<span class="sourceLineNo">389</span><a id="line.389">                if(count != null &amp;&amp; count &gt; 1)</a>
-<span class="sourceLineNo">390</span><a id="line.390">                    continue;</a>
-<span class="sourceLineNo">391</span><a id="line.391">                dungeon[i][down.x][down.y] = '&gt;';</a>
-<span class="sourceLineNo">392</span><a id="line.392"></a>
-<span class="sourceLineNo">393</span><a id="line.393">                used.put(down, (count == null) ? 1 : count + 1);</a>
-<span class="sourceLineNo">394</span><a id="line.394">            }</a>
-<span class="sourceLineNo">395</span><a id="line.395">        }</a>
-<span class="sourceLineNo">396</span><a id="line.396">        return dungeon;</a>
-<span class="sourceLineNo">397</span><a id="line.397">    }</a>
-<span class="sourceLineNo">398</span><a id="line.398"></a>
-<span class="sourceLineNo">399</span><a id="line.399">    /**</a>
-<span class="sourceLineNo">400</span><a id="line.400">     * Gets an array (length equals depth) of 2D int arrays representing the environments for levels.</a>
-<span class="sourceLineNo">401</span><a id="line.401">     * @return an array of 2D int arrays, where each 2D array is a level's environment</a>
-<span class="sourceLineNo">402</span><a id="line.402">     */</a>
-<span class="sourceLineNo">403</span><a id="line.403">    public int[][][] getEnvironments()</a>
-<span class="sourceLineNo">404</span><a id="line.404">    {</a>
-<span class="sourceLineNo">405</span><a id="line.405">        int[][][] env = new int[depth][][];</a>
-<span class="sourceLineNo">406</span><a id="line.406">        for (int i = 0; i &lt; depth; i++) {</a>
-<span class="sourceLineNo">407</span><a id="line.407">            env[i] = mix[i].getEnvironment();</a>
-<span class="sourceLineNo">408</span><a id="line.408">        }</a>
-<span class="sourceLineNo">409</span><a id="line.409">        return env;</a>
-<span class="sourceLineNo">410</span><a id="line.410">    }</a>
-<span class="sourceLineNo">411</span><a id="line.411"></a>
-<span class="sourceLineNo">412</span><a id="line.412">    /**</a>
-<span class="sourceLineNo">413</span><a id="line.413">     * Gets a 2D int array representing the environment for the requested level.</a>
-<span class="sourceLineNo">414</span><a id="line.414">     * @param level the level to get from the generated dungeon; will be clamped between 0 and depth - 1</a>
-<span class="sourceLineNo">415</span><a id="line.415">     * @return a 2D int array representing the requested level's environment</a>
-<span class="sourceLineNo">416</span><a id="line.416">     */</a>
-<span class="sourceLineNo">417</span><a id="line.417">    public int[][] getEnvironment(int level)</a>
-<span class="sourceLineNo">418</span><a id="line.418">    {</a>
-<span class="sourceLineNo">419</span><a id="line.419">        return mix[Math.max(0, Math.min(depth - 1, level))].getEnvironment();</a>
-<span class="sourceLineNo">420</span><a id="line.420">    }</a>
-<span class="sourceLineNo">421</span><a id="line.421">}</a>
+<span class="sourceLineNo">117</span><a id="line.117">            int tx = x, ty = y;</a>
+<span class="sourceLineNo">118</span><a id="line.118">            do {</a>
+<span class="sourceLineNo">119</span><a id="line.119">                List&lt;Coord&gt; cl = new ArrayList&lt;&gt;(4);</a>
+<span class="sourceLineNo">120</span><a id="line.120"></a>
+<span class="sourceLineNo">121</span><a id="line.121">                for (int j = 0;</a>
+<span class="sourceLineNo">122</span><a id="line.122">                     j &lt; 2;</a>
+<span class="sourceLineNo">123</span><a id="line.123">                     j++) {</a>
+<span class="sourceLineNo">124</span><a id="line.124">                    int x2 = random.between(Math.max(0, tx - 2), tx);</a>
+<span class="sourceLineNo">125</span><a id="line.125">                    int x3 = random.between(tx + 1, Math.min(tx + 3, 15));</a>
+<span class="sourceLineNo">126</span><a id="line.126">                    int y2 = random.between(Math.max(0, ty - 2), ty);</a>
+<span class="sourceLineNo">127</span><a id="line.127">                    int y3 = random.between(ty + 1, Math.min(ty + 3, 15));</a>
+<span class="sourceLineNo">128</span><a id="line.128">                    if (x3 &lt; 16 &amp;&amp; random.nextBoolean())</a>
+<span class="sourceLineNo">129</span><a id="line.129">                        x2 = x3;</a>
+<span class="sourceLineNo">130</span><a id="line.130">                    if (y3 &lt; 16 &amp;&amp; random.nextBoolean())</a>
+<span class="sourceLineNo">131</span><a id="line.131">                        y2 = y3;</a>
+<span class="sourceLineNo">132</span><a id="line.132">                    cl.add(Coord.get(columns[x2], rows[y2]));</a>
+<span class="sourceLineNo">133</span><a id="line.133">                    if (random.nextDouble() &gt;= branchingChance)</a>
+<span class="sourceLineNo">134</span><a id="line.134">                        break;</a>
+<span class="sourceLineNo">135</span><a id="line.135">                }</a>
+<span class="sourceLineNo">136</span><a id="line.136"></a>
+<span class="sourceLineNo">137</span><a id="line.137">                List&lt;Coord&gt; connect = connections.get(tz).get(Coord.get(columns[tx], rows[ty]));</a>
+<span class="sourceLineNo">138</span><a id="line.138">                if(connect != null)</a>
+<span class="sourceLineNo">139</span><a id="line.139">                    connections.get(tz).get(Coord.get(columns[tx], rows[ty])).addAll(cl);</a>
+<span class="sourceLineNo">140</span><a id="line.140">                else</a>
+<span class="sourceLineNo">141</span><a id="line.141">                    connections.get(tz).put(Coord.get(columns[tx], rows[ty]), new ArrayList&lt;&gt;(cl));</a>
+<span class="sourceLineNo">142</span><a id="line.142"></a>
+<span class="sourceLineNo">143</span><a id="line.143">                x = CoordPacker.getXMoore3D(m, numLayers);</a>
+<span class="sourceLineNo">144</span><a id="line.144">                y = CoordPacker.getYMoore3D(m, numLayers);</a>
+<span class="sourceLineNo">145</span><a id="line.145">                z = (int)Math.floor(CoordPacker.getZMoore3D(m, numLayers) * depth / (8f * numLayers));</a>
+<span class="sourceLineNo">146</span><a id="line.146">                if(z != tz)</a>
+<span class="sourceLineNo">147</span><a id="line.147">                    cl.clear();</a>
+<span class="sourceLineNo">148</span><a id="line.148">                cl.add(Coord.get(columns[x], rows[y]));</a>
+<span class="sourceLineNo">149</span><a id="line.149"></a>
+<span class="sourceLineNo">150</span><a id="line.150">                if (tz == z) {</a>
+<span class="sourceLineNo">151</span><a id="line.151">                    List&lt;Coord&gt; conn = connections.get(z).get(Coord.get(columns[tx], rows[ty]));</a>
+<span class="sourceLineNo">152</span><a id="line.152">                    if(conn != null)</a>
+<span class="sourceLineNo">153</span><a id="line.153">                        connections.get(z).get(Coord.get(columns[tx], rows[ty])).addAll(cl);</a>
+<span class="sourceLineNo">154</span><a id="line.154">                    else</a>
+<span class="sourceLineNo">155</span><a id="line.155">                        connections.get(z).put(Coord.get(columns[tx], rows[ty]), new ArrayList&lt;&gt;(cl));</a>
+<span class="sourceLineNo">156</span><a id="line.156">                    break;</a>
+<span class="sourceLineNo">157</span><a id="line.157">                }</a>
+<span class="sourceLineNo">158</span><a id="line.158">                else {</a>
+<span class="sourceLineNo">159</span><a id="line.159">                    if (z &gt; tz) {</a>
+<span class="sourceLineNo">160</span><a id="line.160">                        linksDown.get(tz).add(Coord.get(tx, ty));</a>
+<span class="sourceLineNo">161</span><a id="line.161">                        tz++;</a>
+<span class="sourceLineNo">162</span><a id="line.162">                        linksUp.get(tz).add(Coord.get(tx, ty));</a>
+<span class="sourceLineNo">163</span><a id="line.163">                    }</a>
+<span class="sourceLineNo">164</span><a id="line.164">                    else</a>
+<span class="sourceLineNo">165</span><a id="line.165">                    {</a>
+<span class="sourceLineNo">166</span><a id="line.166">                        linksUp.get(tz).add(Coord.get(tx, ty));</a>
+<span class="sourceLineNo">167</span><a id="line.167">                        tz--;</a>
+<span class="sourceLineNo">168</span><a id="line.168">                        linksDown.get(tz).add(Coord.get(tx, ty));</a>
+<span class="sourceLineNo">169</span><a id="line.169">                    }</a>
+<span class="sourceLineNo">170</span><a id="line.170">                }</a>
+<span class="sourceLineNo">171</span><a id="line.171">            }while (true);</a>
+<span class="sourceLineNo">172</span><a id="line.172">        }</a>
+<span class="sourceLineNo">173</span><a id="line.173"></a>
+<span class="sourceLineNo">174</span><a id="line.174">        do {</a>
+<span class="sourceLineNo">175</span><a id="line.175">            List&lt;Coord&gt; cl = new ArrayList&lt;&gt;(4);</a>
+<span class="sourceLineNo">176</span><a id="line.176"></a>
+<span class="sourceLineNo">177</span><a id="line.177">            for (int j = 0;</a>
+<span class="sourceLineNo">178</span><a id="line.178">                 j &lt; 2;</a>
+<span class="sourceLineNo">179</span><a id="line.179">                 j++) {</a>
+<span class="sourceLineNo">180</span><a id="line.180">                int x2 = random.between(Math.max(0, x - 2), x);</a>
+<span class="sourceLineNo">181</span><a id="line.181">                int x3 = random.between(x + 1, Math.min(x + 3, 15));</a>
+<span class="sourceLineNo">182</span><a id="line.182">                int y2 = random.between(Math.max(0, y - 2), y);</a>
+<span class="sourceLineNo">183</span><a id="line.183">                int y3 = random.between(y + 1, Math.min(y + 3, 15));</a>
+<span class="sourceLineNo">184</span><a id="line.184">                if (x3 &lt; 16 &amp;&amp; random.nextBoolean())</a>
+<span class="sourceLineNo">185</span><a id="line.185">                    x2 = x3;</a>
+<span class="sourceLineNo">186</span><a id="line.186">                if (y3 &lt; 16 &amp;&amp; random.nextBoolean())</a>
+<span class="sourceLineNo">187</span><a id="line.187">                    y2 = y3;</a>
+<span class="sourceLineNo">188</span><a id="line.188">                cl.add(Coord.get(columns[x2], rows[y2]));</a>
+<span class="sourceLineNo">189</span><a id="line.189">                if (Math.min(random.nextDouble(), random.nextDouble()) &gt;= branchingChance)</a>
+<span class="sourceLineNo">190</span><a id="line.190">                    break;</a>
+<span class="sourceLineNo">191</span><a id="line.191">            }</a>
+<span class="sourceLineNo">192</span><a id="line.192"></a>
+<span class="sourceLineNo">193</span><a id="line.193">            List&lt;Coord&gt; connect = connections.get(tz).get(Coord.get(columns[x], rows[y]));</a>
+<span class="sourceLineNo">194</span><a id="line.194">            if(connect != null)</a>
+<span class="sourceLineNo">195</span><a id="line.195">                connections.get(tz).get(Coord.get(columns[x], rows[y])).addAll(cl);</a>
+<span class="sourceLineNo">196</span><a id="line.196">            else</a>
+<span class="sourceLineNo">197</span><a id="line.197">                connections.get(tz).put(Coord.get(columns[x], rows[y]), new ArrayList&lt;&gt;(cl));</a>
+<span class="sourceLineNo">198</span><a id="line.198"></a>
+<span class="sourceLineNo">199</span><a id="line.199">            if(sz != tz)</a>
+<span class="sourceLineNo">200</span><a id="line.200">                cl.clear();</a>
+<span class="sourceLineNo">201</span><a id="line.201">            cl.add(Coord.get(columns[x], rows[y]));</a>
+<span class="sourceLineNo">202</span><a id="line.202"></a>
+<span class="sourceLineNo">203</span><a id="line.203">            if (tz == sz) {</a>
+<span class="sourceLineNo">204</span><a id="line.204">                connections.get(sz).get(Coord.get(columns[x], rows[y])).add(</a>
+<span class="sourceLineNo">205</span><a id="line.205">                        Coord.get(columns[sx], rows[sy]));</a>
+<span class="sourceLineNo">206</span><a id="line.206">                break;</a>
+<span class="sourceLineNo">207</span><a id="line.207">            }</a>
+<span class="sourceLineNo">208</span><a id="line.208">            else {</a>
+<span class="sourceLineNo">209</span><a id="line.209">                if (sz &gt; tz) {</a>
+<span class="sourceLineNo">210</span><a id="line.210">                    linksDown.get(tz).add(Coord.get(x, y));</a>
+<span class="sourceLineNo">211</span><a id="line.211">                    tz++;</a>
+<span class="sourceLineNo">212</span><a id="line.212">                    linksUp.get(tz).add(Coord.get(x, y));</a>
+<span class="sourceLineNo">213</span><a id="line.213">                }</a>
+<span class="sourceLineNo">214</span><a id="line.214">                else</a>
+<span class="sourceLineNo">215</span><a id="line.215">                {</a>
+<span class="sourceLineNo">216</span><a id="line.216">                    linksUp.get(tz).add(Coord.get(x, y));</a>
+<span class="sourceLineNo">217</span><a id="line.217">                    tz--;</a>
+<span class="sourceLineNo">218</span><a id="line.218">                    linksDown.get(tz).add(Coord.get(x, y));</a>
+<span class="sourceLineNo">219</span><a id="line.219">                }</a>
+<span class="sourceLineNo">220</span><a id="line.220">            }</a>
+<span class="sourceLineNo">221</span><a id="line.221">        }while (true);</a>
+<span class="sourceLineNo">222</span><a id="line.222"></a>
+<span class="sourceLineNo">223</span><a id="line.223">        mix = new MixedGenerator[depth];</a>
+<span class="sourceLineNo">224</span><a id="line.224">        for (int i = 0; i &lt; depth; i++) {</a>
+<span class="sourceLineNo">225</span><a id="line.225">            mix[i] = new MixedGenerator(width, height, random, connections.get(i), 0.35f);</a>
+<span class="sourceLineNo">226</span><a id="line.226">        }</a>
+<span class="sourceLineNo">227</span><a id="line.227">    }</a>
+<span class="sourceLineNo">228</span><a id="line.228">    /**</a>
+<span class="sourceLineNo">229</span><a id="line.229">     * Changes the number of "carvers" that will create caves from one room to the next. If count is 0 or less, no caves</a>
+<span class="sourceLineNo">230</span><a id="line.230">     * will be made. If count is at least 1, caves are possible, and higher numbers relative to the other carvers make</a>
+<span class="sourceLineNo">231</span><a id="line.231">     * caves more likely. Carvers are shuffled when used, then repeat if exhausted during generation. Since typically</a>
+<span class="sourceLineNo">232</span><a id="line.232">     * about 30-40 rooms are carved, large totals for carver count aren't really needed; aiming for a total of 10</a>
+<span class="sourceLineNo">233</span><a id="line.233">     * between the count of putCaveCarvers(), putBoxRoomCarvers(), and putRoundRoomCarvers() is reasonable.</a>
+<span class="sourceLineNo">234</span><a id="line.234">     * @see MixedGenerator</a>
+<span class="sourceLineNo">235</span><a id="line.235">     * @param count the number of carvers making caves between rooms; only matters in relation to other carvers</a>
+<span class="sourceLineNo">236</span><a id="line.236">     */</a>
+<span class="sourceLineNo">237</span><a id="line.237">    public void putCaveCarvers(int count)</a>
+<span class="sourceLineNo">238</span><a id="line.238">    {</a>
+<span class="sourceLineNo">239</span><a id="line.239">        for (int i = 0; i &lt; depth; i++) {</a>
+<span class="sourceLineNo">240</span><a id="line.240">            mix[i].putCaveCarvers(count);</a>
+<span class="sourceLineNo">241</span><a id="line.241">        }</a>
+<span class="sourceLineNo">242</span><a id="line.242">    }</a>
+<span class="sourceLineNo">243</span><a id="line.243">    /**</a>
+<span class="sourceLineNo">244</span><a id="line.244">     * Changes the number of "carvers" that will create right-angle corridors from one room to the next, create rooms</a>
+<span class="sourceLineNo">245</span><a id="line.245">     * with a random size in a box shape at the start and end, and a small room at the corner if there is one. If count</a>
+<span class="sourceLineNo">246</span><a id="line.246">     * is 0 or less, no box-shaped rooms will be made. If count is at least 1, box-shaped rooms are possible, and higher</a>
+<span class="sourceLineNo">247</span><a id="line.247">     * numbers relative to the other carvers make box-shaped rooms more likely. Carvers are shuffled when used, then</a>
+<span class="sourceLineNo">248</span><a id="line.248">     * repeat if exhausted during generation. Since typically about 30-40 rooms are carved, large totals for carver</a>
+<span class="sourceLineNo">249</span><a id="line.249">     * count aren't really needed; aiming for a total of 10 between the count of putCaveCarvers(), putBoxRoomCarvers(),</a>
+<span class="sourceLineNo">250</span><a id="line.250">     * and putRoundRoomCarvers() is reasonable.</a>
+<span class="sourceLineNo">251</span><a id="line.251">     * @see MixedGenerator</a>
+<span class="sourceLineNo">252</span><a id="line.252">     * @param count the number of carvers making box-shaped rooms and corridors between them; only matters in relation</a>
+<span class="sourceLineNo">253</span><a id="line.253">     *              to other carvers</a>
+<span class="sourceLineNo">254</span><a id="line.254">     */</a>
+<span class="sourceLineNo">255</span><a id="line.255">    public void putBoxRoomCarvers(int count)</a>
+<span class="sourceLineNo">256</span><a id="line.256">    {</a>
+<span class="sourceLineNo">257</span><a id="line.257">        for (int i = 0; i &lt; depth; i++) {</a>
+<span class="sourceLineNo">258</span><a id="line.258">            mix[i].putBoxRoomCarvers(count);</a>
+<span class="sourceLineNo">259</span><a id="line.259">        }</a>
+<span class="sourceLineNo">260</span><a id="line.260">    }</a>
+<span class="sourceLineNo">261</span><a id="line.261">    /**</a>
+<span class="sourceLineNo">262</span><a id="line.262">     * Changes the number of "carvers" that will create right-angle corridors from one room to the next, create rooms</a>
+<span class="sourceLineNo">263</span><a id="line.263">     * with a random size in a box shape at the start and end, and a small room at the corner if there is one. This also</a>
+<span class="sourceLineNo">264</span><a id="line.264">     * ensures walls will be placed around the room, only allowing corridors and small cave openings to pass. If count</a>
+<span class="sourceLineNo">265</span><a id="line.265">     * is 0 or less, no box-shaped rooms will be made. If count is at least 1, box-shaped rooms are possible, and higher</a>
+<span class="sourceLineNo">266</span><a id="line.266">     * numbers relative to the other carvers make box-shaped rooms more likely. Carvers are shuffled when used, then</a>
+<span class="sourceLineNo">267</span><a id="line.267">     * repeat if exhausted during generation. Since typically about 30-40 rooms are carved, large totals for carver</a>
+<span class="sourceLineNo">268</span><a id="line.268">     * count aren't really needed; aiming for a total of 10 between the count of putCaveCarvers(), putBoxRoomCarvers(),</a>
+<span class="sourceLineNo">269</span><a id="line.269">     * and putRoundRoomCarvers() is reasonable.</a>
+<span class="sourceLineNo">270</span><a id="line.270">     * @see MixedGenerator</a>
+<span class="sourceLineNo">271</span><a id="line.271">     * @param count the number of carvers making box-shaped rooms and corridors between them; only matters in relation</a>
+<span class="sourceLineNo">272</span><a id="line.272">     *              to other carvers</a>
+<span class="sourceLineNo">273</span><a id="line.273">     */</a>
+<span class="sourceLineNo">274</span><a id="line.274">    public void putWalledBoxRoomCarvers(int count)</a>
+<span class="sourceLineNo">275</span><a id="line.275">    {</a>
+<span class="sourceLineNo">276</span><a id="line.276">        for (int i = 0; i &lt; depth; i++) {</a>
+<span class="sourceLineNo">277</span><a id="line.277">            mix[i].putWalledBoxRoomCarvers(count);</a>
+<span class="sourceLineNo">278</span><a id="line.278">        }</a>
+<span class="sourceLineNo">279</span><a id="line.279">    }</a>
+<span class="sourceLineNo">280</span><a id="line.280">    /**</a>
+<span class="sourceLineNo">281</span><a id="line.281">     * Changes the number of "carvers" that will create right-angle corridors from one room to the next, create rooms</a>
+<span class="sourceLineNo">282</span><a id="line.282">     * with a random size in a circle shape at the start and end, and a small circular room at the corner if there is</a>
+<span class="sourceLineNo">283</span><a id="line.283">     * one. If count is 0 or less, no circular rooms will be made. If count is at least 1, circular rooms are possible,</a>
+<span class="sourceLineNo">284</span><a id="line.284">     * and higher numbers relative to the other carvers make circular rooms more likely. Carvers are shuffled when used,</a>
+<span class="sourceLineNo">285</span><a id="line.285">     * then repeat if exhausted during generation. Since typically about 30-40 rooms are carved, large totals for carver</a>
+<span class="sourceLineNo">286</span><a id="line.286">     * count aren't really needed; aiming for a total of 10 between the count of putCaveCarvers(), putBoxRoomCarvers(),</a>
+<span class="sourceLineNo">287</span><a id="line.287">     * and putRoundRoomCarvers() is reasonable.</a>
+<span class="sourceLineNo">288</span><a id="line.288">     * @see MixedGenerator</a>
+<span class="sourceLineNo">289</span><a id="line.289">     * @param count the number of carvers making circular rooms and corridors between them; only matters in relation</a>
+<span class="sourceLineNo">290</span><a id="line.290">     *              to other carvers</a>
+<span class="sourceLineNo">291</span><a id="line.291">     */</a>
+<span class="sourceLineNo">292</span><a id="line.292">    public void putRoundRoomCarvers(int count)</a>
+<span class="sourceLineNo">293</span><a id="line.293">    {</a>
+<span class="sourceLineNo">294</span><a id="line.294">        for (int i = 0; i &lt; depth; i++) {</a>
+<span class="sourceLineNo">295</span><a id="line.295">            mix[i].putRoundRoomCarvers(count);</a>
+<span class="sourceLineNo">296</span><a id="line.296">        }</a>
+<span class="sourceLineNo">297</span><a id="line.297">    }</a>
+<span class="sourceLineNo">298</span><a id="line.298"></a>
+<span class="sourceLineNo">299</span><a id="line.299">    /**</a>
+<span class="sourceLineNo">300</span><a id="line.300">     * Changes the number of "carvers" that will create right-angle corridors from one room to the next, create rooms</a>
+<span class="sourceLineNo">301</span><a id="line.301">     * with a random size in a circle shape at the start and end, and a small circular room at the corner if there is</a>
+<span class="sourceLineNo">302</span><a id="line.302">     * one. This also ensures walls will be placed around the room, only allowing corridors and small cave openings to</a>
+<span class="sourceLineNo">303</span><a id="line.303">     * pass. If count is 0 or less, no circular rooms will be made. If count is at least 1, circular rooms are possible,</a>
+<span class="sourceLineNo">304</span><a id="line.304">     * and higher numbers relative to the other carvers make circular rooms more likely. Carvers are shuffled when used,</a>
+<span class="sourceLineNo">305</span><a id="line.305">     * then repeat if exhausted during generation. Since typically about 30-40 rooms are carved, large totals for carver</a>
+<span class="sourceLineNo">306</span><a id="line.306">     * count aren't really needed; aiming for a total of 10 between the count of putCaveCarvers(), putBoxRoomCarvers(),</a>
+<span class="sourceLineNo">307</span><a id="line.307">     * and putRoundRoomCarvers() is reasonable.</a>
+<span class="sourceLineNo">308</span><a id="line.308">     * @see MixedGenerator</a>
+<span class="sourceLineNo">309</span><a id="line.309">     * @param count the number of carvers making circular rooms and corridors between them; only matters in relation</a>
+<span class="sourceLineNo">310</span><a id="line.310">     *              to other carvers</a>
+<span class="sourceLineNo">311</span><a id="line.311">     */</a>
+<span class="sourceLineNo">312</span><a id="line.312">    public void putWalledRoundRoomCarvers(int count)</a>
+<span class="sourceLineNo">313</span><a id="line.313">    {</a>
+<span class="sourceLineNo">314</span><a id="line.314">        for (int i = 0; i &lt; depth; i++) {</a>
+<span class="sourceLineNo">315</span><a id="line.315">            mix[i].putWalledRoundRoomCarvers(count);</a>
+<span class="sourceLineNo">316</span><a id="line.316">        }</a>
+<span class="sourceLineNo">317</span><a id="line.317">    }</a>
+<span class="sourceLineNo">318</span><a id="line.318"></a>
+<span class="sourceLineNo">319</span><a id="line.319">    /**</a>
+<span class="sourceLineNo">320</span><a id="line.320">     * This generates a new map by stretching a 32x32x(multiple of 8) grid of potential rooms to fit the width, height,</a>
+<span class="sourceLineNo">321</span><a id="line.321">     * and depth passed to the constructor, randomly expanding columns and rows before contracting the whole to fit</a>
+<span class="sourceLineNo">322</span><a id="line.322">     * perfectly. This uses the Moore Curve, a space-filling curve that loops around on itself, to guarantee that the</a>
+<span class="sourceLineNo">323</span><a id="line.323">     * rooms will always have a long path through the dungeon, going up and down as well as north/south/east/west, that,</a>
+<span class="sourceLineNo">324</span><a id="line.324">     * if followed completely, will take you back to your starting room. Some small branches are possible, and large</a>
+<span class="sourceLineNo">325</span><a id="line.325">     * rooms may merge with other rooms nearby. This uses MixedGenerator.</a>
+<span class="sourceLineNo">326</span><a id="line.326">     * @see MixedGenerator</a>
+<span class="sourceLineNo">327</span><a id="line.327">     * @return a char[][][] where the outermost array is layers, then inside that are x and y in order (z x y)</a>
+<span class="sourceLineNo">328</span><a id="line.328">     */</a>
+<span class="sourceLineNo">329</span><a id="line.329">    public char[][][] generate()</a>
+<span class="sourceLineNo">330</span><a id="line.330">    {</a>
+<span class="sourceLineNo">331</span><a id="line.331">        char[][][] dungeon = new char[depth][][];</a>
+<span class="sourceLineNo">332</span><a id="line.332">        short[][] floors = new short[depth][];</a>
+<span class="sourceLineNo">333</span><a id="line.333">        int dlimit = (height + width) / 3;</a>
+<span class="sourceLineNo">334</span><a id="line.334">        for (int i = 0; i &lt; depth; i++) {</a>
+<span class="sourceLineNo">335</span><a id="line.335">            dungeon[i] = mix[i].generate();</a>
+<span class="sourceLineNo">336</span><a id="line.336">            floors[i] = CoordPacker.pack(dungeon[i], '.');</a>
+<span class="sourceLineNo">337</span><a id="line.337">        }</a>
+<span class="sourceLineNo">338</span><a id="line.338">        //using actual dungeon space per layer, not row/column 3D grid space</a>
+<span class="sourceLineNo">339</span><a id="line.339">        ArrayList&lt;OrderedSet&lt;Coord&gt;&gt; ups = new ArrayList&lt;&gt;(depth),</a>
+<span class="sourceLineNo">340</span><a id="line.340">                downs = new ArrayList&lt;&gt;(depth);</a>
+<span class="sourceLineNo">341</span><a id="line.341">        for (int i = 0; i &lt; depth; i++) {</a>
+<span class="sourceLineNo">342</span><a id="line.342">            ups.add(new OrderedSet&lt;Coord&gt;(40));</a>
+<span class="sourceLineNo">343</span><a id="line.343">            downs.add(new OrderedSet&lt;Coord&gt;(40));</a>
+<span class="sourceLineNo">344</span><a id="line.344">            OrderedSet&lt;Coord&gt; above;</a>
+<span class="sourceLineNo">345</span><a id="line.345">            if (i &gt; 0) {</a>
+<span class="sourceLineNo">346</span><a id="line.346">                above = new OrderedSet&lt;&gt;(linksDown.get(i - 1));</a>
+<span class="sourceLineNo">347</span><a id="line.347">                if(above.size() == 0)</a>
+<span class="sourceLineNo">348</span><a id="line.348">                    continue;</a>
+<span class="sourceLineNo">349</span><a id="line.349">                Coord higher = above.randomItem(random);//random.getRandomElement(above.toArray(new Coord[above.size()]));</a>
+<span class="sourceLineNo">350</span><a id="line.350">                while(above.size() &gt; 0)</a>
+<span class="sourceLineNo">351</span><a id="line.351">                {</a>
+<span class="sourceLineNo">352</span><a id="line.352">                    short[] nearAbove = CoordPacker.flood(floors[i - 1],</a>
+<span class="sourceLineNo">353</span><a id="line.353">                            CoordPacker.packOne(columns[higher.x], rows[higher.y]),</a>
+<span class="sourceLineNo">354</span><a id="line.354">                            dlimit);</a>
+<span class="sourceLineNo">355</span><a id="line.355">                    short[] near = CoordPacker.intersectPacked(nearAbove, CoordPacker.flood(floors[i],</a>
+<span class="sourceLineNo">356</span><a id="line.356">                            CoordPacker.packOne(columns[higher.x], rows[higher.y]),</a>
+<span class="sourceLineNo">357</span><a id="line.357">                            dlimit));</a>
+<span class="sourceLineNo">358</span><a id="line.358">                    ArrayList&lt;Coord&gt; subLinks = CoordPacker.randomPortion(near, 1, random);</a>
+<span class="sourceLineNo">359</span><a id="line.359">                    ups.get(i).addAll(subLinks);</a>
+<span class="sourceLineNo">360</span><a id="line.360">                    downs.get(i-1).addAll(subLinks);</a>
+<span class="sourceLineNo">361</span><a id="line.361">                    for(Coord abv : linksDown.get(i-1))</a>
+<span class="sourceLineNo">362</span><a id="line.362">                    {</a>
+<span class="sourceLineNo">363</span><a id="line.363">                        if(CoordPacker.queryPacked(nearAbove, columns[abv.x], rows[abv.y])) //scannedAbove[columns[abv.x]][rows[abv.y]] &lt;= dlimit</a>
+<span class="sourceLineNo">364</span><a id="line.364">                            above.remove(abv);</a>
+<span class="sourceLineNo">365</span><a id="line.365">                    }</a>
+<span class="sourceLineNo">366</span><a id="line.366">                    if(above.isEmpty())</a>
+<span class="sourceLineNo">367</span><a id="line.367">                        break;</a>
+<span class="sourceLineNo">368</span><a id="line.368">                    higher = above.randomItem(random);//random.getRandomElement(above.toArray(new Coord[above.size()]));</a>
+<span class="sourceLineNo">369</span><a id="line.369">                }</a>
+<span class="sourceLineNo">370</span><a id="line.370">            }</a>
+<span class="sourceLineNo">371</span><a id="line.371">        }</a>
+<span class="sourceLineNo">372</span><a id="line.372"></a>
+<span class="sourceLineNo">373</span><a id="line.373">        for (int i = 0; i &lt; depth; i++) {</a>
+<span class="sourceLineNo">374</span><a id="line.374">            OrderedMap&lt;Coord, Integer&gt; used = new OrderedMap&lt;&gt;(128);</a>
+<span class="sourceLineNo">375</span><a id="line.375">            for(Coord up : ups.get(i))</a>
+<span class="sourceLineNo">376</span><a id="line.376">            {</a>
+<span class="sourceLineNo">377</span><a id="line.377">                Integer count = used.get(up);</a>
+<span class="sourceLineNo">378</span><a id="line.378">                if(count != null &amp;&amp; count &gt; 1)</a>
+<span class="sourceLineNo">379</span><a id="line.379">                    continue;</a>
+<span class="sourceLineNo">380</span><a id="line.380">                dungeon[i][up.x][up.y] = '&lt;';</a>
+<span class="sourceLineNo">381</span><a id="line.381"></a>
+<span class="sourceLineNo">382</span><a id="line.382">                used.put(up, (count == null) ? 1 : count + 1);</a>
+<span class="sourceLineNo">383</span><a id="line.383">            }</a>
+<span class="sourceLineNo">384</span><a id="line.384">            used.clear();</a>
+<span class="sourceLineNo">385</span><a id="line.385">            for(Coord down : downs.get(i))</a>
+<span class="sourceLineNo">386</span><a id="line.386">            {</a>
+<span class="sourceLineNo">387</span><a id="line.387">                Integer count = used.get(down);</a>
+<span class="sourceLineNo">388</span><a id="line.388">                if(count != null &amp;&amp; count &gt; 1)</a>
+<span class="sourceLineNo">389</span><a id="line.389">                    continue;</a>
+<span class="sourceLineNo">390</span><a id="line.390">                dungeon[i][down.x][down.y] = '&gt;';</a>
+<span class="sourceLineNo">391</span><a id="line.391"></a>
+<span class="sourceLineNo">392</span><a id="line.392">                used.put(down, (count == null) ? 1 : count + 1);</a>
+<span class="sourceLineNo">393</span><a id="line.393">            }</a>
+<span class="sourceLineNo">394</span><a id="line.394">        }</a>
+<span class="sourceLineNo">395</span><a id="line.395">        return dungeon;</a>
+<span class="sourceLineNo">396</span><a id="line.396">    }</a>
+<span class="sourceLineNo">397</span><a id="line.397"></a>
+<span class="sourceLineNo">398</span><a id="line.398">    /**</a>
+<span class="sourceLineNo">399</span><a id="line.399">     * Gets an array (length equals depth) of 2D int arrays representing the environments for levels.</a>
+<span class="sourceLineNo">400</span><a id="line.400">     * @return an array of 2D int arrays, where each 2D array is a level's environment</a>
+<span class="sourceLineNo">401</span><a id="line.401">     */</a>
+<span class="sourceLineNo">402</span><a id="line.402">    public int[][][] getEnvironments()</a>
+<span class="sourceLineNo">403</span><a id="line.403">    {</a>
+<span class="sourceLineNo">404</span><a id="line.404">        int[][][] env = new int[depth][][];</a>
+<span class="sourceLineNo">405</span><a id="line.405">        for (int i = 0; i &lt; depth; i++) {</a>
+<span class="sourceLineNo">406</span><a id="line.406">            env[i] = mix[i].getEnvironment();</a>
+<span class="sourceLineNo">407</span><a id="line.407">        }</a>
+<span class="sourceLineNo">408</span><a id="line.408">        return env;</a>
+<span class="sourceLineNo">409</span><a id="line.409">    }</a>
+<span class="sourceLineNo">410</span><a id="line.410"></a>
+<span class="sourceLineNo">411</span><a id="line.411">    /**</a>
+<span class="sourceLineNo">412</span><a id="line.412">     * Gets a 2D int array representing the environment for the requested level.</a>
+<span class="sourceLineNo">413</span><a id="line.413">     * @param level the level to get from the generated dungeon; will be clamped between 0 and depth - 1</a>
+<span class="sourceLineNo">414</span><a id="line.414">     * @return a 2D int array representing the requested level's environment</a>
+<span class="sourceLineNo">415</span><a id="line.415">     */</a>
+<span class="sourceLineNo">416</span><a id="line.416">    public int[][] getEnvironment(int level)</a>
+<span class="sourceLineNo">417</span><a id="line.417">    {</a>
+<span class="sourceLineNo">418</span><a id="line.418">        return mix[Math.max(0, Math.min(depth - 1, level))].getEnvironment();</a>
+<span class="sourceLineNo">419</span><a id="line.419">    }</a>
+<span class="sourceLineNo">420</span><a id="line.420">}</a>
 
 
 

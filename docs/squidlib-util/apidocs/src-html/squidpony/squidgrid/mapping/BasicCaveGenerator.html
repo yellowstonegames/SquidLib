@@ -72,26 +72,24 @@
 <span class="sourceLineNo">060</span><a id="line.60">                }</a>
 <span class="sourceLineNo">061</span><a id="line.61">            }</a>
 <span class="sourceLineNo">062</span><a id="line.62">            for (int x = 0; x &lt; width; x++) {</a>
-<span class="sourceLineNo">063</span><a id="line.63">                for (int y = 0; y &lt; height; y++) {</a>
-<span class="sourceLineNo">064</span><a id="line.64">                    dungeon[x][y] = working[x][y];</a>
-<span class="sourceLineNo">065</span><a id="line.65">                }</a>
-<span class="sourceLineNo">066</span><a id="line.66">            }</a>
-<span class="sourceLineNo">067</span><a id="line.67">        }</a>
-<span class="sourceLineNo">068</span><a id="line.68">        return dungeon;</a>
-<span class="sourceLineNo">069</span><a id="line.69">    }</a>
-<span class="sourceLineNo">070</span><a id="line.70"></a>
-<span class="sourceLineNo">071</span><a id="line.71">    /**</a>
-<span class="sourceLineNo">072</span><a id="line.72">     * Gets the most recently-produced dungeon as a 2D char array, usually produced by calling {@link #generate()} or</a>
-<span class="sourceLineNo">073</span><a id="line.73">     * some similar method present in a specific implementation. This normally passes a direct reference and not a copy,</a>
-<span class="sourceLineNo">074</span><a id="line.74">     * so you can normally modify the returned array to propagate changes back into this IDungeonGenerator.</a>
-<span class="sourceLineNo">075</span><a id="line.75">     *</a>
-<span class="sourceLineNo">076</span><a id="line.76">     * @return the most recently-produced dungeon/map as a 2D char array</a>
-<span class="sourceLineNo">077</span><a id="line.77">     */</a>
-<span class="sourceLineNo">078</span><a id="line.78">    @Override</a>
-<span class="sourceLineNo">079</span><a id="line.79">    public char[][] getDungeon() {</a>
-<span class="sourceLineNo">080</span><a id="line.80">        return dungeon;</a>
-<span class="sourceLineNo">081</span><a id="line.81">    }</a>
-<span class="sourceLineNo">082</span><a id="line.82">}</a>
+<span class="sourceLineNo">063</span><a id="line.63">                                if (height &gt;= 0) System.arraycopy(working[x], 0, dungeon[x], 0, height);</a>
+<span class="sourceLineNo">064</span><a id="line.64">            }</a>
+<span class="sourceLineNo">065</span><a id="line.65">        }</a>
+<span class="sourceLineNo">066</span><a id="line.66">        return dungeon;</a>
+<span class="sourceLineNo">067</span><a id="line.67">    }</a>
+<span class="sourceLineNo">068</span><a id="line.68"></a>
+<span class="sourceLineNo">069</span><a id="line.69">    /**</a>
+<span class="sourceLineNo">070</span><a id="line.70">     * Gets the most recently-produced dungeon as a 2D char array, usually produced by calling {@link #generate()} or</a>
+<span class="sourceLineNo">071</span><a id="line.71">     * some similar method present in a specific implementation. This normally passes a direct reference and not a copy,</a>
+<span class="sourceLineNo">072</span><a id="line.72">     * so you can normally modify the returned array to propagate changes back into this IDungeonGenerator.</a>
+<span class="sourceLineNo">073</span><a id="line.73">     *</a>
+<span class="sourceLineNo">074</span><a id="line.74">     * @return the most recently-produced dungeon/map as a 2D char array</a>
+<span class="sourceLineNo">075</span><a id="line.75">     */</a>
+<span class="sourceLineNo">076</span><a id="line.76">    @Override</a>
+<span class="sourceLineNo">077</span><a id="line.77">    public char[][] getDungeon() {</a>
+<span class="sourceLineNo">078</span><a id="line.78">        return dungeon;</a>
+<span class="sourceLineNo">079</span><a id="line.79">    }</a>
+<span class="sourceLineNo">080</span><a id="line.80">}</a>
 
 
 

@@ -135,9 +135,9 @@
 <span class="sourceLineNo">123</span><a id="line.123">            return this;</a>
 <span class="sourceLineNo">124</span><a id="line.124">        int i = table.getInt(item);</a>
 <span class="sourceLineNo">125</span><a id="line.125">        if (i &lt; 0) {</a>
-<span class="sourceLineNo">126</span><a id="line.126">            weights.insert(table.size, Math.max(0, weight));</a>
+<span class="sourceLineNo">126</span><a id="line.126">            weights.insert(table.size, weight);</a>
 <span class="sourceLineNo">127</span><a id="line.127">            table.add(item);</a>
-<span class="sourceLineNo">128</span><a id="line.128">            int w = Math.max(0, weight);</a>
+<span class="sourceLineNo">128</span><a id="line.128">            int w = weight;</a>
 <span class="sourceLineNo">129</span><a id="line.129">            total += w;</a>
 <span class="sourceLineNo">130</span><a id="line.130">            normalTotal += w;</a>
 <span class="sourceLineNo">131</span><a id="line.131">        } else {</a>
@@ -262,9 +262,9 @@
 <span class="sourceLineNo">250</span><a id="line.250">    public ProbabilityTable&lt;T&gt; add(ProbabilityTable&lt;T&gt; table, int weight) {</a>
 <span class="sourceLineNo">251</span><a id="line.251">        if(weight &lt;= 0 || table == null || contentEquals(table) || table.total &lt;= 0)</a>
 <span class="sourceLineNo">252</span><a id="line.252">            return this;</a>
-<span class="sourceLineNo">253</span><a id="line.253">        weights.add(Math.max(0, weight));</a>
+<span class="sourceLineNo">253</span><a id="line.253">        weights.add(weight);</a>
 <span class="sourceLineNo">254</span><a id="line.254">        extraTable.add(table);</a>
-<span class="sourceLineNo">255</span><a id="line.255">        total += Math.max(0, weight);</a>
+<span class="sourceLineNo">255</span><a id="line.255">        total += weight;</a>
 <span class="sourceLineNo">256</span><a id="line.256">        return this;</a>
 <span class="sourceLineNo">257</span><a id="line.257">    }</a>
 <span class="sourceLineNo">258</span><a id="line.258"></a>

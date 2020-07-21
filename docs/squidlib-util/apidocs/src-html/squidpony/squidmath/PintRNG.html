@@ -178,7 +178,7 @@
 <span class="sourceLineNo">166</span><a id="line.166">     * @param bytes a byte array that will have its contents overwritten with random bytes.</a>
 <span class="sourceLineNo">167</span><a id="line.167">     */</a>
 <span class="sourceLineNo">168</span><a id="line.168">    public void nextBytes( final byte[] bytes ) {</a>
-<span class="sourceLineNo">169</span><a id="line.169">        int i = bytes.length, n = 0;</a>
+<span class="sourceLineNo">169</span><a id="line.169">        int i = bytes.length, n;</a>
 <span class="sourceLineNo">170</span><a id="line.170">        while( i != 0 ) {</a>
 <span class="sourceLineNo">171</span><a id="line.171">            n = Math.min( i, 4 );</a>
 <span class="sourceLineNo">172</span><a id="line.172">            for ( int bits = nextInt(); n-- != 0; bits &gt;&gt;&gt;= 8 ) bytes[ --i ] = (byte)bits;</a>

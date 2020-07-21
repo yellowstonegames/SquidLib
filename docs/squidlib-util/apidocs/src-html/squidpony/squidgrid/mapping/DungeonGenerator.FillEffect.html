@@ -97,12 +97,12 @@
 <span class="sourceLineNo">085</span><a id="line.85">    protected DungeonBoneGen gen;</a>
 <span class="sourceLineNo">086</span><a id="line.86">    public DungeonUtility utility;</a>
 <span class="sourceLineNo">087</span><a id="line.87">    protected int height, width;</a>
-<span class="sourceLineNo">088</span><a id="line.88">    public Coord stairsUp = null, stairsDown = null;</a>
+<span class="sourceLineNo">088</span><a id="line.88">    public Coord stairsUp, stairsDown;</a>
 <span class="sourceLineNo">089</span><a id="line.89">    public IStatefulRNG rng;</a>
 <span class="sourceLineNo">090</span><a id="line.90">    protected long rebuildSeed;</a>
-<span class="sourceLineNo">091</span><a id="line.91">    protected boolean seedFixed = false;</a>
+<span class="sourceLineNo">091</span><a id="line.91">    protected boolean seedFixed;</a>
 <span class="sourceLineNo">092</span><a id="line.92"></a>
-<span class="sourceLineNo">093</span><a id="line.93">    protected char[][] dungeon = null;</a>
+<span class="sourceLineNo">093</span><a id="line.93">    protected char[][] dungeon;</a>
 <span class="sourceLineNo">094</span><a id="line.94"></a>
 <span class="sourceLineNo">095</span><a id="line.95">    /**</a>
 <span class="sourceLineNo">096</span><a id="line.96">     * Get the most recently generated char[][] dungeon out of this class. The</a>
@@ -237,7 +237,7 @@
 <span class="sourceLineNo">225</span><a id="line.225">    {</a>
 <span class="sourceLineNo">226</span><a id="line.226">        if(percentage &lt; 0) percentage = 0;</a>
 <span class="sourceLineNo">227</span><a id="line.227">        if(percentage &gt; 100) percentage = 100;</a>
-<span class="sourceLineNo">228</span><a id="line.228">        if(fx.containsKey(FillEffect.WATER)) fx.remove(FillEffect.WATER);</a>
+<span class="sourceLineNo">228</span><a id="line.228">                fx.remove(FillEffect.WATER);</a>
 <span class="sourceLineNo">229</span><a id="line.229">        fx.put(FillEffect.WATER, percentage);</a>
 <span class="sourceLineNo">230</span><a id="line.230">        return this;</a>
 <span class="sourceLineNo">231</span><a id="line.231">    }</a>
@@ -256,9 +256,9 @@
 <span class="sourceLineNo">244</span><a id="line.244">    {</a>
 <span class="sourceLineNo">245</span><a id="line.245">        if(percentage &lt; 0) percentage = 0;</a>
 <span class="sourceLineNo">246</span><a id="line.246">        if(percentage &gt; 100) percentage = 100;</a>
-<span class="sourceLineNo">247</span><a id="line.247">        if(fx.containsKey(FillEffect.WATER)) fx.remove(FillEffect.WATER);</a>
+<span class="sourceLineNo">247</span><a id="line.247">        fx.remove(FillEffect.WATER);</a>
 <span class="sourceLineNo">248</span><a id="line.248">        fx.put(FillEffect.WATER, percentage);</a>
-<span class="sourceLineNo">249</span><a id="line.249">        if(fx.containsKey(FillEffect.ISLANDS)) fx.remove(FillEffect.ISLANDS);</a>
+<span class="sourceLineNo">249</span><a id="line.249">        fx.remove(FillEffect.ISLANDS);</a>
 <span class="sourceLineNo">250</span><a id="line.250">        if(islandSpacing &gt; 1)</a>
 <span class="sourceLineNo">251</span><a id="line.251">            fx.put(FillEffect.ISLANDS, islandSpacing);</a>
 <span class="sourceLineNo">252</span><a id="line.252">        return this;</a>
@@ -277,7 +277,7 @@
 <span class="sourceLineNo">265</span><a id="line.265">    {</a>
 <span class="sourceLineNo">266</span><a id="line.266">        if(percentage &lt; 0) percentage = 0;</a>
 <span class="sourceLineNo">267</span><a id="line.267">        if(percentage &gt; 100) percentage = 100;</a>
-<span class="sourceLineNo">268</span><a id="line.268">        if(fx.containsKey(FillEffect.GRASS)) fx.remove(FillEffect.GRASS);</a>
+<span class="sourceLineNo">268</span><a id="line.268">        fx.remove(FillEffect.GRASS);</a>
 <span class="sourceLineNo">269</span><a id="line.269">        fx.put(FillEffect.GRASS, percentage);</a>
 <span class="sourceLineNo">270</span><a id="line.270">        return this;</a>
 <span class="sourceLineNo">271</span><a id="line.271">    }</a>
@@ -291,7 +291,7 @@
 <span class="sourceLineNo">279</span><a id="line.279">    {</a>
 <span class="sourceLineNo">280</span><a id="line.280">        if(percentage &lt; 0) percentage = 0;</a>
 <span class="sourceLineNo">281</span><a id="line.281">        if(percentage &gt; 100) percentage = 100;</a>
-<span class="sourceLineNo">282</span><a id="line.282">        if(fx.containsKey(FillEffect.BOULDERS)) fx.remove(FillEffect.BOULDERS);</a>
+<span class="sourceLineNo">282</span><a id="line.282">        fx.remove(FillEffect.BOULDERS);</a>
 <span class="sourceLineNo">283</span><a id="line.283">        fx.put(FillEffect.BOULDERS, percentage);</a>
 <span class="sourceLineNo">284</span><a id="line.284">        return this;</a>
 <span class="sourceLineNo">285</span><a id="line.285">    }</a>
@@ -311,7 +311,7 @@
 <span class="sourceLineNo">299</span><a id="line.299">        if(percentage &lt; 0) percentage = 0;</a>
 <span class="sourceLineNo">300</span><a id="line.300">        if(percentage &gt; 100) percentage = 100;</a>
 <span class="sourceLineNo">301</span><a id="line.301">        if(doubleDoors) percentage *= -1;</a>
-<span class="sourceLineNo">302</span><a id="line.302">        if(fx.containsKey(FillEffect.DOORS)) fx.remove(FillEffect.DOORS);</a>
+<span class="sourceLineNo">302</span><a id="line.302">        fx.remove(FillEffect.DOORS);</a>
 <span class="sourceLineNo">303</span><a id="line.303">        fx.put(FillEffect.DOORS, percentage);</a>
 <span class="sourceLineNo">304</span><a id="line.304">        return this;</a>
 <span class="sourceLineNo">305</span><a id="line.305">    }</a>
@@ -328,7 +328,7 @@
 <span class="sourceLineNo">316</span><a id="line.316">    {</a>
 <span class="sourceLineNo">317</span><a id="line.317">        if(percentage &lt; 0) percentage = 0;</a>
 <span class="sourceLineNo">318</span><a id="line.318">        if(percentage &gt; 100) percentage = 100;</a>
-<span class="sourceLineNo">319</span><a id="line.319">        if(fx.containsKey(FillEffect.TRAPS)) fx.remove(FillEffect.TRAPS);</a>
+<span class="sourceLineNo">319</span><a id="line.319">        fx.remove(FillEffect.TRAPS);</a>
 <span class="sourceLineNo">320</span><a id="line.320">        fx.put(FillEffect.TRAPS, percentage);</a>
 <span class="sourceLineNo">321</span><a id="line.321">        return this;</a>
 <span class="sourceLineNo">322</span><a id="line.322">    }</a>
@@ -793,7 +793,7 @@
 <span class="sourceLineNo">781</span><a id="line.781">            for(int i = 0; i &lt; total; i++)</a>
 <span class="sourceLineNo">782</span><a id="line.782">            {</a>
 <span class="sourceLineNo">783</span><a id="line.783">                Coord entry = rng.getRandomElement(hazards);</a>
-<span class="sourceLineNo">784</span><a id="line.784">                if(map[entry.x][entry.y] == '&lt;' || map[entry.x][entry.y] == '&lt;')</a>
+<span class="sourceLineNo">784</span><a id="line.784">                if(map[entry.x][entry.y] == '&lt;' || map[entry.x][entry.y] == '&gt;')</a>
 <span class="sourceLineNo">785</span><a id="line.785">                    continue;</a>
 <span class="sourceLineNo">786</span><a id="line.786">                map[entry.x][entry.y] = '^';</a>
 <span class="sourceLineNo">787</span><a id="line.787">                hazards.remove(entry);</a>

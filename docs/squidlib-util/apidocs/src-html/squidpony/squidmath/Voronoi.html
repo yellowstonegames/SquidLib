@@ -251,8 +251,8 @@
 <span class="sourceLineNo">239</span><a id="line.239">    private void legalizeEdge(Triangle triangle, CoordDouble ea, CoordDouble eb, CoordDouble newVertex) {</a>
 <span class="sourceLineNo">240</span><a id="line.240">        Triangle neighborTriangle = triangleSoup.findNeighbor(triangle, ea, eb);</a>
 <span class="sourceLineNo">241</span><a id="line.241"></a>
-<span class="sourceLineNo">242</span><a id="line.242">        /**</a>
-<span class="sourceLineNo">243</span><a id="line.243">         * If the triangle has a neighbor, then legalize the edge</a>
+<span class="sourceLineNo">242</span><a id="line.242">        /*</a>
+<span class="sourceLineNo">243</span><a id="line.243">          If the triangle has a neighbor, then legalize the edge</a>
 <span class="sourceLineNo">244</span><a id="line.244">         */</a>
 <span class="sourceLineNo">245</span><a id="line.245">        if (neighborTriangle != null) {</a>
 <span class="sourceLineNo">246</span><a id="line.246">            if (neighborTriangle.isPointInCircumcircle(newVertex)) {</a>
@@ -510,242 +510,238 @@
 <span class="sourceLineNo">498</span><a id="line.498">         *         triangle</a>
 <span class="sourceLineNo">499</span><a id="line.499">         */</a>
 <span class="sourceLineNo">500</span><a id="line.500">        public boolean hasVertex(CoordDouble vertex) {</a>
-<span class="sourceLineNo">501</span><a id="line.501">            if (a == vertex || b == vertex || c == vertex) {</a>
-<span class="sourceLineNo">502</span><a id="line.502">                return true;</a>
-<span class="sourceLineNo">503</span><a id="line.503">            }</a>
-<span class="sourceLineNo">504</span><a id="line.504"></a>
-<span class="sourceLineNo">505</span><a id="line.505">            return false;</a>
-<span class="sourceLineNo">506</span><a id="line.506">        }</a>
-<span class="sourceLineNo">507</span><a id="line.507"></a>
-<span class="sourceLineNo">508</span><a id="line.508">        /**</a>
-<span class="sourceLineNo">509</span><a id="line.509">         * Computes the closest point on the given edge to the specified point.</a>
-<span class="sourceLineNo">510</span><a id="line.510">         *</a>
-<span class="sourceLineNo">511</span><a id="line.511">         * @param edge</a>
-<span class="sourceLineNo">512</span><a id="line.512">         *            The edge on which we search the closest point to the specified</a>
-<span class="sourceLineNo">513</span><a id="line.513">         *            point</a>
-<span class="sourceLineNo">514</span><a id="line.514">         * @param point</a>
-<span class="sourceLineNo">515</span><a id="line.515">         *            The point to which we search the closest point on the edge</a>
-<span class="sourceLineNo">516</span><a id="line.516">         * @return The closest point on the given edge to the specified point</a>
-<span class="sourceLineNo">517</span><a id="line.517">         */</a>
-<span class="sourceLineNo">518</span><a id="line.518">        CoordDouble computeClosestPoint(Edge edge, CoordDouble point) {</a>
-<span class="sourceLineNo">519</span><a id="line.519">            //CoordDouble ab = edge.b.sub(edge.a);</a>
-<span class="sourceLineNo">520</span><a id="line.520">            double abx = edge.b.x = edge.a.x;</a>
-<span class="sourceLineNo">521</span><a id="line.521">            double aby = edge.b.y = edge.a.y;</a>
-<span class="sourceLineNo">522</span><a id="line.522">            double t = ((point.x - edge.a.x) * abx + (point.y - edge.a.y) * aby) / (abx * abx + aby * aby);</a>
-<span class="sourceLineNo">523</span><a id="line.523">            //double t = point.sub(edge.a).dot(ab) / ab.dot(ab);</a>
-<span class="sourceLineNo">524</span><a id="line.524"></a>
-<span class="sourceLineNo">525</span><a id="line.525">            if (t &lt; 0.0d) {</a>
-<span class="sourceLineNo">526</span><a id="line.526">                t = 0.0d;</a>
-<span class="sourceLineNo">527</span><a id="line.527">            } else if (t &gt; 1.0d) {</a>
-<span class="sourceLineNo">528</span><a id="line.528">                t = 1.0d;</a>
-<span class="sourceLineNo">529</span><a id="line.529">            }</a>
-<span class="sourceLineNo">530</span><a id="line.530">            return new CoordDouble(edge.a.x + abx * t, edge.a.y + aby * t);</a>
-<span class="sourceLineNo">531</span><a id="line.531">//            return edge.a.add(ab.mult(t));</a>
-<span class="sourceLineNo">532</span><a id="line.532">        }</a>
-<span class="sourceLineNo">533</span><a id="line.533"></a>
-<span class="sourceLineNo">534</span><a id="line.534">        /**</a>
-<span class="sourceLineNo">535</span><a id="line.535">         * Tests if the two arguments have the same sign.</a>
-<span class="sourceLineNo">536</span><a id="line.536">         *</a>
-<span class="sourceLineNo">537</span><a id="line.537">         * @param a</a>
-<span class="sourceLineNo">538</span><a id="line.538">         *            The first floating point argument</a>
-<span class="sourceLineNo">539</span><a id="line.539">         * @param b</a>
-<span class="sourceLineNo">540</span><a id="line.540">         *            The second floating point argument</a>
-<span class="sourceLineNo">541</span><a id="line.541">         * @return Returns true iff both arguments have the same sign</a>
-<span class="sourceLineNo">542</span><a id="line.542">         */</a>
-<span class="sourceLineNo">543</span><a id="line.543">        private boolean hasSameSign(double a, double b) {</a>
-<span class="sourceLineNo">544</span><a id="line.544">            return (a == 0.0 &amp;&amp; b == 0.0) || ((a &gt; 0.0) == (b &gt; 0.0));</a>
-<span class="sourceLineNo">545</span><a id="line.545">        }</a>
-<span class="sourceLineNo">546</span><a id="line.546"></a>
-<span class="sourceLineNo">547</span><a id="line.547">        @Override</a>
-<span class="sourceLineNo">548</span><a id="line.548">        public String toString() {</a>
-<span class="sourceLineNo">549</span><a id="line.549">            return "Triangle[" + a + ", " + b + ", " + c + "]";</a>
-<span class="sourceLineNo">550</span><a id="line.550">        }</a>
-<span class="sourceLineNo">551</span><a id="line.551">    }</a>
-<span class="sourceLineNo">552</span><a id="line.552">    public static class Polygon implements Serializable {</a>
-<span class="sourceLineNo">553</span><a id="line.553">        private static final long serialVersionUID = 1L;</a>
-<span class="sourceLineNo">554</span><a id="line.554">        public CoordDouble centroid;</a>
-<span class="sourceLineNo">555</span><a id="line.555">        public final CoordDouble[] vertices;</a>
-<span class="sourceLineNo">556</span><a id="line.556"></a>
-<span class="sourceLineNo">557</span><a id="line.557">        public Polygon(CoordDouble... vertices) {</a>
-<span class="sourceLineNo">558</span><a id="line.558">            this.vertices = vertices == null || vertices.length &lt; 3</a>
-<span class="sourceLineNo">559</span><a id="line.559">                    ? new CoordDouble[] {new CoordDouble(), new CoordDouble(), new CoordDouble()}</a>
-<span class="sourceLineNo">560</span><a id="line.560">                    : vertices;</a>
-<span class="sourceLineNo">561</span><a id="line.561">            this.centroid = new CoordDouble(this.vertices[0]);</a>
-<span class="sourceLineNo">562</span><a id="line.562">            for (int i = 1; i &lt; this.vertices.length; i++) {</a>
-<span class="sourceLineNo">563</span><a id="line.563">                this.centroid.add(this.vertices[i]);</a>
-<span class="sourceLineNo">564</span><a id="line.564">            }</a>
-<span class="sourceLineNo">565</span><a id="line.565">            this.centroid.divide(this.vertices.length, this.vertices.length);</a>
-<span class="sourceLineNo">566</span><a id="line.566">        }</a>
-<span class="sourceLineNo">567</span><a id="line.567"></a>
-<span class="sourceLineNo">568</span><a id="line.568">    }</a>
-<span class="sourceLineNo">569</span><a id="line.569">    private static final Comparator&lt;Double&gt; doubleComparator = new Comparator&lt;Double&gt;() {</a>
-<span class="sourceLineNo">570</span><a id="line.570">        @Override</a>
-<span class="sourceLineNo">571</span><a id="line.571">        public int compare(Double o1, Double o2) {</a>
-<span class="sourceLineNo">572</span><a id="line.572">            return o1.compareTo(o2);</a>
-<span class="sourceLineNo">573</span><a id="line.573">        }</a>
-<span class="sourceLineNo">574</span><a id="line.574">    };</a>
-<span class="sourceLineNo">575</span><a id="line.575"></a>
-<span class="sourceLineNo">576</span><a id="line.576">    /**</a>
-<span class="sourceLineNo">577</span><a id="line.577">     * Triangle soup class implementation.</a>
-<span class="sourceLineNo">578</span><a id="line.578">     *</a>
-<span class="sourceLineNo">579</span><a id="line.579">     * @author Johannes Diemke</a>
-<span class="sourceLineNo">580</span><a id="line.580">     */</a>
-<span class="sourceLineNo">581</span><a id="line.581">    static class TriangleSoup {</a>
-<span class="sourceLineNo">582</span><a id="line.582"></a>
-<span class="sourceLineNo">583</span><a id="line.583">        ArrayList&lt;Triangle&gt; triangleSoup;</a>
-<span class="sourceLineNo">584</span><a id="line.584"></a>
-<span class="sourceLineNo">585</span><a id="line.585">        /**</a>
-<span class="sourceLineNo">586</span><a id="line.586">         * Constructor of the triangle soup class used to create a new triangle soup</a>
-<span class="sourceLineNo">587</span><a id="line.587">         * instance.</a>
-<span class="sourceLineNo">588</span><a id="line.588">         */</a>
-<span class="sourceLineNo">589</span><a id="line.589">        public TriangleSoup() {</a>
-<span class="sourceLineNo">590</span><a id="line.590">            this.triangleSoup = new ArrayList&lt;&gt;();</a>
-<span class="sourceLineNo">591</span><a id="line.591">        }</a>
-<span class="sourceLineNo">592</span><a id="line.592"></a>
-<span class="sourceLineNo">593</span><a id="line.593">        /**</a>
-<span class="sourceLineNo">594</span><a id="line.594">         * Adds a triangle to this triangle soup.</a>
-<span class="sourceLineNo">595</span><a id="line.595">         *</a>
-<span class="sourceLineNo">596</span><a id="line.596">         * @param triangle</a>
-<span class="sourceLineNo">597</span><a id="line.597">         *            The triangle to be added to this triangle soup</a>
-<span class="sourceLineNo">598</span><a id="line.598">         */</a>
-<span class="sourceLineNo">599</span><a id="line.599">        public void add(Triangle triangle) {</a>
-<span class="sourceLineNo">600</span><a id="line.600">            this.triangleSoup.add(triangle);</a>
-<span class="sourceLineNo">601</span><a id="line.601">        }</a>
-<span class="sourceLineNo">602</span><a id="line.602"></a>
-<span class="sourceLineNo">603</span><a id="line.603">        /**</a>
-<span class="sourceLineNo">604</span><a id="line.604">         * Removes a triangle from this triangle soup.</a>
-<span class="sourceLineNo">605</span><a id="line.605">         *</a>
-<span class="sourceLineNo">606</span><a id="line.606">         * @param triangle</a>
-<span class="sourceLineNo">607</span><a id="line.607">         *            The triangle to be removed from this triangle soup</a>
-<span class="sourceLineNo">608</span><a id="line.608">         */</a>
-<span class="sourceLineNo">609</span><a id="line.609">        public void remove(Triangle triangle) {</a>
-<span class="sourceLineNo">610</span><a id="line.610">            this.triangleSoup.remove(triangle);</a>
-<span class="sourceLineNo">611</span><a id="line.611">        }</a>
-<span class="sourceLineNo">612</span><a id="line.612"></a>
-<span class="sourceLineNo">613</span><a id="line.613">        /**</a>
-<span class="sourceLineNo">614</span><a id="line.614">         * Returns the triangles from this triangle soup.</a>
-<span class="sourceLineNo">615</span><a id="line.615">         *</a>
-<span class="sourceLineNo">616</span><a id="line.616">         * @return The triangles from this triangle soup</a>
-<span class="sourceLineNo">617</span><a id="line.617">         */</a>
-<span class="sourceLineNo">618</span><a id="line.618">        public ArrayList&lt;Triangle&gt; getTriangles() {</a>
-<span class="sourceLineNo">619</span><a id="line.619">            return this.triangleSoup;</a>
-<span class="sourceLineNo">620</span><a id="line.620">        }</a>
-<span class="sourceLineNo">621</span><a id="line.621"></a>
-<span class="sourceLineNo">622</span><a id="line.622">        /**</a>
-<span class="sourceLineNo">623</span><a id="line.623">         * Returns the triangle from this triangle soup that contains the specified</a>
-<span class="sourceLineNo">624</span><a id="line.624">         * point or null if no triangle from the triangle soup contains the point.</a>
-<span class="sourceLineNo">625</span><a id="line.625">         *</a>
-<span class="sourceLineNo">626</span><a id="line.626">         * @param point</a>
-<span class="sourceLineNo">627</span><a id="line.627">         *            The point</a>
-<span class="sourceLineNo">628</span><a id="line.628">         * @return Returns the triangle from this triangle soup that contains the</a>
-<span class="sourceLineNo">629</span><a id="line.629">         *         specified point or null</a>
-<span class="sourceLineNo">630</span><a id="line.630">         */</a>
-<span class="sourceLineNo">631</span><a id="line.631">        public Triangle findContainingTriangle(CoordDouble point) {</a>
-<span class="sourceLineNo">632</span><a id="line.632">            for (Triangle triangle : triangleSoup) {</a>
-<span class="sourceLineNo">633</span><a id="line.633">                if (triangle.contains(point)) {</a>
-<span class="sourceLineNo">634</span><a id="line.634">                    return triangle;</a>
-<span class="sourceLineNo">635</span><a id="line.635">                }</a>
-<span class="sourceLineNo">636</span><a id="line.636">            }</a>
-<span class="sourceLineNo">637</span><a id="line.637">            return null;</a>
-<span class="sourceLineNo">638</span><a id="line.638">        }</a>
-<span class="sourceLineNo">639</span><a id="line.639"></a>
-<span class="sourceLineNo">640</span><a id="line.640">        /**</a>
-<span class="sourceLineNo">641</span><a id="line.641">         * Returns the neighbor triangle of the specified triangle sharing the same</a>
-<span class="sourceLineNo">642</span><a id="line.642">         * edge as specified. If no neighbor sharing the same edge exists null is</a>
-<span class="sourceLineNo">643</span><a id="line.643">         * returned.</a>
-<span class="sourceLineNo">644</span><a id="line.644">         *</a>
-<span class="sourceLineNo">645</span><a id="line.645">         * @param triangle</a>
-<span class="sourceLineNo">646</span><a id="line.646">         *            The triangle</a>
-<span class="sourceLineNo">647</span><a id="line.647">         * @param edge</a>
-<span class="sourceLineNo">648</span><a id="line.648">         *            The edge</a>
-<span class="sourceLineNo">649</span><a id="line.649">         * @return The triangle's neighbor triangle sharing the same edge or null if</a>
-<span class="sourceLineNo">650</span><a id="line.650">         *         no triangle exists</a>
-<span class="sourceLineNo">651</span><a id="line.651">         */</a>
-<span class="sourceLineNo">652</span><a id="line.652">        public Triangle findNeighbor(Triangle triangle, Edge edge) {</a>
-<span class="sourceLineNo">653</span><a id="line.653">            for (Triangle triangleFromSoup : triangleSoup) {</a>
-<span class="sourceLineNo">654</span><a id="line.654">                if (triangleFromSoup.isNeighbor(edge) &amp;&amp; triangleFromSoup != triangle) {</a>
-<span class="sourceLineNo">655</span><a id="line.655">                    return triangleFromSoup;</a>
-<span class="sourceLineNo">656</span><a id="line.656">                }</a>
-<span class="sourceLineNo">657</span><a id="line.657">            }</a>
-<span class="sourceLineNo">658</span><a id="line.658">            return null;</a>
-<span class="sourceLineNo">659</span><a id="line.659">        }</a>
-<span class="sourceLineNo">660</span><a id="line.660">        public Triangle findNeighbor(Triangle triangle, CoordDouble ea, CoordDouble eb) {</a>
-<span class="sourceLineNo">661</span><a id="line.661">            for (Triangle triangleFromSoup : triangleSoup) {</a>
-<span class="sourceLineNo">662</span><a id="line.662">                if (triangleFromSoup.isNeighbor(ea, eb) &amp;&amp; triangleFromSoup != triangle) {</a>
-<span class="sourceLineNo">663</span><a id="line.663">                    return triangleFromSoup;</a>
-<span class="sourceLineNo">664</span><a id="line.664">                }</a>
-<span class="sourceLineNo">665</span><a id="line.665">            }</a>
-<span class="sourceLineNo">666</span><a id="line.666">            return null;</a>
-<span class="sourceLineNo">667</span><a id="line.667">        }</a>
-<span class="sourceLineNo">668</span><a id="line.668"></a>
-<span class="sourceLineNo">669</span><a id="line.669">        /**</a>
-<span class="sourceLineNo">670</span><a id="line.670">         * Returns one of the possible triangles sharing the specified edge. Based</a>
-<span class="sourceLineNo">671</span><a id="line.671">         * on the ordering of the triangles in this triangle soup the returned</a>
-<span class="sourceLineNo">672</span><a id="line.672">         * triangle may differ. To find the other triangle that shares this edge use</a>
-<span class="sourceLineNo">673</span><a id="line.673">         * the {@link #findNeighbor(Triangle, Edge)} method.</a>
-<span class="sourceLineNo">674</span><a id="line.674">         *</a>
-<span class="sourceLineNo">675</span><a id="line.675">         * @param edge</a>
-<span class="sourceLineNo">676</span><a id="line.676">         *            The edge</a>
-<span class="sourceLineNo">677</span><a id="line.677">         * @return Returns one triangle that shares the specified edge</a>
-<span class="sourceLineNo">678</span><a id="line.678">         */</a>
-<span class="sourceLineNo">679</span><a id="line.679">        public Triangle findOneTriangleSharing(Edge edge) {</a>
-<span class="sourceLineNo">680</span><a id="line.680">            for (Triangle triangle : triangleSoup) {</a>
-<span class="sourceLineNo">681</span><a id="line.681">                if (triangle.isNeighbor(edge)) {</a>
-<span class="sourceLineNo">682</span><a id="line.682">                    return triangle;</a>
-<span class="sourceLineNo">683</span><a id="line.683">                }</a>
-<span class="sourceLineNo">684</span><a id="line.684">            }</a>
-<span class="sourceLineNo">685</span><a id="line.685">            return null;</a>
-<span class="sourceLineNo">686</span><a id="line.686">        }</a>
-<span class="sourceLineNo">687</span><a id="line.687"></a>
-<span class="sourceLineNo">688</span><a id="line.688">        /**</a>
-<span class="sourceLineNo">689</span><a id="line.689">         * Returns the edge from the triangle soup nearest to the specified point.</a>
-<span class="sourceLineNo">690</span><a id="line.690">         *</a>
-<span class="sourceLineNo">691</span><a id="line.691">         * @param point</a>
-<span class="sourceLineNo">692</span><a id="line.692">         *            The point</a>
-<span class="sourceLineNo">693</span><a id="line.693">         * @return The edge from the triangle soup nearest to the specified point</a>
-<span class="sourceLineNo">694</span><a id="line.694">         */</a>
-<span class="sourceLineNo">695</span><a id="line.695">        public Edge findNearestEdge(CoordDouble point) {</a>
-<span class="sourceLineNo">696</span><a id="line.696">//            List&lt;EdgeDistancePack&gt; edgeList = new ArrayList&lt;EdgeDistancePack&gt;();</a>
-<span class="sourceLineNo">697</span><a id="line.697"></a>
-<span class="sourceLineNo">698</span><a id="line.698">            OrderedMap&lt;Edge, Double&gt; edges = new OrderedMap&lt;&gt;(triangleSoup.size());</a>
-<span class="sourceLineNo">699</span><a id="line.699">            for (Triangle triangle : triangleSoup) {</a>
-<span class="sourceLineNo">700</span><a id="line.700">                Edge ab = new Edge(triangle.a, triangle.b);</a>
-<span class="sourceLineNo">701</span><a id="line.701">                Edge bc = new Edge(triangle.b, triangle.c);</a>
-<span class="sourceLineNo">702</span><a id="line.702">                Edge ca = new Edge(triangle.c, triangle.a);</a>
-<span class="sourceLineNo">703</span><a id="line.703">                double abd = triangle.computeClosestPoint(ab, point).subtract(point).lengthSq();</a>
-<span class="sourceLineNo">704</span><a id="line.704">                double bcd = triangle.computeClosestPoint(bc, point).subtract(point).lengthSq();</a>
-<span class="sourceLineNo">705</span><a id="line.705">                double cad = triangle.computeClosestPoint(ca, point).subtract(point).lengthSq();</a>
-<span class="sourceLineNo">706</span><a id="line.706">                </a>
-<span class="sourceLineNo">707</span><a id="line.707">                if(abd &lt;= bcd &amp;&amp; abd &lt;= cad)</a>
-<span class="sourceLineNo">708</span><a id="line.708">                    edges.put(ab, abd);</a>
-<span class="sourceLineNo">709</span><a id="line.709">                else if(bcd &lt;= abd &amp;&amp; bcd &lt;= cad)</a>
-<span class="sourceLineNo">710</span><a id="line.710">                    edges.put(bc, bcd);</a>
-<span class="sourceLineNo">711</span><a id="line.711">                else </a>
-<span class="sourceLineNo">712</span><a id="line.712">                    edges.put(ca, cad);</a>
-<span class="sourceLineNo">713</span><a id="line.713">            }</a>
-<span class="sourceLineNo">714</span><a id="line.714">            edges.sortByValue(doubleComparator);</a>
-<span class="sourceLineNo">715</span><a id="line.715">            return edges.keyAt(0);</a>
-<span class="sourceLineNo">716</span><a id="line.716">        }</a>
-<span class="sourceLineNo">717</span><a id="line.717"></a>
-<span class="sourceLineNo">718</span><a id="line.718">        /**</a>
-<span class="sourceLineNo">719</span><a id="line.719">         * Removes all triangles from this triangle soup that contain the specified</a>
-<span class="sourceLineNo">720</span><a id="line.720">         * vertex.</a>
-<span class="sourceLineNo">721</span><a id="line.721">         *</a>
-<span class="sourceLineNo">722</span><a id="line.722">         * @param vertex</a>
-<span class="sourceLineNo">723</span><a id="line.723">         *            The vertex</a>
-<span class="sourceLineNo">724</span><a id="line.724">         */</a>
-<span class="sourceLineNo">725</span><a id="line.725">        public void removeTrianglesUsing(CoordDouble vertex) {</a>
-<span class="sourceLineNo">726</span><a id="line.726">            ListIterator&lt;Triangle&gt; li = triangleSoup.listIterator();</a>
-<span class="sourceLineNo">727</span><a id="line.727">            while (li.hasNext())</a>
-<span class="sourceLineNo">728</span><a id="line.728">            {</a>
-<span class="sourceLineNo">729</span><a id="line.729">                Triangle triangle = li.next();</a>
-<span class="sourceLineNo">730</span><a id="line.730">                if(triangle.hasVertex(vertex))</a>
-<span class="sourceLineNo">731</span><a id="line.731">                    li.remove();</a>
-<span class="sourceLineNo">732</span><a id="line.732">            }</a>
-<span class="sourceLineNo">733</span><a id="line.733">        }</a>
-<span class="sourceLineNo">734</span><a id="line.734"></a>
-<span class="sourceLineNo">735</span><a id="line.735">    }</a>
-<span class="sourceLineNo">736</span><a id="line.736">}</a>
+<span class="sourceLineNo">501</span><a id="line.501">                        return a == vertex || b == vertex || c == vertex;</a>
+<span class="sourceLineNo">502</span><a id="line.502">                }</a>
+<span class="sourceLineNo">503</span><a id="line.503"></a>
+<span class="sourceLineNo">504</span><a id="line.504">        /**</a>
+<span class="sourceLineNo">505</span><a id="line.505">         * Computes the closest point on the given edge to the specified point.</a>
+<span class="sourceLineNo">506</span><a id="line.506">         *</a>
+<span class="sourceLineNo">507</span><a id="line.507">         * @param edge</a>
+<span class="sourceLineNo">508</span><a id="line.508">         *            The edge on which we search the closest point to the specified</a>
+<span class="sourceLineNo">509</span><a id="line.509">         *            point</a>
+<span class="sourceLineNo">510</span><a id="line.510">         * @param point</a>
+<span class="sourceLineNo">511</span><a id="line.511">         *            The point to which we search the closest point on the edge</a>
+<span class="sourceLineNo">512</span><a id="line.512">         * @return The closest point on the given edge to the specified point</a>
+<span class="sourceLineNo">513</span><a id="line.513">         */</a>
+<span class="sourceLineNo">514</span><a id="line.514">        CoordDouble computeClosestPoint(Edge edge, CoordDouble point) {</a>
+<span class="sourceLineNo">515</span><a id="line.515">            //CoordDouble ab = edge.b.sub(edge.a);</a>
+<span class="sourceLineNo">516</span><a id="line.516">            double abx = edge.b.x = edge.a.x;</a>
+<span class="sourceLineNo">517</span><a id="line.517">            double aby = edge.b.y = edge.a.y;</a>
+<span class="sourceLineNo">518</span><a id="line.518">            double t = ((point.x - edge.a.x) * abx + (point.y - edge.a.y) * aby) / (abx * abx + aby * aby);</a>
+<span class="sourceLineNo">519</span><a id="line.519">            //double t = point.sub(edge.a).dot(ab) / ab.dot(ab);</a>
+<span class="sourceLineNo">520</span><a id="line.520"></a>
+<span class="sourceLineNo">521</span><a id="line.521">            if (t &lt; 0.0d) {</a>
+<span class="sourceLineNo">522</span><a id="line.522">                t = 0.0d;</a>
+<span class="sourceLineNo">523</span><a id="line.523">            } else if (t &gt; 1.0d) {</a>
+<span class="sourceLineNo">524</span><a id="line.524">                t = 1.0d;</a>
+<span class="sourceLineNo">525</span><a id="line.525">            }</a>
+<span class="sourceLineNo">526</span><a id="line.526">            return new CoordDouble(edge.a.x + abx * t, edge.a.y + aby * t);</a>
+<span class="sourceLineNo">527</span><a id="line.527">//            return edge.a.add(ab.mult(t));</a>
+<span class="sourceLineNo">528</span><a id="line.528">        }</a>
+<span class="sourceLineNo">529</span><a id="line.529"></a>
+<span class="sourceLineNo">530</span><a id="line.530">        /**</a>
+<span class="sourceLineNo">531</span><a id="line.531">         * Tests if the two arguments have the same sign.</a>
+<span class="sourceLineNo">532</span><a id="line.532">         *</a>
+<span class="sourceLineNo">533</span><a id="line.533">         * @param a</a>
+<span class="sourceLineNo">534</span><a id="line.534">         *            The first floating point argument</a>
+<span class="sourceLineNo">535</span><a id="line.535">         * @param b</a>
+<span class="sourceLineNo">536</span><a id="line.536">         *            The second floating point argument</a>
+<span class="sourceLineNo">537</span><a id="line.537">         * @return Returns true iff both arguments have the same sign</a>
+<span class="sourceLineNo">538</span><a id="line.538">         */</a>
+<span class="sourceLineNo">539</span><a id="line.539">        private boolean hasSameSign(double a, double b) {</a>
+<span class="sourceLineNo">540</span><a id="line.540">            return (a == 0.0 &amp;&amp; b == 0.0) || ((a &gt; 0.0) == (b &gt; 0.0));</a>
+<span class="sourceLineNo">541</span><a id="line.541">        }</a>
+<span class="sourceLineNo">542</span><a id="line.542"></a>
+<span class="sourceLineNo">543</span><a id="line.543">        @Override</a>
+<span class="sourceLineNo">544</span><a id="line.544">        public String toString() {</a>
+<span class="sourceLineNo">545</span><a id="line.545">            return "Triangle[" + a + ", " + b + ", " + c + "]";</a>
+<span class="sourceLineNo">546</span><a id="line.546">        }</a>
+<span class="sourceLineNo">547</span><a id="line.547">    }</a>
+<span class="sourceLineNo">548</span><a id="line.548">    public static class Polygon implements Serializable {</a>
+<span class="sourceLineNo">549</span><a id="line.549">        private static final long serialVersionUID = 1L;</a>
+<span class="sourceLineNo">550</span><a id="line.550">        public CoordDouble centroid;</a>
+<span class="sourceLineNo">551</span><a id="line.551">        public final CoordDouble[] vertices;</a>
+<span class="sourceLineNo">552</span><a id="line.552"></a>
+<span class="sourceLineNo">553</span><a id="line.553">        public Polygon(CoordDouble... vertices) {</a>
+<span class="sourceLineNo">554</span><a id="line.554">            this.vertices = vertices == null || vertices.length &lt; 3</a>
+<span class="sourceLineNo">555</span><a id="line.555">                    ? new CoordDouble[] {new CoordDouble(), new CoordDouble(), new CoordDouble()}</a>
+<span class="sourceLineNo">556</span><a id="line.556">                    : vertices;</a>
+<span class="sourceLineNo">557</span><a id="line.557">            this.centroid = new CoordDouble(this.vertices[0]);</a>
+<span class="sourceLineNo">558</span><a id="line.558">            for (int i = 1; i &lt; this.vertices.length; i++) {</a>
+<span class="sourceLineNo">559</span><a id="line.559">                this.centroid.add(this.vertices[i]);</a>
+<span class="sourceLineNo">560</span><a id="line.560">            }</a>
+<span class="sourceLineNo">561</span><a id="line.561">            this.centroid.divide(this.vertices.length, this.vertices.length);</a>
+<span class="sourceLineNo">562</span><a id="line.562">        }</a>
+<span class="sourceLineNo">563</span><a id="line.563"></a>
+<span class="sourceLineNo">564</span><a id="line.564">    }</a>
+<span class="sourceLineNo">565</span><a id="line.565">    private static final Comparator&lt;Double&gt; doubleComparator = new Comparator&lt;Double&gt;() {</a>
+<span class="sourceLineNo">566</span><a id="line.566">        @Override</a>
+<span class="sourceLineNo">567</span><a id="line.567">        public int compare(Double o1, Double o2) {</a>
+<span class="sourceLineNo">568</span><a id="line.568">            return o1.compareTo(o2);</a>
+<span class="sourceLineNo">569</span><a id="line.569">        }</a>
+<span class="sourceLineNo">570</span><a id="line.570">    };</a>
+<span class="sourceLineNo">571</span><a id="line.571"></a>
+<span class="sourceLineNo">572</span><a id="line.572">    /**</a>
+<span class="sourceLineNo">573</span><a id="line.573">     * Triangle soup class implementation.</a>
+<span class="sourceLineNo">574</span><a id="line.574">     *</a>
+<span class="sourceLineNo">575</span><a id="line.575">     * @author Johannes Diemke</a>
+<span class="sourceLineNo">576</span><a id="line.576">     */</a>
+<span class="sourceLineNo">577</span><a id="line.577">    static class TriangleSoup {</a>
+<span class="sourceLineNo">578</span><a id="line.578"></a>
+<span class="sourceLineNo">579</span><a id="line.579">        ArrayList&lt;Triangle&gt; triangleSoup;</a>
+<span class="sourceLineNo">580</span><a id="line.580"></a>
+<span class="sourceLineNo">581</span><a id="line.581">        /**</a>
+<span class="sourceLineNo">582</span><a id="line.582">         * Constructor of the triangle soup class used to create a new triangle soup</a>
+<span class="sourceLineNo">583</span><a id="line.583">         * instance.</a>
+<span class="sourceLineNo">584</span><a id="line.584">         */</a>
+<span class="sourceLineNo">585</span><a id="line.585">        public TriangleSoup() {</a>
+<span class="sourceLineNo">586</span><a id="line.586">            this.triangleSoup = new ArrayList&lt;&gt;();</a>
+<span class="sourceLineNo">587</span><a id="line.587">        }</a>
+<span class="sourceLineNo">588</span><a id="line.588"></a>
+<span class="sourceLineNo">589</span><a id="line.589">        /**</a>
+<span class="sourceLineNo">590</span><a id="line.590">         * Adds a triangle to this triangle soup.</a>
+<span class="sourceLineNo">591</span><a id="line.591">         *</a>
+<span class="sourceLineNo">592</span><a id="line.592">         * @param triangle</a>
+<span class="sourceLineNo">593</span><a id="line.593">         *            The triangle to be added to this triangle soup</a>
+<span class="sourceLineNo">594</span><a id="line.594">         */</a>
+<span class="sourceLineNo">595</span><a id="line.595">        public void add(Triangle triangle) {</a>
+<span class="sourceLineNo">596</span><a id="line.596">            this.triangleSoup.add(triangle);</a>
+<span class="sourceLineNo">597</span><a id="line.597">        }</a>
+<span class="sourceLineNo">598</span><a id="line.598"></a>
+<span class="sourceLineNo">599</span><a id="line.599">        /**</a>
+<span class="sourceLineNo">600</span><a id="line.600">         * Removes a triangle from this triangle soup.</a>
+<span class="sourceLineNo">601</span><a id="line.601">         *</a>
+<span class="sourceLineNo">602</span><a id="line.602">         * @param triangle</a>
+<span class="sourceLineNo">603</span><a id="line.603">         *            The triangle to be removed from this triangle soup</a>
+<span class="sourceLineNo">604</span><a id="line.604">         */</a>
+<span class="sourceLineNo">605</span><a id="line.605">        public void remove(Triangle triangle) {</a>
+<span class="sourceLineNo">606</span><a id="line.606">            this.triangleSoup.remove(triangle);</a>
+<span class="sourceLineNo">607</span><a id="line.607">        }</a>
+<span class="sourceLineNo">608</span><a id="line.608"></a>
+<span class="sourceLineNo">609</span><a id="line.609">        /**</a>
+<span class="sourceLineNo">610</span><a id="line.610">         * Returns the triangles from this triangle soup.</a>
+<span class="sourceLineNo">611</span><a id="line.611">         *</a>
+<span class="sourceLineNo">612</span><a id="line.612">         * @return The triangles from this triangle soup</a>
+<span class="sourceLineNo">613</span><a id="line.613">         */</a>
+<span class="sourceLineNo">614</span><a id="line.614">        public ArrayList&lt;Triangle&gt; getTriangles() {</a>
+<span class="sourceLineNo">615</span><a id="line.615">            return this.triangleSoup;</a>
+<span class="sourceLineNo">616</span><a id="line.616">        }</a>
+<span class="sourceLineNo">617</span><a id="line.617"></a>
+<span class="sourceLineNo">618</span><a id="line.618">        /**</a>
+<span class="sourceLineNo">619</span><a id="line.619">         * Returns the triangle from this triangle soup that contains the specified</a>
+<span class="sourceLineNo">620</span><a id="line.620">         * point or null if no triangle from the triangle soup contains the point.</a>
+<span class="sourceLineNo">621</span><a id="line.621">         *</a>
+<span class="sourceLineNo">622</span><a id="line.622">         * @param point</a>
+<span class="sourceLineNo">623</span><a id="line.623">         *            The point</a>
+<span class="sourceLineNo">624</span><a id="line.624">         * @return Returns the triangle from this triangle soup that contains the</a>
+<span class="sourceLineNo">625</span><a id="line.625">         *         specified point or null</a>
+<span class="sourceLineNo">626</span><a id="line.626">         */</a>
+<span class="sourceLineNo">627</span><a id="line.627">        public Triangle findContainingTriangle(CoordDouble point) {</a>
+<span class="sourceLineNo">628</span><a id="line.628">            for (Triangle triangle : triangleSoup) {</a>
+<span class="sourceLineNo">629</span><a id="line.629">                if (triangle.contains(point)) {</a>
+<span class="sourceLineNo">630</span><a id="line.630">                    return triangle;</a>
+<span class="sourceLineNo">631</span><a id="line.631">                }</a>
+<span class="sourceLineNo">632</span><a id="line.632">            }</a>
+<span class="sourceLineNo">633</span><a id="line.633">            return null;</a>
+<span class="sourceLineNo">634</span><a id="line.634">        }</a>
+<span class="sourceLineNo">635</span><a id="line.635"></a>
+<span class="sourceLineNo">636</span><a id="line.636">        /**</a>
+<span class="sourceLineNo">637</span><a id="line.637">         * Returns the neighbor triangle of the specified triangle sharing the same</a>
+<span class="sourceLineNo">638</span><a id="line.638">         * edge as specified. If no neighbor sharing the same edge exists null is</a>
+<span class="sourceLineNo">639</span><a id="line.639">         * returned.</a>
+<span class="sourceLineNo">640</span><a id="line.640">         *</a>
+<span class="sourceLineNo">641</span><a id="line.641">         * @param triangle</a>
+<span class="sourceLineNo">642</span><a id="line.642">         *            The triangle</a>
+<span class="sourceLineNo">643</span><a id="line.643">         * @param edge</a>
+<span class="sourceLineNo">644</span><a id="line.644">         *            The edge</a>
+<span class="sourceLineNo">645</span><a id="line.645">         * @return The triangle's neighbor triangle sharing the same edge or null if</a>
+<span class="sourceLineNo">646</span><a id="line.646">         *         no triangle exists</a>
+<span class="sourceLineNo">647</span><a id="line.647">         */</a>
+<span class="sourceLineNo">648</span><a id="line.648">        public Triangle findNeighbor(Triangle triangle, Edge edge) {</a>
+<span class="sourceLineNo">649</span><a id="line.649">            for (Triangle triangleFromSoup : triangleSoup) {</a>
+<span class="sourceLineNo">650</span><a id="line.650">                if (triangleFromSoup.isNeighbor(edge) &amp;&amp; triangleFromSoup != triangle) {</a>
+<span class="sourceLineNo">651</span><a id="line.651">                    return triangleFromSoup;</a>
+<span class="sourceLineNo">652</span><a id="line.652">                }</a>
+<span class="sourceLineNo">653</span><a id="line.653">            }</a>
+<span class="sourceLineNo">654</span><a id="line.654">            return null;</a>
+<span class="sourceLineNo">655</span><a id="line.655">        }</a>
+<span class="sourceLineNo">656</span><a id="line.656">        public Triangle findNeighbor(Triangle triangle, CoordDouble ea, CoordDouble eb) {</a>
+<span class="sourceLineNo">657</span><a id="line.657">            for (Triangle triangleFromSoup : triangleSoup) {</a>
+<span class="sourceLineNo">658</span><a id="line.658">                if (triangleFromSoup.isNeighbor(ea, eb) &amp;&amp; triangleFromSoup != triangle) {</a>
+<span class="sourceLineNo">659</span><a id="line.659">                    return triangleFromSoup;</a>
+<span class="sourceLineNo">660</span><a id="line.660">                }</a>
+<span class="sourceLineNo">661</span><a id="line.661">            }</a>
+<span class="sourceLineNo">662</span><a id="line.662">            return null;</a>
+<span class="sourceLineNo">663</span><a id="line.663">        }</a>
+<span class="sourceLineNo">664</span><a id="line.664"></a>
+<span class="sourceLineNo">665</span><a id="line.665">        /**</a>
+<span class="sourceLineNo">666</span><a id="line.666">         * Returns one of the possible triangles sharing the specified edge. Based</a>
+<span class="sourceLineNo">667</span><a id="line.667">         * on the ordering of the triangles in this triangle soup the returned</a>
+<span class="sourceLineNo">668</span><a id="line.668">         * triangle may differ. To find the other triangle that shares this edge use</a>
+<span class="sourceLineNo">669</span><a id="line.669">         * the {@link #findNeighbor(Triangle, Edge)} method.</a>
+<span class="sourceLineNo">670</span><a id="line.670">         *</a>
+<span class="sourceLineNo">671</span><a id="line.671">         * @param edge</a>
+<span class="sourceLineNo">672</span><a id="line.672">         *            The edge</a>
+<span class="sourceLineNo">673</span><a id="line.673">         * @return Returns one triangle that shares the specified edge</a>
+<span class="sourceLineNo">674</span><a id="line.674">         */</a>
+<span class="sourceLineNo">675</span><a id="line.675">        public Triangle findOneTriangleSharing(Edge edge) {</a>
+<span class="sourceLineNo">676</span><a id="line.676">            for (Triangle triangle : triangleSoup) {</a>
+<span class="sourceLineNo">677</span><a id="line.677">                if (triangle.isNeighbor(edge)) {</a>
+<span class="sourceLineNo">678</span><a id="line.678">                    return triangle;</a>
+<span class="sourceLineNo">679</span><a id="line.679">                }</a>
+<span class="sourceLineNo">680</span><a id="line.680">            }</a>
+<span class="sourceLineNo">681</span><a id="line.681">            return null;</a>
+<span class="sourceLineNo">682</span><a id="line.682">        }</a>
+<span class="sourceLineNo">683</span><a id="line.683"></a>
+<span class="sourceLineNo">684</span><a id="line.684">        /**</a>
+<span class="sourceLineNo">685</span><a id="line.685">         * Returns the edge from the triangle soup nearest to the specified point.</a>
+<span class="sourceLineNo">686</span><a id="line.686">         *</a>
+<span class="sourceLineNo">687</span><a id="line.687">         * @param point</a>
+<span class="sourceLineNo">688</span><a id="line.688">         *            The point</a>
+<span class="sourceLineNo">689</span><a id="line.689">         * @return The edge from the triangle soup nearest to the specified point</a>
+<span class="sourceLineNo">690</span><a id="line.690">         */</a>
+<span class="sourceLineNo">691</span><a id="line.691">        public Edge findNearestEdge(CoordDouble point) {</a>
+<span class="sourceLineNo">692</span><a id="line.692">//            List&lt;EdgeDistancePack&gt; edgeList = new ArrayList&lt;EdgeDistancePack&gt;();</a>
+<span class="sourceLineNo">693</span><a id="line.693"></a>
+<span class="sourceLineNo">694</span><a id="line.694">            OrderedMap&lt;Edge, Double&gt; edges = new OrderedMap&lt;&gt;(triangleSoup.size());</a>
+<span class="sourceLineNo">695</span><a id="line.695">            for (Triangle triangle : triangleSoup) {</a>
+<span class="sourceLineNo">696</span><a id="line.696">                Edge ab = new Edge(triangle.a, triangle.b);</a>
+<span class="sourceLineNo">697</span><a id="line.697">                Edge bc = new Edge(triangle.b, triangle.c);</a>
+<span class="sourceLineNo">698</span><a id="line.698">                Edge ca = new Edge(triangle.c, triangle.a);</a>
+<span class="sourceLineNo">699</span><a id="line.699">                double abd = triangle.computeClosestPoint(ab, point).subtract(point).lengthSq();</a>
+<span class="sourceLineNo">700</span><a id="line.700">                double bcd = triangle.computeClosestPoint(bc, point).subtract(point).lengthSq();</a>
+<span class="sourceLineNo">701</span><a id="line.701">                double cad = triangle.computeClosestPoint(ca, point).subtract(point).lengthSq();</a>
+<span class="sourceLineNo">702</span><a id="line.702">                </a>
+<span class="sourceLineNo">703</span><a id="line.703">                if(abd &lt;= bcd &amp;&amp; abd &lt;= cad)</a>
+<span class="sourceLineNo">704</span><a id="line.704">                    edges.put(ab, abd);</a>
+<span class="sourceLineNo">705</span><a id="line.705">                else if(bcd &lt;= abd &amp;&amp; bcd &lt;= cad)</a>
+<span class="sourceLineNo">706</span><a id="line.706">                    edges.put(bc, bcd);</a>
+<span class="sourceLineNo">707</span><a id="line.707">                else </a>
+<span class="sourceLineNo">708</span><a id="line.708">                    edges.put(ca, cad);</a>
+<span class="sourceLineNo">709</span><a id="line.709">            }</a>
+<span class="sourceLineNo">710</span><a id="line.710">            edges.sortByValue(doubleComparator);</a>
+<span class="sourceLineNo">711</span><a id="line.711">            return edges.keyAt(0);</a>
+<span class="sourceLineNo">712</span><a id="line.712">        }</a>
+<span class="sourceLineNo">713</span><a id="line.713"></a>
+<span class="sourceLineNo">714</span><a id="line.714">        /**</a>
+<span class="sourceLineNo">715</span><a id="line.715">         * Removes all triangles from this triangle soup that contain the specified</a>
+<span class="sourceLineNo">716</span><a id="line.716">         * vertex.</a>
+<span class="sourceLineNo">717</span><a id="line.717">         *</a>
+<span class="sourceLineNo">718</span><a id="line.718">         * @param vertex</a>
+<span class="sourceLineNo">719</span><a id="line.719">         *            The vertex</a>
+<span class="sourceLineNo">720</span><a id="line.720">         */</a>
+<span class="sourceLineNo">721</span><a id="line.721">        public void removeTrianglesUsing(CoordDouble vertex) {</a>
+<span class="sourceLineNo">722</span><a id="line.722">            ListIterator&lt;Triangle&gt; li = triangleSoup.listIterator();</a>
+<span class="sourceLineNo">723</span><a id="line.723">            while (li.hasNext())</a>
+<span class="sourceLineNo">724</span><a id="line.724">            {</a>
+<span class="sourceLineNo">725</span><a id="line.725">                Triangle triangle = li.next();</a>
+<span class="sourceLineNo">726</span><a id="line.726">                if(triangle.hasVertex(vertex))</a>
+<span class="sourceLineNo">727</span><a id="line.727">                    li.remove();</a>
+<span class="sourceLineNo">728</span><a id="line.728">            }</a>
+<span class="sourceLineNo">729</span><a id="line.729">        }</a>
+<span class="sourceLineNo">730</span><a id="line.730"></a>
+<span class="sourceLineNo">731</span><a id="line.731">    }</a>
+<span class="sourceLineNo">732</span><a id="line.732">}</a>
 
 
 

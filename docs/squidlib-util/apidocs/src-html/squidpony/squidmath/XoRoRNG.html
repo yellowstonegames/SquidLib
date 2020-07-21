@@ -202,7 +202,7 @@
 <span class="sourceLineNo">190</span><a id="line.190">    }</a>
 <span class="sourceLineNo">191</span><a id="line.191"></a>
 <span class="sourceLineNo">192</span><a id="line.192">    public void nextBytes(final byte[] bytes) {</a>
-<span class="sourceLineNo">193</span><a id="line.193">        int i = bytes.length, n = 0;</a>
+<span class="sourceLineNo">193</span><a id="line.193">        int i = bytes.length, n;</a>
 <span class="sourceLineNo">194</span><a id="line.194">        while (i != 0) {</a>
 <span class="sourceLineNo">195</span><a id="line.195">            n = Math.min(i, 8);</a>
 <span class="sourceLineNo">196</span><a id="line.196">            for (long bits = nextLong(); n-- != 0; bits &gt;&gt;&gt;= 8) {</a>

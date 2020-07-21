@@ -49,11 +49,11 @@
 <span class="sourceLineNo">037</span><a id="line.37">public class SquidPanel extends Group implements IPackedColorPanel {</a>
 <span class="sourceLineNo">038</span><a id="line.38"></a>
 <span class="sourceLineNo">039</span><a id="line.39">    public float DEFAULT_ANIMATION_DURATION = 0.12F;</a>
-<span class="sourceLineNo">040</span><a id="line.40">    protected int animationCount = 0;</a>
+<span class="sourceLineNo">040</span><a id="line.40">    protected int animationCount;</a>
 <span class="sourceLineNo">041</span><a id="line.41">    protected Color defaultForeground = Color.WHITE;</a>
 <span class="sourceLineNo">042</span><a id="line.42">    protected IColorCenter&lt;Color&gt; scc;</a>
 <span class="sourceLineNo">043</span><a id="line.43">    protected int cellWidth, cellHeight;</a>
-<span class="sourceLineNo">044</span><a id="line.44">    protected int gridWidth, gridHeight, gridOffsetX = 0, gridOffsetY = 0;</a>
+<span class="sourceLineNo">044</span><a id="line.44">    protected int gridWidth, gridHeight, gridOffsetX, gridOffsetY;</a>
 <span class="sourceLineNo">045</span><a id="line.45">    /**</a>
 <span class="sourceLineNo">046</span><a id="line.46">     * The 2D array of chars that this will render, using x,y indexing.</a>
 <span class="sourceLineNo">047</span><a id="line.47">     * Full-block cells that are completely filled with their color will be the char at Unicode codepoint 0,</a>
@@ -84,7 +84,7 @@
 <span class="sourceLineNo">072</span><a id="line.72">     * can be accomplished by using {@link #setTextSize(float, float)} to double the previously-given cell width</a>
 <span class="sourceLineNo">073</span><a id="line.73">     * and height.</a>
 <span class="sourceLineNo">074</span><a id="line.74">     */</a>
-<span class="sourceLineNo">075</span><a id="line.75">    public boolean onlyRenderEven = false;</a>
+<span class="sourceLineNo">075</span><a id="line.75">    public boolean onlyRenderEven;</a>
 <span class="sourceLineNo">076</span><a id="line.76"></a>
 <span class="sourceLineNo">077</span><a id="line.77">    /**</a>
 <span class="sourceLineNo">078</span><a id="line.78">     * Creates a bare-bones panel with all default values for text rendering.</a>
@@ -2345,355 +2345,352 @@
 <span class="sourceLineNo">2333</span><a id="line.2333">    }</a>
 <span class="sourceLineNo">2334</span><a id="line.2334"></a>
 <span class="sourceLineNo">2335</span><a id="line.2335">    protected float clampDuration(float duration) {</a>
-<span class="sourceLineNo">2336</span><a id="line.2336">        if (duration &lt; 0.02f)</a>
-<span class="sourceLineNo">2337</span><a id="line.2337">                return 0.02f;</a>
-<span class="sourceLineNo">2338</span><a id="line.2338">        else</a>
-<span class="sourceLineNo">2339</span><a id="line.2339">                return duration;</a>
-<span class="sourceLineNo">2340</span><a id="line.2340">    }</a>
-<span class="sourceLineNo">2341</span><a id="line.2341"></a>
-<span class="sourceLineNo">2342</span><a id="line.2342">    /**</a>
-<span class="sourceLineNo">2343</span><a id="line.2343">     * The X offset that the whole panel's internals will be rendered at. If the {@code gridWidth} of this SquidPanel is</a>
-<span class="sourceLineNo">2344</span><a id="line.2344">     * less than the actual size of the char[][] it renders, then you can use gridOffsetX to start rendering at a</a>
-<span class="sourceLineNo">2345</span><a id="line.2345">     * different position</a>
-<span class="sourceLineNo">2346</span><a id="line.2346">     * @return the current offset in cells along the x axis</a>
-<span class="sourceLineNo">2347</span><a id="line.2347">     */</a>
-<span class="sourceLineNo">2348</span><a id="line.2348">    public int getGridOffsetX() {</a>
-<span class="sourceLineNo">2349</span><a id="line.2349">        return gridOffsetX;</a>
-<span class="sourceLineNo">2350</span><a id="line.2350">    }</a>
-<span class="sourceLineNo">2351</span><a id="line.2351"></a>
-<span class="sourceLineNo">2352</span><a id="line.2352">    /**</a>
-<span class="sourceLineNo">2353</span><a id="line.2353">     * Sets the X offset that the whole panel's internals will be rendered at.</a>
-<span class="sourceLineNo">2354</span><a id="line.2354">     * @param gridOffsetX the requested offset in cells</a>
-<span class="sourceLineNo">2355</span><a id="line.2355">     */</a>
-<span class="sourceLineNo">2356</span><a id="line.2356">    public void setGridOffsetX(int gridOffsetX) {</a>
-<span class="sourceLineNo">2357</span><a id="line.2357">        this.gridOffsetX = clamp(gridOffsetX,0,  contents.length - gridWidth);</a>
-<span class="sourceLineNo">2358</span><a id="line.2358">    }</a>
-<span class="sourceLineNo">2359</span><a id="line.2359"></a>
-<span class="sourceLineNo">2360</span><a id="line.2360">    /**</a>
-<span class="sourceLineNo">2361</span><a id="line.2361">     * The Y offset that the whole panel's internals will be rendered at.</a>
-<span class="sourceLineNo">2362</span><a id="line.2362">     * @return the current offset in cells along the y axis</a>
-<span class="sourceLineNo">2363</span><a id="line.2363">     */</a>
-<span class="sourceLineNo">2364</span><a id="line.2364">    public int getGridOffsetY() {</a>
-<span class="sourceLineNo">2365</span><a id="line.2365">        return gridOffsetY;</a>
-<span class="sourceLineNo">2366</span><a id="line.2366">    }</a>
-<span class="sourceLineNo">2367</span><a id="line.2367"></a>
-<span class="sourceLineNo">2368</span><a id="line.2368">    /**</a>
-<span class="sourceLineNo">2369</span><a id="line.2369">     * Sets the Y offset that the whole panel's internals will be rendered at.</a>
-<span class="sourceLineNo">2370</span><a id="line.2370">     * @param gridOffsetY the requested offset in cells</a>
-<span class="sourceLineNo">2371</span><a id="line.2371">     */</a>
-<span class="sourceLineNo">2372</span><a id="line.2372">    public void setGridOffsetY(int gridOffsetY) {</a>
-<span class="sourceLineNo">2373</span><a id="line.2373">        this.gridOffsetY = clamp(gridOffsetY,0,  contents[0].length - gridHeight);</a>
-<span class="sourceLineNo">2374</span><a id="line.2374">    }</a>
-<span class="sourceLineNo">2375</span><a id="line.2375"></a>
-<span class="sourceLineNo">2376</span><a id="line.2376">    /**</a>
-<span class="sourceLineNo">2377</span><a id="line.2377">     * The number of cells along the x-axis that will be rendered of this panel.</a>
-<span class="sourceLineNo">2378</span><a id="line.2378">     * @return the number of cells along the x-axis that will be rendered of this panel</a>
-<span class="sourceLineNo">2379</span><a id="line.2379">     */</a>
-<span class="sourceLineNo">2380</span><a id="line.2380">    public int getGridWidth() {</a>
-<span class="sourceLineNo">2381</span><a id="line.2381">        return gridWidth;</a>
-<span class="sourceLineNo">2382</span><a id="line.2382">    }</a>
-<span class="sourceLineNo">2383</span><a id="line.2383"></a>
-<span class="sourceLineNo">2384</span><a id="line.2384">    /**</a>
-<span class="sourceLineNo">2385</span><a id="line.2385">     * Sets the number of cells along the x-axis that will be rendered of this panel to gridWidth.</a>
-<span class="sourceLineNo">2386</span><a id="line.2386">     * @param gridWidth the requested width in cells</a>
-<span class="sourceLineNo">2387</span><a id="line.2387">     */</a>
-<span class="sourceLineNo">2388</span><a id="line.2388">    public void setGridWidth(int gridWidth) {</a>
-<span class="sourceLineNo">2389</span><a id="line.2389">        this.gridWidth = gridWidth;</a>
-<span class="sourceLineNo">2390</span><a id="line.2390">    }</a>
-<span class="sourceLineNo">2391</span><a id="line.2391"></a>
-<span class="sourceLineNo">2392</span><a id="line.2392">    /**</a>
-<span class="sourceLineNo">2393</span><a id="line.2393">     * The number of cells along the y-axis that will be rendered of this panel</a>
-<span class="sourceLineNo">2394</span><a id="line.2394">     * @return the number of cells along the y-axis that will be rendered of this panel</a>
-<span class="sourceLineNo">2395</span><a id="line.2395">     */</a>
-<span class="sourceLineNo">2396</span><a id="line.2396">    public int getGridHeight() {</a>
-<span class="sourceLineNo">2397</span><a id="line.2397">        return gridHeight;</a>
-<span class="sourceLineNo">2398</span><a id="line.2398">    }</a>
-<span class="sourceLineNo">2399</span><a id="line.2399"></a>
-<span class="sourceLineNo">2400</span><a id="line.2400">    /**</a>
-<span class="sourceLineNo">2401</span><a id="line.2401">     * Sets the number of cells along the y-axis that will be rendered of this panel to gridHeight.</a>
-<span class="sourceLineNo">2402</span><a id="line.2402">     * @param gridHeight the requested height in cells</a>
-<span class="sourceLineNo">2403</span><a id="line.2403">     */</a>
-<span class="sourceLineNo">2404</span><a id="line.2404">    public void setGridHeight(int gridHeight) {</a>
-<span class="sourceLineNo">2405</span><a id="line.2405">        this.gridHeight = gridHeight;</a>
-<span class="sourceLineNo">2406</span><a id="line.2406">    }</a>
-<span class="sourceLineNo">2407</span><a id="line.2407"></a>
-<span class="sourceLineNo">2408</span><a id="line.2408">    /**</a>
-<span class="sourceLineNo">2409</span><a id="line.2409">     * Gets the total number of cells along the x-axis that this stores; this is usually equivalent to</a>
-<span class="sourceLineNo">2410</span><a id="line.2410">     * {@link #getGridWidth()}, but not if the constructor</a>
-<span class="sourceLineNo">2411</span><a id="line.2411">     * {@link #SquidPanel(int, int, TextCellFactory, IColorCenter, float, float, char[][])} was used to set a</a>
-<span class="sourceLineNo">2412</span><a id="line.2412">     * larger-than-normal map.</a>
-<span class="sourceLineNo">2413</span><a id="line.2413">     * @return the width of the internal array this can render, which may be larger than the visible width</a>
-<span class="sourceLineNo">2414</span><a id="line.2414">     */</a>
-<span class="sourceLineNo">2415</span><a id="line.2415">    public int getTotalWidth()</a>
-<span class="sourceLineNo">2416</span><a id="line.2416">    {</a>
-<span class="sourceLineNo">2417</span><a id="line.2417">        return contents.length;</a>
-<span class="sourceLineNo">2418</span><a id="line.2418">    }</a>
-<span class="sourceLineNo">2419</span><a id="line.2419">    /**</a>
-<span class="sourceLineNo">2420</span><a id="line.2420">     * Gets the total number of cells along the y-axis that this stores; this is usually equivalent to</a>
-<span class="sourceLineNo">2421</span><a id="line.2421">     * {@link #getGridHeight()}, but not if the constructor</a>
-<span class="sourceLineNo">2422</span><a id="line.2422">     * {@link #SquidPanel(int, int, TextCellFactory, IColorCenter, float, float, char[][])} was used to set a</a>
-<span class="sourceLineNo">2423</span><a id="line.2423">     * larger-than-normal map.</a>
-<span class="sourceLineNo">2424</span><a id="line.2424">     * @return the height of the internal array this can render, which may be larger than the visible height</a>
-<span class="sourceLineNo">2425</span><a id="line.2425">     */</a>
-<span class="sourceLineNo">2426</span><a id="line.2426">    public int getTotalHeight()</a>
-<span class="sourceLineNo">2427</span><a id="line.2427">    {</a>
-<span class="sourceLineNo">2428</span><a id="line.2428">        return contents[0].length;</a>
-<span class="sourceLineNo">2429</span><a id="line.2429">    }</a>
-<span class="sourceLineNo">2430</span><a id="line.2430"></a>
-<span class="sourceLineNo">2431</span><a id="line.2431">    /**</a>
-<span class="sourceLineNo">2432</span><a id="line.2432">     * Sets the position of the actor's bottom left corner.</a>
-<span class="sourceLineNo">2433</span><a id="line.2433">     *</a>
-<span class="sourceLineNo">2434</span><a id="line.2434">     * @param x</a>
-<span class="sourceLineNo">2435</span><a id="line.2435">     * @param y</a>
-<span class="sourceLineNo">2436</span><a id="line.2436">     */</a>
-<span class="sourceLineNo">2437</span><a id="line.2437">    @Override</a>
-<span class="sourceLineNo">2438</span><a id="line.2438">    public void setPosition(float x, float y) {</a>
-<span class="sourceLineNo">2439</span><a id="line.2439">        super.setPosition(x, y);</a>
-<span class="sourceLineNo">2440</span><a id="line.2440">        setBounds(x, y, getWidth(), getHeight());</a>
-<span class="sourceLineNo">2441</span><a id="line.2441">    }</a>
-<span class="sourceLineNo">2442</span><a id="line.2442"></a>
-<span class="sourceLineNo">2443</span><a id="line.2443">    public float getxOffset() {</a>
-<span class="sourceLineNo">2444</span><a id="line.2444">        return xOffset;</a>
-<span class="sourceLineNo">2445</span><a id="line.2445">    }</a>
-<span class="sourceLineNo">2446</span><a id="line.2446"></a>
-<span class="sourceLineNo">2447</span><a id="line.2447">    public void setOffsetX(float xOffset) {</a>
-<span class="sourceLineNo">2448</span><a id="line.2448">        this.xOffset = xOffset;</a>
-<span class="sourceLineNo">2449</span><a id="line.2449">    }</a>
-<span class="sourceLineNo">2450</span><a id="line.2450"></a>
-<span class="sourceLineNo">2451</span><a id="line.2451">    public float getyOffset() {</a>
-<span class="sourceLineNo">2452</span><a id="line.2452">        return yOffset;</a>
-<span class="sourceLineNo">2453</span><a id="line.2453">    }</a>
-<span class="sourceLineNo">2454</span><a id="line.2454"></a>
-<span class="sourceLineNo">2455</span><a id="line.2455">    public void setOffsetY(float yOffset) {</a>
-<span class="sourceLineNo">2456</span><a id="line.2456">        this.yOffset = yOffset;</a>
-<span class="sourceLineNo">2457</span><a id="line.2457">    }</a>
-<span class="sourceLineNo">2458</span><a id="line.2458"></a>
-<span class="sourceLineNo">2459</span><a id="line.2459">    public void setOffsets(float x, float y) {</a>
-<span class="sourceLineNo">2460</span><a id="line.2460">        xOffset = x;</a>
-<span class="sourceLineNo">2461</span><a id="line.2461">        yOffset = y;</a>
-<span class="sourceLineNo">2462</span><a id="line.2462">    }</a>
-<span class="sourceLineNo">2463</span><a id="line.2463"></a>
-<span class="sourceLineNo">2464</span><a id="line.2464">    /**</a>
-<span class="sourceLineNo">2465</span><a id="line.2465">     * Gets the status of a boolean flag used for rendering thin maps; it will almost always be false unless it</a>
-<span class="sourceLineNo">2466</span><a id="line.2466">     * was set to true with {@link #setOnlyRenderEven(boolean)}.</a>
-<span class="sourceLineNo">2467</span><a id="line.2467">     * &lt;br&gt;</a>
-<span class="sourceLineNo">2468</span><a id="line.2468">     * This is meant for thin-wall maps, where only cells where x and y are both even numbers have backgrounds</a>
-<span class="sourceLineNo">2469</span><a id="line.2469">     * displayed. Should be false when using this SquidPanel for anything that isn't specifically a background</a>
-<span class="sourceLineNo">2470</span><a id="line.2470">     * of a map that uses the thin-wall method from ThinDungeonGenerator or something similar. Even the</a>
-<span class="sourceLineNo">2471</span><a id="line.2471">     * foregrounds of thin-wall maps should have this false, since ThinDungeonGenerator (in conjunction with</a>
-<span class="sourceLineNo">2472</span><a id="line.2472">     * DungeonUtility's hashesToLines() method) makes thin lines for walls that should be displayed as between</a>
-<span class="sourceLineNo">2473</span><a id="line.2473">     * the boundaries of other cells. The overlap behavior needed for some "thin enough" cells to be displayed</a>
-<span class="sourceLineNo">2474</span><a id="line.2474">     * between the cells can be accomplished by using {@link #setTextSize(float, float)} to double the</a>
-<span class="sourceLineNo">2475</span><a id="line.2475">     * previously-given cell width and height.</a>
-<span class="sourceLineNo">2476</span><a id="line.2476">     *</a>
-<span class="sourceLineNo">2477</span><a id="line.2477">     * @return the current status of the onlyRenderEven flag, which defaults to false</a>
-<span class="sourceLineNo">2478</span><a id="line.2478">     */</a>
-<span class="sourceLineNo">2479</span><a id="line.2479">    public boolean getOnlyRenderEven() {</a>
-<span class="sourceLineNo">2480</span><a id="line.2480">        return onlyRenderEven;</a>
-<span class="sourceLineNo">2481</span><a id="line.2481">    }</a>
-<span class="sourceLineNo">2482</span><a id="line.2482">    /**</a>
-<span class="sourceLineNo">2483</span><a id="line.2483">     * Sets the status of a boolean flag used for rendering thin maps; it should almost always be the default,</a>
-<span class="sourceLineNo">2484</span><a id="line.2484">     * which is false, unless you are using a thin-wall map, and then this should be true only if this</a>
-<span class="sourceLineNo">2485</span><a id="line.2485">     * SquidPanel is used for the background layer.</a>
-<span class="sourceLineNo">2486</span><a id="line.2486">     * &lt;br&gt;</a>
-<span class="sourceLineNo">2487</span><a id="line.2487">     * This is meant for thin-wall maps, where only cells where x and y are both even numbers have backgrounds</a>
-<span class="sourceLineNo">2488</span><a id="line.2488">     * displayed. Should be false when using this SquidPanel for anything that isn't specifically a background</a>
-<span class="sourceLineNo">2489</span><a id="line.2489">     * of a map that uses the thin-wall method from ThinDungeonGenerator or something similar. Even the</a>
-<span class="sourceLineNo">2490</span><a id="line.2490">     * foregrounds of thin-wall maps should have this false, since ThinDungeonGenerator (in conjunction with</a>
-<span class="sourceLineNo">2491</span><a id="line.2491">     * DungeonUtility's hashesToLines() method) makes thin lines for walls that should be displayed as between</a>
-<span class="sourceLineNo">2492</span><a id="line.2492">     * the boundaries of other cells. The overlap behavior needed for some "thin enough" cells to be displayed</a>
-<span class="sourceLineNo">2493</span><a id="line.2493">     * between the cells can be accomplished by using {@link #setTextSize(float, float)} to double the</a>
-<span class="sourceLineNo">2494</span><a id="line.2494">     * previously-given cell width and height.</a>
-<span class="sourceLineNo">2495</span><a id="line.2495">     *</a>
-<span class="sourceLineNo">2496</span><a id="line.2496">     * @param onlyRenderEven generally, should only be true if this SquidPanel is a background of a thin map</a>
-<span class="sourceLineNo">2497</span><a id="line.2497">     */</a>
-<span class="sourceLineNo">2498</span><a id="line.2498"></a>
-<span class="sourceLineNo">2499</span><a id="line.2499">    public void setOnlyRenderEven(boolean onlyRenderEven) {</a>
-<span class="sourceLineNo">2500</span><a id="line.2500">        this.onlyRenderEven = onlyRenderEven;</a>
-<span class="sourceLineNo">2501</span><a id="line.2501">    }</a>
-<span class="sourceLineNo">2502</span><a id="line.2502"></a>
-<span class="sourceLineNo">2503</span><a id="line.2503">    /**</a>
-<span class="sourceLineNo">2504</span><a id="line.2504">     * Gets a "snapshot" of the data represented by this SquidPanel; stores the dimensions, the char data, and the color</a>
-<span class="sourceLineNo">2505</span><a id="line.2505">     * data in a way that can be set back to a SquidPanel using {@link #setFromSnapshot(String, int, int, int, int)} or</a>
-<span class="sourceLineNo">2506</span><a id="line.2506">     * its overload that takes a StringBuilder. The actual contents of the returned StringBuilder are unlikely to be</a>
-<span class="sourceLineNo">2507</span><a id="line.2507">     * legible in any way if read as text, and are meant to be concise and stable across versions.</a>
-<span class="sourceLineNo">2508</span><a id="line.2508">     * @return a StringBuilder representation of this SquidPanel's data that can be passed later to {@link #setFromSnapshot(StringBuilder, int, int, int, int)} or converted to String and passed to its overload</a>
-<span class="sourceLineNo">2509</span><a id="line.2509">     */</a>
-<span class="sourceLineNo">2510</span><a id="line.2510">    public StringBuilder getSnapshot()</a>
-<span class="sourceLineNo">2511</span><a id="line.2511">    {</a>
-<span class="sourceLineNo">2512</span><a id="line.2512">        return getSnapshot(0, 0, gridWidth, gridHeight);</a>
-<span class="sourceLineNo">2513</span><a id="line.2513">    }</a>
-<span class="sourceLineNo">2514</span><a id="line.2514">    /**</a>
-<span class="sourceLineNo">2515</span><a id="line.2515">     * Gets a "snapshot" of the data represented by this SquidPanel; stores the dimensions, the char data, and the color</a>
-<span class="sourceLineNo">2516</span><a id="line.2516">     * data in a way that can be set back to a SquidPanel using {@link #setFromSnapshot(String, int, int, int, int)} or</a>
-<span class="sourceLineNo">2517</span><a id="line.2517">     * its overload that takes a StringBuilder. The actual contents of the returned StringBuilder are unlikely to be</a>
-<span class="sourceLineNo">2518</span><a id="line.2518">     * legible in any way if read as text, and are meant to be concise and stable across versions. This overload allows</a>
-<span class="sourceLineNo">2519</span><a id="line.2519">     * the first x and y position used to be specified, as well as the width and height to use (the actual width and</a>
-<span class="sourceLineNo">2520</span><a id="line.2520">     * height stored may be different if this SquidPanel's gridWidth and/or gridHeight are smaller than the width and/or</a>
-<span class="sourceLineNo">2521</span><a id="line.2521">     * height given).</a>
-<span class="sourceLineNo">2522</span><a id="line.2522">     * @param startX the first x position to use in the snapshot, inclusive</a>
-<span class="sourceLineNo">2523</span><a id="line.2523">     * @param startY the first y position to use in the snapshot, inclusive</a>
-<span class="sourceLineNo">2524</span><a id="line.2524">     * @param width how wide the snapshot area should be; x positions from startX to startX + width - 1 will be used</a>
-<span class="sourceLineNo">2525</span><a id="line.2525">     * @param height how tall the snapshot area should be; y positions from startY to startY + height - 1 will be used</a>
-<span class="sourceLineNo">2526</span><a id="line.2526">     * @return a StringBuilder representation of this SquidPanel's data that can be passed later to {@link #setFromSnapshot(StringBuilder, int, int, int, int)} or converted to String and passed to its overload</a>
-<span class="sourceLineNo">2527</span><a id="line.2527">     */</a>
-<span class="sourceLineNo">2528</span><a id="line.2528">    public StringBuilder getSnapshot(int startX, int startY, int width, int height) {</a>
-<span class="sourceLineNo">2529</span><a id="line.2529">        width = Math.min(gridWidth - startX, width);</a>
-<span class="sourceLineNo">2530</span><a id="line.2530">        height = Math.min(gridHeight - startY, height);</a>
-<span class="sourceLineNo">2531</span><a id="line.2531">        StringBuilder sb = new StringBuilder(width * height * 9 + 12);</a>
-<span class="sourceLineNo">2532</span><a id="line.2532">        sb.append(width).append('x').append(height).append(':');</a>
-<span class="sourceLineNo">2533</span><a id="line.2533">        for (int x = startX, i = 0; i &lt; width; x++, i++) {</a>
-<span class="sourceLineNo">2534</span><a id="line.2534">            sb.append(contents[x], startY, height);</a>
-<span class="sourceLineNo">2535</span><a id="line.2535">        }</a>
-<span class="sourceLineNo">2536</span><a id="line.2536">        char[] reuse = new char[8];</a>
-<span class="sourceLineNo">2537</span><a id="line.2537">        for (int x = startX, i = 0; i &lt; width; x++, i++) {</a>
-<span class="sourceLineNo">2538</span><a id="line.2538">            for (int y = startY, j = 0; j &lt; height; y++, j++) {</a>
-<span class="sourceLineNo">2539</span><a id="line.2539">                sb.append(SColor.floatToChars(reuse, colors[x][y]));</a>
-<span class="sourceLineNo">2540</span><a id="line.2540">            }</a>
-<span class="sourceLineNo">2541</span><a id="line.2541">        }</a>
-<span class="sourceLineNo">2542</span><a id="line.2542">        return sb;</a>
-<span class="sourceLineNo">2543</span><a id="line.2543">    }</a>
-<span class="sourceLineNo">2544</span><a id="line.2544"></a>
-<span class="sourceLineNo">2545</span><a id="line.2545">    /**</a>
-<span class="sourceLineNo">2546</span><a id="line.2546">     * Given a "snapshot" from {@link #getSnapshot(int, int, int, int)}, this assigns the chars and colors in this</a>
-<span class="sourceLineNo">2547</span><a id="line.2547">     * SquidPanel from 0,0 (inclusive) up to the dimensions stored in the snapshot to match the snapshot's data.</a>
-<span class="sourceLineNo">2548</span><a id="line.2548">     * @param snapshot a StringBuilder in a special format as produced by {@link #getSnapshot(int, int, int, int)}</a>
-<span class="sourceLineNo">2549</span><a id="line.2549">     * @return this after setting, for chaining</a>
-<span class="sourceLineNo">2550</span><a id="line.2550">     */</a>
-<span class="sourceLineNo">2551</span><a id="line.2551">    public SquidPanel setFromSnapshot(StringBuilder snapshot)</a>
-<span class="sourceLineNo">2552</span><a id="line.2552">    {</a>
-<span class="sourceLineNo">2553</span><a id="line.2553">        return setFromSnapshot(snapshot, 0, 0, -1, -1);</a>
-<span class="sourceLineNo">2554</span><a id="line.2554">    }</a>
-<span class="sourceLineNo">2555</span><a id="line.2555">    /**</a>
-<span class="sourceLineNo">2556</span><a id="line.2556">     * Given a "snapshot" from {@link #getSnapshot(int, int, int, int)}, this assigns the chars and colors in this</a>
-<span class="sourceLineNo">2557</span><a id="line.2557">     * SquidPanel from the position given by putX,putY (inclusive) up to the dimensions stored in the snapshot</a>
-<span class="sourceLineNo">2558</span><a id="line.2558">     * (considering putX and putY as offsets) so they have the values stored in the snapshot.</a>
-<span class="sourceLineNo">2559</span><a id="line.2559">     * @param snapshot a StringBuilder in a special format as produced by {@link #getSnapshot(int, int, int, int)}</a>
-<span class="sourceLineNo">2560</span><a id="line.2560">     * @param putX where to start placing the data from the snapshot, x position</a>
-<span class="sourceLineNo">2561</span><a id="line.2561">     * @param putY where to start placing the data from the snapshot, y position</a>
-<span class="sourceLineNo">2562</span><a id="line.2562">     * @return this after setting, for chaining</a>
-<span class="sourceLineNo">2563</span><a id="line.2563">     */</a>
-<span class="sourceLineNo">2564</span><a id="line.2564">    public SquidPanel setFromSnapshot(StringBuilder snapshot, int putX, int putY)</a>
-<span class="sourceLineNo">2565</span><a id="line.2565">    {</a>
-<span class="sourceLineNo">2566</span><a id="line.2566">        return setFromSnapshot(snapshot, putX, putY, -1, -1);</a>
-<span class="sourceLineNo">2567</span><a id="line.2567">    }</a>
-<span class="sourceLineNo">2568</span><a id="line.2568">    /**</a>
-<span class="sourceLineNo">2569</span><a id="line.2569">     * Given a "snapshot" from {@link #getSnapshot(int, int, int, int)}, this assigns the chars and colors in this</a>
-<span class="sourceLineNo">2570</span><a id="line.2570">     * SquidPanel from the position given by putX,putY (inclusive) to putX+limitWidth,putY+limitHeight (exclusive) so</a>
-<span class="sourceLineNo">2571</span><a id="line.2571">     * they have the values stored in the snapshot. If limitWidth or limitHeight is negative, this uses the full width</a>
-<span class="sourceLineNo">2572</span><a id="line.2572">     * and height of the snapshot (stopping early if it would extend past the gridWidth or gridHeight of this</a>
-<span class="sourceLineNo">2573</span><a id="line.2573">     * SquidPanel).</a>
-<span class="sourceLineNo">2574</span><a id="line.2574">     * @param snapshot a StringBuilder in a special format as produced by {@link #getSnapshot(int, int, int, int)}</a>
-<span class="sourceLineNo">2575</span><a id="line.2575">     * @param putX where to start placing the data from the snapshot, x position</a>
-<span class="sourceLineNo">2576</span><a id="line.2576">     * @param putY where to start placing the data from the snapshot, y position</a>
-<span class="sourceLineNo">2577</span><a id="line.2577">     * @param limitWidth if negative, uses all of snapshot's width as possible, otherwise restricts the width allowed</a>
-<span class="sourceLineNo">2578</span><a id="line.2578">     * @param limitHeight if negative, uses all of snapshot's height as possible, otherwise restricts the height allowed</a>
-<span class="sourceLineNo">2579</span><a id="line.2579">     * @return this after setting, for chaining</a>
-<span class="sourceLineNo">2580</span><a id="line.2580">     */</a>
-<span class="sourceLineNo">2581</span><a id="line.2581">    public SquidPanel setFromSnapshot(StringBuilder snapshot, int putX, int putY, int limitWidth, int limitHeight)</a>
-<span class="sourceLineNo">2582</span><a id="line.2582">    {</a>
-<span class="sourceLineNo">2583</span><a id="line.2583">        if(putX &gt;= gridWidth || putY &gt;= gridHeight || snapshot == null || snapshot.length() &lt; 4) return this;</a>
-<span class="sourceLineNo">2584</span><a id="line.2584">        if(putX &lt; 0) putX = 0;</a>
-<span class="sourceLineNo">2585</span><a id="line.2585">        if(putY &lt; 0) putY = 0;</a>
-<span class="sourceLineNo">2586</span><a id="line.2586">        int start = snapshot.indexOf(":")+1, width = StringKit.intFromDec(snapshot),</a>
-<span class="sourceLineNo">2587</span><a id="line.2587">                height = StringKit.intFromDec(snapshot, snapshot.indexOf("x") + 1, start),</a>
-<span class="sourceLineNo">2588</span><a id="line.2588">                run = start;</a>
-<span class="sourceLineNo">2589</span><a id="line.2589">        if(limitWidth &lt; 0)</a>
-<span class="sourceLineNo">2590</span><a id="line.2590">            limitWidth = Math.min(width, gridWidth - putX);</a>
-<span class="sourceLineNo">2591</span><a id="line.2591">        else</a>
-<span class="sourceLineNo">2592</span><a id="line.2592">            limitWidth = Math.min(limitWidth, Math.min(width, gridWidth - putX));</a>
-<span class="sourceLineNo">2593</span><a id="line.2593"></a>
-<span class="sourceLineNo">2594</span><a id="line.2594">        if(limitHeight &lt; 0)</a>
-<span class="sourceLineNo">2595</span><a id="line.2595">            limitHeight = Math.min(height, gridHeight - putY);</a>
-<span class="sourceLineNo">2596</span><a id="line.2596">        else</a>
-<span class="sourceLineNo">2597</span><a id="line.2597">            limitHeight = Math.min(limitHeight, Math.min(height, gridHeight - putY));</a>
-<span class="sourceLineNo">2598</span><a id="line.2598">        for (int x = putX, i = 0; i &lt; limitWidth; x++, i++, run += height) {</a>
-<span class="sourceLineNo">2599</span><a id="line.2599">            snapshot.getChars(run, run + limitHeight, contents[x], putY);</a>
-<span class="sourceLineNo">2600</span><a id="line.2600">        }</a>
-<span class="sourceLineNo">2601</span><a id="line.2601">        run = start + width * height;</a>
-<span class="sourceLineNo">2602</span><a id="line.2602">        for (int x = putX, i = 0; i &lt; limitWidth; x++, i++) {</a>
-<span class="sourceLineNo">2603</span><a id="line.2603">            for (int y = putY, j = 0; j &lt; limitHeight; y++, j++) {</a>
-<span class="sourceLineNo">2604</span><a id="line.2604">                colors[x][y] = SColor.charsToFloat(snapshot, run);</a>
-<span class="sourceLineNo">2605</span><a id="line.2605">                run += 8;</a>
-<span class="sourceLineNo">2606</span><a id="line.2606">            }</a>
-<span class="sourceLineNo">2607</span><a id="line.2607">        }</a>
-<span class="sourceLineNo">2608</span><a id="line.2608">        return this;</a>
-<span class="sourceLineNo">2609</span><a id="line.2609">    }</a>
-<span class="sourceLineNo">2610</span><a id="line.2610"></a>
-<span class="sourceLineNo">2611</span><a id="line.2611">    /**</a>
-<span class="sourceLineNo">2612</span><a id="line.2612">     * Given a "snapshot" from {@link #getSnapshot(int, int, int, int)}, this assigns the chars and colors in this</a>
-<span class="sourceLineNo">2613</span><a id="line.2613">     * SquidPanel from 0,0 (inclusive) up to the dimensions stored in the snapshot to match the snapshot's data.</a>
-<span class="sourceLineNo">2614</span><a id="line.2614">     * &lt;br&gt;</a>
-<span class="sourceLineNo">2615</span><a id="line.2615">     * This overload takes a String instead of a StringBuilder for potentially-easier loading from files.</a>
-<span class="sourceLineNo">2616</span><a id="line.2616">     * @param snapshot a String in a special format as produced by {@link #getSnapshot(int, int, int, int)}</a>
-<span class="sourceLineNo">2617</span><a id="line.2617">     * @return this after setting, for chaining</a>
-<span class="sourceLineNo">2618</span><a id="line.2618">     */</a>
-<span class="sourceLineNo">2619</span><a id="line.2619">    public SquidPanel setFromSnapshot(String snapshot)</a>
-<span class="sourceLineNo">2620</span><a id="line.2620">    {</a>
-<span class="sourceLineNo">2621</span><a id="line.2621">        return setFromSnapshot(snapshot, 0, 0, -1, -1);</a>
-<span class="sourceLineNo">2622</span><a id="line.2622">    }</a>
-<span class="sourceLineNo">2623</span><a id="line.2623">    /**</a>
-<span class="sourceLineNo">2624</span><a id="line.2624">     * Given a "snapshot" from {@link #getSnapshot(int, int, int, int)}, this assigns the chars and colors in this</a>
-<span class="sourceLineNo">2625</span><a id="line.2625">     * SquidPanel from the position given by putX,putY (inclusive) up to the dimensions stored in the snapshot</a>
-<span class="sourceLineNo">2626</span><a id="line.2626">     * (considering putX and putY as offsets) so they have the values stored in the snapshot.</a>
-<span class="sourceLineNo">2627</span><a id="line.2627">     * &lt;br&gt;</a>
-<span class="sourceLineNo">2628</span><a id="line.2628">     * This overload takes a String instead of a StringBuilder for potentially-easier loading from files.</a>
-<span class="sourceLineNo">2629</span><a id="line.2629">     * @param snapshot a String in a special format as produced by {@link #getSnapshot(int, int, int, int)}</a>
-<span class="sourceLineNo">2630</span><a id="line.2630">     * @param putX where to start placing the data from the snapshot, x position</a>
-<span class="sourceLineNo">2631</span><a id="line.2631">     * @param putY where to start placing the data from the snapshot, y position</a>
-<span class="sourceLineNo">2632</span><a id="line.2632">     * @return this after setting, for chaining</a>
-<span class="sourceLineNo">2633</span><a id="line.2633">     */</a>
-<span class="sourceLineNo">2634</span><a id="line.2634">    public SquidPanel setFromSnapshot(String snapshot, int putX, int putY)</a>
-<span class="sourceLineNo">2635</span><a id="line.2635">    {</a>
-<span class="sourceLineNo">2636</span><a id="line.2636">        return setFromSnapshot(snapshot, putX, putY, -1, -1);</a>
-<span class="sourceLineNo">2637</span><a id="line.2637">    }</a>
-<span class="sourceLineNo">2638</span><a id="line.2638"></a>
-<span class="sourceLineNo">2639</span><a id="line.2639">    /**</a>
-<span class="sourceLineNo">2640</span><a id="line.2640">     * Given a "snapshot" from {@link #getSnapshot(int, int, int, int)}, this assigns the chars and colors in this</a>
-<span class="sourceLineNo">2641</span><a id="line.2641">     * SquidPanel from the position given by putX,putY (inclusive) to putX+limitWidth,putY+limitHeight (exclusive) so</a>
-<span class="sourceLineNo">2642</span><a id="line.2642">     * they have the values stored in the snapshot. If limitWidth or limitHeight is negative, this uses the full width</a>
-<span class="sourceLineNo">2643</span><a id="line.2643">     * and height of the snapshot (stopping early if it would extend past the gridWidth or gridHeight of this</a>
-<span class="sourceLineNo">2644</span><a id="line.2644">     * SquidPanel).</a>
-<span class="sourceLineNo">2645</span><a id="line.2645">     * &lt;br&gt;</a>
-<span class="sourceLineNo">2646</span><a id="line.2646">     * This overload takes a String instead of a StringBuilder for potentially-easier loading from files.</a>
-<span class="sourceLineNo">2647</span><a id="line.2647">     * @param snapshot a String in a special format as produced by {@link #getSnapshot(int, int, int, int)}</a>
-<span class="sourceLineNo">2648</span><a id="line.2648">     * @param putX where to start placing the data from the snapshot, x position</a>
-<span class="sourceLineNo">2649</span><a id="line.2649">     * @param putY where to start placing the data from the snapshot, y position</a>
-<span class="sourceLineNo">2650</span><a id="line.2650">     * @param limitWidth if negative, uses all of snapshot's width as possible, otherwise restricts the width allowed</a>
-<span class="sourceLineNo">2651</span><a id="line.2651">     * @param limitHeight if negative, uses all of snapshot's height as possible, otherwise restricts the height allowed</a>
-<span class="sourceLineNo">2652</span><a id="line.2652">     * @return this after setting, for chaining</a>
-<span class="sourceLineNo">2653</span><a id="line.2653">     */</a>
-<span class="sourceLineNo">2654</span><a id="line.2654"></a>
-<span class="sourceLineNo">2655</span><a id="line.2655">    public SquidPanel setFromSnapshot(String snapshot, int putX, int putY, int limitWidth, int limitHeight)</a>
-<span class="sourceLineNo">2656</span><a id="line.2656">    {</a>
-<span class="sourceLineNo">2657</span><a id="line.2657">        if(putX &gt;= gridWidth || putY &gt;= gridHeight || snapshot == null || snapshot.length() &lt; 4) return this;</a>
-<span class="sourceLineNo">2658</span><a id="line.2658">        if(putX &lt; 0) putX = 0;</a>
-<span class="sourceLineNo">2659</span><a id="line.2659">        if(putY &lt; 0) putY = 0;</a>
-<span class="sourceLineNo">2660</span><a id="line.2660">        int start = snapshot.indexOf(":")+1, width = StringKit.intFromDec(snapshot),</a>
-<span class="sourceLineNo">2661</span><a id="line.2661">                height = StringKit.intFromDec(snapshot, snapshot.indexOf("x") + 1, start),</a>
-<span class="sourceLineNo">2662</span><a id="line.2662">                run = start;</a>
-<span class="sourceLineNo">2663</span><a id="line.2663">        if(limitWidth &lt; 0)</a>
-<span class="sourceLineNo">2664</span><a id="line.2664">            limitWidth = Math.min(width, gridWidth - putX);</a>
-<span class="sourceLineNo">2665</span><a id="line.2665">        else</a>
-<span class="sourceLineNo">2666</span><a id="line.2666">            limitWidth = Math.min(limitWidth, Math.min(width, gridWidth - putX));</a>
-<span class="sourceLineNo">2667</span><a id="line.2667"></a>
-<span class="sourceLineNo">2668</span><a id="line.2668">        if(limitHeight &lt; 0)</a>
-<span class="sourceLineNo">2669</span><a id="line.2669">            limitHeight = Math.min(height, gridHeight - putY);</a>
-<span class="sourceLineNo">2670</span><a id="line.2670">        else</a>
-<span class="sourceLineNo">2671</span><a id="line.2671">            limitHeight = Math.min(limitHeight, Math.min(height, gridHeight - putY));</a>
-<span class="sourceLineNo">2672</span><a id="line.2672">        for (int x = putX, i = 0; i &lt; limitWidth; x++, i++, run += height) {</a>
-<span class="sourceLineNo">2673</span><a id="line.2673">            snapshot.getChars(run, run + limitHeight, contents[x], putY);</a>
-<span class="sourceLineNo">2674</span><a id="line.2674">        }</a>
-<span class="sourceLineNo">2675</span><a id="line.2675">        run = start + width * height;</a>
-<span class="sourceLineNo">2676</span><a id="line.2676">        for (int x = putX, i = 0; i &lt; limitWidth; x++, i++) {</a>
-<span class="sourceLineNo">2677</span><a id="line.2677">            for (int y = putY, j = 0; j &lt; limitHeight; y++, j++) {</a>
-<span class="sourceLineNo">2678</span><a id="line.2678">                colors[x][y] = SColor.charsToFloat(snapshot, run);</a>
-<span class="sourceLineNo">2679</span><a id="line.2679">                run += 8;</a>
-<span class="sourceLineNo">2680</span><a id="line.2680">            }</a>
-<span class="sourceLineNo">2681</span><a id="line.2681">        }</a>
-<span class="sourceLineNo">2682</span><a id="line.2682">        return this;</a>
-<span class="sourceLineNo">2683</span><a id="line.2683">    }</a>
-<span class="sourceLineNo">2684</span><a id="line.2684">}</a>
+<span class="sourceLineNo">2336</span><a id="line.2336">        return Math.max(duration, 0.02f);</a>
+<span class="sourceLineNo">2337</span><a id="line.2337">    }</a>
+<span class="sourceLineNo">2338</span><a id="line.2338"></a>
+<span class="sourceLineNo">2339</span><a id="line.2339">    /**</a>
+<span class="sourceLineNo">2340</span><a id="line.2340">     * The X offset that the whole panel's internals will be rendered at. If the {@code gridWidth} of this SquidPanel is</a>
+<span class="sourceLineNo">2341</span><a id="line.2341">     * less than the actual size of the char[][] it renders, then you can use gridOffsetX to start rendering at a</a>
+<span class="sourceLineNo">2342</span><a id="line.2342">     * different position</a>
+<span class="sourceLineNo">2343</span><a id="line.2343">     * @return the current offset in cells along the x axis</a>
+<span class="sourceLineNo">2344</span><a id="line.2344">     */</a>
+<span class="sourceLineNo">2345</span><a id="line.2345">    public int getGridOffsetX() {</a>
+<span class="sourceLineNo">2346</span><a id="line.2346">        return gridOffsetX;</a>
+<span class="sourceLineNo">2347</span><a id="line.2347">    }</a>
+<span class="sourceLineNo">2348</span><a id="line.2348"></a>
+<span class="sourceLineNo">2349</span><a id="line.2349">    /**</a>
+<span class="sourceLineNo">2350</span><a id="line.2350">     * Sets the X offset that the whole panel's internals will be rendered at.</a>
+<span class="sourceLineNo">2351</span><a id="line.2351">     * @param gridOffsetX the requested offset in cells</a>
+<span class="sourceLineNo">2352</span><a id="line.2352">     */</a>
+<span class="sourceLineNo">2353</span><a id="line.2353">    public void setGridOffsetX(int gridOffsetX) {</a>
+<span class="sourceLineNo">2354</span><a id="line.2354">        this.gridOffsetX = clamp(gridOffsetX,0,  contents.length - gridWidth);</a>
+<span class="sourceLineNo">2355</span><a id="line.2355">    }</a>
+<span class="sourceLineNo">2356</span><a id="line.2356"></a>
+<span class="sourceLineNo">2357</span><a id="line.2357">    /**</a>
+<span class="sourceLineNo">2358</span><a id="line.2358">     * The Y offset that the whole panel's internals will be rendered at.</a>
+<span class="sourceLineNo">2359</span><a id="line.2359">     * @return the current offset in cells along the y axis</a>
+<span class="sourceLineNo">2360</span><a id="line.2360">     */</a>
+<span class="sourceLineNo">2361</span><a id="line.2361">    public int getGridOffsetY() {</a>
+<span class="sourceLineNo">2362</span><a id="line.2362">        return gridOffsetY;</a>
+<span class="sourceLineNo">2363</span><a id="line.2363">    }</a>
+<span class="sourceLineNo">2364</span><a id="line.2364"></a>
+<span class="sourceLineNo">2365</span><a id="line.2365">    /**</a>
+<span class="sourceLineNo">2366</span><a id="line.2366">     * Sets the Y offset that the whole panel's internals will be rendered at.</a>
+<span class="sourceLineNo">2367</span><a id="line.2367">     * @param gridOffsetY the requested offset in cells</a>
+<span class="sourceLineNo">2368</span><a id="line.2368">     */</a>
+<span class="sourceLineNo">2369</span><a id="line.2369">    public void setGridOffsetY(int gridOffsetY) {</a>
+<span class="sourceLineNo">2370</span><a id="line.2370">        this.gridOffsetY = clamp(gridOffsetY,0,  contents[0].length - gridHeight);</a>
+<span class="sourceLineNo">2371</span><a id="line.2371">    }</a>
+<span class="sourceLineNo">2372</span><a id="line.2372"></a>
+<span class="sourceLineNo">2373</span><a id="line.2373">    /**</a>
+<span class="sourceLineNo">2374</span><a id="line.2374">     * The number of cells along the x-axis that will be rendered of this panel.</a>
+<span class="sourceLineNo">2375</span><a id="line.2375">     * @return the number of cells along the x-axis that will be rendered of this panel</a>
+<span class="sourceLineNo">2376</span><a id="line.2376">     */</a>
+<span class="sourceLineNo">2377</span><a id="line.2377">    public int getGridWidth() {</a>
+<span class="sourceLineNo">2378</span><a id="line.2378">        return gridWidth;</a>
+<span class="sourceLineNo">2379</span><a id="line.2379">    }</a>
+<span class="sourceLineNo">2380</span><a id="line.2380"></a>
+<span class="sourceLineNo">2381</span><a id="line.2381">    /**</a>
+<span class="sourceLineNo">2382</span><a id="line.2382">     * Sets the number of cells along the x-axis that will be rendered of this panel to gridWidth.</a>
+<span class="sourceLineNo">2383</span><a id="line.2383">     * @param gridWidth the requested width in cells</a>
+<span class="sourceLineNo">2384</span><a id="line.2384">     */</a>
+<span class="sourceLineNo">2385</span><a id="line.2385">    public void setGridWidth(int gridWidth) {</a>
+<span class="sourceLineNo">2386</span><a id="line.2386">        this.gridWidth = gridWidth;</a>
+<span class="sourceLineNo">2387</span><a id="line.2387">    }</a>
+<span class="sourceLineNo">2388</span><a id="line.2388"></a>
+<span class="sourceLineNo">2389</span><a id="line.2389">    /**</a>
+<span class="sourceLineNo">2390</span><a id="line.2390">     * The number of cells along the y-axis that will be rendered of this panel</a>
+<span class="sourceLineNo">2391</span><a id="line.2391">     * @return the number of cells along the y-axis that will be rendered of this panel</a>
+<span class="sourceLineNo">2392</span><a id="line.2392">     */</a>
+<span class="sourceLineNo">2393</span><a id="line.2393">    public int getGridHeight() {</a>
+<span class="sourceLineNo">2394</span><a id="line.2394">        return gridHeight;</a>
+<span class="sourceLineNo">2395</span><a id="line.2395">    }</a>
+<span class="sourceLineNo">2396</span><a id="line.2396"></a>
+<span class="sourceLineNo">2397</span><a id="line.2397">    /**</a>
+<span class="sourceLineNo">2398</span><a id="line.2398">     * Sets the number of cells along the y-axis that will be rendered of this panel to gridHeight.</a>
+<span class="sourceLineNo">2399</span><a id="line.2399">     * @param gridHeight the requested height in cells</a>
+<span class="sourceLineNo">2400</span><a id="line.2400">     */</a>
+<span class="sourceLineNo">2401</span><a id="line.2401">    public void setGridHeight(int gridHeight) {</a>
+<span class="sourceLineNo">2402</span><a id="line.2402">        this.gridHeight = gridHeight;</a>
+<span class="sourceLineNo">2403</span><a id="line.2403">    }</a>
+<span class="sourceLineNo">2404</span><a id="line.2404"></a>
+<span class="sourceLineNo">2405</span><a id="line.2405">    /**</a>
+<span class="sourceLineNo">2406</span><a id="line.2406">     * Gets the total number of cells along the x-axis that this stores; this is usually equivalent to</a>
+<span class="sourceLineNo">2407</span><a id="line.2407">     * {@link #getGridWidth()}, but not if the constructor</a>
+<span class="sourceLineNo">2408</span><a id="line.2408">     * {@link #SquidPanel(int, int, TextCellFactory, IColorCenter, float, float, char[][])} was used to set a</a>
+<span class="sourceLineNo">2409</span><a id="line.2409">     * larger-than-normal map.</a>
+<span class="sourceLineNo">2410</span><a id="line.2410">     * @return the width of the internal array this can render, which may be larger than the visible width</a>
+<span class="sourceLineNo">2411</span><a id="line.2411">     */</a>
+<span class="sourceLineNo">2412</span><a id="line.2412">    public int getTotalWidth()</a>
+<span class="sourceLineNo">2413</span><a id="line.2413">    {</a>
+<span class="sourceLineNo">2414</span><a id="line.2414">        return contents.length;</a>
+<span class="sourceLineNo">2415</span><a id="line.2415">    }</a>
+<span class="sourceLineNo">2416</span><a id="line.2416">    /**</a>
+<span class="sourceLineNo">2417</span><a id="line.2417">     * Gets the total number of cells along the y-axis that this stores; this is usually equivalent to</a>
+<span class="sourceLineNo">2418</span><a id="line.2418">     * {@link #getGridHeight()}, but not if the constructor</a>
+<span class="sourceLineNo">2419</span><a id="line.2419">     * {@link #SquidPanel(int, int, TextCellFactory, IColorCenter, float, float, char[][])} was used to set a</a>
+<span class="sourceLineNo">2420</span><a id="line.2420">     * larger-than-normal map.</a>
+<span class="sourceLineNo">2421</span><a id="line.2421">     * @return the height of the internal array this can render, which may be larger than the visible height</a>
+<span class="sourceLineNo">2422</span><a id="line.2422">     */</a>
+<span class="sourceLineNo">2423</span><a id="line.2423">    public int getTotalHeight()</a>
+<span class="sourceLineNo">2424</span><a id="line.2424">    {</a>
+<span class="sourceLineNo">2425</span><a id="line.2425">        return contents[0].length;</a>
+<span class="sourceLineNo">2426</span><a id="line.2426">    }</a>
+<span class="sourceLineNo">2427</span><a id="line.2427"></a>
+<span class="sourceLineNo">2428</span><a id="line.2428">    /**</a>
+<span class="sourceLineNo">2429</span><a id="line.2429">     * Sets the position of the actor's bottom left corner.</a>
+<span class="sourceLineNo">2430</span><a id="line.2430">     *</a>
+<span class="sourceLineNo">2431</span><a id="line.2431">     * @param x</a>
+<span class="sourceLineNo">2432</span><a id="line.2432">     * @param y</a>
+<span class="sourceLineNo">2433</span><a id="line.2433">     */</a>
+<span class="sourceLineNo">2434</span><a id="line.2434">    @Override</a>
+<span class="sourceLineNo">2435</span><a id="line.2435">    public void setPosition(float x, float y) {</a>
+<span class="sourceLineNo">2436</span><a id="line.2436">        super.setPosition(x, y);</a>
+<span class="sourceLineNo">2437</span><a id="line.2437">        setBounds(x, y, getWidth(), getHeight());</a>
+<span class="sourceLineNo">2438</span><a id="line.2438">    }</a>
+<span class="sourceLineNo">2439</span><a id="line.2439"></a>
+<span class="sourceLineNo">2440</span><a id="line.2440">    public float getxOffset() {</a>
+<span class="sourceLineNo">2441</span><a id="line.2441">        return xOffset;</a>
+<span class="sourceLineNo">2442</span><a id="line.2442">    }</a>
+<span class="sourceLineNo">2443</span><a id="line.2443"></a>
+<span class="sourceLineNo">2444</span><a id="line.2444">    public void setOffsetX(float xOffset) {</a>
+<span class="sourceLineNo">2445</span><a id="line.2445">        this.xOffset = xOffset;</a>
+<span class="sourceLineNo">2446</span><a id="line.2446">    }</a>
+<span class="sourceLineNo">2447</span><a id="line.2447"></a>
+<span class="sourceLineNo">2448</span><a id="line.2448">    public float getyOffset() {</a>
+<span class="sourceLineNo">2449</span><a id="line.2449">        return yOffset;</a>
+<span class="sourceLineNo">2450</span><a id="line.2450">    }</a>
+<span class="sourceLineNo">2451</span><a id="line.2451"></a>
+<span class="sourceLineNo">2452</span><a id="line.2452">    public void setOffsetY(float yOffset) {</a>
+<span class="sourceLineNo">2453</span><a id="line.2453">        this.yOffset = yOffset;</a>
+<span class="sourceLineNo">2454</span><a id="line.2454">    }</a>
+<span class="sourceLineNo">2455</span><a id="line.2455"></a>
+<span class="sourceLineNo">2456</span><a id="line.2456">    public void setOffsets(float x, float y) {</a>
+<span class="sourceLineNo">2457</span><a id="line.2457">        xOffset = x;</a>
+<span class="sourceLineNo">2458</span><a id="line.2458">        yOffset = y;</a>
+<span class="sourceLineNo">2459</span><a id="line.2459">    }</a>
+<span class="sourceLineNo">2460</span><a id="line.2460"></a>
+<span class="sourceLineNo">2461</span><a id="line.2461">    /**</a>
+<span class="sourceLineNo">2462</span><a id="line.2462">     * Gets the status of a boolean flag used for rendering thin maps; it will almost always be false unless it</a>
+<span class="sourceLineNo">2463</span><a id="line.2463">     * was set to true with {@link #setOnlyRenderEven(boolean)}.</a>
+<span class="sourceLineNo">2464</span><a id="line.2464">     * &lt;br&gt;</a>
+<span class="sourceLineNo">2465</span><a id="line.2465">     * This is meant for thin-wall maps, where only cells where x and y are both even numbers have backgrounds</a>
+<span class="sourceLineNo">2466</span><a id="line.2466">     * displayed. Should be false when using this SquidPanel for anything that isn't specifically a background</a>
+<span class="sourceLineNo">2467</span><a id="line.2467">     * of a map that uses the thin-wall method from ThinDungeonGenerator or something similar. Even the</a>
+<span class="sourceLineNo">2468</span><a id="line.2468">     * foregrounds of thin-wall maps should have this false, since ThinDungeonGenerator (in conjunction with</a>
+<span class="sourceLineNo">2469</span><a id="line.2469">     * DungeonUtility's hashesToLines() method) makes thin lines for walls that should be displayed as between</a>
+<span class="sourceLineNo">2470</span><a id="line.2470">     * the boundaries of other cells. The overlap behavior needed for some "thin enough" cells to be displayed</a>
+<span class="sourceLineNo">2471</span><a id="line.2471">     * between the cells can be accomplished by using {@link #setTextSize(float, float)} to double the</a>
+<span class="sourceLineNo">2472</span><a id="line.2472">     * previously-given cell width and height.</a>
+<span class="sourceLineNo">2473</span><a id="line.2473">     *</a>
+<span class="sourceLineNo">2474</span><a id="line.2474">     * @return the current status of the onlyRenderEven flag, which defaults to false</a>
+<span class="sourceLineNo">2475</span><a id="line.2475">     */</a>
+<span class="sourceLineNo">2476</span><a id="line.2476">    public boolean getOnlyRenderEven() {</a>
+<span class="sourceLineNo">2477</span><a id="line.2477">        return onlyRenderEven;</a>
+<span class="sourceLineNo">2478</span><a id="line.2478">    }</a>
+<span class="sourceLineNo">2479</span><a id="line.2479">    /**</a>
+<span class="sourceLineNo">2480</span><a id="line.2480">     * Sets the status of a boolean flag used for rendering thin maps; it should almost always be the default,</a>
+<span class="sourceLineNo">2481</span><a id="line.2481">     * which is false, unless you are using a thin-wall map, and then this should be true only if this</a>
+<span class="sourceLineNo">2482</span><a id="line.2482">     * SquidPanel is used for the background layer.</a>
+<span class="sourceLineNo">2483</span><a id="line.2483">     * &lt;br&gt;</a>
+<span class="sourceLineNo">2484</span><a id="line.2484">     * This is meant for thin-wall maps, where only cells where x and y are both even numbers have backgrounds</a>
+<span class="sourceLineNo">2485</span><a id="line.2485">     * displayed. Should be false when using this SquidPanel for anything that isn't specifically a background</a>
+<span class="sourceLineNo">2486</span><a id="line.2486">     * of a map that uses the thin-wall method from ThinDungeonGenerator or something similar. Even the</a>
+<span class="sourceLineNo">2487</span><a id="line.2487">     * foregrounds of thin-wall maps should have this false, since ThinDungeonGenerator (in conjunction with</a>
+<span class="sourceLineNo">2488</span><a id="line.2488">     * DungeonUtility's hashesToLines() method) makes thin lines for walls that should be displayed as between</a>
+<span class="sourceLineNo">2489</span><a id="line.2489">     * the boundaries of other cells. The overlap behavior needed for some "thin enough" cells to be displayed</a>
+<span class="sourceLineNo">2490</span><a id="line.2490">     * between the cells can be accomplished by using {@link #setTextSize(float, float)} to double the</a>
+<span class="sourceLineNo">2491</span><a id="line.2491">     * previously-given cell width and height.</a>
+<span class="sourceLineNo">2492</span><a id="line.2492">     *</a>
+<span class="sourceLineNo">2493</span><a id="line.2493">     * @param onlyRenderEven generally, should only be true if this SquidPanel is a background of a thin map</a>
+<span class="sourceLineNo">2494</span><a id="line.2494">     */</a>
+<span class="sourceLineNo">2495</span><a id="line.2495"></a>
+<span class="sourceLineNo">2496</span><a id="line.2496">    public void setOnlyRenderEven(boolean onlyRenderEven) {</a>
+<span class="sourceLineNo">2497</span><a id="line.2497">        this.onlyRenderEven = onlyRenderEven;</a>
+<span class="sourceLineNo">2498</span><a id="line.2498">    }</a>
+<span class="sourceLineNo">2499</span><a id="line.2499"></a>
+<span class="sourceLineNo">2500</span><a id="line.2500">    /**</a>
+<span class="sourceLineNo">2501</span><a id="line.2501">     * Gets a "snapshot" of the data represented by this SquidPanel; stores the dimensions, the char data, and the color</a>
+<span class="sourceLineNo">2502</span><a id="line.2502">     * data in a way that can be set back to a SquidPanel using {@link #setFromSnapshot(String, int, int, int, int)} or</a>
+<span class="sourceLineNo">2503</span><a id="line.2503">     * its overload that takes a StringBuilder. The actual contents of the returned StringBuilder are unlikely to be</a>
+<span class="sourceLineNo">2504</span><a id="line.2504">     * legible in any way if read as text, and are meant to be concise and stable across versions.</a>
+<span class="sourceLineNo">2505</span><a id="line.2505">     * @return a StringBuilder representation of this SquidPanel's data that can be passed later to {@link #setFromSnapshot(StringBuilder, int, int, int, int)} or converted to String and passed to its overload</a>
+<span class="sourceLineNo">2506</span><a id="line.2506">     */</a>
+<span class="sourceLineNo">2507</span><a id="line.2507">    public StringBuilder getSnapshot()</a>
+<span class="sourceLineNo">2508</span><a id="line.2508">    {</a>
+<span class="sourceLineNo">2509</span><a id="line.2509">        return getSnapshot(0, 0, gridWidth, gridHeight);</a>
+<span class="sourceLineNo">2510</span><a id="line.2510">    }</a>
+<span class="sourceLineNo">2511</span><a id="line.2511">    /**</a>
+<span class="sourceLineNo">2512</span><a id="line.2512">     * Gets a "snapshot" of the data represented by this SquidPanel; stores the dimensions, the char data, and the color</a>
+<span class="sourceLineNo">2513</span><a id="line.2513">     * data in a way that can be set back to a SquidPanel using {@link #setFromSnapshot(String, int, int, int, int)} or</a>
+<span class="sourceLineNo">2514</span><a id="line.2514">     * its overload that takes a StringBuilder. The actual contents of the returned StringBuilder are unlikely to be</a>
+<span class="sourceLineNo">2515</span><a id="line.2515">     * legible in any way if read as text, and are meant to be concise and stable across versions. This overload allows</a>
+<span class="sourceLineNo">2516</span><a id="line.2516">     * the first x and y position used to be specified, as well as the width and height to use (the actual width and</a>
+<span class="sourceLineNo">2517</span><a id="line.2517">     * height stored may be different if this SquidPanel's gridWidth and/or gridHeight are smaller than the width and/or</a>
+<span class="sourceLineNo">2518</span><a id="line.2518">     * height given).</a>
+<span class="sourceLineNo">2519</span><a id="line.2519">     * @param startX the first x position to use in the snapshot, inclusive</a>
+<span class="sourceLineNo">2520</span><a id="line.2520">     * @param startY the first y position to use in the snapshot, inclusive</a>
+<span class="sourceLineNo">2521</span><a id="line.2521">     * @param width how wide the snapshot area should be; x positions from startX to startX + width - 1 will be used</a>
+<span class="sourceLineNo">2522</span><a id="line.2522">     * @param height how tall the snapshot area should be; y positions from startY to startY + height - 1 will be used</a>
+<span class="sourceLineNo">2523</span><a id="line.2523">     * @return a StringBuilder representation of this SquidPanel's data that can be passed later to {@link #setFromSnapshot(StringBuilder, int, int, int, int)} or converted to String and passed to its overload</a>
+<span class="sourceLineNo">2524</span><a id="line.2524">     */</a>
+<span class="sourceLineNo">2525</span><a id="line.2525">    public StringBuilder getSnapshot(int startX, int startY, int width, int height) {</a>
+<span class="sourceLineNo">2526</span><a id="line.2526">        width = Math.min(gridWidth - startX, width);</a>
+<span class="sourceLineNo">2527</span><a id="line.2527">        height = Math.min(gridHeight - startY, height);</a>
+<span class="sourceLineNo">2528</span><a id="line.2528">        StringBuilder sb = new StringBuilder(width * height * 9 + 12);</a>
+<span class="sourceLineNo">2529</span><a id="line.2529">        sb.append(width).append('x').append(height).append(':');</a>
+<span class="sourceLineNo">2530</span><a id="line.2530">        for (int x = startX, i = 0; i &lt; width; x++, i++) {</a>
+<span class="sourceLineNo">2531</span><a id="line.2531">            sb.append(contents[x], startY, height);</a>
+<span class="sourceLineNo">2532</span><a id="line.2532">        }</a>
+<span class="sourceLineNo">2533</span><a id="line.2533">        char[] reuse = new char[8];</a>
+<span class="sourceLineNo">2534</span><a id="line.2534">        for (int x = startX, i = 0; i &lt; width; x++, i++) {</a>
+<span class="sourceLineNo">2535</span><a id="line.2535">            for (int y = startY, j = 0; j &lt; height; y++, j++) {</a>
+<span class="sourceLineNo">2536</span><a id="line.2536">                sb.append(SColor.floatToChars(reuse, colors[x][y]));</a>
+<span class="sourceLineNo">2537</span><a id="line.2537">            }</a>
+<span class="sourceLineNo">2538</span><a id="line.2538">        }</a>
+<span class="sourceLineNo">2539</span><a id="line.2539">        return sb;</a>
+<span class="sourceLineNo">2540</span><a id="line.2540">    }</a>
+<span class="sourceLineNo">2541</span><a id="line.2541"></a>
+<span class="sourceLineNo">2542</span><a id="line.2542">    /**</a>
+<span class="sourceLineNo">2543</span><a id="line.2543">     * Given a "snapshot" from {@link #getSnapshot(int, int, int, int)}, this assigns the chars and colors in this</a>
+<span class="sourceLineNo">2544</span><a id="line.2544">     * SquidPanel from 0,0 (inclusive) up to the dimensions stored in the snapshot to match the snapshot's data.</a>
+<span class="sourceLineNo">2545</span><a id="line.2545">     * @param snapshot a StringBuilder in a special format as produced by {@link #getSnapshot(int, int, int, int)}</a>
+<span class="sourceLineNo">2546</span><a id="line.2546">     * @return this after setting, for chaining</a>
+<span class="sourceLineNo">2547</span><a id="line.2547">     */</a>
+<span class="sourceLineNo">2548</span><a id="line.2548">    public SquidPanel setFromSnapshot(StringBuilder snapshot)</a>
+<span class="sourceLineNo">2549</span><a id="line.2549">    {</a>
+<span class="sourceLineNo">2550</span><a id="line.2550">        return setFromSnapshot(snapshot, 0, 0, -1, -1);</a>
+<span class="sourceLineNo">2551</span><a id="line.2551">    }</a>
+<span class="sourceLineNo">2552</span><a id="line.2552">    /**</a>
+<span class="sourceLineNo">2553</span><a id="line.2553">     * Given a "snapshot" from {@link #getSnapshot(int, int, int, int)}, this assigns the chars and colors in this</a>
+<span class="sourceLineNo">2554</span><a id="line.2554">     * SquidPanel from the position given by putX,putY (inclusive) up to the dimensions stored in the snapshot</a>
+<span class="sourceLineNo">2555</span><a id="line.2555">     * (considering putX and putY as offsets) so they have the values stored in the snapshot.</a>
+<span class="sourceLineNo">2556</span><a id="line.2556">     * @param snapshot a StringBuilder in a special format as produced by {@link #getSnapshot(int, int, int, int)}</a>
+<span class="sourceLineNo">2557</span><a id="line.2557">     * @param putX where to start placing the data from the snapshot, x position</a>
+<span class="sourceLineNo">2558</span><a id="line.2558">     * @param putY where to start placing the data from the snapshot, y position</a>
+<span class="sourceLineNo">2559</span><a id="line.2559">     * @return this after setting, for chaining</a>
+<span class="sourceLineNo">2560</span><a id="line.2560">     */</a>
+<span class="sourceLineNo">2561</span><a id="line.2561">    public SquidPanel setFromSnapshot(StringBuilder snapshot, int putX, int putY)</a>
+<span class="sourceLineNo">2562</span><a id="line.2562">    {</a>
+<span class="sourceLineNo">2563</span><a id="line.2563">        return setFromSnapshot(snapshot, putX, putY, -1, -1);</a>
+<span class="sourceLineNo">2564</span><a id="line.2564">    }</a>
+<span class="sourceLineNo">2565</span><a id="line.2565">    /**</a>
+<span class="sourceLineNo">2566</span><a id="line.2566">     * Given a "snapshot" from {@link #getSnapshot(int, int, int, int)}, this assigns the chars and colors in this</a>
+<span class="sourceLineNo">2567</span><a id="line.2567">     * SquidPanel from the position given by putX,putY (inclusive) to putX+limitWidth,putY+limitHeight (exclusive) so</a>
+<span class="sourceLineNo">2568</span><a id="line.2568">     * they have the values stored in the snapshot. If limitWidth or limitHeight is negative, this uses the full width</a>
+<span class="sourceLineNo">2569</span><a id="line.2569">     * and height of the snapshot (stopping early if it would extend past the gridWidth or gridHeight of this</a>
+<span class="sourceLineNo">2570</span><a id="line.2570">     * SquidPanel).</a>
+<span class="sourceLineNo">2571</span><a id="line.2571">     * @param snapshot a StringBuilder in a special format as produced by {@link #getSnapshot(int, int, int, int)}</a>
+<span class="sourceLineNo">2572</span><a id="line.2572">     * @param putX where to start placing the data from the snapshot, x position</a>
+<span class="sourceLineNo">2573</span><a id="line.2573">     * @param putY where to start placing the data from the snapshot, y position</a>
+<span class="sourceLineNo">2574</span><a id="line.2574">     * @param limitWidth if negative, uses all of snapshot's width as possible, otherwise restricts the width allowed</a>
+<span class="sourceLineNo">2575</span><a id="line.2575">     * @param limitHeight if negative, uses all of snapshot's height as possible, otherwise restricts the height allowed</a>
+<span class="sourceLineNo">2576</span><a id="line.2576">     * @return this after setting, for chaining</a>
+<span class="sourceLineNo">2577</span><a id="line.2577">     */</a>
+<span class="sourceLineNo">2578</span><a id="line.2578">    public SquidPanel setFromSnapshot(StringBuilder snapshot, int putX, int putY, int limitWidth, int limitHeight)</a>
+<span class="sourceLineNo">2579</span><a id="line.2579">    {</a>
+<span class="sourceLineNo">2580</span><a id="line.2580">        if(putX &gt;= gridWidth || putY &gt;= gridHeight || snapshot == null || snapshot.length() &lt; 4) return this;</a>
+<span class="sourceLineNo">2581</span><a id="line.2581">        if(putX &lt; 0) putX = 0;</a>
+<span class="sourceLineNo">2582</span><a id="line.2582">        if(putY &lt; 0) putY = 0;</a>
+<span class="sourceLineNo">2583</span><a id="line.2583">        int start = snapshot.indexOf(":")+1, width = StringKit.intFromDec(snapshot),</a>
+<span class="sourceLineNo">2584</span><a id="line.2584">                height = StringKit.intFromDec(snapshot, snapshot.indexOf("x") + 1, start),</a>
+<span class="sourceLineNo">2585</span><a id="line.2585">                run = start;</a>
+<span class="sourceLineNo">2586</span><a id="line.2586">        if(limitWidth &lt; 0)</a>
+<span class="sourceLineNo">2587</span><a id="line.2587">            limitWidth = Math.min(width, gridWidth - putX);</a>
+<span class="sourceLineNo">2588</span><a id="line.2588">        else</a>
+<span class="sourceLineNo">2589</span><a id="line.2589">            limitWidth = Math.min(limitWidth, Math.min(width, gridWidth - putX));</a>
+<span class="sourceLineNo">2590</span><a id="line.2590"></a>
+<span class="sourceLineNo">2591</span><a id="line.2591">        if(limitHeight &lt; 0)</a>
+<span class="sourceLineNo">2592</span><a id="line.2592">            limitHeight = Math.min(height, gridHeight - putY);</a>
+<span class="sourceLineNo">2593</span><a id="line.2593">        else</a>
+<span class="sourceLineNo">2594</span><a id="line.2594">            limitHeight = Math.min(limitHeight, Math.min(height, gridHeight - putY));</a>
+<span class="sourceLineNo">2595</span><a id="line.2595">        for (int x = putX, i = 0; i &lt; limitWidth; x++, i++, run += height) {</a>
+<span class="sourceLineNo">2596</span><a id="line.2596">            snapshot.getChars(run, run + limitHeight, contents[x], putY);</a>
+<span class="sourceLineNo">2597</span><a id="line.2597">        }</a>
+<span class="sourceLineNo">2598</span><a id="line.2598">        run = start + width * height;</a>
+<span class="sourceLineNo">2599</span><a id="line.2599">        for (int x = putX, i = 0; i &lt; limitWidth; x++, i++) {</a>
+<span class="sourceLineNo">2600</span><a id="line.2600">            for (int y = putY, j = 0; j &lt; limitHeight; y++, j++) {</a>
+<span class="sourceLineNo">2601</span><a id="line.2601">                colors[x][y] = SColor.charsToFloat(snapshot, run);</a>
+<span class="sourceLineNo">2602</span><a id="line.2602">                run += 8;</a>
+<span class="sourceLineNo">2603</span><a id="line.2603">            }</a>
+<span class="sourceLineNo">2604</span><a id="line.2604">        }</a>
+<span class="sourceLineNo">2605</span><a id="line.2605">        return this;</a>
+<span class="sourceLineNo">2606</span><a id="line.2606">    }</a>
+<span class="sourceLineNo">2607</span><a id="line.2607"></a>
+<span class="sourceLineNo">2608</span><a id="line.2608">    /**</a>
+<span class="sourceLineNo">2609</span><a id="line.2609">     * Given a "snapshot" from {@link #getSnapshot(int, int, int, int)}, this assigns the chars and colors in this</a>
+<span class="sourceLineNo">2610</span><a id="line.2610">     * SquidPanel from 0,0 (inclusive) up to the dimensions stored in the snapshot to match the snapshot's data.</a>
+<span class="sourceLineNo">2611</span><a id="line.2611">     * &lt;br&gt;</a>
+<span class="sourceLineNo">2612</span><a id="line.2612">     * This overload takes a String instead of a StringBuilder for potentially-easier loading from files.</a>
+<span class="sourceLineNo">2613</span><a id="line.2613">     * @param snapshot a String in a special format as produced by {@link #getSnapshot(int, int, int, int)}</a>
+<span class="sourceLineNo">2614</span><a id="line.2614">     * @return this after setting, for chaining</a>
+<span class="sourceLineNo">2615</span><a id="line.2615">     */</a>
+<span class="sourceLineNo">2616</span><a id="line.2616">    public SquidPanel setFromSnapshot(String snapshot)</a>
+<span class="sourceLineNo">2617</span><a id="line.2617">    {</a>
+<span class="sourceLineNo">2618</span><a id="line.2618">        return setFromSnapshot(snapshot, 0, 0, -1, -1);</a>
+<span class="sourceLineNo">2619</span><a id="line.2619">    }</a>
+<span class="sourceLineNo">2620</span><a id="line.2620">    /**</a>
+<span class="sourceLineNo">2621</span><a id="line.2621">     * Given a "snapshot" from {@link #getSnapshot(int, int, int, int)}, this assigns the chars and colors in this</a>
+<span class="sourceLineNo">2622</span><a id="line.2622">     * SquidPanel from the position given by putX,putY (inclusive) up to the dimensions stored in the snapshot</a>
+<span class="sourceLineNo">2623</span><a id="line.2623">     * (considering putX and putY as offsets) so they have the values stored in the snapshot.</a>
+<span class="sourceLineNo">2624</span><a id="line.2624">     * &lt;br&gt;</a>
+<span class="sourceLineNo">2625</span><a id="line.2625">     * This overload takes a String instead of a StringBuilder for potentially-easier loading from files.</a>
+<span class="sourceLineNo">2626</span><a id="line.2626">     * @param snapshot a String in a special format as produced by {@link #getSnapshot(int, int, int, int)}</a>
+<span class="sourceLineNo">2627</span><a id="line.2627">     * @param putX where to start placing the data from the snapshot, x position</a>
+<span class="sourceLineNo">2628</span><a id="line.2628">     * @param putY where to start placing the data from the snapshot, y position</a>
+<span class="sourceLineNo">2629</span><a id="line.2629">     * @return this after setting, for chaining</a>
+<span class="sourceLineNo">2630</span><a id="line.2630">     */</a>
+<span class="sourceLineNo">2631</span><a id="line.2631">    public SquidPanel setFromSnapshot(String snapshot, int putX, int putY)</a>
+<span class="sourceLineNo">2632</span><a id="line.2632">    {</a>
+<span class="sourceLineNo">2633</span><a id="line.2633">        return setFromSnapshot(snapshot, putX, putY, -1, -1);</a>
+<span class="sourceLineNo">2634</span><a id="line.2634">    }</a>
+<span class="sourceLineNo">2635</span><a id="line.2635"></a>
+<span class="sourceLineNo">2636</span><a id="line.2636">    /**</a>
+<span class="sourceLineNo">2637</span><a id="line.2637">     * Given a "snapshot" from {@link #getSnapshot(int, int, int, int)}, this assigns the chars and colors in this</a>
+<span class="sourceLineNo">2638</span><a id="line.2638">     * SquidPanel from the position given by putX,putY (inclusive) to putX+limitWidth,putY+limitHeight (exclusive) so</a>
+<span class="sourceLineNo">2639</span><a id="line.2639">     * they have the values stored in the snapshot. If limitWidth or limitHeight is negative, this uses the full width</a>
+<span class="sourceLineNo">2640</span><a id="line.2640">     * and height of the snapshot (stopping early if it would extend past the gridWidth or gridHeight of this</a>
+<span class="sourceLineNo">2641</span><a id="line.2641">     * SquidPanel).</a>
+<span class="sourceLineNo">2642</span><a id="line.2642">     * &lt;br&gt;</a>
+<span class="sourceLineNo">2643</span><a id="line.2643">     * This overload takes a String instead of a StringBuilder for potentially-easier loading from files.</a>
+<span class="sourceLineNo">2644</span><a id="line.2644">     * @param snapshot a String in a special format as produced by {@link #getSnapshot(int, int, int, int)}</a>
+<span class="sourceLineNo">2645</span><a id="line.2645">     * @param putX where to start placing the data from the snapshot, x position</a>
+<span class="sourceLineNo">2646</span><a id="line.2646">     * @param putY where to start placing the data from the snapshot, y position</a>
+<span class="sourceLineNo">2647</span><a id="line.2647">     * @param limitWidth if negative, uses all of snapshot's width as possible, otherwise restricts the width allowed</a>
+<span class="sourceLineNo">2648</span><a id="line.2648">     * @param limitHeight if negative, uses all of snapshot's height as possible, otherwise restricts the height allowed</a>
+<span class="sourceLineNo">2649</span><a id="line.2649">     * @return this after setting, for chaining</a>
+<span class="sourceLineNo">2650</span><a id="line.2650">     */</a>
+<span class="sourceLineNo">2651</span><a id="line.2651"></a>
+<span class="sourceLineNo">2652</span><a id="line.2652">    public SquidPanel setFromSnapshot(String snapshot, int putX, int putY, int limitWidth, int limitHeight)</a>
+<span class="sourceLineNo">2653</span><a id="line.2653">    {</a>
+<span class="sourceLineNo">2654</span><a id="line.2654">        if(putX &gt;= gridWidth || putY &gt;= gridHeight || snapshot == null || snapshot.length() &lt; 4) return this;</a>
+<span class="sourceLineNo">2655</span><a id="line.2655">        if(putX &lt; 0) putX = 0;</a>
+<span class="sourceLineNo">2656</span><a id="line.2656">        if(putY &lt; 0) putY = 0;</a>
+<span class="sourceLineNo">2657</span><a id="line.2657">        int start = snapshot.indexOf(":")+1, width = StringKit.intFromDec(snapshot),</a>
+<span class="sourceLineNo">2658</span><a id="line.2658">                height = StringKit.intFromDec(snapshot, snapshot.indexOf("x") + 1, start),</a>
+<span class="sourceLineNo">2659</span><a id="line.2659">                run = start;</a>
+<span class="sourceLineNo">2660</span><a id="line.2660">        if(limitWidth &lt; 0)</a>
+<span class="sourceLineNo">2661</span><a id="line.2661">            limitWidth = Math.min(width, gridWidth - putX);</a>
+<span class="sourceLineNo">2662</span><a id="line.2662">        else</a>
+<span class="sourceLineNo">2663</span><a id="line.2663">            limitWidth = Math.min(limitWidth, Math.min(width, gridWidth - putX));</a>
+<span class="sourceLineNo">2664</span><a id="line.2664"></a>
+<span class="sourceLineNo">2665</span><a id="line.2665">        if(limitHeight &lt; 0)</a>
+<span class="sourceLineNo">2666</span><a id="line.2666">            limitHeight = Math.min(height, gridHeight - putY);</a>
+<span class="sourceLineNo">2667</span><a id="line.2667">        else</a>
+<span class="sourceLineNo">2668</span><a id="line.2668">            limitHeight = Math.min(limitHeight, Math.min(height, gridHeight - putY));</a>
+<span class="sourceLineNo">2669</span><a id="line.2669">        for (int x = putX, i = 0; i &lt; limitWidth; x++, i++, run += height) {</a>
+<span class="sourceLineNo">2670</span><a id="line.2670">            snapshot.getChars(run, run + limitHeight, contents[x], putY);</a>
+<span class="sourceLineNo">2671</span><a id="line.2671">        }</a>
+<span class="sourceLineNo">2672</span><a id="line.2672">        run = start + width * height;</a>
+<span class="sourceLineNo">2673</span><a id="line.2673">        for (int x = putX, i = 0; i &lt; limitWidth; x++, i++) {</a>
+<span class="sourceLineNo">2674</span><a id="line.2674">            for (int y = putY, j = 0; j &lt; limitHeight; y++, j++) {</a>
+<span class="sourceLineNo">2675</span><a id="line.2675">                colors[x][y] = SColor.charsToFloat(snapshot, run);</a>
+<span class="sourceLineNo">2676</span><a id="line.2676">                run += 8;</a>
+<span class="sourceLineNo">2677</span><a id="line.2677">            }</a>
+<span class="sourceLineNo">2678</span><a id="line.2678">        }</a>
+<span class="sourceLineNo">2679</span><a id="line.2679">        return this;</a>
+<span class="sourceLineNo">2680</span><a id="line.2680">    }</a>
+<span class="sourceLineNo">2681</span><a id="line.2681">}</a>
 
 
 

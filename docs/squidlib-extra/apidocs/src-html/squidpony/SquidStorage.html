@@ -179,25 +179,24 @@
 <span class="sourceLineNo">167</span><a id="line.167">     * @param &lt;T&gt; the type of the value to retrieve; if type was {@code RNG.class}, this would be {@code RNG}</a>
 <span class="sourceLineNo">168</span><a id="line.168">     * @return the retrieved value if successful, or null otherwise</a>
 <span class="sourceLineNo">169</span><a id="line.169">     */</a>
-<span class="sourceLineNo">170</span><a id="line.170">    @SuppressWarnings("unchecked")</a>
-<span class="sourceLineNo">171</span><a id="line.171">    public &lt;T&gt; T get(String outerName, String innerName, Class&lt;T&gt; type)</a>
-<span class="sourceLineNo">172</span><a id="line.172">    {</a>
-<span class="sourceLineNo">173</span><a id="line.173">        return super.get(outerName, innerName, type);</a>
-<span class="sourceLineNo">174</span><a id="line.174">    }</a>
-<span class="sourceLineNo">175</span><a id="line.175"></a>
-<span class="sourceLineNo">176</span><a id="line.176">    /**</a>
-<span class="sourceLineNo">177</span><a id="line.177">     * Gets the approximate size of the currently-stored preferences. This assumes UTF-16 storage, which is the case for</a>
-<span class="sourceLineNo">178</span><a id="line.178">     * GWT's LocalStorage. Since GWT is restricted to the size the browser permits for LocalStorage, and this limit can</a>
-<span class="sourceLineNo">179</span><a id="line.179">     * be rather small (about 5 MB, sometimes more but not reliably), this method is especially useful there, but it may</a>
-<span class="sourceLineNo">180</span><a id="line.180">     * yield inaccurate sizes on other platforms that save Preferences data differently.</a>
-<span class="sourceLineNo">181</span><a id="line.181">     * @return the size, in bytes, of the already-stored preferences</a>
-<span class="sourceLineNo">182</span><a id="line.182">     */</a>
-<span class="sourceLineNo">183</span><a id="line.183">    public int preferencesSize()</a>
-<span class="sourceLineNo">184</span><a id="line.184">    {</a>
-<span class="sourceLineNo">185</span><a id="line.185">        return super.preferencesSize();</a>
-<span class="sourceLineNo">186</span><a id="line.186">    }</a>
-<span class="sourceLineNo">187</span><a id="line.187"></a>
-<span class="sourceLineNo">188</span><a id="line.188">}</a>
+<span class="sourceLineNo">170</span><a id="line.170">    public &lt;T&gt; T get(String outerName, String innerName, Class&lt;T&gt; type)</a>
+<span class="sourceLineNo">171</span><a id="line.171">    {</a>
+<span class="sourceLineNo">172</span><a id="line.172">        return super.get(outerName, innerName, type);</a>
+<span class="sourceLineNo">173</span><a id="line.173">    }</a>
+<span class="sourceLineNo">174</span><a id="line.174"></a>
+<span class="sourceLineNo">175</span><a id="line.175">    /**</a>
+<span class="sourceLineNo">176</span><a id="line.176">     * Gets the approximate size of the currently-stored preferences. This assumes UTF-16 storage, which is the case for</a>
+<span class="sourceLineNo">177</span><a id="line.177">     * GWT's LocalStorage. Since GWT is restricted to the size the browser permits for LocalStorage, and this limit can</a>
+<span class="sourceLineNo">178</span><a id="line.178">     * be rather small (about 5 MB, sometimes more but not reliably), this method is especially useful there, but it may</a>
+<span class="sourceLineNo">179</span><a id="line.179">     * yield inaccurate sizes on other platforms that save Preferences data differently.</a>
+<span class="sourceLineNo">180</span><a id="line.180">     * @return the size, in bytes, of the already-stored preferences</a>
+<span class="sourceLineNo">181</span><a id="line.181">     */</a>
+<span class="sourceLineNo">182</span><a id="line.182">    public int preferencesSize()</a>
+<span class="sourceLineNo">183</span><a id="line.183">    {</a>
+<span class="sourceLineNo">184</span><a id="line.184">        return super.preferencesSize();</a>
+<span class="sourceLineNo">185</span><a id="line.185">    }</a>
+<span class="sourceLineNo">186</span><a id="line.186"></a>
+<span class="sourceLineNo">187</span><a id="line.187">}</a>
 
 
 

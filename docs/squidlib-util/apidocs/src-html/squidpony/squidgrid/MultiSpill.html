@@ -75,14 +75,14 @@
 <span class="sourceLineNo">063</span><a id="line.63">     * The amount of cells filled by this Spill, which may be less than the volume passed to start() if the boundaries</a>
 <span class="sourceLineNo">064</span><a id="line.64">     * are reached on all sides and the Spill has no more room to fill.</a>
 <span class="sourceLineNo">065</span><a id="line.65">     */</a>
-<span class="sourceLineNo">066</span><a id="line.66">    public int filled = 0;</a>
+<span class="sourceLineNo">066</span><a id="line.66">    public int filled;</a>
 <span class="sourceLineNo">067</span><a id="line.67">    private ArrayList&lt;OrderedSet&lt;Coord&gt;&gt; fresh;</a>
 <span class="sourceLineNo">068</span><a id="line.68">    /**</a>
 <span class="sourceLineNo">069</span><a id="line.69">     * The IRNG used to decide how to randomly fill a space; can have its state set and read.</a>
 <span class="sourceLineNo">070</span><a id="line.70">     */</a>
 <span class="sourceLineNo">071</span><a id="line.71">    public IRNG rng;</a>
 <span class="sourceLineNo">072</span><a id="line.72"></a>
-<span class="sourceLineNo">073</span><a id="line.73">    private boolean initialized = false;</a>
+<span class="sourceLineNo">073</span><a id="line.73">    private boolean initialized;</a>
 <span class="sourceLineNo">074</span><a id="line.74">    /**</a>
 <span class="sourceLineNo">075</span><a id="line.75">     * Construct a Spill without a level to actually scan. If you use this constructor, you must call an</a>
 <span class="sourceLineNo">076</span><a id="line.76">     * initialize() method before using this class.</a>

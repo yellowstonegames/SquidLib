@@ -87,13 +87,13 @@ loadScripts(document, 'script');</script>
 <h1 title="Class OrderedSet" class="title">Class OrderedSet&lt;K&gt;</h1>
 </div>
 <div class="contentContainer">
-<div class="inheritance" title="Inheritance Tree"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">java.lang.Object</a>
+<div class="inheritance" title="Inheritance Tree"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">java.lang.Object</a>
 <div class="inheritance">squidpony.squidmath.OrderedSet&lt;K&gt;</div>
 </div>
 <section class="description">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink">Serializable</a></code>, <code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Cloneable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Cloneable</a></code>, <code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Iterable</a>&lt;K&gt;</code>, <code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;K&gt;</code>, <code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Set.html?is-external=true" title="class or interface in java.util" class="externalLink">Set</a>&lt;K&gt;</code>, <code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/SortedSet.html?is-external=true" title="class or interface in java.util" class="externalLink">SortedSet</a>&lt;K&gt;</code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink">Serializable</a></code>, <code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Cloneable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Cloneable</a></code>, <code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Iterable</a>&lt;K&gt;</code>, <code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;K&gt;</code>, <code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Set.html?is-external=true" title="class or interface in java.util" class="externalLink">Set</a>&lt;K&gt;</code>, <code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/SortedSet.html?is-external=true" title="class or interface in java.util" class="externalLink">SortedSet</a>&lt;K&gt;</code></dd>
 </dl>
 <dl>
 <dt>Direct Known Subclasses:</dt>
@@ -101,8 +101,8 @@ loadScripts(document, 'script');</script>
 </dl>
 <hr>
 <pre>public class <a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.87">OrderedSet</a>&lt;K&gt;
-extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>
-implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/SortedSet.html?is-external=true" title="class or interface in java.util" class="externalLink">SortedSet</a>&lt;K&gt;, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink">Serializable</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Cloneable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Cloneable</a></pre>
+extends <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>
+implements <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/SortedSet.html?is-external=true" title="class or interface in java.util" class="externalLink">SortedSet</a>&lt;K&gt;, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink">Serializable</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Cloneable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Cloneable</a></pre>
 <div class="block">A generic linked hash set with with a fast implementation, originally from fastutil as ObjectLinkedOpenHashSet but
  modified to support indexed access of items, reordering, and optional hash strategies for array keys (which fastutil
  does differently).
@@ -131,7 +131,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base
  This class implements the interface of a sorted set, so to allow easy access
  of the iteration order: for instance, you can get the first element in
  iteration order with <code>first()</code> without having to create an iterator;
- however, this class partially violates the <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/SortedSet.html?is-external=true" title="class or interface in java.util" class="externalLink"><code>SortedSet</code></a>
+ however, this class partially violates the <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/SortedSet.html?is-external=true" title="class or interface in java.util" class="externalLink"><code>SortedSet</code></a>
  contract because all subset methods throw an exception and
  <a href="#comparator()"><code>comparator()</code></a> returns always <code>null</code>.
  <p>
@@ -337,21 +337,21 @@ float&nbsp;f,
 </td>
 </tr>
 <tr class="rowColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.util.Collection)">OrderedSet</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;? extends <a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;&nbsp;c)</code></th>
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.util.Collection)">OrderedSet</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;? extends <a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;&nbsp;c)</code></th>
 <td class="colLast">
 <div class="block">Creates a new hash set with <a href="#DEFAULT_LOAD_FACTOR"><code>DEFAULT_LOAD_FACTOR</code></a> as load
  factor copying a given collection.</div>
 </td>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.util.Collection,float)">OrderedSet</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;? extends <a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;&nbsp;c,
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.util.Collection,float)">OrderedSet</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;? extends <a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;&nbsp;c,
 float&nbsp;f)</code></th>
 <td class="colLast">
 <div class="block">Creates a new hash set copying a given collection.</div>
 </td>
 </tr>
 <tr class="rowColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.util.Collection,float,squidpony.squidmath.CrossHash.IHasher)">OrderedSet</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;? extends <a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;&nbsp;c,
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.util.Collection,float,squidpony.squidmath.CrossHash.IHasher)">OrderedSet</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;? extends <a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;&nbsp;c,
 float&nbsp;f,
 <a href="CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a>&nbsp;hasher)</code></th>
 <td class="colLast">
@@ -359,7 +359,7 @@ float&nbsp;f,
 </td>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.util.Collection,squidpony.squidmath.CrossHash.IHasher)">OrderedSet</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;? extends <a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;&nbsp;c,
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.util.Collection,squidpony.squidmath.CrossHash.IHasher)">OrderedSet</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;? extends <a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;&nbsp;c,
 <a href="CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a>&nbsp;hasher)</code></th>
 <td class="colLast">
 <div class="block">Creates a new hash set with <a href="#DEFAULT_LOAD_FACTOR"><code>DEFAULT_LOAD_FACTOR</code></a> as load
@@ -367,14 +367,14 @@ float&nbsp;f,
 </td>
 </tr>
 <tr class="rowColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.util.Iterator)">OrderedSet</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Iterator.html?is-external=true" title="class or interface in java.util" class="externalLink">Iterator</a>&lt;? extends <a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;&nbsp;i)</code></th>
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.util.Iterator)">OrderedSet</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Iterator.html?is-external=true" title="class or interface in java.util" class="externalLink">Iterator</a>&lt;? extends <a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;&nbsp;i)</code></th>
 <td class="colLast">
 <div class="block">Creates a new hash set with <a href="#DEFAULT_LOAD_FACTOR"><code>DEFAULT_LOAD_FACTOR</code></a> as load
  factor using elements provided by a type-specific iterator.</div>
 </td>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.util.Iterator,float)">OrderedSet</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Iterator.html?is-external=true" title="class or interface in java.util" class="externalLink">Iterator</a>&lt;? extends <a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;&nbsp;i,
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.util.Iterator,float)">OrderedSet</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Iterator.html?is-external=true" title="class or interface in java.util" class="externalLink">Iterator</a>&lt;? extends <a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;&nbsp;i,
 float&nbsp;f)</code></th>
 <td class="colLast">
 <div class="block">Creates a new hash set using elements provided by a type-specific
@@ -486,7 +486,7 @@ int&nbsp;length,
 </tr>
 <tr class="rowColor" id="i1">
 <td class="colFirst"><code>boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addAll(java.util.Collection)">addAll</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;? extends <a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;&nbsp;c)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addAll(java.util.Collection)">addAll</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;? extends <a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;&nbsp;c)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor" id="i2">
@@ -554,25 +554,25 @@ float&nbsp;f)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor" id="i11">
-<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></code></td>
+<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#clone()">clone</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns a deep copy of this map.</div>
 </td>
 </tr>
 <tr class="altColor" id="i12">
-<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Comparator.html?is-external=true" title="class or interface in java.util" class="externalLink">Comparator</a>&lt;? super <a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></td>
+<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Comparator.html?is-external=true" title="class or interface in java.util" class="externalLink">Comparator</a>&lt;? super <a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#comparator()">comparator</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor" id="i13">
 <td class="colFirst"><code>boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#contains(java.lang.Object)">contains</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;k)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#contains(java.lang.Object)">contains</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;k)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor" id="i14">
 <td class="colFirst"><code>boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#containsAll(java.util.Collection)">containsAll</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;?&gt;&nbsp;c)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#containsAll(java.util.Collection)">containsAll</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;?&gt;&nbsp;c)</code></th>
 <td class="colLast">
 <div class="block">Checks whether this collection contains all elements from the given
  collection.</div>
@@ -580,7 +580,7 @@ float&nbsp;f)</code></th>
 </tr>
 <tr class="rowColor" id="i15">
 <td class="colFirst"><code>boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#equals(java.lang.Object)">equals</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;o)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#equals(java.lang.Object)">equals</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;o)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor" id="i16">
@@ -607,7 +607,7 @@ int&nbsp;d)</code></th>
 </tr>
 <tr class="rowColor" id="i19">
 <td class="colFirst"><code><a href="OrderedSet.html" title="type parameter in OrderedSet">K</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#get(java.lang.Object)">get</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;k)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#get(java.lang.Object)">get</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;k)</code></th>
 <td class="colLast">
 <div class="block">Returns the element of this set that is equal to the given key, or
  <code>null</code>.</div>
@@ -633,13 +633,13 @@ int&nbsp;d)</code></th>
 </td>
 </tr>
 <tr class="rowColor" id="i23">
-<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/SortedSet.html?is-external=true" title="class or interface in java.util" class="externalLink">SortedSet</a>&lt;<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></td>
+<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/SortedSet.html?is-external=true" title="class or interface in java.util" class="externalLink">SortedSet</a>&lt;<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#headSet(K)">headSet</a></span>&#8203;(<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&nbsp;to)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor" id="i24">
 <td class="colFirst"><code>int</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#indexOf(java.lang.Object)">indexOf</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;k)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#indexOf(java.lang.Object)">indexOf</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;k)</code></th>
 <td class="colLast">
 <div class="block">Gets the position in the ordering of the given key, though not as efficiently as some data structures can do it
  (e.g.</div>
@@ -651,7 +651,7 @@ int&nbsp;d)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor" id="i26">
-<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ListIterator.html?is-external=true" title="class or interface in java.util" class="externalLink">ListIterator</a>&lt;<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></td>
+<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/ListIterator.html?is-external=true" title="class or interface in java.util" class="externalLink">ListIterator</a>&lt;<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#iterator()">iterator</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -680,7 +680,7 @@ float&nbsp;f)</code></th>
 </tr>
 <tr class="altColor" id="i30">
 <td class="colFirst"><code>protected int</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#positionOf(java.lang.Object)">positionOf</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;k)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#positionOf(java.lang.Object)">positionOf</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;k)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor" id="i31">
@@ -699,17 +699,17 @@ float&nbsp;f)</code></th>
 </tr>
 <tr class="rowColor" id="i33">
 <td class="colFirst"><code>protected boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#rem(java.lang.Object)">rem</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;k)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#rem(java.lang.Object)">rem</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;k)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor" id="i34">
 <td class="colFirst"><code>boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#remove(java.lang.Object)">remove</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;o)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#remove(java.lang.Object)">remove</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;o)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor" id="i35">
 <td class="colFirst"><code>boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#removeAll(java.util.Collection)">removeAll</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;?&gt;&nbsp;c)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#removeAll(java.util.Collection)">removeAll</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;?&gt;&nbsp;c)</code></th>
 <td class="colLast">
 <div class="block">Remove from this collection all elements in the given collection.</div>
 </td>
@@ -747,7 +747,7 @@ float&nbsp;f)</code></th>
 </tr>
 <tr class="altColor" id="i40">
 <td class="colFirst"><code>boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#retainAll(java.util.Collection)">retainAll</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;?&gt;&nbsp;c)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#retainAll(java.util.Collection)">retainAll</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;?&gt;&nbsp;c)</code></th>
 <td class="colLast">
 <div class="block">Retains in this collection only elements from the given collection.</div>
 </td>
@@ -781,14 +781,14 @@ float&nbsp;f)</code></th>
 </tr>
 <tr class="rowColor" id="i45">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sort(java.util.Comparator)">sort</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Comparator.html?is-external=true" title="class or interface in java.util" class="externalLink">Comparator</a>&lt;? super <a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;&nbsp;comparator)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sort(java.util.Comparator)">sort</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Comparator.html?is-external=true" title="class or interface in java.util" class="externalLink">Comparator</a>&lt;? super <a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;&nbsp;comparator)</code></th>
 <td class="colLast">
 <div class="block">Sorts this whole OrderedSet using the supplied Comparator.</div>
 </td>
 </tr>
 <tr class="altColor" id="i46">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sort(java.util.Comparator,int,int)">sort</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Comparator.html?is-external=true" title="class or interface in java.util" class="externalLink">Comparator</a>&lt;? super <a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;&nbsp;comparator,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sort(java.util.Comparator,int,int)">sort</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Comparator.html?is-external=true" title="class or interface in java.util" class="externalLink">Comparator</a>&lt;? super <a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;&nbsp;comparator,
 int&nbsp;start,
 int&nbsp;end)</code></th>
 <td class="colLast">
@@ -797,7 +797,7 @@ int&nbsp;end)</code></th>
 </td>
 </tr>
 <tr class="rowColor" id="i47">
-<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/SortedSet.html?is-external=true" title="class or interface in java.util" class="externalLink">SortedSet</a>&lt;<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></td>
+<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/SortedSet.html?is-external=true" title="class or interface in java.util" class="externalLink">SortedSet</a>&lt;<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#subSet(K,K)">subSet</a></span>&#8203;(<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&nbsp;from,
 <a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&nbsp;to)</code></th>
 <td class="colLast">&nbsp;</td>
@@ -819,12 +819,12 @@ int&nbsp;right)</code></th>
 </td>
 </tr>
 <tr class="altColor" id="i50">
-<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/SortedSet.html?is-external=true" title="class or interface in java.util" class="externalLink">SortedSet</a>&lt;<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></td>
+<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/SortedSet.html?is-external=true" title="class or interface in java.util" class="externalLink">SortedSet</a>&lt;<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#tailSet(K)">tailSet</a></span>&#8203;(<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&nbsp;from)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor" id="i51">
-<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>[]</code></td>
+<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>[]</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#toArray()">toArray</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -834,7 +834,7 @@ int&nbsp;right)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor" id="i53">
-<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
+<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#toString()">toString</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -857,25 +857,25 @@ int&nbsp;right)</code></th>
 </div>
 </div>
 <div class="inheritedList">
-<h3>Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></h3>
+<h3>Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></h3>
 <a id="methods.inherited.from.class.java.lang.Object">
 <!--   -->
-</a><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#finalize()" title="class or interface in java.lang" class="externalLink">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#getClass()" title="class or interface in java.lang" class="externalLink">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#notify()" title="class or interface in java.lang" class="externalLink">notify</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#notifyAll()" title="class or interface in java.lang" class="externalLink">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#wait()" title="class or interface in java.lang" class="externalLink">wait</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#wait(long)" title="class or interface in java.lang" class="externalLink">wait</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#wait(long,int)" title="class or interface in java.lang" class="externalLink">wait</a></code></div>
+</a><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#finalize()" title="class or interface in java.lang" class="externalLink">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#getClass()" title="class or interface in java.lang" class="externalLink">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#notify()" title="class or interface in java.lang" class="externalLink">notify</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#notifyAll()" title="class or interface in java.lang" class="externalLink">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#wait()" title="class or interface in java.lang" class="externalLink">wait</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#wait(long)" title="class or interface in java.lang" class="externalLink">wait</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#wait(long,int)" title="class or interface in java.lang" class="externalLink">wait</a></code></div>
 <div class="inheritedList">
-<h3>Methods inherited from interface&nbsp;java.util.<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a></h3>
+<h3>Methods inherited from interface&nbsp;java.util.<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a></h3>
 <a id="methods.inherited.from.class.java.util.Collection">
 <!--   -->
-</a><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true#parallelStream()" title="class or interface in java.util" class="externalLink">parallelStream</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true#removeIf(java.util.function.Predicate)" title="class or interface in java.util" class="externalLink">removeIf</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true#stream()" title="class or interface in java.util" class="externalLink">stream</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true#toArray(java.util.function.IntFunction)" title="class or interface in java.util" class="externalLink">toArray</a></code></div>
+</a><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true#parallelStream()" title="class or interface in java.util" class="externalLink">parallelStream</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true#removeIf(java.util.function.Predicate)" title="class or interface in java.util" class="externalLink">removeIf</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true#stream()" title="class or interface in java.util" class="externalLink">stream</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true#toArray(java.util.function.IntFunction)" title="class or interface in java.util" class="externalLink">toArray</a></code></div>
 <div class="inheritedList">
-<h3>Methods inherited from interface&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Iterable</a></h3>
+<h3>Methods inherited from interface&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Iterable</a></h3>
 <a id="methods.inherited.from.class.java.lang.Iterable">
 <!--   -->
-</a><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Iterable.html?is-external=true#forEach(java.util.function.Consumer)" title="class or interface in java.lang" class="externalLink">forEach</a></code></div>
+</a><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Iterable.html?is-external=true#forEach(java.util.function.Consumer)" title="class or interface in java.lang" class="externalLink">forEach</a></code></div>
 <div class="inheritedList">
-<h3>Methods inherited from interface&nbsp;java.util.<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/SortedSet.html?is-external=true" title="class or interface in java.util" class="externalLink">SortedSet</a></h3>
+<h3>Methods inherited from interface&nbsp;java.util.<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/SortedSet.html?is-external=true" title="class or interface in java.util" class="externalLink">SortedSet</a></h3>
 <a id="methods.inherited.from.class.java.util.SortedSet">
 <!--   -->
-</a><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/SortedSet.html?is-external=true#spliterator()" title="class or interface in java.util" class="externalLink">spliterator</a></code></div>
+</a><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/SortedSet.html?is-external=true#spliterator()" title="class or interface in java.util" class="externalLink">spliterator</a></code></div>
 </section>
 </li>
 </ul>
@@ -1045,12 +1045,12 @@ float&nbsp;f)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(java.util.Collection,float)">OrderedSet</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.191">OrderedSet</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;? extends <a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;&nbsp;c,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.191">OrderedSet</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;? extends <a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;&nbsp;c,
 float&nbsp;f)</span></div>
 <div class="block">Creates a new hash set copying a given collection.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>c</code> - a <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink"><code>Collection</code></a> to be copied into the new hash set.</dd>
+<dd><code>c</code> - a <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink"><code>Collection</code></a> to be copied into the new hash set.</dd>
 <dd><code>f</code> - the load factor.</dd>
 </dl>
 </section>
@@ -1058,19 +1058,19 @@ float&nbsp;f)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(java.util.Collection)">OrderedSet</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.203">OrderedSet</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;? extends <a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;&nbsp;c)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.203">OrderedSet</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;? extends <a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;&nbsp;c)</span></div>
 <div class="block">Creates a new hash set with <a href="#DEFAULT_LOAD_FACTOR"><code>DEFAULT_LOAD_FACTOR</code></a> as load
  factor copying a given collection.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>c</code> - a <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink"><code>Collection</code></a> to be copied into the new hash set.</dd>
+<dd><code>c</code> - a <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink"><code>Collection</code></a> to be copied into the new hash set.</dd>
 </dl>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(java.util.Iterator,float)">OrderedSet</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.214">OrderedSet</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Iterator.html?is-external=true" title="class or interface in java.util" class="externalLink">Iterator</a>&lt;? extends <a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;&nbsp;i,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.214">OrderedSet</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Iterator.html?is-external=true" title="class or interface in java.util" class="externalLink">Iterator</a>&lt;? extends <a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;&nbsp;i,
 float&nbsp;f)</span></div>
 <div class="block">Creates a new hash set using elements provided by a type-specific
  iterator.</div>
@@ -1084,7 +1084,7 @@ float&nbsp;f)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(java.util.Iterator)">OrderedSet</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.226">OrderedSet</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Iterator.html?is-external=true" title="class or interface in java.util" class="externalLink">Iterator</a>&lt;? extends <a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;&nbsp;i)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.226">OrderedSet</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Iterator.html?is-external=true" title="class or interface in java.util" class="externalLink">Iterator</a>&lt;? extends <a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;&nbsp;i)</span></div>
 <div class="block">Creates a new hash set with <a href="#DEFAULT_LOAD_FACTOR"><code>DEFAULT_LOAD_FACTOR</code></a> as load
  factor using elements provided by a type-specific iterator.</div>
 <dl>
@@ -1204,13 +1204,13 @@ float&nbsp;f,
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(java.util.Collection,float,squidpony.squidmath.CrossHash.IHasher)">OrderedSet</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.336">OrderedSet</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;? extends <a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;&nbsp;c,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.336">OrderedSet</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;? extends <a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;&nbsp;c,
 float&nbsp;f,
 <a href="CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a>&nbsp;hasher)</span></div>
 <div class="block">Creates a new hash set copying a given collection.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>c</code> - a <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink"><code>Collection</code></a> to be copied into the new hash set.</dd>
+<dd><code>c</code> - a <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink"><code>Collection</code></a> to be copied into the new hash set.</dd>
 <dd><code>f</code> - the load factor.</dd>
 <dd><code>hasher</code> - used to hash items; typically only needed when K is an array, where CrossHash has implementations</dd>
 </dl>
@@ -1219,13 +1219,13 @@ float&nbsp;f,
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(java.util.Collection,squidpony.squidmath.CrossHash.IHasher)">OrderedSet</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.349">OrderedSet</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;? extends <a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;&nbsp;c,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.349">OrderedSet</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;? extends <a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;&nbsp;c,
 <a href="CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a>&nbsp;hasher)</span></div>
 <div class="block">Creates a new hash set with <a href="#DEFAULT_LOAD_FACTOR"><code>DEFAULT_LOAD_FACTOR</code></a> as load
  factor copying a given collection.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>c</code> - a <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink"><code>Collection</code></a> to be copied into the new hash set.</dd>
+<dd><code>c</code> - a <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink"><code>Collection</code></a> to be copied into the new hash set.</dd>
 <dd><code>hasher</code> - used to hash items; typically only needed when K is an array, where CrossHash has implementations</dd>
 </dl>
 </section>
@@ -1313,12 +1313,12 @@ float&nbsp;f,
 <li class="blockList">
 <section class="detail">
 <h3><a id="addAll(java.util.Collection)">addAll</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.427">addAll</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;? extends <a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;&nbsp;c)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.427">addAll</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;? extends <a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;&nbsp;c)</span></div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true#addAll(java.util.Collection)" title="class or interface in java.util" class="externalLink">addAll</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true#addAll(java.util.Collection)" title="class or interface in java.util" class="externalLink">addAll</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></dd>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Set.html?is-external=true#addAll(java.util.Collection)" title="class or interface in java.util" class="externalLink">addAll</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Set.html?is-external=true" title="class or interface in java.util" class="externalLink">Set</a>&lt;<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Set.html?is-external=true#addAll(java.util.Collection)" title="class or interface in java.util" class="externalLink">addAll</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Set.html?is-external=true" title="class or interface in java.util" class="externalLink">Set</a>&lt;<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></dd>
 </dl>
 </section>
 </li>
@@ -1338,9 +1338,9 @@ float&nbsp;f,
 <div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.464">add</a></span>&#8203;(<span class="arguments"><a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&nbsp;k)</span></div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true#add(E)" title="class or interface in java.util" class="externalLink">add</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true#add(E)" title="class or interface in java.util" class="externalLink">add</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></dd>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Set.html?is-external=true#add(E)" title="class or interface in java.util" class="externalLink">add</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Set.html?is-external=true" title="class or interface in java.util" class="externalLink">Set</a>&lt;<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Set.html?is-external=true#add(E)" title="class or interface in java.util" class="externalLink">add</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Set.html?is-external=true" title="class or interface in java.util" class="externalLink">Set</a>&lt;<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></dd>
 </dl>
 </section>
 </li>
@@ -1388,44 +1388,44 @@ int&nbsp;idx)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="rem(java.lang.Object)">rem</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.610">rem</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;k)</span></div>
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.610">rem</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;k)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="remove(java.lang.Object)">remove</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.630">remove</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;o)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.629">remove</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;o)</span></div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true#remove(java.lang.Object)" title="class or interface in java.util" class="externalLink">remove</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true#remove(java.lang.Object)" title="class or interface in java.util" class="externalLink">remove</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></dd>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Set.html?is-external=true#remove(java.lang.Object)" title="class or interface in java.util" class="externalLink">remove</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Set.html?is-external=true" title="class or interface in java.util" class="externalLink">Set</a>&lt;<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Set.html?is-external=true#remove(java.lang.Object)" title="class or interface in java.util" class="externalLink">remove</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Set.html?is-external=true" title="class or interface in java.util" class="externalLink">Set</a>&lt;<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></dd>
 </dl>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="removeFirst()">removeFirst</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="OrderedSet.html" title="type parameter in OrderedSet">K</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.641">removeFirst</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="OrderedSet.html" title="type parameter in OrderedSet">K</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.640">removeFirst</a></span>()</div>
 <div class="block">Removes the first key in iteration order.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the first key.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/NoSuchElementException.html?is-external=true" title="class or interface in java.util" class="externalLink">NoSuchElementException</a></code> - is this set is empty.</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/NoSuchElementException.html?is-external=true" title="class or interface in java.util" class="externalLink">NoSuchElementException</a></code> - is this set is empty.</dd>
 </dl>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="removeLast()">removeLast</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="OrderedSet.html" title="type parameter in OrderedSet">K</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.663">removeLast</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="OrderedSet.html" title="type parameter in OrderedSet">K</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.662">removeLast</a></span>()</div>
 <div class="block">Removes the the last key in iteration order.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the last key.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/NoSuchElementException.html?is-external=true" title="class or interface in java.util" class="externalLink">NoSuchElementException</a></code> - is this set is empty.</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/NoSuchElementException.html?is-external=true" title="class or interface in java.util" class="externalLink">NoSuchElementException</a></code> - is this set is empty.</dd>
 </dl>
 </section>
 </li>
@@ -1434,7 +1434,7 @@ int&nbsp;idx)</span></div>
 <h3><a id="addAndMoveToFirst(java.lang.Object)">
 <!--   -->
 </a><a id="addAndMoveToFirst(K)">addAndMoveToFirst</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.707">addAndMoveToFirst</a></span>&#8203;(<span class="arguments"><a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&nbsp;k)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.706">addAndMoveToFirst</a></span>&#8203;(<span class="arguments"><a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&nbsp;k)</span></div>
 <div class="block">Adds a key to the set; if the key is already present, it is moved to the
  first position of the iteration order.</div>
 <dl>
@@ -1450,7 +1450,7 @@ int&nbsp;idx)</span></div>
 <h3><a id="addAndMoveToLast(java.lang.Object)">
 <!--   -->
 </a><a id="addAndMoveToLast(K)">addAndMoveToLast</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.742">addAndMoveToLast</a></span>&#8203;(<span class="arguments"><a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&nbsp;k)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.741">addAndMoveToLast</a></span>&#8203;(<span class="arguments"><a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&nbsp;k)</span></div>
 <div class="block">Adds a key to the set; if the key is already present, it is moved to the
  last position of the iteration order.</div>
 <dl>
@@ -1464,7 +1464,7 @@ int&nbsp;idx)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="get(java.lang.Object)">get</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="OrderedSet.html" title="type parameter in OrderedSet">K</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.778">get</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;k)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="OrderedSet.html" title="type parameter in OrderedSet">K</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.777">get</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;k)</span></div>
 <div class="block">Returns the element of this set that is equal to the given key, or
  <code>null</code>.</div>
 <dl>
@@ -1477,25 +1477,25 @@ int&nbsp;idx)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="contains(java.lang.Object)">contains</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.799">contains</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;k)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.798">contains</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;k)</span></div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true#contains(java.lang.Object)" title="class or interface in java.util" class="externalLink">contains</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true#contains(java.lang.Object)" title="class or interface in java.util" class="externalLink">contains</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></dd>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Set.html?is-external=true#contains(java.lang.Object)" title="class or interface in java.util" class="externalLink">contains</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Set.html?is-external=true" title="class or interface in java.util" class="externalLink">Set</a>&lt;<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Set.html?is-external=true#contains(java.lang.Object)" title="class or interface in java.util" class="externalLink">contains</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Set.html?is-external=true" title="class or interface in java.util" class="externalLink">Set</a>&lt;<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></dd>
 </dl>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="positionOf(java.lang.Object)">positionOf</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.819">positionOf</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;k)</span></div>
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.818">positionOf</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;k)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="indexOf(java.lang.Object)">indexOf</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.850">indexOf</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;k)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.849">indexOf</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;k)</span></div>
 <div class="block">Gets the position in the ordering of the given key, though not as efficiently as some data structures can do it
  (e.g. <a href="Arrangement.html" title="class in squidpony.squidmath"><code>Arrangement</code></a> can access ordering position very quickly but doesn't store other values on its own).
  Returns a value that is at least 0 if it found k, or -1 if k was not present.</div>
@@ -1512,7 +1512,7 @@ int&nbsp;idx)</span></div>
 <h3><a id="swap(java.lang.Object,java.lang.Object)">
 <!--   -->
 </a><a id="swap(K,K)">swap</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.864">swap</a></span>&#8203;(<span class="arguments"><a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&nbsp;left,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.863">swap</a></span>&#8203;(<span class="arguments"><a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&nbsp;left,
 <a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&nbsp;right)</span></div>
 <div class="block">Swaps the positions in the ordering for the given items, if they are both present. Returns true if the ordering
  changed as a result of this call, or false if it stayed the same (which can be because left or right was not
@@ -1529,7 +1529,7 @@ int&nbsp;idx)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="swapIndices(int,int)">swapIndices</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.882">swapIndices</a></span>&#8203;(<span class="arguments">int&nbsp;left,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.881">swapIndices</a></span>&#8203;(<span class="arguments">int&nbsp;left,
 int&nbsp;right)</span></div>
 <div class="block">Swaps the given indices in the ordering, if they are both ints between 0 and size. Returns true if the ordering
  changed as a result of this call, or false if it stayed the same (which can be because left or right referred to
@@ -1546,38 +1546,38 @@ int&nbsp;right)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="clear()">clear</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.895">clear</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.894">clear</a></span>()</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true#clear()" title="class or interface in java.util" class="externalLink">clear</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true#clear()" title="class or interface in java.util" class="externalLink">clear</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></dd>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Set.html?is-external=true#clear()" title="class or interface in java.util" class="externalLink">clear</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Set.html?is-external=true" title="class or interface in java.util" class="externalLink">Set</a>&lt;<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Set.html?is-external=true#clear()" title="class or interface in java.util" class="externalLink">clear</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Set.html?is-external=true" title="class or interface in java.util" class="externalLink">Set</a>&lt;<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></dd>
 </dl>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="size()">size</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.904">size</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.903">size</a></span>()</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true#size()" title="class or interface in java.util" class="externalLink">size</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true#size()" title="class or interface in java.util" class="externalLink">size</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></dd>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Set.html?is-external=true#size()" title="class or interface in java.util" class="externalLink">size</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Set.html?is-external=true" title="class or interface in java.util" class="externalLink">Set</a>&lt;<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Set.html?is-external=true#size()" title="class or interface in java.util" class="externalLink">size</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Set.html?is-external=true" title="class or interface in java.util" class="externalLink">Set</a>&lt;<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></dd>
 </dl>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="containsAll(java.util.Collection)">containsAll</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.916">containsAll</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;?&gt;&nbsp;c)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.915">containsAll</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;?&gt;&nbsp;c)</span></div>
 <div class="block">Checks whether this collection contains all elements from the given
  collection.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true#containsAll(java.util.Collection)" title="class or interface in java.util" class="externalLink">containsAll</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true#containsAll(java.util.Collection)" title="class or interface in java.util" class="externalLink">containsAll</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></dd>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Set.html?is-external=true#containsAll(java.util.Collection)" title="class or interface in java.util" class="externalLink">containsAll</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Set.html?is-external=true" title="class or interface in java.util" class="externalLink">Set</a>&lt;<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Set.html?is-external=true#containsAll(java.util.Collection)" title="class or interface in java.util" class="externalLink">containsAll</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Set.html?is-external=true" title="class or interface in java.util" class="externalLink">Set</a>&lt;<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>c</code> - a collection.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -1589,13 +1589,13 @@ int&nbsp;right)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="retainAll(java.util.Collection)">retainAll</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.932">retainAll</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;?&gt;&nbsp;c)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.931">retainAll</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;?&gt;&nbsp;c)</span></div>
 <div class="block">Retains in this collection only elements from the given collection.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true#retainAll(java.util.Collection)" title="class or interface in java.util" class="externalLink">retainAll</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true#retainAll(java.util.Collection)" title="class or interface in java.util" class="externalLink">retainAll</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></dd>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Set.html?is-external=true#retainAll(java.util.Collection)" title="class or interface in java.util" class="externalLink">retainAll</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Set.html?is-external=true" title="class or interface in java.util" class="externalLink">Set</a>&lt;<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Set.html?is-external=true#retainAll(java.util.Collection)" title="class or interface in java.util" class="externalLink">retainAll</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Set.html?is-external=true" title="class or interface in java.util" class="externalLink">Set</a>&lt;<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>c</code> - a collection.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -1607,14 +1607,14 @@ int&nbsp;right)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="removeAll(java.util.Collection)">removeAll</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.953">removeAll</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;?&gt;&nbsp;c)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.952">removeAll</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;?&gt;&nbsp;c)</span></div>
 <div class="block">Remove from this collection all elements in the given collection. If the
  collection is an instance of this class, it uses faster iterators.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true#removeAll(java.util.Collection)" title="class or interface in java.util" class="externalLink">removeAll</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true#removeAll(java.util.Collection)" title="class or interface in java.util" class="externalLink">removeAll</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></dd>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Set.html?is-external=true#removeAll(java.util.Collection)" title="class or interface in java.util" class="externalLink">removeAll</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Set.html?is-external=true" title="class or interface in java.util" class="externalLink">Set</a>&lt;<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Set.html?is-external=true#removeAll(java.util.Collection)" title="class or interface in java.util" class="externalLink">removeAll</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Set.html?is-external=true" title="class or interface in java.util" class="externalLink">Set</a>&lt;<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>c</code> - a collection.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -1626,19 +1626,19 @@ int&nbsp;right)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="isEmpty()">isEmpty</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.963">isEmpty</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.962">isEmpty</a></span>()</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true#isEmpty()" title="class or interface in java.util" class="externalLink">isEmpty</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true#isEmpty()" title="class or interface in java.util" class="externalLink">isEmpty</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></dd>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Set.html?is-external=true#isEmpty()" title="class or interface in java.util" class="externalLink">isEmpty</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Set.html?is-external=true" title="class or interface in java.util" class="externalLink">Set</a>&lt;<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Set.html?is-external=true#isEmpty()" title="class or interface in java.util" class="externalLink">isEmpty</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Set.html?is-external=true" title="class or interface in java.util" class="externalLink">Set</a>&lt;<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></dd>
 </dl>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="fixOrder(int)">fixOrder</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.973">fixOrder</a></span>&#8203;(<span class="arguments">int&nbsp;i)</span></div>
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.972">fixOrder</a></span>&#8203;(<span class="arguments">int&nbsp;i)</span></div>
 <div class="block">Modifies the link vector so that the given entry is removed. This method will complete in linear time.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -1649,7 +1649,7 @@ int&nbsp;right)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="fixOrder(int,int)">fixOrder</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.990">fixOrder</a></span>&#8203;(<span class="arguments">int&nbsp;s,
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.988">fixOrder</a></span>&#8203;(<span class="arguments">int&nbsp;s,
 int&nbsp;d)</span></div>
 <div class="block">Modifies the ordering for a shift from s to d.
  <br>
@@ -1664,11 +1664,11 @@ int&nbsp;d)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="first()">first</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="OrderedSet.html" title="type parameter in OrderedSet">K</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1007">first</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="OrderedSet.html" title="type parameter in OrderedSet">K</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1005">first</a></span>()</div>
 <div class="block">Returns the first element of this set in iteration order.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/SortedSet.html?is-external=true#first()" title="class or interface in java.util" class="externalLink">first</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/SortedSet.html?is-external=true" title="class or interface in java.util" class="externalLink">SortedSet</a>&lt;<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/SortedSet.html?is-external=true#first()" title="class or interface in java.util" class="externalLink">first</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/SortedSet.html?is-external=true" title="class or interface in java.util" class="externalLink">SortedSet</a>&lt;<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the first element in iteration order.</dd>
 </dl>
@@ -1677,11 +1677,11 @@ int&nbsp;d)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="last()">last</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="OrderedSet.html" title="type parameter in OrderedSet">K</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1018">last</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="OrderedSet.html" title="type parameter in OrderedSet">K</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1016">last</a></span>()</div>
 <div class="block">Returns the last element of this set in iteration order.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/SortedSet.html?is-external=true#last()" title="class or interface in java.util" class="externalLink">last</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/SortedSet.html?is-external=true" title="class or interface in java.util" class="externalLink">SortedSet</a>&lt;<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/SortedSet.html?is-external=true#last()" title="class or interface in java.util" class="externalLink">last</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/SortedSet.html?is-external=true" title="class or interface in java.util" class="externalLink">SortedSet</a>&lt;<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the last element in iteration order.</dd>
 </dl>
@@ -1692,10 +1692,10 @@ int&nbsp;d)</span></div>
 <h3><a id="tailSet(java.lang.Object)">
 <!--   -->
 </a><a id="tailSet(K)">tailSet</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/SortedSet.html?is-external=true" title="class or interface in java.util" class="externalLink">SortedSet</a>&lt;<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1024">tailSet</a></span>&#8203;(<span class="arguments"><a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&nbsp;from)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/SortedSet.html?is-external=true" title="class or interface in java.util" class="externalLink">SortedSet</a>&lt;<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1022">tailSet</a></span>&#8203;(<span class="arguments"><a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&nbsp;from)</span></div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/SortedSet.html?is-external=true#tailSet(E)" title="class or interface in java.util" class="externalLink">tailSet</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/SortedSet.html?is-external=true" title="class or interface in java.util" class="externalLink">SortedSet</a>&lt;<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/SortedSet.html?is-external=true#tailSet(E)" title="class or interface in java.util" class="externalLink">tailSet</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/SortedSet.html?is-external=true" title="class or interface in java.util" class="externalLink">SortedSet</a>&lt;<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></dd>
 </dl>
 </section>
 </li>
@@ -1704,10 +1704,10 @@ int&nbsp;d)</span></div>
 <h3><a id="headSet(java.lang.Object)">
 <!--   -->
 </a><a id="headSet(K)">headSet</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/SortedSet.html?is-external=true" title="class or interface in java.util" class="externalLink">SortedSet</a>&lt;<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1028">headSet</a></span>&#8203;(<span class="arguments"><a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&nbsp;to)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/SortedSet.html?is-external=true" title="class or interface in java.util" class="externalLink">SortedSet</a>&lt;<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1026">headSet</a></span>&#8203;(<span class="arguments"><a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&nbsp;to)</span></div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/SortedSet.html?is-external=true#headSet(E)" title="class or interface in java.util" class="externalLink">headSet</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/SortedSet.html?is-external=true" title="class or interface in java.util" class="externalLink">SortedSet</a>&lt;<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/SortedSet.html?is-external=true#headSet(E)" title="class or interface in java.util" class="externalLink">headSet</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/SortedSet.html?is-external=true" title="class or interface in java.util" class="externalLink">SortedSet</a>&lt;<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></dd>
 </dl>
 </section>
 </li>
@@ -1716,42 +1716,42 @@ int&nbsp;d)</span></div>
 <h3><a id="subSet(java.lang.Object,java.lang.Object)">
 <!--   -->
 </a><a id="subSet(K,K)">subSet</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/SortedSet.html?is-external=true" title="class or interface in java.util" class="externalLink">SortedSet</a>&lt;<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1032">subSet</a></span>&#8203;(<span class="arguments"><a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&nbsp;from,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/SortedSet.html?is-external=true" title="class or interface in java.util" class="externalLink">SortedSet</a>&lt;<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1030">subSet</a></span>&#8203;(<span class="arguments"><a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&nbsp;from,
 <a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&nbsp;to)</span></div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/SortedSet.html?is-external=true#subSet(E,E)" title="class or interface in java.util" class="externalLink">subSet</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/SortedSet.html?is-external=true" title="class or interface in java.util" class="externalLink">SortedSet</a>&lt;<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/SortedSet.html?is-external=true#subSet(E,E)" title="class or interface in java.util" class="externalLink">subSet</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/SortedSet.html?is-external=true" title="class or interface in java.util" class="externalLink">SortedSet</a>&lt;<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></dd>
 </dl>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="comparator()">comparator</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Comparator.html?is-external=true" title="class or interface in java.util" class="externalLink">Comparator</a>&lt;? super <a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1036">comparator</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Comparator.html?is-external=true" title="class or interface in java.util" class="externalLink">Comparator</a>&lt;? super <a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1034">comparator</a></span>()</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/SortedSet.html?is-external=true#comparator()" title="class or interface in java.util" class="externalLink">comparator</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/SortedSet.html?is-external=true" title="class or interface in java.util" class="externalLink">SortedSet</a>&lt;<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/SortedSet.html?is-external=true#comparator()" title="class or interface in java.util" class="externalLink">comparator</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/SortedSet.html?is-external=true" title="class or interface in java.util" class="externalLink">SortedSet</a>&lt;<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></dd>
 </dl>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="iterator()">iterator</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ListIterator.html?is-external=true" title="class or interface in java.util" class="externalLink">ListIterator</a>&lt;<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1241">iterator</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/ListIterator.html?is-external=true" title="class or interface in java.util" class="externalLink">ListIterator</a>&lt;<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1239">iterator</a></span>()</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true#iterator()" title="class or interface in java.util" class="externalLink">iterator</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true#iterator()" title="class or interface in java.util" class="externalLink">iterator</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></dd>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Iterable.html?is-external=true#iterator()" title="class or interface in java.lang" class="externalLink">iterator</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Iterable</a>&lt;<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Iterable.html?is-external=true#iterator()" title="class or interface in java.lang" class="externalLink">iterator</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Iterable</a>&lt;<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></dd>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Set.html?is-external=true#iterator()" title="class or interface in java.util" class="externalLink">iterator</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Set.html?is-external=true" title="class or interface in java.util" class="externalLink">Set</a>&lt;<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Set.html?is-external=true#iterator()" title="class or interface in java.util" class="externalLink">iterator</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Set.html?is-external=true" title="class or interface in java.util" class="externalLink">Set</a>&lt;<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></dd>
 </dl>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="trim()">trim</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1255">trim</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1253">trim</a></span>()</div>
 <div class="block">Rehashes the map, making the table as small as possible.
  <p>
  <P>This method rehashes the table to the smallest size satisfying the load factor. It can be used when the set will not be changed anymore, so to optimize access speed and size.
@@ -1768,7 +1768,7 @@ int&nbsp;d)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="trim(int)">trim</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1279">trim</a></span>&#8203;(<span class="arguments">int&nbsp;n)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1277">trim</a></span>&#8203;(<span class="arguments">int&nbsp;n)</span></div>
 <div class="block">Rehashes this map if the table is too large.
  <p>
  <P>Let <var>N</var> be the smallest table size that can hold <code>max(n,<a href="#size()"><code>size()</code></a>)</code> entries, still satisfying the load factor. If the current table size is smaller than or equal to
@@ -1789,7 +1789,7 @@ int&nbsp;d)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="rehash(int)">rehash</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1302">rehash</a></span>&#8203;(<span class="arguments">int&nbsp;newN)</span></div>
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1300">rehash</a></span>&#8203;(<span class="arguments">int&nbsp;newN)</span></div>
 <div class="block">Rehashes the map.
  <p>
  <p>
@@ -1806,7 +1806,7 @@ int&nbsp;d)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="clone()">clone</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1387">clone</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1385">clone</a></span>()</div>
 <div class="block">Returns a deep copy of this map.
  <p>
  <p>
@@ -1815,7 +1815,7 @@ int&nbsp;d)</span></div>
  object keys.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#clone()" title="class or interface in java.lang" class="externalLink">clone</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#clone()" title="class or interface in java.lang" class="externalLink">clone</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a deep copy of this map.</dd>
 </dl>
@@ -1824,7 +1824,7 @@ int&nbsp;d)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="hashCode()">hashCode</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1413">hashCode</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1411">hashCode</a></span>()</div>
 <div class="block">Returns a hash code for this set.
  <p>
  This method overrides the generic method provided by the superclass.
@@ -1833,11 +1833,11 @@ int&nbsp;d)</span></div>
  the overriden method.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true#hashCode()" title="class or interface in java.util" class="externalLink">hashCode</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true#hashCode()" title="class or interface in java.util" class="externalLink">hashCode</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></dd>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Set.html?is-external=true#hashCode()" title="class or interface in java.util" class="externalLink">hashCode</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Set.html?is-external=true" title="class or interface in java.util" class="externalLink">Set</a>&lt;<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Set.html?is-external=true#hashCode()" title="class or interface in java.util" class="externalLink">hashCode</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Set.html?is-external=true" title="class or interface in java.util" class="externalLink">Set</a>&lt;<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></dd>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#hashCode()" title="class or interface in java.lang" class="externalLink">hashCode</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#hashCode()" title="class or interface in java.lang" class="externalLink">hashCode</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a hash code for this set.</dd>
 </dl>
@@ -1846,13 +1846,13 @@ int&nbsp;d)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="hash64()">hash64</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1426">hash64</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1424">hash64</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="maxFill(int,float)">maxFill</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1453">maxFill</a></span>&#8203;(<span class="arguments">int&nbsp;n,
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1451">maxFill</a></span>&#8203;(<span class="arguments">int&nbsp;n,
 float&nbsp;f)</span></div>
 <div class="block">Returns the maximum number of entries that can be filled before rehashing.</div>
 <dl>
@@ -1867,7 +1867,7 @@ float&nbsp;f)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="maxFill(long,float)">maxFill</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1466">maxFill</a></span>&#8203;(<span class="arguments">long&nbsp;n,
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1464">maxFill</a></span>&#8203;(<span class="arguments">long&nbsp;n,
 float&nbsp;f)</span></div>
 <div class="block">Returns the maximum number of entries that can be filled before rehashing.</div>
 <dl>
@@ -1882,7 +1882,7 @@ float&nbsp;f)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="arraySize(int,float)">arraySize</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1480">arraySize</a></span>&#8203;(<span class="arguments">int&nbsp;expected,
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1478">arraySize</a></span>&#8203;(<span class="arguments">int&nbsp;expected,
 float&nbsp;f)</span></div>
 <div class="block">Returns the least power of two smaller than or equal to 2<sup>30</sup> and larger than or equal to <code>Math.ceil( expected / f )</code>.</div>
 <dl>
@@ -1892,19 +1892,19 @@ float&nbsp;f)</span></div>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the minimum possible size for a backing array.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink">IllegalArgumentException</a></code> - if the necessary size is larger than 2<sup>30</sup>.</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink">IllegalArgumentException</a></code> - if the necessary size is larger than 2<sup>30</sup>.</dd>
 </dl>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="toArray()">toArray</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>[]</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1487">toArray</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>[]</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1485">toArray</a></span>()</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true#toArray()" title="class or interface in java.util" class="externalLink">toArray</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true#toArray()" title="class or interface in java.util" class="externalLink">toArray</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></dd>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Set.html?is-external=true#toArray()" title="class or interface in java.util" class="externalLink">toArray</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Set.html?is-external=true" title="class or interface in java.util" class="externalLink">Set</a>&lt;<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Set.html?is-external=true#toArray()" title="class or interface in java.util" class="externalLink">toArray</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Set.html?is-external=true" title="class or interface in java.util" class="externalLink">Set</a>&lt;<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></dd>
 </dl>
 </section>
 </li>
@@ -1913,43 +1913,43 @@ float&nbsp;f)</span></div>
 <h3><a id="toArray(java.lang.Object[])">
 <!--   -->
 </a><a id="toArray(T[])">toArray</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="typeParameters">&lt;T&gt;</span>&nbsp;<span class="returnType">T[]</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1494">toArray</a></span>&#8203;(<span class="arguments">T[]&nbsp;a)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="typeParameters">&lt;T&gt;</span>&nbsp;<span class="returnType">T[]</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1492">toArray</a></span>&#8203;(<span class="arguments">T[]&nbsp;a)</span></div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true#toArray(T%5B%5D)" title="class or interface in java.util" class="externalLink">toArray</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true#toArray(T%5B%5D)" title="class or interface in java.util" class="externalLink">toArray</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></dd>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Set.html?is-external=true#toArray(T%5B%5D)" title="class or interface in java.util" class="externalLink">toArray</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Set.html?is-external=true" title="class or interface in java.util" class="externalLink">Set</a>&lt;<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Set.html?is-external=true#toArray(T%5B%5D)" title="class or interface in java.util" class="externalLink">toArray</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Set.html?is-external=true" title="class or interface in java.util" class="externalLink">Set</a>&lt;<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></dd>
 </dl>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="toString()">toString</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1540">toString</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1537">toString</a></span>()</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#toString()" title="class or interface in java.lang" class="externalLink">toString</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#toString()" title="class or interface in java.lang" class="externalLink">toString</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></code></dd>
 </dl>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="equals(java.lang.Object)">equals</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1556">equals</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;o)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1553">equals</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;o)</span></div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.util" class="externalLink">equals</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.util" class="externalLink">equals</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></dd>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Set.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.util" class="externalLink">equals</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Set.html?is-external=true" title="class or interface in java.util" class="externalLink">Set</a>&lt;<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Set.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.util" class="externalLink">equals</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Set.html?is-external=true" title="class or interface in java.util" class="externalLink">Set</a>&lt;<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></dd>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.lang" class="externalLink">equals</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.lang" class="externalLink">equals</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></code></dd>
 </dl>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getAt(int)">getAt</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="OrderedSet.html" title="type parameter in OrderedSet">K</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1608">getAt</a></span>&#8203;(<span class="arguments">int&nbsp;idx)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="OrderedSet.html" title="type parameter in OrderedSet">K</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1605">getAt</a></span>&#8203;(<span class="arguments">int&nbsp;idx)</span></div>
 <div class="block">Gets the item at the given index in the iteration order in constant time (random-access).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -1962,7 +1962,7 @@ float&nbsp;f)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="removeAt(int)">removeAt</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1623">removeAt</a></span>&#8203;(<span class="arguments">int&nbsp;idx)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1620">removeAt</a></span>&#8203;(<span class="arguments">int&nbsp;idx)</span></div>
 <div class="block">Removes the item at the given index in the iteration order in not-exactly constant time (though it still should
  be efficient).</div>
 <dl>
@@ -1976,7 +1976,7 @@ float&nbsp;f)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="randomItem(squidpony.squidmath.IRNG)">randomItem</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="OrderedSet.html" title="type parameter in OrderedSet">K</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1641">randomItem</a></span>&#8203;(<span class="arguments"><a href="IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="OrderedSet.html" title="type parameter in OrderedSet">K</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1638">randomItem</a></span>&#8203;(<span class="arguments"><a href="IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng)</span></div>
 <div class="block">Gets a random value from this OrderedSet in constant time, using the given IRNG to generate a random number.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -1989,7 +1989,7 @@ float&nbsp;f)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="shuffle(squidpony.squidmath.IRNG)">shuffle</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1651">shuffle</a></span>&#8203;(<span class="arguments"><a href="IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1648">shuffle</a></span>&#8203;(<span class="arguments"><a href="IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng)</span></div>
 <div class="block">Randomly alters the iteration order for this OrderedSet using the given IRNG to shuffle.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -2002,7 +2002,7 @@ float&nbsp;f)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="reorder(int...)">reorder</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1675">reorder</a></span>&#8203;(<span class="arguments">int...&nbsp;ordering)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1672">reorder</a></span>&#8203;(<span class="arguments">int...&nbsp;ordering)</span></div>
 <div class="block">Given an array or varargs of replacement indices for this OrderedSet's iteration order, reorders this so the
  first item in the returned version is the same as <code>getAt(ordering[0])</code> (with some care taken for negative
  or too-large indices), the second item in the returned version is the same as <code>getAt(ordering[1])</code>, etc.
@@ -2028,7 +2028,7 @@ float&nbsp;f)</span></div>
 <h3><a id="alter(java.lang.Object,java.lang.Object)">
 <!--   -->
 </a><a id="alter(K,K)">alter</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1781">alter</a></span>&#8203;(<span class="arguments"><a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&nbsp;original,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1778">alter</a></span>&#8203;(<span class="arguments"><a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&nbsp;original,
 <a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&nbsp;replacement)</span></div>
 <div class="block">Changes a K, original, to another, replacement, while keeping replacement at the same point in the ordering.</div>
 <dl>
@@ -2045,7 +2045,7 @@ float&nbsp;f)</span></div>
 <h3><a id="alterAt(int,java.lang.Object)">
 <!--   -->
 </a><a id="alterAt(int,K)">alterAt</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1826">alterAt</a></span>&#8203;(<span class="arguments">int&nbsp;index,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1823">alterAt</a></span>&#8203;(<span class="arguments">int&nbsp;index,
 <a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&nbsp;replacement)</span></div>
 <div class="block">Changes the K at the given index to replacement while keeping replacement at the same point in the ordering.</div>
 <dl>
@@ -2060,7 +2060,7 @@ float&nbsp;f)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="sort(java.util.Comparator)">sort</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1835">sort</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Comparator.html?is-external=true" title="class or interface in java.util" class="externalLink">Comparator</a>&lt;? super <a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;&nbsp;comparator)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1832">sort</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Comparator.html?is-external=true" title="class or interface in java.util" class="externalLink">Comparator</a>&lt;? super <a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;&nbsp;comparator)</span></div>
 <div class="block">Sorts this whole OrderedSet using the supplied Comparator.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -2071,7 +2071,7 @@ float&nbsp;f)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="sort(java.util.Comparator,int,int)">sort</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1847">sort</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Comparator.html?is-external=true" title="class or interface in java.util" class="externalLink">Comparator</a>&lt;? super <a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;&nbsp;comparator,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1844">sort</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Comparator.html?is-external=true" title="class or interface in java.util" class="externalLink">Comparator</a>&lt;? super <a href="OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;&nbsp;comparator,
 int&nbsp;start,
 int&nbsp;end)</span></div>
 <div class="block">Sorts a sub-range of this OrderedSet from what is currently the index <code>start</code> up to (but not including) the
@@ -2087,7 +2087,7 @@ int&nbsp;end)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="reverse()">reverse</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1855">reverse</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1852">reverse</a></span>()</div>
 <div class="block">Reverses the iteration order in linear time.</div>
 </section>
 </li>

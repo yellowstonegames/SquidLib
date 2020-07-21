@@ -67,7 +67,7 @@
 <span class="sourceLineNo">055</span><a id="line.55">     */</a>
 <span class="sourceLineNo">056</span><a id="line.56">    public Reach(int maxDistance) {</a>
 <span class="sourceLineNo">057</span><a id="line.57">        minDistance = 0;</a>
-<span class="sourceLineNo">058</span><a id="line.58">        this.maxDistance = (maxDistance &lt; 0) ? 0 : maxDistance;</a>
+<span class="sourceLineNo">058</span><a id="line.58">        this.maxDistance = Math.max(maxDistance, 0);</a>
 <span class="sourceLineNo">059</span><a id="line.59">        limit = AimLimit.FREE;</a>
 <span class="sourceLineNo">060</span><a id="line.60">        metric = Radius.SQUARE;</a>
 <span class="sourceLineNo">061</span><a id="line.61">    }</a>
@@ -81,8 +81,8 @@
 <span class="sourceLineNo">069</span><a id="line.69">     *                    minDistance if it is lower than the calculated minDistance</a>
 <span class="sourceLineNo">070</span><a id="line.70">     */</a>
 <span class="sourceLineNo">071</span><a id="line.71">    public Reach(int minDistance, int maxDistance) {</a>
-<span class="sourceLineNo">072</span><a id="line.72">        this.minDistance = (minDistance &lt; 0) ? 0 : minDistance;</a>
-<span class="sourceLineNo">073</span><a id="line.73">        this.maxDistance = (this.minDistance  &gt; maxDistance) ? this.minDistance : maxDistance;</a>
+<span class="sourceLineNo">072</span><a id="line.72">        this.minDistance = Math.max(minDistance, 0);</a>
+<span class="sourceLineNo">073</span><a id="line.73">        this.maxDistance = Math.max(this.minDistance, maxDistance);</a>
 <span class="sourceLineNo">074</span><a id="line.74">        limit = AimLimit.FREE;</a>
 <span class="sourceLineNo">075</span><a id="line.75">        metric = Radius.SQUARE;</a>
 <span class="sourceLineNo">076</span><a id="line.76">    }</a>
@@ -97,8 +97,8 @@
 <span class="sourceLineNo">085</span><a id="line.85">     * @param metric a Radius enum that determines how distance will be calculated</a>
 <span class="sourceLineNo">086</span><a id="line.86">     */</a>
 <span class="sourceLineNo">087</span><a id="line.87">    public Reach(int minDistance, int maxDistance, Radius metric) {</a>
-<span class="sourceLineNo">088</span><a id="line.88">        this.minDistance = (minDistance &lt; 0) ? 0 : minDistance;</a>
-<span class="sourceLineNo">089</span><a id="line.89">        this.maxDistance = (this.minDistance  &gt; maxDistance) ? this.minDistance : maxDistance;</a>
+<span class="sourceLineNo">088</span><a id="line.88">        this.minDistance = Math.max(minDistance, 0);</a>
+<span class="sourceLineNo">089</span><a id="line.89">        this.maxDistance = Math.max(this.minDistance, maxDistance);</a>
 <span class="sourceLineNo">090</span><a id="line.90">        limit = AimLimit.FREE;</a>
 <span class="sourceLineNo">091</span><a id="line.91">        this.metric = metric;</a>
 <span class="sourceLineNo">092</span><a id="line.92">    }</a>
@@ -115,8 +115,8 @@
 <span class="sourceLineNo">103</span><a id="line.103">     *              equal to AimLimit.FREE)</a>
 <span class="sourceLineNo">104</span><a id="line.104">     */</a>
 <span class="sourceLineNo">105</span><a id="line.105">    public Reach(int minDistance, int maxDistance, Radius metric, AimLimit limit) {</a>
-<span class="sourceLineNo">106</span><a id="line.106">        this.minDistance = (minDistance &lt; 0) ? 0 : minDistance;</a>
-<span class="sourceLineNo">107</span><a id="line.107">        this.maxDistance = (this.minDistance  &gt; maxDistance) ? this.minDistance : maxDistance;</a>
+<span class="sourceLineNo">106</span><a id="line.106">        this.minDistance = Math.max(minDistance, 0);</a>
+<span class="sourceLineNo">107</span><a id="line.107">        this.maxDistance = Math.max(this.minDistance, maxDistance);</a>
 <span class="sourceLineNo">108</span><a id="line.108">        this.limit = limit;</a>
 <span class="sourceLineNo">109</span><a id="line.109">        this.metric = metric;</a>
 <span class="sourceLineNo">110</span><a id="line.110">    }</a>

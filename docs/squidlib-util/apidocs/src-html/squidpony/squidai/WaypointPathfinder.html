@@ -41,10 +41,10 @@
 <span class="sourceLineNo">029</span><a id="line.29">     * Uses a new RNG for all random choices, which will be seeded with {@code rng.nextLong()}, or unseeded if</a>
 <span class="sourceLineNo">030</span><a id="line.30">     * the parameter is null.</a>
 <span class="sourceLineNo">031</span><a id="line.31">     * @param map a char[][] that stores a "complete" dungeon map, with any chars as features that pathfinding needs.</a>
-<span class="sourceLineNo">032</span><a id="line.32">     * @param measurement a Radius that should correspond to how you want path distance calculated.</a>
+<span class="sourceLineNo">032</span><a id="line.32">     * @param radius a Radius that should correspond to how you want path distance calculated.</a>
 <span class="sourceLineNo">033</span><a id="line.33">     * @param rng an RNG object or null (this will always use a new RNG, but it may be seeded by a given RNG's next result)</a>
 <span class="sourceLineNo">034</span><a id="line.34">     */</a>
-<span class="sourceLineNo">035</span><a id="line.35">    public WaypointPathfinder(char[][] map, Radius measurement, IRNG rng)</a>
+<span class="sourceLineNo">035</span><a id="line.35">    public WaypointPathfinder(char[][] map, Radius radius, IRNG rng)</a>
 <span class="sourceLineNo">036</span><a id="line.36">    {</a>
 <span class="sourceLineNo">037</span><a id="line.37">        if(rng == null)</a>
 <span class="sourceLineNo">038</span><a id="line.38">            this.rng = new StatefulRNG();</a>
@@ -115,7 +115,7 @@
 <span class="sourceLineNo">103</span><a id="line.103">            }</a>
 <span class="sourceLineNo">104</span><a id="line.104">        }</a>
 <span class="sourceLineNo">105</span><a id="line.105">        </a>
-<span class="sourceLineNo">106</span><a id="line.106">        dm = new DijkstraMap(map, DijkstraMap.findMeasurement(measurement));</a>
+<span class="sourceLineNo">106</span><a id="line.106">        dm = new DijkstraMap(map, radius.matchingMeasurement());</a>
 <span class="sourceLineNo">107</span><a id="line.107"></a>
 <span class="sourceLineNo">108</span><a id="line.108">        for(Map.Entry&lt;Coord, OrderedMap&lt;Coord, Edge&gt;&gt; n : waypoints.entrySet())</a>
 <span class="sourceLineNo">109</span><a id="line.109">        {</a>
@@ -139,11 +139,11 @@
 <span class="sourceLineNo">127</span><a id="line.127">     * Uses a new RNG for all random choices, which will be seeded with {@code rng.nextLong()}, or unseeded if</a>
 <span class="sourceLineNo">128</span><a id="line.128">     * the parameter is null.</a>
 <span class="sourceLineNo">129</span><a id="line.129">     * @param map a char[][] that stores a "complete" dungeon map, with any chars as features that pathfinding needs.</a>
-<span class="sourceLineNo">130</span><a id="line.130">     * @param measurement a Radius that should correspond to how you want path distance calculated.</a>
+<span class="sourceLineNo">130</span><a id="line.130">     * @param radius a Radius that should correspond to how you want path distance calculated.</a>
 <span class="sourceLineNo">131</span><a id="line.131">     * @param rng an RNG object or null (this will always use a new RNG, but it may be seeded by a given RNG's next result)</a>
 <span class="sourceLineNo">132</span><a id="line.132">     * @param thickCorridors true if most chokepoints on the map are 2 cells wide instead of 1</a>
 <span class="sourceLineNo">133</span><a id="line.133">     */</a>
-<span class="sourceLineNo">134</span><a id="line.134">    public WaypointPathfinder(char[][] map, Radius measurement, IRNG rng, boolean thickCorridors)</a>
+<span class="sourceLineNo">134</span><a id="line.134">    public WaypointPathfinder(char[][] map, Radius radius, IRNG rng, boolean thickCorridors)</a>
 <span class="sourceLineNo">135</span><a id="line.135">    {</a>
 <span class="sourceLineNo">136</span><a id="line.136">        if(rng == null)</a>
 <span class="sourceLineNo">137</span><a id="line.137">            this.rng = new StatefulRNG();</a>
@@ -227,7 +227,7 @@
 <span class="sourceLineNo">215</span><a id="line.215">            }</a>
 <span class="sourceLineNo">216</span><a id="line.216">        }</a>
 <span class="sourceLineNo">217</span><a id="line.217"></a>
-<span class="sourceLineNo">218</span><a id="line.218">        dm = new DijkstraMap(map, DijkstraMap.findMeasurement(measurement));</a>
+<span class="sourceLineNo">218</span><a id="line.218">        dm = new DijkstraMap(map, radius.matchingMeasurement());</a>
 <span class="sourceLineNo">219</span><a id="line.219"></a>
 <span class="sourceLineNo">220</span><a id="line.220">        int e = 0;</a>
 <span class="sourceLineNo">221</span><a id="line.221">        for(Map.Entry&lt;Coord, OrderedMap&lt;Coord, Edge&gt;&gt; n : waypoints.entrySet())</a>
@@ -258,11 +258,11 @@
 <span class="sourceLineNo">246</span><a id="line.246">     * &lt;br&gt;</a>
 <span class="sourceLineNo">247</span><a id="line.247">     * Remember, a fraction value of 29 works well!</a>
 <span class="sourceLineNo">248</span><a id="line.248">     * @param map a char[][] that stores a "complete" dungeon map, with any chars as features that pathfinding needs.</a>
-<span class="sourceLineNo">249</span><a id="line.249">     * @param measurement a Radius that should correspond to how you want path distance calculated.</a>
+<span class="sourceLineNo">249</span><a id="line.249">     * @param radius a Radius that should correspond to how you want path distance calculated.</a>
 <span class="sourceLineNo">250</span><a id="line.250">     * @param rng an RNG object or null (this will always use a new RNG, but it may be seeded by a given RNG's next result)</a>
 <span class="sourceLineNo">251</span><a id="line.251">     * @param fraction the fractional denominator of passable cells to assign as waypoints; use 29 if you aren't sure</a>
 <span class="sourceLineNo">252</span><a id="line.252">     */</a>
-<span class="sourceLineNo">253</span><a id="line.253">    public WaypointPathfinder(char[][] map, Radius measurement, IRNG rng, int fraction)</a>
+<span class="sourceLineNo">253</span><a id="line.253">    public WaypointPathfinder(char[][] map, Radius radius, IRNG rng, int fraction)</a>
 <span class="sourceLineNo">254</span><a id="line.254">    {</a>
 <span class="sourceLineNo">255</span><a id="line.255">        if(rng == null)</a>
 <span class="sourceLineNo">256</span><a id="line.256">            this.rng = new StatefulRNG();</a>
@@ -281,7 +281,7 @@
 <span class="sourceLineNo">269</span><a id="line.269">            waypoints.put(apart[i], new OrderedMap&lt;Coord, Edge&gt;());</a>
 <span class="sourceLineNo">270</span><a id="line.270">        }</a>
 <span class="sourceLineNo">271</span><a id="line.271"></a>
-<span class="sourceLineNo">272</span><a id="line.272">        dm = new DijkstraMap(map, DijkstraMap.findMeasurement(measurement));</a>
+<span class="sourceLineNo">272</span><a id="line.272">        dm = new DijkstraMap(map, radius.matchingMeasurement());</a>
 <span class="sourceLineNo">273</span><a id="line.273"></a>
 <span class="sourceLineNo">274</span><a id="line.274">        int e = 0;</a>
 <span class="sourceLineNo">275</span><a id="line.275">        for(Map.Entry&lt;Coord, OrderedMap&lt;Coord, Edge&gt;&gt; n : waypoints.entrySet())</a>

@@ -67,7 +67,7 @@
 <span class="sourceLineNo">055</span><a id="line.55">     * always start with a reasonable default value for when the int key is not present. It's common to simply assign</a>
 <span class="sourceLineNo">056</span><a id="line.56">     * a char like '#' or '.' to an element in costMap.</a>
 <span class="sourceLineNo">057</span><a id="line.57">     */</a>
-<span class="sourceLineNo">058</span><a id="line.58">    public int[] costMap = null;</a>
+<span class="sourceLineNo">058</span><a id="line.58">    public int[] costMap;</a>
 <span class="sourceLineNo">059</span><a id="line.59"></a>
 <span class="sourceLineNo">060</span><a id="line.60">    /**</a>
 <span class="sourceLineNo">061</span><a id="line.61">     * The neighbors map, as produced by adjacency; can be modified by passing neighbors as the first argument to</a>
@@ -112,13 +112,13 @@
 <span class="sourceLineNo">100</span><a id="line.100">     * The RNG used to decide which one of multiple equally-short paths to take.</a>
 <span class="sourceLineNo">101</span><a id="line.101">     */</a>
 <span class="sourceLineNo">102</span><a id="line.102">    public IRNG rng;</a>
-<span class="sourceLineNo">103</span><a id="line.103">    private int frustration = 0;</a>
+<span class="sourceLineNo">103</span><a id="line.103">    private int frustration;</a>
 <span class="sourceLineNo">104</span><a id="line.104"></a>
 <span class="sourceLineNo">105</span><a id="line.105">    private int[] reuse = new int[9];</a>
 <span class="sourceLineNo">106</span><a id="line.106"></a>
-<span class="sourceLineNo">107</span><a id="line.107">    private boolean initialized = false;</a>
+<span class="sourceLineNo">107</span><a id="line.107">    private boolean initialized;</a>
 <span class="sourceLineNo">108</span><a id="line.108"></a>
-<span class="sourceLineNo">109</span><a id="line.109">    private int mappedCount = 0;</a>
+<span class="sourceLineNo">109</span><a id="line.109">    private int mappedCount;</a>
 <span class="sourceLineNo">110</span><a id="line.110">    private double[] heuristics;</a>
 <span class="sourceLineNo">111</span><a id="line.111"></a>
 <span class="sourceLineNo">112</span><a id="line.112">    /**</a>
@@ -2031,7 +2031,7 @@
 <span class="sourceLineNo">2019</span><a id="line.2019"></a>
 <span class="sourceLineNo">2020</span><a id="line.2020"></a>
 <span class="sourceLineNo">2021</span><a id="line.2021">    private double cachedLongerPaths = 1.2;</a>
-<span class="sourceLineNo">2022</span><a id="line.2022">    private long cachedImpassable = 0L, cachedFearSources = 0L;</a>
+<span class="sourceLineNo">2022</span><a id="line.2022">    private long cachedImpassable, cachedFearSources;</a>
 <span class="sourceLineNo">2023</span><a id="line.2023">    private double[] cachedFleeMap;</a>
 <span class="sourceLineNo">2024</span><a id="line.2024">    private int cachedSize = 1;</a>
 <span class="sourceLineNo">2025</span><a id="line.2025"></a>

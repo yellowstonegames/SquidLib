@@ -927,7 +927,7 @@
 <span class="sourceLineNo">915</span><a id="line.915">     * @return the inverse of ordering</a>
 <span class="sourceLineNo">916</span><a id="line.916">     */</a>
 <span class="sourceLineNo">917</span><a id="line.917">    public static int[] invertOrdering(int[] ordering) {</a>
-<span class="sourceLineNo">918</span><a id="line.918">        int ol = 0;</a>
+<span class="sourceLineNo">918</span><a id="line.918">        int ol;</a>
 <span class="sourceLineNo">919</span><a id="line.919">        if (ordering == null || (ol = ordering.length) == 0) return ordering;</a>
 <span class="sourceLineNo">920</span><a id="line.920">        int[] next = new int[ol];</a>
 <span class="sourceLineNo">921</span><a id="line.921">        for (int i = 0; i &lt; ol; i++) {</a>
@@ -948,7 +948,7 @@
 <span class="sourceLineNo">936</span><a id="line.936">     * @return the inverse of ordering; will have the same value as dest</a>
 <span class="sourceLineNo">937</span><a id="line.937">     */</a>
 <span class="sourceLineNo">938</span><a id="line.938">    public static int[] invertOrdering(int[] ordering, int[] dest) {</a>
-<span class="sourceLineNo">939</span><a id="line.939">        int ol = 0;</a>
+<span class="sourceLineNo">939</span><a id="line.939">        int ol;</a>
 <span class="sourceLineNo">940</span><a id="line.940">        if (ordering == null || dest == null || (ol = Math.min(ordering.length, dest.length)) == 0)</a>
 <span class="sourceLineNo">941</span><a id="line.941">            return ordering;</a>
 <span class="sourceLineNo">942</span><a id="line.942">        for (int i = 0; i &lt; ol; i++) {</a>

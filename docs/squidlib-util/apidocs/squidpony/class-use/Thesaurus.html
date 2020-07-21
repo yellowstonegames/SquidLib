@@ -130,15 +130,23 @@ loadScripts(document, 'script');</script>
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../Thesaurus.html" title="class in squidpony">Thesaurus</a></code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">Thesaurus.</span><code><span class="memberNameLink"><a href="../Thesaurus.html#addCategory(java.lang.String,java.util.Collection)">addCategory</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;keyword,
-<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&gt;&nbsp;synonyms)</code></th>
+<th class="colSecond" scope="row"><span class="typeNameLabel">Thesaurus.</span><code><span class="memberNameLink"><a href="../Thesaurus.html#addArchivedCategories(java.lang.String)">addArchivedCategories</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;archive)</code></th>
+<td class="colLast">
+<div class="block">Given an archive String saved by <a href="../Thesaurus.html#archiveCategories()"><code>archiveCategories()</code></a> (probably from another version of SquidLib), this
+ makes the Thesaurus class act like it did in that archive, assuming the <a href="../Thesaurus.html#rng"><code>rng</code></a> is seeded the same.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../Thesaurus.html" title="class in squidpony">Thesaurus</a></code></td>
+<th class="colSecond" scope="row"><span class="typeNameLabel">Thesaurus.</span><code><span class="memberNameLink"><a href="../Thesaurus.html#addCategory(java.lang.String,java.util.Collection)">addCategory</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;keyword,
+<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&gt;&nbsp;synonyms)</code></th>
 <td class="colLast">
 <div class="block">Allows this Thesaurus to replace a specific keyword, typically containing multiple backtick characters
  (<code>`</code>) so it can't be confused with a "real word," with one of the words in synonyms (chosen in shuffled
  order).</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../Thesaurus.html" title="class in squidpony">Thesaurus</a></code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">Thesaurus.</span><code><span class="memberNameLink"><a href="../Thesaurus.html#addFakeWords()">addFakeWords</a></span>()</code></th>
 <td class="colLast">
@@ -146,7 +154,7 @@ loadScripts(document, 'script');</script>
  accessible with a keyword based on the language.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../Thesaurus.html" title="class in squidpony">Thesaurus</a></code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">Thesaurus.</span><code><span class="memberNameLink"><a href="../Thesaurus.html#addKnownCategories()">addKnownCategories</a></span>()</code></th>
 <td class="colLast">
@@ -154,10 +162,10 @@ loadScripts(document, 'script');</script>
  words with synonyms (only categories, which contain backticks in the name).</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../Thesaurus.html" title="class in squidpony">Thesaurus</a></code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">Thesaurus.</span><code><span class="memberNameLink"><a href="../Thesaurus.html#addReplacement(java.lang.CharSequence,java.lang.String)">addReplacement</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang" class="externalLink">CharSequence</a>&nbsp;before,
-<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;after)</code></th>
+<th class="colSecond" scope="row"><span class="typeNameLabel">Thesaurus.</span><code><span class="memberNameLink"><a href="../Thesaurus.html#addReplacement(java.lang.CharSequence,java.lang.String)">addReplacement</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang" class="externalLink">CharSequence</a>&nbsp;before,
+<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;after)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </tbody>

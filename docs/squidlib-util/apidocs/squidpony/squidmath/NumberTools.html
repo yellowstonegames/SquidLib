@@ -87,13 +87,13 @@ loadScripts(document, 'script');</script>
 <h1 title="Class NumberTools" class="title">Class NumberTools</h1>
 </div>
 <div class="contentContainer">
-<div class="inheritance" title="Inheritance Tree"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">java.lang.Object</a>
+<div class="inheritance" title="Inheritance Tree"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">java.lang.Object</a>
 <div class="inheritance">squidpony.squidmath.NumberTools</div>
 </div>
 <section class="description">
 <hr>
 <pre>public final class <a href="../../src-html/squidpony/squidmath/NumberTools.html#line.12">NumberTools</a>
-extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></pre>
+extends <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></pre>
 <div class="block">Various numeric functions that are important to performance but need alternate implementations on GWT to obtain it.
  Super-sourced on GWT, but most things here are direct calls to JDK methods when on desktop or Android.
  Some of this code makes use of "creative" bit manipulation of floats and doubles, which can sometimes allow uncommon
@@ -317,7 +317,7 @@ int&nbsp;valueHigh)</code></th>
 <td class="colFirst"><code>static double</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#cos(double)">cos</a></span>&#8203;(double&nbsp;radians)</code></th>
 <td class="colLast">
-<div class="block">A fairly-close approximation of <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Math.html?is-external=true#cos(double)" title="class or interface in java.lang" class="externalLink"><code>Math.cos(double)</code></a> that can be significantly faster (between 8x and 80x
+<div class="block">A fairly-close approximation of <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Math.html?is-external=true#cos(double)" title="class or interface in java.lang" class="externalLink"><code>Math.cos(double)</code></a> that can be significantly faster (between 8x and 80x
  faster cos() calls in benchmarking; if you have access to libGDX you should consider its sometimes-more-precise
  and sometimes-faster MathUtils.cos() method.</div>
 </td>
@@ -326,7 +326,7 @@ int&nbsp;valueHigh)</code></th>
 <td class="colFirst"><code>static float</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#cos(float)">cos</a></span>&#8203;(float&nbsp;radians)</code></th>
 <td class="colLast">
-<div class="block">A fairly-close approximation of <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Math.html?is-external=true#cos(double)" title="class or interface in java.lang" class="externalLink"><code>Math.cos(double)</code></a> that can be significantly faster (between 8x and 80x
+<div class="block">A fairly-close approximation of <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Math.html?is-external=true#cos(double)" title="class or interface in java.lang" class="externalLink"><code>Math.cos(double)</code></a> that can be significantly faster (between 8x and 80x
  faster cos() calls in benchmarking, and both takes and returns floats; if you have access to libGDX you should
  consider its more-precise and sometimes-faster MathUtils.cos() method.</div>
 </td>
@@ -335,7 +335,7 @@ int&nbsp;valueHigh)</code></th>
 <td class="colFirst"><code>static double</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#cos_(double)">cos_</a></span>&#8203;(double&nbsp;turns)</code></th>
 <td class="colLast">
-<div class="block">A variation on <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Math.html?is-external=true#cos(double)" title="class or interface in java.lang" class="externalLink"><code>Math.cos(double)</code></a> that takes its input as a fraction of a turn instead of in radians; one
+<div class="block">A variation on <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Math.html?is-external=true#cos(double)" title="class or interface in java.lang" class="externalLink"><code>Math.cos(double)</code></a> that takes its input as a fraction of a turn instead of in radians; one
  turn is equal to 360 degrees or two*PI radians.</div>
 </td>
 </tr>
@@ -343,7 +343,7 @@ int&nbsp;valueHigh)</code></th>
 <td class="colFirst"><code>static float</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#cos_(float)">cos_</a></span>&#8203;(float&nbsp;turns)</code></th>
 <td class="colLast">
-<div class="block">A variation on <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Math.html?is-external=true#cos(double)" title="class or interface in java.lang" class="externalLink"><code>Math.cos(double)</code></a> that takes its input as a fraction of a turn instead of in radians (it
+<div class="block">A variation on <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Math.html?is-external=true#cos(double)" title="class or interface in java.lang" class="externalLink"><code>Math.cos(double)</code></a> that takes its input as a fraction of a turn instead of in radians (it
  also takes and returns a float); one turn is equal to 360 degrees or two*PI radians.</div>
 </td>
 </tr>
@@ -351,7 +351,7 @@ int&nbsp;valueHigh)</code></th>
 <td class="colFirst"><code>static float</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#cosDegrees(float)">cosDegrees</a></span>&#8203;(float&nbsp;degrees)</code></th>
 <td class="colLast">
-<div class="block">A fairly-close approximation of <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Math.html?is-external=true#cos(double)" title="class or interface in java.lang" class="externalLink"><code>Math.cos(double)</code></a> that can be significantly faster (between 8x and 80x
+<div class="block">A fairly-close approximation of <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Math.html?is-external=true#cos(double)" title="class or interface in java.lang" class="externalLink"><code>Math.cos(double)</code></a> that can be significantly faster (between 8x and 80x
  faster cos() calls in benchmarking, and both takes and returns floats; if you have access to libGDX, you should
  consider its more-precise and sometimes-faster MathUtils.cosDeg() method.</div>
 </td>
@@ -367,7 +367,7 @@ int&nbsp;valueHigh)</code></th>
 <td class="colFirst"><code>static long</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#doubleToLongBits(double)">doubleToLongBits</a></span>&#8203;(double&nbsp;value)</code></th>
 <td class="colLast">
-<div class="block">Identical to <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Double.html?is-external=true#doubleToLongBits(double)" title="class or interface in java.lang" class="externalLink"><code>Double.doubleToLongBits(double)</code></a> on desktop; optimized on GWT.</div>
+<div class="block">Identical to <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Double.html?is-external=true#doubleToLongBits(double)" title="class or interface in java.lang" class="externalLink"><code>Double.doubleToLongBits(double)</code></a> on desktop; optimized on GWT.</div>
 </td>
 </tr>
 <tr class="rowColor" id="i27">
@@ -388,22 +388,22 @@ int&nbsp;valueHigh)</code></th>
 <td class="colFirst"><code>static long</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#doubleToRawLongBits(double)">doubleToRawLongBits</a></span>&#8203;(double&nbsp;value)</code></th>
 <td class="colLast">
-<div class="block">Identical to <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Double.html?is-external=true#doubleToLongBits(double)" title="class or interface in java.lang" class="externalLink"><code>Double.doubleToLongBits(double)</code></a> on desktop (note, not
- <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Double.html?is-external=true#doubleToRawLongBits(double)" title="class or interface in java.lang" class="externalLink"><code>Double.doubleToRawLongBits(double)</code></a>); optimized on GWT.</div>
+<div class="block">Identical to <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Double.html?is-external=true#doubleToLongBits(double)" title="class or interface in java.lang" class="externalLink"><code>Double.doubleToLongBits(double)</code></a> on desktop (note, not
+ <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Double.html?is-external=true#doubleToRawLongBits(double)" title="class or interface in java.lang" class="externalLink"><code>Double.doubleToRawLongBits(double)</code></a>); optimized on GWT.</div>
 </td>
 </tr>
 <tr class="altColor" id="i30">
 <td class="colFirst"><code>static int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#floatToIntBits(float)">floatToIntBits</a></span>&#8203;(float&nbsp;value)</code></th>
 <td class="colLast">
-<div class="block">Identical to <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Float.html?is-external=true#floatToIntBits(float)" title="class or interface in java.lang" class="externalLink"><code>Float.floatToIntBits(float)</code></a> on desktop; optimized on GWT.</div>
+<div class="block">Identical to <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Float.html?is-external=true#floatToIntBits(float)" title="class or interface in java.lang" class="externalLink"><code>Float.floatToIntBits(float)</code></a> on desktop; optimized on GWT.</div>
 </td>
 </tr>
 <tr class="rowColor" id="i31">
 <td class="colFirst"><code>static int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#floatToRawIntBits(float)">floatToRawIntBits</a></span>&#8203;(float&nbsp;value)</code></th>
 <td class="colLast">
-<div class="block">Identical to <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Float.html?is-external=true#floatToIntBits(float)" title="class or interface in java.lang" class="externalLink"><code>Float.floatToIntBits(float)</code></a> on desktop (note, not <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Float.html?is-external=true#floatToRawIntBits(float)" title="class or interface in java.lang" class="externalLink"><code>Float.floatToRawIntBits(float)</code></a>);
+<div class="block">Identical to <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Float.html?is-external=true#floatToIntBits(float)" title="class or interface in java.lang" class="externalLink"><code>Float.floatToIntBits(float)</code></a> on desktop (note, not <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Float.html?is-external=true#floatToRawIntBits(float)" title="class or interface in java.lang" class="externalLink"><code>Float.floatToRawIntBits(float)</code></a>);
  optimized on GWT.</div>
 </td>
 </tr>
@@ -509,14 +509,14 @@ int&nbsp;whichByte)</code></th>
 <td class="colFirst"><code>static float</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#intBitsToFloat(int)">intBitsToFloat</a></span>&#8203;(int&nbsp;bits)</code></th>
 <td class="colLast">
-<div class="block">Identical to <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Float.html?is-external=true#intBitsToFloat(int)" title="class or interface in java.lang" class="externalLink"><code>Float.intBitsToFloat(int)</code></a> on desktop; optimized on GWT.</div>
+<div class="block">Identical to <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Float.html?is-external=true#intBitsToFloat(int)" title="class or interface in java.lang" class="externalLink"><code>Float.intBitsToFloat(int)</code></a> on desktop; optimized on GWT.</div>
 </td>
 </tr>
 <tr class="rowColor" id="i45">
 <td class="colFirst"><code>static double</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#longBitsToDouble(long)">longBitsToDouble</a></span>&#8203;(long&nbsp;bits)</code></th>
 <td class="colLast">
-<div class="block">Identical to <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Double.html?is-external=true#longBitsToDouble(long)" title="class or interface in java.lang" class="externalLink"><code>Double.longBitsToDouble(long)</code></a> on desktop; optimized on GWT.</div>
+<div class="block">Identical to <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Double.html?is-external=true#longBitsToDouble(long)" title="class or interface in java.lang" class="externalLink"><code>Double.longBitsToDouble(long)</code></a> on desktop; optimized on GWT.</div>
 </td>
 </tr>
 <tr class="altColor" id="i46">
@@ -614,7 +614,7 @@ byte&nbsp;newValue)</code></th>
 <td class="colFirst"><code>static double</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sin(double)">sin</a></span>&#8203;(double&nbsp;radians)</code></th>
 <td class="colLast">
-<div class="block">A fairly-close approximation of <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Math.html?is-external=true#sin(double)" title="class or interface in java.lang" class="externalLink"><code>Math.sin(double)</code></a> that can be significantly faster (between 8x and 80x
+<div class="block">A fairly-close approximation of <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Math.html?is-external=true#sin(double)" title="class or interface in java.lang" class="externalLink"><code>Math.sin(double)</code></a> that can be significantly faster (between 8x and 80x
  faster sin() calls in benchmarking; if you have access to libGDX you should consider its sometimes-more-precise
  and sometimes-faster MathUtils.sin() method.</div>
 </td>
@@ -623,7 +623,7 @@ byte&nbsp;newValue)</code></th>
 <td class="colFirst"><code>static float</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sin(float)">sin</a></span>&#8203;(float&nbsp;radians)</code></th>
 <td class="colLast">
-<div class="block">A fairly-close approximation of <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Math.html?is-external=true#sin(double)" title="class or interface in java.lang" class="externalLink"><code>Math.sin(double)</code></a> that can be significantly faster (between 8x and 80x
+<div class="block">A fairly-close approximation of <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Math.html?is-external=true#sin(double)" title="class or interface in java.lang" class="externalLink"><code>Math.sin(double)</code></a> that can be significantly faster (between 8x and 80x
  faster sin() calls in benchmarking, and both takes and returns floats; if you have access to libGDX you should
  consider its more-precise and sometimes-faster MathUtils.sin() method.</div>
 </td>
@@ -632,7 +632,7 @@ byte&nbsp;newValue)</code></th>
 <td class="colFirst"><code>static double</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sin_(double)">sin_</a></span>&#8203;(double&nbsp;turns)</code></th>
 <td class="colLast">
-<div class="block">A variation on <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Math.html?is-external=true#sin(double)" title="class or interface in java.lang" class="externalLink"><code>Math.sin(double)</code></a> that takes its input as a fraction of a turn instead of in radians; one
+<div class="block">A variation on <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Math.html?is-external=true#sin(double)" title="class or interface in java.lang" class="externalLink"><code>Math.sin(double)</code></a> that takes its input as a fraction of a turn instead of in radians; one
  turn is equal to 360 degrees or two*PI radians.</div>
 </td>
 </tr>
@@ -640,7 +640,7 @@ byte&nbsp;newValue)</code></th>
 <td class="colFirst"><code>static float</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sin_(float)">sin_</a></span>&#8203;(float&nbsp;turns)</code></th>
 <td class="colLast">
-<div class="block">A variation on <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Math.html?is-external=true#sin(double)" title="class or interface in java.lang" class="externalLink"><code>Math.sin(double)</code></a> that takes its input as a fraction of a turn instead of in radians (it
+<div class="block">A variation on <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Math.html?is-external=true#sin(double)" title="class or interface in java.lang" class="externalLink"><code>Math.sin(double)</code></a> that takes its input as a fraction of a turn instead of in radians (it
  also takes and returns a float); one turn is equal to 360 degrees or two*PI radians.</div>
 </td>
 </tr>
@@ -648,7 +648,7 @@ byte&nbsp;newValue)</code></th>
 <td class="colFirst"><code>static float</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sinDegrees(float)">sinDegrees</a></span>&#8203;(float&nbsp;degrees)</code></th>
 <td class="colLast">
-<div class="block">A fairly-close approximation of <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Math.html?is-external=true#sin(double)" title="class or interface in java.lang" class="externalLink"><code>Math.sin(double)</code></a> that can be significantly faster (between 8x and 80x
+<div class="block">A fairly-close approximation of <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Math.html?is-external=true#sin(double)" title="class or interface in java.lang" class="externalLink"><code>Math.sin(double)</code></a> that can be significantly faster (between 8x and 80x
  faster sin() calls in benchmarking, and both takes and returns floats; if you have access to libGDX, you should
  consider its more-precise and sometimes-faster MathUtils.sinDeg() method.</div>
 </td>
@@ -755,10 +755,10 @@ float&nbsp;value)</code></th>
 </div>
 </div>
 <div class="inheritedList">
-<h3>Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></h3>
+<h3>Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></h3>
 <a id="methods.inherited.from.class.java.lang.Object">
 <!--   -->
-</a><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#clone()" title="class or interface in java.lang" class="externalLink">clone</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.lang" class="externalLink">equals</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#finalize()" title="class or interface in java.lang" class="externalLink">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#getClass()" title="class or interface in java.lang" class="externalLink">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#hashCode()" title="class or interface in java.lang" class="externalLink">hashCode</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#notify()" title="class or interface in java.lang" class="externalLink">notify</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#notifyAll()" title="class or interface in java.lang" class="externalLink">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#toString()" title="class or interface in java.lang" class="externalLink">toString</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#wait()" title="class or interface in java.lang" class="externalLink">wait</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#wait(long)" title="class or interface in java.lang" class="externalLink">wait</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#wait(long,int)" title="class or interface in java.lang" class="externalLink">wait</a></code></div>
+</a><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#clone()" title="class or interface in java.lang" class="externalLink">clone</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.lang" class="externalLink">equals</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#finalize()" title="class or interface in java.lang" class="externalLink">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#getClass()" title="class or interface in java.lang" class="externalLink">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#hashCode()" title="class or interface in java.lang" class="externalLink">hashCode</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#notify()" title="class or interface in java.lang" class="externalLink">notify</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#notifyAll()" title="class or interface in java.lang" class="externalLink">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#toString()" title="class or interface in java.lang" class="externalLink">toString</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#wait()" title="class or interface in java.lang" class="externalLink">wait</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#wait(long)" title="class or interface in java.lang" class="externalLink">wait</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#wait(long,int)" title="class or interface in java.lang" class="externalLink">wait</a></code></div>
 </section>
 </li>
 </ul>
@@ -792,7 +792,7 @@ float&nbsp;value)</code></th>
 <section class="detail">
 <h3><a id="doubleToLongBits(double)">doubleToLongBits</a></h3>
 <div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.23">doubleToLongBits</a></span>&#8203;(<span class="arguments">double&nbsp;value)</span></div>
-<div class="block">Identical to <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Double.html?is-external=true#doubleToLongBits(double)" title="class or interface in java.lang" class="externalLink"><code>Double.doubleToLongBits(double)</code></a> on desktop; optimized on GWT. When compiling to JS via GWT,
+<div class="block">Identical to <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Double.html?is-external=true#doubleToLongBits(double)" title="class or interface in java.lang" class="externalLink"><code>Double.doubleToLongBits(double)</code></a> on desktop; optimized on GWT. When compiling to JS via GWT,
  there is no way to distinguish NaN values with different bits but that are still NaN, so this doesn't try to
  somehow permit that. Uses JS typed arrays on GWT, which are well-supported now across all recent browsers and
  have fallbacks in GWT in the unlikely event of a browser not supporting them. JS typed arrays support double, but
@@ -810,8 +810,8 @@ float&nbsp;value)</code></th>
 <section class="detail">
 <h3><a id="doubleToRawLongBits(double)">doubleToRawLongBits</a></h3>
 <div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.38">doubleToRawLongBits</a></span>&#8203;(<span class="arguments">double&nbsp;value)</span></div>
-<div class="block">Identical to <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Double.html?is-external=true#doubleToLongBits(double)" title="class or interface in java.lang" class="externalLink"><code>Double.doubleToLongBits(double)</code></a> on desktop (note, not
- <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Double.html?is-external=true#doubleToRawLongBits(double)" title="class or interface in java.lang" class="externalLink"><code>Double.doubleToRawLongBits(double)</code></a>); optimized on GWT. When compiling to JS via GWT, there is no way to
+<div class="block">Identical to <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Double.html?is-external=true#doubleToLongBits(double)" title="class or interface in java.lang" class="externalLink"><code>Double.doubleToLongBits(double)</code></a> on desktop (note, not
+ <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Double.html?is-external=true#doubleToRawLongBits(double)" title="class or interface in java.lang" class="externalLink"><code>Double.doubleToRawLongBits(double)</code></a>); optimized on GWT. When compiling to JS via GWT, there is no way to
  distinguish NaN values with different bits but that are still NaN, so this doesn't try to somehow permit that.
  Uses JS typed arrays on GWT, which are well-supported now across all recent browsers and have fallbacks in GWT in
  the unlikely event of a browser not supporting them. JS typed arrays support double, but not long, so this needs
@@ -829,7 +829,7 @@ float&nbsp;value)</code></th>
 <section class="detail">
 <h3><a id="longBitsToDouble(long)">longBitsToDouble</a></h3>
 <div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.51">longBitsToDouble</a></span>&#8203;(<span class="arguments">long&nbsp;bits)</span></div>
-<div class="block">Identical to <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Double.html?is-external=true#longBitsToDouble(long)" title="class or interface in java.lang" class="externalLink"><code>Double.longBitsToDouble(long)</code></a> on desktop; optimized on GWT. Uses JS typed arrays on GWT,
+<div class="block">Identical to <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Double.html?is-external=true#longBitsToDouble(long)" title="class or interface in java.lang" class="externalLink"><code>Double.longBitsToDouble(long)</code></a> on desktop; optimized on GWT. Uses JS typed arrays on GWT,
  which are well-supported now across all recent browsers and have fallbacks in GWT in the unlikely event of a
  browser not supporting them. JS typed arrays support double, but not long, so this needs to compose a long from
  two ints, which means the double-to/from-long conversions aren't as fast as float-to/from-int conversions.</div>
@@ -1249,7 +1249,7 @@ float&nbsp;value)</span></div>
 <section class="detail">
 <h3><a id="floatToIntBits(float)">floatToIntBits</a></h3>
 <div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.453">floatToIntBits</a></span>&#8203;(<span class="arguments">float&nbsp;value)</span></div>
-<div class="block">Identical to <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Float.html?is-external=true#floatToIntBits(float)" title="class or interface in java.lang" class="externalLink"><code>Float.floatToIntBits(float)</code></a> on desktop; optimized on GWT. Uses JS typed arrays on GWT, which
+<div class="block">Identical to <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Float.html?is-external=true#floatToIntBits(float)" title="class or interface in java.lang" class="externalLink"><code>Float.floatToIntBits(float)</code></a> on desktop; optimized on GWT. Uses JS typed arrays on GWT, which
  are well-supported now across all recent browsers and have fallbacks in GWT in the unlikely event of a browser
  not supporting them.</div>
 <dl>
@@ -1264,7 +1264,7 @@ float&nbsp;value)</span></div>
 <section class="detail">
 <h3><a id="floatToRawIntBits(float)">floatToRawIntBits</a></h3>
 <div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.466">floatToRawIntBits</a></span>&#8203;(<span class="arguments">float&nbsp;value)</span></div>
-<div class="block">Identical to <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Float.html?is-external=true#floatToIntBits(float)" title="class or interface in java.lang" class="externalLink"><code>Float.floatToIntBits(float)</code></a> on desktop (note, not <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Float.html?is-external=true#floatToRawIntBits(float)" title="class or interface in java.lang" class="externalLink"><code>Float.floatToRawIntBits(float)</code></a>);
+<div class="block">Identical to <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Float.html?is-external=true#floatToIntBits(float)" title="class or interface in java.lang" class="externalLink"><code>Float.floatToIntBits(float)</code></a> on desktop (note, not <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Float.html?is-external=true#floatToRawIntBits(float)" title="class or interface in java.lang" class="externalLink"><code>Float.floatToRawIntBits(float)</code></a>);
  optimized on GWT. When compiling to JS via GWT, there is no way to distinguish NaN values with different bits but
  that are still NaN, so this doesn't try to somehow permit that. Uses JS typed arrays on GWT, which are
  well-supported now across all recent browsers and have fallbacks in GWT in the unlikely event of a browser not
@@ -1311,7 +1311,7 @@ float&nbsp;value)</span></div>
 <section class="detail">
 <h3><a id="intBitsToFloat(int)">intBitsToFloat</a></h3>
 <div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.501">intBitsToFloat</a></span>&#8203;(<span class="arguments">int&nbsp;bits)</span></div>
-<div class="block">Identical to <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Float.html?is-external=true#intBitsToFloat(int)" title="class or interface in java.lang" class="externalLink"><code>Float.intBitsToFloat(int)</code></a> on desktop; optimized on GWT. Uses JS typed arrays on GWT, which
+<div class="block">Identical to <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Float.html?is-external=true#intBitsToFloat(int)" title="class or interface in java.lang" class="externalLink"><code>Float.intBitsToFloat(int)</code></a> on desktop; optimized on GWT. Uses JS typed arrays on GWT, which
  are well-supported now across all recent browsers and have fallbacks in GWT in the unlikely event of a browser
  not supporting them.</div>
 <dl>
@@ -1597,11 +1597,11 @@ int&nbsp;start2)</span></div>
  the specified int value. Returns zero if the specified value has no one-bits in its two's complement binary
  representation, that is, if it is equal to zero.
  <br>
- Identical to <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Integer.html?is-external=true#lowestOneBit(int)" title="class or interface in java.lang" class="externalLink"><code>Integer.lowestOneBit(int)</code></a>, but super-sourced to act correctly on GWT. If you have GWT as a
- target and do bit manipulation work, double-check everything! An int can be higher than <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Integer.html?is-external=true#MAX_VALUE" title="class or interface in java.lang" class="externalLink"><code>Integer.MAX_VALUE</code></a>
- or lower than <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Integer.html?is-external=true#MIN_VALUE" title="class or interface in java.lang" class="externalLink"><code>Integer.MIN_VALUE</code></a> on GWT, without actually being a long (internally it's a double). This
+ Identical to <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Integer.html?is-external=true#lowestOneBit(int)" title="class or interface in java.lang" class="externalLink"><code>Integer.lowestOneBit(int)</code></a>, but super-sourced to act correctly on GWT. If you have GWT as a
+ target and do bit manipulation work, double-check everything! An int can be higher than <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Integer.html?is-external=true#MAX_VALUE" title="class or interface in java.lang" class="externalLink"><code>Integer.MAX_VALUE</code></a>
+ or lower than <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Integer.html?is-external=true#MIN_VALUE" title="class or interface in java.lang" class="externalLink"><code>Integer.MIN_VALUE</code></a> on GWT, without actually being a long (internally it's a double). This
  is especially relevant for the overload of this method that takes and returns a long;
- <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Long.html?is-external=true#lowestOneBit(long)" title="class or interface in java.lang" class="externalLink"><code>Long.lowestOneBit(long)</code></a> does not provide correct results for certain inputs on GWT, such as
+ <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Long.html?is-external=true#lowestOneBit(long)" title="class or interface in java.lang" class="externalLink"><code>Long.lowestOneBit(long)</code></a> does not provide correct results for certain inputs on GWT, such as
  -17592186044416L, which it mysteriously returns 0L on, so you should use <a href="#lowestOneBit(long)"><code>lowestOneBit(long)</code></a>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -1620,10 +1620,10 @@ int&nbsp;start2)</span></div>
  the specified long value. Returns zero if the specified value has no one-bits in its two's complement binary
  representation, that is, if it is equal to zero.
  <br>
- Identical to <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Long.html?is-external=true#lowestOneBit(long)" title="class or interface in java.lang" class="externalLink"><code>Long.lowestOneBit(long)</code></a>, but super-sourced to act correctly on GWT. If you have GWT as a
- target and do bit manipulation work, double-check everything! An int can be higher than <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Integer.html?is-external=true#MAX_VALUE" title="class or interface in java.lang" class="externalLink"><code>Integer.MAX_VALUE</code></a>
- or lower than <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Integer.html?is-external=true#MIN_VALUE" title="class or interface in java.lang" class="externalLink"><code>Integer.MIN_VALUE</code></a> on GWT, without actually being a long (internally it's a double). This
- is especially relevant for this overload (for longs more so than for ints); <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Long.html?is-external=true#lowestOneBit(long)" title="class or interface in java.lang" class="externalLink"><code>Long.lowestOneBit(long)</code></a> does
+ Identical to <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Long.html?is-external=true#lowestOneBit(long)" title="class or interface in java.lang" class="externalLink"><code>Long.lowestOneBit(long)</code></a>, but super-sourced to act correctly on GWT. If you have GWT as a
+ target and do bit manipulation work, double-check everything! An int can be higher than <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Integer.html?is-external=true#MAX_VALUE" title="class or interface in java.lang" class="externalLink"><code>Integer.MAX_VALUE</code></a>
+ or lower than <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Integer.html?is-external=true#MIN_VALUE" title="class or interface in java.lang" class="externalLink"><code>Integer.MIN_VALUE</code></a> on GWT, without actually being a long (internally it's a double). This
+ is especially relevant for this overload (for longs more so than for ints); <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Long.html?is-external=true#lowestOneBit(long)" title="class or interface in java.lang" class="externalLink"><code>Long.lowestOneBit(long)</code></a> does
  not provide correct results for certain inputs on GWT, such as -17592186044416L, which it mysteriously returns 0L
  on, so you should use this method.</div>
 <dl>
@@ -1639,15 +1639,15 @@ int&nbsp;start2)</span></div>
 <section class="detail">
 <h3><a id="sin(double)">sin</a></h3>
 <div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.799">sin</a></span>&#8203;(<span class="arguments">double&nbsp;radians)</span></div>
-<div class="block">A fairly-close approximation of <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Math.html?is-external=true#sin(double)" title="class or interface in java.lang" class="externalLink"><code>Math.sin(double)</code></a> that can be significantly faster (between 8x and 80x
+<div class="block">A fairly-close approximation of <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Math.html?is-external=true#sin(double)" title="class or interface in java.lang" class="externalLink"><code>Math.sin(double)</code></a> that can be significantly faster (between 8x and 80x
  faster sin() calls in benchmarking; if you have access to libGDX you should consider its sometimes-more-precise
  and sometimes-faster MathUtils.sin() method. Because this method doesn't rely on a
  lookup table, where libGDX's MathUtils does, applications that have a bottleneck on memory may perform better
  with this method than with MathUtils. Takes the same arguments Math.sin() does, so one angle in radians,
  which may technically be any double (but this will lose precision on fairly large doubles, such as those that are
- larger than <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Long.html?is-external=true#MAX_VALUE" title="class or interface in java.lang" class="externalLink"><code>Long.MAX_VALUE</code></a>, because those doubles themselves will lose precision at that scale). This
+ larger than <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Long.html?is-external=true#MAX_VALUE" title="class or interface in java.lang" class="externalLink"><code>Long.MAX_VALUE</code></a>, because those doubles themselves will lose precision at that scale). This
  is closely related to <a href="#sway(double)"><code>sway(double)</code></a>, but the shape of the output when graphed is almost identical to
- sin(). The difference between the result of this method and <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Math.html?is-external=true#sin(double)" title="class or interface in java.lang" class="externalLink"><code>Math.sin(double)</code></a> should be under 0.0011 at
+ sin(). The difference between the result of this method and <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Math.html?is-external=true#sin(double)" title="class or interface in java.lang" class="externalLink"><code>Math.sin(double)</code></a> should be under 0.0011 at
  all points between -pi and pi, with an average difference of about 0.0005; not all points have been checked for
  potentially higher errors, though.
  <br>
@@ -1675,15 +1675,15 @@ int&nbsp;start2)</span></div>
 <section class="detail">
 <h3><a id="cos(double)">cos</a></h3>
 <div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.835">cos</a></span>&#8203;(<span class="arguments">double&nbsp;radians)</span></div>
-<div class="block">A fairly-close approximation of <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Math.html?is-external=true#cos(double)" title="class or interface in java.lang" class="externalLink"><code>Math.cos(double)</code></a> that can be significantly faster (between 8x and 80x
+<div class="block">A fairly-close approximation of <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Math.html?is-external=true#cos(double)" title="class or interface in java.lang" class="externalLink"><code>Math.cos(double)</code></a> that can be significantly faster (between 8x and 80x
  faster cos() calls in benchmarking; if you have access to libGDX you should consider its sometimes-more-precise
  and sometimes-faster MathUtils.cos() method. Because this method doesn't rely on a
  lookup table, where libGDX's MathUtils does, applications that have a bottleneck on memory may perform better
  with this method than with MathUtils. Takes the same arguments Math.cos() does, so one angle in radians,
  which may technically be any double (but this will lose precision on fairly large doubles, such as those that are
- larger than <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Long.html?is-external=true#MAX_VALUE" title="class or interface in java.lang" class="externalLink"><code>Long.MAX_VALUE</code></a>, because those doubles themselves will lose precision at that scale). This
+ larger than <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Long.html?is-external=true#MAX_VALUE" title="class or interface in java.lang" class="externalLink"><code>Long.MAX_VALUE</code></a>, because those doubles themselves will lose precision at that scale). This
  is closely related to <a href="#sway(double)"><code>sway(double)</code></a>, but the shape of the output when graphed is almost identical to
- cos(). The difference between the result of this method and <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Math.html?is-external=true#cos(double)" title="class or interface in java.lang" class="externalLink"><code>Math.cos(double)</code></a> should be under 0.0011 at
+ cos(). The difference between the result of this method and <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Math.html?is-external=true#cos(double)" title="class or interface in java.lang" class="externalLink"><code>Math.cos(double)</code></a> should be under 0.0011 at
  all points between -pi and pi, with an average difference of about 0.0005; not all points have been checked for
  potentially higher errors, though.
  <br>
@@ -1710,15 +1710,15 @@ int&nbsp;start2)</span></div>
 <section class="detail">
 <h3><a id="sin(float)">sin</a></h3>
 <div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.872">sin</a></span>&#8203;(<span class="arguments">float&nbsp;radians)</span></div>
-<div class="block">A fairly-close approximation of <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Math.html?is-external=true#sin(double)" title="class or interface in java.lang" class="externalLink"><code>Math.sin(double)</code></a> that can be significantly faster (between 8x and 80x
+<div class="block">A fairly-close approximation of <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Math.html?is-external=true#sin(double)" title="class or interface in java.lang" class="externalLink"><code>Math.sin(double)</code></a> that can be significantly faster (between 8x and 80x
  faster sin() calls in benchmarking, and both takes and returns floats; if you have access to libGDX you should
  consider its more-precise and sometimes-faster MathUtils.sin() method. Because this method doesn't rely on a
  lookup table, where libGDX's MathUtils does, applications that have a bottleneck on memory may perform better
  with this method than with MathUtils. Takes the same arguments Math.sin() does, so one angle in radians,
  which may technically be any float (but this will lose precision on fairly large floats, such as those that are
- larger than <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Integer.html?is-external=true#MAX_VALUE" title="class or interface in java.lang" class="externalLink"><code>Integer.MAX_VALUE</code></a>, because those floats themselves will lose precision at that scale). This
+ larger than <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Integer.html?is-external=true#MAX_VALUE" title="class or interface in java.lang" class="externalLink"><code>Integer.MAX_VALUE</code></a>, because those floats themselves will lose precision at that scale). This
  is closely related to <a href="#sway(float)"><code>sway(float)</code></a>, but the shape of the output when graphed is almost identical to
- sin(). The difference between the result of this method and <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Math.html?is-external=true#sin(double)" title="class or interface in java.lang" class="externalLink"><code>Math.sin(double)</code></a> should be under 0.0011 at
+ sin(). The difference between the result of this method and <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Math.html?is-external=true#sin(double)" title="class or interface in java.lang" class="externalLink"><code>Math.sin(double)</code></a> should be under 0.0011 at
  all points between -pi and pi, with an average difference of about 0.0005; not all points have been checked for
  potentially higher errors, though.
  <br>
@@ -1746,15 +1746,15 @@ int&nbsp;start2)</span></div>
 <section class="detail">
 <h3><a id="cos(float)">cos</a></h3>
 <div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.909">cos</a></span>&#8203;(<span class="arguments">float&nbsp;radians)</span></div>
-<div class="block">A fairly-close approximation of <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Math.html?is-external=true#cos(double)" title="class or interface in java.lang" class="externalLink"><code>Math.cos(double)</code></a> that can be significantly faster (between 8x and 80x
+<div class="block">A fairly-close approximation of <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Math.html?is-external=true#cos(double)" title="class or interface in java.lang" class="externalLink"><code>Math.cos(double)</code></a> that can be significantly faster (between 8x and 80x
  faster cos() calls in benchmarking, and both takes and returns floats; if you have access to libGDX you should
  consider its more-precise and sometimes-faster MathUtils.cos() method. Because this method doesn't rely on a
  lookup table, where libGDX's MathUtils does, applications that have a bottleneck on memory may perform better
  with this method than with MathUtils. Takes the same arguments Math.cos() does, so one angle in radians,
  which may technically be any float (but this will lose precision on fairly large floats, such as those that are
- larger than <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Integer.html?is-external=true#MAX_VALUE" title="class or interface in java.lang" class="externalLink"><code>Integer.MAX_VALUE</code></a>, because those floats themselves will lose precision at that scale). This
+ larger than <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Integer.html?is-external=true#MAX_VALUE" title="class or interface in java.lang" class="externalLink"><code>Integer.MAX_VALUE</code></a>, because those floats themselves will lose precision at that scale). This
  is closely related to <a href="#sway(float)"><code>sway(float)</code></a>, but the shape of the output when graphed is almost identical to
- cos(). The difference between the result of this method and <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Math.html?is-external=true#cos(double)" title="class or interface in java.lang" class="externalLink"><code>Math.cos(double)</code></a> should be under 0.0011 at
+ cos(). The difference between the result of this method and <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Math.html?is-external=true#cos(double)" title="class or interface in java.lang" class="externalLink"><code>Math.cos(double)</code></a> should be under 0.0011 at
  all points between -pi and pi, with an average difference of about 0.0005; not all points have been checked for
  potentially higher errors, though.
  <br>
@@ -1782,15 +1782,15 @@ int&nbsp;start2)</span></div>
 <section class="detail">
 <h3><a id="sinDegrees(float)">sinDegrees</a></h3>
 <div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.945">sinDegrees</a></span>&#8203;(<span class="arguments">float&nbsp;degrees)</span></div>
-<div class="block">A fairly-close approximation of <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Math.html?is-external=true#sin(double)" title="class or interface in java.lang" class="externalLink"><code>Math.sin(double)</code></a> that can be significantly faster (between 8x and 80x
+<div class="block">A fairly-close approximation of <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Math.html?is-external=true#sin(double)" title="class or interface in java.lang" class="externalLink"><code>Math.sin(double)</code></a> that can be significantly faster (between 8x and 80x
  faster sin() calls in benchmarking, and both takes and returns floats; if you have access to libGDX, you should
  consider its more-precise and sometimes-faster MathUtils.sinDeg() method. Because this method doesn't rely on a
  lookup table, where libGDX's MathUtils does, applications that have a bottleneck on memory may perform better
  with this method than with MathUtils. Takes one angle in degrees,
  which may technically be any float (but this will lose precision on fairly large floats, such as those that are
- larger than <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Integer.html?is-external=true#MAX_VALUE" title="class or interface in java.lang" class="externalLink"><code>Integer.MAX_VALUE</code></a>, because those floats themselves will lose precision at that scale). This
+ larger than <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Integer.html?is-external=true#MAX_VALUE" title="class or interface in java.lang" class="externalLink"><code>Integer.MAX_VALUE</code></a>, because those floats themselves will lose precision at that scale). This
  is closely related to <a href="#sway(float)"><code>sway(float)</code></a>, but the shape of the output when graphed is almost identical to
- sin(). The difference between the result of this method and <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Math.html?is-external=true#sin(double)" title="class or interface in java.lang" class="externalLink"><code>Math.sin(double)</code></a> should be under 0.0011 at
+ sin(). The difference between the result of this method and <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Math.html?is-external=true#sin(double)" title="class or interface in java.lang" class="externalLink"><code>Math.sin(double)</code></a> should be under 0.0011 at
  all points between -360 and 360, with an average difference of about 0.0005; not all points have been checked for
  potentially higher errors, though.
  <br>
@@ -1818,15 +1818,15 @@ int&nbsp;start2)</span></div>
 <section class="detail">
 <h3><a id="cosDegrees(float)">cosDegrees</a></h3>
 <div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.982">cosDegrees</a></span>&#8203;(<span class="arguments">float&nbsp;degrees)</span></div>
-<div class="block">A fairly-close approximation of <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Math.html?is-external=true#cos(double)" title="class or interface in java.lang" class="externalLink"><code>Math.cos(double)</code></a> that can be significantly faster (between 8x and 80x
+<div class="block">A fairly-close approximation of <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Math.html?is-external=true#cos(double)" title="class or interface in java.lang" class="externalLink"><code>Math.cos(double)</code></a> that can be significantly faster (between 8x and 80x
  faster cos() calls in benchmarking, and both takes and returns floats; if you have access to libGDX, you should
  consider its more-precise and sometimes-faster MathUtils.cosDeg() method. Because this method doesn't rely on a
  lookup table, where libGDX's MathUtils does, applications that have a bottleneck on memory may perform better
  with this method than with MathUtils. Takes one angle in degrees,
  which may technically be any float (but this will lose precision on fairly large floats, such as those that are
- larger than <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Integer.html?is-external=true#MAX_VALUE" title="class or interface in java.lang" class="externalLink"><code>Integer.MAX_VALUE</code></a>, because those floats themselves will lose precision at that scale). This
+ larger than <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Integer.html?is-external=true#MAX_VALUE" title="class or interface in java.lang" class="externalLink"><code>Integer.MAX_VALUE</code></a>, because those floats themselves will lose precision at that scale). This
  is closely related to <a href="#sway(float)"><code>sway(float)</code></a>, but the shape of the output when graphed is almost identical to
- cos(). The difference between the result of this method and <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Math.html?is-external=true#cos(double)" title="class or interface in java.lang" class="externalLink"><code>Math.cos(double)</code></a> should be under 0.0011 at
+ cos(). The difference between the result of this method and <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Math.html?is-external=true#cos(double)" title="class or interface in java.lang" class="externalLink"><code>Math.cos(double)</code></a> should be under 0.0011 at
  all points between -360 and 360, with an average difference of about 0.0005; not all points have been checked for
  potentially higher errors, though.
  <br>
@@ -1854,7 +1854,7 @@ int&nbsp;start2)</span></div>
 <section class="detail">
 <h3><a id="sin_(double)">sin_</a></h3>
 <div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.1013">sin_</a></span>&#8203;(<span class="arguments">double&nbsp;turns)</span></div>
-<div class="block">A variation on <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Math.html?is-external=true#sin(double)" title="class or interface in java.lang" class="externalLink"><code>Math.sin(double)</code></a> that takes its input as a fraction of a turn instead of in radians; one
+<div class="block">A variation on <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Math.html?is-external=true#sin(double)" title="class or interface in java.lang" class="externalLink"><code>Math.sin(double)</code></a> that takes its input as a fraction of a turn instead of in radians; one
  turn is equal to 360 degrees or two*PI radians. This can be useful as a building block for other measurements;
  to make a sine method that takes its input in grad (with 400 grad equal to 360 degrees), you would just divide
  the grad value by 400.0 (or multiply it by 0.0025) and pass it to this method. Similarly for binary degrees, also
@@ -1884,7 +1884,7 @@ int&nbsp;start2)</span></div>
 <section class="detail">
 <h3><a id="cos_(double)">cos_</a></h3>
 <div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.1044">cos_</a></span>&#8203;(<span class="arguments">double&nbsp;turns)</span></div>
-<div class="block">A variation on <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Math.html?is-external=true#cos(double)" title="class or interface in java.lang" class="externalLink"><code>Math.cos(double)</code></a> that takes its input as a fraction of a turn instead of in radians; one
+<div class="block">A variation on <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Math.html?is-external=true#cos(double)" title="class or interface in java.lang" class="externalLink"><code>Math.cos(double)</code></a> that takes its input as a fraction of a turn instead of in radians; one
  turn is equal to 360 degrees or two*PI radians. This can be useful as a building block for other measurements;
  to make a cosine method that takes its input in grad (with 400 grad equal to 360 degrees), you would just divide
  the grad value by 400.0 (or multiply it by 0.0025) and pass it to this method. Similarly for binary degrees, also
@@ -1914,7 +1914,7 @@ int&nbsp;start2)</span></div>
 <section class="detail">
 <h3><a id="sin_(float)">sin_</a></h3>
 <div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.1076">sin_</a></span>&#8203;(<span class="arguments">float&nbsp;turns)</span></div>
-<div class="block">A variation on <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Math.html?is-external=true#sin(double)" title="class or interface in java.lang" class="externalLink"><code>Math.sin(double)</code></a> that takes its input as a fraction of a turn instead of in radians (it
+<div class="block">A variation on <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Math.html?is-external=true#sin(double)" title="class or interface in java.lang" class="externalLink"><code>Math.sin(double)</code></a> that takes its input as a fraction of a turn instead of in radians (it
  also takes and returns a float); one turn is equal to 360 degrees or two*PI radians. This can be useful as a
  building block for other measurements; to make a sine method that takes its input in grad (with 400 grad equal to
  360 degrees), you would just divide the grad value by 400.0 (or multiply it by 0.0025) and pass it to this
@@ -1945,7 +1945,7 @@ int&nbsp;start2)</span></div>
 <section class="detail">
 <h3><a id="cos_(float)">cos_</a></h3>
 <div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.1108">cos_</a></span>&#8203;(<span class="arguments">float&nbsp;turns)</span></div>
-<div class="block">A variation on <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Math.html?is-external=true#cos(double)" title="class or interface in java.lang" class="externalLink"><code>Math.cos(double)</code></a> that takes its input as a fraction of a turn instead of in radians (it
+<div class="block">A variation on <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Math.html?is-external=true#cos(double)" title="class or interface in java.lang" class="externalLink"><code>Math.cos(double)</code></a> that takes its input as a fraction of a turn instead of in radians (it
  also takes and returns a float); one turn is equal to 360 degrees or two*PI radians. This can be useful as a
  building block for other measurements; to make a cosine method that takes its input in grad (with 400 grad equal
  to 360 degrees), you would just divide the grad value by 400.0 (or multiply it by 0.0025) and pass it to this
@@ -1980,7 +1980,7 @@ double&nbsp;x)</span></div>
 <div class="block">Close approximation of the frequently-used trigonometric method atan2, with higher precision than LibGDX's atan2
  approximation. Maximum error is below 0.001 radians.
  Takes y and x (in that unusual order) as doubles, and returns the angle from the origin to that point in radians.
- It is about 5 times faster than <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Math.html?is-external=true#atan2(double,double)" title="class or interface in java.lang" class="externalLink"><code>Math.atan2(double, double)</code></a> (roughly 17 ns instead of roughly 88 ns for
+ It is about 5 times faster than <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Math.html?is-external=true#atan2(double,double)" title="class or interface in java.lang" class="externalLink"><code>Math.atan2(double, double)</code></a> (roughly 17 ns instead of roughly 88 ns for
  Math, though the computer was under some load during testing). It is almost identical in speed to LibGDX'
  MathUtils approximation of the same method; MathUtils seems to have worse average error, though.
  Credit to StackExchange user njuffa, who gave
@@ -2005,7 +2005,7 @@ float&nbsp;x)</span></div>
 <div class="block">Close approximation of the frequently-used trigonometric method atan2, with higher precision than LibGDX's atan2
  approximation. Maximum error is below 0.001 radians.
  Takes y and x (in that unusual order) as floats, and returns the angle from the origin to that point in radians.
- It is about 5 times faster than <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Math.html?is-external=true#atan2(double,double)" title="class or interface in java.lang" class="externalLink"><code>Math.atan2(double, double)</code></a> (roughly 17 ns instead of roughly 88 ns for
+ It is about 5 times faster than <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Math.html?is-external=true#atan2(double,double)" title="class or interface in java.lang" class="externalLink"><code>Math.atan2(double, double)</code></a> (roughly 17 ns instead of roughly 88 ns for
  Math, though the computer was under some load during testing). It is almost identical in speed to LibGDX'
  MathUtils approximation of the same method; MathUtils seems to have worse average error, though.
  Credit to StackExchange user njuffa, who gave
@@ -2076,7 +2076,7 @@ double&nbsp;x)</span></div>
 <div class="block">Close approximation of the frequently-used trigonometric method atan2, with higher precision than LibGDX's atan2
  approximation, and giving a result in degrees from -180 to 180. Maximum error is below 0.1 degrees.
  Takes y and x (in that unusual order) as doubles, and returns the angle from the origin to that point in degrees.
- It is about 5 times faster than <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Math.html?is-external=true#atan2(double,double)" title="class or interface in java.lang" class="externalLink"><code>Math.atan2(double, double)</code></a> (roughly 17 ns instead of roughly 88 ns for
+ It is about 5 times faster than <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Math.html?is-external=true#atan2(double,double)" title="class or interface in java.lang" class="externalLink"><code>Math.atan2(double, double)</code></a> (roughly 17 ns instead of roughly 88 ns for
  Math, though the computer was under some load during testing). It is almost identical in speed to LibGDX'
  MathUtils approximation after converting to degrees; MathUtils seems to have worse average error, though.
  Credit to StackExchange user njuffa, who gave
@@ -2101,7 +2101,7 @@ float&nbsp;x)</span></div>
 <div class="block">Close approximation of the frequently-used trigonometric method atan2, with higher precision than LibGDX's atan2
  approximation, and giving a result in degrees from -180 to 180. Maximum error is below 0.1 degrees.
  Takes y and x (in that unusual order) as floats, and returns the angle from the origin to that point in degrees.
- It is about 5 times faster than <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Math.html?is-external=true#atan2(double,double)" title="class or interface in java.lang" class="externalLink"><code>Math.atan2(double, double)</code></a> (roughly 17 ns instead of roughly 88 ns for
+ It is about 5 times faster than <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Math.html?is-external=true#atan2(double,double)" title="class or interface in java.lang" class="externalLink"><code>Math.atan2(double, double)</code></a> (roughly 17 ns instead of roughly 88 ns for
  Math, though the computer was under some load during testing). It is almost identical in speed to LibGDX'
  MathUtils approximation after converting to degrees; MathUtils seems to have worse average error, though.
  Credit to StackExchange user njuffa, who gave
@@ -2126,14 +2126,14 @@ double&nbsp;x)</span></div>
 <div class="block">Close approximation of the frequently-used trigonometric method atan2, with higher precision than LibGDX's atan2
  approximation, and giving a result in degrees from 0 to 360. Maximum error is below 0.1 degrees.
  Takes y and x (in that unusual order) as doubles, and returns the angle from the origin to that point in degrees.
- It is about 5 times faster than <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Math.html?is-external=true#atan2(double,double)" title="class or interface in java.lang" class="externalLink"><code>Math.atan2(double, double)</code></a> (roughly 17 ns instead of roughly 88 ns for
+ It is about 5 times faster than <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Math.html?is-external=true#atan2(double,double)" title="class or interface in java.lang" class="externalLink"><code>Math.atan2(double, double)</code></a> (roughly 17 ns instead of roughly 88 ns for
  Math, though the computer was under some load during testing). It is almost identical in speed to LibGDX'
  MathUtils approximation after converting to degrees; MathUtils seems to have worse average error, though.
  Credit to StackExchange user njuffa, who gave
  <a href="https://math.stackexchange.com/a/1105038">this useful answer</a>.
  <br>
  See also <a href="#atan2Degrees(double,double)"><code>atan2Degrees(double, double)</code></a>, which is just like this but returns an angle from -180 to 180,
- matching <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Math.html?is-external=true#atan2(double,double)" title="class or interface in java.lang" class="externalLink"><code>Math.atan2(double, double)</code></a>'s convention.</div>
+ matching <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Math.html?is-external=true#atan2(double,double)" title="class or interface in java.lang" class="externalLink"><code>Math.atan2(double, double)</code></a>'s convention.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>y</code> - y-component of the point to find the angle towards; note the parameter order is unusual by convention</dd>
@@ -2151,14 +2151,14 @@ float&nbsp;x)</span></div>
 <div class="block">Close approximation of the frequently-used trigonometric method atan2, with higher precision than LibGDX's atan2
  approximation, and giving a result in degrees from 0 to 360. Maximum error is below 0.1 degrees.
  Takes y and x (in that unusual order) as floats, and returns the angle from the origin to that point in degrees.
- It is about 5 times faster than <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Math.html?is-external=true#atan2(double,double)" title="class or interface in java.lang" class="externalLink"><code>Math.atan2(double, double)</code></a> (roughly 17 ns instead of roughly 88 ns for
+ It is about 5 times faster than <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Math.html?is-external=true#atan2(double,double)" title="class or interface in java.lang" class="externalLink"><code>Math.atan2(double, double)</code></a> (roughly 17 ns instead of roughly 88 ns for
  Math, though the computer was under some load during testing). It is almost identical in speed to LibGDX'
  MathUtils approximation after converting to degrees; MathUtils seems to have worse average error, though.
  Credit to StackExchange user njuffa, who gave
  <a href="https://math.stackexchange.com/a/1105038">this useful answer</a>.
  <br>
  See also <a href="#atan2Degrees(float,float)"><code>atan2Degrees(float, float)</code></a>, which is just like this but returns an angle from -180 to 180,
- matching <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Math.html?is-external=true#atan2(double,double)" title="class or interface in java.lang" class="externalLink"><code>Math.atan2(double, double)</code></a>'s convention.</div>
+ matching <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Math.html?is-external=true#atan2(double,double)" title="class or interface in java.lang" class="externalLink"><code>Math.atan2(double, double)</code></a>'s convention.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>y</code> - y-component of the point to find the angle towards; note the parameter order is unusual by convention</dd>
@@ -2173,7 +2173,7 @@ float&nbsp;x)</span></div>
 <h3><a id="asin(float)">asin</a></h3>
 <div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.1424">asin</a></span>&#8203;(<span class="arguments">float&nbsp;n)</span></div>
 <div class="block">Arc sine approximation with very low error, based on a simplified version of <a href="#atan2(double,double)"><code>atan2(double, double)</code></a>.
- This method is usually much faster than <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Math.html?is-external=true#asin(double)" title="class or interface in java.lang" class="externalLink"><code>Math.asin(double)</code></a>, but is somewhat less precise than Math's
+ This method is usually much faster than <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Math.html?is-external=true#asin(double)" title="class or interface in java.lang" class="externalLink"><code>Math.asin(double)</code></a>, but is somewhat less precise than Math's
  implementation). It is currently more precise than libGDX's approximation in their MathUtils, but this isn't
  quite as fast; the difference in precision is hard to spot but can be noticeable in some usage.</div>
 <dl>
@@ -2189,7 +2189,7 @@ float&nbsp;x)</span></div>
 <h3><a id="asin(double)">asin</a></h3>
 <div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.1461">asin</a></span>&#8203;(<span class="arguments">double&nbsp;n)</span></div>
 <div class="block">Arc sine approximation with very low error, based on a simplified version of <a href="#atan2(float,float)"><code>atan2(float, float)</code></a>.
- This method is usually much faster than <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Math.html?is-external=true#asin(double)" title="class or interface in java.lang" class="externalLink"><code>Math.asin(double)</code></a>, but is somewhat less precise than Math's
+ This method is usually much faster than <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Math.html?is-external=true#asin(double)" title="class or interface in java.lang" class="externalLink"><code>Math.asin(double)</code></a>, but is somewhat less precise than Math's
  implementation). It is currently more precise than libGDX's approximation in their MathUtils, but this isn't
  quite as fast; the difference in precision is hard to spot but can be noticeable in some usage.</div>
 <dl>
@@ -2205,7 +2205,7 @@ float&nbsp;x)</span></div>
 <h3><a id="acos(double)">acos</a></h3>
 <div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.1484">acos</a></span>&#8203;(<span class="arguments">double&nbsp;n)</span></div>
 <div class="block">Arc cosine approximation with very low error, based on a simplified version of <a href="#atan2(double,double)"><code>atan2(double, double)</code></a>.
- This method is usually much faster than <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Math.html?is-external=true#acos(double)" title="class or interface in java.lang" class="externalLink"><code>Math.acos(double)</code></a>, but is somewhat less precise than Math's
+ This method is usually much faster than <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Math.html?is-external=true#acos(double)" title="class or interface in java.lang" class="externalLink"><code>Math.acos(double)</code></a>, but is somewhat less precise than Math's
  implementation). It is currently more precise than libGDX's approximation in their MathUtils, but this isn't
  quite as fast; the difference in precision is hard to spot but can be noticeable in some usage.</div>
 <dl>
@@ -2221,7 +2221,7 @@ float&nbsp;x)</span></div>
 <h3><a id="acos(float)">acos</a></h3>
 <div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.1522">acos</a></span>&#8203;(<span class="arguments">float&nbsp;n)</span></div>
 <div class="block">Arc cosine approximation with very low error, based on a simplified version of <a href="#atan2(float,float)"><code>atan2(float, float)</code></a>.
- This method is usually much faster than <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Math.html?is-external=true#acos(double)" title="class or interface in java.lang" class="externalLink"><code>Math.acos(double)</code></a>, but is somewhat less precise than Math's
+ This method is usually much faster than <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Math.html?is-external=true#acos(double)" title="class or interface in java.lang" class="externalLink"><code>Math.acos(double)</code></a>, but is somewhat less precise than Math's
  implementation). It is currently more precise than libGDX's approximation in their MathUtils, but this isn't
  quite as fast; the difference in precision is hard to spot but can be noticeable in some usage.</div>
 <dl>

@@ -70,7 +70,7 @@
 <span class="sourceLineNo">058</span><a id="line.58">     * @param points The point set to be triangulated</a>
 <span class="sourceLineNo">059</span><a id="line.59">     */</a>
 <span class="sourceLineNo">060</span><a id="line.60">    public DelaunayTriangulator(Collection&lt;CoordDouble&gt; points) {</a>
-<span class="sourceLineNo">061</span><a id="line.61">        this.points = points.toArray(new CoordDouble[points.size()]);</a>
+<span class="sourceLineNo">061</span><a id="line.61">        this.points = points.toArray(new CoordDouble[0]);</a>
 <span class="sourceLineNo">062</span><a id="line.62">        this.triangleSoup = new ArrayList&lt;&gt;(points.size());</a>
 <span class="sourceLineNo">063</span><a id="line.63">    }</a>
 <span class="sourceLineNo">064</span><a id="line.64">    /**</a>
@@ -553,65 +553,61 @@
 <span class="sourceLineNo">541</span><a id="line.541">         *         triangle</a>
 <span class="sourceLineNo">542</span><a id="line.542">         */</a>
 <span class="sourceLineNo">543</span><a id="line.543">        public boolean hasVertex(CoordDouble vertex) {</a>
-<span class="sourceLineNo">544</span><a id="line.544">            if (a == vertex || b == vertex || c == vertex) {</a>
-<span class="sourceLineNo">545</span><a id="line.545">                return true;</a>
-<span class="sourceLineNo">546</span><a id="line.546">            }</a>
-<span class="sourceLineNo">547</span><a id="line.547"></a>
-<span class="sourceLineNo">548</span><a id="line.548">            return false;</a>
-<span class="sourceLineNo">549</span><a id="line.549">        }</a>
-<span class="sourceLineNo">550</span><a id="line.550"></a>
-<span class="sourceLineNo">551</span><a id="line.551">        /**</a>
-<span class="sourceLineNo">552</span><a id="line.552">         * Computes the closest point on the given edge to the specified point.</a>
-<span class="sourceLineNo">553</span><a id="line.553">         *</a>
-<span class="sourceLineNo">554</span><a id="line.554">         * @param edge</a>
-<span class="sourceLineNo">555</span><a id="line.555">         *            The edge on which we search the closest point to the specified</a>
-<span class="sourceLineNo">556</span><a id="line.556">         *            point</a>
-<span class="sourceLineNo">557</span><a id="line.557">         * @param point</a>
-<span class="sourceLineNo">558</span><a id="line.558">         *            The point to which we search the closest point on the edge</a>
-<span class="sourceLineNo">559</span><a id="line.559">         * @return The closest point on the given edge to the specified point</a>
-<span class="sourceLineNo">560</span><a id="line.560">         */</a>
-<span class="sourceLineNo">561</span><a id="line.561">        CoordDouble computeClosestPoint(Edge edge, CoordDouble point) {</a>
-<span class="sourceLineNo">562</span><a id="line.562">            //CoordDouble ab = edge.b.sub(edge.a);</a>
-<span class="sourceLineNo">563</span><a id="line.563">            double abx = edge.b.x = edge.a.x;</a>
-<span class="sourceLineNo">564</span><a id="line.564">            double aby = edge.b.y = edge.a.y;</a>
-<span class="sourceLineNo">565</span><a id="line.565">            double t = ((point.x - edge.a.x) * abx + (point.y - edge.a.y) * aby) / (abx * abx + aby * aby);</a>
-<span class="sourceLineNo">566</span><a id="line.566">            //double t = point.sub(edge.a).dot(ab) / ab.dot(ab);</a>
-<span class="sourceLineNo">567</span><a id="line.567"></a>
-<span class="sourceLineNo">568</span><a id="line.568">            if (t &lt; 0.0d) {</a>
-<span class="sourceLineNo">569</span><a id="line.569">                t = 0.0d;</a>
-<span class="sourceLineNo">570</span><a id="line.570">            } else if (t &gt; 1.0d) {</a>
-<span class="sourceLineNo">571</span><a id="line.571">                t = 1.0d;</a>
-<span class="sourceLineNo">572</span><a id="line.572">            }</a>
-<span class="sourceLineNo">573</span><a id="line.573">            return new CoordDouble(edge.a.x + abx * t, edge.a.y + aby * t);</a>
-<span class="sourceLineNo">574</span><a id="line.574">//            return edge.a.add(ab.mult(t));</a>
-<span class="sourceLineNo">575</span><a id="line.575">        }</a>
-<span class="sourceLineNo">576</span><a id="line.576"></a>
-<span class="sourceLineNo">577</span><a id="line.577">        /**</a>
-<span class="sourceLineNo">578</span><a id="line.578">         * Tests if the two arguments have the same sign.</a>
-<span class="sourceLineNo">579</span><a id="line.579">         *</a>
-<span class="sourceLineNo">580</span><a id="line.580">         * @param a</a>
-<span class="sourceLineNo">581</span><a id="line.581">         *            The first floating point argument</a>
-<span class="sourceLineNo">582</span><a id="line.582">         * @param b</a>
-<span class="sourceLineNo">583</span><a id="line.583">         *            The second floating point argument</a>
-<span class="sourceLineNo">584</span><a id="line.584">         * @return Returns true iff both arguments have the same sign</a>
-<span class="sourceLineNo">585</span><a id="line.585">         */</a>
-<span class="sourceLineNo">586</span><a id="line.586">        private boolean hasSameSign(double a, double b) {</a>
-<span class="sourceLineNo">587</span><a id="line.587">            return (a == 0.0 &amp;&amp; b == 0.0) || ((a &gt; 0.0) == (b &gt; 0.0));</a>
-<span class="sourceLineNo">588</span><a id="line.588">        }</a>
-<span class="sourceLineNo">589</span><a id="line.589"></a>
-<span class="sourceLineNo">590</span><a id="line.590">        @Override</a>
-<span class="sourceLineNo">591</span><a id="line.591">        public String toString() {</a>
-<span class="sourceLineNo">592</span><a id="line.592">            return "Triangle[" + a + ", " + b + ", " + c + "]";</a>
-<span class="sourceLineNo">593</span><a id="line.593">        }</a>
-<span class="sourceLineNo">594</span><a id="line.594">    }</a>
-<span class="sourceLineNo">595</span><a id="line.595">    private static final Comparator&lt;Double&gt; doubleComparator = new Comparator&lt;Double&gt;() {</a>
-<span class="sourceLineNo">596</span><a id="line.596">        @Override</a>
-<span class="sourceLineNo">597</span><a id="line.597">        public int compare(Double o1, Double o2) {</a>
-<span class="sourceLineNo">598</span><a id="line.598">            return o1.compareTo(o2);</a>
-<span class="sourceLineNo">599</span><a id="line.599">        }</a>
-<span class="sourceLineNo">600</span><a id="line.600">    };</a>
-<span class="sourceLineNo">601</span><a id="line.601"></a>
-<span class="sourceLineNo">602</span><a id="line.602">}</a>
+<span class="sourceLineNo">544</span><a id="line.544">                        return a == vertex || b == vertex || c == vertex;</a>
+<span class="sourceLineNo">545</span><a id="line.545">                }</a>
+<span class="sourceLineNo">546</span><a id="line.546"></a>
+<span class="sourceLineNo">547</span><a id="line.547">        /**</a>
+<span class="sourceLineNo">548</span><a id="line.548">         * Computes the closest point on the given edge to the specified point.</a>
+<span class="sourceLineNo">549</span><a id="line.549">         *</a>
+<span class="sourceLineNo">550</span><a id="line.550">         * @param edge</a>
+<span class="sourceLineNo">551</span><a id="line.551">         *            The edge on which we search the closest point to the specified</a>
+<span class="sourceLineNo">552</span><a id="line.552">         *            point</a>
+<span class="sourceLineNo">553</span><a id="line.553">         * @param point</a>
+<span class="sourceLineNo">554</span><a id="line.554">         *            The point to which we search the closest point on the edge</a>
+<span class="sourceLineNo">555</span><a id="line.555">         * @return The closest point on the given edge to the specified point</a>
+<span class="sourceLineNo">556</span><a id="line.556">         */</a>
+<span class="sourceLineNo">557</span><a id="line.557">        CoordDouble computeClosestPoint(Edge edge, CoordDouble point) {</a>
+<span class="sourceLineNo">558</span><a id="line.558">            //CoordDouble ab = edge.b.sub(edge.a);</a>
+<span class="sourceLineNo">559</span><a id="line.559">            double abx = edge.b.x = edge.a.x;</a>
+<span class="sourceLineNo">560</span><a id="line.560">            double aby = edge.b.y = edge.a.y;</a>
+<span class="sourceLineNo">561</span><a id="line.561">            double t = ((point.x - edge.a.x) * abx + (point.y - edge.a.y) * aby) / (abx * abx + aby * aby);</a>
+<span class="sourceLineNo">562</span><a id="line.562">            //double t = point.sub(edge.a).dot(ab) / ab.dot(ab);</a>
+<span class="sourceLineNo">563</span><a id="line.563"></a>
+<span class="sourceLineNo">564</span><a id="line.564">            if (t &lt; 0.0d) {</a>
+<span class="sourceLineNo">565</span><a id="line.565">                t = 0.0d;</a>
+<span class="sourceLineNo">566</span><a id="line.566">            } else if (t &gt; 1.0d) {</a>
+<span class="sourceLineNo">567</span><a id="line.567">                t = 1.0d;</a>
+<span class="sourceLineNo">568</span><a id="line.568">            }</a>
+<span class="sourceLineNo">569</span><a id="line.569">            return new CoordDouble(edge.a.x + abx * t, edge.a.y + aby * t);</a>
+<span class="sourceLineNo">570</span><a id="line.570">//            return edge.a.add(ab.mult(t));</a>
+<span class="sourceLineNo">571</span><a id="line.571">        }</a>
+<span class="sourceLineNo">572</span><a id="line.572"></a>
+<span class="sourceLineNo">573</span><a id="line.573">        /**</a>
+<span class="sourceLineNo">574</span><a id="line.574">         * Tests if the two arguments have the same sign.</a>
+<span class="sourceLineNo">575</span><a id="line.575">         *</a>
+<span class="sourceLineNo">576</span><a id="line.576">         * @param a</a>
+<span class="sourceLineNo">577</span><a id="line.577">         *            The first floating point argument</a>
+<span class="sourceLineNo">578</span><a id="line.578">         * @param b</a>
+<span class="sourceLineNo">579</span><a id="line.579">         *            The second floating point argument</a>
+<span class="sourceLineNo">580</span><a id="line.580">         * @return Returns true iff both arguments have the same sign</a>
+<span class="sourceLineNo">581</span><a id="line.581">         */</a>
+<span class="sourceLineNo">582</span><a id="line.582">        private boolean hasSameSign(double a, double b) {</a>
+<span class="sourceLineNo">583</span><a id="line.583">            return (a == 0.0 &amp;&amp; b == 0.0) || ((a &gt; 0.0) == (b &gt; 0.0));</a>
+<span class="sourceLineNo">584</span><a id="line.584">        }</a>
+<span class="sourceLineNo">585</span><a id="line.585"></a>
+<span class="sourceLineNo">586</span><a id="line.586">        @Override</a>
+<span class="sourceLineNo">587</span><a id="line.587">        public String toString() {</a>
+<span class="sourceLineNo">588</span><a id="line.588">            return "Triangle[" + a + ", " + b + ", " + c + "]";</a>
+<span class="sourceLineNo">589</span><a id="line.589">        }</a>
+<span class="sourceLineNo">590</span><a id="line.590">    }</a>
+<span class="sourceLineNo">591</span><a id="line.591">    private static final Comparator&lt;Double&gt; doubleComparator = new Comparator&lt;Double&gt;() {</a>
+<span class="sourceLineNo">592</span><a id="line.592">        @Override</a>
+<span class="sourceLineNo">593</span><a id="line.593">        public int compare(Double o1, Double o2) {</a>
+<span class="sourceLineNo">594</span><a id="line.594">            return o1.compareTo(o2);</a>
+<span class="sourceLineNo">595</span><a id="line.595">        }</a>
+<span class="sourceLineNo">596</span><a id="line.596">    };</a>
+<span class="sourceLineNo">597</span><a id="line.597"></a>
+<span class="sourceLineNo">598</span><a id="line.598">}</a>
 
 
 

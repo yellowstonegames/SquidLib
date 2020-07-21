@@ -87,18 +87,18 @@ loadScripts(document, 'script');</script>
 <h1 title="Class MultiArrangement" class="title">Class MultiArrangement&lt;K&gt;</h1>
 </div>
 <div class="contentContainer">
-<div class="inheritance" title="Inheritance Tree"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">java.lang.Object</a>
+<div class="inheritance" title="Inheritance Tree"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">java.lang.Object</a>
 <div class="inheritance">squidpony.squidmath.MultiArrangement&lt;K&gt;</div>
 </div>
 <section class="description">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink">Serializable</a></code>, <code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Cloneable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Cloneable</a></code>, <code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Iterable</a>&lt;K&gt;</code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink">Serializable</a></code>, <code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Cloneable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Cloneable</a></code>, <code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Iterable</a>&lt;K&gt;</code></dd>
 </dl>
 <hr>
 <pre>public class <a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.61">MultiArrangement</a>&lt;K&gt;
-extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>
-implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Iterable</a>&lt;K&gt;, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink">Serializable</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Cloneable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Cloneable</a></pre>
+extends <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>
+implements <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Iterable</a>&lt;K&gt;, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink">Serializable</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Cloneable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Cloneable</a></pre>
 <div class="block">A bi-directional mapping of non-unique objects to positions in an ordering (which this generates), and vice versa.
  This class is very similar to <a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/Arrangement.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink"><code>Arrangement</code></a>, but is bag-like instead of set-like, allowing repeats of the same
  key with different positions in the ordering. Useful for various indirection techniques where you want to be able to
@@ -121,7 +121,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base
  class' <a href="#reorder(int...)"><code>reorder(int...)</code></a> and <a href="#shuffle(squidpony.squidmath.IRNG)"><code>shuffle(IRNG)</code></a> methods, among other tools.
  </p>
  <p>This class implements the interface of a sorted map, so to allow easy access of the iteration order: for instance, you can get the first key in iteration order with <code>firstKey()</code> without
- having to create an iterator; however, this class partially violates the <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/SortedMap.html?is-external=true" title="class or interface in java.util" class="externalLink"><code>SortedMap</code></a> contract because all submap methods throw an exception and <a href="#comparator()"><code>comparator()</code></a> returns always
+ having to create an iterator; however, this class partially violates the <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/SortedMap.html?is-external=true" title="class or interface in java.util" class="externalLink"><code>SortedMap</code></a> contract because all submap methods throw an exception and <a href="#comparator()"><code>comparator()</code></a> returns always
  <code>null</code>.
  </p>
  <p>
@@ -388,13 +388,13 @@ float&nbsp;f,
 </td>
 </tr>
 <tr class="rowColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.util.Collection)">MultiArrangement</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a>&gt;&nbsp;keyColl)</code></th>
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.util.Collection)">MultiArrangement</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a>&gt;&nbsp;keyColl)</code></th>
 <td class="colLast">
 <div class="block">Creates a new Arrangement using the elements of an array.</div>
 </td>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.util.Collection,float)">MultiArrangement</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a>&gt;&nbsp;keyColl,
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.util.Collection,float)">MultiArrangement</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a>&gt;&nbsp;keyColl,
 float&nbsp;f)</code></th>
 <td class="colLast">
 <div class="block">Creates a new Arrangement using the given collection of keys.</div>
@@ -468,7 +468,7 @@ float&nbsp;f,
 </tr>
 <tr class="rowColor" id="i1">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addAll(java.util.Collection)">addAll</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;? extends <a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a>&gt;&nbsp;keyArray)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addAll(java.util.Collection)">addAll</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;? extends <a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a>&gt;&nbsp;keyArray)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor" id="i2">
@@ -478,12 +478,12 @@ float&nbsp;f,
 </tr>
 <tr class="rowColor" id="i3">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addAllIfAbsent(java.util.Collection)">addAllIfAbsent</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;? extends <a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a>&gt;&nbsp;keyArray)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addAllIfAbsent(java.util.Collection)">addAllIfAbsent</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;? extends <a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a>&gt;&nbsp;keyArray)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor" id="i4">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addAllIfAbsent(java.util.Map)">addAllIfAbsent</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Map.html?is-external=true" title="class or interface in java.util" class="externalLink">Map</a>&lt;? extends <a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a>,&#8203;? extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Integer.html?is-external=true" title="class or interface in java.lang" class="externalLink">Integer</a>&gt;&nbsp;m)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addAllIfAbsent(java.util.Map)">addAllIfAbsent</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Map.html?is-external=true" title="class or interface in java.util" class="externalLink">Map</a>&lt;? extends <a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a>,&#8203;? extends <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Integer.html?is-external=true" title="class or interface in java.lang" class="externalLink">Integer</a>&gt;&nbsp;m)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor" id="i5">
@@ -517,7 +517,7 @@ float&nbsp;f,
 <tr class="rowColor" id="i9">
 <td class="colFirst"><code>int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#append(squidpony.squidmath.IntVLA,java.lang.Object)">append</a></span>&#8203;(<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/IntVLA.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">IntVLA</a>&nbsp;container,
-<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;k)</code></th>
+<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;k)</code></th>
 <td class="colLast">
 <div class="block">Different from the typical get method; adds to the non-null IntVLA, container, filling with any positions
  associated with k in this MultiArrangement.</div>
@@ -544,13 +544,13 @@ float&nbsp;f)</code></th>
 </td>
 </tr>
 <tr class="rowColor" id="i13">
-<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Comparator.html?is-external=true" title="class or interface in java.util" class="externalLink">Comparator</a>&lt;? super <a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a>&gt;</code></td>
+<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Comparator.html?is-external=true" title="class or interface in java.util" class="externalLink">Comparator</a>&lt;? super <a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#comparator()">comparator</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor" id="i14">
 <td class="colFirst"><code>boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#containsKey(java.lang.Object)">containsKey</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;k)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#containsKey(java.lang.Object)">containsKey</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;k)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor" id="i15">
@@ -560,12 +560,12 @@ float&nbsp;f)</code></th>
 </tr>
 <tr class="altColor" id="i16">
 <td class="colFirst"><code>boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#containsValue(java.lang.Object)">containsValue</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;ov)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#containsValue(java.lang.Object)">containsValue</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;ov)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor" id="i17">
 <td class="colFirst"><code>boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#equals(java.lang.Object)">equals</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;o)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#equals(java.lang.Object)">equals</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;o)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor" id="i18">
@@ -596,7 +596,7 @@ int&nbsp;d)</code></th>
 <tr class="altColor" id="i22">
 <td class="colFirst"><code>int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#get(squidpony.squidmath.IntVLA,java.lang.Object)">get</a></span>&#8203;(<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/IntVLA.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">IntVLA</a>&nbsp;container,
-<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;k)</code></th>
+<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;k)</code></th>
 <td class="colLast">
 <div class="block">Different from the typical get method; clears the non-null IntVLA, container, and fills it with any positions
  associated with k in this MultiArrangement.</div>
@@ -604,7 +604,7 @@ int&nbsp;d)</code></th>
 </tr>
 <tr class="rowColor" id="i23">
 <td class="colFirst"><code>int[]</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getArray(java.util.Collection)">getArray</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;? extends <a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a>&gt;&nbsp;keys)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getArray(java.util.Collection)">getArray</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;? extends <a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a>&gt;&nbsp;keys)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor" id="i24">
@@ -621,7 +621,7 @@ int&nbsp;d)</code></th>
 </tr>
 <tr class="altColor" id="i26">
 <td class="colFirst"><code><a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/IntVLA.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">IntVLA</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getMany(java.lang.Iterable)">getMany</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Iterable</a>&lt;? extends <a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a>&gt;&nbsp;keys)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getMany(java.lang.Iterable)">getMany</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Iterable</a>&lt;? extends <a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a>&gt;&nbsp;keys)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor" id="i27">
@@ -632,7 +632,7 @@ int&nbsp;d)</code></th>
 </td>
 </tr>
 <tr class="altColor" id="i28">
-<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/SortedMap.html?is-external=true" title="class or interface in java.util" class="externalLink">SortedMap</a>&lt;<a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Integer.html?is-external=true" title="class or interface in java.lang" class="externalLink">Integer</a>&gt;</code></td>
+<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/SortedMap.html?is-external=true" title="class or interface in java.util" class="externalLink">SortedMap</a>&lt;<a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Integer.html?is-external=true" title="class or interface in java.lang" class="externalLink">Integer</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#headMap(K)">headMap</a></span>&#8203;(<a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a>&nbsp;to)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -642,7 +642,7 @@ int&nbsp;d)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor" id="i30">
-<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Iterator.html?is-external=true" title="class or interface in java.util" class="externalLink">Iterator</a>&lt;<a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a>&gt;</code></td>
+<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Iterator.html?is-external=true" title="class or interface in java.util" class="externalLink">Iterator</a>&lt;<a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#iterator()">iterator</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns an iterator over elements of type <code>T</code>.</div>
@@ -661,7 +661,7 @@ int&nbsp;d)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor" id="i33">
-<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a>&gt;</code></td>
+<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#keysAsArrayList()">keysAsArrayList</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -700,7 +700,7 @@ float&nbsp;f)</code></th>
 </tr>
 <tr class="rowColor" id="i39">
 <td class="colFirst"><code>protected int</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#positionOf(java.lang.Object)">positionOf</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;k)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#positionOf(java.lang.Object)">positionOf</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;k)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor" id="i40">
@@ -719,12 +719,12 @@ float&nbsp;f)</code></th>
 </tr>
 <tr class="altColor" id="i42">
 <td class="colFirst"><code>protected int</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#rem(java.lang.Object)">rem</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;k)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#rem(java.lang.Object)">rem</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;k)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor" id="i43">
 <td class="colFirst"><code>int</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#remove(java.lang.Object)">remove</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;o)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#remove(java.lang.Object)">remove</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;o)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor" id="i44">
@@ -744,7 +744,7 @@ float&nbsp;f)</code></th>
 </tr>
 <tr class="altColor" id="i46">
 <td class="colFirst"><code>int</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#removeInt(java.lang.Object)">removeInt</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;k)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#removeInt(java.lang.Object)">removeInt</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;k)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor" id="i47">
@@ -765,7 +765,7 @@ float&nbsp;f)</code></th>
 </tr>
 <tr class="rowColor" id="i49">
 <td class="colFirst"><code>boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#retainAll(java.util.Collection)">retainAll</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;?&gt;&nbsp;c)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#retainAll(java.util.Collection)">retainAll</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;?&gt;&nbsp;c)</code></th>
 <td class="colLast">
 <div class="block">Retains in this collection only elements from the given collection.</div>
 </td>
@@ -799,7 +799,7 @@ float&nbsp;f)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor" id="i54">
-<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/SortedMap.html?is-external=true" title="class or interface in java.util" class="externalLink">SortedMap</a>&lt;<a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Integer.html?is-external=true" title="class or interface in java.lang" class="externalLink">Integer</a>&gt;</code></td>
+<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/SortedMap.html?is-external=true" title="class or interface in java.util" class="externalLink">SortedMap</a>&lt;<a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Integer.html?is-external=true" title="class or interface in java.lang" class="externalLink">Integer</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#subMap(K,K)">subMap</a></span>&#8203;(<a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a>&nbsp;from,
 <a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a>&nbsp;to)</code></th>
 <td class="colLast">&nbsp;</td>
@@ -821,7 +821,7 @@ int&nbsp;right)</code></th>
 </td>
 </tr>
 <tr class="rowColor" id="i57">
-<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/SortedMap.html?is-external=true" title="class or interface in java.util" class="externalLink">SortedMap</a>&lt;<a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Integer.html?is-external=true" title="class or interface in java.lang" class="externalLink">Integer</a>&gt;</code></td>
+<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/SortedMap.html?is-external=true" title="class or interface in java.util" class="externalLink">SortedMap</a>&lt;<a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Integer.html?is-external=true" title="class or interface in java.lang" class="externalLink">Integer</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#tailMap(K)">tailMap</a></span>&#8203;(<a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a>&nbsp;from)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -833,7 +833,7 @@ int&nbsp;right)</code></th>
 </td>
 </tr>
 <tr class="rowColor" id="i59">
-<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
+<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#toString()">toString</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -852,7 +852,7 @@ int&nbsp;right)</code></th>
 </td>
 </tr>
 <tr class="altColor" id="i62">
-<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Integer.html?is-external=true" title="class or interface in java.lang" class="externalLink">Integer</a>&gt;</code></td>
+<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Integer.html?is-external=true" title="class or interface in java.lang" class="externalLink">Integer</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#values()">values</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -867,7 +867,7 @@ int&nbsp;right)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor" id="i65">
-<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Integer.html?is-external=true" title="class or interface in java.lang" class="externalLink">Integer</a>&gt;</code></td>
+<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Integer.html?is-external=true" title="class or interface in java.lang" class="externalLink">Integer</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#valuesAsList()">valuesAsList</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -876,15 +876,15 @@ int&nbsp;right)</code></th>
 </div>
 </div>
 <div class="inheritedList">
-<h3>Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></h3>
+<h3>Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></h3>
 <a id="methods.inherited.from.class.java.lang.Object">
 <!--   -->
-</a><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#finalize()" title="class or interface in java.lang" class="externalLink">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#getClass()" title="class or interface in java.lang" class="externalLink">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#notify()" title="class or interface in java.lang" class="externalLink">notify</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#notifyAll()" title="class or interface in java.lang" class="externalLink">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#wait()" title="class or interface in java.lang" class="externalLink">wait</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#wait(long)" title="class or interface in java.lang" class="externalLink">wait</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#wait(long,int)" title="class or interface in java.lang" class="externalLink">wait</a></code></div>
+</a><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#finalize()" title="class or interface in java.lang" class="externalLink">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#getClass()" title="class or interface in java.lang" class="externalLink">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#notify()" title="class or interface in java.lang" class="externalLink">notify</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#notifyAll()" title="class or interface in java.lang" class="externalLink">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#wait()" title="class or interface in java.lang" class="externalLink">wait</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#wait(long)" title="class or interface in java.lang" class="externalLink">wait</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#wait(long,int)" title="class or interface in java.lang" class="externalLink">wait</a></code></div>
 <div class="inheritedList">
-<h3>Methods inherited from interface&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Iterable</a></h3>
+<h3>Methods inherited from interface&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Iterable</a></h3>
 <a id="methods.inherited.from.class.java.lang.Iterable">
 <!--   -->
-</a><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Iterable.html?is-external=true#forEach(java.util.function.Consumer)" title="class or interface in java.lang" class="externalLink">forEach</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Iterable.html?is-external=true#spliterator()" title="class or interface in java.lang" class="externalLink">spliterator</a></code></div>
+</a><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Iterable.html?is-external=true#forEach(java.util.function.Consumer)" title="class or interface in java.lang" class="externalLink">forEach</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Iterable.html?is-external=true#spliterator()" title="class or interface in java.lang" class="externalLink">spliterator</a></code></div>
 </section>
 </li>
 </ul>
@@ -1111,27 +1111,27 @@ float&nbsp;f)</span></div>
 <dd><code>keyArray</code> - the array of keys of the new MultiArrangement.</dd>
 <dd><code>f</code> - the load factor.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink">IllegalArgumentException</a></code> - if <code>k</code> and <code>v</code> have different lengths.</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink">IllegalArgumentException</a></code> - if <code>k</code> and <code>v</code> have different lengths.</dd>
 </dl>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(java.util.Collection)">MultiArrangement</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.208">MultiArrangement</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a>&gt;&nbsp;keyColl)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.208">MultiArrangement</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a>&gt;&nbsp;keyColl)</span></div>
 <div class="block">Creates a new Arrangement using the elements of an array.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>keyColl</code> - the collection of keys of the new Arrangement.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink">IllegalArgumentException</a></code> - if <code>k</code> and <code>v</code> have different lengths.</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink">IllegalArgumentException</a></code> - if <code>k</code> and <code>v</code> have different lengths.</dd>
 </dl>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(java.util.Collection,float)">MultiArrangement</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.218">MultiArrangement</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a>&gt;&nbsp;keyColl,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.218">MultiArrangement</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a>&gt;&nbsp;keyColl,
 float&nbsp;f)</span></div>
 <div class="block">Creates a new Arrangement using the given collection of keys.</div>
 <dl>
@@ -1139,7 +1139,7 @@ float&nbsp;f)</span></div>
 <dd><code>keyColl</code> - the collection of keys of the new Arrangement.</dd>
 <dd><code>f</code> - the load factor.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink">IllegalArgumentException</a></code> - if <code>k</code> and <code>v</code> have different lengths.</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink">IllegalArgumentException</a></code> - if <code>k</code> and <code>v</code> have different lengths.</dd>
 </dl>
 </section>
 </li>
@@ -1154,7 +1154,7 @@ float&nbsp;f)</span></div>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>keyArray</code> - the array of keys of the new Arrangement.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink">IllegalArgumentException</a></code> - if <code>k</code> and <code>v</code> have different lengths.</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink">IllegalArgumentException</a></code> - if <code>k</code> and <code>v</code> have different lengths.</dd>
 </dl>
 </section>
 </li>
@@ -1210,7 +1210,7 @@ float&nbsp;f,
 <dd><code>f</code> - the load factor.</dd>
 <dd><code>hasher</code> - used to hash items; typically only needed when K is an array, where CrossHash has implementations</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink">IllegalArgumentException</a></code> - if <code>k</code> and <code>v</code> have different lengths.</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink">IllegalArgumentException</a></code> - if <code>k</code> and <code>v</code> have different lengths.</dd>
 </dl>
 </section>
 </li>
@@ -1227,7 +1227,7 @@ float&nbsp;f,
 <dd><code>keyArray</code> - the array of keys of the new Arrangement.</dd>
 <dd><code>hasher</code> - used to hash items; typically only needed when K is an array, where CrossHash has implementations</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink">IllegalArgumentException</a></code> - if <code>k</code> and <code>v</code> have different lengths.</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink">IllegalArgumentException</a></code> - if <code>k</code> and <code>v</code> have different lengths.</dd>
 </dl>
 </section>
 </li>
@@ -1252,13 +1252,13 @@ float&nbsp;f,
 <li class="blockList">
 <section class="detail">
 <h3><a id="addAll(java.util.Collection)">addAll</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.356">addAll</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;? extends <a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a>&gt;&nbsp;keyArray)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.356">addAll</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;? extends <a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a>&gt;&nbsp;keyArray)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="addAllIfAbsent(java.util.Map)">addAllIfAbsent</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.366">addAllIfAbsent</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Map.html?is-external=true" title="class or interface in java.util" class="externalLink">Map</a>&lt;? extends <a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a>,&#8203;? extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Integer.html?is-external=true" title="class or interface in java.lang" class="externalLink">Integer</a>&gt;&nbsp;m)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.366">addAllIfAbsent</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Map.html?is-external=true" title="class or interface in java.util" class="externalLink">Map</a>&lt;? extends <a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a>,&#8203;? extends <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Integer.html?is-external=true" title="class or interface in java.lang" class="externalLink">Integer</a>&gt;&nbsp;m)</span></div>
 </section>
 </li>
 <li class="blockList">
@@ -1272,7 +1272,7 @@ float&nbsp;f,
 <li class="blockList">
 <section class="detail">
 <h3><a id="addAllIfAbsent(java.util.Collection)">addAllIfAbsent</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.391">addAllIfAbsent</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;? extends <a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a>&gt;&nbsp;keyArray)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.391">addAllIfAbsent</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;? extends <a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a>&gt;&nbsp;keyArray)</span></div>
 </section>
 </li>
 <li class="blockList">
@@ -1324,54 +1324,54 @@ float&nbsp;f,
 <li class="blockList">
 <section class="detail">
 <h3><a id="rem(java.lang.Object)">rem</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.539">rem</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;k)</span></div>
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.539">rem</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;k)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="remove(java.lang.Object)">remove</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.561">remove</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;o)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.560">remove</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;o)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="removeInt(java.lang.Object)">removeInt</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.565">removeInt</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;k)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.564">removeInt</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;k)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="removeFirst()">removeFirst</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.595">removeFirst</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.593">removeFirst</a></span>()</div>
 <div class="block">Removes the mapping associated with the first key in iteration order.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the value previously associated with the first key in iteration
          order.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/NoSuchElementException.html?is-external=true" title="class or interface in java.util" class="externalLink">NoSuchElementException</a></code> - is this map is empty.</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/NoSuchElementException.html?is-external=true" title="class or interface in java.util" class="externalLink">NoSuchElementException</a></code> - is this map is empty.</dd>
 </dl>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="removeLast()">removeLast</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.607">removeLast</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.605">removeLast</a></span>()</div>
 <div class="block">Removes the mapping associated with the last key in iteration order.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the value previously associated with the last key in iteration
          order.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/NoSuchElementException.html?is-external=true" title="class or interface in java.util" class="externalLink">NoSuchElementException</a></code> - is this map is empty.</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/NoSuchElementException.html?is-external=true" title="class or interface in java.util" class="externalLink">NoSuchElementException</a></code> - is this map is empty.</dd>
 </dl>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="get(squidpony.squidmath.IntVLA,java.lang.Object)">get</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.664">get</a></span>&#8203;(<span class="arguments"><a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/IntVLA.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">IntVLA</a>&nbsp;container,
-<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;k)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.662">get</a></span>&#8203;(<span class="arguments"><a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/IntVLA.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">IntVLA</a>&nbsp;container,
+<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;k)</span></div>
 <div class="block">Different from the typical get method; clears the non-null IntVLA, container, and fills it with any positions
  associated with k in this MultiArrangement. If you want to append to container instead of clearing it, use
  <a href="#append(squidpony.squidmath.IntVLA,java.lang.Object)"><code>append(IntVLA, Object)</code></a>.</div>
@@ -1387,8 +1387,8 @@ float&nbsp;f,
 <li class="blockList">
 <section class="detail">
 <h3><a id="append(squidpony.squidmath.IntVLA,java.lang.Object)">append</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.676">append</a></span>&#8203;(<span class="arguments"><a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/IntVLA.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">IntVLA</a>&nbsp;container,
-<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;k)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.674">append</a></span>&#8203;(<span class="arguments"><a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/IntVLA.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">IntVLA</a>&nbsp;container,
+<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;k)</span></div>
 <div class="block">Different from the typical get method; adds to the non-null IntVLA, container, filling with any positions
  associated with k in this MultiArrangement. If you want a more convenient method for the case where you want
  container to hold only the items associated with k (discarding old contents), use <a href="#get(squidpony.squidmath.IntVLA,java.lang.Object)"><code>get(IntVLA, Object)</code></a>.</div>
@@ -1404,47 +1404,47 @@ float&nbsp;f,
 <li class="blockList">
 <section class="detail">
 <h3><a id="containsKey(java.lang.Object)">containsKey</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.708">containsKey</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;k)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.706">containsKey</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;k)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="containsValue(int)">containsValue</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.727">containsValue</a></span>&#8203;(<span class="arguments">int&nbsp;v)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.725">containsValue</a></span>&#8203;(<span class="arguments">int&nbsp;v)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="containsValue(java.lang.Object)">containsValue</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.730">containsValue</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;ov)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.728">containsValue</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;ov)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="clear()">clear</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.739">clear</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.737">clear</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="size()">size</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.750">size</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.748">size</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="isEmpty()">isEmpty</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.754">isEmpty</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.752">isEmpty</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="iterator()">iterator</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Iterator.html?is-external=true" title="class or interface in java.util" class="externalLink">Iterator</a>&lt;<a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.763">iterator</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Iterator.html?is-external=true" title="class or interface in java.util" class="externalLink">Iterator</a>&lt;<a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.761">iterator</a></span>()</div>
 <div class="block">Returns an iterator over elements of type <code>T</code>.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Iterable.html?is-external=true#iterator()" title="class or interface in java.lang" class="externalLink">iterator</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Iterable</a>&lt;<a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a>&gt;</code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Iterable.html?is-external=true#iterator()" title="class or interface in java.lang" class="externalLink">iterator</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Iterable</a>&lt;<a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a>&gt;</code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>an Iterator.</dd>
 </dl>
@@ -1453,13 +1453,13 @@ float&nbsp;f,
 <li class="blockList">
 <section class="detail">
 <h3><a id="fixOrder(int)">fixOrder</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.768">fixOrder</a></span>&#8203;(<span class="arguments">int&nbsp;i)</span></div>
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.766">fixOrder</a></span>&#8203;(<span class="arguments">int&nbsp;i)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="fixOrder(int,int)">fixOrder</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.813">fixOrder</a></span>&#8203;(<span class="arguments">int&nbsp;s,
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.811">fixOrder</a></span>&#8203;(<span class="arguments">int&nbsp;s,
 int&nbsp;d)</span></div>
 <div class="block">Modifies the link vector for a shift from s to d.
  <br>
@@ -1474,7 +1474,7 @@ int&nbsp;d)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="firstKey()">firstKey</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.851">firstKey</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.849">firstKey</a></span>()</div>
 <div class="block">Returns the first key of this map in iteration order.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -1485,7 +1485,7 @@ int&nbsp;d)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="lastKey()">lastKey</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.861">lastKey</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.859">lastKey</a></span>()</div>
 <div class="block">Returns the last key of this map in iteration order.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -1496,7 +1496,7 @@ int&nbsp;d)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="retainAll(java.util.Collection)">retainAll</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.873">retainAll</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;?&gt;&nbsp;c)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.871">retainAll</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;?&gt;&nbsp;c)</span></div>
 <div class="block">Retains in this collection only elements from the given collection.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -1510,7 +1510,7 @@ int&nbsp;d)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="comparator()">comparator</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Comparator.html?is-external=true" title="class or interface in java.util" class="externalLink">Comparator</a>&lt;? super <a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.885">comparator</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Comparator.html?is-external=true" title="class or interface in java.util" class="externalLink">Comparator</a>&lt;? super <a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.883">comparator</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
@@ -1518,7 +1518,7 @@ int&nbsp;d)</span></div>
 <h3><a id="tailMap(java.lang.Object)">
 <!--   -->
 </a><a id="tailMap(K)">tailMap</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/SortedMap.html?is-external=true" title="class or interface in java.util" class="externalLink">SortedMap</a>&lt;<a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Integer.html?is-external=true" title="class or interface in java.lang" class="externalLink">Integer</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.888">tailMap</a></span>&#8203;(<span class="arguments"><a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a>&nbsp;from)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/SortedMap.html?is-external=true" title="class or interface in java.util" class="externalLink">SortedMap</a>&lt;<a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Integer.html?is-external=true" title="class or interface in java.lang" class="externalLink">Integer</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.886">tailMap</a></span>&#8203;(<span class="arguments"><a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a>&nbsp;from)</span></div>
 </section>
 </li>
 <li class="blockList">
@@ -1526,7 +1526,7 @@ int&nbsp;d)</span></div>
 <h3><a id="headMap(java.lang.Object)">
 <!--   -->
 </a><a id="headMap(K)">headMap</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/SortedMap.html?is-external=true" title="class or interface in java.util" class="externalLink">SortedMap</a>&lt;<a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Integer.html?is-external=true" title="class or interface in java.lang" class="externalLink">Integer</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.891">headMap</a></span>&#8203;(<span class="arguments"><a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a>&nbsp;to)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/SortedMap.html?is-external=true" title="class or interface in java.util" class="externalLink">SortedMap</a>&lt;<a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Integer.html?is-external=true" title="class or interface in java.lang" class="externalLink">Integer</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.889">headMap</a></span>&#8203;(<span class="arguments"><a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a>&nbsp;to)</span></div>
 </section>
 </li>
 <li class="blockList">
@@ -1534,50 +1534,50 @@ int&nbsp;d)</span></div>
 <h3><a id="subMap(java.lang.Object,java.lang.Object)">
 <!--   -->
 </a><a id="subMap(K,K)">subMap</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/SortedMap.html?is-external=true" title="class or interface in java.util" class="externalLink">SortedMap</a>&lt;<a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Integer.html?is-external=true" title="class or interface in java.lang" class="externalLink">Integer</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.894">subMap</a></span>&#8203;(<span class="arguments"><a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a>&nbsp;from,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/SortedMap.html?is-external=true" title="class or interface in java.util" class="externalLink">SortedMap</a>&lt;<a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Integer.html?is-external=true" title="class or interface in java.lang" class="externalLink">Integer</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.892">subMap</a></span>&#8203;(<span class="arguments"><a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a>&nbsp;from,
 <a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a>&nbsp;to)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="keyList()">keyList</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="MultiArrangement.KeyList.html" title="class in squidpony.squidmath">MultiArrangement.KeyList</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.1310">keyList</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="MultiArrangement.KeyList.html" title="class in squidpony.squidmath">MultiArrangement.KeyList</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.1308">keyList</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="keysAsArrayList()">keysAsArrayList</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.1315">keysAsArrayList</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.1313">keysAsArrayList</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="values()">values</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Integer.html?is-external=true" title="class or interface in java.lang" class="externalLink">Integer</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.1370">values</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Integer.html?is-external=true" title="class or interface in java.lang" class="externalLink">Integer</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.1368">values</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="valuesAsList()">valuesAsList</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Integer.html?is-external=true" title="class or interface in java.lang" class="externalLink">Integer</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.1378">valuesAsList</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Integer.html?is-external=true" title="class or interface in java.lang" class="externalLink">Integer</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.1376">valuesAsList</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="valuesAsIntVLA()">valuesAsIntVLA</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/IntVLA.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">IntVLA</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.1383">valuesAsIntVLA</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/IntVLA.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">IntVLA</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.1381">valuesAsIntVLA</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="valuesAsArray()">valuesAsArray</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int[]</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.1387">valuesAsArray</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int[]</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.1385">valuesAsArray</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="trim()">trim</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.1402">trim</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.1400">trim</a></span>()</div>
 <div class="block">Rehashes the map, making the table as small as possible.
  <p>
  <P>This method rehashes the table to the smallest size satisfying the load factor. It can be used when the set will not be changed anymore, so to optimize access speed and size.
@@ -1594,7 +1594,7 @@ int&nbsp;d)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="trim(int)">trim</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.1426">trim</a></span>&#8203;(<span class="arguments">int&nbsp;n)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.1424">trim</a></span>&#8203;(<span class="arguments">int&nbsp;n)</span></div>
 <div class="block">Rehashes this map if the table is too large.
  <p>
  <P>Let <var>N</var> be the smallest table size that can hold <code>max(n,<a href="#size()"><code>size()</code></a>)</code> entries, still satisfying the load factor. If the current table size is smaller than or equal to
@@ -1615,7 +1615,7 @@ int&nbsp;d)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="rehash(int)">rehash</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.1450">rehash</a></span>&#8203;(<span class="arguments">int&nbsp;newN)</span></div>
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.1448">rehash</a></span>&#8203;(<span class="arguments">int&nbsp;newN)</span></div>
 <div class="block">Rehashes the map.
 
  <P>
@@ -1632,7 +1632,7 @@ int&nbsp;d)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="clone()">clone</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="MultiArrangement.html" title="class in squidpony.squidmath">MultiArrangement</a>&lt;<a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.1492">clone</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="MultiArrangement.html" title="class in squidpony.squidmath">MultiArrangement</a>&lt;<a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.1490">clone</a></span>()</div>
 <div class="block">Returns a deep copy of this map.
 
  <P>
@@ -1641,7 +1641,7 @@ int&nbsp;d)</span></div>
  object keys.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#clone()" title="class or interface in java.lang" class="externalLink">clone</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#clone()" title="class or interface in java.lang" class="externalLink">clone</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a deep copy of this map.</dd>
 </dl>
@@ -1650,7 +1650,7 @@ int&nbsp;d)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="hashCode()">hashCode</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.1520">hashCode</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.1518">hashCode</a></span>()</div>
 <div class="block">Returns a hash code for this map.
 
  This method overrides the generic method provided by the superclass.
@@ -1659,7 +1659,7 @@ int&nbsp;d)</span></div>
  the overriden method.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#hashCode()" title="class or interface in java.lang" class="externalLink">hashCode</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#hashCode()" title="class or interface in java.lang" class="externalLink">hashCode</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a hash code for this map.</dd>
 </dl>
@@ -1668,7 +1668,7 @@ int&nbsp;d)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="maxFill(int,float)">maxFill</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.1543">maxFill</a></span>&#8203;(<span class="arguments">int&nbsp;n,
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.1541">maxFill</a></span>&#8203;(<span class="arguments">int&nbsp;n,
 float&nbsp;f)</span></div>
 <div class="block">Returns the maximum number of entries that can be filled before rehashing.</div>
 <dl>
@@ -1683,7 +1683,7 @@ float&nbsp;f)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="maxFill(long,float)">maxFill</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.1556">maxFill</a></span>&#8203;(<span class="arguments">long&nbsp;n,
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.1554">maxFill</a></span>&#8203;(<span class="arguments">long&nbsp;n,
 float&nbsp;f)</span></div>
 <div class="block">Returns the maximum number of entries that can be filled before rehashing.</div>
 <dl>
@@ -1698,7 +1698,7 @@ float&nbsp;f)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="arraySize(int,float)">arraySize</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.1570">arraySize</a></span>&#8203;(<span class="arguments">int&nbsp;expected,
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.1568">arraySize</a></span>&#8203;(<span class="arguments">int&nbsp;expected,
 float&nbsp;f)</span></div>
 <div class="block">Returns the least power of two smaller than or equal to 2<sup>30</sup> and larger than or equal to <code>Math.ceil( expected / f )</code>.</div>
 <dl>
@@ -1708,34 +1708,34 @@ float&nbsp;f)</span></div>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the minimum possible size for a backing array.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink">IllegalArgumentException</a></code> - if the necessary size is larger than 2<sup>30</sup>.</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink">IllegalArgumentException</a></code> - if the necessary size is larger than 2<sup>30</sup>.</dd>
 </dl>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="toString()">toString</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.1644">toString</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.1642">toString</a></span>()</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#toString()" title="class or interface in java.lang" class="externalLink">toString</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#toString()" title="class or interface in java.lang" class="externalLink">toString</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></code></dd>
 </dl>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="equals(java.lang.Object)">equals</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.1658">equals</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;o)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.1656">equals</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;o)</span></div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.lang" class="externalLink">equals</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.lang" class="externalLink">equals</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></code></dd>
 </dl>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getAt(int)">getAt</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.1681">getAt</a></span>&#8203;(<span class="arguments">int&nbsp;idx)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.1679">getAt</a></span>&#8203;(<span class="arguments">int&nbsp;idx)</span></div>
 <div class="block">Gets the value at the given index in the iteration order in constant time (random-access).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -1748,7 +1748,7 @@ float&nbsp;f)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="keyAt(int)">keyAt</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.1691">keyAt</a></span>&#8203;(<span class="arguments">int&nbsp;idx)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.1689">keyAt</a></span>&#8203;(<span class="arguments">int&nbsp;idx)</span></div>
 <div class="block">Gets the key at the given index in the iteration order in constant time (random-access).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -1761,7 +1761,7 @@ float&nbsp;f)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="removeAt(int)">removeAt</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.1704">removeAt</a></span>&#8203;(<span class="arguments">int&nbsp;idx)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.1702">removeAt</a></span>&#8203;(<span class="arguments">int&nbsp;idx)</span></div>
 <div class="block">Removes the key and value at the given index in the iteration order in not-exactly constant time (though it still
  should be efficient).</div>
 <dl>
@@ -1777,7 +1777,7 @@ float&nbsp;f)</span></div>
 <h3><a id="addAt(int,java.lang.Object)">
 <!--   -->
 </a><a id="addAt(int,K)">addAt</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.1727">addAt</a></span>&#8203;(<span class="arguments">int&nbsp;idx,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.1725">addAt</a></span>&#8203;(<span class="arguments">int&nbsp;idx,
 <a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a>&nbsp;k)</span></div>
 <div class="block">Equivalent to <a href="#add(K)"><code>add(Object)</code></a>, except that it can place k at any point in the ordering (shifting up later
  entries and changing their values to match their new positions in the ordering).</div>
@@ -1793,7 +1793,7 @@ float&nbsp;f)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="randomKey(squidpony.squidmath.IRNG)">randomKey</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.1743">randomKey</a></span>&#8203;(<span class="arguments"><a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/IRNG.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">IRNG</a>&nbsp;rng)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.1741">randomKey</a></span>&#8203;(<span class="arguments"><a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/IRNG.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">IRNG</a>&nbsp;rng)</span></div>
 <div class="block">Gets a random key from this MultiArrangement in constant time, using the given IRNG to generate a random number.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -1806,7 +1806,7 @@ float&nbsp;f)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="shuffle(squidpony.squidmath.IRNG)">shuffle</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="MultiArrangement.html" title="class in squidpony.squidmath">MultiArrangement</a>&lt;<a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.1755">shuffle</a></span>&#8203;(<span class="arguments"><a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/IRNG.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">IRNG</a>&nbsp;rng)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="MultiArrangement.html" title="class in squidpony.squidmath">MultiArrangement</a>&lt;<a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.1753">shuffle</a></span>&#8203;(<span class="arguments"><a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/IRNG.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">IRNG</a>&nbsp;rng)</span></div>
 <div class="block">Randomly alters the iteration order for this MultiArrangement using the given IRNG to shuffle.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -1819,7 +1819,7 @@ float&nbsp;f)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="reorder(int...)">reorder</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="MultiArrangement.html" title="class in squidpony.squidmath">MultiArrangement</a>&lt;<a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.1782">reorder</a></span>&#8203;(<span class="arguments">int...&nbsp;ordering)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="MultiArrangement.html" title="class in squidpony.squidmath">MultiArrangement</a>&lt;<a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.1780">reorder</a></span>&#8203;(<span class="arguments">int...&nbsp;ordering)</span></div>
 <div class="block">Given an array or varargs of replacement indices for this MultiArrangement's iteration order, reorders this so the
  first item in the returned version is the same as <code>getAt(ordering[0])</code> (with some care taken for negative
  or too-large indices), the second item in the returned version is the same as <code>getAt(ordering[1])</code>, etc.
@@ -1845,7 +1845,7 @@ float&nbsp;f)</span></div>
 <h3><a id="alter(java.lang.Object,java.lang.Object)">
 <!--   -->
 </a><a id="alter(K,K)">alter</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.1882">alter</a></span>&#8203;(<span class="arguments"><a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a>&nbsp;original,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.1880">alter</a></span>&#8203;(<span class="arguments"><a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a>&nbsp;original,
 <a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a>&nbsp;replacement)</span></div>
 <div class="block">Swaps a key, original, for another key, replacement, while keeping replacement at the same point in the iteration
  order as original and keeping it associated with the same value (which also keeps its iteration index).</div>
@@ -1863,37 +1863,37 @@ float&nbsp;f)</span></div>
 <h3><a id="getArray(java.lang.Object[])">
 <!--   -->
 </a><a id="getArray(K[])">getArray</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int[]</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.1908">getArray</a></span>&#8203;(<span class="arguments"><a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a>[]&nbsp;keys)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int[]</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.1906">getArray</a></span>&#8203;(<span class="arguments"><a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a>[]&nbsp;keys)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getArray(java.util.Collection)">getArray</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int[]</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.1920">getArray</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;? extends <a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a>&gt;&nbsp;keys)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int[]</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.1918">getArray</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;? extends <a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a>&gt;&nbsp;keys)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getMany(java.lang.Iterable)">getMany</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/IntVLA.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">IntVLA</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.1933">getMany</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Iterable</a>&lt;? extends <a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a>&gt;&nbsp;keys)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/IntVLA.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">IntVLA</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.1931">getMany</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Iterable</a>&lt;? extends <a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a>&gt;&nbsp;keys)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="keysAt(int...)">keysAt</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/OrderedSet.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">OrderedSet</a>&lt;<a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.1945">keysAt</a></span>&#8203;(<span class="arguments">int...&nbsp;positions)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/OrderedSet.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">OrderedSet</a>&lt;<a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.1943">keysAt</a></span>&#8203;(<span class="arguments">int...&nbsp;positions)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="keysAt(squidpony.squidmath.IntVLA)">keysAt</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/OrderedSet.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">OrderedSet</a>&lt;<a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.1956">keysAt</a></span>&#8203;(<span class="arguments"><a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/IntVLA.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">IntVLA</a>&nbsp;positions)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/OrderedSet.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">OrderedSet</a>&lt;<a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.1954">keysAt</a></span>&#8203;(<span class="arguments"><a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/IntVLA.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">IntVLA</a>&nbsp;positions)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="take(int)">take</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="MultiArrangement.html" title="class in squidpony.squidmath">MultiArrangement</a>&lt;<a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.1974">take</a></span>&#8203;(<span class="arguments">int&nbsp;amount)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="MultiArrangement.html" title="class in squidpony.squidmath">MultiArrangement</a>&lt;<a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.1972">take</a></span>&#8203;(<span class="arguments">int&nbsp;amount)</span></div>
 <div class="block">Produces a copy of this MultiArrangement, but only using up to the given amount of items to take. Does a shallow copy
  of individual keys, so the references will be shared.</div>
 <dl>
@@ -1907,7 +1907,7 @@ float&nbsp;f)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="positionOf(java.lang.Object)">positionOf</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.1983">positionOf</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;k)</span></div>
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.1981">positionOf</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;k)</span></div>
 </section>
 </li>
 <li class="blockList">
@@ -1915,7 +1915,7 @@ float&nbsp;f)</span></div>
 <h3><a id="swap(java.lang.Object,java.lang.Object)">
 <!--   -->
 </a><a id="swap(K,K)">swap</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.2013">swap</a></span>&#8203;(<span class="arguments"><a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a>&nbsp;left,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.2011">swap</a></span>&#8203;(<span class="arguments"><a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a>&nbsp;left,
 <a href="MultiArrangement.html" title="type parameter in MultiArrangement">K</a>&nbsp;right)</span></div>
 <div class="block">Swaps the positions in the ordering for the given items, if they are both present. Returns true if the ordering
  changed as a result of this call, or false if it stayed the same (which can be because left or right was not
@@ -1932,7 +1932,7 @@ float&nbsp;f)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="swapIndices(int,int)">swapIndices</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.2039">swapIndices</a></span>&#8203;(<span class="arguments">int&nbsp;left,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MultiArrangement.html#line.2037">swapIndices</a></span>&#8203;(<span class="arguments">int&nbsp;left,
 int&nbsp;right)</span></div>
 <div class="block">Swaps the given indices in the ordering, if they are both ints between 0 and size. Returns true if the ordering
  changed as a result of this call, or false if it stayed the same (which can be because left or right referred to

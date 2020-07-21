@@ -282,275 +282,274 @@
 <span class="sourceLineNo">270</span><a id="line.270">            }</a>
 <span class="sourceLineNo">271</span><a id="line.271"></a>
 <span class="sourceLineNo">272</span><a id="line.272">            @Override</a>
-<span class="sourceLineNo">273</span><a id="line.273">            @SuppressWarnings("unchecked")</a>
-<span class="sourceLineNo">274</span><a id="line.274">            public OrderedMap read(Json json, JsonValue jsonData, Class type) {</a>
-<span class="sourceLineNo">275</span><a id="line.275">                if(jsonData == null || jsonData.isNull()) return null;</a>
-<span class="sourceLineNo">276</span><a id="line.276">                float f = json.readValue("f", float.class, jsonData);</a>
-<span class="sourceLineNo">277</span><a id="line.277">                Object k = json.readValue("k", null, INVALID, jsonData);</a>
-<span class="sourceLineNo">278</span><a id="line.278">                Object v = json.readValue("v", null, INVALID, jsonData);</a>
-<span class="sourceLineNo">279</span><a id="line.279">                Object[] r = json.readValue("r", Object[].class, jsonData);</a>
-<span class="sourceLineNo">280</span><a id="line.280">                if(k == INVALID)</a>
-<span class="sourceLineNo">281</span><a id="line.281">                    return new OrderedMap(0, f);</a>
-<span class="sourceLineNo">282</span><a id="line.282">                return Maker.makeOM(f, k, v, r);</a>
-<span class="sourceLineNo">283</span><a id="line.283">                //return new OrderedMap(json.readValue(OrderedSet.class, jsonData.get("k")),</a>
-<span class="sourceLineNo">284</span><a id="line.284">                //        json.readValue(ArrayList.class, jsonData.get("v")), jsonData.getFloat("f"));</a>
-<span class="sourceLineNo">285</span><a id="line.285">            }</a>
-<span class="sourceLineNo">286</span><a id="line.286">        });</a>
-<span class="sourceLineNo">287</span><a id="line.287">        json.setSerializer(EnumOrderedMap.class, new Serializer&lt;EnumOrderedMap&gt;() {</a>
-<span class="sourceLineNo">288</span><a id="line.288">            @Override</a>
-<span class="sourceLineNo">289</span><a id="line.289">            public void write(Json json, EnumOrderedMap object, Class knownType) {</a>
-<span class="sourceLineNo">290</span><a id="line.290">                if(object == null)</a>
-<span class="sourceLineNo">291</span><a id="line.291">                {</a>
-<span class="sourceLineNo">292</span><a id="line.292">                    json.writeValue(null);</a>
-<span class="sourceLineNo">293</span><a id="line.293">                    return;</a>
-<span class="sourceLineNo">294</span><a id="line.294">                }</a>
-<span class="sourceLineNo">295</span><a id="line.295">                json.writeObjectStart();</a>
-<span class="sourceLineNo">296</span><a id="line.296">                if(!object.isEmpty()) {</a>
-<span class="sourceLineNo">297</span><a id="line.297">                    json.writeValue("c", object.firstKey().getClass().getName());</a>
-<span class="sourceLineNo">298</span><a id="line.298">                    json.writeValue("k", object.firstKey(), null);</a>
-<span class="sourceLineNo">299</span><a id="line.299">                    json.writeValue("v", object.getAt(0), null);</a>
-<span class="sourceLineNo">300</span><a id="line.300">                    int sz = object.size();</a>
-<span class="sourceLineNo">301</span><a id="line.301">                    Object[] r = new Object[(sz - 1) * 2];</a>
-<span class="sourceLineNo">302</span><a id="line.302">                    for (int i = 1, p = 0; i &lt; sz; i++) {</a>
-<span class="sourceLineNo">303</span><a id="line.303">                        r[p++] = object.keyAt(i);</a>
-<span class="sourceLineNo">304</span><a id="line.304">                        r[p++] = object.getAt(i);</a>
-<span class="sourceLineNo">305</span><a id="line.305">                    }</a>
-<span class="sourceLineNo">306</span><a id="line.306">                    json.writeValue("r", r, Object[].class, Object.class);</a>
-<span class="sourceLineNo">307</span><a id="line.307">                }</a>
-<span class="sourceLineNo">308</span><a id="line.308">                else</a>
-<span class="sourceLineNo">309</span><a id="line.309">                    json.writeValue("c", "default");</a>
-<span class="sourceLineNo">310</span><a id="line.310">                json.writeObjectEnd();</a>
-<span class="sourceLineNo">311</span><a id="line.311">            }</a>
-<span class="sourceLineNo">312</span><a id="line.312"></a>
-<span class="sourceLineNo">313</span><a id="line.313">            @Override</a>
-<span class="sourceLineNo">314</span><a id="line.314">            @SuppressWarnings("unchecked")</a>
-<span class="sourceLineNo">315</span><a id="line.315">            public EnumOrderedMap read(Json json, JsonValue jsonData, Class type) {</a>
-<span class="sourceLineNo">316</span><a id="line.316">                if(jsonData == null || jsonData.isNull()) return null;</a>
-<span class="sourceLineNo">317</span><a id="line.317">                String c = json.readValue("c", String.class, "", jsonData);</a>
-<span class="sourceLineNo">318</span><a id="line.318">                if("default".equals(c))</a>
-<span class="sourceLineNo">319</span><a id="line.319">                    return new EnumOrderedMap();</a>
-<span class="sourceLineNo">320</span><a id="line.320">                try {</a>
-<span class="sourceLineNo">321</span><a id="line.321">                    Class&lt;? extends Enum&lt;?&gt;&gt; cl = ClassReflection.forName(c);</a>
-<span class="sourceLineNo">322</span><a id="line.322">                    if(!ClassReflection.isEnum(cl))</a>
-<span class="sourceLineNo">323</span><a id="line.323">                        return null;</a>
-<span class="sourceLineNo">324</span><a id="line.324">                    Enum&lt;?&gt; k = json.readValue("k", cl, jsonData);</a>
-<span class="sourceLineNo">325</span><a id="line.325">                    Object v = json.readValue("v", null, INVALID, jsonData);</a>
-<span class="sourceLineNo">326</span><a id="line.326">                    Object[] r = json.readValue("r", Object[].class, jsonData);</a>
-<span class="sourceLineNo">327</span><a id="line.327">                    if(v == INVALID)</a>
-<span class="sourceLineNo">328</span><a id="line.328">                        return new EnumOrderedMap();</a>
-<span class="sourceLineNo">329</span><a id="line.329">                    return Maker.makeEOM(k, v, r);</a>
-<span class="sourceLineNo">330</span><a id="line.330">                } catch (ReflectionException e) {</a>
-<span class="sourceLineNo">331</span><a id="line.331">                    return null;</a>
-<span class="sourceLineNo">332</span><a id="line.332">                }</a>
-<span class="sourceLineNo">333</span><a id="line.333">                //return new OrderedMap(json.readValue(OrderedSet.class, jsonData.get("k")),</a>
-<span class="sourceLineNo">334</span><a id="line.334">                //        json.readValue(ArrayList.class, jsonData.get("v")), jsonData.getFloat("f"));</a>
-<span class="sourceLineNo">335</span><a id="line.335">            }</a>
-<span class="sourceLineNo">336</span><a id="line.336">        });</a>
-<span class="sourceLineNo">337</span><a id="line.337">        json.setSerializer(EnumOrderedSet.class, new Serializer&lt;EnumOrderedSet&gt;() {</a>
-<span class="sourceLineNo">338</span><a id="line.338">            @Override</a>
-<span class="sourceLineNo">339</span><a id="line.339">            public void write(Json json, EnumOrderedSet object, Class knownType) {</a>
-<span class="sourceLineNo">340</span><a id="line.340">                if(object == null)</a>
-<span class="sourceLineNo">341</span><a id="line.341">                {</a>
-<span class="sourceLineNo">342</span><a id="line.342">                    json.writeValue(null);</a>
-<span class="sourceLineNo">343</span><a id="line.343">                    return;</a>
-<span class="sourceLineNo">344</span><a id="line.344">                }</a>
-<span class="sourceLineNo">345</span><a id="line.345">                json.writeObjectStart();</a>
-<span class="sourceLineNo">346</span><a id="line.346">                if(!object.isEmpty()) {</a>
-<span class="sourceLineNo">347</span><a id="line.347">                    json.writeValue("c", object.first().getClass().getName());</a>
-<span class="sourceLineNo">348</span><a id="line.348">                    json.writeValue("i", object.first(), null);</a>
-<span class="sourceLineNo">349</span><a id="line.349">                    int sz = object.size();</a>
-<span class="sourceLineNo">350</span><a id="line.350">                    Object[] r = new Object[sz - 1];</a>
-<span class="sourceLineNo">351</span><a id="line.351">                    for (int i = 1, p = 0; i &lt; sz; i++) {</a>
-<span class="sourceLineNo">352</span><a id="line.352">                        r[p++] = object.getAt(i);</a>
-<span class="sourceLineNo">353</span><a id="line.353">                    }</a>
-<span class="sourceLineNo">354</span><a id="line.354">                    json.writeValue("r", r, Object[].class, Object.class);</a>
-<span class="sourceLineNo">355</span><a id="line.355">                }</a>
-<span class="sourceLineNo">356</span><a id="line.356">                else</a>
-<span class="sourceLineNo">357</span><a id="line.357">                    json.writeValue("c", "default");</a>
-<span class="sourceLineNo">358</span><a id="line.358">                json.writeObjectEnd();</a>
-<span class="sourceLineNo">359</span><a id="line.359">            }</a>
-<span class="sourceLineNo">360</span><a id="line.360"></a>
-<span class="sourceLineNo">361</span><a id="line.361">            @Override</a>
-<span class="sourceLineNo">362</span><a id="line.362">            @SuppressWarnings("unchecked")</a>
-<span class="sourceLineNo">363</span><a id="line.363">            public EnumOrderedSet read(Json json, JsonValue jsonData, Class type) {</a>
-<span class="sourceLineNo">364</span><a id="line.364">                if(jsonData == null || jsonData.isNull()) return null;</a>
-<span class="sourceLineNo">365</span><a id="line.365">                String c = json.readValue("c", String.class, "", jsonData);</a>
-<span class="sourceLineNo">366</span><a id="line.366">                if("default".equals(c))</a>
-<span class="sourceLineNo">367</span><a id="line.367">                    return new EnumOrderedSet();</a>
-<span class="sourceLineNo">368</span><a id="line.368">                try {</a>
-<span class="sourceLineNo">369</span><a id="line.369">                    Class&lt;? extends Enum&lt;?&gt;&gt; cl = ClassReflection.forName(c);</a>
-<span class="sourceLineNo">370</span><a id="line.370">                    if(!ClassReflection.isEnum(cl))</a>
-<span class="sourceLineNo">371</span><a id="line.371">                        return null;</a>
-<span class="sourceLineNo">372</span><a id="line.372">                    Enum&lt;?&gt; i = json.readValue("i", cl, jsonData);</a>
-<span class="sourceLineNo">373</span><a id="line.373">                    Object[] r = json.readValue("r", Object[].class, jsonData);</a>
-<span class="sourceLineNo">374</span><a id="line.374">                    return Maker.makeEOS(i, (Enum&lt;?&gt;[]) r);</a>
-<span class="sourceLineNo">375</span><a id="line.375">                } catch (ReflectionException e) {</a>
-<span class="sourceLineNo">376</span><a id="line.376">                    return null;</a>
-<span class="sourceLineNo">377</span><a id="line.377">                }</a>
-<span class="sourceLineNo">378</span><a id="line.378">                //return new OrderedMap(json.readValue(OrderedSet.class, jsonData.get("k")),</a>
-<span class="sourceLineNo">379</span><a id="line.379">                //        json.readValue(ArrayList.class, jsonData.get("v")), jsonData.getFloat("f"));</a>
-<span class="sourceLineNo">380</span><a id="line.380">            }</a>
-<span class="sourceLineNo">381</span><a id="line.381">        });</a>
-<span class="sourceLineNo">382</span><a id="line.382"></a>
-<span class="sourceLineNo">383</span><a id="line.383">        json.setSerializer(EnumMap.class, new Serializer&lt;EnumMap&gt;() {</a>
-<span class="sourceLineNo">384</span><a id="line.384">            @Override</a>
-<span class="sourceLineNo">385</span><a id="line.385">            public void write(Json json, EnumMap object, Class knownType) {</a>
-<span class="sourceLineNo">386</span><a id="line.386">                if(object == null)</a>
-<span class="sourceLineNo">387</span><a id="line.387">                {</a>
-<span class="sourceLineNo">388</span><a id="line.388">                    json.writeValue(null);</a>
-<span class="sourceLineNo">389</span><a id="line.389">                    return;</a>
-<span class="sourceLineNo">390</span><a id="line.390">                }</a>
-<span class="sourceLineNo">391</span><a id="line.391">                json.writeObjectStart();</a>
-<span class="sourceLineNo">392</span><a id="line.392">                if(!object.isEmpty()) {</a>
-<span class="sourceLineNo">393</span><a id="line.393">                    Iterator it = object.entrySet().iterator();</a>
-<span class="sourceLineNo">394</span><a id="line.394">                    Map.Entry en = (Map.Entry)it.next();</a>
-<span class="sourceLineNo">395</span><a id="line.395">                    json.writeValue("e", en.getKey(), Enum.class);</a>
-<span class="sourceLineNo">396</span><a id="line.396">                    json.writeValue("v", en.getValue(), null);</a>
-<span class="sourceLineNo">397</span><a id="line.397">                    int sz = object.size();</a>
-<span class="sourceLineNo">398</span><a id="line.398">                    Object[] r = new Object[(sz - 1) * 2];</a>
-<span class="sourceLineNo">399</span><a id="line.399">                    for (int i = 1, p = 0; i &lt; sz; i++) {</a>
-<span class="sourceLineNo">400</span><a id="line.400">                        if(!it.hasNext())</a>
-<span class="sourceLineNo">401</span><a id="line.401">                            break;</a>
-<span class="sourceLineNo">402</span><a id="line.402">                        en = (Map.Entry)it.next();</a>
-<span class="sourceLineNo">403</span><a id="line.403">                        r[p++] = en.getKey();</a>
-<span class="sourceLineNo">404</span><a id="line.404">                        r[p++] = en.getValue();</a>
-<span class="sourceLineNo">405</span><a id="line.405">                    }</a>
-<span class="sourceLineNo">406</span><a id="line.406">                    json.writeValue("r", r, Object[].class, Object.class);</a>
-<span class="sourceLineNo">407</span><a id="line.407">                }</a>
-<span class="sourceLineNo">408</span><a id="line.408">                json.writeObjectEnd();</a>
-<span class="sourceLineNo">409</span><a id="line.409">            }</a>
-<span class="sourceLineNo">410</span><a id="line.410"></a>
-<span class="sourceLineNo">411</span><a id="line.411">            @Override</a>
-<span class="sourceLineNo">412</span><a id="line.412">            @SuppressWarnings("unchecked")</a>
-<span class="sourceLineNo">413</span><a id="line.413">            public EnumMap read(Json json, JsonValue jsonData, Class type) {</a>
-<span class="sourceLineNo">414</span><a id="line.414">                if(jsonData == null || jsonData.isNull() || jsonData.size == 0) return null;</a>
-<span class="sourceLineNo">415</span><a id="line.415">                return new EnumMap(Maker.makeOM(0.75f,</a>
-<span class="sourceLineNo">416</span><a id="line.416">                        json.readValue("e", null, jsonData),</a>
-<span class="sourceLineNo">417</span><a id="line.417">                        json.readValue("v", null, jsonData),</a>
-<span class="sourceLineNo">418</span><a id="line.418">                        json.readValue("r", Object[].class, jsonData)));</a>
-<span class="sourceLineNo">419</span><a id="line.419">                //return new OrderedMap(json.readValue(OrderedSet.class, jsonData.get("k")),</a>
-<span class="sourceLineNo">420</span><a id="line.420">                //        json.readValue(ArrayList.class, jsonData.get("v")), jsonData.getFloat("f"));</a>
-<span class="sourceLineNo">421</span><a id="line.421">            }</a>
-<span class="sourceLineNo">422</span><a id="line.422">        });</a>
-<span class="sourceLineNo">423</span><a id="line.423">        json.setSerializer(Arrangement.class, new Serializer&lt;Arrangement&gt;() {</a>
-<span class="sourceLineNo">424</span><a id="line.424">            @Override</a>
-<span class="sourceLineNo">425</span><a id="line.425">            public void write(Json json, Arrangement object, Class knownType) {</a>
-<span class="sourceLineNo">426</span><a id="line.426">                if(object == null)</a>
-<span class="sourceLineNo">427</span><a id="line.427">                {</a>
-<span class="sourceLineNo">428</span><a id="line.428">                    json.writeValue(null);</a>
-<span class="sourceLineNo">429</span><a id="line.429">                    return;</a>
-<span class="sourceLineNo">430</span><a id="line.430">                }</a>
-<span class="sourceLineNo">431</span><a id="line.431">                json.writeObjectStart();</a>
-<span class="sourceLineNo">432</span><a id="line.432">                json.writeValue("k", object.keysAsOrderedSet(), OrderedSet.class);</a>
-<span class="sourceLineNo">433</span><a id="line.433">                json.writeValue("f", object.f);</a>
-<span class="sourceLineNo">434</span><a id="line.434">                json.writeObjectEnd();</a>
-<span class="sourceLineNo">435</span><a id="line.435">            }</a>
-<span class="sourceLineNo">436</span><a id="line.436"></a>
-<span class="sourceLineNo">437</span><a id="line.437">            @Override</a>
-<span class="sourceLineNo">438</span><a id="line.438">            @SuppressWarnings("unchecked")</a>
-<span class="sourceLineNo">439</span><a id="line.439">            public Arrangement read(Json json, JsonValue jsonData, Class type) {</a>
-<span class="sourceLineNo">440</span><a id="line.440">                if(jsonData == null || jsonData.isNull()) return null;</a>
-<span class="sourceLineNo">441</span><a id="line.441">                return new Arrangement(json.readValue(OrderedSet.class, jsonData.get("k")), jsonData.getFloat("f"));</a>
-<span class="sourceLineNo">442</span><a id="line.442">            }</a>
-<span class="sourceLineNo">443</span><a id="line.443">        });</a>
-<span class="sourceLineNo">444</span><a id="line.444"></a>
-<span class="sourceLineNo">445</span><a id="line.445">        json.setSerializer(K2.class, new Serializer&lt;K2&gt;() {</a>
-<span class="sourceLineNo">446</span><a id="line.446">            @Override</a>
-<span class="sourceLineNo">447</span><a id="line.447">            public void write(Json json, K2 object, Class knownType) {</a>
-<span class="sourceLineNo">448</span><a id="line.448">                if(object == null)</a>
-<span class="sourceLineNo">449</span><a id="line.449">                {</a>
-<span class="sourceLineNo">450</span><a id="line.450">                    json.writeValue(null);</a>
-<span class="sourceLineNo">451</span><a id="line.451">                    return;</a>
-<span class="sourceLineNo">452</span><a id="line.452">                }</a>
-<span class="sourceLineNo">453</span><a id="line.453">                json.writeObjectStart();</a>
-<span class="sourceLineNo">454</span><a id="line.454">                json.writeValue("a", object.getSetA(), SortedSet.class);</a>
-<span class="sourceLineNo">455</span><a id="line.455">                json.writeValue("b", object.getSetB(), SortedSet.class);</a>
-<span class="sourceLineNo">456</span><a id="line.456">                json.writeObjectEnd();</a>
-<span class="sourceLineNo">457</span><a id="line.457">            }</a>
-<span class="sourceLineNo">458</span><a id="line.458"></a>
-<span class="sourceLineNo">459</span><a id="line.459">            @Override</a>
-<span class="sourceLineNo">460</span><a id="line.460">            @SuppressWarnings("unchecked")</a>
-<span class="sourceLineNo">461</span><a id="line.461">            public K2 read(Json json, JsonValue jsonData, Class type) {</a>
-<span class="sourceLineNo">462</span><a id="line.462">                if(jsonData == null || jsonData.isNull()) return null;</a>
-<span class="sourceLineNo">463</span><a id="line.463">                return new K2(json.readValue(SortedSet.class, jsonData.get("a")), json.readValue(SortedSet.class, jsonData.get("b")));</a>
-<span class="sourceLineNo">464</span><a id="line.464">            }</a>
-<span class="sourceLineNo">465</span><a id="line.465">        });</a>
-<span class="sourceLineNo">466</span><a id="line.466"></a>
-<span class="sourceLineNo">467</span><a id="line.467">        json.setSerializer(K2V1.class, new Serializer&lt;K2V1&gt;() {</a>
-<span class="sourceLineNo">468</span><a id="line.468">            @Override</a>
-<span class="sourceLineNo">469</span><a id="line.469">            public void write(Json json, K2V1 object, Class knownType) {</a>
-<span class="sourceLineNo">470</span><a id="line.470">                if(object == null)</a>
-<span class="sourceLineNo">471</span><a id="line.471">                {</a>
-<span class="sourceLineNo">472</span><a id="line.472">                    json.writeValue(null);</a>
-<span class="sourceLineNo">473</span><a id="line.473">                    return;</a>
-<span class="sourceLineNo">474</span><a id="line.474">                }</a>
-<span class="sourceLineNo">475</span><a id="line.475">                json.writeObjectStart();</a>
-<span class="sourceLineNo">476</span><a id="line.476">                json.writeValue("a", object.getSetA(), SortedSet.class);</a>
-<span class="sourceLineNo">477</span><a id="line.477">                json.writeValue("b", object.getSetB(), SortedSet.class);</a>
-<span class="sourceLineNo">478</span><a id="line.478">                json.writeValue("q", object.getListQ(), ArrayList.class);</a>
-<span class="sourceLineNo">479</span><a id="line.479">                json.writeObjectEnd();</a>
-<span class="sourceLineNo">480</span><a id="line.480">            }</a>
-<span class="sourceLineNo">481</span><a id="line.481"></a>
-<span class="sourceLineNo">482</span><a id="line.482">            @Override</a>
-<span class="sourceLineNo">483</span><a id="line.483">            @SuppressWarnings("unchecked")</a>
-<span class="sourceLineNo">484</span><a id="line.484">            public K2V1 read(Json json, JsonValue jsonData, Class type) {</a>
-<span class="sourceLineNo">485</span><a id="line.485">                if(jsonData == null || jsonData.isNull()) return null;</a>
-<span class="sourceLineNo">486</span><a id="line.486">                return new K2V1(</a>
-<span class="sourceLineNo">487</span><a id="line.487">                        json.readValue(SortedSet.class, jsonData.get("a")),</a>
-<span class="sourceLineNo">488</span><a id="line.488">                        json.readValue(SortedSet.class, jsonData.get("b")),</a>
-<span class="sourceLineNo">489</span><a id="line.489">                        json.readValue(ArrayList.class, jsonData.get("q")));</a>
-<span class="sourceLineNo">490</span><a id="line.490">            }</a>
-<span class="sourceLineNo">491</span><a id="line.491">        });</a>
-<span class="sourceLineNo">492</span><a id="line.492"></a>
-<span class="sourceLineNo">493</span><a id="line.493">        json.setSerializer(char[][].class, new Serializer&lt;char[][]&gt;() {</a>
-<span class="sourceLineNo">494</span><a id="line.494">            @Override</a>
-<span class="sourceLineNo">495</span><a id="line.495">            public void write(Json json, char[][] object, Class knownType) {</a>
-<span class="sourceLineNo">496</span><a id="line.496">                if(object == null)</a>
-<span class="sourceLineNo">497</span><a id="line.497">                {</a>
-<span class="sourceLineNo">498</span><a id="line.498">                    json.writeValue(null);</a>
-<span class="sourceLineNo">499</span><a id="line.499">                    return;</a>
-<span class="sourceLineNo">500</span><a id="line.500">                }</a>
-<span class="sourceLineNo">501</span><a id="line.501">                int sz = object.length;</a>
-<span class="sourceLineNo">502</span><a id="line.502">                json.writeArrayStart();</a>
-<span class="sourceLineNo">503</span><a id="line.503">                for (int i = 0; i &lt; sz; i++) {</a>
-<span class="sourceLineNo">504</span><a id="line.504">                    json.writeValue(String.valueOf(object[i]));</a>
-<span class="sourceLineNo">505</span><a id="line.505">                }</a>
-<span class="sourceLineNo">506</span><a id="line.506">                json.writeArrayEnd();</a>
-<span class="sourceLineNo">507</span><a id="line.507">            }</a>
-<span class="sourceLineNo">508</span><a id="line.508"></a>
-<span class="sourceLineNo">509</span><a id="line.509">            @Override</a>
-<span class="sourceLineNo">510</span><a id="line.510">            public char[][] read(Json json, JsonValue jsonData, Class type) {</a>
-<span class="sourceLineNo">511</span><a id="line.511">                if(jsonData == null || jsonData.isNull())</a>
-<span class="sourceLineNo">512</span><a id="line.512">                    return null;</a>
-<span class="sourceLineNo">513</span><a id="line.513">                int sz = jsonData.size;</a>
-<span class="sourceLineNo">514</span><a id="line.514">                char[][] data = new char[sz][];</a>
-<span class="sourceLineNo">515</span><a id="line.515">                JsonValue c = jsonData.child();</a>
-<span class="sourceLineNo">516</span><a id="line.516">                for (int i = 0; i &lt; sz &amp;&amp; c != null; i++, c = c.next()) {</a>
-<span class="sourceLineNo">517</span><a id="line.517">                    data[i] = c.asString().toCharArray();</a>
-<span class="sourceLineNo">518</span><a id="line.518">                }</a>
-<span class="sourceLineNo">519</span><a id="line.519">                return data;</a>
-<span class="sourceLineNo">520</span><a id="line.520">            }</a>
-<span class="sourceLineNo">521</span><a id="line.521">        });</a>
-<span class="sourceLineNo">522</span><a id="line.522">        json.setSerializer(FakeLanguageGen.class, new Serializer&lt;FakeLanguageGen&gt;() {</a>
-<span class="sourceLineNo">523</span><a id="line.523">            @Override</a>
-<span class="sourceLineNo">524</span><a id="line.524">            public void write(Json json, FakeLanguageGen object, Class knownType) {</a>
-<span class="sourceLineNo">525</span><a id="line.525">                if(object == null)</a>
-<span class="sourceLineNo">526</span><a id="line.526">                {</a>
-<span class="sourceLineNo">527</span><a id="line.527">                    json.writeValue(null);</a>
-<span class="sourceLineNo">528</span><a id="line.528">                    return;</a>
-<span class="sourceLineNo">529</span><a id="line.529">                }</a>
-<span class="sourceLineNo">530</span><a id="line.530">                json.writeValue(object.serializeToString());</a>
-<span class="sourceLineNo">531</span><a id="line.531">            }</a>
-<span class="sourceLineNo">532</span><a id="line.532"></a>
-<span class="sourceLineNo">533</span><a id="line.533">            @Override</a>
-<span class="sourceLineNo">534</span><a id="line.534">            public FakeLanguageGen read(Json json, JsonValue jsonData, Class type) {</a>
-<span class="sourceLineNo">535</span><a id="line.535">                if(jsonData == null || jsonData.isNull())</a>
-<span class="sourceLineNo">536</span><a id="line.536">                    return null;</a>
-<span class="sourceLineNo">537</span><a id="line.537">                return FakeLanguageGen.deserializeFromString(jsonData.asString());</a>
-<span class="sourceLineNo">538</span><a id="line.538">            }</a>
-<span class="sourceLineNo">539</span><a id="line.539">        });</a>
-<span class="sourceLineNo">540</span><a id="line.540">    }</a>
-<span class="sourceLineNo">541</span><a id="line.541">}</a>
+<span class="sourceLineNo">273</span><a id="line.273">                        public OrderedMap read(Json json, JsonValue jsonData, Class type) {</a>
+<span class="sourceLineNo">274</span><a id="line.274">                if(jsonData == null || jsonData.isNull()) return null;</a>
+<span class="sourceLineNo">275</span><a id="line.275">                float f = json.readValue("f", float.class, jsonData);</a>
+<span class="sourceLineNo">276</span><a id="line.276">                Object k = json.readValue("k", null, INVALID, jsonData);</a>
+<span class="sourceLineNo">277</span><a id="line.277">                Object v = json.readValue("v", null, INVALID, jsonData);</a>
+<span class="sourceLineNo">278</span><a id="line.278">                Object[] r = json.readValue("r", Object[].class, jsonData);</a>
+<span class="sourceLineNo">279</span><a id="line.279">                if(k == INVALID)</a>
+<span class="sourceLineNo">280</span><a id="line.280">                    return new OrderedMap(0, f);</a>
+<span class="sourceLineNo">281</span><a id="line.281">                return Maker.makeOM(f, k, v, r);</a>
+<span class="sourceLineNo">282</span><a id="line.282">                //return new OrderedMap(json.readValue(OrderedSet.class, jsonData.get("k")),</a>
+<span class="sourceLineNo">283</span><a id="line.283">                //        json.readValue(ArrayList.class, jsonData.get("v")), jsonData.getFloat("f"));</a>
+<span class="sourceLineNo">284</span><a id="line.284">            }</a>
+<span class="sourceLineNo">285</span><a id="line.285">        });</a>
+<span class="sourceLineNo">286</span><a id="line.286">        json.setSerializer(EnumOrderedMap.class, new Serializer&lt;EnumOrderedMap&gt;() {</a>
+<span class="sourceLineNo">287</span><a id="line.287">            @Override</a>
+<span class="sourceLineNo">288</span><a id="line.288">            public void write(Json json, EnumOrderedMap object, Class knownType) {</a>
+<span class="sourceLineNo">289</span><a id="line.289">                if(object == null)</a>
+<span class="sourceLineNo">290</span><a id="line.290">                {</a>
+<span class="sourceLineNo">291</span><a id="line.291">                    json.writeValue(null);</a>
+<span class="sourceLineNo">292</span><a id="line.292">                    return;</a>
+<span class="sourceLineNo">293</span><a id="line.293">                }</a>
+<span class="sourceLineNo">294</span><a id="line.294">                json.writeObjectStart();</a>
+<span class="sourceLineNo">295</span><a id="line.295">                if(!object.isEmpty()) {</a>
+<span class="sourceLineNo">296</span><a id="line.296">                    json.writeValue("c", object.firstKey().getClass().getName());</a>
+<span class="sourceLineNo">297</span><a id="line.297">                    json.writeValue("k", object.firstKey(), null);</a>
+<span class="sourceLineNo">298</span><a id="line.298">                    json.writeValue("v", object.getAt(0), null);</a>
+<span class="sourceLineNo">299</span><a id="line.299">                    int sz = object.size();</a>
+<span class="sourceLineNo">300</span><a id="line.300">                    Object[] r = new Object[(sz - 1) * 2];</a>
+<span class="sourceLineNo">301</span><a id="line.301">                    for (int i = 1, p = 0; i &lt; sz; i++) {</a>
+<span class="sourceLineNo">302</span><a id="line.302">                        r[p++] = object.keyAt(i);</a>
+<span class="sourceLineNo">303</span><a id="line.303">                        r[p++] = object.getAt(i);</a>
+<span class="sourceLineNo">304</span><a id="line.304">                    }</a>
+<span class="sourceLineNo">305</span><a id="line.305">                    json.writeValue("r", r, Object[].class, Object.class);</a>
+<span class="sourceLineNo">306</span><a id="line.306">                }</a>
+<span class="sourceLineNo">307</span><a id="line.307">                else</a>
+<span class="sourceLineNo">308</span><a id="line.308">                    json.writeValue("c", "default");</a>
+<span class="sourceLineNo">309</span><a id="line.309">                json.writeObjectEnd();</a>
+<span class="sourceLineNo">310</span><a id="line.310">            }</a>
+<span class="sourceLineNo">311</span><a id="line.311"></a>
+<span class="sourceLineNo">312</span><a id="line.312">            @Override</a>
+<span class="sourceLineNo">313</span><a id="line.313">            @SuppressWarnings("unchecked")</a>
+<span class="sourceLineNo">314</span><a id="line.314">            public EnumOrderedMap read(Json json, JsonValue jsonData, Class type) {</a>
+<span class="sourceLineNo">315</span><a id="line.315">                if(jsonData == null || jsonData.isNull()) return null;</a>
+<span class="sourceLineNo">316</span><a id="line.316">                String c = json.readValue("c", String.class, "", jsonData);</a>
+<span class="sourceLineNo">317</span><a id="line.317">                if("default".equals(c))</a>
+<span class="sourceLineNo">318</span><a id="line.318">                    return new EnumOrderedMap();</a>
+<span class="sourceLineNo">319</span><a id="line.319">                try {</a>
+<span class="sourceLineNo">320</span><a id="line.320">                    Class&lt;? extends Enum&lt;?&gt;&gt; cl = ClassReflection.forName(c);</a>
+<span class="sourceLineNo">321</span><a id="line.321">                    if(!ClassReflection.isEnum(cl))</a>
+<span class="sourceLineNo">322</span><a id="line.322">                        return null;</a>
+<span class="sourceLineNo">323</span><a id="line.323">                    Enum&lt;?&gt; k = json.readValue("k", cl, jsonData);</a>
+<span class="sourceLineNo">324</span><a id="line.324">                    Object v = json.readValue("v", null, INVALID, jsonData);</a>
+<span class="sourceLineNo">325</span><a id="line.325">                    Object[] r = json.readValue("r", Object[].class, jsonData);</a>
+<span class="sourceLineNo">326</span><a id="line.326">                    if(v == INVALID)</a>
+<span class="sourceLineNo">327</span><a id="line.327">                        return new EnumOrderedMap();</a>
+<span class="sourceLineNo">328</span><a id="line.328">                    return Maker.makeEOM(k, v, r);</a>
+<span class="sourceLineNo">329</span><a id="line.329">                } catch (ReflectionException e) {</a>
+<span class="sourceLineNo">330</span><a id="line.330">                    return null;</a>
+<span class="sourceLineNo">331</span><a id="line.331">                }</a>
+<span class="sourceLineNo">332</span><a id="line.332">                //return new OrderedMap(json.readValue(OrderedSet.class, jsonData.get("k")),</a>
+<span class="sourceLineNo">333</span><a id="line.333">                //        json.readValue(ArrayList.class, jsonData.get("v")), jsonData.getFloat("f"));</a>
+<span class="sourceLineNo">334</span><a id="line.334">            }</a>
+<span class="sourceLineNo">335</span><a id="line.335">        });</a>
+<span class="sourceLineNo">336</span><a id="line.336">        json.setSerializer(EnumOrderedSet.class, new Serializer&lt;EnumOrderedSet&gt;() {</a>
+<span class="sourceLineNo">337</span><a id="line.337">            @Override</a>
+<span class="sourceLineNo">338</span><a id="line.338">            public void write(Json json, EnumOrderedSet object, Class knownType) {</a>
+<span class="sourceLineNo">339</span><a id="line.339">                if(object == null)</a>
+<span class="sourceLineNo">340</span><a id="line.340">                {</a>
+<span class="sourceLineNo">341</span><a id="line.341">                    json.writeValue(null);</a>
+<span class="sourceLineNo">342</span><a id="line.342">                    return;</a>
+<span class="sourceLineNo">343</span><a id="line.343">                }</a>
+<span class="sourceLineNo">344</span><a id="line.344">                json.writeObjectStart();</a>
+<span class="sourceLineNo">345</span><a id="line.345">                if(!object.isEmpty()) {</a>
+<span class="sourceLineNo">346</span><a id="line.346">                    json.writeValue("c", object.first().getClass().getName());</a>
+<span class="sourceLineNo">347</span><a id="line.347">                    json.writeValue("i", object.first(), null);</a>
+<span class="sourceLineNo">348</span><a id="line.348">                    int sz = object.size();</a>
+<span class="sourceLineNo">349</span><a id="line.349">                    Object[] r = new Object[sz - 1];</a>
+<span class="sourceLineNo">350</span><a id="line.350">                    for (int i = 1, p = 0; i &lt; sz; i++) {</a>
+<span class="sourceLineNo">351</span><a id="line.351">                        r[p++] = object.getAt(i);</a>
+<span class="sourceLineNo">352</span><a id="line.352">                    }</a>
+<span class="sourceLineNo">353</span><a id="line.353">                    json.writeValue("r", r, Object[].class, Object.class);</a>
+<span class="sourceLineNo">354</span><a id="line.354">                }</a>
+<span class="sourceLineNo">355</span><a id="line.355">                else</a>
+<span class="sourceLineNo">356</span><a id="line.356">                    json.writeValue("c", "default");</a>
+<span class="sourceLineNo">357</span><a id="line.357">                json.writeObjectEnd();</a>
+<span class="sourceLineNo">358</span><a id="line.358">            }</a>
+<span class="sourceLineNo">359</span><a id="line.359"></a>
+<span class="sourceLineNo">360</span><a id="line.360">            @Override</a>
+<span class="sourceLineNo">361</span><a id="line.361">            @SuppressWarnings("unchecked")</a>
+<span class="sourceLineNo">362</span><a id="line.362">            public EnumOrderedSet read(Json json, JsonValue jsonData, Class type) {</a>
+<span class="sourceLineNo">363</span><a id="line.363">                if(jsonData == null || jsonData.isNull()) return null;</a>
+<span class="sourceLineNo">364</span><a id="line.364">                String c = json.readValue("c", String.class, "", jsonData);</a>
+<span class="sourceLineNo">365</span><a id="line.365">                if("default".equals(c))</a>
+<span class="sourceLineNo">366</span><a id="line.366">                    return new EnumOrderedSet();</a>
+<span class="sourceLineNo">367</span><a id="line.367">                try {</a>
+<span class="sourceLineNo">368</span><a id="line.368">                    Class&lt;? extends Enum&lt;?&gt;&gt; cl = ClassReflection.forName(c);</a>
+<span class="sourceLineNo">369</span><a id="line.369">                    if(!ClassReflection.isEnum(cl))</a>
+<span class="sourceLineNo">370</span><a id="line.370">                        return null;</a>
+<span class="sourceLineNo">371</span><a id="line.371">                    Enum&lt;?&gt; i = json.readValue("i", cl, jsonData);</a>
+<span class="sourceLineNo">372</span><a id="line.372">                    Object[] r = json.readValue("r", Object[].class, jsonData);</a>
+<span class="sourceLineNo">373</span><a id="line.373">                    return Maker.makeEOS(i, (Enum&lt;?&gt;[]) r);</a>
+<span class="sourceLineNo">374</span><a id="line.374">                } catch (ReflectionException e) {</a>
+<span class="sourceLineNo">375</span><a id="line.375">                    return null;</a>
+<span class="sourceLineNo">376</span><a id="line.376">                }</a>
+<span class="sourceLineNo">377</span><a id="line.377">                //return new OrderedMap(json.readValue(OrderedSet.class, jsonData.get("k")),</a>
+<span class="sourceLineNo">378</span><a id="line.378">                //        json.readValue(ArrayList.class, jsonData.get("v")), jsonData.getFloat("f"));</a>
+<span class="sourceLineNo">379</span><a id="line.379">            }</a>
+<span class="sourceLineNo">380</span><a id="line.380">        });</a>
+<span class="sourceLineNo">381</span><a id="line.381"></a>
+<span class="sourceLineNo">382</span><a id="line.382">        json.setSerializer(EnumMap.class, new Serializer&lt;EnumMap&gt;() {</a>
+<span class="sourceLineNo">383</span><a id="line.383">            @Override</a>
+<span class="sourceLineNo">384</span><a id="line.384">            public void write(Json json, EnumMap object, Class knownType) {</a>
+<span class="sourceLineNo">385</span><a id="line.385">                if(object == null)</a>
+<span class="sourceLineNo">386</span><a id="line.386">                {</a>
+<span class="sourceLineNo">387</span><a id="line.387">                    json.writeValue(null);</a>
+<span class="sourceLineNo">388</span><a id="line.388">                    return;</a>
+<span class="sourceLineNo">389</span><a id="line.389">                }</a>
+<span class="sourceLineNo">390</span><a id="line.390">                json.writeObjectStart();</a>
+<span class="sourceLineNo">391</span><a id="line.391">                if(!object.isEmpty()) {</a>
+<span class="sourceLineNo">392</span><a id="line.392">                    Iterator it = object.entrySet().iterator();</a>
+<span class="sourceLineNo">393</span><a id="line.393">                    Map.Entry en = (Map.Entry)it.next();</a>
+<span class="sourceLineNo">394</span><a id="line.394">                    json.writeValue("e", en.getKey(), Enum.class);</a>
+<span class="sourceLineNo">395</span><a id="line.395">                    json.writeValue("v", en.getValue(), null);</a>
+<span class="sourceLineNo">396</span><a id="line.396">                    int sz = object.size();</a>
+<span class="sourceLineNo">397</span><a id="line.397">                    Object[] r = new Object[(sz - 1) * 2];</a>
+<span class="sourceLineNo">398</span><a id="line.398">                    for (int i = 1, p = 0; i &lt; sz; i++) {</a>
+<span class="sourceLineNo">399</span><a id="line.399">                        if(!it.hasNext())</a>
+<span class="sourceLineNo">400</span><a id="line.400">                            break;</a>
+<span class="sourceLineNo">401</span><a id="line.401">                        en = (Map.Entry)it.next();</a>
+<span class="sourceLineNo">402</span><a id="line.402">                        r[p++] = en.getKey();</a>
+<span class="sourceLineNo">403</span><a id="line.403">                        r[p++] = en.getValue();</a>
+<span class="sourceLineNo">404</span><a id="line.404">                    }</a>
+<span class="sourceLineNo">405</span><a id="line.405">                    json.writeValue("r", r, Object[].class, Object.class);</a>
+<span class="sourceLineNo">406</span><a id="line.406">                }</a>
+<span class="sourceLineNo">407</span><a id="line.407">                json.writeObjectEnd();</a>
+<span class="sourceLineNo">408</span><a id="line.408">            }</a>
+<span class="sourceLineNo">409</span><a id="line.409"></a>
+<span class="sourceLineNo">410</span><a id="line.410">            @Override</a>
+<span class="sourceLineNo">411</span><a id="line.411">            @SuppressWarnings("unchecked")</a>
+<span class="sourceLineNo">412</span><a id="line.412">            public EnumMap read(Json json, JsonValue jsonData, Class type) {</a>
+<span class="sourceLineNo">413</span><a id="line.413">                if(jsonData == null || jsonData.isNull() || jsonData.size == 0) return null;</a>
+<span class="sourceLineNo">414</span><a id="line.414">                return new EnumMap(Maker.makeOM(0.75f,</a>
+<span class="sourceLineNo">415</span><a id="line.415">                        json.readValue("e", null, jsonData),</a>
+<span class="sourceLineNo">416</span><a id="line.416">                        json.readValue("v", null, jsonData),</a>
+<span class="sourceLineNo">417</span><a id="line.417">                        json.readValue("r", Object[].class, jsonData)));</a>
+<span class="sourceLineNo">418</span><a id="line.418">                //return new OrderedMap(json.readValue(OrderedSet.class, jsonData.get("k")),</a>
+<span class="sourceLineNo">419</span><a id="line.419">                //        json.readValue(ArrayList.class, jsonData.get("v")), jsonData.getFloat("f"));</a>
+<span class="sourceLineNo">420</span><a id="line.420">            }</a>
+<span class="sourceLineNo">421</span><a id="line.421">        });</a>
+<span class="sourceLineNo">422</span><a id="line.422">        json.setSerializer(Arrangement.class, new Serializer&lt;Arrangement&gt;() {</a>
+<span class="sourceLineNo">423</span><a id="line.423">            @Override</a>
+<span class="sourceLineNo">424</span><a id="line.424">            public void write(Json json, Arrangement object, Class knownType) {</a>
+<span class="sourceLineNo">425</span><a id="line.425">                if(object == null)</a>
+<span class="sourceLineNo">426</span><a id="line.426">                {</a>
+<span class="sourceLineNo">427</span><a id="line.427">                    json.writeValue(null);</a>
+<span class="sourceLineNo">428</span><a id="line.428">                    return;</a>
+<span class="sourceLineNo">429</span><a id="line.429">                }</a>
+<span class="sourceLineNo">430</span><a id="line.430">                json.writeObjectStart();</a>
+<span class="sourceLineNo">431</span><a id="line.431">                json.writeValue("k", object.keysAsOrderedSet(), OrderedSet.class);</a>
+<span class="sourceLineNo">432</span><a id="line.432">                json.writeValue("f", object.f);</a>
+<span class="sourceLineNo">433</span><a id="line.433">                json.writeObjectEnd();</a>
+<span class="sourceLineNo">434</span><a id="line.434">            }</a>
+<span class="sourceLineNo">435</span><a id="line.435"></a>
+<span class="sourceLineNo">436</span><a id="line.436">            @Override</a>
+<span class="sourceLineNo">437</span><a id="line.437">            @SuppressWarnings("unchecked")</a>
+<span class="sourceLineNo">438</span><a id="line.438">            public Arrangement read(Json json, JsonValue jsonData, Class type) {</a>
+<span class="sourceLineNo">439</span><a id="line.439">                if(jsonData == null || jsonData.isNull()) return null;</a>
+<span class="sourceLineNo">440</span><a id="line.440">                return new Arrangement(json.readValue(OrderedSet.class, jsonData.get("k")), jsonData.getFloat("f"));</a>
+<span class="sourceLineNo">441</span><a id="line.441">            }</a>
+<span class="sourceLineNo">442</span><a id="line.442">        });</a>
+<span class="sourceLineNo">443</span><a id="line.443"></a>
+<span class="sourceLineNo">444</span><a id="line.444">        json.setSerializer(K2.class, new Serializer&lt;K2&gt;() {</a>
+<span class="sourceLineNo">445</span><a id="line.445">            @Override</a>
+<span class="sourceLineNo">446</span><a id="line.446">            public void write(Json json, K2 object, Class knownType) {</a>
+<span class="sourceLineNo">447</span><a id="line.447">                if(object == null)</a>
+<span class="sourceLineNo">448</span><a id="line.448">                {</a>
+<span class="sourceLineNo">449</span><a id="line.449">                    json.writeValue(null);</a>
+<span class="sourceLineNo">450</span><a id="line.450">                    return;</a>
+<span class="sourceLineNo">451</span><a id="line.451">                }</a>
+<span class="sourceLineNo">452</span><a id="line.452">                json.writeObjectStart();</a>
+<span class="sourceLineNo">453</span><a id="line.453">                json.writeValue("a", object.getSetA(), SortedSet.class);</a>
+<span class="sourceLineNo">454</span><a id="line.454">                json.writeValue("b", object.getSetB(), SortedSet.class);</a>
+<span class="sourceLineNo">455</span><a id="line.455">                json.writeObjectEnd();</a>
+<span class="sourceLineNo">456</span><a id="line.456">            }</a>
+<span class="sourceLineNo">457</span><a id="line.457"></a>
+<span class="sourceLineNo">458</span><a id="line.458">            @Override</a>
+<span class="sourceLineNo">459</span><a id="line.459">            @SuppressWarnings("unchecked")</a>
+<span class="sourceLineNo">460</span><a id="line.460">            public K2 read(Json json, JsonValue jsonData, Class type) {</a>
+<span class="sourceLineNo">461</span><a id="line.461">                if(jsonData == null || jsonData.isNull()) return null;</a>
+<span class="sourceLineNo">462</span><a id="line.462">                return new K2(json.readValue(SortedSet.class, jsonData.get("a")), json.readValue(SortedSet.class, jsonData.get("b")));</a>
+<span class="sourceLineNo">463</span><a id="line.463">            }</a>
+<span class="sourceLineNo">464</span><a id="line.464">        });</a>
+<span class="sourceLineNo">465</span><a id="line.465"></a>
+<span class="sourceLineNo">466</span><a id="line.466">        json.setSerializer(K2V1.class, new Serializer&lt;K2V1&gt;() {</a>
+<span class="sourceLineNo">467</span><a id="line.467">            @Override</a>
+<span class="sourceLineNo">468</span><a id="line.468">            public void write(Json json, K2V1 object, Class knownType) {</a>
+<span class="sourceLineNo">469</span><a id="line.469">                if(object == null)</a>
+<span class="sourceLineNo">470</span><a id="line.470">                {</a>
+<span class="sourceLineNo">471</span><a id="line.471">                    json.writeValue(null);</a>
+<span class="sourceLineNo">472</span><a id="line.472">                    return;</a>
+<span class="sourceLineNo">473</span><a id="line.473">                }</a>
+<span class="sourceLineNo">474</span><a id="line.474">                json.writeObjectStart();</a>
+<span class="sourceLineNo">475</span><a id="line.475">                json.writeValue("a", object.getSetA(), SortedSet.class);</a>
+<span class="sourceLineNo">476</span><a id="line.476">                json.writeValue("b", object.getSetB(), SortedSet.class);</a>
+<span class="sourceLineNo">477</span><a id="line.477">                json.writeValue("q", object.getListQ(), ArrayList.class);</a>
+<span class="sourceLineNo">478</span><a id="line.478">                json.writeObjectEnd();</a>
+<span class="sourceLineNo">479</span><a id="line.479">            }</a>
+<span class="sourceLineNo">480</span><a id="line.480"></a>
+<span class="sourceLineNo">481</span><a id="line.481">            @Override</a>
+<span class="sourceLineNo">482</span><a id="line.482">            @SuppressWarnings("unchecked")</a>
+<span class="sourceLineNo">483</span><a id="line.483">            public K2V1 read(Json json, JsonValue jsonData, Class type) {</a>
+<span class="sourceLineNo">484</span><a id="line.484">                if(jsonData == null || jsonData.isNull()) return null;</a>
+<span class="sourceLineNo">485</span><a id="line.485">                return new K2V1(</a>
+<span class="sourceLineNo">486</span><a id="line.486">                        json.readValue(SortedSet.class, jsonData.get("a")),</a>
+<span class="sourceLineNo">487</span><a id="line.487">                        json.readValue(SortedSet.class, jsonData.get("b")),</a>
+<span class="sourceLineNo">488</span><a id="line.488">                        json.readValue(ArrayList.class, jsonData.get("q")));</a>
+<span class="sourceLineNo">489</span><a id="line.489">            }</a>
+<span class="sourceLineNo">490</span><a id="line.490">        });</a>
+<span class="sourceLineNo">491</span><a id="line.491"></a>
+<span class="sourceLineNo">492</span><a id="line.492">        json.setSerializer(char[][].class, new Serializer&lt;char[][]&gt;() {</a>
+<span class="sourceLineNo">493</span><a id="line.493">            @Override</a>
+<span class="sourceLineNo">494</span><a id="line.494">            public void write(Json json, char[][] object, Class knownType) {</a>
+<span class="sourceLineNo">495</span><a id="line.495">                if(object == null)</a>
+<span class="sourceLineNo">496</span><a id="line.496">                {</a>
+<span class="sourceLineNo">497</span><a id="line.497">                    json.writeValue(null);</a>
+<span class="sourceLineNo">498</span><a id="line.498">                    return;</a>
+<span class="sourceLineNo">499</span><a id="line.499">                }</a>
+<span class="sourceLineNo">500</span><a id="line.500">                int sz = object.length;</a>
+<span class="sourceLineNo">501</span><a id="line.501">                json.writeArrayStart();</a>
+<span class="sourceLineNo">502</span><a id="line.502">                for (int i = 0; i &lt; sz; i++) {</a>
+<span class="sourceLineNo">503</span><a id="line.503">                    json.writeValue(String.valueOf(object[i]));</a>
+<span class="sourceLineNo">504</span><a id="line.504">                }</a>
+<span class="sourceLineNo">505</span><a id="line.505">                json.writeArrayEnd();</a>
+<span class="sourceLineNo">506</span><a id="line.506">            }</a>
+<span class="sourceLineNo">507</span><a id="line.507"></a>
+<span class="sourceLineNo">508</span><a id="line.508">            @Override</a>
+<span class="sourceLineNo">509</span><a id="line.509">            public char[][] read(Json json, JsonValue jsonData, Class type) {</a>
+<span class="sourceLineNo">510</span><a id="line.510">                if(jsonData == null || jsonData.isNull())</a>
+<span class="sourceLineNo">511</span><a id="line.511">                    return null;</a>
+<span class="sourceLineNo">512</span><a id="line.512">                int sz = jsonData.size;</a>
+<span class="sourceLineNo">513</span><a id="line.513">                char[][] data = new char[sz][];</a>
+<span class="sourceLineNo">514</span><a id="line.514">                JsonValue c = jsonData.child();</a>
+<span class="sourceLineNo">515</span><a id="line.515">                for (int i = 0; i &lt; sz &amp;&amp; c != null; i++, c = c.next()) {</a>
+<span class="sourceLineNo">516</span><a id="line.516">                    data[i] = c.asString().toCharArray();</a>
+<span class="sourceLineNo">517</span><a id="line.517">                }</a>
+<span class="sourceLineNo">518</span><a id="line.518">                return data;</a>
+<span class="sourceLineNo">519</span><a id="line.519">            }</a>
+<span class="sourceLineNo">520</span><a id="line.520">        });</a>
+<span class="sourceLineNo">521</span><a id="line.521">        json.setSerializer(FakeLanguageGen.class, new Serializer&lt;FakeLanguageGen&gt;() {</a>
+<span class="sourceLineNo">522</span><a id="line.522">            @Override</a>
+<span class="sourceLineNo">523</span><a id="line.523">            public void write(Json json, FakeLanguageGen object, Class knownType) {</a>
+<span class="sourceLineNo">524</span><a id="line.524">                if(object == null)</a>
+<span class="sourceLineNo">525</span><a id="line.525">                {</a>
+<span class="sourceLineNo">526</span><a id="line.526">                    json.writeValue(null);</a>
+<span class="sourceLineNo">527</span><a id="line.527">                    return;</a>
+<span class="sourceLineNo">528</span><a id="line.528">                }</a>
+<span class="sourceLineNo">529</span><a id="line.529">                json.writeValue(object.serializeToString());</a>
+<span class="sourceLineNo">530</span><a id="line.530">            }</a>
+<span class="sourceLineNo">531</span><a id="line.531"></a>
+<span class="sourceLineNo">532</span><a id="line.532">            @Override</a>
+<span class="sourceLineNo">533</span><a id="line.533">            public FakeLanguageGen read(Json json, JsonValue jsonData, Class type) {</a>
+<span class="sourceLineNo">534</span><a id="line.534">                if(jsonData == null || jsonData.isNull())</a>
+<span class="sourceLineNo">535</span><a id="line.535">                    return null;</a>
+<span class="sourceLineNo">536</span><a id="line.536">                return FakeLanguageGen.deserializeFromString(jsonData.asString());</a>
+<span class="sourceLineNo">537</span><a id="line.537">            }</a>
+<span class="sourceLineNo">538</span><a id="line.538">        });</a>
+<span class="sourceLineNo">539</span><a id="line.539">    }</a>
+<span class="sourceLineNo">540</span><a id="line.540">}</a>
 
 
 

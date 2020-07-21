@@ -87,7 +87,7 @@ loadScripts(document, 'script');</script>
 <h1 title="Class GreasedRegion" class="title">Class GreasedRegion</h1>
 </div>
 <div class="contentContainer">
-<div class="inheritance" title="Inheritance Tree"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">java.lang.Object</a>
+<div class="inheritance" title="Inheritance Tree"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">java.lang.Object</a>
 <div class="inheritance"><a href="../squidgrid/zone/Zone.Skeleton.html" title="class in squidpony.squidgrid.zone">squidpony.squidgrid.zone.Zone.Skeleton</a>
 <div class="inheritance">squidpony.squidmath.GreasedRegion</div>
 </div>
@@ -95,12 +95,12 @@ loadScripts(document, 'script');</script>
 <section class="description">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink">Serializable</a></code>, <code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Iterable</a>&lt;<a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code>, <code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code>, <code><a href="../squidgrid/zone/MutableZone.html" title="interface in squidpony.squidgrid.zone">MutableZone</a></code>, <code><a href="../squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a></code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink">Serializable</a></code>, <code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Iterable</a>&lt;<a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code>, <code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code>, <code><a href="../squidgrid/zone/MutableZone.html" title="interface in squidpony.squidgrid.zone">MutableZone</a></code>, <code><a href="../squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a></code></dd>
 </dl>
 <hr>
 <pre>public class <a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.69">GreasedRegion</a>
 extends <a href="../squidgrid/zone/Zone.Skeleton.html" title="class in squidpony.squidgrid.zone">Zone.Skeleton</a>
-implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink">Serializable</a>, <a href="../squidgrid/zone/MutableZone.html" title="interface in squidpony.squidgrid.zone">MutableZone</a></pre>
+implements <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink">Serializable</a>, <a href="../squidgrid/zone/MutableZone.html" title="interface in squidpony.squidgrid.zone">MutableZone</a></pre>
 <div class="block">Region encoding of on/off information about areas using bitsets; uncompressed (fatty), but fast (greased lightning).
  This can handle any size of 2D data, and is not strictly limited to 256x256 as CoordPacker is. It stores several long
  arrays and uses each bit in one of those numbers to represent a single point, though sometimes this does waste bits
@@ -350,7 +350,7 @@ int&nbsp;height)</code></th>
 <tr class="altColor">
 <th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(int,int,java.lang.Iterable)">GreasedRegion</a></span>&#8203;(int&nbsp;width,
 int&nbsp;height,
-<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Iterable</a>&lt;<a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;points)</code></th>
+<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Iterable</a>&lt;<a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;points)</code></th>
 <td class="colLast">
 <div class="block">Constructor for a GreasedRegion that can have several "on" cells specified, and has the given width and height.</div>
 </td>
@@ -396,7 +396,7 @@ int&nbsp;upper)</code></th>
 </td>
 </tr>
 <tr class="rowColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.lang.String%5B%5D,char)">GreasedRegion</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]&nbsp;map,
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.lang.String%5B%5D,char)">GreasedRegion</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]&nbsp;map,
 char&nbsp;yes)</code></th>
 <td class="colLast">
 <div class="block">Weird constructor that takes a String array, _as it would be printed_, so each String is a row and indexing would
@@ -475,7 +475,7 @@ int&nbsp;height)</code></th>
 </tr>
 <tr class="rowColor" id="i1">
 <td class="colFirst"><code>boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addAll(java.util.Collection)">addAll</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;? extends <a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;c)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addAll(java.util.Collection)">addAll</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;? extends <a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;c)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor" id="i2">
@@ -518,19 +518,19 @@ int&nbsp;heightChange)</code></th>
 </td>
 </tr>
 <tr class="rowColor" id="i7">
-<td class="colFirst"><code>static <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#appendContaining(java.util.Collection,int,int,java.util.Collection)">appendContaining</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;into,
+<td class="colFirst"><code>static <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#appendContaining(java.util.Collection,int,int,java.util.Collection)">appendContaining</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;into,
 int&nbsp;x,
 int&nbsp;y,
-<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;packed)</code></th>
+<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;packed)</code></th>
 <td class="colLast">
 <div class="block">Tries to look up the position x,y in each GreasedRegion in packed; each GreasedRegion that contains that x,y
  point is appended into the Collection <code>into</code>.</div>
 </td>
 </tr>
 <tr class="altColor" id="i8">
-<td class="colFirst"><code>static <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#appendContaining(java.util.Collection,int,int,squidpony.squidmath.GreasedRegion...)">appendContaining</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;into,
+<td class="colFirst"><code>static <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#appendContaining(java.util.Collection,int,int,squidpony.squidmath.GreasedRegion...)">appendContaining</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;into,
 int&nbsp;x,
 int&nbsp;y,
 <a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>...&nbsp;packed)</code></th>
@@ -622,7 +622,7 @@ int&nbsp;y)</code></th>
 </tr>
 <tr class="altColor" id="i22">
 <td class="colFirst"><code>boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#contains(java.lang.Object)">contains</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;o)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#contains(java.lang.Object)">contains</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;o)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor" id="i23">
@@ -641,7 +641,7 @@ int&nbsp;y)</code></th>
 </tr>
 <tr class="rowColor" id="i25">
 <td class="colFirst"><code>boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#containsAll(java.util.Collection)">containsAll</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;?&gt;&nbsp;c)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#containsAll(java.util.Collection)">containsAll</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;?&gt;&nbsp;c)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor" id="i26">
@@ -669,7 +669,7 @@ int&nbsp;y)</code></th>
 </tr>
 <tr class="rowColor" id="i29">
 <td class="colFirst"><code>static <a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#decompress(java.lang.String)">decompress</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;compressed)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#decompress(java.lang.String)">decompress</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;compressed)</code></th>
 <td class="colLast">
 <div class="block">Decompresses a String returned by <a href="#toCompressedString()"><code>toCompressedString()</code></a>, returning a new GreasedRegion with identical
  width, height, and contents to the GreasedRegion before compression.</div>
@@ -677,7 +677,7 @@ int&nbsp;y)</code></th>
 </tr>
 <tr class="altColor" id="i30">
 <td class="colFirst"><code>static <a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#deserializeFromString(java.lang.String)">deserializeFromString</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;s)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#deserializeFromString(java.lang.String)">deserializeFromString</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;s)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor" id="i31">
@@ -759,7 +759,7 @@ int&nbsp;preservation)</code></th>
 </tr>
 <tr class="altColor" id="i40">
 <td class="colFirst"><code>boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#equals(java.lang.Object)">equals</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;o)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#equals(java.lang.Object)">equals</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;o)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor" id="i41">
@@ -808,12 +808,12 @@ int&nbsp;preservation)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor" id="i47">
-<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;</code></td>
+<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#expandSeriesToLimit()">expandSeriesToLimit</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor" id="i48">
-<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;</code></td>
+<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#expandSeriesToLimit8way()">expandSeriesToLimit8way</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -912,7 +912,7 @@ int&nbsp;amount)</code></th>
 </td>
 </tr>
 <tr class="altColor" id="i62">
-<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;</code></td>
+<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#floodSeriesToLimit(squidpony.squidmath.GreasedRegion)">floodSeriesToLimit</a></span>&#8203;(<a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;bounds)</code></th>
 <td class="colLast">
 <div class="block">Repeatedly generates new GreasedRegions, each one cell expanded in 4 directions from the previous GreasedRegion
@@ -920,7 +920,7 @@ int&nbsp;amount)</code></th>
 </td>
 </tr>
 <tr class="rowColor" id="i63">
-<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;</code></td>
+<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#floodSeriesToLimit8way(squidpony.squidmath.GreasedRegion)">floodSeriesToLimit8way</a></span>&#8203;(<a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;bounds)</code></th>
 <td class="colLast">
 <div class="block">Repeatedly generates new GreasedRegions, each one cell expanded in 8 directions from the previous GreasedRegion
@@ -978,17 +978,17 @@ int&nbsp;amount)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor" id="i71">
-<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;</code></td>
+<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#fringeSeriesToLimit()">fringeSeriesToLimit</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor" id="i72">
-<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;</code></td>
+<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#fringeSeriesToLimit8way()">fringeSeriesToLimit8way</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor" id="i73">
-<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
+<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getAll()">getAll</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -1098,7 +1098,7 @@ int&nbsp;rectangleHeight)</code></th>
 </tr>
 <tr class="rowColor" id="i89">
 <td class="colFirst"><code><a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#insertSeveral(java.lang.Iterable)">insertSeveral</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Iterable</a>&lt;<a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;points)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#insertSeveral(java.lang.Iterable)">insertSeveral</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Iterable</a>&lt;<a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;points)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor" id="i90">
@@ -1170,7 +1170,7 @@ char&nbsp;toWrite)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor" id="i99">
-<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Iterator.html?is-external=true" title="class or interface in java.util" class="externalLink">Iterator</a>&lt;<a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
+<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Iterator.html?is-external=true" title="class or interface in java.util" class="externalLink">Iterator</a>&lt;<a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#iterator()">iterator</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -1647,7 +1647,7 @@ int&nbsp;upper)</code></th>
 </tr>
 <tr class="rowColor" id="i155">
 <td class="colFirst"><code><a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#refill(java.lang.String%5B%5D,char)">refill</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]&nbsp;map,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#refill(java.lang.String%5B%5D,char)">refill</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]&nbsp;map,
 char&nbsp;yes)</code></th>
 <td class="colLast">
 <div class="block">Weird refill method that takes a String array, _as it would be printed_, so each String is a row and indexing
@@ -1712,7 +1712,7 @@ int&nbsp;y,
 </tr>
 <tr class="altColor" id="i162">
 <td class="colFirst"><code>boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#remove(java.lang.Object)">remove</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;o)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#remove(java.lang.Object)">remove</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;o)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor" id="i163">
@@ -1722,7 +1722,7 @@ int&nbsp;y,
 </tr>
 <tr class="altColor" id="i164">
 <td class="colFirst"><code>boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#removeAll(java.util.Collection)">removeAll</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;?&gt;&nbsp;c)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#removeAll(java.util.Collection)">removeAll</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;?&gt;&nbsp;c)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor" id="i165">
@@ -1766,7 +1766,7 @@ int&nbsp;rectangleHeight)</code></th>
 </tr>
 <tr class="altColor" id="i170">
 <td class="colFirst"><code><a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#removeSeveral(java.lang.Iterable)">removeSeveral</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Iterable</a>&lt;<a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;points)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#removeSeveral(java.lang.Iterable)">removeSeveral</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Iterable</a>&lt;<a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;points)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor" id="i171">
@@ -1787,7 +1787,7 @@ int&nbsp;height)</code></th>
 </tr>
 <tr class="rowColor" id="i173">
 <td class="colFirst"><code>boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#retainAll(java.util.Collection)">retainAll</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;?&gt;&nbsp;c)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#retainAll(java.util.Collection)">retainAll</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;?&gt;&nbsp;c)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor" id="i174">
@@ -1828,12 +1828,12 @@ int&nbsp;height)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor" id="i180">
-<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;</code></td>
+<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#retractSeriesToLimit()">retractSeriesToLimit</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor" id="i181">
-<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;</code></td>
+<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#retractSeriesToLimit8way()">retractSeriesToLimit8way</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -1914,7 +1914,7 @@ int&nbsp;limit)</code></th>
 </td>
 </tr>
 <tr class="rowColor" id="i191">
-<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
+<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#serializeToString()">serializeToString</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -1936,7 +1936,7 @@ int&nbsp;y)</code></th>
 </td>
 </tr>
 <tr class="altColor" id="i194">
-<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/StringBuilder.html?is-external=true" title="class or interface in java.lang" class="externalLink">StringBuilder</a></code></td>
+<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/StringBuilder.html?is-external=true" title="class or interface in java.lang" class="externalLink">StringBuilder</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#show(char,char)">show</a></span>&#8203;(char&nbsp;on,
 char&nbsp;off)</code></th>
 <td class="colLast">
@@ -1973,7 +1973,7 @@ int&nbsp;volume,
 </td>
 </tr>
 <tr class="rowColor" id="i199">
-<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;</code></td>
+<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#split()">split</a></span>()</code></th>
 <td class="colLast">
 <div class="block">If this GreasedRegion stores multiple unconnected "on" areas, this finds each isolated area (areas that
@@ -1982,7 +1982,7 @@ int&nbsp;volume,
 </td>
 </tr>
 <tr class="altColor" id="i200">
-<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;</code></td>
+<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#split8way()">split8way</a></span>()</code></th>
 <td class="colLast">
 <div class="block">If this GreasedRegion stores multiple unconnected "on" areas, this finds each isolated area (areas that
@@ -1992,7 +1992,7 @@ int&nbsp;volume,
 </tr>
 <tr class="rowColor" id="i201">
 <td class="colFirst"><code>static int[][]</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sum(java.util.List)">sum</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;regions)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sum(java.util.List)">sum</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;regions)</code></th>
 <td class="colLast">
 <div class="block">Generates a 2D int array from a List of GreasedRegions, starting at all 0 and adding 1 to the int at
  a position once for every GreasedRegion that has that cell as "on." This means if you give 8 GreasedRegions to
@@ -2012,7 +2012,7 @@ int&nbsp;volume,
 </tr>
 <tr class="rowColor" id="i203">
 <td class="colFirst"><code>static double[][]</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sumDouble(java.util.List)">sumDouble</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;regions)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sumDouble(java.util.List)">sumDouble</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;regions)</code></th>
 <td class="colLast">
 <div class="block">Generates a 2D double array from a List of GreasedRegions, starting at all 0 and adding 1 to the double at
  a position once for every GreasedRegion that has that cell as "on." This means if you give 8 GreasedRegions to
@@ -2103,12 +2103,12 @@ double[]&nbsp;weights)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor" id="i215">
-<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;</code></td>
+<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#surfaceSeriesToLimit()">surfaceSeriesToLimit</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor" id="i216">
-<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;</code></td>
+<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#surfaceSeriesToLimit8way()">surfaceSeriesToLimit8way</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -2144,7 +2144,7 @@ double[]&nbsp;weights)</code></th>
 </td>
 </tr>
 <tr class="rowColor" id="i221">
-<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>[]</code></td>
+<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>[]</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#toArray()">toArray</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -2171,7 +2171,7 @@ char&nbsp;off)</code></th>
 </td>
 </tr>
 <tr class="rowColor" id="i225">
-<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
+<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#toCompressedString()">toCompressedString</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Compresses this GreasedRegion into a UTF-16 String and returns the String without modifying this GreasedRegion.</div>
@@ -2187,7 +2187,7 @@ int&nbsp;y)</code></th>
 </td>
 </tr>
 <tr class="rowColor" id="i227">
-<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
+<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#toString()">toString</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns a legible String representation of this that can be printed over multiple lines, with all "on" cells
@@ -2214,7 +2214,7 @@ int&nbsp;y)</code></th>
 <td class="colFirst"><code>static <a href="OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#whichContain(int,int,java.util.Collection)">whichContain</a></span>&#8203;(int&nbsp;x,
 int&nbsp;y,
-<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;packed)</code></th>
+<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;packed)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor" id="i231">
@@ -2306,20 +2306,20 @@ int&nbsp;y)</code></th>
 <!--   -->
 </a><code><a href="../squidgrid/zone/Zone.Skeleton.html#getCenter()">getCenter</a></code></div>
 <div class="inheritedList">
-<h3>Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></h3>
+<h3>Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></h3>
 <a id="methods.inherited.from.class.java.lang.Object">
 <!--   -->
-</a><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#clone()" title="class or interface in java.lang" class="externalLink">clone</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#finalize()" title="class or interface in java.lang" class="externalLink">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#getClass()" title="class or interface in java.lang" class="externalLink">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#notify()" title="class or interface in java.lang" class="externalLink">notify</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#notifyAll()" title="class or interface in java.lang" class="externalLink">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#wait()" title="class or interface in java.lang" class="externalLink">wait</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#wait(long)" title="class or interface in java.lang" class="externalLink">wait</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#wait(long,int)" title="class or interface in java.lang" class="externalLink">wait</a></code></div>
+</a><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#clone()" title="class or interface in java.lang" class="externalLink">clone</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#finalize()" title="class or interface in java.lang" class="externalLink">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#getClass()" title="class or interface in java.lang" class="externalLink">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#notify()" title="class or interface in java.lang" class="externalLink">notify</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#notifyAll()" title="class or interface in java.lang" class="externalLink">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#wait()" title="class or interface in java.lang" class="externalLink">wait</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#wait(long)" title="class or interface in java.lang" class="externalLink">wait</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#wait(long,int)" title="class or interface in java.lang" class="externalLink">wait</a></code></div>
 <div class="inheritedList">
-<h3>Methods inherited from interface&nbsp;java.util.<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a></h3>
+<h3>Methods inherited from interface&nbsp;java.util.<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a></h3>
 <a id="methods.inherited.from.class.java.util.Collection">
 <!--   -->
-</a><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true#parallelStream()" title="class or interface in java.util" class="externalLink">parallelStream</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true#removeIf(java.util.function.Predicate)" title="class or interface in java.util" class="externalLink">removeIf</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true#spliterator()" title="class or interface in java.util" class="externalLink">spliterator</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true#stream()" title="class or interface in java.util" class="externalLink">stream</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true#toArray(java.util.function.IntFunction)" title="class or interface in java.util" class="externalLink">toArray</a></code></div>
+</a><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true#parallelStream()" title="class or interface in java.util" class="externalLink">parallelStream</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true#removeIf(java.util.function.Predicate)" title="class or interface in java.util" class="externalLink">removeIf</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true#spliterator()" title="class or interface in java.util" class="externalLink">spliterator</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true#stream()" title="class or interface in java.util" class="externalLink">stream</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true#toArray(java.util.function.IntFunction)" title="class or interface in java.util" class="externalLink">toArray</a></code></div>
 <div class="inheritedList">
-<h3>Methods inherited from interface&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Iterable</a></h3>
+<h3>Methods inherited from interface&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Iterable</a></h3>
 <a id="methods.inherited.from.class.java.lang.Iterable">
 <!--   -->
-</a><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Iterable.html?is-external=true#forEach(java.util.function.Consumer)" title="class or interface in java.lang" class="externalLink">forEach</a></code></div>
+</a><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Iterable.html?is-external=true#forEach(java.util.function.Consumer)" title="class or interface in java.lang" class="externalLink">forEach</a></code></div>
 <div class="inheritedList">
 <h3>Methods inherited from interface&nbsp;squidpony.squidgrid.zone.<a href="../squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a></h3>
 <a id="methods.inherited.from.class.squidpony.squidgrid.zone.Zone">
@@ -2417,7 +2417,7 @@ char[]&nbsp;yes)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(java.lang.String[],char)">GreasedRegion</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.299">GreasedRegion</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]&nbsp;map,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.299">GreasedRegion</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]&nbsp;map,
 char&nbsp;yes)</span></div>
 <div class="block">Weird constructor that takes a String array, _as it would be printed_, so each String is a row and indexing would
  be done with y, x instead of the normal x, y.</div>
@@ -2616,7 +2616,7 @@ int&nbsp;height,
 <h3><a id="&lt;init&gt;(int,int,java.lang.Iterable)">GreasedRegion</a></h3>
 <div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1001">GreasedRegion</a></span>&#8203;(<span class="arguments">int&nbsp;width,
 int&nbsp;height,
-<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Iterable</a>&lt;<a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;points)</span></div>
+<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Iterable</a>&lt;<a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;points)</span></div>
 <div class="block">Constructor for a GreasedRegion that can have several "on" cells specified, and has the given width and height.
  Note that to avoid confusion with the constructor that takes one Coord value, this takes the Iterable of
  Coords last, while the single-Coord constructor takes its one Coord first.</div>
@@ -2810,7 +2810,7 @@ char[]&nbsp;yes)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="refill(java.lang.String[],char)">refill</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.322">refill</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]&nbsp;map,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.322">refill</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]&nbsp;map,
 char&nbsp;yes)</span></div>
 <div class="block">Weird refill method that takes a String array, _as it would be printed_, so each String is a row and indexing
  would be done with y, x instead of the normal x, y.</div>
@@ -3275,7 +3275,7 @@ int&nbsp;y,
 <li class="blockList">
 <section class="detail">
 <h3><a id="insertSeveral(java.lang.Iterable)">insertSeveral</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1817">insertSeveral</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Iterable</a>&lt;<a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;points)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1817">insertSeveral</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Iterable</a>&lt;<a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;points)</span></div>
 </section>
 </li>
 <li class="blockList">
@@ -3339,7 +3339,7 @@ int&nbsp;y,
 <li class="blockList">
 <section class="detail">
 <h3><a id="removeSeveral(java.lang.Iterable)">removeSeveral</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2056">removeSeveral</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Iterable</a>&lt;<a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;points)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2056">removeSeveral</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Iterable</a>&lt;<a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;points)</span></div>
 </section>
 </li>
 <li class="blockList">
@@ -3505,7 +3505,7 @@ char&nbsp;off)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="show(char,char)">show</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/StringBuilder.html?is-external=true" title="class or interface in java.lang" class="externalLink">StringBuilder</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2371">show</a></span>&#8203;(<span class="arguments">char&nbsp;on,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/StringBuilder.html?is-external=true" title="class or interface in java.lang" class="externalLink">StringBuilder</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2371">show</a></span>&#8203;(<span class="arguments">char&nbsp;on,
 char&nbsp;off)</span></div>
 <div class="block">Returns this GreasedRegion's data as a StringBuilder, with each row made of the parameter on for "on" cells and
  the parameter off for "off" cells, separated by newlines, with no trailing newline at the end.</div>
@@ -3521,13 +3521,13 @@ char&nbsp;off)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="toString()">toString</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2390">toString</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2390">toString</a></span>()</div>
 <div class="block">Returns a legible String representation of this that can be printed over multiple lines, with all "on" cells
  represented by '.' and all "off" cells by '#', in roguelike floors-on walls-off convention, separating each row
  by newlines (without a final trailing newline, so you could append text right after this).</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#toString()" title="class or interface in java.lang" class="externalLink">toString</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#toString()" title="class or interface in java.lang" class="externalLink">toString</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a String representation of this GreasedRegion using '.' for on, '#' for off, and newlines between rows</dd>
 </dl>
@@ -4084,7 +4084,7 @@ int&nbsp;bitCount)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="expandSeriesToLimit()">expandSeriesToLimit</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3465">expandSeriesToLimit</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3465">expandSeriesToLimit</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
@@ -4149,7 +4149,7 @@ int&nbsp;bitCount)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="fringeSeriesToLimit()">fringeSeriesToLimit</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3545">fringeSeriesToLimit</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3545">fringeSeriesToLimit</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
@@ -4194,7 +4194,7 @@ int&nbsp;bitCount)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="retractSeriesToLimit()">retractSeriesToLimit</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3644">retractSeriesToLimit</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3644">retractSeriesToLimit</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
@@ -4218,7 +4218,7 @@ int&nbsp;bitCount)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="surfaceSeriesToLimit()">surfaceSeriesToLimit</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3681">surfaceSeriesToLimit</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3681">surfaceSeriesToLimit</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
@@ -4253,7 +4253,7 @@ int&nbsp;bitCount)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="expandSeriesToLimit8way()">expandSeriesToLimit8way</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3764">expandSeriesToLimit8way</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3764">expandSeriesToLimit8way</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
@@ -4277,7 +4277,7 @@ int&nbsp;bitCount)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="fringeSeriesToLimit8way()">fringeSeriesToLimit8way</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3806">fringeSeriesToLimit8way</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3806">fringeSeriesToLimit8way</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
@@ -4301,7 +4301,7 @@ int&nbsp;bitCount)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="retractSeriesToLimit8way()">retractSeriesToLimit8way</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3905">retractSeriesToLimit8way</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3905">retractSeriesToLimit8way</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
@@ -4325,7 +4325,7 @@ int&nbsp;bitCount)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="surfaceSeriesToLimit8way()">surfaceSeriesToLimit8way</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3946">surfaceSeriesToLimit8way</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3946">surfaceSeriesToLimit8way</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
@@ -4383,7 +4383,7 @@ int&nbsp;amount)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="floodSeriesToLimit(squidpony.squidmath.GreasedRegion)">floodSeriesToLimit</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.4087">floodSeriesToLimit</a></span>&#8203;(<span class="arguments"><a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;bounds)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.4087">floodSeriesToLimit</a></span>&#8203;(<span class="arguments"><a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;bounds)</span></div>
 <div class="block">Repeatedly generates new GreasedRegions, each one cell expanded in 4 directions from the previous GreasedRegion
  and staying inside the "on" cells of <code>bounds</code>, until it can't expand any more. Returns an ArrayList of the
  GreasedRegion steps this generated; this list does not include this GreasedRegion (or any unmodified copy of this
@@ -4451,7 +4451,7 @@ int&nbsp;amount)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="floodSeriesToLimit8way(squidpony.squidmath.GreasedRegion)">floodSeriesToLimit8way</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.4236">floodSeriesToLimit8way</a></span>&#8203;(<span class="arguments"><a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;bounds)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.4236">floodSeriesToLimit8way</a></span>&#8203;(<span class="arguments"><a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;bounds)</span></div>
 <div class="block">Repeatedly generates new GreasedRegions, each one cell expanded in 8 directions from the previous GreasedRegion
  and staying inside the "on" cells of <code>bounds</code>, until it can't expand any more. Returns an ArrayList of the
  GreasedRegion steps this generated; this list does not include this GreasedRegion (or any unmodified copy of this
@@ -4500,7 +4500,7 @@ int&nbsp;volume,
 <li class="blockList">
 <section class="detail">
 <h3><a id="split()">split</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.4412">split</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.4412">split</a></span>()</div>
 <div class="block">If this GreasedRegion stores multiple unconnected "on" areas, this finds each isolated area (areas that
  are only adjacent diagonally are considered separate from each other) and returns it as an element in an
  ArrayList of GreasedRegion, with one GreasedRegion per isolated area. Not to be confused with
@@ -4534,7 +4534,7 @@ int&nbsp;volume,
 <li class="blockList">
 <section class="detail">
 <h3><a id="split8way()">split8way</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.4451">split8way</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.4451">split8way</a></span>()</div>
 <div class="block">If this GreasedRegion stores multiple unconnected "on" areas, this finds each isolated area (areas that
  are only adjacent diagonally are considered <b>one area</b> with this) and returns it as an element in an
  ArrayList of GreasedRegion, with one GreasedRegion per isolated area. This should not be confused with
@@ -4738,13 +4738,13 @@ int&nbsp;y,
 <h3><a id="whichContain(int,int,java.util.Collection)">whichContain</a></h3>
 <div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType"><a href="OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.4775">whichContain</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
-<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;packed)</span></div>
+<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;packed)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="appendContaining(java.util.Collection,int,int,squidpony.squidmath.GreasedRegion...)">appendContaining</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.4793">appendContaining</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;into,
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.4793">appendContaining</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;into,
 int&nbsp;x,
 int&nbsp;y,
 <a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>...&nbsp;packed)</span></div>
@@ -4764,10 +4764,10 @@ int&nbsp;y,
 <li class="blockList">
 <section class="detail">
 <h3><a id="appendContaining(java.util.Collection,int,int,java.util.Collection)">appendContaining</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.4812">appendContaining</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;into,
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.4812">appendContaining</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;into,
 int&nbsp;x,
 int&nbsp;y,
-<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;packed)</span></div>
+<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;packed)</span></div>
 <div class="block">Tries to look up the position x,y in each GreasedRegion in packed; each GreasedRegion that contains that x,y
  point is appended into the Collection <code>into</code>.</div>
 <dl>
@@ -4787,7 +4787,7 @@ int&nbsp;y,
 <div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.4822">size</a></span>()</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true#size()" title="class or interface in java.util" class="externalLink">size</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true#size()" title="class or interface in java.util" class="externalLink">size</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></dd>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../squidgrid/zone/Zone.html#size()">size</a></code>&nbsp;in interface&nbsp;<code><a href="../squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a></code></dd>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
@@ -5201,7 +5201,7 @@ int[]&nbsp;working)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getAll()">getAll</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.5719">getAll</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.5719">getAll</a></span>()</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../squidgrid/zone/Zone.html#getAll()">getAll</a></code>&nbsp;in interface&nbsp;<code><a href="../squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a></code></dd>
@@ -5592,7 +5592,7 @@ int&nbsp;y)</span></div>
 <div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6325">isEmpty</a></span>()</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true#isEmpty()" title="class or interface in java.util" class="externalLink">isEmpty</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true#isEmpty()" title="class or interface in java.util" class="externalLink">isEmpty</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></dd>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../squidgrid/zone/Zone.html#isEmpty()">isEmpty</a></code>&nbsp;in interface&nbsp;<code><a href="../squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -5619,7 +5619,7 @@ int&nbsp;y)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="sum(java.util.List)">sum</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int[][]</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6366">sum</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;regions)</span></div>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int[][]</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6366">sum</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;regions)</span></div>
 <div class="block">Generates a 2D int array from a List of GreasedRegions, starting at all 0 and adding 1 to the int at
  a position once for every GreasedRegion that has that cell as "on." This means if you give 8 GreasedRegions to
  this method, it can produce any number between 0 and 8 in a cell; if you give 16 GreasedRegions, then it can
@@ -5651,7 +5651,7 @@ int&nbsp;y)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="sumDouble(java.util.List)">sumDouble</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">double[][]</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6415">sumDouble</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;regions)</span></div>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">double[][]</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6415">sumDouble</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;regions)</span></div>
 <div class="block">Generates a 2D double array from a List of GreasedRegions, starting at all 0 and adding 1 to the double at
  a position once for every GreasedRegion that has that cell as "on." This means if you give 8 GreasedRegions to
  this method, it can produce any number between 0 and 8 in a cell; if you give 16 GreasedRegions, then it can
@@ -5791,12 +5791,12 @@ double[]&nbsp;weights)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="equals(java.lang.Object)">equals</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6629">equals</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;o)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6629">equals</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;o)</span></div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.util" class="externalLink">equals</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.util" class="externalLink">equals</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></dd>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.lang" class="externalLink">equals</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.lang" class="externalLink">equals</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></code></dd>
 </dl>
 </section>
 </li>
@@ -5806,9 +5806,9 @@ double[]&nbsp;weights)</span></div>
 <div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6643">hashCode</a></span>()</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true#hashCode()" title="class or interface in java.util" class="externalLink">hashCode</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true#hashCode()" title="class or interface in java.util" class="externalLink">hashCode</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></dd>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#hashCode()" title="class or interface in java.lang" class="externalLink">hashCode</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#hashCode()" title="class or interface in java.lang" class="externalLink">hashCode</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></code></dd>
 </dl>
 </section>
 </li>
@@ -5837,13 +5837,13 @@ double[]&nbsp;weights)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="serializeToString()">serializeToString</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6713">serializeToString</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6713">serializeToString</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="deserializeFromString(java.lang.String)">deserializeFromString</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType"><a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6719">deserializeFromString</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;s)</span></div>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType"><a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6719">deserializeFromString</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;s)</span></div>
 </section>
 </li>
 <li class="blockList">
@@ -5867,7 +5867,7 @@ long...&nbsp;data)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="toCompressedString()">toCompressedString</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6755">toCompressedString</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6755">toCompressedString</a></span>()</div>
 <div class="block">Compresses this GreasedRegion into a UTF-16 String and returns the String without modifying this GreasedRegion.
  Uses <a href="CoordPacker.html" title="class in squidpony.squidmath"><code>CoordPacker</code></a>'s algorithm and data to compress this GreasedRegion in 256x128 blocks, storing the
  CoordPacker-like data as chars with values from 256 to 33023 (a concept also used in <a href="../LZSEncoding.html" title="class in squidpony"><code>LZSEncoding</code></a>),
@@ -5883,7 +5883,7 @@ long...&nbsp;data)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="decompress(java.lang.String)">decompress</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType"><a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6818">decompress</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;compressed)</span></div>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType"><a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6818">decompress</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;compressed)</span></div>
 <div class="block">Decompresses a String returned by <a href="#toCompressedString()"><code>toCompressedString()</code></a>, returning a new GreasedRegion with identical
  width, height, and contents to the GreasedRegion before compression. This decompresses the <a href="../LZSEncoding.html" title="class in squidpony"><code>LZSEncoding</code></a>
  applied to the data, then decompresses the <a href="CoordPacker.html" title="class in squidpony.squidmath"><code>CoordPacker</code></a>-type Hilbert Curve RLE data to get the original
@@ -5899,22 +5899,22 @@ long...&nbsp;data)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="contains(java.lang.Object)">contains</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6853">contains</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;o)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6853">contains</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;o)</span></div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true#contains(java.lang.Object)" title="class or interface in java.util" class="externalLink">contains</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true#contains(java.lang.Object)" title="class or interface in java.util" class="externalLink">contains</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></dd>
 </dl>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="iterator()">iterator</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Iterator.html?is-external=true" title="class or interface in java.util" class="externalLink">Iterator</a>&lt;<a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6860">iterator</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Iterator.html?is-external=true" title="class or interface in java.util" class="externalLink">Iterator</a>&lt;<a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6860">iterator</a></span>()</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true#iterator()" title="class or interface in java.util" class="externalLink">iterator</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true#iterator()" title="class or interface in java.util" class="externalLink">iterator</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></dd>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Iterable.html?is-external=true#iterator()" title="class or interface in java.lang" class="externalLink">iterator</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Iterable</a>&lt;<a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Iterable.html?is-external=true#iterator()" title="class or interface in java.lang" class="externalLink">iterator</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Iterable</a>&lt;<a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></dd>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="../squidgrid/zone/Zone.Skeleton.html#iterator()">iterator</a></code>&nbsp;in class&nbsp;<code><a href="../squidgrid/zone/Zone.Skeleton.html" title="class in squidpony.squidgrid.zone">Zone.Skeleton</a></code></dd>
 </dl>
@@ -5923,10 +5923,10 @@ long...&nbsp;data)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="toArray()">toArray</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>[]</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6865">toArray</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>[]</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6865">toArray</a></span>()</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true#toArray()" title="class or interface in java.util" class="externalLink">toArray</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true#toArray()" title="class or interface in java.util" class="externalLink">toArray</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></dd>
 </dl>
 </section>
 </li>
@@ -5938,7 +5938,7 @@ long...&nbsp;data)</span></div>
 <div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="typeParameters">&lt;T&gt;</span>&nbsp;<span class="returnType">T[]</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6870">toArray</a></span>&#8203;(<span class="arguments">T[]&nbsp;a)</span></div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true#toArray(T%5B%5D)" title="class or interface in java.util" class="externalLink">toArray</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true#toArray(T%5B%5D)" title="class or interface in java.util" class="externalLink">toArray</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></dd>
 </dl>
 </section>
 </li>
@@ -5948,7 +5948,7 @@ long...&nbsp;data)</span></div>
 <div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6878">add</a></span>&#8203;(<span class="arguments"><a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;coord)</span></div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true#add(E)" title="class or interface in java.util" class="externalLink">add</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true#add(E)" title="class or interface in java.util" class="externalLink">add</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></dd>
 </dl>
 </section>
 </li>
@@ -5958,57 +5958,57 @@ long...&nbsp;data)</span></div>
 <div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6885">clear</a></span>()</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true#clear()" title="class or interface in java.util" class="externalLink">clear</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true#clear()" title="class or interface in java.util" class="externalLink">clear</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></dd>
 </dl>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="remove(java.lang.Object)">remove</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6891">remove</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;o)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6891">remove</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;o)</span></div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true#remove(java.lang.Object)" title="class or interface in java.util" class="externalLink">remove</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true#remove(java.lang.Object)" title="class or interface in java.util" class="externalLink">remove</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></dd>
 </dl>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="containsAll(java.util.Collection)">containsAll</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6905">containsAll</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;?&gt;&nbsp;c)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6905">containsAll</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;?&gt;&nbsp;c)</span></div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true#containsAll(java.util.Collection)" title="class or interface in java.util" class="externalLink">containsAll</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true#containsAll(java.util.Collection)" title="class or interface in java.util" class="externalLink">containsAll</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></dd>
 </dl>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="addAll(java.util.Collection)">addAll</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6915">addAll</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;? extends <a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;c)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6915">addAll</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;? extends <a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;c)</span></div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true#addAll(java.util.Collection)" title="class or interface in java.util" class="externalLink">addAll</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true#addAll(java.util.Collection)" title="class or interface in java.util" class="externalLink">addAll</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></dd>
 </dl>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="removeAll(java.util.Collection)">removeAll</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6925">removeAll</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;?&gt;&nbsp;c)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6925">removeAll</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;?&gt;&nbsp;c)</span></div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true#removeAll(java.util.Collection)" title="class or interface in java.util" class="externalLink">removeAll</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true#removeAll(java.util.Collection)" title="class or interface in java.util" class="externalLink">removeAll</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></dd>
 </dl>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="retainAll(java.util.Collection)">retainAll</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6935">retainAll</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;?&gt;&nbsp;c)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6935">retainAll</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;?&gt;&nbsp;c)</span></div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true#retainAll(java.util.Collection)" title="class or interface in java.util" class="externalLink">retainAll</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true#retainAll(java.util.Collection)" title="class or interface in java.util" class="externalLink">retainAll</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></dd>
 </dl>
 </section>
 </li>

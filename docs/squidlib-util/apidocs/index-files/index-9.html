@@ -582,7 +582,7 @@ loadScripts(document, 'script');</script>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/CrossHash.IHasher.html#hash(java.lang.Object)">hash(Object)</a></span> - Method in interface squidpony.squidmath.<a href="../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a></dt>
 <dd>
 <div class="block">If data is a type that this IHasher can specifically hash, this method should use that specific hash; in
- other situations, it should simply delegate to calling <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#hashCode()" title="class or interface in java.lang" class="externalLink"><code>Object.hashCode()</code></a> on data.</div>
+ other situations, it should simply delegate to calling <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#hashCode()" title="class or interface in java.lang" class="externalLink"><code>Object.hashCode()</code></a> on data.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/CrossHash.Mist.html#hash(java.lang.Object)">hash(Object)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/CrossHash.Mist.html" title="class in squidpony.squidmath">CrossHash.Mist</a></dt>
 <dd>&nbsp;</dd>
@@ -622,9 +622,19 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/CrossHash.Yolk.html#hash(java.util.List)">hash(List&lt;? extends CharSequence&gt;)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/CrossHash.Yolk.html" title="class in squidpony.squidmath">CrossHash.Yolk</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/GoldPointHash.html#hash256(int,int,int)">hash256(int, int, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/GoldPointHash.html" title="class in squidpony.squidmath">GoldPointHash</a></dt>
+<dd>
+<div class="block">A 8-bit point hash that smashes x and y into s using XOR and multiplications by harmonious numbers,
+ then runs a simple unary hash on s and returns it.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntPointHash.html#hash256(int,int,int)">hash256(int, int, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntPointHash.html" title="class in squidpony.squidmath">IntPointHash</a></dt>
 <dd>
 <div class="block">A 8-bit point hash that smashes x and y into s using XOR and multiplications by harmonious numbers,
+ then runs a simple unary hash on s and returns it.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/GoldPointHash.html#hash256(int,int,int,int)">hash256(int, int, int, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/GoldPointHash.html" title="class in squidpony.squidmath">GoldPointHash</a></dt>
+<dd>
+<div class="block">A 8-bit point hash that smashes x, y, and z into s using XOR and multiplications by harmonious numbers,
  then runs a simple unary hash on s and returns it.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntPointHash.html#hash256(int,int,int,int)">hash256(int, int, int, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntPointHash.html" title="class in squidpony.squidmath">IntPointHash</a></dt>
@@ -632,10 +642,20 @@ loadScripts(document, 'script');</script>
 <div class="block">A 8-bit point hash that smashes x, y, and z into s using XOR and multiplications by harmonious numbers,
  then runs a simple unary hash on s and returns it.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/GoldPointHash.html#hash256(int,int,int,int,int)">hash256(int, int, int, int, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/GoldPointHash.html" title="class in squidpony.squidmath">GoldPointHash</a></dt>
+<dd>
+<div class="block">A 8-bit point hash that smashes x, y, z, and w into s using XOR and multiplications by harmonious numbers,
+ then runs a simple unary hash on s and returns it.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntPointHash.html#hash256(int,int,int,int,int)">hash256(int, int, int, int, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntPointHash.html" title="class in squidpony.squidmath">IntPointHash</a></dt>
 <dd>
 <div class="block">A 8-bit point hash that smashes x, y, z, and w into s using XOR and multiplications by harmonious numbers,
  then runs a simple unary hash on s and returns it.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/GoldPointHash.html#hash256(int,int,int,int,int,int,int)">hash256(int, int, int, int, int, int, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/GoldPointHash.html" title="class in squidpony.squidmath">GoldPointHash</a></dt>
+<dd>
+<div class="block">A 8-bit point hash that smashes x, y, z, w, u, and v into s using XOR and multiplications by harmonious
+ numbers, then runs a simple unary hash on s and returns it.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntPointHash.html#hash256(int,int,int,int,int,int,int)">hash256(int, int, int, int, int, int, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntPointHash.html" title="class in squidpony.squidmath">IntPointHash</a></dt>
 <dd>
@@ -688,9 +708,19 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/CrossHash.Wisp.html#hash32(int%5B%5D%5B%5D)">hash32(int[][])</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/CrossHash.Wisp.html" title="class in squidpony.squidmath">CrossHash.Wisp</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/GoldPointHash.html#hash32(int,int,int)">hash32(int, int, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/GoldPointHash.html" title="class in squidpony.squidmath">GoldPointHash</a></dt>
+<dd>
+<div class="block">A 5-bit point hash that smashes x and y into s using XOR and multiplications by harmonious numbers,
+ then runs a simple unary hash on s and returns it.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntPointHash.html#hash32(int,int,int)">hash32(int, int, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntPointHash.html" title="class in squidpony.squidmath">IntPointHash</a></dt>
 <dd>
 <div class="block">A 5-bit point hash that smashes x and y into s using XOR and multiplications by harmonious numbers,
+ then runs a simple unary hash on s and returns it.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/GoldPointHash.html#hash32(int,int,int,int)">hash32(int, int, int, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/GoldPointHash.html" title="class in squidpony.squidmath">GoldPointHash</a></dt>
+<dd>
+<div class="block">A 5-bit point hash that smashes x, y, and z into s using XOR and multiplications by harmonious numbers,
  then runs a simple unary hash on s and returns it.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntPointHash.html#hash32(int,int,int,int)">hash32(int, int, int, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntPointHash.html" title="class in squidpony.squidmath">IntPointHash</a></dt>
@@ -698,10 +728,20 @@ loadScripts(document, 'script');</script>
 <div class="block">A 5-bit point hash that smashes x, y, and z into s using XOR and multiplications by harmonious numbers,
  then runs a simple unary hash on s and returns it.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/GoldPointHash.html#hash32(int,int,int,int,int)">hash32(int, int, int, int, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/GoldPointHash.html" title="class in squidpony.squidmath">GoldPointHash</a></dt>
+<dd>
+<div class="block">A 5-bit point hash that smashes x, y, z, and w into s using XOR and multiplications by harmonious numbers,
+ then runs a simple unary hash on s and returns it.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntPointHash.html#hash32(int,int,int,int,int)">hash32(int, int, int, int, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntPointHash.html" title="class in squidpony.squidmath">IntPointHash</a></dt>
 <dd>
 <div class="block">A 5-bit point hash that smashes x, y, z, and w into s using XOR and multiplications by harmonious numbers,
  then runs a simple unary hash on s and returns it.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/GoldPointHash.html#hash32(int,int,int,int,int,int,int)">hash32(int, int, int, int, int, int, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/GoldPointHash.html" title="class in squidpony.squidmath">GoldPointHash</a></dt>
+<dd>
+<div class="block">A 5-bit point hash that smashes x, y, z, w, u, and v into s using XOR and multiplications by harmonious
+ numbers, then runs a simple unary hash on s and returns it.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntPointHash.html#hash32(int,int,int,int,int,int,int)">hash32(int, int, int, int, int, int, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntPointHash.html" title="class in squidpony.squidmath">IntPointHash</a></dt>
 <dd>
@@ -960,9 +1000,19 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/CrossHash.Yolk.html#hash64(int%5B%5D,int)">hash64(int[], int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/CrossHash.Yolk.html" title="class in squidpony.squidmath">CrossHash.Yolk</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/GoldPointHash.html#hash64(int,int,int)">hash64(int, int, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/GoldPointHash.html" title="class in squidpony.squidmath">GoldPointHash</a></dt>
+<dd>
+<div class="block">A 6-bit point hash that smashes x and y into s using XOR and multiplications by harmonious numbers,
+ then runs a simple unary hash on s and returns it.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntPointHash.html#hash64(int,int,int)">hash64(int, int, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntPointHash.html" title="class in squidpony.squidmath">IntPointHash</a></dt>
 <dd>
 <div class="block">A 6-bit point hash that smashes x and y into s using XOR and multiplications by harmonious numbers,
+ then runs a simple unary hash on s and returns it.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/GoldPointHash.html#hash64(int,int,int,int)">hash64(int, int, int, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/GoldPointHash.html" title="class in squidpony.squidmath">GoldPointHash</a></dt>
+<dd>
+<div class="block">A 6-bit point hash that smashes x, y, and z into s using XOR and multiplications by harmonious numbers,
  then runs a simple unary hash on s and returns it.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntPointHash.html#hash64(int,int,int,int)">hash64(int, int, int, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntPointHash.html" title="class in squidpony.squidmath">IntPointHash</a></dt>
@@ -970,10 +1020,20 @@ loadScripts(document, 'script');</script>
 <div class="block">A 6-bit point hash that smashes x, y, and z into s using XOR and multiplications by harmonious numbers,
  then runs a simple unary hash on s and returns it.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/GoldPointHash.html#hash64(int,int,int,int,int)">hash64(int, int, int, int, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/GoldPointHash.html" title="class in squidpony.squidmath">GoldPointHash</a></dt>
+<dd>
+<div class="block">A 6-bit point hash that smashes x, y, z, and w into s using XOR and multiplications by harmonious numbers,
+ then runs a simple unary hash on s and returns it.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntPointHash.html#hash64(int,int,int,int,int)">hash64(int, int, int, int, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntPointHash.html" title="class in squidpony.squidmath">IntPointHash</a></dt>
 <dd>
 <div class="block">A 6-bit point hash that smashes x, y, z, and w into s using XOR and multiplications by harmonious numbers,
  then runs a simple unary hash on s and returns it.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/GoldPointHash.html#hash64(int,int,int,int,int,int,int)">hash64(int, int, int, int, int, int, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/GoldPointHash.html" title="class in squidpony.squidmath">GoldPointHash</a></dt>
+<dd>
+<div class="block">A 6-bit point hash that smashes x, y, z, w, u, and v into s using XOR and multiplications by harmonious
+ numbers, then runs a simple unary hash on s and returns it.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntPointHash.html#hash64(int,int,int,int,int,int,int)">hash64(int, int, int, int, int, int, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntPointHash.html" title="class in squidpony.squidmath">IntPointHash</a></dt>
 <dd>
@@ -1280,20 +1340,36 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/CrossHash.Yolk.html#hash64(java.util.List)">hash64(List&lt;? extends CharSequence&gt;)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/CrossHash.Yolk.html" title="class in squidpony.squidmath">CrossHash.Yolk</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/GoldPointHash.html#hashAll(int,int,int)">hashAll(int, int, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/GoldPointHash.html" title="class in squidpony.squidmath">GoldPointHash</a></dt>
+<dd>
+<div class="block">A 32-bit-result point hash that uses multiplication with long constants.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntPointHash.html#hashAll(int,int,int)">hashAll(int, int, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntPointHash.html" title="class in squidpony.squidmath">IntPointHash</a></dt>
 <dd>
 <div class="block">A 32-bit point hash that smashes x and y into s using XOR and multiplications by harmonious numbers,
  then runs a simple unary hash on s and returns it.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/GoldPointHash.html#hashAll(int,int,int,int)">hashAll(int, int, int, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/GoldPointHash.html" title="class in squidpony.squidmath">GoldPointHash</a></dt>
+<dd>
+<div class="block">A 32-bit-result point hash that uses multiplication with long constants.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntPointHash.html#hashAll(int,int,int,int)">hashAll(int, int, int, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntPointHash.html" title="class in squidpony.squidmath">IntPointHash</a></dt>
 <dd>
 <div class="block">A 32-bit point hash that smashes x, y, and z into s using XOR and multiplications by harmonious numbers,
  then runs a simple unary hash on s and returns it.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/GoldPointHash.html#hashAll(int,int,int,int,int)">hashAll(int, int, int, int, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/GoldPointHash.html" title="class in squidpony.squidmath">GoldPointHash</a></dt>
+<dd>
+<div class="block">A 32-bit-result point hash that uses multiplication with long constants.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntPointHash.html#hashAll(int,int,int,int,int)">hashAll(int, int, int, int, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntPointHash.html" title="class in squidpony.squidmath">IntPointHash</a></dt>
 <dd>
 <div class="block">A 32-bit point hash that smashes x, y, z, and w into s using XOR and multiplications by harmonious numbers,
  then runs a simple unary hash on s and returns it.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/GoldPointHash.html#hashAll(int,int,int,int,int,int,int)">hashAll(int, int, int, int, int, int, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/GoldPointHash.html" title="class in squidpony.squidmath">GoldPointHash</a></dt>
+<dd>
+<div class="block">A 32-bit-result point hash that uses multiplication with long constants.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntPointHash.html#hashAll(int,int,int,int,int,int,int)">hashAll(int, int, int, int, int, int, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntPointHash.html" title="class in squidpony.squidmath">IntPointHash</a></dt>
 <dd>
@@ -1547,6 +1623,8 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/FlawedPointHash.RugHash.html#hashWithState(int,int,int)">hashWithState(int, int, int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/FlawedPointHash.RugHash.html" title="class in squidpony.squidmath">FlawedPointHash.RugHash</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/GoldPointHash.html#hashWithState(int,int,int)">hashWithState(int, int, int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/GoldPointHash.html" title="class in squidpony.squidmath">GoldPointHash</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/HastyPointHash.html#hashWithState(int,int,int)">hashWithState(int, int, int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/HastyPointHash.html" title="class in squidpony.squidmath">HastyPointHash</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntPointHash.html#hashWithState(int,int,int)">hashWithState(int, int, int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntPointHash.html" title="class in squidpony.squidmath">IntPointHash</a></dt>
@@ -1562,6 +1640,8 @@ loadScripts(document, 'script');</script>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/FlawedPointHash.QuiltHash.html#hashWithState(int,int,int,int)">hashWithState(int, int, int, int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/FlawedPointHash.QuiltHash.html" title="class in squidpony.squidmath">FlawedPointHash.QuiltHash</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/FlawedPointHash.RugHash.html#hashWithState(int,int,int,int)">hashWithState(int, int, int, int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/FlawedPointHash.RugHash.html" title="class in squidpony.squidmath">FlawedPointHash.RugHash</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/GoldPointHash.html#hashWithState(int,int,int,int)">hashWithState(int, int, int, int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/GoldPointHash.html" title="class in squidpony.squidmath">GoldPointHash</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/HastyPointHash.html#hashWithState(int,int,int,int)">hashWithState(int, int, int, int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/HastyPointHash.html" title="class in squidpony.squidmath">HastyPointHash</a></dt>
 <dd>&nbsp;</dd>
@@ -1579,6 +1659,8 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/FlawedPointHash.RugHash.html#hashWithState(int,int,int,int,int)">hashWithState(int, int, int, int, int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/FlawedPointHash.RugHash.html" title="class in squidpony.squidmath">FlawedPointHash.RugHash</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/GoldPointHash.html#hashWithState(int,int,int,int,int)">hashWithState(int, int, int, int, int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/GoldPointHash.html" title="class in squidpony.squidmath">GoldPointHash</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/HastyPointHash.html#hashWithState(int,int,int,int,int)">hashWithState(int, int, int, int, int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/HastyPointHash.html" title="class in squidpony.squidmath">HastyPointHash</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntPointHash.html#hashWithState(int,int,int,int,int)">hashWithState(int, int, int, int, int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntPointHash.html" title="class in squidpony.squidmath">IntPointHash</a></dt>
@@ -1594,6 +1676,8 @@ loadScripts(document, 'script');</script>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/FlawedPointHash.QuiltHash.html#hashWithState(int,int,int,int,int,int,int)">hashWithState(int, int, int, int, int, int, int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/FlawedPointHash.QuiltHash.html" title="class in squidpony.squidmath">FlawedPointHash.QuiltHash</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/FlawedPointHash.RugHash.html#hashWithState(int,int,int,int,int,int,int)">hashWithState(int, int, int, int, int, int, int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/FlawedPointHash.RugHash.html" title="class in squidpony.squidmath">FlawedPointHash.RugHash</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/GoldPointHash.html#hashWithState(int,int,int,int,int,int,int)">hashWithState(int, int, int, int, int, int, int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/GoldPointHash.html" title="class in squidpony.squidmath">GoldPointHash</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/HastyPointHash.html#hashWithState(int,int,int,int,int,int,int)">hashWithState(int, int, int, int, int, int, int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/HastyPointHash.html" title="class in squidpony.squidmath">HastyPointHash</a></dt>
 <dd>&nbsp;</dd>

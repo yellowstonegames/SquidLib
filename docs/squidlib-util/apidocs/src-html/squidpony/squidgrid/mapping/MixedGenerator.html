@@ -91,7 +91,7 @@
 <span class="sourceLineNo">079</span><a id="line.79">    protected float roomWidth, roomHeight;</a>
 <span class="sourceLineNo">080</span><a id="line.80">    public IRNG rng;</a>
 <span class="sourceLineNo">081</span><a id="line.81">    protected char[][] dungeon;</a>
-<span class="sourceLineNo">082</span><a id="line.82">    protected boolean generated = false;</a>
+<span class="sourceLineNo">082</span><a id="line.82">    protected boolean generated;</a>
 <span class="sourceLineNo">083</span><a id="line.83">    protected int[][] environment;</a>
 <span class="sourceLineNo">084</span><a id="line.84">    protected boolean[][] marked, walled, fixedRooms;</a>
 <span class="sourceLineNo">085</span><a id="line.85">    protected IntVLA points;</a>
@@ -816,7 +816,7 @@
 <span class="sourceLineNo">804</span><a id="line.804">                wallOff(i, j);</a>
 <span class="sourceLineNo">805</span><a id="line.805">            }</a>
 <span class="sourceLineNo">806</span><a id="line.806">        }</a>
-<span class="sourceLineNo">807</span><a id="line.807">        return block;</a>
+<span class="sourceLineNo">807</span><a id="line.807">        return null;</a>
 <span class="sourceLineNo">808</span><a id="line.808">    }</a>
 <span class="sourceLineNo">809</span><a id="line.809"></a>
 <span class="sourceLineNo">810</span><a id="line.810">    /**</a>
@@ -886,7 +886,7 @@
 <span class="sourceLineNo">874</span><a id="line.874"></a>
 <span class="sourceLineNo">875</span><a id="line.875">            }</a>
 <span class="sourceLineNo">876</span><a id="line.876">        }</a>
-<span class="sourceLineNo">877</span><a id="line.877">        return block;</a>
+<span class="sourceLineNo">877</span><a id="line.877">        return null;</a>
 <span class="sourceLineNo">878</span><a id="line.878">    }</a>
 <span class="sourceLineNo">879</span><a id="line.879"></a>
 <span class="sourceLineNo">880</span><a id="line.880">    /**</a>

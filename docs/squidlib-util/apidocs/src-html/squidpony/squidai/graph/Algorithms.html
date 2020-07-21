@@ -190,7 +190,20 @@
 <span class="sourceLineNo">178</span><a id="line.178">        return implementations.containsCycle(graph);</a>
 <span class="sourceLineNo">179</span><a id="line.179">    }</a>
 <span class="sourceLineNo">180</span><a id="line.180"></a>
-<span class="sourceLineNo">181</span><a id="line.181">}</a>
+<span class="sourceLineNo">181</span><a id="line.181">    //--------------------</a>
+<span class="sourceLineNo">182</span><a id="line.182">    //  Structures</a>
+<span class="sourceLineNo">183</span><a id="line.183">    //--------------------</a>
+<span class="sourceLineNo">184</span><a id="line.184"></a>
+<span class="sourceLineNo">185</span><a id="line.185">    /**</a>
+<span class="sourceLineNo">186</span><a id="line.186">     * Gets the identifier for the last run of an algorithm; this should mostly be usable internally, but may be useful</a>
+<span class="sourceLineNo">187</span><a id="line.187">     * when different runs have affected a graph and a {@link Node#lastRunID} may need to be checked against this.</a>
+<span class="sourceLineNo">188</span><a id="line.188">     * @return an identifier for which algorithm ran last, as a probably-unique int</a>
+<span class="sourceLineNo">189</span><a id="line.189">     */</a>
+<span class="sourceLineNo">190</span><a id="line.190">    public int lastRunID() {</a>
+<span class="sourceLineNo">191</span><a id="line.191">        return implementations.getRunID();</a>
+<span class="sourceLineNo">192</span><a id="line.192">    }</a>
+<span class="sourceLineNo">193</span><a id="line.193"></a>
+<span class="sourceLineNo">194</span><a id="line.194">}</a>
 
 
 

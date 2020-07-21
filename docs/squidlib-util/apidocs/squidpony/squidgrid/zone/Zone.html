@@ -90,7 +90,7 @@ loadScripts(document, 'script');</script>
 <section class="description">
 <dl>
 <dt>All Superinterfaces:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Iterable</a>&lt;<a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code>, <code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink">Serializable</a></code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Iterable</a>&lt;<a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code>, <code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink">Serializable</a></code></dd>
 </dl>
 <dl>
 <dt>All Known Subinterfaces:</dt>
@@ -102,16 +102,16 @@ loadScripts(document, 'script');</script>
 </dl>
 <hr>
 <pre>public interface <a href="../../../src-html/squidpony/squidgrid/zone/Zone.html#line.53">Zone</a>
-extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink">Serializable</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Iterable</a>&lt;<a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</pre>
+extends <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink">Serializable</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Iterable</a>&lt;<a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</pre>
 <div class="block">Abstraction over a list of <a href="../../squidmath/Coord.html" title="class in squidpony.squidmath"><code>Coord</code></a>. This allows to use the short arrays
  coming from <a href="../../squidmath/CoordPacker.html" title="class in squidpony.squidmath"><code>CoordPacker</code></a>, which are compressed for
- better memory usage, regular <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink"><code>lists of Coord</code></a>, which are often the
+ better memory usage, regular <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink"><code>lists of Coord</code></a>, which are often the
  simplest option, or <a href="../../squidmath/GreasedRegion.html" title="class in squidpony.squidmath"><code>GreasedRegions</code></a>,
  which are "greasy" in the fatty-food sense (they are heavier objects, and are
  uncompressed) but also "greased" like greased lightning (they are very fast at
  spatial transformations on their region).
  <p>
- Zones are <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink"><code>Serializable</code></a>, but serialization doesn't change the internal
+ Zones are <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink"><code>Serializable</code></a>, but serialization doesn't change the internal
  representation (some would want to pack <a href="ListZone.html" title="class in squidpony.squidgrid.zone"><code>ListZone</code></a> into
  <a href="CoordPackerZone.html" title="class in squidpony.squidgrid.zone"><code>CoordPackerZone</code></a>s when serializing). I find that overzealous for a
  simple interface. If you want your zones to be be packed when serialized,
@@ -226,7 +226,7 @@ int&nbsp;y)</code></th>
 </td>
 </tr>
 <tr class="altColor" id="i4">
-<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
+<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getAll()">getAll</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -241,7 +241,7 @@ int&nbsp;y)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor" id="i7">
-<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
+<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getExternalBorder()">getExternalBorder</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets a Collection of Coord values that are not in this Zone, but are
@@ -254,7 +254,7 @@ int&nbsp;y)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor" id="i9">
-<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
+<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getInternalBorder()">getInternalBorder</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -304,10 +304,10 @@ int&nbsp;y)</code></th>
 </div>
 </div>
 <div class="inheritedList">
-<h3>Methods inherited from interface&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Iterable</a></h3>
+<h3>Methods inherited from interface&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Iterable</a></h3>
 <a id="methods.inherited.from.class.java.lang.Iterable">
 <!--   -->
-</a><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Iterable.html?is-external=true#forEach(java.util.function.Consumer)" title="class or interface in java.lang" class="externalLink">forEach</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Iterable.html?is-external=true#iterator()" title="class or interface in java.lang" class="externalLink">iterator</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Iterable.html?is-external=true#spliterator()" title="class or interface in java.lang" class="externalLink">spliterator</a></code></div>
+</a><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Iterable.html?is-external=true#forEach(java.util.function.Consumer)" title="class or interface in java.lang" class="externalLink">forEach</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Iterable.html?is-external=true#iterator()" title="class or interface in java.lang" class="externalLink">iterator</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Iterable.html?is-external=true#spliterator()" title="class or interface in java.lang" class="externalLink">spliterator</a></code></div>
 </section>
 </li>
 </ul>
@@ -469,7 +469,7 @@ int&nbsp;y)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getAll()">getAll</a></h3>
-<div class="memberSignature"><span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/zone/Zone.html#line.136">getAll</a></span>()</div>
+<div class="memberSignature"><span class="returnType"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/zone/Zone.html#line.136">getAll</a></span>()</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>All cells in this zone.</dd>
@@ -500,7 +500,7 @@ int&nbsp;y)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getInternalBorder()">getInternalBorder</a></h3>
-<div class="memberSignature"><span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/zone/Zone.html#line.148">getInternalBorder</a></span>()</div>
+<div class="memberSignature"><span class="returnType"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/zone/Zone.html#line.148">getInternalBorder</a></span>()</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>Cells in <code>this</code> that are adjacent to a cell not in
@@ -511,7 +511,7 @@ int&nbsp;y)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getExternalBorder()">getExternalBorder</a></h3>
-<div class="memberSignature"><span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/zone/Zone.html#line.158">getExternalBorder</a></span>()</div>
+<div class="memberSignature"><span class="returnType"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/zone/Zone.html#line.158">getExternalBorder</a></span>()</div>
 <div class="block">Gets a Collection of Coord values that are not in this Zone, but are
  adjacent to it, either orthogonally or diagonally. Related to the fringe()
  methods in CoordPacker and GreasedRegion, but guaranteed to use 8-way

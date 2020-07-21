@@ -19,7 +19,7 @@
 <script type="text/javascript" src="../../script-dir/jquery-ui.js"></script>
 </head>
 <body class="class-declaration">
-<script type="text/javascript">var data = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9,"i10":9};
+<script type="text/javascript">var data = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9,"i10":9,"i11":9,"i12":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -87,14 +87,14 @@ loadScripts(document, 'script');</script>
 <h1 title="Class MathExtras" class="title">Class MathExtras</h1>
 </div>
 <div class="contentContainer">
-<div class="inheritance" title="Inheritance Tree"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">java.lang.Object</a>
+<div class="inheritance" title="Inheritance Tree"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">java.lang.Object</a>
 <div class="inheritance">squidpony.squidmath.MathExtras</div>
 </div>
 <section class="description">
 <hr>
-<pre>public final class <a href="../../src-html/squidpony/squidmath/MathExtras.html#line.26">MathExtras</a>
-extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></pre>
-<div class="block">Mathematical operations not provided by <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Math.html?is-external=true" title="class or interface in java.lang" class="externalLink"><code>java.lang.Math</code></a>.
+<pre>public final class <a href="../../src-html/squidpony/squidmath/MathExtras.html#line.28">MathExtras</a>
+extends <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></pre>
+<div class="block">Mathematical operations not provided by <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Math.html?is-external=true" title="class or interface in java.lang" class="externalLink"><code>java.lang.Math</code></a>.
  <br>
  Originally part of the <a href="http://maths.uncommons.org/">Uncommon Maths software package</a> as Maths.</div>
 <dl>
@@ -132,7 +132,7 @@ double&nbsp;tolerance)</code></th>
 </td>
 </tr>
 <tr class="rowColor" id="i1">
-<td class="colFirst"><code>static <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/math/BigInteger.html?is-external=true" title="class or interface in java.math" class="externalLink">BigInteger</a></code></td>
+<td class="colFirst"><code>static <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/math/BigInteger.html?is-external=true" title="class or interface in java.math" class="externalLink">BigInteger</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#bigFactorial(int)">bigFactorial</a></span>&#8203;(int&nbsp;n)</code></th>
 <td class="colLast">
 <div class="block">Calculates the factorial of n where n is a positive integer.</div>
@@ -204,6 +204,20 @@ double&nbsp;arg)</code></th>
 </td>
 </tr>
 <tr class="rowColor" id="i9">
+<td class="colFirst"><code>static int</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#modularMultiplicativeInverse(int)">modularMultiplicativeInverse</a></span>&#8203;(int&nbsp;a)</code></th>
+<td class="colLast">
+<div class="block">Given any odd int <code>a</code>, this finds another odd int <code>b</code> such that <code>a * b == 1</code>.</div>
+</td>
+</tr>
+<tr class="altColor" id="i10">
+<td class="colFirst"><code>static long</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#modularMultiplicativeInverse(long)">modularMultiplicativeInverse</a></span>&#8203;(long&nbsp;a)</code></th>
+<td class="colLast">
+<div class="block">Given any odd long <code>a</code>, this finds another odd long <code>b</code> such that <code>a * b == 1L</code>.</div>
+</td>
+</tr>
+<tr class="rowColor" id="i11">
 <td class="colFirst"><code>static long</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#raiseToPower(int,int)">raiseToPower</a></span>&#8203;(int&nbsp;value,
 int&nbsp;power)</code></th>
@@ -211,7 +225,7 @@ int&nbsp;power)</code></th>
 <div class="block">Calculate the first argument raised to the power of the second.</div>
 </td>
 </tr>
-<tr class="altColor" id="i10">
+<tr class="altColor" id="i12">
 <td class="colFirst"><code>static double</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#remainder(double,double)">remainder</a></span>&#8203;(double&nbsp;op,
 double&nbsp;d)</code></th>
@@ -224,10 +238,10 @@ double&nbsp;d)</code></th>
 </div>
 </div>
 <div class="inheritedList">
-<h3>Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></h3>
+<h3>Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></h3>
 <a id="methods.inherited.from.class.java.lang.Object">
 <!--   -->
-</a><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#clone()" title="class or interface in java.lang" class="externalLink">clone</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.lang" class="externalLink">equals</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#finalize()" title="class or interface in java.lang" class="externalLink">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#getClass()" title="class or interface in java.lang" class="externalLink">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#hashCode()" title="class or interface in java.lang" class="externalLink">hashCode</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#notify()" title="class or interface in java.lang" class="externalLink">notify</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#notifyAll()" title="class or interface in java.lang" class="externalLink">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#toString()" title="class or interface in java.lang" class="externalLink">toString</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#wait()" title="class or interface in java.lang" class="externalLink">wait</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#wait(long)" title="class or interface in java.lang" class="externalLink">wait</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#wait(long,int)" title="class or interface in java.lang" class="externalLink">wait</a></code></div>
+</a><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#clone()" title="class or interface in java.lang" class="externalLink">clone</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.lang" class="externalLink">equals</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#finalize()" title="class or interface in java.lang" class="externalLink">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#getClass()" title="class or interface in java.lang" class="externalLink">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#hashCode()" title="class or interface in java.lang" class="externalLink">hashCode</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#notify()" title="class or interface in java.lang" class="externalLink">notify</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#notifyAll()" title="class or interface in java.lang" class="externalLink">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#toString()" title="class or interface in java.lang" class="externalLink">toString</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#wait()" title="class or interface in java.lang" class="externalLink">wait</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#wait(long)" title="class or interface in java.lang" class="externalLink">wait</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#wait(long,int)" title="class or interface in java.lang" class="externalLink">wait</a></code></div>
 </section>
 </li>
 </ul>
@@ -244,7 +258,7 @@ double&nbsp;d)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="factorial(int)">factorial</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MathExtras.html#line.56">factorial</a></span>&#8203;(<span class="arguments">int&nbsp;n)</span></div>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MathExtras.html#line.58">factorial</a></span>&#8203;(<span class="arguments">int&nbsp;n)</span></div>
 <div class="block">Calculates the factorial of n where n is a number in the
  range 0 - 20.  Zero factorial is equal to 1.  For values of
  n greater than 20 you must use <a href="#bigFactorial(int)"><code>bigFactorial(int)</code></a>.</div>
@@ -261,7 +275,7 @@ double&nbsp;d)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="bigFactorial(int)">bigFactorial</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/math/BigInteger.html?is-external=true" title="class or interface in java.math" class="externalLink">BigInteger</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MathExtras.html#line.81">bigFactorial</a></span>&#8203;(<span class="arguments">int&nbsp;n)</span></div>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/math/BigInteger.html?is-external=true" title="class or interface in java.math" class="externalLink">BigInteger</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MathExtras.html#line.83">bigFactorial</a></span>&#8203;(<span class="arguments">int&nbsp;n)</span></div>
 <div class="block">Calculates the factorial of n where n is a positive integer.
  Zero factorial is equal to 1.  For values of n up to 20, consider
  using <a href="#factorial(int)"><code>factorial(int)</code></a> instead since it uses a faster
@@ -279,7 +293,7 @@ double&nbsp;d)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="raiseToPower(int,int)">raiseToPower</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MathExtras.html#line.119">raiseToPower</a></span>&#8203;(<span class="arguments">int&nbsp;value,
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MathExtras.html#line.121">raiseToPower</a></span>&#8203;(<span class="arguments">int&nbsp;value,
 int&nbsp;power)</span></div>
 <div class="block">Calculate the first argument raised to the power of the second.
  This method only supports non-negative powers.</div>
@@ -295,7 +309,7 @@ int&nbsp;power)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="log(double,double)">log</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MathExtras.html#line.140">log</a></span>&#8203;(<span class="arguments">double&nbsp;base,
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MathExtras.html#line.142">log</a></span>&#8203;(<span class="arguments">double&nbsp;base,
 double&nbsp;arg)</span></div>
 <div class="block">Calculate logarithms for arbitrary bases.</div>
 <dl>
@@ -310,7 +324,7 @@ double&nbsp;arg)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="approxEquals(double,double,double)">approxEquals</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MathExtras.html#line.156">approxEquals</a></span>&#8203;(<span class="arguments">double&nbsp;value1,
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MathExtras.html#line.158">approxEquals</a></span>&#8203;(<span class="arguments">double&nbsp;value1,
 double&nbsp;value2,
 double&nbsp;tolerance)</span></div>
 <div class="block">Checks that two values are approximately equal (plus or minus a specified tolerance).</div>
@@ -329,7 +343,7 @@ double&nbsp;tolerance)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="clamp(int,int,int)">clamp</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MathExtras.html#line.177">clamp</a></span>&#8203;(<span class="arguments">int&nbsp;value,
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MathExtras.html#line.179">clamp</a></span>&#8203;(<span class="arguments">int&nbsp;value,
 int&nbsp;min,
 int&nbsp;max)</span></div>
 <div class="block">If the specified value is not greater than or equal to the specified minimum and
@@ -348,7 +362,7 @@ int&nbsp;max)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="clamp(long,long,long)">clamp</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MathExtras.html#line.192">clamp</a></span>&#8203;(<span class="arguments">long&nbsp;value,
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MathExtras.html#line.194">clamp</a></span>&#8203;(<span class="arguments">long&nbsp;value,
 long&nbsp;min,
 long&nbsp;max)</span></div>
 <div class="block">If the specified value is not greater than or equal to the specified minimum and
@@ -367,7 +381,7 @@ long&nbsp;max)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="clamp(double,double,double)">clamp</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MathExtras.html#line.207">clamp</a></span>&#8203;(<span class="arguments">double&nbsp;value,
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MathExtras.html#line.209">clamp</a></span>&#8203;(<span class="arguments">double&nbsp;value,
 double&nbsp;min,
 double&nbsp;max)</span></div>
 <div class="block">If the specified value is not greater than or equal to the specified minimum and
@@ -386,7 +400,7 @@ double&nbsp;max)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="clamp(float,float,float)">clamp</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MathExtras.html#line.221">clamp</a></span>&#8203;(<span class="arguments">float&nbsp;value,
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MathExtras.html#line.223">clamp</a></span>&#8203;(<span class="arguments">float&nbsp;value,
 float&nbsp;min,
 float&nbsp;max)</span></div>
 <div class="block">If the specified value is not greater than or equal to the specified minimum and
@@ -405,7 +419,7 @@ float&nbsp;max)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="remainder(double,double)">remainder</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MathExtras.html#line.232">remainder</a></span>&#8203;(<span class="arguments">double&nbsp;op,
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MathExtras.html#line.234">remainder</a></span>&#8203;(<span class="arguments">double&nbsp;op,
 double&nbsp;d)</span></div>
 <div class="block">Like the modulo operator <code>%</code>, but the result will always match the sign of <code>d</code> instead of <code>op</code>.</div>
 <dl>
@@ -420,7 +434,7 @@ double&nbsp;d)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="greatestCommonDivisor(long,long)">greatestCommonDivisor</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MathExtras.html#line.245">greatestCommonDivisor</a></span>&#8203;(<span class="arguments">long&nbsp;a,
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MathExtras.html#line.247">greatestCommonDivisor</a></span>&#8203;(<span class="arguments">long&nbsp;a,
 long&nbsp;b)</span></div>
 <div class="block">Determines the greatest common divisor of a pair of natural numbers
  using the Euclidean algorithm.  This method only works with natural
@@ -432,6 +446,35 @@ long&nbsp;b)</span></div>
 <dd><code>b</code> - The second value.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The greatest common divisor.</dd>
+</dl>
+</section>
+</li>
+<li class="blockList">
+<section class="detail">
+<h3><a id="modularMultiplicativeInverse(int)">modularMultiplicativeInverse</a></h3>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MathExtras.html#line.268">modularMultiplicativeInverse</a></span>&#8203;(<span class="arguments">int&nbsp;a)</span></div>
+<div class="block">Given any odd int <code>a</code>, this finds another odd int <code>b</code> such that <code>a * b == 1</code>.
+ <br>
+ This is incompatible with GWT, but it should usually only find uses in exploratory code or in tests anyway...
+ It is only incompatible because it tends to rely on multiplication overflow to work.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>a</code> - any odd int; note that even numbers do not have inverses modulo 2 to the 32</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the multiplicative inverse of <code>a</code> modulo 4294967296 (or, 2 to the 32)</dd>
+</dl>
+</section>
+</li>
+<li class="blockList">
+<section class="detail">
+<h3><a id="modularMultiplicativeInverse(long)">modularMultiplicativeInverse</a></h3>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MathExtras.html#line.283">modularMultiplicativeInverse</a></span>&#8203;(<span class="arguments">long&nbsp;a)</span></div>
+<div class="block">Given any odd long <code>a</code>, this finds another odd long <code>b</code> such that <code>a * b == 1L</code>.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>a</code> - any odd long; note that even numbers do not have inverses modulo 2 to the 64</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the multiplicative inverse of <code>a</code> modulo 18446744073709551616 (or, 2 to the 64)</dd>
 </dl>
 </section>
 </li>

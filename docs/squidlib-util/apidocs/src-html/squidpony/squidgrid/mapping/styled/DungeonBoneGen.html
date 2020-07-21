@@ -368,7 +368,7 @@
 <span class="sourceLineNo">356</span><a id="line.356">//        }</a>
 <span class="sourceLineNo">357</span><a id="line.357">        if (ts.config.is_corner) {</a>
 <span class="sourceLineNo">358</span><a id="line.358">            c_color = new int[ymax][xmax];</a>
-<span class="sourceLineNo">359</span><a id="line.359">            int i = 0, j = 0, ypos = -sidelen;</a>
+<span class="sourceLineNo">359</span><a id="line.359">            int i, j, ypos = -sidelen;</a>
 <span class="sourceLineNo">360</span><a id="line.360">            int[] cc = ts.config.num_colors;</a>
 <span class="sourceLineNo">361</span><a id="line.361"></a>
 <span class="sourceLineNo">362</span><a id="line.362">            for (j = 0; j &lt; ymax; ++j) {</a>
@@ -382,7 +382,7 @@
 <span class="sourceLineNo">370</span><a id="line.370">            // to avoid really obvious repetition (which happens easily with extreme weights)</a>
 <span class="sourceLineNo">371</span><a id="line.371">            for (j = 0; j &lt; ymax - 3; ++j) {</a>
 <span class="sourceLineNo">372</span><a id="line.372">                for (i = 0; i &lt; xmax - 3; ++i) {</a>
-<span class="sourceLineNo">373</span><a id="line.373">                    int p = (i - j + 1) &amp; 3; // corner type</a>
+<span class="sourceLineNo">373</span><a id="line.373">                    int p; // corner type</a>
 <span class="sourceLineNo">374</span><a id="line.374">//                    if (i + 3 &gt;= 1006) {</a>
 <span class="sourceLineNo">375</span><a id="line.375">//                        return null;</a>
 <span class="sourceLineNo">376</span><a id="line.376">//                    }</a>

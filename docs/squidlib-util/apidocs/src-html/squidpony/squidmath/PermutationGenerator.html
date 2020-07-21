@@ -92,689 +92,688 @@
 <span class="sourceLineNo">080</span><a id="line.80">     *               exactly the same length as elements, since GWT can create larger</a>
 <span class="sourceLineNo">081</span><a id="line.81">     *               versions of an array on its own, but our code can't easily.</a>
 <span class="sourceLineNo">082</span><a id="line.82">     */</a>
-<span class="sourceLineNo">083</span><a id="line.83">    @SuppressWarnings("unchecked")</a>
-<span class="sourceLineNo">084</span><a id="line.84">    public PermutationGenerator(Collection&lt;T&gt; elements, T[] filler)</a>
-<span class="sourceLineNo">085</span><a id="line.85">    {</a>
-<span class="sourceLineNo">086</span><a id="line.86">        this(elements.toArray(filler));</a>
-<span class="sourceLineNo">087</span><a id="line.87">    }</a>
+<span class="sourceLineNo">083</span><a id="line.83">    public PermutationGenerator(Collection&lt;T&gt; elements, T[] filler)</a>
+<span class="sourceLineNo">084</span><a id="line.84">    {</a>
+<span class="sourceLineNo">085</span><a id="line.85">        this(elements.toArray(filler));</a>
+<span class="sourceLineNo">086</span><a id="line.86">    }</a>
+<span class="sourceLineNo">087</span><a id="line.87"></a>
 <span class="sourceLineNo">088</span><a id="line.88"></a>
-<span class="sourceLineNo">089</span><a id="line.89"></a>
-<span class="sourceLineNo">090</span><a id="line.90">    /**</a>
-<span class="sourceLineNo">091</span><a id="line.91">     * Resets the generator state.</a>
-<span class="sourceLineNo">092</span><a id="line.92">     */</a>
-<span class="sourceLineNo">093</span><a id="line.93">    public final void reset()</a>
-<span class="sourceLineNo">094</span><a id="line.94">    {</a>
-<span class="sourceLineNo">095</span><a id="line.95">        for (int i = 0; i &lt; permutationIndices.length; i++)</a>
-<span class="sourceLineNo">096</span><a id="line.96">        {</a>
-<span class="sourceLineNo">097</span><a id="line.97">            permutationIndices[i] = i;</a>
-<span class="sourceLineNo">098</span><a id="line.98">        }</a>
-<span class="sourceLineNo">099</span><a id="line.99">        remainingPermutations = totalPermutations;</a>
-<span class="sourceLineNo">100</span><a id="line.100">    }</a>
+<span class="sourceLineNo">089</span><a id="line.89">    /**</a>
+<span class="sourceLineNo">090</span><a id="line.90">     * Resets the generator state.</a>
+<span class="sourceLineNo">091</span><a id="line.91">     */</a>
+<span class="sourceLineNo">092</span><a id="line.92">    public final void reset()</a>
+<span class="sourceLineNo">093</span><a id="line.93">    {</a>
+<span class="sourceLineNo">094</span><a id="line.94">        for (int i = 0; i &lt; permutationIndices.length; i++)</a>
+<span class="sourceLineNo">095</span><a id="line.95">        {</a>
+<span class="sourceLineNo">096</span><a id="line.96">            permutationIndices[i] = i;</a>
+<span class="sourceLineNo">097</span><a id="line.97">        }</a>
+<span class="sourceLineNo">098</span><a id="line.98">        remainingPermutations = totalPermutations;</a>
+<span class="sourceLineNo">099</span><a id="line.99">    }</a>
+<span class="sourceLineNo">100</span><a id="line.100"></a>
 <span class="sourceLineNo">101</span><a id="line.101"></a>
-<span class="sourceLineNo">102</span><a id="line.102"></a>
-<span class="sourceLineNo">103</span><a id="line.103">    /**</a>
-<span class="sourceLineNo">104</span><a id="line.104">     * Returns the number of permutations not yet generated.</a>
-<span class="sourceLineNo">105</span><a id="line.105">     * @return The number of unique permutations still to be generated.</a>
-<span class="sourceLineNo">106</span><a id="line.106">     */</a>
-<span class="sourceLineNo">107</span><a id="line.107">    public long getRemainingPermutations()</a>
-<span class="sourceLineNo">108</span><a id="line.108">    {</a>
-<span class="sourceLineNo">109</span><a id="line.109">        return remainingPermutations;</a>
-<span class="sourceLineNo">110</span><a id="line.110">    }</a>
+<span class="sourceLineNo">102</span><a id="line.102">    /**</a>
+<span class="sourceLineNo">103</span><a id="line.103">     * Returns the number of permutations not yet generated.</a>
+<span class="sourceLineNo">104</span><a id="line.104">     * @return The number of unique permutations still to be generated.</a>
+<span class="sourceLineNo">105</span><a id="line.105">     */</a>
+<span class="sourceLineNo">106</span><a id="line.106">    public long getRemainingPermutations()</a>
+<span class="sourceLineNo">107</span><a id="line.107">    {</a>
+<span class="sourceLineNo">108</span><a id="line.108">        return remainingPermutations;</a>
+<span class="sourceLineNo">109</span><a id="line.109">    }</a>
+<span class="sourceLineNo">110</span><a id="line.110"></a>
 <span class="sourceLineNo">111</span><a id="line.111"></a>
-<span class="sourceLineNo">112</span><a id="line.112"></a>
-<span class="sourceLineNo">113</span><a id="line.113">    /**</a>
-<span class="sourceLineNo">114</span><a id="line.114">     * Returns the total number of unique permutations that can be</a>
-<span class="sourceLineNo">115</span><a id="line.115">     * generated for the given set of elements.</a>
-<span class="sourceLineNo">116</span><a id="line.116">     * @return The total number of permutations.</a>
-<span class="sourceLineNo">117</span><a id="line.117">     */</a>
-<span class="sourceLineNo">118</span><a id="line.118">    public long getTotalPermutations()</a>
-<span class="sourceLineNo">119</span><a id="line.119">    {</a>
-<span class="sourceLineNo">120</span><a id="line.120">        return totalPermutations;</a>
-<span class="sourceLineNo">121</span><a id="line.121">    }</a>
-<span class="sourceLineNo">122</span><a id="line.122"></a>
-<span class="sourceLineNo">123</span><a id="line.123">    /**</a>
-<span class="sourceLineNo">124</span><a id="line.124">     * Returns the total number of unique permutations that can be</a>
-<span class="sourceLineNo">125</span><a id="line.125">     * generated for the given count of permute-able elements.</a>
-<span class="sourceLineNo">126</span><a id="line.126">     * Typically used with the static methods of this class that</a>
-<span class="sourceLineNo">127</span><a id="line.127">     * find permutation indices.</a>
-<span class="sourceLineNo">128</span><a id="line.128">     * @param count the number of elements (typically indices) you want to find a permutation of</a>
-<span class="sourceLineNo">129</span><a id="line.129">     * @return The total number of permutations.</a>
-<span class="sourceLineNo">130</span><a id="line.130">     */</a>
-<span class="sourceLineNo">131</span><a id="line.131">    public static long getTotalPermutations(int count)</a>
-<span class="sourceLineNo">132</span><a id="line.132">    {</a>
-<span class="sourceLineNo">133</span><a id="line.133">        return MathExtras.factorial(count);</a>
-<span class="sourceLineNo">134</span><a id="line.134">    }</a>
+<span class="sourceLineNo">112</span><a id="line.112">    /**</a>
+<span class="sourceLineNo">113</span><a id="line.113">     * Returns the total number of unique permutations that can be</a>
+<span class="sourceLineNo">114</span><a id="line.114">     * generated for the given set of elements.</a>
+<span class="sourceLineNo">115</span><a id="line.115">     * @return The total number of permutations.</a>
+<span class="sourceLineNo">116</span><a id="line.116">     */</a>
+<span class="sourceLineNo">117</span><a id="line.117">    public long getTotalPermutations()</a>
+<span class="sourceLineNo">118</span><a id="line.118">    {</a>
+<span class="sourceLineNo">119</span><a id="line.119">        return totalPermutations;</a>
+<span class="sourceLineNo">120</span><a id="line.120">    }</a>
+<span class="sourceLineNo">121</span><a id="line.121"></a>
+<span class="sourceLineNo">122</span><a id="line.122">    /**</a>
+<span class="sourceLineNo">123</span><a id="line.123">     * Returns the total number of unique permutations that can be</a>
+<span class="sourceLineNo">124</span><a id="line.124">     * generated for the given count of permute-able elements.</a>
+<span class="sourceLineNo">125</span><a id="line.125">     * Typically used with the static methods of this class that</a>
+<span class="sourceLineNo">126</span><a id="line.126">     * find permutation indices.</a>
+<span class="sourceLineNo">127</span><a id="line.127">     * @param count the number of elements (typically indices) you want to find a permutation of</a>
+<span class="sourceLineNo">128</span><a id="line.128">     * @return The total number of permutations.</a>
+<span class="sourceLineNo">129</span><a id="line.129">     */</a>
+<span class="sourceLineNo">130</span><a id="line.130">    public static long getTotalPermutations(int count)</a>
+<span class="sourceLineNo">131</span><a id="line.131">    {</a>
+<span class="sourceLineNo">132</span><a id="line.132">        return MathExtras.factorial(count);</a>
+<span class="sourceLineNo">133</span><a id="line.133">    }</a>
+<span class="sourceLineNo">134</span><a id="line.134"></a>
 <span class="sourceLineNo">135</span><a id="line.135"></a>
-<span class="sourceLineNo">136</span><a id="line.136"></a>
-<span class="sourceLineNo">137</span><a id="line.137">    /**</a>
-<span class="sourceLineNo">138</span><a id="line.138">     * Returns the total number of unique permutations that can be</a>
-<span class="sourceLineNo">139</span><a id="line.139">     * generated for the given count of permute-able elements.</a>
-<span class="sourceLineNo">140</span><a id="line.140">     * Typically used with the static methods of this class that</a>
-<span class="sourceLineNo">141</span><a id="line.141">     * find permutation indices and involve BigInteger values.</a>
-<span class="sourceLineNo">142</span><a id="line.142">     * @param count the number of elements (typically indices) you want to find a permutation of</a>
-<span class="sourceLineNo">143</span><a id="line.143">     * @return The total number of permutations.</a>
-<span class="sourceLineNo">144</span><a id="line.144">     */</a>
-<span class="sourceLineNo">145</span><a id="line.145">    public static BigInteger getBigTotalPermutations(int count)</a>
-<span class="sourceLineNo">146</span><a id="line.146">    {</a>
-<span class="sourceLineNo">147</span><a id="line.147">        return MathExtras.bigFactorial(count);</a>
-<span class="sourceLineNo">148</span><a id="line.148">    }</a>
+<span class="sourceLineNo">136</span><a id="line.136">    /**</a>
+<span class="sourceLineNo">137</span><a id="line.137">     * Returns the total number of unique permutations that can be</a>
+<span class="sourceLineNo">138</span><a id="line.138">     * generated for the given count of permute-able elements.</a>
+<span class="sourceLineNo">139</span><a id="line.139">     * Typically used with the static methods of this class that</a>
+<span class="sourceLineNo">140</span><a id="line.140">     * find permutation indices and involve BigInteger values.</a>
+<span class="sourceLineNo">141</span><a id="line.141">     * @param count the number of elements (typically indices) you want to find a permutation of</a>
+<span class="sourceLineNo">142</span><a id="line.142">     * @return The total number of permutations.</a>
+<span class="sourceLineNo">143</span><a id="line.143">     */</a>
+<span class="sourceLineNo">144</span><a id="line.144">    public static BigInteger getBigTotalPermutations(int count)</a>
+<span class="sourceLineNo">145</span><a id="line.145">    {</a>
+<span class="sourceLineNo">146</span><a id="line.146">        return MathExtras.bigFactorial(count);</a>
+<span class="sourceLineNo">147</span><a id="line.147">    }</a>
+<span class="sourceLineNo">148</span><a id="line.148"></a>
 <span class="sourceLineNo">149</span><a id="line.149"></a>
-<span class="sourceLineNo">150</span><a id="line.150"></a>
-<span class="sourceLineNo">151</span><a id="line.151">    /**</a>
-<span class="sourceLineNo">152</span><a id="line.152">     * Are there more permutations that have not yet been returned?</a>
-<span class="sourceLineNo">153</span><a id="line.153">     * @return true if there are more permutations, false otherwise.</a>
-<span class="sourceLineNo">154</span><a id="line.154">     */</a>
-<span class="sourceLineNo">155</span><a id="line.155">    public boolean hasMore()</a>
-<span class="sourceLineNo">156</span><a id="line.156">    {</a>
-<span class="sourceLineNo">157</span><a id="line.157">        return remainingPermutations &gt; 0;</a>
-<span class="sourceLineNo">158</span><a id="line.158">    }</a>
+<span class="sourceLineNo">150</span><a id="line.150">    /**</a>
+<span class="sourceLineNo">151</span><a id="line.151">     * Are there more permutations that have not yet been returned?</a>
+<span class="sourceLineNo">152</span><a id="line.152">     * @return true if there are more permutations, false otherwise.</a>
+<span class="sourceLineNo">153</span><a id="line.153">     */</a>
+<span class="sourceLineNo">154</span><a id="line.154">    public boolean hasMore()</a>
+<span class="sourceLineNo">155</span><a id="line.155">    {</a>
+<span class="sourceLineNo">156</span><a id="line.156">        return remainingPermutations &gt; 0;</a>
+<span class="sourceLineNo">157</span><a id="line.157">    }</a>
+<span class="sourceLineNo">158</span><a id="line.158"></a>
 <span class="sourceLineNo">159</span><a id="line.159"></a>
-<span class="sourceLineNo">160</span><a id="line.160"></a>
-<span class="sourceLineNo">161</span><a id="line.161">    /**</a>
-<span class="sourceLineNo">162</span><a id="line.162">     * Generate the next permutation and return an array containing</a>
-<span class="sourceLineNo">163</span><a id="line.163">     * the elements in the appropriate order.  This overloaded method</a>
-<span class="sourceLineNo">164</span><a id="line.164">     * allows the caller to provide an array that will be used and returned.</a>
-<span class="sourceLineNo">165</span><a id="line.165">     * The purpose of this is to improve performance when iterating over</a>
-<span class="sourceLineNo">166</span><a id="line.166">     * permutations. This method allows a single array instance to be reused.</a>
-<span class="sourceLineNo">167</span><a id="line.167">     * @param destination Provides an array to use to create the</a>
-<span class="sourceLineNo">168</span><a id="line.168">     * permutation.  The specified array must be the same length as a</a>
-<span class="sourceLineNo">169</span><a id="line.169">     * permutation.  This is the array that will be returned, once</a>
-<span class="sourceLineNo">170</span><a id="line.170">     * it has been filled with the elements in the appropriate order.</a>
-<span class="sourceLineNo">171</span><a id="line.171">     * @return The next permutation as an array.</a>
-<span class="sourceLineNo">172</span><a id="line.172">     */</a>
-<span class="sourceLineNo">173</span><a id="line.173">    public T[] nextPermutationAsArray(T[] destination)</a>
-<span class="sourceLineNo">174</span><a id="line.174">    {</a>
-<span class="sourceLineNo">175</span><a id="line.175">        if (destination.length != elements.length)</a>
-<span class="sourceLineNo">176</span><a id="line.176">        {</a>
-<span class="sourceLineNo">177</span><a id="line.177">            throw new IllegalArgumentException("Destination array must be the same length as permutations.");</a>
-<span class="sourceLineNo">178</span><a id="line.178">        }</a>
-<span class="sourceLineNo">179</span><a id="line.179">        generateNextPermutationIndices();</a>
-<span class="sourceLineNo">180</span><a id="line.180">        // Generate actual permutation.</a>
-<span class="sourceLineNo">181</span><a id="line.181">        for (int i = 0; i &lt; permutationIndices.length; i++)</a>
-<span class="sourceLineNo">182</span><a id="line.182">        {</a>
-<span class="sourceLineNo">183</span><a id="line.183">            destination[i] = elements[permutationIndices[i]];</a>
-<span class="sourceLineNo">184</span><a id="line.184">        }</a>
-<span class="sourceLineNo">185</span><a id="line.185">        return destination;</a>
-<span class="sourceLineNo">186</span><a id="line.186">    }</a>
+<span class="sourceLineNo">160</span><a id="line.160">    /**</a>
+<span class="sourceLineNo">161</span><a id="line.161">     * Generate the next permutation and return an array containing</a>
+<span class="sourceLineNo">162</span><a id="line.162">     * the elements in the appropriate order.  This overloaded method</a>
+<span class="sourceLineNo">163</span><a id="line.163">     * allows the caller to provide an array that will be used and returned.</a>
+<span class="sourceLineNo">164</span><a id="line.164">     * The purpose of this is to improve performance when iterating over</a>
+<span class="sourceLineNo">165</span><a id="line.165">     * permutations. This method allows a single array instance to be reused.</a>
+<span class="sourceLineNo">166</span><a id="line.166">     * @param destination Provides an array to use to create the</a>
+<span class="sourceLineNo">167</span><a id="line.167">     * permutation.  The specified array must be the same length as a</a>
+<span class="sourceLineNo">168</span><a id="line.168">     * permutation.  This is the array that will be returned, once</a>
+<span class="sourceLineNo">169</span><a id="line.169">     * it has been filled with the elements in the appropriate order.</a>
+<span class="sourceLineNo">170</span><a id="line.170">     * @return The next permutation as an array.</a>
+<span class="sourceLineNo">171</span><a id="line.171">     */</a>
+<span class="sourceLineNo">172</span><a id="line.172">    public T[] nextPermutationAsArray(T[] destination)</a>
+<span class="sourceLineNo">173</span><a id="line.173">    {</a>
+<span class="sourceLineNo">174</span><a id="line.174">        if (destination.length != elements.length)</a>
+<span class="sourceLineNo">175</span><a id="line.175">        {</a>
+<span class="sourceLineNo">176</span><a id="line.176">            throw new IllegalArgumentException("Destination array must be the same length as permutations.");</a>
+<span class="sourceLineNo">177</span><a id="line.177">        }</a>
+<span class="sourceLineNo">178</span><a id="line.178">        generateNextPermutationIndices();</a>
+<span class="sourceLineNo">179</span><a id="line.179">        // Generate actual permutation.</a>
+<span class="sourceLineNo">180</span><a id="line.180">        for (int i = 0; i &lt; permutationIndices.length; i++)</a>
+<span class="sourceLineNo">181</span><a id="line.181">        {</a>
+<span class="sourceLineNo">182</span><a id="line.182">            destination[i] = elements[permutationIndices[i]];</a>
+<span class="sourceLineNo">183</span><a id="line.183">        }</a>
+<span class="sourceLineNo">184</span><a id="line.184">        return destination;</a>
+<span class="sourceLineNo">185</span><a id="line.185">    }</a>
+<span class="sourceLineNo">186</span><a id="line.186"></a>
 <span class="sourceLineNo">187</span><a id="line.187"></a>
-<span class="sourceLineNo">188</span><a id="line.188"></a>
-<span class="sourceLineNo">189</span><a id="line.189">    /**</a>
-<span class="sourceLineNo">190</span><a id="line.190">     * Generate the next permutation and return a list containing</a>
-<span class="sourceLineNo">191</span><a id="line.191">     * the elements in the appropriate order.</a>
-<span class="sourceLineNo">192</span><a id="line.192">     * @see #nextPermutationAsList(List)</a>
-<span class="sourceLineNo">193</span><a id="line.193">     * @return The next permutation as a list.</a>
-<span class="sourceLineNo">194</span><a id="line.194">     */</a>
-<span class="sourceLineNo">195</span><a id="line.195">    public List&lt;T&gt; nextPermutationAsList()</a>
-<span class="sourceLineNo">196</span><a id="line.196">    {</a>
-<span class="sourceLineNo">197</span><a id="line.197">        List&lt;T&gt; permutation = new ArrayList&lt;T&gt;(elements.length);</a>
-<span class="sourceLineNo">198</span><a id="line.198">        return nextPermutationAsList(permutation);</a>
-<span class="sourceLineNo">199</span><a id="line.199">    }</a>
+<span class="sourceLineNo">188</span><a id="line.188">    /**</a>
+<span class="sourceLineNo">189</span><a id="line.189">     * Generate the next permutation and return a list containing</a>
+<span class="sourceLineNo">190</span><a id="line.190">     * the elements in the appropriate order.</a>
+<span class="sourceLineNo">191</span><a id="line.191">     * @see #nextPermutationAsList(List)</a>
+<span class="sourceLineNo">192</span><a id="line.192">     * @return The next permutation as a list.</a>
+<span class="sourceLineNo">193</span><a id="line.193">     */</a>
+<span class="sourceLineNo">194</span><a id="line.194">    public List&lt;T&gt; nextPermutationAsList()</a>
+<span class="sourceLineNo">195</span><a id="line.195">    {</a>
+<span class="sourceLineNo">196</span><a id="line.196">        List&lt;T&gt; permutation = new ArrayList&lt;T&gt;(elements.length);</a>
+<span class="sourceLineNo">197</span><a id="line.197">        return nextPermutationAsList(permutation);</a>
+<span class="sourceLineNo">198</span><a id="line.198">    }</a>
+<span class="sourceLineNo">199</span><a id="line.199"></a>
 <span class="sourceLineNo">200</span><a id="line.200"></a>
-<span class="sourceLineNo">201</span><a id="line.201"></a>
-<span class="sourceLineNo">202</span><a id="line.202">    /**</a>
-<span class="sourceLineNo">203</span><a id="line.203">     * Generate the next permutation and return a list containing</a>
-<span class="sourceLineNo">204</span><a id="line.204">     * the elements in the appropriate order.  This overloaded method</a>
-<span class="sourceLineNo">205</span><a id="line.205">     * allows the caller to provide a list that will be used and returned.</a>
-<span class="sourceLineNo">206</span><a id="line.206">     * The purpose of this is to improve performance when iterating over</a>
-<span class="sourceLineNo">207</span><a id="line.207">     * permutations.  If the {@link #nextPermutationAsList()} method is</a>
-<span class="sourceLineNo">208</span><a id="line.208">     * used it will create a new list every time.  When iterating over</a>
-<span class="sourceLineNo">209</span><a id="line.209">     * permutations this will result in lots of short-lived objects that</a>
-<span class="sourceLineNo">210</span><a id="line.210">     * have to be garbage collected.  This method allows a single list</a>
-<span class="sourceLineNo">211</span><a id="line.211">     * instance to be reused in such circumstances.</a>
-<span class="sourceLineNo">212</span><a id="line.212">     * @param destination Provides a list to use to create the</a>
-<span class="sourceLineNo">213</span><a id="line.213">     * permutation.  This is the list that will be returned, once</a>
-<span class="sourceLineNo">214</span><a id="line.214">     * it has been filled with the elements in the appropriate order.</a>
-<span class="sourceLineNo">215</span><a id="line.215">     * @return The next permutation as a list.</a>
-<span class="sourceLineNo">216</span><a id="line.216">     */</a>
-<span class="sourceLineNo">217</span><a id="line.217">    public List&lt;T&gt; nextPermutationAsList(List&lt;T&gt; destination)</a>
-<span class="sourceLineNo">218</span><a id="line.218">    {</a>
-<span class="sourceLineNo">219</span><a id="line.219">        generateNextPermutationIndices();</a>
-<span class="sourceLineNo">220</span><a id="line.220">        // Generate actual permutation.</a>
-<span class="sourceLineNo">221</span><a id="line.221">        destination.clear();</a>
-<span class="sourceLineNo">222</span><a id="line.222">        for (int i : permutationIndices)</a>
-<span class="sourceLineNo">223</span><a id="line.223">        {</a>
-<span class="sourceLineNo">224</span><a id="line.224">            destination.add(elements[i]);</a>
-<span class="sourceLineNo">225</span><a id="line.225">        }</a>
-<span class="sourceLineNo">226</span><a id="line.226">        return destination;</a>
-<span class="sourceLineNo">227</span><a id="line.227">    }</a>
-<span class="sourceLineNo">228</span><a id="line.228"></a>
-<span class="sourceLineNo">229</span><a id="line.229">    /**</a>
-<span class="sourceLineNo">230</span><a id="line.230">     * Generate the indices into the elements array for the next permutation.  The</a>
-<span class="sourceLineNo">231</span><a id="line.231">     * algorithm is from Kenneth H. Rosen, Discrete Mathematics and its Applications,</a>
-<span class="sourceLineNo">232</span><a id="line.232">     * 2nd edition (NY: McGraw-Hill, 1991), p. 284)</a>
-<span class="sourceLineNo">233</span><a id="line.233">     */</a>
-<span class="sourceLineNo">234</span><a id="line.234">    private void generateNextPermutationIndices()</a>
-<span class="sourceLineNo">235</span><a id="line.235">    {</a>
-<span class="sourceLineNo">236</span><a id="line.236">        if (remainingPermutations == 0)</a>
-<span class="sourceLineNo">237</span><a id="line.237">        {</a>
-<span class="sourceLineNo">238</span><a id="line.238">            throw new IllegalStateException("There are no permutations remaining.  " +</a>
-<span class="sourceLineNo">239</span><a id="line.239">                                            "Generator must be reset to continue using.");</a>
-<span class="sourceLineNo">240</span><a id="line.240">        }</a>
-<span class="sourceLineNo">241</span><a id="line.241">        else if (remainingPermutations &lt; totalPermutations)</a>
-<span class="sourceLineNo">242</span><a id="line.242">        {</a>
-<span class="sourceLineNo">243</span><a id="line.243">            // Find largest index j with permutationIndices[j] &lt; permutationIndices[j + 1]</a>
-<span class="sourceLineNo">244</span><a id="line.244">            int j = permutationIndices.length - 2;</a>
-<span class="sourceLineNo">245</span><a id="line.245">            while (permutationIndices[j] &gt; permutationIndices[j + 1])</a>
-<span class="sourceLineNo">246</span><a id="line.246">            {</a>
-<span class="sourceLineNo">247</span><a id="line.247">                j--;</a>
-<span class="sourceLineNo">248</span><a id="line.248">            }</a>
-<span class="sourceLineNo">249</span><a id="line.249"></a>
-<span class="sourceLineNo">250</span><a id="line.250">            // Find index k such that permutationIndices[k] is smallest integer greater than</a>
-<span class="sourceLineNo">251</span><a id="line.251">            // permutationIndices[j] to the right of permutationIndices[j].</a>
-<span class="sourceLineNo">252</span><a id="line.252">            int k = permutationIndices.length - 1;</a>
-<span class="sourceLineNo">253</span><a id="line.253">            while (permutationIndices[j] &gt; permutationIndices[k])</a>
-<span class="sourceLineNo">254</span><a id="line.254">            {</a>
-<span class="sourceLineNo">255</span><a id="line.255">                k--;</a>
-<span class="sourceLineNo">256</span><a id="line.256">            }</a>
-<span class="sourceLineNo">257</span><a id="line.257"></a>
-<span class="sourceLineNo">258</span><a id="line.258">            // Interchange permutation indices.</a>
-<span class="sourceLineNo">259</span><a id="line.259">            int temp = permutationIndices[k];</a>
-<span class="sourceLineNo">260</span><a id="line.260">            permutationIndices[k] = permutationIndices[j];</a>
-<span class="sourceLineNo">261</span><a id="line.261">            permutationIndices[j] = temp;</a>
-<span class="sourceLineNo">262</span><a id="line.262"></a>
-<span class="sourceLineNo">263</span><a id="line.263">            // Put tail end of permutation after jth position in increasing order.</a>
-<span class="sourceLineNo">264</span><a id="line.264">            int r = permutationIndices.length - 1;</a>
-<span class="sourceLineNo">265</span><a id="line.265">            int s = j + 1;</a>
-<span class="sourceLineNo">266</span><a id="line.266"></a>
-<span class="sourceLineNo">267</span><a id="line.267">            while (r &gt; s)</a>
-<span class="sourceLineNo">268</span><a id="line.268">            {</a>
-<span class="sourceLineNo">269</span><a id="line.269">                temp = permutationIndices[s];</a>
-<span class="sourceLineNo">270</span><a id="line.270">                permutationIndices[s] = permutationIndices[r];</a>
-<span class="sourceLineNo">271</span><a id="line.271">                permutationIndices[r] = temp;</a>
-<span class="sourceLineNo">272</span><a id="line.272">                r--;</a>
-<span class="sourceLineNo">273</span><a id="line.273">                s++;</a>
-<span class="sourceLineNo">274</span><a id="line.274">            }</a>
-<span class="sourceLineNo">275</span><a id="line.275">        }</a>
-<span class="sourceLineNo">276</span><a id="line.276">        --remainingPermutations;</a>
-<span class="sourceLineNo">277</span><a id="line.277">    }</a>
-<span class="sourceLineNo">278</span><a id="line.278"></a>
-<span class="sourceLineNo">279</span><a id="line.279">    private int[] getPermutationShift(T[] perm) {</a>
-<span class="sourceLineNo">280</span><a id="line.280">        int[] sh = new int[perm.length];</a>
-<span class="sourceLineNo">281</span><a id="line.281">        boolean[] taken = new boolean[perm.length];</a>
-<span class="sourceLineNo">282</span><a id="line.282"></a>
-<span class="sourceLineNo">283</span><a id="line.283">        for (int i = 0; i &lt; perm.length - 1; i++) {</a>
-<span class="sourceLineNo">284</span><a id="line.284">            int ctr = -1;</a>
-<span class="sourceLineNo">285</span><a id="line.285">            for (int j = 0; j &lt; perm.length; j++) {</a>
-<span class="sourceLineNo">286</span><a id="line.286">                if (!taken[j])</a>
-<span class="sourceLineNo">287</span><a id="line.287">                    ctr++;</a>
-<span class="sourceLineNo">288</span><a id="line.288">                if (perm[j] == elements[i]) {</a>
-<span class="sourceLineNo">289</span><a id="line.289">                    taken[j] = true;</a>
-<span class="sourceLineNo">290</span><a id="line.290">                    sh[i] = ctr;</a>
-<span class="sourceLineNo">291</span><a id="line.291">                    break;</a>
-<span class="sourceLineNo">292</span><a id="line.292">                }</a>
-<span class="sourceLineNo">293</span><a id="line.293">            }</a>
-<span class="sourceLineNo">294</span><a id="line.294">        }</a>
-<span class="sourceLineNo">295</span><a id="line.295">        return sh;</a>
-<span class="sourceLineNo">296</span><a id="line.296">    }</a>
-<span class="sourceLineNo">297</span><a id="line.297"></a>
-<span class="sourceLineNo">298</span><a id="line.298">    private int[] getPermutationShift(List&lt;T&gt; perm) {</a>
-<span class="sourceLineNo">299</span><a id="line.299">        int length = perm.size();</a>
-<span class="sourceLineNo">300</span><a id="line.300">        int[] sh = new int[length];</a>
-<span class="sourceLineNo">301</span><a id="line.301">        boolean[] taken = new boolean[length];</a>
-<span class="sourceLineNo">302</span><a id="line.302"></a>
-<span class="sourceLineNo">303</span><a id="line.303">        for (int i = 0; i &lt; length - 1; i++) {</a>
-<span class="sourceLineNo">304</span><a id="line.304">            int ctr = -1;</a>
-<span class="sourceLineNo">305</span><a id="line.305">            for (int j = 0; j &lt; length; j++) {</a>
-<span class="sourceLineNo">306</span><a id="line.306">                if (!taken[j])</a>
-<span class="sourceLineNo">307</span><a id="line.307">                    ctr++;</a>
-<span class="sourceLineNo">308</span><a id="line.308">                if (perm.get(j) == elements[i]) {</a>
-<span class="sourceLineNo">309</span><a id="line.309">                    taken[j] = true;</a>
-<span class="sourceLineNo">310</span><a id="line.310">                    sh[i] = ctr;</a>
-<span class="sourceLineNo">311</span><a id="line.311">                    break;</a>
-<span class="sourceLineNo">312</span><a id="line.312">                }</a>
-<span class="sourceLineNo">313</span><a id="line.313">            }</a>
-<span class="sourceLineNo">314</span><a id="line.314">        }</a>
-<span class="sourceLineNo">315</span><a id="line.315">        return sh;</a>
-<span class="sourceLineNo">316</span><a id="line.316">    }</a>
-<span class="sourceLineNo">317</span><a id="line.317"></a>
-<span class="sourceLineNo">318</span><a id="line.318">    /**</a>
-<span class="sourceLineNo">319</span><a id="line.319">     * Given an array of T that constitutes a permutation of the elements this was constructed with, finds the specific</a>
-<span class="sourceLineNo">320</span><a id="line.320">     * index of the permutation given a factoradic numbering scheme (not used by the rest of this class, except the</a>
-<span class="sourceLineNo">321</span><a id="line.321">     * decodePermutation() method). The index can be passed to decodePermutation to reproduce the permutation passed to</a>
-<span class="sourceLineNo">322</span><a id="line.322">     * this, or modified and then passed to decodePermutation(). Determines equality by identity, not by .equals(), so</a>
-<span class="sourceLineNo">323</span><a id="line.323">     * that equivalent values that have different references/identities can appear in the permuted elements.</a>
-<span class="sourceLineNo">324</span><a id="line.324">     * &lt;br&gt;</a>
-<span class="sourceLineNo">325</span><a id="line.325">     * Credit goes to user Joren on StackOverflow, http://stackoverflow.com/a/1506337</a>
-<span class="sourceLineNo">326</span><a id="line.326">     * @param perm an array of T that must be a valid permutation of this object's elements</a>
-<span class="sourceLineNo">327</span><a id="line.327">     * @return an encoded number that can be used to reconstruct the permutation when passed to decodePermutation()</a>
-<span class="sourceLineNo">328</span><a id="line.328">     */</a>
-<span class="sourceLineNo">329</span><a id="line.329">    public long encodePermutation(T[] perm)</a>
-<span class="sourceLineNo">330</span><a id="line.330">    {</a>
-<span class="sourceLineNo">331</span><a id="line.331">        long e = 0;</a>
-<span class="sourceLineNo">332</span><a id="line.332">        if(perm == null || perm.length != elements.length)</a>
-<span class="sourceLineNo">333</span><a id="line.333">            return e;</a>
-<span class="sourceLineNo">334</span><a id="line.334">        int[] shift = getPermutationShift(perm);</a>
-<span class="sourceLineNo">335</span><a id="line.335">        for (int i = 1; i &lt; shift.length; i++) {</a>
-<span class="sourceLineNo">336</span><a id="line.336">            e += shift[i] * MathExtras.factorialsStart[i];</a>
-<span class="sourceLineNo">337</span><a id="line.337">        }</a>
-<span class="sourceLineNo">338</span><a id="line.338">        return e;</a>
-<span class="sourceLineNo">339</span><a id="line.339">    }</a>
-<span class="sourceLineNo">340</span><a id="line.340"></a>
-<span class="sourceLineNo">341</span><a id="line.341">    /**</a>
-<span class="sourceLineNo">342</span><a id="line.342">     * Given a List of T that constitutes a permutation of the elements this was constructed with, finds the specific</a>
-<span class="sourceLineNo">343</span><a id="line.343">     * index of the permutation given a factoradic numbering scheme (not used by the rest of this class, except the</a>
-<span class="sourceLineNo">344</span><a id="line.344">     * decodePermutation() method). The index can be passed to decodePermutation to reproduce the permutation passed to</a>
-<span class="sourceLineNo">345</span><a id="line.345">     * this, or modified and then passed to decodePermutation(). Determines equality by identity, not by .equals(), so</a>
-<span class="sourceLineNo">346</span><a id="line.346">     * that equivalent values that have different references/identities can appear in the permuted elements.</a>
-<span class="sourceLineNo">347</span><a id="line.347">     * &lt;br&gt;</a>
-<span class="sourceLineNo">348</span><a id="line.348">     * Credit goes to user Joren on StackOverflow, http://stackoverflow.com/a/1506337</a>
-<span class="sourceLineNo">349</span><a id="line.349">     * @param perm a List of T that must be a valid permutation of this object's elements</a>
-<span class="sourceLineNo">350</span><a id="line.350">     * @return an encoded number that can be used to reconstruct the permutation when passed to decodePermutation()</a>
-<span class="sourceLineNo">351</span><a id="line.351">     */</a>
-<span class="sourceLineNo">352</span><a id="line.352">    public long encodePermutation(List&lt;T&gt; perm)</a>
-<span class="sourceLineNo">353</span><a id="line.353">    {</a>
-<span class="sourceLineNo">354</span><a id="line.354">        long e = 0;</a>
-<span class="sourceLineNo">355</span><a id="line.355">        if(perm == null || perm.size() != elements.length)</a>
-<span class="sourceLineNo">356</span><a id="line.356">            return e;</a>
-<span class="sourceLineNo">357</span><a id="line.357">        int[] shift = getPermutationShift(perm);</a>
-<span class="sourceLineNo">358</span><a id="line.358">        for (int i = 1; i &lt; shift.length; i++) {</a>
-<span class="sourceLineNo">359</span><a id="line.359">            e += shift[i] * MathExtras.factorialsStart[i];</a>
-<span class="sourceLineNo">360</span><a id="line.360">        }</a>
-<span class="sourceLineNo">361</span><a id="line.361">        return e;</a>
-<span class="sourceLineNo">362</span><a id="line.362">    }</a>
-<span class="sourceLineNo">363</span><a id="line.363"></a>
-<span class="sourceLineNo">364</span><a id="line.364">    private int[] factoradicDecode(long e)</a>
-<span class="sourceLineNo">365</span><a id="line.365">    {</a>
-<span class="sourceLineNo">366</span><a id="line.366">        int[] sequence = new int[elements.length];</a>
-<span class="sourceLineNo">367</span><a id="line.367">        int base = 2;</a>
-<span class="sourceLineNo">368</span><a id="line.368"></a>
-<span class="sourceLineNo">369</span><a id="line.369">        for (int k = 1; k &lt; elements.length; k++)</a>
-<span class="sourceLineNo">370</span><a id="line.370">        {</a>
-<span class="sourceLineNo">371</span><a id="line.371">            sequence[elements.length - 1 - k] = (int)(e % base);</a>
-<span class="sourceLineNo">372</span><a id="line.372">            e /= base;</a>
-<span class="sourceLineNo">373</span><a id="line.373"></a>
-<span class="sourceLineNo">374</span><a id="line.374">            base++;</a>
-<span class="sourceLineNo">375</span><a id="line.375">        }</a>
-<span class="sourceLineNo">376</span><a id="line.376">        return sequence;</a>
-<span class="sourceLineNo">377</span><a id="line.377">    }</a>
-<span class="sourceLineNo">378</span><a id="line.378"></a>
-<span class="sourceLineNo">379</span><a id="line.379">    /**</a>
-<span class="sourceLineNo">380</span><a id="line.380">     * Given a long between 0 and the total number of permutations possible (see getTotalPermutations() for how to access</a>
-<span class="sourceLineNo">381</span><a id="line.381">     * this) and an array of T with the same length as the elements this was constructed with, fills the array with the</a>
-<span class="sourceLineNo">382</span><a id="line.382">     * permutation described by the long as a special (factoradic) index into the possible permutations. You can get an</a>
-<span class="sourceLineNo">383</span><a id="line.383">     * index for a specific permutation with encodePermutation() or by generating a random number between 0 and</a>
-<span class="sourceLineNo">384</span><a id="line.384">     * getTotalPermutations(), if you want it randomly.</a>
-<span class="sourceLineNo">385</span><a id="line.385">     * &lt;br&gt;</a>
-<span class="sourceLineNo">386</span><a id="line.386">     * Credit goes to user Joren on StackOverflow, http://stackoverflow.com/a/1506337</a>
-<span class="sourceLineNo">387</span><a id="line.387">     * @param encoded the index encoded as a long</a>
-<span class="sourceLineNo">388</span><a id="line.388">     * @param destination an array of T that must have equivalent length to the elements this was constructed with</a>
-<span class="sourceLineNo">389</span><a id="line.389">     * @return the looked-up permutation, which is the same value destination will be assigned</a>
-<span class="sourceLineNo">390</span><a id="line.390">     */</a>
-<span class="sourceLineNo">391</span><a id="line.391">    public T[] decodePermutation(long encoded, T[] destination)</a>
-<span class="sourceLineNo">392</span><a id="line.392">    {</a>
-<span class="sourceLineNo">393</span><a id="line.393">        if(destination == null)</a>
-<span class="sourceLineNo">394</span><a id="line.394">            return null;</a>
-<span class="sourceLineNo">395</span><a id="line.395">        encoded %= totalPermutations;</a>
-<span class="sourceLineNo">396</span><a id="line.396">        int[] sequence = factoradicDecode(encoded);</a>
-<span class="sourceLineNo">397</span><a id="line.397"></a>
-<span class="sourceLineNo">398</span><a id="line.398">        boolean[] set = new boolean[elements.length];</a>
-<span class="sourceLineNo">399</span><a id="line.399"></a>
-<span class="sourceLineNo">400</span><a id="line.400">        for (int i = 0; i &lt; elements.length; i++)</a>
-<span class="sourceLineNo">401</span><a id="line.401">        {</a>
-<span class="sourceLineNo">402</span><a id="line.402">            int s = sequence[i];</a>
-<span class="sourceLineNo">403</span><a id="line.403">            int remainingPosition = 0;</a>
-<span class="sourceLineNo">404</span><a id="line.404">            int index;</a>
-<span class="sourceLineNo">405</span><a id="line.405"></a>
-<span class="sourceLineNo">406</span><a id="line.406">            // Find the s'th position in the permuted list that has not been set yet.</a>
-<span class="sourceLineNo">407</span><a id="line.407">            for (index = 0; index &lt; elements.length; index++)</a>
-<span class="sourceLineNo">408</span><a id="line.408">            {</a>
-<span class="sourceLineNo">409</span><a id="line.409">                if (!set[index])</a>
-<span class="sourceLineNo">410</span><a id="line.410">                {</a>
-<span class="sourceLineNo">411</span><a id="line.411">                    if (remainingPosition == s)</a>
-<span class="sourceLineNo">412</span><a id="line.412">                        break;</a>
-<span class="sourceLineNo">413</span><a id="line.413"></a>
-<span class="sourceLineNo">414</span><a id="line.414">                    remainingPosition++;</a>
-<span class="sourceLineNo">415</span><a id="line.415">                }</a>
-<span class="sourceLineNo">416</span><a id="line.416">            }</a>
-<span class="sourceLineNo">417</span><a id="line.417"></a>
-<span class="sourceLineNo">418</span><a id="line.418">            destination[index] = elements[i];</a>
-<span class="sourceLineNo">419</span><a id="line.419">            set[index] = true;</a>
-<span class="sourceLineNo">420</span><a id="line.420">        }</a>
-<span class="sourceLineNo">421</span><a id="line.421">        return destination;</a>
-<span class="sourceLineNo">422</span><a id="line.422">    }</a>
-<span class="sourceLineNo">423</span><a id="line.423"></a>
-<span class="sourceLineNo">424</span><a id="line.424">    /**</a>
-<span class="sourceLineNo">425</span><a id="line.425">     * Given a long between 0 and the total number of permutations possible (see getTotalPermutations() for how to access</a>
-<span class="sourceLineNo">426</span><a id="line.426">     * this), creates a List filled with the permutation described by the long as a special (factoradic) index into the</a>
-<span class="sourceLineNo">427</span><a id="line.427">     * possible permutations. You can get an index for a specific permutation with encodePermutation() or by generating a</a>
-<span class="sourceLineNo">428</span><a id="line.428">     * random number between 0 and getTotalPermutations(), if you want it randomly.</a>
-<span class="sourceLineNo">429</span><a id="line.429">     * &lt;br&gt;</a>
-<span class="sourceLineNo">430</span><a id="line.430">     * Credit goes to user Joren on StackOverflow, http://stackoverflow.com/a/1506337</a>
-<span class="sourceLineNo">431</span><a id="line.431">     * @param encoded the index encoded as a long</a>
-<span class="sourceLineNo">432</span><a id="line.432">     * @return a List of T that corresponds to the permutation at the encoded index</a>
-<span class="sourceLineNo">433</span><a id="line.433">     */</a>
-<span class="sourceLineNo">434</span><a id="line.434">    public List&lt;T&gt; decodePermutation(long encoded)</a>
-<span class="sourceLineNo">435</span><a id="line.435">    {</a>
-<span class="sourceLineNo">436</span><a id="line.436">        ArrayList&lt;T&gt; list = new ArrayList&lt;T&gt;(elements.length);</a>
-<span class="sourceLineNo">437</span><a id="line.437">        Collections.addAll(list, elements);</a>
-<span class="sourceLineNo">438</span><a id="line.438">        return decodePermutation(encoded, list);</a>
-<span class="sourceLineNo">439</span><a id="line.439">    }</a>
-<span class="sourceLineNo">440</span><a id="line.440"></a>
-<span class="sourceLineNo">441</span><a id="line.441">    /**</a>
-<span class="sourceLineNo">442</span><a id="line.442">     * Given a long between 0 and the total number of permutations possible (see getTotalPermutations() for how to access</a>
-<span class="sourceLineNo">443</span><a id="line.443">     * this) and a List of T with the same length as the elements this was constructed with, fills the List with the</a>
-<span class="sourceLineNo">444</span><a id="line.444">     * permutation described by the long as a special (factoradic) index into the possible permutations. You can get an</a>
-<span class="sourceLineNo">445</span><a id="line.445">     * index for a specific permutation with encodePermutation() or by generating a random number between 0 and</a>
-<span class="sourceLineNo">446</span><a id="line.446">     * getTotalPermutations(), if you want it randomly.</a>
-<span class="sourceLineNo">447</span><a id="line.447">     * &lt;br&gt;</a>
-<span class="sourceLineNo">448</span><a id="line.448">     * Credit goes to user Joren on StackOverflow, http://stackoverflow.com/a/1506337</a>
-<span class="sourceLineNo">449</span><a id="line.449">     * @param encoded the index encoded as a long</a>
-<span class="sourceLineNo">450</span><a id="line.450">     * @param destination a List of T that must have equivalent size to the elements this was constructed with</a>
-<span class="sourceLineNo">451</span><a id="line.451">     * @return the looked-up permutation, which is the same value destination will be assigned</a>
-<span class="sourceLineNo">452</span><a id="line.452">     */</a>
-<span class="sourceLineNo">453</span><a id="line.453">    public List&lt;T&gt; decodePermutation(long encoded, List&lt;T&gt; destination)</a>
-<span class="sourceLineNo">454</span><a id="line.454">    {</a>
-<span class="sourceLineNo">455</span><a id="line.455">        if(destination == null)</a>
-<span class="sourceLineNo">456</span><a id="line.456">            return null;</a>
-<span class="sourceLineNo">457</span><a id="line.457">        encoded %= totalPermutations;</a>
-<span class="sourceLineNo">458</span><a id="line.458">        int[] sequence = factoradicDecode(encoded);</a>
-<span class="sourceLineNo">459</span><a id="line.459"></a>
-<span class="sourceLineNo">460</span><a id="line.460">        boolean[] set = new boolean[elements.length];</a>
-<span class="sourceLineNo">461</span><a id="line.461"></a>
-<span class="sourceLineNo">462</span><a id="line.462">        for (int i = 0; i &lt; elements.length; i++)</a>
-<span class="sourceLineNo">463</span><a id="line.463">        {</a>
-<span class="sourceLineNo">464</span><a id="line.464">            int s = sequence[i];</a>
-<span class="sourceLineNo">465</span><a id="line.465">            int remainingPosition = 0;</a>
-<span class="sourceLineNo">466</span><a id="line.466">            int index;</a>
-<span class="sourceLineNo">467</span><a id="line.467"></a>
-<span class="sourceLineNo">468</span><a id="line.468">            // Find the s'th position in the permuted list that has not been set yet.</a>
-<span class="sourceLineNo">469</span><a id="line.469">            for (index = 0; index &lt; elements.length; index++)</a>
-<span class="sourceLineNo">470</span><a id="line.470">            {</a>
-<span class="sourceLineNo">471</span><a id="line.471">                if (!set[index])</a>
-<span class="sourceLineNo">472</span><a id="line.472">                {</a>
-<span class="sourceLineNo">473</span><a id="line.473">                    if (remainingPosition == s)</a>
-<span class="sourceLineNo">474</span><a id="line.474">                        break;</a>
-<span class="sourceLineNo">475</span><a id="line.475"></a>
-<span class="sourceLineNo">476</span><a id="line.476">                    remainingPosition++;</a>
-<span class="sourceLineNo">477</span><a id="line.477">                }</a>
-<span class="sourceLineNo">478</span><a id="line.478">            }</a>
-<span class="sourceLineNo">479</span><a id="line.479"></a>
-<span class="sourceLineNo">480</span><a id="line.480">            destination.set(index, elements[i]);</a>
-<span class="sourceLineNo">481</span><a id="line.481">            set[index] = true;</a>
-<span class="sourceLineNo">482</span><a id="line.482">        }</a>
-<span class="sourceLineNo">483</span><a id="line.483">        return destination;</a>
-<span class="sourceLineNo">484</span><a id="line.484">    }</a>
-<span class="sourceLineNo">485</span><a id="line.485">    /**</a>
-<span class="sourceLineNo">486</span><a id="line.486">     * &lt;p&gt;Provides a read-only iterator for iterating over the permutations</a>
-<span class="sourceLineNo">487</span><a id="line.487">     * generated by this object.  This method is the implementation of the</a>
-<span class="sourceLineNo">488</span><a id="line.488">     * {@link Iterable} interface that permits instances of this class to be</a>
-<span class="sourceLineNo">489</span><a id="line.489">     * used with the new-style for loop.&lt;/p&gt;</a>
-<span class="sourceLineNo">490</span><a id="line.490">     * &lt;p&gt;For example:&lt;/p&gt;</a>
-<span class="sourceLineNo">491</span><a id="line.491">     * &lt;pre&gt;</a>
-<span class="sourceLineNo">492</span><a id="line.492">     * List&amp;lt;Integer&amp;gt; elements = Arrays.asList(1, 2, 3);</a>
-<span class="sourceLineNo">493</span><a id="line.493">     * PermutationGenerator&amp;lt;Integer&amp;gt; permutations = new PermutationGenerator(elements);</a>
-<span class="sourceLineNo">494</span><a id="line.494">     * for (List&amp;lt;Integer&amp;gt; p : permutations)</a>
-<span class="sourceLineNo">495</span><a id="line.495">     * {</a>
-<span class="sourceLineNo">496</span><a id="line.496">     *     // Do something with each permutation.</a>
-<span class="sourceLineNo">497</span><a id="line.497">     * }</a>
-<span class="sourceLineNo">498</span><a id="line.498">     * &lt;/pre&gt;</a>
-<span class="sourceLineNo">499</span><a id="line.499">     * @return An iterator.</a>
-<span class="sourceLineNo">500</span><a id="line.500">     * @since 1.1</a>
-<span class="sourceLineNo">501</span><a id="line.501">     */</a>
-<span class="sourceLineNo">502</span><a id="line.502">    public Iterator&lt;List&lt;T&gt;&gt; iterator()</a>
-<span class="sourceLineNo">503</span><a id="line.503">    {</a>
-<span class="sourceLineNo">504</span><a id="line.504">        return new Iterator&lt;List&lt;T&gt;&gt;()</a>
-<span class="sourceLineNo">505</span><a id="line.505">        {</a>
-<span class="sourceLineNo">506</span><a id="line.506">            public boolean hasNext()</a>
-<span class="sourceLineNo">507</span><a id="line.507">            {</a>
-<span class="sourceLineNo">508</span><a id="line.508">                return hasMore();</a>
-<span class="sourceLineNo">509</span><a id="line.509">            }</a>
+<span class="sourceLineNo">201</span><a id="line.201">    /**</a>
+<span class="sourceLineNo">202</span><a id="line.202">     * Generate the next permutation and return a list containing</a>
+<span class="sourceLineNo">203</span><a id="line.203">     * the elements in the appropriate order.  This overloaded method</a>
+<span class="sourceLineNo">204</span><a id="line.204">     * allows the caller to provide a list that will be used and returned.</a>
+<span class="sourceLineNo">205</span><a id="line.205">     * The purpose of this is to improve performance when iterating over</a>
+<span class="sourceLineNo">206</span><a id="line.206">     * permutations.  If the {@link #nextPermutationAsList()} method is</a>
+<span class="sourceLineNo">207</span><a id="line.207">     * used it will create a new list every time.  When iterating over</a>
+<span class="sourceLineNo">208</span><a id="line.208">     * permutations this will result in lots of short-lived objects that</a>
+<span class="sourceLineNo">209</span><a id="line.209">     * have to be garbage collected.  This method allows a single list</a>
+<span class="sourceLineNo">210</span><a id="line.210">     * instance to be reused in such circumstances.</a>
+<span class="sourceLineNo">211</span><a id="line.211">     * @param destination Provides a list to use to create the</a>
+<span class="sourceLineNo">212</span><a id="line.212">     * permutation.  This is the list that will be returned, once</a>
+<span class="sourceLineNo">213</span><a id="line.213">     * it has been filled with the elements in the appropriate order.</a>
+<span class="sourceLineNo">214</span><a id="line.214">     * @return The next permutation as a list.</a>
+<span class="sourceLineNo">215</span><a id="line.215">     */</a>
+<span class="sourceLineNo">216</span><a id="line.216">    public List&lt;T&gt; nextPermutationAsList(List&lt;T&gt; destination)</a>
+<span class="sourceLineNo">217</span><a id="line.217">    {</a>
+<span class="sourceLineNo">218</span><a id="line.218">        generateNextPermutationIndices();</a>
+<span class="sourceLineNo">219</span><a id="line.219">        // Generate actual permutation.</a>
+<span class="sourceLineNo">220</span><a id="line.220">        destination.clear();</a>
+<span class="sourceLineNo">221</span><a id="line.221">        for (int i : permutationIndices)</a>
+<span class="sourceLineNo">222</span><a id="line.222">        {</a>
+<span class="sourceLineNo">223</span><a id="line.223">            destination.add(elements[i]);</a>
+<span class="sourceLineNo">224</span><a id="line.224">        }</a>
+<span class="sourceLineNo">225</span><a id="line.225">        return destination;</a>
+<span class="sourceLineNo">226</span><a id="line.226">    }</a>
+<span class="sourceLineNo">227</span><a id="line.227"></a>
+<span class="sourceLineNo">228</span><a id="line.228">    /**</a>
+<span class="sourceLineNo">229</span><a id="line.229">     * Generate the indices into the elements array for the next permutation.  The</a>
+<span class="sourceLineNo">230</span><a id="line.230">     * algorithm is from Kenneth H. Rosen, Discrete Mathematics and its Applications,</a>
+<span class="sourceLineNo">231</span><a id="line.231">     * 2nd edition (NY: McGraw-Hill, 1991), p. 284)</a>
+<span class="sourceLineNo">232</span><a id="line.232">     */</a>
+<span class="sourceLineNo">233</span><a id="line.233">    private void generateNextPermutationIndices()</a>
+<span class="sourceLineNo">234</span><a id="line.234">    {</a>
+<span class="sourceLineNo">235</span><a id="line.235">        if (remainingPermutations == 0)</a>
+<span class="sourceLineNo">236</span><a id="line.236">        {</a>
+<span class="sourceLineNo">237</span><a id="line.237">            throw new IllegalStateException("There are no permutations remaining.  " +</a>
+<span class="sourceLineNo">238</span><a id="line.238">                                            "Generator must be reset to continue using.");</a>
+<span class="sourceLineNo">239</span><a id="line.239">        }</a>
+<span class="sourceLineNo">240</span><a id="line.240">        else if (remainingPermutations &lt; totalPermutations)</a>
+<span class="sourceLineNo">241</span><a id="line.241">        {</a>
+<span class="sourceLineNo">242</span><a id="line.242">            // Find largest index j with permutationIndices[j] &lt; permutationIndices[j + 1]</a>
+<span class="sourceLineNo">243</span><a id="line.243">            int j = permutationIndices.length - 2;</a>
+<span class="sourceLineNo">244</span><a id="line.244">            while (permutationIndices[j] &gt; permutationIndices[j + 1])</a>
+<span class="sourceLineNo">245</span><a id="line.245">            {</a>
+<span class="sourceLineNo">246</span><a id="line.246">                j--;</a>
+<span class="sourceLineNo">247</span><a id="line.247">            }</a>
+<span class="sourceLineNo">248</span><a id="line.248"></a>
+<span class="sourceLineNo">249</span><a id="line.249">            // Find index k such that permutationIndices[k] is smallest integer greater than</a>
+<span class="sourceLineNo">250</span><a id="line.250">            // permutationIndices[j] to the right of permutationIndices[j].</a>
+<span class="sourceLineNo">251</span><a id="line.251">            int k = permutationIndices.length - 1;</a>
+<span class="sourceLineNo">252</span><a id="line.252">            while (permutationIndices[j] &gt; permutationIndices[k])</a>
+<span class="sourceLineNo">253</span><a id="line.253">            {</a>
+<span class="sourceLineNo">254</span><a id="line.254">                k--;</a>
+<span class="sourceLineNo">255</span><a id="line.255">            }</a>
+<span class="sourceLineNo">256</span><a id="line.256"></a>
+<span class="sourceLineNo">257</span><a id="line.257">            // Interchange permutation indices.</a>
+<span class="sourceLineNo">258</span><a id="line.258">            int temp = permutationIndices[k];</a>
+<span class="sourceLineNo">259</span><a id="line.259">            permutationIndices[k] = permutationIndices[j];</a>
+<span class="sourceLineNo">260</span><a id="line.260">            permutationIndices[j] = temp;</a>
+<span class="sourceLineNo">261</span><a id="line.261"></a>
+<span class="sourceLineNo">262</span><a id="line.262">            // Put tail end of permutation after jth position in increasing order.</a>
+<span class="sourceLineNo">263</span><a id="line.263">            int r = permutationIndices.length - 1;</a>
+<span class="sourceLineNo">264</span><a id="line.264">            int s = j + 1;</a>
+<span class="sourceLineNo">265</span><a id="line.265"></a>
+<span class="sourceLineNo">266</span><a id="line.266">            while (r &gt; s)</a>
+<span class="sourceLineNo">267</span><a id="line.267">            {</a>
+<span class="sourceLineNo">268</span><a id="line.268">                temp = permutationIndices[s];</a>
+<span class="sourceLineNo">269</span><a id="line.269">                permutationIndices[s] = permutationIndices[r];</a>
+<span class="sourceLineNo">270</span><a id="line.270">                permutationIndices[r] = temp;</a>
+<span class="sourceLineNo">271</span><a id="line.271">                r--;</a>
+<span class="sourceLineNo">272</span><a id="line.272">                s++;</a>
+<span class="sourceLineNo">273</span><a id="line.273">            }</a>
+<span class="sourceLineNo">274</span><a id="line.274">        }</a>
+<span class="sourceLineNo">275</span><a id="line.275">        --remainingPermutations;</a>
+<span class="sourceLineNo">276</span><a id="line.276">    }</a>
+<span class="sourceLineNo">277</span><a id="line.277"></a>
+<span class="sourceLineNo">278</span><a id="line.278">    private int[] getPermutationShift(T[] perm) {</a>
+<span class="sourceLineNo">279</span><a id="line.279">        int[] sh = new int[perm.length];</a>
+<span class="sourceLineNo">280</span><a id="line.280">        boolean[] taken = new boolean[perm.length];</a>
+<span class="sourceLineNo">281</span><a id="line.281"></a>
+<span class="sourceLineNo">282</span><a id="line.282">        for (int i = 0; i &lt; perm.length - 1; i++) {</a>
+<span class="sourceLineNo">283</span><a id="line.283">            int ctr = -1;</a>
+<span class="sourceLineNo">284</span><a id="line.284">            for (int j = 0; j &lt; perm.length; j++) {</a>
+<span class="sourceLineNo">285</span><a id="line.285">                if (!taken[j])</a>
+<span class="sourceLineNo">286</span><a id="line.286">                    ctr++;</a>
+<span class="sourceLineNo">287</span><a id="line.287">                if (perm[j] == elements[i]) {</a>
+<span class="sourceLineNo">288</span><a id="line.288">                    taken[j] = true;</a>
+<span class="sourceLineNo">289</span><a id="line.289">                    sh[i] = ctr;</a>
+<span class="sourceLineNo">290</span><a id="line.290">                    break;</a>
+<span class="sourceLineNo">291</span><a id="line.291">                }</a>
+<span class="sourceLineNo">292</span><a id="line.292">            }</a>
+<span class="sourceLineNo">293</span><a id="line.293">        }</a>
+<span class="sourceLineNo">294</span><a id="line.294">        return sh;</a>
+<span class="sourceLineNo">295</span><a id="line.295">    }</a>
+<span class="sourceLineNo">296</span><a id="line.296"></a>
+<span class="sourceLineNo">297</span><a id="line.297">    private int[] getPermutationShift(List&lt;T&gt; perm) {</a>
+<span class="sourceLineNo">298</span><a id="line.298">        int length = perm.size();</a>
+<span class="sourceLineNo">299</span><a id="line.299">        int[] sh = new int[length];</a>
+<span class="sourceLineNo">300</span><a id="line.300">        boolean[] taken = new boolean[length];</a>
+<span class="sourceLineNo">301</span><a id="line.301"></a>
+<span class="sourceLineNo">302</span><a id="line.302">        for (int i = 0; i &lt; length - 1; i++) {</a>
+<span class="sourceLineNo">303</span><a id="line.303">            int ctr = -1;</a>
+<span class="sourceLineNo">304</span><a id="line.304">            for (int j = 0; j &lt; length; j++) {</a>
+<span class="sourceLineNo">305</span><a id="line.305">                if (!taken[j])</a>
+<span class="sourceLineNo">306</span><a id="line.306">                    ctr++;</a>
+<span class="sourceLineNo">307</span><a id="line.307">                if (perm.get(j) == elements[i]) {</a>
+<span class="sourceLineNo">308</span><a id="line.308">                    taken[j] = true;</a>
+<span class="sourceLineNo">309</span><a id="line.309">                    sh[i] = ctr;</a>
+<span class="sourceLineNo">310</span><a id="line.310">                    break;</a>
+<span class="sourceLineNo">311</span><a id="line.311">                }</a>
+<span class="sourceLineNo">312</span><a id="line.312">            }</a>
+<span class="sourceLineNo">313</span><a id="line.313">        }</a>
+<span class="sourceLineNo">314</span><a id="line.314">        return sh;</a>
+<span class="sourceLineNo">315</span><a id="line.315">    }</a>
+<span class="sourceLineNo">316</span><a id="line.316"></a>
+<span class="sourceLineNo">317</span><a id="line.317">    /**</a>
+<span class="sourceLineNo">318</span><a id="line.318">     * Given an array of T that constitutes a permutation of the elements this was constructed with, finds the specific</a>
+<span class="sourceLineNo">319</span><a id="line.319">     * index of the permutation given a factoradic numbering scheme (not used by the rest of this class, except the</a>
+<span class="sourceLineNo">320</span><a id="line.320">     * decodePermutation() method). The index can be passed to decodePermutation to reproduce the permutation passed to</a>
+<span class="sourceLineNo">321</span><a id="line.321">     * this, or modified and then passed to decodePermutation(). Determines equality by identity, not by .equals(), so</a>
+<span class="sourceLineNo">322</span><a id="line.322">     * that equivalent values that have different references/identities can appear in the permuted elements.</a>
+<span class="sourceLineNo">323</span><a id="line.323">     * &lt;br&gt;</a>
+<span class="sourceLineNo">324</span><a id="line.324">     * Credit goes to user Joren on StackOverflow, http://stackoverflow.com/a/1506337</a>
+<span class="sourceLineNo">325</span><a id="line.325">     * @param perm an array of T that must be a valid permutation of this object's elements</a>
+<span class="sourceLineNo">326</span><a id="line.326">     * @return an encoded number that can be used to reconstruct the permutation when passed to decodePermutation()</a>
+<span class="sourceLineNo">327</span><a id="line.327">     */</a>
+<span class="sourceLineNo">328</span><a id="line.328">    public long encodePermutation(T[] perm)</a>
+<span class="sourceLineNo">329</span><a id="line.329">    {</a>
+<span class="sourceLineNo">330</span><a id="line.330">        long e = 0;</a>
+<span class="sourceLineNo">331</span><a id="line.331">        if(perm == null || perm.length != elements.length)</a>
+<span class="sourceLineNo">332</span><a id="line.332">            return e;</a>
+<span class="sourceLineNo">333</span><a id="line.333">        int[] shift = getPermutationShift(perm);</a>
+<span class="sourceLineNo">334</span><a id="line.334">        for (int i = 1; i &lt; shift.length; i++) {</a>
+<span class="sourceLineNo">335</span><a id="line.335">            e += shift[i] * MathExtras.factorialsStart[i];</a>
+<span class="sourceLineNo">336</span><a id="line.336">        }</a>
+<span class="sourceLineNo">337</span><a id="line.337">        return e;</a>
+<span class="sourceLineNo">338</span><a id="line.338">    }</a>
+<span class="sourceLineNo">339</span><a id="line.339"></a>
+<span class="sourceLineNo">340</span><a id="line.340">    /**</a>
+<span class="sourceLineNo">341</span><a id="line.341">     * Given a List of T that constitutes a permutation of the elements this was constructed with, finds the specific</a>
+<span class="sourceLineNo">342</span><a id="line.342">     * index of the permutation given a factoradic numbering scheme (not used by the rest of this class, except the</a>
+<span class="sourceLineNo">343</span><a id="line.343">     * decodePermutation() method). The index can be passed to decodePermutation to reproduce the permutation passed to</a>
+<span class="sourceLineNo">344</span><a id="line.344">     * this, or modified and then passed to decodePermutation(). Determines equality by identity, not by .equals(), so</a>
+<span class="sourceLineNo">345</span><a id="line.345">     * that equivalent values that have different references/identities can appear in the permuted elements.</a>
+<span class="sourceLineNo">346</span><a id="line.346">     * &lt;br&gt;</a>
+<span class="sourceLineNo">347</span><a id="line.347">     * Credit goes to user Joren on StackOverflow, http://stackoverflow.com/a/1506337</a>
+<span class="sourceLineNo">348</span><a id="line.348">     * @param perm a List of T that must be a valid permutation of this object's elements</a>
+<span class="sourceLineNo">349</span><a id="line.349">     * @return an encoded number that can be used to reconstruct the permutation when passed to decodePermutation()</a>
+<span class="sourceLineNo">350</span><a id="line.350">     */</a>
+<span class="sourceLineNo">351</span><a id="line.351">    public long encodePermutation(List&lt;T&gt; perm)</a>
+<span class="sourceLineNo">352</span><a id="line.352">    {</a>
+<span class="sourceLineNo">353</span><a id="line.353">        long e = 0;</a>
+<span class="sourceLineNo">354</span><a id="line.354">        if(perm == null || perm.size() != elements.length)</a>
+<span class="sourceLineNo">355</span><a id="line.355">            return e;</a>
+<span class="sourceLineNo">356</span><a id="line.356">        int[] shift = getPermutationShift(perm);</a>
+<span class="sourceLineNo">357</span><a id="line.357">        for (int i = 1; i &lt; shift.length; i++) {</a>
+<span class="sourceLineNo">358</span><a id="line.358">            e += shift[i] * MathExtras.factorialsStart[i];</a>
+<span class="sourceLineNo">359</span><a id="line.359">        }</a>
+<span class="sourceLineNo">360</span><a id="line.360">        return e;</a>
+<span class="sourceLineNo">361</span><a id="line.361">    }</a>
+<span class="sourceLineNo">362</span><a id="line.362"></a>
+<span class="sourceLineNo">363</span><a id="line.363">    private int[] factoradicDecode(long e)</a>
+<span class="sourceLineNo">364</span><a id="line.364">    {</a>
+<span class="sourceLineNo">365</span><a id="line.365">        int[] sequence = new int[elements.length];</a>
+<span class="sourceLineNo">366</span><a id="line.366">        int base = 2;</a>
+<span class="sourceLineNo">367</span><a id="line.367"></a>
+<span class="sourceLineNo">368</span><a id="line.368">        for (int k = 1; k &lt; elements.length; k++)</a>
+<span class="sourceLineNo">369</span><a id="line.369">        {</a>
+<span class="sourceLineNo">370</span><a id="line.370">            sequence[elements.length - 1 - k] = (int)(e % base);</a>
+<span class="sourceLineNo">371</span><a id="line.371">            e /= base;</a>
+<span class="sourceLineNo">372</span><a id="line.372"></a>
+<span class="sourceLineNo">373</span><a id="line.373">            base++;</a>
+<span class="sourceLineNo">374</span><a id="line.374">        }</a>
+<span class="sourceLineNo">375</span><a id="line.375">        return sequence;</a>
+<span class="sourceLineNo">376</span><a id="line.376">    }</a>
+<span class="sourceLineNo">377</span><a id="line.377"></a>
+<span class="sourceLineNo">378</span><a id="line.378">    /**</a>
+<span class="sourceLineNo">379</span><a id="line.379">     * Given a long between 0 and the total number of permutations possible (see getTotalPermutations() for how to access</a>
+<span class="sourceLineNo">380</span><a id="line.380">     * this) and an array of T with the same length as the elements this was constructed with, fills the array with the</a>
+<span class="sourceLineNo">381</span><a id="line.381">     * permutation described by the long as a special (factoradic) index into the possible permutations. You can get an</a>
+<span class="sourceLineNo">382</span><a id="line.382">     * index for a specific permutation with encodePermutation() or by generating a random number between 0 and</a>
+<span class="sourceLineNo">383</span><a id="line.383">     * getTotalPermutations(), if you want it randomly.</a>
+<span class="sourceLineNo">384</span><a id="line.384">     * &lt;br&gt;</a>
+<span class="sourceLineNo">385</span><a id="line.385">     * Credit goes to user Joren on StackOverflow, http://stackoverflow.com/a/1506337</a>
+<span class="sourceLineNo">386</span><a id="line.386">     * @param encoded the index encoded as a long</a>
+<span class="sourceLineNo">387</span><a id="line.387">     * @param destination an array of T that must have equivalent length to the elements this was constructed with</a>
+<span class="sourceLineNo">388</span><a id="line.388">     * @return the looked-up permutation, which is the same value destination will be assigned</a>
+<span class="sourceLineNo">389</span><a id="line.389">     */</a>
+<span class="sourceLineNo">390</span><a id="line.390">    public T[] decodePermutation(long encoded, T[] destination)</a>
+<span class="sourceLineNo">391</span><a id="line.391">    {</a>
+<span class="sourceLineNo">392</span><a id="line.392">        if(destination == null)</a>
+<span class="sourceLineNo">393</span><a id="line.393">            return null;</a>
+<span class="sourceLineNo">394</span><a id="line.394">        encoded %= totalPermutations;</a>
+<span class="sourceLineNo">395</span><a id="line.395">        int[] sequence = factoradicDecode(encoded);</a>
+<span class="sourceLineNo">396</span><a id="line.396"></a>
+<span class="sourceLineNo">397</span><a id="line.397">        boolean[] set = new boolean[elements.length];</a>
+<span class="sourceLineNo">398</span><a id="line.398"></a>
+<span class="sourceLineNo">399</span><a id="line.399">        for (int i = 0; i &lt; elements.length; i++)</a>
+<span class="sourceLineNo">400</span><a id="line.400">        {</a>
+<span class="sourceLineNo">401</span><a id="line.401">            int s = sequence[i];</a>
+<span class="sourceLineNo">402</span><a id="line.402">            int remainingPosition = 0;</a>
+<span class="sourceLineNo">403</span><a id="line.403">            int index;</a>
+<span class="sourceLineNo">404</span><a id="line.404"></a>
+<span class="sourceLineNo">405</span><a id="line.405">            // Find the s'th position in the permuted list that has not been set yet.</a>
+<span class="sourceLineNo">406</span><a id="line.406">            for (index = 0; index &lt; elements.length; index++)</a>
+<span class="sourceLineNo">407</span><a id="line.407">            {</a>
+<span class="sourceLineNo">408</span><a id="line.408">                if (!set[index])</a>
+<span class="sourceLineNo">409</span><a id="line.409">                {</a>
+<span class="sourceLineNo">410</span><a id="line.410">                    if (remainingPosition == s)</a>
+<span class="sourceLineNo">411</span><a id="line.411">                        break;</a>
+<span class="sourceLineNo">412</span><a id="line.412"></a>
+<span class="sourceLineNo">413</span><a id="line.413">                    remainingPosition++;</a>
+<span class="sourceLineNo">414</span><a id="line.414">                }</a>
+<span class="sourceLineNo">415</span><a id="line.415">            }</a>
+<span class="sourceLineNo">416</span><a id="line.416"></a>
+<span class="sourceLineNo">417</span><a id="line.417">            destination[index] = elements[i];</a>
+<span class="sourceLineNo">418</span><a id="line.418">            set[index] = true;</a>
+<span class="sourceLineNo">419</span><a id="line.419">        }</a>
+<span class="sourceLineNo">420</span><a id="line.420">        return destination;</a>
+<span class="sourceLineNo">421</span><a id="line.421">    }</a>
+<span class="sourceLineNo">422</span><a id="line.422"></a>
+<span class="sourceLineNo">423</span><a id="line.423">    /**</a>
+<span class="sourceLineNo">424</span><a id="line.424">     * Given a long between 0 and the total number of permutations possible (see getTotalPermutations() for how to access</a>
+<span class="sourceLineNo">425</span><a id="line.425">     * this), creates a List filled with the permutation described by the long as a special (factoradic) index into the</a>
+<span class="sourceLineNo">426</span><a id="line.426">     * possible permutations. You can get an index for a specific permutation with encodePermutation() or by generating a</a>
+<span class="sourceLineNo">427</span><a id="line.427">     * random number between 0 and getTotalPermutations(), if you want it randomly.</a>
+<span class="sourceLineNo">428</span><a id="line.428">     * &lt;br&gt;</a>
+<span class="sourceLineNo">429</span><a id="line.429">     * Credit goes to user Joren on StackOverflow, http://stackoverflow.com/a/1506337</a>
+<span class="sourceLineNo">430</span><a id="line.430">     * @param encoded the index encoded as a long</a>
+<span class="sourceLineNo">431</span><a id="line.431">     * @return a List of T that corresponds to the permutation at the encoded index</a>
+<span class="sourceLineNo">432</span><a id="line.432">     */</a>
+<span class="sourceLineNo">433</span><a id="line.433">    public List&lt;T&gt; decodePermutation(long encoded)</a>
+<span class="sourceLineNo">434</span><a id="line.434">    {</a>
+<span class="sourceLineNo">435</span><a id="line.435">        ArrayList&lt;T&gt; list = new ArrayList&lt;T&gt;(elements.length);</a>
+<span class="sourceLineNo">436</span><a id="line.436">        Collections.addAll(list, elements);</a>
+<span class="sourceLineNo">437</span><a id="line.437">        return decodePermutation(encoded, list);</a>
+<span class="sourceLineNo">438</span><a id="line.438">    }</a>
+<span class="sourceLineNo">439</span><a id="line.439"></a>
+<span class="sourceLineNo">440</span><a id="line.440">    /**</a>
+<span class="sourceLineNo">441</span><a id="line.441">     * Given a long between 0 and the total number of permutations possible (see getTotalPermutations() for how to access</a>
+<span class="sourceLineNo">442</span><a id="line.442">     * this) and a List of T with the same length as the elements this was constructed with, fills the List with the</a>
+<span class="sourceLineNo">443</span><a id="line.443">     * permutation described by the long as a special (factoradic) index into the possible permutations. You can get an</a>
+<span class="sourceLineNo">444</span><a id="line.444">     * index for a specific permutation with encodePermutation() or by generating a random number between 0 and</a>
+<span class="sourceLineNo">445</span><a id="line.445">     * getTotalPermutations(), if you want it randomly.</a>
+<span class="sourceLineNo">446</span><a id="line.446">     * &lt;br&gt;</a>
+<span class="sourceLineNo">447</span><a id="line.447">     * Credit goes to user Joren on StackOverflow, http://stackoverflow.com/a/1506337</a>
+<span class="sourceLineNo">448</span><a id="line.448">     * @param encoded the index encoded as a long</a>
+<span class="sourceLineNo">449</span><a id="line.449">     * @param destination a List of T that must have equivalent size to the elements this was constructed with</a>
+<span class="sourceLineNo">450</span><a id="line.450">     * @return the looked-up permutation, which is the same value destination will be assigned</a>
+<span class="sourceLineNo">451</span><a id="line.451">     */</a>
+<span class="sourceLineNo">452</span><a id="line.452">    public List&lt;T&gt; decodePermutation(long encoded, List&lt;T&gt; destination)</a>
+<span class="sourceLineNo">453</span><a id="line.453">    {</a>
+<span class="sourceLineNo">454</span><a id="line.454">        if(destination == null)</a>
+<span class="sourceLineNo">455</span><a id="line.455">            return null;</a>
+<span class="sourceLineNo">456</span><a id="line.456">        encoded %= totalPermutations;</a>
+<span class="sourceLineNo">457</span><a id="line.457">        int[] sequence = factoradicDecode(encoded);</a>
+<span class="sourceLineNo">458</span><a id="line.458"></a>
+<span class="sourceLineNo">459</span><a id="line.459">        boolean[] set = new boolean[elements.length];</a>
+<span class="sourceLineNo">460</span><a id="line.460"></a>
+<span class="sourceLineNo">461</span><a id="line.461">        for (int i = 0; i &lt; elements.length; i++)</a>
+<span class="sourceLineNo">462</span><a id="line.462">        {</a>
+<span class="sourceLineNo">463</span><a id="line.463">            int s = sequence[i];</a>
+<span class="sourceLineNo">464</span><a id="line.464">            int remainingPosition = 0;</a>
+<span class="sourceLineNo">465</span><a id="line.465">            int index;</a>
+<span class="sourceLineNo">466</span><a id="line.466"></a>
+<span class="sourceLineNo">467</span><a id="line.467">            // Find the s'th position in the permuted list that has not been set yet.</a>
+<span class="sourceLineNo">468</span><a id="line.468">            for (index = 0; index &lt; elements.length; index++)</a>
+<span class="sourceLineNo">469</span><a id="line.469">            {</a>
+<span class="sourceLineNo">470</span><a id="line.470">                if (!set[index])</a>
+<span class="sourceLineNo">471</span><a id="line.471">                {</a>
+<span class="sourceLineNo">472</span><a id="line.472">                    if (remainingPosition == s)</a>
+<span class="sourceLineNo">473</span><a id="line.473">                        break;</a>
+<span class="sourceLineNo">474</span><a id="line.474"></a>
+<span class="sourceLineNo">475</span><a id="line.475">                    remainingPosition++;</a>
+<span class="sourceLineNo">476</span><a id="line.476">                }</a>
+<span class="sourceLineNo">477</span><a id="line.477">            }</a>
+<span class="sourceLineNo">478</span><a id="line.478"></a>
+<span class="sourceLineNo">479</span><a id="line.479">            destination.set(index, elements[i]);</a>
+<span class="sourceLineNo">480</span><a id="line.480">            set[index] = true;</a>
+<span class="sourceLineNo">481</span><a id="line.481">        }</a>
+<span class="sourceLineNo">482</span><a id="line.482">        return destination;</a>
+<span class="sourceLineNo">483</span><a id="line.483">    }</a>
+<span class="sourceLineNo">484</span><a id="line.484">    /**</a>
+<span class="sourceLineNo">485</span><a id="line.485">     * &lt;p&gt;Provides a read-only iterator for iterating over the permutations</a>
+<span class="sourceLineNo">486</span><a id="line.486">     * generated by this object.  This method is the implementation of the</a>
+<span class="sourceLineNo">487</span><a id="line.487">     * {@link Iterable} interface that permits instances of this class to be</a>
+<span class="sourceLineNo">488</span><a id="line.488">     * used with the new-style for loop.&lt;/p&gt;</a>
+<span class="sourceLineNo">489</span><a id="line.489">     * &lt;p&gt;For example:&lt;/p&gt;</a>
+<span class="sourceLineNo">490</span><a id="line.490">     * &lt;pre&gt;</a>
+<span class="sourceLineNo">491</span><a id="line.491">     * List&amp;lt;Integer&amp;gt; elements = Arrays.asList(1, 2, 3);</a>
+<span class="sourceLineNo">492</span><a id="line.492">     * PermutationGenerator&amp;lt;Integer&amp;gt; permutations = new PermutationGenerator(elements);</a>
+<span class="sourceLineNo">493</span><a id="line.493">     * for (List&amp;lt;Integer&amp;gt; p : permutations)</a>
+<span class="sourceLineNo">494</span><a id="line.494">     * {</a>
+<span class="sourceLineNo">495</span><a id="line.495">     *     // Do something with each permutation.</a>
+<span class="sourceLineNo">496</span><a id="line.496">     * }</a>
+<span class="sourceLineNo">497</span><a id="line.497">     * &lt;/pre&gt;</a>
+<span class="sourceLineNo">498</span><a id="line.498">     * @return An iterator.</a>
+<span class="sourceLineNo">499</span><a id="line.499">     * @since 1.1</a>
+<span class="sourceLineNo">500</span><a id="line.500">     */</a>
+<span class="sourceLineNo">501</span><a id="line.501">    public Iterator&lt;List&lt;T&gt;&gt; iterator()</a>
+<span class="sourceLineNo">502</span><a id="line.502">    {</a>
+<span class="sourceLineNo">503</span><a id="line.503">        return new Iterator&lt;List&lt;T&gt;&gt;()</a>
+<span class="sourceLineNo">504</span><a id="line.504">        {</a>
+<span class="sourceLineNo">505</span><a id="line.505">            public boolean hasNext()</a>
+<span class="sourceLineNo">506</span><a id="line.506">            {</a>
+<span class="sourceLineNo">507</span><a id="line.507">                return hasMore();</a>
+<span class="sourceLineNo">508</span><a id="line.508">            }</a>
+<span class="sourceLineNo">509</span><a id="line.509"></a>
 <span class="sourceLineNo">510</span><a id="line.510"></a>
-<span class="sourceLineNo">511</span><a id="line.511"></a>
-<span class="sourceLineNo">512</span><a id="line.512">            public List&lt;T&gt; next()</a>
-<span class="sourceLineNo">513</span><a id="line.513">            {</a>
-<span class="sourceLineNo">514</span><a id="line.514">                return nextPermutationAsList();</a>
-<span class="sourceLineNo">515</span><a id="line.515">            }</a>
+<span class="sourceLineNo">511</span><a id="line.511">            public List&lt;T&gt; next()</a>
+<span class="sourceLineNo">512</span><a id="line.512">            {</a>
+<span class="sourceLineNo">513</span><a id="line.513">                return nextPermutationAsList();</a>
+<span class="sourceLineNo">514</span><a id="line.514">            }</a>
+<span class="sourceLineNo">515</span><a id="line.515"></a>
 <span class="sourceLineNo">516</span><a id="line.516"></a>
-<span class="sourceLineNo">517</span><a id="line.517"></a>
-<span class="sourceLineNo">518</span><a id="line.518">            public void remove()</a>
-<span class="sourceLineNo">519</span><a id="line.519">            {</a>
-<span class="sourceLineNo">520</span><a id="line.520">                throw new UnsupportedOperationException("Iterator does not support removal.");</a>
-<span class="sourceLineNo">521</span><a id="line.521">            }</a>
-<span class="sourceLineNo">522</span><a id="line.522">        };</a>
-<span class="sourceLineNo">523</span><a id="line.523">    }</a>
+<span class="sourceLineNo">517</span><a id="line.517">            public void remove()</a>
+<span class="sourceLineNo">518</span><a id="line.518">            {</a>
+<span class="sourceLineNo">519</span><a id="line.519">                throw new UnsupportedOperationException("Iterator does not support removal.");</a>
+<span class="sourceLineNo">520</span><a id="line.520">            }</a>
+<span class="sourceLineNo">521</span><a id="line.521">        };</a>
+<span class="sourceLineNo">522</span><a id="line.522">    }</a>
+<span class="sourceLineNo">523</span><a id="line.523"></a>
 <span class="sourceLineNo">524</span><a id="line.524"></a>
-<span class="sourceLineNo">525</span><a id="line.525"></a>
-<span class="sourceLineNo">526</span><a id="line.526">    private static int[] getPermutationShift(int[] perm) {</a>
-<span class="sourceLineNo">527</span><a id="line.527">        int[] sh = new int[perm.length];</a>
-<span class="sourceLineNo">528</span><a id="line.528">        boolean[] taken = new boolean[perm.length];</a>
-<span class="sourceLineNo">529</span><a id="line.529"></a>
-<span class="sourceLineNo">530</span><a id="line.530">        for (int i = 0; i &lt; perm.length - 1; i++) {</a>
-<span class="sourceLineNo">531</span><a id="line.531">            int ctr = -1;</a>
-<span class="sourceLineNo">532</span><a id="line.532">            for (int j = 0; j &lt; perm.length; j++) {</a>
-<span class="sourceLineNo">533</span><a id="line.533">                if (!taken[j])</a>
-<span class="sourceLineNo">534</span><a id="line.534">                    ctr++;</a>
-<span class="sourceLineNo">535</span><a id="line.535">                if (perm[j] == i) {</a>
-<span class="sourceLineNo">536</span><a id="line.536">                    taken[j] = true;</a>
-<span class="sourceLineNo">537</span><a id="line.537">                    sh[i] = ctr;</a>
-<span class="sourceLineNo">538</span><a id="line.538">                    break;</a>
-<span class="sourceLineNo">539</span><a id="line.539">                }</a>
-<span class="sourceLineNo">540</span><a id="line.540">            }</a>
-<span class="sourceLineNo">541</span><a id="line.541">        }</a>
-<span class="sourceLineNo">542</span><a id="line.542">        return sh;</a>
-<span class="sourceLineNo">543</span><a id="line.543">    }</a>
-<span class="sourceLineNo">544</span><a id="line.544">    /**</a>
-<span class="sourceLineNo">545</span><a id="line.545">     * Given an array of int that constitutes a permutation of indices, where no element in perm is repeated and all</a>
-<span class="sourceLineNo">546</span><a id="line.546">     * ints are less than perm.length, finds the specific index of the permutation given a factoradic numbering scheme</a>
-<span class="sourceLineNo">547</span><a id="line.547">     * (not used by the rest of this class, except the decodePermutation() method). The index can be passed to</a>
-<span class="sourceLineNo">548</span><a id="line.548">     * decodePermutation to reproduce the index permutation passed to this, or modified and then passed to</a>
-<span class="sourceLineNo">549</span><a id="line.549">     * decodePermutation().</a>
-<span class="sourceLineNo">550</span><a id="line.550">     * &lt;br&gt;</a>
-<span class="sourceLineNo">551</span><a id="line.551">     * If perm is more than 20 items in length, you should use {@link #encodeBigPermutation} instead.</a>
-<span class="sourceLineNo">552</span><a id="line.552">     * &lt;br&gt;</a>
-<span class="sourceLineNo">553</span><a id="line.553">     * Credit goes to user Joren on StackOverflow, http://stackoverflow.com/a/1506337</a>
-<span class="sourceLineNo">554</span><a id="line.554">     * @param perm an array of int that is a permutation of the range from 0 (inclusive) to perm.length (exclusive, must be no more than 20)</a>
-<span class="sourceLineNo">555</span><a id="line.555">     * @return an encoded number that can be used to reconstruct the permutation when passed to decodePermutation()</a>
-<span class="sourceLineNo">556</span><a id="line.556">     */</a>
-<span class="sourceLineNo">557</span><a id="line.557">    public static long encodePermutation(int[] perm)</a>
-<span class="sourceLineNo">558</span><a id="line.558">    {</a>
-<span class="sourceLineNo">559</span><a id="line.559">        long e = 0;</a>
-<span class="sourceLineNo">560</span><a id="line.560">        if(perm == null || perm.length &lt;= 0)</a>
-<span class="sourceLineNo">561</span><a id="line.561">            return e;</a>
-<span class="sourceLineNo">562</span><a id="line.562">        int[] shift = getPermutationShift(perm);</a>
-<span class="sourceLineNo">563</span><a id="line.563">        for (int i = 1; i &lt; shift.length; i++) {</a>
-<span class="sourceLineNo">564</span><a id="line.564">            e += shift[i] * MathExtras.factorialsStart[i];</a>
-<span class="sourceLineNo">565</span><a id="line.565">        }</a>
-<span class="sourceLineNo">566</span><a id="line.566">        return e;</a>
-<span class="sourceLineNo">567</span><a id="line.567">    }</a>
-<span class="sourceLineNo">568</span><a id="line.568"></a>
-<span class="sourceLineNo">569</span><a id="line.569">    /**</a>
-<span class="sourceLineNo">570</span><a id="line.570">     * Given an array of int that constitutes a permutation of indices, where no element in perm is repeated and all</a>
-<span class="sourceLineNo">571</span><a id="line.571">     * ints are less than perm.length, finds the specific index of the permutation given a factoradic numbering scheme</a>
-<span class="sourceLineNo">572</span><a id="line.572">     * (not used by the rest of this class, except the decodePermutation() method). The index can be passed to</a>
-<span class="sourceLineNo">573</span><a id="line.573">     * decodePermutation to reproduce the index permutation passed to this, or modified and then passed to</a>
-<span class="sourceLineNo">574</span><a id="line.574">     * decodePermutation().</a>
-<span class="sourceLineNo">575</span><a id="line.575">     * &lt;br&gt;</a>
-<span class="sourceLineNo">576</span><a id="line.576">     * If perm is 20 items or less in length, you can use {@link #encodePermutation} instead to get a 64-bit encoding.</a>
-<span class="sourceLineNo">577</span><a id="line.577">     * &lt;br&gt;</a>
-<span class="sourceLineNo">578</span><a id="line.578">     * Credit goes to user Joren on StackOverflow, http://stackoverflow.com/a/1506337</a>
-<span class="sourceLineNo">579</span><a id="line.579">     * @param perm an array of int that is a permutation of the range from 0 (inclusive) to perm.length (exclusive)</a>
-<span class="sourceLineNo">580</span><a id="line.580">     * @return an encoded number that can be used to reconstruct the permutation when passed to decodePermutation()</a>
-<span class="sourceLineNo">581</span><a id="line.581">     */</a>
-<span class="sourceLineNo">582</span><a id="line.582">    public static BigInteger encodeBigPermutation(int[] perm)</a>
-<span class="sourceLineNo">583</span><a id="line.583">    {</a>
-<span class="sourceLineNo">584</span><a id="line.584">        BigInteger e = BigInteger.ZERO;</a>
-<span class="sourceLineNo">585</span><a id="line.585">        if(perm == null || perm.length &lt;= 0)</a>
-<span class="sourceLineNo">586</span><a id="line.586">            return e;</a>
-<span class="sourceLineNo">587</span><a id="line.587">        int[] shift = getPermutationShift(perm);</a>
-<span class="sourceLineNo">588</span><a id="line.588">        for (int i = 1; i &lt; shift.length; i++) {</a>
-<span class="sourceLineNo">589</span><a id="line.589">            e = e.add(MathExtras.bigFactorial(i).multiply(BigInteger.valueOf(shift[i])));</a>
-<span class="sourceLineNo">590</span><a id="line.590">        }</a>
-<span class="sourceLineNo">591</span><a id="line.591">        return e;</a>
-<span class="sourceLineNo">592</span><a id="line.592">    }</a>
+<span class="sourceLineNo">525</span><a id="line.525">    private static int[] getPermutationShift(int[] perm) {</a>
+<span class="sourceLineNo">526</span><a id="line.526">        int[] sh = new int[perm.length];</a>
+<span class="sourceLineNo">527</span><a id="line.527">        boolean[] taken = new boolean[perm.length];</a>
+<span class="sourceLineNo">528</span><a id="line.528"></a>
+<span class="sourceLineNo">529</span><a id="line.529">        for (int i = 0; i &lt; perm.length - 1; i++) {</a>
+<span class="sourceLineNo">530</span><a id="line.530">            int ctr = -1;</a>
+<span class="sourceLineNo">531</span><a id="line.531">            for (int j = 0; j &lt; perm.length; j++) {</a>
+<span class="sourceLineNo">532</span><a id="line.532">                if (!taken[j])</a>
+<span class="sourceLineNo">533</span><a id="line.533">                    ctr++;</a>
+<span class="sourceLineNo">534</span><a id="line.534">                if (perm[j] == i) {</a>
+<span class="sourceLineNo">535</span><a id="line.535">                    taken[j] = true;</a>
+<span class="sourceLineNo">536</span><a id="line.536">                    sh[i] = ctr;</a>
+<span class="sourceLineNo">537</span><a id="line.537">                    break;</a>
+<span class="sourceLineNo">538</span><a id="line.538">                }</a>
+<span class="sourceLineNo">539</span><a id="line.539">            }</a>
+<span class="sourceLineNo">540</span><a id="line.540">        }</a>
+<span class="sourceLineNo">541</span><a id="line.541">        return sh;</a>
+<span class="sourceLineNo">542</span><a id="line.542">    }</a>
+<span class="sourceLineNo">543</span><a id="line.543">    /**</a>
+<span class="sourceLineNo">544</span><a id="line.544">     * Given an array of int that constitutes a permutation of indices, where no element in perm is repeated and all</a>
+<span class="sourceLineNo">545</span><a id="line.545">     * ints are less than perm.length, finds the specific index of the permutation given a factoradic numbering scheme</a>
+<span class="sourceLineNo">546</span><a id="line.546">     * (not used by the rest of this class, except the decodePermutation() method). The index can be passed to</a>
+<span class="sourceLineNo">547</span><a id="line.547">     * decodePermutation to reproduce the index permutation passed to this, or modified and then passed to</a>
+<span class="sourceLineNo">548</span><a id="line.548">     * decodePermutation().</a>
+<span class="sourceLineNo">549</span><a id="line.549">     * &lt;br&gt;</a>
+<span class="sourceLineNo">550</span><a id="line.550">     * If perm is more than 20 items in length, you should use {@link #encodeBigPermutation} instead.</a>
+<span class="sourceLineNo">551</span><a id="line.551">     * &lt;br&gt;</a>
+<span class="sourceLineNo">552</span><a id="line.552">     * Credit goes to user Joren on StackOverflow, http://stackoverflow.com/a/1506337</a>
+<span class="sourceLineNo">553</span><a id="line.553">     * @param perm an array of int that is a permutation of the range from 0 (inclusive) to perm.length (exclusive, must be no more than 20)</a>
+<span class="sourceLineNo">554</span><a id="line.554">     * @return an encoded number that can be used to reconstruct the permutation when passed to decodePermutation()</a>
+<span class="sourceLineNo">555</span><a id="line.555">     */</a>
+<span class="sourceLineNo">556</span><a id="line.556">    public static long encodePermutation(int[] perm)</a>
+<span class="sourceLineNo">557</span><a id="line.557">    {</a>
+<span class="sourceLineNo">558</span><a id="line.558">        long e = 0;</a>
+<span class="sourceLineNo">559</span><a id="line.559">        if(perm == null || perm.length &lt;= 0)</a>
+<span class="sourceLineNo">560</span><a id="line.560">            return e;</a>
+<span class="sourceLineNo">561</span><a id="line.561">        int[] shift = getPermutationShift(perm);</a>
+<span class="sourceLineNo">562</span><a id="line.562">        for (int i = 1; i &lt; shift.length; i++) {</a>
+<span class="sourceLineNo">563</span><a id="line.563">            e += shift[i] * MathExtras.factorialsStart[i];</a>
+<span class="sourceLineNo">564</span><a id="line.564">        }</a>
+<span class="sourceLineNo">565</span><a id="line.565">        return e;</a>
+<span class="sourceLineNo">566</span><a id="line.566">    }</a>
+<span class="sourceLineNo">567</span><a id="line.567"></a>
+<span class="sourceLineNo">568</span><a id="line.568">    /**</a>
+<span class="sourceLineNo">569</span><a id="line.569">     * Given an array of int that constitutes a permutation of indices, where no element in perm is repeated and all</a>
+<span class="sourceLineNo">570</span><a id="line.570">     * ints are less than perm.length, finds the specific index of the permutation given a factoradic numbering scheme</a>
+<span class="sourceLineNo">571</span><a id="line.571">     * (not used by the rest of this class, except the decodePermutation() method). The index can be passed to</a>
+<span class="sourceLineNo">572</span><a id="line.572">     * decodePermutation to reproduce the index permutation passed to this, or modified and then passed to</a>
+<span class="sourceLineNo">573</span><a id="line.573">     * decodePermutation().</a>
+<span class="sourceLineNo">574</span><a id="line.574">     * &lt;br&gt;</a>
+<span class="sourceLineNo">575</span><a id="line.575">     * If perm is 20 items or less in length, you can use {@link #encodePermutation} instead to get a 64-bit encoding.</a>
+<span class="sourceLineNo">576</span><a id="line.576">     * &lt;br&gt;</a>
+<span class="sourceLineNo">577</span><a id="line.577">     * Credit goes to user Joren on StackOverflow, http://stackoverflow.com/a/1506337</a>
+<span class="sourceLineNo">578</span><a id="line.578">     * @param perm an array of int that is a permutation of the range from 0 (inclusive) to perm.length (exclusive)</a>
+<span class="sourceLineNo">579</span><a id="line.579">     * @return an encoded number that can be used to reconstruct the permutation when passed to decodePermutation()</a>
+<span class="sourceLineNo">580</span><a id="line.580">     */</a>
+<span class="sourceLineNo">581</span><a id="line.581">    public static BigInteger encodeBigPermutation(int[] perm)</a>
+<span class="sourceLineNo">582</span><a id="line.582">    {</a>
+<span class="sourceLineNo">583</span><a id="line.583">        BigInteger e = BigInteger.ZERO;</a>
+<span class="sourceLineNo">584</span><a id="line.584">        if(perm == null || perm.length &lt;= 0)</a>
+<span class="sourceLineNo">585</span><a id="line.585">            return e;</a>
+<span class="sourceLineNo">586</span><a id="line.586">        int[] shift = getPermutationShift(perm);</a>
+<span class="sourceLineNo">587</span><a id="line.587">        for (int i = 1; i &lt; shift.length; i++) {</a>
+<span class="sourceLineNo">588</span><a id="line.588">            e = e.add(MathExtras.bigFactorial(i).multiply(BigInteger.valueOf(shift[i])));</a>
+<span class="sourceLineNo">589</span><a id="line.589">        }</a>
+<span class="sourceLineNo">590</span><a id="line.590">        return e;</a>
+<span class="sourceLineNo">591</span><a id="line.591">    }</a>
+<span class="sourceLineNo">592</span><a id="line.592"></a>
 <span class="sourceLineNo">593</span><a id="line.593"></a>
-<span class="sourceLineNo">594</span><a id="line.594"></a>
-<span class="sourceLineNo">595</span><a id="line.595">    private static int[] factoradicDecode(long e, int count)</a>
-<span class="sourceLineNo">596</span><a id="line.596">    {</a>
-<span class="sourceLineNo">597</span><a id="line.597">        int[] sequence = new int[count];</a>
-<span class="sourceLineNo">598</span><a id="line.598">        int base = 2;</a>
-<span class="sourceLineNo">599</span><a id="line.599"></a>
-<span class="sourceLineNo">600</span><a id="line.600">        for (int k = 1; k &lt; count; k++)</a>
-<span class="sourceLineNo">601</span><a id="line.601">        {</a>
-<span class="sourceLineNo">602</span><a id="line.602">            sequence[count - 1 - k] = (int)(e % base);</a>
-<span class="sourceLineNo">603</span><a id="line.603">            e /= base;</a>
-<span class="sourceLineNo">604</span><a id="line.604"></a>
-<span class="sourceLineNo">605</span><a id="line.605">            base++;</a>
-<span class="sourceLineNo">606</span><a id="line.606">        }</a>
-<span class="sourceLineNo">607</span><a id="line.607">        return sequence;</a>
-<span class="sourceLineNo">608</span><a id="line.608">    }</a>
-<span class="sourceLineNo">609</span><a id="line.609"></a>
-<span class="sourceLineNo">610</span><a id="line.610">    private static int[] factoradicDecode(BigInteger e, int count)</a>
-<span class="sourceLineNo">611</span><a id="line.611">    {</a>
-<span class="sourceLineNo">612</span><a id="line.612">        int[] sequence = new int[count];</a>
-<span class="sourceLineNo">613</span><a id="line.613">        BigInteger base = BigInteger.valueOf(2);</a>
-<span class="sourceLineNo">614</span><a id="line.614"></a>
-<span class="sourceLineNo">615</span><a id="line.615">        for (int k = 1; k &lt; count; k++)</a>
-<span class="sourceLineNo">616</span><a id="line.616">        {</a>
-<span class="sourceLineNo">617</span><a id="line.617">            sequence[count - 1 - k] = e.mod(base).intValue();</a>
-<span class="sourceLineNo">618</span><a id="line.618">            e = e.divide(base);</a>
-<span class="sourceLineNo">619</span><a id="line.619"></a>
-<span class="sourceLineNo">620</span><a id="line.620">            base = base.add(BigInteger.ONE);</a>
-<span class="sourceLineNo">621</span><a id="line.621">        }</a>
-<span class="sourceLineNo">622</span><a id="line.622">        return sequence;</a>
-<span class="sourceLineNo">623</span><a id="line.623">    }</a>
-<span class="sourceLineNo">624</span><a id="line.624"></a>
-<span class="sourceLineNo">625</span><a id="line.625">    /**</a>
-<span class="sourceLineNo">626</span><a id="line.626">     * Given a long between 0 and the total number of permutations possible (see getTotalPermutations() for how to access</a>
-<span class="sourceLineNo">627</span><a id="line.627">     * this) and an int count of how many indices to find a permutation of, returns an array with the permutation</a>
-<span class="sourceLineNo">628</span><a id="line.628">     * of the indices described by the long as a special (factoradic) index into the possible permutations. You can get</a>
-<span class="sourceLineNo">629</span><a id="line.629">     * an index for a specific permutation with encodePermutation() or by generating a random number between 0 and</a>
-<span class="sourceLineNo">630</span><a id="line.630">     * getTotalPermutations(), if you want it randomly.</a>
-<span class="sourceLineNo">631</span><a id="line.631">     * &lt;br&gt;</a>
-<span class="sourceLineNo">632</span><a id="line.632">     * Credit goes to user Joren on StackOverflow, http://stackoverflow.com/a/1506337</a>
-<span class="sourceLineNo">633</span><a id="line.633">     * @param encoded the index encoded as a long</a>
-<span class="sourceLineNo">634</span><a id="line.634">     * @param count an int between 1 and 20, inclusive, that will be the size of the returned array</a>
-<span class="sourceLineNo">635</span><a id="line.635">     * @return the looked-up permutation as an int array with length equal to count</a>
-<span class="sourceLineNo">636</span><a id="line.636">     */</a>
-<span class="sourceLineNo">637</span><a id="line.637">    public static int[] decodePermutation(long encoded, int count)</a>
-<span class="sourceLineNo">638</span><a id="line.638">    {</a>
-<span class="sourceLineNo">639</span><a id="line.639">        if(count &lt;= 0)</a>
-<span class="sourceLineNo">640</span><a id="line.640">            return new int[0];</a>
-<span class="sourceLineNo">641</span><a id="line.641">        encoded %= MathExtras.factorial(count);</a>
-<span class="sourceLineNo">642</span><a id="line.642">        int[] sequence = factoradicDecode(encoded, count), destination = new int[count];</a>
-<span class="sourceLineNo">643</span><a id="line.643">        //char[] list = new char[] { 'a', 'b', 'c', 'd', 'e' }; //change for elements</a>
-<span class="sourceLineNo">644</span><a id="line.644"></a>
-<span class="sourceLineNo">645</span><a id="line.645">        //char[] permuted = new char[n]; //change for destination</a>
-<span class="sourceLineNo">646</span><a id="line.646">        boolean[] set = new boolean[count];</a>
-<span class="sourceLineNo">647</span><a id="line.647"></a>
-<span class="sourceLineNo">648</span><a id="line.648">        for (int i = 0; i &lt; count; i++)</a>
-<span class="sourceLineNo">649</span><a id="line.649">        {</a>
-<span class="sourceLineNo">650</span><a id="line.650">            int s = sequence[i];</a>
-<span class="sourceLineNo">651</span><a id="line.651">            int remainingPosition = 0;</a>
-<span class="sourceLineNo">652</span><a id="line.652">            int index;</a>
-<span class="sourceLineNo">653</span><a id="line.653"></a>
-<span class="sourceLineNo">654</span><a id="line.654">            // Find the s'th position in the permuted list that has not been set yet.</a>
-<span class="sourceLineNo">655</span><a id="line.655">            for (index = 0; index &lt; count; index++)</a>
-<span class="sourceLineNo">656</span><a id="line.656">            {</a>
-<span class="sourceLineNo">657</span><a id="line.657">                if (!set[index])</a>
-<span class="sourceLineNo">658</span><a id="line.658">                {</a>
-<span class="sourceLineNo">659</span><a id="line.659">                    if (remainingPosition == s)</a>
-<span class="sourceLineNo">660</span><a id="line.660">                        break;</a>
-<span class="sourceLineNo">661</span><a id="line.661"></a>
-<span class="sourceLineNo">662</span><a id="line.662">                    remainingPosition++;</a>
-<span class="sourceLineNo">663</span><a id="line.663">                }</a>
-<span class="sourceLineNo">664</span><a id="line.664">            }</a>
-<span class="sourceLineNo">665</span><a id="line.665"></a>
-<span class="sourceLineNo">666</span><a id="line.666">            destination[index] = i;</a>
-<span class="sourceLineNo">667</span><a id="line.667">            set[index] = true;</a>
-<span class="sourceLineNo">668</span><a id="line.668">        }</a>
-<span class="sourceLineNo">669</span><a id="line.669">        return destination;</a>
-<span class="sourceLineNo">670</span><a id="line.670">    }</a>
-<span class="sourceLineNo">671</span><a id="line.671"></a>
-<span class="sourceLineNo">672</span><a id="line.672">    /**</a>
-<span class="sourceLineNo">673</span><a id="line.673">     * Given a long between 0 and the total number of permutations possible (see getBigTotalPermutations() for how to</a>
-<span class="sourceLineNo">674</span><a id="line.674">     * access this) and an int count of how many indices to find a permutation of, returns an array with the permutation</a>
-<span class="sourceLineNo">675</span><a id="line.675">     * of the indices described by the long as a special (factoradic) index into the possible permutations. You can get</a>
-<span class="sourceLineNo">676</span><a id="line.676">     * an index for a specific permutation with encodeBigPermutation() or by generating a random number between 0 and</a>
-<span class="sourceLineNo">677</span><a id="line.677">     * getBigTotalPermutations(), if you want it randomly.</a>
-<span class="sourceLineNo">678</span><a id="line.678">     * &lt;br&gt;</a>
-<span class="sourceLineNo">679</span><a id="line.679">     * Credit goes to user Joren on StackOverflow, http://stackoverflow.com/a/1506337</a>
-<span class="sourceLineNo">680</span><a id="line.680">     * @param encoded the index encoded as a BigInteger</a>
-<span class="sourceLineNo">681</span><a id="line.681">     * @param count a positive int that will be the size of the returned array</a>
-<span class="sourceLineNo">682</span><a id="line.682">     * @return the looked-up permutation as an int array with length equal to count</a>
-<span class="sourceLineNo">683</span><a id="line.683">     */</a>
-<span class="sourceLineNo">684</span><a id="line.684">    public static int[] decodePermutation(BigInteger encoded, int count)</a>
-<span class="sourceLineNo">685</span><a id="line.685">    {</a>
-<span class="sourceLineNo">686</span><a id="line.686">        if(count &lt;= 0)</a>
-<span class="sourceLineNo">687</span><a id="line.687">            return new int[0];</a>
-<span class="sourceLineNo">688</span><a id="line.688">        BigInteger enc = encoded.mod(MathExtras.bigFactorial(count));</a>
-<span class="sourceLineNo">689</span><a id="line.689">        int[] sequence = factoradicDecode(enc, count), destination = new int[count];</a>
-<span class="sourceLineNo">690</span><a id="line.690">        //char[] list = new char[] { 'a', 'b', 'c', 'd', 'e' }; //change for elements</a>
-<span class="sourceLineNo">691</span><a id="line.691"></a>
-<span class="sourceLineNo">692</span><a id="line.692">        //char[] permuted = new char[n]; //change for destination</a>
-<span class="sourceLineNo">693</span><a id="line.693">        boolean[] set = new boolean[count];</a>
-<span class="sourceLineNo">694</span><a id="line.694"></a>
-<span class="sourceLineNo">695</span><a id="line.695">        for (int i = 0; i &lt; count; i++)</a>
-<span class="sourceLineNo">696</span><a id="line.696">        {</a>
-<span class="sourceLineNo">697</span><a id="line.697">            int s = sequence[i];</a>
-<span class="sourceLineNo">698</span><a id="line.698">            int remainingPosition = 0;</a>
-<span class="sourceLineNo">699</span><a id="line.699">            int index;</a>
-<span class="sourceLineNo">700</span><a id="line.700"></a>
-<span class="sourceLineNo">701</span><a id="line.701">            // Find the s'th position in the permuted list that has not been set yet.</a>
-<span class="sourceLineNo">702</span><a id="line.702">            for (index = 0; index &lt; count; index++)</a>
-<span class="sourceLineNo">703</span><a id="line.703">            {</a>
-<span class="sourceLineNo">704</span><a id="line.704">                if (!set[index])</a>
-<span class="sourceLineNo">705</span><a id="line.705">                {</a>
-<span class="sourceLineNo">706</span><a id="line.706">                    if (remainingPosition == s)</a>
-<span class="sourceLineNo">707</span><a id="line.707">                        break;</a>
-<span class="sourceLineNo">708</span><a id="line.708"></a>
-<span class="sourceLineNo">709</span><a id="line.709">                    remainingPosition++;</a>
-<span class="sourceLineNo">710</span><a id="line.710">                }</a>
-<span class="sourceLineNo">711</span><a id="line.711">            }</a>
-<span class="sourceLineNo">712</span><a id="line.712"></a>
-<span class="sourceLineNo">713</span><a id="line.713">            destination[index] = i;</a>
-<span class="sourceLineNo">714</span><a id="line.714">            set[index] = true;</a>
-<span class="sourceLineNo">715</span><a id="line.715">        }</a>
-<span class="sourceLineNo">716</span><a id="line.716">        return destination;</a>
-<span class="sourceLineNo">717</span><a id="line.717">    }</a>
-<span class="sourceLineNo">718</span><a id="line.718"></a>
-<span class="sourceLineNo">719</span><a id="line.719">    /**</a>
-<span class="sourceLineNo">720</span><a id="line.720">     * Given a long between 0 and the total number of permutations possible (see getTotalPermutations() for how to access</a>
-<span class="sourceLineNo">721</span><a id="line.721">     * this) and an int count of how many indices to find a permutation of, returns an array with the permutation</a>
-<span class="sourceLineNo">722</span><a id="line.722">     * of the indices described by the long as a special (factoradic) index into the possible permutations. You can get</a>
-<span class="sourceLineNo">723</span><a id="line.723">     * an index for a specific permutation with encodePermutation() or by generating a random number between 0 and</a>
-<span class="sourceLineNo">724</span><a id="line.724">     * getTotalPermutations(), if you want it randomly. This variant adds an int to each item in the returned array,</a>
-<span class="sourceLineNo">725</span><a id="line.725">     * which may be useful if generating indices that don't start at 0.</a>
-<span class="sourceLineNo">726</span><a id="line.726">     * &lt;br&gt;</a>
-<span class="sourceLineNo">727</span><a id="line.727">     * Credit goes to user Joren on StackOverflow, http://stackoverflow.com/a/1506337</a>
-<span class="sourceLineNo">728</span><a id="line.728">     * @param encoded the index encoded as a long</a>
-<span class="sourceLineNo">729</span><a id="line.729">     * @param count an int between 1 and 20, inclusive, that will be the size of the returned array</a>
-<span class="sourceLineNo">730</span><a id="line.730">     * @param add an int to add to each item of the permutation</a>
-<span class="sourceLineNo">731</span><a id="line.731">     * @return the looked-up permutation as an int array with length equal to count</a>
-<span class="sourceLineNo">732</span><a id="line.732">     */</a>
-<span class="sourceLineNo">733</span><a id="line.733">    public static int[] decodePermutation(long encoded, int count, int add)</a>
-<span class="sourceLineNo">734</span><a id="line.734">    {</a>
-<span class="sourceLineNo">735</span><a id="line.735">        int[] p = decodePermutation(encoded, count);</a>
-<span class="sourceLineNo">736</span><a id="line.736">        for (int i = 0; i &lt; p.length; i++) {</a>
-<span class="sourceLineNo">737</span><a id="line.737">            p[i] += add;</a>
-<span class="sourceLineNo">738</span><a id="line.738">        }</a>
-<span class="sourceLineNo">739</span><a id="line.739">        return p;</a>
-<span class="sourceLineNo">740</span><a id="line.740">    }</a>
-<span class="sourceLineNo">741</span><a id="line.741"></a>
-<span class="sourceLineNo">742</span><a id="line.742">    /**</a>
-<span class="sourceLineNo">743</span><a id="line.743">     * Given a long between 0 and the total number of permutations possible (see getBigTotalPermutations() for how to</a>
-<span class="sourceLineNo">744</span><a id="line.744">     * access this) and an int count of how many indices to find a permutation of, returns an array with the permutation</a>
-<span class="sourceLineNo">745</span><a id="line.745">     * of the indices described by the long as a special (factoradic) index into the possible permutations. You can get</a>
-<span class="sourceLineNo">746</span><a id="line.746">     * an index for a specific permutation with encodeBigPermutation() or by generating a random number between 0 and</a>
-<span class="sourceLineNo">747</span><a id="line.747">     * getBigTotalPermutations(), if you want it randomly. This variant adds an int to each item in the returned array,</a>
-<span class="sourceLineNo">748</span><a id="line.748">     * which may be useful if generating indices that don't start at 0.</a>
-<span class="sourceLineNo">749</span><a id="line.749">     * &lt;br&gt;</a>
-<span class="sourceLineNo">750</span><a id="line.750">     * Credit goes to user Joren on StackOverflow, http://stackoverflow.com/a/1506337</a>
-<span class="sourceLineNo">751</span><a id="line.751">     * @param encoded the index encoded as a BigInteger</a>
-<span class="sourceLineNo">752</span><a id="line.752">     * @param count a positive int that will be the size of the returned array</a>
-<span class="sourceLineNo">753</span><a id="line.753">     * @param add an int to add to each item of the permutation</a>
-<span class="sourceLineNo">754</span><a id="line.754">     * @return the looked-up permutation as an int array with length equal to count</a>
-<span class="sourceLineNo">755</span><a id="line.755">     */</a>
-<span class="sourceLineNo">756</span><a id="line.756">    public static int[] decodePermutation(BigInteger encoded, int count, int add)</a>
-<span class="sourceLineNo">757</span><a id="line.757">    {</a>
-<span class="sourceLineNo">758</span><a id="line.758">        int[] p = decodePermutation(encoded, count);</a>
-<span class="sourceLineNo">759</span><a id="line.759">        for (int i = 0; i &lt; p.length; i++) {</a>
-<span class="sourceLineNo">760</span><a id="line.760">            p[i] += add;</a>
-<span class="sourceLineNo">761</span><a id="line.761">        }</a>
-<span class="sourceLineNo">762</span><a id="line.762">        return p;</a>
-<span class="sourceLineNo">763</span><a id="line.763">    }</a>
-<span class="sourceLineNo">764</span><a id="line.764"></a>
-<span class="sourceLineNo">765</span><a id="line.765">}</a>
+<span class="sourceLineNo">594</span><a id="line.594">    private static int[] factoradicDecode(long e, int count)</a>
+<span class="sourceLineNo">595</span><a id="line.595">    {</a>
+<span class="sourceLineNo">596</span><a id="line.596">        int[] sequence = new int[count];</a>
+<span class="sourceLineNo">597</span><a id="line.597">        int base = 2;</a>
+<span class="sourceLineNo">598</span><a id="line.598"></a>
+<span class="sourceLineNo">599</span><a id="line.599">        for (int k = 1; k &lt; count; k++)</a>
+<span class="sourceLineNo">600</span><a id="line.600">        {</a>
+<span class="sourceLineNo">601</span><a id="line.601">            sequence[count - 1 - k] = (int)(e % base);</a>
+<span class="sourceLineNo">602</span><a id="line.602">            e /= base;</a>
+<span class="sourceLineNo">603</span><a id="line.603"></a>
+<span class="sourceLineNo">604</span><a id="line.604">            base++;</a>
+<span class="sourceLineNo">605</span><a id="line.605">        }</a>
+<span class="sourceLineNo">606</span><a id="line.606">        return sequence;</a>
+<span class="sourceLineNo">607</span><a id="line.607">    }</a>
+<span class="sourceLineNo">608</span><a id="line.608"></a>
+<span class="sourceLineNo">609</span><a id="line.609">    private static int[] factoradicDecode(BigInteger e, int count)</a>
+<span class="sourceLineNo">610</span><a id="line.610">    {</a>
+<span class="sourceLineNo">611</span><a id="line.611">        int[] sequence = new int[count];</a>
+<span class="sourceLineNo">612</span><a id="line.612">        BigInteger base = BigInteger.valueOf(2);</a>
+<span class="sourceLineNo">613</span><a id="line.613"></a>
+<span class="sourceLineNo">614</span><a id="line.614">        for (int k = 1; k &lt; count; k++)</a>
+<span class="sourceLineNo">615</span><a id="line.615">        {</a>
+<span class="sourceLineNo">616</span><a id="line.616">            sequence[count - 1 - k] = e.mod(base).intValue();</a>
+<span class="sourceLineNo">617</span><a id="line.617">            e = e.divide(base);</a>
+<span class="sourceLineNo">618</span><a id="line.618"></a>
+<span class="sourceLineNo">619</span><a id="line.619">            base = base.add(BigInteger.ONE);</a>
+<span class="sourceLineNo">620</span><a id="line.620">        }</a>
+<span class="sourceLineNo">621</span><a id="line.621">        return sequence;</a>
+<span class="sourceLineNo">622</span><a id="line.622">    }</a>
+<span class="sourceLineNo">623</span><a id="line.623"></a>
+<span class="sourceLineNo">624</span><a id="line.624">    /**</a>
+<span class="sourceLineNo">625</span><a id="line.625">     * Given a long between 0 and the total number of permutations possible (see getTotalPermutations() for how to access</a>
+<span class="sourceLineNo">626</span><a id="line.626">     * this) and an int count of how many indices to find a permutation of, returns an array with the permutation</a>
+<span class="sourceLineNo">627</span><a id="line.627">     * of the indices described by the long as a special (factoradic) index into the possible permutations. You can get</a>
+<span class="sourceLineNo">628</span><a id="line.628">     * an index for a specific permutation with encodePermutation() or by generating a random number between 0 and</a>
+<span class="sourceLineNo">629</span><a id="line.629">     * getTotalPermutations(), if you want it randomly.</a>
+<span class="sourceLineNo">630</span><a id="line.630">     * &lt;br&gt;</a>
+<span class="sourceLineNo">631</span><a id="line.631">     * Credit goes to user Joren on StackOverflow, http://stackoverflow.com/a/1506337</a>
+<span class="sourceLineNo">632</span><a id="line.632">     * @param encoded the index encoded as a long</a>
+<span class="sourceLineNo">633</span><a id="line.633">     * @param count an int between 1 and 20, inclusive, that will be the size of the returned array</a>
+<span class="sourceLineNo">634</span><a id="line.634">     * @return the looked-up permutation as an int array with length equal to count</a>
+<span class="sourceLineNo">635</span><a id="line.635">     */</a>
+<span class="sourceLineNo">636</span><a id="line.636">    public static int[] decodePermutation(long encoded, int count)</a>
+<span class="sourceLineNo">637</span><a id="line.637">    {</a>
+<span class="sourceLineNo">638</span><a id="line.638">        if(count &lt;= 0)</a>
+<span class="sourceLineNo">639</span><a id="line.639">            return new int[0];</a>
+<span class="sourceLineNo">640</span><a id="line.640">        encoded %= MathExtras.factorial(count);</a>
+<span class="sourceLineNo">641</span><a id="line.641">        int[] sequence = factoradicDecode(encoded, count), destination = new int[count];</a>
+<span class="sourceLineNo">642</span><a id="line.642">        //char[] list = new char[] { 'a', 'b', 'c', 'd', 'e' }; //change for elements</a>
+<span class="sourceLineNo">643</span><a id="line.643"></a>
+<span class="sourceLineNo">644</span><a id="line.644">        //char[] permuted = new char[n]; //change for destination</a>
+<span class="sourceLineNo">645</span><a id="line.645">        boolean[] set = new boolean[count];</a>
+<span class="sourceLineNo">646</span><a id="line.646"></a>
+<span class="sourceLineNo">647</span><a id="line.647">        for (int i = 0; i &lt; count; i++)</a>
+<span class="sourceLineNo">648</span><a id="line.648">        {</a>
+<span class="sourceLineNo">649</span><a id="line.649">            int s = sequence[i];</a>
+<span class="sourceLineNo">650</span><a id="line.650">            int remainingPosition = 0;</a>
+<span class="sourceLineNo">651</span><a id="line.651">            int index;</a>
+<span class="sourceLineNo">652</span><a id="line.652"></a>
+<span class="sourceLineNo">653</span><a id="line.653">            // Find the s'th position in the permuted list that has not been set yet.</a>
+<span class="sourceLineNo">654</span><a id="line.654">            for (index = 0; index &lt; count; index++)</a>
+<span class="sourceLineNo">655</span><a id="line.655">            {</a>
+<span class="sourceLineNo">656</span><a id="line.656">                if (!set[index])</a>
+<span class="sourceLineNo">657</span><a id="line.657">                {</a>
+<span class="sourceLineNo">658</span><a id="line.658">                    if (remainingPosition == s)</a>
+<span class="sourceLineNo">659</span><a id="line.659">                        break;</a>
+<span class="sourceLineNo">660</span><a id="line.660"></a>
+<span class="sourceLineNo">661</span><a id="line.661">                    remainingPosition++;</a>
+<span class="sourceLineNo">662</span><a id="line.662">                }</a>
+<span class="sourceLineNo">663</span><a id="line.663">            }</a>
+<span class="sourceLineNo">664</span><a id="line.664"></a>
+<span class="sourceLineNo">665</span><a id="line.665">            destination[index] = i;</a>
+<span class="sourceLineNo">666</span><a id="line.666">            set[index] = true;</a>
+<span class="sourceLineNo">667</span><a id="line.667">        }</a>
+<span class="sourceLineNo">668</span><a id="line.668">        return destination;</a>
+<span class="sourceLineNo">669</span><a id="line.669">    }</a>
+<span class="sourceLineNo">670</span><a id="line.670"></a>
+<span class="sourceLineNo">671</span><a id="line.671">    /**</a>
+<span class="sourceLineNo">672</span><a id="line.672">     * Given a long between 0 and the total number of permutations possible (see getBigTotalPermutations() for how to</a>
+<span class="sourceLineNo">673</span><a id="line.673">     * access this) and an int count of how many indices to find a permutation of, returns an array with the permutation</a>
+<span class="sourceLineNo">674</span><a id="line.674">     * of the indices described by the long as a special (factoradic) index into the possible permutations. You can get</a>
+<span class="sourceLineNo">675</span><a id="line.675">     * an index for a specific permutation with encodeBigPermutation() or by generating a random number between 0 and</a>
+<span class="sourceLineNo">676</span><a id="line.676">     * getBigTotalPermutations(), if you want it randomly.</a>
+<span class="sourceLineNo">677</span><a id="line.677">     * &lt;br&gt;</a>
+<span class="sourceLineNo">678</span><a id="line.678">     * Credit goes to user Joren on StackOverflow, http://stackoverflow.com/a/1506337</a>
+<span class="sourceLineNo">679</span><a id="line.679">     * @param encoded the index encoded as a BigInteger</a>
+<span class="sourceLineNo">680</span><a id="line.680">     * @param count a positive int that will be the size of the returned array</a>
+<span class="sourceLineNo">681</span><a id="line.681">     * @return the looked-up permutation as an int array with length equal to count</a>
+<span class="sourceLineNo">682</span><a id="line.682">     */</a>
+<span class="sourceLineNo">683</span><a id="line.683">    public static int[] decodePermutation(BigInteger encoded, int count)</a>
+<span class="sourceLineNo">684</span><a id="line.684">    {</a>
+<span class="sourceLineNo">685</span><a id="line.685">        if(count &lt;= 0)</a>
+<span class="sourceLineNo">686</span><a id="line.686">            return new int[0];</a>
+<span class="sourceLineNo">687</span><a id="line.687">        BigInteger enc = encoded.mod(MathExtras.bigFactorial(count));</a>
+<span class="sourceLineNo">688</span><a id="line.688">        int[] sequence = factoradicDecode(enc, count), destination = new int[count];</a>
+<span class="sourceLineNo">689</span><a id="line.689">        //char[] list = new char[] { 'a', 'b', 'c', 'd', 'e' }; //change for elements</a>
+<span class="sourceLineNo">690</span><a id="line.690"></a>
+<span class="sourceLineNo">691</span><a id="line.691">        //char[] permuted = new char[n]; //change for destination</a>
+<span class="sourceLineNo">692</span><a id="line.692">        boolean[] set = new boolean[count];</a>
+<span class="sourceLineNo">693</span><a id="line.693"></a>
+<span class="sourceLineNo">694</span><a id="line.694">        for (int i = 0; i &lt; count; i++)</a>
+<span class="sourceLineNo">695</span><a id="line.695">        {</a>
+<span class="sourceLineNo">696</span><a id="line.696">            int s = sequence[i];</a>
+<span class="sourceLineNo">697</span><a id="line.697">            int remainingPosition = 0;</a>
+<span class="sourceLineNo">698</span><a id="line.698">            int index;</a>
+<span class="sourceLineNo">699</span><a id="line.699"></a>
+<span class="sourceLineNo">700</span><a id="line.700">            // Find the s'th position in the permuted list that has not been set yet.</a>
+<span class="sourceLineNo">701</span><a id="line.701">            for (index = 0; index &lt; count; index++)</a>
+<span class="sourceLineNo">702</span><a id="line.702">            {</a>
+<span class="sourceLineNo">703</span><a id="line.703">                if (!set[index])</a>
+<span class="sourceLineNo">704</span><a id="line.704">                {</a>
+<span class="sourceLineNo">705</span><a id="line.705">                    if (remainingPosition == s)</a>
+<span class="sourceLineNo">706</span><a id="line.706">                        break;</a>
+<span class="sourceLineNo">707</span><a id="line.707"></a>
+<span class="sourceLineNo">708</span><a id="line.708">                    remainingPosition++;</a>
+<span class="sourceLineNo">709</span><a id="line.709">                }</a>
+<span class="sourceLineNo">710</span><a id="line.710">            }</a>
+<span class="sourceLineNo">711</span><a id="line.711"></a>
+<span class="sourceLineNo">712</span><a id="line.712">            destination[index] = i;</a>
+<span class="sourceLineNo">713</span><a id="line.713">            set[index] = true;</a>
+<span class="sourceLineNo">714</span><a id="line.714">        }</a>
+<span class="sourceLineNo">715</span><a id="line.715">        return destination;</a>
+<span class="sourceLineNo">716</span><a id="line.716">    }</a>
+<span class="sourceLineNo">717</span><a id="line.717"></a>
+<span class="sourceLineNo">718</span><a id="line.718">    /**</a>
+<span class="sourceLineNo">719</span><a id="line.719">     * Given a long between 0 and the total number of permutations possible (see getTotalPermutations() for how to access</a>
+<span class="sourceLineNo">720</span><a id="line.720">     * this) and an int count of how many indices to find a permutation of, returns an array with the permutation</a>
+<span class="sourceLineNo">721</span><a id="line.721">     * of the indices described by the long as a special (factoradic) index into the possible permutations. You can get</a>
+<span class="sourceLineNo">722</span><a id="line.722">     * an index for a specific permutation with encodePermutation() or by generating a random number between 0 and</a>
+<span class="sourceLineNo">723</span><a id="line.723">     * getTotalPermutations(), if you want it randomly. This variant adds an int to each item in the returned array,</a>
+<span class="sourceLineNo">724</span><a id="line.724">     * which may be useful if generating indices that don't start at 0.</a>
+<span class="sourceLineNo">725</span><a id="line.725">     * &lt;br&gt;</a>
+<span class="sourceLineNo">726</span><a id="line.726">     * Credit goes to user Joren on StackOverflow, http://stackoverflow.com/a/1506337</a>
+<span class="sourceLineNo">727</span><a id="line.727">     * @param encoded the index encoded as a long</a>
+<span class="sourceLineNo">728</span><a id="line.728">     * @param count an int between 1 and 20, inclusive, that will be the size of the returned array</a>
+<span class="sourceLineNo">729</span><a id="line.729">     * @param add an int to add to each item of the permutation</a>
+<span class="sourceLineNo">730</span><a id="line.730">     * @return the looked-up permutation as an int array with length equal to count</a>
+<span class="sourceLineNo">731</span><a id="line.731">     */</a>
+<span class="sourceLineNo">732</span><a id="line.732">    public static int[] decodePermutation(long encoded, int count, int add)</a>
+<span class="sourceLineNo">733</span><a id="line.733">    {</a>
+<span class="sourceLineNo">734</span><a id="line.734">        int[] p = decodePermutation(encoded, count);</a>
+<span class="sourceLineNo">735</span><a id="line.735">        for (int i = 0; i &lt; p.length; i++) {</a>
+<span class="sourceLineNo">736</span><a id="line.736">            p[i] += add;</a>
+<span class="sourceLineNo">737</span><a id="line.737">        }</a>
+<span class="sourceLineNo">738</span><a id="line.738">        return p;</a>
+<span class="sourceLineNo">739</span><a id="line.739">    }</a>
+<span class="sourceLineNo">740</span><a id="line.740"></a>
+<span class="sourceLineNo">741</span><a id="line.741">    /**</a>
+<span class="sourceLineNo">742</span><a id="line.742">     * Given a long between 0 and the total number of permutations possible (see getBigTotalPermutations() for how to</a>
+<span class="sourceLineNo">743</span><a id="line.743">     * access this) and an int count of how many indices to find a permutation of, returns an array with the permutation</a>
+<span class="sourceLineNo">744</span><a id="line.744">     * of the indices described by the long as a special (factoradic) index into the possible permutations. You can get</a>
+<span class="sourceLineNo">745</span><a id="line.745">     * an index for a specific permutation with encodeBigPermutation() or by generating a random number between 0 and</a>
+<span class="sourceLineNo">746</span><a id="line.746">     * getBigTotalPermutations(), if you want it randomly. This variant adds an int to each item in the returned array,</a>
+<span class="sourceLineNo">747</span><a id="line.747">     * which may be useful if generating indices that don't start at 0.</a>
+<span class="sourceLineNo">748</span><a id="line.748">     * &lt;br&gt;</a>
+<span class="sourceLineNo">749</span><a id="line.749">     * Credit goes to user Joren on StackOverflow, http://stackoverflow.com/a/1506337</a>
+<span class="sourceLineNo">750</span><a id="line.750">     * @param encoded the index encoded as a BigInteger</a>
+<span class="sourceLineNo">751</span><a id="line.751">     * @param count a positive int that will be the size of the returned array</a>
+<span class="sourceLineNo">752</span><a id="line.752">     * @param add an int to add to each item of the permutation</a>
+<span class="sourceLineNo">753</span><a id="line.753">     * @return the looked-up permutation as an int array with length equal to count</a>
+<span class="sourceLineNo">754</span><a id="line.754">     */</a>
+<span class="sourceLineNo">755</span><a id="line.755">    public static int[] decodePermutation(BigInteger encoded, int count, int add)</a>
+<span class="sourceLineNo">756</span><a id="line.756">    {</a>
+<span class="sourceLineNo">757</span><a id="line.757">        int[] p = decodePermutation(encoded, count);</a>
+<span class="sourceLineNo">758</span><a id="line.758">        for (int i = 0; i &lt; p.length; i++) {</a>
+<span class="sourceLineNo">759</span><a id="line.759">            p[i] += add;</a>
+<span class="sourceLineNo">760</span><a id="line.760">        }</a>
+<span class="sourceLineNo">761</span><a id="line.761">        return p;</a>
+<span class="sourceLineNo">762</span><a id="line.762">    }</a>
+<span class="sourceLineNo">763</span><a id="line.763"></a>
+<span class="sourceLineNo">764</span><a id="line.764">}</a>
 
 
 

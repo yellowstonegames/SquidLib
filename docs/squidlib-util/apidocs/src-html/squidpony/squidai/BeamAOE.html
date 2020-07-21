@@ -335,8 +335,8 @@
 <span class="sourceLineNo">323</span><a id="line.323">        if(totalTargets == 0)</a>
 <span class="sourceLineNo">324</span><a id="line.324">            return bestPoints;</a>
 <span class="sourceLineNo">325</span><a id="line.325"></a>
-<span class="sourceLineNo">326</span><a id="line.326">        Coord[] ts = targets.toArray(new Coord[targets.size()]);</a>
-<span class="sourceLineNo">327</span><a id="line.327">        Coord[] exs = requiredExclusions.toArray(new Coord[requiredExclusions.size()]);</a>
+<span class="sourceLineNo">326</span><a id="line.326">        Coord[] ts = targets.toArray(new Coord[0]);</a>
+<span class="sourceLineNo">327</span><a id="line.327">        Coord[] exs = requiredExclusions.toArray(new Coord[0]);</a>
 <span class="sourceLineNo">328</span><a id="line.328">        Coord t;</a>
 <span class="sourceLineNo">329</span><a id="line.329"></a>
 <span class="sourceLineNo">330</span><a id="line.330">        double[][][] compositeMap = new double[ts.length][dungeon.length][dungeon[0].length];</a>
@@ -347,7 +347,7 @@
 <span class="sourceLineNo">335</span><a id="line.335">        }</a>
 <span class="sourceLineNo">336</span><a id="line.336">        DijkstraMap dt = new DijkstraMap(dungeon, dijkstra.measurement);</a>
 <span class="sourceLineNo">337</span><a id="line.337">        double[][] resMap = DungeonUtility.generateResistances(dungeon);</a>
-<span class="sourceLineNo">338</span><a id="line.338">        Coord tempPt = Coord.get(0, 0);</a>
+<span class="sourceLineNo">338</span><a id="line.338">        Coord tempPt;</a>
 <span class="sourceLineNo">339</span><a id="line.339">        for (int i = 0; i &lt; exs.length; ++i) {</a>
 <span class="sourceLineNo">340</span><a id="line.340">            t = rt.extend(origin, exs[i], length, false, dungeon.length, dungeon[0].length);</a>
 <span class="sourceLineNo">341</span><a id="line.341">            dt.resetMap();</a>
@@ -390,7 +390,7 @@
 <span class="sourceLineNo">378</span><a id="line.378">                dt.partialScan(radius, null);</a>
 <span class="sourceLineNo">379</span><a id="line.379"></a>
 <span class="sourceLineNo">380</span><a id="line.380"></a>
-<span class="sourceLineNo">381</span><a id="line.381">            double dist = 0.0;</a>
+<span class="sourceLineNo">381</span><a id="line.381">            double dist;</a>
 <span class="sourceLineNo">382</span><a id="line.382">            for (int x = 0; x &lt; dungeon.length; x++) {</a>
 <span class="sourceLineNo">383</span><a id="line.383">                for (int y = 0; y &lt; dungeon[x].length; y++) {</a>
 <span class="sourceLineNo">384</span><a id="line.384">                    if (dt.gradientMap[x][y] &lt; DijkstraMap.FLOOR){</a>
@@ -479,9 +479,9 @@
 <span class="sourceLineNo">467</span><a id="line.467">        if(totalTargets == 0)</a>
 <span class="sourceLineNo">468</span><a id="line.468">            return bestPoints;</a>
 <span class="sourceLineNo">469</span><a id="line.469"></a>
-<span class="sourceLineNo">470</span><a id="line.470">        Coord[] pts = priorityTargets.toArray(new Coord[priorityTargets.size()]);</a>
-<span class="sourceLineNo">471</span><a id="line.471">        Coord[] lts = lesserTargets.toArray(new Coord[lesserTargets.size()]);</a>
-<span class="sourceLineNo">472</span><a id="line.472">        Coord[] exs = requiredExclusions.toArray(new Coord[requiredExclusions.size()]);</a>
+<span class="sourceLineNo">470</span><a id="line.470">        Coord[] pts = priorityTargets.toArray(new Coord[0]);</a>
+<span class="sourceLineNo">471</span><a id="line.471">        Coord[] lts = lesserTargets.toArray(new Coord[0]);</a>
+<span class="sourceLineNo">472</span><a id="line.472">        Coord[] exs = requiredExclusions.toArray(new Coord[0]);</a>
 <span class="sourceLineNo">473</span><a id="line.473">        Coord t;// = rt.extend(origin, exs[0], length, false, dungeon.length, dungeon[0].length);</a>
 <span class="sourceLineNo">474</span><a id="line.474"></a>
 <span class="sourceLineNo">475</span><a id="line.475">        double[][][] compositeMap = new double[totalTargets][dungeon.length][dungeon[0].length];</a>
@@ -494,7 +494,7 @@
 <span class="sourceLineNo">482</span><a id="line.482">        }</a>
 <span class="sourceLineNo">483</span><a id="line.483">        DijkstraMap dt = new DijkstraMap(dungeon, dijkstra.measurement);</a>
 <span class="sourceLineNo">484</span><a id="line.484">        double[][] resMap = DungeonUtility.generateResistances(dungeon);</a>
-<span class="sourceLineNo">485</span><a id="line.485">        Coord tempPt = Coord.get(0, 0);</a>
+<span class="sourceLineNo">485</span><a id="line.485">        Coord tempPt;</a>
 <span class="sourceLineNo">486</span><a id="line.486">        for (int i = 0; i &lt; exs.length; ++i) {</a>
 <span class="sourceLineNo">487</span><a id="line.487">            t = rt.extend(origin, exs[i], length, false, dungeon.length, dungeon[0].length);</a>
 <span class="sourceLineNo">488</span><a id="line.488">            dt.resetMap();</a>
@@ -516,261 +516,257 @@
 <span class="sourceLineNo">504</span><a id="line.504">                }</a>
 <span class="sourceLineNo">505</span><a id="line.505">            }</a>
 <span class="sourceLineNo">506</span><a id="line.506">        }</a>
-<span class="sourceLineNo">507</span><a id="line.507"></a>
-<span class="sourceLineNo">508</span><a id="line.508">        t = rt.extend(origin, pts[0], length, false, dungeon.length, dungeon[0].length);</a>
-<span class="sourceLineNo">509</span><a id="line.509"></a>
-<span class="sourceLineNo">510</span><a id="line.510">        for (int i = 0; i &lt; pts.length; ++i) {</a>
-<span class="sourceLineNo">511</span><a id="line.511">            DijkstraMap dm = new DijkstraMap(dungeon, dijkstra.measurement);</a>
-<span class="sourceLineNo">512</span><a id="line.512"></a>
-<span class="sourceLineNo">513</span><a id="line.513">            t = rt.extend(origin, pts[i], length, false, dungeon.length, dungeon[0].length);</a>
-<span class="sourceLineNo">514</span><a id="line.514">            dt.resetMap();</a>
-<span class="sourceLineNo">515</span><a id="line.515">            dt.clearGoals();</a>
-<span class="sourceLineNo">516</span><a id="line.516">            los.isReachable(resMap, origin.x, origin.y, t.x, t.y, rt);</a>
-<span class="sourceLineNo">517</span><a id="line.517">            Queue&lt;Coord&gt; lit = los.getLastPath();</a>
-<span class="sourceLineNo">518</span><a id="line.518"></a>
-<span class="sourceLineNo">519</span><a id="line.519">            for(Coord p : lit)</a>
-<span class="sourceLineNo">520</span><a id="line.520">            {</a>
-<span class="sourceLineNo">521</span><a id="line.521">                dt.setGoal(p);</a>
-<span class="sourceLineNo">522</span><a id="line.522">            }</a>
-<span class="sourceLineNo">523</span><a id="line.523">            if(radius &gt; 0)</a>
-<span class="sourceLineNo">524</span><a id="line.524">                dt.partialScan(radius, null);</a>
-<span class="sourceLineNo">525</span><a id="line.525"></a>
-<span class="sourceLineNo">526</span><a id="line.526"></a>
-<span class="sourceLineNo">527</span><a id="line.527">            double dist = 0.0;</a>
-<span class="sourceLineNo">528</span><a id="line.528">            for (int x = 0; x &lt; dungeon.length; x++) {</a>
-<span class="sourceLineNo">529</span><a id="line.529">                for (int y = 0; y &lt; dungeon[x].length; y++) {</a>
-<span class="sourceLineNo">530</span><a id="line.530">                    if (dt.gradientMap[x][y] &lt; DijkstraMap.FLOOR){</a>
-<span class="sourceLineNo">531</span><a id="line.531">                        dist = reach.metric.radius(origin.x, origin.y, x, y);</a>
-<span class="sourceLineNo">532</span><a id="line.532">                        if(dist &lt;= reach.maxDistance + radius &amp;&amp; dist &gt;= reach.minDistance - radius) {</a>
-<span class="sourceLineNo">533</span><a id="line.533">                            compositeMap[i][x][y] = dm.physicalMap[x][y];</a>
-<span class="sourceLineNo">534</span><a id="line.534">                            dungeonPriorities[x][y] = dungeon[x][y];</a>
-<span class="sourceLineNo">535</span><a id="line.535">                        }</a>
-<span class="sourceLineNo">536</span><a id="line.536">                        else</a>
-<span class="sourceLineNo">537</span><a id="line.537">                            compositeMap[i][x][y] = DijkstraMap.WALL;</a>
-<span class="sourceLineNo">538</span><a id="line.538">                    }</a>
-<span class="sourceLineNo">539</span><a id="line.539">                    else compositeMap[i][x][y] = DijkstraMap.WALL;</a>
-<span class="sourceLineNo">540</span><a id="line.540">                }</a>
-<span class="sourceLineNo">541</span><a id="line.541">            }</a>
-<span class="sourceLineNo">542</span><a id="line.542">            if(compositeMap[i][pts[i].x][pts[i].y] &gt; DijkstraMap.FLOOR)</a>
-<span class="sourceLineNo">543</span><a id="line.543">            {</a>
-<span class="sourceLineNo">544</span><a id="line.544">                for (int x = 0; x &lt; dungeon.length; x++) {</a>
-<span class="sourceLineNo">545</span><a id="line.545">                    Arrays.fill(compositeMap[i][x], 399999.0);</a>
-<span class="sourceLineNo">546</span><a id="line.546">                }</a>
-<span class="sourceLineNo">547</span><a id="line.547">                continue;</a>
-<span class="sourceLineNo">548</span><a id="line.548">            }</a>
-<span class="sourceLineNo">549</span><a id="line.549"></a>
-<span class="sourceLineNo">550</span><a id="line.550"></a>
-<span class="sourceLineNo">551</span><a id="line.551">            dm.initialize(compositeMap[i]);</a>
-<span class="sourceLineNo">552</span><a id="line.552">            dm.setGoal(pts[i]);</a>
-<span class="sourceLineNo">553</span><a id="line.553">            dm.scan(null, null);</a>
-<span class="sourceLineNo">554</span><a id="line.554">            for (int x = 0; x &lt; dungeon.length; x++) {</a>
-<span class="sourceLineNo">555</span><a id="line.555">                for (int y = 0; y &lt; dungeon[x].length; y++) {</a>
-<span class="sourceLineNo">556</span><a id="line.556">                    compositeMap[i][x][y] = (dm.gradientMap[x][y] &lt; DijkstraMap.FLOOR  &amp;&amp; dungeonCopy[x][y] != '!') ? dm.gradientMap[x][y] : 399999.0;</a>
-<span class="sourceLineNo">557</span><a id="line.557">                }</a>
-<span class="sourceLineNo">558</span><a id="line.558">            }</a>
-<span class="sourceLineNo">559</span><a id="line.559">            dm.resetMap();</a>
-<span class="sourceLineNo">560</span><a id="line.560">            dm.clearGoals();</a>
-<span class="sourceLineNo">561</span><a id="line.561">        }</a>
-<span class="sourceLineNo">562</span><a id="line.562"></a>
-<span class="sourceLineNo">563</span><a id="line.563">        t = rt.extend(origin, lts[0], length, false, dungeon.length, dungeon[0].length);</a>
-<span class="sourceLineNo">564</span><a id="line.564"></a>
-<span class="sourceLineNo">565</span><a id="line.565">        for (int i = pts.length; i &lt; totalTargets; ++i) {</a>
-<span class="sourceLineNo">566</span><a id="line.566">            DijkstraMap dm = new DijkstraMap(dungeon, dijkstra.measurement);</a>
-<span class="sourceLineNo">567</span><a id="line.567"></a>
-<span class="sourceLineNo">568</span><a id="line.568">            t = rt.extend(origin, lts[i - pts.length], length, false, dungeon.length, dungeon[0].length);</a>
-<span class="sourceLineNo">569</span><a id="line.569">            dt.resetMap();</a>
-<span class="sourceLineNo">570</span><a id="line.570">            dt.clearGoals();</a>
-<span class="sourceLineNo">571</span><a id="line.571">            los.isReachable(resMap, origin.x, origin.y, t.x, t.y, rt);</a>
-<span class="sourceLineNo">572</span><a id="line.572">            Queue&lt;Coord&gt; lit = los.getLastPath();</a>
-<span class="sourceLineNo">573</span><a id="line.573"></a>
-<span class="sourceLineNo">574</span><a id="line.574">            for(Coord p : lit)</a>
-<span class="sourceLineNo">575</span><a id="line.575">            {</a>
-<span class="sourceLineNo">576</span><a id="line.576">                dt.setGoal(p);</a>
-<span class="sourceLineNo">577</span><a id="line.577">            }</a>
-<span class="sourceLineNo">578</span><a id="line.578">            if(radius &gt; 0)</a>
-<span class="sourceLineNo">579</span><a id="line.579">                dt.partialScan(radius, null);</a>
-<span class="sourceLineNo">580</span><a id="line.580"></a>
-<span class="sourceLineNo">581</span><a id="line.581"></a>
-<span class="sourceLineNo">582</span><a id="line.582">            double dist = 0.0;</a>
-<span class="sourceLineNo">583</span><a id="line.583">            for (int x = 0; x &lt; dungeon.length; x++) {</a>
-<span class="sourceLineNo">584</span><a id="line.584">                for (int y = 0; y &lt; dungeon[x].length; y++) {</a>
-<span class="sourceLineNo">585</span><a id="line.585">                    if (dt.gradientMap[x][y] &lt; DijkstraMap.FLOOR){</a>
-<span class="sourceLineNo">586</span><a id="line.586">                        dist = reach.metric.radius(origin.x, origin.y, x, y);</a>
-<span class="sourceLineNo">587</span><a id="line.587">                        if(dist &lt;= reach.maxDistance + radius &amp;&amp; dist &gt;= reach.minDistance - radius)</a>
-<span class="sourceLineNo">588</span><a id="line.588">                            compositeMap[i][x][y] = dm.physicalMap[x][y];</a>
-<span class="sourceLineNo">589</span><a id="line.589">                        else</a>
-<span class="sourceLineNo">590</span><a id="line.590">                            compositeMap[i][x][y] = DijkstraMap.WALL;</a>
-<span class="sourceLineNo">591</span><a id="line.591">                    }</a>
-<span class="sourceLineNo">592</span><a id="line.592">                    else compositeMap[i][x][y] = DijkstraMap.WALL;</a>
-<span class="sourceLineNo">593</span><a id="line.593">                }</a>
-<span class="sourceLineNo">594</span><a id="line.594">            }</a>
-<span class="sourceLineNo">595</span><a id="line.595">            if(compositeMap[i][lts[i - pts.length].x][lts[i - pts.length].y] &gt; DijkstraMap.FLOOR)</a>
-<span class="sourceLineNo">596</span><a id="line.596">            {</a>
-<span class="sourceLineNo">597</span><a id="line.597">                for (int x = 0; x &lt; dungeon.length; x++)</a>
-<span class="sourceLineNo">598</span><a id="line.598">                {</a>
-<span class="sourceLineNo">599</span><a id="line.599">                    Arrays.fill(compositeMap[i][x], 99999.0);</a>
-<span class="sourceLineNo">600</span><a id="line.600">                }</a>
-<span class="sourceLineNo">601</span><a id="line.601">                continue;</a>
-<span class="sourceLineNo">602</span><a id="line.602">            }</a>
-<span class="sourceLineNo">603</span><a id="line.603"></a>
-<span class="sourceLineNo">604</span><a id="line.604"></a>
-<span class="sourceLineNo">605</span><a id="line.605">            dm.initialize(compositeMap[i]);</a>
-<span class="sourceLineNo">606</span><a id="line.606">            dm.setGoal(lts[i - pts.length]);</a>
-<span class="sourceLineNo">607</span><a id="line.607">            dm.scan(null, null);</a>
-<span class="sourceLineNo">608</span><a id="line.608">            for (int x = 0; x &lt; dungeon.length; x++) {</a>
-<span class="sourceLineNo">609</span><a id="line.609">                for (int y = 0; y &lt; dungeon[x].length; y++) {</a>
-<span class="sourceLineNo">610</span><a id="line.610">                    compositeMap[i][x][y] = (dm.gradientMap[x][y] &lt; DijkstraMap.FLOOR  &amp;&amp; dungeonCopy[x][y] != '!' &amp;&amp; dungeonPriorities[x][y] != '#') ? dm.gradientMap[x][y] : 99999.0;</a>
-<span class="sourceLineNo">611</span><a id="line.611">                }</a>
-<span class="sourceLineNo">612</span><a id="line.612">            }</a>
-<span class="sourceLineNo">613</span><a id="line.613">            dm.resetMap();</a>
-<span class="sourceLineNo">614</span><a id="line.614">            dm.clearGoals();</a>
-<span class="sourceLineNo">615</span><a id="line.615">        }</a>
-<span class="sourceLineNo">616</span><a id="line.616">        double bestQuality = 99999 * lts.length + 399999 * pts.length;</a>
-<span class="sourceLineNo">617</span><a id="line.617">        double[][] qualityMap = new double[dungeon.length][dungeon[0].length];</a>
-<span class="sourceLineNo">618</span><a id="line.618">        for (int x = 0; x &lt; qualityMap.length; x++) {</a>
-<span class="sourceLineNo">619</span><a id="line.619">            for (int y = 0; y &lt; qualityMap[x].length; y++) {</a>
-<span class="sourceLineNo">620</span><a id="line.620">                qualityMap[x][y] = 0.0;</a>
-<span class="sourceLineNo">621</span><a id="line.621">                long pbits = 0, lbits = 0;</a>
-<span class="sourceLineNo">622</span><a id="line.622">                for (int i = 0; i &lt; pts.length; ++i) {</a>
-<span class="sourceLineNo">623</span><a id="line.623">                    qualityMap[x][y] += compositeMap[i][x][y];</a>
-<span class="sourceLineNo">624</span><a id="line.624">                    if(compositeMap[i][x][y] &lt; 399999.0 &amp;&amp; i &lt; 63)</a>
-<span class="sourceLineNo">625</span><a id="line.625">                        pbits |= 1 &lt;&lt; i;</a>
-<span class="sourceLineNo">626</span><a id="line.626">                }</a>
-<span class="sourceLineNo">627</span><a id="line.627">                for (int i = pts.length; i &lt; totalTargets; ++i) {</a>
-<span class="sourceLineNo">628</span><a id="line.628">                    qualityMap[x][y] += compositeMap[i][x][y];</a>
-<span class="sourceLineNo">629</span><a id="line.629">                    if(compositeMap[i][x][y] &lt; 99999.0 &amp;&amp; i &lt; 63)</a>
-<span class="sourceLineNo">630</span><a id="line.630">                        lbits |= 1 &lt;&lt; i;</a>
-<span class="sourceLineNo">631</span><a id="line.631">                }</a>
-<span class="sourceLineNo">632</span><a id="line.632">                if(qualityMap[x][y] &lt; bestQuality)</a>
-<span class="sourceLineNo">633</span><a id="line.633">                {</a>
-<span class="sourceLineNo">634</span><a id="line.634">                    ArrayList&lt;Coord&gt; ap = new ArrayList&lt;&gt;();</a>
-<span class="sourceLineNo">635</span><a id="line.635"></a>
-<span class="sourceLineNo">636</span><a id="line.636">                    for (int i = 0; i &lt; pts.length &amp;&amp; i &lt; 63; ++i) {</a>
-<span class="sourceLineNo">637</span><a id="line.637">                        if((pbits &amp; (1 &lt;&lt; i)) != 0)</a>
-<span class="sourceLineNo">638</span><a id="line.638">                            ap.add(pts[i]);</a>
+<span class="sourceLineNo">507</span><a id="line.507">        </a>
+<span class="sourceLineNo">508</span><a id="line.508">        for (int i = 0; i &lt; pts.length; ++i) {</a>
+<span class="sourceLineNo">509</span><a id="line.509">            DijkstraMap dm = new DijkstraMap(dungeon, dijkstra.measurement);</a>
+<span class="sourceLineNo">510</span><a id="line.510"></a>
+<span class="sourceLineNo">511</span><a id="line.511">            t = rt.extend(origin, pts[i], length, false, dungeon.length, dungeon[0].length);</a>
+<span class="sourceLineNo">512</span><a id="line.512">            dt.resetMap();</a>
+<span class="sourceLineNo">513</span><a id="line.513">            dt.clearGoals();</a>
+<span class="sourceLineNo">514</span><a id="line.514">            los.isReachable(resMap, origin.x, origin.y, t.x, t.y, rt);</a>
+<span class="sourceLineNo">515</span><a id="line.515">            Queue&lt;Coord&gt; lit = los.getLastPath();</a>
+<span class="sourceLineNo">516</span><a id="line.516"></a>
+<span class="sourceLineNo">517</span><a id="line.517">            for(Coord p : lit)</a>
+<span class="sourceLineNo">518</span><a id="line.518">            {</a>
+<span class="sourceLineNo">519</span><a id="line.519">                dt.setGoal(p);</a>
+<span class="sourceLineNo">520</span><a id="line.520">            }</a>
+<span class="sourceLineNo">521</span><a id="line.521">            if(radius &gt; 0)</a>
+<span class="sourceLineNo">522</span><a id="line.522">                dt.partialScan(radius, null);</a>
+<span class="sourceLineNo">523</span><a id="line.523"></a>
+<span class="sourceLineNo">524</span><a id="line.524"></a>
+<span class="sourceLineNo">525</span><a id="line.525">            double dist;</a>
+<span class="sourceLineNo">526</span><a id="line.526">            for (int x = 0; x &lt; dungeon.length; x++) {</a>
+<span class="sourceLineNo">527</span><a id="line.527">                for (int y = 0; y &lt; dungeon[x].length; y++) {</a>
+<span class="sourceLineNo">528</span><a id="line.528">                    if (dt.gradientMap[x][y] &lt; DijkstraMap.FLOOR){</a>
+<span class="sourceLineNo">529</span><a id="line.529">                        dist = reach.metric.radius(origin.x, origin.y, x, y);</a>
+<span class="sourceLineNo">530</span><a id="line.530">                        if(dist &lt;= reach.maxDistance + radius &amp;&amp; dist &gt;= reach.minDistance - radius) {</a>
+<span class="sourceLineNo">531</span><a id="line.531">                            compositeMap[i][x][y] = dm.physicalMap[x][y];</a>
+<span class="sourceLineNo">532</span><a id="line.532">                            dungeonPriorities[x][y] = dungeon[x][y];</a>
+<span class="sourceLineNo">533</span><a id="line.533">                        }</a>
+<span class="sourceLineNo">534</span><a id="line.534">                        else</a>
+<span class="sourceLineNo">535</span><a id="line.535">                            compositeMap[i][x][y] = DijkstraMap.WALL;</a>
+<span class="sourceLineNo">536</span><a id="line.536">                    }</a>
+<span class="sourceLineNo">537</span><a id="line.537">                    else compositeMap[i][x][y] = DijkstraMap.WALL;</a>
+<span class="sourceLineNo">538</span><a id="line.538">                }</a>
+<span class="sourceLineNo">539</span><a id="line.539">            }</a>
+<span class="sourceLineNo">540</span><a id="line.540">            if(compositeMap[i][pts[i].x][pts[i].y] &gt; DijkstraMap.FLOOR)</a>
+<span class="sourceLineNo">541</span><a id="line.541">            {</a>
+<span class="sourceLineNo">542</span><a id="line.542">                for (int x = 0; x &lt; dungeon.length; x++) {</a>
+<span class="sourceLineNo">543</span><a id="line.543">                    Arrays.fill(compositeMap[i][x], 399999.0);</a>
+<span class="sourceLineNo">544</span><a id="line.544">                }</a>
+<span class="sourceLineNo">545</span><a id="line.545">                continue;</a>
+<span class="sourceLineNo">546</span><a id="line.546">            }</a>
+<span class="sourceLineNo">547</span><a id="line.547"></a>
+<span class="sourceLineNo">548</span><a id="line.548"></a>
+<span class="sourceLineNo">549</span><a id="line.549">            dm.initialize(compositeMap[i]);</a>
+<span class="sourceLineNo">550</span><a id="line.550">            dm.setGoal(pts[i]);</a>
+<span class="sourceLineNo">551</span><a id="line.551">            dm.scan(null, null);</a>
+<span class="sourceLineNo">552</span><a id="line.552">            for (int x = 0; x &lt; dungeon.length; x++) {</a>
+<span class="sourceLineNo">553</span><a id="line.553">                for (int y = 0; y &lt; dungeon[x].length; y++) {</a>
+<span class="sourceLineNo">554</span><a id="line.554">                    compositeMap[i][x][y] = (dm.gradientMap[x][y] &lt; DijkstraMap.FLOOR  &amp;&amp; dungeonCopy[x][y] != '!') ? dm.gradientMap[x][y] : 399999.0;</a>
+<span class="sourceLineNo">555</span><a id="line.555">                }</a>
+<span class="sourceLineNo">556</span><a id="line.556">            }</a>
+<span class="sourceLineNo">557</span><a id="line.557">            dm.resetMap();</a>
+<span class="sourceLineNo">558</span><a id="line.558">            dm.clearGoals();</a>
+<span class="sourceLineNo">559</span><a id="line.559">        }</a>
+<span class="sourceLineNo">560</span><a id="line.560">        </a>
+<span class="sourceLineNo">561</span><a id="line.561">        for (int i = pts.length; i &lt; totalTargets; ++i) {</a>
+<span class="sourceLineNo">562</span><a id="line.562">            DijkstraMap dm = new DijkstraMap(dungeon, dijkstra.measurement);</a>
+<span class="sourceLineNo">563</span><a id="line.563"></a>
+<span class="sourceLineNo">564</span><a id="line.564">            t = rt.extend(origin, lts[i - pts.length], length, false, dungeon.length, dungeon[0].length);</a>
+<span class="sourceLineNo">565</span><a id="line.565">            dt.resetMap();</a>
+<span class="sourceLineNo">566</span><a id="line.566">            dt.clearGoals();</a>
+<span class="sourceLineNo">567</span><a id="line.567">            los.isReachable(resMap, origin.x, origin.y, t.x, t.y, rt);</a>
+<span class="sourceLineNo">568</span><a id="line.568">            Queue&lt;Coord&gt; lit = los.getLastPath();</a>
+<span class="sourceLineNo">569</span><a id="line.569"></a>
+<span class="sourceLineNo">570</span><a id="line.570">            for(Coord p : lit)</a>
+<span class="sourceLineNo">571</span><a id="line.571">            {</a>
+<span class="sourceLineNo">572</span><a id="line.572">                dt.setGoal(p);</a>
+<span class="sourceLineNo">573</span><a id="line.573">            }</a>
+<span class="sourceLineNo">574</span><a id="line.574">            if(radius &gt; 0)</a>
+<span class="sourceLineNo">575</span><a id="line.575">                dt.partialScan(radius, null);</a>
+<span class="sourceLineNo">576</span><a id="line.576"></a>
+<span class="sourceLineNo">577</span><a id="line.577"></a>
+<span class="sourceLineNo">578</span><a id="line.578">            double dist;</a>
+<span class="sourceLineNo">579</span><a id="line.579">            for (int x = 0; x &lt; dungeon.length; x++) {</a>
+<span class="sourceLineNo">580</span><a id="line.580">                for (int y = 0; y &lt; dungeon[x].length; y++) {</a>
+<span class="sourceLineNo">581</span><a id="line.581">                    if (dt.gradientMap[x][y] &lt; DijkstraMap.FLOOR){</a>
+<span class="sourceLineNo">582</span><a id="line.582">                        dist = reach.metric.radius(origin.x, origin.y, x, y);</a>
+<span class="sourceLineNo">583</span><a id="line.583">                        if(dist &lt;= reach.maxDistance + radius &amp;&amp; dist &gt;= reach.minDistance - radius)</a>
+<span class="sourceLineNo">584</span><a id="line.584">                            compositeMap[i][x][y] = dm.physicalMap[x][y];</a>
+<span class="sourceLineNo">585</span><a id="line.585">                        else</a>
+<span class="sourceLineNo">586</span><a id="line.586">                            compositeMap[i][x][y] = DijkstraMap.WALL;</a>
+<span class="sourceLineNo">587</span><a id="line.587">                    }</a>
+<span class="sourceLineNo">588</span><a id="line.588">                    else compositeMap[i][x][y] = DijkstraMap.WALL;</a>
+<span class="sourceLineNo">589</span><a id="line.589">                }</a>
+<span class="sourceLineNo">590</span><a id="line.590">            }</a>
+<span class="sourceLineNo">591</span><a id="line.591">            if(compositeMap[i][lts[i - pts.length].x][lts[i - pts.length].y] &gt; DijkstraMap.FLOOR)</a>
+<span class="sourceLineNo">592</span><a id="line.592">            {</a>
+<span class="sourceLineNo">593</span><a id="line.593">                for (int x = 0; x &lt; dungeon.length; x++)</a>
+<span class="sourceLineNo">594</span><a id="line.594">                {</a>
+<span class="sourceLineNo">595</span><a id="line.595">                    Arrays.fill(compositeMap[i][x], 99999.0);</a>
+<span class="sourceLineNo">596</span><a id="line.596">                }</a>
+<span class="sourceLineNo">597</span><a id="line.597">                continue;</a>
+<span class="sourceLineNo">598</span><a id="line.598">            }</a>
+<span class="sourceLineNo">599</span><a id="line.599"></a>
+<span class="sourceLineNo">600</span><a id="line.600"></a>
+<span class="sourceLineNo">601</span><a id="line.601">            dm.initialize(compositeMap[i]);</a>
+<span class="sourceLineNo">602</span><a id="line.602">            dm.setGoal(lts[i - pts.length]);</a>
+<span class="sourceLineNo">603</span><a id="line.603">            dm.scan(null, null);</a>
+<span class="sourceLineNo">604</span><a id="line.604">            for (int x = 0; x &lt; dungeon.length; x++) {</a>
+<span class="sourceLineNo">605</span><a id="line.605">                for (int y = 0; y &lt; dungeon[x].length; y++) {</a>
+<span class="sourceLineNo">606</span><a id="line.606">                    compositeMap[i][x][y] = (dm.gradientMap[x][y] &lt; DijkstraMap.FLOOR  &amp;&amp; dungeonCopy[x][y] != '!' &amp;&amp; dungeonPriorities[x][y] != '#') ? dm.gradientMap[x][y] : 99999.0;</a>
+<span class="sourceLineNo">607</span><a id="line.607">                }</a>
+<span class="sourceLineNo">608</span><a id="line.608">            }</a>
+<span class="sourceLineNo">609</span><a id="line.609">            dm.resetMap();</a>
+<span class="sourceLineNo">610</span><a id="line.610">            dm.clearGoals();</a>
+<span class="sourceLineNo">611</span><a id="line.611">        }</a>
+<span class="sourceLineNo">612</span><a id="line.612">        double bestQuality = 99999 * lts.length + 399999 * pts.length;</a>
+<span class="sourceLineNo">613</span><a id="line.613">        double[][] qualityMap = new double[dungeon.length][dungeon[0].length];</a>
+<span class="sourceLineNo">614</span><a id="line.614">        for (int x = 0; x &lt; qualityMap.length; x++) {</a>
+<span class="sourceLineNo">615</span><a id="line.615">            for (int y = 0; y &lt; qualityMap[x].length; y++) {</a>
+<span class="sourceLineNo">616</span><a id="line.616">                qualityMap[x][y] = 0.0;</a>
+<span class="sourceLineNo">617</span><a id="line.617">                long pbits = 0, lbits = 0;</a>
+<span class="sourceLineNo">618</span><a id="line.618">                for (int i = 0; i &lt; pts.length; ++i) {</a>
+<span class="sourceLineNo">619</span><a id="line.619">                    qualityMap[x][y] += compositeMap[i][x][y];</a>
+<span class="sourceLineNo">620</span><a id="line.620">                    if(compositeMap[i][x][y] &lt; 399999.0 &amp;&amp; i &lt; 63)</a>
+<span class="sourceLineNo">621</span><a id="line.621">                        pbits |= 1 &lt;&lt; i;</a>
+<span class="sourceLineNo">622</span><a id="line.622">                }</a>
+<span class="sourceLineNo">623</span><a id="line.623">                for (int i = pts.length; i &lt; totalTargets; ++i) {</a>
+<span class="sourceLineNo">624</span><a id="line.624">                    qualityMap[x][y] += compositeMap[i][x][y];</a>
+<span class="sourceLineNo">625</span><a id="line.625">                    if(compositeMap[i][x][y] &lt; 99999.0 &amp;&amp; i &lt; 63)</a>
+<span class="sourceLineNo">626</span><a id="line.626">                        lbits |= 1 &lt;&lt; i;</a>
+<span class="sourceLineNo">627</span><a id="line.627">                }</a>
+<span class="sourceLineNo">628</span><a id="line.628">                if(qualityMap[x][y] &lt; bestQuality)</a>
+<span class="sourceLineNo">629</span><a id="line.629">                {</a>
+<span class="sourceLineNo">630</span><a id="line.630">                    ArrayList&lt;Coord&gt; ap = new ArrayList&lt;&gt;();</a>
+<span class="sourceLineNo">631</span><a id="line.631"></a>
+<span class="sourceLineNo">632</span><a id="line.632">                    for (int i = 0; i &lt; pts.length &amp;&amp; i &lt; 63; ++i) {</a>
+<span class="sourceLineNo">633</span><a id="line.633">                        if((pbits &amp; (1 &lt;&lt; i)) != 0)</a>
+<span class="sourceLineNo">634</span><a id="line.634">                            ap.add(pts[i]);</a>
+<span class="sourceLineNo">635</span><a id="line.635">                    }</a>
+<span class="sourceLineNo">636</span><a id="line.636">                    for (int i = pts.length; i &lt; totalTargets &amp;&amp; i &lt; 63; ++i) {</a>
+<span class="sourceLineNo">637</span><a id="line.637">                        if((lbits &amp; (1 &lt;&lt; i)) != 0)</a>
+<span class="sourceLineNo">638</span><a id="line.638">                            ap.add(lts[i - pts.length]);</a>
 <span class="sourceLineNo">639</span><a id="line.639">                    }</a>
-<span class="sourceLineNo">640</span><a id="line.640">                    for (int i = pts.length; i &lt; totalTargets &amp;&amp; i &lt; 63; ++i) {</a>
-<span class="sourceLineNo">641</span><a id="line.641">                        if((lbits &amp; (1 &lt;&lt; i)) != 0)</a>
-<span class="sourceLineNo">642</span><a id="line.642">                            ap.add(lts[i - pts.length]);</a>
-<span class="sourceLineNo">643</span><a id="line.643">                    }</a>
-<span class="sourceLineNo">644</span><a id="line.644"></a>
-<span class="sourceLineNo">645</span><a id="line.645">                    if(ap.size() &gt; 0) {</a>
-<span class="sourceLineNo">646</span><a id="line.646">                        bestQuality = qualityMap[x][y];</a>
-<span class="sourceLineNo">647</span><a id="line.647">                        bestPoints.clear();</a>
-<span class="sourceLineNo">648</span><a id="line.648">                        bestPoints.put(Coord.get(x, y), ap);</a>
-<span class="sourceLineNo">649</span><a id="line.649">                    }</a>
-<span class="sourceLineNo">650</span><a id="line.650">                }</a>
-<span class="sourceLineNo">651</span><a id="line.651">                else if(qualityMap[x][y] == bestQuality)</a>
-<span class="sourceLineNo">652</span><a id="line.652">                {</a>
-<span class="sourceLineNo">653</span><a id="line.653">                    ArrayList&lt;Coord&gt; ap = new ArrayList&lt;&gt;();</a>
-<span class="sourceLineNo">654</span><a id="line.654"></a>
-<span class="sourceLineNo">655</span><a id="line.655">                    for (int i = 0; i &lt; pts.length &amp;&amp; i &lt; 63; ++i) {</a>
-<span class="sourceLineNo">656</span><a id="line.656">                        if ((pbits &amp; (1 &lt;&lt; i)) != 0) {</a>
-<span class="sourceLineNo">657</span><a id="line.657">                            ap.add(pts[i]);</a>
-<span class="sourceLineNo">658</span><a id="line.658">                            ap.add(pts[i]);</a>
-<span class="sourceLineNo">659</span><a id="line.659">                            ap.add(pts[i]);</a>
-<span class="sourceLineNo">660</span><a id="line.660">                            ap.add(pts[i]);</a>
-<span class="sourceLineNo">661</span><a id="line.661">                        }</a>
+<span class="sourceLineNo">640</span><a id="line.640"></a>
+<span class="sourceLineNo">641</span><a id="line.641">                    if(ap.size() &gt; 0) {</a>
+<span class="sourceLineNo">642</span><a id="line.642">                        bestQuality = qualityMap[x][y];</a>
+<span class="sourceLineNo">643</span><a id="line.643">                        bestPoints.clear();</a>
+<span class="sourceLineNo">644</span><a id="line.644">                        bestPoints.put(Coord.get(x, y), ap);</a>
+<span class="sourceLineNo">645</span><a id="line.645">                    }</a>
+<span class="sourceLineNo">646</span><a id="line.646">                }</a>
+<span class="sourceLineNo">647</span><a id="line.647">                else if(qualityMap[x][y] == bestQuality)</a>
+<span class="sourceLineNo">648</span><a id="line.648">                {</a>
+<span class="sourceLineNo">649</span><a id="line.649">                    ArrayList&lt;Coord&gt; ap = new ArrayList&lt;&gt;();</a>
+<span class="sourceLineNo">650</span><a id="line.650"></a>
+<span class="sourceLineNo">651</span><a id="line.651">                    for (int i = 0; i &lt; pts.length &amp;&amp; i &lt; 63; ++i) {</a>
+<span class="sourceLineNo">652</span><a id="line.652">                        if ((pbits &amp; (1 &lt;&lt; i)) != 0) {</a>
+<span class="sourceLineNo">653</span><a id="line.653">                            ap.add(pts[i]);</a>
+<span class="sourceLineNo">654</span><a id="line.654">                            ap.add(pts[i]);</a>
+<span class="sourceLineNo">655</span><a id="line.655">                            ap.add(pts[i]);</a>
+<span class="sourceLineNo">656</span><a id="line.656">                            ap.add(pts[i]);</a>
+<span class="sourceLineNo">657</span><a id="line.657">                        }</a>
+<span class="sourceLineNo">658</span><a id="line.658">                    }</a>
+<span class="sourceLineNo">659</span><a id="line.659">                    for (int i = pts.length; i &lt; totalTargets &amp;&amp; i &lt; 63; ++i) {</a>
+<span class="sourceLineNo">660</span><a id="line.660">                        if((lbits &amp; (1 &lt;&lt; i)) != 0)</a>
+<span class="sourceLineNo">661</span><a id="line.661">                            ap.add(lts[i - pts.length]);</a>
 <span class="sourceLineNo">662</span><a id="line.662">                    }</a>
-<span class="sourceLineNo">663</span><a id="line.663">                    for (int i = pts.length; i &lt; totalTargets &amp;&amp; i &lt; 63; ++i) {</a>
-<span class="sourceLineNo">664</span><a id="line.664">                        if((lbits &amp; (1 &lt;&lt; i)) != 0)</a>
-<span class="sourceLineNo">665</span><a id="line.665">                            ap.add(lts[i - pts.length]);</a>
+<span class="sourceLineNo">663</span><a id="line.663"></a>
+<span class="sourceLineNo">664</span><a id="line.664">                    if (ap.size() &gt; 0) {</a>
+<span class="sourceLineNo">665</span><a id="line.665">                        bestPoints.put(Coord.get(x, y), ap);</a>
 <span class="sourceLineNo">666</span><a id="line.666">                    }</a>
-<span class="sourceLineNo">667</span><a id="line.667"></a>
-<span class="sourceLineNo">668</span><a id="line.668">                    if (ap.size() &gt; 0) {</a>
-<span class="sourceLineNo">669</span><a id="line.669">                        bestPoints.put(Coord.get(x, y), ap);</a>
-<span class="sourceLineNo">670</span><a id="line.670">                    }</a>
-<span class="sourceLineNo">671</span><a id="line.671">                }</a>
-<span class="sourceLineNo">672</span><a id="line.672">            }</a>
-<span class="sourceLineNo">673</span><a id="line.673">        }</a>
-<span class="sourceLineNo">674</span><a id="line.674"></a>
-<span class="sourceLineNo">675</span><a id="line.675">        return bestPoints;</a>
-<span class="sourceLineNo">676</span><a id="line.676">    }</a>
-<span class="sourceLineNo">677</span><a id="line.677"></a>
-<span class="sourceLineNo">678</span><a id="line.678">    /*</a>
-<span class="sourceLineNo">679</span><a id="line.679">        @Override</a>
-<span class="sourceLineNo">680</span><a id="line.680">        public ArrayList&lt;ArrayList&lt;Coord&gt;&gt; idealLocations(Set&lt;Coord&gt; targets, Set&lt;Coord&gt; requiredExclusions) {</a>
-<span class="sourceLineNo">681</span><a id="line.681">            int totalTargets = targets.size() + 1;</a>
-<span class="sourceLineNo">682</span><a id="line.682">            int volume = (int)(rt.radius(1, 1, dungeon.length - 2, dungeon[0].length - 2) * radius * 2.1);</a>
-<span class="sourceLineNo">683</span><a id="line.683">            ArrayList&lt;ArrayList&lt;Coord&gt;&gt; locs = new ArrayList&lt;ArrayList&lt;Coord&gt;&gt;(totalTargets);</a>
-<span class="sourceLineNo">684</span><a id="line.684">            for(int i = 0; i &lt; totalTargets; i++)</a>
-<span class="sourceLineNo">685</span><a id="line.685">            {</a>
-<span class="sourceLineNo">686</span><a id="line.686">                locs.add(new ArrayList&lt;Coord&gt;(volume));</a>
-<span class="sourceLineNo">687</span><a id="line.687">            }</a>
-<span class="sourceLineNo">688</span><a id="line.688">            if(totalTargets == 1)</a>
-<span class="sourceLineNo">689</span><a id="line.689">                return locs;</a>
-<span class="sourceLineNo">690</span><a id="line.690"></a>
-<span class="sourceLineNo">691</span><a id="line.691">            int ctr = 0;</a>
+<span class="sourceLineNo">667</span><a id="line.667">                }</a>
+<span class="sourceLineNo">668</span><a id="line.668">            }</a>
+<span class="sourceLineNo">669</span><a id="line.669">        }</a>
+<span class="sourceLineNo">670</span><a id="line.670"></a>
+<span class="sourceLineNo">671</span><a id="line.671">        return bestPoints;</a>
+<span class="sourceLineNo">672</span><a id="line.672">    }</a>
+<span class="sourceLineNo">673</span><a id="line.673"></a>
+<span class="sourceLineNo">674</span><a id="line.674">    /*</a>
+<span class="sourceLineNo">675</span><a id="line.675">        @Override</a>
+<span class="sourceLineNo">676</span><a id="line.676">        public ArrayList&lt;ArrayList&lt;Coord&gt;&gt; idealLocations(Set&lt;Coord&gt; targets, Set&lt;Coord&gt; requiredExclusions) {</a>
+<span class="sourceLineNo">677</span><a id="line.677">            int totalTargets = targets.size() + 1;</a>
+<span class="sourceLineNo">678</span><a id="line.678">            int volume = (int)(rt.radius(1, 1, dungeon.length - 2, dungeon[0].length - 2) * radius * 2.1);</a>
+<span class="sourceLineNo">679</span><a id="line.679">            ArrayList&lt;ArrayList&lt;Coord&gt;&gt; locs = new ArrayList&lt;ArrayList&lt;Coord&gt;&gt;(totalTargets);</a>
+<span class="sourceLineNo">680</span><a id="line.680">            for(int i = 0; i &lt; totalTargets; i++)</a>
+<span class="sourceLineNo">681</span><a id="line.681">            {</a>
+<span class="sourceLineNo">682</span><a id="line.682">                locs.add(new ArrayList&lt;Coord&gt;(volume));</a>
+<span class="sourceLineNo">683</span><a id="line.683">            }</a>
+<span class="sourceLineNo">684</span><a id="line.684">            if(totalTargets == 1)</a>
+<span class="sourceLineNo">685</span><a id="line.685">                return locs;</a>
+<span class="sourceLineNo">686</span><a id="line.686"></a>
+<span class="sourceLineNo">687</span><a id="line.687">            int ctr = 0;</a>
+<span class="sourceLineNo">688</span><a id="line.688"></a>
+<span class="sourceLineNo">689</span><a id="line.689">            boolean[][] tested = new boolean[dungeon.length][dungeon[0].length];</a>
+<span class="sourceLineNo">690</span><a id="line.690">            for (int x = 1; x &lt; dungeon.length - 1; x += radius) {</a>
+<span class="sourceLineNo">691</span><a id="line.691">                for (int y = 1; y &lt; dungeon[x].length - 1; y += radius) {</a>
 <span class="sourceLineNo">692</span><a id="line.692"></a>
-<span class="sourceLineNo">693</span><a id="line.693">            boolean[][] tested = new boolean[dungeon.length][dungeon[0].length];</a>
-<span class="sourceLineNo">694</span><a id="line.694">            for (int x = 1; x &lt; dungeon.length - 1; x += radius) {</a>
-<span class="sourceLineNo">695</span><a id="line.695">                for (int y = 1; y &lt; dungeon[x].length - 1; y += radius) {</a>
-<span class="sourceLineNo">696</span><a id="line.696"></a>
-<span class="sourceLineNo">697</span><a id="line.697">                    if(mayContainTarget(requiredExclusions, x, y))</a>
-<span class="sourceLineNo">698</span><a id="line.698">                        continue;</a>
-<span class="sourceLineNo">699</span><a id="line.699">                    ctr = 0;</a>
-<span class="sourceLineNo">700</span><a id="line.700">                    for(Coord tgt : targets)</a>
-<span class="sourceLineNo">701</span><a id="line.701">                    {</a>
-<span class="sourceLineNo">702</span><a id="line.702">                        if(rt.radius(origin.x, origin.y, tgt.x, tgt.y) + rt.radius(end.x, end.y, tgt.x, tgt.y) -</a>
-<span class="sourceLineNo">703</span><a id="line.703">                            rt.radius(origin.x, origin.y, end.x, end.y) &lt;= 3.0 + radius)</a>
-<span class="sourceLineNo">704</span><a id="line.704">                            ctr++;</a>
-<span class="sourceLineNo">705</span><a id="line.705">                    }</a>
-<span class="sourceLineNo">706</span><a id="line.706">                    if(ctr &gt; 0)</a>
-<span class="sourceLineNo">707</span><a id="line.707">                        locs.get(totalTargets - ctr).add(Coord.get(x, y));</a>
-<span class="sourceLineNo">708</span><a id="line.708">                }</a>
-<span class="sourceLineNo">709</span><a id="line.709">            }</a>
-<span class="sourceLineNo">710</span><a id="line.710">            Coord it;</a>
-<span class="sourceLineNo">711</span><a id="line.711">            for(int t = 0; t &lt; totalTargets - 1; t++)</a>
-<span class="sourceLineNo">712</span><a id="line.712">            {</a>
-<span class="sourceLineNo">713</span><a id="line.713">                if(locs.get(t).size() &gt; 0) {</a>
-<span class="sourceLineNo">714</span><a id="line.714">                    int numPoints = locs.get(t).size();</a>
-<span class="sourceLineNo">715</span><a id="line.715">                    for (int i = 0; i &lt; numPoints; i++) {</a>
-<span class="sourceLineNo">716</span><a id="line.716">                        it = locs.get(t).get(i);</a>
-<span class="sourceLineNo">717</span><a id="line.717">                        for (int x = Math.max(1, it.x - radius / 2); x &lt; it.x + (radius + 1) / 2 &amp;&amp; x &lt; dungeon.length - 1; x++) {</a>
-<span class="sourceLineNo">718</span><a id="line.718">                            for (int y = Math.max(1, it.y - radius / 2); y &lt;= it.y + (radius - 1) / 2 &amp;&amp; y &lt; dungeon[0].length - 1; y++)</a>
-<span class="sourceLineNo">719</span><a id="line.719">                            {</a>
-<span class="sourceLineNo">720</span><a id="line.720">                                if(tested[x][y])</a>
+<span class="sourceLineNo">693</span><a id="line.693">                    if(mayContainTarget(requiredExclusions, x, y))</a>
+<span class="sourceLineNo">694</span><a id="line.694">                        continue;</a>
+<span class="sourceLineNo">695</span><a id="line.695">                    ctr = 0;</a>
+<span class="sourceLineNo">696</span><a id="line.696">                    for(Coord tgt : targets)</a>
+<span class="sourceLineNo">697</span><a id="line.697">                    {</a>
+<span class="sourceLineNo">698</span><a id="line.698">                        if(rt.radius(origin.x, origin.y, tgt.x, tgt.y) + rt.radius(end.x, end.y, tgt.x, tgt.y) -</a>
+<span class="sourceLineNo">699</span><a id="line.699">                            rt.radius(origin.x, origin.y, end.x, end.y) &lt;= 3.0 + radius)</a>
+<span class="sourceLineNo">700</span><a id="line.700">                            ctr++;</a>
+<span class="sourceLineNo">701</span><a id="line.701">                    }</a>
+<span class="sourceLineNo">702</span><a id="line.702">                    if(ctr &gt; 0)</a>
+<span class="sourceLineNo">703</span><a id="line.703">                        locs.get(totalTargets - ctr).add(Coord.get(x, y));</a>
+<span class="sourceLineNo">704</span><a id="line.704">                }</a>
+<span class="sourceLineNo">705</span><a id="line.705">            }</a>
+<span class="sourceLineNo">706</span><a id="line.706">            Coord it;</a>
+<span class="sourceLineNo">707</span><a id="line.707">            for(int t = 0; t &lt; totalTargets - 1; t++)</a>
+<span class="sourceLineNo">708</span><a id="line.708">            {</a>
+<span class="sourceLineNo">709</span><a id="line.709">                if(locs.get(t).size() &gt; 0) {</a>
+<span class="sourceLineNo">710</span><a id="line.710">                    int numPoints = locs.get(t).size();</a>
+<span class="sourceLineNo">711</span><a id="line.711">                    for (int i = 0; i &lt; numPoints; i++) {</a>
+<span class="sourceLineNo">712</span><a id="line.712">                        it = locs.get(t).get(i);</a>
+<span class="sourceLineNo">713</span><a id="line.713">                        for (int x = Math.max(1, it.x - radius / 2); x &lt; it.x + (radius + 1) / 2 &amp;&amp; x &lt; dungeon.length - 1; x++) {</a>
+<span class="sourceLineNo">714</span><a id="line.714">                            for (int y = Math.max(1, it.y - radius / 2); y &lt;= it.y + (radius - 1) / 2 &amp;&amp; y &lt; dungeon[0].length - 1; y++)</a>
+<span class="sourceLineNo">715</span><a id="line.715">                            {</a>
+<span class="sourceLineNo">716</span><a id="line.716">                                if(tested[x][y])</a>
+<span class="sourceLineNo">717</span><a id="line.717">                                    continue;</a>
+<span class="sourceLineNo">718</span><a id="line.718">                                tested[x][y] = true;</a>
+<span class="sourceLineNo">719</span><a id="line.719"></a>
+<span class="sourceLineNo">720</span><a id="line.720">                                if(mayContainTarget(requiredExclusions, x, y))</a>
 <span class="sourceLineNo">721</span><a id="line.721">                                    continue;</a>
-<span class="sourceLineNo">722</span><a id="line.722">                                tested[x][y] = true;</a>
-<span class="sourceLineNo">723</span><a id="line.723"></a>
-<span class="sourceLineNo">724</span><a id="line.724">                                if(mayContainTarget(requiredExclusions, x, y))</a>
-<span class="sourceLineNo">725</span><a id="line.725">                                    continue;</a>
-<span class="sourceLineNo">726</span><a id="line.726"></a>
-<span class="sourceLineNo">727</span><a id="line.727">                                ctr = 0;</a>
-<span class="sourceLineNo">728</span><a id="line.728">                                for(Coord tgt : targets)</a>
-<span class="sourceLineNo">729</span><a id="line.729">                                {</a>
-<span class="sourceLineNo">730</span><a id="line.730">                                    if(rt.radius(origin.x, origin.y, tgt.x, tgt.y) + rt.radius(end.x, end.y, tgt.x, tgt.y) -</a>
-<span class="sourceLineNo">731</span><a id="line.731">                                            rt.radius(origin.x, origin.y, end.x, end.y) &lt;= 3.0 + radius)</a>
-<span class="sourceLineNo">732</span><a id="line.732">                                        ctr++;</a>
-<span class="sourceLineNo">733</span><a id="line.733">                                }</a>
-<span class="sourceLineNo">734</span><a id="line.734">                                if(ctr &gt; 0)</a>
-<span class="sourceLineNo">735</span><a id="line.735">                                    locs.get(totalTargets - ctr).add(Coord.get(x, y));</a>
-<span class="sourceLineNo">736</span><a id="line.736">                            }</a>
-<span class="sourceLineNo">737</span><a id="line.737">                        }</a>
-<span class="sourceLineNo">738</span><a id="line.738">                    }</a>
-<span class="sourceLineNo">739</span><a id="line.739">                }</a>
-<span class="sourceLineNo">740</span><a id="line.740">            }</a>
-<span class="sourceLineNo">741</span><a id="line.741">            return locs;</a>
-<span class="sourceLineNo">742</span><a id="line.742">        }</a>
-<span class="sourceLineNo">743</span><a id="line.743">    */</a>
-<span class="sourceLineNo">744</span><a id="line.744">    @Override</a>
-<span class="sourceLineNo">745</span><a id="line.745">    public void setMap(char[][] map) {</a>
-<span class="sourceLineNo">746</span><a id="line.746">        dungeon = map;</a>
-<span class="sourceLineNo">747</span><a id="line.747">        end = rt.extend(origin, end, length, false, map.length, map[0].length);</a>
-<span class="sourceLineNo">748</span><a id="line.748">        dijkstra.resetMap();</a>
-<span class="sourceLineNo">749</span><a id="line.749">        dijkstra.clearGoals();</a>
-<span class="sourceLineNo">750</span><a id="line.750">    }</a>
-<span class="sourceLineNo">751</span><a id="line.751"></a>
-<span class="sourceLineNo">752</span><a id="line.752">    @Override</a>
-<span class="sourceLineNo">753</span><a id="line.753">    public OrderedMap&lt;Coord, Double&gt; findArea() {</a>
-<span class="sourceLineNo">754</span><a id="line.754">        double[][] dmap = initDijkstra();</a>
-<span class="sourceLineNo">755</span><a id="line.755">        dmap[origin.x][origin.y] = DijkstraMap.DARK;</a>
-<span class="sourceLineNo">756</span><a id="line.756">        dijkstra.resetMap();</a>
-<span class="sourceLineNo">757</span><a id="line.757">        dijkstra.clearGoals();</a>
-<span class="sourceLineNo">758</span><a id="line.758">        return AreaUtils.dijkstraToHashMap(dmap);</a>
-<span class="sourceLineNo">759</span><a id="line.759">    }</a>
-<span class="sourceLineNo">760</span><a id="line.760"></a>
-<span class="sourceLineNo">761</span><a id="line.761">}</a>
+<span class="sourceLineNo">722</span><a id="line.722"></a>
+<span class="sourceLineNo">723</span><a id="line.723">                                ctr = 0;</a>
+<span class="sourceLineNo">724</span><a id="line.724">                                for(Coord tgt : targets)</a>
+<span class="sourceLineNo">725</span><a id="line.725">                                {</a>
+<span class="sourceLineNo">726</span><a id="line.726">                                    if(rt.radius(origin.x, origin.y, tgt.x, tgt.y) + rt.radius(end.x, end.y, tgt.x, tgt.y) -</a>
+<span class="sourceLineNo">727</span><a id="line.727">                                            rt.radius(origin.x, origin.y, end.x, end.y) &lt;= 3.0 + radius)</a>
+<span class="sourceLineNo">728</span><a id="line.728">                                        ctr++;</a>
+<span class="sourceLineNo">729</span><a id="line.729">                                }</a>
+<span class="sourceLineNo">730</span><a id="line.730">                                if(ctr &gt; 0)</a>
+<span class="sourceLineNo">731</span><a id="line.731">                                    locs.get(totalTargets - ctr).add(Coord.get(x, y));</a>
+<span class="sourceLineNo">732</span><a id="line.732">                            }</a>
+<span class="sourceLineNo">733</span><a id="line.733">                        }</a>
+<span class="sourceLineNo">734</span><a id="line.734">                    }</a>
+<span class="sourceLineNo">735</span><a id="line.735">                }</a>
+<span class="sourceLineNo">736</span><a id="line.736">            }</a>
+<span class="sourceLineNo">737</span><a id="line.737">            return locs;</a>
+<span class="sourceLineNo">738</span><a id="line.738">        }</a>
+<span class="sourceLineNo">739</span><a id="line.739">    */</a>
+<span class="sourceLineNo">740</span><a id="line.740">    @Override</a>
+<span class="sourceLineNo">741</span><a id="line.741">    public void setMap(char[][] map) {</a>
+<span class="sourceLineNo">742</span><a id="line.742">        dungeon = map;</a>
+<span class="sourceLineNo">743</span><a id="line.743">        end = rt.extend(origin, end, length, false, map.length, map[0].length);</a>
+<span class="sourceLineNo">744</span><a id="line.744">        dijkstra.resetMap();</a>
+<span class="sourceLineNo">745</span><a id="line.745">        dijkstra.clearGoals();</a>
+<span class="sourceLineNo">746</span><a id="line.746">    }</a>
+<span class="sourceLineNo">747</span><a id="line.747"></a>
+<span class="sourceLineNo">748</span><a id="line.748">    @Override</a>
+<span class="sourceLineNo">749</span><a id="line.749">    public OrderedMap&lt;Coord, Double&gt; findArea() {</a>
+<span class="sourceLineNo">750</span><a id="line.750">        double[][] dmap = initDijkstra();</a>
+<span class="sourceLineNo">751</span><a id="line.751">        dmap[origin.x][origin.y] = DijkstraMap.DARK;</a>
+<span class="sourceLineNo">752</span><a id="line.752">        dijkstra.resetMap();</a>
+<span class="sourceLineNo">753</span><a id="line.753">        dijkstra.clearGoals();</a>
+<span class="sourceLineNo">754</span><a id="line.754">        return AreaUtils.dijkstraToHashMap(dmap);</a>
+<span class="sourceLineNo">755</span><a id="line.755">    }</a>
+<span class="sourceLineNo">756</span><a id="line.756"></a>
+<span class="sourceLineNo">757</span><a id="line.757">}</a>
 
 
 

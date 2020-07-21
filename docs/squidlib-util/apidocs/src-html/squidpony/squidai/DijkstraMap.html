@@ -86,7 +86,7 @@
 <span class="sourceLineNo">074</span><a id="line.74">     * to gradientMap during a scan. The values for walls are identical to the value used by gradientMap, that is, this</a>
 <span class="sourceLineNo">075</span><a id="line.75">     * class' WALL static final field. Floors, however, are never given FLOOR as a value, and default to 1.0 .</a>
 <span class="sourceLineNo">076</span><a id="line.76">     */</a>
-<span class="sourceLineNo">077</span><a id="line.77">    public double[][] costMap = null;</a>
+<span class="sourceLineNo">077</span><a id="line.77">    public double[][] costMap;</a>
 <span class="sourceLineNo">078</span><a id="line.78"></a>
 <span class="sourceLineNo">079</span><a id="line.79">    public boolean standardCosts = true;</a>
 <span class="sourceLineNo">080</span><a id="line.80">    /**</a>
@@ -106,7 +106,7 @@
 <span class="sourceLineNo">094</span><a id="line.94"></a>
 <span class="sourceLineNo">095</span><a id="line.95">    private HashSet&lt;Coord&gt; impassable2, friends, tempSet;</a>
 <span class="sourceLineNo">096</span><a id="line.96">    </a>
-<span class="sourceLineNo">097</span><a id="line.97">    public boolean cutShort = false;</a>
+<span class="sourceLineNo">097</span><a id="line.97">    public boolean cutShort;</a>
 <span class="sourceLineNo">098</span><a id="line.98"></a>
 <span class="sourceLineNo">099</span><a id="line.99">    /**</a>
 <span class="sourceLineNo">100</span><a id="line.100">     * Goals are always marked with 0.</a>
@@ -136,14 +136,14 @@
 <span class="sourceLineNo">124</span><a id="line.124">     * {@link GWTRNG} if you may target web browsers with GWT, or a {@link RNG} or {@link StatefulRNG} otherwise.</a>
 <span class="sourceLineNo">125</span><a id="line.125">     */</a>
 <span class="sourceLineNo">126</span><a id="line.126">    public IRNG rng;</a>
-<span class="sourceLineNo">127</span><a id="line.127">    private int frustration = 0;</a>
+<span class="sourceLineNo">127</span><a id="line.127">    private int frustration;</a>
 <span class="sourceLineNo">128</span><a id="line.128">    public Coord[][] targetMap;</a>
 <span class="sourceLineNo">129</span><a id="line.129"></a>
 <span class="sourceLineNo">130</span><a id="line.130">    private Direction[] dirs = new Direction[9];</a>
 <span class="sourceLineNo">131</span><a id="line.131"></a>
-<span class="sourceLineNo">132</span><a id="line.132">    private boolean initialized = false;</a>
+<span class="sourceLineNo">132</span><a id="line.132">    private boolean initialized;</a>
 <span class="sourceLineNo">133</span><a id="line.133"></a>
-<span class="sourceLineNo">134</span><a id="line.134">    private int mappedCount = 0;</a>
+<span class="sourceLineNo">134</span><a id="line.134">    private int mappedCount;</a>
 <span class="sourceLineNo">135</span><a id="line.135"></a>
 <span class="sourceLineNo">136</span><a id="line.136">    private int blockingRequirement = 2;</a>
 <span class="sourceLineNo">137</span><a id="line.137"></a>
@@ -477,11 +477,11 @@
 <span class="sourceLineNo">465</span><a id="line.465">    }</a>
 <span class="sourceLineNo">466</span><a id="line.466"></a>
 <span class="sourceLineNo">467</span><a id="line.467">    /**</a>
-<span class="sourceLineNo">468</span><a id="line.468">     * Gets the appropriate DijkstraMap.Measurement to pass to a constructor if you already have a Radius.</a>
+<span class="sourceLineNo">468</span><a id="line.468">     * Gets the appropriate Measurement to pass to a constructor if you already have a Radius.</a>
 <span class="sourceLineNo">469</span><a id="line.469">     * Matches SQUARE or CUBE to CHEBYSHEV, DIAMOND or OCTAHEDRON to MANHATTAN, and CIRCLE or SPHERE to EUCLIDEAN.</a>
 <span class="sourceLineNo">470</span><a id="line.470">     *</a>
 <span class="sourceLineNo">471</span><a id="line.471">     * @param radius the Radius to find the corresponding Measurement for</a>
-<span class="sourceLineNo">472</span><a id="line.472">     * @return a DijkstraMap.Measurement that matches radius; SQUARE to CHEBYSHEV, DIAMOND to MANHATTAN, etc.</a>
+<span class="sourceLineNo">472</span><a id="line.472">     * @return a Measurement that matches radius; SQUARE to CHEBYSHEV, DIAMOND to MANHATTAN, etc.</a>
 <span class="sourceLineNo">473</span><a id="line.473">     */</a>
 <span class="sourceLineNo">474</span><a id="line.474">    public static Measurement findMeasurement(Radius radius) {</a>
 <span class="sourceLineNo">475</span><a id="line.475">        switch (radius)</a>
@@ -498,7 +498,7 @@
 <span class="sourceLineNo">486</span><a id="line.486">    }</a>
 <span class="sourceLineNo">487</span><a id="line.487"></a>
 <span class="sourceLineNo">488</span><a id="line.488">    /**</a>
-<span class="sourceLineNo">489</span><a id="line.489">     * Gets the appropriate Radius corresponding to a DijkstraMap.Measurement.</a>
+<span class="sourceLineNo">489</span><a id="line.489">     * Gets the appropriate Radius corresponding to a Measurement.</a>
 <span class="sourceLineNo">490</span><a id="line.490">     * Matches CHEBYSHEV to SQUARE, MANHATTAN to DIAMOND, and EUCLIDEAN to CIRCLE.</a>
 <span class="sourceLineNo">491</span><a id="line.491">     * &lt;br&gt;</a>
 <span class="sourceLineNo">492</span><a id="line.492">     * See also {@link Measurement#matchingRadius()} as a method on Measurement.</a>
@@ -2618,831 +2618,829 @@
 <span class="sourceLineNo">2606</span><a id="line.2606">                }</a>
 <span class="sourceLineNo">2607</span><a id="line.2607">            }</a>
 <span class="sourceLineNo">2608</span><a id="line.2608"></a>
-<span class="sourceLineNo">2609</span><a id="line.2609">            if(length &lt; 0) length = 0;</a>
-<span class="sourceLineNo">2610</span><a id="line.2610">            if(scanLimit &lt;= 0 || scanLimit &lt; length)</a>
-<span class="sourceLineNo">2611</span><a id="line.2611">                cachedFleeMap = scan(impassable2);</a>
-<span class="sourceLineNo">2612</span><a id="line.2612">            else</a>
-<span class="sourceLineNo">2613</span><a id="line.2613">                cachedFleeMap = partialScan(scanLimit, impassable2);</a>
+<span class="sourceLineNo">2609</span><a id="line.2609">            if(scanLimit &lt;= 0 || scanLimit &lt; length)</a>
+<span class="sourceLineNo">2610</span><a id="line.2610">                cachedFleeMap = scan(impassable2);</a>
+<span class="sourceLineNo">2611</span><a id="line.2611">            else</a>
+<span class="sourceLineNo">2612</span><a id="line.2612">                cachedFleeMap = partialScan(scanLimit, impassable2);</a>
+<span class="sourceLineNo">2613</span><a id="line.2613"></a>
 <span class="sourceLineNo">2614</span><a id="line.2614"></a>
-<span class="sourceLineNo">2615</span><a id="line.2615"></a>
-<span class="sourceLineNo">2616</span><a id="line.2616">            for (int x = 0; x &lt; gradientMap.length; x++) {</a>
-<span class="sourceLineNo">2617</span><a id="line.2617">                for (int y = 0; y &lt; gradientMap[x].length; y++) {</a>
-<span class="sourceLineNo">2618</span><a id="line.2618">                    gradientMap[x][y] *= (gradientMap[x][y] &gt;= FLOOR) ? 1.0 : -preferLongerPaths;</a>
-<span class="sourceLineNo">2619</span><a id="line.2619">                }</a>
-<span class="sourceLineNo">2620</span><a id="line.2620">            }</a>
-<span class="sourceLineNo">2621</span><a id="line.2621"></a>
-<span class="sourceLineNo">2622</span><a id="line.2622">            if(scanLimit &lt;= 0 || scanLimit &lt; length)</a>
-<span class="sourceLineNo">2623</span><a id="line.2623">            {</a>
-<span class="sourceLineNo">2624</span><a id="line.2624">                scan(null, impassable2, true);</a>
-<span class="sourceLineNo">2625</span><a id="line.2625">                for (int x = 0; x &lt; width; x++) {</a>
-<span class="sourceLineNo">2626</span><a id="line.2626">                    for (int y = 0; y &lt; height; y++) {</a>
-<span class="sourceLineNo">2627</span><a id="line.2627">                        if (gradientMap[x][y] == FLOOR) {</a>
-<span class="sourceLineNo">2628</span><a id="line.2628">                            gradientMap[x][y] = DARK;</a>
-<span class="sourceLineNo">2629</span><a id="line.2629">                        }</a>
-<span class="sourceLineNo">2630</span><a id="line.2630">                    }</a>
-<span class="sourceLineNo">2631</span><a id="line.2631">                    System.arraycopy(gradientMap[x], 0, cachedFleeMap[x], 0, height);</a>
-<span class="sourceLineNo">2632</span><a id="line.2632">                }</a>
-<span class="sourceLineNo">2633</span><a id="line.2633">            }</a>
-<span class="sourceLineNo">2634</span><a id="line.2634">            else</a>
-<span class="sourceLineNo">2635</span><a id="line.2635">                cachedFleeMap = partialScan(scanLimit, impassable2);</a>
-<span class="sourceLineNo">2636</span><a id="line.2636">        }</a>
-<span class="sourceLineNo">2637</span><a id="line.2637">        Coord currentPos = start;</a>
-<span class="sourceLineNo">2638</span><a id="line.2638">        double paidLength = 0.0;</a>
-<span class="sourceLineNo">2639</span><a id="line.2639">        while (true) {</a>
-<span class="sourceLineNo">2640</span><a id="line.2640">            if (frustration &gt; 500) {</a>
-<span class="sourceLineNo">2641</span><a id="line.2641">                path.clear();</a>
-<span class="sourceLineNo">2642</span><a id="line.2642">                break;</a>
-<span class="sourceLineNo">2643</span><a id="line.2643">            }</a>
-<span class="sourceLineNo">2644</span><a id="line.2644">            double best = gradientMap[currentPos.x][currentPos.y];</a>
-<span class="sourceLineNo">2645</span><a id="line.2645">            appendDirToShuffle(rng);</a>
-<span class="sourceLineNo">2646</span><a id="line.2646">            int choice = 0;</a>
-<span class="sourceLineNo">2647</span><a id="line.2647"></a>
-<span class="sourceLineNo">2648</span><a id="line.2648">            for (int d = 0; d &lt;= measurement.directionCount(); d++) {</a>
-<span class="sourceLineNo">2649</span><a id="line.2649">                Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);</a>
-<span class="sourceLineNo">2650</span><a id="line.2650">                if(!pt.isWithin(width, height))</a>
-<span class="sourceLineNo">2651</span><a id="line.2651">                    continue;</a>
-<span class="sourceLineNo">2652</span><a id="line.2652">                if (gradientMap[pt.x][pt.y] &lt; best &amp;&amp; !impassable2.contains(pt)) {</a>
-<span class="sourceLineNo">2653</span><a id="line.2653">                    if (dirs[choice] == Direction.NONE || !path.contains(pt)) {</a>
-<span class="sourceLineNo">2654</span><a id="line.2654">                        best = gradientMap[pt.x][pt.y];</a>
-<span class="sourceLineNo">2655</span><a id="line.2655">                        choice = d;</a>
-<span class="sourceLineNo">2656</span><a id="line.2656">                    }</a>
-<span class="sourceLineNo">2657</span><a id="line.2657">                }</a>
-<span class="sourceLineNo">2658</span><a id="line.2658">            }</a>
-<span class="sourceLineNo">2659</span><a id="line.2659">            if (best &gt;= gradientMap[start.x][start.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] &gt; FLOOR) {</a>
-<span class="sourceLineNo">2660</span><a id="line.2660">                cutShort = true;</a>
-<span class="sourceLineNo">2661</span><a id="line.2661">                frustration = 0;</a>
-<span class="sourceLineNo">2662</span><a id="line.2662">                if(buffer == null)</a>
-<span class="sourceLineNo">2663</span><a id="line.2663">                    return new ArrayList&lt;&gt;(path);</a>
-<span class="sourceLineNo">2664</span><a id="line.2664">                else</a>
-<span class="sourceLineNo">2665</span><a id="line.2665">                {</a>
-<span class="sourceLineNo">2666</span><a id="line.2666">                    buffer.addAll(path);</a>
-<span class="sourceLineNo">2667</span><a id="line.2667">                    return buffer;</a>
-<span class="sourceLineNo">2668</span><a id="line.2668">                }</a>
-<span class="sourceLineNo">2669</span><a id="line.2669">            }</a>
-<span class="sourceLineNo">2670</span><a id="line.2670">            currentPos = currentPos.translate(dirs[choice].deltaX, dirs[choice].deltaY);</a>
-<span class="sourceLineNo">2671</span><a id="line.2671">            if (path.size() &gt; 0) {</a>
-<span class="sourceLineNo">2672</span><a id="line.2672">                Coord last = path.get(path.size() - 1);</a>
-<span class="sourceLineNo">2673</span><a id="line.2673">                if (gradientMap[last.x][last.y] &lt;= gradientMap[currentPos.x][currentPos.y])</a>
-<span class="sourceLineNo">2674</span><a id="line.2674">                    break;</a>
-<span class="sourceLineNo">2675</span><a id="line.2675">            }</a>
-<span class="sourceLineNo">2676</span><a id="line.2676">            path.add(currentPos);</a>
-<span class="sourceLineNo">2677</span><a id="line.2677">            frustration++;</a>
-<span class="sourceLineNo">2678</span><a id="line.2678">            paidLength += costMap[currentPos.x][currentPos.y];</a>
-<span class="sourceLineNo">2679</span><a id="line.2679">            if (paidLength &gt; length - 1.0) {</a>
-<span class="sourceLineNo">2680</span><a id="line.2680">                if (onlyPassable != null &amp;&amp; onlyPassable.contains(currentPos)) {</a>
-<span class="sourceLineNo">2681</span><a id="line.2681">                    tempSet.clear();</a>
-<span class="sourceLineNo">2682</span><a id="line.2682">                    tempSet.addAll(impassable2);</a>
-<span class="sourceLineNo">2683</span><a id="line.2683">                    tempSet.add(currentPos);</a>
-<span class="sourceLineNo">2684</span><a id="line.2684">                    return findFleePath(buffer, length, scanLimit, preferLongerPaths, tempSet, onlyPassable, start, fearSources);</a>
-<span class="sourceLineNo">2685</span><a id="line.2685">                }</a>
-<span class="sourceLineNo">2686</span><a id="line.2686">                break;</a>
-<span class="sourceLineNo">2687</span><a id="line.2687">            }</a>
-<span class="sourceLineNo">2688</span><a id="line.2688">        }</a>
-<span class="sourceLineNo">2689</span><a id="line.2689">        cutShort = false;</a>
-<span class="sourceLineNo">2690</span><a id="line.2690">        frustration = 0;</a>
-<span class="sourceLineNo">2691</span><a id="line.2691">        goals.clear();</a>
-<span class="sourceLineNo">2692</span><a id="line.2692">        if(buffer == null) </a>
-<span class="sourceLineNo">2693</span><a id="line.2693">            return new ArrayList&lt;&gt;(path);</a>
-<span class="sourceLineNo">2694</span><a id="line.2694">        else</a>
-<span class="sourceLineNo">2695</span><a id="line.2695">        {</a>
-<span class="sourceLineNo">2696</span><a id="line.2696">            buffer.addAll(path);</a>
-<span class="sourceLineNo">2697</span><a id="line.2697">            return buffer;</a>
-<span class="sourceLineNo">2698</span><a id="line.2698">        }</a>
-<span class="sourceLineNo">2699</span><a id="line.2699">    }</a>
-<span class="sourceLineNo">2700</span><a id="line.2700"></a>
-<span class="sourceLineNo">2701</span><a id="line.2701">    /**</a>
-<span class="sourceLineNo">2702</span><a id="line.2702">     * For pathfinding creatures larger than 1x1 cell; scans the dungeon using DijkstraMap.scan with the listed goals</a>
-<span class="sourceLineNo">2703</span><a id="line.2703">     * and start point, and returns a list</a>
-<span class="sourceLineNo">2704</span><a id="line.2704">     * of Coord positions (using the current measurement) needed to get closer to the closest reachable</a>
-<span class="sourceLineNo">2705</span><a id="line.2705">     * goal. The maximum length of the returned list is given by length; if moving the full length of</a>
-<span class="sourceLineNo">2706</span><a id="line.2706">     * the list would place the mover in a position shared by one of the positions in onlyPassable</a>
-<span class="sourceLineNo">2707</span><a id="line.2707">     * (which is typically filled with friendly units that can be passed through in multi-tile-</a>
-<span class="sourceLineNo">2708</span><a id="line.2708">     * movement scenarios), it will recalculate a move so that it does not pass into that cell.</a>
-<span class="sourceLineNo">2709</span><a id="line.2709">     * The keys in impassable should be the positions of enemies and obstacles that cannot be moved</a>
-<span class="sourceLineNo">2710</span><a id="line.2710">     * through, and will be ignored if there is a goal overlapping one.</a>
-<span class="sourceLineNo">2711</span><a id="line.2711">     * The parameter size refers to the side length of a square unit, such as 2 for a 2x2 unit. The</a>
-<span class="sourceLineNo">2712</span><a id="line.2712">     * parameter start must refer to the minimum-x, minimum-y cell of that unit if size is &amp;gt; 1, and</a>
-<span class="sourceLineNo">2713</span><a id="line.2713">     * all positions in the returned path will refer to movement of the minimum-x, minimum-y cell.</a>
-<span class="sourceLineNo">2714</span><a id="line.2714">     * &lt;br&gt;</a>
-<span class="sourceLineNo">2715</span><a id="line.2715">     * This caches its result in a member field, path, which can be fetched after finding a path and will change with</a>
-<span class="sourceLineNo">2716</span><a id="line.2716">     * each call to a pathfinding method.</a>
-<span class="sourceLineNo">2717</span><a id="line.2717">     *</a>
-<span class="sourceLineNo">2718</span><a id="line.2718">     * @param size         the side length of the creature trying to find a path</a>
-<span class="sourceLineNo">2719</span><a id="line.2719">     * @param length       the length of the path to calculate</a>
-<span class="sourceLineNo">2720</span><a id="line.2720">     * @param impassable   a Set of impassable Coord positions that may change (not constant like walls); can be null</a>
-<span class="sourceLineNo">2721</span><a id="line.2721">     * @param onlyPassable a Set of Coord positions that this pathfinder cannot end a path occupying (typically allies); can be null</a>
-<span class="sourceLineNo">2722</span><a id="line.2722">     * @param start        the start of the path, should correspond to the minimum-x, minimum-y position of the pathfinder</a>
-<span class="sourceLineNo">2723</span><a id="line.2723">     * @param targets      a vararg or array of Coord that this will try to pathfind toward</a>
-<span class="sourceLineNo">2724</span><a id="line.2724">     * @return an ArrayList of Coord that will contain the min-x, min-y locations of this creature as it goes toward a target. Copy of path.</a>
-<span class="sourceLineNo">2725</span><a id="line.2725">     */</a>
-<span class="sourceLineNo">2726</span><a id="line.2726"></a>
-<span class="sourceLineNo">2727</span><a id="line.2727">    public ArrayList&lt;Coord&gt; findPathLarge(final int size, int length, Collection&lt;Coord&gt; impassable,</a>
-<span class="sourceLineNo">2728</span><a id="line.2728">                                          Collection&lt;Coord&gt; onlyPassable, Coord start, Coord... targets) {</a>
-<span class="sourceLineNo">2729</span><a id="line.2729">        return findPathLarge(size, length, -1, impassable, onlyPassable, start, targets);</a>
-<span class="sourceLineNo">2730</span><a id="line.2730">    }</a>
-<span class="sourceLineNo">2731</span><a id="line.2731">    public ArrayList&lt;Coord&gt; findPathLarge(final int size, int length, final int scanLimit, Collection&lt;Coord&gt; impassable,</a>
-<span class="sourceLineNo">2732</span><a id="line.2732">                                          Collection&lt;Coord&gt; onlyPassable, Coord start, Coord... targets) {</a>
-<span class="sourceLineNo">2733</span><a id="line.2733"></a>
-<span class="sourceLineNo">2734</span><a id="line.2734">        if (!initialized) return null;</a>
-<span class="sourceLineNo">2735</span><a id="line.2735">        path.clear();</a>
-<span class="sourceLineNo">2736</span><a id="line.2736">        if (impassable == null)</a>
-<span class="sourceLineNo">2737</span><a id="line.2737">            impassable2.clear();</a>
-<span class="sourceLineNo">2738</span><a id="line.2738">        else</a>
-<span class="sourceLineNo">2739</span><a id="line.2739">        {</a>
-<span class="sourceLineNo">2740</span><a id="line.2740">            impassable2.clear();</a>
-<span class="sourceLineNo">2741</span><a id="line.2741">            impassable2.addAll(impassable);</a>
-<span class="sourceLineNo">2742</span><a id="line.2742">        }</a>
-<span class="sourceLineNo">2743</span><a id="line.2743">        if(onlyPassable != null &amp;&amp; length == 1)</a>
-<span class="sourceLineNo">2744</span><a id="line.2744">            impassable2.addAll(onlyPassable);</a>
-<span class="sourceLineNo">2745</span><a id="line.2745"></a>
-<span class="sourceLineNo">2746</span><a id="line.2746">        resetMap();</a>
-<span class="sourceLineNo">2747</span><a id="line.2747">        for (Coord goal : targets) {</a>
-<span class="sourceLineNo">2748</span><a id="line.2748">            setGoal(goal.x, goal.y);</a>
-<span class="sourceLineNo">2749</span><a id="line.2749">        }</a>
-<span class="sourceLineNo">2750</span><a id="line.2750">        if (goals.isEmpty())</a>
-<span class="sourceLineNo">2751</span><a id="line.2751">        {</a>
-<span class="sourceLineNo">2752</span><a id="line.2752">            cutShort = true;</a>
-<span class="sourceLineNo">2753</span><a id="line.2753">            return new ArrayList&lt;&gt;(path);</a>
-<span class="sourceLineNo">2754</span><a id="line.2754">        }</a>
-<span class="sourceLineNo">2755</span><a id="line.2755"></a>
-<span class="sourceLineNo">2756</span><a id="line.2756">        if(length &lt; 0)</a>
-<span class="sourceLineNo">2757</span><a id="line.2757">            length = 0;</a>
-<span class="sourceLineNo">2758</span><a id="line.2758">        if(scanLimit &lt;= 0 || scanLimit &lt; length)</a>
-<span class="sourceLineNo">2759</span><a id="line.2759">            scan(start, impassable2, size);</a>
-<span class="sourceLineNo">2760</span><a id="line.2760">        else</a>
-<span class="sourceLineNo">2761</span><a id="line.2761">            partialScan(scanLimit, start, impassable2, size);</a>
-<span class="sourceLineNo">2762</span><a id="line.2762"></a>
-<span class="sourceLineNo">2763</span><a id="line.2763">        Coord currentPos = start;</a>
-<span class="sourceLineNo">2764</span><a id="line.2764">        double paidLength = 0.0;</a>
-<span class="sourceLineNo">2765</span><a id="line.2765">        while (true) {</a>
-<span class="sourceLineNo">2766</span><a id="line.2766">            if (frustration &gt; 500) {</a>
-<span class="sourceLineNo">2767</span><a id="line.2767">                path.clear();</a>
-<span class="sourceLineNo">2768</span><a id="line.2768">                break;</a>
-<span class="sourceLineNo">2769</span><a id="line.2769">            }</a>
-<span class="sourceLineNo">2770</span><a id="line.2770">            double best = gradientMap[currentPos.x][currentPos.y];</a>
-<span class="sourceLineNo">2771</span><a id="line.2771">            appendDirToShuffle(rng);</a>
-<span class="sourceLineNo">2772</span><a id="line.2772">            int choice = 0;</a>
-<span class="sourceLineNo">2773</span><a id="line.2773"></a>
-<span class="sourceLineNo">2774</span><a id="line.2774">            for (int d = 0; d &lt;= measurement.directionCount(); d++) {</a>
-<span class="sourceLineNo">2775</span><a id="line.2775">                Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);</a>
-<span class="sourceLineNo">2776</span><a id="line.2776">                if(!pt.isWithin(width, height))</a>
-<span class="sourceLineNo">2777</span><a id="line.2777">                    continue;</a>
-<span class="sourceLineNo">2778</span><a id="line.2778">                if (gradientMap[pt.x][pt.y] &lt; best &amp;&amp; !impassable2.contains(pt)) {</a>
-<span class="sourceLineNo">2779</span><a id="line.2779">                    if (dirs[choice] == Direction.NONE || !path.contains(pt)) {</a>
-<span class="sourceLineNo">2780</span><a id="line.2780">                        best = gradientMap[pt.x][pt.y];</a>
-<span class="sourceLineNo">2781</span><a id="line.2781">                        choice = d;</a>
-<span class="sourceLineNo">2782</span><a id="line.2782">                    }</a>
-<span class="sourceLineNo">2783</span><a id="line.2783">                }</a>
-<span class="sourceLineNo">2784</span><a id="line.2784">            }</a>
-<span class="sourceLineNo">2785</span><a id="line.2785"></a>
-<span class="sourceLineNo">2786</span><a id="line.2786">            if (best &gt;= gradientMap[currentPos.x][currentPos.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] &gt; FLOOR) {</a>
-<span class="sourceLineNo">2787</span><a id="line.2787">                cutShort = true;</a>
-<span class="sourceLineNo">2788</span><a id="line.2788">                frustration = 0;</a>
-<span class="sourceLineNo">2789</span><a id="line.2789">                return new ArrayList&lt;&gt;(path);</a>
-<span class="sourceLineNo">2790</span><a id="line.2790">            }</a>
-<span class="sourceLineNo">2791</span><a id="line.2791">            currentPos = currentPos.translate(dirs[choice].deltaX, dirs[choice].deltaY);</a>
-<span class="sourceLineNo">2792</span><a id="line.2792"></a>
-<span class="sourceLineNo">2793</span><a id="line.2793">            path.add(currentPos);</a>
-<span class="sourceLineNo">2794</span><a id="line.2794">            paidLength += costMap[currentPos.x][currentPos.y];</a>
-<span class="sourceLineNo">2795</span><a id="line.2795">            frustration++;</a>
-<span class="sourceLineNo">2796</span><a id="line.2796">            if (paidLength &gt; length - 1.0) {</a>
-<span class="sourceLineNo">2797</span><a id="line.2797">                if (onlyPassable != null &amp;&amp; onlyPassable.contains(currentPos)) {</a>
-<span class="sourceLineNo">2798</span><a id="line.2798">                    tempSet.clear();</a>
-<span class="sourceLineNo">2799</span><a id="line.2799">                    tempSet.addAll(impassable2);</a>
-<span class="sourceLineNo">2800</span><a id="line.2800">                    tempSet.add(currentPos);</a>
-<span class="sourceLineNo">2801</span><a id="line.2801">                    return findPathLarge(size, length, tempSet, onlyPassable, start, targets);</a>
-<span class="sourceLineNo">2802</span><a id="line.2802">                }</a>
-<span class="sourceLineNo">2803</span><a id="line.2803">                break;</a>
-<span class="sourceLineNo">2804</span><a id="line.2804">            }</a>
-<span class="sourceLineNo">2805</span><a id="line.2805">            if (gradientMap[currentPos.x][currentPos.y] == 0)</a>
-<span class="sourceLineNo">2806</span><a id="line.2806">                break;</a>
-<span class="sourceLineNo">2807</span><a id="line.2807">        }</a>
-<span class="sourceLineNo">2808</span><a id="line.2808">        cutShort = false;</a>
-<span class="sourceLineNo">2809</span><a id="line.2809">        frustration = 0;</a>
-<span class="sourceLineNo">2810</span><a id="line.2810">        goals.clear();</a>
-<span class="sourceLineNo">2811</span><a id="line.2811">        return new ArrayList&lt;&gt;(path);</a>
-<span class="sourceLineNo">2812</span><a id="line.2812">    }</a>
-<span class="sourceLineNo">2813</span><a id="line.2813"></a>
-<span class="sourceLineNo">2814</span><a id="line.2814">    /**</a>
-<span class="sourceLineNo">2815</span><a id="line.2815">     * For pathfinding creatures larger than 1x1 cell; scans the dungeon using DijkstraMap.scan with the listed goals</a>
-<span class="sourceLineNo">2816</span><a id="line.2816">     * and start point, and returns a list</a>
-<span class="sourceLineNo">2817</span><a id="line.2817">     * of Coord positions (using the current measurement) needed to get closer to a goal, until preferredRange is</a>
-<span class="sourceLineNo">2818</span><a id="line.2818">     * reached, or further from a goal if the preferredRange has not been met at the current distance.</a>
-<span class="sourceLineNo">2819</span><a id="line.2819">     * The maximum length of the returned list is given by moveLength; if moving the full length of</a>
-<span class="sourceLineNo">2820</span><a id="line.2820">     * the list would place the mover in a position shared by one of the positions in onlyPassable</a>
-<span class="sourceLineNo">2821</span><a id="line.2821">     * (which is typically filled with friendly units that can be passed through in multi-tile-</a>
-<span class="sourceLineNo">2822</span><a id="line.2822">     * movement scenarios), it will recalculate a move so that it does not pass into that cell.</a>
-<span class="sourceLineNo">2823</span><a id="line.2823">     * The keys in impassable should be the positions of enemies and obstacles that cannot be moved</a>
-<span class="sourceLineNo">2824</span><a id="line.2824">     * through, and will be ignored if there is a goal overlapping one.</a>
-<span class="sourceLineNo">2825</span><a id="line.2825">     * The parameter size refers to the side length of a square unit, such as 2 for a 2x2 unit. The</a>
-<span class="sourceLineNo">2826</span><a id="line.2826">     * parameter start must refer to the minimum-x, minimum-y cell of that unit if size is &amp;gt; 1, and</a>
-<span class="sourceLineNo">2827</span><a id="line.2827">     * all positions in the returned path will refer to movement of the minimum-x, minimum-y cell.</a>
-<span class="sourceLineNo">2828</span><a id="line.2828">     * &lt;br&gt;</a>
-<span class="sourceLineNo">2829</span><a id="line.2829">     * This caches its result in a member field, path, which can be fetched after finding a path and will change with</a>
-<span class="sourceLineNo">2830</span><a id="line.2830">     * each call to a pathfinding method.</a>
-<span class="sourceLineNo">2831</span><a id="line.2831">     *</a>
-<span class="sourceLineNo">2832</span><a id="line.2832">     * @param size           the side length of the creature trying to find a path</a>
-<span class="sourceLineNo">2833</span><a id="line.2833">     * @param moveLength     the length of the path to calculate</a>
-<span class="sourceLineNo">2834</span><a id="line.2834">     * @param preferredRange the distance this unit will try to keep from a target</a>
-<span class="sourceLineNo">2835</span><a id="line.2835">     * @param los            a squidgrid.LOS object if the preferredRange should try to stay in line of sight, or null if LoS</a>
-<span class="sourceLineNo">2836</span><a id="line.2836">     *                       should be disregarded.</a>
-<span class="sourceLineNo">2837</span><a id="line.2837">     * @param impassable     a Set of impassable Coord positions that may change (not constant like walls); can be null</a>
-<span class="sourceLineNo">2838</span><a id="line.2838">     * @param onlyPassable   a Set of Coord positions that this pathfinder cannot end a path occupying (typically allies); can be null</a>
-<span class="sourceLineNo">2839</span><a id="line.2839">     * @param start          the start of the path, should correspond to the minimum-x, minimum-y position of the pathfinder</a>
-<span class="sourceLineNo">2840</span><a id="line.2840">     * @param targets        a vararg or array of Coord that this will try to pathfind toward</a>
-<span class="sourceLineNo">2841</span><a id="line.2841">     * @return an ArrayList of Coord that will contain the min-x, min-y locations of this creature as it goes toward a target. Copy of path.</a>
-<span class="sourceLineNo">2842</span><a id="line.2842">     */</a>
-<span class="sourceLineNo">2843</span><a id="line.2843">    public ArrayList&lt;Coord&gt; findAttackPathLarge(int size, int moveLength, int preferredRange, LOS los, Collection&lt;Coord&gt; impassable,</a>
-<span class="sourceLineNo">2844</span><a id="line.2844">                                                Collection&lt;Coord&gt; onlyPassable, Coord start, Coord... targets) {</a>
-<span class="sourceLineNo">2845</span><a id="line.2845">        if (!initialized) return null;</a>
-<span class="sourceLineNo">2846</span><a id="line.2846">        if (preferredRange &lt; 0) preferredRange = 0;</a>
-<span class="sourceLineNo">2847</span><a id="line.2847">        double[][] resMap = new double[width][height];</a>
-<span class="sourceLineNo">2848</span><a id="line.2848">        if (los != null) {</a>
-<span class="sourceLineNo">2849</span><a id="line.2849">            for (int x = 0; x &lt; width; x++) {</a>
-<span class="sourceLineNo">2850</span><a id="line.2850">                for (int y = 0; y &lt; height; y++) {</a>
-<span class="sourceLineNo">2851</span><a id="line.2851">                    resMap[x][y] = (physicalMap[x][y] == WALL) ? 1.0 : 0.0;</a>
-<span class="sourceLineNo">2852</span><a id="line.2852">                }</a>
-<span class="sourceLineNo">2853</span><a id="line.2853">            }</a>
-<span class="sourceLineNo">2854</span><a id="line.2854">        }</a>
-<span class="sourceLineNo">2855</span><a id="line.2855">        path.clear();</a>
-<span class="sourceLineNo">2856</span><a id="line.2856">        if (impassable == null)</a>
-<span class="sourceLineNo">2857</span><a id="line.2857">            impassable2.clear();</a>
-<span class="sourceLineNo">2858</span><a id="line.2858">        else</a>
-<span class="sourceLineNo">2859</span><a id="line.2859">        {</a>
-<span class="sourceLineNo">2860</span><a id="line.2860">            impassable2.clear();</a>
-<span class="sourceLineNo">2861</span><a id="line.2861">            impassable2.addAll(impassable);</a>
-<span class="sourceLineNo">2862</span><a id="line.2862">        }</a>
-<span class="sourceLineNo">2863</span><a id="line.2863">        if(onlyPassable != null &amp;&amp; moveLength == 1)</a>
-<span class="sourceLineNo">2864</span><a id="line.2864">            impassable2.addAll(onlyPassable);</a>
-<span class="sourceLineNo">2865</span><a id="line.2865"></a>
-<span class="sourceLineNo">2866</span><a id="line.2866">        resetMap();</a>
-<span class="sourceLineNo">2867</span><a id="line.2867">        for (Coord goal : targets) {</a>
-<span class="sourceLineNo">2868</span><a id="line.2868">            setGoal(goal.x, goal.y);</a>
-<span class="sourceLineNo">2869</span><a id="line.2869">        }</a>
-<span class="sourceLineNo">2870</span><a id="line.2870">        if (goals.isEmpty())</a>
-<span class="sourceLineNo">2871</span><a id="line.2871">        {</a>
-<span class="sourceLineNo">2872</span><a id="line.2872">            cutShort = true;</a>
-<span class="sourceLineNo">2873</span><a id="line.2873">            return new ArrayList&lt;&gt;(path);</a>
-<span class="sourceLineNo">2874</span><a id="line.2874">        }</a>
-<span class="sourceLineNo">2875</span><a id="line.2875"></a>
-<span class="sourceLineNo">2876</span><a id="line.2876">        Measurement mess = measurement;</a>
-<span class="sourceLineNo">2877</span><a id="line.2877">        if (measurement == Measurement.EUCLIDEAN) {</a>
-<span class="sourceLineNo">2878</span><a id="line.2878">            measurement = Measurement.CHEBYSHEV;</a>
-<span class="sourceLineNo">2879</span><a id="line.2879">        }</a>
-<span class="sourceLineNo">2880</span><a id="line.2880">        scan(impassable2, size);</a>
-<span class="sourceLineNo">2881</span><a id="line.2881">        goals.clear();</a>
-<span class="sourceLineNo">2882</span><a id="line.2882"></a>
-<span class="sourceLineNo">2883</span><a id="line.2883">        for (int x = 0; x &lt; width; x++) {</a>
-<span class="sourceLineNo">2884</span><a id="line.2884">            CELL:</a>
-<span class="sourceLineNo">2885</span><a id="line.2885">            for (int y = 0; y &lt; height; y++) {</a>
-<span class="sourceLineNo">2886</span><a id="line.2886">                if (gradientMap[x][y] == WALL || gradientMap[x][y] == DARK)</a>
-<span class="sourceLineNo">2887</span><a id="line.2887">                    continue;</a>
-<span class="sourceLineNo">2888</span><a id="line.2888">                if (x + 2 &lt; width &amp;&amp; y + 2 &lt; height &amp;&amp; gradientMap[x][y] == preferredRange) {</a>
-<span class="sourceLineNo">2889</span><a id="line.2889">                    for (Coord goal : targets) {</a>
-<span class="sourceLineNo">2890</span><a id="line.2890">                        if (los == null</a>
-<span class="sourceLineNo">2891</span><a id="line.2891">                                || los.isReachable(resMap, x, y, goal.x, goal.y)</a>
-<span class="sourceLineNo">2892</span><a id="line.2892">                                || los.isReachable(resMap, x + 1, y, goal.x, goal.y)</a>
-<span class="sourceLineNo">2893</span><a id="line.2893">                                || los.isReachable(resMap, x, y + 1, goal.x, goal.y)</a>
-<span class="sourceLineNo">2894</span><a id="line.2894">                                || los.isReachable(resMap, x + 1, y + 1, goal.x, goal.y)) {</a>
-<span class="sourceLineNo">2895</span><a id="line.2895">                            setGoal(x, y);</a>
-<span class="sourceLineNo">2896</span><a id="line.2896">                            gradientMap[x][y] = 0;</a>
-<span class="sourceLineNo">2897</span><a id="line.2897">                            continue CELL;</a>
-<span class="sourceLineNo">2898</span><a id="line.2898">                        }</a>
-<span class="sourceLineNo">2899</span><a id="line.2899">                    }</a>
-<span class="sourceLineNo">2900</span><a id="line.2900">                    gradientMap[x][y] = FLOOR;</a>
-<span class="sourceLineNo">2901</span><a id="line.2901">                } else</a>
-<span class="sourceLineNo">2902</span><a id="line.2902">                    gradientMap[x][y] = FLOOR;</a>
-<span class="sourceLineNo">2903</span><a id="line.2903">            }</a>
-<span class="sourceLineNo">2904</span><a id="line.2904">        }</a>
-<span class="sourceLineNo">2905</span><a id="line.2905">        measurement = mess;</a>
-<span class="sourceLineNo">2906</span><a id="line.2906">        scan(impassable2, size);</a>
-<span class="sourceLineNo">2907</span><a id="line.2907"></a>
-<span class="sourceLineNo">2908</span><a id="line.2908">        Coord currentPos = start;</a>
-<span class="sourceLineNo">2909</span><a id="line.2909">        double paidLength = 0.0;</a>
-<span class="sourceLineNo">2910</span><a id="line.2910">        while (true) {</a>
-<span class="sourceLineNo">2911</span><a id="line.2911">            if (frustration &gt; 500) {</a>
-<span class="sourceLineNo">2912</span><a id="line.2912">                path.clear();</a>
-<span class="sourceLineNo">2913</span><a id="line.2913">                break;</a>
-<span class="sourceLineNo">2914</span><a id="line.2914">            }</a>
-<span class="sourceLineNo">2915</span><a id="line.2915">            double best = gradientMap[currentPos.x][currentPos.y];</a>
-<span class="sourceLineNo">2916</span><a id="line.2916">            appendDirToShuffle(rng);</a>
-<span class="sourceLineNo">2917</span><a id="line.2917">            int choice = 0;</a>
-<span class="sourceLineNo">2918</span><a id="line.2918"></a>
-<span class="sourceLineNo">2919</span><a id="line.2919">            for (int d = 0; d &lt;= measurement.directionCount(); d++) {</a>
-<span class="sourceLineNo">2920</span><a id="line.2920">                Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);</a>
-<span class="sourceLineNo">2921</span><a id="line.2921">                if(!pt.isWithin(width, height))</a>
-<span class="sourceLineNo">2922</span><a id="line.2922">                    continue;</a>
-<span class="sourceLineNo">2923</span><a id="line.2923">                if (gradientMap[pt.x][pt.y] &lt; best &amp;&amp; !impassable2.contains(pt)) {</a>
-<span class="sourceLineNo">2924</span><a id="line.2924">                    if (dirs[choice] == Direction.NONE || !path.contains(pt)) {</a>
-<span class="sourceLineNo">2925</span><a id="line.2925">                        best = gradientMap[pt.x][pt.y];</a>
-<span class="sourceLineNo">2926</span><a id="line.2926">                        choice = d;</a>
-<span class="sourceLineNo">2927</span><a id="line.2927">                    }</a>
-<span class="sourceLineNo">2928</span><a id="line.2928">                }</a>
-<span class="sourceLineNo">2929</span><a id="line.2929">            }</a>
-<span class="sourceLineNo">2930</span><a id="line.2930"></a>
-<span class="sourceLineNo">2931</span><a id="line.2931">            if (best &gt;= gradientMap[currentPos.x][currentPos.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] &gt; FLOOR) {</a>
-<span class="sourceLineNo">2932</span><a id="line.2932">                cutShort = true;</a>
-<span class="sourceLineNo">2933</span><a id="line.2933">                frustration = 0;</a>
-<span class="sourceLineNo">2934</span><a id="line.2934">                return new ArrayList&lt;&gt;(path);</a>
-<span class="sourceLineNo">2935</span><a id="line.2935">            }</a>
-<span class="sourceLineNo">2936</span><a id="line.2936">            currentPos = currentPos.translate(dirs[choice].deltaX, dirs[choice].deltaY);</a>
-<span class="sourceLineNo">2937</span><a id="line.2937">            path.add(currentPos);</a>
-<span class="sourceLineNo">2938</span><a id="line.2938">            frustration++;</a>
-<span class="sourceLineNo">2939</span><a id="line.2939">            paidLength += costMap[currentPos.x][currentPos.y];</a>
-<span class="sourceLineNo">2940</span><a id="line.2940">            if (paidLength &gt; moveLength - 1.0) {</a>
-<span class="sourceLineNo">2941</span><a id="line.2941">                if (onlyPassable != null &amp;&amp; onlyPassable.contains(currentPos)) {</a>
-<span class="sourceLineNo">2942</span><a id="line.2942">                    tempSet.clear();</a>
-<span class="sourceLineNo">2943</span><a id="line.2943">                    tempSet.addAll(impassable2);</a>
-<span class="sourceLineNo">2944</span><a id="line.2944">                    tempSet.add(currentPos);</a>
-<span class="sourceLineNo">2945</span><a id="line.2945">                    return findAttackPathLarge(size, moveLength, preferredRange, los, tempSet, onlyPassable, start, targets);</a>
-<span class="sourceLineNo">2946</span><a id="line.2946">                }</a>
-<span class="sourceLineNo">2947</span><a id="line.2947">                break;</a>
-<span class="sourceLineNo">2948</span><a id="line.2948">            }</a>
-<span class="sourceLineNo">2949</span><a id="line.2949">            if (gradientMap[currentPos.x][currentPos.y] == 0)</a>
-<span class="sourceLineNo">2950</span><a id="line.2950">                break;</a>
-<span class="sourceLineNo">2951</span><a id="line.2951">        }</a>
-<span class="sourceLineNo">2952</span><a id="line.2952">        cutShort = false;</a>
-<span class="sourceLineNo">2953</span><a id="line.2953">        frustration = 0;</a>
-<span class="sourceLineNo">2954</span><a id="line.2954">        goals.clear();</a>
-<span class="sourceLineNo">2955</span><a id="line.2955">        return new ArrayList&lt;&gt;(path);</a>
-<span class="sourceLineNo">2956</span><a id="line.2956">    }</a>
-<span class="sourceLineNo">2957</span><a id="line.2957"></a>
-<span class="sourceLineNo">2958</span><a id="line.2958">    /**</a>
-<span class="sourceLineNo">2959</span><a id="line.2959">     * Scans the dungeon using DijkstraMap.scan with the listed goals and start point, and returns a list</a>
-<span class="sourceLineNo">2960</span><a id="line.2960">     * of Coord positions (using the current measurement) needed to get closer to a goal, until a cell is reached with</a>
-<span class="sourceLineNo">2961</span><a id="line.2961">     * a distance from a goal that is at least equal to minPreferredRange and no more than maxPreferredRange,</a>
-<span class="sourceLineNo">2962</span><a id="line.2962">     * which may go further from a goal if the minPreferredRange has not been met at the current distance.</a>
-<span class="sourceLineNo">2963</span><a id="line.2963">     * The maximum length of the returned list is given by moveLength; if moving the full length of</a>
-<span class="sourceLineNo">2964</span><a id="line.2964">     * the list would place the mover in a position shared by one of the positions in onlyPassable</a>
-<span class="sourceLineNo">2965</span><a id="line.2965">     * (which is typically filled with friendly units that can be passed through in multi-tile-</a>
-<span class="sourceLineNo">2966</span><a id="line.2966">     * movement scenarios), it will recalculate a move so that it does not pass into that cell.</a>
-<span class="sourceLineNo">2967</span><a id="line.2967">     * The keys in impassable should be the positions of enemies and obstacles that cannot be moved</a>
-<span class="sourceLineNo">2968</span><a id="line.2968">     * through, and will be ignored if there is a goal overlapping one.</a>
-<span class="sourceLineNo">2969</span><a id="line.2969">     * The parameter size refers to the side length of a square unit, such as 2 for a 2x2 unit. The</a>
-<span class="sourceLineNo">2970</span><a id="line.2970">     * parameter start must refer to the minimum-x, minimum-y cell of that unit if size is &amp;gt; 1, and</a>
-<span class="sourceLineNo">2971</span><a id="line.2971">     * all positions in the returned path will refer to movement of the minimum-x, minimum-y cell.</a>
-<span class="sourceLineNo">2972</span><a id="line.2972">     * &lt;br&gt;</a>
-<span class="sourceLineNo">2973</span><a id="line.2973">     * This caches its result in a member field, path, which can be fetched after finding a path and will change with</a>
-<span class="sourceLineNo">2974</span><a id="line.2974">     * each call to a pathfinding method.</a>
-<span class="sourceLineNo">2975</span><a id="line.2975">     *</a>
-<span class="sourceLineNo">2976</span><a id="line.2976">     * @param size              the side length of the creature trying to find a path</a>
-<span class="sourceLineNo">2977</span><a id="line.2977">     * @param moveLength        the length of the path to calculate</a>
-<span class="sourceLineNo">2978</span><a id="line.2978">     * @param minPreferredRange the (inclusive) lower bound of the distance this unit will try to keep from a target</a>
-<span class="sourceLineNo">2979</span><a id="line.2979">     * @param maxPreferredRange the (inclusive) upper bound of the distance this unit will try to keep from a target</a>
-<span class="sourceLineNo">2980</span><a id="line.2980">     * @param los               a squidgrid.LOS object if the preferredRange should try to stay in line of sight, or null if LoS</a>
-<span class="sourceLineNo">2981</span><a id="line.2981">     *                          should be disregarded.</a>
-<span class="sourceLineNo">2982</span><a id="line.2982">     * @param impassable        a Set of impassable Coord positions that may change (not constant like walls); can be null</a>
-<span class="sourceLineNo">2983</span><a id="line.2983">     * @param onlyPassable      a Set of Coord positions that this pathfinder cannot end a path occupying (typically allies); can be null</a>
-<span class="sourceLineNo">2984</span><a id="line.2984">     * @param start             the start of the path, should correspond to the minimum-x, minimum-y position of the pathfinder</a>
-<span class="sourceLineNo">2985</span><a id="line.2985">     * @param targets           a vararg or array of Coord that this will try to pathfind toward</a>
-<span class="sourceLineNo">2986</span><a id="line.2986">     * @return an ArrayList of Coord that will contain the min-x, min-y locations of this creature as it goes toward a target. Copy of path.</a>
-<span class="sourceLineNo">2987</span><a id="line.2987">     */</a>
-<span class="sourceLineNo">2988</span><a id="line.2988">    public ArrayList&lt;Coord&gt; findAttackPathLarge(int size, int moveLength, int minPreferredRange, int maxPreferredRange, LOS los,</a>
-<span class="sourceLineNo">2989</span><a id="line.2989">                                                Collection&lt;Coord&gt; impassable, Collection&lt;Coord&gt; onlyPassable, Coord start, Coord... targets) {</a>
-<span class="sourceLineNo">2990</span><a id="line.2990">        if (!initialized) return null;</a>
-<span class="sourceLineNo">2991</span><a id="line.2991">        if (minPreferredRange &lt; 0) minPreferredRange = 0;</a>
-<span class="sourceLineNo">2992</span><a id="line.2992">        if (maxPreferredRange &lt; minPreferredRange) maxPreferredRange = minPreferredRange;</a>
-<span class="sourceLineNo">2993</span><a id="line.2993">        double[][] resMap = new double[width][height];</a>
-<span class="sourceLineNo">2994</span><a id="line.2994">        if (los != null) {</a>
-<span class="sourceLineNo">2995</span><a id="line.2995">            for (int x = 0; x &lt; width; x++) {</a>
-<span class="sourceLineNo">2996</span><a id="line.2996">                for (int y = 0; y &lt; height; y++) {</a>
-<span class="sourceLineNo">2997</span><a id="line.2997">                    resMap[x][y] = (physicalMap[x][y] == WALL) ? 1.0 : 0.0;</a>
-<span class="sourceLineNo">2998</span><a id="line.2998">                }</a>
-<span class="sourceLineNo">2999</span><a id="line.2999">            }</a>
-<span class="sourceLineNo">3000</span><a id="line.3000">        }</a>
-<span class="sourceLineNo">3001</span><a id="line.3001">        path.clear();</a>
-<span class="sourceLineNo">3002</span><a id="line.3002">        if (impassable == null)</a>
-<span class="sourceLineNo">3003</span><a id="line.3003">            impassable2.clear();</a>
-<span class="sourceLineNo">3004</span><a id="line.3004">        else</a>
-<span class="sourceLineNo">3005</span><a id="line.3005">        {</a>
-<span class="sourceLineNo">3006</span><a id="line.3006">            impassable2.clear();</a>
-<span class="sourceLineNo">3007</span><a id="line.3007">            impassable2.addAll(impassable);</a>
-<span class="sourceLineNo">3008</span><a id="line.3008">        }</a>
-<span class="sourceLineNo">3009</span><a id="line.3009">        if(onlyPassable != null &amp;&amp; moveLength == 1)</a>
-<span class="sourceLineNo">3010</span><a id="line.3010">            impassable2.addAll(onlyPassable);</a>
-<span class="sourceLineNo">3011</span><a id="line.3011"></a>
-<span class="sourceLineNo">3012</span><a id="line.3012">        resetMap();</a>
-<span class="sourceLineNo">3013</span><a id="line.3013">        for (Coord goal : targets) {</a>
-<span class="sourceLineNo">3014</span><a id="line.3014">            setGoal(goal);</a>
-<span class="sourceLineNo">3015</span><a id="line.3015">        }</a>
-<span class="sourceLineNo">3016</span><a id="line.3016">        if (goals.isEmpty())</a>
-<span class="sourceLineNo">3017</span><a id="line.3017">        {</a>
-<span class="sourceLineNo">3018</span><a id="line.3018">            cutShort = true;</a>
-<span class="sourceLineNo">3019</span><a id="line.3019">            return new ArrayList&lt;&gt;(path);</a>
-<span class="sourceLineNo">3020</span><a id="line.3020">        }</a>
-<span class="sourceLineNo">3021</span><a id="line.3021"></a>
-<span class="sourceLineNo">3022</span><a id="line.3022">        Measurement mess = measurement;</a>
-<span class="sourceLineNo">3023</span><a id="line.3023">        if (measurement == Measurement.EUCLIDEAN) {</a>
-<span class="sourceLineNo">3024</span><a id="line.3024">            measurement = Measurement.CHEBYSHEV;</a>
-<span class="sourceLineNo">3025</span><a id="line.3025">        }</a>
-<span class="sourceLineNo">3026</span><a id="line.3026">        scan(impassable2, size);</a>
-<span class="sourceLineNo">3027</span><a id="line.3027">        goals.clear();</a>
-<span class="sourceLineNo">3028</span><a id="line.3028"></a>
-<span class="sourceLineNo">3029</span><a id="line.3029">        for (int x = 0; x &lt; width; x++) {</a>
-<span class="sourceLineNo">3030</span><a id="line.3030">            CELL:</a>
-<span class="sourceLineNo">3031</span><a id="line.3031">            for (int y = 0; y &lt; height; y++) {</a>
-<span class="sourceLineNo">3032</span><a id="line.3032">                if (gradientMap[x][y] == WALL || gradientMap[x][y] == DARK)</a>
-<span class="sourceLineNo">3033</span><a id="line.3033">                    continue;</a>
-<span class="sourceLineNo">3034</span><a id="line.3034">                if (x + 2 &lt; width &amp;&amp; y + 2 &lt; height &amp;&amp; gradientMap[x][y] &gt;= minPreferredRange &amp;&amp; gradientMap[x][y] &lt;= maxPreferredRange) {</a>
-<span class="sourceLineNo">3035</span><a id="line.3035">                    for (Coord goal : targets) {</a>
-<span class="sourceLineNo">3036</span><a id="line.3036">                        if (los == null</a>
-<span class="sourceLineNo">3037</span><a id="line.3037">                                || los.isReachable(resMap, x, y, goal.x, goal.y)</a>
-<span class="sourceLineNo">3038</span><a id="line.3038">                                || los.isReachable(resMap, x + 1, y, goal.x, goal.y)</a>
-<span class="sourceLineNo">3039</span><a id="line.3039">                                || los.isReachable(resMap, x, y + 1, goal.x, goal.y)</a>
-<span class="sourceLineNo">3040</span><a id="line.3040">                                || los.isReachable(resMap, x + 1, y + 1, goal.x, goal.y)) {</a>
-<span class="sourceLineNo">3041</span><a id="line.3041">                            setGoal(x, y);</a>
-<span class="sourceLineNo">3042</span><a id="line.3042">                            gradientMap[x][y] = 0;</a>
-<span class="sourceLineNo">3043</span><a id="line.3043">                            continue CELL;</a>
-<span class="sourceLineNo">3044</span><a id="line.3044">                        }</a>
-<span class="sourceLineNo">3045</span><a id="line.3045">                    }</a>
-<span class="sourceLineNo">3046</span><a id="line.3046">                    gradientMap[x][y] = FLOOR;</a>
-<span class="sourceLineNo">3047</span><a id="line.3047">                } else</a>
-<span class="sourceLineNo">3048</span><a id="line.3048">                    gradientMap[x][y] = FLOOR;</a>
-<span class="sourceLineNo">3049</span><a id="line.3049">            }</a>
-<span class="sourceLineNo">3050</span><a id="line.3050">        }</a>
-<span class="sourceLineNo">3051</span><a id="line.3051">        measurement = mess;</a>
-<span class="sourceLineNo">3052</span><a id="line.3052">        scan(impassable2, size);</a>
-<span class="sourceLineNo">3053</span><a id="line.3053"></a>
-<span class="sourceLineNo">3054</span><a id="line.3054">        Coord currentPos = start;</a>
-<span class="sourceLineNo">3055</span><a id="line.3055">        double paidLength = 0.0;</a>
-<span class="sourceLineNo">3056</span><a id="line.3056">        while (true) {</a>
-<span class="sourceLineNo">3057</span><a id="line.3057">            if (frustration &gt; 500) {</a>
-<span class="sourceLineNo">3058</span><a id="line.3058">                path.clear();</a>
-<span class="sourceLineNo">3059</span><a id="line.3059">                break;</a>
-<span class="sourceLineNo">3060</span><a id="line.3060">            }</a>
-<span class="sourceLineNo">3061</span><a id="line.3061"></a>
-<span class="sourceLineNo">3062</span><a id="line.3062">            double best = gradientMap[currentPos.x][currentPos.y];</a>
-<span class="sourceLineNo">3063</span><a id="line.3063">            appendDirToShuffle(rng);</a>
-<span class="sourceLineNo">3064</span><a id="line.3064">            int choice = 0;</a>
-<span class="sourceLineNo">3065</span><a id="line.3065"></a>
-<span class="sourceLineNo">3066</span><a id="line.3066">            for (int d = 0; d &lt;= measurement.directionCount(); d++) {</a>
-<span class="sourceLineNo">3067</span><a id="line.3067">                Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);</a>
-<span class="sourceLineNo">3068</span><a id="line.3068">                if(!pt.isWithin(width, height))</a>
-<span class="sourceLineNo">3069</span><a id="line.3069">                    continue;</a>
-<span class="sourceLineNo">3070</span><a id="line.3070">                if (gradientMap[pt.x][pt.y] &lt; best &amp;&amp; !impassable2.contains(pt)) {</a>
-<span class="sourceLineNo">3071</span><a id="line.3071">                    if (dirs[choice] == Direction.NONE || !path.contains(pt)) {</a>
-<span class="sourceLineNo">3072</span><a id="line.3072">                        best = gradientMap[pt.x][pt.y];</a>
-<span class="sourceLineNo">3073</span><a id="line.3073">                        choice = d;</a>
-<span class="sourceLineNo">3074</span><a id="line.3074">                    }</a>
-<span class="sourceLineNo">3075</span><a id="line.3075">                }</a>
-<span class="sourceLineNo">3076</span><a id="line.3076">            }</a>
-<span class="sourceLineNo">3077</span><a id="line.3077">            if (best &gt;= gradientMap[currentPos.x][currentPos.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] &gt; FLOOR) {</a>
-<span class="sourceLineNo">3078</span><a id="line.3078">                cutShort = true;</a>
-<span class="sourceLineNo">3079</span><a id="line.3079">                frustration = 0;</a>
-<span class="sourceLineNo">3080</span><a id="line.3080">                return new ArrayList&lt;&gt;(path);</a>
-<span class="sourceLineNo">3081</span><a id="line.3081">            }</a>
-<span class="sourceLineNo">3082</span><a id="line.3082">            currentPos = currentPos.translate(dirs[choice].deltaX, dirs[choice].deltaY);</a>
-<span class="sourceLineNo">3083</span><a id="line.3083"></a>
-<span class="sourceLineNo">3084</span><a id="line.3084">            path.add(currentPos);</a>
-<span class="sourceLineNo">3085</span><a id="line.3085">            frustration++;</a>
-<span class="sourceLineNo">3086</span><a id="line.3086">            paidLength += costMap[currentPos.x][currentPos.y];</a>
-<span class="sourceLineNo">3087</span><a id="line.3087">            if (paidLength &gt; moveLength - 1.0) {</a>
-<span class="sourceLineNo">3088</span><a id="line.3088">                if (onlyPassable != null &amp;&amp; onlyPassable.contains(currentPos)) {</a>
-<span class="sourceLineNo">3089</span><a id="line.3089">                    tempSet.clear();</a>
-<span class="sourceLineNo">3090</span><a id="line.3090">                    tempSet.addAll(impassable2);</a>
-<span class="sourceLineNo">3091</span><a id="line.3091">                    tempSet.add(currentPos);</a>
-<span class="sourceLineNo">3092</span><a id="line.3092">                    return findAttackPathLarge(size, moveLength, minPreferredRange, maxPreferredRange, los, tempSet,</a>
-<span class="sourceLineNo">3093</span><a id="line.3093">                            onlyPassable, start, targets);</a>
-<span class="sourceLineNo">3094</span><a id="line.3094">                }</a>
-<span class="sourceLineNo">3095</span><a id="line.3095">                break;</a>
-<span class="sourceLineNo">3096</span><a id="line.3096">            }</a>
-<span class="sourceLineNo">3097</span><a id="line.3097">            if (gradientMap[currentPos.x][currentPos.y] == 0)</a>
-<span class="sourceLineNo">3098</span><a id="line.3098">                break;</a>
-<span class="sourceLineNo">3099</span><a id="line.3099">        }</a>
-<span class="sourceLineNo">3100</span><a id="line.3100">        cutShort = false;</a>
-<span class="sourceLineNo">3101</span><a id="line.3101">        frustration = 0;</a>
-<span class="sourceLineNo">3102</span><a id="line.3102">        goals.clear();</a>
-<span class="sourceLineNo">3103</span><a id="line.3103">        return new ArrayList&lt;&gt;(path);</a>
-<span class="sourceLineNo">3104</span><a id="line.3104">    }</a>
-<span class="sourceLineNo">3105</span><a id="line.3105"></a>
-<span class="sourceLineNo">3106</span><a id="line.3106">    /**</a>
-<span class="sourceLineNo">3107</span><a id="line.3107">     * Scans the dungeon using DijkstraMap.scan with the listed fearSources and start point, and returns a list</a>
-<span class="sourceLineNo">3108</span><a id="line.3108">     * of Coord positions (using Manhattan distance) needed to get further from the closest fearSources, meant</a>
-<span class="sourceLineNo">3109</span><a id="line.3109">     * for running away. The maximum length of the returned list is given by length; if moving the full</a>
-<span class="sourceLineNo">3110</span><a id="line.3110">     * length of the list would place the mover in a position shared by one of the positions in onlyPassable</a>
-<span class="sourceLineNo">3111</span><a id="line.3111">     * (which is typically filled with friendly units that can be passed through in multi-tile-</a>
-<span class="sourceLineNo">3112</span><a id="line.3112">     * movement scenarios), it will recalculate a move so that it does not pass into that cell.</a>
-<span class="sourceLineNo">3113</span><a id="line.3113">     * The keys in impassable should be the positions of enemies and obstacles that cannot be moved</a>
-<span class="sourceLineNo">3114</span><a id="line.3114">     * through, and will be ignored if there is a fearSource overlapping one. The preferLongerPaths parameter</a>
-<span class="sourceLineNo">3115</span><a id="line.3115">     * is meant to be tweaked and adjusted; higher values should make creatures prefer to escape out of</a>
-<span class="sourceLineNo">3116</span><a id="line.3116">     * doorways instead of hiding in the closest corner, and a value of 1.2 should be typical for many maps.</a>
-<span class="sourceLineNo">3117</span><a id="line.3117">     * The parameters size, preferLongerPaths, impassable, and the varargs used for fearSources will be cached, and</a>
-<span class="sourceLineNo">3118</span><a id="line.3118">     * any subsequent calls that use the same values as the last values passed will avoid recalculating</a>
-<span class="sourceLineNo">3119</span><a id="line.3119">     * unnecessary scans. Calls to findFleePath will cache as if size is 1, and may share a cache with this function.</a>
-<span class="sourceLineNo">3120</span><a id="line.3120">     * The parameter size refers to the side length of a square unit, such as 2 for a 2x2 unit. The</a>
-<span class="sourceLineNo">3121</span><a id="line.3121">     * parameter start must refer to the minimum-x, minimum-y cell of that unit if size is &amp;gt; 1, and</a>
-<span class="sourceLineNo">3122</span><a id="line.3122">     * all positions in the returned path will refer to movement of the minimum-x, minimum-y cell.</a>
-<span class="sourceLineNo">3123</span><a id="line.3123">     * &lt;br&gt;</a>
-<span class="sourceLineNo">3124</span><a id="line.3124">     * This caches its result in a member field, path, which can be fetched after finding a path and will change with</a>
-<span class="sourceLineNo">3125</span><a id="line.3125">     * each call to a pathfinding method.</a>
-<span class="sourceLineNo">3126</span><a id="line.3126">     *</a>
-<span class="sourceLineNo">3127</span><a id="line.3127">     * @param size              the side length of the creature trying the find a path</a>
-<span class="sourceLineNo">3128</span><a id="line.3128">     * @param length            the length of the path to calculate</a>
-<span class="sourceLineNo">3129</span><a id="line.3129">     * @param preferLongerPaths Set this to 1.2 if you aren't sure; it will probably need tweaking for different maps.</a>
-<span class="sourceLineNo">3130</span><a id="line.3130">     * @param impassable        a Set of impassable Coord positions that may change (not constant like walls); can be null</a>
-<span class="sourceLineNo">3131</span><a id="line.3131">     * @param onlyPassable      a Set of Coord positions that this pathfinder cannot end a path occupying (typically allies); can be null</a>
-<span class="sourceLineNo">3132</span><a id="line.3132">     * @param start             the start of the path, should correspond to the minimum-x, minimum-y position of the pathfinder</a>
-<span class="sourceLineNo">3133</span><a id="line.3133">     * @param fearSources       a vararg or array of Coord positions to run away from</a>
-<span class="sourceLineNo">3134</span><a id="line.3134">     * @return an ArrayList of Coord that will contain the locations of this creature as it goes away from fear sources. Copy of path.</a>
-<span class="sourceLineNo">3135</span><a id="line.3135">     */</a>
-<span class="sourceLineNo">3136</span><a id="line.3136">    public ArrayList&lt;Coord&gt; findFleePathLarge(int size, int length, double preferLongerPaths, Collection&lt;Coord&gt; impassable,</a>
-<span class="sourceLineNo">3137</span><a id="line.3137">                                              Collection&lt;Coord&gt; onlyPassable, Coord start, Coord... fearSources) {</a>
-<span class="sourceLineNo">3138</span><a id="line.3138">        if (!initialized) return null;</a>
-<span class="sourceLineNo">3139</span><a id="line.3139">        path.clear();</a>
-<span class="sourceLineNo">3140</span><a id="line.3140">        if (impassable == null)</a>
-<span class="sourceLineNo">3141</span><a id="line.3141">            impassable2.clear();</a>
-<span class="sourceLineNo">3142</span><a id="line.3142">        else {</a>
-<span class="sourceLineNo">3143</span><a id="line.3143">            impassable2.clear();</a>
-<span class="sourceLineNo">3144</span><a id="line.3144">            impassable2.addAll(impassable);</a>
-<span class="sourceLineNo">3145</span><a id="line.3145">        }</a>
-<span class="sourceLineNo">3146</span><a id="line.3146">        if(onlyPassable != null &amp;&amp; length == 1)</a>
-<span class="sourceLineNo">3147</span><a id="line.3147">            impassable2.addAll(onlyPassable);</a>
-<span class="sourceLineNo">3148</span><a id="line.3148">        if (fearSources == null || fearSources.length &lt; 1) {</a>
-<span class="sourceLineNo">3149</span><a id="line.3149">            cutShort = true;</a>
-<span class="sourceLineNo">3150</span><a id="line.3150">            path.clear();</a>
-<span class="sourceLineNo">3151</span><a id="line.3151">            return new ArrayList&lt;&gt;(path);</a>
-<span class="sourceLineNo">3152</span><a id="line.3152">        }</a>
-<span class="sourceLineNo">3153</span><a id="line.3153">        if (size == cachedSize &amp;&amp; preferLongerPaths == cachedLongerPaths &amp;&amp; impassable2.equals(cachedImpassable)</a>
-<span class="sourceLineNo">3154</span><a id="line.3154">                &amp;&amp; Arrays.equals(fearSources, cachedFearSources)) {</a>
-<span class="sourceLineNo">3155</span><a id="line.3155">            gradientMap = cachedFleeMap;</a>
-<span class="sourceLineNo">3156</span><a id="line.3156">        } else {</a>
-<span class="sourceLineNo">3157</span><a id="line.3157">            cachedLongerPaths = preferLongerPaths;</a>
-<span class="sourceLineNo">3158</span><a id="line.3158">            cachedImpassable.clear();</a>
-<span class="sourceLineNo">3159</span><a id="line.3159">            cachedImpassable.addAll(impassable2);</a>
-<span class="sourceLineNo">3160</span><a id="line.3160">            cachedFearSources = new Coord[fearSources.length];</a>
-<span class="sourceLineNo">3161</span><a id="line.3161">            System.arraycopy(fearSources, 0, cachedFearSources, 0, fearSources.length);</a>
-<span class="sourceLineNo">3162</span><a id="line.3162">            cachedSize = size;</a>
-<span class="sourceLineNo">3163</span><a id="line.3163">            resetMap();</a>
-<span class="sourceLineNo">3164</span><a id="line.3164">            setGoals(fearSources);</a>
-<span class="sourceLineNo">3165</span><a id="line.3165">            if (goals.isEmpty())</a>
-<span class="sourceLineNo">3166</span><a id="line.3166">            {</a>
-<span class="sourceLineNo">3167</span><a id="line.3167">                cutShort = true;</a>
-<span class="sourceLineNo">3168</span><a id="line.3168">                return new ArrayList&lt;&gt;(path);</a>
-<span class="sourceLineNo">3169</span><a id="line.3169">            }</a>
+<span class="sourceLineNo">2615</span><a id="line.2615">            for (int x = 0; x &lt; gradientMap.length; x++) {</a>
+<span class="sourceLineNo">2616</span><a id="line.2616">                for (int y = 0; y &lt; gradientMap[x].length; y++) {</a>
+<span class="sourceLineNo">2617</span><a id="line.2617">                    gradientMap[x][y] *= (gradientMap[x][y] &gt;= FLOOR) ? 1.0 : -preferLongerPaths;</a>
+<span class="sourceLineNo">2618</span><a id="line.2618">                }</a>
+<span class="sourceLineNo">2619</span><a id="line.2619">            }</a>
+<span class="sourceLineNo">2620</span><a id="line.2620"></a>
+<span class="sourceLineNo">2621</span><a id="line.2621">            if(scanLimit &lt;= 0 || scanLimit &lt; length)</a>
+<span class="sourceLineNo">2622</span><a id="line.2622">            {</a>
+<span class="sourceLineNo">2623</span><a id="line.2623">                scan(null, impassable2, true);</a>
+<span class="sourceLineNo">2624</span><a id="line.2624">                for (int x = 0; x &lt; width; x++) {</a>
+<span class="sourceLineNo">2625</span><a id="line.2625">                    for (int y = 0; y &lt; height; y++) {</a>
+<span class="sourceLineNo">2626</span><a id="line.2626">                        if (gradientMap[x][y] == FLOOR) {</a>
+<span class="sourceLineNo">2627</span><a id="line.2627">                            gradientMap[x][y] = DARK;</a>
+<span class="sourceLineNo">2628</span><a id="line.2628">                        }</a>
+<span class="sourceLineNo">2629</span><a id="line.2629">                    }</a>
+<span class="sourceLineNo">2630</span><a id="line.2630">                    System.arraycopy(gradientMap[x], 0, cachedFleeMap[x], 0, height);</a>
+<span class="sourceLineNo">2631</span><a id="line.2631">                }</a>
+<span class="sourceLineNo">2632</span><a id="line.2632">            }</a>
+<span class="sourceLineNo">2633</span><a id="line.2633">            else</a>
+<span class="sourceLineNo">2634</span><a id="line.2634">                cachedFleeMap = partialScan(scanLimit, impassable2);</a>
+<span class="sourceLineNo">2635</span><a id="line.2635">        }</a>
+<span class="sourceLineNo">2636</span><a id="line.2636">        Coord currentPos = start;</a>
+<span class="sourceLineNo">2637</span><a id="line.2637">        double paidLength = 0.0;</a>
+<span class="sourceLineNo">2638</span><a id="line.2638">        while (true) {</a>
+<span class="sourceLineNo">2639</span><a id="line.2639">            if (frustration &gt; 500) {</a>
+<span class="sourceLineNo">2640</span><a id="line.2640">                path.clear();</a>
+<span class="sourceLineNo">2641</span><a id="line.2641">                break;</a>
+<span class="sourceLineNo">2642</span><a id="line.2642">            }</a>
+<span class="sourceLineNo">2643</span><a id="line.2643">            double best = gradientMap[currentPos.x][currentPos.y];</a>
+<span class="sourceLineNo">2644</span><a id="line.2644">            appendDirToShuffle(rng);</a>
+<span class="sourceLineNo">2645</span><a id="line.2645">            int choice = 0;</a>
+<span class="sourceLineNo">2646</span><a id="line.2646"></a>
+<span class="sourceLineNo">2647</span><a id="line.2647">            for (int d = 0; d &lt;= measurement.directionCount(); d++) {</a>
+<span class="sourceLineNo">2648</span><a id="line.2648">                Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);</a>
+<span class="sourceLineNo">2649</span><a id="line.2649">                if(!pt.isWithin(width, height))</a>
+<span class="sourceLineNo">2650</span><a id="line.2650">                    continue;</a>
+<span class="sourceLineNo">2651</span><a id="line.2651">                if (gradientMap[pt.x][pt.y] &lt; best &amp;&amp; !impassable2.contains(pt)) {</a>
+<span class="sourceLineNo">2652</span><a id="line.2652">                    if (dirs[choice] == Direction.NONE || !path.contains(pt)) {</a>
+<span class="sourceLineNo">2653</span><a id="line.2653">                        best = gradientMap[pt.x][pt.y];</a>
+<span class="sourceLineNo">2654</span><a id="line.2654">                        choice = d;</a>
+<span class="sourceLineNo">2655</span><a id="line.2655">                    }</a>
+<span class="sourceLineNo">2656</span><a id="line.2656">                }</a>
+<span class="sourceLineNo">2657</span><a id="line.2657">            }</a>
+<span class="sourceLineNo">2658</span><a id="line.2658">            if (best &gt;= gradientMap[start.x][start.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] &gt; FLOOR) {</a>
+<span class="sourceLineNo">2659</span><a id="line.2659">                cutShort = true;</a>
+<span class="sourceLineNo">2660</span><a id="line.2660">                frustration = 0;</a>
+<span class="sourceLineNo">2661</span><a id="line.2661">                if(buffer == null)</a>
+<span class="sourceLineNo">2662</span><a id="line.2662">                    return new ArrayList&lt;&gt;(path);</a>
+<span class="sourceLineNo">2663</span><a id="line.2663">                else</a>
+<span class="sourceLineNo">2664</span><a id="line.2664">                {</a>
+<span class="sourceLineNo">2665</span><a id="line.2665">                    buffer.addAll(path);</a>
+<span class="sourceLineNo">2666</span><a id="line.2666">                    return buffer;</a>
+<span class="sourceLineNo">2667</span><a id="line.2667">                }</a>
+<span class="sourceLineNo">2668</span><a id="line.2668">            }</a>
+<span class="sourceLineNo">2669</span><a id="line.2669">            currentPos = currentPos.translate(dirs[choice].deltaX, dirs[choice].deltaY);</a>
+<span class="sourceLineNo">2670</span><a id="line.2670">            if (path.size() &gt; 0) {</a>
+<span class="sourceLineNo">2671</span><a id="line.2671">                Coord last = path.get(path.size() - 1);</a>
+<span class="sourceLineNo">2672</span><a id="line.2672">                if (gradientMap[last.x][last.y] &lt;= gradientMap[currentPos.x][currentPos.y])</a>
+<span class="sourceLineNo">2673</span><a id="line.2673">                    break;</a>
+<span class="sourceLineNo">2674</span><a id="line.2674">            }</a>
+<span class="sourceLineNo">2675</span><a id="line.2675">            path.add(currentPos);</a>
+<span class="sourceLineNo">2676</span><a id="line.2676">            frustration++;</a>
+<span class="sourceLineNo">2677</span><a id="line.2677">            paidLength += costMap[currentPos.x][currentPos.y];</a>
+<span class="sourceLineNo">2678</span><a id="line.2678">            if (paidLength &gt; length - 1.0) {</a>
+<span class="sourceLineNo">2679</span><a id="line.2679">                if (onlyPassable != null &amp;&amp; onlyPassable.contains(currentPos)) {</a>
+<span class="sourceLineNo">2680</span><a id="line.2680">                    tempSet.clear();</a>
+<span class="sourceLineNo">2681</span><a id="line.2681">                    tempSet.addAll(impassable2);</a>
+<span class="sourceLineNo">2682</span><a id="line.2682">                    tempSet.add(currentPos);</a>
+<span class="sourceLineNo">2683</span><a id="line.2683">                    return findFleePath(buffer, length, scanLimit, preferLongerPaths, tempSet, onlyPassable, start, fearSources);</a>
+<span class="sourceLineNo">2684</span><a id="line.2684">                }</a>
+<span class="sourceLineNo">2685</span><a id="line.2685">                break;</a>
+<span class="sourceLineNo">2686</span><a id="line.2686">            }</a>
+<span class="sourceLineNo">2687</span><a id="line.2687">        }</a>
+<span class="sourceLineNo">2688</span><a id="line.2688">        cutShort = false;</a>
+<span class="sourceLineNo">2689</span><a id="line.2689">        frustration = 0;</a>
+<span class="sourceLineNo">2690</span><a id="line.2690">        goals.clear();</a>
+<span class="sourceLineNo">2691</span><a id="line.2691">        if(buffer == null) </a>
+<span class="sourceLineNo">2692</span><a id="line.2692">            return new ArrayList&lt;&gt;(path);</a>
+<span class="sourceLineNo">2693</span><a id="line.2693">        else</a>
+<span class="sourceLineNo">2694</span><a id="line.2694">        {</a>
+<span class="sourceLineNo">2695</span><a id="line.2695">            buffer.addAll(path);</a>
+<span class="sourceLineNo">2696</span><a id="line.2696">            return buffer;</a>
+<span class="sourceLineNo">2697</span><a id="line.2697">        }</a>
+<span class="sourceLineNo">2698</span><a id="line.2698">    }</a>
+<span class="sourceLineNo">2699</span><a id="line.2699"></a>
+<span class="sourceLineNo">2700</span><a id="line.2700">    /**</a>
+<span class="sourceLineNo">2701</span><a id="line.2701">     * For pathfinding creatures larger than 1x1 cell; scans the dungeon using DijkstraMap.scan with the listed goals</a>
+<span class="sourceLineNo">2702</span><a id="line.2702">     * and start point, and returns a list</a>
+<span class="sourceLineNo">2703</span><a id="line.2703">     * of Coord positions (using the current measurement) needed to get closer to the closest reachable</a>
+<span class="sourceLineNo">2704</span><a id="line.2704">     * goal. The maximum length of the returned list is given by length; if moving the full length of</a>
+<span class="sourceLineNo">2705</span><a id="line.2705">     * the list would place the mover in a position shared by one of the positions in onlyPassable</a>
+<span class="sourceLineNo">2706</span><a id="line.2706">     * (which is typically filled with friendly units that can be passed through in multi-tile-</a>
+<span class="sourceLineNo">2707</span><a id="line.2707">     * movement scenarios), it will recalculate a move so that it does not pass into that cell.</a>
+<span class="sourceLineNo">2708</span><a id="line.2708">     * The keys in impassable should be the positions of enemies and obstacles that cannot be moved</a>
+<span class="sourceLineNo">2709</span><a id="line.2709">     * through, and will be ignored if there is a goal overlapping one.</a>
+<span class="sourceLineNo">2710</span><a id="line.2710">     * The parameter size refers to the side length of a square unit, such as 2 for a 2x2 unit. The</a>
+<span class="sourceLineNo">2711</span><a id="line.2711">     * parameter start must refer to the minimum-x, minimum-y cell of that unit if size is &amp;gt; 1, and</a>
+<span class="sourceLineNo">2712</span><a id="line.2712">     * all positions in the returned path will refer to movement of the minimum-x, minimum-y cell.</a>
+<span class="sourceLineNo">2713</span><a id="line.2713">     * &lt;br&gt;</a>
+<span class="sourceLineNo">2714</span><a id="line.2714">     * This caches its result in a member field, path, which can be fetched after finding a path and will change with</a>
+<span class="sourceLineNo">2715</span><a id="line.2715">     * each call to a pathfinding method.</a>
+<span class="sourceLineNo">2716</span><a id="line.2716">     *</a>
+<span class="sourceLineNo">2717</span><a id="line.2717">     * @param size         the side length of the creature trying to find a path</a>
+<span class="sourceLineNo">2718</span><a id="line.2718">     * @param length       the length of the path to calculate</a>
+<span class="sourceLineNo">2719</span><a id="line.2719">     * @param impassable   a Set of impassable Coord positions that may change (not constant like walls); can be null</a>
+<span class="sourceLineNo">2720</span><a id="line.2720">     * @param onlyPassable a Set of Coord positions that this pathfinder cannot end a path occupying (typically allies); can be null</a>
+<span class="sourceLineNo">2721</span><a id="line.2721">     * @param start        the start of the path, should correspond to the minimum-x, minimum-y position of the pathfinder</a>
+<span class="sourceLineNo">2722</span><a id="line.2722">     * @param targets      a vararg or array of Coord that this will try to pathfind toward</a>
+<span class="sourceLineNo">2723</span><a id="line.2723">     * @return an ArrayList of Coord that will contain the min-x, min-y locations of this creature as it goes toward a target. Copy of path.</a>
+<span class="sourceLineNo">2724</span><a id="line.2724">     */</a>
+<span class="sourceLineNo">2725</span><a id="line.2725"></a>
+<span class="sourceLineNo">2726</span><a id="line.2726">    public ArrayList&lt;Coord&gt; findPathLarge(final int size, int length, Collection&lt;Coord&gt; impassable,</a>
+<span class="sourceLineNo">2727</span><a id="line.2727">                                          Collection&lt;Coord&gt; onlyPassable, Coord start, Coord... targets) {</a>
+<span class="sourceLineNo">2728</span><a id="line.2728">        return findPathLarge(size, length, -1, impassable, onlyPassable, start, targets);</a>
+<span class="sourceLineNo">2729</span><a id="line.2729">    }</a>
+<span class="sourceLineNo">2730</span><a id="line.2730">    public ArrayList&lt;Coord&gt; findPathLarge(final int size, int length, final int scanLimit, Collection&lt;Coord&gt; impassable,</a>
+<span class="sourceLineNo">2731</span><a id="line.2731">                                          Collection&lt;Coord&gt; onlyPassable, Coord start, Coord... targets) {</a>
+<span class="sourceLineNo">2732</span><a id="line.2732"></a>
+<span class="sourceLineNo">2733</span><a id="line.2733">        if (!initialized) return null;</a>
+<span class="sourceLineNo">2734</span><a id="line.2734">        path.clear();</a>
+<span class="sourceLineNo">2735</span><a id="line.2735">        if (impassable == null)</a>
+<span class="sourceLineNo">2736</span><a id="line.2736">            impassable2.clear();</a>
+<span class="sourceLineNo">2737</span><a id="line.2737">        else</a>
+<span class="sourceLineNo">2738</span><a id="line.2738">        {</a>
+<span class="sourceLineNo">2739</span><a id="line.2739">            impassable2.clear();</a>
+<span class="sourceLineNo">2740</span><a id="line.2740">            impassable2.addAll(impassable);</a>
+<span class="sourceLineNo">2741</span><a id="line.2741">        }</a>
+<span class="sourceLineNo">2742</span><a id="line.2742">        if(onlyPassable != null &amp;&amp; length == 1)</a>
+<span class="sourceLineNo">2743</span><a id="line.2743">            impassable2.addAll(onlyPassable);</a>
+<span class="sourceLineNo">2744</span><a id="line.2744"></a>
+<span class="sourceLineNo">2745</span><a id="line.2745">        resetMap();</a>
+<span class="sourceLineNo">2746</span><a id="line.2746">        for (Coord goal : targets) {</a>
+<span class="sourceLineNo">2747</span><a id="line.2747">            setGoal(goal.x, goal.y);</a>
+<span class="sourceLineNo">2748</span><a id="line.2748">        }</a>
+<span class="sourceLineNo">2749</span><a id="line.2749">        if (goals.isEmpty())</a>
+<span class="sourceLineNo">2750</span><a id="line.2750">        {</a>
+<span class="sourceLineNo">2751</span><a id="line.2751">            cutShort = true;</a>
+<span class="sourceLineNo">2752</span><a id="line.2752">            return new ArrayList&lt;&gt;(path);</a>
+<span class="sourceLineNo">2753</span><a id="line.2753">        }</a>
+<span class="sourceLineNo">2754</span><a id="line.2754"></a>
+<span class="sourceLineNo">2755</span><a id="line.2755">        if(length &lt; 0)</a>
+<span class="sourceLineNo">2756</span><a id="line.2756">            length = 0;</a>
+<span class="sourceLineNo">2757</span><a id="line.2757">        if(scanLimit &lt;= 0 || scanLimit &lt; length)</a>
+<span class="sourceLineNo">2758</span><a id="line.2758">            scan(start, impassable2, size);</a>
+<span class="sourceLineNo">2759</span><a id="line.2759">        else</a>
+<span class="sourceLineNo">2760</span><a id="line.2760">            partialScan(scanLimit, start, impassable2, size);</a>
+<span class="sourceLineNo">2761</span><a id="line.2761"></a>
+<span class="sourceLineNo">2762</span><a id="line.2762">        Coord currentPos = start;</a>
+<span class="sourceLineNo">2763</span><a id="line.2763">        double paidLength = 0.0;</a>
+<span class="sourceLineNo">2764</span><a id="line.2764">        while (true) {</a>
+<span class="sourceLineNo">2765</span><a id="line.2765">            if (frustration &gt; 500) {</a>
+<span class="sourceLineNo">2766</span><a id="line.2766">                path.clear();</a>
+<span class="sourceLineNo">2767</span><a id="line.2767">                break;</a>
+<span class="sourceLineNo">2768</span><a id="line.2768">            }</a>
+<span class="sourceLineNo">2769</span><a id="line.2769">            double best = gradientMap[currentPos.x][currentPos.y];</a>
+<span class="sourceLineNo">2770</span><a id="line.2770">            appendDirToShuffle(rng);</a>
+<span class="sourceLineNo">2771</span><a id="line.2771">            int choice = 0;</a>
+<span class="sourceLineNo">2772</span><a id="line.2772"></a>
+<span class="sourceLineNo">2773</span><a id="line.2773">            for (int d = 0; d &lt;= measurement.directionCount(); d++) {</a>
+<span class="sourceLineNo">2774</span><a id="line.2774">                Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);</a>
+<span class="sourceLineNo">2775</span><a id="line.2775">                if(!pt.isWithin(width, height))</a>
+<span class="sourceLineNo">2776</span><a id="line.2776">                    continue;</a>
+<span class="sourceLineNo">2777</span><a id="line.2777">                if (gradientMap[pt.x][pt.y] &lt; best &amp;&amp; !impassable2.contains(pt)) {</a>
+<span class="sourceLineNo">2778</span><a id="line.2778">                    if (dirs[choice] == Direction.NONE || !path.contains(pt)) {</a>
+<span class="sourceLineNo">2779</span><a id="line.2779">                        best = gradientMap[pt.x][pt.y];</a>
+<span class="sourceLineNo">2780</span><a id="line.2780">                        choice = d;</a>
+<span class="sourceLineNo">2781</span><a id="line.2781">                    }</a>
+<span class="sourceLineNo">2782</span><a id="line.2782">                }</a>
+<span class="sourceLineNo">2783</span><a id="line.2783">            }</a>
+<span class="sourceLineNo">2784</span><a id="line.2784"></a>
+<span class="sourceLineNo">2785</span><a id="line.2785">            if (best &gt;= gradientMap[currentPos.x][currentPos.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] &gt; FLOOR) {</a>
+<span class="sourceLineNo">2786</span><a id="line.2786">                cutShort = true;</a>
+<span class="sourceLineNo">2787</span><a id="line.2787">                frustration = 0;</a>
+<span class="sourceLineNo">2788</span><a id="line.2788">                return new ArrayList&lt;&gt;(path);</a>
+<span class="sourceLineNo">2789</span><a id="line.2789">            }</a>
+<span class="sourceLineNo">2790</span><a id="line.2790">            currentPos = currentPos.translate(dirs[choice].deltaX, dirs[choice].deltaY);</a>
+<span class="sourceLineNo">2791</span><a id="line.2791"></a>
+<span class="sourceLineNo">2792</span><a id="line.2792">            path.add(currentPos);</a>
+<span class="sourceLineNo">2793</span><a id="line.2793">            paidLength += costMap[currentPos.x][currentPos.y];</a>
+<span class="sourceLineNo">2794</span><a id="line.2794">            frustration++;</a>
+<span class="sourceLineNo">2795</span><a id="line.2795">            if (paidLength &gt; length - 1.0) {</a>
+<span class="sourceLineNo">2796</span><a id="line.2796">                if (onlyPassable != null &amp;&amp; onlyPassable.contains(currentPos)) {</a>
+<span class="sourceLineNo">2797</span><a id="line.2797">                    tempSet.clear();</a>
+<span class="sourceLineNo">2798</span><a id="line.2798">                    tempSet.addAll(impassable2);</a>
+<span class="sourceLineNo">2799</span><a id="line.2799">                    tempSet.add(currentPos);</a>
+<span class="sourceLineNo">2800</span><a id="line.2800">                    return findPathLarge(size, length, tempSet, onlyPassable, start, targets);</a>
+<span class="sourceLineNo">2801</span><a id="line.2801">                }</a>
+<span class="sourceLineNo">2802</span><a id="line.2802">                break;</a>
+<span class="sourceLineNo">2803</span><a id="line.2803">            }</a>
+<span class="sourceLineNo">2804</span><a id="line.2804">            if (gradientMap[currentPos.x][currentPos.y] == 0)</a>
+<span class="sourceLineNo">2805</span><a id="line.2805">                break;</a>
+<span class="sourceLineNo">2806</span><a id="line.2806">        }</a>
+<span class="sourceLineNo">2807</span><a id="line.2807">        cutShort = false;</a>
+<span class="sourceLineNo">2808</span><a id="line.2808">        frustration = 0;</a>
+<span class="sourceLineNo">2809</span><a id="line.2809">        goals.clear();</a>
+<span class="sourceLineNo">2810</span><a id="line.2810">        return new ArrayList&lt;&gt;(path);</a>
+<span class="sourceLineNo">2811</span><a id="line.2811">    }</a>
+<span class="sourceLineNo">2812</span><a id="line.2812"></a>
+<span class="sourceLineNo">2813</span><a id="line.2813">    /**</a>
+<span class="sourceLineNo">2814</span><a id="line.2814">     * For pathfinding creatures larger than 1x1 cell; scans the dungeon using DijkstraMap.scan with the listed goals</a>
+<span class="sourceLineNo">2815</span><a id="line.2815">     * and start point, and returns a list</a>
+<span class="sourceLineNo">2816</span><a id="line.2816">     * of Coord positions (using the current measurement) needed to get closer to a goal, until preferredRange is</a>
+<span class="sourceLineNo">2817</span><a id="line.2817">     * reached, or further from a goal if the preferredRange has not been met at the current distance.</a>
+<span class="sourceLineNo">2818</span><a id="line.2818">     * The maximum length of the returned list is given by moveLength; if moving the full length of</a>
+<span class="sourceLineNo">2819</span><a id="line.2819">     * the list would place the mover in a position shared by one of the positions in onlyPassable</a>
+<span class="sourceLineNo">2820</span><a id="line.2820">     * (which is typically filled with friendly units that can be passed through in multi-tile-</a>
+<span class="sourceLineNo">2821</span><a id="line.2821">     * movement scenarios), it will recalculate a move so that it does not pass into that cell.</a>
+<span class="sourceLineNo">2822</span><a id="line.2822">     * The keys in impassable should be the positions of enemies and obstacles that cannot be moved</a>
+<span class="sourceLineNo">2823</span><a id="line.2823">     * through, and will be ignored if there is a goal overlapping one.</a>
+<span class="sourceLineNo">2824</span><a id="line.2824">     * The parameter size refers to the side length of a square unit, such as 2 for a 2x2 unit. The</a>
+<span class="sourceLineNo">2825</span><a id="line.2825">     * parameter start must refer to the minimum-x, minimum-y cell of that unit if size is &amp;gt; 1, and</a>
+<span class="sourceLineNo">2826</span><a id="line.2826">     * all positions in the returned path will refer to movement of the minimum-x, minimum-y cell.</a>
+<span class="sourceLineNo">2827</span><a id="line.2827">     * &lt;br&gt;</a>
+<span class="sourceLineNo">2828</span><a id="line.2828">     * This caches its result in a member field, path, which can be fetched after finding a path and will change with</a>
+<span class="sourceLineNo">2829</span><a id="line.2829">     * each call to a pathfinding method.</a>
+<span class="sourceLineNo">2830</span><a id="line.2830">     *</a>
+<span class="sourceLineNo">2831</span><a id="line.2831">     * @param size           the side length of the creature trying to find a path</a>
+<span class="sourceLineNo">2832</span><a id="line.2832">     * @param moveLength     the length of the path to calculate</a>
+<span class="sourceLineNo">2833</span><a id="line.2833">     * @param preferredRange the distance this unit will try to keep from a target</a>
+<span class="sourceLineNo">2834</span><a id="line.2834">     * @param los            a squidgrid.LOS object if the preferredRange should try to stay in line of sight, or null if LoS</a>
+<span class="sourceLineNo">2835</span><a id="line.2835">     *                       should be disregarded.</a>
+<span class="sourceLineNo">2836</span><a id="line.2836">     * @param impassable     a Set of impassable Coord positions that may change (not constant like walls); can be null</a>
+<span class="sourceLineNo">2837</span><a id="line.2837">     * @param onlyPassable   a Set of Coord positions that this pathfinder cannot end a path occupying (typically allies); can be null</a>
+<span class="sourceLineNo">2838</span><a id="line.2838">     * @param start          the start of the path, should correspond to the minimum-x, minimum-y position of the pathfinder</a>
+<span class="sourceLineNo">2839</span><a id="line.2839">     * @param targets        a vararg or array of Coord that this will try to pathfind toward</a>
+<span class="sourceLineNo">2840</span><a id="line.2840">     * @return an ArrayList of Coord that will contain the min-x, min-y locations of this creature as it goes toward a target. Copy of path.</a>
+<span class="sourceLineNo">2841</span><a id="line.2841">     */</a>
+<span class="sourceLineNo">2842</span><a id="line.2842">    public ArrayList&lt;Coord&gt; findAttackPathLarge(int size, int moveLength, int preferredRange, LOS los, Collection&lt;Coord&gt; impassable,</a>
+<span class="sourceLineNo">2843</span><a id="line.2843">                                                Collection&lt;Coord&gt; onlyPassable, Coord start, Coord... targets) {</a>
+<span class="sourceLineNo">2844</span><a id="line.2844">        if (!initialized) return null;</a>
+<span class="sourceLineNo">2845</span><a id="line.2845">        if (preferredRange &lt; 0) preferredRange = 0;</a>
+<span class="sourceLineNo">2846</span><a id="line.2846">        double[][] resMap = new double[width][height];</a>
+<span class="sourceLineNo">2847</span><a id="line.2847">        if (los != null) {</a>
+<span class="sourceLineNo">2848</span><a id="line.2848">            for (int x = 0; x &lt; width; x++) {</a>
+<span class="sourceLineNo">2849</span><a id="line.2849">                for (int y = 0; y &lt; height; y++) {</a>
+<span class="sourceLineNo">2850</span><a id="line.2850">                    resMap[x][y] = (physicalMap[x][y] == WALL) ? 1.0 : 0.0;</a>
+<span class="sourceLineNo">2851</span><a id="line.2851">                }</a>
+<span class="sourceLineNo">2852</span><a id="line.2852">            }</a>
+<span class="sourceLineNo">2853</span><a id="line.2853">        }</a>
+<span class="sourceLineNo">2854</span><a id="line.2854">        path.clear();</a>
+<span class="sourceLineNo">2855</span><a id="line.2855">        if (impassable == null)</a>
+<span class="sourceLineNo">2856</span><a id="line.2856">            impassable2.clear();</a>
+<span class="sourceLineNo">2857</span><a id="line.2857">        else</a>
+<span class="sourceLineNo">2858</span><a id="line.2858">        {</a>
+<span class="sourceLineNo">2859</span><a id="line.2859">            impassable2.clear();</a>
+<span class="sourceLineNo">2860</span><a id="line.2860">            impassable2.addAll(impassable);</a>
+<span class="sourceLineNo">2861</span><a id="line.2861">        }</a>
+<span class="sourceLineNo">2862</span><a id="line.2862">        if(onlyPassable != null &amp;&amp; moveLength == 1)</a>
+<span class="sourceLineNo">2863</span><a id="line.2863">            impassable2.addAll(onlyPassable);</a>
+<span class="sourceLineNo">2864</span><a id="line.2864"></a>
+<span class="sourceLineNo">2865</span><a id="line.2865">        resetMap();</a>
+<span class="sourceLineNo">2866</span><a id="line.2866">        for (Coord goal : targets) {</a>
+<span class="sourceLineNo">2867</span><a id="line.2867">            setGoal(goal.x, goal.y);</a>
+<span class="sourceLineNo">2868</span><a id="line.2868">        }</a>
+<span class="sourceLineNo">2869</span><a id="line.2869">        if (goals.isEmpty())</a>
+<span class="sourceLineNo">2870</span><a id="line.2870">        {</a>
+<span class="sourceLineNo">2871</span><a id="line.2871">            cutShort = true;</a>
+<span class="sourceLineNo">2872</span><a id="line.2872">            return new ArrayList&lt;&gt;(path);</a>
+<span class="sourceLineNo">2873</span><a id="line.2873">        }</a>
+<span class="sourceLineNo">2874</span><a id="line.2874"></a>
+<span class="sourceLineNo">2875</span><a id="line.2875">        Measurement mess = measurement;</a>
+<span class="sourceLineNo">2876</span><a id="line.2876">        if (measurement == Measurement.EUCLIDEAN) {</a>
+<span class="sourceLineNo">2877</span><a id="line.2877">            measurement = Measurement.CHEBYSHEV;</a>
+<span class="sourceLineNo">2878</span><a id="line.2878">        }</a>
+<span class="sourceLineNo">2879</span><a id="line.2879">        scan(impassable2, size);</a>
+<span class="sourceLineNo">2880</span><a id="line.2880">        goals.clear();</a>
+<span class="sourceLineNo">2881</span><a id="line.2881"></a>
+<span class="sourceLineNo">2882</span><a id="line.2882">        for (int x = 0; x &lt; width; x++) {</a>
+<span class="sourceLineNo">2883</span><a id="line.2883">            CELL:</a>
+<span class="sourceLineNo">2884</span><a id="line.2884">            for (int y = 0; y &lt; height; y++) {</a>
+<span class="sourceLineNo">2885</span><a id="line.2885">                if (gradientMap[x][y] == WALL || gradientMap[x][y] == DARK)</a>
+<span class="sourceLineNo">2886</span><a id="line.2886">                    continue;</a>
+<span class="sourceLineNo">2887</span><a id="line.2887">                if (x + 2 &lt; width &amp;&amp; y + 2 &lt; height &amp;&amp; gradientMap[x][y] == preferredRange) {</a>
+<span class="sourceLineNo">2888</span><a id="line.2888">                    for (Coord goal : targets) {</a>
+<span class="sourceLineNo">2889</span><a id="line.2889">                        if (los == null</a>
+<span class="sourceLineNo">2890</span><a id="line.2890">                                || los.isReachable(resMap, x, y, goal.x, goal.y)</a>
+<span class="sourceLineNo">2891</span><a id="line.2891">                                || los.isReachable(resMap, x + 1, y, goal.x, goal.y)</a>
+<span class="sourceLineNo">2892</span><a id="line.2892">                                || los.isReachable(resMap, x, y + 1, goal.x, goal.y)</a>
+<span class="sourceLineNo">2893</span><a id="line.2893">                                || los.isReachable(resMap, x + 1, y + 1, goal.x, goal.y)) {</a>
+<span class="sourceLineNo">2894</span><a id="line.2894">                            setGoal(x, y);</a>
+<span class="sourceLineNo">2895</span><a id="line.2895">                            gradientMap[x][y] = 0;</a>
+<span class="sourceLineNo">2896</span><a id="line.2896">                            continue CELL;</a>
+<span class="sourceLineNo">2897</span><a id="line.2897">                        }</a>
+<span class="sourceLineNo">2898</span><a id="line.2898">                    }</a>
+<span class="sourceLineNo">2899</span><a id="line.2899">                    gradientMap[x][y] = FLOOR;</a>
+<span class="sourceLineNo">2900</span><a id="line.2900">                } else</a>
+<span class="sourceLineNo">2901</span><a id="line.2901">                    gradientMap[x][y] = FLOOR;</a>
+<span class="sourceLineNo">2902</span><a id="line.2902">            }</a>
+<span class="sourceLineNo">2903</span><a id="line.2903">        }</a>
+<span class="sourceLineNo">2904</span><a id="line.2904">        measurement = mess;</a>
+<span class="sourceLineNo">2905</span><a id="line.2905">        scan(impassable2, size);</a>
+<span class="sourceLineNo">2906</span><a id="line.2906"></a>
+<span class="sourceLineNo">2907</span><a id="line.2907">        Coord currentPos = start;</a>
+<span class="sourceLineNo">2908</span><a id="line.2908">        double paidLength = 0.0;</a>
+<span class="sourceLineNo">2909</span><a id="line.2909">        while (true) {</a>
+<span class="sourceLineNo">2910</span><a id="line.2910">            if (frustration &gt; 500) {</a>
+<span class="sourceLineNo">2911</span><a id="line.2911">                path.clear();</a>
+<span class="sourceLineNo">2912</span><a id="line.2912">                break;</a>
+<span class="sourceLineNo">2913</span><a id="line.2913">            }</a>
+<span class="sourceLineNo">2914</span><a id="line.2914">            double best = gradientMap[currentPos.x][currentPos.y];</a>
+<span class="sourceLineNo">2915</span><a id="line.2915">            appendDirToShuffle(rng);</a>
+<span class="sourceLineNo">2916</span><a id="line.2916">            int choice = 0;</a>
+<span class="sourceLineNo">2917</span><a id="line.2917"></a>
+<span class="sourceLineNo">2918</span><a id="line.2918">            for (int d = 0; d &lt;= measurement.directionCount(); d++) {</a>
+<span class="sourceLineNo">2919</span><a id="line.2919">                Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);</a>
+<span class="sourceLineNo">2920</span><a id="line.2920">                if(!pt.isWithin(width, height))</a>
+<span class="sourceLineNo">2921</span><a id="line.2921">                    continue;</a>
+<span class="sourceLineNo">2922</span><a id="line.2922">                if (gradientMap[pt.x][pt.y] &lt; best &amp;&amp; !impassable2.contains(pt)) {</a>
+<span class="sourceLineNo">2923</span><a id="line.2923">                    if (dirs[choice] == Direction.NONE || !path.contains(pt)) {</a>
+<span class="sourceLineNo">2924</span><a id="line.2924">                        best = gradientMap[pt.x][pt.y];</a>
+<span class="sourceLineNo">2925</span><a id="line.2925">                        choice = d;</a>
+<span class="sourceLineNo">2926</span><a id="line.2926">                    }</a>
+<span class="sourceLineNo">2927</span><a id="line.2927">                }</a>
+<span class="sourceLineNo">2928</span><a id="line.2928">            }</a>
+<span class="sourceLineNo">2929</span><a id="line.2929"></a>
+<span class="sourceLineNo">2930</span><a id="line.2930">            if (best &gt;= gradientMap[currentPos.x][currentPos.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] &gt; FLOOR) {</a>
+<span class="sourceLineNo">2931</span><a id="line.2931">                cutShort = true;</a>
+<span class="sourceLineNo">2932</span><a id="line.2932">                frustration = 0;</a>
+<span class="sourceLineNo">2933</span><a id="line.2933">                return new ArrayList&lt;&gt;(path);</a>
+<span class="sourceLineNo">2934</span><a id="line.2934">            }</a>
+<span class="sourceLineNo">2935</span><a id="line.2935">            currentPos = currentPos.translate(dirs[choice].deltaX, dirs[choice].deltaY);</a>
+<span class="sourceLineNo">2936</span><a id="line.2936">            path.add(currentPos);</a>
+<span class="sourceLineNo">2937</span><a id="line.2937">            frustration++;</a>
+<span class="sourceLineNo">2938</span><a id="line.2938">            paidLength += costMap[currentPos.x][currentPos.y];</a>
+<span class="sourceLineNo">2939</span><a id="line.2939">            if (paidLength &gt; moveLength - 1.0) {</a>
+<span class="sourceLineNo">2940</span><a id="line.2940">                if (onlyPassable != null &amp;&amp; onlyPassable.contains(currentPos)) {</a>
+<span class="sourceLineNo">2941</span><a id="line.2941">                    tempSet.clear();</a>
+<span class="sourceLineNo">2942</span><a id="line.2942">                    tempSet.addAll(impassable2);</a>
+<span class="sourceLineNo">2943</span><a id="line.2943">                    tempSet.add(currentPos);</a>
+<span class="sourceLineNo">2944</span><a id="line.2944">                    return findAttackPathLarge(size, moveLength, preferredRange, los, tempSet, onlyPassable, start, targets);</a>
+<span class="sourceLineNo">2945</span><a id="line.2945">                }</a>
+<span class="sourceLineNo">2946</span><a id="line.2946">                break;</a>
+<span class="sourceLineNo">2947</span><a id="line.2947">            }</a>
+<span class="sourceLineNo">2948</span><a id="line.2948">            if (gradientMap[currentPos.x][currentPos.y] == 0)</a>
+<span class="sourceLineNo">2949</span><a id="line.2949">                break;</a>
+<span class="sourceLineNo">2950</span><a id="line.2950">        }</a>
+<span class="sourceLineNo">2951</span><a id="line.2951">        cutShort = false;</a>
+<span class="sourceLineNo">2952</span><a id="line.2952">        frustration = 0;</a>
+<span class="sourceLineNo">2953</span><a id="line.2953">        goals.clear();</a>
+<span class="sourceLineNo">2954</span><a id="line.2954">        return new ArrayList&lt;&gt;(path);</a>
+<span class="sourceLineNo">2955</span><a id="line.2955">    }</a>
+<span class="sourceLineNo">2956</span><a id="line.2956"></a>
+<span class="sourceLineNo">2957</span><a id="line.2957">    /**</a>
+<span class="sourceLineNo">2958</span><a id="line.2958">     * Scans the dungeon using DijkstraMap.scan with the listed goals and start point, and returns a list</a>
+<span class="sourceLineNo">2959</span><a id="line.2959">     * of Coord positions (using the current measurement) needed to get closer to a goal, until a cell is reached with</a>
+<span class="sourceLineNo">2960</span><a id="line.2960">     * a distance from a goal that is at least equal to minPreferredRange and no more than maxPreferredRange,</a>
+<span class="sourceLineNo">2961</span><a id="line.2961">     * which may go further from a goal if the minPreferredRange has not been met at the current distance.</a>
+<span class="sourceLineNo">2962</span><a id="line.2962">     * The maximum length of the returned list is given by moveLength; if moving the full length of</a>
+<span class="sourceLineNo">2963</span><a id="line.2963">     * the list would place the mover in a position shared by one of the positions in onlyPassable</a>
+<span class="sourceLineNo">2964</span><a id="line.2964">     * (which is typically filled with friendly units that can be passed through in multi-tile-</a>
+<span class="sourceLineNo">2965</span><a id="line.2965">     * movement scenarios), it will recalculate a move so that it does not pass into that cell.</a>
+<span class="sourceLineNo">2966</span><a id="line.2966">     * The keys in impassable should be the positions of enemies and obstacles that cannot be moved</a>
+<span class="sourceLineNo">2967</span><a id="line.2967">     * through, and will be ignored if there is a goal overlapping one.</a>
+<span class="sourceLineNo">2968</span><a id="line.2968">     * The parameter size refers to the side length of a square unit, such as 2 for a 2x2 unit. The</a>
+<span class="sourceLineNo">2969</span><a id="line.2969">     * parameter start must refer to the minimum-x, minimum-y cell of that unit if size is &amp;gt; 1, and</a>
+<span class="sourceLineNo">2970</span><a id="line.2970">     * all positions in the returned path will refer to movement of the minimum-x, minimum-y cell.</a>
+<span class="sourceLineNo">2971</span><a id="line.2971">     * &lt;br&gt;</a>
+<span class="sourceLineNo">2972</span><a id="line.2972">     * This caches its result in a member field, path, which can be fetched after finding a path and will change with</a>
+<span class="sourceLineNo">2973</span><a id="line.2973">     * each call to a pathfinding method.</a>
+<span class="sourceLineNo">2974</span><a id="line.2974">     *</a>
+<span class="sourceLineNo">2975</span><a id="line.2975">     * @param size              the side length of the creature trying to find a path</a>
+<span class="sourceLineNo">2976</span><a id="line.2976">     * @param moveLength        the length of the path to calculate</a>
+<span class="sourceLineNo">2977</span><a id="line.2977">     * @param minPreferredRange the (inclusive) lower bound of the distance this unit will try to keep from a target</a>
+<span class="sourceLineNo">2978</span><a id="line.2978">     * @param maxPreferredRange the (inclusive) upper bound of the distance this unit will try to keep from a target</a>
+<span class="sourceLineNo">2979</span><a id="line.2979">     * @param los               a squidgrid.LOS object if the preferredRange should try to stay in line of sight, or null if LoS</a>
+<span class="sourceLineNo">2980</span><a id="line.2980">     *                          should be disregarded.</a>
+<span class="sourceLineNo">2981</span><a id="line.2981">     * @param impassable        a Set of impassable Coord positions that may change (not constant like walls); can be null</a>
+<span class="sourceLineNo">2982</span><a id="line.2982">     * @param onlyPassable      a Set of Coord positions that this pathfinder cannot end a path occupying (typically allies); can be null</a>
+<span class="sourceLineNo">2983</span><a id="line.2983">     * @param start             the start of the path, should correspond to the minimum-x, minimum-y position of the pathfinder</a>
+<span class="sourceLineNo">2984</span><a id="line.2984">     * @param targets           a vararg or array of Coord that this will try to pathfind toward</a>
+<span class="sourceLineNo">2985</span><a id="line.2985">     * @return an ArrayList of Coord that will contain the min-x, min-y locations of this creature as it goes toward a target. Copy of path.</a>
+<span class="sourceLineNo">2986</span><a id="line.2986">     */</a>
+<span class="sourceLineNo">2987</span><a id="line.2987">    public ArrayList&lt;Coord&gt; findAttackPathLarge(int size, int moveLength, int minPreferredRange, int maxPreferredRange, LOS los,</a>
+<span class="sourceLineNo">2988</span><a id="line.2988">                                                Collection&lt;Coord&gt; impassable, Collection&lt;Coord&gt; onlyPassable, Coord start, Coord... targets) {</a>
+<span class="sourceLineNo">2989</span><a id="line.2989">        if (!initialized) return null;</a>
+<span class="sourceLineNo">2990</span><a id="line.2990">        if (minPreferredRange &lt; 0) minPreferredRange = 0;</a>
+<span class="sourceLineNo">2991</span><a id="line.2991">        if (maxPreferredRange &lt; minPreferredRange) maxPreferredRange = minPreferredRange;</a>
+<span class="sourceLineNo">2992</span><a id="line.2992">        double[][] resMap = new double[width][height];</a>
+<span class="sourceLineNo">2993</span><a id="line.2993">        if (los != null) {</a>
+<span class="sourceLineNo">2994</span><a id="line.2994">            for (int x = 0; x &lt; width; x++) {</a>
+<span class="sourceLineNo">2995</span><a id="line.2995">                for (int y = 0; y &lt; height; y++) {</a>
+<span class="sourceLineNo">2996</span><a id="line.2996">                    resMap[x][y] = (physicalMap[x][y] == WALL) ? 1.0 : 0.0;</a>
+<span class="sourceLineNo">2997</span><a id="line.2997">                }</a>
+<span class="sourceLineNo">2998</span><a id="line.2998">            }</a>
+<span class="sourceLineNo">2999</span><a id="line.2999">        }</a>
+<span class="sourceLineNo">3000</span><a id="line.3000">        path.clear();</a>
+<span class="sourceLineNo">3001</span><a id="line.3001">        if (impassable == null)</a>
+<span class="sourceLineNo">3002</span><a id="line.3002">            impassable2.clear();</a>
+<span class="sourceLineNo">3003</span><a id="line.3003">        else</a>
+<span class="sourceLineNo">3004</span><a id="line.3004">        {</a>
+<span class="sourceLineNo">3005</span><a id="line.3005">            impassable2.clear();</a>
+<span class="sourceLineNo">3006</span><a id="line.3006">            impassable2.addAll(impassable);</a>
+<span class="sourceLineNo">3007</span><a id="line.3007">        }</a>
+<span class="sourceLineNo">3008</span><a id="line.3008">        if(onlyPassable != null &amp;&amp; moveLength == 1)</a>
+<span class="sourceLineNo">3009</span><a id="line.3009">            impassable2.addAll(onlyPassable);</a>
+<span class="sourceLineNo">3010</span><a id="line.3010"></a>
+<span class="sourceLineNo">3011</span><a id="line.3011">        resetMap();</a>
+<span class="sourceLineNo">3012</span><a id="line.3012">        for (Coord goal : targets) {</a>
+<span class="sourceLineNo">3013</span><a id="line.3013">            setGoal(goal);</a>
+<span class="sourceLineNo">3014</span><a id="line.3014">        }</a>
+<span class="sourceLineNo">3015</span><a id="line.3015">        if (goals.isEmpty())</a>
+<span class="sourceLineNo">3016</span><a id="line.3016">        {</a>
+<span class="sourceLineNo">3017</span><a id="line.3017">            cutShort = true;</a>
+<span class="sourceLineNo">3018</span><a id="line.3018">            return new ArrayList&lt;&gt;(path);</a>
+<span class="sourceLineNo">3019</span><a id="line.3019">        }</a>
+<span class="sourceLineNo">3020</span><a id="line.3020"></a>
+<span class="sourceLineNo">3021</span><a id="line.3021">        Measurement mess = measurement;</a>
+<span class="sourceLineNo">3022</span><a id="line.3022">        if (measurement == Measurement.EUCLIDEAN) {</a>
+<span class="sourceLineNo">3023</span><a id="line.3023">            measurement = Measurement.CHEBYSHEV;</a>
+<span class="sourceLineNo">3024</span><a id="line.3024">        }</a>
+<span class="sourceLineNo">3025</span><a id="line.3025">        scan(impassable2, size);</a>
+<span class="sourceLineNo">3026</span><a id="line.3026">        goals.clear();</a>
+<span class="sourceLineNo">3027</span><a id="line.3027"></a>
+<span class="sourceLineNo">3028</span><a id="line.3028">        for (int x = 0; x &lt; width; x++) {</a>
+<span class="sourceLineNo">3029</span><a id="line.3029">            CELL:</a>
+<span class="sourceLineNo">3030</span><a id="line.3030">            for (int y = 0; y &lt; height; y++) {</a>
+<span class="sourceLineNo">3031</span><a id="line.3031">                if (gradientMap[x][y] == WALL || gradientMap[x][y] == DARK)</a>
+<span class="sourceLineNo">3032</span><a id="line.3032">                    continue;</a>
+<span class="sourceLineNo">3033</span><a id="line.3033">                if (x + 2 &lt; width &amp;&amp; y + 2 &lt; height &amp;&amp; gradientMap[x][y] &gt;= minPreferredRange &amp;&amp; gradientMap[x][y] &lt;= maxPreferredRange) {</a>
+<span class="sourceLineNo">3034</span><a id="line.3034">                    for (Coord goal : targets) {</a>
+<span class="sourceLineNo">3035</span><a id="line.3035">                        if (los == null</a>
+<span class="sourceLineNo">3036</span><a id="line.3036">                                || los.isReachable(resMap, x, y, goal.x, goal.y)</a>
+<span class="sourceLineNo">3037</span><a id="line.3037">                                || los.isReachable(resMap, x + 1, y, goal.x, goal.y)</a>
+<span class="sourceLineNo">3038</span><a id="line.3038">                                || los.isReachable(resMap, x, y + 1, goal.x, goal.y)</a>
+<span class="sourceLineNo">3039</span><a id="line.3039">                                || los.isReachable(resMap, x + 1, y + 1, goal.x, goal.y)) {</a>
+<span class="sourceLineNo">3040</span><a id="line.3040">                            setGoal(x, y);</a>
+<span class="sourceLineNo">3041</span><a id="line.3041">                            gradientMap[x][y] = 0;</a>
+<span class="sourceLineNo">3042</span><a id="line.3042">                            continue CELL;</a>
+<span class="sourceLineNo">3043</span><a id="line.3043">                        }</a>
+<span class="sourceLineNo">3044</span><a id="line.3044">                    }</a>
+<span class="sourceLineNo">3045</span><a id="line.3045">                    gradientMap[x][y] = FLOOR;</a>
+<span class="sourceLineNo">3046</span><a id="line.3046">                } else</a>
+<span class="sourceLineNo">3047</span><a id="line.3047">                    gradientMap[x][y] = FLOOR;</a>
+<span class="sourceLineNo">3048</span><a id="line.3048">            }</a>
+<span class="sourceLineNo">3049</span><a id="line.3049">        }</a>
+<span class="sourceLineNo">3050</span><a id="line.3050">        measurement = mess;</a>
+<span class="sourceLineNo">3051</span><a id="line.3051">        scan(impassable2, size);</a>
+<span class="sourceLineNo">3052</span><a id="line.3052"></a>
+<span class="sourceLineNo">3053</span><a id="line.3053">        Coord currentPos = start;</a>
+<span class="sourceLineNo">3054</span><a id="line.3054">        double paidLength = 0.0;</a>
+<span class="sourceLineNo">3055</span><a id="line.3055">        while (true) {</a>
+<span class="sourceLineNo">3056</span><a id="line.3056">            if (frustration &gt; 500) {</a>
+<span class="sourceLineNo">3057</span><a id="line.3057">                path.clear();</a>
+<span class="sourceLineNo">3058</span><a id="line.3058">                break;</a>
+<span class="sourceLineNo">3059</span><a id="line.3059">            }</a>
+<span class="sourceLineNo">3060</span><a id="line.3060"></a>
+<span class="sourceLineNo">3061</span><a id="line.3061">            double best = gradientMap[currentPos.x][currentPos.y];</a>
+<span class="sourceLineNo">3062</span><a id="line.3062">            appendDirToShuffle(rng);</a>
+<span class="sourceLineNo">3063</span><a id="line.3063">            int choice = 0;</a>
+<span class="sourceLineNo">3064</span><a id="line.3064"></a>
+<span class="sourceLineNo">3065</span><a id="line.3065">            for (int d = 0; d &lt;= measurement.directionCount(); d++) {</a>
+<span class="sourceLineNo">3066</span><a id="line.3066">                Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);</a>
+<span class="sourceLineNo">3067</span><a id="line.3067">                if(!pt.isWithin(width, height))</a>
+<span class="sourceLineNo">3068</span><a id="line.3068">                    continue;</a>
+<span class="sourceLineNo">3069</span><a id="line.3069">                if (gradientMap[pt.x][pt.y] &lt; best &amp;&amp; !impassable2.contains(pt)) {</a>
+<span class="sourceLineNo">3070</span><a id="line.3070">                    if (dirs[choice] == Direction.NONE || !path.contains(pt)) {</a>
+<span class="sourceLineNo">3071</span><a id="line.3071">                        best = gradientMap[pt.x][pt.y];</a>
+<span class="sourceLineNo">3072</span><a id="line.3072">                        choice = d;</a>
+<span class="sourceLineNo">3073</span><a id="line.3073">                    }</a>
+<span class="sourceLineNo">3074</span><a id="line.3074">                }</a>
+<span class="sourceLineNo">3075</span><a id="line.3075">            }</a>
+<span class="sourceLineNo">3076</span><a id="line.3076">            if (best &gt;= gradientMap[currentPos.x][currentPos.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] &gt; FLOOR) {</a>
+<span class="sourceLineNo">3077</span><a id="line.3077">                cutShort = true;</a>
+<span class="sourceLineNo">3078</span><a id="line.3078">                frustration = 0;</a>
+<span class="sourceLineNo">3079</span><a id="line.3079">                return new ArrayList&lt;&gt;(path);</a>
+<span class="sourceLineNo">3080</span><a id="line.3080">            }</a>
+<span class="sourceLineNo">3081</span><a id="line.3081">            currentPos = currentPos.translate(dirs[choice].deltaX, dirs[choice].deltaY);</a>
+<span class="sourceLineNo">3082</span><a id="line.3082"></a>
+<span class="sourceLineNo">3083</span><a id="line.3083">            path.add(currentPos);</a>
+<span class="sourceLineNo">3084</span><a id="line.3084">            frustration++;</a>
+<span class="sourceLineNo">3085</span><a id="line.3085">            paidLength += costMap[currentPos.x][currentPos.y];</a>
+<span class="sourceLineNo">3086</span><a id="line.3086">            if (paidLength &gt; moveLength - 1.0) {</a>
+<span class="sourceLineNo">3087</span><a id="line.3087">                if (onlyPassable != null &amp;&amp; onlyPassable.contains(currentPos)) {</a>
+<span class="sourceLineNo">3088</span><a id="line.3088">                    tempSet.clear();</a>
+<span class="sourceLineNo">3089</span><a id="line.3089">                    tempSet.addAll(impassable2);</a>
+<span class="sourceLineNo">3090</span><a id="line.3090">                    tempSet.add(currentPos);</a>
+<span class="sourceLineNo">3091</span><a id="line.3091">                    return findAttackPathLarge(size, moveLength, minPreferredRange, maxPreferredRange, los, tempSet,</a>
+<span class="sourceLineNo">3092</span><a id="line.3092">                            onlyPassable, start, targets);</a>
+<span class="sourceLineNo">3093</span><a id="line.3093">                }</a>
+<span class="sourceLineNo">3094</span><a id="line.3094">                break;</a>
+<span class="sourceLineNo">3095</span><a id="line.3095">            }</a>
+<span class="sourceLineNo">3096</span><a id="line.3096">            if (gradientMap[currentPos.x][currentPos.y] == 0)</a>
+<span class="sourceLineNo">3097</span><a id="line.3097">                break;</a>
+<span class="sourceLineNo">3098</span><a id="line.3098">        }</a>
+<span class="sourceLineNo">3099</span><a id="line.3099">        cutShort = false;</a>
+<span class="sourceLineNo">3100</span><a id="line.3100">        frustration = 0;</a>
+<span class="sourceLineNo">3101</span><a id="line.3101">        goals.clear();</a>
+<span class="sourceLineNo">3102</span><a id="line.3102">        return new ArrayList&lt;&gt;(path);</a>
+<span class="sourceLineNo">3103</span><a id="line.3103">    }</a>
+<span class="sourceLineNo">3104</span><a id="line.3104"></a>
+<span class="sourceLineNo">3105</span><a id="line.3105">    /**</a>
+<span class="sourceLineNo">3106</span><a id="line.3106">     * Scans the dungeon using DijkstraMap.scan with the listed fearSources and start point, and returns a list</a>
+<span class="sourceLineNo">3107</span><a id="line.3107">     * of Coord positions (using Manhattan distance) needed to get further from the closest fearSources, meant</a>
+<span class="sourceLineNo">3108</span><a id="line.3108">     * for running away. The maximum length of the returned list is given by length; if moving the full</a>
+<span class="sourceLineNo">3109</span><a id="line.3109">     * length of the list would place the mover in a position shared by one of the positions in onlyPassable</a>
+<span class="sourceLineNo">3110</span><a id="line.3110">     * (which is typically filled with friendly units that can be passed through in multi-tile-</a>
+<span class="sourceLineNo">3111</span><a id="line.3111">     * movement scenarios), it will recalculate a move so that it does not pass into that cell.</a>
+<span class="sourceLineNo">3112</span><a id="line.3112">     * The keys in impassable should be the positions of enemies and obstacles that cannot be moved</a>
+<span class="sourceLineNo">3113</span><a id="line.3113">     * through, and will be ignored if there is a fearSource overlapping one. The preferLongerPaths parameter</a>
+<span class="sourceLineNo">3114</span><a id="line.3114">     * is meant to be tweaked and adjusted; higher values should make creatures prefer to escape out of</a>
+<span class="sourceLineNo">3115</span><a id="line.3115">     * doorways instead of hiding in the closest corner, and a value of 1.2 should be typical for many maps.</a>
+<span class="sourceLineNo">3116</span><a id="line.3116">     * The parameters size, preferLongerPaths, impassable, and the varargs used for fearSources will be cached, and</a>
+<span class="sourceLineNo">3117</span><a id="line.3117">     * any subsequent calls that use the same values as the last values passed will avoid recalculating</a>
+<span class="sourceLineNo">3118</span><a id="line.3118">     * unnecessary scans. Calls to findFleePath will cache as if size is 1, and may share a cache with this function.</a>
+<span class="sourceLineNo">3119</span><a id="line.3119">     * The parameter size refers to the side length of a square unit, such as 2 for a 2x2 unit. The</a>
+<span class="sourceLineNo">3120</span><a id="line.3120">     * parameter start must refer to the minimum-x, minimum-y cell of that unit if size is &amp;gt; 1, and</a>
+<span class="sourceLineNo">3121</span><a id="line.3121">     * all positions in the returned path will refer to movement of the minimum-x, minimum-y cell.</a>
+<span class="sourceLineNo">3122</span><a id="line.3122">     * &lt;br&gt;</a>
+<span class="sourceLineNo">3123</span><a id="line.3123">     * This caches its result in a member field, path, which can be fetched after finding a path and will change with</a>
+<span class="sourceLineNo">3124</span><a id="line.3124">     * each call to a pathfinding method.</a>
+<span class="sourceLineNo">3125</span><a id="line.3125">     *</a>
+<span class="sourceLineNo">3126</span><a id="line.3126">     * @param size              the side length of the creature trying the find a path</a>
+<span class="sourceLineNo">3127</span><a id="line.3127">     * @param length            the length of the path to calculate</a>
+<span class="sourceLineNo">3128</span><a id="line.3128">     * @param preferLongerPaths Set this to 1.2 if you aren't sure; it will probably need tweaking for different maps.</a>
+<span class="sourceLineNo">3129</span><a id="line.3129">     * @param impassable        a Set of impassable Coord positions that may change (not constant like walls); can be null</a>
+<span class="sourceLineNo">3130</span><a id="line.3130">     * @param onlyPassable      a Set of Coord positions that this pathfinder cannot end a path occupying (typically allies); can be null</a>
+<span class="sourceLineNo">3131</span><a id="line.3131">     * @param start             the start of the path, should correspond to the minimum-x, minimum-y position of the pathfinder</a>
+<span class="sourceLineNo">3132</span><a id="line.3132">     * @param fearSources       a vararg or array of Coord positions to run away from</a>
+<span class="sourceLineNo">3133</span><a id="line.3133">     * @return an ArrayList of Coord that will contain the locations of this creature as it goes away from fear sources. Copy of path.</a>
+<span class="sourceLineNo">3134</span><a id="line.3134">     */</a>
+<span class="sourceLineNo">3135</span><a id="line.3135">    public ArrayList&lt;Coord&gt; findFleePathLarge(int size, int length, double preferLongerPaths, Collection&lt;Coord&gt; impassable,</a>
+<span class="sourceLineNo">3136</span><a id="line.3136">                                              Collection&lt;Coord&gt; onlyPassable, Coord start, Coord... fearSources) {</a>
+<span class="sourceLineNo">3137</span><a id="line.3137">        if (!initialized) return null;</a>
+<span class="sourceLineNo">3138</span><a id="line.3138">        path.clear();</a>
+<span class="sourceLineNo">3139</span><a id="line.3139">        if (impassable == null)</a>
+<span class="sourceLineNo">3140</span><a id="line.3140">            impassable2.clear();</a>
+<span class="sourceLineNo">3141</span><a id="line.3141">        else {</a>
+<span class="sourceLineNo">3142</span><a id="line.3142">            impassable2.clear();</a>
+<span class="sourceLineNo">3143</span><a id="line.3143">            impassable2.addAll(impassable);</a>
+<span class="sourceLineNo">3144</span><a id="line.3144">        }</a>
+<span class="sourceLineNo">3145</span><a id="line.3145">        if(onlyPassable != null &amp;&amp; length == 1)</a>
+<span class="sourceLineNo">3146</span><a id="line.3146">            impassable2.addAll(onlyPassable);</a>
+<span class="sourceLineNo">3147</span><a id="line.3147">        if (fearSources == null || fearSources.length &lt; 1) {</a>
+<span class="sourceLineNo">3148</span><a id="line.3148">            cutShort = true;</a>
+<span class="sourceLineNo">3149</span><a id="line.3149">            return new ArrayList&lt;&gt;(path);</a>
+<span class="sourceLineNo">3150</span><a id="line.3150">        }</a>
+<span class="sourceLineNo">3151</span><a id="line.3151">        if (size == cachedSize &amp;&amp; preferLongerPaths == cachedLongerPaths &amp;&amp; impassable2.equals(cachedImpassable)</a>
+<span class="sourceLineNo">3152</span><a id="line.3152">                &amp;&amp; Arrays.equals(fearSources, cachedFearSources)) {</a>
+<span class="sourceLineNo">3153</span><a id="line.3153">            gradientMap = cachedFleeMap;</a>
+<span class="sourceLineNo">3154</span><a id="line.3154">        } else {</a>
+<span class="sourceLineNo">3155</span><a id="line.3155">            cachedLongerPaths = preferLongerPaths;</a>
+<span class="sourceLineNo">3156</span><a id="line.3156">            cachedImpassable.clear();</a>
+<span class="sourceLineNo">3157</span><a id="line.3157">            cachedImpassable.addAll(impassable2);</a>
+<span class="sourceLineNo">3158</span><a id="line.3158">            cachedFearSources = new Coord[fearSources.length];</a>
+<span class="sourceLineNo">3159</span><a id="line.3159">            System.arraycopy(fearSources, 0, cachedFearSources, 0, fearSources.length);</a>
+<span class="sourceLineNo">3160</span><a id="line.3160">            cachedSize = size;</a>
+<span class="sourceLineNo">3161</span><a id="line.3161">            resetMap();</a>
+<span class="sourceLineNo">3162</span><a id="line.3162">            setGoals(fearSources);</a>
+<span class="sourceLineNo">3163</span><a id="line.3163">            if (goals.isEmpty())</a>
+<span class="sourceLineNo">3164</span><a id="line.3164">            {</a>
+<span class="sourceLineNo">3165</span><a id="line.3165">                cutShort = true;</a>
+<span class="sourceLineNo">3166</span><a id="line.3166">                return new ArrayList&lt;&gt;(path);</a>
+<span class="sourceLineNo">3167</span><a id="line.3167">            }</a>
+<span class="sourceLineNo">3168</span><a id="line.3168"></a>
+<span class="sourceLineNo">3169</span><a id="line.3169">            scan(impassable2, size);</a>
 <span class="sourceLineNo">3170</span><a id="line.3170"></a>
-<span class="sourceLineNo">3171</span><a id="line.3171">            scan(impassable2, size);</a>
-<span class="sourceLineNo">3172</span><a id="line.3172"></a>
-<span class="sourceLineNo">3173</span><a id="line.3173">            for (int x = 0; x &lt; gradientMap.length; x++) {</a>
-<span class="sourceLineNo">3174</span><a id="line.3174">                for (int y = 0; y &lt; gradientMap[x].length; y++) {</a>
-<span class="sourceLineNo">3175</span><a id="line.3175">                    gradientMap[x][y] *= (gradientMap[x][y] &gt;= FLOOR) ? 1.0 : (0.0 - preferLongerPaths);</a>
-<span class="sourceLineNo">3176</span><a id="line.3176">                }</a>
-<span class="sourceLineNo">3177</span><a id="line.3177">            }</a>
-<span class="sourceLineNo">3178</span><a id="line.3178">            cachedFleeMap = scan(impassable2, size);</a>
-<span class="sourceLineNo">3179</span><a id="line.3179">        }</a>
-<span class="sourceLineNo">3180</span><a id="line.3180">        Coord currentPos = start;</a>
-<span class="sourceLineNo">3181</span><a id="line.3181">        double paidLength = 0.0;</a>
-<span class="sourceLineNo">3182</span><a id="line.3182">        while (true) {</a>
-<span class="sourceLineNo">3183</span><a id="line.3183">            if (frustration &gt; 500) {</a>
-<span class="sourceLineNo">3184</span><a id="line.3184">                path.clear();</a>
-<span class="sourceLineNo">3185</span><a id="line.3185">                break;</a>
-<span class="sourceLineNo">3186</span><a id="line.3186">            }</a>
-<span class="sourceLineNo">3187</span><a id="line.3187"></a>
-<span class="sourceLineNo">3188</span><a id="line.3188">            double best = gradientMap[currentPos.x][currentPos.y];</a>
-<span class="sourceLineNo">3189</span><a id="line.3189">            appendDirToShuffle(rng);</a>
-<span class="sourceLineNo">3190</span><a id="line.3190">            int choice = 0;</a>
-<span class="sourceLineNo">3191</span><a id="line.3191"></a>
-<span class="sourceLineNo">3192</span><a id="line.3192">            for (int d = 0; d &lt;= measurement.directionCount(); d++) {</a>
-<span class="sourceLineNo">3193</span><a id="line.3193">                Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);</a>
-<span class="sourceLineNo">3194</span><a id="line.3194">                if(!pt.isWithin(width, height))</a>
-<span class="sourceLineNo">3195</span><a id="line.3195">                    continue;</a>
-<span class="sourceLineNo">3196</span><a id="line.3196">                if (gradientMap[pt.x][pt.y] &lt; best &amp;&amp; !impassable2.contains(pt)) {</a>
-<span class="sourceLineNo">3197</span><a id="line.3197">                    if (dirs[choice] == Direction.NONE || !path.contains(pt)) {</a>
-<span class="sourceLineNo">3198</span><a id="line.3198">                        best = gradientMap[pt.x][pt.y];</a>
-<span class="sourceLineNo">3199</span><a id="line.3199">                        choice = d;</a>
-<span class="sourceLineNo">3200</span><a id="line.3200">                    }</a>
-<span class="sourceLineNo">3201</span><a id="line.3201">                }</a>
-<span class="sourceLineNo">3202</span><a id="line.3202">            }</a>
-<span class="sourceLineNo">3203</span><a id="line.3203">            if (best &gt;= gradientMap[currentPos.x][currentPos.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] &gt; FLOOR) {</a>
-<span class="sourceLineNo">3204</span><a id="line.3204">                cutShort = true;</a>
-<span class="sourceLineNo">3205</span><a id="line.3205">                frustration = 0;</a>
-<span class="sourceLineNo">3206</span><a id="line.3206">                return new ArrayList&lt;&gt;(path);</a>
-<span class="sourceLineNo">3207</span><a id="line.3207">            }</a>
-<span class="sourceLineNo">3208</span><a id="line.3208">            currentPos = currentPos.translate(dirs[choice].deltaX, dirs[choice].deltaY);</a>
-<span class="sourceLineNo">3209</span><a id="line.3209"></a>
-<span class="sourceLineNo">3210</span><a id="line.3210">            if (path.size() &gt; 0) {</a>
-<span class="sourceLineNo">3211</span><a id="line.3211">                Coord last = path.get(path.size() - 1);</a>
-<span class="sourceLineNo">3212</span><a id="line.3212">                if (gradientMap[last.x][last.y] &lt;= gradientMap[currentPos.x][currentPos.y])</a>
-<span class="sourceLineNo">3213</span><a id="line.3213">                    break;</a>
-<span class="sourceLineNo">3214</span><a id="line.3214">            }</a>
-<span class="sourceLineNo">3215</span><a id="line.3215">            path.add(currentPos);</a>
-<span class="sourceLineNo">3216</span><a id="line.3216">            frustration++;</a>
-<span class="sourceLineNo">3217</span><a id="line.3217">            paidLength += costMap[currentPos.x][currentPos.y];</a>
-<span class="sourceLineNo">3218</span><a id="line.3218">            if (paidLength &gt; length - 1.0) {</a>
-<span class="sourceLineNo">3219</span><a id="line.3219">                if (onlyPassable != null &amp;&amp; onlyPassable.contains(currentPos)) {</a>
-<span class="sourceLineNo">3220</span><a id="line.3220">                    tempSet.clear();</a>
-<span class="sourceLineNo">3221</span><a id="line.3221">                    tempSet.addAll(impassable2);</a>
-<span class="sourceLineNo">3222</span><a id="line.3222">                    tempSet.add(currentPos);</a>
-<span class="sourceLineNo">3223</span><a id="line.3223">                    return findFleePathLarge(size, length, preferLongerPaths, tempSet, onlyPassable, start, fearSources);</a>
-<span class="sourceLineNo">3224</span><a id="line.3224">                }</a>
-<span class="sourceLineNo">3225</span><a id="line.3225">                break;</a>
-<span class="sourceLineNo">3226</span><a id="line.3226">            }</a>
-<span class="sourceLineNo">3227</span><a id="line.3227">        }</a>
-<span class="sourceLineNo">3228</span><a id="line.3228">        cutShort = false;</a>
-<span class="sourceLineNo">3229</span><a id="line.3229">        frustration = 0;</a>
-<span class="sourceLineNo">3230</span><a id="line.3230">        goals.clear();</a>
-<span class="sourceLineNo">3231</span><a id="line.3231">        return new ArrayList&lt;&gt;(path);</a>
-<span class="sourceLineNo">3232</span><a id="line.3232">    }</a>
-<span class="sourceLineNo">3233</span><a id="line.3233"></a>
-<span class="sourceLineNo">3234</span><a id="line.3234"></a>
-<span class="sourceLineNo">3235</span><a id="line.3235">    /**</a>
-<span class="sourceLineNo">3236</span><a id="line.3236">     * When you can control how often the (relatively time-intensive) scan() method is called, but may need simple paths</a>
-<span class="sourceLineNo">3237</span><a id="line.3237">     * very frequently (such as for a path that follows the mouse), you can use this method to reduce the amount of work</a>
-<span class="sourceLineNo">3238</span><a id="line.3238">     * needed to find paths. Needs scan() or partialScan() to already be called and at least one goal to already be set,</a>
-<span class="sourceLineNo">3239</span><a id="line.3239">     * and does not restrict the length of the path or behave as if the pathfinder has allies or enemies.</a>
-<span class="sourceLineNo">3240</span><a id="line.3240">     * &lt;br&gt;</a>
-<span class="sourceLineNo">3241</span><a id="line.3241">     * This caches its result in a member field, path, which can be fetched after finding a path and will change with</a>
-<span class="sourceLineNo">3242</span><a id="line.3242">     * each call to a pathfinding method.</a>
-<span class="sourceLineNo">3243</span><a id="line.3243">     *</a>
-<span class="sourceLineNo">3244</span><a id="line.3244">     * @param target the target cell</a>
-<span class="sourceLineNo">3245</span><a id="line.3245">     * @return an ArrayList of Coord that make up the best path. Copy of path.</a>
-<span class="sourceLineNo">3246</span><a id="line.3246">     */</a>
-<span class="sourceLineNo">3247</span><a id="line.3247">    public ArrayList&lt;Coord&gt; findPathPreScanned(Coord target) {</a>
-<span class="sourceLineNo">3248</span><a id="line.3248">        return findPathPreScanned(null, target);</a>
-<span class="sourceLineNo">3249</span><a id="line.3249">    }</a>
-<span class="sourceLineNo">3250</span><a id="line.3250">    /**</a>
-<span class="sourceLineNo">3251</span><a id="line.3251">     * When you can control how often the (relatively time-intensive) scan() method is called, but may need simple paths</a>
-<span class="sourceLineNo">3252</span><a id="line.3252">     * very frequently (such as for a path that follows the mouse), you can use this method to reduce the amount of work</a>
-<span class="sourceLineNo">3253</span><a id="line.3253">     * needed to find paths. Needs scan() or partialScan() to already be called and at least one goal to already be set,</a>
-<span class="sourceLineNo">3254</span><a id="line.3254">     * and does not restrict the length of the path or behave as if the pathfinder has allies or enemies.</a>
-<span class="sourceLineNo">3255</span><a id="line.3255">     * &lt;br&gt;</a>
-<span class="sourceLineNo">3256</span><a id="line.3256">     * This overload takes a buffer parameter, an ArrayList of Coord, that the results will be appended to. If the</a>
-<span class="sourceLineNo">3257</span><a id="line.3257">     * buffer is null, a new ArrayList will be made and appended to. This caches its result in a member field, path,</a>
-<span class="sourceLineNo">3258</span><a id="line.3258">     * which can be fetched after finding a path and will change with each call to a pathfinding method. Any existing</a>
-<span class="sourceLineNo">3259</span><a id="line.3259">     * contents of buffer will not affect the path field of this DijkstraMap.</a>
-<span class="sourceLineNo">3260</span><a id="line.3260">     *</a>
-<span class="sourceLineNo">3261</span><a id="line.3261">     * @param buffer an existing ArrayList of Coord that will have the result appended to it (in-place); if null, this will make a new ArrayList</a>
-<span class="sourceLineNo">3262</span><a id="line.3262">     * @param target the target cell</a>
-<span class="sourceLineNo">3263</span><a id="line.3263">     * @return an ArrayList of Coord that make up the best path, appended to buffer (if non-null)</a>
-<span class="sourceLineNo">3264</span><a id="line.3264">     */</a>
-<span class="sourceLineNo">3265</span><a id="line.3265">    public ArrayList&lt;Coord&gt; findPathPreScanned(ArrayList&lt;Coord&gt; buffer, Coord target) {</a>
-<span class="sourceLineNo">3266</span><a id="line.3266">        path.clear();</a>
-<span class="sourceLineNo">3267</span><a id="line.3267">        if (!initialized || goals == null || goals.isEmpty())</a>
-<span class="sourceLineNo">3268</span><a id="line.3268">        {</a>
-<span class="sourceLineNo">3269</span><a id="line.3269">            if(buffer == null)</a>
-<span class="sourceLineNo">3270</span><a id="line.3270">                return new ArrayList&lt;&gt;();</a>
-<span class="sourceLineNo">3271</span><a id="line.3271">            else</a>
-<span class="sourceLineNo">3272</span><a id="line.3272">            {</a>
-<span class="sourceLineNo">3273</span><a id="line.3273">                return buffer;</a>
-<span class="sourceLineNo">3274</span><a id="line.3274">            }</a>
-<span class="sourceLineNo">3275</span><a id="line.3275">        }</a>
-<span class="sourceLineNo">3276</span><a id="line.3276">        Coord currentPos = target;</a>
-<span class="sourceLineNo">3277</span><a id="line.3277">        if(gradientMap[currentPos.x][currentPos.y] &lt;= FLOOR)</a>
-<span class="sourceLineNo">3278</span><a id="line.3278">            path.add(currentPos);</a>
-<span class="sourceLineNo">3279</span><a id="line.3279">        else</a>
-<span class="sourceLineNo">3280</span><a id="line.3280">        {</a>
-<span class="sourceLineNo">3281</span><a id="line.3281">            if(buffer == null)</a>
-<span class="sourceLineNo">3282</span><a id="line.3282">                return new ArrayList&lt;&gt;();</a>
-<span class="sourceLineNo">3283</span><a id="line.3283">            else</a>
-<span class="sourceLineNo">3284</span><a id="line.3284">            {</a>
-<span class="sourceLineNo">3285</span><a id="line.3285">                return buffer;</a>
-<span class="sourceLineNo">3286</span><a id="line.3286">            }</a>
-<span class="sourceLineNo">3287</span><a id="line.3287"></a>
-<span class="sourceLineNo">3288</span><a id="line.3288">        }</a>
-<span class="sourceLineNo">3289</span><a id="line.3289">        while (true) {</a>
-<span class="sourceLineNo">3290</span><a id="line.3290">            if (frustration &gt; 2000) {</a>
-<span class="sourceLineNo">3291</span><a id="line.3291">                path.clear();</a>
-<span class="sourceLineNo">3292</span><a id="line.3292">                break;</a>
-<span class="sourceLineNo">3293</span><a id="line.3293">            }</a>
-<span class="sourceLineNo">3294</span><a id="line.3294">            double best = gradientMap[currentPos.x][currentPos.y];</a>
-<span class="sourceLineNo">3295</span><a id="line.3295">            appendDirToShuffle(rng);</a>
-<span class="sourceLineNo">3296</span><a id="line.3296">            int choice = 0;</a>
-<span class="sourceLineNo">3297</span><a id="line.3297"></a>
-<span class="sourceLineNo">3298</span><a id="line.3298">            for (int d = 0; d &lt;= measurement.directionCount(); d++) {</a>
-<span class="sourceLineNo">3299</span><a id="line.3299">                Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);</a>
-<span class="sourceLineNo">3300</span><a id="line.3300">                if(!pt.isWithin(width, height))</a>
-<span class="sourceLineNo">3301</span><a id="line.3301">                    continue;</a>
-<span class="sourceLineNo">3302</span><a id="line.3302">                if (gradientMap[pt.x][pt.y] &lt; best) {</a>
-<span class="sourceLineNo">3303</span><a id="line.3303">                    if (dirs[choice] == Direction.NONE || !path.contains(pt)) {</a>
-<span class="sourceLineNo">3304</span><a id="line.3304">                        best = gradientMap[pt.x][pt.y];</a>
-<span class="sourceLineNo">3305</span><a id="line.3305">                        choice = d;</a>
-<span class="sourceLineNo">3306</span><a id="line.3306">                    }</a>
-<span class="sourceLineNo">3307</span><a id="line.3307">                }</a>
-<span class="sourceLineNo">3308</span><a id="line.3308">            }</a>
-<span class="sourceLineNo">3309</span><a id="line.3309"></a>
-<span class="sourceLineNo">3310</span><a id="line.3310">            if (best &gt;= gradientMap[currentPos.x][currentPos.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] &gt; FLOOR) {</a>
-<span class="sourceLineNo">3311</span><a id="line.3311">                cutShort = true;</a>
-<span class="sourceLineNo">3312</span><a id="line.3312">                frustration = 0;</a>
-<span class="sourceLineNo">3313</span><a id="line.3313">                if(buffer == null)</a>
-<span class="sourceLineNo">3314</span><a id="line.3314">                    return new ArrayList&lt;&gt;(path);</a>
-<span class="sourceLineNo">3315</span><a id="line.3315">                else</a>
-<span class="sourceLineNo">3316</span><a id="line.3316">                {</a>
-<span class="sourceLineNo">3317</span><a id="line.3317">                    buffer.addAll(path);</a>
-<span class="sourceLineNo">3318</span><a id="line.3318">                    return buffer;</a>
-<span class="sourceLineNo">3319</span><a id="line.3319">                }</a>
-<span class="sourceLineNo">3320</span><a id="line.3320">            }</a>
-<span class="sourceLineNo">3321</span><a id="line.3321">            currentPos = currentPos.translate(dirs[choice].deltaX, dirs[choice].deltaY);</a>
-<span class="sourceLineNo">3322</span><a id="line.3322">            path.add(0, currentPos);</a>
-<span class="sourceLineNo">3323</span><a id="line.3323">            frustration++;</a>
-<span class="sourceLineNo">3324</span><a id="line.3324"></a>
-<span class="sourceLineNo">3325</span><a id="line.3325">            if (gradientMap[currentPos.x][currentPos.y] == 0)</a>
-<span class="sourceLineNo">3326</span><a id="line.3326">                break;</a>
-<span class="sourceLineNo">3327</span><a id="line.3327">        }</a>
-<span class="sourceLineNo">3328</span><a id="line.3328">        cutShort = false;</a>
-<span class="sourceLineNo">3329</span><a id="line.3329">        frustration = 0;</a>
-<span class="sourceLineNo">3330</span><a id="line.3330">        if(buffer == null)</a>
-<span class="sourceLineNo">3331</span><a id="line.3331">            return new ArrayList&lt;&gt;(path);</a>
-<span class="sourceLineNo">3332</span><a id="line.3332">        else</a>
-<span class="sourceLineNo">3333</span><a id="line.3333">        {</a>
-<span class="sourceLineNo">3334</span><a id="line.3334">            buffer.addAll(path);</a>
-<span class="sourceLineNo">3335</span><a id="line.3335">            return buffer;</a>
-<span class="sourceLineNo">3336</span><a id="line.3336">        }</a>
+<span class="sourceLineNo">3171</span><a id="line.3171">            for (int x = 0; x &lt; gradientMap.length; x++) {</a>
+<span class="sourceLineNo">3172</span><a id="line.3172">                for (int y = 0; y &lt; gradientMap[x].length; y++) {</a>
+<span class="sourceLineNo">3173</span><a id="line.3173">                    gradientMap[x][y] *= (gradientMap[x][y] &gt;= FLOOR) ? 1.0 : (0.0 - preferLongerPaths);</a>
+<span class="sourceLineNo">3174</span><a id="line.3174">                }</a>
+<span class="sourceLineNo">3175</span><a id="line.3175">            }</a>
+<span class="sourceLineNo">3176</span><a id="line.3176">            cachedFleeMap = scan(impassable2, size);</a>
+<span class="sourceLineNo">3177</span><a id="line.3177">        }</a>
+<span class="sourceLineNo">3178</span><a id="line.3178">        Coord currentPos = start;</a>
+<span class="sourceLineNo">3179</span><a id="line.3179">        double paidLength = 0.0;</a>
+<span class="sourceLineNo">3180</span><a id="line.3180">        while (true) {</a>
+<span class="sourceLineNo">3181</span><a id="line.3181">            if (frustration &gt; 500) {</a>
+<span class="sourceLineNo">3182</span><a id="line.3182">                path.clear();</a>
+<span class="sourceLineNo">3183</span><a id="line.3183">                break;</a>
+<span class="sourceLineNo">3184</span><a id="line.3184">            }</a>
+<span class="sourceLineNo">3185</span><a id="line.3185"></a>
+<span class="sourceLineNo">3186</span><a id="line.3186">            double best = gradientMap[currentPos.x][currentPos.y];</a>
+<span class="sourceLineNo">3187</span><a id="line.3187">            appendDirToShuffle(rng);</a>
+<span class="sourceLineNo">3188</span><a id="line.3188">            int choice = 0;</a>
+<span class="sourceLineNo">3189</span><a id="line.3189"></a>
+<span class="sourceLineNo">3190</span><a id="line.3190">            for (int d = 0; d &lt;= measurement.directionCount(); d++) {</a>
+<span class="sourceLineNo">3191</span><a id="line.3191">                Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);</a>
+<span class="sourceLineNo">3192</span><a id="line.3192">                if(!pt.isWithin(width, height))</a>
+<span class="sourceLineNo">3193</span><a id="line.3193">                    continue;</a>
+<span class="sourceLineNo">3194</span><a id="line.3194">                if (gradientMap[pt.x][pt.y] &lt; best &amp;&amp; !impassable2.contains(pt)) {</a>
+<span class="sourceLineNo">3195</span><a id="line.3195">                    if (dirs[choice] == Direction.NONE || !path.contains(pt)) {</a>
+<span class="sourceLineNo">3196</span><a id="line.3196">                        best = gradientMap[pt.x][pt.y];</a>
+<span class="sourceLineNo">3197</span><a id="line.3197">                        choice = d;</a>
+<span class="sourceLineNo">3198</span><a id="line.3198">                    }</a>
+<span class="sourceLineNo">3199</span><a id="line.3199">                }</a>
+<span class="sourceLineNo">3200</span><a id="line.3200">            }</a>
+<span class="sourceLineNo">3201</span><a id="line.3201">            if (best &gt;= gradientMap[currentPos.x][currentPos.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] &gt; FLOOR) {</a>
+<span class="sourceLineNo">3202</span><a id="line.3202">                cutShort = true;</a>
+<span class="sourceLineNo">3203</span><a id="line.3203">                frustration = 0;</a>
+<span class="sourceLineNo">3204</span><a id="line.3204">                return new ArrayList&lt;&gt;(path);</a>
+<span class="sourceLineNo">3205</span><a id="line.3205">            }</a>
+<span class="sourceLineNo">3206</span><a id="line.3206">            currentPos = currentPos.translate(dirs[choice].deltaX, dirs[choice].deltaY);</a>
+<span class="sourceLineNo">3207</span><a id="line.3207"></a>
+<span class="sourceLineNo">3208</span><a id="line.3208">            if (path.size() &gt; 0) {</a>
+<span class="sourceLineNo">3209</span><a id="line.3209">                Coord last = path.get(path.size() - 1);</a>
+<span class="sourceLineNo">3210</span><a id="line.3210">                if (gradientMap[last.x][last.y] &lt;= gradientMap[currentPos.x][currentPos.y])</a>
+<span class="sourceLineNo">3211</span><a id="line.3211">                    break;</a>
+<span class="sourceLineNo">3212</span><a id="line.3212">            }</a>
+<span class="sourceLineNo">3213</span><a id="line.3213">            path.add(currentPos);</a>
+<span class="sourceLineNo">3214</span><a id="line.3214">            frustration++;</a>
+<span class="sourceLineNo">3215</span><a id="line.3215">            paidLength += costMap[currentPos.x][currentPos.y];</a>
+<span class="sourceLineNo">3216</span><a id="line.3216">            if (paidLength &gt; length - 1.0) {</a>
+<span class="sourceLineNo">3217</span><a id="line.3217">                if (onlyPassable != null &amp;&amp; onlyPassable.contains(currentPos)) {</a>
+<span class="sourceLineNo">3218</span><a id="line.3218">                    tempSet.clear();</a>
+<span class="sourceLineNo">3219</span><a id="line.3219">                    tempSet.addAll(impassable2);</a>
+<span class="sourceLineNo">3220</span><a id="line.3220">                    tempSet.add(currentPos);</a>
+<span class="sourceLineNo">3221</span><a id="line.3221">                    return findFleePathLarge(size, length, preferLongerPaths, tempSet, onlyPassable, start, fearSources);</a>
+<span class="sourceLineNo">3222</span><a id="line.3222">                }</a>
+<span class="sourceLineNo">3223</span><a id="line.3223">                break;</a>
+<span class="sourceLineNo">3224</span><a id="line.3224">            }</a>
+<span class="sourceLineNo">3225</span><a id="line.3225">        }</a>
+<span class="sourceLineNo">3226</span><a id="line.3226">        cutShort = false;</a>
+<span class="sourceLineNo">3227</span><a id="line.3227">        frustration = 0;</a>
+<span class="sourceLineNo">3228</span><a id="line.3228">        goals.clear();</a>
+<span class="sourceLineNo">3229</span><a id="line.3229">        return new ArrayList&lt;&gt;(path);</a>
+<span class="sourceLineNo">3230</span><a id="line.3230">    }</a>
+<span class="sourceLineNo">3231</span><a id="line.3231"></a>
+<span class="sourceLineNo">3232</span><a id="line.3232"></a>
+<span class="sourceLineNo">3233</span><a id="line.3233">    /**</a>
+<span class="sourceLineNo">3234</span><a id="line.3234">     * When you can control how often the (relatively time-intensive) scan() method is called, but may need simple paths</a>
+<span class="sourceLineNo">3235</span><a id="line.3235">     * very frequently (such as for a path that follows the mouse), you can use this method to reduce the amount of work</a>
+<span class="sourceLineNo">3236</span><a id="line.3236">     * needed to find paths. Needs scan() or partialScan() to already be called and at least one goal to already be set,</a>
+<span class="sourceLineNo">3237</span><a id="line.3237">     * and does not restrict the length of the path or behave as if the pathfinder has allies or enemies.</a>
+<span class="sourceLineNo">3238</span><a id="line.3238">     * &lt;br&gt;</a>
+<span class="sourceLineNo">3239</span><a id="line.3239">     * This caches its result in a member field, path, which can be fetched after finding a path and will change with</a>
+<span class="sourceLineNo">3240</span><a id="line.3240">     * each call to a pathfinding method.</a>
+<span class="sourceLineNo">3241</span><a id="line.3241">     *</a>
+<span class="sourceLineNo">3242</span><a id="line.3242">     * @param target the target cell</a>
+<span class="sourceLineNo">3243</span><a id="line.3243">     * @return an ArrayList of Coord that make up the best path. Copy of path.</a>
+<span class="sourceLineNo">3244</span><a id="line.3244">     */</a>
+<span class="sourceLineNo">3245</span><a id="line.3245">    public ArrayList&lt;Coord&gt; findPathPreScanned(Coord target) {</a>
+<span class="sourceLineNo">3246</span><a id="line.3246">        return findPathPreScanned(null, target);</a>
+<span class="sourceLineNo">3247</span><a id="line.3247">    }</a>
+<span class="sourceLineNo">3248</span><a id="line.3248">    /**</a>
+<span class="sourceLineNo">3249</span><a id="line.3249">     * When you can control how often the (relatively time-intensive) scan() method is called, but may need simple paths</a>
+<span class="sourceLineNo">3250</span><a id="line.3250">     * very frequently (such as for a path that follows the mouse), you can use this method to reduce the amount of work</a>
+<span class="sourceLineNo">3251</span><a id="line.3251">     * needed to find paths. Needs scan() or partialScan() to already be called and at least one goal to already be set,</a>
+<span class="sourceLineNo">3252</span><a id="line.3252">     * and does not restrict the length of the path or behave as if the pathfinder has allies or enemies.</a>
+<span class="sourceLineNo">3253</span><a id="line.3253">     * &lt;br&gt;</a>
+<span class="sourceLineNo">3254</span><a id="line.3254">     * This overload takes a buffer parameter, an ArrayList of Coord, that the results will be appended to. If the</a>
+<span class="sourceLineNo">3255</span><a id="line.3255">     * buffer is null, a new ArrayList will be made and appended to. This caches its result in a member field, path,</a>
+<span class="sourceLineNo">3256</span><a id="line.3256">     * which can be fetched after finding a path and will change with each call to a pathfinding method. Any existing</a>
+<span class="sourceLineNo">3257</span><a id="line.3257">     * contents of buffer will not affect the path field of this DijkstraMap.</a>
+<span class="sourceLineNo">3258</span><a id="line.3258">     *</a>
+<span class="sourceLineNo">3259</span><a id="line.3259">     * @param buffer an existing ArrayList of Coord that will have the result appended to it (in-place); if null, this will make a new ArrayList</a>
+<span class="sourceLineNo">3260</span><a id="line.3260">     * @param target the target cell</a>
+<span class="sourceLineNo">3261</span><a id="line.3261">     * @return an ArrayList of Coord that make up the best path, appended to buffer (if non-null)</a>
+<span class="sourceLineNo">3262</span><a id="line.3262">     */</a>
+<span class="sourceLineNo">3263</span><a id="line.3263">    public ArrayList&lt;Coord&gt; findPathPreScanned(ArrayList&lt;Coord&gt; buffer, Coord target) {</a>
+<span class="sourceLineNo">3264</span><a id="line.3264">        path.clear();</a>
+<span class="sourceLineNo">3265</span><a id="line.3265">        if (!initialized || goals == null || goals.isEmpty())</a>
+<span class="sourceLineNo">3266</span><a id="line.3266">        {</a>
+<span class="sourceLineNo">3267</span><a id="line.3267">            if(buffer == null)</a>
+<span class="sourceLineNo">3268</span><a id="line.3268">                return new ArrayList&lt;&gt;();</a>
+<span class="sourceLineNo">3269</span><a id="line.3269">            else</a>
+<span class="sourceLineNo">3270</span><a id="line.3270">            {</a>
+<span class="sourceLineNo">3271</span><a id="line.3271">                return buffer;</a>
+<span class="sourceLineNo">3272</span><a id="line.3272">            }</a>
+<span class="sourceLineNo">3273</span><a id="line.3273">        }</a>
+<span class="sourceLineNo">3274</span><a id="line.3274">        Coord currentPos = target;</a>
+<span class="sourceLineNo">3275</span><a id="line.3275">        if(gradientMap[currentPos.x][currentPos.y] &lt;= FLOOR)</a>
+<span class="sourceLineNo">3276</span><a id="line.3276">            path.add(currentPos);</a>
+<span class="sourceLineNo">3277</span><a id="line.3277">        else</a>
+<span class="sourceLineNo">3278</span><a id="line.3278">        {</a>
+<span class="sourceLineNo">3279</span><a id="line.3279">            if(buffer == null)</a>
+<span class="sourceLineNo">3280</span><a id="line.3280">                return new ArrayList&lt;&gt;();</a>
+<span class="sourceLineNo">3281</span><a id="line.3281">            else</a>
+<span class="sourceLineNo">3282</span><a id="line.3282">            {</a>
+<span class="sourceLineNo">3283</span><a id="line.3283">                return buffer;</a>
+<span class="sourceLineNo">3284</span><a id="line.3284">            }</a>
+<span class="sourceLineNo">3285</span><a id="line.3285"></a>
+<span class="sourceLineNo">3286</span><a id="line.3286">        }</a>
+<span class="sourceLineNo">3287</span><a id="line.3287">        while (true) {</a>
+<span class="sourceLineNo">3288</span><a id="line.3288">            if (frustration &gt; 2000) {</a>
+<span class="sourceLineNo">3289</span><a id="line.3289">                path.clear();</a>
+<span class="sourceLineNo">3290</span><a id="line.3290">                break;</a>
+<span class="sourceLineNo">3291</span><a id="line.3291">            }</a>
+<span class="sourceLineNo">3292</span><a id="line.3292">            double best = gradientMap[currentPos.x][currentPos.y];</a>
+<span class="sourceLineNo">3293</span><a id="line.3293">            appendDirToShuffle(rng);</a>
+<span class="sourceLineNo">3294</span><a id="line.3294">            int choice = 0;</a>
+<span class="sourceLineNo">3295</span><a id="line.3295"></a>
+<span class="sourceLineNo">3296</span><a id="line.3296">            for (int d = 0; d &lt;= measurement.directionCount(); d++) {</a>
+<span class="sourceLineNo">3297</span><a id="line.3297">                Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);</a>
+<span class="sourceLineNo">3298</span><a id="line.3298">                if(!pt.isWithin(width, height))</a>
+<span class="sourceLineNo">3299</span><a id="line.3299">                    continue;</a>
+<span class="sourceLineNo">3300</span><a id="line.3300">                if (gradientMap[pt.x][pt.y] &lt; best) {</a>
+<span class="sourceLineNo">3301</span><a id="line.3301">                    if (dirs[choice] == Direction.NONE || !path.contains(pt)) {</a>
+<span class="sourceLineNo">3302</span><a id="line.3302">                        best = gradientMap[pt.x][pt.y];</a>
+<span class="sourceLineNo">3303</span><a id="line.3303">                        choice = d;</a>
+<span class="sourceLineNo">3304</span><a id="line.3304">                    }</a>
+<span class="sourceLineNo">3305</span><a id="line.3305">                }</a>
+<span class="sourceLineNo">3306</span><a id="line.3306">            }</a>
+<span class="sourceLineNo">3307</span><a id="line.3307"></a>
+<span class="sourceLineNo">3308</span><a id="line.3308">            if (best &gt;= gradientMap[currentPos.x][currentPos.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] &gt; FLOOR) {</a>
+<span class="sourceLineNo">3309</span><a id="line.3309">                cutShort = true;</a>
+<span class="sourceLineNo">3310</span><a id="line.3310">                frustration = 0;</a>
+<span class="sourceLineNo">3311</span><a id="line.3311">                if(buffer == null)</a>
+<span class="sourceLineNo">3312</span><a id="line.3312">                    return new ArrayList&lt;&gt;(path);</a>
+<span class="sourceLineNo">3313</span><a id="line.3313">                else</a>
+<span class="sourceLineNo">3314</span><a id="line.3314">                {</a>
+<span class="sourceLineNo">3315</span><a id="line.3315">                    buffer.addAll(path);</a>
+<span class="sourceLineNo">3316</span><a id="line.3316">                    return buffer;</a>
+<span class="sourceLineNo">3317</span><a id="line.3317">                }</a>
+<span class="sourceLineNo">3318</span><a id="line.3318">            }</a>
+<span class="sourceLineNo">3319</span><a id="line.3319">            currentPos = currentPos.translate(dirs[choice].deltaX, dirs[choice].deltaY);</a>
+<span class="sourceLineNo">3320</span><a id="line.3320">            path.add(0, currentPos);</a>
+<span class="sourceLineNo">3321</span><a id="line.3321">            frustration++;</a>
+<span class="sourceLineNo">3322</span><a id="line.3322"></a>
+<span class="sourceLineNo">3323</span><a id="line.3323">            if (gradientMap[currentPos.x][currentPos.y] == 0)</a>
+<span class="sourceLineNo">3324</span><a id="line.3324">                break;</a>
+<span class="sourceLineNo">3325</span><a id="line.3325">        }</a>
+<span class="sourceLineNo">3326</span><a id="line.3326">        cutShort = false;</a>
+<span class="sourceLineNo">3327</span><a id="line.3327">        frustration = 0;</a>
+<span class="sourceLineNo">3328</span><a id="line.3328">        if(buffer == null)</a>
+<span class="sourceLineNo">3329</span><a id="line.3329">            return new ArrayList&lt;&gt;(path);</a>
+<span class="sourceLineNo">3330</span><a id="line.3330">        else</a>
+<span class="sourceLineNo">3331</span><a id="line.3331">        {</a>
+<span class="sourceLineNo">3332</span><a id="line.3332">            buffer.addAll(path);</a>
+<span class="sourceLineNo">3333</span><a id="line.3333">            return buffer;</a>
+<span class="sourceLineNo">3334</span><a id="line.3334">        }</a>
+<span class="sourceLineNo">3335</span><a id="line.3335"></a>
+<span class="sourceLineNo">3336</span><a id="line.3336">    }</a>
 <span class="sourceLineNo">3337</span><a id="line.3337"></a>
-<span class="sourceLineNo">3338</span><a id="line.3338">    }</a>
-<span class="sourceLineNo">3339</span><a id="line.3339"></a>
-<span class="sourceLineNo">3340</span><a id="line.3340">    /**</a>
-<span class="sourceLineNo">3341</span><a id="line.3341">     * A simple limited flood-fill that returns a OrderedMap of Coord keys to the Double values in the DijkstraMap, only</a>
-<span class="sourceLineNo">3342</span><a id="line.3342">     * calculating out to a number of steps determined by limit. This can be useful if you need many flood-fills and</a>
-<span class="sourceLineNo">3343</span><a id="line.3343">     * don't need a large area for each, or if you want to have an effect spread to a certain number of cells away.</a>
-<span class="sourceLineNo">3344</span><a id="line.3344">     *</a>
-<span class="sourceLineNo">3345</span><a id="line.3345">     * @param radius the number of steps to take outward from each starting position.</a>
-<span class="sourceLineNo">3346</span><a id="line.3346">     * @param starts a vararg group of Points to step outward from; this often will only need to be one Coord.</a>
-<span class="sourceLineNo">3347</span><a id="line.3347">     * @return A OrderedMap of Coord keys to Double values; the starts are included in this with the value 0.0.</a>
-<span class="sourceLineNo">3348</span><a id="line.3348">     */</a>
-<span class="sourceLineNo">3349</span><a id="line.3349">    public OrderedMap&lt;Coord, Double&gt; floodFill(int radius, Coord... starts) {</a>
-<span class="sourceLineNo">3350</span><a id="line.3350">        if (!initialized) return null;</a>
-<span class="sourceLineNo">3351</span><a id="line.3351">        OrderedMap&lt;Coord, Double&gt; fill = new OrderedMap&lt;&gt;();</a>
-<span class="sourceLineNo">3352</span><a id="line.3352"></a>
-<span class="sourceLineNo">3353</span><a id="line.3353">        resetMap();</a>
-<span class="sourceLineNo">3354</span><a id="line.3354">        for (Coord goal : starts) {</a>
-<span class="sourceLineNo">3355</span><a id="line.3355">            setGoal(goal.x, goal.y);</a>
-<span class="sourceLineNo">3356</span><a id="line.3356">        }</a>
-<span class="sourceLineNo">3357</span><a id="line.3357">        if (goals.isEmpty())</a>
-<span class="sourceLineNo">3358</span><a id="line.3358">            return fill;</a>
-<span class="sourceLineNo">3359</span><a id="line.3359"></a>
-<span class="sourceLineNo">3360</span><a id="line.3360">        partialScan(radius, null);</a>
-<span class="sourceLineNo">3361</span><a id="line.3361">        double temp;</a>
-<span class="sourceLineNo">3362</span><a id="line.3362">        for (int x = 1; x &lt; width - 1; x++) {</a>
-<span class="sourceLineNo">3363</span><a id="line.3363">            for (int y = 1; y &lt; height - 1; y++) {</a>
-<span class="sourceLineNo">3364</span><a id="line.3364">                temp = gradientMap[x][y];</a>
-<span class="sourceLineNo">3365</span><a id="line.3365">                if (temp &lt; FLOOR) {</a>
-<span class="sourceLineNo">3366</span><a id="line.3366">                    fill.put(Coord.get(x, y), temp);</a>
-<span class="sourceLineNo">3367</span><a id="line.3367">                }</a>
-<span class="sourceLineNo">3368</span><a id="line.3368">            }</a>
-<span class="sourceLineNo">3369</span><a id="line.3369">        }</a>
-<span class="sourceLineNo">3370</span><a id="line.3370">        goals.clear();</a>
-<span class="sourceLineNo">3371</span><a id="line.3371">        return fill;</a>
-<span class="sourceLineNo">3372</span><a id="line.3372">    }</a>
-<span class="sourceLineNo">3373</span><a id="line.3373"></a>
-<span class="sourceLineNo">3374</span><a id="line.3374">    public int getMappedCount() {</a>
-<span class="sourceLineNo">3375</span><a id="line.3375">        return mappedCount;</a>
-<span class="sourceLineNo">3376</span><a id="line.3376">    }</a>
-<span class="sourceLineNo">3377</span><a id="line.3377"></a>
-<span class="sourceLineNo">3378</span><a id="line.3378">    /**</a>
-<span class="sourceLineNo">3379</span><a id="line.3379">     * If you want obstacles present in orthogonal cells to prevent pathfinding along the diagonal between them, this</a>
-<span class="sourceLineNo">3380</span><a id="line.3380">     * can be used to make thin diagonal walls non-viable to move through, or even to prevent diagonal movement if any</a>
-<span class="sourceLineNo">3381</span><a id="line.3381">     * one obstacle is orthogonally adjacent to both the start and target cell of a diagonal move. If you haven't set</a>
-<span class="sourceLineNo">3382</span><a id="line.3382">     * this yet, then the default is 2.</a>
+<span class="sourceLineNo">3338</span><a id="line.3338">    /**</a>
+<span class="sourceLineNo">3339</span><a id="line.3339">     * A simple limited flood-fill that returns a OrderedMap of Coord keys to the Double values in the DijkstraMap, only</a>
+<span class="sourceLineNo">3340</span><a id="line.3340">     * calculating out to a number of steps determined by limit. This can be useful if you need many flood-fills and</a>
+<span class="sourceLineNo">3341</span><a id="line.3341">     * don't need a large area for each, or if you want to have an effect spread to a certain number of cells away.</a>
+<span class="sourceLineNo">3342</span><a id="line.3342">     *</a>
+<span class="sourceLineNo">3343</span><a id="line.3343">     * @param radius the number of steps to take outward from each starting position.</a>
+<span class="sourceLineNo">3344</span><a id="line.3344">     * @param starts a vararg group of Points to step outward from; this often will only need to be one Coord.</a>
+<span class="sourceLineNo">3345</span><a id="line.3345">     * @return A OrderedMap of Coord keys to Double values; the starts are included in this with the value 0.0.</a>
+<span class="sourceLineNo">3346</span><a id="line.3346">     */</a>
+<span class="sourceLineNo">3347</span><a id="line.3347">    public OrderedMap&lt;Coord, Double&gt; floodFill(int radius, Coord... starts) {</a>
+<span class="sourceLineNo">3348</span><a id="line.3348">        if (!initialized) return null;</a>
+<span class="sourceLineNo">3349</span><a id="line.3349">        OrderedMap&lt;Coord, Double&gt; fill = new OrderedMap&lt;&gt;();</a>
+<span class="sourceLineNo">3350</span><a id="line.3350"></a>
+<span class="sourceLineNo">3351</span><a id="line.3351">        resetMap();</a>
+<span class="sourceLineNo">3352</span><a id="line.3352">        for (Coord goal : starts) {</a>
+<span class="sourceLineNo">3353</span><a id="line.3353">            setGoal(goal.x, goal.y);</a>
+<span class="sourceLineNo">3354</span><a id="line.3354">        }</a>
+<span class="sourceLineNo">3355</span><a id="line.3355">        if (goals.isEmpty())</a>
+<span class="sourceLineNo">3356</span><a id="line.3356">            return fill;</a>
+<span class="sourceLineNo">3357</span><a id="line.3357"></a>
+<span class="sourceLineNo">3358</span><a id="line.3358">        partialScan(radius, null);</a>
+<span class="sourceLineNo">3359</span><a id="line.3359">        double temp;</a>
+<span class="sourceLineNo">3360</span><a id="line.3360">        for (int x = 1; x &lt; width - 1; x++) {</a>
+<span class="sourceLineNo">3361</span><a id="line.3361">            for (int y = 1; y &lt; height - 1; y++) {</a>
+<span class="sourceLineNo">3362</span><a id="line.3362">                temp = gradientMap[x][y];</a>
+<span class="sourceLineNo">3363</span><a id="line.3363">                if (temp &lt; FLOOR) {</a>
+<span class="sourceLineNo">3364</span><a id="line.3364">                    fill.put(Coord.get(x, y), temp);</a>
+<span class="sourceLineNo">3365</span><a id="line.3365">                }</a>
+<span class="sourceLineNo">3366</span><a id="line.3366">            }</a>
+<span class="sourceLineNo">3367</span><a id="line.3367">        }</a>
+<span class="sourceLineNo">3368</span><a id="line.3368">        goals.clear();</a>
+<span class="sourceLineNo">3369</span><a id="line.3369">        return fill;</a>
+<span class="sourceLineNo">3370</span><a id="line.3370">    }</a>
+<span class="sourceLineNo">3371</span><a id="line.3371"></a>
+<span class="sourceLineNo">3372</span><a id="line.3372">    public int getMappedCount() {</a>
+<span class="sourceLineNo">3373</span><a id="line.3373">        return mappedCount;</a>
+<span class="sourceLineNo">3374</span><a id="line.3374">    }</a>
+<span class="sourceLineNo">3375</span><a id="line.3375"></a>
+<span class="sourceLineNo">3376</span><a id="line.3376">    /**</a>
+<span class="sourceLineNo">3377</span><a id="line.3377">     * If you want obstacles present in orthogonal cells to prevent pathfinding along the diagonal between them, this</a>
+<span class="sourceLineNo">3378</span><a id="line.3378">     * can be used to make thin diagonal walls non-viable to move through, or even to prevent diagonal movement if any</a>
+<span class="sourceLineNo">3379</span><a id="line.3379">     * one obstacle is orthogonally adjacent to both the start and target cell of a diagonal move. If you haven't set</a>
+<span class="sourceLineNo">3380</span><a id="line.3380">     * this yet, then the default is 2.</a>
+<span class="sourceLineNo">3381</span><a id="line.3381">     * &lt;br&gt;</a>
+<span class="sourceLineNo">3382</span><a id="line.3382">     * If this is 0, as a special case no orthogonal obstacles will block diagonal moves.</a>
 <span class="sourceLineNo">3383</span><a id="line.3383">     * &lt;br&gt;</a>
-<span class="sourceLineNo">3384</span><a id="line.3384">     * If this is 0, as a special case no orthogonal obstacles will block diagonal moves.</a>
-<span class="sourceLineNo">3385</span><a id="line.3385">     * &lt;br&gt;</a>
-<span class="sourceLineNo">3386</span><a id="line.3386">     * If this is 1, having one orthogonal obstacle adjacent to both the current cell and the cell the pathfinder is</a>
-<span class="sourceLineNo">3387</span><a id="line.3387">     * trying to diagonally enter will block diagonal moves. This generally blocks movement around corners, the "hard</a>
-<span class="sourceLineNo">3388</span><a id="line.3388">     * corner" rule used in some games.</a>
-<span class="sourceLineNo">3389</span><a id="line.3389">     * &lt;br&gt;</a>
-<span class="sourceLineNo">3390</span><a id="line.3390">     * If this is 2 (the default), having two orthogonal obstacles adjacent to both the current cell and the cell the</a>
-<span class="sourceLineNo">3391</span><a id="line.3391">     * pathfinder is trying to diagonally enter will block diagonal moves. As an example, if there is a wall to the</a>
-<span class="sourceLineNo">3392</span><a id="line.3392">     * north and a wall to the east, then the pathfinder won't be able to move northeast even if there is a floor there.</a>
-<span class="sourceLineNo">3393</span><a id="line.3393">     * @return the current level of blocking required to stop a diagonal move</a>
-<span class="sourceLineNo">3394</span><a id="line.3394">     */</a>
-<span class="sourceLineNo">3395</span><a id="line.3395">    public int getBlockingRequirement() {</a>
-<span class="sourceLineNo">3396</span><a id="line.3396">        return blockingRequirement;</a>
-<span class="sourceLineNo">3397</span><a id="line.3397">    }</a>
-<span class="sourceLineNo">3398</span><a id="line.3398"></a>
-<span class="sourceLineNo">3399</span><a id="line.3399">    /**</a>
-<span class="sourceLineNo">3400</span><a id="line.3400">     * If you want obstacles present in orthogonal cells to prevent pathfinding along the diagonal between them, this</a>
-<span class="sourceLineNo">3401</span><a id="line.3401">     * can be used to make thin diagonal walls non-viable to move through, or even to prevent diagonal movement if any</a>
-<span class="sourceLineNo">3402</span><a id="line.3402">     * one obstacle is orthogonally adjacent to both the start and target cell of a diagonal move. If you haven't set</a>
-<span class="sourceLineNo">3403</span><a id="line.3403">     * this yet, then the default is 2.</a>
+<span class="sourceLineNo">3384</span><a id="line.3384">     * If this is 1, having one orthogonal obstacle adjacent to both the current cell and the cell the pathfinder is</a>
+<span class="sourceLineNo">3385</span><a id="line.3385">     * trying to diagonally enter will block diagonal moves. This generally blocks movement around corners, the "hard</a>
+<span class="sourceLineNo">3386</span><a id="line.3386">     * corner" rule used in some games.</a>
+<span class="sourceLineNo">3387</span><a id="line.3387">     * &lt;br&gt;</a>
+<span class="sourceLineNo">3388</span><a id="line.3388">     * If this is 2 (the default), having two orthogonal obstacles adjacent to both the current cell and the cell the</a>
+<span class="sourceLineNo">3389</span><a id="line.3389">     * pathfinder is trying to diagonally enter will block diagonal moves. As an example, if there is a wall to the</a>
+<span class="sourceLineNo">3390</span><a id="line.3390">     * north and a wall to the east, then the pathfinder won't be able to move northeast even if there is a floor there.</a>
+<span class="sourceLineNo">3391</span><a id="line.3391">     * @return the current level of blocking required to stop a diagonal move</a>
+<span class="sourceLineNo">3392</span><a id="line.3392">     */</a>
+<span class="sourceLineNo">3393</span><a id="line.3393">    public int getBlockingRequirement() {</a>
+<span class="sourceLineNo">3394</span><a id="line.3394">        return blockingRequirement;</a>
+<span class="sourceLineNo">3395</span><a id="line.3395">    }</a>
+<span class="sourceLineNo">3396</span><a id="line.3396"></a>
+<span class="sourceLineNo">3397</span><a id="line.3397">    /**</a>
+<span class="sourceLineNo">3398</span><a id="line.3398">     * If you want obstacles present in orthogonal cells to prevent pathfinding along the diagonal between them, this</a>
+<span class="sourceLineNo">3399</span><a id="line.3399">     * can be used to make thin diagonal walls non-viable to move through, or even to prevent diagonal movement if any</a>
+<span class="sourceLineNo">3400</span><a id="line.3400">     * one obstacle is orthogonally adjacent to both the start and target cell of a diagonal move. If you haven't set</a>
+<span class="sourceLineNo">3401</span><a id="line.3401">     * this yet, then the default is 2.</a>
+<span class="sourceLineNo">3402</span><a id="line.3402">     * &lt;br&gt;</a>
+<span class="sourceLineNo">3403</span><a id="line.3403">     * If this is 0, as a special case no orthogonal obstacles will block diagonal moves.</a>
 <span class="sourceLineNo">3404</span><a id="line.3404">     * &lt;br&gt;</a>
-<span class="sourceLineNo">3405</span><a id="line.3405">     * If this is 0, as a special case no orthogonal obstacles will block diagonal moves.</a>
-<span class="sourceLineNo">3406</span><a id="line.3406">     * &lt;br&gt;</a>
-<span class="sourceLineNo">3407</span><a id="line.3407">     * If this is 1, having one orthogonal obstacle adjacent to both the current cell and the cell the pathfinder is</a>
-<span class="sourceLineNo">3408</span><a id="line.3408">     * trying to diagonally enter will block diagonal moves. This generally blocks movement around corners, the "hard</a>
-<span class="sourceLineNo">3409</span><a id="line.3409">     * corner" rule used in some games.</a>
-<span class="sourceLineNo">3410</span><a id="line.3410">     * &lt;br&gt;</a>
-<span class="sourceLineNo">3411</span><a id="line.3411">     * If this is 2 (the default), having two orthogonal obstacles adjacent to both the current cell and the cell the</a>
-<span class="sourceLineNo">3412</span><a id="line.3412">     * pathfinder is trying to diagonally enter will block diagonal moves. As an example, if there is a wall to the</a>
-<span class="sourceLineNo">3413</span><a id="line.3413">     * north and a wall to the east, then the pathfinder won't be able to move northeast even if there is a floor there.</a>
-<span class="sourceLineNo">3414</span><a id="line.3414">     * @param blockingRequirement the desired level of blocking required to stop a diagonal move</a>
-<span class="sourceLineNo">3415</span><a id="line.3415">     */</a>
-<span class="sourceLineNo">3416</span><a id="line.3416">    public void setBlockingRequirement(int blockingRequirement) {</a>
-<span class="sourceLineNo">3417</span><a id="line.3417">        this.blockingRequirement = blockingRequirement &gt; 2 ? 2 : blockingRequirement &lt; 0 ? 0 : blockingRequirement;</a>
-<span class="sourceLineNo">3418</span><a id="line.3418">    }</a>
-<span class="sourceLineNo">3419</span><a id="line.3419"></a>
-<span class="sourceLineNo">3420</span><a id="line.3420">    private void appendDirToShuffle(IRNG rng) {</a>
-<span class="sourceLineNo">3421</span><a id="line.3421">        final Direction[] src = measurement == Measurement.MANHATTAN</a>
-<span class="sourceLineNo">3422</span><a id="line.3422">                ? Direction.CARDINALS : Direction.OUTWARDS;</a>
-<span class="sourceLineNo">3423</span><a id="line.3423">        final int n = measurement.directionCount();</a>
-<span class="sourceLineNo">3424</span><a id="line.3424">        System.arraycopy(src, 0, dirs, 0, n);</a>
-<span class="sourceLineNo">3425</span><a id="line.3425">        for (int i = n - 1; i &gt; 0; i--) {</a>
-<span class="sourceLineNo">3426</span><a id="line.3426">            final int r = rng.nextInt(i+1);</a>
-<span class="sourceLineNo">3427</span><a id="line.3427">            Direction t = dirs[r];</a>
-<span class="sourceLineNo">3428</span><a id="line.3428">            dirs[r] = dirs[i];</a>
-<span class="sourceLineNo">3429</span><a id="line.3429">            dirs[i] = t;</a>
-<span class="sourceLineNo">3430</span><a id="line.3430">        }</a>
-<span class="sourceLineNo">3431</span><a id="line.3431">        dirs[n] = Direction.NONE;</a>
-<span class="sourceLineNo">3432</span><a id="line.3432">    }</a>
-<span class="sourceLineNo">3433</span><a id="line.3433">}</a>
+<span class="sourceLineNo">3405</span><a id="line.3405">     * If this is 1, having one orthogonal obstacle adjacent to both the current cell and the cell the pathfinder is</a>
+<span class="sourceLineNo">3406</span><a id="line.3406">     * trying to diagonally enter will block diagonal moves. This generally blocks movement around corners, the "hard</a>
+<span class="sourceLineNo">3407</span><a id="line.3407">     * corner" rule used in some games.</a>
+<span class="sourceLineNo">3408</span><a id="line.3408">     * &lt;br&gt;</a>
+<span class="sourceLineNo">3409</span><a id="line.3409">     * If this is 2 (the default), having two orthogonal obstacles adjacent to both the current cell and the cell the</a>
+<span class="sourceLineNo">3410</span><a id="line.3410">     * pathfinder is trying to diagonally enter will block diagonal moves. As an example, if there is a wall to the</a>
+<span class="sourceLineNo">3411</span><a id="line.3411">     * north and a wall to the east, then the pathfinder won't be able to move northeast even if there is a floor there.</a>
+<span class="sourceLineNo">3412</span><a id="line.3412">     * @param blockingRequirement the desired level of blocking required to stop a diagonal move</a>
+<span class="sourceLineNo">3413</span><a id="line.3413">     */</a>
+<span class="sourceLineNo">3414</span><a id="line.3414">    public void setBlockingRequirement(int blockingRequirement) {</a>
+<span class="sourceLineNo">3415</span><a id="line.3415">        this.blockingRequirement = blockingRequirement &gt; 2 ? 2 : Math.max(blockingRequirement, 0);</a>
+<span class="sourceLineNo">3416</span><a id="line.3416">    }</a>
+<span class="sourceLineNo">3417</span><a id="line.3417"></a>
+<span class="sourceLineNo">3418</span><a id="line.3418">    private void appendDirToShuffle(IRNG rng) {</a>
+<span class="sourceLineNo">3419</span><a id="line.3419">        final Direction[] src = measurement == Measurement.MANHATTAN</a>
+<span class="sourceLineNo">3420</span><a id="line.3420">                ? Direction.CARDINALS : Direction.OUTWARDS;</a>
+<span class="sourceLineNo">3421</span><a id="line.3421">        final int n = measurement.directionCount();</a>
+<span class="sourceLineNo">3422</span><a id="line.3422">        System.arraycopy(src, 0, dirs, 0, n);</a>
+<span class="sourceLineNo">3423</span><a id="line.3423">        for (int i = n - 1; i &gt; 0; i--) {</a>
+<span class="sourceLineNo">3424</span><a id="line.3424">            final int r = rng.nextInt(i+1);</a>
+<span class="sourceLineNo">3425</span><a id="line.3425">            Direction t = dirs[r];</a>
+<span class="sourceLineNo">3426</span><a id="line.3426">            dirs[r] = dirs[i];</a>
+<span class="sourceLineNo">3427</span><a id="line.3427">            dirs[i] = t;</a>
+<span class="sourceLineNo">3428</span><a id="line.3428">        }</a>
+<span class="sourceLineNo">3429</span><a id="line.3429">        dirs[n] = Direction.NONE;</a>
+<span class="sourceLineNo">3430</span><a id="line.3430">    }</a>
+<span class="sourceLineNo">3431</span><a id="line.3431">}</a>
 
 
 

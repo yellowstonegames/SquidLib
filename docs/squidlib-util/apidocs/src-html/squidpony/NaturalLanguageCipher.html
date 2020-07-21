@@ -764,294 +764,292 @@
 <span class="sourceLineNo">752</span><a id="line.752">            {</a>
 <span class="sourceLineNo">753</span><a id="line.753">                mods |=VERBER;</a>
 <span class="sourceLineNo">754</span><a id="line.754">                end-=3;</a>
-<span class="sourceLineNo">755</span><a id="line.755">                endO-=3;</a>
-<span class="sourceLineNo">756</span><a id="line.756">            }</a>
-<span class="sourceLineNo">757</span><a id="line.757">            else if(end &gt;= 4 &amp;&amp; endO &gt;= 4 &amp;&amp; (sc[end-2] == 'e' || sc[end-2] == 'o') &amp;&amp; sc[end-1] == 'r')</a>
-<span class="sourceLineNo">758</span><a id="line.758">            {</a>
-<span class="sourceLineNo">759</span><a id="line.759">                mods |= VERBER;</a>
-<span class="sourceLineNo">760</span><a id="line.760">                end-=2;</a>
-<span class="sourceLineNo">761</span><a id="line.761">            }</a>
-<span class="sourceLineNo">762</span><a id="line.762">            if(end &gt;= 4 &amp;&amp; sc[end-2] == 'e' &amp;&amp; sc[end-1]=='n')</a>
-<span class="sourceLineNo">763</span><a id="line.763">            {</a>
-<span class="sourceLineNo">764</span><a id="line.764">                mods |=NOUNEN;</a>
-<span class="sourceLineNo">765</span><a id="line.765">                end-=2;</a>
-<span class="sourceLineNo">766</span><a id="line.766">            }</a>
-<span class="sourceLineNo">767</span><a id="line.767">            if(end - start &gt;= 5 &amp;&amp; sc[start] == 'p' &amp;&amp; sc[start+1] == 'r' &amp;&amp; sc[start+2] == 'e')</a>
-<span class="sourceLineNo">768</span><a id="line.768">            {</a>
-<span class="sourceLineNo">769</span><a id="line.769">                mods |=PREVERB;</a>
-<span class="sourceLineNo">770</span><a id="line.770">                start += 3;</a>
-<span class="sourceLineNo">771</span><a id="line.771">            }</a>
-<span class="sourceLineNo">772</span><a id="line.772">            if(end - start &gt;= 6 &amp;&amp; sc[start] == 'p' &amp;&amp; sc[start+1] == 'o' &amp;&amp; sc[start+2] == 's' &amp;&amp; sc[start+3] == 't')</a>
-<span class="sourceLineNo">773</span><a id="line.773">            {</a>
-<span class="sourceLineNo">774</span><a id="line.774">                mods |= POSTVERB;</a>
-<span class="sourceLineNo">775</span><a id="line.775">                start += 4;</a>
-<span class="sourceLineNo">776</span><a id="line.776">            }</a>
-<span class="sourceLineNo">777</span><a id="line.777"></a>
-<span class="sourceLineNo">778</span><a id="line.778">            if(end - start &gt;= 5 &amp;&amp; sc[start] == 'p' &amp;&amp; sc[start+1] == 'r' &amp;&amp; sc[start+2] == 'o')</a>
-<span class="sourceLineNo">779</span><a id="line.779">            {</a>
-<span class="sourceLineNo">780</span><a id="line.780">                mods |= PROVERB;</a>
-<span class="sourceLineNo">781</span><a id="line.781">                start += 3;</a>
-<span class="sourceLineNo">782</span><a id="line.782">            }</a>
-<span class="sourceLineNo">783</span><a id="line.783">            else {</a>
-<span class="sourceLineNo">784</span><a id="line.784">                if (end - start &gt;= 6 &amp;&amp; sc[start] == 'a' &amp;&amp; sc[start + 1] == 'n' &amp;&amp; sc[start + 2] == 't' &amp;&amp; sc[start + 3] == 'i') {</a>
-<span class="sourceLineNo">785</span><a id="line.785">                    mods |= ANTIVERB;</a>
-<span class="sourceLineNo">786</span><a id="line.786">                    start += 4;</a>
-<span class="sourceLineNo">787</span><a id="line.787">                }</a>
-<span class="sourceLineNo">788</span><a id="line.788">                else if (end - start &gt;= 8 &amp;&amp; sc[start] == 'c' &amp;&amp; sc[start + 1] == 'o' &amp;&amp; sc[start + 2] == 'n' &amp;&amp; sc[start + 3] == 't' &amp;&amp; sc[start + 4] == 'r' &amp;&amp; sc[start + 5] == 'a') {</a>
-<span class="sourceLineNo">789</span><a id="line.789">                    mods |= ANTIVERB;</a>
-<span class="sourceLineNo">790</span><a id="line.790">                    start += 6;</a>
-<span class="sourceLineNo">791</span><a id="line.791">                }</a>
-<span class="sourceLineNo">792</span><a id="line.792">            }</a>
-<span class="sourceLineNo">793</span><a id="line.793">            if(end - start &gt;= 4 &amp;&amp; sc[start] == 'r' &amp;&amp; sc[start+1] == 'e')</a>
-<span class="sourceLineNo">794</span><a id="line.794">            {</a>
-<span class="sourceLineNo">795</span><a id="line.795">                mods |= REVERB;</a>
-<span class="sourceLineNo">796</span><a id="line.796">                start += 2;</a>
-<span class="sourceLineNo">797</span><a id="line.797">            }</a>
-<span class="sourceLineNo">798</span><a id="line.798">            if(end - start &gt;= 5 &amp;&amp; sc[start] == 'd' &amp;&amp; sc[start+1] == 'i' &amp;&amp; sc[start+2] == 's')</a>
-<span class="sourceLineNo">799</span><a id="line.799">            {</a>
-<span class="sourceLineNo">800</span><a id="line.800">                mods |= DISNOUN;</a>
-<span class="sourceLineNo">801</span><a id="line.801">                start += 3;</a>
-<span class="sourceLineNo">802</span><a id="line.802">            }</a>
-<span class="sourceLineNo">803</span><a id="line.803">            if(end - start &gt;= 4 &amp;&amp; sc[start] == 'u' &amp;&amp; sc[start+1] == 'n')</a>
-<span class="sourceLineNo">804</span><a id="line.804">            {</a>
-<span class="sourceLineNo">805</span><a id="line.805">                mods |= ANTIVERB;</a>
-<span class="sourceLineNo">806</span><a id="line.806">                start += 2;</a>
-<span class="sourceLineNo">807</span><a id="line.807">            }</a>
-<span class="sourceLineNo">808</span><a id="line.808">            if(end - start &gt;= 4 &amp;&amp; (sc[start] == 'e' || sc[start] == 'i') &amp;&amp; sc[start+1] == 'n')</a>
-<span class="sourceLineNo">809</span><a id="line.809">            {</a>
-<span class="sourceLineNo">810</span><a id="line.810">                mods |= ENNOUN;</a>
-<span class="sourceLineNo">811</span><a id="line.811">                start += 2;</a>
-<span class="sourceLineNo">812</span><a id="line.812">            }</a>
-<span class="sourceLineNo">813</span><a id="line.813">            long h = phoneticHash64(sc, start, end) ^ (shift &amp; 0xFFFFFFFFFFFFFFFL) ^ (shift &gt;&gt;&gt; 14), frustration = 0;</a>
-<span class="sourceLineNo">814</span><a id="line.814">            //System.out.print(source + ":" + ((h &gt;&gt;&gt; 60) &amp; 7) + ":" + StringKit.hex(h) + ", ");</a>
-<span class="sourceLineNo">815</span><a id="line.815">            rs.setState(h);</a>
-<span class="sourceLineNo">816</span><a id="line.816">            do {</a>
-<span class="sourceLineNo">817</span><a id="line.817">                ciphered = conjugate(language.word(rng, false, (int) Math.ceil((h &gt;&gt;&gt; 60) / (0.9 + 0.5 * rng.nextDouble()))), mods);</a>
-<span class="sourceLineNo">818</span><a id="line.818">                if(cacheLevel &lt; 2 || frustration++ &gt; 9)</a>
-<span class="sourceLineNo">819</span><a id="line.819">                    break;</a>
-<span class="sourceLineNo">820</span><a id="line.820">            }while (reverse.containsKey(ciphered));</a>
-<span class="sourceLineNo">821</span><a id="line.821">            switch (cacheLevel) {</a>
-<span class="sourceLineNo">822</span><a id="line.822">                case 2: reverse.put(ciphered, s2);</a>
-<span class="sourceLineNo">823</span><a id="line.823">                case 1: table.put(s2, ciphered);</a>
-<span class="sourceLineNo">824</span><a id="line.824">            }</a>
-<span class="sourceLineNo">825</span><a id="line.825">        }</a>
-<span class="sourceLineNo">826</span><a id="line.826">        char[] chars = ciphered.toCharArray();</a>
-<span class="sourceLineNo">827</span><a id="line.827">        // Lu is the upper case letter category in Unicode; we're using regexodus for this because GWT won't</a>
-<span class="sourceLineNo">828</span><a id="line.828">        // respect unicode case data on its own (see</a>
-<span class="sourceLineNo">829</span><a id="line.829">        // https://github.com/gwtproject/gwt/blob/2.6.1/user/super/com/google/gwt/emul/java/lang/Character.java#L54-L61</a>
-<span class="sourceLineNo">830</span><a id="line.830">        // ). We are using GWT to capitalize, though, which appears to work in practice and the docs agree.</a>
-<span class="sourceLineNo">831</span><a id="line.831">        if(Category.Lu.contains(source.charAt(0)))</a>
-<span class="sourceLineNo">832</span><a id="line.832">            chars[0] = Character.toUpperCase(chars[0]);</a>
-<span class="sourceLineNo">833</span><a id="line.833">        if(source.length() &gt; 1 &amp;&amp; Category.Lu.contains(source.charAt(1))) {</a>
-<span class="sourceLineNo">834</span><a id="line.834">            for (int i = 1; i &lt; chars.length; i++) {</a>
-<span class="sourceLineNo">835</span><a id="line.835">                chars[i] = Character.toUpperCase(chars[i]);</a>
-<span class="sourceLineNo">836</span><a id="line.836">            }</a>
-<span class="sourceLineNo">837</span><a id="line.837">        }</a>
-<span class="sourceLineNo">838</span><a id="line.838">        return new String(chars);</a>
-<span class="sourceLineNo">839</span><a id="line.839">    }</a>
-<span class="sourceLineNo">840</span><a id="line.840"></a>
-<span class="sourceLineNo">841</span><a id="line.841">    /**</a>
-<span class="sourceLineNo">842</span><a id="line.842">     * Given a String that should contain words in the source language, this translates each word to the fake language,</a>
-<span class="sourceLineNo">843</span><a id="line.843">     * using existing translations if previous calls to cipher() or lookup() had translated that word.</a>
-<span class="sourceLineNo">844</span><a id="line.844">     * @param text a String that contains words in the source language</a>
-<span class="sourceLineNo">845</span><a id="line.845">     * @return a String of the translated text.</a>
-<span class="sourceLineNo">846</span><a id="line.846">     */</a>
-<span class="sourceLineNo">847</span><a id="line.847">    public String cipher(String text)</a>
-<span class="sourceLineNo">848</span><a id="line.848">    {</a>
-<span class="sourceLineNo">849</span><a id="line.849">        Replacer rep = wordPattern.replacer(new CipherSubstitution());</a>
-<span class="sourceLineNo">850</span><a id="line.850">        return rep.replace(text.replace('-', '\u2013'));</a>
-<span class="sourceLineNo">851</span><a id="line.851">    }</a>
-<span class="sourceLineNo">852</span><a id="line.852"></a>
-<span class="sourceLineNo">853</span><a id="line.853">    private class CipherSubstitution implements Substitution</a>
-<span class="sourceLineNo">854</span><a id="line.854">    {</a>
-<span class="sourceLineNo">855</span><a id="line.855">        @Override</a>
-<span class="sourceLineNo">856</span><a id="line.856">        public void appendSubstitution(MatchResult match, TextBuffer dest) {</a>
-<span class="sourceLineNo">857</span><a id="line.857">            dest.append(lookup(match.group(0)));</a>
-<span class="sourceLineNo">858</span><a id="line.858">        }</a>
-<span class="sourceLineNo">859</span><a id="line.859">    }</a>
-<span class="sourceLineNo">860</span><a id="line.860">    private class DecipherSubstition implements Substitution</a>
-<span class="sourceLineNo">861</span><a id="line.861">    {</a>
-<span class="sourceLineNo">862</span><a id="line.862">        private final Map&lt;String, String&gt; vocabulary;</a>
-<span class="sourceLineNo">863</span><a id="line.863">        DecipherSubstition(final Map&lt;String, String&gt; vocabulary)</a>
-<span class="sourceLineNo">864</span><a id="line.864">        {</a>
-<span class="sourceLineNo">865</span><a id="line.865">            this.vocabulary = vocabulary;</a>
-<span class="sourceLineNo">866</span><a id="line.866">        }</a>
-<span class="sourceLineNo">867</span><a id="line.867">        public void appendSubstitution(MatchResult match, TextBuffer dest) {</a>
-<span class="sourceLineNo">868</span><a id="line.868">            String translated = match.group(0);</a>
-<span class="sourceLineNo">869</span><a id="line.869">            if(translated == null) {</a>
-<span class="sourceLineNo">870</span><a id="line.870">                return;</a>
-<span class="sourceLineNo">871</span><a id="line.871">            }</a>
-<span class="sourceLineNo">872</span><a id="line.872">            translated = translated.toLowerCase();</a>
-<span class="sourceLineNo">873</span><a id="line.873">            translated = vocabulary.get(translated);</a>
-<span class="sourceLineNo">874</span><a id="line.874">            if(translated == null) {</a>
-<span class="sourceLineNo">875</span><a id="line.875">                dest.append(match.group(0));</a>
-<span class="sourceLineNo">876</span><a id="line.876">                return;</a>
-<span class="sourceLineNo">877</span><a id="line.877">            }</a>
-<span class="sourceLineNo">878</span><a id="line.878">            char[] chars = translated.toCharArray();</a>
-<span class="sourceLineNo">879</span><a id="line.879">            if(Category.Lu.contains(match.charAt(0)))</a>
-<span class="sourceLineNo">880</span><a id="line.880">                chars[0] = Character.toUpperCase(chars[0]);</a>
-<span class="sourceLineNo">881</span><a id="line.881">            if(match.length() &gt; 1 &amp;&amp; Category.Lu.contains(match.charAt(1))) {</a>
-<span class="sourceLineNo">882</span><a id="line.882">                for (int i = 1; i &lt; chars.length; i++) {</a>
-<span class="sourceLineNo">883</span><a id="line.883">                    chars[i] = Character.toUpperCase(chars[i]);</a>
-<span class="sourceLineNo">884</span><a id="line.884">                }</a>
-<span class="sourceLineNo">885</span><a id="line.885">            }</a>
-<span class="sourceLineNo">886</span><a id="line.886">            dest.append(chars, 0, chars.length);</a>
-<span class="sourceLineNo">887</span><a id="line.887">        }</a>
-<span class="sourceLineNo">888</span><a id="line.888">    }</a>
-<span class="sourceLineNo">889</span><a id="line.889"></a>
-<span class="sourceLineNo">890</span><a id="line.890">    /**</a>
-<span class="sourceLineNo">891</span><a id="line.891">     * Deciphers words in an already-ciphered text with a given String-to-String Map for a vocabulary. This Map could be</a>
-<span class="sourceLineNo">892</span><a id="line.892">     * the reverse field of this NaturalLanguageCipher, which would give a complete translation, or it could be a</a>
-<span class="sourceLineNo">893</span><a id="line.893">     * partially-complete or partially-correct vocabulary of words the player has learned. The vocabulary should</a>
-<span class="sourceLineNo">894</span><a id="line.894">     * typically have entries added using the quick and accurate {@link #learnTranslations(Map, String...)} method,</a>
-<span class="sourceLineNo">895</span><a id="line.895">     * unless you want to add translations one word at a time (then use {@link #learnTranslation(Map, String)}) or you</a>
-<span class="sourceLineNo">896</span><a id="line.896">     * want incorrect or biased translations added (then use {@link #mismatchTranslation(Map, String, String)}). You</a>
-<span class="sourceLineNo">897</span><a id="line.897">     * don't need to use one of these methods if you just pass the whole of the reverse field as a vocabulary, which</a>
-<span class="sourceLineNo">898</span><a id="line.898">     * will translate every word. If making your own vocabulary without the learn methods, the keys need to be</a>
-<span class="sourceLineNo">899</span><a id="line.899">     * lower-case because while regex Patterns can be case-insensitive, the Maps used here are not.</a>
-<span class="sourceLineNo">900</span><a id="line.900">     * @param text a text in the fake language, as a CharSequence such as a String or StringBuilder</a>
-<span class="sourceLineNo">901</span><a id="line.901">     * @param vocabulary a Map of Strings in the fake language to Strings in the source language</a>
-<span class="sourceLineNo">902</span><a id="line.902">     * @return a String of deciphered text that has any words as keys in vocabulary translated to the source language</a>
-<span class="sourceLineNo">903</span><a id="line.903">     */</a>
-<span class="sourceLineNo">904</span><a id="line.904">    public String decipher(CharSequence text, final Map&lt;String, String&gt; vocabulary)</a>
-<span class="sourceLineNo">905</span><a id="line.905">    {</a>
-<span class="sourceLineNo">906</span><a id="line.906">        Pattern pat;</a>
-<span class="sourceLineNo">907</span><a id="line.907">        Replacer rep;</a>
-<span class="sourceLineNo">908</span><a id="line.908">        StringBuilder sb = new StringBuilder(128);</a>
-<span class="sourceLineNo">909</span><a id="line.909">        sb.append("(?:");</a>
-<span class="sourceLineNo">910</span><a id="line.910">        for(String k : vocabulary.keySet())</a>
-<span class="sourceLineNo">911</span><a id="line.911">        {</a>
-<span class="sourceLineNo">912</span><a id="line.912">            sb.append("(?:\\Q").append(k).append("\\E)|");</a>
-<span class="sourceLineNo">913</span><a id="line.913">        }</a>
-<span class="sourceLineNo">914</span><a id="line.914">        sb.deleteCharAt(sb.length() - 1)</a>
-<span class="sourceLineNo">915</span><a id="line.915">                .append(')');</a>
-<span class="sourceLineNo">916</span><a id="line.916"></a>
-<span class="sourceLineNo">917</span><a id="line.917">        pat = Pattern.compile("(?&lt;![\\pL\\&amp;-])(?=[\\pL\\&amp;-])" + sb + "(?![\\pL\\&amp;-])", "ui");</a>
-<span class="sourceLineNo">918</span><a id="line.918"></a>
-<span class="sourceLineNo">919</span><a id="line.919">        rep = pat.replacer(new DecipherSubstition(vocabulary));</a>
-<span class="sourceLineNo">920</span><a id="line.920">        return rep.replace(text);</a>
-<span class="sourceLineNo">921</span><a id="line.921">    }</a>
-<span class="sourceLineNo">922</span><a id="line.922"></a>
-<span class="sourceLineNo">923</span><a id="line.923">    /**</a>
-<span class="sourceLineNo">924</span><a id="line.924">     * Adds a translation pair to vocabulary so it can be used in decipher, giving a correct translation for sourceWord.</a>
-<span class="sourceLineNo">925</span><a id="line.925">     * Modifies vocabulary in-place and returns this NaturalLanguageCipher for chaining. Can be used to correct a</a>
-<span class="sourceLineNo">926</span><a id="line.926">     * mismatched translation added to vocabulary with mismatchTranslation().</a>
-<span class="sourceLineNo">927</span><a id="line.927">     * @param vocabulary a Map of String keys to String values that will be modified in-place</a>
-<span class="sourceLineNo">928</span><a id="line.928">     * @param sourceWord a word in the source language, typically English; the meaning will be "learned" for decipher</a>
-<span class="sourceLineNo">929</span><a id="line.929">     * @return this, for chaining</a>
-<span class="sourceLineNo">930</span><a id="line.930">     */</a>
-<span class="sourceLineNo">931</span><a id="line.931">    public NaturalLanguageCipher learnTranslation(Map&lt;String, String&gt; vocabulary, String sourceWord)</a>
-<span class="sourceLineNo">932</span><a id="line.932">    {</a>
-<span class="sourceLineNo">933</span><a id="line.933">        vocabulary.put(lookup(sourceWord.toLowerCase()), sourceWord);</a>
-<span class="sourceLineNo">934</span><a id="line.934">        return this;</a>
-<span class="sourceLineNo">935</span><a id="line.935">    }</a>
-<span class="sourceLineNo">936</span><a id="line.936"></a>
-<span class="sourceLineNo">937</span><a id="line.937">    /**</a>
-<span class="sourceLineNo">938</span><a id="line.938">     * Adds translation pairs to vocabulary so it can be used in decipher, giving a correct translation for sourceWords.</a>
-<span class="sourceLineNo">939</span><a id="line.939">     * Modifies vocabulary in-place and returns this NaturalLanguageCipher for chaining. Can be used to correct</a>
-<span class="sourceLineNo">940</span><a id="line.940">     * mismatched translations added to vocabulary with mismatchTranslation().</a>
-<span class="sourceLineNo">941</span><a id="line.941">     * @param vocabulary a Map of String keys to String values that will be modified in-place</a>
-<span class="sourceLineNo">942</span><a id="line.942">     * @param sourceWords an array or vararg of words in the source language, typically English; their meanings will</a>
-<span class="sourceLineNo">943</span><a id="line.943">     *                    be "learned" for decipher</a>
-<span class="sourceLineNo">944</span><a id="line.944">     * @return this, for chaining</a>
-<span class="sourceLineNo">945</span><a id="line.945">     */</a>
-<span class="sourceLineNo">946</span><a id="line.946">    public NaturalLanguageCipher learnTranslations(Map&lt;String, String&gt; vocabulary, String... sourceWords)</a>
-<span class="sourceLineNo">947</span><a id="line.947">    {</a>
-<span class="sourceLineNo">948</span><a id="line.948">        for (int i = 0; i &lt; sourceWords.length; i++) {</a>
-<span class="sourceLineNo">949</span><a id="line.949">            learnTranslation(vocabulary, sourceWords[i]);</a>
-<span class="sourceLineNo">950</span><a id="line.950">        }</a>
-<span class="sourceLineNo">951</span><a id="line.951">        return this;</a>
-<span class="sourceLineNo">952</span><a id="line.952">    }</a>
-<span class="sourceLineNo">953</span><a id="line.953"></a>
-<span class="sourceLineNo">954</span><a id="line.954">    /**</a>
-<span class="sourceLineNo">955</span><a id="line.955">     * Adds translation pairs to vocabulary so it can be used in decipher, giving a correct translation for sourceWords.</a>
-<span class="sourceLineNo">956</span><a id="line.956">     * Modifies vocabulary in-place and returns this NaturalLanguageCipher for chaining. Can be used to correct</a>
-<span class="sourceLineNo">957</span><a id="line.957">     * mismatched translations added to vocabulary with mismatchTranslation().</a>
-<span class="sourceLineNo">958</span><a id="line.958">     * @param vocabulary a Map of String keys to String values that will be modified in-place</a>
-<span class="sourceLineNo">959</span><a id="line.959">     * @param sourceWords an Iterable of words in the source language, typically English; their meanings will be</a>
-<span class="sourceLineNo">960</span><a id="line.960">     *                   "learned" for decipher</a>
-<span class="sourceLineNo">961</span><a id="line.961">     * @return this, for chaining</a>
-<span class="sourceLineNo">962</span><a id="line.962">     */</a>
-<span class="sourceLineNo">963</span><a id="line.963">    public NaturalLanguageCipher learnTranslations(Map&lt;String, String&gt; vocabulary, Iterable&lt;String&gt; sourceWords)</a>
-<span class="sourceLineNo">964</span><a id="line.964">    {</a>
-<span class="sourceLineNo">965</span><a id="line.965">        for (String s : sourceWords) {</a>
-<span class="sourceLineNo">966</span><a id="line.966">            learnTranslation(vocabulary, s);</a>
-<span class="sourceLineNo">967</span><a id="line.967">        }</a>
-<span class="sourceLineNo">968</span><a id="line.968">        return this;</a>
-<span class="sourceLineNo">969</span><a id="line.969">    }</a>
-<span class="sourceLineNo">970</span><a id="line.970"></a>
-<span class="sourceLineNo">971</span><a id="line.971">    /**</a>
-<span class="sourceLineNo">972</span><a id="line.972">     * Adds a translation pair to vocabulary so it can be used in decipher, giving a typically-incorrect translation for</a>
-<span class="sourceLineNo">973</span><a id="line.973">     * correctWord where it provides mismatchWord instead when the ciphered version of correctWord appears.</a>
-<span class="sourceLineNo">974</span><a id="line.974">     * Modifies vocabulary in-place and returns this NaturalLanguageCipher for chaining. You can use learnTranslation()</a>
-<span class="sourceLineNo">975</span><a id="line.975">     * to correct a mismatched vocabulary word, or mismatchTranslation() again to change the mismatched word.</a>
-<span class="sourceLineNo">976</span><a id="line.976">     * @param vocabulary a Map of String keys to String values that will be modified in-place</a>
-<span class="sourceLineNo">977</span><a id="line.977">     * @param correctWord a word in the source language, typically English; where the ciphered version of this</a>
-<span class="sourceLineNo">978</span><a id="line.978">     *                    appears and the text is deciphered, mismatchWord will be used instead</a>
-<span class="sourceLineNo">979</span><a id="line.979">     * @param mismatchWord a String that will be used for deciphering in place of the translation of correctWord.</a>
-<span class="sourceLineNo">980</span><a id="line.980">     * @return this, for chaining</a>
-<span class="sourceLineNo">981</span><a id="line.981">     */</a>
-<span class="sourceLineNo">982</span><a id="line.982">    public NaturalLanguageCipher mismatchTranslation(Map&lt;String, String&gt; vocabulary, String correctWord, String mismatchWord)</a>
-<span class="sourceLineNo">983</span><a id="line.983">    {</a>
-<span class="sourceLineNo">984</span><a id="line.984">        vocabulary.put(lookup(correctWord.toLowerCase()), mismatchWord);</a>
-<span class="sourceLineNo">985</span><a id="line.985">        return this;</a>
-<span class="sourceLineNo">986</span><a id="line.986">    }</a>
-<span class="sourceLineNo">987</span><a id="line.987"></a>
-<span class="sourceLineNo">988</span><a id="line.988">    public int getCacheLevel() {</a>
-<span class="sourceLineNo">989</span><a id="line.989">        return cacheLevel;</a>
-<span class="sourceLineNo">990</span><a id="line.990">    }</a>
-<span class="sourceLineNo">991</span><a id="line.991"></a>
-<span class="sourceLineNo">992</span><a id="line.992">    public void setCacheLevel(int cacheLevel) {</a>
-<span class="sourceLineNo">993</span><a id="line.993">        if(cacheLevel &gt;= 2) this.cacheLevel = 2;</a>
-<span class="sourceLineNo">994</span><a id="line.994">        else if(cacheLevel &lt;= 0) this.cacheLevel = 0;</a>
-<span class="sourceLineNo">995</span><a id="line.995">        else this.cacheLevel = cacheLevel;</a>
-<span class="sourceLineNo">996</span><a id="line.996">    }</a>
+<span class="sourceLineNo">755</span><a id="line.755">                        }</a>
+<span class="sourceLineNo">756</span><a id="line.756">            else if(end &gt;= 4 &amp;&amp; endO &gt;= 4 &amp;&amp; (sc[end-2] == 'e' || sc[end-2] == 'o') &amp;&amp; sc[end-1] == 'r')</a>
+<span class="sourceLineNo">757</span><a id="line.757">            {</a>
+<span class="sourceLineNo">758</span><a id="line.758">                mods |= VERBER;</a>
+<span class="sourceLineNo">759</span><a id="line.759">                end-=2;</a>
+<span class="sourceLineNo">760</span><a id="line.760">            }</a>
+<span class="sourceLineNo">761</span><a id="line.761">            if(end &gt;= 4 &amp;&amp; sc[end-2] == 'e' &amp;&amp; sc[end-1]=='n')</a>
+<span class="sourceLineNo">762</span><a id="line.762">            {</a>
+<span class="sourceLineNo">763</span><a id="line.763">                mods |=NOUNEN;</a>
+<span class="sourceLineNo">764</span><a id="line.764">                end-=2;</a>
+<span class="sourceLineNo">765</span><a id="line.765">            }</a>
+<span class="sourceLineNo">766</span><a id="line.766">            if(end - start &gt;= 5 &amp;&amp; sc[start] == 'p' &amp;&amp; sc[start+1] == 'r' &amp;&amp; sc[start+2] == 'e')</a>
+<span class="sourceLineNo">767</span><a id="line.767">            {</a>
+<span class="sourceLineNo">768</span><a id="line.768">                mods |=PREVERB;</a>
+<span class="sourceLineNo">769</span><a id="line.769">                start += 3;</a>
+<span class="sourceLineNo">770</span><a id="line.770">            }</a>
+<span class="sourceLineNo">771</span><a id="line.771">            if(end - start &gt;= 6 &amp;&amp; sc[start] == 'p' &amp;&amp; sc[start+1] == 'o' &amp;&amp; sc[start+2] == 's' &amp;&amp; sc[start+3] == 't')</a>
+<span class="sourceLineNo">772</span><a id="line.772">            {</a>
+<span class="sourceLineNo">773</span><a id="line.773">                mods |= POSTVERB;</a>
+<span class="sourceLineNo">774</span><a id="line.774">                start += 4;</a>
+<span class="sourceLineNo">775</span><a id="line.775">            }</a>
+<span class="sourceLineNo">776</span><a id="line.776"></a>
+<span class="sourceLineNo">777</span><a id="line.777">            if(end - start &gt;= 5 &amp;&amp; sc[start] == 'p' &amp;&amp; sc[start+1] == 'r' &amp;&amp; sc[start+2] == 'o')</a>
+<span class="sourceLineNo">778</span><a id="line.778">            {</a>
+<span class="sourceLineNo">779</span><a id="line.779">                mods |= PROVERB;</a>
+<span class="sourceLineNo">780</span><a id="line.780">                start += 3;</a>
+<span class="sourceLineNo">781</span><a id="line.781">            }</a>
+<span class="sourceLineNo">782</span><a id="line.782">            else {</a>
+<span class="sourceLineNo">783</span><a id="line.783">                if (end - start &gt;= 6 &amp;&amp; sc[start] == 'a' &amp;&amp; sc[start + 1] == 'n' &amp;&amp; sc[start + 2] == 't' &amp;&amp; sc[start + 3] == 'i') {</a>
+<span class="sourceLineNo">784</span><a id="line.784">                    mods |= ANTIVERB;</a>
+<span class="sourceLineNo">785</span><a id="line.785">                    start += 4;</a>
+<span class="sourceLineNo">786</span><a id="line.786">                }</a>
+<span class="sourceLineNo">787</span><a id="line.787">                else if (end - start &gt;= 8 &amp;&amp; sc[start] == 'c' &amp;&amp; sc[start + 1] == 'o' &amp;&amp; sc[start + 2] == 'n' &amp;&amp; sc[start + 3] == 't' &amp;&amp; sc[start + 4] == 'r' &amp;&amp; sc[start + 5] == 'a') {</a>
+<span class="sourceLineNo">788</span><a id="line.788">                    mods |= ANTIVERB;</a>
+<span class="sourceLineNo">789</span><a id="line.789">                    start += 6;</a>
+<span class="sourceLineNo">790</span><a id="line.790">                }</a>
+<span class="sourceLineNo">791</span><a id="line.791">            }</a>
+<span class="sourceLineNo">792</span><a id="line.792">            if(end - start &gt;= 4 &amp;&amp; sc[start] == 'r' &amp;&amp; sc[start+1] == 'e')</a>
+<span class="sourceLineNo">793</span><a id="line.793">            {</a>
+<span class="sourceLineNo">794</span><a id="line.794">                mods |= REVERB;</a>
+<span class="sourceLineNo">795</span><a id="line.795">                start += 2;</a>
+<span class="sourceLineNo">796</span><a id="line.796">            }</a>
+<span class="sourceLineNo">797</span><a id="line.797">            if(end - start &gt;= 5 &amp;&amp; sc[start] == 'd' &amp;&amp; sc[start+1] == 'i' &amp;&amp; sc[start+2] == 's')</a>
+<span class="sourceLineNo">798</span><a id="line.798">            {</a>
+<span class="sourceLineNo">799</span><a id="line.799">                mods |= DISNOUN;</a>
+<span class="sourceLineNo">800</span><a id="line.800">                start += 3;</a>
+<span class="sourceLineNo">801</span><a id="line.801">            }</a>
+<span class="sourceLineNo">802</span><a id="line.802">            if(end - start &gt;= 4 &amp;&amp; sc[start] == 'u' &amp;&amp; sc[start+1] == 'n')</a>
+<span class="sourceLineNo">803</span><a id="line.803">            {</a>
+<span class="sourceLineNo">804</span><a id="line.804">                mods |= ANTIVERB;</a>
+<span class="sourceLineNo">805</span><a id="line.805">                start += 2;</a>
+<span class="sourceLineNo">806</span><a id="line.806">            }</a>
+<span class="sourceLineNo">807</span><a id="line.807">            if(end - start &gt;= 4 &amp;&amp; (sc[start] == 'e' || sc[start] == 'i') &amp;&amp; sc[start+1] == 'n')</a>
+<span class="sourceLineNo">808</span><a id="line.808">            {</a>
+<span class="sourceLineNo">809</span><a id="line.809">                mods |= ENNOUN;</a>
+<span class="sourceLineNo">810</span><a id="line.810">                start += 2;</a>
+<span class="sourceLineNo">811</span><a id="line.811">            }</a>
+<span class="sourceLineNo">812</span><a id="line.812">            long h = phoneticHash64(sc, start, end) ^ (shift &amp; 0xFFFFFFFFFFFFFFFL) ^ (shift &gt;&gt;&gt; 14), frustration = 0;</a>
+<span class="sourceLineNo">813</span><a id="line.813">            //System.out.print(source + ":" + ((h &gt;&gt;&gt; 60) &amp; 7) + ":" + StringKit.hex(h) + ", ");</a>
+<span class="sourceLineNo">814</span><a id="line.814">            rs.setState(h);</a>
+<span class="sourceLineNo">815</span><a id="line.815">            do {</a>
+<span class="sourceLineNo">816</span><a id="line.816">                ciphered = conjugate(language.word(rng, false, (int) Math.ceil((h &gt;&gt;&gt; 60) / (0.9 + 0.5 * rng.nextDouble()))), mods);</a>
+<span class="sourceLineNo">817</span><a id="line.817">                if(cacheLevel &lt; 2 || frustration++ &gt; 9)</a>
+<span class="sourceLineNo">818</span><a id="line.818">                    break;</a>
+<span class="sourceLineNo">819</span><a id="line.819">            }while (reverse.containsKey(ciphered));</a>
+<span class="sourceLineNo">820</span><a id="line.820">            switch (cacheLevel) {</a>
+<span class="sourceLineNo">821</span><a id="line.821">                case 2: reverse.put(ciphered, s2);</a>
+<span class="sourceLineNo">822</span><a id="line.822">                case 1: table.put(s2, ciphered);</a>
+<span class="sourceLineNo">823</span><a id="line.823">            }</a>
+<span class="sourceLineNo">824</span><a id="line.824">        }</a>
+<span class="sourceLineNo">825</span><a id="line.825">        char[] chars = ciphered.toCharArray();</a>
+<span class="sourceLineNo">826</span><a id="line.826">        // Lu is the upper case letter category in Unicode; we're using regexodus for this because GWT won't</a>
+<span class="sourceLineNo">827</span><a id="line.827">        // respect unicode case data on its own (see</a>
+<span class="sourceLineNo">828</span><a id="line.828">        // https://github.com/gwtproject/gwt/blob/2.6.1/user/super/com/google/gwt/emul/java/lang/Character.java#L54-L61</a>
+<span class="sourceLineNo">829</span><a id="line.829">        // ). We are using GWT to capitalize, though, which appears to work in practice and the docs agree.</a>
+<span class="sourceLineNo">830</span><a id="line.830">        if(Category.Lu.contains(source.charAt(0)))</a>
+<span class="sourceLineNo">831</span><a id="line.831">            chars[0] = Character.toUpperCase(chars[0]);</a>
+<span class="sourceLineNo">832</span><a id="line.832">        if(source.length() &gt; 1 &amp;&amp; Category.Lu.contains(source.charAt(1))) {</a>
+<span class="sourceLineNo">833</span><a id="line.833">            for (int i = 1; i &lt; chars.length; i++) {</a>
+<span class="sourceLineNo">834</span><a id="line.834">                chars[i] = Character.toUpperCase(chars[i]);</a>
+<span class="sourceLineNo">835</span><a id="line.835">            }</a>
+<span class="sourceLineNo">836</span><a id="line.836">        }</a>
+<span class="sourceLineNo">837</span><a id="line.837">        return new String(chars);</a>
+<span class="sourceLineNo">838</span><a id="line.838">    }</a>
+<span class="sourceLineNo">839</span><a id="line.839"></a>
+<span class="sourceLineNo">840</span><a id="line.840">    /**</a>
+<span class="sourceLineNo">841</span><a id="line.841">     * Given a String that should contain words in the source language, this translates each word to the fake language,</a>
+<span class="sourceLineNo">842</span><a id="line.842">     * using existing translations if previous calls to cipher() or lookup() had translated that word.</a>
+<span class="sourceLineNo">843</span><a id="line.843">     * @param text a String that contains words in the source language</a>
+<span class="sourceLineNo">844</span><a id="line.844">     * @return a String of the translated text.</a>
+<span class="sourceLineNo">845</span><a id="line.845">     */</a>
+<span class="sourceLineNo">846</span><a id="line.846">    public String cipher(String text)</a>
+<span class="sourceLineNo">847</span><a id="line.847">    {</a>
+<span class="sourceLineNo">848</span><a id="line.848">        Replacer rep = wordPattern.replacer(new CipherSubstitution());</a>
+<span class="sourceLineNo">849</span><a id="line.849">        return rep.replace(text.replace('-', '\u2013'));</a>
+<span class="sourceLineNo">850</span><a id="line.850">    }</a>
+<span class="sourceLineNo">851</span><a id="line.851"></a>
+<span class="sourceLineNo">852</span><a id="line.852">    private class CipherSubstitution implements Substitution</a>
+<span class="sourceLineNo">853</span><a id="line.853">    {</a>
+<span class="sourceLineNo">854</span><a id="line.854">        @Override</a>
+<span class="sourceLineNo">855</span><a id="line.855">        public void appendSubstitution(MatchResult match, TextBuffer dest) {</a>
+<span class="sourceLineNo">856</span><a id="line.856">            dest.append(lookup(match.group(0)));</a>
+<span class="sourceLineNo">857</span><a id="line.857">        }</a>
+<span class="sourceLineNo">858</span><a id="line.858">    }</a>
+<span class="sourceLineNo">859</span><a id="line.859">    private static class DecipherSubstition implements Substitution</a>
+<span class="sourceLineNo">860</span><a id="line.860">    {</a>
+<span class="sourceLineNo">861</span><a id="line.861">        private final Map&lt;String, String&gt; vocabulary;</a>
+<span class="sourceLineNo">862</span><a id="line.862">        DecipherSubstition(final Map&lt;String, String&gt; vocabulary)</a>
+<span class="sourceLineNo">863</span><a id="line.863">        {</a>
+<span class="sourceLineNo">864</span><a id="line.864">            this.vocabulary = vocabulary;</a>
+<span class="sourceLineNo">865</span><a id="line.865">        }</a>
+<span class="sourceLineNo">866</span><a id="line.866">        public void appendSubstitution(MatchResult match, TextBuffer dest) {</a>
+<span class="sourceLineNo">867</span><a id="line.867">            String translated = match.group(0);</a>
+<span class="sourceLineNo">868</span><a id="line.868">            if(translated == null) {</a>
+<span class="sourceLineNo">869</span><a id="line.869">                return;</a>
+<span class="sourceLineNo">870</span><a id="line.870">            }</a>
+<span class="sourceLineNo">871</span><a id="line.871">            translated = translated.toLowerCase();</a>
+<span class="sourceLineNo">872</span><a id="line.872">            translated = vocabulary.get(translated);</a>
+<span class="sourceLineNo">873</span><a id="line.873">            if(translated == null) {</a>
+<span class="sourceLineNo">874</span><a id="line.874">                dest.append(match.group(0));</a>
+<span class="sourceLineNo">875</span><a id="line.875">                return;</a>
+<span class="sourceLineNo">876</span><a id="line.876">            }</a>
+<span class="sourceLineNo">877</span><a id="line.877">            char[] chars = translated.toCharArray();</a>
+<span class="sourceLineNo">878</span><a id="line.878">            if(Category.Lu.contains(match.charAt(0)))</a>
+<span class="sourceLineNo">879</span><a id="line.879">                chars[0] = Character.toUpperCase(chars[0]);</a>
+<span class="sourceLineNo">880</span><a id="line.880">            if(match.length() &gt; 1 &amp;&amp; Category.Lu.contains(match.charAt(1))) {</a>
+<span class="sourceLineNo">881</span><a id="line.881">                for (int i = 1; i &lt; chars.length; i++) {</a>
+<span class="sourceLineNo">882</span><a id="line.882">                    chars[i] = Character.toUpperCase(chars[i]);</a>
+<span class="sourceLineNo">883</span><a id="line.883">                }</a>
+<span class="sourceLineNo">884</span><a id="line.884">            }</a>
+<span class="sourceLineNo">885</span><a id="line.885">            dest.append(chars, 0, chars.length);</a>
+<span class="sourceLineNo">886</span><a id="line.886">        }</a>
+<span class="sourceLineNo">887</span><a id="line.887">    }</a>
+<span class="sourceLineNo">888</span><a id="line.888"></a>
+<span class="sourceLineNo">889</span><a id="line.889">    /**</a>
+<span class="sourceLineNo">890</span><a id="line.890">     * Deciphers words in an already-ciphered text with a given String-to-String Map for a vocabulary. This Map could be</a>
+<span class="sourceLineNo">891</span><a id="line.891">     * the reverse field of this NaturalLanguageCipher, which would give a complete translation, or it could be a</a>
+<span class="sourceLineNo">892</span><a id="line.892">     * partially-complete or partially-correct vocabulary of words the player has learned. The vocabulary should</a>
+<span class="sourceLineNo">893</span><a id="line.893">     * typically have entries added using the quick and accurate {@link #learnTranslations(Map, String...)} method,</a>
+<span class="sourceLineNo">894</span><a id="line.894">     * unless you want to add translations one word at a time (then use {@link #learnTranslation(Map, String)}) or you</a>
+<span class="sourceLineNo">895</span><a id="line.895">     * want incorrect or biased translations added (then use {@link #mismatchTranslation(Map, String, String)}). You</a>
+<span class="sourceLineNo">896</span><a id="line.896">     * don't need to use one of these methods if you just pass the whole of the reverse field as a vocabulary, which</a>
+<span class="sourceLineNo">897</span><a id="line.897">     * will translate every word. If making your own vocabulary without the learn methods, the keys need to be</a>
+<span class="sourceLineNo">898</span><a id="line.898">     * lower-case because while regex Patterns can be case-insensitive, the Maps used here are not.</a>
+<span class="sourceLineNo">899</span><a id="line.899">     * @param text a text in the fake language, as a CharSequence such as a String or StringBuilder</a>
+<span class="sourceLineNo">900</span><a id="line.900">     * @param vocabulary a Map of Strings in the fake language to Strings in the source language</a>
+<span class="sourceLineNo">901</span><a id="line.901">     * @return a String of deciphered text that has any words as keys in vocabulary translated to the source language</a>
+<span class="sourceLineNo">902</span><a id="line.902">     */</a>
+<span class="sourceLineNo">903</span><a id="line.903">    public String decipher(CharSequence text, final Map&lt;String, String&gt; vocabulary)</a>
+<span class="sourceLineNo">904</span><a id="line.904">    {</a>
+<span class="sourceLineNo">905</span><a id="line.905">        Pattern pat;</a>
+<span class="sourceLineNo">906</span><a id="line.906">        Replacer rep;</a>
+<span class="sourceLineNo">907</span><a id="line.907">        StringBuilder sb = new StringBuilder(128);</a>
+<span class="sourceLineNo">908</span><a id="line.908">        sb.append("(?:");</a>
+<span class="sourceLineNo">909</span><a id="line.909">        for(String k : vocabulary.keySet())</a>
+<span class="sourceLineNo">910</span><a id="line.910">        {</a>
+<span class="sourceLineNo">911</span><a id="line.911">            sb.append("(?:\\Q").append(k).append("\\E)|");</a>
+<span class="sourceLineNo">912</span><a id="line.912">        }</a>
+<span class="sourceLineNo">913</span><a id="line.913">        sb.deleteCharAt(sb.length() - 1)</a>
+<span class="sourceLineNo">914</span><a id="line.914">                .append(')');</a>
+<span class="sourceLineNo">915</span><a id="line.915"></a>
+<span class="sourceLineNo">916</span><a id="line.916">        pat = Pattern.compile("(?&lt;![\\pL\\&amp;-])(?=[\\pL\\&amp;-])" + sb + "(?![\\pL\\&amp;-])", "ui");</a>
+<span class="sourceLineNo">917</span><a id="line.917"></a>
+<span class="sourceLineNo">918</span><a id="line.918">        rep = pat.replacer(new DecipherSubstition(vocabulary));</a>
+<span class="sourceLineNo">919</span><a id="line.919">        return rep.replace(text);</a>
+<span class="sourceLineNo">920</span><a id="line.920">    }</a>
+<span class="sourceLineNo">921</span><a id="line.921"></a>
+<span class="sourceLineNo">922</span><a id="line.922">    /**</a>
+<span class="sourceLineNo">923</span><a id="line.923">     * Adds a translation pair to vocabulary so it can be used in decipher, giving a correct translation for sourceWord.</a>
+<span class="sourceLineNo">924</span><a id="line.924">     * Modifies vocabulary in-place and returns this NaturalLanguageCipher for chaining. Can be used to correct a</a>
+<span class="sourceLineNo">925</span><a id="line.925">     * mismatched translation added to vocabulary with mismatchTranslation().</a>
+<span class="sourceLineNo">926</span><a id="line.926">     * @param vocabulary a Map of String keys to String values that will be modified in-place</a>
+<span class="sourceLineNo">927</span><a id="line.927">     * @param sourceWord a word in the source language, typically English; the meaning will be "learned" for decipher</a>
+<span class="sourceLineNo">928</span><a id="line.928">     * @return this, for chaining</a>
+<span class="sourceLineNo">929</span><a id="line.929">     */</a>
+<span class="sourceLineNo">930</span><a id="line.930">    public NaturalLanguageCipher learnTranslation(Map&lt;String, String&gt; vocabulary, String sourceWord)</a>
+<span class="sourceLineNo">931</span><a id="line.931">    {</a>
+<span class="sourceLineNo">932</span><a id="line.932">        vocabulary.put(lookup(sourceWord.toLowerCase()), sourceWord);</a>
+<span class="sourceLineNo">933</span><a id="line.933">        return this;</a>
+<span class="sourceLineNo">934</span><a id="line.934">    }</a>
+<span class="sourceLineNo">935</span><a id="line.935"></a>
+<span class="sourceLineNo">936</span><a id="line.936">    /**</a>
+<span class="sourceLineNo">937</span><a id="line.937">     * Adds translation pairs to vocabulary so it can be used in decipher, giving a correct translation for sourceWords.</a>
+<span class="sourceLineNo">938</span><a id="line.938">     * Modifies vocabulary in-place and returns this NaturalLanguageCipher for chaining. Can be used to correct</a>
+<span class="sourceLineNo">939</span><a id="line.939">     * mismatched translations added to vocabulary with mismatchTranslation().</a>
+<span class="sourceLineNo">940</span><a id="line.940">     * @param vocabulary a Map of String keys to String values that will be modified in-place</a>
+<span class="sourceLineNo">941</span><a id="line.941">     * @param sourceWords an array or vararg of words in the source language, typically English; their meanings will</a>
+<span class="sourceLineNo">942</span><a id="line.942">     *                    be "learned" for decipher</a>
+<span class="sourceLineNo">943</span><a id="line.943">     * @return this, for chaining</a>
+<span class="sourceLineNo">944</span><a id="line.944">     */</a>
+<span class="sourceLineNo">945</span><a id="line.945">    public NaturalLanguageCipher learnTranslations(Map&lt;String, String&gt; vocabulary, String... sourceWords)</a>
+<span class="sourceLineNo">946</span><a id="line.946">    {</a>
+<span class="sourceLineNo">947</span><a id="line.947">        for (int i = 0; i &lt; sourceWords.length; i++) {</a>
+<span class="sourceLineNo">948</span><a id="line.948">            learnTranslation(vocabulary, sourceWords[i]);</a>
+<span class="sourceLineNo">949</span><a id="line.949">        }</a>
+<span class="sourceLineNo">950</span><a id="line.950">        return this;</a>
+<span class="sourceLineNo">951</span><a id="line.951">    }</a>
+<span class="sourceLineNo">952</span><a id="line.952"></a>
+<span class="sourceLineNo">953</span><a id="line.953">    /**</a>
+<span class="sourceLineNo">954</span><a id="line.954">     * Adds translation pairs to vocabulary so it can be used in decipher, giving a correct translation for sourceWords.</a>
+<span class="sourceLineNo">955</span><a id="line.955">     * Modifies vocabulary in-place and returns this NaturalLanguageCipher for chaining. Can be used to correct</a>
+<span class="sourceLineNo">956</span><a id="line.956">     * mismatched translations added to vocabulary with mismatchTranslation().</a>
+<span class="sourceLineNo">957</span><a id="line.957">     * @param vocabulary a Map of String keys to String values that will be modified in-place</a>
+<span class="sourceLineNo">958</span><a id="line.958">     * @param sourceWords an Iterable of words in the source language, typically English; their meanings will be</a>
+<span class="sourceLineNo">959</span><a id="line.959">     *                   "learned" for decipher</a>
+<span class="sourceLineNo">960</span><a id="line.960">     * @return this, for chaining</a>
+<span class="sourceLineNo">961</span><a id="line.961">     */</a>
+<span class="sourceLineNo">962</span><a id="line.962">    public NaturalLanguageCipher learnTranslations(Map&lt;String, String&gt; vocabulary, Iterable&lt;String&gt; sourceWords)</a>
+<span class="sourceLineNo">963</span><a id="line.963">    {</a>
+<span class="sourceLineNo">964</span><a id="line.964">        for (String s : sourceWords) {</a>
+<span class="sourceLineNo">965</span><a id="line.965">            learnTranslation(vocabulary, s);</a>
+<span class="sourceLineNo">966</span><a id="line.966">        }</a>
+<span class="sourceLineNo">967</span><a id="line.967">        return this;</a>
+<span class="sourceLineNo">968</span><a id="line.968">    }</a>
+<span class="sourceLineNo">969</span><a id="line.969"></a>
+<span class="sourceLineNo">970</span><a id="line.970">    /**</a>
+<span class="sourceLineNo">971</span><a id="line.971">     * Adds a translation pair to vocabulary so it can be used in decipher, giving a typically-incorrect translation for</a>
+<span class="sourceLineNo">972</span><a id="line.972">     * correctWord where it provides mismatchWord instead when the ciphered version of correctWord appears.</a>
+<span class="sourceLineNo">973</span><a id="line.973">     * Modifies vocabulary in-place and returns this NaturalLanguageCipher for chaining. You can use learnTranslation()</a>
+<span class="sourceLineNo">974</span><a id="line.974">     * to correct a mismatched vocabulary word, or mismatchTranslation() again to change the mismatched word.</a>
+<span class="sourceLineNo">975</span><a id="line.975">     * @param vocabulary a Map of String keys to String values that will be modified in-place</a>
+<span class="sourceLineNo">976</span><a id="line.976">     * @param correctWord a word in the source language, typically English; where the ciphered version of this</a>
+<span class="sourceLineNo">977</span><a id="line.977">     *                    appears and the text is deciphered, mismatchWord will be used instead</a>
+<span class="sourceLineNo">978</span><a id="line.978">     * @param mismatchWord a String that will be used for deciphering in place of the translation of correctWord.</a>
+<span class="sourceLineNo">979</span><a id="line.979">     * @return this, for chaining</a>
+<span class="sourceLineNo">980</span><a id="line.980">     */</a>
+<span class="sourceLineNo">981</span><a id="line.981">    public NaturalLanguageCipher mismatchTranslation(Map&lt;String, String&gt; vocabulary, String correctWord, String mismatchWord)</a>
+<span class="sourceLineNo">982</span><a id="line.982">    {</a>
+<span class="sourceLineNo">983</span><a id="line.983">        vocabulary.put(lookup(correctWord.toLowerCase()), mismatchWord);</a>
+<span class="sourceLineNo">984</span><a id="line.984">        return this;</a>
+<span class="sourceLineNo">985</span><a id="line.985">    }</a>
+<span class="sourceLineNo">986</span><a id="line.986"></a>
+<span class="sourceLineNo">987</span><a id="line.987">    public int getCacheLevel() {</a>
+<span class="sourceLineNo">988</span><a id="line.988">        return cacheLevel;</a>
+<span class="sourceLineNo">989</span><a id="line.989">    }</a>
+<span class="sourceLineNo">990</span><a id="line.990"></a>
+<span class="sourceLineNo">991</span><a id="line.991">    public void setCacheLevel(int cacheLevel) {</a>
+<span class="sourceLineNo">992</span><a id="line.992">        if(cacheLevel &gt;= 2) this.cacheLevel = 2;</a>
+<span class="sourceLineNo">993</span><a id="line.993">        else this.cacheLevel = Math.max(cacheLevel, 0);</a>
+<span class="sourceLineNo">994</span><a id="line.994">    }</a>
+<span class="sourceLineNo">995</span><a id="line.995"></a>
+<span class="sourceLineNo">996</span><a id="line.996">    protected Matcher markupMatcher = Pattern.compile("\\[\\?\\](.*?)(?:\\[\\?\\]|$)").matcher();</a>
 <span class="sourceLineNo">997</span><a id="line.997"></a>
-<span class="sourceLineNo">998</span><a id="line.998">    protected Matcher markupMatcher = Pattern.compile("\\[\\?\\](.*?)(?:\\[\\?\\]|$)").matcher();</a>
-<span class="sourceLineNo">999</span><a id="line.999"></a>
-<span class="sourceLineNo">1000</span><a id="line.1000">    private class BulkCipherSubstitution implements Substitution</a>
-<span class="sourceLineNo">1001</span><a id="line.1001">    {</a>
-<span class="sourceLineNo">1002</span><a id="line.1002">        @Override</a>
-<span class="sourceLineNo">1003</span><a id="line.1003">        public void appendSubstitution(MatchResult match, TextBuffer dest) {</a>
-<span class="sourceLineNo">1004</span><a id="line.1004">            if(match instanceof Matcher)</a>
-<span class="sourceLineNo">1005</span><a id="line.1005">            {</a>
-<span class="sourceLineNo">1006</span><a id="line.1006">                wordMatcher.setTarget((Matcher)match, 1);</a>
-<span class="sourceLineNo">1007</span><a id="line.1007">            }</a>
-<span class="sourceLineNo">1008</span><a id="line.1008">            else</a>
-<span class="sourceLineNo">1009</span><a id="line.1009">            {</a>
-<span class="sourceLineNo">1010</span><a id="line.1010">                wordMatcher.setTarget(match.targetChars(), match.start(1) + match.targetStart(), match.length(1));</a>
-<span class="sourceLineNo">1011</span><a id="line.1011">            }</a>
-<span class="sourceLineNo">1012</span><a id="line.1012">            while (wordMatcher.find())</a>
-<span class="sourceLineNo">1013</span><a id="line.1013">            {</a>
-<span class="sourceLineNo">1014</span><a id="line.1014">                wordMatcher.getGroup(MatchResult.PREFIX, dest);</a>
-<span class="sourceLineNo">1015</span><a id="line.1015">                dest.append(lookup(wordMatcher.group()));</a>
-<span class="sourceLineNo">1016</span><a id="line.1016">                wordMatcher.setTarget(wordMatcher, MatchResult.SUFFIX);</a>
-<span class="sourceLineNo">1017</span><a id="line.1017">            }</a>
-<span class="sourceLineNo">1018</span><a id="line.1018">            wordMatcher.getGroup(MatchResult.TARGET, dest);</a>
-<span class="sourceLineNo">1019</span><a id="line.1019">        }</a>
-<span class="sourceLineNo">1020</span><a id="line.1020">    }</a>
-<span class="sourceLineNo">1021</span><a id="line.1021"></a>
-<span class="sourceLineNo">1022</span><a id="line.1022">    /**</a>
-<span class="sourceLineNo">1023</span><a id="line.1023">     * Given a String, StringBuilder, or other CharSequence that should contain words in the source language (almost</a>
-<span class="sourceLineNo">1024</span><a id="line.1024">     * always English, since this only knows English prefixes and suffixes), this finds sections of the text that</a>
-<span class="sourceLineNo">1025</span><a id="line.1025">     * start and end with {@code [?]} and {@code [?]}, translates each word between those start/end markers to the fake</a>
-<span class="sourceLineNo">1026</span><a id="line.1026">     * language, using existing translations if previous calls to cipher() or lookup() had translated that word, and</a>
-<span class="sourceLineNo">1027</span><a id="line.1027">     * removes the {@code [?]} markup afterwards. This is meant for cases where only some words should be translated,</a>
-<span class="sourceLineNo">1028</span><a id="line.1028">     * such as (for example) translating "What the [?]heck?[?]" to "What the grug?" or something like it if the language</a>
-<span class="sourceLineNo">1029</span><a id="line.1029">     * is {@link FakeLanguageGen#GOBLIN}, or "What the xu'oz?" if the language is {@link FakeLanguageGen#DEMONIC}.</a>
-<span class="sourceLineNo">1030</span><a id="line.1030">     * @param text a CharSequence, such as a String, that contains words in the source language and {@code [?]} markup</a>
-<span class="sourceLineNo">1031</span><a id="line.1031">     * @return a String of the translated text with markup-surrounded sections translated and markup removed</a>
-<span class="sourceLineNo">1032</span><a id="line.1032">     */</a>
-<span class="sourceLineNo">1033</span><a id="line.1033">    public String cipherMarkup(CharSequence text)</a>
-<span class="sourceLineNo">1034</span><a id="line.1034">    {</a>
-<span class="sourceLineNo">1035</span><a id="line.1035">        BulkCipherSubstitution cipherSub = new BulkCipherSubstitution();</a>
-<span class="sourceLineNo">1036</span><a id="line.1036">        markupMatcher.setTarget(text);</a>
-<span class="sourceLineNo">1037</span><a id="line.1037">        Replacer.StringBuilderBuffer sb = Replacer.wrap(new StringBuilder(text.length() * 5 &gt;&gt;&gt; 2));</a>
-<span class="sourceLineNo">1038</span><a id="line.1038">        Replacer.replace(markupMatcher, cipherSub, sb);</a>
-<span class="sourceLineNo">1039</span><a id="line.1039">        return sb.toString();</a>
-<span class="sourceLineNo">1040</span><a id="line.1040">    }</a>
-<span class="sourceLineNo">1041</span><a id="line.1041"></a>
-<span class="sourceLineNo">1042</span><a id="line.1042">}</a>
+<span class="sourceLineNo">998</span><a id="line.998">    private class BulkCipherSubstitution implements Substitution</a>
+<span class="sourceLineNo">999</span><a id="line.999">    {</a>
+<span class="sourceLineNo">1000</span><a id="line.1000">        @Override</a>
+<span class="sourceLineNo">1001</span><a id="line.1001">        public void appendSubstitution(MatchResult match, TextBuffer dest) {</a>
+<span class="sourceLineNo">1002</span><a id="line.1002">            if(match instanceof Matcher)</a>
+<span class="sourceLineNo">1003</span><a id="line.1003">            {</a>
+<span class="sourceLineNo">1004</span><a id="line.1004">                wordMatcher.setTarget((Matcher)match, 1);</a>
+<span class="sourceLineNo">1005</span><a id="line.1005">            }</a>
+<span class="sourceLineNo">1006</span><a id="line.1006">            else</a>
+<span class="sourceLineNo">1007</span><a id="line.1007">            {</a>
+<span class="sourceLineNo">1008</span><a id="line.1008">                wordMatcher.setTarget(match.targetChars(), match.start(1) + match.targetStart(), match.length(1));</a>
+<span class="sourceLineNo">1009</span><a id="line.1009">            }</a>
+<span class="sourceLineNo">1010</span><a id="line.1010">            while (wordMatcher.find())</a>
+<span class="sourceLineNo">1011</span><a id="line.1011">            {</a>
+<span class="sourceLineNo">1012</span><a id="line.1012">                wordMatcher.getGroup(MatchResult.PREFIX, dest);</a>
+<span class="sourceLineNo">1013</span><a id="line.1013">                dest.append(lookup(wordMatcher.group()));</a>
+<span class="sourceLineNo">1014</span><a id="line.1014">                wordMatcher.setTarget(wordMatcher, MatchResult.SUFFIX);</a>
+<span class="sourceLineNo">1015</span><a id="line.1015">            }</a>
+<span class="sourceLineNo">1016</span><a id="line.1016">            wordMatcher.getGroup(MatchResult.TARGET, dest);</a>
+<span class="sourceLineNo">1017</span><a id="line.1017">        }</a>
+<span class="sourceLineNo">1018</span><a id="line.1018">    }</a>
+<span class="sourceLineNo">1019</span><a id="line.1019"></a>
+<span class="sourceLineNo">1020</span><a id="line.1020">    /**</a>
+<span class="sourceLineNo">1021</span><a id="line.1021">     * Given a String, StringBuilder, or other CharSequence that should contain words in the source language (almost</a>
+<span class="sourceLineNo">1022</span><a id="line.1022">     * always English, since this only knows English prefixes and suffixes), this finds sections of the text that</a>
+<span class="sourceLineNo">1023</span><a id="line.1023">     * start and end with {@code [?]} and {@code [?]}, translates each word between those start/end markers to the fake</a>
+<span class="sourceLineNo">1024</span><a id="line.1024">     * language, using existing translations if previous calls to cipher() or lookup() had translated that word, and</a>
+<span class="sourceLineNo">1025</span><a id="line.1025">     * removes the {@code [?]} markup afterwards. This is meant for cases where only some words should be translated,</a>
+<span class="sourceLineNo">1026</span><a id="line.1026">     * such as (for example) translating "What the [?]heck?[?]" to "What the grug?" or something like it if the language</a>
+<span class="sourceLineNo">1027</span><a id="line.1027">     * is {@link FakeLanguageGen#GOBLIN}, or "What the xu'oz?" if the language is {@link FakeLanguageGen#DEMONIC}.</a>
+<span class="sourceLineNo">1028</span><a id="line.1028">     * @param text a CharSequence, such as a String, that contains words in the source language and {@code [?]} markup</a>
+<span class="sourceLineNo">1029</span><a id="line.1029">     * @return a String of the translated text with markup-surrounded sections translated and markup removed</a>
+<span class="sourceLineNo">1030</span><a id="line.1030">     */</a>
+<span class="sourceLineNo">1031</span><a id="line.1031">    public String cipherMarkup(CharSequence text)</a>
+<span class="sourceLineNo">1032</span><a id="line.1032">    {</a>
+<span class="sourceLineNo">1033</span><a id="line.1033">        BulkCipherSubstitution cipherSub = new BulkCipherSubstitution();</a>
+<span class="sourceLineNo">1034</span><a id="line.1034">        markupMatcher.setTarget(text);</a>
+<span class="sourceLineNo">1035</span><a id="line.1035">        Replacer.StringBuilderBuffer sb = Replacer.wrap(new StringBuilder(text.length() * 5 &gt;&gt;&gt; 2));</a>
+<span class="sourceLineNo">1036</span><a id="line.1036">        Replacer.replace(markupMatcher, cipherSub, sb);</a>
+<span class="sourceLineNo">1037</span><a id="line.1037">        return sb.toString();</a>
+<span class="sourceLineNo">1038</span><a id="line.1038">    }</a>
+<span class="sourceLineNo">1039</span><a id="line.1039"></a>
+<span class="sourceLineNo">1040</span><a id="line.1040">}</a>
 
 
 

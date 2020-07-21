@@ -86,13 +86,13 @@ loadScripts(document, 'script');</script>
 <h1 title="Class StarterKit" class="title">Class StarterKit</h1>
 </div>
 <div class="contentContainer">
-<div class="inheritance" title="Inheritance Tree"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">java.lang.Object</a>
+<div class="inheritance" title="Inheritance Tree"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">java.lang.Object</a>
 <div class="inheritance">squidpony.squidgrid.gui.gdx.StarterKit</div>
 </div>
 <section class="description">
 <hr>
 <pre>public class <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/StarterKit.html#line.14">StarterKit</a>
-extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></pre>
+extends <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></pre>
 <div class="block">A convenience class that groups several commonly-used GUI classes into one object and provides ways to
  initialize these kits for specific purposes, some of which would be a challenge to write without this code.
  Created by Tommy Ettinger on 8/11/2016.</div>
@@ -249,7 +249,9 @@ int&nbsp;additionalWidth,
 int&nbsp;additionalHeight)</code></th>
 <td class="colLast">
 <div class="block">Constructs a StarterKit with the given width and height in cells (gridWidth and gridHeight) and the given width
- and height for each letter (cellWidth and cellHeight), using the given TextCellFactory for the font.</div>
+ and height for each letter (cellWidth and cellHeight), using the given TextCellFactory for the font; this
+ overload also allows specifying additional space in pixels to be added to the right or bottom sides of the area
+ with the grid of chars.</div>
 </td>
 </tr>
 </tbody>
@@ -298,10 +300,10 @@ int&nbsp;height)</code></th>
 </div>
 </div>
 <div class="inheritedList">
-<h3>Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></h3>
+<h3>Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></h3>
 <a id="methods.inherited.from.class.java.lang.Object">
 <!--   -->
-</a><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#clone()" title="class or interface in java.lang" class="externalLink">clone</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.lang" class="externalLink">equals</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#finalize()" title="class or interface in java.lang" class="externalLink">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#getClass()" title="class or interface in java.lang" class="externalLink">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#hashCode()" title="class or interface in java.lang" class="externalLink">hashCode</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#notify()" title="class or interface in java.lang" class="externalLink">notify</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#notifyAll()" title="class or interface in java.lang" class="externalLink">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#toString()" title="class or interface in java.lang" class="externalLink">toString</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#wait()" title="class or interface in java.lang" class="externalLink">wait</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#wait(long)" title="class or interface in java.lang" class="externalLink">wait</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#wait(long,int)" title="class or interface in java.lang" class="externalLink">wait</a></code></div>
+</a><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#clone()" title="class or interface in java.lang" class="externalLink">clone</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.lang" class="externalLink">equals</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#finalize()" title="class or interface in java.lang" class="externalLink">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#getClass()" title="class or interface in java.lang" class="externalLink">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#hashCode()" title="class or interface in java.lang" class="externalLink">hashCode</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#notify()" title="class or interface in java.lang" class="externalLink">notify</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#notifyAll()" title="class or interface in java.lang" class="externalLink">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#toString()" title="class or interface in java.lang" class="externalLink">toString</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#wait()" title="class or interface in java.lang" class="externalLink">wait</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#wait(long)" title="class or interface in java.lang" class="externalLink">wait</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#wait(long,int)" title="class or interface in java.lang" class="externalLink">wait</a></code></div>
 </section>
 </li>
 </ul>
@@ -447,22 +449,27 @@ int&nbsp;cellHeight)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(squidpony.squidgrid.gui.gdx.TextCellFactory,int,int,int,int)">StarterKit</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/StarterKit.html#line.119">StarterKit</a></span>&#8203;(<span class="arguments"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a>&nbsp;textFactory,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/StarterKit.html#line.124">StarterKit</a></span>&#8203;(<span class="arguments"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a>&nbsp;textFactory,
 int&nbsp;gridWidth,
 int&nbsp;gridHeight,
 int&nbsp;cellWidth,
 int&nbsp;cellHeight)</span></div>
 <div class="block">Constructs a StarterKit with the given width and height in cells (gridWidth and gridHeight) and the given width
  and height for each letter (cellWidth and cellHeight), using the given TextCellFactory for the font. You can use
- any of the pre-constructed TextCellFactory objects in <a href="DefaultResources.html" title="class in squidpony.squidgrid.gui.gdx"><code>DefaultResources</code></a>. such as
- <a href="DefaultResources.html#getStretchableTypewriterFont()"><code>DefaultResources.getStretchableTypewriterFont()</code></a>, <a href="DefaultResources.html#getStretchableDejaVuFont()"><code>DefaultResources.getStretchableDejaVuFont()</code></a>,
- <a href="DefaultResources.html#getStretchableSquareFont()"><code>DefaultResources.getStretchableSquareFont()</code></a>, or <a href="DefaultResources.html#getStretchableCodeFont()"><code>DefaultResources.getStretchableCodeFont()</code></a>, as
+ any of the pre-constructed TextCellFactory objects in <a href="DefaultResources.html" title="class in squidpony.squidgrid.gui.gdx"><code>DefaultResources</code></a>, such as
+ <a href="DefaultResources.html#getCrispLeanFamily()"><code>DefaultResources.getCrispLeanFamily()</code></a>, <a href="DefaultResources.html#getCrispDejaVuFont()"><code>DefaultResources.getCrispDejaVuFont()</code></a>,
+ <a href="DefaultResources.html#getCrispSlabFamily()"><code>DefaultResources.getCrispSlabFamily()</code></a>, or <a href="DefaultResources.html#getStretchableTypewriterFont()"><code>DefaultResources.getStretchableTypewriterFont()</code></a>, as
  long as you have the right assets available (their documentation says the exact files you need). While you can
  construct your own TextCellFactory given a BitmapFont, that won't work well as a distance field font unless you
  used some very unusual configuration making the font, so the font would only look good at one size or possibly a
  multiple of that size. The defaults are recommended for now; a separate project is used to make the distance
- field monospace fonts (tommyettinger/Glamer on GitHub) and more can be made as needed from permissively-licensed
- fonts if a game has particular aesthetic requirements.</div>
+ field monospace fonts (<a href="https://github.com/tommyettinger/Glamer">tommyettinger/Glamer</a> on GitHub)
+ That project also serves as storage for fonts that were made with Glamer, and appropriately-licensed fonts are
+ added to the "premade" folder once they are converted.
+ <br>
+ If you don't know what font to pick, <a href="DefaultResources.html#getCrispLeanFamily()"><code>DefaultResources.getCrispLeanFamily()</code></a> and
+ <a href="DefaultResources.html#getCrispSlabFamily()"><code>DefaultResources.getCrispSlabFamily()</code></a> have the same (very large) character coverage, and have bold and
+ italic modes that can be accessed with <a href="GDXMarkup.html" title="class in squidpony.squidgrid.gui.gdx"><code>GDXMarkup</code></a> if you decide to use that later.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>textFactory</code> - the TextCellFactory to use for the font</dd>
@@ -476,7 +483,7 @@ int&nbsp;cellHeight)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(squidpony.squidgrid.gui.gdx.TextCellFactory,int,int,int,int,int,int)">StarterKit</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/StarterKit.html#line.142">StarterKit</a></span>&#8203;(<span class="arguments"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a>&nbsp;textFactory,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/StarterKit.html#line.154">StarterKit</a></span>&#8203;(<span class="arguments"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a>&nbsp;textFactory,
 int&nbsp;gridWidth,
 int&nbsp;gridHeight,
 int&nbsp;cellWidth,
@@ -484,16 +491,23 @@ int&nbsp;cellHeight,
 int&nbsp;additionalWidth,
 int&nbsp;additionalHeight)</span></div>
 <div class="block">Constructs a StarterKit with the given width and height in cells (gridWidth and gridHeight) and the given width
- and height for each letter (cellWidth and cellHeight), using the given TextCellFactory for the font. You can use
- any of the pre-constructed TextCellFactory objects in <a href="DefaultResources.html" title="class in squidpony.squidgrid.gui.gdx"><code>DefaultResources</code></a>. such as
- <a href="DefaultResources.html#getCrispLeanFamily()"><code>DefaultResources.getCrispLeanFamily()</code></a>, <a href="DefaultResources.html#getCrispDejaVuFont()"><code>DefaultResources.getCrispDejaVuFont()</code></a>,
- <a href="DefaultResources.html#getCrispCurvySquareFont()"><code>DefaultResources.getCrispCurvySquareFont()</code></a>, or <a href="DefaultResources.html#getCrispSlabFamily()"><code>DefaultResources.getCrispSlabFamily()</code></a> , as
- long as you have the right assets available (their documentation says the exact files you need). While you can
- construct your own TextCellFactory given a BitmapFont, that won't work well as a distance field font unless you
- used some very unusual configuration making the font, so the font would only look good at one size or possibly a
- multiple of that size. The defaults are recommended for now; a separate project is used to make the distance
- field monospace fonts (tommyettinger/Glamer on GitHub) and more can be made as needed from permissively-licensed
- fonts if a game has particular aesthetic requirements.</div>
+ and height for each letter (cellWidth and cellHeight), using the given TextCellFactory for the font; this
+ overload also allows specifying additional space in pixels to be added to the right or bottom sides of the area
+ with the grid of chars. You can use any of the pre-constructed TextCellFactory objects in
+ <a href="DefaultResources.html" title="class in squidpony.squidgrid.gui.gdx"><code>DefaultResources</code></a>, such as <a href="DefaultResources.html#getCrispLeanFamily()"><code>DefaultResources.getCrispLeanFamily()</code></a>
+ <a href="DefaultResources.html#getCrispDejaVuFont()"><code>DefaultResources.getCrispDejaVuFont()</code></a>, <a href="DefaultResources.html#getCrispSlabFamily()"><code>DefaultResources.getCrispSlabFamily()</code></a>, or
+ <a href="DefaultResources.html#getStretchableTypewriterFont()"><code>DefaultResources.getStretchableTypewriterFont()</code></a>, as long as you have the right assets available (their
+ documentation says the exact files you need). While you can construct your own TextCellFactory given a
+ BitmapFont, that won't work well as a distance field font unless you used some very unusual configuration making
+ the font, so the font would only look good at one size or possibly a multiple of that size. The defaults are
+ recommended for now; a separate project is used to make the distance field monospace fonts
+ (<a href="https://github.com/tommyettinger/Glamer">tommyettinger/Glamer</a> on GitHub). That project also serves
+ as storage for fonts that were made with Glamer, and appropriately-licensed fonts are added to the "premade"
+ folder once they are converted.
+ <br>
+ If you don't know what font to pick, <a href="DefaultResources.html#getCrispLeanFamily()"><code>DefaultResources.getCrispLeanFamily()</code></a> and
+ <a href="DefaultResources.html#getCrispSlabFamily()"><code>DefaultResources.getCrispSlabFamily()</code></a> have the same (very large) character coverage, and have bold and
+ italic modes that can be accessed with <a href="GDXMarkup.html" title="class in squidpony.squidgrid.gui.gdx"><code>GDXMarkup</code></a> if you decide to use that later.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>textFactory</code> - the TextCellFactory to use for the font</dd>
@@ -519,7 +533,7 @@ int&nbsp;additionalHeight)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="draw()">draw</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/StarterKit.html#line.169">draw</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/StarterKit.html#line.181">draw</a></span>()</div>
 <div class="block">Not a complete drawing solution; so much of the logic related to drawing is specific to each game, like
  FOV being used to make certain things not render if they are out of sight, that this doesn't even try to
  guess at what a particular game needs for its rendering code. Any <a href="TextCellFactory.Glyph.html" title="class in squidpony.squidgrid.gui.gdx"><code>TextCellFactory.Glyph</code></a> objects in
@@ -536,7 +550,7 @@ int&nbsp;additionalHeight)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="resize(int,int)">resize</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/StarterKit.html#line.182">resize</a></span>&#8203;(<span class="arguments">int&nbsp;width,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/StarterKit.html#line.194">resize</a></span>&#8203;(<span class="arguments">int&nbsp;width,
 int&nbsp;height)</span></div>
 <div class="block">Not a complete resize method; this is meant to handle the resizing of this StarterKit only and should be
  called inside your main Game, ApplicationListener, etc. class' resize method.</div>

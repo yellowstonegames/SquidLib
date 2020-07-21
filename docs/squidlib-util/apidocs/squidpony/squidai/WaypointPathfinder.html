@@ -87,13 +87,13 @@ loadScripts(document, 'script');</script>
 <h1 title="Class WaypointPathfinder" class="title">Class WaypointPathfinder</h1>
 </div>
 <div class="contentContainer">
-<div class="inheritance" title="Inheritance Tree"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">java.lang.Object</a>
+<div class="inheritance" title="Inheritance Tree"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">java.lang.Object</a>
 <div class="inheritance">squidpony.squidai.WaypointPathfinder</div>
 </div>
 <section class="description">
 <hr>
 <pre>public class <a href="../../src-html/squidpony/squidai/WaypointPathfinder.html#line.18">WaypointPathfinder</a>
-extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></pre>
+extends <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></pre>
 <div class="block">Pathfind to known connections between rooms or other "chokepoints" without needing full-map Dijkstra scans.
  Pre-calculates a path either from or to any given chokepoint to each other chokepoint.
  Created by Tommy Ettinger on 10/25/2015.</div>
@@ -153,7 +153,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/ja
 </tr>
 <tr class="rowColor">
 <th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(char%5B%5D%5B%5D,squidpony.squidgrid.Radius,squidpony.squidmath.IRNG)">WaypointPathfinder</a></span>&#8203;(char[][]&nbsp;map,
-<a href="../squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a>&nbsp;measurement,
+<a href="../squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a>&nbsp;radius,
 <a href="../squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng)</code></th>
 <td class="colLast">
 <div class="block">Calculates and stores the doors and doors-like connections ("chokepoints") on the given map as waypoints.</div>
@@ -161,7 +161,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/ja
 </tr>
 <tr class="altColor">
 <th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(char%5B%5D%5B%5D,squidpony.squidgrid.Radius,squidpony.squidmath.IRNG,boolean)">WaypointPathfinder</a></span>&#8203;(char[][]&nbsp;map,
-<a href="../squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a>&nbsp;measurement,
+<a href="../squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a>&nbsp;radius,
 <a href="../squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng,
 boolean&nbsp;thickCorridors)</code></th>
 <td class="colLast">
@@ -170,7 +170,7 @@ boolean&nbsp;thickCorridors)</code></th>
 </tr>
 <tr class="rowColor">
 <th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(char%5B%5D%5B%5D,squidpony.squidgrid.Radius,squidpony.squidmath.IRNG,int)">WaypointPathfinder</a></span>&#8203;(char[][]&nbsp;map,
-<a href="../squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a>&nbsp;measurement,
+<a href="../squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a>&nbsp;radius,
 <a href="../squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng,
 int&nbsp;fraction)</code></th>
 <td class="colLast">
@@ -201,7 +201,7 @@ int&nbsp;fraction)</code></th>
 </thead>
 <tbody>
 <tr class="altColor" id="i0">
-<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
+<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getKnownPath(squidpony.squidmath.Coord,squidpony.squidmath.Coord)">getKnownPath</a></span>&#8203;(<a href="../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;self,
 <a href="../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;approximateTarget)</code></th>
 <td class="colLast">
@@ -215,9 +215,9 @@ int&nbsp;fraction)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor" id="i2">
-<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
+<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#goBackToPath(squidpony.squidmath.Coord,java.util.ArrayList)">goBackToPath</a></span>&#8203;(<a href="../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;currentPosition,
-<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;path)</code></th>
+<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;path)</code></th>
 <td class="colLast">
 <div class="block">If a creature is interrupted or obstructed on a "highway" path, it may need to travel off the path to its goal.</div>
 </td>
@@ -227,10 +227,10 @@ int&nbsp;fraction)</code></th>
 </div>
 </div>
 <div class="inheritedList">
-<h3>Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></h3>
+<h3>Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></h3>
 <a id="methods.inherited.from.class.java.lang.Object">
 <!--   -->
-</a><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#clone()" title="class or interface in java.lang" class="externalLink">clone</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.lang" class="externalLink">equals</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#finalize()" title="class or interface in java.lang" class="externalLink">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#getClass()" title="class or interface in java.lang" class="externalLink">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#hashCode()" title="class or interface in java.lang" class="externalLink">hashCode</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#notify()" title="class or interface in java.lang" class="externalLink">notify</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#notifyAll()" title="class or interface in java.lang" class="externalLink">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#toString()" title="class or interface in java.lang" class="externalLink">toString</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#wait()" title="class or interface in java.lang" class="externalLink">wait</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#wait(long)" title="class or interface in java.lang" class="externalLink">wait</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#wait(long,int)" title="class or interface in java.lang" class="externalLink">wait</a></code></div>
+</a><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#clone()" title="class or interface in java.lang" class="externalLink">clone</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.lang" class="externalLink">equals</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#finalize()" title="class or interface in java.lang" class="externalLink">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#getClass()" title="class or interface in java.lang" class="externalLink">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#hashCode()" title="class or interface in java.lang" class="externalLink">hashCode</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#notify()" title="class or interface in java.lang" class="externalLink">notify</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#notifyAll()" title="class or interface in java.lang" class="externalLink">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#toString()" title="class or interface in java.lang" class="externalLink">toString</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#wait()" title="class or interface in java.lang" class="externalLink">wait</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#wait(long)" title="class or interface in java.lang" class="externalLink">wait</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#wait(long,int)" title="class or interface in java.lang" class="externalLink">wait</a></code></div>
 </section>
 </li>
 </ul>
@@ -264,7 +264,7 @@ int&nbsp;fraction)</code></th>
 <section class="detail">
 <h3><a id="&lt;init&gt;(char[][],squidpony.squidgrid.Radius,squidpony.squidmath.IRNG)">WaypointPathfinder</a></h3>
 <div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidai/WaypointPathfinder.html#line.35">WaypointPathfinder</a></span>&#8203;(<span class="arguments">char[][]&nbsp;map,
-<a href="../squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a>&nbsp;measurement,
+<a href="../squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a>&nbsp;radius,
 <a href="../squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng)</span></div>
 <div class="block">Calculates and stores the doors and doors-like connections ("chokepoints") on the given map as waypoints.
  Will use the given Radius enum to determine how to handle DijkstraMap measurement in future pathfinding.
@@ -273,7 +273,7 @@ int&nbsp;fraction)</code></th>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>map</code> - a char[][] that stores a "complete" dungeon map, with any chars as features that pathfinding needs.</dd>
-<dd><code>measurement</code> - a Radius that should correspond to how you want path distance calculated.</dd>
+<dd><code>radius</code> - a Radius that should correspond to how you want path distance calculated.</dd>
 <dd><code>rng</code> - an RNG object or null (this will always use a new RNG, but it may be seeded by a given RNG's next result)</dd>
 </dl>
 </section>
@@ -282,7 +282,7 @@ int&nbsp;fraction)</code></th>
 <section class="detail">
 <h3><a id="&lt;init&gt;(char[][],squidpony.squidgrid.Radius,squidpony.squidmath.IRNG,boolean)">WaypointPathfinder</a></h3>
 <div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidai/WaypointPathfinder.html#line.134">WaypointPathfinder</a></span>&#8203;(<span class="arguments">char[][]&nbsp;map,
-<a href="../squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a>&nbsp;measurement,
+<a href="../squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a>&nbsp;radius,
 <a href="../squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng,
 boolean&nbsp;thickCorridors)</span></div>
 <div class="block">Calculates and stores the doors and doors-like connections ("chokepoints") on the given map as waypoints.
@@ -292,7 +292,7 @@ boolean&nbsp;thickCorridors)</span></div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>map</code> - a char[][] that stores a "complete" dungeon map, with any chars as features that pathfinding needs.</dd>
-<dd><code>measurement</code> - a Radius that should correspond to how you want path distance calculated.</dd>
+<dd><code>radius</code> - a Radius that should correspond to how you want path distance calculated.</dd>
 <dd><code>rng</code> - an RNG object or null (this will always use a new RNG, but it may be seeded by a given RNG's next result)</dd>
 <dd><code>thickCorridors</code> - true if most chokepoints on the map are 2 cells wide instead of 1</dd>
 </dl>
@@ -302,7 +302,7 @@ boolean&nbsp;thickCorridors)</span></div>
 <section class="detail">
 <h3><a id="&lt;init&gt;(char[][],squidpony.squidgrid.Radius,squidpony.squidmath.IRNG,int)">WaypointPathfinder</a></h3>
 <div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidai/WaypointPathfinder.html#line.253">WaypointPathfinder</a></span>&#8203;(<span class="arguments">char[][]&nbsp;map,
-<a href="../squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a>&nbsp;measurement,
+<a href="../squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a>&nbsp;radius,
 <a href="../squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng,
 int&nbsp;fraction)</span></div>
 <div class="block">Calculates and stores the specified fraction of walkable points from map as waypoints. Does not perform any
@@ -317,7 +317,7 @@ int&nbsp;fraction)</span></div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>map</code> - a char[][] that stores a "complete" dungeon map, with any chars as features that pathfinding needs.</dd>
-<dd><code>measurement</code> - a Radius that should correspond to how you want path distance calculated.</dd>
+<dd><code>radius</code> - a Radius that should correspond to how you want path distance calculated.</dd>
 <dd><code>rng</code> - an RNG object or null (this will always use a new RNG, but it may be seeded by a given RNG's next result)</dd>
 <dd><code>fraction</code> - the fractional denominator of passable cells to assign as waypoints; use 29 if you aren't sure</dd>
 </dl>
@@ -355,7 +355,7 @@ int&nbsp;fraction)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getKnownPath(squidpony.squidmath.Coord,squidpony.squidmath.Coord)">getKnownPath</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidai/WaypointPathfinder.html#line.399">getKnownPath</a></span>&#8203;(<span class="arguments"><a href="../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;self,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidai/WaypointPathfinder.html#line.399">getKnownPath</a></span>&#8203;(<span class="arguments"><a href="../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;self,
 <a href="../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;approximateTarget)</span></div>
 <div class="block">Finds the appropriate one of the already-calculated, possibly-long paths this class stores to get from a waypoint
  to another waypoint, then quickly finds a path to get on the long path, and returns the total path. This does
@@ -373,8 +373,8 @@ int&nbsp;fraction)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="goBackToPath(squidpony.squidmath.Coord,java.util.ArrayList)">goBackToPath</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidai/WaypointPathfinder.html#line.449">goBackToPath</a></span>&#8203;(<span class="arguments"><a href="../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;currentPosition,
-<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;path)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidai/WaypointPathfinder.html#line.449">goBackToPath</a></span>&#8203;(<span class="arguments"><a href="../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;currentPosition,
+<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;path)</span></div>
 <div class="block">If a creature is interrupted or obstructed on a "highway" path, it may need to travel off the path to its goal.
  This method gets a straight-line path back to the path to goal. It does not contain the "highway" path, only the
  "on-ramp" to enter the ideal path.</div>

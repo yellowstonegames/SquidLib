@@ -396,808 +396,807 @@
 <span class="sourceLineNo">384</span><a id="line.384">        char[][] portion = new char[width - 2][height - 2];</a>
 <span class="sourceLineNo">385</span><a id="line.385">        for (int i = 1; i &lt; width - 1; i++) {</a>
 <span class="sourceLineNo">386</span><a id="line.386">            for (int j = 1; j &lt; height - 1; j++) {</a>
-<span class="sourceLineNo">387</span><a id="line.387">                switch (dungeon[i][j]) {</a>
-<span class="sourceLineNo">388</span><a id="line.388">                    case '\1':</a>
-<span class="sourceLineNo">389</span><a id="line.389">                        portion[i - 1][j - 1] = ' ';</a>
-<span class="sourceLineNo">390</span><a id="line.390">                        break;</a>
-<span class="sourceLineNo">391</span><a id="line.391">                    default: // ┼┌┘</a>
-<span class="sourceLineNo">392</span><a id="line.392">                        portion[i - 1][j - 1] = dungeon[i][j];</a>
-<span class="sourceLineNo">393</span><a id="line.393">                }</a>
-<span class="sourceLineNo">394</span><a id="line.394">            }</a>
-<span class="sourceLineNo">395</span><a id="line.395">        }</a>
-<span class="sourceLineNo">396</span><a id="line.396">        return portion;</a>
-<span class="sourceLineNo">397</span><a id="line.397">    }</a>
-<span class="sourceLineNo">398</span><a id="line.398"></a>
-<span class="sourceLineNo">399</span><a id="line.399">    /**</a>
-<span class="sourceLineNo">400</span><a id="line.400">     * Reverses most of the effects of hashesToLines(). The only things that will not be reversed are the placement of</a>
-<span class="sourceLineNo">401</span><a id="line.401">     * space characters in unreachable wall-cells-behind-wall-cells, which remain as spaces. This is useful if you</a>
-<span class="sourceLineNo">402</span><a id="line.402">     * have a modified map that contains wall characters of conflicting varieties, as described in hashesToLines().</a>
-<span class="sourceLineNo">403</span><a id="line.403">     *</a>
-<span class="sourceLineNo">404</span><a id="line.404">     * @param map a 2D char array indexed with x,y that uses box-drawing characters for walls</a>
-<span class="sourceLineNo">405</span><a id="line.405">     * @return a copy of the map passed as an argument with '#' replacing box-drawing characters for walls</a>
-<span class="sourceLineNo">406</span><a id="line.406">     */</a>
-<span class="sourceLineNo">407</span><a id="line.407">    public static char[][] linesToHashes(char[][] map) {</a>
-<span class="sourceLineNo">408</span><a id="line.408"></a>
-<span class="sourceLineNo">409</span><a id="line.409">        int width = map.length;</a>
-<span class="sourceLineNo">410</span><a id="line.410">        int height = map[0].length;</a>
-<span class="sourceLineNo">411</span><a id="line.411">        char[][] portion = new char[width][height];</a>
-<span class="sourceLineNo">412</span><a id="line.412">        for (int i = 0; i &lt; width; i++) {</a>
-<span class="sourceLineNo">413</span><a id="line.413">            for (int j = 0; j &lt; height; j++) {</a>
-<span class="sourceLineNo">414</span><a id="line.414">                switch (map[i][j]) {</a>
-<span class="sourceLineNo">415</span><a id="line.415">                    case '\1':</a>
-<span class="sourceLineNo">416</span><a id="line.416">                    case '├':</a>
-<span class="sourceLineNo">417</span><a id="line.417">                    case '┤':</a>
-<span class="sourceLineNo">418</span><a id="line.418">                    case '┴':</a>
-<span class="sourceLineNo">419</span><a id="line.419">                    case '┬':</a>
-<span class="sourceLineNo">420</span><a id="line.420">                    case '┌':</a>
-<span class="sourceLineNo">421</span><a id="line.421">                    case '┐':</a>
-<span class="sourceLineNo">422</span><a id="line.422">                    case '└':</a>
-<span class="sourceLineNo">423</span><a id="line.423">                    case '┘':</a>
-<span class="sourceLineNo">424</span><a id="line.424">                    case '│':</a>
-<span class="sourceLineNo">425</span><a id="line.425">                    case '─':</a>
-<span class="sourceLineNo">426</span><a id="line.426">                    case '┼':</a>
-<span class="sourceLineNo">427</span><a id="line.427">                        portion[i][j] = '#';</a>
-<span class="sourceLineNo">428</span><a id="line.428">                        break;</a>
-<span class="sourceLineNo">429</span><a id="line.429">                    default:</a>
-<span class="sourceLineNo">430</span><a id="line.430">                        portion[i][j] = map[i][j];</a>
-<span class="sourceLineNo">431</span><a id="line.431">                }</a>
-<span class="sourceLineNo">432</span><a id="line.432">            }</a>
-<span class="sourceLineNo">433</span><a id="line.433">        }</a>
-<span class="sourceLineNo">434</span><a id="line.434">        return portion;</a>
-<span class="sourceLineNo">435</span><a id="line.435">    }</a>
-<span class="sourceLineNo">436</span><a id="line.436"></a>
-<span class="sourceLineNo">437</span><a id="line.437">    /**</a>
-<span class="sourceLineNo">438</span><a id="line.438">     * If you call hashesToLines() on a map that uses [y][x] conventions instead of [x][y], it will have the lines not</a>
-<span class="sourceLineNo">439</span><a id="line.439">     * connect as you expect. Use this function to change the directions of the box-drawing characters only, without</a>
-<span class="sourceLineNo">440</span><a id="line.440">     * altering the dimensions in any way. This returns a new char[][], instead of modifying the parameter in place.</a>
-<span class="sourceLineNo">441</span><a id="line.441">     * transposeLines is also needed if the lines in a map have become transposed when they were already correct;</a>
-<span class="sourceLineNo">442</span><a id="line.442">     * calling this method on an incorrectly transposed map will change the directions on all of its lines.</a>
-<span class="sourceLineNo">443</span><a id="line.443">     *</a>
-<span class="sourceLineNo">444</span><a id="line.444">     * @param map a 2D char array indexed with y,x that uses box-drawing characters for walls</a>
-<span class="sourceLineNo">445</span><a id="line.445">     * @return a copy of map that uses box-drawing characters for walls that will be correct when indexed with x,y</a>
-<span class="sourceLineNo">446</span><a id="line.446">     */</a>
-<span class="sourceLineNo">447</span><a id="line.447">    public static char[][] transposeLines(char[][] map) {</a>
-<span class="sourceLineNo">448</span><a id="line.448"></a>
-<span class="sourceLineNo">449</span><a id="line.449">        int width = map[0].length;</a>
-<span class="sourceLineNo">450</span><a id="line.450">        int height = map.length;</a>
-<span class="sourceLineNo">451</span><a id="line.451">        char[][] portion = new char[height][width];</a>
-<span class="sourceLineNo">452</span><a id="line.452">        for (int i = 0; i &lt; height; i++) {</a>
-<span class="sourceLineNo">453</span><a id="line.453">            for (int j = 0; j &lt; width; j++) {</a>
-<span class="sourceLineNo">454</span><a id="line.454">                switch (map[i][j]) {</a>
-<span class="sourceLineNo">455</span><a id="line.455">                    case '\1':</a>
-<span class="sourceLineNo">456</span><a id="line.456">                        portion[i][j] = ' ';</a>
-<span class="sourceLineNo">457</span><a id="line.457">                        break;</a>
-<span class="sourceLineNo">458</span><a id="line.458">                    case '├':</a>
-<span class="sourceLineNo">459</span><a id="line.459">                        portion[i][j] = '┬';</a>
-<span class="sourceLineNo">460</span><a id="line.460">                        break;</a>
-<span class="sourceLineNo">461</span><a id="line.461">                    case '┤':</a>
-<span class="sourceLineNo">462</span><a id="line.462">                        portion[i][j] = '┴';</a>
-<span class="sourceLineNo">463</span><a id="line.463">                        break;</a>
-<span class="sourceLineNo">464</span><a id="line.464">                    case '┴':</a>
-<span class="sourceLineNo">465</span><a id="line.465">                        portion[i][j] = '┤';</a>
-<span class="sourceLineNo">466</span><a id="line.466">                        break;</a>
-<span class="sourceLineNo">467</span><a id="line.467">                    case '┬':</a>
-<span class="sourceLineNo">468</span><a id="line.468">                        portion[i][j] = '├';</a>
-<span class="sourceLineNo">469</span><a id="line.469">                        break;</a>
-<span class="sourceLineNo">470</span><a id="line.470">                    case '┐':</a>
-<span class="sourceLineNo">471</span><a id="line.471">                        portion[i][j] = '└';</a>
-<span class="sourceLineNo">472</span><a id="line.472">                        break;</a>
-<span class="sourceLineNo">473</span><a id="line.473">                    case '└':</a>
-<span class="sourceLineNo">474</span><a id="line.474">                        portion[i][j] = '┐';</a>
-<span class="sourceLineNo">475</span><a id="line.475">                        break;</a>
-<span class="sourceLineNo">476</span><a id="line.476">                    case '│':</a>
-<span class="sourceLineNo">477</span><a id="line.477">                        portion[i][j] = '─';</a>
-<span class="sourceLineNo">478</span><a id="line.478">                        break;</a>
-<span class="sourceLineNo">479</span><a id="line.479">                    case '─':</a>
-<span class="sourceLineNo">480</span><a id="line.480">                        portion[i][j] = '│';</a>
-<span class="sourceLineNo">481</span><a id="line.481">                        break;</a>
-<span class="sourceLineNo">482</span><a id="line.482">                    default: //applies to ┼┌┘ and any non-box-drawing</a>
-<span class="sourceLineNo">483</span><a id="line.483">                        portion[i][j] = map[i][j];</a>
-<span class="sourceLineNo">484</span><a id="line.484">                }</a>
-<span class="sourceLineNo">485</span><a id="line.485">            }</a>
-<span class="sourceLineNo">486</span><a id="line.486">        }</a>
-<span class="sourceLineNo">487</span><a id="line.487">        return portion;</a>
-<span class="sourceLineNo">488</span><a id="line.488">    }</a>
-<span class="sourceLineNo">489</span><a id="line.489">    //                    case '├ ┤ ┴ ┬ ┌ ┐ └ ┘ │ ─':</a>
-<span class="sourceLineNo">490</span><a id="line.490">    /**</a>
-<span class="sourceLineNo">491</span><a id="line.491">     * When a map is generated by DungeonGenerator with addDoors enabled, different chars are used for vertical and</a>
-<span class="sourceLineNo">492</span><a id="line.492">     * horizontal doors ('+' for vertical and '/' for horizontal).  This makes all doors '+', which is useful if you</a>
-<span class="sourceLineNo">493</span><a id="line.493">     * want '/' to be used for a different purpose and/or to distinguish open and closed doors.</a>
-<span class="sourceLineNo">494</span><a id="line.494">     *</a>
-<span class="sourceLineNo">495</span><a id="line.495">     * @param map a char[][] that may have both '+' and '/' for doors</a>
-<span class="sourceLineNo">496</span><a id="line.496">     * @return a char[][] that only uses '+' for all doors</a>
-<span class="sourceLineNo">497</span><a id="line.497">     */</a>
-<span class="sourceLineNo">498</span><a id="line.498">    public static char[][] closeDoors(char[][] map) {</a>
-<span class="sourceLineNo">499</span><a id="line.499"></a>
-<span class="sourceLineNo">500</span><a id="line.500">        int width = map.length;</a>
-<span class="sourceLineNo">501</span><a id="line.501">        int height = map[0].length;</a>
-<span class="sourceLineNo">502</span><a id="line.502">        char[][] portion = new char[width][height];</a>
-<span class="sourceLineNo">503</span><a id="line.503">        for (int i = 0; i &lt; width; i++) {</a>
-<span class="sourceLineNo">504</span><a id="line.504">            for (int j = 0; j &lt; height; j++) {</a>
-<span class="sourceLineNo">505</span><a id="line.505">                if (map[i][j] == '/') portion[i][j] = '+';</a>
-<span class="sourceLineNo">506</span><a id="line.506">                else portion[i][j] = map[i][j];</a>
-<span class="sourceLineNo">507</span><a id="line.507"></a>
-<span class="sourceLineNo">508</span><a id="line.508">            }</a>
-<span class="sourceLineNo">509</span><a id="line.509">        }</a>
-<span class="sourceLineNo">510</span><a id="line.510">        return portion;</a>
-<span class="sourceLineNo">511</span><a id="line.511">    }</a>
-<span class="sourceLineNo">512</span><a id="line.512"></a>
-<span class="sourceLineNo">513</span><a id="line.513">    /**</a>
-<span class="sourceLineNo">514</span><a id="line.514">     * When a map is generated by DungeonGenerator with addDoors enabled, different chars are used for vertical and</a>
-<span class="sourceLineNo">515</span><a id="line.515">     * horizontal doors ('+' for vertical and '/' for horizontal).  This makes all doors '/', which is useful if you</a>
-<span class="sourceLineNo">516</span><a id="line.516">     * want '+' to be used for a different purpose and/or to distinguish open and closed doors.</a>
-<span class="sourceLineNo">517</span><a id="line.517">     *</a>
-<span class="sourceLineNo">518</span><a id="line.518">     * @param map a char[][] that may have both '+' and '/' for doors</a>
-<span class="sourceLineNo">519</span><a id="line.519">     * @return a char[][] that only uses '/' for all doors</a>
-<span class="sourceLineNo">520</span><a id="line.520">     */</a>
-<span class="sourceLineNo">521</span><a id="line.521">    public static char[][] openDoors(char[][] map) {</a>
-<span class="sourceLineNo">522</span><a id="line.522"></a>
-<span class="sourceLineNo">523</span><a id="line.523">        int width = map.length;</a>
-<span class="sourceLineNo">524</span><a id="line.524">        int height = map[0].length;</a>
-<span class="sourceLineNo">525</span><a id="line.525">        char[][] portion = new char[width][height];</a>
-<span class="sourceLineNo">526</span><a id="line.526">        for (int i = 0; i &lt; width; i++) {</a>
-<span class="sourceLineNo">527</span><a id="line.527">            for (int j = 0; j &lt; height; j++) {</a>
-<span class="sourceLineNo">528</span><a id="line.528">                if (map[i][j] == '+') portion[i][j] = '/';</a>
-<span class="sourceLineNo">529</span><a id="line.529">                else portion[i][j] = map[i][j];</a>
-<span class="sourceLineNo">530</span><a id="line.530">            }</a>
-<span class="sourceLineNo">531</span><a id="line.531">        }</a>
-<span class="sourceLineNo">532</span><a id="line.532">        return portion;</a>
-<span class="sourceLineNo">533</span><a id="line.533">    }</a>
+<span class="sourceLineNo">387</span><a id="line.387">                if (dungeon[i][j] == '\1') {</a>
+<span class="sourceLineNo">388</span><a id="line.388">                    portion[i - 1][j - 1] = ' ';</a>
+<span class="sourceLineNo">389</span><a id="line.389">                } else {</a>
+<span class="sourceLineNo">390</span><a id="line.390">                    // ┼┌┘</a>
+<span class="sourceLineNo">391</span><a id="line.391">                    portion[i - 1][j - 1] = dungeon[i][j];</a>
+<span class="sourceLineNo">392</span><a id="line.392">                }</a>
+<span class="sourceLineNo">393</span><a id="line.393">            }</a>
+<span class="sourceLineNo">394</span><a id="line.394">        }</a>
+<span class="sourceLineNo">395</span><a id="line.395">        return portion;</a>
+<span class="sourceLineNo">396</span><a id="line.396">    }</a>
+<span class="sourceLineNo">397</span><a id="line.397"></a>
+<span class="sourceLineNo">398</span><a id="line.398">    /**</a>
+<span class="sourceLineNo">399</span><a id="line.399">     * Reverses most of the effects of hashesToLines(). The only things that will not be reversed are the placement of</a>
+<span class="sourceLineNo">400</span><a id="line.400">     * space characters in unreachable wall-cells-behind-wall-cells, which remain as spaces. This is useful if you</a>
+<span class="sourceLineNo">401</span><a id="line.401">     * have a modified map that contains wall characters of conflicting varieties, as described in hashesToLines().</a>
+<span class="sourceLineNo">402</span><a id="line.402">     *</a>
+<span class="sourceLineNo">403</span><a id="line.403">     * @param map a 2D char array indexed with x,y that uses box-drawing characters for walls</a>
+<span class="sourceLineNo">404</span><a id="line.404">     * @return a copy of the map passed as an argument with '#' replacing box-drawing characters for walls</a>
+<span class="sourceLineNo">405</span><a id="line.405">     */</a>
+<span class="sourceLineNo">406</span><a id="line.406">    public static char[][] linesToHashes(char[][] map) {</a>
+<span class="sourceLineNo">407</span><a id="line.407"></a>
+<span class="sourceLineNo">408</span><a id="line.408">        int width = map.length;</a>
+<span class="sourceLineNo">409</span><a id="line.409">        int height = map[0].length;</a>
+<span class="sourceLineNo">410</span><a id="line.410">        char[][] portion = new char[width][height];</a>
+<span class="sourceLineNo">411</span><a id="line.411">        for (int i = 0; i &lt; width; i++) {</a>
+<span class="sourceLineNo">412</span><a id="line.412">            for (int j = 0; j &lt; height; j++) {</a>
+<span class="sourceLineNo">413</span><a id="line.413">                switch (map[i][j]) {</a>
+<span class="sourceLineNo">414</span><a id="line.414">                    case '\1':</a>
+<span class="sourceLineNo">415</span><a id="line.415">                    case '├':</a>
+<span class="sourceLineNo">416</span><a id="line.416">                    case '┤':</a>
+<span class="sourceLineNo">417</span><a id="line.417">                    case '┴':</a>
+<span class="sourceLineNo">418</span><a id="line.418">                    case '┬':</a>
+<span class="sourceLineNo">419</span><a id="line.419">                    case '┌':</a>
+<span class="sourceLineNo">420</span><a id="line.420">                    case '┐':</a>
+<span class="sourceLineNo">421</span><a id="line.421">                    case '└':</a>
+<span class="sourceLineNo">422</span><a id="line.422">                    case '┘':</a>
+<span class="sourceLineNo">423</span><a id="line.423">                    case '│':</a>
+<span class="sourceLineNo">424</span><a id="line.424">                    case '─':</a>
+<span class="sourceLineNo">425</span><a id="line.425">                    case '┼':</a>
+<span class="sourceLineNo">426</span><a id="line.426">                        portion[i][j] = '#';</a>
+<span class="sourceLineNo">427</span><a id="line.427">                        break;</a>
+<span class="sourceLineNo">428</span><a id="line.428">                    default:</a>
+<span class="sourceLineNo">429</span><a id="line.429">                        portion[i][j] = map[i][j];</a>
+<span class="sourceLineNo">430</span><a id="line.430">                }</a>
+<span class="sourceLineNo">431</span><a id="line.431">            }</a>
+<span class="sourceLineNo">432</span><a id="line.432">        }</a>
+<span class="sourceLineNo">433</span><a id="line.433">        return portion;</a>
+<span class="sourceLineNo">434</span><a id="line.434">    }</a>
+<span class="sourceLineNo">435</span><a id="line.435"></a>
+<span class="sourceLineNo">436</span><a id="line.436">    /**</a>
+<span class="sourceLineNo">437</span><a id="line.437">     * If you call hashesToLines() on a map that uses [y][x] conventions instead of [x][y], it will have the lines not</a>
+<span class="sourceLineNo">438</span><a id="line.438">     * connect as you expect. Use this function to change the directions of the box-drawing characters only, without</a>
+<span class="sourceLineNo">439</span><a id="line.439">     * altering the dimensions in any way. This returns a new char[][], instead of modifying the parameter in place.</a>
+<span class="sourceLineNo">440</span><a id="line.440">     * transposeLines is also needed if the lines in a map have become transposed when they were already correct;</a>
+<span class="sourceLineNo">441</span><a id="line.441">     * calling this method on an incorrectly transposed map will change the directions on all of its lines.</a>
+<span class="sourceLineNo">442</span><a id="line.442">     *</a>
+<span class="sourceLineNo">443</span><a id="line.443">     * @param map a 2D char array indexed with y,x that uses box-drawing characters for walls</a>
+<span class="sourceLineNo">444</span><a id="line.444">     * @return a copy of map that uses box-drawing characters for walls that will be correct when indexed with x,y</a>
+<span class="sourceLineNo">445</span><a id="line.445">     */</a>
+<span class="sourceLineNo">446</span><a id="line.446">    public static char[][] transposeLines(char[][] map) {</a>
+<span class="sourceLineNo">447</span><a id="line.447"></a>
+<span class="sourceLineNo">448</span><a id="line.448">        int width = map[0].length;</a>
+<span class="sourceLineNo">449</span><a id="line.449">        int height = map.length;</a>
+<span class="sourceLineNo">450</span><a id="line.450">        char[][] portion = new char[height][width];</a>
+<span class="sourceLineNo">451</span><a id="line.451">        for (int i = 0; i &lt; height; i++) {</a>
+<span class="sourceLineNo">452</span><a id="line.452">            for (int j = 0; j &lt; width; j++) {</a>
+<span class="sourceLineNo">453</span><a id="line.453">                switch (map[i][j]) {</a>
+<span class="sourceLineNo">454</span><a id="line.454">                    case '\1':</a>
+<span class="sourceLineNo">455</span><a id="line.455">                        portion[i][j] = ' ';</a>
+<span class="sourceLineNo">456</span><a id="line.456">                        break;</a>
+<span class="sourceLineNo">457</span><a id="line.457">                    case '├':</a>
+<span class="sourceLineNo">458</span><a id="line.458">                        portion[i][j] = '┬';</a>
+<span class="sourceLineNo">459</span><a id="line.459">                        break;</a>
+<span class="sourceLineNo">460</span><a id="line.460">                    case '┤':</a>
+<span class="sourceLineNo">461</span><a id="line.461">                        portion[i][j] = '┴';</a>
+<span class="sourceLineNo">462</span><a id="line.462">                        break;</a>
+<span class="sourceLineNo">463</span><a id="line.463">                    case '┴':</a>
+<span class="sourceLineNo">464</span><a id="line.464">                        portion[i][j] = '┤';</a>
+<span class="sourceLineNo">465</span><a id="line.465">                        break;</a>
+<span class="sourceLineNo">466</span><a id="line.466">                    case '┬':</a>
+<span class="sourceLineNo">467</span><a id="line.467">                        portion[i][j] = '├';</a>
+<span class="sourceLineNo">468</span><a id="line.468">                        break;</a>
+<span class="sourceLineNo">469</span><a id="line.469">                    case '┐':</a>
+<span class="sourceLineNo">470</span><a id="line.470">                        portion[i][j] = '└';</a>
+<span class="sourceLineNo">471</span><a id="line.471">                        break;</a>
+<span class="sourceLineNo">472</span><a id="line.472">                    case '└':</a>
+<span class="sourceLineNo">473</span><a id="line.473">                        portion[i][j] = '┐';</a>
+<span class="sourceLineNo">474</span><a id="line.474">                        break;</a>
+<span class="sourceLineNo">475</span><a id="line.475">                    case '│':</a>
+<span class="sourceLineNo">476</span><a id="line.476">                        portion[i][j] = '─';</a>
+<span class="sourceLineNo">477</span><a id="line.477">                        break;</a>
+<span class="sourceLineNo">478</span><a id="line.478">                    case '─':</a>
+<span class="sourceLineNo">479</span><a id="line.479">                        portion[i][j] = '│';</a>
+<span class="sourceLineNo">480</span><a id="line.480">                        break;</a>
+<span class="sourceLineNo">481</span><a id="line.481">                    default: //applies to ┼┌┘ and any non-box-drawing</a>
+<span class="sourceLineNo">482</span><a id="line.482">                        portion[i][j] = map[i][j];</a>
+<span class="sourceLineNo">483</span><a id="line.483">                }</a>
+<span class="sourceLineNo">484</span><a id="line.484">            }</a>
+<span class="sourceLineNo">485</span><a id="line.485">        }</a>
+<span class="sourceLineNo">486</span><a id="line.486">        return portion;</a>
+<span class="sourceLineNo">487</span><a id="line.487">    }</a>
+<span class="sourceLineNo">488</span><a id="line.488">    //                    case '├ ┤ ┴ ┬ ┌ ┐ └ ┘ │ ─':</a>
+<span class="sourceLineNo">489</span><a id="line.489">    /**</a>
+<span class="sourceLineNo">490</span><a id="line.490">     * When a map is generated by DungeonGenerator with addDoors enabled, different chars are used for vertical and</a>
+<span class="sourceLineNo">491</span><a id="line.491">     * horizontal doors ('+' for vertical and '/' for horizontal).  This makes all doors '+', which is useful if you</a>
+<span class="sourceLineNo">492</span><a id="line.492">     * want '/' to be used for a different purpose and/or to distinguish open and closed doors.</a>
+<span class="sourceLineNo">493</span><a id="line.493">     *</a>
+<span class="sourceLineNo">494</span><a id="line.494">     * @param map a char[][] that may have both '+' and '/' for doors</a>
+<span class="sourceLineNo">495</span><a id="line.495">     * @return a char[][] that only uses '+' for all doors</a>
+<span class="sourceLineNo">496</span><a id="line.496">     */</a>
+<span class="sourceLineNo">497</span><a id="line.497">    public static char[][] closeDoors(char[][] map) {</a>
+<span class="sourceLineNo">498</span><a id="line.498"></a>
+<span class="sourceLineNo">499</span><a id="line.499">        int width = map.length;</a>
+<span class="sourceLineNo">500</span><a id="line.500">        int height = map[0].length;</a>
+<span class="sourceLineNo">501</span><a id="line.501">        char[][] portion = new char[width][height];</a>
+<span class="sourceLineNo">502</span><a id="line.502">        for (int i = 0; i &lt; width; i++) {</a>
+<span class="sourceLineNo">503</span><a id="line.503">            for (int j = 0; j &lt; height; j++) {</a>
+<span class="sourceLineNo">504</span><a id="line.504">                if (map[i][j] == '/') portion[i][j] = '+';</a>
+<span class="sourceLineNo">505</span><a id="line.505">                else portion[i][j] = map[i][j];</a>
+<span class="sourceLineNo">506</span><a id="line.506"></a>
+<span class="sourceLineNo">507</span><a id="line.507">            }</a>
+<span class="sourceLineNo">508</span><a id="line.508">        }</a>
+<span class="sourceLineNo">509</span><a id="line.509">        return portion;</a>
+<span class="sourceLineNo">510</span><a id="line.510">    }</a>
+<span class="sourceLineNo">511</span><a id="line.511"></a>
+<span class="sourceLineNo">512</span><a id="line.512">    /**</a>
+<span class="sourceLineNo">513</span><a id="line.513">     * When a map is generated by DungeonGenerator with addDoors enabled, different chars are used for vertical and</a>
+<span class="sourceLineNo">514</span><a id="line.514">     * horizontal doors ('+' for vertical and '/' for horizontal).  This makes all doors '/', which is useful if you</a>
+<span class="sourceLineNo">515</span><a id="line.515">     * want '+' to be used for a different purpose and/or to distinguish open and closed doors.</a>
+<span class="sourceLineNo">516</span><a id="line.516">     *</a>
+<span class="sourceLineNo">517</span><a id="line.517">     * @param map a char[][] that may have both '+' and '/' for doors</a>
+<span class="sourceLineNo">518</span><a id="line.518">     * @return a char[][] that only uses '/' for all doors</a>
+<span class="sourceLineNo">519</span><a id="line.519">     */</a>
+<span class="sourceLineNo">520</span><a id="line.520">    public static char[][] openDoors(char[][] map) {</a>
+<span class="sourceLineNo">521</span><a id="line.521"></a>
+<span class="sourceLineNo">522</span><a id="line.522">        int width = map.length;</a>
+<span class="sourceLineNo">523</span><a id="line.523">        int height = map[0].length;</a>
+<span class="sourceLineNo">524</span><a id="line.524">        char[][] portion = new char[width][height];</a>
+<span class="sourceLineNo">525</span><a id="line.525">        for (int i = 0; i &lt; width; i++) {</a>
+<span class="sourceLineNo">526</span><a id="line.526">            for (int j = 0; j &lt; height; j++) {</a>
+<span class="sourceLineNo">527</span><a id="line.527">                if (map[i][j] == '+') portion[i][j] = '/';</a>
+<span class="sourceLineNo">528</span><a id="line.528">                else portion[i][j] = map[i][j];</a>
+<span class="sourceLineNo">529</span><a id="line.529">            }</a>
+<span class="sourceLineNo">530</span><a id="line.530">        }</a>
+<span class="sourceLineNo">531</span><a id="line.531">        return portion;</a>
+<span class="sourceLineNo">532</span><a id="line.532">    }</a>
+<span class="sourceLineNo">533</span><a id="line.533"></a>
 <span class="sourceLineNo">534</span><a id="line.534"></a>
-<span class="sourceLineNo">535</span><a id="line.535"></a>
-<span class="sourceLineNo">536</span><a id="line.536">    /**</a>
-<span class="sourceLineNo">537</span><a id="line.537">     * Takes a char[][] dungeon map and returns a copy with all box drawing chars, special placeholder chars, or '#'</a>
-<span class="sourceLineNo">538</span><a id="line.538">     * chars changed to '#' and everything else changed to '.' .</a>
-<span class="sourceLineNo">539</span><a id="line.539">     *</a>
-<span class="sourceLineNo">540</span><a id="line.540">     * @param map a char[][] with different characters that can be simplified to "wall" or "floor"</a>
-<span class="sourceLineNo">541</span><a id="line.541">     * @return a copy of map with all box-drawing, placeholder, wall or space characters as '#' and everything else '.'</a>
-<span class="sourceLineNo">542</span><a id="line.542">     */</a>
-<span class="sourceLineNo">543</span><a id="line.543">    public static char[][] simplifyDungeon(char[][] map) {</a>
-<span class="sourceLineNo">544</span><a id="line.544"></a>
-<span class="sourceLineNo">545</span><a id="line.545">        int width = map.length;</a>
-<span class="sourceLineNo">546</span><a id="line.546">        int height = map[0].length;</a>
-<span class="sourceLineNo">547</span><a id="line.547">        char[][] portion = new char[width][height];</a>
-<span class="sourceLineNo">548</span><a id="line.548">        for (int i = 0; i &lt; width; i++) {</a>
-<span class="sourceLineNo">549</span><a id="line.549">            for (int j = 0; j &lt; height; j++) {</a>
-<span class="sourceLineNo">550</span><a id="line.550">                switch (map[i][j]) {</a>
-<span class="sourceLineNo">551</span><a id="line.551">                    case '\1':</a>
-<span class="sourceLineNo">552</span><a id="line.552">                    case '├':</a>
-<span class="sourceLineNo">553</span><a id="line.553">                    case '┤':</a>
-<span class="sourceLineNo">554</span><a id="line.554">                    case '┴':</a>
-<span class="sourceLineNo">555</span><a id="line.555">                    case '┬':</a>
-<span class="sourceLineNo">556</span><a id="line.556">                    case '┌':</a>
-<span class="sourceLineNo">557</span><a id="line.557">                    case '┐':</a>
-<span class="sourceLineNo">558</span><a id="line.558">                    case '└':</a>
-<span class="sourceLineNo">559</span><a id="line.559">                    case '┘':</a>
-<span class="sourceLineNo">560</span><a id="line.560">                    case '│':</a>
-<span class="sourceLineNo">561</span><a id="line.561">                    case '─':</a>
-<span class="sourceLineNo">562</span><a id="line.562">                    case '┼':</a>
-<span class="sourceLineNo">563</span><a id="line.563">                    case ' ':</a>
-<span class="sourceLineNo">564</span><a id="line.564">                    case '#':</a>
-<span class="sourceLineNo">565</span><a id="line.565">                        portion[i][j] = '#';</a>
-<span class="sourceLineNo">566</span><a id="line.566">                        break;</a>
-<span class="sourceLineNo">567</span><a id="line.567">                    default:</a>
-<span class="sourceLineNo">568</span><a id="line.568">                        portion[i][j] = '.';</a>
-<span class="sourceLineNo">569</span><a id="line.569">                }</a>
-<span class="sourceLineNo">570</span><a id="line.570">            }</a>
-<span class="sourceLineNo">571</span><a id="line.571">        }</a>
-<span class="sourceLineNo">572</span><a id="line.572">        return portion;</a>
-<span class="sourceLineNo">573</span><a id="line.573">    }</a>
-<span class="sourceLineNo">574</span><a id="line.574"></a>
-<span class="sourceLineNo">575</span><a id="line.575">    /**</a>
-<span class="sourceLineNo">576</span><a id="line.576">     * Takes a dungeon map with either '#' as the only wall character or the unicode box drawing characters used by</a>
-<span class="sourceLineNo">577</span><a id="line.577">     * hashesToLines(), and returns a new char[][] dungeon map with two characters per cell, mostly filling the spaces</a>
-<span class="sourceLineNo">578</span><a id="line.578">     * next to non-walls with space characters, and only doing anything different if a box-drawing character would</a>
-<span class="sourceLineNo">579</span><a id="line.579">     * continue into an adjacent cell, or if a '#' wall needs another '#' wall next to it. The recommended approach is</a>
-<span class="sourceLineNo">580</span><a id="line.580">     * to keep both the original non-double-width map and the newly-returned double-width map, since the single-width</a>
-<span class="sourceLineNo">581</span><a id="line.581">     * maps can be used more easily for pathfinding. If you need to undo this function, call unDoubleWidth().</a>
-<span class="sourceLineNo">582</span><a id="line.582">     *</a>
-<span class="sourceLineNo">583</span><a id="line.583">     * @param map a char[][] that uses either '#' or box-drawing characters for walls, but one per cell</a>
-<span class="sourceLineNo">584</span><a id="line.584">     * @return a widened copy of map that uses two characters for every cell, connecting box-drawing chars correctly</a>
-<span class="sourceLineNo">585</span><a id="line.585">     */</a>
-<span class="sourceLineNo">586</span><a id="line.586">    public static char[][] doubleWidth(char[][] map) {</a>
-<span class="sourceLineNo">587</span><a id="line.587">        int width = map.length;</a>
-<span class="sourceLineNo">588</span><a id="line.588">        int height = map[0].length;</a>
-<span class="sourceLineNo">589</span><a id="line.589">        char[][] paired = new char[width * 2][height];</a>
-<span class="sourceLineNo">590</span><a id="line.590">        for (int y = 0; y &lt; height; y++) {</a>
-<span class="sourceLineNo">591</span><a id="line.591">            for (int x = 0, px = 0; x &lt; width; x++, px += 2) {</a>
-<span class="sourceLineNo">592</span><a id="line.592">                paired[px][y] = map[x][y];</a>
-<span class="sourceLineNo">593</span><a id="line.593">                switch (paired[px][y]) {</a>
-<span class="sourceLineNo">594</span><a id="line.594">                    //                        case '┼ ├ ┤ ┴ ┬ ┌ ┐ └ ┘ │ ─'</a>
-<span class="sourceLineNo">595</span><a id="line.595">                    case '┼':</a>
-<span class="sourceLineNo">596</span><a id="line.596">                    case '├':</a>
-<span class="sourceLineNo">597</span><a id="line.597">                    case '┴':</a>
-<span class="sourceLineNo">598</span><a id="line.598">                    case '┬':</a>
-<span class="sourceLineNo">599</span><a id="line.599">                    case '┌':</a>
-<span class="sourceLineNo">600</span><a id="line.600">                    case '└':</a>
-<span class="sourceLineNo">601</span><a id="line.601">                    case '─':</a>
-<span class="sourceLineNo">602</span><a id="line.602">                        paired[px + 1][y] = '─';</a>
-<span class="sourceLineNo">603</span><a id="line.603">                        break;</a>
-<span class="sourceLineNo">604</span><a id="line.604">                    case '#':</a>
-<span class="sourceLineNo">605</span><a id="line.605">                        paired[px + 1][y] = '#';</a>
-<span class="sourceLineNo">606</span><a id="line.606">                        break;</a>
-<span class="sourceLineNo">607</span><a id="line.607"></a>
-<span class="sourceLineNo">608</span><a id="line.608">                    default:</a>
-<span class="sourceLineNo">609</span><a id="line.609">                        paired[px + 1][y] = ' ';</a>
-<span class="sourceLineNo">610</span><a id="line.610">                        break;</a>
-<span class="sourceLineNo">611</span><a id="line.611">                        /*</a>
-<span class="sourceLineNo">612</span><a id="line.612">                    case '.':</a>
-<span class="sourceLineNo">613</span><a id="line.613">                    case '┤':</a>
-<span class="sourceLineNo">614</span><a id="line.614">                    case '┐':</a>
-<span class="sourceLineNo">615</span><a id="line.615">                    case '┘':</a>
-<span class="sourceLineNo">616</span><a id="line.616">                    case '│':</a>
-<span class="sourceLineNo">617</span><a id="line.617">                         */</a>
-<span class="sourceLineNo">618</span><a id="line.618">                }</a>
-<span class="sourceLineNo">619</span><a id="line.619">            }</a>
-<span class="sourceLineNo">620</span><a id="line.620">        }</a>
-<span class="sourceLineNo">621</span><a id="line.621">        return paired;</a>
-<span class="sourceLineNo">622</span><a id="line.622">    }</a>
-<span class="sourceLineNo">623</span><a id="line.623"></a>
-<span class="sourceLineNo">624</span><a id="line.624">    /**</a>
-<span class="sourceLineNo">625</span><a id="line.625">     * Takes a dungeon map that uses two characters per cell, and condenses it to use only the left (lower index)</a>
-<span class="sourceLineNo">626</span><a id="line.626">     * character in each cell. This should (probably) only be called on the result of doubleWidth(), and will throw an</a>
-<span class="sourceLineNo">627</span><a id="line.627">     * exception if called on a map with an odd number of characters for width, such as "#...#" .</a>
-<span class="sourceLineNo">628</span><a id="line.628">     *</a>
-<span class="sourceLineNo">629</span><a id="line.629">     * @param map a char[][] that has been widened by doubleWidth()</a>
-<span class="sourceLineNo">630</span><a id="line.630">     * @return a copy of map that uses only one char per cell</a>
-<span class="sourceLineNo">631</span><a id="line.631">     */</a>
-<span class="sourceLineNo">632</span><a id="line.632">    public static char[][] unDoubleWidth(char[][] map) {</a>
-<span class="sourceLineNo">633</span><a id="line.633">        int width = map.length;</a>
-<span class="sourceLineNo">634</span><a id="line.634">        int height = map[0].length;</a>
-<span class="sourceLineNo">635</span><a id="line.635">        if (width % 2 != 0)</a>
-<span class="sourceLineNo">636</span><a id="line.636">            throw new IllegalArgumentException("Argument must be a char[width][height] with an even width.");</a>
-<span class="sourceLineNo">637</span><a id="line.637">        char[][] unpaired = new char[width / 2][height];</a>
-<span class="sourceLineNo">638</span><a id="line.638">        for (int y = 0; y &lt; height; y++) {</a>
-<span class="sourceLineNo">639</span><a id="line.639">            for (int x = 0, px = 0; px &lt; width; x++, px += 2) {</a>
-<span class="sourceLineNo">640</span><a id="line.640">                unpaired[x][y] = map[px][y];</a>
-<span class="sourceLineNo">641</span><a id="line.641">            }</a>
-<span class="sourceLineNo">642</span><a id="line.642">        }</a>
-<span class="sourceLineNo">643</span><a id="line.643">        return unpaired;</a>
-<span class="sourceLineNo">644</span><a id="line.644">    }</a>
+<span class="sourceLineNo">535</span><a id="line.535">    /**</a>
+<span class="sourceLineNo">536</span><a id="line.536">     * Takes a char[][] dungeon map and returns a copy with all box drawing chars, special placeholder chars, or '#'</a>
+<span class="sourceLineNo">537</span><a id="line.537">     * chars changed to '#' and everything else changed to '.' .</a>
+<span class="sourceLineNo">538</span><a id="line.538">     *</a>
+<span class="sourceLineNo">539</span><a id="line.539">     * @param map a char[][] with different characters that can be simplified to "wall" or "floor"</a>
+<span class="sourceLineNo">540</span><a id="line.540">     * @return a copy of map with all box-drawing, placeholder, wall or space characters as '#' and everything else '.'</a>
+<span class="sourceLineNo">541</span><a id="line.541">     */</a>
+<span class="sourceLineNo">542</span><a id="line.542">    public static char[][] simplifyDungeon(char[][] map) {</a>
+<span class="sourceLineNo">543</span><a id="line.543"></a>
+<span class="sourceLineNo">544</span><a id="line.544">        int width = map.length;</a>
+<span class="sourceLineNo">545</span><a id="line.545">        int height = map[0].length;</a>
+<span class="sourceLineNo">546</span><a id="line.546">        char[][] portion = new char[width][height];</a>
+<span class="sourceLineNo">547</span><a id="line.547">        for (int i = 0; i &lt; width; i++) {</a>
+<span class="sourceLineNo">548</span><a id="line.548">            for (int j = 0; j &lt; height; j++) {</a>
+<span class="sourceLineNo">549</span><a id="line.549">                switch (map[i][j]) {</a>
+<span class="sourceLineNo">550</span><a id="line.550">                    case '\1':</a>
+<span class="sourceLineNo">551</span><a id="line.551">                    case '├':</a>
+<span class="sourceLineNo">552</span><a id="line.552">                    case '┤':</a>
+<span class="sourceLineNo">553</span><a id="line.553">                    case '┴':</a>
+<span class="sourceLineNo">554</span><a id="line.554">                    case '┬':</a>
+<span class="sourceLineNo">555</span><a id="line.555">                    case '┌':</a>
+<span class="sourceLineNo">556</span><a id="line.556">                    case '┐':</a>
+<span class="sourceLineNo">557</span><a id="line.557">                    case '└':</a>
+<span class="sourceLineNo">558</span><a id="line.558">                    case '┘':</a>
+<span class="sourceLineNo">559</span><a id="line.559">                    case '│':</a>
+<span class="sourceLineNo">560</span><a id="line.560">                    case '─':</a>
+<span class="sourceLineNo">561</span><a id="line.561">                    case '┼':</a>
+<span class="sourceLineNo">562</span><a id="line.562">                    case ' ':</a>
+<span class="sourceLineNo">563</span><a id="line.563">                    case '#':</a>
+<span class="sourceLineNo">564</span><a id="line.564">                        portion[i][j] = '#';</a>
+<span class="sourceLineNo">565</span><a id="line.565">                        break;</a>
+<span class="sourceLineNo">566</span><a id="line.566">                    default:</a>
+<span class="sourceLineNo">567</span><a id="line.567">                        portion[i][j] = '.';</a>
+<span class="sourceLineNo">568</span><a id="line.568">                }</a>
+<span class="sourceLineNo">569</span><a id="line.569">            }</a>
+<span class="sourceLineNo">570</span><a id="line.570">        }</a>
+<span class="sourceLineNo">571</span><a id="line.571">        return portion;</a>
+<span class="sourceLineNo">572</span><a id="line.572">    }</a>
+<span class="sourceLineNo">573</span><a id="line.573"></a>
+<span class="sourceLineNo">574</span><a id="line.574">    /**</a>
+<span class="sourceLineNo">575</span><a id="line.575">     * Takes a dungeon map with either '#' as the only wall character or the unicode box drawing characters used by</a>
+<span class="sourceLineNo">576</span><a id="line.576">     * hashesToLines(), and returns a new char[][] dungeon map with two characters per cell, mostly filling the spaces</a>
+<span class="sourceLineNo">577</span><a id="line.577">     * next to non-walls with space characters, and only doing anything different if a box-drawing character would</a>
+<span class="sourceLineNo">578</span><a id="line.578">     * continue into an adjacent cell, or if a '#' wall needs another '#' wall next to it. The recommended approach is</a>
+<span class="sourceLineNo">579</span><a id="line.579">     * to keep both the original non-double-width map and the newly-returned double-width map, since the single-width</a>
+<span class="sourceLineNo">580</span><a id="line.580">     * maps can be used more easily for pathfinding. If you need to undo this function, call unDoubleWidth().</a>
+<span class="sourceLineNo">581</span><a id="line.581">     *</a>
+<span class="sourceLineNo">582</span><a id="line.582">     * @param map a char[][] that uses either '#' or box-drawing characters for walls, but one per cell</a>
+<span class="sourceLineNo">583</span><a id="line.583">     * @return a widened copy of map that uses two characters for every cell, connecting box-drawing chars correctly</a>
+<span class="sourceLineNo">584</span><a id="line.584">     */</a>
+<span class="sourceLineNo">585</span><a id="line.585">    public static char[][] doubleWidth(char[][] map) {</a>
+<span class="sourceLineNo">586</span><a id="line.586">        int width = map.length;</a>
+<span class="sourceLineNo">587</span><a id="line.587">        int height = map[0].length;</a>
+<span class="sourceLineNo">588</span><a id="line.588">        char[][] paired = new char[width * 2][height];</a>
+<span class="sourceLineNo">589</span><a id="line.589">        for (int y = 0; y &lt; height; y++) {</a>
+<span class="sourceLineNo">590</span><a id="line.590">            for (int x = 0, px = 0; x &lt; width; x++, px += 2) {</a>
+<span class="sourceLineNo">591</span><a id="line.591">                paired[px][y] = map[x][y];</a>
+<span class="sourceLineNo">592</span><a id="line.592">                switch (paired[px][y]) {</a>
+<span class="sourceLineNo">593</span><a id="line.593">                    //                        case '┼ ├ ┤ ┴ ┬ ┌ ┐ └ ┘ │ ─'</a>
+<span class="sourceLineNo">594</span><a id="line.594">                    case '┼':</a>
+<span class="sourceLineNo">595</span><a id="line.595">                    case '├':</a>
+<span class="sourceLineNo">596</span><a id="line.596">                    case '┴':</a>
+<span class="sourceLineNo">597</span><a id="line.597">                    case '┬':</a>
+<span class="sourceLineNo">598</span><a id="line.598">                    case '┌':</a>
+<span class="sourceLineNo">599</span><a id="line.599">                    case '└':</a>
+<span class="sourceLineNo">600</span><a id="line.600">                    case '─':</a>
+<span class="sourceLineNo">601</span><a id="line.601">                        paired[px + 1][y] = '─';</a>
+<span class="sourceLineNo">602</span><a id="line.602">                        break;</a>
+<span class="sourceLineNo">603</span><a id="line.603">                    case '#':</a>
+<span class="sourceLineNo">604</span><a id="line.604">                        paired[px + 1][y] = '#';</a>
+<span class="sourceLineNo">605</span><a id="line.605">                        break;</a>
+<span class="sourceLineNo">606</span><a id="line.606"></a>
+<span class="sourceLineNo">607</span><a id="line.607">                    default:</a>
+<span class="sourceLineNo">608</span><a id="line.608">                        paired[px + 1][y] = ' ';</a>
+<span class="sourceLineNo">609</span><a id="line.609">                        break;</a>
+<span class="sourceLineNo">610</span><a id="line.610">                        /*</a>
+<span class="sourceLineNo">611</span><a id="line.611">                    case '.':</a>
+<span class="sourceLineNo">612</span><a id="line.612">                    case '┤':</a>
+<span class="sourceLineNo">613</span><a id="line.613">                    case '┐':</a>
+<span class="sourceLineNo">614</span><a id="line.614">                    case '┘':</a>
+<span class="sourceLineNo">615</span><a id="line.615">                    case '│':</a>
+<span class="sourceLineNo">616</span><a id="line.616">                         */</a>
+<span class="sourceLineNo">617</span><a id="line.617">                }</a>
+<span class="sourceLineNo">618</span><a id="line.618">            }</a>
+<span class="sourceLineNo">619</span><a id="line.619">        }</a>
+<span class="sourceLineNo">620</span><a id="line.620">        return paired;</a>
+<span class="sourceLineNo">621</span><a id="line.621">    }</a>
+<span class="sourceLineNo">622</span><a id="line.622"></a>
+<span class="sourceLineNo">623</span><a id="line.623">    /**</a>
+<span class="sourceLineNo">624</span><a id="line.624">     * Takes a dungeon map that uses two characters per cell, and condenses it to use only the left (lower index)</a>
+<span class="sourceLineNo">625</span><a id="line.625">     * character in each cell. This should (probably) only be called on the result of doubleWidth(), and will throw an</a>
+<span class="sourceLineNo">626</span><a id="line.626">     * exception if called on a map with an odd number of characters for width, such as "#...#" .</a>
+<span class="sourceLineNo">627</span><a id="line.627">     *</a>
+<span class="sourceLineNo">628</span><a id="line.628">     * @param map a char[][] that has been widened by doubleWidth()</a>
+<span class="sourceLineNo">629</span><a id="line.629">     * @return a copy of map that uses only one char per cell</a>
+<span class="sourceLineNo">630</span><a id="line.630">     */</a>
+<span class="sourceLineNo">631</span><a id="line.631">    public static char[][] unDoubleWidth(char[][] map) {</a>
+<span class="sourceLineNo">632</span><a id="line.632">        int width = map.length;</a>
+<span class="sourceLineNo">633</span><a id="line.633">        int height = map[0].length;</a>
+<span class="sourceLineNo">634</span><a id="line.634">        if (width % 2 != 0)</a>
+<span class="sourceLineNo">635</span><a id="line.635">            throw new IllegalArgumentException("Argument must be a char[width][height] with an even width.");</a>
+<span class="sourceLineNo">636</span><a id="line.636">        char[][] unpaired = new char[width / 2][height];</a>
+<span class="sourceLineNo">637</span><a id="line.637">        for (int y = 0; y &lt; height; y++) {</a>
+<span class="sourceLineNo">638</span><a id="line.638">            for (int x = 0, px = 0; px &lt; width; x++, px += 2) {</a>
+<span class="sourceLineNo">639</span><a id="line.639">                unpaired[x][y] = map[px][y];</a>
+<span class="sourceLineNo">640</span><a id="line.640">            }</a>
+<span class="sourceLineNo">641</span><a id="line.641">        }</a>
+<span class="sourceLineNo">642</span><a id="line.642">        return unpaired;</a>
+<span class="sourceLineNo">643</span><a id="line.643">    }</a>
+<span class="sourceLineNo">644</span><a id="line.644"></a>
 <span class="sourceLineNo">645</span><a id="line.645"></a>
-<span class="sourceLineNo">646</span><a id="line.646"></a>
-<span class="sourceLineNo">647</span><a id="line.647">    /**</a>
-<span class="sourceLineNo">648</span><a id="line.648">     * Given a char[][] for the map, produces a double[][] that can be used with FOV.calculateFOV(). It expects any</a>
-<span class="sourceLineNo">649</span><a id="line.649">     * doors to be represented by '+' if closed or '/' if open (which can be caused by calling</a>
-<span class="sourceLineNo">650</span><a id="line.650">     * DungeonUtility.closeDoors() ), any walls to be '#' or box drawing characters, and it doesn't care what other</a>
-<span class="sourceLineNo">651</span><a id="line.651">     * chars are used (only doors, including open ones, and walls obscure light and thus have a resistance by default).</a>
-<span class="sourceLineNo">652</span><a id="line.652">     * &lt;br&gt;</a>
-<span class="sourceLineNo">653</span><a id="line.653">     * This is here for backwards-compatibility; this method delegates to {@link FOV#generateResistances(char[][])}.</a>
-<span class="sourceLineNo">654</span><a id="line.654">     *</a>
-<span class="sourceLineNo">655</span><a id="line.655">     * @param map a dungeon, width by height, with any closed doors as '+' and open doors as '/' as per closeDoors()</a>
-<span class="sourceLineNo">656</span><a id="line.656">     * @return a resistance map suitable for use with the FOV class, with clear cells assigned 0.0 and blocked ones 1.0</a>
-<span class="sourceLineNo">657</span><a id="line.657">     */</a>
-<span class="sourceLineNo">658</span><a id="line.658">    public static double[][] generateResistances(char[][] map) {</a>
-<span class="sourceLineNo">659</span><a id="line.659">        return FOV.generateResistances(map);</a>
-<span class="sourceLineNo">660</span><a id="line.660">    }</a>
-<span class="sourceLineNo">661</span><a id="line.661"></a>
-<span class="sourceLineNo">662</span><a id="line.662">    /**</a>
-<span class="sourceLineNo">663</span><a id="line.663">     * Given a char[][] for the map that should use box drawing characters (as produced by</a>
-<span class="sourceLineNo">664</span><a id="line.664">     * {@link #hashesToLines(char[][], boolean)}), produces a double[][] with triple width and triple height that can be</a>
-<span class="sourceLineNo">665</span><a id="line.665">     * used with FOV.calculateFOV() in classes that use subcell lighting. Importantly, this only considers a "thin line"</a>
-<span class="sourceLineNo">666</span><a id="line.666">     * of wall to be blocking (matching the box drawing character), instead of the whole 3x3 area. This expects any</a>
-<span class="sourceLineNo">667</span><a id="line.667">     * doors to be represented by '+' if closed or '/' if open (which can be caused by calling</a>
-<span class="sourceLineNo">668</span><a id="line.668">     * {@link #closeDoors(char[][])}), thick vegetation or other concealing obstructions to be '"', any normal walls to</a>
-<span class="sourceLineNo">669</span><a id="line.669">     * be box drawing characters, any cells that block all subcells to be '#', and it doesn't care what other chars are</a>
-<span class="sourceLineNo">670</span><a id="line.670">     * used (only doors, including open ones, vegetation, and walls obscure light and thus have a resistance normally).</a>
-<span class="sourceLineNo">671</span><a id="line.671">     * &lt;br&gt;</a>
-<span class="sourceLineNo">672</span><a id="line.672">     * This is here for backwards-compatibility; this method delegates to {@link FOV#generateResistances3x3(char[][])}</a>
-<span class="sourceLineNo">673</span><a id="line.673">     * </a>
-<span class="sourceLineNo">674</span><a id="line.674">     * @param map a dungeon, width by height, with any closed doors as '+' and open doors as '/' as per closeDoors()</a>
-<span class="sourceLineNo">675</span><a id="line.675">     * @return a resistance map suitable for use with the FOV class and subcell lighting, with triple width/height</a>
-<span class="sourceLineNo">676</span><a id="line.676">     */</a>
-<span class="sourceLineNo">677</span><a id="line.677">    public static double[][] generateResistances3x3(char[][] map) {</a>
-<span class="sourceLineNo">678</span><a id="line.678">        return FOV.generateResistances3x3(map);</a>
-<span class="sourceLineNo">679</span><a id="line.679">    }</a>
-<span class="sourceLineNo">680</span><a id="line.680"></a>
-<span class="sourceLineNo">681</span><a id="line.681">    /**</a>
-<span class="sourceLineNo">682</span><a id="line.682">     * Given a char[][] for the map, produces a double[][] that can be used with FOV.calculateFOV(), but does not treat</a>
-<span class="sourceLineNo">683</span><a id="line.683">     * any cells as partly transparent, only fully-blocking or fully-permitting light. This is mainly useful if you</a>
-<span class="sourceLineNo">684</span><a id="line.684">     * expect the FOV radius to be very high or (effectively) infinite, since anything less than complete blockage would</a>
-<span class="sourceLineNo">685</span><a id="line.685">     * be passed through by infinite-radius FOV. This expects any doors to be represented by '+' if closed or '/' if</a>
-<span class="sourceLineNo">686</span><a id="line.686">     * open (most door placement defaults to a mix of '+' and '/', so by calling</a>
-<span class="sourceLineNo">687</span><a id="line.687">     * {@link DungeonUtility#closeDoors(char[][])} you can close all doors at the start), and any walls to be '#' or</a>
-<span class="sourceLineNo">688</span><a id="line.688">     * box drawing characters. This will assign 1.0 resistance to walls and closed doors or 0.0 for any other cell.</a>
-<span class="sourceLineNo">689</span><a id="line.689">     * &lt;br&gt;</a>
-<span class="sourceLineNo">690</span><a id="line.690">     * This is here for backwards-compatibility; this method delegates to {@link FOV#generateSimpleResistances(char[][])}.</a>
-<span class="sourceLineNo">691</span><a id="line.691">     *</a>
-<span class="sourceLineNo">692</span><a id="line.692">     * @param map a dungeon, width by height, with any closed doors as '+' and open doors as '/' as per closeDoors()</a>
-<span class="sourceLineNo">693</span><a id="line.693">     * @return a resistance map suitable for use with the FOV class, but with no partially transparent cells</a>
-<span class="sourceLineNo">694</span><a id="line.694">     */</a>
-<span class="sourceLineNo">695</span><a id="line.695">    public static double[][] generateSimpleResistances(char[][] map) {</a>
-<span class="sourceLineNo">696</span><a id="line.696">        return FOV.generateSimpleResistances(map);</a>
-<span class="sourceLineNo">697</span><a id="line.697">    }</a>
-<span class="sourceLineNo">698</span><a id="line.698"></a>
-<span class="sourceLineNo">699</span><a id="line.699">    /**</a>
-<span class="sourceLineNo">700</span><a id="line.700">     * Given a char[][] for the map that should use box drawing characters (as produced by</a>
-<span class="sourceLineNo">701</span><a id="line.701">     * {@link #hashesToLines(char[][], boolean)}), produces a double[][] with triple width and triple height that can be</a>
-<span class="sourceLineNo">702</span><a id="line.702">     * used with FOV.calculateFOV() in classes that use subcell lighting. This expects any doors to be represented by</a>
-<span class="sourceLineNo">703</span><a id="line.703">     * '+' if closed or '/' if open (most door placement defaults to a mix of '+' and '/', so by calling</a>
-<span class="sourceLineNo">704</span><a id="line.704">     * {@link DungeonUtility#closeDoors(char[][])} you can close all doors at the start), any walls to be box drawing</a>
-<span class="sourceLineNo">705</span><a id="line.705">     * characters, and any cells that block all subcells within their area to be '#'. This will assign 1.0 resistance to</a>
-<span class="sourceLineNo">706</span><a id="line.706">     * walls and closed doors where a line of the box drawing char would block light, or 0.0 for any other subcell.</a>
-<span class="sourceLineNo">707</span><a id="line.707">     * &lt;br&gt;</a>
-<span class="sourceLineNo">708</span><a id="line.708">     * This is here for backwards-compatibility; this method delegates to {@link FOV#generateSimpleResistances3x3(char[][])}.</a>
-<span class="sourceLineNo">709</span><a id="line.709">     *</a>
-<span class="sourceLineNo">710</span><a id="line.710">     * @param map a dungeon, width by height, with any closed doors as '+' and open doors as '/' as per closeDoors()</a>
-<span class="sourceLineNo">711</span><a id="line.711">     * @return a resistance map suitable for use with the FOV class and subcell lighting, with triple width/height</a>
-<span class="sourceLineNo">712</span><a id="line.712">     */</a>
-<span class="sourceLineNo">713</span><a id="line.713">    public static double[][] generateSimpleResistances3x3(char[][] map) {</a>
-<span class="sourceLineNo">714</span><a id="line.714">        return FOV.generateSimpleResistances3x3(map);</a>
-<span class="sourceLineNo">715</span><a id="line.715">    }</a>
-<span class="sourceLineNo">716</span><a id="line.716"></a>
-<span class="sourceLineNo">717</span><a id="line.717">    /**</a>
-<span class="sourceLineNo">718</span><a id="line.718">     * Given a char[][] for the map, a Map of Character keys to Double values that will be used to determine costs, and</a>
-<span class="sourceLineNo">719</span><a id="line.719">     * a double value for unhandled characters, produces a double[][] that can be used as a costMap by DijkstraMap. It</a>
-<span class="sourceLineNo">720</span><a id="line.720">     * expects any doors to be represented by '+' if closed or '/' if open (which can be caused by calling</a>
-<span class="sourceLineNo">721</span><a id="line.721">     * DungeonUtility.closeDoors() ) and any walls to be '#' or box drawing characters. In the parameter costs, there</a>
-<span class="sourceLineNo">722</span><a id="line.722">     * does not need to be an entry for '#' or any box drawing characters, but if one is present for '#' it will apply</a>
-<span class="sourceLineNo">723</span><a id="line.723">     * that cost to both '#' and all box drawing characters, and if one is not present it will default to a very high</a>
-<span class="sourceLineNo">724</span><a id="line.724">     * number. For any other entry in costs, a char in the 2D char array that matches the key will correspond</a>
-<span class="sourceLineNo">725</span><a id="line.725">     * (at the same x,y position in the returned 2D double array) to that key's value in costs. If a char is used in the</a>
-<span class="sourceLineNo">726</span><a id="line.726">     * map but does not have a corresponding key in costs, it will be given the value of the parameter defaultValue.</a>
-<span class="sourceLineNo">727</span><a id="line.727">     * &lt;p/&gt;</a>
-<span class="sourceLineNo">728</span><a id="line.728">     * The values in costs are multipliers, so should not be negative, should only be 0.0 in cases where you want</a>
-<span class="sourceLineNo">729</span><a id="line.729">     * infinite movement across all adjacent squares of that kind, should be higher than 1.0 for difficult terrain (2.0</a>
-<span class="sourceLineNo">730</span><a id="line.730">     * and 3.0 are reasonable), should be between 0.0 and 1.0 for easy terrain, and should be 1.0 for normal terrain.</a>
-<span class="sourceLineNo">731</span><a id="line.731">     * If a cell should not be possible to enter for this character, 999.0 should be a reasonable value for a cost.</a>
-<span class="sourceLineNo">732</span><a id="line.732">     * &lt;p/&gt;</a>
-<span class="sourceLineNo">733</span><a id="line.733">     * An example use for this would be to make a creature unable to enter any non-water cell (like a fish),</a>
-<span class="sourceLineNo">734</span><a id="line.734">     * unable to enter doorways (like some mythological versions of vampires), or to make a wheeled vehicle take more</a>
-<span class="sourceLineNo">735</span><a id="line.735">     * time to move across rubble or rough terrain.</a>
-<span class="sourceLineNo">736</span><a id="line.736">     * &lt;p/&gt;</a>
-<span class="sourceLineNo">737</span><a id="line.737">     * A potentially common case that needs to be addressed is NPC movement onto staircases in games that have them;</a>
-<span class="sourceLineNo">738</span><a id="line.738">     * some games may find it desirable for NPCs to block staircases and others may not, but in either case you should</a>
-<span class="sourceLineNo">739</span><a id="line.739">     * give both '&amp;gt;' and '&amp;lt;', the standard characters for staircases, the same value in costs.</a>
-<span class="sourceLineNo">740</span><a id="line.740">     *</a>
-<span class="sourceLineNo">741</span><a id="line.741">     * @param map          a dungeon, width by height, with any closed doors as '+' and open doors as '/' as per closeDoors() .</a>
-<span class="sourceLineNo">742</span><a id="line.742">     * @param costs        a Map of Character keys representing possible elements in map, and Double values for their cost.</a>
-<span class="sourceLineNo">743</span><a id="line.743">     * @param defaultValue a double that will be used as the cost for any characters that don't have a key in costs.</a>
-<span class="sourceLineNo">744</span><a id="line.744">     * @return a cost map suitable for use with DijkstraMap</a>
-<span class="sourceLineNo">745</span><a id="line.745">     */</a>
-<span class="sourceLineNo">746</span><a id="line.746">    public static double[][] generateCostMap(char[][] map, Map&lt;Character, Double&gt; costs, double defaultValue) {</a>
-<span class="sourceLineNo">747</span><a id="line.747">        int width = map.length;</a>
-<span class="sourceLineNo">748</span><a id="line.748">        int height = map[0].length;</a>
-<span class="sourceLineNo">749</span><a id="line.749">        double[][] portion = new double[width][height];</a>
-<span class="sourceLineNo">750</span><a id="line.750">        char current;</a>
-<span class="sourceLineNo">751</span><a id="line.751">        for (int i = 0; i &lt; width; i++) {</a>
-<span class="sourceLineNo">752</span><a id="line.752">            for (int j = 0; j &lt; height; j++) {</a>
-<span class="sourceLineNo">753</span><a id="line.753">                current = map[i][j];</a>
-<span class="sourceLineNo">754</span><a id="line.754">                if (costs.containsKey(current)) {</a>
-<span class="sourceLineNo">755</span><a id="line.755">                    portion[i][j] = costs.get(current);</a>
-<span class="sourceLineNo">756</span><a id="line.756">                } else {</a>
-<span class="sourceLineNo">757</span><a id="line.757">                    switch (current) {</a>
-<span class="sourceLineNo">758</span><a id="line.758">                        case '\1':</a>
-<span class="sourceLineNo">759</span><a id="line.759">                        case '├':</a>
-<span class="sourceLineNo">760</span><a id="line.760">                        case '┤':</a>
-<span class="sourceLineNo">761</span><a id="line.761">                        case '┴':</a>
-<span class="sourceLineNo">762</span><a id="line.762">                        case '┬':</a>
-<span class="sourceLineNo">763</span><a id="line.763">                        case '┌':</a>
-<span class="sourceLineNo">764</span><a id="line.764">                        case '┐':</a>
-<span class="sourceLineNo">765</span><a id="line.765">                        case '└':</a>
-<span class="sourceLineNo">766</span><a id="line.766">                        case '┘':</a>
-<span class="sourceLineNo">767</span><a id="line.767">                        case '│':</a>
-<span class="sourceLineNo">768</span><a id="line.768">                        case '─':</a>
-<span class="sourceLineNo">769</span><a id="line.769">                        case '┼':</a>
-<span class="sourceLineNo">770</span><a id="line.770">                        case '#':</a>
-<span class="sourceLineNo">771</span><a id="line.771">                            portion[i][j] = (costs.containsKey('#'))</a>
-<span class="sourceLineNo">772</span><a id="line.772">                                    ? costs.get('#')</a>
-<span class="sourceLineNo">773</span><a id="line.773">                                    : squidpony.squidai.DijkstraMap.WALL;</a>
-<span class="sourceLineNo">774</span><a id="line.774">                            break;</a>
-<span class="sourceLineNo">775</span><a id="line.775">                        default:</a>
-<span class="sourceLineNo">776</span><a id="line.776">                            portion[i][j] = defaultValue;</a>
-<span class="sourceLineNo">777</span><a id="line.777">                    }</a>
-<span class="sourceLineNo">778</span><a id="line.778">                }</a>
-<span class="sourceLineNo">779</span><a id="line.779">            }</a>
-<span class="sourceLineNo">780</span><a id="line.780">        }</a>
-<span class="sourceLineNo">781</span><a id="line.781">        return portion;</a>
-<span class="sourceLineNo">782</span><a id="line.782">    }</a>
-<span class="sourceLineNo">783</span><a id="line.783"></a>
-<span class="sourceLineNo">784</span><a id="line.784">    /**</a>
-<span class="sourceLineNo">785</span><a id="line.785">     * Given a char[][] for the map, produces a double[][] that can be used as a map by AStarSearch. It</a>
-<span class="sourceLineNo">786</span><a id="line.786">     * expects any doors to be represented by '+' if closed or '/' if open (which can be ensured by calling</a>
-<span class="sourceLineNo">787</span><a id="line.787">     * {@link #closeDoors(char[][])}) and any walls to be '#' or box drawing characters. Any wall or closed door will be</a>
-<span class="sourceLineNo">788</span><a id="line.788">     * assigned a negative number, meaning it is impassable for AStarSearch, and all other chars will be assigned 1.0,</a>
-<span class="sourceLineNo">789</span><a id="line.789">     * giving them a normal cost.</a>
-<span class="sourceLineNo">790</span><a id="line.790">     *</a>
-<span class="sourceLineNo">791</span><a id="line.791">     * @param map          a dungeon, width by height, with any closed doors as '+' and open doors as '/' as per closeDoors() .</a>
-<span class="sourceLineNo">792</span><a id="line.792">     * @return a cost map suitable for use with AStarSearch</a>
-<span class="sourceLineNo">793</span><a id="line.793">     */</a>
-<span class="sourceLineNo">794</span><a id="line.794">    public static double[][] generateAStarCostMap(char[][] map) {</a>
-<span class="sourceLineNo">795</span><a id="line.795">        int width = map.length;</a>
-<span class="sourceLineNo">796</span><a id="line.796">        int height = map[0].length;</a>
-<span class="sourceLineNo">797</span><a id="line.797">        double[][] portion = new double[width][height];</a>
-<span class="sourceLineNo">798</span><a id="line.798">        for (int i = 0; i &lt; width; i++) {</a>
-<span class="sourceLineNo">799</span><a id="line.799">            for (int j = 0; j &lt; height; j++) {</a>
-<span class="sourceLineNo">800</span><a id="line.800">                switch (map[i][j]) {</a>
-<span class="sourceLineNo">801</span><a id="line.801">                    case '\1':</a>
-<span class="sourceLineNo">802</span><a id="line.802">                    case '├':</a>
-<span class="sourceLineNo">803</span><a id="line.803">                    case '┤':</a>
-<span class="sourceLineNo">804</span><a id="line.804">                    case '┴':</a>
-<span class="sourceLineNo">805</span><a id="line.805">                    case '┬':</a>
-<span class="sourceLineNo">806</span><a id="line.806">                    case '┌':</a>
-<span class="sourceLineNo">807</span><a id="line.807">                    case '┐':</a>
-<span class="sourceLineNo">808</span><a id="line.808">                    case '└':</a>
-<span class="sourceLineNo">809</span><a id="line.809">                    case '┘':</a>
-<span class="sourceLineNo">810</span><a id="line.810">                    case '│':</a>
-<span class="sourceLineNo">811</span><a id="line.811">                    case '─':</a>
-<span class="sourceLineNo">812</span><a id="line.812">                    case '┼':</a>
-<span class="sourceLineNo">813</span><a id="line.813">                    case '#':</a>
-<span class="sourceLineNo">814</span><a id="line.814">                    case '+':</a>
-<span class="sourceLineNo">815</span><a id="line.815">                        portion[i][j] = -1;</a>
-<span class="sourceLineNo">816</span><a id="line.816">                        break;</a>
-<span class="sourceLineNo">817</span><a id="line.817">                    default:</a>
-<span class="sourceLineNo">818</span><a id="line.818">                        portion[i][j] = 1;</a>
-<span class="sourceLineNo">819</span><a id="line.819">                }</a>
-<span class="sourceLineNo">820</span><a id="line.820">            }</a>
-<span class="sourceLineNo">821</span><a id="line.821">        }</a>
-<span class="sourceLineNo">822</span><a id="line.822">        return portion;</a>
-<span class="sourceLineNo">823</span><a id="line.823">    }</a>
-<span class="sourceLineNo">824</span><a id="line.824"></a>
-<span class="sourceLineNo">825</span><a id="line.825">    /**</a>
-<span class="sourceLineNo">826</span><a id="line.826">     * Given a char[][] for the map, a Map of Character keys to Double values that will be used to determine costs, and</a>
-<span class="sourceLineNo">827</span><a id="line.827">     * a double value for unhandled characters, produces a double[][] that can be used as a map by AStarSearch. It</a>
-<span class="sourceLineNo">828</span><a id="line.828">     * expects any doors to be represented by '+' if closed or '/' if open (which can be caused by calling</a>
-<span class="sourceLineNo">829</span><a id="line.829">     * DungeonUtility.closeDoors() ) and any walls to be '#' or box drawing characters. In the parameter costs, there</a>
-<span class="sourceLineNo">830</span><a id="line.830">     * does not need to be an entry for '#' or any box drawing characters, but if one is present for '#' it will apply</a>
-<span class="sourceLineNo">831</span><a id="line.831">     * that cost to both '#' and all box drawing characters, and if one is not present it will default to a negative</a>
-<span class="sourceLineNo">832</span><a id="line.832">     * number, meaning it is impassable for AStarSearch. For any other entry in costs, a char in the 2D char array that</a>
-<span class="sourceLineNo">833</span><a id="line.833">     * matches the key will correspond (at the same x,y position in the returned 2D double array) to that key's value in</a>
-<span class="sourceLineNo">834</span><a id="line.834">     * costs. If a char is used in the map but does not have a corresponding key in costs, it will be given the value of</a>
-<span class="sourceLineNo">835</span><a id="line.835">     * the parameter defaultValue, which is typically 1 unless a creature is limited to only moving in some terrain.</a>
-<span class="sourceLineNo">836</span><a id="line.836">     * &lt;p/&gt;</a>
-<span class="sourceLineNo">837</span><a id="line.837">     * The values in costs are different from those expected for DijkstraMap; negative numbers are impassable, 1 is the</a>
-<span class="sourceLineNo">838</span><a id="line.838">     * cost for a normal walkable tile, and higher numbers are harder to enter.</a>
-<span class="sourceLineNo">839</span><a id="line.839">     * &lt;p/&gt;</a>
-<span class="sourceLineNo">840</span><a id="line.840">     * An example use for this would be to make a creature unable to enter any non-water cell (like a fish),</a>
-<span class="sourceLineNo">841</span><a id="line.841">     * unable to enter doorways (like some mythological versions of vampires), or to make a wheeled vehicle take more</a>
-<span class="sourceLineNo">842</span><a id="line.842">     * time to move across rubble or rough terrain.</a>
-<span class="sourceLineNo">843</span><a id="line.843">     * &lt;p/&gt;</a>
-<span class="sourceLineNo">844</span><a id="line.844">     * A potentially common case that needs to be addressed is NPC movement onto staircases in games that have them;</a>
-<span class="sourceLineNo">845</span><a id="line.845">     * some games may find it desirable for NPCs to block staircases and others may not, but in either case you should</a>
-<span class="sourceLineNo">846</span><a id="line.846">     * give both '&amp;gt;' and '&amp;lt;', the standard characters for staircases, the same value in costs.</a>
-<span class="sourceLineNo">847</span><a id="line.847">     *</a>
-<span class="sourceLineNo">848</span><a id="line.848">     * @param map          a dungeon, width by height, with any closed doors as '+' and open doors as '/' as per closeDoors() .</a>
-<span class="sourceLineNo">849</span><a id="line.849">     * @param costs        a Map of Character keys representing possible elements in map, and Double values for their cost.</a>
-<span class="sourceLineNo">850</span><a id="line.850">     * @param defaultValue a double that will be used as the cost for any characters that don't have a key in costs.</a>
-<span class="sourceLineNo">851</span><a id="line.851">     * @return a cost map suitable for use with AStarSearch</a>
-<span class="sourceLineNo">852</span><a id="line.852">     */</a>
-<span class="sourceLineNo">853</span><a id="line.853">    public static double[][] generateAStarCostMap(char[][] map, Map&lt;Character, Double&gt; costs, double defaultValue) {</a>
-<span class="sourceLineNo">854</span><a id="line.854">        int width = map.length;</a>
-<span class="sourceLineNo">855</span><a id="line.855">        int height = map[0].length;</a>
-<span class="sourceLineNo">856</span><a id="line.856">        double[][] portion = new double[width][height];</a>
-<span class="sourceLineNo">857</span><a id="line.857">        char current;</a>
-<span class="sourceLineNo">858</span><a id="line.858">        for (int i = 0; i &lt; width; i++) {</a>
-<span class="sourceLineNo">859</span><a id="line.859">            for (int j = 0; j &lt; height; j++) {</a>
-<span class="sourceLineNo">860</span><a id="line.860">                current = map[i][j];</a>
-<span class="sourceLineNo">861</span><a id="line.861">                if (costs.containsKey(current)) {</a>
-<span class="sourceLineNo">862</span><a id="line.862">                    portion[i][j] = costs.get(current);</a>
-<span class="sourceLineNo">863</span><a id="line.863">                } else {</a>
-<span class="sourceLineNo">864</span><a id="line.864">                    switch (current) {</a>
-<span class="sourceLineNo">865</span><a id="line.865">                        case '\1':</a>
-<span class="sourceLineNo">866</span><a id="line.866">                        case '├':</a>
-<span class="sourceLineNo">867</span><a id="line.867">                        case '┤':</a>
-<span class="sourceLineNo">868</span><a id="line.868">                        case '┴':</a>
-<span class="sourceLineNo">869</span><a id="line.869">                        case '┬':</a>
-<span class="sourceLineNo">870</span><a id="line.870">                        case '┌':</a>
-<span class="sourceLineNo">871</span><a id="line.871">                        case '┐':</a>
-<span class="sourceLineNo">872</span><a id="line.872">                        case '└':</a>
-<span class="sourceLineNo">873</span><a id="line.873">                        case '┘':</a>
-<span class="sourceLineNo">874</span><a id="line.874">                        case '│':</a>
-<span class="sourceLineNo">875</span><a id="line.875">                        case '─':</a>
-<span class="sourceLineNo">876</span><a id="line.876">                        case '┼':</a>
-<span class="sourceLineNo">877</span><a id="line.877">                        case '#':</a>
-<span class="sourceLineNo">878</span><a id="line.878">                            portion[i][j] = (costs.containsKey('#'))</a>
-<span class="sourceLineNo">879</span><a id="line.879">                                    ? costs.get('#')</a>
-<span class="sourceLineNo">880</span><a id="line.880">                                    : -1;</a>
-<span class="sourceLineNo">881</span><a id="line.881">                            break;</a>
-<span class="sourceLineNo">882</span><a id="line.882">                        default:</a>
-<span class="sourceLineNo">883</span><a id="line.883">                            portion[i][j] = defaultValue;</a>
-<span class="sourceLineNo">884</span><a id="line.884">                    }</a>
-<span class="sourceLineNo">885</span><a id="line.885">                }</a>
-<span class="sourceLineNo">886</span><a id="line.886">            }</a>
-<span class="sourceLineNo">887</span><a id="line.887">        }</a>
-<span class="sourceLineNo">888</span><a id="line.888">        return portion;</a>
-<span class="sourceLineNo">889</span><a id="line.889">    }</a>
-<span class="sourceLineNo">890</span><a id="line.890"></a>
-<span class="sourceLineNo">891</span><a id="line.891">    public static double[][] translateAStarToDijkstra(double[][] astar) {</a>
-<span class="sourceLineNo">892</span><a id="line.892">        if (astar == null) return null;</a>
-<span class="sourceLineNo">893</span><a id="line.893">        if (astar.length &lt;= 0 || astar[0].length &lt;= 0)</a>
-<span class="sourceLineNo">894</span><a id="line.894">            return new double[0][0];</a>
-<span class="sourceLineNo">895</span><a id="line.895">        double[][] dijkstra = new double[astar.length][astar[0].length];</a>
-<span class="sourceLineNo">896</span><a id="line.896">        for (int x = 0; x &lt; astar.length; x++) {</a>
-<span class="sourceLineNo">897</span><a id="line.897">            for (int y = 0; y &lt; astar[x].length; y++) {</a>
-<span class="sourceLineNo">898</span><a id="line.898">                if (astar[x][y] &lt;= 0)</a>
-<span class="sourceLineNo">899</span><a id="line.899">                    dijkstra[x][y] = DijkstraMap.WALL;</a>
-<span class="sourceLineNo">900</span><a id="line.900">                else</a>
-<span class="sourceLineNo">901</span><a id="line.901">                    dijkstra[x][y] = DijkstraMap.FLOOR;</a>
-<span class="sourceLineNo">902</span><a id="line.902">            }</a>
-<span class="sourceLineNo">903</span><a id="line.903">        }</a>
-<span class="sourceLineNo">904</span><a id="line.904">        return dijkstra;</a>
-<span class="sourceLineNo">905</span><a id="line.905">    }</a>
-<span class="sourceLineNo">906</span><a id="line.906"></a>
-<span class="sourceLineNo">907</span><a id="line.907">    public static double[][] translateDijkstraToAStar(double[][] dijkstra) {</a>
-<span class="sourceLineNo">908</span><a id="line.908">        if (dijkstra == null) return null;</a>
-<span class="sourceLineNo">909</span><a id="line.909">        if (dijkstra.length &lt;= 0 || dijkstra[0].length &lt;= 0)</a>
-<span class="sourceLineNo">910</span><a id="line.910">            return new double[0][0];</a>
-<span class="sourceLineNo">911</span><a id="line.911">        double[][] astar = new double[dijkstra.length][dijkstra[0].length];</a>
-<span class="sourceLineNo">912</span><a id="line.912">        for (int x = 0; x &lt; dijkstra.length; x++) {</a>
-<span class="sourceLineNo">913</span><a id="line.913">            for (int y = 0; y &lt; dijkstra[x].length; y++) {</a>
-<span class="sourceLineNo">914</span><a id="line.914">                if (dijkstra[x][y] &gt;  DijkstraMap.FLOOR)</a>
-<span class="sourceLineNo">915</span><a id="line.915">                    astar[x][y] = -1;</a>
-<span class="sourceLineNo">916</span><a id="line.916">                else</a>
-<span class="sourceLineNo">917</span><a id="line.917">                    astar[x][y] = 1;</a>
-<span class="sourceLineNo">918</span><a id="line.918">            }</a>
-<span class="sourceLineNo">919</span><a id="line.919">        }</a>
-<span class="sourceLineNo">920</span><a id="line.920">        return astar;</a>
-<span class="sourceLineNo">921</span><a id="line.921">    }</a>
-<span class="sourceLineNo">922</span><a id="line.922"></a>
-<span class="sourceLineNo">923</span><a id="line.923">    /**</a>
-<span class="sourceLineNo">924</span><a id="line.924">     * @param rng</a>
-<span class="sourceLineNo">925</span><a id="line.925">     * @param map</a>
-<span class="sourceLineNo">926</span><a id="line.926">     * @param acceptable</a>
-<span class="sourceLineNo">927</span><a id="line.927">     * @param frustration The number of trials that this method can do. Usually 16 or</a>
-<span class="sourceLineNo">928</span><a id="line.928">     *                    32.</a>
-<span class="sourceLineNo">929</span><a id="line.929">     * @return A random cell in {@code map} whose symbol is in</a>
-<span class="sourceLineNo">930</span><a id="line.930">     * {@code acceptable}. Or {@code null} if not found.</a>
-<span class="sourceLineNo">931</span><a id="line.931">     */</a>
-<span class="sourceLineNo">932</span><a id="line.932">    public static /* @Nullable */Coord getRandomCell(IRNG rng, char[][] map, Set&lt;Character&gt; acceptable,</a>
-<span class="sourceLineNo">933</span><a id="line.933">                                                     int frustration) {</a>
-<span class="sourceLineNo">934</span><a id="line.934">        if (frustration &lt; 0)</a>
-<span class="sourceLineNo">935</span><a id="line.935">            throw new IllegalStateException("Frustration should not be negative");</a>
-<span class="sourceLineNo">936</span><a id="line.936">        final int width = map.length;</a>
-<span class="sourceLineNo">937</span><a id="line.937">        final int height = width == 0 ? 0 : map[0].length;</a>
-<span class="sourceLineNo">938</span><a id="line.938">        if (width == 0 || height == 0)</a>
-<span class="sourceLineNo">939</span><a id="line.939">            throw new IllegalStateException("Map must be non-empty to get a cell from it");</a>
-<span class="sourceLineNo">940</span><a id="line.940">        int i = 0;</a>
-<span class="sourceLineNo">941</span><a id="line.941">        while (i &lt; frustration) {</a>
-<span class="sourceLineNo">942</span><a id="line.942">            final int x = rng.nextInt(width);</a>
-<span class="sourceLineNo">943</span><a id="line.943">            final int y = rng.nextInt(height);</a>
-<span class="sourceLineNo">944</span><a id="line.944">            if (acceptable.contains(map[x][y]))</a>
-<span class="sourceLineNo">945</span><a id="line.945">                return Coord.get(x, y);</a>
-<span class="sourceLineNo">946</span><a id="line.946">            i++;</a>
-<span class="sourceLineNo">947</span><a id="line.947">        }</a>
-<span class="sourceLineNo">948</span><a id="line.948">        return null;</a>
-<span class="sourceLineNo">949</span><a id="line.949">    }</a>
-<span class="sourceLineNo">950</span><a id="line.950"></a>
-<span class="sourceLineNo">951</span><a id="line.951">    /**</a>
-<span class="sourceLineNo">952</span><a id="line.952">     * @param level dungeon/map level as 2D char array. x,y indexed</a>
-<span class="sourceLineNo">953</span><a id="line.953">     * @param c     Coord to check</a>
-<span class="sourceLineNo">954</span><a id="line.954">     * @return {@code true} if {@code c} is valid in {@code level}, {@code false} otherwise.</a>
-<span class="sourceLineNo">955</span><a id="line.955">     */</a>
-<span class="sourceLineNo">956</span><a id="line.956">    public static boolean inLevel(char[][] level, Coord c) {</a>
-<span class="sourceLineNo">957</span><a id="line.957">        return inLevel(level, c.x, c.y);</a>
-<span class="sourceLineNo">958</span><a id="line.958">    }</a>
-<span class="sourceLineNo">959</span><a id="line.959"></a>
-<span class="sourceLineNo">960</span><a id="line.960">    /**</a>
-<span class="sourceLineNo">961</span><a id="line.961">     * @param level dungeon/map level as 2D char array. x,y indexed</a>
-<span class="sourceLineNo">962</span><a id="line.962">     * @param x     x coordinate to check</a>
-<span class="sourceLineNo">963</span><a id="line.963">     * @param y     y coordinate to check</a>
-<span class="sourceLineNo">964</span><a id="line.964">     * @return {@code true} if {@code c} is valid in {@code level}, {@code false} otherwise.</a>
-<span class="sourceLineNo">965</span><a id="line.965">     */</a>
-<span class="sourceLineNo">966</span><a id="line.966">    public static boolean inLevel(char[][] level, int x, int y) {</a>
-<span class="sourceLineNo">967</span><a id="line.967">        return 0 &lt;= x &amp;&amp; x &lt; level.length &amp;&amp; 0 &lt;= y &amp;&amp; y &lt; level[x].length;</a>
-<span class="sourceLineNo">968</span><a id="line.968">    }</a>
-<span class="sourceLineNo">969</span><a id="line.969"></a>
-<span class="sourceLineNo">970</span><a id="line.970">    /**</a>
-<span class="sourceLineNo">971</span><a id="line.971">     * @param level dungeon/map level as 2D double array. x,y indexed</a>
-<span class="sourceLineNo">972</span><a id="line.972">     * @param c     Coord to check</a>
-<span class="sourceLineNo">973</span><a id="line.973">     * @return {@code true} if {@code c} is valid in {@code level}, {@code false} otherwise.</a>
-<span class="sourceLineNo">974</span><a id="line.974">     */</a>
-<span class="sourceLineNo">975</span><a id="line.975">    public static boolean inLevel(double[][] level, Coord c) {</a>
-<span class="sourceLineNo">976</span><a id="line.976">        return inLevel(level, c.x, c.y);</a>
-<span class="sourceLineNo">977</span><a id="line.977">    }</a>
-<span class="sourceLineNo">978</span><a id="line.978"></a>
-<span class="sourceLineNo">979</span><a id="line.979">    /**</a>
-<span class="sourceLineNo">980</span><a id="line.980">     * @param level dungeon/map level as 2D double array. x,y indexed</a>
-<span class="sourceLineNo">981</span><a id="line.981">     * @param x     x coordinate to check</a>
-<span class="sourceLineNo">982</span><a id="line.982">     * @param y     y coordinate to check</a>
-<span class="sourceLineNo">983</span><a id="line.983">     * @return {@code true} if {@code c} is valid in {@code level}, {@code false} otherwise.</a>
-<span class="sourceLineNo">984</span><a id="line.984">     */</a>
-<span class="sourceLineNo">985</span><a id="line.985">    public static boolean inLevel(double[][] level, int x, int y) {</a>
-<span class="sourceLineNo">986</span><a id="line.986">        return 0 &lt;= x &amp;&amp; x &lt; level.length &amp;&amp; 0 &lt;= y &amp;&amp; y &lt; level[x].length;</a>
-<span class="sourceLineNo">987</span><a id="line.987">    }</a>
-<span class="sourceLineNo">988</span><a id="line.988"></a>
-<span class="sourceLineNo">989</span><a id="line.989">    /**</a>
-<span class="sourceLineNo">990</span><a id="line.990">     * @param level a dungeon/map level as 2D array. x,y indexed</a>
-<span class="sourceLineNo">991</span><a id="line.991">     * @param c     Coord to check</a>
-<span class="sourceLineNo">992</span><a id="line.992">     * @return {@code true} if {@code c} is valid in {@code level}, {@code false} otherwise.</a>
-<span class="sourceLineNo">993</span><a id="line.993">     */</a>
-<span class="sourceLineNo">994</span><a id="line.994">    public static &lt;T&gt; boolean inLevel(T[][] level, Coord c) {</a>
-<span class="sourceLineNo">995</span><a id="line.995">        return inLevel(level, c.x, c.y);</a>
-<span class="sourceLineNo">996</span><a id="line.996">    }</a>
-<span class="sourceLineNo">997</span><a id="line.997"></a>
-<span class="sourceLineNo">998</span><a id="line.998">    /**</a>
-<span class="sourceLineNo">999</span><a id="line.999">     * @param level a dungeon/map level as 2D array. x,y indexed</a>
-<span class="sourceLineNo">1000</span><a id="line.1000">     * @param x     x coordinate to check</a>
-<span class="sourceLineNo">1001</span><a id="line.1001">     * @param y     y coordinate to check</a>
-<span class="sourceLineNo">1002</span><a id="line.1002">     * @return {@code true} if {@code c} is valid in {@code level}, {@code false} otherwise.</a>
-<span class="sourceLineNo">1003</span><a id="line.1003">     */</a>
-<span class="sourceLineNo">1004</span><a id="line.1004">    public static &lt;T&gt; boolean inLevel(T[][] level, int x, int y) {</a>
-<span class="sourceLineNo">1005</span><a id="line.1005">        return 0 &lt;= x &amp;&amp; x &lt; level.length &amp;&amp; 0 &lt;= y &amp;&amp; y &lt; level[x].length;</a>
-<span class="sourceLineNo">1006</span><a id="line.1006">    }</a>
-<span class="sourceLineNo">1007</span><a id="line.1007">    </a>
-<span class="sourceLineNo">1008</span><a id="line.1008">    /**</a>
-<span class="sourceLineNo">1009</span><a id="line.1009">     * Quickly counts the number of char elements in level that are equal to match.</a>
-<span class="sourceLineNo">1010</span><a id="line.1010">     *</a>
-<span class="sourceLineNo">1011</span><a id="line.1011">     * @param level the 2D char array to count cells in</a>
-<span class="sourceLineNo">1012</span><a id="line.1012">     * @param match the char to search for</a>
-<span class="sourceLineNo">1013</span><a id="line.1013">     * @return the number of cells that matched</a>
-<span class="sourceLineNo">1014</span><a id="line.1014">     */</a>
-<span class="sourceLineNo">1015</span><a id="line.1015">    public static int countCells(char[][] level, char match) {</a>
-<span class="sourceLineNo">1016</span><a id="line.1016">        if (level == null || level.length == 0)</a>
-<span class="sourceLineNo">1017</span><a id="line.1017">            return 0;</a>
-<span class="sourceLineNo">1018</span><a id="line.1018">        int counter = 0;</a>
-<span class="sourceLineNo">1019</span><a id="line.1019">        for (int x = 0; x &lt; level.length; x++) {</a>
-<span class="sourceLineNo">1020</span><a id="line.1020">            for (int y = 0; y &lt; level[x].length; y++) {</a>
-<span class="sourceLineNo">1021</span><a id="line.1021">                if (level[x][y] == match) counter++;</a>
-<span class="sourceLineNo">1022</span><a id="line.1022">            }</a>
-<span class="sourceLineNo">1023</span><a id="line.1023">        }</a>
-<span class="sourceLineNo">1024</span><a id="line.1024">        return counter;</a>
-<span class="sourceLineNo">1025</span><a id="line.1025">    }</a>
-<span class="sourceLineNo">1026</span><a id="line.1026"></a>
-<span class="sourceLineNo">1027</span><a id="line.1027">    /**</a>
-<span class="sourceLineNo">1028</span><a id="line.1028">     * For when you want to print a 2D char array. Prints on multiple lines, with a trailing newline.</a>
-<span class="sourceLineNo">1029</span><a id="line.1029">     *</a>
-<span class="sourceLineNo">1030</span><a id="line.1030">     * @param level a 2D char array to print with a trailing newline</a>
-<span class="sourceLineNo">1031</span><a id="line.1031">     */</a>
-<span class="sourceLineNo">1032</span><a id="line.1032">    public static void debugPrint(char[][] level) {</a>
-<span class="sourceLineNo">1033</span><a id="line.1033">        if (level == null || level.length == 0 || level[0].length == 0)</a>
-<span class="sourceLineNo">1034</span><a id="line.1034">            System.out.println("INVALID DUNGEON LEVEL");</a>
-<span class="sourceLineNo">1035</span><a id="line.1035">        else {</a>
-<span class="sourceLineNo">1036</span><a id="line.1036">            for (int y = 0; y &lt; level[0].length; y++) {</a>
-<span class="sourceLineNo">1037</span><a id="line.1037">                for (int x = 0; x &lt; level.length; x++) {</a>
-<span class="sourceLineNo">1038</span><a id="line.1038">                    System.out.print(level[x][y]);</a>
-<span class="sourceLineNo">1039</span><a id="line.1039">                }</a>
-<span class="sourceLineNo">1040</span><a id="line.1040">                System.out.println();</a>
-<span class="sourceLineNo">1041</span><a id="line.1041"></a>
-<span class="sourceLineNo">1042</span><a id="line.1042">            }</a>
-<span class="sourceLineNo">1043</span><a id="line.1043">        }</a>
-<span class="sourceLineNo">1044</span><a id="line.1044">    }</a>
-<span class="sourceLineNo">1045</span><a id="line.1045"></a>
-<span class="sourceLineNo">1046</span><a id="line.1046">    /**</a>
-<span class="sourceLineNo">1047</span><a id="line.1047">     * Changes the outer edge of a char[][] to the wall char, '#'.</a>
-<span class="sourceLineNo">1048</span><a id="line.1048">     *</a>
-<span class="sourceLineNo">1049</span><a id="line.1049">     * @param map A char[][] that stores map data; will be modified in place</a>
-<span class="sourceLineNo">1050</span><a id="line.1050">     * @return the modified-in-place map with its edge replaced with '#'</a>
-<span class="sourceLineNo">1051</span><a id="line.1051">     */</a>
-<span class="sourceLineNo">1052</span><a id="line.1052">    public static char[][] wallWrap(char[][] map) {</a>
-<span class="sourceLineNo">1053</span><a id="line.1053">        int upperY = map[0].length - 1;</a>
-<span class="sourceLineNo">1054</span><a id="line.1054">        int upperX = map.length - 1;</a>
-<span class="sourceLineNo">1055</span><a id="line.1055">        for (int i = 0; i &lt; map.length; i++) {</a>
-<span class="sourceLineNo">1056</span><a id="line.1056">            map[i][0] = '#';</a>
-<span class="sourceLineNo">1057</span><a id="line.1057">            map[i][upperY] = '#';</a>
-<span class="sourceLineNo">1058</span><a id="line.1058">        }</a>
-<span class="sourceLineNo">1059</span><a id="line.1059">        for (int i = 0; i &lt; map[0].length; i++) {</a>
-<span class="sourceLineNo">1060</span><a id="line.1060">            map[0][i] = '#';</a>
-<span class="sourceLineNo">1061</span><a id="line.1061">            map[upperX][i] = '#';</a>
-<span class="sourceLineNo">1062</span><a id="line.1062">        }</a>
-<span class="sourceLineNo">1063</span><a id="line.1063">        return map;</a>
-<span class="sourceLineNo">1064</span><a id="line.1064">    }</a>
-<span class="sourceLineNo">1065</span><a id="line.1065">    public static ArrayList&lt;Coord&gt; pointPath(int width, int height, IRNG rng) {</a>
-<span class="sourceLineNo">1066</span><a id="line.1066">        if (width &lt;= 2 || height &lt;= 2)</a>
-<span class="sourceLineNo">1067</span><a id="line.1067">            throw new IllegalArgumentException("width and height must be greater than 2");</a>
-<span class="sourceLineNo">1068</span><a id="line.1068">        CoordPacker.init();</a>
-<span class="sourceLineNo">1069</span><a id="line.1069">        long columnAlterations = (rng.nextLong() &amp; 0xFFFFFFFFFFFFL);</a>
-<span class="sourceLineNo">1070</span><a id="line.1070">        float columnBase = width / (Long.bitCount(columnAlterations) + 48.0f);</a>
-<span class="sourceLineNo">1071</span><a id="line.1071">        long rowAlterations = (rng.nextLong() &amp; 0xFFFFFFFFFFFFL);</a>
-<span class="sourceLineNo">1072</span><a id="line.1072">        float rowBase = height / (Long.bitCount(rowAlterations) + 48.0f);</a>
-<span class="sourceLineNo">1073</span><a id="line.1073"></a>
-<span class="sourceLineNo">1074</span><a id="line.1074">        int[] columns = new int[16], rows = new int[16];</a>
-<span class="sourceLineNo">1075</span><a id="line.1075">        int csum = 0, rsum = 0;</a>
-<span class="sourceLineNo">1076</span><a id="line.1076">        long b = 7;</a>
-<span class="sourceLineNo">1077</span><a id="line.1077">        for (int i = 0; i &lt; 16; i++, b &lt;&lt;= 3) {</a>
-<span class="sourceLineNo">1078</span><a id="line.1078">            columns[i] = csum + (int) (columnBase * 0.5f * (3 + Long.bitCount(columnAlterations &amp; b)));</a>
-<span class="sourceLineNo">1079</span><a id="line.1079">            csum += (int) (columnBase * (3 + Long.bitCount(columnAlterations &amp; b)));</a>
-<span class="sourceLineNo">1080</span><a id="line.1080">            rows[i] = rsum + (int) (rowBase * 0.5f * (3 + Long.bitCount(rowAlterations &amp; b)));</a>
-<span class="sourceLineNo">1081</span><a id="line.1081">            rsum += (int) (rowBase * (3 + Long.bitCount(rowAlterations &amp; b)));</a>
-<span class="sourceLineNo">1082</span><a id="line.1082">        }</a>
-<span class="sourceLineNo">1083</span><a id="line.1083">        int cs = width - csum;</a>
-<span class="sourceLineNo">1084</span><a id="line.1084">        int rs = height - rsum;</a>
-<span class="sourceLineNo">1085</span><a id="line.1085">        int cs2 = cs, rs2 = rs, cs3 = cs, rs3 = rs;</a>
-<span class="sourceLineNo">1086</span><a id="line.1086">        for (int i = 0; i &lt;= 7; i++) {</a>
-<span class="sourceLineNo">1087</span><a id="line.1087">            cs2 = cs2 * i / 7;</a>
-<span class="sourceLineNo">1088</span><a id="line.1088">            rs2 = rs2 * i / 7;</a>
-<span class="sourceLineNo">1089</span><a id="line.1089">            columns[i] -= cs2;</a>
-<span class="sourceLineNo">1090</span><a id="line.1090">            rows[i] -= rs2;</a>
-<span class="sourceLineNo">1091</span><a id="line.1091">        }</a>
-<span class="sourceLineNo">1092</span><a id="line.1092">        for (int i = 15; i &gt;= 8; i--) {</a>
-<span class="sourceLineNo">1093</span><a id="line.1093">            cs3 = cs3 * (i - 8) &gt;&gt; 3;</a>
-<span class="sourceLineNo">1094</span><a id="line.1094">            rs3 = rs3 * (i - 8) &gt;&gt; 3;</a>
-<span class="sourceLineNo">1095</span><a id="line.1095">            columns[i] += cs3;</a>
-<span class="sourceLineNo">1096</span><a id="line.1096">            rows[i] += rs3;</a>
-<span class="sourceLineNo">1097</span><a id="line.1097">        }</a>
-<span class="sourceLineNo">1098</span><a id="line.1098"></a>
-<span class="sourceLineNo">1099</span><a id="line.1099">        ArrayList&lt;Coord&gt; points = new ArrayList&lt;&gt;(80);</a>
-<span class="sourceLineNo">1100</span><a id="line.1100">        int m = rng.nextInt(64);</a>
-<span class="sourceLineNo">1101</span><a id="line.1101">        Coord temp = CoordPacker.mooreToCoord(m), next;</a>
-<span class="sourceLineNo">1102</span><a id="line.1102">        temp = Coord.get(columns[temp.x], rows[temp.y]);</a>
-<span class="sourceLineNo">1103</span><a id="line.1103">        for (int i = 0, r; i &lt; 256; r = rng.between(4, 12), i += r, m += r) {</a>
-<span class="sourceLineNo">1104</span><a id="line.1104">            next = CoordPacker.mooreToCoord(m);</a>
-<span class="sourceLineNo">1105</span><a id="line.1105">            next = Coord.get(columns[next.x], rows[next.y]);</a>
-<span class="sourceLineNo">1106</span><a id="line.1106">            points.addAll(OrthoLine.line(temp, next));</a>
-<span class="sourceLineNo">1107</span><a id="line.1107">            temp = next;</a>
-<span class="sourceLineNo">1108</span><a id="line.1108">        }</a>
-<span class="sourceLineNo">1109</span><a id="line.1109">        points.add(points.get(0));</a>
-<span class="sourceLineNo">1110</span><a id="line.1110">        return points;</a>
-<span class="sourceLineNo">1111</span><a id="line.1111">    }</a>
-<span class="sourceLineNo">1112</span><a id="line.1112"></a>
-<span class="sourceLineNo">1113</span><a id="line.1113">    /**</a>
-<span class="sourceLineNo">1114</span><a id="line.1114">     * Ensures a path exists in a rough ring around the map by first creating the path (using</a>
-<span class="sourceLineNo">1115</span><a id="line.1115">     * {@link #pointPath(int, int, IRNG)} with the given IRNG), then finding chars in blocking that are on that path and</a>
-<span class="sourceLineNo">1116</span><a id="line.1116">     * replacing them with replacement. Modifies map in-place (!) and returns an ArrayList of Coord points that will</a>
-<span class="sourceLineNo">1117</span><a id="line.1117">     * always be on the path.</a>
-<span class="sourceLineNo">1118</span><a id="line.1118">     *</a>
-<span class="sourceLineNo">1119</span><a id="line.1119">     * @param map         a 2D char array, x then y, etc. that will be modified directly; this is the "returned map"</a>
-<span class="sourceLineNo">1120</span><a id="line.1120">     * @param rng         used for random factors in the path choice</a>
-<span class="sourceLineNo">1121</span><a id="line.1121">     * @param replacement the char that will fill be used where a path needs to be carved out; usually '.'</a>
-<span class="sourceLineNo">1122</span><a id="line.1122">     * @param blocking    an array or vararg of char that are considered blocking for the path and will be replaced if</a>
-<span class="sourceLineNo">1123</span><a id="line.1123">     *                    they are in the way</a>
-<span class="sourceLineNo">1124</span><a id="line.1124">     * @return the ArrayList of Coord points that are on the carved path, including existing non-blocking cells; will be empty if any parameters are invalid</a>
-<span class="sourceLineNo">1125</span><a id="line.1125">     */</a>
-<span class="sourceLineNo">1126</span><a id="line.1126">    public static ArrayList&lt;Coord&gt; ensurePath(char[][] map, IRNG rng, char replacement, char... blocking) {</a>
-<span class="sourceLineNo">1127</span><a id="line.1127">        if (map == null || map.length &lt;= 0 || blocking == null || blocking.length &lt;= 0)</a>
-<span class="sourceLineNo">1128</span><a id="line.1128">            return new ArrayList&lt;Coord&gt;(0);</a>
-<span class="sourceLineNo">1129</span><a id="line.1129">        int width = map.length, height = map[0].length;</a>
-<span class="sourceLineNo">1130</span><a id="line.1130">        ArrayList&lt;Coord&gt; points = pointPath(width, height, rng);</a>
-<span class="sourceLineNo">1131</span><a id="line.1131">        char[] blocks = new char[blocking.length];</a>
-<span class="sourceLineNo">1132</span><a id="line.1132">        System.arraycopy(blocking, 0, blocks, 0, blocking.length);</a>
-<span class="sourceLineNo">1133</span><a id="line.1133">        Arrays.sort(blocks);</a>
-<span class="sourceLineNo">1134</span><a id="line.1134">        for (Coord c : points) {</a>
-<span class="sourceLineNo">1135</span><a id="line.1135">            if (c.x &gt;= 0 &amp;&amp; c.x &lt; width &amp;&amp; c.y &gt;= 0 &amp;&amp; c.y &lt; height &amp;&amp; Arrays.binarySearch(blocks, map[c.x][c.y]) &gt;= 0) {</a>
-<span class="sourceLineNo">1136</span><a id="line.1136">                map[c.x][c.y] = replacement;</a>
-<span class="sourceLineNo">1137</span><a id="line.1137">            }</a>
-<span class="sourceLineNo">1138</span><a id="line.1138">        }</a>
-<span class="sourceLineNo">1139</span><a id="line.1139">        return points;</a>
-<span class="sourceLineNo">1140</span><a id="line.1140">    }</a>
-<span class="sourceLineNo">1141</span><a id="line.1141"></a>
-<span class="sourceLineNo">1142</span><a id="line.1142">    public static ArrayList&lt;Coord&gt; allMatching(char[][] map, char... matching) {</a>
-<span class="sourceLineNo">1143</span><a id="line.1143">        if (map == null || map.length &lt;= 0 || matching == null || matching.length &lt;= 0)</a>
-<span class="sourceLineNo">1144</span><a id="line.1144">            return new ArrayList&lt;Coord&gt;(0);</a>
-<span class="sourceLineNo">1145</span><a id="line.1145">        int width = map.length, height = map[0].length;</a>
-<span class="sourceLineNo">1146</span><a id="line.1146">        char[] matches = new char[matching.length];</a>
-<span class="sourceLineNo">1147</span><a id="line.1147">        System.arraycopy(matching, 0, matches, 0, matching.length);</a>
-<span class="sourceLineNo">1148</span><a id="line.1148">        Arrays.sort(matches);</a>
-<span class="sourceLineNo">1149</span><a id="line.1149">        ArrayList&lt;Coord&gt; points = new ArrayList&lt;Coord&gt;(map.length * 4);</a>
-<span class="sourceLineNo">1150</span><a id="line.1150">        for (int x = 0; x &lt; width; x++) {</a>
-<span class="sourceLineNo">1151</span><a id="line.1151">            for (int y = 0; y &lt; height; y++) {</a>
-<span class="sourceLineNo">1152</span><a id="line.1152">                if (Arrays.binarySearch(matches, map[x][y]) &gt;= 0)</a>
-<span class="sourceLineNo">1153</span><a id="line.1153">                    points.add(Coord.get(x, y));</a>
-<span class="sourceLineNo">1154</span><a id="line.1154">            }</a>
-<span class="sourceLineNo">1155</span><a id="line.1155">        }</a>
-<span class="sourceLineNo">1156</span><a id="line.1156">        return points;</a>
-<span class="sourceLineNo">1157</span><a id="line.1157">    }</a>
-<span class="sourceLineNo">1158</span><a id="line.1158"></a>
-<span class="sourceLineNo">1159</span><a id="line.1159">    /**</a>
-<span class="sourceLineNo">1160</span><a id="line.1160">     * Gets a List of Coord that are within radius distance of (x,y), and appends them to buf if it is non-null or makes</a>
-<span class="sourceLineNo">1161</span><a id="line.1161">     * a fresh List to append to otherwise. Returns buf if non-null, else the fresh List of Coord. May produce Coord</a>
-<span class="sourceLineNo">1162</span><a id="line.1162">     * values that are not within the boundaries of a map, such as (-5,-4), if the center is too close to the edge or</a>
-<span class="sourceLineNo">1163</span><a id="line.1163">     * radius is too high. You can use {@link squidpony.squidgrid.Radius#inCircle(int, int, int, boolean, int, int, List)}</a>
-<span class="sourceLineNo">1164</span><a id="line.1164">     * with surpassEdges as false if you want to limit Coords to within the map, or the more general</a>
-<span class="sourceLineNo">1165</span><a id="line.1165">     * {@link squidpony.squidgrid.Radius#pointsInside(int, int, int, boolean, int, int, List)} on a Radius.SQUARE or</a>
-<span class="sourceLineNo">1166</span><a id="line.1166">     * Radius.DIAMOND enum value if you want a square or diamond shape.</a>
-<span class="sourceLineNo">1167</span><a id="line.1167">     *</a>
-<span class="sourceLineNo">1168</span><a id="line.1168">     * @param x      center x of the circle</a>
-<span class="sourceLineNo">1169</span><a id="line.1169">     * @param y      center y of the circle</a>
-<span class="sourceLineNo">1170</span><a id="line.1170">     * @param radius inclusive radius to extend from the center; radius 0 gives just the center</a>
-<span class="sourceLineNo">1171</span><a id="line.1171">     * @param buf    Where to add the coordinates, or null for this method to</a>
-<span class="sourceLineNo">1172</span><a id="line.1172">     *               allocate a fresh list.</a>
-<span class="sourceLineNo">1173</span><a id="line.1173">     * @return The coordinates of a circle centered {@code (x, y)}, whose</a>
-<span class="sourceLineNo">1174</span><a id="line.1174">     * diameter is {@code (radius * 2) + 1}.</a>
-<span class="sourceLineNo">1175</span><a id="line.1175">     * @see squidpony.squidgrid.Radius#inCircle(int, int, int, boolean, int, int, List) if you want to keep the Coords within the bounds of the map</a>
-<span class="sourceLineNo">1176</span><a id="line.1176">     */</a>
-<span class="sourceLineNo">1177</span><a id="line.1177">    public static List&lt;Coord&gt; circle(int x, int y, int radius, /* @Nullable */ List&lt;Coord&gt; buf) {</a>
-<span class="sourceLineNo">1178</span><a id="line.1178">        final List&lt;Coord&gt; result = buf == null ? new ArrayList&lt;Coord&gt;() : buf;</a>
-<span class="sourceLineNo">1179</span><a id="line.1179">        radius = Math.max(0, radius);</a>
-<span class="sourceLineNo">1180</span><a id="line.1180">        for (int dx = -radius; dx &lt;= radius; ++dx) {</a>
-<span class="sourceLineNo">1181</span><a id="line.1181">            final int high = (int) Math.floor(Math.sqrt(radius * radius - dx * dx));</a>
-<span class="sourceLineNo">1182</span><a id="line.1182">            for (int dy = -high; dy &lt;= high; ++dy) {</a>
-<span class="sourceLineNo">1183</span><a id="line.1183">                result.add(Coord.get(x + dx, y + dy));</a>
-<span class="sourceLineNo">1184</span><a id="line.1184">            }</a>
-<span class="sourceLineNo">1185</span><a id="line.1185">        }</a>
-<span class="sourceLineNo">1186</span><a id="line.1186">        return result;</a>
-<span class="sourceLineNo">1187</span><a id="line.1187">    }</a>
-<span class="sourceLineNo">1188</span><a id="line.1188">}</a>
+<span class="sourceLineNo">646</span><a id="line.646">    /**</a>
+<span class="sourceLineNo">647</span><a id="line.647">     * Given a char[][] for the map, produces a double[][] that can be used with FOV.calculateFOV(). It expects any</a>
+<span class="sourceLineNo">648</span><a id="line.648">     * doors to be represented by '+' if closed or '/' if open (which can be caused by calling</a>
+<span class="sourceLineNo">649</span><a id="line.649">     * DungeonUtility.closeDoors() ), any walls to be '#' or box drawing characters, and it doesn't care what other</a>
+<span class="sourceLineNo">650</span><a id="line.650">     * chars are used (only doors, including open ones, and walls obscure light and thus have a resistance by default).</a>
+<span class="sourceLineNo">651</span><a id="line.651">     * &lt;br&gt;</a>
+<span class="sourceLineNo">652</span><a id="line.652">     * This is here for backwards-compatibility; this method delegates to {@link FOV#generateResistances(char[][])}.</a>
+<span class="sourceLineNo">653</span><a id="line.653">     *</a>
+<span class="sourceLineNo">654</span><a id="line.654">     * @param map a dungeon, width by height, with any closed doors as '+' and open doors as '/' as per closeDoors()</a>
+<span class="sourceLineNo">655</span><a id="line.655">     * @return a resistance map suitable for use with the FOV class, with clear cells assigned 0.0 and blocked ones 1.0</a>
+<span class="sourceLineNo">656</span><a id="line.656">     */</a>
+<span class="sourceLineNo">657</span><a id="line.657">    public static double[][] generateResistances(char[][] map) {</a>
+<span class="sourceLineNo">658</span><a id="line.658">        return FOV.generateResistances(map);</a>
+<span class="sourceLineNo">659</span><a id="line.659">    }</a>
+<span class="sourceLineNo">660</span><a id="line.660"></a>
+<span class="sourceLineNo">661</span><a id="line.661">    /**</a>
+<span class="sourceLineNo">662</span><a id="line.662">     * Given a char[][] for the map that should use box drawing characters (as produced by</a>
+<span class="sourceLineNo">663</span><a id="line.663">     * {@link #hashesToLines(char[][], boolean)}), produces a double[][] with triple width and triple height that can be</a>
+<span class="sourceLineNo">664</span><a id="line.664">     * used with FOV.calculateFOV() in classes that use subcell lighting. Importantly, this only considers a "thin line"</a>
+<span class="sourceLineNo">665</span><a id="line.665">     * of wall to be blocking (matching the box drawing character), instead of the whole 3x3 area. This expects any</a>
+<span class="sourceLineNo">666</span><a id="line.666">     * doors to be represented by '+' if closed or '/' if open (which can be caused by calling</a>
+<span class="sourceLineNo">667</span><a id="line.667">     * {@link #closeDoors(char[][])}), thick vegetation or other concealing obstructions to be '"', any normal walls to</a>
+<span class="sourceLineNo">668</span><a id="line.668">     * be box drawing characters, any cells that block all subcells to be '#', and it doesn't care what other chars are</a>
+<span class="sourceLineNo">669</span><a id="line.669">     * used (only doors, including open ones, vegetation, and walls obscure light and thus have a resistance normally).</a>
+<span class="sourceLineNo">670</span><a id="line.670">     * &lt;br&gt;</a>
+<span class="sourceLineNo">671</span><a id="line.671">     * This is here for backwards-compatibility; this method delegates to {@link FOV#generateResistances3x3(char[][])}</a>
+<span class="sourceLineNo">672</span><a id="line.672">     * </a>
+<span class="sourceLineNo">673</span><a id="line.673">     * @param map a dungeon, width by height, with any closed doors as '+' and open doors as '/' as per closeDoors()</a>
+<span class="sourceLineNo">674</span><a id="line.674">     * @return a resistance map suitable for use with the FOV class and subcell lighting, with triple width/height</a>
+<span class="sourceLineNo">675</span><a id="line.675">     */</a>
+<span class="sourceLineNo">676</span><a id="line.676">    public static double[][] generateResistances3x3(char[][] map) {</a>
+<span class="sourceLineNo">677</span><a id="line.677">        return FOV.generateResistances3x3(map);</a>
+<span class="sourceLineNo">678</span><a id="line.678">    }</a>
+<span class="sourceLineNo">679</span><a id="line.679"></a>
+<span class="sourceLineNo">680</span><a id="line.680">    /**</a>
+<span class="sourceLineNo">681</span><a id="line.681">     * Given a char[][] for the map, produces a double[][] that can be used with FOV.calculateFOV(), but does not treat</a>
+<span class="sourceLineNo">682</span><a id="line.682">     * any cells as partly transparent, only fully-blocking or fully-permitting light. This is mainly useful if you</a>
+<span class="sourceLineNo">683</span><a id="line.683">     * expect the FOV radius to be very high or (effectively) infinite, since anything less than complete blockage would</a>
+<span class="sourceLineNo">684</span><a id="line.684">     * be passed through by infinite-radius FOV. This expects any doors to be represented by '+' if closed or '/' if</a>
+<span class="sourceLineNo">685</span><a id="line.685">     * open (most door placement defaults to a mix of '+' and '/', so by calling</a>
+<span class="sourceLineNo">686</span><a id="line.686">     * {@link DungeonUtility#closeDoors(char[][])} you can close all doors at the start), and any walls to be '#' or</a>
+<span class="sourceLineNo">687</span><a id="line.687">     * box drawing characters. This will assign 1.0 resistance to walls and closed doors or 0.0 for any other cell.</a>
+<span class="sourceLineNo">688</span><a id="line.688">     * &lt;br&gt;</a>
+<span class="sourceLineNo">689</span><a id="line.689">     * This is here for backwards-compatibility; this method delegates to {@link FOV#generateSimpleResistances(char[][])}.</a>
+<span class="sourceLineNo">690</span><a id="line.690">     *</a>
+<span class="sourceLineNo">691</span><a id="line.691">     * @param map a dungeon, width by height, with any closed doors as '+' and open doors as '/' as per closeDoors()</a>
+<span class="sourceLineNo">692</span><a id="line.692">     * @return a resistance map suitable for use with the FOV class, but with no partially transparent cells</a>
+<span class="sourceLineNo">693</span><a id="line.693">     */</a>
+<span class="sourceLineNo">694</span><a id="line.694">    public static double[][] generateSimpleResistances(char[][] map) {</a>
+<span class="sourceLineNo">695</span><a id="line.695">        return FOV.generateSimpleResistances(map);</a>
+<span class="sourceLineNo">696</span><a id="line.696">    }</a>
+<span class="sourceLineNo">697</span><a id="line.697"></a>
+<span class="sourceLineNo">698</span><a id="line.698">    /**</a>
+<span class="sourceLineNo">699</span><a id="line.699">     * Given a char[][] for the map that should use box drawing characters (as produced by</a>
+<span class="sourceLineNo">700</span><a id="line.700">     * {@link #hashesToLines(char[][], boolean)}), produces a double[][] with triple width and triple height that can be</a>
+<span class="sourceLineNo">701</span><a id="line.701">     * used with FOV.calculateFOV() in classes that use subcell lighting. This expects any doors to be represented by</a>
+<span class="sourceLineNo">702</span><a id="line.702">     * '+' if closed or '/' if open (most door placement defaults to a mix of '+' and '/', so by calling</a>
+<span class="sourceLineNo">703</span><a id="line.703">     * {@link DungeonUtility#closeDoors(char[][])} you can close all doors at the start), any walls to be box drawing</a>
+<span class="sourceLineNo">704</span><a id="line.704">     * characters, and any cells that block all subcells within their area to be '#'. This will assign 1.0 resistance to</a>
+<span class="sourceLineNo">705</span><a id="line.705">     * walls and closed doors where a line of the box drawing char would block light, or 0.0 for any other subcell.</a>
+<span class="sourceLineNo">706</span><a id="line.706">     * &lt;br&gt;</a>
+<span class="sourceLineNo">707</span><a id="line.707">     * This is here for backwards-compatibility; this method delegates to {@link FOV#generateSimpleResistances3x3(char[][])}.</a>
+<span class="sourceLineNo">708</span><a id="line.708">     *</a>
+<span class="sourceLineNo">709</span><a id="line.709">     * @param map a dungeon, width by height, with any closed doors as '+' and open doors as '/' as per closeDoors()</a>
+<span class="sourceLineNo">710</span><a id="line.710">     * @return a resistance map suitable for use with the FOV class and subcell lighting, with triple width/height</a>
+<span class="sourceLineNo">711</span><a id="line.711">     */</a>
+<span class="sourceLineNo">712</span><a id="line.712">    public static double[][] generateSimpleResistances3x3(char[][] map) {</a>
+<span class="sourceLineNo">713</span><a id="line.713">        return FOV.generateSimpleResistances3x3(map);</a>
+<span class="sourceLineNo">714</span><a id="line.714">    }</a>
+<span class="sourceLineNo">715</span><a id="line.715"></a>
+<span class="sourceLineNo">716</span><a id="line.716">    /**</a>
+<span class="sourceLineNo">717</span><a id="line.717">     * Given a char[][] for the map, a Map of Character keys to Double values that will be used to determine costs, and</a>
+<span class="sourceLineNo">718</span><a id="line.718">     * a double value for unhandled characters, produces a double[][] that can be used as a costMap by DijkstraMap. It</a>
+<span class="sourceLineNo">719</span><a id="line.719">     * expects any doors to be represented by '+' if closed or '/' if open (which can be caused by calling</a>
+<span class="sourceLineNo">720</span><a id="line.720">     * DungeonUtility.closeDoors() ) and any walls to be '#' or box drawing characters. In the parameter costs, there</a>
+<span class="sourceLineNo">721</span><a id="line.721">     * does not need to be an entry for '#' or any box drawing characters, but if one is present for '#' it will apply</a>
+<span class="sourceLineNo">722</span><a id="line.722">     * that cost to both '#' and all box drawing characters, and if one is not present it will default to a very high</a>
+<span class="sourceLineNo">723</span><a id="line.723">     * number. For any other entry in costs, a char in the 2D char array that matches the key will correspond</a>
+<span class="sourceLineNo">724</span><a id="line.724">     * (at the same x,y position in the returned 2D double array) to that key's value in costs. If a char is used in the</a>
+<span class="sourceLineNo">725</span><a id="line.725">     * map but does not have a corresponding key in costs, it will be given the value of the parameter defaultValue.</a>
+<span class="sourceLineNo">726</span><a id="line.726">     * &lt;p/&gt;</a>
+<span class="sourceLineNo">727</span><a id="line.727">     * The values in costs are multipliers, so should not be negative, should only be 0.0 in cases where you want</a>
+<span class="sourceLineNo">728</span><a id="line.728">     * infinite movement across all adjacent squares of that kind, should be higher than 1.0 for difficult terrain (2.0</a>
+<span class="sourceLineNo">729</span><a id="line.729">     * and 3.0 are reasonable), should be between 0.0 and 1.0 for easy terrain, and should be 1.0 for normal terrain.</a>
+<span class="sourceLineNo">730</span><a id="line.730">     * If a cell should not be possible to enter for this character, 999.0 should be a reasonable value for a cost.</a>
+<span class="sourceLineNo">731</span><a id="line.731">     * &lt;p/&gt;</a>
+<span class="sourceLineNo">732</span><a id="line.732">     * An example use for this would be to make a creature unable to enter any non-water cell (like a fish),</a>
+<span class="sourceLineNo">733</span><a id="line.733">     * unable to enter doorways (like some mythological versions of vampires), or to make a wheeled vehicle take more</a>
+<span class="sourceLineNo">734</span><a id="line.734">     * time to move across rubble or rough terrain.</a>
+<span class="sourceLineNo">735</span><a id="line.735">     * &lt;p/&gt;</a>
+<span class="sourceLineNo">736</span><a id="line.736">     * A potentially common case that needs to be addressed is NPC movement onto staircases in games that have them;</a>
+<span class="sourceLineNo">737</span><a id="line.737">     * some games may find it desirable for NPCs to block staircases and others may not, but in either case you should</a>
+<span class="sourceLineNo">738</span><a id="line.738">     * give both '&amp;gt;' and '&amp;lt;', the standard characters for staircases, the same value in costs.</a>
+<span class="sourceLineNo">739</span><a id="line.739">     *</a>
+<span class="sourceLineNo">740</span><a id="line.740">     * @param map          a dungeon, width by height, with any closed doors as '+' and open doors as '/' as per closeDoors() .</a>
+<span class="sourceLineNo">741</span><a id="line.741">     * @param costs        a Map of Character keys representing possible elements in map, and Double values for their cost.</a>
+<span class="sourceLineNo">742</span><a id="line.742">     * @param defaultValue a double that will be used as the cost for any characters that don't have a key in costs.</a>
+<span class="sourceLineNo">743</span><a id="line.743">     * @return a cost map suitable for use with DijkstraMap</a>
+<span class="sourceLineNo">744</span><a id="line.744">     */</a>
+<span class="sourceLineNo">745</span><a id="line.745">    public static double[][] generateCostMap(char[][] map, Map&lt;Character, Double&gt; costs, double defaultValue) {</a>
+<span class="sourceLineNo">746</span><a id="line.746">        int width = map.length;</a>
+<span class="sourceLineNo">747</span><a id="line.747">        int height = map[0].length;</a>
+<span class="sourceLineNo">748</span><a id="line.748">        double[][] portion = new double[width][height];</a>
+<span class="sourceLineNo">749</span><a id="line.749">        char current;</a>
+<span class="sourceLineNo">750</span><a id="line.750">        for (int i = 0; i &lt; width; i++) {</a>
+<span class="sourceLineNo">751</span><a id="line.751">            for (int j = 0; j &lt; height; j++) {</a>
+<span class="sourceLineNo">752</span><a id="line.752">                current = map[i][j];</a>
+<span class="sourceLineNo">753</span><a id="line.753">                if (costs.containsKey(current)) {</a>
+<span class="sourceLineNo">754</span><a id="line.754">                    portion[i][j] = costs.get(current);</a>
+<span class="sourceLineNo">755</span><a id="line.755">                } else {</a>
+<span class="sourceLineNo">756</span><a id="line.756">                    switch (current) {</a>
+<span class="sourceLineNo">757</span><a id="line.757">                        case '\1':</a>
+<span class="sourceLineNo">758</span><a id="line.758">                        case '├':</a>
+<span class="sourceLineNo">759</span><a id="line.759">                        case '┤':</a>
+<span class="sourceLineNo">760</span><a id="line.760">                        case '┴':</a>
+<span class="sourceLineNo">761</span><a id="line.761">                        case '┬':</a>
+<span class="sourceLineNo">762</span><a id="line.762">                        case '┌':</a>
+<span class="sourceLineNo">763</span><a id="line.763">                        case '┐':</a>
+<span class="sourceLineNo">764</span><a id="line.764">                        case '└':</a>
+<span class="sourceLineNo">765</span><a id="line.765">                        case '┘':</a>
+<span class="sourceLineNo">766</span><a id="line.766">                        case '│':</a>
+<span class="sourceLineNo">767</span><a id="line.767">                        case '─':</a>
+<span class="sourceLineNo">768</span><a id="line.768">                        case '┼':</a>
+<span class="sourceLineNo">769</span><a id="line.769">                        case '#':</a>
+<span class="sourceLineNo">770</span><a id="line.770">                            portion[i][j] = (costs.containsKey('#'))</a>
+<span class="sourceLineNo">771</span><a id="line.771">                                    ? costs.get('#')</a>
+<span class="sourceLineNo">772</span><a id="line.772">                                    : squidpony.squidai.DijkstraMap.WALL;</a>
+<span class="sourceLineNo">773</span><a id="line.773">                            break;</a>
+<span class="sourceLineNo">774</span><a id="line.774">                        default:</a>
+<span class="sourceLineNo">775</span><a id="line.775">                            portion[i][j] = defaultValue;</a>
+<span class="sourceLineNo">776</span><a id="line.776">                    }</a>
+<span class="sourceLineNo">777</span><a id="line.777">                }</a>
+<span class="sourceLineNo">778</span><a id="line.778">            }</a>
+<span class="sourceLineNo">779</span><a id="line.779">        }</a>
+<span class="sourceLineNo">780</span><a id="line.780">        return portion;</a>
+<span class="sourceLineNo">781</span><a id="line.781">    }</a>
+<span class="sourceLineNo">782</span><a id="line.782"></a>
+<span class="sourceLineNo">783</span><a id="line.783">    /**</a>
+<span class="sourceLineNo">784</span><a id="line.784">     * Given a char[][] for the map, produces a double[][] that can be used as a map by AStarSearch. It</a>
+<span class="sourceLineNo">785</span><a id="line.785">     * expects any doors to be represented by '+' if closed or '/' if open (which can be ensured by calling</a>
+<span class="sourceLineNo">786</span><a id="line.786">     * {@link #closeDoors(char[][])}) and any walls to be '#' or box drawing characters. Any wall or closed door will be</a>
+<span class="sourceLineNo">787</span><a id="line.787">     * assigned a negative number, meaning it is impassable for AStarSearch, and all other chars will be assigned 1.0,</a>
+<span class="sourceLineNo">788</span><a id="line.788">     * giving them a normal cost.</a>
+<span class="sourceLineNo">789</span><a id="line.789">     *</a>
+<span class="sourceLineNo">790</span><a id="line.790">     * @param map          a dungeon, width by height, with any closed doors as '+' and open doors as '/' as per closeDoors() .</a>
+<span class="sourceLineNo">791</span><a id="line.791">     * @return a cost map suitable for use with AStarSearch</a>
+<span class="sourceLineNo">792</span><a id="line.792">     */</a>
+<span class="sourceLineNo">793</span><a id="line.793">    public static double[][] generateAStarCostMap(char[][] map) {</a>
+<span class="sourceLineNo">794</span><a id="line.794">        int width = map.length;</a>
+<span class="sourceLineNo">795</span><a id="line.795">        int height = map[0].length;</a>
+<span class="sourceLineNo">796</span><a id="line.796">        double[][] portion = new double[width][height];</a>
+<span class="sourceLineNo">797</span><a id="line.797">        for (int i = 0; i &lt; width; i++) {</a>
+<span class="sourceLineNo">798</span><a id="line.798">            for (int j = 0; j &lt; height; j++) {</a>
+<span class="sourceLineNo">799</span><a id="line.799">                switch (map[i][j]) {</a>
+<span class="sourceLineNo">800</span><a id="line.800">                    case '\1':</a>
+<span class="sourceLineNo">801</span><a id="line.801">                    case '├':</a>
+<span class="sourceLineNo">802</span><a id="line.802">                    case '┤':</a>
+<span class="sourceLineNo">803</span><a id="line.803">                    case '┴':</a>
+<span class="sourceLineNo">804</span><a id="line.804">                    case '┬':</a>
+<span class="sourceLineNo">805</span><a id="line.805">                    case '┌':</a>
+<span class="sourceLineNo">806</span><a id="line.806">                    case '┐':</a>
+<span class="sourceLineNo">807</span><a id="line.807">                    case '└':</a>
+<span class="sourceLineNo">808</span><a id="line.808">                    case '┘':</a>
+<span class="sourceLineNo">809</span><a id="line.809">                    case '│':</a>
+<span class="sourceLineNo">810</span><a id="line.810">                    case '─':</a>
+<span class="sourceLineNo">811</span><a id="line.811">                    case '┼':</a>
+<span class="sourceLineNo">812</span><a id="line.812">                    case '#':</a>
+<span class="sourceLineNo">813</span><a id="line.813">                    case '+':</a>
+<span class="sourceLineNo">814</span><a id="line.814">                        portion[i][j] = -1;</a>
+<span class="sourceLineNo">815</span><a id="line.815">                        break;</a>
+<span class="sourceLineNo">816</span><a id="line.816">                    default:</a>
+<span class="sourceLineNo">817</span><a id="line.817">                        portion[i][j] = 1;</a>
+<span class="sourceLineNo">818</span><a id="line.818">                }</a>
+<span class="sourceLineNo">819</span><a id="line.819">            }</a>
+<span class="sourceLineNo">820</span><a id="line.820">        }</a>
+<span class="sourceLineNo">821</span><a id="line.821">        return portion;</a>
+<span class="sourceLineNo">822</span><a id="line.822">    }</a>
+<span class="sourceLineNo">823</span><a id="line.823"></a>
+<span class="sourceLineNo">824</span><a id="line.824">    /**</a>
+<span class="sourceLineNo">825</span><a id="line.825">     * Given a char[][] for the map, a Map of Character keys to Double values that will be used to determine costs, and</a>
+<span class="sourceLineNo">826</span><a id="line.826">     * a double value for unhandled characters, produces a double[][] that can be used as a map by AStarSearch. It</a>
+<span class="sourceLineNo">827</span><a id="line.827">     * expects any doors to be represented by '+' if closed or '/' if open (which can be caused by calling</a>
+<span class="sourceLineNo">828</span><a id="line.828">     * DungeonUtility.closeDoors() ) and any walls to be '#' or box drawing characters. In the parameter costs, there</a>
+<span class="sourceLineNo">829</span><a id="line.829">     * does not need to be an entry for '#' or any box drawing characters, but if one is present for '#' it will apply</a>
+<span class="sourceLineNo">830</span><a id="line.830">     * that cost to both '#' and all box drawing characters, and if one is not present it will default to a negative</a>
+<span class="sourceLineNo">831</span><a id="line.831">     * number, meaning it is impassable for AStarSearch. For any other entry in costs, a char in the 2D char array that</a>
+<span class="sourceLineNo">832</span><a id="line.832">     * matches the key will correspond (at the same x,y position in the returned 2D double array) to that key's value in</a>
+<span class="sourceLineNo">833</span><a id="line.833">     * costs. If a char is used in the map but does not have a corresponding key in costs, it will be given the value of</a>
+<span class="sourceLineNo">834</span><a id="line.834">     * the parameter defaultValue, which is typically 1 unless a creature is limited to only moving in some terrain.</a>
+<span class="sourceLineNo">835</span><a id="line.835">     * &lt;p/&gt;</a>
+<span class="sourceLineNo">836</span><a id="line.836">     * The values in costs are different from those expected for DijkstraMap; negative numbers are impassable, 1 is the</a>
+<span class="sourceLineNo">837</span><a id="line.837">     * cost for a normal walkable tile, and higher numbers are harder to enter.</a>
+<span class="sourceLineNo">838</span><a id="line.838">     * &lt;p/&gt;</a>
+<span class="sourceLineNo">839</span><a id="line.839">     * An example use for this would be to make a creature unable to enter any non-water cell (like a fish),</a>
+<span class="sourceLineNo">840</span><a id="line.840">     * unable to enter doorways (like some mythological versions of vampires), or to make a wheeled vehicle take more</a>
+<span class="sourceLineNo">841</span><a id="line.841">     * time to move across rubble or rough terrain.</a>
+<span class="sourceLineNo">842</span><a id="line.842">     * &lt;p/&gt;</a>
+<span class="sourceLineNo">843</span><a id="line.843">     * A potentially common case that needs to be addressed is NPC movement onto staircases in games that have them;</a>
+<span class="sourceLineNo">844</span><a id="line.844">     * some games may find it desirable for NPCs to block staircases and others may not, but in either case you should</a>
+<span class="sourceLineNo">845</span><a id="line.845">     * give both '&amp;gt;' and '&amp;lt;', the standard characters for staircases, the same value in costs.</a>
+<span class="sourceLineNo">846</span><a id="line.846">     *</a>
+<span class="sourceLineNo">847</span><a id="line.847">     * @param map          a dungeon, width by height, with any closed doors as '+' and open doors as '/' as per closeDoors() .</a>
+<span class="sourceLineNo">848</span><a id="line.848">     * @param costs        a Map of Character keys representing possible elements in map, and Double values for their cost.</a>
+<span class="sourceLineNo">849</span><a id="line.849">     * @param defaultValue a double that will be used as the cost for any characters that don't have a key in costs.</a>
+<span class="sourceLineNo">850</span><a id="line.850">     * @return a cost map suitable for use with AStarSearch</a>
+<span class="sourceLineNo">851</span><a id="line.851">     */</a>
+<span class="sourceLineNo">852</span><a id="line.852">    public static double[][] generateAStarCostMap(char[][] map, Map&lt;Character, Double&gt; costs, double defaultValue) {</a>
+<span class="sourceLineNo">853</span><a id="line.853">        int width = map.length;</a>
+<span class="sourceLineNo">854</span><a id="line.854">        int height = map[0].length;</a>
+<span class="sourceLineNo">855</span><a id="line.855">        double[][] portion = new double[width][height];</a>
+<span class="sourceLineNo">856</span><a id="line.856">        char current;</a>
+<span class="sourceLineNo">857</span><a id="line.857">        for (int i = 0; i &lt; width; i++) {</a>
+<span class="sourceLineNo">858</span><a id="line.858">            for (int j = 0; j &lt; height; j++) {</a>
+<span class="sourceLineNo">859</span><a id="line.859">                current = map[i][j];</a>
+<span class="sourceLineNo">860</span><a id="line.860">                if (costs.containsKey(current)) {</a>
+<span class="sourceLineNo">861</span><a id="line.861">                    portion[i][j] = costs.get(current);</a>
+<span class="sourceLineNo">862</span><a id="line.862">                } else {</a>
+<span class="sourceLineNo">863</span><a id="line.863">                    switch (current) {</a>
+<span class="sourceLineNo">864</span><a id="line.864">                        case '\1':</a>
+<span class="sourceLineNo">865</span><a id="line.865">                        case '├':</a>
+<span class="sourceLineNo">866</span><a id="line.866">                        case '┤':</a>
+<span class="sourceLineNo">867</span><a id="line.867">                        case '┴':</a>
+<span class="sourceLineNo">868</span><a id="line.868">                        case '┬':</a>
+<span class="sourceLineNo">869</span><a id="line.869">                        case '┌':</a>
+<span class="sourceLineNo">870</span><a id="line.870">                        case '┐':</a>
+<span class="sourceLineNo">871</span><a id="line.871">                        case '└':</a>
+<span class="sourceLineNo">872</span><a id="line.872">                        case '┘':</a>
+<span class="sourceLineNo">873</span><a id="line.873">                        case '│':</a>
+<span class="sourceLineNo">874</span><a id="line.874">                        case '─':</a>
+<span class="sourceLineNo">875</span><a id="line.875">                        case '┼':</a>
+<span class="sourceLineNo">876</span><a id="line.876">                        case '#':</a>
+<span class="sourceLineNo">877</span><a id="line.877">                            portion[i][j] = (costs.containsKey('#'))</a>
+<span class="sourceLineNo">878</span><a id="line.878">                                    ? costs.get('#')</a>
+<span class="sourceLineNo">879</span><a id="line.879">                                    : -1;</a>
+<span class="sourceLineNo">880</span><a id="line.880">                            break;</a>
+<span class="sourceLineNo">881</span><a id="line.881">                        default:</a>
+<span class="sourceLineNo">882</span><a id="line.882">                            portion[i][j] = defaultValue;</a>
+<span class="sourceLineNo">883</span><a id="line.883">                    }</a>
+<span class="sourceLineNo">884</span><a id="line.884">                }</a>
+<span class="sourceLineNo">885</span><a id="line.885">            }</a>
+<span class="sourceLineNo">886</span><a id="line.886">        }</a>
+<span class="sourceLineNo">887</span><a id="line.887">        return portion;</a>
+<span class="sourceLineNo">888</span><a id="line.888">    }</a>
+<span class="sourceLineNo">889</span><a id="line.889"></a>
+<span class="sourceLineNo">890</span><a id="line.890">    public static double[][] translateAStarToDijkstra(double[][] astar) {</a>
+<span class="sourceLineNo">891</span><a id="line.891">        if (astar == null) return null;</a>
+<span class="sourceLineNo">892</span><a id="line.892">        if (astar.length &lt;= 0 || astar[0].length &lt;= 0)</a>
+<span class="sourceLineNo">893</span><a id="line.893">            return new double[0][0];</a>
+<span class="sourceLineNo">894</span><a id="line.894">        double[][] dijkstra = new double[astar.length][astar[0].length];</a>
+<span class="sourceLineNo">895</span><a id="line.895">        for (int x = 0; x &lt; astar.length; x++) {</a>
+<span class="sourceLineNo">896</span><a id="line.896">            for (int y = 0; y &lt; astar[x].length; y++) {</a>
+<span class="sourceLineNo">897</span><a id="line.897">                if (astar[x][y] &lt;= 0)</a>
+<span class="sourceLineNo">898</span><a id="line.898">                    dijkstra[x][y] = DijkstraMap.WALL;</a>
+<span class="sourceLineNo">899</span><a id="line.899">                else</a>
+<span class="sourceLineNo">900</span><a id="line.900">                    dijkstra[x][y] = DijkstraMap.FLOOR;</a>
+<span class="sourceLineNo">901</span><a id="line.901">            }</a>
+<span class="sourceLineNo">902</span><a id="line.902">        }</a>
+<span class="sourceLineNo">903</span><a id="line.903">        return dijkstra;</a>
+<span class="sourceLineNo">904</span><a id="line.904">    }</a>
+<span class="sourceLineNo">905</span><a id="line.905"></a>
+<span class="sourceLineNo">906</span><a id="line.906">    public static double[][] translateDijkstraToAStar(double[][] dijkstra) {</a>
+<span class="sourceLineNo">907</span><a id="line.907">        if (dijkstra == null) return null;</a>
+<span class="sourceLineNo">908</span><a id="line.908">        if (dijkstra.length &lt;= 0 || dijkstra[0].length &lt;= 0)</a>
+<span class="sourceLineNo">909</span><a id="line.909">            return new double[0][0];</a>
+<span class="sourceLineNo">910</span><a id="line.910">        double[][] astar = new double[dijkstra.length][dijkstra[0].length];</a>
+<span class="sourceLineNo">911</span><a id="line.911">        for (int x = 0; x &lt; dijkstra.length; x++) {</a>
+<span class="sourceLineNo">912</span><a id="line.912">            for (int y = 0; y &lt; dijkstra[x].length; y++) {</a>
+<span class="sourceLineNo">913</span><a id="line.913">                if (dijkstra[x][y] &gt;  DijkstraMap.FLOOR)</a>
+<span class="sourceLineNo">914</span><a id="line.914">                    astar[x][y] = -1;</a>
+<span class="sourceLineNo">915</span><a id="line.915">                else</a>
+<span class="sourceLineNo">916</span><a id="line.916">                    astar[x][y] = 1;</a>
+<span class="sourceLineNo">917</span><a id="line.917">            }</a>
+<span class="sourceLineNo">918</span><a id="line.918">        }</a>
+<span class="sourceLineNo">919</span><a id="line.919">        return astar;</a>
+<span class="sourceLineNo">920</span><a id="line.920">    }</a>
+<span class="sourceLineNo">921</span><a id="line.921"></a>
+<span class="sourceLineNo">922</span><a id="line.922">    /**</a>
+<span class="sourceLineNo">923</span><a id="line.923">     * @param rng</a>
+<span class="sourceLineNo">924</span><a id="line.924">     * @param map</a>
+<span class="sourceLineNo">925</span><a id="line.925">     * @param acceptable</a>
+<span class="sourceLineNo">926</span><a id="line.926">     * @param frustration The number of trials that this method can do. Usually 16 or</a>
+<span class="sourceLineNo">927</span><a id="line.927">     *                    32.</a>
+<span class="sourceLineNo">928</span><a id="line.928">     * @return A random cell in {@code map} whose symbol is in</a>
+<span class="sourceLineNo">929</span><a id="line.929">     * {@code acceptable}. Or {@code null} if not found.</a>
+<span class="sourceLineNo">930</span><a id="line.930">     */</a>
+<span class="sourceLineNo">931</span><a id="line.931">    public static /* @Nullable */Coord getRandomCell(IRNG rng, char[][] map, Set&lt;Character&gt; acceptable,</a>
+<span class="sourceLineNo">932</span><a id="line.932">                                                     int frustration) {</a>
+<span class="sourceLineNo">933</span><a id="line.933">        if (frustration &lt; 0)</a>
+<span class="sourceLineNo">934</span><a id="line.934">            throw new IllegalStateException("Frustration should not be negative");</a>
+<span class="sourceLineNo">935</span><a id="line.935">        final int width = map.length;</a>
+<span class="sourceLineNo">936</span><a id="line.936">        final int height = width == 0 ? 0 : map[0].length;</a>
+<span class="sourceLineNo">937</span><a id="line.937">        if (width == 0 || height == 0)</a>
+<span class="sourceLineNo">938</span><a id="line.938">            throw new IllegalStateException("Map must be non-empty to get a cell from it");</a>
+<span class="sourceLineNo">939</span><a id="line.939">        int i = 0;</a>
+<span class="sourceLineNo">940</span><a id="line.940">        while (i &lt; frustration) {</a>
+<span class="sourceLineNo">941</span><a id="line.941">            final int x = rng.nextInt(width);</a>
+<span class="sourceLineNo">942</span><a id="line.942">            final int y = rng.nextInt(height);</a>
+<span class="sourceLineNo">943</span><a id="line.943">            if (acceptable.contains(map[x][y]))</a>
+<span class="sourceLineNo">944</span><a id="line.944">                return Coord.get(x, y);</a>
+<span class="sourceLineNo">945</span><a id="line.945">            i++;</a>
+<span class="sourceLineNo">946</span><a id="line.946">        }</a>
+<span class="sourceLineNo">947</span><a id="line.947">        return null;</a>
+<span class="sourceLineNo">948</span><a id="line.948">    }</a>
+<span class="sourceLineNo">949</span><a id="line.949"></a>
+<span class="sourceLineNo">950</span><a id="line.950">    /**</a>
+<span class="sourceLineNo">951</span><a id="line.951">     * @param level dungeon/map level as 2D char array. x,y indexed</a>
+<span class="sourceLineNo">952</span><a id="line.952">     * @param c     Coord to check</a>
+<span class="sourceLineNo">953</span><a id="line.953">     * @return {@code true} if {@code c} is valid in {@code level}, {@code false} otherwise.</a>
+<span class="sourceLineNo">954</span><a id="line.954">     */</a>
+<span class="sourceLineNo">955</span><a id="line.955">    public static boolean inLevel(char[][] level, Coord c) {</a>
+<span class="sourceLineNo">956</span><a id="line.956">        return inLevel(level, c.x, c.y);</a>
+<span class="sourceLineNo">957</span><a id="line.957">    }</a>
+<span class="sourceLineNo">958</span><a id="line.958"></a>
+<span class="sourceLineNo">959</span><a id="line.959">    /**</a>
+<span class="sourceLineNo">960</span><a id="line.960">     * @param level dungeon/map level as 2D char array. x,y indexed</a>
+<span class="sourceLineNo">961</span><a id="line.961">     * @param x     x coordinate to check</a>
+<span class="sourceLineNo">962</span><a id="line.962">     * @param y     y coordinate to check</a>
+<span class="sourceLineNo">963</span><a id="line.963">     * @return {@code true} if {@code c} is valid in {@code level}, {@code false} otherwise.</a>
+<span class="sourceLineNo">964</span><a id="line.964">     */</a>
+<span class="sourceLineNo">965</span><a id="line.965">    public static boolean inLevel(char[][] level, int x, int y) {</a>
+<span class="sourceLineNo">966</span><a id="line.966">        return 0 &lt;= x &amp;&amp; x &lt; level.length &amp;&amp; 0 &lt;= y &amp;&amp; y &lt; level[x].length;</a>
+<span class="sourceLineNo">967</span><a id="line.967">    }</a>
+<span class="sourceLineNo">968</span><a id="line.968"></a>
+<span class="sourceLineNo">969</span><a id="line.969">    /**</a>
+<span class="sourceLineNo">970</span><a id="line.970">     * @param level dungeon/map level as 2D double array. x,y indexed</a>
+<span class="sourceLineNo">971</span><a id="line.971">     * @param c     Coord to check</a>
+<span class="sourceLineNo">972</span><a id="line.972">     * @return {@code true} if {@code c} is valid in {@code level}, {@code false} otherwise.</a>
+<span class="sourceLineNo">973</span><a id="line.973">     */</a>
+<span class="sourceLineNo">974</span><a id="line.974">    public static boolean inLevel(double[][] level, Coord c) {</a>
+<span class="sourceLineNo">975</span><a id="line.975">        return inLevel(level, c.x, c.y);</a>
+<span class="sourceLineNo">976</span><a id="line.976">    }</a>
+<span class="sourceLineNo">977</span><a id="line.977"></a>
+<span class="sourceLineNo">978</span><a id="line.978">    /**</a>
+<span class="sourceLineNo">979</span><a id="line.979">     * @param level dungeon/map level as 2D double array. x,y indexed</a>
+<span class="sourceLineNo">980</span><a id="line.980">     * @param x     x coordinate to check</a>
+<span class="sourceLineNo">981</span><a id="line.981">     * @param y     y coordinate to check</a>
+<span class="sourceLineNo">982</span><a id="line.982">     * @return {@code true} if {@code c} is valid in {@code level}, {@code false} otherwise.</a>
+<span class="sourceLineNo">983</span><a id="line.983">     */</a>
+<span class="sourceLineNo">984</span><a id="line.984">    public static boolean inLevel(double[][] level, int x, int y) {</a>
+<span class="sourceLineNo">985</span><a id="line.985">        return 0 &lt;= x &amp;&amp; x &lt; level.length &amp;&amp; 0 &lt;= y &amp;&amp; y &lt; level[x].length;</a>
+<span class="sourceLineNo">986</span><a id="line.986">    }</a>
+<span class="sourceLineNo">987</span><a id="line.987"></a>
+<span class="sourceLineNo">988</span><a id="line.988">    /**</a>
+<span class="sourceLineNo">989</span><a id="line.989">     * @param level a dungeon/map level as 2D array. x,y indexed</a>
+<span class="sourceLineNo">990</span><a id="line.990">     * @param c     Coord to check</a>
+<span class="sourceLineNo">991</span><a id="line.991">     * @return {@code true} if {@code c} is valid in {@code level}, {@code false} otherwise.</a>
+<span class="sourceLineNo">992</span><a id="line.992">     */</a>
+<span class="sourceLineNo">993</span><a id="line.993">    public static &lt;T&gt; boolean inLevel(T[][] level, Coord c) {</a>
+<span class="sourceLineNo">994</span><a id="line.994">        return inLevel(level, c.x, c.y);</a>
+<span class="sourceLineNo">995</span><a id="line.995">    }</a>
+<span class="sourceLineNo">996</span><a id="line.996"></a>
+<span class="sourceLineNo">997</span><a id="line.997">    /**</a>
+<span class="sourceLineNo">998</span><a id="line.998">     * @param level a dungeon/map level as 2D array. x,y indexed</a>
+<span class="sourceLineNo">999</span><a id="line.999">     * @param x     x coordinate to check</a>
+<span class="sourceLineNo">1000</span><a id="line.1000">     * @param y     y coordinate to check</a>
+<span class="sourceLineNo">1001</span><a id="line.1001">     * @return {@code true} if {@code c} is valid in {@code level}, {@code false} otherwise.</a>
+<span class="sourceLineNo">1002</span><a id="line.1002">     */</a>
+<span class="sourceLineNo">1003</span><a id="line.1003">    public static &lt;T&gt; boolean inLevel(T[][] level, int x, int y) {</a>
+<span class="sourceLineNo">1004</span><a id="line.1004">        return 0 &lt;= x &amp;&amp; x &lt; level.length &amp;&amp; 0 &lt;= y &amp;&amp; y &lt; level[x].length;</a>
+<span class="sourceLineNo">1005</span><a id="line.1005">    }</a>
+<span class="sourceLineNo">1006</span><a id="line.1006">    </a>
+<span class="sourceLineNo">1007</span><a id="line.1007">    /**</a>
+<span class="sourceLineNo">1008</span><a id="line.1008">     * Quickly counts the number of char elements in level that are equal to match.</a>
+<span class="sourceLineNo">1009</span><a id="line.1009">     *</a>
+<span class="sourceLineNo">1010</span><a id="line.1010">     * @param level the 2D char array to count cells in</a>
+<span class="sourceLineNo">1011</span><a id="line.1011">     * @param match the char to search for</a>
+<span class="sourceLineNo">1012</span><a id="line.1012">     * @return the number of cells that matched</a>
+<span class="sourceLineNo">1013</span><a id="line.1013">     */</a>
+<span class="sourceLineNo">1014</span><a id="line.1014">    public static int countCells(char[][] level, char match) {</a>
+<span class="sourceLineNo">1015</span><a id="line.1015">        if (level == null || level.length == 0)</a>
+<span class="sourceLineNo">1016</span><a id="line.1016">            return 0;</a>
+<span class="sourceLineNo">1017</span><a id="line.1017">        int counter = 0;</a>
+<span class="sourceLineNo">1018</span><a id="line.1018">        for (int x = 0; x &lt; level.length; x++) {</a>
+<span class="sourceLineNo">1019</span><a id="line.1019">            for (int y = 0; y &lt; level[x].length; y++) {</a>
+<span class="sourceLineNo">1020</span><a id="line.1020">                if (level[x][y] == match) counter++;</a>
+<span class="sourceLineNo">1021</span><a id="line.1021">            }</a>
+<span class="sourceLineNo">1022</span><a id="line.1022">        }</a>
+<span class="sourceLineNo">1023</span><a id="line.1023">        return counter;</a>
+<span class="sourceLineNo">1024</span><a id="line.1024">    }</a>
+<span class="sourceLineNo">1025</span><a id="line.1025"></a>
+<span class="sourceLineNo">1026</span><a id="line.1026">    /**</a>
+<span class="sourceLineNo">1027</span><a id="line.1027">     * For when you want to print a 2D char array. Prints on multiple lines, with a trailing newline.</a>
+<span class="sourceLineNo">1028</span><a id="line.1028">     *</a>
+<span class="sourceLineNo">1029</span><a id="line.1029">     * @param level a 2D char array to print with a trailing newline</a>
+<span class="sourceLineNo">1030</span><a id="line.1030">     */</a>
+<span class="sourceLineNo">1031</span><a id="line.1031">    public static void debugPrint(char[][] level) {</a>
+<span class="sourceLineNo">1032</span><a id="line.1032">        if (level == null || level.length == 0 || level[0].length == 0)</a>
+<span class="sourceLineNo">1033</span><a id="line.1033">            System.out.println("INVALID DUNGEON LEVEL");</a>
+<span class="sourceLineNo">1034</span><a id="line.1034">        else {</a>
+<span class="sourceLineNo">1035</span><a id="line.1035">            for (int y = 0; y &lt; level[0].length; y++) {</a>
+<span class="sourceLineNo">1036</span><a id="line.1036">                for (int x = 0; x &lt; level.length; x++) {</a>
+<span class="sourceLineNo">1037</span><a id="line.1037">                    System.out.print(level[x][y]);</a>
+<span class="sourceLineNo">1038</span><a id="line.1038">                }</a>
+<span class="sourceLineNo">1039</span><a id="line.1039">                System.out.println();</a>
+<span class="sourceLineNo">1040</span><a id="line.1040"></a>
+<span class="sourceLineNo">1041</span><a id="line.1041">            }</a>
+<span class="sourceLineNo">1042</span><a id="line.1042">        }</a>
+<span class="sourceLineNo">1043</span><a id="line.1043">    }</a>
+<span class="sourceLineNo">1044</span><a id="line.1044"></a>
+<span class="sourceLineNo">1045</span><a id="line.1045">    /**</a>
+<span class="sourceLineNo">1046</span><a id="line.1046">     * Changes the outer edge of a char[][] to the wall char, '#'.</a>
+<span class="sourceLineNo">1047</span><a id="line.1047">     *</a>
+<span class="sourceLineNo">1048</span><a id="line.1048">     * @param map A char[][] that stores map data; will be modified in place</a>
+<span class="sourceLineNo">1049</span><a id="line.1049">     * @return the modified-in-place map with its edge replaced with '#'</a>
+<span class="sourceLineNo">1050</span><a id="line.1050">     */</a>
+<span class="sourceLineNo">1051</span><a id="line.1051">    public static char[][] wallWrap(char[][] map) {</a>
+<span class="sourceLineNo">1052</span><a id="line.1052">        int upperY = map[0].length - 1;</a>
+<span class="sourceLineNo">1053</span><a id="line.1053">        int upperX = map.length - 1;</a>
+<span class="sourceLineNo">1054</span><a id="line.1054">        for (int i = 0; i &lt; map.length; i++) {</a>
+<span class="sourceLineNo">1055</span><a id="line.1055">            map[i][0] = '#';</a>
+<span class="sourceLineNo">1056</span><a id="line.1056">            map[i][upperY] = '#';</a>
+<span class="sourceLineNo">1057</span><a id="line.1057">        }</a>
+<span class="sourceLineNo">1058</span><a id="line.1058">        for (int i = 0; i &lt; map[0].length; i++) {</a>
+<span class="sourceLineNo">1059</span><a id="line.1059">            map[0][i] = '#';</a>
+<span class="sourceLineNo">1060</span><a id="line.1060">            map[upperX][i] = '#';</a>
+<span class="sourceLineNo">1061</span><a id="line.1061">        }</a>
+<span class="sourceLineNo">1062</span><a id="line.1062">        return map;</a>
+<span class="sourceLineNo">1063</span><a id="line.1063">    }</a>
+<span class="sourceLineNo">1064</span><a id="line.1064">    public static ArrayList&lt;Coord&gt; pointPath(int width, int height, IRNG rng) {</a>
+<span class="sourceLineNo">1065</span><a id="line.1065">        if (width &lt;= 2 || height &lt;= 2)</a>
+<span class="sourceLineNo">1066</span><a id="line.1066">            throw new IllegalArgumentException("width and height must be greater than 2");</a>
+<span class="sourceLineNo">1067</span><a id="line.1067">        CoordPacker.init();</a>
+<span class="sourceLineNo">1068</span><a id="line.1068">        long columnAlterations = (rng.nextLong() &amp; 0xFFFFFFFFFFFFL);</a>
+<span class="sourceLineNo">1069</span><a id="line.1069">        float columnBase = width / (Long.bitCount(columnAlterations) + 48.0f);</a>
+<span class="sourceLineNo">1070</span><a id="line.1070">        long rowAlterations = (rng.nextLong() &amp; 0xFFFFFFFFFFFFL);</a>
+<span class="sourceLineNo">1071</span><a id="line.1071">        float rowBase = height / (Long.bitCount(rowAlterations) + 48.0f);</a>
+<span class="sourceLineNo">1072</span><a id="line.1072"></a>
+<span class="sourceLineNo">1073</span><a id="line.1073">        int[] columns = new int[16], rows = new int[16];</a>
+<span class="sourceLineNo">1074</span><a id="line.1074">        int csum = 0, rsum = 0;</a>
+<span class="sourceLineNo">1075</span><a id="line.1075">        long b = 7;</a>
+<span class="sourceLineNo">1076</span><a id="line.1076">        for (int i = 0; i &lt; 16; i++, b &lt;&lt;= 3) {</a>
+<span class="sourceLineNo">1077</span><a id="line.1077">            columns[i] = csum + (int) (columnBase * 0.5f * (3 + Long.bitCount(columnAlterations &amp; b)));</a>
+<span class="sourceLineNo">1078</span><a id="line.1078">            csum += (int) (columnBase * (3 + Long.bitCount(columnAlterations &amp; b)));</a>
+<span class="sourceLineNo">1079</span><a id="line.1079">            rows[i] = rsum + (int) (rowBase * 0.5f * (3 + Long.bitCount(rowAlterations &amp; b)));</a>
+<span class="sourceLineNo">1080</span><a id="line.1080">            rsum += (int) (rowBase * (3 + Long.bitCount(rowAlterations &amp; b)));</a>
+<span class="sourceLineNo">1081</span><a id="line.1081">        }</a>
+<span class="sourceLineNo">1082</span><a id="line.1082">        int cs = width - csum;</a>
+<span class="sourceLineNo">1083</span><a id="line.1083">        int rs = height - rsum;</a>
+<span class="sourceLineNo">1084</span><a id="line.1084">        int cs2 = cs, rs2 = rs, cs3 = cs, rs3 = rs;</a>
+<span class="sourceLineNo">1085</span><a id="line.1085">        for (int i = 0; i &lt;= 7; i++) {</a>
+<span class="sourceLineNo">1086</span><a id="line.1086">            cs2 = 0;</a>
+<span class="sourceLineNo">1087</span><a id="line.1087">            rs2 = 0;</a>
+<span class="sourceLineNo">1088</span><a id="line.1088">            columns[i] -= cs2;</a>
+<span class="sourceLineNo">1089</span><a id="line.1089">            rows[i] -= rs2;</a>
+<span class="sourceLineNo">1090</span><a id="line.1090">        }</a>
+<span class="sourceLineNo">1091</span><a id="line.1091">        for (int i = 15; i &gt;= 8; i--) {</a>
+<span class="sourceLineNo">1092</span><a id="line.1092">            cs3 = cs3 * (i - 8) &gt;&gt; 3;</a>
+<span class="sourceLineNo">1093</span><a id="line.1093">            rs3 = rs3 * (i - 8) &gt;&gt; 3;</a>
+<span class="sourceLineNo">1094</span><a id="line.1094">            columns[i] += cs3;</a>
+<span class="sourceLineNo">1095</span><a id="line.1095">            rows[i] += rs3;</a>
+<span class="sourceLineNo">1096</span><a id="line.1096">        }</a>
+<span class="sourceLineNo">1097</span><a id="line.1097"></a>
+<span class="sourceLineNo">1098</span><a id="line.1098">        ArrayList&lt;Coord&gt; points = new ArrayList&lt;&gt;(80);</a>
+<span class="sourceLineNo">1099</span><a id="line.1099">        int m = rng.nextInt(64);</a>
+<span class="sourceLineNo">1100</span><a id="line.1100">        Coord temp = CoordPacker.mooreToCoord(m), next;</a>
+<span class="sourceLineNo">1101</span><a id="line.1101">        temp = Coord.get(columns[temp.x], rows[temp.y]);</a>
+<span class="sourceLineNo">1102</span><a id="line.1102">        for (int i = 0, r; i &lt; 256; r = rng.between(4, 12), i += r, m += r) {</a>
+<span class="sourceLineNo">1103</span><a id="line.1103">            next = CoordPacker.mooreToCoord(m);</a>
+<span class="sourceLineNo">1104</span><a id="line.1104">            next = Coord.get(columns[next.x], rows[next.y]);</a>
+<span class="sourceLineNo">1105</span><a id="line.1105">            points.addAll(OrthoLine.line(temp, next));</a>
+<span class="sourceLineNo">1106</span><a id="line.1106">            temp = next;</a>
+<span class="sourceLineNo">1107</span><a id="line.1107">        }</a>
+<span class="sourceLineNo">1108</span><a id="line.1108">        points.add(points.get(0));</a>
+<span class="sourceLineNo">1109</span><a id="line.1109">        return points;</a>
+<span class="sourceLineNo">1110</span><a id="line.1110">    }</a>
+<span class="sourceLineNo">1111</span><a id="line.1111"></a>
+<span class="sourceLineNo">1112</span><a id="line.1112">    /**</a>
+<span class="sourceLineNo">1113</span><a id="line.1113">     * Ensures a path exists in a rough ring around the map by first creating the path (using</a>
+<span class="sourceLineNo">1114</span><a id="line.1114">     * {@link #pointPath(int, int, IRNG)} with the given IRNG), then finding chars in blocking that are on that path and</a>
+<span class="sourceLineNo">1115</span><a id="line.1115">     * replacing them with replacement. Modifies map in-place (!) and returns an ArrayList of Coord points that will</a>
+<span class="sourceLineNo">1116</span><a id="line.1116">     * always be on the path.</a>
+<span class="sourceLineNo">1117</span><a id="line.1117">     *</a>
+<span class="sourceLineNo">1118</span><a id="line.1118">     * @param map         a 2D char array, x then y, etc. that will be modified directly; this is the "returned map"</a>
+<span class="sourceLineNo">1119</span><a id="line.1119">     * @param rng         used for random factors in the path choice</a>
+<span class="sourceLineNo">1120</span><a id="line.1120">     * @param replacement the char that will fill be used where a path needs to be carved out; usually '.'</a>
+<span class="sourceLineNo">1121</span><a id="line.1121">     * @param blocking    an array or vararg of char that are considered blocking for the path and will be replaced if</a>
+<span class="sourceLineNo">1122</span><a id="line.1122">     *                    they are in the way</a>
+<span class="sourceLineNo">1123</span><a id="line.1123">     * @return the ArrayList of Coord points that are on the carved path, including existing non-blocking cells; will be empty if any parameters are invalid</a>
+<span class="sourceLineNo">1124</span><a id="line.1124">     */</a>
+<span class="sourceLineNo">1125</span><a id="line.1125">    public static ArrayList&lt;Coord&gt; ensurePath(char[][] map, IRNG rng, char replacement, char... blocking) {</a>
+<span class="sourceLineNo">1126</span><a id="line.1126">        if (map == null || map.length &lt;= 0 || blocking == null || blocking.length &lt;= 0)</a>
+<span class="sourceLineNo">1127</span><a id="line.1127">            return new ArrayList&lt;Coord&gt;(0);</a>
+<span class="sourceLineNo">1128</span><a id="line.1128">        int width = map.length, height = map[0].length;</a>
+<span class="sourceLineNo">1129</span><a id="line.1129">        ArrayList&lt;Coord&gt; points = pointPath(width, height, rng);</a>
+<span class="sourceLineNo">1130</span><a id="line.1130">        char[] blocks = new char[blocking.length];</a>
+<span class="sourceLineNo">1131</span><a id="line.1131">        System.arraycopy(blocking, 0, blocks, 0, blocking.length);</a>
+<span class="sourceLineNo">1132</span><a id="line.1132">        Arrays.sort(blocks);</a>
+<span class="sourceLineNo">1133</span><a id="line.1133">        for (Coord c : points) {</a>
+<span class="sourceLineNo">1134</span><a id="line.1134">            if (c.x &gt;= 0 &amp;&amp; c.x &lt; width &amp;&amp; c.y &gt;= 0 &amp;&amp; c.y &lt; height &amp;&amp; Arrays.binarySearch(blocks, map[c.x][c.y]) &gt;= 0) {</a>
+<span class="sourceLineNo">1135</span><a id="line.1135">                map[c.x][c.y] = replacement;</a>
+<span class="sourceLineNo">1136</span><a id="line.1136">            }</a>
+<span class="sourceLineNo">1137</span><a id="line.1137">        }</a>
+<span class="sourceLineNo">1138</span><a id="line.1138">        return points;</a>
+<span class="sourceLineNo">1139</span><a id="line.1139">    }</a>
+<span class="sourceLineNo">1140</span><a id="line.1140"></a>
+<span class="sourceLineNo">1141</span><a id="line.1141">    public static ArrayList&lt;Coord&gt; allMatching(char[][] map, char... matching) {</a>
+<span class="sourceLineNo">1142</span><a id="line.1142">        if (map == null || map.length &lt;= 0 || matching == null || matching.length &lt;= 0)</a>
+<span class="sourceLineNo">1143</span><a id="line.1143">            return new ArrayList&lt;Coord&gt;(0);</a>
+<span class="sourceLineNo">1144</span><a id="line.1144">        int width = map.length, height = map[0].length;</a>
+<span class="sourceLineNo">1145</span><a id="line.1145">        char[] matches = new char[matching.length];</a>
+<span class="sourceLineNo">1146</span><a id="line.1146">        System.arraycopy(matching, 0, matches, 0, matching.length);</a>
+<span class="sourceLineNo">1147</span><a id="line.1147">        Arrays.sort(matches);</a>
+<span class="sourceLineNo">1148</span><a id="line.1148">        ArrayList&lt;Coord&gt; points = new ArrayList&lt;Coord&gt;(map.length * 4);</a>
+<span class="sourceLineNo">1149</span><a id="line.1149">        for (int x = 0; x &lt; width; x++) {</a>
+<span class="sourceLineNo">1150</span><a id="line.1150">            for (int y = 0; y &lt; height; y++) {</a>
+<span class="sourceLineNo">1151</span><a id="line.1151">                if (Arrays.binarySearch(matches, map[x][y]) &gt;= 0)</a>
+<span class="sourceLineNo">1152</span><a id="line.1152">                    points.add(Coord.get(x, y));</a>
+<span class="sourceLineNo">1153</span><a id="line.1153">            }</a>
+<span class="sourceLineNo">1154</span><a id="line.1154">        }</a>
+<span class="sourceLineNo">1155</span><a id="line.1155">        return points;</a>
+<span class="sourceLineNo">1156</span><a id="line.1156">    }</a>
+<span class="sourceLineNo">1157</span><a id="line.1157"></a>
+<span class="sourceLineNo">1158</span><a id="line.1158">    /**</a>
+<span class="sourceLineNo">1159</span><a id="line.1159">     * Gets a List of Coord that are within radius distance of (x,y), and appends them to buf if it is non-null or makes</a>
+<span class="sourceLineNo">1160</span><a id="line.1160">     * a fresh List to append to otherwise. Returns buf if non-null, else the fresh List of Coord. May produce Coord</a>
+<span class="sourceLineNo">1161</span><a id="line.1161">     * values that are not within the boundaries of a map, such as (-5,-4), if the center is too close to the edge or</a>
+<span class="sourceLineNo">1162</span><a id="line.1162">     * radius is too high. You can use {@link squidpony.squidgrid.Radius#inCircle(int, int, int, boolean, int, int, List)}</a>
+<span class="sourceLineNo">1163</span><a id="line.1163">     * with surpassEdges as false if you want to limit Coords to within the map, or the more general</a>
+<span class="sourceLineNo">1164</span><a id="line.1164">     * {@link squidpony.squidgrid.Radius#pointsInside(int, int, int, boolean, int, int, List)} on a Radius.SQUARE or</a>
+<span class="sourceLineNo">1165</span><a id="line.1165">     * Radius.DIAMOND enum value if you want a square or diamond shape.</a>
+<span class="sourceLineNo">1166</span><a id="line.1166">     *</a>
+<span class="sourceLineNo">1167</span><a id="line.1167">     * @param x      center x of the circle</a>
+<span class="sourceLineNo">1168</span><a id="line.1168">     * @param y      center y of the circle</a>
+<span class="sourceLineNo">1169</span><a id="line.1169">     * @param radius inclusive radius to extend from the center; radius 0 gives just the center</a>
+<span class="sourceLineNo">1170</span><a id="line.1170">     * @param buf    Where to add the coordinates, or null for this method to</a>
+<span class="sourceLineNo">1171</span><a id="line.1171">     *               allocate a fresh list.</a>
+<span class="sourceLineNo">1172</span><a id="line.1172">     * @return The coordinates of a circle centered {@code (x, y)}, whose</a>
+<span class="sourceLineNo">1173</span><a id="line.1173">     * diameter is {@code (radius * 2) + 1}.</a>
+<span class="sourceLineNo">1174</span><a id="line.1174">     * @see squidpony.squidgrid.Radius#inCircle(int, int, int, boolean, int, int, List) if you want to keep the Coords within the bounds of the map</a>
+<span class="sourceLineNo">1175</span><a id="line.1175">     */</a>
+<span class="sourceLineNo">1176</span><a id="line.1176">    public static List&lt;Coord&gt; circle(int x, int y, int radius, /* @Nullable */ List&lt;Coord&gt; buf) {</a>
+<span class="sourceLineNo">1177</span><a id="line.1177">        final List&lt;Coord&gt; result = buf == null ? new ArrayList&lt;Coord&gt;() : buf;</a>
+<span class="sourceLineNo">1178</span><a id="line.1178">        radius = Math.max(0, radius);</a>
+<span class="sourceLineNo">1179</span><a id="line.1179">        for (int dx = -radius; dx &lt;= radius; ++dx) {</a>
+<span class="sourceLineNo">1180</span><a id="line.1180">            final int high = (int) Math.floor(Math.sqrt(radius * radius - dx * dx));</a>
+<span class="sourceLineNo">1181</span><a id="line.1181">            for (int dy = -high; dy &lt;= high; ++dy) {</a>
+<span class="sourceLineNo">1182</span><a id="line.1182">                result.add(Coord.get(x + dx, y + dy));</a>
+<span class="sourceLineNo">1183</span><a id="line.1183">            }</a>
+<span class="sourceLineNo">1184</span><a id="line.1184">        }</a>
+<span class="sourceLineNo">1185</span><a id="line.1185">        return result;</a>
+<span class="sourceLineNo">1186</span><a id="line.1186">    }</a>
+<span class="sourceLineNo">1187</span><a id="line.1187">}</a>
 
 
 

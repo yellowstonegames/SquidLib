@@ -280,7 +280,7 @@
 <span class="sourceLineNo">268</span><a id="line.268">    public static int determineBoundedShort(int state, final int bound)</a>
 <span class="sourceLineNo">269</span><a id="line.269">    {</a>
 <span class="sourceLineNo">270</span><a id="line.270">        state = ((state *= 0x62BD5) ^ state &gt;&gt;&gt; 13) * ((state &amp; 0xFFFF8) ^ 0xCD7B5);</a>
-<span class="sourceLineNo">271</span><a id="line.271">        return (int) ((((((state &lt;&lt; 21) | (state &gt;&gt;&gt; 11)) ^ (((state &lt;&lt; 7) | (state &gt;&gt;&gt; 25)) * 0x62BD5)) &amp; 0xFFFF) * bound) &gt;&gt; 16);</a>
+<span class="sourceLineNo">271</span><a id="line.271">        return (((((state &lt;&lt; 21) | (state &gt;&gt;&gt; 11)) ^ (((state &lt;&lt; 7) | (state &gt;&gt;&gt; 25)) * 0x62BD5)) &amp; 0xFFFF) * bound) &gt;&gt; 16;</a>
 <span class="sourceLineNo">272</span><a id="line.272">    }</a>
 <span class="sourceLineNo">273</span><a id="line.273">    /**</a>
 <span class="sourceLineNo">274</span><a id="line.274">     * Returns a random float that is deterministic based on an int state; if state is the same on two calls to this,</a>

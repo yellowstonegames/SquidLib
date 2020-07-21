@@ -4891,7 +4891,7 @@
 <span class="sourceLineNo">4879</span><a id="line.4879">        if (basis == null || basis.length &lt;= 0 || basis[0] == null || basis[0].length &lt;= 0) {</a>
 <span class="sourceLineNo">4880</span><a id="line.4880">            result = next;</a>
 <span class="sourceLineNo">4881</span><a id="line.4881">        } else {</a>
-<span class="sourceLineNo">4882</span><a id="line.4882">            int tmp, xTotal = 0, yTotal = 0, xTarget, yTarget, bestX, oX = basis.length, oY = basis[0].length, ao;</a>
+<span class="sourceLineNo">4882</span><a id="line.4882">            int tmp, xTotal = 0, yTotal, xTarget, yTarget, bestX, oX = basis.length, oY = basis[0].length, ao;</a>
 <span class="sourceLineNo">4883</span><a id="line.4883">            long t;</a>
 <span class="sourceLineNo">4884</span><a id="line.4884">            int[] xCounts = new int[width];</a>
 <span class="sourceLineNo">4885</span><a id="line.4885">            for (int x = 0; x &lt; width; x++) {</a>
@@ -7295,7 +7295,7 @@
 <span class="sourceLineNo">7283</span><a id="line.7283"></a>
 <span class="sourceLineNo">7284</span><a id="line.7284">    public class GRIterator implements Iterator&lt;Coord&gt;</a>
 <span class="sourceLineNo">7285</span><a id="line.7285">    {</a>
-<span class="sourceLineNo">7286</span><a id="line.7286">        public int index = 0;</a>
+<span class="sourceLineNo">7286</span><a id="line.7286">        public int index;</a>
 <span class="sourceLineNo">7287</span><a id="line.7287">        private long t, w;</a>
 <span class="sourceLineNo">7288</span><a id="line.7288">        public GRIterator()</a>
 <span class="sourceLineNo">7289</span><a id="line.7289">        {</a>

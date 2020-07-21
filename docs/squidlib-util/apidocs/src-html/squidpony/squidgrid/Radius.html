@@ -75,7 +75,7 @@
 <span class="sourceLineNo">063</span><a id="line.63"></a>
 <span class="sourceLineNo">064</span><a id="line.64">    private static final double PI2 = Math.PI * 2;</a>
 <span class="sourceLineNo">065</span><a id="line.65">    public double radius(int startx, int starty, int startz, int endx, int endy, int endz) {</a>
-<span class="sourceLineNo">066</span><a id="line.66">        return radius((double) startx, (double) starty, (double) startz, (double) endx, (double) endy, (double) endz);</a>
+<span class="sourceLineNo">066</span><a id="line.66">        return radius(startx, starty, startz, endx, endy, (double) endz);</a>
 <span class="sourceLineNo">067</span><a id="line.67">    }</a>
 <span class="sourceLineNo">068</span><a id="line.68"></a>
 <span class="sourceLineNo">069</span><a id="line.69">    public double radius(double startx, double starty, double startz, double endx, double endy, double endz) {</a>
@@ -110,13 +110,13 @@
 <span class="sourceLineNo">098</span><a id="line.98">    }</a>
 <span class="sourceLineNo">099</span><a id="line.99"></a>
 <span class="sourceLineNo">100</span><a id="line.100">    public double radius(int startx, int starty, int endx, int endy) {</a>
-<span class="sourceLineNo">101</span><a id="line.101">        return radius((double) startx, (double) starty, (double) endx, (double) endy);</a>
+<span class="sourceLineNo">101</span><a id="line.101">        return radius(startx, starty, endx, (double) endy);</a>
 <span class="sourceLineNo">102</span><a id="line.102">    }</a>
 <span class="sourceLineNo">103</span><a id="line.103">    public double radius(Coord start, Coord end) {</a>
-<span class="sourceLineNo">104</span><a id="line.104">        return radius((double) start.x, (double) start.y, (double) end.x, (double) end.y);</a>
+<span class="sourceLineNo">104</span><a id="line.104">        return radius(start.x, start.y, end.x, (double) end.y);</a>
 <span class="sourceLineNo">105</span><a id="line.105">    }</a>
 <span class="sourceLineNo">106</span><a id="line.106">    public double radius(Coord end) {</a>
-<span class="sourceLineNo">107</span><a id="line.107">        return radius(0.0, 0.0, (double) end.x, (double) end.y);</a>
+<span class="sourceLineNo">107</span><a id="line.107">        return radius(0.0, 0.0, end.x, end.y);</a>
 <span class="sourceLineNo">108</span><a id="line.108">    }</a>
 <span class="sourceLineNo">109</span><a id="line.109"></a>
 <span class="sourceLineNo">110</span><a id="line.110">    public double radius(double startx, double starty, double endx, double endy) {</a>
@@ -126,7 +126,7 @@
 <span class="sourceLineNo">114</span><a id="line.114">    }</a>
 <span class="sourceLineNo">115</span><a id="line.115"></a>
 <span class="sourceLineNo">116</span><a id="line.116">    public double radius(int dx, int dy) {</a>
-<span class="sourceLineNo">117</span><a id="line.117">        return radius((double) dx, (double) dy);</a>
+<span class="sourceLineNo">117</span><a id="line.117">        return radius(dx, (double) dy);</a>
 <span class="sourceLineNo">118</span><a id="line.118">    }</a>
 <span class="sourceLineNo">119</span><a id="line.119"></a>
 <span class="sourceLineNo">120</span><a id="line.120">    public double radius(double dx, double dy) {</a>
@@ -149,7 +149,7 @@
 <span class="sourceLineNo">137</span><a id="line.137">    }</a>
 <span class="sourceLineNo">138</span><a id="line.138"></a>
 <span class="sourceLineNo">139</span><a id="line.139">    public Coord onUnitShape(double distance, IRNG rng) {</a>
-<span class="sourceLineNo">140</span><a id="line.140">        int x = 0, y = 0;</a>
+<span class="sourceLineNo">140</span><a id="line.140">        int x, y;</a>
 <span class="sourceLineNo">141</span><a id="line.141">        switch (this) {</a>
 <span class="sourceLineNo">142</span><a id="line.142">            case SQUARE:</a>
 <span class="sourceLineNo">143</span><a id="line.143">            case CUBE:</a>
@@ -388,13 +388,13 @@
 <span class="sourceLineNo">376</span><a id="line.376">                end = Coord.get(clamp( (int) Math.round(cosTheta * radiusLength) + center.x, 0, width)</a>
 <span class="sourceLineNo">377</span><a id="line.377">                        , clamp( (int) Math.round(sinTheta * radiusLength) + center.y, 0, height));</a>
 <span class="sourceLineNo">378</span><a id="line.378">                if(!surpassEdges) {</a>
-<span class="sourceLineNo">379</span><a id="line.379">                    long edgeLength = 0;</a>
+<span class="sourceLineNo">379</span><a id="line.379">                    long edgeLength;</a>
 <span class="sourceLineNo">380</span><a id="line.380">//                    if (end.x == 0 || end.x == width - 1 || end.y == 0 || end.y == height - 1)</a>
 <span class="sourceLineNo">381</span><a id="line.381">                    if (end.x &lt; 0)</a>
 <span class="sourceLineNo">382</span><a id="line.382">                    {</a>
 <span class="sourceLineNo">383</span><a id="line.383">                        // wow, we lucked out here. the only situation where cos(angle) is 0 is if the angle aims</a>
 <span class="sourceLineNo">384</span><a id="line.384">                        // straight up or down, and then x cannot be &lt; 0 or &gt;= width.</a>
-<span class="sourceLineNo">385</span><a id="line.385">                        edgeLength = Math.round((0 - center.x) / cosTheta);</a>
+<span class="sourceLineNo">385</span><a id="line.385">                        edgeLength = Math.round((-center.x) / cosTheta);</a>
 <span class="sourceLineNo">386</span><a id="line.386">                        end = end.setY(clamp((int) Math.round(sinTheta * edgeLength) + center.y, 0, height));</a>
 <span class="sourceLineNo">387</span><a id="line.387">                    }</a>
 <span class="sourceLineNo">388</span><a id="line.388">                    else if(end.x &gt;= width)</a>
@@ -409,7 +409,7 @@
 <span class="sourceLineNo">397</span><a id="line.397">                    {</a>
 <span class="sourceLineNo">398</span><a id="line.398">                        // wow, we lucked out here. the only situation where sin(angle) is 0 is if the angle aims</a>
 <span class="sourceLineNo">399</span><a id="line.399">                        // straight left or right, and then y cannot be &lt; 0 or &gt;= height.</a>
-<span class="sourceLineNo">400</span><a id="line.400">                        edgeLength = Math.round((0 - center.y) / sinTheta);</a>
+<span class="sourceLineNo">400</span><a id="line.400">                        edgeLength = Math.round((-center.y) / sinTheta);</a>
 <span class="sourceLineNo">401</span><a id="line.401">                        end = end.setX(clamp((int) Math.round(cosTheta * edgeLength) + center.x, 0, width));</a>
 <span class="sourceLineNo">402</span><a id="line.402">                    }</a>
 <span class="sourceLineNo">403</span><a id="line.403">                    else if(end.y &gt;= height)</a>
@@ -686,7 +686,30 @@
 <span class="sourceLineNo">674</span><a id="line.674">        }</a>
 <span class="sourceLineNo">675</span><a id="line.675">        return expanded;</a>
 <span class="sourceLineNo">676</span><a id="line.676">    }</a>
-<span class="sourceLineNo">677</span><a id="line.677">}</a>
+<span class="sourceLineNo">677</span><a id="line.677">    /**</a>
+<span class="sourceLineNo">678</span><a id="line.678">     * Gets the appropriate {@link Measurement} to pass to a constructor if you already have a Radius.</a>
+<span class="sourceLineNo">679</span><a id="line.679">     * Matches SQUARE or CUBE to CHEBYSHEV, DIAMOND or OCTAHEDRON to MANHATTAN, and CIRCLE or SPHERE to EUCLIDEAN.</a>
+<span class="sourceLineNo">680</span><a id="line.680">     * </a>
+<span class="sourceLineNo">681</span><a id="line.681">     * @see Measurement#matchingMeasurement(Radius) an equivalent method in Measurement</a>
+<span class="sourceLineNo">682</span><a id="line.682">     * @see Measurement#matchingRadius() a method to do the inverse of this and get a Radius from a Measurement</a>
+<span class="sourceLineNo">683</span><a id="line.683">     *</a>
+<span class="sourceLineNo">684</span><a id="line.684">     * @return a {@link Measurement} that matches this; SQUARE to CHEBYSHEV, DIAMOND to MANHATTAN, etc.</a>
+<span class="sourceLineNo">685</span><a id="line.685">     */</a>
+<span class="sourceLineNo">686</span><a id="line.686">    public Measurement matchingMeasurement() {</a>
+<span class="sourceLineNo">687</span><a id="line.687">        switch (this)</a>
+<span class="sourceLineNo">688</span><a id="line.688">        {</a>
+<span class="sourceLineNo">689</span><a id="line.689">            case CUBE:</a>
+<span class="sourceLineNo">690</span><a id="line.690">            case SQUARE:</a>
+<span class="sourceLineNo">691</span><a id="line.691">                return Measurement.CHEBYSHEV;</a>
+<span class="sourceLineNo">692</span><a id="line.692">            case DIAMOND:</a>
+<span class="sourceLineNo">693</span><a id="line.693">            case OCTAHEDRON:</a>
+<span class="sourceLineNo">694</span><a id="line.694">                return Measurement.MANHATTAN;</a>
+<span class="sourceLineNo">695</span><a id="line.695">            default:</a>
+<span class="sourceLineNo">696</span><a id="line.696">                return Measurement.EUCLIDEAN;</a>
+<span class="sourceLineNo">697</span><a id="line.697">        }</a>
+<span class="sourceLineNo">698</span><a id="line.698">    }</a>
+<span class="sourceLineNo">699</span><a id="line.699"></a>
+<span class="sourceLineNo">700</span><a id="line.700">}</a>
 
 
 

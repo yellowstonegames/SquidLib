@@ -39,7 +39,7 @@
 <span class="sourceLineNo">027</span><a id="line.27">    private DijkstraMap dijkstra;</a>
 <span class="sourceLineNo">028</span><a id="line.28">    private Coord[][] influences;</a>
 <span class="sourceLineNo">029</span><a id="line.29">    private GreasedRegion[] groups;</a>
-<span class="sourceLineNo">030</span><a id="line.30">    private boolean completed = false;</a>
+<span class="sourceLineNo">030</span><a id="line.30">    private boolean completed;</a>
 <span class="sourceLineNo">031</span><a id="line.31">    private Radius radius;</a>
 <span class="sourceLineNo">032</span><a id="line.32">    /**</a>
 <span class="sourceLineNo">033</span><a id="line.33">     * Constructs a Zone of Influence map. Takes a (quite possibly jagged) array of arrays of Coord influences, where</a>
@@ -52,13 +52,13 @@
 <span class="sourceLineNo">040</span><a id="line.40">     * Call {@link #calculate()} when you want information out of this.</a>
 <span class="sourceLineNo">041</span><a id="line.41">     * @param influences an outer array containing influencing groups, each an array containing Coords that influence</a>
 <span class="sourceLineNo">042</span><a id="line.42">     * @param map a char[][] that is used as an area map; should be bounded</a>
-<span class="sourceLineNo">043</span><a id="line.43">     * @param measurement a Radius enum that corresponds to how distance should be measured</a>
+<span class="sourceLineNo">043</span><a id="line.43">     * @param radiusStrategy a Radius enum that corresponds to how distance should be measured</a>
 <span class="sourceLineNo">044</span><a id="line.44">     */</a>
-<span class="sourceLineNo">045</span><a id="line.45">    public GreasedZOI(Coord[][] influences, char[][] map, Radius measurement) {</a>
+<span class="sourceLineNo">045</span><a id="line.45">    public GreasedZOI(Coord[][] influences, char[][] map, Radius radiusStrategy) {</a>
 <span class="sourceLineNo">046</span><a id="line.46">        this.influences = influences;</a>
 <span class="sourceLineNo">047</span><a id="line.47">        groups = new GreasedRegion[influences.length];</a>
-<span class="sourceLineNo">048</span><a id="line.48">        radius = measurement;</a>
-<span class="sourceLineNo">049</span><a id="line.49">        dijkstra = new DijkstraMap(map, DijkstraMap.findMeasurement(measurement));</a>
+<span class="sourceLineNo">048</span><a id="line.48">        radius = radiusStrategy == null ? Radius.CIRCLE : radiusStrategy;</a>
+<span class="sourceLineNo">049</span><a id="line.49">        dijkstra = new DijkstraMap(map, radius.matchingMeasurement());</a>
 <span class="sourceLineNo">050</span><a id="line.50">    }</a>
 <span class="sourceLineNo">051</span><a id="line.51">    /**</a>
 <span class="sourceLineNo">052</span><a id="line.52">     * Constructs a Zone of Influence map. Takes an arrays of Coord influences, where each Coord is treated as both a</a>
@@ -72,17 +72,17 @@
 <span class="sourceLineNo">060</span><a id="line.60">     * Call {@link #calculate()} when you want information out of this.</a>
 <span class="sourceLineNo">061</span><a id="line.61">     * @param influences an array containing Coords that each have their own independent influence</a>
 <span class="sourceLineNo">062</span><a id="line.62">     * @param map a char[][] that is used as an area map; should be bounded</a>
-<span class="sourceLineNo">063</span><a id="line.63">     * @param measurement a Radius enum that corresponds to how distance should be measured</a>
+<span class="sourceLineNo">063</span><a id="line.63">     * @param radiusStrategy a Radius enum that corresponds to how distance should be measured</a>
 <span class="sourceLineNo">064</span><a id="line.64">     * @see squidpony.squidmath.PoissonDisk PoissonDisk provides a good way to generate evenly spaced Coords</a>
 <span class="sourceLineNo">065</span><a id="line.65">     */</a>
-<span class="sourceLineNo">066</span><a id="line.66">    public GreasedZOI(Coord[] influences, char[][] map, Radius measurement) {</a>
+<span class="sourceLineNo">066</span><a id="line.66">    public GreasedZOI(Coord[] influences, char[][] map, Radius radiusStrategy) {</a>
 <span class="sourceLineNo">067</span><a id="line.67">        this.influences = new Coord[influences.length][];</a>
 <span class="sourceLineNo">068</span><a id="line.68">        for (int i = 0; i &lt; influences.length; i++) {</a>
 <span class="sourceLineNo">069</span><a id="line.69">            this.influences[i] = new Coord[] { influences[i] };</a>
 <span class="sourceLineNo">070</span><a id="line.70">        }</a>
 <span class="sourceLineNo">071</span><a id="line.71">        groups = new GreasedRegion[influences.length];</a>
-<span class="sourceLineNo">072</span><a id="line.72">        radius = measurement;</a>
-<span class="sourceLineNo">073</span><a id="line.73">        dijkstra = new DijkstraMap(map, DijkstraMap.findMeasurement(measurement));</a>
+<span class="sourceLineNo">072</span><a id="line.72">        radius = radiusStrategy == null ? Radius.CIRCLE : radiusStrategy;</a>
+<span class="sourceLineNo">073</span><a id="line.73">        dijkstra = new DijkstraMap(map, radius.matchingMeasurement());</a>
 <span class="sourceLineNo">074</span><a id="line.74">    }</a>
 <span class="sourceLineNo">075</span><a id="line.75">    /**</a>
 <span class="sourceLineNo">076</span><a id="line.76">     * Constructs a Zone of Influence map. Takes a Collection of Coord influences, where each Coord is treated as both a</a>
@@ -97,17 +97,17 @@
 <span class="sourceLineNo">085</span><a id="line.85">     * Call {@link #calculate()} when you want information out of this.</a>
 <span class="sourceLineNo">086</span><a id="line.86">     * @param influences A Collection of Coord, such as a GreasedRegion, where each Coord has independent influence</a>
 <span class="sourceLineNo">087</span><a id="line.87">     * @param map a char[][] that is used as an area map; should be bounded</a>
-<span class="sourceLineNo">088</span><a id="line.88">     * @param measurement a Radius enum that corresponds to how distance should be measured</a>
+<span class="sourceLineNo">088</span><a id="line.88">     * @param radiusStrategy a Radius enum that corresponds to how distance should be measured</a>
 <span class="sourceLineNo">089</span><a id="line.89">     */</a>
-<span class="sourceLineNo">090</span><a id="line.90">    public GreasedZOI(Collection&lt;Coord&gt; influences, char[][] map, Radius measurement) {</a>
+<span class="sourceLineNo">090</span><a id="line.90">    public GreasedZOI(Collection&lt;Coord&gt; influences, char[][] map, Radius radiusStrategy) {</a>
 <span class="sourceLineNo">091</span><a id="line.91">        this.influences = new Coord[influences.size()][];</a>
 <span class="sourceLineNo">092</span><a id="line.92">        int i = 0;</a>
 <span class="sourceLineNo">093</span><a id="line.93">        for(Coord c : influences) {</a>
 <span class="sourceLineNo">094</span><a id="line.94">            this.influences[i++] = new Coord[]{c};</a>
 <span class="sourceLineNo">095</span><a id="line.95">        }</a>
 <span class="sourceLineNo">096</span><a id="line.96">        groups = new GreasedRegion[this.influences.length];</a>
-<span class="sourceLineNo">097</span><a id="line.97">        radius = measurement;</a>
-<span class="sourceLineNo">098</span><a id="line.98">        dijkstra = new DijkstraMap(map, DijkstraMap.findMeasurement(measurement));</a>
+<span class="sourceLineNo">097</span><a id="line.97">        radius = radiusStrategy == null ? Radius.CIRCLE : radiusStrategy;</a>
+<span class="sourceLineNo">098</span><a id="line.98">        dijkstra = new DijkstraMap(map, radius.matchingMeasurement());</a>
 <span class="sourceLineNo">099</span><a id="line.99">    }</a>
 <span class="sourceLineNo">100</span><a id="line.100"></a>
 <span class="sourceLineNo">101</span><a id="line.101">    /**</a>

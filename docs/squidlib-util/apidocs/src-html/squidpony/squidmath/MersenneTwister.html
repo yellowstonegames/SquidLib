@@ -193,7 +193,7 @@
 <span class="sourceLineNo">181</span><a id="line.181">            return;</a>
 <span class="sourceLineNo">182</span><a id="line.182">        int i = 1;</a>
 <span class="sourceLineNo">183</span><a id="line.183">        int j = 0;</a>
-<span class="sourceLineNo">184</span><a id="line.184">        int k = (NN &gt; array.length ? NN : array.length);</a>
+<span class="sourceLineNo">184</span><a id="line.184">        int k = (Math.max(NN, array.length));</a>
 <span class="sourceLineNo">185</span><a id="line.185">        for (; k != 0; k--) {</a>
 <span class="sourceLineNo">186</span><a id="line.186">            mt[i] = (mt[i] ^ ((mt[i - 1] ^ (mt[i - 1] &gt;&gt;&gt; 62)) * 3935559000370003845L))</a>
 <span class="sourceLineNo">187</span><a id="line.187">                    + array[j] + j;</a>

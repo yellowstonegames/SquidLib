@@ -367,7 +367,7 @@
 <span class="sourceLineNo">355</span><a id="line.355">     * @return a pseudo-random float between 0f (inclusive) and 1f (exclusive), determined by {@code state}</a>
 <span class="sourceLineNo">356</span><a id="line.356">     */</a>
 <span class="sourceLineNo">357</span><a id="line.357">    public static float determineFloat(long state) {</a>
-<span class="sourceLineNo">358</span><a id="line.358">        return ((state = ((state = (state ^ (state &lt;&lt; 41 | state &gt;&gt;&gt; 23) ^ (state &lt;&lt; 17 | state &gt;&gt;&gt; 47)) * 0x369DEA0F31A53F85L) ^ state &gt;&gt;&gt; 37 ^ state &gt;&gt;&gt; 25) * 0xDB4F0B9175AE2165L) &gt;&gt;&gt; 40) * 0x1p-24f;</a>
+<span class="sourceLineNo">358</span><a id="line.358">        return (((state = (state ^ (state &lt;&lt; 41 | state &gt;&gt;&gt; 23) ^ (state &lt;&lt; 17 | state &gt;&gt;&gt; 47)) * 0x369DEA0F31A53F85L) ^ state &gt;&gt;&gt; 37 ^ state &gt;&gt;&gt; 25) * 0xDB4F0B9175AE2165L &gt;&gt;&gt; 40) * 0x1p-24f;</a>
 <span class="sourceLineNo">359</span><a id="line.359">    }</a>
 <span class="sourceLineNo">360</span><a id="line.360"></a>
 <span class="sourceLineNo">361</span><a id="line.361">    /**</a>

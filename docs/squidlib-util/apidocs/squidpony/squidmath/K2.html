@@ -87,18 +87,18 @@ loadScripts(document, 'script');</script>
 <h1 title="Class K2" class="title">Class K2&lt;A,&#8203;B&gt;</h1>
 </div>
 <div class="contentContainer">
-<div class="inheritance" title="Inheritance Tree"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">java.lang.Object</a>
+<div class="inheritance" title="Inheritance Tree"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">java.lang.Object</a>
 <div class="inheritance">squidpony.squidmath.K2&lt;A,&#8203;B&gt;</div>
 </div>
 <section class="description">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink">Serializable</a></code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink">Serializable</a></code></dd>
 </dl>
 <hr>
 <pre>public class <a href="../../src-html/squidpony/squidmath/K2.html#line.18">K2</a>&lt;A,&#8203;B&gt;
-extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>
-implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink">Serializable</a></pre>
+extends <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>
+implements <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink">Serializable</a></pre>
 <div class="block">An ordered bidirectional map-like data structure, with unique A keys and unique B keys updated together like a map
  that can be queried by A keys, B keys, or int indices. Does not implement any interfaces that you would expect for a
  data structure, because almost every method it has needs to specify whether it applies to A or B items, but you can
@@ -197,8 +197,8 @@ float&nbsp;f,
 </td>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.lang.Iterable,java.lang.Iterable)">K2</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Iterable</a>&lt;? extends <a href="K2.html" title="type parameter in K2">A</a>&gt;&nbsp;aKeys,
-<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Iterable</a>&lt;? extends <a href="K2.html" title="type parameter in K2">B</a>&gt;&nbsp;bKeys)</code></th>
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.lang.Iterable,java.lang.Iterable)">K2</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Iterable</a>&lt;? extends <a href="K2.html" title="type parameter in K2">A</a>&gt;&nbsp;aKeys,
+<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Iterable</a>&lt;? extends <a href="K2.html" title="type parameter in K2">B</a>&gt;&nbsp;bKeys)</code></th>
 <td class="colLast">
 <div class="block">Constructs a K2 from a pair of Iterables that will be processed in pairs, adding a unique A from aKeys if and
  only if it can also add a unique B from bKeys, otherwise skipping that pair.</div>
@@ -302,7 +302,7 @@ float&nbsp;f,
 </tr>
 <tr class="altColor" id="i8">
 <td class="colFirst"><code><a href="K2.html" title="type parameter in K2">A</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getAFromB(java.lang.Object)">getAFromB</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;key)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getAFromB(java.lang.Object)">getAFromB</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;key)</code></th>
 <td class="colLast">
 <div class="block">Given a B object, finds the associated A object (it will be at the same point in the ordering).</div>
 </td>
@@ -316,7 +316,7 @@ float&nbsp;f,
 </tr>
 <tr class="altColor" id="i10">
 <td class="colFirst"><code><a href="K2.html" title="type parameter in K2">B</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getBFromA(java.lang.Object)">getBFromA</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;key)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getBFromA(java.lang.Object)">getBFromA</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;key)</code></th>
 <td class="colLast">
 <div class="block">Given an A object, finds the associated B object (it will be at the same point in the ordering).</div>
 </td>
@@ -336,14 +336,14 @@ float&nbsp;f,
 </td>
 </tr>
 <tr class="rowColor" id="i13">
-<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/SortedSet.html?is-external=true" title="class or interface in java.util" class="externalLink">SortedSet</a>&lt;<a href="K2.html" title="type parameter in K2">A</a>&gt;</code></td>
+<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/SortedSet.html?is-external=true" title="class or interface in java.util" class="externalLink">SortedSet</a>&lt;<a href="K2.html" title="type parameter in K2">A</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getSetA()">getSetA</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets and caches the A keys as a Collection that implements SortedSet (and so also implements Set).</div>
 </td>
 </tr>
 <tr class="altColor" id="i14">
-<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/SortedSet.html?is-external=true" title="class or interface in java.util" class="externalLink">SortedSet</a>&lt;<a href="K2.html" title="type parameter in K2">B</a>&gt;</code></td>
+<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/SortedSet.html?is-external=true" title="class or interface in java.util" class="externalLink">SortedSet</a>&lt;<a href="K2.html" title="type parameter in K2">B</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getSetB()">getSetB</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets and caches the B keys as a Collection that implements SortedSet (and so also implements Set).</div>
@@ -351,14 +351,14 @@ float&nbsp;f,
 </tr>
 <tr class="rowColor" id="i15">
 <td class="colFirst"><code>int</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#indexOfA(java.lang.Object)">indexOfA</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;key)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#indexOfA(java.lang.Object)">indexOfA</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;key)</code></th>
 <td class="colLast">
 <div class="block">Given an A object key, finds the position in the ordering that A has, or -1 if key is not present.</div>
 </td>
 </tr>
 <tr class="altColor" id="i16">
 <td class="colFirst"><code>int</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#indexOfB(java.lang.Object)">indexOfB</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;key)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#indexOfB(java.lang.Object)">indexOfB</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;key)</code></th>
 <td class="colLast">
 <div class="block">Given a B object key, finds the position in the ordering that B has, or -1 if key is not present.</div>
 </td>
@@ -369,14 +369,14 @@ float&nbsp;f,
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor" id="i18">
-<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Iterator.html?is-external=true" title="class or interface in java.util" class="externalLink">Iterator</a>&lt;<a href="K2.html" title="type parameter in K2">A</a>&gt;</code></td>
+<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Iterator.html?is-external=true" title="class or interface in java.util" class="externalLink">Iterator</a>&lt;<a href="K2.html" title="type parameter in K2">A</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#iteratorA()">iteratorA</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Creates a new iterator over the A keys this holds.</div>
 </td>
 </tr>
 <tr class="rowColor" id="i19">
-<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Iterator.html?is-external=true" title="class or interface in java.util" class="externalLink">Iterator</a>&lt;<a href="K2.html" title="type parameter in K2">B</a>&gt;</code></td>
+<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Iterator.html?is-external=true" title="class or interface in java.util" class="externalLink">Iterator</a>&lt;<a href="K2.html" title="type parameter in K2">B</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#iteratorB()">iteratorB</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Creates a new iterator over the B keys this holds.</div>
@@ -397,8 +397,8 @@ float&nbsp;f,
 </tr>
 <tr class="altColor" id="i22">
 <td class="colFirst"><code>boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#putAll(java.lang.Iterable,java.lang.Iterable)">putAll</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Iterable</a>&lt;? extends <a href="K2.html" title="type parameter in K2">A</a>&gt;&nbsp;aKeys,
-<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Iterable</a>&lt;? extends <a href="K2.html" title="type parameter in K2">B</a>&gt;&nbsp;bKeys)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#putAll(java.lang.Iterable,java.lang.Iterable)">putAll</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Iterable</a>&lt;? extends <a href="K2.html" title="type parameter in K2">A</a>&gt;&nbsp;aKeys,
+<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Iterable</a>&lt;? extends <a href="K2.html" title="type parameter in K2">B</a>&gt;&nbsp;bKeys)</code></th>
 <td class="colLast">
 <div class="block">Puts all unique A and B keys in <code>aKeys</code> and <code>bKeys</code> into this K2 at the end.</div>
 </td>
@@ -489,10 +489,10 @@ float&nbsp;f,
 </div>
 </div>
 <div class="inheritedList">
-<h3>Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></h3>
+<h3>Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></h3>
 <a id="methods.inherited.from.class.java.lang.Object">
 <!--   -->
-</a><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#clone()" title="class or interface in java.lang" class="externalLink">clone</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.lang" class="externalLink">equals</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#finalize()" title="class or interface in java.lang" class="externalLink">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#getClass()" title="class or interface in java.lang" class="externalLink">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#hashCode()" title="class or interface in java.lang" class="externalLink">hashCode</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#notify()" title="class or interface in java.lang" class="externalLink">notify</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#notifyAll()" title="class or interface in java.lang" class="externalLink">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#toString()" title="class or interface in java.lang" class="externalLink">toString</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#wait()" title="class or interface in java.lang" class="externalLink">wait</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#wait(long)" title="class or interface in java.lang" class="externalLink">wait</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#wait(long,int)" title="class or interface in java.lang" class="externalLink">wait</a></code></div>
+</a><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#clone()" title="class or interface in java.lang" class="externalLink">clone</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.lang" class="externalLink">equals</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#finalize()" title="class or interface in java.lang" class="externalLink">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#getClass()" title="class or interface in java.lang" class="externalLink">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#hashCode()" title="class or interface in java.lang" class="externalLink">hashCode</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#notify()" title="class or interface in java.lang" class="externalLink">notify</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#notifyAll()" title="class or interface in java.lang" class="externalLink">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#toString()" title="class or interface in java.lang" class="externalLink">toString</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#wait()" title="class or interface in java.lang" class="externalLink">wait</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#wait(long)" title="class or interface in java.lang" class="externalLink">wait</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#wait(long,int)" title="class or interface in java.lang" class="externalLink">wait</a></code></div>
 </section>
 </li>
 </ul>
@@ -590,8 +590,8 @@ float&nbsp;f,
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(java.lang.Iterable,java.lang.Iterable)">K2</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2.html#line.81">K2</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Iterable</a>&lt;? extends <a href="K2.html" title="type parameter in K2">A</a>&gt;&nbsp;aKeys,
-<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Iterable</a>&lt;? extends <a href="K2.html" title="type parameter in K2">B</a>&gt;&nbsp;bKeys)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2.html#line.81">K2</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Iterable</a>&lt;? extends <a href="K2.html" title="type parameter in K2">A</a>&gt;&nbsp;aKeys,
+<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Iterable</a>&lt;? extends <a href="K2.html" title="type parameter in K2">B</a>&gt;&nbsp;bKeys)</span></div>
 <div class="block">Constructs a K2 from a pair of Iterables that will be processed in pairs, adding a unique A from aKeys if and
  only if it can also add a unique B from bKeys, otherwise skipping that pair.</div>
 <dl>
@@ -670,9 +670,9 @@ float&nbsp;f,
 <li class="blockList">
 <section class="detail">
 <h3><a id="indexOfA(java.lang.Object)">indexOfA</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2.html#line.143">indexOfA</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;key)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2.html#line.143">indexOfA</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;key)</span></div>
 <div class="block">Given an A object key, finds the position in the ordering that A has, or -1 if key is not present.
- Unlike <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/List.html?is-external=true#indexOf(java.lang.Object)" title="class or interface in java.util" class="externalLink"><code>List.indexOf(Object)</code></a>, this runs in constant time.</div>
+ Unlike <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/List.html?is-external=true#indexOf(java.lang.Object)" title="class or interface in java.util" class="externalLink"><code>List.indexOf(Object)</code></a>, this runs in constant time.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>key</code> - the A to find the position of</dd>
@@ -684,9 +684,9 @@ float&nbsp;f,
 <li class="blockList">
 <section class="detail">
 <h3><a id="indexOfB(java.lang.Object)">indexOfB</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2.html#line.153">indexOfB</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;key)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2.html#line.153">indexOfB</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;key)</span></div>
 <div class="block">Given a B object key, finds the position in the ordering that B has, or -1 if key is not present.
- Unlike <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/List.html?is-external=true#indexOf(java.lang.Object)" title="class or interface in java.util" class="externalLink"><code>List.indexOf(Object)</code></a>, this runs in constant time.</div>
+ Unlike <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/List.html?is-external=true#indexOf(java.lang.Object)" title="class or interface in java.util" class="externalLink"><code>List.indexOf(Object)</code></a>, this runs in constant time.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>key</code> - the B to find the position of</dd>
@@ -724,7 +724,7 @@ float&nbsp;f,
 <li class="blockList">
 <section class="detail">
 <h3><a id="getBFromA(java.lang.Object)">getBFromA</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="K2.html" title="type parameter in K2">B</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2.html#line.182">getBFromA</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;key)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="K2.html" title="type parameter in K2">B</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2.html#line.182">getBFromA</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;key)</span></div>
 <div class="block">Given an A object, finds the associated B object (it will be at the same point in the ordering).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -737,7 +737,7 @@ float&nbsp;f,
 <li class="blockList">
 <section class="detail">
 <h3><a id="getAFromB(java.lang.Object)">getAFromB</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="K2.html" title="type parameter in K2">A</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2.html#line.192">getAFromB</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;key)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="K2.html" title="type parameter in K2">A</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2.html#line.192">getAFromB</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;key)</span></div>
 <div class="block">Given a B object, finds the associated A object (it will be at the same point in the ordering).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -873,8 +873,8 @@ float&nbsp;f,
 <li class="blockList">
 <section class="detail">
 <h3><a id="putAll(java.lang.Iterable,java.lang.Iterable)">putAll</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2.html#line.305">putAll</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Iterable</a>&lt;? extends <a href="K2.html" title="type parameter in K2">A</a>&gt;&nbsp;aKeys,
-<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Iterable</a>&lt;? extends <a href="K2.html" title="type parameter in K2">B</a>&gt;&nbsp;bKeys)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2.html#line.305">putAll</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Iterable</a>&lt;? extends <a href="K2.html" title="type parameter in K2">A</a>&gt;&nbsp;aKeys,
+<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Iterable</a>&lt;? extends <a href="K2.html" title="type parameter in K2">B</a>&gt;&nbsp;bKeys)</span></div>
 <div class="block">Puts all unique A and B keys in <code>aKeys</code> and <code>bKeys</code> into this K2 at the end. If an A in aKeys or a B
  in bKeys is already present when this would add one, this will not put the A and B keys at that point in the
  iteration order, and will place the next unique A and B it finds in the arguments at that position instead.</div>
@@ -1004,7 +1004,7 @@ float&nbsp;f,
 <li class="blockList">
 <section class="detail">
 <h3><a id="iteratorA()">iteratorA</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Iterator.html?is-external=true" title="class or interface in java.util" class="externalLink">Iterator</a>&lt;<a href="K2.html" title="type parameter in K2">A</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2.html#line.427">iteratorA</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Iterator.html?is-external=true" title="class or interface in java.util" class="externalLink">Iterator</a>&lt;<a href="K2.html" title="type parameter in K2">A</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2.html#line.427">iteratorA</a></span>()</div>
 <div class="block">Creates a new iterator over the A keys this holds. This can be problematic for garbage collection if called very
  frequently; it may be better to access items by index (which also lets you access other keys associated with that
  index) using <a href="#getAAt(int)"><code>getAAt(int)</code></a> in a for(int i=0...) loop.</div>
@@ -1017,7 +1017,7 @@ float&nbsp;f,
 <li class="blockList">
 <section class="detail">
 <h3><a id="iteratorB()">iteratorB</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Iterator.html?is-external=true" title="class or interface in java.util" class="externalLink">Iterator</a>&lt;<a href="K2.html" title="type parameter in K2">B</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2.html#line.437">iteratorB</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Iterator.html?is-external=true" title="class or interface in java.util" class="externalLink">Iterator</a>&lt;<a href="K2.html" title="type parameter in K2">B</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2.html#line.437">iteratorB</a></span>()</div>
 <div class="block">Creates a new iterator over the B keys this holds. This can be problematic for garbage collection if called very
  frequently; it may be better to access items by index (which also lets you access other keys associated with that
  index) using <a href="#getBAt(int)"><code>getBAt(int)</code></a> in a for(int i=0...) loop.</div>
@@ -1030,7 +1030,7 @@ float&nbsp;f,
 <li class="blockList">
 <section class="detail">
 <h3><a id="getSetA()">getSetA</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/SortedSet.html?is-external=true" title="class or interface in java.util" class="externalLink">SortedSet</a>&lt;<a href="K2.html" title="type parameter in K2">A</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2.html#line.447">getSetA</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/SortedSet.html?is-external=true" title="class or interface in java.util" class="externalLink">SortedSet</a>&lt;<a href="K2.html" title="type parameter in K2">A</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2.html#line.447">getSetA</a></span>()</div>
 <div class="block">Gets and caches the A keys as a Collection that implements SortedSet (and so also implements Set). This Set is
  shared with this collection; it is not a copy.</div>
 <dl>
@@ -1042,7 +1042,7 @@ float&nbsp;f,
 <li class="blockList">
 <section class="detail">
 <h3><a id="getSetB()">getSetB</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/SortedSet.html?is-external=true" title="class or interface in java.util" class="externalLink">SortedSet</a>&lt;<a href="K2.html" title="type parameter in K2">B</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2.html#line.455">getSetB</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/SortedSet.html?is-external=true" title="class or interface in java.util" class="externalLink">SortedSet</a>&lt;<a href="K2.html" title="type parameter in K2">B</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2.html#line.455">getSetB</a></span>()</div>
 <div class="block">Gets and caches the B keys as a Collection that implements SortedSet (and so also implements Set). This Set is
  shared with this collection; it is not a copy.</div>
 <dl>

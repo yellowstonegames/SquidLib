@@ -10,21 +10,21 @@
 <body class="source">
 <main role="main">
 <div class="sourceContainer">
-<pre><span class="sourceLineNo">001</span><a id="line.1">/*******************************************************************************</a>
-<span class="sourceLineNo">002</span><a id="line.2"> * Copyright 2011 See AUTHORS file.</a>
-<span class="sourceLineNo">003</span><a id="line.3"> *</a>
-<span class="sourceLineNo">004</span><a id="line.4"> * Licensed under the Apache License, Version 2.0 (the "License");</a>
-<span class="sourceLineNo">005</span><a id="line.5"> * you may not use this file except in compliance with the License.</a>
-<span class="sourceLineNo">006</span><a id="line.6"> * You may obtain a copy of the License at</a>
-<span class="sourceLineNo">007</span><a id="line.7"> *</a>
-<span class="sourceLineNo">008</span><a id="line.8"> *   http://www.apache.org/licenses/LICENSE-2.0</a>
-<span class="sourceLineNo">009</span><a id="line.9"> *</a>
-<span class="sourceLineNo">010</span><a id="line.10"> * Unless required by applicable law or agreed to in writing, software</a>
-<span class="sourceLineNo">011</span><a id="line.11"> * distributed under the License is distributed on an "AS IS" BASIS,</a>
-<span class="sourceLineNo">012</span><a id="line.12"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</a>
-<span class="sourceLineNo">013</span><a id="line.13"> * See the License for the specific language governing permissions and</a>
-<span class="sourceLineNo">014</span><a id="line.14"> * limitations under the License.</a>
-<span class="sourceLineNo">015</span><a id="line.15"> ******************************************************************************/</a>
+<pre><span class="sourceLineNo">001</span><a id="line.1">/******************************************************************************</a>
+<span class="sourceLineNo">002</span><a id="line.2"> Copyright 2011 See AUTHORS file.</a>
+<span class="sourceLineNo">003</span><a id="line.3"></a>
+<span class="sourceLineNo">004</span><a id="line.4"> Licensed under the Apache License, Version 2.0 (the "License");</a>
+<span class="sourceLineNo">005</span><a id="line.5"> you may not use this file except in compliance with the License.</a>
+<span class="sourceLineNo">006</span><a id="line.6"> You may obtain a copy of the License at</a>
+<span class="sourceLineNo">007</span><a id="line.7"></a>
+<span class="sourceLineNo">008</span><a id="line.8"> http://www.apache.org/licenses/LICENSE-2.0</a>
+<span class="sourceLineNo">009</span><a id="line.9"></a>
+<span class="sourceLineNo">010</span><a id="line.10"> Unless required by applicable law or agreed to in writing, software</a>
+<span class="sourceLineNo">011</span><a id="line.11"> distributed under the License is distributed on an "AS IS" BASIS,</a>
+<span class="sourceLineNo">012</span><a id="line.12"> WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</a>
+<span class="sourceLineNo">013</span><a id="line.13"> See the License for the specific language governing permissions and</a>
+<span class="sourceLineNo">014</span><a id="line.14"> limitations under the License.</a>
+<span class="sourceLineNo">015</span><a id="line.15"> */</a>
 <span class="sourceLineNo">016</span><a id="line.16">package squidpony.squidmath;</a>
 <span class="sourceLineNo">017</span><a id="line.17"></a>
 <span class="sourceLineNo">018</span><a id="line.18">import squidpony.StringKit;</a>
@@ -426,145 +426,144 @@
 <span class="sourceLineNo">414</span><a id="line.414">    }</a>
 <span class="sourceLineNo">415</span><a id="line.415"></a>
 <span class="sourceLineNo">416</span><a id="line.416">    @GwtIncompatible</a>
-<span class="sourceLineNo">417</span><a id="line.417">    @SuppressWarnings("unchecked")</a>
-<span class="sourceLineNo">418</span><a id="line.418">    @Override</a>
-<span class="sourceLineNo">419</span><a id="line.419">    public Object clone() {</a>
-<span class="sourceLineNo">420</span><a id="line.420">        try {</a>
-<span class="sourceLineNo">421</span><a id="line.421">            IntVLA nx = (IntVLA) super.clone();</a>
-<span class="sourceLineNo">422</span><a id="line.422">            nx.items = new int[items.length];</a>
-<span class="sourceLineNo">423</span><a id="line.423">            System.arraycopy(items, 0, nx.items, 0, size);</a>
-<span class="sourceLineNo">424</span><a id="line.424">            return nx;</a>
-<span class="sourceLineNo">425</span><a id="line.425">        } catch (CloneNotSupportedException e) {</a>
-<span class="sourceLineNo">426</span><a id="line.426">            throw new InternalError(e + (e.getMessage() != null ? "; " + e.getMessage() : ""));</a>
-<span class="sourceLineNo">427</span><a id="line.427">        }</a>
-<span class="sourceLineNo">428</span><a id="line.428">    }</a>
-<span class="sourceLineNo">429</span><a id="line.429"></a>
-<span class="sourceLineNo">430</span><a id="line.430">    /**</a>
-<span class="sourceLineNo">431</span><a id="line.431">     * Hashes this IntVLA using {@link CrossHash.Water}, getting a 32-bit result. The same algorithm is used by</a>
-<span class="sourceLineNo">432</span><a id="line.432">     * {@link #hash64()}, just with different constants and a different final step here.</a>
-<span class="sourceLineNo">433</span><a id="line.433">     * @return a 32-bit hash code</a>
-<span class="sourceLineNo">434</span><a id="line.434">     */</a>
-<span class="sourceLineNo">435</span><a id="line.435">    @Override</a>
-<span class="sourceLineNo">436</span><a id="line.436">    public int hashCode () {</a>
-<span class="sourceLineNo">437</span><a id="line.437">        return CrossHash.Water.hash(items, size);</a>
-<span class="sourceLineNo">438</span><a id="line.438">    }</a>
-<span class="sourceLineNo">439</span><a id="line.439"></a>
-<span class="sourceLineNo">440</span><a id="line.440">    /**</a>
-<span class="sourceLineNo">441</span><a id="line.441">     * Gets a low-to-mid-quality hash code quickly using the Wisp algorithm; you should prefer {@link #hashHive()} in</a>
-<span class="sourceLineNo">442</span><a id="line.442">     * code that needs to run on GWT, since that method avoids the long math that is expensive on GWT. You are fine</a>
-<span class="sourceLineNo">443</span><a id="line.443">     * using {@link #hashCode()} when you need quality and low collison rates; Wisp tends to collide too often on some</a>
-<span class="sourceLineNo">444</span><a id="line.444">     * data sets.</a>
-<span class="sourceLineNo">445</span><a id="line.445">     * @return a 32-bit hash code that has OK quality, but worse than {@link #hashCode()}</a>
-<span class="sourceLineNo">446</span><a id="line.446">     */</a>
-<span class="sourceLineNo">447</span><a id="line.447">    public int hashWisp () {</a>
-<span class="sourceLineNo">448</span><a id="line.448">        int[] data = this.items;</a>
-<span class="sourceLineNo">449</span><a id="line.449">        long result = 0x9E3779B97F4A7C94L, a = 0x632BE59BD9B4E019L;</a>
-<span class="sourceLineNo">450</span><a id="line.450">        final int len = size;</a>
-<span class="sourceLineNo">451</span><a id="line.451">        for (int i = 0; i &lt; len; i++) {</a>
-<span class="sourceLineNo">452</span><a id="line.452">            result += (a ^= 0x8329C6EB9E6AD3E3L * data[i]);</a>
-<span class="sourceLineNo">453</span><a id="line.453">        }</a>
-<span class="sourceLineNo">454</span><a id="line.454">        return (int)(result * (a | 1L) ^ (result &gt;&gt;&gt; 27 | result &lt;&lt; 37));</a>
-<span class="sourceLineNo">455</span><a id="line.455">    }</a>
-<span class="sourceLineNo">456</span><a id="line.456"></a>
-<span class="sourceLineNo">457</span><a id="line.457">    /**</a>
-<span class="sourceLineNo">458</span><a id="line.458">     * Gets a mid-quality hash code using the 32-bit part of the Hive algorithm; this uses only int math and so is an</a>
-<span class="sourceLineNo">459</span><a id="line.459">     * excellent option on GWT. It is relatively slow on desktop platforms compared to {@link #hashCode()}, which uses</a>
-<span class="sourceLineNo">460</span><a id="line.460">     * a higher-quality and sometimes faster algorithm, but only has that speed advantage on 64-bit JVMs.</a>
-<span class="sourceLineNo">461</span><a id="line.461">     * {@link #hash64()} uses almost exactly the same algorithm as hashCode(), both in {@link CrossHash.Water}. </a>
-<span class="sourceLineNo">462</span><a id="line.462">     * @return a 32-bit hash code that should show very little bias toward any bits</a>
-<span class="sourceLineNo">463</span><a id="line.463">     */</a>
-<span class="sourceLineNo">464</span><a id="line.464">    public int hashHive () {</a>
-<span class="sourceLineNo">465</span><a id="line.465">        final int[] data = this.items;</a>
-<span class="sourceLineNo">466</span><a id="line.466">        int result = 0x1A976FDF, z = 0x60642E25;</a>
-<span class="sourceLineNo">467</span><a id="line.467">        final int len = size;</a>
-<span class="sourceLineNo">468</span><a id="line.468">        for (int i = 0; i &lt; len; i++) {</a>
-<span class="sourceLineNo">469</span><a id="line.469">            result ^= (z += (data[i] ^ 0xC3564E95) * 0x9E375);</a>
-<span class="sourceLineNo">470</span><a id="line.470">            z ^= (result = (result &lt;&lt; 20 | result &gt;&gt;&gt; 12));</a>
-<span class="sourceLineNo">471</span><a id="line.471">        }</a>
-<span class="sourceLineNo">472</span><a id="line.472">        result += (z ^ z &gt;&gt;&gt; 15 ^ 0xAE932BD5) * 0x632B9;</a>
-<span class="sourceLineNo">473</span><a id="line.473">        result = (result ^ result &gt;&gt;&gt; 15) * 0xFF51D;</a>
-<span class="sourceLineNo">474</span><a id="line.474">        result = (result ^ result &gt;&gt;&gt; 15) * 0xC4CEB;</a>
-<span class="sourceLineNo">475</span><a id="line.475">        return result ^ result &gt;&gt;&gt; 15;</a>
-<span class="sourceLineNo">476</span><a id="line.476">    }</a>
-<span class="sourceLineNo">477</span><a id="line.477"></a>
-<span class="sourceLineNo">478</span><a id="line.478">    /**</a>
-<span class="sourceLineNo">479</span><a id="line.479">     * Hashes this IntVLA using {@link CrossHash.Water}, getting a 64-bit result. The same algorithm is used by</a>
-<span class="sourceLineNo">480</span><a id="line.480">     * {@link #hashCode()}, just with different constants and a different final step here.</a>
-<span class="sourceLineNo">481</span><a id="line.481">     * @return a 64-bit hash code</a>
-<span class="sourceLineNo">482</span><a id="line.482">     */</a>
-<span class="sourceLineNo">483</span><a id="line.483">    public long hash64 () {</a>
-<span class="sourceLineNo">484</span><a id="line.484">        return CrossHash.Water.hash64(items, size);</a>
-<span class="sourceLineNo">485</span><a id="line.485">    }</a>
-<span class="sourceLineNo">486</span><a id="line.486"></a>
-<span class="sourceLineNo">487</span><a id="line.487">    @Override</a>
-<span class="sourceLineNo">488</span><a id="line.488">        public boolean equals (Object object) {</a>
-<span class="sourceLineNo">489</span><a id="line.489">        if (object == this) return true;</a>
-<span class="sourceLineNo">490</span><a id="line.490">        if (!(object instanceof IntVLA)) return false;</a>
-<span class="sourceLineNo">491</span><a id="line.491">        IntVLA array = (IntVLA)object;</a>
-<span class="sourceLineNo">492</span><a id="line.492">        int n = size;</a>
-<span class="sourceLineNo">493</span><a id="line.493">        if (n != array.size) return false;</a>
-<span class="sourceLineNo">494</span><a id="line.494">        for (int i = 0; i &lt; n; i++)</a>
-<span class="sourceLineNo">495</span><a id="line.495">            if (items[i] != array.items[i]) return false;</a>
-<span class="sourceLineNo">496</span><a id="line.496">        return true;</a>
-<span class="sourceLineNo">497</span><a id="line.497">    }</a>
-<span class="sourceLineNo">498</span><a id="line.498"></a>
-<span class="sourceLineNo">499</span><a id="line.499">    @Override</a>
-<span class="sourceLineNo">500</span><a id="line.500">        public String toString () {</a>
-<span class="sourceLineNo">501</span><a id="line.501">        if (size == 0) return "[]";</a>
-<span class="sourceLineNo">502</span><a id="line.502">        int[] items = this.items;</a>
-<span class="sourceLineNo">503</span><a id="line.503">        StringBuilder buffer = new StringBuilder(32);</a>
-<span class="sourceLineNo">504</span><a id="line.504">        buffer.append('[');</a>
-<span class="sourceLineNo">505</span><a id="line.505">        buffer.append(items[0]);</a>
-<span class="sourceLineNo">506</span><a id="line.506">        for (int i = 1; i &lt; size; i++) {</a>
-<span class="sourceLineNo">507</span><a id="line.507">            buffer.append(", ");</a>
-<span class="sourceLineNo">508</span><a id="line.508">            buffer.append(items[i]);</a>
-<span class="sourceLineNo">509</span><a id="line.509">        }</a>
-<span class="sourceLineNo">510</span><a id="line.510">        buffer.append(']');</a>
-<span class="sourceLineNo">511</span><a id="line.511">        return buffer.toString();</a>
-<span class="sourceLineNo">512</span><a id="line.512">    }</a>
-<span class="sourceLineNo">513</span><a id="line.513"></a>
-<span class="sourceLineNo">514</span><a id="line.514">    public String toString (String separator) {</a>
-<span class="sourceLineNo">515</span><a id="line.515">        if (size == 0) return "";</a>
-<span class="sourceLineNo">516</span><a id="line.516">        int[] items = this.items;</a>
-<span class="sourceLineNo">517</span><a id="line.517">        StringBuilder buffer = new StringBuilder(32);</a>
-<span class="sourceLineNo">518</span><a id="line.518">        buffer.append(items[0]);</a>
-<span class="sourceLineNo">519</span><a id="line.519">        for (int i = 1; i &lt; size; i++) {</a>
-<span class="sourceLineNo">520</span><a id="line.520">            buffer.append(separator);</a>
-<span class="sourceLineNo">521</span><a id="line.521">            buffer.append(items[i]);</a>
-<span class="sourceLineNo">522</span><a id="line.522">        }</a>
-<span class="sourceLineNo">523</span><a id="line.523">        return buffer.toString();</a>
-<span class="sourceLineNo">524</span><a id="line.524">    }</a>
-<span class="sourceLineNo">525</span><a id="line.525"></a>
-<span class="sourceLineNo">526</span><a id="line.526">    public static IntVLA deserializeFromString(String data)</a>
-<span class="sourceLineNo">527</span><a id="line.527">    {</a>
-<span class="sourceLineNo">528</span><a id="line.528">        int amount = StringKit.count(data, ",");</a>
-<span class="sourceLineNo">529</span><a id="line.529">        if (amount &lt;= 0) return new IntVLA();</a>
-<span class="sourceLineNo">530</span><a id="line.530">        IntVLA iv = new IntVLA(amount+1);</a>
-<span class="sourceLineNo">531</span><a id="line.531">        int dl = 1, idx = -dl, idx2;</a>
-<span class="sourceLineNo">532</span><a id="line.532">        for (int i = 0; i &lt; amount; i++) {</a>
-<span class="sourceLineNo">533</span><a id="line.533">            iv.add(StringKit.intFromDec(data, idx+dl, idx = data.indexOf(",", idx+dl)));</a>
-<span class="sourceLineNo">534</span><a id="line.534">        }</a>
-<span class="sourceLineNo">535</span><a id="line.535">        if((idx2 = data.indexOf(",", idx+dl)) &lt; 0)</a>
-<span class="sourceLineNo">536</span><a id="line.536">        {</a>
-<span class="sourceLineNo">537</span><a id="line.537">            iv.add(StringKit.intFromDec(data, idx+dl, data.length()));</a>
-<span class="sourceLineNo">538</span><a id="line.538">        }</a>
-<span class="sourceLineNo">539</span><a id="line.539">        else</a>
-<span class="sourceLineNo">540</span><a id="line.540">        {</a>
-<span class="sourceLineNo">541</span><a id="line.541">            iv.add(StringKit.intFromDec(data, idx+dl, idx2));</a>
-<span class="sourceLineNo">542</span><a id="line.542">        }</a>
-<span class="sourceLineNo">543</span><a id="line.543">        return iv;</a>
-<span class="sourceLineNo">544</span><a id="line.544">    }</a>
-<span class="sourceLineNo">545</span><a id="line.545"></a>
-<span class="sourceLineNo">546</span><a id="line.546">    /** @see #IntVLA(int[]) */</a>
-<span class="sourceLineNo">547</span><a id="line.547">    public static IntVLA with (int... array) {</a>
-<span class="sourceLineNo">548</span><a id="line.548">        return new IntVLA(array);</a>
-<span class="sourceLineNo">549</span><a id="line.549">    }</a>
-<span class="sourceLineNo">550</span><a id="line.550"></a>
-<span class="sourceLineNo">551</span><a id="line.551">    public boolean isEmpty() {</a>
-<span class="sourceLineNo">552</span><a id="line.552">        return size == 0;</a>
-<span class="sourceLineNo">553</span><a id="line.553">    }</a>
-<span class="sourceLineNo">554</span><a id="line.554"></a>
-<span class="sourceLineNo">555</span><a id="line.555">}</a>
+<span class="sourceLineNo">417</span><a id="line.417">        @Override</a>
+<span class="sourceLineNo">418</span><a id="line.418">    public Object clone() {</a>
+<span class="sourceLineNo">419</span><a id="line.419">        try {</a>
+<span class="sourceLineNo">420</span><a id="line.420">            IntVLA nx = (IntVLA) super.clone();</a>
+<span class="sourceLineNo">421</span><a id="line.421">            nx.items = new int[items.length];</a>
+<span class="sourceLineNo">422</span><a id="line.422">            System.arraycopy(items, 0, nx.items, 0, size);</a>
+<span class="sourceLineNo">423</span><a id="line.423">            return nx;</a>
+<span class="sourceLineNo">424</span><a id="line.424">        } catch (CloneNotSupportedException e) {</a>
+<span class="sourceLineNo">425</span><a id="line.425">            throw new InternalError(e + (e.getMessage() != null ? "; " + e.getMessage() : ""));</a>
+<span class="sourceLineNo">426</span><a id="line.426">        }</a>
+<span class="sourceLineNo">427</span><a id="line.427">    }</a>
+<span class="sourceLineNo">428</span><a id="line.428"></a>
+<span class="sourceLineNo">429</span><a id="line.429">    /**</a>
+<span class="sourceLineNo">430</span><a id="line.430">     * Hashes this IntVLA using {@link CrossHash.Water}, getting a 32-bit result. The same algorithm is used by</a>
+<span class="sourceLineNo">431</span><a id="line.431">     * {@link #hash64()}, just with different constants and a different final step here.</a>
+<span class="sourceLineNo">432</span><a id="line.432">     * @return a 32-bit hash code</a>
+<span class="sourceLineNo">433</span><a id="line.433">     */</a>
+<span class="sourceLineNo">434</span><a id="line.434">    @Override</a>
+<span class="sourceLineNo">435</span><a id="line.435">    public int hashCode () {</a>
+<span class="sourceLineNo">436</span><a id="line.436">        return CrossHash.Water.hash(items, size);</a>
+<span class="sourceLineNo">437</span><a id="line.437">    }</a>
+<span class="sourceLineNo">438</span><a id="line.438"></a>
+<span class="sourceLineNo">439</span><a id="line.439">    /**</a>
+<span class="sourceLineNo">440</span><a id="line.440">     * Gets a low-to-mid-quality hash code quickly using the Wisp algorithm; you should prefer {@link #hashHive()} in</a>
+<span class="sourceLineNo">441</span><a id="line.441">     * code that needs to run on GWT, since that method avoids the long math that is expensive on GWT. You are fine</a>
+<span class="sourceLineNo">442</span><a id="line.442">     * using {@link #hashCode()} when you need quality and low collison rates; Wisp tends to collide too often on some</a>
+<span class="sourceLineNo">443</span><a id="line.443">     * data sets.</a>
+<span class="sourceLineNo">444</span><a id="line.444">     * @return a 32-bit hash code that has OK quality, but worse than {@link #hashCode()}</a>
+<span class="sourceLineNo">445</span><a id="line.445">     */</a>
+<span class="sourceLineNo">446</span><a id="line.446">    public int hashWisp () {</a>
+<span class="sourceLineNo">447</span><a id="line.447">        int[] data = this.items;</a>
+<span class="sourceLineNo">448</span><a id="line.448">        long result = 0x9E3779B97F4A7C94L, a = 0x632BE59BD9B4E019L;</a>
+<span class="sourceLineNo">449</span><a id="line.449">        final int len = size;</a>
+<span class="sourceLineNo">450</span><a id="line.450">        for (int i = 0; i &lt; len; i++) {</a>
+<span class="sourceLineNo">451</span><a id="line.451">            result += (a ^= 0x8329C6EB9E6AD3E3L * data[i]);</a>
+<span class="sourceLineNo">452</span><a id="line.452">        }</a>
+<span class="sourceLineNo">453</span><a id="line.453">        return (int)(result * (a | 1L) ^ (result &gt;&gt;&gt; 27 | result &lt;&lt; 37));</a>
+<span class="sourceLineNo">454</span><a id="line.454">    }</a>
+<span class="sourceLineNo">455</span><a id="line.455"></a>
+<span class="sourceLineNo">456</span><a id="line.456">    /**</a>
+<span class="sourceLineNo">457</span><a id="line.457">     * Gets a mid-quality hash code using the 32-bit part of the Hive algorithm; this uses only int math and so is an</a>
+<span class="sourceLineNo">458</span><a id="line.458">     * excellent option on GWT. It is relatively slow on desktop platforms compared to {@link #hashCode()}, which uses</a>
+<span class="sourceLineNo">459</span><a id="line.459">     * a higher-quality and sometimes faster algorithm, but only has that speed advantage on 64-bit JVMs.</a>
+<span class="sourceLineNo">460</span><a id="line.460">     * {@link #hash64()} uses almost exactly the same algorithm as hashCode(), both in {@link CrossHash.Water}. </a>
+<span class="sourceLineNo">461</span><a id="line.461">     * @return a 32-bit hash code that should show very little bias toward any bits</a>
+<span class="sourceLineNo">462</span><a id="line.462">     */</a>
+<span class="sourceLineNo">463</span><a id="line.463">    public int hashHive () {</a>
+<span class="sourceLineNo">464</span><a id="line.464">        final int[] data = this.items;</a>
+<span class="sourceLineNo">465</span><a id="line.465">        int result = 0x1A976FDF, z = 0x60642E25;</a>
+<span class="sourceLineNo">466</span><a id="line.466">        final int len = size;</a>
+<span class="sourceLineNo">467</span><a id="line.467">        for (int i = 0; i &lt; len; i++) {</a>
+<span class="sourceLineNo">468</span><a id="line.468">            result ^= (z += (data[i] ^ 0xC3564E95) * 0x9E375);</a>
+<span class="sourceLineNo">469</span><a id="line.469">            z ^= (result = (result &lt;&lt; 20 | result &gt;&gt;&gt; 12));</a>
+<span class="sourceLineNo">470</span><a id="line.470">        }</a>
+<span class="sourceLineNo">471</span><a id="line.471">        result += (z ^ z &gt;&gt;&gt; 15 ^ 0xAE932BD5) * 0x632B9;</a>
+<span class="sourceLineNo">472</span><a id="line.472">        result = (result ^ result &gt;&gt;&gt; 15) * 0xFF51D;</a>
+<span class="sourceLineNo">473</span><a id="line.473">        result = (result ^ result &gt;&gt;&gt; 15) * 0xC4CEB;</a>
+<span class="sourceLineNo">474</span><a id="line.474">        return result ^ result &gt;&gt;&gt; 15;</a>
+<span class="sourceLineNo">475</span><a id="line.475">    }</a>
+<span class="sourceLineNo">476</span><a id="line.476"></a>
+<span class="sourceLineNo">477</span><a id="line.477">    /**</a>
+<span class="sourceLineNo">478</span><a id="line.478">     * Hashes this IntVLA using {@link CrossHash.Water}, getting a 64-bit result. The same algorithm is used by</a>
+<span class="sourceLineNo">479</span><a id="line.479">     * {@link #hashCode()}, just with different constants and a different final step here.</a>
+<span class="sourceLineNo">480</span><a id="line.480">     * @return a 64-bit hash code</a>
+<span class="sourceLineNo">481</span><a id="line.481">     */</a>
+<span class="sourceLineNo">482</span><a id="line.482">    public long hash64 () {</a>
+<span class="sourceLineNo">483</span><a id="line.483">        return CrossHash.Water.hash64(items, size);</a>
+<span class="sourceLineNo">484</span><a id="line.484">    }</a>
+<span class="sourceLineNo">485</span><a id="line.485"></a>
+<span class="sourceLineNo">486</span><a id="line.486">    @Override</a>
+<span class="sourceLineNo">487</span><a id="line.487">        public boolean equals (Object object) {</a>
+<span class="sourceLineNo">488</span><a id="line.488">        if (object == this) return true;</a>
+<span class="sourceLineNo">489</span><a id="line.489">        if (!(object instanceof IntVLA)) return false;</a>
+<span class="sourceLineNo">490</span><a id="line.490">        IntVLA array = (IntVLA)object;</a>
+<span class="sourceLineNo">491</span><a id="line.491">        int n = size;</a>
+<span class="sourceLineNo">492</span><a id="line.492">        if (n != array.size) return false;</a>
+<span class="sourceLineNo">493</span><a id="line.493">        for (int i = 0; i &lt; n; i++)</a>
+<span class="sourceLineNo">494</span><a id="line.494">            if (items[i] != array.items[i]) return false;</a>
+<span class="sourceLineNo">495</span><a id="line.495">        return true;</a>
+<span class="sourceLineNo">496</span><a id="line.496">    }</a>
+<span class="sourceLineNo">497</span><a id="line.497"></a>
+<span class="sourceLineNo">498</span><a id="line.498">    @Override</a>
+<span class="sourceLineNo">499</span><a id="line.499">        public String toString () {</a>
+<span class="sourceLineNo">500</span><a id="line.500">        if (size == 0) return "[]";</a>
+<span class="sourceLineNo">501</span><a id="line.501">        int[] items = this.items;</a>
+<span class="sourceLineNo">502</span><a id="line.502">        StringBuilder buffer = new StringBuilder(32);</a>
+<span class="sourceLineNo">503</span><a id="line.503">        buffer.append('[');</a>
+<span class="sourceLineNo">504</span><a id="line.504">        buffer.append(items[0]);</a>
+<span class="sourceLineNo">505</span><a id="line.505">        for (int i = 1; i &lt; size; i++) {</a>
+<span class="sourceLineNo">506</span><a id="line.506">            buffer.append(", ");</a>
+<span class="sourceLineNo">507</span><a id="line.507">            buffer.append(items[i]);</a>
+<span class="sourceLineNo">508</span><a id="line.508">        }</a>
+<span class="sourceLineNo">509</span><a id="line.509">        buffer.append(']');</a>
+<span class="sourceLineNo">510</span><a id="line.510">        return buffer.toString();</a>
+<span class="sourceLineNo">511</span><a id="line.511">    }</a>
+<span class="sourceLineNo">512</span><a id="line.512"></a>
+<span class="sourceLineNo">513</span><a id="line.513">    public String toString (String separator) {</a>
+<span class="sourceLineNo">514</span><a id="line.514">        if (size == 0) return "";</a>
+<span class="sourceLineNo">515</span><a id="line.515">        int[] items = this.items;</a>
+<span class="sourceLineNo">516</span><a id="line.516">        StringBuilder buffer = new StringBuilder(32);</a>
+<span class="sourceLineNo">517</span><a id="line.517">        buffer.append(items[0]);</a>
+<span class="sourceLineNo">518</span><a id="line.518">        for (int i = 1; i &lt; size; i++) {</a>
+<span class="sourceLineNo">519</span><a id="line.519">            buffer.append(separator);</a>
+<span class="sourceLineNo">520</span><a id="line.520">            buffer.append(items[i]);</a>
+<span class="sourceLineNo">521</span><a id="line.521">        }</a>
+<span class="sourceLineNo">522</span><a id="line.522">        return buffer.toString();</a>
+<span class="sourceLineNo">523</span><a id="line.523">    }</a>
+<span class="sourceLineNo">524</span><a id="line.524"></a>
+<span class="sourceLineNo">525</span><a id="line.525">    public static IntVLA deserializeFromString(String data)</a>
+<span class="sourceLineNo">526</span><a id="line.526">    {</a>
+<span class="sourceLineNo">527</span><a id="line.527">        int amount = StringKit.count(data, ",");</a>
+<span class="sourceLineNo">528</span><a id="line.528">        if (amount &lt;= 0) return new IntVLA();</a>
+<span class="sourceLineNo">529</span><a id="line.529">        IntVLA iv = new IntVLA(amount+1);</a>
+<span class="sourceLineNo">530</span><a id="line.530">        int dl = 1, idx = -dl, idx2;</a>
+<span class="sourceLineNo">531</span><a id="line.531">        for (int i = 0; i &lt; amount; i++) {</a>
+<span class="sourceLineNo">532</span><a id="line.532">            iv.add(StringKit.intFromDec(data, idx+dl, idx = data.indexOf(",", idx+dl)));</a>
+<span class="sourceLineNo">533</span><a id="line.533">        }</a>
+<span class="sourceLineNo">534</span><a id="line.534">        if((idx2 = data.indexOf(",", idx+dl)) &lt; 0)</a>
+<span class="sourceLineNo">535</span><a id="line.535">        {</a>
+<span class="sourceLineNo">536</span><a id="line.536">            iv.add(StringKit.intFromDec(data, idx+dl, data.length()));</a>
+<span class="sourceLineNo">537</span><a id="line.537">        }</a>
+<span class="sourceLineNo">538</span><a id="line.538">        else</a>
+<span class="sourceLineNo">539</span><a id="line.539">        {</a>
+<span class="sourceLineNo">540</span><a id="line.540">            iv.add(StringKit.intFromDec(data, idx+dl, idx2));</a>
+<span class="sourceLineNo">541</span><a id="line.541">        }</a>
+<span class="sourceLineNo">542</span><a id="line.542">        return iv;</a>
+<span class="sourceLineNo">543</span><a id="line.543">    }</a>
+<span class="sourceLineNo">544</span><a id="line.544"></a>
+<span class="sourceLineNo">545</span><a id="line.545">    /** @see #IntVLA(int[]) */</a>
+<span class="sourceLineNo">546</span><a id="line.546">    public static IntVLA with (int... array) {</a>
+<span class="sourceLineNo">547</span><a id="line.547">        return new IntVLA(array);</a>
+<span class="sourceLineNo">548</span><a id="line.548">    }</a>
+<span class="sourceLineNo">549</span><a id="line.549"></a>
+<span class="sourceLineNo">550</span><a id="line.550">    public boolean isEmpty() {</a>
+<span class="sourceLineNo">551</span><a id="line.551">        return size == 0;</a>
+<span class="sourceLineNo">552</span><a id="line.552">    }</a>
+<span class="sourceLineNo">553</span><a id="line.553"></a>
+<span class="sourceLineNo">554</span><a id="line.554">}</a>
 
 
 

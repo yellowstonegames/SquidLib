@@ -63,37 +63,37 @@
 <span class="sourceLineNo">051</span><a id="line.51">    private final Mesh mesh;</a>
 <span class="sourceLineNo">052</span><a id="line.52"></a>
 <span class="sourceLineNo">053</span><a id="line.53">    final float[] vertices;</a>
-<span class="sourceLineNo">054</span><a id="line.54">    int idx = 0;</a>
-<span class="sourceLineNo">055</span><a id="line.55">    Texture lastTexture = null;</a>
-<span class="sourceLineNo">056</span><a id="line.56">    float invTexWidth = 0, invTexHeight = 0;</a>
+<span class="sourceLineNo">054</span><a id="line.54">    int idx;</a>
+<span class="sourceLineNo">055</span><a id="line.55">    Texture lastTexture;</a>
+<span class="sourceLineNo">056</span><a id="line.56">    float invTexWidth, invTexHeight;</a>
 <span class="sourceLineNo">057</span><a id="line.57"></a>
-<span class="sourceLineNo">058</span><a id="line.58">    boolean drawing = false;</a>
+<span class="sourceLineNo">058</span><a id="line.58">    boolean drawing;</a>
 <span class="sourceLineNo">059</span><a id="line.59"></a>
 <span class="sourceLineNo">060</span><a id="line.60">    private final Matrix4 transformMatrix = new Matrix4();</a>
 <span class="sourceLineNo">061</span><a id="line.61">    private final Matrix4 projectionMatrix = new Matrix4();</a>
 <span class="sourceLineNo">062</span><a id="line.62">    private final Matrix4 combinedMatrix = new Matrix4();</a>
 <span class="sourceLineNo">063</span><a id="line.63"></a>
-<span class="sourceLineNo">064</span><a id="line.64">    private boolean blendingDisabled = false;</a>
+<span class="sourceLineNo">064</span><a id="line.64">    private boolean blendingDisabled;</a>
 <span class="sourceLineNo">065</span><a id="line.65">    private int blendSrcFunc = GL20.GL_SRC_ALPHA;</a>
 <span class="sourceLineNo">066</span><a id="line.66">    private int blendDstFunc = GL20.GL_ONE_MINUS_SRC_ALPHA;</a>
 <span class="sourceLineNo">067</span><a id="line.67">    private int blendSrcFuncAlpha = GL20.GL_SRC_ALPHA;</a>
 <span class="sourceLineNo">068</span><a id="line.68">    private int blendDstFuncAlpha = GL20.GL_ONE_MINUS_SRC_ALPHA;</a>
 <span class="sourceLineNo">069</span><a id="line.69"></a>
 <span class="sourceLineNo">070</span><a id="line.70">    private final ShaderProgram shader;</a>
-<span class="sourceLineNo">071</span><a id="line.71">    private ShaderProgram customShader = null;</a>
+<span class="sourceLineNo">071</span><a id="line.71">    private ShaderProgram customShader;</a>
 <span class="sourceLineNo">072</span><a id="line.72">    private boolean ownsShader;</a>
 <span class="sourceLineNo">073</span><a id="line.73"></a>
 <span class="sourceLineNo">074</span><a id="line.74">    float color = Color.WHITE.toFloatBits();</a>
 <span class="sourceLineNo">075</span><a id="line.75">    private final Color tempColor = new Color(1, 1, 1, 1);</a>
 <span class="sourceLineNo">076</span><a id="line.76"></a>
 <span class="sourceLineNo">077</span><a id="line.77">    /** Number of render calls since the last {@link #begin()}. **/</a>
-<span class="sourceLineNo">078</span><a id="line.78">    public int renderCalls = 0;</a>
+<span class="sourceLineNo">078</span><a id="line.78">    public int renderCalls;</a>
 <span class="sourceLineNo">079</span><a id="line.79"></a>
 <span class="sourceLineNo">080</span><a id="line.80">    /** Number of rendering calls, ever. Will not be reset unless set manually. **/</a>
-<span class="sourceLineNo">081</span><a id="line.81">    public int totalRenderCalls = 0;</a>
+<span class="sourceLineNo">081</span><a id="line.81">    public int totalRenderCalls;</a>
 <span class="sourceLineNo">082</span><a id="line.82"></a>
 <span class="sourceLineNo">083</span><a id="line.83">    /** The maximum number of sprites rendered in one batch so far. **/</a>
-<span class="sourceLineNo">084</span><a id="line.84">    public int maxSpritesInBatch = 0;</a>
+<span class="sourceLineNo">084</span><a id="line.84">    public int maxSpritesInBatch;</a>
 <span class="sourceLineNo">085</span><a id="line.85"></a>
 <span class="sourceLineNo">086</span><a id="line.86">    /** Constructs a new FilterBatch with a size of 1000, one buffer, the default shader, and no changes in the</a>
 <span class="sourceLineNo">087</span><a id="line.87">     * color filter.</a>

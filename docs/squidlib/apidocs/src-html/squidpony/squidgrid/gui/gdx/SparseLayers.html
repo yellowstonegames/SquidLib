@@ -108,7 +108,7 @@
 <span class="sourceLineNo">096</span><a id="line.96">     * reduce animationCount would never happen.</a>
 <span class="sourceLineNo">097</span><a id="line.97">     * @deprecated Use {@link #hasActiveAnimations()} instead of adjusting this manually</a>
 <span class="sourceLineNo">098</span><a id="line.98">     */</a>
-<span class="sourceLineNo">099</span><a id="line.99">    public int animationCount = 0;</a>
+<span class="sourceLineNo">099</span><a id="line.99">    public int animationCount;</a>
 <span class="sourceLineNo">100</span><a id="line.100">    /**</a>
 <span class="sourceLineNo">101</span><a id="line.101">     * A list of individually-movable Glyph objects. This field is public, and though it shouldn't be assigned null (you</a>
 <span class="sourceLineNo">102</span><a id="line.102">     * don't really need to be told that), there may be cases where you may need manual control over what Glyph objects</a>
@@ -736,7 +736,7 @@
 <span class="sourceLineNo">724</span><a id="line.724">     * {@link Color#toFloatBits()} can be used to bypass the filtering if you want a color to be used exactly.</a>
 <span class="sourceLineNo">725</span><a id="line.725">     * @param icc an IColorCenter that can cache and possibly filter {@link Color} objects</a>
 <span class="sourceLineNo">726</span><a id="line.726">     */</a>
-<span class="sourceLineNo">727</span><a id="line.727">    private void setColorCenter(IColorCenter&lt;Color&gt; icc) {</a>
+<span class="sourceLineNo">727</span><a id="line.727">    protected void setColorCenter(IColorCenter&lt;Color&gt; icc) {</a>
 <span class="sourceLineNo">728</span><a id="line.728">        scc = icc;</a>
 <span class="sourceLineNo">729</span><a id="line.729">    }</a>
 <span class="sourceLineNo">730</span><a id="line.730"></a>

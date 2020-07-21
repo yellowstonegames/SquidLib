@@ -113,89 +113,101 @@
 <span class="sourceLineNo">101</span><a id="line.101">    /**</a>
 <span class="sourceLineNo">102</span><a id="line.102">     * Constructs a StarterKit with the given width and height in cells (gridWidth and gridHeight) and the given width</a>
 <span class="sourceLineNo">103</span><a id="line.103">     * and height for each letter (cellWidth and cellHeight), using the given TextCellFactory for the font. You can use</a>
-<span class="sourceLineNo">104</span><a id="line.104">     * any of the pre-constructed TextCellFactory objects in {@link DefaultResources}. such as</a>
-<span class="sourceLineNo">105</span><a id="line.105">     * {@link DefaultResources#getStretchableTypewriterFont()}, {@link DefaultResources#getStretchableDejaVuFont()},</a>
-<span class="sourceLineNo">106</span><a id="line.106">     * {@link DefaultResources#getStretchableSquareFont()}, or {@link DefaultResources#getStretchableCodeFont()}, as</a>
+<span class="sourceLineNo">104</span><a id="line.104">     * any of the pre-constructed TextCellFactory objects in {@link DefaultResources}, such as</a>
+<span class="sourceLineNo">105</span><a id="line.105">     * {@link DefaultResources#getCrispLeanFamily()}, {@link DefaultResources#getCrispDejaVuFont()},</a>
+<span class="sourceLineNo">106</span><a id="line.106">     * {@link DefaultResources#getCrispSlabFamily()}, or {@link DefaultResources#getStretchableTypewriterFont()}, as</a>
 <span class="sourceLineNo">107</span><a id="line.107">     * long as you have the right assets available (their documentation says the exact files you need). While you can</a>
 <span class="sourceLineNo">108</span><a id="line.108">     * construct your own TextCellFactory given a BitmapFont, that won't work well as a distance field font unless you</a>
 <span class="sourceLineNo">109</span><a id="line.109">     * used some very unusual configuration making the font, so the font would only look good at one size or possibly a</a>
 <span class="sourceLineNo">110</span><a id="line.110">     * multiple of that size. The defaults are recommended for now; a separate project is used to make the distance</a>
-<span class="sourceLineNo">111</span><a id="line.111">     * field monospace fonts (tommyettinger/Glamer on GitHub) and more can be made as needed from permissively-licensed</a>
-<span class="sourceLineNo">112</span><a id="line.112">     * fonts if a game has particular aesthetic requirements.</a>
-<span class="sourceLineNo">113</span><a id="line.113">     * @param textFactory the TextCellFactory to use for the font</a>
-<span class="sourceLineNo">114</span><a id="line.114">     * @param gridWidth the width of the display area in cells</a>
-<span class="sourceLineNo">115</span><a id="line.115">     * @param gridHeight the height of the display area in cells</a>
-<span class="sourceLineNo">116</span><a id="line.116">     * @param cellWidth the width of a single cell in pixels, before any stretching is applied</a>
-<span class="sourceLineNo">117</span><a id="line.117">     * @param cellHeight the height of a single cell in pixels, before any stretching is applied</a>
-<span class="sourceLineNo">118</span><a id="line.118">     */</a>
-<span class="sourceLineNo">119</span><a id="line.119">    public StarterKit(TextCellFactory textFactory, int gridWidth, int gridHeight, int cellWidth, int cellHeight) {</a>
-<span class="sourceLineNo">120</span><a id="line.120">        this(textFactory, gridWidth, gridHeight, cellWidth, cellHeight, 0, 0);</a>
-<span class="sourceLineNo">121</span><a id="line.121">    }</a>
-<span class="sourceLineNo">122</span><a id="line.122">    /**</a>
-<span class="sourceLineNo">123</span><a id="line.123">     * Constructs a StarterKit with the given width and height in cells (gridWidth and gridHeight) and the given width</a>
-<span class="sourceLineNo">124</span><a id="line.124">     * and height for each letter (cellWidth and cellHeight), using the given TextCellFactory for the font. You can use</a>
-<span class="sourceLineNo">125</span><a id="line.125">     * any of the pre-constructed TextCellFactory objects in {@link DefaultResources}. such as</a>
-<span class="sourceLineNo">126</span><a id="line.126">     * {@link DefaultResources#getCrispLeanFamily()}, {@link DefaultResources#getCrispDejaVuFont()},</a>
-<span class="sourceLineNo">127</span><a id="line.127">     * {@link DefaultResources#getCrispCurvySquareFont()}, or {@link DefaultResources#getCrispSlabFamily()} , as</a>
-<span class="sourceLineNo">128</span><a id="line.128">     * long as you have the right assets available (their documentation says the exact files you need). While you can</a>
-<span class="sourceLineNo">129</span><a id="line.129">     * construct your own TextCellFactory given a BitmapFont, that won't work well as a distance field font unless you</a>
-<span class="sourceLineNo">130</span><a id="line.130">     * used some very unusual configuration making the font, so the font would only look good at one size or possibly a</a>
-<span class="sourceLineNo">131</span><a id="line.131">     * multiple of that size. The defaults are recommended for now; a separate project is used to make the distance</a>
-<span class="sourceLineNo">132</span><a id="line.132">     * field monospace fonts (tommyettinger/Glamer on GitHub) and more can be made as needed from permissively-licensed</a>
-<span class="sourceLineNo">133</span><a id="line.133">     * fonts if a game has particular aesthetic requirements.</a>
-<span class="sourceLineNo">134</span><a id="line.134">     * @param textFactory the TextCellFactory to use for the font</a>
-<span class="sourceLineNo">135</span><a id="line.135">     * @param gridWidth the width of the display area in cells</a>
-<span class="sourceLineNo">136</span><a id="line.136">     * @param gridHeight the height of the display area in cells</a>
-<span class="sourceLineNo">137</span><a id="line.137">     * @param cellWidth the width of a single cell in pixels, before any stretching is applied</a>
-<span class="sourceLineNo">138</span><a id="line.138">     * @param cellHeight the height of a single cell in pixels, before any stretching is applied</a>
-<span class="sourceLineNo">139</span><a id="line.139">     * @param additionalWidth the width in pixels to add to the stretched area, before any stretching is applied</a>
-<span class="sourceLineNo">140</span><a id="line.140">     * @param additionalHeight the height in pixels to add to the stretched area, before any stretching is applied</a>
-<span class="sourceLineNo">141</span><a id="line.141">     */</a>
-<span class="sourceLineNo">142</span><a id="line.142">    public StarterKit(TextCellFactory textFactory, int gridWidth, int gridHeight, int cellWidth, int cellHeight,</a>
-<span class="sourceLineNo">143</span><a id="line.143">                      int additionalWidth, int additionalHeight) {</a>
-<span class="sourceLineNo">144</span><a id="line.144">        this.cellWidth = cellWidth;</a>
-<span class="sourceLineNo">145</span><a id="line.145">        this.cellHeight = cellHeight;</a>
-<span class="sourceLineNo">146</span><a id="line.146">        this.textFactory = textFactory == null ? DefaultResources.getCrispLeanFamily() : textFactory;</a>
-<span class="sourceLineNo">147</span><a id="line.147">        layers = new SparseLayers(gridWidth, gridHeight, this.cellWidth, this.cellHeight, this.textFactory);</a>
-<span class="sourceLineNo">148</span><a id="line.148">        this.gridWidth = gridWidth;</a>
-<span class="sourceLineNo">149</span><a id="line.149">        this.gridHeight = gridHeight;</a>
-<span class="sourceLineNo">150</span><a id="line.150">        batch = new FilterBatch();</a>
-<span class="sourceLineNo">151</span><a id="line.151">        viewport = new StretchViewport(this.cellWidth * gridWidth + additionalWidth, this.cellHeight * gridHeight + additionalHeight);</a>
-<span class="sourceLineNo">152</span><a id="line.152">        stage = new Stage(viewport, batch);</a>
-<span class="sourceLineNo">153</span><a id="line.153">        stage.addActor(layers);</a>
-<span class="sourceLineNo">154</span><a id="line.154">    }</a>
-<span class="sourceLineNo">155</span><a id="line.155"></a>
-<span class="sourceLineNo">156</span><a id="line.156">    /**</a>
-<span class="sourceLineNo">157</span><a id="line.157">     * Not a complete drawing solution; so much of the logic related to drawing is specific to each game, like</a>
-<span class="sourceLineNo">158</span><a id="line.158">     * FOV being used to make certain things not render if they are out of sight, that this doesn't even try to</a>
-<span class="sourceLineNo">159</span><a id="line.159">     * guess at what a particular game needs for its rendering code. Any {@link TextCellFactory.Glyph} objects in</a>
-<span class="sourceLineNo">160</span><a id="line.160">     * {@link #layers} will be rendered by that SparseLayers, but any that aren't stored in layers must be drawn</a>
-<span class="sourceLineNo">161</span><a id="line.161">     * separately (Glyph has a {@link TextCellFactory.Glyph#draw(Batch, float)} method that must be called between</a>
-<span class="sourceLineNo">162</span><a id="line.162">     * {@link Batch#begin()} and {@link Batch#end()}, typically with begin() called before all Glyphs are drawn in</a>
-<span class="sourceLineNo">163</span><a id="line.163">     * a loop and then with end() called after). </a>
-<span class="sourceLineNo">164</span><a id="line.164">     * &lt;br&gt;</a>
-<span class="sourceLineNo">165</span><a id="line.165">     * Specifically, this applies the current viewport to the stage, draws the stage, and makes any actions or</a>
-<span class="sourceLineNo">166</span><a id="line.166">     * events related to the stage take effect. Should not be called inside a {@link FilterBatch#begin()} block,</a>
-<span class="sourceLineNo">167</span><a id="line.167">     * since this calls it itself by drawing the stage, and also calls {@link FilterBatch#end()} afterwards.</a>
-<span class="sourceLineNo">168</span><a id="line.168">     */</a>
-<span class="sourceLineNo">169</span><a id="line.169">    public void draw()</a>
-<span class="sourceLineNo">170</span><a id="line.170">    {</a>
-<span class="sourceLineNo">171</span><a id="line.171">        stage.getViewport().apply(true);</a>
-<span class="sourceLineNo">172</span><a id="line.172">        stage.act();</a>
-<span class="sourceLineNo">173</span><a id="line.173">        stage.draw();</a>
-<span class="sourceLineNo">174</span><a id="line.174">    }</a>
-<span class="sourceLineNo">175</span><a id="line.175">    </a>
-<span class="sourceLineNo">176</span><a id="line.176">    /**</a>
-<span class="sourceLineNo">177</span><a id="line.177">     * Not a complete resize method; this is meant to handle the resizing of this StarterKit only and should be</a>
-<span class="sourceLineNo">178</span><a id="line.178">     * called inside your main Game, ApplicationListener, etc. class' resize method.</a>
-<span class="sourceLineNo">179</span><a id="line.179">     * @param width the new width of the screen; should be a parameter from the other resize() method</a>
-<span class="sourceLineNo">180</span><a id="line.180">     * @param height the new height of the screen; should be a parameter from the other resize() method</a>
-<span class="sourceLineNo">181</span><a id="line.181">     */</a>
-<span class="sourceLineNo">182</span><a id="line.182">    public void resize(int width, int height) {</a>
-<span class="sourceLineNo">183</span><a id="line.183">        viewport.update(width, height, true);</a>
-<span class="sourceLineNo">184</span><a id="line.184">    }</a>
-<span class="sourceLineNo">185</span><a id="line.185"></a>
-<span class="sourceLineNo">186</span><a id="line.186">}</a>
+<span class="sourceLineNo">111</span><a id="line.111">     * field monospace fonts (&lt;a href="https://github.com/tommyettinger/Glamer"&gt;tommyettinger/Glamer&lt;/a&gt; on GitHub)</a>
+<span class="sourceLineNo">112</span><a id="line.112">     * That project also serves as storage for fonts that were made with Glamer, and appropriately-licensed fonts are</a>
+<span class="sourceLineNo">113</span><a id="line.113">     * added to the "premade" folder once they are converted.</a>
+<span class="sourceLineNo">114</span><a id="line.114">     * &lt;br&gt;</a>
+<span class="sourceLineNo">115</span><a id="line.115">     * If you don't know what font to pick, {@link DefaultResources#getCrispLeanFamily()} and</a>
+<span class="sourceLineNo">116</span><a id="line.116">     * {@link DefaultResources#getCrispSlabFamily()} have the same (very large) character coverage, and have bold and</a>
+<span class="sourceLineNo">117</span><a id="line.117">     * italic modes that can be accessed with {@link GDXMarkup} if you decide to use that later.</a>
+<span class="sourceLineNo">118</span><a id="line.118">     * @param textFactory the TextCellFactory to use for the font</a>
+<span class="sourceLineNo">119</span><a id="line.119">     * @param gridWidth the width of the display area in cells</a>
+<span class="sourceLineNo">120</span><a id="line.120">     * @param gridHeight the height of the display area in cells</a>
+<span class="sourceLineNo">121</span><a id="line.121">     * @param cellWidth the width of a single cell in pixels, before any stretching is applied</a>
+<span class="sourceLineNo">122</span><a id="line.122">     * @param cellHeight the height of a single cell in pixels, before any stretching is applied</a>
+<span class="sourceLineNo">123</span><a id="line.123">     */</a>
+<span class="sourceLineNo">124</span><a id="line.124">    public StarterKit(TextCellFactory textFactory, int gridWidth, int gridHeight, int cellWidth, int cellHeight) {</a>
+<span class="sourceLineNo">125</span><a id="line.125">        this(textFactory, gridWidth, gridHeight, cellWidth, cellHeight, 0, 0);</a>
+<span class="sourceLineNo">126</span><a id="line.126">    }</a>
+<span class="sourceLineNo">127</span><a id="line.127">    /**</a>
+<span class="sourceLineNo">128</span><a id="line.128">     * Constructs a StarterKit with the given width and height in cells (gridWidth and gridHeight) and the given width</a>
+<span class="sourceLineNo">129</span><a id="line.129">     * and height for each letter (cellWidth and cellHeight), using the given TextCellFactory for the font; this</a>
+<span class="sourceLineNo">130</span><a id="line.130">     * overload also allows specifying additional space in pixels to be added to the right or bottom sides of the area</a>
+<span class="sourceLineNo">131</span><a id="line.131">     * with the grid of chars. You can use any of the pre-constructed TextCellFactory objects in</a>
+<span class="sourceLineNo">132</span><a id="line.132">     * {@link DefaultResources}, such as {@link DefaultResources#getCrispLeanFamily()}</a>
+<span class="sourceLineNo">133</span><a id="line.133">     * {@link DefaultResources#getCrispDejaVuFont()}, {@link DefaultResources#getCrispSlabFamily()}, or</a>
+<span class="sourceLineNo">134</span><a id="line.134">     * {@link DefaultResources#getStretchableTypewriterFont()}, as long as you have the right assets available (their</a>
+<span class="sourceLineNo">135</span><a id="line.135">     * documentation says the exact files you need). While you can construct your own TextCellFactory given a</a>
+<span class="sourceLineNo">136</span><a id="line.136">     * BitmapFont, that won't work well as a distance field font unless you used some very unusual configuration making</a>
+<span class="sourceLineNo">137</span><a id="line.137">     * the font, so the font would only look good at one size or possibly a multiple of that size. The defaults are</a>
+<span class="sourceLineNo">138</span><a id="line.138">     * recommended for now; a separate project is used to make the distance field monospace fonts</a>
+<span class="sourceLineNo">139</span><a id="line.139">     * (&lt;a href="https://github.com/tommyettinger/Glamer"&gt;tommyettinger/Glamer&lt;/a&gt; on GitHub). That project also serves</a>
+<span class="sourceLineNo">140</span><a id="line.140">     * as storage for fonts that were made with Glamer, and appropriately-licensed fonts are added to the "premade"</a>
+<span class="sourceLineNo">141</span><a id="line.141">     * folder once they are converted.</a>
+<span class="sourceLineNo">142</span><a id="line.142">     * &lt;br&gt;</a>
+<span class="sourceLineNo">143</span><a id="line.143">     * If you don't know what font to pick, {@link DefaultResources#getCrispLeanFamily()} and</a>
+<span class="sourceLineNo">144</span><a id="line.144">     * {@link DefaultResources#getCrispSlabFamily()} have the same (very large) character coverage, and have bold and</a>
+<span class="sourceLineNo">145</span><a id="line.145">     * italic modes that can be accessed with {@link GDXMarkup} if you decide to use that later.</a>
+<span class="sourceLineNo">146</span><a id="line.146">     * @param textFactory the TextCellFactory to use for the font</a>
+<span class="sourceLineNo">147</span><a id="line.147">     * @param gridWidth the width of the display area in cells</a>
+<span class="sourceLineNo">148</span><a id="line.148">     * @param gridHeight the height of the display area in cells</a>
+<span class="sourceLineNo">149</span><a id="line.149">     * @param cellWidth the width of a single cell in pixels, before any stretching is applied</a>
+<span class="sourceLineNo">150</span><a id="line.150">     * @param cellHeight the height of a single cell in pixels, before any stretching is applied</a>
+<span class="sourceLineNo">151</span><a id="line.151">     * @param additionalWidth the width in pixels to add to the stretched area, before any stretching is applied</a>
+<span class="sourceLineNo">152</span><a id="line.152">     * @param additionalHeight the height in pixels to add to the stretched area, before any stretching is applied</a>
+<span class="sourceLineNo">153</span><a id="line.153">     */</a>
+<span class="sourceLineNo">154</span><a id="line.154">    public StarterKit(TextCellFactory textFactory, int gridWidth, int gridHeight, int cellWidth, int cellHeight,</a>
+<span class="sourceLineNo">155</span><a id="line.155">                      int additionalWidth, int additionalHeight) {</a>
+<span class="sourceLineNo">156</span><a id="line.156">        this.cellWidth = cellWidth;</a>
+<span class="sourceLineNo">157</span><a id="line.157">        this.cellHeight = cellHeight;</a>
+<span class="sourceLineNo">158</span><a id="line.158">        this.textFactory = textFactory == null ? DefaultResources.getCrispLeanFamily() : textFactory;</a>
+<span class="sourceLineNo">159</span><a id="line.159">        layers = new SparseLayers(gridWidth, gridHeight, this.cellWidth, this.cellHeight, this.textFactory);</a>
+<span class="sourceLineNo">160</span><a id="line.160">        this.gridWidth = gridWidth;</a>
+<span class="sourceLineNo">161</span><a id="line.161">        this.gridHeight = gridHeight;</a>
+<span class="sourceLineNo">162</span><a id="line.162">        batch = new FilterBatch();</a>
+<span class="sourceLineNo">163</span><a id="line.163">        viewport = new StretchViewport(this.cellWidth * gridWidth + additionalWidth, this.cellHeight * gridHeight + additionalHeight);</a>
+<span class="sourceLineNo">164</span><a id="line.164">        stage = new Stage(viewport, batch);</a>
+<span class="sourceLineNo">165</span><a id="line.165">        stage.addActor(layers);</a>
+<span class="sourceLineNo">166</span><a id="line.166">    }</a>
+<span class="sourceLineNo">167</span><a id="line.167"></a>
+<span class="sourceLineNo">168</span><a id="line.168">    /**</a>
+<span class="sourceLineNo">169</span><a id="line.169">     * Not a complete drawing solution; so much of the logic related to drawing is specific to each game, like</a>
+<span class="sourceLineNo">170</span><a id="line.170">     * FOV being used to make certain things not render if they are out of sight, that this doesn't even try to</a>
+<span class="sourceLineNo">171</span><a id="line.171">     * guess at what a particular game needs for its rendering code. Any {@link TextCellFactory.Glyph} objects in</a>
+<span class="sourceLineNo">172</span><a id="line.172">     * {@link #layers} will be rendered by that SparseLayers, but any that aren't stored in layers must be drawn</a>
+<span class="sourceLineNo">173</span><a id="line.173">     * separately (Glyph has a {@link TextCellFactory.Glyph#draw(Batch, float)} method that must be called between</a>
+<span class="sourceLineNo">174</span><a id="line.174">     * {@link Batch#begin()} and {@link Batch#end()}, typically with begin() called before all Glyphs are drawn in</a>
+<span class="sourceLineNo">175</span><a id="line.175">     * a loop and then with end() called after). </a>
+<span class="sourceLineNo">176</span><a id="line.176">     * &lt;br&gt;</a>
+<span class="sourceLineNo">177</span><a id="line.177">     * Specifically, this applies the current viewport to the stage, draws the stage, and makes any actions or</a>
+<span class="sourceLineNo">178</span><a id="line.178">     * events related to the stage take effect. Should not be called inside a {@link FilterBatch#begin()} block,</a>
+<span class="sourceLineNo">179</span><a id="line.179">     * since this calls it itself by drawing the stage, and also calls {@link FilterBatch#end()} afterwards.</a>
+<span class="sourceLineNo">180</span><a id="line.180">     */</a>
+<span class="sourceLineNo">181</span><a id="line.181">    public void draw()</a>
+<span class="sourceLineNo">182</span><a id="line.182">    {</a>
+<span class="sourceLineNo">183</span><a id="line.183">        stage.getViewport().apply(true);</a>
+<span class="sourceLineNo">184</span><a id="line.184">        stage.act();</a>
+<span class="sourceLineNo">185</span><a id="line.185">        stage.draw();</a>
+<span class="sourceLineNo">186</span><a id="line.186">    }</a>
+<span class="sourceLineNo">187</span><a id="line.187">    </a>
+<span class="sourceLineNo">188</span><a id="line.188">    /**</a>
+<span class="sourceLineNo">189</span><a id="line.189">     * Not a complete resize method; this is meant to handle the resizing of this StarterKit only and should be</a>
+<span class="sourceLineNo">190</span><a id="line.190">     * called inside your main Game, ApplicationListener, etc. class' resize method.</a>
+<span class="sourceLineNo">191</span><a id="line.191">     * @param width the new width of the screen; should be a parameter from the other resize() method</a>
+<span class="sourceLineNo">192</span><a id="line.192">     * @param height the new height of the screen; should be a parameter from the other resize() method</a>
+<span class="sourceLineNo">193</span><a id="line.193">     */</a>
+<span class="sourceLineNo">194</span><a id="line.194">    public void resize(int width, int height) {</a>
+<span class="sourceLineNo">195</span><a id="line.195">        viewport.update(width, height, true);</a>
+<span class="sourceLineNo">196</span><a id="line.196">    }</a>
+<span class="sourceLineNo">197</span><a id="line.197"></a>
+<span class="sourceLineNo">198</span><a id="line.198">}</a>
 
 
 

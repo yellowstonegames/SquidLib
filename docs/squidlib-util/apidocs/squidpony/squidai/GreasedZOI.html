@@ -87,18 +87,18 @@ loadScripts(document, 'script');</script>
 <h1 title="Class GreasedZOI" class="title">Class GreasedZOI</h1>
 </div>
 <div class="contentContainer">
-<div class="inheritance" title="Inheritance Tree"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">java.lang.Object</a>
+<div class="inheritance" title="Inheritance Tree"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">java.lang.Object</a>
 <div class="inheritance">squidpony.squidai.GreasedZOI</div>
 </div>
 <section class="description">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink">Serializable</a></code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink">Serializable</a></code></dd>
 </dl>
 <hr>
 <pre>public class <a href="../../src-html/squidpony/squidai/GreasedZOI.html#line.25">GreasedZOI</a>
-extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>
-implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink">Serializable</a></pre>
+extends <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>
+implements <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink">Serializable</a></pre>
 <div class="block">Calculates the Zone of Influence, also known as Zone of Control, for different points on a map.
  Uses GreasedRegion for faster storage and manipulation of zones; it's suggested if you use this class to be
  somewhat familiar with the methods for manipulating data in that class, though a GreasedRegion can also be used just
@@ -136,9 +136,9 @@ implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base
 </thead>
 <tbody>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.util.Collection,char%5B%5D%5B%5D,squidpony.squidgrid.Radius)">GreasedZOI</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;influences,
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.util.Collection,char%5B%5D%5B%5D,squidpony.squidgrid.Radius)">GreasedZOI</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;influences,
 char[][]&nbsp;map,
-<a href="../squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a>&nbsp;measurement)</code></th>
+<a href="../squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a>&nbsp;radiusStrategy)</code></th>
 <td class="colLast">
 <div class="block">Constructs a Zone of Influence map.</div>
 </td>
@@ -146,7 +146,7 @@ char[][]&nbsp;map,
 <tr class="rowColor">
 <th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(squidpony.squidmath.Coord%5B%5D%5B%5D,char%5B%5D%5B%5D,squidpony.squidgrid.Radius)">GreasedZOI</a></span>&#8203;(<a href="../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[][]&nbsp;influences,
 char[][]&nbsp;map,
-<a href="../squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a>&nbsp;measurement)</code></th>
+<a href="../squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a>&nbsp;radiusStrategy)</code></th>
 <td class="colLast">
 <div class="block">Constructs a Zone of Influence map.</div>
 </td>
@@ -154,7 +154,7 @@ char[][]&nbsp;map,
 <tr class="altColor">
 <th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(squidpony.squidmath.Coord%5B%5D,char%5B%5D%5B%5D,squidpony.squidgrid.Radius)">GreasedZOI</a></span>&#8203;(<a href="../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[]&nbsp;influences,
 char[][]&nbsp;map,
-<a href="../squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a>&nbsp;measurement)</code></th>
+<a href="../squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a>&nbsp;radiusStrategy)</code></th>
 <td class="colLast">
 <div class="block">Constructs a Zone of Influence map.</div>
 </td>
@@ -231,10 +231,10 @@ char[][]&nbsp;map,
 </div>
 </div>
 <div class="inheritedList">
-<h3>Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></h3>
+<h3>Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></h3>
 <a id="methods.inherited.from.class.java.lang.Object">
 <!--   -->
-</a><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#clone()" title="class or interface in java.lang" class="externalLink">clone</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.lang" class="externalLink">equals</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#finalize()" title="class or interface in java.lang" class="externalLink">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#getClass()" title="class or interface in java.lang" class="externalLink">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#hashCode()" title="class or interface in java.lang" class="externalLink">hashCode</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#notify()" title="class or interface in java.lang" class="externalLink">notify</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#notifyAll()" title="class or interface in java.lang" class="externalLink">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#toString()" title="class or interface in java.lang" class="externalLink">toString</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#wait()" title="class or interface in java.lang" class="externalLink">wait</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#wait(long)" title="class or interface in java.lang" class="externalLink">wait</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#wait(long,int)" title="class or interface in java.lang" class="externalLink">wait</a></code></div>
+</a><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#clone()" title="class or interface in java.lang" class="externalLink">clone</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.lang" class="externalLink">equals</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#finalize()" title="class or interface in java.lang" class="externalLink">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#getClass()" title="class or interface in java.lang" class="externalLink">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#hashCode()" title="class or interface in java.lang" class="externalLink">hashCode</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#notify()" title="class or interface in java.lang" class="externalLink">notify</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#notifyAll()" title="class or interface in java.lang" class="externalLink">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#toString()" title="class or interface in java.lang" class="externalLink">toString</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#wait()" title="class or interface in java.lang" class="externalLink">wait</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#wait(long)" title="class or interface in java.lang" class="externalLink">wait</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#wait(long,int)" title="class or interface in java.lang" class="externalLink">wait</a></code></div>
 </section>
 </li>
 </ul>
@@ -253,7 +253,7 @@ char[][]&nbsp;map,
 <h3><a id="&lt;init&gt;(squidpony.squidmath.Coord[][],char[][],squidpony.squidgrid.Radius)">GreasedZOI</a></h3>
 <div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidai/GreasedZOI.html#line.45">GreasedZOI</a></span>&#8203;(<span class="arguments"><a href="../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[][]&nbsp;influences,
 char[][]&nbsp;map,
-<a href="../squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a>&nbsp;measurement)</span></div>
+<a href="../squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a>&nbsp;radiusStrategy)</span></div>
 <div class="block">Constructs a Zone of Influence map. Takes a (quite possibly jagged) array of arrays of Coord influences, where
  the elements of the outer array represent different groups of influencing "factions" or groups that exert control
  over nearby areas, and the Coord elements of the inner array represent individual spots that are part of those
@@ -266,7 +266,7 @@ char[][]&nbsp;map,
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>influences</code> - an outer array containing influencing groups, each an array containing Coords that influence</dd>
 <dd><code>map</code> - a char[][] that is used as an area map; should be bounded</dd>
-<dd><code>measurement</code> - a Radius enum that corresponds to how distance should be measured</dd>
+<dd><code>radiusStrategy</code> - a Radius enum that corresponds to how distance should be measured</dd>
 </dl>
 </section>
 </li>
@@ -275,7 +275,7 @@ char[][]&nbsp;map,
 <h3><a id="&lt;init&gt;(squidpony.squidmath.Coord[],char[][],squidpony.squidgrid.Radius)">GreasedZOI</a></h3>
 <div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidai/GreasedZOI.html#line.66">GreasedZOI</a></span>&#8203;(<span class="arguments"><a href="../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[]&nbsp;influences,
 char[][]&nbsp;map,
-<a href="../squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a>&nbsp;measurement)</span></div>
+<a href="../squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a>&nbsp;radiusStrategy)</span></div>
 <div class="block">Constructs a Zone of Influence map. Takes an arrays of Coord influences, where each Coord is treated as both a
  one-element group of influencing "factions" or groups that exert control over nearby areas, and the individual
  spot that makes up one of those groups and spreads influence. Also takes a char[][] for a map, which can be the
@@ -289,7 +289,7 @@ char[][]&nbsp;map,
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>influences</code> - an array containing Coords that each have their own independent influence</dd>
 <dd><code>map</code> - a char[][] that is used as an area map; should be bounded</dd>
-<dd><code>measurement</code> - a Radius enum that corresponds to how distance should be measured</dd>
+<dd><code>radiusStrategy</code> - a Radius enum that corresponds to how distance should be measured</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../squidmath/PoissonDisk.html" title="class in squidpony.squidmath"><code>PoissonDisk provides a good way to generate evenly spaced Coords</code></a></dd>
 </dl>
@@ -298,9 +298,9 @@ char[][]&nbsp;map,
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(java.util.Collection,char[][],squidpony.squidgrid.Radius)">GreasedZOI</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidai/GreasedZOI.html#line.90">GreasedZOI</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;influences,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidai/GreasedZOI.html#line.90">GreasedZOI</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;influences,
 char[][]&nbsp;map,
-<a href="../squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a>&nbsp;measurement)</span></div>
+<a href="../squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a>&nbsp;radiusStrategy)</span></div>
 <div class="block">Constructs a Zone of Influence map. Takes a Collection of Coord influences, where each Coord is treated as both a
  one-element group of influencing "factions" or groups that exert control over nearby areas, and the individual
  spot that makes up one of those groups and spreads influence. Also takes a char[][] for a map, which can be the
@@ -315,7 +315,7 @@ char[][]&nbsp;map,
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>influences</code> - A Collection of Coord, such as a GreasedRegion, where each Coord has independent influence</dd>
 <dd><code>map</code> - a char[][] that is used as an area map; should be bounded</dd>
-<dd><code>measurement</code> - a Radius enum that corresponds to how distance should be measured</dd>
+<dd><code>radiusStrategy</code> - a Radius enum that corresponds to how distance should be measured</dd>
 </dl>
 </section>
 </li>

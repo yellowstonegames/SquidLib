@@ -33,7 +33,7 @@
 <span class="sourceLineNo">021</span><a id="line.21">    protected OrderedMap&lt;String, String&gt; contents;</a>
 <span class="sourceLineNo">022</span><a id="line.22">    public final StringConvert&lt;OrderedMap&lt;String, String&gt;&gt; mapConverter;</a>
 <span class="sourceLineNo">023</span><a id="line.23">    public boolean compress = true;</a>
-<span class="sourceLineNo">024</span><a id="line.24">    public long[] garbleKey = null;</a>
+<span class="sourceLineNo">024</span><a id="line.24">    public long[] garbleKey;</a>
 <span class="sourceLineNo">025</span><a id="line.25"></a>
 <span class="sourceLineNo">026</span><a id="line.26">    /**</a>
 <span class="sourceLineNo">027</span><a id="line.27">     * Please don't use this constructor if possible; it simply calls {@link #TextStorage(String)} with the constant</a>
@@ -245,94 +245,92 @@
 <span class="sourceLineNo">233</span><a id="line.233">     * @param &lt;T&gt; the type of the value to retrieve; if type was {@code RNG.class}, this would be {@code RNG}</a>
 <span class="sourceLineNo">234</span><a id="line.234">     * @return the retrieved value if successful, or null otherwise</a>
 <span class="sourceLineNo">235</span><a id="line.235">     */</a>
-<span class="sourceLineNo">236</span><a id="line.236">    @SuppressWarnings("unchecked")</a>
-<span class="sourceLineNo">237</span><a id="line.237">    public &lt;T&gt; T get(String outerName, String innerName, StringConvert&lt;?&gt; converter, Class&lt;T&gt; type)</a>
-<span class="sourceLineNo">238</span><a id="line.238">    {</a>
-<span class="sourceLineNo">239</span><a id="line.239">        OrderedMap&lt;String, String&gt; om;</a>
-<span class="sourceLineNo">240</span><a id="line.240">        String got;</a>
-<span class="sourceLineNo">241</span><a id="line.241">        if(garbleKey == null) {</a>
-<span class="sourceLineNo">242</span><a id="line.242">            if (compress)</a>
-<span class="sourceLineNo">243</span><a id="line.243">                got = LZSPlus.decompress(preferences.getString(outerName));</a>
-<span class="sourceLineNo">244</span><a id="line.244">            else</a>
-<span class="sourceLineNo">245</span><a id="line.245">                got = preferences.getString(outerName);</a>
-<span class="sourceLineNo">246</span><a id="line.246">        }</a>
-<span class="sourceLineNo">247</span><a id="line.247">        else</a>
-<span class="sourceLineNo">248</span><a id="line.248">        {</a>
-<span class="sourceLineNo">249</span><a id="line.249">            if (compress)</a>
-<span class="sourceLineNo">250</span><a id="line.250">                got = LZSPlus.decompress(preferences.getString(outerName), garbleKey);</a>
-<span class="sourceLineNo">251</span><a id="line.251">            else</a>
-<span class="sourceLineNo">252</span><a id="line.252">                got = Garbler.degarble(preferences.getString(outerName), garbleKey);</a>
-<span class="sourceLineNo">253</span><a id="line.253">        }</a>
-<span class="sourceLineNo">254</span><a id="line.254">        if(got == null) return null;</a>
-<span class="sourceLineNo">255</span><a id="line.255">        om = mapConverter.restore(got);</a>
-<span class="sourceLineNo">256</span><a id="line.256">        if(om == null) return null;</a>
-<span class="sourceLineNo">257</span><a id="line.257">        return converter.restore(om.get(innerName), type);</a>
-<span class="sourceLineNo">258</span><a id="line.258">    }</a>
-<span class="sourceLineNo">259</span><a id="line.259"></a>
-<span class="sourceLineNo">260</span><a id="line.260">    /**</a>
-<span class="sourceLineNo">261</span><a id="line.261">     * Gets an object from the storage by the given {@code outerName} key from {@link #store(String)} and</a>
-<span class="sourceLineNo">262</span><a id="line.262">     * {@code innerName} key from {@link #put(String, Object, StringConvert)}, and uses the class given by {@code type}</a>
-<span class="sourceLineNo">263</span><a id="line.263">     * for the returned value, assuming it matches the object that was originally put with those keys. Uses typeName to</a>
-<span class="sourceLineNo">264</span><a id="line.264">     * find an appropriate StringConvert that has already been created (and thus registered), and because typeName is a</a>
-<span class="sourceLineNo">265</span><a id="line.265">     * CharSequence instead of a Class, it doesn't suffer from generic type erasure at runtime, It can and should have</a>
-<span class="sourceLineNo">266</span><a id="line.266">     * the generic type arguments as if it were the type for a variable, e.g. {@code OrderedSet&lt;ArrayList&lt;String&gt;&gt;}. If</a>
-<span class="sourceLineNo">267</span><a id="line.267">     * no such object exists, returns null. Results are undefined if {@code type} doesn't match the actual class of the</a>
-<span class="sourceLineNo">268</span><a id="line.268">     * stored object, and this will return null if there is no known StringConvert for the given typeName.</a>
-<span class="sourceLineNo">269</span><a id="line.269">     * @param outerName the key used to store the group of objects with {@link #store(String)}</a>
-<span class="sourceLineNo">270</span><a id="line.270">     * @param innerName the key used to store the specific object with {@link #put(String, Object, StringConvert)}</a>
-<span class="sourceLineNo">271</span><a id="line.271">     * @param typeName the name of the type to produce, with generic type parameters intact; used to find an appropriate StringConvert</a>
-<span class="sourceLineNo">272</span><a id="line.272">     * @param type the class of the value; for a class like RNG, use {@code RNG.class}, but changed to fit</a>
-<span class="sourceLineNo">273</span><a id="line.273">     * @param &lt;T&gt; the type of the value to retrieve; if type was {@code RNG.class}, this would be {@code RNG}</a>
-<span class="sourceLineNo">274</span><a id="line.274">     * @return the retrieved value if successful, or null otherwise</a>
-<span class="sourceLineNo">275</span><a id="line.275">     */</a>
-<span class="sourceLineNo">276</span><a id="line.276">    @SuppressWarnings("unchecked")</a>
-<span class="sourceLineNo">277</span><a id="line.277">    public &lt;T&gt; T get(String outerName, String innerName, CharSequence typeName, Class&lt;T&gt; type)</a>
-<span class="sourceLineNo">278</span><a id="line.278">    {</a>
-<span class="sourceLineNo">279</span><a id="line.279">        OrderedMap&lt;String, String&gt; om;</a>
-<span class="sourceLineNo">280</span><a id="line.280">        String got;</a>
-<span class="sourceLineNo">281</span><a id="line.281">        if(garbleKey == null) {</a>
-<span class="sourceLineNo">282</span><a id="line.282">            if (compress)</a>
-<span class="sourceLineNo">283</span><a id="line.283">                got = LZSPlus.decompress(preferences.getString(outerName));</a>
-<span class="sourceLineNo">284</span><a id="line.284">            else</a>
-<span class="sourceLineNo">285</span><a id="line.285">                got = preferences.getString(outerName);</a>
-<span class="sourceLineNo">286</span><a id="line.286">        }</a>
-<span class="sourceLineNo">287</span><a id="line.287">        else</a>
-<span class="sourceLineNo">288</span><a id="line.288">        {</a>
-<span class="sourceLineNo">289</span><a id="line.289">            if (compress)</a>
-<span class="sourceLineNo">290</span><a id="line.290">                got = LZSPlus.decompress(preferences.getString(outerName), garbleKey);</a>
-<span class="sourceLineNo">291</span><a id="line.291">            else</a>
-<span class="sourceLineNo">292</span><a id="line.292">                got = Garbler.degarble(preferences.getString(outerName), garbleKey);</a>
-<span class="sourceLineNo">293</span><a id="line.293">        }</a>
-<span class="sourceLineNo">294</span><a id="line.294">        if(got == null) return null;</a>
-<span class="sourceLineNo">295</span><a id="line.295">        om = mapConverter.restore(got);</a>
-<span class="sourceLineNo">296</span><a id="line.296">        if(om == null) return null;</a>
-<span class="sourceLineNo">297</span><a id="line.297">        StringConvert&lt;?&gt; converter = StringConvert.get(typeName);</a>
-<span class="sourceLineNo">298</span><a id="line.298">        if(converter == null) return null;</a>
-<span class="sourceLineNo">299</span><a id="line.299">        got = om.get(innerName);</a>
-<span class="sourceLineNo">300</span><a id="line.300">        if(got == null) return null;</a>
-<span class="sourceLineNo">301</span><a id="line.301">        return converter.restore(got, type);</a>
-<span class="sourceLineNo">302</span><a id="line.302">    }</a>
-<span class="sourceLineNo">303</span><a id="line.303"></a>
-<span class="sourceLineNo">304</span><a id="line.304">    /**</a>
-<span class="sourceLineNo">305</span><a id="line.305">     * Gets the approximate size of the currently-stored preferences. This assumes UTF-16 storage, which is the case for</a>
-<span class="sourceLineNo">306</span><a id="line.306">     * GWT's LocalStorage. Since GWT is restricted to the size the browser permits for LocalStorage, and this limit can</a>
-<span class="sourceLineNo">307</span><a id="line.307">     * be rather small (about 5 MB, sometimes more but not reliably), this method is especially useful there, but it may</a>
-<span class="sourceLineNo">308</span><a id="line.308">     * yield inaccurate sizes on other platforms that save Preferences data differently.</a>
-<span class="sourceLineNo">309</span><a id="line.309">     * @return the size, in bytes, of the already-stored preferences</a>
-<span class="sourceLineNo">310</span><a id="line.310">     */</a>
-<span class="sourceLineNo">311</span><a id="line.311">    public int preferencesSize()</a>
-<span class="sourceLineNo">312</span><a id="line.312">    {</a>
-<span class="sourceLineNo">313</span><a id="line.313">        Map&lt;String, ?&gt; p = preferences.get();</a>
-<span class="sourceLineNo">314</span><a id="line.314">        int byteSize = 0;</a>
-<span class="sourceLineNo">315</span><a id="line.315">        for(String k : p.keySet())</a>
-<span class="sourceLineNo">316</span><a id="line.316">        {</a>
-<span class="sourceLineNo">317</span><a id="line.317">            byteSize += k.length();</a>
-<span class="sourceLineNo">318</span><a id="line.318">            byteSize += preferences.getString(k, "").length();</a>
-<span class="sourceLineNo">319</span><a id="line.319">        }</a>
-<span class="sourceLineNo">320</span><a id="line.320">        return byteSize * 2;</a>
-<span class="sourceLineNo">321</span><a id="line.321">    }</a>
-<span class="sourceLineNo">322</span><a id="line.322"></a>
-<span class="sourceLineNo">323</span><a id="line.323">}</a>
+<span class="sourceLineNo">236</span><a id="line.236">    public &lt;T&gt; T get(String outerName, String innerName, StringConvert&lt;?&gt; converter, Class&lt;T&gt; type)</a>
+<span class="sourceLineNo">237</span><a id="line.237">    {</a>
+<span class="sourceLineNo">238</span><a id="line.238">        OrderedMap&lt;String, String&gt; om;</a>
+<span class="sourceLineNo">239</span><a id="line.239">        String got;</a>
+<span class="sourceLineNo">240</span><a id="line.240">        if(garbleKey == null) {</a>
+<span class="sourceLineNo">241</span><a id="line.241">            if (compress)</a>
+<span class="sourceLineNo">242</span><a id="line.242">                got = LZSPlus.decompress(preferences.getString(outerName));</a>
+<span class="sourceLineNo">243</span><a id="line.243">            else</a>
+<span class="sourceLineNo">244</span><a id="line.244">                got = preferences.getString(outerName);</a>
+<span class="sourceLineNo">245</span><a id="line.245">        }</a>
+<span class="sourceLineNo">246</span><a id="line.246">        else</a>
+<span class="sourceLineNo">247</span><a id="line.247">        {</a>
+<span class="sourceLineNo">248</span><a id="line.248">            if (compress)</a>
+<span class="sourceLineNo">249</span><a id="line.249">                got = LZSPlus.decompress(preferences.getString(outerName), garbleKey);</a>
+<span class="sourceLineNo">250</span><a id="line.250">            else</a>
+<span class="sourceLineNo">251</span><a id="line.251">                got = Garbler.degarble(preferences.getString(outerName), garbleKey);</a>
+<span class="sourceLineNo">252</span><a id="line.252">        }</a>
+<span class="sourceLineNo">253</span><a id="line.253">        if(got == null) return null;</a>
+<span class="sourceLineNo">254</span><a id="line.254">        om = mapConverter.restore(got);</a>
+<span class="sourceLineNo">255</span><a id="line.255">        if(om == null) return null;</a>
+<span class="sourceLineNo">256</span><a id="line.256">        return converter.restore(om.get(innerName), type);</a>
+<span class="sourceLineNo">257</span><a id="line.257">    }</a>
+<span class="sourceLineNo">258</span><a id="line.258"></a>
+<span class="sourceLineNo">259</span><a id="line.259">    /**</a>
+<span class="sourceLineNo">260</span><a id="line.260">     * Gets an object from the storage by the given {@code outerName} key from {@link #store(String)} and</a>
+<span class="sourceLineNo">261</span><a id="line.261">     * {@code innerName} key from {@link #put(String, Object, StringConvert)}, and uses the class given by {@code type}</a>
+<span class="sourceLineNo">262</span><a id="line.262">     * for the returned value, assuming it matches the object that was originally put with those keys. Uses typeName to</a>
+<span class="sourceLineNo">263</span><a id="line.263">     * find an appropriate StringConvert that has already been created (and thus registered), and because typeName is a</a>
+<span class="sourceLineNo">264</span><a id="line.264">     * CharSequence instead of a Class, it doesn't suffer from generic type erasure at runtime, It can and should have</a>
+<span class="sourceLineNo">265</span><a id="line.265">     * the generic type arguments as if it were the type for a variable, e.g. {@code OrderedSet&lt;ArrayList&lt;String&gt;&gt;}. If</a>
+<span class="sourceLineNo">266</span><a id="line.266">     * no such object exists, returns null. Results are undefined if {@code type} doesn't match the actual class of the</a>
+<span class="sourceLineNo">267</span><a id="line.267">     * stored object, and this will return null if there is no known StringConvert for the given typeName.</a>
+<span class="sourceLineNo">268</span><a id="line.268">     * @param outerName the key used to store the group of objects with {@link #store(String)}</a>
+<span class="sourceLineNo">269</span><a id="line.269">     * @param innerName the key used to store the specific object with {@link #put(String, Object, StringConvert)}</a>
+<span class="sourceLineNo">270</span><a id="line.270">     * @param typeName the name of the type to produce, with generic type parameters intact; used to find an appropriate StringConvert</a>
+<span class="sourceLineNo">271</span><a id="line.271">     * @param type the class of the value; for a class like RNG, use {@code RNG.class}, but changed to fit</a>
+<span class="sourceLineNo">272</span><a id="line.272">     * @param &lt;T&gt; the type of the value to retrieve; if type was {@code RNG.class}, this would be {@code RNG}</a>
+<span class="sourceLineNo">273</span><a id="line.273">     * @return the retrieved value if successful, or null otherwise</a>
+<span class="sourceLineNo">274</span><a id="line.274">     */</a>
+<span class="sourceLineNo">275</span><a id="line.275">    public &lt;T&gt; T get(String outerName, String innerName, CharSequence typeName, Class&lt;T&gt; type)</a>
+<span class="sourceLineNo">276</span><a id="line.276">    {</a>
+<span class="sourceLineNo">277</span><a id="line.277">        OrderedMap&lt;String, String&gt; om;</a>
+<span class="sourceLineNo">278</span><a id="line.278">        String got;</a>
+<span class="sourceLineNo">279</span><a id="line.279">        if(garbleKey == null) {</a>
+<span class="sourceLineNo">280</span><a id="line.280">            if (compress)</a>
+<span class="sourceLineNo">281</span><a id="line.281">                got = LZSPlus.decompress(preferences.getString(outerName));</a>
+<span class="sourceLineNo">282</span><a id="line.282">            else</a>
+<span class="sourceLineNo">283</span><a id="line.283">                got = preferences.getString(outerName);</a>
+<span class="sourceLineNo">284</span><a id="line.284">        }</a>
+<span class="sourceLineNo">285</span><a id="line.285">        else</a>
+<span class="sourceLineNo">286</span><a id="line.286">        {</a>
+<span class="sourceLineNo">287</span><a id="line.287">            if (compress)</a>
+<span class="sourceLineNo">288</span><a id="line.288">                got = LZSPlus.decompress(preferences.getString(outerName), garbleKey);</a>
+<span class="sourceLineNo">289</span><a id="line.289">            else</a>
+<span class="sourceLineNo">290</span><a id="line.290">                got = Garbler.degarble(preferences.getString(outerName), garbleKey);</a>
+<span class="sourceLineNo">291</span><a id="line.291">        }</a>
+<span class="sourceLineNo">292</span><a id="line.292">        if(got == null) return null;</a>
+<span class="sourceLineNo">293</span><a id="line.293">        om = mapConverter.restore(got);</a>
+<span class="sourceLineNo">294</span><a id="line.294">        if(om == null) return null;</a>
+<span class="sourceLineNo">295</span><a id="line.295">        StringConvert&lt;?&gt; converter = StringConvert.get(typeName);</a>
+<span class="sourceLineNo">296</span><a id="line.296">        if(converter == null) return null;</a>
+<span class="sourceLineNo">297</span><a id="line.297">        got = om.get(innerName);</a>
+<span class="sourceLineNo">298</span><a id="line.298">        if(got == null) return null;</a>
+<span class="sourceLineNo">299</span><a id="line.299">        return converter.restore(got, type);</a>
+<span class="sourceLineNo">300</span><a id="line.300">    }</a>
+<span class="sourceLineNo">301</span><a id="line.301"></a>
+<span class="sourceLineNo">302</span><a id="line.302">    /**</a>
+<span class="sourceLineNo">303</span><a id="line.303">     * Gets the approximate size of the currently-stored preferences. This assumes UTF-16 storage, which is the case for</a>
+<span class="sourceLineNo">304</span><a id="line.304">     * GWT's LocalStorage. Since GWT is restricted to the size the browser permits for LocalStorage, and this limit can</a>
+<span class="sourceLineNo">305</span><a id="line.305">     * be rather small (about 5 MB, sometimes more but not reliably), this method is especially useful there, but it may</a>
+<span class="sourceLineNo">306</span><a id="line.306">     * yield inaccurate sizes on other platforms that save Preferences data differently.</a>
+<span class="sourceLineNo">307</span><a id="line.307">     * @return the size, in bytes, of the already-stored preferences</a>
+<span class="sourceLineNo">308</span><a id="line.308">     */</a>
+<span class="sourceLineNo">309</span><a id="line.309">    public int preferencesSize()</a>
+<span class="sourceLineNo">310</span><a id="line.310">    {</a>
+<span class="sourceLineNo">311</span><a id="line.311">        Map&lt;String, ?&gt; p = preferences.get();</a>
+<span class="sourceLineNo">312</span><a id="line.312">        int byteSize = 0;</a>
+<span class="sourceLineNo">313</span><a id="line.313">        for(String k : p.keySet())</a>
+<span class="sourceLineNo">314</span><a id="line.314">        {</a>
+<span class="sourceLineNo">315</span><a id="line.315">            byteSize += k.length();</a>
+<span class="sourceLineNo">316</span><a id="line.316">            byteSize += preferences.getString(k, "").length();</a>
+<span class="sourceLineNo">317</span><a id="line.317">        }</a>
+<span class="sourceLineNo">318</span><a id="line.318">        return byteSize * 2;</a>
+<span class="sourceLineNo">319</span><a id="line.319">    }</a>
+<span class="sourceLineNo">320</span><a id="line.320"></a>
+<span class="sourceLineNo">321</span><a id="line.321">}</a>
 
 
 

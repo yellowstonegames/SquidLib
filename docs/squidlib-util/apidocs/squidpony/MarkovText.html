@@ -87,18 +87,18 @@ loadScripts(document, 'script');</script>
 <h1 title="Class MarkovText" class="title">Class MarkovText</h1>
 </div>
 <div class="contentContainer">
-<div class="inheritance" title="Inheritance Tree"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">java.lang.Object</a>
+<div class="inheritance" title="Inheritance Tree"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">java.lang.Object</a>
 <div class="inheritance">squidpony.MarkovText</div>
 </div>
 <section class="description">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink">Serializable</a></code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink">Serializable</a></code></dd>
 </dl>
 <hr>
 <pre>public class <a href="../src-html/squidpony/MarkovText.html#line.26">MarkovText</a>
-extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>
-implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink">Serializable</a></pre>
+extends <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>
+implements <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink">Serializable</a></pre>
 <div class="block">A simple Markov chain text generator; call <a href="#analyze(java.lang.CharSequence)"><code>analyze(CharSequence)</code></a> once on a large sample text, then you can
  call <a href="#chain(long)"><code>chain(long)</code></a> many times to get odd-sounding "remixes" of the sample text. This is an order-2 Markov
  chain, so it chooses the next word based on the previous two words; <a href="MarkovTextLimited.html" title="class in squidpony"><code>MarkovTextLimited</code></a> is an order-1 Markov
@@ -150,7 +150,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base
 </td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]</code></td>
+<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#words">words</a></span></code></th>
 <td class="colLast">
 <div class="block">All words (case-sensitive and counting some punctuation as part of words) that this encountered during the latest
@@ -207,14 +207,14 @@ implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base
 <tbody>
 <tr class="altColor" id="i0">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#analyze(java.lang.CharSequence)">analyze</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang" class="externalLink">CharSequence</a>&nbsp;corpus)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#analyze(java.lang.CharSequence)">analyze</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang" class="externalLink">CharSequence</a>&nbsp;corpus)</code></th>
 <td class="colLast">
 <div class="block">This is the main necessary step before using a MarkovText; you must call this method at some point before you can
  call any other methods.</div>
 </td>
 </tr>
 <tr class="rowColor" id="i1">
-<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
+<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#chain(long)">chain</a></span>&#8203;(long&nbsp;seed)</code></th>
 <td class="colLast">
 <div class="block">Generate a roughly-sentence-sized piece of text based on the previously analyzed corpus text (using
@@ -224,7 +224,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base
 </td>
 </tr>
 <tr class="altColor" id="i2">
-<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
+<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#chain(long,int)">chain</a></span>&#8203;(long&nbsp;seed,
 int&nbsp;maxLength)</code></th>
 <td class="colLast">
@@ -251,13 +251,13 @@ int&nbsp;maxLength)</code></th>
 </tr>
 <tr class="rowColor" id="i5">
 <td class="colFirst"><code>static <a href="MarkovText.html" title="class in squidpony">MarkovText</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#deserializeFromString(java.lang.String)">deserializeFromString</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;data)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#deserializeFromString(java.lang.String)">deserializeFromString</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;data)</code></th>
 <td class="colLast">
 <div class="block">Recreates an already-analyzed MarkovText given a String produced by <a href="#serializeToString()"><code>serializeToString()</code></a>.</div>
 </td>
 </tr>
 <tr class="altColor" id="i6">
-<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
+<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#serializeToString()">serializeToString</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns a representation of this MarkovText as a String; use <a href="#deserializeFromString(java.lang.String)"><code>deserializeFromString(String)</code></a> to get a
@@ -269,10 +269,10 @@ int&nbsp;maxLength)</code></th>
 </div>
 </div>
 <div class="inheritedList">
-<h3>Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></h3>
+<h3>Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></h3>
 <a id="methods.inherited.from.class.java.lang.Object">
 <!--   -->
-</a><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#clone()" title="class or interface in java.lang" class="externalLink">clone</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.lang" class="externalLink">equals</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#finalize()" title="class or interface in java.lang" class="externalLink">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#getClass()" title="class or interface in java.lang" class="externalLink">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#hashCode()" title="class or interface in java.lang" class="externalLink">hashCode</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#notify()" title="class or interface in java.lang" class="externalLink">notify</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#notifyAll()" title="class or interface in java.lang" class="externalLink">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#toString()" title="class or interface in java.lang" class="externalLink">toString</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#wait()" title="class or interface in java.lang" class="externalLink">wait</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#wait(long)" title="class or interface in java.lang" class="externalLink">wait</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#wait(long,int)" title="class or interface in java.lang" class="externalLink">wait</a></code></div>
+</a><code><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#clone()" title="class or interface in java.lang" class="externalLink">clone</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.lang" class="externalLink">equals</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#finalize()" title="class or interface in java.lang" class="externalLink">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#getClass()" title="class or interface in java.lang" class="externalLink">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#hashCode()" title="class or interface in java.lang" class="externalLink">hashCode</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#notify()" title="class or interface in java.lang" class="externalLink">notify</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#notifyAll()" title="class or interface in java.lang" class="externalLink">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#toString()" title="class or interface in java.lang" class="externalLink">toString</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#wait()" title="class or interface in java.lang" class="externalLink">wait</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#wait(long)" title="class or interface in java.lang" class="externalLink">wait</a>, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html?is-external=true#wait(long,int)" title="class or interface in java.lang" class="externalLink">wait</a></code></div>
 </section>
 </li>
 </ul>
@@ -289,7 +289,7 @@ int&nbsp;maxLength)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="words">words</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/MarkovText.html#line.33">words</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/MarkovText.html#line.33">words</a></span></div>
 <div class="block">All words (case-sensitive and counting some punctuation as part of words) that this encountered during the latest
  call to <a href="#analyze(java.lang.CharSequence)"><code>analyze(CharSequence)</code></a>. Will be null if <a href="#analyze(java.lang.CharSequence)"><code>analyze(CharSequence)</code></a> was never called.</div>
 </section>
@@ -343,14 +343,14 @@ int&nbsp;maxLength)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="analyze(java.lang.CharSequence)">analyze</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/MarkovText.html#line.66">analyze</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang" class="externalLink">CharSequence</a>&nbsp;corpus)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/MarkovText.html#line.66">analyze</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang" class="externalLink">CharSequence</a>&nbsp;corpus)</span></div>
 <div class="block">This is the main necessary step before using a MarkovText; you must call this method at some point before you can
  call any other methods. You can serialize this MarkovText after calling to avoid needing to call this again on later
  runs, or even include serialized MarkovText objects with a game to only need to call this during pre-processing.
  This method analyzes the pairings of words in a (typically large) corpus text, including some punctuation as part
  of words and some kinds as their own "words." It only uses one preceding word to determine the subsequent word.
  When it finishes processing, it stores the results in <a href="#words"><code>words</code></a> and <a href="#processed"><code>processed</code></a>, which allows other
- methods to be called (they will throw a <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/NullPointerException.html?is-external=true" title="class or interface in java.lang" class="externalLink"><code>NullPointerException</code></a> if analyze() hasn't been called).</div>
+ methods to be called (they will throw a <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/NullPointerException.html?is-external=true" title="class or interface in java.lang" class="externalLink"><code>NullPointerException</code></a> if analyze() hasn't been called).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>corpus</code> - a typically-large sample text in the style that should be mimicked</dd>
@@ -376,7 +376,7 @@ int&nbsp;maxLength)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="chain(long)">chain</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/MarkovText.html#line.224">chain</a></span>&#8203;(<span class="arguments">long&nbsp;seed)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/MarkovText.html#line.224">chain</a></span>&#8203;(<span class="arguments">long&nbsp;seed)</span></div>
 <div class="block">Generate a roughly-sentence-sized piece of text based on the previously analyzed corpus text (using
  <a href="#analyze(java.lang.CharSequence)"><code>analyze(CharSequence)</code></a>) that terminates when stop punctuation is used (".", "!", "?", or "..."), or once
  the length would be greater than 200 characters without encountering stop punctuation(it terminates such a
@@ -392,7 +392,7 @@ int&nbsp;maxLength)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="chain(long,int)">chain</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/MarkovText.html#line.236">chain</a></span>&#8203;(<span class="arguments">long&nbsp;seed,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/MarkovText.html#line.236">chain</a></span>&#8203;(<span class="arguments">long&nbsp;seed,
 int&nbsp;maxLength)</span></div>
 <div class="block">Generate a roughly-sentence-sized piece of text based on the previously analyzed corpus text (using
  <a href="#analyze(java.lang.CharSequence)"><code>analyze(CharSequence)</code></a>) that terminates when stop punctuation is used (".", "!", "?", or "...") or once
@@ -409,7 +409,7 @@ int&nbsp;maxLength)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="serializeToString()">serializeToString</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/MarkovText.html#line.295">serializeToString</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/MarkovText.html#line.295">serializeToString</a></span>()</div>
 <div class="block">Returns a representation of this MarkovText as a String; use <a href="#deserializeFromString(java.lang.String)"><code>deserializeFromString(String)</code></a> to get a
  MarkovText back from this String. The <a href="#words"><code>words</code></a> and <a href="#processed"><code>processed</code></a> fields must have been given values by
  either direct assignment, calling <a href="#analyze(java.lang.CharSequence)"><code>analyze(CharSequence)</code></a>, or building this MarkovTest with the
@@ -423,7 +423,7 @@ int&nbsp;maxLength)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="deserializeFromString(java.lang.String)">deserializeFromString</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType"><a href="MarkovText.html" title="class in squidpony">MarkovText</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/MarkovText.html#line.305">deserializeFromString</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;data)</span></div>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType"><a href="MarkovText.html" title="class in squidpony">MarkovText</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/MarkovText.html#line.305">deserializeFromString</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;data)</span></div>
 <div class="block">Recreates an already-analyzed MarkovText given a String produced by <a href="#serializeToString()"><code>serializeToString()</code></a>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>

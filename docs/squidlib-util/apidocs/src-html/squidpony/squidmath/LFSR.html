@@ -148,7 +148,7 @@
 <span class="sourceLineNo">136</span><a id="line.136">    }</a>
 <span class="sourceLineNo">137</span><a id="line.137"></a>
 <span class="sourceLineNo">138</span><a id="line.138">    public void nextBytes(final byte[] bytes) {</a>
-<span class="sourceLineNo">139</span><a id="line.139">        int i = bytes.length, n = 0;</a>
+<span class="sourceLineNo">139</span><a id="line.139">        int i = bytes.length, n;</a>
 <span class="sourceLineNo">140</span><a id="line.140">        while (i != 0) {</a>
 <span class="sourceLineNo">141</span><a id="line.141">            n = Math.min(i, 8);</a>
 <span class="sourceLineNo">142</span><a id="line.142">            for (long bits = nextLong(); n-- != 0; bits &gt;&gt;&gt;= 8) {</a>

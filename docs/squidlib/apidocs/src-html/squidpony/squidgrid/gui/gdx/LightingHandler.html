@@ -293,18 +293,18 @@
 <span class="sourceLineNo">281</span><a id="line.281">                            if ((losResult[x][y - 1] &gt; 0 &amp;&amp; other[0][x][y - 1] &gt; 0 &amp;&amp; resistances[x][y - 1] &lt; 1)</a>
 <span class="sourceLineNo">282</span><a id="line.282">                                    || (x &gt; 0 &amp;&amp; losResult[x - 1][y - 1] &gt; 0 &amp;&amp; other[0][x - 1][y - 1] &gt; 0 &amp;&amp; resistances[x - 1][y - 1] &lt; 1)</a>
 <span class="sourceLineNo">283</span><a id="line.283">                                    || (x &lt; width - 1 &amp;&amp; losResult[x + 1][y - 1] &gt; 0 &amp;&amp; other[0][x + 1][y - 1] &gt; 0 &amp;&amp; resistances[x + 1][y - 1] &lt; 1)) {</a>
-<span class="sourceLineNo">284</span><a id="line.284">                                o0 = (float) other[0][x][y];</a>
+<span class="sourceLineNo">284</span><a id="line.284">                                o0 = other[0][x][y];</a>
 <span class="sourceLineNo">285</span><a id="line.285">                            }</a>
 <span class="sourceLineNo">286</span><a id="line.286">                        }</a>
 <span class="sourceLineNo">287</span><a id="line.287">                        if (y &lt; height - 1) {</a>
 <span class="sourceLineNo">288</span><a id="line.288">                            if ((losResult[x][y + 1] &gt; 0 &amp;&amp; other[0][x][y + 1] &gt; 0 &amp;&amp; resistances[x][y + 1] &lt; 1)</a>
 <span class="sourceLineNo">289</span><a id="line.289">                                    || (x &gt; 0 &amp;&amp; losResult[x - 1][y + 1] &gt; 0 &amp;&amp; other[0][x - 1][y + 1] &gt; 0 &amp;&amp; resistances[x - 1][y + 1] &lt; 1)</a>
 <span class="sourceLineNo">290</span><a id="line.290">                                    || (x &lt; width - 1 &amp;&amp; losResult[x + 1][y + 1] &gt; 0 &amp;&amp; other[0][x + 1][y + 1] &gt; 0 &amp;&amp; resistances[x + 1][y + 1] &lt; 1)) {</a>
-<span class="sourceLineNo">291</span><a id="line.291">                                o0 = (float) other[0][x][y];</a>
+<span class="sourceLineNo">291</span><a id="line.291">                                o0 = other[0][x][y];</a>
 <span class="sourceLineNo">292</span><a id="line.292">                            }</a>
 <span class="sourceLineNo">293</span><a id="line.293">                        }</a>
 <span class="sourceLineNo">294</span><a id="line.294">                        if (x &gt; 0 &amp;&amp; losResult[x - 1][y] &gt; 0 &amp;&amp; other[0][x - 1][y] &gt; 0 &amp;&amp; resistances[x - 1][y] &lt; 1) {</a>
-<span class="sourceLineNo">295</span><a id="line.295">                            o0 = (float) other[0][x][y];</a>
+<span class="sourceLineNo">295</span><a id="line.295">                            o0 = other[0][x][y];</a>
 <span class="sourceLineNo">296</span><a id="line.296">                        }</a>
 <span class="sourceLineNo">297</span><a id="line.297">                        if (x &lt; width - 1 &amp;&amp; losResult[x + 1][y] &gt; 0 &amp;&amp; other[0][x + 1][y] &gt; 0 &amp;&amp; resistances[x + 1][y] &lt; 1) {</a>
 <span class="sourceLineNo">298</span><a id="line.298">                            o0 = other[0][x][y];</a>

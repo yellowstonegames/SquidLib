@@ -99,7 +99,7 @@
 <span class="sourceLineNo">087</span><a id="line.87">         * runBase[i] + runLen[i] == runBase[i + 1]</a>
 <span class="sourceLineNo">088</span><a id="line.88">         * </a>
 <span class="sourceLineNo">089</span><a id="line.89">         * so we could cut the storage for this, but it's a minor amount, and keeping all the info explicit simplifies the code. */</a>
-<span class="sourceLineNo">090</span><a id="line.90">        private int stackSize = 0; // Number of pending runs on stack</a>
+<span class="sourceLineNo">090</span><a id="line.90">        private int stackSize; // Number of pending runs on stack</a>
 <span class="sourceLineNo">091</span><a id="line.91">        private final int[] runBase;</a>
 <span class="sourceLineNo">092</span><a id="line.92">        private final int[] runLen;</a>
 <span class="sourceLineNo">093</span><a id="line.93"></a>
@@ -185,8 +185,8 @@
 <span class="sourceLineNo">173</span><a id="line.173">                        return;</a>
 <span class="sourceLineNo">174</span><a id="line.174">                }</a>
 <span class="sourceLineNo">175</span><a id="line.175"></a>
-<span class="sourceLineNo">176</span><a id="line.176">                /** March over the array once, left to right, finding natural runs, extending short natural runs to minRun elements, and</a>
-<span class="sourceLineNo">177</span><a id="line.177">                 * merging runs to maintain stack invariant. */</a>
+<span class="sourceLineNo">176</span><a id="line.176">                /* March over the array once, left to right, finding natural runs, extending short natural runs to minRun elements, and</a>
+<span class="sourceLineNo">177</span><a id="line.177">                  merging runs to maintain stack invariant. */</a>
 <span class="sourceLineNo">178</span><a id="line.178">                TimSort&lt;T&gt; ts = new TimSort&lt;&gt;(a, order, c);</a>
 <span class="sourceLineNo">179</span><a id="line.179">                int minRun = minRunLength(nRemaining);</a>
 <span class="sourceLineNo">180</span><a id="line.180">                do {</a>
@@ -195,7 +195,7 @@
 <span class="sourceLineNo">183</span><a id="line.183"></a>
 <span class="sourceLineNo">184</span><a id="line.184">                        // If run is short, extend to min(minRun, nRemaining)</a>
 <span class="sourceLineNo">185</span><a id="line.185">                        if (runLen &lt; minRun) {</a>
-<span class="sourceLineNo">186</span><a id="line.186">                                int force = nRemaining &lt;= minRun ? nRemaining : minRun;</a>
+<span class="sourceLineNo">186</span><a id="line.186">                                int force = Math.min(nRemaining, minRun);</a>
 <span class="sourceLineNo">187</span><a id="line.187">                                binarySort(a, order, lo, lo + force, lo + runLen, c);</a>
 <span class="sourceLineNo">188</span><a id="line.188">                                runLen = force;</a>
 <span class="sourceLineNo">189</span><a id="line.189">                        }</a>
@@ -664,7 +664,7 @@
 <span class="sourceLineNo">652</span><a id="line.652">                        if (minGallop &lt; 0) minGallop = 0;</a>
 <span class="sourceLineNo">653</span><a id="line.653">                        minGallop += 2; // Penalize for leaving gallop mode</a>
 <span class="sourceLineNo">654</span><a id="line.654">                } // End of "outer" loop</a>
-<span class="sourceLineNo">655</span><a id="line.655">                this.minGallop = minGallop &lt; 1 ? 1 : minGallop; // Write back to field</a>
+<span class="sourceLineNo">655</span><a id="line.655">                this.minGallop = Math.max(minGallop, 1); // Write back to field</a>
 <span class="sourceLineNo">656</span><a id="line.656"></a>
 <span class="sourceLineNo">657</span><a id="line.657">                if (len1 == 1) {</a>
 <span class="sourceLineNo">658</span><a id="line.658">                        if (DEBUG) assert len2 &gt; 0;</a>
@@ -771,7 +771,7 @@
 <span class="sourceLineNo">759</span><a id="line.759">                        if (minGallop &lt; 0) minGallop = 0;</a>
 <span class="sourceLineNo">760</span><a id="line.760">                        minGallop += 2; // Penalize for leaving gallop mode</a>
 <span class="sourceLineNo">761</span><a id="line.761">                } // End of "outer" loop</a>
-<span class="sourceLineNo">762</span><a id="line.762">                this.minGallop = minGallop &lt; 1 ? 1 : minGallop; // Write back to field</a>
+<span class="sourceLineNo">762</span><a id="line.762">                this.minGallop = Math.max(minGallop, 1); // Write back to field</a>
 <span class="sourceLineNo">763</span><a id="line.763"></a>
 <span class="sourceLineNo">764</span><a id="line.764">                if (len2 == 1) {</a>
 <span class="sourceLineNo">765</span><a id="line.765">                        if (DEBUG) assert len1 &gt; 0;</a>

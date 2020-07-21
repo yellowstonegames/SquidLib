@@ -725,7 +725,7 @@
 <span class="sourceLineNo">713</span><a id="line.713"></a>
 <span class="sourceLineNo">714</span><a id="line.714">                @Override</a>
 <span class="sourceLineNo">715</span><a id="line.715">                public ArrayList&lt;T&gt; gradient(T fromColor, T toColor, int steps) {</a>
-<span class="sourceLineNo">716</span><a id="line.716">                        ArrayList&lt;T&gt; colors = new ArrayList&lt;&gt;((steps &gt; 1) ? steps : 1);</a>
+<span class="sourceLineNo">716</span><a id="line.716">                        ArrayList&lt;T&gt; colors = new ArrayList&lt;&gt;(Math.max(steps, 1));</a>
 <span class="sourceLineNo">717</span><a id="line.717">                        colors.add(filter(fromColor));</a>
 <span class="sourceLineNo">718</span><a id="line.718">                        if(steps &lt; 2)</a>
 <span class="sourceLineNo">719</span><a id="line.719">                                return colors;</a>

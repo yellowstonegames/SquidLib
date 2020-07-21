@@ -75,8 +75,8 @@
 <span class="sourceLineNo">063</span><a id="line.63">     * The array of keys.</a>
 <span class="sourceLineNo">064</span><a id="line.64">     */</a>
 <span class="sourceLineNo">065</span><a id="line.65">    protected K[] key;</a>
-<span class="sourceLineNo">066</span><a id="line.66">    /**</a>
-<span class="sourceLineNo">067</span><a id="line.67">     * The array of values.</a>
+<span class="sourceLineNo">066</span><a id="line.66">    /*</a>
+<span class="sourceLineNo">067</span><a id="line.67">      The array of values.</a>
 <span class="sourceLineNo">068</span><a id="line.68">     */</a>
 <span class="sourceLineNo">069</span><a id="line.69">    //protected V[] value;</a>
 <span class="sourceLineNo">070</span><a id="line.70">    /**</a>
@@ -219,7 +219,7 @@
 <span class="sourceLineNo">207</span><a id="line.207">     */</a>
 <span class="sourceLineNo">208</span><a id="line.208">    public UnorderedSet(final K[] a, final int offset,</a>
 <span class="sourceLineNo">209</span><a id="line.209">                        final int length, final float f) {</a>
-<span class="sourceLineNo">210</span><a id="line.210">        this(length &lt; 0 ? 0 : length, f);</a>
+<span class="sourceLineNo">210</span><a id="line.210">        this(Math.max(length, 0), f);</a>
 <span class="sourceLineNo">211</span><a id="line.211">        if (a == null) throw new NullPointerException("Array passed to OrderedSet constructor cannot be null");</a>
 <span class="sourceLineNo">212</span><a id="line.212">        if (offset &lt; 0) throw new ArrayIndexOutOfBoundsException("Offset (" + offset + ") is negative");</a>
 <span class="sourceLineNo">213</span><a id="line.213">        if (length &lt; 0) throw new IllegalArgumentException("Length (" + length + ") is negative");</a>
@@ -340,7 +340,7 @@
 <span class="sourceLineNo">328</span><a id="line.328">     */</a>
 <span class="sourceLineNo">329</span><a id="line.329">    public UnorderedSet(final K[] a, final int offset,</a>
 <span class="sourceLineNo">330</span><a id="line.330">                        final int length, final float f, CrossHash.IHasher hasher) {</a>
-<span class="sourceLineNo">331</span><a id="line.331">        this(length &lt; 0 ? 0 : length, f, hasher);</a>
+<span class="sourceLineNo">331</span><a id="line.331">        this(Math.max(length, 0), f, hasher);</a>
 <span class="sourceLineNo">332</span><a id="line.332">        if (a == null) throw new NullPointerException("Array passed to OrderedSet constructor cannot be null");</a>
 <span class="sourceLineNo">333</span><a id="line.333">        if (offset &lt; 0) throw new ArrayIndexOutOfBoundsException("Offset (" + offset + ") is negative");</a>
 <span class="sourceLineNo">334</span><a id="line.334">        if (length &lt; 0) throw new IllegalArgumentException("Length (" + length + ") is negative");</a>
@@ -549,585 +549,583 @@
 <span class="sourceLineNo">537</span><a id="line.537">        return true;</a>
 <span class="sourceLineNo">538</span><a id="line.538">    }</a>
 <span class="sourceLineNo">539</span><a id="line.539"></a>
-<span class="sourceLineNo">540</span><a id="line.540">    @SuppressWarnings("unchecked")</a>
-<span class="sourceLineNo">541</span><a id="line.541">    @Override</a>
-<span class="sourceLineNo">542</span><a id="line.542">    public boolean remove(final Object k) {</a>
-<span class="sourceLineNo">543</span><a id="line.543">        if (k == null)</a>
-<span class="sourceLineNo">544</span><a id="line.544">            return containsNull &amp;&amp; removeNullEntry();</a>
-<span class="sourceLineNo">545</span><a id="line.545">        K curr;</a>
-<span class="sourceLineNo">546</span><a id="line.546">        final K[] key = this.key;</a>
-<span class="sourceLineNo">547</span><a id="line.547">        int pos;</a>
-<span class="sourceLineNo">548</span><a id="line.548">        // The starting point.</a>
-<span class="sourceLineNo">549</span><a id="line.549">        if ((curr = key[pos = (hasher.hash(k)) &amp; mask]) == null)</a>
-<span class="sourceLineNo">550</span><a id="line.550">            return false;</a>
-<span class="sourceLineNo">551</span><a id="line.551">        if (hasher.areEqual(k, curr))</a>
-<span class="sourceLineNo">552</span><a id="line.552">            return removeEntry(pos);</a>
-<span class="sourceLineNo">553</span><a id="line.553">        while (true) {</a>
-<span class="sourceLineNo">554</span><a id="line.554">            if ((curr = key[pos = pos + 1 &amp; mask]) == null)</a>
-<span class="sourceLineNo">555</span><a id="line.555">                return false;</a>
-<span class="sourceLineNo">556</span><a id="line.556">            if (hasher.areEqual(k, curr))</a>
-<span class="sourceLineNo">557</span><a id="line.557">                return removeEntry(pos);</a>
-<span class="sourceLineNo">558</span><a id="line.558">        }</a>
-<span class="sourceLineNo">559</span><a id="line.559">    }</a>
-<span class="sourceLineNo">560</span><a id="line.560"></a>
-<span class="sourceLineNo">561</span><a id="line.561">    /**</a>
-<span class="sourceLineNo">562</span><a id="line.562">     * Returns the element of this set that is equal to the given key, or</a>
-<span class="sourceLineNo">563</span><a id="line.563">     * &lt;code&gt;null&lt;/code&gt;.</a>
-<span class="sourceLineNo">564</span><a id="line.564">     *</a>
-<span class="sourceLineNo">565</span><a id="line.565">     * @return the element of this set that is equal to the given key, or</a>
-<span class="sourceLineNo">566</span><a id="line.566">     * &lt;code&gt;null&lt;/code&gt;.</a>
-<span class="sourceLineNo">567</span><a id="line.567">     */</a>
-<span class="sourceLineNo">568</span><a id="line.568">    public K get(final Object k) {</a>
-<span class="sourceLineNo">569</span><a id="line.569">        if (k == null)</a>
-<span class="sourceLineNo">570</span><a id="line.570">            return key[n]; // This is correct independently of the value of</a>
-<span class="sourceLineNo">571</span><a id="line.571">        // containsNull and of the map being custom</a>
-<span class="sourceLineNo">572</span><a id="line.572">        K curr;</a>
-<span class="sourceLineNo">573</span><a id="line.573">        final K[] key = this.key;</a>
-<span class="sourceLineNo">574</span><a id="line.574">        int pos;</a>
-<span class="sourceLineNo">575</span><a id="line.575">        // The starting point.</a>
-<span class="sourceLineNo">576</span><a id="line.576">        if ((curr = key[pos = (hasher.hash(k)) &amp; mask]) == null)</a>
-<span class="sourceLineNo">577</span><a id="line.577">            return null;</a>
-<span class="sourceLineNo">578</span><a id="line.578">        if (hasher.areEqual(k, curr))</a>
-<span class="sourceLineNo">579</span><a id="line.579">            return curr;</a>
-<span class="sourceLineNo">580</span><a id="line.580">        // There's always an unused entry.</a>
-<span class="sourceLineNo">581</span><a id="line.581">        while (true) {</a>
-<span class="sourceLineNo">582</span><a id="line.582">            if ((curr = key[pos = pos + 1 &amp; mask]) == null)</a>
-<span class="sourceLineNo">583</span><a id="line.583">                return null;</a>
-<span class="sourceLineNo">584</span><a id="line.584">            if (hasher.areEqual(k, curr))</a>
-<span class="sourceLineNo">585</span><a id="line.585">                return curr;</a>
-<span class="sourceLineNo">586</span><a id="line.586">        }</a>
-<span class="sourceLineNo">587</span><a id="line.587">    }</a>
-<span class="sourceLineNo">588</span><a id="line.588"></a>
-<span class="sourceLineNo">589</span><a id="line.589">    public boolean contains(final Object k) {</a>
-<span class="sourceLineNo">590</span><a id="line.590">        if (k == null)</a>
-<span class="sourceLineNo">591</span><a id="line.591">            return containsNull;</a>
-<span class="sourceLineNo">592</span><a id="line.592">        K curr;</a>
-<span class="sourceLineNo">593</span><a id="line.593">        final K[] key = this.key;</a>
-<span class="sourceLineNo">594</span><a id="line.594">        int pos;</a>
-<span class="sourceLineNo">595</span><a id="line.595">        // The starting point.</a>
-<span class="sourceLineNo">596</span><a id="line.596">        if ((curr = key[pos = (hasher.hash(k)) &amp; mask]) == null)</a>
-<span class="sourceLineNo">597</span><a id="line.597">            return false;</a>
-<span class="sourceLineNo">598</span><a id="line.598">        if (hasher.areEqual(k, curr))</a>
-<span class="sourceLineNo">599</span><a id="line.599">            return true;</a>
-<span class="sourceLineNo">600</span><a id="line.600">        // There's always an unused entry.</a>
-<span class="sourceLineNo">601</span><a id="line.601">        while (true) {</a>
-<span class="sourceLineNo">602</span><a id="line.602">            if ((curr = key[pos = pos + 1 &amp; mask]) == null)</a>
-<span class="sourceLineNo">603</span><a id="line.603">                return false;</a>
-<span class="sourceLineNo">604</span><a id="line.604">            if (hasher.areEqual(k, curr))</a>
-<span class="sourceLineNo">605</span><a id="line.605">                return true;</a>
-<span class="sourceLineNo">606</span><a id="line.606">        }</a>
-<span class="sourceLineNo">607</span><a id="line.607">    }</a>
-<span class="sourceLineNo">608</span><a id="line.608"></a>
-<span class="sourceLineNo">609</span><a id="line.609">    protected int positionOf(final Object k) {</a>
-<span class="sourceLineNo">610</span><a id="line.610">        if (k == null)</a>
-<span class="sourceLineNo">611</span><a id="line.611">        {</a>
-<span class="sourceLineNo">612</span><a id="line.612">            if(containsNull)</a>
-<span class="sourceLineNo">613</span><a id="line.613">                return n;</a>
-<span class="sourceLineNo">614</span><a id="line.614">            else</a>
-<span class="sourceLineNo">615</span><a id="line.615">                return -1;</a>
-<span class="sourceLineNo">616</span><a id="line.616">        }</a>
-<span class="sourceLineNo">617</span><a id="line.617">        K curr;</a>
-<span class="sourceLineNo">618</span><a id="line.618">        final K[] key = this.key;</a>
-<span class="sourceLineNo">619</span><a id="line.619">        int pos;</a>
-<span class="sourceLineNo">620</span><a id="line.620">        // The starting point.</a>
-<span class="sourceLineNo">621</span><a id="line.621">        if ((curr = key[pos = (hasher.hash(k)) &amp; mask]) == null)</a>
-<span class="sourceLineNo">622</span><a id="line.622">            return -1;</a>
-<span class="sourceLineNo">623</span><a id="line.623">        if (hasher.areEqual(k, curr))</a>
-<span class="sourceLineNo">624</span><a id="line.624">            return pos;</a>
-<span class="sourceLineNo">625</span><a id="line.625">        // There's always an unused entry.</a>
-<span class="sourceLineNo">626</span><a id="line.626">        while (true) {</a>
-<span class="sourceLineNo">627</span><a id="line.627">            if ((curr = key[pos = pos + 1 &amp; mask]) == null)</a>
-<span class="sourceLineNo">628</span><a id="line.628">                return -1;</a>
-<span class="sourceLineNo">629</span><a id="line.629">            if (hasher.areEqual(k, curr))</a>
-<span class="sourceLineNo">630</span><a id="line.630">                return pos;</a>
-<span class="sourceLineNo">631</span><a id="line.631">        }</a>
-<span class="sourceLineNo">632</span><a id="line.632">    }</a>
-<span class="sourceLineNo">633</span><a id="line.633"></a>
-<span class="sourceLineNo">634</span><a id="line.634">    /*</a>
-<span class="sourceLineNo">635</span><a id="line.635">     * Removes all elements from this set.</a>
-<span class="sourceLineNo">636</span><a id="line.636">     *</a>
-<span class="sourceLineNo">637</span><a id="line.637">     * &lt;P&gt;To increase object reuse, this method does not change the table size.</a>
-<span class="sourceLineNo">638</span><a id="line.638">     * If you want to reduce the table size, you must use {@link #trim()}.</a>
-<span class="sourceLineNo">639</span><a id="line.639">     */</a>
-<span class="sourceLineNo">640</span><a id="line.640">    public void clear() {</a>
-<span class="sourceLineNo">641</span><a id="line.641">        if (size == 0)</a>
-<span class="sourceLineNo">642</span><a id="line.642">            return;</a>
-<span class="sourceLineNo">643</span><a id="line.643">        size = 0;</a>
-<span class="sourceLineNo">644</span><a id="line.644">        containsNull = false;</a>
-<span class="sourceLineNo">645</span><a id="line.645">        Arrays.fill(key, null);</a>
-<span class="sourceLineNo">646</span><a id="line.646">    }</a>
-<span class="sourceLineNo">647</span><a id="line.647"></a>
-<span class="sourceLineNo">648</span><a id="line.648">    public int size() {</a>
-<span class="sourceLineNo">649</span><a id="line.649">        return size;</a>
-<span class="sourceLineNo">650</span><a id="line.650">    }</a>
-<span class="sourceLineNo">651</span><a id="line.651"></a>
-<span class="sourceLineNo">652</span><a id="line.652">    /**</a>
-<span class="sourceLineNo">653</span><a id="line.653">     * Checks whether this collection contains all elements from the given</a>
-<span class="sourceLineNo">654</span><a id="line.654">     * collection.</a>
-<span class="sourceLineNo">655</span><a id="line.655">     *</a>
-<span class="sourceLineNo">656</span><a id="line.656">     * @param c a collection.</a>
-<span class="sourceLineNo">657</span><a id="line.657">     * @return &lt;code&gt;true&lt;/code&gt; if this collection contains all elements of the</a>
-<span class="sourceLineNo">658</span><a id="line.658">     * argument.</a>
-<span class="sourceLineNo">659</span><a id="line.659">     */</a>
-<span class="sourceLineNo">660</span><a id="line.660">    public boolean containsAll(Collection&lt;?&gt; c) {</a>
-<span class="sourceLineNo">661</span><a id="line.661">        int n = c.size();</a>
-<span class="sourceLineNo">662</span><a id="line.662">        final Iterator&lt;?&gt; i = c.iterator();</a>
-<span class="sourceLineNo">663</span><a id="line.663">        while (n-- != 0)</a>
-<span class="sourceLineNo">664</span><a id="line.664">            if (!contains(i.next()))</a>
-<span class="sourceLineNo">665</span><a id="line.665">                return false;</a>
-<span class="sourceLineNo">666</span><a id="line.666">        return true;</a>
-<span class="sourceLineNo">667</span><a id="line.667">    }</a>
-<span class="sourceLineNo">668</span><a id="line.668"></a>
-<span class="sourceLineNo">669</span><a id="line.669">    /**</a>
-<span class="sourceLineNo">670</span><a id="line.670">     * Retains in this collection only elements from the given collection.</a>
-<span class="sourceLineNo">671</span><a id="line.671">     *</a>
-<span class="sourceLineNo">672</span><a id="line.672">     * @param c a collection.</a>
-<span class="sourceLineNo">673</span><a id="line.673">     * @return &lt;code&gt;true&lt;/code&gt; if this collection changed as a result of the</a>
-<span class="sourceLineNo">674</span><a id="line.674">     * call.</a>
-<span class="sourceLineNo">675</span><a id="line.675">     */</a>
-<span class="sourceLineNo">676</span><a id="line.676">    public boolean retainAll(Collection&lt;?&gt; c) {</a>
-<span class="sourceLineNo">677</span><a id="line.677">        boolean retVal = false;</a>
-<span class="sourceLineNo">678</span><a id="line.678">        int n = size;</a>
-<span class="sourceLineNo">679</span><a id="line.679">        final Iterator&lt;?&gt; i = iterator();</a>
-<span class="sourceLineNo">680</span><a id="line.680">        while (n-- != 0) {</a>
-<span class="sourceLineNo">681</span><a id="line.681">            if (!c.contains(i.next())) {</a>
-<span class="sourceLineNo">682</span><a id="line.682">                i.remove();</a>
-<span class="sourceLineNo">683</span><a id="line.683">                retVal = true;</a>
-<span class="sourceLineNo">684</span><a id="line.684">            }</a>
-<span class="sourceLineNo">685</span><a id="line.685">        }</a>
-<span class="sourceLineNo">686</span><a id="line.686">        return retVal;</a>
-<span class="sourceLineNo">687</span><a id="line.687">    }</a>
-<span class="sourceLineNo">688</span><a id="line.688"></a>
-<span class="sourceLineNo">689</span><a id="line.689">    /**</a>
-<span class="sourceLineNo">690</span><a id="line.690">     * Remove from this collection all elements in the given collection. If the</a>
-<span class="sourceLineNo">691</span><a id="line.691">     * collection is an instance of this class, it uses faster iterators.</a>
-<span class="sourceLineNo">692</span><a id="line.692">     *</a>
-<span class="sourceLineNo">693</span><a id="line.693">     * @param c a collection.</a>
-<span class="sourceLineNo">694</span><a id="line.694">     * @return &lt;code&gt;true&lt;/code&gt; if this collection changed as a result of the</a>
-<span class="sourceLineNo">695</span><a id="line.695">     * call.</a>
-<span class="sourceLineNo">696</span><a id="line.696">     */</a>
-<span class="sourceLineNo">697</span><a id="line.697">    public boolean removeAll(Collection&lt;?&gt; c) {</a>
-<span class="sourceLineNo">698</span><a id="line.698">        boolean retVal = false;</a>
-<span class="sourceLineNo">699</span><a id="line.699">        int n = c.size();</a>
-<span class="sourceLineNo">700</span><a id="line.700">        final Iterator&lt;?&gt; i = c.iterator();</a>
-<span class="sourceLineNo">701</span><a id="line.701">        while (n-- != 0)</a>
-<span class="sourceLineNo">702</span><a id="line.702">            if (remove(i.next()))</a>
-<span class="sourceLineNo">703</span><a id="line.703">                retVal = true;</a>
-<span class="sourceLineNo">704</span><a id="line.704">        return retVal;</a>
-<span class="sourceLineNo">705</span><a id="line.705">    }</a>
-<span class="sourceLineNo">706</span><a id="line.706"></a>
-<span class="sourceLineNo">707</span><a id="line.707">    public boolean isEmpty() {</a>
-<span class="sourceLineNo">708</span><a id="line.708">        return size == 0;</a>
-<span class="sourceLineNo">709</span><a id="line.709">    }</a>
+<span class="sourceLineNo">540</span><a id="line.540">    @Override</a>
+<span class="sourceLineNo">541</span><a id="line.541">    public boolean remove(final Object k) {</a>
+<span class="sourceLineNo">542</span><a id="line.542">        if (k == null)</a>
+<span class="sourceLineNo">543</span><a id="line.543">            return containsNull &amp;&amp; removeNullEntry();</a>
+<span class="sourceLineNo">544</span><a id="line.544">        K curr;</a>
+<span class="sourceLineNo">545</span><a id="line.545">        final K[] key = this.key;</a>
+<span class="sourceLineNo">546</span><a id="line.546">        int pos;</a>
+<span class="sourceLineNo">547</span><a id="line.547">        // The starting point.</a>
+<span class="sourceLineNo">548</span><a id="line.548">        if ((curr = key[pos = (hasher.hash(k)) &amp; mask]) == null)</a>
+<span class="sourceLineNo">549</span><a id="line.549">            return false;</a>
+<span class="sourceLineNo">550</span><a id="line.550">        if (hasher.areEqual(k, curr))</a>
+<span class="sourceLineNo">551</span><a id="line.551">            return removeEntry(pos);</a>
+<span class="sourceLineNo">552</span><a id="line.552">        while (true) {</a>
+<span class="sourceLineNo">553</span><a id="line.553">            if ((curr = key[pos = pos + 1 &amp; mask]) == null)</a>
+<span class="sourceLineNo">554</span><a id="line.554">                return false;</a>
+<span class="sourceLineNo">555</span><a id="line.555">            if (hasher.areEqual(k, curr))</a>
+<span class="sourceLineNo">556</span><a id="line.556">                return removeEntry(pos);</a>
+<span class="sourceLineNo">557</span><a id="line.557">        }</a>
+<span class="sourceLineNo">558</span><a id="line.558">    }</a>
+<span class="sourceLineNo">559</span><a id="line.559"></a>
+<span class="sourceLineNo">560</span><a id="line.560">    /**</a>
+<span class="sourceLineNo">561</span><a id="line.561">     * Returns the element of this set that is equal to the given key, or</a>
+<span class="sourceLineNo">562</span><a id="line.562">     * &lt;code&gt;null&lt;/code&gt;.</a>
+<span class="sourceLineNo">563</span><a id="line.563">     *</a>
+<span class="sourceLineNo">564</span><a id="line.564">     * @return the element of this set that is equal to the given key, or</a>
+<span class="sourceLineNo">565</span><a id="line.565">     * &lt;code&gt;null&lt;/code&gt;.</a>
+<span class="sourceLineNo">566</span><a id="line.566">     */</a>
+<span class="sourceLineNo">567</span><a id="line.567">    public K get(final Object k) {</a>
+<span class="sourceLineNo">568</span><a id="line.568">        if (k == null)</a>
+<span class="sourceLineNo">569</span><a id="line.569">            return key[n]; // This is correct independently of the value of</a>
+<span class="sourceLineNo">570</span><a id="line.570">        // containsNull and of the map being custom</a>
+<span class="sourceLineNo">571</span><a id="line.571">        K curr;</a>
+<span class="sourceLineNo">572</span><a id="line.572">        final K[] key = this.key;</a>
+<span class="sourceLineNo">573</span><a id="line.573">        int pos;</a>
+<span class="sourceLineNo">574</span><a id="line.574">        // The starting point.</a>
+<span class="sourceLineNo">575</span><a id="line.575">        if ((curr = key[pos = (hasher.hash(k)) &amp; mask]) == null)</a>
+<span class="sourceLineNo">576</span><a id="line.576">            return null;</a>
+<span class="sourceLineNo">577</span><a id="line.577">        if (hasher.areEqual(k, curr))</a>
+<span class="sourceLineNo">578</span><a id="line.578">            return curr;</a>
+<span class="sourceLineNo">579</span><a id="line.579">        // There's always an unused entry.</a>
+<span class="sourceLineNo">580</span><a id="line.580">        while (true) {</a>
+<span class="sourceLineNo">581</span><a id="line.581">            if ((curr = key[pos = pos + 1 &amp; mask]) == null)</a>
+<span class="sourceLineNo">582</span><a id="line.582">                return null;</a>
+<span class="sourceLineNo">583</span><a id="line.583">            if (hasher.areEqual(k, curr))</a>
+<span class="sourceLineNo">584</span><a id="line.584">                return curr;</a>
+<span class="sourceLineNo">585</span><a id="line.585">        }</a>
+<span class="sourceLineNo">586</span><a id="line.586">    }</a>
+<span class="sourceLineNo">587</span><a id="line.587"></a>
+<span class="sourceLineNo">588</span><a id="line.588">    public boolean contains(final Object k) {</a>
+<span class="sourceLineNo">589</span><a id="line.589">        if (k == null)</a>
+<span class="sourceLineNo">590</span><a id="line.590">            return containsNull;</a>
+<span class="sourceLineNo">591</span><a id="line.591">        K curr;</a>
+<span class="sourceLineNo">592</span><a id="line.592">        final K[] key = this.key;</a>
+<span class="sourceLineNo">593</span><a id="line.593">        int pos;</a>
+<span class="sourceLineNo">594</span><a id="line.594">        // The starting point.</a>
+<span class="sourceLineNo">595</span><a id="line.595">        if ((curr = key[pos = (hasher.hash(k)) &amp; mask]) == null)</a>
+<span class="sourceLineNo">596</span><a id="line.596">            return false;</a>
+<span class="sourceLineNo">597</span><a id="line.597">        if (hasher.areEqual(k, curr))</a>
+<span class="sourceLineNo">598</span><a id="line.598">            return true;</a>
+<span class="sourceLineNo">599</span><a id="line.599">        // There's always an unused entry.</a>
+<span class="sourceLineNo">600</span><a id="line.600">        while (true) {</a>
+<span class="sourceLineNo">601</span><a id="line.601">            if ((curr = key[pos = pos + 1 &amp; mask]) == null)</a>
+<span class="sourceLineNo">602</span><a id="line.602">                return false;</a>
+<span class="sourceLineNo">603</span><a id="line.603">            if (hasher.areEqual(k, curr))</a>
+<span class="sourceLineNo">604</span><a id="line.604">                return true;</a>
+<span class="sourceLineNo">605</span><a id="line.605">        }</a>
+<span class="sourceLineNo">606</span><a id="line.606">    }</a>
+<span class="sourceLineNo">607</span><a id="line.607"></a>
+<span class="sourceLineNo">608</span><a id="line.608">    protected int positionOf(final Object k) {</a>
+<span class="sourceLineNo">609</span><a id="line.609">        if (k == null)</a>
+<span class="sourceLineNo">610</span><a id="line.610">        {</a>
+<span class="sourceLineNo">611</span><a id="line.611">            if(containsNull)</a>
+<span class="sourceLineNo">612</span><a id="line.612">                return n;</a>
+<span class="sourceLineNo">613</span><a id="line.613">            else</a>
+<span class="sourceLineNo">614</span><a id="line.614">                return -1;</a>
+<span class="sourceLineNo">615</span><a id="line.615">        }</a>
+<span class="sourceLineNo">616</span><a id="line.616">        K curr;</a>
+<span class="sourceLineNo">617</span><a id="line.617">        final K[] key = this.key;</a>
+<span class="sourceLineNo">618</span><a id="line.618">        int pos;</a>
+<span class="sourceLineNo">619</span><a id="line.619">        // The starting point.</a>
+<span class="sourceLineNo">620</span><a id="line.620">        if ((curr = key[pos = (hasher.hash(k)) &amp; mask]) == null)</a>
+<span class="sourceLineNo">621</span><a id="line.621">            return -1;</a>
+<span class="sourceLineNo">622</span><a id="line.622">        if (hasher.areEqual(k, curr))</a>
+<span class="sourceLineNo">623</span><a id="line.623">            return pos;</a>
+<span class="sourceLineNo">624</span><a id="line.624">        // There's always an unused entry.</a>
+<span class="sourceLineNo">625</span><a id="line.625">        while (true) {</a>
+<span class="sourceLineNo">626</span><a id="line.626">            if ((curr = key[pos = pos + 1 &amp; mask]) == null)</a>
+<span class="sourceLineNo">627</span><a id="line.627">                return -1;</a>
+<span class="sourceLineNo">628</span><a id="line.628">            if (hasher.areEqual(k, curr))</a>
+<span class="sourceLineNo">629</span><a id="line.629">                return pos;</a>
+<span class="sourceLineNo">630</span><a id="line.630">        }</a>
+<span class="sourceLineNo">631</span><a id="line.631">    }</a>
+<span class="sourceLineNo">632</span><a id="line.632"></a>
+<span class="sourceLineNo">633</span><a id="line.633">    /*</a>
+<span class="sourceLineNo">634</span><a id="line.634">     * Removes all elements from this set.</a>
+<span class="sourceLineNo">635</span><a id="line.635">     *</a>
+<span class="sourceLineNo">636</span><a id="line.636">     * &lt;P&gt;To increase object reuse, this method does not change the table size.</a>
+<span class="sourceLineNo">637</span><a id="line.637">     * If you want to reduce the table size, you must use {@link #trim()}.</a>
+<span class="sourceLineNo">638</span><a id="line.638">     */</a>
+<span class="sourceLineNo">639</span><a id="line.639">    public void clear() {</a>
+<span class="sourceLineNo">640</span><a id="line.640">        if (size == 0)</a>
+<span class="sourceLineNo">641</span><a id="line.641">            return;</a>
+<span class="sourceLineNo">642</span><a id="line.642">        size = 0;</a>
+<span class="sourceLineNo">643</span><a id="line.643">        containsNull = false;</a>
+<span class="sourceLineNo">644</span><a id="line.644">        Arrays.fill(key, null);</a>
+<span class="sourceLineNo">645</span><a id="line.645">    }</a>
+<span class="sourceLineNo">646</span><a id="line.646"></a>
+<span class="sourceLineNo">647</span><a id="line.647">    public int size() {</a>
+<span class="sourceLineNo">648</span><a id="line.648">        return size;</a>
+<span class="sourceLineNo">649</span><a id="line.649">    }</a>
+<span class="sourceLineNo">650</span><a id="line.650"></a>
+<span class="sourceLineNo">651</span><a id="line.651">    /**</a>
+<span class="sourceLineNo">652</span><a id="line.652">     * Checks whether this collection contains all elements from the given</a>
+<span class="sourceLineNo">653</span><a id="line.653">     * collection.</a>
+<span class="sourceLineNo">654</span><a id="line.654">     *</a>
+<span class="sourceLineNo">655</span><a id="line.655">     * @param c a collection.</a>
+<span class="sourceLineNo">656</span><a id="line.656">     * @return &lt;code&gt;true&lt;/code&gt; if this collection contains all elements of the</a>
+<span class="sourceLineNo">657</span><a id="line.657">     * argument.</a>
+<span class="sourceLineNo">658</span><a id="line.658">     */</a>
+<span class="sourceLineNo">659</span><a id="line.659">    public boolean containsAll(Collection&lt;?&gt; c) {</a>
+<span class="sourceLineNo">660</span><a id="line.660">        int n = c.size();</a>
+<span class="sourceLineNo">661</span><a id="line.661">        final Iterator&lt;?&gt; i = c.iterator();</a>
+<span class="sourceLineNo">662</span><a id="line.662">        while (n-- != 0)</a>
+<span class="sourceLineNo">663</span><a id="line.663">            if (!contains(i.next()))</a>
+<span class="sourceLineNo">664</span><a id="line.664">                return false;</a>
+<span class="sourceLineNo">665</span><a id="line.665">        return true;</a>
+<span class="sourceLineNo">666</span><a id="line.666">    }</a>
+<span class="sourceLineNo">667</span><a id="line.667"></a>
+<span class="sourceLineNo">668</span><a id="line.668">    /**</a>
+<span class="sourceLineNo">669</span><a id="line.669">     * Retains in this collection only elements from the given collection.</a>
+<span class="sourceLineNo">670</span><a id="line.670">     *</a>
+<span class="sourceLineNo">671</span><a id="line.671">     * @param c a collection.</a>
+<span class="sourceLineNo">672</span><a id="line.672">     * @return &lt;code&gt;true&lt;/code&gt; if this collection changed as a result of the</a>
+<span class="sourceLineNo">673</span><a id="line.673">     * call.</a>
+<span class="sourceLineNo">674</span><a id="line.674">     */</a>
+<span class="sourceLineNo">675</span><a id="line.675">    public boolean retainAll(Collection&lt;?&gt; c) {</a>
+<span class="sourceLineNo">676</span><a id="line.676">        boolean retVal = false;</a>
+<span class="sourceLineNo">677</span><a id="line.677">        int n = size;</a>
+<span class="sourceLineNo">678</span><a id="line.678">        final Iterator&lt;?&gt; i = iterator();</a>
+<span class="sourceLineNo">679</span><a id="line.679">        while (n-- != 0) {</a>
+<span class="sourceLineNo">680</span><a id="line.680">            if (!c.contains(i.next())) {</a>
+<span class="sourceLineNo">681</span><a id="line.681">                i.remove();</a>
+<span class="sourceLineNo">682</span><a id="line.682">                retVal = true;</a>
+<span class="sourceLineNo">683</span><a id="line.683">            }</a>
+<span class="sourceLineNo">684</span><a id="line.684">        }</a>
+<span class="sourceLineNo">685</span><a id="line.685">        return retVal;</a>
+<span class="sourceLineNo">686</span><a id="line.686">    }</a>
+<span class="sourceLineNo">687</span><a id="line.687"></a>
+<span class="sourceLineNo">688</span><a id="line.688">    /**</a>
+<span class="sourceLineNo">689</span><a id="line.689">     * Remove from this collection all elements in the given collection. If the</a>
+<span class="sourceLineNo">690</span><a id="line.690">     * collection is an instance of this class, it uses faster iterators.</a>
+<span class="sourceLineNo">691</span><a id="line.691">     *</a>
+<span class="sourceLineNo">692</span><a id="line.692">     * @param c a collection.</a>
+<span class="sourceLineNo">693</span><a id="line.693">     * @return &lt;code&gt;true&lt;/code&gt; if this collection changed as a result of the</a>
+<span class="sourceLineNo">694</span><a id="line.694">     * call.</a>
+<span class="sourceLineNo">695</span><a id="line.695">     */</a>
+<span class="sourceLineNo">696</span><a id="line.696">    public boolean removeAll(Collection&lt;?&gt; c) {</a>
+<span class="sourceLineNo">697</span><a id="line.697">        boolean retVal = false;</a>
+<span class="sourceLineNo">698</span><a id="line.698">        int n = c.size();</a>
+<span class="sourceLineNo">699</span><a id="line.699">        final Iterator&lt;?&gt; i = c.iterator();</a>
+<span class="sourceLineNo">700</span><a id="line.700">        while (n-- != 0)</a>
+<span class="sourceLineNo">701</span><a id="line.701">            if (remove(i.next()))</a>
+<span class="sourceLineNo">702</span><a id="line.702">                retVal = true;</a>
+<span class="sourceLineNo">703</span><a id="line.703">        return retVal;</a>
+<span class="sourceLineNo">704</span><a id="line.704">    }</a>
+<span class="sourceLineNo">705</span><a id="line.705"></a>
+<span class="sourceLineNo">706</span><a id="line.706">    public boolean isEmpty() {</a>
+<span class="sourceLineNo">707</span><a id="line.707">        return size == 0;</a>
+<span class="sourceLineNo">708</span><a id="line.708">    }</a>
+<span class="sourceLineNo">709</span><a id="line.709"></a>
 <span class="sourceLineNo">710</span><a id="line.710"></a>
-<span class="sourceLineNo">711</span><a id="line.711"></a>
-<span class="sourceLineNo">712</span><a id="line.712">    /*</a>
-<span class="sourceLineNo">713</span><a id="line.713">     * A list iterator over a set.</a>
+<span class="sourceLineNo">711</span><a id="line.711">    /*</a>
+<span class="sourceLineNo">712</span><a id="line.712">     * A list iterator over a set.</a>
+<span class="sourceLineNo">713</span><a id="line.713">     * &lt;p&gt;</a>
 <span class="sourceLineNo">714</span><a id="line.714">     * &lt;p&gt;</a>
-<span class="sourceLineNo">715</span><a id="line.715">     * &lt;p&gt;</a>
-<span class="sourceLineNo">716</span><a id="line.716">     * This class provides a list iterator over a hash set. The</a>
-<span class="sourceLineNo">717</span><a id="line.717">     * constructor takes constant time.</a>
-<span class="sourceLineNo">718</span><a id="line.718">     */</a>
-<span class="sourceLineNo">719</span><a id="line.719">    private class SetIterator implements Iterator &lt;K&gt; {</a>
-<span class="sourceLineNo">720</span><a id="line.720">        /** The index of the last entry returned, if positive or zero; initially, {@link #n}. If negative, the last</a>
-<span class="sourceLineNo">721</span><a id="line.721">         element returned was that of index {@code - pos - 1} from the {@link #wrapped} list. */</a>
-<span class="sourceLineNo">722</span><a id="line.722">        int pos = n;</a>
-<span class="sourceLineNo">723</span><a id="line.723">        /** The index of the last entry that has been returned (more precisely, the value of {@link #pos} if {@link #pos} is positive,</a>
-<span class="sourceLineNo">724</span><a id="line.724">         or {@link Integer#MIN_VALUE} if {@link #pos} is negative). It is -1 if either</a>
-<span class="sourceLineNo">725</span><a id="line.725">         we did not return an entry yet, or the last returned entry has been removed. */</a>
-<span class="sourceLineNo">726</span><a id="line.726">        int last = -1;</a>
-<span class="sourceLineNo">727</span><a id="line.727">        /** A downward counter measuring how many entries must still be returned. */</a>
-<span class="sourceLineNo">728</span><a id="line.728">        int c = size;</a>
-<span class="sourceLineNo">729</span><a id="line.729">        /** A boolean telling us whether we should return the null key. */</a>
-<span class="sourceLineNo">730</span><a id="line.730">        boolean mustReturnNull = UnorderedSet.this.containsNull;</a>
-<span class="sourceLineNo">731</span><a id="line.731">        /** A lazily allocated list containing elements that have wrapped around the table because of removals. */</a>
-<span class="sourceLineNo">732</span><a id="line.732">        ArrayList &lt;K&gt; wrapped;</a>
-<span class="sourceLineNo">733</span><a id="line.733">        public boolean hasNext() {</a>
-<span class="sourceLineNo">734</span><a id="line.734">            return c != 0;</a>
-<span class="sourceLineNo">735</span><a id="line.735">        }</a>
-<span class="sourceLineNo">736</span><a id="line.736">        public K next() {</a>
-<span class="sourceLineNo">737</span><a id="line.737">            if ( ! hasNext() ) throw new NoSuchElementException();</a>
-<span class="sourceLineNo">738</span><a id="line.738">            c--;</a>
-<span class="sourceLineNo">739</span><a id="line.739">            if ( mustReturnNull ) {</a>
-<span class="sourceLineNo">740</span><a id="line.740">                mustReturnNull = false;</a>
-<span class="sourceLineNo">741</span><a id="line.741">                last = n;</a>
-<span class="sourceLineNo">742</span><a id="line.742">                return key[ n ];</a>
-<span class="sourceLineNo">743</span><a id="line.743">            }</a>
-<span class="sourceLineNo">744</span><a id="line.744">            final K[] key = UnorderedSet.this.key;</a>
-<span class="sourceLineNo">745</span><a id="line.745">            for(;;) {</a>
-<span class="sourceLineNo">746</span><a id="line.746">                if ( --pos &lt; 0 ) {</a>
-<span class="sourceLineNo">747</span><a id="line.747">                    // We are just enumerating elements from the wrapped list.</a>
-<span class="sourceLineNo">748</span><a id="line.748">                    last = Integer.MIN_VALUE;</a>
-<span class="sourceLineNo">749</span><a id="line.749">                    return wrapped.get( - pos - 1 );</a>
-<span class="sourceLineNo">750</span><a id="line.750">                }</a>
-<span class="sourceLineNo">751</span><a id="line.751">                if ( ! ( (key[ pos ]) == null ) ) return key[ last = pos ];</a>
-<span class="sourceLineNo">752</span><a id="line.752">            }</a>
-<span class="sourceLineNo">753</span><a id="line.753">        }</a>
-<span class="sourceLineNo">754</span><a id="line.754">        /** Shifts left entries with the specified hash code, starting at the specified position,</a>
-<span class="sourceLineNo">755</span><a id="line.755">         * and empties the resulting free entry.</a>
-<span class="sourceLineNo">756</span><a id="line.756">         *</a>
-<span class="sourceLineNo">757</span><a id="line.757">         * @param pos a starting position.</a>
-<span class="sourceLineNo">758</span><a id="line.758">         */</a>
-<span class="sourceLineNo">759</span><a id="line.759">        private final void shiftKeys( int pos ) {</a>
-<span class="sourceLineNo">760</span><a id="line.760">            // Shift entries with the same hash.</a>
-<span class="sourceLineNo">761</span><a id="line.761">            int last, slot;</a>
-<span class="sourceLineNo">762</span><a id="line.762">            K current;</a>
-<span class="sourceLineNo">763</span><a id="line.763">            final K[] key = UnorderedSet.this.key;</a>
-<span class="sourceLineNo">764</span><a id="line.764">            for(;;) {</a>
-<span class="sourceLineNo">765</span><a id="line.765">                pos = ( ( last = pos ) + 1 ) &amp; mask;</a>
-<span class="sourceLineNo">766</span><a id="line.766">                for(;;) {</a>
-<span class="sourceLineNo">767</span><a id="line.767">                    if ( ( (current = key[ pos ]) == null ) ) {</a>
-<span class="sourceLineNo">768</span><a id="line.768">                        key[ last ] = (null);</a>
-<span class="sourceLineNo">769</span><a id="line.769">                        return;</a>
-<span class="sourceLineNo">770</span><a id="line.770">                    }</a>
-<span class="sourceLineNo">771</span><a id="line.771">                    slot = ( (hasher.hash(current)) ) &amp; mask;</a>
-<span class="sourceLineNo">772</span><a id="line.772">                    if ( last &lt;= pos ? last &gt;= slot || slot &gt; pos : last &gt;= slot &amp;&amp; slot &gt; pos ) break;</a>
-<span class="sourceLineNo">773</span><a id="line.773">                    pos = ( pos + 1 ) &amp; mask;</a>
-<span class="sourceLineNo">774</span><a id="line.774">                }</a>
-<span class="sourceLineNo">775</span><a id="line.775">                if ( pos &lt; last ) { // Wrapped entry.</a>
-<span class="sourceLineNo">776</span><a id="line.776">                    if ( wrapped == null ) wrapped = new ArrayList&lt;K&gt;( 2 );</a>
-<span class="sourceLineNo">777</span><a id="line.777">                    wrapped.add( key[ pos ] );</a>
-<span class="sourceLineNo">778</span><a id="line.778">                }</a>
-<span class="sourceLineNo">779</span><a id="line.779">                key[ last ] = current;</a>
-<span class="sourceLineNo">780</span><a id="line.780">            }</a>
-<span class="sourceLineNo">781</span><a id="line.781">        }</a>
-<span class="sourceLineNo">782</span><a id="line.782">        public void remove() {</a>
-<span class="sourceLineNo">783</span><a id="line.783">            if ( last == -1 ) throw new IllegalStateException();</a>
-<span class="sourceLineNo">784</span><a id="line.784">            if ( last == n ) {</a>
-<span class="sourceLineNo">785</span><a id="line.785">                UnorderedSet.this.containsNull = false;</a>
-<span class="sourceLineNo">786</span><a id="line.786">                UnorderedSet.this.key[ n ] = (null);</a>
-<span class="sourceLineNo">787</span><a id="line.787">            }</a>
-<span class="sourceLineNo">788</span><a id="line.788">            else if ( pos &gt;= 0 ) shiftKeys( last );</a>
-<span class="sourceLineNo">789</span><a id="line.789">            else {</a>
-<span class="sourceLineNo">790</span><a id="line.790">                // We're removing wrapped entries.</a>
-<span class="sourceLineNo">791</span><a id="line.791">                UnorderedSet.this.remove( wrapped.set( - pos - 1, null ) );</a>
-<span class="sourceLineNo">792</span><a id="line.792">                last = -1; // Note that we must not decrement size</a>
-<span class="sourceLineNo">793</span><a id="line.793">                return;</a>
-<span class="sourceLineNo">794</span><a id="line.794">            }</a>
-<span class="sourceLineNo">795</span><a id="line.795">            size--;</a>
-<span class="sourceLineNo">796</span><a id="line.796">            last = -1; // You can no longer remove this entry.</a>
-<span class="sourceLineNo">797</span><a id="line.797">        }</a>
-<span class="sourceLineNo">798</span><a id="line.798">        /** This method just iterates the type-specific version of {@link #next()} for at most</a>
-<span class="sourceLineNo">799</span><a id="line.799">         * &lt;code&gt;n&lt;/code&gt; times, stopping if {@link #hasNext()} becomes false.*/</a>
-<span class="sourceLineNo">800</span><a id="line.800">        public int skip( final int n ) {</a>
-<span class="sourceLineNo">801</span><a id="line.801">            int i = n;</a>
-<span class="sourceLineNo">802</span><a id="line.802">            while( i-- != 0 &amp;&amp; hasNext() ) next();</a>
-<span class="sourceLineNo">803</span><a id="line.803">            return n - i - 1;</a>
-<span class="sourceLineNo">804</span><a id="line.804">        }</a>
-<span class="sourceLineNo">805</span><a id="line.805">    }</a>
-<span class="sourceLineNo">806</span><a id="line.806"></a>
-<span class="sourceLineNo">807</span><a id="line.807">    public Iterator&lt;K&gt; iterator() {</a>
-<span class="sourceLineNo">808</span><a id="line.808">        return new SetIterator();</a>
-<span class="sourceLineNo">809</span><a id="line.809">    }</a>
-<span class="sourceLineNo">810</span><a id="line.810"></a>
-<span class="sourceLineNo">811</span><a id="line.811">    /**</a>
-<span class="sourceLineNo">812</span><a id="line.812">     * Rehashes the map, making the table as small as possible.</a>
-<span class="sourceLineNo">813</span><a id="line.813">     * &lt;p&gt;</a>
-<span class="sourceLineNo">814</span><a id="line.814">     * &lt;P&gt;This method rehashes the table to the smallest size satisfying the load factor. It can be used when the set will not be changed anymore, so to optimize access speed and size.</a>
-<span class="sourceLineNo">815</span><a id="line.815">     * &lt;p&gt;</a>
-<span class="sourceLineNo">816</span><a id="line.816">     * &lt;P&gt;If the table size is already the minimum possible, this method does nothing.</a>
-<span class="sourceLineNo">817</span><a id="line.817">     *</a>
-<span class="sourceLineNo">818</span><a id="line.818">     * @return true if there was enough memory to trim the map.</a>
-<span class="sourceLineNo">819</span><a id="line.819">     * @see #trim(int)</a>
-<span class="sourceLineNo">820</span><a id="line.820">     */</a>
-<span class="sourceLineNo">821</span><a id="line.821">    public boolean trim() {</a>
-<span class="sourceLineNo">822</span><a id="line.822">        final int l = arraySize(size, f);</a>
-<span class="sourceLineNo">823</span><a id="line.823">        if (l &gt;= n || size &gt; maxFill(l, f)) return true;</a>
-<span class="sourceLineNo">824</span><a id="line.824">        try {</a>
-<span class="sourceLineNo">825</span><a id="line.825">            rehash(l);</a>
-<span class="sourceLineNo">826</span><a id="line.826">        } catch (Exception cantDoIt) {</a>
-<span class="sourceLineNo">827</span><a id="line.827">            return false;</a>
-<span class="sourceLineNo">828</span><a id="line.828">        }</a>
-<span class="sourceLineNo">829</span><a id="line.829">        return true;</a>
-<span class="sourceLineNo">830</span><a id="line.830">    }</a>
-<span class="sourceLineNo">831</span><a id="line.831"></a>
-<span class="sourceLineNo">832</span><a id="line.832">    /**</a>
-<span class="sourceLineNo">833</span><a id="line.833">     * Rehashes this map if the table is too large.</a>
-<span class="sourceLineNo">834</span><a id="line.834">     * &lt;p&gt;</a>
-<span class="sourceLineNo">835</span><a id="line.835">     * &lt;P&gt;Let &lt;var&gt;N&lt;/var&gt; be the smallest table size that can hold &lt;code&gt;max(n,{@link #size()})&lt;/code&gt; entries, still satisfying the load factor. If the current table size is smaller than or equal to</a>
-<span class="sourceLineNo">836</span><a id="line.836">     * &lt;var&gt;N&lt;/var&gt;, this method does nothing. Otherwise, it rehashes this map in a table of size &lt;var&gt;N&lt;/var&gt;.</a>
-<span class="sourceLineNo">837</span><a id="line.837">     * &lt;p&gt;</a>
-<span class="sourceLineNo">838</span><a id="line.838">     * &lt;P&gt;This method is useful when reusing maps. {@linkplain #clear() Clearing a map} leaves the table size untouched. If you are reusing a map many times, you can call this method with a typical</a>
-<span class="sourceLineNo">839</span><a id="line.839">     * size to avoid keeping around a very large table just because of a few large transient maps.</a>
-<span class="sourceLineNo">840</span><a id="line.840">     *</a>
-<span class="sourceLineNo">841</span><a id="line.841">     * @param n the threshold for the trimming.</a>
-<span class="sourceLineNo">842</span><a id="line.842">     * @return true if there was enough memory to trim the map.</a>
-<span class="sourceLineNo">843</span><a id="line.843">     * @see #trim()</a>
-<span class="sourceLineNo">844</span><a id="line.844">     */</a>
-<span class="sourceLineNo">845</span><a id="line.845">    public boolean trim(final int n) {</a>
-<span class="sourceLineNo">846</span><a id="line.846">        final int l = HashCommon.nextPowerOfTwo((int) Math.ceil(n / f));</a>
-<span class="sourceLineNo">847</span><a id="line.847">        if (l &gt;= n || size &gt; maxFill(l, f)) return true;</a>
-<span class="sourceLineNo">848</span><a id="line.848">        try {</a>
-<span class="sourceLineNo">849</span><a id="line.849">            rehash(l);</a>
-<span class="sourceLineNo">850</span><a id="line.850">        } catch (Exception cantDoIt) {</a>
-<span class="sourceLineNo">851</span><a id="line.851">            return false;</a>
-<span class="sourceLineNo">852</span><a id="line.852">        }</a>
-<span class="sourceLineNo">853</span><a id="line.853">        return true;</a>
-<span class="sourceLineNo">854</span><a id="line.854">    }</a>
-<span class="sourceLineNo">855</span><a id="line.855"></a>
-<span class="sourceLineNo">856</span><a id="line.856">    /**</a>
-<span class="sourceLineNo">857</span><a id="line.857">     * Given a hash position, this finds the next position that contains an item, or -1 if none remain.</a>
-<span class="sourceLineNo">858</span><a id="line.858">     * To scan from the start, give this -1 for position.</a>
-<span class="sourceLineNo">859</span><a id="line.859">     * @param position a hash-based masked position in the K array</a>
-<span class="sourceLineNo">860</span><a id="line.860">     * @return the next position after the given one</a>
-<span class="sourceLineNo">861</span><a id="line.861">     */</a>
-<span class="sourceLineNo">862</span><a id="line.862">    private int scanNext(int position)</a>
-<span class="sourceLineNo">863</span><a id="line.863">    {</a>
-<span class="sourceLineNo">864</span><a id="line.864">        int h = position;</a>
-<span class="sourceLineNo">865</span><a id="line.865">        while (++h &lt; n)</a>
-<span class="sourceLineNo">866</span><a id="line.866">        {</a>
-<span class="sourceLineNo">867</span><a id="line.867">            if(key[h] != null)</a>
-<span class="sourceLineNo">868</span><a id="line.868">            {</a>
-<span class="sourceLineNo">869</span><a id="line.869">                return h;</a>
-<span class="sourceLineNo">870</span><a id="line.870">            }</a>
-<span class="sourceLineNo">871</span><a id="line.871">        }</a>
-<span class="sourceLineNo">872</span><a id="line.872">        if(containsNull)</a>
-<span class="sourceLineNo">873</span><a id="line.873">            return n;</a>
-<span class="sourceLineNo">874</span><a id="line.874">        return -1;</a>
-<span class="sourceLineNo">875</span><a id="line.875">    }</a>
-<span class="sourceLineNo">876</span><a id="line.876"></a>
-<span class="sourceLineNo">877</span><a id="line.877">    /**</a>
-<span class="sourceLineNo">878</span><a id="line.878">     * Rehashes the map.</a>
+<span class="sourceLineNo">715</span><a id="line.715">     * This class provides a list iterator over a hash set. The</a>
+<span class="sourceLineNo">716</span><a id="line.716">     * constructor takes constant time.</a>
+<span class="sourceLineNo">717</span><a id="line.717">     */</a>
+<span class="sourceLineNo">718</span><a id="line.718">    private class SetIterator implements Iterator &lt;K&gt; {</a>
+<span class="sourceLineNo">719</span><a id="line.719">        /** The index of the last entry returned, if positive or zero; initially, {@link #n}. If negative, the last</a>
+<span class="sourceLineNo">720</span><a id="line.720">         element returned was that of index {@code - pos - 1} from the {@link #wrapped} list. */</a>
+<span class="sourceLineNo">721</span><a id="line.721">        int pos = n;</a>
+<span class="sourceLineNo">722</span><a id="line.722">        /** The index of the last entry that has been returned (more precisely, the value of {@link #pos} if {@link #pos} is positive,</a>
+<span class="sourceLineNo">723</span><a id="line.723">         or {@link Integer#MIN_VALUE} if {@link #pos} is negative). It is -1 if either</a>
+<span class="sourceLineNo">724</span><a id="line.724">         we did not return an entry yet, or the last returned entry has been removed. */</a>
+<span class="sourceLineNo">725</span><a id="line.725">        int last = -1;</a>
+<span class="sourceLineNo">726</span><a id="line.726">        /** A downward counter measuring how many entries must still be returned. */</a>
+<span class="sourceLineNo">727</span><a id="line.727">        int c = size;</a>
+<span class="sourceLineNo">728</span><a id="line.728">        /** A boolean telling us whether we should return the null key. */</a>
+<span class="sourceLineNo">729</span><a id="line.729">        boolean mustReturnNull = UnorderedSet.this.containsNull;</a>
+<span class="sourceLineNo">730</span><a id="line.730">        /** A lazily allocated list containing elements that have wrapped around the table because of removals. */</a>
+<span class="sourceLineNo">731</span><a id="line.731">        ArrayList &lt;K&gt; wrapped;</a>
+<span class="sourceLineNo">732</span><a id="line.732">        public boolean hasNext() {</a>
+<span class="sourceLineNo">733</span><a id="line.733">            return c != 0;</a>
+<span class="sourceLineNo">734</span><a id="line.734">        }</a>
+<span class="sourceLineNo">735</span><a id="line.735">        public K next() {</a>
+<span class="sourceLineNo">736</span><a id="line.736">            if ( ! hasNext() ) throw new NoSuchElementException();</a>
+<span class="sourceLineNo">737</span><a id="line.737">            c--;</a>
+<span class="sourceLineNo">738</span><a id="line.738">            if ( mustReturnNull ) {</a>
+<span class="sourceLineNo">739</span><a id="line.739">                mustReturnNull = false;</a>
+<span class="sourceLineNo">740</span><a id="line.740">                last = n;</a>
+<span class="sourceLineNo">741</span><a id="line.741">                return key[ n ];</a>
+<span class="sourceLineNo">742</span><a id="line.742">            }</a>
+<span class="sourceLineNo">743</span><a id="line.743">            final K[] key = UnorderedSet.this.key;</a>
+<span class="sourceLineNo">744</span><a id="line.744">            for(;;) {</a>
+<span class="sourceLineNo">745</span><a id="line.745">                if ( --pos &lt; 0 ) {</a>
+<span class="sourceLineNo">746</span><a id="line.746">                    // We are just enumerating elements from the wrapped list.</a>
+<span class="sourceLineNo">747</span><a id="line.747">                    last = Integer.MIN_VALUE;</a>
+<span class="sourceLineNo">748</span><a id="line.748">                    return wrapped.get( - pos - 1 );</a>
+<span class="sourceLineNo">749</span><a id="line.749">                }</a>
+<span class="sourceLineNo">750</span><a id="line.750">                if ( ! ( (key[ pos ]) == null ) ) return key[ last = pos ];</a>
+<span class="sourceLineNo">751</span><a id="line.751">            }</a>
+<span class="sourceLineNo">752</span><a id="line.752">        }</a>
+<span class="sourceLineNo">753</span><a id="line.753">        /** Shifts left entries with the specified hash code, starting at the specified position,</a>
+<span class="sourceLineNo">754</span><a id="line.754">         * and empties the resulting free entry.</a>
+<span class="sourceLineNo">755</span><a id="line.755">         *</a>
+<span class="sourceLineNo">756</span><a id="line.756">         * @param pos a starting position.</a>
+<span class="sourceLineNo">757</span><a id="line.757">         */</a>
+<span class="sourceLineNo">758</span><a id="line.758">        private void shiftKeys(int pos ) {</a>
+<span class="sourceLineNo">759</span><a id="line.759">            // Shift entries with the same hash.</a>
+<span class="sourceLineNo">760</span><a id="line.760">            int last, slot;</a>
+<span class="sourceLineNo">761</span><a id="line.761">            K current;</a>
+<span class="sourceLineNo">762</span><a id="line.762">            final K[] key = UnorderedSet.this.key;</a>
+<span class="sourceLineNo">763</span><a id="line.763">            for(;;) {</a>
+<span class="sourceLineNo">764</span><a id="line.764">                pos = ( ( last = pos ) + 1 ) &amp; mask;</a>
+<span class="sourceLineNo">765</span><a id="line.765">                for(;;) {</a>
+<span class="sourceLineNo">766</span><a id="line.766">                    if ( ( (current = key[ pos ]) == null ) ) {</a>
+<span class="sourceLineNo">767</span><a id="line.767">                        key[ last ] = (null);</a>
+<span class="sourceLineNo">768</span><a id="line.768">                        return;</a>
+<span class="sourceLineNo">769</span><a id="line.769">                    }</a>
+<span class="sourceLineNo">770</span><a id="line.770">                    slot = ( (hasher.hash(current)) ) &amp; mask;</a>
+<span class="sourceLineNo">771</span><a id="line.771">                    if ( last &lt;= pos ? last &gt;= slot || slot &gt; pos : last &gt;= slot &amp;&amp; slot &gt; pos ) break;</a>
+<span class="sourceLineNo">772</span><a id="line.772">                    pos = ( pos + 1 ) &amp; mask;</a>
+<span class="sourceLineNo">773</span><a id="line.773">                }</a>
+<span class="sourceLineNo">774</span><a id="line.774">                if ( pos &lt; last ) { // Wrapped entry.</a>
+<span class="sourceLineNo">775</span><a id="line.775">                    if ( wrapped == null ) wrapped = new ArrayList&lt;K&gt;( 2 );</a>
+<span class="sourceLineNo">776</span><a id="line.776">                    wrapped.add( key[ pos ] );</a>
+<span class="sourceLineNo">777</span><a id="line.777">                }</a>
+<span class="sourceLineNo">778</span><a id="line.778">                key[ last ] = current;</a>
+<span class="sourceLineNo">779</span><a id="line.779">            }</a>
+<span class="sourceLineNo">780</span><a id="line.780">        }</a>
+<span class="sourceLineNo">781</span><a id="line.781">        public void remove() {</a>
+<span class="sourceLineNo">782</span><a id="line.782">            if ( last == -1 ) throw new IllegalStateException();</a>
+<span class="sourceLineNo">783</span><a id="line.783">            if ( last == n ) {</a>
+<span class="sourceLineNo">784</span><a id="line.784">                UnorderedSet.this.containsNull = false;</a>
+<span class="sourceLineNo">785</span><a id="line.785">                UnorderedSet.this.key[ n ] = (null);</a>
+<span class="sourceLineNo">786</span><a id="line.786">            }</a>
+<span class="sourceLineNo">787</span><a id="line.787">            else if ( pos &gt;= 0 ) shiftKeys( last );</a>
+<span class="sourceLineNo">788</span><a id="line.788">            else {</a>
+<span class="sourceLineNo">789</span><a id="line.789">                // We're removing wrapped entries.</a>
+<span class="sourceLineNo">790</span><a id="line.790">                UnorderedSet.this.remove( wrapped.set( - pos - 1, null ) );</a>
+<span class="sourceLineNo">791</span><a id="line.791">                last = -1; // Note that we must not decrement size</a>
+<span class="sourceLineNo">792</span><a id="line.792">                return;</a>
+<span class="sourceLineNo">793</span><a id="line.793">            }</a>
+<span class="sourceLineNo">794</span><a id="line.794">            size--;</a>
+<span class="sourceLineNo">795</span><a id="line.795">            last = -1; // You can no longer remove this entry.</a>
+<span class="sourceLineNo">796</span><a id="line.796">        }</a>
+<span class="sourceLineNo">797</span><a id="line.797">        /** This method just iterates the type-specific version of {@link #next()} for at most</a>
+<span class="sourceLineNo">798</span><a id="line.798">         * &lt;code&gt;n&lt;/code&gt; times, stopping if {@link #hasNext()} becomes false.*/</a>
+<span class="sourceLineNo">799</span><a id="line.799">        public int skip( final int n ) {</a>
+<span class="sourceLineNo">800</span><a id="line.800">            int i = n;</a>
+<span class="sourceLineNo">801</span><a id="line.801">            while( i-- != 0 &amp;&amp; hasNext() ) next();</a>
+<span class="sourceLineNo">802</span><a id="line.802">            return n - i - 1;</a>
+<span class="sourceLineNo">803</span><a id="line.803">        }</a>
+<span class="sourceLineNo">804</span><a id="line.804">    }</a>
+<span class="sourceLineNo">805</span><a id="line.805"></a>
+<span class="sourceLineNo">806</span><a id="line.806">    public Iterator&lt;K&gt; iterator() {</a>
+<span class="sourceLineNo">807</span><a id="line.807">        return new SetIterator();</a>
+<span class="sourceLineNo">808</span><a id="line.808">    }</a>
+<span class="sourceLineNo">809</span><a id="line.809"></a>
+<span class="sourceLineNo">810</span><a id="line.810">    /**</a>
+<span class="sourceLineNo">811</span><a id="line.811">     * Rehashes the map, making the table as small as possible.</a>
+<span class="sourceLineNo">812</span><a id="line.812">     * &lt;p&gt;</a>
+<span class="sourceLineNo">813</span><a id="line.813">     * &lt;P&gt;This method rehashes the table to the smallest size satisfying the load factor. It can be used when the set will not be changed anymore, so to optimize access speed and size.</a>
+<span class="sourceLineNo">814</span><a id="line.814">     * &lt;p&gt;</a>
+<span class="sourceLineNo">815</span><a id="line.815">     * &lt;P&gt;If the table size is already the minimum possible, this method does nothing.</a>
+<span class="sourceLineNo">816</span><a id="line.816">     *</a>
+<span class="sourceLineNo">817</span><a id="line.817">     * @return true if there was enough memory to trim the map.</a>
+<span class="sourceLineNo">818</span><a id="line.818">     * @see #trim(int)</a>
+<span class="sourceLineNo">819</span><a id="line.819">     */</a>
+<span class="sourceLineNo">820</span><a id="line.820">    public boolean trim() {</a>
+<span class="sourceLineNo">821</span><a id="line.821">        final int l = arraySize(size, f);</a>
+<span class="sourceLineNo">822</span><a id="line.822">        if (l &gt;= n || size &gt; maxFill(l, f)) return true;</a>
+<span class="sourceLineNo">823</span><a id="line.823">        try {</a>
+<span class="sourceLineNo">824</span><a id="line.824">            rehash(l);</a>
+<span class="sourceLineNo">825</span><a id="line.825">        } catch (Exception cantDoIt) {</a>
+<span class="sourceLineNo">826</span><a id="line.826">            return false;</a>
+<span class="sourceLineNo">827</span><a id="line.827">        }</a>
+<span class="sourceLineNo">828</span><a id="line.828">        return true;</a>
+<span class="sourceLineNo">829</span><a id="line.829">    }</a>
+<span class="sourceLineNo">830</span><a id="line.830"></a>
+<span class="sourceLineNo">831</span><a id="line.831">    /**</a>
+<span class="sourceLineNo">832</span><a id="line.832">     * Rehashes this map if the table is too large.</a>
+<span class="sourceLineNo">833</span><a id="line.833">     * &lt;p&gt;</a>
+<span class="sourceLineNo">834</span><a id="line.834">     * &lt;P&gt;Let &lt;var&gt;N&lt;/var&gt; be the smallest table size that can hold &lt;code&gt;max(n,{@link #size()})&lt;/code&gt; entries, still satisfying the load factor. If the current table size is smaller than or equal to</a>
+<span class="sourceLineNo">835</span><a id="line.835">     * &lt;var&gt;N&lt;/var&gt;, this method does nothing. Otherwise, it rehashes this map in a table of size &lt;var&gt;N&lt;/var&gt;.</a>
+<span class="sourceLineNo">836</span><a id="line.836">     * &lt;p&gt;</a>
+<span class="sourceLineNo">837</span><a id="line.837">     * &lt;P&gt;This method is useful when reusing maps. {@linkplain #clear() Clearing a map} leaves the table size untouched. If you are reusing a map many times, you can call this method with a typical</a>
+<span class="sourceLineNo">838</span><a id="line.838">     * size to avoid keeping around a very large table just because of a few large transient maps.</a>
+<span class="sourceLineNo">839</span><a id="line.839">     *</a>
+<span class="sourceLineNo">840</span><a id="line.840">     * @param n the threshold for the trimming.</a>
+<span class="sourceLineNo">841</span><a id="line.841">     * @return true if there was enough memory to trim the map.</a>
+<span class="sourceLineNo">842</span><a id="line.842">     * @see #trim()</a>
+<span class="sourceLineNo">843</span><a id="line.843">     */</a>
+<span class="sourceLineNo">844</span><a id="line.844">    public boolean trim(final int n) {</a>
+<span class="sourceLineNo">845</span><a id="line.845">        final int l = HashCommon.nextPowerOfTwo((int) Math.ceil(n / f));</a>
+<span class="sourceLineNo">846</span><a id="line.846">        if (l &gt;= n || size &gt; maxFill(l, f)) return true;</a>
+<span class="sourceLineNo">847</span><a id="line.847">        try {</a>
+<span class="sourceLineNo">848</span><a id="line.848">            rehash(l);</a>
+<span class="sourceLineNo">849</span><a id="line.849">        } catch (Exception cantDoIt) {</a>
+<span class="sourceLineNo">850</span><a id="line.850">            return false;</a>
+<span class="sourceLineNo">851</span><a id="line.851">        }</a>
+<span class="sourceLineNo">852</span><a id="line.852">        return true;</a>
+<span class="sourceLineNo">853</span><a id="line.853">    }</a>
+<span class="sourceLineNo">854</span><a id="line.854"></a>
+<span class="sourceLineNo">855</span><a id="line.855">    /**</a>
+<span class="sourceLineNo">856</span><a id="line.856">     * Given a hash position, this finds the next position that contains an item, or -1 if none remain.</a>
+<span class="sourceLineNo">857</span><a id="line.857">     * To scan from the start, give this -1 for position.</a>
+<span class="sourceLineNo">858</span><a id="line.858">     * @param position a hash-based masked position in the K array</a>
+<span class="sourceLineNo">859</span><a id="line.859">     * @return the next position after the given one</a>
+<span class="sourceLineNo">860</span><a id="line.860">     */</a>
+<span class="sourceLineNo">861</span><a id="line.861">    private int scanNext(int position)</a>
+<span class="sourceLineNo">862</span><a id="line.862">    {</a>
+<span class="sourceLineNo">863</span><a id="line.863">        int h = position;</a>
+<span class="sourceLineNo">864</span><a id="line.864">        while (++h &lt; n)</a>
+<span class="sourceLineNo">865</span><a id="line.865">        {</a>
+<span class="sourceLineNo">866</span><a id="line.866">            if(key[h] != null)</a>
+<span class="sourceLineNo">867</span><a id="line.867">            {</a>
+<span class="sourceLineNo">868</span><a id="line.868">                return h;</a>
+<span class="sourceLineNo">869</span><a id="line.869">            }</a>
+<span class="sourceLineNo">870</span><a id="line.870">        }</a>
+<span class="sourceLineNo">871</span><a id="line.871">        if(containsNull)</a>
+<span class="sourceLineNo">872</span><a id="line.872">            return n;</a>
+<span class="sourceLineNo">873</span><a id="line.873">        return -1;</a>
+<span class="sourceLineNo">874</span><a id="line.874">    }</a>
+<span class="sourceLineNo">875</span><a id="line.875"></a>
+<span class="sourceLineNo">876</span><a id="line.876">    /**</a>
+<span class="sourceLineNo">877</span><a id="line.877">     * Rehashes the map.</a>
+<span class="sourceLineNo">878</span><a id="line.878">     * &lt;p&gt;</a>
 <span class="sourceLineNo">879</span><a id="line.879">     * &lt;p&gt;</a>
-<span class="sourceLineNo">880</span><a id="line.880">     * &lt;p&gt;</a>
-<span class="sourceLineNo">881</span><a id="line.881">     * This method implements the basic rehashing strategy, and may be overriden</a>
-<span class="sourceLineNo">882</span><a id="line.882">     * by subclasses implementing different rehashing strategies (e.g.,</a>
-<span class="sourceLineNo">883</span><a id="line.883">     * disk-based rehashing). However, you should not override this method</a>
-<span class="sourceLineNo">884</span><a id="line.884">     * unless you understand the internal workings of this class.</a>
-<span class="sourceLineNo">885</span><a id="line.885">     *</a>
-<span class="sourceLineNo">886</span><a id="line.886">     * @param newN the new size</a>
-<span class="sourceLineNo">887</span><a id="line.887">     */</a>
-<span class="sourceLineNo">888</span><a id="line.888">    @SuppressWarnings("unchecked")</a>
-<span class="sourceLineNo">889</span><a id="line.889">    protected void rehash(final int newN) {</a>
-<span class="sourceLineNo">890</span><a id="line.890">        final K[] key = this.key;</a>
-<span class="sourceLineNo">891</span><a id="line.891">        final int mask = newN - 1;</a>
-<span class="sourceLineNo">892</span><a id="line.892">        final K[] newKey = (K[]) new Object[newN + 1];</a>
-<span class="sourceLineNo">893</span><a id="line.893">        K k;</a>
-<span class="sourceLineNo">894</span><a id="line.894">        int i = -1, pos, sz = size;</a>
-<span class="sourceLineNo">895</span><a id="line.895">        for (int q = 0; q &lt; sz; q++) {</a>
-<span class="sourceLineNo">896</span><a id="line.896">            i = scanNext(i);</a>
-<span class="sourceLineNo">897</span><a id="line.897">            if ((k = key[i]) == null)</a>
-<span class="sourceLineNo">898</span><a id="line.898">                pos = newN;</a>
-<span class="sourceLineNo">899</span><a id="line.899">            else {</a>
-<span class="sourceLineNo">900</span><a id="line.900">                pos = (hasher.hash(k)) &amp; mask;</a>
-<span class="sourceLineNo">901</span><a id="line.901">                while (!(newKey[pos] == null))</a>
-<span class="sourceLineNo">902</span><a id="line.902">                    pos = pos + 1 &amp; mask;</a>
-<span class="sourceLineNo">903</span><a id="line.903">            }</a>
-<span class="sourceLineNo">904</span><a id="line.904">            newKey[pos] = k;</a>
-<span class="sourceLineNo">905</span><a id="line.905">        }</a>
-<span class="sourceLineNo">906</span><a id="line.906">        n = newN;</a>
-<span class="sourceLineNo">907</span><a id="line.907">        this.mask = mask;</a>
-<span class="sourceLineNo">908</span><a id="line.908">        maxFill = maxFill(n, f);</a>
-<span class="sourceLineNo">909</span><a id="line.909">        this.key = newKey;</a>
-<span class="sourceLineNo">910</span><a id="line.910">    }</a>
-<span class="sourceLineNo">911</span><a id="line.911"></a>
-<span class="sourceLineNo">912</span><a id="line.912">    /**</a>
-<span class="sourceLineNo">913</span><a id="line.913">     * Returns a deep copy of this map.</a>
+<span class="sourceLineNo">880</span><a id="line.880">     * This method implements the basic rehashing strategy, and may be overriden</a>
+<span class="sourceLineNo">881</span><a id="line.881">     * by subclasses implementing different rehashing strategies (e.g.,</a>
+<span class="sourceLineNo">882</span><a id="line.882">     * disk-based rehashing). However, you should not override this method</a>
+<span class="sourceLineNo">883</span><a id="line.883">     * unless you understand the internal workings of this class.</a>
+<span class="sourceLineNo">884</span><a id="line.884">     *</a>
+<span class="sourceLineNo">885</span><a id="line.885">     * @param newN the new size</a>
+<span class="sourceLineNo">886</span><a id="line.886">     */</a>
+<span class="sourceLineNo">887</span><a id="line.887">    @SuppressWarnings("unchecked")</a>
+<span class="sourceLineNo">888</span><a id="line.888">    protected void rehash(final int newN) {</a>
+<span class="sourceLineNo">889</span><a id="line.889">        final K[] key = this.key;</a>
+<span class="sourceLineNo">890</span><a id="line.890">        final int mask = newN - 1;</a>
+<span class="sourceLineNo">891</span><a id="line.891">        final K[] newKey = (K[]) new Object[newN + 1];</a>
+<span class="sourceLineNo">892</span><a id="line.892">        K k;</a>
+<span class="sourceLineNo">893</span><a id="line.893">        int i = -1, pos, sz = size;</a>
+<span class="sourceLineNo">894</span><a id="line.894">        for (int q = 0; q &lt; sz; q++) {</a>
+<span class="sourceLineNo">895</span><a id="line.895">            i = scanNext(i);</a>
+<span class="sourceLineNo">896</span><a id="line.896">            if ((k = key[i]) == null)</a>
+<span class="sourceLineNo">897</span><a id="line.897">                pos = newN;</a>
+<span class="sourceLineNo">898</span><a id="line.898">            else {</a>
+<span class="sourceLineNo">899</span><a id="line.899">                pos = (hasher.hash(k)) &amp; mask;</a>
+<span class="sourceLineNo">900</span><a id="line.900">                while (!(newKey[pos] == null))</a>
+<span class="sourceLineNo">901</span><a id="line.901">                    pos = pos + 1 &amp; mask;</a>
+<span class="sourceLineNo">902</span><a id="line.902">            }</a>
+<span class="sourceLineNo">903</span><a id="line.903">            newKey[pos] = k;</a>
+<span class="sourceLineNo">904</span><a id="line.904">        }</a>
+<span class="sourceLineNo">905</span><a id="line.905">        n = newN;</a>
+<span class="sourceLineNo">906</span><a id="line.906">        this.mask = mask;</a>
+<span class="sourceLineNo">907</span><a id="line.907">        maxFill = maxFill(n, f);</a>
+<span class="sourceLineNo">908</span><a id="line.908">        this.key = newKey;</a>
+<span class="sourceLineNo">909</span><a id="line.909">    }</a>
+<span class="sourceLineNo">910</span><a id="line.910"></a>
+<span class="sourceLineNo">911</span><a id="line.911">    /**</a>
+<span class="sourceLineNo">912</span><a id="line.912">     * Returns a deep copy of this map.</a>
+<span class="sourceLineNo">913</span><a id="line.913">     * &lt;p&gt;</a>
 <span class="sourceLineNo">914</span><a id="line.914">     * &lt;p&gt;</a>
-<span class="sourceLineNo">915</span><a id="line.915">     * &lt;p&gt;</a>
-<span class="sourceLineNo">916</span><a id="line.916">     * This method performs a deep copy of this hash map; the data stored in the</a>
-<span class="sourceLineNo">917</span><a id="line.917">     * map, however, is not cloned. Note that this makes a difference only for</a>
-<span class="sourceLineNo">918</span><a id="line.918">     * object keys.</a>
-<span class="sourceLineNo">919</span><a id="line.919">     *</a>
-<span class="sourceLineNo">920</span><a id="line.920">     * @return a deep copy of this map.</a>
-<span class="sourceLineNo">921</span><a id="line.921">     */</a>
-<span class="sourceLineNo">922</span><a id="line.922">    @SuppressWarnings("unchecked")</a>
-<span class="sourceLineNo">923</span><a id="line.923">    @GwtIncompatible</a>
-<span class="sourceLineNo">924</span><a id="line.924">    public Object clone() {</a>
-<span class="sourceLineNo">925</span><a id="line.925">        UnorderedSet&lt;K&gt; c;</a>
-<span class="sourceLineNo">926</span><a id="line.926">        try {</a>
-<span class="sourceLineNo">927</span><a id="line.927">            c = new UnorderedSet&lt;&gt;(hasher);</a>
-<span class="sourceLineNo">928</span><a id="line.928">            c.key = (K[]) new Object[n + 1];</a>
-<span class="sourceLineNo">929</span><a id="line.929">            System.arraycopy(key, 0, c.key, 0, n + 1);</a>
-<span class="sourceLineNo">930</span><a id="line.930">            return c;</a>
-<span class="sourceLineNo">931</span><a id="line.931">        } catch (Exception cantHappen) {</a>
-<span class="sourceLineNo">932</span><a id="line.932">            throw new UnsupportedOperationException(cantHappen + (cantHappen.getMessage() != null ?</a>
-<span class="sourceLineNo">933</span><a id="line.933">                    "; " + cantHappen.getMessage() : ""));</a>
-<span class="sourceLineNo">934</span><a id="line.934">        }</a>
-<span class="sourceLineNo">935</span><a id="line.935">    }</a>
-<span class="sourceLineNo">936</span><a id="line.936"></a>
-<span class="sourceLineNo">937</span><a id="line.937">    /**</a>
-<span class="sourceLineNo">938</span><a id="line.938">     * Returns a hash code for this set.</a>
-<span class="sourceLineNo">939</span><a id="line.939">     * &lt;p&gt;</a>
-<span class="sourceLineNo">940</span><a id="line.940">     * This method overrides the generic method provided by the superclass.</a>
-<span class="sourceLineNo">941</span><a id="line.941">     * Since &lt;code&gt;equals()&lt;/code&gt; is not overriden, it is important that the</a>
-<span class="sourceLineNo">942</span><a id="line.942">     * value returned by this method is the same value as the one returned by</a>
-<span class="sourceLineNo">943</span><a id="line.943">     * the overriden method.</a>
-<span class="sourceLineNo">944</span><a id="line.944">     *</a>
-<span class="sourceLineNo">945</span><a id="line.945">     * @return a hash code for this set.</a>
-<span class="sourceLineNo">946</span><a id="line.946">     */</a>
-<span class="sourceLineNo">947</span><a id="line.947">    public int hashCode() {</a>
-<span class="sourceLineNo">948</span><a id="line.948">        int h = 0;</a>
-<span class="sourceLineNo">949</span><a id="line.949">        for (int j = realSize(), i = 0; j-- != 0; ) {</a>
-<span class="sourceLineNo">950</span><a id="line.950">            while (key[i] == null)</a>
-<span class="sourceLineNo">951</span><a id="line.951">                i++;</a>
-<span class="sourceLineNo">952</span><a id="line.952">            if (this != key[i])</a>
-<span class="sourceLineNo">953</span><a id="line.953">                h += hasher.hash(key[i]);</a>
-<span class="sourceLineNo">954</span><a id="line.954">            i++;</a>
-<span class="sourceLineNo">955</span><a id="line.955">        }</a>
-<span class="sourceLineNo">956</span><a id="line.956">        // Zero / null have hash zero.</a>
-<span class="sourceLineNo">957</span><a id="line.957">        return h;</a>
-<span class="sourceLineNo">958</span><a id="line.958">    }</a>
-<span class="sourceLineNo">959</span><a id="line.959"></a>
-<span class="sourceLineNo">960</span><a id="line.960">    public long hash64()</a>
-<span class="sourceLineNo">961</span><a id="line.961">    {</a>
-<span class="sourceLineNo">962</span><a id="line.962">        return 31L * size + CrossHash.hash64(key);</a>
-<span class="sourceLineNo">963</span><a id="line.963">    }</a>
-<span class="sourceLineNo">964</span><a id="line.964"></a>
-<span class="sourceLineNo">965</span><a id="line.965">    /**</a>
-<span class="sourceLineNo">966</span><a id="line.966">     * Returns the maximum number of entries that can be filled before rehashing.</a>
-<span class="sourceLineNo">967</span><a id="line.967">     *</a>
-<span class="sourceLineNo">968</span><a id="line.968">     * @param n the size of the backing array.</a>
-<span class="sourceLineNo">969</span><a id="line.969">     * @param f the load factor.</a>
-<span class="sourceLineNo">970</span><a id="line.970">     * @return the maximum number of entries before rehashing.</a>
-<span class="sourceLineNo">971</span><a id="line.971">     */</a>
-<span class="sourceLineNo">972</span><a id="line.972">    public static int maxFill(final int n, final float f) {</a>
-<span class="sourceLineNo">973</span><a id="line.973">        /* We must guarantee that there is always at least</a>
-<span class="sourceLineNo">974</span><a id="line.974">                 * one free entry (even with pathological load factors). */</a>
-<span class="sourceLineNo">975</span><a id="line.975">        return Math.min((int) Math.ceil(n * f), n - 1);</a>
-<span class="sourceLineNo">976</span><a id="line.976">    }</a>
-<span class="sourceLineNo">977</span><a id="line.977"></a>
-<span class="sourceLineNo">978</span><a id="line.978">    /**</a>
-<span class="sourceLineNo">979</span><a id="line.979">     * Returns the maximum number of entries that can be filled before rehashing.</a>
-<span class="sourceLineNo">980</span><a id="line.980">     *</a>
-<span class="sourceLineNo">981</span><a id="line.981">     * @param n the size of the backing array.</a>
-<span class="sourceLineNo">982</span><a id="line.982">     * @param f the load factor.</a>
-<span class="sourceLineNo">983</span><a id="line.983">     * @return the maximum number of entries before rehashing.</a>
-<span class="sourceLineNo">984</span><a id="line.984">     */</a>
-<span class="sourceLineNo">985</span><a id="line.985">    public static long maxFill(final long n, final float f) {</a>
-<span class="sourceLineNo">986</span><a id="line.986">                /* We must guarantee that there is always at least</a>
-<span class="sourceLineNo">987</span><a id="line.987">                 * one free entry (even with pathological load factors). */</a>
-<span class="sourceLineNo">988</span><a id="line.988">        return Math.min((long) Math.ceil(n * f), n - 1);</a>
-<span class="sourceLineNo">989</span><a id="line.989">    }</a>
-<span class="sourceLineNo">990</span><a id="line.990"></a>
-<span class="sourceLineNo">991</span><a id="line.991">    /**</a>
-<span class="sourceLineNo">992</span><a id="line.992">     * Returns the least power of two smaller than or equal to 2&lt;sup&gt;30&lt;/sup&gt; and larger than or equal to &lt;code&gt;Math.ceil( expected / f )&lt;/code&gt;.</a>
-<span class="sourceLineNo">993</span><a id="line.993">     *</a>
-<span class="sourceLineNo">994</span><a id="line.994">     * @param expected the expected number of elements in a hash table.</a>
-<span class="sourceLineNo">995</span><a id="line.995">     * @param f        the load factor.</a>
-<span class="sourceLineNo">996</span><a id="line.996">     * @return the minimum possible size for a backing array.</a>
-<span class="sourceLineNo">997</span><a id="line.997">     * @throws IllegalArgumentException if the necessary size is larger than 2&lt;sup&gt;30&lt;/sup&gt;.</a>
-<span class="sourceLineNo">998</span><a id="line.998">     */</a>
-<span class="sourceLineNo">999</span><a id="line.999">    public static int arraySize(final int expected, final float f) {</a>
-<span class="sourceLineNo">1000</span><a id="line.1000">        final long s = Math.max(2, HashCommon.nextPowerOfTwo((long) Math.ceil(expected / f)));</a>
-<span class="sourceLineNo">1001</span><a id="line.1001">        if (s &gt; 1 &lt;&lt; 30)</a>
-<span class="sourceLineNo">1002</span><a id="line.1002">            throw new IllegalArgumentException("Too large (" + expected + " expected elements with load factor " + f + ")");</a>
-<span class="sourceLineNo">1003</span><a id="line.1003">        return (int) s;</a>
-<span class="sourceLineNo">1004</span><a id="line.1004">    }</a>
-<span class="sourceLineNo">1005</span><a id="line.1005"></a>
-<span class="sourceLineNo">1006</span><a id="line.1006">    @Override</a>
-<span class="sourceLineNo">1007</span><a id="line.1007">    public Object[] toArray() {</a>
-<span class="sourceLineNo">1008</span><a id="line.1008">        final Object[] a = new Object[size];</a>
-<span class="sourceLineNo">1009</span><a id="line.1009">        objectUnwrap(iterator(), a);</a>
-<span class="sourceLineNo">1010</span><a id="line.1010">        return a;</a>
-<span class="sourceLineNo">1011</span><a id="line.1011">    }</a>
-<span class="sourceLineNo">1012</span><a id="line.1012"></a>
-<span class="sourceLineNo">1013</span><a id="line.1013">    @SuppressWarnings("unchecked")</a>
-<span class="sourceLineNo">1014</span><a id="line.1014">    @Override</a>
-<span class="sourceLineNo">1015</span><a id="line.1015">    public &lt;T&gt; T[] toArray(T[] a) {</a>
-<span class="sourceLineNo">1016</span><a id="line.1016">        final int size = this.size;</a>
-<span class="sourceLineNo">1017</span><a id="line.1017">        objectUnwrap(iterator(), a);</a>
-<span class="sourceLineNo">1018</span><a id="line.1018">        if (size &lt; a.length)</a>
-<span class="sourceLineNo">1019</span><a id="line.1019">            a[size] = null;</a>
-<span class="sourceLineNo">1020</span><a id="line.1020">        return a;</a>
-<span class="sourceLineNo">1021</span><a id="line.1021">    }</a>
-<span class="sourceLineNo">1022</span><a id="line.1022"></a>
-<span class="sourceLineNo">1023</span><a id="line.1023"></a>
-<span class="sourceLineNo">1024</span><a id="line.1024">    /**</a>
-<span class="sourceLineNo">1025</span><a id="line.1025">     * Unwraps an iterator into an array starting at a given offset for a given number of elements.</a>
-<span class="sourceLineNo">1026</span><a id="line.1026">     * &lt;p&gt;</a>
-<span class="sourceLineNo">1027</span><a id="line.1027">     * &lt;P&gt;This method iterates over the given type-specific iterator and stores the elements returned, up to a maximum of &lt;code&gt;length&lt;/code&gt;, in the given array starting at &lt;code&gt;offset&lt;/code&gt;. The</a>
-<span class="sourceLineNo">1028</span><a id="line.1028">     * number of actually unwrapped elements is returned (it may be less than &lt;code&gt;max&lt;/code&gt; if the iterator emits less than &lt;code&gt;max&lt;/code&gt; elements).</a>
-<span class="sourceLineNo">1029</span><a id="line.1029">     *</a>
-<span class="sourceLineNo">1030</span><a id="line.1030">     * @param i      a type-specific iterator.</a>
-<span class="sourceLineNo">1031</span><a id="line.1031">     * @param array  an array to contain the output of the iterator.</a>
-<span class="sourceLineNo">1032</span><a id="line.1032">     * @param offset the first element of the array to be returned.</a>
-<span class="sourceLineNo">1033</span><a id="line.1033">     * @param max    the maximum number of elements to unwrap.</a>
-<span class="sourceLineNo">1034</span><a id="line.1034">     * @return the number of elements unwrapped.</a>
-<span class="sourceLineNo">1035</span><a id="line.1035">     */</a>
-<span class="sourceLineNo">1036</span><a id="line.1036">    private static &lt;K&gt; int objectUnwrap(final Iterator&lt;? extends K&gt; i, final K[] array, int offset, final int max) {</a>
-<span class="sourceLineNo">1037</span><a id="line.1037">        if (max &lt; 0) throw new IllegalArgumentException("The maximum number of elements (" + max + ") is negative");</a>
-<span class="sourceLineNo">1038</span><a id="line.1038">        if (offset &lt; 0 || offset + max &gt; array.length) throw new IllegalArgumentException();</a>
-<span class="sourceLineNo">1039</span><a id="line.1039">        int j = max;</a>
-<span class="sourceLineNo">1040</span><a id="line.1040">        while (j-- != 0 &amp;&amp; i.hasNext())</a>
-<span class="sourceLineNo">1041</span><a id="line.1041">            array[offset++] = i.next();</a>
-<span class="sourceLineNo">1042</span><a id="line.1042">        return max - j - 1;</a>
-<span class="sourceLineNo">1043</span><a id="line.1043">    }</a>
-<span class="sourceLineNo">1044</span><a id="line.1044"></a>
-<span class="sourceLineNo">1045</span><a id="line.1045">    /**</a>
-<span class="sourceLineNo">1046</span><a id="line.1046">     * Unwraps an iterator into an array.</a>
-<span class="sourceLineNo">1047</span><a id="line.1047">     * &lt;p&gt;</a>
-<span class="sourceLineNo">1048</span><a id="line.1048">     * &lt;P&gt;This method iterates over the given type-specific iterator and stores the elements returned in the given array. The iteration will stop when the iterator has no more elements or when the end</a>
-<span class="sourceLineNo">1049</span><a id="line.1049">     * of the array has been reached.</a>
-<span class="sourceLineNo">1050</span><a id="line.1050">     *</a>
-<span class="sourceLineNo">1051</span><a id="line.1051">     * @param i     a type-specific iterator.</a>
-<span class="sourceLineNo">1052</span><a id="line.1052">     * @param array an array to contain the output of the iterator.</a>
-<span class="sourceLineNo">1053</span><a id="line.1053">     * @return the number of elements unwrapped.</a>
-<span class="sourceLineNo">1054</span><a id="line.1054">     */</a>
-<span class="sourceLineNo">1055</span><a id="line.1055">    private static &lt;K&gt; int objectUnwrap(final Iterator&lt;? extends K&gt; i, final K[] array) {</a>
-<span class="sourceLineNo">1056</span><a id="line.1056">        return objectUnwrap(i, array, 0, array.length);</a>
-<span class="sourceLineNo">1057</span><a id="line.1057">    }</a>
-<span class="sourceLineNo">1058</span><a id="line.1058"></a>
-<span class="sourceLineNo">1059</span><a id="line.1059">    @Override</a>
-<span class="sourceLineNo">1060</span><a id="line.1060">    public String toString() {</a>
-<span class="sourceLineNo">1061</span><a id="line.1061">        final StringBuilder s = new StringBuilder();</a>
-<span class="sourceLineNo">1062</span><a id="line.1062">        int i = scanNext(-1);</a>
-<span class="sourceLineNo">1063</span><a id="line.1063">        boolean first = true;</a>
-<span class="sourceLineNo">1064</span><a id="line.1064">        s.append("OrderedSet{");</a>
-<span class="sourceLineNo">1065</span><a id="line.1065">        while (i != -1) {</a>
-<span class="sourceLineNo">1066</span><a id="line.1066">            if (first) first = false;</a>
-<span class="sourceLineNo">1067</span><a id="line.1067">            else s.append(", ");</a>
-<span class="sourceLineNo">1068</span><a id="line.1068">            s.append(key[i]);</a>
-<span class="sourceLineNo">1069</span><a id="line.1069">            i = scanNext(i);</a>
-<span class="sourceLineNo">1070</span><a id="line.1070">        }</a>
-<span class="sourceLineNo">1071</span><a id="line.1071">        s.append("}");</a>
-<span class="sourceLineNo">1072</span><a id="line.1072">        return s.toString();</a>
-<span class="sourceLineNo">1073</span><a id="line.1073">    }</a>
-<span class="sourceLineNo">1074</span><a id="line.1074"></a>
-<span class="sourceLineNo">1075</span><a id="line.1075">    @Override</a>
-<span class="sourceLineNo">1076</span><a id="line.1076">    public boolean equals(final Object o) {</a>
-<span class="sourceLineNo">1077</span><a id="line.1077">        if (o == this)</a>
-<span class="sourceLineNo">1078</span><a id="line.1078">            return true;</a>
-<span class="sourceLineNo">1079</span><a id="line.1079">        if (!(o instanceof Set))</a>
-<span class="sourceLineNo">1080</span><a id="line.1080">            return false;</a>
-<span class="sourceLineNo">1081</span><a id="line.1081">        Set&lt;?&gt; s = (Set&lt;?&gt;) o;</a>
-<span class="sourceLineNo">1082</span><a id="line.1082">        if (s.size() != size)</a>
-<span class="sourceLineNo">1083</span><a id="line.1083">            return false;</a>
-<span class="sourceLineNo">1084</span><a id="line.1084">        return containsAll(s);</a>
-<span class="sourceLineNo">1085</span><a id="line.1085">    }</a>
-<span class="sourceLineNo">1086</span><a id="line.1086"></a>
-<span class="sourceLineNo">1087</span><a id="line.1087">    @GwtIncompatible</a>
-<span class="sourceLineNo">1088</span><a id="line.1088">    private void writeObject(java.io.ObjectOutputStream s)</a>
-<span class="sourceLineNo">1089</span><a id="line.1089">            throws java.io.IOException {</a>
-<span class="sourceLineNo">1090</span><a id="line.1090">        final Iterator&lt;K&gt; i = iterator();</a>
-<span class="sourceLineNo">1091</span><a id="line.1091">        s.defaultWriteObject();</a>
-<span class="sourceLineNo">1092</span><a id="line.1092">        for (int j = size; j-- != 0; )</a>
-<span class="sourceLineNo">1093</span><a id="line.1093">            s.writeObject(i.next());</a>
-<span class="sourceLineNo">1094</span><a id="line.1094">    }</a>
-<span class="sourceLineNo">1095</span><a id="line.1095"></a>
-<span class="sourceLineNo">1096</span><a id="line.1096">    @GwtIncompatible</a>
-<span class="sourceLineNo">1097</span><a id="line.1097">    @SuppressWarnings("unchecked")</a>
-<span class="sourceLineNo">1098</span><a id="line.1098">    private void readObject(java.io.ObjectInputStream s)</a>
-<span class="sourceLineNo">1099</span><a id="line.1099">            throws java.io.IOException, ClassNotFoundException {</a>
-<span class="sourceLineNo">1100</span><a id="line.1100">        s.defaultReadObject();</a>
-<span class="sourceLineNo">1101</span><a id="line.1101">        n = arraySize(size, f);</a>
-<span class="sourceLineNo">1102</span><a id="line.1102">        maxFill = maxFill(n, f);</a>
-<span class="sourceLineNo">1103</span><a id="line.1103">        mask = n - 1;</a>
-<span class="sourceLineNo">1104</span><a id="line.1104">        final K[] key = this.key = (K[]) new Object[n + 1];</a>
-<span class="sourceLineNo">1105</span><a id="line.1105">        K k;</a>
-<span class="sourceLineNo">1106</span><a id="line.1106">        for (int i = size, pos; i-- != 0; ) {</a>
-<span class="sourceLineNo">1107</span><a id="line.1107">            k = (K) s.readObject();</a>
-<span class="sourceLineNo">1108</span><a id="line.1108">            if (k == null) {</a>
-<span class="sourceLineNo">1109</span><a id="line.1109">                pos = n;</a>
-<span class="sourceLineNo">1110</span><a id="line.1110">                containsNull = true;</a>
-<span class="sourceLineNo">1111</span><a id="line.1111">            } else {</a>
-<span class="sourceLineNo">1112</span><a id="line.1112">                if (!(key[pos = (hasher.hash(k)) &amp; mask] == null))</a>
-<span class="sourceLineNo">1113</span><a id="line.1113">                    while (!(key[pos = pos + 1 &amp; mask] == null)) ;</a>
-<span class="sourceLineNo">1114</span><a id="line.1114">            }</a>
-<span class="sourceLineNo">1115</span><a id="line.1115">            key[pos] = k;</a>
-<span class="sourceLineNo">1116</span><a id="line.1116">        }</a>
-<span class="sourceLineNo">1117</span><a id="line.1117">    }</a>
-<span class="sourceLineNo">1118</span><a id="line.1118">}</a>
+<span class="sourceLineNo">915</span><a id="line.915">     * This method performs a deep copy of this hash map; the data stored in the</a>
+<span class="sourceLineNo">916</span><a id="line.916">     * map, however, is not cloned. Note that this makes a difference only for</a>
+<span class="sourceLineNo">917</span><a id="line.917">     * object keys.</a>
+<span class="sourceLineNo">918</span><a id="line.918">     *</a>
+<span class="sourceLineNo">919</span><a id="line.919">     * @return a deep copy of this map.</a>
+<span class="sourceLineNo">920</span><a id="line.920">     */</a>
+<span class="sourceLineNo">921</span><a id="line.921">    @SuppressWarnings("unchecked")</a>
+<span class="sourceLineNo">922</span><a id="line.922">    @GwtIncompatible</a>
+<span class="sourceLineNo">923</span><a id="line.923">    public Object clone() {</a>
+<span class="sourceLineNo">924</span><a id="line.924">        UnorderedSet&lt;K&gt; c;</a>
+<span class="sourceLineNo">925</span><a id="line.925">        try {</a>
+<span class="sourceLineNo">926</span><a id="line.926">            c = new UnorderedSet&lt;&gt;(hasher);</a>
+<span class="sourceLineNo">927</span><a id="line.927">            c.key = (K[]) new Object[n + 1];</a>
+<span class="sourceLineNo">928</span><a id="line.928">            System.arraycopy(key, 0, c.key, 0, n + 1);</a>
+<span class="sourceLineNo">929</span><a id="line.929">            return c;</a>
+<span class="sourceLineNo">930</span><a id="line.930">        } catch (Exception cantHappen) {</a>
+<span class="sourceLineNo">931</span><a id="line.931">            throw new UnsupportedOperationException(cantHappen + (cantHappen.getMessage() != null ?</a>
+<span class="sourceLineNo">932</span><a id="line.932">                    "; " + cantHappen.getMessage() : ""));</a>
+<span class="sourceLineNo">933</span><a id="line.933">        }</a>
+<span class="sourceLineNo">934</span><a id="line.934">    }</a>
+<span class="sourceLineNo">935</span><a id="line.935"></a>
+<span class="sourceLineNo">936</span><a id="line.936">    /**</a>
+<span class="sourceLineNo">937</span><a id="line.937">     * Returns a hash code for this set.</a>
+<span class="sourceLineNo">938</span><a id="line.938">     * &lt;p&gt;</a>
+<span class="sourceLineNo">939</span><a id="line.939">     * This method overrides the generic method provided by the superclass.</a>
+<span class="sourceLineNo">940</span><a id="line.940">     * Since &lt;code&gt;equals()&lt;/code&gt; is not overriden, it is important that the</a>
+<span class="sourceLineNo">941</span><a id="line.941">     * value returned by this method is the same value as the one returned by</a>
+<span class="sourceLineNo">942</span><a id="line.942">     * the overriden method.</a>
+<span class="sourceLineNo">943</span><a id="line.943">     *</a>
+<span class="sourceLineNo">944</span><a id="line.944">     * @return a hash code for this set.</a>
+<span class="sourceLineNo">945</span><a id="line.945">     */</a>
+<span class="sourceLineNo">946</span><a id="line.946">    public int hashCode() {</a>
+<span class="sourceLineNo">947</span><a id="line.947">        int h = 0;</a>
+<span class="sourceLineNo">948</span><a id="line.948">        for (int j = realSize(), i = 0; j-- != 0; ) {</a>
+<span class="sourceLineNo">949</span><a id="line.949">            while (key[i] == null)</a>
+<span class="sourceLineNo">950</span><a id="line.950">                i++;</a>
+<span class="sourceLineNo">951</span><a id="line.951">            if (this != key[i])</a>
+<span class="sourceLineNo">952</span><a id="line.952">                h += hasher.hash(key[i]);</a>
+<span class="sourceLineNo">953</span><a id="line.953">            i++;</a>
+<span class="sourceLineNo">954</span><a id="line.954">        }</a>
+<span class="sourceLineNo">955</span><a id="line.955">        // Zero / null have hash zero.</a>
+<span class="sourceLineNo">956</span><a id="line.956">        return h;</a>
+<span class="sourceLineNo">957</span><a id="line.957">    }</a>
+<span class="sourceLineNo">958</span><a id="line.958"></a>
+<span class="sourceLineNo">959</span><a id="line.959">    public long hash64()</a>
+<span class="sourceLineNo">960</span><a id="line.960">    {</a>
+<span class="sourceLineNo">961</span><a id="line.961">        return 31L * size + CrossHash.hash64(key);</a>
+<span class="sourceLineNo">962</span><a id="line.962">    }</a>
+<span class="sourceLineNo">963</span><a id="line.963"></a>
+<span class="sourceLineNo">964</span><a id="line.964">    /**</a>
+<span class="sourceLineNo">965</span><a id="line.965">     * Returns the maximum number of entries that can be filled before rehashing.</a>
+<span class="sourceLineNo">966</span><a id="line.966">     *</a>
+<span class="sourceLineNo">967</span><a id="line.967">     * @param n the size of the backing array.</a>
+<span class="sourceLineNo">968</span><a id="line.968">     * @param f the load factor.</a>
+<span class="sourceLineNo">969</span><a id="line.969">     * @return the maximum number of entries before rehashing.</a>
+<span class="sourceLineNo">970</span><a id="line.970">     */</a>
+<span class="sourceLineNo">971</span><a id="line.971">    public static int maxFill(final int n, final float f) {</a>
+<span class="sourceLineNo">972</span><a id="line.972">        /* We must guarantee that there is always at least</a>
+<span class="sourceLineNo">973</span><a id="line.973">                 * one free entry (even with pathological load factors). */</a>
+<span class="sourceLineNo">974</span><a id="line.974">        return Math.min((int) Math.ceil(n * f), n - 1);</a>
+<span class="sourceLineNo">975</span><a id="line.975">    }</a>
+<span class="sourceLineNo">976</span><a id="line.976"></a>
+<span class="sourceLineNo">977</span><a id="line.977">    /**</a>
+<span class="sourceLineNo">978</span><a id="line.978">     * Returns the maximum number of entries that can be filled before rehashing.</a>
+<span class="sourceLineNo">979</span><a id="line.979">     *</a>
+<span class="sourceLineNo">980</span><a id="line.980">     * @param n the size of the backing array.</a>
+<span class="sourceLineNo">981</span><a id="line.981">     * @param f the load factor.</a>
+<span class="sourceLineNo">982</span><a id="line.982">     * @return the maximum number of entries before rehashing.</a>
+<span class="sourceLineNo">983</span><a id="line.983">     */</a>
+<span class="sourceLineNo">984</span><a id="line.984">    public static long maxFill(final long n, final float f) {</a>
+<span class="sourceLineNo">985</span><a id="line.985">                /* We must guarantee that there is always at least</a>
+<span class="sourceLineNo">986</span><a id="line.986">                 * one free entry (even with pathological load factors). */</a>
+<span class="sourceLineNo">987</span><a id="line.987">        return Math.min((long) Math.ceil(n * f), n - 1);</a>
+<span class="sourceLineNo">988</span><a id="line.988">    }</a>
+<span class="sourceLineNo">989</span><a id="line.989"></a>
+<span class="sourceLineNo">990</span><a id="line.990">    /**</a>
+<span class="sourceLineNo">991</span><a id="line.991">     * Returns the least power of two smaller than or equal to 2&lt;sup&gt;30&lt;/sup&gt; and larger than or equal to &lt;code&gt;Math.ceil( expected / f )&lt;/code&gt;.</a>
+<span class="sourceLineNo">992</span><a id="line.992">     *</a>
+<span class="sourceLineNo">993</span><a id="line.993">     * @param expected the expected number of elements in a hash table.</a>
+<span class="sourceLineNo">994</span><a id="line.994">     * @param f        the load factor.</a>
+<span class="sourceLineNo">995</span><a id="line.995">     * @return the minimum possible size for a backing array.</a>
+<span class="sourceLineNo">996</span><a id="line.996">     * @throws IllegalArgumentException if the necessary size is larger than 2&lt;sup&gt;30&lt;/sup&gt;.</a>
+<span class="sourceLineNo">997</span><a id="line.997">     */</a>
+<span class="sourceLineNo">998</span><a id="line.998">    public static int arraySize(final int expected, final float f) {</a>
+<span class="sourceLineNo">999</span><a id="line.999">        final long s = Math.max(2, HashCommon.nextPowerOfTwo((long) Math.ceil(expected / f)));</a>
+<span class="sourceLineNo">1000</span><a id="line.1000">        if (s &gt; 1 &lt;&lt; 30)</a>
+<span class="sourceLineNo">1001</span><a id="line.1001">            throw new IllegalArgumentException("Too large (" + expected + " expected elements with load factor " + f + ")");</a>
+<span class="sourceLineNo">1002</span><a id="line.1002">        return (int) s;</a>
+<span class="sourceLineNo">1003</span><a id="line.1003">    }</a>
+<span class="sourceLineNo">1004</span><a id="line.1004"></a>
+<span class="sourceLineNo">1005</span><a id="line.1005">    @Override</a>
+<span class="sourceLineNo">1006</span><a id="line.1006">    public Object[] toArray() {</a>
+<span class="sourceLineNo">1007</span><a id="line.1007">        final Object[] a = new Object[size];</a>
+<span class="sourceLineNo">1008</span><a id="line.1008">        objectUnwrap(iterator(), a);</a>
+<span class="sourceLineNo">1009</span><a id="line.1009">        return a;</a>
+<span class="sourceLineNo">1010</span><a id="line.1010">    }</a>
+<span class="sourceLineNo">1011</span><a id="line.1011"></a>
+<span class="sourceLineNo">1012</span><a id="line.1012">    @Override</a>
+<span class="sourceLineNo">1013</span><a id="line.1013">    public &lt;T&gt; T[] toArray(T[] a) {</a>
+<span class="sourceLineNo">1014</span><a id="line.1014">        final int size = this.size;</a>
+<span class="sourceLineNo">1015</span><a id="line.1015">        objectUnwrap(iterator(), a);</a>
+<span class="sourceLineNo">1016</span><a id="line.1016">        if (size &lt; a.length)</a>
+<span class="sourceLineNo">1017</span><a id="line.1017">            a[size] = null;</a>
+<span class="sourceLineNo">1018</span><a id="line.1018">        return a;</a>
+<span class="sourceLineNo">1019</span><a id="line.1019">    }</a>
+<span class="sourceLineNo">1020</span><a id="line.1020"></a>
+<span class="sourceLineNo">1021</span><a id="line.1021"></a>
+<span class="sourceLineNo">1022</span><a id="line.1022">    /**</a>
+<span class="sourceLineNo">1023</span><a id="line.1023">     * Unwraps an iterator into an array starting at a given offset for a given number of elements.</a>
+<span class="sourceLineNo">1024</span><a id="line.1024">     * &lt;p&gt;</a>
+<span class="sourceLineNo">1025</span><a id="line.1025">     * &lt;P&gt;This method iterates over the given type-specific iterator and stores the elements returned, up to a maximum of &lt;code&gt;length&lt;/code&gt;, in the given array starting at &lt;code&gt;offset&lt;/code&gt;. The</a>
+<span class="sourceLineNo">1026</span><a id="line.1026">     * number of actually unwrapped elements is returned (it may be less than &lt;code&gt;max&lt;/code&gt; if the iterator emits less than &lt;code&gt;max&lt;/code&gt; elements).</a>
+<span class="sourceLineNo">1027</span><a id="line.1027">     *</a>
+<span class="sourceLineNo">1028</span><a id="line.1028">     * @param i      a type-specific iterator.</a>
+<span class="sourceLineNo">1029</span><a id="line.1029">     * @param array  an array to contain the output of the iterator.</a>
+<span class="sourceLineNo">1030</span><a id="line.1030">     * @param offset the first element of the array to be returned.</a>
+<span class="sourceLineNo">1031</span><a id="line.1031">     * @param max    the maximum number of elements to unwrap.</a>
+<span class="sourceLineNo">1032</span><a id="line.1032">     * @return the number of elements unwrapped.</a>
+<span class="sourceLineNo">1033</span><a id="line.1033">     */</a>
+<span class="sourceLineNo">1034</span><a id="line.1034">    private static &lt;K&gt; int objectUnwrap(final Iterator&lt;? extends K&gt; i, final K[] array, int offset, final int max) {</a>
+<span class="sourceLineNo">1035</span><a id="line.1035">        if (max &lt; 0) throw new IllegalArgumentException("The maximum number of elements (" + max + ") is negative");</a>
+<span class="sourceLineNo">1036</span><a id="line.1036">        if (offset &lt; 0 || offset + max &gt; array.length) throw new IllegalArgumentException();</a>
+<span class="sourceLineNo">1037</span><a id="line.1037">        int j = max;</a>
+<span class="sourceLineNo">1038</span><a id="line.1038">        while (j-- != 0 &amp;&amp; i.hasNext())</a>
+<span class="sourceLineNo">1039</span><a id="line.1039">            array[offset++] = i.next();</a>
+<span class="sourceLineNo">1040</span><a id="line.1040">        return max - j - 1;</a>
+<span class="sourceLineNo">1041</span><a id="line.1041">    }</a>
+<span class="sourceLineNo">1042</span><a id="line.1042"></a>
+<span class="sourceLineNo">1043</span><a id="line.1043">    /**</a>
+<span class="sourceLineNo">1044</span><a id="line.1044">     * Unwraps an iterator into an array.</a>
+<span class="sourceLineNo">1045</span><a id="line.1045">     * &lt;p&gt;</a>
+<span class="sourceLineNo">1046</span><a id="line.1046">     * &lt;P&gt;This method iterates over the given type-specific iterator and stores the elements returned in the given array. The iteration will stop when the iterator has no more elements or when the end</a>
+<span class="sourceLineNo">1047</span><a id="line.1047">     * of the array has been reached.</a>
+<span class="sourceLineNo">1048</span><a id="line.1048">     *</a>
+<span class="sourceLineNo">1049</span><a id="line.1049">     * @param i     a type-specific iterator.</a>
+<span class="sourceLineNo">1050</span><a id="line.1050">     * @param array an array to contain the output of the iterator.</a>
+<span class="sourceLineNo">1051</span><a id="line.1051">     * @return the number of elements unwrapped.</a>
+<span class="sourceLineNo">1052</span><a id="line.1052">     */</a>
+<span class="sourceLineNo">1053</span><a id="line.1053">    private static &lt;K&gt; int objectUnwrap(final Iterator&lt;? extends K&gt; i, final K[] array) {</a>
+<span class="sourceLineNo">1054</span><a id="line.1054">        return objectUnwrap(i, array, 0, array.length);</a>
+<span class="sourceLineNo">1055</span><a id="line.1055">    }</a>
+<span class="sourceLineNo">1056</span><a id="line.1056"></a>
+<span class="sourceLineNo">1057</span><a id="line.1057">    @Override</a>
+<span class="sourceLineNo">1058</span><a id="line.1058">    public String toString() {</a>
+<span class="sourceLineNo">1059</span><a id="line.1059">        final StringBuilder s = new StringBuilder();</a>
+<span class="sourceLineNo">1060</span><a id="line.1060">        int i = scanNext(-1);</a>
+<span class="sourceLineNo">1061</span><a id="line.1061">        boolean first = true;</a>
+<span class="sourceLineNo">1062</span><a id="line.1062">        s.append("OrderedSet{");</a>
+<span class="sourceLineNo">1063</span><a id="line.1063">        while (i != -1) {</a>
+<span class="sourceLineNo">1064</span><a id="line.1064">            if (first) first = false;</a>
+<span class="sourceLineNo">1065</span><a id="line.1065">            else s.append(", ");</a>
+<span class="sourceLineNo">1066</span><a id="line.1066">            s.append(key[i]);</a>
+<span class="sourceLineNo">1067</span><a id="line.1067">            i = scanNext(i);</a>
+<span class="sourceLineNo">1068</span><a id="line.1068">        }</a>
+<span class="sourceLineNo">1069</span><a id="line.1069">        s.append("}");</a>
+<span class="sourceLineNo">1070</span><a id="line.1070">        return s.toString();</a>
+<span class="sourceLineNo">1071</span><a id="line.1071">    }</a>
+<span class="sourceLineNo">1072</span><a id="line.1072"></a>
+<span class="sourceLineNo">1073</span><a id="line.1073">    @Override</a>
+<span class="sourceLineNo">1074</span><a id="line.1074">    public boolean equals(final Object o) {</a>
+<span class="sourceLineNo">1075</span><a id="line.1075">        if (o == this)</a>
+<span class="sourceLineNo">1076</span><a id="line.1076">            return true;</a>
+<span class="sourceLineNo">1077</span><a id="line.1077">        if (!(o instanceof Set))</a>
+<span class="sourceLineNo">1078</span><a id="line.1078">            return false;</a>
+<span class="sourceLineNo">1079</span><a id="line.1079">        Set&lt;?&gt; s = (Set&lt;?&gt;) o;</a>
+<span class="sourceLineNo">1080</span><a id="line.1080">        if (s.size() != size)</a>
+<span class="sourceLineNo">1081</span><a id="line.1081">            return false;</a>
+<span class="sourceLineNo">1082</span><a id="line.1082">        return containsAll(s);</a>
+<span class="sourceLineNo">1083</span><a id="line.1083">    }</a>
+<span class="sourceLineNo">1084</span><a id="line.1084"></a>
+<span class="sourceLineNo">1085</span><a id="line.1085">    @GwtIncompatible</a>
+<span class="sourceLineNo">1086</span><a id="line.1086">    private void writeObject(java.io.ObjectOutputStream s)</a>
+<span class="sourceLineNo">1087</span><a id="line.1087">            throws java.io.IOException {</a>
+<span class="sourceLineNo">1088</span><a id="line.1088">        final Iterator&lt;K&gt; i = iterator();</a>
+<span class="sourceLineNo">1089</span><a id="line.1089">        s.defaultWriteObject();</a>
+<span class="sourceLineNo">1090</span><a id="line.1090">        for (int j = size; j-- != 0; )</a>
+<span class="sourceLineNo">1091</span><a id="line.1091">            s.writeObject(i.next());</a>
+<span class="sourceLineNo">1092</span><a id="line.1092">    }</a>
+<span class="sourceLineNo">1093</span><a id="line.1093"></a>
+<span class="sourceLineNo">1094</span><a id="line.1094">    @GwtIncompatible</a>
+<span class="sourceLineNo">1095</span><a id="line.1095">    @SuppressWarnings("unchecked")</a>
+<span class="sourceLineNo">1096</span><a id="line.1096">    private void readObject(java.io.ObjectInputStream s)</a>
+<span class="sourceLineNo">1097</span><a id="line.1097">            throws java.io.IOException, ClassNotFoundException {</a>
+<span class="sourceLineNo">1098</span><a id="line.1098">        s.defaultReadObject();</a>
+<span class="sourceLineNo">1099</span><a id="line.1099">        n = arraySize(size, f);</a>
+<span class="sourceLineNo">1100</span><a id="line.1100">        maxFill = maxFill(n, f);</a>
+<span class="sourceLineNo">1101</span><a id="line.1101">        mask = n - 1;</a>
+<span class="sourceLineNo">1102</span><a id="line.1102">        final K[] key = this.key = (K[]) new Object[n + 1];</a>
+<span class="sourceLineNo">1103</span><a id="line.1103">        K k;</a>
+<span class="sourceLineNo">1104</span><a id="line.1104">        for (int i = size, pos; i-- != 0; ) {</a>
+<span class="sourceLineNo">1105</span><a id="line.1105">            k = (K) s.readObject();</a>
+<span class="sourceLineNo">1106</span><a id="line.1106">            if (k == null) {</a>
+<span class="sourceLineNo">1107</span><a id="line.1107">                pos = n;</a>
+<span class="sourceLineNo">1108</span><a id="line.1108">                containsNull = true;</a>
+<span class="sourceLineNo">1109</span><a id="line.1109">            } else {</a>
+<span class="sourceLineNo">1110</span><a id="line.1110">                if (!(key[pos = (hasher.hash(k)) &amp; mask] == null))</a>
+<span class="sourceLineNo">1111</span><a id="line.1111">                    while (!(key[pos = pos + 1 &amp; mask] == null)) ;</a>
+<span class="sourceLineNo">1112</span><a id="line.1112">            }</a>
+<span class="sourceLineNo">1113</span><a id="line.1113">            key[pos] = k;</a>
+<span class="sourceLineNo">1114</span><a id="line.1114">        }</a>
+<span class="sourceLineNo">1115</span><a id="line.1115">    }</a>
+<span class="sourceLineNo">1116</span><a id="line.1116">}</a>
 
 
 

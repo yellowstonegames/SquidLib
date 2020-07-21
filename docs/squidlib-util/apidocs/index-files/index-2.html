@@ -334,7 +334,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/ColoredStringList.html#addAllText(java.util.Collection)">addAllText(Collection&lt;? extends IColoredString&lt;T&gt;&gt;)</a></span> - Method in class squidpony.<a href="../squidpony/ColoredStringList.html" title="class in squidpony">ColoredStringList</a></dt>
 <dd>
-<div class="block">Contrary to <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true#addAll(java.util.Collection)" title="class or interface in java.util" class="externalLink"><code>Collection.addAll(Collection)</code></a>, this method appends
+<div class="block">Contrary to <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html?is-external=true#addAll(java.util.Collection)" title="class or interface in java.util" class="externalLink"><code>Collection.addAll(Collection)</code></a>, this method appends
  text to the current text, without inserting new lines.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/OrderedSet.html#addAndMoveToFirst(K)">addAndMoveToFirst(K)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a></dt>
@@ -346,6 +346,11 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Adds a key to the set; if the key is already present, it is moved to the
  last position of the iteration order.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/Thesaurus.html#addArchivedCategories(java.lang.String)">addArchivedCategories(String)</a></span> - Method in class squidpony.<a href="../squidpony/Thesaurus.html" title="class in squidpony">Thesaurus</a></dt>
+<dd>
+<div class="block">Given an archive String saved by <a href="../squidpony/Thesaurus.html#archiveCategories()"><code>Thesaurus.archiveCategories()</code></a> (probably from another version of SquidLib), this
+ makes the Thesaurus class act like it did in that archive, assuming the <a href="../squidpony/Thesaurus.html#rng"><code>Thesaurus.rng</code></a> is seeded the same.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Arrangement.html#addAt(int,K)">addAt(int, K)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Arrangement.html" title="class in squidpony.squidmath">Arrangement</a></dt>
 <dd>
@@ -603,8 +608,6 @@ loadScripts(document, 'script');</script>
 <dt><a href="../squidpony/squidgrid/Adjacency.RotationAdjacency.html" title="class in squidpony.squidgrid"><span class="typeNameLink">Adjacency.RotationAdjacency</span></a> - Class in <a href="../squidpony/squidgrid/package-summary.html">squidpony.squidgrid</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="../squidpony/squidgrid/Adjacency.ThinWallAdjacency.html" title="class in squidpony.squidgrid"><span class="typeNameLink">Adjacency.ThinWallAdjacency</span></a> - Class in <a href="../squidpony/squidgrid/package-summary.html">squidpony.squidgrid</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/Mnemonic.html#adjective">adjective</a></span> - Variable in class squidpony.<a href="../squidpony/Mnemonic.html" title="class in squidpony">Mnemonic</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/Thesaurus.html#adjective">adjective</a></span> - Static variable in class squidpony.<a href="../squidpony/Thesaurus.html" title="class in squidpony">Thesaurus</a></dt>
 <dd>&nbsp;</dd>
@@ -1175,6 +1178,11 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/MitchellNoise.html#arbitraryNoise(long,double...)">arbitraryNoise(long, double...)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/MitchellNoise.html" title="class in squidpony.squidmath">MitchellNoise</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/Thesaurus.html#archiveCategories()">archiveCategories()</a></span> - Static method in class squidpony.<a href="../squidpony/Thesaurus.html" title="class in squidpony">Thesaurus</a></dt>
+<dd>
+<div class="block">Gets a stable (large) String that stores all categories this version of Thesaurus knows, as well as all of the
+ words each category includes.</div>
+</dd>
 <dt><a href="../squidpony/squidai/AreaUtils.html" title="class in squidpony.squidai"><span class="typeNameLink">AreaUtils</span></a> - Class in <a href="../squidpony/squidai/package-summary.html">squidpony.squidai</a></dt>
 <dd>
 <div class="block">Static utilities for use in AOE and anything else that might need HashMaps of Coord keys to Double values.</div>
