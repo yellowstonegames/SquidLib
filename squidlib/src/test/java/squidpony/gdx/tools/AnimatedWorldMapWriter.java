@@ -35,7 +35,7 @@ public class AnimatedWorldMapWriter extends ApplicationAdapter {
 //    private static final int width = 512, height = 256; // mimic, elliptical
 //    private static final int width = 1024, height = 512; // mimic, elliptical
 //    private static final int width = 2048, height = 1024; // mimic, elliptical
-    private static final int width = 400, height = 400; // space view
+    private static final int width = 300, height = 300; // space view
 //    private static final int width = 1200, height = 400; // squat
     private static final int LIMIT = 5;
     //private static final int width = 256, height = 128;
