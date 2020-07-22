@@ -72,7 +72,7 @@ class AlgorithmImplementations<V> {
     //================================================================================
 
     boolean isReachable(Node<V> start, Node<V> target) {
-        return findShortestPath(start, target, new ArrayList<V>());
+        return !findShortestPath(start, target).isEmpty();
     }
 
     //================================================================================
