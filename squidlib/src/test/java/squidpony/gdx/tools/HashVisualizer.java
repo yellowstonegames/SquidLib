@@ -68,7 +68,7 @@ public class HashVisualizer extends ApplicationAdapter {
     // 5 RNG results
     private int testType = 4;
     private static final int NOISE_LIMIT = 148;
-    private int hashMode, rngMode, noiseMode = 5, otherMode = 1;//142
+    private int hashMode, rngMode, noiseMode = 60, otherMode = 1;//142
 
     private FilterBatch batch;
     
@@ -131,7 +131,13 @@ public class HashVisualizer extends ApplicationAdapter {
     private final PhantomNoise phantom4D = new PhantomNoise(0x1337BEEF, 4);
     private final PhantomNoise phantom5D = new PhantomNoise(0x1337BEEF, 5);
     private final PhantomNoise phantom6D = new PhantomNoise(0x1337BEEF, 6);
+    private final PhantomNoise phantom6D_A = new PhantomNoise(0xAAAAAAAAAAAAAAAAL, 6);
+    private final PhantomNoise phantom6D_B = new PhantomNoise(0xBBBBBBBBBBBBBBBBL, 6);
+    private final PhantomNoise phantom6D_C = new PhantomNoise(0xCCCCCCCCCCCCCCCCL, 6);
     private final PhantomNoise phantom7D = new PhantomNoise(0x1337BEEF, 7);
+    private final PhantomNoise phantom7D_A = new PhantomNoise(0xAAAAAAAAAAAAAAAAL, 7);
+    private final PhantomNoise phantom7D_B = new PhantomNoise(0xBBBBBBBBBBBBBBBBL, 7);
+    private final PhantomNoise phantom7D_C = new PhantomNoise(0xCCCCCCCCCCCCCCCCL, 7);
 //    private final Noise.Layered2D white2D = new Noise.Layered2D(WhiteNoise.instance, 2);
 //    private final Noise.Layered3D white3D = new Noise.Layered3D(WhiteNoise.instance, 2);
 //    private final Noise.Layered4D white4D = new Noise.Layered4D(WhiteNoise.instance, 2);
@@ -3473,7 +3479,6 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 
 
                     case 16:
-                    case 60:
                         Gdx.graphics.setTitle("Seeded Seamless 3D Color Noise, three octaves per channel at " + Gdx.graphics.getFramesPerSecond() + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
@@ -3491,7 +3496,6 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         }
                         break;
                     case 17:
-                    case 61:
                         Gdx.graphics.setTitle("Seeded Seamless 3D Noise, three octaves at " + Gdx.graphics.getFramesPerSecond() + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
@@ -3502,16 +3506,42 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             }
                         }
                         break;
+                    case 60:
                     case 18:
-                    case 62:
                         Gdx.graphics.setTitle("Seeded 6D as 3D Color Noise, one octave per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                back[x][y] = 
+                                back[x][y] =
                                         floatGet(
                                                 ((float)SeededNoise.noise(x * 0.03125 + 20, y * 0.03125 + 30, ctr * 0.05125 + 10, 0.0, 0.0, 0.0,1234) * 0.50f) + 0.50f,
                                                 ((float)SeededNoise.noise(x * 0.03125 + 30, y * 0.03125 + 10, ctr * 0.05125 + 20, 0.0, 0.0, 0.0,54321) * 0.50f) + 0.50f,
                                                 ((float)SeededNoise.noise(x * 0.03125 + 10, y * 0.03125 + 20, ctr * 0.05125 + 30, 0.0, 0.0, 0.0,1234321) * 0.50f) + 0.50f,
+                                                1.0f);
+                            }
+                        }
+                        break;
+                    case 61:
+                        Gdx.graphics.setTitle("Foam 6D as 3D Color Noise, one octave per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                back[x][y] =
+                                        floatGet(
+                                                ((float)phantom6D_A.getNoise(alter6D(~x, y, ~ctr)) * 0.50f) + 0.50f,
+                                                ((float)phantom6D_B.getNoise(alter6D(~x, ~y, ctr)) * 0.50f) + 0.50f,
+                                                ((float)phantom6D_C.getNoise(alter6D(x, ~y, ~ctr)) * 0.50f) + 0.50f,
+                                                1.0f);
+                            }
+                        }
+                        break;
+                    case 62:
+                        Gdx.graphics.setTitle("Foam 7D as 3D Color Noise, one octave per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                back[x][y] = 
+                                        floatGet(
+                                                ((float)phantom7D_A.getNoise(alter7D(~x, y, ~ctr)) * 0.50f) + 0.50f,
+                                                ((float)phantom7D_B.getNoise(alter7D(~x, ~y, ctr)) * 0.50f) + 0.50f,
+                                                ((float)phantom7D_C.getNoise(alter7D(x, ~y, ~ctr)) * 0.50f) + 0.50f,
                                                 1.0f);
                             }
                         }
@@ -6354,37 +6384,37 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
         return point3D;
     }
     private double[] alter4D(int x, int y, int ctr) {
-        point4D[0]  = (y * 0.6 + x) * 0.2625 + ctr * 0.375;
-        point4D[1]  = (x * 0.6 - y) * 0.2625 + ctr * 0.315;
-        point4D[2]  = (x * 0.8 + y * 0.5) * 0.2125 - ctr * 0.395;
-        point4D[3]  = (y * 0.8 - x * 0.5) * 0.2125 - ctr * 0.365;
+        point4D[0]  = (y * 0.6 + x) * 0.03125 + ctr * 0.1375;
+        point4D[1]  = (x * 0.6 - y) * 0.03125 + ctr * 0.1375;
+        point4D[2]  = (x * 0.8 + y * 0.5) * 0.03125 - ctr * 0.1375;
+        point4D[3]  = (y * 0.8 - x * 0.5) * 0.03125 - ctr * 0.1375;
         return point4D;
     }
     private double[] alter5D(int x, int y, int ctr) {
-        point5D[0] = (y * 0.6 + x) * 0.2625 + ctr * 0.305;
-        point5D[1] = (x * 0.6 - y) * 0.1625 + ctr * 0.395;
-        point5D[2] = (x * 0.8 + y * 0.5) * 0.2125 - ctr * 0.365;
-        point5D[3] = (y * 0.8 - x * 0.5) * 0.2625 - ctr * 0.325;
-        point5D[4] = (ctr * 0.35 + x * 0.5 - y * 0.3) * 0.4125 + ctr * 0.315;
+        point5D[0] = (y * 0.6 + x) * 0.03125 + ctr * 0.1375;
+        point5D[1] = (x * 0.6 - y) * 0.03125 + ctr * 0.1375;
+        point5D[2] = (x * 0.8 + y * 0.5) * 0.03125 - ctr * 0.1375;
+        point5D[3] = (y * 0.8 - x * 0.5) * 0.03125 - ctr * 0.1375;
+        point5D[4] = (ctr * 0.35 + x * 0.5 - y * 0.3) * 0.03125 + ctr * 0.1375;
         return point5D;
     }
     private double[] alter6D(int x, int y, int ctr) {
-        point6D[0]  = (y * 0.6 + x) * 0.2625 + ctr * 0.3125;
-        point6D[1]  = (x * 0.6 - y) * 0.1625 + ctr * 0.5125;
-        point6D[2]  = (x * 0.8 + y * 0.5) * 0.2125 - ctr * 0.4625;
-        point6D[3]  = (y * 0.8 - x * 0.5) * 0.2625 - ctr * 0.4125;
-        point6D[4]  = (ctr * 0.35 + x * 0.5 - y * 0.3) * 0.4125 + ctr * 0.2625;
-        point6D[5]  = (ctr * 0.35 + y * 0.5 - x * 0.3) * 0.6125 - ctr * 0.1625;
+        point6D[0]  = (y * 0.6 + x) * 0.03125 + ctr * 0.1375;
+        point6D[1]  = (x * 0.6 - y) * 0.03125 + ctr * 0.1375;
+        point6D[2]  = (x * 0.8 + y * 0.5) * 0.03125 - ctr * 0.1375;
+        point6D[3]  = (y * 0.8 - x * 0.5) * 0.03125 - ctr * 0.1375;
+        point6D[4]  = (ctr * 0.35 + x * 0.5 - y * 0.3) * 0.03125 + ctr * 0.1375;
+        point6D[5]  = (ctr * 0.35 + y * 0.5 - x * 0.3) * 0.03125 - ctr * 0.1375;
         return point6D;
     }
     private double[] alter7D(int x, int y, int ctr) {
-        point7D[0]  = (y * 0.6 + x) * 0.2625 + ctr * 0.3125;
-        point7D[1]  = (x * 0.6 - y) * 0.1625 + ctr * 0.5125;
-        point7D[2]  = (x * 0.8 + y * 0.5) * 0.2125 - ctr * 0.4625;
-        point7D[3]  = (y * 0.8 - x * 0.5) * 0.2625 - ctr * 0.4125;
-        point7D[4]  = (ctr * 0.35 + x * 0.5 - y * 0.3) * 0.4125 + ctr * 0.2625;
-        point7D[5]  = (ctr * 0.41 + y * 0.5 - x * 0.3) * 0.6125 - ctr * 0.1625;
-        point7D[6]  = (ctr * 0.31 + x * 0.45 + y * 0.45) * 0.5125 - ctr * 0.2125;
+        point7D[0]  = (y * 0.6 + x) * 0.03125 + ctr * 0.1375;
+        point7D[1]  = (x * 0.6 - y) * 0.03125 + ctr * 0.1375;
+        point7D[2]  = (x * 0.8 + y * 0.5) * 0.03125 - ctr * 0.1375;
+        point7D[3]  = (y * 0.8 - x * 0.5) * 0.03125 - ctr * 0.1375;
+        point7D[4]  = (ctr * 0.35 + x * 0.5 - y * 0.3) *   0.03125 + ctr * 0.1375;
+        point7D[5]  = (ctr * 0.41 + y * 0.5 - x * 0.3) *   0.03125 - ctr * 0.1375;
+        point7D[6]  = (ctr * 0.31 + x * 0.45 + y * 0.45) * 0.03125 - ctr * 0.1375;
         //point7D[7]  = (x * 0.7 + y * 0.4) * 0.02125f - ctr * 0.05125f;
         //point7D[8]  = (y * 0.7 - x * 0.4) * 0.02625f - ctr * 0.04125f;
         //point7D[9]  = (ctr * 0.55 + x * 0.3 - y * 0.2) * 0.04125f + ctr * 0.02625f;
