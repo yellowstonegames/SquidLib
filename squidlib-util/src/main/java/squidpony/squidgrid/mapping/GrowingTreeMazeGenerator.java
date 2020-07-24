@@ -10,7 +10,10 @@ import squidpony.squidmath.OrderedSet;
 
 /**
  * A maze generator that can be configured using a {@link ChoosingMethod}, which can be customized for the app.
- * Based in part on code from <a href="http://weblog.jamisbuck.org/2011/1/27/maze-generation-growing-tree-algorithm">Jamis Buck's blog</a>.
+ * Based in part on code from
+ * <a href="http://weblog.jamisbuck.org/2011/1/27/maze-generation-growing-tree-algorithm">Jamis Buck's blog</a>.
+ * This defaults to {@link #newest} for its ChoosingMethod, but {@link #random} is also good to try; you can specify a
+ * ChoosingMethod with {@link #generate(ChoosingMethod)}.
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
 public class GrowingTreeMazeGenerator implements IDungeonGenerator {
@@ -68,7 +71,7 @@ public class GrowingTreeMazeGenerator implements IDungeonGenerator {
         
         int x = rng.nextInt(width - 1) | 1;
         int y = rng.nextInt(height - 1) | 1;
-
+        dungeon[x][y] = '.';
         OrderedSet<Coord> deck = new OrderedSet<>();
         deck.add(Coord.get(x, y));
 
@@ -118,6 +121,29 @@ public class GrowingTreeMazeGenerator implements IDungeonGenerator {
 
     /**
      * Produces high-quality mazes that are very similar to those produced by a recursive back-tracking algorithm.
+     * <br>
+     * Example:
+     * <pre>
+     * ┌─────┬───────┬───┬─────────┬─────┬───┐
+     * │.....│.......│...│.........│.....│...│
+     * │.────┘.┌──.│.│.│.└───┐.┌──.│.──┐.│.│.│
+     * │.......│...│.│.│.....│.│...│...│.│.│.│
+     * │.──────┤.──┤.│.└─┬──.│.└─┐.└─┐.│.│.│.│
+     * │.......│...│.│...│...│...│...│.│.│.│.│
+     * ├─────┐.├──.│.└─┐.└─┐.├──.├─┐.│.│.│.│.│
+     * │.....│.│...│...│...│.│...│.│...│...│.│
+     * │.│.──┘.│.──┼───┼──.│.│.──┤.└───┼───┘.│
+     * │.│.....│...│...│...│.│...│.....│.....│
+     * │.└─┬───┴─┐.└─┐.│.┌─┘.│.│.└───┐.│.──┬─┤
+     * │...│.....│...│...│...│.│.....│.│...│.│
+     * ├──.│.┌──.│.──┴───┤.──┴─┤.──┐.│.└─┐.│.│
+     * │...│.│...│.......│.....│...│.│...│.│.│
+     * │.┌─┴─┘.│.├─┐.│.┌─┴───┐.├───┘.│.│.│.│.│
+     * │.│.....│.│.│.│.│.....│.│.....│.│.│.│.│
+     * │.│.┌───┘.│.│.└─┘.──┐.│.│.┌───┘.│.│.│.│
+     * │...│.......│.......│.....│.....│.....│
+     * └───┴───────┴───────┴─────┴─────┴─────┘
+     * </pre>
      */
     public final ChoosingMethod newest = new ChoosingMethod() {
         @Override
@@ -126,7 +152,31 @@ public class GrowingTreeMazeGenerator implements IDungeonGenerator {
         }
     };
     /**
-     * Produces mostly straight corridors that dead-end at the map's edge; probably only useful with {@link #mix(ChoosingMethod, double, ChoosingMethod, double)}.
+     * Produces mostly straight corridors that dead-end at the map's edge; probably only useful with
+     * {@link #mix(ChoosingMethod, double, ChoosingMethod, double)}.
+     * <br>
+     * Example:
+     * <pre>
+     * ┌─┬─┬─┬─┬─┬─┬─┬───────────────────────┐
+     * │.│.│.│.│.│.│.│.......................│
+     * │.│.│.│.│.│.│.│.──────────────────────┤
+     * │.│.│.│.│.│.│.│.......................│
+     * │.│.│.│.│.│.│.│.──────────────────────┤
+     * │.│.│.│.│.│.│.│.......................│
+     * │.│.│.│.│.│.│.│.──────────────────────┤
+     * │.........│.│.│.......................│
+     * ├────────.│.│.│.──────────────────────┤
+     * │.....................................│
+     * ├────────────.│.──────────────────────┤
+     * │.............│.......................│
+     * ├────────────.│.──────────────────────┤
+     * │.............│.......................│
+     * ├────────────.│.│.────────────────────┤
+     * │.............│.│.....................│
+     * ├────────.│.│.│.│.────────────────────┤
+     * │.........│.│.│.│.....................│
+     * └─────────┴─┴─┴─┴─────────────────────┘
+     * </pre>
      */
     public final ChoosingMethod oldest = new ChoosingMethod() {
         @Override
@@ -135,7 +185,32 @@ public class GrowingTreeMazeGenerator implements IDungeonGenerator {
         }
     };
     /**
-     * Produces chaotic, jumbled spans of corridors that are similar to those produced by Prim's algorithm.
+     * Produces chaotic, jumbled spans of corridors, often with dead-ends, that are similar to those produced by Prim's
+     * algorithm. This works well when mixed with {@link #newest} using
+     * {@link #mix(ChoosingMethod, double, ChoosingMethod, double)}, and not as well when mixed with {@link #oldest}.
+     * <br>
+     * Example:
+     * <pre>
+     * ┌─────────────┬───────────┬───────────┐
+     * │.............│...........│...........│
+     * ├─┬─┬─┬────.┌─┘.┌─┐.──┐.──┤.──┐.──┐.│.│
+     * │.│.│.│.....│...│.│...│...│...│...│.│.│
+     * │.│.│.└─┬──.│.┌─┘.└─┐.└─┬─┘.──┴───┤.│.│
+     * │.│.│...│...│.│.....│...│.........│.│.│
+     * │.│.└─┐.└─┐.│.│.┌─┬─┤.┌─┤.──┐.────┴─┼─┤
+     * │.....│...│.....│.│.│.│.│...│.......│.│
+     * ├────.├──.└──.──┘.│.└─┘.│.──┴─┐.│.──┘.│
+     * │.....│...........│...........│.│.....│
+     * ├────.└──.│.│.│.──┘.──────────┴─┴─┐.──┤
+     * │.........│.│.│...................│...│
+     * ├──────.│.│.│.│.────────────────┐.└─┬─┤
+     * │.......│.│.│.│.................│...│.│
+     * ├────.│.│.│.│.├─┬─┐.│.│.│.──┐.──┴───┘.│
+     * │.....│.│.│.│.│.│.│.│.│.│...│.........│
+     * │.┌──.├─┴─┴─┘.│.│.└─┴─┴─┴─┐.└─┐.│.│.│.│
+     * │.│...│...................│...│.│.│.│.│
+     * └─┴───┴───────────────────┴───┴─┴─┴─┴─┘
+     * </pre>
      */
     public final ChoosingMethod random = new ChoosingMethod() {
         @Override
