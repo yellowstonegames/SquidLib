@@ -80,7 +80,7 @@ import java.util.ArrayList;
  * @author Tommy Ettinger - https://github.com/tommyettinger
  */
 public class DungeonGeneratorTest {
-    public static int width = 60, height = 30, depth = 16;
+    public static int width = 70, height = 70, depth = 16;
     public static GreasedRegion expandIsolated(GreasedRegion gr)
     {
         int fst = gr.firstTight();
@@ -251,14 +251,14 @@ public class DungeonGeneratorTest {
 
 
         dungeonGenerator = new DungeonGenerator(width, height, rng);
-        dungeonGenerator.addDoors(12, false);
-        dungeonGenerator.addWater(8);
-        dungeonGenerator.addGrass(11);
+//        dungeonGenerator.addDoors(12, false);
+//        dungeonGenerator.addWater(8);
+//        dungeonGenerator.addGrass(11);
         rng.setState(2252637788195L);
         SerpentMapGenerator serpent = new SerpentMapGenerator(width, height, rng, 0.2);
-        serpent.putWalledBoxRoomCarvers(5);
-        serpent.putRoundRoomCarvers(3);
-        serpent.putCaveCarvers(3);
+        serpent.putWalledBoxRoomCarvers(7);
+        serpent.putWalledRoundRoomCarvers(4);
+        serpent.putCaveCarvers(2);
         map = serpent.generate();
         dungeonGenerator.generate(ArrayTools.copy(map));
 
