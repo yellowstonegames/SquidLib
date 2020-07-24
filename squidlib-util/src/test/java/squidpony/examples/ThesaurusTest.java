@@ -67,7 +67,7 @@ public class ThesaurusTest {
 //                .append(", if it's not too much trouble.");
 //        System.out.println(text);
         text.append('\n');
-        text.append("\nYou have slain the ").append(FakeLanguageGen.DEMONIC.word(thesaurus.rng, true, 1, 2))
+        text.append("\nYou have slain the ").append(FakeLanguageGen.DEMONIC.word(thesaurus.rng, true, thesaurus.rng.between(1, 3)))
                 .append("!\nYou loot its body, and find potion`term`, potion`term`, potion`term`, and potion`term`.");
         text.append('\n');
         text.append("For the emperor`noun`, and for ").append(thesaurus.makeNationName()).append('!');

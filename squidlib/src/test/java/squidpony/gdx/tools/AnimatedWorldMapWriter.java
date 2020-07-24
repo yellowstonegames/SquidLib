@@ -35,7 +35,7 @@ public class AnimatedWorldMapWriter extends ApplicationAdapter {
 //    private static final int width = 512, height = 256; // mimic, elliptical
 //    private static final int width = 1024, height = 512; // mimic, elliptical
 //    private static final int width = 2048, height = 1024; // mimic, elliptical
-    private static final int width = 300, height = 300; // space view
+    private static final int width = 260, height = 260; // space view
 //    private static final int width = 1200, height = 400; // squat
     private static final int LIMIT = 5;
     //private static final int width = 256, height = 128;
@@ -71,7 +71,7 @@ public class AnimatedWorldMapWriter extends ApplicationAdapter {
     private AnimatedGif writer;
     
     private String date, path;
-
+    private double mutation = 1.2345;
     @Override
     public void create() {
         batch = new FilterBatch();
@@ -84,7 +84,8 @@ public class AnimatedWorldMapWriter extends ApplicationAdapter {
 //        path = "out/worldsAnimated/" + date + "/Ellipse/";
 //        path = "out/worldsAnimated/" + date + "/EllipseExpo/";
 //        path = "out/worldsAnimated/" + date + "/Mimic/";
-        path = "out/worldsAnimated/" + date + "/SpaceView/";
+//        path = "out/worldsAnimated/" + date + "/SpaceView/";
+        path = "out/worldsAnimated/" + date + "/SpaceViewMutant/";
 //        path = "out/worldsAnimated/" + date + "/Sphere_Classic/";
 //        path = "out/worldsAnimated/" + date + "/Hyperellipse/";
 //        path = "out/worldsAnimated/" + date + "/HyperellipseExpo/";
@@ -116,8 +117,22 @@ public class AnimatedWorldMapWriter extends ApplicationAdapter {
         seed = rng.getState();
         
         thesaurus = new Thesaurus(rng);
+//        Noise.Noise3D noise = new FastNoise((int)seed, 2.75f, FastNoise.FOAM_FRACTAL, 2);
+        Noise.Noise3D noise = new Noise.Noise3D() {
+            private FastNoise fn = new FastNoise((int)seed, 2.75f, FastNoise.FOAM, 1);
+            @Override
+            public double getNoise(double x, double y, double z) {
+                return fn.getNoise(x, y, z, mutation);
+            }
+
+            @Override
+            public double getNoiseWithSeed(double x, double y, double z, long seed) {
+                return fn.getNoiseWithSeed(x, y, z, mutation, seed);
+            }
+        };
+
+
 //        Noise.Noise3D noise = new Noise.Exponential3D(new FastNoise((int)seed, 2.75f, FastNoise.FOAM_FRACTAL, 3));
-        Noise.Noise3D noise = new FastNoise((int)seed, 2.75f, FastNoise.FOAM_FRACTAL, 2);
 //        FastNoise noise = new FastNoise((int)seed, 8f, FastNoise.CUBIC_FRACTAL, 1);
 //        noise.setPointHash(new FlawedPointHash.CubeHash(seed, 1 << 14));
 //        Noise.Noise3D noise = new Noise.Exponential3D(fn);
@@ -130,12 +145,14 @@ public class AnimatedWorldMapWriter extends ApplicationAdapter {
 //        WorldMapGenerator.DEFAULT_NOISE.setFractalGain(5f);
 //        WorldMapGenerator.DEFAULT_NOISE.setFractalLacunarity(0.8f);
 //        WorldMapGenerator.DEFAULT_NOISE.setFractalGain(1.25f);
+
+//        world = new WorldMapGenerator.RotatingSpaceMap(seed, width, height, noise, 1.0);
         
 //        world = new WorldMapGenerator.SphereMap(seed, width, height, noise, 1.0);
 //        world = new WorldMapGenerator.TilingMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.75);
 //        world = new WorldMapGenerator.EllipticalMap(seed, width, height, noise, 1.75);
 //        world = new WorldMapGenerator.MimicMap(seed, WorldMapGenerator.DEFAULT_NOISE, 1.75);
-        world = new WorldMapGenerator.RotatingSpaceMap(seed, width, height, noise, 1.0);
+        world = new WorldMapGenerator.SpaceViewMap(seed, width, height, noise, 0.8);
 //        world = new WorldMapGenerator.RoundSideMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.75);
 //        world = new WorldMapGenerator.HyperellipticalMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 0.8, 0.03125, 2.5);
 //        world = new WorldMapGenerator.EllipticalHammerMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.75);
@@ -177,9 +194,12 @@ public class AnimatedWorldMapWriter extends ApplicationAdapter {
         String name = makeName(thesaurus);
         while (Gdx.files.local(path + name + ".gif").exists())
             name = makeName(thesaurus);
-        generate(CrossHash.hash64(name));
+        long hash = CrossHash.hash64(name);
         for (int i = 0; i < pm.length; i++) {
-            world.setCenterLongitude((Math.PI * 2.0 / pm.length) * i);
+            double angle = (Math.PI * 2.0 / pm.length) * i;
+            mutation = NumberTools.sin(angle) * 0.418 + NumberTools.cos(angle * 4.0 + 1.618) * 0.123;
+            generate(hash);
+            world.setCenterLongitude(angle);
             wmv.getBiomeMapper().makeBiomes(world);
             float[][] cm = wmv.show();
             pm[i].setColor(SColor.DB_INK);
@@ -190,6 +210,7 @@ public class AnimatedWorldMapWriter extends ApplicationAdapter {
                     pm[i].drawPixel(x, y, NumberTools.floatToReversedIntBits(cm[x][y]));
                 }
             }
+            if(i % 5 == 4) System.out.println("Finished " + (i + 1) + " frames");
         }
         
         batch.begin();
