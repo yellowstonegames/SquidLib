@@ -4,7 +4,7 @@ package squidpony.examples;
  * Created by Tommy Ettinger on 6/28/2020.
  */
 public class TestConfiguration {
-    public static boolean PRINTING;
+    public static boolean PRINTING = true;
     public static void print(char c){
         if(PRINTING) System.out.print(c);
     }

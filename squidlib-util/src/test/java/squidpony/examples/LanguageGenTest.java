@@ -331,25 +331,22 @@ public class LanguageGenTest {
                 FakeLanguageGen.DEEP_SPEECH
         };
         String marked = "What the [?]heck?[?] Check that out will ya? It's probably nothing, but - OH [?]NO, THIS IS BAD!";
-        String[] oz = new String[]{
-                "Uncle Uncles Carbuncle Carbuncles Live Lives Lived Living Liver Livers Livery Liveries",
-                "Dorothy lived in the midst of the great Kansas prairies, with Uncle Henry, who was a ",
-                "farmer, and Aunt Em, who was the farmer's wife. Their house was small, for the ",
-                "lumber to build it had to be carried by wagon many miles. There were four walls, ",
-                "a floor and a roof, which made one room; and this room contained a rusty looking ",
-                "cookstove, a cupboard for the dishes, a table, three or four chairs, and the beds. ",
-                "Uncle Henry and Aunt Em had a big bed in one corner, and Dorothy a little bed in ",
-                "another corner. There was no garret at all, and no cellar-except a small hole dug ",
-                "in the ground, called a cyclone cellar, where the family could go in case one of ",
-                "those great whirlwinds arose, mighty enough to crush any building in its path. It ",
-                "was reached by a trap door in the middle of the floor, from which a ladder led ",
+        String oz =
+                "Uncle Uncles Carbuncle Carbuncles Live Lives Lived Living Liver Livers Livery Liveries\n\n" +
+                "Dorothy lived in the midst of the great Kansas prairies, with Uncle Henry, who was a "+
+                "farmer, and Aunt Em, who was the farmer's wife. Their house was small, for the "+
+                "lumber to build it had to be carried by wagon many miles. There were four walls, "+
+                "a floor and a roof, which made one room; and this room contained a rusty looking "+
+                "cookstove, a cupboard for the dishes, a table, three or four chairs, and the beds. "+
+                "Uncle Henry and Aunt Em had a big bed in one corner, and Dorothy a little bed in "+
+                "another corner. There was no garret at all, and no cellar-except a small hole dug "+
+                "in the ground, called a cyclone cellar, where the family could go in case one of "+
+                "those great whirlwinds arose, mighty enough to crush any building in its path. It "+
+                "was reached by a trap door in the middle of the floor, from which a ladder led "+
                 "down into the small, dark hole.",
-        }, oz2 = new String[oz.length];
-        System.out.println("ORIGINAL:");
-        for(String o : oz)
-        {
-            System.out.println(o);
-        }
+        oz2;
+        System.out.println("ORIGINAL:");         
+        System.out.println(StringKit.join("\n", StringKit.wrap(oz, 80)));
         System.out.println("\n\nGENERATED:\n");
         StatefulRNG sr = new StatefulRNG(2252637788195L);
         for(FakeLanguageGen lang : languages) {
@@ -358,21 +355,16 @@ public class LanguageGenTest {
 //            System.out.println("princess   : " + cipher.lookup("princess"));
 //            System.out.println("princesses : " + cipher.lookup("princesses"));
             int ctr = 0;
-            System.out.println(cipher.cipherMarkup(marked));
-            for (String s : oz) {
-                oz2[ctr] = cipher.cipher(s);
-                System.out.println(oz2[ctr++]);
-            }
-
+            System.out.println(StringKit.join("\n", StringKit.wrap(cipher.cipherMarkup(marked), 80)));
+            oz2 = cipher.cipher(oz);
+            System.out.println(StringKit.join("\n", StringKit.wrap(oz2, 80)));
+            
             HashMap<String, String> vocabulary = new HashMap<>(16);
             cipher.learnTranslations(vocabulary, "Dorothy", "farmer", "the", "room", "one", "uncle", "aunt");
-            for (String s : oz2) {
-                System.out.println(cipher.decipher(s, vocabulary));
-            }
+
+            System.out.println(StringKit.join("\n", StringKit.wrap(cipher.decipher(oz2, vocabulary), 80)));
             System.out.println();
-            for (String s : oz2) {
-                System.out.println(cipher.decipher(s, cipher.reverse));
-            }
+            System.out.println(StringKit.join("\n", StringKit.wrap(cipher.decipher(oz2, cipher.reverse), 80)));
             System.out.println();
 
             /*
