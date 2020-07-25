@@ -206,6 +206,11 @@ public class Noise {
         double getNoiseWithSeed(double x, double y, double z, double w, long seed);
     }
 
+    public interface Noise5D {
+        double getNoise(double x, double y, double z, double w, double u);
+        double getNoiseWithSeed(double x, double y, double z, double w, double u, long seed);
+    }
+
     public interface Noise6D {
         double getNoise(double x, double y, double z, double w, double u, double v);
         double getNoiseWithSeed(double x, double y, double z, double w, double u, double v, long seed);
@@ -417,6 +422,65 @@ public class Noise {
             return n / ((1 << octaves) - 1.0);
         }
     }
+    public static class Layered5D implements Noise5D {
+        protected int octaves;
+        protected Noise5D basis;
+        public double frequency;
+        public double lacunarity;
+        public Layered5D() {
+            this(FoamNoise.instance);
+        }
+
+        public Layered5D(Noise5D basis) {
+            this(basis, 2);
+        }
+
+        public Layered5D(Noise5D basis, final int octaves) {
+            this(basis, octaves, 1.0);
+        }
+        public Layered5D(Noise5D basis, final int octaves, double frequency) {
+            this(basis, octaves, frequency, 0.5);
+        }
+        public Layered5D(Noise5D basis, final int octaves, double frequency, double lacunarity) {
+            this.basis = basis;
+            this.frequency = frequency;
+            this.octaves = Math.max(1, Math.min(63, octaves));
+            this.lacunarity = lacunarity;
+        }
+
+        @Override
+        public double getNoise(double x, double y, double z, double w, double u) {
+            x *= frequency;
+            y *= frequency;
+            z *= frequency;
+            w *= frequency;
+            u *= frequency;
+            int s = 1;
+            double n = 0.0, i_s = 2.0;
+            for (int o = 0; o < octaves; o++, s <<= 1) {
+                n += basis.getNoise(x * (i_s *= lacunarity) + (o << 6), y * i_s + (o << 7), z * i_s + (o << 8)
+                        , w * i_s + (o << 9), u * i_s + (o << 10)) * s;
+            }
+            return n / ((1 << octaves) - 1.0);
+        }
+
+        @Override
+        public double getNoiseWithSeed(double x, double y, double z, double w, double u, long seed) {
+            x *= frequency;
+            y *= frequency;
+            z *= frequency;
+            w *= frequency;
+            u *= frequency;
+            int s = 1;
+            double n = 0.0, i_s = 2.0;
+            for (int o = 0; o < octaves; o++, s <<= 1) {
+                n += basis.getNoiseWithSeed(x * (i_s *= lacunarity), y * i_s, z * i_s
+                        , w * i_s, u * i_s, (seed += 0x9E3779B97F4A7C15L)) * s;
+            }
+            return n / ((1 << octaves) - 1.0);
+        }
+    }
+    
     public static class Layered6D implements Noise6D {
         protected int octaves;
         protected Noise6D basis;
@@ -691,6 +755,67 @@ public class Noise {
             double n = 0.0, i_s = 2.0;
             for (int o = 0; o < octaves; o++, s >>= 1) {
                 n += basis.getNoiseWithSeed(x * (i_s *= lacunarity), y * i_s, z * i_s, w * i_s, (seed += 0x9E3779B97F4A7C15L)) * s;
+            }
+            return n / ((1 << octaves) - 1.0);
+        }
+    }
+    public static class InverseLayered5D implements Noise5D {
+        protected int octaves;
+        protected Noise5D basis;
+        public double frequency;
+        /**
+         * A multiplier that affects how much the frequency changes with each layer; the default is 0.5 .
+         */
+        public double lacunarity = 0.5;
+        public InverseLayered5D() {
+            this(FoamNoise.instance, 2);
+        }
+
+        public InverseLayered5D(Noise5D basis) {
+            this(basis, 2);
+        }
+
+        public InverseLayered5D(Noise5D basis, final int octaves) {
+            this(basis, octaves, 1.0);
+        }
+        public InverseLayered5D(Noise5D basis, final int octaves, double frequency) {
+            this.basis = basis;
+            this.frequency = frequency;
+            this.octaves = Math.max(1, Math.min(63, octaves));
+        }
+        public InverseLayered5D(Noise5D basis, final int octaves, double frequency, double lacunarity){
+            this(basis, octaves, frequency);
+            this.lacunarity = lacunarity;
+        }
+
+        @Override
+        public double getNoise(double x, double y, double z, double w, double u) {
+            x *= frequency;
+            y *= frequency;
+            z *= frequency;
+            w *= frequency;
+            u *= frequency;
+            int s = 1 << (octaves - 1);
+            double n = 0.0, i_s = 2.0;
+            for (int o = 0; o < octaves; o++, s >>= 1) {
+                n += basis.getNoise(x * (i_s *= lacunarity) + (o << 6), y * i_s + (o << 7), z * i_s + (o << 8)
+                        , w * i_s + (o << 9), u * i_s + (o << 10)) * s;
+            }
+            return n / ((1 << octaves) - 1.0);
+        }
+
+        @Override
+        public double getNoiseWithSeed(double x, double y, double z, double w, double u, long seed) {
+            x *= frequency;
+            y *= frequency;
+            z *= frequency;
+            w *= frequency;
+            u *= frequency;
+            int s = 1 << (octaves - 1);
+            double n = 0.0, i_s = 2.0;
+            for (int o = 0; o < octaves; o++, s >>= 1) {
+                n += basis.getNoiseWithSeed(x * (i_s *= lacunarity), y * i_s, z * i_s
+                        , w * i_s, u * i_s, (seed += 0x9E3779B97F4A7C15L)) * s;
             }
             return n / ((1 << octaves) - 1.0);
         }
@@ -1130,6 +1255,82 @@ public class Noise {
         }
     }
 
+
+    public static class Ridged5D implements Noise5D
+    {
+        protected double[] exp;
+        protected int octaves;
+        public double frequency, correct;
+        public Noise5D basis;
+        public Ridged5D()
+        {
+            this(FoamNoise.instance, 2, 1.25);
+        }
+        public Ridged5D(Noise5D basis)
+        {
+            this(basis, 2, 1.25);
+        }
+        public Ridged5D(Noise5D basis, int octaves, double frequency)
+        {
+            this.basis = basis;
+            this.frequency = frequency;
+            setOctaves(octaves);
+        }
+        public void setOctaves(int octaves)
+        {
+            this.octaves = (octaves = Math.max(1, Math.min(63, octaves)));
+            exp = new double[octaves];
+            double maxvalue = 0.0;
+            for (int i = 0; i < octaves; ++i) {
+                maxvalue += (exp[i] = Math.pow(2.0, -i));
+            }
+            correct = 2.0 / maxvalue;
+        }
+
+        @Override
+        public double getNoise(double x, double y, double z, double w, double u) {
+            double sum = 0.0, n;
+            x *= frequency;
+            y *= frequency;
+            z *= frequency;
+            w *= frequency;
+            u *= frequency;
+
+            for (int i = 0; i < octaves; ++i) {
+                n = basis.getNoise(x + (i << 6), y + (i << 7), z + (i << 8), w + (i << 9), u + (i << 10));
+                n = 1.0 - Math.abs(n);
+                sum += n * n * exp[i];
+                x *= 2.0;
+                y *= 2.0;
+                z *= 2.0;
+                w *= 2.0;
+                u *= 2.0; 
+            }
+            return sum * correct - 1.0;
+        }
+
+        @Override
+        public double getNoiseWithSeed(double x, double y, double z, double w, double u, long seed) {
+            double sum = 0, n;
+            x *= frequency;
+            y *= frequency;
+            z *= frequency;
+            w *= frequency;
+            u *= frequency;
+            for (int i = 0; i < octaves; ++i) {
+                n = basis.getNoiseWithSeed(x, y, z,
+                        w, u, (seed += 0x9E3779B97F4A7C15L));
+                n = 1.0 - Math.abs(n);
+                sum += n * n * exp[i];
+                x *= 2.0;
+                y *= 2.0;
+                z *= 2.0;
+                w *= 2.0;
+                u *= 2.0;
+            }
+            return sum * correct - 1.0;
+        }
+    }
 
     public static class Ridged6D implements Noise6D
     {
