@@ -71,8 +71,8 @@ public class AnimatedWorldMapWriter extends ApplicationAdapter {
     private AnimatedGif writer;
     
     private String date, path;
-    private double mutationA = NumberTools.cos(0.75) * 3.0, mutationB = NumberTools.sin(0.75) * 3.0, 
-            mutationC = NumberTools.cos(1.5), mutationD = NumberTools.sin(1.5);
+    private double mutationA = NumberTools.cos(0.75) * 3.0, mutationB = NumberTools.sin(0.75) * 3.0;
+//    private double mutationC = NumberTools.cos(1.5), mutationD = NumberTools.sin(1.5);
     @Override
     public void create() {
         batch = new FilterBatch();
@@ -86,7 +86,7 @@ public class AnimatedWorldMapWriter extends ApplicationAdapter {
 //        path = "out/worldsAnimated/" + date + "/EllipseExpo/";
 //        path = "out/worldsAnimated/" + date + "/Mimic/";
 //        path = "out/worldsAnimated/" + date + "/SpaceView/";
-        path = "out/worldsAnimated/" + date + "/SpaceViewMutant3/";
+        path = "out/worldsAnimated/" + date + "/SpaceViewMutant5/";
 //        path = "out/worldsAnimated/" + date + "/Sphere_Classic/";
 //        path = "out/worldsAnimated/" + date + "/Hyperellipse/";
 //        path = "out/worldsAnimated/" + date + "/HyperellipseExpo/";
@@ -119,31 +119,30 @@ public class AnimatedWorldMapWriter extends ApplicationAdapter {
         
         thesaurus = new Thesaurus(rng);
 //        Noise.Noise3D noise = new FastNoise((int)seed, 2.75f, FastNoise.FOAM_FRACTAL, 2);
-        Noise.Noise3D noise = new Noise.Noise3D() {
-            @Override
-            public double getNoise(double x, double y, double z) {
-                return FoamNoise.foamNoise(x * mutationC + mutationA, y * mutationC + mutationB, z * mutationC + mutationD, 123456789);
-            }
-
-            @Override
-            public double getNoiseWithSeed(double x, double y, double z, long seed) {
-                return FoamNoise.foamNoise(x * mutationC + mutationA, y * mutationC + mutationB, z * mutationC + mutationD, (int) seed);
-            }
-        };
-
 //        Noise.Noise3D noise = new Noise.Noise3D() {
 //            @Override
 //            public double getNoise(double x, double y, double z) {
-//                return FoamNoise.foamNoise(x * 2.75, y * 2.75, z * 2.75, mutationA, mutationB, 123456789);
+//                return FoamNoise.foamNoise(x * mutationC + mutationA, y * mutationC + mutationB, z * mutationC + mutationD, 123456789);
 //            }
 //
 //            @Override
 //            public double getNoiseWithSeed(double x, double y, double z, long seed) {
-//                return FoamNoise.foamNoise(x * 2.75, y * 2.75, z * 2.75, mutationA, mutationB, (int) seed);
+//                return FoamNoise.foamNoise(x * mutationC + mutationA, y * mutationC + mutationB, z * mutationC + mutationD, (int) seed);
 //            }
 //        };
-//
 
+        Noise.Noise3D noise = new Noise.Noise3D() {
+            @Override
+            public double getNoise(double x, double y, double z) {
+                return FoamNoise.foamNoise(x * 2.75, y * 2.75, z * 2.75, mutationA, mutationB, 123456789);
+            }
+
+            @Override
+            public double getNoiseWithSeed(double x, double y, double z, long seed) {
+                return FoamNoise.foamNoise(x * 2.75, y * 2.75, z * 2.75, mutationA, mutationB, (int) seed);
+            }
+        };
+        
 //        Noise.Noise3D noise = new Noise.Exponential3D(new FastNoise((int)seed, 2.75f, FastNoise.FOAM_FRACTAL, 3));
 //        FastNoise noise = new FastNoise((int)seed, 8f, FastNoise.CUBIC_FRACTAL, 1);
 //        noise.setPointHash(new FlawedPointHash.CubeHash(seed, 1 << 14));
@@ -210,12 +209,13 @@ public class AnimatedWorldMapWriter extends ApplicationAdapter {
         for (int i = 0; i < pm.length; i++) {
             double angle = (Math.PI * 2.0 / pm.length) * i;
 
-            mutationC = NumberTools.cos(angle * 5.0) * 0.5;
-            mutationD = NumberTools.sin(angle * 5.0) * 0.5;
-            mutationA = NumberTools.cos(angle) * (mutationC + 2.0);
-            mutationB = NumberTools.sin(angle) * (mutationC + 2.0);
-            mutationC = NumberTools.cos(angle * 3.0 + 1.0) * 0.625 + 2.25;
-            
+//            mutationC = NumberTools.cos(angle * 5.0) * 0.5;
+//            mutationD = NumberTools.sin(angle * 5.0) * 0.5;
+//            mutationA = NumberTools.cos(angle) * (mutationC + 2.0);
+//            mutationB = NumberTools.sin(angle) * (mutationC + 2.0);
+//            mutationC = NumberTools.cos(angle * 3.0 + 1.0) * 0.625 + 2.25;
+            mutationA = NumberTools.cos(angle);
+            mutationB = NumberTools.sin(angle);
             //            mutation = NumberTools.sin(angle) * 0.918 + NumberTools.cos(angle * 4.0 + 1.618) * 0.307;
             generate(hash);
             world.setCenterLongitude(angle);
