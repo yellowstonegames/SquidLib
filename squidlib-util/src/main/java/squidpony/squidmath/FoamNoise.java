@@ -222,6 +222,73 @@ x * -0.776796 + y * 0.628752 + z * -0.035464;
 //        return  (result * result * (6.0 - 4.0 * result) - 1.0);
     }
     public static double foamNoise(final double x, final double y, final double z,
+                                   final double w, final double u, int seed) {
+        final double p0 = x * 0.8157559148337911 + y * 0.5797766823136037;
+        final double p1 = x * -0.7314923478726791 + y * 0.6832997137249108;
+        final double p2 = x * -0.0208603044412437 + y * -0.3155296974329846 + z * 0.9486832980505138;
+        final double p3 = x * -0.0208603044412437 + y * -0.3155296974329846 + z * -0.316227766016838 + w * 0.8944271909999159;
+        final double p4 = x * -0.0208603044412437 + y * -0.3155296974329846 + z * -0.316227766016838 + w * -0.44721359549995804 + u * 0.7745966692414833;
+        final double p5 = x * -0.0208603044412437 + y * -0.3155296974329846 + z * -0.316227766016838 + w * -0.44721359549995804 + u * -0.7745966692414836;
+
+        double xin = p1;
+        double yin = p2;
+        double zin = p3;
+        double win = p4;
+        double uin = p5;
+        final double a = valueNoise(seed, xin, yin, zin, win, uin);
+        seed += 0x9E3779BD;
+        seed = (seed ^ seed >>> 12) * 0xDAB;
+        seed ^= seed >>> 14;
+        xin = p0;
+        yin = p2;
+        zin = p3;
+        win = p4;
+        uin = p5;
+        final double b = valueNoise(seed, xin + a, yin, zin, win, uin);
+        seed += 0x9E3779BD;
+        seed = (seed ^ seed >>> 12) * 0xDAB;
+        seed ^= seed >>> 14;
+        xin = p0;
+        yin = p1;
+        zin = p3;
+        win = p4;
+        uin = p5;
+        final double c = valueNoise(seed, xin + b, yin, zin, win, uin);
+        seed += 0x9E3779BD;
+        seed = (seed ^ seed >>> 12) * 0xDAB;
+        seed ^= seed >>> 14;
+        xin = p0;
+        yin = p1;
+        zin = p2;
+        win = p4;
+        uin = p5;
+        final double d = valueNoise(seed, xin + c, yin, zin, win, uin);
+        seed += 0x9E3779BD;
+        seed = (seed ^ seed >>> 12) * 0xDAB;
+        seed ^= seed >>> 14;
+        xin = p0;
+        yin = p1;
+        zin = p2;
+        win = p3;
+        uin = p5;
+        final double e = valueNoise(seed, xin + d, yin, zin, win, uin);
+        seed += 0x9E3779BD;
+        seed = (seed ^ seed >>> 12) * 0xDAB;
+        seed ^= seed >>> 14;
+        xin = p0;
+        yin = p1;
+        zin = p2;
+        win = p3;
+        uin = p4;
+        final double f = valueNoise(seed, xin + e, yin, zin, win, uin);
+
+        final double result = (a + b + c + d + e + f) * 0.16666666666666666;
+        return (result <= 0.5)
+                ? 8.0 * result * result * result - 1.0
+                : 8.0 * (result - 1) * (result - 1) * (result - 1) + 1.0;
+    }
+
+    public static double foamNoise(final double x, final double y, final double z,
                                    final double w, final double u, final double v, int seed) {
         final double p0 = x;
         final double p1 = x * -0.16666666666666666 + y * 0.9860132971832694;

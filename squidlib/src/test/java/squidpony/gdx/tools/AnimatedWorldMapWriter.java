@@ -71,7 +71,7 @@ public class AnimatedWorldMapWriter extends ApplicationAdapter {
     private AnimatedGif writer;
     
     private String date, path;
-    private double mutation = 1.2345;
+    private double mutationW = NumberTools.sin(0.75), mutationU = NumberTools.cos(0.75);
     @Override
     public void create() {
         batch = new FilterBatch();
@@ -119,15 +119,15 @@ public class AnimatedWorldMapWriter extends ApplicationAdapter {
         thesaurus = new Thesaurus(rng);
 //        Noise.Noise3D noise = new FastNoise((int)seed, 2.75f, FastNoise.FOAM_FRACTAL, 2);
         Noise.Noise3D noise = new Noise.Noise3D() {
-            private FastNoise fn = new FastNoise((int)seed, 2.75f, FastNoise.FOAM, 1);
+//            private FastNoise fn = new FastNoise((int)seed, 2.75f, FastNoise.FOAM, 1);
             @Override
             public double getNoise(double x, double y, double z) {
-                return fn.getNoise(x, y, z, mutation);
+                return FoamNoise.foamNoise(x * 2.75, y * 2.75, z * 2.75, mutationW, mutationU, 123456789);
             }
 
             @Override
             public double getNoiseWithSeed(double x, double y, double z, long seed) {
-                return fn.getNoiseWithSeed(x, y, z, mutation, seed);
+                return FoamNoise.foamNoise(x * 2.75, y * 2.75, z * 2.75, mutationW, mutationU, (int) seed);
             }
         };
 
@@ -152,7 +152,7 @@ public class AnimatedWorldMapWriter extends ApplicationAdapter {
 //        world = new WorldMapGenerator.TilingMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.75);
 //        world = new WorldMapGenerator.EllipticalMap(seed, width, height, noise, 1.75);
 //        world = new WorldMapGenerator.MimicMap(seed, WorldMapGenerator.DEFAULT_NOISE, 1.75);
-        world = new WorldMapGenerator.SpaceViewMap(seed, width, height, noise, 0.8);
+        world = new WorldMapGenerator.SpaceViewMap(seed, width, height, noise, 0.75);
 //        world = new WorldMapGenerator.RoundSideMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.75);
 //        world = new WorldMapGenerator.HyperellipticalMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 0.8, 0.03125, 2.5);
 //        world = new WorldMapGenerator.EllipticalHammerMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.75);
@@ -197,7 +197,10 @@ public class AnimatedWorldMapWriter extends ApplicationAdapter {
         long hash = CrossHash.hash64(name);
         for (int i = 0; i < pm.length; i++) {
             double angle = (Math.PI * 2.0 / pm.length) * i;
-            mutation = NumberTools.sin(angle) * 0.418 + NumberTools.cos(angle * 4.0 + 1.618) * 0.123;
+            
+            mutationW = NumberTools.sin(angle);
+            mutationU = NumberTools.cos(angle);
+//            mutation = NumberTools.sin(angle) * 0.918 + NumberTools.cos(angle * 4.0 + 1.618) * 0.307;
             generate(hash);
             world.setCenterLongitude(angle);
             wmv.getBiomeMapper().makeBiomes(world);
