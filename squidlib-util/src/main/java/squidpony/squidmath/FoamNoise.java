@@ -38,7 +38,7 @@ import static squidpony.squidmath.ValueNoise.valueNoise;
  * <a href="https://i.imgur.com/CvWFFyI.gifv">6D FoamNoise animated over time, two octaves colorized</a>,
  * <a href="https://i.imgur.com/ktCTiIK.jpg">World map made using FoamNoise</a>.
  */
-public class FoamNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, Noise.Noise6D {
+public class FoamNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, Noise.Noise5D, Noise.Noise6D {
     public static final FoamNoise instance = new FoamNoise();
     
     public int seed = 0xD1CEBEEF;
@@ -284,8 +284,8 @@ x * -0.776796 + y * 0.628752 + z * -0.035464;
 
         final double result = (a + b + c + d + e + f) * 0.16666666666666666;
         return (result <= 0.5)
-                ? 8.0 * result * result * result - 1.0
-                : 8.0 * (result - 1) * (result - 1) * (result - 1) + 1.0;
+                ? 32.0 * result * result * result * result * result - 1.0
+                : 32.0 * (result - 1) * (result - 1) * (result - 1) * (result - 1) * (result - 1) + 1.0;
     }
 
     public static double foamNoise(final double x, final double y, final double z,
@@ -394,6 +394,14 @@ x * -0.776796 + y * 0.628752 + z * -0.035464;
     @Override
     public double getNoiseWithSeed(double x, double y, double z, double w, long seed) {
         return foamNoise(x, y, z, w, (int) (seed ^ seed >>> 32));
+    }
+    @Override
+    public double getNoise(double x, double y, double z, double w, double u) {
+        return foamNoise(x, y, z, w, u, seed);
+    }
+    @Override
+    public double getNoiseWithSeed(double x, double y, double z, double w, double u, long seed) {
+        return foamNoise(x, y, z, w, u, (int) (seed ^ seed >>> 32));
     }
     @Override
     public double getNoise(double x, double y, double z, double w, double u, double v) {
