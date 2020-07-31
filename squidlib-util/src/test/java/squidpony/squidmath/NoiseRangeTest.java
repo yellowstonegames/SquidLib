@@ -46,7 +46,7 @@ public class NoiseRangeTest {
                     double t0 = threshold - x0 * x0 - y0 * y0;
                     if (t0 > 0) {
                         t0 *= t0;
-                        n = t0 * t0 * (phiGrad2[gi0][0] * x0 + phiGrad2[gi0][1] * y0);
+                        n = t0 * t0 * (grad2d[gi0][0] * x0 + grad2d[gi0][1] * y0);
 
                         min0 = Math.min(n, min0);
                         max0 = Math.max(n, max0);
@@ -57,7 +57,7 @@ public class NoiseRangeTest {
                     double t1 = threshold - x1 * x1 - y1 * y1;
                     if (t1 > 0) {
                         t1 *= t1;
-                        n = t1 * t1 * (phiGrad2[gi1][0] * x1 + phiGrad2[gi1][1] * y1);
+                        n = t1 * t1 * (grad2d[gi1][0] * x1 + grad2d[gi1][1] * y1);
 
                         min1 = Math.min(n, min1);
                         max1 = Math.max(n, max1);
@@ -68,7 +68,7 @@ public class NoiseRangeTest {
                     double t2 = threshold - x2 * x2 - y2 * y2;
                     if (t2 > 0)  {
                         t2 *= t2;
-                        n = t2 * t2 * (phiGrad2[gi2][0] * x2 + phiGrad2[gi2][1] * y2);
+                        n = t2 * t2 * (grad2d[gi2][0] * x2 + grad2d[gi2][1] * y2);
 
                         min2 = Math.min(n, min2);
                         max2 = Math.max(n, max2);

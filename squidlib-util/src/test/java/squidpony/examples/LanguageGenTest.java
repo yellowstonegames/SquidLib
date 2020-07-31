@@ -18,6 +18,27 @@ public class LanguageGenTest {
     @Test
     public void testOutput() {
         if(!TestConfiguration.PRINTING) return;
+
+        System.out.println("Known languages:");
+        for (int langi = 0; langi < FakeLanguageGen.registered.length; langi++) {
+            System.out.println(FakeLanguageGen.registeredNames[langi]);
+        }
+        System.out.println();
+//// Used to bootstrap SquidLibSharp's language gen class; not useful elsewhere.
+//        System.out.println("C# code:");
+//        for (int langi = 0; langi < FakeLanguageGen.registered.length; langi++) {
+//            String name = FakeLanguageGen.registeredNames[langi];
+//            System.out.println(
+//                    "        public static readonly LanguageGen " + name.toUpperCase().replace(' ', '_') + " = new LanguageGen(\n" +
+//                            "                new string[]{\"u\"},\n" +
+//                            "                new string[]{\"au\"},\n" +
+//                            "                new string[]{\"b\"},\n" +
+//                            "                new string[]{\"b\", \"lb\"},\n" +
+//                            "                new string[]{\"lb\"},\n" +
+//                            "                Array.Empty<string>(),\n" +
+//                            "                Array.Empty<string>(), new int[]{1, 2}, new double[]{5, 3}, 0.45, 0.45, 0.0, 0.0, null, true).Register(\"" + name + "\");\n");
+//        }
+//        System.out.println();
         StatefulRNG rng = new StatefulRNG(0xf00df00L);
 
         for (int langi = 0; langi < FakeLanguageGen.registered.length; langi++) {

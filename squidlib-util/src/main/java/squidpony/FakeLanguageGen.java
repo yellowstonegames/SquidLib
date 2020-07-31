@@ -627,7 +627,7 @@ public class FakeLanguageGen implements Serializable {
                 new String[]{"b", "v", "g", "d", "zh", "z", "k", "l", "m", "n", "p", "r", "s", "t", "f", "kh", "ts", "ch", "sh",
                         "v", "f", "sk", "sk", "sk", "s", "b", "d", "d", "n", "r", "r"},
                 new String[]{"odka", "odna", "usk", "ask", "usky", "ad", "ar", "ovich", "ev", "ov", "of", "agda", "etsky", "ich", "on", "akh", "iev", "ian"},
-                new String[]{}, new int[]{1, 2, 3, 4, 5, 6}, new double[]{4, 5, 6, 5, 3, 1}, 0.1, 0.2, 0.0, 0.12, englishSanityChecks, true);
+                new String[]{}, new int[]{1, 2, 3, 4, 5, 6}, new double[]{4, 5, 6, 5, 3, 1}, 0.1, 0.2, 0.0, 0.12, null, true);
     }
     /**
      * Imitation modern Russian, romanized to use the Latin alphabet. Likely to seem pretty fake to many readers.
@@ -4377,7 +4377,7 @@ public class FakeLanguageGen implements Serializable {
     }
 
 
-    protected String[] accentVowels(IRNG rng, String[] me, double influence) {
+    protected static String[] accentVowels(IRNG rng, String[] me, double influence) {
         String[] ret = new String[1000];
         int otherCount = (int) (1000 * influence);
         int idx;
@@ -4405,7 +4405,7 @@ public class FakeLanguageGen implements Serializable {
         return ret;
     }
 
-    protected String[] accentConsonants(IRNG rng, String[] me, double influence) {
+    protected static String[] accentConsonants(IRNG rng, String[] me, double influence) {
         String[] ret = new String[1000];
         int otherCount = (int) (1000 * influence);
         int idx;
@@ -4450,7 +4450,7 @@ public class FakeLanguageGen implements Serializable {
         return ret;
     }
 
-    protected String[] accentBoth(IRNG rng, String[] me, double vowelInfluence, double consonantInfluence) {
+    protected static String[] accentBoth(IRNG rng, String[] me, double vowelInfluence, double consonantInfluence) {
         String[] ret = new String[1000];
         int idx;
         Matcher matcher;
@@ -5146,6 +5146,11 @@ public class FakeLanguageGen implements Serializable {
          * Simple changes to merge "ae" into "æ", "oe" into "œ", and any of "aé", "áe", or "áé" into "ǽ".
          */
         public static final Modifier LIGATURES = replacementTable("ae", "æ", "oe", "œ", "áe", "ǽ", "aé", "ǽ", "áé", "ǽ");
+
+        /**
+         * Simple changes to merge "æ" into "ae", "œ" into "oe", and "ǽ" into "áe".
+         */
+        public static final Modifier SPLIT_LIGATURES = replacementTable("æ", "ae", "œ", "oe", "ǽ", "áe");
         /**
          * Some changes that can be applied when sanity checks (which force re-generating a new word) aren't appropriate
          * for fixing a word that isn't pronounceable.

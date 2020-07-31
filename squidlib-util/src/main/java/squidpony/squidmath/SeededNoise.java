@@ -61,6 +61,426 @@ import static squidpony.squidmath.Noise.fastFloor;
  * incorporated, but now that SquidLib has seamless noise, that's a nice feature that would have needed Joise before.
  */
 public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, Noise.Noise6D {
+    
+    protected final long defaultSeed;
+    public static final SeededNoise instance = new SeededNoise();
+
+    public SeededNoise() {
+        defaultSeed = 0x1337BEEF2A22L;
+    }
+    public SeededNoise(long seed)
+    {
+        defaultSeed = seed;
+    }
+
+    /**
+     * Computes the hash for a 3D int point and its dot product with a 3D double point as one step.
+     * @param seed
+     * @param x
+     * @param y
+     * @param z
+     * @param xd
+     * @param yd
+     * @param zd
+     * @return a double between -1.2571 and 1.2571, exclusive
+     */
+    protected static double gradCoord3D(long seed, int x, int y, int z, double xd, double yd, double zd) {
+        final int hash = HastyPointHash.hash32(x, y, z, seed) * 3;
+        return xd * grad3d[hash] + yd * grad3d[hash + 1] + zd * grad3d[hash + 2];
+    }
+
+    public double getNoise(final double x, final double y) {
+        return noise(x, y, defaultSeed);
+    }
+    public double getNoise(final double x, final double y, final double z) {
+        return noise(x, y, z, defaultSeed);
+    }
+    public double getNoise(final double x, final double y, final double z, final double w) {
+        return noise(x, y, z, w, defaultSeed);
+    }
+    public double getNoise(final double x, final double y, final double z, final double w, final double u, final double v) {
+        return noise(x, y, z, w, u, v, defaultSeed);
+    }
+
+    public double getNoiseWithSeed(final double x, final double y, final long seed) {
+        return noise(x, y, seed);
+    }
+    public double getNoiseWithSeed(final double x, final double y, final double z, final long seed) {
+        return noise(x, y, z, seed);
+    }
+    public double getNoiseWithSeed(final double x, final double y, final double z, final double w, final long seed) {
+        return noise(x, y, z, w, seed);
+    }
+    public double getNoiseWithSeed(final double x, final double y, final double z, final double w, final double u, final double v, final long seed) {
+        return noise(x, y, z, w, u, v, seed);
+    }
+    
+    /**
+     * Used by {@link #noise(double, double, double, double, long)} to look up the vertices of the 4D triangle analogue.
+     */
+    protected static final int[] SIMPLEX_4D = {0, 1, 3, 7, 0, 1, 7, 3,
+            0, 0, 0, 0, 0, 3, 7, 1, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 1, 3, 7, 0, 0, 3, 1, 7, 0, 0, 0, 0,
+            0, 7, 1, 3, 0, 7, 3, 1, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 1, 7, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 0, 7, 0, 0, 0, 0,
+            1, 7, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            3, 7, 0, 1, 3, 7, 1, 0, 1, 0, 3, 7, 1, 0, 7, 3,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 7, 1,
+            0, 0, 0, 0, 3, 1, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 1, 7, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 1, 3, 7, 0, 3, 1,
+            0, 0, 0, 0, 7, 1, 3, 0, 3, 1, 0, 7, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 7, 1, 0, 3, 0, 0, 0, 0,
+            7, 3, 0, 1, 7, 3, 1, 0};
+    
+    protected static final double F2 = 0.36602540378443864676372317075294,
+            G2 = 0.21132486540518711774542560974902,
+            F3 = 1.0 / 3.0,
+            G3 = 1.0 / 6.0,
+            F4 = (Math.sqrt(5.0) - 1.0) * 0.25,
+            G4 = (5.0 - Math.sqrt(5.0)) * 0.05,
+            LIMIT4 = 0.62,
+            F6 = (Math.sqrt(7.0) - 1.0) / 6.0,
+            G6 = F6 / (1.0 + 6.0 * F6),
+            LIMIT6 = 0.8375
+            //LIMIT6 = 0.777
+            //LIMIT6 = 0.86
+            /*
+            sideLength = (float)Math.sqrt(6.0) / (6f * F6 + 1f),
+            a6 = (float)(Math.sqrt((sideLength * sideLength)
+                    - ((sideLength * 0.5) * (sideLength * 0.5f)))),
+            cornerFace = (float)Math.sqrt(a6 * a6 + (a6 * 0.5) * (a6 * 0.5)),
+            cornerFaceSq = cornerFace * cornerFace,
+            valueScaler = 9.5f
+             */
+            ;
+    //Math.pow(5.0, -0.5) * (Math.pow(5.0, -3.5) * 100 + 13),
+    
+    public static double noise(final double x, final double y, final long seed) {
+        final double s = (x + y) * F2;
+        final int i = fastFloor(x + s),
+                j = fastFloor(y + s);
+        final double t = (i + j) * G2,
+                X0 = i - t,
+                Y0 = j - t,
+                x0 = x - X0,
+                y0 = y - Y0;
+        int i1, j1;
+        if (x0 > y0) {
+            i1 = 1;
+            j1 = 0;
+        } else {
+            i1 = 0;
+            j1 = 1;
+        }
+        final double
+                x1 = x0 - i1 + G2,
+                y1 = y0 - j1 + G2,
+                x2 = x0 - 1 + 2 * G2,
+                y2 = y0 - 1 + 2 * G2;
+        double n = 0.0;
+        final int
+                gi0 = hash256(i, j, seed),
+                gi1 = hash256(i + i1, j + j1, seed),
+                gi2 = hash256(i + 1, j + 1, seed);
+        // Calculate the contribution from the three corners for 2D gradient
+        double t0 = 0.75 - x0 * x0 - y0 * y0;
+        if (t0 > 0) {
+            t0 *= t0;
+            n += t0 * t0 * (grad2d[gi0][0] * x0 + grad2d[gi0][1] * y0);
+        }
+        double t1 = 0.75 - x1 * x1 - y1 * y1;
+        if (t1 > 0) {
+            t1 *= t1;
+            n += t1 * t1 * (grad2d[gi1][0] * x1 + grad2d[gi1][1] * y1);
+        }
+        double t2 = 0.75 - x2 * x2 - y2 * y2;
+        if (t2 > 0)  {
+            t2 *= t2;
+            n += t2 * t2 * (grad2d[gi2][0] * x2 + grad2d[gi2][1] * y2);
+        }
+        // Add contributions from each corner to get the final noise value.
+        // The result is clamped to return values in the interval [-1,1].
+        return Math.max(-1.0, Math.min(1.0, 9.125f * n));
+
+//        double n0, n1, n2;
+//        double t0 = 0.5 - x0 * x0 - y0 * y0;
+//        if (t0 < 0)
+//            n0 = 0;
+//        else {
+//            t0 *= t0;
+//            n0 = t0 * t0 * (x0 * gradient2DLUT[h0] + y0 * gradient2DLUT[h0 | 1]);
+//        }
+//        double t1 = 0.5 - x1 * x1 - y1 * y1;
+//        if (t1 < 0)
+//            n1 = 0;
+//        else {
+//            t1 *= t1;
+//            n1 = t1 * t1 * (x1 * gradient2DLUT[h1] + y1 * gradient2DLUT[h1 | 1]);
+//        }
+//        double t2 = 0.5 - x2 * x2 - y2 * y2;
+//        if (t2 < 0)
+//            n2 = 0;
+//        else {
+//            t2 *= t2;
+//            n2 = t2 * t2 * (x2 * gradient2DLUT[h2] + y2 * gradient2DLUT[h2 | 1]);
+//        }
+//        return (70 * (n0 + n1 + n2)) * 1.42188695 + 0.001054489;
+    }
+
+    public static double noise(final double x, final double y, final double z, final long seed) {
+        double n = 0.0;
+        final double s = (x + y + z) * F3;
+        final int i = fastFloor(x + s),
+                j = fastFloor(y + s),
+                k = fastFloor(z + s);
+
+        final double t = (i + j + k) * G3;
+        final double X0 = i - t, Y0 = j - t, Z0 = k - t,
+                x0 = x - X0, y0 = y - Y0, z0 = z - Z0;
+
+        int i1, j1, k1;
+        int i2, j2, k2;
+
+        if (x0 >= y0) {
+            if (y0 >= z0) {
+                i1 = 1;
+                j1 = 0;
+                k1 = 0;
+                i2 = 1;
+                j2 = 1;
+                k2 = 0;
+            } else if (x0 >= z0) {
+                i1 = 1;
+                j1 = 0;
+                k1 = 0;
+                i2 = 1;
+                j2 = 0;
+                k2 = 1;
+            } else {
+                i1 = 0;
+                j1 = 0;
+                k1 = 1;
+                i2 = 1;
+                j2 = 0;
+                k2 = 1;
+            }
+        } else {
+            if (y0 < z0) {
+                i1 = 0;
+                j1 = 0;
+                k1 = 1;
+                i2 = 0;
+                j2 = 1;
+                k2 = 1;
+            } else if (x0 < z0) {
+                i1 = 0;
+                j1 = 1;
+                k1 = 0;
+                i2 = 0;
+                j2 = 1;
+                k2 = 1;
+            } else {
+                i1 = 0;
+                j1 = 1;
+                k1 = 0;
+                i2 = 1;
+                j2 = 1;
+                k2 = 0;
+            }
+        }
+
+        double x1 = x0 - i1 + G3; // Offsets for second corner in (x,y,z) coords
+        double y1 = y0 - j1 + G3;
+        double z1 = z0 - k1 + G3;
+        double x2 = x0 - i2 + F3; // Offsets for third corner in (x,y,z) coords
+        double y2 = y0 - j2 + F3;
+        double z2 = z0 - k2 + F3;
+        double x3 = x0 - 0.5; // Offsets for last corner in (x,y,z) coords
+        double y3 = y0 - 0.5;
+        double z3 = z0 - 0.5;
+
+        // Calculate the contribution from the four corners
+        double t0 = 0.6 - x0 * x0 - y0 * y0 - z0 * z0;
+        if (t0 > 0) {
+            t0 *= t0;
+            n += t0 * t0 * gradCoord3D(seed, i, j, k, x0, y0, z0);
+        }
+        double t1 = 0.6 - x1 * x1 - y1 * y1 - z1 * z1;
+        if (t1 > 0) {
+            t1 *= t1;
+            n += t1 * t1 * gradCoord3D(seed, i + i1, j + j1, k + k1, x1, y1, z1);
+        }
+        double t2 = 0.6 - x2 * x2 - y2 * y2 - z2 * z2;
+        if (t2 > 0) {
+            t2 *= t2;
+            n += t2 * t2 * gradCoord3D(seed, i + i2, j + j2, k + k2, x2, y2, z2);
+        }
+        double t3 = 0.6 - x3 * x3 - y3 * y3 - z3 * z3;
+        if (t3 > 0) {
+            t3 *= t3;
+            n += t3 * t3 * gradCoord3D(seed, i + 1, j + 1, k + 1, x3, y3, z3);
+        }
+        // Add contributions from each corner to get the final noise value.
+        // The result is clamped to stay just inside [-1,1]
+        return Math.max(-1.0, Math.min(1.0, 31.5 * n));
+        //return (32.0 * n) * 1.25086885 + 0.0003194984;
+    }
+
+    public static double noise(final double x, final double y, final double z, final double w, final long seed) {
+        double n = 0.0;
+        final double s = (x + y + z + w) * F4;
+        final int i = fastFloor(x + s), j = fastFloor(y + s), k = fastFloor(z + s), l = fastFloor(w + s);
+        final double[] gradient4DLUT = grad4d;
+        final double t = (i + j + k + l) * G4,
+                X0 = i - t,
+                Y0 = j - t,
+                Z0 = k - t,
+                W0 = l - t,
+                x0 = x - X0,
+                y0 = y - Y0,
+                z0 = z - Z0,
+                w0 = w - W0;
+        final int c = (x0 > y0 ? 128 : 0) | (x0 > z0 ? 64 : 0) | (y0 > z0 ? 32 : 0) | (x0 > w0 ? 16 : 0) | (y0 > w0 ? 8 : 0) | (z0 > w0 ? 4 : 0);
+        final int i1 = SIMPLEX_4D[c] >>> 2,
+                j1 = SIMPLEX_4D[c | 1] >>> 2,
+                k1 = SIMPLEX_4D[c | 2] >>> 2,
+                l1 = SIMPLEX_4D[c | 3] >>> 2,
+                i2 = SIMPLEX_4D[c] >>> 1 & 1,
+                j2 = SIMPLEX_4D[c | 1] >>> 1 & 1,
+                k2 = SIMPLEX_4D[c | 2] >>> 1 & 1,
+                l2 = SIMPLEX_4D[c | 3] >>> 1 & 1,
+                i3 = SIMPLEX_4D[c] & 1,
+                j3 = SIMPLEX_4D[c | 1] & 1,
+                k3 = SIMPLEX_4D[c | 2] & 1,
+                l3 = SIMPLEX_4D[c | 3] & 1;
+        final double x1 = x0 - i1 + G4,
+                y1 = y0 - j1 + G4,
+                z1 = z0 - k1 + G4,
+                w1 = w0 - l1 + G4,
+                x2 = x0 - i2 + 2 * G4,
+                y2 = y0 - j2 + 2 * G4,
+                z2 = z0 - k2 + 2 * G4,
+                w2 = w0 - l2 + 2 * G4,
+                x3 = x0 - i3 + 3 * G4,
+                y3 = y0 - j3 + 3 * G4,
+                z3 = z0 - k3 + 3 * G4,
+                w3 = w0 - l3 + 3 * G4,
+                x4 = x0 - 1 + 4 * G4,
+                y4 = y0 - 1 + 4 * G4,
+                z4 = z0 - 1 + 4 * G4,
+                w4 = w0 - 1 + 4 * G4;
+        final int h0 = (hash256(i, j, k, l, seed) & 0xFC),
+                h1 = (hash256(i + i1, j + j1, k + k1, l + l1, seed) & 0xFC),
+                h2 = (hash256(i + i2, j + j2, k + k2, l + l2, seed) & 0xFC),
+                h3 = (hash256(i + i3, j + j3, k + k3, l + l3, seed) & 0xFC),
+                h4 = (hash256(i + 1, j + 1, k + 1, l + 1, seed) & 0xFC);
+        double t0 = LIMIT4 - x0 * x0 - y0 * y0 - z0 * z0 - w0 * w0;
+        if(t0 > 0) {
+            t0 *= t0;
+            n += t0 * t0 * (x0 * gradient4DLUT[h0] + y0 * gradient4DLUT[h0 | 1] + z0 * gradient4DLUT[h0 | 2] + w0 * gradient4DLUT[h0 | 3]);
+        }
+        double t1 = LIMIT4 - x1 * x1 - y1 * y1 - z1 * z1 - w1 * w1;
+        if (t1 > 0) {
+            t1 *= t1;
+            n += t1 * t1 * (x1 * gradient4DLUT[h1] + y1 * gradient4DLUT[h1 | 1] + z1 * gradient4DLUT[h1 | 2] + w1 * gradient4DLUT[h1 | 3]);
+        }
+        double t2 = LIMIT4 - x2 * x2 - y2 * y2 - z2 * z2 - w2 * w2;
+        if (t2 > 0) {
+            t2 *= t2;
+            n += t2 * t2 * (x2 * gradient4DLUT[h2] + y2 * gradient4DLUT[h2 | 1] + z2 * gradient4DLUT[h2 | 2] + w2 * gradient4DLUT[h2 | 3]);
+        }
+        double t3 = LIMIT4 - x3 * x3 - y3 * y3 - z3 * z3 - w3 * w3;
+        if (t3 > 0) {
+            t3 *= t3;
+            n += t3 * t3 * (x3 * gradient4DLUT[h3] + y3 * gradient4DLUT[h3 | 1] + z3 * gradient4DLUT[h3 | 2] + w3 * gradient4DLUT[h3 | 3]);
+        }
+        double t4 = LIMIT4 - x4 * x4 - y4 * y4 - z4 * z4 - w4 * w4;
+        if (t4 > 0) {
+            t4 *= t4;
+            n += t4 * t4 * (x4 * gradient4DLUT[h4] + y4 * gradient4DLUT[h4 | 1] + z4 * gradient4DLUT[h4 | 2] + w4 * gradient4DLUT[h4 | 3]);
+        }
+        //return NumberTools.bounce(5.0 + 41.0 * n);
+        return Math.max(-1.0, Math.min(1.0, 14.75 * n));
+    }
+
+    
+    private static final double[] mShared = {0, 0, 0, 0, 0, 0}, cellDistShared = {0, 0, 0, 0, 0, 0};
+    private static final int[] distOrderShared = {0, 0, 0, 0, 0, 0}, intLocShared = {0, 0, 0, 0, 0, 0};
+
+    public static double noise(final double x, final double y, final double z,
+                               final double w, final double u, final double v, final long seed) {
+        final double s = (x + y + z + w + u + v) * F6;
+
+        final int skewX = fastFloor(x + s), skewY = fastFloor(y + s), skewZ = fastFloor(z + s),
+                skewW = fastFloor(w + s), skewU = fastFloor(u + s), skewV = fastFloor(v + s);
+        final double[] m = mShared, cellDist = cellDistShared, gradient6DLUT = SeededNoise.grad6d;
+        final int[] distOrder = distOrderShared,
+                intLoc = intLocShared;
+        intLoc[0] = skewX;
+        intLoc[1] = skewY;
+        intLoc[2] = skewZ;
+        intLoc[3] = skewW;
+        intLoc[4] = skewU;
+        intLoc[5] = skewV;
+
+        final double unskew = (skewX + skewY + skewZ + skewW + skewU + skewV) * G6;
+        cellDist[0] = x - skewX + unskew;
+        cellDist[1] = y - skewY + unskew;
+        cellDist[2] = z - skewZ + unskew;
+        cellDist[3] = w - skewW + unskew;
+        cellDist[4] = u - skewU + unskew;
+        cellDist[5] = v - skewV + unskew;
+
+        int o0 = (cellDist[0]<cellDist[1]?1:0)+(cellDist[0]<cellDist[2]?1:0)+(cellDist[0]<cellDist[3]?1:0)+(cellDist[0]<cellDist[4]?1:0)+(cellDist[0]<cellDist[5]?1:0);
+        int o1 = (cellDist[1]<=cellDist[0]?1:0)+(cellDist[1]<cellDist[2]?1:0)+(cellDist[1]<cellDist[3]?1:0)+(cellDist[1]<cellDist[4]?1:0)+(cellDist[1]<cellDist[5]?1:0);
+        int o2 = (cellDist[2]<=cellDist[0]?1:0)+(cellDist[2]<=cellDist[1]?1:0)+(cellDist[2]<cellDist[3]?1:0)+(cellDist[2]<cellDist[4]?1:0)+(cellDist[2]<cellDist[5]?1:0);
+        int o3 = (cellDist[3]<=cellDist[0]?1:0)+(cellDist[3]<=cellDist[1]?1:0)+(cellDist[3]<=cellDist[2]?1:0)+(cellDist[3]<cellDist[4]?1:0)+(cellDist[3]<cellDist[5]?1:0);
+        int o4 = (cellDist[4]<=cellDist[0]?1:0)+(cellDist[4]<=cellDist[1]?1:0)+(cellDist[4]<=cellDist[2]?1:0)+(cellDist[4]<=cellDist[3]?1:0)+(cellDist[4]<cellDist[5]?1:0);
+        int o5 = 15-(o0+o1+o2+o3+o4);
+
+        distOrder[o0]=0;
+        distOrder[o1]=1;
+        distOrder[o2]=2;
+        distOrder[o3]=3;
+        distOrder[o4]=4;
+        distOrder[o5]=5;
+
+        double n = 0;
+        double skewOffset = 0;
+
+        for (int c = -1; c < 6; c++) {
+            if (c != -1) intLoc[distOrder[c]]++;
+
+            m[0] = cellDist[0] - (intLoc[0] - skewX) + skewOffset;
+            m[1] = cellDist[1] - (intLoc[1] - skewY) + skewOffset;
+            m[2] = cellDist[2] - (intLoc[2] - skewZ) + skewOffset;
+            m[3] = cellDist[3] - (intLoc[3] - skewW) + skewOffset;
+            m[4] = cellDist[4] - (intLoc[4] - skewU) + skewOffset;
+            m[5] = cellDist[5] - (intLoc[5] - skewV) + skewOffset;
+
+            double tc = LIMIT6;
+
+            for (int d = 0; d < 6; d++) {
+                tc -= m[d] * m[d];
+            }
+
+            if (tc > 0) {
+                final int h = hash256(intLoc[0], intLoc[1], intLoc[2], intLoc[3],
+                        intLoc[4], intLoc[5], seed) * 6;
+                final double gr = gradient6DLUT[h] * m[0] + gradient6DLUT[h + 1] * m[1]
+                        + gradient6DLUT[h + 2] * m[2] + gradient6DLUT[h + 3] * m[3]
+                        + gradient6DLUT[h + 4] * m[4] + gradient6DLUT[h + 5] * m[5];
+                tc *= tc;
+                n += gr * tc * tc;
+            }
+            skewOffset += G6;
+        }
+        return Math.max(-1.0, Math.min(1.0, 7.5f * n));
+    }
 
     /**
      * 256 2-element gradient vectors formed from the cos and sin of increasing multiples of the inverse of phi, the
@@ -72,7 +492,7 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
      * {@code index & 255}), but smaller numbers should also work down to about 4 bits (typically using
      * {@code index & 15}).
      */
-    public static final double[][] phiGrad2 = {
+    public static final double[][] grad2d = {
             {0.6499429579167653, 0.759982994187637},
             {-0.1551483029088119, 0.9878911904175052},
             {-0.8516180517334043, 0.5241628506120981},
@@ -365,40 +785,40 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
 //            {-0.000000000000002f, -0.850650808352042f,  0.525731112119130f },
 //            { 0.324919696232902f, -0.850650808352041f,  0.000000000000002f }
 //    };
-    protected static final float[] grad3d =
+    protected static final double[] grad3d =
             {
-                    -0.448549002408981f,  1.174316525459290f,  0.000000000000001f,
-                     0.000000000000001f,  1.069324374198914f,  0.660878777503967f,
-                     0.448549002408981f,  1.174316525459290f,  0.000000000000001f,
-                     0.000000000000001f,  1.069324374198914f, -0.660878777503967f,
-                    -0.725767493247986f,  0.725767493247986f, -0.725767493247986f,
-                    -1.069324374198914f,  0.660878777503967f,  0.000000000000001f,
-                    -0.725767493247986f,  0.725767493247986f,  0.725767493247986f,
-                     0.725767493247986f,  0.725767493247986f,  0.725767493247986f,
-                     1.069324374198914f,  0.660878777503967f,  0.000000000000000f,
-                     0.725767493247986f,  0.725767493247986f, -0.725767493247986f,
-                    -0.660878777503967f,  0.000000000000003f, -1.069324374198914f,
-                    -1.174316525459290f,  0.000000000000003f, -0.448549002408981f,
-                     0.000000000000000f,  0.448549002408981f, -1.174316525459290f,
-                    -0.660878777503967f,  0.000000000000001f,  1.069324374198914f,
-                     0.000000000000001f,  0.448549002408981f,  1.174316525459290f,
-                    -1.174316525459290f,  0.000000000000001f,  0.448549002408981f,
-                     0.660878777503967f,  0.000000000000001f,  1.069324374198914f,
-                     1.174316525459290f,  0.000000000000001f,  0.448549002408981f,
-                     0.660878777503967f,  0.000000000000001f, -1.069324374198914f,
-                     1.174316525459290f,  0.000000000000001f, -0.448549002408981f,
-                    -0.725767493247986f, -0.725767493247986f, -0.725767493247986f,
-                    -1.069324374198914f, -0.660878777503967f, -0.000000000000001f,
-                    -0.000000000000001f, -0.448549002408981f, -1.174316525459290f,
-                    -0.000000000000001f, -0.448549002408981f,  1.174316525459290f,
-                    -0.725767493247986f, -0.725767493247986f,  0.725767493247986f,
-                     0.725767493247986f, -0.725767493247986f,  0.725767493247986f,
-                     1.069324374198914f, -0.660878777503967f,  0.000000000000001f,
-                     0.725767493247986f, -0.725767493247986f, -0.725767493247986f,
-                    -0.000000000000004f, -1.069324374198914f, -0.660878777503967f,
-                    -0.448549002408981f, -1.174316525459290f, -0.000000000000003f,
-                    -0.000000000000003f, -1.069324374198914f,  0.660878777503967f,
-                     0.448549002408981f, -1.174316525459290f,  0.000000000000003f,
+                    -0.448549002408981,  1.174316525459290,  0.000000000000001,
+                    0.000000000000001,  1.069324374198914,  0.660878777503967,
+                    0.448549002408981,  1.174316525459290,  0.000000000000001,
+                    0.000000000000001,  1.069324374198914, -0.660878777503967,
+                    -0.725767493247986,  0.725767493247986, -0.725767493247986,
+                    -1.069324374198914,  0.660878777503967,  0.000000000000001,
+                    -0.725767493247986,  0.725767493247986,  0.725767493247986,
+                    0.725767493247986,  0.725767493247986,  0.725767493247986,
+                    1.069324374198914,  0.660878777503967,  0.000000000000000,
+                    0.725767493247986,  0.725767493247986, -0.725767493247986,
+                    -0.660878777503967,  0.000000000000003, -1.069324374198914,
+                    -1.174316525459290,  0.000000000000003, -0.448549002408981,
+                    0.000000000000000,  0.448549002408981, -1.174316525459290,
+                    -0.660878777503967,  0.000000000000001,  1.069324374198914,
+                    0.000000000000001,  0.448549002408981,  1.174316525459290,
+                    -1.174316525459290,  0.000000000000001,  0.448549002408981,
+                    0.660878777503967,  0.000000000000001,  1.069324374198914,
+                    1.174316525459290,  0.000000000000001,  0.448549002408981,
+                    0.660878777503967,  0.000000000000001, -1.069324374198914,
+                    1.174316525459290,  0.000000000000001, -0.448549002408981,
+                    -0.725767493247986, -0.725767493247986, -0.725767493247986,
+                    -1.069324374198914, -0.660878777503967, -0.000000000000001,
+                    -0.000000000000001, -0.448549002408981, -1.174316525459290,
+                    -0.000000000000001, -0.448549002408981,  1.174316525459290,
+                    -0.725767493247986, -0.725767493247986,  0.725767493247986,
+                    0.725767493247986, -0.725767493247986,  0.725767493247986,
+                    1.069324374198914, -0.660878777503967,  0.000000000000001,
+                    0.725767493247986, -0.725767493247986, -0.725767493247986,
+                    -0.000000000000004, -1.069324374198914, -0.660878777503967,
+                    -0.448549002408981, -1.174316525459290, -0.000000000000003,
+                    -0.000000000000003, -1.069324374198914,  0.660878777503967,
+                    0.448549002408981, -1.174316525459290,  0.000000000000003,
             };
     protected static final double[] grad4d =
             {
@@ -467,60 +887,7 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
                     -1.4183908, -1.4183908, 1.4183908, 0.5875167,
                     -1.4183908, -1.4183908, -1.4183908, 0.5875167,
             };
-    protected final long defaultSeed;
-    public static final SeededNoise instance = new SeededNoise();
-
-    public SeededNoise() {
-        defaultSeed = 0x1337BEEF2A22L;
-    }
-    public SeededNoise(long seed)
-    {
-        defaultSeed = seed;
-    }
-
-    /**
-     * Computes the hash for a 3D int point and its dot product with a 3D double point as one step.
-     * @param seed
-     * @param x
-     * @param y
-     * @param z
-     * @param xd
-     * @param yd
-     * @param zd
-     * @return a double between -1.2571 and 1.2571, exclusive
-     */
-    protected static double gradCoord3D(long seed, int x, int y, int z, double xd, double yd, double zd) {
-        final int hash = HastyPointHash.hash32(x, y, z, seed) * 3;
-        return xd * grad3d[hash] + yd * grad3d[hash + 1] + zd * grad3d[hash + 2];
-    }
-
-    public double getNoise(final double x, final double y) {
-        return noise(x, y, defaultSeed);
-    }
-    public double getNoise(final double x, final double y, final double z) {
-        return noise(x, y, z, defaultSeed);
-    }
-    public double getNoise(final double x, final double y, final double z, final double w) {
-        return noise(x, y, z, w, defaultSeed);
-    }
-    public double getNoise(final double x, final double y, final double z, final double w, final double u, final double v) {
-        return noise(x, y, z, w, u, v, defaultSeed);
-    }
-
-    public double getNoiseWithSeed(final double x, final double y, final long seed) {
-        return noise(x, y, seed);
-    }
-    public double getNoiseWithSeed(final double x, final double y, final double z, final long seed) {
-        return noise(x, y, z, seed);
-    }
-    public double getNoiseWithSeed(final double x, final double y, final double z, final double w, final long seed) {
-        return noise(x, y, z, w, seed);
-    }
-    public double getNoiseWithSeed(final double x, final double y, final double z, final double w, final double u, final double v, final long seed) {
-        return noise(x, y, z, w, u, v, seed);
-    }
-
-    protected static final double[] gradient6DLUT = {
+    protected static final double[] grad6d = {
             0.31733186658157, 0.043599150809166, -0.63578104939541,
             0.60224147484783, -0.061995657882187, 0.35587048501823,
             -0.54645425808647, -0.75981513883963, -0.035144342454363,
@@ -1034,373 +1401,4 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
             0.51057171220039, -0.23740201245544, 0.26673587003088, 0.5521767379032,
             0.16849318602455, 0.52774964064755,
     };
-
-
-    /**
-     * Used by {@link #noise(double, double, double, double, long)} to look up the vertices of the 4D triangle analogue.
-     */
-    protected static final int[] SIMPLEX_4D = {0, 1, 3, 7, 0, 1, 7, 3,
-            0, 0, 0, 0, 0, 3, 7, 1, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 1, 3, 7, 0, 0, 3, 1, 7, 0, 0, 0, 0,
-            0, 7, 1, 3, 0, 7, 3, 1, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 1, 7, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 0, 7, 0, 0, 0, 0,
-            1, 7, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            3, 7, 0, 1, 3, 7, 1, 0, 1, 0, 3, 7, 1, 0, 7, 3,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 7, 1,
-            0, 0, 0, 0, 3, 1, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 1, 7, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 1, 3, 7, 0, 3, 1,
-            0, 0, 0, 0, 7, 1, 3, 0, 3, 1, 0, 7, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 7, 1, 0, 3, 0, 0, 0, 0,
-            7, 3, 0, 1, 7, 3, 1, 0};
-    
-    protected static final double F2 = 0.36602540378443864676372317075294,
-            G2 = 0.21132486540518711774542560974902,
-            F3 = 1.0 / 3.0,
-            G3 = 1.0 / 6.0,
-            F4 = (Math.sqrt(5.0) - 1.0) * 0.25,
-            G4 = (5.0 - Math.sqrt(5.0)) * 0.05,
-            LIMIT4 = 0.62,
-            F6 = (Math.sqrt(7.0) - 1.0) / 6.0,
-            G6 = F6 / (1.0 + 6.0 * F6),
-            LIMIT6 = 0.8375
-            //LIMIT6 = 0.777
-            //LIMIT6 = 0.86
-            /*
-            sideLength = (float)Math.sqrt(6.0) / (6f * F6 + 1f),
-            a6 = (float)(Math.sqrt((sideLength * sideLength)
-                    - ((sideLength * 0.5) * (sideLength * 0.5f)))),
-            cornerFace = (float)Math.sqrt(a6 * a6 + (a6 * 0.5) * (a6 * 0.5)),
-            cornerFaceSq = cornerFace * cornerFace,
-            valueScaler = 9.5f
-             */
-            ;
-    //Math.pow(5.0, -0.5) * (Math.pow(5.0, -3.5) * 100 + 13),
-    
-    public static double noise(final double x, final double y, final long seed) {
-        final double s = (x + y) * F2;
-        final int i = fastFloor(x + s),
-                j = fastFloor(y + s);
-        final double t = (i + j) * G2,
-                X0 = i - t,
-                Y0 = j - t,
-                x0 = x - X0,
-                y0 = y - Y0;
-        int i1, j1;
-        if (x0 > y0) {
-            i1 = 1;
-            j1 = 0;
-        } else {
-            i1 = 0;
-            j1 = 1;
-        }
-        final double
-                x1 = x0 - i1 + G2,
-                y1 = y0 - j1 + G2,
-                x2 = x0 - 1 + 2 * G2,
-                y2 = y0 - 1 + 2 * G2;
-        double n = 0.0;
-        final int
-                gi0 = hash256(i, j, seed),
-                gi1 = hash256(i + i1, j + j1, seed),
-                gi2 = hash256(i + 1, j + 1, seed);
-        // Calculate the contribution from the three corners for 2D gradient
-        double t0 = 0.75 - x0 * x0 - y0 * y0;
-        if (t0 > 0) {
-            t0 *= t0;
-            n += t0 * t0 * (phiGrad2[gi0][0] * x0 + phiGrad2[gi0][1] * y0);
-        }
-        double t1 = 0.75 - x1 * x1 - y1 * y1;
-        if (t1 > 0) {
-            t1 *= t1;
-            n += t1 * t1 * (phiGrad2[gi1][0] * x1 + phiGrad2[gi1][1] * y1);
-        }
-        double t2 = 0.75 - x2 * x2 - y2 * y2;
-        if (t2 > 0)  {
-            t2 *= t2;
-            n += t2 * t2 * (phiGrad2[gi2][0] * x2 + phiGrad2[gi2][1] * y2);
-        }
-        // Add contributions from each corner to get the final noise value.
-        // The result is clamped to return values in the interval [-1,1].
-        return Math.max(-1.0, Math.min(1.0, 9.125f * n));
-
-//        double n0, n1, n2;
-//        double t0 = 0.5 - x0 * x0 - y0 * y0;
-//        if (t0 < 0)
-//            n0 = 0;
-//        else {
-//            t0 *= t0;
-//            n0 = t0 * t0 * (x0 * gradient2DLUT[h0] + y0 * gradient2DLUT[h0 | 1]);
-//        }
-//        double t1 = 0.5 - x1 * x1 - y1 * y1;
-//        if (t1 < 0)
-//            n1 = 0;
-//        else {
-//            t1 *= t1;
-//            n1 = t1 * t1 * (x1 * gradient2DLUT[h1] + y1 * gradient2DLUT[h1 | 1]);
-//        }
-//        double t2 = 0.5 - x2 * x2 - y2 * y2;
-//        if (t2 < 0)
-//            n2 = 0;
-//        else {
-//            t2 *= t2;
-//            n2 = t2 * t2 * (x2 * gradient2DLUT[h2] + y2 * gradient2DLUT[h2 | 1]);
-//        }
-//        return (70 * (n0 + n1 + n2)) * 1.42188695 + 0.001054489;
-    }
-
-    public static double noise(final double x, final double y, final double z, final long seed) {
-        double n = 0.0;
-        final double s = (x + y + z) * F3;
-        final int i = fastFloor(x + s),
-                j = fastFloor(y + s),
-                k = fastFloor(z + s);
-
-        final double t = (i + j + k) * G3;
-        final double X0 = i - t, Y0 = j - t, Z0 = k - t,
-                x0 = x - X0, y0 = y - Y0, z0 = z - Z0;
-
-        int i1, j1, k1;
-        int i2, j2, k2;
-
-        if (x0 >= y0) {
-            if (y0 >= z0) {
-                i1 = 1;
-                j1 = 0;
-                k1 = 0;
-                i2 = 1;
-                j2 = 1;
-                k2 = 0;
-            } else if (x0 >= z0) {
-                i1 = 1;
-                j1 = 0;
-                k1 = 0;
-                i2 = 1;
-                j2 = 0;
-                k2 = 1;
-            } else {
-                i1 = 0;
-                j1 = 0;
-                k1 = 1;
-                i2 = 1;
-                j2 = 0;
-                k2 = 1;
-            }
-        } else {
-            if (y0 < z0) {
-                i1 = 0;
-                j1 = 0;
-                k1 = 1;
-                i2 = 0;
-                j2 = 1;
-                k2 = 1;
-            } else if (x0 < z0) {
-                i1 = 0;
-                j1 = 1;
-                k1 = 0;
-                i2 = 0;
-                j2 = 1;
-                k2 = 1;
-            } else {
-                i1 = 0;
-                j1 = 1;
-                k1 = 0;
-                i2 = 1;
-                j2 = 1;
-                k2 = 0;
-            }
-        }
-
-        double x1 = x0 - i1 + G3; // Offsets for second corner in (x,y,z) coords
-        double y1 = y0 - j1 + G3;
-        double z1 = z0 - k1 + G3;
-        double x2 = x0 - i2 + F3; // Offsets for third corner in (x,y,z) coords
-        double y2 = y0 - j2 + F3;
-        double z2 = z0 - k2 + F3;
-        double x3 = x0 - 0.5; // Offsets for last corner in (x,y,z) coords
-        double y3 = y0 - 0.5;
-        double z3 = z0 - 0.5;
-
-        // Calculate the contribution from the four corners
-        double t0 = 0.6 - x0 * x0 - y0 * y0 - z0 * z0;
-        if (t0 > 0) {
-            t0 *= t0;
-            n += t0 * t0 * gradCoord3D(seed, i, j, k, x0, y0, z0);
-        }
-        double t1 = 0.6 - x1 * x1 - y1 * y1 - z1 * z1;
-        if (t1 > 0) {
-            t1 *= t1;
-            n += t1 * t1 * gradCoord3D(seed, i + i1, j + j1, k + k1, x1, y1, z1);
-        }
-        double t2 = 0.6 - x2 * x2 - y2 * y2 - z2 * z2;
-        if (t2 > 0) {
-            t2 *= t2;
-            n += t2 * t2 * gradCoord3D(seed, i + i2, j + j2, k + k2, x2, y2, z2);
-        }
-        double t3 = 0.6 - x3 * x3 - y3 * y3 - z3 * z3;
-        if (t3 > 0) {
-            t3 *= t3;
-            n += t3 * t3 * gradCoord3D(seed, i + 1, j + 1, k + 1, x3, y3, z3);
-        }
-        // Add contributions from each corner to get the final noise value.
-        // The result is clamped to stay just inside [-1,1]
-        return Math.max(-1.0, Math.min(1.0, 31.5 * n));
-        //return (32.0 * n) * 1.25086885 + 0.0003194984;
-    }
-
-    public static double noise(final double x, final double y, final double z, final double w, final long seed) {
-        double n = 0.0;
-        final double s = (x + y + z + w) * F4;
-        final int i = fastFloor(x + s), j = fastFloor(y + s), k = fastFloor(z + s), l = fastFloor(w + s);
-        final double[] gradient4DLUT = grad4d;
-        final double t = (i + j + k + l) * G4,
-                X0 = i - t,
-                Y0 = j - t,
-                Z0 = k - t,
-                W0 = l - t,
-                x0 = x - X0,
-                y0 = y - Y0,
-                z0 = z - Z0,
-                w0 = w - W0;
-        final int c = (x0 > y0 ? 128 : 0) | (x0 > z0 ? 64 : 0) | (y0 > z0 ? 32 : 0) | (x0 > w0 ? 16 : 0) | (y0 > w0 ? 8 : 0) | (z0 > w0 ? 4 : 0);
-        final int i1 = SIMPLEX_4D[c] >>> 2,
-                j1 = SIMPLEX_4D[c | 1] >>> 2,
-                k1 = SIMPLEX_4D[c | 2] >>> 2,
-                l1 = SIMPLEX_4D[c | 3] >>> 2,
-                i2 = SIMPLEX_4D[c] >>> 1 & 1,
-                j2 = SIMPLEX_4D[c | 1] >>> 1 & 1,
-                k2 = SIMPLEX_4D[c | 2] >>> 1 & 1,
-                l2 = SIMPLEX_4D[c | 3] >>> 1 & 1,
-                i3 = SIMPLEX_4D[c] & 1,
-                j3 = SIMPLEX_4D[c | 1] & 1,
-                k3 = SIMPLEX_4D[c | 2] & 1,
-                l3 = SIMPLEX_4D[c | 3] & 1;
-        final double x1 = x0 - i1 + G4,
-                y1 = y0 - j1 + G4,
-                z1 = z0 - k1 + G4,
-                w1 = w0 - l1 + G4,
-                x2 = x0 - i2 + 2 * G4,
-                y2 = y0 - j2 + 2 * G4,
-                z2 = z0 - k2 + 2 * G4,
-                w2 = w0 - l2 + 2 * G4,
-                x3 = x0 - i3 + 3 * G4,
-                y3 = y0 - j3 + 3 * G4,
-                z3 = z0 - k3 + 3 * G4,
-                w3 = w0 - l3 + 3 * G4,
-                x4 = x0 - 1 + 4 * G4,
-                y4 = y0 - 1 + 4 * G4,
-                z4 = z0 - 1 + 4 * G4,
-                w4 = w0 - 1 + 4 * G4;
-        final int h0 = (hash256(i, j, k, l, seed) & 0xFC),
-                h1 = (hash256(i + i1, j + j1, k + k1, l + l1, seed) & 0xFC),
-                h2 = (hash256(i + i2, j + j2, k + k2, l + l2, seed) & 0xFC),
-                h3 = (hash256(i + i3, j + j3, k + k3, l + l3, seed) & 0xFC),
-                h4 = (hash256(i + 1, j + 1, k + 1, l + 1, seed) & 0xFC);
-        double t0 = LIMIT4 - x0 * x0 - y0 * y0 - z0 * z0 - w0 * w0;
-        if(t0 > 0) {
-            t0 *= t0;
-            n += t0 * t0 * (x0 * gradient4DLUT[h0] + y0 * gradient4DLUT[h0 | 1] + z0 * gradient4DLUT[h0 | 2] + w0 * gradient4DLUT[h0 | 3]);
-        }
-        double t1 = LIMIT4 - x1 * x1 - y1 * y1 - z1 * z1 - w1 * w1;
-        if (t1 > 0) {
-            t1 *= t1;
-            n += t1 * t1 * (x1 * gradient4DLUT[h1] + y1 * gradient4DLUT[h1 | 1] + z1 * gradient4DLUT[h1 | 2] + w1 * gradient4DLUT[h1 | 3]);
-        }
-        double t2 = LIMIT4 - x2 * x2 - y2 * y2 - z2 * z2 - w2 * w2;
-        if (t2 > 0) {
-            t2 *= t2;
-            n += t2 * t2 * (x2 * gradient4DLUT[h2] + y2 * gradient4DLUT[h2 | 1] + z2 * gradient4DLUT[h2 | 2] + w2 * gradient4DLUT[h2 | 3]);
-        }
-        double t3 = LIMIT4 - x3 * x3 - y3 * y3 - z3 * z3 - w3 * w3;
-        if (t3 > 0) {
-            t3 *= t3;
-            n += t3 * t3 * (x3 * gradient4DLUT[h3] + y3 * gradient4DLUT[h3 | 1] + z3 * gradient4DLUT[h3 | 2] + w3 * gradient4DLUT[h3 | 3]);
-        }
-        double t4 = LIMIT4 - x4 * x4 - y4 * y4 - z4 * z4 - w4 * w4;
-        if (t4 > 0) {
-            t4 *= t4;
-            n += t4 * t4 * (x4 * gradient4DLUT[h4] + y4 * gradient4DLUT[h4 | 1] + z4 * gradient4DLUT[h4 | 2] + w4 * gradient4DLUT[h4 | 3]);
-        }
-        //return NumberTools.bounce(5.0 + 41.0 * n);
-        return Math.max(-1.0, Math.min(1.0, 14.75 * n));
-    }
-
-    
-    private static final double[] mShared = {0, 0, 0, 0, 0, 0}, cellDistShared = {0, 0, 0, 0, 0, 0};
-    private static final int[] distOrderShared = {0, 0, 0, 0, 0, 0}, intLocShared = {0, 0, 0, 0, 0, 0};
-
-    public static double noise(final double x, final double y, final double z,
-                               final double w, final double u, final double v, final long seed) {
-        final double s = (x + y + z + w + u + v) * F6;
-
-        final int skewX = fastFloor(x + s), skewY = fastFloor(y + s), skewZ = fastFloor(z + s),
-                skewW = fastFloor(w + s), skewU = fastFloor(u + s), skewV = fastFloor(v + s);
-        final double[] m = mShared, cellDist = cellDistShared, gradient6DLUT = SeededNoise.gradient6DLUT;
-        final int[] distOrder = distOrderShared,
-                intLoc = intLocShared;
-        intLoc[0] = skewX;
-        intLoc[1] = skewY;
-        intLoc[2] = skewZ;
-        intLoc[3] = skewW;
-        intLoc[4] = skewU;
-        intLoc[5] = skewV;
-
-        final double unskew = (skewX + skewY + skewZ + skewW + skewU + skewV) * G6;
-        cellDist[0] = x - skewX + unskew;
-        cellDist[1] = y - skewY + unskew;
-        cellDist[2] = z - skewZ + unskew;
-        cellDist[3] = w - skewW + unskew;
-        cellDist[4] = u - skewU + unskew;
-        cellDist[5] = v - skewV + unskew;
-
-        int o0 = (cellDist[0]<cellDist[1]?1:0)+(cellDist[0]<cellDist[2]?1:0)+(cellDist[0]<cellDist[3]?1:0)+(cellDist[0]<cellDist[4]?1:0)+(cellDist[0]<cellDist[5]?1:0);
-        int o1 = (cellDist[1]<=cellDist[0]?1:0)+(cellDist[1]<cellDist[2]?1:0)+(cellDist[1]<cellDist[3]?1:0)+(cellDist[1]<cellDist[4]?1:0)+(cellDist[1]<cellDist[5]?1:0);
-        int o2 = (cellDist[2]<=cellDist[0]?1:0)+(cellDist[2]<=cellDist[1]?1:0)+(cellDist[2]<cellDist[3]?1:0)+(cellDist[2]<cellDist[4]?1:0)+(cellDist[2]<cellDist[5]?1:0);
-        int o3 = (cellDist[3]<=cellDist[0]?1:0)+(cellDist[3]<=cellDist[1]?1:0)+(cellDist[3]<=cellDist[2]?1:0)+(cellDist[3]<cellDist[4]?1:0)+(cellDist[3]<cellDist[5]?1:0);
-        int o4 = (cellDist[4]<=cellDist[0]?1:0)+(cellDist[4]<=cellDist[1]?1:0)+(cellDist[4]<=cellDist[2]?1:0)+(cellDist[4]<=cellDist[3]?1:0)+(cellDist[4]<cellDist[5]?1:0);
-        int o5 = 15-(o0+o1+o2+o3+o4);
-
-        distOrder[o0]=0;
-        distOrder[o1]=1;
-        distOrder[o2]=2;
-        distOrder[o3]=3;
-        distOrder[o4]=4;
-        distOrder[o5]=5;
-
-        double n = 0;
-        double skewOffset = 0;
-
-        for (int c = -1; c < 6; c++) {
-            if (c != -1) intLoc[distOrder[c]]++;
-
-            m[0] = cellDist[0] - (intLoc[0] - skewX) + skewOffset;
-            m[1] = cellDist[1] - (intLoc[1] - skewY) + skewOffset;
-            m[2] = cellDist[2] - (intLoc[2] - skewZ) + skewOffset;
-            m[3] = cellDist[3] - (intLoc[3] - skewW) + skewOffset;
-            m[4] = cellDist[4] - (intLoc[4] - skewU) + skewOffset;
-            m[5] = cellDist[5] - (intLoc[5] - skewV) + skewOffset;
-
-            double tc = LIMIT6;
-
-            for (int d = 0; d < 6; d++) {
-                tc -= m[d] * m[d];
-            }
-
-            if (tc > 0) {
-                final int h = hash256(intLoc[0], intLoc[1], intLoc[2], intLoc[3],
-                        intLoc[4], intLoc[5], seed) * 6;
-                final double gr = gradient6DLUT[h] * m[0] + gradient6DLUT[h + 1] * m[1]
-                        + gradient6DLUT[h + 2] * m[2] + gradient6DLUT[h + 3] * m[3]
-                        + gradient6DLUT[h + 4] * m[4] + gradient6DLUT[h + 5] * m[5];
-                tc *= tc;
-                n += gr * tc * tc;
-            }
-            skewOffset += G6;
-        }
-        return Math.max(-1.0, Math.min(1.0, 7.5f * n));
-    }
-
 }

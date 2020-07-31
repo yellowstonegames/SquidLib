@@ -2,8 +2,8 @@ package squidpony.squidmath;
 
 import static squidpony.squidmath.Noise.cerp;
 import static squidpony.squidmath.Noise.fastFloor;
-import static squidpony.squidmath.SeededNoise.phiGrad2;
-import static squidpony.squidmath.SeededNoise.gradient6DLUT;
+import static squidpony.squidmath.SeededNoise.grad2d;
+import static squidpony.squidmath.SeededNoise.grad6d;
 import static squidpony.squidmath.SeededNoise.grad3d;
 import static squidpony.squidmath.SeededNoise.grad4d;
 
@@ -39,7 +39,7 @@ public class JitterNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
                                               double xd, double yd) {
         final int hash = ((int)(((seed ^= 0xB4C4D * x ^ 0xEE2C3 * y) ^ seed >>> 13) * (seed))) >>> 24;
         //final int hash = (int)((((seed = (((seed * (0x632BE59BD9B4E019L + (x << 23))) ^ 0x9E3779B97F4A7C15L) * (0xC6BC279692B5CC83L + (y << 23)))) ^ seed >>> 27 ^ x + y) * 0xAEF17502108EF2D9L) >>> 56);
-        final double[] grad = phiGrad2[hash], jitter = phiGrad2[255 - hash];
+        final double[] grad = grad2d[hash], jitter = grad2d[255 - hash];
         return (xd + jitter[0] * 0.5) * grad[0] + (yd + jitter[1] * 0.5) * grad[1];
     }
     protected static double gradCoord3D(long seed, int x, int y, int z, double xd, double yd, double zd) {
@@ -63,12 +63,12 @@ public class JitterNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
                                         double xd, double yd, double zd, double wd, double ud, double vd) {
         final int idx = ((int)(((seed ^= 0xB4C4D * x ^ 0xEE2C1 * y ^ 0xA7E07 * z ^ 0xCD5E9 * w ^ 0x94B5B * u ^ 0xD2385 * v)
                         ^ seed >>> 13) * (seed)) >>> 24) * 6, jitter = 1530 - idx;
-        return (  (xd+gradient6DLUT[jitter]*0.5) * gradient6DLUT[idx]
-                + (yd+gradient6DLUT[jitter+1]*0.5) * gradient6DLUT[idx+1]
-                + (zd+gradient6DLUT[jitter+2]*0.5) * gradient6DLUT[idx+2]
-                + (wd+gradient6DLUT[jitter+3]*0.5) * gradient6DLUT[idx+3]
-                + (ud+gradient6DLUT[jitter+4]*0.5) * gradient6DLUT[idx+4]
-                + (vd+gradient6DLUT[jitter+5]*0.5) * gradient6DLUT[idx+5]);
+        return (  (xd+ grad6d[jitter]*0.5) * grad6d[idx]
+                + (yd+ grad6d[jitter+1]*0.5) * grad6d[idx+1]
+                + (zd+ grad6d[jitter+2]*0.5) * grad6d[idx+2]
+                + (wd+ grad6d[jitter+3]*0.5) * grad6d[idx+3]
+                + (ud+ grad6d[jitter+4]*0.5) * grad6d[idx+4]
+                + (vd+ grad6d[jitter+5]*0.5) * grad6d[idx+5]);
     }
 
     @Override
