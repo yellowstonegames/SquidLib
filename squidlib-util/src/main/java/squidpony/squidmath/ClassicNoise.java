@@ -2,8 +2,8 @@ package squidpony.squidmath;
 
 import static squidpony.squidmath.Noise.cerp;
 import static squidpony.squidmath.Noise.fastFloor;
-import static squidpony.squidmath.SeededNoise.phiGrad2;
-import static squidpony.squidmath.SeededNoise.gradient6DLUT;
+import static squidpony.squidmath.SeededNoise.grad2d;
+import static squidpony.squidmath.SeededNoise.grad6d;
 import static squidpony.squidmath.SeededNoise.grad3d;
 import static squidpony.squidmath.SeededNoise.grad4d;
 
@@ -42,7 +42,7 @@ public class ClassicNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D
                                         double xd, double yd) {
         final int hash = ((int)(((seed ^= 0xB4C4D * x ^ 0xEE2C3 * y) ^ seed >>> 13) * (seed)));
         //final int hash = (int)((((seed = (((seed * (0x632BE59BD9B4E019L + (x << 23))) ^ 0x9E3779B97F4A7C15L) * (0xC6BC279692B5CC83L + (y << 23)))) ^ seed >>> 27 ^ x + y) * 0xAEF17502108EF2D9L) >>> 56);
-        final double[] grad = phiGrad2[hash >>> 24];
+        final double[] grad = grad2d[hash >>> 24];
         return xd * grad[0] + yd * grad[1];
     }
     protected static double gradCoord3D(long seed, int x, int y, int z, double xd, double yd, double zd) {
@@ -64,8 +64,8 @@ public class ClassicNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D
                 ((int)(((seed ^= 0xB4C4D * x ^ 0xEE2C1 * y ^ 0xA7E07 * z ^ 0xCD5E9 * w ^ 0x94B5B * u ^ 0xD2385 * v)
                         ^ seed >>> 13) * (seed))
                         >>> 24) * 6;
-        return xd * gradient6DLUT[hash] + yd * gradient6DLUT[hash + 1] + zd * gradient6DLUT[hash + 2]
-                + wd * gradient6DLUT[hash + 3] + ud * gradient6DLUT[hash + 4] + vd * gradient6DLUT[hash + 5];
+        return xd * grad6d[hash] + yd * grad6d[hash + 1] + zd * grad6d[hash + 2]
+                + wd * grad6d[hash + 3] + ud * grad6d[hash + 4] + vd * grad6d[hash + 5];
     }
 //    protected static double gradCoord2DJitter(long seed, int x, int y,
 //                                              double xd, double yd) {

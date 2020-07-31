@@ -2634,10 +2634,10 @@ public class Noise {
 //                    + (ix * SeededNoise.phiGrad2[x0y1][0] + y * SeededNoise.phiGrad2[x0y1][1])
 //                    + (x * SeededNoise.phiGrad2[x1y1][0] + y * SeededNoise.phiGrad2[x1y1][1])
 //            );
-            return ((SeededNoise.phiGrad2[x0y0][0] + SeededNoise.phiGrad2[x0y0][1]) * (ix * iy)
-                    + (SeededNoise.phiGrad2[x1y0][0] + SeededNoise.phiGrad2[x1y0][1]) * (x * iy)
-                    + (SeededNoise.phiGrad2[x0y1][0] + SeededNoise.phiGrad2[x0y1][1]) * (ix * y)
-                    + (SeededNoise.phiGrad2[x1y1][0] + SeededNoise.phiGrad2[x1y1][1]) * (x * y)
+            return ((SeededNoise.grad2d[x0y0][0] + SeededNoise.grad2d[x0y0][1]) * (ix * iy)
+                    + (SeededNoise.grad2d[x1y0][0] + SeededNoise.grad2d[x1y0][1]) * (x * iy)
+                    + (SeededNoise.grad2d[x0y1][0] + SeededNoise.grad2d[x0y1][1]) * (ix * y)
+                    + (SeededNoise.grad2d[x1y1][0] + SeededNoise.grad2d[x1y1][1]) * (x * y)
             ) * 0.7071067811865475;
 //            long xf = x >= 0.0 ? (long) x : (long) x - 1L;
 //            long yf = y >= 0.0 ? (long) y : (long) y - 1L;
