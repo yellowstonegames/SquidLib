@@ -86,7 +86,7 @@ public class AnimatedWorldMapWriter extends ApplicationAdapter {
 //        path = "out/worldsAnimated/" + date + "/EllipseExpo/";
 //        path = "out/worldsAnimated/" + date + "/Mimic/";
 //        path = "out/worldsAnimated/" + date + "/SpaceView/";
-        path = "out/worldsAnimated/" + date + "/SpaceViewMutant5/";
+        path = "out/worldsAnimated/" + date + "/SpaceViewMutantClassic/";
 //        path = "out/worldsAnimated/" + date + "/Sphere_Classic/";
 //        path = "out/worldsAnimated/" + date + "/Hyperellipse/";
 //        path = "out/worldsAnimated/" + date + "/HyperellipseExpo/";
@@ -134,12 +134,14 @@ public class AnimatedWorldMapWriter extends ApplicationAdapter {
         Noise.Noise3D noise = new Noise.Noise3D() {
             @Override
             public double getNoise(double x, double y, double z) {
-                return FoamNoise.foamNoise(x * 2.75, y * 2.75, z * 2.75, mutationA, mutationB, 123456789);
+//                return FoamNoise.foamNoise(x * 2.75, y * 2.75, z * 2.75, mutationA, mutationB, 123456789);
+                return ClassicNoise.instance.getNoiseWithSeed(x, y, z, mutationA, mutationB, 123456789);
             }
 
             @Override
             public double getNoiseWithSeed(double x, double y, double z, long seed) {
-                return FoamNoise.foamNoise(x * 2.75, y * 2.75, z * 2.75, mutationA, mutationB, (int) seed);
+//                return FoamNoise.foamNoise(x * 2.75, y * 2.75, z * 2.75, mutationA, mutationB, (int)seed);
+                return ClassicNoise.instance.getNoiseWithSeed(x, y, z, mutationA, mutationB, seed);
             }
         };
         
@@ -214,8 +216,8 @@ public class AnimatedWorldMapWriter extends ApplicationAdapter {
 //            mutationA = NumberTools.cos(angle) * (mutationC + 2.0);
 //            mutationB = NumberTools.sin(angle) * (mutationC + 2.0);
 //            mutationC = NumberTools.cos(angle * 3.0 + 1.0) * 0.625 + 2.25;
-            mutationA = NumberTools.cos(angle) * 0.75;
-            mutationB = NumberTools.sin(angle) * 0.75;
+            mutationA = NumberTools.cos(angle) * 0.5;
+            mutationB = NumberTools.sin(angle) * 0.5;
             //            mutation = NumberTools.sin(angle) * 0.918 + NumberTools.cos(angle * 4.0 + 1.618) * 0.307;
             generate(hash);
             world.setCenterLongitude(angle);
