@@ -185,12 +185,19 @@ public class ClassicNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D
                 w0 = fastFloor(w),
                 u0 = fastFloor(u);
         final double xd = x - x0, yd = y - y0, zd = z - z0, wd = w - w0, ud = u - u0;
-        
-        final double xc = xd * xd * (3.0 - 2.0 * xd);
-        final double yc = yd * yd * (3.0 - 2.0 * yd);
-        final double zc = zd * zd * (3.0 - 2.0 * zd);
-        final double wc = wd * wd * (3.0 - 2.0 * wd);
-        final double uc = ud * ud * (3.0 - 2.0 * ud);
+        //ad * ad * ad * (ad * (ad * 6.0 - 15.0) + 10.0)
+        final double xc = xd * xd * xd * (xd * (xd * 6.0 - 15.0) + 10.0);
+        final double yc = yd * yd * yd * (yd * (yd * 6.0 - 15.0) + 10.0);
+        final double zc = zd * zd * zd * (zd * (zd * 6.0 - 15.0) + 10.0);
+        final double wc = wd * wd * wd * (wd * (wd * 6.0 - 15.0) + 10.0);
+        final double uc = ud * ud * ud * (ud * (ud * 6.0 - 15.0) + 10.0);
+//        
+//        final double xc = xd * xd * (3.0 - 2.0 * xd);
+//        final double yc = yd * yd * (3.0 - 2.0 * yd);
+//        final double zc = zd * zd * (3.0 - 2.0 * zd);
+//        final double wc = wd * wd * (3.0 - 2.0 * wd);
+//        final double uc = ud * ud * (3.0 - 2.0 * ud);
+//        
 //        final double res =
         return 
                 Noise.emphasizeSigned(
@@ -254,7 +261,7 @@ public class ClassicNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D
                                                 yc),
                                         zc),
                                 wc),
-                        uc) * 0.875);
+                        uc) );
 //        if(res < -1 || res > 1) System.out.println(res);
 //        return res;
     }
