@@ -68,7 +68,24 @@ public class HashVisualizer extends ApplicationAdapter {
     // 5 RNG results
     private int testType = 4;
     private static final int NOISE_LIMIT = 148;
-    private int hashMode, rngMode, noiseMode = 60, otherMode = 1;//142
+    private int hashMode, rngMode, noiseMode = 125, otherMode = 1;//142
+
+    /**
+     * If you're editing the source of HashVisualizer, you can comment out one line and uncomment another to change
+     * how this shows values in the 0-1 range, typically for noise.
+     * @param brightness a float that must be between 0.0f and 1.0f, inclusive.
+     * @return a packed float color
+     */
+    public float getGray(float brightness) {
+        //// black or white, threshold at 50%
+//        return grayscaleF[-(int)(brightness * 1.999) & 255];
+        //// colorful; purple is darkest, green middle, red brightest
+//        return gradientF[(int)(brightness * 255.999)];
+        //// retro green-scale, with the darkest colors in the middle
+//        return bumpF[(int)(brightness * 255.999)];
+        //// grayscale, dark to light
+        return grayscaleF[(int)(brightness * 255.999)];
+    }
 
     private FilterBatch batch;
     
@@ -1372,23 +1389,6 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     {
         n = n * 0.5f + 0.5f;
         return (n * n * (3 - 2 * n));
-    }
-
-    /**
-     * If you're editing the source of HashVisualizer, you can comment out one line and uncomment another to change
-     * how this shows values in the 0-1 range, typically for noise.
-     * @param brightness a float that must be between 0.0f and 1.0f, inclusive.
-     * @return a packed float color
-     */
-    public float getGray(float brightness) {
-        //// black or white, threshold at 50%
-//        return grayscaleF[-(int)(brightness * 1.999) & 255];
-        //// colorful; purple is darkest, green middle, red brightest
-        return gradientF[(int)(brightness * 255.999)];
-        //// retro green-scale, with the darkest colors in the middle
-//        return bumpF[(int)(brightness * 255.999)];
-        //// grayscale, dark to light
-//        return grayscaleF[(int)(brightness * 255.999)];
     }
 
 //    public static class Dunes implements Noise.Noise2D {
@@ -4991,22 +4991,39 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             }
                         }
                         break;
-                    case 125: {
-                        Gdx.graphics.setTitle("Jitter 6D Noise, unprocessed, one octave at " + Gdx.graphics.getFramesPerSecond() + " FPS");
-                        double u = NumberTools.swayRandomized(123456L, ctr * -0.04),
-                                v = NumberTools.swayRandomized(-987654321L, ctr * -0.013 + 0.3) * 1.5,
-                                w = NumberTools.swayRandomized(543212345L, ctr * -0.02 + 0.7) * 1.25;
+                    case 125:
+                    {
+                        Gdx.graphics.setTitle("Classic5D Noise, unprocessed, one octave at " + Gdx.graphics.getFramesPerSecond() + " FPS");
+                        double w = NumberTools.swayRandomized(123456L, ctr * -0.028),
+                                u = NumberTools.swayRandomized(-987654321L, ctr * -0.017 + 0.3);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                bright =
-                                        basicPrepare(JitterNoise.instance.getNoise(x * 0.03125, y * 0.03125, ctr * 0.045, u + x * 0.015, v - y * 0.014, w - ctr * 0.021)
-                                        );
+                                alter5D(x, y, ctr);
+                                bright = 
+//                                        basicPrepare(ClassicNoise.instance.getNoise(point5D[0], point5D[1], point5D[2], point5D[3], point5D[4]));
+                                        basicPrepare(ClassicNoise.instance.getNoise(x * 0.03125, y * 0.03125, ctr * 0.04, w * 0.025, u * 0.024));
                                 //+ 15f) / 30f;
                                 back[x][y] = getGray(bright);
                             }
                         }
+                        break;
                     }
-                    break;
+//                        {
+//                        Gdx.graphics.setTitle("Jitter 6D Noise, unprocessed, one octave at " + Gdx.graphics.getFramesPerSecond() + " FPS");
+//                        double u = NumberTools.swayRandomized(123456L, ctr * -0.04),
+//                                v = NumberTools.swayRandomized(-987654321L, ctr * -0.013 + 0.3) * 1.5,
+//                                w = NumberTools.swayRandomized(543212345L, ctr * -0.02 + 0.7) * 1.25;
+//                        for (int x = 0; x < width; x++) {
+//                            for (int y = 0; y < height; y++) {
+//                                bright =
+//                                        basicPrepare(JitterNoise.instance.getNoise(x * 0.03125, y * 0.03125, ctr * 0.045, u + x * 0.015, v - y * 0.014, w - ctr * 0.021)
+//                                        );
+//                                //+ 15f) / 30f;
+//                                back[x][y] = getGray(bright);
+//                            }
+//                        }
+//                    }
+//                    break;
                     case 126:
                         Gdx.graphics.setTitle("Whirling 2D YCbCr Noise " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
@@ -6391,11 +6408,11 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
         return point4D;
     }
     private double[] alter5D(int x, int y, int ctr) {
-        point5D[0] = (y * 0.6 + x) * 0.03125 + ctr * 0.1375;
-        point5D[1] = (x * 0.6 - y) * 0.03125 + ctr * 0.1375;
-        point5D[2] = (x * 0.8 + y * 0.5) * 0.03125 - ctr * 0.1375;
-        point5D[3] = (y * 0.8 - x * 0.5) * 0.03125 - ctr * 0.1375;
-        point5D[4] = (ctr * 0.35 + x * 0.5 - y * 0.3) * 0.03125 + ctr * 0.1375;
+        point5D[0] = (y * 0.6 + x * 0.4) * 0.03125 + ctr * 0.05375;
+        point5D[1] = (x * 0.6 - y * 0.4) * 0.03125 + ctr * 0.05375;
+        point5D[2] = (x * 0.7 + y * 0.3) * 0.03125 - ctr * 0.05375;
+        point5D[3] = (y * 0.7 - x * 0.3) * 0.03125 - ctr * 0.05375;
+        point5D[4] = (x * 0.35 - y * 0.25) * 0.02125 - (x * 0.25 + y * 0.35) * 0.04125;
         return point5D;
     }
     private double[] alter6D(int x, int y, int ctr) {
