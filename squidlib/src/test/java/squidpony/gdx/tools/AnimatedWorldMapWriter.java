@@ -32,10 +32,11 @@ import java.util.Date;
 public class AnimatedWorldMapWriter extends ApplicationAdapter {
 //    private static final int width = 1920, height = 1080;
 //    private static final int width = 256, height = 256; // localMimic
+    private static final int width = 420, height = 210; // mimic, elliptical
 //    private static final int width = 512, height = 256; // mimic, elliptical
 //    private static final int width = 1024, height = 512; // mimic, elliptical
 //    private static final int width = 2048, height = 1024; // mimic, elliptical
-    private static final int width = 260, height = 260; // space view
+//    private static final int width = 256, height = 256; // space view
 //    private static final int width = 1200, height = 400; // squat
     private static final int LIMIT = 5;
     //private static final int width = 256, height = 128;
@@ -86,7 +87,8 @@ public class AnimatedWorldMapWriter extends ApplicationAdapter {
 //        path = "out/worldsAnimated/" + date + "/EllipseExpo/";
 //        path = "out/worldsAnimated/" + date + "/Mimic/";
 //        path = "out/worldsAnimated/" + date + "/SpaceView/";
-        path = "out/worldsAnimated/" + date + "/SpaceViewMutantClassic/";
+//        path = "out/worldsAnimated/" + date + "/SpaceViewMutantClassic/";
+        path = "out/worldsAnimated/" + date + "/HyperellipseWrithing/";
 //        path = "out/worldsAnimated/" + date + "/Sphere_Classic/";
 //        path = "out/worldsAnimated/" + date + "/Hyperellipse/";
 //        path = "out/worldsAnimated/" + date + "/HyperellipseExpo/";
@@ -165,9 +167,10 @@ public class AnimatedWorldMapWriter extends ApplicationAdapter {
 //        world = new WorldMapGenerator.TilingMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.75);
 //        world = new WorldMapGenerator.EllipticalMap(seed, width, height, noise, 1.75);
 //        world = new WorldMapGenerator.MimicMap(seed, WorldMapGenerator.DEFAULT_NOISE, 1.75);
-        world = new WorldMapGenerator.SpaceViewMap(seed, width, height, noise, 0.65);
+//        world = new WorldMapGenerator.SpaceViewMap(seed, width, height, noise, 0.55);
 //        world = new WorldMapGenerator.RoundSideMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.75);
 //        world = new WorldMapGenerator.HyperellipticalMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 0.8, 0.03125, 2.5);
+        world = new WorldMapGenerator.HyperellipticalMap(seed, width, height, noise, 0.5, 0.03125, 2.5);
 //        world = new WorldMapGenerator.EllipticalHammerMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.75);
 //        world = new WorldMapGenerator.LocalMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.75);
 //        world = new WorldMapGenerator.LocalMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 0.8);
@@ -216,11 +219,13 @@ public class AnimatedWorldMapWriter extends ApplicationAdapter {
 //            mutationA = NumberTools.cos(angle) * (mutationC + 2.0);
 //            mutationB = NumberTools.sin(angle) * (mutationC + 2.0);
 //            mutationC = NumberTools.cos(angle * 3.0 + 1.0) * 0.625 + 2.25;
-            mutationA = NumberTools.cos(angle) * 0.5;
-            mutationB = NumberTools.sin(angle) * 0.5;
+            mutationA = NumberTools.cos(angle) * 0.25;
+            mutationB = NumberTools.sin(angle) * 0.25;
             //            mutation = NumberTools.sin(angle) * 0.918 + NumberTools.cos(angle * 4.0 + 1.618) * 0.307;
+
+            //// this next line should not usually be commented out, but it makes sense not to have it when you can see the whole map.
+            //world.setCenterLongitude(angle);
             generate(hash);
-            world.setCenterLongitude(angle);
             wmv.getBiomeMapper().makeBiomes(world);
             float[][] cm = wmv.show();
             pm[i].setColor(SColor.DB_INK);
@@ -239,7 +244,7 @@ public class AnimatedWorldMapWriter extends ApplicationAdapter {
         batch.draw(pt, 0, 0, width, height);
         batch.end();
 
-        writer.write(Gdx.files.local(path + name + ".gif"), new Array<Pixmap>(pm), 30);
+        writer.write(Gdx.files.local(path + name + ".gif"), new Array<Pixmap>(pm), 40);
 
         if(counter >= LIMIT)
                 Gdx.app.exit();
@@ -273,9 +278,9 @@ public class AnimatedWorldMapWriter extends ApplicationAdapter {
         config.width = width * cellWidth;
         config.height = height * cellHeight;
         //config.fullscreen = true;
-        config.foregroundFPS = 0;
+        config.foregroundFPS = 2;
         //config.fullscreen = true;
-        config.backgroundFPS = 0;
+        config.backgroundFPS = 2;
         config.addIcon("Tentacle-16.png", Files.FileType.Internal);
         config.addIcon("Tentacle-32.png", Files.FileType.Internal);
         config.addIcon("Tentacle-128.png", Files.FileType.Internal);
