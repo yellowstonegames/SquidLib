@@ -22,15 +22,14 @@ public class TinyTest extends ApplicationAdapter {
     private FilterBatch batch;
     private Stage stage;
     private SparseLayers layers;
-//    private SquidMessageBox smb;
     private TextCellFactory font;
+    public static final int GRID_WIDTH = 40, GRID_HEIGHT = 25, CELL_WIDTH = 7, CELL_HEIGHT = 12;
     @Override
     public void create() {
         batch = new FilterBatch();
-        stage = new Stage(new StretchViewport(40 * 8,  25 * 8), batch);
-        font = DefaultResources.getCrispOctagonalSquareFont();
-        layers = new SparseLayers(40, 25, 8, 8, font);
-//        smb = new SquidMessageBox(40, 25, font);
+        stage = new Stage(new StretchViewport(GRID_WIDTH * CELL_WIDTH, GRID_HEIGHT * CELL_HEIGHT), batch);
+        font = new TextCellFactory().font(DefaultResources.getSevenTwelveFont());
+        layers = new SparseLayers(GRID_WIDTH, GRID_HEIGHT, CELL_WIDTH, CELL_HEIGHT, font);
         List<IColoredString<Color>> messages = new ArrayList<>(20);
         new IColoredString.Impl<Color>("ABCDEFGHIJ0123456789abcdefghij01234567", SColor.WHITE).wrap(40, messages);
         new IColoredString.Impl<Color>("ABCDEFGHIJ0123456789abcdefghij012345678", SColor.WHITE).wrap(40, messages);
@@ -54,15 +53,14 @@ public class TinyTest extends ApplicationAdapter {
         // standard clear the background routine for libGDX
         Gdx.gl.glClearColor(0f, 0f, 0f, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        //layers.put(10, 10, '@');
         stage.draw();
     }
 
     public static void main (String[] arg) {
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
         config.title = "SquidLib Demo: Tiny Test";
-        config.width = 40 * 8;
-        config.height = 25 * 8;
+        config.width = GRID_WIDTH * CELL_WIDTH;
+        config.height = GRID_HEIGHT * CELL_HEIGHT;
         config.addIcon("Tentacle-16.png", Files.FileType.Internal);
         config.addIcon("Tentacle-32.png", Files.FileType.Internal);
         config.addIcon("Tentacle-64.png", Files.FileType.Internal);
