@@ -32,12 +32,12 @@ public final class Fft {
 		int n = real.length;
 		if (n != imag.length)
 			throw new IllegalArgumentException("Mismatched lengths");
-		if (n == 0) {
+		if (n != 0) {
+			if ((n & (n - 1)) == 0)  // Is power of 2
+				transformRadix2(real, imag);
+			else  // More complicated algorithm for arbitrary sizes
+				transformBluestein(real, imag);
 		}
-		else if ((n & (n - 1)) == 0)  // Is power of 2
-			transformRadix2(real, imag);
-		else  // More complicated algorithm for arbitrary sizes
-			transformBluestein(real, imag);
 	}
 	
 	
