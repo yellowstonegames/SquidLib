@@ -5,6 +5,7 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ImmediateModeRenderer20;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -29,8 +30,8 @@ public class FFTVisualizer extends ApplicationAdapter {
 //    private FlawedPointHash.FNVHash fnv = new FlawedPointHash.FNVHash(1);
     private IPointHash[] pointHashes = new IPointHash[] {iph, cube, rug, quilt};
     private int hashIndex;
-    private static final int MODE_LIMIT = 7;
-    private int mode = 6;
+    private static final int MODE_LIMIT = 8;
+    private int mode = 7;
     private int dim; // this can be 0, 1, 2, or 3; add 2 to get the actual dimensions
     private int octaves = 3;
     private float freq = 0.125f;
@@ -511,6 +512,54 @@ public class FFTVisualizer extends ApplicationAdapter {
                     }
                     break;
             }
+        } else if(mode == 7) {
+//                    imag[x][y] = imag[width - 1 - x][height - 1 - y] = 
+//                            0x1p-8 * IntPointHash.hash256(x, y, ~noise.getSeed());
+
+            for (int x = 0; x < width; x++) {
+                for (int y = 0; y < height >>> 1; y++) {
+                    final double hx = 1.0 - Math.abs(x - width * 0.5 + 0.5) / 255.5, hy = 1.0 - (height * 0.5 - 0.5 - y) / 255.5;
+                    final double a = Math.sqrt(hx * hx + hy * hy);
+                    imag[x][y] = imag[width - 1 - x][height - 1 - y] = 
+                            0x1p-8 * IntPointHash.hash256(x, y, noise.getSeed()) * MathUtils.clamp((a * a * a * (a * (a *6.0 -15.0) + 10.0) - 0.125), 0.0, 1.0);
+                }
+            }
+            imag[width >>> 1][height >>> 1] = 1.0;
+            imag[(width >>> 1)-1][(height >>> 1)-1] = 1.0;
+            imag[(width >>> 1)][(height >>> 1)-1] = 1.0;
+            imag[(width >>> 1)-1][(height >>> 1)] = 1.0;
+            ArrayTools.fill(real, 0.0);
+            //// Copied from Fft.transform2D, with windowing removed
+            final int n = real.length;
+            Fft.loadTables(n);
+
+            for (int x = 0; x < n; x++) {
+                Fft.transformRadix2(real[x], imag[x]);
+            }
+            double swap;
+            for (int x = 0; x < n; x++) {
+                for (int y = x + 1; y < n; y++) {
+                    swap = real[x][y];
+                    real[x][y] = real[y][x];
+                    real[y][x] = swap;
+                    swap = imag[x][y];
+                    imag[x][y] = imag[y][x];
+                    imag[y][x] = swap;
+                }
+            }
+            for (int x = 0; x < n; x++) {
+                Fft.transformRadix2(real[x], imag[x]);
+            }
+            //// End section from Fft
+
+            for (int x = 0; x < width; x++) {
+                for (int y = 0; y < height; y++) {
+                    bright = (float) (real[x][y] = imag[x][y]);
+                    renderer.color(bright, bright, bright, 1f);
+                    renderer.vertex(x, y, 0);
+                }
+            }
+            ArrayTools.fill(imag, 0.0);
         }
         Fft.transform2D(real, imag);
         Fft.getColors(real, imag, colors);
