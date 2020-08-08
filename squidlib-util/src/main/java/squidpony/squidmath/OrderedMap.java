@@ -546,6 +546,23 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
         value[pos] = v;
         return oldValue;
     }
+
+    /**
+     * Changes the value at a specified {@code idx} in the iteration order to {@code v}, without involving keys at all.
+     * If {@code idx} isn't currently a valid index in the iteration order, this returns {@link #defaultReturnValue()}.
+     * @param v the new V value to assign
+     * @param idx the index in the iteration order to set {@code v} at
+     * @return the previous value held at {@code idx} in the iteration order, which may be null if the value was null
+     */
+    public V setAt(final V v, final int idx) {
+        if(idx < 0 || idx >= size)
+            return defRetValue;
+        final int pos = order.get(idx);
+        final V oldValue = value[pos];
+        value[pos] = v;
+        return oldValue;
+    }
+    
     /**
      * Shifts left entries with the specified hash code, starting at the
      * specified position, and empties the resulting free entry.
