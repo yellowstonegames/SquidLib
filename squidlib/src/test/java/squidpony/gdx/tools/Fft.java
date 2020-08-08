@@ -133,7 +133,10 @@ public final class Fft {
 				imag[i][j] *= im * jm;
 			}
 		}
-
+		transformWindowless2D(real, imag);
+	}
+	public static void transformWindowless2D(double[][] real, double[][] imag){
+		final int n = real.length;
 		for (int x = 0; x < n; x++) {
 			transformRadix2(real[x], imag[x]);
 		}

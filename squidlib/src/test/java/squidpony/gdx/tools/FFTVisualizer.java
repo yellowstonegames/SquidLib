@@ -4,6 +4,7 @@ import com.badlogic.gdx.*;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.glutils.ImmediateModeRenderer20;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.TimeUtils;
@@ -46,6 +47,7 @@ public class FFTVisualizer extends ApplicationAdapter {
     private static final int width = 512, height = 512;
 //    private static final int width = 256, height = 256;
     private final double[][] real = new double[width][height], imag = new double[width][height];
+    private final double[][] realKnown = new double[width][height], imagKnown = new double[width][height];
     private final float[][] colors = new float[width][height];
     private InputAdapter input;
     
@@ -56,47 +58,6 @@ public class FFTVisualizer extends ApplicationAdapter {
     StatefulRNG shuffler;
     
     private static final Comparator<Double> doubleComparator = new Comparator<Double>(){
-
-        /**
-         * Compares its two arguments for order.  Returns a negative integer,
-         * zero, or a positive integer as the first argument is less than, equal
-         * to, or greater than the second.<p>
-         * <p>
-         * In the foregoing description, the notation
-         * <tt>sgn(</tt><i>expression</i><tt>)</tt> designates the mathematical
-         * <i>signum</i> function, which is defined to return one of <tt>-1</tt>,
-         * <tt>0</tt>, or <tt>1</tt> according to whether the value of
-         * <i>expression</i> is negative, zero or positive.<p>
-         * <p>
-         * The implementor must ensure that <tt>sgn(compare(x, y)) ==
-         * -sgn(compare(y, x))</tt> for all <tt>x</tt> and <tt>y</tt>.  (This
-         * implies that <tt>compare(x, y)</tt> must throw an exception if and only
-         * if <tt>compare(y, x)</tt> throws an exception.)<p>
-         * <p>
-         * The implementor must also ensure that the relation is transitive:
-         * <tt>((compare(x, y)&gt;0) &amp;&amp; (compare(y, z)&gt;0))</tt> implies
-         * <tt>compare(x, z)&gt;0</tt>.<p>
-         * <p>
-         * Finally, the implementor must ensure that <tt>compare(x, y)==0</tt>
-         * implies that <tt>sgn(compare(x, z))==sgn(compare(y, z))</tt> for all
-         * <tt>z</tt>.<p>
-         * <p>
-         * It is generally the case, but <i>not</i> strictly required that
-         * <tt>(compare(x, y)==0) == (x.equals(y))</tt>.  Generally speaking,
-         * any comparator that violates this condition should clearly indicate
-         * this fact.  The recommended language is "Note: this comparator
-         * imposes orderings that are inconsistent with equals."
-         *
-         * @param o1 the first object to be compared.
-         * @param o2 the second object to be compared.
-         * @return a negative integer, zero, or a positive integer as the
-         * first argument is less than, equal to, or greater than the
-         * second.
-         * @throws NullPointerException if an argument is null and this
-         *                              comparator does not permit null arguments
-         * @throws ClassCastException   if the arguments' types prevent them from
-         *                              being compared by this comparator.
-         */
         @Override
         public int compare(Double o1, Double o2) {
             return NumberTools.doubleToHighIntBits(o1 - o2);
@@ -118,6 +79,15 @@ public class FFTVisualizer extends ApplicationAdapter {
         Coord.expandPoolTo(width, height);
         norm = new OrderedMap<>(width * height, 0.75f);
         shuffler = new StatefulRNG(0x1234567890ABCDEFL);
+        
+        Pixmap pm = new Pixmap(Gdx.files.internal("special/BlueNoise512x512.png"));
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                realKnown[x][y] = (pm.getPixel(x, y) >>> 24) / 255.0;
+            }
+        }
+        Fft.transformWindowless2D(realKnown, imagKnown);
+
         startTime = TimeUtils.millis();
         renderer = new ImmediateModeRenderer20(width * height * 2, false, true, 0);
         view = new ScreenViewport();
@@ -572,48 +542,34 @@ public class FFTVisualizer extends ApplicationAdapter {
             norm.clear();
             
             //// Set up an initial Fourier transform for this to invert
-            //// This is likely incorrect... imag probably also needs some values.
             for (int x = 0; x < width; x++) {
                 for (int y = 0; y < height >>> 1; y++) {
-                    final double hx = 1.0 - Math.abs(x - width * 0.5 + 0.5) / 255.5, hy = 1.0 - (height * 0.5 - 0.5 - y) / 255.5;
-                    final double a = Math.sqrt(hx * hx + hy * hy);
-                    norm.put(Coord.get(x + 256 & 511, y + 256 & 511),
-                            real[x][y] = real[width - 1 - x][height - 1 - y] = 
-                            0x1p-8 * IntPointHash.hash256(x, y, noise.getSeed()) * MathUtils.clamp((a * a * a * (a * (a * 6.0 -15.0) + 10.0) - 0.125), 0.0, 1.0));
+                    norm.put(Coord.get(x, y),
+                            real[x][y] = real[width - 1 - x][height - 1 - y] = realKnown[x][y]);
+                    imag[x][y] = imag[width - 1 - x][height - 1 - y] = imagKnown[x][y];
                  }
             }
-            real[width >>> 1][height >>> 1] = 1.0;
-            real[(width >>> 1)-1][(height >>> 1)] = 1.0;
-            real[(width >>> 1)-1][(height >>> 1)-1] = 1.0;
-            real[(width >>> 1)][(height >>> 1)-1] = 1.0;
-            norm.put(Coord.get(width >>> 1, (height >>> 1)-1), 1.0);
-            norm.put(Coord.get((width >>> 1) - 1, (height >>> 1)-1), 1.0);
+            
+//            //// This is likely incorrect... imag probably also needs some values.
+//            for (int x = 0; x < width; x++) {
+//                for (int y = 0; y < height >>> 1; y++) {
+//                    final double hx = 1.0 - Math.abs(x - width * 0.5 + 0.5) / 255.5, hy = 1.0 - (height * 0.5 - 0.5 - y) / 255.5;
+//                    final double a = Math.sqrt(hx * hx + hy * hy);
+//                    norm.put(Coord.get(x + 256 & 511, y + 256 & 511),
+//                            real[x][y] = real[width - 1 - x][height - 1 - y] = 
+//                            0x1p-8 * IntPointHash.hash256(x, y, noise.getSeed()) * MathUtils.clamp((a * a * a * (a * (a * 6.0 -15.0) + 10.0) - 0.125), 0.0, 1.0));
+//                 }
+//            }
+//            real[width >>> 1][height >>> 1] = 1.0;
+//            real[(width >>> 1)-1][(height >>> 1)] = 1.0;
+//            real[(width >>> 1)-1][(height >>> 1)-1] = 1.0;
+//            real[(width >>> 1)][(height >>> 1)-1] = 1.0;
+//            norm.put(Coord.get(width >>> 1, (height >>> 1)-1), 1.0);
+//            norm.put(Coord.get((width >>> 1) - 1, (height >>> 1)-1), 1.0);
             
             //// Done setting up the initial Fourier transform 
             
-            //// Copied from Fft.transform2D, with windowing removed and imag/real switched to get the inverse
-            final int n = imag.length;
-            Fft.loadTables(n);
-
-            for (int x = 0; x < n; x++) {
-                Fft.transformRadix2(imag[x], real[x]);
-            }
-            double swap;
-            for (int x = 0; x < n; x++) {
-                for (int y = x + 1; y < n; y++) {
-                    swap = real[x][y];
-                    real[x][y] = real[y][x];
-                    real[y][x] = swap;
-                    swap = imag[x][y];
-                    imag[x][y] = imag[y][x];
-                    imag[y][x] = swap;
-                }
-            }
-            for (int x = 0; x < n; x++) {
-                Fft.transformRadix2(imag[x], real[x]);
-            }
-            //// End section from Fft
-            
+            Fft.transformWindowless2D(imag, real);
             //// re-normalize
 
             norm.shuffle(shuffler);
