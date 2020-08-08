@@ -68,7 +68,7 @@ public class HashVisualizer extends ApplicationAdapter {
     // 5 RNG results
     private int testType = 4;
     private static final int NOISE_LIMIT = 148;
-    private int hashMode, rngMode, noiseMode = 125, otherMode = 1;//142
+    private int hashMode, rngMode, noiseMode = 101, otherMode = 1;//142
 
     /**
      * If you're editing the source of HashVisualizer, you can comment out one line and uncomment another to change
@@ -4510,10 +4510,20 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         }
                         break;
                     case 101:
-                        Gdx.graphics.setTitle("Mitchell 5D Noise, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+//                        Gdx.graphics.setTitle("Mitchell 5D Noise, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+//                        for (int x = 0; x < width; x++) {
+//                            for (int y = 0; y < height; y++) {
+//                                bright = basicPrepare(mitchell.arbitraryNoise(0x1337L, alter5D(x, y, ctr)));
+//                                back[x][y] = getGray(bright);
+//                            }
+//                        }
+//                        break;
+                        Gdx.graphics.setTitle("Seeded 5D Noise, unprocessed, one octave at " + Gdx.graphics.getFramesPerSecond() + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                bright = basicPrepare(mitchell.arbitraryNoise(0x1337L, alter5D(x, y, ctr)));
+                                alter5D(x, y, ctr);
+                                bright =
+                                        basicPrepare(SeededNoise.noise(point5D[0], point5D[1], point5D[2], point5D[3], point5D[4], seedU0));
                                 back[x][y] = getGray(bright);
                             }
                         }
@@ -4994,15 +5004,14 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                     case 125:
                     {
                         Gdx.graphics.setTitle("Classic5D Noise, unprocessed, one octave at " + Gdx.graphics.getFramesPerSecond() + " FPS");
-                        double w = NumberTools.swayRandomized(123456L, ctr * -0.028),
-                                u = NumberTools.swayRandomized(-987654321L, ctr * -0.017 + 0.3);
+//                        double w = NumberTools.swayRandomized(123456L, ctr * -0.028),
+//                                u = NumberTools.swayRandomized(-987654321L, ctr * -0.017 + 0.3);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 alter5D(x, y, ctr);
                                 bright = 
-//                                        basicPrepare(ClassicNoise.instance.getNoise(point5D[0], point5D[1], point5D[2], point5D[3], point5D[4]));
-                                        basicPrepare(ClassicNoise.instance.getNoise(x * 0.03125, y * 0.03125, ctr * 0.04, w * 0.025, u * 0.024));
-                                //+ 15f) / 30f;
+                                        basicPrepare(ClassicNoise.instance.getNoise(point5D[0], point5D[1], point5D[2], point5D[3], point5D[4]));
+//                                        basicPrepare(ClassicNoise.instance.getNoise(x * 0.03125, y * 0.03125, ctr * 0.04, w * 0.025, u * 0.024));
                                 back[x][y] = getGray(bright);
                             }
                         }
