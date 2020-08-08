@@ -12,6 +12,8 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import squidpony.ArrayTools;
 import squidpony.squidmath.*;
 
+import java.util.Comparator;
+
 import static com.badlogic.gdx.Input.Keys.*;
 import static com.badlogic.gdx.graphics.GL20.GL_POINTS;
 import static squidpony.squidmath.BlueNoise.ALT_NOISE;
@@ -49,6 +51,57 @@ public class FFTVisualizer extends ApplicationAdapter {
     
     private Viewport view;
     private long ctr = -128, startTime;
+    
+    private OrderedMap<Coord, Double> norm;
+    StatefulRNG shuffler;
+    
+    private static final Comparator<Double> doubleComparator = new Comparator<Double>(){
+
+        /**
+         * Compares its two arguments for order.  Returns a negative integer,
+         * zero, or a positive integer as the first argument is less than, equal
+         * to, or greater than the second.<p>
+         * <p>
+         * In the foregoing description, the notation
+         * <tt>sgn(</tt><i>expression</i><tt>)</tt> designates the mathematical
+         * <i>signum</i> function, which is defined to return one of <tt>-1</tt>,
+         * <tt>0</tt>, or <tt>1</tt> according to whether the value of
+         * <i>expression</i> is negative, zero or positive.<p>
+         * <p>
+         * The implementor must ensure that <tt>sgn(compare(x, y)) ==
+         * -sgn(compare(y, x))</tt> for all <tt>x</tt> and <tt>y</tt>.  (This
+         * implies that <tt>compare(x, y)</tt> must throw an exception if and only
+         * if <tt>compare(y, x)</tt> throws an exception.)<p>
+         * <p>
+         * The implementor must also ensure that the relation is transitive:
+         * <tt>((compare(x, y)&gt;0) &amp;&amp; (compare(y, z)&gt;0))</tt> implies
+         * <tt>compare(x, z)&gt;0</tt>.<p>
+         * <p>
+         * Finally, the implementor must ensure that <tt>compare(x, y)==0</tt>
+         * implies that <tt>sgn(compare(x, z))==sgn(compare(y, z))</tt> for all
+         * <tt>z</tt>.<p>
+         * <p>
+         * It is generally the case, but <i>not</i> strictly required that
+         * <tt>(compare(x, y)==0) == (x.equals(y))</tt>.  Generally speaking,
+         * any comparator that violates this condition should clearly indicate
+         * this fact.  The recommended language is "Note: this comparator
+         * imposes orderings that are inconsistent with equals."
+         *
+         * @param o1 the first object to be compared.
+         * @param o2 the second object to be compared.
+         * @return a negative integer, zero, or a positive integer as the
+         * first argument is less than, equal to, or greater than the
+         * second.
+         * @throws NullPointerException if an argument is null and this
+         *                              comparator does not permit null arguments
+         * @throws ClassCastException   if the arguments' types prevent them from
+         *                              being compared by this comparator.
+         */
+        @Override
+        public int compare(Double o1, Double o2) {
+            return NumberTools.doubleToHighIntBits(o1 - o2);
+        }
+    };
 
     public static float basicPrepare(float n)
     {
@@ -62,6 +115,9 @@ public class FFTVisualizer extends ApplicationAdapter {
 
     @Override
     public void create() {
+        Coord.expandPoolTo(width, height);
+        norm = new OrderedMap<>(width * height, 0.75f);
+        shuffler = new StatefulRNG(0x1234567890ABCDEFL);
         startTime = TimeUtils.millis();
         renderer = new ImmediateModeRenderer20(width * height * 2, false, true, 0);
         view = new ScreenViewport();
@@ -513,28 +569,34 @@ public class FFTVisualizer extends ApplicationAdapter {
                     break;
             }
         } else if(mode == 7) {
-//                    imag[x][y] = imag[width - 1 - x][height - 1 - y] = 
-//                            0x1p-8 * IntPointHash.hash256(x, y, ~noise.getSeed());
-
+            norm.clear();
+            
+            //// Set up an initial Fourier transform for this to invert
+            //// This is likely incorrect... imag probably also needs some values.
             for (int x = 0; x < width; x++) {
                 for (int y = 0; y < height >>> 1; y++) {
                     final double hx = 1.0 - Math.abs(x - width * 0.5 + 0.5) / 255.5, hy = 1.0 - (height * 0.5 - 0.5 - y) / 255.5;
                     final double a = Math.sqrt(hx * hx + hy * hy);
-                    imag[x][y] = imag[width - 1 - x][height - 1 - y] = 
-                            0x1p-8 * IntPointHash.hash256(x, y, noise.getSeed()) * MathUtils.clamp((a * a * a * (a * (a *6.0 -15.0) + 10.0) - 0.125), 0.0, 1.0);
-                }
+                    norm.put(Coord.get(x + 256 & 511, y + 256 & 511),
+                            real[x][y] = real[width - 1 - x][height - 1 - y] = 
+                            0x1p-8 * IntPointHash.hash256(x, y, noise.getSeed()) * MathUtils.clamp((a * a * a * (a * (a * 6.0 -15.0) + 10.0) - 0.125), 0.0, 1.0));
+                 }
             }
-            imag[width >>> 1][height >>> 1] = 1.0;
-            imag[(width >>> 1)-1][(height >>> 1)-1] = 1.0;
-            imag[(width >>> 1)][(height >>> 1)-1] = 1.0;
-            imag[(width >>> 1)-1][(height >>> 1)] = 1.0;
-            ArrayTools.fill(real, 0.0);
-            //// Copied from Fft.transform2D, with windowing removed
-            final int n = real.length;
+            real[width >>> 1][height >>> 1] = 1.0;
+            real[(width >>> 1)-1][(height >>> 1)] = 1.0;
+            real[(width >>> 1)-1][(height >>> 1)-1] = 1.0;
+            real[(width >>> 1)][(height >>> 1)-1] = 1.0;
+            norm.put(Coord.get(width >>> 1, (height >>> 1)-1), 1.0);
+            norm.put(Coord.get((width >>> 1) - 1, (height >>> 1)-1), 1.0);
+            
+            //// Done setting up the initial Fourier transform 
+            
+            //// Copied from Fft.transform2D, with windowing removed and imag/real switched to get the inverse
+            final int n = imag.length;
             Fft.loadTables(n);
 
             for (int x = 0; x < n; x++) {
-                Fft.transformRadix2(real[x], imag[x]);
+                Fft.transformRadix2(imag[x], real[x]);
             }
             double swap;
             for (int x = 0; x < n; x++) {
@@ -548,18 +610,37 @@ public class FFTVisualizer extends ApplicationAdapter {
                 }
             }
             for (int x = 0; x < n; x++) {
-                Fft.transformRadix2(real[x], imag[x]);
+                Fft.transformRadix2(imag[x], real[x]);
             }
             //// End section from Fft
+            
+            //// re-normalize
 
+            norm.shuffle(shuffler);
+            norm.sortByValue(doubleComparator);
+            final int ns = norm.size();
+            final double den = (ns - 1.0);
+            for (int i = 0; i < ns; i++) {
+                final Coord co = norm.keyAt(i);
+                real[co.x][co.y] = real[width - 1 - co.x][height - 1 - co.y] = i / den;
+            }
+            shuffler.setState(0x1234567890ABCDEFL);
+            //// done re-normalizing
+//            
+//            for (int x = 0; x < width; x++) {
+//                for (int y = 0; y < height; y++) {
+//                    bright = (float) real[x][y];
+//                    renderer.color(bright, bright, bright, 1f);
+//                    renderer.vertex(x, y, 0);
+//                }
+//            }
+            Fft.getColors(real, imag, colors);
             for (int x = 0; x < width; x++) {
                 for (int y = 0; y < height; y++) {
-                    bright = (float) (real[x][y] = imag[x][y]);
-                    renderer.color(bright, bright, bright, 1f);
+                    renderer.color(colors[x][y]);
                     renderer.vertex(x, y, 0);
                 }
             }
-            ArrayTools.fill(imag, 0.0);
         }
         Fft.transform2D(real, imag);
         Fft.getColors(real, imag, colors);
