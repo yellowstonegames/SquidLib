@@ -2,7 +2,7 @@ package squidpony.squidmath;
 
 /**
  * A container class for various interfaces and implementing classes that affect continuous noise, such as that produced
- * by {@link WhirlingNoise} or {@link SeededNoise}, as well as static utility methods used throughout noise code.
+ * by {@link FastNoise} or {@link SeededNoise}, as well as static utility methods used throughout noise code.
  * <br>
  * Created by Tommy Ettinger on 3/17/2017.
  */
@@ -428,7 +428,7 @@ public class Noise {
         public double frequency;
         public double lacunarity;
         public Layered5D() {
-            this(FoamNoise.instance);
+            this(ClassicNoise.instance);
         }
 
         public Layered5D(Noise5D basis) {
@@ -768,7 +768,7 @@ public class Noise {
          */
         public double lacunarity = 0.5;
         public InverseLayered5D() {
-            this(FoamNoise.instance, 2);
+            this(ClassicNoise.instance, 2);
         }
 
         public InverseLayered5D(Noise5D basis) {
@@ -1264,7 +1264,7 @@ public class Noise {
         public Noise5D basis;
         public Ridged5D()
         {
-            this(FoamNoise.instance, 2, 1.25);
+            this(ClassicNoise.instance, 2, 1.25);
         }
         public Ridged5D(Noise5D basis)
         {
@@ -2173,6 +2173,33 @@ public class Noise {
             return Math.log(1.0 + sharpness * (basis.getNoiseWithSeed(x, y, z, w, seed) + 1.0)) * adjustment - 1.0;
         }
     }
+    public static class Exponential5D implements Noise5D {
+        protected Noise5D basis;
+        protected double sharpness, adjustment;
+        public Exponential5D() {
+            this(ClassicNoise.instance);
+        }
+
+        public Exponential5D(Noise5D basis) {
+            this(basis, 0.125);
+        }
+        public Exponential5D(Noise5D basis, double sharpness) {
+            this.basis = basis;
+            this.sharpness = sharpness - fastFloor(sharpness) - 1.0;
+            this.adjustment = 2.0 / Math.log1p(this.sharpness * 0.9999999999999999);
+            this.sharpness *= 0.5;
+        }
+
+        @Override
+        public double getNoise(double x, double y, double z, double w, double u) {
+            return Math.log(1.0 + sharpness * (basis.getNoise(x, y, z, w, u) + 1.0)) * adjustment - 1.0;
+        }
+
+        @Override
+        public double getNoiseWithSeed(double x, double y, double z, double w, double u, long seed) {
+            return Math.log(1.0 + sharpness * (basis.getNoiseWithSeed(x, y, z, w, u, seed) + 1.0)) * adjustment - 1.0;
+        }
+    }
     public static class Exponential6D implements Noise6D {
         protected Noise6D basis;
         protected double sharpness, adjustment;
@@ -2200,9 +2227,97 @@ public class Noise {
             return Math.log(1.0 + sharpness * (basis.getNoiseWithSeed(x, y, z, w, u, v, seed) + 1.0)) * adjustment - 1.0;
         }
     }
-    
-    
+
     /**
+     * Used to add an extra parameter to 3D noise, such as one based on rotation, time, or some non-spatial component.
+     * Adding a sine wave as the {@link #w} value to a world made with 3D noise results in
+     * <a href="https://i.imgur.com/w55JXtX.gif">something that looks like this</a>.
+     */
+    public static class Adapted3DFrom4D implements Noise3D {
+        protected Noise4D basis;
+        public double w;
+        public Adapted3DFrom4D() {
+            this(ClassicNoise.instance);
+        }
+
+        public Adapted3DFrom4D(Noise4D basis) {
+            this.basis = basis;
+        }
+
+        public double getW() {
+            return w;
+        }
+
+        public void setW(double w) {
+            this.w = w;
+        }
+
+        @Override
+        public double getNoise(double x, double y, double z) {
+            return basis.getNoise(x, y, z, w);
+        }
+
+        @Override
+        public double getNoiseWithSeed(double x, double y, double z, long seed) {
+            return basis.getNoiseWithSeed(x, y, z, w, seed);
+        }
+    }
+
+    /**
+     * Used to add extra parameters to 3D noise, such as those based on rotation, time, or some non-spatial component.
+     * Using {@link #setExtras(double)} to set {@link #w} and {@link #u} in a world made with 3D noise results in
+     * <a href="https://i.imgur.com/zN2OmWx.gif">something that looks like this</a>.
+     */
+    public static class Adapted3DFrom5D implements Noise3D {
+        protected Noise5D basis;
+        public double w, u;
+        public Adapted3DFrom5D() {
+            this(ClassicNoise.instance);
+        }
+
+        public Adapted3DFrom5D(Noise5D basis) {
+            this.basis = basis;
+        }
+
+        public double getW() {
+            return w;
+        }
+
+        public void setW(double w) {
+            this.w = w;
+        }
+
+        public double getU() {
+            return u;
+        }
+
+        public void setU(double u) {
+            this.u = u;
+        }
+
+        /**
+         * This sets the two extra noise parameters given one parameter, theta, which is treated as looping over a
+         * circle of different w and u values, with one cycle equal to a change of 1.0 in theta.
+         * @param theta only the fractional part matters; used to set both w and u. Cycles if it goes past an integer.
+         */
+        public void setExtras(double theta) {
+            w = NumberTools.cos_(theta);
+            u = NumberTools.sin_(theta);
+        }
+
+        @Override
+        public double getNoise(double x, double y, double z) {
+            return basis.getNoise(x, y, z, w, u);
+        }
+
+        @Override
+        public double getNoiseWithSeed(double x, double y, double z, long seed) {
+            return basis.getNoiseWithSeed(x, y, z, w, u, seed);
+        }
+    }
+
+
+        /**
      * Produces a 2D array of noise with values from -1.0 to 1.0 that is seamless on all boundaries.
      * Uses (x,y) order. Allows a seed to change the generated noise.
      * If you need to call this very often, consider {@link #seamless2D(double[][], int, int)}, which re-uses the array.
