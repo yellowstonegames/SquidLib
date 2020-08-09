@@ -12,6 +12,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.github.tommyettinger.anim8.AnimatedGif;
+import com.github.tommyettinger.anim8.Dithered;
 import squidpony.FakeLanguageGen;
 import squidpony.StringKit;
 import squidpony.Thesaurus;
@@ -19,7 +20,12 @@ import squidpony.squidgrid.gui.gdx.FilterBatch;
 import squidpony.squidgrid.gui.gdx.SColor;
 import squidpony.squidgrid.gui.gdx.WorldMapView;
 import squidpony.squidgrid.mapping.WorldMapGenerator;
-import squidpony.squidmath.*;
+import squidpony.squidmath.CrossHash;
+import squidpony.squidmath.DiverRNG;
+import squidpony.squidmath.Noise;
+import squidpony.squidmath.NumberTools;
+import squidpony.squidmath.SeededNoise;
+import squidpony.squidmath.StatefulRNG;
 
 import java.text.DateFormat;
 import java.util.Date;
@@ -32,11 +38,11 @@ import java.util.Date;
 public class AnimatedWorldMapWriter extends ApplicationAdapter {
 //    private static final int width = 1920, height = 1080;
 //    private static final int width = 256, height = 256; // localMimic
-    private static final int width = 420, height = 210; // mimic, elliptical
+//    private static final int width = 420, height = 210; // mimic, elliptical
 //    private static final int width = 512, height = 256; // mimic, elliptical
 //    private static final int width = 1024, height = 512; // mimic, elliptical
 //    private static final int width = 2048, height = 1024; // mimic, elliptical
-//    private static final int width = 256, height = 256; // space view
+    private static final int width = 256, height = 256; // space view
 //    private static final int width = 1200, height = 400; // squat
     private static final int LIMIT = 5;
     //private static final int width = 256, height = 128;
@@ -88,7 +94,9 @@ public class AnimatedWorldMapWriter extends ApplicationAdapter {
 //        path = "out/worldsAnimated/" + date + "/Mimic/";
 //        path = "out/worldsAnimated/" + date + "/SpaceView/";
 //        path = "out/worldsAnimated/" + date + "/SpaceViewMutantClassic/";
-        path = "out/worldsAnimated/" + date + "/HyperellipseWrithing/";
+//        path = "out/worldsAnimated/" + date + "/SpaceViewMutantFoam/";
+        path = "out/worldsAnimated/" + date + "/SpaceViewMutantSimplex/";
+//        path = "out/worldsAnimated/" + date + "/HyperellipseWrithing/";
 //        path = "out/worldsAnimated/" + date + "/Sphere_Classic/";
 //        path = "out/worldsAnimated/" + date + "/Hyperellipse/";
 //        path = "out/worldsAnimated/" + date + "/HyperellipseExpo/";
@@ -111,9 +119,10 @@ public class AnimatedWorldMapWriter extends ApplicationAdapter {
         pt = new Texture(pm[0]);
 
         writer = new AnimatedGif();
+        writer.setDitherAlgorithm(Dithered.DitherAlgorithm.GRADIENT_NOISE);
         writer.setFlipY(false);
 //        writer.palette = new PaletteReducer();
-//        writer.palette.setDitherStrength(1f);
+//        writer.palette.setDitherStrength(1.0f);
         rng = new StatefulRNG(CrossHash.hash64(date));
         //rng.setState(rng.nextLong() + 2000L); // change addend when you need different results on the same date  
         //rng = new StatefulRNG(0L);
@@ -137,13 +146,13 @@ public class AnimatedWorldMapWriter extends ApplicationAdapter {
             @Override
             public double getNoise(double x, double y, double z) {
 //                return FoamNoise.foamNoise(x * 2.75, y * 2.75, z * 2.75, mutationA, mutationB, 123456789);
-                return ClassicNoise.instance.getNoiseWithSeed(x, y, z, mutationA, mutationB, 123456789);
+                return SeededNoise.instance.getNoiseWithSeed(x, y, z, mutationA, mutationB, 123456789);
             }
 
             @Override
             public double getNoiseWithSeed(double x, double y, double z, long seed) {
 //                return FoamNoise.foamNoise(x * 2.75, y * 2.75, z * 2.75, mutationA, mutationB, (int)seed);
-                return ClassicNoise.instance.getNoiseWithSeed(x, y, z, mutationA, mutationB, seed);
+                return SeededNoise.instance.getNoiseWithSeed(x * 1.5, y * 1.5, z * 1.5, mutationA, mutationB, seed);
             }
         };
         
@@ -167,10 +176,10 @@ public class AnimatedWorldMapWriter extends ApplicationAdapter {
 //        world = new WorldMapGenerator.TilingMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.75);
 //        world = new WorldMapGenerator.EllipticalMap(seed, width, height, noise, 1.75);
 //        world = new WorldMapGenerator.MimicMap(seed, WorldMapGenerator.DEFAULT_NOISE, 1.75);
-//        world = new WorldMapGenerator.SpaceViewMap(seed, width, height, noise, 0.55);
+        world = new WorldMapGenerator.SpaceViewMap(seed, width, height, noise, 0.5);
 //        world = new WorldMapGenerator.RoundSideMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.75);
 //        world = new WorldMapGenerator.HyperellipticalMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 0.8, 0.03125, 2.5);
-        world = new WorldMapGenerator.HyperellipticalMap(seed, width, height, noise, 0.5, 0.03125, 2.5);
+//        world = new WorldMapGenerator.HyperellipticalMap(seed, width, height, noise, 0.5, 0.03125, 2.5);
 //        world = new WorldMapGenerator.EllipticalHammerMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.75);
 //        world = new WorldMapGenerator.LocalMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.75);
 //        world = new WorldMapGenerator.LocalMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 0.8);
@@ -201,7 +210,7 @@ public class AnimatedWorldMapWriter extends ApplicationAdapter {
         wmv.generate(
                 //1.45,
                 1.0 + NumberTools.formCurvedDouble(world.seedA * 0x123456789ABCDEFL ^ world.seedB) * 0.1875,
-                1.0 + DiverRNG.determineDouble(world.seedB * 0x123456789ABL ^ world.seedA) * 0.3125);
+                1.0625 + DiverRNG.determineDouble(world.seedB * 0x123456789ABL ^ world.seedA) * 0.375);
         ttg = System.currentTimeMillis() - startTime;
     }
 
@@ -219,12 +228,12 @@ public class AnimatedWorldMapWriter extends ApplicationAdapter {
 //            mutationA = NumberTools.cos(angle) * (mutationC + 2.0);
 //            mutationB = NumberTools.sin(angle) * (mutationC + 2.0);
 //            mutationC = NumberTools.cos(angle * 3.0 + 1.0) * 0.625 + 2.25;
-            mutationA = NumberTools.cos(angle) * 0.25;
-            mutationB = NumberTools.sin(angle) * 0.25;
+            mutationA = NumberTools.cos(angle) * 0.3125;
+            mutationB = NumberTools.sin(angle) * 0.3125;
             //            mutation = NumberTools.sin(angle) * 0.918 + NumberTools.cos(angle * 4.0 + 1.618) * 0.307;
 
             //// this next line should not usually be commented out, but it makes sense not to have it when you can see the whole map.
-            //world.setCenterLongitude(angle);
+            world.setCenterLongitude(angle);
             generate(hash);
             wmv.getBiomeMapper().makeBiomes(world);
             float[][] cm = wmv.show();
@@ -243,8 +252,9 @@ public class AnimatedWorldMapWriter extends ApplicationAdapter {
         pt.draw(pm[0], 0, 0);
         batch.draw(pt, 0, 0, width, height);
         batch.end();
-
-        writer.write(Gdx.files.local(path + name + ".gif"), new Array<Pixmap>(pm), 40);
+//        Array<Pixmap> apm = new Array<Pixmap>(pm);
+//        writer.palette.analyze(apm);
+        writer.write(Gdx.files.local(path + name + ".gif"), new Array<Pixmap>(pm), 30);
 
         if(counter >= LIMIT)
                 Gdx.app.exit();
