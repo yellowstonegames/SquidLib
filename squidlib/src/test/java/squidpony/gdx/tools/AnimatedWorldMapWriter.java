@@ -152,7 +152,8 @@ public class AnimatedWorldMapWriter extends ApplicationAdapter {
             @Override
             public double getNoiseWithSeed(double x, double y, double z, long seed) {
 //                return FoamNoise.foamNoise(x * 2.75, y * 2.75, z * 2.75, mutationA, mutationB, (int)seed);
-                return SeededNoise.instance.getNoiseWithSeed(x * 1.5, y * 1.5, z * 1.5, mutationA, mutationB, seed);
+                final double a = SeededNoise.instance.getNoiseWithSeed(mutationA * 0.75, mutationB * 0.75, x * 0.75, y * 0.75, z * 0.75, ~seed) * 0.25;
+                return SeededNoise.instance.getNoiseWithSeed(x * 1.5 + a, y * 1.5 - a, z * 1.5 + a, mutationA * 1.5, mutationB * 1.5, seed);
             }
         };
         
@@ -228,8 +229,8 @@ public class AnimatedWorldMapWriter extends ApplicationAdapter {
 //            mutationA = NumberTools.cos(angle) * (mutationC + 2.0);
 //            mutationB = NumberTools.sin(angle) * (mutationC + 2.0);
 //            mutationC = NumberTools.cos(angle * 3.0 + 1.0) * 0.625 + 2.25;
-            mutationA = NumberTools.cos(angle) * 0.3125;
-            mutationB = NumberTools.sin(angle) * 0.3125;
+            mutationA = NumberTools.cos(angle) * 0.25;
+            mutationB = NumberTools.sin(angle) * 0.25;
             //            mutation = NumberTools.sin(angle) * 0.918 + NumberTools.cos(angle * 4.0 + 1.618) * 0.307;
 
             //// this next line should not usually be commented out, but it makes sense not to have it when you can see the whole map.
@@ -271,11 +272,6 @@ public class AnimatedWorldMapWriter extends ApplicationAdapter {
     }
 
     @Override
-    public void dispose() {
-        super.dispose();
-    }
-
-    @Override
     public void resize(int width, int height) {
         super.resize(width, height);
         view.update(width, height, true);
@@ -284,12 +280,11 @@ public class AnimatedWorldMapWriter extends ApplicationAdapter {
 
     public static void main(String[] arg) {
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-        config.title = "SquidLib Demo: Detailed World Map";
+        config.title = "SquidLib Demo: Animated World Map Writer";
         config.width = width * cellWidth;
         config.height = height * cellHeight;
         //config.fullscreen = true;
         config.foregroundFPS = 2;
-        //config.fullscreen = true;
         config.backgroundFPS = 2;
         config.addIcon("Tentacle-16.png", Files.FileType.Internal);
         config.addIcon("Tentacle-32.png", Files.FileType.Internal);
