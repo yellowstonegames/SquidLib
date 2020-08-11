@@ -34,13 +34,13 @@ import java.io.Serializable;
 /**
  * A wide range of noise functions that can all be called from one configurable object. Originally from Jordan Peck's
  * FastNoise library, hence the name (these functions are sometimes, but not always, very fast for noise that doesn't
- * use the GPU). This implements Noise2D, Noise3D, Noise4D, and Noise6D, and this is the fastest continuous noise
- * algorithm in the library. Though it doesn't implement an interface for them, you can also use this to get
+ * use the GPU). This implements Noise2D, Noise3D, Noise4D, Noise5D, and Noise6D, and this is the fastest continuous
+ * noise algorithm in the library. Though it doesn't implement an interface for them, you can also use this to get
  * ridged-multi simplex noise (the same type as {@link Noise.Ridged2D}) with {@link #ridged2D(float, float, int, int)},
  * {@link #ridged3D(float, float, float, int, int)}, or any of the overloads that allow specifying alternate lacunarity
  * and gain.
  */
-public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, Noise.Noise6D {
+public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, Noise.Noise5D, Noise.Noise6D {
     private static final long serialVersionUID = 3L;
     public static final int VALUE = 0, VALUE_FRACTAL = 1, PERLIN = 2, PERLIN_FRACTAL = 3,
             SIMPLEX = 4, SIMPLEX_FRACTAL = 5, CELLULAR = 6, WHITE_NOISE = 7, CUBIC = 8, CUBIC_FRACTAL = 9, 
@@ -364,6 +364,10 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         return pointHash.hashWithState(x, y, z, w, s);
     }
 
+    private int hashAll(int x, int y, int z, int w, int u, int s){
+        return pointHash.hashWithState(x, y, z, w, u, s);
+    }
+
     private int hashAll(int x, int y, int z, int w, int u, int v, int s){
         return pointHash.hashWithState(x, y, z, w, u, v, s);
     }
@@ -378,6 +382,10 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
 
     private int hash32(int x, int y, int z, int w, int s){
         return pointHash.hashWithState(x, y, z, w, s) >>> 27;
+    }
+
+    private int hash32(int x, int y, int z, int w, int u, int s){
+        return pointHash.hashWithState(x, y, z, w, u, s) >>> 27;
     }
 
     private int hash32(int x, int y, int z, int w, int u, int v, int s){
@@ -396,6 +404,10 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         return pointHash.hashWithState(x, y, z, w, s) >>> 24;
     }
 
+    private int hash256(int x, int y, int z, int w, int u, int s){
+        return pointHash.hashWithState(x, y, z, w, u, s) >>> 24;
+    }
+    
     private int hash256(int x, int y, int z, int w, int u, int v, int s){
         return pointHash.hashWithState(x, y, z, w, u, v, s) >>> 24;
     }
@@ -436,6 +448,18 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         return r;
     }
 
+    public double getNoise(double x, double y, double z, double w, double u) {
+        return getConfiguredNoise((float)x, (float)y, (float)z, (float)w, (float)u);
+    }
+
+    public double getNoiseWithSeed(double x, double y, double z, double w, double u, long seed) {
+        int s = this.seed;
+        this.seed = (int) (seed ^ seed >>> 32);
+        double r = getConfiguredNoise((float)x, (float)y, (float)z, (float)w, (float)u);
+        this.seed = s;
+        return r;
+    }
+    
     public double getNoise(double x, double y, double z, double w, double u, double v) {
         return getConfiguredNoise((float)x, (float)y, (float)z, (float)w, (float)u, (float)v);
     }
@@ -467,6 +491,14 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         final int s = this.seed;
         this.seed = seed;
         float r = getConfiguredNoise(x, y, z, w);
+        this.seed = s;
+        return r;
+    }
+
+    public float getNoiseWithSeed(float x, float y, float z, float w, float u, int seed) {
+        final int s = this.seed;
+        this.seed = seed;
+        float r = getConfiguredNoise(x, y, z, w, u);
         this.seed = s;
         return r;
     }
@@ -548,6 +580,13 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
     protected float gradCoord4D(int seed, int x, int y, int z, int w, float xd, float yd, float zd, float wd) {
         final int hash = hash256(x, y, z, w, seed) & 0xFC;
         return xd * grad4f[hash] + yd * grad4f[hash + 1] + zd * grad4f[hash + 2] + wd * grad4f[hash + 3];
+    }
+
+    protected float gradCoord5D(int seed, int x, int y, int z, int w, int u,
+                                       float xd, float yd, float zd, float wd, float ud) {
+        final int hash = hash256(x, y, z, w, u, seed) * 5;
+        return xd * grad5f[hash] + yd * grad5f[hash + 1] + zd * grad5f[hash + 2]
+                + wd * grad5f[hash + 3] + ud * grad5f[hash + 4];
     }
 
     protected float gradCoord6D(int seed, int x, int y, int z, int w, int u, int v,
@@ -726,7 +765,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
     /**
      * After being configured with the setters in this class, such as {@link #setNoiseType(int)},
      * {@link #setFrequency(float)}, {@link #setFractalOctaves(int)}, and {@link #setFractalType(int)}, among others,
-     * you can call this method to get the particular variety of noise you specified, in 3D.
+     * you can call this method to get the particular variety of noise you specified, in 4D.
      * @param x
      * @param y
      * @param z
@@ -801,7 +840,75 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
     /**
      * After being configured with the setters in this class, such as {@link #setNoiseType(int)},
      * {@link #setFrequency(float)}, {@link #setFractalOctaves(int)}, and {@link #setFractalType(int)}, among others,
-     * you can call this method to get the particular variety of noise you specified, in 3D.
+     * you can call this method to get the particular variety of noise you specified, in 5D.
+     * @param x
+     * @param y
+     * @param z
+     * @param w
+     * @param u
+     * @return noise as a float from -1f to 1f
+     */
+    public float getConfiguredNoise(float x, float y, float z, float w, float u) {
+        x *= frequency;
+        y *= frequency;
+        z *= frequency;
+        w *= frequency;
+        u *= frequency;
+
+        switch (noiseType) {
+//            case VALUE:
+//                return singleValue(seed, x, y, z, w, u, v);
+//            case VALUE_FRACTAL:
+//                switch (fractalType) {
+//                    case BILLOW:
+//                        return singleValueFractalBillow(x, y, z, w, u, v);
+//                    case RIDGED_MULTI:
+//                        return singleValueFractalRidgedMulti(x, y, z, w, u, v);
+//                    default:
+//                        return singleValueFractalFBM(x, y, z, w, u, v);
+//                }
+//            case FOAM:
+//                return singleFoam(seed, x, y, z, w, u, v);
+//            case FOAM_FRACTAL:
+//                switch (fractalType) {
+//                    case BILLOW:
+//                        return singleFoamFractalBillow(x, y, z, w, u, v);
+//                    case RIDGED_MULTI:
+//                        return singleFoamFractalRidgedMulti(x, y, z, w, u, v);
+//                    default:
+//                        return singleFoamFractalFBM(x, y, z, w, u, v);
+//                }
+//            case PERLIN:
+//                return singlePerlin(seed, x, y, z, w, u, v);
+//            case PERLIN_FRACTAL:
+//                switch (fractalType) {
+//                    case BILLOW:
+//                        return singlePerlinFractalBillow(x, y, z, w, u, v);
+//                    case RIDGED_MULTI:
+//                        return singlePerlinFractalRidgedMulti(x, y, z, w, u, v);
+//                    default:
+//                        return singlePerlinFractalFBM(x, y, z, w, u, v);
+//                }
+            case SIMPLEX_FRACTAL:
+                switch (fractalType) {
+                    case BILLOW:
+                        return singleSimplexFractalBillow(x, y, z, w, u);
+                    case RIDGED_MULTI:
+                        return singleSimplexFractalRidgedMulti(x, y, z, w, u);
+                    default:
+                        return singleSimplexFractalFBM(x, y, z, w, u);
+                }
+//            case WHITE_NOISE:
+//                return getWhiteNoise(x, y, z, w, u, v);
+            default:
+                return singleSimplex(seed, x, y, z, w, u);
+        }
+    }
+
+    /**
+     * After being configured with the setters in this class, such as {@link #setNoiseType(int)},
+     * {@link #setFrequency(float)}, {@link #setFractalOctaves(int)}, and {@link #setFractalType(int)}, among others,
+     * you can call this method to get the particular variety of noise you specified, in 6D.
      * @param x
      * @param y
      * @param z
@@ -3494,6 +3601,237 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
 
         return sum * fractalBounding;
     }
+    
+    // 5D Simplex
+
+    private static final float
+            F5 = (float) ((Math.sqrt(6.0) - 1.0) / 5.0),
+            G5 = (float) ((6.0 - Math.sqrt(6.0)) / 30.0),
+            LIMIT5 = 0.7f;
+
+    public float singleSimplex(int seed, float x, float y, float z, float w, float u) {
+        float n0, n1, n2, n3, n4, n5;
+        float t = (x + y + z + w + u) * F5;
+        int i = fastFloor(x + t);
+        int j = fastFloor(y + t);
+        int k = fastFloor(z + t);
+        int l = fastFloor(w + t);
+        int h = fastFloor(u + t);
+        t = (i + j + k + l + h) * G5;
+        float X0 = i - t;
+        float Y0 = j - t;
+        float Z0 = k - t;
+        float W0 = l - t;
+        float U0 = h - t;
+        float x0 = x - X0;
+        float y0 = y - Y0;
+        float z0 = z - Z0;
+        float w0 = w - W0;
+        float u0 = u - U0;
+
+        int rankx = 0;
+        int ranky = 0;
+        int rankz = 0;
+        int rankw = 0;
+        int ranku = 0;
+
+        if (x0 > y0) rankx++; else ranky++;
+        if (x0 > z0) rankx++; else rankz++;
+        if (x0 > w0) rankx++; else rankw++;
+        if (x0 > u0) rankx++; else ranku++;
+
+        if (y0 > z0) ranky++; else rankz++;
+        if (y0 > w0) ranky++; else rankw++;
+        if (y0 > u0) ranky++; else ranku++;
+
+        if (z0 > w0) rankz++; else rankw++;
+        if (z0 > u0) rankz++; else ranku++;
+
+        if (w0 > u0) rankw++; else ranku++;
+
+        int i1 = 3 - rankx >>> 31;
+        int j1 = 3 - ranky >>> 31;
+        int k1 = 3 - rankz >>> 31;
+        int l1 = 3 - rankw >>> 31;
+        int h1 = 3 - ranku >>> 31;
+
+        int i2 = 2 - rankx >>> 31;
+        int j2 = 2 - ranky >>> 31;
+        int k2 = 2 - rankz >>> 31;
+        int l2 = 2 - rankw >>> 31;
+        int h2 = 2 - ranku >>> 31;
+
+        int i3 = 1 - rankx >>> 31;
+        int j3 = 1 - ranky >>> 31;
+        int k3 = 1 - rankz >>> 31;
+        int l3 = 1 - rankw >>> 31;
+        int h3 = 1 - ranku >>> 31;
+
+        int i4 = -rankx >>> 31;
+        int j4 = -ranky >>> 31;
+        int k4 = -rankz >>> 31;
+        int l4 = -rankw >>> 31;
+        int h4 = -ranku >>> 31;
+
+        float x1 = x0 - i1 + G5;
+        float y1 = y0 - j1 + G5;
+        float z1 = z0 - k1 + G5;
+        float w1 = w0 - l1 + G5;
+        float u1 = u0 - h1 + G5;
+
+        float x2 = x0 - i2 + 2 * G5;
+        float y2 = y0 - j2 + 2 * G5;
+        float z2 = z0 - k2 + 2 * G5;
+        float w2 = w0 - l2 + 2 * G5;
+        float u2 = u0 - h2 + 2 * G5;
+
+        float x3 = x0 - i3 + 3 * G5;
+        float y3 = y0 - j3 + 3 * G5;
+        float z3 = z0 - k3 + 3 * G5;
+        float w3 = w0 - l3 + 3 * G5;
+        float u3 = u0 - h3 + 3 * G5;
+
+        float x4 = x0 - i4 + 4 * G5;
+        float y4 = y0 - j4 + 4 * G5;
+        float z4 = z0 - k4 + 4 * G5;
+        float w4 = w0 - l4 + 4 * G5;
+        float u4 = u0 - h4 + 4 * G5;
+
+        float x5 = x0 - 1 + 5 * G5;
+        float y5 = y0 - 1 + 5 * G5;
+        float z5 = z0 - 1 + 5 * G5;
+        float w5 = w0 - 1 + 5 * G5;
+        float u5 = u0 - 1 + 5 * G5;
+
+        t = LIMIT5 - x0 * x0 - y0 * y0 - z0 * z0 - w0 * w0 - u0 * u0;
+        if (t < 0) n0 = 0;
+        else
+        {
+            t *= t;
+            n0 = t * t * gradCoord5D(seed, i, j, k, l, h, x0, y0, z0, w0, u0);
+        }
+
+        t = LIMIT5 - x1 * x1 - y1 * y1 - z1 * z1 - w1 * w1 - u1 * u1;
+        if (t < 0) n1 = 0;
+        else
+        {
+            t *= t;
+            n1 = t * t * gradCoord5D(seed, i + i1, j + j1, k + k1, l + l1, h + h1, x1, y1, z1, w1, u1);
+        }
+
+        t = LIMIT5 - x2 * x2 - y2 * y2 - z2 * z2 - w2 * w2 - u2 * u2;
+        if (t < 0) n2 = 0;
+        else
+        {
+            t *= t;
+            n2 = t * t * gradCoord5D(seed, i + i2, j + j2, k + k2, l + l2, h + h2, x2, y2, z2, w2, u2);
+        }
+
+        t = LIMIT5 - x3 * x3 - y3 * y3 - z3 * z3 - w3 * w3 - u3 * u3;
+        if (t < 0) n3 = 0;
+        else
+        {
+            t *= t;
+            n3 = t * t * gradCoord5D(seed, i + i3, j + j3, k + k3, l + l3, h + h3, x3, y3, z3, w3, u3);
+        }
+
+        t = LIMIT5 - x4 * x4 - y4 * y4 - z4 * z4 - w4 * w4 - u4 * u4;
+        if (t < 0) n4 = 0;
+        else
+        {
+            t *= t;
+            n4 = t * t * gradCoord5D(seed, i + i4, j + j4, k + k4, l + l4, h + h4, x4, y4, z4, w4, u4);
+        }
+
+        t = LIMIT5 - x5 * x5 - y5 * y5 - z5 * z5 - w5 * w5 - u5 * u5;
+        if (t < 0) n5 = 0;
+        else
+        {
+            t *= t;
+            n5 = t * t * gradCoord5D(seed, i + 1, j + 1, k + 1, l + 1, h + 1, x5, y5, z5, w5, u5);
+        }
+
+        return  (n0 + n1 + n2 + n3 + n4 + n5) * 10f; 
+    }
+
+    public float getSimplex(float x, float y, float z, float w, float u) {
+        return singleSimplex(seed, x * frequency, y * frequency, z * frequency, w * frequency, u * frequency);
+    }
+    // Simplex Noise
+    public float getSimplexFractal(float x, float y, float z, float w, float u) {
+        x *= frequency;
+        y *= frequency;
+        z *= frequency;
+        w *= frequency;
+        u *= frequency;
+
+        switch (fractalType) {
+            case FBM:
+                return singleSimplexFractalFBM(x, y, z, w, u);
+            case BILLOW:
+                return singleSimplexFractalBillow(x, y, z, w, u);
+            case RIDGED_MULTI:
+                return singleSimplexFractalRidgedMulti(x, y, z, w, u);
+            default:
+                return 0;
+        }
+    }
+
+    private float singleSimplexFractalFBM(float x, float y, float z, float w, float u) {
+        int seed = this.seed;
+        float sum = singleSimplex(seed, x, y, z, w, u);
+        float amp = 1;
+
+        for (int i = 1; i < octaves; i++) {
+            x *= lacunarity;
+            y *= lacunarity;
+            z *= lacunarity;
+            w *= lacunarity;
+            u *= lacunarity;
+
+            amp *= gain;
+            sum += singleSimplex(seed + i, x, y, z, w, u) * amp;
+        }
+
+        return sum * fractalBounding;
+    }
+    private float singleSimplexFractalRidgedMulti(float x, float y, float z, float w, float u) {
+        int seed = this.seed;
+        float sum = 0, amp = 1, ampBias = 1f, spike;
+        for (int i = 0; i < octaves; i++) {
+            spike = 1f - Math.abs(singleSimplex(seed + i, x, y, z, w, u));
+            spike *= spike * amp;
+            amp = Math.max(0f, Math.min(1f, spike * 2f));
+            sum += (spike * ampBias);
+            ampBias *= 2f;
+            x *= lacunarity;
+            y *= lacunarity;
+            z *= lacunarity;
+            w *= lacunarity;
+            u *= lacunarity;
+        }
+        return sum / ((ampBias - 1f) * 0.5f) - 1f;
+    }
+
+    private float singleSimplexFractalBillow(float x, float y, float z, float w, float u) {
+        int seed = this.seed;
+        float sum = Math.abs(singleSimplex(seed, x, y, z, w, u)) * 2 - 1;
+        float amp = 1;
+
+        for (int i = 1; i < octaves; i++) {
+            x *= lacunarity;
+            y *= lacunarity;
+            z *= lacunarity;
+            w *= lacunarity;
+            u *= lacunarity;
+
+            amp *= gain;
+            sum += (Math.abs(singleSimplex(seed + i, x, y, z, w, u)) * 2 - 1) * amp;
+        }
+
+        return sum * fractalBounding;
+    }
+
 
     // 6D Simplex
 
@@ -4794,7 +5132,275 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
             0, 0, 0, 0, 7, 1, 3, 0, 3, 1, 0, 7, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 7, 1, 0, 3, 0, 0, 0, 0,
             7, 3, 0, 1, 7, 3, 1, 0};
-    
+    /**
+     * This gradient vector array was pseudo-randomly generated after a lot of rejection sampling. Each gradient should
+     * have a magnitude of 2.0, matching the magnitude of the center of an edge of a 5D hypercube.
+     * This may bias slightly in some directions. The sums of the x, y, z, w, and u components of all 256 vectors are:
+     * <br>
+     * x: +0.66677894631043, y: -0.67457046130430, z: -0.86203306900659, w: +0.63575181967243, u: +0.47384803638072
+     * <br>
+     * Most of the rejected sets of 256 vectors had some component sums at 10 or more, so having all of these close to
+     * 0.0 is good.
+     */
+    protected static final float[] grad5f = {
+            -0.8135037701f, -1.4093324762f, +0.4981674194f, +1.0221341212f, -0.2430321956f,
+            -1.0472578593f, +1.5035195198f, -0.3859795921f, -0.6042103597f, +0.3586497251f,
+            +1.2588681037f, -1.1621986474f, -0.8123094051f, +0.5944339059f, +0.2265991249f,
+            -0.2960358350f, +0.0170047461f, -1.8165726173f, -0.4794051151f, +0.6183108318f,
+            -0.3365697234f, +1.0025399140f, -0.3342898515f, -1.2201787939f, -1.1318341523f,
+            -1.1798657213f, +0.3878857844f, -0.0047051864f, -0.5091701000f, -1.4826277916f,
+            -0.0489109302f, +1.2981950452f, -0.7649713084f, -0.3691832721f, -1.2612771125f,
+            -0.0612615129f, +1.4820797101f, -0.1072664451f, +1.2446745792f, -0.4888413461f,
+            -0.6621120988f, +0.1384623861f, -0.5196699469f, -0.4864615611f, +1.7423357977f,
+            -0.5783656744f, +0.6783668545f, -0.7055237483f, -1.3714609220f, -0.9091989537f,
+            +0.7351444842f, +0.7923092131f, +0.1905953342f, +1.1881160783f, +1.1763767684f,
+            +0.7692669119f, -0.5722145680f, -1.6379784624f, -0.2688003492f, +0.5705890250f,
+            +0.0796703277f, +0.5758477138f, -0.6676893639f, -0.3441795362f, -1.7600521042f,
+            +0.0202501603f, +0.7104597787f, -0.8290042697f, +1.6662766142f, -0.1763831049f,
+            -0.3263675211f, -0.4703927051f, +1.1022210297f, +1.3426936983f, -0.8090101225f,
+            -1.2955279282f, -1.0884490171f, -0.4371549231f, -0.6865473487f, -0.6887920119f,
+            +0.5157780595f, +0.7680918222f, -1.1694371005f, +1.2256868318f, -0.5235614617f,
+            +1.4466690387f, -0.6576881996f, -1.0596724686f, -0.2693364586f, +0.5283436911f,
+            +0.1232897549f, +0.0877975959f, -1.1404266324f, +0.1884320885f, +1.6251189687f,
+            -0.8555904107f, +1.4296013143f, -0.8463954489f, -0.5503002325f, +0.4527576939f,
+            +0.0234155836f, -0.9837219063f, -0.6821029381f, -0.8476569318f, +1.3593955382f,
+            +1.7892428919f, +0.5220227406f, +0.0110223541f, +0.7207562621f, +0.0805670558f,
+            -0.4293868153f, +1.0344832480f, -1.2893123840f, +1.0403632804f, +0.0280925932f,
+            +0.7916575492f, +0.0033153855f, -1.0930829739f, +1.0304678656f, -1.0566801424f,
+            +0.6760136637f, -0.3493488323f, -1.2095929483f, +0.8896749291f, +1.0799649717f,
+            +1.1140270928f, -0.4273503201f, +0.9011244868f, +0.5287852709f, -1.2184728709f,
+            -0.6455453736f, +0.2148296014f, +0.1113957520f, -1.4486139903f, +1.1942478413f,
+            -0.7885750939f, +1.4996205936f, +0.6310893695f, +0.5934480559f, +0.6154941181f,
+            +0.7293084741f, +1.2427236824f, +0.8400151653f, +0.7745575708f, +0.7862455662f,
+            +1.0321795514f, +0.1997656305f, +0.5800043270f, -1.5979448440f, +0.0697590333f,
+            +0.6972026170f, +1.6829318840f, +0.5275668404f, -0.2871990368f, -0.5664262766f,
+            +1.5776132644f, -0.4511467598f, +1.0432759097f, -0.4633993608f, -0.0666288052f,
+            +0.1097217287f, +0.2476558079f, -0.4818135273f, -1.5250099293f, -1.1699693088f,
+            -1.3816067831f, +0.3764648739f, -0.4118151086f, +0.9033974500f, -0.9816915296f,
+            +1.1883662133f, -0.8073547121f, +1.3034256479f, -0.2213720052f, +0.4336359389f,
+            +1.3667617011f, -0.3219864189f, -1.1046135188f, +0.1341811806f, -0.8888822101f,
+            +0.8429523414f, +1.4333214898f, +0.8005151149f, +0.7696009955f, +0.0437117320f,
+            -0.4629311478f, +0.3129604106f, +0.5959353074f, -0.0440924216f, -1.8250116442f,
+            +0.9931164017f, -1.1621808031f, -1.1919233319f, +0.2114379458f, -0.4445990997f,
+            -0.4694361590f, -0.0720812980f, -1.0504569965f, +0.2412132219f, +1.6164127750f,
+            +0.2255783496f, -0.2656159811f, +0.1836243267f, +1.0247734750f, -1.6717308367f,
+            -1.1249246028f, -1.5370863231f, -0.1225300230f, +0.1846111151f, -0.5681684636f,
+            +1.7969542831f, -0.2398689157f, +0.2637113045f, +0.1468158723f, +0.7888723947f,
+            +1.4759978631f, -0.5282519730f, +0.9824708882f, -0.6592134457f, +0.3775827700f,
+            +0.7822637006f, +0.3953055238f, -1.7940565963f, +0.0934530762f, +0.0665168960f,
+            -0.1895305589f, +0.8138331320f, +0.1133728725f, +0.8730224243f, +1.5895698283f,
+            +0.3659882348f, -0.1532017028f, -1.3927442803f, -1.1285714875f, +0.7932033899f,
+            +1.3994232629f, -1.3493129158f, -0.2458528093f, +0.1300296689f, +0.3789694814f,
+            +0.7205921486f, -0.0063786412f, +0.1639523403f, -1.7029676103f, +0.7441284948f,
+            +1.4394387723f, -1.1109356044f, -0.0084571960f, -0.7562201284f, +0.3491385069f,
+            -1.3728884000f, +0.6803626642f, -0.2367573292f, -0.9912534233f, -0.7833560520f,
+            +0.6660160012f, -0.5734084579f, -1.1364022383f, +0.5303648945f, +1.2864402271f,
+            -1.1118911670f, +0.7518442270f, -0.6193249159f, -0.6971011180f, +1.1527857437f,
+            +0.4697132699f, +0.1800452980f, -0.7519527299f, +0.8922366145f, -1.5444850438f,
+            +0.9129657523f, -1.3462955184f, +0.8962598490f, -0.5850859544f, +0.4564806911f,
+            +0.4353207304f, -0.8947986429f, +1.0223003929f, -0.2880732642f, -1.3717678198f,
+            -1.3570198893f, -1.2149228730f, +0.4864509822f, -0.6542550666f, -0.1333236003f,
+            -0.8429268378f, +1.5487100476f, +0.6728404933f, +0.5411148811f, +0.3813815554f,
+            +1.1542818894f, +0.5161191350f, -0.0106170109f, -1.5482653183f, -0.0633730362f,
+            -0.3028841894f, +0.5637115661f, -0.6357795737f, +1.6484778594f, +0.6846864382f,
+            -0.7554941457f, -0.3792273201f, -0.9524406706f, -1.3427742039f, +0.7584388188f,
+            -0.6516571437f, -0.8096739074f, +1.2403868463f, -0.9420548462f, +0.7026693882f,
+            +1.1282889166f, -0.2046286773f, -0.5585557914f, +0.1515500267f, +1.5330163869f,
+            -1.8754512728f, -0.2443753413f, +0.6267313678f, +0.1501249582f, -0.0873699336f,
+            -0.7954420378f, -0.0011730104f, +1.2243206689f, +1.3461079784f, +0.2372821079f,
+            -0.2416801963f, -0.0096300449f, +1.2563518812f, +0.0597570611f, -1.5360686799f,
+            +1.0551343881f, -0.8474288199f, +0.6453925651f, -1.2404048956f, +0.4619739711f,
+            -0.7100307233f, -1.5954783091f, -0.8002979289f, +0.2605585040f, -0.4918717597f,
+            -0.6468051663f, +1.4624421482f, -0.1024406877f, -1.1968226377f, -0.0052458877f,
+            -0.0559435798f, -1.0845699098f, +0.3345624715f, -1.2829424922f, +1.0308758126f,
+            +0.2693015563f, +0.6548401802f, +1.1578288561f, -0.2511868960f, +1.4474109622f,
+            +0.5639618509f, -1.2979663293f, -0.0869327731f, +0.9603401159f, +1.0331601974f,
+            +1.7368208447f, +0.0640245222f, +0.8669874340f, -0.2677451350f, -0.3949677783f,
+            -0.0944818319f, -0.7689572828f, +0.0969776328f, -0.3967748508f, -1.7980386362f,
+            -1.0081008566f, +0.1401741032f, +1.5948365089f, +0.1046299384f, +0.6400257568f,
+            +0.7906457652f, -0.8588089302f, +1.3480070219f, -0.5822062372f, +0.6937142507f,
+            -1.5838247464f, +0.4117180083f, +1.1093312660f, +0.1203095141f, +0.2773034754f,
+            +1.1485752079f, -0.3057436499f, +1.0038566858f, +0.2569800630f, -1.2302555889f,
+            -0.4643362753f, +0.0527486340f, -0.5267816051f, -1.7479894609f, +0.6698084729f,
+            +0.6511653464f, +0.1627163528f, -0.6243065129f, -0.8848824566f, -1.5416651699f,
+            +0.2478327185f, -1.6090011830f, +0.2855396793f, -0.7650677400f, +0.8263368451f,
+            -0.4679093746f, +0.3517391490f, +1.6504647049f, +0.2121612740f, +0.9424936285f,
+            +1.1524992600f, +0.4245453907f, +0.4176501076f, +0.9808398701f, +1.1640567871f,
+            -0.6634415859f, +1.6550211652f, +0.7874326604f, +0.4415148931f, +0.0759250242f,
+            -0.0412327914f, -0.3505368928f, +0.8558498721f, -0.5848297084f, +1.6735946201f,
+            +0.3547189382f, -1.7184881162f, +0.5007184287f, +0.4490445315f, -0.6845532363f,
+            -0.3834315751f, +0.3428730656f, -0.3351234278f, -1.7627873621f, +0.7181164893f,
+            -1.0454290166f, -0.5639739397f, -1.3417921576f, -0.8849215875f, -0.0742910254f,
+            +1.1680066160f, -0.3827933313f, -1.4825659627f, -0.4967358337f, -0.2109063492f,
+            -1.5454371752f, -1.0726924123f, -0.2517537762f, +0.2452762614f, -0.5808739259f,
+            +0.5836685680f, +0.7000533029f, -0.7779803099f, -1.5848776079f, -0.2283987327f,
+            -0.7096420818f, +1.5584823825f, -0.7594797447f, -0.6018790930f, +0.3584311009f,
+            +1.0114275797f, -0.6676161775f, -0.6188288462f, +0.2346621257f, +1.4468197664f,
+            -0.6736922510f, -0.4841886117f, -1.5995845157f, +0.5783311944f, +0.6469640995f,
+            -0.6149414658f, +0.7811060917f, -1.6622776308f, +0.4457867877f, -0.2232207099f,
+            +0.9733737437f, -0.4277073646f, +1.2689422722f, +0.0669243740f, -1.1202306027f,
+            +0.1285525134f, +1.3602300828f, +0.7937181153f, +0.4154354789f, -1.1535481305f,
+            +1.1258201069f, +0.7265045253f, +0.7727828593f, +1.2638082317f, -0.1015660740f,
+            +0.2576028495f, +0.4466047871f, -1.6315521044f, +0.1664361243f, -1.0220184359f,
+            -1.2637043813f, -0.2854498187f, +0.7746532753f, +1.1819207514f, +0.5696887555f,
+            -1.7722327289f, -0.3228176294f, -0.4590453215f, -0.1981963132f, -0.7106163149f,
+            +0.4246192449f, -0.8445679528f, +0.2395992643f, -1.1808116599f, +1.2863434558f,
+            -0.1905644446f, +1.0893507679f, +1.2445824260f, -1.0623776423f, +0.3152275795f,
+            +0.0918870228f, -1.3938039147f, -0.7082701148f, -0.9973240838f, +0.7433475223f,
+            -0.9802998477f, -1.2974708212f, -0.6676406432f, +0.8408168026f, +0.4504050984f,
+            -0.4437627839f, -1.4265839857f, -1.3233439994f, -0.1067615287f, +0.0727692141f,
+            -0.7368457934f, +1.4234177323f, -1.1363011787f, -0.2584157530f, -0.2701502654f,
+            +1.2818557990f, +0.5352751228f, -0.1330287798f, -0.2587493132f, -1.4091410114f,
+            -0.5750307464f, -0.8488049316f, +1.1038871297f, +1.2590686262f, +0.3808532896f,
+            -1.0836557104f, +0.9700975741f, +1.3697765418f, +0.0254178194f, -0.0875623095f,
+            -0.4609184892f, +1.0631869587f, +1.1152084273f, -0.1590172959f, -1.1782237905f,
+            +1.3780658247f, +0.1221620032f, -0.8855727725f, -1.1375752240f, +0.0877183100f,
+            +0.2169356842f, -0.7257425078f, +0.5277865751f, +1.7387476451f, -0.3527530000f,
+            +0.5797869767f, -0.4024220452f, -1.5338493739f, +0.5186057185f, +0.9382205317f,
+            +1.3846709393f, -0.0923161271f, -0.9242707797f, +1.0781388520f, -0.2398004677f,
+            +1.5761774632f, -0.7200510919f, +0.7882079724f, +0.5982383931f, -0.1342760095f,
+            -0.0042997054f, -1.1394100050f, -0.7785351130f, +0.7081662713f, +1.2625806758f,
+            +0.2997533240f, -1.4170869215f, -0.5788158053f, +0.3519792904f, -1.2012890761f,
+            -0.3398151012f, +0.5791467632f, +1.5781017121f, +0.4058255292f, +0.9455238495f,
+            +1.1105596738f, +0.7447802839f, +0.6355979079f, -1.2596018785f, -0.4705081791f,
+            +0.0974575499f, +0.2372195493f, -1.8826219023f, +0.0288000719f, +0.6238062522f,
+            -0.1670458275f, +1.3998296887f, -1.0693753008f, +0.6130269221f, +0.7022869733f,
+            -1.5897952191f, -1.0894693285f, -0.2517800038f, -0.3047327680f, +0.3596561043f,
+            -0.4548162700f, -1.4395992274f, +0.1747274977f, -1.2709436621f, +0.2736215166f,
+            +0.7047777372f, +0.3204704899f, -0.2744422464f, -0.0872377649f, -1.8214439415f,
+            -0.0835945116f, -0.6039148549f, +1.2165255757f, -0.5432353406f, +1.3613448109f,
+            -0.5580119339f, +0.7700707950f, +1.0434424225f, +1.3552807019f, -0.4123782029f,
+            -1.3236047038f, +0.0222110721f, -0.2091127948f, +0.7389365969f, +1.2875642902f,
+            +1.4606909234f, +0.9324375707f, +0.6558211411f, -0.7518544646f, -0.0394423370f,
+            -0.5778226562f, +0.8127182901f, -1.4201531204f, -0.8399052400f, -0.5322915191f,
+            +1.8937623000f, +0.4754836653f, -0.2486242181f, +0.3544516598f, +0.0113865826f,
+            -1.3415568820f, -1.1014814961f, -0.8105272843f, +0.2020732697f, +0.5377504637f,
+            -0.2583280661f, +1.2566661182f, +1.0309321158f, -1.1358076933f, +0.0343035591f,
+            -1.2748727280f, -0.0862238606f, +1.0312513127f, +0.5525218687f, +0.9992523645f,
+            +0.6004095193f, -0.7697495350f, -0.0279612153f, +1.4385785345f, -0.9882833768f,
+            +0.1791096940f, -0.3122400084f, -1.1238723610f, -1.2955239535f, +0.9638228554f,
+            -0.8344845959f, -0.9577728108f, +1.4291249551f, -0.4439256733f, -0.3831952002f,
+            +0.0361279687f, +1.3825482465f, +1.2573509521f, -0.3200313309f, +0.6355341427f,
+            -0.4899748397f, +1.4002632000f, +0.2640288623f, -0.5729557095f, -1.1837221558f,
+            +0.0220928428f, +0.8453539300f, -0.6964338665f, +1.5613479737f, +0.6017150602f,
+            +1.1591317831f, +1.4962667848f, +0.5055630374f, -0.4024925586f, -0.0022301895f,
+            -0.8808171225f, -0.2380538291f, -0.1263889335f, -1.2270624956f, +1.2829010252f,
+            +1.1659012920f, -0.2023339878f, +1.4469222005f, +0.4910369010f, +0.5148145708f,
+            -0.5585879333f, -0.1892166684f, -0.1118926136f, +1.7707799312f, -0.7099260886f,
+            +1.2181692145f, -0.2162856459f, +0.5090497515f, +1.3798097233f, +0.5534236734f,
+            +1.5861219677f, +0.0473259571f, +0.0759487853f, -0.4800094936f, -1.1161541227f,
+            +0.2754784559f, -1.5604203593f, -0.0792565330f, -1.2125350672f, -0.1125923412f,
+            +1.5249430370f, -0.4856862525f, -0.2349726680f, -0.3760169641f, +1.1144759693f,
+            -1.0864471403f, +0.7017300011f, +1.4502098874f, -0.2616387685f, +0.3945174954f,
+            +0.1282960259f, +1.6051913595f, +0.8504986684f, +0.7193102303f, +0.4076096620f,
+            -1.1673756381f, -0.9865782759f, -0.8127574831f, +0.9995403808f, -0.0651285341f,
+            +1.0597568163f, -1.0427712976f, +0.4841266562f, -0.1613319818f, -1.2365827443f,
+            +1.1069876626f, +1.0689568330f, +0.6883391790f, +1.0532097608f, -0.2210157876f,
+            +1.6336972026f, -0.1169131536f, +0.3796970340f, -0.2244835027f, -1.0596235578f,
+            -1.6882298535f, -0.4026774875f, +0.5790348642f, +0.4319404661f, -0.6825517289f,
+            -1.0420891019f, +0.4703792971f, -1.2614194784f, +1.0475006975f, +0.0660061275f,
+            -1.1115203350f, +0.6219642641f, -0.6643952149f, +0.2573941971f, +1.3674831717f,
+            +0.6104410011f, +0.1848728647f, -0.2275884976f, -0.6851337535f, +1.7527062000f,
+            -0.6274920022f, +1.5045483400f, +0.2212603180f, -1.0514866173f, -0.4335987143f,
+            -0.1894075701f, -0.0764645670f, +0.1043714973f, +1.1604740125f, -1.6126638209f,
+            -0.4793458989f, +0.5247143922f, -0.1485283477f, +0.6136056483f, -1.7596390977f,
+            +0.4593772039f, -1.5807876036f, +0.7433875464f, +0.7443767102f, -0.4282071997f,
+            +0.3334185668f, +1.0526333947f, +1.0550636144f, -0.1768323052f, -1.2792052615f,
+            -0.5013801734f, -1.7297765796f, -0.5680502301f, -0.6449752959f, -0.1334792494f,
+            -0.7384873298f, +1.1948407251f, +1.1294421482f, -0.4306189235f, -0.7522764665f,
+            +1.9623456580f, -0.0601015262f, -0.3443093306f, -0.0240035994f, -0.1626721764f,
+            -0.6462341030f, -1.5495209515f, +0.4772598306f, +0.4724930194f, -0.8545991491f,
+            -0.9271592486f, -0.9164331857f, -0.8762201985f, +0.1053094866f, +1.2335615184f,
+            -1.0452875145f, +0.3323893576f, -0.8370427499f, +1.3683840682f, -0.4730494727f,
+            -0.1584241227f, -0.2455324631f, -1.4932560684f, +0.8009539349f, +1.0214082021f,
+            +0.1797586888f, +0.7739372059f, -0.3812911277f, +1.7411792905f, +0.4377439539f,
+            +0.0959518921f, -0.0847042684f, +0.7671399835f, +0.4417224083f, +1.7888532587f,
+            -0.2714200077f, +1.3897209289f, +0.1735228453f, +0.0681501032f, -1.4000901060f,
+            +0.0040328233f, +0.1419446850f, -0.9740310106f, -1.3729349811f, +1.0705832852f,
+            +0.4545660210f, -0.3265565076f, -1.1245342375f, +1.0226134198f, -1.1732071950f,
+            -0.9494741062f, -0.9504645175f, -1.1734348225f, -0.3130958988f, +0.8486093319f,
+            -0.9757942081f, -1.2454940243f, -1.0070638432f, -0.2479547287f, -0.6487766696f,
+            -1.6540480422f, -0.5949040117f, +0.5762559401f, +0.7375154865f, -0.1849710504f,
+            +0.0560458683f, -0.7051589996f, +0.6606256343f, +1.7145557805f, +0.3513999041f,
+            +1.1001204177f, -1.2698509474f, +0.4939122258f, +0.4061097718f, +0.8765496017f,
+            -0.3898506647f, +0.6059446156f, +1.4988160749f, -0.1422571316f, +1.1018896788f,
+            +0.9499030630f, +0.8716820975f, -0.5062858946f, +1.4268365292f, -0.2136974581f,
+            -1.0301948936f, +0.6549076890f, +1.1512985254f, -0.3826209039f, +1.0187773797f,
+            +0.4584098506f, +1.5987153387f, -0.3904534202f, +0.2519468527f, +1.0089789813f,
+            +0.1501195597f, +1.5640833736f, -1.2134794420f, -0.0935125052f, -0.2232271790f,
+            +0.4403494696f, +0.0752774911f, -1.1975144186f, +0.7860559026f, -1.3223089575f,
+            +1.0343032480f, -1.0975003922f, -0.0454887395f, +1.1314336302f, -0.6659567518f,
+            -0.5678182331f, -0.2424223239f, -0.6977802175f, -1.2897175137f, -1.2118355391f,
+            -0.7144746825f, +1.5232671234f, +0.0796805545f, -0.5856307259f, +0.9054672059f,
+            -0.5625313586f, +0.1505111648f, -1.5929247566f, +1.0385433844f, +0.2119509813f,
+            +0.0270820047f, -1.5047499736f, -0.8772608735f, -0.7672576468f, -0.6137777653f,
+            +0.0131821757f, +0.0635589002f, +1.0647702299f, +1.6087180835f, +0.5235236209f,
+            +0.7186411462f, -1.2888842493f, -1.2047413453f, +0.2381133731f, -0.5605645434f,
+            +0.7106190891f, +1.0216290234f, -1.3274996515f, +0.6249542030f, +0.5463255147f,
+            -0.6335303582f, -1.0831647314f, +0.0584281040f, +0.8455934917f, +1.3065034456f,
+            -1.5240780986f, -0.2782384039f, +0.5520485628f, +0.5155589686f, +1.0145002091f,
+            -0.1257538508f, +0.6064705500f, +1.8625078562f, -0.0013785925f, +0.3839818041f,
+            +0.3462236094f, -0.1415978256f, -1.5682994840f, -1.0201269076f, -0.5998808957f,
+            -0.6090050173f, -1.4450581856f, +0.5417620803f, -0.2677155856f, +1.0843163480f,
+            -1.9182244224f, -0.3276618638f, +0.4501860713f, -0.0999395123f, +0.0199339790f,
+            +0.6810523845f, +0.8027080105f, -0.4199528020f, +1.5863979078f, -0.4458798285f,
+            -1.2916869201f, -0.4277976767f, +0.5072462222f, +1.3317191886f, +0.3431607802f,
+            +0.7533258512f, +0.2242712142f, +0.1338178896f, +1.6788518044f, -0.7387502796f,
+            +1.0205904762f, +1.1544839971f, +0.3374252423f, -1.1827357661f, +0.3359197725f,
+            -0.7131855003f, +0.3503287566f, +0.3784595687f, -1.4270209021f, -1.0904200587f,
+            -0.1275177062f, -0.2421649159f, -1.6204124232f, +0.8562826789f, +0.7524220497f,
+            +0.7941341241f, +0.0629760671f, +0.8980825906f, -0.8506830337f, -1.3546848507f,
+            -0.5876950706f, +0.4013438684f, -1.7865930292f, +0.2870135017f, -0.4682373340f,
+            -0.4794200043f, -0.5245048470f, +1.7373417449f, +0.3384354292f, +0.6017941898f,
+            +1.4511852036f, +0.6887478693f, -0.6235454849f, -0.9903300913f, +0.2238866140f,
+            -0.3644728320f, -0.8687821535f, -1.5824285834f, -0.1157396583f, +0.7712984083f,
+            -0.4843077904f, -0.1071181712f, +1.4772407071f, -0.8383016657f, +0.9321919716f,
+            +0.8989098311f, +0.2914427417f, +1.2725678231f, +0.5502129989f, -1.0885123038f,
+            -0.9941628672f, -1.0791837589f, -1.0938689305f, -0.6550078935f, -0.4705507734f,
+            +0.1699911365f, -0.9656946644f, +1.5648879845f, -0.6644284248f, -0.3849640150f,
+            -1.2640949187f, +0.4335092900f, -0.9750943149f, +0.5730971291f, -0.9668942495f,
+            -0.6467090571f, +0.2977390881f, -0.6333990112f, +1.6638545894f, -0.5687815300f,
+            -0.9149155132f, +1.1998957973f, +0.6536737263f, -1.0888266025f, -0.3321851423f,
+            +0.4004313182f, -0.5589116322f, +1.6760503230f, +0.8183645559f, +0.2200166246f,
+            -0.5554008162f, -0.4349796728f, -0.1912259551f, -0.8048637094f, +1.6786749718f,
+            -1.6510751672f, +0.2960916800f, -0.3150855653f, +0.7172724023f, +0.7566517671f,
+            -1.1765872572f, -0.8507361063f, -1.2441093486f, +0.5634132344f, -0.1632420279f,
+            -0.4745943513f, +0.1683270003f, +1.3824965728f, +0.4881271903f, -1.2636697729f,
+            -0.5550915001f, -1.3102458921f, +1.0331188650f, -0.6601011541f, -0.6870669589f,
+            +0.5812359172f, +1.1212174690f, +1.1582096388f, +0.0930332695f, +1.0270985538f,
+            -0.8132909314f, -0.1437797735f, -0.3229643523f, -0.9135736798f, -1.5423885361f,
+            -0.8662848703f, +0.8307177232f, +0.1594864617f, +1.5570483757f, -0.3310936606f,
+            -0.4213354539f, -0.2701383112f, -1.2786889460f, +0.5386076899f, -1.3506879965f,
+            +0.5210062774f, -1.1315988348f, +0.2626475701f, +0.8988107062f, +1.2534720197f,
+            -0.9040609290f, +0.6401866861f, +0.9930216830f, +1.3268745007f, -0.1616998454f,
+            -0.7136823678f, -1.7912481355f, +0.2785563894f, -0.1955421696f, -0.4077464811f,
+            +1.0734387218f, -0.6849915564f, -0.8318877853f, -0.9954208212f, -0.8340359582f,
+            +0.0916720939f, -0.1927318785f, +1.8899311775f, -0.6153445263f, -0.0629436930f,
+            -0.0514322848f, -0.4115639024f, -0.8535647225f, -1.5107838575f, +0.9038413990f,
+            -1.1682773077f, -0.4769562158f, +0.9188385715f, -0.9085976256f, -0.8589685296f,
+            +0.3957663286f, +0.1905419951f, +0.0205733212f, +0.6092913823f, -1.8534841545f,
+            -0.0907209671f, +0.2279849483f, +1.8308445032f, +0.3477107133f, -0.6832995202f,
+            -1.4224056098f, +1.0506697457f, +0.5249650109f, -0.7331538144f, -0.2444434259f,
+            +0.0674495494f, -0.9452784408f, -0.9900939215f, -0.5251212194f, -1.3586246572f,
+            -0.1416211791f, -0.7210993805f, +1.6431192773f, -0.7187777982f, -0.4934335237f,
+            +0.5068054340f, +1.0856574782f, +0.4160995491f, -0.8331199486f, +1.3027925424f,
+            +0.5230127406f, +0.5023771082f, +1.0477755451f, +1.4380103293f, -0.5553085756f,
+            +0.0071295269f, -0.0980358256f, -0.3375033833f, -1.8052530775f, -0.7858059170f,
+            +0.1325145240f, -1.2441319218f, +1.2539962010f, -0.9277348610f, -0.0371108830f,
+            +0.5038157423f, +0.9398537932f, -1.4363552688f, -0.7665671129f, +0.4605463585f,
+            +0.0462506548f, -1.2605374333f, +0.2297368266f, -0.6131821042f, -1.4071726809f,
+            -0.5279286088f, -1.0321320554f, -0.2377081990f, +1.5064596492f, -0.5745162676f,
+            +1.4631104055f, +0.8151109118f, +0.7827198919f, +0.5493474740f, -0.5295933029f,
+            +0.3951846604f, +1.7775474688f, +0.3153040997f, -0.7608688357f, +0.0762628357f,
+            -0.6884692740f, +1.7626834622f, +0.3550760758f, +0.0887588207f, -0.5338538406f,
+            +1.2191299513f, +0.0437135079f, -0.3743082719f, -1.5394642074f, +0.0418875011f,
+            +0.7173640461f, +1.0593713650f, +0.8926403386f, -0.0394645360f, +1.2509024393f,
+            +1.1694715935f, +0.5655488307f, -1.0900453450f, -1.0270843522f, +0.2634190415f,
+            +0.6121350796f, +0.3996470676f, -1.0639956757f, -0.9973656864f, +1.1570426765f,
+            -0.0328687534f, -1.6257066420f, +0.9740209148f, -0.0336034884f, -0.6373002608f,
+            +0.8082412311f, +1.0257462935f, +0.6017522292f, -1.3364946739f, +0.3824485521f,
+    };
+
     private static final Float2[] CELL_2D =
             {
                     new Float2(-0.4313539279f, 0.1281943404f), new Float2(-0.1733316799f, 0.415278375f), new Float2(-0.2821957395f, -0.3505218461f), new Float2(-0.2806473808f, 0.3517627718f), new Float2(0.3125508975f, -0.3237467165f), new Float2(0.3383018443f, -0.2967353402f), new Float2(-0.4393982022f, -0.09710417025f), new Float2(-0.4460443703f, -0.05953502905f),

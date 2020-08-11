@@ -20,12 +20,7 @@ import squidpony.squidgrid.gui.gdx.FilterBatch;
 import squidpony.squidgrid.gui.gdx.SColor;
 import squidpony.squidgrid.gui.gdx.WorldMapView;
 import squidpony.squidgrid.mapping.WorldMapGenerator;
-import squidpony.squidmath.CrossHash;
-import squidpony.squidmath.DiverRNG;
-import squidpony.squidmath.Noise;
-import squidpony.squidmath.NumberTools;
-import squidpony.squidmath.SeededNoise;
-import squidpony.squidmath.StatefulRNG;
+import squidpony.squidmath.*;
 
 import java.text.DateFormat;
 import java.util.Date;
@@ -146,14 +141,14 @@ public class AnimatedWorldMapWriter extends ApplicationAdapter {
             @Override
             public double getNoise(double x, double y, double z) {
 //                return FoamNoise.foamNoise(x * 2.75, y * 2.75, z * 2.75, mutationA, mutationB, 123456789);
-                return SeededNoise.instance.getNoiseWithSeed(x, y, z, mutationA, mutationB, 123456789);
+                return FastNoise.instance.getNoiseWithSeed(x, y, z, mutationA, mutationB, 123456789);
             }
 
             @Override
             public double getNoiseWithSeed(double x, double y, double z, long seed) {
 //                return FoamNoise.foamNoise(x * 2.75, y * 2.75, z * 2.75, mutationA, mutationB, (int)seed);
-                final double a = SeededNoise.instance.getNoiseWithSeed(mutationA * 0.75, mutationB * 0.75, x * 0.75, y * 0.75, z * 0.75, ~seed) * 0.25;
-                return SeededNoise.instance.getNoiseWithSeed(x * 1.5 + a, y * 1.5 - a, z * 1.5 + a, mutationA * 1.5, mutationB * 1.5, seed);
+                final double a = WorldMapGenerator.DEFAULT_NOISE.getNoiseWithSeed(x * 0.75, y * 0.75, z * 0.75, ~seed) * 0.25;
+                return WorldMapGenerator.DEFAULT_NOISE.getNoiseWithSeed(x * 1.5 + a, y * 1.5 - a, z * 1.5 + a, mutationA, mutationB, seed);
             }
         };
         
@@ -229,8 +224,8 @@ public class AnimatedWorldMapWriter extends ApplicationAdapter {
 //            mutationA = NumberTools.cos(angle) * (mutationC + 2.0);
 //            mutationB = NumberTools.sin(angle) * (mutationC + 2.0);
 //            mutationC = NumberTools.cos(angle * 3.0 + 1.0) * 0.625 + 2.25;
-            mutationA = NumberTools.cos(angle) * 0.25;
-            mutationB = NumberTools.sin(angle) * 0.25;
+            mutationA = NumberTools.cos(angle) * 0.3125;
+            mutationB = NumberTools.sin(angle) * 0.3125;
             //            mutation = NumberTools.sin(angle) * 0.918 + NumberTools.cos(angle * 4.0 + 1.618) * 0.307;
 
             //// this next line should not usually be commented out, but it makes sense not to have it when you can see the whole map.
