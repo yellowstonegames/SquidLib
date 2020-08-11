@@ -18,10 +18,12 @@ public interface IPointHash {
     int hash(int x, int y);
     int hash(int x, int y, int z);
     int hash(int x, int y, int z, int w);
+    int hash(int x, int y, int z, int w, int u);
     int hash(int x, int y, int z, int w, int u, int v);
     int hashWithState(int x, int y, int state);
     int hashWithState(int x, int y, int z, int state);
     int hashWithState(int x, int y, int z, int w, int state);
+    int hashWithState(int x, int y, int z, int w, int u, int state);
     int hashWithState(int x, int y, int z, int w, int u, int v, int state);
 
     /**
@@ -61,6 +63,11 @@ public interface IPointHash {
         }
 
         @Override
+        public int hash(int x, int y, int z, int w, int u) {
+            return hashWithState(x, y, z, w, u, state);
+        }
+
+        @Override
         public int hash(int x, int y, int z, int w, int u, int v) {
             return hashWithState(x, y, z, w, u, v, state);
         }
@@ -68,7 +75,8 @@ public interface IPointHash {
     /**
      * A convenience abstract class to implement IPointHash when you have a long for state. Subclasses will need to
      * implement {@link #hashWithState(int, int, int)},  {@link #hashWithState(int, int, int, int)},
-     * {@link #hashWithState(int, int, int, int, int)}, and  {@link #hashWithState(int, int, int, int, int, int, int)}.
+     * {@link #hashWithState(int, int, int, int, int)}, {@link #hashWithState(int, int, int, int, int, int)}, an
+     * {@link #hashWithState(int, int, int, int, int, int, int)}.
      * They can optionally override {@link #setState(int)} or {@link #setState(long)}, and can at their discretion
      * provide an accessor for the protected long {@link #state}.
      */
@@ -108,6 +116,10 @@ public interface IPointHash {
             return hashWithState(x, y, z, w, (int) (state ^ state >>> 32));
         }
 
+        @Override
+        public int hash(int x, int y, int z, int w, int u) {
+            return hashWithState(x, y, z, w, u, (int) (state ^ state >>> 32));
+        }
         @Override
         public int hash(int x, int y, int z, int w, int u, int v) {
             return hashWithState(x, y, z, w, u, v, (int) (state ^ state >>> 32));
