@@ -153,22 +153,13 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
             F4 = (Math.sqrt(5.0) - 1.0) * 0.25,
             G4 = (5.0 - Math.sqrt(5.0)) * 0.05,
             LIMIT4 = 0.62,
+            F5 = (Math.sqrt(6.0) - 1.0) / 5.0,
+            G5 = (6.0 - Math.sqrt(6.0)) / 30.0,
+            LIMIT5 = 0.7,
             F6 = (Math.sqrt(7.0) - 1.0) / 6.0,
             G6 = F6 / (1.0 + 6.0 * F6),
-            LIMIT6 = 0.8375
-            //LIMIT6 = 0.777
-            //LIMIT6 = 0.86
-            /*
-            sideLength = (float)Math.sqrt(6.0) / (6f * F6 + 1f),
-            a6 = (float)(Math.sqrt((sideLength * sideLength)
-                    - ((sideLength * 0.5) * (sideLength * 0.5f)))),
-            cornerFace = (float)Math.sqrt(a6 * a6 + (a6 * 0.5) * (a6 * 0.5)),
-            cornerFaceSq = cornerFace * cornerFace,
-            valueScaler = 9.5f
-             */
-            ;
-    //Math.pow(5.0, -0.5) * (Math.pow(5.0, -3.5) * 100 + 13),
-    
+            LIMIT6 = 0.8375;
+
     public static double noise(final double x, final double y, final long seed) {
         final double s = (x + y) * F2;
         final int i = fastFloor(x + s),
@@ -416,24 +407,19 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
         //return NumberTools.bounce(5.0 + 41.0 * n);
         return Math.max(-1.0, Math.min(1.0, 14.75 * n));
     }
-    protected static final double F5 = (Math.sqrt(6.0) - 1.0) / 5.0;
-    protected static final double G5 = (6 - Math.sqrt(6.0)) / 30.0;
 
     /**
      * Thanks to Mark A. Ropper for
      * <a href="https://computergraphics.stackexchange.com/questions/6408/what-might-be-causing-these-artifacts-in-5d-6d-simplex-noise">this implementation</a>.
-     * @param x
-     * @param y
-     * @param z
-     * @param w
-     * @param u
-     * @param seed
-     * @return
+     * @param x x coordinate
+     * @param y y coordinate
+     * @param z z coordinate
+     * @param w w coordinate (4th dimension)
+     * @param u u coordinate (5th dimension)
+     * @param seed long value that should completely change the noise if it changes even slightly
+     * @return a continuous noise value between -1.0 and 1.0, both inclusive
      */
     public static double noise(final double x, final double y, final double z, final double w, final double u, final long seed) {
-
-        final double norm = 10.0;
-
         double n0, n1, n2, n3, n4, n5;
         double t = (x + y + z + w + u) * F5;
         int i = fastFloor(x + t);
@@ -527,7 +513,7 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
         double w5 = w0 - 1 + 5 * G5;
         double u5 = u0 - 1 + 5 * G5;
 
-        t = (0.7) - x0 * x0 - y0 * y0 - z0 * z0 - w0 * w0 - u0 * u0;
+        t = LIMIT5 - x0 * x0 - y0 * y0 - z0 * z0 - w0 * w0 - u0 * u0;
         if (t < 0) n0 = 0;
         else
         {
@@ -535,7 +521,7 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
             n0 = t * t * gradCoord5D(seed, i, j, k, l, h, x0, y0, z0, w0, u0);
         }
 
-        t = (0.7) - x1 * x1 - y1 * y1 - z1 * z1 - w1 * w1 - u1 * u1;
+        t = LIMIT5 - x1 * x1 - y1 * y1 - z1 * z1 - w1 * w1 - u1 * u1;
         if (t < 0) n1 = 0;
         else
         {
@@ -543,7 +529,7 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
             n1 = t * t * gradCoord5D(seed, i + i1, j + j1, k + k1, l + l1, h + h1, x1, y1, z1, w1, u1);
         }
 
-        t = (0.7) - x2 * x2 - y2 * y2 - z2 * z2 - w2 * w2 - u2 * u2;
+        t = LIMIT5 - x2 * x2 - y2 * y2 - z2 * z2 - w2 * w2 - u2 * u2;
         if (t < 0) n2 = 0;
         else
         {
@@ -551,7 +537,7 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
             n2 = t * t * gradCoord5D(seed, i + i2, j + j2, k + k2, l + l2, h + h2, x2, y2, z2, w2, u2);
         }
 
-        t = (0.7) - x3 * x3 - y3 * y3 - z3 * z3 - w3 * w3 - u3 * u3;
+        t = LIMIT5 - x3 * x3 - y3 * y3 - z3 * z3 - w3 * w3 - u3 * u3;
         if (t < 0) n3 = 0;
         else
         {
@@ -559,7 +545,7 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
             n3 = t * t * gradCoord5D(seed, i + i3, j + j3, k + k3, l + l3, h + h3, x3, y3, z3, w3, u3);
         }
 
-        t = (0.7) - x4 * x4 - y4 * y4 - z4 * z4 - w4 * w4 - u4 * u4;
+        t = LIMIT5 - x4 * x4 - y4 * y4 - z4 * z4 - w4 * w4 - u4 * u4;
         if (t < 0) n4 = 0;
         else
         {
@@ -567,7 +553,7 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
             n4 = t * t * gradCoord5D(seed, i + i4, j + j4, k + k4, l + l4, h + h4, x4, y4, z4, w4, u4);
         }
 
-        t = (0.7) - x5 * x5 - y5 * y5 - z5 * z5 - w5 * w5 - u5 * u5;
+        t = LIMIT5 - x5 * x5 - y5 * y5 - z5 * z5 - w5 * w5 - u5 * u5;
         if (t < 0) n5 = 0;
         else
         {
@@ -575,8 +561,9 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
             n5 = t * t * gradCoord5D(seed, i + 1, j + 1, k + 1, l + 1, h + 1, x5, y5, z5, w5, u5);
         }
 
-        return  (n0 + n1 + n2 + n3 + n4 + n5) * norm;
-//        t = (n0 + n1 + n2 + n3 + n4 + n5) * norm;
+        return  (n0 + n1 + n2 + n3 + n4 + n5) * 10.0;
+    }
+//        t = (n0 + n1 + n2 + n3 + n4 + n5) * 10.0;
 //        if(t < -1.0) {
 //            System.out.println(t);
 //            return -1.0;
@@ -586,7 +573,6 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
 //            return 1.0;
 //        }
 //        return t;
-    }
     
     private static final double[] mShared = {0, 0, 0, 0, 0, 0}, cellDistShared = {0, 0, 0, 0, 0, 0};
     private static final int[] distOrderShared = {0, 0, 0, 0, 0, 0}, intLocShared = {0, 0, 0, 0, 0, 0};

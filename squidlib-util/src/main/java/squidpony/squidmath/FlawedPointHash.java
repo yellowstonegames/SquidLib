@@ -54,6 +54,16 @@ public interface FlawedPointHash extends IPointHash, IFlawed {
             return (int) (s >>> 32);
         }
 
+        public static int hashLongs(long x, long y, long z, long w, long u, long s) {
+            x = (x + 0x9E3779B97F4A7C15L ^ x) * (s + u);
+            y = (y + 0x9E3779B97F4A7C15L ^ y) * (x + s);
+            z = (z + 0x9E3779B97F4A7C15L ^ z) * (y + x);
+            w = (w + 0x9E3779B97F4A7C15L ^ w) * (z + y);
+            u = (u + 0x9E3779B97F4A7C15L ^ u) * (w + z);
+            s = (s + 0x9E3779B97F4A7C15L ^ s) * (u + w);
+            return (int) (s >>> 32);
+        }
+
         public static int hashLongs(long x, long y, long z, long w, long u, long v, long s) {
             x = (x + 0x9E3779B97F4A7C15L ^ x) * (s + v);
             y = (y + 0x9E3779B97F4A7C15L ^ y) * (x + s);
@@ -78,6 +88,11 @@ public interface FlawedPointHash extends IPointHash, IFlawed {
         @Override
         public int hashWithState(int x, int y, int z, int w, int state) {
             return hashLongs(x, y, z, w, state);
+        }
+
+        @Override
+        public int hashWithState(int x, int y, int z, int w, int u, int state) {
+            return hashLongs(x, y, z, w, u, state);
         }
 
         @Override
@@ -181,6 +196,10 @@ public interface FlawedPointHash extends IPointHash, IFlawed {
             return hashLongs(x, hashLongs(y, hashLongs(z, w, s), s), s);
         }
 
+        public long hashLongs(long x, long y, long z, long w, long u, long s) {
+            return hashLongs(x, hashLongs(y, hashLongs(z, hashLongs(w, u, s), s), s), s);
+        }
+        
         public long hashLongs(long x, long y, long z, long w, long u, long v, long s) {
             return hashLongs(x, hashLongs(y, hashLongs(z, hashLongs(w, hashLongs(u, v, s), s), s), s), s);
         }
@@ -200,6 +219,11 @@ public interface FlawedPointHash extends IPointHash, IFlawed {
             return (int)(hashLongs(x, y, z, w, state) >>> 32);
         }
 
+        @Override
+        public int hashWithState(int x, int y, int z, int w, int u, int state) {
+            return (int)(hashLongs(x, y, z, w, u, state) >>> 32);
+        }
+        
         @Override
         public int hashWithState(int x, int y, int z, int w, int u, int v, int state) {
             return (int)(hashLongs(x, y, z, w, u, v, state) >>> 32);
@@ -297,6 +321,10 @@ public interface FlawedPointHash extends IPointHash, IFlawed {
             return hashLongs(x, hashLongs(y, hashLongs(z, w, s), s), s);
         }
 
+        public long hashLongs(long x, long y, long z, long w, long u, long s) {
+            return hashLongs(x, hashLongs(y, hashLongs(z, hashLongs(w, u, s), s), s), s);
+        }
+
         public long hashLongs(long x, long y, long z, long w, long u, long v, long s) {
             return hashLongs(x, hashLongs(y, hashLongs(z, hashLongs(w, hashLongs(u, v, s), s), s), s), s);
         }
@@ -314,6 +342,11 @@ public interface FlawedPointHash extends IPointHash, IFlawed {
         @Override
         public int hashWithState(int x, int y, int z, int w, int state) {
             return (int)(hashLongs(x, y, z, w, state) >>> 32);
+        }
+
+        @Override
+        public int hashWithState(int x, int y, int z, int w, int u, int state) {
+            return (int)(hashLongs(x, y, z, w, u, state) >>> 32);
         }
 
         @Override
@@ -353,6 +386,12 @@ public interface FlawedPointHash extends IPointHash, IFlawed {
         @Override
         public int hashWithState(int x, int y, int z, int w, int state) {
             return ((((state ^ 0x811c9dc5 ^ x) * 0x1000193 ^ y) * 0x1000193 ^ z) * 0x1000193 ^ w) * 0x1000193;
+        }
+
+        @Override
+        public int hashWithState(int x, int y, int z, int w, int u, int state) {
+            return (((((state ^ 0x811c9dc5 ^ x) * 0x1000193 ^ y) * 0x1000193 ^ z) * 0x1000193
+                    ^ w) * 0x1000193 ^ u) * 0x1000193;
         }
 
         @Override

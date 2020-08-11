@@ -29,6 +29,11 @@ public final class HastyPointHash extends IPointHash.LongImpl
     }
 
     @Override
+    public int hashWithState(int x, int y, int z, int w, int u, int state) {
+        return (int)hashAll(x, y, z, w, u, state);
+    }
+    
+    @Override
     public int hashWithState(int x, int y, int z, int w, int u, int v, int state) {
         return (int)hashAll(x, y, z, w, u, v, state);
     }
@@ -112,6 +117,36 @@ public final class HastyPointHash extends IPointHash.LongImpl
         y += z * 0xAF36D01EF7518DBBL;
         x += y * 0x9A69443F36F710E7L;
         s += x * 0x881403B9339BD42DL;
+        return ((s = (s ^ s >>> 27 ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L) ^ s >>> 25);
+    }
+
+    /**
+     * Gets a 64-bit point hash of a 5D point (x, y, z, w, and u are all longs) and a state/seed as a long. This
+     * point hash has close to the best speed of any algorithms tested, and though its quality is mediocre for
+     * traditional uses of hashing (such as hash tables), it's sufficiently random to act as a positional RNG.
+     * <br>
+     * This uses a technique related to the one used by Martin Roberts for his golden-ratio-based sub-random
+     * sequences, where each axis is multiplied by a different constant, and the choice of constants depends on the
+     * number of axes but is always related to a generalized form of golden ratios, repeatedly dividing 1.0 by the
+     * generalized ratio. See
+     * <a href="http://extremelearning.com.au/unreasonable-effectiveness-of-quasirandom-sequences/">Roberts' article</a>
+     * for some more information on how he uses this, but we do things differently because we want random-seeming
+     * results instead of separated sub-random results.
+     * @param x x position; any long
+     * @param y y position; any long
+     * @param z z position; any long
+     * @param w w position; any long
+     * @param u u position; any long
+     * @param s the state; any long
+     * @return 64-bit hash of the x,y,z,w,u point with the given state
+     */
+    public static long hashAll(long x, long y, long z, long w, long u, long s) {
+        u += s * 0xE60E2B722B53AEEBL;
+        w += u * 0xCEBD76D9EDB6A8EFL;
+        z += w * 0xB9C9AA3A51D00B65L;
+        y += z * 0xA6F5777F6F88983FL;
+        x += y * 0x9609C71EB7D03F7BL;
+        s += x * 0x86D516E50B04AB1BL;
         return ((s = (s ^ s >>> 27 ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L) ^ s >>> 25);
     }
 

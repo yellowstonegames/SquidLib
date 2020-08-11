@@ -32,6 +32,10 @@ public final class PointHash extends IPointHash.LongImpl
     }
 
     @Override
+    public int hashWithState(int x, int y, int z, int w, int u, int state) {
+        return (int)hashAll(x, y, z, w, u, state);
+    }
+    @Override
     public int hashWithState(int x, int y, int z, int w, int u, int v, int state) {
         return (int)hashAll(x, y, z, w, u, v, state);
     }
@@ -171,6 +175,32 @@ public final class PointHash extends IPointHash.LongImpl
 //                    ((state = ((state += 0x6C8E9CD570932BD5L ^ w) ^ (state >>> 25)) * ((state ^ x) | 0xA529L)) ^ (state >>> 22)));
     }
 
+    /**
+     *
+     * @param x
+     * @param y
+     * @param z
+     * @param w
+     * @param u
+     * @param state
+     * @return 64-bit hash of the x,y,z,w,u point with the given state
+     */
+    public static long hashAll(long x, long y, long z, long w, long u, long state)
+    {
+        state *= 0x9E3779B97F4A7C15L;
+        long other = 0x60642E2A34326F15L;
+        state ^= (other += (x ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
+        state = (state << 54 | state >>> 10);
+        state ^= (other += (y ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
+        state = (state << 54 | state >>> 10);
+        state ^= (other += (z ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
+        state = (state << 54 | state >>> 10);
+        state ^= (other += (w ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
+        state = (state << 54 | state >>> 10);
+        state ^= (other += (u ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
+        state -= ((state << 54 | state >>> 10) + (other ^ other >>> 29)) * 0x94D049BB133111EBL;
+        return state ^ state >>> 31;
+    }
     /**
      *
      * @param x

@@ -38,6 +38,11 @@ public final class IntPointHash extends IPointHash.IntImpl {
     }
 
     @Override
+    public int hashWithState(int x, int y, int z, int w, int u, int state) {
+        return hashAll(x, y, z, w, u, state);
+    }
+
+    @Override
     public int hashWithState(int x, int y, int z, int w, int u, int v, int state) {
         return hashAll(x, y, z, w, u, v, state);
     }
@@ -92,6 +97,27 @@ public final class IntPointHash extends IPointHash.IntImpl {
      */
     public static int hashAll(int x, int y, int z, int w, int s) {
         s ^= x * 0x1B69E1 ^ y * 0x177C0B ^ z * 0x141E5D ^ w * 0x113C31;
+        return (s = (s ^ (s << 19 | s >>> 13) ^ (s << 5 | s >>> 27) ^ 0xD1B54A35) * 0x125493) ^ s >>> 11;
+    }
+
+    /**
+     * A 32-bit point hash that smashes x, y, z, w, u, and v into s using XOR and multiplications by harmonious
+     * numbers, then runs a simple unary hash on s and returns it. Has better performance than HastyPointHash,
+     * especially for ints, and has slightly fewer collisions in a hash table of points. GWT-optimized. Inspired by
+     * Pelle Evensen's rrxmrrxmsx_0 unary hash, though this doesn't use its code or its full algorithm. The unary
+     * hash used here has been stripped down heavily, both for speed and because unless points are selected
+     * specifically to target flaws in the hash, it doesn't need the intense resistance to bad inputs that
+     * rrxmrrxmsx_0 has.
+     * @param x x position, as an int
+     * @param y y position, as an int
+     * @param z z position, as an int
+     * @param w w position, as an int
+     * @param u u position, as an int
+     * @param s any int, a seed to be able to produce many hashes for a given point 
+     * @return 32-bit hash of the x,y,z,w,u point with the given state s
+     */
+    public static int hashAll(int x, int y, int z, int w, int u, int s) {
+        s ^= x * 0x1C3360 ^ y * 0x18DA3A ^ z * 0x15E6DA ^ w * 0x134D28 ^ u * 0x110280;
         return (s = (s ^ (s << 19 | s >>> 13) ^ (s << 5 | s >>> 27) ^ 0xD1B54A35) * 0x125493) ^ s >>> 11;
     }
 
