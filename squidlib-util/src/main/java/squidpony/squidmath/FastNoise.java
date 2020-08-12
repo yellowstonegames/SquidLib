@@ -42,9 +42,106 @@ import java.io.Serializable;
  */
 public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, Noise.Noise5D, Noise.Noise6D {
     private static final long serialVersionUID = 3L;
-    public static final int VALUE = 0, VALUE_FRACTAL = 1, PERLIN = 2, PERLIN_FRACTAL = 3,
-            SIMPLEX = 4, SIMPLEX_FRACTAL = 5, CELLULAR = 6, WHITE_NOISE = 7, CUBIC = 8, CUBIC_FRACTAL = 9, 
-            FOAM = 10, FOAM_FRACTAL = 11;
+    /**
+     * Simple, very fast but very low-quality noise that forms a grid of squares, with their values blending at shared
+     * edges somewhat.
+     * <br>
+     * This is meant to be used with {@link #setNoiseType(int)}.
+     */
+    public static final int VALUE = 0,
+    /**
+     * Simple, very fast but very low-quality noise that forms a grid of squares, with their values blending at shared
+     * edges somewhat; this version can use {@link #setFractalType(int)}, {@link #setFractalOctaves(int)}, and more, but
+     * none of these really disguise the grid it uses.
+     * <br>
+     * This is meant to be used with {@link #setNoiseType(int)}.
+     */
+    VALUE_FRACTAL = 1,
+    /**
+     * Also called Gradient Noise or Classic Perlin noise, this is fast and mid-to-low-quality in 2D, but slows down
+     * significantly in higher dimensions while mostly improving in quality. This may have a noticeable grid at 90
+     * degree angles (and a little at 45 degree angles).
+     * <br>
+     * This is meant to be used with {@link #setNoiseType(int)}.
+     */
+    PERLIN = 2,
+    /**
+     * Also called Gradient Noise or Classic Perlin noise, this is fast and mid-to-low-quality in 2D, but slows down
+     * significantly in higher dimensions while mostly improving in quality. This may have a noticeable grid at 90
+     * degree angles (and a little at 45 degree angles). This version can use {@link #setFractalType(int)},
+     * {@link #setFractalOctaves(int)}, and more.
+     * <br>
+     * This is meant to be used with {@link #setNoiseType(int)}.
+     */
+    PERLIN_FRACTAL = 3,
+    /**
+     * Also called Improved Perlin noise, this is always fast but tends to have better quality in lower dimensions. This
+     * may have a noticeable grid at 60 degree angles, made of regular triangles in 2D.
+     * <br>
+     * This is meant to be used with {@link #setNoiseType(int)}.
+     */
+    SIMPLEX = 4,
+    /**
+     * Also called Improved Perlin noise, this is always fast but tends to have better quality in lower dimensions. This
+     * may have a noticeable grid at 60 degree angles, made of regular triangles in 2D. This version can use
+     * {@link #setFractalType(int)}, {@link #setFractalOctaves(int)}, and more.
+     * <br>
+     * This is meant to be used with {@link #setNoiseType(int)}.
+     */
+    SIMPLEX_FRACTAL = 5,
+    /**
+     * Creates a Voronoi diagram of 2D or 3D space and fills cells based on the {@link #setCellularReturnType(int)},
+     * {@link #setCellularDistanceFunction(int)}, and possibly the {@link #setCellularNoiseLookup(FastNoise)}. This is
+     * more of an advanced usage, but can yield useful results when oddly-shaped areas should have similar values.
+     * <br>
+     * This is meant to be used with {@link #setNoiseType(int)}.
+     */
+    CELLULAR = 6,
+    /**
+     * Purely chaotic, non-continuous random noise per position; looks like static on a TV screen.
+     * <br>
+     * This is meant to be used with {@link #setNoiseType(int)}.
+     */
+    WHITE_NOISE = 7,
+    /**
+     * A simple kind of noise that gets a random float for each vertex of a square or cube, and interpolates between all
+     * of them to get a smoothly changing value (using cubic interpolation, also called {@link #HERMITE}, of course).
+     * If you're changing the point hashing algorithm with {@link #setPointHash(IPointHash)}, you should usually use
+     * this or {@link #CUBIC_FRACTAL} if you want to see any aesthetically-desirable artifacts in the hash.
+     * <br>
+     * This is meant to be used with {@link #setNoiseType(int)}.
+     */
+    CUBIC = 8,
+    /**
+     * A simple kind of noise that gets a random float for each vertex of a square or cube, and interpolates between all
+     * of them to get a smoothly changing value (using cubic interpolation, also called {@link #HERMITE}, of course).
+     * This version can use {@link #setFractalType(int)}, {@link #setFractalOctaves(int)}, and more.
+     * If you're changing the point hashing algorithm with {@link #setPointHash(IPointHash)}, you should usually use
+     * this or {@link #CUBIC} if you want to see any aesthetically-desirable artifacts in the hash.
+     * <br>
+     * This is meant to be used with {@link #setNoiseType(int)}.
+     */
+    CUBIC_FRACTAL = 9,
+    /**
+     * A novel kind of noise that works in n-dimensions by averaging n+1 value noise calls, all of them rotated around
+     * each other, and with all of the value noise calls after the first adding in the last call's result to part of the
+     * position. This yields rather high-quality noise (especially when comparing one octave of FOAM to one octave of
+     * {@link #PERLIN} or {@link #SIMPLEX}), but is somewhat slow.
+     * <br>
+     * This is meant to be used with {@link #setNoiseType(int)}.
+     */
+    FOAM = 10,
+    /**
+     * A novel kind of noise that works in n-dimensions by averaging n+1 value noise calls, all of them rotated around
+     * each other, and with all of the value noise calls after the first adding in the last call's result to part of the
+     * position. This yields rather high-quality noise (especially when comparing one octave of FOAM to one octave of
+     * {@link #PERLIN} or {@link #SIMPLEX}), but is somewhat slow. This version can use {@link #setFractalType(int)},
+     * {@link #setFractalOctaves(int)}, and more, and usually doesn't need as many octaves as PERLIN or SIMPLEX to
+     * attain comparable quality.
+     * <br>
+     * This is meant to be used with {@link #setNoiseType(int)}.
+     */
+    FOAM_FRACTAL = 11;
 
     public static final int LINEAR = 0, HERMITE = 1, QUINTIC = 2;
 
@@ -163,12 +260,28 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
     public FastNoise(int seed, float frequency, int noiseType, int octaves, float lacunarity, float gain)
     {
         this.seed = seed;
-        this.frequency = frequency;
+        this.frequency = Math.max(0.0001f, frequency);
         this.noiseType = noiseType;
         this.octaves = octaves;
         this.lacunarity = lacunarity;
         this.gain = gain;
         calculateFractalBounding();
+    }
+
+    /**
+     * Copy constructor; copies all non-temporary fields from  {@code other} into this. This uses the same reference to
+     * an {@link IPointHash} set with {@link #setPointHash(IPointHash)} and to another FastNoise set with
+     * {@link #setCellularNoiseLookup(FastNoise)}, but otherwise everything it copies is a primitive.
+     * @param other another FastNoise, which must not be null
+     */
+    public FastNoise(final FastNoise other) {
+        this(other.seed, other.frequency, other.noiseType, other.octaves, other.lacunarity, other.gain);
+        this.pointHash = other.pointHash;
+        this.interpolation = other.interpolation;
+        this.gradientPerturbAmp = other.gradientPerturbAmp;
+        this.cellularReturnType = other.cellularReturnType;
+        this.cellularDistanceFunction = other.cellularDistanceFunction;
+        this.cellularNoiseLookup = other.cellularNoiseLookup;
     }
 
     protected static float dotf(final float[] g, final float x, final float y) {
@@ -193,10 +306,14 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
 
     /**
      * Sets the frequency for all noise types. If this is not called, it defaults to 0.03125f (or 1f/32f).
+     * This setter validates the frequency, and won't set it to a float less than 0.0001f, which is small enough that
+     * floating-point precision could be an issue. Lots of things may expect this to be higher than the default,
+     * especially code that is meant to be compatible across {@link squidpony.squidmath.Noise.Noise2D} and similar
+     * interfaces; try setting frequency to {@code 1.0f} if you experience issues.
      * @param frequency the frequency for all noise types, as a positive non-zero float
      */
     public void setFrequency(float frequency) {
-        this.frequency = frequency;
+        this.frequency = Math.max(0.0001f, frequency);
     }
 
     /**
@@ -211,7 +328,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
     /**
      * Changes the interpolation method used to smooth between noise values, using on of the following constants from
      * this class (lowest to highest quality): {@link #LINEAR} (0), {@link #HERMITE} (1), or {@link #QUINTIC} (2). If
-     * this is not called, it defaults to HERMITE. This is used in Value, Gradient Noise and Position Perturbing.
+     * this is not called, it defaults to HERMITE. This is used in Value, Perlin, and Position Perturbing.
      * @param interpolation an int (0, 1, or 2) corresponding  to a constant from this class for an interpolation level
      */
     public void setInterpolation(int interpolation) {
@@ -223,7 +340,8 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
      * in this class:
      * {@link #VALUE} (0), {@link #VALUE_FRACTAL} (1), {@link #PERLIN} (2), {@link #PERLIN_FRACTAL} (3),
      * {@link #SIMPLEX} (4), {@link #SIMPLEX_FRACTAL} (5), {@link #CELLULAR} (6), {@link #WHITE_NOISE} (7),
-     * {@link #CUBIC} (8), or {@link #CUBIC_FRACTAL} (9). If this isn't called, getConfiguredNoise() will default to SIMPLEX.
+     * {@link #CUBIC} (8), {@link #CUBIC_FRACTAL} (9), {@link #FOAM} (10), or {@link #FOAM_FRACTAL} (11).
+     * If this isn't called, getConfiguredNoise() will default to SIMPLEX_FRACTAL.
      * @param noiseType an int from 0 to 9 corresponding to a constant from this class for a noise type
      */
     public void setNoiseType(int noiseType) {
@@ -235,7 +353,8 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
      * in this class:
      * {@link #VALUE} (0), {@link #VALUE_FRACTAL} (1), {@link #PERLIN} (2), {@link #PERLIN_FRACTAL} (3),
      * {@link #SIMPLEX} (4), {@link #SIMPLEX_FRACTAL} (5), {@link #CELLULAR} (6), {@link #WHITE_NOISE} (7),
-     * {@link #CUBIC} (8), or {@link #CUBIC_FRACTAL} (9). The default is SIMPLEX.
+     * {@link #CUBIC} (8), {@link #CUBIC_FRACTAL} (9), {@link #FOAM} (10), or {@link #FOAM_FRACTAL} (11).
+     * The default is SIMPLEX_FRACTAL.
      * @return the noise type as a code, from 0 to 9 inclusive
      */
     public int getNoiseType()
@@ -3835,8 +3954,8 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
 
     // 6D Simplex
 
-    private final float[] m = {0, 0, 0, 0, 0, 0}, cellDist = {0, 0, 0, 0, 0, 0};
-    private final int[] distOrder = {0, 0, 0, 0, 0, 0}, intLoc = {0, 0, 0, 0, 0, 0};
+    private final transient float[] m = {0, 0, 0, 0, 0, 0}, cellDist = {0, 0, 0, 0, 0, 0};
+    private final transient int[] distOrder = {0, 0, 0, 0, 0, 0}, intLoc = {0, 0, 0, 0, 0, 0};
 
     private static final float
             F6 = (float) ((Math.sqrt(7.0) - 1.0) / 6.0),
