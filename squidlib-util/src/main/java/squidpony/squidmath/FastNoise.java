@@ -1001,17 +1001,17 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
 //                    default:
 //                        return singleFoamFractalFBM(x, y, z, w, u);
 //                }
-//            case PERLIN:
-//                return singlePerlin(seed, x, y, z, w, u);
-//            case PERLIN_FRACTAL:
-//                switch (fractalType) {
-//                    case BILLOW:
-//                        return singlePerlinFractalBillow(x, y, z, w, u);
-//                    case RIDGED_MULTI:
-//                        return singlePerlinFractalRidgedMulti(x, y, z, w, u);
-//                    default:
-//                        return singlePerlinFractalFBM(x, y, z, w, u);
-//                }
+            case PERLIN:
+                return singlePerlin(seed, x, y, z, w, u);
+            case PERLIN_FRACTAL:
+                switch (fractalType) {
+                    case BILLOW:
+                        return singlePerlinFractalBillow(x, y, z, w, u);
+                    case RIDGED_MULTI:
+                        return singlePerlinFractalRidgedMulti(x, y, z, w, u);
+                    default:
+                        return singlePerlinFractalFBM(x, y, z, w, u);
+                }
             case SIMPLEX_FRACTAL:
                 switch (fractalType) {
                     case BILLOW:
@@ -2362,7 +2362,108 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         }
     }
 
-    // Gradient Noise
+    // Classic Perlin Noise
+    public float getPerlinFractal(float x, float y) {
+        x *= frequency;
+        y *= frequency;
+
+        switch (fractalType) {
+            case FBM:
+                return singlePerlinFractalFBM(x, y);
+            case BILLOW:
+                return singlePerlinFractalBillow(x, y);
+            case RIDGED_MULTI:
+                return singlePerlinFractalRidgedMulti(x, y);
+            default:
+                return 0;
+        }
+    }
+
+    private float singlePerlinFractalFBM(float x, float y) {
+        int seed = this.seed;
+        float sum = singlePerlin(seed, x, y);
+        float amp = 1;
+
+        for (int i = 1; i < octaves; i++) {
+            x *= lacunarity;
+            y *= lacunarity;
+
+            amp *= gain;
+            sum += singlePerlin(++seed, x, y) * amp;
+        }
+
+        return sum * fractalBounding;
+    }
+
+    private float singlePerlinFractalBillow(float x, float y) {
+        int seed = this.seed;
+        float sum = Math.abs(singlePerlin(seed, x, y)) * 2 - 1;
+        float amp = 1;
+
+        for (int i = 1; i < octaves; i++) {
+            x *= lacunarity;
+            y *= lacunarity;
+
+            amp *= gain;
+            sum += (Math.abs(singlePerlin(++seed, x, y)) * 2 - 1) * amp;
+        }
+
+        return sum * fractalBounding;
+    }
+
+    private float singlePerlinFractalRidgedMulti(float x, float y) {
+        int seed = this.seed;
+        float sum = 0, amp = 1, ampBias = 1f, spike;
+        for (int i = 0; i < octaves; i++) {
+            spike = 1f - Math.abs(singlePerlin(seed + i, x, y));
+            spike *= spike * amp;
+            amp = Math.max(0f, Math.min(1f, spike * 2f));
+            sum += (spike * ampBias);
+            ampBias *= 2f;
+            x *= lacunarity;
+            y *= lacunarity;
+        }
+        return sum / ((ampBias - 1f) * 0.5f) - 1f;
+    }
+
+    public float getPerlin(float x, float y) {
+        return singlePerlin(seed, x * frequency, y * frequency);
+    }
+
+    private float singlePerlin(int seed, float x, float y) {
+        int x0 = fastFloor(x);
+        int y0 = fastFloor(y);
+        int x1 = x0 + 1;
+        int y1 = y0 + 1;
+
+        float xs, ys;
+        switch (interpolation) {
+            default:
+            case LINEAR:
+                xs = x - x0;
+                ys = y - y0;
+                break;
+            case HERMITE:
+                xs = hermiteInterpolator(x - x0);
+                ys = hermiteInterpolator(y - y0);
+                break;
+            case QUINTIC:
+                xs = quinticInterpolator(x - x0);
+                ys = quinticInterpolator(y - y0);
+                break;
+        }
+
+        float xd0 = x - x0;
+        float yd0 = y - y0;
+        float xd1 = xd0 - 1;
+        float yd1 = yd0 - 1;
+
+        float xf0 = lerp(gradCoord2D(seed, x0, y0, xd0, yd0), gradCoord2D(seed, x1, y0, xd1, yd0), xs);
+        float xf1 = lerp(gradCoord2D(seed, x0, y1, xd0, yd1), gradCoord2D(seed, x1, y1, xd1, yd1), xs);
+
+        return lerp(xf0, xf1, ys);
+    }
+
     public float getPerlinFractal(float x, float y, float z) {
         x *= frequency;
         y *= frequency;
@@ -2596,106 +2697,159 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         return sum / ((ampBias - 1f) * 0.5f) - 1f;
     }
 
-    public float getPerlinFractal(float x, float y) {
-        x *= frequency;
-        y *= frequency;
+    public float getPerlin(float x, float y, float z, float w, float u) {
+        return singlePerlin(seed, x * frequency, y * frequency, z * frequency, w * frequency, u * frequency);
+    }
 
-        switch (fractalType) {
-            case FBM:
-                return singlePerlinFractalFBM(x, y);
-            case BILLOW:
-                return singlePerlinFractalBillow(x, y);
-            case RIDGED_MULTI:
-                return singlePerlinFractalRidgedMulti(x, y);
+    private float singlePerlin(int seed, float x, float y, float z, float w, float u) {
+        int x0 = fastFloor(x);
+        int y0 = fastFloor(y);
+        int z0 = fastFloor(z);
+        int w0 = fastFloor(w);
+        int u0 = fastFloor(u);
+        int x1 = x0 + 1;
+        int y1 = y0 + 1;
+        int z1 = z0 + 1;
+        int w1 = w0 + 1;
+        int u1 = u0 + 1;
+        
+        float xs, ys, zs, ws, us;
+        switch (interpolation) {
             default:
-                return 0;
+            case LINEAR:
+                xs = x - x0;
+                ys = y - y0;
+                zs = z - z0;
+                ws = w - w0;
+                us = u - u0;
+                break;
+            case HERMITE:
+                xs = hermiteInterpolator(x - x0);
+                ys = hermiteInterpolator(y - y0);
+                zs = hermiteInterpolator(z - z0);
+                ws = hermiteInterpolator(w - w0);
+                us = hermiteInterpolator(u - u0);
+                break;
+            case QUINTIC:
+                xs = quinticInterpolator(x - x0);
+                ys = quinticInterpolator(y - y0);
+                zs = quinticInterpolator(z - z0);
+                ws = quinticInterpolator(w - w0);
+                us = quinticInterpolator(u - u0);
+                break;
         }
-    }
 
-    private float singlePerlinFractalFBM(float x, float y) {
+        final float xd0 = x - x0;
+        final float yd0 = y - y0;
+        final float zd0 = z - z0;
+        final float wd0 = w - w0;
+        final float ud0 = u - u0;
+        final float xd1 = xd0 - 1;
+        final float yd1 = yd0 - 1;
+        final float zd1 = zd0 - 1;
+        final float wd1 = wd0 - 1;
+        final float ud1 = ud0 - 1;
+
+        final float xf0000 = lerp(gradCoord5D(seed, x0, y0, z0, w0, u0, xd0, yd0, zd0, wd0, ud0), gradCoord5D(seed, x1, y0, z0, w0, u0, xd1, yd0, zd0, wd0, ud0), xs);
+        final float xf1000 = lerp(gradCoord5D(seed, x0, y1, z0, w0, u0, xd0, yd1, zd0, wd0, ud0), gradCoord5D(seed, x1, y1, z0, w0, u0, xd1, yd1, zd0, wd0, ud0), xs);
+        final float xf0100 = lerp(gradCoord5D(seed, x0, y0, z1, w0, u0, xd0, yd0, zd1, wd0, ud0), gradCoord5D(seed, x1, y0, z1, w0, u0, xd1, yd0, zd1, wd0, ud0), xs);
+        final float xf1100 = lerp(gradCoord5D(seed, x0, y1, z1, w0, u0, xd0, yd1, zd1, wd0, ud0), gradCoord5D(seed, x1, y1, z1, w0, u0, xd1, yd1, zd1, wd0, ud0), xs);
+        final float xf0010 = lerp(gradCoord5D(seed, x0, y0, z0, w1, u0, xd0, yd0, zd0, wd1, ud0), gradCoord5D(seed, x1, y0, z0, w1, u0, xd1, yd0, zd0, wd1, ud0), xs);
+        final float xf1010 = lerp(gradCoord5D(seed, x0, y1, z0, w1, u0, xd0, yd1, zd0, wd1, ud0), gradCoord5D(seed, x1, y1, z0, w1, u0, xd1, yd1, zd0, wd1, ud0), xs);
+        final float xf0110 = lerp(gradCoord5D(seed, x0, y0, z1, w1, u0, xd0, yd0, zd1, wd1, ud0), gradCoord5D(seed, x1, y0, z1, w1, u0, xd1, yd0, zd1, wd1, ud0), xs);
+        final float xf1110 = lerp(gradCoord5D(seed, x0, y1, z1, w1, u0, xd0, yd1, zd1, wd1, ud0), gradCoord5D(seed, x1, y1, z1, w1, u0, xd1, yd1, zd1, wd1, ud0), xs);
+        final float xf0001 = lerp(gradCoord5D(seed, x0, y0, z0, w0, u1, xd0, yd0, zd0, wd0, ud1), gradCoord5D(seed, x1, y0, z0, w0, u1, xd1, yd0, zd0, wd0, ud1), xs);
+        final float xf1001 = lerp(gradCoord5D(seed, x0, y1, z0, w0, u1, xd0, yd1, zd0, wd0, ud1), gradCoord5D(seed, x1, y1, z0, w0, u1, xd1, yd1, zd0, wd0, ud1), xs);
+        final float xf0101 = lerp(gradCoord5D(seed, x0, y0, z1, w0, u1, xd0, yd0, zd1, wd0, ud1), gradCoord5D(seed, x1, y0, z1, w0, u1, xd1, yd0, zd1, wd0, ud1), xs);
+        final float xf1101 = lerp(gradCoord5D(seed, x0, y1, z1, w0, u1, xd0, yd1, zd1, wd0, ud1), gradCoord5D(seed, x1, y1, z1, w0, u1, xd1, yd1, zd1, wd0, ud1), xs);
+        final float xf0011 = lerp(gradCoord5D(seed, x0, y0, z0, w1, u1, xd0, yd0, zd0, wd1, ud1), gradCoord5D(seed, x1, y0, z0, w1, u1, xd1, yd0, zd0, wd1, ud1), xs);
+        final float xf1011 = lerp(gradCoord5D(seed, x0, y1, z0, w1, u1, xd0, yd1, zd0, wd1, ud1), gradCoord5D(seed, x1, y1, z0, w1, u1, xd1, yd1, zd0, wd1, ud1), xs);
+        final float xf0111 = lerp(gradCoord5D(seed, x0, y0, z1, w1, u1, xd0, yd0, zd1, wd1, ud1), gradCoord5D(seed, x1, y0, z1, w1, u1, xd1, yd0, zd1, wd1, ud1), xs);
+        final float xf1111 = lerp(gradCoord5D(seed, x0, y1, z1, w1, u1, xd0, yd1, zd1, wd1, ud1), gradCoord5D(seed, x1, y1, z1, w1, u1, xd1, yd1, zd1, wd1, ud1), xs);
+
+        final float yf000 = lerp(xf0000, xf1000, ys);
+        final float yf100 = lerp(xf0100, xf1100, ys);
+        final float yf010 = lerp(xf0010, xf1010, ys);
+        final float yf110 = lerp(xf0110, xf1110, ys);
+        final float yf001 = lerp(xf0001, xf1001, ys);
+        final float yf101 = lerp(xf0101, xf1101, ys);
+        final float yf011 = lerp(xf0011, xf1011, ys);
+        final float yf111 = lerp(xf0111, xf1111, ys);
+
+        final float zf00 = lerp(yf000, yf100, zs);
+        final float zf10 = lerp(yf010, yf110, zs);
+        final float zf01 = lerp(yf001, yf101, zs);
+        final float zf11 = lerp(yf011, yf111, zs);
+
+        final float wf0 = lerp(zf00, zf10, ws);
+        final float wf1 = lerp(zf01, zf11, ws);
+
+        return lerp(wf0, wf1, us);
+    }
+    private float singlePerlinFractalFBM(float x, float y, float z, float w, float u) {
         int seed = this.seed;
-        float sum = singlePerlin(seed, x, y);
+        float sum = singlePerlin(seed, x, y, z, w, u);
         float amp = 1;
 
         for (int i = 1; i < octaves; i++) {
             x *= lacunarity;
             y *= lacunarity;
+            z *= lacunarity;
+            w *= lacunarity;
+            u *= lacunarity;
 
             amp *= gain;
-            sum += singlePerlin(++seed, x, y) * amp;
+            sum += singlePerlin(seed + i, x, y, z, w, u) * amp;
         }
 
         return sum * fractalBounding;
     }
 
-    private float singlePerlinFractalBillow(float x, float y) {
+    private float singlePerlinFractalBillow(float x, float y, float z, float w, float u) {
         int seed = this.seed;
-        float sum = Math.abs(singlePerlin(seed, x, y)) * 2 - 1;
+        float sum = Math.abs(singlePerlin(seed, x, y, z, w, u)) * 2 - 1;
         float amp = 1;
 
         for (int i = 1; i < octaves; i++) {
             x *= lacunarity;
             y *= lacunarity;
+            z *= lacunarity;
+            w *= lacunarity;
+            u *= lacunarity;
 
             amp *= gain;
-            sum += (Math.abs(singlePerlin(++seed, x, y)) * 2 - 1) * amp;
+            sum += (Math.abs(singlePerlin(seed + i, x, y, z, w, u)) * 2 - 1) * amp;
         }
 
         return sum * fractalBounding;
     }
 
-    private float singlePerlinFractalRidgedMulti(float x, float y) {
+    private float singlePerlinFractalRidgedMulti(float x, float y, float z, float w, float u) {
         int seed = this.seed;
         float sum = 0, amp = 1, ampBias = 1f, spike;
         for (int i = 0; i < octaves; i++) {
-            spike = 1f - Math.abs(singlePerlin(seed + i, x, y));
+            spike = 1f - Math.abs(singlePerlin(seed + i, x, y, z, w, u));
             spike *= spike * amp;
             amp = Math.max(0f, Math.min(1f, spike * 2f));
             sum += (spike * ampBias);
             ampBias *= 2f;
             x *= lacunarity;
             y *= lacunarity;
+            z *= lacunarity;
+            w *= lacunarity;
+            u *= lacunarity;
         }
         return sum / ((ampBias - 1f) * 0.5f) - 1f;
     }
 
-    public float getPerlin(float x, float y) {
-        return singlePerlin(seed, x * frequency, y * frequency);
-    }
-
-    private float singlePerlin(int seed, float x, float y) {
-        int x0 = fastFloor(x);
-        int y0 = fastFloor(y);
-        int x1 = x0 + 1;
-        int y1 = y0 + 1;
-
-        float xs, ys;
-        switch (interpolation) {
-            default:
-            case LINEAR:
-                xs = x - x0;
-                ys = y - y0;
-                break;
-            case HERMITE:
-                xs = hermiteInterpolator(x - x0);
-                ys = hermiteInterpolator(y - y0);
-                break;
-            case QUINTIC:
-                xs = quinticInterpolator(x - x0);
-                ys = quinticInterpolator(y - y0);
-                break;
-        }
-
-        float xd0 = x - x0;
-        float yd0 = y - y0;
-        float xd1 = xd0 - 1;
-        float yd1 = yd0 - 1;
-
-        float xf0 = lerp(gradCoord2D(seed, x0, y0, xd0, yd0), gradCoord2D(seed, x1, y0, xd1, yd0), xs);
-        float xf1 = lerp(gradCoord2D(seed, x0, y1, xd0, yd1), gradCoord2D(seed, x1, y1, xd1, yd1), xs);
-
-        return lerp(xf0, xf1, ys);
-    }
+    
+    
+    
+    
+    
+    
+    
+    
     public float getPerlin(float x, float y, float z, float w, float u, float v) {
         return singlePerlin(seed, x * frequency, y * frequency, z * frequency, w * frequency, u * frequency, v * frequency);
     }
