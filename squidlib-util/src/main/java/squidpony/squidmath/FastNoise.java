@@ -682,6 +682,10 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         return (hashAll(x, y, z, w, seed) >> 7) * 0x1.0p-24f;
     }
 
+    private float valCoord5D(int seed, int x, int y, int z, int w, int u) {
+        return (hashAll(x, y, z, w, u, seed) >> 7) * 0x1.0p-24f;
+    }
+
     private float valCoord6D(int seed, int x, int y, int z, int w, int u, int v) {
         return (hashAll(x, y, z, w, u, v, seed) >> 7) * 0x1.0p-24f;
     }
@@ -976,37 +980,37 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
 
         switch (noiseType) {
 //            case VALUE:
-//                return singleValue(seed, x, y, z, w, u, v);
+//                return singleValue(seed, x, y, z, w, u);
 //            case VALUE_FRACTAL:
 //                switch (fractalType) {
 //                    case BILLOW:
-//                        return singleValueFractalBillow(x, y, z, w, u, v);
+//                        return singleValueFractalBillow(x, y, z, w, u);
 //                    case RIDGED_MULTI:
-//                        return singleValueFractalRidgedMulti(x, y, z, w, u, v);
+//                        return singleValueFractalRidgedMulti(x, y, z, w, u);
 //                    default:
-//                        return singleValueFractalFBM(x, y, z, w, u, v);
+//                        return singleValueFractalFBM(x, y, z, w, u);
 //                }
 //            case FOAM:
-//                return singleFoam(seed, x, y, z, w, u, v);
+//                return singleFoam(seed, x, y, z, w, u);
 //            case FOAM_FRACTAL:
 //                switch (fractalType) {
 //                    case BILLOW:
-//                        return singleFoamFractalBillow(x, y, z, w, u, v);
+//                        return singleFoamFractalBillow(x, y, z, w, u);
 //                    case RIDGED_MULTI:
-//                        return singleFoamFractalRidgedMulti(x, y, z, w, u, v);
+//                        return singleFoamFractalRidgedMulti(x, y, z, w, u);
 //                    default:
-//                        return singleFoamFractalFBM(x, y, z, w, u, v);
+//                        return singleFoamFractalFBM(x, y, z, w, u);
 //                }
 //            case PERLIN:
-//                return singlePerlin(seed, x, y, z, w, u, v);
+//                return singlePerlin(seed, x, y, z, w, u);
 //            case PERLIN_FRACTAL:
 //                switch (fractalType) {
 //                    case BILLOW:
-//                        return singlePerlinFractalBillow(x, y, z, w, u, v);
+//                        return singlePerlinFractalBillow(x, y, z, w, u);
 //                    case RIDGED_MULTI:
-//                        return singlePerlinFractalRidgedMulti(x, y, z, w, u, v);
+//                        return singlePerlinFractalRidgedMulti(x, y, z, w, u);
 //                    default:
-//                        return singlePerlinFractalFBM(x, y, z, w, u, v);
+//                        return singlePerlinFractalFBM(x, y, z, w, u);
 //                }
             case SIMPLEX_FRACTAL:
                 switch (fractalType) {
@@ -1017,8 +1021,8 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
                     default:
                         return singleSimplexFractalFBM(x, y, z, w, u);
                 }
-//            case WHITE_NOISE:
-//                return getWhiteNoise(x, y, z, w, u, v);
+            case WHITE_NOISE:
+                return getWhiteNoise(x, y, z, w, u);
             default:
                 return singleSimplex(seed, x, y, z, w, u);
         }
@@ -1101,6 +1105,40 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         return i ^ i >>> 16;
     }
 
+    public float getWhiteNoise(float x, float y) {
+        int xi = floatToIntMixed(x);
+        int yi = floatToIntMixed(y);
+
+        return valCoord2D(seed, xi, yi);
+    }
+
+    public float getWhiteNoise(float x, float y, float z) {
+        int xi = floatToIntMixed(x);
+        int yi = floatToIntMixed(y);
+        int zi = floatToIntMixed(z);
+
+        return valCoord3D(seed, xi, yi, zi);
+    }
+    
+    public float getWhiteNoise(float x, float y, float z, float w) {
+        int xi = floatToIntMixed(x);
+        int yi = floatToIntMixed(y);
+        int zi = floatToIntMixed(z);
+        int wi = floatToIntMixed(w);
+
+        return valCoord4D(seed, xi, yi, zi, wi);
+    }
+    
+    public float getWhiteNoise(float x, float y, float z, float w, float u) {
+        int xi = floatToIntMixed(x);
+        int yi = floatToIntMixed(y);
+        int zi = floatToIntMixed(z);
+        int wi = floatToIntMixed(w);
+        int ui = floatToIntMixed(u);
+
+        return valCoord5D(seed, xi, yi, zi, wi, ui);
+    }
+
     public float getWhiteNoise(float x, float y, float z, float w, float u, float v) {
         int xi = floatToIntMixed(x);
         int yi = floatToIntMixed(y);
@@ -1112,44 +1150,24 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         return valCoord6D(seed, xi, yi, zi, wi, ui, vi);
     }
 
-    public float getWhiteNoise(float x, float y, float z, float w) {
-        int xi = floatToIntMixed(x);
-        int yi = floatToIntMixed(y);
-        int zi = floatToIntMixed(z);
-        int wi = floatToIntMixed(w);
-
-        return valCoord4D(seed, xi, yi, zi, wi);
-    }
-
-    public float getWhiteNoise(float x, float y, float z) {
-        int xi = floatToIntMixed(x);
-        int yi = floatToIntMixed(y);
-        int zi = floatToIntMixed(z);
-
-        return valCoord3D(seed, xi, yi, zi);
-    }
-
-    public float getWhiteNoise(float x, float y) {
-        int xi = floatToIntMixed(x);
-        int yi = floatToIntMixed(y);
-
-        return valCoord2D(seed, xi, yi);
-    }
-
-    public float getWhiteNoiseInt(int x, int y, int z, int w, int u, int v) {
-        return valCoord6D(seed, x, y, z, w, u, v);
-    }
-
-    public float getWhiteNoiseInt(int x, int y, int z, int w) {
-        return valCoord4D(seed, x, y, z, w);
+    public float getWhiteNoiseInt(int x, int y) {
+        return valCoord2D(seed, x, y);
     }
 
     public float getWhiteNoiseInt(int x, int y, int z) {
         return valCoord3D(seed, x, y, z);
     }
 
-    public float getWhiteNoiseInt(int x, int y) {
-        return valCoord2D(seed, x, y);
+    public float getWhiteNoiseInt(int x, int y, int z, int w) {
+        return valCoord4D(seed, x, y, z, w);
+    }
+
+    public float getWhiteNoiseInt(int x, int y, int z, int w, int u) {
+        return valCoord5D(seed, x, y, z, w, u);
+    }
+
+    public float getWhiteNoiseInt(int x, int y, int z, int w, int u, int v) {
+        return valCoord6D(seed, x, y, z, w, u, v);
     }
 
     // Value Noise
