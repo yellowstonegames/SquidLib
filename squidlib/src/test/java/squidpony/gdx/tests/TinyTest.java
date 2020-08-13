@@ -23,26 +23,29 @@ public class TinyTest extends ApplicationAdapter {
     private Stage stage;
     private SparseLayers layers;
     private TextCellFactory font;
-    public static final int GRID_WIDTH = 40, GRID_HEIGHT = 25, CELL_WIDTH = 7, CELL_HEIGHT = 12;
+//    public static final int GRID_WIDTH = 40, GRID_HEIGHT = 25, CELL_WIDTH = 7, CELL_HEIGHT = 12;
+    public static final int GRID_WIDTH = 40, GRID_HEIGHT = 14, CELL_WIDTH = 11, CELL_HEIGHT = 21;
     @Override
     public void create() {
         batch = new FilterBatch();
         stage = new Stage(new StretchViewport(GRID_WIDTH * CELL_WIDTH, GRID_HEIGHT * CELL_HEIGHT), batch);
-        font = new TextCellFactory().font(DefaultResources.getSevenTwelveFont());
+        font = DefaultResources.getCrispSlabFamily();
+//        font = new TextCellFactory().font(DefaultResources.getSevenTwelveFont());
         layers = new SparseLayers(GRID_WIDTH, GRID_HEIGHT, CELL_WIDTH, CELL_HEIGHT, font);
         List<IColoredString<Color>> messages = new ArrayList<>(20);
-        new IColoredString.Impl<Color>("ABCDEFGHIJ0123456789abcdefghij01234567", SColor.WHITE).wrap(40, messages);
-        new IColoredString.Impl<Color>("ABCDEFGHIJ0123456789abcdefghij012345678", SColor.WHITE).wrap(40, messages);
-        new IColoredString.Impl<Color>("ABCDEFGHIJ0123456789 abcdefghij01234567", SColor.WHITE).wrap(40, messages);
-        new IColoredString.Impl<Color>("alpha beta gamma delta epsilon zeta...", SColor.WHITE).wrap(40, messages);
-        new IColoredString.Impl<Color>("alpha beta gamma delta epsilon zeta eta", SColor.WHITE).wrap(40, messages);
-        new IColoredString.Impl<Color>("ABCDEFGHIJ0123456789abcdefghij01234567", SColor.RED).wrap(40, messages);
-        new IColoredString.Impl<Color>("ABCDEFGHIJ0123456789abcdefghij012345678", SColor.GREEN).wrap(40, messages);
-        new IColoredString.Impl<Color>("ABCDEFGHIJ0123456789 abcdefghij01234567", SColor.CW_AZURE).wrap(40, messages);
+        GDXMarkup.instance.colorString("[Aurora Fusion Red]Baal, [*]Agares, [/]Vassago[*], Samigina[/], Marbas, [*]Valefor, [/]Amon[*], Barbatos... [*]Heed this![*]").wrap(40, messages);
+        GDXMarkup.instance.colorString("ABCDEFGHIJ0123456789abcdefghij01234567" ).wrap(40, messages);
+        GDXMarkup.instance.colorString("ABCDEFGHIJ0123456789abcdefghij012345678").wrap(40, messages);
+        GDXMarkup.instance.colorString("ABCDEFGHIJ0123456789 abcdefghij01234567").wrap(40, messages);
+        GDXMarkup.instance.colorString("alpha beta gamma delta epsilon zeta..." ).wrap(40, messages);
+        GDXMarkup.instance.colorString("alpha beta gamma delta epsilon zeta eta").wrap(40, messages);
+        GDXMarkup.instance.colorString("[Red]ABCDEFGHIJ0123456789abcdefghij01234567").wrap(40, messages);
+        GDXMarkup.instance.colorString("[Green]ABCDEFGHIJ0123456789abcdefghij012345678").wrap(40, messages);
+        GDXMarkup.instance.colorString("[CW Azure]ABCDEFGHIJ0123456789 abcdefghij01234567").wrap(40, messages);
         GDXMarkup.instance.colorString("[CW Red (lighter)]alpha[] [CW Apricot (lighter)]beta [][CW Yellow (lighter)]gamma [CW Jade (lighter)]delta [CW Blue (lighter)]epsilon [CW Purple (lighter)]zeta[]...").wrap(40, messages);
         GDXMarkup.instance.colorString("[CW Red]alpha[] [CW Apricot]beta [][CW Yellow]gamma [CW Jade]delta [CW Blue]epsilon [CW Purple]zeta[] eta").wrap(40, messages);
         GDXMarkup.instance.colorString("[CW Red (darker)]alpha[] [CW Apricot (darker)]beta [][CW Yellow (darker)]gamma [CW Jade (darker)]delta [CW Blue (darker)]epsilon [CW Purple (darker)]zeta[] eta!").wrap(40, messages);
-        for (int i = 0; i < 25 && i < messages.size(); i++) {
+        for (int i = 0; i < GRID_HEIGHT && i < messages.size(); i++) {
             layers.put(0, i, messages.get(i));
         }
         stage.addActor(layers);
