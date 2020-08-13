@@ -17,12 +17,13 @@ import squidpony.squidgrid.gui.gdx.TextCellFactory;
 import squidpony.squidmath.*;
 
 import java.util.Arrays;
+import java.util.Random;
 
 /**
  * Created by Tommy Ettinger on 1/13/2018.
  */
 public class MathVisualizer extends ApplicationAdapter {
-    private int mode = 14;
+    private int mode = 16;
     private int modes = 51;
     private FilterBatch batch;
     private SparseLayers layers;
@@ -204,15 +205,94 @@ public class MathVisualizer extends ApplicationAdapter {
     public double erfGaussian(){
         return erfInv(rng.nextDouble() * 2.0 - 1.0);
     }
+
+    ////
+    // This section is based on Peter John Acklam's probit function, as implemented by Sherali Karimov. Source:
+    // https://web.archive.org/web/20150910002142/http://home.online.no/~pjacklam/notes/invnorm/impl/karimov/StatUtil.java
+    // Information on the algorithm:
+    // https://web.archive.org/web/20151030215612/http://home.online.no/~pjacklam/notes/invnorm/
+    ////
+    private static final double ACKLAM_LOW = 0.02425;
+    private static final double ACKLAM_HIGH = 1.0 - ACKLAM_LOW;
+
+    // Coefficients in rational approximations.
+    private static final double
+            ACKLAM_A0 = -3.969683028665376e+01,
+            ACKLAM_A1 =  2.209460984245205e+02, 
+            ACKLAM_A2 = -2.759285104469687e+02,
+            ACKLAM_A3 =  1.383577518672690e+02, 
+            ACKLAM_A4 = -3.066479806614716e+01,
+            ACKLAM_A5 =  2.506628277459239e+00;
+
+    private static final double
+            ACKLAM_B0 = -5.447609879822406e+01,
+            ACKLAM_B1 =  1.615858368580409e+02, 
+            ACKLAM_B2 = -1.556989798598866e+02,
+            ACKLAM_B3 =  6.680131188771972e+01, 
+            ACKLAM_B4 = -1.328068155288572e+01;
+
+    private static final double
+            ACKLAM_C0 = -7.784894002430293e-03, 
+            ACKLAM_C1 = -3.223964580411365e-01,
+            ACKLAM_C2 = -2.400758277161838e+00,
+            ACKLAM_C3 = -2.549732539343734e+00, 
+            ACKLAM_C4 =  4.374664141464968e+00,
+            ACKLAM_C5 =  2.938163982698783e+00;
+
+    private static final double
+            ACKLAM_D0 = 7.784695709041462e-03,
+            ACKLAM_D1 = 3.224671290700398e-01,
+            ACKLAM_D2 = 2.445134137142996e+00,
+            ACKLAM_D3 = 3.754408661907416e+00;
+
+    /**
+     * A way of taking a double in the (0.0, 1.0) range and mapping it to a Gaussian or normal distribution, so high
+     * inputs correspond to high outputs, and similarly for the low range. This is centered on 0.0 and its standard
+     * deviation seems to be 1.0 (the same as {@link Random#nextGaussian()}). It uses an algorithm by Peter John Acklam,
+     * as implemented by Sherali Karimov.
+     * <a href="https://web.archive.org/web/20150910002142/http://home.online.no/~pjacklam/notes/invnorm/impl/karimov/StatUtil.java">Source</a>.
+     * <a href="https://web.archive.org/web/20151030215612/http://home.online.no/~pjacklam/notes/invnorm/">Information on the algorithm</a>.
+     * @param d should be between 0 and 1, exclusive, but other values are tolerated (they return infinite results)
+     * @return a normal-distributed double centered on 0.0
+     */
+    @SuppressWarnings("divzero") // This can legitimately return infinite doubles, which it produces with zero division.
+    public double probit(final double d) {
+        if (d <= 0 || d >= 1) {
+            return (d - 0.5) / 0.0;
+        }
+        // Rational approximation for lower region:
+        else if (d < ACKLAM_LOW) {
+            final double q = Math.sqrt(-2 * Math.log(d));
+            return (((((ACKLAM_C0 * q + ACKLAM_C1) * q + ACKLAM_C2) * q + ACKLAM_C3) * q + ACKLAM_C4) * q + ACKLAM_C5) / ((((ACKLAM_D0 * q + ACKLAM_D1) * q + ACKLAM_D2) * q + ACKLAM_D3) * q + 1);
+        }
+        // Rational approximation for upper region:
+        else if (ACKLAM_HIGH < d) {
+            final double q = Math.sqrt(-2 * Math.log(1 - d));
+            return -(((((ACKLAM_C0 * q + ACKLAM_C1) * q + ACKLAM_C2) * q + ACKLAM_C3) * q + ACKLAM_C4) * q + ACKLAM_C5) / ((((ACKLAM_D0 * q + ACKLAM_D1) * q + ACKLAM_D2) * q + ACKLAM_D3) * q + 1);
+        }
+        // Rational approximation for central region:
+        else {
+            final double q = d - 0.5;
+            final double r = q * q;
+            return (((((ACKLAM_A0 * r + ACKLAM_A1) * r + ACKLAM_A2) * r + ACKLAM_A3) * r + ACKLAM_A4) * r + ACKLAM_A5) * q / (((((ACKLAM_B0 * r + ACKLAM_B1) * r + ACKLAM_B2) * r + ACKLAM_B3) * r + ACKLAM_B4) * r + 1);
+        }
+    }
+    
+    ////
+    // End section based on Acklam's probit algorithm.
+    ////
     
     public final float editedCurve()
     {
+        long r = diver.nextLong(), s = diver.nextLong();
+        return ((r >>> 56) - (r >>> 48 & 255) + (r >>> 40 & 255) - (r >>> 32 & 255) + (r >>> 24 & 255) - (r >>> 16 & 255) + (r >>> 8 & 255) - (r & 255)) * 0x1p-8f
+                + ((s >>> 48) - (s >>> 32 & 65535) + (s >>> 16 & 65535) - (s & 65535)) * 0x1p-16f;
 //        final long r = diver.nextLong(), s = diver.nextLong();
 //        return (((r & 0xFFFFFFL) + (r >>> 40)) * 0x1p-25f + (1.0f - ((s & 0xFFFFFFL) * 0x1p-24f) * ((s >>> 40) * 0x1p-24f))) * 0.5f;
 
-        return 0.1f * (diver.nextFloat() + diver.nextFloat() + diver.nextFloat()
-                + diver.nextFloat() + diver.nextFloat() + diver.nextFloat())
-                + 0.2f * ((1f - diver.nextFloat() * diver.nextFloat()) + (1f - diver.nextFloat() * diver.nextFloat()));
+//        return 0.1f * (diver.nextFloat() + diver.nextFloat() + diver.nextFloat()
+//                + diver.nextFloat() + diver.nextFloat() + diver.nextFloat())
+//                + 0.2f * ((1f - diver.nextFloat() * diver.nextFloat()) + (1f - diver.nextFloat() * diver.nextFloat()));
         
 //                - (s & 0xFFFFFFL) - (r >>> 20 & 0xFFFFFFL) - (s >>> 26 & 0xFFFFFFL) - (t >>> 40) - (t >>> 13 & 0xFFFFFFL)
 //        return  ((r & 0xFFFFFFL) + (r >>> 20 & 0xFFFFFFL) + (s >>> 40)
@@ -864,9 +944,11 @@ public class MathVisualizer extends ApplicationAdapter {
             break;
             case 15: {
                 Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
-                        " erfGaussian, clamped [-4,4]");
+                        " probit");
                 for (int i = 0; i < 0x100000; i++) {
-                    amounts[Noise.fastFloor(MathUtils.clamp(erfGaussian(), -0x3.FCp0, 0x3.FCp0) * 64 + 256)]++;
+                    double d = probit(diver.nextDouble()) * 64.0 + 256.0;
+                    if(d >= 0 && d < 512)
+                        amounts[(int)d]++;
                 }
                 for (int i = 0; i < 512; i++) {
                     float color = (i & 63) == 0
@@ -908,14 +990,16 @@ public class MathVisualizer extends ApplicationAdapter {
             case 16: {
                 Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
                         " editedCurve");
-                for (int i = 0; i < 0x1000000; i++) {
-                    amounts[MathUtils.floor(editedCurve() * 512f)]++;
+                for (int i = 0; i < 0x100000; i++) {
+                    float f = editedCurve() * 64f + 256f;
+                    if(f >= 0 && f < 512) 
+                        amounts[MathUtils.floor(f)]++;
                 }
                 for (int i = 0; i < 512; i++) {
                     float color = (i & 63) == 0
                             ? -0x1.c98066p126F // CW Azure
                             : -0x1.d08864p126F; // CW Sapphire
-                    for (int j = 519 - (amounts[i] >> 9); j < 520; j++) {
+                    for (int j = Math.max(0, 519 - (amounts[i] >> 5)); j < 520; j++) {
                         layers.backgrounds[i][j] = color;
                     }
                 }
