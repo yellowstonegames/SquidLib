@@ -35,10 +35,44 @@ import java.io.Serializable;
  * A wide range of noise functions that can all be called from one configurable object. Originally from Jordan Peck's
  * FastNoise library, hence the name (these functions are sometimes, but not always, very fast for noise that doesn't
  * use the GPU). This implements Noise2D, Noise3D, Noise4D, Noise5D, and Noise6D, and this is the fastest continuous
- * noise algorithm in the library. Though it doesn't implement an interface for them, you can also use this to get
- * ridged-multi simplex noise (the same type as {@link Noise.Ridged2D}) with {@link #ridged2D(float, float, int, int)},
- * {@link #ridged3D(float, float, float, int, int)}, or any of the overloads that allow specifying alternate lacunarity
- * and gain.
+ * noise algorithm in the library. It also allows the most configuration of any noise generator here, and the API is
+ * quite large. Some key parts to keep in mind:
+ * <ul>
+ *     <li>The noise type, set with {@link #setNoiseType(int)}, controls what algorithm this uses to generate noise, and
+ *     affects most of the other options. Choose a "_FRACTAL" noise type like {@link #SIMPLEX_FRACTAL} (the default) if
+ *     you want to use any of the fractal options, like octaves, lacunarity, gain, or fractal type.</li>
+ *     <li>The frequency, set with {@link #setFrequency(float)}, affects how quickly significant changes in output can
+ *     occur over a given span of input values. It defaults to {@code 1f/32f}, though you should try setting this to
+ *     {@code 1f} if results look strange.</li>
+ *     <li>If your noise type is one of the fractal varieties ({@link #VALUE_FRACTAL}, {@link #PERLIN_FRACTAL},
+ *     {@link #SIMPLEX_FRACTAL}, {@link #CUBIC_FRACTAL}, or {@link #FOAM_FRACTAL}):
+ *     <ul>
+ *         <li>Fractal noise can set a fractal type with {@link #setFractalType(int)}, which defaults to {@link #FBM}
+ *         (almost the same as {@link squidpony.squidmath.Noise.Layered2D}), and can also be set to
+ *         {@link #RIDGED_MULTI} (almost the same as {@link squidpony.squidmath.Noise.Ridged2D}) or {@link #BILLOW}
+ *         (related to RIDGED_MULTI in some ways). The noise type affects how the other fractal options work, and has a
+ *         very strong effect on the appearance of the noise when it changes.</li>
+ *         <li>Octaves, set with {@link #setFractalOctaves(int)}, are how many "layers" of noise this will calculate on
+ *         each call to get fractal noise. Each octave has its frequency changed based on lacunarity (set with
+ *         {@link #setFractalLacunarity(float)}), and contributes a different amount to the resulting value, based on
+ *         gain (set with {@link #setFractalGain(float)}). Generally, more octaves result in more detail and slower
+ *         generation times. {@link #SIMPLEX_FRACTAL} and {@link #PERLIN_FRACTAL} only really look like noise when they
+ *         use more than one octave.</li>
+ *         <li>Lacunarity may occasionally need adjustment, but usually you're fine with setting it to 2.0 or 0.5, with
+ *         the appearance informing the decision. I think lacunarity means something related to the width of a crescent,
+ *         and refers to the exponential shape of a graph of frequency as octaves are added. It defaults to 2.0, and you
+ *         can imitate {@link squidpony.squidmath.Noise.InverseLayered2D} by setting it to 0.5.</li>
+ *         <li>Gain usually only needs changing if lacunarity is changed, but they can be adjusted independently. You
+ *         probably will get the best results if gain is equal to {@code 1f / lacunarity}, or close to that.</li>
+ *     </ul>
+ *     </li>
+ *     <li>In some cases, you may want unusual or symmetrical artifacts in noise; you can make this happen with
+ *     {@link #setPointHash(IPointHash)}, giving it a {@link FlawedPointHash} or a point hash you made, and setting
+ *     noise type to {@link #CUBIC_FRACTAL} (or {@link #CUBIC}).</li>
+ *     <li>The {@link #CELLULAR} noise type has lots of extra configuration, and not all of it is well-documented, but
+ *     experimenting with settings like {@link #setCellularReturnType(int)} and
+ *     {@link #setCellularNoiseLookup(FastNoise)} is a good way to see if it can do what you want.</li>
+ * </ul>
  */
 public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, Noise.Noise5D, Noise.Noise6D {
     private static final long serialVersionUID = 3L;
@@ -84,7 +118,8 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
     /**
      * Also called Improved Perlin noise, this is always fast but tends to have better quality in lower dimensions. This
      * may have a noticeable grid at 60 degree angles, made of regular triangles in 2D. This version can use
-     * {@link #setFractalType(int)}, {@link #setFractalOctaves(int)}, and more.
+     * {@link #setFractalType(int)}, {@link #setFractalOctaves(int)}, and more; it is the default noise type if none is
+     * specified.
      * <br>
      * This is meant to be used with {@link #setNoiseType(int)}.
      */
@@ -990,17 +1025,17 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
                     default:
                         return singleValueFractalFBM(x, y, z, w, u);
                 }
-//            case FOAM:
-//                return singleFoam(seed, x, y, z, w, u);
-//            case FOAM_FRACTAL:
-//                switch (fractalType) {
-//                    case BILLOW:
-//                        return singleFoamFractalBillow(x, y, z, w, u);
-//                    case RIDGED_MULTI:
-//                        return singleFoamFractalRidgedMulti(x, y, z, w, u);
-//                    default:
-//                        return singleFoamFractalFBM(x, y, z, w, u);
-//                }
+            case FOAM:
+                return singleFoam(seed, x, y, z, w, u);
+            case FOAM_FRACTAL:
+                switch (fractalType) {
+                    case BILLOW:
+                        return singleFoamFractalBillow(x, y, z, w, u);
+                    case RIDGED_MULTI:
+                        return singleFoamFractalRidgedMulti(x, y, z, w, u);
+                    default:
+                        return singleFoamFractalFBM(x, y, z, w, u);
+                }
             case PERLIN:
                 return singlePerlin(seed, x, y, z, w, u);
             case PERLIN_FRACTAL:
@@ -2411,6 +2446,151 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
             return 1 - result * result;
         }
     }
+    public float getFoamFractal(float x, float y, float z, float w, float u) {
+        x *= frequency;
+        y *= frequency;
+        z *= frequency;
+        w *= frequency;
+        u *= frequency;
+
+        switch (fractalType) {
+            case FBM:
+                return singleFoamFractalFBM(x, y, z, w, u);
+            case BILLOW:
+                return singleFoamFractalBillow(x, y, z, w, u);
+            case RIDGED_MULTI:
+                return singleFoamFractalRidgedMulti(x, y, z, w, u);
+            default:
+                return 0;
+        }
+    }
+
+    private float singleFoamFractalFBM(float x, float y, float z, float w, float u) {
+        final int seed = this.seed;
+        float sum = singleFoam(seed, x, y, z, w, u);
+        float amp = 1;
+
+        for (int i = 1; i < octaves; i++) {
+            x *= lacunarity;
+            y *= lacunarity;
+            z *= lacunarity;
+            w *= lacunarity;
+            u *= lacunarity;
+
+            amp *= gain;
+            sum += singleFoam(seed + i, x, y, z, w, u) * amp;
+        }
+
+        return sum * fractalBounding;
+    }
+
+    private float singleFoamFractalBillow(float x, float y, float z, float w, float u) {
+        final int seed = this.seed;
+        float sum = Math.abs(singleFoam(seed, x, y, z, w, u)) * 2 - 1;
+        float amp = 1;
+
+        for (int i = 1; i < octaves; i++) {
+            x *= lacunarity;
+            y *= lacunarity;
+            z *= lacunarity;
+            w *= lacunarity;
+            u *= lacunarity;
+
+            amp *= gain;
+            sum += (Math.abs(singleFoam(seed + i, x, y, z, w, u)) * 2 - 1) * amp;
+        }
+
+        return sum * fractalBounding;
+    }
+
+    private float singleFoamFractalRidgedMulti(float x, float y, float z, float w, float u) {
+        final int seed = this.seed;
+        float sum = 0, amp = 1, ampBias = 1f, spike;
+        for (int i = 0; i < octaves; i++) {
+            spike = 1f - Math.abs(singleFoam(seed + i, x, y, z, w, u));
+            spike *= spike * amp;
+            amp = Math.max(0f, Math.min(1f, spike * 2f));
+            sum += (spike * ampBias);
+            ampBias *= 2f;
+            x *= lacunarity;
+            y *= lacunarity;
+            z *= lacunarity;
+            w *= lacunarity;
+            u *= lacunarity;
+        }
+        return sum / ((ampBias - 1f) * 0.5f) - 1f;
+    }
+
+    public float getFoam(float x, float y, float z, float w, float u) {
+        return singleFoam(seed, x * frequency, y * frequency, z * frequency, w * frequency, u * frequency);
+    }
+
+    public float singleFoam(int seed, float x, float y, float z, float w, float u) {
+        final float p0 = x *  0.8157559148337911f + y *  0.5797766823136037f;
+        final float p1 = x * -0.7314923478726791f + y *  0.6832997137249108f;
+        final float p2 = x * -0.0208603044412437f + y * -0.3155296974329846f + z * 0.9486832980505138f;
+        final float p3 = x * -0.0208603044412437f + y * -0.3155296974329846f + z * -0.316227766016838f + w *   0.8944271909999159f;
+        final float p4 = x * -0.0208603044412437f + y * -0.3155296974329846f + z * -0.316227766016838f + w * -0.44721359549995804f + u *  0.7745966692414833f;
+        final float p5 = x * -0.0208603044412437f + y * -0.3155296974329846f + z * -0.316227766016838f + w * -0.44721359549995804f + u * -0.7745966692414836f;
+
+        float xin = p1;
+        float yin = p2;
+        float zin = p3;
+        float win = p4;
+        float uin = p5;
+        final float a = valueNoise(seed, xin, yin, zin, win, uin);
+        seed += 0x9E3779BD;
+        seed = (seed ^ seed >>> 12) * 0xDAB;
+        seed ^= seed >>> 14;
+        xin = p0;
+        yin = p2;
+        zin = p3;
+        win = p4;
+        uin = p5;
+        final float b = valueNoise(seed, xin + a, yin, zin, win, uin);
+        seed += 0x9E3779BD;
+        seed = (seed ^ seed >>> 12) * 0xDAB;
+        seed ^= seed >>> 14;
+        xin = p0;
+        yin = p1;
+        zin = p3;
+        win = p4;
+        uin = p5;
+        final float c = valueNoise(seed, xin + b, yin, zin, win, uin);
+        seed += 0x9E3779BD;
+        seed = (seed ^ seed >>> 12) * 0xDAB;
+        seed ^= seed >>> 14;
+        xin = p0;
+        yin = p1;
+        zin = p2;
+        win = p4;
+        uin = p5;
+        final float d = valueNoise(seed, xin + c, yin, zin, win, uin);
+        seed += 0x9E3779BD;
+        seed = (seed ^ seed >>> 12) * 0xDAB;
+        seed ^= seed >>> 14;
+        xin = p0;
+        yin = p1;
+        zin = p2;
+        win = p3;
+        uin = p5;
+        final float e = valueNoise(seed, xin + d, yin, zin, win, uin);
+        seed += 0x9E3779BD;
+        seed = (seed ^ seed >>> 12) * 0xDAB;
+        seed ^= seed >>> 14;
+        xin = p0;
+        yin = p1;
+        zin = p2;
+        win = p3;
+        uin = p4;
+        final float f = valueNoise(seed, xin + e, yin, zin, win, uin);
+
+        final float result = (a + b + c + d + e + f) * 0.16666666666666666f;
+        return (result <= 0.5f)
+                ? 32 * result * result * result * result * result - 1
+                : 32 * (result - 1) * (result - 1) * (result - 1) * (result - 1) * (result - 1) + 1;
+    }
+    
     public float getFoamFractal(float x, float y, float z, float w, float u, float v) {
         x *= frequency;
         y *= frequency;
