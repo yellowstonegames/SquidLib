@@ -289,4 +289,48 @@ public final class MathExtras
         x *= 2 - a * x;        // 80 -- 64 low bits
         return x;
     }
+
+    /**
+     * A way of taking a double in the (0.0, 1.0) range and mapping it to a Gaussian or normal distribution, so high
+     * inputs correspond to high outputs, and similarly for the low range. This is centered on 0.0 and its standard
+     * deviation seems to be 1.0 (the same as {@link java.util.Random#nextGaussian()}). If this is given an input of 0.0
+     * or less, it returns negative infinity; if it is given an input of 1.0 or more, it returns positive infinity. If
+     * given NaN, it returns NaN. It uses an algorithm by Peter John Acklam, as implemented by Sherali Karimov.
+      <a href="https://web.archive.org/web/20150910002142/http://home.online.no/~pjacklam/notes/invnorm/impl/karimov/StatUtil.java">Original source</a>.
+     * <a href="https://web.archive.org/web/20151030215612/http://home.online.no/~pjacklam/notes/invnorm/">Information on the algorithm</a>.
+     * <a href="https://en.wikipedia.org/wiki/Probit_function">Wikipedia's page on the probit function</a> may help, but
+     * is more likely to just be confusing.
+     * <br>
+     * This can be used both as an optimization for generating Gaussian random values, and as a way of generating
+     * Gaussian values that match a pattern present in the inputs (which you could have by using a sub-random sequence
+     * as the input, such as those produced by {@link VanDerCorputQRNG#determine(int, int)} or the R2 sequence).
+     * @param d should be between 0 and 1, exclusive, but other values are tolerated (they return infinite results)
+     * @return a normal-distributed double centered on 0.0; may be infinite
+     */
+    @SuppressWarnings("divzero") // This can legitimately return infinite doubles, which it produces with zero division.
+    public static double probit(final double d) {
+        if (d <= 0 || d >= 1) {
+            return (d - 0.5) / 0.0;
+        }
+        // Rational approximation for lower region:
+        else if (d < 0.02425) {
+            final double q = Math.sqrt(-2.0 * Math.log(d));
+            return (((((-7.784894002430293e-03 * q + -3.223964580411365e-01) * q + -2.400758277161838e+00) * q + -2.549732539343734e+00) * q + 4.374664141464968e+00) * q + 2.938163982698783e+00)
+                    / ((((7.784695709041462e-03 * q + 3.224671290700398e-01) * q + 2.445134137142996e+00) * q + 3.754408661907416e+00) * q + 1.0);
+        }
+        // Rational approximation for upper region:
+        else if (0.97575 < d) {
+            final double q = Math.sqrt(-2.0 * Math.log(1 - d));
+            return -(((((-7.784894002430293e-03 * q + -3.223964580411365e-01) * q + -2.400758277161838e+00) * q + -2.549732539343734e+00) * q + 4.374664141464968e+00) * q + 2.938163982698783e+00)
+                    / ((((7.784695709041462e-03 * q + 3.224671290700398e-01) * q + 2.445134137142996e+00) * q + 3.754408661907416e+00) * q + 1.0);
+        }
+        // Rational approximation for central region:
+        else {
+            final double q = d - 0.5;
+            final double r = q * q;
+            return (((((-3.969683028665376e+01 * r + 2.209460984245205e+02) * r + -2.759285104469687e+02) * r + 1.383577518672690e+02) * r + -3.066479806614716e+01) * r + 2.506628277459239e+00) * q
+                    / (((((-5.447609879822406e+01 * r + 1.615858368580409e+02) * r + -1.556989798598866e+02) * r + 6.680131188771972e+01) * r + -1.328068155288572e+01) * r + 1.0);
+        }
+    }
+
 }
