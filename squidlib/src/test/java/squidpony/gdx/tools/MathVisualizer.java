@@ -205,82 +205,6 @@ public class MathVisualizer extends ApplicationAdapter {
     public double erfGaussian(){
         return erfInv(rng.nextDouble() * 2.0 - 1.0);
     }
-
-    ////
-    // This section is based on Peter John Acklam's probit function, as implemented by Sherali Karimov. Source:
-    // https://web.archive.org/web/20150910002142/http://home.online.no/~pjacklam/notes/invnorm/impl/karimov/StatUtil.java
-    // Information on the algorithm:
-    // https://web.archive.org/web/20151030215612/http://home.online.no/~pjacklam/notes/invnorm/
-    ////
-    private static final double ACKLAM_LOW = 0.02425;
-    private static final double ACKLAM_HIGH = 1.0 - ACKLAM_LOW;
-
-    // Coefficients in rational approximations.
-    private static final double
-            ACKLAM_A0 = -3.969683028665376e+01,
-            ACKLAM_A1 =  2.209460984245205e+02, 
-            ACKLAM_A2 = -2.759285104469687e+02,
-            ACKLAM_A3 =  1.383577518672690e+02, 
-            ACKLAM_A4 = -3.066479806614716e+01,
-            ACKLAM_A5 =  2.506628277459239e+00;
-
-    private static final double
-            ACKLAM_B0 = -5.447609879822406e+01,
-            ACKLAM_B1 =  1.615858368580409e+02, 
-            ACKLAM_B2 = -1.556989798598866e+02,
-            ACKLAM_B3 =  6.680131188771972e+01, 
-            ACKLAM_B4 = -1.328068155288572e+01;
-
-    private static final double
-            ACKLAM_C0 = -7.784894002430293e-03, 
-            ACKLAM_C1 = -3.223964580411365e-01,
-            ACKLAM_C2 = -2.400758277161838e+00,
-            ACKLAM_C3 = -2.549732539343734e+00, 
-            ACKLAM_C4 =  4.374664141464968e+00,
-            ACKLAM_C5 =  2.938163982698783e+00;
-
-    private static final double
-            ACKLAM_D0 = 7.784695709041462e-03,
-            ACKLAM_D1 = 3.224671290700398e-01,
-            ACKLAM_D2 = 2.445134137142996e+00,
-            ACKLAM_D3 = 3.754408661907416e+00;
-
-    /**
-     * A way of taking a double in the (0.0, 1.0) range and mapping it to a Gaussian or normal distribution, so high
-     * inputs correspond to high outputs, and similarly for the low range. This is centered on 0.0 and its standard
-     * deviation seems to be 1.0 (the same as {@link Random#nextGaussian()}). It uses an algorithm by Peter John Acklam,
-     * as implemented by Sherali Karimov.
-     * <a href="https://web.archive.org/web/20150910002142/http://home.online.no/~pjacklam/notes/invnorm/impl/karimov/StatUtil.java">Source</a>.
-     * <a href="https://web.archive.org/web/20151030215612/http://home.online.no/~pjacklam/notes/invnorm/">Information on the algorithm</a>.
-     * @param d should be between 0 and 1, exclusive, but other values are tolerated (they return infinite results)
-     * @return a normal-distributed double centered on 0.0
-     */
-    @SuppressWarnings("divzero") // This can legitimately return infinite doubles, which it produces with zero division.
-    public double probit(final double d) {
-        if (d <= 0 || d >= 1) {
-            return (d - 0.5) / 0.0;
-        }
-        // Rational approximation for lower region:
-        else if (d < ACKLAM_LOW) {
-            final double q = Math.sqrt(-2 * Math.log(d));
-            return (((((ACKLAM_C0 * q + ACKLAM_C1) * q + ACKLAM_C2) * q + ACKLAM_C3) * q + ACKLAM_C4) * q + ACKLAM_C5) / ((((ACKLAM_D0 * q + ACKLAM_D1) * q + ACKLAM_D2) * q + ACKLAM_D3) * q + 1);
-        }
-        // Rational approximation for upper region:
-        else if (ACKLAM_HIGH < d) {
-            final double q = Math.sqrt(-2 * Math.log(1 - d));
-            return -(((((ACKLAM_C0 * q + ACKLAM_C1) * q + ACKLAM_C2) * q + ACKLAM_C3) * q + ACKLAM_C4) * q + ACKLAM_C5) / ((((ACKLAM_D0 * q + ACKLAM_D1) * q + ACKLAM_D2) * q + ACKLAM_D3) * q + 1);
-        }
-        // Rational approximation for central region:
-        else {
-            final double q = d - 0.5;
-            final double r = q * q;
-            return (((((ACKLAM_A0 * r + ACKLAM_A1) * r + ACKLAM_A2) * r + ACKLAM_A3) * r + ACKLAM_A4) * r + ACKLAM_A5) * q / (((((ACKLAM_B0 * r + ACKLAM_B1) * r + ACKLAM_B2) * r + ACKLAM_B3) * r + ACKLAM_B4) * r + 1);
-        }
-    }
-    
-    ////
-    // End section based on Acklam's probit algorithm.
-    ////
     
     public final float editedCurve()
     {
@@ -299,6 +223,14 @@ public class MathVisualizer extends ApplicationAdapter {
 //                - (s & 0xFFFFFFL) - (s >>> 20 & 0xFFFFFFL) - (r >>> 40)
 //        ) * 0x1p-26f;
 //        return ((r & 0xFFFFFFL) * 0x1p-23f - ((s & 0xFFFFFFL) * 0x1p-23f)) * ((r >> 40) * 0x1p-23f) * ((s >> 40) * 0x1p-23f);
+    }
+    public final double nextGaussianBasicBoxMuller() {
+        if (hasGauss = !hasGauss) {
+            final double u1 = Math.sqrt(-2.0 * Math.log(1.0 - rng.nextDouble())), u2 = rng.nextDouble();
+            followingGauss = u1 * NumberTools.sin_(u2);
+            return u1 * NumberTools.cos_(u2);
+        }
+        else return followingGauss;
     }
     public final double nextGaussian() {
         if (hasGauss = !hasGauss) {
@@ -885,15 +817,17 @@ public class MathVisualizer extends ApplicationAdapter {
             break;
             case 14: {
                 Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
-                        " RNG.nextGaussian(), clamped [-4,4]");
-                for (int i = 0; i < 0x100000; i++) {
-                    amounts[Noise.fastFloor(MathUtils.clamp(nextGaussian(), -0x3.FCp0, 0x3.FCp0) * 64 + 256)]++;
+                        " nextGaussian()");
+                for (int i = 0; i < 0x50000; i++) {
+                    double d = nextGaussian() * 64.0 + 256.0;
+                    if(d >= 0 && d < 512)
+                        amounts[(int)d]++;
                 }
                 for (int i = 0; i < 512; i++) {
                     float color = (i & 63) == 0
                             ? -0x1.c98066p126F // CW Azure
                             : -0x1.d08864p126F; // CW Sapphire
-                    for (int j = 519 - (amounts[i] >> 5); j < 520; j++) {
+                    for (int j = Math.max(0, 519 - (amounts[i] >> 3)); j < 520; j++) {
                         layers.backgrounds[i][j] = color;
                     }
                 }
@@ -945,8 +879,8 @@ public class MathVisualizer extends ApplicationAdapter {
             case 15: {
                 Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
                         " probit");
-                for (int i = 0; i < 0x100000; i++) {
-                    double d = probit(diver.nextDouble()) * 64.0 + 256.0;
+                for (int i = 0; i < 0x50000; i++) {
+                    double d = MathExtras.probit(diver.nextDouble()) * 64.0 + 256.0;
                     if(d >= 0 && d < 512)
                         amounts[(int)d]++;
                 }
@@ -954,7 +888,7 @@ public class MathVisualizer extends ApplicationAdapter {
                     float color = (i & 63) == 0
                             ? -0x1.c98066p126F // CW Azure
                             : -0x1.d08864p126F; // CW Sapphire
-                    for (int j = Math.max(0, 519 - (amounts[i] >> 5)); j < 520; j++) {
+                    for (int j = Math.max(0, 519 - (amounts[i] >> 3)); j < 520; j++) {
                         layers.backgrounds[i][j] = color;
                     }
                 }
@@ -990,7 +924,7 @@ public class MathVisualizer extends ApplicationAdapter {
             case 16: {
                 Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
                         " editedCurve");
-                for (int i = 0; i < 0x100000; i++) {
+                for (int i = 0; i < 0x50000; i++) {
                     float f = editedCurve() * 64f + 256f;
                     if(f >= 0 && f < 512) 
                         amounts[MathUtils.floor(f)]++;
@@ -999,7 +933,7 @@ public class MathVisualizer extends ApplicationAdapter {
                     float color = (i & 63) == 0
                             ? -0x1.c98066p126F // CW Azure
                             : -0x1.d08864p126F; // CW Sapphire
-                    for (int j = Math.max(0, 519 - (amounts[i] >> 5)); j < 520; j++) {
+                    for (int j = Math.max(0, 519 - (amounts[i] >> 3)); j < 520; j++) {
                         layers.backgrounds[i][j] = color;
                     }
                 }
