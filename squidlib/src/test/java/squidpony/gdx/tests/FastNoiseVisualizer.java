@@ -23,24 +23,22 @@ import static com.badlogic.gdx.graphics.GL20.GL_POINTS;
  */
 public class FastNoiseVisualizer extends ApplicationAdapter {
 
-    private FastNoise noise = new FastNoise(1, 0.25f, FastNoise.CUBIC_FRACTAL, 1);
-    private static final int MODE_LIMIT = 1;
-    private int mode;
-    private int dim; // this can be 0, 1, or 2; add 2 to get the actual dimensions
+    private FastNoise noise = new FastNoise(1, 0.0625f, FastNoise.SIMPLEX_FRACTAL, 1);
+    private int dim; // this can be 0, 1, 2, 3, or 4; add 2 to get the actual dimensions
     private int octaves = 3;
     private float freq = 0.125f;
     private boolean inverse;
     private ImmediateModeRenderer20 renderer;
     
-    private int hashIndex = 3;
+    private int hashIndex = 2;
     private PointHash ph = new PointHash();
     private HastyPointHash hph = new HastyPointHash();
     private IntPointHash iph = new IntPointHash();
+    private GoldPointHash gold = new GoldPointHash();
     private FlawedPointHash.RugHash rug = new FlawedPointHash.RugHash(1);
     private FlawedPointHash.QuiltHash quilt = new FlawedPointHash.QuiltHash(1, 16);
     private FlawedPointHash.CubeHash cube = new FlawedPointHash.CubeHash(1, 32);
     private FlawedPointHash.FNVHash fnv = new FlawedPointHash.FNVHash(1);
-    private GoldPointHash gold = new GoldPointHash();
     private IPointHash[] pointHashes = new IPointHash[] {ph, hph, iph, gold, rug, quilt, cube};
 
     private static final int width = 512, height = 512;
@@ -64,10 +62,10 @@ public class FastNoiseVisualizer extends ApplicationAdapter {
         renderer = new ImmediateModeRenderer20(width * height, false, true, 0);
         view = new ScreenViewport();
         noise.setPointHash(pointHashes[hashIndex]);
-        noise.setFractalType(FastNoise.RIDGED_MULTI);
+        noise.setFractalType(FastNoise.FBM);
         gif = new AnimatedGif();
         gif.palette = new PaletteReducer(new int[] {
-                0x000000FF, 0x081820FF, 0x132C2DFF, 0x1E403BFF, 0x295447FF, 0x346856FF, 0x497E5BFF,
+                0x00000000, 0x000000FF, 0x081820FF, 0x132C2DFF, 0x1E403BFF, 0x295447FF, 0x346856FF, 0x497E5BFF,
                 0x5E9463FF, 0x73AA69FF, 0x88C070FF, 0x9ECE88FF, 0xB4DCA0FF, 0xCAEAB8FF, 0xE0F8D0FF, 0xEFFBE7FF,
                 0xFFFFFFFF,
 
@@ -119,7 +117,8 @@ public class FastNoiseVisualizer extends ApplicationAdapter {
                             }
                             frames.add(p);
                         }
-                        gif.write(Gdx.files.local("green.gif"), frames, 12);
+                        Gdx.files.local("out/").mkdirs();
+                        gif.write(Gdx.files.local("out/green.gif"), frames, 12);
                         
                         break;
                     case P: //pause
@@ -134,10 +133,14 @@ public class FastNoiseVisualizer extends ApplicationAdapter {
                         noise.setSeed(noise.getSeed() + 1);
                         break;
                     case N: // noise type
-                        noise.setNoiseType((noise.getNoiseType() + 1) % 10);
+                    case EQUALS:
+                        noise.setNoiseType((noise.getNoiseType() + 1) % 12);
+                        break;
+                    case MINUS:
+                        noise.setNoiseType((noise.getNoiseType() + 11) % 12);
                         break;
                     case D: //dimension
-                        dim = (dim + 1) & 3;
+                        dim = (dim + 1) % 5;
                         break;
                     case F: // frequency
 //                        noise.setFrequency(NumberTools.sin(freq += 0.125f) * 0.25f + 0.25f + 0x1p-7f);
@@ -209,7 +212,20 @@ public class FastNoiseVisualizer extends ApplicationAdapter {
                     }
                 }
                 break;
-            case 3:
+            case 3: {
+                for (int x = 0; x < width; x++) {
+                    for (int y = 0; y < height; y++) {
+                        bright = basicPrepare(noise.getConfiguredNoise(
+                                (y * 0.6f + x * 0.4f) + ctr * 1.3f, (x * 0.6f - y * 0.4f) + ctr * 1.3f,
+                                (x * 0.7f + y * 0.3f) - ctr * 1.3f, (y * 0.7f - x * 0.3f) - ctr * 1.3f,
+                                (x * 0.35f - y * 0.25f) * 0.65f - (x * 0.25f + y * 0.35f) * 1.35f));
+                        renderer.color(bright, bright, bright, 1f);
+                        renderer.vertex(x, y, 0);
+                    }
+                }
+            }
+                break;
+            case 4: {
                 float xx, yy;
                 for (int x = 0; x < width; x++) {
                     xx = x * 0x1p-4f;
@@ -217,11 +233,12 @@ public class FastNoiseVisualizer extends ApplicationAdapter {
                         yy = y * 0x1p-4f;
                         bright = basicPrepare(noise.getConfiguredNoise(
                                 ctr + xx, x + ctr, y - ctr,
-                                ctr - yy, x +  yy, y - xx));
+                                ctr - yy, x + yy, y - xx));
                         renderer.color(bright, bright, bright, 1f);
                         renderer.vertex(x, y, 0);
                     }
                 }
+            }
                 break;
         }
         renderer.end();
