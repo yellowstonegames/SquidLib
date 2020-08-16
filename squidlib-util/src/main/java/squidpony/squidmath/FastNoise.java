@@ -3094,7 +3094,9 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
     public float getPerlin(float x, float y, float z, float w, float u) {
         return singlePerlin(seed, x * frequency, y * frequency, z * frequency, w * frequency, u * frequency);
     }
-
+    
+//    public float minBound = -1f, maxBound = 1f;
+    
     private float singlePerlin(int seed, float x, float y, float z, float w, float u) {
         int x0 = fastFloor(x);
         int y0 = fastFloor(y);
@@ -3178,7 +3180,19 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         final float wf0 = lerp(zf00, zf10, ws);
         final float wf1 = lerp(zf01, zf11, ws);
 
-        return lerp(wf0, wf1, us);
+        return lerp(wf0, wf1, us) * 0.73333333333333f;
+//        final float res = lerp(wf0, wf1, us) * 0.73333333333333f;
+//        if(res < minBound)
+//        {
+//            System.out.println(minBound = res);
+//            return -1f;
+//        }
+//        else if(res > maxBound)
+//        {
+//            System.out.println(maxBound = res);
+//            return 1f;
+//        }
+//        return res;
     }
     private float singlePerlinFractalFBM(float x, float y, float z, float w, float u) {
         int seed = this.seed;
