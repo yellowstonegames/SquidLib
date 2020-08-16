@@ -226,14 +226,13 @@ public class FastNoiseVisualizer extends ApplicationAdapter {
             }
                 break;
             case 4: {
-                float xx, yy;
-                for (int x = 0; x < width; x++) {
-                    xx = x * 0x1p-4f;
+                for (int x = 0; x < width; x++) { 
                     for (int y = 0; y < height; y++) {
-                        yy = y * 0x1p-4f;
                         bright = basicPrepare(noise.getConfiguredNoise(
-                                ctr + xx, x + ctr, y - ctr,
-                                ctr - yy, x + yy, y - xx));
+                                (y * 0.6f + x * 0.4f) + ctr * 1.3f, (x * 0.6f - y * 0.4f) + ctr * 1.3f,
+                                (x * 0.7f + y * 0.3f) - ctr * 1.3f, (y * 0.7f - x * 0.3f) - ctr * 1.3f,
+                                (x * 0.35f - y * 0.25f) * 0.65f - (x * 0.25f + y * 0.35f) * 1.35f,
+                                (y * 0.45f - x * 0.15f) * 0.75f - (y * 0.15f + x * 0.45f) * 1.25f));
                         renderer.color(bright, bright, bright, 1f);
                         renderer.vertex(x, y, 0);
                     }
