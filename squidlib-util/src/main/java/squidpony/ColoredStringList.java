@@ -9,11 +9,17 @@ import java.util.Iterator;
 /**
  * An helper class for code that deals with lists of {@link IColoredString}s. It
  * does nothing smart, its only purpose is to save you some typing for frequent
- * calls. It is particularly useful when feeding large pieces of text to classes
- * like TextPanel in the display module.
+ * calls. 
+ * <br>
+ * This class is deprecated in favor of using standard JDK {@code ArrayList<IColoredString<T>>}, where T is usually
+ * Color from libGDX. Using ArrayList lets you build these using {@link Maker#makeList(Object[])}, if you want. Some of
+ * the methods in this class aren't very obvious for what they actually do; {@link #add(Object)} will add a new line,
+ * while {@link #addText(String)} will append text to the last line.
  * 
  * @author smelC
+ * @deprecated This class duplicates the functionality of an ArrayList of IColoredString, and isn't very clear.
  */
+@Deprecated
 public class ColoredStringList<T> extends ArrayList<IColoredString<T>> {
 
 	private static final long serialVersionUID = -5111205714079762803L;

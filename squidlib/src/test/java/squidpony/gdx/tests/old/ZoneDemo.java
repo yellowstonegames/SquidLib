@@ -10,7 +10,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
-import squidpony.ColoredStringList;
+import squidpony.panel.IColoredString;
 import squidpony.squidai.ZOI;
 import squidpony.squidgrid.Direction;
 import squidpony.squidgrid.Radius;
@@ -21,6 +21,8 @@ import squidpony.squidgrid.mapping.SerpentMapGenerator;
 import squidpony.squidmath.Coord;
 import squidpony.squidmath.GreasedRegion;
 import squidpony.squidmath.RNG;
+
+import java.util.ArrayList;
 
 public class ZoneDemo extends ApplicationAdapter {
     private FilterBatch batch;
@@ -261,20 +263,14 @@ public class ZoneDemo extends ApplicationAdapter {
     }
 
     private void buildCurrentTextPanel(int newWidth, int newHeight) {
-        current = new TextPanel( //DefaultResources.getLargeFont());
-                //new TextCellFactory().fontDistanceField("Gentium-distance.fnt", "Gentium-distance.png")
-                //new TextCellFactory().fontDistanceField("Noto-Sans-distance.fnt", "Noto-Sans-distance.png")
-                //        .setSmoothingMultiplier(0.4f).height(30).width(7)
-                //DefaultResources.getSlabFamily().width(11).height(24));
-                crispVariableWidth);
-//                DefaultResources.getStretchablePrintFont().width(6).height(24));
+        current = new TextPanel(crispVariableWidth);
         current.backgroundColor = colorCenter.get(30, 30, 30);
-        final ColoredStringList<Color> text = new ColoredStringList<Color>();
-        //text.addColoredText("SquidLib ", colorCenter.get(255, 0, 0));
-        text.addText(GDXMarkup.instance.colorString("[/][CW Pale Indigo]SquidLib[] is brought to you by Tommy Ettinger, Eben Howard, smelC, and others"));
-        /* Jump a line */
-        text.addTextOnNewLine(GDXMarkup.instance.colorString("If you wanna contribute, visit " +
+                final ArrayList<IColoredString<Color>> text = new ArrayList<IColoredString<Color>>();
+        text.add(GDXMarkup.instance.colorString("[/][CW Pale Indigo]SquidLib[] is brought to you by Tommy Ettinger, Eben Howard, smelC, and others."));
+        text.add(GDXMarkup.instance.colorString("If you wanna contribute, visit " +
                 "[CW Bright Sapphire][*]https://github.com/SquidPony/SquidLib[]"));
+
+
         /* // useful during debugging
         char[] big = new char[50];
         Arrays.fill(big, 'A');
