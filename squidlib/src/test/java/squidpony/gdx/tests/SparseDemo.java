@@ -5,8 +5,8 @@ import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
-import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.math.Vector2;
@@ -774,17 +774,12 @@ public class SparseDemo extends ApplicationAdapter {
         stage.getViewport().setScreenBounds(0, (int)languageDisplay.getHeight(), width, height - (int)languageDisplay.getHeight());
 	}
     public static void main (String[] arg) {
-        LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-        config.title = "SquidLib GDX Sparse Demo";
-        config.width = gridWidth * cellWidth;
-        config.height = (gridHeight + bonusHeight) * cellHeight;
-        config.vSyncEnabled = false;
-        config.foregroundFPS = 0;
-        config.backgroundFPS = 0;
-        config.addIcon("Tentacle-16.png", Files.FileType.Classpath);
-        config.addIcon("Tentacle-32.png", Files.FileType.Classpath);
-        config.addIcon("Tentacle-128.png", Files.FileType.Classpath);
-        new LwjglApplication(new SparseDemo(), config);
+        Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
+        config.setTitle("SquidLib GDX Sparse Demo");
+        config.useVsync(false);
+        config.setWindowedMode(gridWidth * cellWidth, (gridHeight + bonusHeight) * cellHeight);
+        config.setWindowIcon(Files.FileType.Internal, "Tentacle-128.png", "Tentacle-64.png", "Tentacle-32.png", "Tentacle-16.png");
+        new Lwjgl3Application(new SparseDemo(), config);
     }
 
 }

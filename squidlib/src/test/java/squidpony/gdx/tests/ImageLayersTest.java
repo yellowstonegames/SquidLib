@@ -3,8 +3,8 @@ package squidpony.gdx.tests;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
-import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -26,7 +26,7 @@ import java.util.ArrayList;
  * Created by Tommy Ettinger on 4/6/2016.
  */
 public class ImageLayersTest extends ApplicationAdapter{
-    int gridWidth, gridHeight, cellWidth, cellHeight;
+    public static final int gridWidth = 50, gridHeight = 25, cellWidth = 32, cellHeight = 32;
     SquidLayers layers;
     ImageSquidPanel imagePanel;
     char[][] map, displayedMap;
@@ -49,10 +49,6 @@ public class ImageLayersTest extends ApplicationAdapter{
         atlas = DefaultResources.getIconAtlas();
         regions = atlas.getRegions();
         totalRegions = regions.size;
-        gridWidth = 50;
-        gridHeight = 25;
-        cellWidth = 32;
-        cellHeight = 32;
         layers = new SquidLayers(gridWidth, gridHeight, cellWidth, cellHeight,
                 DefaultResources.getStretchableSquareFont());
         layers.setTextSize(cellWidth, cellHeight+1);
@@ -186,13 +182,11 @@ public class ImageLayersTest extends ApplicationAdapter{
     }
 
     public static void main (String[] arg) {
-        LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-        config.title = "SquidLib Test: Layered Images/Text";
-        config.width = 60 * 24;
-        config.height = 40 * 24;
-        config.addIcon("Tentacle-16.png", Files.FileType.Internal);
-        config.addIcon("Tentacle-32.png", Files.FileType.Internal);
-        config.addIcon("Tentacle-128.png", Files.FileType.Internal);
-        new LwjglApplication(new ImageLayersTest(), config);
+        Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
+        config.setTitle("SquidLib Test: Layered Images/Text");
+        config.useVsync(false);
+        config.setWindowedMode(gridWidth * cellWidth, gridHeight * cellHeight);
+        config.setWindowIcon(Files.FileType.Internal, "Tentacle-128.png", "Tentacle-64.png", "Tentacle-32.png", "Tentacle-16.png");
+        new Lwjgl3Application(new ImageLayersTest(), config);
     }
 }

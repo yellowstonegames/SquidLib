@@ -1,8 +1,8 @@
 package squidpony.gdx.tests;
 
 import com.badlogic.gdx.*;
-import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
-import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -81,7 +81,6 @@ public class ThinWallDemo extends ApplicationAdapter {
     private double[][] fovmap, monfovmap;
     private Creature player;
     private FOV fov, monfov;
-    public static final int INTERNAL_ZOOM = 1;
 
     /**
      * In number of cells
@@ -100,11 +99,11 @@ public class ThinWallDemo extends ApplicationAdapter {
     /**
      * The pixel width of a cell
      */
-    private static final int cellWidth = 12 * INTERNAL_ZOOM;
+    private static final int cellWidth = 12;
     /**
      * The pixel height of a cell
      */
-    private static final int cellHeight = 24 * INTERNAL_ZOOM;
+    private static final int cellHeight = 24;
     private VisualInput input;
     private boolean[][] seen;
     private int health = 9;
@@ -120,7 +119,7 @@ public class ThinWallDemo extends ApplicationAdapter {
     private String lang;
     private TextCellFactory textFactory;
     private Viewport viewport;
-    private float currentZoomX = INTERNAL_ZOOM, currentZoomY = INTERNAL_ZOOM;
+    private float currentZoomX = 1, currentZoomY = 1;
 
     public static final Adjacency adjacency = new Adjacency.ThinWallAdjacency(overlapWidth, overlapHeight, Measurement.EUCLIDEAN);
     @Override
@@ -614,8 +613,8 @@ public class ThinWallDemo extends ApplicationAdapter {
         text.add(helping2);
         text.add(helping3);
 
-        final float w = width * cellWidth, aw = helping3.length() * cellWidth * 0.8f * INTERNAL_ZOOM;
-        final float h = height * cellHeight, ah = cellHeight * 9f * INTERNAL_ZOOM;
+        final float w = width * cellWidth, aw = helping3.length() * cellWidth * 0.8f;
+        final float h = height * cellHeight, ah = cellHeight * 9f;
         tp.init(aw, ah, text);
         a = tp.getScrollPane();
         final float x = (w - aw) / 2f;
@@ -787,14 +786,12 @@ public class ThinWallDemo extends ApplicationAdapter {
         stage.getViewport().update(width, height, true);
     }
     public static void main (String[] arg) {
-        LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-        config.title = "SquidLib Demo: Thin Wall Dungeon and Pathfinding";
-        config.width = width * cellWidth / INTERNAL_ZOOM;
-        config.height = (height+messageHeight+1) * cellHeight / INTERNAL_ZOOM;
-        config.addIcon("Tentacle-16.png", Files.FileType.Internal);
-        config.addIcon("Tentacle-32.png", Files.FileType.Internal);
-        config.addIcon("Tentacle-128.png", Files.FileType.Internal);
-        new LwjglApplication(new ThinWallDemo(), config);
+        Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
+        config.setTitle("SquidLib Demo: Thin Wall Dungeon and Pathfinding");
+        config.useVsync(false);
+        config.setWindowedMode(width * cellWidth, (height + messageHeight + 1) * cellHeight);
+        config.setWindowIcon(Files.FileType.Internal, "Tentacle-128.png", "Tentacle-64.png", "Tentacle-32.png", "Tentacle-16.png");
+        new Lwjgl3Application(new ThinWallDemo(), config);
     }
 
 }

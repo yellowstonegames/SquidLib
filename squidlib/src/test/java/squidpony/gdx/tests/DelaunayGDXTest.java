@@ -3,8 +3,8 @@ package squidpony.gdx.tests;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
-import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -89,17 +89,12 @@ public class DelaunayGDXTest extends ApplicationAdapter {
     }
 
     public static void main (String[] arg) {
-        LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-        config.title = "SquidLib/libGDX Demo: Delaunay Test";
-        config.width = 512;
-        config.height = 512;
-        config.vSyncEnabled = false;
-        config.foregroundFPS = 0;
-        config.addIcon("Tentacle-16.png", Files.FileType.Internal);
-        config.addIcon("Tentacle-32.png", Files.FileType.Internal);
-        config.addIcon("Tentacle-64.png", Files.FileType.Internal);
-        config.addIcon("Tentacle-128.png", Files.FileType.Internal);
-        new LwjglApplication(new DelaunayGDXTest(), config);
+        Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
+        config.setTitle("SquidLib/libGDX Demo: Delaunay Test");
+        config.useVsync(false);
+        config.setWindowedMode(512, 512);
+        config.setWindowIcon(Files.FileType.Internal, "Tentacle-128.png", "Tentacle-64.png", "Tentacle-32.png", "Tentacle-16.png");
+        new Lwjgl3Application(new DelaunayGDXTest(), config);
     }
 
 }

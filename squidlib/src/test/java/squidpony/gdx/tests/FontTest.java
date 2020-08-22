@@ -1,8 +1,8 @@
 package squidpony.gdx.tests;
 
 import com.badlogic.gdx.*;
-import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
-import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -357,18 +357,15 @@ public class FontTest extends ApplicationAdapter {
         stage.getViewport().update(width, height, true);
     }
     public static void main (String[] arg) {
-        LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-        config.title = "SquidLib Demo: Fonts, preview 1/25 (press any key)";
-//        config.width = totalWidth = LwjglApplicationConfiguration.getDesktopDisplayMode().width - 10;
-//        config.height = totalHeight = LwjglApplicationConfiguration.getDesktopDisplayMode().height - 128;
-        config.width = totalWidth = 1000;
-        config.height = totalHeight = 500;
-        config.x = 0;
-        config.y = 0;
-        config.addIcon("Tentacle-16.png", Files.FileType.Internal);
-        config.addIcon("Tentacle-32.png", Files.FileType.Internal);
-        config.addIcon("Tentacle-128.png", Files.FileType.Internal);
-        new LwjglApplication(new FontTest(), config);
+        Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
+        config.setTitle("SquidLib Demo: Fonts, preview 1/25 (press any key)");
+//        config.width = totalWidth = Lwjgl3ApplicationConfiguration.getDesktopDisplayMode().width - 10;
+//        config.height = totalHeight = Lwjgl3ApplicationConfiguration.getDesktopDisplayMode().height - 128;
+        config.useVsync(false);
+        config.setWindowedMode(totalWidth = 1000, totalHeight = 500);
+        config.setWindowPosition(0, 0);
+        config.setWindowIcon(Files.FileType.Internal, "Tentacle-128.png", "Tentacle-64.png", "Tentacle-32.png", "Tentacle-16.png");
+        new Lwjgl3Application(new FontTest(), config);
     }
 
 }

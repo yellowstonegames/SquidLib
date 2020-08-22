@@ -2,8 +2,8 @@ package squidpony.gdx.tests.old;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
-import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 
 /**
  * Test to diagnose SquidLib's GitHub issue #178; code is by gotoss08 .
@@ -27,13 +27,10 @@ public class TinyTest2 extends Game {
     }
 
     public static void main(String[] args) {
-        LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
+        Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
 
-        config.width = 640;
-        config.height = 480;
-        config.forceExit = false;
-
-        new LwjglApplication(new TinyTest2(), config);
+        config.setWindowedMode(640, 480);
+        new Lwjgl3Application(new TinyTest2(), config);
     }
 
 }
