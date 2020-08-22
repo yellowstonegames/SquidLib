@@ -71,6 +71,10 @@ public class ThesaurusTest {
                 .append("!\nYou loot its body, and find potion`term`, potion`term`, potion`term`, and potion`term`.");
         text.append('\n');
         text.append("For the emperor`noun`, and for ").append(thesaurus.makeNationName()).append('!');
+        text.append('\n');
+        text.append("By the light`adj` fire`noun` in my heart, I will vanquish thee!");
+        text.append('\n');
+        text.append("By the light`adj` fire`noun` in my heart, I will vanquish thee!");
         for(String s : StringKit.wrap(thesaurus.process(text), 80))
         {
             System.out.println(s);
@@ -79,7 +83,6 @@ public class ThesaurusTest {
 
         Mnemonic[] m = {new Mnemonic(0), new Mnemonic(1), new Mnemonic(2), new Mnemonic(3)};
         for (int i = 0; i < 10; i++) {
-            int a = GWTRNG.determineInt(i);
             for (int j = 0; j < m.length; j++) {
                 String words = m[j].toWordMnemonic(i, true);
                 System.out.println("Mnemonic(" + j + "), encoding " + StringKit.hex(i) + ": "+ words + ", decoding to " + StringKit.hex(m[j].fromWordMnemonic(words)));

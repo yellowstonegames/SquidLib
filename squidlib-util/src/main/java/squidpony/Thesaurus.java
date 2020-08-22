@@ -13,7 +13,13 @@ import static squidpony.Maker.makeList;
 import static squidpony.Maker.makeOM;
 
 /**
- * A text processing class that can swap out occurrences of words and replace them with their synonyms.
+ * A text processing class that can swap out occurrences of special keywords and replace them with randomly-selected
+ * synonyms. For example, this can take {@code "By the light`adj` fire`noun` in my heart, I will vanquish thee!"}, which
+ * has the keywords {@code light`adj`} and {@code fire`noun`}, and could produce
+ * {@code "By the shimmering inferno in my heart, I will vanquish thee!"} on one run, and
+ * {@code "By the gleaming conflagration in my heart, I will vanquish thee!"} on another. This can also generate some
+ * plant names and basic descriptions of potions, as well as make some text sound like {@link #ORK}. 
+ * <br>
  * Created by Tommy Ettinger on 5/23/2016.
  */
 public class Thesaurus implements Serializable{
@@ -273,8 +279,18 @@ public class Thesaurus implements Serializable{
     /**
      * Given an archive String saved by {@link #archiveCategories()} (probably from another version of SquidLib), this
      * makes the Thesaurus class act like it did in that archive, assuming the {@link #rng} is seeded the same. This
-     * modifies the {@link #categories}, {@link #adjective}, {@link #noun}, and {@link #nouns} static fields, so it can
-     * affect other Thesaurus objects produced later (it won't change previously-made ones, probably).
+     * modifies the {@link #mappings} field and the {@link #categories}, {@link #adjective}, {@link #noun}, and
+     * {@link #nouns} static fields, so it can affect other Thesaurus objects produced later (it won't change
+     * previously-made ones, probably).
+     * 
+     * If you didn't have an archive of the categories from some version of SquidLib, you can download one of the small
+     * files from <a href="https://github.com/SquidPony/SquidLib/tree/master/archives">the 'archives' folder of the
+     * SquidLib repo</a>; there's an archive that acts as a snapshot of SquidLib 3.0.0's Thesaurus class, for instance.
+     * If you save the 3.0.0 archive in a libGDX application's assets folder, you can reload the 3.0.0 definitions into
+     * a Thesaurus called {@code myThesaurus} with:
+     * <br>
+     * {@code myThesaurus.addArchivedCategories(Gdx.files.internal("Thesaurus-3-0-0.txt").readString("UTF-8"));}
+     * 
      * @param archive an archived String of categories produced by {@link #archiveCategories()}
      * @return this Thesaurus, but static state of the class will also be modified so this may affect other Thesaurus objects
      */
@@ -283,6 +299,8 @@ public class Thesaurus implements Serializable{
                 Converters.convertString,
                 Converters.convertArrayList(Converters.convertString)
         ).restore(archive);
+        
+        mappings.clear();
         
         categories.clear();
         categories.putAll(cat);
