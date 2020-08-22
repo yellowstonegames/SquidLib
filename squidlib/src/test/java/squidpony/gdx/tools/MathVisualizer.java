@@ -1,8 +1,8 @@
 package squidpony.gdx.tools;
 
 import com.badlogic.gdx.*;
-import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
-import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.RandomXS128;
@@ -2046,17 +2046,12 @@ public class MathVisualizer extends ApplicationAdapter {
     }
 
     public static void main (String[] arg) {
-        LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-        config.title = "SquidLib Visualizer for Math Testing/Checking";
-        config.width = 520;
-        config.height = 520;
-        config.foregroundFPS = 0;
-        config.vSyncEnabled = false;
-        config.addIcon("Tentacle-16.png", Files.FileType.Internal);
-        config.addIcon("Tentacle-32.png", Files.FileType.Internal);
-        config.addIcon("Tentacle-64.png", Files.FileType.Internal);
-        config.addIcon("Tentacle-128.png", Files.FileType.Internal);
-        new LwjglApplication(new MathVisualizer(), config);
+        Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
+        config.setTitle("SquidLib Visualizer for Math Testing/Checking");
+        config.useVsync(false);
+        config.setWindowedMode(520, 520);
+        config.setWindowIcon(Files.FileType.Internal, "Tentacle-128.png", "Tentacle-64.png", "Tentacle-32.png", "Tentacle-16.png");
+        new Lwjgl3Application(new MathVisualizer(), config);
     }
 
 }

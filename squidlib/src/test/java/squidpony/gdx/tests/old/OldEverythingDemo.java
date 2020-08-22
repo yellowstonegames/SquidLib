@@ -1,8 +1,8 @@
 package squidpony.gdx.tests.old;
 
 import com.badlogic.gdx.*;
-import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
-import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -1088,19 +1088,11 @@ public class OldEverythingDemo extends ApplicationAdapter {
     }
     
     public static void main (String[] arg) {
-        LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-        config.title = "SquidLib GDX Everything Demo";
-        config.width = 90 * 13;
-        config.height = 30 * 23;
-        config.foregroundFPS = 0;
-        config.backgroundFPS = 30;
-        config.vSyncEnabled = true;
-        config.forceExit = false;
-
-        config.addIcon("Tentacle-16.png", Files.FileType.Classpath);
-        config.addIcon("Tentacle-32.png", Files.FileType.Classpath);
-        config.addIcon("Tentacle-128.png", Files.FileType.Classpath);
-        new LwjglApplication(new OldEverythingDemo(), config);
+        Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
+        config.setTitle("SquidLib GDX Everything Demo");
+        config.setWindowedMode(90 * 13, 30 * 23);
+        config.setWindowIcon(Files.FileType.Internal, "Tentacle-128.png", "Tentacle-64.png", "Tentacle-32.png", "Tentacle-16.png");
+        new Lwjgl3Application(new OldEverythingDemo(), config);
     }
 
 }
