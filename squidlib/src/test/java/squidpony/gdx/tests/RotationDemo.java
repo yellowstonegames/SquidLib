@@ -588,7 +588,7 @@ public class RotationDemo extends ApplicationAdapter {
         final TextPanel tp = new TextPanel(DefaultResources.getCrispPrintFamily());
         tp.backgroundColor = SColor.DARK_SLATE_GRAY;
 
-        final List<IColoredString<Color>> text = new ArrayList<>();
+        final ArrayList<IColoredString<Color>> text = new ArrayList<>();
         text.add(cs);
 			/* No need to call IColoredString::wrap, TextPanel does it on its own */
         text.add(helping1);
