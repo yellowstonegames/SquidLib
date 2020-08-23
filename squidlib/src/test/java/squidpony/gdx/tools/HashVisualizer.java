@@ -174,10 +174,13 @@ public class HashVisualizer extends ApplicationAdapter {
     private final Noise.Noise4D slick4D = new Noise.Slick4D(SeededNoise.instance, Noise.alternate, 1);
     private final Noise.Noise6D slick6D = new Noise.Slick6D(SeededNoise.instance, Noise.alternate, 1);
 
-    private final Noise.Warped2D turb2D = new Noise.Warped2D(SeededNoise.instance, 2);
-    private final Noise.Warped3D turb3D = new Noise.Warped3D(SeededNoise.instance, 2);
-    private final Noise.Warped4D turb4D = new Noise.Warped4D(SeededNoise.instance, 2);
-    private final Noise.Warped6D turb6D = new Noise.Warped6D(SeededNoise.instance, 2);
+    private final FastNoise thinFN = new FastNoise(1337, 1, FastNoise.SIMPLEX);
+    private final FastNoise layeredFN = new FastNoise(1337, 1, FastNoise.SIMPLEX_FRACTAL);
+
+    private final Noise.Warped2D turb2D = new Noise.Warped2D(thinFN, 4);
+    private final Noise.Warped3D turb3D = new Noise.Warped3D(thinFN, 4);
+    private final Noise.Warped4D turb4D = new Noise.Warped4D(thinFN, 4);
+    private final Noise.Warped6D turb6D = new Noise.Warped6D(thinFN, 4);
 //    private final Noise.Turbulent2D turb2D = new Noise.Turbulent2D(SeededNoise.instance, ridged2D, 3, 2);
 //    private final Noise.Turbulent3D turb3D = new Noise.Turbulent3D(SeededNoise.instance, ridged3D, 3, 2);
 //    private final Noise.Turbulent4D turb4D = new Noise.Turbulent4D(SeededNoise.instance, ridged4D, 3, 2);
@@ -187,7 +190,6 @@ public class HashVisualizer extends ApplicationAdapter {
     private final Noise.Layered2D masonLayered2D = new Noise.Layered2D(MasonNoise.instance, 3, 2.2);
     private final Noise.Layered3D layeredWhirling = new Noise.Layered3D(WhirlingNoise.instance,1);
     private final Noise.Layered3D layeredSeeded = new Noise.Layered3D(SeededNoise.instance,1);
-    private final FastNoise layeredFN = new FastNoise(1337, 0.03125f, FastNoise.SIMPLEX_FRACTAL);
     private final GlitchNoise glitch = GlitchNoise.instance;
     private final MitchellNoise mitchell = new MitchellNoise(0x1337BEEF, 6); 
 
