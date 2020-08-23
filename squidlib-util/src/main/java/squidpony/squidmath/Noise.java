@@ -428,7 +428,7 @@ public class Noise {
         public double frequency;
         public double lacunarity;
         public Layered5D() {
-            this(ClassicNoise.instance);
+            this(SeededNoise.instance);
         }
 
         public Layered5D(Noise5D basis) {
@@ -537,6 +537,332 @@ public class Noise {
             for (int o = 0; o < octaves; o++, s <<= 1) {
                 n += basis.getNoiseWithSeed(x * (i_s *= lacunarity), y * i_s, z * i_s
                         , w * i_s, u * i_s, v * i_s, (seed += 0x9E3779B97F4A7C15L)) * s;
+            }
+            return n / ((1 << octaves) - 1.0);
+        }
+    }
+
+    public static class Warped1D implements Noise1D {
+        protected int octaves;
+        protected Noise1D basis;
+        public double frequency;
+        public double lacunarity;
+        public Warped1D() {
+            this(Basic1D.instance);
+        }
+
+        public Warped1D(Noise1D basis) {
+            this(basis, 2);
+        }
+
+        public Warped1D(Noise1D basis, final int octaves) {
+            this(basis, octaves, 1.0);
+        }
+        public Warped1D(Noise1D basis, final int octaves, double frequency) {
+            this(basis, octaves, frequency, 0.5);
+        }
+        public Warped1D(Noise1D basis, final int octaves, double frequency, double lacunarity) {
+            this.basis = basis;
+            this.frequency = frequency;
+            this.octaves = Math.max(1, Math.min(63, octaves));
+            this.lacunarity = lacunarity;
+        }
+
+
+        @Override
+        public double getNoise(double x) {
+            x *= frequency;
+            int s = 1;
+            double n = 0.0, i_s = 2.0, prev = 0.0;
+            for (int o = 0; o < octaves; o++, s <<= 1) {
+                n += (prev = basis.getNoise(x * (i_s *= lacunarity) + (o << 6) + prev * 0.25)) * s;
+            }
+            return n / ((1 << octaves) - 1.0);
+        }
+
+        @Override
+        public double getNoiseWithSeed(double x, long seed) {
+            x *= frequency;
+            int s = 1;
+            double n = 0.0, i_s = 2.0, prev = 0.0;
+            for (int o = 0; o < octaves; o++, s <<= 1) {
+                n += (prev = basis.getNoiseWithSeed(x * (i_s *= lacunarity) + prev * 0.25, (seed += 0x9E3779B97F4A7C15L))) * s;
+            }
+            return n / ((1 << octaves) - 1.0);
+        }
+    }
+
+    public static class Warped2D implements Noise2D {
+        protected int octaves;
+        protected Noise2D basis;
+        public double frequency;
+        public double lacunarity;
+        public Warped2D() {
+            this(SeededNoise.instance);
+        }
+
+        public Warped2D(Noise2D basis) {
+            this(basis, 2);
+        }
+
+        public Warped2D(Noise2D basis, final int octaves) {
+            this(basis, octaves, 1.0);
+        }
+        public Warped2D(Noise2D basis, final int octaves, double frequency) {
+            this(basis, octaves, frequency, 0.5);
+        }
+        public Warped2D(Noise2D basis, final int octaves, double frequency, double lacunarity) {
+            this.basis = basis;
+            this.frequency = frequency;
+            this.octaves = Math.max(1, Math.min(63, octaves));
+            this.lacunarity = lacunarity;
+        }
+
+        @Override
+        public double getNoise(double x, double y) {
+            x *= frequency;
+            y *= frequency;
+            int s = 1;
+            double n = 0.0, i_s = 2.0, prev = 0.0;
+            for (int o = 0; o < octaves; o++, s <<= 1) {
+                n += (prev = basis.getNoise(x * (i_s *= lacunarity) + (o << 6) + prev * 0.25, y * i_s + (o << 7))) * s;
+            }
+            return n / ((1 << octaves) - 1.0);
+        }
+
+        @Override
+        public double getNoiseWithSeed(double x, double y, long seed) {
+            x *= frequency;
+            y *= frequency;
+            int s = 1;
+            double n = 0.0, i_s = 2.0, prev = 0.0;
+            for (int o = 0; o < octaves; o++, s <<= 1) {
+                n += (prev = basis.getNoiseWithSeed(x * (i_s *= lacunarity) + prev * 0.25, y * i_s, (seed += 0x9E3779B97F4A7C15L))) * s;
+            }
+            return n / ((1 << octaves) - 1.0);
+        }
+    }
+    public static class Warped3D implements Noise3D {
+        protected int octaves;
+        protected Noise3D basis;
+        public double frequency;
+        public double lacunarity;
+        public Warped3D() {
+            this(SeededNoise.instance);
+        }
+
+        public Warped3D(Noise3D basis) {
+            this(basis, 2);
+        }
+
+        public Warped3D(Noise3D basis, final int octaves) {
+            this(basis, octaves, 1.0);
+        }
+        public Warped3D(Noise3D basis, final int octaves, double frequency) {
+            this(basis, octaves, frequency, 0.5);
+        }
+        public Warped3D(Noise3D basis, final int octaves, double frequency, double lacunarity) {
+            this.basis = basis;
+            this.frequency = frequency;
+            this.octaves = Math.max(1, Math.min(63, octaves));
+            this.lacunarity = lacunarity;
+        }
+
+        @Override
+        public double getNoise(double x, double y, double z) {
+            x *= frequency;
+            y *= frequency;
+            z *= frequency;
+            int s = 1;
+            double n = 0.0, i_s = 2.0, prev = 0.0;
+            for (int o = 0; o < octaves; o++, s <<= 1) {
+                n += (prev = basis.getNoise(x * (i_s *= lacunarity) + (o << 6) + prev * 0.25, y * i_s + (o << 7), z * i_s + (o << 8))) * s;
+            }
+            return n / ((1 << octaves) - 1.0);
+        }
+
+        @Override
+        public double getNoiseWithSeed(double x, double y, double z, long seed) {
+            x *= frequency;
+            y *= frequency;
+            z *= frequency;
+            int s = 1;
+            double n = 0.0, i_s = 2.0, prev = 0.0;
+            for (int o = 0; o < octaves; o++, s <<= 1) {
+                n += (prev = basis.getNoiseWithSeed(x * (i_s *= lacunarity) + prev * 0.25, y * i_s, z * i_s, (seed += 0x9E3779B97F4A7C15L))) * s;
+            }
+            return n / ((1 << octaves) - 1.0);
+        }
+    }
+    public static class Warped4D implements Noise4D {
+        protected int octaves;
+        protected Noise4D basis;
+        public double frequency;
+        public double lacunarity;
+        public Warped4D() {
+            this(SeededNoise.instance);
+        }
+
+        public Warped4D(Noise4D basis) {
+            this(basis, 2);
+        }
+
+        public Warped4D(Noise4D basis, final int octaves) {
+            this(basis, octaves, 1.0);
+        }
+        public Warped4D(Noise4D basis, final int octaves, double frequency) {
+            this(basis, octaves, frequency, 0.5);
+        }
+        public Warped4D(Noise4D basis, final int octaves, double frequency, double lacunarity) {
+            this.basis = basis;
+            this.frequency = frequency;
+            this.octaves = Math.max(1, Math.min(63, octaves));
+            this.lacunarity = lacunarity;
+        }
+
+        @Override
+        public double getNoise(double x, double y, double z, double w) {
+            x *= frequency;
+            y *= frequency;
+            z *= frequency;
+            w *= frequency;
+            int s = 1;
+            double n = 0.0, i_s = 2.0, prev = 0.0;
+            for (int o = 0; o < octaves; o++, s <<= 1) {
+                n += (prev = basis.getNoise(x * (i_s *= lacunarity) + (o << 6) + prev * 0.25, y * i_s + (o << 7), z * i_s + (o << 8), w * i_s + (o << 9))) * s;
+            }
+            return n / ((1 << octaves) - 1.0);
+        }
+
+        @Override
+        public double getNoiseWithSeed(double x, double y, double z, double w, long seed) {
+            x *= frequency;
+            y *= frequency;
+            z *= frequency;
+            w *= frequency;
+            int s = 1;
+            double n = 0.0, i_s = 2.0, prev = 0.0;
+            for (int o = 0; o < octaves; o++, s <<= 1) {
+                n += (prev = basis.getNoiseWithSeed(x * (i_s *= lacunarity) + prev * 0.25, y * i_s, z * i_s, w * i_s, (seed += 0x9E3779B97F4A7C15L))) * s;
+            }
+            return n / ((1 << octaves) - 1.0);
+        }
+    }
+    public static class Warped5D implements Noise5D {
+        protected int octaves;
+        protected Noise5D basis;
+        public double frequency;
+        public double lacunarity;
+        public Warped5D() {
+            this(SeededNoise.instance);
+        }
+
+        public Warped5D(Noise5D basis) {
+            this(basis, 2);
+        }
+
+        public Warped5D(Noise5D basis, final int octaves) {
+            this(basis, octaves, 1.0);
+        }
+        public Warped5D(Noise5D basis, final int octaves, double frequency) {
+            this(basis, octaves, frequency, 0.5);
+        }
+        public Warped5D(Noise5D basis, final int octaves, double frequency, double lacunarity) {
+            this.basis = basis;
+            this.frequency = frequency;
+            this.octaves = Math.max(1, Math.min(63, octaves));
+            this.lacunarity = lacunarity;
+        }
+
+        @Override
+        public double getNoise(double x, double y, double z, double w, double u) {
+            x *= frequency;
+            y *= frequency;
+            z *= frequency;
+            w *= frequency;
+            u *= frequency;
+            int s = 1;
+            double n = 0.0, i_s = 2.0, prev = 0.0;
+            for (int o = 0; o < octaves; o++, s <<= 1) {
+                n += (prev = basis.getNoise(x * (i_s *= lacunarity) + (o << 6) + prev * 0.25, y * i_s + (o << 7), z * i_s + (o << 8)
+                        , w * i_s + (o << 9), u * i_s + (o << 10))) * s;
+            }
+            return n / ((1 << octaves) - 1.0);
+        }
+
+        @Override
+        public double getNoiseWithSeed(double x, double y, double z, double w, double u, long seed) {
+            x *= frequency;
+            y *= frequency;
+            z *= frequency;
+            w *= frequency;
+            u *= frequency;
+            int s = 1;
+            double n = 0.0, i_s = 2.0, prev = 0.0;
+            for (int o = 0; o < octaves; o++, s <<= 1) {
+                n += (prev = basis.getNoiseWithSeed(x * (i_s *= lacunarity) + prev * 0.25, y * i_s, z * i_s
+                        , w * i_s, u * i_s, (seed += 0x9E3779B97F4A7C15L))) * s;
+            }
+            return n / ((1 << octaves) - 1.0);
+        }
+    }
+    
+    public static class Warped6D implements Noise6D {
+        protected int octaves;
+        protected Noise6D basis;
+        public double frequency;
+        public double lacunarity;
+        public Warped6D() {
+            this(SeededNoise.instance);
+        }
+
+        public Warped6D(Noise6D basis) {
+            this(basis, 2);
+        }
+
+        public Warped6D(Noise6D basis, final int octaves) {
+            this(basis, octaves, 1.0);
+        }
+        public Warped6D(Noise6D basis, final int octaves, double frequency) {
+            this(basis, octaves, frequency, 0.5);
+        }
+        public Warped6D(Noise6D basis, final int octaves, double frequency, double lacunarity) {
+            this.basis = basis;
+            this.frequency = frequency;
+            this.octaves = Math.max(1, Math.min(63, octaves));
+            this.lacunarity = lacunarity;
+        }
+
+        @Override
+        public double getNoise(double x, double y, double z, double w, double u, double v) {
+            x *= frequency;
+            y *= frequency;
+            z *= frequency;
+            w *= frequency;
+            u *= frequency;
+            v *= frequency;
+            int s = 1;
+            double n = 0.0, i_s = 2.0, prev = 0.0;
+            for (int o = 0; o < octaves; o++, s <<= 1) {
+                n += (prev = basis.getNoise(x * (i_s *= lacunarity) + (o << 6) + prev * 0.25, y * i_s + (o << 7), z * i_s + (o << 8)
+                        , w * i_s + (o << 9), u * i_s + (o << 10), v * i_s + (o << 11))) * s;
+            }
+            return n / ((1 << octaves) - 1.0);
+        }
+
+        @Override
+        public double getNoiseWithSeed(double x, double y, double z, double w, double u, double v, long seed) {
+            x *= frequency;
+            y *= frequency;
+            z *= frequency;
+            w *= frequency;
+            u *= frequency;
+            v *= frequency;
+            int s = 1;
+            double n = 0.0, i_s = 2.0, prev = 0.0;
+            for (int o = 0; o < octaves; o++, s <<= 1) {
+                n += (prev = basis.getNoiseWithSeed(x * (i_s *= lacunarity) + prev * 0.25, y * i_s, z * i_s
+                        , w * i_s, u * i_s, v * i_s, (seed += 0x9E3779B97F4A7C15L))) * s;
             }
             return n / ((1 << octaves) - 1.0);
         }
@@ -768,7 +1094,7 @@ public class Noise {
          */
         public double lacunarity = 0.5;
         public InverseLayered5D() {
-            this(ClassicNoise.instance, 2);
+            this(SeededNoise.instance, 2);
         }
 
         public InverseLayered5D(Noise5D basis) {
@@ -1264,7 +1590,7 @@ public class Noise {
         public Noise5D basis;
         public Ridged5D()
         {
-            this(ClassicNoise.instance, 2, 1.25);
+            this(SeededNoise.instance, 2, 1.25);
         }
         public Ridged5D(Noise5D basis)
         {
@@ -2177,7 +2503,7 @@ public class Noise {
         protected Noise5D basis;
         protected double sharpness, adjustment;
         public Exponential5D() {
-            this(ClassicNoise.instance);
+            this(SeededNoise.instance);
         }
 
         public Exponential5D(Noise5D basis) {
