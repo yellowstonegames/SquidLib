@@ -1690,9 +1690,9 @@ public abstract class WorldMapGenerator implements Serializable {
             zPositions = new double[width][height];
 
             terrain = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 10), terrainFreq);
-            terrainLayered = new Noise.InverseLayered3D(noiseGenerator, (int) (1 + octaveMultiplier * 6), terrainRidgedFreq * 0.325);
-            heat = new Noise.InverseLayered3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 3), heatFreq, 0.75);
-            moisture = new Noise.InverseLayered3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 4), moistureFreq, 0.55);
+            terrainLayered = new Noise.Scaled3D(noiseGenerator,  terrainRidgedFreq * 0.325);
+            heat = new Noise.Scaled3D(noiseGenerator,  heatFreq);
+            moisture = new Noise.Scaled3D(noiseGenerator,  moistureFreq);
             otherRidged = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 6), otherFreq);
         }
         @Override
@@ -2075,9 +2075,9 @@ public abstract class WorldMapGenerator implements Serializable {
             zPositions = new double[width][height];
             edges = new int[height << 1];
             terrain = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 10), terrainFreq);
-            terrainLayered = new Noise.InverseLayered3D(noiseGenerator, (int) (1 + octaveMultiplier * 6), terrainRidgedFreq * 0.325);
-            heat = new Noise.InverseLayered3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 3), heatFreq, 0.75);
-            moisture = new Noise.InverseLayered3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 4), moistureFreq, 0.55);
+            terrainLayered = new Noise.Scaled3D(noiseGenerator,  terrainRidgedFreq * 0.325);
+            heat = new Noise.Scaled3D(noiseGenerator,  heatFreq);
+            moisture = new Noise.Scaled3D(noiseGenerator,  moistureFreq);
             otherRidged = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 6), otherFreq);
         }
 
@@ -2727,7 +2727,7 @@ public abstract class WorldMapGenerator implements Serializable {
                 minHeat1 = Double.POSITIVE_INFINITY, maxHeat1 = Double.NEGATIVE_INFINITY,
                 minWet0 = Double.POSITIVE_INFINITY, maxWet0 = Double.NEGATIVE_INFINITY;
 
-        public final Noise3D terrain, heat, moisture, otherRidged, terrainLayered;
+        public final Noise3D terrainRidged, heat, moisture, otherRidged, terrainLayered;
         public final double[][] xPositions,
                 yPositions,
                 zPositions;
@@ -2837,12 +2837,13 @@ public abstract class WorldMapGenerator implements Serializable {
             yPositions = new double[width][height];
             zPositions = new double[width][height];
             edges = new int[height << 1];
-            terrain = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 10), terrainFreq);
-            terrainLayered = new Noise.InverseLayered3D(noiseGenerator, (int) (1 + octaveMultiplier * 6), terrainRidgedFreq * 0.325, 0.475);
-//            terrain = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 8), terrainFreq);
-//            terrainLayered = new Noise.Layered3D(noiseGenerator, (int) (1 + octaveMultiplier * 6), terrainRidgedFreq * 5.25, 0.475);
-            heat = new Noise.InverseLayered3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 3), heatFreq, 0.75);
-            moisture = new Noise.InverseLayered3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 4), moistureFreq, 0.55);
+            terrainRidged = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 10), terrainFreq);
+            terrainLayered = new Noise.Scaled3D(noiseGenerator,  terrainRidgedFreq * 0.325); 
+//                    new Noise.InverseLayered3D(noiseGenerator, (int) (1 + octaveMultiplier * 6), terrainRidgedFreq * 0.325, 0.475);
+            heat = new Noise.Scaled3D(noiseGenerator, heatFreq);
+//                    new Noise.InverseLayered3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 3), heatFreq, 0.75);
+            moisture = new Noise.Scaled3D(noiseGenerator, moistureFreq); 
+//                    new Noise.InverseLayered3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 4), moistureFreq, 0.55);
             otherRidged = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 6), otherFreq);
         }
 
@@ -2854,7 +2855,7 @@ public abstract class WorldMapGenerator implements Serializable {
         public SpaceViewMap(SpaceViewMap other)
         {
             super(other);
-            terrain = other.terrain;
+            terrainRidged = other.terrainRidged;
             terrainLayered = other.terrainLayered;
             heat = other.heat;
             moisture = other.moisture;
@@ -2959,7 +2960,7 @@ public abstract class WorldMapGenerator implements Serializable {
                     yPositions[x][y] = ps;
                     zPositions[x][y] = qs;
                     heightData[x][y] = (h = terrainLayered.getNoiseWithSeed(pc +
-                                    terrain.getNoiseWithSeed(pc, ps, qs,seedB - seedA) * 0.5,
+                                    terrainRidged.getNoiseWithSeed(pc, ps, qs,seedB - seedA) * 0.5,
                             ps, qs, seedA) + landModifier - 1.0);
 //                    heightData[x][y] = (h = terrain4D.getNoiseWithSeed(pc, ps, qs,
 //                            (terrainLayered.getNoiseWithSeed(pc, ps, qs, seedB - seedA)
@@ -3199,11 +3200,11 @@ public abstract class WorldMapGenerator implements Serializable {
             zPositions = new double[width][height];
             edges = new int[height << 1];
             terrain = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 10), terrainFreq);
-            terrainLayered = new Noise.InverseLayered3D(noiseGenerator, (int) (1 + octaveMultiplier * 6), terrainRidgedFreq * 0.325);
+            terrainLayered = new Noise.Scaled3D(noiseGenerator,  terrainRidgedFreq * 0.325);
 //            terrain = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 8), terrainFreq);
 //            terrainLayered = new Noise.Layered3D(noiseGenerator, (int) (1 + octaveMultiplier * 6), terrainRidgedFreq * 5.25);
-            heat = new Noise.InverseLayered3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 3), heatFreq, 0.75);
-            moisture = new Noise.InverseLayered3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 4), moistureFreq, 0.55);
+            heat = new Noise.Scaled3D(noiseGenerator,  heatFreq);
+            moisture = new Noise.Scaled3D(noiseGenerator,  moistureFreq);
             otherRidged = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 6), otherFreq);
         }
 
@@ -3588,9 +3589,9 @@ public abstract class WorldMapGenerator implements Serializable {
             zPositions = new double[width][height];
             edges = new int[height << 1];
             terrain = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 10), terrainFreq);
-            terrainLayered = new Noise.InverseLayered3D(noiseGenerator, (int) (1 + octaveMultiplier * 6), terrainRidgedFreq * 0.325);
-            heat = new Noise.InverseLayered3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 3), heatFreq, 0.75);
-            moisture = new Noise.InverseLayered3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 4), moistureFreq, 0.55);
+            terrainLayered = new Noise.Scaled3D(noiseGenerator,  terrainRidgedFreq * 0.325);
+            heat = new Noise.Scaled3D(noiseGenerator,  heatFreq);
+            moisture = new Noise.Scaled3D(noiseGenerator,  moistureFreq);
             otherRidged = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 6), otherFreq);
             this.alpha = alpha;
             this.kappa = kappa;
@@ -4002,11 +4003,11 @@ public abstract class WorldMapGenerator implements Serializable {
             zPositions = new double[width][height];
             edges = new int[height << 1];
             terrain = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 10), terrainFreq);
-            terrainLayered = new Noise.InverseLayered3D(noiseGenerator, (int) (1 + octaveMultiplier * 6), terrainRidgedFreq * 0.325);
+            terrainLayered = new Noise.Scaled3D(noiseGenerator,  terrainRidgedFreq * 0.325);
 //            terrain = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 8), terrainFreq);
 //            terrainLayered = new Noise.Layered3D(noiseGenerator, (int) (1 + octaveMultiplier * 6), terrainRidgedFreq * 5.25);
-            heat = new Noise.InverseLayered3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 3), heatFreq, 0.75);
-            moisture = new Noise.InverseLayered3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 4), moistureFreq, 0.55);
+            heat = new Noise.Scaled3D(noiseGenerator,  heatFreq);
+            moisture = new Noise.Scaled3D(noiseGenerator,  moistureFreq);
             otherRidged = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 6), otherFreq);
         }
 
