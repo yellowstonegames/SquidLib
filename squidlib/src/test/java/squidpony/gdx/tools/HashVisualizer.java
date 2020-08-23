@@ -181,10 +181,15 @@ public class HashVisualizer extends ApplicationAdapter {
 //    private final Noise.Turbulent4D turb4D = new Noise.Turbulent4D(SeededNoise.instance, ridged4D, 3, 2);
 //    private final Noise.Turbulent6D turb6D = new Noise.Turbulent6D(SeededNoise.instance, ridged6D, 3, 2);
 
-    private final Noise.InverseWarped2D slick2D = new Noise.InverseWarped2D(thinFN, 2);
-    private final Noise.InverseWarped3D slick3D = new Noise.InverseWarped3D(thinFN, 2);
-    private final Noise.InverseWarped4D slick4D = new Noise.InverseWarped4D(thinFN, 2);
-    private final Noise.InverseWarped6D slick6D = new Noise.InverseWarped6D(thinFN, 2);
+    private final Noise.WarpedRidged2D slick2D = new Noise.WarpedRidged2D(thinFN, 2, 1.25);
+    private final Noise.WarpedRidged3D slick3D = new Noise.WarpedRidged3D(thinFN, 2, 1.25);
+    private final Noise.WarpedRidged4D slick4D = new Noise.WarpedRidged4D(thinFN, 2, 1.25);
+    private final Noise.WarpedRidged6D slick6D = new Noise.WarpedRidged6D(thinFN, 2, 1.25);
+
+//    private final Noise.Ridged2D slick2D = new Noise.Ridged2D(thinFN, 2, 1.25);
+//    private final Noise.Ridged3D slick3D = new Noise.Ridged3D(thinFN, 2, 1.25);
+//    private final Noise.Ridged4D slick4D = new Noise.Ridged4D(thinFN, 2, 1.25);
+//    private final Noise.Ridged6D slick6D = new Noise.Ridged6D(thinFN, 2, 1.25);
 
 //    private final Noise.Noise2D slick2D = new Noise.Slick2D(SeededNoise.instance, Noise.alternate, 1);
 //    private final Noise.Noise3D slick3D = new Noise.Slick3D(SeededNoise.instance, Noise.alternate, 1);
