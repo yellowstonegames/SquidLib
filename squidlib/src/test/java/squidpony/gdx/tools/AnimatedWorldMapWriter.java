@@ -141,7 +141,7 @@ public class AnimatedWorldMapWriter extends ApplicationAdapter {
             @Override
             public double getNoise(double x, double y, double z) {
 //                return FoamNoise.foamNoise(x * 2.75, y * 2.75, z * 2.75, mutationA, mutationB, 123456789);
-                return FastNoise.instance.getNoiseWithSeed(x, y, z, mutationA, mutationB, 123456789);
+                return WorldMapGenerator.DEFAULT_NOISE.getNoiseWithSeed(x, y, z, mutationA, mutationB, 123456789);
             }
 
             @Override

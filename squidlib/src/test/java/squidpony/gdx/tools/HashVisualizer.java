@@ -68,7 +68,7 @@ public class HashVisualizer extends ApplicationAdapter {
     // 5 RNG results
     private int testType = 4;
     private static final int NOISE_LIMIT = 148;
-    private int hashMode, rngMode, noiseMode = 31, otherMode = 1;//142
+    private int hashMode, rngMode, noiseMode = 40, otherMode = 1;//142
 
     /**
      * If you're editing the source of HashVisualizer, you can comment out one line and uncomment another to change
@@ -168,23 +168,29 @@ public class HashVisualizer extends ApplicationAdapter {
     private final Noise.Ridged3D ridged3D = new Noise.Ridged3D(SeededNoise.instance, 1, 1.45); // 1.45
     private final Noise.Ridged4D ridged4D = new Noise.Ridged4D(SeededNoise.instance, 1, 1.45); // 1.45
     private final Noise.Ridged6D ridged6D = new Noise.Ridged6D(SeededNoise.instance, 1, 1.45); // 1.45
-                                                                                   
-    private final Noise.Noise2D slick2D = new Noise.Slick2D(SeededNoise.instance, Noise.alternate, 1);
-    private final Noise.Noise3D slick3D = new Noise.Slick3D(SeededNoise.instance, Noise.alternate, 1);
-    private final Noise.Noise4D slick4D = new Noise.Slick4D(SeededNoise.instance, Noise.alternate, 1);
-    private final Noise.Noise6D slick6D = new Noise.Slick6D(SeededNoise.instance, Noise.alternate, 1);
-
+                                                        
     private final FastNoise thinFN = new FastNoise(1337, 1, FastNoise.SIMPLEX);
     private final FastNoise layeredFN = new FastNoise(1337, 1, FastNoise.SIMPLEX_FRACTAL);
 
-    private final Noise.Warped2D turb2D = new Noise.Warped2D(thinFN, 4);
-    private final Noise.Warped3D turb3D = new Noise.Warped3D(thinFN, 4);
-    private final Noise.Warped4D turb4D = new Noise.Warped4D(thinFN, 4);
-    private final Noise.Warped6D turb6D = new Noise.Warped6D(thinFN, 4);
+    private final Noise.Warped2D turb2D = new Noise.Warped2D(thinFN, 2);
+    private final Noise.Warped3D turb3D = new Noise.Warped3D(thinFN, 2);
+    private final Noise.Warped4D turb4D = new Noise.Warped4D(thinFN, 2);
+    private final Noise.Warped6D turb6D = new Noise.Warped6D(thinFN, 2);
 //    private final Noise.Turbulent2D turb2D = new Noise.Turbulent2D(SeededNoise.instance, ridged2D, 3, 2);
 //    private final Noise.Turbulent3D turb3D = new Noise.Turbulent3D(SeededNoise.instance, ridged3D, 3, 2);
 //    private final Noise.Turbulent4D turb4D = new Noise.Turbulent4D(SeededNoise.instance, ridged4D, 3, 2);
 //    private final Noise.Turbulent6D turb6D = new Noise.Turbulent6D(SeededNoise.instance, ridged6D, 3, 2);
+
+    private final Noise.InverseWarped2D slick2D = new Noise.InverseWarped2D(thinFN, 2);
+    private final Noise.InverseWarped3D slick3D = new Noise.InverseWarped3D(thinFN, 2);
+    private final Noise.InverseWarped4D slick4D = new Noise.InverseWarped4D(thinFN, 2);
+    private final Noise.InverseWarped6D slick6D = new Noise.InverseWarped6D(thinFN, 2);
+
+//    private final Noise.Noise2D slick2D = new Noise.Slick2D(SeededNoise.instance, Noise.alternate, 1);
+//    private final Noise.Noise3D slick3D = new Noise.Slick3D(SeededNoise.instance, Noise.alternate, 1);
+//    private final Noise.Noise4D slick4D = new Noise.Slick4D(SeededNoise.instance, Noise.alternate, 1);
+//    private final Noise.Noise6D slick6D = new Noise.Slick6D(SeededNoise.instance, Noise.alternate, 1);
+
     private final Noise.Scaled2D stretchScaled2D = new Noise.Scaled2D(SeededNoise.instance, 0.035, 0.035);
     private final Noise.Scaled3D stretchScaled3D = new Noise.Scaled3D(SeededNoise.instance, 0.035, 0.035, 0.035);
     private final Noise.Layered2D masonLayered2D = new Noise.Layered2D(MasonNoise.instance, 3, 2.2);
@@ -3776,6 +3782,51 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("Turb4D Seamless at " + Gdx.graphics.getFramesPerSecond()  + " FPS, total " + total);
                         break;
                     case 36:
+                        Gdx.graphics.setTitle("Seeded Slick Seamless 3D Color Noise at " + Gdx.graphics.getFramesPerSecond() + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                back[x][y] =
+                                        floatGet(
+                                                (float) (seamless[0][ctr & 63][x & 63][y & 63] * 0.5 + 0.5),
+                                                (float) (seamless[1][ctr & 63][x & 63][y & 63] * 0.5 + 0.5),
+                                                (float) (seamless[2][ctr & 63][x & 63][y & 63] * 0.5 + 0.5),
+                                                1.0f);
+                            }
+                        }
+                        break;
+                    case 37:
+                        Gdx.graphics.setTitle("Seeded Slick Seamless 3D Noise at " + Gdx.graphics.getFramesPerSecond() + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bright = (float) (seamless[0][ctr & 63][x & 63][y & 63] * 0.5 + 0.5);
+                                back[x][y] = getGray(bright);
+                            }
+                        }
+                        break;
+                    case 38:
+                        Gdx.graphics.setTitle("Seeded Slick Seamless 2D Color Noise at " + Gdx.graphics.getFramesPerSecond() + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                back[x][y] =
+                                        floatGet(
+                                                (float) (seamless[0][0][x+ctr & 63][y+ctr & 63] * 0.5 + 0.5),
+                                                (float) (seamless[1][0][x+ctr & 63][y+ctr & 63] * 0.5 + 0.5),
+                                                (float) (seamless[2][0][x+ctr & 63][y+ctr & 63] * 0.5 + 0.5),
+                                                1.0f);
+                            }
+                        }
+                        break;
+                    case 39: {
+                        Gdx.graphics.setTitle("Seeded Slick Seamless 2D Noise at " + Gdx.graphics.getFramesPerSecond() + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bright = (float) (seamless[0][0][x+ctr & 63][y+ctr & 63] * 0.5 + 0.5);
+                                back[x][y] = getGray(bright);
+                            }
+                        }
+                    }
+                    break;
+                    case 40:
                         Gdx.graphics.setTitle("Whirling Turbulent 3D Color Noise at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
@@ -3788,7 +3839,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             }
                         }
                         break;
-                    case 37:
+                    case 41:
                         total = 0.0;
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
@@ -3797,16 +3848,14 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                         + Noise.seamless3D(x * 0.125, y * 0.125, ctr  * 0.05125,
                                         40.0, 40.0, 20.0, 1234)
                                         + */turb3D.getNoiseWithSeed(x * 0.03125, y * 0.03125, ctr * 0.05125,
-                                        123456) * 0.5f);
-                                total += bright;
-                                bright += 0.5f;
+                                        123456) * 0.5 + 0.5);
                                 back[x][y] = getGray(bright);
                             }
                         }
-                        Gdx.graphics.setTitle("Turb3D at " + Gdx.graphics.getFramesPerSecond()  + " FPS, total " + total);
+                        Gdx.graphics.setTitle("Turb3D at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
-                    case 38:
-                        Gdx.graphics.setTitle("Whirling Turbulent 2D Color Noise at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                    case 42:
+                        Gdx.graphics.setTitle("Turbulent 2D Color Noise at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 back[x][y] = 
@@ -3818,7 +3867,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             }
                         }
                         break;
-                    case 39:
+                    case 43:
                         total = 0.0;
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
@@ -3827,59 +3876,12 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                         + Noise.seamless3D(x * 0.125, y * 0.125, ctr  * 0.05125,
                                         40.0, 40.0, 20.0, 1234)
                                         + */turb2D.getNoiseWithSeed(x * 0.03125 + ctr * 0.05125, y * 0.03125 + ctr * 0.05125,
-                                        123456) * 0.5);
-                                total += bright;
-                                bright += 0.5f;
+                                        123456) * 0.5 + 0.5);
                                 back[x][y] = getGray(bright);
                             }
                         }
-                        Gdx.graphics.setTitle("Turb2D at " + Gdx.graphics.getFramesPerSecond()  + " FPS, total " + total);
+                        Gdx.graphics.setTitle("Turb2D at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
-                    case 40:
-                        Gdx.graphics.setTitle("Seeded Slick Seamless 3D Color Noise at " + Gdx.graphics.getFramesPerSecond() + " FPS");
-                        for (int x = 0; x < width; x++) {
-                            for (int y = 0; y < height; y++) {
-                                back[x][y] = 
-                                        floatGet(
-                                                (float) (seamless[0][ctr & 63][x & 63][y & 63] * 0.5 + 0.5),
-                                                (float) (seamless[1][ctr & 63][x & 63][y & 63] * 0.5 + 0.5),
-                                                (float) (seamless[2][ctr & 63][x & 63][y & 63] * 0.5 + 0.5),
-                                                1.0f);
-                            }
-                        }
-                        break;
-                    case 41:
-                        Gdx.graphics.setTitle("Seeded Slick Seamless 3D Noise at " + Gdx.graphics.getFramesPerSecond() + " FPS");
-                        for (int x = 0; x < width; x++) {
-                            for (int y = 0; y < height; y++) {
-                                bright = (float) (seamless[0][ctr & 63][x & 63][y & 63] * 0.5 + 0.5);
-                                back[x][y] = getGray(bright);
-                            }
-                        }
-                        break;
-                    case 42:
-                        Gdx.graphics.setTitle("Seeded Slick Seamless 2D Color Noise at " + Gdx.graphics.getFramesPerSecond() + " FPS");
-                        for (int x = 0; x < width; x++) {
-                            for (int y = 0; y < height; y++) {
-                                back[x][y] = 
-                                        floatGet(
-                                                (float) (seamless[0][0][x+ctr & 63][y+ctr & 63] * 0.5 + 0.5),
-                                                (float) (seamless[1][0][x+ctr & 63][y+ctr & 63] * 0.5 + 0.5),
-                                                (float) (seamless[2][0][x+ctr & 63][y+ctr & 63] * 0.5 + 0.5),
-                                                1.0f);
-                            }
-                        }
-                        break;
-                    case 43: {
-                        Gdx.graphics.setTitle("Seeded Slick Seamless 2D Noise at " + Gdx.graphics.getFramesPerSecond() + " FPS");
-                        for (int x = 0; x < width; x++) {
-                            for (int y = 0; y < height; y++) {
-                                bright = (float) (seamless[0][0][x+ctr & 63][y+ctr & 63] * 0.5 + 0.5);
-                                back[x][y] = getGray(bright);
-                            }
-                        }
-                    }
-                    break;
                     case 44:
                         Gdx.graphics.setTitle("Seeded Slick 3D Color Noise at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
