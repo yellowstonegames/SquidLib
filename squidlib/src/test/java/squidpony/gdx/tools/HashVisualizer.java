@@ -68,7 +68,7 @@ public class HashVisualizer extends ApplicationAdapter {
     // 5 RNG results
     private int testType = 4;
     private static final int NOISE_LIMIT = 148;
-    private int hashMode, rngMode, noiseMode = 101, otherMode = 1;//142
+    private int hashMode, rngMode, noiseMode = 31, otherMode = 1;//142
 
     /**
      * If you're editing the source of HashVisualizer, you can comment out one line and uncomment another to change
@@ -164,9 +164,9 @@ public class HashVisualizer extends ApplicationAdapter {
     private final Noise.Scaled4D scaled4D = new Noise.Scaled4D(seeded, 1.43, 1.43, 1.43, 1.43);
     private final Noise.Scaled6D scaled6D = new Noise.Scaled6D(seeded, 1.43, 1.43, 1.43, 1.43, 1.43, 1.43);
 
-    private final Noise.Ridged2D ridged2D = new Noise.Ridged2D(WhirlingNoise.instance, 1, 1.45); // 1.45
-    private final Noise.Ridged3D ridged3D = new Noise.Ridged3D(WhirlingNoise.instance, 1, 1.45); // 1.45
-    private final Noise.Ridged4D ridged4D = new Noise.Ridged4D(WhirlingNoise.instance, 1, 1.45); // 1.45
+    private final Noise.Ridged2D ridged2D = new Noise.Ridged2D(SeededNoise.instance, 1, 1.45); // 1.45
+    private final Noise.Ridged3D ridged3D = new Noise.Ridged3D(SeededNoise.instance, 1, 1.45); // 1.45
+    private final Noise.Ridged4D ridged4D = new Noise.Ridged4D(SeededNoise.instance, 1, 1.45); // 1.45
     private final Noise.Ridged6D ridged6D = new Noise.Ridged6D(SeededNoise.instance, 1, 1.45); // 1.45
                                                                                    
     private final Noise.Noise2D slick2D = new Noise.Slick2D(SeededNoise.instance, Noise.alternate, 1);
@@ -174,10 +174,14 @@ public class HashVisualizer extends ApplicationAdapter {
     private final Noise.Noise4D slick4D = new Noise.Slick4D(SeededNoise.instance, Noise.alternate, 1);
     private final Noise.Noise6D slick6D = new Noise.Slick6D(SeededNoise.instance, Noise.alternate, 1);
 
-    private final Noise.Turbulent2D turb2D = new Noise.Turbulent2D(WhirlingNoise.instance, ridged2D, 3, 2);
-    private final Noise.Turbulent3D turb3D = new Noise.Turbulent3D(WhirlingNoise.instance, ridged3D, 3, 2);
-    private final Noise.Turbulent4D turb4D = new Noise.Turbulent4D(WhirlingNoise.instance, ridged4D, 3, 2);
-    private final Noise.Turbulent6D turb6D = new Noise.Turbulent6D(SeededNoise.instance, ridged6D, 3, 2);
+    private final Noise.Warped2D turb2D = new Noise.Warped2D(SeededNoise.instance, 2);
+    private final Noise.Warped3D turb3D = new Noise.Warped3D(SeededNoise.instance, 2);
+    private final Noise.Warped4D turb4D = new Noise.Warped4D(SeededNoise.instance, 2);
+    private final Noise.Warped6D turb6D = new Noise.Warped6D(SeededNoise.instance, 2);
+//    private final Noise.Turbulent2D turb2D = new Noise.Turbulent2D(SeededNoise.instance, ridged2D, 3, 2);
+//    private final Noise.Turbulent3D turb3D = new Noise.Turbulent3D(SeededNoise.instance, ridged3D, 3, 2);
+//    private final Noise.Turbulent4D turb4D = new Noise.Turbulent4D(SeededNoise.instance, ridged4D, 3, 2);
+//    private final Noise.Turbulent6D turb6D = new Noise.Turbulent6D(SeededNoise.instance, ridged6D, 3, 2);
     private final Noise.Scaled2D stretchScaled2D = new Noise.Scaled2D(SeededNoise.instance, 0.035, 0.035);
     private final Noise.Scaled3D stretchScaled3D = new Noise.Scaled3D(SeededNoise.instance, 0.035, 0.035, 0.035);
     private final Noise.Layered2D masonLayered2D = new Noise.Layered2D(MasonNoise.instance, 3, 2.2);
