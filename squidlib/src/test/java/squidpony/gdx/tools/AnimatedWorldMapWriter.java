@@ -67,7 +67,7 @@ public class AnimatedWorldMapWriter extends ApplicationAdapter {
     private Viewport view;
     private StatefulRNG rng;
     private long seed;
-    private long ttg; // time to generate
+    private long ttg, worldTime; // time to generate, world starting time
     private WorldMapGenerator world;
     private WorldMapView wmv;
     private AnimatedGif writer;
@@ -75,6 +75,39 @@ public class AnimatedWorldMapWriter extends ApplicationAdapter {
     private String date, path;
     private double mutationA = NumberTools.cos(0.75) * 3.0, mutationB = NumberTools.sin(0.75) * 3.0;
 //    private double mutationC = NumberTools.cos(1.5), mutationD = NumberTools.sin(1.5);
+    
+    /*
+    Both of these use FastNoise 5D Simplex (adapted so 3 dimensions can be changed by WorldMapGenerator);
+    the first experiments with using Noise.WarpedRidged3D inside WorldMapGenerator,
+    while the second uses the normal Ridged3D. They have almost identical results.
+    
+SpaceViewMutantWarpedRidged
+10% (6719 ms)... 20% (13237 ms)... 30% (19842 ms)... 40% (26447 ms)... 50% (33010 ms)... 60% (39540 ms)... 70% (46041 ms)... 80% (52567 ms)... 90% (59130 ms)... 100% (65659 ms)... 
+World #1, FibrousBudWillow, completed in 67614 ms
+10% (6499 ms)... 20% (13653 ms)... 30% (20148 ms)... 40% (26667 ms)... 50% (33188 ms)... 60% (39721 ms)... 70% (46113 ms)... 80% (52592 ms)... 90% (59133 ms)... 100% (65660 ms)... 
+World #2, AgigikFragrantTwig, completed in 69591 ms
+10% (6478 ms)... 20% (12887 ms)... 30% (19395 ms)... 40% (25946 ms)... 50% (32497 ms)... 60% (38958 ms)... 70% (45403 ms)... 80% (51897 ms)... 90% (58423 ms)... 100% (64924 ms)... 
+World #3, RedSapLotus, completed in 68874 ms
+10% (6467 ms)... 20% (12886 ms)... 30% (19383 ms)... 40% (25921 ms)... 50% (32415 ms)... 60% (38861 ms)... 70% (45263 ms)... 80% (51775 ms)... 90% (58282 ms)... 100% (64779 ms)... 
+World #4, SugarrootMagnolia, completed in 66622 ms
+10% (6477 ms)... 20% (12898 ms)... 30% (19447 ms)... 40% (25963 ms)... 50% (32475 ms)... 60% (38930 ms)... 70% (45362 ms)... 80% (51862 ms)... 90% (58385 ms)... 100% (64902 ms)... 
+World #5, SavoryMelonAlder, completed in 66787 ms
+
+SpaceViewMutantRidged
+10% (6390 ms)... 20% (12607 ms)... 30% (18922 ms)... 40% (25184 ms)... 50% (31470 ms)... 60% (37695 ms)... 70% (43879 ms)... 80% (50118 ms)... 90% (56421 ms)... 100% (62670 ms)... 
+World #1, FibrousBudWillow, completed in 64647 ms
+10% (6210 ms)... 20% (12329 ms)... 30% (18827 ms)... 40% (25376 ms)... 50% (31940 ms)... 60% (38497 ms)... 70% (44864 ms)... 80% (51093 ms)... 90% (57406 ms)... 100% (63685 ms)... 
+World #2, AgigikFragrantTwig, completed in 65527 ms
+10% (6215 ms)... 20% (12430 ms)... 30% (18678 ms)... 40% (24963 ms)... 50% (31235 ms)... 60% (37479 ms)... 70% (43627 ms)... 80% (49879 ms)... 90% (56185 ms)... 100% (62435 ms)... 
+World #3, RedSapLotus, completed in 64326 ms
+10% (6195 ms)... 20% (12412 ms)... 30% (18681 ms)... 40% (24921 ms)... 50% (31207 ms)... 60% (37417 ms)... 70% (43601 ms)... 80% (49881 ms)... 90% (56204 ms)... 100% (62472 ms)... 
+World #4, SugarrootMagnolia, completed in 64317 ms
+10% (6251 ms)... 20% (12471 ms)... 30% (18753 ms)... 40% (25067 ms)... 50% (31353 ms)... 60% (37617 ms)... 70% (43748 ms)... 80% (50008 ms)... 90% (56251 ms)... 100% (62497 ms)... 
+World #5, SavoryMelonAlder, completed in 64338 ms
+
+     */
+    
+    
     @Override
     public void create() {
         batch = new FilterBatch();
@@ -90,7 +123,7 @@ public class AnimatedWorldMapWriter extends ApplicationAdapter {
 //        path = "out/worldsAnimated/" + date + "/SpaceView/";
 //        path = "out/worldsAnimated/" + date + "/SpaceViewMutantClassic/";
 //        path = "out/worldsAnimated/" + date + "/SpaceViewMutantFoam/";
-        path = "out/worldsAnimated/" + date + "/SpaceViewMutantSimplex/";
+        path = "out/worldsAnimated/" + date + "/SpaceViewMutantRidged/";
 //        path = "out/worldsAnimated/" + date + "/HyperellipseWrithing/";
 //        path = "out/worldsAnimated/" + date + "/Sphere_Classic/";
 //        path = "out/worldsAnimated/" + date + "/Hyperellipse/";
@@ -216,6 +249,7 @@ public class AnimatedWorldMapWriter extends ApplicationAdapter {
         while (Gdx.files.local(path + name + ".gif").exists())
             name = makeName(thesaurus);
         long hash = CrossHash.hash64(name);
+        worldTime = System.currentTimeMillis();
         for (int i = 0; i < pm.length; i++) {
             double angle = (Math.PI * 2.0 / pm.length) * i;
 
@@ -241,7 +275,8 @@ public class AnimatedWorldMapWriter extends ApplicationAdapter {
                     pm[i].drawPixel(x, y, NumberTools.floatToReversedIntBits(cm[x][y]));
                 }
             }
-            if(i % 5 == 4) System.out.println("Finished " + (i + 1) + " frames");
+//            if(i % 5 == 4) System.out.println("Finished " + (i + 1) + " frames in " + (System.currentTimeMillis() - worldTime) + " ms");
+            if(i % 36 == 35) System.out.print(((i + 1) * 10 / 36) + "% (" + (System.currentTimeMillis() - worldTime) + " ms)... ");
         }
         
         batch.begin();
@@ -251,6 +286,9 @@ public class AnimatedWorldMapWriter extends ApplicationAdapter {
 //        Array<Pixmap> apm = new Array<Pixmap>(pm);
 //        writer.palette.analyze(apm);
         writer.write(Gdx.files.local(path + name + ".gif"), new Array<Pixmap>(pm), 30);
+
+        System.out.println();
+        System.out.println("World #" + counter + ", " + name + ", completed in " + (System.currentTimeMillis() - worldTime) + " ms");
 
         if(counter >= LIMIT)
                 Gdx.app.exit();
