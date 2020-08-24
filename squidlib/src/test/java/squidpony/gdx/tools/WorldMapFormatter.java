@@ -7,6 +7,8 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Pixmap;
+import squidpony.LZSEncoding;
+import squidpony.StringKit;
 import squidpony.squidgrid.mapping.WorldMapGenerator;
 import squidpony.squidmath.CoordPacker;
 import squidpony.squidmath.GreasedRegion;
@@ -14,7 +16,7 @@ import squidpony.squidmath.GreasedRegion;
 public class WorldMapFormatter extends ApplicationAdapter {
     @Override
     public void create() {
-        Pixmap pix = new Pixmap(Gdx.files.internal("special/Earth_map.png"));
+        Pixmap pix = new Pixmap(Gdx.files.internal("special/Australia_map.png"));
         final int bigWidth = pix.getWidth() / 4, bigHeight = pix.getHeight() / 4;
         GreasedRegion basis = new GreasedRegion(bigWidth, bigHeight);
         for (int x = 0; x < bigWidth; x++) {
@@ -23,10 +25,28 @@ public class WorldMapFormatter extends ApplicationAdapter {
                     basis.insert(x, y);
             }
         }
-        FileHandle handle = Gdx.files.local("Earth_map.txt");
+        FileHandle handle = Gdx.files.local("Australia_map.txt");
         handle.writeString(basis.toCompressedString(), false, "UTF-16");
         pix.dispose();
-        System.out.println(basis.equals(GreasedRegion.decompress(handle.readString("UTF-16"))));
+        String again = handle.readString("UTF-16");
+        System.out.println(basis.equals(GreasedRegion.decompress(again)));
+        
+        String basicString = basis.toString();
+        String compressedBasic = LZSEncoding.compressToUTF16(basicString);
+        String ser = basis.serializeToString();
+        String compSer = LZSEncoding.compressToUTF16(ser);
+        int grs = 2 * again.length();
+        int bin = (bigWidth * bigHeight >>> 3);
+        int bas = basicString.length();
+        int sim = 2 * compressedBasic.length();
+        int sts = 2 * compSer.length();
+        double bestBytes = Math.min(grs, Math.min(bin, Math.min(bas, Math.min(sim, sts))));
+        System.out.println("GreasedRegion way: " + grs + " (" + (grs/bestBytes) + " ratio)" );
+        System.out.println("Binary bits-only:  " + bin + " (" + (bin/bestBytes) + " ratio)" );
+        System.out.println("Dumbest way:       " + bas + " (" + (bas/bestBytes) + " ratio)" );
+        System.out.println("Simple way:        " + sim + " (" + (sim/bestBytes) + " ratio)" );
+        System.out.println("serializeToString: " + sts + " (" + (sts/bestBytes) + " ratio)" );
+        
         Gdx.app.exit();
     }
 
