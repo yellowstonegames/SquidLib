@@ -2727,7 +2727,7 @@ public abstract class WorldMapGenerator implements Serializable {
                 minHeat1 = Double.POSITIVE_INFINITY, maxHeat1 = Double.NEGATIVE_INFINITY,
                 minWet0 = Double.POSITIVE_INFINITY, maxWet0 = Double.NEGATIVE_INFINITY;
 
-        public final Noise3D terrainRidged, heat, moisture, otherRidged, terrainLayered;
+        public final Noise3D terrainRidged, heat, moisture, otherRidged, terrainBasic;
         public final double[][] xPositions,
                 yPositions,
                 zPositions;
@@ -2838,7 +2838,7 @@ public abstract class WorldMapGenerator implements Serializable {
             zPositions = new double[width][height];
             edges = new int[height << 1];
             terrainRidged = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 10), terrainFreq);
-            terrainLayered = new Noise.Scaled3D(noiseGenerator,  terrainRidgedFreq * 0.325); 
+            terrainBasic = new Noise.Scaled3D(noiseGenerator,  terrainRidgedFreq * 0.325); 
 //                    new Noise.InverseLayered3D(noiseGenerator, (int) (1 + octaveMultiplier * 6), terrainRidgedFreq * 0.325, 0.475);
             heat = new Noise.Scaled3D(noiseGenerator, heatFreq);
 //                    new Noise.InverseLayered3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 3), heatFreq, 0.75);
@@ -2856,7 +2856,7 @@ public abstract class WorldMapGenerator implements Serializable {
         {
             super(other);
             terrainRidged = other.terrainRidged;
-            terrainLayered = other.terrainLayered;
+            terrainBasic = other.terrainBasic;
             heat = other.heat;
             moisture = other.moisture;
             otherRidged = other.otherRidged;
@@ -2959,7 +2959,7 @@ public abstract class WorldMapGenerator implements Serializable {
                     xPositions[x][y] = pc;
                     yPositions[x][y] = ps;
                     zPositions[x][y] = qs;
-                    heightData[x][y] = (h = terrainLayered.getNoiseWithSeed(pc +
+                    heightData[x][y] = (h = terrainBasic.getNoiseWithSeed(pc +
                                     terrainRidged.getNoiseWithSeed(pc, ps, qs,seedB - seedA) * 0.5,
                             ps, qs, seedA) + landModifier - 1.0);
 //                    heightData[x][y] = (h = terrain4D.getNoiseWithSeed(pc, ps, qs,
