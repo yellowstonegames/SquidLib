@@ -25,10 +25,10 @@ public class WorldMapViewDemo extends ApplicationAdapter {
 
     //private static final int width = 314 * 3, height = 300;
 //    private static final int width = 1024, height = 512;
-//    private static final int width = 512, height = 256;
+    private static final int width = 512, height = 256; // mimic
 //    private static final int width = 256, height = 256;
 //    private static final int width = 400, height = 400; // fast rotations
-    private static final int width = 300, height = 300;
+//    private static final int width = 300, height = 300;
 //    private static final int width = 1600, height = 800;
 //    private static final int width = 900, height = 900;
 //    private static final int width = 700, height = 700;
@@ -96,9 +96,9 @@ public class WorldMapViewDemo extends ApplicationAdapter {
 //        world = new WorldMapGenerator.TilingMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.25);
 //        world = new WorldMapGenerator.EllipticalMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 0.875);
         //world = new WorldMapGenerator.EllipticalHammerMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 0.75);
-//        world = new WorldMapGenerator.MimicMap(seed, WorldMapGenerator.DEFAULT_NOISE, 0.7);
+        world = new WorldMapGenerator.MimicMap(seed, new FastNoise(rng.nextInt(), 1f, FastNoise.SIMPLEX_FRACTAL, 2), 0.7);
 //        world = new WorldMapGenerator.SpaceViewMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 0.7);
-        world = new WorldMapGenerator.RotatingSpaceMap(seed, width, height, new FastNoise(rng.nextInt(), 1f, FastNoise.SIMPLEX_FRACTAL, 2), 0.7);
+//        world = new WorldMapGenerator.RotatingSpaceMap(seed, width, height, new FastNoise(rng.nextInt(), 1f, FastNoise.SIMPLEX_FRACTAL, 2), 0.7);
         //world = new WorldMapGenerator.RoundSideMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 0.8);
 //        world = new WorldMapGenerator.HyperellipticalMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.2, 0.0625, 2.5);
 //        world = new WorldMapGenerator.HyperellipticalMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.2, 0.0, 2.0);

@@ -17,7 +17,7 @@ public class MarkovReadTest extends ApplicationAdapter {
     public void create() {
         super.create();
         long time = System.currentTimeMillis();
-        String text = LZSPlus.decompress(Gdx.files.classpath("bible_markov_order_2_compressed.dat").readString("UTF16"));
+        String text = LZSEncoding.decompressFromUTF16(Gdx.files.classpath("bible_markov_order_2_compressed.dat").readString("UTF16"));
         MarkovText mt = MarkovText.deserializeFromString(text);
         System.out.print((System.currentTimeMillis() - time));
         System.out.println(" ms");

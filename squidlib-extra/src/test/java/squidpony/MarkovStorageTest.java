@@ -21,7 +21,7 @@ public class MarkovStorageTest extends ApplicationAdapter {
         mt.analyze(text.replace("\n\n", "\n."));
         String data = mt.serializeToString();
         //Gdx.files.local("bible_markov.dat").writeString(data, false, "UTF8");
-        Gdx.files.local("bible_markov_order_2_compressed.dat").writeString(LZSPlus.compress(data), false, "UTF16");
+        Gdx.files.local("bible_markov_order_2_compressed.dat").writeString(LZSEncoding.compressToUTF16(data), false, "UTF16");
         System.out.print((System.currentTimeMillis() - time));
         System.out.println(" ms");
         Gdx.app.exit();
