@@ -181,10 +181,10 @@ public class HashVisualizer extends ApplicationAdapter {
 //    private final Noise.Turbulent4D turb4D = new Noise.Turbulent4D(SeededNoise.instance, ridged4D, 3, 2);
 //    private final Noise.Turbulent6D turb6D = new Noise.Turbulent6D(SeededNoise.instance, ridged6D, 3, 2);
 
-    private final Noise.WarpedRidged2D slick2D = new Noise.WarpedRidged2D(thinFN, 2, 1.25);
-    private final Noise.WarpedRidged3D slick3D = new Noise.WarpedRidged3D(thinFN, 2, 1.25);
-    private final Noise.WarpedRidged4D slick4D = new Noise.WarpedRidged4D(thinFN, 2, 1.25);
-    private final Noise.WarpedRidged6D slick6D = new Noise.WarpedRidged6D(thinFN, 2, 1.25);
+    private final Noise.Maelstrom2D slick2D = new Noise.Maelstrom2D(thinFN, 2, 0.5);
+    private final Noise.Maelstrom3D slick3D = new Noise.Maelstrom3D(thinFN, 2, 0.5);
+    private final Noise.Maelstrom4D slick4D = new Noise.Maelstrom4D(thinFN, 2, 0.5);
+    private final Noise.Maelstrom6D slick6D = new Noise.Maelstrom6D(thinFN, 2, 0.5);
 
 //    private final Noise.Ridged2D slick2D = new Noise.Ridged2D(thinFN, 2, 1.25);
 //    private final Noise.Ridged3D slick3D = new Noise.Ridged3D(thinFN, 2, 1.25);
