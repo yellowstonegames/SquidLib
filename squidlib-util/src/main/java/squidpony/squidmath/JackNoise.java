@@ -47,33 +47,27 @@
  */
 package squidpony.squidmath;
 
-import static squidpony.squidmath.HastyPointHash.hash256;
+import squidpony.annotation.Beta;
+
+import static squidpony.squidmath.HastyPointHash.*;
 import static squidpony.squidmath.Noise.fastFloor;
 
 /**
- * Simplex noise functions, in 2D, 3D, 4D, 5D, and 6D, with 4D and 6D as options for generating seamlessly-tiling noise
- * using {@link Noise#seamless2D(double[][], long, int, Noise.Noise4D)} and/or
- * {@link Noise#seamless3D(double[][][], long, int, Noise.Noise6D)}. All functions can take a long seed that should
- * significantly change the pattern of noise produced. Incorporates code from Joise; the full library is available at
- * https://github.com/SudoPlayGames/Joise , and this class adds rather significant optimization in a few methods,
- * especially 6D noise. Joise is derived from the Accidental Noise Library, available in C++ at
- * http://accidentalnoise.sourceforge.net/index.html . Both Joise and ANL have many features that SquidLib has not (yet)
- * incorporated, but now that SquidLib has seamless noise, that's a nice feature that would have needed Joise before.
- * This also supplies 5D noise, which doesn't have an immediate application like taking 6D noise and making 3D seamless
- * noise, but still has plenty of uses. <a href="http://squidpony.github.io/SquidLib/AnimatedChangingGlobe.gif">This
- * world GIF</a> was made using 5D noise, for instance, using a cycle through the 4th and 5th dimensions to alter the
- * globe in a way that loops. You'd probably find yourself mostly using 2D through 4D, though, with 4D useful for 3D
- * shapes that change linearly over time.
+ * Really weird experimental noise meant to be like {@link ValueNoise}, but faster in higher dimensions by using the
+ * simplex grid that {@link SeededNoise} uses.
+ * <br>
+ * This gets its name from the playground toys (jacks) that are shaped like a 3-simplex (a tetrahedron).
  */
-public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, Noise.Noise5D, Noise.Noise6D {
+@Beta
+public class JackNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, Noise.Noise5D, Noise.Noise6D {
     
     protected final long defaultSeed;
-    public static final SeededNoise instance = new SeededNoise();
+    public static final JackNoise instance = new JackNoise();
 
-    public SeededNoise() {
+    public JackNoise() {
         defaultSeed = 0x1337BEEF2A22L;
     }
-    public SeededNoise(long seed)
+    public JackNoise(long seed)
     {
         defaultSeed = seed;
     }
@@ -151,18 +145,18 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
             0, 0, 0, 0, 0, 0, 0, 0, 7, 1, 0, 3, 0, 0, 0, 0,
             7, 3, 0, 1, 7, 3, 1, 0};
     
-    protected static final double F2 = 0.36602540378443864676372317075294,
-            G2 = 0.21132486540518711774542560974902,
-            F3 = 1.0 / 3.0,
-            G3 = 1.0 / 6.0,
-            F4 = (Math.sqrt(5.0) - 1.0) * 0.25,
-            G4 = (5.0 - Math.sqrt(5.0)) * 0.05,
+    protected static final double F2 = (Math.sqrt(3.0) - 1.0) / 2.0,
+            G2 = (3.0 - Math.sqrt(3.0)) / (2.0 * 3.0),
+            F3 = (Math.sqrt(4.0) - 1.0) / 3.0,
+            G3 = (4.0 - Math.sqrt(4.0)) / (3.0 * 4.0),
+            F4 = (Math.sqrt(5.0) - 1.0) / 4.0,
+            G4 = (5.0 - Math.sqrt(5.0)) / (4.0 * 5.0),
             LIMIT4 = 0.62,
             F5 = (Math.sqrt(6.0) - 1.0) / 5.0,
-            G5 = (6.0 - Math.sqrt(6.0)) / 30.0,
+            G5 = (6.0 - Math.sqrt(6.0)) / (5.0 * 6.0),
             LIMIT5 = 0.7,
             F6 = (Math.sqrt(7.0) - 1.0) / 6.0,
-            G6 = F6 / (1.0 + 6.0 * F6),
+            G6 = (7.0 - Math.sqrt(7.0)) / (6.0 * 7.0),//F6 / (1.0 + 6.0 * F6),
             LIMIT6 = 0.8375;
 
     public static double noise(final double x, final double y, final long seed) {
@@ -188,29 +182,25 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
                 x2 = x0 - 1 + 2 * G2,
                 y2 = y0 - 1 + 2 * G2;
         double n = 0.0;
-        final int
-                gi0 = hash256(i, j, seed),
-                gi1 = hash256(i + i1, j + j1, seed),
-                gi2 = hash256(i + 1, j + 1, seed);
         // Calculate the contribution from the three corners for 2D gradient
         double t0 = 0.75 - x0 * x0 - y0 * y0;
         if (t0 > 0) {
             t0 *= t0;
-            n += t0 * t0 * (grad2d[gi0][0] * x0 + grad2d[gi0][1] * y0);
+            n += t0 * t0 * (hashAll(i, j, seed) >> 10) * 0x1.8p-53;
         }
         double t1 = 0.75 - x1 * x1 - y1 * y1;
         if (t1 > 0) {
             t1 *= t1;
-            n += t1 * t1 * (grad2d[gi1][0] * x1 + grad2d[gi1][1] * y1);
+            n += t1 * t1 * (hashAll(i + i1, j + j1, seed) >> 10) * 0x1.8p-53;
         }
         double t2 = 0.75 - x2 * x2 - y2 * y2;
         if (t2 > 0)  {
             t2 *= t2;
-            n += t2 * t2 * (grad2d[gi2][0] * x2 + grad2d[gi2][1] * y2);
+            n += t2 * t2 * (hashAll(i + 1, j + 1, seed) >> 10) * 0x1.8p-53;
         }
         // Add contributions from each corner to get the final noise value.
-        // The result is clamped to return values in the interval [-1,1].
-        return Math.max(-1.0, Math.min(1.0, 9.125f * n));
+        return NumberTools.zigzag(n + 0.5);
+//        return 9.11 * n;
 
 //        double n0, n1, n2;
 //        double t0 = 0.5 - x0 * x0 - y0 * y0;
@@ -588,7 +578,7 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
 
         final int skewX = fastFloor(x + s), skewY = fastFloor(y + s), skewZ = fastFloor(z + s),
                 skewW = fastFloor(w + s), skewU = fastFloor(u + s), skewV = fastFloor(v + s);
-        final double[] m = mShared, cellDist = cellDistShared, gradient6DLUT = SeededNoise.grad6d;
+        final double[] m = mShared, cellDist = cellDistShared, gradient6DLUT = JackNoise.grad6d;
         final int[] distOrder = distOrderShared,
                 intLoc = intLocShared;
         intLoc[0] = skewX;
