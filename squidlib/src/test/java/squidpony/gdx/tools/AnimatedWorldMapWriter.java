@@ -123,7 +123,8 @@ World #5, SavoryMelonAlder, completed in 64338 ms
 //        path = "out/worldsAnimated/" + date + "/SpaceView/";
 //        path = "out/worldsAnimated/" + date + "/SpaceViewMutantClassic/";
 //        path = "out/worldsAnimated/" + date + "/SpaceViewMutantFoam/";
-        path = "out/worldsAnimated/" + date + "/SpaceViewMutantRidged/";
+//        path = "out/worldsAnimated/" + date + "/SpaceViewMutantRidged/";
+        path = "out/worldsAnimated/" + date + "/SpaceViewMutantMaelstrom/";
 //        path = "out/worldsAnimated/" + date + "/HyperellipseWrithing/";
 //        path = "out/worldsAnimated/" + date + "/Sphere_Classic/";
 //        path = "out/worldsAnimated/" + date + "/Hyperellipse/";
@@ -180,8 +181,10 @@ World #5, SavoryMelonAlder, completed in 64338 ms
             @Override
             public double getNoiseWithSeed(double x, double y, double z, long seed) {
 //                return FoamNoise.foamNoise(x * 2.75, y * 2.75, z * 2.75, mutationA, mutationB, (int)seed);
-                final double a = WorldMapGenerator.DEFAULT_NOISE.getNoiseWithSeed(x * 0.75, y * 0.75, z * 0.75, ~seed) * 0.25;
-                return WorldMapGenerator.DEFAULT_NOISE.getNoiseWithSeed(x * 1.5 + a, y * 1.5 - a, z * 1.5 + a, mutationA, mutationB, seed);
+                
+//                final double a = WorldMapGenerator.DEFAULT_NOISE.getNoiseWithSeed(x * 0.75, y * 0.75, z * 0.75, ~seed) * 0.25;
+//                return WorldMapGenerator.DEFAULT_NOISE.getNoiseWithSeed(x * 1.5 + a, y * 1.5 - a, z * 1.5 + a, mutationA, mutationB, seed);
+                return WorldMapGenerator.DEFAULT_NOISE.getNoiseWithSeed(x * 1.5, y * 1.5, z * 1.5, mutationA, mutationB, seed);
             }
         };
         

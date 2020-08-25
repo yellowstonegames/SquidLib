@@ -1186,316 +1186,189 @@ public class Noise {
         }
     }
 
-
-    public static class WarpedRidged1D implements Noise1D {
-        protected int octaves;
-        public double frequency;
-        protected double correct;
-        protected Noise1D basis;
-
-        public WarpedRidged1D() {
-            this(Basic1D.instance, 2, 1.25);
+    public static class Maelstrom1D extends Warped1D {
+        public Maelstrom1D() {
+            this(Basic1D.instance);
         }
 
-        public WarpedRidged1D(Noise1D basis) {
-            this(basis, 2, 1.25);
+        public Maelstrom1D(Noise1D basis) {
+            this(basis, 2);
         }
 
-        public WarpedRidged1D(Noise1D basis, int octaves) {
-            this(basis, octaves, 1.25);
+        public Maelstrom1D(Noise1D basis, final int octaves) {
+            this(basis, octaves, 1.0);
         }
-
-        public WarpedRidged1D(Noise1D basis, int octaves, double frequency) {
+        public Maelstrom1D(Noise1D basis, final int octaves, double frequency) {
+            this(basis, octaves, frequency, 0.5);
+        }
+        public Maelstrom1D(Noise1D basis, final int octaves, double frequency, double lacunarity) {
             this.basis = basis;
             this.frequency = frequency;
-            setOctaves(octaves);
+            this.octaves = Math.max(1, Math.min(63, octaves));
+            this.lacunarity = lacunarity;
         }
 
-        public void setOctaves(int octaves)
-        {
-            this.octaves = (octaves = Math.max(1, Math.min(63, octaves)));
-            correct = 1.0;
-            for (int o = 1; o < octaves; o++) {
-                correct += Math.pow(2.0, -o);
-            }
-            correct = 2.0 / correct;
-        }
 
         @Override
         public double getNoise(double x) {
-            double sum = 0, amp = 1.0, n;
-            x *= frequency;
-            for (int i = 0; i < octaves; i++) {
-                n = basis.getNoise(sum * 0.25 + x + (i << 6));
-                n = 1.0 - Math.abs(n);
-                sum += amp * n;
-                amp *= 0.5;
-                x *= 2.0;
-            }
-            return sum * correct - 1.0;
+            return Math.exp(super.getNoise(x)) * 0.850918 - 1.31303495;
         }
 
         @Override
         public double getNoiseWithSeed(double x, long seed) {
-            double sum = 0, amp = 1.0, n;
-            x *= frequency;
-            for (int i = 0; i < octaves; i++) {
-                n = basis.getNoiseWithSeed(sum * 0.25 + x, (seed += 0x9E3779B97F4A7C15L));
-                n = 1.0 - Math.abs(n);
-                sum += amp * n;
-                amp *= 0.5;
-                x *= 2.0;
-            }
-            return sum * correct - 1.0;
+            return Math.exp(super.getNoiseWithSeed(x, seed)) * 0.850918 - 1.31303495;
         }
     }
 
-    public static class Maelstrom2D implements Noise2D {
-        protected int octaves;
-        protected double i_octaves;
-        public double frequency;
-        protected Noise2D basis;
+    public static class Maelstrom2D extends Warped2D {
         public Maelstrom2D() {
-            this(SeededNoise.instance, 2, 1.0);
+            this(SeededNoise.instance);
         }
 
         public Maelstrom2D(Noise2D basis) {
-            this(basis, 2, 1.0);
+            this(basis, 2);
         }
 
-        public Maelstrom2D(Noise2D basis, int octaves) {
+        public Maelstrom2D(Noise2D basis, final int octaves) {
             this(basis, octaves, 1.0);
         }
-        public Maelstrom2D(Noise2D basis, int octaves, double frequency) {
+        public Maelstrom2D(Noise2D basis, final int octaves, double frequency) {
+            this(basis, octaves, frequency, 0.5);
+        }
+        public Maelstrom2D(Noise2D basis, final int octaves, double frequency, double lacunarity) {
             this.basis = basis;
             this.frequency = frequency;
             this.octaves = Math.max(1, Math.min(63, octaves));
-            this.i_octaves = 1.0 / octaves;
+            this.lacunarity = lacunarity;
         }
 
         @Override
         public double getNoise(double x, double y) {
-            x *= frequency;
-            y *= frequency;
-            double n = 0.0, prev = 0.0;
-            for (int o = 0; o < octaves; o++) {
-                n += (prev = basis.getNoise(x + (o << 6) + prev * 0.25, y + (o << 7)));
-            }
-            return Math.pow(3.0, (n * i_octaves)) * 0.75 - 1.25;
+            return Math.exp(super.getNoise(x, y)) * 0.850918 - 1.31303495;
         }
 
         @Override
         public double getNoiseWithSeed(double x, double y, long seed) {
-            x *= frequency;
-            y *= frequency;
-            double n = 0.0, prev = 0.0;
-            for (int o = 0; o < octaves; o++) {
-                n += (prev = basis.getNoiseWithSeed(x + prev * 0.25, y, (seed += 0x9E3779B97F4A7C15L)));
-            }
-            return Math.pow(3.0, (n * i_octaves)) * 0.75 - 1.25;
+            return Math.exp(super.getNoiseWithSeed(x, y, seed)) * 0.850918 - 1.31303495;
         }
     }
-
     public static class Maelstrom3D implements Noise3D {
-        protected int octaves;
-        protected double i_octaves;
-        public double frequency;
-        protected Noise3D basis;
+        public Noise3D basis;
         public Maelstrom3D() {
-            this(SeededNoise.instance, 2, 1.0);
+            this(SeededNoise.instance);
         }
 
         public Maelstrom3D(Noise3D basis) {
-            this(basis, 2, 1.0);
-        }
-
-        public Maelstrom3D(Noise3D basis, int octaves) {
-            this(basis, octaves, 1.0);
-        }
-        public Maelstrom3D(Noise3D basis, int octaves, double frequency) {
             this.basis = basis;
-            this.frequency = frequency;
-            this.octaves = Math.max(1, Math.min(63, octaves));
-            this.i_octaves = 1.0 / octaves;
         }
 
         @Override
         public double getNoise(double x, double y, double z) {
-            x *= frequency;
-            y *= frequency;
-            z *= frequency;
-            double n = 0.0, prev = 0.0;
-            for (int o = 0; o < octaves; o++) {
-                n += (prev = basis.getNoise(x + (o << 6) + prev * 0.25, y + (o << 7), z + (o << 8)));
-            }
-            return Math.pow(3.0, (n * i_octaves)) * 0.75 - 1.25;
+            return Math.exp(basis.getNoise(x, y, z)) * 0.850918 - 1.31303495;
+//            return Math.pow(3.0, basis.getNoise(x, y, z)) * 0.75 - 1.25;
         }
 
         @Override
         public double getNoiseWithSeed(double x, double y, double z, long seed) {
-            x *= frequency;
-            y *= frequency;
-            z *= frequency;
-            double n = 0.0, prev = 0.0;
-            for (int o = 0; o < octaves; o++) {
-                n += (prev = basis.getNoiseWithSeed(x + prev * 0.25, y, z, (seed += 0x9E3779B97F4A7C15L)));
-            }
-            return Math.pow(3.0, (n * i_octaves)) * 0.75 - 1.25;
+            return Math.exp(basis.getNoiseWithSeed(x, y, z, seed)) * 0.850918 - 1.31303495;
+//            return Math.pow(3.0, basis.getNoiseWithSeed(x, y, z, seed)) * 0.75 - 1.25;
         }
     }
-
-    public static class Maelstrom4D implements Noise4D {
-        protected int octaves;
-        protected double i_octaves;
-        public double frequency;
-        protected Noise4D basis;
+    public static class Maelstrom4D extends Warped4D {
         public Maelstrom4D() {
-            this(SeededNoise.instance, 2, 1.0);
+            this(SeededNoise.instance);
         }
 
         public Maelstrom4D(Noise4D basis) {
-            this(basis, 2, 1.0);
+            this(basis, 2);
         }
 
-        public Maelstrom4D(Noise4D basis, int octaves) {
+        public Maelstrom4D(Noise4D basis, final int octaves) {
             this(basis, octaves, 1.0);
         }
-        public Maelstrom4D(Noise4D basis, int octaves, double frequency) {
+        public Maelstrom4D(Noise4D basis, final int octaves, double frequency) {
+            this(basis, octaves, frequency, 0.5);
+        }
+        public Maelstrom4D(Noise4D basis, final int octaves, double frequency, double lacunarity) {
             this.basis = basis;
             this.frequency = frequency;
             this.octaves = Math.max(1, Math.min(63, octaves));
-            this.i_octaves = 1.0 / octaves;
+            this.lacunarity = lacunarity;
         }
 
         @Override
         public double getNoise(double x, double y, double z, double w) {
-            x *= frequency;
-            y *= frequency;
-            z *= frequency;
-            w *= frequency;
-            double n = 0.0, prev = 0.0;
-            for (int o = 0; o < octaves; o++) {
-                n += (prev = basis.getNoise(x + (o << 6) + prev * 0.25, y + (o << 7), z + (o << 8), w + (o << 9)));
-            }
-            return Math.pow(3.0, (n * i_octaves)) * 0.75 - 1.25;
+            return Math.exp(super.getNoise(x, y, z, w)) * 0.850918 - 1.31303495;
         }
 
         @Override
         public double getNoiseWithSeed(double x, double y, double z, double w, long seed) {
-            x *= frequency;
-            y *= frequency;
-            z *= frequency;
-            w *= frequency;
-            double n = 0.0, prev = 0.0;
-            for (int o = 0; o < octaves; o++) {
-                n += (prev = basis.getNoiseWithSeed(x + prev * 0.25, y, z, w, (seed += 0x9E3779B97F4A7C15L)));
-            }
-            return Math.pow(3.0, (n * i_octaves)) * 0.75 - 1.25;
+            return Math.exp(super.getNoiseWithSeed(x, y, z, w, seed)) * 0.850918 - 1.31303495;
         }
     }
-
-    public static class Maelstrom5D implements Noise5D {
-        protected int octaves;
-        protected double i_octaves;
-        public double frequency;
-        protected Noise5D basis;
+    public static class Maelstrom5D extends Warped5D {
         public Maelstrom5D() {
-            this(SeededNoise.instance, 2, 1.0);
+            this(SeededNoise.instance);
         }
 
         public Maelstrom5D(Noise5D basis) {
-            this(basis, 2, 1.0);
+            this(basis, 2);
         }
 
-        public Maelstrom5D(Noise5D basis, int octaves) {
+        public Maelstrom5D(Noise5D basis, final int octaves) {
             this(basis, octaves, 1.0);
         }
-        public Maelstrom5D(Noise5D basis, int octaves, double frequency) {
+        public Maelstrom5D(Noise5D basis, final int octaves, double frequency) {
+            this(basis, octaves, frequency, 0.5);
+        }
+        public Maelstrom5D(Noise5D basis, final int octaves, double frequency, double lacunarity) {
             this.basis = basis;
             this.frequency = frequency;
             this.octaves = Math.max(1, Math.min(63, octaves));
-            this.i_octaves = 1.0 / octaves;
+            this.lacunarity = lacunarity;
         }
 
         @Override
         public double getNoise(double x, double y, double z, double w, double u) {
-            x *= frequency;
-            y *= frequency;
-            z *= frequency;
-            w *= frequency;
-            u *= frequency;
-            double n = 0.0, prev = 0.0;
-            for (int o = 0; o < octaves; o++) {
-                n += (prev = basis.getNoise(x + (o << 6) + prev * 0.25, y + (o << 7), z + (o << 8), w + (o << 9), u + (o << 10)));
-            }
-            return Math.pow(3.0, (n * i_octaves)) * 0.75 - 1.25;
+            return Math.exp(super.getNoise(x, y, z, w, u)) * 0.850918 - 1.31303495;
         }
 
         @Override
         public double getNoiseWithSeed(double x, double y, double z, double w, double u, long seed) {
-            x *= frequency;
-            y *= frequency;
-            z *= frequency;
-            w *= frequency;
-            u *= frequency;
-            double n = 0.0, prev = 0.0;
-            for (int o = 0; o < octaves; o++) {
-                n += (prev = basis.getNoiseWithSeed(x + prev * 0.25, y, z, w, u, (seed += 0x9E3779B97F4A7C15L)));
-            }
-            return Math.pow(3.0, (n * i_octaves)) * 0.75 - 1.25;
+            return Math.exp(super.getNoiseWithSeed(x, y, z, w, u, seed)) * 0.850918 - 1.31303495;
         }
     }
-    public static class Maelstrom6D implements Noise6D {
-        protected int octaves;
-        protected double i_octaves;
-        public double frequency;
-        protected Noise6D basis;
+
+    public static class Maelstrom6D extends Warped6D {
         public Maelstrom6D() {
-            this(SeededNoise.instance, 2, 1.0);
+            this(SeededNoise.instance);
         }
 
         public Maelstrom6D(Noise6D basis) {
-            this(basis, 2, 1.0);
+            this(basis, 2);
         }
 
-        public Maelstrom6D(Noise6D basis, int octaves) {
+        public Maelstrom6D(Noise6D basis, final int octaves) {
             this(basis, octaves, 1.0);
         }
-        public Maelstrom6D(Noise6D basis, int octaves, double frequency) {
+        public Maelstrom6D(Noise6D basis, final int octaves, double frequency) {
+            this(basis, octaves, frequency, 0.5);
+        }
+        public Maelstrom6D(Noise6D basis, final int octaves, double frequency, double lacunarity) {
             this.basis = basis;
             this.frequency = frequency;
             this.octaves = Math.max(1, Math.min(63, octaves));
-            this.i_octaves = 1.0 / octaves;
+            this.lacunarity = lacunarity;
         }
 
         @Override
         public double getNoise(double x, double y, double z, double w, double u, double v) {
-            x *= frequency;
-            y *= frequency;
-            z *= frequency;
-            w *= frequency;
-            u *= frequency;
-            v *= frequency;
-            double n = 0.0, prev = 0.0;
-            for (int o = 0; o < octaves; o++) {
-                n += (prev = basis.getNoise(x + (o << 6) + prev * 0.25, y + (o << 7), z + (o << 8), w + (o << 9), u + (o << 10), v + (o << 11)));
-            }
-            return Math.pow(3.0, (n * i_octaves)) * 0.75 - 1.25;
+            return Math.exp(super.getNoise(x, y, z, w, u, v)) * 0.850918 - 1.31303495;
         }
 
         @Override
         public double getNoiseWithSeed(double x, double y, double z, double w, double u, double v, long seed) {
-            x *= frequency;
-            y *= frequency;
-            z *= frequency;
-            w *= frequency;
-            u *= frequency;
-            v *= frequency;
-            double n = 0.0, prev = 0.0;
-            for (int o = 0; o < octaves; o++) {
-                n += (prev = basis.getNoiseWithSeed(x + prev * 0.25, y, z, w, u, v, (seed += 0x9E3779B97F4A7C15L)));
-            }
-            return Math.pow(3.0, (n * i_octaves)) * 0.75 - 1.25;
+            return Math.exp(super.getNoiseWithSeed(x, y, z, w, u, v, seed)) * 0.850918 - 1.31303495;
         }
     }
 

@@ -170,6 +170,7 @@ public class HashVisualizer extends ApplicationAdapter {
     private final Noise.Ridged6D ridged6D = new Noise.Ridged6D(SeededNoise.instance, 1, 1.45); // 1.45
                                                         
     private final FastNoise thinFN = new FastNoise(1337, 1, FastNoise.SIMPLEX);
+    private final FastNoise thickFN = new FastNoise(1337, 3, FastNoise.SIMPLEX_FRACTAL);
     private final FastNoise layeredFN = new FastNoise(1337, 1, FastNoise.SIMPLEX_FRACTAL);
 
     private final Noise.Warped2D turb2D = new Noise.Warped2D(thinFN, 2);
@@ -181,10 +182,10 @@ public class HashVisualizer extends ApplicationAdapter {
 //    private final Noise.Turbulent4D turb4D = new Noise.Turbulent4D(SeededNoise.instance, ridged4D, 3, 2);
 //    private final Noise.Turbulent6D turb6D = new Noise.Turbulent6D(SeededNoise.instance, ridged6D, 3, 2);
 
-    private final Noise.Maelstrom2D slick2D = new Noise.Maelstrom2D(thinFN, 2, 0.5);
-    private final Noise.Maelstrom3D slick3D = new Noise.Maelstrom3D(thinFN, 2, 0.5);
-    private final Noise.Maelstrom4D slick4D = new Noise.Maelstrom4D(thinFN, 2, 0.5);
-    private final Noise.Maelstrom6D slick6D = new Noise.Maelstrom6D(thinFN, 2, 0.5);
+    private final Noise.Maelstrom2D slick2D = new Noise.Maelstrom2D(thickFN);
+    private final Noise.Maelstrom3D slick3D = new Noise.Maelstrom3D(thickFN);
+    private final Noise.Maelstrom4D slick4D = new Noise.Maelstrom4D(thickFN);
+    private final Noise.Maelstrom6D slick6D = new Noise.Maelstrom6D(thickFN);
 
 //    private final Noise.Ridged2D slick2D = new Noise.Ridged2D(thinFN, 2, 1.25);
 //    private final Noise.Ridged3D slick3D = new Noise.Ridged3D(thinFN, 2, 1.25);
