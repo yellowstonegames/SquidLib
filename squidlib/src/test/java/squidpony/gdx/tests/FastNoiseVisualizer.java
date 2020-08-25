@@ -23,24 +23,24 @@ import static com.badlogic.gdx.graphics.GL20.GL_POINTS;
  */
 public class FastNoiseVisualizer extends ApplicationAdapter {
 
-    private FastNoise noise = new FastNoise(1, 0.0625f, FastNoise.SIMPLEX_FRACTAL, 1);
+    private FastNoise noise = new FastNoise(1, 0.0625f, FastNoise.FOAM, 1);
     private int dim; // this can be 0, 1, 2, 3, or 4; add 2 to get the actual dimensions
     private int octaves = 3;
     private float freq = 0.125f;
     private boolean inverse;
     private ImmediateModeRenderer20 renderer;
     
-    private int hashIndex = 3;
+    private int hashIndex = 2;
     private PointHash ph = new PointHash();
     private HastyPointHash hph = new HastyPointHash();
     private IntPointHash iph = new IntPointHash();
     private GoldPointHash gold = new GoldPointHash();
-    private PermPointHash pph = new PermPointHash();
+//    private PermPointHash pph = new PermPointHash();
     private FlawedPointHash.RugHash rug = new FlawedPointHash.RugHash(1);
     private FlawedPointHash.QuiltHash quilt = new FlawedPointHash.QuiltHash(1, 16);
     private FlawedPointHash.CubeHash cube = new FlawedPointHash.CubeHash(1, 32);
     private FlawedPointHash.FNVHash fnv = new FlawedPointHash.FNVHash(1);
-    private IPointHash[] pointHashes = new IPointHash[] {ph, hph, iph, pph, gold, rug, quilt, cube};
+    private IPointHash[] pointHashes = new IPointHash[] {ph, hph, iph, fnv, gold, rug, quilt, cube};
 
     private static final int width = 512, height = 512;
 
@@ -104,7 +104,7 @@ public class FastNoiseVisualizer extends ApplicationAdapter {
             @Override
             public boolean keyDown(int keycode) {
                 switch (keycode) {
-                    case ENTER:
+                    case W:
                         frames.clear();
                         for (int c = 0; c < 64; c++) {
                             Pixmap p = new Pixmap(128, 128, Pixmap.Format.RGBA8888);
@@ -135,10 +135,11 @@ public class FastNoiseVisualizer extends ApplicationAdapter {
                         break;
                     case N: // noise type
                     case EQUALS:
-                        noise.setNoiseType((noise.getNoiseType() + 1) % 12);
+                    case ENTER:
+                        noise.setNoiseType((noise.getNoiseType() + 1) % 14);
                         break;
                     case MINUS:
-                        noise.setNoiseType((noise.getNoiseType() + 11) % 12);
+                        noise.setNoiseType((noise.getNoiseType() + 13) % 14);
                         break;
                     case D: //dimension
                         dim = (dim + 1) % 5;

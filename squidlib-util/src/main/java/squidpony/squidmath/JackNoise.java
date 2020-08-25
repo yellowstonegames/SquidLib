@@ -186,20 +186,20 @@ public class JackNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, N
         double t0 = 0.75 - x0 * x0 - y0 * y0;
         if (t0 > 0) {
             t0 *= t0;
-            n += t0 * t0 * (hashAll(i, j, seed) >> 10) * 0x1p-53;
+            n += t0 * t0 * (hashAll(i, j, seed) >> 10);
         }
         double t1 = 0.75 - x1 * x1 - y1 * y1;
         if (t1 > 0) {
             t1 *= t1;
-            n += t1 * t1 * (hashAll(i + i1, j + j1, seed) >> 10) * 0x1p-53;
+            n += t1 * t1 * (hashAll(i + i1, j + j1, seed) >> 10);
         }
         double t2 = 0.75 - x2 * x2 - y2 * y2;
         if (t2 > 0)  {
             t2 *= t2;
-            n += t2 * t2 * (hashAll(i + 1, j + 1, seed) >> 10) * 0x1p-53;
+            n += t2 * t2 * (hashAll(i + 1, j + 1, seed) >> 10);
         }
         // Use sin_, which takes an argument in turns rather than radians, to wrap values
-        return NumberTools.sin_(n);
+        return NumberTools.sin_(n * 0x1p-53);
 //        return 9.11 * n;
 
 //        double n0, n1, n2;
@@ -303,25 +303,25 @@ public class JackNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, N
         double t0 = 0.75 - x0 * x0 - y0 * y0 - z0 * z0;
         if (t0 > 0) {
             t0 *= t0;
-            n += t0 * t0 * (hashAll(i, j, k, seed) >> 10) * 0x1.1p-53;
+            n += t0 * t0 * (hashAll(i, j, k, seed) >> 10);
         }
         double t1 = 0.75 - x1 * x1 - y1 * y1 - z1 * z1;
         if (t1 > 0) {
             t1 *= t1;
-            n += t1 * t1 * (hashAll(i + i1, j + j1, k + k1, seed) >> 10) * 0x1.1p-53;
+            n += t1 * t1 * (hashAll(i + i1, j + j1, k + k1, seed) >> 10);
         }
         double t2 = 0.75 - x2 * x2 - y2 * y2 - z2 * z2;
         if (t2 > 0) {
             t2 *= t2;
-            n += t2 * t2 * (hashAll(i + i2, j + j2, k + k2, seed) >> 10) * 0x1.1p-53;
+            n += t2 * t2 * (hashAll(i + i2, j + j2, k + k2, seed) >> 10);
         }
         double t3 = 0.75 - x3 * x3 - y3 * y3 - z3 * z3;
         if (t3 > 0) {
             t3 *= t3;
-            n += t3 * t3 * (hashAll(i + 1, j + 1, k + 1, seed) >> 10) * 0x1.1p-53;
+            n += t3 * t3 * (hashAll(i + 1, j + 1, k + 1, seed) >> 10);
         }
         // Use sin_, which takes an argument in turns rather than radians, to wrap values
-        return NumberTools.sin_(n); 
+        return NumberTools.sin_(n * 0x1.1p-53); 
     }
 
     public static double noise(final double x, final double y, final double z, final double w, final long seed) {
