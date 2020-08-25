@@ -183,22 +183,22 @@ public class JackNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, N
                 y2 = y0 - 1 + 2 * G2;
         double n = 0.0;
         // Calculate the contribution from the three corners for 2D gradient
-        double t0 = 0.5 - x0 * x0 - y0 * y0;
+        double t0 = 0.75 - x0 * x0 - y0 * y0;
         if (t0 > 0) {
-//            t0 *= t0;
+            t0 *= t0;
             n += t0 * t0 * (hashAll(i, j, seed) >> 10) * 0x1p-53;
         }
-        double t1 = 0.5 - x1 * x1 - y1 * y1;
+        double t1 = 0.75 - x1 * x1 - y1 * y1;
         if (t1 > 0) {
-//            t1 *= t1;
+            t1 *= t1;
             n += t1 * t1 * (hashAll(i + i1, j + j1, seed) >> 10) * 0x1p-53;
         }
-        double t2 = 0.5 - x2 * x2 - y2 * y2;
+        double t2 = 0.75 - x2 * x2 - y2 * y2;
         if (t2 > 0)  {
-//            t2 *= t2;
+            t2 *= t2;
             n += t2 * t2 * (hashAll(i + 1, j + 1, seed) >> 10) * 0x1p-53;
         }
-        // Add contributions from each corner to get the final noise value.
+        // Use sin_, which takes an argument in turns rather than radians, to wrap values
         return NumberTools.sin_(n);
 //        return 9.11 * n;
 
@@ -300,30 +300,28 @@ public class JackNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, N
         double z3 = z0 - 0.5;
 
         // Calculate the contribution from the four corners
-        double t0 = 0.6 - x0 * x0 - y0 * y0 - z0 * z0;
+        double t0 = 0.75 - x0 * x0 - y0 * y0 - z0 * z0;
         if (t0 > 0) {
             t0 *= t0;
-            n += t0 * t0 * gradCoord3D(seed, i, j, k, x0, y0, z0);
+            n += t0 * t0 * (hashAll(i, j, k, seed) >> 10) * 0x1.1p-53;
         }
-        double t1 = 0.6 - x1 * x1 - y1 * y1 - z1 * z1;
+        double t1 = 0.75 - x1 * x1 - y1 * y1 - z1 * z1;
         if (t1 > 0) {
             t1 *= t1;
-            n += t1 * t1 * gradCoord3D(seed, i + i1, j + j1, k + k1, x1, y1, z1);
+            n += t1 * t1 * (hashAll(i + i1, j + j1, k + k1, seed) >> 10) * 0x1.1p-53;
         }
-        double t2 = 0.6 - x2 * x2 - y2 * y2 - z2 * z2;
+        double t2 = 0.75 - x2 * x2 - y2 * y2 - z2 * z2;
         if (t2 > 0) {
             t2 *= t2;
-            n += t2 * t2 * gradCoord3D(seed, i + i2, j + j2, k + k2, x2, y2, z2);
+            n += t2 * t2 * (hashAll(i + i2, j + j2, k + k2, seed) >> 10) * 0x1.1p-53;
         }
-        double t3 = 0.6 - x3 * x3 - y3 * y3 - z3 * z3;
+        double t3 = 0.75 - x3 * x3 - y3 * y3 - z3 * z3;
         if (t3 > 0) {
             t3 *= t3;
-            n += t3 * t3 * gradCoord3D(seed, i + 1, j + 1, k + 1, x3, y3, z3);
+            n += t3 * t3 * (hashAll(i + 1, j + 1, k + 1, seed) >> 10) * 0x1.1p-53;
         }
-        // Add contributions from each corner to get the final noise value.
-        // The result is clamped to stay just inside [-1,1]
-        return Math.max(-1.0, Math.min(1.0, 31.5 * n));
-        //return (32.0 * n) * 1.25086885 + 0.0003194984;
+        // Use sin_, which takes an argument in turns rather than radians, to wrap values
+        return NumberTools.sin_(n); 
     }
 
     public static double noise(final double x, final double y, final double z, final double w, final long seed) {
