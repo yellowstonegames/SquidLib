@@ -183,23 +183,23 @@ public class JackNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, N
                 y2 = y0 - 1 + 2 * G2;
         double n = 0.0;
         // Calculate the contribution from the three corners for 2D gradient
-        double t0 = 0.75 - x0 * x0 - y0 * y0;
+        double t0 = 0.5 - x0 * x0 - y0 * y0;
         if (t0 > 0) {
-            t0 *= t0;
-            n += t0 * t0 * (hashAll(i, j, seed) >> 10) * 0x1.8p-53;
+//            t0 *= t0;
+            n += t0 * t0 * (hashAll(i, j, seed) >> 10) * 0x1p-53;
         }
-        double t1 = 0.75 - x1 * x1 - y1 * y1;
+        double t1 = 0.5 - x1 * x1 - y1 * y1;
         if (t1 > 0) {
-            t1 *= t1;
-            n += t1 * t1 * (hashAll(i + i1, j + j1, seed) >> 10) * 0x1.8p-53;
+//            t1 *= t1;
+            n += t1 * t1 * (hashAll(i + i1, j + j1, seed) >> 10) * 0x1p-53;
         }
-        double t2 = 0.75 - x2 * x2 - y2 * y2;
+        double t2 = 0.5 - x2 * x2 - y2 * y2;
         if (t2 > 0)  {
-            t2 *= t2;
-            n += t2 * t2 * (hashAll(i + 1, j + 1, seed) >> 10) * 0x1.8p-53;
+//            t2 *= t2;
+            n += t2 * t2 * (hashAll(i + 1, j + 1, seed) >> 10) * 0x1p-53;
         }
         // Add contributions from each corner to get the final noise value.
-        return NumberTools.zigzag(n + 0.5);
+        return NumberTools.sin_(n);
 //        return 9.11 * n;
 
 //        double n0, n1, n2;
