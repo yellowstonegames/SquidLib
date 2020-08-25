@@ -176,7 +176,11 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
      * <br>
      * This is meant to be used with {@link #setNoiseType(int)}.
      */
-    FOAM_FRACTAL = 11;
+    FOAM_FRACTAL = 11,
+
+    HONEY = 12,
+
+    HONEY_FRACTAL = 13;
 
     public static final int LINEAR = 0, HERMITE = 1, QUINTIC = 2;
 
@@ -789,6 +793,17 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
                         return singleFoamFractalRidgedMulti(x, y);
                     default:
                         return singleFoamFractalFBM(x, y);
+                }
+            case HONEY:
+                return singleHoney(seed, x, y);
+            case HONEY_FRACTAL:
+                switch (fractalType) {
+                    case BILLOW:
+                        return singleHoneyFractalBillow(x, y);
+                    case RIDGED_MULTI:
+                        return singleHoneyFractalRidgedMulti(x, y);
+                    default:
+                        return singleHoneyFractalFBM(x, y);
                 }
             case PERLIN:
                 return singlePerlin(seed, x, y);
@@ -5420,6 +5435,91 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         v2[0] += lerp(lx0x, lx1x, ys) * perturbAmp;
         v2[1] += lerp(ly0x, ly1x, ys) * perturbAmp;
     }
+
+
+    public float getHoney(float x, float y) {
+        return singleHoney(seed, x * frequency, y * frequency);
+    }
+
+    public float singleHoney(int seed, float x, float y) {
+        final float a = singleSimplex(seed, x, y);
+        seed += 0x9E3779BD;
+        seed ^= seed >>> 14;
+        final float b = singleSimplex(seed, y + a * 0.25f, x);
+        final float result = (a - b) * 0.5f;
+        return result;
+//        return (result <= 0f)
+//                ? (result * result) - 1
+//                : 1 - ((result - 1) * (result - 1));
+    }
+
+    public float getHoneyFractal(float x, float y) {
+        x *= frequency;
+        y *= frequency;
+
+        switch (fractalType) {
+            case FBM:
+                return singleHoneyFractalFBM(x, y);
+            case BILLOW:
+                return singleHoneyFractalBillow(x, y);
+            case RIDGED_MULTI:
+                return singleHoneyFractalRidgedMulti(x, y);
+            default:
+                return 0;
+        }
+    }
+
+    private float singleHoneyFractalFBM(float x, float y) {
+        int seed = this.seed;
+        float sum = singleHoney(seed, x, y);
+        float amp = 1, t;
+
+        for (int i = 1; i < octaves; i++) {
+            t = x;
+            x = y * lacunarity;
+            y = t * lacunarity;
+
+            amp *= gain;
+            sum += singleHoney(seed + i, x, y) * amp;
+        }
+
+        return sum * fractalBounding;
+    }
+
+    private float singleHoneyFractalBillow(float x, float y) {
+        int seed = this.seed;
+        float sum = Math.abs(singleHoney(seed, x, y)) * 2 - 1;
+        float amp = 1, t;
+
+        for (int i = 1; i < octaves; i++) {
+            t = x;
+            x = y * lacunarity;
+            y = t * lacunarity;
+
+            amp *= gain;
+            sum += (Math.abs(singleHoney(++seed, x, y)) * 2 - 1) * amp;
+        }
+
+        return sum * fractalBounding;
+    }
+
+    private float singleHoneyFractalRidgedMulti(float x, float y) {
+        int seed = this.seed;
+        float sum = 0, amp = 1, ampBias = 1f, spike, t;
+        for (int i = 0; i < octaves; i++) {
+            spike = 1f - Math.abs(singleHoney(seed + i, x, y));
+            spike *= spike * amp;
+            amp = Math.max(0f, Math.min(1f, spike * 2f));
+            sum += (spike * ampBias);
+            ampBias *= 2f;
+            t = x;
+            x = y * lacunarity;
+            y = t * lacunarity;
+        }
+        return sum / ((ampBias - 1f) * 0.5f) - 1f;
+    }
+
+
 
 
     public static final float F2f = 0.3660254f;
