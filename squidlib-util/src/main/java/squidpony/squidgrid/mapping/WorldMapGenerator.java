@@ -1246,7 +1246,7 @@ public abstract class WorldMapGenerator implements Serializable {
     public static class TilingMap extends WorldMapGenerator {
         //protected static final double terrainFreq = 1.5, terrainRidgedFreq = 1.3, heatFreq = 2.8, moistureFreq = 2.9, otherFreq = 4.5;
 //        protected static final double terrainFreq = 1.175, terrainRidgedFreq = 1.3, heatFreq = 2.3, moistureFreq = 2.4, otherFreq = 3.5;
-        protected static final double terrainFreq = 0.95, terrainRidgedFreq = 3.1, heatFreq = 2.1, moistureFreq = 2.125, otherFreq = 3.375;
+        protected static final double terrainFreq = 0.95, terrainRidgedFreq = 2.6, heatFreq = 2.1, moistureFreq = 2.125, otherFreq = 3.375;
         private double minHeat0 = Double.POSITIVE_INFINITY, maxHeat0 = Double.NEGATIVE_INFINITY,
                 minHeat1 = Double.POSITIVE_INFINITY, maxHeat1 = Double.NEGATIVE_INFINITY,
                 minWet0 = Double.POSITIVE_INFINITY, maxWet0 = Double.NEGATIVE_INFINITY;
@@ -1336,10 +1336,10 @@ public abstract class WorldMapGenerator implements Serializable {
         public TilingMap(long initialSeed, int mapWidth, int mapHeight, final Noise4D noiseGenerator, double octaveMultiplier) {
             super(initialSeed, mapWidth, mapHeight);
             terrain = new Noise.InverseLayered4D(noiseGenerator, (int) (0.5 + octaveMultiplier * 8), terrainFreq);
-            terrainRidged = new Noise.Ridged4D(noiseGenerator, (int) (0.5 + octaveMultiplier * 10), terrainRidgedFreq);
+            terrainRidged = new Noise.Maelstrom4D(new Noise.Ridged4D(noiseGenerator, (int) (0.5 + octaveMultiplier * 10), terrainRidgedFreq));
             heat = new Noise.InverseLayered4D(noiseGenerator, (int) (0.5 + octaveMultiplier * 3), heatFreq);
             moisture = new Noise.InverseLayered4D(noiseGenerator, (int) (0.5 + octaveMultiplier * 4), moistureFreq);
-            otherRidged = new Noise.Ridged4D(noiseGenerator, (int) (0.5 + octaveMultiplier * 6), otherFreq);
+            otherRidged = new Noise.Maelstrom4D(new Noise.Ridged4D(noiseGenerator, (int) (0.5 + octaveMultiplier * 6), otherFreq));
         }
 
         /**
@@ -1415,10 +1415,10 @@ public abstract class WorldMapGenerator implements Serializable {
                                     terrainRidged.getNoiseWithSeed(pc, ps, qc, qs,seedB - seedA) * 0.25,
                             ps, qc, qs, seedA) + landModifier - 1.0);
                     heatData[x][y] = (p = heat.getNoiseWithSeed(pc, ps, qc
-                                    + otherRidged.getNoiseWithSeed(pc, ps, qc, qs, seedB + seedC)
+                                    + 0.375 * otherRidged.getNoiseWithSeed(pc, ps, qc, qs, seedB + seedC)
                             , qs, seedB));
                     moistureData[x][y] = (temp = moisture.getNoiseWithSeed(pc, ps, qc, qs
-                                    + otherRidged.getNoiseWithSeed(pc, ps, qc, qs, seedC + seedA)
+                                    + 0.375 * otherRidged.getNoiseWithSeed(pc, ps, qc, qs, seedC + seedA)
                             , seedC));
                     minHeightActual = Math.min(minHeightActual, h);
                     maxHeightActual = Math.max(maxHeightActual, h);
@@ -1567,7 +1567,7 @@ public abstract class WorldMapGenerator implements Serializable {
      * <a href="http://squidpony.github.io/SquidLib/SphereWorld.png" >Example map</a>.
      */
     public static class SphereMap extends WorldMapGenerator {
-        protected static final double terrainFreq = 1.45, terrainRidgedFreq = 3.1, heatFreq = 2.1, moistureFreq = 2.125, otherFreq = 3.375;
+        protected static final double terrainFreq = 1.45, terrainRidgedFreq = 2.6, heatFreq = 2.1, moistureFreq = 2.125, otherFreq = 3.375;
         //protected static final double terrainFreq = 1.65, terrainRidgedFreq = 1.8, heatFreq = 2.1, moistureFreq = 2.125, otherFreq = 3.375, riverRidgedFreq = 21.7;
         private double minHeat0 = Double.POSITIVE_INFINITY, maxHeat0 = Double.NEGATIVE_INFINITY,
                 minHeat1 = Double.POSITIVE_INFINITY, maxHeat1 = Double.NEGATIVE_INFINITY,
@@ -1689,11 +1689,11 @@ public abstract class WorldMapGenerator implements Serializable {
             yPositions = new double[width][height];
             zPositions = new double[width][height];
 
-            terrain = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 10), terrainFreq);
+            terrain = new Noise.Maelstrom3D(new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 10), terrainFreq));
             terrainLayered = new Noise.Scaled3D(noiseGenerator,  terrainRidgedFreq * 0.325);
             heat = new Noise.Scaled3D(noiseGenerator,  heatFreq);
             moisture = new Noise.Scaled3D(noiseGenerator,  moistureFreq);
-            otherRidged = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 6), otherFreq);
+            otherRidged = new Noise.Maelstrom3D(new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 6), otherFreq));
         }
         @Override
         public int wrapY(final int x, final int y)  {
@@ -1804,10 +1804,10 @@ public abstract class WorldMapGenerator implements Serializable {
                                     terrain.getNoiseWithSeed(pc, ps, qs,seedB - seedA) * 0.5,
                             ps, qs, seedA) + landModifier - 1.0);
                     heatData[x][y] = (p = heat.getNoiseWithSeed(pc, ps
-                                    + otherRidged.getNoiseWithSeed(pc, ps, qs,seedB + seedC)
+                                    + 0.375 * otherRidged.getNoiseWithSeed(pc, ps, qs,seedB + seedC)
                             , qs, seedB));
                     moistureData[x][y] = (temp = moisture.getNoiseWithSeed(pc, ps, qs
-                                    + otherRidged.getNoiseWithSeed(pc, ps, qs, seedC + seedA)
+                                    + 0.375 * otherRidged.getNoiseWithSeed(pc, ps, qs, seedC + seedA)
                             , seedC));
 
                     minHeightActual = Math.min(minHeightActual, h);
@@ -1957,7 +1957,7 @@ public abstract class WorldMapGenerator implements Serializable {
      */
     public static class EllipticalMap extends WorldMapGenerator {
         //        protected static final double terrainFreq = 1.35, terrainRidgedFreq = 1.8, heatFreq = 2.1, moistureFreq = 2.125, otherFreq = 3.375, riverRidgedFreq = 21.7;
-        protected static final double terrainFreq = 1.45, terrainRidgedFreq = 3.1, heatFreq = 2.1, moistureFreq = 2.125, otherFreq = 3.375;
+        protected static final double terrainFreq = 1.45, terrainRidgedFreq = 2.6, heatFreq = 2.1, moistureFreq = 2.125, otherFreq = 3.375;
         protected double minHeat0 = Double.POSITIVE_INFINITY, maxHeat0 = Double.NEGATIVE_INFINITY,
                 minHeat1 = Double.POSITIVE_INFINITY, maxHeat1 = Double.NEGATIVE_INFINITY,
                 minWet0 = Double.POSITIVE_INFINITY, maxWet0 = Double.NEGATIVE_INFINITY;
@@ -2074,11 +2074,11 @@ public abstract class WorldMapGenerator implements Serializable {
             yPositions = new double[width][height];
             zPositions = new double[width][height];
             edges = new int[height << 1];
-            terrain = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 10), terrainFreq);
+            terrain = new Noise.Maelstrom3D(new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 10), terrainFreq));
             terrainLayered = new Noise.Scaled3D(noiseGenerator,  terrainRidgedFreq * 0.325);
             heat = new Noise.Scaled3D(noiseGenerator,  heatFreq);
             moisture = new Noise.Scaled3D(noiseGenerator,  moistureFreq);
-            otherRidged = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 6), otherFreq);
+            otherRidged = new Noise.Maelstrom3D(new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 6), otherFreq));
         }
 
         /**
@@ -2195,10 +2195,10 @@ public abstract class WorldMapGenerator implements Serializable {
                                     terrain.getNoiseWithSeed(pc, ps, qs,seedB - seedA) * 0.5,
                             ps, qs, seedA) + landModifier - 1.0);
                     heatData[x][y] = (p = heat.getNoiseWithSeed(pc, ps
-                                    + otherRidged.getNoiseWithSeed(pc, ps, qs,seedB + seedC)
+                                    + 0.375 * otherRidged.getNoiseWithSeed(pc, ps, qs,seedB + seedC)
                             , qs, seedB));
                     moistureData[x][y] = (temp = moisture.getNoiseWithSeed(pc, ps, qs
-                                    + otherRidged.getNoiseWithSeed(pc, ps, qs, seedC + seedA)
+                                    + 0.375 * otherRidged.getNoiseWithSeed(pc, ps, qs, seedC + seedA)
                             , seedC));
                     minHeightActual = Math.min(minHeightActual, h);
                     maxHeightActual = Math.max(maxHeightActual, h);
@@ -2606,10 +2606,10 @@ public abstract class WorldMapGenerator implements Serializable {
                     }
                     heightData[x][y] = h;
                     heatData[x][y] = (p = heat.getNoiseWithSeed(pc, ps
-                                    + otherRidged.getNoiseWithSeed(pc, ps, qs,seedB + seedC)
+                                    + 0.375 * otherRidged.getNoiseWithSeed(pc, ps, qs,seedB + seedC)
                             , qs, seedB));
                     moistureData[x][y] = (temp = moisture.getNoiseWithSeed(pc, ps, qs
-                                    + otherRidged.getNoiseWithSeed(pc, ps, qs, seedC + seedA)
+                                    + 0.375 * otherRidged.getNoiseWithSeed(pc, ps, qs, seedC + seedA)
                             , seedC));
                     minHeightActual = Math.min(minHeightActual, h);
                     maxHeightActual = Math.max(maxHeightActual, h);
@@ -2727,7 +2727,7 @@ public abstract class WorldMapGenerator implements Serializable {
      */
     public static class SpaceViewMap extends WorldMapGenerator {
         //        protected static final double terrainFreq = 1.65, terrainRidgedFreq = 1.8, heatFreq = 2.1, moistureFreq = 2.125, otherFreq = 3.375, riverRidgedFreq = 21.7;
-        protected static final double terrainFreq = 1.45, terrainRidgedFreq = 3.1, heatFreq = 2.1, moistureFreq = 2.125, otherFreq = 3.375;
+        protected static final double terrainFreq = 1.45, terrainRidgedFreq = 2.6, heatFreq = 2.1, moistureFreq = 2.125, otherFreq = 3.375;
         protected double minHeat0 = Double.POSITIVE_INFINITY, maxHeat0 = Double.NEGATIVE_INFINITY,
                 minHeat1 = Double.POSITIVE_INFINITY, maxHeat1 = Double.NEGATIVE_INFINITY,
                 minWet0 = Double.POSITIVE_INFINITY, maxWet0 = Double.NEGATIVE_INFINITY;
@@ -2844,11 +2844,8 @@ public abstract class WorldMapGenerator implements Serializable {
             edges = new int[height << 1];
             terrainRidged = new Noise.Maelstrom3D(new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 10), terrainFreq));
             terrainBasic = new Noise.Scaled3D(noiseGenerator,  terrainRidgedFreq * 0.325); 
-//                    new Noise.InverseLayered3D(noiseGenerator, (int) (1 + octaveMultiplier * 6), terrainRidgedFreq * 0.325, 0.475);
             heat = new Noise.Scaled3D(noiseGenerator, heatFreq);
-//                    new Noise.InverseLayered3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 3), heatFreq, 0.75);
             moisture = new Noise.Scaled3D(noiseGenerator, moistureFreq); 
-//                    new Noise.InverseLayered3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 4), moistureFreq, 0.55);
             otherRidged = new Noise.Maelstrom3D(new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 6), otherFreq));
         }
 
@@ -2972,10 +2969,10 @@ public abstract class WorldMapGenerator implements Serializable {
 //                                    + terrain.getNoiseWithSeed(pc, ps, qs, seedC - seedB)) * 0.5,
 //                            seedA) * landModifier);
                     heatData[x][y] = (p = heat.getNoiseWithSeed(pc, ps
-                                    + otherRidged.getNoiseWithSeed(pc, ps, qs,seedB + seedC)
+                                    + 0.375 * otherRidged.getNoiseWithSeed(pc, ps, qs,seedB + seedC)
                             , qs, seedB));
                     moistureData[x][y] = (temp = moisture.getNoiseWithSeed(pc, ps, qs
-                                    + otherRidged.getNoiseWithSeed(pc, ps, qs, seedC + seedA)
+                                    + 0.375 * otherRidged.getNoiseWithSeed(pc, ps, qs, seedC + seedA)
                             , seedC));
                     minHeightActual = Math.min(minHeightActual, h);
                     maxHeightActual = Math.max(maxHeightActual, h);
@@ -3087,7 +3084,7 @@ public abstract class WorldMapGenerator implements Serializable {
      */
     public static class RoundSideMap extends WorldMapGenerator {
         //        protected static final double terrainFreq = 1.35, terrainRidgedFreq = 1.8, heatFreq = 2.1, moistureFreq = 2.125, otherFreq = 3.375, riverRidgedFreq = 21.7;
-        protected static final double terrainFreq = 1.45, terrainRidgedFreq = 3.1, heatFreq = 2.1, moistureFreq = 2.125, otherFreq = 3.375;
+        protected static final double terrainFreq = 1.45, terrainRidgedFreq = 2.6, heatFreq = 2.1, moistureFreq = 2.125, otherFreq = 3.375;
         protected double minHeat0 = Double.POSITIVE_INFINITY, maxHeat0 = Double.NEGATIVE_INFINITY,
                 minHeat1 = Double.POSITIVE_INFINITY, maxHeat1 = Double.NEGATIVE_INFINITY,
                 minWet0 = Double.POSITIVE_INFINITY, maxWet0 = Double.NEGATIVE_INFINITY;
@@ -3204,13 +3201,11 @@ public abstract class WorldMapGenerator implements Serializable {
             yPositions = new double[width][height];
             zPositions = new double[width][height];
             edges = new int[height << 1];
-            terrain = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 10), terrainFreq);
+            terrain = new Noise.Maelstrom3D(new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 10), terrainFreq));
             terrainLayered = new Noise.Scaled3D(noiseGenerator,  terrainRidgedFreq * 0.325);
-//            terrain = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 8), terrainFreq);
-//            terrainLayered = new Noise.Layered3D(noiseGenerator, (int) (1 + octaveMultiplier * 6), terrainRidgedFreq * 5.25);
             heat = new Noise.Scaled3D(noiseGenerator,  heatFreq);
             moisture = new Noise.Scaled3D(noiseGenerator,  moistureFreq);
-            otherRidged = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 6), otherFreq);
+            otherRidged = new Noise.Maelstrom3D(new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 6), otherFreq));
         }
 
         /**
@@ -3331,10 +3326,10 @@ public abstract class WorldMapGenerator implements Serializable {
                                     terrain.getNoiseWithSeed(pc, ps, qs,seedB - seedA) * 0.5,
                             ps, qs, seedA) + landModifier - 1.0);
                     heatData[x][y] = (p = heat.getNoiseWithSeed(pc, ps
-                                    + otherRidged.getNoiseWithSeed(pc, ps, qs,seedB + seedC)
+                                    + 0.375 * otherRidged.getNoiseWithSeed(pc, ps, qs,seedB + seedC)
                             , qs, seedB));
                     moistureData[x][y] = (temp = moisture.getNoiseWithSeed(pc, ps, qs
-                                    + otherRidged.getNoiseWithSeed(pc, ps, qs, seedC + seedA)
+                                    + 0.375 * otherRidged.getNoiseWithSeed(pc, ps, qs, seedC + seedA)
                             , seedC));
                     minHeightActual = Math.min(minHeightActual, h);
                     maxHeightActual = Math.max(maxHeightActual, h);
@@ -3445,7 +3440,7 @@ public abstract class WorldMapGenerator implements Serializable {
      * <a href="">Example map</a>
      */
     public static class HyperellipticalMap extends WorldMapGenerator {
-        protected static final double terrainFreq = 1.45, terrainRidgedFreq = 3.1, heatFreq = 2.1, moistureFreq = 2.125, otherFreq = 3.375;
+        protected static final double terrainFreq = 1.45, terrainRidgedFreq = 2.6, heatFreq = 2.1, moistureFreq = 2.125, otherFreq = 3.375;
         protected double minHeat0 = Double.POSITIVE_INFINITY, maxHeat0 = Double.NEGATIVE_INFINITY,
                 minHeat1 = Double.POSITIVE_INFINITY, maxHeat1 = Double.NEGATIVE_INFINITY,
                 minWet0 = Double.POSITIVE_INFINITY, maxWet0 = Double.NEGATIVE_INFINITY;
@@ -3593,11 +3588,11 @@ public abstract class WorldMapGenerator implements Serializable {
             yPositions = new double[width][height];
             zPositions = new double[width][height];
             edges = new int[height << 1];
-            terrain = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 10), terrainFreq);
+            terrain = new Noise.Maelstrom3D(new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 10), terrainFreq));
             terrainLayered = new Noise.Scaled3D(noiseGenerator,  terrainRidgedFreq * 0.325);
             heat = new Noise.Scaled3D(noiseGenerator,  heatFreq);
             moisture = new Noise.Scaled3D(noiseGenerator,  moistureFreq);
-            otherRidged = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 6), otherFreq);
+            otherRidged = new Noise.Maelstrom3D(new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 6), otherFreq));
             this.alpha = alpha;
             this.kappa = kappa;
             this.Z = new double[height << 2];
@@ -3762,10 +3757,10 @@ public abstract class WorldMapGenerator implements Serializable {
                                     terrain.getNoiseWithSeed(pc, ps, qs, seedB - seedA) * 0.5,
                             ps, qs, seedA) + landModifier - 1.0);
                     heatData[x][y] = (p = heat.getNoiseWithSeed(pc, ps
-                                    + otherRidged.getNoiseWithSeed(pc, ps, qs, seedB + seedC)
+                                    + 0.375 * otherRidged.getNoiseWithSeed(pc, ps, qs, seedB + seedC)
                             , qs, seedB));
                     moistureData[x][y] = (temp = moisture.getNoiseWithSeed(pc, ps, qs
-                                    + otherRidged.getNoiseWithSeed(pc, ps, qs, seedC + seedA)
+                                    + 0.375 * otherRidged.getNoiseWithSeed(pc, ps, qs, seedC + seedA)
                             , seedC));
                     minHeightActual = Math.min(minHeightActual, h);
                     maxHeightActual = Math.max(maxHeightActual, h);
@@ -3878,7 +3873,7 @@ public abstract class WorldMapGenerator implements Serializable {
      */
     public static class EllipticalHammerMap extends WorldMapGenerator {
         //        protected static final double terrainFreq = 1.35, terrainRidgedFreq = 1.8, heatFreq = 2.1, moistureFreq = 2.125, otherFreq = 3.375, riverRidgedFreq = 21.7;
-        protected static final double terrainFreq = 1.45, terrainRidgedFreq = 3.1, heatFreq = 2.1, moistureFreq = 2.125, otherFreq = 3.375;
+        protected static final double terrainFreq = 1.45, terrainRidgedFreq = 2.6, heatFreq = 2.1, moistureFreq = 2.125, otherFreq = 3.375;
         protected double minHeat0 = Double.POSITIVE_INFINITY, maxHeat0 = Double.NEGATIVE_INFINITY,
                 minHeat1 = Double.POSITIVE_INFINITY, maxHeat1 = Double.NEGATIVE_INFINITY,
                 minWet0 = Double.POSITIVE_INFINITY, maxWet0 = Double.NEGATIVE_INFINITY;
@@ -4007,13 +4002,11 @@ public abstract class WorldMapGenerator implements Serializable {
             yPositions = new double[width][height];
             zPositions = new double[width][height];
             edges = new int[height << 1];
-            terrain = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 10), terrainFreq);
+            terrain = new Noise.Maelstrom3D(new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 10), terrainFreq));
             terrainLayered = new Noise.Scaled3D(noiseGenerator,  terrainRidgedFreq * 0.325);
-//            terrain = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 8), terrainFreq);
-//            terrainLayered = new Noise.Layered3D(noiseGenerator, (int) (1 + octaveMultiplier * 6), terrainRidgedFreq * 5.25);
             heat = new Noise.Scaled3D(noiseGenerator,  heatFreq);
             moisture = new Noise.Scaled3D(noiseGenerator,  moistureFreq);
-            otherRidged = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 6), otherFreq);
+            otherRidged = new Noise.Maelstrom3D(new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 6), otherFreq));
         }
 
         /**
@@ -4132,10 +4125,10 @@ public abstract class WorldMapGenerator implements Serializable {
                                     terrain.getNoiseWithSeed(pc, ps, qs,seedB - seedA) * 0.5,
                             ps, qs, seedA) + landModifier - 1.0);
                     heatData[x][y] = (p = heat.getNoiseWithSeed(pc, ps
-                                    + otherRidged.getNoiseWithSeed(pc, ps, qs,seedB + seedC)
+                                    + 0.375 * otherRidged.getNoiseWithSeed(pc, ps, qs,seedB + seedC)
                             , qs, seedB));
                     moistureData[x][y] = (temp = moisture.getNoiseWithSeed(pc, ps, qs
-                                    + otherRidged.getNoiseWithSeed(pc, ps, qs, seedC + seedA)
+                                    + 0.375 * otherRidged.getNoiseWithSeed(pc, ps, qs, seedC + seedA)
                             , seedC));
                     minHeightActual = Math.min(minHeightActual, h);
                     maxHeightActual = Math.max(maxHeightActual, h);
@@ -4545,13 +4538,13 @@ public abstract class WorldMapGenerator implements Serializable {
      * <a href="http://squidpony.github.io/SquidLib/LocalMap.png" >Example map, showing lack of polar ice</a>
      */
     public static class LocalMap extends WorldMapGenerator {
-        protected static final double terrainFreq = 1.45, terrainRidgedFreq = 3.1, heatFreq = 2.1, moistureFreq = 2.125, otherFreq = 3.375;
+        protected static final double terrainFreq = 1.45, terrainRidgedFreq = 2.6, heatFreq = 2.1, moistureFreq = 2.125, otherFreq = 3.375;
         //protected static final double terrainFreq = 1.65, terrainRidgedFreq = 1.8, heatFreq = 2.1, moistureFreq = 2.125, otherFreq = 3.375, riverRidgedFreq = 21.7;
         protected double minHeat0 = Double.POSITIVE_INFINITY, maxHeat0 = Double.NEGATIVE_INFINITY,
                 minHeat1 = Double.POSITIVE_INFINITY, maxHeat1 = Double.NEGATIVE_INFINITY,
                 minWet0 = Double.POSITIVE_INFINITY, maxWet0 = Double.NEGATIVE_INFINITY;
 
-        public final Noise.Ridged2D terrain, otherRidged;
+        public final Noise.Maelstrom2D terrain, otherRidged;
         public final Noise.InverseLayered2D heat, moisture, terrainLayered;
         public final double[][] xPositions,
                 yPositions,
@@ -4668,11 +4661,11 @@ public abstract class WorldMapGenerator implements Serializable {
             yPositions = new double[width][height];
             zPositions = new double[width][height];
 
-            terrain = new Noise.Ridged2D(noiseGenerator, (int) (0.5 + octaveMultiplier * 10), terrainFreq);
+            terrain = new Noise.Maelstrom2D(new Noise.Ridged2D(noiseGenerator, (int) (0.5 + octaveMultiplier * 10), terrainFreq));
             terrainLayered = new Noise.InverseLayered2D(noiseGenerator, (int) (1 + octaveMultiplier * 6), terrainRidgedFreq * 0.325);
             heat = new Noise.InverseLayered2D(noiseGenerator, (int) (0.5 + octaveMultiplier * 3), heatFreq, 0.75);
             moisture = new Noise.InverseLayered2D(noiseGenerator, (int) (0.5 + octaveMultiplier * 4), moistureFreq, 0.55);
-            otherRidged = new Noise.Ridged2D(noiseGenerator, (int) (0.5 + octaveMultiplier * 6), otherFreq);
+            otherRidged = new Noise.Maelstrom2D(new Noise.Ridged2D(noiseGenerator, (int) (0.5 + octaveMultiplier * 6), otherFreq));
         }
 
         /**
@@ -4754,9 +4747,9 @@ public abstract class WorldMapGenerator implements Serializable {
                                     terrain.getNoiseWithSeed(xPos, yPos, seedB - seedA) * 0.5,
                             yPos, seedA) + landModifier - 1.0);
                     heatData[x][y] = (p = heat.getNoiseWithSeed(xPos, yPos
-                                    + otherRidged.getNoiseWithSeed(xPos, yPos, seedB + seedC),
+                                    + 0.375 * otherRidged.getNoiseWithSeed(xPos, yPos, seedB + seedC),
                             seedB));
-                    temp = otherRidged.getNoiseWithSeed(xPos, yPos, seedC + seedA);
+                    temp = 0.375 * otherRidged.getNoiseWithSeed(xPos, yPos, seedC + seedA);
                     moistureData[x][y] = (temp = moisture.getNoiseWithSeed(xPos - temp, yPos + temp, seedC));
 
                     minHeightActual = Math.min(minHeightActual, h);
@@ -5083,9 +5076,9 @@ public abstract class WorldMapGenerator implements Serializable {
                     //h += landModifier - 1.0;
                     heightData[x][y] = h;
                     heatData[x][y] = (p = heat.getNoiseWithSeed(xPos, yPos
-                                    + otherRidged.getNoiseWithSeed(xPos, yPos, seedB + seedC),
+                                    + 0.375 * otherRidged.getNoiseWithSeed(xPos, yPos, seedB + seedC),
                             seedB));
-                    temp = otherRidged.getNoiseWithSeed(xPos, yPos, seedC + seedA);
+                    temp = 0.375 * otherRidged.getNoiseWithSeed(xPos, yPos, seedC + seedA);
                     moistureData[x][y] = (temp = moisture.getNoiseWithSeed(xPos - temp, yPos + temp, seedC));
 
                     minHeightActual = Math.min(minHeightActual, h);

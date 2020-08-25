@@ -123,8 +123,8 @@ World #5, SavoryMelonAlder, completed in 64338 ms
 //        path = "out/worldsAnimated/" + date + "/SpaceView/";
 //        path = "out/worldsAnimated/" + date + "/SpaceViewMutantClassic/";
 //        path = "out/worldsAnimated/" + date + "/SpaceViewMutantFoam/";
-//        path = "out/worldsAnimated/" + date + "/SpaceViewMutantRidged/";
-        path = "out/worldsAnimated/" + date + "/SpaceViewMutantMaelstrom/";
+        path = "out/worldsAnimated/" + date + "/SpaceViewMutantRidged/";
+//        path = "out/worldsAnimated/" + date + "/SpaceViewMutantMaelstrom/";
 //        path = "out/worldsAnimated/" + date + "/HyperellipseWrithing/";
 //        path = "out/worldsAnimated/" + date + "/Sphere_Classic/";
 //        path = "out/worldsAnimated/" + date + "/Hyperellipse/";
