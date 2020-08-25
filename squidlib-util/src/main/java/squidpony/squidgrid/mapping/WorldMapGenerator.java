@@ -2842,14 +2842,14 @@ public abstract class WorldMapGenerator implements Serializable {
             yPositions = new double[width][height];
             zPositions = new double[width][height];
             edges = new int[height << 1];
-            terrainRidged = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 10), terrainFreq);
+            terrainRidged = new Noise.Maelstrom3D(new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 10), terrainFreq));
             terrainBasic = new Noise.Scaled3D(noiseGenerator,  terrainRidgedFreq * 0.325); 
 //                    new Noise.InverseLayered3D(noiseGenerator, (int) (1 + octaveMultiplier * 6), terrainRidgedFreq * 0.325, 0.475);
             heat = new Noise.Scaled3D(noiseGenerator, heatFreq);
 //                    new Noise.InverseLayered3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 3), heatFreq, 0.75);
             moisture = new Noise.Scaled3D(noiseGenerator, moistureFreq); 
 //                    new Noise.InverseLayered3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 4), moistureFreq, 0.55);
-            otherRidged = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 6), otherFreq);
+            otherRidged = new Noise.Maelstrom3D(new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 6), otherFreq));
         }
 
         /**
