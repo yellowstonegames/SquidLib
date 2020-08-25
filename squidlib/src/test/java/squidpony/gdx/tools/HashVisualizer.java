@@ -1633,30 +1633,30 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                         Noise.seamless2D(seamless[0][0], -31337, 1, turb4D);
                                         total = Noise.total;
                                         break;
-                                    case 40:
-                                        ArrayTools.fill(seamless[0], 0.0);
-                                        ArrayTools.fill(seamless[1], 0.0);
-                                        ArrayTools.fill(seamless[2], 0.0);
-                                        Noise.seamless3D(seamless[0], 1337, 1, slick6D);
-                                        Noise.seamless3D(seamless[1], 123456, 1, slick6D);
-                                        Noise.seamless3D(seamless[2], -9999, 1, slick6D);
-                                        break;
-                                    case 41:
-                                        ArrayTools.fill(seamless[0], 0.0);
-                                        Noise.seamless3D(seamless[0], -31337, 1, slick6D);
-                                        break;
-                                    case 42:
-                                        ArrayTools.fill(seamless[0], 0.0);
-                                        ArrayTools.fill(seamless[1], 0.0);
-                                        ArrayTools.fill(seamless[2], 0.0);
-                                        Noise.seamless2D(seamless[0][0], 1337, 1, slick4D);
-                                        Noise.seamless2D(seamless[1][0], 123456, 1, slick4D);
-                                        Noise.seamless2D(seamless[2][0], -9999, 1, slick4D);
-                                        break;
-                                    case 43:
-                                        ArrayTools.fill(seamless[0], 0.0);
-                                        Noise.seamless2D(seamless[0][0], -31337, 1, slick4D);
-                                        break;
+//                                    case 40:
+//                                        ArrayTools.fill(seamless[0], 0.0);
+//                                        ArrayTools.fill(seamless[1], 0.0);
+//                                        ArrayTools.fill(seamless[2], 0.0);
+//                                        Noise.seamless3D(seamless[0], 1337, 1, slick6D);
+//                                        Noise.seamless3D(seamless[1], 123456, 1, slick6D);
+//                                        Noise.seamless3D(seamless[2], -9999, 1, slick6D);
+//                                        break;
+//                                    case 41:
+//                                        ArrayTools.fill(seamless[0], 0.0);
+//                                        Noise.seamless3D(seamless[0], -31337, 1, slick6D);
+//                                        break;
+//                                    case 42:
+//                                        ArrayTools.fill(seamless[0], 0.0);
+//                                        ArrayTools.fill(seamless[1], 0.0);
+//                                        ArrayTools.fill(seamless[2], 0.0);
+//                                        Noise.seamless2D(seamless[0][0], 1337, 1, slick4D);
+//                                        Noise.seamless2D(seamless[1][0], 123456, 1, slick4D);
+//                                        Noise.seamless2D(seamless[2][0], -9999, 1, slick4D);
+//                                        break;
+//                                    case 43:
+//                                        ArrayTools.fill(seamless[0], 0.0);
+//                                        Noise.seamless2D(seamless[0][0], -31337, 1, slick4D);
+//                                        break;
                                     case 48:
                                         ArrayTools.fill(seamless[0], 0.0);
                                         ArrayTools.fill(seamless[1], 0.0);
@@ -1693,18 +1693,18 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                         ArrayTools.fill(seamless[0], 0.0);
                                         Noise.seamless3D(seamless[0], -31337, 1, SeededNoise.instance);
                                         break;
-                                    case 56:
-                                        ArrayTools.fill(seamless[0], 0.0);
-                                        ArrayTools.fill(seamless[1], 0.0);
-                                        ArrayTools.fill(seamless[2], 0.0);
-                                        Noise.seamless2D(seamless[0][0], 1337, 1, SeededNoise.instance);
-                                        Noise.seamless2D(seamless[1][0], 123456, 1, SeededNoise.instance);
-                                        Noise.seamless2D(seamless[2][0], -9999, 1, SeededNoise.instance);
-                                        break;
-                                    case 57:
-                                        ArrayTools.fill(seamless[0], 0.0);
-                                        Noise.seamless2D(seamless[0][0], -31337, 1, SeededNoise.instance);
-                                        break;
+//                                    case 56:
+//                                        ArrayTools.fill(seamless[0], 0.0);
+//                                        ArrayTools.fill(seamless[1], 0.0);
+//                                        ArrayTools.fill(seamless[2], 0.0);
+//                                        Noise.seamless2D(seamless[0][0], 1337, 1, SeededNoise.instance);
+//                                        Noise.seamless2D(seamless[1][0], 123456, 1, SeededNoise.instance);
+//                                        Noise.seamless2D(seamless[2][0], -9999, 1, SeededNoise.instance);
+//                                        break;
+//                                    case 57:
+//                                        ArrayTools.fill(seamless[0], 0.0);
+//                                        Noise.seamless2D(seamless[0][0], -31337, 1, SeededNoise.instance);
+//                                        break;
                                     case 68:
                                         TuringPattern.initializeInto(turing, ctr);
                                         break;
@@ -4063,27 +4063,47 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 //                        }
                         break;
                     case 56:
-                        Gdx.graphics.setTitle("Seeded Seamless 2D Color Noise, three octaves per channel at " + Gdx.graphics.getFramesPerSecond() + " FPS");
+                        Gdx.graphics.setTitle("Jack 3D Color Noise, one octave per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                back[x][y] = 
+                                back[x][y] =
                                         floatGet(
-                                                (float) (seamless[0][0][x+ctr & 63][y+ctr & 63] * 0.5 + 0.5),
-                                                (float) (seamless[1][0][x+ctr & 63][y+ctr & 63] * 0.5 + 0.5),
-                                                (float) (seamless[2][0][x+ctr & 63][y+ctr & 63] * 0.5 + 0.5),
+                                                ((float)JackNoise.noise(x * 0.03125 + 20, y * 0.03125 + 30, ctr * 0.03125 + 10, 1234) * 0.50f) + 0.50f,
+                                                ((float)JackNoise.noise(x * 0.03125 + 30, y * 0.03125 + 10, ctr * 0.03125 + 20, 54321) * 0.50f) + 0.50f,
+                                                ((float)JackNoise.noise(x * 0.03125 + 10, y * 0.03125 + 20, ctr * 0.03125 + 30, 1234321) * 0.50f) + 0.50f,
                                                 1.0f);
                             }
                         }
+//                        Gdx.graphics.setTitle("Seeded Seamless 2D Color Noise, three octaves per channel at " + Gdx.graphics.getFramesPerSecond() + " FPS");
+//                        for (int x = 0; x < width; x++) {
+//                            for (int y = 0; y < height; y++) {
+//                                back[x][y] = 
+//                                        floatGet(
+//                                                (float) (seamless[0][0][x+ctr & 63][y+ctr & 63] * 0.5 + 0.5),
+//                                                (float) (seamless[1][0][x+ctr & 63][y+ctr & 63] * 0.5 + 0.5),
+//                                                (float) (seamless[2][0][x+ctr & 63][y+ctr & 63] * 0.5 + 0.5),
+//                                                1.0f);
+//                            }
+//                        }
                         break;
                     case 57: {
-                        Gdx.graphics.setTitle("Seeded Seamless 2D Noise, three octaves at " + Gdx.graphics.getFramesPerSecond() + " FPS");
+                        Gdx.graphics.setTitle("Jack 3D Noise, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                bright = (float) (seamless[0][0][x+ctr & 63][y+ctr & 63] * 0.5 + 0.5);
+                                bright = (float)(JackNoise.noise(x * 0.03125, y * 0.03125, ctr * 0.03125, 123456) * 0.50f) + 0.50f;
                                 back[x][y] = getGray(bright);
                             }
                         }
+
                     }
+//                        Gdx.graphics.setTitle("Seeded Seamless 2D Noise, three octaves at " + Gdx.graphics.getFramesPerSecond() + " FPS");
+//                        for (int x = 0; x < width; x++) {
+//                            for (int y = 0; y < height; y++) {
+//                                bright = (float) (seamless[0][0][x+ctr & 63][y+ctr & 63] * 0.5 + 0.5);
+//                                back[x][y] = getGray(bright);
+//                            }
+//                        }
+//                    }
                     break;
                     case 59:
                         Gdx.graphics.setTitle("Ecto Noise 2D, 1 octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
