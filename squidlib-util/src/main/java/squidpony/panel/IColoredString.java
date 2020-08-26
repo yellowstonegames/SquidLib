@@ -1,6 +1,6 @@
 package squidpony.panel;
 
-import squidpony.StringKit;
+import regexodus.Pattern;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -444,7 +444,10 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 			// delegate to the buf-appending overload
 			return wrap(width, new ArrayList<IColoredString<T>>());
 		}
-
+		
+		private static final Pattern eitherPattern = Pattern.compile("[^ \u4020\u8020\uC020]+|[ \u4020\u8020\uC020]+"), 
+				spacePattern = Pattern.compile("[ \u4020\u8020\uC020]+");
+		
 		@Override
 		public List<IColoredString<T>> wrap(int width, List<IColoredString<T>> buf) {
 			if (width <= 0) {
@@ -469,31 +472,21 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 			while (it.hasNext()) {
 				final Bucket<T> next = it.next();
 				final String bucket = next.getText();
-				final String[] split = StringKit.split(bucket," ");
+				final ArrayList<String> split = eitherPattern.matcher(bucket).findAll().asList(); 
 				final T color = next.color;
-				for (int i = 0; i < split.length; i++) {
+				for (int i = 0; i < split.size(); i++) {
 					// This section was needed when using String.split() above, but not for
 					// StringKit.split(), which keeps leading and trailing delimiters.
-//					if (i == split.length - 1 && bucket.endsWith(" "))
+//					if (i == split.size() - 1 && bucket.matches(".*[ \u4020\u8020\uC020]$"))
 //						/*
 //						 * Do not lose trailing space that got eaten by
 //						 * 'bucket.split'.
 //						 */
-//						split[i] = split[i] + " ";
-					final String chunk = split[i];
+//						split.set(i, split.get(i) + " ");
+					final String chunk = split.get(i);
 					final int chunklen = chunk.length();
-					final boolean addLeadingSpace = 0 < curlen && 0 < i;
-					if (curlen + chunklen + (addLeadingSpace ? 1 : 0) <= width) {
-						if (addLeadingSpace) {
-							/*
-							 * Do not forget space on which chunk got split. If
-							 * the space is offscreen, it's harmless, hence not
-							 * checking it.
-							 */
-							current.append(' ', null);
-							curlen++;
-						}
-
+					final boolean addLeadingSpace = false;// 0 < curlen && 0 < i;
+					if (curlen + chunklen <= width) {
 						/* Can add it */
 						current.append(chunk, color);
 						/* Extend size */
@@ -508,9 +501,12 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 						 */
 						if (chunklen <= width) {
 							current = create();
-							current.append(chunk, color);
-							/* Reinit size */
-							curlen = chunklen;
+							if(!spacePattern.matches(chunk)) {
+								current.append(chunk, color);
+								/* Reinit size */
+								curlen = chunklen;
+							}
+							else curlen = 0;
 						} else {
 							/*
 							 * This word is too long. Adding it and preparing a

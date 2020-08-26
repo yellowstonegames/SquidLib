@@ -24,7 +24,7 @@ public class TinyTest extends ApplicationAdapter {
     private SparseLayers layers;
     private TextCellFactory font;
 //    public static final int GRID_WIDTH = 40, GRID_HEIGHT = 25, CELL_WIDTH = 7, CELL_HEIGHT = 12;
-    public static final int GRID_WIDTH = 40, GRID_HEIGHT = 14, CELL_WIDTH = 11, CELL_HEIGHT = 21;
+    public static final int GRID_WIDTH = 40, GRID_HEIGHT = 15, CELL_WIDTH = 11, CELL_HEIGHT = 21;
     @Override
     public void create() {
         batch = new FilterBatch();
@@ -33,7 +33,7 @@ public class TinyTest extends ApplicationAdapter {
 //        font = new TextCellFactory().font(DefaultResources.getSevenTwelveFont());
         layers = new SparseLayers(GRID_WIDTH, GRID_HEIGHT, CELL_WIDTH, CELL_HEIGHT, font);
         List<IColoredString<Color>> messages = new ArrayList<>(20);
-        GDXMarkup.instance.colorString("[Aurora Fusion Red]Baal, [*]Agares, [/]Vassago[*], Samigina[/], Marbas, [*]Valefor, [/]Amon[*], Barbatos... [*]Heed this![*]").wrap(40, messages);
+        GDXMarkup.instance.colorString("[Aurora Fusion Red]Baal, [*]Agares, [/]Vassago[*], Samigina[/], Marbas, [*]Valefor, [/]Amon[*], Barbatos... [*]Heed thy master![*]").wrap(40, messages);
         GDXMarkup.instance.colorString("ABCDEFGHIJ0123456789abcdefghij01234567" ).wrap(40, messages);
         GDXMarkup.instance.colorString("ABCDEFGHIJ0123456789abcdefghij012345678").wrap(40, messages);
         GDXMarkup.instance.colorString("ABCDEFGHIJ0123456789 abcdefghij01234567").wrap(40, messages);
