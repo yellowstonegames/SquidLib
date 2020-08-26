@@ -5442,15 +5442,15 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
     }
 
     public float singleHoney(int seed, float x, float y) {
-        final float a = singleSimplex(seed, x, y);
-        seed += 0x9E3779BD;
-        seed ^= seed >>> 14;
-        final float b = singleSimplex(seed, y + a * 0.25f, x);
-        final float result = (a - b) * 0.5f;
-        return result;
-//        return (result <= 0f)
-//                ? (result * result) - 1
-//                : 1 - ((result - 1) * (result - 1));
+        return singleSimplex(seed, x, y, 0.5f * singleSimplex(seed * 0xDAB ^ 0x9E3779BD, x, y));
+//        return singleSimplex(seed, x, y + 0.25f * singleSimplex(seed * 0xDAB ^ 0x9E3779BD, y, x));
+//        return singleSimplex(seed, x + NumberTools.swayRandomized(seed, y) * 0.25f, y + NumberTools.swayRandomized(seed, x) * 0.25f);
+        
+//        final float a = singleSimplex(seed, x, y);
+//        seed += 0x9E3779BD;
+//        seed ^= seed >>> 14;
+//        final float b = singleSimplex(seed, x + a * 0.25f, y);
+//        return NumberTools.sin_((a + b) * 0.25f); 
     }
 
     public float getHoneyFractal(float x, float y) {
