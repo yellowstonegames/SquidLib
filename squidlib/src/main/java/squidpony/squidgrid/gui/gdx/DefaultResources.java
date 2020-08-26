@@ -69,7 +69,7 @@ public class DefaultResources implements LifecycleListener {
             square1, square2,
             unicode1, unicode2,
             arial15, tiny, lessTiny,
-            sevenTwelve, computerSaysNo;
+            sevenTwelve, computerSaysNo, cozette;
 
     private TextCellFactory distanceNarrow, distanceSquare, typewriterDistanceNarrow,
             distancePrint, distanceClean, distanceCode, distanceCodeJP,
@@ -93,6 +93,7 @@ public class DefaultResources implements LifecycleListener {
             lessTinyName = "Monty-8x20.fnt", lessTinyTexture = "Monty-8x20.png",
             sevenTwelveName = "7-12-serif.fnt", sevenTwelveTexture = "7-12-serif.png",
             computerSaysNoName = "ComputerSaysNo.fnt", computerSaysNoTexture = "ComputerSaysNo.png",
+            cozetteName = "Cozette.fnt", cozetteTexture = "Cozette.png",
             smoothName = "Inconsolata-LGC-8x18.fnt", smoothTexture = "Inconsolata-LGC-8x18.png",
             smoothNameLarge = "Inconsolata-LGC-12x24.fnt", smoothTextureLarge = "Inconsolata-LGC-12x24.png",
             smoothSquareName = "Inconsolata-LGC-Square-25x25.fnt", smoothSquareTexture = "Inconsolata-LGC-Square-25x25.png",
@@ -361,7 +362,7 @@ public class DefaultResources implements LifecycleListener {
             try {
                 instance.arial15 = new BitmapFont();
                 //instance.narrow1.getData().padBottom = instance.narrow1.getDescent();
-            } catch (Exception e) {
+            } catch (Exception ignored) {
             }
         }
         return copyFont(instance.arial15);
@@ -384,7 +385,7 @@ public class DefaultResources implements LifecycleListener {
             try {
                 instance.square1 = new BitmapFont(Gdx.files.internal(squareName), Gdx.files.internal(squareTexture), false);
                 //instance.square1.getData().padBottom = instance.square1.getDescent();
-            } catch (Exception e) {
+            } catch (Exception ignored) {
             }
         }
         return copyFont(instance.square1);
@@ -407,7 +408,7 @@ public class DefaultResources implements LifecycleListener {
             try {
                 instance.square2 = new BitmapFont(Gdx.files.internal(squareNameLarge), Gdx.files.internal(squareTextureLarge), false);
                 //instance.square2.getData().padBottom = instance.square2.getDescent();
-            } catch (Exception e) {
+            } catch (Exception ignored) {
             }
         }
         return copyFont(instance.square2);
@@ -430,7 +431,7 @@ public class DefaultResources implements LifecycleListener {
             try {
                 instance.narrow1 = new BitmapFont(Gdx.files.internal(narrowName), Gdx.files.internal(narrowTexture), false);
                 //instance.narrow1.getData().padBottom = instance.narrow1.getDescent();
-            } catch (Exception e) {
+            } catch (Exception ignored) {
             }
         }
         return copyFont(instance.narrow1);
@@ -454,7 +455,7 @@ public class DefaultResources implements LifecycleListener {
             try {
                 instance.narrow2 = new BitmapFont(Gdx.files.internal(narrowNameLarge), Gdx.files.internal(narrowTextureLarge), false);
                 //instance.narrow2.getData().padBottom = instance.narrow2.getDescent();
-            } catch (Exception e) {
+            } catch (Exception ignored) {
             }
         }
         return copyFont(instance.narrow2);
@@ -477,7 +478,7 @@ public class DefaultResources implements LifecycleListener {
             try {
                 instance.narrow3 = new BitmapFont(Gdx.files.internal(narrowNameExtraLarge), Gdx.files.internal(narrowTextureExtraLarge), false);
                 //instance.narrow3.getData().padBottom = instance.narrow3.getDescent();
-            } catch (Exception e) {
+            } catch (Exception ignored) {
             }
         }
         return copyFont(instance.narrow3);
@@ -503,7 +504,7 @@ public class DefaultResources implements LifecycleListener {
             try {
                 instance.smooth1 = new BitmapFont(Gdx.files.internal(smoothName), Gdx.files.internal(smoothTexture), false);
                 //instance.smooth1.getData().padBottom = instance.smooth1.getDescent();
-            } catch (Exception e) {
+            } catch (Exception ignored) {
             }
         }
         return copyFont(instance.smooth1);
@@ -528,7 +529,7 @@ public class DefaultResources implements LifecycleListener {
             try {
                 instance.smooth2 = new BitmapFont(Gdx.files.internal(smoothNameLarge), Gdx.files.internal(smoothTextureLarge), false);
                 //instance.smooth2.getData().padBottom = instance.smooth2.getDescent();
-            } catch (Exception e) {
+            } catch (Exception ignored) {
             }
         }
         return copyFont(instance.smooth2);
@@ -551,7 +552,7 @@ public class DefaultResources implements LifecycleListener {
             try {
                 instance.unicode1 = new BitmapFont(Gdx.files.internal(unicodeName), Gdx.files.internal(unicodeTexture), false);
                 //instance.unicode1.getData().padBottom = instance.unicode1.getDescent();
-            } catch (Exception e) {
+            } catch (Exception ignored) {
             }
         }
         return copyFont(instance.unicode1);
@@ -575,7 +576,7 @@ public class DefaultResources implements LifecycleListener {
             try {
                 instance.unicode2 = new BitmapFont(Gdx.files.internal(unicodeNameLarge), Gdx.files.internal(unicodeTextureLarge), false);
                 //instance.unicode2.getData().padBottom = instance.unicode2.getDescent();
-            } catch (Exception e) {
+            } catch (Exception ignored) {
             }
         }
         return copyFont(instance.unicode2);
@@ -602,7 +603,7 @@ public class DefaultResources implements LifecycleListener {
             try {
                 instance.smoothSquare = new BitmapFont(Gdx.files.internal(smoothSquareName), Gdx.files.internal(smoothSquareTexture), false);
                 //instance.smoothSquare.getData().padBottom = instance.smoothSquare.getDescent();
-            } catch (Exception e) {
+            } catch (Exception ignored) {
             }
         }
         return copyFont(instance.smoothSquare);
@@ -630,7 +631,7 @@ public class DefaultResources implements LifecycleListener {
             try {
                 instance.tiny = new BitmapFont(Gdx.files.internal(tinyName), Gdx.files.internal(tinyTexture), false);
                 //instance.narrow1.getData().padBottom = instance.narrow1.getDescent();
-            } catch (Exception e) {
+            } catch (Exception ignored) {
             }
         }
         return copyFont(instance.tiny);
@@ -658,7 +659,7 @@ public class DefaultResources implements LifecycleListener {
         {
             try {
                 instance.lessTiny = new BitmapFont(Gdx.files.internal(lessTinyName), Gdx.files.internal(lessTinyTexture), false);
-            } catch (Exception e) {
+            } catch (Exception ignored) {
             }
         }
         return copyFont(instance.lessTiny);
@@ -687,7 +688,7 @@ public class DefaultResources implements LifecycleListener {
         {
             try {
                 instance.sevenTwelve = new BitmapFont(Gdx.files.internal(sevenTwelveName), Gdx.files.internal(sevenTwelveTexture), false);
-            } catch (Exception e) {
+            } catch (Exception ignored) {
             }
         }
         final BitmapFont cpy = copyFont(instance.sevenTwelve);
@@ -830,6 +831,32 @@ public class DefaultResources implements LifecycleListener {
     }
 
     /**
+     * Returns a 7x14px pixel font with broad coverage of Unicode, including Greek, Cyrillic, Braille, and tech-related
+     * icons. The font is <a href="https://github.com/slavfox/Cozette">Cozette by slavfox</a>. Caches the font for later
+     * calls. Attribution is not required; Cozette is MIT-licensed, and we aren't distributing any of its files. Still,
+     * credit goes to slavfox for this nice, highly-usable font.
+     * <br>
+     * Needs files:
+     * <ul>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Cozette.fnt</li>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Cozette.png</li>
+     * </ul>
+     * @return the BitmapFont object representing CozetteVector.ttf at size 12 pt
+     */
+    public static BitmapFont getCozyFont()
+    {
+        initialize();
+        if(instance.cozette == null)
+        {
+            try {
+                instance.cozette = new BitmapFont(Gdx.files.internal(cozetteName), Gdx.files.internal(cozetteTexture), false);
+            } catch (Exception ignored) {
+            }
+        }
+        return copyFont(instance.cozette);
+    }
+
+    /**
      * Returns a TextCellFactory already configured to use a square font that should scale cleanly to many sizes. Caches
      * the result for later calls.
      * <br>
@@ -852,7 +879,7 @@ public class DefaultResources implements LifecycleListener {
         {
             try {
                 instance.distanceSquare = new TextCellFactory().defaultDistanceFieldFont();
-            } catch (Exception e) {
+            } catch (Exception ignored) {
             }
         }
         if(instance.distanceSquare != null)
@@ -889,7 +916,7 @@ public class DefaultResources implements LifecycleListener {
                 instance.distanceHeavySquare = new TextCellFactory()
                         .fontDistanceField(distanceFieldHeavySquare, distanceFieldHeavySquareTexture)
                         .setSmoothingMultiplier(2.125f);
-            } catch (Exception e) {
+            } catch (Exception ignored) {
             }
         }
         if(instance.distanceHeavySquare != null)
@@ -933,7 +960,7 @@ public class DefaultResources implements LifecycleListener {
             try {
                 instance.msdfCurvySquare = new TextCellFactory()
                         .fontMultiDistanceField(crispCurvySquare, crispCurvySquareTexture).setSmoothingMultiplier(6f);
-            } catch (Exception e) {
+            } catch (Exception ignored) {
             }
         }
         if(instance.msdfCurvySquare != null)
@@ -973,7 +1000,7 @@ public class DefaultResources implements LifecycleListener {
             try {
                 instance.msdfOctagonalSquare = new TextCellFactory()
                         .fontMultiDistanceField(crispOctagonalSquare, crispOctagonalSquareTexture).setSmoothingMultiplier(3f);
-            } catch (Exception e) {
+            } catch (Exception ignored) {
             }
         }
         if(instance.msdfOctagonalSquare != null)
@@ -2251,6 +2278,10 @@ public class DefaultResources implements LifecycleListener {
         if(computerSaysNo != null){
             computerSaysNo.dispose();
             computerSaysNo = null;
+        }
+        if(cozette != null){
+            cozette.dispose();
+            cozette = null;
         }
         if(sevenTwelve != null){
             sevenTwelve.dispose();
