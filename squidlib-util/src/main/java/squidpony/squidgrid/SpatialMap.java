@@ -600,13 +600,14 @@ public class SpatialMap<I, E> implements Iterable<E> {
      * @param a the array to replace; should usually have the same length as this data structure's size.
      * @return an array of elements that should be the same as the changed array originally passed as a parameter.
      */
+    @SuppressWarnings("unchecked")
     public E[] toArray(E[] a)
     {
-        Collection<SpatialTriple<I,E>> contents = itemMapping.values();
-        int i = 0;
-        for (SpatialTriple<I,E> triple : contents) {
+        final int size = size();
+        if (a.length < size) a = Arrays.copyOf(a, size);
+        for (int i = 0; i < size; i++) {
             if(i < a.length)
-                a[i] = triple.element;
+                a[i] = itemMapping.getAt(i).element;
             else
                 break;
             i++;

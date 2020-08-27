@@ -1154,7 +1154,7 @@ public class IntIntOrderedMap implements Serializable, Cloneable {
 
         @SuppressWarnings("unchecked")
         public <T> T[] toArray(T[] a) {
-            if (a == null || a.length < size()) a = (T[]) new Object[size()];
+            if (a.length < size) a = Arrays.copyOf(a, size);
             objectUnwrap(iterator(), a);
             return a;
         }
@@ -1341,7 +1341,7 @@ public class IntIntOrderedMap implements Serializable, Cloneable {
         @SuppressWarnings("unchecked")
         @Override
         public <T> T[] toArray(T[] a) {
-            if (a == null || a.length < size()) a = (T[]) new Object[size()];
+            if (a.length < size) a = Arrays.copyOf(a, size);
             unwrap(iterator(), a);
             return a;
         }

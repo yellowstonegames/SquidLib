@@ -38,8 +38,7 @@ public class SquidAIDemo extends ApplicationAdapter {
     private Color[][] colors, bgColors;
     private int[][] lights;
     private LOS los;
-    private int width, height;
-    private int cellWidth, cellHeight;
+    public static final int gridWidth = 40, gridHeight = 40, cellWidth = 6, cellHeight = 12;
     private int numMonsters = 16;
 
     private SquidInput input;
@@ -59,17 +58,13 @@ public class SquidAIDemo extends ApplicationAdapter {
     @Override
     public void create () {
         batch = new FilterBatch();
-        width = 40;
-        height = 40;
-        cellWidth = 6;
-        cellHeight = 12;
-        display = new SquidLayers(width * 2, height, cellWidth, cellHeight, DefaultResources.narrowName);
+        display = new SquidLayers(gridWidth * 2, gridHeight, cellWidth, cellHeight, DefaultResources.getCozyFont());
         display.setAnimationDuration(0.35f);
         stage = new Stage(new ScreenViewport(), batch);
 
         rng = new RNG(0x1337BEEF);
 
-        dungeonGen = new DungeonGenerator(width, height, rng);
+        dungeonGen = new DungeonGenerator(gridWidth, gridHeight, rng);
 //        dungeonGen.addWater(10);
         //dungeonGen.addDoors(15, true);
 
@@ -340,7 +335,8 @@ public class SquidAIDemo extends ApplicationAdapter {
 
         OrderedMap<Coord, ArrayList<Coord>> ideal = whichTech.idealLocations(user, visibleTargets, whichAllies);
         Coord targetCell = null;
-        if(!ideal.isEmpty()) targetCell = ideal.firstKey();
+        if(!ideal.isEmpty())
+            targetCell = ideal.firstKey();
 
         if(targetCell != null)
         {
@@ -366,24 +362,22 @@ public class SquidAIDemo extends ApplicationAdapter {
                 }
             }
         }
-        /*
         else
         {
-
-            System.out.println("NO ATTACK POSITION: User at (" + user.x + "," + user.y + ") using " +
-                    whichTech.name);
-
-            display.tint(user.x * 2    , user.y, highlightColor, 0, display.getAnimationDuration() * 3);
-            display.tint(user.x * 2 + 1, user.y, highlightColor, 0, display.getAnimationDuration() * 3);
+//
+//            System.out.println("NO ATTACK POSITION: User at (" + user.x + "," + user.y + ") using " +
+//                    whichTech.name);
+            display.tint(user.x * 2    , user.y, SColor.GOLDEN_YELLOW, 0, display.getAnimationDuration() * 3);
+            display.tint(user.x * 2 + 1, user.y, SColor.GOLDEN_YELLOW, 0, display.getAnimationDuration() * 3);
         }
-        */
+        
         whichAllies.add(user);
         phase = Phase.ATTACK_ANIM;
     }
     public void putMap()
     {
-        for (int i = 0; i < width; i++) {
-            for (int j = 0; j < height; j++) {
+        for (int i = 0; i < gridWidth; i++) {
+            for (int j = 0; j < gridHeight; j++) {
                 display.put(i * 2, j, lineDungeon[i * 2][j], colors[i][j], bgColors[i][j], lights[i][j]);
                 display.put(i * 2 + 1, j, lineDungeon[i * 2 + 1][j], colors[i][j], bgColors[i][j], lights[i][j]);
             }
@@ -416,8 +410,8 @@ public class SquidAIDemo extends ApplicationAdapter {
         if (blueWins) {
             // still need to display the map, then write over it with a message.
             putMap();
-            display.putBoxedString(width / 2 - 11, height / 2 - 1, "  BLUE TEAM WINS!  ");
-            display.putBoxedString(width / 2 - 11, height / 2 + 5, "     q to quit.    ");
+            display.putBoxedString(gridWidth / 2 - 11, gridHeight / 2 - 1, "  BLUE TEAM WINS!  ");
+            display.putBoxedString(gridWidth / 2 - 11, gridHeight / 2 + 5, "     q to quit.    ");
 
             // because we return early, we still need to draw.
             stage.draw();
@@ -429,8 +423,8 @@ public class SquidAIDemo extends ApplicationAdapter {
         else if(redWins)
         {
             putMap();
-            display.putBoxedString(width / 2 - 11, height / 2 - 1, "   RED TEAM WINS!  ");
-            display.putBoxedString(width / 2 - 11, height / 2 + 5, "     q to quit.    ");
+            display.putBoxedString(gridWidth / 2 - 11, gridHeight / 2 - 1, "   RED TEAM WINS!  ");
+            display.putBoxedString(gridWidth / 2 - 11, gridHeight / 2 + 5, "     q to quit.    ");
 
             // because we return early, we still need to draw.
             stage.draw();
@@ -530,7 +524,8 @@ public class SquidAIDemo extends ApplicationAdapter {
     public static void main (String[] arg) {
         Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
         config.setTitle("SquidLib GDX AI Demo");
-        config.setWindowedMode(40 * 2 * 6, 40 * 12);
+        config.setWindowedMode(gridWidth * cellWidth * 2, gridHeight * cellHeight);
+        config.useVsync(true);
         config.setWindowIcon(Files.FileType.Internal, "Tentacle-128.png", "Tentacle-64.png", "Tentacle-32.png", "Tentacle-16.png");
         new Lwjgl3Application(new SquidAIDemo(), config);
     }
