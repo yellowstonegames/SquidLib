@@ -1492,8 +1492,9 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
     @Override
     public <T> T[] toArray(T[] a) {
         final int size = size();
+        if (a.length < size) a = Arrays.copyOf(a, size);
         objectUnwrap(iterator(), a);
-        if (size < a.length)
+        if (containsNull)
             a[size] = null;
         return a;
     }

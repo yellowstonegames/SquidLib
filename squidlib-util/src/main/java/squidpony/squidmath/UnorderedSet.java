@@ -1011,7 +1011,8 @@ public class UnorderedSet<K> implements Set<K>, java.io.Serializable, Cloneable 
 
     @Override
     public <T> T[] toArray(T[] a) {
-        final int size = this.size;
+        final int size = size();
+        if (a.length < size) a = Arrays.copyOf(a, size);
         objectUnwrap(iterator(), a);
         if (size < a.length)
             a[size] = null;

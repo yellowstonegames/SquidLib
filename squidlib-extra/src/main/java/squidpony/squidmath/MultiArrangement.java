@@ -1143,10 +1143,9 @@ public class MultiArrangement<K> implements Iterable<K>, Serializable, Cloneable
             return key[last];
         }
 
-        @SuppressWarnings("unchecked")
         @Override
         public <T> T[] toArray(T[] a) {
-            if (a == null || a.length < size()) a = (T[]) new Object[size()];
+            if (a.length < size) a = Arrays.copyOf(a, size);
             unwrap(iterator(), a);
             return a;
         }
