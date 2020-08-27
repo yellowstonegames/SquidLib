@@ -69,7 +69,7 @@ public class DefaultResources implements LifecycleListener {
             square1, square2,
             unicode1, unicode2,
             arial15, tiny, lessTiny,
-            sevenTwelve, computerSaysNo, cozette;
+            sevenTwelve, computerSaysNo, cozette, cozetteOutlined;
 
     private TextCellFactory distanceNarrow, distanceSquare, typewriterDistanceNarrow,
             distancePrint, distanceClean, distanceCode, distanceCodeJP,
@@ -94,6 +94,7 @@ public class DefaultResources implements LifecycleListener {
             sevenTwelveName = "7-12-serif.fnt", sevenTwelveTexture = "7-12-serif.png",
             computerSaysNoName = "ComputerSaysNo.fnt", computerSaysNoTexture = "ComputerSaysNo.png",
             cozetteName = "Cozette.fnt", cozetteTexture = "Cozette.png",
+            cozetteOutlinedName = "CozetteOutlined.fnt", cozetteOutlinedTexture = "CozetteOutlined.png",
             smoothName = "Inconsolata-LGC-8x18.fnt", smoothTexture = "Inconsolata-LGC-8x18.png",
             smoothNameLarge = "Inconsolata-LGC-12x24.fnt", smoothTextureLarge = "Inconsolata-LGC-12x24.png",
             smoothSquareName = "Inconsolata-LGC-Square-25x25.fnt", smoothSquareTexture = "Inconsolata-LGC-Square-25x25.png",
@@ -854,6 +855,36 @@ public class DefaultResources implements LifecycleListener {
             }
         }
         return copyFont(instance.cozette);
+    }
+
+    /**
+     * Returns a 7x14px pixel font with broad coverage of Unicode, including Greek, Cyrillic, Braille, and tech-related
+     * icons, with a black outline applied around the white inner strokes. The outline typically won't be colored when
+     * the rest of the font is, but the inner stroke changes color normally. The font is
+     * <a href="https://github.com/slavfox/Cozette">Cozette by slavfox</a>. Caches the font for later
+     * calls. Attribution is not required; Cozette is MIT-licensed, and we aren't distributing any of its files. Still,
+     * credit goes to slavfox for this nice, highly-usable font.
+     * <br>
+     * Using this font in a TextCellFactory is experimental; it should be usable in scene2d.ui widgets, though.
+     * <br>
+     * Needs files:
+     * <ul>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/CozetteOutlined.fnt</li>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/CozetteOutlined.png</li>
+     * </ul>
+     * @return the BitmapFont object representing CozetteVector.ttf at size 12 pt with a square outline applied
+     */
+    public static BitmapFont getCozyOutlinedFont()
+    {
+        initialize();
+        if(instance.cozetteOutlined == null)
+        {
+            try {
+                instance.cozetteOutlined = new BitmapFont(Gdx.files.internal(cozetteOutlinedName), Gdx.files.internal(cozetteOutlinedTexture), false);
+            } catch (Exception ignored) {
+            }
+        }
+        return copyFont(instance.cozetteOutlined);
     }
 
     /**
@@ -2282,6 +2313,10 @@ public class DefaultResources implements LifecycleListener {
         if(cozette != null){
             cozette.dispose();
             cozette = null;
+        }
+        if(cozetteOutlined != null){
+            cozetteOutlined.dispose();
+            cozetteOutlined = null;
         }
         if(sevenTwelve != null){
             sevenTwelve.dispose();
