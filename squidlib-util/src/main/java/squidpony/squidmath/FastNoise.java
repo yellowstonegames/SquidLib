@@ -889,6 +889,17 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
                     default:
                         return singleFoamFractalFBM(x, y, z);
                 }
+            case HONEY:
+                return singleHoney(seed, x, y, z);
+            case HONEY_FRACTAL:
+                switch (fractalType) {
+                    case BILLOW:
+                        return singleHoneyFractalBillow(x, y, z);
+                    case RIDGED_MULTI:
+                        return singleHoneyFractalRidgedMulti(x, y, z);
+                    default:
+                        return singleHoneyFractalFBM(x, y, z);
+                }
             case PERLIN:
                 return singlePerlin(seed, x, y, z);
             case PERLIN_FRACTAL:
@@ -974,6 +985,17 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
                     default:
                         return singleFoamFractalFBM(x, y, z, w);
                 }
+            case HONEY:
+                return singleHoney(seed, x, y, z, w);
+            case HONEY_FRACTAL:
+                switch (fractalType) {
+                    case BILLOW:
+                        return singleHoneyFractalBillow(x, y, z, w);
+                    case RIDGED_MULTI:
+                        return singleHoneyFractalRidgedMulti(x, y, z, w);
+                    default:
+                        return singleHoneyFractalFBM(x, y, z, w);
+                }
             case PERLIN:
                 return singlePerlin(seed, x, y, z, w);
             case PERLIN_FRACTAL:
@@ -1051,6 +1073,17 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
                     default:
                         return singleFoamFractalFBM(x, y, z, w, u);
                 }
+            case HONEY:
+                return singleHoney(seed, x, y, z, w, u);
+            case HONEY_FRACTAL:
+                switch (fractalType) {
+                    case BILLOW:
+                        return singleHoneyFractalBillow(x, y, z, w, u);
+                    case RIDGED_MULTI:
+                        return singleHoneyFractalRidgedMulti(x, y, z, w, u);
+                    default:
+                        return singleHoneyFractalFBM(x, y, z, w, u);
+                }
             case PERLIN:
                 return singlePerlin(seed, x, y, z, w, u);
             case PERLIN_FRACTAL:
@@ -1120,6 +1153,17 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
                         return singleFoamFractalRidgedMulti(x, y, z, w, u, v);
                     default:
                         return singleFoamFractalFBM(x, y, z, w, u, v);
+                }
+            case HONEY:
+                return singleHoney(seed, x, y, z, w, u, v);
+            case HONEY_FRACTAL:
+                switch (fractalType) {
+                    case BILLOW:
+                        return singleHoneyFractalBillow(x, y, z, w, u, v);
+                    case RIDGED_MULTI:
+                        return singleHoneyFractalRidgedMulti(x, y, z, w, u, v);
+                    default:
+                        return singleHoneyFractalFBM(x, y, z, w, u, v);
                 }
             case PERLIN:
                 return singlePerlin(seed, x, y, z, w, u, v);
@@ -5442,7 +5486,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
     }
 
     public float singleHoney(int seed, float x, float y) {
-        final float result = (singleSimplex(seed, x, y) + singleValue(seed ^ 0x9E3779BD, x, y)) * 0.5f + 1f;
+        final float result = (singleSimplex(seed, x, y) + singleValue(seed ^ 0x9E3779B9, x, y)) * 0.5f + 1f;
         return (result <= 1f) ? result * result - 1f : (result - 2f) * -(result - 2f) + 1f;
 
         //return singleSimplex(seed, x, y, 0.5f * singleSimplex(seed * 0xDAB ^ 0x9E3779BD, x, y));
@@ -5520,6 +5564,316 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
             y = t * lacunarity;
         }
         return sum / ((ampBias - 1f) * 0.5f) - 1f;
+    }
+
+    public float getHoneyFractal(float x, float y, float z) {
+        x *= frequency;
+        y *= frequency;
+        z *= frequency;
+
+        switch (fractalType) {
+            case FBM:
+                return singleHoneyFractalFBM(x, y, z);
+            case BILLOW:
+                return singleHoneyFractalBillow(x, y, z);
+            case RIDGED_MULTI:
+                return singleHoneyFractalRidgedMulti(x, y, z);
+            default:
+                return 0;
+        }
+    }
+
+    private float singleHoneyFractalFBM(float x, float y, float z) {
+        int seed = this.seed;
+        float sum = singleHoney(seed, x, y, z);
+        float amp = 1;
+
+        for (int i = 1; i < octaves; i++) {
+            x *= lacunarity;
+            y *= lacunarity;
+            z *= lacunarity;
+
+            amp *= gain;
+            sum += singleHoney(++seed, x, y, z) * amp;
+        }
+
+        return sum * fractalBounding;
+    }
+
+    private float singleHoneyFractalBillow(float x, float y, float z) {
+        int seed = this.seed;
+        float sum = Math.abs(singleHoney(seed, x, y, z)) * 2 - 1;
+        float amp = 1;
+
+        for (int i = 1; i < octaves; i++) {
+            x *= lacunarity;
+            y *= lacunarity;
+            z *= lacunarity;
+
+            amp *= gain;
+            sum += (Math.abs(singleHoney(++seed, x, y, z)) * 2 - 1) * amp;
+        }
+
+        return sum * fractalBounding;
+    }
+
+    private float singleHoneyFractalRidgedMulti(float x, float y, float z) {
+        int seed = this.seed;
+        float sum = 0, amp = 1, ampBias = 1f, spike;
+        for (int i = 0; i < octaves; i++) {
+            spike = 1f - Math.abs(singleHoney(seed + i, x, y, z));
+            spike *= spike * amp;
+            amp = Math.max(0f, Math.min(1f, spike * 2f));
+            sum += (spike * ampBias);
+            ampBias *= 2f;
+            x *= lacunarity;
+            y *= lacunarity;
+            z *= lacunarity;
+        }
+        return sum / ((ampBias - 1f) * 0.5f) - 1f;
+    }
+
+    public float getHoney(float x, float y, float z) {
+        return singleHoney(seed, x * frequency, y * frequency, z * frequency);
+    }
+
+    public float singleHoney(int seed, float x, float y, float z){
+        final float result = (singleSimplex(seed, x, y, z) + singleValue(seed ^ 0x9E3779B9, x, y, z)) * 0.5f + 1f;
+        return (result <= 1f) ? result * result - 1f : (result - 2f) * -(result - 2f) + 1f;
+    }
+
+
+    private float singleHoneyFractalFBM(float x, float y, float z, float w) {
+        int seed = this.seed;
+        float sum = singleHoney(seed, x, y, z, w);
+        float amp = 1;
+
+        for (int i = 1; i < octaves; i++) {
+            x *= lacunarity;
+            y *= lacunarity;
+            z *= lacunarity;
+            w *= lacunarity;
+
+            amp *= gain;
+            sum += singleHoney(++seed, x, y, z, w) * amp;
+        }
+
+        return sum * fractalBounding;
+    }
+
+    private float singleHoneyFractalBillow(float x, float y, float z, float w) {
+        int seed = this.seed;
+        float sum = Math.abs(singleHoney(seed, x, y, z, w)) * 2 - 1;
+        float amp = 1;
+
+        for (int i = 1; i < octaves; i++) {
+            x *= lacunarity;
+            y *= lacunarity;
+            z *= lacunarity;
+            w *= lacunarity;
+
+            amp *= gain;
+            sum += (Math.abs(singleHoney(++seed, x, y, z, w)) * 2 - 1) * amp;
+        }
+
+        return sum * fractalBounding;
+    }
+
+    private float singleHoneyFractalRidgedMulti(float x, float y, float z, float w) {
+        int seed = this.seed;
+        float sum = 0, amp = 1, ampBias = 1f, spike;
+        for (int i = 0; i < octaves; i++) {
+            spike = 1f - Math.abs(singleHoney(seed + i, x, y,  z, w));
+            spike *= spike * amp;
+            amp = Math.max(0f, Math.min(1f, spike * 2f));
+            sum += (spike * ampBias);
+            ampBias *= 2f;
+            x *= lacunarity;
+            y *= lacunarity;
+            z *= lacunarity;
+            w *= lacunarity;
+        }
+        return sum / ((ampBias - 1f) * 0.5f) - 1f;
+    }
+
+    public float getHoney(float x, float y, float z, float w) {
+        return singleHoney(seed, x * frequency, y * frequency, z * frequency, w * frequency);
+    }
+
+    public float singleHoney(int seed, float x, float y, float z, float w) {
+        final float result = (singleSimplex(seed, x, y, z, w) + singleValue(seed ^ 0x9E3779B9, x, y, z, w)) * 0.5f + 1f;
+        return (result <= 1f) ? result * result - 1f : (result - 2f) * -(result - 2f) + 1f;
+    }
+    public float getHoneyFractal(float x, float y, float z, float w, float u) {
+        x *= frequency;
+        y *= frequency;
+        z *= frequency;
+        w *= frequency;
+        u *= frequency;
+
+        switch (fractalType) {
+            case FBM:
+                return singleHoneyFractalFBM(x, y, z, w, u);
+            case BILLOW:
+                return singleHoneyFractalBillow(x, y, z, w, u);
+            case RIDGED_MULTI:
+                return singleHoneyFractalRidgedMulti(x, y, z, w, u);
+            default:
+                return 0;
+        }
+    }
+
+    private float singleHoneyFractalFBM(float x, float y, float z, float w, float u) {
+        final int seed = this.seed;
+        float sum = singleHoney(seed, x, y, z, w, u);
+        float amp = 1;
+
+        for (int i = 1; i < octaves; i++) {
+            x *= lacunarity;
+            y *= lacunarity;
+            z *= lacunarity;
+            w *= lacunarity;
+            u *= lacunarity;
+
+            amp *= gain;
+            sum += singleHoney(seed + i, x, y, z, w, u) * amp;
+        }
+
+        return sum * fractalBounding;
+    }
+
+    private float singleHoneyFractalBillow(float x, float y, float z, float w, float u) {
+        final int seed = this.seed;
+        float sum = Math.abs(singleHoney(seed, x, y, z, w, u)) * 2 - 1;
+        float amp = 1;
+
+        for (int i = 1; i < octaves; i++) {
+            x *= lacunarity;
+            y *= lacunarity;
+            z *= lacunarity;
+            w *= lacunarity;
+            u *= lacunarity;
+
+            amp *= gain;
+            sum += (Math.abs(singleHoney(seed + i, x, y, z, w, u)) * 2 - 1) * amp;
+        }
+
+        return sum * fractalBounding;
+    }
+
+    private float singleHoneyFractalRidgedMulti(float x, float y, float z, float w, float u) {
+        final int seed = this.seed;
+        float sum = 0, amp = 1, ampBias = 1f, spike;
+        for (int i = 0; i < octaves; i++) {
+            spike = 1f - Math.abs(singleHoney(seed + i, x, y, z, w, u));
+            spike *= spike * amp;
+            amp = Math.max(0f, Math.min(1f, spike * 2f));
+            sum += (spike * ampBias);
+            ampBias *= 2f;
+            x *= lacunarity;
+            y *= lacunarity;
+            z *= lacunarity;
+            w *= lacunarity;
+            u *= lacunarity;
+        }
+        return sum / ((ampBias - 1f) * 0.5f) - 1f;
+    }
+
+    public float getHoney(float x, float y, float z, float w, float u) {
+        return singleHoney(seed, x * frequency, y * frequency, z * frequency, w * frequency, u * frequency);
+    }
+
+    public float singleHoney(int seed, float x, float y, float z, float w, float u) {
+        final float result = (singleSimplex(seed, x, y, z, w, u) + singleValue(seed ^ 0x9E3779B9, x, y, z, w, u)) * 0.5f + 1f;
+        return (result <= 1f) ? result * result - 1f : (result - 2f) * -(result - 2f) + 1f;
+    }
+
+    public float getHoneyFractal(float x, float y, float z, float w, float u, float v) {
+        x *= frequency;
+        y *= frequency;
+        z *= frequency;
+        w *= frequency;
+        u *= frequency;
+        v *= frequency;
+
+        switch (fractalType) {
+            case FBM:
+                return singleHoneyFractalFBM(x, y, z, w, u, v);
+            case BILLOW:
+                return singleHoneyFractalBillow(x, y, z, w, u, v);
+            case RIDGED_MULTI:
+                return singleHoneyFractalRidgedMulti(x, y, z, w, u, v);
+            default:
+                return 0;
+        }
+    }
+
+    private float singleHoneyFractalFBM(float x, float y, float z, float w, float u, float v) {
+        int seed = this.seed;
+        float sum = singleHoney(seed, x, y, z, w, u, v);
+        float amp = 1;
+
+        for (int i = 1; i < octaves; i++) {
+            x *= lacunarity;
+            y *= lacunarity;
+            z *= lacunarity;
+            w *= lacunarity;
+            u *= lacunarity;
+            v *= lacunarity;
+
+            amp *= gain;
+            sum += singleHoney(++seed, x, y, z, w, u, v) * amp;
+        }
+
+        return sum * fractalBounding;
+    }
+
+    private float singleHoneyFractalBillow(float x, float y, float z, float w, float u, float v) {
+        int seed = this.seed;
+        float sum = Math.abs(singleHoney(seed, x, y, z, w, u, v)) * 2 - 1;
+        float amp = 1;
+
+        for (int i = 1; i < octaves; i++) {
+            x *= lacunarity;
+            y *= lacunarity;
+            z *= lacunarity;
+            w *= lacunarity;
+            u *= lacunarity;
+            v *= lacunarity;
+
+            amp *= gain;
+            sum += (Math.abs(singleHoney(++seed, x, y, z, w, u, v)) * 2 - 1) * amp;
+        }
+
+        return sum * fractalBounding;
+    }
+
+    private float singleHoneyFractalRidgedMulti(float x, float y, float z, float w, float u, float v) {
+        int seed = this.seed;
+        float sum = 0, amp = 1, ampBias = 1f, spike;
+        for (int i = 0; i < octaves; i++) {
+            spike = 1f - Math.abs(singleHoney(seed + i, x, y, z, w, u, v));
+            spike *= spike * amp;
+            amp = Math.max(0f, Math.min(1f, spike * 2f));
+            sum += (spike * ampBias);
+            ampBias *= 2f;
+            x *= lacunarity;
+            y *= lacunarity;
+            z *= lacunarity;
+            w *= lacunarity;
+            u *= lacunarity;
+            v *= lacunarity;
+        }
+        return sum / ((ampBias - 1f) * 0.5f) - 1f;
+    }
+
+    public float getHoney(float x, float y, float z, float w, float u, float v) {
+        return singleHoney(seed, x * frequency, y * frequency, z * frequency, w * frequency, u * frequency, v * frequency);
+    }
+
+    public float singleHoney(int seed, float x, float y, float z, float w, float u, float v) {
+        final float result = (singleSimplex(seed, x, y, z, w, u, v) + singleValue(seed ^ 0x9E3779B9, x, y, z, w, u, v)) * 0.5f + 1f;
+        return (result <= 1f) ? result * result - 1f : (result - 2f) * -(result - 2f) + 1f;
     }
 
 
