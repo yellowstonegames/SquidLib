@@ -25,7 +25,6 @@ import squidpony.squidmath.*;
 
 import java.text.DateFormat;
 import java.util.Date;
-import java.util.Iterator;
 
 /**
  * Port of Zachary Carter's world generation technique, https://github.com/zacharycarter/mapgen
@@ -41,10 +40,12 @@ public class AnimatedWorldMapWriter extends ApplicationAdapter {
 //    private static final int width = 2048, height = 1024; // mimic, elliptical
     private static final int width = 256, height = 256; // space view
 //    private static final int width = 1200, height = 400; // squat
-    private static final int LIMIT = 5;
     //private static final int width = 256, height = 128;
     //private static final int width = 314 * 4, height = 400;
     //private static final int width = 512, height = 512;
+
+    private static final int LIMIT = 5;
+    private static final boolean MEASURE_BOUNDS = false;
 
     private FilterBatch batch;
 //    private OrderedSet<String> adjective = new OrderedSet<>(256), noun = new OrderedSet<>(256);
@@ -126,7 +127,9 @@ World #5, SavoryMelonAlder, completed in 64338 ms
 //        path = "out/worldsAnimated/" + date + "/SpaceView/";
 //        path = "out/worldsAnimated/" + date + "/SpaceViewMutantClassic/";
 //        path = "out/worldsAnimated/" + date + "/SpaceViewMutantFoam/";
-        path = "out/worldsAnimated/" + date + "/SpaceViewFoam/";
+        path = "out/worldsAnimated/" + date + "/SpaceViewMutantHoney/";
+//        path = "out/worldsAnimated/" + date + "/SpaceViewHoney/";
+//        path = "out/worldsAnimated/" + date + "/SpaceViewFoam/";
 //        path = "out/worldsAnimated/" + date + "/SpaceViewRidged/";
 //        path = "out/worldsAnimated/" + date + "/SpaceViewMutantMaelstrom/";
 //        path = "out/worldsAnimated/" + date + "/HyperellipseWrithing/";
@@ -178,7 +181,6 @@ World #5, SavoryMelonAlder, completed in 64338 ms
         final Noise.Noise3D noise = new Noise.Noise3D() {
             @Override
             public double getNoise(double x, double y, double z) {
-//                return FoamNoise.foamNoise(x * 2.75, y * 2.75, z * 2.75, mutationA, mutationB, 123456789);
                 return WorldMapGenerator.DEFAULT_NOISE.getNoiseWithSeed(x, y, z, mutationA, mutationB, 123456789);
             }
 
@@ -188,8 +190,9 @@ World #5, SavoryMelonAlder, completed in 64338 ms
                 
 //                final double a = WorldMapGenerator.DEFAULT_NOISE.getNoiseWithSeed(x * 0.75, y * 0.75, z * 0.75, ~seed) * 0.25;
 //                return WorldMapGenerator.DEFAULT_NOISE.getNoiseWithSeed(x * 1.5 + a, y * 1.5 - a, z * 1.5 + a, mutationA, mutationB, seed);
+                return WorldMapGenerator.DEFAULT_NOISE.getNoiseWithSeed(x, y, z, mutationA, mutationB, seed);
 //                return WorldMapGenerator.DEFAULT_NOISE.getNoiseWithSeed(x * 1.5, y * 1.5, z * 1.5, mutationA, mutationB, seed);
-                return WorldMapGenerator.DEFAULT_NOISE.getNoiseWithSeed(x * 1.5, y * 1.5, z * 1.5, seed);
+//                return WorldMapGenerator.DEFAULT_NOISE.getNoiseWithSeed(x * 1.5, y * 1.5, z * 1.5, seed);
             }
         };
         
@@ -206,8 +209,8 @@ World #5, SavoryMelonAlder, completed in 64338 ms
 //        WorldMapGenerator.DEFAULT_NOISE.setFractalGain(5f);
 //        WorldMapGenerator.DEFAULT_NOISE.setFractalLacunarity(0.8f);
 //        WorldMapGenerator.DEFAULT_NOISE.setFractalGain(1.25f);
-        WorldMapGenerator.DEFAULT_NOISE.setNoiseType(FastNoise.SIMPLEX);
-        WorldMapGenerator.DEFAULT_NOISE.setFrequency(1f);
+        WorldMapGenerator.DEFAULT_NOISE.setNoiseType(FastNoise.HONEY);
+        WorldMapGenerator.DEFAULT_NOISE.setFrequency(1.25f);
         WorldMapGenerator.DEFAULT_NOISE.setFractalOctaves(1);
 //        WorldMapGenerator.DEFAULT_NOISE.setFractalType(FastNoise.BILLOW);
         
@@ -216,75 +219,78 @@ World #5, SavoryMelonAlder, completed in 64338 ms
           on all axes. A 64x64x64 box, centered on the origin, of random ints could be used instead of calculating a
           hash for each point over and over (or a larger box to permit more octaves).
          */
-        WorldMapGenerator.DEFAULT_NOISE.setPointHash(new IPointHash.IntImpl() {
-            @Override
-            public int hashWithState(int x, int y, int state) {
-                int[] b;
-                if((b = bounds.get(state)) == null)
-                {
-                    b = new int[4];
-                    bounds.put(state, b);
+        if(MEASURE_BOUNDS)
+        {
+            WorldMapGenerator.DEFAULT_NOISE.setPointHash(new IPointHash.IntImpl() {
+                @Override
+                public int hashWithState(int x, int y, int state) {
+                    int[] b;
+                    if((b = bounds.get(state)) == null)
+                    {
+                        b = new int[4];
+                        bounds.put(state, b);
+                    }
+                    b[0] = Math.min(b[0], x);
+                    b[1] = Math.max(b[1], x);
+                    b[2] = Math.min(b[2], y);
+                    b[3] = Math.max(b[3], y);
+                    return IntPointHash.hashAll(x, y, state);
                 }
-                b[0] = Math.min(b[0], x);
-                b[1] = Math.max(b[1], x);
-                b[2] = Math.min(b[2], y);
-                b[3] = Math.max(b[3], y);
-                return IntPointHash.hashAll(x, y, state);
-            }
 
-            @Override
-            public int hashWithState(int x, int y, int z, int state) {
-                int[] b;
-                if((b = bounds.get(state)) == null)
-                {
-                    b = new int[6];
-                    bounds.put(state, b);
+                @Override
+                public int hashWithState(int x, int y, int z, int state) {
+                    int[] b;
+                    if((b = bounds.get(state)) == null)
+                    {
+                        b = new int[6];
+                        bounds.put(state, b);
+                    }
+                    b[0] = Math.min(b[0], x);
+                    b[1] = Math.max(b[1], x);
+                    b[2] = Math.min(b[2], y);
+                    b[3] = Math.max(b[3], y);
+                    b[4] = Math.min(b[4], z);
+                    b[5] = Math.max(b[5], z);
+                    return IntPointHash.hashAll(x, y, z, state);
                 }
-                b[0] = Math.min(b[0], x);
-                b[1] = Math.max(b[1], x);
-                b[2] = Math.min(b[2], y);
-                b[3] = Math.max(b[3], y);
-                b[4] = Math.min(b[4], z);
-                b[5] = Math.max(b[5], z);
-                return IntPointHash.hashAll(x, y, z, state);
-            }
 
-            @Override
-            public int hashWithState(int x, int y, int z, int w, int state) {
-                int[] b;
-                if((b = bounds.get(state)) == null)
-                {
-                    b = new int[6];
-                    bounds.put(state, b);
+                @Override
+                public int hashWithState(int x, int y, int z, int w, int state) {
+                    int[] b;
+                    if((b = bounds.get(state)) == null)
+                    {
+                        b = new int[6];
+                        bounds.put(state, b);
+                    }
+                    b[0] = Math.min(b[0], x);
+                    b[1] = Math.max(b[1], x);
+                    b[2] = Math.min(b[2], y);
+                    b[3] = Math.max(b[3], y);
+                    b[4] = Math.min(b[4], z);
+                    b[5] = Math.max(b[5], z);
+                    b[6] = Math.min(b[6], w);
+                    b[7] = Math.max(b[7], w);
+                    return IntPointHash.hashAll(x, y, z, w, state);
                 }
-                b[0] = Math.min(b[0], x);
-                b[1] = Math.max(b[1], x);
-                b[2] = Math.min(b[2], y);
-                b[3] = Math.max(b[3], y);
-                b[4] = Math.min(b[4], z);
-                b[5] = Math.max(b[5], z);
-                b[6] = Math.min(b[6], w);
-                b[7] = Math.max(b[7], w);
-                return IntPointHash.hashAll(x, y, z, w, state);
-            }
 
-            @Override
-            public int hashWithState(int x, int y, int z, int w, int u, int state) {
-                return IntPointHash.hashAll(x, y, z, w, u, state);
-            }
+                @Override
+                public int hashWithState(int x, int y, int z, int w, int u, int state) {
+                    return IntPointHash.hashAll(x, y, z, w, u, state);
+                }
 
-            @Override
-            public int hashWithState(int x, int y, int z, int w, int u, int v, int state) {
-                return IntPointHash.hashAll(x, y, z, w, u, v, state);
-            }
-        });
+                @Override
+                public int hashWithState(int x, int y, int z, int w, int u, int v, int state) {
+                    return IntPointHash.hashAll(x, y, z, w, u, v, state);
+                }
+            });
+        }
 //        world = new WorldMapGenerator.RotatingSpaceMap(seed, width, height, noise, 1.0);
         
 //        world = new WorldMapGenerator.SphereMap(seed, width, height, noise, 1.0);
 //        world = new WorldMapGenerator.TilingMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.75);
 //        world = new WorldMapGenerator.EllipticalMap(seed, width, height, noise, 1.75);
 //        world = new WorldMapGenerator.MimicMap(seed, WorldMapGenerator.DEFAULT_NOISE, 1.75);
-        world = new WorldMapGenerator.SpaceViewMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 0.42);
+        world = new WorldMapGenerator.SpaceViewMap(seed, width, height, noise, 0.42);
 //        world = new WorldMapGenerator.SpaceViewMap(seed, width, height, noise, 0.5);
 //        world = new WorldMapGenerator.RoundSideMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.75);
 //        world = new WorldMapGenerator.HyperellipticalMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 0.8, 0.03125, 2.5);
@@ -298,6 +304,11 @@ World #5, SavoryMelonAlder, completed in 64338 ms
 
         //generate(seed);
         rng.setState(seed);
+        Gdx.graphics.setContinuousRendering(false);
+        for (int i = 0; i < LIMIT; i++) {
+            putMap();
+        }
+        Gdx.app.exit();
     }
 
     public void generate(final long seed)
@@ -330,7 +341,8 @@ World #5, SavoryMelonAlder, completed in 64338 ms
             name = makeName(thesaurus);
         long hash = CrossHash.hash64(name);
         worldTime = System.currentTimeMillis();
-        bounds.clear();
+        if(MEASURE_BOUNDS)
+            bounds.clear();
         for (int i = 0; i < pm.length; i++) {
             double angle = (Math.PI * 2.0 / pm.length) * i;
 
@@ -339,8 +351,10 @@ World #5, SavoryMelonAlder, completed in 64338 ms
 //            mutationA = NumberTools.cos(angle) * (mutationC + 2.0);
 //            mutationB = NumberTools.sin(angle) * (mutationC + 2.0);
 //            mutationC = NumberTools.cos(angle * 3.0 + 1.0) * 0.625 + 2.25;
-            mutationA = NumberTools.cos(angle) * 0.3125;
-            mutationB = NumberTools.sin(angle) * 0.3125;
+//            mutationA = NumberTools.cos(angle) * 0.3125;
+//            mutationB = NumberTools.sin(angle) * 0.3125;
+            mutationA = NumberTools.cos(angle) * 0.25;
+            mutationB = NumberTools.sin(angle) * 0.25;
             //            mutation = NumberTools.sin(angle) * 0.918 + NumberTools.cos(angle * 4.0 + 1.618) * 0.307;
 
             //// this next line should not usually be commented out, but it makes sense not to have it when you can see the whole map.
@@ -359,25 +373,25 @@ World #5, SavoryMelonAlder, completed in 64338 ms
 //            if(i % 5 == 4) System.out.println("Finished " + (i + 1) + " frames in " + (System.currentTimeMillis() - worldTime) + " ms");
             if(i % 36 == 35) System.out.print(((i + 1) * 10 / 36) + "% (" + (System.currentTimeMillis() - worldTime) + " ms)... ");
         }
-        
-        batch.begin();
-        pt.draw(pm[0], 0, 0);
-        batch.draw(pt, 0, 0, width, height);
-        batch.end();
 //        Array<Pixmap> apm = new Array<Pixmap>(pm);
 //        writer.palette.analyze(apm);
         writer.write(Gdx.files.local(path + name + ".gif"), new Array<Pixmap>(pm), 30);
 
+//        Gdx.graphics.requestRendering();
+        
         System.out.println();
         System.out.println("World #" + counter + ", " + name + ", completed in " + (System.currentTimeMillis() - worldTime) + " ms");
-
-        System.out.println(bounds.size);
-        for (IntMap.Entry<int[]> e : bounds) {
-            System.out.println("0x" + StringKit.hex(e.key) + ": " + StringKit.join(", ", e.value));
+        if(MEASURE_BOUNDS) {
+            System.out.println(bounds.size);
+            for (IntMap.Entry<int[]> e : bounds) {
+                System.out.println("0x" + StringKit.hex(e.key) + ": " + StringKit.join(", ", e.value));
+            }
         }
 
-        if(counter >= LIMIT)
-                Gdx.app.exit();
+//        if(counter >= LIMIT)
+//        {
+//            Gdx.app.exit();
+//        }
     }
     @Override
     public void render() {
@@ -386,7 +400,11 @@ World #5, SavoryMelonAlder, completed in 64338 ms
         //Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         Gdx.gl.glDisable(GL20.GL_BLEND);
         // need to display the map every frame, since we clear the screen to avoid artifacts.
-        putMap();
+        batch.begin();
+        if(pm[0] != null) 
+            pt.draw(pm[0], 0, 0);
+        batch.draw(pt, 0, 0, width, height);
+        batch.end();
         Gdx.graphics.setTitle("Map! Took " + ttg + " ms to generate");
     }
 
@@ -402,6 +420,7 @@ World #5, SavoryMelonAlder, completed in 64338 ms
         config.setTitle("SquidLib Demo: Animated World Map Writer");
         config.setWindowedMode(width * cellWidth, height * cellHeight);
         config.setResizable(false);
+        config.useVsync(true);
         config.setWindowIcon(Files.FileType.Internal, "Tentacle-128.png", "Tentacle-64.png", "Tentacle-32.png", "Tentacle-16.png");
         new Lwjgl3Application(new AnimatedWorldMapWriter(), config);
     }
