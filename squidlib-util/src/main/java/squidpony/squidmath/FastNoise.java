@@ -5442,7 +5442,10 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
     }
 
     public float singleHoney(int seed, float x, float y) {
-        return singleSimplex(seed, x, y, 0.5f * singleSimplex(seed * 0xDAB ^ 0x9E3779BD, x, y));
+        final float result = (singleSimplex(seed, x, y) + singleValue(seed ^ 0x9E3779BD, x, y)) * 0.5f + 1f;
+        return (result <= 1f) ? result * result - 1f : (result - 2f) * -(result - 2f) + 1f;
+
+        //return singleSimplex(seed, x, y, 0.5f * singleSimplex(seed * 0xDAB ^ 0x9E3779BD, x, y));
 //        return singleSimplex(seed, x, y + 0.25f * singleSimplex(seed * 0xDAB ^ 0x9E3779BD, y, x));
 //        return singleSimplex(seed, x + NumberTools.swayRandomized(seed, y) * 0.25f, y + NumberTools.swayRandomized(seed, x) * 0.25f);
         

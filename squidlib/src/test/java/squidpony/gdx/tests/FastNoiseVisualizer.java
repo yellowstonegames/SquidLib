@@ -25,7 +25,7 @@ public class FastNoiseVisualizer extends ApplicationAdapter {
 
     private FastNoise noise = new FastNoise(1, 0.0625f, FastNoise.FOAM, 1);
     private int dim; // this can be 0, 1, 2, 3, or 4; add 2 to get the actual dimensions
-    private int octaves = 3;
+    private int octaves = 1;
     private float freq = 0.125f;
     private boolean inverse;
     private ImmediateModeRenderer20 renderer;
