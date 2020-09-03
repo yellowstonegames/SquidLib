@@ -1121,38 +1121,26 @@ public final class NumberTools {
      * It is about 5 times faster than {@link Math#atan2(double, double)} (roughly 17 ns instead of roughly 88 ns for
      * Math, though the computer was under some load during testing). It is almost identical in speed to LibGDX'
      * MathUtils approximation of the same method; MathUtils seems to have worse average error, though.
-     * Credit to StackExchange user njuffa, who gave
-     * <a href="https://math.stackexchange.com/a/1105038">this useful answer</a>. This method changed from an earlier
+     * Credit to Nic Taylor and imuli, with Taylor publishing
+     * <a href="https://www.dsprelated.com/showarticle/1052.php">this nice post</a> and imuli commenting with very
+     * handy information that makes this approach usable. This method changed from an earlier
      * technique that was twice as fast but had very poor quality, enough to be visually noticeable. See also
      * {@link #atan2_(double, double)} if you don't want a mess converting to degrees or some other measurement, since
      * that method returns an angle from 0.0 (equal to 0 degrees) to 1.0 (equal to 360 degrees).
      * @param y y-component of the point to find the angle towards; note the parameter order is unusual by convention
      * @param x x-component of the point to find the angle towards; note the parameter order is unusual by convention
-     * @return the angle to the given point, in radians as a double
+     * @return the angle to the given point, in radians as a double; ranges from -PI to PI
      */
-    public static double atan2(final double y, final double x)
+    public static double atan2(double y, double x)
     {
-        /*
-a := min (|x|, |y|) / max (|x|, |y|)
-s := a * a
-r := ((-0.0464964749 * s + 0.15931422) * s - 0.327622764) * s * a + a
-if |y| > |x| then r := 1.57079637 - r
-if x < 0 then r := 3.14159274 - r
-if y < 0 then r := -r
-         */
         if(y == 0.0 && x >= 0.0) return 0.0;
-        final double ax = Math.abs(x), ay = Math.abs(y);
-        if(ax < ay)
-        {
-            final double a = ax / ay, s = a * a,
-                    r = 1.57079637 - (((-0.0464964749 * s + 0.15931422) * s - 0.327622764) * s * a + a);
-            return (x < 0.0) ? (y < 0.0) ? -3.14159274 + r : 3.14159274 - r : (y < 0.0) ? -r : r;
-        }
-        else {
-            final double a = ay / ax, s = a * a,
-                    r = (((-0.0464964749 * s + 0.15931422) * s - 0.327622764) * s * a + a);
-            return (x < 0.0) ? (y < 0.0) ? -3.14159274 + r : 3.14159274 - r : (y < 0.0) ? -r : r;
-        }
+        double ay = Math.abs(y), ax = Math.abs(x);
+        boolean invert = ay > ax;
+        double z = invert ? ax / ay : ay / ax;
+        z = ((((0.141499  * z) - 0.343315 ) * z - 0.016224 ) * z + 1.003839 ) * z - 0.000158 ;
+        if (invert) z = 1.5707963267948966 - z;
+        if (x < 0) z = 3.141592653589793 - z;
+        return Math.copySign(z, y);
     }
 
     /**
@@ -1162,38 +1150,25 @@ if y < 0 then r := -r
      * It is about 5 times faster than {@link Math#atan2(double, double)} (roughly 17 ns instead of roughly 88 ns for
      * Math, though the computer was under some load during testing). It is almost identical in speed to LibGDX'
      * MathUtils approximation of the same method; MathUtils seems to have worse average error, though.
-     * Credit to StackExchange user njuffa, who gave
-     * <a href="https://math.stackexchange.com/a/1105038">this useful answer</a>. This method changed from an earlier
+     * Credit to Nic Taylor and imuli, with Taylor publishing
+     * <a href="https://www.dsprelated.com/showarticle/1052.php">this nice post</a> and imuli commenting with very
+     * handy information that makes this approach usable. This method changed from an earlier
      * technique that was twice as fast but had very poor quality, enough to be visually noticeable. See also
      * {@link #atan2_(float, float)} if you don't want a mess converting to degrees or some other measurement, since
      * that method returns an angle from 0f (equal to 0 degrees) to 1f (equal to 360 degrees).
      * @param y y-component of the point to find the angle towards; note the parameter order is unusual by convention
      * @param x x-component of the point to find the angle towards; note the parameter order is unusual by convention
-     * @return the angle to the given point, in radians as a float
+     * @return the angle to the given point, in radians as a float; ranges from -PI to PI
      */
-    public static float atan2(final float y, final float x)
-    {
-        /*
-a := min (|x|, |y|) / max (|x|, |y|)
-s := a * a
-r := ((-0.0464964749 * s + 0.15931422) * s - 0.327622764) * s * a + a
-if |y| > |x| then r := 1.57079637 - r
-if x < 0 then r := 3.14159274 - r
-if y < 0 then r := -r
-         */
-        if(y == 0f && x >= 0f) return 0f;
-        final float ax = Math.abs(x), ay = Math.abs(y);
-        if(ax < ay)
-        {
-            final float a = ax / ay, s = a * a,
-                    r = 1.57079637f - (((-0.0464964749f * s + 0.15931422f) * s - 0.327622764f) * s * a + a);
-            return (x < 0f) ? (y < 0f) ? -3.14159274f + r : 3.14159274f - r : (y < 0f) ? -r : r;
-        }
-        else {
-            final float a = ay / ax, s = a * a,
-                    r = (((-0.0464964749f * s + 0.15931422f) * s - 0.327622764f) * s * a + a);
-            return (x < 0f) ? (y < 0f) ? -3.14159274f + r : 3.14159274f - r : (y < 0f) ? -r : r;
-        }
+    public static float atan2(float y, float x) {
+        if (y == 0f && x >= 0f) return 0f;
+        float ay = Math.abs(y), ax = Math.abs(x);
+        boolean invert = ay > ax;
+        float z = invert ? ax / ay : ay / ax;
+        z = ((((0.141499f * z) - 0.343315f) * z - 0.016224f) * z + 1.003839f) * z - 0.000158f;
+        if (invert) z = 1.5707963267948966f - z;
+        if (x < 0) z = 3.141592653589793f - z;
+        return Math.copySign(z, y);
     }
 
     /**
@@ -1202,29 +1177,26 @@ if y < 0 then r := -r
      * equivalent to 360 degrees or 2PI radians. You can multiply the angle by {@code 6.2831855f} to change to radians,
      * or by {@code 360f} to change to degrees. Takes y and x (in that unusual order) as doubles. Will never return a
      * negative number, which may help avoid costly floating-point modulus when you actually want a positive number.
-     * Credit to StackExchange user njuffa, who gave
-     * <a href="https://math.stackexchange.com/a/1105038">this useful answer</a>. Note that
+     * Credit to Nic Taylor and imuli, with Taylor publishing
+     * <a href="https://www.dsprelated.com/showarticle/1052.php">this nice post</a> and imuli commenting with very
+     * handy information that makes this approach usable. Note that
      * {@link #atan2(double, double)} returns an angle in radians and can return negative results, which may be fine for
      * many tasks; these two methods are extremely close in implementation and speed.
      * @param y y-component of the point to find the angle towards; note the parameter order is unusual by convention
      * @param x x-component of the point to find the angle towards; note the parameter order is unusual by convention
      * @return the angle to the given point, as a double from 0.0 to 1.0, inclusive
      */
-    public static double atan2_(final double y, final double x)
+    public static double atan2_(double y, double x)
     {
         if(y == 0.0 && x >= 0.0) return 0.0;
-        final double ax = Math.abs(x), ay = Math.abs(y);
-        if(ax < ay)
-        {
-            final double a = ax / ay, s = a * a,
-                    r = 0.25 - (((-0.0464964749 * s + 0.15931422) * s - 0.327622764) * s * a + a) * 0.15915494309189535;
-            return (x < 0.0) ? (y < 0.0) ? 0.5 + r : 0.5 - r : (y < 0.0) ? 1.0 - r : r;
-        }
-        else {
-            final double a = ay / ax, s = a * a,
-                    r = (((-0.0464964749 * s + 0.15931422) * s - 0.327622764) * s * a + a) * 0.15915494309189535;
-            return (x < 0.0) ? (y < 0.0) ? 0.5 + r : 0.5 - r : (y < 0.0) ? 1.0 - r : r;
-        }
+        double ay = Math.abs(y), ax = Math.abs(x);
+        boolean invert = ay > ax;
+        double z = invert ? ax/ay : ay/ax;
+        z = (((((0.022520265292560102) * z) - (0.054640279287594046)) * z - (0.0025821297967229097)) * z + (0.1597659389184251)) * z - (0.000025146481008519463);
+        if(invert) z = 0.25 - z;
+        if(x < 0) z = 0.5 - z;
+        return y < 0 ? 1 - z : z;
+
     }
     /**
      * Altered-range approximation of the frequently-used trigonometric method atan2, taking y and x positions as floats
@@ -1232,29 +1204,25 @@ if y < 0 then r := -r
      * degrees or 2PI radians. You can multiply the angle by {@code 6.2831855f} to change to radians, or by {@code 360f}
      * to change to degrees. Takes y and x (in that unusual order) as floats. Will never return a negative number, which
      * may help avoid costly floating-point modulus when you actually want a positive number.
-     * Credit to StackExchange user njuffa, who gave
-     * <a href="https://math.stackexchange.com/a/1105038">this useful answer</a>. Note that
+     * Credit to Nic Taylor and imuli, with Taylor publishing
+     * <a href="https://www.dsprelated.com/showarticle/1052.php">this nice post</a> and imuli commenting with very
+     * handy information that makes this approach usable. Note that
      * {@link #atan2(float, float)} returns an angle in radians and can return negative results, which may be fine for
      * many tasks; these two methods are extremely close in implementation and speed.
      * @param y y-component of the point to find the angle towards; note the parameter order is unusual by convention
      * @param x x-component of the point to find the angle towards; note the parameter order is unusual by convention
      * @return the angle to the given point, as a float from 0.0f to 1.0f, inclusive
      */
-    public static float atan2_(final float y, final float x)
+    public static float atan2_(float y, float x)
     {
         if(y == 0.0 && x >= 0.0) return 0f;
-        final float ax = Math.abs(x), ay = Math.abs(y);
-        if(ax < ay)
-        {
-            final float a = ax / ay, s = a * a,
-                    r = 0.25f - (((-0.0464964749f * s + 0.15931422f) * s - 0.327622764f) * s * a + a) * 0.15915494309189535f;
-            return (x < 0.0f) ? (y < 0.0f) ? 0.5f + r : 0.5f - r : (y < 0.0f) ? 1f - r : r;
-        }
-        else {
-            final float a = ay / ax, s = a * a,
-                    r = (((-0.0464964749f * s + 0.15931422f) * s - 0.327622764f) * s * a + a) * 0.15915494309189535f;
-            return (x < 0.0f) ? (y < 0.0f) ? 0.5f + r : 0.5f - r : (y < 0.0f) ? 1f - r : r;
-        }
+        float ay = Math.abs(y), ax = Math.abs(x);
+        boolean invert = ay > ax;
+        float z = invert ? ax/ay : ay/ax;
+        z = (((((0.022520265292560102f) * z) - (0.054640279287594046f)) * z - (0.0025821297967229097f)) * z + (0.1597659389184251f)) * z - (0.000025146481008519463f);
+        if(invert) z = 0.25f - z;
+        if(x < 0) z = 0.5f - z;
+        return y < 0 ? 1f - z : z;
     }
 
     /**
