@@ -11,7 +11,7 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import squidpony.squidmath.StatefulRNG;
 
 /**
- * Default BitmapFonts, a sample image, "stretchable" fonts and icons, and a central RNG for use with LibGDX.
+ * Default BitmapFonts, a sample image, "stretchable" fonts and icons, and a central RNG for use with libGDX.
  * All but one of the resources here need to be downloaded separately, to avoid bloating the size of the dependency jar
  * with many fonts that a game probably won't use. You can download assets in a jar with a release of SquidLib, or
  * individually from https://github.com/SquidPony/SquidLib/tree/master/assets . The assets you choose should go in the
@@ -670,7 +670,7 @@ public class DefaultResources implements LifecycleListener {
      * The font is 7-12-serif by Christian Munk, but not all of the Unicode glyphs supported in his amazingly-huge font
      * are present here; just the subset that's compatible with Iosevka (which is way more than is required for SquidLib
      * to present most things). Caches the font for later calls, but be aware that if you copy the BitmapFont instead of
-     * calling this method again, it won't stay monospaced because of a quirk of LibGDX. Attribution to Christian Munk
+     * calling this method again, it won't stay monospaced because of a quirk of libGDX. Attribution to Christian Munk
      * (or the username he used, CMunk) is required to use this font; this is in the license file linked below.
      * <br>
      * Needs files:
@@ -768,7 +768,7 @@ public class DefaultResources implements LifecycleListener {
      * Returns a 14x27px font with fairly good Unicode coverage and an octagonal, angular look, as an embedded resource.
      * The font is Computer Says No by Christian Munk, which has a nice clean appearance. Caches the font for later
      * calls, but be aware that if you copy the BitmapFont instead of calling this method again, it won't stay
-     * monospaced because of a quirk of LibGDX. Attribution to Christian Munk (or the username he used,
+     * monospaced because of a quirk of libGDX. Attribution to Christian Munk (or the username he used,
      * CMunk) is required to use this font; this is in the license file linked below.
      * <br>
      * Needs files:

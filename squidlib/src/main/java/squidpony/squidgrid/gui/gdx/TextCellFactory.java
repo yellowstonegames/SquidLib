@@ -885,7 +885,7 @@ public class TextCellFactory implements Disposable {
      * Use the specified Batch to draw a String or other CharSequence (often just one char long) with the default color
      * (white), with x and y determining the world-space coordinates for the upper-left corner.
      *
-     * @param batch the LibGDX Batch to do the drawing
+     * @param batch the libGDX Batch to do the drawing
      * @param s the string to draw, often but not necessarily one char. Can be null to draw a solid block instead.
      * @param x x of the upper-left corner of the region of text in world coordinates.
      * @param y y of the upper-left corner of the region of text in world coordinates.
@@ -914,7 +914,7 @@ public class TextCellFactory implements Disposable {
      * Use the specified Batch to draw a char with the default color (white), with x and y determining the world-space
      * coordinates for the upper-left corner. If c is {@code '\0'}, will draw a solid white block instead.
      *
-     * @param batch the LibGDX Batch to do the drawing
+     * @param batch the libGDX Batch to do the drawing
      * @param c the char to draw. Can be {@code '\0'} to draw a solid block instead.
      * @param x x of the upper-left corner of the region of text in world coordinates.
      * @param y y of the upper-left corner of the region of text in world coordinates.
@@ -942,7 +942,7 @@ public class TextCellFactory implements Disposable {
      * Use the specified Batch to draw a String or other CharSequence (often just one char long) in the specified rgba
      * color, with x and y determining the world-space coordinates for the upper-left corner.
      *
-     * @param batch the LibGDX Batch to do the drawing
+     * @param batch the libGDX Batch to do the drawing
      * @param s the string to draw, often but not necessarily one char. Can be null to draw a solid block instead.
      * @param r 0.0f to 1.0f red value
      * @param g 0.0f to 1.0f green value
@@ -974,13 +974,13 @@ public class TextCellFactory implements Disposable {
     }
 
     /**
-     * Use the specified Batch to draw a String or other CharSequence (often just one char long) in the specified LibGDX
+     * Use the specified Batch to draw a String or other CharSequence (often just one char long) in the specified libGDX
      * Color, with x and y
      * determining the world-space coordinates for the upper-left corner.
      *
-     * @param batch the LibGDX Batch to do the drawing
+     * @param batch the libGDX Batch to do the drawing
      * @param s the string to draw, often but not necessarily one char. Can be null to draw a solid block instead.
-     * @param color the LibGDX Color to draw the char(s) with, all the same color
+     * @param color the libGDX Color to draw the char(s) with, all the same color
      * @param x x of the upper-left corner of the region of text in world coordinates.
      * @param y y of the upper-left corner of the region of text in world coordinates.
      */
@@ -1006,12 +1006,12 @@ public class TextCellFactory implements Disposable {
         }
     }
     /**
-     * Use the specified Batch to draw a String or other CharSequence (often just one char long) in the specified LibGDX
+     * Use the specified Batch to draw a String or other CharSequence (often just one char long) in the specified libGDX
      * Color, with x and y determining the world-space coordinates for the upper-left corner.
      *
-     * @param batch the LibGDX Batch to do the drawing
+     * @param batch the libGDX Batch to do the drawing
      * @param s the string to draw, often but not necessarily one char. Can be null to draw a solid block instead.
-     * @param encodedColor the LibGDX Color to use, converted to float as by {@link Color#toFloatBits()}
+     * @param encodedColor the libGDX Color to use, converted to float as by {@link Color#toFloatBits()}
      * @param x x of the upper-left corner of the region of text in world coordinates.
      * @param y y of the upper-left corner of the region of text in world coordinates.
      */
@@ -1039,12 +1039,12 @@ public class TextCellFactory implements Disposable {
     }
 
     /**
-     * Use the specified Batch to draw a char in the specified LibGDX Color, with x and y
+     * Use the specified Batch to draw a char in the specified libGDX Color, with x and y
      * determining the world-space coordinates for the upper-left corner.
      *
-     * @param batch the LibGDX Batch to do the drawing
+     * @param batch the libGDX Batch to do the drawing
      * @param c the char to draw. Can be {@code '\0'} to draw a solid block instead.
-     * @param color the LibGDX Color (or SquidLib SColor) to use, as an object
+     * @param color the libGDX Color (or SquidLib SColor) to use, as an object
      * @param x x of the upper-left corner of the region of text in world coordinates.
      * @param y y of the upper-left corner of the region of text in world coordinates.
      */
@@ -1067,12 +1067,12 @@ public class TextCellFactory implements Disposable {
     }
 
     /**
-     * Use the specified Batch to draw a String (often just one char long) in the specified LibGDX Color, with x and y
+     * Use the specified Batch to draw a String (often just one char long) in the specified libGDX Color, with x and y
      * determining the world-space coordinates for the upper-left corner.
      *
-     * @param batch the LibGDX Batch to do the drawing
+     * @param batch the libGDX Batch to do the drawing
      * @param c the char to draw. Can be {@code '\0'} to draw a solid block instead.
-     * @param encodedColor the LibGDX Color to use, converted to float as by {@link Color#toFloatBits()}
+     * @param encodedColor the libGDX Color to use, converted to float as by {@link Color#toFloatBits()}
      * @param x x of the upper-left corner of the region of text in world coordinates.
      * @param y y of the upper-left corner of the region of text in world coordinates.
      */
@@ -1099,7 +1099,7 @@ public class TextCellFactory implements Disposable {
      * determining the world-space coordinates for the upper-left corner. The TextureRegion will be stretched
      * if its size does not match what this TextCellFactory uses for width and height.
      *
-     * @param batch the LibGDX Batch to do the drawing
+     * @param batch the libGDX Batch to do the drawing
      * @param tr the TextureRegion to draw. Can be null to draw a solid block instead.
      * @param x x of the upper-left corner of the region of text in world coordinates.
      * @param y y of the upper-left corner of the region of text in world coordinates.
@@ -1120,7 +1120,7 @@ public class TextCellFactory implements Disposable {
      * determining the world-space coordinates for the upper-left corner. The TextureRegion will be stretched
      * if its size does not match what this TextCellFactory uses for width and height.
      *
-     * @param batch the LibGDX Batch to do the drawing
+     * @param batch the libGDX Batch to do the drawing
      * @param tr the TextureRegion to draw. Can be null to draw a solid block instead.
      * @param r 0.0 to 0.1 red value
      * @param g 0.0 to 0.1 green value
@@ -1148,13 +1148,13 @@ public class TextCellFactory implements Disposable {
     }
 
     /**
-     * Use the specified Batch to draw a TextureRegion tinted with the specified LibGDX Color, with x and y
+     * Use the specified Batch to draw a TextureRegion tinted with the specified libGDX Color, with x and y
      * determining the world-space coordinates for the upper-left corner. The TextureRegion will be stretched
      * if its size does not match what this TextCellFactory uses for width and height.
      *
-     * @param batch the LibGDX Batch to do the drawing
+     * @param batch the libGDX Batch to do the drawing
      * @param tr the TextureRegion to draw. Can be null to draw a solid block instead.
-     * @param color the LibGDX Color to draw the char(s) with, all the same color
+     * @param color the libGDX Color to draw the char(s) with, all the same color
      * @param x x of the upper-left corner of the region of text in world coordinates.
      * @param y y of the upper-left corner of the region of text in world coordinates.
      */
@@ -1183,7 +1183,7 @@ public class TextCellFactory implements Disposable {
      * {@link SColor#toFloatBits()}, {@link SColor#colorFromFloat(Color, float)}, and
      * {@link SColor#lerpFloatColors(float, float, float)}.
      *
-     * @param batch the LibGDX Batch to do the drawing
+     * @param batch the libGDX Batch to do the drawing
      * @param tr the TextureRegion to draw. Can be null to draw a solid block instead.
      * @param encodedColor the float encoding a color (as ABGR8888; SColor can produce these) to draw the image with
      * @param x x of the upper-left corner of the image in world coordinates.
@@ -1213,7 +1213,7 @@ public class TextCellFactory implements Disposable {
      * determining the world-space coordinates for the upper-left corner. The TextureRegion will be stretched
      * only if the supplied width and height do not match what its own dimensions are.
      *
-     * @param batch the LibGDX Batch to do the drawing
+     * @param batch the libGDX Batch to do the drawing
      * @param tr the TextureRegion to draw. Can be null to draw a solid block instead.
      * @param x x of the upper-left corner of the region of text in world coordinates.
      * @param y y of the upper-left corner of the region of text in world coordinates.
@@ -1236,7 +1236,7 @@ public class TextCellFactory implements Disposable {
      * determining the world-space coordinates for the upper-left corner. The TextureRegion will be stretched
      * only if the supplied width and height do not match what its own dimensions are.
      *
-     * @param batch the LibGDX Batch to do the drawing
+     * @param batch the libGDX Batch to do the drawing
      * @param tr the TextureRegion to draw. Can be null to draw a solid block instead.
      * @param r 0.0 to 0.1 red value
      * @param g 0.0 to 0.1 green value
@@ -1266,13 +1266,13 @@ public class TextCellFactory implements Disposable {
     }
 
     /**
-     * Use the specified Batch to draw a TextureRegion tinted with the specified LibGDX Color, with x and y
+     * Use the specified Batch to draw a TextureRegion tinted with the specified libGDX Color, with x and y
      * determining the world-space coordinates for the upper-left corner. The TextureRegion will be stretched
      * only if the supplied width and height do not match what its own dimensions are.
      *
-     * @param batch the LibGDX Batch to do the drawing
+     * @param batch the libGDX Batch to do the drawing
      * @param tr the TextureRegion to draw. Can be null to draw a solid block instead.
-     * @param color the LibGDX Color to draw the image with, all the same color
+     * @param color the libGDX Color to draw the image with, all the same color
      * @param x x of the upper-left corner of the image in world coordinates.
      * @param y y of the upper-left corner of the image in world coordinates.
      * @param width the width of the TextureRegion or solid block in pixels.
@@ -1297,11 +1297,11 @@ public class TextCellFactory implements Disposable {
     }
 
     /**
-     * Use the specified Batch to draw a TextureRegion tinted with the specified LibGDX Color, with x and y
+     * Use the specified Batch to draw a TextureRegion tinted with the specified libGDX Color, with x and y
      * determining the world-space coordinates for the upper-left corner. The TextureRegion will be stretched
      * only if the supplied width and height do not match what its own dimensions are.
      *
-     * @param batch the LibGDX Batch to do the drawing
+     * @param batch the libGDX Batch to do the drawing
      * @param tr the TextureRegion to draw. Can be null to draw a solid block instead.
      * @param encodedColor the float encoding a color (as ABGR8888; SColor can produce these) to draw the image with
      * @param x x of the upper-left corner of the image in world coordinates.
@@ -1330,7 +1330,7 @@ public class TextCellFactory implements Disposable {
     /**
      * Draws a 2D array of floats that represent encoded colors, with each float used for a block of color the size of
      * one character cell (it will be {@link #actualCellWidth} by {@link #actualCellHeight} in size, using world units).
-     * @param batch the LibGDX Batch to do the drawing
+     * @param batch the libGDX Batch to do the drawing
      * @param encodedColors a 2D float array of encoded colors, each usually produced by {@link Color#toFloatBits()} or an SColor method
      * @param x the x-position where this should render the block of many colors 
      * @param y the y-position where this should render the block of many colors
@@ -1358,7 +1358,7 @@ public class TextCellFactory implements Disposable {
      * {@link #actualCellHeight} divided by {@code ySubCells} in size, using world units). Typically the 2D float array
      * should be larger than the 2D storage for text drawn over the colorful blocks (such as a 2D char array), since
      * more than one subcell may be drawn in the space of one character cell.
-     * @param batch the LibGDX Batch to do the drawing
+     * @param batch the libGDX Batch to do the drawing
      * @param encodedColors a 2D float array of encoded colors, each usually produced by {@link Color#toFloatBits()} or an SColor method
      * @param x the x-position where this should render the block of many colors 
      * @param y the y-position where this should render the block of many colors

@@ -37,7 +37,7 @@ import java.util.List;
 // handling (using the mouse to get a path for the player) already filled in. You can remove any imports or usages of
 // classes that you don't need.
 
-// A main game class that uses LibGDX to display, which is the default for SquidLib, needs to extend ApplicationAdapter
+// A main game class that uses libGDX to display, which is the default for SquidLib, needs to extend ApplicationAdapter
 // or something related, like Game. Game adds features that SquidLib doesn't currently use, so ApplicationAdapter is
 // perfectly fine for these uses.
 public class BasicDemo2 extends ApplicationAdapter {

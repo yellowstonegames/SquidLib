@@ -5508,7 +5508,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                 back[x][y] = floatGet(code);
                             }
                         }
-                        Gdx.graphics.setTitle("RandomXS128 from LibGDX at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("RandomXS128 from libGDX at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 9:
                         for (int x = 0; x < width; x++) {
@@ -5589,7 +5589,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                 back[x][y] = floatGet(code);
                             }
                         }
-                        Gdx.graphics.setTitle("RandomXS128 from LibGDX at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("RandomXS128 from libGDX at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 18:
                         for (int x = 0; x < width; x++) {
