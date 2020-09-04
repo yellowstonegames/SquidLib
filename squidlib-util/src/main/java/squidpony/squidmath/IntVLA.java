@@ -27,7 +27,7 @@ import java.util.Arrays;
  * <br>
  * Was called IntArray in libGDX; to avoid confusion with the fixed-length primitive array type, VLA (variable-length
  * array) was chosen as a different name.
- * Copied from LibGDX by Tommy Ettinger on 10/1/2015.
+ * Copied from libGDX by Tommy Ettinger on 10/1/2015.
  * @author Nathan Sweet */
 public class IntVLA implements Serializable, Cloneable {
     private static final long serialVersionUID = -2948161891082748626L;

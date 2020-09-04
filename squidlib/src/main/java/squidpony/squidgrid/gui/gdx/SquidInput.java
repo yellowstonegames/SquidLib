@@ -639,7 +639,7 @@ public class SquidInput extends InputAdapter {
      * <li>{@code '+'} to {@code '='}</li>
      * <li>{@code '`'} to {@code '~'} (note, this key produces no event on the GWT backend)</li>
      * </ul>
-     * @param keycode a keycode as passed by LibGDX
+     * @param keycode a keycode as passed by libGDX
      * @param shift true if Shift key is being held.
      * @return a char appropriate to the given keycode; often uses shift to capitalize or change a char, but not for keys like the arrow keys that normally don't produce chars
      */

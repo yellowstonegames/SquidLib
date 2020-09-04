@@ -6,7 +6,7 @@ to the usage of semicolons to separate classpath jars on Windows and colons to s
 
 Steps:
 1:
-Download a LibGDX nightly .zip from relatively recently; these steps were done on the 12-31-2015 nightly and should
+Download a libGDX nightly .zip from relatively recently; these steps were done on the 12-31-2015 nightly and should
 probably be unchanged in similar versions or in the 1.7.2 .zip distribution. Unzip the archive where you can easily
 access it on the command line. Also, install the TTF font you want to make into a distance field font. If all you have
 is an OTF font, it needs to be converted to TTF for BMFont to use it; there are plenty of online converters out there.
@@ -84,7 +84,7 @@ time. Make sure the PNG is in the same folder as the unzipped GDX nightly. Also,
 step-7-PNG and step-13-PNG are the same; glyph positions on the grid must be identical. If they aren't, change the
 padding in step 10 and try again.
 14:
-Now it's LibGDX's time to shine. At the command prompt, from the folder holding the unzipped GDX nightly, run this
+Now it's libGDX's time to shine. At the command prompt, from the folder holding the unzipped GDX nightly, run this
 command, replacing INPUT_FONT_8192x8192.png with the name of the PNG generated in step 13, and OUTPUT_FONT_1024x1024.png
 with the name of the PNG generated in step 7:
 

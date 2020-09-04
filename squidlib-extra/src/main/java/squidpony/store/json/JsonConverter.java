@@ -16,8 +16,8 @@ import squidpony.squidmath.*;
 import java.util.*;
 
 /**
- * Augmented version of LibGDX's Json class that knows how to handle various data types common in SquidLib.
- * This includes OrderedMap, which notably allows non-String keys (LibGDX's default Map serializer requires keys to be
+ * Augmented version of libGDX's Json class that knows how to handle various data types common in SquidLib.
+ * This includes OrderedMap, which notably allows non-String keys (libGDX's default Map serializer requires keys to be
  * Strings), but does not currently allow the IHasher to be set (which only should affect OrderedMaps with array keys).
  * It also makes significantly shorter serialized output for 2D char arrays, GreasedRegion and FakeLanguageGen objects,
  * and various collections (IntDoubleOrderedMap, IntVLA, Arrangement, K2, and K2V1 at least).

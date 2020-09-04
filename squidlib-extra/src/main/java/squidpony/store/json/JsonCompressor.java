@@ -17,8 +17,8 @@ import java.io.Writer;
  * and FileHandle input formats, and throws exceptions if you try to deserialize a char array, InputStream, or Reader
  * with fromJson() . Otherwise, it acts like JsonConverter, so the same docs apply:
  * <br>
- * Augmented version of LibGDX's Json class that knows how to handle various data types common in SquidLib.
- * This includes OrderedMap, which notably allows non-String keys (LibGDX's default Map serializer requires keys to be
+ * Augmented version of libGDX's Json class that knows how to handle various data types common in SquidLib.
+ * This includes OrderedMap, which notably allows non-String keys (libGDX's default Map serializer requires keys to be
  * Strings), but does not currently allow the IHasher to be set (which only should affect OrderedMaps with array keys).
  * It also makes significantly shorter serialized output for 2D char arrays, GreasedRegion and FakeLanguageGen objects,
  * and various collections (IntDoubleOrderedMap, IntVLA, Arrangement, K2, and K2V1 at least).
@@ -49,7 +49,7 @@ public class JsonCompressor extends Json {
      * @param object      The object to serialize
      * @param knownType   May be null if the type is unknown.
      * @param elementType May be null if the type is unknown.
-     * @param file        A LibGDX FileHandle that can be written to; overwrites, does not append
+     * @param file        A libGDX FileHandle that can be written to; overwrites, does not append
      */
     @Override
     public void toJson (Object object, Class knownType, Class elementType, FileHandle file) {

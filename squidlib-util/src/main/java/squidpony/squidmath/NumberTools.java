@@ -1115,11 +1115,11 @@ public final class NumberTools {
     }
 
     /**
-     * Close approximation of the frequently-used trigonometric method atan2, with higher precision than LibGDX's atan2
+     * Close approximation of the frequently-used trigonometric method atan2, with higher precision than libGDX's atan2
      * approximation. Maximum error is below 0.001 radians.
      * Takes y and x (in that unusual order) as doubles, and returns the angle from the origin to that point in radians.
      * It is about 5 times faster than {@link Math#atan2(double, double)} (roughly 17 ns instead of roughly 88 ns for
-     * Math, though the computer was under some load during testing). It is almost identical in speed to LibGDX'
+     * Math, though the computer was under some load during testing). It is almost identical in speed to libGDX'
      * MathUtils approximation of the same method; MathUtils seems to have worse average error, though.
      * Credit to Nic Taylor and imuli, with Taylor publishing
      * <a href="https://www.dsprelated.com/showarticle/1052.php">this nice post</a> and imuli commenting with very
@@ -1144,11 +1144,11 @@ public final class NumberTools {
     }
 
     /**
-     * Close approximation of the frequently-used trigonometric method atan2, with higher precision than LibGDX's atan2
+     * Close approximation of the frequently-used trigonometric method atan2, with higher precision than libGDX's atan2
      * approximation. Maximum error is below 0.001 radians.
      * Takes y and x (in that unusual order) as floats, and returns the angle from the origin to that point in radians.
      * It is about 5 times faster than {@link Math#atan2(double, double)} (roughly 17 ns instead of roughly 88 ns for
-     * Math, though the computer was under some load during testing). It is almost identical in speed to LibGDX'
+     * Math, though the computer was under some load during testing). It is almost identical in speed to libGDX'
      * MathUtils approximation of the same method; MathUtils seems to have worse average error, though.
      * Credit to Nic Taylor and imuli, with Taylor publishing
      * <a href="https://www.dsprelated.com/showarticle/1052.php">this nice post</a> and imuli commenting with very
@@ -1226,11 +1226,11 @@ public final class NumberTools {
     }
 
     /**
-     * Close approximation of the frequently-used trigonometric method atan2, with higher precision than LibGDX's atan2
+     * Close approximation of the frequently-used trigonometric method atan2, with higher precision than libGDX's atan2
      * approximation, and giving a result in degrees from -180 to 180. Maximum error is below 0.1 degrees.
      * Takes y and x (in that unusual order) as doubles, and returns the angle from the origin to that point in degrees.
      * It is about 5 times faster than {@link Math#atan2(double, double)} (roughly 17 ns instead of roughly 88 ns for
-     * Math, though the computer was under some load during testing). It is almost identical in speed to LibGDX'
+     * Math, though the computer was under some load during testing). It is almost identical in speed to libGDX'
      * MathUtils approximation after converting to degrees; MathUtils seems to have worse average error, though.
      * Credit to StackExchange user njuffa, who gave
      * <a href="https://math.stackexchange.com/a/1105038">this useful answer</a>.
@@ -1259,11 +1259,11 @@ public final class NumberTools {
     }
 
     /**
-     * Close approximation of the frequently-used trigonometric method atan2, with higher precision than LibGDX's atan2
+     * Close approximation of the frequently-used trigonometric method atan2, with higher precision than libGDX's atan2
      * approximation, and giving a result in degrees from -180 to 180. Maximum error is below 0.1 degrees.
      * Takes y and x (in that unusual order) as floats, and returns the angle from the origin to that point in degrees.
      * It is about 5 times faster than {@link Math#atan2(double, double)} (roughly 17 ns instead of roughly 88 ns for
-     * Math, though the computer was under some load during testing). It is almost identical in speed to LibGDX'
+     * Math, though the computer was under some load during testing). It is almost identical in speed to libGDX'
      * MathUtils approximation after converting to degrees; MathUtils seems to have worse average error, though.
      * Credit to StackExchange user njuffa, who gave
      * <a href="https://math.stackexchange.com/a/1105038">this useful answer</a>.
@@ -1292,11 +1292,11 @@ public final class NumberTools {
     }
 
     /**
-     * Close approximation of the frequently-used trigonometric method atan2, with higher precision than LibGDX's atan2
+     * Close approximation of the frequently-used trigonometric method atan2, with higher precision than libGDX's atan2
      * approximation, and giving a result in degrees from 0 to 360. Maximum error is below 0.1 degrees.
      * Takes y and x (in that unusual order) as doubles, and returns the angle from the origin to that point in degrees.
      * It is about 5 times faster than {@link Math#atan2(double, double)} (roughly 17 ns instead of roughly 88 ns for
-     * Math, though the computer was under some load during testing). It is almost identical in speed to LibGDX'
+     * Math, though the computer was under some load during testing). It is almost identical in speed to libGDX'
      * MathUtils approximation after converting to degrees; MathUtils seems to have worse average error, though.
      * Credit to StackExchange user njuffa, who gave
      * <a href="https://math.stackexchange.com/a/1105038">this useful answer</a>.
@@ -1324,11 +1324,11 @@ public final class NumberTools {
         }
     }
     /**
-     * Close approximation of the frequently-used trigonometric method atan2, with higher precision than LibGDX's atan2
+     * Close approximation of the frequently-used trigonometric method atan2, with higher precision than libGDX's atan2
      * approximation, and giving a result in degrees from 0 to 360. Maximum error is below 0.1 degrees.
      * Takes y and x (in that unusual order) as floats, and returns the angle from the origin to that point in degrees.
      * It is about 5 times faster than {@link Math#atan2(double, double)} (roughly 17 ns instead of roughly 88 ns for
-     * Math, though the computer was under some load during testing). It is almost identical in speed to LibGDX'
+     * Math, though the computer was under some load during testing). It is almost identical in speed to libGDX'
      * MathUtils approximation after converting to degrees; MathUtils seems to have worse average error, though.
      * Credit to StackExchange user njuffa, who gave
      * <a href="https://math.stackexchange.com/a/1105038">this useful answer</a>.

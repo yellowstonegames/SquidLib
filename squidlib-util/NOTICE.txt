@@ -123,7 +123,7 @@ shared between eudex and SquidLib, however.
 Small but important bugfixes and additions were contributed by Ivan Polozhēntsev
 ( https://github.com/uzername/ , introduced the concept and some code for
 SquidKeys.ignoreInput), David Becker (found and fixed several GDX-related bugs),
-and Shane Chubb (found and fixed a bug in the LibGDX TextCellFactory).
+and Shane Chubb (found and fixed a bug in the libGDX TextCellFactory).
 This is not a complete list of bugfix contributors.
 
 MixedGenerator is an extension and port of Drunkard's Walk dungeon generation code
