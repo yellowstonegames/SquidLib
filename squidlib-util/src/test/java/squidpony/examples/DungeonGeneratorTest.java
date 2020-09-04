@@ -506,11 +506,12 @@ public class DungeonGeneratorTest {
 
         System.out.println("ConnectingMapGenerator\n");
         rng.setState(1L);
-        ConnectingMapGenerator cmg = new ConnectingMapGenerator(30, 30, 1, 1, rng, 2);
+        ConnectingMapGenerator cmg = new ConnectingMapGenerator(31, 31, 4, 4, rng, 1, 0.6);
         sdg.clearEffects();
         //sdg.addGrass(DungeonUtility.CORRIDOR_FLOOR, 20);
+        sdg.addDoors(80, false);
         cmg.generate();
-        dungeon = sdg.generate(cmg.dungeon, cmg.environment);
+        dungeon = DungeonUtility.closeDoors(sdg.generate(cmg.dungeon, cmg.environment));
         //dungeonGenerator.generate(TilesetType.DEFAULT_DUNGEON);
         dungeon[sdg.stairsUp.x][sdg.stairsUp.y] = '<';
         dungeon[sdg.stairsDown.x][sdg.stairsDown.y] = '>';

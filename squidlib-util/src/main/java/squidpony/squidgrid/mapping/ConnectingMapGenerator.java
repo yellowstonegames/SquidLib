@@ -90,6 +90,7 @@ public class ConnectingMapGenerator implements IDungeonGenerator {
     public char[][] dungeon;
     public int[][] environment;
     public GreasedRegion region;
+    public double divideRooms;
     private final transient GreasedRegion tempRegion;
     public IRNG rng;
 
@@ -135,7 +136,21 @@ public class ConnectingMapGenerator implements IDungeonGenerator {
      * @param wallThickness how thick a wall between two rooms should be, in cells; 1 is minimum, and this usually
      *                      shouldn't be much more than roomWidth or roomHeight
      */
-    public ConnectingMapGenerator(int width, int height, int roomWidth, int roomHeight, IRNG random, int wallThickness)
+    public ConnectingMapGenerator(int width, int height, int roomWidth, int roomHeight, IRNG random, int wallThickness) {
+        this(width, height, roomWidth, roomHeight, random, wallThickness, 0.0);
+    }
+    /**
+     * 
+     * @param width total width of the map, in cells
+     * @param height total height of the map, in cells
+     * @param roomWidth target width of each room, in cells; only counts the center floor area of a room
+     * @param roomHeight target height of each room, in cells; only counts the center floor area of a room
+     * @param random an IRNG to make random choices for connecting rooms
+     * @param wallThickness how thick a wall between two rooms should be, in cells; 1 is minimum, and this usually
+     *                      shouldn't be much more than roomWidth or roomHeight
+     */
+    public ConnectingMapGenerator(int width, int height, int roomWidth, int roomHeight, IRNG random, int wallThickness,
+                                  double divideRooms)
     {
         this.width = Math.max(1, width);
         this.height = Math.max(1, height);
@@ -146,6 +161,7 @@ public class ConnectingMapGenerator implements IDungeonGenerator {
         this.wallThickness = Math.max(1, wallThickness);
         dungeon = ArrayTools.fill(' ', this.width, this.height);
         environment = new int[this.width][this.height];
+        this.divideRooms = divideRooms;
         rng = random;
     }
     /**
@@ -258,16 +274,39 @@ public class ConnectingMapGenerator implements IDungeonGenerator {
             dx = d & 0xFFFF;
             dy = d >>> 16;
             int conn = links.getAt(i);
-            
+
             region.insertRectangle(1 + dx * (roomWidth + wallThickness), 1 + dy * (roomHeight + wallThickness), roomWidth, roomHeight);
-            if((conn & 1) != 0)
-                region.insertRectangle(1 + dx * (roomWidth + wallThickness) + roomWidth, 1 + dy * (roomHeight + wallThickness), wallThickness, roomHeight);
-            if((conn & 2) != 0)
-                region.insertRectangle(1 + dx * (roomWidth + wallThickness), 1 + dy * (roomHeight + wallThickness) + roomHeight, roomWidth, wallThickness);
-            if((conn & 4) != 0)
-                region.insertRectangle(1 + dx * (roomWidth + wallThickness) - wallThickness, 1 + dy * (roomHeight + wallThickness), wallThickness, roomHeight);
-            if((conn & 8) != 0)
-                region.insertRectangle(1 + dx * (roomWidth + wallThickness), 1 + dy * (roomHeight + wallThickness) - wallThickness, roomWidth, wallThickness);
+            if (divideRooms > 0.0 && rng.nextDouble() < divideRooms) {
+                if ((conn & 1) != 0)
+                {
+                    region.removeRectangle(1 + dx * (roomWidth + wallThickness) + roomWidth, 1 + dy * (roomHeight + wallThickness), wallThickness, roomHeight);
+                    region.insertRectangle(1 + dx * (roomWidth + wallThickness) + roomWidth, 1 + dy * (roomHeight + wallThickness) + rng.nextSignedInt(roomHeight), wallThickness, 1);
+                }
+                if ((conn & 2) != 0)
+                {
+                    region.removeRectangle(1 + dx * (roomWidth + wallThickness), 1 + dy * (roomHeight + wallThickness) + roomHeight, roomWidth, wallThickness);
+                    region.insertRectangle(1 + dx * (roomWidth + wallThickness) + rng.nextSignedInt(roomWidth), 1 + dy * (roomHeight + wallThickness) + roomHeight, 1, wallThickness);
+                }
+                if ((conn & 4) != 0)
+                {
+                    region.removeRectangle(1 + dx * (roomWidth + wallThickness) - wallThickness, 1 + dy * (roomHeight + wallThickness), wallThickness, roomHeight);
+                    region.insertRectangle(1 + dx * (roomWidth + wallThickness) - wallThickness, 1 + dy * (roomHeight + wallThickness) + rng.nextSignedInt(roomHeight), wallThickness, 1);
+                }
+                if ((conn & 8) != 0)
+                {
+                    region.removeRectangle(1 + dx * (roomWidth + wallThickness), 1 + dy * (roomHeight + wallThickness) - wallThickness, roomWidth, wallThickness);
+                    region.insertRectangle(1 + dx * (roomWidth + wallThickness) + rng.nextSignedInt(roomWidth), 1 + dy * (roomHeight + wallThickness) - wallThickness, 1, wallThickness);
+                }
+            } else {
+                if ((conn & 1) != 0)
+                    region.insertRectangle(1 + dx * (roomWidth + wallThickness) + roomWidth, 1 + dy * (roomHeight + wallThickness), wallThickness, roomHeight);
+                if ((conn & 2) != 0)
+                    region.insertRectangle(1 + dx * (roomWidth + wallThickness), 1 + dy * (roomHeight + wallThickness) + roomHeight, roomWidth, wallThickness);
+                if ((conn & 4) != 0)
+                    region.insertRectangle(1 + dx * (roomWidth + wallThickness) - wallThickness, 1 + dy * (roomHeight + wallThickness), wallThickness, roomHeight);
+                if ((conn & 8) != 0)
+                    region.insertRectangle(1 + dx * (roomWidth + wallThickness), 1 + dy * (roomHeight + wallThickness) - wallThickness, roomWidth, wallThickness);
+            }
         }
         region.writeCharsInto(dungeon, '.');
         region.writeIntsInto(environment, DungeonUtility.ROOM_FLOOR);
