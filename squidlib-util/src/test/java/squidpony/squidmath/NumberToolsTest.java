@@ -6,6 +6,7 @@ import org.junit.Test;
 public class NumberToolsTest {
   
   public static float TOLERANCE = 0x1p-12f; // 1.0 / 4096.0
+  public static float WEAK_TOLERANCE = 0x1.2p-10f; // 1.125 / 1024.0
 
   public static double atan2_Math(double y, double x){
     final double a = Math.atan2(y, x) * (0.5 / Math.PI) + 1.0;
@@ -50,34 +51,40 @@ public class NumberToolsTest {
   }
   
   @Test
-  public void testCosDegrees() {
+  public void testDegrees() {
     Assert.assertEquals(Float.NEGATIVE_INFINITY, NumberTools.cosDegrees(-0x1.7a573cp+102f), TOLERANCE);
+    Assert.assertEquals(Math.cos(Math.toRadians(-0x1.f6a936p+1f)), NumberTools.cosDegrees(-0x1.f6a936p+1f), WEAK_TOLERANCE);
+    Assert.assertEquals(Math.cos(Math.toRadians(0x1.f03bda2455007p-7)), NumberTools.cosDegrees(0x1.f03bda2455007p-7f), WEAK_TOLERANCE);
+    for (float f = 0f; f <= 360f; f += 0.01f) {
+      Assert.assertEquals("Bad sin result at " + f, Math.sin(Math.toRadians(f)), NumberTools.sinDegrees(f), WEAK_TOLERANCE);
+      Assert.assertEquals("Bad cos result at " + f, Math.cos(Math.toRadians(f)), NumberTools.cosDegrees(f), WEAK_TOLERANCE);
+    }
   }
 
   @Test
   public void testRadians() {
-    Assert.assertEquals(-0x1.6a61f2p-1f, NumberTools.cos(-0x1.f6a936p+1f), TOLERANCE);
-    Assert.assertEquals(0x1.fff1139353f1cp-1, NumberTools.cos(0x1.f03bda2455007p-7), TOLERANCE);
+    Assert.assertEquals(Math.cos(-0x1.f6a936p+1f), NumberTools.cos(-0x1.f6a936p+1f), WEAK_TOLERANCE);
+    Assert.assertEquals(Math.cos(0x1.f03bda2455007p-7), NumberTools.cos(0x1.f03bda2455007p-7), WEAK_TOLERANCE);
     for (float f = 0f; f <= 6.283185307179586f; f += 0.001f) {
-      Assert.assertEquals("Bad sin result at " + f, Math.sin(f), NumberTools.sin(f), 0.0011);
-      Assert.assertEquals("Bad cos result at " + f, Math.cos(f), NumberTools.cos(f), 0.0011);
+      Assert.assertEquals("Bad sin result at " + f, Math.sin(f), NumberTools.sin(f), WEAK_TOLERANCE);
+      Assert.assertEquals("Bad cos result at " + f, Math.cos(f), NumberTools.cos(f), WEAK_TOLERANCE);
     }
 
   }
 
   @Test
   public void testTurns() {
-    Assert.assertEquals(Math.sin(0.2499999999999 * Math.PI * 2.0), NumberTools.sin_(0.2499999999999), 0x1p-9);
-    Assert.assertEquals(Math.cos(0.2499999999999 * Math.PI * 2.0), NumberTools.cos_(0.2499999999999), 0x1p-9);
+    Assert.assertEquals(Math.sin(0.2499999999999 * Math.PI * 2.0), NumberTools.sin_(0.2499999999999), WEAK_TOLERANCE);
+    Assert.assertEquals(Math.cos(0.2499999999999 * Math.PI * 2.0), NumberTools.cos_(0.2499999999999), WEAK_TOLERANCE);
 
-    Assert.assertEquals(Math.sin(-0.2499999999999 * Math.PI * 2.0), NumberTools.sin_(-0.2499999999999), 0x1p-9);
-    Assert.assertEquals(Math.cos(-0.2499999999999 * Math.PI * 2.0), NumberTools.cos_(-0.2499999999999), 0x1p-9);
+    Assert.assertEquals(Math.sin(-0.2499999999999 * Math.PI * 2.0), NumberTools.sin_(-0.2499999999999), WEAK_TOLERANCE);
+    Assert.assertEquals(Math.cos(-0.2499999999999 * Math.PI * 2.0), NumberTools.cos_(-0.2499999999999), WEAK_TOLERANCE);
     
-    Assert.assertEquals(Math.sin(Math.PI * -0.5), NumberTools.sin_(-0.25), 0x1p-9);
-    Assert.assertEquals(Math.cos(Math.PI * -0.5), NumberTools.cos_(-0.25), 0x1p-9);
+    Assert.assertEquals(Math.sin(Math.PI * -0.5), NumberTools.sin_(-0.25), WEAK_TOLERANCE);
+    Assert.assertEquals(Math.cos(Math.PI * -0.5), NumberTools.cos_(-0.25), WEAK_TOLERANCE);
     for (float f = 0f; f <= 1f; f += 0.0001f) {
-      Assert.assertEquals("Bad sin_ result at " + f, Math.sin(f * Math.PI * 2.0), NumberTools.sin_(f), 0x1p-9);
-      Assert.assertEquals("Bad cos_ result at " + f, Math.cos(f * Math.PI * 2.0), NumberTools.cos_(f), 0x1p-9);
+      Assert.assertEquals("Bad sin_ result at " + f, Math.sin(f * Math.PI * 2.0), NumberTools.sin_(f), WEAK_TOLERANCE);
+      Assert.assertEquals("Bad cos_ result at " + f, Math.cos(f * Math.PI * 2.0), NumberTools.cos_(f), WEAK_TOLERANCE);
     }
   }
   @Test
