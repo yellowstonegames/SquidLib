@@ -7,6 +7,7 @@ public class NumberToolsTest {
   
   public static float TOLERANCE = 0x1p-12f; // 1.0 / 4096.0
   public static float WEAK_TOLERANCE = 0x1.2p-10f; // 1.125 / 1024.0
+  public static float DEGREE_TOLERANCE = 0.05f; // 1.0 / 20.0, only permitted for degree measurements
 
   public static double atan2_Math(double y, double x){
     final double a = Math.atan2(y, x) * (0.5 / Math.PI) + 1.0;
@@ -58,6 +59,11 @@ public class NumberToolsTest {
     for (float f = 0f; f <= 360f; f += 0.01f) {
       Assert.assertEquals("Bad sin result at " + f, Math.sin(Math.toRadians(f)), NumberTools.sinDegrees(f), WEAK_TOLERANCE);
       Assert.assertEquals("Bad cos result at " + f, Math.cos(Math.toRadians(f)), NumberTools.cosDegrees(f), WEAK_TOLERANCE);
+    }
+    for (float y = -2f; y < 2f; y+= 0.01f) {
+      for (float x = -2f; x < 2f; x+= 0.01f) {
+        Assert.assertEquals("Bad atan2Degrees result at x=" + x + ",y=" + y, Math.toDegrees(Math.atan2(y, x)), NumberTools.atan2Degrees(y, x), DEGREE_TOLERANCE);
+      }
     }
   }
 

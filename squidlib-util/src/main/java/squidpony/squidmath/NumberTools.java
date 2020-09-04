@@ -1232,8 +1232,9 @@ public final class NumberTools {
      * It is about 5 times faster than {@link Math#atan2(double, double)} (roughly 17 ns instead of roughly 88 ns for
      * Math, though the computer was under some load during testing). It is almost identical in speed to libGDX'
      * MathUtils approximation after converting to degrees; MathUtils seems to have worse average error, though.
-     * Credit to StackExchange user njuffa, who gave
-     * <a href="https://math.stackexchange.com/a/1105038">this useful answer</a>.
+     * Credit to Nic Taylor and imuli, with Taylor publishing
+     * <a href="https://www.dsprelated.com/showarticle/1052.php">this nice post</a> and imuli commenting with very
+     * handy information that makes this approach usable.
      * <br>
      * See also {@link #atan2Degrees360(double, double)}, which is just like this but returns an angle from 0 to 360,
      * instead of -180 to 180, in case negative angles are undesirable.
@@ -1241,21 +1242,16 @@ public final class NumberTools {
      * @param x x-component of the point to find the angle towards; note the parameter order is unusual by convention
      * @return the angle to the given point, in degrees as a double
      */
-    public static double atan2Degrees(final double y, final double x)
+    public static double atan2Degrees(double y, double x)
     {
         if(y == 0.0 && x >= 0.0) return 0.0;
-        final double ax = Math.abs(x), ay = Math.abs(y);
-        if(ax < ay)
-        {
-            final double a = ax / ay, s = a * a,
-                    r = 90.0 - (((-0.0464964749 * s + 0.15931422) * s - 0.327622764) * s * a + a) * 57.29577951308232;
-            return (x < 0.0) ? (y < 0.0) ? -180.0 + r : 180.0 - r : (y < 0.0) ? -r : r;
-        }
-        else {
-            final double a = ay / ax, s = a * a,
-                    r = (((-0.0464964749 * s + 0.15931422) * s - 0.327622764) * s * a + a) * 57.29577951308232;
-            return (x < 0.0) ? (y < 0.0) ? -180.0 + r : 180.0 - r : (y < 0.0) ? -r : r;
-        }
+        double ay = Math.abs(y), ax = Math.abs(x);
+        boolean invert = ay > ax;
+        double z = invert ? ax / ay : ay / ax;
+        z = (((((8.107295505321636)  * z) - (19.670500543533855) ) * z - (0.9295667268202475) ) * z + (57.51573801063304) ) * z - (0.009052733163067006) ;
+        if (invert) z = 90 - z;
+        if (x < 0) z = 180 - z;
+        return Math.copySign(z, y);
     }
 
     /**
@@ -1265,8 +1261,9 @@ public final class NumberTools {
      * It is about 5 times faster than {@link Math#atan2(double, double)} (roughly 17 ns instead of roughly 88 ns for
      * Math, though the computer was under some load during testing). It is almost identical in speed to libGDX'
      * MathUtils approximation after converting to degrees; MathUtils seems to have worse average error, though.
-     * Credit to StackExchange user njuffa, who gave
-     * <a href="https://math.stackexchange.com/a/1105038">this useful answer</a>.
+     * Credit to Nic Taylor and imuli, with Taylor publishing
+     * <a href="https://www.dsprelated.com/showarticle/1052.php">this nice post</a> and imuli commenting with very
+     * handy information that makes this approach usable.
      * <br>
      * See also {@link #atan2Degrees360(float, float)}, which is just like this but returns an angle from 0 to 360,
      * instead of -180 to 180, in case negative angles are undesirable.
@@ -1274,32 +1271,28 @@ public final class NumberTools {
      * @param x x-component of the point to find the angle towards; note the parameter order is unusual by convention
      * @return the angle to the given point, in degrees as a float
      */
-    public static float atan2Degrees(final float y, final float x)
+    public static float atan2Degrees(float y, float x)
     {
         if(y == 0f && x >= 0f) return 0f;
-        final float ax = Math.abs(x), ay = Math.abs(y);
-        if(ax < ay)
-        {
-            final float a = ax / ay, s = a * a,
-                    r = 90f - (((-0.0464964749f * s + 0.15931422f) * s - 0.327622764f) * s * a + a) * 57.29577951308232f;
-            return (x < 0f) ? (y < 0f) ? -180f + r : 180f - r : (y < 0f) ? -r : r;
-        }
-        else {
-            final float a = ay / ax, s = a * a,
-                    r = (((-0.0464964749f * s + 0.15931422f) * s - 0.327622764f) * s * a + a) * 57.29577951308232f;
-            return (x < 0f) ? (y < 0f) ? -180f + r : 180f - r : (y < 0f) ? -r : r;
-        }
+        float ax = Math.abs(x), ay = Math.abs(y);
+        boolean invert = ay > ax;
+        float z = invert ? ax / ay : ay / ax;
+        z = (((((8.107295505321636f)  * z) - (19.670500543533855f) ) * z - (0.9295667268202475f) ) * z + (57.51573801063304f) ) * z - (0.009052733163067006f) ;
+        if (invert) z = 90 - z;
+        if (x < 0) z = 180 - z;
+        return Math.copySign(z, y);
     }
 
     /**
      * Close approximation of the frequently-used trigonometric method atan2, with higher precision than libGDX's atan2
-     * approximation, and giving a result in degrees from 0 to 360. Maximum error is below 0.1 degrees.
+     * approximation, and giving a result in degrees from 0 to 360 (both inclusive). Maximum error is below 0.1 degrees.
      * Takes y and x (in that unusual order) as doubles, and returns the angle from the origin to that point in degrees.
      * It is about 5 times faster than {@link Math#atan2(double, double)} (roughly 17 ns instead of roughly 88 ns for
      * Math, though the computer was under some load during testing). It is almost identical in speed to libGDX'
      * MathUtils approximation after converting to degrees; MathUtils seems to have worse average error, though.
-     * Credit to StackExchange user njuffa, who gave
-     * <a href="https://math.stackexchange.com/a/1105038">this useful answer</a>.
+     * Credit to Nic Taylor and imuli, with Taylor publishing
+     * <a href="https://www.dsprelated.com/showarticle/1052.php">this nice post</a> and imuli commenting with very
+     * handy information that makes this approach usable.
      * <br>
      * See also {@link #atan2Degrees(double, double)}, which is just like this but returns an angle from -180 to 180,
      * matching {@link Math#atan2(double, double)}'s convention.
@@ -1307,31 +1300,27 @@ public final class NumberTools {
      * @param x x-component of the point to find the angle towards; note the parameter order is unusual by convention
      * @return the angle to the given point, in degrees as a double
      */
-    public static double atan2Degrees360(final double y, final double x)
+    public static double atan2Degrees360(double y, double x)
     {
         if(y == 0.0 && x >= 0.0) return 0.0;
-        final double ax = Math.abs(x), ay = Math.abs(y);
-        if(ax < ay)
-        {
-            final double a = ax / ay, s = a * a,
-                    r = 90.0 - (((-0.0464964749 * s + 0.15931422) * s - 0.327622764) * s * a + a) * 57.29577951308232;
-            return (x < 0.0) ? (y < 0.0) ? 180.0 + r : 180.0 - r : (y < 0.0) ? 360.0 - r : r;
-        }
-        else {
-            final double a = ay / ax, s = a * a,
-                    r = (((-0.0464964749 * s + 0.15931422) * s - 0.327622764) * s * a + a) * 57.29577951308232;
-            return (x < 0.0) ? (y < 0.0) ? 180.0 + r : 180.0 - r : (y < 0.0) ? 360.0 - r : r;
-        }
+        double ay = Math.abs(y), ax = Math.abs(x);
+        boolean invert = ay > ax;
+        double z = invert ? ax / ay : ay / ax;
+        z = (((((8.107295505321636)  * z) - (19.670500543533855) ) * z - (0.9295667268202475) ) * z + (57.51573801063304) ) * z - (0.009052733163067006) ;
+        if (invert) z = 90 - z;
+        if (x < 0) z = 180 - z;
+        return y < 0 ? 360 - z : z;
     }
     /**
      * Close approximation of the frequently-used trigonometric method atan2, with higher precision than libGDX's atan2
-     * approximation, and giving a result in degrees from 0 to 360. Maximum error is below 0.1 degrees.
+     * approximation, and giving a result in degrees from 0 to 360 (both inclusive). Maximum error is below 0.1 degrees.
      * Takes y and x (in that unusual order) as floats, and returns the angle from the origin to that point in degrees.
      * It is about 5 times faster than {@link Math#atan2(double, double)} (roughly 17 ns instead of roughly 88 ns for
      * Math, though the computer was under some load during testing). It is almost identical in speed to libGDX'
      * MathUtils approximation after converting to degrees; MathUtils seems to have worse average error, though.
-     * Credit to StackExchange user njuffa, who gave
-     * <a href="https://math.stackexchange.com/a/1105038">this useful answer</a>.
+     * Credit to Nic Taylor and imuli, with Taylor publishing
+     * <a href="https://www.dsprelated.com/showarticle/1052.php">this nice post</a> and imuli commenting with very
+     * handy information that makes this approach usable.
      * <br>
      * See also {@link #atan2Degrees(float, float)}, which is just like this but returns an angle from -180 to 180,
      * matching {@link Math#atan2(double, double)}'s convention.
@@ -1339,21 +1328,16 @@ public final class NumberTools {
      * @param x x-component of the point to find the angle towards; note the parameter order is unusual by convention
      * @return the angle to the given point, in degrees as a float
      */
-    public static float atan2Degrees360(final float y, final float x)
+    public static float atan2Degrees360(float y, float x)
     {
-        if(y == 0.0 && x >= 0.0) return 0f;
-        final float ax = Math.abs(x), ay = Math.abs(y);
-        if(ax < ay)
-        {
-            final float a = ax / ay, s = a * a,
-                    r = 90f - (((-0.0464964749f * s + 0.15931422f) * s - 0.327622764f) * s * a + a) * 57.29577951308232f;
-            return (x < 0f) ? (y < 0f) ? 180f + r : 180f - r : (y < 0f) ? 360f - r : r;
-        }
-        else {
-            final float a = ay / ax, s = a * a,
-                    r = (((-0.0464964749f * s + 0.15931422f) * s - 0.327622764f) * s * a + a) * 57.29577951308232f;
-            return (x < 0f) ? (y < 0f) ? 180f + r : 180f - r : (y < 0f) ? 360f - r : r;
-        }
+        if(y == 0f && x >= 0f) return 0f;
+        float ax = Math.abs(x), ay = Math.abs(y);
+        boolean invert = ay > ax;
+        float z = invert ? ax / ay : ay / ax;
+        z = (((((8.107295505321636f)  * z) - (19.670500543533855f) ) * z - (0.9295667268202475f) ) * z + (57.51573801063304f) ) * z - (0.009052733163067006f) ;
+        if (invert) z = 90 - z;
+        if (x < 0) z = 180 - z;
+        return y < 0 ? 360 - z : z;
     }
 
 
