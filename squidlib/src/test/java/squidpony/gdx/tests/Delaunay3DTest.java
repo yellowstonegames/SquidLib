@@ -99,15 +99,14 @@ public class Delaunay3DTest extends ApplicationAdapter {
         palette = new OrderedSet<>(SColor.FULL_PALETTE);
         for (int i = palette.size() - 1; i >= 0; i--) {
             Color color = palette.getAt(i);
-            if(color.a < 1f || SColor.saturation(color) < 0.5f || SColor.value(color) < 0.4f)
+            if(color.a < 1f || SColor.saturation(color) < 0.35f || SColor.luminanceYCoCg(color) < 0.45f)
                 palette.removeAt(i);
         }
         palette.sort(new Comparator<Color>() {
             @Override
             public int compare(Color c1, Color c2) {
                 // sorts by hue
-                final int diff = NumberTools.floatToIntBits(SColor.hue(c1) - SColor.hue(c2));
-                return (diff >> 31 | -diff >>> 31); // project nayuki signum
+                return NumberTools.floatToIntBits(SColor.hue(c1) - SColor.hue(c2));
             }
         });
         imr = new ImmediateModeRenderer20(30000, false, true, 0);
@@ -116,7 +115,7 @@ public class Delaunay3DTest extends ApplicationAdapter {
         vertices = new float[(triangles.size / 3) * 10];
         int idx;
         for (int t = 2, i = 0; t < triangles.size; t+=3) {
-            vertices[i++] = palette.getAt(t % palette.size()).toFloatBits();
+            vertices[i++] = palette.getAt(t % palette.size()).toFloatBits(); //-0x1.252524p126F;//for uniform gray
             idx = triangles.get(t-2);
 //            vertices[i++] = points[idx*3] * 256f;
 //            vertices[i++] = points[idx*3+1] * 256f;
