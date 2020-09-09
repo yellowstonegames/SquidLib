@@ -391,7 +391,29 @@ public class DelaunayTriangulator implements Serializable {
             this.a = a;
             this.b = b;
             this.c = c;
+            cw();
         }
+
+        /**
+         * Checks if this Triangle is oriented clockwise; if it isn't, this swaps
+         * {@link #a} and {@link #c} to make it oriented CW.
+         * @return this for chaining; may be different from before the call
+         */
+        public Triangle cw() {
+            double a11 = a.x - c.x;
+            double a21 = b.x - c.x;
+
+            double a12 = a.y - c.y;
+            double a22 = b.y - c.y;
+
+            if(a11 * a22 - a12 * a21 > 0.0){
+                CoordDouble p = c;
+                this.c = this.a;
+                this.a = p;
+            }
+            return this;
+        }
+
 
         /**
          * Tests if a 2D point lies inside this 2D triangle. See Real-Time Collision
@@ -442,20 +464,20 @@ public class DelaunayTriangulator implements Serializable {
          *         the three points a, b, and c of the triangle
          */
         public boolean isPointInCircumcircle(CoordDouble point) {
-            double a11 = a.x - point.x;
-            double a21 = b.x - point.x;
-            double a31 = c.x - point.x;
+            double a1x = a.x - point.x;
+            double a2x = b.x - point.x;
+            double a3x = c.x - point.x;
+   
+            double a1y = a.y - point.y;
+            double a2y = b.y - point.y;
+            double a3y = c.y - point.y;
 
-            double a12 = a.y - point.y;
-            double a22 = b.y - point.y;
-            double a32 = c.y - point.y;
+            double a1d = a1x * a1x + a1y * a1y;
+            double a2d = a2x * a2x + a2y * a2y;
+            double a3d = a3x * a3x + a3y * a3y;
 
-            double a13 = (a.x - point.x) * (a.x - point.x) + (a.y - point.y) * (a.y - point.y);
-            double a23 = (b.x - point.x) * (b.x - point.x) + (b.y - point.y) * (b.y - point.y);
-            double a33 = (c.x - point.x) * (c.x - point.x) + (c.y - point.y) * (c.y - point.y);
-
-            double det = a11 * a22 * a33 + a12 * a23 * a31 + a13 * a21 * a32 - a13 * a22 * a31 - a12 * a21 * a33
-                    - a11 * a23 * a32;
+            double det = a1x * a2y * a3d + a1y * a2d * a3x + a1d * a2x * a3y - a1d * a2y * a3x - a1y * a2x * a3d
+                    - a1x * a2d * a3y;
 
             if (isOrientedCCW()) {
                 return det > 0.0;
