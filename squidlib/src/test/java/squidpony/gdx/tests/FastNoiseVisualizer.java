@@ -24,7 +24,7 @@ import static com.badlogic.gdx.graphics.GL20.GL_POINTS;
  */
 public class FastNoiseVisualizer extends ApplicationAdapter {
 
-    private VastNoise noise = new VastNoise(1, 0.0625f, FastNoise.HONEY, 1);
+    private FastNoise noise = new VastNoise(1, 0.0625f, FastNoise.FOAM, 1);
     private int dim; // this can be 0, 1, 2, 3, or 4; add 2 to get the actual dimensions
     private int octaves = 1;
     private float freq = 1f;
@@ -220,7 +220,7 @@ public class FastNoiseVisualizer extends ApplicationAdapter {
 
     public void putMap() {
         renderer.begin(view.getCamera().combined, GL_POINTS);
-        float bright;
+        float bright, c = ctr * 0.5f;
         switch (dim) {
             case 0:
                 for (int x = 0; x < width; x++) {
@@ -234,7 +234,7 @@ public class FastNoiseVisualizer extends ApplicationAdapter {
             case 1:
                 for (int x = 0; x < width; x++) {
                     for (int y = 0; y < height; y++) {
-                        bright = basicPrepare(noise.getConfiguredNoise(x, y, ctr));
+                        bright = basicPrepare(noise.getConfiguredNoise(x, y, c));
                         renderer.color(bright, bright, bright, 1f);
                         renderer.vertex(x, y, 0);
                     }
@@ -253,9 +253,11 @@ public class FastNoiseVisualizer extends ApplicationAdapter {
                 for (int x = 0; x < width; x++) {
                     for (int y = 0; y < height; y++) {
                         bright = basicPrepare(noise.getConfiguredNoise(
-                                (y * 0.6f + x * 0.4f) + ctr * 1.3f, (x * 0.6f - y * 0.4f) + ctr * 1.3f,
-                                (x * 0.7f + y * 0.3f) - ctr * 1.3f, (y * 0.7f - x * 0.3f) - ctr * 1.3f,
-                                (x * 0.35f - y * 0.25f) * 0.65f - (x * 0.25f + y * 0.35f) * 1.35f));
+                                (y * 0.6f + x * 0.4f) + ctr * 1.4f,
+                                (x * 0.6f - y * 0.4f) + ctr * 1.4f,
+                                (x * 0.7f + y * 0.3f) - ctr * 1.4f,
+                                (y * 0.7f - x * 0.3f) - ctr * 1.4f,
+                                (x * 0.35f - y * 0.25f) * 0.6f - (x * 0.25f - y * 0.35f) * 1.2f));
                         renderer.color(bright, bright, bright, 1f);
                         renderer.vertex(x, y, 0);
                     }
@@ -266,8 +268,8 @@ public class FastNoiseVisualizer extends ApplicationAdapter {
                 for (int x = 0; x < width; x++) { 
                     for (int y = 0; y < height; y++) {
                         bright = basicPrepare(noise.getConfiguredNoise(
-                                (y * 0.6f + x * 0.4f) + ctr * 1.3f, (x * 0.6f - y * 0.4f) + ctr * 1.3f,
-                                (x * 0.7f + y * 0.3f) - ctr * 1.3f, (y * 0.7f - x * 0.3f) - ctr * 1.3f,
+                                (y * 0.6f + x * 0.4f) + ctr * 1.2f, (x * 0.6f - y * 0.4f) + ctr * 1.2f,
+                                (x * 0.7f + y * 0.3f) - ctr * 1.2f, (y * 0.7f - x * 0.3f) - ctr * 1.2f,
                                 (x * 0.35f - y * 0.25f) * 0.65f - (x * 0.25f + y * 0.35f) * 1.35f,
                                 (y * 0.45f - x * 0.15f) * 0.75f - (y * 0.15f + x * 0.45f) * 1.25f));
                         renderer.color(bright, bright, bright, 1f);

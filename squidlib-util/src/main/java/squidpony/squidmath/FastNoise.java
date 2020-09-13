@@ -1448,7 +1448,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
      * @param y
      * @return noise from 0 to 1.
      */
-    private static float valueNoise (int seed, float x, float y) {
+    protected float valueNoise (int seed, float x, float y) {
         int xFloor = x >= 0 ? (int) x : (int) x - 1;
         x -= xFloor;
         x *= x * (3 - 2 * x);
@@ -1569,7 +1569,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
      * @param z
      * @return noise from 0 to 1.
      */
-    private static float valueNoise (int seed, float x, float y, float z)
+    protected float valueNoise(int seed, float x, float y, float z)
     {
         int xFloor = x >= 0 ? (int) x : (int) x - 1;
         x -= xFloor;
@@ -1710,7 +1710,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
                                 + y * ((1 - x) * hashPart1024(xFloor, yFloor + 0xC6D1D, zFloor + 0xAF36D, wFloor + 0x9A695, seed) + x * hashPart1024(xFloor + 0xE19B1, yFloor + 0xC6D1D, zFloor + 0xAF36D, wFloor + 0x9A695, seed)))
                 ))) * 0x1p-9f;
     }
-    private static float valueNoise(int seed, float x, float y, float z, float w)
+    protected float valueNoise(int seed, float x, float y, float z, float w)
     {
         int xFloor = x >= 0 ? (int) x : (int) x - 1;
         x -= xFloor;
@@ -1890,7 +1890,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         ) * 0x1p-9f;
     }
 
-    private static float valueNoise(int seed, float x, float y, float z, float w, float u) {
+    protected float valueNoise(int seed, float x, float y, float z, float w, float u) {
         int xFloor = x >= 0 ? (int) x : (int) x - 1;
         x -= xFloor;
         x *= x * (3 - 2 * x);
@@ -2134,7 +2134,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         ) * 0x1p-9f;
     }
 
-    private static float valueNoise(int seed, float x, float y, float z, float w, float u, float v) {
+    protected float valueNoise(int seed, float x, float y, float z, float w, float u, float v) {
         int xFloor = x >= 0 ? (int) x : (int) x - 1;
         x -= xFloor;
         x *= x * (3 - 2 * x);
