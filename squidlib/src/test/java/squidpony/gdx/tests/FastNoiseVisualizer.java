@@ -24,7 +24,7 @@ import static com.badlogic.gdx.graphics.GL20.GL_POINTS;
  */
 public class FastNoiseVisualizer extends ApplicationAdapter {
 
-    private FastNoise noise = new FastNoise(1, 0.0625f, FastNoise.FOAM, 1);
+    private VastNoise noise = new VastNoise(1, 0.0625f, FastNoise.HONEY, 1);
     private int dim; // this can be 0, 1, 2, 3, or 4; add 2 to get the actual dimensions
     private int octaves = 1;
     private float freq = 1f;
