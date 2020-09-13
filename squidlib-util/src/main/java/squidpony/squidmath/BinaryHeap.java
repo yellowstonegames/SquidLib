@@ -21,6 +21,7 @@ import java.util.Arrays;
 /** A binary heap that stores nodes which each have a double value and are sorted either lowest first or highest first.
  * The {@link Node} class can be extended to store additional information.
  * @author Nathan Sweet */
+@SuppressWarnings("unchecked")
 public class BinaryHeap<T extends BinaryHeap.Node> {
 	public int size;
 
