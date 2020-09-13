@@ -333,4 +333,23 @@ public final class MathExtras
         }
     }
 
+    /**
+     * Integer square root (using floor), maintaining correct results even for very large {@code long} values. This
+     * version treats negative inputs as unsigned and returns positive square roots for them (these are usually large).
+     * <br>
+     * This is based on <a href="https://github.com/python/cpython/pull/13244">code recently added to Python</a>, but
+     * isn't identical. Notably, this doesn't branch except in the for loop, and it handles negative inputs differently.
+     * @param n a {@code long} value that will be treated as if unsigned
+     * @return the square root of n, rounded down to the next lower {@code long} if the result isn't already a {@code long}
+     */
+    public static long isqrt(final long n) {
+        final int c = 63 - Long.numberOfLeadingZeros(n) >> 1;
+        long a = 1, d = 0, e;
+        for(int s = 31 & 32 - Integer.numberOfLeadingZeros(c); s > 0;) {
+            e = d;
+            d = c >>> --s;
+            a = (a << d - e - 1) + (n >>> c + c - e - d + 1) / a;
+        }
+        return a - (n - a * a >>> 63);
+    }
 }
