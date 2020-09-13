@@ -24,7 +24,7 @@ import static squidpony.squidmath.BlueNoise.ALT_NOISE;
  */
 public class FFTVisualizer extends ApplicationAdapter {
 
-    private FastNoise noise = new FastNoise(1);
+    private VastNoise noise = new VastNoise(1);
     private IntPointHash iph = new IntPointHash();
     private FlawedPointHash.RugHash rug = new FlawedPointHash.RugHash(1);
     private FlawedPointHash.QuiltHash quilt = new FlawedPointHash.QuiltHash(1);
