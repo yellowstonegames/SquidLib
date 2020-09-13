@@ -25,7 +25,6 @@ import static squidpony.squidmath.BlueNoise.ALT_NOISE;
 public class FFTVisualizer extends ApplicationAdapter {
 
     private FastNoise noise = new FastNoise(1);
-    private FoamNoise foam = new FoamNoise(1);
     private IntPointHash iph = new IntPointHash();
     private FlawedPointHash.RugHash rug = new FlawedPointHash.RugHash(1);
     private FlawedPointHash.QuiltHash quilt = new FlawedPointHash.QuiltHash(1);
@@ -34,7 +33,7 @@ public class FFTVisualizer extends ApplicationAdapter {
     private IPointHash[] pointHashes = new IPointHash[] {iph, cube, rug, quilt};
     private int hashIndex;
     private static final int MODE_LIMIT = 8;
-    private int mode = 7;
+    private int mode = 0;
     private int dim; // this can be 0, 1, 2, or 3; add 2 to get the actual dimensions
     private int octaves = 3;
     private float freq = 0.125f;
@@ -123,7 +122,7 @@ public class FFTVisualizer extends ApplicationAdapter {
                         break;
                     case N: // noise type
                         if(mode == 0) 
-                            noise.setNoiseType((noise.getNoiseType() + 1) % 12);
+                            noise.setNoiseType((noise.getNoiseType() + 1) % 14);
                         break;
                     case ENTER:
                     case D: //dimension

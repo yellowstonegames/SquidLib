@@ -80,6 +80,8 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
      * Simple, very fast but very low-quality noise that forms a grid of squares, with their values blending at shared
      * edges somewhat.
      * <br>
+     * <a href="https://i.imgur.com/egjotwb.png">Noise sample at left, FFT at right.</a>
+     * <br>
      * This is meant to be used with {@link #setNoiseType(int)}.
      */
     public static final int VALUE = 0,
@@ -88,6 +90,8 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
      * edges somewhat; this version can use {@link #setFractalType(int)}, {@link #setFractalOctaves(int)}, and more, but
      * none of these really disguise the grid it uses.
      * <br>
+     * <a href="https://i.imgur.com/egjotwb.png">Noise sample at left, FFT at right.</a>
+     * <br>
      * This is meant to be used with {@link #setNoiseType(int)}.
      */
     VALUE_FRACTAL = 1,
@@ -95,6 +99,8 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
      * Also called Gradient Noise or Classic Perlin noise, this is fast and mid-to-low-quality in 2D, but slows down
      * significantly in higher dimensions while mostly improving in quality. This may have a noticeable grid at 90
      * degree angles (and a little at 45 degree angles).
+     * <br>
+     * <a href="https://i.imgur.com/MO7hwSI.png">Noise sample at left, FFT at right.</a>
      * <br>
      * This is meant to be used with {@link #setNoiseType(int)}.
      */
@@ -105,12 +111,16 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
      * degree angles (and a little at 45 degree angles). This version can use {@link #setFractalType(int)},
      * {@link #setFractalOctaves(int)}, and more.
      * <br>
+     * <a href="https://i.imgur.com/MO7hwSI.png">Noise sample at left, FFT at right.</a>
+     * <br>
      * This is meant to be used with {@link #setNoiseType(int)}.
      */
     PERLIN_FRACTAL = 3,
     /**
      * Also called Improved Perlin noise, this is always fast but tends to have better quality in lower dimensions. This
      * may have a noticeable grid at 60 degree angles, made of regular triangles in 2D.
+     * <br>
+     * <a href="https://i.imgur.com/wg3kq5A.png">Noise sample at left, FFT at right.</a>
      * <br>
      * This is meant to be used with {@link #setNoiseType(int)}.
      */
@@ -121,6 +131,8 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
      * {@link #setFractalType(int)}, {@link #setFractalOctaves(int)}, and more; it is the default noise type if none is
      * specified.
      * <br>
+     * <a href="https://i.imgur.com/wg3kq5A.png">Noise sample at left, FFT at right.</a>
+     * <br>
      * This is meant to be used with {@link #setNoiseType(int)}.
      */
     SIMPLEX_FRACTAL = 5,
@@ -129,11 +141,15 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
      * {@link #setCellularDistanceFunction(int)}, and possibly the {@link #setCellularNoiseLookup(FastNoise)}. This is
      * more of an advanced usage, but can yield useful results when oddly-shaped areas should have similar values.
      * <br>
+     * <a href="https://i.imgur.com/ScRves7.png">Noise sample at left, FFT at right.</a>
+     * <br>
      * This is meant to be used with {@link #setNoiseType(int)}.
      */
     CELLULAR = 6,
     /**
      * Purely chaotic, non-continuous random noise per position; looks like static on a TV screen.
+     * <br>
+     * <a href="https://i.imgur.com/vBtISSx.jpg">Noise sample at left, FFT at right.</a>
      * <br>
      * This is meant to be used with {@link #setNoiseType(int)}.
      */
@@ -143,6 +159,8 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
      * of them to get a smoothly changing value (using cubic interpolation, also called {@link #HERMITE}, of course).
      * If you're changing the point hashing algorithm with {@link #setPointHash(IPointHash)}, you should usually use
      * this or {@link #CUBIC_FRACTAL} if you want to see any aesthetically-desirable artifacts in the hash.
+     * <br>
+     * <a href="https://i.imgur.com/foV90pn.png">Noise sample at left, FFT at right.</a>
      * <br>
      * This is meant to be used with {@link #setNoiseType(int)}.
      */
@@ -154,6 +172,8 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
      * If you're changing the point hashing algorithm with {@link #setPointHash(IPointHash)}, you should usually use
      * this or {@link #CUBIC} if you want to see any aesthetically-desirable artifacts in the hash.
      * <br>
+     * <a href="https://i.imgur.com/foV90pn.png">Noise sample at left, FFT at right.</a>
+     * <br>
      * This is meant to be used with {@link #setNoiseType(int)}.
      */
     CUBIC_FRACTAL = 9,
@@ -162,6 +182,8 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
      * each other, and with all of the value noise calls after the first adding in the last call's result to part of the
      * position. This yields rather high-quality noise (especially when comparing one octave of FOAM to one octave of
      * {@link #PERLIN} or {@link #SIMPLEX}), but is somewhat slow.
+     * <br>
+     * <a href="https://i.imgur.com/4ZC9h5t.png">Noise sample at left, FFT at right.</a>
      * <br>
      * This is meant to be used with {@link #setNoiseType(int)}.
      */
@@ -174,12 +196,35 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
      * {@link #setFractalOctaves(int)}, and more, and usually doesn't need as many octaves as PERLIN or SIMPLEX to
      * attain comparable quality.
      * <br>
+     * <a href="https://i.imgur.com/4ZC9h5t.png">Noise sample at left, FFT at right.</a>
+     * <br>
      * This is meant to be used with {@link #setNoiseType(int)}.
      */
     FOAM_FRACTAL = 11,
-
+    /**
+     * A simple combination of {@link #SIMPLEX} and {@link #VALUE} noise, averaging a call to each and then distorting
+     * the result's distribution so it isn't as centrally-biased. The result is somewhere between {@link #FOAM} and
+     * {@link #SIMPLEX}, and has less angular bias than Simplex or Value. This gets its name from how it mixes two
+     * different geometric honeycombs (a triangular one for 2D Simplex noise and a square one for 2D Value noise).
+     * <br>
+     * <a href="https://i.imgur.com/bMEPiBA.png">Noise sample at left, FFT at right.</a>
+     * <br>
+     * This is meant to be used with {@link #setNoiseType(int)}.
+     */
     HONEY = 12,
-
+    /**
+     * A simple combination of {@link #SIMPLEX_FRACTAL} and {@link #VALUE_FRACTAL} noise, averaging a call to each and
+     * then distorting the result's distribution so it isn't as centrally-biased. The result is somewhere between
+     * {@link #FOAM_FRACTAL} and {@link #SIMPLEX_FRACTAL}, and has less angular bias than Simplex or Value. This gets
+     * its name from how it mixes two different geometric honeycombs (a triangular one for 2D Simplex noise and a square
+     * one for 2D Value noise). This version can use {@link #setFractalType(int)}, {@link #setFractalOctaves(int)}, and
+     * more, and usually doesn't need as many octaves as PERLIN or SIMPLEX to attain comparable quality, though it
+     * drastically improves with just two octaves.
+     * <br>
+     * <a href="https://i.imgur.com/bMEPiBA.png">Noise sample at left, FFT at right.</a>
+     * <br>
+     * This is meant to be used with {@link #setNoiseType(int)}.
+     */
     HONEY_FRACTAL = 13;
 
     public static final int LINEAR = 0, HERMITE = 1, QUINTIC = 2;
@@ -534,7 +579,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         return pointHash.hashWithState(x, y, s) >>> 27;
     }
 
-    private int hash32(int x, int y, int z, int s){
+    protected int hash32(int x, int y, int z, int s){
         return pointHash.hashWithState(x, y, z, s) >>> 27;
     }
 
@@ -550,23 +595,23 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         return pointHash.hashWithState(x, y, z, w, u, v, s) >>> 27;
     }
 
-    private int hash256(int x, int y, int s){
+    protected int hash256(int x, int y, int s){
         return pointHash.hashWithState(x, y, s) >>> 24;
     }
 
-    private int hash256(int x, int y, int z, int s){
+    protected int hash256(int x, int y, int z, int s){
         return pointHash.hashWithState(x, y, z, s) >>> 24;
     }
 
-    private int hash256(int x, int y, int z, int w, int s){
+    protected int hash256(int x, int y, int z, int w, int s){
         return pointHash.hashWithState(x, y, z, w, s) >>> 24;
     }
 
-    private int hash256(int x, int y, int z, int w, int u, int s){
+    protected int hash256(int x, int y, int z, int w, int u, int s){
         return pointHash.hashWithState(x, y, z, w, u, s) >>> 24;
     }
-    
-    private int hash256(int x, int y, int z, int w, int u, int v, int s){
+
+    protected int hash256(int x, int y, int z, int w, int u, int v, int s){
         return pointHash.hashWithState(x, y, z, w, u, v, s) >>> 24;
     }
 
