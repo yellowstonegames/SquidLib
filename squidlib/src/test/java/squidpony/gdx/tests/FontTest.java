@@ -173,14 +173,12 @@ public class FontTest extends ApplicationAdapter {
                 new SquidPanel(widths[24], heights[24], factories[24]).setTextSize(factories[24].width() + 0f * ZOOM, factories[24].height() + 0f * ZOOM),
         };
         final GDXMarkup markup = GDXMarkup.instance;
-        final ArrayList<? extends IColoredString<Color>> samples = Maker.makeList(
+        final ArrayList<IColoredString<Color>> samples = Maker.makeList(
                 markup.colorString("The quick brown fox jumps over the lazy dog.")
                 , markup.colorString("HAMBURGEVONS")
                 , markup.colorString("Black Sphinx Of Quartz: Judge Ye My Vow!")
                 , markup.colorString("Non-rainbow; [CW Red]r[CW Apricot]a[CW Bright Yellow]i[CW Green]n[CW Cyan]b[CW Blue]o[CW Purple]w[White]!")
-                , 
-                //// Currently the next line is all it takes to break libGDX's text coloring via BitmapFontCache.setColors(float, int, int)
-                markup.colorString("Sun Tzu said: In the practical art of war, the best thing of all is to take the enemy's country whole and intact; to shatter and destroy it is not so good.")
+                , markup.colorString("Sun Tzu said: In the practical art of war, the best thing of all is to take the enemy's country whole and intact; to shatter and destroy it is not so good.")
                 , markup.colorString("So, too, it is better to recapture an army entire than to destroy it, to capture a regiment, a detachment or a company entire than to destroy them.")
                 , markup.colorString("Hence to fight and conquer in all your battles is not supreme excellence; supreme excellence consists in breaking the enemy's resistance without fighting.")
         );
@@ -196,7 +194,7 @@ public class FontTest extends ApplicationAdapter {
         stage = new Stage(viewport, batch);
 
         Gdx.input.setInputProcessor(new InputAdapter() {
-            DiverRNG rng = new DiverRNG(System.nanoTime());
+            final DiverRNG rng = new DiverRNG(System.nanoTime());
             @Override
             public boolean keyUp(int keycode) {
                 if(keycode == Input.Keys.B)
