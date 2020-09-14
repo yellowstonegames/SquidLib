@@ -237,8 +237,8 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
             DISTANCE_2_ADD = 4, DISTANCE_2_SUB = 5, DISTANCE_2_MUL = 6, DISTANCE_2_DIV = 7;
 
     private int seed;
-    private float frequency = 0.03125f;
-    private int interpolation = HERMITE;
+    protected float frequency = 0.03125f;
+    protected int interpolation = HERMITE;
     private int noiseType = SIMPLEX_FRACTAL;
 
     private int octaves = 1;
@@ -714,12 +714,12 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         return r;
     }
 
-    private static int fastFloor(float f) {
+    protected static int fastFloor(float f) {
         return (f >= 0 ? (int) f : (int) f - 1);
     }
 
 
-    private static int fastRound(float f) {
+    protected static int fastRound(float f) {
         return (f >= 0) ? (int) (f + 0.5f) : (int) (f - 0.5f);
     }
 
@@ -729,17 +729,16 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
     }
 
 
-    private static float hermiteInterpolator(float t) {
+    protected static float hermiteInterpolator(float t) {
         return t * t * (3 - 2 * t);
     }
 
 
-    private static float quinticInterpolator(float t) {
+    protected static float quinticInterpolator(float t) {
         return t * t * t * (t * (t * 6 - 15) + 10);
     }
 
-
-    private static float cubicLerp(float a, float b, float c, float d, float t) {
+    protected static float cubicLerp(float a, float b, float c, float d, float t) {
         float p = (d - c) - (a - b);
         return t * (t * t * p + t * ((a - b) - p) + (c - a)) + b;
     }
@@ -1530,7 +1529,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         return singleValue(seed, x * frequency, y * frequency, z * frequency);
     }
 
-    private float singleValue(int seed, float x, float y, float z) {
+    public float singleValue(int seed, float x, float y, float z) {
         int xFloor = x >= 0 ? (int) x : (int) x - 1;
         x -= xFloor;
         int yFloor = y >= 0 ? (int) y : (int) y - 1;
@@ -1666,7 +1665,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         return singleValue(seed, x * frequency, y * frequency, z * frequency, w * frequency);
     }
 
-    private float singleValue(int seed, float x, float y, float z, float w) {
+    public float singleValue(int seed, float x, float y, float z, float w) {
         int xFloor = x >= 0 ? (int) x : (int) x - 1;
         x -= xFloor;
         int yFloor = y >= 0 ? (int) y : (int) y - 1;
@@ -1822,7 +1821,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         return singleValue(seed, x * frequency, y * frequency, z * frequency, w * frequency, u * frequency);
     }
 
-    private float singleValue(int seed, float x, float y, float z, float w, float u) {
+    public float singleValue(int seed, float x, float y, float z, float w, float u) {
         int xFloor = x >= 0 ? (int) x : (int) x - 1;
         x -= xFloor;
         int yFloor = y >= 0 ? (int) y : (int) y - 1;
@@ -2027,7 +2026,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         return singleValue(seed, x * frequency, y * frequency, z * frequency, w * frequency, u * frequency, v * frequency);
     }
 
-    private float singleValue(int seed, float x, float y, float z, float w, float u, float v) {
+    public float singleValue(int seed, float x, float y, float z, float w, float u, float v) {
         int xFloor = x >= 0 ? (int) x : (int) x - 1;
         x -= xFloor;
         int yFloor = y >= 0 ? (int) y : (int) y - 1;

@@ -76,7 +76,8 @@ public class AnimatedWorldMapWriter extends ApplicationAdapter {
     private AnimatedGif writer;
     
     private String date, path;
-    private double mutationA = NumberTools.cos(0.75) * 3.0, mutationB = NumberTools.sin(0.75) * 3.0;
+    private Noise.Adapted3DFrom5D noise;
+//    private double mutationA = NumberTools.cos(0.75) * 3.0, mutationB = NumberTools.sin(0.75) * 3.0;
     public IntMap<int[]> bounds = new IntMap<>(20);
 //    private double mutationC = NumberTools.cos(1.5), mutationD = NumberTools.sin(1.5);
     
@@ -178,23 +179,17 @@ World #5, SavoryMelonAlder, completed in 64338 ms
 //            }
 //        };
 
-        final Noise.Noise3D noise = new Noise.Noise3D() {
-            @Override
-            public double getNoise(double x, double y, double z) {
-                return WorldMapGenerator.DEFAULT_NOISE.getNoiseWithSeed(x, y, z, mutationA, mutationB, 123456789);
-            }
-
-            @Override
-            public double getNoiseWithSeed(double x, double y, double z, long seed) {
-//                return FoamNoise.foamNoise(x * 2.75, y * 2.75, z * 2.75, mutationA, mutationB, (int)seed);
-                
-//                final double a = WorldMapGenerator.DEFAULT_NOISE.getNoiseWithSeed(x * 0.75, y * 0.75, z * 0.75, ~seed) * 0.25;
-//                return WorldMapGenerator.DEFAULT_NOISE.getNoiseWithSeed(x * 1.5 + a, y * 1.5 - a, z * 1.5 + a, mutationA, mutationB, seed);
-                return WorldMapGenerator.DEFAULT_NOISE.getNoiseWithSeed(x, y, z, mutationA, mutationB, seed);
-//                return WorldMapGenerator.DEFAULT_NOISE.getNoiseWithSeed(x * 1.5, y * 1.5, z * 1.5, mutationA, mutationB, seed);
-//                return WorldMapGenerator.DEFAULT_NOISE.getNoiseWithSeed(x * 1.5, y * 1.5, z * 1.5, seed);
-            }
-        };
+//        final Noise.Noise3D noise = new Noise.Noise3D() {
+//            @Override
+//            public double getNoise(double x, double y, double z) {
+//                return WorldMapGenerator.DEFAULT_NOISE.getNoiseWithSeed(x, y, z, mutationA, mutationB, 123456789);
+//            }
+//
+//            @Override
+//            public double getNoiseWithSeed(double x, double y, double z, long seed) {
+//                return WorldMapGenerator.DEFAULT_NOISE.getNoiseWithSeed(x, y, z, mutationA, mutationB, seed);
+//            }
+//        };
         
 //        Noise.Noise3D noise = new Noise.Exponential3D(new FastNoise((int)seed, 2.75f, FastNoise.FOAM_FRACTAL, 3));
 //        FastNoise noise = new FastNoise((int)seed, 8f, FastNoise.CUBIC_FRACTAL, 1);
@@ -209,9 +204,12 @@ World #5, SavoryMelonAlder, completed in 64338 ms
 //        WorldMapGenerator.DEFAULT_NOISE.setFractalGain(5f);
 //        WorldMapGenerator.DEFAULT_NOISE.setFractalLacunarity(0.8f);
 //        WorldMapGenerator.DEFAULT_NOISE.setFractalGain(1.25f);
-        WorldMapGenerator.DEFAULT_NOISE.setNoiseType(FastNoise.HONEY);
-        WorldMapGenerator.DEFAULT_NOISE.setFrequency(1.25f);
-        WorldMapGenerator.DEFAULT_NOISE.setFractalOctaves(1);
+        FastNoise fn = new VastNoise((int) seed, 1.25f, FastNoise.HONEY, 1);
+        
+        noise = new Noise.Adapted3DFrom5D(fn);
+//        WorldMapGenerator.DEFAULT_NOISE.setNoiseType(FastNoise.HONEY);
+//        WorldMapGenerator.DEFAULT_NOISE.setFrequency(1.25f);
+//        WorldMapGenerator.DEFAULT_NOISE.setFractalOctaves(1);
 //        WorldMapGenerator.DEFAULT_NOISE.setFractalType(FastNoise.BILLOW);
         
         /*
@@ -219,78 +217,78 @@ World #5, SavoryMelonAlder, completed in 64338 ms
           on all axes. A 64x64x64 box, centered on the origin, of random ints could be used instead of calculating a
           hash for each point over and over (or a larger box to permit more octaves).
          */
-        if(MEASURE_BOUNDS)
-        {
-            WorldMapGenerator.DEFAULT_NOISE.setPointHash(new IPointHash.IntImpl() {
-                @Override
-                public int hashWithState(int x, int y, int state) {
-                    int[] b;
-                    if((b = bounds.get(state)) == null)
-                    {
-                        b = new int[4];
-                        bounds.put(state, b);
-                    }
-                    b[0] = Math.min(b[0], x);
-                    b[1] = Math.max(b[1], x);
-                    b[2] = Math.min(b[2], y);
-                    b[3] = Math.max(b[3], y);
-                    return IntPointHash.hashAll(x, y, state);
-                }
-
-                @Override
-                public int hashWithState(int x, int y, int z, int state) {
-                    int[] b;
-                    if((b = bounds.get(state)) == null)
-                    {
-                        b = new int[6];
-                        bounds.put(state, b);
-                    }
-                    b[0] = Math.min(b[0], x);
-                    b[1] = Math.max(b[1], x);
-                    b[2] = Math.min(b[2], y);
-                    b[3] = Math.max(b[3], y);
-                    b[4] = Math.min(b[4], z);
-                    b[5] = Math.max(b[5], z);
-                    return IntPointHash.hashAll(x, y, z, state);
-                }
-
-                @Override
-                public int hashWithState(int x, int y, int z, int w, int state) {
-                    int[] b;
-                    if((b = bounds.get(state)) == null)
-                    {
-                        b = new int[6];
-                        bounds.put(state, b);
-                    }
-                    b[0] = Math.min(b[0], x);
-                    b[1] = Math.max(b[1], x);
-                    b[2] = Math.min(b[2], y);
-                    b[3] = Math.max(b[3], y);
-                    b[4] = Math.min(b[4], z);
-                    b[5] = Math.max(b[5], z);
-                    b[6] = Math.min(b[6], w);
-                    b[7] = Math.max(b[7], w);
-                    return IntPointHash.hashAll(x, y, z, w, state);
-                }
-
-                @Override
-                public int hashWithState(int x, int y, int z, int w, int u, int state) {
-                    return IntPointHash.hashAll(x, y, z, w, u, state);
-                }
-
-                @Override
-                public int hashWithState(int x, int y, int z, int w, int u, int v, int state) {
-                    return IntPointHash.hashAll(x, y, z, w, u, v, state);
-                }
-            });
-        }
+//        if(MEASURE_BOUNDS)
+//        {
+//            WorldMapGenerator.DEFAULT_NOISE.setPointHash(new IPointHash.IntImpl() {
+//                @Override
+//                public int hashWithState(int x, int y, int state) {
+//                    int[] b;
+//                    if((b = bounds.get(state)) == null)
+//                    {
+//                        b = new int[4];
+//                        bounds.put(state, b);
+//                    }
+//                    b[0] = Math.min(b[0], x);
+//                    b[1] = Math.max(b[1], x);
+//                    b[2] = Math.min(b[2], y);
+//                    b[3] = Math.max(b[3], y);
+//                    return IntPointHash.hashAll(x, y, state);
+//                }
+//
+//                @Override
+//                public int hashWithState(int x, int y, int z, int state) {
+//                    int[] b;
+//                    if((b = bounds.get(state)) == null)
+//                    {
+//                        b = new int[6];
+//                        bounds.put(state, b);
+//                    }
+//                    b[0] = Math.min(b[0], x);
+//                    b[1] = Math.max(b[1], x);
+//                    b[2] = Math.min(b[2], y);
+//                    b[3] = Math.max(b[3], y);
+//                    b[4] = Math.min(b[4], z);
+//                    b[5] = Math.max(b[5], z);
+//                    return IntPointHash.hashAll(x, y, z, state);
+//                }
+//
+//                @Override
+//                public int hashWithState(int x, int y, int z, int w, int state) {
+//                    int[] b;
+//                    if((b = bounds.get(state)) == null)
+//                    {
+//                        b = new int[6];
+//                        bounds.put(state, b);
+//                    }
+//                    b[0] = Math.min(b[0], x);
+//                    b[1] = Math.max(b[1], x);
+//                    b[2] = Math.min(b[2], y);
+//                    b[3] = Math.max(b[3], y);
+//                    b[4] = Math.min(b[4], z);
+//                    b[5] = Math.max(b[5], z);
+//                    b[6] = Math.min(b[6], w);
+//                    b[7] = Math.max(b[7], w);
+//                    return IntPointHash.hashAll(x, y, z, w, state);
+//                }
+//
+//                @Override
+//                public int hashWithState(int x, int y, int z, int w, int u, int state) {
+//                    return IntPointHash.hashAll(x, y, z, w, u, state);
+//                }
+//
+//                @Override
+//                public int hashWithState(int x, int y, int z, int w, int u, int v, int state) {
+//                    return IntPointHash.hashAll(x, y, z, w, u, v, state);
+//                }
+//            });
+//        }
 //        world = new WorldMapGenerator.RotatingSpaceMap(seed, width, height, noise, 1.0);
         
 //        world = new WorldMapGenerator.SphereMap(seed, width, height, noise, 1.0);
 //        world = new WorldMapGenerator.TilingMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.75);
 //        world = new WorldMapGenerator.EllipticalMap(seed, width, height, noise, 1.75);
 //        world = new WorldMapGenerator.MimicMap(seed, WorldMapGenerator.DEFAULT_NOISE, 1.75);
-        world = new WorldMapGenerator.SpaceViewMap(seed, width, height, noise, 0.42);
+        world = new WorldMapGenerator.SpaceViewMap(seed, width, height, noise, 0.58);
 //        world = new WorldMapGenerator.SpaceViewMap(seed, width, height, noise, 0.5);
 //        world = new WorldMapGenerator.RoundSideMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.75);
 //        world = new WorldMapGenerator.HyperellipticalMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 0.8, 0.03125, 2.5);
@@ -353,8 +351,8 @@ World #5, SavoryMelonAlder, completed in 64338 ms
 //            mutationC = NumberTools.cos(angle * 3.0 + 1.0) * 0.625 + 2.25;
 //            mutationA = NumberTools.cos(angle) * 0.3125;
 //            mutationB = NumberTools.sin(angle) * 0.3125;
-            mutationA = NumberTools.cos(angle) * 0.25;
-            mutationB = NumberTools.sin(angle) * 0.25;
+            noise.w = NumberTools.cos(angle) * 0.25;
+            noise.u = NumberTools.sin(angle) * 0.25;
             //            mutation = NumberTools.sin(angle) * 0.918 + NumberTools.cos(angle * 4.0 + 1.618) * 0.307;
 
             //// this next line should not usually be commented out, but it makes sense not to have it when you can see the whole map.
