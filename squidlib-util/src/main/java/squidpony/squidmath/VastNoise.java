@@ -5,11 +5,13 @@ import squidpony.annotation.Beta;
 /**
  * An experimental way of speeding up {@link FastNoise} by using a large buffer of random bytes, and choosing a byte
  * from the buffer purely by the current seed and position (a simpler calculation than a hash). This currently gives a
- * modest speed boost to {@link #SIMPLEX}, {@link #PERLIN}, and {@link #HONEY}, but does not improve the performance of
- * {@link #FOAM} or {@link #VALUE}. It should be interchangeable with FastNoise, but be aware that the first time this
+ * modest speed boost to {@link #SIMPLEX}, {@link #PERLIN}, {@link #CUBIC}, and {@link #HONEY}, a smaller speed boost to
+ * {@link #FOAM}, and no change for {@link #VALUE} or {@link #WHITE_NOISE}. This class only uses the least-significant
+ * 20 bits of any seed in most cases; using unique non-negative seeds that are all less than 1000000 is one way to
+ * ensure these bits are different. It should be interchangeable with FastNoise, but be aware that the first time this
  * class is imported, it will generate about a million random bytes using {@link TangleRNG}. Generating a million bytes
  * really doesn't take more time than the blink of an eye, but it does use 1MB of RAM for the class (not allocated per
- * object, at least).
+ * object, at least). 
  * <br>
  * Created by Tommy Ettinger on 9/12/2020.
  */
@@ -352,5 +354,4 @@ public class VastNoise extends FastNoise {
 								))))))
 		) * 0.003921569f;
 	}
-
 }
