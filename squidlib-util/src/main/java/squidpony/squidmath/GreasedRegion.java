@@ -31,16 +31,57 @@ import static squidpony.squidmath.CrossHash.Water.*;
  * is like and() but for the union), xor() (like and() but for exclusive or, finding only cells that are on in exactly
  * one of the two GreasedRegions), and andNot() (which can be considered the "subtract another region from me" method).
  * There are 8-way (Chebyshev distance) variants on all of the spatial methods, and methods without "8way" in the name
- * are either 4-way (Manhattan distance) or not affected by distance measurement. Once you have a GreasedRegion, you may
- * want to:
+ * are either 4-way (Manhattan distance) or not affected by distance measurement. There's really quite a lot of methods
+ * here that modify a GreasedRegion, so here's a partial list:
+ * <ul>
+ *     <li>{@link #expand()} changes any cells next to a currently "on" cell to also be "on." It's 4-way, and has an
+ *     8-way variant {@link #expand8way()}. There's an overload that expands several times as if by a loop,
+ *     {@link #expand(int)}, which also has an 8-way variant. You can use {@link #expandSeries(int)} to get multiple
+ *     GreasedRegions produced as intermediate values of a series of expansions; this also has an 8-way variant.
+ *     {@link #expandSeriesToLimit()} returns an ArrayList of as many GreasedRegions as it takes to expand until no more
+ *     cells can change.</li>
+ *     <li>{@link #retract()} is just like {@link #expand()}, but changes any "on" cells that are next to an "off" cell
+ *     to also be "off." It can be thought of as expanding the "off" cells, with the subtle difference that the edges
+ *     are also considered "off" here. All of the above variants of {@link #expand()} listed above have equivalents for
+ *     {@link #retract()}, like {@link #retractSeriesToLimit()}.</li>
+ *     <li>{@link #fringe()} is like {@link #expand()}, but doesn't keep the old contents of the GreasedRegion, only the
+ *     cells that are added. This has some differences in how {@link #fringe(int)} works (it returns a
+ *     multiple-cell-thick fringe section, still not containing any of the original), and how {@link #fringeSeries(int)}
+ *     works (it returns many single-cell-thick fringe sections). There's a {@link #fringeSeriesToLimit()}, too.</li>
+ *     <li>{@link #surface()} is something like removing the result of {@link #retract()} from this GreasedRegion; it
+ *     gets only those "on" cells that are next to an "off" cell. Like with {@link #fringe()}, the variants are a little
+ *     different; {@link #surface(int)} gets a multiple-cell deep surface, and {@link #surfaceSeries(int)} gets a series
+ *     of single-cell deep rings from further and further inside the original GreasedRegion. Yes, there's also a
+ *     {@link #surfaceSeriesToLimit()}.</li>
+ *     <li>{@link #flood(GreasedRegion)} is useful; it acts like {@link #expand()}, but won't change any cells unless
+ *     they are "on" in its {@code bounds} argument, another GreasedRegion. There's also
+ *     {@link #flood(GreasedRegion, int)}, which may be most useful with a very large {@code amount} parameter to fill
+ *     up the bounds completely with whatever the original GreasedRegion could reach. {@link #flood8way(GreasedRegion)},
+ *     {@link #floodSeries(GreasedRegion, int)}, and {@link #floodSeriesToLimit(GreasedRegion)} are all here, too.</li>
+ *     <li>{@link #spill(GreasedRegion, int, IRNG)} is like calling {@link #flood(GreasedRegion)} many times, but only
+ *     expanding one cell on the edge each time, randomly choosing it. As long as {@code volume} is not enough to fully
+ *     fill the reachable part of {@code bounds}, the filled area will be random but always connected.</li>
+ *     <li>Various random modifications: {@link #randomRegion(IRNG, int)} simply chooses "on" points from this
+ *     GreasedRegion until it reaches {@code size}, {@link #deteriorate(RandomnessSource, double)} randomly removes
+ *     points but stops when the fraction of cells remaining is equal to {@code preservation}, {@link #fray(double)}
+ *     acts like {@link #deteriorate(RandomnessSource, double)} but only affects the surface (what {@link #surface()}
+ *     would return), and {@link #disperseRandom(RandomnessSource)} randomly removes one of each pair of "on" cells.
+ *     </li>
+ *     <li>Various quasi-random modifications: Mostly you should use {@link #separatedRegionBlue(double)} if you want
+ *     to get an approximate fraction of well-separated "on" cells from a GreasedRegion; there are other similar methods
+ *     but the ones that use {@link BlueNoise} seem superior. {@link #fray(double)} also has a quasi-random version that
+ *     doesn't use a RandomnessSource.</li>
+ * </ul>
+ * <br>
+ * Once you have a GreasedRegion, you may want to:
  * <ul>
  *     <li>get a single random point from it (use {@link #singleRandom(IRNG)}),</li>
  *     <li>get several random points from it with random sampling (use {@link #randomPortion(IRNG, int)}),</li>
  *     <li>mutate the current GreasedRegion to keep random points from it with random sampling (use {@link #randomRegion(IRNG, int)}),</li>
  *     <li>get random points that are likely to be separated (use {@link #mixedRandomSeparated(double, int, long)} with
- *     a random long for the last parameter, or {@link #quasiRandomSeparated(double)} if you don't want a random seed),</li>
+ *     a random long for the last parameter, or {@link #separatedBlue(double)} if you don't want a random seed),</li>
  *     <li>do what any of the above "separated" methods can do, but mutate the current GreasedRegion (use
- *     {@link #mixedRandomRegion(double, int, long)} or {@link #quasiRandomRegion(double, int)}),</li>
+ *     {@link #mixedRandomRegion(double, int, long)} or {@link #separatedRegionBlue(double)} ),</li>
  *     <li>get all points from it (use {@link #asCoords()} to get a Coord array, or produce a 2D array of the contents
  *     with {@link #decode()} or {@link #toChars(char, char)}),</li>
  *     <li>use it to modify other 2D data, such as with {@link #mask(char[][], char)},
@@ -5453,6 +5494,23 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
     {
         GreasedRegion cpy = new GreasedRegion(this).retract();
         return xor(cpy).separatedRegionBlue(fractionKept).or(cpy);
+    }
+
+    /**
+     * Like {@link #retract()}, this removes the "on" cells that are 4-way-adjacent to any "off" cell, but unlike that
+     * method it keeps a fraction of those surface cells, randomly selecting them. This can be thought of as running 
+     * {@link #surface()} on a copy of this GreasedRegion, running {@link #deteriorate(RandomnessSource, double)} on
+     * that surface with the given fractionKept, taking the original GreasedRegion and removing its whole surface with
+     * {@link #retract()}, then inserting the randomly-removed surface into this GreasedRegion to replace its surface
+     * with a randomly "damaged" one.
+     * @param random any non-null RandomnessSource, such as an {@link RNG}, {@link GWTRNG}, or {@link TangleRNG}
+     * @param fractionKept the fraction between 0.0 and 1.0 of how many cells on the outer surface of this to keep "on"
+     * @return this for chaining
+     */
+    public GreasedRegion fray(RandomnessSource random, double fractionKept)
+    {
+        GreasedRegion cpy = new GreasedRegion(this).retract();
+        return xor(cpy).deteriorate(random, fractionKept).or(cpy);
     }
 
     /**
