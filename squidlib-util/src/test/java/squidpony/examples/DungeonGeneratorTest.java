@@ -506,7 +506,7 @@ public class DungeonGeneratorTest {
 
         System.out.println("ConnectingMapGenerator\n");
         rng.setState(1L);
-        ConnectingMapGenerator cmg = new ConnectingMapGenerator(103, 43, 3, 3, rng, 1, 0.65);
+        ConnectingMapGenerator cmg = new ConnectingMapGenerator(61, 31, 5, 5, rng, 1, 0.65);
         sdg.clearEffects();
         //sdg.addGrass(DungeonUtility.CORRIDOR_FLOOR, 20);
         sdg.addDoors(80, false);
@@ -515,6 +515,28 @@ public class DungeonGeneratorTest {
         //dungeonGenerator.generate(TilesetType.DEFAULT_DUNGEON);
         dungeon[sdg.stairsUp.x][sdg.stairsUp.y] = '<';
         dungeon[sdg.stairsDown.x][sdg.stairsDown.y] = '>';
+
+        dungeonGenerator.setDungeon(DungeonUtility.doubleWidth(
+                DungeonUtility.hashesToLines(dungeon, true)));
+        System.out.println(dungeonGenerator);
+        System.out.println();
+        dungeonGenerator.setDungeon(DungeonUtility.linesToHashes(dungeonGenerator.getDungeon()));
+        System.out.println(dungeonGenerator);
+        System.out.println("------------------------------------------------------------");
+
+        System.out.println("ConnectingMapGenerator Deteriorated\n");
+        rng.setState(1L);
+        cmg = new ConnectingMapGenerator(60, 30, 5, 5, rng, 2);
+        dungeonGenerator.clearEffects();
+        cmg.generate();
+        gr.refill(cmg.dungeon, '.');
+        CellularAutomaton ca = new CellularAutomaton(gr.fray(0.8).retract().or(gr.copy().fringe().deteriorate(rng, 0.75)));
+        ca.runBasicSmoothing().fray(0.6);
+        ca.runBasicSmoothing();
+        ca.runBasicSmoothing();
+        dungeon = dungeonGenerator.generate(ca.runBasicSmoothing().toChars());
+        dungeon[dungeonGenerator.stairsUp.x][dungeonGenerator.stairsUp.y] = '<';
+        dungeon[dungeonGenerator.stairsDown.x][dungeonGenerator.stairsDown.y] = '>';
 
         dungeonGenerator.setDungeon(DungeonUtility.doubleWidth(
                 DungeonUtility.hashesToLines(dungeon, true)));
