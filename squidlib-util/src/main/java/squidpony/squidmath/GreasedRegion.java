@@ -5442,7 +5442,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
     /**
      * Like {@link #retract()}, this removes the "on" cells that are 4-way-adjacent to any "off" cell, but unlike that
      * method it keeps a fraction of those surface cells, quasi-randomly selecting them. This can be thought of as
-     * running {@link #surface()} on a copy of this GreasedRegion, running {@link #quasiRandomRegion(double)} on that
+     * running {@link #surface()} on a copy of this GreasedRegion, running {@link #separatedRegionBlue(double)} on that
      * surface with the given fractionKept, taking the original GreasedRegion and removing its whole surface with
      * {@link #retract()}, then inserting the quasi-randomly-removed surface into this GreasedRegion to replace its
      * surface with a randomly "damaged" one.
@@ -5452,7 +5452,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
     public GreasedRegion fray(double fractionKept)
     {
         GreasedRegion cpy = new GreasedRegion(this).retract();
-        return xor(cpy).quasiRandomRegion(1.0 - fractionKept).or(cpy);
+        return xor(cpy).separatedRegionBlue(fractionKept).or(cpy);
     }
 
     /**

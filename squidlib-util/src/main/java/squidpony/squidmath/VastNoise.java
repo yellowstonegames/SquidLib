@@ -13,6 +13,9 @@ import squidpony.annotation.Beta;
  * really doesn't take more time than the blink of an eye, but it does use 1MB of RAM for the class (not allocated per
  * object, at least). 
  * <br>
+ * This is currently marked as Beta because it's unclear if it can be sped up further, or how that would happen, but if
+ * an opportunity showed itself to accelerate VastNoise and change earlier results, the change would happen.
+ * <br>
  * Created by Tommy Ettinger on 9/12/2020.
  */
 @Beta
