@@ -639,7 +639,7 @@
 <span class="sourceLineNo">627</span><a id="line.627">                new String[]{"b", "v", "g", "d", "zh", "z", "k", "l", "m", "n", "p", "r", "s", "t", "f", "kh", "ts", "ch", "sh",</a>
 <span class="sourceLineNo">628</span><a id="line.628">                        "v", "f", "sk", "sk", "sk", "s", "b", "d", "d", "n", "r", "r"},</a>
 <span class="sourceLineNo">629</span><a id="line.629">                new String[]{"odka", "odna", "usk", "ask", "usky", "ad", "ar", "ovich", "ev", "ov", "of", "agda", "etsky", "ich", "on", "akh", "iev", "ian"},</a>
-<span class="sourceLineNo">630</span><a id="line.630">                new String[]{}, new int[]{1, 2, 3, 4, 5, 6}, new double[]{4, 5, 6, 5, 3, 1}, 0.1, 0.2, 0.0, 0.12, englishSanityChecks, true);</a>
+<span class="sourceLineNo">630</span><a id="line.630">                new String[]{}, new int[]{1, 2, 3, 4, 5, 6}, new double[]{4, 5, 6, 5, 3, 1}, 0.1, 0.2, 0.0, 0.12, null, true);</a>
 <span class="sourceLineNo">631</span><a id="line.631">    }</a>
 <span class="sourceLineNo">632</span><a id="line.632">    /**</a>
 <span class="sourceLineNo">633</span><a id="line.633">     * Imitation modern Russian, romanized to use the Latin alphabet. Likely to seem pretty fake to many readers.</a>
@@ -4389,7 +4389,7 @@
 <span class="sourceLineNo">4377</span><a id="line.4377">    }</a>
 <span class="sourceLineNo">4378</span><a id="line.4378"></a>
 <span class="sourceLineNo">4379</span><a id="line.4379"></a>
-<span class="sourceLineNo">4380</span><a id="line.4380">    protected String[] accentVowels(IRNG rng, String[] me, double influence) {</a>
+<span class="sourceLineNo">4380</span><a id="line.4380">    protected static String[] accentVowels(IRNG rng, String[] me, double influence) {</a>
 <span class="sourceLineNo">4381</span><a id="line.4381">        String[] ret = new String[1000];</a>
 <span class="sourceLineNo">4382</span><a id="line.4382">        int otherCount = (int) (1000 * influence);</a>
 <span class="sourceLineNo">4383</span><a id="line.4383">        int idx;</a>
@@ -4417,7 +4417,7 @@
 <span class="sourceLineNo">4405</span><a id="line.4405">        return ret;</a>
 <span class="sourceLineNo">4406</span><a id="line.4406">    }</a>
 <span class="sourceLineNo">4407</span><a id="line.4407"></a>
-<span class="sourceLineNo">4408</span><a id="line.4408">    protected String[] accentConsonants(IRNG rng, String[] me, double influence) {</a>
+<span class="sourceLineNo">4408</span><a id="line.4408">    protected static String[] accentConsonants(IRNG rng, String[] me, double influence) {</a>
 <span class="sourceLineNo">4409</span><a id="line.4409">        String[] ret = new String[1000];</a>
 <span class="sourceLineNo">4410</span><a id="line.4410">        int otherCount = (int) (1000 * influence);</a>
 <span class="sourceLineNo">4411</span><a id="line.4411">        int idx;</a>
@@ -4462,7 +4462,7 @@
 <span class="sourceLineNo">4450</span><a id="line.4450">        return ret;</a>
 <span class="sourceLineNo">4451</span><a id="line.4451">    }</a>
 <span class="sourceLineNo">4452</span><a id="line.4452"></a>
-<span class="sourceLineNo">4453</span><a id="line.4453">    protected String[] accentBoth(IRNG rng, String[] me, double vowelInfluence, double consonantInfluence) {</a>
+<span class="sourceLineNo">4453</span><a id="line.4453">    protected static String[] accentBoth(IRNG rng, String[] me, double vowelInfluence, double consonantInfluence) {</a>
 <span class="sourceLineNo">4454</span><a id="line.4454">        String[] ret = new String[1000];</a>
 <span class="sourceLineNo">4455</span><a id="line.4455">        int idx;</a>
 <span class="sourceLineNo">4456</span><a id="line.4456">        Matcher matcher;</a>
@@ -5158,458 +5158,463 @@
 <span class="sourceLineNo">5146</span><a id="line.5146">         * Simple changes to merge "ae" into "æ", "oe" into "œ", and any of "aé", "áe", or "áé" into "ǽ".</a>
 <span class="sourceLineNo">5147</span><a id="line.5147">         */</a>
 <span class="sourceLineNo">5148</span><a id="line.5148">        public static final Modifier LIGATURES = replacementTable("ae", "æ", "oe", "œ", "áe", "ǽ", "aé", "ǽ", "áé", "ǽ");</a>
-<span class="sourceLineNo">5149</span><a id="line.5149">        /**</a>
-<span class="sourceLineNo">5150</span><a id="line.5150">         * Some changes that can be applied when sanity checks (which force re-generating a new word) aren't appropriate</a>
-<span class="sourceLineNo">5151</span><a id="line.5151">         * for fixing a word that isn't pronounceable.</a>
+<span class="sourceLineNo">5149</span><a id="line.5149"></a>
+<span class="sourceLineNo">5150</span><a id="line.5150">        /**</a>
+<span class="sourceLineNo">5151</span><a id="line.5151">         * Simple changes to merge "æ" into "ae", "œ" into "oe", and "ǽ" into "áe".</a>
 <span class="sourceLineNo">5152</span><a id="line.5152">         */</a>
-<span class="sourceLineNo">5153</span><a id="line.5153">        public static final Modifier GENERAL_CLEANUP = replacementTable(</a>
-<span class="sourceLineNo">5154</span><a id="line.5154">                "[æǽœìíîïĩīĭįıiùúûüũūŭůűųuýÿŷỳy]([æǽœýÿŷỳy])", "$1",</a>
-<span class="sourceLineNo">5155</span><a id="line.5155">                "q([ùúûüũūŭůűųu])$", "q$1e",</a>
-<span class="sourceLineNo">5156</span><a id="line.5156">                "([ìíîïĩīĭįıi])[ìíîïĩīĭįıi]", "$1",</a>
-<span class="sourceLineNo">5157</span><a id="line.5157">                "([æǽœìíîïĩīĭįıiùúûüũūŭůűųuýÿŷỳy])[wŵẁẃẅ]$", "$1",</a>
-<span class="sourceLineNo">5158</span><a id="line.5158">                "([ùúûüũūŭůűųu])([òóôõöøōŏőǿo])", "$2$1",</a>
-<span class="sourceLineNo">5159</span><a id="line.5159">                "[àáâãäåāăąǻaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőǿoùúûüũūŭůűųuýÿŷỳy]([æǽœ])", "$1",</a>
-<span class="sourceLineNo">5160</span><a id="line.5160">                "([æǽœ])[àáâãäåāăąǻaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőǿoùúûüũūŭůűųuýÿŷỳy]", "$1",</a>
-<span class="sourceLineNo">5161</span><a id="line.5161">                "([wŵẁẃẅ])[wŵẁẃẅ]", "$1",</a>
-<span class="sourceLineNo">5162</span><a id="line.5162">                "qq", "q");</a>
-<span class="sourceLineNo">5163</span><a id="line.5163"></a>
-<span class="sourceLineNo">5164</span><a id="line.5164">        //àáâãäåāăąǻæǽaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőœǿoùúûüũūŭůűųuýÿŷỳy</a>
-<span class="sourceLineNo">5165</span><a id="line.5165">        //bcçćĉċčdþðďđfgĝğġģhĥħjĵȷkķlĺļľŀłmnñńņňŋpqrŕŗřsśŝşšștţťțvwŵẁẃẅxyýÿŷỳzźżž</a>
-<span class="sourceLineNo">5166</span><a id="line.5166"></a>
-<span class="sourceLineNo">5167</span><a id="line.5167">        /**</a>
-<span class="sourceLineNo">5168</span><a id="line.5168">         * Creates a Modifier that will replace the nth char in initial with the nth char in change. Expects initial and</a>
-<span class="sourceLineNo">5169</span><a id="line.5169">         * change to be the same length, but will use the lesser length if they are not equal-length. Because of the</a>
-<span class="sourceLineNo">5170</span><a id="line.5170">         * state of the text at the time modifiers are run, only lower-case letters need to be searched for.</a>
-<span class="sourceLineNo">5171</span><a id="line.5171">         *</a>
-<span class="sourceLineNo">5172</span><a id="line.5172">         * @param initial a String containing lower-case letters or other symbols to be swapped out of a text</a>
-<span class="sourceLineNo">5173</span><a id="line.5173">         * @param change  a String containing characters that will replace occurrences of characters in initial</a>
-<span class="sourceLineNo">5174</span><a id="line.5174">         * @return a Modifier that can be added to a FakeLanguageGen with its addModifiers() method</a>
-<span class="sourceLineNo">5175</span><a id="line.5175">         */</a>
-<span class="sourceLineNo">5176</span><a id="line.5176">        public static Modifier charReplacementTable(String initial, String change) {</a>
-<span class="sourceLineNo">5177</span><a id="line.5177">            Alteration[] alts = new Alteration[Math.min(initial.length(), change.length())];</a>
-<span class="sourceLineNo">5178</span><a id="line.5178">            for (int i = 0; i &lt; alts.length; i++) {</a>
-<span class="sourceLineNo">5179</span><a id="line.5179">                //literal string syntax; avoids sensitive escaping issues and also doesn't need a character class,</a>
-<span class="sourceLineNo">5180</span><a id="line.5180">                // which is slightly slower and has some odd escaping cases.</a>
-<span class="sourceLineNo">5181</span><a id="line.5181">                alts[i] = new Alteration("\\Q" + initial.charAt(i), change.substring(i, i + 1));</a>
-<span class="sourceLineNo">5182</span><a id="line.5182">            }</a>
-<span class="sourceLineNo">5183</span><a id="line.5183">            return new Modifier(alts);</a>
-<span class="sourceLineNo">5184</span><a id="line.5184">        }</a>
-<span class="sourceLineNo">5185</span><a id="line.5185"></a>
-<span class="sourceLineNo">5186</span><a id="line.5186">        /**</a>
-<span class="sourceLineNo">5187</span><a id="line.5187">         * Creates a Modifier that will replace the nth String key in map with the nth value. Because of the</a>
-<span class="sourceLineNo">5188</span><a id="line.5188">         * state of the text at the time modifiers are run, only lower-case letters need to be searched for.</a>
-<span class="sourceLineNo">5189</span><a id="line.5189">         * This overload of replacementTable allows full regex pattern strings as keys and replacement syntax,</a>
-<span class="sourceLineNo">5190</span><a id="line.5190">         * such as searching for "([aeiou])\\1+" to find repeated occurrences of the same vowel, and "$1" in</a>
-<span class="sourceLineNo">5191</span><a id="line.5191">         * this example to replace the repeated section with only the first vowel.</a>
-<span class="sourceLineNo">5192</span><a id="line.5192">         * The ordering of map matters if a later key contains an earlier key (the earlier one will be replaced</a>
-<span class="sourceLineNo">5193</span><a id="line.5193">         * first, possibly making the later key not match), or if an earlier replacement causes a later one to</a>
-<span class="sourceLineNo">5194</span><a id="line.5194">         * become valid.</a>
-<span class="sourceLineNo">5195</span><a id="line.5195">         *</a>
-<span class="sourceLineNo">5196</span><a id="line.5196">         * @param map containing String keys to replace and String values to use instead; replacements happen in order</a>
-<span class="sourceLineNo">5197</span><a id="line.5197">         * @return a Modifier that can be added to a FakeLanguageGen with its addModifiers() method</a>
-<span class="sourceLineNo">5198</span><a id="line.5198">         */</a>
-<span class="sourceLineNo">5199</span><a id="line.5199">        public static Modifier replacementTable(OrderedMap&lt;String, String&gt; map) {</a>
-<span class="sourceLineNo">5200</span><a id="line.5200">            if (map == null)</a>
-<span class="sourceLineNo">5201</span><a id="line.5201">                return new Modifier();</a>
-<span class="sourceLineNo">5202</span><a id="line.5202">            Alteration[] alts = new Alteration[map.size()];</a>
-<span class="sourceLineNo">5203</span><a id="line.5203">            for (int i = 0; i &lt; alts.length; i++) {</a>
-<span class="sourceLineNo">5204</span><a id="line.5204">                alts[i] = new Alteration(map.keyAt(i), map.getAt(i));</a>
-<span class="sourceLineNo">5205</span><a id="line.5205">            }</a>
-<span class="sourceLineNo">5206</span><a id="line.5206">            return new Modifier(alts);</a>
-<span class="sourceLineNo">5207</span><a id="line.5207">        }</a>
-<span class="sourceLineNo">5208</span><a id="line.5208"></a>
-<span class="sourceLineNo">5209</span><a id="line.5209">        /**</a>
-<span class="sourceLineNo">5210</span><a id="line.5210">         * Creates a Modifier that will replace the (n*2)th String in pairs with the (n*2+1)th value in pairs. Because</a>
-<span class="sourceLineNo">5211</span><a id="line.5211">         * of the state of the text at the time modifiers are run, only lower-case letters need to be searched for.</a>
-<span class="sourceLineNo">5212</span><a id="line.5212">         * This overload of replacementTable allows full regex syntax for search and replacement Strings,</a>
-<span class="sourceLineNo">5213</span><a id="line.5213">         * such as searching for "([aeiou])\\1+" to find repeated occurrences of the same vowel, and "$1" in</a>
-<span class="sourceLineNo">5214</span><a id="line.5214">         * this example to replace the repeated section with only the first vowel.</a>
-<span class="sourceLineNo">5215</span><a id="line.5215">         * The ordering of pairs matters if a later search contains an earlier search (the earlier one will be replaced</a>
-<span class="sourceLineNo">5216</span><a id="line.5216">         * first, possibly making the later search not match), or if an earlier replacement causes a later one to</a>
-<span class="sourceLineNo">5217</span><a id="line.5217">         * become valid.</a>
-<span class="sourceLineNo">5218</span><a id="line.5218">         *</a>
-<span class="sourceLineNo">5219</span><a id="line.5219">         * @param pairs array or vararg of alternating Strings to search for and Strings to replace with; replacements happen in order</a>
-<span class="sourceLineNo">5220</span><a id="line.5220">         * @return a Modifier that can be added to a FakeLanguageGen with its addModifiers() method</a>
-<span class="sourceLineNo">5221</span><a id="line.5221">         */</a>
-<span class="sourceLineNo">5222</span><a id="line.5222">        public static Modifier replacementTable(String... pairs) {</a>
-<span class="sourceLineNo">5223</span><a id="line.5223">            int len;</a>
-<span class="sourceLineNo">5224</span><a id="line.5224">            if (pairs == null || (len = pairs.length) &lt;= 1)</a>
-<span class="sourceLineNo">5225</span><a id="line.5225">                return new Modifier();</a>
-<span class="sourceLineNo">5226</span><a id="line.5226">            Alteration[] alts = new Alteration[len &gt;&gt; 1];</a>
-<span class="sourceLineNo">5227</span><a id="line.5227">            for (int i = 0; i &lt; alts.length; i++) {</a>
-<span class="sourceLineNo">5228</span><a id="line.5228">                alts[i] = new Alteration(pairs[i&lt;&lt; 1], pairs[i&lt;&lt;1|1]);</a>
-<span class="sourceLineNo">5229</span><a id="line.5229">            }</a>
-<span class="sourceLineNo">5230</span><a id="line.5230">            return new Modifier(alts);</a>
-<span class="sourceLineNo">5231</span><a id="line.5231">        }</a>
-<span class="sourceLineNo">5232</span><a id="line.5232"></a>
-<span class="sourceLineNo">5233</span><a id="line.5233">        /**</a>
-<span class="sourceLineNo">5234</span><a id="line.5234">         * Adds the potential for the String {@code insertion} to be used as a vowel in addition to the vowels that the</a>
-<span class="sourceLineNo">5235</span><a id="line.5235">         * language already uses; insertion will replace an existing vowel (at any point in a word that had a vowel</a>
-<span class="sourceLineNo">5236</span><a id="line.5236">         * generated) with a probability of {@code chance}, so chance should be low (0.1 at most) unless you want the</a>
-<span class="sourceLineNo">5237</span><a id="line.5237">         * newly-inserted vowel to be likely to be present in every word of some sentences.</a>
-<span class="sourceLineNo">5238</span><a id="line.5238">         * @param insertion the String to use as an additional vowel</a>
-<span class="sourceLineNo">5239</span><a id="line.5239">         * @param chance the chance for a vowel cluster to be replaced with insertion; normally 0.1 or less</a>
-<span class="sourceLineNo">5240</span><a id="line.5240">         * @return a Modifier that can be added to a FakeLanguageGen with its addModifiers() method</a>
-<span class="sourceLineNo">5241</span><a id="line.5241">         */</a>
-<span class="sourceLineNo">5242</span><a id="line.5242">        public static Modifier insertVowel(String insertion, double chance)</a>
-<span class="sourceLineNo">5243</span><a id="line.5243">        {</a>
-<span class="sourceLineNo">5244</span><a id="line.5244">            return new Modifier(anyVowelCluster, insertion, chance);</a>
-<span class="sourceLineNo">5245</span><a id="line.5245">        }</a>
-<span class="sourceLineNo">5246</span><a id="line.5246"></a>
-<span class="sourceLineNo">5247</span><a id="line.5247">        /**</a>
-<span class="sourceLineNo">5248</span><a id="line.5248">         * Adds the potential for the String {@code insertion} to be used as a consonant in addition to the consonants</a>
-<span class="sourceLineNo">5249</span><a id="line.5249">         * that the language already uses; insertion will replace an existing consonant (at any point in a word that had</a>
-<span class="sourceLineNo">5250</span><a id="line.5250">         * a consonant generated) with a probability of {@code chance}, so chance should be low (0.1 at most) unless you</a>
-<span class="sourceLineNo">5251</span><a id="line.5251">         * want the newly-inserted consonant to be likely to be present in every word of some sentences.</a>
-<span class="sourceLineNo">5252</span><a id="line.5252">         * @param insertion the String to use as an additional consonant</a>
-<span class="sourceLineNo">5253</span><a id="line.5253">         * @param chance the chance for a consonant cluster to be replaced with insertion; normally 0.1 or less</a>
-<span class="sourceLineNo">5254</span><a id="line.5254">         * @return a Modifier that can be added to a FakeLanguageGen with its addModifiers() method</a>
-<span class="sourceLineNo">5255</span><a id="line.5255">         */</a>
-<span class="sourceLineNo">5256</span><a id="line.5256">        public static Modifier insertConsonant(String insertion, double chance)</a>
-<span class="sourceLineNo">5257</span><a id="line.5257">        {</a>
-<span class="sourceLineNo">5258</span><a id="line.5258">            return new Modifier(anyConsonantCluster, insertion, chance);</a>
-<span class="sourceLineNo">5259</span><a id="line.5259">        }</a>
-<span class="sourceLineNo">5260</span><a id="line.5260"></a>
-<span class="sourceLineNo">5261</span><a id="line.5261">        /**</a>
-<span class="sourceLineNo">5262</span><a id="line.5262">         * Adds the potential for the String {@code insertion} to be used as a vowel in addition to the vowels that the</a>
-<span class="sourceLineNo">5263</span><a id="line.5263">         * language already uses; insertion will replace an existing vowel at the start of a word with a probability of</a>
-<span class="sourceLineNo">5264</span><a id="line.5264">         * {@code chance}, so chance should be low (0.2 at most) unless you want the newly-inserted vowel to be likely</a>
-<span class="sourceLineNo">5265</span><a id="line.5265">         * to start every word of some sentences. Not all languages can start words with vowels, or do that very rarely,</a>
-<span class="sourceLineNo">5266</span><a id="line.5266">         * so this might not do anything.</a>
-<span class="sourceLineNo">5267</span><a id="line.5267">         * @param insertion the String to use as an additional opening vowel</a>
-<span class="sourceLineNo">5268</span><a id="line.5268">         * @param chance the chance for a vowel cluster at the start of a word to be replaced with insertion; normally 0.2 or less</a>
-<span class="sourceLineNo">5269</span><a id="line.5269">         * @return a Modifier that can be added to a FakeLanguageGen with its addModifiers() method</a>
-<span class="sourceLineNo">5270</span><a id="line.5270">         */</a>
-<span class="sourceLineNo">5271</span><a id="line.5271">        public static Modifier insertOpeningVowel(String insertion, double chance)</a>
-<span class="sourceLineNo">5272</span><a id="line.5272">        {</a>
-<span class="sourceLineNo">5273</span><a id="line.5273">            return new Modifier("\\b[àáâãäåæāăąǻǽaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőœǿoùúûüũūŭůűųuýÿŷỳyαοειυωаеёийоуъыэюя]+", insertion, chance);</a>
-<span class="sourceLineNo">5274</span><a id="line.5274">        }</a>
-<span class="sourceLineNo">5275</span><a id="line.5275"></a>
-<span class="sourceLineNo">5276</span><a id="line.5276">        /**</a>
-<span class="sourceLineNo">5277</span><a id="line.5277">         * Adds the potential for the String {@code insertion} to be used as a consonant in addition to the consonants</a>
-<span class="sourceLineNo">5278</span><a id="line.5278">         * that the language already uses; insertion will replace an existing consonant at the start of a word with a</a>
-<span class="sourceLineNo">5279</span><a id="line.5279">         * probability of {@code chance}, so chance should be low (0.2 at most) unless you want the newly-inserted</a>
-<span class="sourceLineNo">5280</span><a id="line.5280">         * consonant to be likely to start every word of some sentences. Not all languages can start words with</a>
-<span class="sourceLineNo">5281</span><a id="line.5281">         * consonants, or do that very rarely, so this might not do anything.</a>
-<span class="sourceLineNo">5282</span><a id="line.5282">         * @param insertion the String to use as an additional opening consonant</a>
-<span class="sourceLineNo">5283</span><a id="line.5283">         * @param chance the chance for a consonant cluster at the start of a word to be replaced with insertion; normally 0.2 or less</a>
-<span class="sourceLineNo">5284</span><a id="line.5284">         * @return a Modifier that can be added to a FakeLanguageGen with its addModifiers() method</a>
-<span class="sourceLineNo">5285</span><a id="line.5285">         */</a>
-<span class="sourceLineNo">5286</span><a id="line.5286">        public static Modifier insertOpeningConsonant(String insertion, double chance)</a>
-<span class="sourceLineNo">5287</span><a id="line.5287">        {</a>
-<span class="sourceLineNo">5288</span><a id="line.5288">            return new Modifier("\\b[bcçćĉċčdþðďđfgĝğġģhĥħjĵȷkķlĺļľŀłmnñńņňŋpqrŕŗřsśŝşšștţťțvwŵẁẃẅxyýÿŷỳzźżžρσζτκχνθμπψβλγφξςбвгдклпрстфхцжмнзчшщ]+", insertion, chance);</a>
-<span class="sourceLineNo">5289</span><a id="line.5289">        }</a>
-<span class="sourceLineNo">5290</span><a id="line.5290"></a>
-<span class="sourceLineNo">5291</span><a id="line.5291">        /**</a>
-<span class="sourceLineNo">5292</span><a id="line.5292">         * Adds the potential for the String {@code insertion} to be used as a vowel in addition to the vowels that the</a>
-<span class="sourceLineNo">5293</span><a id="line.5293">         * language already uses; insertion will replace an existing vowel at the end of a word with a probability of</a>
-<span class="sourceLineNo">5294</span><a id="line.5294">         * {@code chance}, so chance should be low (0.2 at most) unless you want the newly-inserted vowel to be likely</a>
-<span class="sourceLineNo">5295</span><a id="line.5295">         * to end every word of some sentences. Not all languages can end words with vowels, or do that very</a>
-<span class="sourceLineNo">5296</span><a id="line.5296">         * rarely, so this might not do anything.</a>
-<span class="sourceLineNo">5297</span><a id="line.5297">         * @param insertion the String to use as an additional closing vowel</a>
-<span class="sourceLineNo">5298</span><a id="line.5298">         * @param chance the chance for a vowel cluster at the end of a word to be replaced with insertion; normally 0.2 or less</a>
-<span class="sourceLineNo">5299</span><a id="line.5299">         * @return a Modifier that can be added to a FakeLanguageGen with its addModifiers() method</a>
-<span class="sourceLineNo">5300</span><a id="line.5300">         */</a>
-<span class="sourceLineNo">5301</span><a id="line.5301">        public static Modifier insertClosingVowel(String insertion, double chance)</a>
-<span class="sourceLineNo">5302</span><a id="line.5302">        {</a>
-<span class="sourceLineNo">5303</span><a id="line.5303">            return new Modifier("[àáâãäåæāăąǻǽaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőœǿoùúûüũūŭůűųuýÿŷỳyαοειυωаеёийоуъыэюя]+\\b", insertion, chance);</a>
-<span class="sourceLineNo">5304</span><a id="line.5304">        }</a>
-<span class="sourceLineNo">5305</span><a id="line.5305"></a>
-<span class="sourceLineNo">5306</span><a id="line.5306">        /**</a>
-<span class="sourceLineNo">5307</span><a id="line.5307">         * Adds the potential for the String {@code insertion} to be used as a consonant in addition to the consonants</a>
-<span class="sourceLineNo">5308</span><a id="line.5308">         * that the language already uses; insertion will replace an existing consonant at the end of a word with a</a>
-<span class="sourceLineNo">5309</span><a id="line.5309">         * probability of {@code chance}, so chance should be low (0.2 at most) unless you want the newly-inserted</a>
-<span class="sourceLineNo">5310</span><a id="line.5310">         * consonant to be likely to end every word of some sentences. Not all languages can end words with consonants,</a>
-<span class="sourceLineNo">5311</span><a id="line.5311">         * or do that very rarely, so this might not do anything.</a>
-<span class="sourceLineNo">5312</span><a id="line.5312">         * @param insertion the String to use as an additional closing consonant</a>
-<span class="sourceLineNo">5313</span><a id="line.5313">         * @param chance the chance for a consonant cluster at the end of a word to be replaced with insertion; normally 0.2 or less</a>
-<span class="sourceLineNo">5314</span><a id="line.5314">         * @return a Modifier that can be added to a FakeLanguageGen with its addModifiers() method</a>
-<span class="sourceLineNo">5315</span><a id="line.5315">         */</a>
-<span class="sourceLineNo">5316</span><a id="line.5316">        public static Modifier insertClosingConsonant(String insertion, double chance)</a>
-<span class="sourceLineNo">5317</span><a id="line.5317">        {</a>
-<span class="sourceLineNo">5318</span><a id="line.5318">            return new Modifier("[bcçćĉċčdþðďđfgĝğġģhĥħjĵȷkķlĺļľŀłmnñńņňŋpqrŕŗřsśŝşšștţťțvwŵẁẃẅxyýÿŷỳzźżžρσζτκχνθμπψβλγφξςбвгдклпрстфхцжмнзчшщ]+\\b", insertion, chance);</a>
-<span class="sourceLineNo">5319</span><a id="line.5319">        }</a>
-<span class="sourceLineNo">5320</span><a id="line.5320"></a>
-<span class="sourceLineNo">5321</span><a id="line.5321">        /**</a>
-<span class="sourceLineNo">5322</span><a id="line.5322">         * Replaces any characters this can produce that aren't in ASCII or Latin-1 with Latin-script stand-ins; this</a>
-<span class="sourceLineNo">5323</span><a id="line.5323">         * will often use accented characters, but will only use those present in Latin-1 (which many fonts support).</a>
-<span class="sourceLineNo">5324</span><a id="line.5324">         * &lt;br&gt;</a>
-<span class="sourceLineNo">5325</span><a id="line.5325">         * The rationale for this Modifier is to allow users of FakeLanguageGen who don't display with the wide-ranging</a>
-<span class="sourceLineNo">5326</span><a id="line.5326">         * fonts in the display module to still be able to display something reasonable for generated text.</a>
-<span class="sourceLineNo">5327</span><a id="line.5327">         */</a>
-<span class="sourceLineNo">5328</span><a id="line.5328">        public static final Modifier REDUCE_ACCENTS = replacementTable("ā", "â", "ă", "ä", "ą", "ã", "ǻ", "å", "ǽ", "áe",</a>
-<span class="sourceLineNo">5329</span><a id="line.5329">                "ē", "ê", "ĕ", "ë", "ė", "ë", "ę", "è", "ě", "é", "ĩ", "í", "ī", "î", "į", "ì", "ĭ", "ï", "ı", "iy", "ō", "ô",</a>
-<span class="sourceLineNo">5330</span><a id="line.5330">                "ŏ", "ö", "ő", "ó", "œ", "oe", "ǿ", "ø", "ũ", "ú", "ŭ", "ü", "ů", "ùo", "ű", "ú", "ų", "ù", "ŷ", "ý", "ỳ", "ÿ",</a>
-<span class="sourceLineNo">5331</span><a id="line.5331">                // done with latin vowels...</a>
-<span class="sourceLineNo">5332</span><a id="line.5332">                "ć", "ç", "ĉ", "ç", "ċ", "ç", "č", "ç", "ď", "dh", "đ", "dh", "ĝ", "gh", "ğ", "gh", "ġ", "gh", "ģ", "gh",</a>
-<span class="sourceLineNo">5333</span><a id="line.5333">                "ĥ", "hh", "ħ", "hh", "ĵ", "jh", "ȷ", "jj", "ķ", "kc", "ĺ", "lh", "ļ", "ll", "ľ", "ly", "ŀł", "yl", "ł", "wl",</a>
-<span class="sourceLineNo">5334</span><a id="line.5334">                "ń", "nn", "ņ", "wn", "ň", "nh", "ŋ", "ng", "ŕ", "rh", "ŗ", "wr", "ř", "rr", "ś", "ss", "ŝ", "hs",</a>
-<span class="sourceLineNo">5335</span><a id="line.5335">                "ş", "sy", "š", "ws", "ș", "sw", "ţ", "wt", "ť", "tt", "ț", "ty", "ŵ", "ww", "ẁ", "hw", "ẃ", "wh", "ẅ", "uw",</a>
-<span class="sourceLineNo">5336</span><a id="line.5336">                "ź", "hz", "ż", "zy", "ž", "zz",</a>
-<span class="sourceLineNo">5337</span><a id="line.5337">                // greek</a>
-<span class="sourceLineNo">5338</span><a id="line.5338">                "α", "a", "ο", "o", "ε", "e", "ι", "i", "υ", "y", "ω", "au",</a>
-<span class="sourceLineNo">5339</span><a id="line.5339">                "κρ", "kr", "γγ", "ng", "γκ", "nk", "γξ", "nx", "γχ", "nch", "ρστ", "rst", "ρτ", "rt",</a>
-<span class="sourceLineNo">5340</span><a id="line.5340">                "ρ", "rh", "σ", "s", "ζ", "z", "τ", "t", "κ", "k", "χ", "ch", "ν", "n", "ξ", "x",</a>
-<span class="sourceLineNo">5341</span><a id="line.5341">                "θ", "th", "μ", "m", "π", "p", "ψ", "ps", "β", "b", "λ", "l", "γ", "g", "δ", "d", "φ", "ph", "ς", "s",</a>
-<span class="sourceLineNo">5342</span><a id="line.5342">                // cyrillic</a>
-<span class="sourceLineNo">5343</span><a id="line.5343">                "а", "a", "е", "e", "ё", "ë", "и", "i", "й", "î", "о", "o", "у", "u", "ъ", "ie", "ы", "y", "э", "e", "ю", "iu", "я", "ia",</a>
-<span class="sourceLineNo">5344</span><a id="line.5344">                "б", "b", "в", "v", "г", "g", "д", "d", "к", "k", "л", "l", "п", "p", "р", "r", "с", "s", "т", "t",</a>
-<span class="sourceLineNo">5345</span><a id="line.5345">                "ф", "f", "х", "kh", "ц", "ts", "ч", "ch", "ж", "zh", "м", "m", "н", "n", "з", "z", "ш", "sh", "щ", "shch");</a>
-<span class="sourceLineNo">5346</span><a id="line.5346"></a>
-<span class="sourceLineNo">5347</span><a id="line.5347">        @Override</a>
-<span class="sourceLineNo">5348</span><a id="line.5348">        public boolean equals(Object o) {</a>
-<span class="sourceLineNo">5349</span><a id="line.5349">            if (this == o) return true;</a>
-<span class="sourceLineNo">5350</span><a id="line.5350">            if (o == null || getClass() != o.getClass()) return false;</a>
+<span class="sourceLineNo">5153</span><a id="line.5153">        public static final Modifier SPLIT_LIGATURES = replacementTable("æ", "ae", "œ", "oe", "ǽ", "áe");</a>
+<span class="sourceLineNo">5154</span><a id="line.5154">        /**</a>
+<span class="sourceLineNo">5155</span><a id="line.5155">         * Some changes that can be applied when sanity checks (which force re-generating a new word) aren't appropriate</a>
+<span class="sourceLineNo">5156</span><a id="line.5156">         * for fixing a word that isn't pronounceable.</a>
+<span class="sourceLineNo">5157</span><a id="line.5157">         */</a>
+<span class="sourceLineNo">5158</span><a id="line.5158">        public static final Modifier GENERAL_CLEANUP = replacementTable(</a>
+<span class="sourceLineNo">5159</span><a id="line.5159">                "[æǽœìíîïĩīĭįıiùúûüũūŭůűųuýÿŷỳy]([æǽœýÿŷỳy])", "$1",</a>
+<span class="sourceLineNo">5160</span><a id="line.5160">                "q([ùúûüũūŭůűųu])$", "q$1e",</a>
+<span class="sourceLineNo">5161</span><a id="line.5161">                "([ìíîïĩīĭįıi])[ìíîïĩīĭįıi]", "$1",</a>
+<span class="sourceLineNo">5162</span><a id="line.5162">                "([æǽœìíîïĩīĭįıiùúûüũūŭůűųuýÿŷỳy])[wŵẁẃẅ]$", "$1",</a>
+<span class="sourceLineNo">5163</span><a id="line.5163">                "([ùúûüũūŭůűųu])([òóôõöøōŏőǿo])", "$2$1",</a>
+<span class="sourceLineNo">5164</span><a id="line.5164">                "[àáâãäåāăąǻaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőǿoùúûüũūŭůűųuýÿŷỳy]([æǽœ])", "$1",</a>
+<span class="sourceLineNo">5165</span><a id="line.5165">                "([æǽœ])[àáâãäåāăąǻaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőǿoùúûüũūŭůűųuýÿŷỳy]", "$1",</a>
+<span class="sourceLineNo">5166</span><a id="line.5166">                "([wŵẁẃẅ])[wŵẁẃẅ]", "$1",</a>
+<span class="sourceLineNo">5167</span><a id="line.5167">                "qq", "q");</a>
+<span class="sourceLineNo">5168</span><a id="line.5168"></a>
+<span class="sourceLineNo">5169</span><a id="line.5169">        //àáâãäåāăąǻæǽaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőœǿoùúûüũūŭůűųuýÿŷỳy</a>
+<span class="sourceLineNo">5170</span><a id="line.5170">        //bcçćĉċčdþðďđfgĝğġģhĥħjĵȷkķlĺļľŀłmnñńņňŋpqrŕŗřsśŝşšștţťțvwŵẁẃẅxyýÿŷỳzźżž</a>
+<span class="sourceLineNo">5171</span><a id="line.5171"></a>
+<span class="sourceLineNo">5172</span><a id="line.5172">        /**</a>
+<span class="sourceLineNo">5173</span><a id="line.5173">         * Creates a Modifier that will replace the nth char in initial with the nth char in change. Expects initial and</a>
+<span class="sourceLineNo">5174</span><a id="line.5174">         * change to be the same length, but will use the lesser length if they are not equal-length. Because of the</a>
+<span class="sourceLineNo">5175</span><a id="line.5175">         * state of the text at the time modifiers are run, only lower-case letters need to be searched for.</a>
+<span class="sourceLineNo">5176</span><a id="line.5176">         *</a>
+<span class="sourceLineNo">5177</span><a id="line.5177">         * @param initial a String containing lower-case letters or other symbols to be swapped out of a text</a>
+<span class="sourceLineNo">5178</span><a id="line.5178">         * @param change  a String containing characters that will replace occurrences of characters in initial</a>
+<span class="sourceLineNo">5179</span><a id="line.5179">         * @return a Modifier that can be added to a FakeLanguageGen with its addModifiers() method</a>
+<span class="sourceLineNo">5180</span><a id="line.5180">         */</a>
+<span class="sourceLineNo">5181</span><a id="line.5181">        public static Modifier charReplacementTable(String initial, String change) {</a>
+<span class="sourceLineNo">5182</span><a id="line.5182">            Alteration[] alts = new Alteration[Math.min(initial.length(), change.length())];</a>
+<span class="sourceLineNo">5183</span><a id="line.5183">            for (int i = 0; i &lt; alts.length; i++) {</a>
+<span class="sourceLineNo">5184</span><a id="line.5184">                //literal string syntax; avoids sensitive escaping issues and also doesn't need a character class,</a>
+<span class="sourceLineNo">5185</span><a id="line.5185">                // which is slightly slower and has some odd escaping cases.</a>
+<span class="sourceLineNo">5186</span><a id="line.5186">                alts[i] = new Alteration("\\Q" + initial.charAt(i), change.substring(i, i + 1));</a>
+<span class="sourceLineNo">5187</span><a id="line.5187">            }</a>
+<span class="sourceLineNo">5188</span><a id="line.5188">            return new Modifier(alts);</a>
+<span class="sourceLineNo">5189</span><a id="line.5189">        }</a>
+<span class="sourceLineNo">5190</span><a id="line.5190"></a>
+<span class="sourceLineNo">5191</span><a id="line.5191">        /**</a>
+<span class="sourceLineNo">5192</span><a id="line.5192">         * Creates a Modifier that will replace the nth String key in map with the nth value. Because of the</a>
+<span class="sourceLineNo">5193</span><a id="line.5193">         * state of the text at the time modifiers are run, only lower-case letters need to be searched for.</a>
+<span class="sourceLineNo">5194</span><a id="line.5194">         * This overload of replacementTable allows full regex pattern strings as keys and replacement syntax,</a>
+<span class="sourceLineNo">5195</span><a id="line.5195">         * such as searching for "([aeiou])\\1+" to find repeated occurrences of the same vowel, and "$1" in</a>
+<span class="sourceLineNo">5196</span><a id="line.5196">         * this example to replace the repeated section with only the first vowel.</a>
+<span class="sourceLineNo">5197</span><a id="line.5197">         * The ordering of map matters if a later key contains an earlier key (the earlier one will be replaced</a>
+<span class="sourceLineNo">5198</span><a id="line.5198">         * first, possibly making the later key not match), or if an earlier replacement causes a later one to</a>
+<span class="sourceLineNo">5199</span><a id="line.5199">         * become valid.</a>
+<span class="sourceLineNo">5200</span><a id="line.5200">         *</a>
+<span class="sourceLineNo">5201</span><a id="line.5201">         * @param map containing String keys to replace and String values to use instead; replacements happen in order</a>
+<span class="sourceLineNo">5202</span><a id="line.5202">         * @return a Modifier that can be added to a FakeLanguageGen with its addModifiers() method</a>
+<span class="sourceLineNo">5203</span><a id="line.5203">         */</a>
+<span class="sourceLineNo">5204</span><a id="line.5204">        public static Modifier replacementTable(OrderedMap&lt;String, String&gt; map) {</a>
+<span class="sourceLineNo">5205</span><a id="line.5205">            if (map == null)</a>
+<span class="sourceLineNo">5206</span><a id="line.5206">                return new Modifier();</a>
+<span class="sourceLineNo">5207</span><a id="line.5207">            Alteration[] alts = new Alteration[map.size()];</a>
+<span class="sourceLineNo">5208</span><a id="line.5208">            for (int i = 0; i &lt; alts.length; i++) {</a>
+<span class="sourceLineNo">5209</span><a id="line.5209">                alts[i] = new Alteration(map.keyAt(i), map.getAt(i));</a>
+<span class="sourceLineNo">5210</span><a id="line.5210">            }</a>
+<span class="sourceLineNo">5211</span><a id="line.5211">            return new Modifier(alts);</a>
+<span class="sourceLineNo">5212</span><a id="line.5212">        }</a>
+<span class="sourceLineNo">5213</span><a id="line.5213"></a>
+<span class="sourceLineNo">5214</span><a id="line.5214">        /**</a>
+<span class="sourceLineNo">5215</span><a id="line.5215">         * Creates a Modifier that will replace the (n*2)th String in pairs with the (n*2+1)th value in pairs. Because</a>
+<span class="sourceLineNo">5216</span><a id="line.5216">         * of the state of the text at the time modifiers are run, only lower-case letters need to be searched for.</a>
+<span class="sourceLineNo">5217</span><a id="line.5217">         * This overload of replacementTable allows full regex syntax for search and replacement Strings,</a>
+<span class="sourceLineNo">5218</span><a id="line.5218">         * such as searching for "([aeiou])\\1+" to find repeated occurrences of the same vowel, and "$1" in</a>
+<span class="sourceLineNo">5219</span><a id="line.5219">         * this example to replace the repeated section with only the first vowel.</a>
+<span class="sourceLineNo">5220</span><a id="line.5220">         * The ordering of pairs matters if a later search contains an earlier search (the earlier one will be replaced</a>
+<span class="sourceLineNo">5221</span><a id="line.5221">         * first, possibly making the later search not match), or if an earlier replacement causes a later one to</a>
+<span class="sourceLineNo">5222</span><a id="line.5222">         * become valid.</a>
+<span class="sourceLineNo">5223</span><a id="line.5223">         *</a>
+<span class="sourceLineNo">5224</span><a id="line.5224">         * @param pairs array or vararg of alternating Strings to search for and Strings to replace with; replacements happen in order</a>
+<span class="sourceLineNo">5225</span><a id="line.5225">         * @return a Modifier that can be added to a FakeLanguageGen with its addModifiers() method</a>
+<span class="sourceLineNo">5226</span><a id="line.5226">         */</a>
+<span class="sourceLineNo">5227</span><a id="line.5227">        public static Modifier replacementTable(String... pairs) {</a>
+<span class="sourceLineNo">5228</span><a id="line.5228">            int len;</a>
+<span class="sourceLineNo">5229</span><a id="line.5229">            if (pairs == null || (len = pairs.length) &lt;= 1)</a>
+<span class="sourceLineNo">5230</span><a id="line.5230">                return new Modifier();</a>
+<span class="sourceLineNo">5231</span><a id="line.5231">            Alteration[] alts = new Alteration[len &gt;&gt; 1];</a>
+<span class="sourceLineNo">5232</span><a id="line.5232">            for (int i = 0; i &lt; alts.length; i++) {</a>
+<span class="sourceLineNo">5233</span><a id="line.5233">                alts[i] = new Alteration(pairs[i&lt;&lt; 1], pairs[i&lt;&lt;1|1]);</a>
+<span class="sourceLineNo">5234</span><a id="line.5234">            }</a>
+<span class="sourceLineNo">5235</span><a id="line.5235">            return new Modifier(alts);</a>
+<span class="sourceLineNo">5236</span><a id="line.5236">        }</a>
+<span class="sourceLineNo">5237</span><a id="line.5237"></a>
+<span class="sourceLineNo">5238</span><a id="line.5238">        /**</a>
+<span class="sourceLineNo">5239</span><a id="line.5239">         * Adds the potential for the String {@code insertion} to be used as a vowel in addition to the vowels that the</a>
+<span class="sourceLineNo">5240</span><a id="line.5240">         * language already uses; insertion will replace an existing vowel (at any point in a word that had a vowel</a>
+<span class="sourceLineNo">5241</span><a id="line.5241">         * generated) with a probability of {@code chance}, so chance should be low (0.1 at most) unless you want the</a>
+<span class="sourceLineNo">5242</span><a id="line.5242">         * newly-inserted vowel to be likely to be present in every word of some sentences.</a>
+<span class="sourceLineNo">5243</span><a id="line.5243">         * @param insertion the String to use as an additional vowel</a>
+<span class="sourceLineNo">5244</span><a id="line.5244">         * @param chance the chance for a vowel cluster to be replaced with insertion; normally 0.1 or less</a>
+<span class="sourceLineNo">5245</span><a id="line.5245">         * @return a Modifier that can be added to a FakeLanguageGen with its addModifiers() method</a>
+<span class="sourceLineNo">5246</span><a id="line.5246">         */</a>
+<span class="sourceLineNo">5247</span><a id="line.5247">        public static Modifier insertVowel(String insertion, double chance)</a>
+<span class="sourceLineNo">5248</span><a id="line.5248">        {</a>
+<span class="sourceLineNo">5249</span><a id="line.5249">            return new Modifier(anyVowelCluster, insertion, chance);</a>
+<span class="sourceLineNo">5250</span><a id="line.5250">        }</a>
+<span class="sourceLineNo">5251</span><a id="line.5251"></a>
+<span class="sourceLineNo">5252</span><a id="line.5252">        /**</a>
+<span class="sourceLineNo">5253</span><a id="line.5253">         * Adds the potential for the String {@code insertion} to be used as a consonant in addition to the consonants</a>
+<span class="sourceLineNo">5254</span><a id="line.5254">         * that the language already uses; insertion will replace an existing consonant (at any point in a word that had</a>
+<span class="sourceLineNo">5255</span><a id="line.5255">         * a consonant generated) with a probability of {@code chance}, so chance should be low (0.1 at most) unless you</a>
+<span class="sourceLineNo">5256</span><a id="line.5256">         * want the newly-inserted consonant to be likely to be present in every word of some sentences.</a>
+<span class="sourceLineNo">5257</span><a id="line.5257">         * @param insertion the String to use as an additional consonant</a>
+<span class="sourceLineNo">5258</span><a id="line.5258">         * @param chance the chance for a consonant cluster to be replaced with insertion; normally 0.1 or less</a>
+<span class="sourceLineNo">5259</span><a id="line.5259">         * @return a Modifier that can be added to a FakeLanguageGen with its addModifiers() method</a>
+<span class="sourceLineNo">5260</span><a id="line.5260">         */</a>
+<span class="sourceLineNo">5261</span><a id="line.5261">        public static Modifier insertConsonant(String insertion, double chance)</a>
+<span class="sourceLineNo">5262</span><a id="line.5262">        {</a>
+<span class="sourceLineNo">5263</span><a id="line.5263">            return new Modifier(anyConsonantCluster, insertion, chance);</a>
+<span class="sourceLineNo">5264</span><a id="line.5264">        }</a>
+<span class="sourceLineNo">5265</span><a id="line.5265"></a>
+<span class="sourceLineNo">5266</span><a id="line.5266">        /**</a>
+<span class="sourceLineNo">5267</span><a id="line.5267">         * Adds the potential for the String {@code insertion} to be used as a vowel in addition to the vowels that the</a>
+<span class="sourceLineNo">5268</span><a id="line.5268">         * language already uses; insertion will replace an existing vowel at the start of a word with a probability of</a>
+<span class="sourceLineNo">5269</span><a id="line.5269">         * {@code chance}, so chance should be low (0.2 at most) unless you want the newly-inserted vowel to be likely</a>
+<span class="sourceLineNo">5270</span><a id="line.5270">         * to start every word of some sentences. Not all languages can start words with vowels, or do that very rarely,</a>
+<span class="sourceLineNo">5271</span><a id="line.5271">         * so this might not do anything.</a>
+<span class="sourceLineNo">5272</span><a id="line.5272">         * @param insertion the String to use as an additional opening vowel</a>
+<span class="sourceLineNo">5273</span><a id="line.5273">         * @param chance the chance for a vowel cluster at the start of a word to be replaced with insertion; normally 0.2 or less</a>
+<span class="sourceLineNo">5274</span><a id="line.5274">         * @return a Modifier that can be added to a FakeLanguageGen with its addModifiers() method</a>
+<span class="sourceLineNo">5275</span><a id="line.5275">         */</a>
+<span class="sourceLineNo">5276</span><a id="line.5276">        public static Modifier insertOpeningVowel(String insertion, double chance)</a>
+<span class="sourceLineNo">5277</span><a id="line.5277">        {</a>
+<span class="sourceLineNo">5278</span><a id="line.5278">            return new Modifier("\\b[àáâãäåæāăąǻǽaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőœǿoùúûüũūŭůűųuýÿŷỳyαοειυωаеёийоуъыэюя]+", insertion, chance);</a>
+<span class="sourceLineNo">5279</span><a id="line.5279">        }</a>
+<span class="sourceLineNo">5280</span><a id="line.5280"></a>
+<span class="sourceLineNo">5281</span><a id="line.5281">        /**</a>
+<span class="sourceLineNo">5282</span><a id="line.5282">         * Adds the potential for the String {@code insertion} to be used as a consonant in addition to the consonants</a>
+<span class="sourceLineNo">5283</span><a id="line.5283">         * that the language already uses; insertion will replace an existing consonant at the start of a word with a</a>
+<span class="sourceLineNo">5284</span><a id="line.5284">         * probability of {@code chance}, so chance should be low (0.2 at most) unless you want the newly-inserted</a>
+<span class="sourceLineNo">5285</span><a id="line.5285">         * consonant to be likely to start every word of some sentences. Not all languages can start words with</a>
+<span class="sourceLineNo">5286</span><a id="line.5286">         * consonants, or do that very rarely, so this might not do anything.</a>
+<span class="sourceLineNo">5287</span><a id="line.5287">         * @param insertion the String to use as an additional opening consonant</a>
+<span class="sourceLineNo">5288</span><a id="line.5288">         * @param chance the chance for a consonant cluster at the start of a word to be replaced with insertion; normally 0.2 or less</a>
+<span class="sourceLineNo">5289</span><a id="line.5289">         * @return a Modifier that can be added to a FakeLanguageGen with its addModifiers() method</a>
+<span class="sourceLineNo">5290</span><a id="line.5290">         */</a>
+<span class="sourceLineNo">5291</span><a id="line.5291">        public static Modifier insertOpeningConsonant(String insertion, double chance)</a>
+<span class="sourceLineNo">5292</span><a id="line.5292">        {</a>
+<span class="sourceLineNo">5293</span><a id="line.5293">            return new Modifier("\\b[bcçćĉċčdþðďđfgĝğġģhĥħjĵȷkķlĺļľŀłmnñńņňŋpqrŕŗřsśŝşšștţťțvwŵẁẃẅxyýÿŷỳzźżžρσζτκχνθμπψβλγφξςбвгдклпрстфхцжмнзчшщ]+", insertion, chance);</a>
+<span class="sourceLineNo">5294</span><a id="line.5294">        }</a>
+<span class="sourceLineNo">5295</span><a id="line.5295"></a>
+<span class="sourceLineNo">5296</span><a id="line.5296">        /**</a>
+<span class="sourceLineNo">5297</span><a id="line.5297">         * Adds the potential for the String {@code insertion} to be used as a vowel in addition to the vowels that the</a>
+<span class="sourceLineNo">5298</span><a id="line.5298">         * language already uses; insertion will replace an existing vowel at the end of a word with a probability of</a>
+<span class="sourceLineNo">5299</span><a id="line.5299">         * {@code chance}, so chance should be low (0.2 at most) unless you want the newly-inserted vowel to be likely</a>
+<span class="sourceLineNo">5300</span><a id="line.5300">         * to end every word of some sentences. Not all languages can end words with vowels, or do that very</a>
+<span class="sourceLineNo">5301</span><a id="line.5301">         * rarely, so this might not do anything.</a>
+<span class="sourceLineNo">5302</span><a id="line.5302">         * @param insertion the String to use as an additional closing vowel</a>
+<span class="sourceLineNo">5303</span><a id="line.5303">         * @param chance the chance for a vowel cluster at the end of a word to be replaced with insertion; normally 0.2 or less</a>
+<span class="sourceLineNo">5304</span><a id="line.5304">         * @return a Modifier that can be added to a FakeLanguageGen with its addModifiers() method</a>
+<span class="sourceLineNo">5305</span><a id="line.5305">         */</a>
+<span class="sourceLineNo">5306</span><a id="line.5306">        public static Modifier insertClosingVowel(String insertion, double chance)</a>
+<span class="sourceLineNo">5307</span><a id="line.5307">        {</a>
+<span class="sourceLineNo">5308</span><a id="line.5308">            return new Modifier("[àáâãäåæāăąǻǽaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőœǿoùúûüũūŭůűųuýÿŷỳyαοειυωаеёийоуъыэюя]+\\b", insertion, chance);</a>
+<span class="sourceLineNo">5309</span><a id="line.5309">        }</a>
+<span class="sourceLineNo">5310</span><a id="line.5310"></a>
+<span class="sourceLineNo">5311</span><a id="line.5311">        /**</a>
+<span class="sourceLineNo">5312</span><a id="line.5312">         * Adds the potential for the String {@code insertion} to be used as a consonant in addition to the consonants</a>
+<span class="sourceLineNo">5313</span><a id="line.5313">         * that the language already uses; insertion will replace an existing consonant at the end of a word with a</a>
+<span class="sourceLineNo">5314</span><a id="line.5314">         * probability of {@code chance}, so chance should be low (0.2 at most) unless you want the newly-inserted</a>
+<span class="sourceLineNo">5315</span><a id="line.5315">         * consonant to be likely to end every word of some sentences. Not all languages can end words with consonants,</a>
+<span class="sourceLineNo">5316</span><a id="line.5316">         * or do that very rarely, so this might not do anything.</a>
+<span class="sourceLineNo">5317</span><a id="line.5317">         * @param insertion the String to use as an additional closing consonant</a>
+<span class="sourceLineNo">5318</span><a id="line.5318">         * @param chance the chance for a consonant cluster at the end of a word to be replaced with insertion; normally 0.2 or less</a>
+<span class="sourceLineNo">5319</span><a id="line.5319">         * @return a Modifier that can be added to a FakeLanguageGen with its addModifiers() method</a>
+<span class="sourceLineNo">5320</span><a id="line.5320">         */</a>
+<span class="sourceLineNo">5321</span><a id="line.5321">        public static Modifier insertClosingConsonant(String insertion, double chance)</a>
+<span class="sourceLineNo">5322</span><a id="line.5322">        {</a>
+<span class="sourceLineNo">5323</span><a id="line.5323">            return new Modifier("[bcçćĉċčdþðďđfgĝğġģhĥħjĵȷkķlĺļľŀłmnñńņňŋpqrŕŗřsśŝşšștţťțvwŵẁẃẅxyýÿŷỳzźżžρσζτκχνθμπψβλγφξςбвгдклпрстфхцжмнзчшщ]+\\b", insertion, chance);</a>
+<span class="sourceLineNo">5324</span><a id="line.5324">        }</a>
+<span class="sourceLineNo">5325</span><a id="line.5325"></a>
+<span class="sourceLineNo">5326</span><a id="line.5326">        /**</a>
+<span class="sourceLineNo">5327</span><a id="line.5327">         * Replaces any characters this can produce that aren't in ASCII or Latin-1 with Latin-script stand-ins; this</a>
+<span class="sourceLineNo">5328</span><a id="line.5328">         * will often use accented characters, but will only use those present in Latin-1 (which many fonts support).</a>
+<span class="sourceLineNo">5329</span><a id="line.5329">         * &lt;br&gt;</a>
+<span class="sourceLineNo">5330</span><a id="line.5330">         * The rationale for this Modifier is to allow users of FakeLanguageGen who don't display with the wide-ranging</a>
+<span class="sourceLineNo">5331</span><a id="line.5331">         * fonts in the display module to still be able to display something reasonable for generated text.</a>
+<span class="sourceLineNo">5332</span><a id="line.5332">         */</a>
+<span class="sourceLineNo">5333</span><a id="line.5333">        public static final Modifier REDUCE_ACCENTS = replacementTable("ā", "â", "ă", "ä", "ą", "ã", "ǻ", "å", "ǽ", "áe",</a>
+<span class="sourceLineNo">5334</span><a id="line.5334">                "ē", "ê", "ĕ", "ë", "ė", "ë", "ę", "è", "ě", "é", "ĩ", "í", "ī", "î", "į", "ì", "ĭ", "ï", "ı", "iy", "ō", "ô",</a>
+<span class="sourceLineNo">5335</span><a id="line.5335">                "ŏ", "ö", "ő", "ó", "œ", "oe", "ǿ", "ø", "ũ", "ú", "ŭ", "ü", "ů", "ùo", "ű", "ú", "ų", "ù", "ŷ", "ý", "ỳ", "ÿ",</a>
+<span class="sourceLineNo">5336</span><a id="line.5336">                // done with latin vowels...</a>
+<span class="sourceLineNo">5337</span><a id="line.5337">                "ć", "ç", "ĉ", "ç", "ċ", "ç", "č", "ç", "ď", "dh", "đ", "dh", "ĝ", "gh", "ğ", "gh", "ġ", "gh", "ģ", "gh",</a>
+<span class="sourceLineNo">5338</span><a id="line.5338">                "ĥ", "hh", "ħ", "hh", "ĵ", "jh", "ȷ", "jj", "ķ", "kc", "ĺ", "lh", "ļ", "ll", "ľ", "ly", "ŀł", "yl", "ł", "wl",</a>
+<span class="sourceLineNo">5339</span><a id="line.5339">                "ń", "nn", "ņ", "wn", "ň", "nh", "ŋ", "ng", "ŕ", "rh", "ŗ", "wr", "ř", "rr", "ś", "ss", "ŝ", "hs",</a>
+<span class="sourceLineNo">5340</span><a id="line.5340">                "ş", "sy", "š", "ws", "ș", "sw", "ţ", "wt", "ť", "tt", "ț", "ty", "ŵ", "ww", "ẁ", "hw", "ẃ", "wh", "ẅ", "uw",</a>
+<span class="sourceLineNo">5341</span><a id="line.5341">                "ź", "hz", "ż", "zy", "ž", "zz",</a>
+<span class="sourceLineNo">5342</span><a id="line.5342">                // greek</a>
+<span class="sourceLineNo">5343</span><a id="line.5343">                "α", "a", "ο", "o", "ε", "e", "ι", "i", "υ", "y", "ω", "au",</a>
+<span class="sourceLineNo">5344</span><a id="line.5344">                "κρ", "kr", "γγ", "ng", "γκ", "nk", "γξ", "nx", "γχ", "nch", "ρστ", "rst", "ρτ", "rt",</a>
+<span class="sourceLineNo">5345</span><a id="line.5345">                "ρ", "rh", "σ", "s", "ζ", "z", "τ", "t", "κ", "k", "χ", "ch", "ν", "n", "ξ", "x",</a>
+<span class="sourceLineNo">5346</span><a id="line.5346">                "θ", "th", "μ", "m", "π", "p", "ψ", "ps", "β", "b", "λ", "l", "γ", "g", "δ", "d", "φ", "ph", "ς", "s",</a>
+<span class="sourceLineNo">5347</span><a id="line.5347">                // cyrillic</a>
+<span class="sourceLineNo">5348</span><a id="line.5348">                "а", "a", "е", "e", "ё", "ë", "и", "i", "й", "î", "о", "o", "у", "u", "ъ", "ie", "ы", "y", "э", "e", "ю", "iu", "я", "ia",</a>
+<span class="sourceLineNo">5349</span><a id="line.5349">                "б", "b", "в", "v", "г", "g", "д", "d", "к", "k", "л", "l", "п", "p", "р", "r", "с", "s", "т", "t",</a>
+<span class="sourceLineNo">5350</span><a id="line.5350">                "ф", "f", "х", "kh", "ц", "ts", "ч", "ch", "ж", "zh", "м", "m", "н", "n", "з", "z", "ш", "sh", "щ", "shch");</a>
 <span class="sourceLineNo">5351</span><a id="line.5351"></a>
-<span class="sourceLineNo">5352</span><a id="line.5352">            Modifier modifier = (Modifier) o;</a>
-<span class="sourceLineNo">5353</span><a id="line.5353"></a>
-<span class="sourceLineNo">5354</span><a id="line.5354">            // Probably incorrect - comparing Object[] arrays with Arrays.equals</a>
-<span class="sourceLineNo">5355</span><a id="line.5355">            return Arrays.equals(alterations, modifier.alterations);</a>
-<span class="sourceLineNo">5356</span><a id="line.5356">        }</a>
-<span class="sourceLineNo">5357</span><a id="line.5357"></a>
-<span class="sourceLineNo">5358</span><a id="line.5358">        @Override</a>
-<span class="sourceLineNo">5359</span><a id="line.5359">        public int hashCode() {</a>
-<span class="sourceLineNo">5360</span><a id="line.5360">            return CrossHash.hash(alterations);</a>
+<span class="sourceLineNo">5352</span><a id="line.5352">        @Override</a>
+<span class="sourceLineNo">5353</span><a id="line.5353">        public boolean equals(Object o) {</a>
+<span class="sourceLineNo">5354</span><a id="line.5354">            if (this == o) return true;</a>
+<span class="sourceLineNo">5355</span><a id="line.5355">            if (o == null || getClass() != o.getClass()) return false;</a>
+<span class="sourceLineNo">5356</span><a id="line.5356"></a>
+<span class="sourceLineNo">5357</span><a id="line.5357">            Modifier modifier = (Modifier) o;</a>
+<span class="sourceLineNo">5358</span><a id="line.5358"></a>
+<span class="sourceLineNo">5359</span><a id="line.5359">            // Probably incorrect - comparing Object[] arrays with Arrays.equals</a>
+<span class="sourceLineNo">5360</span><a id="line.5360">            return Arrays.equals(alterations, modifier.alterations);</a>
 <span class="sourceLineNo">5361</span><a id="line.5361">        }</a>
 <span class="sourceLineNo">5362</span><a id="line.5362"></a>
 <span class="sourceLineNo">5363</span><a id="line.5363">        @Override</a>
-<span class="sourceLineNo">5364</span><a id="line.5364">        public String toString() {</a>
-<span class="sourceLineNo">5365</span><a id="line.5365">            return "Modifier{" +</a>
-<span class="sourceLineNo">5366</span><a id="line.5366">                    "alterations=" + Arrays.toString(alterations) +</a>
-<span class="sourceLineNo">5367</span><a id="line.5367">                    '}';</a>
-<span class="sourceLineNo">5368</span><a id="line.5368">        }</a>
-<span class="sourceLineNo">5369</span><a id="line.5369"></a>
-<span class="sourceLineNo">5370</span><a id="line.5370">        public String serializeToString() {</a>
-<span class="sourceLineNo">5371</span><a id="line.5371">            if (alterations.length == 0) return "\6";</a>
-<span class="sourceLineNo">5372</span><a id="line.5372">            modSB.setLength(0);</a>
-<span class="sourceLineNo">5373</span><a id="line.5373">            modSB.append('\6');</a>
-<span class="sourceLineNo">5374</span><a id="line.5374">            for (int i = 0; i &lt; alterations.length; i++)</a>
-<span class="sourceLineNo">5375</span><a id="line.5375">                modSB.append(alterations[i].serializeToString()).append('\6');</a>
-<span class="sourceLineNo">5376</span><a id="line.5376">            return modSB.toString();</a>
-<span class="sourceLineNo">5377</span><a id="line.5377">        }</a>
-<span class="sourceLineNo">5378</span><a id="line.5378"></a>
-<span class="sourceLineNo">5379</span><a id="line.5379">        public static Modifier deserializeFromString(String data) {</a>
-<span class="sourceLineNo">5380</span><a id="line.5380">            int currIdx = data.indexOf(6), altIdx = currIdx, matches = 0;</a>
-<span class="sourceLineNo">5381</span><a id="line.5381">            while (currIdx &gt;= 0) {</a>
-<span class="sourceLineNo">5382</span><a id="line.5382">                if ((currIdx = data.indexOf(6, currIdx + 1)) &lt; 0)</a>
-<span class="sourceLineNo">5383</span><a id="line.5383">                    break;</a>
-<span class="sourceLineNo">5384</span><a id="line.5384">                matches++;</a>
-<span class="sourceLineNo">5385</span><a id="line.5385">            }</a>
-<span class="sourceLineNo">5386</span><a id="line.5386">            Alteration[] alts = new Alteration[matches];</a>
-<span class="sourceLineNo">5387</span><a id="line.5387">            for (int i = 0; i &lt; matches; i++) {</a>
-<span class="sourceLineNo">5388</span><a id="line.5388">                alts[i] = Alteration.deserializeFromString(data.substring(altIdx + 1, altIdx = data.indexOf(6, altIdx + 1)));</a>
-<span class="sourceLineNo">5389</span><a id="line.5389">            }</a>
-<span class="sourceLineNo">5390</span><a id="line.5390">            return new Modifier(alts);</a>
-<span class="sourceLineNo">5391</span><a id="line.5391">        }</a>
-<span class="sourceLineNo">5392</span><a id="line.5392">    }</a>
-<span class="sourceLineNo">5393</span><a id="line.5393"></a>
-<span class="sourceLineNo">5394</span><a id="line.5394">    public static class Alteration implements Serializable {</a>
-<span class="sourceLineNo">5395</span><a id="line.5395">        private static final long serialVersionUID = -2138854697837563188L;</a>
-<span class="sourceLineNo">5396</span><a id="line.5396">        public Replacer replacer;</a>
-<span class="sourceLineNo">5397</span><a id="line.5397">        public String replacement;</a>
-<span class="sourceLineNo">5398</span><a id="line.5398">        public double chance;</a>
-<span class="sourceLineNo">5399</span><a id="line.5399"></a>
-<span class="sourceLineNo">5400</span><a id="line.5400">        public Alteration() {</a>
-<span class="sourceLineNo">5401</span><a id="line.5401">            this("[tţťț]?[sśŝşšș]+h?", "th");</a>
-<span class="sourceLineNo">5402</span><a id="line.5402">        }</a>
-<span class="sourceLineNo">5403</span><a id="line.5403"></a>
-<span class="sourceLineNo">5404</span><a id="line.5404">        public Alteration(String pattern, String replacement) {</a>
-<span class="sourceLineNo">5405</span><a id="line.5405">            this.replacement = replacement;</a>
-<span class="sourceLineNo">5406</span><a id="line.5406">            replacer = Pattern.compile(pattern).replacer(replacement);</a>
-<span class="sourceLineNo">5407</span><a id="line.5407">            chance = 1.0;</a>
-<span class="sourceLineNo">5408</span><a id="line.5408">        }</a>
-<span class="sourceLineNo">5409</span><a id="line.5409"></a>
-<span class="sourceLineNo">5410</span><a id="line.5410">        public Alteration(String pattern, String replacement, double chance) {</a>
-<span class="sourceLineNo">5411</span><a id="line.5411">            this.replacement = replacement;</a>
-<span class="sourceLineNo">5412</span><a id="line.5412">            replacer = Pattern.compile(pattern).replacer(replacement);</a>
-<span class="sourceLineNo">5413</span><a id="line.5413">            this.chance = chance;</a>
-<span class="sourceLineNo">5414</span><a id="line.5414">        }</a>
-<span class="sourceLineNo">5415</span><a id="line.5415"></a>
-<span class="sourceLineNo">5416</span><a id="line.5416">        public Alteration(Pattern pattern, String replacement, double chance) {</a>
-<span class="sourceLineNo">5417</span><a id="line.5417">            this.replacement = replacement;</a>
-<span class="sourceLineNo">5418</span><a id="line.5418">            replacer = pattern.replacer(replacement);</a>
-<span class="sourceLineNo">5419</span><a id="line.5419">            this.chance = chance;</a>
-<span class="sourceLineNo">5420</span><a id="line.5420">        }</a>
-<span class="sourceLineNo">5421</span><a id="line.5421"></a>
-<span class="sourceLineNo">5422</span><a id="line.5422">        @Override</a>
-<span class="sourceLineNo">5423</span><a id="line.5423">        public boolean equals(Object o) {</a>
-<span class="sourceLineNo">5424</span><a id="line.5424">            if (this == o) return true;</a>
-<span class="sourceLineNo">5425</span><a id="line.5425">            if (o == null || getClass() != o.getClass()) return false;</a>
+<span class="sourceLineNo">5364</span><a id="line.5364">        public int hashCode() {</a>
+<span class="sourceLineNo">5365</span><a id="line.5365">            return CrossHash.hash(alterations);</a>
+<span class="sourceLineNo">5366</span><a id="line.5366">        }</a>
+<span class="sourceLineNo">5367</span><a id="line.5367"></a>
+<span class="sourceLineNo">5368</span><a id="line.5368">        @Override</a>
+<span class="sourceLineNo">5369</span><a id="line.5369">        public String toString() {</a>
+<span class="sourceLineNo">5370</span><a id="line.5370">            return "Modifier{" +</a>
+<span class="sourceLineNo">5371</span><a id="line.5371">                    "alterations=" + Arrays.toString(alterations) +</a>
+<span class="sourceLineNo">5372</span><a id="line.5372">                    '}';</a>
+<span class="sourceLineNo">5373</span><a id="line.5373">        }</a>
+<span class="sourceLineNo">5374</span><a id="line.5374"></a>
+<span class="sourceLineNo">5375</span><a id="line.5375">        public String serializeToString() {</a>
+<span class="sourceLineNo">5376</span><a id="line.5376">            if (alterations.length == 0) return "\6";</a>
+<span class="sourceLineNo">5377</span><a id="line.5377">            modSB.setLength(0);</a>
+<span class="sourceLineNo">5378</span><a id="line.5378">            modSB.append('\6');</a>
+<span class="sourceLineNo">5379</span><a id="line.5379">            for (int i = 0; i &lt; alterations.length; i++)</a>
+<span class="sourceLineNo">5380</span><a id="line.5380">                modSB.append(alterations[i].serializeToString()).append('\6');</a>
+<span class="sourceLineNo">5381</span><a id="line.5381">            return modSB.toString();</a>
+<span class="sourceLineNo">5382</span><a id="line.5382">        }</a>
+<span class="sourceLineNo">5383</span><a id="line.5383"></a>
+<span class="sourceLineNo">5384</span><a id="line.5384">        public static Modifier deserializeFromString(String data) {</a>
+<span class="sourceLineNo">5385</span><a id="line.5385">            int currIdx = data.indexOf(6), altIdx = currIdx, matches = 0;</a>
+<span class="sourceLineNo">5386</span><a id="line.5386">            while (currIdx &gt;= 0) {</a>
+<span class="sourceLineNo">5387</span><a id="line.5387">                if ((currIdx = data.indexOf(6, currIdx + 1)) &lt; 0)</a>
+<span class="sourceLineNo">5388</span><a id="line.5388">                    break;</a>
+<span class="sourceLineNo">5389</span><a id="line.5389">                matches++;</a>
+<span class="sourceLineNo">5390</span><a id="line.5390">            }</a>
+<span class="sourceLineNo">5391</span><a id="line.5391">            Alteration[] alts = new Alteration[matches];</a>
+<span class="sourceLineNo">5392</span><a id="line.5392">            for (int i = 0; i &lt; matches; i++) {</a>
+<span class="sourceLineNo">5393</span><a id="line.5393">                alts[i] = Alteration.deserializeFromString(data.substring(altIdx + 1, altIdx = data.indexOf(6, altIdx + 1)));</a>
+<span class="sourceLineNo">5394</span><a id="line.5394">            }</a>
+<span class="sourceLineNo">5395</span><a id="line.5395">            return new Modifier(alts);</a>
+<span class="sourceLineNo">5396</span><a id="line.5396">        }</a>
+<span class="sourceLineNo">5397</span><a id="line.5397">    }</a>
+<span class="sourceLineNo">5398</span><a id="line.5398"></a>
+<span class="sourceLineNo">5399</span><a id="line.5399">    public static class Alteration implements Serializable {</a>
+<span class="sourceLineNo">5400</span><a id="line.5400">        private static final long serialVersionUID = -2138854697837563188L;</a>
+<span class="sourceLineNo">5401</span><a id="line.5401">        public Replacer replacer;</a>
+<span class="sourceLineNo">5402</span><a id="line.5402">        public String replacement;</a>
+<span class="sourceLineNo">5403</span><a id="line.5403">        public double chance;</a>
+<span class="sourceLineNo">5404</span><a id="line.5404"></a>
+<span class="sourceLineNo">5405</span><a id="line.5405">        public Alteration() {</a>
+<span class="sourceLineNo">5406</span><a id="line.5406">            this("[tţťț]?[sśŝşšș]+h?", "th");</a>
+<span class="sourceLineNo">5407</span><a id="line.5407">        }</a>
+<span class="sourceLineNo">5408</span><a id="line.5408"></a>
+<span class="sourceLineNo">5409</span><a id="line.5409">        public Alteration(String pattern, String replacement) {</a>
+<span class="sourceLineNo">5410</span><a id="line.5410">            this.replacement = replacement;</a>
+<span class="sourceLineNo">5411</span><a id="line.5411">            replacer = Pattern.compile(pattern).replacer(replacement);</a>
+<span class="sourceLineNo">5412</span><a id="line.5412">            chance = 1.0;</a>
+<span class="sourceLineNo">5413</span><a id="line.5413">        }</a>
+<span class="sourceLineNo">5414</span><a id="line.5414"></a>
+<span class="sourceLineNo">5415</span><a id="line.5415">        public Alteration(String pattern, String replacement, double chance) {</a>
+<span class="sourceLineNo">5416</span><a id="line.5416">            this.replacement = replacement;</a>
+<span class="sourceLineNo">5417</span><a id="line.5417">            replacer = Pattern.compile(pattern).replacer(replacement);</a>
+<span class="sourceLineNo">5418</span><a id="line.5418">            this.chance = chance;</a>
+<span class="sourceLineNo">5419</span><a id="line.5419">        }</a>
+<span class="sourceLineNo">5420</span><a id="line.5420"></a>
+<span class="sourceLineNo">5421</span><a id="line.5421">        public Alteration(Pattern pattern, String replacement, double chance) {</a>
+<span class="sourceLineNo">5422</span><a id="line.5422">            this.replacement = replacement;</a>
+<span class="sourceLineNo">5423</span><a id="line.5423">            replacer = pattern.replacer(replacement);</a>
+<span class="sourceLineNo">5424</span><a id="line.5424">            this.chance = chance;</a>
+<span class="sourceLineNo">5425</span><a id="line.5425">        }</a>
 <span class="sourceLineNo">5426</span><a id="line.5426"></a>
-<span class="sourceLineNo">5427</span><a id="line.5427">            Alteration that = (Alteration) o;</a>
-<span class="sourceLineNo">5428</span><a id="line.5428"></a>
-<span class="sourceLineNo">5429</span><a id="line.5429">            if (Double.compare(that.chance, chance) != 0) return false;</a>
-<span class="sourceLineNo">5430</span><a id="line.5430">            return replacer.equals(that.replacer);</a>
+<span class="sourceLineNo">5427</span><a id="line.5427">        @Override</a>
+<span class="sourceLineNo">5428</span><a id="line.5428">        public boolean equals(Object o) {</a>
+<span class="sourceLineNo">5429</span><a id="line.5429">            if (this == o) return true;</a>
+<span class="sourceLineNo">5430</span><a id="line.5430">            if (o == null || getClass() != o.getClass()) return false;</a>
 <span class="sourceLineNo">5431</span><a id="line.5431"></a>
-<span class="sourceLineNo">5432</span><a id="line.5432">        }</a>
+<span class="sourceLineNo">5432</span><a id="line.5432">            Alteration that = (Alteration) o;</a>
 <span class="sourceLineNo">5433</span><a id="line.5433"></a>
-<span class="sourceLineNo">5434</span><a id="line.5434">        @Override</a>
-<span class="sourceLineNo">5435</span><a id="line.5435">        public int hashCode() {</a>
-<span class="sourceLineNo">5436</span><a id="line.5436">            long result;</a>
-<span class="sourceLineNo">5437</span><a id="line.5437">            result = CrossHash.hash64(replacer.getPattern().serializeToString());</a>
-<span class="sourceLineNo">5438</span><a id="line.5438">            result = 31L * result + NumberTools.doubleToLongBits(chance);</a>
-<span class="sourceLineNo">5439</span><a id="line.5439">            result ^= result &gt;&gt;&gt; 32;</a>
-<span class="sourceLineNo">5440</span><a id="line.5440">            return (int) (0xFFFFFFFFL &amp; result);</a>
-<span class="sourceLineNo">5441</span><a id="line.5441">        }</a>
-<span class="sourceLineNo">5442</span><a id="line.5442"></a>
-<span class="sourceLineNo">5443</span><a id="line.5443">        @Override</a>
-<span class="sourceLineNo">5444</span><a id="line.5444">        public String toString() {</a>
-<span class="sourceLineNo">5445</span><a id="line.5445">            return "Alteration{" +</a>
-<span class="sourceLineNo">5446</span><a id="line.5446">                    "replacer=" + replacer +</a>
-<span class="sourceLineNo">5447</span><a id="line.5447">                    ", chance=" + chance +</a>
-<span class="sourceLineNo">5448</span><a id="line.5448">                    '}';</a>
-<span class="sourceLineNo">5449</span><a id="line.5449">        }</a>
-<span class="sourceLineNo">5450</span><a id="line.5450"></a>
-<span class="sourceLineNo">5451</span><a id="line.5451">        public String serializeToString() {</a>
-<span class="sourceLineNo">5452</span><a id="line.5452">            return replacer.getPattern().serializeToString() + '\2' + replacement + '\4' + chance;</a>
-<span class="sourceLineNo">5453</span><a id="line.5453">        }</a>
-<span class="sourceLineNo">5454</span><a id="line.5454"></a>
-<span class="sourceLineNo">5455</span><a id="line.5455">        public static Alteration deserializeFromString(String data) {</a>
-<span class="sourceLineNo">5456</span><a id="line.5456">            int split2 = data.indexOf('\2'), split4 = data.indexOf('\4');</a>
-<span class="sourceLineNo">5457</span><a id="line.5457">            return new Alteration(Pattern.deserializeFromString(data.substring(0, split2)),</a>
-<span class="sourceLineNo">5458</span><a id="line.5458">                    data.substring(split2 + 1, split4),</a>
-<span class="sourceLineNo">5459</span><a id="line.5459">                    Double.parseDouble(data.substring(split4 + 1)));</a>
-<span class="sourceLineNo">5460</span><a id="line.5460">        }</a>
-<span class="sourceLineNo">5461</span><a id="line.5461">    }</a>
-<span class="sourceLineNo">5462</span><a id="line.5462"></a>
-<span class="sourceLineNo">5463</span><a id="line.5463">    /**</a>
-<span class="sourceLineNo">5464</span><a id="line.5464">     * A simple way to bundle a FakeLanguageGen with the arguments that would be passed to it when calling</a>
-<span class="sourceLineNo">5465</span><a id="line.5465">     * {@link FakeLanguageGen#sentence(IRNG, int, int, String[], String[], double, int)} or one of its overloads.</a>
-<span class="sourceLineNo">5466</span><a id="line.5466">     * You can call {@link #sentence()} on this to produce another String sentence with the parameters it was given</a>
-<span class="sourceLineNo">5467</span><a id="line.5467">     * at construction. The parameters to</a>
-<span class="sourceLineNo">5468</span><a id="line.5468">     * {@link #SentenceForm(FakeLanguageGen, IStatefulRNG, int, int, String[], String[], double, int)} are stored in fields of</a>
-<span class="sourceLineNo">5469</span><a id="line.5469">     * the same name, and all fields in this class are public and modifiable.</a>
-<span class="sourceLineNo">5470</span><a id="line.5470">     */</a>
-<span class="sourceLineNo">5471</span><a id="line.5471">    public static class SentenceForm implements Serializable</a>
-<span class="sourceLineNo">5472</span><a id="line.5472">    {</a>
-<span class="sourceLineNo">5473</span><a id="line.5473">        private static final long serialVersionUID = 1246527948419533147L;</a>
-<span class="sourceLineNo">5474</span><a id="line.5474">        public IStatefulRNG rng;</a>
-<span class="sourceLineNo">5475</span><a id="line.5475">        public int minWords, maxWords, maxChars;</a>
-<span class="sourceLineNo">5476</span><a id="line.5476">        public String[] midPunctuation, endPunctuation;</a>
-<span class="sourceLineNo">5477</span><a id="line.5477">        public double midPunctuationFrequency;</a>
-<span class="sourceLineNo">5478</span><a id="line.5478">        public FakeLanguageGen language;</a>
-<span class="sourceLineNo">5479</span><a id="line.5479"></a>
-<span class="sourceLineNo">5480</span><a id="line.5480">        /**</a>
-<span class="sourceLineNo">5481</span><a id="line.5481">         * Builds a SentenceForm with all default fields, using {@link FakeLanguageGen#FANTASY_NAME} for a language,</a>
-<span class="sourceLineNo">5482</span><a id="line.5482">         * using between 1 and 9 words in a sentence, and otherwise defaulting to how</a>
-<span class="sourceLineNo">5483</span><a id="line.5483">         * {@link #SentenceForm(FakeLanguageGen, int, int)} behaves.</a>
-<span class="sourceLineNo">5484</span><a id="line.5484">         */</a>
-<span class="sourceLineNo">5485</span><a id="line.5485">        public SentenceForm()</a>
-<span class="sourceLineNo">5486</span><a id="line.5486">        {</a>
-<span class="sourceLineNo">5487</span><a id="line.5487">            this(FakeLanguageGen.FANTASY_NAME, FakeLanguageGen.srng, 1, 9,</a>
-<span class="sourceLineNo">5488</span><a id="line.5488">                    mid,</a>
-<span class="sourceLineNo">5489</span><a id="line.5489">                    end, 0.18, -1);</a>
-<span class="sourceLineNo">5490</span><a id="line.5490">        }</a>
-<span class="sourceLineNo">5491</span><a id="line.5491">        /**</a>
-<span class="sourceLineNo">5492</span><a id="line.5492">         * Builds a SentenceForm with only a few fields specified. The {@link #rng} will be made based on</a>
-<span class="sourceLineNo">5493</span><a id="line.5493">         * FakeLanguageGen's static {@link FakeLanguageGen#srng} field, maxChars will be -1 so the sentence length</a>
-<span class="sourceLineNo">5494</span><a id="line.5494">         * will be limited only by maxWords and the length of words produced, and the between-word and end-of-sentence</a>
-<span class="sourceLineNo">5495</span><a id="line.5495">         * punctuation will be set to reasonable defaults. This places either a comma or a semicolon after a word in the</a>
-<span class="sourceLineNo">5496</span><a id="line.5496">         * middle of a sentence about 18% of the time ({@code midPunctuationFrequency} is 0.18), and can end a sentence</a>
-<span class="sourceLineNo">5497</span><a id="line.5497">         * in a period, exclamation mark, question mark, or ellipsis (the "..." punctuation).</a>
-<span class="sourceLineNo">5498</span><a id="line.5498">         * @param language A FakeLanguageGen to use to generate words</a>
-<span class="sourceLineNo">5499</span><a id="line.5499">         * @param minWords minimum words per sentence</a>
-<span class="sourceLineNo">5500</span><a id="line.5500">         * @param maxWords maximum words per sentence</a>
-<span class="sourceLineNo">5501</span><a id="line.5501">         */</a>
-<span class="sourceLineNo">5502</span><a id="line.5502">        public SentenceForm(FakeLanguageGen language, int minWords, int maxWords)</a>
-<span class="sourceLineNo">5503</span><a id="line.5503">        {</a>
-<span class="sourceLineNo">5504</span><a id="line.5504">            this(language, FakeLanguageGen.srng, minWords, maxWords, mid,</a>
-<span class="sourceLineNo">5505</span><a id="line.5505">                    end, 0.18, -1);</a>
-<span class="sourceLineNo">5506</span><a id="line.5506">        }</a>
-<span class="sourceLineNo">5507</span><a id="line.5507">        /**</a>
-<span class="sourceLineNo">5508</span><a id="line.5508">         * Builds a SentenceForm with all fields specified except for {@link #rng}, which will be made based on</a>
-<span class="sourceLineNo">5509</span><a id="line.5509">         * FakeLanguageGen's static {@link FakeLanguageGen#srng} field, and maxChars, which means the sentence length</a>
-<span class="sourceLineNo">5510</span><a id="line.5510">         * will be limited only by maxWords and the length of words produced.</a>
-<span class="sourceLineNo">5511</span><a id="line.5511">         * @param language A FakeLanguageGen to use to generate words</a>
-<span class="sourceLineNo">5512</span><a id="line.5512">         * @param minWords minimum words per sentence</a>
-<span class="sourceLineNo">5513</span><a id="line.5513">         * @param maxWords maximum words per sentence</a>
-<span class="sourceLineNo">5514</span><a id="line.5514">         * @param midPunctuation an array of Strings that can be used immediately after words in the middle of sentences, like "," or ";"</a>
-<span class="sourceLineNo">5515</span><a id="line.5515">         * @param endPunctuation an array of Strings that can end a sentence, like ".", "?", or "..."</a>
-<span class="sourceLineNo">5516</span><a id="line.5516">         * @param midPunctuationFrequency the probability that two words will be separated by a String from midPunctuation, between 0.0 and 1.0</a>
-<span class="sourceLineNo">5517</span><a id="line.5517">         */</a>
-<span class="sourceLineNo">5518</span><a id="line.5518">        public SentenceForm(FakeLanguageGen language, int minWords, int maxWords, String[] midPunctuation,</a>
-<span class="sourceLineNo">5519</span><a id="line.5519">                            String[] endPunctuation, double midPunctuationFrequency)</a>
-<span class="sourceLineNo">5520</span><a id="line.5520">        {</a>
-<span class="sourceLineNo">5521</span><a id="line.5521">            this(language, FakeLanguageGen.srng, minWords, maxWords, midPunctuation, endPunctuation,</a>
-<span class="sourceLineNo">5522</span><a id="line.5522">                    midPunctuationFrequency, -1);</a>
-<span class="sourceLineNo">5523</span><a id="line.5523">        }</a>
-<span class="sourceLineNo">5524</span><a id="line.5524">        /**</a>
-<span class="sourceLineNo">5525</span><a id="line.5525">         * Builds a SentenceForm with all fields specified except for {@link #rng}, which will be made based on</a>
-<span class="sourceLineNo">5526</span><a id="line.5526">         * FakeLanguageGen's static {@link FakeLanguageGen#srng} field.</a>
-<span class="sourceLineNo">5527</span><a id="line.5527">         * @param language A FakeLanguageGen to use to generate words</a>
-<span class="sourceLineNo">5528</span><a id="line.5528">         * @param minWords minimum words per sentence</a>
-<span class="sourceLineNo">5529</span><a id="line.5529">         * @param maxWords maximum words per sentence</a>
-<span class="sourceLineNo">5530</span><a id="line.5530">         * @param midPunctuation an array of Strings that can be used immediately after words in the middle of sentences, like "," or ";"</a>
-<span class="sourceLineNo">5531</span><a id="line.5531">         * @param endPunctuation an array of Strings that can end a sentence, like ".", "?", or "..."</a>
-<span class="sourceLineNo">5532</span><a id="line.5532">         * @param midPunctuationFrequency the probability that two words will be separated by a String from midPunctuation, between 0.0 and 1.0</a>
-<span class="sourceLineNo">5533</span><a id="line.5533">         * @param maxChars the maximum number of chars to use in a sentence, or -1 for no hard limit</a>
-<span class="sourceLineNo">5534</span><a id="line.5534">         */</a>
-<span class="sourceLineNo">5535</span><a id="line.5535">        public SentenceForm(FakeLanguageGen language, int minWords, int maxWords, String[] midPunctuation,</a>
-<span class="sourceLineNo">5536</span><a id="line.5536">                            String[] endPunctuation, double midPunctuationFrequency, int maxChars)</a>
-<span class="sourceLineNo">5537</span><a id="line.5537">        {</a>
-<span class="sourceLineNo">5538</span><a id="line.5538">            this(language, FakeLanguageGen.srng, minWords, maxWords, midPunctuation, endPunctuation,</a>
-<span class="sourceLineNo">5539</span><a id="line.5539">                    midPunctuationFrequency, maxChars);</a>
-<span class="sourceLineNo">5540</span><a id="line.5540">        }</a>
-<span class="sourceLineNo">5541</span><a id="line.5541"></a>
-<span class="sourceLineNo">5542</span><a id="line.5542">        /**</a>
-<span class="sourceLineNo">5543</span><a id="line.5543">         * Builds a SentenceForm with all fields specified; each value is referenced directly except for {@code rng},</a>
-<span class="sourceLineNo">5544</span><a id="line.5544">         * which will not change or be directly referenced (a new GWTRNG will be used with the same state value).</a>
-<span class="sourceLineNo">5545</span><a id="line.5545">         * @param language A FakeLanguageGen to use to generate words</a>
-<span class="sourceLineNo">5546</span><a id="line.5546">         * @param rng a StatefulRNG that will not be directly referenced; the state will be copied into a new StatefulRNG</a>
-<span class="sourceLineNo">5547</span><a id="line.5547">         * @param minWords minimum words per sentence</a>
-<span class="sourceLineNo">5548</span><a id="line.5548">         * @param maxWords maximum words per sentence</a>
-<span class="sourceLineNo">5549</span><a id="line.5549">         * @param midPunctuation an array of Strings that can be used immediately after words in the middle of sentences, like "," or ";"</a>
-<span class="sourceLineNo">5550</span><a id="line.5550">         * @param endPunctuation an array of Strings that can end a sentence, like ".", "?", or "..."</a>
-<span class="sourceLineNo">5551</span><a id="line.5551">         * @param midPunctuationFrequency the probability that two words will be separated by a String from midPunctuation, between 0.0 and 1.0</a>
-<span class="sourceLineNo">5552</span><a id="line.5552">         * @param maxChars the maximum number of chars to use in a sentence, or -1 for no hard limit</a>
-<span class="sourceLineNo">5553</span><a id="line.5553">         */</a>
-<span class="sourceLineNo">5554</span><a id="line.5554">        public SentenceForm(FakeLanguageGen language, IStatefulRNG rng, int minWords, int maxWords,</a>
-<span class="sourceLineNo">5555</span><a id="line.5555">                            String[] midPunctuation, String[] endPunctuation,</a>
-<span class="sourceLineNo">5556</span><a id="line.5556">                            double midPunctuationFrequency, int maxChars)</a>
-<span class="sourceLineNo">5557</span><a id="line.5557">        {</a>
-<span class="sourceLineNo">5558</span><a id="line.5558">            this.language = language;</a>
-<span class="sourceLineNo">5559</span><a id="line.5559">            this.rng = new GWTRNG(rng.getState());</a>
-<span class="sourceLineNo">5560</span><a id="line.5560">            this.minWords = minWords;</a>
-<span class="sourceLineNo">5561</span><a id="line.5561">            this.maxWords = maxWords;</a>
-<span class="sourceLineNo">5562</span><a id="line.5562">            this.midPunctuation = midPunctuation;</a>
-<span class="sourceLineNo">5563</span><a id="line.5563">            this.endPunctuation = endPunctuation;</a>
-<span class="sourceLineNo">5564</span><a id="line.5564">            this.midPunctuationFrequency = midPunctuationFrequency;</a>
-<span class="sourceLineNo">5565</span><a id="line.5565">            this.maxChars = maxChars;</a>
-<span class="sourceLineNo">5566</span><a id="line.5566">        }</a>
-<span class="sourceLineNo">5567</span><a id="line.5567">        public String sentence()</a>
-<span class="sourceLineNo">5568</span><a id="line.5568">        {</a>
-<span class="sourceLineNo">5569</span><a id="line.5569">            return language.sentence(rng, minWords, maxWords, midPunctuation, endPunctuation,</a>
-<span class="sourceLineNo">5570</span><a id="line.5570">                    midPunctuationFrequency, maxChars);</a>
+<span class="sourceLineNo">5434</span><a id="line.5434">            if (Double.compare(that.chance, chance) != 0) return false;</a>
+<span class="sourceLineNo">5435</span><a id="line.5435">            return replacer.equals(that.replacer);</a>
+<span class="sourceLineNo">5436</span><a id="line.5436"></a>
+<span class="sourceLineNo">5437</span><a id="line.5437">        }</a>
+<span class="sourceLineNo">5438</span><a id="line.5438"></a>
+<span class="sourceLineNo">5439</span><a id="line.5439">        @Override</a>
+<span class="sourceLineNo">5440</span><a id="line.5440">        public int hashCode() {</a>
+<span class="sourceLineNo">5441</span><a id="line.5441">            long result;</a>
+<span class="sourceLineNo">5442</span><a id="line.5442">            result = CrossHash.hash64(replacer.getPattern().serializeToString());</a>
+<span class="sourceLineNo">5443</span><a id="line.5443">            result = 31L * result + NumberTools.doubleToLongBits(chance);</a>
+<span class="sourceLineNo">5444</span><a id="line.5444">            result ^= result &gt;&gt;&gt; 32;</a>
+<span class="sourceLineNo">5445</span><a id="line.5445">            return (int) (0xFFFFFFFFL &amp; result);</a>
+<span class="sourceLineNo">5446</span><a id="line.5446">        }</a>
+<span class="sourceLineNo">5447</span><a id="line.5447"></a>
+<span class="sourceLineNo">5448</span><a id="line.5448">        @Override</a>
+<span class="sourceLineNo">5449</span><a id="line.5449">        public String toString() {</a>
+<span class="sourceLineNo">5450</span><a id="line.5450">            return "Alteration{" +</a>
+<span class="sourceLineNo">5451</span><a id="line.5451">                    "replacer=" + replacer +</a>
+<span class="sourceLineNo">5452</span><a id="line.5452">                    ", chance=" + chance +</a>
+<span class="sourceLineNo">5453</span><a id="line.5453">                    '}';</a>
+<span class="sourceLineNo">5454</span><a id="line.5454">        }</a>
+<span class="sourceLineNo">5455</span><a id="line.5455"></a>
+<span class="sourceLineNo">5456</span><a id="line.5456">        public String serializeToString() {</a>
+<span class="sourceLineNo">5457</span><a id="line.5457">            return replacer.getPattern().serializeToString() + '\2' + replacement + '\4' + chance;</a>
+<span class="sourceLineNo">5458</span><a id="line.5458">        }</a>
+<span class="sourceLineNo">5459</span><a id="line.5459"></a>
+<span class="sourceLineNo">5460</span><a id="line.5460">        public static Alteration deserializeFromString(String data) {</a>
+<span class="sourceLineNo">5461</span><a id="line.5461">            int split2 = data.indexOf('\2'), split4 = data.indexOf('\4');</a>
+<span class="sourceLineNo">5462</span><a id="line.5462">            return new Alteration(Pattern.deserializeFromString(data.substring(0, split2)),</a>
+<span class="sourceLineNo">5463</span><a id="line.5463">                    data.substring(split2 + 1, split4),</a>
+<span class="sourceLineNo">5464</span><a id="line.5464">                    Double.parseDouble(data.substring(split4 + 1)));</a>
+<span class="sourceLineNo">5465</span><a id="line.5465">        }</a>
+<span class="sourceLineNo">5466</span><a id="line.5466">    }</a>
+<span class="sourceLineNo">5467</span><a id="line.5467"></a>
+<span class="sourceLineNo">5468</span><a id="line.5468">    /**</a>
+<span class="sourceLineNo">5469</span><a id="line.5469">     * A simple way to bundle a FakeLanguageGen with the arguments that would be passed to it when calling</a>
+<span class="sourceLineNo">5470</span><a id="line.5470">     * {@link FakeLanguageGen#sentence(IRNG, int, int, String[], String[], double, int)} or one of its overloads.</a>
+<span class="sourceLineNo">5471</span><a id="line.5471">     * You can call {@link #sentence()} on this to produce another String sentence with the parameters it was given</a>
+<span class="sourceLineNo">5472</span><a id="line.5472">     * at construction. The parameters to</a>
+<span class="sourceLineNo">5473</span><a id="line.5473">     * {@link #SentenceForm(FakeLanguageGen, IStatefulRNG, int, int, String[], String[], double, int)} are stored in fields of</a>
+<span class="sourceLineNo">5474</span><a id="line.5474">     * the same name, and all fields in this class are public and modifiable.</a>
+<span class="sourceLineNo">5475</span><a id="line.5475">     */</a>
+<span class="sourceLineNo">5476</span><a id="line.5476">    public static class SentenceForm implements Serializable</a>
+<span class="sourceLineNo">5477</span><a id="line.5477">    {</a>
+<span class="sourceLineNo">5478</span><a id="line.5478">        private static final long serialVersionUID = 1246527948419533147L;</a>
+<span class="sourceLineNo">5479</span><a id="line.5479">        public IStatefulRNG rng;</a>
+<span class="sourceLineNo">5480</span><a id="line.5480">        public int minWords, maxWords, maxChars;</a>
+<span class="sourceLineNo">5481</span><a id="line.5481">        public String[] midPunctuation, endPunctuation;</a>
+<span class="sourceLineNo">5482</span><a id="line.5482">        public double midPunctuationFrequency;</a>
+<span class="sourceLineNo">5483</span><a id="line.5483">        public FakeLanguageGen language;</a>
+<span class="sourceLineNo">5484</span><a id="line.5484"></a>
+<span class="sourceLineNo">5485</span><a id="line.5485">        /**</a>
+<span class="sourceLineNo">5486</span><a id="line.5486">         * Builds a SentenceForm with all default fields, using {@link FakeLanguageGen#FANTASY_NAME} for a language,</a>
+<span class="sourceLineNo">5487</span><a id="line.5487">         * using between 1 and 9 words in a sentence, and otherwise defaulting to how</a>
+<span class="sourceLineNo">5488</span><a id="line.5488">         * {@link #SentenceForm(FakeLanguageGen, int, int)} behaves.</a>
+<span class="sourceLineNo">5489</span><a id="line.5489">         */</a>
+<span class="sourceLineNo">5490</span><a id="line.5490">        public SentenceForm()</a>
+<span class="sourceLineNo">5491</span><a id="line.5491">        {</a>
+<span class="sourceLineNo">5492</span><a id="line.5492">            this(FakeLanguageGen.FANTASY_NAME, FakeLanguageGen.srng, 1, 9,</a>
+<span class="sourceLineNo">5493</span><a id="line.5493">                    mid,</a>
+<span class="sourceLineNo">5494</span><a id="line.5494">                    end, 0.18, -1);</a>
+<span class="sourceLineNo">5495</span><a id="line.5495">        }</a>
+<span class="sourceLineNo">5496</span><a id="line.5496">        /**</a>
+<span class="sourceLineNo">5497</span><a id="line.5497">         * Builds a SentenceForm with only a few fields specified. The {@link #rng} will be made based on</a>
+<span class="sourceLineNo">5498</span><a id="line.5498">         * FakeLanguageGen's static {@link FakeLanguageGen#srng} field, maxChars will be -1 so the sentence length</a>
+<span class="sourceLineNo">5499</span><a id="line.5499">         * will be limited only by maxWords and the length of words produced, and the between-word and end-of-sentence</a>
+<span class="sourceLineNo">5500</span><a id="line.5500">         * punctuation will be set to reasonable defaults. This places either a comma or a semicolon after a word in the</a>
+<span class="sourceLineNo">5501</span><a id="line.5501">         * middle of a sentence about 18% of the time ({@code midPunctuationFrequency} is 0.18), and can end a sentence</a>
+<span class="sourceLineNo">5502</span><a id="line.5502">         * in a period, exclamation mark, question mark, or ellipsis (the "..." punctuation).</a>
+<span class="sourceLineNo">5503</span><a id="line.5503">         * @param language A FakeLanguageGen to use to generate words</a>
+<span class="sourceLineNo">5504</span><a id="line.5504">         * @param minWords minimum words per sentence</a>
+<span class="sourceLineNo">5505</span><a id="line.5505">         * @param maxWords maximum words per sentence</a>
+<span class="sourceLineNo">5506</span><a id="line.5506">         */</a>
+<span class="sourceLineNo">5507</span><a id="line.5507">        public SentenceForm(FakeLanguageGen language, int minWords, int maxWords)</a>
+<span class="sourceLineNo">5508</span><a id="line.5508">        {</a>
+<span class="sourceLineNo">5509</span><a id="line.5509">            this(language, FakeLanguageGen.srng, minWords, maxWords, mid,</a>
+<span class="sourceLineNo">5510</span><a id="line.5510">                    end, 0.18, -1);</a>
+<span class="sourceLineNo">5511</span><a id="line.5511">        }</a>
+<span class="sourceLineNo">5512</span><a id="line.5512">        /**</a>
+<span class="sourceLineNo">5513</span><a id="line.5513">         * Builds a SentenceForm with all fields specified except for {@link #rng}, which will be made based on</a>
+<span class="sourceLineNo">5514</span><a id="line.5514">         * FakeLanguageGen's static {@link FakeLanguageGen#srng} field, and maxChars, which means the sentence length</a>
+<span class="sourceLineNo">5515</span><a id="line.5515">         * will be limited only by maxWords and the length of words produced.</a>
+<span class="sourceLineNo">5516</span><a id="line.5516">         * @param language A FakeLanguageGen to use to generate words</a>
+<span class="sourceLineNo">5517</span><a id="line.5517">         * @param minWords minimum words per sentence</a>
+<span class="sourceLineNo">5518</span><a id="line.5518">         * @param maxWords maximum words per sentence</a>
+<span class="sourceLineNo">5519</span><a id="line.5519">         * @param midPunctuation an array of Strings that can be used immediately after words in the middle of sentences, like "," or ";"</a>
+<span class="sourceLineNo">5520</span><a id="line.5520">         * @param endPunctuation an array of Strings that can end a sentence, like ".", "?", or "..."</a>
+<span class="sourceLineNo">5521</span><a id="line.5521">         * @param midPunctuationFrequency the probability that two words will be separated by a String from midPunctuation, between 0.0 and 1.0</a>
+<span class="sourceLineNo">5522</span><a id="line.5522">         */</a>
+<span class="sourceLineNo">5523</span><a id="line.5523">        public SentenceForm(FakeLanguageGen language, int minWords, int maxWords, String[] midPunctuation,</a>
+<span class="sourceLineNo">5524</span><a id="line.5524">                            String[] endPunctuation, double midPunctuationFrequency)</a>
+<span class="sourceLineNo">5525</span><a id="line.5525">        {</a>
+<span class="sourceLineNo">5526</span><a id="line.5526">            this(language, FakeLanguageGen.srng, minWords, maxWords, midPunctuation, endPunctuation,</a>
+<span class="sourceLineNo">5527</span><a id="line.5527">                    midPunctuationFrequency, -1);</a>
+<span class="sourceLineNo">5528</span><a id="line.5528">        }</a>
+<span class="sourceLineNo">5529</span><a id="line.5529">        /**</a>
+<span class="sourceLineNo">5530</span><a id="line.5530">         * Builds a SentenceForm with all fields specified except for {@link #rng}, which will be made based on</a>
+<span class="sourceLineNo">5531</span><a id="line.5531">         * FakeLanguageGen's static {@link FakeLanguageGen#srng} field.</a>
+<span class="sourceLineNo">5532</span><a id="line.5532">         * @param language A FakeLanguageGen to use to generate words</a>
+<span class="sourceLineNo">5533</span><a id="line.5533">         * @param minWords minimum words per sentence</a>
+<span class="sourceLineNo">5534</span><a id="line.5534">         * @param maxWords maximum words per sentence</a>
+<span class="sourceLineNo">5535</span><a id="line.5535">         * @param midPunctuation an array of Strings that can be used immediately after words in the middle of sentences, like "," or ";"</a>
+<span class="sourceLineNo">5536</span><a id="line.5536">         * @param endPunctuation an array of Strings that can end a sentence, like ".", "?", or "..."</a>
+<span class="sourceLineNo">5537</span><a id="line.5537">         * @param midPunctuationFrequency the probability that two words will be separated by a String from midPunctuation, between 0.0 and 1.0</a>
+<span class="sourceLineNo">5538</span><a id="line.5538">         * @param maxChars the maximum number of chars to use in a sentence, or -1 for no hard limit</a>
+<span class="sourceLineNo">5539</span><a id="line.5539">         */</a>
+<span class="sourceLineNo">5540</span><a id="line.5540">        public SentenceForm(FakeLanguageGen language, int minWords, int maxWords, String[] midPunctuation,</a>
+<span class="sourceLineNo">5541</span><a id="line.5541">                            String[] endPunctuation, double midPunctuationFrequency, int maxChars)</a>
+<span class="sourceLineNo">5542</span><a id="line.5542">        {</a>
+<span class="sourceLineNo">5543</span><a id="line.5543">            this(language, FakeLanguageGen.srng, minWords, maxWords, midPunctuation, endPunctuation,</a>
+<span class="sourceLineNo">5544</span><a id="line.5544">                    midPunctuationFrequency, maxChars);</a>
+<span class="sourceLineNo">5545</span><a id="line.5545">        }</a>
+<span class="sourceLineNo">5546</span><a id="line.5546"></a>
+<span class="sourceLineNo">5547</span><a id="line.5547">        /**</a>
+<span class="sourceLineNo">5548</span><a id="line.5548">         * Builds a SentenceForm with all fields specified; each value is referenced directly except for {@code rng},</a>
+<span class="sourceLineNo">5549</span><a id="line.5549">         * which will not change or be directly referenced (a new GWTRNG will be used with the same state value).</a>
+<span class="sourceLineNo">5550</span><a id="line.5550">         * @param language A FakeLanguageGen to use to generate words</a>
+<span class="sourceLineNo">5551</span><a id="line.5551">         * @param rng a StatefulRNG that will not be directly referenced; the state will be copied into a new StatefulRNG</a>
+<span class="sourceLineNo">5552</span><a id="line.5552">         * @param minWords minimum words per sentence</a>
+<span class="sourceLineNo">5553</span><a id="line.5553">         * @param maxWords maximum words per sentence</a>
+<span class="sourceLineNo">5554</span><a id="line.5554">         * @param midPunctuation an array of Strings that can be used immediately after words in the middle of sentences, like "," or ";"</a>
+<span class="sourceLineNo">5555</span><a id="line.5555">         * @param endPunctuation an array of Strings that can end a sentence, like ".", "?", or "..."</a>
+<span class="sourceLineNo">5556</span><a id="line.5556">         * @param midPunctuationFrequency the probability that two words will be separated by a String from midPunctuation, between 0.0 and 1.0</a>
+<span class="sourceLineNo">5557</span><a id="line.5557">         * @param maxChars the maximum number of chars to use in a sentence, or -1 for no hard limit</a>
+<span class="sourceLineNo">5558</span><a id="line.5558">         */</a>
+<span class="sourceLineNo">5559</span><a id="line.5559">        public SentenceForm(FakeLanguageGen language, IStatefulRNG rng, int minWords, int maxWords,</a>
+<span class="sourceLineNo">5560</span><a id="line.5560">                            String[] midPunctuation, String[] endPunctuation,</a>
+<span class="sourceLineNo">5561</span><a id="line.5561">                            double midPunctuationFrequency, int maxChars)</a>
+<span class="sourceLineNo">5562</span><a id="line.5562">        {</a>
+<span class="sourceLineNo">5563</span><a id="line.5563">            this.language = language;</a>
+<span class="sourceLineNo">5564</span><a id="line.5564">            this.rng = new GWTRNG(rng.getState());</a>
+<span class="sourceLineNo">5565</span><a id="line.5565">            this.minWords = minWords;</a>
+<span class="sourceLineNo">5566</span><a id="line.5566">            this.maxWords = maxWords;</a>
+<span class="sourceLineNo">5567</span><a id="line.5567">            this.midPunctuation = midPunctuation;</a>
+<span class="sourceLineNo">5568</span><a id="line.5568">            this.endPunctuation = endPunctuation;</a>
+<span class="sourceLineNo">5569</span><a id="line.5569">            this.midPunctuationFrequency = midPunctuationFrequency;</a>
+<span class="sourceLineNo">5570</span><a id="line.5570">            this.maxChars = maxChars;</a>
 <span class="sourceLineNo">5571</span><a id="line.5571">        }</a>
-<span class="sourceLineNo">5572</span><a id="line.5572"></a>
-<span class="sourceLineNo">5573</span><a id="line.5573">        public String serializeToString() {</a>
-<span class="sourceLineNo">5574</span><a id="line.5574">            return language.serializeToString() + '℘' +</a>
-<span class="sourceLineNo">5575</span><a id="line.5575">                    rng.getState() + '℘' +</a>
-<span class="sourceLineNo">5576</span><a id="line.5576">                    minWords + '℘' +</a>
-<span class="sourceLineNo">5577</span><a id="line.5577">                    maxWords + '℘' +</a>
-<span class="sourceLineNo">5578</span><a id="line.5578">                    StringKit.join("ℙ", midPunctuation) + '℘' +</a>
-<span class="sourceLineNo">5579</span><a id="line.5579">                    StringKit.join("ℙ", endPunctuation) + '℘' +</a>
-<span class="sourceLineNo">5580</span><a id="line.5580">                    NumberTools.doubleToLongBits(midPunctuationFrequency) + '℘' +</a>
-<span class="sourceLineNo">5581</span><a id="line.5581">                    maxChars;</a>
-<span class="sourceLineNo">5582</span><a id="line.5582">        }</a>
-<span class="sourceLineNo">5583</span><a id="line.5583">        public static SentenceForm deserializeFromString(String ser)</a>
-<span class="sourceLineNo">5584</span><a id="line.5584">        {</a>
-<span class="sourceLineNo">5585</span><a id="line.5585">            int gap = ser.indexOf('℘');</a>
-<span class="sourceLineNo">5586</span><a id="line.5586">            FakeLanguageGen lang = FakeLanguageGen.deserializeFromString(ser.substring(0, gap));</a>
-<span class="sourceLineNo">5587</span><a id="line.5587">            GWTRNG rng = new GWTRNG(</a>
-<span class="sourceLineNo">5588</span><a id="line.5588">                    StringKit.longFromDec(ser,gap + 1, gap = ser.indexOf('℘', gap + 1)));</a>
-<span class="sourceLineNo">5589</span><a id="line.5589">            int minWords = StringKit.intFromDec(ser,gap + 1, gap = ser.indexOf('℘', gap + 1));</a>
-<span class="sourceLineNo">5590</span><a id="line.5590">            int maxWords = StringKit.intFromDec(ser,gap + 1, gap = ser.indexOf('℘', gap + 1));</a>
-<span class="sourceLineNo">5591</span><a id="line.5591">            String[] midPunctuation =</a>
-<span class="sourceLineNo">5592</span><a id="line.5592">                    StringKit.split(ser.substring(gap + 1, gap = ser.indexOf('℘', gap + 1)), "ℙ");</a>
-<span class="sourceLineNo">5593</span><a id="line.5593">            String[] endPunctuation =</a>
-<span class="sourceLineNo">5594</span><a id="line.5594">                    StringKit.split(ser.substring(gap + 1, gap = ser.indexOf('℘', gap + 1)), "ℙ");</a>
-<span class="sourceLineNo">5595</span><a id="line.5595">            double midFreq = NumberTools.longBitsToDouble(StringKit.longFromDec(ser,gap + 1, gap = ser.indexOf('℘', gap + 1)));</a>
-<span class="sourceLineNo">5596</span><a id="line.5596">            int maxChars = StringKit.intFromDec(ser,gap + 1, ser.length());</a>
-<span class="sourceLineNo">5597</span><a id="line.5597">            return new SentenceForm(lang, rng, minWords, maxWords, midPunctuation, endPunctuation, midFreq, maxChars);</a>
-<span class="sourceLineNo">5598</span><a id="line.5598">        }</a>
-<span class="sourceLineNo">5599</span><a id="line.5599">    }</a>
-<span class="sourceLineNo">5600</span><a id="line.5600">}</a>
+<span class="sourceLineNo">5572</span><a id="line.5572">        public String sentence()</a>
+<span class="sourceLineNo">5573</span><a id="line.5573">        {</a>
+<span class="sourceLineNo">5574</span><a id="line.5574">            return language.sentence(rng, minWords, maxWords, midPunctuation, endPunctuation,</a>
+<span class="sourceLineNo">5575</span><a id="line.5575">                    midPunctuationFrequency, maxChars);</a>
+<span class="sourceLineNo">5576</span><a id="line.5576">        }</a>
+<span class="sourceLineNo">5577</span><a id="line.5577"></a>
+<span class="sourceLineNo">5578</span><a id="line.5578">        public String serializeToString() {</a>
+<span class="sourceLineNo">5579</span><a id="line.5579">            return language.serializeToString() + '℘' +</a>
+<span class="sourceLineNo">5580</span><a id="line.5580">                    rng.getState() + '℘' +</a>
+<span class="sourceLineNo">5581</span><a id="line.5581">                    minWords + '℘' +</a>
+<span class="sourceLineNo">5582</span><a id="line.5582">                    maxWords + '℘' +</a>
+<span class="sourceLineNo">5583</span><a id="line.5583">                    StringKit.join("ℙ", midPunctuation) + '℘' +</a>
+<span class="sourceLineNo">5584</span><a id="line.5584">                    StringKit.join("ℙ", endPunctuation) + '℘' +</a>
+<span class="sourceLineNo">5585</span><a id="line.5585">                    NumberTools.doubleToLongBits(midPunctuationFrequency) + '℘' +</a>
+<span class="sourceLineNo">5586</span><a id="line.5586">                    maxChars;</a>
+<span class="sourceLineNo">5587</span><a id="line.5587">        }</a>
+<span class="sourceLineNo">5588</span><a id="line.5588">        public static SentenceForm deserializeFromString(String ser)</a>
+<span class="sourceLineNo">5589</span><a id="line.5589">        {</a>
+<span class="sourceLineNo">5590</span><a id="line.5590">            int gap = ser.indexOf('℘');</a>
+<span class="sourceLineNo">5591</span><a id="line.5591">            FakeLanguageGen lang = FakeLanguageGen.deserializeFromString(ser.substring(0, gap));</a>
+<span class="sourceLineNo">5592</span><a id="line.5592">            GWTRNG rng = new GWTRNG(</a>
+<span class="sourceLineNo">5593</span><a id="line.5593">                    StringKit.longFromDec(ser,gap + 1, gap = ser.indexOf('℘', gap + 1)));</a>
+<span class="sourceLineNo">5594</span><a id="line.5594">            int minWords = StringKit.intFromDec(ser,gap + 1, gap = ser.indexOf('℘', gap + 1));</a>
+<span class="sourceLineNo">5595</span><a id="line.5595">            int maxWords = StringKit.intFromDec(ser,gap + 1, gap = ser.indexOf('℘', gap + 1));</a>
+<span class="sourceLineNo">5596</span><a id="line.5596">            String[] midPunctuation =</a>
+<span class="sourceLineNo">5597</span><a id="line.5597">                    StringKit.split(ser.substring(gap + 1, gap = ser.indexOf('℘', gap + 1)), "ℙ");</a>
+<span class="sourceLineNo">5598</span><a id="line.5598">            String[] endPunctuation =</a>
+<span class="sourceLineNo">5599</span><a id="line.5599">                    StringKit.split(ser.substring(gap + 1, gap = ser.indexOf('℘', gap + 1)), "ℙ");</a>
+<span class="sourceLineNo">5600</span><a id="line.5600">            double midFreq = NumberTools.longBitsToDouble(StringKit.longFromDec(ser,gap + 1, gap = ser.indexOf('℘', gap + 1)));</a>
+<span class="sourceLineNo">5601</span><a id="line.5601">            int maxChars = StringKit.intFromDec(ser,gap + 1, ser.length());</a>
+<span class="sourceLineNo">5602</span><a id="line.5602">            return new SentenceForm(lang, rng, minWords, maxWords, midPunctuation, endPunctuation, midFreq, maxChars);</a>
+<span class="sourceLineNo">5603</span><a id="line.5603">        }</a>
+<span class="sourceLineNo">5604</span><a id="line.5604">    }</a>
+<span class="sourceLineNo">5605</span><a id="line.5605">}</a>
 
 
 

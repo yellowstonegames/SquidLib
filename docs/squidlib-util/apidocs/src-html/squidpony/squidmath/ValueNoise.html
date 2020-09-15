@@ -158,7 +158,7 @@
 <span class="sourceLineNo">146</span><a id="line.146">        return (s ^ (s &lt;&lt; 19 | s &gt;&gt;&gt; 13) ^ (s &lt;&lt; 5 | s &gt;&gt;&gt; 27) ^ 0xD1B54A35) * 0x125493 &gt;&gt;&gt; 22;</a>
 <span class="sourceLineNo">147</span><a id="line.147">    }</a>
 <span class="sourceLineNo">148</span><a id="line.148"></a>
-<span class="sourceLineNo">149</span><a id="line.149">    public static double valueNoise(int seed, double x, double y, double z, double w, double u, double v)</a>
+<span class="sourceLineNo">149</span><a id="line.149">    public static double valueNoise(int seed, double x, double y, double z, double w, double u)</a>
 <span class="sourceLineNo">150</span><a id="line.150">    {</a>
 <span class="sourceLineNo">151</span><a id="line.151">        int xFloor = x &gt;= 0 ? (int) x : (int) x - 1;</a>
 <span class="sourceLineNo">152</span><a id="line.152">        x -= xFloor;</a>
@@ -175,133 +175,203 @@
 <span class="sourceLineNo">163</span><a id="line.163">        int uFloor = u &gt;= 0 ? (int) u : (int) u - 1;</a>
 <span class="sourceLineNo">164</span><a id="line.164">        u -= uFloor;</a>
 <span class="sourceLineNo">165</span><a id="line.165">        u *= u * (3 - 2 * u);</a>
-<span class="sourceLineNo">166</span><a id="line.166">        int vFloor = v &gt;= 0 ? (int) v : (int) v - 1;</a>
-<span class="sourceLineNo">167</span><a id="line.167">        v -= vFloor;</a>
-<span class="sourceLineNo">168</span><a id="line.168">        v *= v * (3 - 2 * v);</a>
-<span class="sourceLineNo">169</span><a id="line.169">        //0xE95E1, 0xD4BC7, 0xC1EDB, 0xB0C8B, 0xA1279, 0x92E85</a>
-<span class="sourceLineNo">170</span><a id="line.170">        xFloor *= 0xE95E1;</a>
-<span class="sourceLineNo">171</span><a id="line.171">        yFloor *= 0xD4BC7;</a>
-<span class="sourceLineNo">172</span><a id="line.172">        zFloor *= 0xC1EDB;</a>
-<span class="sourceLineNo">173</span><a id="line.173">        wFloor *= 0xB0C8B;</a>
-<span class="sourceLineNo">174</span><a id="line.174">        uFloor *= 0xA127B;</a>
-<span class="sourceLineNo">175</span><a id="line.175">        vFloor *= 0x92E85;</a>
-<span class="sourceLineNo">176</span><a id="line.176">        return ((1 - v) *</a>
-<span class="sourceLineNo">177</span><a id="line.177">                ((1 - u) *</a>
-<span class="sourceLineNo">178</span><a id="line.178">                        ((1 - w) *</a>
-<span class="sourceLineNo">179</span><a id="line.179">                                ((1 - z) *</a>
-<span class="sourceLineNo">180</span><a id="line.180">                                        ((1 - y) * ((1 - x) * hashPart1024(xFloor, yFloor, zFloor, wFloor, uFloor, vFloor, seed) + x * hashPart1024(xFloor + 0xE95E1, yFloor, zFloor, wFloor, uFloor, vFloor, seed))</a>
-<span class="sourceLineNo">181</span><a id="line.181">                                                + y * ((1 - x) * hashPart1024(xFloor, yFloor + 0xD4BC7, zFloor, wFloor, uFloor, vFloor, seed) + x * hashPart1024(xFloor + 0xE95E1, yFloor + 0xD4BC7, zFloor, wFloor, uFloor, vFloor, seed)))</a>
-<span class="sourceLineNo">182</span><a id="line.182">                                        + z *</a>
-<span class="sourceLineNo">183</span><a id="line.183">                                        ((1 - y) * ((1 - x) * hashPart1024(xFloor, yFloor, zFloor + 0xC1EDB, wFloor, uFloor, vFloor, seed) + x * hashPart1024(xFloor + 0xE95E1, yFloor, zFloor + 0xC1EDB, wFloor, uFloor, vFloor, seed))</a>
-<span class="sourceLineNo">184</span><a id="line.184">                                                + y * ((1 - x) * hashPart1024(xFloor, yFloor + 0xD4BC7, zFloor + 0xC1EDB, wFloor, uFloor, vFloor, seed) + x * hashPart1024(xFloor + 0xE95E1, yFloor + 0xD4BC7, zFloor + 0xC1EDB, wFloor, uFloor, vFloor, seed))))</a>
-<span class="sourceLineNo">185</span><a id="line.185">                                + (w *</a>
-<span class="sourceLineNo">186</span><a id="line.186">                                ((1 - z) *</a>
-<span class="sourceLineNo">187</span><a id="line.187">                                        ((1 - y) * ((1 - x) * hashPart1024(xFloor, yFloor, zFloor, wFloor + 0xB0C8B, uFloor, vFloor, seed) + x * hashPart1024(xFloor + 0xE95E1, yFloor, zFloor, wFloor + 0xB0C8B, uFloor, vFloor, seed))</a>
-<span class="sourceLineNo">188</span><a id="line.188">                                                + y * ((1 - x) * hashPart1024(xFloor, yFloor + 0xD4BC7, zFloor, wFloor + 0xB0C8B, uFloor, vFloor, seed) + x * hashPart1024(xFloor + 0xE95E1, yFloor + 0xD4BC7, zFloor, wFloor + 0xB0C8B, uFloor, vFloor, seed)))</a>
-<span class="sourceLineNo">189</span><a id="line.189">                                        + z *</a>
-<span class="sourceLineNo">190</span><a id="line.190">                                        ((1 - y) * ((1 - x) * hashPart1024(xFloor, yFloor, zFloor + 0xC1EDB, wFloor + 0xB0C8B, uFloor, vFloor, seed) + x * hashPart1024(xFloor + 0xE95E1, yFloor, zFloor + 0xC1EDB, wFloor + 0xB0C8B, uFloor, vFloor, seed))</a>
-<span class="sourceLineNo">191</span><a id="line.191">                                                + y * ((1 - x) * hashPart1024(xFloor, yFloor + 0xD4BC7, zFloor + 0xC1EDB, wFloor + 0xB0C8B, uFloor, vFloor, seed) + x * hashPart1024(xFloor + 0xE95E1, yFloor + 0xD4BC7, zFloor + 0xC1EDB, wFloor + 0xB0C8B, uFloor, vFloor, seed)))</a>
-<span class="sourceLineNo">192</span><a id="line.192">                                )))</a>
-<span class="sourceLineNo">193</span><a id="line.193">                        + (u *</a>
-<span class="sourceLineNo">194</span><a id="line.194">                        ((1 - w) *</a>
-<span class="sourceLineNo">195</span><a id="line.195">                                ((1 - z) *</a>
-<span class="sourceLineNo">196</span><a id="line.196">                                        ((1 - y) * ((1 - x) * hashPart1024(xFloor, yFloor, zFloor, wFloor, uFloor + 0xA127B, vFloor, seed) + x * hashPart1024(xFloor + 0xE95E1, yFloor, zFloor, wFloor, uFloor + 0xA127B, vFloor, seed))</a>
-<span class="sourceLineNo">197</span><a id="line.197">                                                + y * ((1 - x) * hashPart1024(xFloor, yFloor + 0xD4BC7, zFloor, wFloor, uFloor + 0xA127B, vFloor, seed) + x * hashPart1024(xFloor + 0xE95E1, yFloor + 0xD4BC7, zFloor, wFloor, uFloor + 0xA127B, vFloor, seed)))</a>
-<span class="sourceLineNo">198</span><a id="line.198">                                        + z *</a>
-<span class="sourceLineNo">199</span><a id="line.199">                                        ((1 - y) * ((1 - x) * hashPart1024(xFloor, yFloor, zFloor + 0xC1EDB, wFloor, uFloor + 0xA127B, vFloor, seed) + x * hashPart1024(xFloor + 0xE95E1, yFloor, zFloor + 0xC1EDB, wFloor, uFloor + 0xA127B, vFloor, seed))</a>
-<span class="sourceLineNo">200</span><a id="line.200">                                                + y * ((1 - x) * hashPart1024(xFloor, yFloor + 0xD4BC7, zFloor + 0xC1EDB, wFloor, uFloor + 0xA127B, vFloor, seed) + x * hashPart1024(xFloor + 0xE95E1, yFloor + 0xD4BC7, zFloor + 0xC1EDB, wFloor, uFloor + 0xA127B, vFloor, seed))))</a>
-<span class="sourceLineNo">201</span><a id="line.201">                                + (w *</a>
-<span class="sourceLineNo">202</span><a id="line.202">                                ((1 - z) *</a>
-<span class="sourceLineNo">203</span><a id="line.203">                                        ((1 - y) * ((1 - x) * hashPart1024(xFloor, yFloor, zFloor, wFloor + 0xB0C8B, uFloor + 0xA127B, vFloor, seed) + x * hashPart1024(xFloor + 0xE95E1, yFloor, zFloor, wFloor + 0xB0C8B, uFloor + 0xA127B, vFloor, seed))</a>
-<span class="sourceLineNo">204</span><a id="line.204">                                                + y * ((1 - x) * hashPart1024(xFloor, yFloor + 0xD4BC7, zFloor, wFloor + 0xB0C8B, uFloor + 0xA127B, vFloor, seed) + x * hashPart1024(xFloor + 0xE95E1, yFloor + 0xD4BC7, zFloor, wFloor + 0xB0C8B, uFloor + 0xA127B, vFloor, seed)))</a>
-<span class="sourceLineNo">205</span><a id="line.205">                                        + z *</a>
-<span class="sourceLineNo">206</span><a id="line.206">                                        ((1 - y) * ((1 - x) * hashPart1024(xFloor, yFloor, zFloor + 0xC1EDB, wFloor + 0xB0C8B, uFloor + 0xA127B, vFloor, seed) + x * hashPart1024(xFloor + 0xE95E1, yFloor, zFloor + 0xC1EDB, wFloor + 0xB0C8B, uFloor + 0xA127B, vFloor, seed))</a>
-<span class="sourceLineNo">207</span><a id="line.207">                                                + y * ((1 - x) * hashPart1024(xFloor, yFloor + 0xD4BC7, zFloor + 0xC1EDB, wFloor + 0xB0C8B, uFloor + 0xA127B, vFloor, seed) + x * hashPart1024(xFloor + 0xE95E1, yFloor + 0xD4BC7, zFloor + 0xC1EDB, wFloor + 0xB0C8B, uFloor + 0xA127B, vFloor, seed)))</a>
-<span class="sourceLineNo">208</span><a id="line.208">                                )))))</a>
-<span class="sourceLineNo">209</span><a id="line.209">                + (v * </a>
-<span class="sourceLineNo">210</span><a id="line.210">                ((1 - u) *</a>
-<span class="sourceLineNo">211</span><a id="line.211">                ((1 - w) *</a>
-<span class="sourceLineNo">212</span><a id="line.212">                        ((1 - z) *</a>
-<span class="sourceLineNo">213</span><a id="line.213">                                ((1 - y) * ((1 - x) * hashPart1024(xFloor, yFloor, zFloor, wFloor, uFloor, vFloor + 0x92E85, seed) + x * hashPart1024(xFloor + 0xE95E1, yFloor, zFloor, wFloor, uFloor, vFloor + 0x92E85, seed))</a>
-<span class="sourceLineNo">214</span><a id="line.214">                                        + y * ((1 - x) * hashPart1024(xFloor, yFloor + 0xD4BC7, zFloor, wFloor, uFloor, vFloor + 0x92E85, seed) + x * hashPart1024(xFloor + 0xE95E1, yFloor + 0xD4BC7, zFloor, wFloor, uFloor, vFloor + 0x92E85, seed)))</a>
-<span class="sourceLineNo">215</span><a id="line.215">                                + z *</a>
-<span class="sourceLineNo">216</span><a id="line.216">                                ((1 - y) * ((1 - x) * hashPart1024(xFloor, yFloor, zFloor + 0xC1EDB, wFloor, uFloor, vFloor + 0x92E85, seed) + x * hashPart1024(xFloor + 0xE95E1, yFloor, zFloor + 0xC1EDB, wFloor, uFloor, vFloor + 0x92E85, seed))</a>
-<span class="sourceLineNo">217</span><a id="line.217">                                        + y * ((1 - x) * hashPart1024(xFloor, yFloor + 0xD4BC7, zFloor + 0xC1EDB, wFloor, uFloor, vFloor + 0x92E85, seed) + x * hashPart1024(xFloor + 0xE95E1, yFloor + 0xD4BC7, zFloor + 0xC1EDB, wFloor, uFloor, vFloor + 0x92E85, seed))))</a>
-<span class="sourceLineNo">218</span><a id="line.218">                        + (w *</a>
-<span class="sourceLineNo">219</span><a id="line.219">                        ((1 - z) *</a>
-<span class="sourceLineNo">220</span><a id="line.220">                                ((1 - y) * ((1 - x) * hashPart1024(xFloor, yFloor, zFloor, wFloor + 0xB0C8B, uFloor, vFloor + 0x92E85, seed) + x * hashPart1024(xFloor + 0xE95E1, yFloor, zFloor, wFloor + 0xB0C8B, uFloor, vFloor + 0x92E85, seed))</a>
-<span class="sourceLineNo">221</span><a id="line.221">                                        + y * ((1 - x) * hashPart1024(xFloor, yFloor + 0xD4BC7, zFloor, wFloor + 0xB0C8B, uFloor, vFloor + 0x92E85, seed) + x * hashPart1024(xFloor + 0xE95E1, yFloor + 0xD4BC7, zFloor, wFloor + 0xB0C8B, uFloor, vFloor + 0x92E85, seed)))</a>
-<span class="sourceLineNo">222</span><a id="line.222">                                + z *</a>
-<span class="sourceLineNo">223</span><a id="line.223">                                ((1 - y) * ((1 - x) * hashPart1024(xFloor, yFloor, zFloor + 0xC1EDB, wFloor + 0xB0C8B, uFloor, vFloor + 0x92E85, seed) + x * hashPart1024(xFloor + 0xE95E1, yFloor, zFloor + 0xC1EDB, wFloor + 0xB0C8B, uFloor, vFloor + 0x92E85, seed))</a>
-<span class="sourceLineNo">224</span><a id="line.224">                                        + y * ((1 - x) * hashPart1024(xFloor, yFloor + 0xD4BC7, zFloor + 0xC1EDB, wFloor + 0xB0C8B, uFloor, vFloor + 0x92E85, seed) + x * hashPart1024(xFloor + 0xE95E1, yFloor + 0xD4BC7, zFloor + 0xC1EDB, wFloor + 0xB0C8B, uFloor, vFloor + 0x92E85, seed)))</a>
-<span class="sourceLineNo">225</span><a id="line.225">                        )))</a>
-<span class="sourceLineNo">226</span><a id="line.226">                + (u *</a>
-<span class="sourceLineNo">227</span><a id="line.227">                ((1 - w) *</a>
-<span class="sourceLineNo">228</span><a id="line.228">                        ((1 - z) *</a>
-<span class="sourceLineNo">229</span><a id="line.229">                                ((1 - y) * ((1 - x) * hashPart1024(xFloor, yFloor, zFloor, wFloor, uFloor + 0xA127B, vFloor + 0x92E85, seed) + x * hashPart1024(xFloor + 0xE95E1, yFloor, zFloor, wFloor, uFloor + 0xA127B, vFloor + 0x92E85, seed))</a>
-<span class="sourceLineNo">230</span><a id="line.230">                                        + y * ((1 - x) * hashPart1024(xFloor, yFloor + 0xD4BC7, zFloor, wFloor, uFloor + 0xA127B, vFloor + 0x92E85, seed) + x * hashPart1024(xFloor + 0xE95E1, yFloor + 0xD4BC7, zFloor, wFloor, uFloor + 0xA127B, vFloor + 0x92E85, seed)))</a>
-<span class="sourceLineNo">231</span><a id="line.231">                                + z *</a>
-<span class="sourceLineNo">232</span><a id="line.232">                                ((1 - y) * ((1 - x) * hashPart1024(xFloor, yFloor, zFloor + 0xC1EDB, wFloor, uFloor + 0xA127B, vFloor + 0x92E85, seed) + x * hashPart1024(xFloor + 0xE95E1, yFloor, zFloor + 0xC1EDB, wFloor, uFloor + 0xA127B, vFloor + 0x92E85, seed))</a>
-<span class="sourceLineNo">233</span><a id="line.233">                                        + y * ((1 - x) * hashPart1024(xFloor, yFloor + 0xD4BC7, zFloor + 0xC1EDB, wFloor, uFloor + 0xA127B, vFloor + 0x92E85, seed) + x * hashPart1024(xFloor + 0xE95E1, yFloor + 0xD4BC7, zFloor + 0xC1EDB, wFloor, uFloor + 0xA127B, vFloor + 0x92E85, seed))))</a>
-<span class="sourceLineNo">234</span><a id="line.234">                        + (w *</a>
-<span class="sourceLineNo">235</span><a id="line.235">                        ((1 - z) *</a>
-<span class="sourceLineNo">236</span><a id="line.236">                                ((1 - y) * ((1 - x) * hashPart1024(xFloor, yFloor, zFloor, wFloor + 0xB0C8B, uFloor + 0xA127B, vFloor + 0x92E85, seed) + x * hashPart1024(xFloor + 0xE95E1, yFloor, zFloor, wFloor + 0xB0C8B, uFloor + 0xA127B, vFloor + 0x92E85, seed))</a>
-<span class="sourceLineNo">237</span><a id="line.237">                                        + y * ((1 - x) * hashPart1024(xFloor, yFloor + 0xD4BC7, zFloor, wFloor + 0xB0C8B, uFloor + 0xA127B, vFloor + 0x92E85, seed) + x * hashPart1024(xFloor + 0xE95E1, yFloor + 0xD4BC7, zFloor, wFloor + 0xB0C8B, uFloor + 0xA127B, vFloor + 0x92E85, seed)))</a>
-<span class="sourceLineNo">238</span><a id="line.238">                                + z *</a>
-<span class="sourceLineNo">239</span><a id="line.239">                                ((1 - y) * ((1 - x) * hashPart1024(xFloor, yFloor, zFloor + 0xC1EDB, wFloor + 0xB0C8B, uFloor + 0xA127B, vFloor + 0x92E85, seed) + x * hashPart1024(xFloor + 0xE95E1, yFloor, zFloor + 0xC1EDB, wFloor + 0xB0C8B, uFloor + 0xA127B, vFloor + 0x92E85, seed))</a>
-<span class="sourceLineNo">240</span><a id="line.240">                                        + y * ((1 - x) * hashPart1024(xFloor, yFloor + 0xD4BC7, zFloor + 0xC1EDB, wFloor + 0xB0C8B, uFloor + 0xA127B, vFloor + 0x92E85, seed) + x * hashPart1024(xFloor + 0xE95E1, yFloor + 0xD4BC7, zFloor + 0xC1EDB, wFloor + 0xB0C8B, uFloor + 0xA127B, vFloor + 0x92E85, seed)))</a>
-<span class="sourceLineNo">241</span><a id="line.241">                        ))))))</a>
-<span class="sourceLineNo">242</span><a id="line.242">        ) * (0x1.0040100401004p-10);</a>
-<span class="sourceLineNo">243</span><a id="line.243">    }</a>
-<span class="sourceLineNo">244</span><a id="line.244"></a>
-<span class="sourceLineNo">245</span><a id="line.245">    //// constants are the most significant 20 bits of constants from PhantomNoise, incremented if even</a>
-<span class="sourceLineNo">246</span><a id="line.246">    //// they should normally be used for the 7D version of R2, but we only use 6 of the 7 constants</a>
-<span class="sourceLineNo">247</span><a id="line.247">    //x should be premultiplied by 0xE95E1</a>
-<span class="sourceLineNo">248</span><a id="line.248">    //y should be premultiplied by 0xD4BC7</a>
-<span class="sourceLineNo">249</span><a id="line.249">    //z should be premultiplied by 0xC1EDB</a>
-<span class="sourceLineNo">250</span><a id="line.250">    //w should be premultiplied by 0xB0C8B</a>
-<span class="sourceLineNo">251</span><a id="line.251">    //u should be premultiplied by 0xA127B</a>
-<span class="sourceLineNo">252</span><a id="line.252">    //v should be premultiplied by 0x92E85</a>
-<span class="sourceLineNo">253</span><a id="line.253">    private static int hashPart1024(final int x, final int y, final int z, final int w, final int u, final int v, int s) {</a>
-<span class="sourceLineNo">254</span><a id="line.254">        s += x ^ y ^ z ^ w ^ u ^ v;</a>
-<span class="sourceLineNo">255</span><a id="line.255">        return (s ^ (s &lt;&lt; 19 | s &gt;&gt;&gt; 13) ^ (s &lt;&lt; 5 | s &gt;&gt;&gt; 27) ^ 0xD1B54A35) * 0x125493 &gt;&gt;&gt; 22;</a>
-<span class="sourceLineNo">256</span><a id="line.256">    }</a>
-<span class="sourceLineNo">257</span><a id="line.257">    </a>
-<span class="sourceLineNo">258</span><a id="line.258">    @Override</a>
-<span class="sourceLineNo">259</span><a id="line.259">    public double getNoise(double x) {</a>
-<span class="sourceLineNo">260</span><a id="line.260">        return valueNoise(seed, x) * 2 - 1;</a>
-<span class="sourceLineNo">261</span><a id="line.261">    }</a>
-<span class="sourceLineNo">262</span><a id="line.262"></a>
-<span class="sourceLineNo">263</span><a id="line.263">    @Override</a>
-<span class="sourceLineNo">264</span><a id="line.264">    public double getNoiseWithSeed(double x, long seed) {</a>
-<span class="sourceLineNo">265</span><a id="line.265">        return valueNoise((int) (seed ^ seed &gt;&gt;&gt; 32), x) * 2 - 1;</a>
-<span class="sourceLineNo">266</span><a id="line.266">    }</a>
-<span class="sourceLineNo">267</span><a id="line.267"></a>
-<span class="sourceLineNo">268</span><a id="line.268">    @Override</a>
-<span class="sourceLineNo">269</span><a id="line.269">    public double getNoise(double x, double y) {</a>
-<span class="sourceLineNo">270</span><a id="line.270">        return valueNoise(seed, x, y) * 2 - 1;</a>
-<span class="sourceLineNo">271</span><a id="line.271">    }</a>
-<span class="sourceLineNo">272</span><a id="line.272">    @Override</a>
-<span class="sourceLineNo">273</span><a id="line.273">    public double getNoiseWithSeed(double x, double y, long seed) {</a>
-<span class="sourceLineNo">274</span><a id="line.274">        return valueNoise((int) (seed ^ seed &gt;&gt;&gt; 32), x, y) * 2 - 1;</a>
-<span class="sourceLineNo">275</span><a id="line.275">    }</a>
-<span class="sourceLineNo">276</span><a id="line.276">    @Override</a>
-<span class="sourceLineNo">277</span><a id="line.277">    public double getNoise(double x, double y, double z) {</a>
-<span class="sourceLineNo">278</span><a id="line.278">        return valueNoise(seed, x, y, z) * 2 - 1;</a>
-<span class="sourceLineNo">279</span><a id="line.279">    }</a>
-<span class="sourceLineNo">280</span><a id="line.280">    @Override</a>
-<span class="sourceLineNo">281</span><a id="line.281">    public double getNoiseWithSeed(double x, double y, double z, long seed) {</a>
-<span class="sourceLineNo">282</span><a id="line.282">        return valueNoise((int) (seed ^ seed &gt;&gt;&gt; 32), x, y, z) * 2 - 1;</a>
-<span class="sourceLineNo">283</span><a id="line.283">    }</a>
-<span class="sourceLineNo">284</span><a id="line.284">    @Override</a>
-<span class="sourceLineNo">285</span><a id="line.285">    public double getNoise(double x, double y, double z, double w) {</a>
-<span class="sourceLineNo">286</span><a id="line.286">        return valueNoise(seed, x, y, z, w) * 2 - 1;</a>
-<span class="sourceLineNo">287</span><a id="line.287">    }</a>
-<span class="sourceLineNo">288</span><a id="line.288">    @Override</a>
-<span class="sourceLineNo">289</span><a id="line.289">    public double getNoiseWithSeed(double x, double y, double z, double w, long seed) {</a>
-<span class="sourceLineNo">290</span><a id="line.290">        return valueNoise((int) (seed ^ seed &gt;&gt;&gt; 32), x, y, z, w) * 2 - 1;</a>
-<span class="sourceLineNo">291</span><a id="line.291">    }</a>
-<span class="sourceLineNo">292</span><a id="line.292">}</a>
+<span class="sourceLineNo">166</span><a id="line.166">        //0xE60E3, 0xCEBD7, 0xB9C9B, 0xA6F57, 0x9609D, 0x86D51</a>
+<span class="sourceLineNo">167</span><a id="line.167">        xFloor *= 0xE60E3;</a>
+<span class="sourceLineNo">168</span><a id="line.168">        yFloor *= 0xCEBD7;</a>
+<span class="sourceLineNo">169</span><a id="line.169">        zFloor *= 0xB9C9B;</a>
+<span class="sourceLineNo">170</span><a id="line.170">        wFloor *= 0xA6F57;</a>
+<span class="sourceLineNo">171</span><a id="line.171">        uFloor *= 0x9609D;</a>
+<span class="sourceLineNo">172</span><a id="line.172">        return ((1 - u) *</a>
+<span class="sourceLineNo">173</span><a id="line.173">                        ((1 - w) *</a>
+<span class="sourceLineNo">174</span><a id="line.174">                                ((1 - z) *</a>
+<span class="sourceLineNo">175</span><a id="line.175">                                        ((1 - y) * ((1 - x) * hashPart1024(xFloor, yFloor, zFloor, wFloor, uFloor, seed) + x * hashPart1024(xFloor + 0xE60E3, yFloor, zFloor, wFloor, uFloor, seed))</a>
+<span class="sourceLineNo">176</span><a id="line.176">                                                + y * ((1 - x) * hashPart1024(xFloor, yFloor + 0xCEBD7, zFloor, wFloor, uFloor, seed) + x * hashPart1024(xFloor + 0xE60E3, yFloor + 0xCEBD7, zFloor, wFloor, uFloor, seed)))</a>
+<span class="sourceLineNo">177</span><a id="line.177">                                        + z *</a>
+<span class="sourceLineNo">178</span><a id="line.178">                                        ((1 - y) * ((1 - x) * hashPart1024(xFloor, yFloor, zFloor + 0xB9C9B, wFloor, uFloor, seed) + x * hashPart1024(xFloor + 0xE60E3, yFloor, zFloor + 0xB9C9B, wFloor, uFloor, seed))</a>
+<span class="sourceLineNo">179</span><a id="line.179">                                                + y * ((1 - x) * hashPart1024(xFloor, yFloor + 0xCEBD7, zFloor + 0xB9C9B, wFloor, uFloor, seed) + x * hashPart1024(xFloor + 0xE60E3, yFloor + 0xCEBD7, zFloor + 0xB9C9B, wFloor, uFloor, seed))))</a>
+<span class="sourceLineNo">180</span><a id="line.180">                                + (w *</a>
+<span class="sourceLineNo">181</span><a id="line.181">                                ((1 - z) *</a>
+<span class="sourceLineNo">182</span><a id="line.182">                                        ((1 - y) * ((1 - x) * hashPart1024(xFloor, yFloor, zFloor, wFloor + 0xA6F57, uFloor, seed) + x * hashPart1024(xFloor + 0xE60E3, yFloor, zFloor, wFloor + 0xA6F57, uFloor, seed))</a>
+<span class="sourceLineNo">183</span><a id="line.183">                                                + y * ((1 - x) * hashPart1024(xFloor, yFloor + 0xCEBD7, zFloor, wFloor + 0xA6F57, uFloor, seed) + x * hashPart1024(xFloor + 0xE60E3, yFloor + 0xCEBD7, zFloor, wFloor + 0xA6F57, uFloor, seed)))</a>
+<span class="sourceLineNo">184</span><a id="line.184">                                        + z *</a>
+<span class="sourceLineNo">185</span><a id="line.185">                                        ((1 - y) * ((1 - x) * hashPart1024(xFloor, yFloor, zFloor + 0xB9C9B, wFloor + 0xA6F57, uFloor, seed) + x * hashPart1024(xFloor + 0xE60E3, yFloor, zFloor + 0xB9C9B, wFloor + 0xA6F57, uFloor, seed))</a>
+<span class="sourceLineNo">186</span><a id="line.186">                                                + y * ((1 - x) * hashPart1024(xFloor, yFloor + 0xCEBD7, zFloor + 0xB9C9B, wFloor + 0xA6F57, uFloor, seed) + x * hashPart1024(xFloor + 0xE60E3, yFloor + 0xCEBD7, zFloor + 0xB9C9B, wFloor + 0xA6F57, uFloor, seed)))</a>
+<span class="sourceLineNo">187</span><a id="line.187">                                )))</a>
+<span class="sourceLineNo">188</span><a id="line.188">                        + (u *</a>
+<span class="sourceLineNo">189</span><a id="line.189">                        ((1 - w) *</a>
+<span class="sourceLineNo">190</span><a id="line.190">                                ((1 - z) *</a>
+<span class="sourceLineNo">191</span><a id="line.191">                                        ((1 - y) * ((1 - x) * hashPart1024(xFloor, yFloor, zFloor, wFloor, uFloor + 0x9609D, seed) + x * hashPart1024(xFloor + 0xE60E3, yFloor, zFloor, wFloor, uFloor + 0x9609D, seed))</a>
+<span class="sourceLineNo">192</span><a id="line.192">                                                + y * ((1 - x) * hashPart1024(xFloor, yFloor + 0xCEBD7, zFloor, wFloor, uFloor + 0x9609D, seed) + x * hashPart1024(xFloor + 0xE60E3, yFloor + 0xCEBD7, zFloor, wFloor, uFloor + 0x9609D, seed)))</a>
+<span class="sourceLineNo">193</span><a id="line.193">                                        + z *</a>
+<span class="sourceLineNo">194</span><a id="line.194">                                        ((1 - y) * ((1 - x) * hashPart1024(xFloor, yFloor, zFloor + 0xB9C9B, wFloor, uFloor + 0x9609D, seed) + x * hashPart1024(xFloor + 0xE60E3, yFloor, zFloor + 0xB9C9B, wFloor, uFloor + 0x9609D, seed))</a>
+<span class="sourceLineNo">195</span><a id="line.195">                                                + y * ((1 - x) * hashPart1024(xFloor, yFloor + 0xCEBD7, zFloor + 0xB9C9B, wFloor, uFloor + 0x9609D, seed) + x * hashPart1024(xFloor + 0xE60E3, yFloor + 0xCEBD7, zFloor + 0xB9C9B, wFloor, uFloor + 0x9609D, seed))))</a>
+<span class="sourceLineNo">196</span><a id="line.196">                                + (w *</a>
+<span class="sourceLineNo">197</span><a id="line.197">                                ((1 - z) *</a>
+<span class="sourceLineNo">198</span><a id="line.198">                                        ((1 - y) * ((1 - x) * hashPart1024(xFloor, yFloor, zFloor, wFloor + 0xA6F57, uFloor + 0x9609D, seed) + x * hashPart1024(xFloor + 0xE60E3, yFloor, zFloor, wFloor + 0xA6F57, uFloor + 0x9609D, seed))</a>
+<span class="sourceLineNo">199</span><a id="line.199">                                                + y * ((1 - x) * hashPart1024(xFloor, yFloor + 0xCEBD7, zFloor, wFloor + 0xA6F57, uFloor + 0x9609D, seed) + x * hashPart1024(xFloor + 0xE60E3, yFloor + 0xCEBD7, zFloor, wFloor + 0xA6F57, uFloor + 0x9609D, seed)))</a>
+<span class="sourceLineNo">200</span><a id="line.200">                                        + z *</a>
+<span class="sourceLineNo">201</span><a id="line.201">                                        ((1 - y) * ((1 - x) * hashPart1024(xFloor, yFloor, zFloor + 0xB9C9B, wFloor + 0xA6F57, uFloor + 0x9609D, seed) + x * hashPart1024(xFloor + 0xE60E3, yFloor, zFloor + 0xB9C9B, wFloor + 0xA6F57, uFloor + 0x9609D, seed))</a>
+<span class="sourceLineNo">202</span><a id="line.202">                                                + y * ((1 - x) * hashPart1024(xFloor, yFloor + 0xCEBD7, zFloor + 0xB9C9B, wFloor + 0xA6F57, uFloor + 0x9609D, seed) + x * hashPart1024(xFloor + 0xE60E3, yFloor + 0xCEBD7, zFloor + 0xB9C9B, wFloor + 0xA6F57, uFloor + 0x9609D, seed)))</a>
+<span class="sourceLineNo">203</span><a id="line.203">                                ))))</a>
+<span class="sourceLineNo">204</span><a id="line.204">        ) * (0x1.0040100401004p-10);</a>
+<span class="sourceLineNo">205</span><a id="line.205">    }</a>
+<span class="sourceLineNo">206</span><a id="line.206"></a>
+<span class="sourceLineNo">207</span><a id="line.207">    //// constants are the most significant 20 bits of constants from PhantomNoise, incremented if even</a>
+<span class="sourceLineNo">208</span><a id="line.208">    //// they should normally be used for the 6D version of R2, but we only use 5 of the 6 constants</a>
+<span class="sourceLineNo">209</span><a id="line.209">    //x should be premultiplied by 0xE60E3</a>
+<span class="sourceLineNo">210</span><a id="line.210">    //y should be premultiplied by 0xCEBD7</a>
+<span class="sourceLineNo">211</span><a id="line.211">    //z should be premultiplied by 0xB9C9B</a>
+<span class="sourceLineNo">212</span><a id="line.212">    //w should be premultiplied by 0xA6F57</a>
+<span class="sourceLineNo">213</span><a id="line.213">    //u should be premultiplied by 0x9609D</a>
+<span class="sourceLineNo">214</span><a id="line.214">    private static int hashPart1024(final int x, final int y, final int z, final int w, final int u, int s) {</a>
+<span class="sourceLineNo">215</span><a id="line.215">        s += x ^ y ^ z ^ w ^ u;</a>
+<span class="sourceLineNo">216</span><a id="line.216">        return (s ^ (s &lt;&lt; 19 | s &gt;&gt;&gt; 13) ^ (s &lt;&lt; 5 | s &gt;&gt;&gt; 27) ^ 0xD1B54A35) * 0x125493 &gt;&gt;&gt; 22;</a>
+<span class="sourceLineNo">217</span><a id="line.217">    }</a>
+<span class="sourceLineNo">218</span><a id="line.218"></a>
+<span class="sourceLineNo">219</span><a id="line.219">    public static double valueNoise(int seed, double x, double y, double z, double w, double u, double v)</a>
+<span class="sourceLineNo">220</span><a id="line.220">    {</a>
+<span class="sourceLineNo">221</span><a id="line.221">        int xFloor = x &gt;= 0 ? (int) x : (int) x - 1;</a>
+<span class="sourceLineNo">222</span><a id="line.222">        x -= xFloor;</a>
+<span class="sourceLineNo">223</span><a id="line.223">        x *= x * (3 - 2 * x);</a>
+<span class="sourceLineNo">224</span><a id="line.224">        int yFloor = y &gt;= 0 ? (int) y : (int) y - 1;</a>
+<span class="sourceLineNo">225</span><a id="line.225">        y -= yFloor;</a>
+<span class="sourceLineNo">226</span><a id="line.226">        y *= y * (3 - 2 * y);</a>
+<span class="sourceLineNo">227</span><a id="line.227">        int zFloor = z &gt;= 0 ? (int) z : (int) z - 1;</a>
+<span class="sourceLineNo">228</span><a id="line.228">        z -= zFloor;</a>
+<span class="sourceLineNo">229</span><a id="line.229">        z *= z * (3 - 2 * z);</a>
+<span class="sourceLineNo">230</span><a id="line.230">        int wFloor = w &gt;= 0 ? (int) w : (int) w - 1;</a>
+<span class="sourceLineNo">231</span><a id="line.231">        w -= wFloor;</a>
+<span class="sourceLineNo">232</span><a id="line.232">        w *= w * (3 - 2 * w);</a>
+<span class="sourceLineNo">233</span><a id="line.233">        int uFloor = u &gt;= 0 ? (int) u : (int) u - 1;</a>
+<span class="sourceLineNo">234</span><a id="line.234">        u -= uFloor;</a>
+<span class="sourceLineNo">235</span><a id="line.235">        u *= u * (3 - 2 * u);</a>
+<span class="sourceLineNo">236</span><a id="line.236">        int vFloor = v &gt;= 0 ? (int) v : (int) v - 1;</a>
+<span class="sourceLineNo">237</span><a id="line.237">        v -= vFloor;</a>
+<span class="sourceLineNo">238</span><a id="line.238">        v *= v * (3 - 2 * v);</a>
+<span class="sourceLineNo">239</span><a id="line.239">        //0xE95E1, 0xD4BC7, 0xC1EDB, 0xB0C8B, 0xA1279, 0x92E85</a>
+<span class="sourceLineNo">240</span><a id="line.240">        xFloor *= 0xE95E1;</a>
+<span class="sourceLineNo">241</span><a id="line.241">        yFloor *= 0xD4BC7;</a>
+<span class="sourceLineNo">242</span><a id="line.242">        zFloor *= 0xC1EDB;</a>
+<span class="sourceLineNo">243</span><a id="line.243">        wFloor *= 0xB0C8B;</a>
+<span class="sourceLineNo">244</span><a id="line.244">        uFloor *= 0xA127B;</a>
+<span class="sourceLineNo">245</span><a id="line.245">        vFloor *= 0x92E85;</a>
+<span class="sourceLineNo">246</span><a id="line.246">        return ((1 - v) *</a>
+<span class="sourceLineNo">247</span><a id="line.247">                ((1 - u) *</a>
+<span class="sourceLineNo">248</span><a id="line.248">                        ((1 - w) *</a>
+<span class="sourceLineNo">249</span><a id="line.249">                                ((1 - z) *</a>
+<span class="sourceLineNo">250</span><a id="line.250">                                        ((1 - y) * ((1 - x) * hashPart1024(xFloor, yFloor, zFloor, wFloor, uFloor, vFloor, seed) + x * hashPart1024(xFloor + 0xE95E1, yFloor, zFloor, wFloor, uFloor, vFloor, seed))</a>
+<span class="sourceLineNo">251</span><a id="line.251">                                                + y * ((1 - x) * hashPart1024(xFloor, yFloor + 0xD4BC7, zFloor, wFloor, uFloor, vFloor, seed) + x * hashPart1024(xFloor + 0xE95E1, yFloor + 0xD4BC7, zFloor, wFloor, uFloor, vFloor, seed)))</a>
+<span class="sourceLineNo">252</span><a id="line.252">                                        + z *</a>
+<span class="sourceLineNo">253</span><a id="line.253">                                        ((1 - y) * ((1 - x) * hashPart1024(xFloor, yFloor, zFloor + 0xC1EDB, wFloor, uFloor, vFloor, seed) + x * hashPart1024(xFloor + 0xE95E1, yFloor, zFloor + 0xC1EDB, wFloor, uFloor, vFloor, seed))</a>
+<span class="sourceLineNo">254</span><a id="line.254">                                                + y * ((1 - x) * hashPart1024(xFloor, yFloor + 0xD4BC7, zFloor + 0xC1EDB, wFloor, uFloor, vFloor, seed) + x * hashPart1024(xFloor + 0xE95E1, yFloor + 0xD4BC7, zFloor + 0xC1EDB, wFloor, uFloor, vFloor, seed))))</a>
+<span class="sourceLineNo">255</span><a id="line.255">                                + (w *</a>
+<span class="sourceLineNo">256</span><a id="line.256">                                ((1 - z) *</a>
+<span class="sourceLineNo">257</span><a id="line.257">                                        ((1 - y) * ((1 - x) * hashPart1024(xFloor, yFloor, zFloor, wFloor + 0xB0C8B, uFloor, vFloor, seed) + x * hashPart1024(xFloor + 0xE95E1, yFloor, zFloor, wFloor + 0xB0C8B, uFloor, vFloor, seed))</a>
+<span class="sourceLineNo">258</span><a id="line.258">                                                + y * ((1 - x) * hashPart1024(xFloor, yFloor + 0xD4BC7, zFloor, wFloor + 0xB0C8B, uFloor, vFloor, seed) + x * hashPart1024(xFloor + 0xE95E1, yFloor + 0xD4BC7, zFloor, wFloor + 0xB0C8B, uFloor, vFloor, seed)))</a>
+<span class="sourceLineNo">259</span><a id="line.259">                                        + z *</a>
+<span class="sourceLineNo">260</span><a id="line.260">                                        ((1 - y) * ((1 - x) * hashPart1024(xFloor, yFloor, zFloor + 0xC1EDB, wFloor + 0xB0C8B, uFloor, vFloor, seed) + x * hashPart1024(xFloor + 0xE95E1, yFloor, zFloor + 0xC1EDB, wFloor + 0xB0C8B, uFloor, vFloor, seed))</a>
+<span class="sourceLineNo">261</span><a id="line.261">                                                + y * ((1 - x) * hashPart1024(xFloor, yFloor + 0xD4BC7, zFloor + 0xC1EDB, wFloor + 0xB0C8B, uFloor, vFloor, seed) + x * hashPart1024(xFloor + 0xE95E1, yFloor + 0xD4BC7, zFloor + 0xC1EDB, wFloor + 0xB0C8B, uFloor, vFloor, seed)))</a>
+<span class="sourceLineNo">262</span><a id="line.262">                                )))</a>
+<span class="sourceLineNo">263</span><a id="line.263">                        + (u *</a>
+<span class="sourceLineNo">264</span><a id="line.264">                        ((1 - w) *</a>
+<span class="sourceLineNo">265</span><a id="line.265">                                ((1 - z) *</a>
+<span class="sourceLineNo">266</span><a id="line.266">                                        ((1 - y) * ((1 - x) * hashPart1024(xFloor, yFloor, zFloor, wFloor, uFloor + 0xA127B, vFloor, seed) + x * hashPart1024(xFloor + 0xE95E1, yFloor, zFloor, wFloor, uFloor + 0xA127B, vFloor, seed))</a>
+<span class="sourceLineNo">267</span><a id="line.267">                                                + y * ((1 - x) * hashPart1024(xFloor, yFloor + 0xD4BC7, zFloor, wFloor, uFloor + 0xA127B, vFloor, seed) + x * hashPart1024(xFloor + 0xE95E1, yFloor + 0xD4BC7, zFloor, wFloor, uFloor + 0xA127B, vFloor, seed)))</a>
+<span class="sourceLineNo">268</span><a id="line.268">                                        + z *</a>
+<span class="sourceLineNo">269</span><a id="line.269">                                        ((1 - y) * ((1 - x) * hashPart1024(xFloor, yFloor, zFloor + 0xC1EDB, wFloor, uFloor + 0xA127B, vFloor, seed) + x * hashPart1024(xFloor + 0xE95E1, yFloor, zFloor + 0xC1EDB, wFloor, uFloor + 0xA127B, vFloor, seed))</a>
+<span class="sourceLineNo">270</span><a id="line.270">                                                + y * ((1 - x) * hashPart1024(xFloor, yFloor + 0xD4BC7, zFloor + 0xC1EDB, wFloor, uFloor + 0xA127B, vFloor, seed) + x * hashPart1024(xFloor + 0xE95E1, yFloor + 0xD4BC7, zFloor + 0xC1EDB, wFloor, uFloor + 0xA127B, vFloor, seed))))</a>
+<span class="sourceLineNo">271</span><a id="line.271">                                + (w *</a>
+<span class="sourceLineNo">272</span><a id="line.272">                                ((1 - z) *</a>
+<span class="sourceLineNo">273</span><a id="line.273">                                        ((1 - y) * ((1 - x) * hashPart1024(xFloor, yFloor, zFloor, wFloor + 0xB0C8B, uFloor + 0xA127B, vFloor, seed) + x * hashPart1024(xFloor + 0xE95E1, yFloor, zFloor, wFloor + 0xB0C8B, uFloor + 0xA127B, vFloor, seed))</a>
+<span class="sourceLineNo">274</span><a id="line.274">                                                + y * ((1 - x) * hashPart1024(xFloor, yFloor + 0xD4BC7, zFloor, wFloor + 0xB0C8B, uFloor + 0xA127B, vFloor, seed) + x * hashPart1024(xFloor + 0xE95E1, yFloor + 0xD4BC7, zFloor, wFloor + 0xB0C8B, uFloor + 0xA127B, vFloor, seed)))</a>
+<span class="sourceLineNo">275</span><a id="line.275">                                        + z *</a>
+<span class="sourceLineNo">276</span><a id="line.276">                                        ((1 - y) * ((1 - x) * hashPart1024(xFloor, yFloor, zFloor + 0xC1EDB, wFloor + 0xB0C8B, uFloor + 0xA127B, vFloor, seed) + x * hashPart1024(xFloor + 0xE95E1, yFloor, zFloor + 0xC1EDB, wFloor + 0xB0C8B, uFloor + 0xA127B, vFloor, seed))</a>
+<span class="sourceLineNo">277</span><a id="line.277">                                                + y * ((1 - x) * hashPart1024(xFloor, yFloor + 0xD4BC7, zFloor + 0xC1EDB, wFloor + 0xB0C8B, uFloor + 0xA127B, vFloor, seed) + x * hashPart1024(xFloor + 0xE95E1, yFloor + 0xD4BC7, zFloor + 0xC1EDB, wFloor + 0xB0C8B, uFloor + 0xA127B, vFloor, seed)))</a>
+<span class="sourceLineNo">278</span><a id="line.278">                                )))))</a>
+<span class="sourceLineNo">279</span><a id="line.279">                + (v *</a>
+<span class="sourceLineNo">280</span><a id="line.280">                ((1 - u) *</a>
+<span class="sourceLineNo">281</span><a id="line.281">                        ((1 - w) *</a>
+<span class="sourceLineNo">282</span><a id="line.282">                                ((1 - z) *</a>
+<span class="sourceLineNo">283</span><a id="line.283">                                        ((1 - y) * ((1 - x) * hashPart1024(xFloor, yFloor, zFloor, wFloor, uFloor, vFloor + 0x92E85, seed) + x * hashPart1024(xFloor + 0xE95E1, yFloor, zFloor, wFloor, uFloor, vFloor + 0x92E85, seed))</a>
+<span class="sourceLineNo">284</span><a id="line.284">                                                + y * ((1 - x) * hashPart1024(xFloor, yFloor + 0xD4BC7, zFloor, wFloor, uFloor, vFloor + 0x92E85, seed) + x * hashPart1024(xFloor + 0xE95E1, yFloor + 0xD4BC7, zFloor, wFloor, uFloor, vFloor + 0x92E85, seed)))</a>
+<span class="sourceLineNo">285</span><a id="line.285">                                        + z *</a>
+<span class="sourceLineNo">286</span><a id="line.286">                                        ((1 - y) * ((1 - x) * hashPart1024(xFloor, yFloor, zFloor + 0xC1EDB, wFloor, uFloor, vFloor + 0x92E85, seed) + x * hashPart1024(xFloor + 0xE95E1, yFloor, zFloor + 0xC1EDB, wFloor, uFloor, vFloor + 0x92E85, seed))</a>
+<span class="sourceLineNo">287</span><a id="line.287">                                                + y * ((1 - x) * hashPart1024(xFloor, yFloor + 0xD4BC7, zFloor + 0xC1EDB, wFloor, uFloor, vFloor + 0x92E85, seed) + x * hashPart1024(xFloor + 0xE95E1, yFloor + 0xD4BC7, zFloor + 0xC1EDB, wFloor, uFloor, vFloor + 0x92E85, seed))))</a>
+<span class="sourceLineNo">288</span><a id="line.288">                                + (w *</a>
+<span class="sourceLineNo">289</span><a id="line.289">                                ((1 - z) *</a>
+<span class="sourceLineNo">290</span><a id="line.290">                                        ((1 - y) * ((1 - x) * hashPart1024(xFloor, yFloor, zFloor, wFloor + 0xB0C8B, uFloor, vFloor + 0x92E85, seed) + x * hashPart1024(xFloor + 0xE95E1, yFloor, zFloor, wFloor + 0xB0C8B, uFloor, vFloor + 0x92E85, seed))</a>
+<span class="sourceLineNo">291</span><a id="line.291">                                                + y * ((1 - x) * hashPart1024(xFloor, yFloor + 0xD4BC7, zFloor, wFloor + 0xB0C8B, uFloor, vFloor + 0x92E85, seed) + x * hashPart1024(xFloor + 0xE95E1, yFloor + 0xD4BC7, zFloor, wFloor + 0xB0C8B, uFloor, vFloor + 0x92E85, seed)))</a>
+<span class="sourceLineNo">292</span><a id="line.292">                                        + z *</a>
+<span class="sourceLineNo">293</span><a id="line.293">                                        ((1 - y) * ((1 - x) * hashPart1024(xFloor, yFloor, zFloor + 0xC1EDB, wFloor + 0xB0C8B, uFloor, vFloor + 0x92E85, seed) + x * hashPart1024(xFloor + 0xE95E1, yFloor, zFloor + 0xC1EDB, wFloor + 0xB0C8B, uFloor, vFloor + 0x92E85, seed))</a>
+<span class="sourceLineNo">294</span><a id="line.294">                                                + y * ((1 - x) * hashPart1024(xFloor, yFloor + 0xD4BC7, zFloor + 0xC1EDB, wFloor + 0xB0C8B, uFloor, vFloor + 0x92E85, seed) + x * hashPart1024(xFloor + 0xE95E1, yFloor + 0xD4BC7, zFloor + 0xC1EDB, wFloor + 0xB0C8B, uFloor, vFloor + 0x92E85, seed)))</a>
+<span class="sourceLineNo">295</span><a id="line.295">                                )))</a>
+<span class="sourceLineNo">296</span><a id="line.296">                        + (u *</a>
+<span class="sourceLineNo">297</span><a id="line.297">                        ((1 - w) *</a>
+<span class="sourceLineNo">298</span><a id="line.298">                                ((1 - z) *</a>
+<span class="sourceLineNo">299</span><a id="line.299">                                        ((1 - y) * ((1 - x) * hashPart1024(xFloor, yFloor, zFloor, wFloor, uFloor + 0xA127B, vFloor + 0x92E85, seed) + x * hashPart1024(xFloor + 0xE95E1, yFloor, zFloor, wFloor, uFloor + 0xA127B, vFloor + 0x92E85, seed))</a>
+<span class="sourceLineNo">300</span><a id="line.300">                                                + y * ((1 - x) * hashPart1024(xFloor, yFloor + 0xD4BC7, zFloor, wFloor, uFloor + 0xA127B, vFloor + 0x92E85, seed) + x * hashPart1024(xFloor + 0xE95E1, yFloor + 0xD4BC7, zFloor, wFloor, uFloor + 0xA127B, vFloor + 0x92E85, seed)))</a>
+<span class="sourceLineNo">301</span><a id="line.301">                                        + z *</a>
+<span class="sourceLineNo">302</span><a id="line.302">                                        ((1 - y) * ((1 - x) * hashPart1024(xFloor, yFloor, zFloor + 0xC1EDB, wFloor, uFloor + 0xA127B, vFloor + 0x92E85, seed) + x * hashPart1024(xFloor + 0xE95E1, yFloor, zFloor + 0xC1EDB, wFloor, uFloor + 0xA127B, vFloor + 0x92E85, seed))</a>
+<span class="sourceLineNo">303</span><a id="line.303">                                                + y * ((1 - x) * hashPart1024(xFloor, yFloor + 0xD4BC7, zFloor + 0xC1EDB, wFloor, uFloor + 0xA127B, vFloor + 0x92E85, seed) + x * hashPart1024(xFloor + 0xE95E1, yFloor + 0xD4BC7, zFloor + 0xC1EDB, wFloor, uFloor + 0xA127B, vFloor + 0x92E85, seed))))</a>
+<span class="sourceLineNo">304</span><a id="line.304">                                + (w *</a>
+<span class="sourceLineNo">305</span><a id="line.305">                                ((1 - z) *</a>
+<span class="sourceLineNo">306</span><a id="line.306">                                        ((1 - y) * ((1 - x) * hashPart1024(xFloor, yFloor, zFloor, wFloor + 0xB0C8B, uFloor + 0xA127B, vFloor + 0x92E85, seed) + x * hashPart1024(xFloor + 0xE95E1, yFloor, zFloor, wFloor + 0xB0C8B, uFloor + 0xA127B, vFloor + 0x92E85, seed))</a>
+<span class="sourceLineNo">307</span><a id="line.307">                                                + y * ((1 - x) * hashPart1024(xFloor, yFloor + 0xD4BC7, zFloor, wFloor + 0xB0C8B, uFloor + 0xA127B, vFloor + 0x92E85, seed) + x * hashPart1024(xFloor + 0xE95E1, yFloor + 0xD4BC7, zFloor, wFloor + 0xB0C8B, uFloor + 0xA127B, vFloor + 0x92E85, seed)))</a>
+<span class="sourceLineNo">308</span><a id="line.308">                                        + z *</a>
+<span class="sourceLineNo">309</span><a id="line.309">                                        ((1 - y) * ((1 - x) * hashPart1024(xFloor, yFloor, zFloor + 0xC1EDB, wFloor + 0xB0C8B, uFloor + 0xA127B, vFloor + 0x92E85, seed) + x * hashPart1024(xFloor + 0xE95E1, yFloor, zFloor + 0xC1EDB, wFloor + 0xB0C8B, uFloor + 0xA127B, vFloor + 0x92E85, seed))</a>
+<span class="sourceLineNo">310</span><a id="line.310">                                                + y * ((1 - x) * hashPart1024(xFloor, yFloor + 0xD4BC7, zFloor + 0xC1EDB, wFloor + 0xB0C8B, uFloor + 0xA127B, vFloor + 0x92E85, seed) + x * hashPart1024(xFloor + 0xE95E1, yFloor + 0xD4BC7, zFloor + 0xC1EDB, wFloor + 0xB0C8B, uFloor + 0xA127B, vFloor + 0x92E85, seed)))</a>
+<span class="sourceLineNo">311</span><a id="line.311">                                ))))))</a>
+<span class="sourceLineNo">312</span><a id="line.312">        ) * (0x1.0040100401004p-10);</a>
+<span class="sourceLineNo">313</span><a id="line.313">    }</a>
+<span class="sourceLineNo">314</span><a id="line.314"></a>
+<span class="sourceLineNo">315</span><a id="line.315">    //// constants are the most significant 20 bits of constants from PhantomNoise, incremented if even</a>
+<span class="sourceLineNo">316</span><a id="line.316">    //// they should normally be used for the 7D version of R2, but we only use 6 of the 7 constants</a>
+<span class="sourceLineNo">317</span><a id="line.317">    //x should be premultiplied by 0xE95E1</a>
+<span class="sourceLineNo">318</span><a id="line.318">    //y should be premultiplied by 0xD4BC7</a>
+<span class="sourceLineNo">319</span><a id="line.319">    //z should be premultiplied by 0xC1EDB</a>
+<span class="sourceLineNo">320</span><a id="line.320">    //w should be premultiplied by 0xB0C8B</a>
+<span class="sourceLineNo">321</span><a id="line.321">    //u should be premultiplied by 0xA127B</a>
+<span class="sourceLineNo">322</span><a id="line.322">    //v should be premultiplied by 0x92E85</a>
+<span class="sourceLineNo">323</span><a id="line.323">    private static int hashPart1024(final int x, final int y, final int z, final int w, final int u, final int v, int s) {</a>
+<span class="sourceLineNo">324</span><a id="line.324">        s += x ^ y ^ z ^ w ^ u ^ v;</a>
+<span class="sourceLineNo">325</span><a id="line.325">        return (s ^ (s &lt;&lt; 19 | s &gt;&gt;&gt; 13) ^ (s &lt;&lt; 5 | s &gt;&gt;&gt; 27) ^ 0xD1B54A35) * 0x125493 &gt;&gt;&gt; 22;</a>
+<span class="sourceLineNo">326</span><a id="line.326">    }</a>
+<span class="sourceLineNo">327</span><a id="line.327"></a>
+<span class="sourceLineNo">328</span><a id="line.328">    @Override</a>
+<span class="sourceLineNo">329</span><a id="line.329">    public double getNoise(double x) {</a>
+<span class="sourceLineNo">330</span><a id="line.330">        return valueNoise(seed, x) * 2 - 1;</a>
+<span class="sourceLineNo">331</span><a id="line.331">    }</a>
+<span class="sourceLineNo">332</span><a id="line.332"></a>
+<span class="sourceLineNo">333</span><a id="line.333">    @Override</a>
+<span class="sourceLineNo">334</span><a id="line.334">    public double getNoiseWithSeed(double x, long seed) {</a>
+<span class="sourceLineNo">335</span><a id="line.335">        return valueNoise((int) (seed ^ seed &gt;&gt;&gt; 32), x) * 2 - 1;</a>
+<span class="sourceLineNo">336</span><a id="line.336">    }</a>
+<span class="sourceLineNo">337</span><a id="line.337"></a>
+<span class="sourceLineNo">338</span><a id="line.338">    @Override</a>
+<span class="sourceLineNo">339</span><a id="line.339">    public double getNoise(double x, double y) {</a>
+<span class="sourceLineNo">340</span><a id="line.340">        return valueNoise(seed, x, y) * 2 - 1;</a>
+<span class="sourceLineNo">341</span><a id="line.341">    }</a>
+<span class="sourceLineNo">342</span><a id="line.342">    @Override</a>
+<span class="sourceLineNo">343</span><a id="line.343">    public double getNoiseWithSeed(double x, double y, long seed) {</a>
+<span class="sourceLineNo">344</span><a id="line.344">        return valueNoise((int) (seed ^ seed &gt;&gt;&gt; 32), x, y) * 2 - 1;</a>
+<span class="sourceLineNo">345</span><a id="line.345">    }</a>
+<span class="sourceLineNo">346</span><a id="line.346">    @Override</a>
+<span class="sourceLineNo">347</span><a id="line.347">    public double getNoise(double x, double y, double z) {</a>
+<span class="sourceLineNo">348</span><a id="line.348">        return valueNoise(seed, x, y, z) * 2 - 1;</a>
+<span class="sourceLineNo">349</span><a id="line.349">    }</a>
+<span class="sourceLineNo">350</span><a id="line.350">    @Override</a>
+<span class="sourceLineNo">351</span><a id="line.351">    public double getNoiseWithSeed(double x, double y, double z, long seed) {</a>
+<span class="sourceLineNo">352</span><a id="line.352">        return valueNoise((int) (seed ^ seed &gt;&gt;&gt; 32), x, y, z) * 2 - 1;</a>
+<span class="sourceLineNo">353</span><a id="line.353">    }</a>
+<span class="sourceLineNo">354</span><a id="line.354">    @Override</a>
+<span class="sourceLineNo">355</span><a id="line.355">    public double getNoise(double x, double y, double z, double w) {</a>
+<span class="sourceLineNo">356</span><a id="line.356">        return valueNoise(seed, x, y, z, w) * 2 - 1;</a>
+<span class="sourceLineNo">357</span><a id="line.357">    }</a>
+<span class="sourceLineNo">358</span><a id="line.358">    @Override</a>
+<span class="sourceLineNo">359</span><a id="line.359">    public double getNoiseWithSeed(double x, double y, double z, double w, long seed) {</a>
+<span class="sourceLineNo">360</span><a id="line.360">        return valueNoise((int) (seed ^ seed &gt;&gt;&gt; 32), x, y, z, w) * 2 - 1;</a>
+<span class="sourceLineNo">361</span><a id="line.361">    }</a>
+<span class="sourceLineNo">362</span><a id="line.362">}</a>
 
 
 

@@ -612,295 +612,296 @@
 <span class="sourceLineNo">600</span><a id="line.600">     * @param a the array to replace; should usually have the same length as this data structure's size.</a>
 <span class="sourceLineNo">601</span><a id="line.601">     * @return an array of elements that should be the same as the changed array originally passed as a parameter.</a>
 <span class="sourceLineNo">602</span><a id="line.602">     */</a>
-<span class="sourceLineNo">603</span><a id="line.603">    public E[] toArray(E[] a)</a>
-<span class="sourceLineNo">604</span><a id="line.604">    {</a>
-<span class="sourceLineNo">605</span><a id="line.605">        Collection&lt;SpatialTriple&lt;I,E&gt;&gt; contents = itemMapping.values();</a>
-<span class="sourceLineNo">606</span><a id="line.606">        int i = 0;</a>
-<span class="sourceLineNo">607</span><a id="line.607">        for (SpatialTriple&lt;I,E&gt; triple : contents) {</a>
-<span class="sourceLineNo">608</span><a id="line.608">            if(i &lt; a.length)</a>
-<span class="sourceLineNo">609</span><a id="line.609">                a[i] = triple.element;</a>
-<span class="sourceLineNo">610</span><a id="line.610">            else</a>
-<span class="sourceLineNo">611</span><a id="line.611">                break;</a>
-<span class="sourceLineNo">612</span><a id="line.612">            i++;</a>
-<span class="sourceLineNo">613</span><a id="line.613">        }</a>
-<span class="sourceLineNo">614</span><a id="line.614">        return a;</a>
-<span class="sourceLineNo">615</span><a id="line.615">    }</a>
-<span class="sourceLineNo">616</span><a id="line.616"></a>
-<span class="sourceLineNo">617</span><a id="line.617">    /**</a>
-<span class="sourceLineNo">618</span><a id="line.618">     * Iterates through values in insertion order.</a>
-<span class="sourceLineNo">619</span><a id="line.619">     * @return an Iterator of generic type E</a>
-<span class="sourceLineNo">620</span><a id="line.620">     */</a>
-<span class="sourceLineNo">621</span><a id="line.621">    @Override</a>
-<span class="sourceLineNo">622</span><a id="line.622">    public Iterator&lt;E&gt; iterator()</a>
-<span class="sourceLineNo">623</span><a id="line.623">    {</a>
-<span class="sourceLineNo">624</span><a id="line.624">        final Iterator&lt;SpatialTriple&lt;I, E&gt;&gt; it = itemMapping.values().iterator();</a>
-<span class="sourceLineNo">625</span><a id="line.625">        return new Iterator&lt;E&gt;() {</a>
-<span class="sourceLineNo">626</span><a id="line.626">            @Override</a>
-<span class="sourceLineNo">627</span><a id="line.627">            public boolean hasNext() {</a>
-<span class="sourceLineNo">628</span><a id="line.628">                return it.hasNext();</a>
-<span class="sourceLineNo">629</span><a id="line.629">            }</a>
-<span class="sourceLineNo">630</span><a id="line.630"></a>
-<span class="sourceLineNo">631</span><a id="line.631">            @Override</a>
-<span class="sourceLineNo">632</span><a id="line.632">            public E next() {</a>
-<span class="sourceLineNo">633</span><a id="line.633">                SpatialTriple&lt;I,E&gt; triple = it.next();</a>
-<span class="sourceLineNo">634</span><a id="line.634">                if(triple != null)</a>
-<span class="sourceLineNo">635</span><a id="line.635">                    return triple.element;</a>
-<span class="sourceLineNo">636</span><a id="line.636">                return null;</a>
-<span class="sourceLineNo">637</span><a id="line.637">            }</a>
-<span class="sourceLineNo">638</span><a id="line.638"></a>
-<span class="sourceLineNo">639</span><a id="line.639">            @Override</a>
-<span class="sourceLineNo">640</span><a id="line.640">            public void remove() {</a>
-<span class="sourceLineNo">641</span><a id="line.641">                throw new UnsupportedOperationException();</a>
-<span class="sourceLineNo">642</span><a id="line.642">            }</a>
-<span class="sourceLineNo">643</span><a id="line.643">        };</a>
-<span class="sourceLineNo">644</span><a id="line.644">    }</a>
-<span class="sourceLineNo">645</span><a id="line.645"></a>
-<span class="sourceLineNo">646</span><a id="line.646">    /**</a>
-<span class="sourceLineNo">647</span><a id="line.647">     * Iterates through values similar to Map.Entry, but containing a Coord, I, and E value for each entry, in insertion</a>
-<span class="sourceLineNo">648</span><a id="line.648">     * order. The type is SpatialTriple, defined in a nested class.</a>
-<span class="sourceLineNo">649</span><a id="line.649">     * @return an Iterator of SpatialTriple of I, E</a>
-<span class="sourceLineNo">650</span><a id="line.650">     */</a>
-<span class="sourceLineNo">651</span><a id="line.651">    public Iterator&lt;SpatialTriple&lt;I, E&gt;&gt; tripleIterator()</a>
-<span class="sourceLineNo">652</span><a id="line.652">    {</a>
-<span class="sourceLineNo">653</span><a id="line.653">        return itemMapping.values().iterator();</a>
-<span class="sourceLineNo">654</span><a id="line.654">    }</a>
-<span class="sourceLineNo">655</span><a id="line.655">    /**</a>
-<span class="sourceLineNo">656</span><a id="line.656">     * Iterates through positions in insertion order; has less predictable iteration order than the other iterators.</a>
-<span class="sourceLineNo">657</span><a id="line.657">     * @return an Iterator of Coord</a>
-<span class="sourceLineNo">658</span><a id="line.658">     */</a>
-<span class="sourceLineNo">659</span><a id="line.659">    public Iterator&lt;Coord&gt; positionIterator()</a>
-<span class="sourceLineNo">660</span><a id="line.660">    {</a>
-<span class="sourceLineNo">661</span><a id="line.661">        return positionMapping.keySet().iterator();</a>
-<span class="sourceLineNo">662</span><a id="line.662">    }</a>
-<span class="sourceLineNo">663</span><a id="line.663">    /**</a>
-<span class="sourceLineNo">664</span><a id="line.664">     * Iterates through identity keys in insertion order.</a>
-<span class="sourceLineNo">665</span><a id="line.665">     * @return an Iterator of generic type I</a>
-<span class="sourceLineNo">666</span><a id="line.666">     */</a>
-<span class="sourceLineNo">667</span><a id="line.667">    public Iterator&lt;I&gt; identityIterator()</a>
-<span class="sourceLineNo">668</span><a id="line.668">    {</a>
-<span class="sourceLineNo">669</span><a id="line.669">        return itemMapping.keySet().iterator();</a>
-<span class="sourceLineNo">670</span><a id="line.670">    }</a>
-<span class="sourceLineNo">671</span><a id="line.671"></a>
-<span class="sourceLineNo">672</span><a id="line.672">    /**</a>
-<span class="sourceLineNo">673</span><a id="line.673">     * Iterates through positions in a rectangular region (starting at a minimum of x, y and extending to the specified</a>
-<span class="sourceLineNo">674</span><a id="line.674">     * width and height) in left-to-right, then top-to-bottom order (the same as reading a page of text).</a>
-<span class="sourceLineNo">675</span><a id="line.675">     * Any Coords this returns should be viable arguments to get() if you want a corresponding element.</a>
-<span class="sourceLineNo">676</span><a id="line.676">     * @return an Iterator of Coord</a>
-<span class="sourceLineNo">677</span><a id="line.677">     */</a>
-<span class="sourceLineNo">678</span><a id="line.678">    public Iterator&lt;Coord&gt; rectanglePositionIterator(int x, int y, int width, int height)</a>
-<span class="sourceLineNo">679</span><a id="line.679">    {</a>
-<span class="sourceLineNo">680</span><a id="line.680">        return new RectangularIterator(x, y, width, height);</a>
-<span class="sourceLineNo">681</span><a id="line.681">    }</a>
-<span class="sourceLineNo">682</span><a id="line.682"></a>
-<span class="sourceLineNo">683</span><a id="line.683">    /**</a>
-<span class="sourceLineNo">684</span><a id="line.684">     * Iterates through positions in a region defined by a Radius (starting at a minimum of x - distance, y - distance</a>
-<span class="sourceLineNo">685</span><a id="line.685">     * and extending to x + distance, y + distance but skipping any positions where the Radius considers a position</a>
-<span class="sourceLineNo">686</span><a id="line.686">     * further from x, y than distance) in left-to-right, then top-to-bottom order (the same as reading a page of text).</a>
-<span class="sourceLineNo">687</span><a id="line.687">     * You can use Radius.SQUARE to make a square region (which could also be made with rectanglePositionIterator()),</a>
-<span class="sourceLineNo">688</span><a id="line.688">     * Radius.DIAMOND to make a, well, diamond-shaped region, or Radius.CIRCLE to make a circle (which could also be</a>
-<span class="sourceLineNo">689</span><a id="line.689">     * made with circlePositionIterator).</a>
-<span class="sourceLineNo">690</span><a id="line.690">     * Any Coords this returns should be viable arguments to get() if you want a corresponding element.</a>
-<span class="sourceLineNo">691</span><a id="line.691">     * @return an Iterator of Coord</a>
-<span class="sourceLineNo">692</span><a id="line.692">     */</a>
-<span class="sourceLineNo">693</span><a id="line.693">    public Iterator&lt;Coord&gt; radiusPositionIterator(int x, int y, Radius measurement, int distance)</a>
-<span class="sourceLineNo">694</span><a id="line.694">    {</a>
-<span class="sourceLineNo">695</span><a id="line.695">        return new RadiusIterator(x, y, measurement, distance);</a>
-<span class="sourceLineNo">696</span><a id="line.696">    }</a>
-<span class="sourceLineNo">697</span><a id="line.697">    /**</a>
-<span class="sourceLineNo">698</span><a id="line.698">     * Iterates through positions in a circular region (starting at a minimum of x - distance, y - distance and</a>
-<span class="sourceLineNo">699</span><a id="line.699">     * extending to x + distance, y + distance but skipping any positions where the Euclidean distance from x,y to the</a>
-<span class="sourceLineNo">700</span><a id="line.700">     * position is more than distance) in left-to-right, then top-to-bottom order (the same as reading a page of text).</a>
-<span class="sourceLineNo">701</span><a id="line.701">     * Any Coords this returns should be viable arguments to get() if you want a corresponding element.</a>
-<span class="sourceLineNo">702</span><a id="line.702">     * @return an Iterator of Coord</a>
-<span class="sourceLineNo">703</span><a id="line.703">     */</a>
-<span class="sourceLineNo">704</span><a id="line.704">    public Iterator&lt;Coord&gt; circlePositionIterator(int x, int y, int distance)</a>
-<span class="sourceLineNo">705</span><a id="line.705">    {</a>
-<span class="sourceLineNo">706</span><a id="line.706">        return new RadiusIterator(x, y, Radius.CIRCLE, distance);</a>
-<span class="sourceLineNo">707</span><a id="line.707">    }</a>
-<span class="sourceLineNo">708</span><a id="line.708"></a>
-<span class="sourceLineNo">709</span><a id="line.709">    private class RectangularIterator implements Iterator&lt;Coord&gt;</a>
-<span class="sourceLineNo">710</span><a id="line.710">    {</a>
-<span class="sourceLineNo">711</span><a id="line.711">        int x, y, width, height, idx,</a>
-<span class="sourceLineNo">712</span><a id="line.712">                poolWidth = Coord.getCacheWidth(), poolHeight = Coord.getCacheHeight();</a>
-<span class="sourceLineNo">713</span><a id="line.713">        Set&lt;Coord&gt; positions;</a>
-<span class="sourceLineNo">714</span><a id="line.714">        Coord temp;</a>
-<span class="sourceLineNo">715</span><a id="line.715">        RectangularIterator(int x, int y, int width, int height)</a>
-<span class="sourceLineNo">716</span><a id="line.716">        {</a>
-<span class="sourceLineNo">717</span><a id="line.717">            this.x = x;</a>
-<span class="sourceLineNo">718</span><a id="line.718">            this.y = y;</a>
-<span class="sourceLineNo">719</span><a id="line.719">            this.width = width;</a>
-<span class="sourceLineNo">720</span><a id="line.720">            this.height = height;</a>
-<span class="sourceLineNo">721</span><a id="line.721">            idx = -1;</a>
-<span class="sourceLineNo">722</span><a id="line.722">            positions = positionMapping.keySet();</a>
-<span class="sourceLineNo">723</span><a id="line.723">        }</a>
-<span class="sourceLineNo">724</span><a id="line.724"></a>
-<span class="sourceLineNo">725</span><a id="line.725">        @Override</a>
-<span class="sourceLineNo">726</span><a id="line.726">        public boolean hasNext() {</a>
-<span class="sourceLineNo">727</span><a id="line.727">            if (idx &lt; width * height - 1) {</a>
-<span class="sourceLineNo">728</span><a id="line.728">                Coord t2;</a>
-<span class="sourceLineNo">729</span><a id="line.729">                int n = idx;</a>
-<span class="sourceLineNo">730</span><a id="line.730">                do {</a>
-<span class="sourceLineNo">731</span><a id="line.731">                    n = findNext(n);</a>
-<span class="sourceLineNo">732</span><a id="line.732">                    if (idx &lt; 0)</a>
-<span class="sourceLineNo">733</span><a id="line.733">                        return n &gt;= 0;</a>
-<span class="sourceLineNo">734</span><a id="line.734">                    else {</a>
-<span class="sourceLineNo">735</span><a id="line.735">                        if(x + n % width &gt;= 0 &amp;&amp; x + n % width &lt; poolWidth</a>
-<span class="sourceLineNo">736</span><a id="line.736">                                &amp;&amp; y + n / width &gt;= 0 &amp;&amp; y + n / width &lt; poolHeight)</a>
-<span class="sourceLineNo">737</span><a id="line.737">                            t2 = Coord.get(x + n % width, y + n / width);</a>
-<span class="sourceLineNo">738</span><a id="line.738">                        else t2 = Coord.get(-1, -1);</a>
-<span class="sourceLineNo">739</span><a id="line.739">                    }</a>
-<span class="sourceLineNo">740</span><a id="line.740">                } while (!positions.contains(t2));</a>
-<span class="sourceLineNo">741</span><a id="line.741">                                /* Not done &amp;&amp; has next */</a>
-<span class="sourceLineNo">742</span><a id="line.742">                return n &gt;= 0;</a>
-<span class="sourceLineNo">743</span><a id="line.743">            }</a>
-<span class="sourceLineNo">744</span><a id="line.744">            return false;</a>
-<span class="sourceLineNo">745</span><a id="line.745">        }</a>
-<span class="sourceLineNo">746</span><a id="line.746"></a>
+<span class="sourceLineNo">603</span><a id="line.603">    @SuppressWarnings("unchecked")</a>
+<span class="sourceLineNo">604</span><a id="line.604">    public E[] toArray(E[] a)</a>
+<span class="sourceLineNo">605</span><a id="line.605">    {</a>
+<span class="sourceLineNo">606</span><a id="line.606">        final int size = size();</a>
+<span class="sourceLineNo">607</span><a id="line.607">        if (a.length &lt; size) a = Arrays.copyOf(a, size);</a>
+<span class="sourceLineNo">608</span><a id="line.608">        for (int i = 0; i &lt; size; i++) {</a>
+<span class="sourceLineNo">609</span><a id="line.609">            if(i &lt; a.length)</a>
+<span class="sourceLineNo">610</span><a id="line.610">                a[i] = itemMapping.getAt(i).element;</a>
+<span class="sourceLineNo">611</span><a id="line.611">            else</a>
+<span class="sourceLineNo">612</span><a id="line.612">                break;</a>
+<span class="sourceLineNo">613</span><a id="line.613">            i++;</a>
+<span class="sourceLineNo">614</span><a id="line.614">        }</a>
+<span class="sourceLineNo">615</span><a id="line.615">        return a;</a>
+<span class="sourceLineNo">616</span><a id="line.616">    }</a>
+<span class="sourceLineNo">617</span><a id="line.617"></a>
+<span class="sourceLineNo">618</span><a id="line.618">    /**</a>
+<span class="sourceLineNo">619</span><a id="line.619">     * Iterates through values in insertion order.</a>
+<span class="sourceLineNo">620</span><a id="line.620">     * @return an Iterator of generic type E</a>
+<span class="sourceLineNo">621</span><a id="line.621">     */</a>
+<span class="sourceLineNo">622</span><a id="line.622">    @Override</a>
+<span class="sourceLineNo">623</span><a id="line.623">    public Iterator&lt;E&gt; iterator()</a>
+<span class="sourceLineNo">624</span><a id="line.624">    {</a>
+<span class="sourceLineNo">625</span><a id="line.625">        final Iterator&lt;SpatialTriple&lt;I, E&gt;&gt; it = itemMapping.values().iterator();</a>
+<span class="sourceLineNo">626</span><a id="line.626">        return new Iterator&lt;E&gt;() {</a>
+<span class="sourceLineNo">627</span><a id="line.627">            @Override</a>
+<span class="sourceLineNo">628</span><a id="line.628">            public boolean hasNext() {</a>
+<span class="sourceLineNo">629</span><a id="line.629">                return it.hasNext();</a>
+<span class="sourceLineNo">630</span><a id="line.630">            }</a>
+<span class="sourceLineNo">631</span><a id="line.631"></a>
+<span class="sourceLineNo">632</span><a id="line.632">            @Override</a>
+<span class="sourceLineNo">633</span><a id="line.633">            public E next() {</a>
+<span class="sourceLineNo">634</span><a id="line.634">                SpatialTriple&lt;I,E&gt; triple = it.next();</a>
+<span class="sourceLineNo">635</span><a id="line.635">                if(triple != null)</a>
+<span class="sourceLineNo">636</span><a id="line.636">                    return triple.element;</a>
+<span class="sourceLineNo">637</span><a id="line.637">                return null;</a>
+<span class="sourceLineNo">638</span><a id="line.638">            }</a>
+<span class="sourceLineNo">639</span><a id="line.639"></a>
+<span class="sourceLineNo">640</span><a id="line.640">            @Override</a>
+<span class="sourceLineNo">641</span><a id="line.641">            public void remove() {</a>
+<span class="sourceLineNo">642</span><a id="line.642">                throw new UnsupportedOperationException();</a>
+<span class="sourceLineNo">643</span><a id="line.643">            }</a>
+<span class="sourceLineNo">644</span><a id="line.644">        };</a>
+<span class="sourceLineNo">645</span><a id="line.645">    }</a>
+<span class="sourceLineNo">646</span><a id="line.646"></a>
+<span class="sourceLineNo">647</span><a id="line.647">    /**</a>
+<span class="sourceLineNo">648</span><a id="line.648">     * Iterates through values similar to Map.Entry, but containing a Coord, I, and E value for each entry, in insertion</a>
+<span class="sourceLineNo">649</span><a id="line.649">     * order. The type is SpatialTriple, defined in a nested class.</a>
+<span class="sourceLineNo">650</span><a id="line.650">     * @return an Iterator of SpatialTriple of I, E</a>
+<span class="sourceLineNo">651</span><a id="line.651">     */</a>
+<span class="sourceLineNo">652</span><a id="line.652">    public Iterator&lt;SpatialTriple&lt;I, E&gt;&gt; tripleIterator()</a>
+<span class="sourceLineNo">653</span><a id="line.653">    {</a>
+<span class="sourceLineNo">654</span><a id="line.654">        return itemMapping.values().iterator();</a>
+<span class="sourceLineNo">655</span><a id="line.655">    }</a>
+<span class="sourceLineNo">656</span><a id="line.656">    /**</a>
+<span class="sourceLineNo">657</span><a id="line.657">     * Iterates through positions in insertion order; has less predictable iteration order than the other iterators.</a>
+<span class="sourceLineNo">658</span><a id="line.658">     * @return an Iterator of Coord</a>
+<span class="sourceLineNo">659</span><a id="line.659">     */</a>
+<span class="sourceLineNo">660</span><a id="line.660">    public Iterator&lt;Coord&gt; positionIterator()</a>
+<span class="sourceLineNo">661</span><a id="line.661">    {</a>
+<span class="sourceLineNo">662</span><a id="line.662">        return positionMapping.keySet().iterator();</a>
+<span class="sourceLineNo">663</span><a id="line.663">    }</a>
+<span class="sourceLineNo">664</span><a id="line.664">    /**</a>
+<span class="sourceLineNo">665</span><a id="line.665">     * Iterates through identity keys in insertion order.</a>
+<span class="sourceLineNo">666</span><a id="line.666">     * @return an Iterator of generic type I</a>
+<span class="sourceLineNo">667</span><a id="line.667">     */</a>
+<span class="sourceLineNo">668</span><a id="line.668">    public Iterator&lt;I&gt; identityIterator()</a>
+<span class="sourceLineNo">669</span><a id="line.669">    {</a>
+<span class="sourceLineNo">670</span><a id="line.670">        return itemMapping.keySet().iterator();</a>
+<span class="sourceLineNo">671</span><a id="line.671">    }</a>
+<span class="sourceLineNo">672</span><a id="line.672"></a>
+<span class="sourceLineNo">673</span><a id="line.673">    /**</a>
+<span class="sourceLineNo">674</span><a id="line.674">     * Iterates through positions in a rectangular region (starting at a minimum of x, y and extending to the specified</a>
+<span class="sourceLineNo">675</span><a id="line.675">     * width and height) in left-to-right, then top-to-bottom order (the same as reading a page of text).</a>
+<span class="sourceLineNo">676</span><a id="line.676">     * Any Coords this returns should be viable arguments to get() if you want a corresponding element.</a>
+<span class="sourceLineNo">677</span><a id="line.677">     * @return an Iterator of Coord</a>
+<span class="sourceLineNo">678</span><a id="line.678">     */</a>
+<span class="sourceLineNo">679</span><a id="line.679">    public Iterator&lt;Coord&gt; rectanglePositionIterator(int x, int y, int width, int height)</a>
+<span class="sourceLineNo">680</span><a id="line.680">    {</a>
+<span class="sourceLineNo">681</span><a id="line.681">        return new RectangularIterator(x, y, width, height);</a>
+<span class="sourceLineNo">682</span><a id="line.682">    }</a>
+<span class="sourceLineNo">683</span><a id="line.683"></a>
+<span class="sourceLineNo">684</span><a id="line.684">    /**</a>
+<span class="sourceLineNo">685</span><a id="line.685">     * Iterates through positions in a region defined by a Radius (starting at a minimum of x - distance, y - distance</a>
+<span class="sourceLineNo">686</span><a id="line.686">     * and extending to x + distance, y + distance but skipping any positions where the Radius considers a position</a>
+<span class="sourceLineNo">687</span><a id="line.687">     * further from x, y than distance) in left-to-right, then top-to-bottom order (the same as reading a page of text).</a>
+<span class="sourceLineNo">688</span><a id="line.688">     * You can use Radius.SQUARE to make a square region (which could also be made with rectanglePositionIterator()),</a>
+<span class="sourceLineNo">689</span><a id="line.689">     * Radius.DIAMOND to make a, well, diamond-shaped region, or Radius.CIRCLE to make a circle (which could also be</a>
+<span class="sourceLineNo">690</span><a id="line.690">     * made with circlePositionIterator).</a>
+<span class="sourceLineNo">691</span><a id="line.691">     * Any Coords this returns should be viable arguments to get() if you want a corresponding element.</a>
+<span class="sourceLineNo">692</span><a id="line.692">     * @return an Iterator of Coord</a>
+<span class="sourceLineNo">693</span><a id="line.693">     */</a>
+<span class="sourceLineNo">694</span><a id="line.694">    public Iterator&lt;Coord&gt; radiusPositionIterator(int x, int y, Radius measurement, int distance)</a>
+<span class="sourceLineNo">695</span><a id="line.695">    {</a>
+<span class="sourceLineNo">696</span><a id="line.696">        return new RadiusIterator(x, y, measurement, distance);</a>
+<span class="sourceLineNo">697</span><a id="line.697">    }</a>
+<span class="sourceLineNo">698</span><a id="line.698">    /**</a>
+<span class="sourceLineNo">699</span><a id="line.699">     * Iterates through positions in a circular region (starting at a minimum of x - distance, y - distance and</a>
+<span class="sourceLineNo">700</span><a id="line.700">     * extending to x + distance, y + distance but skipping any positions where the Euclidean distance from x,y to the</a>
+<span class="sourceLineNo">701</span><a id="line.701">     * position is more than distance) in left-to-right, then top-to-bottom order (the same as reading a page of text).</a>
+<span class="sourceLineNo">702</span><a id="line.702">     * Any Coords this returns should be viable arguments to get() if you want a corresponding element.</a>
+<span class="sourceLineNo">703</span><a id="line.703">     * @return an Iterator of Coord</a>
+<span class="sourceLineNo">704</span><a id="line.704">     */</a>
+<span class="sourceLineNo">705</span><a id="line.705">    public Iterator&lt;Coord&gt; circlePositionIterator(int x, int y, int distance)</a>
+<span class="sourceLineNo">706</span><a id="line.706">    {</a>
+<span class="sourceLineNo">707</span><a id="line.707">        return new RadiusIterator(x, y, Radius.CIRCLE, distance);</a>
+<span class="sourceLineNo">708</span><a id="line.708">    }</a>
+<span class="sourceLineNo">709</span><a id="line.709"></a>
+<span class="sourceLineNo">710</span><a id="line.710">    private class RectangularIterator implements Iterator&lt;Coord&gt;</a>
+<span class="sourceLineNo">711</span><a id="line.711">    {</a>
+<span class="sourceLineNo">712</span><a id="line.712">        int x, y, width, height, idx,</a>
+<span class="sourceLineNo">713</span><a id="line.713">                poolWidth = Coord.getCacheWidth(), poolHeight = Coord.getCacheHeight();</a>
+<span class="sourceLineNo">714</span><a id="line.714">        Set&lt;Coord&gt; positions;</a>
+<span class="sourceLineNo">715</span><a id="line.715">        Coord temp;</a>
+<span class="sourceLineNo">716</span><a id="line.716">        RectangularIterator(int x, int y, int width, int height)</a>
+<span class="sourceLineNo">717</span><a id="line.717">        {</a>
+<span class="sourceLineNo">718</span><a id="line.718">            this.x = x;</a>
+<span class="sourceLineNo">719</span><a id="line.719">            this.y = y;</a>
+<span class="sourceLineNo">720</span><a id="line.720">            this.width = width;</a>
+<span class="sourceLineNo">721</span><a id="line.721">            this.height = height;</a>
+<span class="sourceLineNo">722</span><a id="line.722">            idx = -1;</a>
+<span class="sourceLineNo">723</span><a id="line.723">            positions = positionMapping.keySet();</a>
+<span class="sourceLineNo">724</span><a id="line.724">        }</a>
+<span class="sourceLineNo">725</span><a id="line.725"></a>
+<span class="sourceLineNo">726</span><a id="line.726">        @Override</a>
+<span class="sourceLineNo">727</span><a id="line.727">        public boolean hasNext() {</a>
+<span class="sourceLineNo">728</span><a id="line.728">            if (idx &lt; width * height - 1) {</a>
+<span class="sourceLineNo">729</span><a id="line.729">                Coord t2;</a>
+<span class="sourceLineNo">730</span><a id="line.730">                int n = idx;</a>
+<span class="sourceLineNo">731</span><a id="line.731">                do {</a>
+<span class="sourceLineNo">732</span><a id="line.732">                    n = findNext(n);</a>
+<span class="sourceLineNo">733</span><a id="line.733">                    if (idx &lt; 0)</a>
+<span class="sourceLineNo">734</span><a id="line.734">                        return n &gt;= 0;</a>
+<span class="sourceLineNo">735</span><a id="line.735">                    else {</a>
+<span class="sourceLineNo">736</span><a id="line.736">                        if(x + n % width &gt;= 0 &amp;&amp; x + n % width &lt; poolWidth</a>
+<span class="sourceLineNo">737</span><a id="line.737">                                &amp;&amp; y + n / width &gt;= 0 &amp;&amp; y + n / width &lt; poolHeight)</a>
+<span class="sourceLineNo">738</span><a id="line.738">                            t2 = Coord.get(x + n % width, y + n / width);</a>
+<span class="sourceLineNo">739</span><a id="line.739">                        else t2 = Coord.get(-1, -1);</a>
+<span class="sourceLineNo">740</span><a id="line.740">                    }</a>
+<span class="sourceLineNo">741</span><a id="line.741">                } while (!positions.contains(t2));</a>
+<span class="sourceLineNo">742</span><a id="line.742">                                /* Not done &amp;&amp; has next */</a>
+<span class="sourceLineNo">743</span><a id="line.743">                return n &gt;= 0;</a>
+<span class="sourceLineNo">744</span><a id="line.744">            }</a>
+<span class="sourceLineNo">745</span><a id="line.745">            return false;</a>
+<span class="sourceLineNo">746</span><a id="line.746">        }</a>
 <span class="sourceLineNo">747</span><a id="line.747"></a>
-<span class="sourceLineNo">748</span><a id="line.748">        @Override</a>
-<span class="sourceLineNo">749</span><a id="line.749">        public Coord next() {</a>
-<span class="sourceLineNo">750</span><a id="line.750">            do {</a>
-<span class="sourceLineNo">751</span><a id="line.751">                idx = findNext(idx);</a>
-<span class="sourceLineNo">752</span><a id="line.752">                if (idx &lt; 0)</a>
-<span class="sourceLineNo">753</span><a id="line.753">                    throw new NoSuchElementException();</a>
-<span class="sourceLineNo">754</span><a id="line.754">                if(x + idx % width &gt;= 0 &amp;&amp; x + idx % width &lt; poolWidth</a>
-<span class="sourceLineNo">755</span><a id="line.755">                        &amp;&amp; y + idx / width &gt;= 0 &amp;&amp; y + idx / width &lt; poolHeight)</a>
-<span class="sourceLineNo">756</span><a id="line.756">                    temp = Coord.get(x + idx % width, y + idx / width);</a>
-<span class="sourceLineNo">757</span><a id="line.757">                else temp = Coord.get(-1, -1);</a>
-<span class="sourceLineNo">758</span><a id="line.758">            } while (!positions.contains(temp));</a>
-<span class="sourceLineNo">759</span><a id="line.759">            return temp;</a>
-<span class="sourceLineNo">760</span><a id="line.760">        }</a>
-<span class="sourceLineNo">761</span><a id="line.761"></a>
-<span class="sourceLineNo">762</span><a id="line.762">        @Override</a>
-<span class="sourceLineNo">763</span><a id="line.763">        public void remove() {</a>
-<span class="sourceLineNo">764</span><a id="line.764">            throw new UnsupportedOperationException();</a>
-<span class="sourceLineNo">765</span><a id="line.765">        }</a>
-<span class="sourceLineNo">766</span><a id="line.766"></a>
-<span class="sourceLineNo">767</span><a id="line.767">        private int findNext(final int idx) {</a>
-<span class="sourceLineNo">768</span><a id="line.768">            if (idx &lt; 0) {</a>
-<span class="sourceLineNo">769</span><a id="line.769">                                /* First iteration */</a>
-<span class="sourceLineNo">770</span><a id="line.770">                return 0;</a>
-<span class="sourceLineNo">771</span><a id="line.771">            } else {</a>
-<span class="sourceLineNo">772</span><a id="line.772">                if (idx &gt;= width * height - 1)</a>
-<span class="sourceLineNo">773</span><a id="line.773">                {</a>
-<span class="sourceLineNo">774</span><a id="line.774">                                        /* Done iterating */</a>
-<span class="sourceLineNo">775</span><a id="line.775">                    return -1;</a>
-<span class="sourceLineNo">776</span><a id="line.776">                } else {</a>
-<span class="sourceLineNo">777</span><a id="line.777">                    return idx + 1;</a>
-<span class="sourceLineNo">778</span><a id="line.778">                }</a>
-<span class="sourceLineNo">779</span><a id="line.779">            }</a>
-<span class="sourceLineNo">780</span><a id="line.780">        }</a>
-<span class="sourceLineNo">781</span><a id="line.781">    }</a>
-<span class="sourceLineNo">782</span><a id="line.782"></a>
-<span class="sourceLineNo">783</span><a id="line.783">    private class RadiusIterator implements Iterator&lt;Coord&gt;</a>
-<span class="sourceLineNo">784</span><a id="line.784">    {</a>
-<span class="sourceLineNo">785</span><a id="line.785">        int x, y, width, height, distance, idx,</a>
-<span class="sourceLineNo">786</span><a id="line.786">                poolWidth = Coord.getCacheWidth(), poolHeight = Coord.getCacheHeight();</a>
-<span class="sourceLineNo">787</span><a id="line.787">        Set&lt;Coord&gt; positions;</a>
-<span class="sourceLineNo">788</span><a id="line.788">        Coord temp;</a>
-<span class="sourceLineNo">789</span><a id="line.789">        Radius measurement;</a>
-<span class="sourceLineNo">790</span><a id="line.790">        RadiusIterator(int x, int y, Radius measurement, int distance)</a>
-<span class="sourceLineNo">791</span><a id="line.791">        {</a>
-<span class="sourceLineNo">792</span><a id="line.792">            this.x = x;</a>
-<span class="sourceLineNo">793</span><a id="line.793">            this.y = y;</a>
-<span class="sourceLineNo">794</span><a id="line.794">            width = 1 + distance * 2;</a>
-<span class="sourceLineNo">795</span><a id="line.795">            height = 1 + distance * 2;</a>
-<span class="sourceLineNo">796</span><a id="line.796">            this.distance = distance;</a>
-<span class="sourceLineNo">797</span><a id="line.797">            this.measurement = measurement;</a>
-<span class="sourceLineNo">798</span><a id="line.798">            idx = -1;</a>
-<span class="sourceLineNo">799</span><a id="line.799">            positions = positionMapping.keySet();</a>
-<span class="sourceLineNo">800</span><a id="line.800">        }</a>
-<span class="sourceLineNo">801</span><a id="line.801"></a>
-<span class="sourceLineNo">802</span><a id="line.802">        @Override</a>
-<span class="sourceLineNo">803</span><a id="line.803">        public boolean hasNext() {</a>
-<span class="sourceLineNo">804</span><a id="line.804">            if (idx &lt; width * height - 1) {</a>
-<span class="sourceLineNo">805</span><a id="line.805">                Coord t2;</a>
-<span class="sourceLineNo">806</span><a id="line.806">                int n = idx;</a>
-<span class="sourceLineNo">807</span><a id="line.807">                do {</a>
-<span class="sourceLineNo">808</span><a id="line.808">                    n = findNext(n);</a>
-<span class="sourceLineNo">809</span><a id="line.809">                    if (idx &lt; 0)</a>
-<span class="sourceLineNo">810</span><a id="line.810">                        return n &gt;= 0;</a>
-<span class="sourceLineNo">811</span><a id="line.811">                    else {</a>
-<span class="sourceLineNo">812</span><a id="line.812">                        if(x - distance + n % width &gt;= 0 &amp;&amp; x - distance + n % width &lt; poolWidth</a>
-<span class="sourceLineNo">813</span><a id="line.813">                                &amp;&amp; y - distance + n / width &gt;= 0 &amp;&amp; y - distance + n / width &lt; poolHeight &amp;&amp;</a>
-<span class="sourceLineNo">814</span><a id="line.814">                                measurement.radius(x, y,</a>
-<span class="sourceLineNo">815</span><a id="line.815">                                        x - distance + n % width, y - distance + n / width) &lt;= distance)</a>
-<span class="sourceLineNo">816</span><a id="line.816">                            t2 = Coord.get(x - distance + n % width, y - distance + n / width);</a>
-<span class="sourceLineNo">817</span><a id="line.817">                        else t2 = Coord.get(-1, -1);</a>
-<span class="sourceLineNo">818</span><a id="line.818">                    }</a>
-<span class="sourceLineNo">819</span><a id="line.819">                } while (!positions.contains(t2));</a>
-<span class="sourceLineNo">820</span><a id="line.820">                                /* Not done &amp;&amp; has next */</a>
-<span class="sourceLineNo">821</span><a id="line.821">                return n &gt;= 0;</a>
-<span class="sourceLineNo">822</span><a id="line.822">            }</a>
-<span class="sourceLineNo">823</span><a id="line.823">            return false;</a>
-<span class="sourceLineNo">824</span><a id="line.824">        }</a>
-<span class="sourceLineNo">825</span><a id="line.825"></a>
+<span class="sourceLineNo">748</span><a id="line.748"></a>
+<span class="sourceLineNo">749</span><a id="line.749">        @Override</a>
+<span class="sourceLineNo">750</span><a id="line.750">        public Coord next() {</a>
+<span class="sourceLineNo">751</span><a id="line.751">            do {</a>
+<span class="sourceLineNo">752</span><a id="line.752">                idx = findNext(idx);</a>
+<span class="sourceLineNo">753</span><a id="line.753">                if (idx &lt; 0)</a>
+<span class="sourceLineNo">754</span><a id="line.754">                    throw new NoSuchElementException();</a>
+<span class="sourceLineNo">755</span><a id="line.755">                if(x + idx % width &gt;= 0 &amp;&amp; x + idx % width &lt; poolWidth</a>
+<span class="sourceLineNo">756</span><a id="line.756">                        &amp;&amp; y + idx / width &gt;= 0 &amp;&amp; y + idx / width &lt; poolHeight)</a>
+<span class="sourceLineNo">757</span><a id="line.757">                    temp = Coord.get(x + idx % width, y + idx / width);</a>
+<span class="sourceLineNo">758</span><a id="line.758">                else temp = Coord.get(-1, -1);</a>
+<span class="sourceLineNo">759</span><a id="line.759">            } while (!positions.contains(temp));</a>
+<span class="sourceLineNo">760</span><a id="line.760">            return temp;</a>
+<span class="sourceLineNo">761</span><a id="line.761">        }</a>
+<span class="sourceLineNo">762</span><a id="line.762"></a>
+<span class="sourceLineNo">763</span><a id="line.763">        @Override</a>
+<span class="sourceLineNo">764</span><a id="line.764">        public void remove() {</a>
+<span class="sourceLineNo">765</span><a id="line.765">            throw new UnsupportedOperationException();</a>
+<span class="sourceLineNo">766</span><a id="line.766">        }</a>
+<span class="sourceLineNo">767</span><a id="line.767"></a>
+<span class="sourceLineNo">768</span><a id="line.768">        private int findNext(final int idx) {</a>
+<span class="sourceLineNo">769</span><a id="line.769">            if (idx &lt; 0) {</a>
+<span class="sourceLineNo">770</span><a id="line.770">                                /* First iteration */</a>
+<span class="sourceLineNo">771</span><a id="line.771">                return 0;</a>
+<span class="sourceLineNo">772</span><a id="line.772">            } else {</a>
+<span class="sourceLineNo">773</span><a id="line.773">                if (idx &gt;= width * height - 1)</a>
+<span class="sourceLineNo">774</span><a id="line.774">                {</a>
+<span class="sourceLineNo">775</span><a id="line.775">                                        /* Done iterating */</a>
+<span class="sourceLineNo">776</span><a id="line.776">                    return -1;</a>
+<span class="sourceLineNo">777</span><a id="line.777">                } else {</a>
+<span class="sourceLineNo">778</span><a id="line.778">                    return idx + 1;</a>
+<span class="sourceLineNo">779</span><a id="line.779">                }</a>
+<span class="sourceLineNo">780</span><a id="line.780">            }</a>
+<span class="sourceLineNo">781</span><a id="line.781">        }</a>
+<span class="sourceLineNo">782</span><a id="line.782">    }</a>
+<span class="sourceLineNo">783</span><a id="line.783"></a>
+<span class="sourceLineNo">784</span><a id="line.784">    private class RadiusIterator implements Iterator&lt;Coord&gt;</a>
+<span class="sourceLineNo">785</span><a id="line.785">    {</a>
+<span class="sourceLineNo">786</span><a id="line.786">        int x, y, width, height, distance, idx,</a>
+<span class="sourceLineNo">787</span><a id="line.787">                poolWidth = Coord.getCacheWidth(), poolHeight = Coord.getCacheHeight();</a>
+<span class="sourceLineNo">788</span><a id="line.788">        Set&lt;Coord&gt; positions;</a>
+<span class="sourceLineNo">789</span><a id="line.789">        Coord temp;</a>
+<span class="sourceLineNo">790</span><a id="line.790">        Radius measurement;</a>
+<span class="sourceLineNo">791</span><a id="line.791">        RadiusIterator(int x, int y, Radius measurement, int distance)</a>
+<span class="sourceLineNo">792</span><a id="line.792">        {</a>
+<span class="sourceLineNo">793</span><a id="line.793">            this.x = x;</a>
+<span class="sourceLineNo">794</span><a id="line.794">            this.y = y;</a>
+<span class="sourceLineNo">795</span><a id="line.795">            width = 1 + distance * 2;</a>
+<span class="sourceLineNo">796</span><a id="line.796">            height = 1 + distance * 2;</a>
+<span class="sourceLineNo">797</span><a id="line.797">            this.distance = distance;</a>
+<span class="sourceLineNo">798</span><a id="line.798">            this.measurement = measurement;</a>
+<span class="sourceLineNo">799</span><a id="line.799">            idx = -1;</a>
+<span class="sourceLineNo">800</span><a id="line.800">            positions = positionMapping.keySet();</a>
+<span class="sourceLineNo">801</span><a id="line.801">        }</a>
+<span class="sourceLineNo">802</span><a id="line.802"></a>
+<span class="sourceLineNo">803</span><a id="line.803">        @Override</a>
+<span class="sourceLineNo">804</span><a id="line.804">        public boolean hasNext() {</a>
+<span class="sourceLineNo">805</span><a id="line.805">            if (idx &lt; width * height - 1) {</a>
+<span class="sourceLineNo">806</span><a id="line.806">                Coord t2;</a>
+<span class="sourceLineNo">807</span><a id="line.807">                int n = idx;</a>
+<span class="sourceLineNo">808</span><a id="line.808">                do {</a>
+<span class="sourceLineNo">809</span><a id="line.809">                    n = findNext(n);</a>
+<span class="sourceLineNo">810</span><a id="line.810">                    if (idx &lt; 0)</a>
+<span class="sourceLineNo">811</span><a id="line.811">                        return n &gt;= 0;</a>
+<span class="sourceLineNo">812</span><a id="line.812">                    else {</a>
+<span class="sourceLineNo">813</span><a id="line.813">                        if(x - distance + n % width &gt;= 0 &amp;&amp; x - distance + n % width &lt; poolWidth</a>
+<span class="sourceLineNo">814</span><a id="line.814">                                &amp;&amp; y - distance + n / width &gt;= 0 &amp;&amp; y - distance + n / width &lt; poolHeight &amp;&amp;</a>
+<span class="sourceLineNo">815</span><a id="line.815">                                measurement.radius(x, y,</a>
+<span class="sourceLineNo">816</span><a id="line.816">                                        x - distance + n % width, y - distance + n / width) &lt;= distance)</a>
+<span class="sourceLineNo">817</span><a id="line.817">                            t2 = Coord.get(x - distance + n % width, y - distance + n / width);</a>
+<span class="sourceLineNo">818</span><a id="line.818">                        else t2 = Coord.get(-1, -1);</a>
+<span class="sourceLineNo">819</span><a id="line.819">                    }</a>
+<span class="sourceLineNo">820</span><a id="line.820">                } while (!positions.contains(t2));</a>
+<span class="sourceLineNo">821</span><a id="line.821">                                /* Not done &amp;&amp; has next */</a>
+<span class="sourceLineNo">822</span><a id="line.822">                return n &gt;= 0;</a>
+<span class="sourceLineNo">823</span><a id="line.823">            }</a>
+<span class="sourceLineNo">824</span><a id="line.824">            return false;</a>
+<span class="sourceLineNo">825</span><a id="line.825">        }</a>
 <span class="sourceLineNo">826</span><a id="line.826"></a>
-<span class="sourceLineNo">827</span><a id="line.827">        @Override</a>
-<span class="sourceLineNo">828</span><a id="line.828">        public Coord next() {</a>
-<span class="sourceLineNo">829</span><a id="line.829">            do {</a>
-<span class="sourceLineNo">830</span><a id="line.830">                idx = findNext(idx);</a>
-<span class="sourceLineNo">831</span><a id="line.831">                if (idx &lt; 0)</a>
-<span class="sourceLineNo">832</span><a id="line.832">                    throw new NoSuchElementException();</a>
-<span class="sourceLineNo">833</span><a id="line.833">                if(x - distance + idx % width &gt;= 0 &amp;&amp; x - distance + idx % width &lt; poolWidth</a>
-<span class="sourceLineNo">834</span><a id="line.834">                        &amp;&amp; y - distance + idx / width &gt;= 0 &amp;&amp; y - distance + idx / width &lt; poolHeight &amp;&amp;</a>
-<span class="sourceLineNo">835</span><a id="line.835">                        measurement.radius(x, y,</a>
-<span class="sourceLineNo">836</span><a id="line.836">                                x - distance + idx % width, y - distance + idx / width) &lt;= distance)</a>
-<span class="sourceLineNo">837</span><a id="line.837">                    temp = Coord.get(x - distance + idx % width, y - distance + idx / width);</a>
-<span class="sourceLineNo">838</span><a id="line.838">                else temp = Coord.get(-1, -1);</a>
-<span class="sourceLineNo">839</span><a id="line.839">            } while (!positions.contains(temp));</a>
-<span class="sourceLineNo">840</span><a id="line.840">            return temp;</a>
-<span class="sourceLineNo">841</span><a id="line.841">        }</a>
-<span class="sourceLineNo">842</span><a id="line.842"></a>
-<span class="sourceLineNo">843</span><a id="line.843">        @Override</a>
-<span class="sourceLineNo">844</span><a id="line.844">        public void remove() {</a>
-<span class="sourceLineNo">845</span><a id="line.845">            throw new UnsupportedOperationException();</a>
-<span class="sourceLineNo">846</span><a id="line.846">        }</a>
-<span class="sourceLineNo">847</span><a id="line.847"></a>
-<span class="sourceLineNo">848</span><a id="line.848">        private int findNext(final int idx) {</a>
-<span class="sourceLineNo">849</span><a id="line.849">            if (idx &lt; 0) {</a>
-<span class="sourceLineNo">850</span><a id="line.850">                                /* First iteration */</a>
-<span class="sourceLineNo">851</span><a id="line.851">                return 0;</a>
-<span class="sourceLineNo">852</span><a id="line.852">            } else {</a>
-<span class="sourceLineNo">853</span><a id="line.853">                if (idx &gt;= width * height - 1)</a>
-<span class="sourceLineNo">854</span><a id="line.854">                {</a>
-<span class="sourceLineNo">855</span><a id="line.855">                                        /* Done iterating */</a>
-<span class="sourceLineNo">856</span><a id="line.856">                    return -1;</a>
-<span class="sourceLineNo">857</span><a id="line.857">                } else {</a>
-<span class="sourceLineNo">858</span><a id="line.858">                    return idx + 1;</a>
-<span class="sourceLineNo">859</span><a id="line.859">                }</a>
-<span class="sourceLineNo">860</span><a id="line.860">            }</a>
-<span class="sourceLineNo">861</span><a id="line.861">        }</a>
-<span class="sourceLineNo">862</span><a id="line.862">    }</a>
-<span class="sourceLineNo">863</span><a id="line.863"></a>
-<span class="sourceLineNo">864</span><a id="line.864">    @Override</a>
-<span class="sourceLineNo">865</span><a id="line.865">    public boolean equals(Object o) {</a>
-<span class="sourceLineNo">866</span><a id="line.866">        if (this == o) return true;</a>
-<span class="sourceLineNo">867</span><a id="line.867">        if (o == null || getClass() != o.getClass()) return false;</a>
-<span class="sourceLineNo">868</span><a id="line.868"></a>
-<span class="sourceLineNo">869</span><a id="line.869">        SpatialMap&lt;?, ?&gt; that = (SpatialMap&lt;?, ?&gt;) o;</a>
-<span class="sourceLineNo">870</span><a id="line.870"></a>
-<span class="sourceLineNo">871</span><a id="line.871">        if (itemMapping != null ? !itemMapping.equals(that.itemMapping) : that.itemMapping != null) return false;</a>
-<span class="sourceLineNo">872</span><a id="line.872">        return positionMapping != null ? positionMapping.equals(that.positionMapping) : that.positionMapping == null;</a>
-<span class="sourceLineNo">873</span><a id="line.873"></a>
-<span class="sourceLineNo">874</span><a id="line.874">    }</a>
-<span class="sourceLineNo">875</span><a id="line.875"></a>
-<span class="sourceLineNo">876</span><a id="line.876">    @Override</a>
-<span class="sourceLineNo">877</span><a id="line.877">    public int hashCode() {</a>
-<span class="sourceLineNo">878</span><a id="line.878">        int result = itemMapping != null ? itemMapping.hashCode() : 0;</a>
-<span class="sourceLineNo">879</span><a id="line.879">        result = 31 * result + (positionMapping != null ? positionMapping.hashCode() : 0);</a>
-<span class="sourceLineNo">880</span><a id="line.880">        return result;</a>
-<span class="sourceLineNo">881</span><a id="line.881">    }</a>
-<span class="sourceLineNo">882</span><a id="line.882"></a>
-<span class="sourceLineNo">883</span><a id="line.883">    @Override</a>
-<span class="sourceLineNo">884</span><a id="line.884">    public String toString() {</a>
-<span class="sourceLineNo">885</span><a id="line.885">        return "SpatialMap{" +</a>
-<span class="sourceLineNo">886</span><a id="line.886">                "itemMapping=" + itemMapping +</a>
-<span class="sourceLineNo">887</span><a id="line.887">                ", positionMapping=" + positionMapping +</a>
-<span class="sourceLineNo">888</span><a id="line.888">                '}';</a>
-<span class="sourceLineNo">889</span><a id="line.889">    }</a>
-<span class="sourceLineNo">890</span><a id="line.890"></a>
-<span class="sourceLineNo">891</span><a id="line.891">}</a>
+<span class="sourceLineNo">827</span><a id="line.827"></a>
+<span class="sourceLineNo">828</span><a id="line.828">        @Override</a>
+<span class="sourceLineNo">829</span><a id="line.829">        public Coord next() {</a>
+<span class="sourceLineNo">830</span><a id="line.830">            do {</a>
+<span class="sourceLineNo">831</span><a id="line.831">                idx = findNext(idx);</a>
+<span class="sourceLineNo">832</span><a id="line.832">                if (idx &lt; 0)</a>
+<span class="sourceLineNo">833</span><a id="line.833">                    throw new NoSuchElementException();</a>
+<span class="sourceLineNo">834</span><a id="line.834">                if(x - distance + idx % width &gt;= 0 &amp;&amp; x - distance + idx % width &lt; poolWidth</a>
+<span class="sourceLineNo">835</span><a id="line.835">                        &amp;&amp; y - distance + idx / width &gt;= 0 &amp;&amp; y - distance + idx / width &lt; poolHeight &amp;&amp;</a>
+<span class="sourceLineNo">836</span><a id="line.836">                        measurement.radius(x, y,</a>
+<span class="sourceLineNo">837</span><a id="line.837">                                x - distance + idx % width, y - distance + idx / width) &lt;= distance)</a>
+<span class="sourceLineNo">838</span><a id="line.838">                    temp = Coord.get(x - distance + idx % width, y - distance + idx / width);</a>
+<span class="sourceLineNo">839</span><a id="line.839">                else temp = Coord.get(-1, -1);</a>
+<span class="sourceLineNo">840</span><a id="line.840">            } while (!positions.contains(temp));</a>
+<span class="sourceLineNo">841</span><a id="line.841">            return temp;</a>
+<span class="sourceLineNo">842</span><a id="line.842">        }</a>
+<span class="sourceLineNo">843</span><a id="line.843"></a>
+<span class="sourceLineNo">844</span><a id="line.844">        @Override</a>
+<span class="sourceLineNo">845</span><a id="line.845">        public void remove() {</a>
+<span class="sourceLineNo">846</span><a id="line.846">            throw new UnsupportedOperationException();</a>
+<span class="sourceLineNo">847</span><a id="line.847">        }</a>
+<span class="sourceLineNo">848</span><a id="line.848"></a>
+<span class="sourceLineNo">849</span><a id="line.849">        private int findNext(final int idx) {</a>
+<span class="sourceLineNo">850</span><a id="line.850">            if (idx &lt; 0) {</a>
+<span class="sourceLineNo">851</span><a id="line.851">                                /* First iteration */</a>
+<span class="sourceLineNo">852</span><a id="line.852">                return 0;</a>
+<span class="sourceLineNo">853</span><a id="line.853">            } else {</a>
+<span class="sourceLineNo">854</span><a id="line.854">                if (idx &gt;= width * height - 1)</a>
+<span class="sourceLineNo">855</span><a id="line.855">                {</a>
+<span class="sourceLineNo">856</span><a id="line.856">                                        /* Done iterating */</a>
+<span class="sourceLineNo">857</span><a id="line.857">                    return -1;</a>
+<span class="sourceLineNo">858</span><a id="line.858">                } else {</a>
+<span class="sourceLineNo">859</span><a id="line.859">                    return idx + 1;</a>
+<span class="sourceLineNo">860</span><a id="line.860">                }</a>
+<span class="sourceLineNo">861</span><a id="line.861">            }</a>
+<span class="sourceLineNo">862</span><a id="line.862">        }</a>
+<span class="sourceLineNo">863</span><a id="line.863">    }</a>
+<span class="sourceLineNo">864</span><a id="line.864"></a>
+<span class="sourceLineNo">865</span><a id="line.865">    @Override</a>
+<span class="sourceLineNo">866</span><a id="line.866">    public boolean equals(Object o) {</a>
+<span class="sourceLineNo">867</span><a id="line.867">        if (this == o) return true;</a>
+<span class="sourceLineNo">868</span><a id="line.868">        if (o == null || getClass() != o.getClass()) return false;</a>
+<span class="sourceLineNo">869</span><a id="line.869"></a>
+<span class="sourceLineNo">870</span><a id="line.870">        SpatialMap&lt;?, ?&gt; that = (SpatialMap&lt;?, ?&gt;) o;</a>
+<span class="sourceLineNo">871</span><a id="line.871"></a>
+<span class="sourceLineNo">872</span><a id="line.872">        if (itemMapping != null ? !itemMapping.equals(that.itemMapping) : that.itemMapping != null) return false;</a>
+<span class="sourceLineNo">873</span><a id="line.873">        return positionMapping != null ? positionMapping.equals(that.positionMapping) : that.positionMapping == null;</a>
+<span class="sourceLineNo">874</span><a id="line.874"></a>
+<span class="sourceLineNo">875</span><a id="line.875">    }</a>
+<span class="sourceLineNo">876</span><a id="line.876"></a>
+<span class="sourceLineNo">877</span><a id="line.877">    @Override</a>
+<span class="sourceLineNo">878</span><a id="line.878">    public int hashCode() {</a>
+<span class="sourceLineNo">879</span><a id="line.879">        int result = itemMapping != null ? itemMapping.hashCode() : 0;</a>
+<span class="sourceLineNo">880</span><a id="line.880">        result = 31 * result + (positionMapping != null ? positionMapping.hashCode() : 0);</a>
+<span class="sourceLineNo">881</span><a id="line.881">        return result;</a>
+<span class="sourceLineNo">882</span><a id="line.882">    }</a>
+<span class="sourceLineNo">883</span><a id="line.883"></a>
+<span class="sourceLineNo">884</span><a id="line.884">    @Override</a>
+<span class="sourceLineNo">885</span><a id="line.885">    public String toString() {</a>
+<span class="sourceLineNo">886</span><a id="line.886">        return "SpatialMap{" +</a>
+<span class="sourceLineNo">887</span><a id="line.887">                "itemMapping=" + itemMapping +</a>
+<span class="sourceLineNo">888</span><a id="line.888">                ", positionMapping=" + positionMapping +</a>
+<span class="sourceLineNo">889</span><a id="line.889">                '}';</a>
+<span class="sourceLineNo">890</span><a id="line.890">    }</a>
+<span class="sourceLineNo">891</span><a id="line.891"></a>
+<span class="sourceLineNo">892</span><a id="line.892">}</a>
 
 
 

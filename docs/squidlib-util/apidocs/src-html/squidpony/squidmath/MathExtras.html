@@ -301,7 +301,70 @@
 <span class="sourceLineNo">289</span><a id="line.289">        x *= 2 - a * x;        // 80 -- 64 low bits</a>
 <span class="sourceLineNo">290</span><a id="line.290">        return x;</a>
 <span class="sourceLineNo">291</span><a id="line.291">    }</a>
-<span class="sourceLineNo">292</span><a id="line.292">}</a>
+<span class="sourceLineNo">292</span><a id="line.292"></a>
+<span class="sourceLineNo">293</span><a id="line.293">    /**</a>
+<span class="sourceLineNo">294</span><a id="line.294">     * A way of taking a double in the (0.0, 1.0) range and mapping it to a Gaussian or normal distribution, so high</a>
+<span class="sourceLineNo">295</span><a id="line.295">     * inputs correspond to high outputs, and similarly for the low range. This is centered on 0.0 and its standard</a>
+<span class="sourceLineNo">296</span><a id="line.296">     * deviation seems to be 1.0 (the same as {@link java.util.Random#nextGaussian()}). If this is given an input of 0.0</a>
+<span class="sourceLineNo">297</span><a id="line.297">     * or less, it returns negative infinity; if it is given an input of 1.0 or more, it returns positive infinity. If</a>
+<span class="sourceLineNo">298</span><a id="line.298">     * given NaN, it returns NaN. It uses an algorithm by Peter John Acklam, as implemented by Sherali Karimov.</a>
+<span class="sourceLineNo">299</span><a id="line.299">      &lt;a href="https://web.archive.org/web/20150910002142/http://home.online.no/~pjacklam/notes/invnorm/impl/karimov/StatUtil.java"&gt;Original source&lt;/a&gt;.</a>
+<span class="sourceLineNo">300</span><a id="line.300">     * &lt;a href="https://web.archive.org/web/20151030215612/http://home.online.no/~pjacklam/notes/invnorm/"&gt;Information on the algorithm&lt;/a&gt;.</a>
+<span class="sourceLineNo">301</span><a id="line.301">     * &lt;a href="https://en.wikipedia.org/wiki/Probit_function"&gt;Wikipedia's page on the probit function&lt;/a&gt; may help, but</a>
+<span class="sourceLineNo">302</span><a id="line.302">     * is more likely to just be confusing.</a>
+<span class="sourceLineNo">303</span><a id="line.303">     * &lt;br&gt;</a>
+<span class="sourceLineNo">304</span><a id="line.304">     * This can be used both as an optimization for generating Gaussian random values, and as a way of generating</a>
+<span class="sourceLineNo">305</span><a id="line.305">     * Gaussian values that match a pattern present in the inputs (which you could have by using a sub-random sequence</a>
+<span class="sourceLineNo">306</span><a id="line.306">     * as the input, such as those produced by {@link VanDerCorputQRNG#determine(int, int)} or the R2 sequence).</a>
+<span class="sourceLineNo">307</span><a id="line.307">     * @param d should be between 0 and 1, exclusive, but other values are tolerated (they return infinite results)</a>
+<span class="sourceLineNo">308</span><a id="line.308">     * @return a normal-distributed double centered on 0.0; may be infinite</a>
+<span class="sourceLineNo">309</span><a id="line.309">     */</a>
+<span class="sourceLineNo">310</span><a id="line.310">    @SuppressWarnings("divzero") // This can legitimately return infinite doubles, which it produces with zero division.</a>
+<span class="sourceLineNo">311</span><a id="line.311">    public static double probit(final double d) {</a>
+<span class="sourceLineNo">312</span><a id="line.312">        if (d &lt;= 0 || d &gt;= 1) {</a>
+<span class="sourceLineNo">313</span><a id="line.313">            return (d - 0.5) / 0.0;</a>
+<span class="sourceLineNo">314</span><a id="line.314">        }</a>
+<span class="sourceLineNo">315</span><a id="line.315">        // Rational approximation for lower region:</a>
+<span class="sourceLineNo">316</span><a id="line.316">        else if (d &lt; 0.02425) {</a>
+<span class="sourceLineNo">317</span><a id="line.317">            final double q = Math.sqrt(-2.0 * Math.log(d));</a>
+<span class="sourceLineNo">318</span><a id="line.318">            return (((((-7.784894002430293e-03 * q + -3.223964580411365e-01) * q + -2.400758277161838e+00) * q + -2.549732539343734e+00) * q + 4.374664141464968e+00) * q + 2.938163982698783e+00)</a>
+<span class="sourceLineNo">319</span><a id="line.319">                    / ((((7.784695709041462e-03 * q + 3.224671290700398e-01) * q + 2.445134137142996e+00) * q + 3.754408661907416e+00) * q + 1.0);</a>
+<span class="sourceLineNo">320</span><a id="line.320">        }</a>
+<span class="sourceLineNo">321</span><a id="line.321">        // Rational approximation for upper region:</a>
+<span class="sourceLineNo">322</span><a id="line.322">        else if (0.97575 &lt; d) {</a>
+<span class="sourceLineNo">323</span><a id="line.323">            final double q = Math.sqrt(-2.0 * Math.log(1 - d));</a>
+<span class="sourceLineNo">324</span><a id="line.324">            return -(((((-7.784894002430293e-03 * q + -3.223964580411365e-01) * q + -2.400758277161838e+00) * q + -2.549732539343734e+00) * q + 4.374664141464968e+00) * q + 2.938163982698783e+00)</a>
+<span class="sourceLineNo">325</span><a id="line.325">                    / ((((7.784695709041462e-03 * q + 3.224671290700398e-01) * q + 2.445134137142996e+00) * q + 3.754408661907416e+00) * q + 1.0);</a>
+<span class="sourceLineNo">326</span><a id="line.326">        }</a>
+<span class="sourceLineNo">327</span><a id="line.327">        // Rational approximation for central region:</a>
+<span class="sourceLineNo">328</span><a id="line.328">        else {</a>
+<span class="sourceLineNo">329</span><a id="line.329">            final double q = d - 0.5;</a>
+<span class="sourceLineNo">330</span><a id="line.330">            final double r = q * q;</a>
+<span class="sourceLineNo">331</span><a id="line.331">            return (((((-3.969683028665376e+01 * r + 2.209460984245205e+02) * r + -2.759285104469687e+02) * r + 1.383577518672690e+02) * r + -3.066479806614716e+01) * r + 2.506628277459239e+00) * q</a>
+<span class="sourceLineNo">332</span><a id="line.332">                    / (((((-5.447609879822406e+01 * r + 1.615858368580409e+02) * r + -1.556989798598866e+02) * r + 6.680131188771972e+01) * r + -1.328068155288572e+01) * r + 1.0);</a>
+<span class="sourceLineNo">333</span><a id="line.333">        }</a>
+<span class="sourceLineNo">334</span><a id="line.334">    }</a>
+<span class="sourceLineNo">335</span><a id="line.335"></a>
+<span class="sourceLineNo">336</span><a id="line.336">    /**</a>
+<span class="sourceLineNo">337</span><a id="line.337">     * Integer square root (using floor), maintaining correct results even for very large {@code long} values. This</a>
+<span class="sourceLineNo">338</span><a id="line.338">     * version treats negative inputs as unsigned and returns positive square roots for them (these are usually large).</a>
+<span class="sourceLineNo">339</span><a id="line.339">     * &lt;br&gt;</a>
+<span class="sourceLineNo">340</span><a id="line.340">     * This is based on &lt;a href="https://github.com/python/cpython/pull/13244"&gt;code recently added to Python&lt;/a&gt;, but</a>
+<span class="sourceLineNo">341</span><a id="line.341">     * isn't identical. Notably, this doesn't branch except in the for loop, and it handles negative inputs differently.</a>
+<span class="sourceLineNo">342</span><a id="line.342">     * @param n a {@code long} value that will be treated as if unsigned</a>
+<span class="sourceLineNo">343</span><a id="line.343">     * @return the square root of n, rounded down to the next lower {@code long} if the result isn't already a {@code long}</a>
+<span class="sourceLineNo">344</span><a id="line.344">     */</a>
+<span class="sourceLineNo">345</span><a id="line.345">    public static long isqrt(final long n) {</a>
+<span class="sourceLineNo">346</span><a id="line.346">        final int c = 63 - Long.numberOfLeadingZeros(n) &gt;&gt; 1;</a>
+<span class="sourceLineNo">347</span><a id="line.347">        long a = 1, d = 0, e;</a>
+<span class="sourceLineNo">348</span><a id="line.348">        for(int s = 31 &amp; 32 - Integer.numberOfLeadingZeros(c); s &gt; 0;) {</a>
+<span class="sourceLineNo">349</span><a id="line.349">            e = d;</a>
+<span class="sourceLineNo">350</span><a id="line.350">            d = c &gt;&gt;&gt; --s;</a>
+<span class="sourceLineNo">351</span><a id="line.351">            a = (a &lt;&lt; d - e - 1) + (n &gt;&gt;&gt; c + c - e - d + 1) / a;</a>
+<span class="sourceLineNo">352</span><a id="line.352">        }</a>
+<span class="sourceLineNo">353</span><a id="line.353">        return a - (n - a * a &gt;&gt;&gt; 63);</a>
+<span class="sourceLineNo">354</span><a id="line.354">    }</a>
+<span class="sourceLineNo">355</span><a id="line.355">}</a>
 
 
 

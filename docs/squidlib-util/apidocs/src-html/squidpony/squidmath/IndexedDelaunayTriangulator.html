@@ -336,55 +336,57 @@
 <span class="sourceLineNo">324</span><a id="line.324">                originalIndices[up / 2] = tempIndex;</a>
 <span class="sourceLineNo">325</span><a id="line.325">            }</a>
 <span class="sourceLineNo">326</span><a id="line.326">        }</a>
-<span class="sourceLineNo">327</span><a id="line.327">        values[lower] = values[up];</a>
-<span class="sourceLineNo">328</span><a id="line.328">        values[up] = value;</a>
-<span class="sourceLineNo">329</span><a id="line.329"></a>
-<span class="sourceLineNo">330</span><a id="line.330">        tempValue = values[lower + 1];</a>
-<span class="sourceLineNo">331</span><a id="line.331">        values[lower + 1] = values[up + 1];</a>
-<span class="sourceLineNo">332</span><a id="line.332">        values[up + 1] = tempValue;</a>
-<span class="sourceLineNo">333</span><a id="line.333"></a>
-<span class="sourceLineNo">334</span><a id="line.334">        tempIndex = originalIndices[lower / 2];</a>
-<span class="sourceLineNo">335</span><a id="line.335">        originalIndices[lower / 2] = originalIndices[up / 2];</a>
-<span class="sourceLineNo">336</span><a id="line.336">        originalIndices[up / 2] = tempIndex;</a>
-<span class="sourceLineNo">337</span><a id="line.337">        return up;</a>
-<span class="sourceLineNo">338</span><a id="line.338">    }</a>
-<span class="sourceLineNo">339</span><a id="line.339"></a>
-<span class="sourceLineNo">340</span><a id="line.340">    /** Removes all triangles with a centroid outside the specified hull, which may be concave. Note some triangulations may have</a>
-<span class="sourceLineNo">341</span><a id="line.341">     * triangles whose centroid is inside the hull but a portion is outside. */</a>
-<span class="sourceLineNo">342</span><a id="line.342">    public void trim (IntVLA triangles, double[] points, double[] hull, int offset, int count) {</a>
-<span class="sourceLineNo">343</span><a id="line.343">        int[] trianglesArray = triangles.items;</a>
-<span class="sourceLineNo">344</span><a id="line.344">        for (int i = triangles.size - 1; i &gt;= 0; i -= 3) {</a>
-<span class="sourceLineNo">345</span><a id="line.345">            int p1 = trianglesArray[i - 2] * 2;</a>
-<span class="sourceLineNo">346</span><a id="line.346">            int p2 = trianglesArray[i - 1] * 2;</a>
-<span class="sourceLineNo">347</span><a id="line.347">            int p3 = trianglesArray[i] * 2;</a>
-<span class="sourceLineNo">348</span><a id="line.348">            double centroidX = (points[p1] + points[p2] + points[p3]) / 3.0;</a>
-<span class="sourceLineNo">349</span><a id="line.349">            double centroidY = (points[p1+1] + points[p2+1] + points[p3+1]) / 3.0;</a>
-<span class="sourceLineNo">350</span><a id="line.350">            if (!isPointInPolygon(hull, offset, count, centroidX, centroidY)) {</a>
-<span class="sourceLineNo">351</span><a id="line.351">                trianglesArray[i] = trianglesArray[--triangles.size];</a>
-<span class="sourceLineNo">352</span><a id="line.352">                trianglesArray[i - 1] = trianglesArray[--triangles.size];</a>
-<span class="sourceLineNo">353</span><a id="line.353">                trianglesArray[i - 2] = trianglesArray[--triangles.size];</a>
-<span class="sourceLineNo">354</span><a id="line.354">            }</a>
-<span class="sourceLineNo">355</span><a id="line.355">        }</a>
-<span class="sourceLineNo">356</span><a id="line.356">    }</a>
-<span class="sourceLineNo">357</span><a id="line.357">    /** Returns true if the specified point is in the polygon.</a>
-<span class="sourceLineNo">358</span><a id="line.358">     * @param offset Starting polygon index.</a>
-<span class="sourceLineNo">359</span><a id="line.359">     * @param count Number of array indices to use after offset. */</a>
-<span class="sourceLineNo">360</span><a id="line.360">    public static boolean isPointInPolygon (double[] polygon, int offset, int count, double x, double y) {</a>
-<span class="sourceLineNo">361</span><a id="line.361">        boolean oddNodes = false;</a>
-<span class="sourceLineNo">362</span><a id="line.362">        int j = offset + count - 2;</a>
-<span class="sourceLineNo">363</span><a id="line.363">        for (int i = offset, n = j; i &lt;= n; i += 2) {</a>
-<span class="sourceLineNo">364</span><a id="line.364">            double yi = polygon[i + 1];</a>
-<span class="sourceLineNo">365</span><a id="line.365">            double yj = polygon[j + 1];</a>
-<span class="sourceLineNo">366</span><a id="line.366">            if ((yi &lt; y &amp;&amp; yj &gt;= y) || (yj &lt; y &amp;&amp; yi &gt;= y)) {</a>
-<span class="sourceLineNo">367</span><a id="line.367">                double xi = polygon[i];</a>
-<span class="sourceLineNo">368</span><a id="line.368">                if (xi + (y - yi) / (yj - yi) * (polygon[j] - xi) &lt; x) oddNodes = !oddNodes;</a>
-<span class="sourceLineNo">369</span><a id="line.369">            }</a>
-<span class="sourceLineNo">370</span><a id="line.370">            j = i;</a>
-<span class="sourceLineNo">371</span><a id="line.371">        }</a>
-<span class="sourceLineNo">372</span><a id="line.372">        return oddNodes;</a>
-<span class="sourceLineNo">373</span><a id="line.373">    }</a>
-<span class="sourceLineNo">374</span><a id="line.374">}</a>
-<span class="sourceLineNo">375</span><a id="line.375"></a>
+<span class="sourceLineNo">327</span><a id="line.327">        if(value &gt; values[up]) {</a>
+<span class="sourceLineNo">328</span><a id="line.328">            values[lower] = values[up];</a>
+<span class="sourceLineNo">329</span><a id="line.329">            values[up] = value;</a>
+<span class="sourceLineNo">330</span><a id="line.330"></a>
+<span class="sourceLineNo">331</span><a id="line.331">            tempValue = values[lower + 1];</a>
+<span class="sourceLineNo">332</span><a id="line.332">            values[lower + 1] = values[up + 1];</a>
+<span class="sourceLineNo">333</span><a id="line.333">            values[up + 1] = tempValue;</a>
+<span class="sourceLineNo">334</span><a id="line.334"></a>
+<span class="sourceLineNo">335</span><a id="line.335">            tempIndex = originalIndices[lower / 2];</a>
+<span class="sourceLineNo">336</span><a id="line.336">            originalIndices[lower / 2] = originalIndices[up / 2];</a>
+<span class="sourceLineNo">337</span><a id="line.337">            originalIndices[up / 2] = tempIndex;</a>
+<span class="sourceLineNo">338</span><a id="line.338">        }</a>
+<span class="sourceLineNo">339</span><a id="line.339">        return up;</a>
+<span class="sourceLineNo">340</span><a id="line.340">    }</a>
+<span class="sourceLineNo">341</span><a id="line.341"></a>
+<span class="sourceLineNo">342</span><a id="line.342">    /** Removes all triangles with a centroid outside the specified hull, which may be concave. Note some triangulations may have</a>
+<span class="sourceLineNo">343</span><a id="line.343">     * triangles whose centroid is inside the hull but a portion is outside. */</a>
+<span class="sourceLineNo">344</span><a id="line.344">    public void trim (IntVLA triangles, double[] points, double[] hull, int offset, int count) {</a>
+<span class="sourceLineNo">345</span><a id="line.345">        int[] trianglesArray = triangles.items;</a>
+<span class="sourceLineNo">346</span><a id="line.346">        for (int i = triangles.size - 1; i &gt;= 0; i -= 3) {</a>
+<span class="sourceLineNo">347</span><a id="line.347">            int p1 = trianglesArray[i - 2] * 2;</a>
+<span class="sourceLineNo">348</span><a id="line.348">            int p2 = trianglesArray[i - 1] * 2;</a>
+<span class="sourceLineNo">349</span><a id="line.349">            int p3 = trianglesArray[i] * 2;</a>
+<span class="sourceLineNo">350</span><a id="line.350">            double centroidX = (points[p1] + points[p2] + points[p3]) / 3.0;</a>
+<span class="sourceLineNo">351</span><a id="line.351">            double centroidY = (points[p1+1] + points[p2+1] + points[p3+1]) / 3.0;</a>
+<span class="sourceLineNo">352</span><a id="line.352">            if (!isPointInPolygon(hull, offset, count, centroidX, centroidY)) {</a>
+<span class="sourceLineNo">353</span><a id="line.353">                trianglesArray[i] = trianglesArray[--triangles.size];</a>
+<span class="sourceLineNo">354</span><a id="line.354">                trianglesArray[i - 1] = trianglesArray[--triangles.size];</a>
+<span class="sourceLineNo">355</span><a id="line.355">                trianglesArray[i - 2] = trianglesArray[--triangles.size];</a>
+<span class="sourceLineNo">356</span><a id="line.356">            }</a>
+<span class="sourceLineNo">357</span><a id="line.357">        }</a>
+<span class="sourceLineNo">358</span><a id="line.358">    }</a>
+<span class="sourceLineNo">359</span><a id="line.359">    /** Returns true if the specified point is in the polygon.</a>
+<span class="sourceLineNo">360</span><a id="line.360">     * @param offset Starting polygon index.</a>
+<span class="sourceLineNo">361</span><a id="line.361">     * @param count Number of array indices to use after offset. */</a>
+<span class="sourceLineNo">362</span><a id="line.362">    public static boolean isPointInPolygon (double[] polygon, int offset, int count, double x, double y) {</a>
+<span class="sourceLineNo">363</span><a id="line.363">        boolean oddNodes = false;</a>
+<span class="sourceLineNo">364</span><a id="line.364">        int j = offset + count - 2;</a>
+<span class="sourceLineNo">365</span><a id="line.365">        for (int i = offset, n = j; i &lt;= n; i += 2) {</a>
+<span class="sourceLineNo">366</span><a id="line.366">            double yi = polygon[i + 1];</a>
+<span class="sourceLineNo">367</span><a id="line.367">            double yj = polygon[j + 1];</a>
+<span class="sourceLineNo">368</span><a id="line.368">            if ((yi &lt; y &amp;&amp; yj &gt;= y) || (yj &lt; y &amp;&amp; yi &gt;= y)) {</a>
+<span class="sourceLineNo">369</span><a id="line.369">                double xi = polygon[i];</a>
+<span class="sourceLineNo">370</span><a id="line.370">                if (xi + (y - yi) / (yj - yi) * (polygon[j] - xi) &lt; x) oddNodes = !oddNodes;</a>
+<span class="sourceLineNo">371</span><a id="line.371">            }</a>
+<span class="sourceLineNo">372</span><a id="line.372">            j = i;</a>
+<span class="sourceLineNo">373</span><a id="line.373">        }</a>
+<span class="sourceLineNo">374</span><a id="line.374">        return oddNodes;</a>
+<span class="sourceLineNo">375</span><a id="line.375">    }</a>
+<span class="sourceLineNo">376</span><a id="line.376">}</a>
+<span class="sourceLineNo">377</span><a id="line.377"></a>
 
 
 

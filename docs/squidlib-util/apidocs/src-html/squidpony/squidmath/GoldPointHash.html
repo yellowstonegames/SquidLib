@@ -41,286 +41,307 @@
 <span class="sourceLineNo">029</span><a id="line.29">    }</a>
 <span class="sourceLineNo">030</span><a id="line.30"></a>
 <span class="sourceLineNo">031</span><a id="line.31">    @Override</a>
-<span class="sourceLineNo">032</span><a id="line.32">    public int hashWithState(int x, int y, int z, int w, int u, int v, int state) {</a>
-<span class="sourceLineNo">033</span><a id="line.33">        return hashAll(x, y, z, w, u, v, state);</a>
+<span class="sourceLineNo">032</span><a id="line.32">    public int hashWithState(int x, int y, int z, int w, int u, int state) {</a>
+<span class="sourceLineNo">033</span><a id="line.33">        return hashAll(x, y, z, w, u, state);</a>
 <span class="sourceLineNo">034</span><a id="line.34">    }</a>
 <span class="sourceLineNo">035</span><a id="line.35"></a>
-<span class="sourceLineNo">036</span><a id="line.36">    /**</a>
-<span class="sourceLineNo">037</span><a id="line.37">     * A 32-bit-result point hash that uses multiplication with long constants.</a>
-<span class="sourceLineNo">038</span><a id="line.38">     * @param x x position, as an int</a>
-<span class="sourceLineNo">039</span><a id="line.39">     * @param y y position, as an int</a>
-<span class="sourceLineNo">040</span><a id="line.40">     * @param s any int, a seed to be able to produce many hashes for a given point</a>
-<span class="sourceLineNo">041</span><a id="line.41">     * @return 32-bit hash of the x,y point with the given state s</a>
-<span class="sourceLineNo">042</span><a id="line.42">     */</a>
-<span class="sourceLineNo">043</span><a id="line.43">    public static int hashAll(int x, int y, int s) {</a>
-<span class="sourceLineNo">044</span><a id="line.44">        return (int)((0xD1B54A32D192ED03L * x + 0xABC98388FB8FAC03L * y + -0x8CB92BA72F3D8DD7L * s ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L &gt;&gt;&gt; 32);</a>
-<span class="sourceLineNo">045</span><a id="line.45">    }</a>
-<span class="sourceLineNo">046</span><a id="line.46">    /**</a>
-<span class="sourceLineNo">047</span><a id="line.47">     * A 32-bit-result point hash that uses multiplication with long constants.</a>
-<span class="sourceLineNo">048</span><a id="line.48">     * @param x x position, as an int</a>
-<span class="sourceLineNo">049</span><a id="line.49">     * @param y y position, as an int</a>
-<span class="sourceLineNo">050</span><a id="line.50">     * @param z z position, as an int</a>
-<span class="sourceLineNo">051</span><a id="line.51">     * @param s any int, a seed to be able to produce many hashes for a given point</a>
-<span class="sourceLineNo">052</span><a id="line.52">     * @return 32-bit hash of the x,y,z point with the given state s</a>
-<span class="sourceLineNo">053</span><a id="line.53">     */</a>
-<span class="sourceLineNo">054</span><a id="line.54">    public static int hashAll(int x, int y, int z, int s) {</a>
-<span class="sourceLineNo">055</span><a id="line.55">        return (int)((0xDB4F0B9175AE2165L * x + 0xBBE0563303A4615FL * y + -0xA0F2EC75A1FE1575L * z + 0x89E182857D9ED689L * s ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L &gt;&gt;&gt; 32);</a>
-<span class="sourceLineNo">056</span><a id="line.56">    }</a>
-<span class="sourceLineNo">057</span><a id="line.57"></a>
-<span class="sourceLineNo">058</span><a id="line.58">    /**</a>
-<span class="sourceLineNo">059</span><a id="line.59">     * A 32-bit-result point hash that uses multiplication with long constants.</a>
-<span class="sourceLineNo">060</span><a id="line.60">     * @param x x position, as an int</a>
-<span class="sourceLineNo">061</span><a id="line.61">     * @param y y position, as an int</a>
-<span class="sourceLineNo">062</span><a id="line.62">     * @param z z position, as an int</a>
-<span class="sourceLineNo">063</span><a id="line.63">     * @param w w position, as an int</a>
-<span class="sourceLineNo">064</span><a id="line.64">     * @param s any int, a seed to be able to produce many hashes for a given point</a>
-<span class="sourceLineNo">065</span><a id="line.65">     * @return 32-bit hash of the x,y,z,w point with the given state s</a>
-<span class="sourceLineNo">066</span><a id="line.66">     */</a>
-<span class="sourceLineNo">067</span><a id="line.67">    public static int hashAll(int x, int y, int z, int w, int s) {</a>
-<span class="sourceLineNo">068</span><a id="line.68">        return (int)((0xE19B01AA9D42C633L * x + 0xC6D1D6C8ED0C9631L * y + -0xAF36D01EF7518DBBL * z +</a>
-<span class="sourceLineNo">069</span><a id="line.69">                0x9A69443F36F710E7L * w + -0x881403B9339BD42DL * s ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L &gt;&gt;&gt; 32);</a>
-<span class="sourceLineNo">070</span><a id="line.70">    }</a>
-<span class="sourceLineNo">071</span><a id="line.71"></a>
-<span class="sourceLineNo">072</span><a id="line.72">    /**</a>
-<span class="sourceLineNo">073</span><a id="line.73">     * A 32-bit-result point hash that uses multiplication with long constants.</a>
-<span class="sourceLineNo">074</span><a id="line.74">     * @param x x position, as an int</a>
-<span class="sourceLineNo">075</span><a id="line.75">     * @param y y position, as an int</a>
-<span class="sourceLineNo">076</span><a id="line.76">     * @param z z position, as an int</a>
-<span class="sourceLineNo">077</span><a id="line.77">     * @param w w position, as an int</a>
-<span class="sourceLineNo">078</span><a id="line.78">     * @param u u position, as an int</a>
-<span class="sourceLineNo">079</span><a id="line.79">     * @param v v position, as an int</a>
-<span class="sourceLineNo">080</span><a id="line.80">     * @param s any int, a seed to be able to produce many hashes for a given point</a>
-<span class="sourceLineNo">081</span><a id="line.81">     * @return 32-bit hash of the x,y,z,w,u,v point with the given state s</a>
-<span class="sourceLineNo">082</span><a id="line.82">     */</a>
-<span class="sourceLineNo">083</span><a id="line.83">    public static int hashAll(int x, int y, int z, int w, int u, int v, int s) {</a>
-<span class="sourceLineNo">084</span><a id="line.84">        return (int)((0xE95E1DD17D35800DL * x + 0xD4BC74E13F3C782FL * y + -0xC1EDBC5B5C68AC25L * z +</a>
-<span class="sourceLineNo">085</span><a id="line.85">                0xB0C8AC50F0EDEF5DL * w + -0xA127A31C56D1CDB5L * u + 0x92E852C80D153DB3L * v -</a>
-<span class="sourceLineNo">086</span><a id="line.86">                0x85EB75C3024385C3L * s ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L &gt;&gt;&gt; 32);</a>
-<span class="sourceLineNo">087</span><a id="line.87">    }</a>
-<span class="sourceLineNo">088</span><a id="line.88"></a>
-<span class="sourceLineNo">089</span><a id="line.89">    /**</a>
-<span class="sourceLineNo">090</span><a id="line.90">     * A 8-bit point hash that smashes x and y into s using XOR and multiplications by harmonious numbers,</a>
-<span class="sourceLineNo">091</span><a id="line.91">     * then runs a simple unary hash on s and returns it. Has better performance than HastyPointHash, especially for</a>
-<span class="sourceLineNo">092</span><a id="line.92">     * ints, and has slightly fewer collisions in a hash table of points. GWT-optimized. Inspired by Pelle Evensen's</a>
-<span class="sourceLineNo">093</span><a id="line.93">     * rrxmrrxmsx_0 unary hash, though this doesn't use its code or its full algorithm. The unary hash used here has</a>
-<span class="sourceLineNo">094</span><a id="line.94">     * been stripped down heavily, both for speed and because unless points are selected specifically to target</a>
-<span class="sourceLineNo">095</span><a id="line.95">     * flaws in the hash, it doesn't need the intense resistance to bad inputs that rrxmrrxmsx_0 has.</a>
-<span class="sourceLineNo">096</span><a id="line.96">     * @param x x position, as an int</a>
-<span class="sourceLineNo">097</span><a id="line.97">     * @param y y position, as an int</a>
-<span class="sourceLineNo">098</span><a id="line.98">     * @param s any int, a seed to be able to produce many hashes for a given point</a>
-<span class="sourceLineNo">099</span><a id="line.99">     * @return 8-bit hash of the x,y point with the given state s</a>
-<span class="sourceLineNo">100</span><a id="line.100">     */</a>
-<span class="sourceLineNo">101</span><a id="line.101">    public static int hash256(int x, int y, int s) {</a>
-<span class="sourceLineNo">102</span><a id="line.102">        return (int)((0xD1B54A32D192ED03L * x + 0xABC98388FB8FAC03L * y + -0x8CB92BA72F3D8DD7L * s ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L &gt;&gt;&gt; 56);</a>
-<span class="sourceLineNo">103</span><a id="line.103">    }</a>
-<span class="sourceLineNo">104</span><a id="line.104">    /**</a>
-<span class="sourceLineNo">105</span><a id="line.105">     * A 8-bit point hash that smashes x, y, and z into s using XOR and multiplications by harmonious numbers,</a>
-<span class="sourceLineNo">106</span><a id="line.106">     * then runs a simple unary hash on s and returns it. Has better performance than HastyPointHash, especially for</a>
-<span class="sourceLineNo">107</span><a id="line.107">     * ints, and has slightly fewer collisions in a hash table of points. GWT-optimized. Inspired by Pelle Evensen's</a>
-<span class="sourceLineNo">108</span><a id="line.108">     * rrxmrrxmsx_0 unary hash, though this doesn't use its code or its full algorithm. The unary hash used here has</a>
-<span class="sourceLineNo">109</span><a id="line.109">     * been stripped down heavily, both for speed and because unless points are selected specifically to target</a>
-<span class="sourceLineNo">110</span><a id="line.110">     flaws in the hash, it doesn't need the intense resistance to bad inputs that rrxmrrxmsx_0 has.</a>
-<span class="sourceLineNo">111</span><a id="line.111">     * @param x x position, as an int</a>
-<span class="sourceLineNo">112</span><a id="line.112">     * @param y y position, as an int</a>
-<span class="sourceLineNo">113</span><a id="line.113">     * @param z z position, as an int</a>
-<span class="sourceLineNo">114</span><a id="line.114">     * @param s any int, a seed to be able to produce many hashes for a given point</a>
-<span class="sourceLineNo">115</span><a id="line.115">     * @return 8-bit hash of the x,y,z point with the given state s</a>
-<span class="sourceLineNo">116</span><a id="line.116">     */</a>
-<span class="sourceLineNo">117</span><a id="line.117">    public static int hash256(int x, int y, int z, int s) {</a>
-<span class="sourceLineNo">118</span><a id="line.118">        return (int)((0xDB4F0B9175AE2165L * x + 0xBBE0563303A4615FL * y + -0xA0F2EC75A1FE1575L * z + 0x89E182857D9ED689L * s ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L &gt;&gt;&gt; 56);</a>
-<span class="sourceLineNo">119</span><a id="line.119">    }</a>
-<span class="sourceLineNo">120</span><a id="line.120"></a>
-<span class="sourceLineNo">121</span><a id="line.121">    /**</a>
-<span class="sourceLineNo">122</span><a id="line.122">     * A 8-bit point hash that smashes x, y, z, and w into s using XOR and multiplications by harmonious numbers,</a>
-<span class="sourceLineNo">123</span><a id="line.123">     * then runs a simple unary hash on s and returns it. Has better performance than HastyPointHash, especially for</a>
-<span class="sourceLineNo">124</span><a id="line.124">     * ints, and has slightly fewer collisions in a hash table of points. GWT-optimized. Inspired by Pelle Evensen's</a>
-<span class="sourceLineNo">125</span><a id="line.125">     * rrxmrrxmsx_0 unary hash, though this doesn't use its code or its full algorithm. The unary hash used here has</a>
-<span class="sourceLineNo">126</span><a id="line.126">     * been stripped down heavily, both for speed and because unless points are selected specifically to target</a>
-<span class="sourceLineNo">127</span><a id="line.127">     * flaws in the hash, it doesn't need the intense resistance to bad inputs that rrxmrrxmsx_0 has.</a>
-<span class="sourceLineNo">128</span><a id="line.128">     * @param x x position, as an int</a>
-<span class="sourceLineNo">129</span><a id="line.129">     * @param y y position, as an int</a>
-<span class="sourceLineNo">130</span><a id="line.130">     * @param z z position, as an int</a>
-<span class="sourceLineNo">131</span><a id="line.131">     * @param w w position, as an int</a>
-<span class="sourceLineNo">132</span><a id="line.132">     * @param s any int, a seed to be able to produce many hashes for a given point</a>
-<span class="sourceLineNo">133</span><a id="line.133">     * @return 8-bit hash of the x,y,z,w point with the given state s</a>
-<span class="sourceLineNo">134</span><a id="line.134">     */</a>
-<span class="sourceLineNo">135</span><a id="line.135">    public static int hash256(int x, int y, int z, int w, int s) {</a>
-<span class="sourceLineNo">136</span><a id="line.136">        return (int)((0xE19B01AA9D42C633L * x + 0xC6D1D6C8ED0C9631L * y + -0xAF36D01EF7518DBBL * z +</a>
-<span class="sourceLineNo">137</span><a id="line.137">                0x9A69443F36F710E7L * w + -0x881403B9339BD42DL * s ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L &gt;&gt;&gt; 56);</a>
-<span class="sourceLineNo">138</span><a id="line.138">    }</a>
-<span class="sourceLineNo">139</span><a id="line.139"></a>
-<span class="sourceLineNo">140</span><a id="line.140">    /**</a>
-<span class="sourceLineNo">141</span><a id="line.141">     * A 8-bit point hash that smashes x, y, z, w, u, and v into s using XOR and multiplications by harmonious</a>
-<span class="sourceLineNo">142</span><a id="line.142">     * numbers, then runs a simple unary hash on s and returns it. Has better performance than HastyPointHash,</a>
-<span class="sourceLineNo">143</span><a id="line.143">     * especially for ints, and has slightly fewer collisions in a hash table of points. GWT-optimized. Inspired by</a>
-<span class="sourceLineNo">144</span><a id="line.144">     * Pelle Evensen's rrxmrrxmsx_0 unary hash, though this doesn't use its code or its full algorithm. The unary</a>
-<span class="sourceLineNo">145</span><a id="line.145">     * hash used here has been stripped down heavily, both for speed and because unless points are selected</a>
-<span class="sourceLineNo">146</span><a id="line.146">     * specifically to target flaws in the hash, it doesn't need the intense resistance to bad inputs that</a>
-<span class="sourceLineNo">147</span><a id="line.147">     * rrxmrrxmsx_0 has.</a>
-<span class="sourceLineNo">148</span><a id="line.148">     * @param x x position, as an int</a>
-<span class="sourceLineNo">149</span><a id="line.149">     * @param y y position, as an int</a>
-<span class="sourceLineNo">150</span><a id="line.150">     * @param z z position, as an int</a>
-<span class="sourceLineNo">151</span><a id="line.151">     * @param w w position, as an int</a>
-<span class="sourceLineNo">152</span><a id="line.152">     * @param u u position, as an int</a>
-<span class="sourceLineNo">153</span><a id="line.153">     * @param v v position, as an int</a>
-<span class="sourceLineNo">154</span><a id="line.154">     * @param s any int, a seed to be able to produce many hashes for a given point</a>
-<span class="sourceLineNo">155</span><a id="line.155">     * @return 8-bit hash of the x,y,z,w,u,v point with the given state s</a>
-<span class="sourceLineNo">156</span><a id="line.156">     */</a>
-<span class="sourceLineNo">157</span><a id="line.157">    public static int hash256(int x, int y, int z, int w, int u, int v, int s) {</a>
-<span class="sourceLineNo">158</span><a id="line.158">        return (int)((0xE95E1DD17D35800DL * x + 0xD4BC74E13F3C782FL * y + -0xC1EDBC5B5C68AC25L * z +</a>
-<span class="sourceLineNo">159</span><a id="line.159">                0xB0C8AC50F0EDEF5DL * w + -0xA127A31C56D1CDB5L * u + 0x92E852C80D153DB3L * v -</a>
-<span class="sourceLineNo">160</span><a id="line.160">                0x85EB75C3024385C3L * s ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L &gt;&gt;&gt; 56);</a>
-<span class="sourceLineNo">161</span><a id="line.161">    }</a>
-<span class="sourceLineNo">162</span><a id="line.162"></a>
-<span class="sourceLineNo">163</span><a id="line.163">    /**</a>
-<span class="sourceLineNo">164</span><a id="line.164">     * A 6-bit point hash that smashes x and y into s using XOR and multiplications by harmonious numbers,</a>
-<span class="sourceLineNo">165</span><a id="line.165">     * then runs a simple unary hash on s and returns it. Has better performance than HastyPointHash, especially for</a>
-<span class="sourceLineNo">166</span><a id="line.166">     * ints, and has slightly fewer collisions in a hash table of points. GWT-optimized. Inspired by Pelle Evensen's</a>
-<span class="sourceLineNo">167</span><a id="line.167">     * rrxmrrxmsx_0 unary hash, though this doesn't use its code or its full algorithm. The unary hash used here has</a>
-<span class="sourceLineNo">168</span><a id="line.168">     * been stripped down heavily, both for speed and because unless points are selected specifically to target</a>
-<span class="sourceLineNo">169</span><a id="line.169">     * flaws in the hash, it doesn't need the intense resistance to bad inputs that rrxmrrxmsx_0 has.</a>
-<span class="sourceLineNo">170</span><a id="line.170">     * @param x x position, as an int</a>
-<span class="sourceLineNo">171</span><a id="line.171">     * @param y y position, as an int</a>
-<span class="sourceLineNo">172</span><a id="line.172">     * @param s any int, a seed to be able to produce many hashes for a given point</a>
-<span class="sourceLineNo">173</span><a id="line.173">     * @return 6-bit hash of the x,y point with the given state s</a>
-<span class="sourceLineNo">174</span><a id="line.174">     */</a>
-<span class="sourceLineNo">175</span><a id="line.175">    public static int hash64(int x, int y, int s) {</a>
-<span class="sourceLineNo">176</span><a id="line.176">        return (int)((0xD1B54A32D192ED03L * x + 0xABC98388FB8FAC03L * y + -0x8CB92BA72F3D8DD7L * s ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L &gt;&gt;&gt; 58);</a>
-<span class="sourceLineNo">177</span><a id="line.177">    }</a>
-<span class="sourceLineNo">178</span><a id="line.178">    /**</a>
-<span class="sourceLineNo">179</span><a id="line.179">     * A 6-bit point hash that smashes x, y, and z into s using XOR and multiplications by harmonious numbers,</a>
-<span class="sourceLineNo">180</span><a id="line.180">     * then runs a simple unary hash on s and returns it. Has better performance than HastyPointHash, especially for</a>
-<span class="sourceLineNo">181</span><a id="line.181">     * ints, and has slightly fewer collisions in a hash table of points. GWT-optimized. Inspired by Pelle Evensen's</a>
-<span class="sourceLineNo">182</span><a id="line.182">     * rrxmrrxmsx_0 unary hash, though this doesn't use its code or its full algorithm. The unary hash used here has</a>
-<span class="sourceLineNo">183</span><a id="line.183">     * been stripped down heavily, both for speed and because unless points are selected specifically to target</a>
-<span class="sourceLineNo">184</span><a id="line.184">     flaws in the hash, it doesn't need the intense resistance to bad inputs that rrxmrrxmsx_0 has.</a>
-<span class="sourceLineNo">185</span><a id="line.185">     * @param x x position, as an int</a>
-<span class="sourceLineNo">186</span><a id="line.186">     * @param y y position, as an int</a>
-<span class="sourceLineNo">187</span><a id="line.187">     * @param z z position, as an int</a>
-<span class="sourceLineNo">188</span><a id="line.188">     * @param s any int, a seed to be able to produce many hashes for a given point</a>
-<span class="sourceLineNo">189</span><a id="line.189">     * @return 6-bit hash of the x,y,z point with the given state s</a>
-<span class="sourceLineNo">190</span><a id="line.190">     */</a>
-<span class="sourceLineNo">191</span><a id="line.191">    public static int hash64(int x, int y, int z, int s) {</a>
-<span class="sourceLineNo">192</span><a id="line.192">        return (int)((0xDB4F0B9175AE2165L * x + 0xBBE0563303A4615FL * y + -0xA0F2EC75A1FE1575L * z + 0x89E182857D9ED689L * s ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L &gt;&gt;&gt; 58);</a>
-<span class="sourceLineNo">193</span><a id="line.193">    }</a>
-<span class="sourceLineNo">194</span><a id="line.194"></a>
-<span class="sourceLineNo">195</span><a id="line.195">    /**</a>
-<span class="sourceLineNo">196</span><a id="line.196">     * A 6-bit point hash that smashes x, y, z, and w into s using XOR and multiplications by harmonious numbers,</a>
-<span class="sourceLineNo">197</span><a id="line.197">     * then runs a simple unary hash on s and returns it. Has better performance than HastyPointHash, especially for</a>
-<span class="sourceLineNo">198</span><a id="line.198">     * ints, and has slightly fewer collisions in a hash table of points. GWT-optimized. Inspired by Pelle Evensen's</a>
-<span class="sourceLineNo">199</span><a id="line.199">     * rrxmrrxmsx_0 unary hash, though this doesn't use its code or its full algorithm. The unary hash used here has</a>
-<span class="sourceLineNo">200</span><a id="line.200">     * been stripped down heavily, both for speed and because unless points are selected specifically to target</a>
-<span class="sourceLineNo">201</span><a id="line.201">     * flaws in the hash, it doesn't need the intense resistance to bad inputs that rrxmrrxmsx_0 has.</a>
-<span class="sourceLineNo">202</span><a id="line.202">     * @param x x position, as an int</a>
-<span class="sourceLineNo">203</span><a id="line.203">     * @param y y position, as an int</a>
-<span class="sourceLineNo">204</span><a id="line.204">     * @param z z position, as an int</a>
-<span class="sourceLineNo">205</span><a id="line.205">     * @param w w position, as an int</a>
-<span class="sourceLineNo">206</span><a id="line.206">     * @param s any int, a seed to be able to produce many hashes for a given point</a>
-<span class="sourceLineNo">207</span><a id="line.207">     * @return 6-bit hash of the x,y,z,w point with the given state s</a>
-<span class="sourceLineNo">208</span><a id="line.208">     */</a>
-<span class="sourceLineNo">209</span><a id="line.209">    public static int hash64(int x, int y, int z, int w, int s) {</a>
-<span class="sourceLineNo">210</span><a id="line.210">        return (int)((0xE19B01AA9D42C633L * x + 0xC6D1D6C8ED0C9631L * y + -0xAF36D01EF7518DBBL * z +</a>
-<span class="sourceLineNo">211</span><a id="line.211">                0x9A69443F36F710E7L * w + -0x881403B9339BD42DL * s ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L &gt;&gt;&gt; 58);</a>
-<span class="sourceLineNo">212</span><a id="line.212">    }</a>
-<span class="sourceLineNo">213</span><a id="line.213"></a>
-<span class="sourceLineNo">214</span><a id="line.214">    /**</a>
-<span class="sourceLineNo">215</span><a id="line.215">     * A 6-bit point hash that smashes x, y, z, w, u, and v into s using XOR and multiplications by harmonious</a>
-<span class="sourceLineNo">216</span><a id="line.216">     * numbers, then runs a simple unary hash on s and returns it. Has better performance than HastyPointHash,</a>
-<span class="sourceLineNo">217</span><a id="line.217">     * especially for ints, and has slightly fewer collisions in a hash table of points. GWT-optimized. Inspired by</a>
-<span class="sourceLineNo">218</span><a id="line.218">     * Pelle Evensen's rrxmrrxmsx_0 unary hash, though this doesn't use its code or its full algorithm. The unary</a>
-<span class="sourceLineNo">219</span><a id="line.219">     * hash used here has been stripped down heavily, both for speed and because unless points are selected</a>
-<span class="sourceLineNo">220</span><a id="line.220">     * specifically to target flaws in the hash, it doesn't need the intense resistance to bad inputs that</a>
-<span class="sourceLineNo">221</span><a id="line.221">     * rrxmrrxmsx_0 has.</a>
-<span class="sourceLineNo">222</span><a id="line.222">     * @param x x position, as an int</a>
-<span class="sourceLineNo">223</span><a id="line.223">     * @param y y position, as an int</a>
-<span class="sourceLineNo">224</span><a id="line.224">     * @param z z position, as an int</a>
-<span class="sourceLineNo">225</span><a id="line.225">     * @param w w position, as an int</a>
-<span class="sourceLineNo">226</span><a id="line.226">     * @param u u position, as an int</a>
-<span class="sourceLineNo">227</span><a id="line.227">     * @param v v position, as an int</a>
-<span class="sourceLineNo">228</span><a id="line.228">     * @param s any int, a seed to be able to produce many hashes for a given point</a>
-<span class="sourceLineNo">229</span><a id="line.229">     * @return 6-bit hash of the x,y,z,w,u,v point with the given state s</a>
-<span class="sourceLineNo">230</span><a id="line.230">     */</a>
-<span class="sourceLineNo">231</span><a id="line.231">    public static int hash64(int x, int y, int z, int w, int u, int v, int s) {</a>
-<span class="sourceLineNo">232</span><a id="line.232">        return (int)((0xE95E1DD17D35800DL * x + 0xD4BC74E13F3C782FL * y + -0xC1EDBC5B5C68AC25L * z +</a>
-<span class="sourceLineNo">233</span><a id="line.233">                0xB0C8AC50F0EDEF5DL * w + -0xA127A31C56D1CDB5L * u + 0x92E852C80D153DB3L * v -</a>
-<span class="sourceLineNo">234</span><a id="line.234">                0x85EB75C3024385C3L * s ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L &gt;&gt;&gt; 58);</a>
-<span class="sourceLineNo">235</span><a id="line.235">    }</a>
-<span class="sourceLineNo">236</span><a id="line.236">    /**</a>
-<span class="sourceLineNo">237</span><a id="line.237">     * A 5-bit point hash that smashes x and y into s using XOR and multiplications by harmonious numbers,</a>
-<span class="sourceLineNo">238</span><a id="line.238">     * then runs a simple unary hash on s and returns it. Has better performance than HastyPointHash, especially for</a>
-<span class="sourceLineNo">239</span><a id="line.239">     * ints, and has slightly fewer collisions in a hash table of points. GWT-optimized. Inspired by Pelle Evensen's</a>
-<span class="sourceLineNo">240</span><a id="line.240">     * rrxmrrxmsx_0 unary hash, though this doesn't use its code or its full algorithm. The unary hash used here has</a>
-<span class="sourceLineNo">241</span><a id="line.241">     * been stripped down heavily, both for speed and because unless points are selected specifically to target</a>
-<span class="sourceLineNo">242</span><a id="line.242">     * flaws in the hash, it doesn't need the intense resistance to bad inputs that rrxmrrxmsx_0 has.</a>
+<span class="sourceLineNo">036</span><a id="line.36">    @Override</a>
+<span class="sourceLineNo">037</span><a id="line.37">    public int hashWithState(int x, int y, int z, int w, int u, int v, int state) {</a>
+<span class="sourceLineNo">038</span><a id="line.38">        return hashAll(x, y, z, w, u, v, state);</a>
+<span class="sourceLineNo">039</span><a id="line.39">    }</a>
+<span class="sourceLineNo">040</span><a id="line.40"></a>
+<span class="sourceLineNo">041</span><a id="line.41">    /**</a>
+<span class="sourceLineNo">042</span><a id="line.42">     * A 32-bit-result point hash that uses multiplication with long constants.</a>
+<span class="sourceLineNo">043</span><a id="line.43">     * @param x x position, as an int</a>
+<span class="sourceLineNo">044</span><a id="line.44">     * @param y y position, as an int</a>
+<span class="sourceLineNo">045</span><a id="line.45">     * @param s any int, a seed to be able to produce many hashes for a given point</a>
+<span class="sourceLineNo">046</span><a id="line.46">     * @return 32-bit hash of the x,y point with the given state s</a>
+<span class="sourceLineNo">047</span><a id="line.47">     */</a>
+<span class="sourceLineNo">048</span><a id="line.48">    public static int hashAll(int x, int y, int s) {</a>
+<span class="sourceLineNo">049</span><a id="line.49">        return (int)((0xD1B54A32D192ED03L * x + 0xABC98388FB8FAC03L * y + -0x8CB92BA72F3D8DD7L * s ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L &gt;&gt;&gt; 32);</a>
+<span class="sourceLineNo">050</span><a id="line.50">    }</a>
+<span class="sourceLineNo">051</span><a id="line.51">    /**</a>
+<span class="sourceLineNo">052</span><a id="line.52">     * A 32-bit-result point hash that uses multiplication with long constants.</a>
+<span class="sourceLineNo">053</span><a id="line.53">     * @param x x position, as an int</a>
+<span class="sourceLineNo">054</span><a id="line.54">     * @param y y position, as an int</a>
+<span class="sourceLineNo">055</span><a id="line.55">     * @param z z position, as an int</a>
+<span class="sourceLineNo">056</span><a id="line.56">     * @param s any int, a seed to be able to produce many hashes for a given point</a>
+<span class="sourceLineNo">057</span><a id="line.57">     * @return 32-bit hash of the x,y,z point with the given state s</a>
+<span class="sourceLineNo">058</span><a id="line.58">     */</a>
+<span class="sourceLineNo">059</span><a id="line.59">    public static int hashAll(int x, int y, int z, int s) {</a>
+<span class="sourceLineNo">060</span><a id="line.60">        return (int)((0xDB4F0B9175AE2165L * x + 0xBBE0563303A4615FL * y + -0xA0F2EC75A1FE1575L * z + 0x89E182857D9ED689L * s ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L &gt;&gt;&gt; 32);</a>
+<span class="sourceLineNo">061</span><a id="line.61">    }</a>
+<span class="sourceLineNo">062</span><a id="line.62"></a>
+<span class="sourceLineNo">063</span><a id="line.63">    /**</a>
+<span class="sourceLineNo">064</span><a id="line.64">     * A 32-bit-result point hash that uses multiplication with long constants.</a>
+<span class="sourceLineNo">065</span><a id="line.65">     * @param x x position, as an int</a>
+<span class="sourceLineNo">066</span><a id="line.66">     * @param y y position, as an int</a>
+<span class="sourceLineNo">067</span><a id="line.67">     * @param z z position, as an int</a>
+<span class="sourceLineNo">068</span><a id="line.68">     * @param w w position, as an int</a>
+<span class="sourceLineNo">069</span><a id="line.69">     * @param s any int, a seed to be able to produce many hashes for a given point</a>
+<span class="sourceLineNo">070</span><a id="line.70">     * @return 32-bit hash of the x,y,z,w point with the given state s</a>
+<span class="sourceLineNo">071</span><a id="line.71">     */</a>
+<span class="sourceLineNo">072</span><a id="line.72">    public static int hashAll(int x, int y, int z, int w, int s) {</a>
+<span class="sourceLineNo">073</span><a id="line.73">        return (int)((0xE19B01AA9D42C633L * x + 0xC6D1D6C8ED0C9631L * y + -0xAF36D01EF7518DBBL * z +</a>
+<span class="sourceLineNo">074</span><a id="line.74">                0x9A69443F36F710E7L * w + -0x881403B9339BD42DL * s ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L &gt;&gt;&gt; 32);</a>
+<span class="sourceLineNo">075</span><a id="line.75">    }</a>
+<span class="sourceLineNo">076</span><a id="line.76"></a>
+<span class="sourceLineNo">077</span><a id="line.77">    /**</a>
+<span class="sourceLineNo">078</span><a id="line.78">     * A 32-bit-result point hash that uses multiplication with long constants.</a>
+<span class="sourceLineNo">079</span><a id="line.79">     * @param x x position, as an int</a>
+<span class="sourceLineNo">080</span><a id="line.80">     * @param y y position, as an int</a>
+<span class="sourceLineNo">081</span><a id="line.81">     * @param z z position, as an int</a>
+<span class="sourceLineNo">082</span><a id="line.82">     * @param w w position, as an int</a>
+<span class="sourceLineNo">083</span><a id="line.83">     * @param u u position, as an int</a>
+<span class="sourceLineNo">084</span><a id="line.84">     * @param s any int, a seed to be able to produce many hashes for a given point</a>
+<span class="sourceLineNo">085</span><a id="line.85">     * @return 32-bit hash of the x,y,z,w,u point with the given state s</a>
+<span class="sourceLineNo">086</span><a id="line.86">     */</a>
+<span class="sourceLineNo">087</span><a id="line.87">    public static int hashAll(int x, int y, int z, int w, int u, int s) {</a>
+<span class="sourceLineNo">088</span><a id="line.88">        return (int)((0xE60E2B722B53AEEBL * x + 0xCEBD76D9EDB6A8EFL * y + -0xB9C9AA3A51D00B65L * z +</a>
+<span class="sourceLineNo">089</span><a id="line.89">                0xA6F5777F6F88983FL * w + -0x9609C71EB7D03F7BL * u + 0x86D516E50B04AB1BL * s ^</a>
+<span class="sourceLineNo">090</span><a id="line.90">                0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L &gt;&gt;&gt; 32);</a>
+<span class="sourceLineNo">091</span><a id="line.91">    }</a>
+<span class="sourceLineNo">092</span><a id="line.92"></a>
+<span class="sourceLineNo">093</span><a id="line.93">    /**</a>
+<span class="sourceLineNo">094</span><a id="line.94">     * A 32-bit-result point hash that uses multiplication with long constants.</a>
+<span class="sourceLineNo">095</span><a id="line.95">     * @param x x position, as an int</a>
+<span class="sourceLineNo">096</span><a id="line.96">     * @param y y position, as an int</a>
+<span class="sourceLineNo">097</span><a id="line.97">     * @param z z position, as an int</a>
+<span class="sourceLineNo">098</span><a id="line.98">     * @param w w position, as an int</a>
+<span class="sourceLineNo">099</span><a id="line.99">     * @param u u position, as an int</a>
+<span class="sourceLineNo">100</span><a id="line.100">     * @param v v position, as an int</a>
+<span class="sourceLineNo">101</span><a id="line.101">     * @param s any int, a seed to be able to produce many hashes for a given point</a>
+<span class="sourceLineNo">102</span><a id="line.102">     * @return 32-bit hash of the x,y,z,w,u,v point with the given state s</a>
+<span class="sourceLineNo">103</span><a id="line.103">     */</a>
+<span class="sourceLineNo">104</span><a id="line.104">    public static int hashAll(int x, int y, int z, int w, int u, int v, int s) {</a>
+<span class="sourceLineNo">105</span><a id="line.105">        return (int)((0xE95E1DD17D35800DL * x + 0xD4BC74E13F3C782FL * y + -0xC1EDBC5B5C68AC25L * z +</a>
+<span class="sourceLineNo">106</span><a id="line.106">                0xB0C8AC50F0EDEF5DL * w + -0xA127A31C56D1CDB5L * u + 0x92E852C80D153DB3L * v +</a>
+<span class="sourceLineNo">107</span><a id="line.107">                -0x85EB75C3024385C3L * s ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L &gt;&gt;&gt; 32);</a>
+<span class="sourceLineNo">108</span><a id="line.108">    }</a>
+<span class="sourceLineNo">109</span><a id="line.109"></a>
+<span class="sourceLineNo">110</span><a id="line.110">    /**</a>
+<span class="sourceLineNo">111</span><a id="line.111">     * A 8-bit point hash that smashes x and y into s using XOR and multiplications by harmonious numbers,</a>
+<span class="sourceLineNo">112</span><a id="line.112">     * then runs a simple unary hash on s and returns it. Has better performance than HastyPointHash, especially for</a>
+<span class="sourceLineNo">113</span><a id="line.113">     * ints, and has slightly fewer collisions in a hash table of points. GWT-optimized. Inspired by Pelle Evensen's</a>
+<span class="sourceLineNo">114</span><a id="line.114">     * rrxmrrxmsx_0 unary hash, though this doesn't use its code or its full algorithm. The unary hash used here has</a>
+<span class="sourceLineNo">115</span><a id="line.115">     * been stripped down heavily, both for speed and because unless points are selected specifically to target</a>
+<span class="sourceLineNo">116</span><a id="line.116">     * flaws in the hash, it doesn't need the intense resistance to bad inputs that rrxmrrxmsx_0 has.</a>
+<span class="sourceLineNo">117</span><a id="line.117">     * @param x x position, as an int</a>
+<span class="sourceLineNo">118</span><a id="line.118">     * @param y y position, as an int</a>
+<span class="sourceLineNo">119</span><a id="line.119">     * @param s any int, a seed to be able to produce many hashes for a given point</a>
+<span class="sourceLineNo">120</span><a id="line.120">     * @return 8-bit hash of the x,y point with the given state s</a>
+<span class="sourceLineNo">121</span><a id="line.121">     */</a>
+<span class="sourceLineNo">122</span><a id="line.122">    public static int hash256(int x, int y, int s) {</a>
+<span class="sourceLineNo">123</span><a id="line.123">        return (int)((0xD1B54A32D192ED03L * x + 0xABC98388FB8FAC03L * y + -0x8CB92BA72F3D8DD7L * s ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L &gt;&gt;&gt; 56);</a>
+<span class="sourceLineNo">124</span><a id="line.124">    }</a>
+<span class="sourceLineNo">125</span><a id="line.125">    /**</a>
+<span class="sourceLineNo">126</span><a id="line.126">     * A 8-bit point hash that smashes x, y, and z into s using XOR and multiplications by harmonious numbers,</a>
+<span class="sourceLineNo">127</span><a id="line.127">     * then runs a simple unary hash on s and returns it. Has better performance than HastyPointHash, especially for</a>
+<span class="sourceLineNo">128</span><a id="line.128">     * ints, and has slightly fewer collisions in a hash table of points. GWT-optimized. Inspired by Pelle Evensen's</a>
+<span class="sourceLineNo">129</span><a id="line.129">     * rrxmrrxmsx_0 unary hash, though this doesn't use its code or its full algorithm. The unary hash used here has</a>
+<span class="sourceLineNo">130</span><a id="line.130">     * been stripped down heavily, both for speed and because unless points are selected specifically to target</a>
+<span class="sourceLineNo">131</span><a id="line.131">     flaws in the hash, it doesn't need the intense resistance to bad inputs that rrxmrrxmsx_0 has.</a>
+<span class="sourceLineNo">132</span><a id="line.132">     * @param x x position, as an int</a>
+<span class="sourceLineNo">133</span><a id="line.133">     * @param y y position, as an int</a>
+<span class="sourceLineNo">134</span><a id="line.134">     * @param z z position, as an int</a>
+<span class="sourceLineNo">135</span><a id="line.135">     * @param s any int, a seed to be able to produce many hashes for a given point</a>
+<span class="sourceLineNo">136</span><a id="line.136">     * @return 8-bit hash of the x,y,z point with the given state s</a>
+<span class="sourceLineNo">137</span><a id="line.137">     */</a>
+<span class="sourceLineNo">138</span><a id="line.138">    public static int hash256(int x, int y, int z, int s) {</a>
+<span class="sourceLineNo">139</span><a id="line.139">        return (int)((0xDB4F0B9175AE2165L * x + 0xBBE0563303A4615FL * y + -0xA0F2EC75A1FE1575L * z + 0x89E182857D9ED689L * s ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L &gt;&gt;&gt; 56);</a>
+<span class="sourceLineNo">140</span><a id="line.140">    }</a>
+<span class="sourceLineNo">141</span><a id="line.141"></a>
+<span class="sourceLineNo">142</span><a id="line.142">    /**</a>
+<span class="sourceLineNo">143</span><a id="line.143">     * A 8-bit point hash that smashes x, y, z, and w into s using XOR and multiplications by harmonious numbers,</a>
+<span class="sourceLineNo">144</span><a id="line.144">     * then runs a simple unary hash on s and returns it. Has better performance than HastyPointHash, especially for</a>
+<span class="sourceLineNo">145</span><a id="line.145">     * ints, and has slightly fewer collisions in a hash table of points. GWT-optimized. Inspired by Pelle Evensen's</a>
+<span class="sourceLineNo">146</span><a id="line.146">     * rrxmrrxmsx_0 unary hash, though this doesn't use its code or its full algorithm. The unary hash used here has</a>
+<span class="sourceLineNo">147</span><a id="line.147">     * been stripped down heavily, both for speed and because unless points are selected specifically to target</a>
+<span class="sourceLineNo">148</span><a id="line.148">     * flaws in the hash, it doesn't need the intense resistance to bad inputs that rrxmrrxmsx_0 has.</a>
+<span class="sourceLineNo">149</span><a id="line.149">     * @param x x position, as an int</a>
+<span class="sourceLineNo">150</span><a id="line.150">     * @param y y position, as an int</a>
+<span class="sourceLineNo">151</span><a id="line.151">     * @param z z position, as an int</a>
+<span class="sourceLineNo">152</span><a id="line.152">     * @param w w position, as an int</a>
+<span class="sourceLineNo">153</span><a id="line.153">     * @param s any int, a seed to be able to produce many hashes for a given point</a>
+<span class="sourceLineNo">154</span><a id="line.154">     * @return 8-bit hash of the x,y,z,w point with the given state s</a>
+<span class="sourceLineNo">155</span><a id="line.155">     */</a>
+<span class="sourceLineNo">156</span><a id="line.156">    public static int hash256(int x, int y, int z, int w, int s) {</a>
+<span class="sourceLineNo">157</span><a id="line.157">        return (int)((0xE19B01AA9D42C633L * x + 0xC6D1D6C8ED0C9631L * y + -0xAF36D01EF7518DBBL * z +</a>
+<span class="sourceLineNo">158</span><a id="line.158">                0x9A69443F36F710E7L * w + -0x881403B9339BD42DL * s ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L &gt;&gt;&gt; 56);</a>
+<span class="sourceLineNo">159</span><a id="line.159">    }</a>
+<span class="sourceLineNo">160</span><a id="line.160"></a>
+<span class="sourceLineNo">161</span><a id="line.161">    /**</a>
+<span class="sourceLineNo">162</span><a id="line.162">     * A 8-bit point hash that smashes x, y, z, w, u, and v into s using XOR and multiplications by harmonious</a>
+<span class="sourceLineNo">163</span><a id="line.163">     * numbers, then runs a simple unary hash on s and returns it. Has better performance than HastyPointHash,</a>
+<span class="sourceLineNo">164</span><a id="line.164">     * especially for ints, and has slightly fewer collisions in a hash table of points. GWT-optimized. Inspired by</a>
+<span class="sourceLineNo">165</span><a id="line.165">     * Pelle Evensen's rrxmrrxmsx_0 unary hash, though this doesn't use its code or its full algorithm. The unary</a>
+<span class="sourceLineNo">166</span><a id="line.166">     * hash used here has been stripped down heavily, both for speed and because unless points are selected</a>
+<span class="sourceLineNo">167</span><a id="line.167">     * specifically to target flaws in the hash, it doesn't need the intense resistance to bad inputs that</a>
+<span class="sourceLineNo">168</span><a id="line.168">     * rrxmrrxmsx_0 has.</a>
+<span class="sourceLineNo">169</span><a id="line.169">     * @param x x position, as an int</a>
+<span class="sourceLineNo">170</span><a id="line.170">     * @param y y position, as an int</a>
+<span class="sourceLineNo">171</span><a id="line.171">     * @param z z position, as an int</a>
+<span class="sourceLineNo">172</span><a id="line.172">     * @param w w position, as an int</a>
+<span class="sourceLineNo">173</span><a id="line.173">     * @param u u position, as an int</a>
+<span class="sourceLineNo">174</span><a id="line.174">     * @param v v position, as an int</a>
+<span class="sourceLineNo">175</span><a id="line.175">     * @param s any int, a seed to be able to produce many hashes for a given point</a>
+<span class="sourceLineNo">176</span><a id="line.176">     * @return 8-bit hash of the x,y,z,w,u,v point with the given state s</a>
+<span class="sourceLineNo">177</span><a id="line.177">     */</a>
+<span class="sourceLineNo">178</span><a id="line.178">    public static int hash256(int x, int y, int z, int w, int u, int v, int s) {</a>
+<span class="sourceLineNo">179</span><a id="line.179">        return (int)((0xE95E1DD17D35800DL * x + 0xD4BC74E13F3C782FL * y + -0xC1EDBC5B5C68AC25L * z +</a>
+<span class="sourceLineNo">180</span><a id="line.180">                0xB0C8AC50F0EDEF5DL * w + -0xA127A31C56D1CDB5L * u + 0x92E852C80D153DB3L * v -</a>
+<span class="sourceLineNo">181</span><a id="line.181">                0x85EB75C3024385C3L * s ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L &gt;&gt;&gt; 56);</a>
+<span class="sourceLineNo">182</span><a id="line.182">    }</a>
+<span class="sourceLineNo">183</span><a id="line.183"></a>
+<span class="sourceLineNo">184</span><a id="line.184">    /**</a>
+<span class="sourceLineNo">185</span><a id="line.185">     * A 6-bit point hash that smashes x and y into s using XOR and multiplications by harmonious numbers,</a>
+<span class="sourceLineNo">186</span><a id="line.186">     * then runs a simple unary hash on s and returns it. Has better performance than HastyPointHash, especially for</a>
+<span class="sourceLineNo">187</span><a id="line.187">     * ints, and has slightly fewer collisions in a hash table of points. GWT-optimized. Inspired by Pelle Evensen's</a>
+<span class="sourceLineNo">188</span><a id="line.188">     * rrxmrrxmsx_0 unary hash, though this doesn't use its code or its full algorithm. The unary hash used here has</a>
+<span class="sourceLineNo">189</span><a id="line.189">     * been stripped down heavily, both for speed and because unless points are selected specifically to target</a>
+<span class="sourceLineNo">190</span><a id="line.190">     * flaws in the hash, it doesn't need the intense resistance to bad inputs that rrxmrrxmsx_0 has.</a>
+<span class="sourceLineNo">191</span><a id="line.191">     * @param x x position, as an int</a>
+<span class="sourceLineNo">192</span><a id="line.192">     * @param y y position, as an int</a>
+<span class="sourceLineNo">193</span><a id="line.193">     * @param s any int, a seed to be able to produce many hashes for a given point</a>
+<span class="sourceLineNo">194</span><a id="line.194">     * @return 6-bit hash of the x,y point with the given state s</a>
+<span class="sourceLineNo">195</span><a id="line.195">     */</a>
+<span class="sourceLineNo">196</span><a id="line.196">    public static int hash64(int x, int y, int s) {</a>
+<span class="sourceLineNo">197</span><a id="line.197">        return (int)((0xD1B54A32D192ED03L * x + 0xABC98388FB8FAC03L * y + -0x8CB92BA72F3D8DD7L * s ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L &gt;&gt;&gt; 58);</a>
+<span class="sourceLineNo">198</span><a id="line.198">    }</a>
+<span class="sourceLineNo">199</span><a id="line.199">    /**</a>
+<span class="sourceLineNo">200</span><a id="line.200">     * A 6-bit point hash that smashes x, y, and z into s using XOR and multiplications by harmonious numbers,</a>
+<span class="sourceLineNo">201</span><a id="line.201">     * then runs a simple unary hash on s and returns it. Has better performance than HastyPointHash, especially for</a>
+<span class="sourceLineNo">202</span><a id="line.202">     * ints, and has slightly fewer collisions in a hash table of points. GWT-optimized. Inspired by Pelle Evensen's</a>
+<span class="sourceLineNo">203</span><a id="line.203">     * rrxmrrxmsx_0 unary hash, though this doesn't use its code or its full algorithm. The unary hash used here has</a>
+<span class="sourceLineNo">204</span><a id="line.204">     * been stripped down heavily, both for speed and because unless points are selected specifically to target</a>
+<span class="sourceLineNo">205</span><a id="line.205">     flaws in the hash, it doesn't need the intense resistance to bad inputs that rrxmrrxmsx_0 has.</a>
+<span class="sourceLineNo">206</span><a id="line.206">     * @param x x position, as an int</a>
+<span class="sourceLineNo">207</span><a id="line.207">     * @param y y position, as an int</a>
+<span class="sourceLineNo">208</span><a id="line.208">     * @param z z position, as an int</a>
+<span class="sourceLineNo">209</span><a id="line.209">     * @param s any int, a seed to be able to produce many hashes for a given point</a>
+<span class="sourceLineNo">210</span><a id="line.210">     * @return 6-bit hash of the x,y,z point with the given state s</a>
+<span class="sourceLineNo">211</span><a id="line.211">     */</a>
+<span class="sourceLineNo">212</span><a id="line.212">    public static int hash64(int x, int y, int z, int s) {</a>
+<span class="sourceLineNo">213</span><a id="line.213">        return (int)((0xDB4F0B9175AE2165L * x + 0xBBE0563303A4615FL * y + -0xA0F2EC75A1FE1575L * z + 0x89E182857D9ED689L * s ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L &gt;&gt;&gt; 58);</a>
+<span class="sourceLineNo">214</span><a id="line.214">    }</a>
+<span class="sourceLineNo">215</span><a id="line.215"></a>
+<span class="sourceLineNo">216</span><a id="line.216">    /**</a>
+<span class="sourceLineNo">217</span><a id="line.217">     * A 6-bit point hash that smashes x, y, z, and w into s using XOR and multiplications by harmonious numbers,</a>
+<span class="sourceLineNo">218</span><a id="line.218">     * then runs a simple unary hash on s and returns it. Has better performance than HastyPointHash, especially for</a>
+<span class="sourceLineNo">219</span><a id="line.219">     * ints, and has slightly fewer collisions in a hash table of points. GWT-optimized. Inspired by Pelle Evensen's</a>
+<span class="sourceLineNo">220</span><a id="line.220">     * rrxmrrxmsx_0 unary hash, though this doesn't use its code or its full algorithm. The unary hash used here has</a>
+<span class="sourceLineNo">221</span><a id="line.221">     * been stripped down heavily, both for speed and because unless points are selected specifically to target</a>
+<span class="sourceLineNo">222</span><a id="line.222">     * flaws in the hash, it doesn't need the intense resistance to bad inputs that rrxmrrxmsx_0 has.</a>
+<span class="sourceLineNo">223</span><a id="line.223">     * @param x x position, as an int</a>
+<span class="sourceLineNo">224</span><a id="line.224">     * @param y y position, as an int</a>
+<span class="sourceLineNo">225</span><a id="line.225">     * @param z z position, as an int</a>
+<span class="sourceLineNo">226</span><a id="line.226">     * @param w w position, as an int</a>
+<span class="sourceLineNo">227</span><a id="line.227">     * @param s any int, a seed to be able to produce many hashes for a given point</a>
+<span class="sourceLineNo">228</span><a id="line.228">     * @return 6-bit hash of the x,y,z,w point with the given state s</a>
+<span class="sourceLineNo">229</span><a id="line.229">     */</a>
+<span class="sourceLineNo">230</span><a id="line.230">    public static int hash64(int x, int y, int z, int w, int s) {</a>
+<span class="sourceLineNo">231</span><a id="line.231">        return (int)((0xE19B01AA9D42C633L * x + 0xC6D1D6C8ED0C9631L * y + -0xAF36D01EF7518DBBL * z +</a>
+<span class="sourceLineNo">232</span><a id="line.232">                0x9A69443F36F710E7L * w + -0x881403B9339BD42DL * s ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L &gt;&gt;&gt; 58);</a>
+<span class="sourceLineNo">233</span><a id="line.233">    }</a>
+<span class="sourceLineNo">234</span><a id="line.234"></a>
+<span class="sourceLineNo">235</span><a id="line.235">    /**</a>
+<span class="sourceLineNo">236</span><a id="line.236">     * A 6-bit point hash that smashes x, y, z, w, u, and v into s using XOR and multiplications by harmonious</a>
+<span class="sourceLineNo">237</span><a id="line.237">     * numbers, then runs a simple unary hash on s and returns it. Has better performance than HastyPointHash,</a>
+<span class="sourceLineNo">238</span><a id="line.238">     * especially for ints, and has slightly fewer collisions in a hash table of points. GWT-optimized. Inspired by</a>
+<span class="sourceLineNo">239</span><a id="line.239">     * Pelle Evensen's rrxmrrxmsx_0 unary hash, though this doesn't use its code or its full algorithm. The unary</a>
+<span class="sourceLineNo">240</span><a id="line.240">     * hash used here has been stripped down heavily, both for speed and because unless points are selected</a>
+<span class="sourceLineNo">241</span><a id="line.241">     * specifically to target flaws in the hash, it doesn't need the intense resistance to bad inputs that</a>
+<span class="sourceLineNo">242</span><a id="line.242">     * rrxmrrxmsx_0 has.</a>
 <span class="sourceLineNo">243</span><a id="line.243">     * @param x x position, as an int</a>
 <span class="sourceLineNo">244</span><a id="line.244">     * @param y y position, as an int</a>
-<span class="sourceLineNo">245</span><a id="line.245">     * @param s any int, a seed to be able to produce many hashes for a given point</a>
-<span class="sourceLineNo">246</span><a id="line.246">     * @return 5-bit hash of the x,y point with the given state s</a>
-<span class="sourceLineNo">247</span><a id="line.247">     */</a>
-<span class="sourceLineNo">248</span><a id="line.248">    public static int hash32(int x, int y, int s) {</a>
-<span class="sourceLineNo">249</span><a id="line.249">        return (int)((0xD1B54A32D192ED03L * x + 0xABC98388FB8FAC03L * y + -0x8CB92BA72F3D8DD7L * s ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L &gt;&gt;&gt; 59);</a>
-<span class="sourceLineNo">250</span><a id="line.250">    }</a>
-<span class="sourceLineNo">251</span><a id="line.251">    /**</a>
-<span class="sourceLineNo">252</span><a id="line.252">     * A 5-bit point hash that smashes x, y, and z into s using XOR and multiplications by harmonious numbers,</a>
-<span class="sourceLineNo">253</span><a id="line.253">     * then runs a simple unary hash on s and returns it. Has better performance than HastyPointHash, especially for</a>
-<span class="sourceLineNo">254</span><a id="line.254">     * ints, and has slightly fewer collisions in a hash table of points. GWT-optimized. Inspired by Pelle Evensen's</a>
-<span class="sourceLineNo">255</span><a id="line.255">     * rrxmrrxmsx_0 unary hash, though this doesn't use its code or its full algorithm. The unary hash used here has</a>
-<span class="sourceLineNo">256</span><a id="line.256">     * been stripped down heavily, both for speed and because unless points are selected specifically to target</a>
-<span class="sourceLineNo">257</span><a id="line.257">     flaws in the hash, it doesn't need the intense resistance to bad inputs that rrxmrrxmsx_0 has.</a>
-<span class="sourceLineNo">258</span><a id="line.258">     * @param x x position, as an int</a>
-<span class="sourceLineNo">259</span><a id="line.259">     * @param y y position, as an int</a>
-<span class="sourceLineNo">260</span><a id="line.260">     * @param z z position, as an int</a>
-<span class="sourceLineNo">261</span><a id="line.261">     * @param s any int, a seed to be able to produce many hashes for a given point</a>
-<span class="sourceLineNo">262</span><a id="line.262">     * @return 5-bit hash of the x,y,z point with the given state s</a>
-<span class="sourceLineNo">263</span><a id="line.263">     */</a>
-<span class="sourceLineNo">264</span><a id="line.264">    public static int hash32(int x, int y, int z, int s) {</a>
-<span class="sourceLineNo">265</span><a id="line.265">        return (int)((0xDB4F0B9175AE2165L * x + 0xBBE0563303A4615FL * y + -0xA0F2EC75A1FE1575L * z + 0x89E182857D9ED689L * s ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L &gt;&gt;&gt; 59);</a>
-<span class="sourceLineNo">266</span><a id="line.266">    }</a>
-<span class="sourceLineNo">267</span><a id="line.267"></a>
-<span class="sourceLineNo">268</span><a id="line.268">    /**</a>
-<span class="sourceLineNo">269</span><a id="line.269">     * A 5-bit point hash that smashes x, y, z, and w into s using XOR and multiplications by harmonious numbers,</a>
-<span class="sourceLineNo">270</span><a id="line.270">     * then runs a simple unary hash on s and returns it. Has better performance than HastyPointHash, especially for</a>
-<span class="sourceLineNo">271</span><a id="line.271">     * ints, and has slightly fewer collisions in a hash table of points. GWT-optimized. Inspired by Pelle Evensen's</a>
-<span class="sourceLineNo">272</span><a id="line.272">     * rrxmrrxmsx_0 unary hash, though this doesn't use its code or its full algorithm. The unary hash used here has</a>
-<span class="sourceLineNo">273</span><a id="line.273">     * been stripped down heavily, both for speed and because unless points are selected specifically to target</a>
-<span class="sourceLineNo">274</span><a id="line.274">     * flaws in the hash, it doesn't need the intense resistance to bad inputs that rrxmrrxmsx_0 has.</a>
-<span class="sourceLineNo">275</span><a id="line.275">     * @param x x position, as an int</a>
-<span class="sourceLineNo">276</span><a id="line.276">     * @param y y position, as an int</a>
-<span class="sourceLineNo">277</span><a id="line.277">     * @param z z position, as an int</a>
-<span class="sourceLineNo">278</span><a id="line.278">     * @param w w position, as an int</a>
-<span class="sourceLineNo">279</span><a id="line.279">     * @param s any int, a seed to be able to produce many hashes for a given point</a>
-<span class="sourceLineNo">280</span><a id="line.280">     * @return 5-bit hash of the x,y,z,w point with the given state s</a>
-<span class="sourceLineNo">281</span><a id="line.281">     */</a>
-<span class="sourceLineNo">282</span><a id="line.282">    public static int hash32(int x, int y, int z, int w, int s) {</a>
-<span class="sourceLineNo">283</span><a id="line.283">        return (int)((0xE19B01AA9D42C633L * x + 0xC6D1D6C8ED0C9631L * y + -0xAF36D01EF7518DBBL * z +</a>
-<span class="sourceLineNo">284</span><a id="line.284">                0x9A69443F36F710E7L * w + -0x881403B9339BD42DL * s ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L &gt;&gt;&gt; 59);</a>
-<span class="sourceLineNo">285</span><a id="line.285">    }</a>
-<span class="sourceLineNo">286</span><a id="line.286"></a>
-<span class="sourceLineNo">287</span><a id="line.287">    /**</a>
-<span class="sourceLineNo">288</span><a id="line.288">     * A 5-bit point hash that smashes x, y, z, w, u, and v into s using XOR and multiplications by harmonious</a>
-<span class="sourceLineNo">289</span><a id="line.289">     * numbers, then runs a simple unary hash on s and returns it. Has better performance than HastyPointHash,</a>
-<span class="sourceLineNo">290</span><a id="line.290">     * especially for ints, and has slightly fewer collisions in a hash table of points. GWT-optimized. Inspired by</a>
-<span class="sourceLineNo">291</span><a id="line.291">     * Pelle Evensen's rrxmrrxmsx_0 unary hash, though this doesn't use its code or its full algorithm. The unary</a>
-<span class="sourceLineNo">292</span><a id="line.292">     * hash used here has been stripped down heavily, both for speed and because unless points are selected</a>
-<span class="sourceLineNo">293</span><a id="line.293">     * specifically to target flaws in the hash, it doesn't need the intense resistance to bad inputs that</a>
-<span class="sourceLineNo">294</span><a id="line.294">     * rrxmrrxmsx_0 has.</a>
-<span class="sourceLineNo">295</span><a id="line.295">     * @param x x position, as an int</a>
-<span class="sourceLineNo">296</span><a id="line.296">     * @param y y position, as an int</a>
-<span class="sourceLineNo">297</span><a id="line.297">     * @param z z position, as an int</a>
-<span class="sourceLineNo">298</span><a id="line.298">     * @param w w position, as an int</a>
-<span class="sourceLineNo">299</span><a id="line.299">     * @param u u position, as an int</a>
-<span class="sourceLineNo">300</span><a id="line.300">     * @param v v position, as an int</a>
-<span class="sourceLineNo">301</span><a id="line.301">     * @param s any int, a seed to be able to produce many hashes for a given point</a>
-<span class="sourceLineNo">302</span><a id="line.302">     * @return 5-bit hash of the x,y,z,w,u,v point with the given state s</a>
-<span class="sourceLineNo">303</span><a id="line.303">     */</a>
-<span class="sourceLineNo">304</span><a id="line.304">    public static int hash32(int x, int y, int z, int w, int u, int v, int s) {</a>
-<span class="sourceLineNo">305</span><a id="line.305">        return (int)((0xE95E1DD17D35800DL * x + 0xD4BC74E13F3C782FL * y + -0xC1EDBC5B5C68AC25L * z +</a>
-<span class="sourceLineNo">306</span><a id="line.306">                0xB0C8AC50F0EDEF5DL * w + -0xA127A31C56D1CDB5L * u + 0x92E852C80D153DB3L * v -</a>
-<span class="sourceLineNo">307</span><a id="line.307">                0x85EB75C3024385C3L * s ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L &gt;&gt;&gt; 59);</a>
-<span class="sourceLineNo">308</span><a id="line.308">    }</a>
-<span class="sourceLineNo">309</span><a id="line.309"></a>
-<span class="sourceLineNo">310</span><a id="line.310"></a>
-<span class="sourceLineNo">311</span><a id="line.311">}</a>
+<span class="sourceLineNo">245</span><a id="line.245">     * @param z z position, as an int</a>
+<span class="sourceLineNo">246</span><a id="line.246">     * @param w w position, as an int</a>
+<span class="sourceLineNo">247</span><a id="line.247">     * @param u u position, as an int</a>
+<span class="sourceLineNo">248</span><a id="line.248">     * @param v v position, as an int</a>
+<span class="sourceLineNo">249</span><a id="line.249">     * @param s any int, a seed to be able to produce many hashes for a given point</a>
+<span class="sourceLineNo">250</span><a id="line.250">     * @return 6-bit hash of the x,y,z,w,u,v point with the given state s</a>
+<span class="sourceLineNo">251</span><a id="line.251">     */</a>
+<span class="sourceLineNo">252</span><a id="line.252">    public static int hash64(int x, int y, int z, int w, int u, int v, int s) {</a>
+<span class="sourceLineNo">253</span><a id="line.253">        return (int)((0xE95E1DD17D35800DL * x + 0xD4BC74E13F3C782FL * y + -0xC1EDBC5B5C68AC25L * z +</a>
+<span class="sourceLineNo">254</span><a id="line.254">                0xB0C8AC50F0EDEF5DL * w + -0xA127A31C56D1CDB5L * u + 0x92E852C80D153DB3L * v -</a>
+<span class="sourceLineNo">255</span><a id="line.255">                0x85EB75C3024385C3L * s ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L &gt;&gt;&gt; 58);</a>
+<span class="sourceLineNo">256</span><a id="line.256">    }</a>
+<span class="sourceLineNo">257</span><a id="line.257">    /**</a>
+<span class="sourceLineNo">258</span><a id="line.258">     * A 5-bit point hash that smashes x and y into s using XOR and multiplications by harmonious numbers,</a>
+<span class="sourceLineNo">259</span><a id="line.259">     * then runs a simple unary hash on s and returns it. Has better performance than HastyPointHash, especially for</a>
+<span class="sourceLineNo">260</span><a id="line.260">     * ints, and has slightly fewer collisions in a hash table of points. GWT-optimized. Inspired by Pelle Evensen's</a>
+<span class="sourceLineNo">261</span><a id="line.261">     * rrxmrrxmsx_0 unary hash, though this doesn't use its code or its full algorithm. The unary hash used here has</a>
+<span class="sourceLineNo">262</span><a id="line.262">     * been stripped down heavily, both for speed and because unless points are selected specifically to target</a>
+<span class="sourceLineNo">263</span><a id="line.263">     * flaws in the hash, it doesn't need the intense resistance to bad inputs that rrxmrrxmsx_0 has.</a>
+<span class="sourceLineNo">264</span><a id="line.264">     * @param x x position, as an int</a>
+<span class="sourceLineNo">265</span><a id="line.265">     * @param y y position, as an int</a>
+<span class="sourceLineNo">266</span><a id="line.266">     * @param s any int, a seed to be able to produce many hashes for a given point</a>
+<span class="sourceLineNo">267</span><a id="line.267">     * @return 5-bit hash of the x,y point with the given state s</a>
+<span class="sourceLineNo">268</span><a id="line.268">     */</a>
+<span class="sourceLineNo">269</span><a id="line.269">    public static int hash32(int x, int y, int s) {</a>
+<span class="sourceLineNo">270</span><a id="line.270">        return (int)((0xD1B54A32D192ED03L * x + 0xABC98388FB8FAC03L * y + -0x8CB92BA72F3D8DD7L * s ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L &gt;&gt;&gt; 59);</a>
+<span class="sourceLineNo">271</span><a id="line.271">    }</a>
+<span class="sourceLineNo">272</span><a id="line.272">    /**</a>
+<span class="sourceLineNo">273</span><a id="line.273">     * A 5-bit point hash that smashes x, y, and z into s using XOR and multiplications by harmonious numbers,</a>
+<span class="sourceLineNo">274</span><a id="line.274">     * then runs a simple unary hash on s and returns it. Has better performance than HastyPointHash, especially for</a>
+<span class="sourceLineNo">275</span><a id="line.275">     * ints, and has slightly fewer collisions in a hash table of points. GWT-optimized. Inspired by Pelle Evensen's</a>
+<span class="sourceLineNo">276</span><a id="line.276">     * rrxmrrxmsx_0 unary hash, though this doesn't use its code or its full algorithm. The unary hash used here has</a>
+<span class="sourceLineNo">277</span><a id="line.277">     * been stripped down heavily, both for speed and because unless points are selected specifically to target</a>
+<span class="sourceLineNo">278</span><a id="line.278">     flaws in the hash, it doesn't need the intense resistance to bad inputs that rrxmrrxmsx_0 has.</a>
+<span class="sourceLineNo">279</span><a id="line.279">     * @param x x position, as an int</a>
+<span class="sourceLineNo">280</span><a id="line.280">     * @param y y position, as an int</a>
+<span class="sourceLineNo">281</span><a id="line.281">     * @param z z position, as an int</a>
+<span class="sourceLineNo">282</span><a id="line.282">     * @param s any int, a seed to be able to produce many hashes for a given point</a>
+<span class="sourceLineNo">283</span><a id="line.283">     * @return 5-bit hash of the x,y,z point with the given state s</a>
+<span class="sourceLineNo">284</span><a id="line.284">     */</a>
+<span class="sourceLineNo">285</span><a id="line.285">    public static int hash32(int x, int y, int z, int s) {</a>
+<span class="sourceLineNo">286</span><a id="line.286">        return (int)((0xDB4F0B9175AE2165L * x + 0xBBE0563303A4615FL * y + -0xA0F2EC75A1FE1575L * z + 0x89E182857D9ED689L * s ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L &gt;&gt;&gt; 59);</a>
+<span class="sourceLineNo">287</span><a id="line.287">    }</a>
+<span class="sourceLineNo">288</span><a id="line.288"></a>
+<span class="sourceLineNo">289</span><a id="line.289">    /**</a>
+<span class="sourceLineNo">290</span><a id="line.290">     * A 5-bit point hash that smashes x, y, z, and w into s using XOR and multiplications by harmonious numbers,</a>
+<span class="sourceLineNo">291</span><a id="line.291">     * then runs a simple unary hash on s and returns it. Has better performance than HastyPointHash, especially for</a>
+<span class="sourceLineNo">292</span><a id="line.292">     * ints, and has slightly fewer collisions in a hash table of points. GWT-optimized. Inspired by Pelle Evensen's</a>
+<span class="sourceLineNo">293</span><a id="line.293">     * rrxmrrxmsx_0 unary hash, though this doesn't use its code or its full algorithm. The unary hash used here has</a>
+<span class="sourceLineNo">294</span><a id="line.294">     * been stripped down heavily, both for speed and because unless points are selected specifically to target</a>
+<span class="sourceLineNo">295</span><a id="line.295">     * flaws in the hash, it doesn't need the intense resistance to bad inputs that rrxmrrxmsx_0 has.</a>
+<span class="sourceLineNo">296</span><a id="line.296">     * @param x x position, as an int</a>
+<span class="sourceLineNo">297</span><a id="line.297">     * @param y y position, as an int</a>
+<span class="sourceLineNo">298</span><a id="line.298">     * @param z z position, as an int</a>
+<span class="sourceLineNo">299</span><a id="line.299">     * @param w w position, as an int</a>
+<span class="sourceLineNo">300</span><a id="line.300">     * @param s any int, a seed to be able to produce many hashes for a given point</a>
+<span class="sourceLineNo">301</span><a id="line.301">     * @return 5-bit hash of the x,y,z,w point with the given state s</a>
+<span class="sourceLineNo">302</span><a id="line.302">     */</a>
+<span class="sourceLineNo">303</span><a id="line.303">    public static int hash32(int x, int y, int z, int w, int s) {</a>
+<span class="sourceLineNo">304</span><a id="line.304">        return (int)((0xE19B01AA9D42C633L * x + 0xC6D1D6C8ED0C9631L * y + -0xAF36D01EF7518DBBL * z +</a>
+<span class="sourceLineNo">305</span><a id="line.305">                0x9A69443F36F710E7L * w + -0x881403B9339BD42DL * s ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L &gt;&gt;&gt; 59);</a>
+<span class="sourceLineNo">306</span><a id="line.306">    }</a>
+<span class="sourceLineNo">307</span><a id="line.307"></a>
+<span class="sourceLineNo">308</span><a id="line.308">    /**</a>
+<span class="sourceLineNo">309</span><a id="line.309">     * A 5-bit point hash that smashes x, y, z, w, u, and v into s using XOR and multiplications by harmonious</a>
+<span class="sourceLineNo">310</span><a id="line.310">     * numbers, then runs a simple unary hash on s and returns it. Has better performance than HastyPointHash,</a>
+<span class="sourceLineNo">311</span><a id="line.311">     * especially for ints, and has slightly fewer collisions in a hash table of points. GWT-optimized. Inspired by</a>
+<span class="sourceLineNo">312</span><a id="line.312">     * Pelle Evensen's rrxmrrxmsx_0 unary hash, though this doesn't use its code or its full algorithm. The unary</a>
+<span class="sourceLineNo">313</span><a id="line.313">     * hash used here has been stripped down heavily, both for speed and because unless points are selected</a>
+<span class="sourceLineNo">314</span><a id="line.314">     * specifically to target flaws in the hash, it doesn't need the intense resistance to bad inputs that</a>
+<span class="sourceLineNo">315</span><a id="line.315">     * rrxmrrxmsx_0 has.</a>
+<span class="sourceLineNo">316</span><a id="line.316">     * @param x x position, as an int</a>
+<span class="sourceLineNo">317</span><a id="line.317">     * @param y y position, as an int</a>
+<span class="sourceLineNo">318</span><a id="line.318">     * @param z z position, as an int</a>
+<span class="sourceLineNo">319</span><a id="line.319">     * @param w w position, as an int</a>
+<span class="sourceLineNo">320</span><a id="line.320">     * @param u u position, as an int</a>
+<span class="sourceLineNo">321</span><a id="line.321">     * @param v v position, as an int</a>
+<span class="sourceLineNo">322</span><a id="line.322">     * @param s any int, a seed to be able to produce many hashes for a given point</a>
+<span class="sourceLineNo">323</span><a id="line.323">     * @return 5-bit hash of the x,y,z,w,u,v point with the given state s</a>
+<span class="sourceLineNo">324</span><a id="line.324">     */</a>
+<span class="sourceLineNo">325</span><a id="line.325">    public static int hash32(int x, int y, int z, int w, int u, int v, int s) {</a>
+<span class="sourceLineNo">326</span><a id="line.326">        return (int)((0xE95E1DD17D35800DL * x + 0xD4BC74E13F3C782FL * y + -0xC1EDBC5B5C68AC25L * z +</a>
+<span class="sourceLineNo">327</span><a id="line.327">                0xB0C8AC50F0EDEF5DL * w + -0xA127A31C56D1CDB5L * u + 0x92E852C80D153DB3L * v -</a>
+<span class="sourceLineNo">328</span><a id="line.328">                0x85EB75C3024385C3L * s ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L &gt;&gt;&gt; 59);</a>
+<span class="sourceLineNo">329</span><a id="line.329">    }</a>
+<span class="sourceLineNo">330</span><a id="line.330"></a>
+<span class="sourceLineNo">331</span><a id="line.331"></a>
+<span class="sourceLineNo">332</span><a id="line.332">}</a>
 
 
 

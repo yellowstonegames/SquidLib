@@ -13427,18 +13427,18 @@
 <span class="sourceLineNo">13415</span><a id="line.13415">    }</a>
 <span class="sourceLineNo">13416</span><a id="line.13416"></a>
 <span class="sourceLineNo">13417</span><a id="line.13417">    /**</a>
-<span class="sourceLineNo">13418</span><a id="line.13418">     * Gets a packed float representation of a color given as 4 RGBA float components. LibGDX expects ABGR format</a>
+<span class="sourceLineNo">13418</span><a id="line.13418">     * Gets a packed float representation of a color given as 4 RGBA float components. libGDX expects ABGR format</a>
 <span class="sourceLineNo">13419</span><a id="line.13419">     * in some places, but not all, and it can be confusing to track when it wants RGBA, ABGR, or ARGB. Generally,</a>
 <span class="sourceLineNo">13420</span><a id="line.13420">     * packed floats like what this returns are ABGR format, the kind that can be passed directly to</a>
 <span class="sourceLineNo">13421</span><a id="line.13421">     * {@link com.badlogic.gdx.graphics.g2d.Batch#setPackedColor(float)} without constructing intermediate objects.</a>
-<span class="sourceLineNo">13422</span><a id="line.13422">     * SquidPanel also uses floats internally instead of LibGDX Color objects in its internal 2D array that</a>
+<span class="sourceLineNo">13422</span><a id="line.13422">     * SquidPanel also uses floats internally instead of libGDX Color objects in its internal 2D array that</a>
 <span class="sourceLineNo">13423</span><a id="line.13423">     * associates colors to cells; this has changed from earlier releases and should be much more efficient.</a>
 <span class="sourceLineNo">13424</span><a id="line.13424">     *</a>
 <span class="sourceLineNo">13425</span><a id="line.13425">     * @param r a float from 0.0 to 1.0 for red</a>
 <span class="sourceLineNo">13426</span><a id="line.13426">     * @param g a float from 0.0 to 1.0 for green</a>
 <span class="sourceLineNo">13427</span><a id="line.13427">     * @param b a float from 0.0 to 1.0 for blue</a>
 <span class="sourceLineNo">13428</span><a id="line.13428">     * @param a a float from 0.0 to 1.0 for alpha/opacity</a>
-<span class="sourceLineNo">13429</span><a id="line.13429">     * @return a packed float that can be given to the setColor method in LibGDX's Batch classes</a>
+<span class="sourceLineNo">13429</span><a id="line.13429">     * @return a packed float that can be given to the setColor method in libGDX's Batch classes</a>
 <span class="sourceLineNo">13430</span><a id="line.13430">     */</a>
 <span class="sourceLineNo">13431</span><a id="line.13431">    public static float floatGet(float r, float g, float b, float a) {</a>
 <span class="sourceLineNo">13432</span><a id="line.13432">        return NumberTools.intBitsToFloat(((int) (a * 255) &lt;&lt; 24 &amp; 0xFE000000) | ((int) (b * 255) &lt;&lt; 16)</a>
@@ -13446,11 +13446,11 @@
 <span class="sourceLineNo">13434</span><a id="line.13434">    }</a>
 <span class="sourceLineNo">13435</span><a id="line.13435"></a>
 <span class="sourceLineNo">13436</span><a id="line.13436">    /**</a>
-<span class="sourceLineNo">13437</span><a id="line.13437">     * Gets a packed float representation of a color given an RGBA8888-format long. LibGDX expects ABGR format</a>
+<span class="sourceLineNo">13437</span><a id="line.13437">     * Gets a packed float representation of a color given an RGBA8888-format long. libGDX expects ABGR format</a>
 <span class="sourceLineNo">13438</span><a id="line.13438">     * in some places, but not all, and it can be confusing to track when it wants RGBA, ABGR, or ARGB. Generally,</a>
 <span class="sourceLineNo">13439</span><a id="line.13439">     * packed floats like what this returns are ABGR format, the kind that can be passed directly to</a>
 <span class="sourceLineNo">13440</span><a id="line.13440">     * {@link com.badlogic.gdx.graphics.g2d.Batch#setPackedColor(float)} without constructing intermediate objects.</a>
-<span class="sourceLineNo">13441</span><a id="line.13441">     * SquidPanel also uses floats internally instead of LibGDX Color objects in its internal 2D array that</a>
+<span class="sourceLineNo">13441</span><a id="line.13441">     * SquidPanel also uses floats internally instead of libGDX Color objects in its internal 2D array that</a>
 <span class="sourceLineNo">13442</span><a id="line.13442">     * associates colors to cells; this has changed from earlier releases and should be much more efficient.</a>
 <span class="sourceLineNo">13443</span><a id="line.13443">     * &lt;br&gt;</a>
 <span class="sourceLineNo">13444</span><a id="line.13444">     * This method is probably not what you want unless you specifically have RGBA8888-format longs that you</a>
@@ -13459,7 +13459,7 @@
 <span class="sourceLineNo">13447</span><a id="line.13447">     * components as ints and alpha simply opaque.</a>
 <span class="sourceLineNo">13448</span><a id="line.13448">     *</a>
 <span class="sourceLineNo">13449</span><a id="line.13449">     * @param c a long with format {@code 32 unused bits, 8 red bits, 8 green bits, 8 blue bits, 7 alpha bits, 1 unused bit}</a>
-<span class="sourceLineNo">13450</span><a id="line.13450">     * @return a packed float that can be given to the setColor method in LibGDX's Batch classes</a>
+<span class="sourceLineNo">13450</span><a id="line.13450">     * @return a packed float that can be given to the setColor method in libGDX's Batch classes</a>
 <span class="sourceLineNo">13451</span><a id="line.13451">     */</a>
 <span class="sourceLineNo">13452</span><a id="line.13452">    public static float floatGet(long c) {</a>
 <span class="sourceLineNo">13453</span><a id="line.13453">        return NumberTools.intBitsToFloat((int) ((c &gt;&gt;&gt; 24 &amp; 0xff) | (c &gt;&gt;&gt; 8 &amp; 0xff00) | (c &lt;&lt; 8 &amp; 0xff0000)</a>
@@ -13467,11 +13467,11 @@
 <span class="sourceLineNo">13455</span><a id="line.13455">    }</a>
 <span class="sourceLineNo">13456</span><a id="line.13456"></a>
 <span class="sourceLineNo">13457</span><a id="line.13457">    /**</a>
-<span class="sourceLineNo">13458</span><a id="line.13458">     * Gets a packed float representation of a color given an RGBA8888-format int. LibGDX expects ABGR format</a>
+<span class="sourceLineNo">13458</span><a id="line.13458">     * Gets a packed float representation of a color given an RGBA8888-format int. libGDX expects ABGR format</a>
 <span class="sourceLineNo">13459</span><a id="line.13459">     * in some places, but not all, and it can be confusing to track when it wants RGBA, ABGR, or ARGB. Generally,</a>
 <span class="sourceLineNo">13460</span><a id="line.13460">     * packed floats like what this returns are ABGR format, the kind that can be passed directly to</a>
 <span class="sourceLineNo">13461</span><a id="line.13461">     * {@link com.badlogic.gdx.graphics.g2d.Batch#setPackedColor(float)} without constructing intermediate objects.</a>
-<span class="sourceLineNo">13462</span><a id="line.13462">     * SquidPanel also uses floats internally instead of LibGDX Color objects in its internal 2D array that</a>
+<span class="sourceLineNo">13462</span><a id="line.13462">     * SquidPanel also uses floats internally instead of libGDX Color objects in its internal 2D array that</a>
 <span class="sourceLineNo">13463</span><a id="line.13463">     * associates colors to cells; this has changed from earlier releases and should be much more efficient.</a>
 <span class="sourceLineNo">13464</span><a id="line.13464">     * &lt;br&gt;</a>
 <span class="sourceLineNo">13465</span><a id="line.13465">     * This method is probably not what you want unless you specifically have RGBA8888-format ints that you</a>
@@ -13480,24 +13480,24 @@
 <span class="sourceLineNo">13468</span><a id="line.13468">     * components as ints and alpha simply opaque.</a>
 <span class="sourceLineNo">13469</span><a id="line.13469">     *</a>
 <span class="sourceLineNo">13470</span><a id="line.13470">     * @param c an int with format {@code 8 red bits, 8 green bits, 8 blue bits, 7 alpha bits, 1 unused bit}</a>
-<span class="sourceLineNo">13471</span><a id="line.13471">     * @return a packed float that can be given to the setColor method in LibGDX's Batch classes</a>
+<span class="sourceLineNo">13471</span><a id="line.13471">     * @return a packed float that can be given to the setColor method in libGDX's Batch classes</a>
 <span class="sourceLineNo">13472</span><a id="line.13472">     */</a>
 <span class="sourceLineNo">13473</span><a id="line.13473">    public static float floatGet(int c) {</a>
 <span class="sourceLineNo">13474</span><a id="line.13474">        return NumberTools.intBitsToFloat(Integer.reverseBytes(c) &amp; 0xFEFFFFFF);</a>
 <span class="sourceLineNo">13475</span><a id="line.13475">    }</a>
 <span class="sourceLineNo">13476</span><a id="line.13476"></a>
 <span class="sourceLineNo">13477</span><a id="line.13477">    /**</a>
-<span class="sourceLineNo">13478</span><a id="line.13478">     * Gets a packed float representation of a color given as 3 RGB int components, setting alpha to opaque. LibGDX</a>
+<span class="sourceLineNo">13478</span><a id="line.13478">     * Gets a packed float representation of a color given as 3 RGB int components, setting alpha to opaque. libGDX</a>
 <span class="sourceLineNo">13479</span><a id="line.13479">     * expects ABGR format in some places, but not all, and it can be confusing to track when it wants RGBA, ABGR,</a>
 <span class="sourceLineNo">13480</span><a id="line.13480">     * or ARGB. Generally, packed floats like what this returns are ABGR format, the kind that can be passed</a>
 <span class="sourceLineNo">13481</span><a id="line.13481">     * directly to {@link com.badlogic.gdx.graphics.g2d.Batch#setPackedColor(float)} without constructing intermediate</a>
-<span class="sourceLineNo">13482</span><a id="line.13482">     * objects. SquidPanel also uses floats internally instead of LibGDX Color objects in its internal 2D array that</a>
+<span class="sourceLineNo">13482</span><a id="line.13482">     * objects. SquidPanel also uses floats internally instead of libGDX Color objects in its internal 2D array that</a>
 <span class="sourceLineNo">13483</span><a id="line.13483">     * associates colors to cells; this has changed from earlier releases and should be much more efficient.</a>
 <span class="sourceLineNo">13484</span><a id="line.13484">     *</a>
 <span class="sourceLineNo">13485</span><a id="line.13485">     * @param r an int from 0 to 255 (both inclusive) for red</a>
 <span class="sourceLineNo">13486</span><a id="line.13486">     * @param g an int from 0 to 255 (both inclusive) for green</a>
 <span class="sourceLineNo">13487</span><a id="line.13487">     * @param b an int from 0 to 255 (both inclusive) for blue</a>
-<span class="sourceLineNo">13488</span><a id="line.13488">     * @return a packed float that can be given to the setColor method in LibGDX's Batch classes</a>
+<span class="sourceLineNo">13488</span><a id="line.13488">     * @return a packed float that can be given to the setColor method in libGDX's Batch classes</a>
 <span class="sourceLineNo">13489</span><a id="line.13489">     */</a>
 <span class="sourceLineNo">13490</span><a id="line.13490">    public static float floatGetI(int r, int g, int b) {</a>
 <span class="sourceLineNo">13491</span><a id="line.13491">        return NumberTools.intBitsToFloat((r &amp; 0xff) | (g &lt;&lt; 8 &amp; 0xff00) | (b &lt;&lt; 16 &amp; 0xff0000)</a>

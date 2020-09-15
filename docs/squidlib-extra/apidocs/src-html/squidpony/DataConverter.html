@@ -15,8 +15,8 @@
 <span class="sourceLineNo">003</span><a id="line.3">import com.badlogic.gdx.utils.JsonWriter;</a>
 <span class="sourceLineNo">004</span><a id="line.4">import squidpony.store.json.JsonConverter;</a>
 <span class="sourceLineNo">005</span><a id="line.5">/**</a>
-<span class="sourceLineNo">006</span><a id="line.6"> * Augmented version of LibGDX's Json class that knows how to handle various data types common in SquidLib.</a>
-<span class="sourceLineNo">007</span><a id="line.7"> * This includes OrderedMap, which notably allows non-String keys (LibGDX's default Map serializer requires keys to be</a>
+<span class="sourceLineNo">006</span><a id="line.6"> * Augmented version of libGDX's Json class that knows how to handle various data types common in SquidLib.</a>
+<span class="sourceLineNo">007</span><a id="line.7"> * This includes OrderedMap, which notably allows non-String keys (libGDX's default Map serializer requires keys to be</a>
 <span class="sourceLineNo">008</span><a id="line.8"> * Strings), but does not currently allow the IHasher to be set (which only should affect OrderedMaps with array keys).</a>
 <span class="sourceLineNo">009</span><a id="line.9"> * It also makes significantly shorter serialized output for 2D char arrays, GreasedRegion and FakeLanguageGen objects,</a>
 <span class="sourceLineNo">010</span><a id="line.10"> * and various collections (IntDoubleOrderedMap, IntVLA, Arrangement, K2, and K2V1 at least).</a>

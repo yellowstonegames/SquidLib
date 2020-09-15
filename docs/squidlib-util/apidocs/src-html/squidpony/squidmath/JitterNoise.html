@@ -14,8 +14,8 @@
 <span class="sourceLineNo">002</span><a id="line.2"></a>
 <span class="sourceLineNo">003</span><a id="line.3">import static squidpony.squidmath.Noise.cerp;</a>
 <span class="sourceLineNo">004</span><a id="line.4">import static squidpony.squidmath.Noise.fastFloor;</a>
-<span class="sourceLineNo">005</span><a id="line.5">import static squidpony.squidmath.SeededNoise.phiGrad2;</a>
-<span class="sourceLineNo">006</span><a id="line.6">import static squidpony.squidmath.SeededNoise.gradient6DLUT;</a>
+<span class="sourceLineNo">005</span><a id="line.5">import static squidpony.squidmath.SeededNoise.grad2d;</a>
+<span class="sourceLineNo">006</span><a id="line.6">import static squidpony.squidmath.SeededNoise.grad6d;</a>
 <span class="sourceLineNo">007</span><a id="line.7">import static squidpony.squidmath.SeededNoise.grad3d;</a>
 <span class="sourceLineNo">008</span><a id="line.8">import static squidpony.squidmath.SeededNoise.grad4d;</a>
 <span class="sourceLineNo">009</span><a id="line.9"></a>
@@ -51,7 +51,7 @@
 <span class="sourceLineNo">039</span><a id="line.39">                                              double xd, double yd) {</a>
 <span class="sourceLineNo">040</span><a id="line.40">        final int hash = ((int)(((seed ^= 0xB4C4D * x ^ 0xEE2C3 * y) ^ seed &gt;&gt;&gt; 13) * (seed))) &gt;&gt;&gt; 24;</a>
 <span class="sourceLineNo">041</span><a id="line.41">        //final int hash = (int)((((seed = (((seed * (0x632BE59BD9B4E019L + (x &lt;&lt; 23))) ^ 0x9E3779B97F4A7C15L) * (0xC6BC279692B5CC83L + (y &lt;&lt; 23)))) ^ seed &gt;&gt;&gt; 27 ^ x + y) * 0xAEF17502108EF2D9L) &gt;&gt;&gt; 56);</a>
-<span class="sourceLineNo">042</span><a id="line.42">        final double[] grad = phiGrad2[hash], jitter = phiGrad2[255 - hash];</a>
+<span class="sourceLineNo">042</span><a id="line.42">        final double[] grad = grad2d[hash], jitter = grad2d[255 - hash];</a>
 <span class="sourceLineNo">043</span><a id="line.43">        return (xd + jitter[0] * 0.5) * grad[0] + (yd + jitter[1] * 0.5) * grad[1];</a>
 <span class="sourceLineNo">044</span><a id="line.44">    }</a>
 <span class="sourceLineNo">045</span><a id="line.45">    protected static double gradCoord3D(long seed, int x, int y, int z, double xd, double yd, double zd) {</a>
@@ -75,12 +75,12 @@
 <span class="sourceLineNo">063</span><a id="line.63">                                        double xd, double yd, double zd, double wd, double ud, double vd) {</a>
 <span class="sourceLineNo">064</span><a id="line.64">        final int idx = ((int)(((seed ^= 0xB4C4D * x ^ 0xEE2C1 * y ^ 0xA7E07 * z ^ 0xCD5E9 * w ^ 0x94B5B * u ^ 0xD2385 * v)</a>
 <span class="sourceLineNo">065</span><a id="line.65">                        ^ seed &gt;&gt;&gt; 13) * (seed)) &gt;&gt;&gt; 24) * 6, jitter = 1530 - idx;</a>
-<span class="sourceLineNo">066</span><a id="line.66">        return (  (xd+gradient6DLUT[jitter]*0.5) * gradient6DLUT[idx]</a>
-<span class="sourceLineNo">067</span><a id="line.67">                + (yd+gradient6DLUT[jitter+1]*0.5) * gradient6DLUT[idx+1]</a>
-<span class="sourceLineNo">068</span><a id="line.68">                + (zd+gradient6DLUT[jitter+2]*0.5) * gradient6DLUT[idx+2]</a>
-<span class="sourceLineNo">069</span><a id="line.69">                + (wd+gradient6DLUT[jitter+3]*0.5) * gradient6DLUT[idx+3]</a>
-<span class="sourceLineNo">070</span><a id="line.70">                + (ud+gradient6DLUT[jitter+4]*0.5) * gradient6DLUT[idx+4]</a>
-<span class="sourceLineNo">071</span><a id="line.71">                + (vd+gradient6DLUT[jitter+5]*0.5) * gradient6DLUT[idx+5]);</a>
+<span class="sourceLineNo">066</span><a id="line.66">        return (  (xd+ grad6d[jitter]*0.5) * grad6d[idx]</a>
+<span class="sourceLineNo">067</span><a id="line.67">                + (yd+ grad6d[jitter+1]*0.5) * grad6d[idx+1]</a>
+<span class="sourceLineNo">068</span><a id="line.68">                + (zd+ grad6d[jitter+2]*0.5) * grad6d[idx+2]</a>
+<span class="sourceLineNo">069</span><a id="line.69">                + (wd+ grad6d[jitter+3]*0.5) * grad6d[idx+3]</a>
+<span class="sourceLineNo">070</span><a id="line.70">                + (ud+ grad6d[jitter+4]*0.5) * grad6d[idx+4]</a>
+<span class="sourceLineNo">071</span><a id="line.71">                + (vd+ grad6d[jitter+5]*0.5) * grad6d[idx+5]);</a>
 <span class="sourceLineNo">072</span><a id="line.72">    }</a>
 <span class="sourceLineNo">073</span><a id="line.73"></a>
 <span class="sourceLineNo">074</span><a id="line.74">    @Override</a>

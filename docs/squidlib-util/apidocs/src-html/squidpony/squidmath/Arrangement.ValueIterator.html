@@ -1509,7 +1509,7 @@
 <span class="sourceLineNo">1497</span><a id="line.1497"></a>
 <span class="sourceLineNo">1498</span><a id="line.1498">        @SuppressWarnings("unchecked")</a>
 <span class="sourceLineNo">1499</span><a id="line.1499">        public &lt;T&gt; T[] toArray(T[] a) {</a>
-<span class="sourceLineNo">1500</span><a id="line.1500">            if (a == null || a.length &lt; size()) a = (T[]) new Object[size()];</a>
+<span class="sourceLineNo">1500</span><a id="line.1500">            if (a.length &lt; size) a = Arrays.copyOf(a, size);</a>
 <span class="sourceLineNo">1501</span><a id="line.1501">            objectUnwrap(iterator(), a);</a>
 <span class="sourceLineNo">1502</span><a id="line.1502">            return a;</a>
 <span class="sourceLineNo">1503</span><a id="line.1503">        }</a>
@@ -1698,7 +1698,7 @@
 <span class="sourceLineNo">1686</span><a id="line.1686">        @SuppressWarnings("unchecked")</a>
 <span class="sourceLineNo">1687</span><a id="line.1687">        @Override</a>
 <span class="sourceLineNo">1688</span><a id="line.1688">        public &lt;T&gt; T[] toArray(T[] a) {</a>
-<span class="sourceLineNo">1689</span><a id="line.1689">            if (a == null || a.length &lt; size()) a = (T[]) new Object[size()];</a>
+<span class="sourceLineNo">1689</span><a id="line.1689">            if (a.length &lt; size) a = Arrays.copyOf(a, size);</a>
 <span class="sourceLineNo">1690</span><a id="line.1690">            unwrap(iterator(), a);</a>
 <span class="sourceLineNo">1691</span><a id="line.1691">            return a;</a>
 <span class="sourceLineNo">1692</span><a id="line.1692">        }</a>

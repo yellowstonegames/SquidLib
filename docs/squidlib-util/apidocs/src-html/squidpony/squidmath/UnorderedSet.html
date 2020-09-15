@@ -1023,109 +1023,110 @@
 <span class="sourceLineNo">1011</span><a id="line.1011"></a>
 <span class="sourceLineNo">1012</span><a id="line.1012">    @Override</a>
 <span class="sourceLineNo">1013</span><a id="line.1013">    public &lt;T&gt; T[] toArray(T[] a) {</a>
-<span class="sourceLineNo">1014</span><a id="line.1014">        final int size = this.size;</a>
-<span class="sourceLineNo">1015</span><a id="line.1015">        objectUnwrap(iterator(), a);</a>
-<span class="sourceLineNo">1016</span><a id="line.1016">        if (size &lt; a.length)</a>
-<span class="sourceLineNo">1017</span><a id="line.1017">            a[size] = null;</a>
-<span class="sourceLineNo">1018</span><a id="line.1018">        return a;</a>
-<span class="sourceLineNo">1019</span><a id="line.1019">    }</a>
-<span class="sourceLineNo">1020</span><a id="line.1020"></a>
+<span class="sourceLineNo">1014</span><a id="line.1014">        final int size = size();</a>
+<span class="sourceLineNo">1015</span><a id="line.1015">        if (a.length &lt; size) a = Arrays.copyOf(a, size);</a>
+<span class="sourceLineNo">1016</span><a id="line.1016">        objectUnwrap(iterator(), a);</a>
+<span class="sourceLineNo">1017</span><a id="line.1017">        if (size &lt; a.length)</a>
+<span class="sourceLineNo">1018</span><a id="line.1018">            a[size] = null;</a>
+<span class="sourceLineNo">1019</span><a id="line.1019">        return a;</a>
+<span class="sourceLineNo">1020</span><a id="line.1020">    }</a>
 <span class="sourceLineNo">1021</span><a id="line.1021"></a>
-<span class="sourceLineNo">1022</span><a id="line.1022">    /**</a>
-<span class="sourceLineNo">1023</span><a id="line.1023">     * Unwraps an iterator into an array starting at a given offset for a given number of elements.</a>
-<span class="sourceLineNo">1024</span><a id="line.1024">     * &lt;p&gt;</a>
-<span class="sourceLineNo">1025</span><a id="line.1025">     * &lt;P&gt;This method iterates over the given type-specific iterator and stores the elements returned, up to a maximum of &lt;code&gt;length&lt;/code&gt;, in the given array starting at &lt;code&gt;offset&lt;/code&gt;. The</a>
-<span class="sourceLineNo">1026</span><a id="line.1026">     * number of actually unwrapped elements is returned (it may be less than &lt;code&gt;max&lt;/code&gt; if the iterator emits less than &lt;code&gt;max&lt;/code&gt; elements).</a>
-<span class="sourceLineNo">1027</span><a id="line.1027">     *</a>
-<span class="sourceLineNo">1028</span><a id="line.1028">     * @param i      a type-specific iterator.</a>
-<span class="sourceLineNo">1029</span><a id="line.1029">     * @param array  an array to contain the output of the iterator.</a>
-<span class="sourceLineNo">1030</span><a id="line.1030">     * @param offset the first element of the array to be returned.</a>
-<span class="sourceLineNo">1031</span><a id="line.1031">     * @param max    the maximum number of elements to unwrap.</a>
-<span class="sourceLineNo">1032</span><a id="line.1032">     * @return the number of elements unwrapped.</a>
-<span class="sourceLineNo">1033</span><a id="line.1033">     */</a>
-<span class="sourceLineNo">1034</span><a id="line.1034">    private static &lt;K&gt; int objectUnwrap(final Iterator&lt;? extends K&gt; i, final K[] array, int offset, final int max) {</a>
-<span class="sourceLineNo">1035</span><a id="line.1035">        if (max &lt; 0) throw new IllegalArgumentException("The maximum number of elements (" + max + ") is negative");</a>
-<span class="sourceLineNo">1036</span><a id="line.1036">        if (offset &lt; 0 || offset + max &gt; array.length) throw new IllegalArgumentException();</a>
-<span class="sourceLineNo">1037</span><a id="line.1037">        int j = max;</a>
-<span class="sourceLineNo">1038</span><a id="line.1038">        while (j-- != 0 &amp;&amp; i.hasNext())</a>
-<span class="sourceLineNo">1039</span><a id="line.1039">            array[offset++] = i.next();</a>
-<span class="sourceLineNo">1040</span><a id="line.1040">        return max - j - 1;</a>
-<span class="sourceLineNo">1041</span><a id="line.1041">    }</a>
-<span class="sourceLineNo">1042</span><a id="line.1042"></a>
-<span class="sourceLineNo">1043</span><a id="line.1043">    /**</a>
-<span class="sourceLineNo">1044</span><a id="line.1044">     * Unwraps an iterator into an array.</a>
-<span class="sourceLineNo">1045</span><a id="line.1045">     * &lt;p&gt;</a>
-<span class="sourceLineNo">1046</span><a id="line.1046">     * &lt;P&gt;This method iterates over the given type-specific iterator and stores the elements returned in the given array. The iteration will stop when the iterator has no more elements or when the end</a>
-<span class="sourceLineNo">1047</span><a id="line.1047">     * of the array has been reached.</a>
-<span class="sourceLineNo">1048</span><a id="line.1048">     *</a>
-<span class="sourceLineNo">1049</span><a id="line.1049">     * @param i     a type-specific iterator.</a>
-<span class="sourceLineNo">1050</span><a id="line.1050">     * @param array an array to contain the output of the iterator.</a>
-<span class="sourceLineNo">1051</span><a id="line.1051">     * @return the number of elements unwrapped.</a>
-<span class="sourceLineNo">1052</span><a id="line.1052">     */</a>
-<span class="sourceLineNo">1053</span><a id="line.1053">    private static &lt;K&gt; int objectUnwrap(final Iterator&lt;? extends K&gt; i, final K[] array) {</a>
-<span class="sourceLineNo">1054</span><a id="line.1054">        return objectUnwrap(i, array, 0, array.length);</a>
-<span class="sourceLineNo">1055</span><a id="line.1055">    }</a>
-<span class="sourceLineNo">1056</span><a id="line.1056"></a>
-<span class="sourceLineNo">1057</span><a id="line.1057">    @Override</a>
-<span class="sourceLineNo">1058</span><a id="line.1058">    public String toString() {</a>
-<span class="sourceLineNo">1059</span><a id="line.1059">        final StringBuilder s = new StringBuilder();</a>
-<span class="sourceLineNo">1060</span><a id="line.1060">        int i = scanNext(-1);</a>
-<span class="sourceLineNo">1061</span><a id="line.1061">        boolean first = true;</a>
-<span class="sourceLineNo">1062</span><a id="line.1062">        s.append("OrderedSet{");</a>
-<span class="sourceLineNo">1063</span><a id="line.1063">        while (i != -1) {</a>
-<span class="sourceLineNo">1064</span><a id="line.1064">            if (first) first = false;</a>
-<span class="sourceLineNo">1065</span><a id="line.1065">            else s.append(", ");</a>
-<span class="sourceLineNo">1066</span><a id="line.1066">            s.append(key[i]);</a>
-<span class="sourceLineNo">1067</span><a id="line.1067">            i = scanNext(i);</a>
-<span class="sourceLineNo">1068</span><a id="line.1068">        }</a>
-<span class="sourceLineNo">1069</span><a id="line.1069">        s.append("}");</a>
-<span class="sourceLineNo">1070</span><a id="line.1070">        return s.toString();</a>
-<span class="sourceLineNo">1071</span><a id="line.1071">    }</a>
-<span class="sourceLineNo">1072</span><a id="line.1072"></a>
-<span class="sourceLineNo">1073</span><a id="line.1073">    @Override</a>
-<span class="sourceLineNo">1074</span><a id="line.1074">    public boolean equals(final Object o) {</a>
-<span class="sourceLineNo">1075</span><a id="line.1075">        if (o == this)</a>
-<span class="sourceLineNo">1076</span><a id="line.1076">            return true;</a>
-<span class="sourceLineNo">1077</span><a id="line.1077">        if (!(o instanceof Set))</a>
-<span class="sourceLineNo">1078</span><a id="line.1078">            return false;</a>
-<span class="sourceLineNo">1079</span><a id="line.1079">        Set&lt;?&gt; s = (Set&lt;?&gt;) o;</a>
-<span class="sourceLineNo">1080</span><a id="line.1080">        if (s.size() != size)</a>
-<span class="sourceLineNo">1081</span><a id="line.1081">            return false;</a>
-<span class="sourceLineNo">1082</span><a id="line.1082">        return containsAll(s);</a>
-<span class="sourceLineNo">1083</span><a id="line.1083">    }</a>
-<span class="sourceLineNo">1084</span><a id="line.1084"></a>
-<span class="sourceLineNo">1085</span><a id="line.1085">    @GwtIncompatible</a>
-<span class="sourceLineNo">1086</span><a id="line.1086">    private void writeObject(java.io.ObjectOutputStream s)</a>
-<span class="sourceLineNo">1087</span><a id="line.1087">            throws java.io.IOException {</a>
-<span class="sourceLineNo">1088</span><a id="line.1088">        final Iterator&lt;K&gt; i = iterator();</a>
-<span class="sourceLineNo">1089</span><a id="line.1089">        s.defaultWriteObject();</a>
-<span class="sourceLineNo">1090</span><a id="line.1090">        for (int j = size; j-- != 0; )</a>
-<span class="sourceLineNo">1091</span><a id="line.1091">            s.writeObject(i.next());</a>
-<span class="sourceLineNo">1092</span><a id="line.1092">    }</a>
-<span class="sourceLineNo">1093</span><a id="line.1093"></a>
-<span class="sourceLineNo">1094</span><a id="line.1094">    @GwtIncompatible</a>
-<span class="sourceLineNo">1095</span><a id="line.1095">    @SuppressWarnings("unchecked")</a>
-<span class="sourceLineNo">1096</span><a id="line.1096">    private void readObject(java.io.ObjectInputStream s)</a>
-<span class="sourceLineNo">1097</span><a id="line.1097">            throws java.io.IOException, ClassNotFoundException {</a>
-<span class="sourceLineNo">1098</span><a id="line.1098">        s.defaultReadObject();</a>
-<span class="sourceLineNo">1099</span><a id="line.1099">        n = arraySize(size, f);</a>
-<span class="sourceLineNo">1100</span><a id="line.1100">        maxFill = maxFill(n, f);</a>
-<span class="sourceLineNo">1101</span><a id="line.1101">        mask = n - 1;</a>
-<span class="sourceLineNo">1102</span><a id="line.1102">        final K[] key = this.key = (K[]) new Object[n + 1];</a>
-<span class="sourceLineNo">1103</span><a id="line.1103">        K k;</a>
-<span class="sourceLineNo">1104</span><a id="line.1104">        for (int i = size, pos; i-- != 0; ) {</a>
-<span class="sourceLineNo">1105</span><a id="line.1105">            k = (K) s.readObject();</a>
-<span class="sourceLineNo">1106</span><a id="line.1106">            if (k == null) {</a>
-<span class="sourceLineNo">1107</span><a id="line.1107">                pos = n;</a>
-<span class="sourceLineNo">1108</span><a id="line.1108">                containsNull = true;</a>
-<span class="sourceLineNo">1109</span><a id="line.1109">            } else {</a>
-<span class="sourceLineNo">1110</span><a id="line.1110">                if (!(key[pos = (hasher.hash(k)) &amp; mask] == null))</a>
-<span class="sourceLineNo">1111</span><a id="line.1111">                    while (!(key[pos = pos + 1 &amp; mask] == null)) ;</a>
-<span class="sourceLineNo">1112</span><a id="line.1112">            }</a>
-<span class="sourceLineNo">1113</span><a id="line.1113">            key[pos] = k;</a>
-<span class="sourceLineNo">1114</span><a id="line.1114">        }</a>
-<span class="sourceLineNo">1115</span><a id="line.1115">    }</a>
-<span class="sourceLineNo">1116</span><a id="line.1116">}</a>
+<span class="sourceLineNo">1022</span><a id="line.1022"></a>
+<span class="sourceLineNo">1023</span><a id="line.1023">    /**</a>
+<span class="sourceLineNo">1024</span><a id="line.1024">     * Unwraps an iterator into an array starting at a given offset for a given number of elements.</a>
+<span class="sourceLineNo">1025</span><a id="line.1025">     * &lt;p&gt;</a>
+<span class="sourceLineNo">1026</span><a id="line.1026">     * &lt;P&gt;This method iterates over the given type-specific iterator and stores the elements returned, up to a maximum of &lt;code&gt;length&lt;/code&gt;, in the given array starting at &lt;code&gt;offset&lt;/code&gt;. The</a>
+<span class="sourceLineNo">1027</span><a id="line.1027">     * number of actually unwrapped elements is returned (it may be less than &lt;code&gt;max&lt;/code&gt; if the iterator emits less than &lt;code&gt;max&lt;/code&gt; elements).</a>
+<span class="sourceLineNo">1028</span><a id="line.1028">     *</a>
+<span class="sourceLineNo">1029</span><a id="line.1029">     * @param i      a type-specific iterator.</a>
+<span class="sourceLineNo">1030</span><a id="line.1030">     * @param array  an array to contain the output of the iterator.</a>
+<span class="sourceLineNo">1031</span><a id="line.1031">     * @param offset the first element of the array to be returned.</a>
+<span class="sourceLineNo">1032</span><a id="line.1032">     * @param max    the maximum number of elements to unwrap.</a>
+<span class="sourceLineNo">1033</span><a id="line.1033">     * @return the number of elements unwrapped.</a>
+<span class="sourceLineNo">1034</span><a id="line.1034">     */</a>
+<span class="sourceLineNo">1035</span><a id="line.1035">    private static &lt;K&gt; int objectUnwrap(final Iterator&lt;? extends K&gt; i, final K[] array, int offset, final int max) {</a>
+<span class="sourceLineNo">1036</span><a id="line.1036">        if (max &lt; 0) throw new IllegalArgumentException("The maximum number of elements (" + max + ") is negative");</a>
+<span class="sourceLineNo">1037</span><a id="line.1037">        if (offset &lt; 0 || offset + max &gt; array.length) throw new IllegalArgumentException();</a>
+<span class="sourceLineNo">1038</span><a id="line.1038">        int j = max;</a>
+<span class="sourceLineNo">1039</span><a id="line.1039">        while (j-- != 0 &amp;&amp; i.hasNext())</a>
+<span class="sourceLineNo">1040</span><a id="line.1040">            array[offset++] = i.next();</a>
+<span class="sourceLineNo">1041</span><a id="line.1041">        return max - j - 1;</a>
+<span class="sourceLineNo">1042</span><a id="line.1042">    }</a>
+<span class="sourceLineNo">1043</span><a id="line.1043"></a>
+<span class="sourceLineNo">1044</span><a id="line.1044">    /**</a>
+<span class="sourceLineNo">1045</span><a id="line.1045">     * Unwraps an iterator into an array.</a>
+<span class="sourceLineNo">1046</span><a id="line.1046">     * &lt;p&gt;</a>
+<span class="sourceLineNo">1047</span><a id="line.1047">     * &lt;P&gt;This method iterates over the given type-specific iterator and stores the elements returned in the given array. The iteration will stop when the iterator has no more elements or when the end</a>
+<span class="sourceLineNo">1048</span><a id="line.1048">     * of the array has been reached.</a>
+<span class="sourceLineNo">1049</span><a id="line.1049">     *</a>
+<span class="sourceLineNo">1050</span><a id="line.1050">     * @param i     a type-specific iterator.</a>
+<span class="sourceLineNo">1051</span><a id="line.1051">     * @param array an array to contain the output of the iterator.</a>
+<span class="sourceLineNo">1052</span><a id="line.1052">     * @return the number of elements unwrapped.</a>
+<span class="sourceLineNo">1053</span><a id="line.1053">     */</a>
+<span class="sourceLineNo">1054</span><a id="line.1054">    private static &lt;K&gt; int objectUnwrap(final Iterator&lt;? extends K&gt; i, final K[] array) {</a>
+<span class="sourceLineNo">1055</span><a id="line.1055">        return objectUnwrap(i, array, 0, array.length);</a>
+<span class="sourceLineNo">1056</span><a id="line.1056">    }</a>
+<span class="sourceLineNo">1057</span><a id="line.1057"></a>
+<span class="sourceLineNo">1058</span><a id="line.1058">    @Override</a>
+<span class="sourceLineNo">1059</span><a id="line.1059">    public String toString() {</a>
+<span class="sourceLineNo">1060</span><a id="line.1060">        final StringBuilder s = new StringBuilder();</a>
+<span class="sourceLineNo">1061</span><a id="line.1061">        int i = scanNext(-1);</a>
+<span class="sourceLineNo">1062</span><a id="line.1062">        boolean first = true;</a>
+<span class="sourceLineNo">1063</span><a id="line.1063">        s.append("OrderedSet{");</a>
+<span class="sourceLineNo">1064</span><a id="line.1064">        while (i != -1) {</a>
+<span class="sourceLineNo">1065</span><a id="line.1065">            if (first) first = false;</a>
+<span class="sourceLineNo">1066</span><a id="line.1066">            else s.append(", ");</a>
+<span class="sourceLineNo">1067</span><a id="line.1067">            s.append(key[i]);</a>
+<span class="sourceLineNo">1068</span><a id="line.1068">            i = scanNext(i);</a>
+<span class="sourceLineNo">1069</span><a id="line.1069">        }</a>
+<span class="sourceLineNo">1070</span><a id="line.1070">        s.append("}");</a>
+<span class="sourceLineNo">1071</span><a id="line.1071">        return s.toString();</a>
+<span class="sourceLineNo">1072</span><a id="line.1072">    }</a>
+<span class="sourceLineNo">1073</span><a id="line.1073"></a>
+<span class="sourceLineNo">1074</span><a id="line.1074">    @Override</a>
+<span class="sourceLineNo">1075</span><a id="line.1075">    public boolean equals(final Object o) {</a>
+<span class="sourceLineNo">1076</span><a id="line.1076">        if (o == this)</a>
+<span class="sourceLineNo">1077</span><a id="line.1077">            return true;</a>
+<span class="sourceLineNo">1078</span><a id="line.1078">        if (!(o instanceof Set))</a>
+<span class="sourceLineNo">1079</span><a id="line.1079">            return false;</a>
+<span class="sourceLineNo">1080</span><a id="line.1080">        Set&lt;?&gt; s = (Set&lt;?&gt;) o;</a>
+<span class="sourceLineNo">1081</span><a id="line.1081">        if (s.size() != size)</a>
+<span class="sourceLineNo">1082</span><a id="line.1082">            return false;</a>
+<span class="sourceLineNo">1083</span><a id="line.1083">        return containsAll(s);</a>
+<span class="sourceLineNo">1084</span><a id="line.1084">    }</a>
+<span class="sourceLineNo">1085</span><a id="line.1085"></a>
+<span class="sourceLineNo">1086</span><a id="line.1086">    @GwtIncompatible</a>
+<span class="sourceLineNo">1087</span><a id="line.1087">    private void writeObject(java.io.ObjectOutputStream s)</a>
+<span class="sourceLineNo">1088</span><a id="line.1088">            throws java.io.IOException {</a>
+<span class="sourceLineNo">1089</span><a id="line.1089">        final Iterator&lt;K&gt; i = iterator();</a>
+<span class="sourceLineNo">1090</span><a id="line.1090">        s.defaultWriteObject();</a>
+<span class="sourceLineNo">1091</span><a id="line.1091">        for (int j = size; j-- != 0; )</a>
+<span class="sourceLineNo">1092</span><a id="line.1092">            s.writeObject(i.next());</a>
+<span class="sourceLineNo">1093</span><a id="line.1093">    }</a>
+<span class="sourceLineNo">1094</span><a id="line.1094"></a>
+<span class="sourceLineNo">1095</span><a id="line.1095">    @GwtIncompatible</a>
+<span class="sourceLineNo">1096</span><a id="line.1096">    @SuppressWarnings("unchecked")</a>
+<span class="sourceLineNo">1097</span><a id="line.1097">    private void readObject(java.io.ObjectInputStream s)</a>
+<span class="sourceLineNo">1098</span><a id="line.1098">            throws java.io.IOException, ClassNotFoundException {</a>
+<span class="sourceLineNo">1099</span><a id="line.1099">        s.defaultReadObject();</a>
+<span class="sourceLineNo">1100</span><a id="line.1100">        n = arraySize(size, f);</a>
+<span class="sourceLineNo">1101</span><a id="line.1101">        maxFill = maxFill(n, f);</a>
+<span class="sourceLineNo">1102</span><a id="line.1102">        mask = n - 1;</a>
+<span class="sourceLineNo">1103</span><a id="line.1103">        final K[] key = this.key = (K[]) new Object[n + 1];</a>
+<span class="sourceLineNo">1104</span><a id="line.1104">        K k;</a>
+<span class="sourceLineNo">1105</span><a id="line.1105">        for (int i = size, pos; i-- != 0; ) {</a>
+<span class="sourceLineNo">1106</span><a id="line.1106">            k = (K) s.readObject();</a>
+<span class="sourceLineNo">1107</span><a id="line.1107">            if (k == null) {</a>
+<span class="sourceLineNo">1108</span><a id="line.1108">                pos = n;</a>
+<span class="sourceLineNo">1109</span><a id="line.1109">                containsNull = true;</a>
+<span class="sourceLineNo">1110</span><a id="line.1110">            } else {</a>
+<span class="sourceLineNo">1111</span><a id="line.1111">                if (!(key[pos = (hasher.hash(k)) &amp; mask] == null))</a>
+<span class="sourceLineNo">1112</span><a id="line.1112">                    while (!(key[pos = pos + 1 &amp; mask] == null)) ;</a>
+<span class="sourceLineNo">1113</span><a id="line.1113">            }</a>
+<span class="sourceLineNo">1114</span><a id="line.1114">            key[pos] = k;</a>
+<span class="sourceLineNo">1115</span><a id="line.1115">        }</a>
+<span class="sourceLineNo">1116</span><a id="line.1116">    }</a>
+<span class="sourceLineNo">1117</span><a id="line.1117">}</a>
 
 
 

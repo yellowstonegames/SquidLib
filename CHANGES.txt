@@ -1,0 +1,23 @@
+
+3.0.1
+Dependencies:
+ - squidlib-util: RegExodus 0.1.10
+ - squidlib: libGDX 1.9.11, anim8-gdx 0.2.0 
+ - squidlib-extra: libGDX 1.9.11
+Changes:
+ - 5D noise has been added to fit in-between the existing 4D and 6D.
+ - Lots of other noise stuff; FastNoise.HONEY may be useful, as may Noise.Maelstrom3D (or any D).
+ - VastNoise is a drop-in replacement for FastNoise that is a little faster but uses an extra 1MB of memory (statically).
+ - Thesaurus has an archive of 3.0.0's lexicon stored in the repo's archives/ folder; this can be loaded to replicate 3.0.0 Thesaurus results.
+ - Some bug-fixes when wrapping IColoredStrings.
+ - MathExtras has nice new features, like isqrt() for getting the square root of large longs precisely, and probit() to Gaussian-distribute 0-1 values.
+
+3.0.0
+Dependencies:
+ - squidlib-util: RegExodus 0.1.10
+ - squidlib: libGDX 1.9.11, anim8-gdx 0.1.6 
+ - squidlib-extra: libGDX 1.9.11
+Changes:
+ - Everything.
+ - Seriously, the library is unrecognizable when compared to 2.x.
+ 

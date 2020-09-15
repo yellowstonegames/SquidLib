@@ -5,7 +5,7 @@
 
     <groupId>com.squidpony</groupId>
     <artifactId>squidlib-parent</artifactId>
-    <version>3.0.1-SNAPSHOT</version>
+    <version>3.0.1</version>
     <packaging>pom</packaging>
 
     <name>squidlib-parent</name>
@@ -68,7 +68,7 @@
         <gdx.version>1.9.11</gdx.version>
         <junit.version>4.12</junit.version>
         <regexodus.version>0.1.10</regexodus.version>
-        <anim8.version>0.1.6</anim8.version>
+        <anim8.version>0.2.0</anim8.version>
     </properties>
 
     <issueManagement>
@@ -216,11 +216,11 @@
                     <encoding>${project.build.sourceEncoding}</encoding>
                     <javadocVersion>14</javadocVersion>
                     <links>
-                        <!--<link>http://docs.oracle.com/javase/8/docs/api/</link>-->
+<!--                        <link>http://docs.oracle.com/javase/8/docs/api/</link>-->
                         <link>https://docs.oracle.com/en/java/javase/14/docs/api/</link>
-                        <link>https://squidpony.github.io/SquidLib/squidlib-util/apidocs/</link>
-                        <link>https://squidpony.github.io/SquidLib/squidlib/apidocs/</link>
-                        <link>https://squidpony.github.io/SquidLib/squidlib-extra/apidocs/</link>
+<!--                        <link>https://squidpony.github.io/SquidLib/squidlib-util/apidocs/</link>-->
+<!--                        <link>https://squidpony.github.io/SquidLib/squidlib/apidocs/</link>-->
+<!--                        <link>https://squidpony.github.io/SquidLib/squidlib-extra/apidocs/</link>-->
                     </links>
                     <linksource>true</linksource>
                     <detectLinks>false</detectLinks>
