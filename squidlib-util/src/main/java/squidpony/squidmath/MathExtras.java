@@ -18,6 +18,7 @@ package squidpony.squidmath;
 import squidpony.annotation.GwtIncompatible;
 
 import java.math.BigInteger;
+import java.util.Random;
 
 /**
  * Mathematical operations not provided by {@link Math java.lang.Math}.
@@ -293,24 +294,37 @@ public final class MathExtras
     /**
      * A way of taking a double in the (0.0, 1.0) range and mapping it to a Gaussian or normal distribution, so high
      * inputs correspond to high outputs, and similarly for the low range. This is centered on 0.0 and its standard
-     * deviation seems to be 1.0 (the same as {@link java.util.Random#nextGaussian()}). If this is given an input of 0.0
-     * or less, it returns negative infinity; if it is given an input of 1.0 or more, it returns positive infinity. If
-     * given NaN, it returns NaN. It uses an algorithm by Peter John Acklam, as implemented by Sherali Karimov.
-      <a href="https://web.archive.org/web/20150910002142/http://home.online.no/~pjacklam/notes/invnorm/impl/karimov/StatUtil.java">Original source</a>.
+     * deviation seems to be 1.0 (the same as {@link Random#nextGaussian()}). If this is given an input of 0.0
+     * or less, it returns -38.5, which is slightly less than the result when given {@link Double#MIN_VALUE}. If it is
+     * given an input of 1.0 or more, it returns 38.5, which is significantly larger than the result when given the
+     * largest double less than 1.0 (this value is further from 1.0 than {@link Double#MIN_VALUE} is from 0.0). If
+     * given {@link Double#NaN}, it returns whatever {@link Math#copySign(double, double)} returns for the arguments
+     * {@code 38.5, Double.NaN}, which is implementation-dependent. It uses an algorithm by Peter John Acklam, as
+     * implemented by Sherali Karimov.
+     * <a href="https://web.archive.org/web/20150910002142/http://home.online.no/~pjacklam/notes/invnorm/impl/karimov/StatUtil.java">Original source</a>.
      * <a href="https://web.archive.org/web/20151030215612/http://home.online.no/~pjacklam/notes/invnorm/">Information on the algorithm</a>.
      * <a href="https://en.wikipedia.org/wiki/Probit_function">Wikipedia's page on the probit function</a> may help, but
      * is more likely to just be confusing.
      * <br>
+     * Acklam's algorithm and Karimov's implementation are both quite fast. This appears faster than generating
+     * Gaussian-distributed numbers using either the Box-Muller Transform or Marsaglia's Polar Method, though it isn't
+     * as precise and can't produce as extreme min and max results in the extreme cases they should appear. If given
+     * a typical uniform random {@code double} that's exclusive on 1.0, it won't produce a result higher than
+     * {@code 8.209536145151493}, and will only produce results of at least {@code -8.209536145151493} if 0.0 is
+     * excluded from the inputs (if 0.0 is an input, the result is {@code 38.5}). A chief advantage of using this with
+     * a random number generator is that it only requires one random double to obtain one Gaussian value;
+     * {@link Random#nextGaussian()} generates at least two random doubles for each two Gaussian values, but may rarely
+     * require much more random generation.
+     * <br>
      * This can be used both as an optimization for generating Gaussian random values, and as a way of generating
      * Gaussian values that match a pattern present in the inputs (which you could have by using a sub-random sequence
      * as the input, such as those produced by {@link VanDerCorputQRNG#determine(int, int)} or the R2 sequence).
-     * @param d should be between 0 and 1, exclusive, but other values are tolerated (they return infinite results)
-     * @return a normal-distributed double centered on 0.0; may be infinite
+     * @param d should be between 0 and 1, exclusive, but other values are tolerated
+     * @return a normal-distributed double centered on 0.0; all results will be between -38.5 and 38.5, both inclusive
      */
-    @SuppressWarnings("divzero") // This can legitimately return infinite doubles, which it produces with zero division.
     public static double probit(final double d) {
         if (d <= 0 || d >= 1) {
-            return (d - 0.5) / 0.0;
+            return Math.copySign(38.5, d - 0.5);
         }
         // Rational approximation for lower region:
         else if (d < 0.02425) {

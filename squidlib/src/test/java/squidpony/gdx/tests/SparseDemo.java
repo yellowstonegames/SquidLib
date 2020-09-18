@@ -9,6 +9,7 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.profiling.GLProfiler;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
@@ -164,8 +165,16 @@ public class SparseDemo extends ApplicationAdapter {
     // This filters colors in a way we adjust over time, producing a sort of hue shift effect.
     // It can also be used to over- or under-saturate colors, change their brightness, or any combination of these. 
     private FloatFilters.YCwCmFilter warmMildFilter;
+
+    private GLProfiler glp;
+    private StringBuilder tempSB;
+    
     @Override
     public void create () {
+        glp = new GLProfiler(Gdx.graphics);
+        tempSB = new StringBuilder(80);
+        glp.enable();
+
         // gotta have a random number generator. We can seed an RNG with any long we want, or even a String.
         // if the seed is identical between two runs, any random factors will also be identical (until user input may
         // cause the usage of an RNG to change). You can randomize the dungeon and several other initial settings by
@@ -686,6 +695,7 @@ public class SparseDemo extends ApplicationAdapter {
     }
     @Override
     public void render () {
+        glp.reset();
         // standard clear the background routine for libGDX
         Gdx.gl.glClearColor(bgColor.r, bgColor.g, bgColor.b, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -746,7 +756,21 @@ public class SparseDemo extends ApplicationAdapter {
         stage.screenToStageCoordinates(screenPosition);
         batch.begin();
         stage.getRoot().draw(batch, 1);
-        display.font.draw(batch, Gdx.graphics.getFramesPerSecond() + " FPS", screenPosition.x, screenPosition.y);
+        int drawCalls = glp.getDrawCalls();
+        int textureBindings = glp.getTextureBindings();
+        int calls = glp.getCalls();
+        int switches = glp.getShaderSwitches();
+        tempSB.setLength(0);
+        tempSB.append(Gdx.graphics.getFramesPerSecond())
+                .append(" FPS, Draw Calls: ").append(drawCalls)
+                .append(", Calls: ").append(calls)
+                .append(",\nTexture Binds: ").append(textureBindings)
+                .append(", Shader Switches: ").append(switches);
+        screenPosition.set(cellWidth * gridWidth * 0.5f, cellHeight);
+        stage.screenToStageCoordinates(screenPosition);
+        display.font.draw(batch, tempSB, screenPosition.x, screenPosition.y);
+
+//        display.font.draw(batch, Gdx.graphics.getFramesPerSecond() + " FPS", screenPosition.x, screenPosition.y);
         batch.end();
         Gdx.graphics.setTitle("SparseLayers Demo running at FPS: " + Gdx.graphics.getFramesPerSecond());
     }
