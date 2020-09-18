@@ -6,7 +6,7 @@
     <parent>
         <groupId>com.squidpony</groupId>
         <artifactId>squidlib-parent</artifactId>
-        <version>3.0.1</version>
+        <version>3.0.2-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>squidlib</artifactId>
@@ -41,7 +41,7 @@
         <dependency>
             <groupId>com.squidpony</groupId>
             <artifactId>squidlib-util</artifactId>
-            <version>3.0.1</version>
+            <version>3.0.2-SNAPSHOT</version>
         </dependency>
 
         <dependency>
