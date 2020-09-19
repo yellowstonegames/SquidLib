@@ -4019,9 +4019,9 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 back[x][y] = 
                                         floatGet(
-                                                ((float)JackNoise.noise((x + ctr) * 0.03125 + 20, (y + ctr) * 0.03125 + 30, 1234) * 0.50f) + 0.50f,
-                                                ((float)JackNoise.noise((x + ctr) * 0.03125 + 30, (y + ctr) * 0.03125 + 10, 54321) * 0.50f) + 0.50f,
-                                                ((float)JackNoise.noise((x + ctr) * 0.03125 + 10, (y + ctr) * 0.03125 + 20, 1234321) * 0.50f) + 0.50f,
+                                                ((float)JackNoise.instance.getNoiseWithSeed((x + ctr) * 0.03125 + 20, (y + ctr) * 0.03125 + 30, 1234) * 0.50f) + 0.50f,
+                                                ((float)JackNoise.instance.getNoiseWithSeed((x + ctr) * 0.03125 + 30, (y + ctr) * 0.03125 + 10, 54321) * 0.50f) + 0.50f,
+                                                ((float)JackNoise.instance.getNoiseWithSeed((x + ctr) * 0.03125 + 10, (y + ctr) * 0.03125 + 20, 1234321) * 0.50f) + 0.50f,
                                                 1.0f);
                             }
                         }
@@ -4045,7 +4045,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                         20.0, 20.0, 20.0, 12) * 0.5
                                         + Noise.seamless3D(x * 0.125, y * 0.125, ctr  * 0.05125,
                                         40.0, 40.0, 20.0, 1234)
-                                        + */JackNoise.noise((x + ctr) * 0.03125, (y + ctr) * 0.03125, 123456) * 0.50f) + 0.50f;
+                                        + */JackNoise.instance.getNoiseWithSeed((x + ctr) * 0.03125, (y + ctr) * 0.03125, 123456) * 0.50f) + 0.50f;
                                 back[x][y] = getGray(bright);
                             }
                         }
@@ -4068,9 +4068,9 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 back[x][y] =
                                         floatGet(
-                                                ((float)JackNoise.noise(x * 0.03125 + 20, y * 0.03125 + 30, ctr * 0.03125 + 10, 1234) * 0.50f) + 0.50f,
-                                                ((float)JackNoise.noise(x * 0.03125 + 30, y * 0.03125 + 10, ctr * 0.03125 + 20, 54321) * 0.50f) + 0.50f,
-                                                ((float)JackNoise.noise(x * 0.03125 + 10, y * 0.03125 + 20, ctr * 0.03125 + 30, 1234321) * 0.50f) + 0.50f,
+                                                ((float)JackNoise.instance.getNoiseWithSeed(x * 0.03125 + 20, y * 0.03125 + 30, ctr * 0.03125 + 10, 1234) * 0.50f) + 0.50f,
+                                                ((float)JackNoise.instance.getNoiseWithSeed(x * 0.03125 + 30, y * 0.03125 + 10, ctr * 0.03125 + 20, 54321) * 0.50f) + 0.50f,
+                                                ((float)JackNoise.instance.getNoiseWithSeed(x * 0.03125 + 10, y * 0.03125 + 20, ctr * 0.03125 + 30, 1234321) * 0.50f) + 0.50f,
                                                 1.0f);
                             }
                         }
@@ -4090,11 +4090,10 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("Jack 3D Noise, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                bright = (float)(JackNoise.noise(x * 0.03125, y * 0.03125, ctr * 0.03125, 123456) * 0.50f) + 0.50f;
+                                bright = (float)(JackNoise.instance.getNoiseWithSeed(x * 0.03125, y * 0.03125, ctr * 0.03125, 123456) * 0.50f) + 0.50f;
                                 back[x][y] = getGray(bright);
                             }
                         }
-
                     }
 //                        Gdx.graphics.setTitle("Seeded Seamless 2D Noise, three octaves at " + Gdx.graphics.getFramesPerSecond() + " FPS");
 //                        for (int x = 0; x < width; x++) {
@@ -4105,14 +4104,35 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 //                        }
 //                    }
                     break;
-                    case 59:
-                        Gdx.graphics.setTitle("Ecto Noise 2D, 1 octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                    case 58:
+                        Gdx.graphics.setTitle("Jack 4D Color Noise, one octave per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                bright = ectoNoise((x + ctr) * 0.0625f, (y + ctr) * 0.0625f, -999999L) * 0.5f + 0.5f; //0.61803398875
+                                back[x][y] =
+                                        floatGet(
+                                                ((float)JackNoise.instance.getNoiseWithSeed(x * 0.04 * 0.8157559148337911 + y * 0.04 * 0.5797766823136037, x * 0.04 * -0.8186594543410776 + y * 0.04 * 0.5756498588428911, x * 0.04 * 0.0014176412627734311 + y * 0.04 * -0.5773484947708223 + ctr * 0.04 * 0.816496580927726, x * 0.04 * 0.0014176412627734311 + y * 0.04 * -0.5773484947708223 + ctr * 0.04 * -0.816496580927726, 1234) * 0.50f) + 0.50f,
+                                                ((float)JackNoise.instance.getNoiseWithSeed(x * 0.04 * 0.8157559148337911 + y * 0.04 * 0.5797766823136037, x * 0.04 * -0.8186594543410776 + y * 0.04 * 0.5756498588428911, x * 0.04 * 0.0014176412627734311 + y * 0.04 * -0.5773484947708223 + ctr * 0.04 * 0.816496580927726, x * 0.04 * 0.0014176412627734311 + y * 0.04 * -0.5773484947708223 + ctr * 0.04 * -0.816496580927726, 54321) * 0.50f) + 0.50f,
+                                                ((float)JackNoise.instance.getNoiseWithSeed(x * 0.04 * 0.8157559148337911 + y * 0.04 * 0.5797766823136037, x * 0.04 * -0.8186594543410776 + y * 0.04 * 0.5756498588428911, x * 0.04 * 0.0014176412627734311 + y * 0.04 * -0.5773484947708223 + ctr * 0.04 * 0.816496580927726, x * 0.04 * 0.0014176412627734311 + y * 0.04 * -0.5773484947708223 + ctr * 0.04 * -0.816496580927726, 1234321) * 0.50f) + 0.50f,
+                                                1.0f);
+                            }
+                        }
+                        break;
+                    case 59: {
+                        Gdx.graphics.setTitle("Jack 4D Noise, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bright = ((float)JackNoise.instance.getNoiseWithSeed(x * 0.04 * 0.8157559148337911 + y * 0.04 * 0.5797766823136037, x * 0.04 * -0.8186594543410776 + y * 0.04 * 0.5756498588428911, x * 0.04 * 0.0014176412627734311 + y * 0.04 * -0.5773484947708223 + ctr * 0.04 * 0.816496580927726, x * 0.04 * 0.0014176412627734311 + y * 0.04 * -0.5773484947708223 + ctr * 0.04 * -0.816496580927726, 123456) * 0.50f) + 0.50f;
                                 back[x][y] = getGray(bright);
                             }
                         }
+                    }
+//                        Gdx.graphics.setTitle("Ecto Noise 2D, 1 octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+//                        for (int x = 0; x < width; x++) {
+//                            for (int y = 0; y < height; y++) {
+//                                bright = ectoNoise((x + ctr) * 0.0625f, (y + ctr) * 0.0625f, -999999L) * 0.5f + 0.5f; //0.61803398875
+//                                back[x][y] = getGray(bright);
+//                            }
+//                        }
                         break;
                     case 68:
                         Gdx.graphics.setTitle("Turing Pattern at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
@@ -4244,7 +4264,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             }
                         }
                         break;
-                    case 58:
+                  
                     case 74:
                         Gdx.graphics.setTitle("Glitch 2D Noise at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
