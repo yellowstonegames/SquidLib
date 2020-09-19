@@ -80,7 +80,7 @@ import java.util.ArrayList;
  * @author Tommy Ettinger - https://github.com/tommyettinger
  */
 public class DungeonGeneratorTest {
-    public static int width = 70, height = 70, depth = 16;
+    public static int width = 30, height = 32, depth = 16;
     public static GreasedRegion expandIsolated(GreasedRegion gr)
     {
         int fst = gr.firstTight();
@@ -250,15 +250,15 @@ public class DungeonGeneratorTest {
         System.out.println("SerpentMapGenerator\n");
 
 
-        dungeonGenerator = new DungeonGenerator(width, height, rng);
+        dungeonGenerator = new DungeonGenerator(60, 30, rng);
 //        dungeonGenerator.addDoors(12, false);
 //        dungeonGenerator.addWater(8);
 //        dungeonGenerator.addGrass(11);
         rng.setState(2252637788195L);
-        SerpentMapGenerator serpent = new SerpentMapGenerator(width, height, rng, 0.2);
+        SerpentMapGenerator serpent = new SerpentMapGenerator(60, 30, rng, 0.04);
         serpent.putWalledBoxRoomCarvers(7);
         serpent.putWalledRoundRoomCarvers(4);
-        serpent.putCaveCarvers(2);
+//        serpent.putCaveCarvers(1);
         map = serpent.generate();
         dungeonGenerator.generate(ArrayTools.copy(map));
 
@@ -266,8 +266,8 @@ public class DungeonGeneratorTest {
         sdungeon[dungeonGenerator.stairsUp.x][dungeonGenerator.stairsUp.y] = '<';
         sdungeon[dungeonGenerator.stairsDown.x][dungeonGenerator.stairsDown.y] = '>';
 
-        dungeonGenerator.setDungeon(DungeonUtility.doubleWidth(
-                DungeonUtility.hashesToLines(sdungeon)));
+        dungeonGenerator.setDungeon(//DungeonUtility.doubleWidth(
+                DungeonUtility.hashesToLines(sdungeon));
         System.out.println(dungeonGenerator);
         System.out.println("------------------------------------------------------------");
         System.out.println("SerpentMapGenerator with chokepoint detection\n");
@@ -538,8 +538,8 @@ public class DungeonGeneratorTest {
         dungeon[dungeonGenerator.stairsUp.x][dungeonGenerator.stairsUp.y] = '<';
         dungeon[dungeonGenerator.stairsDown.x][dungeonGenerator.stairsDown.y] = '>';
 
-        dungeonGenerator.setDungeon(DungeonUtility.doubleWidth(
-                DungeonUtility.hashesToLines(dungeon, true)));
+        dungeonGenerator.setDungeon(//DungeonUtility.doubleWidth(
+                DungeonUtility.hashesToLines(dungeon, true));
         System.out.println(dungeonGenerator);
         System.out.println();
         dungeonGenerator.setDungeon(DungeonUtility.linesToHashes(dungeonGenerator.getDungeon()));
