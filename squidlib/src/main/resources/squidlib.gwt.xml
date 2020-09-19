@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit trunk//EN"
-    "https://gwt.googlesource.com/gwt/+/master/distro-source/core/src/gwt-module.dtd">
+<!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 2.8.2//EN"
+        "http://www.gwtproject.org/doctype/2.8.2/gwt-module.dtd">
 <!-- To compile to Gwt, you need to reference this file in your master .gwt.xml
      file (usually called GdxDefinition.gwt.xml) as follows:
+     <inherits name="anim8"/>
      <inherits name="regexodus"/>
      <inherits name="squidlib-util" />
      <inherits name="squidlib" />
@@ -13,7 +14,7 @@
         <include name="utils/Align.java"/>
         <!-- Thanks mgsx-dev!
         https://github.com/libgdx/libgdx/issues/5820#issuecomment-605991717 
-        This source block should be removed when we update to 1.9.11, when it's released. 
+        This source block should be removed when people start $%#*&ing adopting libGDX 1.9.11... 
         -->
     </source>
     <inherits name="anim8"/>
