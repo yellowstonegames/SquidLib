@@ -170,12 +170,11 @@ public abstract class AbstractRNG implements IRNG {
         long rand = nextLong();
         final long randLow = rand & 0xFFFFFFFFL;
         final long boundLow = outerBound & 0xFFFFFFFFL;
-        rand >>>= 32;
+        rand >>= 32;
         outerBound >>= 32;
         long a = rand * outerBound;
         final long b = randLow * boundLow;
-        a += (((b >>> 32) + (rand + randLow) * (outerBound + boundLow) - a - b) >> 32);
-        return a + (a >>> 63);
+        return a + (((b >>> 32) + (rand + randLow) * (outerBound + boundLow) - a - b) >> 32);
     }
 
     /**
