@@ -823,7 +823,7 @@ public class RNG implements Serializable, IRNG {
      * If bound is negative this returns a negative long; if bound is positive this returns a positive long. The bound
      * can even be 0, which will cause this to return 0L every time. This uses a biased technique to get numbers from
      * large ranges, but the amount of bias is incredibly small (expected to be under 1/1000 if enough random ranged
-     * numbers are requested, which is about the same as an unbiased method that was also considered).It may have
+     * numbers are requested, which is about the same as an unbiased method that was also considered). It may have
      * noticeable bias if the generator's period is exhausted by only calls to this method. Unlike all unbiased methods,
      * this advances the state by an equivalent to exactly one call to {@link #nextLong()}, where rejection sampling
      * would sometimes advance by one call, but other times by arbitrarily many more.
@@ -841,12 +841,11 @@ public class RNG implements Serializable, IRNG {
         long rand = random.nextLong();
         final long randLow = rand & 0xFFFFFFFFL;
         final long boundLow = outerBound & 0xFFFFFFFFL;
-        rand >>>= 32;
+        rand >>= 32;
         outerBound >>= 32;
         long a = rand * outerBound;
         final long b = randLow * boundLow;
-        a += (((b >>> 32) + (rand + randLow) * (outerBound + boundLow) - a - b) >> 32);
-        return a + (a >>> 63);
+        return a + (((b >>> 32) + (rand + randLow) * (outerBound + boundLow) - a - b) >> 32);
     }
 
     /**
