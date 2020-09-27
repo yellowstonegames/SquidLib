@@ -130,24 +130,24 @@ public class DistributedRNG extends AbstractRNG implements IStatefulRNG, Statefu
      * If bound is negative this returns a negative long; if bound is positive this returns a positive long. The bound
      * can even be 0, which will cause this to return 0L every time.
      *
-     * @param bound the outer exclusive bound; can be positive or negative
+     * @param outerBound the outer exclusive bound; can be positive or negative
      * @return a random long between 0 (inclusive) and bound (exclusive)
      */
     @Override
-    public long nextSignedLong(long bound) {
-        return (long) (distribution.nextDouble(rng) * bound);
+    public long nextSignedLong(long outerBound) {
+        return (long) (distribution.nextDouble(rng) * outerBound);
     }
 
     /**
      * Returns a random non-negative integer between 0 (inclusive) and the given bound (exclusive),
      * or 0 if the bound is 0. The bound can be negative, which will produce 0 or a negative result.
      *
-     * @param bound the outer bound (exclusive), can be negative or positive
+     * @param outerBound the outer bound (exclusive), can be negative or positive
      * @return the found number
      */
     @Override
-    public int nextSignedInt(int bound) {
-        return (int) (distribution.nextDouble(rng) * bound);
+    public int nextSignedInt(int outerBound) {
+        return (int) (distribution.nextDouble(rng) * outerBound);
     }
     
     /**

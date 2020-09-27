@@ -138,7 +138,7 @@ public final class LinnormRNG implements RandomnessSource, StatefulRandomness, S
      * Inclusive inner, exclusive outer.
      *
      * @param inner the inner bound, inclusive, can be positive or negative
-     * @param outer the outer bound, exclusive, can be positive or negative, usually greater than inner
+     * @param outer the outer bound, exclusive, can be positive or negative, should be greater than inner
      * @return a random int between inner (inclusive) and outer (exclusive)
      */
     public final int nextInt(final int inner, final int outer) {
@@ -311,9 +311,9 @@ public final class LinnormRNG implements RandomnessSource, StatefulRandomness, S
      * @param bound the outer exclusive bound, as an int
      * @return an int between 0 (inclusive) and bound (exclusive)
      */
-    public static int determineBounded(long state, final int bound)
+    public static int determineBounded(long state, int bound)
     {
-        return (int)((bound * (((state = ((state = (((state * 0x632BE59BD9B4E019L) ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L)) ^ state >>> 27) * 0xAEF17502108EF2D9L) ^ state >>> 25) & 0x7FFFFFFFL)) >> 31);
+        return (bound = (int)((bound * (((state = ((state = (((state * 0x632BE59BD9B4E019L) ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L)) ^ state >>> 27) * 0xAEF17502108EF2D9L) ^ state >>> 25) & 0x7FFFFFFFL)) >> 31)) + (bound >>> 31);
     }
 
     /**

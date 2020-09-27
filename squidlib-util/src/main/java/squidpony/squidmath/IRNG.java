@@ -109,10 +109,10 @@ public interface IRNG extends RandomnessSource {
      * noticeable bias if the generator's period is exhausted by only calls to this method. Unlike all unbiased methods,
      * this advances the state by an equivalent to exactly one call to {@link #nextLong()}, where rejection sampling
      * would sometimes advance by one call, but other times by arbitrarily many more.
-     * @param bound the outer exclusive bound; can be positive or negative
+     * @param outerBound the outer exclusive bound; can be positive or negative
      * @return a random long between 0 (inclusive) and bound (exclusive)
      */
-    long nextSignedLong(long bound);
+    long nextSignedLong(long outerBound);
 
     /**
      * Returns a random non-negative integer between 0 (inclusive) and the given bound (exclusive),
@@ -120,10 +120,10 @@ public interface IRNG extends RandomnessSource {
      * <br>
      * Credit goes to Daniel Lemire, http://lemire.me/blog/2016/06/27/a-fast-alternative-to-the-modulo-reduction/
      *
-     * @param bound the outer bound (exclusive), can be negative or positive
+     * @param outerBound the outer bound (exclusive), can be negative or positive
      * @return the found number
      */
-    int nextSignedInt(final int bound);
+    int nextSignedInt(final int outerBound);
     /**
      * Returns a value between min (inclusive) and max (exclusive) as ints.
      * <br>

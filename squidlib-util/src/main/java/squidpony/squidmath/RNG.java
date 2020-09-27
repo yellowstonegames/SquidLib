@@ -834,17 +834,19 @@ public class RNG implements Serializable, IRNG {
      * faster, possibly more). It also always gets exactly one random long, so by default it advances the state as much
      * as {@link #nextLong()}.
      *
-     * @param bound the outer exclusive bound; can be positive or negative
+     * @param outerBound the outer exclusive bound; can be positive or negative
      * @return a random long between 0 (inclusive) and bound (exclusive)
      */
-    public long nextSignedLong(long bound) {
+    public long nextSignedLong(long outerBound) {
         long rand = random.nextLong();
         final long randLow = rand & 0xFFFFFFFFL;
-        final long boundLow = bound & 0xFFFFFFFFL;
+        final long boundLow = outerBound & 0xFFFFFFFFL;
         rand >>>= 32;
-        bound >>= 32;
-        final long t = rand * boundLow + (randLow * boundLow >>> 32);
-        return rand * bound + (t >> 32) + (randLow * bound + (t & 0xFFFFFFFFL) >> 32);
+        outerBound >>= 32;
+        long a = rand * outerBound;
+        final long b = randLow * boundLow;
+        a += (((b >>> 32) + (rand + randLow) * (outerBound + boundLow) - a - b) >> 32);
+        return a + (a >>> 63);
     }
 
     /**
@@ -858,11 +860,12 @@ public class RNG implements Serializable, IRNG {
      * <br>
      * Credit goes to Daniel Lemire, http://lemire.me/blog/2016/06/27/a-fast-alternative-to-the-modulo-reduction/
      *
-     * @param bound the outer bound (exclusive), can be negative or positive
+     * @param outerBound the outer bound (exclusive), can be negative or positive
      * @return the found number
      */
-    public int nextSignedInt(final int bound) {
-        return (int) ((bound * (long)random.next(31)) >> 31);
+    public int nextSignedInt(int outerBound) {
+        outerBound = (int) ((outerBound * (long)random.next(31)) >> 31);
+        return outerBound + (outerBound >>> 31);
     }
 
     /**

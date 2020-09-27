@@ -113,11 +113,12 @@ public class BasicRandom64 extends Random implements RandomnessSource, Serializa
 
     /**
      * Returns a random non-negative integer between 0 (inclusive) and the given bound (exclusive),
-     * or 0 if the bound is 0. The bound can be negative, which will produce 0 or a negative result.
+     * or 0 if the bound is 0. 
+     * The bound should not be negative; use {@link IRNG#nextSignedInt(int)} if you need a negative outer bound.
      * <br>
      * Credit goes to Daniel Lemire, http://lemire.me/blog/2016/06/27/a-fast-alternative-to-the-modulo-reduction/
      *
-     * @param bound the outer bound (exclusive), can be negative or positive
+     * @param bound the outer bound (exclusive), should be positive
      * @return the found number
      */
     public int nextInt(final int bound) {

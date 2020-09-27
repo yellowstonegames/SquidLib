@@ -123,7 +123,7 @@ public final class MizuchiRNG implements StatefulRandomness, Serializable {
 
     /**
      * Exclusive on the outer bound.  The inner bound is 0.
-     * The bound can be negative, which makes this produce either a negative int or 0.
+     * The bound should not be negative; use {@link IRNG#nextSignedInt(int)} if you need a negative outer bound.
      *
      * @param bound the upper bound; should be positive
      * @return a random int between 0 (inclusive) and bound (exclusive)
@@ -138,7 +138,7 @@ public final class MizuchiRNG implements StatefulRandomness, Serializable {
      * Inclusive inner, exclusive outer.
      *
      * @param inner the inner bound, inclusive, can be positive or negative
-     * @param outer the outer bound, exclusive, can be positive or negative, usually greater than inner
+     * @param outer the outer bound, exclusive, can be positive or negative, should be greater than inner
      * @return a random int between inner (inclusive) and outer (exclusive)
      */
     public final int nextInt(final int inner, final int outer) {

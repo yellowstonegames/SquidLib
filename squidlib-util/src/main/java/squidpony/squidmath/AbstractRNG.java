@@ -162,18 +162,20 @@ public abstract class AbstractRNG implements IRNG {
      * as {@link #nextLong()}; subclasses that are better at generating ints can override this and generate two ints
      * instead of one long that needs separating internally.
      *
-     * @param bound the outer exclusive bound; can be positive or negative
+     * @param outerBound the outer exclusive bound; can be positive or negative
      * @return a random long between 0 (inclusive) and bound (exclusive)
      */
     @Override
-    public long nextSignedLong(long bound) {
+    public long nextSignedLong(long outerBound) {
         long rand = nextLong();
         final long randLow = rand & 0xFFFFFFFFL;
-        final long boundLow = bound & 0xFFFFFFFFL;
+        final long boundLow = outerBound & 0xFFFFFFFFL;
         rand >>>= 32;
-        bound >>= 32;
-        final long t = rand * boundLow + (randLow * boundLow >>> 32);
-        return rand * bound + (t >> 32) + (randLow * bound + (t & 0xFFFFFFFFL) >> 32);
+        outerBound >>= 32;
+        long a = rand * outerBound;
+        final long b = randLow * boundLow;
+        a += (((b >>> 32) + (rand + randLow) * (outerBound + boundLow) - a - b) >> 32);
+        return a + (a >>> 63);
     }
 
     /**
@@ -182,12 +184,12 @@ public abstract class AbstractRNG implements IRNG {
      * <br>
      * Credit goes to Daniel Lemire, http://lemire.me/blog/2016/06/27/a-fast-alternative-to-the-modulo-reduction/
      *
-     * @param bound the outer bound (exclusive), can be negative or positive
+     * @param outerBound the outer bound (exclusive), can be negative or positive
      * @return the found number
      */
     @Override
-    public int nextSignedInt(final int bound) {
-        return (int) ((bound * (nextInt() & 0xFFFFFFFFL)) >> 32);
+    public int nextSignedInt(int outerBound) {
+        return (outerBound = (int) ((outerBound * (nextInt() & 0xFFFFFFFFL)) >> 32)) + (outerBound >>> 31);
     }
 
     /**

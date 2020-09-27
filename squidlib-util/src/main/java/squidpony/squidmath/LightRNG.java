@@ -118,7 +118,8 @@ public final class LightRNG implements RandomnessSource, StatefulRandomness, Ski
 
     /**
      * Returns a random non-negative integer between 0 (inclusive) and the given bound (exclusive),
-     * or 0 if the bound is 0. The bound can be negative, which will produce 0 or a negative result.
+     * or 0 if the bound is 0. 
+     * The bound should not be negative; use {@link IRNG#nextSignedInt(int)} if you need a negative outer bound.
      * Uses an aggressively optimized technique that has some bias, but mostly for values of
      * bound over 1 billion. This method uses the same technique as {@link RNG#nextIntHasty(int)},
      * and like that method will always advance state exactly once (equivalent to one call to
@@ -126,7 +127,7 @@ public final class LightRNG implements RandomnessSource, StatefulRandomness, Ski
      * <br>
      * Credit goes to Daniel Lemire, http://lemire.me/blog/2016/06/27/a-fast-alternative-to-the-modulo-reduction/
      *
-     * @param bound the outer bound (exclusive), can be negative or positive
+     * @param bound the outer bound (exclusive), should be positive
      * @return the found number
      */
     public int nextInt( final int bound ) {
@@ -155,7 +156,7 @@ public final class LightRNG implements RandomnessSource, StatefulRandomness, Ski
      * Inclusive lower, exclusive upper. Although you should usually use a higher value for upper than for lower, you
      * can use a lower "upper" than "lower" and this will still work, producing an int between the two bounds.
      * @param lower the lower bound, inclusive, can be positive or negative
-     * @param upper the upper bound, exclusive, can be positive or negative, usually should be greater than lower
+     * @param upper the upper bound, exclusive, can be positive or negative, should be greater than lower
      * @return a random int between lower (inclusive) and upper (exclusive)
      */
     public int nextInt( final int lower, final int upper ) {
@@ -361,9 +362,9 @@ public final class LightRNG implements RandomnessSource, StatefulRandomness, Ski
         return state ^ (state >>> 31);
     }
 
-    public static int determineBounded(long state, final int bound)
+    public static int determineBounded(long state, int bound)
     {
-        return (int)((bound * (((state = ((state = ((state *= 0x9E3779B97F4A7C15L) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL) ^ state >>> 31) & 0x7FFFFFFFL)) >> 31);
+        return (bound = (int)((bound * (((state = ((state = ((state *= 0x9E3779B97F4A7C15L) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL) ^ state >>> 31) & 0x7FFFFFFFL)) >> 31)) + (bound >>> 31);
     }
 
     /**

@@ -14,10 +14,11 @@ import java.io.Serializable;
  * generation time in use, and O(n) time to construct a WeightedTable instance), this may be useful to consider if you
  * don't need all the features of ProbabilityTable or if you want deeper control over the random aspects of it.
  * <br>
- * Internally, this uses DiverRNG's algorithm as found in {@link DiverRNG#determineBounded(long, int)} and
- * {@link DiverRNG#determine(long)} to generate two ints, one used for probability and treated as a 31-bit integer
- * and the other used to determine the chosen column, which is bounded to an arbitrary positive int. It does this with
- * just one randomized 64-bit value, allowing the state given to {@link #random(long)} to be just one long.
+ * Internally, this uses DiverRNG's algorithm (without considering negative bounds) as found in
+ * {@link DiverRNG#determineBounded(long, int)} and {@link DiverRNG#determine(long)} to generate two ints, one used for
+ * probability and treated as a 31-bit integer and the other used to determine the chosen column, which is bounded to an
+ * arbitrary positive int. It does this with just one randomized 64-bit value, allowing the state given to
+ * {@link #random(long)} to be just one long.
  * <br>
  * Created by Tommy Ettinger on 1/5/2018.
  */
