@@ -134,9 +134,9 @@ public final class XoRoRNG implements RandomnessSource, Serializable {
     }
 
     /**
-     * Exclusive on the outer bound; the inner bound is 0. The bound may be negative, which will produce a non-positive
-     * result.
-     * @param bound the outer exclusive bound; may be positive or negative
+     * Exclusive on the outer bound; the inner bound is 0.
+     * The bound should not be negative; use {@link IRNG#nextSignedInt(int)} if you need a negative outer bound.
+     * @param bound the outer exclusive bound; should be positive
      * @return a random int between 0 (inclusive) and bound (exclusive)
      */
     public int nextInt(final int bound) {

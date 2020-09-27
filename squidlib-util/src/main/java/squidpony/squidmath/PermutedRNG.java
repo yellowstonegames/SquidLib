@@ -135,7 +135,8 @@ public final class PermutedRNG implements RandomnessSource, StatefulRandomness, 
     /**
      * Exclusive on the outer bound; the inner bound is 0.
      * Calls {@link #nextLong()} exactly once.
-     * @param bound the upper bound; can be positive or negative
+     * The bound should not be negative; use {@link IRNG#nextSignedInt(int)} if you need a negative outer bound.
+     * @param bound the upper bound; should be positive
      * @return a random int less than n and at least equal to 0
      */
     public int nextInt( final int bound ) {
@@ -323,9 +324,9 @@ public final class PermutedRNG implements RandomnessSource, StatefulRandomness, 
      * @param bound the exclusive outer bound on the numbers this can produce, as an int
      * @return a pseudo-random int between 0 (inclusive) and bound (exclusive) determined from state
      */
-    public static int determineBounded(long state, final int bound)
+    public static int determineBounded(long state, int bound)
     {
         state ^= state >>> (5 + (state >>> 59));
-        return (int)((bound * ((((state *= 0xAEF17502108EF2D9L) >>> 43) ^ state) & 0x7FFFFFFFL)) >> 31);
+        return (bound = (int)((bound * ((((state *= 0xAEF17502108EF2D9L) >>> 43) ^ state) & 0x7FFFFFFFL)) >> 31)) + (bound >>> 31);
     }
 }

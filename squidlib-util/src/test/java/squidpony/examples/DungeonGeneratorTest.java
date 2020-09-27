@@ -516,8 +516,8 @@ public class DungeonGeneratorTest {
         dungeon[sdg.stairsUp.x][sdg.stairsUp.y] = '<';
         dungeon[sdg.stairsDown.x][sdg.stairsDown.y] = '>';
 
-        dungeonGenerator.setDungeon(DungeonUtility.doubleWidth(
-                DungeonUtility.hashesToLines(dungeon, true)));
+        dungeonGenerator.setDungeon(//DungeonUtility.doubleWidth(
+                DungeonUtility.hashesToLines(dungeon, true));
         System.out.println(dungeonGenerator);
         System.out.println();
         dungeonGenerator.setDungeon(DungeonUtility.linesToHashes(dungeonGenerator.getDungeon()));

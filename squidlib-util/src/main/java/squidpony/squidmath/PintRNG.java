@@ -106,6 +106,7 @@ public final class PintRNG implements RandomnessSource, StatefulRandomness, Seri
 
     /**
      * Exclusive on the upper bound.  The lower bound is 0.
+     * The bound should not be negative; use {@link IRNG#nextSignedInt(int)} if you need a negative outer bound.
      * <br>
      * Credit goes to Daniel Lemire, http://lemire.me/blog/2016/06/27/a-fast-alternative-to-the-modulo-reduction/
      * @param bound the upper bound; should be positive
@@ -287,10 +288,10 @@ public final class PintRNG implements RandomnessSource, StatefulRandomness, Seri
         return ((state *= 0x108EF2D9) >>> 22) ^ state;
     }
 
-    public static int determineBounded(int state, final int bound)
+    public static int determineBounded(int state, int bound)
     {
         state ^= state >>> (4 + (state >>> 28));
-        return (int)((bound * ((((state *= 0x108EF2D9) >>> 22) ^ state) & 0x7FFFFFFFL)) >>> 31);
+        return (bound = (int)((bound * ((((state *= 0x108EF2D9) >>> 22) ^ state) & 0x7FFFFFFFL)) >>> 31)) + (bound >>> 31);
     }
     public static int disperseBounded(int state, final int bound)
     {

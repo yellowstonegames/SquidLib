@@ -215,11 +215,11 @@ public final class ThrustAltRNG implements StatefulRandomness, SkippingRandomnes
      * @param bound the outer exclusive bound for the int this produces; can be negative or positive
      * @return a pseudo-random int between 0 (inclusive) and bound (exclusive)
      */
-    public static int determineBounded(long state, final int bound)
+    public static int determineBounded(long state, int bound)
     {
-        return (int)((bound * (
+        return (bound = (int)((bound * (
                 ((state = ((state *= 0x6C8E9CF570932BD5L) ^ (state >>> 25)) * (state | 0xA529L)) ^ (state >>> 23))
-                        & 0xFFFFFFFFL)) >> 32);
+                        & 0xFFFFFFFFL)) >> 32)) + (bound >>> 31);
     }
 
     /**
@@ -265,10 +265,10 @@ public final class ThrustAltRNG implements StatefulRandomness, SkippingRandomnes
      * @param bound the outer exclusive bound for the int this produces; should be between -65536 and 65535, inclusive
      * @return a pseudo-random int between 0 (inclusive) and bound (exclusive)
      */
-    public static int determineBoundedShort(int state, final int bound)
+    public static int determineBoundedShort(int state, int bound)
     {
         state = ((state *= 0x62BD5) ^ state >>> 13) * ((state & 0xFFFF8) ^ 0xCD7B5);
-        return (((((state << 21) | (state >>> 11)) ^ (((state << 7) | (state >>> 25)) * 0x62BD5)) & 0xFFFF) * bound) >> 16;
+        return (bound = (((((state << 21) | (state >>> 11)) ^ (((state << 7) | (state >>> 25)) * 0x62BD5)) & 0xFFFF) * bound) >> 16) + (bound >>> 31);
     }
     /**
      * Returns a random float that is deterministic based on an int state; if state is the same on two calls to this,

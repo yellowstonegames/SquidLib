@@ -79,9 +79,10 @@ public class LFSR implements StatefulRandomness, Serializable {
     }
 
     /**
-     * Exclusive on the outer bound; the inner bound is 0. The bound may be negative, which will produce a non-positive
-     * result.
-     * @param bound the outer exclusive bound; may be positive or negative
+     * Exclusive on the outer bound; the inner bound is 0.
+     * The bound should not be negative; use {@link IRNG#nextSignedInt(int)} if you need a negative outer bound.
+     * 
+     * @param bound the outer exclusive bound; should be positive
      * @return a random long between 0 (inclusive) and bound (exclusive)
      */
     public int nextInt( final int bound ) {
@@ -90,7 +91,7 @@ public class LFSR implements StatefulRandomness, Serializable {
     /**
      * Inclusive lower, exclusive upper.
      * @param inner the inner bound, inclusive, can be positive or negative
-     * @param outer the outer bound, exclusive, should be positive, should usually be greater than inner
+     * @param outer the outer bound, exclusive, should be positive, should be greater than inner
      * @return a random int that may be equal to inner and will otherwise be between inner and outer
      */
     public int nextInt(final int inner, final int outer) {
@@ -296,9 +297,9 @@ public class LFSR implements StatefulRandomness, Serializable {
      * @param bound the exclusive bound on the result as an int; does better if the bound is not too high (below 10000?)
      * @return the next value that {@link LFSR#determine(long)} would produce with the given state, but limited to bound; can return 0
      */
-    public static int determineBounded(final long state, final int bound)
+    public static int determineBounded(final long state, int bound)
     {
-        return (int)((bound * (state >>> 1 & 0xFFFFFFFFL)) >> 32);
+        return (bound = (int)((bound * (state >>> 1 & 0xFFFFFFFFL)) >> 32)) + (bound >>> 31);
     }
     /**
      * Gets an int using {@link #determineInt(int)} and bounds it to fit between 0 (inclusive) and bound (exclusive).
@@ -307,8 +308,8 @@ public class LFSR implements StatefulRandomness, Serializable {
      * @param bound the exclusive bound on the result as an int; does better if the bound is not too high (below 10000?)
      * @return the next int that {@link LFSR#determineInt(int)} would produce with the given state, but limited to bound; can return 0
      */
-    public static int determineBounded(final int state, final int bound)
+    public static int determineBounded(final int state, int bound)
     {
-        return (int)((bound * ((state >>> 1 ^ (-(state & 1) & 0xA3000000)) & 0xFFFFFFFFL)) >> 32);
+        return (bound = (int)((bound * ((state >>> 1 ^ (-(state & 1) & 0xA3000000)) & 0xFFFFFFFFL)) >> 32)) + (bound >>> 31);
     }
 }

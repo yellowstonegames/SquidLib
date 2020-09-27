@@ -353,7 +353,7 @@ public final class GWTRNG extends AbstractRNG implements IStatefulRNG, Serializa
      */
     public static int determineBounded(int state, final int bound)
     {
-        return (int) ((((state = ((state = (state ^ 0xD1B54A35) * 0x102473) ^ state >>> 11 ^ state >>> 21) * (state | 0xFFE00001)) ^ state >>> 13 ^ state >>> 19) & 0xFFFFFFFFL) * bound >> 32);
+        return (state = (int) ((((state = ((state = (state ^ 0xD1B54A35) * 0x102473) ^ state >>> 11 ^ state >>> 21) * (state | 0xFFE00001)) ^ state >>> 13 ^ state >>> 19) & 0xFFFFFFFFL) * bound >> 32)) + (state >>> 31);
     }
     /**
      * A deterministic random long generator that, given one int {@code state} as input, returns an 

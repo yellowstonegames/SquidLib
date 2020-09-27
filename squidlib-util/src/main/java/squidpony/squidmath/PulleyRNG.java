@@ -122,7 +122,7 @@ public final class PulleyRNG implements StatefulRandomness, SkippingRandomness, 
 
     /**
      * Exclusive on the outer bound.  The inner bound is 0.
-     * The bound can be negative, which makes this produce either a negative int or 0.
+     * The bound should not be negative; use {@link IRNG#nextSignedInt(int)} if you need a negative outer bound.
      *
      * @param bound the upper bound; should be positive
      * @return a random int between 0 (inclusive) and bound (exclusive)
@@ -338,9 +338,9 @@ public final class PulleyRNG implements StatefulRandomness, SkippingRandomness, 
      * @param bound the outer exclusive bound, as an int
      * @return an int between 0 (inclusive) and bound (exclusive)
      */
-    public static int determineBounded(long state, final int bound)
+    public static int determineBounded(long state, int bound)
     {
-        return (int)((bound * (((state = ((state = (state ^ (state << 41 | state >>> 23) ^ (state << 17 | state >>> 47)) * 0x369DEA0F31A53F85L) ^ state >>> 37 ^ state >>> 25) * 0xDB4F0B9175AE2165L) ^ state >>> 28) & 0xFFFFFFFFL)) >> 32);
+        return (bound = (int)((bound * (((state = ((state = (state ^ (state << 41 | state >>> 23) ^ (state << 17 | state >>> 47)) * 0x369DEA0F31A53F85L) ^ state >>> 37 ^ state >>> 25) * 0xDB4F0B9175AE2165L) ^ state >>> 28) & 0xFFFFFFFFL)) >> 32)) + (bound >>> 31);
     }
 
     /**
