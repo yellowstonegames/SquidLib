@@ -1,20 +1,20 @@
 package squidpony.squidgrid.mapping;
 
-import squidpony.squidmath.Coord;
+import squidpony.ArrayTools;
+import squidpony.squidgrid.Radius;
+import squidpony.squidmath.BathtubDistribution;
 import squidpony.squidmath.FastNoise;
 import squidpony.squidmath.GWTRNG;
 import squidpony.squidmath.GreasedRegion;
 import squidpony.squidmath.IRNG;
-import squidpony.squidmath.WobblyLine;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.ListIterator;
 
 /**
- * Map generator using Simplex noise for the formation of "rooms" and then WobblyLine to connect with corridors.
- * Created by Tommy Ettinger on 4/18/2016.
+ * Map generator that produces erratic, non-artificial-looking areas that could be cave complexes. This works by
+ * generating a region of continuous noise and two distant points in it, progressively using larger
+ * portions of the noise until it connects the points. The algorithm was discovered by tann, a libGDX user and noise
+ * aficionado, and it works a little more cleanly than the old approach this class used.
+ * <br>
+ * Initially created by Tommy Ettinger on 4/18/2016, reworked a few times, now mostly tann's work.
  */
 public class OrganicMapGenerator implements IDungeonGenerator {
     public char[][] map;
@@ -24,12 +24,6 @@ public class OrganicMapGenerator implements IDungeonGenerator {
     protected int width, height;
     public double noiseMin, noiseMax;
     protected FastNoise noise;
-    private static final Comparator<GreasedRegion> sizeComparator = new Comparator<GreasedRegion>() {
-        @Override
-        public int compare(GreasedRegion o1, GreasedRegion o2) {
-            return o2.size() - o1.size();
-        }
-    };
 
     public OrganicMapGenerator()
     {
@@ -53,7 +47,7 @@ public class OrganicMapGenerator implements IDungeonGenerator {
         map = new char[this.width][this.height];
         environment = new int[this.width][this.height];
         floors = new GreasedRegion(width, height);
-        noise = new FastNoise(1, 0.333f, FastNoise.SIMPLEX_FRACTAL, 2);
+        noise = new FastNoise(1, 0.375f, FastNoise.HONEY_FRACTAL, 2);
     }
 
     /**
@@ -61,83 +55,37 @@ public class OrganicMapGenerator implements IDungeonGenerator {
      * Should produce an organic, cave-like map.
      * @return a 2D char array for the map that should be organic-looking.
      */
-    public char[][] generate()
-    {
-        double temp;
-        int frustration = 0;
-        while (frustration < 10) {
-            noise.setSeed(rng.nextInt());
-            floors.clear();
-            for (int x = 0; x < width; x++) {
-                for (int y = 0; y < height; y++) {
-                    map[x][y] = '#';
-                    temp = noise.getConfiguredNoise(x, y);
-                    if (temp >= noiseMin && temp <= noiseMax) {
-                        floors.insert(x, y);
-                    }
-                }
-            }
-            if (floors.size() < width * height * 0.1f) {
-                frustration++;
-                continue;
-            }
-            break;
-        }
-        if(frustration >= 10) {
-            noiseMin = Math.min(0.9, Math.max(-1.0, noiseMin - 0.05));
-            noiseMax = Math.min(1.0, Math.max(noiseMin + 0.05, noiseMax + 0.05));
-            return generate();
-        }
-        ArrayList<GreasedRegion> regions = floors.split();
-        GreasedRegion region, linking;
-        ArrayList<Coord> path;
-        Coord start, end;
-        Collections.sort(regions, sizeComparator);
-        ListIterator<GreasedRegion> ri = regions.listIterator();
-        int ctr = 0, rs = regions.size() >> 1, pos = 0;
-        while (ri.hasNext())
-        {
-            region = ri.next();
-            if(pos++ > rs || region.size() <= 5)
-                ri.remove();
-            else {
-                region.expand().inverseMask(map, '.');
-                ctr += region.size();
-            }
-        }
-        int oldSize = regions.size();
-        if(oldSize < 4 || ctr < width * height * 0.1f) {
-            noiseMin = Math.min(0.9, Math.max(-1.0, noiseMin - 0.05));
-            noiseMax = Math.min(1.0, Math.max(noiseMin + 0.05, noiseMax + 0.05));
-            return generate();
-        }
-
+    public char[][] generate() {
+        noise.setSeed(rng.nextInt());
+        double[][] noiseMap = new double[width][height];
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
-                environment[x][y] = (map[x][y] == '.') ? DungeonUtility.CAVE_FLOOR : DungeonUtility.CAVE_WALL;
+                noiseMap[x][y] = noise.getConfiguredNoise(x, y);
             }
         }
-        rng.shuffleInPlace(regions);
-        while (regions.size() > 1)
-        {
-
-            region = regions.remove(regions.size() - 1);
-            linking = regions.get(regions.size() - 1);
-            start = region.singleRandom(rng);
-            end = linking.singleRandom(rng);
-            path = WobblyLine.line(start.x, start.y, end.x, end.y, width, height, 0.75, rng);
-            Coord elem;
-            for (int i = 0; i < path.size(); i++) {
-                elem = path.get(i);
-                if(elem.x < width && elem.y < height) {
-                    if (map[elem.x][elem.y] == '#') {
-                        map[elem.x][elem.y] = '.';
-                        environment[elem.x][elem.y] = DungeonUtility.CORRIDOR_FLOOR;
-                        ctr++;
-                    }
-                }
-            }
+        int w2 = width - 2, h2 = height - 2;
+        int startX = (int) (BathtubDistribution.instance.nextDouble(rng) * w2) + 1;
+        int endX = (int) (BathtubDistribution.instance.nextDouble(rng) * w2) + 1;
+        int startY = (int) (BathtubDistribution.instance.nextDouble(rng) * h2) + 1;
+        int endY = (int) (BathtubDistribution.instance.nextDouble(rng) * h2) + 1;
+        while (Radius.CIRCLE.radius(startX, startY, endX, endY) * 3 < width + height){
+            startX = (int) (BathtubDistribution.instance.nextDouble(rng) * w2) + 1;
+            endX = (int) (BathtubDistribution.instance.nextDouble(rng) * w2) + 1;
+            startY = (int) (BathtubDistribution.instance.nextDouble(rng) * h2) + 1;
+            endY = (int) (BathtubDistribution.instance.nextDouble(rng) * h2) + 1;
         }
+        GreasedRegion region = new GreasedRegion(width, height), linking;
+        for (int i = 1; i <= 25; i++) {
+            noiseMax = 0.04 * i;
+            floors.refill(noiseMap, -noiseMax, noiseMax);
+            if(floors.contains(startX, startY) && floors.contains(endX, endY) && 
+                    region.empty().insert(startX, startY).flood(floors, width * height).contains(endX, endY))
+                break;
+        }
+        floors.intoChars(map, '.', '#');
+        ArrayTools.fill(environment, DungeonUtility.UNTOUCHED);
+        floors.writeIntsInto(environment, DungeonUtility.CAVE_FLOOR);
+        region.remake(floors).fringe8way().writeIntsInto(environment, DungeonUtility.CAVE_WALL);
         int upperY = height - 1;
         int upperX = width - 1;
         for (int i = 0; i < width; i++) {
@@ -152,12 +100,7 @@ public class OrganicMapGenerator implements IDungeonGenerator {
             environment[0][i] = DungeonUtility.UNTOUCHED;
             environment[upperX][i] = DungeonUtility.UNTOUCHED;
         }
-
-        if(ctr < width * height * 0.1f) {
-            noiseMin = Math.min(0.9, Math.max(-1.0, noiseMin - 0.05));
-            noiseMax = Math.min(1.0, Math.max(noiseMin + 0.05, noiseMax + 0.05));
-            return generate();
-        }
+        
         return map;
     }
 
