@@ -24,7 +24,7 @@ import static com.badlogic.gdx.graphics.GL20.GL_POINTS;
  */
 public class FastNoiseVisualizer extends ApplicationAdapter {
 
-    private FastNoise noise = new VastNoise(1, 0.0625f, FastNoise.FOAM, 1);
+    private FastNoise noise = new FastNoise(1, 0.0625f, FastNoise.CUBIC_FRACTAL, 1);
     private int dim; // this can be 0, 1, 2, 3, or 4; add 2 to get the actual dimensions
     private int octaves = 1;
     private float freq = 1f;
@@ -56,6 +56,7 @@ public class FastNoiseVisualizer extends ApplicationAdapter {
 
     public static float basicPrepare(float n)
     {
+//        return Math.max(0f, n);
         return n * 0.5f + 0.5f;
     }
 
@@ -66,7 +67,7 @@ public class FastNoiseVisualizer extends ApplicationAdapter {
         noise.setPointHash(pointHashes[hashIndex]);
         noise.setFractalType(FastNoise.RIDGED_MULTI);
         gif = new AnimatedGif();
-        gif.setDitherAlgorithm(Dithered.DitherAlgorithm.GRADIENT_NOISE);
+        gif.setDitherAlgorithm(Dithered.DitherAlgorithm.SCATTER);
         gif.palette = new PaletteReducer(new int[] {
                 0x00000000, 0x010101FF, 0x020202FF, 0x030303FF, 0x040404FF, 0x050505FF, 0x060606FF, 0x070707FF,
                 0x080808FF, 0x090909FF, 0x0A0A0AFF, 0x0B0B0BFF, 0x0C0C0CFF, 0x0D0D0DFF, 0x0E0E0EFF, 0x0F0F0FFF,

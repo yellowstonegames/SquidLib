@@ -40,12 +40,14 @@ public class AnimatedWorldMapWriter extends ApplicationAdapter {
 //    private static final int width = 2048, height = 1024; // mimic, elliptical
     private static final int width = 256, height = 256; // space view
 //    private static final int width = 1200, height = 400; // squat
-    //private static final int width = 256, height = 128;
+//    private static final int width = 400, height = 400;
     //private static final int width = 314 * 4, height = 400;
     //private static final int width = 512, height = 512;
 
     private static final int LIMIT = 5;
     private static final boolean MEASURE_BOUNDS = false;
+    private static final boolean FLOWING_LAND = false;
+    private static final boolean ALIEN_COLORS = true;
 
     private FilterBatch batch;
 //    private OrderedSet<String> adjective = new OrderedSet<>(256), noun = new OrderedSet<>(256);
@@ -76,7 +78,8 @@ public class AnimatedWorldMapWriter extends ApplicationAdapter {
     private AnimatedGif writer;
     
     private String date, path;
-    private Noise.Adapted3DFrom5D noise;
+    private Noise.Noise3D noise;
+//    private Noise.Adapted3DFrom5D noise;
 //    private double mutationA = NumberTools.cos(0.75) * 3.0, mutationB = NumberTools.sin(0.75) * 3.0;
     public IntMap<int[]> bounds = new IntMap<>(20);
 //    private double mutationC = NumberTools.cos(1.5), mutationD = NumberTools.sin(1.5);
@@ -128,8 +131,8 @@ World #5, SavoryMelonAlder, completed in 64338 ms
 //        path = "out/worldsAnimated/" + date + "/SpaceView/";
 //        path = "out/worldsAnimated/" + date + "/SpaceViewMutantClassic/";
 //        path = "out/worldsAnimated/" + date + "/SpaceViewMutantFoam/";
-        path = "out/worldsAnimated/" + date + "/SpaceViewMutantHoney/";
-//        path = "out/worldsAnimated/" + date + "/SpaceViewHoney/";
+//        path = "out/worldsAnimated/" + date + "/SpaceViewMutantHoney/";
+        path = "out/worldsAnimated/" + date + "/SpaceViewHoney/";
 //        path = "out/worldsAnimated/" + date + "/SpaceViewFoam/";
 //        path = "out/worldsAnimated/" + date + "/SpaceViewRidged/";
 //        path = "out/worldsAnimated/" + date + "/SpaceViewMutantMaelstrom/";
@@ -156,7 +159,7 @@ World #5, SavoryMelonAlder, completed in 64338 ms
         pt = new Texture(pm[0]);
 
         writer = new AnimatedGif();
-        writer.setDitherAlgorithm(Dithered.DitherAlgorithm.GRADIENT_NOISE);
+        writer.setDitherAlgorithm(Dithered.DitherAlgorithm.SCATTER);
         writer.setFlipY(false);
 //        writer.palette = new PaletteReducer();
 //        writer.palette.setDitherStrength(1.0f);
@@ -206,7 +209,7 @@ World #5, SavoryMelonAlder, completed in 64338 ms
 //        WorldMapGenerator.DEFAULT_NOISE.setFractalGain(1.25f);
         FastNoise fn = new VastNoise((int) seed, 1.25f, FastNoise.HONEY, 1);
         
-        noise = new Noise.Adapted3DFrom5D(fn);
+        noise = fn;//new Noise.Adapted3DFrom5D(fn);
 //        WorldMapGenerator.DEFAULT_NOISE.setNoiseType(FastNoise.HONEY);
 //        WorldMapGenerator.DEFAULT_NOISE.setFrequency(1.25f);
 //        WorldMapGenerator.DEFAULT_NOISE.setFractalOctaves(1);
@@ -324,6 +327,16 @@ World #5, SavoryMelonAlder, completed in 64338 ms
         world.rng.setState(seed);
         world.seedA = world.rng.stateA;
         world.seedB = world.rng.stateB;
+        if(ALIEN_COLORS) {
+            int colorCount = (int) (7.5f - world.rng.nextFloat() * world.rng.nextFloat() * 5f); // 1-4
+            float[] colors = new float[colorCount];
+            for (int i = 0; i < colorCount; i++) {
+                colors[i] = SColor.COLOR_WHEEL_PALETTES[world.rng.next(1) + 3 * world.rng.nextInt(3)][world.rng.next(4)]
+                        .toRandomizedFloat(world.rng, 0.3f, 0.05f, 0.2f);
+            }
+            wmv.initialize(world.rng.nextFloat() * 2f - 1f, world.rng.nextFloat() * 0.2f - 0.1f, world.rng.nextFloat() * 0.1f - 0.05f, world.rng.nextFloat() + 0.3f);
+            wmv.match(colors);
+        }
 //        wmv.generate();
         wmv.generate(
                 //1.45,
@@ -344,18 +357,9 @@ World #5, SavoryMelonAlder, completed in 64338 ms
         for (int i = 0; i < pm.length; i++) {
             double angle = (Math.PI * 2.0 / pm.length) * i;
 
-//            mutationC = NumberTools.cos(angle * 5.0) * 0.5;
-//            mutationD = NumberTools.sin(angle * 5.0) * 0.5;
-//            mutationA = NumberTools.cos(angle) * (mutationC + 2.0);
-//            mutationB = NumberTools.sin(angle) * (mutationC + 2.0);
-//            mutationC = NumberTools.cos(angle * 3.0 + 1.0) * 0.625 + 2.25;
-//            mutationA = NumberTools.cos(angle) * 0.3125;
-//            mutationB = NumberTools.sin(angle) * 0.3125;
-            noise.w = NumberTools.cos(angle) * 0.25;
-            noise.u = NumberTools.sin(angle) * 0.25;
-            //            mutation = NumberTools.sin(angle) * 0.918 + NumberTools.cos(angle * 4.0 + 1.618) * 0.307;
-
-            //// this next line should not usually be commented out, but it makes sense not to have it when you can see the whole map.
+//            noise.w = NumberTools.cos(angle) * 0.3125;
+//            noise.u = NumberTools.sin(angle) * 0.3125;
+            
             world.setCenterLongitude(angle);
             generate(hash);
             wmv.getBiomeMapper().makeBiomes(world);

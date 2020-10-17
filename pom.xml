@@ -68,7 +68,7 @@
         <gdx.version>1.9.11</gdx.version>
         <junit.version>4.12</junit.version>
         <regexodus.version>0.1.10</regexodus.version>
-        <anim8.version>0.2.0</anim8.version>
+        <anim8.version>0.2.2</anim8.version>
     </properties>
 
     <issueManagement>
