@@ -227,11 +227,11 @@
 <span class="sourceLineNo">215</span><a id="line.215">     * @param bound the outer exclusive bound for the int this produces; can be negative or positive</a>
 <span class="sourceLineNo">216</span><a id="line.216">     * @return a pseudo-random int between 0 (inclusive) and bound (exclusive)</a>
 <span class="sourceLineNo">217</span><a id="line.217">     */</a>
-<span class="sourceLineNo">218</span><a id="line.218">    public static int determineBounded(long state, final int bound)</a>
+<span class="sourceLineNo">218</span><a id="line.218">    public static int determineBounded(long state, int bound)</a>
 <span class="sourceLineNo">219</span><a id="line.219">    {</a>
-<span class="sourceLineNo">220</span><a id="line.220">        return (int)((bound * (</a>
+<span class="sourceLineNo">220</span><a id="line.220">        return (bound = (int)((bound * (</a>
 <span class="sourceLineNo">221</span><a id="line.221">                ((state = ((state *= 0x6C8E9CF570932BD5L) ^ (state &gt;&gt;&gt; 25)) * (state | 0xA529L)) ^ (state &gt;&gt;&gt; 23))</a>
-<span class="sourceLineNo">222</span><a id="line.222">                        &amp; 0xFFFFFFFFL)) &gt;&gt; 32);</a>
+<span class="sourceLineNo">222</span><a id="line.222">                        &amp; 0xFFFFFFFFL)) &gt;&gt; 32)) + (bound &gt;&gt;&gt; 31);</a>
 <span class="sourceLineNo">223</span><a id="line.223">    }</a>
 <span class="sourceLineNo">224</span><a id="line.224"></a>
 <span class="sourceLineNo">225</span><a id="line.225">    /**</a>
@@ -277,10 +277,10 @@
 <span class="sourceLineNo">265</span><a id="line.265">     * @param bound the outer exclusive bound for the int this produces; should be between -65536 and 65535, inclusive</a>
 <span class="sourceLineNo">266</span><a id="line.266">     * @return a pseudo-random int between 0 (inclusive) and bound (exclusive)</a>
 <span class="sourceLineNo">267</span><a id="line.267">     */</a>
-<span class="sourceLineNo">268</span><a id="line.268">    public static int determineBoundedShort(int state, final int bound)</a>
+<span class="sourceLineNo">268</span><a id="line.268">    public static int determineBoundedShort(int state, int bound)</a>
 <span class="sourceLineNo">269</span><a id="line.269">    {</a>
 <span class="sourceLineNo">270</span><a id="line.270">        state = ((state *= 0x62BD5) ^ state &gt;&gt;&gt; 13) * ((state &amp; 0xFFFF8) ^ 0xCD7B5);</a>
-<span class="sourceLineNo">271</span><a id="line.271">        return (((((state &lt;&lt; 21) | (state &gt;&gt;&gt; 11)) ^ (((state &lt;&lt; 7) | (state &gt;&gt;&gt; 25)) * 0x62BD5)) &amp; 0xFFFF) * bound) &gt;&gt; 16;</a>
+<span class="sourceLineNo">271</span><a id="line.271">        return (bound = (((((state &lt;&lt; 21) | (state &gt;&gt;&gt; 11)) ^ (((state &lt;&lt; 7) | (state &gt;&gt;&gt; 25)) * 0x62BD5)) &amp; 0xFFFF) * bound) &gt;&gt; 16) + (bound &gt;&gt;&gt; 31);</a>
 <span class="sourceLineNo">272</span><a id="line.272">    }</a>
 <span class="sourceLineNo">273</span><a id="line.273">    /**</a>
 <span class="sourceLineNo">274</span><a id="line.274">     * Returns a random float that is deterministic based on an int state; if state is the same on two calls to this,</a>

@@ -134,7 +134,7 @@
 <span class="sourceLineNo">122</span><a id="line.122"></a>
 <span class="sourceLineNo">123</span><a id="line.123">    /**</a>
 <span class="sourceLineNo">124</span><a id="line.124">     * Exclusive on the outer bound.  The inner bound is 0.</a>
-<span class="sourceLineNo">125</span><a id="line.125">     * The bound can be negative, which makes this produce either a negative int or 0.</a>
+<span class="sourceLineNo">125</span><a id="line.125">     * The bound should not be negative; use {@link IRNG#nextSignedInt(int)} if you need a negative outer bound.</a>
 <span class="sourceLineNo">126</span><a id="line.126">     *</a>
 <span class="sourceLineNo">127</span><a id="line.127">     * @param bound the upper bound; should be positive</a>
 <span class="sourceLineNo">128</span><a id="line.128">     * @return a random int between 0 (inclusive) and bound (exclusive)</a>
@@ -350,9 +350,9 @@
 <span class="sourceLineNo">338</span><a id="line.338">     * @param bound the outer exclusive bound, as an int</a>
 <span class="sourceLineNo">339</span><a id="line.339">     * @return an int between 0 (inclusive) and bound (exclusive)</a>
 <span class="sourceLineNo">340</span><a id="line.340">     */</a>
-<span class="sourceLineNo">341</span><a id="line.341">    public static int determineBounded(long state, final int bound)</a>
+<span class="sourceLineNo">341</span><a id="line.341">    public static int determineBounded(long state, int bound)</a>
 <span class="sourceLineNo">342</span><a id="line.342">    {</a>
-<span class="sourceLineNo">343</span><a id="line.343">        return (int)((bound * (((state = ((state = (state ^ (state &lt;&lt; 41 | state &gt;&gt;&gt; 23) ^ (state &lt;&lt; 17 | state &gt;&gt;&gt; 47)) * 0x369DEA0F31A53F85L) ^ state &gt;&gt;&gt; 37 ^ state &gt;&gt;&gt; 25) * 0xDB4F0B9175AE2165L) ^ state &gt;&gt;&gt; 28) &amp; 0xFFFFFFFFL)) &gt;&gt; 32);</a>
+<span class="sourceLineNo">343</span><a id="line.343">        return (bound = (int)((bound * (((state = ((state = (state ^ (state &lt;&lt; 41 | state &gt;&gt;&gt; 23) ^ (state &lt;&lt; 17 | state &gt;&gt;&gt; 47)) * 0x369DEA0F31A53F85L) ^ state &gt;&gt;&gt; 37 ^ state &gt;&gt;&gt; 25) * 0xDB4F0B9175AE2165L) ^ state &gt;&gt;&gt; 28) &amp; 0xFFFFFFFFL)) &gt;&gt; 32)) + (bound &gt;&gt;&gt; 31);</a>
 <span class="sourceLineNo">344</span><a id="line.344">    }</a>
 <span class="sourceLineNo">345</span><a id="line.345"></a>
 <span class="sourceLineNo">346</span><a id="line.346">    /**</a>

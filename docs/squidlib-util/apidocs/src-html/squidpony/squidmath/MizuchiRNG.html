@@ -135,7 +135,7 @@
 <span class="sourceLineNo">123</span><a id="line.123"></a>
 <span class="sourceLineNo">124</span><a id="line.124">    /**</a>
 <span class="sourceLineNo">125</span><a id="line.125">     * Exclusive on the outer bound.  The inner bound is 0.</a>
-<span class="sourceLineNo">126</span><a id="line.126">     * The bound can be negative, which makes this produce either a negative int or 0.</a>
+<span class="sourceLineNo">126</span><a id="line.126">     * The bound should not be negative; use {@link IRNG#nextSignedInt(int)} if you need a negative outer bound.</a>
 <span class="sourceLineNo">127</span><a id="line.127">     *</a>
 <span class="sourceLineNo">128</span><a id="line.128">     * @param bound the upper bound; should be positive</a>
 <span class="sourceLineNo">129</span><a id="line.129">     * @return a random int between 0 (inclusive) and bound (exclusive)</a>
@@ -150,7 +150,7 @@
 <span class="sourceLineNo">138</span><a id="line.138">     * Inclusive inner, exclusive outer.</a>
 <span class="sourceLineNo">139</span><a id="line.139">     *</a>
 <span class="sourceLineNo">140</span><a id="line.140">     * @param inner the inner bound, inclusive, can be positive or negative</a>
-<span class="sourceLineNo">141</span><a id="line.141">     * @param outer the outer bound, exclusive, can be positive or negative, usually greater than inner</a>
+<span class="sourceLineNo">141</span><a id="line.141">     * @param outer the outer bound, exclusive, can be positive or negative, should be greater than inner</a>
 <span class="sourceLineNo">142</span><a id="line.142">     * @return a random int between inner (inclusive) and outer (exclusive)</a>
 <span class="sourceLineNo">143</span><a id="line.143">     */</a>
 <span class="sourceLineNo">144</span><a id="line.144">    public final int nextInt(final int inner, final int outer) {</a>

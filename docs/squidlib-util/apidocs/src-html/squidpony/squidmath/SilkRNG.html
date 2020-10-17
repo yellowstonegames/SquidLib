@@ -348,7 +348,7 @@
 <span class="sourceLineNo">336</span><a id="line.336">     */</a>
 <span class="sourceLineNo">337</span><a id="line.337">    public static int determineBounded(int state, final int bound)</a>
 <span class="sourceLineNo">338</span><a id="line.338">    {</a>
-<span class="sourceLineNo">339</span><a id="line.339">        return (int) ((((state = ((state = (state ^ 0xD1B54A35) * 0x102473) ^ state &gt;&gt;&gt; 11 ^ state &gt;&gt;&gt; 21) * (state | 0xFFE00001)) ^ state &gt;&gt;&gt; 13 ^ state &gt;&gt;&gt; 19) &amp; 0xFFFFFFFFL) * bound &gt;&gt; 32);</a>
+<span class="sourceLineNo">339</span><a id="line.339">        return (state = (int) ((((state = ((state = (state ^ 0xD1B54A35) * 0x102473) ^ state &gt;&gt;&gt; 11 ^ state &gt;&gt;&gt; 21) * (state | 0xFFE00001)) ^ state &gt;&gt;&gt; 13 ^ state &gt;&gt;&gt; 19) &amp; 0xFFFFFFFFL) * bound &gt;&gt; 32)) + (state &gt;&gt;&gt; 31);</a>
 <span class="sourceLineNo">340</span><a id="line.340">    }</a>
 <span class="sourceLineNo">341</span><a id="line.341">    /**</a>
 <span class="sourceLineNo">342</span><a id="line.342">     * A deterministic random long generator that, given one int {@code state} as input, returns an </a>

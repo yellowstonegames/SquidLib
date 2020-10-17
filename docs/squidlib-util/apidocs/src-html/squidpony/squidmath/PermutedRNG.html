@@ -147,200 +147,201 @@
 <span class="sourceLineNo">135</span><a id="line.135">    /**</a>
 <span class="sourceLineNo">136</span><a id="line.136">     * Exclusive on the outer bound; the inner bound is 0.</a>
 <span class="sourceLineNo">137</span><a id="line.137">     * Calls {@link #nextLong()} exactly once.</a>
-<span class="sourceLineNo">138</span><a id="line.138">     * @param bound the upper bound; can be positive or negative</a>
-<span class="sourceLineNo">139</span><a id="line.139">     * @return a random int less than n and at least equal to 0</a>
-<span class="sourceLineNo">140</span><a id="line.140">     */</a>
-<span class="sourceLineNo">141</span><a id="line.141">    public int nextInt( final int bound ) {</a>
-<span class="sourceLineNo">142</span><a id="line.142">        return (int)((bound * (nextLong() &amp; 0x7FFFFFFFL)) &gt;&gt; 31);</a>
-<span class="sourceLineNo">143</span><a id="line.143">    }</a>
-<span class="sourceLineNo">144</span><a id="line.144"></a>
-<span class="sourceLineNo">145</span><a id="line.145">    /**</a>
-<span class="sourceLineNo">146</span><a id="line.146">     * Inclusive lower, exclusive upper. The upper bound is really the outer bound, and the lower bound the inner bound,</a>
-<span class="sourceLineNo">147</span><a id="line.147">     * because upper is permitted to be less than lower, though upper is still exclusive there.</a>
-<span class="sourceLineNo">148</span><a id="line.148">     * Calls {@link #nextLong()} exactly once.</a>
-<span class="sourceLineNo">149</span><a id="line.149">     * @param lower the lower bound, inclusive, can be positive or negative</a>
-<span class="sourceLineNo">150</span><a id="line.150">     * @param upper the upper bound, exclusive, can be positive or negative</a>
-<span class="sourceLineNo">151</span><a id="line.151">     * @return a random int at least equal to lower and less than upper (if upper is less than lower, then the result</a>
-<span class="sourceLineNo">152</span><a id="line.152">     *         will be less than or equal to lower and greater than upper)</a>
-<span class="sourceLineNo">153</span><a id="line.153">     */</a>
-<span class="sourceLineNo">154</span><a id="line.154">    public int nextInt( final int lower, final int upper ) {</a>
-<span class="sourceLineNo">155</span><a id="line.155">        return lower + nextInt(upper - lower);</a>
-<span class="sourceLineNo">156</span><a id="line.156">    }</a>
-<span class="sourceLineNo">157</span><a id="line.157"></a>
-<span class="sourceLineNo">158</span><a id="line.158">    /**</a>
-<span class="sourceLineNo">159</span><a id="line.159">     * Exclusive on the outer bound; the inner bound is 0. The bound may be negative, which will produce a non-positive</a>
-<span class="sourceLineNo">160</span><a id="line.160">     * result. Calls {@link #nextLong()} exactly once.</a>
-<span class="sourceLineNo">161</span><a id="line.161">     * @param bound the outer exclusive bound; may be positive or negative</a>
-<span class="sourceLineNo">162</span><a id="line.162">     * @return a random long between 0 (inclusive) and bound (exclusive)</a>
-<span class="sourceLineNo">163</span><a id="line.163">     */</a>
-<span class="sourceLineNo">164</span><a id="line.164">    public long nextLong(long bound) {</a>
-<span class="sourceLineNo">165</span><a id="line.165">        long rand = nextLong();</a>
-<span class="sourceLineNo">166</span><a id="line.166">        final long randLow = rand &amp; 0xFFFFFFFFL;</a>
-<span class="sourceLineNo">167</span><a id="line.167">        final long boundLow = bound &amp; 0xFFFFFFFFL;</a>
-<span class="sourceLineNo">168</span><a id="line.168">        rand &gt;&gt;&gt;= 32;</a>
-<span class="sourceLineNo">169</span><a id="line.169">        bound &gt;&gt;= 32;</a>
-<span class="sourceLineNo">170</span><a id="line.170">        final long t = rand * boundLow + (randLow * boundLow &gt;&gt;&gt; 32);</a>
-<span class="sourceLineNo">171</span><a id="line.171">        return rand * bound + (t &gt;&gt; 32) + (randLow * bound + (t &amp; 0xFFFFFFFFL) &gt;&gt; 32);</a>
-<span class="sourceLineNo">172</span><a id="line.172">    }</a>
-<span class="sourceLineNo">173</span><a id="line.173">    /**</a>
-<span class="sourceLineNo">174</span><a id="line.174">     * Inclusive inner, exclusive outer; both inner and outer can be positive or negative. Calls {@link #nextLong()}</a>
-<span class="sourceLineNo">175</span><a id="line.175">     * exactly once.</a>
-<span class="sourceLineNo">176</span><a id="line.176">     * @param inner the inner bound, inclusive, can be positive or negative</a>
-<span class="sourceLineNo">177</span><a id="line.177">     * @param outer the outer bound, exclusive, can be positive or negative and may be greater than or less than inner</a>
-<span class="sourceLineNo">178</span><a id="line.178">     * @return a random long that may be equal to inner and will otherwise be between inner and outer</a>
-<span class="sourceLineNo">179</span><a id="line.179">     */</a>
-<span class="sourceLineNo">180</span><a id="line.180">    public long nextLong(final long inner, final long outer) {</a>
-<span class="sourceLineNo">181</span><a id="line.181">        return inner + nextLong(outer - inner);</a>
-<span class="sourceLineNo">182</span><a id="line.182">    }</a>
-<span class="sourceLineNo">183</span><a id="line.183">    /**</a>
-<span class="sourceLineNo">184</span><a id="line.184">     * Gets a uniform random double in the range {@code [0.0,1.0)}.</a>
-<span class="sourceLineNo">185</span><a id="line.185">     * Calls {@link #nextLong()} exactly once.</a>
-<span class="sourceLineNo">186</span><a id="line.186">     * @return a random double at least equal to 0.0 and less than 1.0</a>
-<span class="sourceLineNo">187</span><a id="line.187">     */</a>
-<span class="sourceLineNo">188</span><a id="line.188">    public double nextDouble() {</a>
-<span class="sourceLineNo">189</span><a id="line.189">        return ( nextLong() &amp; DOUBLE_MASK ) * NORM_53;</a>
-<span class="sourceLineNo">190</span><a id="line.190">    }</a>
-<span class="sourceLineNo">191</span><a id="line.191"></a>
-<span class="sourceLineNo">192</span><a id="line.192">    /**</a>
-<span class="sourceLineNo">193</span><a id="line.193">     * Gets a uniform random double in the range [0.0,outer) given a positive parameter outer. If outer</a>
-<span class="sourceLineNo">194</span><a id="line.194">     * is negative, it will be the (exclusive) lower bound and 0.0 will be the (inclusive) upper bound.</a>
-<span class="sourceLineNo">195</span><a id="line.195">     * Calls {@link #nextLong()} exactly once.</a>
-<span class="sourceLineNo">196</span><a id="line.196">     *  @param outer the exclusive outer bound, can be negative</a>
-<span class="sourceLineNo">197</span><a id="line.197">     * @return a random double between 0.0 (inclusive) and outer (exclusive)</a>
-<span class="sourceLineNo">198</span><a id="line.198">     */</a>
-<span class="sourceLineNo">199</span><a id="line.199">    public double nextDouble(final double outer) {</a>
-<span class="sourceLineNo">200</span><a id="line.200">        return nextDouble() * outer;</a>
-<span class="sourceLineNo">201</span><a id="line.201">    }</a>
-<span class="sourceLineNo">202</span><a id="line.202"></a>
-<span class="sourceLineNo">203</span><a id="line.203">    /**</a>
-<span class="sourceLineNo">204</span><a id="line.204">     * Gets a uniform random float in the range {@code [0.0,1.0)}</a>
-<span class="sourceLineNo">205</span><a id="line.205">     * Calls {@link #nextLong()} exactly once.</a>
-<span class="sourceLineNo">206</span><a id="line.206">     *</a>
-<span class="sourceLineNo">207</span><a id="line.207">     * @return a random float at least equal to 0.0f and less than 1.0f</a>
-<span class="sourceLineNo">208</span><a id="line.208">     */</a>
-<span class="sourceLineNo">209</span><a id="line.209">    public float nextFloat() {</a>
-<span class="sourceLineNo">210</span><a id="line.210">        return (float)( ( nextLong() &amp; FLOAT_MASK ) * NORM_24 );</a>
-<span class="sourceLineNo">211</span><a id="line.211">    }</a>
-<span class="sourceLineNo">212</span><a id="line.212"></a>
-<span class="sourceLineNo">213</span><a id="line.213">    /**</a>
-<span class="sourceLineNo">214</span><a id="line.214">     * Gets a random value, true or false.</a>
-<span class="sourceLineNo">215</span><a id="line.215">     * Calls {@link #nextLong()} exactly once.</a>
-<span class="sourceLineNo">216</span><a id="line.216">     * @return a random true or false value.</a>
-<span class="sourceLineNo">217</span><a id="line.217">     */</a>
-<span class="sourceLineNo">218</span><a id="line.218">    public boolean nextBoolean() {</a>
-<span class="sourceLineNo">219</span><a id="line.219">        return nextLong() &lt; 0L;</a>
-<span class="sourceLineNo">220</span><a id="line.220">    }</a>
-<span class="sourceLineNo">221</span><a id="line.221"></a>
-<span class="sourceLineNo">222</span><a id="line.222">    /**</a>
-<span class="sourceLineNo">223</span><a id="line.223">     * Given a byte array as a parameter, this will fill the array with random bytes (modifying it</a>
-<span class="sourceLineNo">224</span><a id="line.224">     * in-place). Calls {@link #nextLong()} {@code Math.ceil(bytes.length / 8.0)} times.</a>
-<span class="sourceLineNo">225</span><a id="line.225">     * @param bytes a byte array that will have its contents overwritten with random bytes.</a>
-<span class="sourceLineNo">226</span><a id="line.226">     */</a>
-<span class="sourceLineNo">227</span><a id="line.227">    public void nextBytes( final byte[] bytes ) {</a>
-<span class="sourceLineNo">228</span><a id="line.228">        int i = bytes.length, n;</a>
-<span class="sourceLineNo">229</span><a id="line.229">        while( i != 0 ) {</a>
-<span class="sourceLineNo">230</span><a id="line.230">            n = Math.min(i, 8 );</a>
-<span class="sourceLineNo">231</span><a id="line.231">            for ( long bits = nextLong(); n-- != 0; bits &gt;&gt;&gt;= 8 ) bytes[ --i ] = (byte)bits;</a>
-<span class="sourceLineNo">232</span><a id="line.232">        }</a>
-<span class="sourceLineNo">233</span><a id="line.233">    }</a>
-<span class="sourceLineNo">234</span><a id="line.234"></a>
+<span class="sourceLineNo">138</span><a id="line.138">     * The bound should not be negative; use {@link IRNG#nextSignedInt(int)} if you need a negative outer bound.</a>
+<span class="sourceLineNo">139</span><a id="line.139">     * @param bound the upper bound; should be positive</a>
+<span class="sourceLineNo">140</span><a id="line.140">     * @return a random int less than n and at least equal to 0</a>
+<span class="sourceLineNo">141</span><a id="line.141">     */</a>
+<span class="sourceLineNo">142</span><a id="line.142">    public int nextInt( final int bound ) {</a>
+<span class="sourceLineNo">143</span><a id="line.143">        return (int)((bound * (nextLong() &amp; 0x7FFFFFFFL)) &gt;&gt; 31);</a>
+<span class="sourceLineNo">144</span><a id="line.144">    }</a>
+<span class="sourceLineNo">145</span><a id="line.145"></a>
+<span class="sourceLineNo">146</span><a id="line.146">    /**</a>
+<span class="sourceLineNo">147</span><a id="line.147">     * Inclusive lower, exclusive upper. The upper bound is really the outer bound, and the lower bound the inner bound,</a>
+<span class="sourceLineNo">148</span><a id="line.148">     * because upper is permitted to be less than lower, though upper is still exclusive there.</a>
+<span class="sourceLineNo">149</span><a id="line.149">     * Calls {@link #nextLong()} exactly once.</a>
+<span class="sourceLineNo">150</span><a id="line.150">     * @param lower the lower bound, inclusive, can be positive or negative</a>
+<span class="sourceLineNo">151</span><a id="line.151">     * @param upper the upper bound, exclusive, can be positive or negative</a>
+<span class="sourceLineNo">152</span><a id="line.152">     * @return a random int at least equal to lower and less than upper (if upper is less than lower, then the result</a>
+<span class="sourceLineNo">153</span><a id="line.153">     *         will be less than or equal to lower and greater than upper)</a>
+<span class="sourceLineNo">154</span><a id="line.154">     */</a>
+<span class="sourceLineNo">155</span><a id="line.155">    public int nextInt( final int lower, final int upper ) {</a>
+<span class="sourceLineNo">156</span><a id="line.156">        return lower + nextInt(upper - lower);</a>
+<span class="sourceLineNo">157</span><a id="line.157">    }</a>
+<span class="sourceLineNo">158</span><a id="line.158"></a>
+<span class="sourceLineNo">159</span><a id="line.159">    /**</a>
+<span class="sourceLineNo">160</span><a id="line.160">     * Exclusive on the outer bound; the inner bound is 0. The bound may be negative, which will produce a non-positive</a>
+<span class="sourceLineNo">161</span><a id="line.161">     * result. Calls {@link #nextLong()} exactly once.</a>
+<span class="sourceLineNo">162</span><a id="line.162">     * @param bound the outer exclusive bound; may be positive or negative</a>
+<span class="sourceLineNo">163</span><a id="line.163">     * @return a random long between 0 (inclusive) and bound (exclusive)</a>
+<span class="sourceLineNo">164</span><a id="line.164">     */</a>
+<span class="sourceLineNo">165</span><a id="line.165">    public long nextLong(long bound) {</a>
+<span class="sourceLineNo">166</span><a id="line.166">        long rand = nextLong();</a>
+<span class="sourceLineNo">167</span><a id="line.167">        final long randLow = rand &amp; 0xFFFFFFFFL;</a>
+<span class="sourceLineNo">168</span><a id="line.168">        final long boundLow = bound &amp; 0xFFFFFFFFL;</a>
+<span class="sourceLineNo">169</span><a id="line.169">        rand &gt;&gt;&gt;= 32;</a>
+<span class="sourceLineNo">170</span><a id="line.170">        bound &gt;&gt;= 32;</a>
+<span class="sourceLineNo">171</span><a id="line.171">        final long t = rand * boundLow + (randLow * boundLow &gt;&gt;&gt; 32);</a>
+<span class="sourceLineNo">172</span><a id="line.172">        return rand * bound + (t &gt;&gt; 32) + (randLow * bound + (t &amp; 0xFFFFFFFFL) &gt;&gt; 32);</a>
+<span class="sourceLineNo">173</span><a id="line.173">    }</a>
+<span class="sourceLineNo">174</span><a id="line.174">    /**</a>
+<span class="sourceLineNo">175</span><a id="line.175">     * Inclusive inner, exclusive outer; both inner and outer can be positive or negative. Calls {@link #nextLong()}</a>
+<span class="sourceLineNo">176</span><a id="line.176">     * exactly once.</a>
+<span class="sourceLineNo">177</span><a id="line.177">     * @param inner the inner bound, inclusive, can be positive or negative</a>
+<span class="sourceLineNo">178</span><a id="line.178">     * @param outer the outer bound, exclusive, can be positive or negative and may be greater than or less than inner</a>
+<span class="sourceLineNo">179</span><a id="line.179">     * @return a random long that may be equal to inner and will otherwise be between inner and outer</a>
+<span class="sourceLineNo">180</span><a id="line.180">     */</a>
+<span class="sourceLineNo">181</span><a id="line.181">    public long nextLong(final long inner, final long outer) {</a>
+<span class="sourceLineNo">182</span><a id="line.182">        return inner + nextLong(outer - inner);</a>
+<span class="sourceLineNo">183</span><a id="line.183">    }</a>
+<span class="sourceLineNo">184</span><a id="line.184">    /**</a>
+<span class="sourceLineNo">185</span><a id="line.185">     * Gets a uniform random double in the range {@code [0.0,1.0)}.</a>
+<span class="sourceLineNo">186</span><a id="line.186">     * Calls {@link #nextLong()} exactly once.</a>
+<span class="sourceLineNo">187</span><a id="line.187">     * @return a random double at least equal to 0.0 and less than 1.0</a>
+<span class="sourceLineNo">188</span><a id="line.188">     */</a>
+<span class="sourceLineNo">189</span><a id="line.189">    public double nextDouble() {</a>
+<span class="sourceLineNo">190</span><a id="line.190">        return ( nextLong() &amp; DOUBLE_MASK ) * NORM_53;</a>
+<span class="sourceLineNo">191</span><a id="line.191">    }</a>
+<span class="sourceLineNo">192</span><a id="line.192"></a>
+<span class="sourceLineNo">193</span><a id="line.193">    /**</a>
+<span class="sourceLineNo">194</span><a id="line.194">     * Gets a uniform random double in the range [0.0,outer) given a positive parameter outer. If outer</a>
+<span class="sourceLineNo">195</span><a id="line.195">     * is negative, it will be the (exclusive) lower bound and 0.0 will be the (inclusive) upper bound.</a>
+<span class="sourceLineNo">196</span><a id="line.196">     * Calls {@link #nextLong()} exactly once.</a>
+<span class="sourceLineNo">197</span><a id="line.197">     *  @param outer the exclusive outer bound, can be negative</a>
+<span class="sourceLineNo">198</span><a id="line.198">     * @return a random double between 0.0 (inclusive) and outer (exclusive)</a>
+<span class="sourceLineNo">199</span><a id="line.199">     */</a>
+<span class="sourceLineNo">200</span><a id="line.200">    public double nextDouble(final double outer) {</a>
+<span class="sourceLineNo">201</span><a id="line.201">        return nextDouble() * outer;</a>
+<span class="sourceLineNo">202</span><a id="line.202">    }</a>
+<span class="sourceLineNo">203</span><a id="line.203"></a>
+<span class="sourceLineNo">204</span><a id="line.204">    /**</a>
+<span class="sourceLineNo">205</span><a id="line.205">     * Gets a uniform random float in the range {@code [0.0,1.0)}</a>
+<span class="sourceLineNo">206</span><a id="line.206">     * Calls {@link #nextLong()} exactly once.</a>
+<span class="sourceLineNo">207</span><a id="line.207">     *</a>
+<span class="sourceLineNo">208</span><a id="line.208">     * @return a random float at least equal to 0.0f and less than 1.0f</a>
+<span class="sourceLineNo">209</span><a id="line.209">     */</a>
+<span class="sourceLineNo">210</span><a id="line.210">    public float nextFloat() {</a>
+<span class="sourceLineNo">211</span><a id="line.211">        return (float)( ( nextLong() &amp; FLOAT_MASK ) * NORM_24 );</a>
+<span class="sourceLineNo">212</span><a id="line.212">    }</a>
+<span class="sourceLineNo">213</span><a id="line.213"></a>
+<span class="sourceLineNo">214</span><a id="line.214">    /**</a>
+<span class="sourceLineNo">215</span><a id="line.215">     * Gets a random value, true or false.</a>
+<span class="sourceLineNo">216</span><a id="line.216">     * Calls {@link #nextLong()} exactly once.</a>
+<span class="sourceLineNo">217</span><a id="line.217">     * @return a random true or false value.</a>
+<span class="sourceLineNo">218</span><a id="line.218">     */</a>
+<span class="sourceLineNo">219</span><a id="line.219">    public boolean nextBoolean() {</a>
+<span class="sourceLineNo">220</span><a id="line.220">        return nextLong() &lt; 0L;</a>
+<span class="sourceLineNo">221</span><a id="line.221">    }</a>
+<span class="sourceLineNo">222</span><a id="line.222"></a>
+<span class="sourceLineNo">223</span><a id="line.223">    /**</a>
+<span class="sourceLineNo">224</span><a id="line.224">     * Given a byte array as a parameter, this will fill the array with random bytes (modifying it</a>
+<span class="sourceLineNo">225</span><a id="line.225">     * in-place). Calls {@link #nextLong()} {@code Math.ceil(bytes.length / 8.0)} times.</a>
+<span class="sourceLineNo">226</span><a id="line.226">     * @param bytes a byte array that will have its contents overwritten with random bytes.</a>
+<span class="sourceLineNo">227</span><a id="line.227">     */</a>
+<span class="sourceLineNo">228</span><a id="line.228">    public void nextBytes( final byte[] bytes ) {</a>
+<span class="sourceLineNo">229</span><a id="line.229">        int i = bytes.length, n;</a>
+<span class="sourceLineNo">230</span><a id="line.230">        while( i != 0 ) {</a>
+<span class="sourceLineNo">231</span><a id="line.231">            n = Math.min(i, 8 );</a>
+<span class="sourceLineNo">232</span><a id="line.232">            for ( long bits = nextLong(); n-- != 0; bits &gt;&gt;&gt;= 8 ) bytes[ --i ] = (byte)bits;</a>
+<span class="sourceLineNo">233</span><a id="line.233">        }</a>
+<span class="sourceLineNo">234</span><a id="line.234">    }</a>
 <span class="sourceLineNo">235</span><a id="line.235"></a>
-<span class="sourceLineNo">236</span><a id="line.236">    /**</a>
-<span class="sourceLineNo">237</span><a id="line.237">     * Sets the seed of this generator (which is also the current state).</a>
-<span class="sourceLineNo">238</span><a id="line.238">     * @param seed the seed to use for this PermutedRNG, as if it was constructed with this seed.</a>
-<span class="sourceLineNo">239</span><a id="line.239">     */</a>
-<span class="sourceLineNo">240</span><a id="line.240">    public void setSeed( final long seed ) {</a>
-<span class="sourceLineNo">241</span><a id="line.241">        state = seed;</a>
-<span class="sourceLineNo">242</span><a id="line.242">    }</a>
-<span class="sourceLineNo">243</span><a id="line.243">    /**</a>
-<span class="sourceLineNo">244</span><a id="line.244">     * Sets the seed (also the current state) of this generator.</a>
-<span class="sourceLineNo">245</span><a id="line.245">     * @param seed the seed to use for this PermutedRNG, as if it was constructed with this seed.</a>
-<span class="sourceLineNo">246</span><a id="line.246">     */</a>
-<span class="sourceLineNo">247</span><a id="line.247">    @Override</a>
-<span class="sourceLineNo">248</span><a id="line.248">        public void setState( final long seed ) {</a>
-<span class="sourceLineNo">249</span><a id="line.249">        state = seed;</a>
-<span class="sourceLineNo">250</span><a id="line.250">    }</a>
-<span class="sourceLineNo">251</span><a id="line.251">    /**</a>
-<span class="sourceLineNo">252</span><a id="line.252">     * Gets the current state of this generator.</a>
-<span class="sourceLineNo">253</span><a id="line.253">     * @return the current seed of this PermutedRNG, changed once per call to {@link #nextLong()}</a>
-<span class="sourceLineNo">254</span><a id="line.254">     */</a>
-<span class="sourceLineNo">255</span><a id="line.255">    @Override</a>
-<span class="sourceLineNo">256</span><a id="line.256">        public long getState( ) {</a>
-<span class="sourceLineNo">257</span><a id="line.257">        return state;</a>
-<span class="sourceLineNo">258</span><a id="line.258">    }</a>
-<span class="sourceLineNo">259</span><a id="line.259"></a>
-<span class="sourceLineNo">260</span><a id="line.260">    /**</a>
-<span class="sourceLineNo">261</span><a id="line.261">     * Advances or rolls back the PermutedRNG's state without actually generating each number. Skips forward</a>
-<span class="sourceLineNo">262</span><a id="line.262">     * or backward a number of steps specified by advance, where a step is equal to one call to {@link #nextLong()},</a>
-<span class="sourceLineNo">263</span><a id="line.263">     * and returns the random number produced at that step (you can get the state with {@link #getState()}).</a>
-<span class="sourceLineNo">264</span><a id="line.264">     * Skipping ahead or behind takes more than constant time, unlike with {@link LightRNG}, but less time</a>
-<span class="sourceLineNo">265</span><a id="line.265">     * than calling {@link #nextLong()} {@code advance} times. Skipping backwards by one step is the worst case for this</a>
-<span class="sourceLineNo">266</span><a id="line.266">     * technique.</a>
-<span class="sourceLineNo">267</span><a id="line.267">     * @param advance Number of future generations to skip past. Can be negative to backtrack.</a>
-<span class="sourceLineNo">268</span><a id="line.268">     * @return the number that would be generated after generating advance random numbers.</a>
-<span class="sourceLineNo">269</span><a id="line.269">     */</a>
-<span class="sourceLineNo">270</span><a id="line.270">    @Override</a>
-<span class="sourceLineNo">271</span><a id="line.271">    public long skip(long advance)</a>
-<span class="sourceLineNo">272</span><a id="line.272">    {</a>
-<span class="sourceLineNo">273</span><a id="line.273">        // The method used here is based on Brown, "Random Number Generation</a>
-<span class="sourceLineNo">274</span><a id="line.274">        // with Arbitrary Stride,", Transactions of the American Nuclear</a>
-<span class="sourceLineNo">275</span><a id="line.275">        // Society (Nov. 1994).  The algorithm is very similar to fast</a>
-<span class="sourceLineNo">276</span><a id="line.276">        // exponentiation.</a>
-<span class="sourceLineNo">277</span><a id="line.277">        //</a>
-<span class="sourceLineNo">278</span><a id="line.278">        // Even though advance is a signed long, it is treated as unsigned, effectively, for the purposes</a>
-<span class="sourceLineNo">279</span><a id="line.279">        // of how many iterations it goes through (at most 63 for forwards, 64 for "backwards").</a>
-<span class="sourceLineNo">280</span><a id="line.280">        long acc_mult = 1, acc_plus = 0, cur_mult = 0x5851F42D4C957F2DL, cur_plus = 0x14057B7EF767814FL;</a>
-<span class="sourceLineNo">281</span><a id="line.281"></a>
-<span class="sourceLineNo">282</span><a id="line.282">        while (advance &gt; 0L) {</a>
-<span class="sourceLineNo">283</span><a id="line.283">            if ((advance &amp; 1L) != 0L) {</a>
-<span class="sourceLineNo">284</span><a id="line.284">                acc_mult *= cur_mult;</a>
-<span class="sourceLineNo">285</span><a id="line.285">                acc_plus = acc_plus*cur_mult + cur_plus;</a>
-<span class="sourceLineNo">286</span><a id="line.286">            }</a>
-<span class="sourceLineNo">287</span><a id="line.287">            cur_plus *= (cur_mult+1L);</a>
-<span class="sourceLineNo">288</span><a id="line.288">            cur_mult *= cur_mult;</a>
-<span class="sourceLineNo">289</span><a id="line.289">            advance &gt;&gt;&gt;= 1;</a>
-<span class="sourceLineNo">290</span><a id="line.290">        }</a>
-<span class="sourceLineNo">291</span><a id="line.291">        long p = (state = acc_mult * state + acc_plus);</a>
-<span class="sourceLineNo">292</span><a id="line.292">        p = (p ^ p &gt;&gt;&gt; (5 + (p &gt;&gt;&gt; 59))) * 0xAEF17502108EF2D9L;</a>
-<span class="sourceLineNo">293</span><a id="line.293">        return (p ^ p &gt;&gt;&gt; 43);</a>
-<span class="sourceLineNo">294</span><a id="line.294">    }</a>
-<span class="sourceLineNo">295</span><a id="line.295"></a>
-<span class="sourceLineNo">296</span><a id="line.296">    @Override</a>
-<span class="sourceLineNo">297</span><a id="line.297">    public String toString() {</a>
-<span class="sourceLineNo">298</span><a id="line.298">        return "PermutedRNG with state 0x" + StringKit.hex(state) + 'L';</a>
-<span class="sourceLineNo">299</span><a id="line.299">    }</a>
-<span class="sourceLineNo">300</span><a id="line.300"></a>
-<span class="sourceLineNo">301</span><a id="line.301">    /**</a>
-<span class="sourceLineNo">302</span><a id="line.302">     * Given suitably-different inputs as {@code state}, this will permute that state to get a seemingly-unrelated</a>
-<span class="sourceLineNo">303</span><a id="line.303">     * number. Unlike {@link LightRNG#determine(long)}, this will not work with inputs that are sequential, and it is</a>
-<span class="sourceLineNo">304</span><a id="line.304">     * recommended that subsequent calls change state with a linear congruential generator like</a>
-<span class="sourceLineNo">305</span><a id="line.305">     * {@code PermutedRNG.determine(state = state * 0x5851F42D4C957F2DL + 0x14057B7EF767814FL)}. It will be correct for</a>
-<span class="sourceLineNo">306</span><a id="line.306">     * any inputs, but if {@code state} is 0, then this will return 0.</a>
-<span class="sourceLineNo">307</span><a id="line.307">     * @param state a long that should be changed with {@code state = state * 0x5851F42D4C957F2DL + 0x14057B7EF767814FL}</a>
-<span class="sourceLineNo">308</span><a id="line.308">     * @return a pseudo-random long determined from state</a>
-<span class="sourceLineNo">309</span><a id="line.309">     */</a>
-<span class="sourceLineNo">310</span><a id="line.310">    public static long determine(long state)</a>
-<span class="sourceLineNo">311</span><a id="line.311">    {</a>
-<span class="sourceLineNo">312</span><a id="line.312">        state = (state ^ state &gt;&gt;&gt; (5 + (state &gt;&gt;&gt; 59))) * 0xAEF17502108EF2D9L;</a>
-<span class="sourceLineNo">313</span><a id="line.313">        return (state &gt;&gt;&gt; 43) ^ state;</a>
-<span class="sourceLineNo">314</span><a id="line.314">    }</a>
-<span class="sourceLineNo">315</span><a id="line.315"></a>
-<span class="sourceLineNo">316</span><a id="line.316">    /**</a>
-<span class="sourceLineNo">317</span><a id="line.317">     * Given suitably-different inputs as {@code state}, this will permute that state to get a seemingly-unrelated</a>
-<span class="sourceLineNo">318</span><a id="line.318">     * number as an int between 0 and bound. Unlike {@link LightRNG#determine(long)}, this will not work with inputs</a>
-<span class="sourceLineNo">319</span><a id="line.319">     * that are sequential, and it is recommended that subsequent calls change state with a linear congruential</a>
-<span class="sourceLineNo">320</span><a id="line.320">     * generator like {@code PermutedRNG.determine(state = state * 0x5851F42D4C957F2DL + 0x14057B7EF767814FL)}. It will</a>
-<span class="sourceLineNo">321</span><a id="line.321">     * be correct for any inputs, but if {@code state} is 0, then this will return 0.</a>
-<span class="sourceLineNo">322</span><a id="line.322">     * @param state a long that should be changed with {@code state = state * 0x5851F42D4C957F2DL + 0x14057B7EF767814FL}</a>
-<span class="sourceLineNo">323</span><a id="line.323">     * @param bound the exclusive outer bound on the numbers this can produce, as an int</a>
-<span class="sourceLineNo">324</span><a id="line.324">     * @return a pseudo-random int between 0 (inclusive) and bound (exclusive) determined from state</a>
-<span class="sourceLineNo">325</span><a id="line.325">     */</a>
-<span class="sourceLineNo">326</span><a id="line.326">    public static int determineBounded(long state, final int bound)</a>
-<span class="sourceLineNo">327</span><a id="line.327">    {</a>
-<span class="sourceLineNo">328</span><a id="line.328">        state ^= state &gt;&gt;&gt; (5 + (state &gt;&gt;&gt; 59));</a>
-<span class="sourceLineNo">329</span><a id="line.329">        return (int)((bound * ((((state *= 0xAEF17502108EF2D9L) &gt;&gt;&gt; 43) ^ state) &amp; 0x7FFFFFFFL)) &gt;&gt; 31);</a>
-<span class="sourceLineNo">330</span><a id="line.330">    }</a>
-<span class="sourceLineNo">331</span><a id="line.331">}</a>
+<span class="sourceLineNo">236</span><a id="line.236"></a>
+<span class="sourceLineNo">237</span><a id="line.237">    /**</a>
+<span class="sourceLineNo">238</span><a id="line.238">     * Sets the seed of this generator (which is also the current state).</a>
+<span class="sourceLineNo">239</span><a id="line.239">     * @param seed the seed to use for this PermutedRNG, as if it was constructed with this seed.</a>
+<span class="sourceLineNo">240</span><a id="line.240">     */</a>
+<span class="sourceLineNo">241</span><a id="line.241">    public void setSeed( final long seed ) {</a>
+<span class="sourceLineNo">242</span><a id="line.242">        state = seed;</a>
+<span class="sourceLineNo">243</span><a id="line.243">    }</a>
+<span class="sourceLineNo">244</span><a id="line.244">    /**</a>
+<span class="sourceLineNo">245</span><a id="line.245">     * Sets the seed (also the current state) of this generator.</a>
+<span class="sourceLineNo">246</span><a id="line.246">     * @param seed the seed to use for this PermutedRNG, as if it was constructed with this seed.</a>
+<span class="sourceLineNo">247</span><a id="line.247">     */</a>
+<span class="sourceLineNo">248</span><a id="line.248">    @Override</a>
+<span class="sourceLineNo">249</span><a id="line.249">        public void setState( final long seed ) {</a>
+<span class="sourceLineNo">250</span><a id="line.250">        state = seed;</a>
+<span class="sourceLineNo">251</span><a id="line.251">    }</a>
+<span class="sourceLineNo">252</span><a id="line.252">    /**</a>
+<span class="sourceLineNo">253</span><a id="line.253">     * Gets the current state of this generator.</a>
+<span class="sourceLineNo">254</span><a id="line.254">     * @return the current seed of this PermutedRNG, changed once per call to {@link #nextLong()}</a>
+<span class="sourceLineNo">255</span><a id="line.255">     */</a>
+<span class="sourceLineNo">256</span><a id="line.256">    @Override</a>
+<span class="sourceLineNo">257</span><a id="line.257">        public long getState( ) {</a>
+<span class="sourceLineNo">258</span><a id="line.258">        return state;</a>
+<span class="sourceLineNo">259</span><a id="line.259">    }</a>
+<span class="sourceLineNo">260</span><a id="line.260"></a>
+<span class="sourceLineNo">261</span><a id="line.261">    /**</a>
+<span class="sourceLineNo">262</span><a id="line.262">     * Advances or rolls back the PermutedRNG's state without actually generating each number. Skips forward</a>
+<span class="sourceLineNo">263</span><a id="line.263">     * or backward a number of steps specified by advance, where a step is equal to one call to {@link #nextLong()},</a>
+<span class="sourceLineNo">264</span><a id="line.264">     * and returns the random number produced at that step (you can get the state with {@link #getState()}).</a>
+<span class="sourceLineNo">265</span><a id="line.265">     * Skipping ahead or behind takes more than constant time, unlike with {@link LightRNG}, but less time</a>
+<span class="sourceLineNo">266</span><a id="line.266">     * than calling {@link #nextLong()} {@code advance} times. Skipping backwards by one step is the worst case for this</a>
+<span class="sourceLineNo">267</span><a id="line.267">     * technique.</a>
+<span class="sourceLineNo">268</span><a id="line.268">     * @param advance Number of future generations to skip past. Can be negative to backtrack.</a>
+<span class="sourceLineNo">269</span><a id="line.269">     * @return the number that would be generated after generating advance random numbers.</a>
+<span class="sourceLineNo">270</span><a id="line.270">     */</a>
+<span class="sourceLineNo">271</span><a id="line.271">    @Override</a>
+<span class="sourceLineNo">272</span><a id="line.272">    public long skip(long advance)</a>
+<span class="sourceLineNo">273</span><a id="line.273">    {</a>
+<span class="sourceLineNo">274</span><a id="line.274">        // The method used here is based on Brown, "Random Number Generation</a>
+<span class="sourceLineNo">275</span><a id="line.275">        // with Arbitrary Stride,", Transactions of the American Nuclear</a>
+<span class="sourceLineNo">276</span><a id="line.276">        // Society (Nov. 1994).  The algorithm is very similar to fast</a>
+<span class="sourceLineNo">277</span><a id="line.277">        // exponentiation.</a>
+<span class="sourceLineNo">278</span><a id="line.278">        //</a>
+<span class="sourceLineNo">279</span><a id="line.279">        // Even though advance is a signed long, it is treated as unsigned, effectively, for the purposes</a>
+<span class="sourceLineNo">280</span><a id="line.280">        // of how many iterations it goes through (at most 63 for forwards, 64 for "backwards").</a>
+<span class="sourceLineNo">281</span><a id="line.281">        long acc_mult = 1, acc_plus = 0, cur_mult = 0x5851F42D4C957F2DL, cur_plus = 0x14057B7EF767814FL;</a>
+<span class="sourceLineNo">282</span><a id="line.282"></a>
+<span class="sourceLineNo">283</span><a id="line.283">        while (advance &gt; 0L) {</a>
+<span class="sourceLineNo">284</span><a id="line.284">            if ((advance &amp; 1L) != 0L) {</a>
+<span class="sourceLineNo">285</span><a id="line.285">                acc_mult *= cur_mult;</a>
+<span class="sourceLineNo">286</span><a id="line.286">                acc_plus = acc_plus*cur_mult + cur_plus;</a>
+<span class="sourceLineNo">287</span><a id="line.287">            }</a>
+<span class="sourceLineNo">288</span><a id="line.288">            cur_plus *= (cur_mult+1L);</a>
+<span class="sourceLineNo">289</span><a id="line.289">            cur_mult *= cur_mult;</a>
+<span class="sourceLineNo">290</span><a id="line.290">            advance &gt;&gt;&gt;= 1;</a>
+<span class="sourceLineNo">291</span><a id="line.291">        }</a>
+<span class="sourceLineNo">292</span><a id="line.292">        long p = (state = acc_mult * state + acc_plus);</a>
+<span class="sourceLineNo">293</span><a id="line.293">        p = (p ^ p &gt;&gt;&gt; (5 + (p &gt;&gt;&gt; 59))) * 0xAEF17502108EF2D9L;</a>
+<span class="sourceLineNo">294</span><a id="line.294">        return (p ^ p &gt;&gt;&gt; 43);</a>
+<span class="sourceLineNo">295</span><a id="line.295">    }</a>
+<span class="sourceLineNo">296</span><a id="line.296"></a>
+<span class="sourceLineNo">297</span><a id="line.297">    @Override</a>
+<span class="sourceLineNo">298</span><a id="line.298">    public String toString() {</a>
+<span class="sourceLineNo">299</span><a id="line.299">        return "PermutedRNG with state 0x" + StringKit.hex(state) + 'L';</a>
+<span class="sourceLineNo">300</span><a id="line.300">    }</a>
+<span class="sourceLineNo">301</span><a id="line.301"></a>
+<span class="sourceLineNo">302</span><a id="line.302">    /**</a>
+<span class="sourceLineNo">303</span><a id="line.303">     * Given suitably-different inputs as {@code state}, this will permute that state to get a seemingly-unrelated</a>
+<span class="sourceLineNo">304</span><a id="line.304">     * number. Unlike {@link LightRNG#determine(long)}, this will not work with inputs that are sequential, and it is</a>
+<span class="sourceLineNo">305</span><a id="line.305">     * recommended that subsequent calls change state with a linear congruential generator like</a>
+<span class="sourceLineNo">306</span><a id="line.306">     * {@code PermutedRNG.determine(state = state * 0x5851F42D4C957F2DL + 0x14057B7EF767814FL)}. It will be correct for</a>
+<span class="sourceLineNo">307</span><a id="line.307">     * any inputs, but if {@code state} is 0, then this will return 0.</a>
+<span class="sourceLineNo">308</span><a id="line.308">     * @param state a long that should be changed with {@code state = state * 0x5851F42D4C957F2DL + 0x14057B7EF767814FL}</a>
+<span class="sourceLineNo">309</span><a id="line.309">     * @return a pseudo-random long determined from state</a>
+<span class="sourceLineNo">310</span><a id="line.310">     */</a>
+<span class="sourceLineNo">311</span><a id="line.311">    public static long determine(long state)</a>
+<span class="sourceLineNo">312</span><a id="line.312">    {</a>
+<span class="sourceLineNo">313</span><a id="line.313">        state = (state ^ state &gt;&gt;&gt; (5 + (state &gt;&gt;&gt; 59))) * 0xAEF17502108EF2D9L;</a>
+<span class="sourceLineNo">314</span><a id="line.314">        return (state &gt;&gt;&gt; 43) ^ state;</a>
+<span class="sourceLineNo">315</span><a id="line.315">    }</a>
+<span class="sourceLineNo">316</span><a id="line.316"></a>
+<span class="sourceLineNo">317</span><a id="line.317">    /**</a>
+<span class="sourceLineNo">318</span><a id="line.318">     * Given suitably-different inputs as {@code state}, this will permute that state to get a seemingly-unrelated</a>
+<span class="sourceLineNo">319</span><a id="line.319">     * number as an int between 0 and bound. Unlike {@link LightRNG#determine(long)}, this will not work with inputs</a>
+<span class="sourceLineNo">320</span><a id="line.320">     * that are sequential, and it is recommended that subsequent calls change state with a linear congruential</a>
+<span class="sourceLineNo">321</span><a id="line.321">     * generator like {@code PermutedRNG.determine(state = state * 0x5851F42D4C957F2DL + 0x14057B7EF767814FL)}. It will</a>
+<span class="sourceLineNo">322</span><a id="line.322">     * be correct for any inputs, but if {@code state} is 0, then this will return 0.</a>
+<span class="sourceLineNo">323</span><a id="line.323">     * @param state a long that should be changed with {@code state = state * 0x5851F42D4C957F2DL + 0x14057B7EF767814FL}</a>
+<span class="sourceLineNo">324</span><a id="line.324">     * @param bound the exclusive outer bound on the numbers this can produce, as an int</a>
+<span class="sourceLineNo">325</span><a id="line.325">     * @return a pseudo-random int between 0 (inclusive) and bound (exclusive) determined from state</a>
+<span class="sourceLineNo">326</span><a id="line.326">     */</a>
+<span class="sourceLineNo">327</span><a id="line.327">    public static int determineBounded(long state, int bound)</a>
+<span class="sourceLineNo">328</span><a id="line.328">    {</a>
+<span class="sourceLineNo">329</span><a id="line.329">        state ^= state &gt;&gt;&gt; (5 + (state &gt;&gt;&gt; 59));</a>
+<span class="sourceLineNo">330</span><a id="line.330">        return (bound = (int)((bound * ((((state *= 0xAEF17502108EF2D9L) &gt;&gt;&gt; 43) ^ state) &amp; 0x7FFFFFFFL)) &gt;&gt; 31)) + (bound &gt;&gt;&gt; 31);</a>
+<span class="sourceLineNo">331</span><a id="line.331">    }</a>
+<span class="sourceLineNo">332</span><a id="line.332">}</a>
 
 
 

@@ -150,7 +150,7 @@
 <span class="sourceLineNo">138</span><a id="line.138">     * Inclusive inner, exclusive outer.</a>
 <span class="sourceLineNo">139</span><a id="line.139">     *</a>
 <span class="sourceLineNo">140</span><a id="line.140">     * @param inner the inner bound, inclusive, can be positive or negative</a>
-<span class="sourceLineNo">141</span><a id="line.141">     * @param outer the outer bound, exclusive, can be positive or negative, usually greater than inner</a>
+<span class="sourceLineNo">141</span><a id="line.141">     * @param outer the outer bound, exclusive, can be positive or negative, should be greater than inner</a>
 <span class="sourceLineNo">142</span><a id="line.142">     * @return a random int between inner (inclusive) and outer (exclusive)</a>
 <span class="sourceLineNo">143</span><a id="line.143">     */</a>
 <span class="sourceLineNo">144</span><a id="line.144">    public final int nextInt(final int inner, final int outer) {</a>
@@ -323,9 +323,9 @@
 <span class="sourceLineNo">311</span><a id="line.311">     * @param bound the outer exclusive bound, as an int</a>
 <span class="sourceLineNo">312</span><a id="line.312">     * @return an int between 0 (inclusive) and bound (exclusive)</a>
 <span class="sourceLineNo">313</span><a id="line.313">     */</a>
-<span class="sourceLineNo">314</span><a id="line.314">    public static int determineBounded(long state, final int bound)</a>
+<span class="sourceLineNo">314</span><a id="line.314">    public static int determineBounded(long state, int bound)</a>
 <span class="sourceLineNo">315</span><a id="line.315">    {</a>
-<span class="sourceLineNo">316</span><a id="line.316">        return (int)((bound * (((state = ((state = (((state * 0x632BE59BD9B4E019L) ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L)) ^ state &gt;&gt;&gt; 27) * 0xAEF17502108EF2D9L) ^ state &gt;&gt;&gt; 25) &amp; 0x7FFFFFFFL)) &gt;&gt; 31);</a>
+<span class="sourceLineNo">316</span><a id="line.316">        return (bound = (int)((bound * (((state = ((state = (((state * 0x632BE59BD9B4E019L) ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L)) ^ state &gt;&gt;&gt; 27) * 0xAEF17502108EF2D9L) ^ state &gt;&gt;&gt; 25) &amp; 0x7FFFFFFFL)) &gt;&gt; 31)) + (bound &gt;&gt;&gt; 31);</a>
 <span class="sourceLineNo">317</span><a id="line.317">    }</a>
 <span class="sourceLineNo">318</span><a id="line.318"></a>
 <span class="sourceLineNo">319</span><a id="line.319">    /**</a>

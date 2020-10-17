@@ -121,10 +121,10 @@
 <span class="sourceLineNo">109</span><a id="line.109">     * noticeable bias if the generator's period is exhausted by only calls to this method. Unlike all unbiased methods,</a>
 <span class="sourceLineNo">110</span><a id="line.110">     * this advances the state by an equivalent to exactly one call to {@link #nextLong()}, where rejection sampling</a>
 <span class="sourceLineNo">111</span><a id="line.111">     * would sometimes advance by one call, but other times by arbitrarily many more.</a>
-<span class="sourceLineNo">112</span><a id="line.112">     * @param bound the outer exclusive bound; can be positive or negative</a>
+<span class="sourceLineNo">112</span><a id="line.112">     * @param outerBound the outer exclusive bound; can be positive or negative</a>
 <span class="sourceLineNo">113</span><a id="line.113">     * @return a random long between 0 (inclusive) and bound (exclusive)</a>
 <span class="sourceLineNo">114</span><a id="line.114">     */</a>
-<span class="sourceLineNo">115</span><a id="line.115">    long nextSignedLong(long bound);</a>
+<span class="sourceLineNo">115</span><a id="line.115">    long nextSignedLong(long outerBound);</a>
 <span class="sourceLineNo">116</span><a id="line.116"></a>
 <span class="sourceLineNo">117</span><a id="line.117">    /**</a>
 <span class="sourceLineNo">118</span><a id="line.118">     * Returns a random non-negative integer between 0 (inclusive) and the given bound (exclusive),</a>
@@ -132,10 +132,10 @@
 <span class="sourceLineNo">120</span><a id="line.120">     * &lt;br&gt;</a>
 <span class="sourceLineNo">121</span><a id="line.121">     * Credit goes to Daniel Lemire, http://lemire.me/blog/2016/06/27/a-fast-alternative-to-the-modulo-reduction/</a>
 <span class="sourceLineNo">122</span><a id="line.122">     *</a>
-<span class="sourceLineNo">123</span><a id="line.123">     * @param bound the outer bound (exclusive), can be negative or positive</a>
+<span class="sourceLineNo">123</span><a id="line.123">     * @param outerBound the outer bound (exclusive), can be negative or positive</a>
 <span class="sourceLineNo">124</span><a id="line.124">     * @return the found number</a>
 <span class="sourceLineNo">125</span><a id="line.125">     */</a>
-<span class="sourceLineNo">126</span><a id="line.126">    int nextSignedInt(final int bound);</a>
+<span class="sourceLineNo">126</span><a id="line.126">    int nextSignedInt(final int outerBound);</a>
 <span class="sourceLineNo">127</span><a id="line.127">    /**</a>
 <span class="sourceLineNo">128</span><a id="line.128">     * Returns a value between min (inclusive) and max (exclusive) as ints.</a>
 <span class="sourceLineNo">129</span><a id="line.129">     * &lt;br&gt;</a>

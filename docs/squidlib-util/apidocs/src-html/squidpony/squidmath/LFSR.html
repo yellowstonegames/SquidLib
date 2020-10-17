@@ -91,239 +91,240 @@
 <span class="sourceLineNo">079</span><a id="line.79">    }</a>
 <span class="sourceLineNo">080</span><a id="line.80"></a>
 <span class="sourceLineNo">081</span><a id="line.81">    /**</a>
-<span class="sourceLineNo">082</span><a id="line.82">     * Exclusive on the outer bound; the inner bound is 0. The bound may be negative, which will produce a non-positive</a>
-<span class="sourceLineNo">083</span><a id="line.83">     * result.</a>
-<span class="sourceLineNo">084</span><a id="line.84">     * @param bound the outer exclusive bound; may be positive or negative</a>
-<span class="sourceLineNo">085</span><a id="line.85">     * @return a random long between 0 (inclusive) and bound (exclusive)</a>
-<span class="sourceLineNo">086</span><a id="line.86">     */</a>
-<span class="sourceLineNo">087</span><a id="line.87">    public int nextInt( final int bound ) {</a>
-<span class="sourceLineNo">088</span><a id="line.88">        return (int)((bound * (nextLong() &amp; 0x7FFFFFFFL)) &gt;&gt; 31);</a>
-<span class="sourceLineNo">089</span><a id="line.89">    }</a>
-<span class="sourceLineNo">090</span><a id="line.90">    /**</a>
-<span class="sourceLineNo">091</span><a id="line.91">     * Inclusive lower, exclusive upper.</a>
-<span class="sourceLineNo">092</span><a id="line.92">     * @param inner the inner bound, inclusive, can be positive or negative</a>
-<span class="sourceLineNo">093</span><a id="line.93">     * @param outer the outer bound, exclusive, should be positive, should usually be greater than inner</a>
-<span class="sourceLineNo">094</span><a id="line.94">     * @return a random int that may be equal to inner and will otherwise be between inner and outer</a>
-<span class="sourceLineNo">095</span><a id="line.95">     */</a>
-<span class="sourceLineNo">096</span><a id="line.96">    public int nextInt(final int inner, final int outer) {</a>
-<span class="sourceLineNo">097</span><a id="line.97">        return inner + nextInt(outer - inner);</a>
-<span class="sourceLineNo">098</span><a id="line.98">    }</a>
-<span class="sourceLineNo">099</span><a id="line.99"></a>
-<span class="sourceLineNo">100</span><a id="line.100">    /**</a>
-<span class="sourceLineNo">101</span><a id="line.101">     * Exclusive on the outer bound; the inner bound is 0. The bound may be negative, which will produce a non-positive</a>
-<span class="sourceLineNo">102</span><a id="line.102">     * result.</a>
-<span class="sourceLineNo">103</span><a id="line.103">     * @param bound the outer exclusive bound; may be positive or negative</a>
-<span class="sourceLineNo">104</span><a id="line.104">     * @return a random long between 0 (inclusive) and bound (exclusive)</a>
-<span class="sourceLineNo">105</span><a id="line.105">     */</a>
-<span class="sourceLineNo">106</span><a id="line.106">    public long nextLong(long bound) {</a>
-<span class="sourceLineNo">107</span><a id="line.107">        long rand = nextLong();</a>
-<span class="sourceLineNo">108</span><a id="line.108">        final long randLow = rand &amp; 0xFFFFFFFFL;</a>
-<span class="sourceLineNo">109</span><a id="line.109">        final long boundLow = bound &amp; 0xFFFFFFFFL;</a>
-<span class="sourceLineNo">110</span><a id="line.110">        rand &gt;&gt;&gt;= 32;</a>
-<span class="sourceLineNo">111</span><a id="line.111">        bound &gt;&gt;= 32;</a>
-<span class="sourceLineNo">112</span><a id="line.112">        final long t = rand * boundLow + (randLow * boundLow &gt;&gt;&gt; 32);</a>
-<span class="sourceLineNo">113</span><a id="line.113">        return rand * bound + (t &gt;&gt; 32) + (randLow * bound + (t &amp; 0xFFFFFFFFL) &gt;&gt; 32);</a>
-<span class="sourceLineNo">114</span><a id="line.114">    }</a>
-<span class="sourceLineNo">115</span><a id="line.115"></a>
-<span class="sourceLineNo">116</span><a id="line.116">    /**</a>
-<span class="sourceLineNo">117</span><a id="line.117">     * Inclusive inner, exclusive outer; both inner and outer can be positive or negative.</a>
-<span class="sourceLineNo">118</span><a id="line.118">     * @param inner the inner bound, inclusive, can be positive or negative</a>
-<span class="sourceLineNo">119</span><a id="line.119">     * @param outer the outer bound, exclusive, can be positive or negative and may be greater than or less than inner</a>
-<span class="sourceLineNo">120</span><a id="line.120">     * @return a random long that may be equal to inner and will otherwise be between inner and outer</a>
-<span class="sourceLineNo">121</span><a id="line.121">     */</a>
-<span class="sourceLineNo">122</span><a id="line.122">    public long nextLong(final long inner, final long outer) {</a>
-<span class="sourceLineNo">123</span><a id="line.123">        return inner + nextLong(outer - inner);</a>
-<span class="sourceLineNo">124</span><a id="line.124">    }</a>
-<span class="sourceLineNo">125</span><a id="line.125"></a>
-<span class="sourceLineNo">126</span><a id="line.126">    public double nextDouble() {</a>
-<span class="sourceLineNo">127</span><a id="line.127">        return (nextLong() &amp; DOUBLE_MASK) * NORM_53;</a>
-<span class="sourceLineNo">128</span><a id="line.128">    }</a>
-<span class="sourceLineNo">129</span><a id="line.129"></a>
-<span class="sourceLineNo">130</span><a id="line.130">    public float nextFloat() {</a>
-<span class="sourceLineNo">131</span><a id="line.131">        return (float) ((nextLong() &amp; FLOAT_MASK) * NORM_24);</a>
-<span class="sourceLineNo">132</span><a id="line.132">    }</a>
-<span class="sourceLineNo">133</span><a id="line.133"></a>
-<span class="sourceLineNo">134</span><a id="line.134">    public boolean nextBoolean() {</a>
-<span class="sourceLineNo">135</span><a id="line.135">        return nextLong() &lt; 0L;</a>
-<span class="sourceLineNo">136</span><a id="line.136">    }</a>
-<span class="sourceLineNo">137</span><a id="line.137"></a>
-<span class="sourceLineNo">138</span><a id="line.138">    public void nextBytes(final byte[] bytes) {</a>
-<span class="sourceLineNo">139</span><a id="line.139">        int i = bytes.length, n;</a>
-<span class="sourceLineNo">140</span><a id="line.140">        while (i != 0) {</a>
-<span class="sourceLineNo">141</span><a id="line.141">            n = Math.min(i, 8);</a>
-<span class="sourceLineNo">142</span><a id="line.142">            for (long bits = nextLong(); n-- != 0; bits &gt;&gt;&gt;= 8) {</a>
-<span class="sourceLineNo">143</span><a id="line.143">                bytes[--i] = (byte) bits;</a>
-<span class="sourceLineNo">144</span><a id="line.144">            }</a>
-<span class="sourceLineNo">145</span><a id="line.145">        }</a>
-<span class="sourceLineNo">146</span><a id="line.146">    }</a>
-<span class="sourceLineNo">147</span><a id="line.147"></a>
-<span class="sourceLineNo">148</span><a id="line.148">    /**</a>
-<span class="sourceLineNo">149</span><a id="line.149">     * Get the current internal state of the StatefulRandomness as a long.</a>
-<span class="sourceLineNo">150</span><a id="line.150">     *</a>
-<span class="sourceLineNo">151</span><a id="line.151">     * @return the current internal state of this object.</a>
-<span class="sourceLineNo">152</span><a id="line.152">     */</a>
-<span class="sourceLineNo">153</span><a id="line.153">    @Override</a>
-<span class="sourceLineNo">154</span><a id="line.154">    public long getState() {</a>
-<span class="sourceLineNo">155</span><a id="line.155">        return state;</a>
-<span class="sourceLineNo">156</span><a id="line.156">    }</a>
-<span class="sourceLineNo">157</span><a id="line.157"></a>
-<span class="sourceLineNo">158</span><a id="line.158">    /**</a>
-<span class="sourceLineNo">159</span><a id="line.159">     * Sets the seed of this generator using one long, running that through LightRNG's algorithm twice to get the state.</a>
-<span class="sourceLineNo">160</span><a id="line.160">     * @param seed the number to use as the seed</a>
-<span class="sourceLineNo">161</span><a id="line.161">     */</a>
-<span class="sourceLineNo">162</span><a id="line.162">    public void setState(final long seed) {</a>
-<span class="sourceLineNo">163</span><a id="line.163">        if(seed == 0)</a>
-<span class="sourceLineNo">164</span><a id="line.164">            state = -1L;</a>
-<span class="sourceLineNo">165</span><a id="line.165">        else</a>
-<span class="sourceLineNo">166</span><a id="line.166">            state = seed;</a>
-<span class="sourceLineNo">167</span><a id="line.167">    }</a>
-<span class="sourceLineNo">168</span><a id="line.168"></a>
-<span class="sourceLineNo">169</span><a id="line.169">    @Override</a>
-<span class="sourceLineNo">170</span><a id="line.170">    public String toString() {</a>
-<span class="sourceLineNo">171</span><a id="line.171">        return "LFSR with state 0x" + StringKit.hex(state) + 'L';</a>
-<span class="sourceLineNo">172</span><a id="line.172">    }</a>
-<span class="sourceLineNo">173</span><a id="line.173"></a>
-<span class="sourceLineNo">174</span><a id="line.174">    @Override</a>
-<span class="sourceLineNo">175</span><a id="line.175">    public boolean equals(Object o) {</a>
-<span class="sourceLineNo">176</span><a id="line.176">        if (this == o) return true;</a>
-<span class="sourceLineNo">177</span><a id="line.177">        if (o == null || getClass() != o.getClass()) return false;</a>
-<span class="sourceLineNo">178</span><a id="line.178"></a>
-<span class="sourceLineNo">179</span><a id="line.179">        LFSR lfsr = (LFSR) o;</a>
-<span class="sourceLineNo">180</span><a id="line.180"></a>
-<span class="sourceLineNo">181</span><a id="line.181">        return (state == lfsr.state);</a>
-<span class="sourceLineNo">182</span><a id="line.182">    }</a>
-<span class="sourceLineNo">183</span><a id="line.183"></a>
-<span class="sourceLineNo">184</span><a id="line.184">    @Override</a>
-<span class="sourceLineNo">185</span><a id="line.185">    public int hashCode() {</a>
-<span class="sourceLineNo">186</span><a id="line.186">        return (int) (state ^ (state &gt;&gt;&gt; 32));</a>
-<span class="sourceLineNo">187</span><a id="line.187">    }</a>
-<span class="sourceLineNo">188</span><a id="line.188"></a>
-<span class="sourceLineNo">189</span><a id="line.189">    /**</a>
-<span class="sourceLineNo">190</span><a id="line.190">     * Gets the next number that an LFSR would produce using {@link #nextLong()} if its state was {@code state}.</a>
-<span class="sourceLineNo">191</span><a id="line.191">     * Does not allow state to be 0. Strongly consider using the result of this and assigning it to state if you expect</a>
-<span class="sourceLineNo">192</span><a id="line.192">     * to call this again, such as with {@code (state = LFSR.determine(state))}, which will ensure the long-term</a>
-<span class="sourceLineNo">193</span><a id="line.193">     * properties of an LFSR hold up (such as having a period of ((2 to the 64) minus 1), or the guarantee that every</a>
-<span class="sourceLineNo">194</span><a id="line.194">     * number from 1 to ((2 to the 64) minus 1), inclusive on both, will be generated once per period).</a>
-<span class="sourceLineNo">195</span><a id="line.195">     * @param state any long other than 0</a>
-<span class="sourceLineNo">196</span><a id="line.196">     * @return the next long that a 64-bit LFSR would produce with the given state</a>
-<span class="sourceLineNo">197</span><a id="line.197">     */</a>
-<span class="sourceLineNo">198</span><a id="line.198">    public static long determine(final long state)</a>
-<span class="sourceLineNo">199</span><a id="line.199">    {</a>
-<span class="sourceLineNo">200</span><a id="line.200">        return state &gt;&gt;&gt; 1 ^ (-(state &amp; 1L) &amp; 0xD800000000000000L);</a>
-<span class="sourceLineNo">201</span><a id="line.201">    }</a>
-<span class="sourceLineNo">202</span><a id="line.202"></a>
-<span class="sourceLineNo">203</span><a id="line.203">    /**</a>
-<span class="sourceLineNo">204</span><a id="line.204">     * Gets the next number from 1 to 255 that a different kind of LFSR would produce if its state was {@code state}.</a>
-<span class="sourceLineNo">205</span><a id="line.205">     * Does not allow state to be 0. If given all byte values except 0 as arguments, will produce all ints 1-255.</a>
-<span class="sourceLineNo">206</span><a id="line.206">     * Strongly consider using the result of this and assigning it to state if you expect to call this again, such as</a>
-<span class="sourceLineNo">207</span><a id="line.207">     * with {@code (state = LFSR.determineByte(state))}, which will ensure the long-term properties of an LFSR hold up</a>
-<span class="sourceLineNo">208</span><a id="line.208">     * (such as having a period of 255, or the guarantee that every number from 1 to 255, inclusive on both, will be</a>
-<span class="sourceLineNo">209</span><a id="line.209">     * generated once per period).</a>
-<span class="sourceLineNo">210</span><a id="line.210">     * @param state any byte other than 0</a>
-<span class="sourceLineNo">211</span><a id="line.211">     * @return the next int between 1 and 255 that an 8-bit LFSR would produce with the given state</a>
-<span class="sourceLineNo">212</span><a id="line.212">     */</a>
-<span class="sourceLineNo">213</span><a id="line.213">    public static int determineByte(final byte state)</a>
-<span class="sourceLineNo">214</span><a id="line.214">    {</a>
-<span class="sourceLineNo">215</span><a id="line.215">        return state &gt;&gt;&gt; 1 ^ (-(state &amp; 1) &amp; 0xB8);</a>
-<span class="sourceLineNo">216</span><a id="line.216">    }</a>
-<span class="sourceLineNo">217</span><a id="line.217"></a>
-<span class="sourceLineNo">218</span><a id="line.218">    /**</a>
-<span class="sourceLineNo">219</span><a id="line.219">     * Gets the next number that a different kind of 32-bit LFSR would produce if its state was {@code state}.</a>
-<span class="sourceLineNo">220</span><a id="line.220">     * Does not allow state to be 0. If given all int values except 0 as arguments, will produce all ints except 0.</a>
-<span class="sourceLineNo">221</span><a id="line.221">     * Strongly consider using the result of this and assigning it to state if you expect to call this again, such as</a>
-<span class="sourceLineNo">222</span><a id="line.222">     * with {@code (state = LFSR.determineInt(state))}, which will ensure the long-term properties of an LFSR hold up</a>
-<span class="sourceLineNo">223</span><a id="line.223">     * (such as having a period of ((2 to the 32) minus 1), or the guarantee that every number from 1 to ((2 to the 32)</a>
-<span class="sourceLineNo">224</span><a id="line.224">     * minus 1), inclusive on both, will be generated once per period).</a>
-<span class="sourceLineNo">225</span><a id="line.225">     * @param state any long other than 0</a>
-<span class="sourceLineNo">226</span><a id="line.226">     * @return the next int that a 32-bit LFSR would produce with the given state</a>
-<span class="sourceLineNo">227</span><a id="line.227">     */</a>
-<span class="sourceLineNo">228</span><a id="line.228">    public static int determineInt(final int state)</a>
-<span class="sourceLineNo">229</span><a id="line.229">    {</a>
-<span class="sourceLineNo">230</span><a id="line.230">        return state &gt;&gt;&gt; 1 ^ (-(state &amp; 1) &amp; 0xA3000000);</a>
-<span class="sourceLineNo">231</span><a id="line.231">    }</a>
-<span class="sourceLineNo">232</span><a id="line.232"></a>
-<span class="sourceLineNo">233</span><a id="line.233">    /**</a>
-<span class="sourceLineNo">234</span><a id="line.234">     * Gets the next positive long that a different kind of 63-bit LFSR would produce if its state was {@code state}.</a>
-<span class="sourceLineNo">235</span><a id="line.235">     * Does not allow state to be 0 or negative. If given all positive long values (not including 0) as arguments, will</a>
-<span class="sourceLineNo">236</span><a id="line.236">     * produce all longs greater than 0. Strongly consider using the result of this and assigning it to state if you</a>
-<span class="sourceLineNo">237</span><a id="line.237">     * expect to call this again, such as with {@code (state = LFSR.determinePositiveLong(state))}, which will ensure</a>
-<span class="sourceLineNo">238</span><a id="line.238">     * the long-term properties of an LFSR hold up (such as having a period of ((2 to the 63) minus 1), or the guarantee</a>
-<span class="sourceLineNo">239</span><a id="line.239">     * that every number from 1 to ((2 to the 63) minus 1), inclusive on both, will be generated once per period).</a>
-<span class="sourceLineNo">240</span><a id="line.240">     * @param state any positive long, not including 0</a>
-<span class="sourceLineNo">241</span><a id="line.241">     * @return the next int that a 63-bit LFSR would produce with the given state</a>
-<span class="sourceLineNo">242</span><a id="line.242">     */</a>
-<span class="sourceLineNo">243</span><a id="line.243">    public static long determinePositiveLong(final long state)</a>
-<span class="sourceLineNo">244</span><a id="line.244">    {</a>
-<span class="sourceLineNo">245</span><a id="line.245">        return state &gt;&gt;&gt; 1 ^ (-(state &amp; 1L) &amp; 0x6000000000000000L);</a>
-<span class="sourceLineNo">246</span><a id="line.246">    }</a>
-<span class="sourceLineNo">247</span><a id="line.247"></a>
-<span class="sourceLineNo">248</span><a id="line.248">    /**</a>
-<span class="sourceLineNo">249</span><a id="line.249">     * Gets the next positive int that a different kind of 31-bit LFSR would produce if its state was {@code state}.</a>
-<span class="sourceLineNo">250</span><a id="line.250">     * Does not allow state to be 0 or negative. If given all positive int values (not including 0) as arguments, will</a>
-<span class="sourceLineNo">251</span><a id="line.251">     * produce all ints greater than 0. Strongly consider using the result of this and assigning it to state if you</a>
-<span class="sourceLineNo">252</span><a id="line.252">     * expect to call this again, such as with {@code (state = LFSR.determinePositiveInt(state))}, which will ensure the</a>
-<span class="sourceLineNo">253</span><a id="line.253">     * long-term properties of an LFSR hold up (such as having a period of ((2 to the 31) minus 1), or the guarantee</a>
-<span class="sourceLineNo">254</span><a id="line.254">     * that every number from 1 to ((2 to the 31) minus 1), inclusive on both, will be generated once per period).</a>
-<span class="sourceLineNo">255</span><a id="line.255">     * &lt;br&gt;</a>
-<span class="sourceLineNo">256</span><a id="line.256">     * A potential benefit of using this particular LFSR type is that the period is a prime number, 2147483647; this can</a>
-<span class="sourceLineNo">257</span><a id="line.257">     * sometimes be relevant if you simultaneously get pseudo-random numbers from sources of randomness with different</a>
-<span class="sourceLineNo">258</span><a id="line.258">     * periods that are "relatively co-prime" (that is, they share no common factors other than 1). This case lengthens</a>
-<span class="sourceLineNo">259</span><a id="line.259">     * the total period of the combined generators significantly, generally multiplying the periods together to get the</a>
-<span class="sourceLineNo">260</span><a id="line.260">     * combined period, as opposed to other cases that may simply add them together.</a>
-<span class="sourceLineNo">261</span><a id="line.261">     * @param state any positive int, not including 0</a>
-<span class="sourceLineNo">262</span><a id="line.262">     * @return the next int that a 31-bit LFSR would produce with the given state</a>
-<span class="sourceLineNo">263</span><a id="line.263">     */</a>
-<span class="sourceLineNo">264</span><a id="line.264">    public static int determinePositiveInt(final int state)</a>
-<span class="sourceLineNo">265</span><a id="line.265">    {</a>
-<span class="sourceLineNo">266</span><a id="line.266">        return state &gt;&gt;&gt; 1 ^ (-(state &amp; 1) &amp; 0x48000000);</a>
-<span class="sourceLineNo">267</span><a id="line.267">    }</a>
-<span class="sourceLineNo">268</span><a id="line.268"></a>
-<span class="sourceLineNo">269</span><a id="line.269">    /**</a>
-<span class="sourceLineNo">270</span><a id="line.270">     * Gets the next int that a different kind of LFSR would produce if its state was {@code state}.</a>
-<span class="sourceLineNo">271</span><a id="line.271">     * Does not allow state to be {@link Integer#MIN_VALUE}, nor will this produce a result of {@link Integer#MIN_VALUE}</a>
-<span class="sourceLineNo">272</span><a id="line.272">     * (as long as {@link Integer#MIN_VALUE} was not the input). If given all int values except</a>
-<span class="sourceLineNo">273</span><a id="line.273">     * {@link Integer#MIN_VALUE} as arguments, will produce all ints in the range {@code [-2147483647,2147483647]},</a>
-<span class="sourceLineNo">274</span><a id="line.274">     * including 0 but not -2147483648 (the minimum int). Strongly consider using the result of this and assigning it to</a>
-<span class="sourceLineNo">275</span><a id="line.275">     * state if you expect to call this again, such as with {@code (state = LFSR.determineIntSymmetrical(state))}, which</a>
-<span class="sourceLineNo">276</span><a id="line.276">     * will ensure the long-term properties of an LFSR hold up (such as having a period of ((2 to the 32) minus 1), or</a>
-<span class="sourceLineNo">277</span><a id="line.277">     * the guarantee that every int except {@link Integer#MIN_VALUE} will be generated once per period).</a>
-<span class="sourceLineNo">278</span><a id="line.278">     * &lt;br&gt;</a>
-<span class="sourceLineNo">279</span><a id="line.279">     * This is called Symmetrical because it produces the same amount of positive and negative numbers, instead of the</a>
-<span class="sourceLineNo">280</span><a id="line.280">     * normal generation of more negative ones (due to how ints are represented, the min value is always further from 0</a>
-<span class="sourceLineNo">281</span><a id="line.281">     * than the max value for any signed integer type).</a>
-<span class="sourceLineNo">282</span><a id="line.282">     * @param state any int other than -2147483648 (0x80000000), which is {@link Integer#MIN_VALUE}; can produce 0</a>
-<span class="sourceLineNo">283</span><a id="line.283">     * @return the next int other than -2147483648 that an LFSR would produce with the given state</a>
-<span class="sourceLineNo">284</span><a id="line.284">     */</a>
-<span class="sourceLineNo">285</span><a id="line.285">    public static int determineIntSymmetrical(final int state)</a>
-<span class="sourceLineNo">286</span><a id="line.286">    {</a>
-<span class="sourceLineNo">287</span><a id="line.287">        return ((state ^ 0x80000000) &gt;&gt;&gt; 1 ^ (-(state &amp; 1) &amp; 0xA3000000));</a>
-<span class="sourceLineNo">288</span><a id="line.288">    }</a>
-<span class="sourceLineNo">289</span><a id="line.289"></a>
-<span class="sourceLineNo">290</span><a id="line.290">    /**</a>
-<span class="sourceLineNo">291</span><a id="line.291">     * Gets the next number that an LFSR would produce using {@link #nextInt(int)} if its state was {@code state} and</a>
-<span class="sourceLineNo">292</span><a id="line.292">     * {@code bound} was passed to nextInt(). Does not allow state to be 0, but bound can be negative, which causes this</a>
-<span class="sourceLineNo">293</span><a id="line.293">     * not to produce positive numbers. This method is very predictable and its use is not encouraged; prefer using</a>
-<span class="sourceLineNo">294</span><a id="line.294">     * {@link #determineBounded(int, int)}.</a>
-<span class="sourceLineNo">295</span><a id="line.295">     * @param state any long other than 0</a>
-<span class="sourceLineNo">296</span><a id="line.296">     * @param bound the exclusive bound on the result as an int; does better if the bound is not too high (below 10000?)</a>
-<span class="sourceLineNo">297</span><a id="line.297">     * @return the next value that {@link LFSR#determine(long)} would produce with the given state, but limited to bound; can return 0</a>
-<span class="sourceLineNo">298</span><a id="line.298">     */</a>
-<span class="sourceLineNo">299</span><a id="line.299">    public static int determineBounded(final long state, final int bound)</a>
-<span class="sourceLineNo">300</span><a id="line.300">    {</a>
-<span class="sourceLineNo">301</span><a id="line.301">        return (int)((bound * (state &gt;&gt;&gt; 1 &amp; 0xFFFFFFFFL)) &gt;&gt; 32);</a>
-<span class="sourceLineNo">302</span><a id="line.302">    }</a>
-<span class="sourceLineNo">303</span><a id="line.303">    /**</a>
-<span class="sourceLineNo">304</span><a id="line.304">     * Gets an int using {@link #determineInt(int)} and bounds it to fit between 0 (inclusive) and bound (exclusive).</a>
-<span class="sourceLineNo">305</span><a id="line.305">     * Does not allow state to be 0, but bound can be negative, which causes this not to produce positive numbers.</a>
-<span class="sourceLineNo">306</span><a id="line.306">     * @param state any int other than 0</a>
-<span class="sourceLineNo">307</span><a id="line.307">     * @param bound the exclusive bound on the result as an int; does better if the bound is not too high (below 10000?)</a>
-<span class="sourceLineNo">308</span><a id="line.308">     * @return the next int that {@link LFSR#determineInt(int)} would produce with the given state, but limited to bound; can return 0</a>
-<span class="sourceLineNo">309</span><a id="line.309">     */</a>
-<span class="sourceLineNo">310</span><a id="line.310">    public static int determineBounded(final int state, final int bound)</a>
-<span class="sourceLineNo">311</span><a id="line.311">    {</a>
-<span class="sourceLineNo">312</span><a id="line.312">        return (int)((bound * ((state &gt;&gt;&gt; 1 ^ (-(state &amp; 1) &amp; 0xA3000000)) &amp; 0xFFFFFFFFL)) &gt;&gt; 32);</a>
-<span class="sourceLineNo">313</span><a id="line.313">    }</a>
-<span class="sourceLineNo">314</span><a id="line.314">}</a>
+<span class="sourceLineNo">082</span><a id="line.82">     * Exclusive on the outer bound; the inner bound is 0.</a>
+<span class="sourceLineNo">083</span><a id="line.83">     * The bound should not be negative; use {@link IRNG#nextSignedInt(int)} if you need a negative outer bound.</a>
+<span class="sourceLineNo">084</span><a id="line.84">     * </a>
+<span class="sourceLineNo">085</span><a id="line.85">     * @param bound the outer exclusive bound; should be positive</a>
+<span class="sourceLineNo">086</span><a id="line.86">     * @return a random long between 0 (inclusive) and bound (exclusive)</a>
+<span class="sourceLineNo">087</span><a id="line.87">     */</a>
+<span class="sourceLineNo">088</span><a id="line.88">    public int nextInt( final int bound ) {</a>
+<span class="sourceLineNo">089</span><a id="line.89">        return (int)((bound * (nextLong() &amp; 0x7FFFFFFFL)) &gt;&gt; 31);</a>
+<span class="sourceLineNo">090</span><a id="line.90">    }</a>
+<span class="sourceLineNo">091</span><a id="line.91">    /**</a>
+<span class="sourceLineNo">092</span><a id="line.92">     * Inclusive lower, exclusive upper.</a>
+<span class="sourceLineNo">093</span><a id="line.93">     * @param inner the inner bound, inclusive, can be positive or negative</a>
+<span class="sourceLineNo">094</span><a id="line.94">     * @param outer the outer bound, exclusive, should be positive, should be greater than inner</a>
+<span class="sourceLineNo">095</span><a id="line.95">     * @return a random int that may be equal to inner and will otherwise be between inner and outer</a>
+<span class="sourceLineNo">096</span><a id="line.96">     */</a>
+<span class="sourceLineNo">097</span><a id="line.97">    public int nextInt(final int inner, final int outer) {</a>
+<span class="sourceLineNo">098</span><a id="line.98">        return inner + nextInt(outer - inner);</a>
+<span class="sourceLineNo">099</span><a id="line.99">    }</a>
+<span class="sourceLineNo">100</span><a id="line.100"></a>
+<span class="sourceLineNo">101</span><a id="line.101">    /**</a>
+<span class="sourceLineNo">102</span><a id="line.102">     * Exclusive on the outer bound; the inner bound is 0. The bound may be negative, which will produce a non-positive</a>
+<span class="sourceLineNo">103</span><a id="line.103">     * result.</a>
+<span class="sourceLineNo">104</span><a id="line.104">     * @param bound the outer exclusive bound; may be positive or negative</a>
+<span class="sourceLineNo">105</span><a id="line.105">     * @return a random long between 0 (inclusive) and bound (exclusive)</a>
+<span class="sourceLineNo">106</span><a id="line.106">     */</a>
+<span class="sourceLineNo">107</span><a id="line.107">    public long nextLong(long bound) {</a>
+<span class="sourceLineNo">108</span><a id="line.108">        long rand = nextLong();</a>
+<span class="sourceLineNo">109</span><a id="line.109">        final long randLow = rand &amp; 0xFFFFFFFFL;</a>
+<span class="sourceLineNo">110</span><a id="line.110">        final long boundLow = bound &amp; 0xFFFFFFFFL;</a>
+<span class="sourceLineNo">111</span><a id="line.111">        rand &gt;&gt;&gt;= 32;</a>
+<span class="sourceLineNo">112</span><a id="line.112">        bound &gt;&gt;= 32;</a>
+<span class="sourceLineNo">113</span><a id="line.113">        final long t = rand * boundLow + (randLow * boundLow &gt;&gt;&gt; 32);</a>
+<span class="sourceLineNo">114</span><a id="line.114">        return rand * bound + (t &gt;&gt; 32) + (randLow * bound + (t &amp; 0xFFFFFFFFL) &gt;&gt; 32);</a>
+<span class="sourceLineNo">115</span><a id="line.115">    }</a>
+<span class="sourceLineNo">116</span><a id="line.116"></a>
+<span class="sourceLineNo">117</span><a id="line.117">    /**</a>
+<span class="sourceLineNo">118</span><a id="line.118">     * Inclusive inner, exclusive outer; both inner and outer can be positive or negative.</a>
+<span class="sourceLineNo">119</span><a id="line.119">     * @param inner the inner bound, inclusive, can be positive or negative</a>
+<span class="sourceLineNo">120</span><a id="line.120">     * @param outer the outer bound, exclusive, can be positive or negative and may be greater than or less than inner</a>
+<span class="sourceLineNo">121</span><a id="line.121">     * @return a random long that may be equal to inner and will otherwise be between inner and outer</a>
+<span class="sourceLineNo">122</span><a id="line.122">     */</a>
+<span class="sourceLineNo">123</span><a id="line.123">    public long nextLong(final long inner, final long outer) {</a>
+<span class="sourceLineNo">124</span><a id="line.124">        return inner + nextLong(outer - inner);</a>
+<span class="sourceLineNo">125</span><a id="line.125">    }</a>
+<span class="sourceLineNo">126</span><a id="line.126"></a>
+<span class="sourceLineNo">127</span><a id="line.127">    public double nextDouble() {</a>
+<span class="sourceLineNo">128</span><a id="line.128">        return (nextLong() &amp; DOUBLE_MASK) * NORM_53;</a>
+<span class="sourceLineNo">129</span><a id="line.129">    }</a>
+<span class="sourceLineNo">130</span><a id="line.130"></a>
+<span class="sourceLineNo">131</span><a id="line.131">    public float nextFloat() {</a>
+<span class="sourceLineNo">132</span><a id="line.132">        return (float) ((nextLong() &amp; FLOAT_MASK) * NORM_24);</a>
+<span class="sourceLineNo">133</span><a id="line.133">    }</a>
+<span class="sourceLineNo">134</span><a id="line.134"></a>
+<span class="sourceLineNo">135</span><a id="line.135">    public boolean nextBoolean() {</a>
+<span class="sourceLineNo">136</span><a id="line.136">        return nextLong() &lt; 0L;</a>
+<span class="sourceLineNo">137</span><a id="line.137">    }</a>
+<span class="sourceLineNo">138</span><a id="line.138"></a>
+<span class="sourceLineNo">139</span><a id="line.139">    public void nextBytes(final byte[] bytes) {</a>
+<span class="sourceLineNo">140</span><a id="line.140">        int i = bytes.length, n;</a>
+<span class="sourceLineNo">141</span><a id="line.141">        while (i != 0) {</a>
+<span class="sourceLineNo">142</span><a id="line.142">            n = Math.min(i, 8);</a>
+<span class="sourceLineNo">143</span><a id="line.143">            for (long bits = nextLong(); n-- != 0; bits &gt;&gt;&gt;= 8) {</a>
+<span class="sourceLineNo">144</span><a id="line.144">                bytes[--i] = (byte) bits;</a>
+<span class="sourceLineNo">145</span><a id="line.145">            }</a>
+<span class="sourceLineNo">146</span><a id="line.146">        }</a>
+<span class="sourceLineNo">147</span><a id="line.147">    }</a>
+<span class="sourceLineNo">148</span><a id="line.148"></a>
+<span class="sourceLineNo">149</span><a id="line.149">    /**</a>
+<span class="sourceLineNo">150</span><a id="line.150">     * Get the current internal state of the StatefulRandomness as a long.</a>
+<span class="sourceLineNo">151</span><a id="line.151">     *</a>
+<span class="sourceLineNo">152</span><a id="line.152">     * @return the current internal state of this object.</a>
+<span class="sourceLineNo">153</span><a id="line.153">     */</a>
+<span class="sourceLineNo">154</span><a id="line.154">    @Override</a>
+<span class="sourceLineNo">155</span><a id="line.155">    public long getState() {</a>
+<span class="sourceLineNo">156</span><a id="line.156">        return state;</a>
+<span class="sourceLineNo">157</span><a id="line.157">    }</a>
+<span class="sourceLineNo">158</span><a id="line.158"></a>
+<span class="sourceLineNo">159</span><a id="line.159">    /**</a>
+<span class="sourceLineNo">160</span><a id="line.160">     * Sets the seed of this generator using one long, running that through LightRNG's algorithm twice to get the state.</a>
+<span class="sourceLineNo">161</span><a id="line.161">     * @param seed the number to use as the seed</a>
+<span class="sourceLineNo">162</span><a id="line.162">     */</a>
+<span class="sourceLineNo">163</span><a id="line.163">    public void setState(final long seed) {</a>
+<span class="sourceLineNo">164</span><a id="line.164">        if(seed == 0)</a>
+<span class="sourceLineNo">165</span><a id="line.165">            state = -1L;</a>
+<span class="sourceLineNo">166</span><a id="line.166">        else</a>
+<span class="sourceLineNo">167</span><a id="line.167">            state = seed;</a>
+<span class="sourceLineNo">168</span><a id="line.168">    }</a>
+<span class="sourceLineNo">169</span><a id="line.169"></a>
+<span class="sourceLineNo">170</span><a id="line.170">    @Override</a>
+<span class="sourceLineNo">171</span><a id="line.171">    public String toString() {</a>
+<span class="sourceLineNo">172</span><a id="line.172">        return "LFSR with state 0x" + StringKit.hex(state) + 'L';</a>
+<span class="sourceLineNo">173</span><a id="line.173">    }</a>
+<span class="sourceLineNo">174</span><a id="line.174"></a>
+<span class="sourceLineNo">175</span><a id="line.175">    @Override</a>
+<span class="sourceLineNo">176</span><a id="line.176">    public boolean equals(Object o) {</a>
+<span class="sourceLineNo">177</span><a id="line.177">        if (this == o) return true;</a>
+<span class="sourceLineNo">178</span><a id="line.178">        if (o == null || getClass() != o.getClass()) return false;</a>
+<span class="sourceLineNo">179</span><a id="line.179"></a>
+<span class="sourceLineNo">180</span><a id="line.180">        LFSR lfsr = (LFSR) o;</a>
+<span class="sourceLineNo">181</span><a id="line.181"></a>
+<span class="sourceLineNo">182</span><a id="line.182">        return (state == lfsr.state);</a>
+<span class="sourceLineNo">183</span><a id="line.183">    }</a>
+<span class="sourceLineNo">184</span><a id="line.184"></a>
+<span class="sourceLineNo">185</span><a id="line.185">    @Override</a>
+<span class="sourceLineNo">186</span><a id="line.186">    public int hashCode() {</a>
+<span class="sourceLineNo">187</span><a id="line.187">        return (int) (state ^ (state &gt;&gt;&gt; 32));</a>
+<span class="sourceLineNo">188</span><a id="line.188">    }</a>
+<span class="sourceLineNo">189</span><a id="line.189"></a>
+<span class="sourceLineNo">190</span><a id="line.190">    /**</a>
+<span class="sourceLineNo">191</span><a id="line.191">     * Gets the next number that an LFSR would produce using {@link #nextLong()} if its state was {@code state}.</a>
+<span class="sourceLineNo">192</span><a id="line.192">     * Does not allow state to be 0. Strongly consider using the result of this and assigning it to state if you expect</a>
+<span class="sourceLineNo">193</span><a id="line.193">     * to call this again, such as with {@code (state = LFSR.determine(state))}, which will ensure the long-term</a>
+<span class="sourceLineNo">194</span><a id="line.194">     * properties of an LFSR hold up (such as having a period of ((2 to the 64) minus 1), or the guarantee that every</a>
+<span class="sourceLineNo">195</span><a id="line.195">     * number from 1 to ((2 to the 64) minus 1), inclusive on both, will be generated once per period).</a>
+<span class="sourceLineNo">196</span><a id="line.196">     * @param state any long other than 0</a>
+<span class="sourceLineNo">197</span><a id="line.197">     * @return the next long that a 64-bit LFSR would produce with the given state</a>
+<span class="sourceLineNo">198</span><a id="line.198">     */</a>
+<span class="sourceLineNo">199</span><a id="line.199">    public static long determine(final long state)</a>
+<span class="sourceLineNo">200</span><a id="line.200">    {</a>
+<span class="sourceLineNo">201</span><a id="line.201">        return state &gt;&gt;&gt; 1 ^ (-(state &amp; 1L) &amp; 0xD800000000000000L);</a>
+<span class="sourceLineNo">202</span><a id="line.202">    }</a>
+<span class="sourceLineNo">203</span><a id="line.203"></a>
+<span class="sourceLineNo">204</span><a id="line.204">    /**</a>
+<span class="sourceLineNo">205</span><a id="line.205">     * Gets the next number from 1 to 255 that a different kind of LFSR would produce if its state was {@code state}.</a>
+<span class="sourceLineNo">206</span><a id="line.206">     * Does not allow state to be 0. If given all byte values except 0 as arguments, will produce all ints 1-255.</a>
+<span class="sourceLineNo">207</span><a id="line.207">     * Strongly consider using the result of this and assigning it to state if you expect to call this again, such as</a>
+<span class="sourceLineNo">208</span><a id="line.208">     * with {@code (state = LFSR.determineByte(state))}, which will ensure the long-term properties of an LFSR hold up</a>
+<span class="sourceLineNo">209</span><a id="line.209">     * (such as having a period of 255, or the guarantee that every number from 1 to 255, inclusive on both, will be</a>
+<span class="sourceLineNo">210</span><a id="line.210">     * generated once per period).</a>
+<span class="sourceLineNo">211</span><a id="line.211">     * @param state any byte other than 0</a>
+<span class="sourceLineNo">212</span><a id="line.212">     * @return the next int between 1 and 255 that an 8-bit LFSR would produce with the given state</a>
+<span class="sourceLineNo">213</span><a id="line.213">     */</a>
+<span class="sourceLineNo">214</span><a id="line.214">    public static int determineByte(final byte state)</a>
+<span class="sourceLineNo">215</span><a id="line.215">    {</a>
+<span class="sourceLineNo">216</span><a id="line.216">        return state &gt;&gt;&gt; 1 ^ (-(state &amp; 1) &amp; 0xB8);</a>
+<span class="sourceLineNo">217</span><a id="line.217">    }</a>
+<span class="sourceLineNo">218</span><a id="line.218"></a>
+<span class="sourceLineNo">219</span><a id="line.219">    /**</a>
+<span class="sourceLineNo">220</span><a id="line.220">     * Gets the next number that a different kind of 32-bit LFSR would produce if its state was {@code state}.</a>
+<span class="sourceLineNo">221</span><a id="line.221">     * Does not allow state to be 0. If given all int values except 0 as arguments, will produce all ints except 0.</a>
+<span class="sourceLineNo">222</span><a id="line.222">     * Strongly consider using the result of this and assigning it to state if you expect to call this again, such as</a>
+<span class="sourceLineNo">223</span><a id="line.223">     * with {@code (state = LFSR.determineInt(state))}, which will ensure the long-term properties of an LFSR hold up</a>
+<span class="sourceLineNo">224</span><a id="line.224">     * (such as having a period of ((2 to the 32) minus 1), or the guarantee that every number from 1 to ((2 to the 32)</a>
+<span class="sourceLineNo">225</span><a id="line.225">     * minus 1), inclusive on both, will be generated once per period).</a>
+<span class="sourceLineNo">226</span><a id="line.226">     * @param state any long other than 0</a>
+<span class="sourceLineNo">227</span><a id="line.227">     * @return the next int that a 32-bit LFSR would produce with the given state</a>
+<span class="sourceLineNo">228</span><a id="line.228">     */</a>
+<span class="sourceLineNo">229</span><a id="line.229">    public static int determineInt(final int state)</a>
+<span class="sourceLineNo">230</span><a id="line.230">    {</a>
+<span class="sourceLineNo">231</span><a id="line.231">        return state &gt;&gt;&gt; 1 ^ (-(state &amp; 1) &amp; 0xA3000000);</a>
+<span class="sourceLineNo">232</span><a id="line.232">    }</a>
+<span class="sourceLineNo">233</span><a id="line.233"></a>
+<span class="sourceLineNo">234</span><a id="line.234">    /**</a>
+<span class="sourceLineNo">235</span><a id="line.235">     * Gets the next positive long that a different kind of 63-bit LFSR would produce if its state was {@code state}.</a>
+<span class="sourceLineNo">236</span><a id="line.236">     * Does not allow state to be 0 or negative. If given all positive long values (not including 0) as arguments, will</a>
+<span class="sourceLineNo">237</span><a id="line.237">     * produce all longs greater than 0. Strongly consider using the result of this and assigning it to state if you</a>
+<span class="sourceLineNo">238</span><a id="line.238">     * expect to call this again, such as with {@code (state = LFSR.determinePositiveLong(state))}, which will ensure</a>
+<span class="sourceLineNo">239</span><a id="line.239">     * the long-term properties of an LFSR hold up (such as having a period of ((2 to the 63) minus 1), or the guarantee</a>
+<span class="sourceLineNo">240</span><a id="line.240">     * that every number from 1 to ((2 to the 63) minus 1), inclusive on both, will be generated once per period).</a>
+<span class="sourceLineNo">241</span><a id="line.241">     * @param state any positive long, not including 0</a>
+<span class="sourceLineNo">242</span><a id="line.242">     * @return the next int that a 63-bit LFSR would produce with the given state</a>
+<span class="sourceLineNo">243</span><a id="line.243">     */</a>
+<span class="sourceLineNo">244</span><a id="line.244">    public static long determinePositiveLong(final long state)</a>
+<span class="sourceLineNo">245</span><a id="line.245">    {</a>
+<span class="sourceLineNo">246</span><a id="line.246">        return state &gt;&gt;&gt; 1 ^ (-(state &amp; 1L) &amp; 0x6000000000000000L);</a>
+<span class="sourceLineNo">247</span><a id="line.247">    }</a>
+<span class="sourceLineNo">248</span><a id="line.248"></a>
+<span class="sourceLineNo">249</span><a id="line.249">    /**</a>
+<span class="sourceLineNo">250</span><a id="line.250">     * Gets the next positive int that a different kind of 31-bit LFSR would produce if its state was {@code state}.</a>
+<span class="sourceLineNo">251</span><a id="line.251">     * Does not allow state to be 0 or negative. If given all positive int values (not including 0) as arguments, will</a>
+<span class="sourceLineNo">252</span><a id="line.252">     * produce all ints greater than 0. Strongly consider using the result of this and assigning it to state if you</a>
+<span class="sourceLineNo">253</span><a id="line.253">     * expect to call this again, such as with {@code (state = LFSR.determinePositiveInt(state))}, which will ensure the</a>
+<span class="sourceLineNo">254</span><a id="line.254">     * long-term properties of an LFSR hold up (such as having a period of ((2 to the 31) minus 1), or the guarantee</a>
+<span class="sourceLineNo">255</span><a id="line.255">     * that every number from 1 to ((2 to the 31) minus 1), inclusive on both, will be generated once per period).</a>
+<span class="sourceLineNo">256</span><a id="line.256">     * &lt;br&gt;</a>
+<span class="sourceLineNo">257</span><a id="line.257">     * A potential benefit of using this particular LFSR type is that the period is a prime number, 2147483647; this can</a>
+<span class="sourceLineNo">258</span><a id="line.258">     * sometimes be relevant if you simultaneously get pseudo-random numbers from sources of randomness with different</a>
+<span class="sourceLineNo">259</span><a id="line.259">     * periods that are "relatively co-prime" (that is, they share no common factors other than 1). This case lengthens</a>
+<span class="sourceLineNo">260</span><a id="line.260">     * the total period of the combined generators significantly, generally multiplying the periods together to get the</a>
+<span class="sourceLineNo">261</span><a id="line.261">     * combined period, as opposed to other cases that may simply add them together.</a>
+<span class="sourceLineNo">262</span><a id="line.262">     * @param state any positive int, not including 0</a>
+<span class="sourceLineNo">263</span><a id="line.263">     * @return the next int that a 31-bit LFSR would produce with the given state</a>
+<span class="sourceLineNo">264</span><a id="line.264">     */</a>
+<span class="sourceLineNo">265</span><a id="line.265">    public static int determinePositiveInt(final int state)</a>
+<span class="sourceLineNo">266</span><a id="line.266">    {</a>
+<span class="sourceLineNo">267</span><a id="line.267">        return state &gt;&gt;&gt; 1 ^ (-(state &amp; 1) &amp; 0x48000000);</a>
+<span class="sourceLineNo">268</span><a id="line.268">    }</a>
+<span class="sourceLineNo">269</span><a id="line.269"></a>
+<span class="sourceLineNo">270</span><a id="line.270">    /**</a>
+<span class="sourceLineNo">271</span><a id="line.271">     * Gets the next int that a different kind of LFSR would produce if its state was {@code state}.</a>
+<span class="sourceLineNo">272</span><a id="line.272">     * Does not allow state to be {@link Integer#MIN_VALUE}, nor will this produce a result of {@link Integer#MIN_VALUE}</a>
+<span class="sourceLineNo">273</span><a id="line.273">     * (as long as {@link Integer#MIN_VALUE} was not the input). If given all int values except</a>
+<span class="sourceLineNo">274</span><a id="line.274">     * {@link Integer#MIN_VALUE} as arguments, will produce all ints in the range {@code [-2147483647,2147483647]},</a>
+<span class="sourceLineNo">275</span><a id="line.275">     * including 0 but not -2147483648 (the minimum int). Strongly consider using the result of this and assigning it to</a>
+<span class="sourceLineNo">276</span><a id="line.276">     * state if you expect to call this again, such as with {@code (state = LFSR.determineIntSymmetrical(state))}, which</a>
+<span class="sourceLineNo">277</span><a id="line.277">     * will ensure the long-term properties of an LFSR hold up (such as having a period of ((2 to the 32) minus 1), or</a>
+<span class="sourceLineNo">278</span><a id="line.278">     * the guarantee that every int except {@link Integer#MIN_VALUE} will be generated once per period).</a>
+<span class="sourceLineNo">279</span><a id="line.279">     * &lt;br&gt;</a>
+<span class="sourceLineNo">280</span><a id="line.280">     * This is called Symmetrical because it produces the same amount of positive and negative numbers, instead of the</a>
+<span class="sourceLineNo">281</span><a id="line.281">     * normal generation of more negative ones (due to how ints are represented, the min value is always further from 0</a>
+<span class="sourceLineNo">282</span><a id="line.282">     * than the max value for any signed integer type).</a>
+<span class="sourceLineNo">283</span><a id="line.283">     * @param state any int other than -2147483648 (0x80000000), which is {@link Integer#MIN_VALUE}; can produce 0</a>
+<span class="sourceLineNo">284</span><a id="line.284">     * @return the next int other than -2147483648 that an LFSR would produce with the given state</a>
+<span class="sourceLineNo">285</span><a id="line.285">     */</a>
+<span class="sourceLineNo">286</span><a id="line.286">    public static int determineIntSymmetrical(final int state)</a>
+<span class="sourceLineNo">287</span><a id="line.287">    {</a>
+<span class="sourceLineNo">288</span><a id="line.288">        return ((state ^ 0x80000000) &gt;&gt;&gt; 1 ^ (-(state &amp; 1) &amp; 0xA3000000));</a>
+<span class="sourceLineNo">289</span><a id="line.289">    }</a>
+<span class="sourceLineNo">290</span><a id="line.290"></a>
+<span class="sourceLineNo">291</span><a id="line.291">    /**</a>
+<span class="sourceLineNo">292</span><a id="line.292">     * Gets the next number that an LFSR would produce using {@link #nextInt(int)} if its state was {@code state} and</a>
+<span class="sourceLineNo">293</span><a id="line.293">     * {@code bound} was passed to nextInt(). Does not allow state to be 0, but bound can be negative, which causes this</a>
+<span class="sourceLineNo">294</span><a id="line.294">     * not to produce positive numbers. This method is very predictable and its use is not encouraged; prefer using</a>
+<span class="sourceLineNo">295</span><a id="line.295">     * {@link #determineBounded(int, int)}.</a>
+<span class="sourceLineNo">296</span><a id="line.296">     * @param state any long other than 0</a>
+<span class="sourceLineNo">297</span><a id="line.297">     * @param bound the exclusive bound on the result as an int; does better if the bound is not too high (below 10000?)</a>
+<span class="sourceLineNo">298</span><a id="line.298">     * @return the next value that {@link LFSR#determine(long)} would produce with the given state, but limited to bound; can return 0</a>
+<span class="sourceLineNo">299</span><a id="line.299">     */</a>
+<span class="sourceLineNo">300</span><a id="line.300">    public static int determineBounded(final long state, int bound)</a>
+<span class="sourceLineNo">301</span><a id="line.301">    {</a>
+<span class="sourceLineNo">302</span><a id="line.302">        return (bound = (int)((bound * (state &gt;&gt;&gt; 1 &amp; 0xFFFFFFFFL)) &gt;&gt; 32)) + (bound &gt;&gt;&gt; 31);</a>
+<span class="sourceLineNo">303</span><a id="line.303">    }</a>
+<span class="sourceLineNo">304</span><a id="line.304">    /**</a>
+<span class="sourceLineNo">305</span><a id="line.305">     * Gets an int using {@link #determineInt(int)} and bounds it to fit between 0 (inclusive) and bound (exclusive).</a>
+<span class="sourceLineNo">306</span><a id="line.306">     * Does not allow state to be 0, but bound can be negative, which causes this not to produce positive numbers.</a>
+<span class="sourceLineNo">307</span><a id="line.307">     * @param state any int other than 0</a>
+<span class="sourceLineNo">308</span><a id="line.308">     * @param bound the exclusive bound on the result as an int; does better if the bound is not too high (below 10000?)</a>
+<span class="sourceLineNo">309</span><a id="line.309">     * @return the next int that {@link LFSR#determineInt(int)} would produce with the given state, but limited to bound; can return 0</a>
+<span class="sourceLineNo">310</span><a id="line.310">     */</a>
+<span class="sourceLineNo">311</span><a id="line.311">    public static int determineBounded(final int state, int bound)</a>
+<span class="sourceLineNo">312</span><a id="line.312">    {</a>
+<span class="sourceLineNo">313</span><a id="line.313">        return (bound = (int)((bound * ((state &gt;&gt;&gt; 1 ^ (-(state &amp; 1) &amp; 0xA3000000)) &amp; 0xFFFFFFFFL)) &gt;&gt; 32)) + (bound &gt;&gt;&gt; 31);</a>
+<span class="sourceLineNo">314</span><a id="line.314">    }</a>
+<span class="sourceLineNo">315</span><a id="line.315">}</a>
 
 
 

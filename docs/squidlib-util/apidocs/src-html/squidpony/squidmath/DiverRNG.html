@@ -126,7 +126,7 @@
 <span class="sourceLineNo">114</span><a id="line.114"></a>
 <span class="sourceLineNo">115</span><a id="line.115">    /**</a>
 <span class="sourceLineNo">116</span><a id="line.116">     * Exclusive on the outer bound.  The inner bound is 0.</a>
-<span class="sourceLineNo">117</span><a id="line.117">     * The bound can be negative, which makes this produce either a negative int or 0.</a>
+<span class="sourceLineNo">117</span><a id="line.117">     * The bound should not be negative; use {@link IRNG#nextSignedInt(int)} if you need a negative outer bound.</a>
 <span class="sourceLineNo">118</span><a id="line.118">     *</a>
 <span class="sourceLineNo">119</span><a id="line.119">     * @param bound the upper bound; should be positive</a>
 <span class="sourceLineNo">120</span><a id="line.120">     * @return a random int between 0 (inclusive) and bound (exclusive)</a>
@@ -141,7 +141,7 @@
 <span class="sourceLineNo">129</span><a id="line.129">     * Inclusive inner, exclusive outer.</a>
 <span class="sourceLineNo">130</span><a id="line.130">     *</a>
 <span class="sourceLineNo">131</span><a id="line.131">     * @param inner the inner bound, inclusive, can be positive or negative</a>
-<span class="sourceLineNo">132</span><a id="line.132">     * @param outer the outer bound, exclusive, can be positive or negative, usually greater than inner</a>
+<span class="sourceLineNo">132</span><a id="line.132">     * @param outer the outer bound, exclusive, can be positive or negative, should be greater than inner</a>
 <span class="sourceLineNo">133</span><a id="line.133">     * @return a random int between inner (inclusive) and outer (exclusive)</a>
 <span class="sourceLineNo">134</span><a id="line.134">     */</a>
 <span class="sourceLineNo">135</span><a id="line.135">    public final int nextInt(final int inner, final int outer) {</a>
@@ -346,9 +346,9 @@
 <span class="sourceLineNo">334</span><a id="line.334">     * @param bound the outer exclusive bound, as an int</a>
 <span class="sourceLineNo">335</span><a id="line.335">     * @return an int between 0 (inclusive) and bound (exclusive)</a>
 <span class="sourceLineNo">336</span><a id="line.336">     */</a>
-<span class="sourceLineNo">337</span><a id="line.337">    public static int determineBounded(long state, final int bound)</a>
+<span class="sourceLineNo">337</span><a id="line.337">    public static int determineBounded(long state, int bound)</a>
 <span class="sourceLineNo">338</span><a id="line.338">    {</a>
-<span class="sourceLineNo">339</span><a id="line.339">        return (int)((bound * (((state = ((state = (((state * 0x632BE59BD9B4E019L) ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L)) ^ state &gt;&gt;&gt; 27) * 0xAEF17502108EF2D9L) ^ state &gt;&gt;&gt; 25) &amp; 0xFFFFFFFFL)) &gt;&gt; 32);</a>
+<span class="sourceLineNo">339</span><a id="line.339">        return (bound = (int)((bound * (((state = ((state = (((state * 0x632BE59BD9B4E019L) ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L)) ^ state &gt;&gt;&gt; 27) * 0xAEF17502108EF2D9L) ^ state &gt;&gt;&gt; 25) &amp; 0xFFFFFFFFL)) &gt;&gt; 32)) + (bound &gt;&gt;&gt; 31);</a>
 <span class="sourceLineNo">340</span><a id="line.340">    }</a>
 <span class="sourceLineNo">341</span><a id="line.341">    /**</a>
 <span class="sourceLineNo">342</span><a id="line.342">     * High-quality static randomizing method that takes its state as a parameter and limits output to an int between 0</a>
@@ -371,9 +371,9 @@
 <span class="sourceLineNo">359</span><a id="line.359">     * @return an int between 0 (inclusive) and bound (exclusive)</a>
 <span class="sourceLineNo">360</span><a id="line.360">     */</a>
 <span class="sourceLineNo">361</span><a id="line.361"></a>
-<span class="sourceLineNo">362</span><a id="line.362">    public static int randomizeBounded(long state, final int bound)</a>
+<span class="sourceLineNo">362</span><a id="line.362">    public static int randomizeBounded(long state, int bound)</a>
 <span class="sourceLineNo">363</span><a id="line.363">    {</a>
-<span class="sourceLineNo">364</span><a id="line.364">        return (int)((bound * (((state = ((state = (state ^ (state &lt;&lt; 41 | state &gt;&gt;&gt; 23) ^ (state &lt;&lt; 17 | state &gt;&gt;&gt; 47) ^ 0xD1B54A32D192ED03L) * 0xAEF17502108EF2D9L) ^ state &gt;&gt;&gt; 43 ^ state &gt;&gt;&gt; 31 ^ state &gt;&gt;&gt; 23) * 0xDB4F0B9175AE2165L) ^ state &gt;&gt;&gt; 28) &amp; 0xFFFFFFFFL)) &gt;&gt; 32);</a>
+<span class="sourceLineNo">364</span><a id="line.364">        return (bound = (int)((bound * (((state = ((state = (state ^ (state &lt;&lt; 41 | state &gt;&gt;&gt; 23) ^ (state &lt;&lt; 17 | state &gt;&gt;&gt; 47) ^ 0xD1B54A32D192ED03L) * 0xAEF17502108EF2D9L) ^ state &gt;&gt;&gt; 43 ^ state &gt;&gt;&gt; 31 ^ state &gt;&gt;&gt; 23) * 0xDB4F0B9175AE2165L) ^ state &gt;&gt;&gt; 28) &amp; 0xFFFFFFFFL)) &gt;&gt; 32)) + (bound &gt;&gt;&gt; 31);</a>
 <span class="sourceLineNo">365</span><a id="line.365">    }</a>
 <span class="sourceLineNo">366</span><a id="line.366"></a>
 <span class="sourceLineNo">367</span><a id="line.367">    /**</a>

@@ -94,7 +94,7 @@
 <span class="sourceLineNo">082</span><a id="line.82">    public static int doubleToMixedIntBits(final double value)</a>
 <span class="sourceLineNo">083</span><a id="line.83">    {</a>
 <span class="sourceLineNo">084</span><a id="line.84">        final long l = Double.doubleToLongBits(value);</a>
-<span class="sourceLineNo">085</span><a id="line.85">        return (int)(l &amp; 0xFFFFFFFFL) ^ (int)(l &gt;&gt;&gt; 32);</a>
+<span class="sourceLineNo">085</span><a id="line.85">        return (int)((l ^ l &gt;&gt;&gt; 32) &amp; 0xFFFFFFFFL);</a>
 <span class="sourceLineNo">086</span><a id="line.86">    }</a>
 <span class="sourceLineNo">087</span><a id="line.87"></a>
 <span class="sourceLineNo">088</span><a id="line.88">    /**</a>
@@ -1352,251 +1352,253 @@
 <span class="sourceLineNo">1340</span><a id="line.1340">        return y &lt; 0 ? 360 - z : z;</a>
 <span class="sourceLineNo">1341</span><a id="line.1341">    }</a>
 <span class="sourceLineNo">1342</span><a id="line.1342"></a>
-<span class="sourceLineNo">1343</span><a id="line.1343"></a>
-<span class="sourceLineNo">1344</span><a id="line.1344">    //    /**</a>
-<span class="sourceLineNo">1345</span><a id="line.1345">//     * Arc sine approximation with fairly low error while still being faster than {@link NumberTools#sin(double)}.</a>
-<span class="sourceLineNo">1346</span><a id="line.1346">//     * This formula is number 201 in &lt;a href="&gt;http://www.fastcode.dk/fastcodeproject/articles/index.htm"&gt;Dennis</a>
-<span class="sourceLineNo">1347</span><a id="line.1347">//     * Kjaer Christensen's unfinished math work on arc sine approximation&lt;/a&gt;. This method is about 40 times faster</a>
-<span class="sourceLineNo">1348</span><a id="line.1348">//     * than {@link Math#asin(double)}. Fast but imprecise.</a>
-<span class="sourceLineNo">1349</span><a id="line.1349">//     * @param a an input to the inverse sine function, from -1 to 1 inclusive (error is higher approaching -1 or 1)</a>
-<span class="sourceLineNo">1350</span><a id="line.1350">//     * @return an output from the inverse sine function, from -PI/2 to PI/2 inclusive.</a>
-<span class="sourceLineNo">1351</span><a id="line.1351">//     */</a>
-<span class="sourceLineNo">1352</span><a id="line.1352">//    public static double asin(double a) {</a>
-<span class="sourceLineNo">1353</span><a id="line.1353">//        return (a * (1.0 + (a *= a) * (-0.141514171442891431 + a * -0.719110791477959357))) /</a>
-<span class="sourceLineNo">1354</span><a id="line.1354">//                (1.0 + a * (-0.439110389941411144 + a * -0.471306172023844527));</a>
-<span class="sourceLineNo">1355</span><a id="line.1355">//    }</a>
-<span class="sourceLineNo">1356</span><a id="line.1356">//    /**</a>
-<span class="sourceLineNo">1357</span><a id="line.1357">//     * Arc sine approximation with fairly low error while still being faster than {@link NumberTools#sin(float)}.</a>
-<span class="sourceLineNo">1358</span><a id="line.1358">//     * This formula is number 201 in &lt;a href="&gt;http://www.fastcode.dk/fastcodeproject/articles/index.htm"&gt;Dennis</a>
-<span class="sourceLineNo">1359</span><a id="line.1359">//     * Kjaer Christensen's unfinished math work on arc sine approximation&lt;/a&gt;. This method is about 40 times faster</a>
-<span class="sourceLineNo">1360</span><a id="line.1360">//     * than {@link Math#asin(double)}, and takes and returns a float. Fast but imprecise.</a>
-<span class="sourceLineNo">1361</span><a id="line.1361">//     * @param a an input to the inverse sine function, from -1 to 1 inclusive (error is higher approaching -1 or 1)</a>
-<span class="sourceLineNo">1362</span><a id="line.1362">//     * @return an output from the inverse sine function, from -PI/2 to PI/2 inclusive.</a>
-<span class="sourceLineNo">1363</span><a id="line.1363">//     */</a>
-<span class="sourceLineNo">1364</span><a id="line.1364">//    public static float asin(float a) {</a>
-<span class="sourceLineNo">1365</span><a id="line.1365">//        return (a * (1f + (a *= a) * (-0.141514171442891431f + a * -0.719110791477959357f))) /</a>
-<span class="sourceLineNo">1366</span><a id="line.1366">//                (1f + a * (-0.439110389941411144f + a * -0.471306172023844527f));</a>
-<span class="sourceLineNo">1367</span><a id="line.1367">//    }</a>
-<span class="sourceLineNo">1368</span><a id="line.1368">    /**</a>
-<span class="sourceLineNo">1369</span><a id="line.1369">     * Arc sine approximation with very low error, based on a simplified version of {@link #atan2(double, double)}.</a>
-<span class="sourceLineNo">1370</span><a id="line.1370">     * This method is usually much faster than {@link Math#asin(double)}, but is somewhat less precise than Math's</a>
-<span class="sourceLineNo">1371</span><a id="line.1371">     * implementation). It is currently more precise than libGDX's approximation in their MathUtils, but this isn't</a>
-<span class="sourceLineNo">1372</span><a id="line.1372">     * quite as fast; the difference in precision is hard to spot but can be noticeable in some usage.</a>
-<span class="sourceLineNo">1373</span><a id="line.1373">     * @param n an input to the inverse sine function, from -1 to 1 inclusive</a>
-<span class="sourceLineNo">1374</span><a id="line.1374">     * @return an output from the inverse sine function, from PI/-2.0 to PI/2.0 inclusive.</a>
-<span class="sourceLineNo">1375</span><a id="line.1375">     */</a>
-<span class="sourceLineNo">1376</span><a id="line.1376">    public static float asin(final float n)</a>
-<span class="sourceLineNo">1377</span><a id="line.1377">    {</a>
-<span class="sourceLineNo">1378</span><a id="line.1378">        final float ax = (float) Math.sqrt(1f - n * n), ay = Math.abs(n);</a>
-<span class="sourceLineNo">1379</span><a id="line.1379">        if(ax &lt; ay)</a>
-<span class="sourceLineNo">1380</span><a id="line.1380">        {</a>
-<span class="sourceLineNo">1381</span><a id="line.1381">            final float a = ax / ay, s = a * a,</a>
-<span class="sourceLineNo">1382</span><a id="line.1382">                    r = 1.57079637f - (((-0.0464964749f * s + 0.15931422f) * s - 0.327622764f) * s * a + a);</a>
-<span class="sourceLineNo">1383</span><a id="line.1383">            return (n &lt; 0f) ? -r : r;</a>
-<span class="sourceLineNo">1384</span><a id="line.1384">        }</a>
-<span class="sourceLineNo">1385</span><a id="line.1385">        else {</a>
-<span class="sourceLineNo">1386</span><a id="line.1386">            final float a = ay / ax, s = a * a,</a>
-<span class="sourceLineNo">1387</span><a id="line.1387">                    r = (((-0.0464964749f * s + 0.15931422f) * s - 0.327622764f) * s * a + a);</a>
-<span class="sourceLineNo">1388</span><a id="line.1388">            return (n &lt; 0f) ? -r : r;</a>
-<span class="sourceLineNo">1389</span><a id="line.1389">        }</a>
-<span class="sourceLineNo">1390</span><a id="line.1390">    }</a>
-<span class="sourceLineNo">1391</span><a id="line.1391"></a>
-<span class="sourceLineNo">1392</span><a id="line.1392">//    /**</a>
-<span class="sourceLineNo">1393</span><a id="line.1393">//     * Arc cosine approximation with fairly low error while still being faster than {@link NumberTools#cos(double)}.</a>
-<span class="sourceLineNo">1394</span><a id="line.1394">//     * This formula is number 201 in &lt;a href="&gt;http://www.fastcode.dk/fastcodeproject/articles/index.htm"&gt;Dennis</a>
-<span class="sourceLineNo">1395</span><a id="line.1395">//     * Kjaer Christensen's unfinished math work on arc sine approximation&lt;/a&gt;, with a basic change to go from arc sine</a>
-<span class="sourceLineNo">1396</span><a id="line.1396">//     * to arc cosine. This method is faster than {@link Math#acos(double)}. Fast but imprecise.</a>
-<span class="sourceLineNo">1397</span><a id="line.1397">//     * @param a an input to the inverse cosine function, from -1 to 1 inclusive (error is higher approaching -1 or 1)</a>
-<span class="sourceLineNo">1398</span><a id="line.1398">//     * @return an output from the inverse cosine function, from 0 to PI inclusive.</a>
-<span class="sourceLineNo">1399</span><a id="line.1399">//     */</a>
-<span class="sourceLineNo">1400</span><a id="line.1400">//    public static double acos(double a) {</a>
-<span class="sourceLineNo">1401</span><a id="line.1401">//        return 1.5707963267948966 - (a * (1.0 + (a *= a) * (-0.141514171442891431 + a * -0.719110791477959357))) /</a>
-<span class="sourceLineNo">1402</span><a id="line.1402">//                (1.0 + a * (-0.439110389941411144 + a * -0.471306172023844527));</a>
-<span class="sourceLineNo">1403</span><a id="line.1403">//    }</a>
-<span class="sourceLineNo">1404</span><a id="line.1404"></a>
-<span class="sourceLineNo">1405</span><a id="line.1405">    /**</a>
-<span class="sourceLineNo">1406</span><a id="line.1406">     * Arc sine approximation with very low error, based on a simplified version of {@link #atan2(float, float)}.</a>
-<span class="sourceLineNo">1407</span><a id="line.1407">     * This method is usually much faster than {@link Math#asin(double)}, but is somewhat less precise than Math's</a>
-<span class="sourceLineNo">1408</span><a id="line.1408">     * implementation). It is currently more precise than libGDX's approximation in their MathUtils, but this isn't</a>
-<span class="sourceLineNo">1409</span><a id="line.1409">     * quite as fast; the difference in precision is hard to spot but can be noticeable in some usage.</a>
-<span class="sourceLineNo">1410</span><a id="line.1410">     * @param n an input to the inverse sine function, from -1 to 1 inclusive</a>
-<span class="sourceLineNo">1411</span><a id="line.1411">     * @return an output from the inverse sine function, from PI/-2.0 to PI/2.0 inclusive.</a>
-<span class="sourceLineNo">1412</span><a id="line.1412">     */</a>
-<span class="sourceLineNo">1413</span><a id="line.1413">    public static double asin(final double n)</a>
-<span class="sourceLineNo">1414</span><a id="line.1414">    {</a>
-<span class="sourceLineNo">1415</span><a id="line.1415">        final double ax = Math.sqrt(1.0 - n * n), ay = Math.abs(n);</a>
-<span class="sourceLineNo">1416</span><a id="line.1416">        if(ax &lt; ay)</a>
-<span class="sourceLineNo">1417</span><a id="line.1417">        {</a>
-<span class="sourceLineNo">1418</span><a id="line.1418">            final double a = ax / ay, s = a * a,</a>
-<span class="sourceLineNo">1419</span><a id="line.1419">                    r = 1.57079637 - (((-0.0464964749 * s + 0.15931422) * s - 0.327622764) * s * a + a);</a>
-<span class="sourceLineNo">1420</span><a id="line.1420">            return (n &lt; 0.0) ? -r : r;</a>
-<span class="sourceLineNo">1421</span><a id="line.1421">        }</a>
-<span class="sourceLineNo">1422</span><a id="line.1422">        else {</a>
-<span class="sourceLineNo">1423</span><a id="line.1423">            final double a = ay / ax, s = a * a,</a>
-<span class="sourceLineNo">1424</span><a id="line.1424">                    r = (((-0.0464964749 * s + 0.15931422) * s - 0.327622764) * s * a + a);</a>
-<span class="sourceLineNo">1425</span><a id="line.1425">            return (n &lt; 0.0) ? -r : r;</a>
-<span class="sourceLineNo">1426</span><a id="line.1426">        }</a>
-<span class="sourceLineNo">1427</span><a id="line.1427">    }</a>
-<span class="sourceLineNo">1428</span><a id="line.1428">    /**</a>
-<span class="sourceLineNo">1429</span><a id="line.1429">     * Arc cosine approximation with very low error, based on a simplified version of {@link #atan2(double, double)}.</a>
-<span class="sourceLineNo">1430</span><a id="line.1430">     * This method is usually much faster than {@link Math#acos(double)}, but is somewhat less precise than Math's</a>
-<span class="sourceLineNo">1431</span><a id="line.1431">     * implementation). It is currently more precise than libGDX's approximation in their MathUtils, but this isn't</a>
-<span class="sourceLineNo">1432</span><a id="line.1432">     * quite as fast; the difference in precision is hard to spot but can be noticeable in some usage.</a>
-<span class="sourceLineNo">1433</span><a id="line.1433">     * @param n an input to the inverse cosine function, from -1 to 1 inclusive</a>
-<span class="sourceLineNo">1434</span><a id="line.1434">     * @return an output from the inverse cosine function, from 0 to PI inclusive.</a>
-<span class="sourceLineNo">1435</span><a id="line.1435">     */</a>
-<span class="sourceLineNo">1436</span><a id="line.1436">    public static double acos(final double n)</a>
-<span class="sourceLineNo">1437</span><a id="line.1437">    {</a>
-<span class="sourceLineNo">1438</span><a id="line.1438">        final double ax = Math.abs(n), ay = Math.sqrt(1.0 - n * n);</a>
-<span class="sourceLineNo">1439</span><a id="line.1439">        if(ax &lt; ay)</a>
-<span class="sourceLineNo">1440</span><a id="line.1440">        {</a>
-<span class="sourceLineNo">1441</span><a id="line.1441">            final double a = ax / ay, s = a * a,</a>
-<span class="sourceLineNo">1442</span><a id="line.1442">                    r = 1.57079637 - (((-0.0464964749 * s + 0.15931422) * s - 0.327622764) * s * a + a);</a>
-<span class="sourceLineNo">1443</span><a id="line.1443">            return (n &lt; 0.0) ? Math.PI - r : r;</a>
-<span class="sourceLineNo">1444</span><a id="line.1444">        }</a>
-<span class="sourceLineNo">1445</span><a id="line.1445">        else {</a>
-<span class="sourceLineNo">1446</span><a id="line.1446">            final double a = ay / ax, s = a * a,</a>
-<span class="sourceLineNo">1447</span><a id="line.1447">                    r = (((-0.0464964749 * s + 0.15931422) * s - 0.327622764) * s * a + a);</a>
-<span class="sourceLineNo">1448</span><a id="line.1448">            return (n &lt; 0.0) ? Math.PI - r : r;</a>
-<span class="sourceLineNo">1449</span><a id="line.1449">        }</a>
-<span class="sourceLineNo">1450</span><a id="line.1450">    }</a>
-<span class="sourceLineNo">1451</span><a id="line.1451">//</a>
-<span class="sourceLineNo">1452</span><a id="line.1452">//    /**</a>
-<span class="sourceLineNo">1453</span><a id="line.1453">//     * Arc cosine approximation with fairly low error while still being faster than {@link NumberTools#cos(float)}.</a>
-<span class="sourceLineNo">1454</span><a id="line.1454">//     * This formula is number 201 in &lt;a href="&gt;http://www.fastcode.dk/fastcodeproject/articles/index.htm"&gt;Dennis</a>
-<span class="sourceLineNo">1455</span><a id="line.1455">//     * Kjaer Christensen's unfinished math work on arc sine approximation&lt;/a&gt;, with a basic change to go from arc sine</a>
-<span class="sourceLineNo">1456</span><a id="line.1456">//     * to arc cosine. This method is faster than {@link Math#acos(double)}, and takes and returns a float. Fast but</a>
-<span class="sourceLineNo">1457</span><a id="line.1457">//     * imprecise.</a>
-<span class="sourceLineNo">1458</span><a id="line.1458">//     * @param a an input to the inverse cosine function, from -1 to 1 inclusive (error is higher approaching -1 or 1)</a>
-<span class="sourceLineNo">1459</span><a id="line.1459">//     * @return an output from the inverse cosine function, from 0 to PI inclusive.</a>
-<span class="sourceLineNo">1460</span><a id="line.1460">//     */</a>
-<span class="sourceLineNo">1461</span><a id="line.1461">//    public static float acos(float a) {</a>
-<span class="sourceLineNo">1462</span><a id="line.1462">//        return 1.5707963267948966f - (a * (1f + (a *= a) * (-0.141514171442891431f + a * -0.719110791477959357f))) /</a>
-<span class="sourceLineNo">1463</span><a id="line.1463">//                (1f + a * (-0.439110389941411144f + a * -0.471306172023844527f));</a>
-<span class="sourceLineNo">1464</span><a id="line.1464">//    }</a>
-<span class="sourceLineNo">1465</span><a id="line.1465">//</a>
-<span class="sourceLineNo">1466</span><a id="line.1466">    /**</a>
-<span class="sourceLineNo">1467</span><a id="line.1467">     * Arc cosine approximation with very low error, based on a simplified version of {@link #atan2(float, float)}.</a>
-<span class="sourceLineNo">1468</span><a id="line.1468">     * This method is usually much faster than {@link Math#acos(double)}, but is somewhat less precise than Math's</a>
-<span class="sourceLineNo">1469</span><a id="line.1469">     * implementation). It is currently more precise than libGDX's approximation in their MathUtils, but this isn't</a>
-<span class="sourceLineNo">1470</span><a id="line.1470">     * quite as fast; the difference in precision is hard to spot but can be noticeable in some usage.</a>
-<span class="sourceLineNo">1471</span><a id="line.1471">     * @param n an input to the inverse cosine function, from -1 to 1 inclusive</a>
-<span class="sourceLineNo">1472</span><a id="line.1472">     * @return an output from the inverse cosine function, from 0 to PI inclusive.</a>
-<span class="sourceLineNo">1473</span><a id="line.1473">     */</a>
-<span class="sourceLineNo">1474</span><a id="line.1474">    public static float acos(final float n)</a>
-<span class="sourceLineNo">1475</span><a id="line.1475">    {</a>
-<span class="sourceLineNo">1476</span><a id="line.1476">        final float ax = Math.abs(n), ay = (float) Math.sqrt(1f - n * n);</a>
-<span class="sourceLineNo">1477</span><a id="line.1477">        if(ax &lt; ay)</a>
-<span class="sourceLineNo">1478</span><a id="line.1478">        {</a>
-<span class="sourceLineNo">1479</span><a id="line.1479">            final float a = ax / ay, s = a * a,</a>
-<span class="sourceLineNo">1480</span><a id="line.1480">                    r = 1.57079637f - (((-0.0464964749f * s + 0.15931422f) * s - 0.327622764f) * s * a + a);</a>
-<span class="sourceLineNo">1481</span><a id="line.1481">            return (n &lt; 0f) ? 3.14159265358979323846f - r : r;</a>
+<span class="sourceLineNo">1343</span><a id="line.1343">    /**</a>
+<span class="sourceLineNo">1344</span><a id="line.1344">     * Arc sine approximation with very low error, based on a simplified version of {@link #atan2(double, double)}.</a>
+<span class="sourceLineNo">1345</span><a id="line.1345">     * This method is usually much faster than {@link Math#asin(double)}, but is somewhat less precise than Math's</a>
+<span class="sourceLineNo">1346</span><a id="line.1346">     * implementation). It is currently more precise than libGDX's approximation in their MathUtils, but this isn't</a>
+<span class="sourceLineNo">1347</span><a id="line.1347">     * quite as fast; the difference in precision is hard to spot but can be noticeable in some usage.</a>
+<span class="sourceLineNo">1348</span><a id="line.1348">     * @param n an input to the inverse sine function, from -1 to 1 inclusive</a>
+<span class="sourceLineNo">1349</span><a id="line.1349">     * @return an output from the inverse sine function, from PI/-2.0 to PI/2.0 inclusive.</a>
+<span class="sourceLineNo">1350</span><a id="line.1350">     */</a>
+<span class="sourceLineNo">1351</span><a id="line.1351">    public static float asin(final float n)</a>
+<span class="sourceLineNo">1352</span><a id="line.1352">    {</a>
+<span class="sourceLineNo">1353</span><a id="line.1353">        final float ax = (float) Math.sqrt(1f - n * n), ay = Math.abs(n);</a>
+<span class="sourceLineNo">1354</span><a id="line.1354">        if(ax &lt; ay)</a>
+<span class="sourceLineNo">1355</span><a id="line.1355">        {</a>
+<span class="sourceLineNo">1356</span><a id="line.1356">            final float a = ax / ay, s = a * a,</a>
+<span class="sourceLineNo">1357</span><a id="line.1357">                    r = 1.57079637f - (((-0.0464964749f * s + 0.15931422f) * s - 0.327622764f) * s * a + a);</a>
+<span class="sourceLineNo">1358</span><a id="line.1358">            return (n &lt; 0f) ? -r : r;</a>
+<span class="sourceLineNo">1359</span><a id="line.1359">        }</a>
+<span class="sourceLineNo">1360</span><a id="line.1360">        else {</a>
+<span class="sourceLineNo">1361</span><a id="line.1361">            final float a = ay / ax, s = a * a,</a>
+<span class="sourceLineNo">1362</span><a id="line.1362">                    r = (((-0.0464964749f * s + 0.15931422f) * s - 0.327622764f) * s * a + a);</a>
+<span class="sourceLineNo">1363</span><a id="line.1363">            return (n &lt; 0f) ? -r : r;</a>
+<span class="sourceLineNo">1364</span><a id="line.1364">        }</a>
+<span class="sourceLineNo">1365</span><a id="line.1365">    }</a>
+<span class="sourceLineNo">1366</span><a id="line.1366"></a>
+<span class="sourceLineNo">1367</span><a id="line.1367">    /**</a>
+<span class="sourceLineNo">1368</span><a id="line.1368">     * Arc sine approximation with very low error, based on a simplified version of {@link #atan2(float, float)}.</a>
+<span class="sourceLineNo">1369</span><a id="line.1369">     * This method is usually much faster than {@link Math#asin(double)}, but is somewhat less precise than Math's</a>
+<span class="sourceLineNo">1370</span><a id="line.1370">     * implementation). It is currently more precise than libGDX's approximation in their MathUtils, but this isn't</a>
+<span class="sourceLineNo">1371</span><a id="line.1371">     * quite as fast; the difference in precision is hard to spot but can be noticeable in some usage.</a>
+<span class="sourceLineNo">1372</span><a id="line.1372">     * @param n an input to the inverse sine function, from -1 to 1 inclusive</a>
+<span class="sourceLineNo">1373</span><a id="line.1373">     * @return an output from the inverse sine function, from PI/-2.0 to PI/2.0 inclusive.</a>
+<span class="sourceLineNo">1374</span><a id="line.1374">     */</a>
+<span class="sourceLineNo">1375</span><a id="line.1375">    public static double asin(final double n)</a>
+<span class="sourceLineNo">1376</span><a id="line.1376">    {</a>
+<span class="sourceLineNo">1377</span><a id="line.1377">        final double ax = Math.sqrt(1.0 - n * n), ay = Math.abs(n);</a>
+<span class="sourceLineNo">1378</span><a id="line.1378">        if(ax &lt; ay)</a>
+<span class="sourceLineNo">1379</span><a id="line.1379">        {</a>
+<span class="sourceLineNo">1380</span><a id="line.1380">            final double a = ax / ay, s = a * a,</a>
+<span class="sourceLineNo">1381</span><a id="line.1381">                    r = 1.57079637 - (((-0.0464964749 * s + 0.15931422) * s - 0.327622764) * s * a + a);</a>
+<span class="sourceLineNo">1382</span><a id="line.1382">            return (n &lt; 0.0) ? -r : r;</a>
+<span class="sourceLineNo">1383</span><a id="line.1383">        }</a>
+<span class="sourceLineNo">1384</span><a id="line.1384">        else {</a>
+<span class="sourceLineNo">1385</span><a id="line.1385">            final double a = ay / ax, s = a * a,</a>
+<span class="sourceLineNo">1386</span><a id="line.1386">                    r = (((-0.0464964749 * s + 0.15931422) * s - 0.327622764) * s * a + a);</a>
+<span class="sourceLineNo">1387</span><a id="line.1387">            return (n &lt; 0.0) ? -r : r;</a>
+<span class="sourceLineNo">1388</span><a id="line.1388">        }</a>
+<span class="sourceLineNo">1389</span><a id="line.1389">    }</a>
+<span class="sourceLineNo">1390</span><a id="line.1390">    /**</a>
+<span class="sourceLineNo">1391</span><a id="line.1391">     * Arc cosine approximation with very low error, based on a simplified version of {@link #atan2(double, double)}.</a>
+<span class="sourceLineNo">1392</span><a id="line.1392">     * This method is usually much faster than {@link Math#acos(double)}, but is somewhat less precise than Math's</a>
+<span class="sourceLineNo">1393</span><a id="line.1393">     * implementation). It is currently more precise than libGDX's approximation in their MathUtils, but this isn't</a>
+<span class="sourceLineNo">1394</span><a id="line.1394">     * quite as fast; the difference in precision is hard to spot but can be noticeable in some usage.</a>
+<span class="sourceLineNo">1395</span><a id="line.1395">     * @param n an input to the inverse cosine function, from -1 to 1 inclusive</a>
+<span class="sourceLineNo">1396</span><a id="line.1396">     * @return an output from the inverse cosine function, from 0 to PI inclusive.</a>
+<span class="sourceLineNo">1397</span><a id="line.1397">     */</a>
+<span class="sourceLineNo">1398</span><a id="line.1398">    public static double acos(final double n)</a>
+<span class="sourceLineNo">1399</span><a id="line.1399">    {</a>
+<span class="sourceLineNo">1400</span><a id="line.1400">        final double ax = Math.abs(n), ay = Math.sqrt(1.0 - n * n);</a>
+<span class="sourceLineNo">1401</span><a id="line.1401">        if(ax &lt; ay)</a>
+<span class="sourceLineNo">1402</span><a id="line.1402">        {</a>
+<span class="sourceLineNo">1403</span><a id="line.1403">            final double a = ax / ay, s = a * a,</a>
+<span class="sourceLineNo">1404</span><a id="line.1404">                    r = 1.57079637 - (((-0.0464964749 * s + 0.15931422) * s - 0.327622764) * s * a + a);</a>
+<span class="sourceLineNo">1405</span><a id="line.1405">            return (n &lt; 0.0) ? Math.PI - r : r;</a>
+<span class="sourceLineNo">1406</span><a id="line.1406">        }</a>
+<span class="sourceLineNo">1407</span><a id="line.1407">        else {</a>
+<span class="sourceLineNo">1408</span><a id="line.1408">            final double a = ay / ax, s = a * a,</a>
+<span class="sourceLineNo">1409</span><a id="line.1409">                    r = (((-0.0464964749 * s + 0.15931422) * s - 0.327622764) * s * a + a);</a>
+<span class="sourceLineNo">1410</span><a id="line.1410">            return (n &lt; 0.0) ? Math.PI - r : r;</a>
+<span class="sourceLineNo">1411</span><a id="line.1411">        }</a>
+<span class="sourceLineNo">1412</span><a id="line.1412">    }</a>
+<span class="sourceLineNo">1413</span><a id="line.1413">    /**</a>
+<span class="sourceLineNo">1414</span><a id="line.1414">     * Arc cosine approximation with very low error, based on a simplified version of {@link #atan2(float, float)}.</a>
+<span class="sourceLineNo">1415</span><a id="line.1415">     * This method is usually much faster than {@link Math#acos(double)}, but is somewhat less precise than Math's</a>
+<span class="sourceLineNo">1416</span><a id="line.1416">     * implementation). It is currently more precise than libGDX's approximation in their MathUtils, but this isn't</a>
+<span class="sourceLineNo">1417</span><a id="line.1417">     * quite as fast; the difference in precision is hard to spot but can be noticeable in some usage.</a>
+<span class="sourceLineNo">1418</span><a id="line.1418">     * @param n an input to the inverse cosine function, from -1 to 1 inclusive</a>
+<span class="sourceLineNo">1419</span><a id="line.1419">     * @return an output from the inverse cosine function, from 0 to PI inclusive.</a>
+<span class="sourceLineNo">1420</span><a id="line.1420">     */</a>
+<span class="sourceLineNo">1421</span><a id="line.1421">    public static float acos(final float n)</a>
+<span class="sourceLineNo">1422</span><a id="line.1422">    {</a>
+<span class="sourceLineNo">1423</span><a id="line.1423">        final float ax = Math.abs(n), ay = (float) Math.sqrt(1f - n * n);</a>
+<span class="sourceLineNo">1424</span><a id="line.1424">        if(ax &lt; ay)</a>
+<span class="sourceLineNo">1425</span><a id="line.1425">        {</a>
+<span class="sourceLineNo">1426</span><a id="line.1426">            final float a = ax / ay, s = a * a,</a>
+<span class="sourceLineNo">1427</span><a id="line.1427">                    r = 1.57079637f - (((-0.0464964749f * s + 0.15931422f) * s - 0.327622764f) * s * a + a);</a>
+<span class="sourceLineNo">1428</span><a id="line.1428">            return (n &lt; 0f) ? 3.14159265358979323846f - r : r;</a>
+<span class="sourceLineNo">1429</span><a id="line.1429">        }</a>
+<span class="sourceLineNo">1430</span><a id="line.1430">        else {</a>
+<span class="sourceLineNo">1431</span><a id="line.1431">            final float a = ay / ax, s = a * a,</a>
+<span class="sourceLineNo">1432</span><a id="line.1432">                    r = (((-0.0464964749f * s + 0.15931422f) * s - 0.327622764f) * s * a + a);</a>
+<span class="sourceLineNo">1433</span><a id="line.1433">            return (n &lt; 0.0) ? 3.14159265358979323846f - r : r;</a>
+<span class="sourceLineNo">1434</span><a id="line.1434">        }</a>
+<span class="sourceLineNo">1435</span><a id="line.1435">    }</a>
+<span class="sourceLineNo">1436</span><a id="line.1436"></a>
+<span class="sourceLineNo">1437</span><a id="line.1437">    /**</a>
+<span class="sourceLineNo">1438</span><a id="line.1438">     * Inverse sine function (arcsine) but with output measured in turns instead of radians. Possible results for this</a>
+<span class="sourceLineNo">1439</span><a id="line.1439">     * range from 0.75 (inclusive) to 1.0 (exclusive), and continuing past that to 0.0 (inclusive) to 0.25 (inclusive).</a>
+<span class="sourceLineNo">1440</span><a id="line.1440">     * &lt;br&gt;</a>
+<span class="sourceLineNo">1441</span><a id="line.1441">     * This method is extremely similar to the non-turn approximation.</a>
+<span class="sourceLineNo">1442</span><a id="line.1442">     * @param n a double from -1.0 to 1.0 (both inclusive), usually the output of sin_() or cos_()</a>
+<span class="sourceLineNo">1443</span><a id="line.1443">     * @return one of the values that would produce {@code n} if it were passed to {@link #sin_(double)}</a>
+<span class="sourceLineNo">1444</span><a id="line.1444">     */</a>
+<span class="sourceLineNo">1445</span><a id="line.1445">    public static double asin_(final double n)</a>
+<span class="sourceLineNo">1446</span><a id="line.1446">    {</a>
+<span class="sourceLineNo">1447</span><a id="line.1447">        if(n == 0.0) return 0.0;</a>
+<span class="sourceLineNo">1448</span><a id="line.1448">        final double ax = Math.sqrt(1.0 - n * n), ay = Math.abs(n);</a>
+<span class="sourceLineNo">1449</span><a id="line.1449">        if(ax &lt; ay)</a>
+<span class="sourceLineNo">1450</span><a id="line.1450">        {</a>
+<span class="sourceLineNo">1451</span><a id="line.1451">            final double a = ax / ay, s = a * a,</a>
+<span class="sourceLineNo">1452</span><a id="line.1452">                    r = 0.25 - (((-0.0464964749 * s + 0.15931422) * s - 0.327622764) * s * a + a) * 0.15915494309189535;</a>
+<span class="sourceLineNo">1453</span><a id="line.1453">            return (n &lt; 0.0) ? 1.0 - r : r;</a>
+<span class="sourceLineNo">1454</span><a id="line.1454">        }</a>
+<span class="sourceLineNo">1455</span><a id="line.1455">        else {</a>
+<span class="sourceLineNo">1456</span><a id="line.1456">            final double a = ay / ax, s = a * a,</a>
+<span class="sourceLineNo">1457</span><a id="line.1457">                    r = (((-0.0464964749 * s + 0.15931422) * s - 0.327622764) * s * a + a) * 0.15915494309189535;</a>
+<span class="sourceLineNo">1458</span><a id="line.1458">            return (n &lt; 0.0) ? 1.0 - r : r;</a>
+<span class="sourceLineNo">1459</span><a id="line.1459">        }</a>
+<span class="sourceLineNo">1460</span><a id="line.1460">    }</a>
+<span class="sourceLineNo">1461</span><a id="line.1461">    /**</a>
+<span class="sourceLineNo">1462</span><a id="line.1462">     * Inverse cosine function (arccos) but with output measured in turns instead of radians. Possible results for this</a>
+<span class="sourceLineNo">1463</span><a id="line.1463">     * range from 0.0 (inclusive) to 0.5 (inclusive).</a>
+<span class="sourceLineNo">1464</span><a id="line.1464">     * &lt;br&gt;</a>
+<span class="sourceLineNo">1465</span><a id="line.1465">     * This method is extremely similar to the non-turn approximation.</a>
+<span class="sourceLineNo">1466</span><a id="line.1466">     * @param n a double from -1.0 to 1.0 (both inclusive), usually the output of sin_() or cos_()</a>
+<span class="sourceLineNo">1467</span><a id="line.1467">     * @return one of the values that would produce {@code n} if it were passed to {@link #cos_(double)}</a>
+<span class="sourceLineNo">1468</span><a id="line.1468">     */</a>
+<span class="sourceLineNo">1469</span><a id="line.1469">    public static double acos_(final double n)</a>
+<span class="sourceLineNo">1470</span><a id="line.1470">    {</a>
+<span class="sourceLineNo">1471</span><a id="line.1471">        final double ax = Math.abs(n), ay = Math.sqrt(1.0 - n * n);</a>
+<span class="sourceLineNo">1472</span><a id="line.1472">        if(ax &lt; ay)</a>
+<span class="sourceLineNo">1473</span><a id="line.1473">        {</a>
+<span class="sourceLineNo">1474</span><a id="line.1474">            final double a = ax / ay, s = a * a,</a>
+<span class="sourceLineNo">1475</span><a id="line.1475">                    r = 0.25 - (((-0.0464964749 * s + 0.15931422) * s - 0.327622764) * s * a + a) * 0.15915494309189535;</a>
+<span class="sourceLineNo">1476</span><a id="line.1476">            return (n &lt; 0.0) ? 0.5 - r : r;</a>
+<span class="sourceLineNo">1477</span><a id="line.1477">        }</a>
+<span class="sourceLineNo">1478</span><a id="line.1478">        else {</a>
+<span class="sourceLineNo">1479</span><a id="line.1479">            final double a = ay / ax, s = a * a,</a>
+<span class="sourceLineNo">1480</span><a id="line.1480">                    r = (((-0.0464964749 * s + 0.15931422) * s - 0.327622764) * s * a + a) * 0.15915494309189535;</a>
+<span class="sourceLineNo">1481</span><a id="line.1481">            return (n &lt; 0.0) ? 0.5 - r : r;</a>
 <span class="sourceLineNo">1482</span><a id="line.1482">        }</a>
-<span class="sourceLineNo">1483</span><a id="line.1483">        else {</a>
-<span class="sourceLineNo">1484</span><a id="line.1484">            final float a = ay / ax, s = a * a,</a>
-<span class="sourceLineNo">1485</span><a id="line.1485">                    r = (((-0.0464964749f * s + 0.15931422f) * s - 0.327622764f) * s * a + a);</a>
-<span class="sourceLineNo">1486</span><a id="line.1486">            return (n &lt; 0.0) ? 3.14159265358979323846f - r : r;</a>
-<span class="sourceLineNo">1487</span><a id="line.1487">        }</a>
-<span class="sourceLineNo">1488</span><a id="line.1488">    }</a>
-<span class="sourceLineNo">1489</span><a id="line.1489"></a>
-<span class="sourceLineNo">1490</span><a id="line.1490">    /**</a>
-<span class="sourceLineNo">1491</span><a id="line.1491">     * Inverse sine function (arcsine) but with output measured in turns instead of radians. Possible results for this</a>
-<span class="sourceLineNo">1492</span><a id="line.1492">     * range from 0.75 (inclusive) to 1.0 (exclusive), and continuing past that to 0.0 (inclusive) to 0.25 (inclusive).</a>
-<span class="sourceLineNo">1493</span><a id="line.1493">     * &lt;br&gt;</a>
-<span class="sourceLineNo">1494</span><a id="line.1494">     * This method is extremely similar to the non-turn approximation.</a>
-<span class="sourceLineNo">1495</span><a id="line.1495">     * @param n a double from -1.0 to 1.0 (both inclusive), usually the output of sin_() or cos_()</a>
-<span class="sourceLineNo">1496</span><a id="line.1496">     * @return one of the values that would produce {@code n} if it were passed to {@link #sin_(double)}</a>
-<span class="sourceLineNo">1497</span><a id="line.1497">     */</a>
-<span class="sourceLineNo">1498</span><a id="line.1498">    public static double asin_(final double n)</a>
-<span class="sourceLineNo">1499</span><a id="line.1499">    {</a>
-<span class="sourceLineNo">1500</span><a id="line.1500">        if(n == 0.0) return 0.0;</a>
-<span class="sourceLineNo">1501</span><a id="line.1501">        final double ax = Math.sqrt(1.0 - n * n), ay = Math.abs(n);</a>
-<span class="sourceLineNo">1502</span><a id="line.1502">        if(ax &lt; ay)</a>
-<span class="sourceLineNo">1503</span><a id="line.1503">        {</a>
-<span class="sourceLineNo">1504</span><a id="line.1504">            final double a = ax / ay, s = a * a,</a>
-<span class="sourceLineNo">1505</span><a id="line.1505">                    r = 0.25 - (((-0.0464964749 * s + 0.15931422) * s - 0.327622764) * s * a + a) * 0.15915494309189535;</a>
-<span class="sourceLineNo">1506</span><a id="line.1506">            return (n &lt; 0.0) ? 1.0 - r : r;</a>
-<span class="sourceLineNo">1507</span><a id="line.1507">        }</a>
-<span class="sourceLineNo">1508</span><a id="line.1508">        else {</a>
-<span class="sourceLineNo">1509</span><a id="line.1509">            final double a = ay / ax, s = a * a,</a>
-<span class="sourceLineNo">1510</span><a id="line.1510">                    r = (((-0.0464964749 * s + 0.15931422) * s - 0.327622764) * s * a + a) * 0.15915494309189535;</a>
-<span class="sourceLineNo">1511</span><a id="line.1511">            return (n &lt; 0.0) ? 1.0 - r : r;</a>
-<span class="sourceLineNo">1512</span><a id="line.1512">        }</a>
-<span class="sourceLineNo">1513</span><a id="line.1513">    }</a>
-<span class="sourceLineNo">1514</span><a id="line.1514">    /**</a>
-<span class="sourceLineNo">1515</span><a id="line.1515">     * Inverse cosine function (arccos) but with output measured in turns instead of radians. Possible results for this</a>
-<span class="sourceLineNo">1516</span><a id="line.1516">     * range from 0.0 (inclusive) to 0.5 (inclusive).</a>
-<span class="sourceLineNo">1517</span><a id="line.1517">     * &lt;br&gt;</a>
-<span class="sourceLineNo">1518</span><a id="line.1518">     * This method is extremely similar to the non-turn approximation.</a>
-<span class="sourceLineNo">1519</span><a id="line.1519">     * @param n a double from -1.0 to 1.0 (both inclusive), usually the output of sin_() or cos_()</a>
-<span class="sourceLineNo">1520</span><a id="line.1520">     * @return one of the values that would produce {@code n} if it were passed to {@link #cos_(double)}</a>
-<span class="sourceLineNo">1521</span><a id="line.1521">     */</a>
-<span class="sourceLineNo">1522</span><a id="line.1522">    public static double acos_(final double n)</a>
-<span class="sourceLineNo">1523</span><a id="line.1523">    {</a>
-<span class="sourceLineNo">1524</span><a id="line.1524">        final double ax = Math.abs(n), ay = Math.sqrt(1.0 - n * n);</a>
-<span class="sourceLineNo">1525</span><a id="line.1525">        if(ax &lt; ay)</a>
-<span class="sourceLineNo">1526</span><a id="line.1526">        {</a>
-<span class="sourceLineNo">1527</span><a id="line.1527">            final double a = ax / ay, s = a * a,</a>
-<span class="sourceLineNo">1528</span><a id="line.1528">                    r = 0.25 - (((-0.0464964749 * s + 0.15931422) * s - 0.327622764) * s * a + a) * 0.15915494309189535;</a>
-<span class="sourceLineNo">1529</span><a id="line.1529">            return (n &lt; 0.0) ? 0.5 - r : r;</a>
-<span class="sourceLineNo">1530</span><a id="line.1530">        }</a>
-<span class="sourceLineNo">1531</span><a id="line.1531">        else {</a>
-<span class="sourceLineNo">1532</span><a id="line.1532">            final double a = ay / ax, s = a * a,</a>
-<span class="sourceLineNo">1533</span><a id="line.1533">                    r = (((-0.0464964749 * s + 0.15931422) * s - 0.327622764) * s * a + a) * 0.15915494309189535;</a>
-<span class="sourceLineNo">1534</span><a id="line.1534">            return (n &lt; 0.0) ? 0.5 - r : r;</a>
-<span class="sourceLineNo">1535</span><a id="line.1535">        }</a>
-<span class="sourceLineNo">1536</span><a id="line.1536">    }</a>
-<span class="sourceLineNo">1537</span><a id="line.1537"></a>
-<span class="sourceLineNo">1538</span><a id="line.1538"></a>
-<span class="sourceLineNo">1539</span><a id="line.1539">    /**</a>
-<span class="sourceLineNo">1540</span><a id="line.1540">     * Inverse sine function (arcsine) but with output measured in turns instead of radians. Possible results for this</a>
-<span class="sourceLineNo">1541</span><a id="line.1541">     * range from 0.75f (inclusive) to 1.0f (exclusive), and continuing past that to 0.0f (inclusive) to 0.25f</a>
-<span class="sourceLineNo">1542</span><a id="line.1542">     * (inclusive).</a>
-<span class="sourceLineNo">1543</span><a id="line.1543">     * &lt;br&gt;</a>
-<span class="sourceLineNo">1544</span><a id="line.1544">     * This method is extremely similar to the non-turn approximation.</a>
-<span class="sourceLineNo">1545</span><a id="line.1545">     * @param n a float from -1.0f to 1.0f (both inclusive), usually the output of sin_() or cos_()</a>
-<span class="sourceLineNo">1546</span><a id="line.1546">     * @return one of the values that would produce {@code n} if it were passed to {@link #sin_(float)}</a>
-<span class="sourceLineNo">1547</span><a id="line.1547">     */</a>
-<span class="sourceLineNo">1548</span><a id="line.1548">    public static float asin_(final float n)</a>
-<span class="sourceLineNo">1549</span><a id="line.1549">    {</a>
-<span class="sourceLineNo">1550</span><a id="line.1550">        if(n == 0.0f) return 0.0f;</a>
-<span class="sourceLineNo">1551</span><a id="line.1551">        final float ax = (float) Math.sqrt(1f - n * n), ay = Math.abs(n);</a>
-<span class="sourceLineNo">1552</span><a id="line.1552">        if(ax &lt; ay)</a>
-<span class="sourceLineNo">1553</span><a id="line.1553">        {</a>
-<span class="sourceLineNo">1554</span><a id="line.1554">            final float a = ax / ay, s = a * a,</a>
-<span class="sourceLineNo">1555</span><a id="line.1555">                    r = 0.25f - (((-0.0464964749f * s + 0.15931422f) * s - 0.327622764f) * s * a + a) * 0.15915494309189535f;</a>
-<span class="sourceLineNo">1556</span><a id="line.1556">            return (n &lt; 0.0f) ? 1.0f - r : r;</a>
-<span class="sourceLineNo">1557</span><a id="line.1557">        }</a>
-<span class="sourceLineNo">1558</span><a id="line.1558">        else {</a>
-<span class="sourceLineNo">1559</span><a id="line.1559">            final float a = ay / ax, s = a * a,</a>
-<span class="sourceLineNo">1560</span><a id="line.1560">                    r = (((-0.0464964749f * s + 0.15931422f) * s - 0.327622764f) * s * a + a) * 0.15915494309189535f;</a>
-<span class="sourceLineNo">1561</span><a id="line.1561">            return (n &lt; 0.0f) ? 1.0f - r : r;</a>
-<span class="sourceLineNo">1562</span><a id="line.1562">        }</a>
-<span class="sourceLineNo">1563</span><a id="line.1563">    }</a>
-<span class="sourceLineNo">1564</span><a id="line.1564">    /**</a>
-<span class="sourceLineNo">1565</span><a id="line.1565">     * Inverse cosine function (arccos) but with output measured in turns instead of radians. Possible results for this</a>
-<span class="sourceLineNo">1566</span><a id="line.1566">     * range from 0.0f (inclusive) to 0.5f (inclusive).</a>
-<span class="sourceLineNo">1567</span><a id="line.1567">     * &lt;br&gt;</a>
-<span class="sourceLineNo">1568</span><a id="line.1568">     * This method is extremely similar to the non-turn approximation.</a>
-<span class="sourceLineNo">1569</span><a id="line.1569">     * @param n a float from -1.0f to 1.0f (both inclusive), usually the output of sin_() or cos_()</a>
-<span class="sourceLineNo">1570</span><a id="line.1570">     * @return one of the values that would produce {@code n} if it were passed to {@link #cos_(float)}</a>
-<span class="sourceLineNo">1571</span><a id="line.1571">     */</a>
-<span class="sourceLineNo">1572</span><a id="line.1572">    public static float acos_(final float n)</a>
-<span class="sourceLineNo">1573</span><a id="line.1573">    {</a>
-<span class="sourceLineNo">1574</span><a id="line.1574">        final float ax = Math.abs(n), ay = (float) Math.sqrt(1f - n * n);</a>
-<span class="sourceLineNo">1575</span><a id="line.1575">        if(ax &lt; ay)</a>
-<span class="sourceLineNo">1576</span><a id="line.1576">        {</a>
-<span class="sourceLineNo">1577</span><a id="line.1577">            final float a = ax / ay, s = a * a,</a>
-<span class="sourceLineNo">1578</span><a id="line.1578">                    r = 0.25f - (((-0.0464964749f * s + 0.15931422f) * s - 0.327622764f) * s * a + a) * 0.15915494309189535f;</a>
-<span class="sourceLineNo">1579</span><a id="line.1579">            return (n &lt; 0.0f) ? 0.5f - r : r;</a>
-<span class="sourceLineNo">1580</span><a id="line.1580">        }</a>
-<span class="sourceLineNo">1581</span><a id="line.1581">        else {</a>
-<span class="sourceLineNo">1582</span><a id="line.1582">            final float a = ay / ax, s = a * a,</a>
-<span class="sourceLineNo">1583</span><a id="line.1583">                    r = (((-0.0464964749f * s + 0.15931422f) * s - 0.327622764f) * s * a + a) * 0.15915494309189535f;</a>
-<span class="sourceLineNo">1584</span><a id="line.1584">            return (n &lt; 0.0f) ? 0.5f - r : r;</a>
-<span class="sourceLineNo">1585</span><a id="line.1585">        }</a>
-<span class="sourceLineNo">1586</span><a id="line.1586">    }</a>
-<span class="sourceLineNo">1587</span><a id="line.1587">}</a>
+<span class="sourceLineNo">1483</span><a id="line.1483">    }</a>
+<span class="sourceLineNo">1484</span><a id="line.1484"></a>
+<span class="sourceLineNo">1485</span><a id="line.1485"></a>
+<span class="sourceLineNo">1486</span><a id="line.1486">    /**</a>
+<span class="sourceLineNo">1487</span><a id="line.1487">     * Inverse sine function (arcsine) but with output measured in turns instead of radians. Possible results for this</a>
+<span class="sourceLineNo">1488</span><a id="line.1488">     * range from 0.75f (inclusive) to 1.0f (exclusive), and continuing past that to 0.0f (inclusive) to 0.25f</a>
+<span class="sourceLineNo">1489</span><a id="line.1489">     * (inclusive).</a>
+<span class="sourceLineNo">1490</span><a id="line.1490">     * &lt;br&gt;</a>
+<span class="sourceLineNo">1491</span><a id="line.1491">     * This method is extremely similar to the non-turn approximation.</a>
+<span class="sourceLineNo">1492</span><a id="line.1492">     * @param n a float from -1.0f to 1.0f (both inclusive), usually the output of sin_() or cos_()</a>
+<span class="sourceLineNo">1493</span><a id="line.1493">     * @return one of the values that would produce {@code n} if it were passed to {@link #sin_(float)}</a>
+<span class="sourceLineNo">1494</span><a id="line.1494">     */</a>
+<span class="sourceLineNo">1495</span><a id="line.1495">    public static float asin_(final float n)</a>
+<span class="sourceLineNo">1496</span><a id="line.1496">    {</a>
+<span class="sourceLineNo">1497</span><a id="line.1497">        if(n == 0.0f) return 0.0f;</a>
+<span class="sourceLineNo">1498</span><a id="line.1498">        final float ax = (float) Math.sqrt(1f - n * n), ay = Math.abs(n);</a>
+<span class="sourceLineNo">1499</span><a id="line.1499">        if(ax &lt; ay)</a>
+<span class="sourceLineNo">1500</span><a id="line.1500">        {</a>
+<span class="sourceLineNo">1501</span><a id="line.1501">            final float a = ax / ay, s = a * a,</a>
+<span class="sourceLineNo">1502</span><a id="line.1502">                    r = 0.25f - (((-0.0464964749f * s + 0.15931422f) * s - 0.327622764f) * s * a + a) * 0.15915494309189535f;</a>
+<span class="sourceLineNo">1503</span><a id="line.1503">            return (n &lt; 0.0f) ? 1.0f - r : r;</a>
+<span class="sourceLineNo">1504</span><a id="line.1504">        }</a>
+<span class="sourceLineNo">1505</span><a id="line.1505">        else {</a>
+<span class="sourceLineNo">1506</span><a id="line.1506">            final float a = ay / ax, s = a * a,</a>
+<span class="sourceLineNo">1507</span><a id="line.1507">                    r = (((-0.0464964749f * s + 0.15931422f) * s - 0.327622764f) * s * a + a) * 0.15915494309189535f;</a>
+<span class="sourceLineNo">1508</span><a id="line.1508">            return (n &lt; 0.0f) ? 1.0f - r : r;</a>
+<span class="sourceLineNo">1509</span><a id="line.1509">        }</a>
+<span class="sourceLineNo">1510</span><a id="line.1510">    }</a>
+<span class="sourceLineNo">1511</span><a id="line.1511">    /**</a>
+<span class="sourceLineNo">1512</span><a id="line.1512">     * Inverse cosine function (arccos) but with output measured in turns instead of radians. Possible results for this</a>
+<span class="sourceLineNo">1513</span><a id="line.1513">     * range from 0.0f (inclusive) to 0.5f (inclusive).</a>
+<span class="sourceLineNo">1514</span><a id="line.1514">     * &lt;br&gt;</a>
+<span class="sourceLineNo">1515</span><a id="line.1515">     * This method is extremely similar to the non-turn approximation.</a>
+<span class="sourceLineNo">1516</span><a id="line.1516">     * @param n a float from -1.0f to 1.0f (both inclusive), usually the output of sin_() or cos_()</a>
+<span class="sourceLineNo">1517</span><a id="line.1517">     * @return one of the values that would produce {@code n} if it were passed to {@link #cos_(float)}</a>
+<span class="sourceLineNo">1518</span><a id="line.1518">     */</a>
+<span class="sourceLineNo">1519</span><a id="line.1519">    public static float acos_(final float n)</a>
+<span class="sourceLineNo">1520</span><a id="line.1520">    {</a>
+<span class="sourceLineNo">1521</span><a id="line.1521">        final float ax = Math.abs(n), ay = (float) Math.sqrt(1f - n * n);</a>
+<span class="sourceLineNo">1522</span><a id="line.1522">        if(ax &lt; ay)</a>
+<span class="sourceLineNo">1523</span><a id="line.1523">        {</a>
+<span class="sourceLineNo">1524</span><a id="line.1524">            final float a = ax / ay, s = a * a,</a>
+<span class="sourceLineNo">1525</span><a id="line.1525">                    r = 0.25f - (((-0.0464964749f * s + 0.15931422f) * s - 0.327622764f) * s * a + a) * 0.15915494309189535f;</a>
+<span class="sourceLineNo">1526</span><a id="line.1526">            return (n &lt; 0.0f) ? 0.5f - r : r;</a>
+<span class="sourceLineNo">1527</span><a id="line.1527">        }</a>
+<span class="sourceLineNo">1528</span><a id="line.1528">        else {</a>
+<span class="sourceLineNo">1529</span><a id="line.1529">            final float a = ay / ax, s = a * a,</a>
+<span class="sourceLineNo">1530</span><a id="line.1530">                    r = (((-0.0464964749f * s + 0.15931422f) * s - 0.327622764f) * s * a + a) * 0.15915494309189535f;</a>
+<span class="sourceLineNo">1531</span><a id="line.1531">            return (n &lt; 0.0f) ? 0.5f - r : r;</a>
+<span class="sourceLineNo">1532</span><a id="line.1532">        }</a>
+<span class="sourceLineNo">1533</span><a id="line.1533">    }</a>
+<span class="sourceLineNo">1534</span><a id="line.1534"></a>
+<span class="sourceLineNo">1535</span><a id="line.1535"></a>
+<span class="sourceLineNo">1536</span><a id="line.1536">//    /**</a>
+<span class="sourceLineNo">1537</span><a id="line.1537">//     * Arc sine approximation with fairly low error while still being faster than {@link NumberTools#sin(double)}.</a>
+<span class="sourceLineNo">1538</span><a id="line.1538">//     * This formula is number 201 in &lt;a href="&gt;http://www.fastcode.dk/fastcodeproject/articles/index.htm"&gt;Dennis</a>
+<span class="sourceLineNo">1539</span><a id="line.1539">//     * Kjaer Christensen's unfinished math work on arc sine approximation&lt;/a&gt;. This method is about 40 times faster</a>
+<span class="sourceLineNo">1540</span><a id="line.1540">//     * than {@link Math#asin(double)}. Fast but imprecise.</a>
+<span class="sourceLineNo">1541</span><a id="line.1541">//     * @param a an input to the inverse sine function, from -1 to 1 inclusive (error is higher approaching -1 or 1)</a>
+<span class="sourceLineNo">1542</span><a id="line.1542">//     * @return an output from the inverse sine function, from -PI/2 to PI/2 inclusive.</a>
+<span class="sourceLineNo">1543</span><a id="line.1543">//     */</a>
+<span class="sourceLineNo">1544</span><a id="line.1544">//    public static double asin(double a) {</a>
+<span class="sourceLineNo">1545</span><a id="line.1545">//        return (a * (1.0 + (a *= a) * (-0.141514171442891431 + a * -0.719110791477959357))) /</a>
+<span class="sourceLineNo">1546</span><a id="line.1546">//                (1.0 + a * (-0.439110389941411144 + a * -0.471306172023844527));</a>
+<span class="sourceLineNo">1547</span><a id="line.1547">//    }</a>
+<span class="sourceLineNo">1548</span><a id="line.1548">//    /**</a>
+<span class="sourceLineNo">1549</span><a id="line.1549">//     * Arc sine approximation with fairly low error while still being faster than {@link NumberTools#sin(float)}.</a>
+<span class="sourceLineNo">1550</span><a id="line.1550">//     * This formula is number 201 in &lt;a href="&gt;http://www.fastcode.dk/fastcodeproject/articles/index.htm"&gt;Dennis</a>
+<span class="sourceLineNo">1551</span><a id="line.1551">//     * Kjaer Christensen's unfinished math work on arc sine approximation&lt;/a&gt;. This method is about 40 times faster</a>
+<span class="sourceLineNo">1552</span><a id="line.1552">//     * than {@link Math#asin(double)}, and takes and returns a float. Fast but imprecise.</a>
+<span class="sourceLineNo">1553</span><a id="line.1553">//     * @param a an input to the inverse sine function, from -1 to 1 inclusive (error is higher approaching -1 or 1)</a>
+<span class="sourceLineNo">1554</span><a id="line.1554">//     * @return an output from the inverse sine function, from -PI/2 to PI/2 inclusive.</a>
+<span class="sourceLineNo">1555</span><a id="line.1555">//     */</a>
+<span class="sourceLineNo">1556</span><a id="line.1556">//    public static float asin(float a) {</a>
+<span class="sourceLineNo">1557</span><a id="line.1557">//        return (a * (1f + (a *= a) * (-0.141514171442891431f + a * -0.719110791477959357f))) /</a>
+<span class="sourceLineNo">1558</span><a id="line.1558">//                (1f + a * (-0.439110389941411144f + a * -0.471306172023844527f));</a>
+<span class="sourceLineNo">1559</span><a id="line.1559">//    }</a>
+<span class="sourceLineNo">1560</span><a id="line.1560"></a>
+<span class="sourceLineNo">1561</span><a id="line.1561">//    /**</a>
+<span class="sourceLineNo">1562</span><a id="line.1562">//     * Arc cosine approximation with fairly low error while still being faster than {@link NumberTools#cos(double)}.</a>
+<span class="sourceLineNo">1563</span><a id="line.1563">//     * This formula is number 201 in &lt;a href="&gt;http://www.fastcode.dk/fastcodeproject/articles/index.htm"&gt;Dennis</a>
+<span class="sourceLineNo">1564</span><a id="line.1564">//     * Kjaer Christensen's unfinished math work on arc sine approximation&lt;/a&gt;, with a basic change to go from arc sine</a>
+<span class="sourceLineNo">1565</span><a id="line.1565">//     * to arc cosine. This method is faster than {@link Math#acos(double)}. Fast but imprecise.</a>
+<span class="sourceLineNo">1566</span><a id="line.1566">//     * @param a an input to the inverse cosine function, from -1 to 1 inclusive (error is higher approaching -1 or 1)</a>
+<span class="sourceLineNo">1567</span><a id="line.1567">//     * @return an output from the inverse cosine function, from 0 to PI inclusive.</a>
+<span class="sourceLineNo">1568</span><a id="line.1568">//     */</a>
+<span class="sourceLineNo">1569</span><a id="line.1569">//    public static double acos(double a) {</a>
+<span class="sourceLineNo">1570</span><a id="line.1570">//        return 1.5707963267948966 - (a * (1.0 + (a *= a) * (-0.141514171442891431 + a * -0.719110791477959357))) /</a>
+<span class="sourceLineNo">1571</span><a id="line.1571">//                (1.0 + a * (-0.439110389941411144 + a * -0.471306172023844527));</a>
+<span class="sourceLineNo">1572</span><a id="line.1572">//    }</a>
+<span class="sourceLineNo">1573</span><a id="line.1573">    </a>
+<span class="sourceLineNo">1574</span><a id="line.1574">//    /**</a>
+<span class="sourceLineNo">1575</span><a id="line.1575">//     * Arc cosine approximation with fairly low error while still being faster than {@link NumberTools#cos(float)}.</a>
+<span class="sourceLineNo">1576</span><a id="line.1576">//     * This formula is number 201 in &lt;a href="&gt;http://www.fastcode.dk/fastcodeproject/articles/index.htm"&gt;Dennis</a>
+<span class="sourceLineNo">1577</span><a id="line.1577">//     * Kjaer Christensen's unfinished math work on arc sine approximation&lt;/a&gt;, with a basic change to go from arc sine</a>
+<span class="sourceLineNo">1578</span><a id="line.1578">//     * to arc cosine. This method is faster than {@link Math#acos(double)}, and takes and returns a float. Fast but</a>
+<span class="sourceLineNo">1579</span><a id="line.1579">//     * imprecise.</a>
+<span class="sourceLineNo">1580</span><a id="line.1580">//     * @param a an input to the inverse cosine function, from -1 to 1 inclusive (error is higher approaching -1 or 1)</a>
+<span class="sourceLineNo">1581</span><a id="line.1581">//     * @return an output from the inverse cosine function, from 0 to PI inclusive.</a>
+<span class="sourceLineNo">1582</span><a id="line.1582">//     */</a>
+<span class="sourceLineNo">1583</span><a id="line.1583">//    public static float acos(float a) {</a>
+<span class="sourceLineNo">1584</span><a id="line.1584">//        return 1.5707963267948966f - (a * (1f + (a *= a) * (-0.141514171442891431f + a * -0.719110791477959357f))) /</a>
+<span class="sourceLineNo">1585</span><a id="line.1585">//                (1f + a * (-0.439110389941411144f + a * -0.471306172023844527f));</a>
+<span class="sourceLineNo">1586</span><a id="line.1586">//    }</a>
+<span class="sourceLineNo">1587</span><a id="line.1587">//</a>
+<span class="sourceLineNo">1588</span><a id="line.1588"></a>
+<span class="sourceLineNo">1589</span><a id="line.1589">}</a>
 
 
 

@@ -146,9 +146,9 @@
 <span class="sourceLineNo">134</span><a id="line.134">    }</a>
 <span class="sourceLineNo">135</span><a id="line.135"></a>
 <span class="sourceLineNo">136</span><a id="line.136">    /**</a>
-<span class="sourceLineNo">137</span><a id="line.137">     * Exclusive on the outer bound; the inner bound is 0. The bound may be negative, which will produce a non-positive</a>
-<span class="sourceLineNo">138</span><a id="line.138">     * result.</a>
-<span class="sourceLineNo">139</span><a id="line.139">     * @param bound the outer exclusive bound; may be positive or negative</a>
+<span class="sourceLineNo">137</span><a id="line.137">     * Exclusive on the outer bound; the inner bound is 0.</a>
+<span class="sourceLineNo">138</span><a id="line.138">     * The bound should not be negative; use {@link IRNG#nextSignedInt(int)} if you need a negative outer bound.</a>
+<span class="sourceLineNo">139</span><a id="line.139">     * @param bound the outer exclusive bound; should be positive</a>
 <span class="sourceLineNo">140</span><a id="line.140">     * @return a random int between 0 (inclusive) and bound (exclusive)</a>
 <span class="sourceLineNo">141</span><a id="line.141">     */</a>
 <span class="sourceLineNo">142</span><a id="line.142">    public int nextInt(final int bound) {</a>
