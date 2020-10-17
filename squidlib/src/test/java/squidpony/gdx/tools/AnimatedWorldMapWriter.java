@@ -7,7 +7,6 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.IntMap;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
@@ -21,7 +20,12 @@ import squidpony.squidgrid.gui.gdx.FilterBatch;
 import squidpony.squidgrid.gui.gdx.SColor;
 import squidpony.squidgrid.gui.gdx.WorldMapView;
 import squidpony.squidgrid.mapping.WorldMapGenerator;
-import squidpony.squidmath.*;
+import squidpony.squidmath.CrossHash;
+import squidpony.squidmath.DiverRNG;
+import squidpony.squidmath.Noise;
+import squidpony.squidmath.NumberTools;
+import squidpony.squidmath.StatefulRNG;
+import squidpony.squidmath.VastNoise;
 
 import java.text.DateFormat;
 import java.util.Date;
@@ -66,7 +70,6 @@ public class AnimatedWorldMapWriter extends ApplicationAdapter {
     //private long[] earthHash = new long[4], worldHash = new long[4];
     //private int[] workingHash = new int[256];
     private Pixmap[] pm;
-    private Texture pt;
     private int counter;
     private static final int cellWidth = 1, cellHeight = 1;
     private Viewport view;
@@ -156,7 +159,6 @@ World #5, SavoryMelonAlder, completed in 64338 ms
             pm[i] = new Pixmap(width * cellWidth, height * cellHeight, Pixmap.Format.RGBA8888);
             pm[i].setBlending(Pixmap.Blending.None);
         }
-        pt = new Texture(pm[0]);
 
         writer = new AnimatedGif();
         writer.setDitherAlgorithm(Dithered.DitherAlgorithm.SCATTER);
@@ -207,7 +209,7 @@ World #5, SavoryMelonAlder, completed in 64338 ms
 //        WorldMapGenerator.DEFAULT_NOISE.setFractalGain(5f);
 //        WorldMapGenerator.DEFAULT_NOISE.setFractalLacunarity(0.8f);
 //        WorldMapGenerator.DEFAULT_NOISE.setFractalGain(1.25f);
-        FastNoise fn = new VastNoise((int) seed, 1.25f, FastNoise.HONEY, 1);
+        VastNoise fn = new VastNoise((int) seed, 1.25f, VastNoise.HONEY, 1);
         
         noise = fn;//new Noise.Adapted3DFrom5D(fn);
 //        WorldMapGenerator.DEFAULT_NOISE.setNoiseType(FastNoise.HONEY);
@@ -328,14 +330,7 @@ World #5, SavoryMelonAlder, completed in 64338 ms
         world.seedA = world.rng.stateA;
         world.seedB = world.rng.stateB;
         if(ALIEN_COLORS) {
-            int colorCount = (int) (7.5f - world.rng.nextFloat() * world.rng.nextFloat() * 5f); // 1-4
-            float[] colors = new float[colorCount];
-            for (int i = 0; i < colorCount; i++) {
-                colors[i] = SColor.COLOR_WHEEL_PALETTES[world.rng.next(1) + 3 * world.rng.nextInt(3)][world.rng.next(4)]
-                        .toRandomizedFloat(world.rng, 0.3f, 0.05f, 0.2f);
-            }
-            wmv.initialize(world.rng.nextFloat() * 2f - 1f, world.rng.nextFloat() * 0.2f - 0.1f, world.rng.nextFloat() * 0.1f - 0.05f, world.rng.nextFloat() + 0.3f);
-            wmv.match(colors);
+            wmv.initialize(world.rng.nextFloat() * 0.7f - 0.35f, world.rng.nextFloat() * 0.2f - 0.1f, world.rng.nextFloat() * 0.3f - 0.15f, world.rng.nextFloat() + 0.2f);
         }
 //        wmv.generate();
         wmv.generate(
@@ -402,11 +397,11 @@ World #5, SavoryMelonAlder, completed in 64338 ms
         //Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         Gdx.gl.glDisable(GL20.GL_BLEND);
         // need to display the map every frame, since we clear the screen to avoid artifacts.
-        batch.begin();
-        if(pm[0] != null) 
-            pt.draw(pm[0], 0, 0);
-        batch.draw(pt, 0, 0, width, height);
-        batch.end();
+//        batch.begin();
+//        if(pm[0] != null) 
+//            pt.draw(pm[0], 0, 0);
+//        batch.draw(pt, 0, 0, width, height);
+//        batch.end();
         Gdx.graphics.setTitle("Map! Took " + ttg + " ms to generate");
     }
 
