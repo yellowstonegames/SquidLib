@@ -2938,6 +2938,50 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
         }));
         addAction(Actions.sequence(sequence));
     }
+    /**
+     * Gets the "front-most" chars visible in this SparseLayers and returns them as a char[][].
+     * This means the highest layers will take precedence over lower layers, the background colors are ignored, and if
+     * no char or Glyph was present at a square, then the array will contain {@code ' '} (the space char) at that spot.
+     * This is the same as {@link #frontChars(char[][])}, except this method allocates a new 2D array on every call.
+     * @return a 2D char array containing the front-most chars present in this, or {@code ' '} if no char was visible
+     */
+    public char[][] frontChars() {
+        return frontChars(new char[gridWidth][gridHeight]);
+    }
+    /**
+     * Gets the "front-most" chars visible in this SparseLayers and stores them in the given char[][] {@code buffer}.
+     * This means the highest layers will take precedence over lower layers, the background colors are ignored, and if
+     * no char or Glyph was present at a square, then the buffer will contain {@code ' '} (the space char) at that spot.
+     * @param buffer a non-null 2D char array; will be erased, filled with {@code ' '}, and then given the chars from the front of this.
+     * @return {@code buffer}, after modifications
+     */
+    public char[][] frontChars(char[][] buffer){
+        ArrayTools.fill(buffer, ' ');
+        final int count = layers.size(), bw = buffer.length, bh = buffer[0].length;
+        for (int i = 0; i < count; i++) {
+            SparseTextMap stm = layers.get(i);
+            for(SparseTextMap.Entry e : stm){
+                int k = e.key, x = SparseTextMap.decodeX(k), y = SparseTextMap.decodeY(k);
+                if(x >= 0 && y >= 0 && x < bw && y < bh)
+                    buffer[x][y] = e.charValue;
+            }
+        }
+        float xo = getX(), yo = getY();
+        for (int i = 0; i < glyphs.size(); i++) {
+            TextCellFactory.Glyph glyph = glyphs.get(i);
+            if(glyph == null)
+                continue;
+            glyph.act(Gdx.graphics.getDeltaTime());
+            int x, y;
+            if (glyph.isVisible() &&
+                    (x = Math.round((glyph.getX() - xo) / font.actualCellWidth)) >= 0 && x < gridWidth && x < bw &&
+                    (y = Math.round((glyph.getY() - yo) / -font.actualCellHeight + gridHeight)) >= 0 && y < gridHeight && y < bh &&
+                    backgrounds[x][y] != 0f) {
+                buffer[x][y] = glyph.getSymbol();
+            }
+        }
+        return buffer;
+    }
 
     /**
      * Draws the SparseLayers and all glyphs it tracks. {@link Batch#begin()} must have already been called on the
@@ -2997,13 +3041,12 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
             if(glyph == null)
                 continue;
             glyph.act(Gdx.graphics.getDeltaTime());
-            if(
-                    !glyph.isVisible() ||
-                    (x = Math.round((gxo = glyph.getX() - xo) / font.actualCellWidth)) < 0 || x >= gridWidth ||
-                    (y = Math.round((gyo = glyph.getY() - yo)  / -font.actualCellHeight + gridHeight)) < 0 || y >= gridHeight ||
-                    backgrounds[x][y] == 0f || (frustum != null && !frustum.boundsInFrustum(gxo, gyo, 0f, font.actualCellWidth, font.actualCellHeight, 0f)))
-                continue;
-            glyph.draw(batch, 1f);
+            if (glyph.isVisible() &&
+                    (x = Math.round((gxo = glyph.getX() - xo) / font.actualCellWidth)) >= 0 && x < gridWidth &&
+                    (y = Math.round((gyo = glyph.getY() - yo) / -font.actualCellHeight + gridHeight)) >= 0 && y < gridHeight &&
+                    backgrounds[x][y] != 0f && (frustum == null || frustum.boundsInFrustum(gxo, gyo, 0f, font.actualCellWidth, font.actualCellHeight, 0f))) {
+                glyph.draw(batch, 1f);
+            }
         }
     }
 }
