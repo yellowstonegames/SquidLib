@@ -482,6 +482,13 @@ public class SparseDemo extends ApplicationAdapter {
                         Gdx.app.exit();
                         break;
                     }
+                    case 'p': 
+                    case 'P':
+                    {
+                        if(ctrl)
+                            DungeonUtility.debugPrint(display.frontChars());
+                        break;
+                    }
                     case 'c':
                     case 'C':
                     {
