@@ -57,16 +57,13 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <maven.compiler.version>3.8.1</maven.compiler.version>
         <maven.javadoc.version>3.2.0</maven.javadoc.version>
-        <maven.resources.version>3.1.0</maven.resources.version>
-        <maven.source.version>3.2.0</maven.source.version>
+        <maven.resources.version>3.2.0</maven.resources.version>
+        <maven.source.version>3.2.1</maven.source.version>
         <maven.gpg.version>1.6</maven.gpg.version>
-        <maven.pmd.version>3.9.0</maven.pmd.version>
-        <findbugs.version>3.0.2</findbugs.version>
-        <cobertura.version>2.7</cobertura.version>
         <jdk.version>1.7</jdk.version>
         <!-- As in build.gradle-->
         <gdx.version>1.9.11</gdx.version>
-        <junit.version>4.12</junit.version>
+        <junit.version>4.13.1</junit.version>
         <regexodus.version>0.1.10</regexodus.version>
         <anim8.version>0.2.2</anim8.version>
     </properties>
