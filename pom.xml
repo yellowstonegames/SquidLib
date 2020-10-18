@@ -61,12 +61,12 @@
         <maven.source.version>3.2.1</maven.source.version>
         <maven.gpg.version>1.6</maven.gpg.version>
         <jdk.version>1.7</jdk.version>
+        <releaseVersion>7</releaseVersion>
         <!-- As in build.gradle-->
         <gdx.version>1.9.11</gdx.version>
         <junit.version>4.13.1</junit.version>
         <regexodus.version>0.1.10</regexodus.version>
         <anim8.version>0.2.2</anim8.version>
-        <maven.compiler.release>7</maven.compiler.release>
     </properties>
 
     <issueManagement>
