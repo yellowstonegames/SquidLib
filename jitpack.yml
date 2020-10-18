@@ -1,5 +1,5 @@
 jdk:
-  - openjdk11
+  - openjdk9
 install:
    - echo "Installing with Maven, ignoring Gradle project"
    - mvn clean install -DskipTests
