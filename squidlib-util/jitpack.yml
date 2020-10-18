@@ -1,4 +1,0 @@
-jdk:
-   - openjdk14
-install:
-   - mvn clean install -DskipTests
