@@ -5,7 +5,7 @@
 
     <groupId>com.squidpony</groupId>
     <artifactId>squidlib-parent</artifactId>
-    <version>3.0.2-SNAPSHOT</version>
+    <version>3.0.2</version>
     <packaging>pom</packaging>
 
     <name>squidlib-parent</name>
@@ -66,6 +66,7 @@
         <junit.version>4.13.1</junit.version>
         <regexodus.version>0.1.10</regexodus.version>
         <anim8.version>0.2.2</anim8.version>
+        <maven.compiler.release>7</maven.compiler.release>
     </properties>
 
     <issueManagement>
@@ -166,8 +167,7 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>${maven.compiler.version}</version>
                 <configuration>
-                    <source>${jdk.version}</source>
-                    <target>${jdk.version}</target>
+                    <release>${maven.compiler.release}</release>
                     <excludes>
                         <exclude>**/emu/*.java</exclude>
                     </excludes>
@@ -211,14 +211,8 @@
                     <windowtitle>${project.name} ${project.version}</windowtitle>
                     <splitindex>true</splitindex>
                     <encoding>${project.build.sourceEncoding}</encoding>
+                    <source>8</source>
                     <javadocVersion>14</javadocVersion>
-                    <links>
-<!--                        <link>http://docs.oracle.com/javase/8/docs/api/</link>-->
-                        <link>https://docs.oracle.com/en/java/javase/14/docs/api/</link>
-<!--                        <link>https://squidpony.github.io/SquidLib/squidlib-util/apidocs/</link>-->
-<!--                        <link>https://squidpony.github.io/SquidLib/squidlib/apidocs/</link>-->
-<!--                        <link>https://squidpony.github.io/SquidLib/squidlib-extra/apidocs/</link>-->
-                    </links>
                     <linksource>true</linksource>
                     <detectLinks>false</detectLinks>
                     <detectJavaApiLink>false</detectJavaApiLink>

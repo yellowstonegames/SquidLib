@@ -90,22 +90,22 @@ it is usually nearly empty and silent, so prefer Discord if at all possible.
 Documentation:
 ---
 Jars of javadocs are distributed with each release via Maven Central, and with the current latest via JitPack. You can
-get the docs and source of the latest version, 3.0.1, in two parts for each; squidlib-util (the core of the library,
+get the docs and source of the latest version, 3.0.2, in two parts for each; squidlib-util (the core of the library,
 and also the largest part) has its
-[library jar here](http://search.maven.org/remotecontent?filepath=com/squidpony/squidlib-util/3.0.1/squidlib-util-3.0.1.jar),
-[docs here](http://search.maven.org/remotecontent?filepath=com/squidpony/squidlib-util/3.0.1/squidlib-util-3.0.1-javadoc.jar),
-and [source here](http://search.maven.org/remotecontent?filepath=com/squidpony/squidlib-util/3.0.1/squidlib-util-3.0.1-sources.jar),
+[library jar here](http://search.maven.org/remotecontent?filepath=com/squidpony/squidlib-util/3.0.2/squidlib-util-3.0.2.jar),
+[docs here](http://search.maven.org/remotecontent?filepath=com/squidpony/squidlib-util/3.0.2/squidlib-util-3.0.2-javadoc.jar),
+and [source here](http://search.maven.org/remotecontent?filepath=com/squidpony/squidlib-util/3.0.2/squidlib-util-3.0.2-sources.jar),
 while squidlib (the display part of the library, named the way it is because depending on squidlib should also pull in
 squidlib-util to make it a "one-stop shop" dependency) has its
-[library jar here](http://search.maven.org/remotecontent?filepath=com/squidpony/squidlib/3.0.1/squidlib-3.0.1.jar),
-[docs here](http://search.maven.org/remotecontent?filepath=com/squidpony/squidlib/3.0.1/squidlib-3.0.1-javadoc.jar),
-and [source here](http://search.maven.org/remotecontent?filepath=com/squidpony/squidlib/3.0.1/squidlib-3.0.1-sources.jar).
+[library jar here](http://search.maven.org/remotecontent?filepath=com/squidpony/squidlib/3.0.2/squidlib-3.0.2.jar),
+[docs here](http://search.maven.org/remotecontent?filepath=com/squidpony/squidlib/3.0.2/squidlib-3.0.2-javadoc.jar),
+and [source here](http://search.maven.org/remotecontent?filepath=com/squidpony/squidlib/3.0.2/squidlib-3.0.2-sources.jar).
 The completely-optional squidlib-extra module (primarily used for serialization; relies on libGDX but doesn't use it for display) has its
-[library jar here](http://search.maven.org/remotecontent?filepath=com/squidpony/squidlib-extra/3.0.1/squidlib-extra-3.0.1.jar),
-[docs here](http://search.maven.org/remotecontent?filepath=com/squidpony/squidlib-extra/3.0.1/squidlib-extra-3.0.1-javadoc.jar),
-and [source here](http://search.maven.org/remotecontent?filepath=com/squidpony/squidlib-extra/3.0.1/squidlib-extra-3.0.1-sources.jar).
+[library jar here](http://search.maven.org/remotecontent?filepath=com/squidpony/squidlib-extra/3.0.2/squidlib-extra-3.0.2.jar),
+[docs here](http://search.maven.org/remotecontent?filepath=com/squidpony/squidlib-extra/3.0.2/squidlib-extra-3.0.2-javadoc.jar),
+and [source here](http://search.maven.org/remotecontent?filepath=com/squidpony/squidlib-extra/3.0.2/squidlib-extra-3.0.2-sources.jar).
 
-You can browse the **JavaDocs** of a recent commit (possibly newer than 3.0.1, but no older) here:
+You can browse the **JavaDocs** of a recent commit (possibly newer than 3.0.2, but no older) here:
   - [Docs for squidlib-util](http://squidpony.github.io/SquidLib/squidlib-util/apidocs/index.html)
   - [Docs for squidlib](http://squidpony.github.io/SquidLib/squidlib/apidocs/index.html)
   - [Docs for squidlib-extra](http://squidpony.github.io/SquidLib/squidlib-extra/apidocs/index.html)
@@ -134,7 +134,7 @@ Core of SquidLib:
 <dependency>
     <groupId>com.squidpony</groupId>
     <artifactId>squidlib-util</artifactId>
-    <version>3.0.1</version>
+    <version>3.0.2</version>
 </dependency>
 ```
 
@@ -143,7 +143,7 @@ Optional Text-Based Display (depends on libGDX 1.9.11)
 <dependency>
     <groupId>com.squidpony</groupId>
     <artifactId>squidlib</artifactId>
-    <version>3.0.1</version>
+    <version>3.0.2</version>
 </dependency>
 ```
 
@@ -152,7 +152,7 @@ Optional Serialization Support (depends on libGDX 1.9.11)
 <dependency>
     <groupId>com.squidpony</groupId>
     <artifactId>squidlib-extra</artifactId>
-    <version>3.0.1</version>
+    <version>3.0.2</version>
 </dependency>
 ```
 
@@ -160,17 +160,17 @@ Or these dependencies for Gradle:
 
 Core of SquidLib:
 ```
-api 'com.squidpony:squidlib-util:3.0.1'
+api 'com.squidpony:squidlib-util:3.0.2'
 ```
 
 Optional Text-Based Display
 ```
-api 'com.squidpony:squidlib:3.0.1'
+api 'com.squidpony:squidlib:3.0.2'
 ```
 
 Optional Serialization Support
 ```
-api 'com.squidpony:squidlib-extra:3.0.1'
+api 'com.squidpony:squidlib-extra:3.0.2'
 ```
 
 If you want the latest version of SquidLib, which uses libGDX 1.9.11 and either GWT 2.8.2 or GWT 2.9.0 (if you use GWT),
@@ -220,7 +220,7 @@ Or this for Gradle (the first two are needed, the others are optional); replace 
 
 If you use GWT, you should probably use SquidSetup to configure the project, since there's a lot of places where
 Maven or Gradle with GWT gets tricky. GWT needs the sources for all dependencies, but also needs the sources for
-regexodus 0.1.10 (because `squidlib-util` needs it) and possibly anim8-gdx 0.2.0 (because `squidlib` needs it; anim8-gdx
+regexodus 0.1.10 (because `squidlib-util` needs it) and possibly anim8-gdx 0.2.2 (because `squidlib` needs it; anim8-gdx
 is only needed if you depend on `squidlib`). The sources dependencies look like this for Gradle (I haven't really tried
 with Maven):
 ```
@@ -230,7 +230,7 @@ with Maven):
 
     implementation "com.github.SquidPony.SquidLib:squidlib:b7f13176ef:sources"
     // above depends on this:
-    implementation "com.github.tommyettinger:anim8-gdx:0.2.0:sources"
+    implementation "com.github.tommyettinger:anim8-gdx:0.2.2:sources"
 
     implementation "com.github.SquidPony.SquidLib:squidlib-extra:b7f13176ef:sources"
 }
