@@ -1,5 +1,4 @@
 jdk:
    - openjdk14
 install:
-   - echo "Installing with Maven, ignoring Gradle project"
    - mvn clean install -DskipTests

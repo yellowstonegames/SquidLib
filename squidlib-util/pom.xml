@@ -29,6 +29,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>${maven.compiler.version}</version>
                 <configuration>
+                    <source>${jdk.version}</source>
+                    <target>${jdk.version}</target>
                     <release>${maven.compiler.release}</release>
                     <excludes>
                         <exclude>**/emu/**</exclude>
