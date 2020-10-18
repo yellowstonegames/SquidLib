@@ -2950,75 +2950,118 @@
 <span class="sourceLineNo">2938</span><a id="line.2938">        }));</a>
 <span class="sourceLineNo">2939</span><a id="line.2939">        addAction(Actions.sequence(sequence));</a>
 <span class="sourceLineNo">2940</span><a id="line.2940">    }</a>
-<span class="sourceLineNo">2941</span><a id="line.2941"></a>
-<span class="sourceLineNo">2942</span><a id="line.2942">    /**</a>
-<span class="sourceLineNo">2943</span><a id="line.2943">     * Draws the SparseLayers and all glyphs it tracks. {@link Batch#begin()} must have already been called on the</a>
-<span class="sourceLineNo">2944</span><a id="line.2944">     * batch, and {@link Batch#end()} should be called after this returns and before the rendering code finishes for the</a>
-<span class="sourceLineNo">2945</span><a id="line.2945">     * frame.</a>
-<span class="sourceLineNo">2946</span><a id="line.2946">     * &lt;br&gt;</a>
-<span class="sourceLineNo">2947</span><a id="line.2947">     * This will set the shader of {@code batch} if using a distance field or MSDF font and the shader is currently not</a>
-<span class="sourceLineNo">2948</span><a id="line.2948">     * configured for such a font; it does not reset the shader to the default so that multiple Actors can all use the</a>
-<span class="sourceLineNo">2949</span><a id="line.2949">     * same shader and so specific extra glyphs or other items can be rendered after calling draw(). If you need to draw</a>
-<span class="sourceLineNo">2950</span><a id="line.2950">     * both a distance field font and full-color art, you should set the shader on the Batch to null when you want to</a>
-<span class="sourceLineNo">2951</span><a id="line.2951">     * draw full-color art, and end the Batch between drawing this object and the other art.</a>
-<span class="sourceLineNo">2952</span><a id="line.2952">     *</a>
-<span class="sourceLineNo">2953</span><a id="line.2953">     * @param batch a Batch such as a {@link FilterBatch} that must be between a begin() and end() call; usually done by Stage</a>
-<span class="sourceLineNo">2954</span><a id="line.2954">     * @param parentAlpha currently ignored</a>
-<span class="sourceLineNo">2955</span><a id="line.2955">     */</a>
-<span class="sourceLineNo">2956</span><a id="line.2956">    @Override</a>
-<span class="sourceLineNo">2957</span><a id="line.2957">    public void draw(Batch batch, float parentAlpha) {</a>
-<span class="sourceLineNo">2958</span><a id="line.2958">        super.draw(batch, parentAlpha);</a>
-<span class="sourceLineNo">2959</span><a id="line.2959">        float xo = getX(), yo = getY(), yOff = yo + 1f + gridHeight * font.actualCellHeight, gxo, gyo;</a>
-<span class="sourceLineNo">2960</span><a id="line.2960">        font.draw(batch, backgrounds, xo, yo);</a>
-<span class="sourceLineNo">2961</span><a id="line.2961">        int len = layers.size();</a>
-<span class="sourceLineNo">2962</span><a id="line.2962">        Frustum frustum = null;</a>
-<span class="sourceLineNo">2963</span><a id="line.2963">        Stage stage = getStage();</a>
-<span class="sourceLineNo">2964</span><a id="line.2964">        if(stage != null) {</a>
-<span class="sourceLineNo">2965</span><a id="line.2965">            Viewport viewport = stage.getViewport();             </a>
-<span class="sourceLineNo">2966</span><a id="line.2966">            if(viewport != null)</a>
-<span class="sourceLineNo">2967</span><a id="line.2967">            {</a>
-<span class="sourceLineNo">2968</span><a id="line.2968">                Camera camera = viewport.getCamera();</a>
-<span class="sourceLineNo">2969</span><a id="line.2969">                if(camera != null)</a>
-<span class="sourceLineNo">2970</span><a id="line.2970">                {</a>
-<span class="sourceLineNo">2971</span><a id="line.2971">                    if(</a>
-<span class="sourceLineNo">2972</span><a id="line.2972">                            camera.frustum != null &amp;&amp;</a>
-<span class="sourceLineNo">2973</span><a id="line.2973">                                    (!camera.frustum.boundsInFrustum(xo, yOff - font.actualCellHeight - 1f, 0f, font.actualCellWidth, font.actualCellHeight, 0f) ||</a>
-<span class="sourceLineNo">2974</span><a id="line.2974">                                     !camera.frustum.boundsInFrustum(xo + font.actualCellWidth * (gridWidth-1), yo, 0f, font.actualCellWidth, font.actualCellHeight, 0f))</a>
-<span class="sourceLineNo">2975</span><a id="line.2975">                    )</a>
-<span class="sourceLineNo">2976</span><a id="line.2976">                        frustum = camera.frustum;</a>
-<span class="sourceLineNo">2977</span><a id="line.2977">                }</a>
-<span class="sourceLineNo">2978</span><a id="line.2978">            }</a>
-<span class="sourceLineNo">2979</span><a id="line.2979">        }</a>
-<span class="sourceLineNo">2980</span><a id="line.2980">        font.configureShader(batch);</a>
-<span class="sourceLineNo">2981</span><a id="line.2981">        if(frustum == null) {</a>
-<span class="sourceLineNo">2982</span><a id="line.2982">            for (int i = 0; i &lt; len; i++) {</a>
-<span class="sourceLineNo">2983</span><a id="line.2983">                layers.get(i).draw(batch, font, xo, yOff);</a>
-<span class="sourceLineNo">2984</span><a id="line.2984">            }</a>
+<span class="sourceLineNo">2941</span><a id="line.2941">    /**</a>
+<span class="sourceLineNo">2942</span><a id="line.2942">     * Gets the "front-most" chars visible in this SparseLayers and returns them as a char[][].</a>
+<span class="sourceLineNo">2943</span><a id="line.2943">     * This means the highest layers will take precedence over lower layers, the background colors are ignored, and if</a>
+<span class="sourceLineNo">2944</span><a id="line.2944">     * no char or Glyph was present at a square, then the array will contain {@code ' '} (the space char) at that spot.</a>
+<span class="sourceLineNo">2945</span><a id="line.2945">     * This is the same as {@link #frontChars(char[][])}, except this method allocates a new 2D array on every call.</a>
+<span class="sourceLineNo">2946</span><a id="line.2946">     * @return a 2D char array containing the front-most chars present in this, or {@code ' '} if no char was visible</a>
+<span class="sourceLineNo">2947</span><a id="line.2947">     */</a>
+<span class="sourceLineNo">2948</span><a id="line.2948">    public char[][] frontChars() {</a>
+<span class="sourceLineNo">2949</span><a id="line.2949">        return frontChars(new char[gridWidth][gridHeight]);</a>
+<span class="sourceLineNo">2950</span><a id="line.2950">    }</a>
+<span class="sourceLineNo">2951</span><a id="line.2951">    /**</a>
+<span class="sourceLineNo">2952</span><a id="line.2952">     * Gets the "front-most" chars visible in this SparseLayers and stores them in the given char[][] {@code buffer}.</a>
+<span class="sourceLineNo">2953</span><a id="line.2953">     * This means the highest layers will take precedence over lower layers, the background colors are ignored, and if</a>
+<span class="sourceLineNo">2954</span><a id="line.2954">     * no char or Glyph was present at a square, then the buffer will contain {@code ' '} (the space char) at that spot.</a>
+<span class="sourceLineNo">2955</span><a id="line.2955">     * @param buffer a non-null 2D char array; will be erased, filled with {@code ' '}, and then given the chars from the front of this.</a>
+<span class="sourceLineNo">2956</span><a id="line.2956">     * @return {@code buffer}, after modifications</a>
+<span class="sourceLineNo">2957</span><a id="line.2957">     */</a>
+<span class="sourceLineNo">2958</span><a id="line.2958">    public char[][] frontChars(char[][] buffer){</a>
+<span class="sourceLineNo">2959</span><a id="line.2959">        ArrayTools.fill(buffer, ' ');</a>
+<span class="sourceLineNo">2960</span><a id="line.2960">        final int count = layers.size(), bw = buffer.length, bh = buffer[0].length;</a>
+<span class="sourceLineNo">2961</span><a id="line.2961">        for (int i = 0; i &lt; count; i++) {</a>
+<span class="sourceLineNo">2962</span><a id="line.2962">            SparseTextMap stm = layers.get(i);</a>
+<span class="sourceLineNo">2963</span><a id="line.2963">            for(SparseTextMap.Entry e : stm){</a>
+<span class="sourceLineNo">2964</span><a id="line.2964">                int k = e.key, x = SparseTextMap.decodeX(k), y = SparseTextMap.decodeY(k);</a>
+<span class="sourceLineNo">2965</span><a id="line.2965">                if(x &gt;= 0 &amp;&amp; y &gt;= 0 &amp;&amp; x &lt; bw &amp;&amp; y &lt; bh)</a>
+<span class="sourceLineNo">2966</span><a id="line.2966">                    buffer[x][y] = e.charValue;</a>
+<span class="sourceLineNo">2967</span><a id="line.2967">            }</a>
+<span class="sourceLineNo">2968</span><a id="line.2968">        }</a>
+<span class="sourceLineNo">2969</span><a id="line.2969">        float xo = getX(), yo = getY();</a>
+<span class="sourceLineNo">2970</span><a id="line.2970">        for (int i = 0; i &lt; glyphs.size(); i++) {</a>
+<span class="sourceLineNo">2971</span><a id="line.2971">            TextCellFactory.Glyph glyph = glyphs.get(i);</a>
+<span class="sourceLineNo">2972</span><a id="line.2972">            if(glyph == null)</a>
+<span class="sourceLineNo">2973</span><a id="line.2973">                continue;</a>
+<span class="sourceLineNo">2974</span><a id="line.2974">            glyph.act(Gdx.graphics.getDeltaTime());</a>
+<span class="sourceLineNo">2975</span><a id="line.2975">            int x, y;</a>
+<span class="sourceLineNo">2976</span><a id="line.2976">            if (glyph.isVisible() &amp;&amp;</a>
+<span class="sourceLineNo">2977</span><a id="line.2977">                    (x = Math.round((glyph.getX() - xo) / font.actualCellWidth)) &gt;= 0 &amp;&amp; x &lt; gridWidth &amp;&amp; x &lt; bw &amp;&amp;</a>
+<span class="sourceLineNo">2978</span><a id="line.2978">                    (y = Math.round((glyph.getY() - yo) / -font.actualCellHeight + gridHeight)) &gt;= 0 &amp;&amp; y &lt; gridHeight &amp;&amp; y &lt; bh &amp;&amp;</a>
+<span class="sourceLineNo">2979</span><a id="line.2979">                    backgrounds[x][y] != 0f) {</a>
+<span class="sourceLineNo">2980</span><a id="line.2980">                buffer[x][y] = glyph.getSymbol();</a>
+<span class="sourceLineNo">2981</span><a id="line.2981">            }</a>
+<span class="sourceLineNo">2982</span><a id="line.2982">        }</a>
+<span class="sourceLineNo">2983</span><a id="line.2983">        return buffer;</a>
+<span class="sourceLineNo">2984</span><a id="line.2984">    }</a>
 <span class="sourceLineNo">2985</span><a id="line.2985"></a>
-<span class="sourceLineNo">2986</span><a id="line.2986">        }</a>
-<span class="sourceLineNo">2987</span><a id="line.2987">        else</a>
-<span class="sourceLineNo">2988</span><a id="line.2988">        {</a>
-<span class="sourceLineNo">2989</span><a id="line.2989">            for (int i = 0; i &lt; len; i++) {</a>
-<span class="sourceLineNo">2990</span><a id="line.2990">                layers.get(i).draw(batch, font, frustum, xo, yOff);</a>
-<span class="sourceLineNo">2991</span><a id="line.2991">            }</a>
-<span class="sourceLineNo">2992</span><a id="line.2992">        }</a>
-<span class="sourceLineNo">2993</span><a id="line.2993">        </a>
-<span class="sourceLineNo">2994</span><a id="line.2994">        int x, y;</a>
-<span class="sourceLineNo">2995</span><a id="line.2995">        for (int i = 0; i &lt; glyphs.size(); i++) {</a>
-<span class="sourceLineNo">2996</span><a id="line.2996">            TextCellFactory.Glyph glyph = glyphs.get(i);</a>
-<span class="sourceLineNo">2997</span><a id="line.2997">            if(glyph == null)</a>
-<span class="sourceLineNo">2998</span><a id="line.2998">                continue;</a>
-<span class="sourceLineNo">2999</span><a id="line.2999">            glyph.act(Gdx.graphics.getDeltaTime());</a>
-<span class="sourceLineNo">3000</span><a id="line.3000">            if(</a>
-<span class="sourceLineNo">3001</span><a id="line.3001">                    !glyph.isVisible() ||</a>
-<span class="sourceLineNo">3002</span><a id="line.3002">                    (x = Math.round((gxo = glyph.getX() - xo) / font.actualCellWidth)) &lt; 0 || x &gt;= gridWidth ||</a>
-<span class="sourceLineNo">3003</span><a id="line.3003">                    (y = Math.round((gyo = glyph.getY() - yo)  / -font.actualCellHeight + gridHeight)) &lt; 0 || y &gt;= gridHeight ||</a>
-<span class="sourceLineNo">3004</span><a id="line.3004">                    backgrounds[x][y] == 0f || (frustum != null &amp;&amp; !frustum.boundsInFrustum(gxo, gyo, 0f, font.actualCellWidth, font.actualCellHeight, 0f)))</a>
-<span class="sourceLineNo">3005</span><a id="line.3005">                continue;</a>
-<span class="sourceLineNo">3006</span><a id="line.3006">            glyph.draw(batch, 1f);</a>
-<span class="sourceLineNo">3007</span><a id="line.3007">        }</a>
-<span class="sourceLineNo">3008</span><a id="line.3008">    }</a>
-<span class="sourceLineNo">3009</span><a id="line.3009">}</a>
+<span class="sourceLineNo">2986</span><a id="line.2986">    /**</a>
+<span class="sourceLineNo">2987</span><a id="line.2987">     * Draws the SparseLayers and all glyphs it tracks. {@link Batch#begin()} must have already been called on the</a>
+<span class="sourceLineNo">2988</span><a id="line.2988">     * batch, and {@link Batch#end()} should be called after this returns and before the rendering code finishes for the</a>
+<span class="sourceLineNo">2989</span><a id="line.2989">     * frame.</a>
+<span class="sourceLineNo">2990</span><a id="line.2990">     * &lt;br&gt;</a>
+<span class="sourceLineNo">2991</span><a id="line.2991">     * This will set the shader of {@code batch} if using a distance field or MSDF font and the shader is currently not</a>
+<span class="sourceLineNo">2992</span><a id="line.2992">     * configured for such a font; it does not reset the shader to the default so that multiple Actors can all use the</a>
+<span class="sourceLineNo">2993</span><a id="line.2993">     * same shader and so specific extra glyphs or other items can be rendered after calling draw(). If you need to draw</a>
+<span class="sourceLineNo">2994</span><a id="line.2994">     * both a distance field font and full-color art, you should set the shader on the Batch to null when you want to</a>
+<span class="sourceLineNo">2995</span><a id="line.2995">     * draw full-color art, and end the Batch between drawing this object and the other art.</a>
+<span class="sourceLineNo">2996</span><a id="line.2996">     *</a>
+<span class="sourceLineNo">2997</span><a id="line.2997">     * @param batch a Batch such as a {@link FilterBatch} that must be between a begin() and end() call; usually done by Stage</a>
+<span class="sourceLineNo">2998</span><a id="line.2998">     * @param parentAlpha currently ignored</a>
+<span class="sourceLineNo">2999</span><a id="line.2999">     */</a>
+<span class="sourceLineNo">3000</span><a id="line.3000">    @Override</a>
+<span class="sourceLineNo">3001</span><a id="line.3001">    public void draw(Batch batch, float parentAlpha) {</a>
+<span class="sourceLineNo">3002</span><a id="line.3002">        super.draw(batch, parentAlpha);</a>
+<span class="sourceLineNo">3003</span><a id="line.3003">        float xo = getX(), yo = getY(), yOff = yo + 1f + gridHeight * font.actualCellHeight, gxo, gyo;</a>
+<span class="sourceLineNo">3004</span><a id="line.3004">        font.draw(batch, backgrounds, xo, yo);</a>
+<span class="sourceLineNo">3005</span><a id="line.3005">        int len = layers.size();</a>
+<span class="sourceLineNo">3006</span><a id="line.3006">        Frustum frustum = null;</a>
+<span class="sourceLineNo">3007</span><a id="line.3007">        Stage stage = getStage();</a>
+<span class="sourceLineNo">3008</span><a id="line.3008">        if(stage != null) {</a>
+<span class="sourceLineNo">3009</span><a id="line.3009">            Viewport viewport = stage.getViewport();             </a>
+<span class="sourceLineNo">3010</span><a id="line.3010">            if(viewport != null)</a>
+<span class="sourceLineNo">3011</span><a id="line.3011">            {</a>
+<span class="sourceLineNo">3012</span><a id="line.3012">                Camera camera = viewport.getCamera();</a>
+<span class="sourceLineNo">3013</span><a id="line.3013">                if(camera != null)</a>
+<span class="sourceLineNo">3014</span><a id="line.3014">                {</a>
+<span class="sourceLineNo">3015</span><a id="line.3015">                    if(</a>
+<span class="sourceLineNo">3016</span><a id="line.3016">                            camera.frustum != null &amp;&amp;</a>
+<span class="sourceLineNo">3017</span><a id="line.3017">                                    (!camera.frustum.boundsInFrustum(xo, yOff - font.actualCellHeight - 1f, 0f, font.actualCellWidth, font.actualCellHeight, 0f) ||</a>
+<span class="sourceLineNo">3018</span><a id="line.3018">                                     !camera.frustum.boundsInFrustum(xo + font.actualCellWidth * (gridWidth-1), yo, 0f, font.actualCellWidth, font.actualCellHeight, 0f))</a>
+<span class="sourceLineNo">3019</span><a id="line.3019">                    )</a>
+<span class="sourceLineNo">3020</span><a id="line.3020">                        frustum = camera.frustum;</a>
+<span class="sourceLineNo">3021</span><a id="line.3021">                }</a>
+<span class="sourceLineNo">3022</span><a id="line.3022">            }</a>
+<span class="sourceLineNo">3023</span><a id="line.3023">        }</a>
+<span class="sourceLineNo">3024</span><a id="line.3024">        font.configureShader(batch);</a>
+<span class="sourceLineNo">3025</span><a id="line.3025">        if(frustum == null) {</a>
+<span class="sourceLineNo">3026</span><a id="line.3026">            for (int i = 0; i &lt; len; i++) {</a>
+<span class="sourceLineNo">3027</span><a id="line.3027">                layers.get(i).draw(batch, font, xo, yOff);</a>
+<span class="sourceLineNo">3028</span><a id="line.3028">            }</a>
+<span class="sourceLineNo">3029</span><a id="line.3029"></a>
+<span class="sourceLineNo">3030</span><a id="line.3030">        }</a>
+<span class="sourceLineNo">3031</span><a id="line.3031">        else</a>
+<span class="sourceLineNo">3032</span><a id="line.3032">        {</a>
+<span class="sourceLineNo">3033</span><a id="line.3033">            for (int i = 0; i &lt; len; i++) {</a>
+<span class="sourceLineNo">3034</span><a id="line.3034">                layers.get(i).draw(batch, font, frustum, xo, yOff);</a>
+<span class="sourceLineNo">3035</span><a id="line.3035">            }</a>
+<span class="sourceLineNo">3036</span><a id="line.3036">        }</a>
+<span class="sourceLineNo">3037</span><a id="line.3037">        </a>
+<span class="sourceLineNo">3038</span><a id="line.3038">        int x, y;</a>
+<span class="sourceLineNo">3039</span><a id="line.3039">        for (int i = 0; i &lt; glyphs.size(); i++) {</a>
+<span class="sourceLineNo">3040</span><a id="line.3040">            TextCellFactory.Glyph glyph = glyphs.get(i);</a>
+<span class="sourceLineNo">3041</span><a id="line.3041">            if(glyph == null)</a>
+<span class="sourceLineNo">3042</span><a id="line.3042">                continue;</a>
+<span class="sourceLineNo">3043</span><a id="line.3043">            glyph.act(Gdx.graphics.getDeltaTime());</a>
+<span class="sourceLineNo">3044</span><a id="line.3044">            if (glyph.isVisible() &amp;&amp;</a>
+<span class="sourceLineNo">3045</span><a id="line.3045">                    (x = Math.round((gxo = glyph.getX() - xo) / font.actualCellWidth)) &gt;= 0 &amp;&amp; x &lt; gridWidth &amp;&amp;</a>
+<span class="sourceLineNo">3046</span><a id="line.3046">                    (y = Math.round((gyo = glyph.getY() - yo) / -font.actualCellHeight + gridHeight)) &gt;= 0 &amp;&amp; y &lt; gridHeight &amp;&amp;</a>
+<span class="sourceLineNo">3047</span><a id="line.3047">                    backgrounds[x][y] != 0f &amp;&amp; (frustum == null || frustum.boundsInFrustum(gxo, gyo, 0f, font.actualCellWidth, font.actualCellHeight, 0f))) {</a>
+<span class="sourceLineNo">3048</span><a id="line.3048">                glyph.draw(batch, 1f);</a>
+<span class="sourceLineNo">3049</span><a id="line.3049">            }</a>
+<span class="sourceLineNo">3050</span><a id="line.3050">        }</a>
+<span class="sourceLineNo">3051</span><a id="line.3051">    }</a>
+<span class="sourceLineNo">3052</span><a id="line.3052">}</a>
 
 
 

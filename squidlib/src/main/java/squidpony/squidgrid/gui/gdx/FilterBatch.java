@@ -15,6 +15,8 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Matrix4;
 import squidpony.squidmath.NumberTools;
 
+import java.nio.Buffer;
+
 /**
  * A drop-in substitute for {@link com.badlogic.gdx.graphics.g2d.SpriteBatch} that filters any colors used to tint text
  * or images using a {@link FloatFilter}. The filter may have an effect on speed in some cases, but even moderately
@@ -1000,8 +1002,8 @@ public class FilterBatch implements Batch {
         lastTexture.bind();
         Mesh mesh = this.mesh;
         mesh.setVertices(vertices, 0, idx);
-        mesh.getIndicesBuffer().position(0);
-        mesh.getIndicesBuffer().limit(count);
+        ((Buffer)mesh.getIndicesBuffer()).position(0);
+        ((Buffer)mesh.getIndicesBuffer()).limit(count);
 
         if (blendingDisabled) {
             Gdx.gl.glDisable(GL20.GL_BLEND);
