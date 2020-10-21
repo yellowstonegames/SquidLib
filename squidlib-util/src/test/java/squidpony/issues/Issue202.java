@@ -8,7 +8,7 @@ import squidpony.squidmath.StatefulRNG;
 import static squidpony.examples.TestConfiguration.PRINTING;
 
 /**
- * Check for <a href="https://github.com/SquidPony/SquidLib/issues/202">SquidLib Issue 202</a>.
+ * Check for <a href="https://github.com/yellowstonegames/SquidLib/issues/202">SquidLib Issue 202</a>.
  * <br>
  * Created by Tommy Ettinger using nateroe's sample code on 12/27/2018.
  */

@@ -5,7 +5,7 @@
     <parent>
         <groupId>com.squidpony</groupId>
         <artifactId>squidlib-parent</artifactId>
-        <version>3.0.2</version>
+        <version>3.0.3-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -13,7 +13,7 @@
     <artifactId>squidlib-extra</artifactId>
     <name>squidlib-extra</name>
     <description>SquidLib extra features that need more dependencies than squidlib-util, but are still display-agnostic.
-        Please refer to https://github.com/SquidPony/SquidLib .
+        Please refer to https://github.com/yellowstonegames/SquidLib .
     </description>
     <profiles>
         <profile>
@@ -51,7 +51,7 @@
         <dependency>
             <groupId>com.squidpony</groupId>
             <artifactId>squidlib-util</artifactId>
-            <version>3.0.2</version>
+            <version>3.0.3-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.badlogicgames.gdx</groupId>

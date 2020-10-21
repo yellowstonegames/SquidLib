@@ -60,7 +60,7 @@ import static squidpony.squidmath.Noise.fastFloor;
  * http://accidentalnoise.sourceforge.net/index.html . Both Joise and ANL have many features that SquidLib has not (yet)
  * incorporated, but now that SquidLib has seamless noise, that's a nice feature that would have needed Joise before.
  * This also supplies 5D noise, which doesn't have an immediate application like taking 6D noise and making 3D seamless
- * noise, but still has plenty of uses. <a href="http://squidpony.github.io/SquidLib/AnimatedChangingGlobe.gif">This
+ * noise, but still has plenty of uses. <a href="http://yellowstonegames.github.io/SquidLib/AnimatedChangingGlobe.gif">This
  * world GIF</a> was made using 5D noise, for instance, using a cycle through the 4th and 5th dimensions to alter the
  * globe in a way that loops. You'd probably find yourself mostly using 2D through 4D, though, with 4D useful for 3D
  * shapes that change linearly over time.

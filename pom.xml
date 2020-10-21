@@ -5,16 +5,16 @@
 
     <groupId>com.squidpony</groupId>
     <artifactId>squidlib-parent</artifactId>
-    <version>3.0.2</version>
+    <version>3.0.3-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>squidlib-parent</name>
 
     <description>Parent module for squidlib projects. Please do not depend on this module, and refer to
-        https://github.com/SquidPony/SquidLib .
+        https://github.com/yellowstonegames/SquidLib .
     </description>
 
-    <url>https://github.com/SquidPony/SquidLib</url>
+    <url>https://github.com/yellowstonegames/SquidLib</url>
 
     <developers>
         <developer>
@@ -70,14 +70,14 @@
     </properties>
 
     <issueManagement>
-        <url>https://github.com/SquidPony/SquidLib/issues</url>
+        <url>https://github.com/yellowstonegames/SquidLib/issues</url>
         <system>GitHub Issues</system>
     </issueManagement>
 
     <scm>
-        <connection>scm:git:git@github.com:SquidPony/SquidLib.git</connection>
-        <developerConnection>scm:git:git@github.com:SquidPony/SquidLib.git</developerConnection>
-        <url>git@github.com:SquidPony/SquidLib.git</url>
+        <connection>scm:git:git@github.com:yellowstonegames/SquidLib.git</connection>
+        <developerConnection>scm:git:git@github.com:yellowstonegames/SquidLib.git</developerConnection>
+        <url>git@github.com:yellowstonegames/SquidLib.git</url>
     </scm>
     <modules>
         <module>squidlib-util</module>

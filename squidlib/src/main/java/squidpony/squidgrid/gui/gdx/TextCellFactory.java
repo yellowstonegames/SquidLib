@@ -433,7 +433,7 @@ public class TextCellFactory implements Disposable {
      * To create distance field fonts that work well with monospace layout is... time-consuming and error-prone, though
      * not especially difficult for most fonts. The process is documented as well as we can, given how differently all
      * fonts are made, in a file not included in the distribution JAR but present on GitHub:
-     * <a href="https://github.com/SquidPony/SquidLib/blob/master/squidlib/etc/making-distance-field-fonts.txt">Instructions here</a>.
+     * <a href="https://github.com/yellowstonegames/SquidLib/blob/master/squidlib/etc/making-distance-field-fonts.txt">Instructions here</a>.
      * A separate project is dedicated to automating this process somewhat,
      * <a href="https://github.com/tommyettinger/Glamer">Glamer</a>; Glamer can also produce MSDF fonts.
      * @param fontPath the path to a .fnt bitmap font file with distance field effects applied, which requires a complex
@@ -520,7 +520,7 @@ public class TextCellFactory implements Disposable {
      * display when used in a grid? Probably not as well as you'd hope. You should probably get some of the assets that
      * accompany SquidLib, and can be downloaded directly from GitHub (not available as one monolithic jar via Maven
      * Central, but that lets you pick and choose individual assets). Get a .fnt and its matching .png file from
-     * https://github.com/SquidPony/SquidLib/tree/master/assets and you can pass them to {@link #font(String)} or
+     * https://github.com/yellowstonegames/SquidLib/tree/master/assets and you can pass them to {@link #font(String)} or
      * {@link #fontDistanceField(String, String)}.
      *
      * @return this factory for method chaining

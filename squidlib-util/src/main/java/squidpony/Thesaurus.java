@@ -284,7 +284,7 @@ public class Thesaurus implements Serializable{
      * previously-made ones, probably).
      * 
      * If you didn't have an archive of the categories from some version of SquidLib, you can download one of the small
-     * files from <a href="https://github.com/SquidPony/SquidLib/tree/master/archives">the 'archives' folder of the
+     * files from <a href="https://github.com/yellowstonegames/SquidLib/tree/master/archives">the 'archives' folder of the
      * SquidLib repo</a>; there's an archive that acts as a snapshot of SquidLib 3.0.0's Thesaurus class, for instance.
      * If you save the 3.0.0 archive in a libGDX application's assets folder, you can reload the 3.0.0 definitions into
      * a Thesaurus called {@code myThesaurus} with:

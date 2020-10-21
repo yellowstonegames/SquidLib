@@ -6,12 +6,12 @@
     <parent>
         <groupId>com.squidpony</groupId>
         <artifactId>squidlib-parent</artifactId>
-        <version>3.0.2</version>
+        <version>3.0.3-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>squidlib</artifactId>
     <name>squidlib</name>
-    <description>SquidLib libGDX display code. Please refer to https://github.com/SquidPony/SquidLib .</description>
+    <description>SquidLib libGDX display code. Please refer to https://github.com/yellowstonegames/SquidLib .</description>
     <profiles>
         <profile>
             <id>releaseLow</id>
@@ -61,7 +61,7 @@
         <dependency>
             <groupId>com.squidpony</groupId>
             <artifactId>squidlib-util</artifactId>
-            <version>3.0.2</version>
+            <version>3.0.3-SNAPSHOT</version>
         </dependency>
 
         <dependency>

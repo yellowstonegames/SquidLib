@@ -14,7 +14,7 @@ import squidpony.squidmath.StatefulRNG;
  * Default BitmapFonts, a sample image, "stretchable" fonts and icons, and a central RNG for use with libGDX.
  * All but one of the resources here need to be downloaded separately, to avoid bloating the size of the dependency jar
  * with many fonts that a game probably won't use. You can download assets in a jar with a release of SquidLib, or
- * individually from https://github.com/SquidPony/SquidLib/tree/master/assets . The assets you choose should go in the
+ * individually from https://github.com/yellowstonegames/SquidLib/tree/master/assets . The assets you choose should go in the
  * android/assets (core/assets if you don't have an Android project) subfolder of your game if you use the normal libGDX
  * setup tool or SquidSetup, or the assets subfolder if you use czyzby's alternate setup tool,
  * https://github.com/czyzby/gdx-setup . They should not be placed in subdirectories of assets, otherwise this won't be
@@ -373,8 +373,8 @@ public class DefaultResources implements LifecycleListener {
      * <br>
      * Needs files:
      * <ul>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Zodiac-Square-12x12.fnt</li>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Zodiac-Square-12x12.png</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/Zodiac-Square-12x12.fnt</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/Zodiac-Square-12x12.png</li>
      * </ul>
      * @return the BitmapFont object representing Zodiac-Square.ttf at size 16 pt
      */
@@ -396,8 +396,8 @@ public class DefaultResources implements LifecycleListener {
      * <br>
      * Needs files:
      * <ul>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Zodiac-Square-24x24.fnt</li>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Zodiac-Square-24x24.png</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/Zodiac-Square-24x24.fnt</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/Zodiac-Square-24x24.png</li>
      * </ul>
      * @return the BitmapFont object representing Zodiac-Square.ttf at size 32 pt
      */
@@ -419,8 +419,8 @@ public class DefaultResources implements LifecycleListener {
      * <br>
      * Needs files:
      * <ul>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Rogue-Zodiac-6x12.fnt</li>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Rogue-Zodiac-6x12_0.png</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/Rogue-Zodiac-6x12.fnt</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/Rogue-Zodiac-6x12_0.png</li>
      * </ul>
      * @return the BitmapFont object representing Rogue-Zodiac.ttf at size 16 pt
      */
@@ -443,8 +443,8 @@ public class DefaultResources implements LifecycleListener {
      * <br>
      * Needs files:
      * <ul>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Rogue-Zodiac-12x24.fnt</li>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Rogue-Zodiac-12x24_0.png</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/Rogue-Zodiac-12x24.fnt</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/Rogue-Zodiac-12x24_0.png</li>
      * </ul>
      * @return the BitmapFont object representing Rogue-Zodiac.ttf at size 32 pt
      */
@@ -466,8 +466,8 @@ public class DefaultResources implements LifecycleListener {
      * <br>
      * Needs files:
      * <ul>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Rogue-Zodiac-18x36.fnt</li>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Rogue-Zodiac-18x36_0.png</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/Rogue-Zodiac-18x36.fnt</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/Rogue-Zodiac-18x36_0.png</li>
      * </ul>
      * @return the BitmapFont object representing Rogue-Zodiac.ttf at size 32 pt
      */
@@ -492,8 +492,8 @@ public class DefaultResources implements LifecycleListener {
      * <br>
      * Needs files:
      * <ul>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Inconsolata-LGC-8x18.fnt</li>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Inconsolata-LGC-8x18.png</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/Inconsolata-LGC-8x18.fnt</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/Inconsolata-LGC-8x18.png</li>
      * </ul>
      * @return the BitmapFont object representing Inconsolata-LGC.ttf at size... pretty sure it's 8x18 pixels
      */
@@ -517,8 +517,8 @@ public class DefaultResources implements LifecycleListener {
      * <br>
      * Needs files:
      * <ul>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Inconsolata-LGC-12x24.fnt</li>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Inconsolata-LGC-12x24.png</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/Inconsolata-LGC-12x24.fnt</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/Inconsolata-LGC-12x24.png</li>
      * </ul>
      * @return the BitmapFont object representing Inconsolata-LGC.ttf at size... not actually sure, 12x24 pixels
      */
@@ -540,8 +540,8 @@ public class DefaultResources implements LifecycleListener {
      * <br>
      * Needs files:
      * <ul>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Mandrill-6x16.fnt</li>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Mandrill-6x16.png</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/Mandrill-6x16.fnt</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/Mandrill-6x16.png</li>
      * </ul>
      * @return the BitmapFont object representing Mandrill.ttf at size 16 pt
      */
@@ -564,8 +564,8 @@ public class DefaultResources implements LifecycleListener {
      * <br>
      * Needs files:
      * <ul>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Mandrill-12x32.fnt</li>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Mandrill-12x32.png</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/Mandrill-12x32.fnt</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/Mandrill-12x32.png</li>
      * </ul>
      * @return the BitmapFont object representing Mandrill.ttf at size 32 pt
      */
@@ -591,8 +591,8 @@ public class DefaultResources implements LifecycleListener {
      * <br>
      * Needs files:
      * <ul>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Inconsolata-LGC-Square-25x25.fnt</li>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Inconsolata-LGC-Square-25x25.png</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/Inconsolata-LGC-Square-25x25.fnt</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/Inconsolata-LGC-Square-25x25.png</li>
      * </ul>
      * @return the BitmapFont object representing Inconsolata-LGC-Square at size 25x25 pixels
      */
@@ -618,9 +618,9 @@ public class DefaultResources implements LifecycleListener {
      * <br>
      * Needs files:
      * <ul>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Monty-4x10.fnt</li>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Monty-4x10.png</li>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Monty-license.txt</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/Monty-4x10.fnt</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/Monty-4x10.png</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/Monty-license.txt</li>
      * </ul>
      * @return the BitmapFont object representing Monty.ttf at size 8 pt
      */
@@ -647,9 +647,9 @@ public class DefaultResources implements LifecycleListener {
      * <br>
      * Needs files:
      * <ul>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Monty-8x20.fnt</li>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Monty-8x20.png</li>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Monty-license.txt</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/Monty-8x20.fnt</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/Monty-8x20.png</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/Monty-license.txt</li>
      * </ul>
      * @return the BitmapFont object representing Monty.ttf at size 16 pt
      */
@@ -675,10 +675,10 @@ public class DefaultResources implements LifecycleListener {
      * <br>
      * Needs files:
      * <ul>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/7-12-serif.fnt</li>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/7-12-serif.png</li>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/7-12-serif-license.txt</li>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/7-12-serif-readme.txt</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/7-12-serif.fnt</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/7-12-serif.png</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/7-12-serif-license.txt</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/7-12-serif-readme.txt</li>
      * </ul>
      * @return the BitmapFont object representing 7-12-serif.ttf at a size that gives exactly 7 px wide by 12 px tall
      */
@@ -773,10 +773,10 @@ public class DefaultResources implements LifecycleListener {
      * <br>
      * Needs files:
      * <ul>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/ComputerSaysNo.fnt</li>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/ComputerSaysNo.png</li>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/ComputerSaysNo-license.txt</li>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/ComputerSaysNo-readme.txt</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/ComputerSaysNo.fnt</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/ComputerSaysNo.png</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/ComputerSaysNo-license.txt</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/ComputerSaysNo-readme.txt</li>
      * </ul>
      * @return the BitmapFont object representing ComputerSaysNo.ttf at a size that gives about 14 px wide by 27 px tall
      */
@@ -839,8 +839,8 @@ public class DefaultResources implements LifecycleListener {
      * <br>
      * Needs files:
      * <ul>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Cozette.fnt</li>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Cozette.png</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/Cozette.fnt</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/Cozette.png</li>
      * </ul>
      * @return the BitmapFont object representing CozetteVector.ttf at size 12 pt
      */
@@ -869,8 +869,8 @@ public class DefaultResources implements LifecycleListener {
      * <br>
      * Needs files:
      * <ul>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/CozetteOutlined.fnt</li>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/CozetteOutlined.png</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/CozetteOutlined.fnt</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/CozetteOutlined.png</li>
      * </ul>
      * @return the BitmapFont object representing CozetteVector.ttf at size 12 pt with a square outline applied
      */
@@ -898,8 +898,8 @@ public class DefaultResources implements LifecycleListener {
      * <br>
      * Needs files:
      * <ul>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Inconsolata-LGC-Square-distance.fnt</li>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Inconsolata-LGC-Square-distance.png</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/Inconsolata-LGC-Square-distance.fnt</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/Inconsolata-LGC-Square-distance.png</li>
      * </ul>
      * @return the TextCellFactory object that can represent many sizes of the square font Inconsolata-LGC-Square.ttf
      */
@@ -933,8 +933,8 @@ public class DefaultResources implements LifecycleListener {
      * <br>
      * Needs files:
      * <ul>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/BoxedIn-distance.fnt</li>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/BoxedIn-distance.png</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/BoxedIn-distance.fnt</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/BoxedIn-distance.png</li>
      * </ul>
      * @return the TextCellFactory object that can represent many sizes of the square font BoxedIn.ttf
      */
@@ -977,9 +977,9 @@ public class DefaultResources implements LifecycleListener {
      * <br>
      * Needs files:
      * <ul>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/square-msdf.fnt</li>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/square-msdf.png</li>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/square-License.txt</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/square-msdf.fnt</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/square-msdf.png</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/square-License.txt</li>
      * </ul>
      * @return the TextCellFactory object that can represent many sizes of the font square.ttf
      */
@@ -1017,9 +1017,9 @@ public class DefaultResources implements LifecycleListener {
      * <br>
      * Needs files:
      * <ul>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/a-starry-msdf.fnt</li>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/a-starry-msdf.png</li>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/a-starry-license.txt</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/a-starry-msdf.fnt</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/a-starry-msdf.png</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/a-starry-license.txt</li>
      * </ul>
      * @return the TextCellFactory object that can represent many sizes of the font a-starry.ttf
      */
@@ -1051,8 +1051,8 @@ public class DefaultResources implements LifecycleListener {
      * <br>
      * Needs files:
      * <ul>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Inconsolata-LGC-Custom-distance.fnt</li>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Inconsolata-LGC-Custom-distance.png</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/Inconsolata-LGC-Custom-distance.fnt</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/Inconsolata-LGC-Custom-distance.png</li>
      * </ul>
      * @return the TextCellFactory object that can represent many sizes of the font Inconsolata-LGC-Custom.ttf
      */
@@ -1084,8 +1084,8 @@ public class DefaultResources implements LifecycleListener {
      * <br>
      * Needs files:
      * <ul>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/CM-Custom-distance.fnt</li>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/CM-Custom-distance.png</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/CM-Custom-distance.fnt</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/CM-Custom-distance.png</li>
      * </ul>
      * @return the TextCellFactory object that can represent many sizes of the font CM-Custom.ttf
      */
@@ -1122,8 +1122,8 @@ public class DefaultResources implements LifecycleListener {
      * <br>
      * Needs files:
      * <ul>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/SourceCodePro-Medium-distance.fnt</li>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/SourceCodePro-Medium-distance.png</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/SourceCodePro-Medium-distance.fnt</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/SourceCodePro-Medium-distance.png</li>
      * </ul>
      * @return the TextCellFactory object that can represent many sizes of the font SourceCodePro-Medium.otf
      */
@@ -1161,8 +1161,8 @@ public class DefaultResources implements LifecycleListener {
      * <br>
      * Needs files:
      * <ul>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/SourceHanCodeJP-Regular-distance.fnt</li>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/SourceHanCodeJP-Regular-distance.png</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/SourceHanCodeJP-Regular-distance.fnt</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/SourceHanCodeJP-Regular-distance.png</li>
      * </ul>
      * @return the TextCellFactory object that can represent many sizes of the font SourceHanCodeJP-Regular.otf
      */
@@ -1205,8 +1205,8 @@ public class DefaultResources implements LifecycleListener {
      * <br>
      * Needs files:
      * <ul>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Iosevka-distance.fnt</li>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Iosevka-distance.png</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/Iosevka-distance.fnt</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/Iosevka-distance.png</li>
      * </ul>
      * @return the TextCellFactory object that can represent many sizes of the font Iosevka.ttf
      */
@@ -1250,8 +1250,8 @@ public class DefaultResources implements LifecycleListener {
      * <br>
      * Needs files:
      * <ul>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Iosevka-Slab-distance.fnt</li>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Iosevka-Slab-distance.png</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/Iosevka-Slab-distance.fnt</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/Iosevka-Slab-distance.png</li>
      * </ul>
      * @return the TextCellFactory object that can represent many sizes of the font Iosevka-Slab.ttf
      */
@@ -1294,8 +1294,8 @@ public class DefaultResources implements LifecycleListener {
      * <br>
      * Needs files:
      * <ul>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Iosevka-Light-distance.fnt</li>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Iosevka-Light-distance.png</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/Iosevka-Light-distance.fnt</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/Iosevka-Light-distance.png</li>
      * </ul>
      * @return the TextCellFactory object that can represent many sizes of the font Iosevka-Light.ttf
      */
@@ -1339,8 +1339,8 @@ public class DefaultResources implements LifecycleListener {
      * <br>
      * Needs files:
      * <ul>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Iosevka-Slab-Light-distance.fnt</li>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Iosevka-Slab-Light-distance.png</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/Iosevka-Slab-Light-distance.fnt</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/Iosevka-Slab-Light-distance.png</li>
      * </ul>
      * @return the TextCellFactory object that can represent many sizes of the font Iosevka-Slab-Light.ttf
      */
@@ -1377,8 +1377,8 @@ public class DefaultResources implements LifecycleListener {
      * <br>
      * Needs files:
      * <ul>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/DejaVuSansMono-distance.fnt</li>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/DejaVuSansMono-distance.png</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/DejaVuSansMono-distance.fnt</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/DejaVuSansMono-distance.png</li>
      * </ul>
      * @return the TextCellFactory object that can represent many sizes of the font DejaVuSansMono.ttf
      */
@@ -1410,8 +1410,8 @@ public class DefaultResources implements LifecycleListener {
      * <br>
      * Needs files:
      * <ul>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Gentium-distance.fnt</li>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Gentium-distance.png</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/Gentium-distance.fnt</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/Gentium-distance.png</li>
      * </ul>
      * @return the TextCellFactory object that can represent many sizes of the font Gentium, by SIL
      */
@@ -1446,8 +1446,8 @@ public class DefaultResources implements LifecycleListener {
      * <br>
      * Needs files:
      * <ul>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Orbitron-distance.fnt</li>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Orbitron-distance.png</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/Orbitron-distance.fnt</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/Orbitron-distance.png</li>
      * </ul>
      * @return the TextCellFactory object that can represent many sizes of the font Orbitron, by The League of Movable Type
      */
@@ -1483,8 +1483,8 @@ public class DefaultResources implements LifecycleListener {
      * <br>
      * Needs files:
      * <ul>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Noto-Sans-distance.fnt</li>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Noto-Sans-distance.png</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/Noto-Sans-distance.fnt</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/Noto-Sans-distance.png</li>
      * </ul>
      * @return the TextCellFactory object that can represent many sizes of the font Noto Sans, by Google
      */
@@ -1523,8 +1523,8 @@ public class DefaultResources implements LifecycleListener {
      * <br>
      * Needs files:
      * <ul>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Iosevka-Slab-msdf.fnt</li>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Iosevka-Slab-msdf.png</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/Iosevka-Slab-msdf.fnt</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/Iosevka-Slab-msdf.png</li>
      * </ul>
      * @return the TextCellFactory object that can represent many sizes of the font Iosevka-Slab.ttf using MSDF
      */
@@ -1574,8 +1574,8 @@ public class DefaultResources implements LifecycleListener {
      * <br>
      * Needs files:
      * <ul>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Iosevka-msdf.fnt</li>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Iosevka-msdf.png</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/Iosevka-msdf.fnt</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/Iosevka-msdf.png</li>
      * </ul>
      * @return the TextCellFactory object that can represent many sizes of the font Iosevka.ttf
      */
@@ -1626,8 +1626,8 @@ public class DefaultResources implements LifecycleListener {
      * <br>
      * Needs files:
      * <ul>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/DejaVuSansMono-msdf.fnt</li>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/DejaVuSansMono-msdf.png</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/DejaVuSansMono-msdf.fnt</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/DejaVuSansMono-msdf.png</li>
      * </ul>
      * @return the TextCellFactory object that can represent many sizes of the font DejaVuSansMono.ttf with an MSDF effect
      */
@@ -1669,8 +1669,8 @@ public class DefaultResources implements LifecycleListener {
      * <br>
      * Needs files:
      * <ul>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Iosevka-Slab-Family-distance.fnt</li>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Iosevka-Slab-Family-distance.png</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/Iosevka-Slab-Family-distance.fnt</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/Iosevka-Slab-Family-distance.png</li>
      * </ul>
      * @return the TextFamily object that can represent many sizes of the font Iosevka-Slab.ttf with 4 styles
      */
@@ -1710,8 +1710,8 @@ public class DefaultResources implements LifecycleListener {
      * <br>
      * Needs files:
      * <ul>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Iosevka-Family-distance.fnt</li>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Iosevka-Family-distance.png</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/Iosevka-Family-distance.fnt</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/Iosevka-Family-distance.png</li>
      * </ul>
      * @return the TextFamily object that can represent many sizes of the font Iosevka.ttf with 4 styles
      */
@@ -1748,9 +1748,9 @@ public class DefaultResources implements LifecycleListener {
      * <br>
      * Needs files:
      * <ul>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/GoMono-Family-distance.fnt</li>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/GoMono-Family-distance.png</li>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/GoMono-License.txt</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/GoMono-Family-distance.fnt</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/GoMono-Family-distance.png</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/GoMono-License.txt</li>
      * </ul>
      * @return the TextFamily object that can represent many sizes of the font GoMono.ttf with 4 styles
      */
@@ -1795,8 +1795,8 @@ public class DefaultResources implements LifecycleListener {
      * <br>
      * Needs files:
      * <ul>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Iosevka-Family-msdf.fnt</li>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Iosevka-Family-msdf.png</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/Iosevka-Family-msdf.fnt</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/Iosevka-Family-msdf.png</li>
      * </ul>
      * @return the TextFamily object that can represent many sizes of the font Iosevka.ttf with 4 styles and an MSDF effect
      */
@@ -1845,8 +1845,8 @@ public class DefaultResources implements LifecycleListener {
      * <br>
      * Needs files:
      * <ul>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Iosevka-Slab-Family-msdf.fnt</li>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Iosevka-Slab-Family-msdf.png</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/Iosevka-Slab-Family-msdf.fnt</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/Iosevka-Slab-Family-msdf.png</li>
      * </ul>
      * @return the TextFamily object that can represent many sizes of the font Iosevka-Slab.ttf with 4 styles and an MSDF effect
      */
@@ -1885,9 +1885,9 @@ public class DefaultResources implements LifecycleListener {
      * <br>
      * Needs files:
      * <ul>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/NotoSerif-Family-msdf.fnt</li>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/NotoSerif-Family-msdf.png</li>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/NotoSerif-license.txt</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/NotoSerif-Family-msdf.fnt</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/NotoSerif-Family-msdf.png</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/NotoSerif-license.txt</li>
      * </ul>
      * @return the TextCellFactory object that can represent many sizes of the font Noto Serif, made available by Google
      */
@@ -1926,9 +1926,9 @@ public class DefaultResources implements LifecycleListener {
      * <br>
      * Needs files:
      * <ul>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/bloccus-msdf.fnt</li>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/bloccus-msdf.png</li>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/bloccus-license.txt</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/bloccus-msdf.fnt</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/bloccus-msdf.png</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/bloccus-license.txt</li>
      * </ul>
      * @return the TextCellFactory object that can represent many sizes of the font bloccus.ttf
      */
@@ -1967,9 +1967,9 @@ public class DefaultResources implements LifecycleListener {
      * <br>
      * Needs files:
      * <ul>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Roboto-Regular-msdf.fnt</li>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Roboto-Regular-msdf.png</li>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Roboto-License.txt</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/Roboto-Regular-msdf.fnt</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/Roboto-Regular-msdf.png</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/Roboto-License.txt</li>
      * </ul>
      * @return the TextCellFactory object that can represent many sizes of the font Roboto-Regular.ttf
      */
@@ -2007,9 +2007,9 @@ public class DefaultResources implements LifecycleListener {
      * <br>
      * Needs files:
      * <ul>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/awesome-solid-msdf.fnt</li>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/awesome-solid-msdf.png</li>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Font-Awesome-license.txt</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/awesome-solid-msdf.fnt</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/awesome-solid-msdf.png</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/Font-Awesome-license.txt</li>
      * </ul>
      * @return the TextCellFactory object that can represent many sizes of Font Awesome Free (solid) with an MSDF effect
      */
@@ -2040,7 +2040,7 @@ public class DefaultResources implements LifecycleListener {
      * <br>
      * Needs file:
      * <ul>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Tentacle.png</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/Tentacle.png</li>
      * </ul>
      * @return a TextureRegion containing an image of a tentacle.
      */
@@ -2073,9 +2073,9 @@ public class DefaultResources implements LifecycleListener {
      * <br>
      * Needs files:
      * <ul>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/icons.atlas</li>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/icons.png</li>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/icons-license.txt Needed to credit artists</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/icons.atlas</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/icons.png</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/icons-license.txt Needed to credit artists</li>
      * </ul>
      * @return a TextureAtlas containing over 2000 icons with a distance field effect
      */
