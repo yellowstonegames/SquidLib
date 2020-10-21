@@ -20,7 +20,7 @@ import java.util.List;
  * not result in exceptions, but will make results inaccurate.
  *
  * There's a detailed introduction
- * <a href="https://github.com/SquidPony/SquidLib/wiki/Handling-Map-Regions-with-CoordPacker">on the SquidLib wiki</a>,
+ * <a href="https://github.com/yellowstonegames/SquidLib/wiki/Handling-Map-Regions-with-CoordPacker">on the SquidLib wiki</a>,
  * which is probably the best way to learn the techniques possible with this class. Most methods in this aren't useful
  * on their own, but can be mixed and matched to get specific regions from a map, such as all floors not adjacent to a
  * wall, or all grass within 3 squares of deep or shallow water, with walls blocking the distance measurement. You can

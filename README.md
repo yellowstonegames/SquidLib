@@ -61,12 +61,12 @@ handy predefined effects that you can add to.
 Where Is It Used?
 ---
 
-SquidLib is used for Wyrm, [Epigon](https://github.com/SquidPony/Epigon), Attack the Geth, Assault Fish,
+SquidLib is used for Wyrm, [Epigon](https://github.com/yellowstonegames/SquidLib/Epigon), Attack the Geth, Assault Fish,
 [Dungeon Mercenary](http://www.schplaf.org/hgames/), [Cave Cops](https://github.com/tommyettinger/CaveCops), and other
 projects.
 
-You can see [a small example](http://tommyettinger.github.io/SquidLib-Demos/tsar/index.html) online; it is part of the
-[SquidLib-Demos](https://github.com/tommyettinger/SquidLib-Demos) collection. It uses `squidlib-util` to generate
+You can see [a small example](http://yellowstonegames.github.io/SquidLib-Demos/tsar/index.html) online; it is part of the
+[SquidLib-Demos](https://github.com/yellowstonegames/SquidLib-Demos) collection. It uses `squidlib-util` to generate
 dungeon maps, handle pathfinding for enemies (who chase you after they see you) and the player (if you click, it
 uses pathfinding to move the player to the clicked spot), calculate field of vision, and produce gibberish text that
 looks like Russian (but isn't). It uses `squidlib` (the display module for text-based games) to show the generated maps
@@ -78,9 +78,9 @@ You don't need to use a text-based display to use many features of this library;
 in [ColorGuard](https://github.com/tommyettinger/ColorGuard), which uses `squidlib-util` to handle random numbers, world
 map generation, and text generation in fictional languages. SquidLib-Demos has some demos that only use `squidlib-util`
 and libGDX; [one can be seen here](https://tommyettinger.github.io/SquidLib-Demos/dawnlike/index.html),
-[source here](https://github.com/tommyettinger/SquidLib-Demos/tree/master/DawnlikeDemo), and another with
+[source here](https://github.com/yellowstonegames/SquidLib-Demos/tree/master/DawnlikeDemo), and another with
 a simpler graphics style [can be seen here](https://tommyettinger.github.io/SquidLib-Demos/graphical/),
-[source here](https://github.com/tommyettinger/SquidLib-Demos/tree/master/GraphicalDemo).
+[source here](https://github.com/yellowstonegames/SquidLib-Demos/tree/master/GraphicalDemo).
 
 There's a fairly-active [Discord server for SquidLib](https://discord.gg/aQtmqXt); many questions for SquidLib
 also apply to libGDX, so if you're on Discord I'd recommend also joining the [libGDX Discord server](https://discord.gg/7c6Wg8H).
@@ -106,9 +106,9 @@ The completely-optional squidlib-extra module (primarily used for serialization;
 and [source here](http://search.maven.org/remotecontent?filepath=com/squidpony/squidlib-extra/3.0.2/squidlib-extra-3.0.2-sources.jar).
 
 You can browse the **JavaDocs** of a recent commit (possibly newer than 3.0.2, but no older) here:
-  - [Docs for squidlib-util](http://squidpony.github.io/SquidLib/squidlib-util/apidocs/index.html)
-  - [Docs for squidlib](http://squidpony.github.io/SquidLib/squidlib/apidocs/index.html)
-  - [Docs for squidlib-extra](http://squidpony.github.io/SquidLib/squidlib-extra/apidocs/index.html)
+  - [Docs for squidlib-util](http://yellowstonegames.github.io/SquidLib/squidlib-util/apidocs/index.html)
+  - [Docs for squidlib](http://yellowstonegames.github.io/SquidLib/squidlib/apidocs/index.html)
+  - [Docs for squidlib-extra](http://yellowstonegames.github.io/SquidLib/squidlib-extra/apidocs/index.html)
 The docs here are updated whenever the project is rebuilt fully, which only coincides with releases occasionally.
 
 Download
@@ -123,9 +123,11 @@ Ideally, if you're starting out you should use [SquidSetup](https://github.com/t
 on [czyzby's gdx-setup tool](https://github.com/czyzby/gdx-setup), an alternative to the current official libGDX setup
 that aims to have more features and update more readily. A demo is present for SquidLib, selected by default when making
 a project with SquidSetup (typically if the demo becomes out-of-date, SquidSetup is updated to fix the demo). The
-recommended release is [v3.0.0-JITPACK](https://github.com/tommyettinger/SquidSetup/releases/tag/v3.0.0-JITPACK), which
-will use Gradle 6.5.1 for the project (and that avoids numerous bugs in older Gradle versions) and will automatically
-depend on the latest SquidLib version at the time the project is generated.
+recommended release is [v3.0.2](https://github.com/tommyettinger/SquidSetup/releases/tag/v3.0.2), which uses SquidLib
+3.0.2 and Gradle 6.7, and as such is compatible with Java versions from 8 to 15. There's also
+[v3.0.0-JITPACK](https://github.com/tommyettinger/SquidSetup/releases/tag/v3.0.0-JITPACK), which will use Gradle 6.5.1
+for the project and will automatically depend on the latest SquidLib version at the time the project is generated. The
+Jitpack release is sometimes out-of-date if assets change or dependencies update.
 
 If you use a dependency manager already and don't need a new project, you can use these dependencies for Maven projects:
 
@@ -138,7 +140,7 @@ Core of SquidLib:
 </dependency>
 ```
 
-Optional Text-Based Display (depends on libGDX 1.9.11)
+Optional Text-Based Display (depends on libGDX 1.9.11 and anim8-gdx 0.2.2)
 ```
 <dependency>
     <groupId>com.squidpony</groupId>
@@ -260,7 +262,7 @@ And if you use squidlib-extra, you also need
 Credits
 ---
 
-GitHub repository: [https://github.com/SquidPony/SquidLib](https://github.com/SquidPony/SquidLib)
+GitHub repository: [https://github.com/yellowstonegames/SquidLib](https://github.com/yellowstonegames/SquidLib)
 
 Blog updates: [http://squidpony.com/not-games/squidlib/](http://squidpony.com/not-games/squidlib/) (possibly down permanently; server mishaps)
 

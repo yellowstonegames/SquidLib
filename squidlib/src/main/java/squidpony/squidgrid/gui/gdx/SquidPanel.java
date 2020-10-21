@@ -80,8 +80,8 @@ public class SquidPanel extends Group implements IPackedColorPanel {
      * This uses a default font that is not supplied in the JAR library of SquidLib; you need two files to use it if it
      * does not render correctly:
      * <ul>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Zodiac-Square-12x12.fnt</li>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Zodiac-Square-12x12.png</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/Zodiac-Square-12x12.fnt</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/Zodiac-Square-12x12.png</li>
      * </ul>
      * @param gridWidth the number of cells horizontally
      * @param gridHeight the number of cells vertically
@@ -96,8 +96,8 @@ public class SquidPanel extends Group implements IPackedColorPanel {
      * This uses a default font that is not supplied in the JAR library of SquidLib; you need two files to use it if it
      * does not render correctly:
      * <ul>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Zodiac-Square-12x12.fnt</li>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Zodiac-Square-12x12.png</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/Zodiac-Square-12x12.fnt</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/Zodiac-Square-12x12.png</li>
      * </ul>
      * @param gridWidth the number of cells horizontally
      * @param gridHeight the number of cells vertically

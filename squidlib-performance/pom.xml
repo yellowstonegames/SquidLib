@@ -34,15 +34,15 @@ THE POSSIBILITY OF SUCH DAMAGE.
 <!--    <parent>-->
 <!--      <artifactId>squidlib-parent</artifactId>-->
 <!--      <groupId>com.squidpony</groupId>-->
-<!--      <version>3.0.2</version>-->
+<!--      <version>3.0.3-SNAPSHOT</version>-->
 <!--    </parent>-->
     <groupId>com.squidpony</groupId>
     <artifactId>squidlib-performance</artifactId>
-    <version>3.0.2</version>
+    <version>3.0.3-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>squidlib-performance</name>
-    <description>SquidLib internal performance testing code; no other projects need this module. Please refer to https://github.com/SquidPony/SquidLib .</description>
+    <description>SquidLib internal performance testing code; no other projects need this module. Please refer to https://github.com/yellowstonegames/SquidLib .</description>
     <profiles>
         <profile>
             <id>releaseLow</id>
@@ -103,7 +103,7 @@ THE POSSIBILITY OF SUCH DAMAGE.
             <groupId>com.squidpony</groupId>
             <!--<groupId>com.github.SquidPony.SquidLib</groupId>-->
             <artifactId>squidlib</artifactId>
-            <version>3.0.2</version>
+            <version>3.0.3-SNAPSHOT</version>
             <scope>compile</scope>
             <!--<version>af61f301b1</version>-->
         </dependency>
@@ -229,7 +229,7 @@ THE POSSIBILITY OF SUCH DAMAGE.
                 </plugin>
                 <plugin>
                     <artifactId>maven-jar-plugin</artifactId>
-                    <version>3.0.2</version>
+                    <version>3.0.3-SNAPSHOT</version>
                 </plugin>
                 <plugin>
                     <artifactId>maven-javadoc-plugin</artifactId>

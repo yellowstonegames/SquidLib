@@ -233,8 +233,8 @@ public class SquidLayers extends Group {
      * This uses a default font that is not supplied in the JAR library of SquidLib; you need two files to use it if it
      * does not render correctly:
      * <ul>
-     * <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Inconsolata-LGC-Custom-distance.fnt</li>
-     * <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Inconsolata-LGC-Custom-distance.png</li>
+     * <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/Inconsolata-LGC-Custom-distance.fnt</li>
+     * <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/Inconsolata-LGC-Custom-distance.png</li>
      * </ul>
      */
     public SquidLayers() {
@@ -248,8 +248,8 @@ public class SquidLayers extends Group {
      * This uses a default font that is not supplied in the JAR library of SquidLib; you need two files to use it if it
      * does not render correctly:
      * <ul>
-     * <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Inconsolata-LGC-Custom-distance.fnt</li>
-     * <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Inconsolata-LGC-Custom-distance.png</li>
+     * <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/Inconsolata-LGC-Custom-distance.fnt</li>
+     * <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/Inconsolata-LGC-Custom-distance.png</li>
      * </ul>
      *
      * @param gridWidth  in grid cells
@@ -267,8 +267,8 @@ public class SquidLayers extends Group {
      * This uses a default font that is not supplied in the JAR library of SquidLib; you need two files to use it if it
      * does not render correctly:
      * <ul>
-     * <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Inconsolata-LGC-Custom-distance.fnt</li>
-     * <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Inconsolata-LGC-Custom-distance.png</li>
+     * <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/Inconsolata-LGC-Custom-distance.fnt</li>
+     * <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/Inconsolata-LGC-Custom-distance.png</li>
      * </ul>
      *
      * @param gridWidth  in grid cells
@@ -335,8 +335,8 @@ public class SquidLayers extends Group {
      * This uses a default font that is not supplied in the JAR library of SquidLib; you need two files to use it if it
      * does not render correctly:
      * <ul>
-     * <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Inconsolata-LGC-Custom-distance.fnt</li>
-     * <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Inconsolata-LGC-Custom-distance.png</li>
+     * <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/Inconsolata-LGC-Custom-distance.fnt</li>
+     * <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/Inconsolata-LGC-Custom-distance.png</li>
      * </ul>
      *
      * @param gridWidth     in grid cells
@@ -412,7 +412,7 @@ public class SquidLayers extends Group {
      * sized differently than gridWidth by gridHeight (it is usually larger than gridWidth by gridHeight, which
      * allows camera scrolling across the map). This requires some special work with the Camera and Viewports to
      * get working correctly; in the squidlib module's examples,
-     * <a href="https://github.com/SquidPony/SquidLib/blob/master/squidlib/src/test/java/squidpony/gdx/examples/EverythingDemo.java">EverythingDemo</a>
+     * <a href="https://github.com/yellowstonegames/SquidLib/blob/master/squidlib/src/test/java/squidpony/gdx/examples/EverythingDemo.java">EverythingDemo</a>
      * may be a good place to see how this can be done. You can pass null for actualMap, which will simply create
      * a char array to use internally that is exactly gridWidth by gridHeight, in cells. Consider using predefined
      * TextCellFactory objects from {@link DefaultResources}, which will be configured by this constructor for

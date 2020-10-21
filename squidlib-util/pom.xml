@@ -6,13 +6,13 @@
     <parent>
         <groupId>com.squidpony</groupId>
         <artifactId>squidlib-parent</artifactId>
-        <version>3.0.2</version>
+        <version>3.0.3-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>squidlib-util</artifactId>
     <name>squidlib-util</name>
     <description>SquidLib platform-independent logic and utility code. Please refer to
-        https://github.com/SquidPony/SquidLib .
+        https://github.com/yellowstonegames/SquidLib .
     </description>
     <profiles>
         <profile>

@@ -268,7 +268,7 @@ public class ZoneDemo extends ApplicationAdapter {
                 final ArrayList<IColoredString<Color>> text = new ArrayList<IColoredString<Color>>();
         text.add(GDXMarkup.instance.colorString("[/][CW Pale Indigo]SquidLib[] is brought to you by Tommy Ettinger, Eben Howard, smelC, and others."));
         text.add(GDXMarkup.instance.colorString("If you wanna contribute, visit " +
-                "[CW Bright Sapphire][*]https://github.com/SquidPony/SquidLib[]"));
+                "[CW Bright Sapphire][*]https://github.com/yellowstonegames/SquidLib[]"));
 
 
         /* // useful during debugging
