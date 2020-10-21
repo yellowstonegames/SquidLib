@@ -1,6 +1,10 @@
 apply plugin: 'java'
+// Using Maven to build this project is strongly recommended.
+// If you want to delve into using Gradle, you can comment out or remove the following line.
+throw new InstantiationException("The Gradle build is unmaintained; use Maven (the pom.xml file) instead.")
+
 // note from smelC: starting with Eclipse Neon, you should not use
-// gradle's Eclipse plugin (grade :eclipse). Instead you should use Eclipse's buildship project (shipped by default with Eclipse):
+// gradle's Eclipse plugin (gradle :eclipse). Instead you should use Eclipse's buildship project (shipped by default with Eclipse):
 // https://projects.eclipse.org/projects/tools.buildship
 // buildship takes care of generating .classpath and .project files according to your build.gradle files
 // (right-click on a project > Gradle > Refresh Gradle Project).
@@ -50,7 +54,7 @@ sourceSets {
 // define 'gdxVersion' if not defined yet. This allows
 // a project depending on SquidLib (like: your game) to define
 // 'gdxVersion' itself, and yet be able to build SquidLib standalone too.
-def gdxVersion = System.getenv("gdxVersion") ?: "1.9.10" // As in pom.xml
+def gdxVersion = System.getenv("gdxVersion") ?: "1.9.11" // As in pom.xml
 project.sourceCompatibility = 1.7
 
 // In this section you declare the dependencies for your production and test code
