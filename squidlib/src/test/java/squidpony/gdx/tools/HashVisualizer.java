@@ -68,7 +68,7 @@ public class HashVisualizer extends ApplicationAdapter {
     // 5 RNG results
     private int testType = 4;
     private static final int NOISE_LIMIT = 148;
-    private int hashMode, rngMode, noiseMode = 54, otherMode = 1;//142
+    private int hashMode, rngMode, noiseMode = 142, otherMode = 1;//142
 
     /**
      * If you're editing the source of HashVisualizer, you can comment out one line and uncomment another to change
@@ -90,8 +90,8 @@ public class HashVisualizer extends ApplicationAdapter {
     private FilterBatch batch;
     
     private TextCellFactory tcf;
-    private static final int width = 512, height = 512;
-//    private static final int width = 256, height = 256;
+//    private static final int width = 512, height = 512;
+    private static final int width = 256, height = 256;
     private static final int almost = width - 1, half = width >> 1;
     private static final float[][] back = new float[width][height];
 

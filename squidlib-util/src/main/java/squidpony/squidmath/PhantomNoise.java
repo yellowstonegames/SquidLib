@@ -14,11 +14,11 @@ import squidpony.annotation.Beta;
  * each call using a different rotation of the same size of grid. It "domain warps" value noise calls after the first,
  * adding the previous value noise result to one coordinate of the next value noise call. To get a PhantomNoise result,
  * it averages all the value noise calls and curves the output range so it doesn't get more biased toward 0 with higher
- * dimensions (which would happen with a pure average of a rising number of variables). The curving here uses adapted
- * code from libGDX's Interpolation.Pow class; it looks
- * <a href="https://user-images.githubusercontent.com/12948924/75205109-c2194b00-5727-11ea-99e9-614c2f613331.png">like this for 2D</a>,
- * <a href="https://user-images.githubusercontent.com/12948924/75205657-36082300-5729-11ea-8636-683fa98d1988.png">like this for 3D</a>, and
- * <a href="https://user-images.githubusercontent.com/12948924/75206040-52f12600-572a-11ea-8621-7763df2868e5.png">like this for 4D</a>.
+ * dimensions (which would happen with a pure average of a rising number of variables). The curving here uses the
+ * {@link MathExtras#barronSpline(double, double, double)} method for adjustable bias/gain; it looks
+ * <a href="https://i.imgur.com/fchQOuP.png">like this for 2D</a>,
+ * <a href="https://i.imgur.com/vpc2XGq.png">like this for 3D</a>, and
+ * <a href="https://i.imgur.com/fNWJOEp.png">like this for 4D</a>.
  * There's some preparation this does in the constructor, which eliminates the need for allocations during noise
  * generation. For N-D PhantomNoise, this makes N+1 double arrays, one for each rotation for a value noise call, and
  * each rotation array has N items. The rotations match the vertices of an N-simplex, so a triangle in 2D, a tetrahedron
@@ -127,9 +127,11 @@ public class PhantomNoise {
             working[dim] += -0.423310825130748; // e - pi
         }
         result *= inverse;
-        return (result <= 0.5)
-                ? Math.pow(result * 2, dim) - 1.0
-                : Math.pow((result - 1) * 2, dim) * (((dim & 1) << 1) - 1) + 1.0;
+        return MathExtras.barronSpline(result, dim, 0.5) * 2.0 - 1.0;
+//        return (result <= 0.5)
+//                ? Math.pow(result * 2, dim) - 1.0
+//                : Math.pow((result - 1) * 2, dim) * (((dim & 1) << 1) - 1) + 1.0;
+        
 //        for (int i = 1; i < dim; i++) {
 //            result *= result * (3.0 - 2.0 * result);
 //        }
@@ -152,9 +154,13 @@ public class PhantomNoise {
             working[dim] += Math.E;
         }
         result *= inverse;
-        return (result <= 0.5)
-                ? (result * result * 4) - 1.0
-                : ((result - 1) * (result - 1) * -4) + 1.0;
+        return MathExtras.barronSpline(result, dim, 0.5) * 2.0 - 1.0;
+        
+//        return MathExtras.barronSpline(result, dim * (2.0 + 0.5 * dim), 0.5) * 2.0 - 1.0;
+        
+//        return (result <= 0.5)
+//                ? (result * result * 4) - 1.0
+//                : ((result - 1) * (result - 1) * -4) + 1.0;
 
 //        result *= result * (3.0 - 2.0 * result);
 //        return  (result * result * (6.0 - 4.0 * result) - 1.0);
