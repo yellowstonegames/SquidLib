@@ -40,9 +40,9 @@ import squidpony.annotation.Beta;
  */
 @Beta
 public class PhantomNoise {
-    private final CrossHash.Yolk yolk;
+    private final CrossHash.Curlup yolk;
     public final int dim;
-    private final double inverse;
+    private final double inverse, sharpness;
     private final double[] working, points;
     private final double[][] vertices;
     private final int[] floors, hashFloors;
@@ -51,7 +51,11 @@ public class PhantomNoise {
     }
 
     public PhantomNoise(long seed, int dimension) {
+        this(seed, dimension, Math.max(2, dimension));
+    }
+    public PhantomNoise(long seed, int dimension, double sharpness) {
         dim = Math.max(2, dimension);
+        this.sharpness = sharpness;
         working = new double[dim+1];
         points = new double[dim+1];
         vertices = new double[dim+1][dim];
@@ -79,7 +83,7 @@ public class PhantomNoise {
         }
         floors = new int[dim+1];
         hashFloors = new int[dim+1];
-        yolk = new CrossHash.Yolk(seed);
+        yolk = new CrossHash.Curlup(seed);
         inverse = 1.0 / (dim + 1.0);
 //        printDebugInfo();
     }
@@ -106,6 +110,32 @@ public class PhantomNoise {
         }
         return (sum * 0x1p-32 + 0.5);
     }
+
+    protected double valueNoise2D()
+    {
+        hashFloors[2] = NumberTools.doubleToMixedIntBits(working[2]);
+        for (int i = 0; i < 2; i++) {
+            floors[i] = working[i] >= 0.0 ? (int)working[i] : (int)working[i] - 1;
+            working[i] -= floors[i];
+            working[i] *= working[i] * (3.0 - 2.0 * working[i]);
+        }
+        double sum = 0.0, temp;
+        int bit;
+        for (int i = 0; i < 4; i++) {
+            temp = 1.0;
+            
+            bit = i;
+            temp *= bit + (1|-bit) * working[0];
+            hashFloors[0] = floors[0] - bit;
+            
+            bit = i >>> 1;
+            temp *= bit + (1|-bit) * working[1];
+            hashFloors[1] = floors[1] - bit;
+            
+            sum += temp * yolk.hash(hashFloors);
+        }
+        return (sum * 0x1p-32 + 0.5);
+    }
     
     public double getNoise(double... args) {
         for (int v = 0; v <= dim; v++) {
@@ -127,7 +157,7 @@ public class PhantomNoise {
             working[dim] += -0.423310825130748; // e - pi
         }
         result *= inverse;
-        return MathExtras.barronSpline(result, dim, 0.5) * 2.0 - 1.0;
+        return MathExtras.barronSpline(result, sharpness, 0.5) * 2.0 - 1.0;
 //        return (result <= 0.5)
 //                ? Math.pow(result * 2, dim) - 1.0
 //                : Math.pow((result - 1) * 2, dim) * (((dim & 1) << 1) - 1) + 1.0;
@@ -142,19 +172,19 @@ public class PhantomNoise {
         points[0] = -0.4161468365471422 * x + 0.9092974268256818 * y;
         points[1] = -0.5794012529532914 * x + -0.8150424455671962 * y;
         points[2] = 0.9955480895004332 * x + -0.09425498125848553 * y;
-        working[dim] = Math.PI;
+        working[2] = 0.6180339887498949;
         double result = 0.0, warp = 0.0;
-        for (int i = 0; i <= dim; i++) {
-            for (int j = 0, d = 0; j < dim; j++, d++) {
+        for (int i = 0; i <= 2; i++) {
+            for (int j = 0, d = 0; j < 2; j++, d++) {
                 if(d == i) d++;
                 working[j] = points[d] + warp;
             }
-            warp = valueNoise();
+            warp = valueNoise2D();
             result += warp;
-            working[dim] += Math.E;
+            working[2] += -0.423310825130748;
         }
         result *= inverse;
-        return MathExtras.barronSpline(result, dim, 0.5) * 2.0 - 1.0;
+        return MathExtras.barronSpline(result, sharpness, 0.5) * 2.0 - 1.0;
         
 //        return MathExtras.barronSpline(result, dim * (2.0 + 0.5 * dim), 0.5) * 2.0 - 1.0;
         
