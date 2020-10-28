@@ -63,7 +63,7 @@ dependencies {
     compile "com.github.tommyettinger:regexodus:0.1.10"
 	testCompile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
 	testCompile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
-	testCompile 'junit:junit:4.12'
+	testCompile 'junit:junit:4.13.1'
 }
 
 // Execute with 'gradle everythingDemo' (add --info to get debug info)
