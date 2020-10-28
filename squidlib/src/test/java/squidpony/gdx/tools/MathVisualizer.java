@@ -23,7 +23,7 @@ import java.util.Random;
  * Created by Tommy Ettinger on 1/13/2018.
  */
 public class MathVisualizer extends ApplicationAdapter {
-    private int mode = 16;
+    private int mode = 10;
     private int modes = 51;
     private FilterBatch batch;
     private SparseLayers layers;
@@ -733,16 +733,18 @@ public class MathVisualizer extends ApplicationAdapter {
             }
             break;
             case 10: {
-                Gdx.graphics.setTitle("Math Visualizer: Mode " + mode);
+                float s = (float)Math.exp(Math.sin((System.currentTimeMillis() & 0xFFFF) * 0x1p-9) * 2);
+                float t = 0.5f;
+                Gdx.graphics.setTitle("s="+s+", t="+t);
                 //DiverRNG diver = new DiverRNG();
-                for (int i = 0; i < 0x1000000; i++) {
-                    amounts[(int) (diver.nextFloat() * 512)]++;
+                for (int i = 0; i < 0x100000; i++) {
+                    amounts[(int) (MathExtras.barronSpline(diver.nextFloat(), s, t) * 511.999)]++;
                 }
                 for (int i = 0; i < 512; i++) {
                     float color = (i & 63) == 0
                             ? -0x1.c98066p126F // CW Azure
                             : -0x1.d08864p126F; // CW Sapphire
-                    for (int j = 519 - (amounts[i] >> 8); j < 520; j++) {
+                    for (int j = Math.max(0, 519 - (amounts[i] >> 5)); j < 520; j++) {
                         layers.backgrounds[i][j] = color;
                     }
                 }
@@ -754,15 +756,18 @@ public class MathVisualizer extends ApplicationAdapter {
             }
             break;
             case 11: {
-                Gdx.graphics.setTitle("Math Visualizer: Mode " + mode);
-                for (int i = 0; i < 0x1000000; i++) {
-                    amounts[(int) (MathUtils.random() * 512)]++;
+                float s = 8;
+                float t = (float) Math.sin((System.currentTimeMillis() & 0xFFFF) * 0x1p-9) * 0.5f + 0.5f;
+                Gdx.graphics.setTitle("s="+s+", t="+t);
+                //DiverRNG diver = new DiverRNG();
+                for (int i = 0; i < 0x100000; i++) {
+                    amounts[(int) (MathExtras.barronSpline(diver.nextFloat(), s, t) * 511.999)]++;
                 }
                 for (int i = 0; i < 512; i++) {
                     float color = (i & 63) == 0
                             ? -0x1.c98066p126F // CW Azure
                             : -0x1.d08864p126F; // CW Sapphire
-                    for (int j = 519 - (amounts[i] >> 8); j < 520; j++) {
+                    for (int j = Math.max(0, 519 - (amounts[i] >> 5)); j < 520; j++) {
                         layers.backgrounds[i][j] = color;
                     }
                 }
@@ -773,6 +778,48 @@ public class MathVisualizer extends ApplicationAdapter {
                 }
             }
             break;
+
+//            case 10: {
+//                Gdx.graphics.setTitle("Math Visualizer: Mode " + mode);
+//                //DiverRNG diver = new DiverRNG();
+//                for (int i = 0; i < 0x1000000; i++) {
+//                    amounts[(int) (diver.nextFloat() * 512)]++;
+//                }
+//                for (int i = 0; i < 512; i++) {
+//                    float color = (i & 63) == 0
+//                            ? -0x1.c98066p126F // CW Azure
+//                            : -0x1.d08864p126F; // CW Sapphire
+//                    for (int j = 519 - (amounts[i] >> 8); j < 520; j++) {
+//                        layers.backgrounds[i][j] = color;
+//                    }
+//                }
+//                for (int i = 0; i < 10; i++) {
+//                    for (int j = 8; j < 520; j += 32) {
+//                        layers.backgrounds[i][j] = -0x1.7677e8p125F;
+//                    }
+//                }
+//            }
+//            break;
+//            case 11: {
+//                Gdx.graphics.setTitle("Math Visualizer: Mode " + mode);
+//                for (int i = 0; i < 0x1000000; i++) {
+//                    amounts[(int) (MathUtils.random() * 512)]++;
+//                }
+//                for (int i = 0; i < 512; i++) {
+//                    float color = (i & 63) == 0
+//                            ? -0x1.c98066p126F // CW Azure
+//                            : -0x1.d08864p126F; // CW Sapphire
+//                    for (int j = 519 - (amounts[i] >> 8); j < 520; j++) {
+//                        layers.backgrounds[i][j] = color;
+//                    }
+//                }
+//                for (int i = 0; i < 10; i++) {
+//                    for (int j = 8; j < 520; j += 32) {
+//                        layers.backgrounds[i][j] = -0x1.7677e8p125F;
+//                    }
+//                }
+//            }
+//            break;
             case 12: {
                 Gdx.graphics.setTitle("Math Visualizer: Mode " + mode);
                 for (int i = 0; i < 0x1000000; i++) {
