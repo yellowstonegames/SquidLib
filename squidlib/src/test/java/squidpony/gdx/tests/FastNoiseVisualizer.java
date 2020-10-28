@@ -9,6 +9,8 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.glutils.ImmediateModeRenderer20;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.scenes.scene2d.utils.UIUtils;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -24,10 +26,12 @@ import static com.badlogic.gdx.graphics.GL20.GL_POINTS;
  */
 public class FastNoiseVisualizer extends ApplicationAdapter {
 
-    private FastNoise noise = new FastNoise(1, 0.0625f, FastNoise.CUBIC_FRACTAL, 1);
-    private int dim; // this can be 0, 1, 2, 3, or 4; add 2 to get the actual dimensions
+    private FastNoise noise = new FastNoise(1, 0.0625f, FastNoise.PERLIN_FRACTAL, 1);
+    private int dim = 1; // this can be 0, 1, 2, 3, or 4; add 2 to get the actual dimensions
     private int octaves = 1;
     private float freq = 1f;
+    private float shape = 2f;
+    private float turning = 0.5f;
     private boolean inverse;
     private ImmediateModeRenderer20 renderer;
     
@@ -41,7 +45,7 @@ public class FastNoiseVisualizer extends ApplicationAdapter {
     private FlawedPointHash.CubeHash cube = new FlawedPointHash.CubeHash(1, 32);
     private FlawedPointHash.FNVHash fnv = new FlawedPointHash.FNVHash(1);
     private IPointHash[] pointHashes = new IPointHash[] {ph, hph, iph, fnv, gold, rug, quilt, cube};
-    private int hashIndex = 7;
+    private int hashIndex = 0;
 
     private static final int width = 512, height = 512;
 
@@ -156,12 +160,19 @@ public class FastNoiseVisualizer extends ApplicationAdapter {
                         }
                         Gdx.files.local("out/").mkdirs();
                         gif.write(Gdx.files.local("out/cube.gif"), frames, 12);
-                        
                         break;
                     case P: //pause
                         keepGoing = !keepGoing;
                     case C:
                         ctr++;
+                        break;
+                        
+                    case B:
+                        if(UIUtils.shift())
+                            turning = (float) Math.sin((System.currentTimeMillis() & 0xFFFF) * 0x1p-9) * 0.5f + 0.5f;
+                        else if(UIUtils.ctrl())
+                            shape = 2f + (float) (Math.sin((System.currentTimeMillis() & 0xFFFF) * 0x1p-9));
+                        noise.setBarronParameters(shape, turning);
                         break;
                     case E: //earlier seed
                         noise.setSeed(noise.getSeed() - 1);
@@ -182,7 +193,7 @@ public class FastNoiseVisualizer extends ApplicationAdapter {
                         break;
                     case F: // frequency
 //                        noise.setFrequency(NumberTools.sin(freq += 0.125f) * 0.25f + 0.25f + 0x1p-7f);
-                        noise.setFrequency((float) Math.pow(2f, (System.currentTimeMillis() >>> 9 & 7) - 5));
+                        noise.setFrequency((float) Math.exp((System.currentTimeMillis() >>> 9 & 7) - 5));
                         break;
                     case R: // fRactal type
                         noise.setFractalType((noise.getFractalType() + 1) % 3);

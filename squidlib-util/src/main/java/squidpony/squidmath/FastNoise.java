@@ -265,7 +265,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
     protected float frequency = 0.03125f;
     protected int interpolation = HERMITE;
     
-    protected float barronShape = 8;
+    protected float barronShape = 2;
     
     protected float barronTurningPoint = 0.5f;
     
@@ -454,10 +454,11 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
     /**
      * Sets the interpolation to {@link #BARRON} and its parameters to the given shape and turning point.
      * The shape should usually be greater that 1 (if it is exactly 1, this will reproduce {@link #LINEAR}),
-     * with the transition being sharper for higher values, and the default at 8. The shape can also be
+     * with the transition being sharper for higher values, and the default at 2. The shape can also be
      * between 0 and 1, which tends to make "foggy," blurry noise. The turning point should almost always
      * be 0.5f (the default), but can be set lower or higher (but between 0 and 1, inclusive) to bias the result
      * in some way. Experimenting with the turning point is essentially a requirement if you change it from 0.5f .
+     * Using Barron interpolation is more prone to showing seams, especially if shape is high.
      * @param shape the shape parameter for {@link MathExtras#barronSpline(float, float, float)}; 0 or higher
      * @param turningPoint the turning point {@link MathExtras#barronSpline(float, float, float)}; 0 to 1 inclusive
      */
