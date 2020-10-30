@@ -40,10 +40,11 @@ public class FakeLanguageGen implements Serializable {
             vowelSplitters, closingSyllables;
     public final boolean clean;
     public final double[] syllableFrequencies;
-    protected double totalSyllableFrequency;
+    protected final double totalSyllableFrequency;
+    public final double syllableBias;
     public final double vowelStartFrequency, vowelEndFrequency, vowelSplitFrequency, syllableEndFrequency;
     public final Pattern[] sanityChecks;
-    public ArrayList<Modifier> modifiers;
+    public final ArrayList<Modifier> modifiers;
     public static final GWTRNG srng = new GWTRNG();
     private static final OrderedMap<String, FakeLanguageGen> registry = new OrderedMap<>(64, Hashers.caseInsensitiveStringHasher);
     protected String summary;
@@ -3280,11 +3281,13 @@ public class FakeLanguageGen implements Serializable {
         this.closingSyllables = closingSyllables;
 
         this.syllableFrequencies = new double[syllableLengths[syllableLengths.length - 1]];
-        totalSyllableFrequency = 0.0;
+        double total = 0.0, bias = 0.0;
         for (int i = 0; i < syllableLengths.length; i++) {
-            totalSyllableFrequency += (this.syllableFrequencies[syllableLengths[i]-1] = syllableFrequencies[i]);
+            total += (this.syllableFrequencies[syllableLengths[i]-1] = syllableFrequencies[i]);
+            bias += syllableLengths[i] * syllableFrequencies[i];
         }
-
+        totalSyllableFrequency = total;
+        syllableBias = bias / total;
         if (vowelStartFrequency > 1.0)
             this.vowelStartFrequency = 1.0 / vowelStartFrequency;
         else
@@ -3328,9 +3331,13 @@ public class FakeLanguageGen implements Serializable {
         this.vowelEndFrequency = vowelEndFrequency;
         this.vowelSplitFrequency = vowelSplitFrequency;
         this.syllableEndFrequency = syllableEndFrequency;
+        double total = 0.0, bias = 0.0;
         for (int i = 0; i < syllableFrequencies.length; i++) {
-            totalSyllableFrequency += syllableFrequencies[i];
+            total += syllableFrequencies[i];
+            bias += (i + 1.0) * syllableFrequencies[i];
         }
+        totalSyllableFrequency = total;
+        syllableBias = bias / total;
         if (sanityChecks == null)
             this.sanityChecks = null;
         else {
