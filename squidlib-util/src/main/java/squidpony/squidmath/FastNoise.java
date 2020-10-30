@@ -246,13 +246,6 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
      * Meant to be used with {@link #setInterpolation(int)}.
      */
     public static final int QUINTIC = 2;
-    /**
-     * Adjustable interpolation using {@link MathExtras#barronSpline(float, float, float)}.
-     * Use {@link #setBarronParameters(float, float)} to set the related shape and turning
-     * point parameters; see its docs for more info.
-     * Meant to be used with {@link #setInterpolation(int)}.
-     */
-    public static final int BARRON = 3;
 
     public static final int FBM = 0, BILLOW = 1, RIDGED_MULTI = 2;
 
@@ -264,10 +257,6 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
     private int seed;
     protected float frequency = 0.03125f;
     protected int interpolation = HERMITE;
-    
-    protected float barronShape = 2;
-    
-    protected float barronTurningPoint = 0.5f;
     
     private int noiseType = SIMPLEX_FRACTAL;
 
@@ -441,33 +430,14 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
 
     /**
      * Changes the interpolation method used to smooth between noise values, using one of the following constants from
-     * this class (lowest to highest quality): {@link #LINEAR} (0), {@link #HERMITE} (1), or {@link #QUINTIC} (2). The
-     * constant {@link #BARRON} is also an option, and allows additional adjustment via
-     * {@link #setBarronParameters(float, float)}. If this is not called, it defaults to HERMITE. This is used in Value,
-     * Perlin, and Position Perturbing.
-     * @param interpolation an int (0, 1, 2, or 3) corresponding  to a constant from this class for an interpolation type
+     * this class (lowest to highest quality): {@link #LINEAR} (0), {@link #HERMITE} (1), or {@link #QUINTIC} (2). If
+     * this is not called, it defaults to HERMITE. This is used in Value, Perlin, and Position Perturbing.
+     * @param interpolation an int (0, 1, 2, or 3) corresponding to a constant from this class for an interpolation type
      */
     public void setInterpolation(int interpolation) {
         this.interpolation = interpolation;
     }
-
-    /**
-     * Sets the interpolation to {@link #BARRON} and its parameters to the given shape and turning point.
-     * The shape should usually be greater that 1 (if it is exactly 1, this will reproduce {@link #LINEAR}),
-     * with the transition being sharper for higher values, and the default at 2. The shape can also be
-     * between 0 and 1, which tends to make "foggy," blurry noise. The turning point should almost always
-     * be 0.5f (the default), but can be set lower or higher (but between 0 and 1, inclusive) to bias the result
-     * in some way. Experimenting with the turning point is essentially a requirement if you change it from 0.5f .
-     * Using Barron interpolation is more prone to showing seams, especially if shape is high.
-     * @param shape the shape parameter for {@link MathExtras#barronSpline(float, float, float)}; 0 or higher
-     * @param turningPoint the turning point {@link MathExtras#barronSpline(float, float, float)}; 0 to 1 inclusive
-     */
-    public void setBarronParameters(float shape, float turningPoint){
-        this.interpolation = BARRON;
-        this.barronShape = Math.abs(shape);
-        this.barronTurningPoint = MathExtras.clamp(turningPoint, 0f, 1f);
-    }
-
+    
     /**
      * Sets the default type of noise returned by {@link #getConfiguredNoise(float, float)}, using one of the following constants
      * in this class:
@@ -790,27 +760,6 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
     protected static float cubicLerp(float a, float b, float c, float d, float t) {
         float p = (d - c) - (a - b);
         return t * (t * t * p + t * ((a - b) - p) + (c - a)) + b;
-    }
-    /**
-     * A generalization on bias and gain functions that can represent both; this version is branch-less.
-     * This is based on <a href="https://arxiv.org/abs/2010.09714">this micro-paper</a> by Jon Barron, which
-     * generalizes the earlier bias and gain rational functions by Schlick. The second and final page of the
-     * paper has useful graphs of what the s (shape) and t (turningPoint) parameters do; shape should be 0
-     * or greater, while turning must be between 0 and 1, inclusive. This effectively combines two different
-     * curving functions so they continue into each other when x equals turning. The shape parameter will
-     * cause this to imitate "smoothstep-like" splines when greater than 1 (where the values ease into their
-     * starting and ending levels), or to be the inverse when less than 1 (where values start like square
-     * root does, taking off very quickly, but also end like square does, landing abruptly at the ending
-     * level). You should only give x values between 0 and 1, inclusive.
-     * <br>
-     * This is configurable using {@link #setBarronParameters(float, float)}.
-     * @param t progress through the spline, from 0 to 1, inclusive
-     * @return a float between 0 and 1, inclusive
-     */
-    protected float barronInterpolator (float t) {
-        final float d = barronTurningPoint - t;
-        final int f = NumberTools.floatToIntBits(d) >> 31, n = f | 1;
-        return ((barronTurningPoint * n - f) * (t + f)) / (Float.MIN_VALUE - f + (t + barronShape * d) * n) - f;
     }
 
     private void calculateFractalBounding() {
@@ -1502,10 +1451,6 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
                 x = quinticInterpolator(x);
                 y = quinticInterpolator(y);
                 break;
-            case BARRON:
-                x = barronInterpolator(x);
-                y = barronInterpolator(y);
-                break;
         }
         xFloor *= 0xD1B55;
         yFloor *= 0xABC99;
@@ -1620,11 +1565,6 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
                 x = quinticInterpolator(x);
                 y = quinticInterpolator(y);
                 z = quinticInterpolator(z);
-                break;
-            case BARRON:
-                x = barronInterpolator(x);
-                y = barronInterpolator(y);
-                z = barronInterpolator(z);
                 break;
         }
         //0xDB4F1, 0xBBE05, 0xA0F2F
@@ -1765,12 +1705,6 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
                 y = quinticInterpolator(y);
                 z = quinticInterpolator(z);
                 w = quinticInterpolator(w);
-                break;
-            case BARRON:
-                x = barronInterpolator(x);
-                y = barronInterpolator(y);
-                z = barronInterpolator(z);
-                w = barronInterpolator(w);
                 break;
         }
         //0xE19B1, 0xC6D1D, 0xAF36D, 0x9A695
@@ -1931,14 +1865,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
                 z = quinticInterpolator(z);
                 w = quinticInterpolator(w);
                 u = quinticInterpolator(u);
-                break;
-            case BARRON:
-                x = barronInterpolator(x);
-                y = barronInterpolator(y);
-                z = barronInterpolator(z);
-                w = barronInterpolator(w);
-                u = barronInterpolator(u);
-                break;
+                break; 
         }
         //0xE60E3, 0xCEBD7, 0xB9C9B, 0xA6F57, 0x9609D, 0x86D51
         xFloor *= 0xE60E3;
@@ -2148,14 +2075,6 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
                 u = quinticInterpolator(u);
                 v = quinticInterpolator(v);
                 break;
-            case BARRON:
-                x = barronInterpolator(x);
-                y = barronInterpolator(y);
-                z = barronInterpolator(z);
-                w = barronInterpolator(w);
-                u = barronInterpolator(u);
-                v = barronInterpolator(v);
-                break;
         }
         //0xE95E1, 0xD4BC7, 0xC1EDB, 0xB0C8B, 0xA1279, 0x92E85
         xFloor *= 0xE95E1;
@@ -2353,9 +2272,10 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         yin = p1;
         final float c = valueNoise(seed, xin + b, yin);
         final float result = (a + b + c) * F3;
-        return (result <= 0.5f)
-                ? (result * result * 4) - 1
-                : 1 - ((result - 1) * (result - 1) * 4);
+        final float sharp = 2.2f;
+        final float diff = 0.5f - result;
+        final int sign = NumberTools.floatToIntBits(diff) >> 31, one = sign | 1;
+        return (((one * 0.5f - sign) * (result + sign)) / (Float.MIN_VALUE - sign + (result + sharp * diff) * one) - sign) * 2f - 1f;
     }
 
     public float getFoamFractal(float x, float y) {
@@ -2525,15 +2445,12 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         zin = p2;
         final float d = valueNoise(seed, xin + c, yin, zin);
 
-        float result = (a + b + c + d) * 0.25f;
-        if(result <= 0.5){
-            result *= 2;
-            return result * result * result - 1;
-        }
-        else {
-            result = (result - 1) * 2;
-            return result * result * result + 1;
-        }
+        final float result = (a + b + c + d) * 0.25f;
+        final float sharp = 3.3f;
+        final float diff = 0.5f - result;
+        final int sign = NumberTools.floatToIntBits(diff) >> 31, one = sign | 1;
+        return (((one * 0.5f - sign) * (result + sign)) / (Float.MIN_VALUE - sign + (result + sharp * diff) * one) - sign) * 2f - 1f;
+
     }
 
 
@@ -2635,17 +2552,11 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         win = p3;
         final float e = valueNoise(seed, xin + d, yin, zin, win);
 
-        float result = (a + b + c + d + e) * 0.2f;
-        if(result <= 0.5f){
-            result *= 2;
-            result *= result;
-            return result * result - 1;
-        }
-        else{
-            result = (result - 1) * 2;
-            result *= result;
-            return 1 - result * result;
-        }
+        final float result = (a + b + c + d + e) * 0.2f;
+        final float sharp = 4.4f;
+        final float diff = 0.5f - result;
+        final int sign = NumberTools.floatToIntBits(diff) >> 31, one = sign | 1;
+        return (((one * 0.5f - sign) * (result + sign)) / (Float.MIN_VALUE - sign + (result + sharp * diff) * one) - sign) * 2f - 1f;
     }
     public float getFoamFractal(float x, float y, float z, float w, float u) {
         x *= frequency;
@@ -2781,15 +2692,12 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         uin = p4;
         final float f = valueNoise(seed, xin + e, yin, zin, win, uin);
 
-        float result = (a + b + c + d + e + f) * 0.16666666666666666f;
-        if(result <= 0.5f){
-            result *= 2;
-            return result * result * result * result * result - 1;
-        }
-        else {
-            result = (result - 1) * 2;
-            return result * result * result * result * result + 1;
-        }
+        final float result = (a + b + c + d + e + f) * 0.16666666666666666f;
+        final float sharp = 5.5f;
+        final float diff = 0.5f - result;
+        final int sign = NumberTools.floatToIntBits(diff) >> 31, one = sign | 1;
+        return (((one * 0.5f - sign) * (result + sign)) / (Float.MIN_VALUE - sign + (result + sharp * diff) * one) - sign) * 2f - 1f;
+
     }
     
     public float getFoamFractal(float x, float y, float z, float w, float u, float v) {
@@ -2944,17 +2852,11 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         uin = p4;
         vin = p0;
         final float g = valueNoise(seed, xin + f, yin, zin, win, uin, vin);
-        float result = (a + b + c + d + e + f + g) * 0.14285714285714285f;
-        if (result <= 0.5f){
-            result *= 2;
-            result *= result * result;
-            return result * result - 1;
-        }
-        else{
-            result = (result - 1) * 2;
-            result *= result * result;
-            return 1 - result * result;
-        }
+        final float result = (a + b + c + d + e + f + g) * 0.14285714285714285f;
+        final float sharp = 6.6f;
+        final float diff = 0.5f - result;
+        final int sign = NumberTools.floatToIntBits(diff) >> 31, one = sign | 1;
+        return (((one * 0.5f - sign) * (result + sign)) / (Float.MIN_VALUE - sign + (result + sharp * diff) * one) - sign) * 2f - 1f;
     }
 
     // Classic Perlin Noise
@@ -3045,10 +2947,6 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
             case QUINTIC:
                 xs = quinticInterpolator(x - x0);
                 ys = quinticInterpolator(y - y0);
-                break;
-            case BARRON:
-                xs = barronInterpolator(x - x0);
-                ys = barronInterpolator(y - y0);
                 break;
         }
 
@@ -3160,11 +3058,6 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
                 ys = quinticInterpolator(y - y0);
                 zs = quinticInterpolator(z - z0);
                 break;
-            case BARRON:
-                xs = barronInterpolator(x - x0);
-                ys = barronInterpolator(y - y0);
-                zs = barronInterpolator(z - z0);
-                break;
         }
 
         final float xd0 = x - x0;
@@ -3218,13 +3111,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
                 ys = quinticInterpolator(y - y0);
                 zs = quinticInterpolator(z - z0);
                 ws = quinticInterpolator(w - w0);
-                break;
-            case BARRON:
-                xs = barronInterpolator(x - x0);
-                ys = barronInterpolator(y - y0);
-                zs = barronInterpolator(z - z0);
-                ws = barronInterpolator(w - w0);
-                break;
+                break; 
         }
 
         final float xd0 = x - x0;
@@ -3348,13 +3235,6 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
                 zs = quinticInterpolator(z - z0);
                 ws = quinticInterpolator(w - w0);
                 us = quinticInterpolator(u - u0);
-                break;
-            case BARRON:
-                xs = barronInterpolator(x - x0);
-                ys = barronInterpolator(y - y0);
-                zs = barronInterpolator(z - z0);
-                ws = barronInterpolator(w - w0);
-                us = barronInterpolator(u - u0);
                 break;
         }
 
@@ -3525,14 +3405,6 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
                 ws = quinticInterpolator(w - w0);
                 us = quinticInterpolator(u - u0);
                 vs = quinticInterpolator(v - v0);
-                break;
-            case BARRON:
-                xs = barronInterpolator(x - x0);
-                ys = barronInterpolator(y - y0);
-                zs = barronInterpolator(z - z0);
-                ws = barronInterpolator(w - w0);
-                us = barronInterpolator(u - u0);
-                vs = barronInterpolator(v - v0);
                 break;
         }
 
@@ -5549,11 +5421,6 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
                 ys = quinticInterpolator(yf - y0);
                 zs = quinticInterpolator(zf - z0);
                 break;
-            case BARRON:
-                xs = barronInterpolator(xf - x0);
-                ys = barronInterpolator(yf - y0);
-                zs = barronInterpolator(zf - z0);
-                break;
         }
 
         Float3 vec0 = CELL_3D[hash256(x0, y0, z0, seed)];
@@ -5634,10 +5501,6 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
             case QUINTIC:
                 xs = quinticInterpolator(xf - x0);
                 ys = quinticInterpolator(yf - y0);
-                break;
-            case BARRON:
-                xs = barronInterpolator(xf - x0);
-                ys = barronInterpolator(yf - y0);
                 break;
         }
 

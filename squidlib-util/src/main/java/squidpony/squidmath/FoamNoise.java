@@ -81,9 +81,13 @@ public class FoamNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, N
         final double c = valueNoise(seed, xin + b, yin);
         final double result = a * 0.3125 + (b + c) * 0.34375;
 //        return result * result * (6.0 - 4.0 * result) - 1.0;
-        return (result <= 0.5)
-                ? (result * result * 4.0) - 1.0
-                : 1.0 - ((result - 1.0) * (result - 1.0) * 4.0);
+//        return (result <= 0.5)
+//                ? (result * result * 4.0) - 1.0
+//                : 1.0 - ((result - 1.0) * (result - 1.0) * 4.0);
+        final double sharp = 2.2;
+        final double diff = 0.5 - result;
+        final int sign = NumberTools.doubleToHighIntBits(diff) >> 31, one = sign | 1;
+        return ((( 0.5 * one - sign) * (result + sign)) / (Double.MIN_VALUE - sign + (result + sharp * diff) * one) - sign) * 2.0 - 1.0;
     }
     
     /*
@@ -151,9 +155,14 @@ x * -0.776796 + y * 0.628752 + z * -0.035464;
 
         final double result = (a + b + c + d) * 0.25;
 //        return  (result * result * (6.0 - 4.0 * result) - 1.0);
-        return (result <= 0.5)
-                ? Math.pow(result * 2, 3.0) - 1.0
-                : Math.pow((result - 1) * 2, 3.0) + 1.0;
+//        return (result <= 0.5)
+//                ? Math.pow(result * 2, 3.0) - 1.0
+//                : Math.pow((result - 1) * 2, 3.0) + 1.0;
+        final double sharp = 3.3;
+        final double diff = 0.5 - result;
+        final int sign = NumberTools.doubleToHighIntBits(diff) >> 31, one = sign | 1;
+        return ((( 0.5 * one - sign) * (result + sign)) / (Double.MIN_VALUE - sign + (result + sharp * diff) * one) - sign) * 2.0 - 1.0;
+
     }
 
     public static double foamNoise(final double x, final double y, final double z, final double w, int seed) {
@@ -215,11 +224,14 @@ x * -0.776796 + y * 0.628752 + z * -0.035464;
         final double e = valueNoise(seed, xin + d, yin, zin, win);
 
         final double result = (a + b + c + d + e) * 0.2;
-        return (result <= 0.5)
-                ? Math.pow(result * 2, 4.0) - 1.0
-                : 1.0 - Math.pow((result - 1) * 2, 4.0);
-
+//        return (result <= 0.5)
+//                ? Math.pow(result * 2, 4.0) - 1.0
+//                : 1.0 - Math.pow((result - 1) * 2, 4.0);
 //        return  (result * result * (6.0 - 4.0 * result) - 1.0);
+        final double sharp = 4.4;
+        final double diff = 0.5 - result;
+        final int sign = NumberTools.doubleToHighIntBits(diff) >> 31, one = sign | 1;
+        return ((( 0.5 * one - sign) * (result + sign)) / (Double.MIN_VALUE - sign + (result + sharp * diff) * one) - sign) * 2.0 - 1.0;
     }
     public static double foamNoise(final double x, final double y, final double z,
                                    final double w, final double u, int seed) {
@@ -283,9 +295,13 @@ x * -0.776796 + y * 0.628752 + z * -0.035464;
         final double f = valueNoise(seed, xin + e, yin, zin, win, uin);
 
         final double result = (a + b + c + d + e + f) * 0.16666666666666666;
-        return (result <= 0.5)
-                ? 32.0 * result * result * result * result * result - 1.0
-                : 32.0 * (result - 1) * (result - 1) * (result - 1) * (result - 1) * (result - 1) + 1.0;
+//        return (result <= 0.5)
+//                ? 32.0 * result * result * result * result * result - 1.0
+//                : 32.0 * (result - 1) * (result - 1) * (result - 1) * (result - 1) * (result - 1) + 1.0;
+        final double sharp = 5.5;
+        final double diff = 0.5 - result;
+        final int sign = NumberTools.doubleToHighIntBits(diff) >> 31, one = sign | 1;
+        return ((( 0.5 * one - sign) * (result + sign)) / (Double.MIN_VALUE - sign + (result + sharp * diff) * one) - sign) * 2.0 - 1.0;
     }
 
     public static double foamNoise(final double x, final double y, final double z,
@@ -366,9 +382,13 @@ x * -0.776796 + y * 0.628752 + z * -0.035464;
         final double g = valueNoise(seed, xin + f, yin, zin, win, uin, vin);
 
         final double result = (a + b + c + d + e + f + g) * 0.14285714285714285;
-        return (result <= 0.5)
-                ? Math.pow(result * 2, 6.0) - 1.0
-                : 1.0 - Math.pow((result - 1) * 2, 6.0); 
+//        return (result <= 0.5)
+//                ? Math.pow(result * 2, 6.0) - 1.0
+//                : 1.0 - Math.pow((result - 1) * 2, 6.0);
+        final double sharp = 6.6;
+        final double diff = 0.5 - result;
+        final int sign = NumberTools.doubleToHighIntBits(diff) >> 31, one = sign | 1;
+        return ((( 0.5 * one - sign) * (result + sign)) / (Double.MIN_VALUE - sign + (result + sharp * diff) * one) - sign) * 2.0 - 1.0;
     }
 
     @Override
