@@ -30,8 +30,6 @@ public class FastNoiseVisualizer extends ApplicationAdapter {
     private int dim = 1; // this can be 0, 1, 2, 3, or 4; add 2 to get the actual dimensions
     private int octaves = 1;
     private float freq = 1f;
-    private float shape = 2f;
-    private float turning = 0.5f;
     private boolean inverse;
     private ImmediateModeRenderer20 renderer;
     
@@ -165,14 +163,6 @@ public class FastNoiseVisualizer extends ApplicationAdapter {
                         keepGoing = !keepGoing;
                     case C:
                         ctr++;
-                        break;
-                        
-                    case B:
-                        if(UIUtils.shift())
-                            turning = (float) Math.sin((System.currentTimeMillis() & 0xFFFF) * 0x1p-9) * 0.5f + 0.5f;
-                        else if(UIUtils.ctrl())
-                            shape = 2f + (float) (Math.sin((System.currentTimeMillis() & 0xFFFF) * 0x1p-9));
-                        noise.setBarronParameters(shape, turning);
                         break;
                     case E: //earlier seed
                         noise.setSeed(noise.getSeed() - 1);

@@ -68,7 +68,7 @@ public class HashVisualizer extends ApplicationAdapter {
     // 5 RNG results
     private int testType = 4;
     private static final int NOISE_LIMIT = 148;
-    private int hashMode, rngMode, noiseMode = 142, otherMode = 1;//142
+    private int hashMode, rngMode, noiseMode = 134, otherMode = 1;//142
 
     /**
      * If you're editing the source of HashVisualizer, you can comment out one line and uncomment another to change
@@ -5380,12 +5380,6 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 slice3D(point4D, x, y, ctr);
-//                                point4D[0] = x * 0.02625;
-//                                point4D[1] = y * 0.02625;
-//                                point4D[2] = ctr * 0.13125;
-////                                point4D[3] = fn.getCubic(x, y, ctr) * 16.0;
-//                                point4D[3] = fn.ridged3D(-y, -x, -ctr, 1337, 3, 0.0023125f, 3f) * 16.0;
-////                                point4D[3] = fn.getCubic(x * 0.03125f, y * 0.03125f, ctr * 0.13125f);
                                 bright =
                                         basicPrepare(phantom4D.getNoise(point4D)
                                         );
