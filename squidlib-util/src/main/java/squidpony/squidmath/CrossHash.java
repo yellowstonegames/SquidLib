@@ -8281,8 +8281,8 @@ public class CrossHash {
             int r;
             for (int i = 0; i < len; i++) { 
                 r = (int)(m >>> 58);
-                t = (data[i] ? 0x9E3779B97F4A7C15L : 0x789ABCDEFEDCBA98L);
-                h += Long.rotateLeft(t * m, r) ^ (m += 0x95B534A1ACCD52DAL);
+                t = (data[i] ? 0x9E3779B97F4A7C15L : 0x789ABCDEFEDCBA98L) * m;
+                h += (t << r | t >>> 64 - r) ^ (m += 0x95B534A1ACCD52DAL);
             }
             h = (h ^ h >>> 27) * 0x3C79AC492BA7B653L;
             h = (h ^ h >>> 33) * 0x1C69B3F74AC4AE35L;
@@ -8299,7 +8299,7 @@ public class CrossHash {
             for (int i = 0; i < len; i++) {
                 r = (int)(m >>> 58);
                 t = data[i] * m;
-                h += Long.rotateLeft(t, r) ^ (m += 0x95B534A1ACCD52DAL);
+                h += (t << r | t >>> 64 - r) ^ (m += 0x95B534A1ACCD52DAL);
             }
             h = (h ^ h >>> 27) * 0x3C79AC492BA7B653L;
             h = (h ^ h >>> 33) * 0x1C69B3F74AC4AE35L;
@@ -8315,7 +8315,7 @@ public class CrossHash {
             for (int i = 0; i < len; i++) {
                 r = (int)(m >>> 58);
                 t = data[i] * m;
-                h += Long.rotateLeft(t, r) ^ (m += 0x95B534A1ACCD52DAL);
+                h += (t << r | t >>> 64 - r) ^ (m += 0x95B534A1ACCD52DAL);
             }
             h = (h ^ h >>> 27) * 0x3C79AC492BA7B653L;
             h = (h ^ h >>> 33) * 0x1C69B3F74AC4AE35L;
@@ -8331,7 +8331,7 @@ public class CrossHash {
             for (int i = 0; i < len; i++) {
                 r = (int)(m >>> 58);
                 t = data[i] * m;
-                h += Long.rotateLeft(t, r) ^ (m += 0x95B534A1ACCD52DAL);
+                h += (t << r | t >>> 64 - r) ^ (m += 0x95B534A1ACCD52DAL);
             }
             h = (h ^ h >>> 27) * 0x3C79AC492BA7B653L;
             h = (h ^ h >>> 33) * 0x1C69B3F74AC4AE35L;
@@ -8347,7 +8347,7 @@ public class CrossHash {
             for (int i = 0; i < len; i++) {
                 r = (int)(m >>> 58);
                 t = data[i] * m;
-                h += Long.rotateLeft(t, r) ^ (m += 0x95B534A1ACCD52DAL);
+                h += (t << r | t >>> 64 - r) ^ (m += 0x95B534A1ACCD52DAL);
             }
             h = (h ^ h >>> 27) * 0x3C79AC492BA7B653L;
             h = (h ^ h >>> 33) * 0x1C69B3F74AC4AE35L;
@@ -8363,7 +8363,8 @@ public class CrossHash {
             for (int i = 0; i < len; i++) {
                 r = (int)(m >>> 58);
                 t = data[i];
-                h += Long.rotateLeft((t ^ t >>> 27) * m, r) ^ (m += 0x95B534A1ACCD52DAL);
+                t = (t ^ t >>> 27) * m;
+                h += (t << r | t >>> 64 - r) ^ (m += 0x95B534A1ACCD52DAL);
             }
             h = (h ^ h >>> 27) * 0x3C79AC492BA7B653L;
             h = (h ^ h >>> 33) * 0x1C69B3F74AC4AE35L;
@@ -8380,7 +8381,7 @@ public class CrossHash {
             for (int i = 0; i < len; i++) {
                 r = (int)(m >>> 58);
                 t = NumberTools.floatToIntBits(data[i]) * m;
-                h += Long.rotateLeft(t, r) ^ (m += 0x95B534A1ACCD52DAL);
+                h += (t << r | t >>> 64 - r) ^ (m += 0x95B534A1ACCD52DAL);
             }
             h = (h ^ h >>> 27) * 0x3C79AC492BA7B653L;
             h = (h ^ h >>> 33) * 0x1C69B3F74AC4AE35L;
@@ -8396,7 +8397,8 @@ public class CrossHash {
             for (int i = 0; i < len; i++) {
                 r = (int)(m >>> 58);
                 t = NumberTools.doubleToLongBits(data[i]);
-                h += Long.rotateLeft((t ^ t >>> 27) * m, r) ^ (m += 0x95B534A1ACCD52DAL);
+                t = (t ^ t >>> 27) * m;
+                h += (t << r | t >>> 64 - r) ^ (m += 0x95B534A1ACCD52DAL);
             }
             h = (h ^ h >>> 27) * 0x3C79AC492BA7B653L;
             h = (h ^ h >>> 33) * 0x1C69B3F74AC4AE35L;
@@ -8420,7 +8422,7 @@ public class CrossHash {
             for (int i = start; i < end && i < len; i++) {
                 r = (int)(m >>> 58);
                 t = data[i] * m;
-                h += Long.rotateLeft(t, r) ^ (m += 0x95B534A1ACCD52DAL);
+                h += (t << r | t >>> 64 - r) ^ (m += 0x95B534A1ACCD52DAL);
             }
             h = (h ^ h >>> 27) * 0x3C79AC492BA7B653L;
             h = (h ^ h >>> 33) * 0x1C69B3F74AC4AE35L;
@@ -8446,7 +8448,7 @@ public class CrossHash {
             for (int i = start; i < end && i < len; i += step) {
                 r = (int)(m >>> 58);
                 t = data[i] * m;
-                h += Long.rotateLeft(t, r) ^ (m += 0x95B534A1ACCD52DAL);
+                h += (t << r | t >>> 64 - r) ^ (m += 0x95B534A1ACCD52DAL);
             }
             h = (h ^ h >>> 27) * 0x3C79AC492BA7B653L;
             h = (h ^ h >>> 33) * 0x1C69B3F74AC4AE35L;
@@ -8463,7 +8465,7 @@ public class CrossHash {
             for (int i = 0; i < len; i++) {
                 r = (int)(m >>> 58);
                 t = data.charAt(i) * m;
-                h += Long.rotateLeft(t, r) ^ (m += 0x95B534A1ACCD52DAL);
+                h += (t << r | t >>> 64 - r) ^ (m += 0x95B534A1ACCD52DAL);
             }
             h = (h ^ h >>> 27) * 0x3C79AC492BA7B653L;
             h = (h ^ h >>> 33) * 0x1C69B3F74AC4AE35L;
@@ -8479,7 +8481,8 @@ public class CrossHash {
             for (int i = 0; i < len; i++) {
                 r = (int)(m >>> 58);
                 t = hash64(data[i]);
-                h += Long.rotateLeft((t ^ t >>> 27) * m, r) ^ (m += 0x95B534A1ACCD52DAL);
+                t = (t ^ t >>> 27) * m;
+                h += (t << r | t >>> 64 - r) ^ (m += 0x95B534A1ACCD52DAL);
             }
             h = (h ^ h >>> 27) * 0x3C79AC492BA7B653L;
             h = (h ^ h >>> 33) * 0x1C69B3F74AC4AE35L;
@@ -8495,7 +8498,8 @@ public class CrossHash {
             for (int i = 0; i < len; i++) {
                 r = (int)(m >>> 58);
                 t = hash64(data[i]);
-                h += Long.rotateLeft((t ^ t >>> 27) * m, r) ^ (m += 0x95B534A1ACCD52DAL);
+                t = (t ^ t >>> 27) * m;
+                h += (t << r | t >>> 64 - r) ^ (m += 0x95B534A1ACCD52DAL);
             }
             h = (h ^ h >>> 27) * 0x3C79AC492BA7B653L;
             h = (h ^ h >>> 33) * 0x1C69B3F74AC4AE35L;
@@ -8511,7 +8515,8 @@ public class CrossHash {
             for (int i = 0; i < len; i++) {
                 r = (int)(m >>> 58);
                 t = hash64(data[i]);
-                h += Long.rotateLeft((t ^ t >>> 27) * m, r) ^ (m += 0x95B534A1ACCD52DAL);
+                t = (t ^ t >>> 27) * m;
+                h += (t << r | t >>> 64 - r) ^ (m += 0x95B534A1ACCD52DAL);
             }
             h = (h ^ h >>> 27) * 0x3C79AC492BA7B653L;
             h = (h ^ h >>> 33) * 0x1C69B3F74AC4AE35L;
@@ -8526,7 +8531,8 @@ public class CrossHash {
             for (CharSequence datum : data) {
                 r = (int)(m >>> 58);
                 t = hash64(datum);
-                h += Long.rotateLeft((t ^ t >>> 27) * m, r) ^ (m += 0x95B534A1ACCD52DAL);
+                t = (t ^ t >>> 27) * m;
+                h += (t << r | t >>> 64 - r) ^ (m += 0x95B534A1ACCD52DAL);
             }
             h = (h ^ h >>> 27) * 0x3C79AC492BA7B653L;
             h = (h ^ h >>> 33) * 0x1C69B3F74AC4AE35L;
@@ -8542,7 +8548,8 @@ public class CrossHash {
             for (int i = 0; i < len; i++) {
                 r = (int)(m >>> 58);
                 t = hash64(data[i]);
-                h += Long.rotateLeft((t ^ t >>> 27) * m, r) ^ (m += 0x95B534A1ACCD52DAL);
+                t = (t ^ t >>> 27) * m;
+                h += (t << r | t >>> 64 - r) ^ (m += 0x95B534A1ACCD52DAL);
             }
             h = (h ^ h >>> 27) * 0x3C79AC492BA7B653L;
             h = (h ^ h >>> 33) * 0x1C69B3F74AC4AE35L;
@@ -8560,7 +8567,7 @@ public class CrossHash {
                 r = (int)(m >>> 58);
                 o = data[i];
                 t = o == null ? 0L : o.hashCode() * m;
-                h += Long.rotateLeft(t, r) ^ (m += 0x95B534A1ACCD52DAL);
+                h += (t << r | t >>> 64 - r) ^ (m += 0x95B534A1ACCD52DAL);
             }
             h = (h ^ h >>> 27) * 0x3C79AC492BA7B653L;
             h = (h ^ h >>> 33) * 0x1C69B3F74AC4AE35L;
@@ -8585,8 +8592,8 @@ public class CrossHash {
             int r;
             for (int i = 0; i < len; i++) {
                 r = (int)(m >>> 58);
-                t = (data[i] ? 0x9E3779B97F4A7C15L : 0x789ABCDEFEDCBA98L);
-                h += Long.rotateLeft(t * m, r) ^ (m += 0x95B534A1ACCD52DAL);
+                t = (data[i] ? 0x9E3779B97F4A7C15L : 0x789ABCDEFEDCBA98L) * m;
+                h += (t << r | t >>> 64 - r) ^ (m += 0x95B534A1ACCD52DAL);
             }
             h = (h ^ h >>> 27) * 0x3C79AC492BA7B653L;
             h = (h ^ h >>> 33) * 0x1C69B3F74AC4AE35L;
@@ -8603,7 +8610,7 @@ public class CrossHash {
             for (int i = 0; i < len; i++) {
                 r = (int)(m >>> 58);
                 t = data[i] * m;
-                h += Long.rotateLeft(t, r) ^ (m += 0x95B534A1ACCD52DAL);
+                h += (t << r | t >>> 64 - r) ^ (m += 0x95B534A1ACCD52DAL);
             }
             h = (h ^ h >>> 27) * 0x3C79AC492BA7B653L;
             h = (h ^ h >>> 33) * 0x1C69B3F74AC4AE35L;
@@ -8619,7 +8626,7 @@ public class CrossHash {
             for (int i = 0; i < len; i++) {
                 r = (int)(m >>> 58);
                 t = data[i] * m;
-                h += Long.rotateLeft(t, r) ^ (m += 0x95B534A1ACCD52DAL);
+                h += (t << r | t >>> 64 - r) ^ (m += 0x95B534A1ACCD52DAL);
             }
             h = (h ^ h >>> 27) * 0x3C79AC492BA7B653L;
             h = (h ^ h >>> 33) * 0x1C69B3F74AC4AE35L;
@@ -8635,7 +8642,7 @@ public class CrossHash {
             for (int i = 0; i < len; i++) {
                 r = (int)(m >>> 58);
                 t = data[i] * m;
-                h += Long.rotateLeft(t, r) ^ (m += 0x95B534A1ACCD52DAL);
+                h += (t << r | t >>> 64 - r) ^ (m += 0x95B534A1ACCD52DAL);
             }
             h = (h ^ h >>> 27) * 0x3C79AC492BA7B653L;
             h = (h ^ h >>> 33) * 0x1C69B3F74AC4AE35L;
@@ -8651,7 +8658,7 @@ public class CrossHash {
             for (int i = 0; i < len; i++) {
                 r = (int)(m >>> 58);
                 t = data[i] * m;
-                h += Long.rotateLeft(t, r) ^ (m += 0x95B534A1ACCD52DAL);
+                h += (t << r | t >>> 64 - r) ^ (m += 0x95B534A1ACCD52DAL);
             }
             h = (h ^ h >>> 27) * 0x3C79AC492BA7B653L;
             h = (h ^ h >>> 33) * 0x1C69B3F74AC4AE35L;
@@ -8667,7 +8674,8 @@ public class CrossHash {
             for (int i = 0; i < len; i++) {
                 r = (int)(m >>> 58);
                 t = data[i];
-                h += Long.rotateLeft((t ^ t >>> 27) * m, r) ^ (m += 0x95B534A1ACCD52DAL);
+                t = (t ^ t >>> 27) * m;
+                h += (t << r | t >>> 64 - r) ^ (m += 0x95B534A1ACCD52DAL);
             }
             h = (h ^ h >>> 27) * 0x3C79AC492BA7B653L;
             h = (h ^ h >>> 33) * 0x1C69B3F74AC4AE35L;
@@ -8684,7 +8692,7 @@ public class CrossHash {
             for (int i = 0; i < len; i++) {
                 r = (int)(m >>> 58);
                 t = NumberTools.floatToIntBits(data[i]) * m;
-                h += Long.rotateLeft(t, r) ^ (m += 0x95B534A1ACCD52DAL);
+                h += (t << r | t >>> 64 - r) ^ (m += 0x95B534A1ACCD52DAL);
             }
             h = (h ^ h >>> 27) * 0x3C79AC492BA7B653L;
             h = (h ^ h >>> 33) * 0x1C69B3F74AC4AE35L;
@@ -8700,7 +8708,8 @@ public class CrossHash {
             for (int i = 0; i < len; i++) {
                 r = (int)(m >>> 58);
                 t = NumberTools.doubleToLongBits(data[i]);
-                h += Long.rotateLeft((t ^ t >>> 27) * m, r) ^ (m += 0x95B534A1ACCD52DAL);
+                t = (t ^ t >>> 27) * m;
+                h += (t << r | t >>> 64 - r) ^ (m += 0x95B534A1ACCD52DAL);
             }
             h = (h ^ h >>> 27) * 0x3C79AC492BA7B653L;
             h = (h ^ h >>> 33) * 0x1C69B3F74AC4AE35L;
@@ -8724,7 +8733,7 @@ public class CrossHash {
             for (int i = start; i < end && i < len; i++) {
                 r = (int)(m >>> 58);
                 t = data[i] * m;
-                h += Long.rotateLeft(t, r) ^ (m += 0x95B534A1ACCD52DAL);
+                h += (t << r | t >>> 64 - r) ^ (m += 0x95B534A1ACCD52DAL);
             }
             h = (h ^ h >>> 27) * 0x3C79AC492BA7B653L;
             h = (h ^ h >>> 33) * 0x1C69B3F74AC4AE35L;
@@ -8750,7 +8759,7 @@ public class CrossHash {
             for (int i = start; i < end && i < len; i += step) {
                 r = (int)(m >>> 58);
                 t = data[i] * m;
-                h += Long.rotateLeft(t, r) ^ (m += 0x95B534A1ACCD52DAL);
+                h += (t << r | t >>> 64 - r) ^ (m += 0x95B534A1ACCD52DAL);
             }
             h = (h ^ h >>> 27) * 0x3C79AC492BA7B653L;
             h = (h ^ h >>> 33) * 0x1C69B3F74AC4AE35L;
@@ -8767,7 +8776,7 @@ public class CrossHash {
             for (int i = 0; i < len; i++) {
                 r = (int)(m >>> 58);
                 t = data.charAt(i) * m;
-                h += Long.rotateLeft(t, r) ^ (m += 0x95B534A1ACCD52DAL);
+                h += (t << r | t >>> 64 - r) ^ (m += 0x95B534A1ACCD52DAL);
             }
             h = (h ^ h >>> 27) * 0x3C79AC492BA7B653L;
             h = (h ^ h >>> 33) * 0x1C69B3F74AC4AE35L;
@@ -8783,7 +8792,8 @@ public class CrossHash {
             for (int i = 0; i < len; i++) {
                 r = (int)(m >>> 58);
                 t = hash64(data[i]);
-                h += Long.rotateLeft((t ^ t >>> 27) * m, r) ^ (m += 0x95B534A1ACCD52DAL);
+                t = (t ^ t >>> 27) * m;
+                h += (t << r | t >>> 64 - r) ^ (m += 0x95B534A1ACCD52DAL);
             }
             h = (h ^ h >>> 27) * 0x3C79AC492BA7B653L;
             h = (h ^ h >>> 33) * 0x1C69B3F74AC4AE35L;
@@ -8799,7 +8809,8 @@ public class CrossHash {
             for (int i = 0; i < len; i++) {
                 r = (int)(m >>> 58);
                 t = hash64(data[i]);
-                h += Long.rotateLeft((t ^ t >>> 27) * m, r) ^ (m += 0x95B534A1ACCD52DAL);
+                t = (t ^ t >>> 27) * m;
+                h += (t << r | t >>> 64 - r) ^ (m += 0x95B534A1ACCD52DAL);
             }
             h = (h ^ h >>> 27) * 0x3C79AC492BA7B653L;
             h = (h ^ h >>> 33) * 0x1C69B3F74AC4AE35L;
@@ -8815,7 +8826,8 @@ public class CrossHash {
             for (int i = 0; i < len; i++) {
                 r = (int)(m >>> 58);
                 t = hash64(data[i]);
-                h += Long.rotateLeft((t ^ t >>> 27) * m, r) ^ (m += 0x95B534A1ACCD52DAL);
+                t = (t ^ t >>> 27) * m;
+                h += (t << r | t >>> 64 - r) ^ (m += 0x95B534A1ACCD52DAL);
             }
             h = (h ^ h >>> 27) * 0x3C79AC492BA7B653L;
             h = (h ^ h >>> 33) * 0x1C69B3F74AC4AE35L;
@@ -8830,7 +8842,8 @@ public class CrossHash {
             for (CharSequence datum : data) {
                 r = (int)(m >>> 58);
                 t = hash64(datum);
-                h += Long.rotateLeft((t ^ t >>> 27) * m, r) ^ (m += 0x95B534A1ACCD52DAL);
+                t = (t ^ t >>> 27) * m;
+                h += (t << r | t >>> 64 - r) ^ (m += 0x95B534A1ACCD52DAL);
             }
             h = (h ^ h >>> 27) * 0x3C79AC492BA7B653L;
             h = (h ^ h >>> 33) * 0x1C69B3F74AC4AE35L;
@@ -8846,7 +8859,8 @@ public class CrossHash {
             for (int i = 0; i < len; i++) {
                 r = (int)(m >>> 58);
                 t = hash64(data[i]);
-                h += Long.rotateLeft((t ^ t >>> 27) * m, r) ^ (m += 0x95B534A1ACCD52DAL);
+                t = (t ^ t >>> 27) * m;
+                h += (t << r | t >>> 64 - r) ^ (m += 0x95B534A1ACCD52DAL);
             }
             h = (h ^ h >>> 27) * 0x3C79AC492BA7B653L;
             h = (h ^ h >>> 33) * 0x1C69B3F74AC4AE35L;
@@ -8864,7 +8878,7 @@ public class CrossHash {
                 r = (int)(m >>> 58);
                 o = data[i];
                 t = o == null ? 0L : o.hashCode() * m;
-                h += Long.rotateLeft(t, r) ^ (m += 0x95B534A1ACCD52DAL);
+                h += (t << r | t >>> 64 - r) ^ (m += 0x95B534A1ACCD52DAL);
             }
             h = (h ^ h >>> 27) * 0x3C79AC492BA7B653L;
             h = (h ^ h >>> 33) * 0x1C69B3F74AC4AE35L;
