@@ -66,9 +66,9 @@ public class HashVisualizer extends ApplicationAdapter {
     // 3 artistic visualizations of hash functions and misc. other
     // 4 noise
     // 5 RNG results
-    private int testType = 4;
+    private int testType = 3;
     private static final int NOISE_LIMIT = 148;
-    private int hashMode, rngMode, noiseMode = 134, otherMode = 1;//142
+    private int hashMode, rngMode, noiseMode = 134, otherMode = 17;//142
 
     /**
      * If you're editing the source of HashVisualizer, you can comment out one line and uncomment another to change
@@ -217,6 +217,9 @@ public class HashVisualizer extends ApplicationAdapter {
 
     private final Noise.Layered2D classic1_2D = new Noise.Layered2D(ClassicNoise.instance, 1, 0.03125f);
     private final Noise.Layered2D classic3_2D = new Noise.Layered2D(ClassicNoise.instance, 3, 0.03125f);
+    
+    private final FoamNoise foamUsed = new FoamNoise(12345);
+    private final Noise.Seamless2D seamlessFoam = new Noise.Seamless2D(new Noise.Layered4D(foamUsed, 2, 3.0), width, height);
 
     private final FastNoise fast1_2D = new FastNoise(1337, 0.03125f, FastNoise.SIMPLEX_FRACTAL, 1);
     private final FastNoise fast3_2D = new FastNoise(1337, 0.03125f, FastNoise.SIMPLEX_FRACTAL, 3);
@@ -6435,6 +6438,18 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = smoothPrepare(fastPerlinRidged3.getNoise(x, y, ctr, -x, -y, -ctr));
+                                back[x][y] = getGray(bright);
+                            }
+                        }
+                    }
+                    break;
+                    case 17:
+                    {
+                        Gdx.graphics.setTitle("Seamless Foam Noise, 3 octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        foamUsed.seed += ctr;
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bright = basicPrepare(seamlessFoam.getNoise(x + ctr, y + ctr));
                                 back[x][y] = getGray(bright);
                             }
                         }

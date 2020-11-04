@@ -2780,7 +2780,7 @@ public class Noise {
      * <a href="https://i.imgur.com/w55JXtX.gif">something that looks like this</a>.
      */
     public static class Adapted3DFrom4D implements Noise3D {
-        protected Noise4D basis;
+        public Noise4D basis;
         public double w;
         public Adapted3DFrom4D() {
             this(ClassicNoise.instance);
@@ -2815,7 +2815,7 @@ public class Noise {
      * <a href="https://i.imgur.com/zN2OmWx.gif">something that looks like this</a>.
      */
     public static class Adapted3DFrom5D implements Noise3D {
-        protected Noise5D basis;
+        public Noise5D basis;
         public double w, u;
         public Adapted3DFrom5D() {
             this(ClassicNoise.instance);
@@ -2861,9 +2861,39 @@ public class Noise {
             return basis.getNoiseWithSeed(x, y, z, w, u, seed);
         }
     }
+    
+    public static class Seamless2D implements Noise2D {
+        public Noise4D basis;
+        public double inverseWidth = 0x1p-8, inverseHeight = 0x1p-8;
+        
+        public Seamless2D() {
+            basis = new FoamNoise();
+        }
+        public Seamless2D(Noise4D basis) {
+            this.basis = basis;
+        }
+        public Seamless2D(Noise4D basis, double width, double height) {
+            this.basis = basis;
+            this.inverseWidth = 1.0 / Math.abs(width);
+            this.inverseHeight = 1.0 / Math.abs(height);
+        }
 
+        @Override
+        public double getNoise(double x, double y) {
+            x *= inverseWidth;
+            y *= inverseHeight;
+            return basis.getNoise(NumberTools.cos_(x), NumberTools.sin_(x), NumberTools.cos_(y), NumberTools.sin_(y));
+        }
 
-        /**
+        @Override
+        public double getNoiseWithSeed(double x, double y, long seed) {
+            x *= inverseWidth;
+            y *= inverseHeight;
+            return basis.getNoiseWithSeed(NumberTools.cos_(x), NumberTools.sin_(x), NumberTools.cos_(y), NumberTools.sin_(y), seed);
+        }
+    }
+
+    /**
      * Produces a 2D array of noise with values from -1.0 to 1.0 that is seamless on all boundaries.
      * Uses (x,y) order. Allows a seed to change the generated noise.
      * If you need to call this very often, consider {@link #seamless2D(double[][], int, int)}, which re-uses the array.

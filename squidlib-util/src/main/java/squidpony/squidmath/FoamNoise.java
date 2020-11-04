@@ -42,6 +42,7 @@ public class FoamNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, N
     public static final FoamNoise instance = new FoamNoise();
     
     public int seed = 0xD1CEBEEF;
+    public double sharpness = 1.0;
     public FoamNoise() {
     }
 
@@ -53,7 +54,13 @@ public class FoamNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, N
         this.seed = (int) (seed ^ seed >>> 32);
     }
 
-    public static double foamNoise(final double x, final double y, int seed) {
+    public FoamNoise(long seed, double sharpness) {
+        this(seed);
+        this.sharpness = sharpness;
+        
+    }
+
+    public double foamNoise(final double x, final double y, int seed) {
         final double p0 = x;
         final double p1 = x * -0.5 + y * 0.8660254037844386;
         final double p2 = x * -0.5 + y * -0.8660254037844387;
@@ -84,7 +91,7 @@ public class FoamNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, N
 //        return (result <= 0.5)
 //                ? (result * result * 4.0) - 1.0
 //                : 1.0 - ((result - 1.0) * (result - 1.0) * 4.0);
-        final double sharp = 2.2;
+        final double sharp = sharpness * 2.2;
         final double diff = 0.5 - result;
         final int sign = NumberTools.doubleToHighIntBits(diff) >> 31, one = sign | 1;
         return ((( 0.5 * one - sign) * (result + sign)) / (Double.MIN_VALUE - sign + (result + sharp * diff) * one) - sign) * 2.0 - 1.0;
@@ -109,7 +116,7 @@ x * -0.776796 + y * 0.628752 + z * -0.035464;
      */
 
 
-    public static double foamNoise(final double x, final double y, final double z, int seed) {
+    public double foamNoise(final double x, final double y, final double z, int seed) {
         final double p0 = x;
         final double p1 = x * -0.3333333333333333 + y * 0.9428090415820634;
         final double p2 = x * -0.3333333333333333 + y * -0.4714045207910317 + z * 0.816496580927726;
@@ -158,14 +165,14 @@ x * -0.776796 + y * 0.628752 + z * -0.035464;
 //        return (result <= 0.5)
 //                ? Math.pow(result * 2, 3.0) - 1.0
 //                : Math.pow((result - 1) * 2, 3.0) + 1.0;
-        final double sharp = 3.3;
+        final double sharp = sharpness * 3.3;
         final double diff = 0.5 - result;
         final int sign = NumberTools.doubleToHighIntBits(diff) >> 31, one = sign | 1;
         return ((( 0.5 * one - sign) * (result + sign)) / (Double.MIN_VALUE - sign + (result + sharp * diff) * one) - sign) * 2.0 - 1.0;
 
     }
 
-    public static double foamNoise(final double x, final double y, final double z, final double w, int seed) {
+    public double foamNoise(final double x, final double y, final double z, final double w, int seed) {
         final double p0 = x;
         final double p1 = x * -0.25 + y * 0.9682458365518543;
         final double p2 = x * -0.25 + y * -0.3227486121839514 + z * 0.9128709291752769;
@@ -228,12 +235,12 @@ x * -0.776796 + y * 0.628752 + z * -0.035464;
 //                ? Math.pow(result * 2, 4.0) - 1.0
 //                : 1.0 - Math.pow((result - 1) * 2, 4.0);
 //        return  (result * result * (6.0 - 4.0 * result) - 1.0);
-        final double sharp = 4.4;
+        final double sharp = sharpness * 4.4;
         final double diff = 0.5 - result;
         final int sign = NumberTools.doubleToHighIntBits(diff) >> 31, one = sign | 1;
         return ((( 0.5 * one - sign) * (result + sign)) / (Double.MIN_VALUE - sign + (result + sharp * diff) * one) - sign) * 2.0 - 1.0;
     }
-    public static double foamNoise(final double x, final double y, final double z,
+    public double foamNoise(final double x, final double y, final double z,
                                    final double w, final double u, int seed) {
         final double p0 = x * 0.8157559148337911 + y * 0.5797766823136037;
         final double p1 = x * -0.7314923478726791 + y * 0.6832997137249108;
@@ -298,13 +305,13 @@ x * -0.776796 + y * 0.628752 + z * -0.035464;
 //        return (result <= 0.5)
 //                ? 32.0 * result * result * result * result * result - 1.0
 //                : 32.0 * (result - 1) * (result - 1) * (result - 1) * (result - 1) * (result - 1) + 1.0;
-        final double sharp = 5.5;
+        final double sharp = sharpness * 5.5;
         final double diff = 0.5 - result;
         final int sign = NumberTools.doubleToHighIntBits(diff) >> 31, one = sign | 1;
         return ((( 0.5 * one - sign) * (result + sign)) / (Double.MIN_VALUE - sign + (result + sharp * diff) * one) - sign) * 2.0 - 1.0;
     }
 
-    public static double foamNoise(final double x, final double y, final double z,
+    public double foamNoise(final double x, final double y, final double z,
                                    final double w, final double u, final double v, int seed) {
         final double p0 = x;
         final double p1 = x * -0.16666666666666666 + y * 0.9860132971832694;
@@ -385,7 +392,7 @@ x * -0.776796 + y * 0.628752 + z * -0.035464;
 //        return (result <= 0.5)
 //                ? Math.pow(result * 2, 6.0) - 1.0
 //                : 1.0 - Math.pow((result - 1) * 2, 6.0);
-        final double sharp = 6.6;
+        final double sharp = sharpness * 6.6;
         final double diff = 0.5 - result;
         final int sign = NumberTools.doubleToHighIntBits(diff) >> 31, one = sign | 1;
         return ((( 0.5 * one - sign) * (result + sign)) / (Double.MIN_VALUE - sign + (result + sharp * diff) * one) - sign) * 2.0 - 1.0;
