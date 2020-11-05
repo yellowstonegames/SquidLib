@@ -90,8 +90,8 @@ public class HashVisualizer extends ApplicationAdapter {
     private FilterBatch batch;
     
     private TextCellFactory tcf;
-//    private static final int width = 512, height = 512;
-    private static final int width = 256, height = 256;
+    private static final int width = 512, height = 512;
+//    private static final int width = 256, height = 256;
     private static final int almost = width - 1, half = width >> 1;
     private static final float[][] back = new float[width][height];
 
@@ -218,8 +218,13 @@ public class HashVisualizer extends ApplicationAdapter {
     private final Noise.Layered2D classic1_2D = new Noise.Layered2D(ClassicNoise.instance, 1, 0.03125f);
     private final Noise.Layered2D classic3_2D = new Noise.Layered2D(ClassicNoise.instance, 3, 0.03125f);
     
-    private final FoamNoise foamUsed = new FoamNoise(12345);
-    private final Noise.Seamless2D seamlessFoam = new Noise.Seamless2D(new Noise.Layered4D(foamUsed, 2, 3.0), width, height);
+    private final FoamNoise foamUsed = new FoamNoise(12345, 1f);
+    private final FastNoise fastUsed = new FastNoise(12345, 5.0f, FastNoise.FOAM_FRACTAL, 2);
+    {
+        fastUsed.setFractalType(FastNoise.RIDGED_MULTI);
+    }
+//    private final Noise.Seamless2D seamlessFoam = new Noise.Seamless2D(fastUsed, width, height);
+    private final Noise.Seamless2D seamlessFoam = new Noise.Seamless2D(new Noise.Ridged4D(foamUsed, 2, 5.0), width, height);
 
     private final FastNoise fast1_2D = new FastNoise(1337, 0.03125f, FastNoise.SIMPLEX_FRACTAL, 1);
     private final FastNoise fast3_2D = new FastNoise(1337, 0.03125f, FastNoise.SIMPLEX_FRACTAL, 3);
@@ -6446,10 +6451,12 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                     case 17:
                     {
                         Gdx.graphics.setTitle("Seamless Foam Noise, 3 octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
-                        foamUsed.seed += ctr;
+                        if(keepGoing)
+                            ++foamUsed.seed;
+//                            fastUsed.setSeed(fastUsed.getSeed()+1);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                bright = basicPrepare(seamlessFoam.getNoise(x + ctr, y + ctr));
+                                bright = basicPrepare(seamlessFoam.getNoise(x, y));
                                 back[x][y] = getGray(bright);
                             }
                         }
