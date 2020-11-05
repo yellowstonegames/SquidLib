@@ -1543,7 +1543,6 @@ public class Noise {
     public static class Ridged1D implements Noise1D {
         protected int octaves;
         public double frequency;
-        protected double correct;
         protected Noise1D basis;
 
         public Ridged1D() {
@@ -1562,47 +1561,41 @@ public class Noise {
 
         public void setOctaves(int octaves)
         {
-            this.octaves = (octaves = Math.max(1, Math.min(63, octaves)));
-            correct = 1.0;
-            for (int o = 1; o < octaves; o++) {
-                correct += Math.pow(2.0, -o);
-            }
-            correct = 2.0 / correct;
+            this.octaves = Math.max(1, Math.min(63, octaves));
         }
 
         @Override
         public double getNoise(double x) {
-            double sum = 0, amp = 1.0;
+            double sum = 0.0, n, exp = 2.0, correct = 0.0;
             x *= frequency;
             for (int i = 0; i < octaves; i++) {
-                double n = basis.getNoise(x + (i << 6));
+                n = basis.getNoise(x + (i << 6));
                 n = 1.0 - Math.abs(n);
-                sum += amp * n;
-                amp *= 0.5;
+                correct += (exp *= 0.5);
+                sum += n * exp;
                 x *= 2.0;
             }
-            return sum * correct - 1.0;
+            return sum * 2.0 / correct - 1.0;
         }
 
         @Override
         public double getNoiseWithSeed(double x, long seed) {
-            double sum = 0, amp = 1.0;
+            double sum = 0.0, n, exp = 2.0, correct = 0.0;
             x *= frequency;
             for (int i = 0; i < octaves; i++) {
-                double n = basis.getNoiseWithSeed(x, (seed += 0x9E3779B97F4A7C15L));
+                n = basis.getNoiseWithSeed(x, (seed += 0x9E3779B97F4A7C15L));
                 n = 1.0 - Math.abs(n);
-                sum += amp * n;
-                amp *= 0.5;
+                correct += (exp *= 0.5);
+                sum += n * exp;
                 x *= 2.0;
             }
-            return sum * correct - 1.0;
+            return sum * 2.0 / correct - 1.0;
         }
     }
 
     public static class Ridged2D implements Noise2D {
         protected int octaves;
         public double frequency;
-        protected double correct;
         protected Noise2D basis;
 
         public Ridged2D() {
@@ -1621,52 +1614,45 @@ public class Noise {
 
         public void setOctaves(int octaves)
         {
-            this.octaves = (octaves = Math.max(1, Math.min(63, octaves)));
-            correct = 1.0;
-            for (int o = 1; o < octaves; o++) {
-                correct += Math.pow(2.0, -o);
-            }
-            correct = 2.0 / correct;
+            this.octaves = Math.max(1, Math.min(63, octaves));
         }
-
 
         @Override
         public double getNoise(double x, double y) {
-            double sum = 0, amp = 1.0;
+            double sum = 0.0, n, exp = 2.0, correct = 0.0;
             x *= frequency;
             y *= frequency;
             for (int i = 0; i < octaves; i++) {
-                double n = basis.getNoise(x + (i << 6), y + (i << 7));
+                n = basis.getNoise(x + (i << 6), y + (i << 7));
                 n = 1.0 - Math.abs(n);
-                sum += amp * n;
-                amp *= 0.5;
+                correct += (exp *= 0.5);
+                sum += n * exp;
                 x *= 2.0;
                 y *= 2.0;
             }
-            return sum * correct - 1.0;
+            return sum * 2.0 / correct - 1.0;
         }
 
         @Override
         public double getNoiseWithSeed(double x, double y, long seed) {
-            double sum = 0, amp = 1.0;
+            double sum = 0.0, n, exp = 2.0, correct = 0.0;
             x *= frequency;
             y *= frequency;
-            for (int i = 0; i < octaves; i++) {
-                double n = basis.getNoiseWithSeed(x, y, (seed += 0x9E3779B97F4A7C15L));
+            for (int i = 0; i < octaves; i++) { 
+                n = basis.getNoiseWithSeed(x, y, (seed += 0x9E3779B97F4A7C15L));
                 n = 1.0 - Math.abs(n);
-                sum += amp * n;
-                amp *= 0.5;
+                correct += (exp *= 0.5);
+                sum += n * exp;
                 x *= 2.0;
                 y *= 2.0;
             }
-            return sum * correct - 1.0;
+            return sum * 2.0 / correct - 1.0;
         }
     }
 
     public static class Ridged3D implements Noise3D {
         protected int octaves;
         public double frequency;
-        protected double correct;
         protected Noise3D basis;
         public Ridged3D() {
             this(SeededNoise.instance, 2, 1.25);
@@ -1686,56 +1672,50 @@ public class Noise {
         }
         public void setOctaves(int octaves)
         {
-            this.octaves = (octaves = Math.max(1, Math.min(63, octaves)));
-            correct = 1.0;
-            for (int o = 1; o < octaves; o++) {
-                correct += Math.pow(2.0, -o);
-            }
-            correct = 2.0 / correct;
+            this.octaves = Math.max(1, Math.min(63, octaves));
         }
 
         @Override
         public double getNoise(double x, double y, double z) {
-            double sum = 0, amp = 1.0;
+            double sum = 0.0, n, exp = 2.0, correct = 0.0;
             x *= frequency;
             y *= frequency;
             z *= frequency;
             for (int i = 0; i < octaves; ++i) {
-                double n = basis.getNoise(x + (i << 6), y + (i << 7), z + (i << 8));
+                n = basis.getNoise(x + (i << 6), y + (i << 7), z + (i << 8));
                 n = 1.0 - Math.abs(n);
-                sum += amp * n;
-                amp *= 0.5;
+                correct += (exp *= 0.5);
+                sum += n * exp;
                 x *= 2.0;
                 y *= 2.0;
                 z *= 2.0;
             }
-            return sum * correct - 1.0;
+            return sum * 2.0 / correct - 1.0;
         }
 
         @Override
         public double getNoiseWithSeed(double x, double y, double z, long seed) {
-            double sum = 0, amp = 1.0;
+            double sum = 0.0, n, exp = 2.0, correct = 0.0;
             x *= frequency;
             y *= frequency;
             z *= frequency;
             for (int i = 0; i < octaves; ++i) {
-                double n = basis.getNoiseWithSeed(x, y, z, (seed += 0x9E3779B97F4A7C15L));
+                n = basis.getNoiseWithSeed(x, y, z, (seed += 0x9E3779B97F4A7C15L));
                 n = 1.0 - Math.abs(n);
-                sum += amp * n;
-                amp *= 0.5;
+                correct += (exp *= 0.5);
+                sum += n * exp;
                 x *= 2.0;
                 y *= 2.0;
                 z *= 2.0;
             }
-            return sum * correct - 1.0;
+            return sum * 2.0 / correct - 1.0;
         }
     }
 
 
     public static class Ridged4D implements Noise4D {
-        public double[] exp;
         protected int octaves;
-        public double frequency, correct;
+        public double frequency;
         public Noise4D basis;
 
         public Ridged4D() {
@@ -1753,18 +1733,12 @@ public class Noise {
         }
         public void setOctaves(int octaves)
         {
-            this.octaves = (octaves = Math.max(1, Math.min(63, octaves)));
-            exp = new double[octaves];
-            double maxvalue = 0.0;
-            for (int i = 0; i < octaves; ++i) {
-                maxvalue += (exp[i] = Math.pow(2.0, -i));
-            }
-            correct = 2.0 / maxvalue;
+            this.octaves = Math.max(1, Math.min(63, octaves));
         }
 
         @Override
         public double getNoise(double x, double y, double z, double w) {
-            double sum = 0.0, n;
+            double sum = 0.0, n, exp = 2.0, correct = 0.0;
             x *= frequency;
             y *= frequency;
             z *= frequency;
@@ -1772,18 +1746,19 @@ public class Noise {
             for (int i = 0; i < octaves; ++i) {
                 n = basis.getNoise(x + (i << 6), y + (i << 7), z + (i << 8), w + (i << 9));
                 n = 1.0 - Math.abs(n);
-                sum += n * n * exp[i];
+                correct += (exp *= 0.5);
+                sum += n * exp;
                 x *= 2.0;
                 y *= 2.0;
                 z *= 2.0;
                 w *= 2.0;
             }
-            return sum * correct - 1.0;
+            return sum * 2.0 / correct - 1.0;
         }
 
         @Override
         public double getNoiseWithSeed(double x, double y, double z, double w, long seed) {
-            double sum = 0, n;
+            double sum = 0.0, n, exp = 2.0, correct = 0.0;
             x *= frequency;
             y *= frequency;
             z *= frequency;
@@ -1791,22 +1766,22 @@ public class Noise {
             for (int i = 0; i < octaves; ++i) {
                 n = basis.getNoiseWithSeed(x, y, z, w, (seed += 0x9E3779B97F4A7C15L));
                 n = 1.0 - Math.abs(n);
-                sum += n * n * exp[i];
+                correct += (exp *= 0.5);
+                sum += n * exp;
                 x *= 2.0;
                 y *= 2.0;
                 z *= 2.0;
                 w *= 2.0;
             }
-            return sum * correct - 1.0;
+            return sum * 2.0 / correct - 1.0;
         }
     }
 
 
     public static class Ridged5D implements Noise5D
     {
-        protected double[] exp;
         protected int octaves;
-        public double frequency, correct;
+        public double frequency;
         public Noise5D basis;
         public Ridged5D()
         {
@@ -1824,18 +1799,12 @@ public class Noise {
         }
         public void setOctaves(int octaves)
         {
-            this.octaves = (octaves = Math.max(1, Math.min(63, octaves)));
-            exp = new double[octaves];
-            double maxvalue = 0.0;
-            for (int i = 0; i < octaves; ++i) {
-                maxvalue += (exp[i] = Math.pow(2.0, -i));
-            }
-            correct = 2.0 / maxvalue;
+            this.octaves = Math.max(1, Math.min(63, octaves));
         }
 
         @Override
         public double getNoise(double x, double y, double z, double w, double u) {
-            double sum = 0.0, n;
+            double sum = 0.0, n, exp = 2.0, correct = 0.0;
             x *= frequency;
             y *= frequency;
             z *= frequency;
@@ -1845,19 +1814,20 @@ public class Noise {
             for (int i = 0; i < octaves; ++i) {
                 n = basis.getNoise(x + (i << 6), y + (i << 7), z + (i << 8), w + (i << 9), u + (i << 10));
                 n = 1.0 - Math.abs(n);
-                sum += n * n * exp[i];
+                correct += (exp *= 0.5);
+                sum += n * exp;
                 x *= 2.0;
                 y *= 2.0;
                 z *= 2.0;
                 w *= 2.0;
-                u *= 2.0; 
+                u *= 2.0;
             }
-            return sum * correct - 1.0;
+            return sum * 2.0 / correct - 1.0;
         }
 
         @Override
         public double getNoiseWithSeed(double x, double y, double z, double w, double u, long seed) {
-            double sum = 0, n;
+            double sum = 0.0, n, exp = 2.0, correct = 0.0;
             x *= frequency;
             y *= frequency;
             z *= frequency;
@@ -1867,22 +1837,22 @@ public class Noise {
                 n = basis.getNoiseWithSeed(x, y, z,
                         w, u, (seed += 0x9E3779B97F4A7C15L));
                 n = 1.0 - Math.abs(n);
-                sum += n * n * exp[i];
+                correct += (exp *= 0.5);
+                sum += n * exp;
                 x *= 2.0;
                 y *= 2.0;
                 z *= 2.0;
                 w *= 2.0;
                 u *= 2.0;
             }
-            return sum * correct - 1.0;
+            return sum * 2.0 / correct - 1.0;
         }
     }
 
     public static class Ridged6D implements Noise6D
     {
-        protected double[] exp;
         protected int octaves;
-        public double frequency, correct;
+        public double frequency;
         public Noise6D basis;
         public Ridged6D()
         {
@@ -1900,18 +1870,12 @@ public class Noise {
         }
         public void setOctaves(int octaves)
         {
-            this.octaves = (octaves = Math.max(1, Math.min(63, octaves)));
-            exp = new double[octaves];
-            double maxvalue = 0.0;
-            for (int i = 0; i < octaves; ++i) {
-                maxvalue += (exp[i] = Math.pow(2.0, -i));
-            }
-            correct = 2.0 / maxvalue;
+            this.octaves = Math.max(1, Math.min(63, octaves));
         }
 
         @Override
         public double getNoise(double x, double y, double z, double w, double u, double v) {
-            double sum = 0.0, n;
+            double sum = 0.0, n, exp = 2.0, correct = 0.0;
             x *= frequency;
             y *= frequency;
             z *= frequency;
@@ -1922,7 +1886,8 @@ public class Noise {
             for (int i = 0; i < octaves; ++i) {
                 n = basis.getNoise(x + (i << 6), y + (i << 7), z + (i << 8), w + (i << 9), u + (i << 10), v + (i << 11));
                 n = 1.0 - Math.abs(n);
-                sum += n * n * exp[i];
+                correct += (exp *= 0.5);
+                sum += n * exp;
                 x *= 2.0;
                 y *= 2.0;
                 z *= 2.0;
@@ -1930,12 +1895,12 @@ public class Noise {
                 u *= 2.0;
                 v *= 2.0;
             }
-            return sum * correct - 1.0;
+            return sum * 2.0 / correct - 1.0;
         }
 
         @Override
         public double getNoiseWithSeed(double x, double y, double z, double w, double u, double v, long seed) {
-            double sum = 0, n;
+            double sum = 0.0, n, exp = 2.0, correct = 0.0;
             x *= frequency;
             y *= frequency;
             z *= frequency;
@@ -1946,7 +1911,8 @@ public class Noise {
                 n = basis.getNoiseWithSeed(x, y, z,
                         w, u, v, (seed += 0x9E3779B97F4A7C15L));
                 n = 1.0 - Math.abs(n);
-                sum += n * n * exp[i];
+                correct += (exp *= 0.5);
+                sum += n * exp;
                 x *= 2.0;
                 y *= 2.0;
                 z *= 2.0;
@@ -1954,7 +1920,7 @@ public class Noise {
                 u *= 2.0;
                 v *= 2.0;
             }
-            return sum * correct - 1.0;
+            return sum * 2.0 / correct - 1.0;
         }
     }
 
