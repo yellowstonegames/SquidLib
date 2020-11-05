@@ -1566,30 +1566,30 @@ public class Noise {
 
         @Override
         public double getNoise(double x) {
-            double sum = 0.0, n, exp = 2.0, correct = 0.0;
+            double sum = 0.0, n, exp = 2.0, correction = 0.0;
             x *= frequency;
             for (int i = 0; i < octaves; i++) {
                 n = basis.getNoise(x + (i << 6));
                 n = 1.0 - Math.abs(n);
-                correct += (exp *= 0.5);
+                correction += (exp *= 0.5);
                 sum += n * exp;
                 x *= 2.0;
             }
-            return sum * 2.0 / correct - 1.0;
+            return sum * 2.0 / correction - 1.0;
         }
 
         @Override
         public double getNoiseWithSeed(double x, long seed) {
-            double sum = 0.0, n, exp = 2.0, correct = 0.0;
+            double sum = 0.0, n, exp = 2.0, correction = 0.0;
             x *= frequency;
             for (int i = 0; i < octaves; i++) {
                 n = basis.getNoiseWithSeed(x, (seed += 0x9E3779B97F4A7C15L));
                 n = 1.0 - Math.abs(n);
-                correct += (exp *= 0.5);
+                correction += (exp *= 0.5);
                 sum += n * exp;
                 x *= 2.0;
             }
-            return sum * 2.0 / correct - 1.0;
+            return sum * 2.0 / correction - 1.0;
         }
     }
 
@@ -1619,34 +1619,34 @@ public class Noise {
 
         @Override
         public double getNoise(double x, double y) {
-            double sum = 0.0, n, exp = 2.0, correct = 0.0;
+            double sum = 0.0, n, exp = 2.0, correction = 0.0;
             x *= frequency;
             y *= frequency;
             for (int i = 0; i < octaves; i++) {
                 n = basis.getNoise(x + (i << 6), y + (i << 7));
                 n = 1.0 - Math.abs(n);
-                correct += (exp *= 0.5);
+                correction += (exp *= 0.5);
                 sum += n * exp;
                 x *= 2.0;
                 y *= 2.0;
             }
-            return sum * 2.0 / correct - 1.0;
+            return sum * 2.0 / correction - 1.0;
         }
 
         @Override
         public double getNoiseWithSeed(double x, double y, long seed) {
-            double sum = 0.0, n, exp = 2.0, correct = 0.0;
+            double sum = 0.0, n, exp = 2.0, correction = 0.0;
             x *= frequency;
             y *= frequency;
             for (int i = 0; i < octaves; i++) { 
                 n = basis.getNoiseWithSeed(x, y, (seed += 0x9E3779B97F4A7C15L));
                 n = 1.0 - Math.abs(n);
-                correct += (exp *= 0.5);
+                correction += (exp *= 0.5);
                 sum += n * exp;
                 x *= 2.0;
                 y *= 2.0;
             }
-            return sum * 2.0 / correct - 1.0;
+            return sum * 2.0 / correction - 1.0;
         }
     }
 
@@ -1677,38 +1677,38 @@ public class Noise {
 
         @Override
         public double getNoise(double x, double y, double z) {
-            double sum = 0.0, n, exp = 2.0, correct = 0.0;
+            double sum = 0.0, n, exp = 2.0, correction = 0.0;
             x *= frequency;
             y *= frequency;
             z *= frequency;
             for (int i = 0; i < octaves; ++i) {
                 n = basis.getNoise(x + (i << 6), y + (i << 7), z + (i << 8));
                 n = 1.0 - Math.abs(n);
-                correct += (exp *= 0.5);
+                correction += (exp *= 0.5);
                 sum += n * exp;
                 x *= 2.0;
                 y *= 2.0;
                 z *= 2.0;
             }
-            return sum * 2.0 / correct - 1.0;
+            return sum * 2.0 / correction - 1.0;
         }
 
         @Override
         public double getNoiseWithSeed(double x, double y, double z, long seed) {
-            double sum = 0.0, n, exp = 2.0, correct = 0.0;
+            double sum = 0.0, n, exp = 2.0, correction = 0.0;
             x *= frequency;
             y *= frequency;
             z *= frequency;
             for (int i = 0; i < octaves; ++i) {
                 n = basis.getNoiseWithSeed(x, y, z, (seed += 0x9E3779B97F4A7C15L));
                 n = 1.0 - Math.abs(n);
-                correct += (exp *= 0.5);
+                correction += (exp *= 0.5);
                 sum += n * exp;
                 x *= 2.0;
                 y *= 2.0;
                 z *= 2.0;
             }
-            return sum * 2.0 / correct - 1.0;
+            return sum * 2.0 / correction - 1.0;
         }
     }
 
@@ -1738,7 +1738,7 @@ public class Noise {
 
         @Override
         public double getNoise(double x, double y, double z, double w) {
-            double sum = 0.0, n, exp = 2.0, correct = 0.0;
+            double sum = 0.0, n, exp = 2.0, correction = 0.0;
             x *= frequency;
             y *= frequency;
             z *= frequency;
@@ -1746,19 +1746,19 @@ public class Noise {
             for (int i = 0; i < octaves; ++i) {
                 n = basis.getNoise(x + (i << 6), y + (i << 7), z + (i << 8), w + (i << 9));
                 n = 1.0 - Math.abs(n);
-                correct += (exp *= 0.5);
+                correction += (exp *= 0.5);
                 sum += n * exp;
                 x *= 2.0;
                 y *= 2.0;
                 z *= 2.0;
                 w *= 2.0;
             }
-            return sum * 2.0 / correct - 1.0;
+            return sum * 2.0 / correction - 1.0;
         }
 
         @Override
         public double getNoiseWithSeed(double x, double y, double z, double w, long seed) {
-            double sum = 0.0, n, exp = 2.0, correct = 0.0;
+            double sum = 0.0, n, exp = 2.0, correction = 0.0;
             x *= frequency;
             y *= frequency;
             z *= frequency;
@@ -1766,14 +1766,14 @@ public class Noise {
             for (int i = 0; i < octaves; ++i) {
                 n = basis.getNoiseWithSeed(x, y, z, w, (seed += 0x9E3779B97F4A7C15L));
                 n = 1.0 - Math.abs(n);
-                correct += (exp *= 0.5);
+                correction += (exp *= 0.5);
                 sum += n * exp;
                 x *= 2.0;
                 y *= 2.0;
                 z *= 2.0;
                 w *= 2.0;
             }
-            return sum * 2.0 / correct - 1.0;
+            return sum * 2.0 / correction - 1.0;
         }
     }
 
@@ -1804,7 +1804,7 @@ public class Noise {
 
         @Override
         public double getNoise(double x, double y, double z, double w, double u) {
-            double sum = 0.0, n, exp = 2.0, correct = 0.0;
+            double sum = 0.0, n, exp = 2.0, correction = 0.0;
             x *= frequency;
             y *= frequency;
             z *= frequency;
@@ -1814,7 +1814,7 @@ public class Noise {
             for (int i = 0; i < octaves; ++i) {
                 n = basis.getNoise(x + (i << 6), y + (i << 7), z + (i << 8), w + (i << 9), u + (i << 10));
                 n = 1.0 - Math.abs(n);
-                correct += (exp *= 0.5);
+                correction += (exp *= 0.5);
                 sum += n * exp;
                 x *= 2.0;
                 y *= 2.0;
@@ -1822,12 +1822,12 @@ public class Noise {
                 w *= 2.0;
                 u *= 2.0;
             }
-            return sum * 2.0 / correct - 1.0;
+            return sum * 2.0 / correction - 1.0;
         }
 
         @Override
         public double getNoiseWithSeed(double x, double y, double z, double w, double u, long seed) {
-            double sum = 0.0, n, exp = 2.0, correct = 0.0;
+            double sum = 0.0, n, exp = 2.0, correction = 0.0;
             x *= frequency;
             y *= frequency;
             z *= frequency;
@@ -1837,7 +1837,7 @@ public class Noise {
                 n = basis.getNoiseWithSeed(x, y, z,
                         w, u, (seed += 0x9E3779B97F4A7C15L));
                 n = 1.0 - Math.abs(n);
-                correct += (exp *= 0.5);
+                correction += (exp *= 0.5);
                 sum += n * exp;
                 x *= 2.0;
                 y *= 2.0;
@@ -1845,7 +1845,7 @@ public class Noise {
                 w *= 2.0;
                 u *= 2.0;
             }
-            return sum * 2.0 / correct - 1.0;
+            return sum * 2.0 / correction - 1.0;
         }
     }
 
@@ -1875,7 +1875,7 @@ public class Noise {
 
         @Override
         public double getNoise(double x, double y, double z, double w, double u, double v) {
-            double sum = 0.0, n, exp = 2.0, correct = 0.0;
+            double sum = 0.0, n, exp = 2.0, correction = 0.0;
             x *= frequency;
             y *= frequency;
             z *= frequency;
@@ -1886,7 +1886,7 @@ public class Noise {
             for (int i = 0; i < octaves; ++i) {
                 n = basis.getNoise(x + (i << 6), y + (i << 7), z + (i << 8), w + (i << 9), u + (i << 10), v + (i << 11));
                 n = 1.0 - Math.abs(n);
-                correct += (exp *= 0.5);
+                correction += (exp *= 0.5);
                 sum += n * exp;
                 x *= 2.0;
                 y *= 2.0;
@@ -1895,12 +1895,12 @@ public class Noise {
                 u *= 2.0;
                 v *= 2.0;
             }
-            return sum * 2.0 / correct - 1.0;
+            return sum * 2.0 / correction - 1.0;
         }
 
         @Override
         public double getNoiseWithSeed(double x, double y, double z, double w, double u, double v, long seed) {
-            double sum = 0.0, n, exp = 2.0, correct = 0.0;
+            double sum = 0.0, n, exp = 2.0, correction = 0.0;
             x *= frequency;
             y *= frequency;
             z *= frequency;
@@ -1911,7 +1911,7 @@ public class Noise {
                 n = basis.getNoiseWithSeed(x, y, z,
                         w, u, v, (seed += 0x9E3779B97F4A7C15L));
                 n = 1.0 - Math.abs(n);
-                correct += (exp *= 0.5);
+                correction += (exp *= 0.5);
                 sum += n * exp;
                 x *= 2.0;
                 y *= 2.0;
@@ -1920,7 +1920,7 @@ public class Noise {
                 u *= 2.0;
                 v *= 2.0;
             }
-            return sum * 2.0 / correct - 1.0;
+            return sum * 2.0 / correction - 1.0;
         }
     }
 
@@ -1928,7 +1928,7 @@ public class Noise {
         protected int octaves;
         protected Noise2D basis, disturbance;
         public double frequency;
-        public final double correct;
+        protected double correction;
 
         public Turbulent2D() {
             this(SeededNoise.instance, alternate, 1);
@@ -1946,7 +1946,7 @@ public class Noise {
             this.frequency = frequency;
             disturbance = disturb;
             this.octaves = Math.max(1, Math.min(63, octaves));
-            correct = 1.0 / ((1 << this.octaves) - 1.0);
+            correction = 1.0 / ((1 << this.octaves) - 1.0);
         }
 
         @Override
@@ -1960,7 +1960,7 @@ public class Noise {
                 i_s *= 0.5;
                 n += basis.getNoise(x * i_s + (o << 6), y * i_s + (o << 7)) * s;
             }
-            return n * correct;
+            return n * correction;
         }
 
         @Override
@@ -1974,14 +1974,14 @@ public class Noise {
                 i_s *= 0.5;
                 n += basis.getNoiseWithSeed(x * i_s, y * i_s, seed += 0x9E3779B97F4A7C15L) * s;
             }
-            return n * correct;
+            return n * correction;
         }
     }
     public static class Turbulent3D implements Noise3D {
         protected int octaves;
         protected Noise3D basis, disturbance;
         public double frequency;
-        public final double correct;
+        protected double correction;
 
         public Turbulent3D() {
             this(SeededNoise.instance, alternate, 1);
@@ -1999,7 +1999,7 @@ public class Noise {
             this.frequency = frequency;
             disturbance = disturb;
             this.octaves = Math.max(1, Math.min(63, octaves));
-            correct = 1.0 / ((1 << this.octaves) - 1.0);
+            correction = 1.0 / ((1 << this.octaves) - 1.0);
         }
 
         @Override
@@ -2014,7 +2014,7 @@ public class Noise {
                 i_s *= 0.5;
                 n += basis.getNoise(x * i_s + (o << 6), y * i_s + (o << 7), z * i_s + (o << 8)) * s;
             }
-            return n * correct;
+            return n * correction;
         }
 
         @Override
@@ -2029,7 +2029,7 @@ public class Noise {
                 i_s *= 0.5;
                 n += basis.getNoiseWithSeed(x * i_s, y * i_s, z * i_s, seed += 0x9E3779B97F4A7C15L) * s;
             }
-            return n * correct;
+            return n * correction;
         }
     }
 
@@ -2037,7 +2037,7 @@ public class Noise {
         protected int octaves;
         protected Noise4D basis, disturbance;
         public double frequency;
-        public final double correct;
+        protected double correction;
         public Turbulent4D() {
             this(SeededNoise.instance, alternate, 1);
         }
@@ -2055,7 +2055,7 @@ public class Noise {
             this.frequency = frequency;
             disturbance = disturb;
             this.octaves = Math.max(1, Math.min(63, octaves));
-            correct = 1.0 / ((1 << this.octaves) - 1.0);
+            correction = 1.0 / ((1 << this.octaves) - 1.0);
         }
 
         @Override
@@ -2071,7 +2071,7 @@ public class Noise {
                 i_s *= 0.5;
                 n += basis.getNoise(x * i_s + (o << 6), y * i_s + (o << 7), z * i_s + (o << 8), w * i_s + (o << 9)) * s;
             }
-            return n * correct;
+            return n * correction;
         }
 
         @Override
@@ -2087,14 +2087,14 @@ public class Noise {
                 i_s *= 0.5;
                 n += basis.getNoiseWithSeed(x * i_s, y * i_s, z * i_s, w * i_s, seed += 0x9E3779B97F4A7C15L) * s;
             }
-            return n * correct;
+            return n * correction;
         }
     }
     public static class Turbulent6D implements Noise6D {
         protected int octaves;
         protected Noise6D basis, disturbance;
         public double frequency;
-        public final double correct;
+        protected double correction;
         public Turbulent6D() {
             this(SeededNoise.instance, alternate, 1);
         }
@@ -2111,7 +2111,7 @@ public class Noise {
             this.frequency = frequency;
             disturbance = disturb;
             this.octaves = Math.max(1, Math.min(63, octaves));
-            correct = 1.0 / ((1 << this.octaves) - 1.0);
+            correction = 1.0 / ((1 << this.octaves) - 1.0);
         }
         @Override
         public double getNoise(double x, double y, double z, double w, double u, double v) {
@@ -2128,7 +2128,7 @@ public class Noise {
                 i_s *= 0.5;
                 n += basis.getNoise(x * i_s + (o << 6), y * i_s + (o << 7), z * i_s + (o << 8), w * i_s + (o << 9), u * i_s + (o << 10), v * i_s + (o << 11)) * s;
             }
-            return n * correct;
+            return n * correction;
         }
 
         @Override
@@ -2146,7 +2146,7 @@ public class Noise {
                 i_s *= 0.5;
                 n += basis.getNoiseWithSeed(x * i_s, y * i_s, z * i_s, w * i_s, u * i_s, v * i_s, seed += 0x9E3779B97F4A7C15L) * s;
             }
-            return n * correct;
+            return n * correction;
         }
     }
 
