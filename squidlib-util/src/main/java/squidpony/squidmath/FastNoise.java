@@ -1423,7 +1423,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         for (int i = 0; i < octaves; i++) {
             spike = 1f - Math.abs(singleValue(seed + i, x, y));
             spike *= spike * amp;
-            amp = Math.max(0f, Math.min(1f, spike * 2f));
+            amp = Math.min(1f, spike * 2f);
             sum += (spike * ampBias);
             ampBias *= 2f;
             x *= lacunarity;
@@ -1534,7 +1534,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         for (int i = 0; i < octaves; i++) {
             spike = 1f - Math.abs(singleValue(seed + i, x, y, z));
             spike *= spike * amp;
-            amp = Math.max(0f, Math.min(1f, spike * 2f));
+            amp = Math.min(1f, spike * 2f);
             sum += (spike * ampBias);
             ampBias *= 2f;
             x *= lacunarity;
@@ -1669,7 +1669,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         for (int i = 0; i < octaves; i++) {
             spike = 1f - Math.abs(singleValue(seed + i, x, y, z, w));
             spike *= spike * amp;
-            amp = Math.max(0f, Math.min(1f, spike * 2f));
+            amp = Math.min(1f, spike * 2f);
             sum += (spike * ampBias);
             ampBias *= 2f;
             x *= lacunarity;
@@ -1824,7 +1824,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         for (int i = 0; i < octaves; i++) {
             spike = 1f - Math.abs(singleValue(seed + i, x, y, z, w, u));
             spike *= spike * amp;
-            amp = Math.max(0f, Math.min(1f, spike * 2f));
+            amp = Math.min(1f, spike * 2f);
             sum += (spike * ampBias);
             ampBias *= 2f;
             x *= lacunarity;
@@ -2028,7 +2028,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         for (int i = 0; i < octaves; i++) {
             spike = 1f - Math.abs(singleValue(seed + i, x, y, z, w, u, v));
             spike *= spike * amp;
-            amp = Math.max(0f, Math.min(1f, spike * 2f));
+            amp = Math.min(1f, spike * 2f);
             sum += (spike * ampBias);
             ampBias *= 2f;
             x *= lacunarity;
@@ -2334,7 +2334,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         for (int i = 0; i < octaves; i++) {
             spike = 1f - Math.abs(singleFoam(seed + i, x, y));
             spike *= spike * amp;
-            amp = Math.max(0f, Math.min(1f, spike * 2f));
+            amp = Math.min(1f, spike * 2f);
             sum += (spike * ampBias);
             ampBias *= 2f;
             t = x;
@@ -2402,7 +2402,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         for (int i = 0; i < octaves; i++) {
             spike = 1f - Math.abs(singleFoam(seed + i, x, y, z));
             spike *= spike * amp;
-            amp = Math.max(0f, Math.min(1f, spike * 2f));
+            amp = Math.min(1f, spike * 2f);
             sum += (spike * ampBias);
             ampBias *= 2f;
             x *= lacunarity;
@@ -2496,7 +2496,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         for (int i = 0; i < octaves; i++) {
             spike = 1f - Math.abs(singleFoam(seed + i, x, y,  z, w));
             spike *= spike * amp;
-            amp = Math.max(0f, Math.min(1f, spike * 2f));
+            amp = Math.min(1f, spike * 2f);
             sum += (spike * ampBias);
             ampBias *= 2f;
             x *= lacunarity;
@@ -2621,7 +2621,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         for (int i = 0; i < octaves; i++) {
             spike = 1f - Math.abs(singleFoam(seed + i, x, y, z, w, u));
             spike *= spike * amp;
-            amp = Math.max(0f, Math.min(1f, spike * 2f));
+            amp = Math.min(1f, spike * 2f);
             sum += (spike * ampBias);
             ampBias *= 2f;
             x *= lacunarity;
@@ -2766,7 +2766,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         for (int i = 0; i < octaves; i++) {
             spike = 1f - Math.abs(singleFoam(seed + i, x, y, z, w, u, v));
             spike *= spike * amp;
-            amp = Math.max(0f, Math.min(1f, spike * 2f));
+            amp = Math.min(1f, spike * 2f);
             sum += (spike * ampBias);
             ampBias *= 2f;
             x *= lacunarity;
@@ -2914,7 +2914,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         for (int i = 0; i < octaves; i++) {
             spike = 1f - Math.abs(singlePerlin(seed + i, x, y));
             spike *= spike * amp;
-            amp = Math.max(0f, Math.min(1f, spike * 2f));
+            amp = Math.min(1f, spike * 2f);
             sum += (spike * ampBias);
             ampBias *= 2f;
             x *= lacunarity;
@@ -3018,7 +3018,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         for (int i = 0; i < octaves; i++) {
             spike = 1f - Math.abs(singlePerlin(seed + i, x, y, z));
             spike *= spike * amp;
-            amp = Math.max(0f, Math.min(1f, spike * 2f));
+            amp = Math.min(1f, spike * 2f);
             sum += (spike * ampBias);
             ampBias *= 2f;
             x *= lacunarity;
@@ -3183,7 +3183,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         for (int i = 0; i < octaves; i++) {
             spike = 1f - Math.abs(singlePerlin(seed + i, x, y,  z, w));
             spike *= spike * amp;
-            amp = Math.max(0f, Math.min(1f, spike * 2f));
+            amp = Math.min(1f, spike * 2f);
             sum += (spike * ampBias);
             ampBias *= 2f;
             x *= lacunarity;
@@ -3341,7 +3341,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         for (int i = 0; i < octaves; i++) {
             spike = 1f - Math.abs(singlePerlin(seed + i, x, y, z, w, u));
             spike *= spike * amp;
-            amp = Math.max(0f, Math.min(1f, spike * 2f));
+            amp = Math.min(1f, spike * 2f);
             sum += (spike * ampBias);
             ampBias *= 2f;
             x *= lacunarity;
@@ -3545,7 +3545,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         for (int i = 0; i < octaves; i++) {
             spike = 1f - Math.abs(singlePerlin(seed + i, x, y, z, w, u, v));
             spike *= spike * amp;
-            amp = Math.max(0f, Math.min(1f, spike * 2f));
+            amp = Math.min(1f, spike * 2f);
             sum += (spike * ampBias);
             ampBias *= 2f;
             x *= lacunarity;
@@ -3807,7 +3807,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         for (int i = 0; i < octaves; i++) {
             spike = 1f - Math.abs(singleSimplex(seed + i, x, y, z));
             spike *= spike * amp;
-            amp = Math.max(0f, Math.min(1f, spike * 2f));
+            amp = Math.min(1f, spike * 2f);
             sum += (spike * ampBias);
             ampBias *= 2f;
             x *= lacunarity;
@@ -3823,7 +3823,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         for (int i = 0; i < octaves; i++) {
             spike = 1f - Math.abs(singleSimplex(seed + i, x, y, z));
             spike *= spike * amp;
-            amp = Math.max(0f, Math.min(1f, spike * 2f));
+            amp = Math.min(1f, spike * 2f);
             sum += (spike * ampBias);
             ampBias *= 2f;
             x *= lacunarity;
@@ -4169,7 +4169,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         for (int i = 0; i < octaves; i++) {
             spike = 1f - Math.abs(singleSimplex(seed + i, x, y));
             spike *= spike * amp;
-            amp = Math.max(0f, Math.min(1f, spike * 2f));
+            amp = Math.min(1f, spike * 2f);
             sum += (spike * ampBias);
             ampBias *= 2f;
             x *= lacunarity;
@@ -4184,7 +4184,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         for (int i = 0; i < octaves; i++) {
             spike = 1f - Math.abs(singleSimplex(seed + i, x, y));
             spike *= spike * amp;
-            amp = Math.max(0f, Math.min(1f, spike * 2f));
+            amp = Math.min(1f, spike * 2f);
             sum += (spike * ampBias);
             ampBias *= 2f;
             x *= lacunarity;
@@ -4375,7 +4375,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         for (int i = 0; i < octaves; i++) {
             spike = 1f - Math.abs(singleSimplex(seed + i, x, y, z, w));
             spike *= spike * amp;
-            amp = Math.max(0f, Math.min(1f, spike * 2f));
+            amp = Math.min(1f, spike * 2f);
             sum += (spike * ampBias);
             ampBias *= 2f;
             x *= lacunarity;
@@ -4603,7 +4603,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         for (int i = 0; i < octaves; i++) {
             spike = 1f - Math.abs(singleSimplex(seed + i, x, y, z, w, u));
             spike *= spike * amp;
-            amp = Math.max(0f, Math.min(1f, spike * 2f));
+            amp = Math.min(1f, spike * 2f);
             sum += (spike * ampBias);
             ampBias *= 2f;
             x *= lacunarity;
@@ -4759,7 +4759,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         for (int i = 0; i < octaves; i++) {
             spike = 1f - Math.abs(singleSimplex(seed + i, x, y, z, w, u, v));
             spike *= spike * amp;
-            amp = Math.max(0f, Math.min(1f, spike * 2f));
+            amp = Math.min(1f, spike * 2f);
             sum += (spike * ampBias);
             ampBias *= 2f;
             x *= lacunarity;
@@ -4852,7 +4852,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         for (int i = 0; i < octaves; i++) {
             spike = 1f - Math.abs(singleCubic(seed + i, x, y, z));
             spike *= spike * amp;
-            amp = Math.max(0f, Math.min(1f, spike * 2f));
+            amp = Math.min(1f, spike * 2f);
             sum += (spike * ampBias);
             ampBias *= 2f;
             x *= lacunarity;
@@ -4972,7 +4972,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         for (int i = 0; i < octaves; i++) {
             spike = 1f - Math.abs(singleCubic(seed + i, x, y));
             spike *= spike * amp;
-            amp = Math.max(0f, Math.min(1f, spike * 2f));
+            amp = Math.min(1f, spike * 2f);
             sum += (spike * ampBias);
             ampBias *= 2f;
             x *= lacunarity;
@@ -5596,7 +5596,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         for (int i = 0; i < octaves; i++) {
             spike = 1f - Math.abs(singleHoney(seed + i, x, y));
             spike *= spike * amp;
-            amp = Math.max(0f, Math.min(1f, spike * 2f));
+            amp = Math.min(1f, spike * 2f);
             sum += (spike * ampBias);
             ampBias *= 2f;
             t = x;
@@ -5663,7 +5663,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         for (int i = 0; i < octaves; i++) {
             spike = 1f - Math.abs(singleHoney(seed + i, x, y, z));
             spike *= spike * amp;
-            amp = Math.max(0f, Math.min(1f, spike * 2f));
+            amp = Math.min(1f, spike * 2f);
             sum += (spike * ampBias);
             ampBias *= 2f;
             x *= lacunarity;
@@ -5725,7 +5725,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         for (int i = 0; i < octaves; i++) {
             spike = 1f - Math.abs(singleHoney(seed + i, x, y,  z, w));
             spike *= spike * amp;
-            amp = Math.max(0f, Math.min(1f, spike * 2f));
+            amp = Math.min(1f, spike * 2f);
             sum += (spike * ampBias);
             ampBias *= 2f;
             x *= lacunarity;
@@ -5807,7 +5807,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         for (int i = 0; i < octaves; i++) {
             spike = 1f - Math.abs(singleHoney(seed + i, x, y, z, w, u));
             spike *= spike * amp;
-            amp = Math.max(0f, Math.min(1f, spike * 2f));
+            amp = Math.min(1f, spike * 2f);
             sum += (spike * ampBias);
             ampBias *= 2f;
             x *= lacunarity;
@@ -5894,7 +5894,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         for (int i = 0; i < octaves; i++) {
             spike = 1f - Math.abs(singleHoney(seed + i, x, y, z, w, u, v));
             spike *= spike * amp;
-            amp = Math.max(0f, Math.min(1f, spike * 2f));
+            amp = Math.min(1f, spike * 2f);
             sum += (spike * ampBias);
             ampBias *= 2f;
             x *= lacunarity;
