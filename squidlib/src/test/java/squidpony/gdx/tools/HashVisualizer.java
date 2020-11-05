@@ -219,12 +219,12 @@ public class HashVisualizer extends ApplicationAdapter {
     private final Noise.Layered2D classic3_2D = new Noise.Layered2D(ClassicNoise.instance, 3, 0.03125f);
     
     private final FoamNoise foamUsed = new FoamNoise(12345, 1f);
-    private final FastNoise fastUsed = new FastNoise(12345, 5.0f, FastNoise.FOAM_FRACTAL, 2);
+    private final FastNoise fastUsed = new FastNoise(12345, 2.0f, FastNoise.FOAM_FRACTAL, 2);
     {
-        fastUsed.setFractalType(FastNoise.RIDGED_MULTI);
+        //fastUsed.setFractalType(FastNoise.RIDGED_MULTI);
     }
-//    private final Noise.Seamless2D seamlessFoam = new Noise.Seamless2D(fastUsed, width, height);
-    private final Noise.Seamless2D seamlessFoam = new Noise.Seamless2D(new Noise.Ridged4D(foamUsed, 2, 5.0), width, height);
+    private final Noise.Seamless2D seamlessFoam = new Noise.Seamless2D(fastUsed, width, height);
+//    private final Noise.Seamless2D seamlessFoam = new Noise.Seamless2D(new Noise.Ridged4D(foamUsed, 2, 5.0), width, height);
 
     private final FastNoise fast1_2D = new FastNoise(1337, 0.03125f, FastNoise.SIMPLEX_FRACTAL, 1);
     private final FastNoise fast3_2D = new FastNoise(1337, 0.03125f, FastNoise.SIMPLEX_FRACTAL, 3);
@@ -6451,13 +6451,22 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                     case 17:
                     {
                         Gdx.graphics.setTitle("Seamless Foam Noise, 3 octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
-                        if(keepGoing)
+                        if(keepGoing) {
                             ++foamUsed.seed;
-//                            fastUsed.setSeed(fastUsed.getSeed()+1);
+                            fastUsed.setSeed(fastUsed.getSeed()+1);
+                        }
+                        float min = Float.MAX_VALUE, max = -Float.MAX_VALUE;
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                bright = basicPrepare(seamlessFoam.getNoise(x, y));
-                                back[x][y] = getGray(bright);
+                                back[x][y] = basicPrepare(seamlessFoam.getNoise(x, y));
+                                min = Math.min(back[x][y], min);
+                                max = Math.max(back[x][y], max);
+                            }
+                        }
+                        float range = 1f / (max - min);
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                back[x][y] = getGray((back[x][y] - min) * range);
                             }
                         }
                     }
