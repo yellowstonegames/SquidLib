@@ -2262,7 +2262,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         yin = p1;
         final float c = valueNoise(seed, xin + b, yin);
         final float result = (a + b + c) * F3;
-        final float sharp = 2.2f;
+        final float sharp = 0.75f * 2.2f;
         final float diff = 0.5f - result;
         final int sign = NumberTools.floatToIntBits(diff) >> 31, one = sign | 1;
         return (((one * 0.5f - sign) * (result + sign)) / (Float.MIN_VALUE - sign + (result + sharp * diff) * one) - sign) * 2f - 1f;
@@ -2433,7 +2433,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         final float d = valueNoise(seed, xin + c, yin, zin);
 
         final float result = (a + b + c + d) * 0.25f;
-        final float sharp = 3.3f;
+        final float sharp = 0.75f * 3.3f;
         final float diff = 0.5f - result;
         final int sign = NumberTools.floatToIntBits(diff) >> 31, one = sign | 1;
         return (((one * 0.5f - sign) * (result + sign)) / (Float.MIN_VALUE - sign + (result + sharp * diff) * one) - sign) * 2f - 1f;
@@ -2538,7 +2538,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         final float e = valueNoise(seed, xin + d, yin, zin, win);
 
         final float result = (a + b + c + d + e) * 0.2f;
-        final float sharp = 4.4f;
+        final float sharp = 0.75f * 4.4f;
         final float diff = 0.5f - result;
         final int sign = NumberTools.floatToIntBits(diff) >> 31, one = sign | 1;
         return (((one * 0.5f - sign) * (result + sign)) / (Float.MIN_VALUE - sign + (result + sharp * diff) * one) - sign) * 2f - 1f;
@@ -2676,7 +2676,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         final float f = valueNoise(seed, xin + e, yin, zin, win, uin);
 
         final float result = (a + b + c + d + e + f) * 0.16666666666666666f;
-        final float sharp = 5.5f;
+        final float sharp = 0.75f * 5.5f;
         final float diff = 0.5f - result;
         final int sign = NumberTools.floatToIntBits(diff) >> 31, one = sign | 1;
         return (((one * 0.5f - sign) * (result + sign)) / (Float.MIN_VALUE - sign + (result + sharp * diff) * one) - sign) * 2f - 1f;
@@ -2834,7 +2834,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         vin = p0;
         final float g = valueNoise(seed, xin + f, yin, zin, win, uin, vin);
         final float result = (a + b + c + d + e + f + g) * 0.14285714285714285f;
-        final float sharp = 6.6f;
+        final float sharp = 0.75f * 6.6f;
         final float diff = 0.5f - result;
         final int sign = NumberTools.floatToIntBits(diff) >> 31, one = sign | 1;
         return (((one * 0.5f - sign) * (result + sign)) / (Float.MIN_VALUE - sign + (result + sharp * diff) * one) - sign) * 2f - 1f;
