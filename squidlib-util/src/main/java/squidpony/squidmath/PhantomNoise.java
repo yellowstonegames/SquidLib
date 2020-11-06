@@ -24,7 +24,7 @@ import squidpony.annotation.Beta;
  * each rotation array has N items. The rotations match the vertices of an N-simplex, so a triangle in 2D, a tetrahedron
  * in 3D, etc. It also stores two working-room arrays, each with N+1 double items, two frequently-edited int arrays of
  * the floors of doubles it's using, and of modified versions of those floors to be hashed (each with N+1 items), and
- * interestingly, a {@link CrossHash.Yolk} hash functor, seeded in the PhantomNoise constructor.
+ * interestingly, a {@link CrossHash.Curlup} hash functor, seeded in the PhantomNoise constructor.
  * <br>
  * At higher dimensions, Simplex noise (what {@link SeededNoise} produces) starts to change how it looks compared to
  * lower dimensions. PhantomNoise, on the other hand, maintains a fairly consistent blob-like organic look, such as
@@ -55,7 +55,7 @@ public class PhantomNoise {
     }
     public PhantomNoise(long seed, int dimension, double sharpness) {
         dim = Math.max(2, dimension);
-        this.sharpness = sharpness;
+        this.sharpness = 0.8375 * sharpness;
         working = new double[dim+1];
         points = new double[dim+1];
         vertices = new double[dim+1][dim];

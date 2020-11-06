@@ -42,7 +42,7 @@ public class FoamNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, N
     public static final FoamNoise instance = new FoamNoise();
     
     public int seed = 0xD1CEBEEF;
-    public double sharpness = 1.0;
+    public double sharpness = 0.75;
     public FoamNoise() {
     }
 
@@ -56,7 +56,7 @@ public class FoamNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, N
 
     public FoamNoise(long seed, double sharpness) {
         this(seed);
-        this.sharpness = sharpness;
+        this.sharpness = 0.75 * sharpness;
         
     }
 
