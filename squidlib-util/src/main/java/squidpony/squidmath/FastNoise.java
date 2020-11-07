@@ -270,9 +270,9 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
     private int cellularDistanceFunction = EUCLIDEAN;
     private int cellularReturnType = CELL_VALUE;
     private FastNoise cellularNoiseLookup;
-    private IPointHash pointHash = new IntPointHash();
-
     private float gradientPerturbAmp = 1f / 0.45f;
+
+    private IPointHash pointHash = new IntPointHash();
 
     /**
      * A publicly available FastNoise object with seed 1337, frequency 1.0f/32.0f, 1 octave of Simplex noise using
@@ -793,7 +793,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
     }
 
     protected float gradCoord2D(int seed, int x, int y, float xd, float yd) {
-        final float[] g = phiGrad2f[hash256(x, y, seed)];
+        final float[] g = grad2f[hash256(x, y, seed)];
         return xd * g[0] + yd * g[1];
     }
 
@@ -1304,27 +1304,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
 
         return valCoord6D(seed, xi, yi, zi, wi, ui, vi);
     }
-
-    public float getWhiteNoiseInt(int x, int y) {
-        return valCoord2D(seed, x, y);
-    }
-
-    public float getWhiteNoiseInt(int x, int y, int z) {
-        return valCoord3D(seed, x, y, z);
-    }
-
-    public float getWhiteNoiseInt(int x, int y, int z, int w) {
-        return valCoord4D(seed, x, y, z, w);
-    }
-
-    public float getWhiteNoiseInt(int x, int y, int z, int w, int u) {
-        return valCoord5D(seed, x, y, z, w, u);
-    }
-
-    public float getWhiteNoiseInt(int x, int y, int z, int w, int u, int v) {
-        return valCoord6D(seed, x, y, z, w, u, v);
-    }
-
+    
     // Value Noise
     //x should be premultiplied by 0xD1B55
     //y should be premultiplied by 0xABC99
@@ -2261,7 +2241,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         xin = p0;
         yin = p1;
         final float c = valueNoise(seed, xin + b, yin);
-        final float result = (a + b + c) * F3;
+        final float result = (a + b + c) * F3f;
         final float sharp = 0.75f * 2.2f;
         final float diff = 0.5f - result;
         final int sign = NumberTools.floatToIntBits(diff) >> 31, one = sign | 1;
@@ -3258,19 +3238,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         final float wf0 = lerp(zf00, zf10, ws);
         final float wf1 = lerp(zf01, zf11, ws);
 
-        return lerp(wf0, wf1, us) * 0.73333333333333f;
-//        final float res = lerp(wf0, wf1, us) * 0.73333333333333f;
-//        if(res < minBound)
-//        {
-//            System.out.println(minBound = res);
-//            return -1f;
-//        }
-//        else if(res > maxBound)
-//        {
-//            System.out.println(maxBound = res);
-//            return 1f;
-//        }
-//        return res;
+        return lerp(wf0, wf1, us) * 0.7777777f;
     }
     private float singlePerlinFractalFBM(float x, float y, float z, float w, float u) {
         int seed = this.seed;
@@ -3470,7 +3438,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         final float uf0 = lerp(wf00, wf10, us);
         final float uf1 = lerp(wf01, wf11, us);
 
-        return lerp(uf0, uf1, vs) * 1.75f;
+        return lerp(uf0, uf1, vs) * 1.61f;
     }
     private float singlePerlinFractalFBM(float x, float y, float z, float w, float u, float v) {
         int seed = this.seed;
@@ -3804,17 +3772,13 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         return singleSimplex(seed, x * frequency, y * frequency, z * frequency);
     }
 
-    private final static float F3 = (1f / 3f);
-    private final static float G3 = (1f / 6f);
-    private final static float G33 = -0.5f;
-
     public float singleSimplex(int seed, float x, float y, float z) {
-        float t = (x + y + z) * F3;
+        float t = (x + y + z) * F3f;
         int i = fastFloor(x + t);
         int j = fastFloor(y + t);
         int k = fastFloor(z + t);
 
-        t = (i + j + k) * G3;
+        t = (i + j + k) * G3f;
         float x0 = x - (i - t);
         float y0 = y - (j - t);
         float z0 = z - (k - t);
@@ -3873,15 +3837,15 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
             }
         }
 
-        float x1 = x0 - i1 + G3;
-        float y1 = y0 - j1 + G3;
-        float z1 = z0 - k1 + G3;
-        float x2 = x0 - i2 + F3;
-        float y2 = y0 - j2 + F3;
-        float z2 = z0 - k2 + F3;
-        float x3 = x0 + G33;
-        float y3 = y0 + G33;
-        float z3 = z0 + G33;
+        float x1 = x0 - i1 + G3f;
+        float y1 = y0 - j1 + G3f;
+        float z1 = z0 - k1 + G3f;
+        float x2 = x0 - i2 + F3f;
+        float y2 = y0 - j2 + F3f;
+        float z2 = z0 - k2 + F3f;
+        float x3 = x0 - 0.5f;
+        float y3 = y0 - 0.5f;
+        float z3 = z0 - 0.5f;
 
         float n = 0;
 
@@ -5947,7 +5911,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         }
     }
 
-    protected static final float[][] phiGrad2f = {
+    protected static final float[][] grad2f = {
             {0.6499429579167653f, 0.759982994187637f},
             {-0.1551483029088119f, 0.9878911904175052f},
             {-0.8516180517334043f, 0.5241628506120981f},
@@ -6205,6 +6169,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
             {0.9744164792492415f, 0.22474991650168097f},
             {0.462509014279733f, 0.8866145790082576f},
     };
+
     private static final Float3[] GRAD_3D =
             {
                     new Float3(-0.448549002408981f,  1.174316525459290f,  0.000000000000001f  ),

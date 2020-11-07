@@ -261,7 +261,7 @@ public class ClassicNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D
                                                 yc),
                                         zc),
                                 wc),
-                        uc) );
+                        uc) * 0.7777777 );
 //        if(res < -1 || res > 1) System.out.println(res);
 //        return res;
     }
@@ -412,7 +412,7 @@ public class ClassicNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D
                                                 zd),
                                         wd),
                                 ud),
-                        vd) * 1.875);
+                        vd) * 1.61);
 //        if(res < -1 || res > 1) System.out.println(res);
 //        return res;
     }
