@@ -203,7 +203,7 @@ public class SquidMouse extends InputAdapter {
     }
 
     @Override
-    public boolean scrolled(int amount) {
-        return processor.scrolled(amount);
+    public boolean scrolled(float amountX, float amountY) {
+        return processor.scrolled(amountX, amountY);
     }
 }

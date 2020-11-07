@@ -63,7 +63,7 @@
         <jdk.version>1.7</jdk.version>
         <releaseVersion>7</releaseVersion>
         <!-- As in build.gradle-->
-        <gdx.version>1.9.11</gdx.version>
+        <gdx.version>1.9.12</gdx.version>
         <junit.version>4.13.1</junit.version>
         <regexodus.version>0.1.10</regexodus.version>
         <anim8.version>0.2.2</anim8.version>
