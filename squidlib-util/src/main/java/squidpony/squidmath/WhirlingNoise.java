@@ -2,6 +2,7 @@ package squidpony.squidmath;
 
 import java.io.Serializable;
 
+import static squidpony.squidmath.FastNoise.grad2f;
 import static squidpony.squidmath.Noise.fastFloor;
 
 /**
@@ -543,7 +544,7 @@ public static final int[]
             noise0 = 0.0f;
         } else {
             t0 *= t0;
-            noise0 = t0 * t0 * FastNoise.dotf(FastNoise.phiGrad2f[gi0], x0, y0);
+            noise0 = t0 * t0 * FastNoise.dotf(grad2f[gi0], x0, y0);
             // for 2D gradient
         }
         float t1 = 0.75f - x1 * x1 - y1 * y1;
@@ -551,14 +552,14 @@ public static final int[]
             noise1 = 0.0f;
         } else {
             t1 *= t1;
-            noise1 = t1 * t1 * FastNoise.dotf(FastNoise.phiGrad2f[gi1], x1, y1);
+            noise1 = t1 * t1 * FastNoise.dotf(grad2f[gi1], x1, y1);
         }
         float t2 = 0.75f - x2 * x2 - y2 * y2;
         if (t2 < 0) {
             noise2 = 0.0f;
         } else {
             t2 *= t2;
-            noise2 = t2 * t2 * FastNoise.dotf(FastNoise.phiGrad2f[gi2], x2, y2);
+            noise2 = t2 * t2 * FastNoise.dotf(grad2f[gi2], x2, y2);
         }
         // Add contributions from each corner to get the final noise value.
         // The result is clamped to return values in the interval [-1,1].

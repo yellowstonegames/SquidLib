@@ -86,21 +86,21 @@ public class ColorNoise extends FastNoise {
             noise0 = 0f;
         } else {
             t0 *= t0;
-            noise0 = t0 * t0 * dotf(phiGrad2f[gi0 & 255], x0, y0);
+            noise0 = t0 * t0 * dotf(grad2f[gi0 & 255], x0, y0);
         }
         t1 = 0.75f - x1 * x1 - y1 * y1;
         if (t1 < 0) {
             noise1 = 0f;
         } else {
             t1 *= t1;
-            noise1 = t1 * t1 * dotf(phiGrad2f[gi1 & 255], x1, y1);
+            noise1 = t1 * t1 * dotf(grad2f[gi1 & 255], x1, y1);
         }
         t2 = 0.75f - x2 * x2 - y2 * y2;
         if (t2 < 0) {
             noise2 = 0f;
         } else {
             t2 *= t2;
-            noise2 = t2 * t2 * dotf(phiGrad2f[gi2 & 255], x2, y2);
+            noise2 = t2 * t2 * dotf(grad2f[gi2 & 255], x2, y2);
         }
         // Add contributions from each corner to get the final noise value.
         // The result is scaled to return values in the interval [0,1].
@@ -115,21 +115,21 @@ public class ColorNoise extends FastNoise {
             noise0 = 0f;
         } else {
             t0 *= t0;
-            noise0 = t0 * t0 * dotf(phiGrad2f[gi0 & 255], x0, y0);
+            noise0 = t0 * t0 * dotf(grad2f[gi0 & 255], x0, y0);
         }
         t1 = 0.75f - x1 * x1 - y1 * y1;
         if (t1 < 0) {
             noise1 = 0f;
         } else {
             t1 *= t1;
-            noise1 = t1 * t1 * dotf(phiGrad2f[gi1 & 255], x1, y1);
+            noise1 = t1 * t1 * dotf(grad2f[gi1 & 255], x1, y1);
         }
         t2 = 0.75f - x2 * x2 - y2 * y2;
         if (t2 < 0) {
             noise2 = 0f;
         } else {
             t2 *= t2;
-            noise2 = t2 * t2 * dotf(phiGrad2f[gi2 & 255], x2, y2);
+            noise2 = t2 * t2 * dotf(grad2f[gi2 & 255], x2, y2);
         }
         // Add contributions from each corner to get the final noise value.
         // The result is scaled to return values in the interval [-0.5,0.5].
@@ -143,21 +143,21 @@ public class ColorNoise extends FastNoise {
             noise0 = 0f;
         } else {
             t0 *= t0;
-            noise0 = t0 * t0 * dotf(phiGrad2f[gi0 & 255], x0, y0);
+            noise0 = t0 * t0 * dotf(grad2f[gi0 & 255], x0, y0);
         }
         t1 = 0.75f - x1 * x1 - y1 * y1;
         if (t1 < 0) {
             noise1 = 0f;
         } else {
             t1 *= t1;
-            noise1 = t1 * t1 * dotf(phiGrad2f[gi1 & 255], x1, y1);
+            noise1 = t1 * t1 * dotf(grad2f[gi1 & 255], x1, y1);
         }
         t2 = 0.75f - x2 * x2 - y2 * y2;
         if (t2 < 0) {
             noise2 = 0f;
         } else {
             t2 *= t2;
-            noise2 = t2 * t2 * dotf(phiGrad2f[gi2 & 255], x2, y2);
+            noise2 = t2 * t2 * dotf(grad2f[gi2 & 255], x2, y2);
         }
         // Add contributions from each corner to get the final noise value.
         // The result is scaled to return values in the interval [-0.5,0.5].

@@ -66,9 +66,9 @@ public class HashVisualizer extends ApplicationAdapter {
     // 3 artistic visualizations of hash functions and misc. other
     // 4 noise
     // 5 RNG results
-    private int testType = 3;
+    private int testType = 4;
     private static final int NOISE_LIMIT = 148;
-    private int hashMode, rngMode, noiseMode = 134, otherMode = 17;//142
+    private int hashMode, rngMode, noiseMode = 125, otherMode = 17;//142
 
     /**
      * If you're editing the source of HashVisualizer, you can comment out one line and uncomment another to change
