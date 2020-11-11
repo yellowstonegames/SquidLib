@@ -1,7 +1,6 @@
 package squidpony.squidgrid.mapping;
 
 import squidpony.ArrayTools;
-import squidpony.LZSPlus;
 import squidpony.squidmath.Coord;
 import squidpony.squidmath.FastNoise;
 import squidpony.squidmath.GWTRNG;

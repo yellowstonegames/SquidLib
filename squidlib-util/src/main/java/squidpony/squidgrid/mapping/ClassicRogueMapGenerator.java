@@ -42,9 +42,9 @@ public class ClassicRogueMapGenerator implements IDungeonGenerator{
 
         @Override
         public int hashCode() {
-            return Coord.xoroHashCode(cellx, celly);
+            return Coord.rosenbergStrongHashCode(cellx, celly);
             // the actual algorithm doesn't matter much here.
-            // another good option, if you don't feel like looking up xoroHashCode(), is
+            // another good option, if you don't feel like looking up rosenbergStrongHashCode(), is
             //return (int)(0xC13FA9A902A6328FL * cellx + 0x91E10DA5C79E7B1DL * celly >>> 32);
         }
 

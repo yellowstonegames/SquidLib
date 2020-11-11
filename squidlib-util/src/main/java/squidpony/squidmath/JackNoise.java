@@ -525,8 +525,8 @@ public class JackNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, N
 //        }
 //        return t;
     
-    private final double[] mShared = {0, 0, 0, 0, 0, 0}, cellDistShared = {0, 0, 0, 0, 0, 0};
-    private final int[] distOrderShared = {0, 0, 0, 0, 0, 0}, intLocShared = {0, 0, 0, 0, 0, 0};
+    private final double[] m = {0, 0, 0, 0, 0, 0}, cellDist = {0, 0, 0, 0, 0, 0};
+    private final int[] distOrder = {0, 0, 0, 0, 0, 0}, intLoc = {0, 0, 0, 0, 0, 0};
 
     public double getNoiseWithSeed(final double x, final double y, final double z,
                                final double w, final double u, final double v, final long seed) {
@@ -534,9 +534,9 @@ public class JackNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, N
 
         final int skewX = fastFloor(x + s), skewY = fastFloor(y + s), skewZ = fastFloor(z + s),
                 skewW = fastFloor(w + s), skewU = fastFloor(u + s), skewV = fastFloor(v + s);
-        final double[] m = mShared, cellDist = cellDistShared;
-        final int[] distOrder = distOrderShared,
-                intLoc = intLocShared;
+        final double[] m = this.m, cellDist = this.cellDist;
+        final int[] distOrder = this.distOrder,
+                intLoc = this.intLoc;
         intLoc[0] = skewX;
         intLoc[1] = skewY;
         intLoc[2] = skewZ;
