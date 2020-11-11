@@ -82,7 +82,7 @@ public class Coord implements Serializable {
 	 * @return The degree from {@code from} to {@code to}; 0 is up
 	 */
 	public static double degrees(final Coord from, final Coord to) {
-		return NumberTools.atan2_(to.y - from.y, to.x - from.x) * 360.0;
+		return NumberTools.atan2Degrees360(to.y - from.y, to.x - from.x);
 	}
 
     /**
@@ -272,7 +272,7 @@ public class Coord implements Serializable {
      */
     public Coord average(final Coord other)
     {
-        return get(Math.round((x + other.x) / 2.0f), Math.round((y + other.y) / 2.0f));
+        return get(Math.round((x + other.x) * 0.5f), Math.round((y + other.y) * 0.5f));
     }
 	/**
 	 * @param d
@@ -656,6 +656,14 @@ public class Coord implements Serializable {
         POOL = POOL2;
     }
 
+	/**
+	 * Gets a (usually cached) Coord between this Coord and {@code end}, with the actual position relative to this based
+	 * on {@code amountTraveled}. If amountTraveled is 0, this simply returns a Coord equal to this; if amountTraveled
+	 * is 1, this returns a Coord equal to end, and values in between 0 and 1 give Coords between this and end.
+	 * @param end another Coord that acts as the "far" endpoint, where this is the "near" start point
+	 * @param amountTraveled a float between 0 and 1 inclusive, with lower meaning closer to this, higher meaning closer to end
+	 * @return a Coord that is between this and end as long as amountTraveled is between 0 and 1
+	 */
     public Coord interpolate(Coord end, float amountTraveled) {
         return Coord.get(x + Math.round((end.x - x) * amountTraveled),
                 y + Math.round((end.y - y) * amountTraveled));

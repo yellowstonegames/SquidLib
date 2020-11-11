@@ -239,7 +239,7 @@ public class BinaryHeap<T extends BinaryHeap.Node> {
 
 	/** A binary heap node.
 	 * @author Nathan Sweet */
-	static public class Node {
+	public static class Node {
 		public double value;
 		public int index;
 

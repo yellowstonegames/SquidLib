@@ -4629,7 +4629,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
             }
             skewOffset += G6;
         }
-        return 8.1f * n;
+        return 7.5f * n;
 
     }
 

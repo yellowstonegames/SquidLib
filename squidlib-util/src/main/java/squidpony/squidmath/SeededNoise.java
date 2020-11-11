@@ -650,7 +650,7 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
             }
             skewOffset += G6;
         }
-        return Math.max(-1.0, Math.min(1.0, 7.5f * n));
+        return 7.5f * n;
     }
 
     /**
