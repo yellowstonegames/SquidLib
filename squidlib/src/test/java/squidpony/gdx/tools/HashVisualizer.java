@@ -68,7 +68,7 @@ public class HashVisualizer extends ApplicationAdapter {
     // 5 RNG results
     private int testType = 4;
     private static final int NOISE_LIMIT = 148;
-    private int hashMode, rngMode, noiseMode = 125, otherMode = 17;//142
+    private int hashMode, rngMode, noiseMode = 105, otherMode = 17;//142
 
     /**
      * If you're editing the source of HashVisualizer, you can comment out one line and uncomment another to change
@@ -1239,18 +1239,21 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
         final int floor = value >= 0f ? (int) value : (int) value - 1;
         //basic XLCG adjustment to the seed; makes small-scale wavering stronger
         seed = seed * 0x9E37B ^ 0xD1B54A35; 
-        //get start and end for interpolation, each from -1 to 1.
-        //uses another XLCG step (backwards), then gets the low 20 bits, multiplies to get them into 0-2 range, etc. 
+        //get start and end for interpolation, each from -1 to 1. These are either "peaks" or "valleys"
+        //uses another XLCG step (backwards), then gets the low 20 bits, multiplies to get them into 0-2 range, etc.
         final float start = (((seed += floor) ^ 0xD0E89D2D) * 0x1D2473 & 0xFFFFF) * 0x0.FFFFFp-19f - 1f,
                 end = ((seed + 1 ^ 0xD0E89D2D) * 0x1D2473 & 0xFFFFF) * 0x0.FFFFFp-19f - 1f;
-        //fract()
+        //similar to GLSL's fract()
         value -= floor;
         //cubic interpolation
         value *= value * (3 - 2 * value);
-        //lerp
+        //interpolate between start and end, using cubic to make it curve smoothly
         return (1 - value) * start + value * end;
     }
 
+    /**
+     * Returns smooth 1D noise between -1 and 1.
+     */
     public static float riverSway(int seed, float value)
     {
         return riverSway(seed, seed ^ 0x9E3779B9, seed ^ 0x7F4A7C15, seed ^ 0x6C8E9CF5, value);
