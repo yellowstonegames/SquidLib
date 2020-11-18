@@ -2,8 +2,15 @@ package squidpony.examples;
 
 import org.junit.Ignore;
 import org.junit.Test;
-import squidpony.*;
+import squidpony.FakeLanguageGen;
+import squidpony.MarkovChar;
+import squidpony.MarkovObject;
+import squidpony.MarkovText;
+import squidpony.NaturalLanguageCipher;
+import squidpony.StringKit;
+import squidpony.WeightedLetterNamegen;
 import squidpony.squidmath.CrossHash;
+import squidpony.squidmath.IStatefulRNG;
 import squidpony.squidmath.StatefulRNG;
 
 import java.util.ArrayList;
@@ -13,7 +20,6 @@ import java.util.List;
 /**
  * Created by Tommy Ettinger on 11/29/2015.
  */
-@Ignore
 public class LanguageGenTest {
     @Test
     public void testOutput() {
@@ -39,7 +45,7 @@ public class LanguageGenTest {
 //                            "                Array.Empty<string>(), new int[]{1, 2}, new double[]{5, 3}, 0.45, 0.45, 0.0, 0.0, null, true).Register(\"" + name + "\");\n");
 //        }
 //        System.out.println();
-        StatefulRNG rng = new StatefulRNG(0xf00df00L);
+        IStatefulRNG rng = new StatefulRNG(0xf00df00L);
 
         for (int langi = 0; langi < FakeLanguageGen.registered.length; langi++) {
             FakeLanguageGen flg = FakeLanguageGen.registered[langi];

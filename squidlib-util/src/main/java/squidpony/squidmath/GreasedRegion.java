@@ -7184,29 +7184,29 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
     }
 
     /**
-     * @param findSmallest if true, finds the smallest x-coordinate value;
+     * @param smallestBound if true, finds the smallest x-coordinate value;
      *                          if false, finds the biggest.
      * @return The x-coordinate of the Coord within {@code this} that has the
      * smallest (or biggest) x-coordinate. Or -1 if the zone is empty.
      */
     @Override
-    public int xBound(boolean findSmallest) {
-        if(findSmallest)
+    public int xBound(boolean smallestBound) {
+        if(smallestBound)
             return first().x;
         else
             return last().x;
     }
 
     /**
-     * @param findSmallest if true, finds the smallest y-coordinate value;
+     * @param smallestBound if true, finds the smallest y-coordinate value;
      *                          if false, finds the biggest.
      * @return The y-coordinate of the Coord within {@code this} that has the
      * smallest (or biggest) y-coordinate. Or -1 if the zone is empty.
      */
     @Override
-    public int yBound(boolean findSmallest) {
+    public int yBound(boolean smallestBound) {
         long t = 0L;
-        if(findSmallest) {
+        if(smallestBound) {
             for (int s = 0; s < ySections; s++) {
                 for (int x = 0; x < width; x++) {
                     t |= data[x * ySections + s];

@@ -388,13 +388,13 @@ public interface Rectangle extends Zone {
 		}
 
 		@Override
-		public int xBound(boolean smallestOrBiggest) {
-			return bottomLeft.x + (smallestOrBiggest ? 0 : getWidth() - 1);
+		public int xBound(boolean smallestBound) {
+			return bottomLeft.x + (smallestBound ? 0 : getWidth() - 1);
 		}
 
 		@Override
-		public int yBound(boolean smallestOrBiggest) {
-			return bottomLeft.y - (smallestOrBiggest ? (getHeight() - 1) : 0);
+		public int yBound(boolean smallestBound) {
+			return bottomLeft.y - (smallestBound ? (getHeight() - 1) : 0);
 		}
 
 		@Override

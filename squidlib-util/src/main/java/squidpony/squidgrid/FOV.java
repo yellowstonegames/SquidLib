@@ -2,10 +2,7 @@ package squidpony.squidgrid;
 
 import squidpony.ArrayTools;
 import squidpony.squidgrid.mapping.DungeonUtility;
-import squidpony.squidmath.Coord;
-import squidpony.squidmath.GreasedRegion;
-import squidpony.squidmath.MathExtras;
-import squidpony.squidmath.NumberTools;
+import squidpony.squidmath.*;
 
 import java.io.Serializable;
 import java.util.*;
@@ -839,10 +836,10 @@ public class FOV implements Serializable {
                         || radiusStrategy.radius(x, y, x2, y2) >= radius + 1) {//+1 to cover starting tile
                     continue;
                 }
-                double newAngle = NumberTools.atan2_(y2 - y, x2 - x);
-                if (newAngle > span * 0.5 && newAngle < 1.0 - span * 0.5) 
+                double newAngle = NumberTools.atan2_(y2 - y, x2 - x) - angle;
+                newAngle -= Noise.fastFloor(newAngle);
+                if (newAngle > span * 0.5f && newAngle < 1.0f - span * 0.5f)
                     continue;
-//if (Math.abs(MathExtras.remainder(angle - newAngle, Math.PI * 2)) > span * 0.5)
 
                 double surroundingLight = nearRippleLight(x2, y2, ripple, x, y, decay, lightMap, map, indirect, radiusStrategy );
                 if (lightMap[x2][y2] < surroundingLight) {

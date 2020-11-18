@@ -10,7 +10,7 @@ public class Noise {
     public static final SeededNoise alternate = new SeededNoise(0xFEEDCAFE);
     /**
      * Like {@link Math#floor}, but returns a long.
-     * Doesn't consider weird doubles like INFINITY and NaN.
+     * Doesn't consider "weird doubles" like INFINITY and NaN.
      *
      * @param t the double to find the floor for
      * @return the floor of t, as a long
@@ -20,7 +20,7 @@ public class Noise {
     }
     /**
      * Like {@link Math#floor(double)}, but takes a float and returns a long.
-     * Doesn't consider weird floats like INFINITY and NaN.
+     * Doesn't consider "weird floats" like INFINITY and NaN.
      *
      * @param t the double to find the floor for
      * @return the floor of t, as a long
@@ -30,7 +30,7 @@ public class Noise {
     }
     /**
      * Like {@link Math#floor(double)} , but returns an int.
-     * Doesn't consider weird doubles like INFINITY and NaN.
+     * Doesn't consider "weird doubles" like INFINITY and NaN.
      * @param t the float to find the floor for
      * @return the floor of t, as an int
      */
@@ -39,7 +39,7 @@ public class Noise {
     }
     /**
      * Like {@link Math#floor(double)}, but takes a float and returns an int.
-     * Doesn't consider weird floats like INFINITY and NaN.
+     * Doesn't consider "weird floats" like INFINITY and NaN.
      * @param t the float to find the floor for
      * @return the floor of t, as an int
      */
@@ -48,7 +48,7 @@ public class Noise {
     }
     /**
      * Like {@link Math#ceil(double)}, but returns an int.
-     * Doesn't consider weird doubles like INFINITY and NaN.
+     * Doesn't consider "weird doubles" like INFINITY and NaN.
      * @param t the float to find the ceiling for
      * @return the ceiling of t, as an int
      */
@@ -57,7 +57,7 @@ public class Noise {
     }
     /**
      * Like {@link Math#ceil(double)}, but takes a float and returns an int.
-     * Doesn't consider weird floats like INFINITY and NaN.
+     * Doesn't consider "weird floats" like INFINITY and NaN.
      * @param t the float to find the ceiling for
      * @return the ceiling of t, as an int
      */

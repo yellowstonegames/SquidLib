@@ -5,7 +5,14 @@ import regexodus.Matcher;
 import regexodus.Pattern;
 import regexodus.REFlags;
 import regexodus.Replacer;
-import squidpony.squidmath.*;
+import squidpony.squidmath.CrossHash;
+import squidpony.squidmath.GWTRNG;
+import squidpony.squidmath.Hashers;
+import squidpony.squidmath.IRNG;
+import squidpony.squidmath.IStatefulRNG;
+import squidpony.squidmath.NumberTools;
+import squidpony.squidmath.OrderedMap;
+import squidpony.squidmath.OrderedSet;
 
 import java.io.Serializable;
 import java.util.ArrayList;

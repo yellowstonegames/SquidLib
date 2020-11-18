@@ -263,21 +263,21 @@ public interface Zone extends Serializable, Iterable<Coord> {
 
 		@Override
 		/* Convenience implementation, feel free to override. */
-		public int xBound(boolean smallestOrBiggest) {
-			return smallestOrBiggest ? smallest(true) : biggest(true);
+		public int xBound(boolean smallestBound) {
+			return smallestBound ? smallest(true) : biggest(true);
 		}
 
 		@Override
 		/* Convenience implementation, feel free to override. */
-		public int yBound(boolean smallestOrBiggest) {
-			return smallestOrBiggest ? smallest(false) : biggest(false);
+		public int yBound(boolean smallestBound) {
+			return smallestBound ? smallest(false) : biggest(false);
 		}
 
 		@Override
 		/* Convenience implementation, feel free to override. */
 		/*
 		 * A possible enhancement would be to check that the center is within
-		 * the zone, and if not to return the coord closest to the center, that
+		 * the zone, and if not to return the Coord closest to the center, that
 		 * is in the zone .
 		 */
 		public /* @Nullable */ Coord getCenter() {
@@ -350,22 +350,22 @@ public interface Zone extends Serializable, Iterable<Coord> {
 			return new ListZone(list);
 		}
 
-		private int smallest(boolean xOrY) {
+		private int smallest(boolean checkX) {
 			if (isEmpty())
 				return -1;
 			int min = Integer.MAX_VALUE;
 			for (Coord c : this) {
-				final int val = xOrY ? c.x : c.y;
+				final int val = checkX ? c.x : c.y;
 				if (val < min)
 					min = val;
 			}
 			return min;
 		}
 
-		private int biggest(boolean xOrY) {
+		private int biggest(boolean checkX) {
 			int max = -1;
 			for (Coord c : this) {
-				final int val = xOrY ? c.x : c.y;
+				final int val = checkX ? c.x : c.y;
 				if (max < val)
 					max = val;
 			}
