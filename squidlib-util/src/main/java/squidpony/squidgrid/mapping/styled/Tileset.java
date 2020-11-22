@@ -15,7 +15,5 @@ public class Tileset {
     public Tileset() {
         config = new Config();
         max_tiles = new Maximums();
-        h_tiles = new Tile[]{};
-        v_tiles = new Tile[]{};
     }
 }
