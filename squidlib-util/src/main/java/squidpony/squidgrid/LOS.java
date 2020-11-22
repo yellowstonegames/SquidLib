@@ -1,6 +1,11 @@
 package squidpony.squidgrid;
 
-import squidpony.squidmath.*;
+import squidpony.squidmath.Bresenham;
+import squidpony.squidmath.Coord;
+import squidpony.squidmath.DDALine;
+import squidpony.squidmath.Elias;
+import squidpony.squidmath.OrderedSet;
+import squidpony.squidmath.OrthoLine;
 
 import java.io.Serializable;
 import java.util.ArrayDeque;

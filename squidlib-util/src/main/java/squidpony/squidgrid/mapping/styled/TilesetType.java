@@ -1349,10 +1349,9 @@ public enum TilesetType {
 		case MAZE_B:
 			return MazePlus2Wide.INSTANCE;
 		case OPEN_AREAS:
-			return OpenAreas.INSTANCE;
-		case REFERENCE_CAVES:
-			return OpenAreas.INSTANCE;
-		case ROOMS_AND_CORRIDORS_A:
+            case REFERENCE_CAVES:
+                return OpenAreas.INSTANCE;
+            case ROOMS_AND_CORRIDORS_A:
 			return RoomsAndCorridors.INSTANCE;
 		case ROOMS_AND_CORRIDORS_B:
 			return RoomsAndCorridors2WideDiagonalBias.INSTANCE;
@@ -1377,42 +1376,25 @@ public enum TilesetType {
         int caves = 3, rooms = 1;
         switch (this) {
             case CAVES_LIMIT_CONNECTIVITY:
-                return caves;
+            case SIMPLE_CAVES:
+            case REFERENCE_CAVES:
+            case OPEN_AREAS:
+            case CORNER_CAVES:
             case CAVES_TINY_CORRIDORS:
                 return caves;
-            case CORNER_CAVES:
-                return caves;
             case DEFAULT_DUNGEON:
-                return rooms;
-            case HORIZONTAL_CORRIDORS_A:
-                return rooms;
-            case HORIZONTAL_CORRIDORS_B:
-                return rooms;
-            case HORIZONTAL_CORRIDORS_C:
-                return rooms;
-            case LIMITED_CONNECTIVITY:
-                return rooms;
-            case LIMIT_CONNECTIVITY_FAT:
-                return rooms;
-            case MAZE_A:
-                return rooms;
-            case MAZE_B:
-                return rooms;
-            case OPEN_AREAS:
-                return caves;
-            case REFERENCE_CAVES:
-                return caves;
-            case ROOMS_AND_CORRIDORS_A:
-                return rooms;
-            case ROOMS_AND_CORRIDORS_B:
-                return rooms;
-            case ROOMS_LIMIT_CONNECTIVITY:
-                return rooms;
-            case ROUND_ROOMS_DIAGONAL_CORRIDORS:
-                return rooms;
-            case SIMPLE_CAVES:
-                return caves;
             case SQUARE_ROOMS_WITH_RANDOM_RECTS:
+            case ROUND_ROOMS_DIAGONAL_CORRIDORS:
+            case ROOMS_LIMIT_CONNECTIVITY:
+            case ROOMS_AND_CORRIDORS_B:
+            case ROOMS_AND_CORRIDORS_A:
+            case MAZE_B:
+            case MAZE_A:
+            case LIMIT_CONNECTIVITY_FAT:
+            case LIMITED_CONNECTIVITY:
+            case HORIZONTAL_CORRIDORS_C:
+            case HORIZONTAL_CORRIDORS_B:
+            case HORIZONTAL_CORRIDORS_A:
                 return rooms;
         }
         throw new IllegalStateException("Unmatched: " + this);

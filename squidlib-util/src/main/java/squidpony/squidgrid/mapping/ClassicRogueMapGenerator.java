@@ -29,7 +29,12 @@ public class ClassicRogueMapGenerator implements IDungeonGenerator{
      */
     private static class ClassicRogueRoom {
 
-        private int x, y, width, height, cellx, celly;
+        private int x;
+        private int y;
+        private int width;
+        private int height;
+        private final int cellx;
+        private final int celly;
         private final OrderedSet<ClassicRogueRoom> connections = new OrderedSet<>(4);
         ClassicRogueRoom(int x, int y, int width, int height, int cellx, int celly) {
             this.x = x;
@@ -64,13 +69,19 @@ public class ClassicRogueMapGenerator implements IDungeonGenerator{
         }
     }
 
-    private IRNG rng;
+    private final IRNG rng;
 
-    private int horizontalRooms, verticalRooms, dungeonWidth, dungeonHeight,
-            minRoomWidth, maxRoomWidth, minRoomHeight, maxRoomHeight;
+    private final int horizontalRooms;
+    private final int verticalRooms;
+    private final int dungeonWidth;
+    private final int dungeonHeight;
+    private int minRoomWidth;
+    private int maxRoomWidth;
+    private int minRoomHeight;
+    private int maxRoomHeight;
     private ClassicRogueRoom[][] rooms;
     private char[][] dungeon;
-    private Direction[] dirToCheck = new Direction[4];
+    private final Direction[] dirToCheck = new Direction[4];
     /**
      * Initializes the generator to turn out random dungeons within the specific
      * parameters.
