@@ -24,14 +24,14 @@ import static squidpony.squidmath.BlueNoise.ALT_NOISE;
  */
 public class FFTVisualizer extends ApplicationAdapter {
 
-    private VastNoise noise = new VastNoise(1);
-    private IntPointHash iph = new IntPointHash();
-    private FlawedPointHash.RugHash rug = new FlawedPointHash.RugHash(1);
-    private FlawedPointHash.QuiltHash quilt = new FlawedPointHash.QuiltHash(1);
-    private FlawedPointHash.CubeHash cube = new FlawedPointHash.CubeHash(1, 256);
+    private final FastNoise noise = new FastNoise(1, 0.25f);
+    private final IntPointHash iph = new IntPointHash();
+    private final FlawedPointHash.RugHash rug = new FlawedPointHash.RugHash(1);
+    private final FlawedPointHash.QuiltHash quilt = new FlawedPointHash.QuiltHash(1, 32);
+    private final FlawedPointHash.CubeHash cube = new FlawedPointHash.CubeHash(1, 64);
 //    private FlawedPointHash.FNVHash fnv = new FlawedPointHash.FNVHash(1);
-    private IPointHash[] pointHashes = new IPointHash[] {iph, cube, rug, quilt};
-    private int hashIndex;
+    private final IPointHash[] pointHashes = new IPointHash[] {iph, cube, rug, quilt};
+    private int hashIndex = 3;
     private static final int MODE_LIMIT = 8;
     private int mode = 0;
     private int dim; // this can be 0, 1, 2, or 3; add 2 to get the actual dimensions
@@ -78,7 +78,8 @@ public class FFTVisualizer extends ApplicationAdapter {
         Coord.expandPoolTo(width, height);
         norm = new OrderedMap<>(width * height, 0.75f);
         shuffler = new StatefulRNG(0x1234567890ABCDEFL);
-        
+        noise.setNoiseType(FastNoise.CUBIC_FRACTAL);
+        noise.setPointHash(quilt);
         Pixmap pm = new Pixmap(Gdx.files.internal("special/BlueNoise512x512.png"));
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
@@ -111,12 +112,14 @@ public class FFTVisualizer extends ApplicationAdapter {
                     case E: //earlier seed
                         s = noise.getSeed() - 1;
                         noise.setSeed(s);
+                        cube.setState(s);
                         rug.setState(s);
                         quilt.setState(s);
                         break;
                     case S: //seed after
                         s = noise.getSeed() + 1;
                         noise.setSeed(s);
+                        cube.setState(s);
                         rug.setState(s);
                         quilt.setState(s);
                         break;
@@ -175,7 +178,7 @@ public class FFTVisualizer extends ApplicationAdapter {
 //// specific thresholds: 32, 96, 160, 224
 //        threshold = (TimeUtils.millis() >>> 10 & 3) * 0x40p-8f + 0x20p-8f;
         renderer.begin(view.getCamera().combined, GL_POINTS);
-        float bright, nf = noise.getFrequency(), c = (paused ? startTime : TimeUtils.timeSinceMillis(startTime)) * 0x1p-12f / nf, xx, yy;
+        float bright, nf = noise.getFrequency(), c = (paused ? startTime : TimeUtils.timeSinceMillis(startTime)) * 0x1p-10f / nf, xx, yy;
         double db;
         ArrayTools.fill(imag, 0.0);
         if(mode == 0) {

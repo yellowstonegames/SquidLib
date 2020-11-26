@@ -432,7 +432,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
      * Changes the interpolation method used to smooth between noise values, using one of the following constants from
      * this class (lowest to highest quality): {@link #LINEAR} (0), {@link #HERMITE} (1), or {@link #QUINTIC} (2). If
      * this is not called, it defaults to HERMITE. This is used in Value, Perlin, and Position Perturbing.
-     * @param interpolation an int (0, 1, 2, or 3) corresponding to a constant from this class for an interpolation type
+     * @param interpolation an int (0, 1, or 2) corresponding to a constant from this class for an interpolation type
      */
     public void setInterpolation(int interpolation) {
         this.interpolation = interpolation;
@@ -443,9 +443,10 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
      * in this class:
      * {@link #VALUE} (0), {@link #VALUE_FRACTAL} (1), {@link #PERLIN} (2), {@link #PERLIN_FRACTAL} (3),
      * {@link #SIMPLEX} (4), {@link #SIMPLEX_FRACTAL} (5), {@link #CELLULAR} (6), {@link #WHITE_NOISE} (7),
-     * {@link #CUBIC} (8), {@link #CUBIC_FRACTAL} (9), {@link #FOAM} (10), or {@link #FOAM_FRACTAL} (11).
+     * {@link #CUBIC} (8), {@link #CUBIC_FRACTAL} (9), {@link #FOAM} (10), {@link #FOAM_FRACTAL} (11), {@link #HONEY}
+     * (12), or {@link #HONEY_FRACTAL} (13).
      * If this isn't called, getConfiguredNoise() will default to SIMPLEX_FRACTAL.
-     * @param noiseType an int from 0 to 9 corresponding to a constant from this class for a noise type
+     * @param noiseType an int from 0 to 13 corresponding to a constant from this class for a noise type
      */
     public void setNoiseType(int noiseType) {
         this.noiseType = noiseType;
@@ -456,9 +457,10 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
      * in this class:
      * {@link #VALUE} (0), {@link #VALUE_FRACTAL} (1), {@link #PERLIN} (2), {@link #PERLIN_FRACTAL} (3),
      * {@link #SIMPLEX} (4), {@link #SIMPLEX_FRACTAL} (5), {@link #CELLULAR} (6), {@link #WHITE_NOISE} (7),
-     * {@link #CUBIC} (8), {@link #CUBIC_FRACTAL} (9), {@link #FOAM} (10), or {@link #FOAM_FRACTAL} (11).
+     * {@link #CUBIC} (8), {@link #CUBIC_FRACTAL} (9), {@link #FOAM} (10), {@link #FOAM_FRACTAL} (11), {@link #HONEY}
+     * (12), or {@link #HONEY_FRACTAL} (13).
      * The default is SIMPLEX_FRACTAL.
-     * @return the noise type as a code, from 0 to 9 inclusive
+     * @return the noise type as a code, from 0 to 13 inclusive
      */
     public int getNoiseType()
     {

@@ -111,10 +111,20 @@ public interface FlawedPointHash extends IPointHash, IFlawed {
         public QuiltHash() {
         }
 
+        /**
+         * The same as calling {@link #QuiltHash(long, int)} with size = 64 .
+         * @param state the state to use for hashing when no state is otherwise specified
+         */
         public QuiltHash(long state) {
             super(state);
         }
 
+        /**
+         * Creates a QuiltHash with the given state and a size for each "quilt square" equal to size, rounded up to the
+         * next power of two if it is not already a power of two. These quilt squares become quilt cubes in 3D.
+         * @param state the state to use for hashing when no state is otherwise specified
+         * @param size the size of each quilt square/cube, in no particular unit, but larger sizes can be more complex
+         */
         public QuiltHash(long state, int size) {
             super(state);
             setSize(size);
@@ -153,43 +163,34 @@ public interface FlawedPointHash extends IPointHash, IFlawed {
         }
 
         public long hashLongs(long x, long y, long z, long s) {
-            return hashLongs(x, hashLongs(y, z, s), s);
-//            s ^= (x >> size) * 0xD1B54A32D192ED03L;
-//            s ^= (y >> size) * 0xABC98388FB8FAC03L;
-//            s ^= (z >> size) * 0x8CB92BA72F3D8DD7L;
-//            x *= x;
-//            y *= y;
-//            z *= z;
-//            x &= mask;
-//            y &= mask;
-//            z &= mask;
-//            long t;
-//            if (x < y && z < y) {
-//                t = x;
-//                x = y;
-//                y = t;
-//            }
-//            else if(x < y && y < z){
-//                t = x;
-//                x = z;
-//                z = t;
-//            }
-//            else if(y < x && x < z){
-//                t = y;
-//                y = z;
-//                z = t;
-//            }
-//            else if(y < x && z < x){
-//                t = y;
-//                y = z;
-//                z = t;
-//            }
-//
-//            x = (x + 0x9E3779B97F4A7C15L ^ x) * (s + z);
-//            y = (y + 0x9E3779B97F4A7C15L ^ y) * (x + s);
-//            z = (z + 0x9E3779B97F4A7C15L ^ z) * (y + x);
-//            s = (s + 0x9E3779B97F4A7C15L ^ s) * (z + y);
-//            return (int) (s >>> 32);
+//            return hashLongs(x, hashLongs(y, z, s), s);
+            s ^= (x >> size) * 0xD1B54A32D192ED03L;
+            s ^= (y >> size) * 0xABC98388FB8FAC03L;
+            s ^= (z >> size) * 0x8CB92BA72F3D8DD7L;
+            x = x * x >>> 1 & mask;
+            y = y * y >>> 1 & mask;
+            z = z * z >>> 1 & mask;
+            long t;
+            if (x < y) {
+                t = x;
+                x = y;
+                y = t;
+            }
+            if(x < z){
+                t = x;
+                x = z;
+                z = t;
+            }
+            if(y < z){
+                t = y;
+                y = z;
+                z = t;
+            }
+            x = (x + 0x9E3779B97F4A7C15L ^ x) * (s + z);
+            y = (y + 0x9E3779B97F4A7C15L ^ y) * (x + s);
+            z = (z + 0x9E3779B97F4A7C15L ^ z) * (y + x);
+            s = (s + 0x9E3779B97F4A7C15L ^ s) * (z + y);
+            return s;
         }
 
         public long hashLongs(long x, long y, long z, long w, long s) {
