@@ -5,9 +5,16 @@ import squidpony.squidai.DijkstraMap;
 import squidpony.squidgrid.Measurement;
 import squidpony.squidgrid.mapping.styled.DungeonBoneGen;
 import squidpony.squidgrid.mapping.styled.TilesetType;
-import squidpony.squidmath.*;
+import squidpony.squidmath.Coord;
+import squidpony.squidmath.GreasedRegion;
+import squidpony.squidmath.IRNG;
+import squidpony.squidmath.OrderedSet;
+import squidpony.squidmath.PoissonDisk;
+import squidpony.squidmath.StatefulRNG;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.EnumMap;
 
 /**
  * A good way to create a more-complete dungeon, layering different effects and modifications on top of a dungeon

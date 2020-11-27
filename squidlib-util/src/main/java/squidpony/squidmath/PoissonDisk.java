@@ -19,8 +19,7 @@ import java.util.HashSet;
  * Created by Tommy Ettinger on 10/20/2015.
  */
 public class PoissonDisk {
-    private static final float rootTwo = (float) Math.sqrt(2),
-            pi2 = (float) (Math.PI * 2.0);
+    private static final float rootTwo = (float) Math.sqrt(2);
     
     private static final int defaultPointsPlaced = 10;
     private static final Radius disk = Radius.CIRCLE;
@@ -121,6 +120,7 @@ public class PoissonDisk {
         Coord[][] grid = new Coord[gridWidth][gridHeight];
         ArrayList<Coord> activePoints = new ArrayList<>();
         OrderedSet<Coord> points = new OrderedSet<>(128);
+        rejectionDistance *= rejectionDistance;
 
         //add first point
         boolean added = false;
@@ -132,7 +132,7 @@ public class PoissonDisk {
             d = rng.nextFloat();
             int yr = Math.round(minPosition.y + dimensions.y * d);
 
-            if (rejectionDistance > 0 && disk.radius(center.x, center.y, xr, yr) > rejectionDistance)
+            if (rejectionDistance != 0f && center.distanceSq(xr, yr) > rejectionDistance)
                 continue;
             added = true;
             Coord p = Coord.get(Math.min(xr, maxX - 1), Math.min(yr, maxY - 1));
@@ -158,16 +158,16 @@ public class PoissonDisk {
                 //get random point around
                 float d = rng.nextFloat();
                 float radius = minimumDistance + minimumDistance * d;
-                float angle = pi2 * rng.nextFloat();
+                float angle = rng.nextFloat();
 
-                float newX = radius * NumberTools.sin(angle);
-                float newY = radius * NumberTools.cos(angle);
+                float newX = radius * NumberTools.sin_(angle);
+                float newY = radius * NumberTools.cos_(angle);
                 Coord q = point.translateCapped(Math.round(newX), Math.round(newY), maxX, maxY);
                 //end get random point around
 
                 if (q.x >= minPosition.x && q.x <= maxPosition.x &&
                         q.y >= minPosition.y && q.y <= maxPosition.y &&
-                        (rejectionDistance <= 0 || disk.radius(center.x, center.y, q.x, q.y) <= rejectionDistance))
+                        (rejectionDistance == 0f || center.distanceSq(q) <= rejectionDistance))
                 {
                     Coord qIndex = q.subtract(minPosition).divide((int)Math.ceil(cellSize));
                     boolean tooClose = false;
@@ -212,10 +212,7 @@ public class PoissonDisk {
         int height = map[0].length;
         HashSet<Character> blocked = new HashSet<>();
         Collections.addAll(blocked, blocking);
-        boolean restricted = false;
-        if (blocked.size() > 0) {
-            restricted = true;
-        }
+        boolean restricted = (blocked.size() > 0);
         Coord dimensions = maxPosition.subtract(minPosition);
         float cellSize = Math.max(minimumDistance / rootTwo, 1f);
         int gridWidth = (int) (dimensions.x / cellSize) + 1;
@@ -250,18 +247,18 @@ public class PoissonDisk {
                 float d = rng.nextFloat();
                 float radius = minimumDistance + minimumDistance * d;
                 d = rng.nextFloat();
-                float angle = pi2 * d;
+                float angle = d;
 
-                float newX = radius * NumberTools.sin(angle);
-                float newY = radius * NumberTools.cos(angle);
+                float newX = radius * NumberTools.sin_(angle);
+                float newY = radius * NumberTools.cos_(angle);
                 Coord q = point.translateCapped(Math.round(newX), Math.round(newY), width, height);
                 int frustration = 0;
                 while(restricted && blocked.contains(map[q.x][q.y]) && frustration < 8)
                 {
                     d = rng.nextFloat();
-                    angle = pi2 * d;
-                    newX = radius * NumberTools.sin(angle);
-                    newY = radius * NumberTools.cos(angle);
+                    angle = d;
+                    newX = radius * NumberTools.sin_(angle);
+                    newY = radius * NumberTools.cos_(angle);
                     q = point.translateCapped(Math.round(newX), Math.round(newY), width, height);
                     frustration++;
                 }
