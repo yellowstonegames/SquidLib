@@ -11,29 +11,26 @@ import squidpony.squidmath.*;
 public class PoissonDiskTest {
 
     public static void main(String[] args) {
-        LightRNG lrng = new LightRNG(0xBEEFBABEL);
-        RNG rng = new RNG(lrng);
+        RNG rng = new RNG(0xBEEFBABEL);
         DungeonGenerator dg = new DungeonGenerator(80, 80, rng);
-
-        SerpentDeepMapGenerator deep = new SerpentDeepMapGenerator(80, 80, 8, rng);
-        //deep.putWalledBoxRoomCarvers(1);
-        char[][] dun = dg.generateRespectingStairs(deep.generate()[7]);
+        char[][] dun = dg.generate();
 
         // System.out.println(dg);
 
-        OrderedSet<Coord> disks = PoissonDisk.sampleMap(dun, 7f, rng, '#');
+        OrderedSet<Coord> disks = PoissonDisk.sampleMap(dun, 4f, rng, '#');
 
         //char[][] hl = DungeonUtility.hashesToLines(dun);
-        for(Coord c : disks)
-        {
-            if(dun[c.x][c.y] != '#')
+        for (Coord c : disks) {
+            if (dun[c.x][c.y] != '#')
                 dun[c.x][c.y] = 'o';
         }
         //hl[entry.x][entry.y] = '@';
         dg.setDungeon(dun);
-        System.out.println(dg);
+        if (TestConfiguration.PRINTING) {
+            System.out.println(dg);
 
-        System.out.println();
+            System.out.println();
+        }
     }
 
 }

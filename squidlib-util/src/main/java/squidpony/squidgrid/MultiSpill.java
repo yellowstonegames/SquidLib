@@ -2,14 +2,24 @@ package squidpony.squidgrid;
 
 import squidpony.squidmath.*;
 
+import java.io.Serializable;
 import java.util.*;
 
 /**
- * A randomized flood-fill implementation that can be used for level generation (e.g. filling ponds and lakes), for
- * gas propagation, or for all sorts of fluid-dynamics-on-the-cheap.
+ * A randomized flood-fill implementation that fills from multiple start points at a time. Typical usage will either
+ * want the in-order-of-expansion result of {@link #start(List, int, Collection)}, which returns an ArrayList of the
+ * different separate spills, with each spill as its own ArrayList of Coord, or may want the all-at-once final result
+ * of all cells that received a spill and which point spilled out onto each given area, which is filled into
+ * {@link #spillMap} when {@link #start(List, int, Collection)} is called.
+ * <br>
+ * This is a pretty complex class, but it can be worthwhile for certain kinds of effect. It's used in
+ * {@link squidpony.squidgrid.mapping.PoliticalMapper} to assign claims to territory by nations or other factions, and
+ * helps ensure that the edges of territories are naturally-shaped.
+ * <br>
  * Created by Tommy Ettinger on 4/7/2015.
  */
-public class MultiSpill {
+public class MultiSpill implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     /**
      * This affects how distance is measured on diagonal directions vs. orthogonal directions. MANHATTAN should form a
