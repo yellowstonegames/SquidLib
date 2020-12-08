@@ -1,7 +1,13 @@
 package squidpony.squidgrid.mapping;
 
 import squidpony.squidgrid.Direction;
-import squidpony.squidmath.*;
+import squidpony.squidmath.Coord;
+import squidpony.squidmath.IRNG;
+import squidpony.squidmath.IntVLA;
+import squidpony.squidmath.OrderedSet;
+import squidpony.squidmath.PoissonDisk;
+import squidpony.squidmath.VanDerCorputQRNG;
+import squidpony.squidmath.WeightedTable;
 
 import java.util.ArrayList;
 import java.util.Arrays;

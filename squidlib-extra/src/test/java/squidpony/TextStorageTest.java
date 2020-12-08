@@ -21,7 +21,7 @@ public class TextStorageTest extends ApplicationAdapter {
     @Override
     public void create() {
         super.create();
-        if(true) {
+        if(false) {
             TextStorage store = new TextStorage("TextStorage", "https://www.youtube.com/watch?v=dQw4w9WgXcQ");
             store.compress = true;
             System.out.println(store.preferences.get().values());
@@ -79,14 +79,14 @@ public class TextStorageTest extends ApplicationAdapter {
             world.generate(15, true);
             GreasedRegion grease = new GreasedRegion(new MiniMover64RNG(75L), 75, 75);
             String text = randomLanguage.sentence(srng.copy(), 5, 8);
-            ProbabilityTable<String> table = new ProbabilityTable<>("I heard you like JSON...");
+            ProbabilityTable<String> table = new ProbabilityTable<>("So, I heard you like JSON...");
             table.add("well", 1).add("this", 2).add("ain't", 3).add("real", 4).add("JSON!", 5);
             //String text = table.random();
 
             noCompression.put("rng", srng);
             noCompression.put("language", randomLanguage);
             noCompression.put("generated", text);
-            noCompression.put("world", world);
+//            noCompression.put("world", world);
             noCompression.put("grease", grease);
             noCompression.put("table", table);
             noCompression.put("drawn", text);
@@ -96,7 +96,7 @@ public class TextStorageTest extends ApplicationAdapter {
             yesCompression.put("rng", srng);
             yesCompression.put("language", randomLanguage);
             yesCompression.put("generated", text);
-            yesCompression.put("world", world);
+//            yesCompression.put("world", world);
             yesCompression.put("grease", grease);
             yesCompression.put("table", table);
             yesCompression.put("drawn", text);

@@ -1,13 +1,14 @@
 package squidpony.squidgrid.mapping;
 
 import squidpony.ArrayTools;
-import squidpony.squidmath.*;
+import squidpony.squidmath.Coord;
+import squidpony.squidmath.GreasedRegion;
+import squidpony.squidmath.OrderedMap;
+import squidpony.squidmath.OrderedSet;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-//import static squidpony.squidmath.CoordPacker.*;
 
 /**
  * A small class that can analyze a dungeon or other map and identify areas as being "room" or "corridor" based on how

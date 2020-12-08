@@ -1,6 +1,9 @@
 package squidpony.squidgrid.mapping;
 
-import squidpony.squidmath.*;
+import squidpony.squidmath.Coord;
+import squidpony.squidmath.CoordPacker;
+import squidpony.squidmath.IRNG;
+import squidpony.squidmath.OrderedMap;
 
 import java.util.ArrayList;
 import java.util.List;
