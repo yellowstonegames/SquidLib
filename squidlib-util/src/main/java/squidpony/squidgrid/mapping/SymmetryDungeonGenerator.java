@@ -7,7 +7,7 @@ import java.util.*;
 /**
  * A variant on {@link MixedGenerator} that creates bi-radially symmetric maps (basically a yin-yang shape). Useful for
  * strategy games and possibly competitive multi-player games. The Coords passed to constructors as room positions do
- * not necessarily need to be
+ * not necessarily need to be symmetrical already; they will be duplicated in their mirror position in the dungeon.
  *
  * Created by Tommy Ettinger on 11/20/2015.
  */
@@ -121,7 +121,7 @@ public class SymmetryDungeonGenerator extends MixedGenerator {
 
     /**
      * This prepares a map generator that will generate a map with the given width and height, using the given RNG.
-     * This version of the constructor uses a LinkedHashMap with Coord keys and Coord array values to determine a
+     * This version of the constructor uses a OrderedMap with Coord keys and Coord array values to determine a
      * branching path for the dungeon to take; each key will connect once to each of the Coords in its value, and you
      * usually don't want to connect in both directions. You call the different carver-adding methods to affect what the
      * dungeon will look like, putCaveCarvers(), putBoxRoomCarvers(), and putRoundRoomCarvers(), defaulting to only

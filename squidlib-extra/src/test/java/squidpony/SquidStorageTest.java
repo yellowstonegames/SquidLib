@@ -107,18 +107,18 @@ public class SquidStorageTest extends ApplicationAdapter {
             GreasedRegion grease = new GreasedRegion(75, 75);
             grease.insertRectangle(10, 10, 55, 55).removeRectangle(20, 20, 45, 45);
             String text = randomLanguage.sentence(srng.copy(), 5, 8);
-            ProbabilityTable<String> table = new ProbabilityTable<>("I heard you like JSON...");
+            ProbabilityTable<String> table = new ProbabilityTable<>("So, I heard you like JSON...");
             table.add("well", 1).add("this", 2).add("ain't", 3).add("real", 4).add("JSON!", 5);
-            //String text = table.random();
+            String drawn = table.random();
             Coord point = Coord.get(42, 23);
 
             noCompression.put("rng", srng);
             noCompression.put("language", randomLanguage);
             noCompression.put("generated", text);
-            noCompression.put("world", world);
+//            noCompression.put("world", world);
             noCompression.put("grease", grease);
             noCompression.put("table", table);
-            noCompression.put("drawn", text);
+            noCompression.put("drawn", drawn);
             noCompression.put("enum_map", em);
             noCompression.put("empty_enum_map", empty);
             noCompression.put("empty_eom", empty2);
@@ -127,10 +127,10 @@ public class SquidStorageTest extends ApplicationAdapter {
             yesCompression.put("rng", srng);
             yesCompression.put("language", randomLanguage);
             yesCompression.put("generated", text);
-            yesCompression.put("world", world);
+//            yesCompression.put("world", world);
             yesCompression.put("grease", grease);
             yesCompression.put("table", table);
-            yesCompression.put("drawn", text);
+            yesCompression.put("drawn", drawn);
             yesCompression.put("enum_map", em);
             yesCompression.put("empty_enum_map", empty);
             yesCompression.put("empty_eom", empty2);

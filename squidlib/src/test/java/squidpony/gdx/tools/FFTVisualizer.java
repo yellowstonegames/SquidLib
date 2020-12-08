@@ -18,6 +18,7 @@ import java.util.Comparator;
 import static com.badlogic.gdx.Input.Keys.*;
 import static com.badlogic.gdx.graphics.GL20.GL_POINTS;
 import static squidpony.squidmath.BlueNoise.ALT_NOISE;
+import static squidpony.squidmath.BlueNoise.TRI_NOISE;
 //import static squidpony.squidmath.BlueNoise.getChosen;
 
 /**
@@ -32,7 +33,7 @@ public class FFTVisualizer extends ApplicationAdapter {
 //    private FlawedPointHash.FNVHash fnv = new FlawedPointHash.FNVHash(1);
     private final IPointHash[] pointHashes = new IPointHash[] {iph, cube, rug, quilt};
     private int hashIndex = 3;
-    private static final int MODE_LIMIT = 8;
+    private static final int MODE_LIMIT = 10;
     private int mode = 0;
     private int dim; // this can be 0, 1, 2, or 3; add 2 to get the actual dimensions
     private int octaves = 3;
@@ -311,104 +312,7 @@ public class FFTVisualizer extends ApplicationAdapter {
 //                    break;
             }
         }
-        else if(mode == 2){
-            switch (dim){
-                case 0:
-                    for (int x = 0; x < width; x++) {
-                        for (int y = 0; y < height; y++) {
-                            bright = (float) (db = 0x1p-8 * (BlueNoise.get(x, y, ALT_NOISE[noise.getSeed() & 63]) + 128));
-                            real[x][y] = db;
-                            renderer.color(bright, bright, bright, 1f);
-                            renderer.vertex(x, y, 0);
-                        }
-                    }
-                    break;
-                case 1:
-                    for (int x = 0; x < width; x++) {
-                        for (int y = 0; y < height; y++) {
-                            bright = (float) (db = 0x1p-8 * (BlueNoise.getSeeded(x, y, noise.getSeed()) + 128));
-                            real[x][y] = db;
-                            renderer.color(bright, bright, bright, 1f);
-                            renderer.vertex(x, y, 0);
-                        }
-                    }
-                    break;
-                case 2:
-                    for (int x = 0; x < width; x++) {
-                        for (int y = 0; y < height; y++) {
-                            bright = (float) (db = 0x1p-8 * (BlueNoise.getChosen(x, y, noise.getSeed()) + 128));
-                            real[x][y] = db;
-                            renderer.color(bright, bright, bright, 1f);
-                            renderer.vertex(x, y, 0);
-                        }
-                    }
-                    break;
-                case 3:
-                    for (int x = 0; x < width; x++) {
-                        for (int y = 0; y < height; y++) {
-                            bright = (float) (db = 0x1p-8 * (getChosen(x, y, noise.getSeed()) + 128));
-                            real[x][y] = db;
-                            renderer.color(bright, bright, bright, 1f);
-                            renderer.vertex(x, y, 0);
-                        }
-                    }
-                    break;
-
-            }
-        }
-        else if(mode == 3){
-            switch (dim){
-                case 0:
-                    for (int x = 0; x < width; x++) {
-                        for (int y = 0; y < height; y++) {
-                            bright = 0x1p-8f * (BlueNoise.get(x, y, ALT_NOISE[noise.getSeed() & 63]) + 128) <= threshold ? 1 : 0;
-                            real[x][y] = bright;
-                            renderer.color(bright, bright, bright, 1f);
-                            renderer.vertex(x, y, 0);
-                        }
-                    }
-                    break;
-                case 1:
-                    for (int x = 0; x < width; x++) {
-                        for (int y = 0; y < height; y++) {
-                            bright = 0x1p-8 * (BlueNoise.getSeeded(x, y, noise.getSeed()) + 128) <= threshold ? 1 : 0;
-                            real[x][y] = bright;
-                            renderer.color(bright, bright, bright, 1f);
-                            renderer.vertex(x, y, 0);
-                        }
-                    }
-                    break;
-                case 2:
-                    for (int x = 0; x < width; x++) {
-                        for (int y = 0; y < height; y++) {
-                            bright = 0x1p-8 * (BlueNoise.getChosen(x, y, noise.getSeed()) + 128) <= threshold ? 1 : 0;
-                            real[x][y] = bright;
-                            renderer.color(bright, bright, bright, 1f);
-                            renderer.vertex(x, y, 0);
-                        }
-                    }
-                    break;
-                case 3:
-                    for (int x = 0; x < width; x++) {
-                        for (int y = 0; y < height; y++) {
-                            bright = 0x1p-8 * (getChosen(x, y, noise.getSeed()) + 128) <= threshold ? 1 : 0;
-                            real[x][y] = bright;
-                            renderer.color(bright, bright, bright, 1f);
-                            renderer.vertex(x, y, 0);
-                        }
-                    }
-                    break;
-//                    for (int x = 0; x < width; x++) {
-//                        for (int y = 0; y < height; y++) {
-//                            bright = region.contains(x, y) ? 1 : 0;
-//                            real[x][y] = bright;
-//                            renderer.color(bright, bright, bright, 1f);
-//                            renderer.vertex(x, y, 0);
-//                        }
-//                    }
-//                    break;
-            }
-        } else if(mode == 4) {
+        else if(mode == 2) {
             int ct = (int)(paused ? startTime : TimeUtils.timeSinceMillis(startTime) >>> 5);
             switch (dim) {
                 case 0:
@@ -452,7 +356,7 @@ public class FFTVisualizer extends ApplicationAdapter {
                     }
                     break;
             }
-        } else if(mode == 5) {
+        } else if(mode == 3) {
             int ct = (int)(paused ? startTime : TimeUtils.timeSinceMillis(startTime) >>> 5);
             switch (dim) {
                 case 0:
@@ -496,7 +400,7 @@ public class FFTVisualizer extends ApplicationAdapter {
                     }
                     break;
             }
-        } else if(mode == 6) {
+        } else if(mode == 4) {
             int ct = (int)(paused ? startTime : TimeUtils.timeSinceMillis(startTime) >>> 5);
             switch (dim) {
                 case 0:
@@ -540,7 +444,7 @@ public class FFTVisualizer extends ApplicationAdapter {
                     }
                     break;
             }
-        } else if(mode == 7) {
+        } else if(mode == 5) {
             norm.clear();
             
             //// Set up an initial Fourier transform for this to invert
@@ -598,6 +502,200 @@ public class FFTVisualizer extends ApplicationAdapter {
                     renderer.color(colors[x][y]);
                     renderer.vertex(x, y, 0);
                 }
+            }
+        }
+        else if(mode == 6){
+            switch (dim){
+                case 0:
+                    for (int x = 0; x < width; x++) {
+                        for (int y = 0; y < height; y++) {
+                            bright = (float) (db = 0x1p-8 * (BlueNoise.get(x, y, ALT_NOISE[noise.getSeed() & 63]) + 128));
+                            real[x][y] = db;
+                            renderer.color(bright, bright, bright, 1f);
+                            renderer.vertex(x, y, 0);
+                        }
+                    }
+                    break;
+                case 1:
+                    for (int x = 0; x < width; x++) {
+                        for (int y = 0; y < height; y++) {
+                            bright = (float) (db = 0x1p-8 * (BlueNoise.getSeeded(x, y, noise.getSeed()) + 128));
+                            real[x][y] = db;
+                            renderer.color(bright, bright, bright, 1f);
+                            renderer.vertex(x, y, 0);
+                        }
+                    }
+                    break;
+                case 2:
+                    for (int x = 0; x < width; x++) {
+                        for (int y = 0; y < height; y++) {
+                            bright = (float) (db = 0x1p-8 * (BlueNoise.getChosen(x, y, noise.getSeed()) + 128));
+                            real[x][y] = db;
+                            renderer.color(bright, bright, bright, 1f);
+                            renderer.vertex(x, y, 0);
+                        }
+                    }
+                    break;
+                case 3:
+                    for (int x = 0; x < width; x++) {
+                        for (int y = 0; y < height; y++) {
+                            bright = (float) (db = 0x1p-8 * (getChosen(x, y, noise.getSeed()) + 128));
+                            real[x][y] = db;
+                            renderer.color(bright, bright, bright, 1f);
+                            renderer.vertex(x, y, 0);
+                        }
+                    }
+                    break;
+            }
+        }
+        else if(mode == 7){
+            switch (dim){
+                case 0:
+                    for (int x = 0; x < width; x++) {
+                        for (int y = 0; y < height; y++) {
+                            bright = (float) (db = 0x1p-8 * (BlueNoise.get(x, y, TRI_NOISE[noise.getSeed() & 63]) + 128));
+                            real[x][y] = db;
+                            renderer.color(bright, bright, bright, 1f);
+                            renderer.vertex(x, y, 0);
+                        }
+                    }
+                    break;
+                case 1:
+                    for (int x = 0; x < width; x++) {
+                        for (int y = 0; y < height; y++) {
+                            bright = (float) (db = 0x1p-8 * (BlueNoise.getSeededTriangular(x, y, noise.getSeed()) + 128));
+                            real[x][y] = db;
+                            renderer.color(bright, bright, bright, 1f);
+                            renderer.vertex(x, y, 0);
+                        }
+                    }
+                    break;
+                case 2:
+                    for (int x = 0; x < width; x++) {
+                        for (int y = 0; y < height; y++) {
+                            bright = (float) (db = 0x1p-8 * (BlueNoise.getChosen(x, y, noise.getSeed(), TRI_NOISE) + 128));
+                            real[x][y] = db;
+                            renderer.color(bright, bright, bright, 1f);
+                            renderer.vertex(x, y, 0);
+                        }
+                    }
+                    break;
+                case 3:
+                    for (int x = 0; x < width; x++) {
+                        for (int y = 0; y < height; y++) {
+                            bright = (float) (db = 0x1p-8 * (getChosen(x, y, noise.getSeed(), TRI_NOISE) + 128));
+                            real[x][y] = db;
+                            renderer.color(bright, bright, bright, 1f);
+                            renderer.vertex(x, y, 0);
+                        }
+                    }
+                    break;
+            }
+        }
+        else if(mode == 8){
+            switch (dim){
+                case 0:
+                    for (int x = 0; x < width; x++) {
+                        for (int y = 0; y < height; y++) {
+                            bright = 0x1p-8f * (BlueNoise.get(x, y, ALT_NOISE[noise.getSeed() & 63]) + 128) <= threshold ? 1 : 0;
+                            real[x][y] = bright;
+                            renderer.color(bright, bright, bright, 1f);
+                            renderer.vertex(x, y, 0);
+                        }
+                    }
+                    break;
+                case 1:
+                    for (int x = 0; x < width; x++) {
+                        for (int y = 0; y < height; y++) {
+                            bright = 0x1p-8 * (BlueNoise.getSeeded(x, y, noise.getSeed()) + 128) <= threshold ? 1 : 0;
+                            real[x][y] = bright;
+                            renderer.color(bright, bright, bright, 1f);
+                            renderer.vertex(x, y, 0);
+                        }
+                    }
+                    break;
+                case 2:
+                    for (int x = 0; x < width; x++) {
+                        for (int y = 0; y < height; y++) {
+                            bright = 0x1p-8 * (BlueNoise.getChosen(x, y, noise.getSeed()) + 128) <= threshold ? 1 : 0;
+                            real[x][y] = bright;
+                            renderer.color(bright, bright, bright, 1f);
+                            renderer.vertex(x, y, 0);
+                        }
+                    }
+                    break;
+                case 3:
+                    for (int x = 0; x < width; x++) {
+                        for (int y = 0; y < height; y++) {
+                            bright = 0x1p-8 * (getChosen(x, y, noise.getSeed()) + 128) <= threshold ? 1 : 0;
+                            real[x][y] = bright;
+                            renderer.color(bright, bright, bright, 1f);
+                            renderer.vertex(x, y, 0);
+                        }
+                    }
+                    break;
+//                    for (int x = 0; x < width; x++) {
+//                        for (int y = 0; y < height; y++) {
+//                            bright = region.contains(x, y) ? 1 : 0;
+//                            real[x][y] = bright;
+//                            renderer.color(bright, bright, bright, 1f);
+//                            renderer.vertex(x, y, 0);
+//                        }
+//                    }
+//                    break;
+            }
+        }
+        else if(mode == 9){
+            switch (dim){
+                case 0:
+                    for (int x = 0; x < width; x++) {
+                        for (int y = 0; y < height; y++) {
+                            bright = 0x1p-8f * (BlueNoise.get(x, y, TRI_NOISE[noise.getSeed() & 63]) + 128) <= threshold ? 1 : 0;
+                            real[x][y] = bright;
+                            renderer.color(bright, bright, bright, 1f);
+                            renderer.vertex(x, y, 0);
+                        }
+                    }
+                    break;
+                case 1:
+                    for (int x = 0; x < width; x++) {
+                        for (int y = 0; y < height; y++) {
+                            bright = 0x1p-8 * (BlueNoise.getSeeded(x, y, noise.getSeed(), TRI_NOISE[0]) + 128) <= threshold ? 1 : 0;
+                            real[x][y] = bright;
+                            renderer.color(bright, bright, bright, 1f);
+                            renderer.vertex(x, y, 0);
+                        }
+                    }
+                    break;
+                case 2:
+                    for (int x = 0; x < width; x++) {
+                        for (int y = 0; y < height; y++) {
+                            bright = 0x1p-8 * (BlueNoise.getChosen(x, y, noise.getSeed(), TRI_NOISE) + 128) <= threshold ? 1 : 0;
+                            real[x][y] = bright;
+                            renderer.color(bright, bright, bright, 1f);
+                            renderer.vertex(x, y, 0);
+                        }
+                    }
+                    break;
+                case 3:
+                    for (int x = 0; x < width; x++) {
+                        for (int y = 0; y < height; y++) {
+                            bright = 0x1p-8 * (getChosen(x, y, noise.getSeed(), TRI_NOISE) + 128) <= threshold ? 1 : 0;
+                            real[x][y] = bright;
+                            renderer.color(bright, bright, bright, 1f);
+                            renderer.vertex(x, y, 0);
+                        }
+                    }
+                    break;
+//                    for (int x = 0; x < width; x++) {
+//                        for (int y = 0; y < height; y++) {
+//                            bright = region.contains(x, y) ? 1 : 0;
+//                            real[x][y] = bright;
+//                            renderer.color(bright, bright, bright, 1f);
+//                            renderer.vertex(x, y, 0);
+//                        }
+//                    }
+//                    break;
             }
         }
         Fft.transform2D(real, imag);
@@ -669,20 +767,23 @@ public class FFTVisualizer extends ApplicationAdapter {
     }
 
     public static byte getChosen(int x, int y, int seed){
+        return getChosen(x, y, seed, ALT_NOISE);
+    }
+    public static byte getChosen(int x, int y, int seed, final byte[][] noises){
         seed ^= (x >>> 6) * 0x1827F5 ^ (y >>> 6) * 0x123C21;
         // hash for a 64x64 tile on the "normal grid"
         int h = (seed = (seed ^ (seed << 19 | seed >>> 13) ^ (seed << 5 | seed >>> 27) ^ 0xD1B54A35) * 0x125493) ^ seed >>> 11;
         // choose from 64 noise tiles in ALT_NOISE and get the exact pixel for our x,y in its 64x64 area
-        final int xc = ALT_NOISE[h & 0x3F][(y << 6 & 0xFC0) | (x & 0x3F)];
+        final int xc = noises[h & 0x3F][(y << 6 & 0xFC0) | (x & 0x3F)];
         // likely to be a different noise tile, and the x,y position is transposed
-        final int yc = ALT_NOISE[h >>> 6 & 0x3F][(x << 6 & 0xFC0) | (y & 0x3F)];
+        final int yc = noises[h >>> 6 & 0x3F][(x << 6 & 0xFC0) | (y & 0x3F)];
         // altered x/y; here we choose a start position for the "offset grid" based on the previously sampled noise
         final int ax = ((xc) * (xc+1) << 6 < ((x & 0x3F) - 32) * ((x & 0x3F) - 31)) ? x - 32 : x + 32;
         final int ay = ((yc) * (yc+1) << 6 < ((y & 0x3F) - 32) * ((y & 0x3F) - 31)) ? y - 32 : y + 32;
         // get a tile based on the "offset grid" position we chose and the hash for the normal grid, then a pixel
         // this transposes x and y again, it seems to help with the particular blue noise textures we have
         h ^= (ax >>> 6) * 0x1827F5 ^ (ay >>> 6) * 0x123C21;
-        return ALT_NOISE[(h ^ (h << 19 | h >>> 13) ^ (h << 5 | h >>> 27) ^ 0xD1B54A35) * 0x125493 >>> 26][(x << 6 & 0xFC0) | (y & 0x3F)];
+        return noises[(h ^ (h << 19 | h >>> 13) ^ (h << 5 | h >>> 27) ^ 0xD1B54A35) * 0x125493 >>> 26][(x << 6 & 0xFC0) | (y & 0x3F)];
     }
 
     @Override
