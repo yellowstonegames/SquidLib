@@ -30,9 +30,10 @@ public class FFTVisualizer extends ApplicationAdapter {
     private final FlawedPointHash.RugHash rug = new FlawedPointHash.RugHash(1);
     private final FlawedPointHash.QuiltHash quilt = new FlawedPointHash.QuiltHash(1, 32);
     private final FlawedPointHash.CubeHash cube = new FlawedPointHash.CubeHash(1, 64);
+    private final TorusCachePointHash torus = new TorusCachePointHash(1, 16);
 //    private FlawedPointHash.FNVHash fnv = new FlawedPointHash.FNVHash(1);
-    private final IPointHash[] pointHashes = new IPointHash[] {iph, cube, rug, quilt};
-    private int hashIndex = 3;
+    private final IPointHash[] pointHashes = new IPointHash[] {iph, torus, cube, rug, quilt};
+    private int hashIndex = 0;
     private static final int MODE_LIMIT = 10;
     private int mode = 0;
     private int dim; // this can be 0, 1, 2, or 3; add 2 to get the actual dimensions
@@ -80,7 +81,7 @@ public class FFTVisualizer extends ApplicationAdapter {
         norm = new OrderedMap<>(width * height, 0.75f);
         shuffler = new StatefulRNG(0x1234567890ABCDEFL);
         noise.setNoiseType(FastNoise.CUBIC_FRACTAL);
-        noise.setPointHash(quilt);
+        noise.setPointHash(torus);
         Pixmap pm = new Pixmap(Gdx.files.internal("special/BlueNoise512x512.png"));
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
@@ -139,7 +140,7 @@ public class FFTVisualizer extends ApplicationAdapter {
                         noise.setFractalType((noise.getFractalType() + 1) % 3);
                         break;
                     case G: // Glitch!
-                        noise.setPointHash(pointHashes[hashIndex = hashIndex + 1 & 3]);
+                        noise.setPointHash(pointHashes[hashIndex = (hashIndex + 1) % 5]);
                         break;
                     case H: // higher octaves
                         noise.setFractalOctaves((octaves = octaves + 1 & 7) + 1);
