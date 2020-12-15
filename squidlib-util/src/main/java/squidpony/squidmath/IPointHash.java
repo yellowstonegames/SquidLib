@@ -36,10 +36,9 @@ public interface IPointHash {
     abstract class IntImpl implements IPointHash {
         protected int state = 42;
         public IntImpl(){
-            setState(42);
         }
         public IntImpl(int state){
-            setState(state);
+            this.state = state;
         }
 
         @Override
