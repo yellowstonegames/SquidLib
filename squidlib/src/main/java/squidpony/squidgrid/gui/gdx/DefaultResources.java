@@ -76,7 +76,7 @@ public class DefaultResources implements LifecycleListener {
             distanceDejaVu, distanceOrbit, distanceHeavySquare,
             distanceSlab, distanceSlabLight,
             distanceLean, distanceLeanLight,
-            msdfSlab, msdfLean, msdfDejaVu,
+            msdfSlab, msdfLean, msdfDejaVu, msdfCascadia,
             msdfCurvySquare, msdfCarved, msdfRoboto, msdfOctagonalSquare,
             msdfIcons;
     private TextFamily familyLean, familySlab, familyGo,
@@ -132,6 +132,8 @@ public class DefaultResources implements LifecycleListener {
             crispLeanTexture = "Iosevka-msdf.png",
             crispDejaVu = "DejaVuSansMono-msdf.fnt",
             crispDejaVuTexture = "DejaVuSansMono-msdf.png",
+            crispCascadia = "CascadiaMono-msdf.fnt",
+            crispCascadiaTexture = "CascadiaMono-msdf.png",
             crispNotoSerif = "NotoSerif-Family-msdf.fnt",
             crispNotoSerifTexture = "NotoSerif-Family-msdf.png",
             crispCarved = "bloccus-msdf.fnt",
@@ -1606,6 +1608,46 @@ public class DefaultResources implements LifecycleListener {
     {
         throw new UnsupportedOperationException("Use getCrispLeanFamily() instead, with GDXMarkup to add italics.");
     }
+
+    /**
+     * Returns a TextCellFactory already configured to use a fixed-width font with excellent Unicode support
+     * and a humanist style, that should scale cleanly to even very large sizes (using an MSDF technique).
+     * Caches the result for later calls. The font used is Cascadia Code Mono, an open-source (SIL Open Font
+     * License) typeface by Microsoft (see https://github.com/microsoft/cascadia-code ). It supports a lot of glyphs,
+     * including most extended Latin (though it doesn't support a handful of chars used by  FakeLanguageGen), Greek,
+     * Braille, and Cyrillic, but also the necessary box drawing characters. This uses the Multi-channel Signed Distance
+     * Field (MSDF) technique as opposed to the normal Signed Distance Field technique, which gives the rendered font
+     * sharper edges and precise corners instead of rounded tips on strokes.
+     * <br>
+     *
+     * <br>
+     * This creates a TextCellFactory instead of a BitmapFont because it needs to set some extra information so the
+     * multi-channel distance field font technique this uses can work.
+     * <br>
+     * Needs files:
+     * <ul>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/CascadiaMono-msdf.fnt</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/CascadiaMono-msdf.png</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/Cascadia-license.txt</li>
+     * </ul>
+     * @return the TextCellFactory object that can represent many sizes of the font CascadiaMono.ttf
+     */
+    public static TextCellFactory getCrispCascadiaFont()
+    {
+        initialize();
+        if(instance.msdfCascadia == null)
+        {
+            try {
+                instance.msdfCascadia = new TextCellFactory()
+                        .fontMultiDistanceField(crispCascadia, crispCascadiaTexture).setSmoothingMultiplier(2f);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        if(instance.msdfCascadia != null)
+            return instance.msdfCascadia.copy();
+        return null;
+    }
     /**
      * Returns a TextCellFactory already configured to use a fixed-width sans-serif font with excellent Unicode support,
      * that should scale cleanly to even very large sizes. Caches the result for later calls. The font used is DejaVu
@@ -2269,6 +2311,10 @@ public class DefaultResources implements LifecycleListener {
         if(msdfLean != null) {
             msdfLean.dispose();
             msdfLean = null;
+        }
+        if(msdfCascadia != null) {
+            msdfCascadia.dispose();
+            msdfCascadia = null;
         }
         if(msdfDejaVu != null) {
             msdfDejaVu.dispose();
