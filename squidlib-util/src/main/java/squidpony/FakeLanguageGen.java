@@ -175,18 +175,18 @@ public class FakeLanguageGen implements Serializable {
     private static final Replacer[]
             accentFinders = new Replacer[]
             {
-                    Pattern.compile("[àáâäăāãåąǻ]").replacer("a"),
+                    Pattern.compile("[àáâäăāãåǎąǻ]").replacer("a"),
                     Pattern.compile("[èéêëĕēėęě]").replacer("e"),
-                    Pattern.compile("[ìíîïĭīĩįı]").replacer("i"),
-                    Pattern.compile("[òóôöŏōõøőǿ]").replacer("o"),
-                    Pattern.compile("[ùúûüŭūũůűų]").replacer("u"),
+                    Pattern.compile("[ìíîïĭīĩįǐı]").replacer("i"),
+                    Pattern.compile("[òóôöŏōõøőǒǿ]").replacer("o"),
+                    Pattern.compile("[ùúûüŭūũůűǔų]").replacer("u"),
                     Pattern.compile("[æǽ]").replacer("ae"),
                     Pattern.compile("œ").replacer("oe"),
-                    Pattern.compile("[ÀÁÂÃÄÅĀĂĄǺ]").replacer("A"),
-                    Pattern.compile("[ÈÉÊËĒĔĖĘĚ]").replacer("E"),
-                    Pattern.compile("[ÌÍÎÏĨĪĬĮI]").replacer("I"),
-                    Pattern.compile("[ÒÓÔÕÖØŌŎŐǾ]").replacer("O"),
-                    Pattern.compile("[ÙÚÛÜŨŪŬŮŰŲ]").replacer("U"),
+                    Pattern.compile("[ÀÁÂÄĂĀÃÅǍĄǺ]").replacer("A"),
+                    Pattern.compile("[ÈÉÊËĔĒĖĘĚ]").replacer("E"),
+                    Pattern.compile("[ÌÍÎÏĬĪĨĮǏ]").replacer("I"),
+                    Pattern.compile("[ÒÓÔÖŎŌÕØŐǑǾ]").replacer("O"),
+                    Pattern.compile("[ÙÚÛÜŬŪŨŮŰǓŲ]").replacer("U"),
                     Pattern.compile("[ÆǼ]").replacer("Ae"),
                     Pattern.compile("Œ").replacer("Oe"),
                     Pattern.compile("Ё").replacer("Е"),
@@ -225,11 +225,11 @@ public class FakeLanguageGen implements Serializable {
             };
 
     static final char[][] accentedVowels = new char[][]{
-            new char[]{'a', 'à', 'á', 'â', 'ä', 'ā', 'ă', 'ã', 'å', 'ą', 'ǻ'},
+            new char[]{'a', 'à', 'á', 'â', 'ä', 'ā', 'ă', 'ã', 'å', 'ǎ', 'ą', 'ǻ'},
             new char[]{'e', 'è', 'é', 'ê', 'ë', 'ē', 'ĕ', 'ė', 'ę', 'ě'},
-            new char[]{'i', 'ì', 'í', 'î', 'ï', 'ī', 'ĭ', 'ĩ', 'į', 'ı',},
-            new char[]{'o', 'ò', 'ó', 'ô', 'ö', 'ō', 'ŏ', 'õ', 'ø', 'ő', 'ǿ'},
-            new char[]{'u', 'ù', 'ú', 'û', 'ü', 'ū', 'ŭ', 'ũ', 'ů', 'ű', 'ų'}
+            new char[]{'i', 'ì', 'í', 'î', 'ï', 'ī', 'ĭ', 'ĩ', 'į', 'ǐ', 'ı',},
+            new char[]{'o', 'ò', 'ó', 'ô', 'ö', 'ō', 'ŏ', 'õ', 'ø', 'ő', 'ǒ', 'ǿ'},
+            new char[]{'u', 'ù', 'ú', 'û', 'ü', 'ū', 'ŭ', 'ũ', 'ů', 'ű', 'ǔ', 'ų'}
     },
             accentedConsonants = new char[][]
                     {

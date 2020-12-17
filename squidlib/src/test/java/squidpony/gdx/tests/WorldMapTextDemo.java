@@ -73,7 +73,7 @@ public class WorldMapTextDemo extends ApplicationAdapter {
     private static final int bigWidth = 512, bigHeight = 256;
 //    private static final int bigWidth = 2048, bigHeight = 1024;
     //private static final int bigWidth = 400, bigHeight = 400;
-    private static final int cellWidth = 16, cellHeight = 16;
+    private static final int cellWidth = 10, cellHeight = 16;
     private static final int shownWidth = 96, shownHeight = 48;
     private FilterBatch batch;
     private SparseLayers display;//, overlay;
@@ -143,7 +143,9 @@ public class WorldMapTextDemo extends ApplicationAdapter {
     @Override
     public void create() {
         batch = new FilterBatch();
-        display = new SparseLayers(bigWidth, bigHeight, cellWidth, cellHeight, DefaultResources.getCrispLeanFont());
+        display = new SparseLayers(bigWidth, bigHeight, cellWidth, cellHeight,
+                DefaultResources.getCrispCascadiaFont());
+//                DefaultResources.getCrispLeanFont());
         //display.font.tweakHeight(13f).tweakWidth(13f).initBySize();
         view = new StretchViewport(shownWidth * cellWidth, shownHeight * cellHeight);
         stage = new Stage(view, batch);
@@ -276,7 +278,9 @@ public class WorldMapTextDemo extends ApplicationAdapter {
             FakeLanguageGen lang = atlas.get(p);
             if(lang != null)
             {
-                cities.put(points[i], lang.word(rng, false).toUpperCase());
+                cities.put(points[i], lang.word(rng, false)
+                );
+//                        .toUpperCase());
             }
         }
         //counter = 0L;
@@ -307,13 +311,13 @@ public class WorldMapTextDemo extends ApplicationAdapter {
                         case 0:
                         case 1:
                         case 2:
-                            display.put(x, y, '≈', wmv.BIOME_DARK_COLOR_TABLE[30]);//SColor.darkenFloat(ice, 0.45f));
+                            display.put(x, y, '≈', SColor.contrastLuma(wmv.BIOME_DARK_COLOR_TABLE[30], display.backgrounds[x][y]));//SColor.darkenFloat(ice, 0.45f));
                             continue PER_CELL;
                         case 3:
-                            display.put(x, y, '~', wmv.BIOME_DARK_COLOR_TABLE[24]);//SColor.darkenFloat(ice, 0.35f));
+                            display.put(x, y, '~', SColor.contrastLuma(wmv.BIOME_DARK_COLOR_TABLE[24], display.backgrounds[x][y]));//SColor.darkenFloat(ice, 0.35f));
                             continue PER_CELL;
                         case 4:
-                            display.put(x, y, '¤', wmv.BIOME_DARK_COLOR_TABLE[42]);//SColor.darkenFloat(ice, 0.25f));
+                            display.put(x, y, '¤', SColor.contrastLuma(wmv.BIOME_DARK_COLOR_TABLE[42], display.backgrounds[x][y]));//SColor.darkenFloat(ice, 0.25f));
                             continue PER_CELL;
                     }
                 }
@@ -321,10 +325,10 @@ public class WorldMapTextDemo extends ApplicationAdapter {
                     case 0:
                     case 1:
                     case 2:
-                        display.put(x, y, '≈', wmv.BIOME_COLOR_TABLE[44]);// SColor.lightenFloat(WorldMapView.foamColor, 0.3f));
+                        display.put(x, y, '≈', SColor.contrastLuma(wmv.BIOME_COLOR_TABLE[44], display.backgrounds[x][y]));// SColor.lightenFloat(WorldMapView.foamColor, 0.3f));
                         break;
                     case 3:
-                        display.put(x, y, '~', wmv.BIOME_COLOR_TABLE[43]);// SColor.lightenFloat(WorldMapView.foamColor, 0.3f));
+                        display.put(x, y, '~', SColor.contrastLuma(wmv.BIOME_COLOR_TABLE[43], display.backgrounds[x][y]));// SColor.lightenFloat(WorldMapView.foamColor, 0.3f));
                         break;
                     default: 
                         int bc = dbm.biomeCodeData[x][y];
@@ -332,9 +336,9 @@ public class WorldMapTextDemo extends ApplicationAdapter {
                         codeA = dbm.extractPartA(bc);
                         mix = dbm.extractMixAmount(bc);
                         if(mix <= 0.5) 
-                            display.put(x, y, BIOME_CHARS[codeA], wmv.BIOME_DARK_COLOR_TABLE[codeB]);
+                            display.put(x, y, BIOME_CHARS[codeA], SColor.contrastLuma(wmv.BIOME_DARK_COLOR_TABLE[codeB], display.backgrounds[x][y]));
                         else
-                            display.put(x, y, BIOME_CHARS[codeB], wmv.BIOME_DARK_COLOR_TABLE[codeA]);
+                            display.put(x, y, BIOME_CHARS[codeB], SColor.contrastLuma(wmv.BIOME_DARK_COLOR_TABLE[codeA], display.backgrounds[x][y]));
                 }
             }
         }

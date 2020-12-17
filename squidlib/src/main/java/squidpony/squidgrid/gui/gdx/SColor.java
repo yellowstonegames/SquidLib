@@ -12782,7 +12782,7 @@ public class SColor extends Color implements Serializable {
                 contrastLuma = ctr * (0x1.010102p-8f * 0.299f) +
                         ctg * (0x1.010102p-16f * 0.587f) +
                         ctb * (0x1.010102p-24f * 0.114f);
-        return floatGetYCbCr(contrastLuma < 0.5f ? luma * 0.45f + 0.55f : 0.5f - luma * 0.45f, cb, cr, 0x1.010102p-8f * a);
+        return floatGetYCbCr(contrastLuma < 0.5f ? luma * 0.35f + 0.625f : 0.6f - luma * 0.55f, cb, cr, 0x1.010102p-8f * a);
     }
 
     /**
