@@ -20,7 +20,7 @@ public class LineKit {
      * bitwise AND with an existing encoded pattern as another long, as with {@code LineKit.interiorSquare & encoded}.
      * If you limit the area to the square with this, you may sometimes want to add a border, and for that you can use
      * {@link #exteriorSquare} and bitwise OR that with the restricted area.
-     * <br>This looks like: 
+     * <br>This looks like:
      * <pre>
      * "┌┬┬┐"
      * "├┼┼┤"
@@ -491,8 +491,9 @@ public class LineKit {
      * non-box-drawing chars unchanged. This method modifies writeInto in-place, and also returns it after those changes
      * are made. The way this works is explained well with an example: if the player is north of a T-junction wall, '┬',
      * then unless he has already explored the area south of his position, the bottom segment of the wall isn't visible
-     * to him, and so '─' should be rendered instead of '┬'. If a cell has already been seen, it is considered still
-     * visible for the purpose of calculating shown segments (it won't change once you leave an area).
+     * to him, and so '─' should be rendered instead of '┬'. If a cell has already been seen (it is true in
+     * {@code seen}), it is considered still visible for the purpose of calculating shown segments (that is, it won't
+     * change once you leave an area).
      * @param map a 2D char array that should have been produced by {@link DungeonUtility#hashesToLines(char[][])}
      * @param seen a GreasedRegion where "on" cells are visible now or were visible in the past
      * @param symbols a char array that should be {@link #light} or {@link #heavy} unless you know your font supports
@@ -585,7 +586,7 @@ public class LineKit {
         }
         return writeInto;
     }
-
+}
 //    public static void main(String[] args)
 //    {
 //        System.out.printf("interiorSquare = 0x%016XL\n", LineKit.encode4x4(DungeonUtility.transposeLines(new char[][]
@@ -701,4 +702,4 @@ public class LineKit {
 //                        {' ', ' ', '│', ' '},
 //                })));
 //    }
-}
+
