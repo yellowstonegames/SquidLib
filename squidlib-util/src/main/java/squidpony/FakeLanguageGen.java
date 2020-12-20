@@ -63,7 +63,7 @@ public class FakeLanguageGen implements Serializable {
      * A pattern String that will match any vowel FakeLanguageGen can produce out-of-the-box, including Latin, Greek,
      * and Cyrillic; for use when a String will be interpreted as a regex (as in {@link FakeLanguageGen.Alteration}).
      */
-    public static final String anyVowel = "[àáâãäåæāăąǻǽaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőœǿoùúûüũūŭůűųuýÿŷỳyαοειυωаеёийоуъыэюя]",
+    public static final String anyVowel = "[àáâãäåæāăǎąǻǽaèéêëēĕėęěeìíîïĩīĭįǐıiòóôõöøōŏőǒœǿoùúûüũūŭůǔűųuýÿŷỳyαοειυωаеёийоуъыэюя]",
     /**
      * A pattern String that will match one or more of any vowels FakeLanguageGen can produce out-of-the-box, including
      * Latin, Greek, and Cyrillic; for use when a String will be interpreted as a regex (as in 
@@ -227,8 +227,8 @@ public class FakeLanguageGen implements Serializable {
     static final char[][] accentedVowels = new char[][]{
             new char[]{'a', 'à', 'á', 'â', 'ä', 'ā', 'ă', 'ã', 'å', 'ǎ', 'ą', 'ǻ'},
             new char[]{'e', 'è', 'é', 'ê', 'ë', 'ē', 'ĕ', 'ė', 'ę', 'ě'},
-            new char[]{'i', 'ì', 'í', 'î', 'ï', 'ī', 'ĭ', 'ĩ', 'į', 'ǐ', 'ı',},
-            new char[]{'o', 'ò', 'ó', 'ô', 'ö', 'ō', 'ŏ', 'õ', 'ø', 'ő', 'ǒ', 'ǿ'},
+            new char[]{'i', 'ì', 'í', 'î', 'ï', 'ī', 'ĭ', 'ĩ', 'į', 'ǐ', 'ı'},
+            new char[]{'o', 'ò', 'ó', 'ô', 'ö', 'ō', 'ŏ', 'õ', 'ø', 'ǒ', 'ő', 'ǿ'},
             new char[]{'u', 'ù', 'ú', 'û', 'ü', 'ū', 'ŭ', 'ũ', 'ů', 'ű', 'ǔ', 'ų'}
     },
             accentedConsonants = new char[][]
