@@ -80,7 +80,7 @@ import java.util.ArrayList;
  * @author Tommy Ettinger - https://github.com/tommyettinger
  */
 public class DungeonGeneratorTest {
-    public static int width = 30, height = 32, depth = 16;
+    public static int width = 60, height = 60, depth = 8;
     public static GreasedRegion expandIsolated(GreasedRegion gr)
     {
         int fst = gr.firstTight();
@@ -654,31 +654,32 @@ public class DungeonGeneratorTest {
 
         System.out.println("------------------------------------------------------------");
         */
-        /*
+        System.out.println("SerpentDeepMapGenerator\n");
         rng.setState(2252637788195L);
-        SerpentDeepMapGenerator deepSerpent = new SerpentDeepMapGenerator(width, height, depth, rng, 0.15);
-        deepSerpent.putWalledBoxRoomCarvers(2);
-        deepSerpent.putWalledRoundRoomCarvers(2);
-        deepSerpent.putCaveCarvers(3);
-        char[][][] map3D = deepSerpent.generate();
-        DungeonGenerator[] gens = new DungeonGenerator[depth];
-        for (int i = 0; i < depth; i++) {
-            gens[i] = new DungeonGenerator(width, height, rng);
-            gens[i].addWater(rng.nextInt(25));
-            gens[i].addGrass(rng.nextInt(15));
-            gens[i].addBoulders(rng.nextInt(30));
-            gens[i].addDoors(rng.between(4, 10), false);
-            gens[i].generateRespectingStairs(map3D[i]);
-            gens[i].setDungeon(DungeonUtility.doubleWidth(
-                    DungeonUtility.hashesToLines(gens[i].getDungeon(), true)));
-            System.out.println(gens[i]);
-            System.out.print  ("------------------------------------------------------------");
-            System.out.print  ("------------------------------------------------------------");
-            System.out.print  ("------------------------------------------------------------");
+        RNG random = new RNG(new TangleRNG(0xB0BAFE77, 0xB055));
+        for (int iter = 0; iter < 1; iter++) {
+            SerpentDeepMapGenerator deepSerpent = new SerpentDeepMapGenerator(width, height, depth, random, 0.15);
+            deepSerpent.putWalledBoxRoomCarvers(2);
+            deepSerpent.putWalledRoundRoomCarvers(2);
+            deepSerpent.putCaveCarvers(3);
+            char[][][] map3D = deepSerpent.generate();
+            DungeonGenerator[] gens = new DungeonGenerator[depth];
+            for (int i = 0; i < depth; i++) {
+                System.out.println("------------------------------------------------------------ depth " + i);
+                gens[i] = new DungeonGenerator(width, height, random);
+                gens[i].addWater(random.nextInt(25));
+                gens[i].addGrass(random.nextInt(15));
+                gens[i].addBoulders(random.nextInt(30));
+                gens[i].addDoors(random.between(4, 10), false);
+                gens[i].generateRespectingStairs(map3D[i]);
+                gens[i].setDungeon(//DungeonUtility.doubleWidth(
+                        DungeonUtility.hashesToLines(gens[i].getDungeon(), true));
+                System.out.println(gens[i]);
+
+            }
             System.out.println("------------------------------------------------------------");
-
         }
-
+/*
         for(int k : new int[]{ThinDungeonGenerator.CAVE_WALL_NORMAL | ThinDungeonGenerator.CORRIDOR_WALL_NORMAL | ThinDungeonGenerator.ROOM_WALL_NORMAL,
                 ThinDungeonGenerator.CAVE_WALL_RETRACT | ThinDungeonGenerator.CORRIDOR_WALL_RETRACT | ThinDungeonGenerator.ROOM_WALL_RETRACT,
                 ThinDungeonGenerator.CAVE_WALL_CHAOTIC | ThinDungeonGenerator.CORRIDOR_WALL_EXPAND | ThinDungeonGenerator.ROOM_WALL_EXPAND

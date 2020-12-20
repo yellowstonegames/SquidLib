@@ -1,5 +1,6 @@
 package squidpony.squidgrid.mapping;
 
+import squidpony.Maker;
 import squidpony.squidmath.*;
 
 import java.util.ArrayList;
@@ -65,11 +66,12 @@ public class SerpentDeepMapGenerator {
         this.width = width;
         this.height = height;
         this.depth = depth;
-        int numLayers = (int)Math.ceil(depth / 4.0f);
-        long columnAlterations = random.nextLong(0x100000000L);
-        float columnBase = width / (Long.bitCount(columnAlterations) + 16.0f);
-        long rowAlterations = random.nextLong(0x100000000L);
-        float rowBase = height / (Long.bitCount(rowAlterations) + 16.0f);
+        int numLayers = (int)Math.ceil(depth / 4.0);
+        long alterations = random.nextLong();
+        long columnAlterations = alterations & 0xFFFFFFFFL;
+        float columnBase = (width - 2) / (Long.bitCount(columnAlterations) + 16.0f);
+        long rowAlterations = alterations >>> 32;
+        float rowBase = (height - 2) / (Long.bitCount(rowAlterations) + 16.0f);
 
         columns = new int[16];
         rows = new int[16];
@@ -79,28 +81,11 @@ public class SerpentDeepMapGenerator {
             linksUp.add(new OrderedSet<Coord>(80));
             linksDown.add(new OrderedSet<Coord>(80));
         }
-        int csum = 0, rsum = 0;
+        float csum = 0, rsum = 0;
         long b = 3;
         for (int i = 0; i < 16; i++, b <<= 2) {
-            columns[i] = csum + (int)(columnBase * 0.5f * (1 + Long.bitCount(columnAlterations & b)));
-            csum += (int)(columnBase * (1 + Long.bitCount(columnAlterations & b)));
-            rows[i] = rsum + (int)(rowBase * 0.5f * (1 + Long.bitCount(rowAlterations & b)));
-            rsum += (int)(rowBase * (1 + Long.bitCount(rowAlterations & b)));
-        }
-        int cs = width - csum;
-        int rs = height - rsum;
-        int cs2 = cs, rs2 = rs, cs3 = cs, rs3 = rs;
-        for (int i = 0; i <= 7; i++) {
-            cs2= 0;
-            rs2 = 0;
-            columns[i] -= cs2;
-            rows[i] -= rs2;
-        }
-        for (int i = 15; i >= 8; i--) {
-            cs3 = cs3 * (i - 8) / 8;
-            rs3 = rs3 * (i - 8) / 8;
-            columns[i] += cs3;
-            rows[i] += rs3;
+            columns[i] = (int)((csum += columnBase * (1 + Long.bitCount(columnAlterations & b))));
+            rows[i] = (int)((rsum += rowBase * (1 + Long.bitCount(rowAlterations & b))));
         }
 
         List<OrderedMap<Coord, List<Coord>>> connections = new ArrayList<>(depth);
@@ -341,12 +326,13 @@ public class SerpentDeepMapGenerator {
         for (int i = 0; i < depth; i++) {
             ups.add(new OrderedSet<Coord>(40));
             downs.add(new OrderedSet<Coord>(40));
-            OrderedSet<Coord> above;
+            OrderedSet<Coord> above = new OrderedSet<>(32);
             if (i > 0) {
-                above = new OrderedSet<>(linksDown.get(i - 1));
-                if(above.size() == 0)
+                if(linksDown.get(i - 1).isEmpty())
                     continue;
-                Coord higher = above.randomItem(random);//random.getRandomElement(above.toArray(new Coord[above.size()]));
+                above.clear();
+                above.addAll(linksDown.get(i - 1));
+                Coord higher = above.randomItem(random);
                 while(above.size() > 0)
                 {
                     short[] nearAbove = CoordPacker.flood(floors[i - 1],
@@ -355,9 +341,9 @@ public class SerpentDeepMapGenerator {
                     short[] near = CoordPacker.intersectPacked(nearAbove, CoordPacker.flood(floors[i],
                             CoordPacker.packOne(columns[higher.x], rows[higher.y]),
                             dlimit));
-                    ArrayList<Coord> subLinks = CoordPacker.randomPortion(near, 1, random);
-                    ups.get(i).addAll(subLinks);
-                    downs.get(i-1).addAll(subLinks);
+                    Coord subLink = CoordPacker.singleRandom(near, random);
+                    ups.get(i).add(subLink);
+                    downs.get(i-1).add(subLink);
                     for(Coord abv : linksDown.get(i-1))
                     {
                         if(CoordPacker.queryPacked(nearAbove, columns[abv.x], rows[abv.y])) //scannedAbove[columns[abv.x]][rows[abv.y]] <= dlimit
