@@ -83,14 +83,14 @@ public class WorldMapView {
 
     public static float iceColor = SColor.floatGetI(240, 248, 255);
     public static float desertColor = SColor.floatGetI(248, 229, 180);
-    public static float savannaColor = SColor.floatGetI(181, 200, 100);
+    public static float savannaColor = SColor.floatGetI(190, 195, 105);
     public static float tropicalRainforestColor = SColor.floatGetI(66, 123, 25);
     public static float tundraColor = SColor.floatGetI(151, 175, 159);
     public static float temperateRainforestColor = SColor.floatGetI(54, 113, 60);
-    public static float grasslandColor = SColor.floatGetI(169, 185, 105);
-    public static float seasonalForestColor = SColor.floatGetI(100, 158, 75);
+    public static float grasslandColor = SColor.floatGetI(155, 205, 110);
+    public static float seasonalForestColor = SColor.floatGetI(105, 150, 45);
     public static float borealForestColor = SColor.floatGetI(75, 105, 45);
-    public static float woodlandColor = SColor.floatGetI(122, 170, 90);
+    public static float woodlandColor = SColor.floatGetI(92, 160, 70);
     public static float rockyColor = SColor.floatGetI(171, 175, 145);
     public static float beachColor = SColor.floatGetI(255, 235, 180);
     public static float emptyColor = SColor.floatGetI(34, 32, 52);

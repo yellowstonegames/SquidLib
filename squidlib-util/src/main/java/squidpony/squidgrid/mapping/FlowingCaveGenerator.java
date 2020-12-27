@@ -2,7 +2,10 @@ package squidpony.squidgrid.mapping;
 
 import squidpony.squidgrid.mapping.styled.DungeonBoneGen;
 import squidpony.squidgrid.mapping.styled.TilesetType;
-import squidpony.squidmath.*;
+import squidpony.squidmath.CellularAutomaton;
+import squidpony.squidmath.GWTRNG;
+import squidpony.squidmath.GreasedRegion;
+import squidpony.squidmath.IRNG;
 
 import java.util.ArrayList;
 
@@ -14,6 +17,7 @@ import java.util.ArrayList;
  * <br>
  * An example map this can produce:
  * <br>
+ * <pre>
  * {@code
  *   ┌─────┐ ┌───────┬─┐ ┌───┐                ┌────┐   ┌────┐   ┌────┐    ┌──┐                  ┌───┐   ┌─────┐
  *  ┌┘.....└─┘.......│.└─┘...└─┐    ┌─┐    ┌──┘....│   │....└──┬┘....└┬───┘..└──┐  ┌───┐       ┌┘...│  ┌┘.....└┐
@@ -86,6 +90,7 @@ import java.util.ArrayList;
  *    └┐.┌───┐........│        └───┐....┌┘    └─┐.┌─┘   └─┐.┌┘         └┐......┌─┘    └─┐...┌┴────┘      └─┐..┌┘
  *     └─┘   └────────┘            └────┘       └─┘       └─┘           └──────┘        └───┘              └──┘
  * }
+ * </pre>
  * Created by Tommy Ettinger on 8/18/2017.
  */
 public class FlowingCaveGenerator implements IDungeonGenerator {
