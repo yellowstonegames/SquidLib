@@ -9,6 +9,7 @@ import squidpony.squidmath.NumberTools;
 /**
  * Created by Tommy Ettinger on 9/6/2019.
  */
+@SuppressWarnings("NumericOverflow")
 public class WorldMapView {
     protected int width, height;
     protected float[][] colorMap;
@@ -81,24 +82,24 @@ public class WorldMapView {
             Ocean                  = 13,
             Empty                  = 14;
 
-    public static float iceColor = SColor.floatGetI(240, 248, 255);
-    public static float desertColor = SColor.floatGetI(248, 229, 180);
-    public static float savannaColor = SColor.floatGetI(190, 195, 105);
-    public static float tropicalRainforestColor = SColor.floatGetI(66, 123, 25);
-    public static float tundraColor = SColor.floatGetI(151, 175, 159);
-    public static float temperateRainforestColor = SColor.floatGetI(54, 113, 60);
-    public static float grasslandColor = SColor.floatGetI(155, 205, 110);
-    public static float seasonalForestColor = SColor.floatGetI(105, 150, 45);
-    public static float borealForestColor = SColor.floatGetI(75, 105, 45);
-    public static float woodlandColor = SColor.floatGetI(92, 160, 70);
-    public static float rockyColor = SColor.floatGetI(171, 175, 145);
-    public static float beachColor = SColor.floatGetI(255, 235, 180);
-    public static float emptyColor = SColor.floatGetI(34, 32, 52);
+    public static float iceColor = SColor.floatGet(240 << 24 | 248 << 16 | 255 << 8 | 255);
+    public static float desertColor = SColor.floatGet(248 << 24 | 229 << 16 | 180 << 8 | 255);
+    public static float savannaColor = SColor.floatGet(190 << 24 | 195 << 16 | 105 << 8 | 255);
+    public static float tropicalRainforestColor = SColor.floatGet(40 << 24 | 100 << 16 | 15 << 8 | 255);
+    public static float tundraColor = SColor.floatGet(151 << 24 | 175 << 16 | 159 << 8 | 255);
+    public static float temperateRainforestColor = SColor.floatGet(54 << 24 | 113 << 16 | 60 << 8 | 255);
+    public static float grasslandColor = SColor.floatGet(145 << 24 | 165 << 16 | 100 << 8 | 255);
+    public static float seasonalForestColor = SColor.floatGet(70 << 24 | 120 << 16 | 35 << 8 | 255);
+    public static float borealForestColor = SColor.floatGet(75 << 24 | 105 << 16 | 45 << 8 | 255);
+    public static float woodlandColor = SColor.floatGet(92 << 24 | 160 << 16 | 70 << 8 | 255);
+    public static float rockyColor = SColor.floatGet(171 << 24 | 175 << 16 | 145 << 8 | 255);
+    public static float beachColor = SColor.floatGet(255 << 24 | 235 << 16 | 180 << 8 | 255);
+    public static float emptyColor = SColor.floatGet(34 << 24 | 32 << 16 | 52 << 8 | 255);
 
     // water colors
-    public static float deepColor =    SColor.floatGetI(0, 42, 88);
-    public static float shallowColor = SColor.floatGetI(20, 145, 197);
-    public static float foamColor =    SColor.floatGetI(61,  162, 215);
+    public static float deepColor = SColor.floatGet(0 << 24 | 42 << 16 | 88 << 8 | 255);
+    public static float shallowColor = SColor.floatGet(20 << 24 | 145 << 16 | 197 << 8 | 255);
+    public static float foamColor = SColor.floatGet(61 << 24 | 162 << 16 | 215 << 8 | 255);
 
     protected float[] biomeColors = {
             desertColor,
