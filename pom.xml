@@ -66,7 +66,7 @@
         <gdx.version>1.9.12</gdx.version>
         <junit.version>4.13.1</junit.version>
         <regexodus.version>0.1.10</regexodus.version>
-        <anim8.version>0.2.2</anim8.version>
+        <anim8.version>0.2.4</anim8.version>
     </properties>
 
     <issueManagement>
@@ -92,21 +92,6 @@
 <!--        </repository>-->
 <!--    </repositories>-->
     <profiles>
-        <profile>
-            <id>jshell</id>
-            <activation>
-                <jdk>[9,)</jdk>
-            </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>com.github.johnpoth</groupId>
-                        <artifactId>jshell-maven-plugin</artifactId>
-                        <version>1.2</version>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
         <profile>
             <id>doclint-java8-disable</id>
             <activation>

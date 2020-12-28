@@ -16,6 +16,8 @@ package squidpony.squidmath;
  */
 public final class PointHash extends IPointHash.LongImpl
 {
+    public static final PointHash INSTANCE = new PointHash();
+
     @Override
     public int hashWithState(int x, int y, int state) {
         return (int)hashAll(x, y, state);

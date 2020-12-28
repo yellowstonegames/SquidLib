@@ -18,10 +18,11 @@ public class PermPointHash extends IPointHash.IntImpl {
         this(1234567890);
     }
 
-    private final short[] perm = new short[2048];
+    private final short[] perm;
 
     public PermPointHash(int state) {
         super(state);
+        perm = new short[2048];
         short[] source = new short[2048];
         for (short i = 0; i < 2048; i++)
             source[i] = i;

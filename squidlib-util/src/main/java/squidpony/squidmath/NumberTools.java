@@ -1344,8 +1344,7 @@ public final class NumberTools {
      * Arc sine approximation with very low error, using an algorithm from the 1955 research study
      * "Approximations for Digital Computers," by RAND Corporation (this is sheet 35's algorithm, which is the fastest
      * and least precise). This method is usually much faster than {@link Math#asin(double)}, but is somewhat less
-     * precise than Math's implementation. It is currently much more precise than libGDX's approximation in their
-     * MathUtils, and is a little faster.
+     * precise than Math's implementation. It is currently the same as libGDX's approximation in their MathUtils.
      * @param x an input to the inverse sine function, from -1 to 1 inclusive
      * @return an output from the inverse sine function, from PI/-2.0 to PI/2.0 inclusive.
      */
@@ -1365,8 +1364,7 @@ public final class NumberTools {
      * Arc cosine approximation with very low error, using an algorithm from the 1955 research study
      * "Approximations for Digital Computers," by RAND Corporation (this is sheet 35's algorithm, which is the fastest
      * and least precise). This method is usually much faster than {@link Math#acos(double)}, but is somewhat less
-     * precise than Math's implementation. It is currently much more precise than libGDX's approximation in their
-     * MathUtils, and is a little faster.
+     * precise than Math's implementation. It is currently the same as libGDX's approximation in their MathUtils.
      * <br>
      * Accuracy: absolute error 0.000028450, relative error -0.000000011, max error 0.000067548 .
      * @param x an input to the inverse cosine function, from -1 to 1 inclusive
@@ -1387,8 +1385,8 @@ public final class NumberTools {
      * Arc sine approximation with very low error, using an algorithm from the 1955 research study
      * "Approximations for Digital Computers," by RAND Corporation (this is sheet 35's algorithm, which is the fastest
      * and least precise). This method is usually much faster than {@link Math#asin(double)}, but is somewhat less
-     * precise than Math's implementation. It is currently much more precise than libGDX's approximation in their
-     * MathUtils, and is a little faster.
+     * precise than Math's implementation. It is currently the same as libGDX's approximation in their MathUtils, except
+     * that this takes a double and returns a double.
      * <br>
      * Accuracy: absolute error 0.000028447, relative error -0.000000033, max error 0.000067592 .
      * @param x an input to the inverse sine function, from -1 to 1 inclusive
@@ -1410,8 +1408,10 @@ public final class NumberTools {
      * Arc cosine approximation with very low error, using an algorithm from the 1955 research study
      * "Approximations for Digital Computers," by RAND Corporation (this is sheet 35's algorithm, which is the fastest
      * and least precise). This method is usually much faster than {@link Math#acos(double)}, but is somewhat less
-     * precise than Math's implementation. It is currently much more precise than libGDX's approximation in their
-     * MathUtils, and is a little faster.
+     * precise than Math's implementation. It is currently the same as libGDX's approximation in their MathUtils, except
+     * that this takes a double and returns a double.
+     * <br>
+     * Accuracy: absolute error 0.000028450, relative error -0.000000011, max error 0.000067548 .
      * @param x an input to the inverse cosine function, from -1 to 1 inclusive
      * @return an output from the inverse cosine function, from 0 to PI inclusive.
      */
@@ -1429,7 +1429,7 @@ public final class NumberTools {
      * Inverse sine function (arcsine) but with output measured in turns instead of radians. Possible results for this
      * range from 0.75 (inclusive) to 1.0 (exclusive), and continuing past that to 0.0 (inclusive) to 0.25 (inclusive).
      * <br>
-     * This method is extremely similar to the non-turn approximation.
+     * This method is extremely similar to the non-turn approximation, but it never returns a negative result.
      * @param x a double from -1.0 to 1.0 (both inclusive), usually the output of sin_() or cos_()
      * @return one of the values that would produce {@code n} if it were passed to {@link #sin_(double)}
      */
@@ -1472,7 +1472,7 @@ public final class NumberTools {
      * range from 0.75f (inclusive) to 1.0f (exclusive), and continuing past that to 0.0f (inclusive) to 0.25f
      * (inclusive).
      * <br>
-     * This method is extremely similar to the non-turn approximation.
+     * This method is extremely similar to the non-turn approximation, but it never returns a negative result.
      * @param x a float from -1.0f to 1.0f (both inclusive), usually the output of sin_() or cos_()
      * @return one of the values that would produce {@code n} if it were passed to {@link #sin_(float)}
      */

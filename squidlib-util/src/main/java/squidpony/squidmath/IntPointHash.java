@@ -22,6 +22,7 @@ package squidpony.squidmath;
  */
 public final class IntPointHash extends IPointHash.IntImpl {
 
+    public static final IntPointHash INSTANCE = new IntPointHash();
     @Override
     public int hashWithState(int x, int y, int state) {
         return hashAll(x, y, state);
