@@ -119,9 +119,9 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
         
         thesaurus = new Thesaurus(rng);
 //        Noise.Noise3D noise = new Noise.Exponential3D(new FastNoise((int)seed, 2.75f, FastNoise.FOAM_FRACTAL, 3));
-//        Noise.Noise3D noise = new FastNoise((int)seed, 2.75f, FastNoise.FOAM_FRACTAL, 3);
-        FastNoise noise = new FastNoise((int)seed, 8f, FastNoise.CUBIC_FRACTAL, 1);
-        noise.setPointHash(new FlawedPointHash.CubeHash(seed, 1 << 3));
+        FastNoise noise = new FastNoise((int)seed, 2.5f, FastNoise.FOAM_FRACTAL, 3);
+//        FastNoise noise = new FastNoise((int)seed, 8f, FastNoise.CUBIC_FRACTAL, 1);
+//        noise.setPointHash(new FlawedPointHash.CubeHash(seed, 1 << 3));
 //        noise.setPointHash(new IPointHash.LongImpl() {
 //            @Override
 //            public int hashWithState(int x, int y, int state) {
