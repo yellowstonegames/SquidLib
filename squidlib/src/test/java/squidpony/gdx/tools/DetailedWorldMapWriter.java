@@ -32,8 +32,8 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
 //    private static final int width = 1920, height = 1080;
 //    private static final int width = 256, height = 256; // localMimic
 //    private static final int width = 512, height = 256; // mimic, elliptical
-//    private static final int width = 1024, height = 512; // mimic, elliptical
-    private static final int width = 2048, height = 1024; // mimic, elliptical
+    private static final int width = 1024, height = 512; // mimic, elliptical
+//    private static final int width = 2048, height = 1024; // mimic, elliptical
 //    private static final int width = 1000, height = 1000; // space view
 //    private static final int width = 1200, height = 400; // squat
     private static final int LIMIT = 5;
@@ -81,7 +81,8 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
         //stage = new Stage(view, batch);
         date = DateFormat.getDateInstance().format(new Date());
 //        path = "out/worlds/" + date + "/Sphere/";
-        path = "out/worlds/" + date + "/SphereQuilt/";
+//        path = "out/worlds/" + date + "/SphereQuilt/";
+        path = "out/worlds/" + date + "/SphereCube/";
 //        path = "out/worlds/" + date + "/SphereExpo/";
 //        path = "out/worlds/" + date + "/Ellipse/";
 //        path = "out/worlds/" + date + "/EllipseExpo/";
@@ -120,7 +121,37 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
 //        Noise.Noise3D noise = new Noise.Exponential3D(new FastNoise((int)seed, 2.75f, FastNoise.FOAM_FRACTAL, 3));
 //        Noise.Noise3D noise = new FastNoise((int)seed, 2.75f, FastNoise.FOAM_FRACTAL, 3);
         FastNoise noise = new FastNoise((int)seed, 8f, FastNoise.CUBIC_FRACTAL, 1);
-        noise.setPointHash(new FlawedPointHash.CubeHash(seed, 1 << 14));
+        noise.setPointHash(new FlawedPointHash.CubeHash(seed, 1 << 3));
+//        noise.setPointHash(new IPointHash.LongImpl() {
+//            @Override
+//            public int hashWithState(int x, int y, int state) {
+//                long[] gold = PhantomNoise.goldenLong[2];
+//                return (int)DiverRNG.determine(state * gold[0] ^ x * gold[1] ^ y * gold[1]);
+//            }
+//
+//            @Override
+//            public int hashWithState(int x, int y, int z, int state) {
+//                long[] gold = PhantomNoise.goldenLong[3];
+//                return (int) DiverRNG.determine(state * gold[0] ^ x * gold[1] ^ y * gold[1] ^ z * gold[2]);
+//            }
+//
+//            @Override
+//            public int hashWithState(int x, int y, int z, int w, int state) {
+//                return state ^ x ^ y ^ z ^ w;
+//            }
+//
+//            @Override
+//            public int hashWithState(int x, int y, int z, int w, int u, int state) {
+//                return state ^ x ^ y ^ z ^ w ^ u;
+//            }
+//
+//            @Override
+//            public int hashWithState(int x, int y, int z, int w, int u, int v, int state) {
+//                return state ^ x ^ y ^ z ^ w ^ u ^ v;
+//            }
+//        });
+//        noise.setPointHash(new IntPointHash());
+
 //        Noise.Noise3D noise = new Noise.Exponential3D(fn);
 //        WorldMapGenerator.DEFAULT_NOISE.setNoiseType(FastNoise.FOAM_FRACTAL);
 //        WorldMapGenerator.DEFAULT_NOISE.setFrequency(2f);
@@ -200,6 +231,7 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
         //writer.palette.reduceFloydSteinberg(pm);
 
         batch.begin();
+        pt.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         pt.draw(pm, 0, 0);
         batch.draw(pt, 0, 0, width >> 1, height >> 1);
         batch.end();

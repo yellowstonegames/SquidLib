@@ -11,8 +11,10 @@ package squidpony.squidmath;
  * <br>
  * This implements {@link IPointHash} and has a long it uses internally for state, exposed by {@link #getState()}.
  */
-public final class HastyPointHash extends IPointHash.LongImpl
-{
+public final class HastyPointHash extends IPointHash.LongImpl {
+
+    public static final HastyPointHash INSTANCE = new HastyPointHash();
+
     @Override
     public int hashWithState(int x, int y, int state) {
         return (int)hashAll(x, y, state);

@@ -13,6 +13,8 @@ package squidpony.squidmath;
  */
 public final class GoldPointHash extends IPointHash.IntImpl {
 
+    public static final GoldPointHash INSTANCE = new GoldPointHash();
+
     @Override
     public int hashWithState(int x, int y, int state) {
         return hashAll(x, y, state);
