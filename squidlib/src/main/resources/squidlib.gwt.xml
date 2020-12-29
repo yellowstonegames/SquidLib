@@ -10,13 +10,6 @@
   -->
 <module>
     <inherits name="com.badlogic.gdx.backends.gdx_backends_gwt" />
-    <source path="com/badlogic/gdx">
-        <include name="utils/Align.java"/>
-        <!-- Thanks mgsx-dev!
-        https://github.com/libgdx/libgdx/issues/5820#issuecomment-605991717 
-        This source block should be removed when people start $%#*&ing adopting libGDX 1.9.11... 
-        -->
-    </source>
     <inherits name="anim8"/>
     <inherits name="regexodus"/>
     <inherits name="squidlib-util"/>
