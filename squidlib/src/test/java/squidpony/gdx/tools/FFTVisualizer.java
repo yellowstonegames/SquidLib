@@ -402,7 +402,7 @@ public class FFTVisualizer extends ApplicationAdapter {
                     break;
             }
         } else if(mode == 4) {
-            int ct = (int)(paused ? startTime : TimeUtils.timeSinceMillis(startTime) >>> 5);
+            int ct = (int)(paused ? startTime : TimeUtils.timeSinceMillis(startTime) >>> 9);
             switch (dim) {
                 case 0:
                     for (int x = 0; x < width; x++) {

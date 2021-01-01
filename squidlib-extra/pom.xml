@@ -5,7 +5,7 @@
     <parent>
         <groupId>com.squidpony</groupId>
         <artifactId>squidlib-parent</artifactId>
-        <version>3.0.3-SNAPSHOT</version>
+        <version>3.0.3</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -51,7 +51,7 @@
         <dependency>
             <groupId>com.squidpony</groupId>
             <artifactId>squidlib-util</artifactId>
-            <version>3.0.3-SNAPSHOT</version>
+            <version>3.0.3</version>
         </dependency>
         <dependency>
             <groupId>com.badlogicgames.gdx</groupId>
