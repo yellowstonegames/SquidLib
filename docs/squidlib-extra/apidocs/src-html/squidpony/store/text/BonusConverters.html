@@ -7,204 +7,204 @@
 <meta name="generator" content="javadoc/SourceToHTMLConverter">
 <link rel="stylesheet" type="text/css" href="../../../../stylesheet.css" title="Style">
 </head>
-<body class="source">
+<body class="source-page">
 <main role="main">
-<div class="sourceContainer">
-<pre><span class="sourceLineNo">001</span><a id="line.1">package squidpony.store.text;</a>
-<span class="sourceLineNo">002</span><a id="line.2"></a>
-<span class="sourceLineNo">003</span><a id="line.3">import com.badlogic.gdx.utils.reflect.ClassReflection;</a>
-<span class="sourceLineNo">004</span><a id="line.4">import squidpony.*;</a>
-<span class="sourceLineNo">005</span><a id="line.5">import squidpony.squidgrid.mapping.PoliticalMapper;</a>
-<span class="sourceLineNo">006</span><a id="line.6">import squidpony.squidgrid.mapping.SpillWorldMap;</a>
-<span class="sourceLineNo">007</span><a id="line.7">import squidpony.squidmath.*;</a>
-<span class="sourceLineNo">008</span><a id="line.8"></a>
-<span class="sourceLineNo">009</span><a id="line.9">import java.util.List;</a>
-<span class="sourceLineNo">010</span><a id="line.10"></a>
-<span class="sourceLineNo">011</span><a id="line.11">import static squidpony.Converters.*;</a>
-<span class="sourceLineNo">012</span><a id="line.12"></a>
-<span class="sourceLineNo">013</span><a id="line.13">/**</a>
-<span class="sourceLineNo">014</span><a id="line.14"> * Created by Tommy Ettinger on 4/22/2017.</a>
-<span class="sourceLineNo">015</span><a id="line.15"> */</a>
-<span class="sourceLineNo">016</span><a id="line.16">@SuppressWarnings("unchecked")</a>
-<span class="sourceLineNo">017</span><a id="line.17">public class BonusConverters {</a>
-<span class="sourceLineNo">018</span><a id="line.18">    public static final StringConvert&lt;OrderedMap&lt;Character, String&gt;&gt; convertMapCharString =</a>
-<span class="sourceLineNo">019</span><a id="line.19">            Converters.convertOrderedMap(Converters.convertChar, Converters.convertString);</a>
-<span class="sourceLineNo">020</span><a id="line.20">    public static final StringConvert&lt;List&lt;FakeLanguageGen&gt;&gt; convertListLanguage = Converters.convertList(Converters.convertFakeLanguageGen);</a>
-<span class="sourceLineNo">021</span><a id="line.21">    public static final StringConvert&lt;OrderedMap&lt;Character, List&lt;FakeLanguageGen&gt;&gt;&gt; convertMapCharListLanguage</a>
-<span class="sourceLineNo">022</span><a id="line.22">            = Converters.convertOrderedMap(Converters.convertChar, convertListLanguage);</a>
-<span class="sourceLineNo">023</span><a id="line.23">    public static final StringConvert&lt;StatefulRNG&gt; convertStatefulRNG = new StringConvert&lt;StatefulRNG&gt;("StatefulRNG") {</a>
-<span class="sourceLineNo">024</span><a id="line.24">        @Override</a>
-<span class="sourceLineNo">025</span><a id="line.25">        public String stringify(StatefulRNG item) {</a>
-<span class="sourceLineNo">026</span><a id="line.26">            return StringKit.hex(item.getState()) + ':' + (item.getRandomness().getClass().getSimpleName());</a>
-<span class="sourceLineNo">027</span><a id="line.27">        }</a>
-<span class="sourceLineNo">028</span><a id="line.28"></a>
-<span class="sourceLineNo">029</span><a id="line.29">        @Override</a>
-<span class="sourceLineNo">030</span><a id="line.30">        public StatefulRNG restore(String text) {</a>
-<span class="sourceLineNo">031</span><a id="line.31">            long state = StringKit.longFromHex(text);</a>
-<span class="sourceLineNo">032</span><a id="line.32">            try {</a>
-<span class="sourceLineNo">033</span><a id="line.33">                StatefulRandomness sr = (StatefulRandomness) ClassReflection.newInstance(ClassReflection.forName(text.substring(text.indexOf(':') + 1)));</a>
-<span class="sourceLineNo">034</span><a id="line.34">                sr.setState(state);</a>
-<span class="sourceLineNo">035</span><a id="line.35">                return new StatefulRNG(sr);</a>
-<span class="sourceLineNo">036</span><a id="line.36">            }catch (Exception re)</a>
-<span class="sourceLineNo">037</span><a id="line.37">            {</a>
-<span class="sourceLineNo">038</span><a id="line.38">                return new StatefulRNG(state);</a>
-<span class="sourceLineNo">039</span><a id="line.39">            }</a>
-<span class="sourceLineNo">040</span><a id="line.40">        }</a>
-<span class="sourceLineNo">041</span><a id="line.41">    };</a>
-<span class="sourceLineNo">042</span><a id="line.42">    public static final StringConvert&lt;StatefulRandomness&gt; convertStatefulRandomness = new StringConvert&lt;StatefulRandomness&gt;("StatefulRandomness") {</a>
-<span class="sourceLineNo">043</span><a id="line.43">        @Override</a>
-<span class="sourceLineNo">044</span><a id="line.44">        public String stringify(StatefulRandomness item) {</a>
-<span class="sourceLineNo">045</span><a id="line.45">            return StringKit.hex(item.getState()) + ':' + (item.getClass().getSimpleName());</a>
-<span class="sourceLineNo">046</span><a id="line.46">        }</a>
-<span class="sourceLineNo">047</span><a id="line.47"></a>
-<span class="sourceLineNo">048</span><a id="line.48">        @Override</a>
-<span class="sourceLineNo">049</span><a id="line.49">        public StatefulRandomness restore(String text) {</a>
-<span class="sourceLineNo">050</span><a id="line.50">            long state = StringKit.longFromHex(text);</a>
-<span class="sourceLineNo">051</span><a id="line.51">            try {</a>
-<span class="sourceLineNo">052</span><a id="line.52">                StatefulRandomness sr = (StatefulRandomness) ClassReflection.newInstance(ClassReflection.forName(text.substring(text.indexOf(':') + 1)));</a>
-<span class="sourceLineNo">053</span><a id="line.53">                sr.setState(state);</a>
-<span class="sourceLineNo">054</span><a id="line.54">                return sr;</a>
-<span class="sourceLineNo">055</span><a id="line.55">            }catch (Exception re)</a>
-<span class="sourceLineNo">056</span><a id="line.56">            {</a>
-<span class="sourceLineNo">057</span><a id="line.57">                return new DiverRNG(state);</a>
-<span class="sourceLineNo">058</span><a id="line.58">            }</a>
-<span class="sourceLineNo">059</span><a id="line.59">        }</a>
-<span class="sourceLineNo">060</span><a id="line.60">    };</a>
-<span class="sourceLineNo">061</span><a id="line.61"></a>
-<span class="sourceLineNo">062</span><a id="line.62">    public static final StringConvert&lt;RNG&gt; convertRNG = new StringConvert&lt;RNG&gt;("RNG") {</a>
-<span class="sourceLineNo">063</span><a id="line.63">        @Override</a>
-<span class="sourceLineNo">064</span><a id="line.64">        public String stringify(RNG item) {</a>
-<span class="sourceLineNo">065</span><a id="line.65">            return "RNG:" + (item.getRandomness().getClass().getSimpleName());</a>
-<span class="sourceLineNo">066</span><a id="line.66">        }</a>
-<span class="sourceLineNo">067</span><a id="line.67"></a>
-<span class="sourceLineNo">068</span><a id="line.68">        @Override</a>
-<span class="sourceLineNo">069</span><a id="line.69">        public RNG restore(String text) {</a>
-<span class="sourceLineNo">070</span><a id="line.70">            try {</a>
-<span class="sourceLineNo">071</span><a id="line.71">                RandomnessSource rs = (RandomnessSource) ClassReflection.newInstance(ClassReflection.forName(text.substring(text.indexOf(':') + 1)));</a>
-<span class="sourceLineNo">072</span><a id="line.72">                return new RNG(rs);</a>
-<span class="sourceLineNo">073</span><a id="line.73">            }catch (Exception re)</a>
-<span class="sourceLineNo">074</span><a id="line.74">            {</a>
-<span class="sourceLineNo">075</span><a id="line.75">                return new RNG();</a>
-<span class="sourceLineNo">076</span><a id="line.76">            }</a>
-<span class="sourceLineNo">077</span><a id="line.77">        }</a>
-<span class="sourceLineNo">078</span><a id="line.78">    };</a>
-<span class="sourceLineNo">079</span><a id="line.79">    public static &lt;K&gt; StringConvert&lt;ProbabilityTable&lt;K&gt;&gt; convertProbabilityTable(final StringConvert&lt;K&gt; convert) {</a>
-<span class="sourceLineNo">080</span><a id="line.80">        CharSequence[] types = StringConvert.asArray("ProbabilityTable", convert.name);</a>
-<span class="sourceLineNo">081</span><a id="line.81">        StringConvert found = StringConvert.lookup(types);</a>
-<span class="sourceLineNo">082</span><a id="line.82">        if (found != null)</a>
-<span class="sourceLineNo">083</span><a id="line.83">            return found; // in this case we've already created a StringConvert for this type combination</a>
-<span class="sourceLineNo">084</span><a id="line.84">        final StringConvert&lt;Arrangement&lt;K&gt;&gt; convertArrange = Converters.convertArrangement(convert);</a>
-<span class="sourceLineNo">085</span><a id="line.85">        return new StringConvert&lt;ProbabilityTable&lt;K&gt;&gt;(types) {</a>
-<span class="sourceLineNo">086</span><a id="line.86">            @Override</a>
-<span class="sourceLineNo">087</span><a id="line.87">            public String stringify(ProbabilityTable&lt;K&gt; item) {</a>
-<span class="sourceLineNo">088</span><a id="line.88">                StringBuilder sb = new StringBuilder(256);</a>
-<span class="sourceLineNo">089</span><a id="line.89">                appendQuoted(sb, StringKit.hex(item.getRandom().getState()));</a>
-<span class="sourceLineNo">090</span><a id="line.90">                sb.append(' ');</a>
-<span class="sourceLineNo">091</span><a id="line.91">                appendQuoted(sb, convertIntVLA.stringify(item.weights));</a>
-<span class="sourceLineNo">092</span><a id="line.92">                sb.append(' ');</a>
-<span class="sourceLineNo">093</span><a id="line.93">                appendQuoted(sb, convertArrange.stringify(item.table));</a>
-<span class="sourceLineNo">094</span><a id="line.94">                for (int i = 0; i &lt; item.extraTable.size(); i++) {</a>
-<span class="sourceLineNo">095</span><a id="line.95">                    sb.append(' ');</a>
-<span class="sourceLineNo">096</span><a id="line.96">                    appendQuoted(sb, stringify(item.extraTable.get(i)));</a>
-<span class="sourceLineNo">097</span><a id="line.97">                }</a>
-<span class="sourceLineNo">098</span><a id="line.98">                return sb.toString();</a>
-<span class="sourceLineNo">099</span><a id="line.99">            }</a>
-<span class="sourceLineNo">100</span><a id="line.100"></a>
-<span class="sourceLineNo">101</span><a id="line.101">            @Override</a>
-<span class="sourceLineNo">102</span><a id="line.102">            public ProbabilityTable&lt;K&gt; restore(String text) {</a>
-<span class="sourceLineNo">103</span><a id="line.103">                ObText.ContentMatcher m = makeMatcher(text);</a>
-<span class="sourceLineNo">104</span><a id="line.104">                if(!m.find() || !m.hasMatch())</a>
-<span class="sourceLineNo">105</span><a id="line.105">                    return null;</a>
-<span class="sourceLineNo">106</span><a id="line.106">                ProbabilityTable&lt;K&gt; pt = new ProbabilityTable&lt;&gt;(StringKit.longFromHex(m.getMatch()));</a>
-<span class="sourceLineNo">107</span><a id="line.107">                if(!m.find() || !m.hasMatch())</a>
-<span class="sourceLineNo">108</span><a id="line.108">                    return pt;</a>
-<span class="sourceLineNo">109</span><a id="line.109">                pt.weights.addAll(convertIntVLA.restore(m.getMatch()));</a>
-<span class="sourceLineNo">110</span><a id="line.110">                if(!m.find() || !m.hasMatch())</a>
-<span class="sourceLineNo">111</span><a id="line.111">                {</a>
-<span class="sourceLineNo">112</span><a id="line.112">                    pt.weights.clear();</a>
-<span class="sourceLineNo">113</span><a id="line.113">                    return pt;</a>
-<span class="sourceLineNo">114</span><a id="line.114">                }</a>
-<span class="sourceLineNo">115</span><a id="line.115">                pt.table.putAll(convertArrange.restore(m.getMatch()));</a>
-<span class="sourceLineNo">116</span><a id="line.116">                while (m.find()) {</a>
-<span class="sourceLineNo">117</span><a id="line.117">                    if (m.hasMatch()) {</a>
-<span class="sourceLineNo">118</span><a id="line.118">                        pt.extraTable.add(restore(m.getMatch()));</a>
-<span class="sourceLineNo">119</span><a id="line.119">                    }</a>
-<span class="sourceLineNo">120</span><a id="line.120">                }</a>
-<span class="sourceLineNo">121</span><a id="line.121">                return pt;</a>
-<span class="sourceLineNo">122</span><a id="line.122">            }</a>
-<span class="sourceLineNo">123</span><a id="line.123">        };</a>
-<span class="sourceLineNo">124</span><a id="line.124">    }</a>
-<span class="sourceLineNo">125</span><a id="line.125"></a>
-<span class="sourceLineNo">126</span><a id="line.126">    public static &lt;K&gt; StringConvert&lt;ProbabilityTable&lt;K&gt;&gt; convertProbabilityTable(final CharSequence type) {</a>
-<span class="sourceLineNo">127</span><a id="line.127">        return convertProbabilityTable((StringConvert&lt;K&gt;) StringConvert.get(type));</a>
-<span class="sourceLineNo">128</span><a id="line.128">    }</a>
-<span class="sourceLineNo">129</span><a id="line.129"></a>
-<span class="sourceLineNo">130</span><a id="line.130">    public static &lt;K&gt; StringConvert&lt;ProbabilityTable&lt;K&gt;&gt; convertProbabilityTable(final Class&lt;K&gt; type) {</a>
-<span class="sourceLineNo">131</span><a id="line.131">        return convertProbabilityTable((StringConvert&lt;K&gt;) StringConvert.get(type.getSimpleName()));</a>
-<span class="sourceLineNo">132</span><a id="line.132">    }</a>
-<span class="sourceLineNo">133</span><a id="line.133"></a>
-<span class="sourceLineNo">134</span><a id="line.134">    public static final StringConvert&lt;SpillWorldMap&gt; convertSpillWorldMap = new StringConvert&lt;SpillWorldMap&gt;("SpillWorldMap") {</a>
-<span class="sourceLineNo">135</span><a id="line.135">        @Override</a>
-<span class="sourceLineNo">136</span><a id="line.136">        public String stringify(SpillWorldMap item) {</a>
-<span class="sourceLineNo">137</span><a id="line.137">            return item.width</a>
-<span class="sourceLineNo">138</span><a id="line.138">                    + "\t" + item.height</a>
-<span class="sourceLineNo">139</span><a id="line.139">                    + "\t" + item.name</a>
-<span class="sourceLineNo">140</span><a id="line.140">                    + '\t' + Converters.convertArrayInt2D.stringify(item.heightMap)</a>
-<span class="sourceLineNo">141</span><a id="line.141">                    + '\t' + Converters.convertArrayCoord.stringify(item.mountains)</a>
-<span class="sourceLineNo">142</span><a id="line.142">                    + '\t' + Converters.convertArrayChar2D.stringify(item.politicalMap)</a>
-<span class="sourceLineNo">143</span><a id="line.143">                    + '\t' + convertMapCharString.stringify(item.atlas)</a>
-<span class="sourceLineNo">144</span><a id="line.144">                    + '\t' + convertStatefulRNG.stringify(item.rng);</a>
-<span class="sourceLineNo">145</span><a id="line.145">        }</a>
-<span class="sourceLineNo">146</span><a id="line.146"></a>
-<span class="sourceLineNo">147</span><a id="line.147">        @Override</a>
-<span class="sourceLineNo">148</span><a id="line.148">        public SpillWorldMap restore(String text) {</a>
-<span class="sourceLineNo">149</span><a id="line.149">            int pos;</a>
-<span class="sourceLineNo">150</span><a id="line.150">            SpillWorldMap swm = new SpillWorldMap(</a>
-<span class="sourceLineNo">151</span><a id="line.151">                    Integer.decode(text.substring(0, (pos = text.indexOf('\t')))),</a>
-<span class="sourceLineNo">152</span><a id="line.152">                    Integer.decode(text.substring(pos+1, (pos = text.indexOf('\t', pos+1)))),</a>
-<span class="sourceLineNo">153</span><a id="line.153">                    text.substring(pos+1, (pos = text.indexOf('\t', pos+1)))</a>
-<span class="sourceLineNo">154</span><a id="line.154">            );</a>
-<span class="sourceLineNo">155</span><a id="line.155">            swm.heightMap = Converters.convertArrayInt2D.restore(text.substring(pos+1, (pos = text.indexOf('\t', pos+1))));</a>
-<span class="sourceLineNo">156</span><a id="line.156">            swm.mountains = Converters.convertArrayCoord.restore(text.substring(pos+1, (pos = text.indexOf('\t', pos+1))));</a>
-<span class="sourceLineNo">157</span><a id="line.157">            swm.politicalMap = Converters.convertArrayChar2D.restore(text.substring(pos+1, (pos = text.indexOf('\t', pos+1))));</a>
-<span class="sourceLineNo">158</span><a id="line.158">            swm.atlas.clear();</a>
-<span class="sourceLineNo">159</span><a id="line.159">            swm.atlas.putAll(convertMapCharString.restore(text.substring(pos+1, (pos = text.indexOf('\t', pos+1)))));</a>
-<span class="sourceLineNo">160</span><a id="line.160">            swm.rng = convertStatefulRNG.restore(text.substring(pos+1));</a>
-<span class="sourceLineNo">161</span><a id="line.161">            return swm;</a>
-<span class="sourceLineNo">162</span><a id="line.162">        }</a>
-<span class="sourceLineNo">163</span><a id="line.163">    };</a>
-<span class="sourceLineNo">164</span><a id="line.164"></a>
-<span class="sourceLineNo">165</span><a id="line.165">    public static final StringConvert&lt;PoliticalMapper&gt; convertPoliticalMapper = new StringConvert&lt;PoliticalMapper&gt;("PoliticalMapper") {</a>
-<span class="sourceLineNo">166</span><a id="line.166">        @Override</a>
-<span class="sourceLineNo">167</span><a id="line.167">        public String stringify(PoliticalMapper item) {</a>
-<span class="sourceLineNo">168</span><a id="line.168">            return item.width</a>
-<span class="sourceLineNo">169</span><a id="line.169">                    + "\t" + item.height</a>
-<span class="sourceLineNo">170</span><a id="line.170">                    + "\t" + item.name</a>
-<span class="sourceLineNo">171</span><a id="line.171">                    + '\t' + Converters.convertArrayChar2D.stringify(item.politicalMap)</a>
-<span class="sourceLineNo">172</span><a id="line.172">                    + '\t' + convertMapCharString.stringify(item.atlas)</a>
-<span class="sourceLineNo">173</span><a id="line.173">                    + '\t' + convertMapCharListLanguage.stringify(item.spokenLanguages)</a>
-<span class="sourceLineNo">174</span><a id="line.174">                    + '\t' + convertStatefulRNG.stringify(item.rng);</a>
-<span class="sourceLineNo">175</span><a id="line.175">        }</a>
-<span class="sourceLineNo">176</span><a id="line.176"></a>
-<span class="sourceLineNo">177</span><a id="line.177">        @Override</a>
-<span class="sourceLineNo">178</span><a id="line.178">        public PoliticalMapper restore(String text) {</a>
-<span class="sourceLineNo">179</span><a id="line.179">            int pos;</a>
-<span class="sourceLineNo">180</span><a id="line.180">            PoliticalMapper pm = new PoliticalMapper();</a>
-<span class="sourceLineNo">181</span><a id="line.181">            pm.width = Integer.decode(text.substring(0, (pos = text.indexOf('\t'))));</a>
-<span class="sourceLineNo">182</span><a id="line.182">            pm.height = Integer.decode(text.substring(pos+1, (pos = text.indexOf('\t', pos+1))));</a>
-<span class="sourceLineNo">183</span><a id="line.183">            pm.name = text.substring(pos+1, (pos = text.indexOf('\t', pos+1)));</a>
-<span class="sourceLineNo">184</span><a id="line.184">            pm.politicalMap = Converters.convertArrayChar2D.restore(text.substring(pos+1, (pos = text.indexOf('\t', pos+1))));</a>
-<span class="sourceLineNo">185</span><a id="line.185">            pm.atlas.clear();</a>
-<span class="sourceLineNo">186</span><a id="line.186">            pm.atlas.putAll(convertMapCharString.restore(text.substring(pos+1, (pos = text.indexOf('\t', pos+1)))));</a>
-<span class="sourceLineNo">187</span><a id="line.187">            pm.spokenLanguages.clear();</a>
-<span class="sourceLineNo">188</span><a id="line.188">            pm.spokenLanguages.putAll(convertMapCharListLanguage.restore(text.substring(pos+1, (pos = text.indexOf('\t', pos+1)))));</a>
-<span class="sourceLineNo">189</span><a id="line.189">            pm.rng = convertStatefulRNG.restore(text.substring(pos+1));</a>
-<span class="sourceLineNo">190</span><a id="line.190">            return pm;</a>
-<span class="sourceLineNo">191</span><a id="line.191">        }</a>
-<span class="sourceLineNo">192</span><a id="line.192">    };</a>
-<span class="sourceLineNo">193</span><a id="line.193"></a>
-<span class="sourceLineNo">194</span><a id="line.194"></a>
-<span class="sourceLineNo">195</span><a id="line.195">}</a>
+<div class="source-container">
+<pre><span class="source-line-no">001</span><span id="line.1">package squidpony.store.text;</span>
+<span class="source-line-no">002</span><span id="line.2"></span>
+<span class="source-line-no">003</span><span id="line.3">import com.badlogic.gdx.utils.reflect.ClassReflection;</span>
+<span class="source-line-no">004</span><span id="line.4">import squidpony.*;</span>
+<span class="source-line-no">005</span><span id="line.5">import squidpony.squidgrid.mapping.PoliticalMapper;</span>
+<span class="source-line-no">006</span><span id="line.6">import squidpony.squidgrid.mapping.SpillWorldMap;</span>
+<span class="source-line-no">007</span><span id="line.7">import squidpony.squidmath.*;</span>
+<span class="source-line-no">008</span><span id="line.8"></span>
+<span class="source-line-no">009</span><span id="line.9">import java.util.List;</span>
+<span class="source-line-no">010</span><span id="line.10"></span>
+<span class="source-line-no">011</span><span id="line.11">import static squidpony.Converters.*;</span>
+<span class="source-line-no">012</span><span id="line.12"></span>
+<span class="source-line-no">013</span><span id="line.13">/**</span>
+<span class="source-line-no">014</span><span id="line.14"> * Created by Tommy Ettinger on 4/22/2017.</span>
+<span class="source-line-no">015</span><span id="line.15"> */</span>
+<span class="source-line-no">016</span><span id="line.16">@SuppressWarnings("unchecked")</span>
+<span class="source-line-no">017</span><span id="line.17">public class BonusConverters {</span>
+<span class="source-line-no">018</span><span id="line.18">    public static final StringConvert&lt;OrderedMap&lt;Character, String&gt;&gt; convertMapCharString =</span>
+<span class="source-line-no">019</span><span id="line.19">            Converters.convertOrderedMap(Converters.convertChar, Converters.convertString);</span>
+<span class="source-line-no">020</span><span id="line.20">    public static final StringConvert&lt;List&lt;FakeLanguageGen&gt;&gt; convertListLanguage = Converters.convertList(Converters.convertFakeLanguageGen);</span>
+<span class="source-line-no">021</span><span id="line.21">    public static final StringConvert&lt;OrderedMap&lt;Character, List&lt;FakeLanguageGen&gt;&gt;&gt; convertMapCharListLanguage</span>
+<span class="source-line-no">022</span><span id="line.22">            = Converters.convertOrderedMap(Converters.convertChar, convertListLanguage);</span>
+<span class="source-line-no">023</span><span id="line.23">    public static final StringConvert&lt;StatefulRNG&gt; convertStatefulRNG = new StringConvert&lt;StatefulRNG&gt;("StatefulRNG") {</span>
+<span class="source-line-no">024</span><span id="line.24">        @Override</span>
+<span class="source-line-no">025</span><span id="line.25">        public String stringify(StatefulRNG item) {</span>
+<span class="source-line-no">026</span><span id="line.26">            return StringKit.hex(item.getState()) + ':' + (item.getRandomness().getClass().getSimpleName());</span>
+<span class="source-line-no">027</span><span id="line.27">        }</span>
+<span class="source-line-no">028</span><span id="line.28"></span>
+<span class="source-line-no">029</span><span id="line.29">        @Override</span>
+<span class="source-line-no">030</span><span id="line.30">        public StatefulRNG restore(String text) {</span>
+<span class="source-line-no">031</span><span id="line.31">            long state = StringKit.longFromHex(text);</span>
+<span class="source-line-no">032</span><span id="line.32">            try {</span>
+<span class="source-line-no">033</span><span id="line.33">                StatefulRandomness sr = (StatefulRandomness) ClassReflection.newInstance(ClassReflection.forName(text.substring(text.indexOf(':') + 1)));</span>
+<span class="source-line-no">034</span><span id="line.34">                sr.setState(state);</span>
+<span class="source-line-no">035</span><span id="line.35">                return new StatefulRNG(sr);</span>
+<span class="source-line-no">036</span><span id="line.36">            }catch (Exception re)</span>
+<span class="source-line-no">037</span><span id="line.37">            {</span>
+<span class="source-line-no">038</span><span id="line.38">                return new StatefulRNG(state);</span>
+<span class="source-line-no">039</span><span id="line.39">            }</span>
+<span class="source-line-no">040</span><span id="line.40">        }</span>
+<span class="source-line-no">041</span><span id="line.41">    };</span>
+<span class="source-line-no">042</span><span id="line.42">    public static final StringConvert&lt;StatefulRandomness&gt; convertStatefulRandomness = new StringConvert&lt;StatefulRandomness&gt;("StatefulRandomness") {</span>
+<span class="source-line-no">043</span><span id="line.43">        @Override</span>
+<span class="source-line-no">044</span><span id="line.44">        public String stringify(StatefulRandomness item) {</span>
+<span class="source-line-no">045</span><span id="line.45">            return StringKit.hex(item.getState()) + ':' + (item.getClass().getSimpleName());</span>
+<span class="source-line-no">046</span><span id="line.46">        }</span>
+<span class="source-line-no">047</span><span id="line.47"></span>
+<span class="source-line-no">048</span><span id="line.48">        @Override</span>
+<span class="source-line-no">049</span><span id="line.49">        public StatefulRandomness restore(String text) {</span>
+<span class="source-line-no">050</span><span id="line.50">            long state = StringKit.longFromHex(text);</span>
+<span class="source-line-no">051</span><span id="line.51">            try {</span>
+<span class="source-line-no">052</span><span id="line.52">                StatefulRandomness sr = (StatefulRandomness) ClassReflection.newInstance(ClassReflection.forName(text.substring(text.indexOf(':') + 1)));</span>
+<span class="source-line-no">053</span><span id="line.53">                sr.setState(state);</span>
+<span class="source-line-no">054</span><span id="line.54">                return sr;</span>
+<span class="source-line-no">055</span><span id="line.55">            }catch (Exception re)</span>
+<span class="source-line-no">056</span><span id="line.56">            {</span>
+<span class="source-line-no">057</span><span id="line.57">                return new DiverRNG(state);</span>
+<span class="source-line-no">058</span><span id="line.58">            }</span>
+<span class="source-line-no">059</span><span id="line.59">        }</span>
+<span class="source-line-no">060</span><span id="line.60">    };</span>
+<span class="source-line-no">061</span><span id="line.61"></span>
+<span class="source-line-no">062</span><span id="line.62">    public static final StringConvert&lt;RNG&gt; convertRNG = new StringConvert&lt;RNG&gt;("RNG") {</span>
+<span class="source-line-no">063</span><span id="line.63">        @Override</span>
+<span class="source-line-no">064</span><span id="line.64">        public String stringify(RNG item) {</span>
+<span class="source-line-no">065</span><span id="line.65">            return "RNG:" + (item.getRandomness().getClass().getSimpleName());</span>
+<span class="source-line-no">066</span><span id="line.66">        }</span>
+<span class="source-line-no">067</span><span id="line.67"></span>
+<span class="source-line-no">068</span><span id="line.68">        @Override</span>
+<span class="source-line-no">069</span><span id="line.69">        public RNG restore(String text) {</span>
+<span class="source-line-no">070</span><span id="line.70">            try {</span>
+<span class="source-line-no">071</span><span id="line.71">                RandomnessSource rs = (RandomnessSource) ClassReflection.newInstance(ClassReflection.forName(text.substring(text.indexOf(':') + 1)));</span>
+<span class="source-line-no">072</span><span id="line.72">                return new RNG(rs);</span>
+<span class="source-line-no">073</span><span id="line.73">            }catch (Exception re)</span>
+<span class="source-line-no">074</span><span id="line.74">            {</span>
+<span class="source-line-no">075</span><span id="line.75">                return new RNG();</span>
+<span class="source-line-no">076</span><span id="line.76">            }</span>
+<span class="source-line-no">077</span><span id="line.77">        }</span>
+<span class="source-line-no">078</span><span id="line.78">    };</span>
+<span class="source-line-no">079</span><span id="line.79">    public static &lt;K&gt; StringConvert&lt;ProbabilityTable&lt;K&gt;&gt; convertProbabilityTable(final StringConvert&lt;K&gt; convert) {</span>
+<span class="source-line-no">080</span><span id="line.80">        CharSequence[] types = StringConvert.asArray("ProbabilityTable", convert.name);</span>
+<span class="source-line-no">081</span><span id="line.81">        StringConvert found = StringConvert.lookup(types);</span>
+<span class="source-line-no">082</span><span id="line.82">        if (found != null)</span>
+<span class="source-line-no">083</span><span id="line.83">            return found; // in this case we've already created a StringConvert for this type combination</span>
+<span class="source-line-no">084</span><span id="line.84">        final StringConvert&lt;Arrangement&lt;K&gt;&gt; convertArrange = Converters.convertArrangement(convert);</span>
+<span class="source-line-no">085</span><span id="line.85">        return new StringConvert&lt;ProbabilityTable&lt;K&gt;&gt;(types) {</span>
+<span class="source-line-no">086</span><span id="line.86">            @Override</span>
+<span class="source-line-no">087</span><span id="line.87">            public String stringify(ProbabilityTable&lt;K&gt; item) {</span>
+<span class="source-line-no">088</span><span id="line.88">                StringBuilder sb = new StringBuilder(256);</span>
+<span class="source-line-no">089</span><span id="line.89">                appendQuoted(sb, StringKit.hex(item.getRandom().getState()));</span>
+<span class="source-line-no">090</span><span id="line.90">                sb.append(' ');</span>
+<span class="source-line-no">091</span><span id="line.91">                appendQuoted(sb, convertIntVLA.stringify(item.weights));</span>
+<span class="source-line-no">092</span><span id="line.92">                sb.append(' ');</span>
+<span class="source-line-no">093</span><span id="line.93">                appendQuoted(sb, convertArrange.stringify(item.table));</span>
+<span class="source-line-no">094</span><span id="line.94">                for (int i = 0; i &lt; item.extraTable.size(); i++) {</span>
+<span class="source-line-no">095</span><span id="line.95">                    sb.append(' ');</span>
+<span class="source-line-no">096</span><span id="line.96">                    appendQuoted(sb, stringify(item.extraTable.get(i)));</span>
+<span class="source-line-no">097</span><span id="line.97">                }</span>
+<span class="source-line-no">098</span><span id="line.98">                return sb.toString();</span>
+<span class="source-line-no">099</span><span id="line.99">            }</span>
+<span class="source-line-no">100</span><span id="line.100"></span>
+<span class="source-line-no">101</span><span id="line.101">            @Override</span>
+<span class="source-line-no">102</span><span id="line.102">            public ProbabilityTable&lt;K&gt; restore(String text) {</span>
+<span class="source-line-no">103</span><span id="line.103">                ObText.ContentMatcher m = makeMatcher(text);</span>
+<span class="source-line-no">104</span><span id="line.104">                if(!m.find() || !m.hasMatch())</span>
+<span class="source-line-no">105</span><span id="line.105">                    return null;</span>
+<span class="source-line-no">106</span><span id="line.106">                ProbabilityTable&lt;K&gt; pt = new ProbabilityTable&lt;&gt;(StringKit.longFromHex(m.getMatch()));</span>
+<span class="source-line-no">107</span><span id="line.107">                if(!m.find() || !m.hasMatch())</span>
+<span class="source-line-no">108</span><span id="line.108">                    return pt;</span>
+<span class="source-line-no">109</span><span id="line.109">                pt.weights.addAll(convertIntVLA.restore(m.getMatch()));</span>
+<span class="source-line-no">110</span><span id="line.110">                if(!m.find() || !m.hasMatch())</span>
+<span class="source-line-no">111</span><span id="line.111">                {</span>
+<span class="source-line-no">112</span><span id="line.112">                    pt.weights.clear();</span>
+<span class="source-line-no">113</span><span id="line.113">                    return pt;</span>
+<span class="source-line-no">114</span><span id="line.114">                }</span>
+<span class="source-line-no">115</span><span id="line.115">                pt.table.putAll(convertArrange.restore(m.getMatch()));</span>
+<span class="source-line-no">116</span><span id="line.116">                while (m.find()) {</span>
+<span class="source-line-no">117</span><span id="line.117">                    if (m.hasMatch()) {</span>
+<span class="source-line-no">118</span><span id="line.118">                        pt.extraTable.add(restore(m.getMatch()));</span>
+<span class="source-line-no">119</span><span id="line.119">                    }</span>
+<span class="source-line-no">120</span><span id="line.120">                }</span>
+<span class="source-line-no">121</span><span id="line.121">                return pt;</span>
+<span class="source-line-no">122</span><span id="line.122">            }</span>
+<span class="source-line-no">123</span><span id="line.123">        };</span>
+<span class="source-line-no">124</span><span id="line.124">    }</span>
+<span class="source-line-no">125</span><span id="line.125"></span>
+<span class="source-line-no">126</span><span id="line.126">    public static &lt;K&gt; StringConvert&lt;ProbabilityTable&lt;K&gt;&gt; convertProbabilityTable(final CharSequence type) {</span>
+<span class="source-line-no">127</span><span id="line.127">        return convertProbabilityTable((StringConvert&lt;K&gt;) StringConvert.get(type));</span>
+<span class="source-line-no">128</span><span id="line.128">    }</span>
+<span class="source-line-no">129</span><span id="line.129"></span>
+<span class="source-line-no">130</span><span id="line.130">    public static &lt;K&gt; StringConvert&lt;ProbabilityTable&lt;K&gt;&gt; convertProbabilityTable(final Class&lt;K&gt; type) {</span>
+<span class="source-line-no">131</span><span id="line.131">        return convertProbabilityTable((StringConvert&lt;K&gt;) StringConvert.get(type.getSimpleName()));</span>
+<span class="source-line-no">132</span><span id="line.132">    }</span>
+<span class="source-line-no">133</span><span id="line.133"></span>
+<span class="source-line-no">134</span><span id="line.134">    public static final StringConvert&lt;SpillWorldMap&gt; convertSpillWorldMap = new StringConvert&lt;SpillWorldMap&gt;("SpillWorldMap") {</span>
+<span class="source-line-no">135</span><span id="line.135">        @Override</span>
+<span class="source-line-no">136</span><span id="line.136">        public String stringify(SpillWorldMap item) {</span>
+<span class="source-line-no">137</span><span id="line.137">            return item.width</span>
+<span class="source-line-no">138</span><span id="line.138">                    + "\t" + item.height</span>
+<span class="source-line-no">139</span><span id="line.139">                    + "\t" + item.name</span>
+<span class="source-line-no">140</span><span id="line.140">                    + '\t' + Converters.convertArrayInt2D.stringify(item.heightMap)</span>
+<span class="source-line-no">141</span><span id="line.141">                    + '\t' + Converters.convertArrayCoord.stringify(item.mountains)</span>
+<span class="source-line-no">142</span><span id="line.142">                    + '\t' + Converters.convertArrayChar2D.stringify(item.politicalMap)</span>
+<span class="source-line-no">143</span><span id="line.143">                    + '\t' + convertMapCharString.stringify(item.atlas)</span>
+<span class="source-line-no">144</span><span id="line.144">                    + '\t' + convertStatefulRNG.stringify(item.rng);</span>
+<span class="source-line-no">145</span><span id="line.145">        }</span>
+<span class="source-line-no">146</span><span id="line.146"></span>
+<span class="source-line-no">147</span><span id="line.147">        @Override</span>
+<span class="source-line-no">148</span><span id="line.148">        public SpillWorldMap restore(String text) {</span>
+<span class="source-line-no">149</span><span id="line.149">            int pos;</span>
+<span class="source-line-no">150</span><span id="line.150">            SpillWorldMap swm = new SpillWorldMap(</span>
+<span class="source-line-no">151</span><span id="line.151">                    Integer.decode(text.substring(0, (pos = text.indexOf('\t')))),</span>
+<span class="source-line-no">152</span><span id="line.152">                    Integer.decode(text.substring(pos+1, (pos = text.indexOf('\t', pos+1)))),</span>
+<span class="source-line-no">153</span><span id="line.153">                    text.substring(pos+1, (pos = text.indexOf('\t', pos+1)))</span>
+<span class="source-line-no">154</span><span id="line.154">            );</span>
+<span class="source-line-no">155</span><span id="line.155">            swm.heightMap = Converters.convertArrayInt2D.restore(text.substring(pos+1, (pos = text.indexOf('\t', pos+1))));</span>
+<span class="source-line-no">156</span><span id="line.156">            swm.mountains = Converters.convertArrayCoord.restore(text.substring(pos+1, (pos = text.indexOf('\t', pos+1))));</span>
+<span class="source-line-no">157</span><span id="line.157">            swm.politicalMap = Converters.convertArrayChar2D.restore(text.substring(pos+1, (pos = text.indexOf('\t', pos+1))));</span>
+<span class="source-line-no">158</span><span id="line.158">            swm.atlas.clear();</span>
+<span class="source-line-no">159</span><span id="line.159">            swm.atlas.putAll(convertMapCharString.restore(text.substring(pos+1, (pos = text.indexOf('\t', pos+1)))));</span>
+<span class="source-line-no">160</span><span id="line.160">            swm.rng = convertStatefulRNG.restore(text.substring(pos+1));</span>
+<span class="source-line-no">161</span><span id="line.161">            return swm;</span>
+<span class="source-line-no">162</span><span id="line.162">        }</span>
+<span class="source-line-no">163</span><span id="line.163">    };</span>
+<span class="source-line-no">164</span><span id="line.164"></span>
+<span class="source-line-no">165</span><span id="line.165">    public static final StringConvert&lt;PoliticalMapper&gt; convertPoliticalMapper = new StringConvert&lt;PoliticalMapper&gt;("PoliticalMapper") {</span>
+<span class="source-line-no">166</span><span id="line.166">        @Override</span>
+<span class="source-line-no">167</span><span id="line.167">        public String stringify(PoliticalMapper item) {</span>
+<span class="source-line-no">168</span><span id="line.168">            return item.width</span>
+<span class="source-line-no">169</span><span id="line.169">                    + "\t" + item.height</span>
+<span class="source-line-no">170</span><span id="line.170">                    + "\t" + item.name</span>
+<span class="source-line-no">171</span><span id="line.171">                    + '\t' + Converters.convertArrayChar2D.stringify(item.politicalMap)</span>
+<span class="source-line-no">172</span><span id="line.172">                    + '\t' + convertMapCharString.stringify(item.atlas)</span>
+<span class="source-line-no">173</span><span id="line.173">                    + '\t' + convertMapCharListLanguage.stringify(item.spokenLanguages)</span>
+<span class="source-line-no">174</span><span id="line.174">                    + '\t' + convertStatefulRNG.stringify(item.rng);</span>
+<span class="source-line-no">175</span><span id="line.175">        }</span>
+<span class="source-line-no">176</span><span id="line.176"></span>
+<span class="source-line-no">177</span><span id="line.177">        @Override</span>
+<span class="source-line-no">178</span><span id="line.178">        public PoliticalMapper restore(String text) {</span>
+<span class="source-line-no">179</span><span id="line.179">            int pos;</span>
+<span class="source-line-no">180</span><span id="line.180">            PoliticalMapper pm = new PoliticalMapper();</span>
+<span class="source-line-no">181</span><span id="line.181">            pm.width = Integer.decode(text.substring(0, (pos = text.indexOf('\t'))));</span>
+<span class="source-line-no">182</span><span id="line.182">            pm.height = Integer.decode(text.substring(pos+1, (pos = text.indexOf('\t', pos+1))));</span>
+<span class="source-line-no">183</span><span id="line.183">            pm.name = text.substring(pos+1, (pos = text.indexOf('\t', pos+1)));</span>
+<span class="source-line-no">184</span><span id="line.184">            pm.politicalMap = Converters.convertArrayChar2D.restore(text.substring(pos+1, (pos = text.indexOf('\t', pos+1))));</span>
+<span class="source-line-no">185</span><span id="line.185">            pm.atlas.clear();</span>
+<span class="source-line-no">186</span><span id="line.186">            pm.atlas.putAll(convertMapCharString.restore(text.substring(pos+1, (pos = text.indexOf('\t', pos+1)))));</span>
+<span class="source-line-no">187</span><span id="line.187">            pm.spokenLanguages.clear();</span>
+<span class="source-line-no">188</span><span id="line.188">            pm.spokenLanguages.putAll(convertMapCharListLanguage.restore(text.substring(pos+1, (pos = text.indexOf('\t', pos+1)))));</span>
+<span class="source-line-no">189</span><span id="line.189">            pm.rng = convertStatefulRNG.restore(text.substring(pos+1));</span>
+<span class="source-line-no">190</span><span id="line.190">            return pm;</span>
+<span class="source-line-no">191</span><span id="line.191">        }</span>
+<span class="source-line-no">192</span><span id="line.192">    };</span>
+<span class="source-line-no">193</span><span id="line.193"></span>
+<span class="source-line-no">194</span><span id="line.194"></span>
+<span class="source-line-no">195</span><span id="line.195">}</span>
 
 
 

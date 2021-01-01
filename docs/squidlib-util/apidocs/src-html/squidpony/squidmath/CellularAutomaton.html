@@ -7,179 +7,179 @@
 <meta name="generator" content="javadoc/SourceToHTMLConverter">
 <link rel="stylesheet" type="text/css" href="../../../stylesheet.css" title="Style">
 </head>
-<body class="source">
+<body class="source-page">
 <main role="main">
-<div class="sourceContainer">
-<pre><span class="sourceLineNo">001</span><a id="line.1">package squidpony.squidmath;</a>
-<span class="sourceLineNo">002</span><a id="line.2"></a>
-<span class="sourceLineNo">003</span><a id="line.3">import squidpony.ArrayTools;</a>
-<span class="sourceLineNo">004</span><a id="line.4"></a>
-<span class="sourceLineNo">005</span><a id="line.5">/**</a>
-<span class="sourceLineNo">006</span><a id="line.6"> * Created by Tommy Ettinger on 7/3/2017.</a>
-<span class="sourceLineNo">007</span><a id="line.7"> */</a>
-<span class="sourceLineNo">008</span><a id="line.8">public class CellularAutomaton {</a>
-<span class="sourceLineNo">009</span><a id="line.9">    /**</a>
-<span class="sourceLineNo">010</span><a id="line.10">     * Returned directly by some methods, but you may want to change this at some other point.</a>
-<span class="sourceLineNo">011</span><a id="line.11">     */</a>
-<span class="sourceLineNo">012</span><a id="line.12">    public GreasedRegion current;</a>
-<span class="sourceLineNo">013</span><a id="line.13">    private GreasedRegion[] neighbors = new GreasedRegion[9];</a>
-<span class="sourceLineNo">014</span><a id="line.14">    private int[][] sums;</a>
-<span class="sourceLineNo">015</span><a id="line.15"></a>
-<span class="sourceLineNo">016</span><a id="line.16">    /**</a>
-<span class="sourceLineNo">017</span><a id="line.17">     * Constructs a CellularAutomaton with an unfilled 64x64 GreasedRegion, that can be altered later via {@link #current}.</a>
-<span class="sourceLineNo">018</span><a id="line.18">     */</a>
-<span class="sourceLineNo">019</span><a id="line.19">    public CellularAutomaton()</a>
-<span class="sourceLineNo">020</span><a id="line.20">    {</a>
-<span class="sourceLineNo">021</span><a id="line.21">        this(new GreasedRegion(64, 64));</a>
-<span class="sourceLineNo">022</span><a id="line.22">    }</a>
-<span class="sourceLineNo">023</span><a id="line.23"></a>
-<span class="sourceLineNo">024</span><a id="line.24">    /**</a>
-<span class="sourceLineNo">025</span><a id="line.25">     * Constructs a CellularAutomaton with an unfilled GreasedRegion of the specified width and height, that can be</a>
-<span class="sourceLineNo">026</span><a id="line.26">     * altered later via {@link #current}.</a>
-<span class="sourceLineNo">027</span><a id="line.27">     * @param width the width of the CellularAutomaton</a>
-<span class="sourceLineNo">028</span><a id="line.28">     * @param height the height of the CellularAutomaton</a>
-<span class="sourceLineNo">029</span><a id="line.29">     */</a>
-<span class="sourceLineNo">030</span><a id="line.30">    public CellularAutomaton(int width, int height)</a>
-<span class="sourceLineNo">031</span><a id="line.31">    {</a>
-<span class="sourceLineNo">032</span><a id="line.32">        this(new GreasedRegion(Math.max(1, width), Math.max(1, height)));</a>
-<span class="sourceLineNo">033</span><a id="line.33">    }</a>
-<span class="sourceLineNo">034</span><a id="line.34"></a>
-<span class="sourceLineNo">035</span><a id="line.35">    /**</a>
-<span class="sourceLineNo">036</span><a id="line.36">     * Stores a direct reference to {@code current} as this object's {@link #current} field, and initializes the other</a>
-<span class="sourceLineNo">037</span><a id="line.37">     * necessary fields.</a>
-<span class="sourceLineNo">038</span><a id="line.38">     * @param current a GreasedRegion that will be used directly; changes will be shared</a>
-<span class="sourceLineNo">039</span><a id="line.39">     */</a>
-<span class="sourceLineNo">040</span><a id="line.40">    public CellularAutomaton(GreasedRegion current) {</a>
-<span class="sourceLineNo">041</span><a id="line.41">        this.current = current;</a>
-<span class="sourceLineNo">042</span><a id="line.42">        for (int i = 0; i &lt; 9; i++) {</a>
-<span class="sourceLineNo">043</span><a id="line.43">            neighbors[i] = current.copy();</a>
-<span class="sourceLineNo">044</span><a id="line.44">        }</a>
-<span class="sourceLineNo">045</span><a id="line.45">        sums = new int[current.width][current.height];</a>
-<span class="sourceLineNo">046</span><a id="line.46">    }</a>
-<span class="sourceLineNo">047</span><a id="line.47"></a>
-<span class="sourceLineNo">048</span><a id="line.48">    /**</a>
-<span class="sourceLineNo">049</span><a id="line.49">     * Re-initializes this CellularAutomaton using a different GreasedRegion as a basis. If the previous GreasedRegion</a>
-<span class="sourceLineNo">050</span><a id="line.50">     * used has the same dimensions as {@code next}, then this performs no allocations and simply sets the existing</a>
-<span class="sourceLineNo">051</span><a id="line.51">     * contents. Otherwise, it makes one new 2D array and also has all 9 of the internal GreasedRegions adjust in size,</a>
-<span class="sourceLineNo">052</span><a id="line.52">     * which involves some allocation. If {@code next} is null, this does nothing and returns itself without changes.</a>
-<span class="sourceLineNo">053</span><a id="line.53">     * @param next a GreasedRegion to set this CellularAutomaton to read from and adjust</a>
-<span class="sourceLineNo">054</span><a id="line.54">     * @return this, for chaining</a>
-<span class="sourceLineNo">055</span><a id="line.55">     */</a>
-<span class="sourceLineNo">056</span><a id="line.56">    public CellularAutomaton remake(GreasedRegion next)</a>
-<span class="sourceLineNo">057</span><a id="line.57">    {</a>
-<span class="sourceLineNo">058</span><a id="line.58">        if(next == null)</a>
-<span class="sourceLineNo">059</span><a id="line.59">            return this;</a>
-<span class="sourceLineNo">060</span><a id="line.60">        if(current.width != next.width || current.height != next.height)</a>
-<span class="sourceLineNo">061</span><a id="line.61">            sums = new int[next.width][next.height];</a>
-<span class="sourceLineNo">062</span><a id="line.62">        else</a>
-<span class="sourceLineNo">063</span><a id="line.63">            ArrayTools.fill(sums, 0);</a>
-<span class="sourceLineNo">064</span><a id="line.64">        current = next;</a>
-<span class="sourceLineNo">065</span><a id="line.65">        for (int i = 0; i &lt; 9; i++) {</a>
-<span class="sourceLineNo">066</span><a id="line.66">            neighbors[i].remake(current);</a>
-<span class="sourceLineNo">067</span><a id="line.67">        }</a>
-<span class="sourceLineNo">068</span><a id="line.68">        return this;</a>
-<span class="sourceLineNo">069</span><a id="line.69">    }</a>
-<span class="sourceLineNo">070</span><a id="line.70"></a>
-<span class="sourceLineNo">071</span><a id="line.71">    /**</a>
-<span class="sourceLineNo">072</span><a id="line.72">     * Reduces the sharpness of corners by only considering a cell on if the previous version has 5 of the 9 cells in</a>
-<span class="sourceLineNo">073</span><a id="line.73">     * the containing 3x3 area as "on." Typically, this method is run repeatedly. It does not return itself for</a>
-<span class="sourceLineNo">074</span><a id="line.74">     * chaining, because it returns a direct reference to the {@link #current} GreasedRegion that this will use for</a>
-<span class="sourceLineNo">075</span><a id="line.75">     * any future calls to this, and changes to current will be used here.</a>
-<span class="sourceLineNo">076</span><a id="line.76">     * @return a direct reference to the changed GreasedRegion this considers its main state, {@link #current}</a>
-<span class="sourceLineNo">077</span><a id="line.77">     */</a>
-<span class="sourceLineNo">078</span><a id="line.78">    public GreasedRegion runBasicSmoothing()</a>
-<span class="sourceLineNo">079</span><a id="line.79">    {</a>
-<span class="sourceLineNo">080</span><a id="line.80">        neighbors[0].remake(current).neighborUp();</a>
-<span class="sourceLineNo">081</span><a id="line.81">        neighbors[1].remake(current).neighborDown();</a>
-<span class="sourceLineNo">082</span><a id="line.82">        neighbors[2].remake(current).neighborLeft();</a>
-<span class="sourceLineNo">083</span><a id="line.83">        neighbors[3].remake(current).neighborRight();</a>
-<span class="sourceLineNo">084</span><a id="line.84">        neighbors[4].remake(current).neighborUpLeft();</a>
-<span class="sourceLineNo">085</span><a id="line.85">        neighbors[5].remake(current).neighborUpRight();</a>
-<span class="sourceLineNo">086</span><a id="line.86">        neighbors[6].remake(current).neighborDownLeft();</a>
-<span class="sourceLineNo">087</span><a id="line.87">        neighbors[7].remake(current).neighborDownRight();</a>
-<span class="sourceLineNo">088</span><a id="line.88">        neighbors[8].remake(current);</a>
-<span class="sourceLineNo">089</span><a id="line.89">        ArrayTools.fill(sums, 0);</a>
-<span class="sourceLineNo">090</span><a id="line.90">        GreasedRegion.sumInto(sums, neighbors);</a>
-<span class="sourceLineNo">091</span><a id="line.91">        return current.refill(sums, 5, 10);</a>
-<span class="sourceLineNo">092</span><a id="line.92">    }</a>
-<span class="sourceLineNo">093</span><a id="line.93"></a>
-<span class="sourceLineNo">094</span><a id="line.94">    /**</a>
-<span class="sourceLineNo">095</span><a id="line.95">     * Runs one step of the simulation called Conway's Game of Life, which has relatively simple rules:</a>
-<span class="sourceLineNo">096</span><a id="line.96">     * &lt;ul&gt;</a>
-<span class="sourceLineNo">097</span><a id="line.97">     *     &lt;li&gt;Any "on" cell with fewer than two "on" neighbors becomes "off."&lt;/li&gt;</a>
-<span class="sourceLineNo">098</span><a id="line.98">     *     &lt;li&gt;Any "on" cell with two or three "on" neighbors (no more than three) stays "on."&lt;/li&gt;</a>
-<span class="sourceLineNo">099</span><a id="line.99">     *     &lt;li&gt;Any "on" cell with more than three "on" neighbors becomes "off."&lt;/li&gt;</a>
-<span class="sourceLineNo">100</span><a id="line.100">     *     &lt;li&gt;Any "off" cell with exactly three "on" neighbors becomes "on."&lt;/li&gt;</a>
-<span class="sourceLineNo">101</span><a id="line.101">     * &lt;/ul&gt;</a>
-<span class="sourceLineNo">102</span><a id="line.102">     * These rules can bring about complex multi-step patterns in many cases, eventually stabilizing to predictable</a>
-<span class="sourceLineNo">103</span><a id="line.103">     * patterns in most cases. Filling the whole state of this CellularAutomaton won't produce interesting patterns</a>
-<span class="sourceLineNo">104</span><a id="line.104">     * most of the time, even if the fill is randomized; you might have better results by using known patterns. Some</a>
-<span class="sourceLineNo">105</span><a id="line.105">     * key well-known patterns are covered on &lt;a href="https://en.wikipedia.org/wiki/Conway's_Game_of_Life"&gt;Wikipedia's</a>
-<span class="sourceLineNo">106</span><a id="line.106">     * detailed article on Conway's Game of Life&lt;/a&gt;.</a>
-<span class="sourceLineNo">107</span><a id="line.107">     * @return a direct reference to the changed GreasedRegion this considers its main state, {@link #current}</a>
-<span class="sourceLineNo">108</span><a id="line.108">     */</a>
-<span class="sourceLineNo">109</span><a id="line.109">    public GreasedRegion runGameOfLife()</a>
-<span class="sourceLineNo">110</span><a id="line.110">    {</a>
-<span class="sourceLineNo">111</span><a id="line.111">        neighbors[0].remake(current).neighborUp();</a>
-<span class="sourceLineNo">112</span><a id="line.112">        neighbors[1].remake(current).neighborDown();</a>
-<span class="sourceLineNo">113</span><a id="line.113">        neighbors[2].remake(current).neighborLeft();</a>
-<span class="sourceLineNo">114</span><a id="line.114">        neighbors[3].remake(current).neighborRight();</a>
-<span class="sourceLineNo">115</span><a id="line.115">        neighbors[4].remake(current).neighborUpLeft();</a>
-<span class="sourceLineNo">116</span><a id="line.116">        neighbors[5].remake(current).neighborUpRight();</a>
-<span class="sourceLineNo">117</span><a id="line.117">        neighbors[6].remake(current).neighborDownLeft();</a>
-<span class="sourceLineNo">118</span><a id="line.118">        neighbors[7].remake(current).neighborDownRight();</a>
-<span class="sourceLineNo">119</span><a id="line.119">        neighbors[8].remake(current);</a>
-<span class="sourceLineNo">120</span><a id="line.120">        ArrayTools.fill(sums, 0);</a>
-<span class="sourceLineNo">121</span><a id="line.121">        GreasedRegion.sumInto(sums, neighbors);</a>
-<span class="sourceLineNo">122</span><a id="line.122">        return current.refill(sums,3).or(neighbors[0].refill(sums, 4).and(neighbors[8]));</a>
-<span class="sourceLineNo">123</span><a id="line.123">    }</a>
-<span class="sourceLineNo">124</span><a id="line.124"></a>
-<span class="sourceLineNo">125</span><a id="line.125">    /**</a>
-<span class="sourceLineNo">126</span><a id="line.126">     * This takes the {@link #current} GreasedRegion and removes any cells that have a diagonal neighbor if that</a>
-<span class="sourceLineNo">127</span><a id="line.127">     * neighbor cannot be accessed from shared orthogonal neighbors. That is, if a 2x2 area contains two "off" cells</a>
-<span class="sourceLineNo">128</span><a id="line.128">     * that are diagonally adjacent and contains two "on" cells that are diagonally adjacent, this sets that whole 2x2</a>
-<span class="sourceLineNo">129</span><a id="line.129">     * area to "off."</a>
-<span class="sourceLineNo">130</span><a id="line.130">     * @return {@link #current} after orthogonally-inaccessible pairs of diagonal "on" cells are removed</a>
-<span class="sourceLineNo">131</span><a id="line.131">     */</a>
-<span class="sourceLineNo">132</span><a id="line.132">    public GreasedRegion runDiagonalGapCleanup()</a>
-<span class="sourceLineNo">133</span><a id="line.133">    {</a>
-<span class="sourceLineNo">134</span><a id="line.134">        neighbors[0].remake(current.not()).neighborUp();</a>
-<span class="sourceLineNo">135</span><a id="line.135">        neighbors[1].remake(current).neighborDown();</a>
-<span class="sourceLineNo">136</span><a id="line.136">        neighbors[2].remake(current).neighborLeft();</a>
-<span class="sourceLineNo">137</span><a id="line.137">        neighbors[3].remake(current).neighborRight();</a>
-<span class="sourceLineNo">138</span><a id="line.138">        neighbors[4].remake(current.not()).neighborUpLeft();</a>
-<span class="sourceLineNo">139</span><a id="line.139">        neighbors[5].remake(current).neighborUpRight();</a>
-<span class="sourceLineNo">140</span><a id="line.140">        neighbors[6].remake(current).neighborDownLeft();</a>
-<span class="sourceLineNo">141</span><a id="line.141">        neighbors[7].remake(current).neighborDownRight();</a>
-<span class="sourceLineNo">142</span><a id="line.142">//        neighbors[8].remake(current);</a>
-<span class="sourceLineNo">143</span><a id="line.143">        current.andNot(neighbors[4].and(neighbors[0]).and(neighbors[2]));</a>
-<span class="sourceLineNo">144</span><a id="line.144">        current.andNot(neighbors[5].and(neighbors[0]).and(neighbors[3]));</a>
-<span class="sourceLineNo">145</span><a id="line.145">        current.andNot(neighbors[6].and(neighbors[1]).and(neighbors[2]));</a>
-<span class="sourceLineNo">146</span><a id="line.146">        current.andNot(neighbors[7].and(neighbors[1]).and(neighbors[3]));</a>
-<span class="sourceLineNo">147</span><a id="line.147">        return current;</a>
-<span class="sourceLineNo">148</span><a id="line.148">    }</a>
-<span class="sourceLineNo">149</span><a id="line.149">    </a>
-<span class="sourceLineNo">150</span><a id="line.150">//    public static void main(String[] args)</a>
-<span class="sourceLineNo">151</span><a id="line.151">//    {</a>
-<span class="sourceLineNo">152</span><a id="line.152">//        GWTRNG rng = new GWTRNG(-3005655405530708008L);</a>
-<span class="sourceLineNo">153</span><a id="line.153">//        final int bigWidth = 80, bigHeight = 48;</a>
-<span class="sourceLineNo">154</span><a id="line.154">//        DungeonGenerator dungeonGen = new DungeonGenerator(bigWidth, bigHeight, rng);</a>
-<span class="sourceLineNo">155</span><a id="line.155">//        dungeonGen.addWater(15);</a>
-<span class="sourceLineNo">156</span><a id="line.156">//        dungeonGen.addGrass(10);</a>
-<span class="sourceLineNo">157</span><a id="line.157">//        DungeonBoneGen gen = new DungeonBoneGen(rng);</a>
-<span class="sourceLineNo">158</span><a id="line.158">//        CellularAutomaton ca = new CellularAutomaton(bigWidth, bigHeight);</a>
-<span class="sourceLineNo">159</span><a id="line.159">//        gen.generate(TilesetType.DEFAULT_DUNGEON, bigWidth, bigHeight);</a>
-<span class="sourceLineNo">160</span><a id="line.160">//        ca.remake(gen.region);</a>
-<span class="sourceLineNo">161</span><a id="line.161">//        gen.region.and(ca.runBasicSmoothing()).deteriorate(rng, 0.9);</a>
-<span class="sourceLineNo">162</span><a id="line.162">//        gen.region.and(ca.runBasicSmoothing()).deteriorate(rng, 0.9);</a>
-<span class="sourceLineNo">163</span><a id="line.163">//        ca.current.remake(gen.region.deteriorate(rng, 0.9));</a>
-<span class="sourceLineNo">164</span><a id="line.164">//        gen.region.or(ca.runBasicSmoothing());</a>
-<span class="sourceLineNo">165</span><a id="line.165">//        gen.region.remake(gen.region.removeEdges().largestPart());</a>
-<span class="sourceLineNo">166</span><a id="line.166">//        ca.current.remake(gen.region);</a>
-<span class="sourceLineNo">167</span><a id="line.167">//        gen.region.remake(ca.runDiagonalGapCleanup());</a>
-<span class="sourceLineNo">168</span><a id="line.168">//        DungeonUtility.debugPrint(DungeonUtility.hashesToLines(dungeonGen.generate(gen.region.intoChars(gen.getDungeon(), '.', '#'))));</a>
-<span class="sourceLineNo">169</span><a id="line.169">//    }</a>
-<span class="sourceLineNo">170</span><a id="line.170">}</a>
+<div class="source-container">
+<pre><span class="source-line-no">001</span><span id="line.1">package squidpony.squidmath;</span>
+<span class="source-line-no">002</span><span id="line.2"></span>
+<span class="source-line-no">003</span><span id="line.3">import squidpony.ArrayTools;</span>
+<span class="source-line-no">004</span><span id="line.4"></span>
+<span class="source-line-no">005</span><span id="line.5">/**</span>
+<span class="source-line-no">006</span><span id="line.6"> * Created by Tommy Ettinger on 7/3/2017.</span>
+<span class="source-line-no">007</span><span id="line.7"> */</span>
+<span class="source-line-no">008</span><span id="line.8">public class CellularAutomaton {</span>
+<span class="source-line-no">009</span><span id="line.9">    /**</span>
+<span class="source-line-no">010</span><span id="line.10">     * Returned directly by some methods, but you may want to change this at some other point.</span>
+<span class="source-line-no">011</span><span id="line.11">     */</span>
+<span class="source-line-no">012</span><span id="line.12">    public GreasedRegion current;</span>
+<span class="source-line-no">013</span><span id="line.13">    private GreasedRegion[] neighbors = new GreasedRegion[9];</span>
+<span class="source-line-no">014</span><span id="line.14">    private int[][] sums;</span>
+<span class="source-line-no">015</span><span id="line.15"></span>
+<span class="source-line-no">016</span><span id="line.16">    /**</span>
+<span class="source-line-no">017</span><span id="line.17">     * Constructs a CellularAutomaton with an unfilled 64x64 GreasedRegion, that can be altered later via {@link #current}.</span>
+<span class="source-line-no">018</span><span id="line.18">     */</span>
+<span class="source-line-no">019</span><span id="line.19">    public CellularAutomaton()</span>
+<span class="source-line-no">020</span><span id="line.20">    {</span>
+<span class="source-line-no">021</span><span id="line.21">        this(new GreasedRegion(64, 64));</span>
+<span class="source-line-no">022</span><span id="line.22">    }</span>
+<span class="source-line-no">023</span><span id="line.23"></span>
+<span class="source-line-no">024</span><span id="line.24">    /**</span>
+<span class="source-line-no">025</span><span id="line.25">     * Constructs a CellularAutomaton with an unfilled GreasedRegion of the specified width and height, that can be</span>
+<span class="source-line-no">026</span><span id="line.26">     * altered later via {@link #current}.</span>
+<span class="source-line-no">027</span><span id="line.27">     * @param width the width of the CellularAutomaton</span>
+<span class="source-line-no">028</span><span id="line.28">     * @param height the height of the CellularAutomaton</span>
+<span class="source-line-no">029</span><span id="line.29">     */</span>
+<span class="source-line-no">030</span><span id="line.30">    public CellularAutomaton(int width, int height)</span>
+<span class="source-line-no">031</span><span id="line.31">    {</span>
+<span class="source-line-no">032</span><span id="line.32">        this(new GreasedRegion(Math.max(1, width), Math.max(1, height)));</span>
+<span class="source-line-no">033</span><span id="line.33">    }</span>
+<span class="source-line-no">034</span><span id="line.34"></span>
+<span class="source-line-no">035</span><span id="line.35">    /**</span>
+<span class="source-line-no">036</span><span id="line.36">     * Stores a direct reference to {@code current} as this object's {@link #current} field, and initializes the other</span>
+<span class="source-line-no">037</span><span id="line.37">     * necessary fields.</span>
+<span class="source-line-no">038</span><span id="line.38">     * @param current a GreasedRegion that will be used directly; changes will be shared</span>
+<span class="source-line-no">039</span><span id="line.39">     */</span>
+<span class="source-line-no">040</span><span id="line.40">    public CellularAutomaton(GreasedRegion current) {</span>
+<span class="source-line-no">041</span><span id="line.41">        this.current = current;</span>
+<span class="source-line-no">042</span><span id="line.42">        for (int i = 0; i &lt; 9; i++) {</span>
+<span class="source-line-no">043</span><span id="line.43">            neighbors[i] = current.copy();</span>
+<span class="source-line-no">044</span><span id="line.44">        }</span>
+<span class="source-line-no">045</span><span id="line.45">        sums = new int[current.width][current.height];</span>
+<span class="source-line-no">046</span><span id="line.46">    }</span>
+<span class="source-line-no">047</span><span id="line.47"></span>
+<span class="source-line-no">048</span><span id="line.48">    /**</span>
+<span class="source-line-no">049</span><span id="line.49">     * Re-initializes this CellularAutomaton using a different GreasedRegion as a basis. If the previous GreasedRegion</span>
+<span class="source-line-no">050</span><span id="line.50">     * used has the same dimensions as {@code next}, then this performs no allocations and simply sets the existing</span>
+<span class="source-line-no">051</span><span id="line.51">     * contents. Otherwise, it makes one new 2D array and also has all 9 of the internal GreasedRegions adjust in size,</span>
+<span class="source-line-no">052</span><span id="line.52">     * which involves some allocation. If {@code next} is null, this does nothing and returns itself without changes.</span>
+<span class="source-line-no">053</span><span id="line.53">     * @param next a GreasedRegion to set this CellularAutomaton to read from and adjust</span>
+<span class="source-line-no">054</span><span id="line.54">     * @return this, for chaining</span>
+<span class="source-line-no">055</span><span id="line.55">     */</span>
+<span class="source-line-no">056</span><span id="line.56">    public CellularAutomaton remake(GreasedRegion next)</span>
+<span class="source-line-no">057</span><span id="line.57">    {</span>
+<span class="source-line-no">058</span><span id="line.58">        if(next == null)</span>
+<span class="source-line-no">059</span><span id="line.59">            return this;</span>
+<span class="source-line-no">060</span><span id="line.60">        if(current.width != next.width || current.height != next.height)</span>
+<span class="source-line-no">061</span><span id="line.61">            sums = new int[next.width][next.height];</span>
+<span class="source-line-no">062</span><span id="line.62">        else</span>
+<span class="source-line-no">063</span><span id="line.63">            ArrayTools.fill(sums, 0);</span>
+<span class="source-line-no">064</span><span id="line.64">        current = next;</span>
+<span class="source-line-no">065</span><span id="line.65">        for (int i = 0; i &lt; 9; i++) {</span>
+<span class="source-line-no">066</span><span id="line.66">            neighbors[i].remake(current);</span>
+<span class="source-line-no">067</span><span id="line.67">        }</span>
+<span class="source-line-no">068</span><span id="line.68">        return this;</span>
+<span class="source-line-no">069</span><span id="line.69">    }</span>
+<span class="source-line-no">070</span><span id="line.70"></span>
+<span class="source-line-no">071</span><span id="line.71">    /**</span>
+<span class="source-line-no">072</span><span id="line.72">     * Reduces the sharpness of corners by only considering a cell on if the previous version has 5 of the 9 cells in</span>
+<span class="source-line-no">073</span><span id="line.73">     * the containing 3x3 area as "on." Typically, this method is run repeatedly. It does not return itself for</span>
+<span class="source-line-no">074</span><span id="line.74">     * chaining, because it returns a direct reference to the {@link #current} GreasedRegion that this will use for</span>
+<span class="source-line-no">075</span><span id="line.75">     * any future calls to this, and changes to current will be used here.</span>
+<span class="source-line-no">076</span><span id="line.76">     * @return a direct reference to the changed GreasedRegion this considers its main state, {@link #current}</span>
+<span class="source-line-no">077</span><span id="line.77">     */</span>
+<span class="source-line-no">078</span><span id="line.78">    public GreasedRegion runBasicSmoothing()</span>
+<span class="source-line-no">079</span><span id="line.79">    {</span>
+<span class="source-line-no">080</span><span id="line.80">        neighbors[0].remake(current).neighborUp();</span>
+<span class="source-line-no">081</span><span id="line.81">        neighbors[1].remake(current).neighborDown();</span>
+<span class="source-line-no">082</span><span id="line.82">        neighbors[2].remake(current).neighborLeft();</span>
+<span class="source-line-no">083</span><span id="line.83">        neighbors[3].remake(current).neighborRight();</span>
+<span class="source-line-no">084</span><span id="line.84">        neighbors[4].remake(current).neighborUpLeft();</span>
+<span class="source-line-no">085</span><span id="line.85">        neighbors[5].remake(current).neighborUpRight();</span>
+<span class="source-line-no">086</span><span id="line.86">        neighbors[6].remake(current).neighborDownLeft();</span>
+<span class="source-line-no">087</span><span id="line.87">        neighbors[7].remake(current).neighborDownRight();</span>
+<span class="source-line-no">088</span><span id="line.88">        neighbors[8].remake(current);</span>
+<span class="source-line-no">089</span><span id="line.89">        ArrayTools.fill(sums, 0);</span>
+<span class="source-line-no">090</span><span id="line.90">        GreasedRegion.sumInto(sums, neighbors);</span>
+<span class="source-line-no">091</span><span id="line.91">        return current.refill(sums, 5, 10);</span>
+<span class="source-line-no">092</span><span id="line.92">    }</span>
+<span class="source-line-no">093</span><span id="line.93"></span>
+<span class="source-line-no">094</span><span id="line.94">    /**</span>
+<span class="source-line-no">095</span><span id="line.95">     * Runs one step of the simulation called Conway's Game of Life, which has relatively simple rules:</span>
+<span class="source-line-no">096</span><span id="line.96">     * &lt;ul&gt;</span>
+<span class="source-line-no">097</span><span id="line.97">     *     &lt;li&gt;Any "on" cell with fewer than two "on" neighbors becomes "off."&lt;/li&gt;</span>
+<span class="source-line-no">098</span><span id="line.98">     *     &lt;li&gt;Any "on" cell with two or three "on" neighbors (no more than three) stays "on."&lt;/li&gt;</span>
+<span class="source-line-no">099</span><span id="line.99">     *     &lt;li&gt;Any "on" cell with more than three "on" neighbors becomes "off."&lt;/li&gt;</span>
+<span class="source-line-no">100</span><span id="line.100">     *     &lt;li&gt;Any "off" cell with exactly three "on" neighbors becomes "on."&lt;/li&gt;</span>
+<span class="source-line-no">101</span><span id="line.101">     * &lt;/ul&gt;</span>
+<span class="source-line-no">102</span><span id="line.102">     * These rules can bring about complex multi-step patterns in many cases, eventually stabilizing to predictable</span>
+<span class="source-line-no">103</span><span id="line.103">     * patterns in most cases. Filling the whole state of this CellularAutomaton won't produce interesting patterns</span>
+<span class="source-line-no">104</span><span id="line.104">     * most of the time, even if the fill is randomized; you might have better results by using known patterns. Some</span>
+<span class="source-line-no">105</span><span id="line.105">     * key well-known patterns are covered on &lt;a href="https://en.wikipedia.org/wiki/Conway's_Game_of_Life"&gt;Wikipedia's</span>
+<span class="source-line-no">106</span><span id="line.106">     * detailed article on Conway's Game of Life&lt;/a&gt;.</span>
+<span class="source-line-no">107</span><span id="line.107">     * @return a direct reference to the changed GreasedRegion this considers its main state, {@link #current}</span>
+<span class="source-line-no">108</span><span id="line.108">     */</span>
+<span class="source-line-no">109</span><span id="line.109">    public GreasedRegion runGameOfLife()</span>
+<span class="source-line-no">110</span><span id="line.110">    {</span>
+<span class="source-line-no">111</span><span id="line.111">        neighbors[0].remake(current).neighborUp();</span>
+<span class="source-line-no">112</span><span id="line.112">        neighbors[1].remake(current).neighborDown();</span>
+<span class="source-line-no">113</span><span id="line.113">        neighbors[2].remake(current).neighborLeft();</span>
+<span class="source-line-no">114</span><span id="line.114">        neighbors[3].remake(current).neighborRight();</span>
+<span class="source-line-no">115</span><span id="line.115">        neighbors[4].remake(current).neighborUpLeft();</span>
+<span class="source-line-no">116</span><span id="line.116">        neighbors[5].remake(current).neighborUpRight();</span>
+<span class="source-line-no">117</span><span id="line.117">        neighbors[6].remake(current).neighborDownLeft();</span>
+<span class="source-line-no">118</span><span id="line.118">        neighbors[7].remake(current).neighborDownRight();</span>
+<span class="source-line-no">119</span><span id="line.119">        neighbors[8].remake(current);</span>
+<span class="source-line-no">120</span><span id="line.120">        ArrayTools.fill(sums, 0);</span>
+<span class="source-line-no">121</span><span id="line.121">        GreasedRegion.sumInto(sums, neighbors);</span>
+<span class="source-line-no">122</span><span id="line.122">        return current.refill(sums,3).or(neighbors[0].refill(sums, 4).and(neighbors[8]));</span>
+<span class="source-line-no">123</span><span id="line.123">    }</span>
+<span class="source-line-no">124</span><span id="line.124"></span>
+<span class="source-line-no">125</span><span id="line.125">    /**</span>
+<span class="source-line-no">126</span><span id="line.126">     * This takes the {@link #current} GreasedRegion and removes any cells that have a diagonal neighbor if that</span>
+<span class="source-line-no">127</span><span id="line.127">     * neighbor cannot be accessed from shared orthogonal neighbors. That is, if a 2x2 area contains two "off" cells</span>
+<span class="source-line-no">128</span><span id="line.128">     * that are diagonally adjacent and contains two "on" cells that are diagonally adjacent, this sets that whole 2x2</span>
+<span class="source-line-no">129</span><span id="line.129">     * area to "off."</span>
+<span class="source-line-no">130</span><span id="line.130">     * @return {@link #current} after orthogonally-inaccessible pairs of diagonal "on" cells are removed</span>
+<span class="source-line-no">131</span><span id="line.131">     */</span>
+<span class="source-line-no">132</span><span id="line.132">    public GreasedRegion runDiagonalGapCleanup()</span>
+<span class="source-line-no">133</span><span id="line.133">    {</span>
+<span class="source-line-no">134</span><span id="line.134">        neighbors[0].remake(current.not()).neighborUp();</span>
+<span class="source-line-no">135</span><span id="line.135">        neighbors[1].remake(current).neighborDown();</span>
+<span class="source-line-no">136</span><span id="line.136">        neighbors[2].remake(current).neighborLeft();</span>
+<span class="source-line-no">137</span><span id="line.137">        neighbors[3].remake(current).neighborRight();</span>
+<span class="source-line-no">138</span><span id="line.138">        neighbors[4].remake(current.not()).neighborUpLeft();</span>
+<span class="source-line-no">139</span><span id="line.139">        neighbors[5].remake(current).neighborUpRight();</span>
+<span class="source-line-no">140</span><span id="line.140">        neighbors[6].remake(current).neighborDownLeft();</span>
+<span class="source-line-no">141</span><span id="line.141">        neighbors[7].remake(current).neighborDownRight();</span>
+<span class="source-line-no">142</span><span id="line.142">//        neighbors[8].remake(current);</span>
+<span class="source-line-no">143</span><span id="line.143">        current.andNot(neighbors[4].and(neighbors[0]).and(neighbors[2]));</span>
+<span class="source-line-no">144</span><span id="line.144">        current.andNot(neighbors[5].and(neighbors[0]).and(neighbors[3]));</span>
+<span class="source-line-no">145</span><span id="line.145">        current.andNot(neighbors[6].and(neighbors[1]).and(neighbors[2]));</span>
+<span class="source-line-no">146</span><span id="line.146">        current.andNot(neighbors[7].and(neighbors[1]).and(neighbors[3]));</span>
+<span class="source-line-no">147</span><span id="line.147">        return current;</span>
+<span class="source-line-no">148</span><span id="line.148">    }</span>
+<span class="source-line-no">149</span><span id="line.149">    </span>
+<span class="source-line-no">150</span><span id="line.150">//    public static void main(String[] args)</span>
+<span class="source-line-no">151</span><span id="line.151">//    {</span>
+<span class="source-line-no">152</span><span id="line.152">//        GWTRNG rng = new GWTRNG(-3005655405530708008L);</span>
+<span class="source-line-no">153</span><span id="line.153">//        final int bigWidth = 80, bigHeight = 48;</span>
+<span class="source-line-no">154</span><span id="line.154">//        DungeonGenerator dungeonGen = new DungeonGenerator(bigWidth, bigHeight, rng);</span>
+<span class="source-line-no">155</span><span id="line.155">//        dungeonGen.addWater(15);</span>
+<span class="source-line-no">156</span><span id="line.156">//        dungeonGen.addGrass(10);</span>
+<span class="source-line-no">157</span><span id="line.157">//        DungeonBoneGen gen = new DungeonBoneGen(rng);</span>
+<span class="source-line-no">158</span><span id="line.158">//        CellularAutomaton ca = new CellularAutomaton(bigWidth, bigHeight);</span>
+<span class="source-line-no">159</span><span id="line.159">//        gen.generate(TilesetType.DEFAULT_DUNGEON, bigWidth, bigHeight);</span>
+<span class="source-line-no">160</span><span id="line.160">//        ca.remake(gen.region);</span>
+<span class="source-line-no">161</span><span id="line.161">//        gen.region.and(ca.runBasicSmoothing()).deteriorate(rng, 0.9);</span>
+<span class="source-line-no">162</span><span id="line.162">//        gen.region.and(ca.runBasicSmoothing()).deteriorate(rng, 0.9);</span>
+<span class="source-line-no">163</span><span id="line.163">//        ca.current.remake(gen.region.deteriorate(rng, 0.9));</span>
+<span class="source-line-no">164</span><span id="line.164">//        gen.region.or(ca.runBasicSmoothing());</span>
+<span class="source-line-no">165</span><span id="line.165">//        gen.region.remake(gen.region.removeEdges().largestPart());</span>
+<span class="source-line-no">166</span><span id="line.166">//        ca.current.remake(gen.region);</span>
+<span class="source-line-no">167</span><span id="line.167">//        gen.region.remake(ca.runDiagonalGapCleanup());</span>
+<span class="source-line-no">168</span><span id="line.168">//        DungeonUtility.debugPrint(DungeonUtility.hashesToLines(dungeonGen.generate(gen.region.intoChars(gen.getDungeon(), '.', '#'))));</span>
+<span class="source-line-no">169</span><span id="line.169">//    }</span>
+<span class="source-line-no">170</span><span id="line.170">}</span>
 
 
 

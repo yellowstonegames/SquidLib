@@ -7,328 +7,328 @@
 <meta name="generator" content="javadoc/SourceToHTMLConverter">
 <link rel="stylesheet" type="text/css" href="../../../../../stylesheet.css" title="Style">
 </head>
-<body class="source">
+<body class="source-page">
 <main role="main">
-<div class="sourceContainer">
-<pre><span class="sourceLineNo">001</span><a id="line.1">package squidpony.squidgrid.gui.gdx;</a>
-<span class="sourceLineNo">002</span><a id="line.2"></a>
-<span class="sourceLineNo">003</span><a id="line.3">import com.badlogic.gdx.graphics.Color;</a>
-<span class="sourceLineNo">004</span><a id="line.4">import squidpony.ArrayTools;</a>
-<span class="sourceLineNo">005</span><a id="line.5">import squidpony.squidgrid.gui.gdx.ICellVisible.Basic;</a>
-<span class="sourceLineNo">006</span><a id="line.6">import squidpony.squidgrid.mapping.WildMap;</a>
-<span class="sourceLineNo">007</span><a id="line.7">import squidpony.squidgrid.mapping.WorldMapGenerator;</a>
-<span class="sourceLineNo">008</span><a id="line.8">import squidpony.squidmath.IntPointHash;</a>
-<span class="sourceLineNo">009</span><a id="line.9">import squidpony.squidmath.SilkRNG;</a>
-<span class="sourceLineNo">010</span><a id="line.10"></a>
-<span class="sourceLineNo">011</span><a id="line.11">import java.util.HashMap;</a>
-<span class="sourceLineNo">012</span><a id="line.12">import java.util.Map;</a>
-<span class="sourceLineNo">013</span><a id="line.13"></a>
-<span class="sourceLineNo">014</span><a id="line.14">import static squidpony.squidgrid.gui.gdx.SColor.*;</a>
-<span class="sourceLineNo">015</span><a id="line.15">import static squidpony.squidgrid.gui.gdx.WorldMapView.*;</a>
-<span class="sourceLineNo">016</span><a id="line.16"></a>
-<span class="sourceLineNo">017</span><a id="line.17">/**</a>
-<span class="sourceLineNo">018</span><a id="line.18"> * Created by Tommy Ettinger on 9/6/2019.</a>
-<span class="sourceLineNo">019</span><a id="line.19"> */</a>
-<span class="sourceLineNo">020</span><a id="line.20">public class WildMapView {</a>
-<span class="sourceLineNo">021</span><a id="line.21">    protected int width, height;</a>
-<span class="sourceLineNo">022</span><a id="line.22">    protected float[][] colorMap;</a>
-<span class="sourceLineNo">023</span><a id="line.23">    public WildMap wildMap;</a>
-<span class="sourceLineNo">024</span><a id="line.24">    </a>
-<span class="sourceLineNo">025</span><a id="line.25">    public Map&lt;String, ? extends ICellVisible&gt; viewer;</a>
-<span class="sourceLineNo">026</span><a id="line.26">    </a>
-<span class="sourceLineNo">027</span><a id="line.27">    public int getWidth() {</a>
-<span class="sourceLineNo">028</span><a id="line.28">        return width;</a>
-<span class="sourceLineNo">029</span><a id="line.29">    }</a>
-<span class="sourceLineNo">030</span><a id="line.30"></a>
-<span class="sourceLineNo">031</span><a id="line.31">    public int getHeight() {</a>
-<span class="sourceLineNo">032</span><a id="line.32">        return height;</a>
-<span class="sourceLineNo">033</span><a id="line.33">    }</a>
-<span class="sourceLineNo">034</span><a id="line.34"></a>
-<span class="sourceLineNo">035</span><a id="line.35">    public float[][] getColorMap() {</a>
-<span class="sourceLineNo">036</span><a id="line.36">        return colorMap;</a>
-<span class="sourceLineNo">037</span><a id="line.37">    }</a>
-<span class="sourceLineNo">038</span><a id="line.38">    </a>
-<span class="sourceLineNo">039</span><a id="line.39">    public WildMap getWildMap() {</a>
-<span class="sourceLineNo">040</span><a id="line.40">        return wildMap;</a>
-<span class="sourceLineNo">041</span><a id="line.41">    }</a>
-<span class="sourceLineNo">042</span><a id="line.42"></a>
-<span class="sourceLineNo">043</span><a id="line.43">    public void setWildMap(WildMap wildMap) {</a>
-<span class="sourceLineNo">044</span><a id="line.44">        this.wildMap = wildMap;</a>
-<span class="sourceLineNo">045</span><a id="line.45">        if(this.width != wildMap.width || this.height != wildMap.height)</a>
-<span class="sourceLineNo">046</span><a id="line.46">        {</a>
-<span class="sourceLineNo">047</span><a id="line.47">            width = wildMap.width;</a>
-<span class="sourceLineNo">048</span><a id="line.48">            height = wildMap.height;</a>
-<span class="sourceLineNo">049</span><a id="line.49">            colorMap = new float[width][height];</a>
-<span class="sourceLineNo">050</span><a id="line.50">        }</a>
-<span class="sourceLineNo">051</span><a id="line.51">    }</a>
-<span class="sourceLineNo">052</span><a id="line.52">    </a>
-<span class="sourceLineNo">053</span><a id="line.53">    public static HashMap&lt;String, ? extends ICellVisible&gt; defaultViewer()</a>
-<span class="sourceLineNo">054</span><a id="line.54">    {</a>
-<span class="sourceLineNo">055</span><a id="line.55">        HashMap&lt;String, ICellVisible&gt; viewer = new HashMap&lt;&gt;(128);</a>
-<span class="sourceLineNo">056</span><a id="line.56"></a>
-<span class="sourceLineNo">057</span><a id="line.57">        viewer.put("snow path", new Basic('.', ALICE_BLUE.toEditedFloat(0.0f, -0.2f, -0.15f)));</a>
-<span class="sourceLineNo">058</span><a id="line.58">        viewer.put("dirt path", new Basic('.', CLOVE_BROWN.toEditedFloat(-0.005f, -0.275f, 0.17f)));</a>
-<span class="sourceLineNo">059</span><a id="line.59">        viewer.put("sand path", new Basic('.', CW_PALE_ORANGE.toEditedFloat(0.05f, -0.17f, -0.075f)));</a>
-<span class="sourceLineNo">060</span><a id="line.60">        viewer.put("grass path", new Basic('.', AURORA_DUSTY_GREEN.toEditedFloat(0.0f, -0.15f, -0.1f)));</a>
-<span class="sourceLineNo">061</span><a id="line.61">        viewer.put("stone path", new Basic('.', AURORA_CHIPPED_GRANITE.toEditedFloat(-0.09f, -0.05f, 0.1f)));</a>
-<span class="sourceLineNo">062</span><a id="line.62">        viewer.put("wooden bridge", new Basic(':', BRUSHWOOD_DYED.toEditedFloat(0.0f, -0.275f, 0.05f)));</a>
-<span class="sourceLineNo">063</span><a id="line.63"></a>
-<span class="sourceLineNo">064</span><a id="line.64">        viewer.put("ice ledge", new Basic('¬', SColor.toEditedFloat(PALE_CORNFLOWER_BLUE, 0.0f, -0.1f, 0.1f)));</a>
-<span class="sourceLineNo">065</span><a id="line.65">        viewer.put("dirt ledge", new Basic('¬', CLOVE_BROWN.toEditedFloat(-0.005f, -0.175f, -0.18f)));</a>
-<span class="sourceLineNo">066</span><a id="line.66">        viewer.put("sand ledge", new Basic('¬', CW_PALE_ORANGE.toEditedFloat(0.05f, -0.15f, -0.125f)));</a>
-<span class="sourceLineNo">067</span><a id="line.67">        viewer.put("grass ledge", new Basic('¬', AURORA_DUSTY_GREEN.toEditedFloat(0.0f, -0.025f, -0.45f)));</a>
-<span class="sourceLineNo">068</span><a id="line.68">        viewer.put("stone ledge", new Basic('¬', AURORA_CHIPPED_GRANITE.toEditedFloat(-0.07f, -0.1f, -0.25f)));</a>
-<span class="sourceLineNo">069</span><a id="line.69"></a>
-<span class="sourceLineNo">070</span><a id="line.70">        viewer.put("snow", new Basic('…', ALICE_BLUE));</a>
-<span class="sourceLineNo">071</span><a id="line.71">        viewer.put("ice", new Basic('-', SColor.lightenFloat(PALE_CORNFLOWER_BLUE, 0.3f)));</a>
-<span class="sourceLineNo">072</span><a id="line.72">        viewer.put("dirt", new Basic('·', CLOVE_BROWN.toEditedFloat(-0.005f, -0.075f, 0.02f)));</a>
-<span class="sourceLineNo">073</span><a id="line.73">        viewer.put("pebbles", new Basic('…', AURORA_WET_STONE.toEditedFloat(0.0f, 0.0f, 0.0f)));</a>
-<span class="sourceLineNo">074</span><a id="line.74">        viewer.put("dry grass", new Basic('\'', CW_FADED_BROWN.toEditedFloat(0.06f, 0.05f, 0.05f)));</a>
-<span class="sourceLineNo">075</span><a id="line.75">        viewer.put("fresh water", new Basic('~', AURORA_BLUE_EYE));</a>
-<span class="sourceLineNo">076</span><a id="line.76">        viewer.put("salt water", new Basic('≈', AURORA_PRUSSIAN_BLUE));</a>
-<span class="sourceLineNo">077</span><a id="line.77">        viewer.put("sand", new Basic('…', CW_PALE_ORANGE.toEditedFloat(0.05f, -0.05f, 0.075f)));</a>
-<span class="sourceLineNo">078</span><a id="line.78">        viewer.put("leaves", new Basic('…', CHINESE_TEA_YELLOW.toEditedFloat(0.02f, -0.025f, 0.0f)));</a>
-<span class="sourceLineNo">079</span><a id="line.79">        viewer.put("grass", new Basic('"', AURORA_DUSTY_GREEN.toEditedFloat(0.0f, 0.075f, -0.25f)));</a>
-<span class="sourceLineNo">080</span><a id="line.80">        viewer.put("mud", new Basic(',', DB_EARTH.toEditedFloat(0.03f, -0.15f, -0.03f)));</a>
-<span class="sourceLineNo">081</span><a id="line.81">        viewer.put("moss", new Basic('˝', AURORA_FERN_GREEN.toEditedFloat(0f, 0.0f, 0.0f)));</a>
-<span class="sourceLineNo">082</span><a id="line.82">        viewer.put("rubble", new Basic('‰', AURORA_CHIPPED_GRANITE.toEditedFloat(-0.07f, 0.0f, -0.05f)));</a>
-<span class="sourceLineNo">083</span><a id="line.83">        viewer.put("empty space", new Basic('_', DB_INK));</a>
-<span class="sourceLineNo">084</span><a id="line.84">        viewer.put("snow mound", new Basic('∆', ALICE_BLUE.toEditedFloat(0f, 0.05f, -0.1f)));</a>
-<span class="sourceLineNo">085</span><a id="line.85">        viewer.put("icy divot", new Basic('°', ALICE_BLUE.toEditedFloat(0.05f, 0.075f, 0.06f)));</a>
-<span class="sourceLineNo">086</span><a id="line.86">        viewer.put("powder snowdrift", new Basic('¨', ALICE_BLUE.toEditedFloat(0.0f, 0.0f, -0.07f)));</a>
-<span class="sourceLineNo">087</span><a id="line.87">        viewer.put("hillock", new Basic('∆', CW_DRAB_BROWN.toEditedFloat(0.1f, -0.05f, 0.25f)));</a>
-<span class="sourceLineNo">088</span><a id="line.88">        viewer.put("animal burrow", new Basic('¸', AURORA_ARMY_GREEN.toEditedFloat(0.05f, 0.0f, -0.05f)));</a>
-<span class="sourceLineNo">089</span><a id="line.89">        viewer.put("small bush 1", new Basic('♣', AURORA_AVOCADO.toEditedFloat(-0.055f, -0.025f, -0.225f)));</a>
-<span class="sourceLineNo">090</span><a id="line.90">        viewer.put("large bush 1", new Basic('♣', AURORA_FOREST_GLEN.toEditedFloat(-0.055f, -0.125f, -0.225f)));</a>
-<span class="sourceLineNo">091</span><a id="line.91">        viewer.put("evergreen tree 1", new Basic('♠', PINE_GREEN.toEditedFloat(-0.13f, -0.03f, -0.05f)));</a>
-<span class="sourceLineNo">092</span><a id="line.92">        viewer.put("evergreen tree 2", new Basic('♠', AURORA_EUCALYPTUS.toEditedFloat(-0.035f, -0.045f, -0.75f)));</a>
-<span class="sourceLineNo">093</span><a id="line.93">        viewer.put("small cactus 1", new Basic('‡', AURORA_FROG_GREEN.toEditedFloat(0.035f, 0.065f, -0.06f)));</a>
-<span class="sourceLineNo">094</span><a id="line.94">        viewer.put("large cactus 1", new Basic('‡', AURORA_MARSH.toEditedFloat(0.04f, 0.11f, -0.03f)));</a>
-<span class="sourceLineNo">095</span><a id="line.95">        viewer.put("succulent 1", new Basic('§', CW_FLUSH_JADE.toEditedFloat(-0.045f, -0.1f, 0.0f)));</a>
-<span class="sourceLineNo">096</span><a id="line.96">        viewer.put("seashell 1", new Basic('ˋ', CW_LIGHT_APRICOT.toEditedFloat(0.0f, -0.095f, 0.07f)));</a>
-<span class="sourceLineNo">097</span><a id="line.97">        viewer.put("seashell 2", new Basic('ˋ', CW_PALE_RED.toEditedFloat(0.0f, -0.2f, 0.1f)));</a>
-<span class="sourceLineNo">098</span><a id="line.98">        viewer.put("seashell 3", new Basic('ˋ', CW_PALE_YELLOW.toEditedFloat(0.0f, 0.02f, 0.05f)));</a>
-<span class="sourceLineNo">099</span><a id="line.99">        viewer.put("seashell 4", new Basic('ˋ', CW_PALE_VIOLET.toEditedFloat(0.0f, -0.080f, 0.11f)));</a>
-<span class="sourceLineNo">100</span><a id="line.100">        viewer.put("driftwood", new Basic('¿', AURORA_DRIFTWOOD.toEditedFloat(0.0f, -0.25f, 0.04f)));</a>
-<span class="sourceLineNo">101</span><a id="line.101">        viewer.put("boulder", new Basic('●', AURORA_SLOW_CREEK.toEditedFloat(0.0f, -0.01f, 0.0f)));</a>
-<span class="sourceLineNo">102</span><a id="line.102">        viewer.put("deciduous tree 1", new Basic('¥', AURORA_AVOCADO.toEditedFloat(-0.065f, 0.0f, -0.3f)));</a>
-<span class="sourceLineNo">103</span><a id="line.103">        viewer.put("small bush 2", new Basic('♣', AURORA_WOODLANDS.toEditedFloat(-0.045f, -0.05f, -0.025f)));</a>
-<span class="sourceLineNo">104</span><a id="line.104">        viewer.put("deciduous tree 2", new Basic('¥', AURORA_IVY_GREEN.toEditedFloat(-0.02f, 0.0f, 0.0f)));</a>
-<span class="sourceLineNo">105</span><a id="line.105">        viewer.put("deciduous tree 3", new Basic('¥', AURORA_ASPARAGUS.toEditedFloat(-0.015f, 0.055f, 0.02f)));</a>
-<span class="sourceLineNo">106</span><a id="line.106">        viewer.put("large bush 2", new Basic('♣', AURORA_VIRIDIAN.toEditedFloat(-0.03f, -0.05f, 0.03f)));</a>
-<span class="sourceLineNo">107</span><a id="line.107">        viewer.put("tropical tree 1", new Basic('¶', AURORA_FLORAL_FOAM.toEditedFloat(-0.05f, 0.025f, 0.075f)));</a>
-<span class="sourceLineNo">108</span><a id="line.108">        viewer.put("tropical tree 2", new Basic('¶', AURORA_MAIDENHAIR_FERN.toEditedFloat(0.0f, 0.0f, 0.02f)));</a>
-<span class="sourceLineNo">109</span><a id="line.109">        viewer.put("large bush 3", new Basic('♣', AURORA_KELLY_GREEN.toEditedFloat(0.0f, 0.025f, 0.02f)));</a>
-<span class="sourceLineNo">110</span><a id="line.110">        viewer.put("tropical tree 3", new Basic('¶', AURORA_SOFT_TEAL.toEditedFloat(-0.15f, -0.07f, -0.03f)));</a>
-<span class="sourceLineNo">111</span><a id="line.111">        viewer.put("tropical tree 4", new Basic('¶', AURORA_PRASE.toEditedFloat(-0.04f, -0.02f, -0.02f)));</a>
-<span class="sourceLineNo">112</span><a id="line.112">        return viewer;</a>
-<span class="sourceLineNo">113</span><a id="line.113">    }</a>
-<span class="sourceLineNo">114</span><a id="line.114"></a>
-<span class="sourceLineNo">115</span><a id="line.115">    public WildMapView()</a>
-<span class="sourceLineNo">116</span><a id="line.116">    {</a>
-<span class="sourceLineNo">117</span><a id="line.117">        this(null);</a>
-<span class="sourceLineNo">118</span><a id="line.118">    }</a>
-<span class="sourceLineNo">119</span><a id="line.119">    public WildMapView(WildMap wildMap)</a>
-<span class="sourceLineNo">120</span><a id="line.120">    {</a>
-<span class="sourceLineNo">121</span><a id="line.121">        if(wildMap == null)</a>
-<span class="sourceLineNo">122</span><a id="line.122">        {</a>
-<span class="sourceLineNo">123</span><a id="line.123">            this.wildMap = new WildMap();</a>
-<span class="sourceLineNo">124</span><a id="line.124">        }</a>
-<span class="sourceLineNo">125</span><a id="line.125">        else</a>
-<span class="sourceLineNo">126</span><a id="line.126">        {</a>
-<span class="sourceLineNo">127</span><a id="line.127">            this.wildMap = wildMap;</a>
-<span class="sourceLineNo">128</span><a id="line.128">        }</a>
-<span class="sourceLineNo">129</span><a id="line.129">        this.viewer = defaultViewer();</a>
-<span class="sourceLineNo">130</span><a id="line.130">        width = this.wildMap.width;</a>
-<span class="sourceLineNo">131</span><a id="line.131">        height = this.wildMap.height;</a>
-<span class="sourceLineNo">132</span><a id="line.132">        colorMap = new float[width][height];</a>
-<span class="sourceLineNo">133</span><a id="line.133">        initialize();</a>
-<span class="sourceLineNo">134</span><a id="line.134">    }</a>
-<span class="sourceLineNo">135</span><a id="line.135">    public WildMapView(WildMap wildMap, Map&lt;String, ? extends ICellVisible&gt; viewer)</a>
-<span class="sourceLineNo">136</span><a id="line.136">    {</a>
-<span class="sourceLineNo">137</span><a id="line.137">        if(wildMap == null) { // default to forest map, biome 21; ignore given viewer, it may be null</a>
-<span class="sourceLineNo">138</span><a id="line.138">            this.wildMap = new WildMap();</a>
-<span class="sourceLineNo">139</span><a id="line.139">            this.viewer = defaultViewer();</a>
-<span class="sourceLineNo">140</span><a id="line.140">        }</a>
-<span class="sourceLineNo">141</span><a id="line.141">        else</a>
-<span class="sourceLineNo">142</span><a id="line.142">        {</a>
-<span class="sourceLineNo">143</span><a id="line.143">            this.wildMap = wildMap;</a>
-<span class="sourceLineNo">144</span><a id="line.144">            this.viewer = viewer == null ? defaultViewer() : viewer;</a>
-<span class="sourceLineNo">145</span><a id="line.145">        }</a>
-<span class="sourceLineNo">146</span><a id="line.146">        width = this.wildMap.width;</a>
-<span class="sourceLineNo">147</span><a id="line.147">        height = this.wildMap.height;</a>
-<span class="sourceLineNo">148</span><a id="line.148">        colorMap = new float[width][height];</a>
-<span class="sourceLineNo">149</span><a id="line.149">        initialize();</a>
-<span class="sourceLineNo">150</span><a id="line.150">    }</a>
-<span class="sourceLineNo">151</span><a id="line.151">    </a>
-<span class="sourceLineNo">152</span><a id="line.152">    public WildMapView(long seed, int width, int height, int biome)</a>
-<span class="sourceLineNo">153</span><a id="line.153">    {</a>
-<span class="sourceLineNo">154</span><a id="line.154">        this(new WildMap(width, height, biome, new SilkRNG(seed)));</a>
-<span class="sourceLineNo">155</span><a id="line.155">    }</a>
-<span class="sourceLineNo">156</span><a id="line.156">    </a>
-<span class="sourceLineNo">157</span><a id="line.157">    protected float[] biomeColors = {</a>
-<span class="sourceLineNo">158</span><a id="line.158">            desertColor,</a>
-<span class="sourceLineNo">159</span><a id="line.159">            savannaColor,</a>
-<span class="sourceLineNo">160</span><a id="line.160">            tropicalRainforestColor,</a>
-<span class="sourceLineNo">161</span><a id="line.161">            grasslandColor,</a>
-<span class="sourceLineNo">162</span><a id="line.162">            woodlandColor,</a>
-<span class="sourceLineNo">163</span><a id="line.163">            seasonalForestColor,</a>
-<span class="sourceLineNo">164</span><a id="line.164">            temperateRainforestColor,</a>
-<span class="sourceLineNo">165</span><a id="line.165">            borealForestColor,</a>
-<span class="sourceLineNo">166</span><a id="line.166">            tundraColor,</a>
-<span class="sourceLineNo">167</span><a id="line.167">            iceColor,</a>
-<span class="sourceLineNo">168</span><a id="line.168">            beachColor,</a>
-<span class="sourceLineNo">169</span><a id="line.169">            rockyColor,</a>
-<span class="sourceLineNo">170</span><a id="line.170">            shallowColor,</a>
-<span class="sourceLineNo">171</span><a id="line.171">            deepColor,</a>
-<span class="sourceLineNo">172</span><a id="line.172">            emptyColor</a>
-<span class="sourceLineNo">173</span><a id="line.173">    };</a>
-<span class="sourceLineNo">174</span><a id="line.174">    public final float[] BIOME_COLOR_TABLE = new float[61], BIOME_DARK_COLOR_TABLE = new float[61];</a>
-<span class="sourceLineNo">175</span><a id="line.175"></a>
-<span class="sourceLineNo">176</span><a id="line.176">    public void initialize()</a>
-<span class="sourceLineNo">177</span><a id="line.177">    {</a>
-<span class="sourceLineNo">178</span><a id="line.178">        initialize(0f, 0f, 0f, 1f);</a>
-<span class="sourceLineNo">179</span><a id="line.179">    }</a>
-<span class="sourceLineNo">180</span><a id="line.180"></a>
-<span class="sourceLineNo">181</span><a id="line.181">    public void initialize(float hue, float saturation, float brightness, float contrast)</a>
-<span class="sourceLineNo">182</span><a id="line.182">    {</a>
-<span class="sourceLineNo">183</span><a id="line.183">        float b, diff;</a>
-<span class="sourceLineNo">184</span><a id="line.184">        for (int i = 0; i &lt; 60; i++) {</a>
-<span class="sourceLineNo">185</span><a id="line.185">            b = BIOME_TABLE[i];</a>
-<span class="sourceLineNo">186</span><a id="line.186">            diff = (b % 1.0f - 0.48f) * 0.27f * contrast;</a>
-<span class="sourceLineNo">187</span><a id="line.187">            BIOME_COLOR_TABLE[i] = b = SColor.toEditedFloat(diff &gt;= 0</a>
-<span class="sourceLineNo">188</span><a id="line.188">                    ? SColor.lightenFloat(biomeColors[(int)b], diff)</a>
-<span class="sourceLineNo">189</span><a id="line.189">                    : SColor.darkenFloat(biomeColors[(int)b], -diff), hue, saturation, brightness, 0f);</a>
-<span class="sourceLineNo">190</span><a id="line.190">            BIOME_DARK_COLOR_TABLE[i] = SColor.darkenFloat(b, 0.08f);</a>
-<span class="sourceLineNo">191</span><a id="line.191">        }</a>
-<span class="sourceLineNo">192</span><a id="line.192">        BIOME_COLOR_TABLE[60] = BIOME_DARK_COLOR_TABLE[60] = emptyColor;</a>
-<span class="sourceLineNo">193</span><a id="line.193">    }</a>
-<span class="sourceLineNo">194</span><a id="line.194"></a>
-<span class="sourceLineNo">195</span><a id="line.195">    /**</a>
-<span class="sourceLineNo">196</span><a id="line.196">     * Initializes the colors to use for each biome (these are almost always mixed with other biome colors in practice).</a>
-<span class="sourceLineNo">197</span><a id="line.197">     * Each parameter may be null to use the default for an Earth-like world; otherwise it should be a libGDX</a>
-<span class="sourceLineNo">198</span><a id="line.198">     * {@link Color} or some subclass, like {@link SColor}. All non-null parameters should probably be fully opaque,</a>
-<span class="sourceLineNo">199</span><a id="line.199">     * except {@code emptyColor}, which is only used for world maps that show empty space (like a globe, as produced by</a>
-<span class="sourceLineNo">200</span><a id="line.200">     * {@link WorldMapGenerator.RotatingSpaceMap}).</a>
-<span class="sourceLineNo">201</span><a id="line.201">     * @param desertColor hot, dry, barren land; may be sandy, but many real-world deserts don't have much sand</a>
-<span class="sourceLineNo">202</span><a id="line.202">     * @param savannaColor hot, mostly-dry land with some parched vegetation; also called scrub or chaparral</a>
-<span class="sourceLineNo">203</span><a id="line.203">     * @param tropicalRainforestColor hot, extremely wet forests with dense rich vegetation</a>
-<span class="sourceLineNo">204</span><a id="line.204">     * @param grasslandColor prairies that are dry and usually wind-swept, but not especially hot or cold</a>
-<span class="sourceLineNo">205</span><a id="line.205">     * @param woodlandColor part-way between a prairie and a forest; not especially hot or cold</a>
-<span class="sourceLineNo">206</span><a id="line.206">     * @param seasonalForestColor forest that becomes barren in winter (deciduous trees); not especially hot or cold</a>
-<span class="sourceLineNo">207</span><a id="line.207">     * @param temperateRainforestColor forest that tends to be slightly warm but very wet</a>
-<span class="sourceLineNo">208</span><a id="line.208">     * @param borealForestColor forest that tends to be cold and very wet</a>
-<span class="sourceLineNo">209</span><a id="line.209">     * @param tundraColor very cold plains that still have some low-lying vegetation; also called taiga </a>
-<span class="sourceLineNo">210</span><a id="line.210">     * @param iceColor cold barren land covered in permafrost; also used for rivers and lakes that are frozen</a>
-<span class="sourceLineNo">211</span><a id="line.211">     * @param beachColor sandy or otherwise light-colored shorelines; here, these are more common in warmer places</a>
-<span class="sourceLineNo">212</span><a id="line.212">     * @param rockyColor rocky or otherwise rugged shorelines; here, these are more common in colder places</a>
-<span class="sourceLineNo">213</span><a id="line.213">     * @param shallowColor the color of very shallow water; will be mixed with {@code deepColor} to get most ocean colors</a>
-<span class="sourceLineNo">214</span><a id="line.214">     * @param deepColor the color of very deep water; will be mixed with {@code shallowColor} to get most ocean colors</a>
-<span class="sourceLineNo">215</span><a id="line.215">     * @param emptyColor the color used for empty space off the edge of the world map; may be transparent</a>
-<span class="sourceLineNo">216</span><a id="line.216">     */</a>
-<span class="sourceLineNo">217</span><a id="line.217">    public void initialize(</a>
-<span class="sourceLineNo">218</span><a id="line.218">            Color desertColor,</a>
-<span class="sourceLineNo">219</span><a id="line.219">            Color savannaColor,</a>
-<span class="sourceLineNo">220</span><a id="line.220">            Color tropicalRainforestColor,</a>
-<span class="sourceLineNo">221</span><a id="line.221">            Color grasslandColor,</a>
-<span class="sourceLineNo">222</span><a id="line.222">            Color woodlandColor,</a>
-<span class="sourceLineNo">223</span><a id="line.223">            Color seasonalForestColor,</a>
-<span class="sourceLineNo">224</span><a id="line.224">            Color temperateRainforestColor,</a>
-<span class="sourceLineNo">225</span><a id="line.225">            Color borealForestColor,</a>
-<span class="sourceLineNo">226</span><a id="line.226">            Color tundraColor,</a>
-<span class="sourceLineNo">227</span><a id="line.227">            Color iceColor,</a>
-<span class="sourceLineNo">228</span><a id="line.228">            Color beachColor,</a>
-<span class="sourceLineNo">229</span><a id="line.229">            Color rockyColor,</a>
-<span class="sourceLineNo">230</span><a id="line.230">            Color shallowColor,</a>
-<span class="sourceLineNo">231</span><a id="line.231">            Color deepColor,</a>
-<span class="sourceLineNo">232</span><a id="line.232">            Color emptyColor</a>
-<span class="sourceLineNo">233</span><a id="line.233">    )</a>
-<span class="sourceLineNo">234</span><a id="line.234">    {</a>
-<span class="sourceLineNo">235</span><a id="line.235">        biomeColors[ 0] = desertColor == null ? WorldMapView.desertColor : desertColor.toFloatBits();</a>
-<span class="sourceLineNo">236</span><a id="line.236">        biomeColors[ 1] = savannaColor == null ? WorldMapView.savannaColor : savannaColor.toFloatBits();</a>
-<span class="sourceLineNo">237</span><a id="line.237">        biomeColors[ 2] = tropicalRainforestColor == null ? WorldMapView.tropicalRainforestColor : tropicalRainforestColor.toFloatBits();</a>
-<span class="sourceLineNo">238</span><a id="line.238">        biomeColors[ 3] = grasslandColor == null ? WorldMapView.grasslandColor : grasslandColor.toFloatBits();</a>
-<span class="sourceLineNo">239</span><a id="line.239">        biomeColors[ 4] = woodlandColor == null ? WorldMapView.woodlandColor : woodlandColor.toFloatBits();</a>
-<span class="sourceLineNo">240</span><a id="line.240">        biomeColors[ 5] = seasonalForestColor == null ? WorldMapView.seasonalForestColor : seasonalForestColor.toFloatBits();</a>
-<span class="sourceLineNo">241</span><a id="line.241">        biomeColors[ 6] = temperateRainforestColor == null ? WorldMapView.temperateRainforestColor : temperateRainforestColor.toFloatBits();</a>
-<span class="sourceLineNo">242</span><a id="line.242">        biomeColors[ 7] = borealForestColor == null ? WorldMapView.borealForestColor : borealForestColor.toFloatBits();</a>
-<span class="sourceLineNo">243</span><a id="line.243">        biomeColors[ 8] = tundraColor == null ? WorldMapView.tundraColor : tundraColor.toFloatBits();</a>
-<span class="sourceLineNo">244</span><a id="line.244">        biomeColors[ 9] = iceColor == null ? WorldMapView.iceColor : iceColor.toFloatBits();</a>
-<span class="sourceLineNo">245</span><a id="line.245">        biomeColors[10] = beachColor == null ? WorldMapView.beachColor : beachColor.toFloatBits();</a>
-<span class="sourceLineNo">246</span><a id="line.246">        biomeColors[11] = rockyColor == null ? WorldMapView.rockyColor : rockyColor.toFloatBits();</a>
-<span class="sourceLineNo">247</span><a id="line.247">        biomeColors[12] = shallowColor == null ? WorldMapView.shallowColor : shallowColor.toFloatBits();</a>
-<span class="sourceLineNo">248</span><a id="line.248">        biomeColors[13] = deepColor == null ? WorldMapView.deepColor : deepColor.toFloatBits();</a>
-<span class="sourceLineNo">249</span><a id="line.249">        biomeColors[14] = emptyColor == null ? WorldMapView.emptyColor : emptyColor.toFloatBits();</a>
-<span class="sourceLineNo">250</span><a id="line.250">        float b, diff;</a>
-<span class="sourceLineNo">251</span><a id="line.251">        for (int i = 0; i &lt; 60; i++) {</a>
-<span class="sourceLineNo">252</span><a id="line.252">            b = BIOME_TABLE[i];</a>
-<span class="sourceLineNo">253</span><a id="line.253">            diff = (b % 1.0f - 0.48f) * 0.27f;</a>
-<span class="sourceLineNo">254</span><a id="line.254">            BIOME_COLOR_TABLE[i] = b = diff &gt;= 0</a>
-<span class="sourceLineNo">255</span><a id="line.255">                    ? SColor.lightenFloat(biomeColors[(int)b], diff)</a>
-<span class="sourceLineNo">256</span><a id="line.256">                    : SColor.darkenFloat(biomeColors[(int)b], -diff);</a>
-<span class="sourceLineNo">257</span><a id="line.257">            BIOME_DARK_COLOR_TABLE[i] = SColor.darkenFloat(b, 0.08f);</a>
-<span class="sourceLineNo">258</span><a id="line.258">        }</a>
-<span class="sourceLineNo">259</span><a id="line.259">        BIOME_COLOR_TABLE[60] = BIOME_DARK_COLOR_TABLE[60] = biomeColors[14];</a>
-<span class="sourceLineNo">260</span><a id="line.260">        biomeColors[ 0] = WorldMapView.desertColor;</a>
-<span class="sourceLineNo">261</span><a id="line.261">        biomeColors[ 1] = WorldMapView.savannaColor;</a>
-<span class="sourceLineNo">262</span><a id="line.262">        biomeColors[ 2] = WorldMapView.tropicalRainforestColor;</a>
-<span class="sourceLineNo">263</span><a id="line.263">        biomeColors[ 3] = WorldMapView.grasslandColor;</a>
-<span class="sourceLineNo">264</span><a id="line.264">        biomeColors[ 4] = WorldMapView.woodlandColor;</a>
-<span class="sourceLineNo">265</span><a id="line.265">        biomeColors[ 5] = WorldMapView.seasonalForestColor;</a>
-<span class="sourceLineNo">266</span><a id="line.266">        biomeColors[ 6] = WorldMapView.temperateRainforestColor;</a>
-<span class="sourceLineNo">267</span><a id="line.267">        biomeColors[ 7] = WorldMapView.borealForestColor;</a>
-<span class="sourceLineNo">268</span><a id="line.268">        biomeColors[ 8] = WorldMapView.tundraColor;</a>
-<span class="sourceLineNo">269</span><a id="line.269">        biomeColors[ 9] = WorldMapView.iceColor;</a>
-<span class="sourceLineNo">270</span><a id="line.270">        biomeColors[10] = WorldMapView.beachColor;</a>
-<span class="sourceLineNo">271</span><a id="line.271">        biomeColors[11] = WorldMapView.rockyColor;</a>
-<span class="sourceLineNo">272</span><a id="line.272">        biomeColors[12] = WorldMapView.shallowColor;</a>
-<span class="sourceLineNo">273</span><a id="line.273">        biomeColors[13] = WorldMapView.deepColor;</a>
-<span class="sourceLineNo">274</span><a id="line.274">        biomeColors[14] = WorldMapView.emptyColor;</a>
-<span class="sourceLineNo">275</span><a id="line.275">    }</a>
-<span class="sourceLineNo">276</span><a id="line.276"></a>
-<span class="sourceLineNo">277</span><a id="line.277"></a>
-<span class="sourceLineNo">278</span><a id="line.278">    public void generate()</a>
-<span class="sourceLineNo">279</span><a id="line.279">    {</a>
-<span class="sourceLineNo">280</span><a id="line.280">        wildMap.generate();</a>
-<span class="sourceLineNo">281</span><a id="line.281">        float baseColor = BIOME_COLOR_TABLE[wildMap.biome &amp; 1023];</a>
-<span class="sourceLineNo">282</span><a id="line.282">        int h = 1234567890, change, seed = wildMap.rng.nextInt();</a>
-<span class="sourceLineNo">283</span><a id="line.283">        ICellVisible icv;</a>
-<span class="sourceLineNo">284</span><a id="line.284">        for (int x = 0; x &lt; width; x++) {</a>
-<span class="sourceLineNo">285</span><a id="line.285">            for (int y = 0; y &lt; height; y++) {</a>
-<span class="sourceLineNo">286</span><a id="line.286">                change = h += IntPointHash.hashAll(x, y, </a>
-<span class="sourceLineNo">287</span><a id="line.287">                        seed);</a>
-<span class="sourceLineNo">288</span><a id="line.288">                if((icv = viewer.get(wildMap.floorTypes.get(wildMap.floors[x][y]))) != null) </a>
-<span class="sourceLineNo">289</span><a id="line.289">                    colorMap[x][y] = SColor.toEditedFloat(icv.getPackedColor(),</a>
-<span class="sourceLineNo">290</span><a id="line.290">                        0x1p-12f * ((h &amp; 0xFF) - 0x9F + (change &gt;&gt;&gt; 8 &amp; 0x3F)),</a>
-<span class="sourceLineNo">291</span><a id="line.291">                        0x1.8p-12f * ((h &gt;&gt;&gt; 8 &amp; 0xFF) - 0xB0 + (change &gt;&gt;&gt; 16 &amp; 0x3F)) - 0.0625f,</a>
-<span class="sourceLineNo">292</span><a id="line.292">                        0x1.3p-12f * ((h &gt;&gt;&gt; 16 &amp; 0xFF) - 0x90 + (change &gt;&gt;&gt; 24 &amp; 0x3F)),</a>
-<span class="sourceLineNo">293</span><a id="line.293">                        0f);</a>
-<span class="sourceLineNo">294</span><a id="line.294">                else </a>
-<span class="sourceLineNo">295</span><a id="line.295">                    colorMap[x][y] = SColor.toEditedFloat(baseColor,</a>
-<span class="sourceLineNo">296</span><a id="line.296">                        0x1p-12f * ((h &amp; 0xFF) - 0x9F + (change &gt;&gt;&gt; 8 &amp; 0x3F)),</a>
-<span class="sourceLineNo">297</span><a id="line.297">                        0x1.8p-12f * ((h &gt;&gt;&gt; 8 &amp; 0xFF) - 0xB0 + (change &gt;&gt;&gt; 16 &amp; 0x3F)) - 0.0625f,</a>
-<span class="sourceLineNo">298</span><a id="line.298">                        0x1.3p-12f * ((h &gt;&gt;&gt; 16 &amp; 0xFF) - 0x90 + (change &gt;&gt;&gt; 24 &amp; 0x3F)),</a>
-<span class="sourceLineNo">299</span><a id="line.299">                        0f);</a>
-<span class="sourceLineNo">300</span><a id="line.300"></a>
-<span class="sourceLineNo">301</span><a id="line.301">            }</a>
-<span class="sourceLineNo">302</span><a id="line.302">        }</a>
-<span class="sourceLineNo">303</span><a id="line.303">    }</a>
-<span class="sourceLineNo">304</span><a id="line.304">    </a>
-<span class="sourceLineNo">305</span><a id="line.305">    public void show(SparseLayers layers)</a>
-<span class="sourceLineNo">306</span><a id="line.306">    {</a>
-<span class="sourceLineNo">307</span><a id="line.307">        ArrayTools.insert(colorMap, layers.backgrounds, 0, 0);</a>
-<span class="sourceLineNo">308</span><a id="line.308">        int c;</a>
-<span class="sourceLineNo">309</span><a id="line.309">        ICellVisible icv;</a>
-<span class="sourceLineNo">310</span><a id="line.310">        for (int x = 0; x &lt; width &amp;&amp; x &lt; layers.gridWidth; x++) {</a>
-<span class="sourceLineNo">311</span><a id="line.311">            for (int y = 0; y &lt; height &amp;&amp; y &lt; layers.gridHeight; y++) {</a>
-<span class="sourceLineNo">312</span><a id="line.312">                if((c = wildMap.content[x][y]) &gt;= 0 &amp;&amp; (icv = viewer.get(wildMap.contentTypes.get(c))) != null)</a>
-<span class="sourceLineNo">313</span><a id="line.313">                    layers.put(x, y, icv.getSymbol(), SColor.contrastLuma(icv.getPackedColor(), colorMap[x][y]));</a>
-<span class="sourceLineNo">314</span><a id="line.314">                else if((icv = viewer.get(wildMap.floorTypes.get(wildMap.floors[x][y]))) != null)</a>
-<span class="sourceLineNo">315</span><a id="line.315">                    layers.put(x, y, icv.getSymbol(), SColor.contrastLuma(icv.getPackedColor(), colorMap[x][y]));</a>
-<span class="sourceLineNo">316</span><a id="line.316">            }</a>
-<span class="sourceLineNo">317</span><a id="line.317">        }</a>
-<span class="sourceLineNo">318</span><a id="line.318">    }</a>
-<span class="sourceLineNo">319</span><a id="line.319">}</a>
+<div class="source-container">
+<pre><span class="source-line-no">001</span><span id="line.1">package squidpony.squidgrid.gui.gdx;</span>
+<span class="source-line-no">002</span><span id="line.2"></span>
+<span class="source-line-no">003</span><span id="line.3">import com.badlogic.gdx.graphics.Color;</span>
+<span class="source-line-no">004</span><span id="line.4">import squidpony.ArrayTools;</span>
+<span class="source-line-no">005</span><span id="line.5">import squidpony.squidgrid.gui.gdx.ICellVisible.Basic;</span>
+<span class="source-line-no">006</span><span id="line.6">import squidpony.squidgrid.mapping.WildMap;</span>
+<span class="source-line-no">007</span><span id="line.7">import squidpony.squidgrid.mapping.WorldMapGenerator;</span>
+<span class="source-line-no">008</span><span id="line.8">import squidpony.squidmath.IntPointHash;</span>
+<span class="source-line-no">009</span><span id="line.9">import squidpony.squidmath.SilkRNG;</span>
+<span class="source-line-no">010</span><span id="line.10"></span>
+<span class="source-line-no">011</span><span id="line.11">import java.util.HashMap;</span>
+<span class="source-line-no">012</span><span id="line.12">import java.util.Map;</span>
+<span class="source-line-no">013</span><span id="line.13"></span>
+<span class="source-line-no">014</span><span id="line.14">import static squidpony.squidgrid.gui.gdx.SColor.*;</span>
+<span class="source-line-no">015</span><span id="line.15">import static squidpony.squidgrid.gui.gdx.WorldMapView.*;</span>
+<span class="source-line-no">016</span><span id="line.16"></span>
+<span class="source-line-no">017</span><span id="line.17">/**</span>
+<span class="source-line-no">018</span><span id="line.18"> * Created by Tommy Ettinger on 9/6/2019.</span>
+<span class="source-line-no">019</span><span id="line.19"> */</span>
+<span class="source-line-no">020</span><span id="line.20">public class WildMapView {</span>
+<span class="source-line-no">021</span><span id="line.21">    protected int width, height;</span>
+<span class="source-line-no">022</span><span id="line.22">    protected float[][] colorMap;</span>
+<span class="source-line-no">023</span><span id="line.23">    public WildMap wildMap;</span>
+<span class="source-line-no">024</span><span id="line.24">    </span>
+<span class="source-line-no">025</span><span id="line.25">    public Map&lt;String, ? extends ICellVisible&gt; viewer;</span>
+<span class="source-line-no">026</span><span id="line.26">    </span>
+<span class="source-line-no">027</span><span id="line.27">    public int getWidth() {</span>
+<span class="source-line-no">028</span><span id="line.28">        return width;</span>
+<span class="source-line-no">029</span><span id="line.29">    }</span>
+<span class="source-line-no">030</span><span id="line.30"></span>
+<span class="source-line-no">031</span><span id="line.31">    public int getHeight() {</span>
+<span class="source-line-no">032</span><span id="line.32">        return height;</span>
+<span class="source-line-no">033</span><span id="line.33">    }</span>
+<span class="source-line-no">034</span><span id="line.34"></span>
+<span class="source-line-no">035</span><span id="line.35">    public float[][] getColorMap() {</span>
+<span class="source-line-no">036</span><span id="line.36">        return colorMap;</span>
+<span class="source-line-no">037</span><span id="line.37">    }</span>
+<span class="source-line-no">038</span><span id="line.38">    </span>
+<span class="source-line-no">039</span><span id="line.39">    public WildMap getWildMap() {</span>
+<span class="source-line-no">040</span><span id="line.40">        return wildMap;</span>
+<span class="source-line-no">041</span><span id="line.41">    }</span>
+<span class="source-line-no">042</span><span id="line.42"></span>
+<span class="source-line-no">043</span><span id="line.43">    public void setWildMap(WildMap wildMap) {</span>
+<span class="source-line-no">044</span><span id="line.44">        this.wildMap = wildMap;</span>
+<span class="source-line-no">045</span><span id="line.45">        if(this.width != wildMap.width || this.height != wildMap.height)</span>
+<span class="source-line-no">046</span><span id="line.46">        {</span>
+<span class="source-line-no">047</span><span id="line.47">            width = wildMap.width;</span>
+<span class="source-line-no">048</span><span id="line.48">            height = wildMap.height;</span>
+<span class="source-line-no">049</span><span id="line.49">            colorMap = new float[width][height];</span>
+<span class="source-line-no">050</span><span id="line.50">        }</span>
+<span class="source-line-no">051</span><span id="line.51">    }</span>
+<span class="source-line-no">052</span><span id="line.52">    </span>
+<span class="source-line-no">053</span><span id="line.53">    public static HashMap&lt;String, ? extends ICellVisible&gt; defaultViewer()</span>
+<span class="source-line-no">054</span><span id="line.54">    {</span>
+<span class="source-line-no">055</span><span id="line.55">        HashMap&lt;String, ICellVisible&gt; viewer = new HashMap&lt;&gt;(128);</span>
+<span class="source-line-no">056</span><span id="line.56"></span>
+<span class="source-line-no">057</span><span id="line.57">        viewer.put("snow path", new Basic('.', ALICE_BLUE.toEditedFloat(0.0f, -0.2f, -0.15f)));</span>
+<span class="source-line-no">058</span><span id="line.58">        viewer.put("dirt path", new Basic('.', CLOVE_BROWN.toEditedFloat(-0.005f, -0.275f, 0.17f)));</span>
+<span class="source-line-no">059</span><span id="line.59">        viewer.put("sand path", new Basic('.', CW_PALE_ORANGE.toEditedFloat(0.05f, -0.17f, -0.075f)));</span>
+<span class="source-line-no">060</span><span id="line.60">        viewer.put("grass path", new Basic('.', AURORA_DUSTY_GREEN.toEditedFloat(0.0f, -0.15f, -0.1f)));</span>
+<span class="source-line-no">061</span><span id="line.61">        viewer.put("stone path", new Basic('.', AURORA_CHIPPED_GRANITE.toEditedFloat(-0.09f, -0.05f, 0.1f)));</span>
+<span class="source-line-no">062</span><span id="line.62">        viewer.put("wooden bridge", new Basic(':', BRUSHWOOD_DYED.toEditedFloat(0.0f, -0.275f, 0.05f)));</span>
+<span class="source-line-no">063</span><span id="line.63"></span>
+<span class="source-line-no">064</span><span id="line.64">        viewer.put("ice ledge", new Basic('¬', SColor.toEditedFloat(PALE_CORNFLOWER_BLUE, 0.0f, -0.1f, 0.1f)));</span>
+<span class="source-line-no">065</span><span id="line.65">        viewer.put("dirt ledge", new Basic('¬', CLOVE_BROWN.toEditedFloat(-0.005f, -0.175f, -0.18f)));</span>
+<span class="source-line-no">066</span><span id="line.66">        viewer.put("sand ledge", new Basic('¬', CW_PALE_ORANGE.toEditedFloat(0.05f, -0.15f, -0.125f)));</span>
+<span class="source-line-no">067</span><span id="line.67">        viewer.put("grass ledge", new Basic('¬', AURORA_DUSTY_GREEN.toEditedFloat(0.0f, -0.025f, -0.45f)));</span>
+<span class="source-line-no">068</span><span id="line.68">        viewer.put("stone ledge", new Basic('¬', AURORA_CHIPPED_GRANITE.toEditedFloat(-0.07f, -0.1f, -0.25f)));</span>
+<span class="source-line-no">069</span><span id="line.69"></span>
+<span class="source-line-no">070</span><span id="line.70">        viewer.put("snow", new Basic('…', ALICE_BLUE));</span>
+<span class="source-line-no">071</span><span id="line.71">        viewer.put("ice", new Basic('-', SColor.lightenFloat(PALE_CORNFLOWER_BLUE, 0.3f)));</span>
+<span class="source-line-no">072</span><span id="line.72">        viewer.put("dirt", new Basic('·', CLOVE_BROWN.toEditedFloat(-0.005f, -0.075f, 0.02f)));</span>
+<span class="source-line-no">073</span><span id="line.73">        viewer.put("pebbles", new Basic('…', AURORA_WET_STONE.toEditedFloat(0.0f, 0.0f, 0.0f)));</span>
+<span class="source-line-no">074</span><span id="line.74">        viewer.put("dry grass", new Basic('\'', CW_FADED_BROWN.toEditedFloat(0.06f, 0.05f, 0.05f)));</span>
+<span class="source-line-no">075</span><span id="line.75">        viewer.put("fresh water", new Basic('~', AURORA_BLUE_EYE));</span>
+<span class="source-line-no">076</span><span id="line.76">        viewer.put("salt water", new Basic('≈', AURORA_PRUSSIAN_BLUE));</span>
+<span class="source-line-no">077</span><span id="line.77">        viewer.put("sand", new Basic('…', CW_PALE_ORANGE.toEditedFloat(0.05f, -0.05f, 0.075f)));</span>
+<span class="source-line-no">078</span><span id="line.78">        viewer.put("leaves", new Basic('…', CHINESE_TEA_YELLOW.toEditedFloat(0.02f, -0.025f, 0.0f)));</span>
+<span class="source-line-no">079</span><span id="line.79">        viewer.put("grass", new Basic('"', AURORA_DUSTY_GREEN.toEditedFloat(0.0f, 0.075f, -0.25f)));</span>
+<span class="source-line-no">080</span><span id="line.80">        viewer.put("mud", new Basic(',', DB_EARTH.toEditedFloat(0.03f, -0.15f, -0.03f)));</span>
+<span class="source-line-no">081</span><span id="line.81">        viewer.put("moss", new Basic('˝', AURORA_FERN_GREEN.toEditedFloat(0f, 0.0f, 0.0f)));</span>
+<span class="source-line-no">082</span><span id="line.82">        viewer.put("rubble", new Basic('‰', AURORA_CHIPPED_GRANITE.toEditedFloat(-0.07f, 0.0f, -0.05f)));</span>
+<span class="source-line-no">083</span><span id="line.83">        viewer.put("empty space", new Basic('_', DB_INK));</span>
+<span class="source-line-no">084</span><span id="line.84">        viewer.put("snow mound", new Basic('∆', ALICE_BLUE.toEditedFloat(0f, 0.05f, -0.1f)));</span>
+<span class="source-line-no">085</span><span id="line.85">        viewer.put("icy divot", new Basic('°', ALICE_BLUE.toEditedFloat(0.05f, 0.075f, 0.06f)));</span>
+<span class="source-line-no">086</span><span id="line.86">        viewer.put("powder snowdrift", new Basic('¨', ALICE_BLUE.toEditedFloat(0.0f, 0.0f, -0.07f)));</span>
+<span class="source-line-no">087</span><span id="line.87">        viewer.put("hillock", new Basic('∆', CW_DRAB_BROWN.toEditedFloat(0.1f, -0.05f, 0.25f)));</span>
+<span class="source-line-no">088</span><span id="line.88">        viewer.put("animal burrow", new Basic('¸', AURORA_ARMY_GREEN.toEditedFloat(0.05f, 0.0f, -0.05f)));</span>
+<span class="source-line-no">089</span><span id="line.89">        viewer.put("small bush 1", new Basic('♣', AURORA_AVOCADO.toEditedFloat(-0.055f, -0.025f, -0.225f)));</span>
+<span class="source-line-no">090</span><span id="line.90">        viewer.put("large bush 1", new Basic('♣', AURORA_FOREST_GLEN.toEditedFloat(-0.055f, -0.125f, -0.225f)));</span>
+<span class="source-line-no">091</span><span id="line.91">        viewer.put("evergreen tree 1", new Basic('♠', PINE_GREEN.toEditedFloat(-0.13f, -0.03f, -0.05f)));</span>
+<span class="source-line-no">092</span><span id="line.92">        viewer.put("evergreen tree 2", new Basic('♠', AURORA_EUCALYPTUS.toEditedFloat(-0.035f, -0.045f, -0.75f)));</span>
+<span class="source-line-no">093</span><span id="line.93">        viewer.put("small cactus 1", new Basic('‡', AURORA_FROG_GREEN.toEditedFloat(0.035f, 0.065f, -0.06f)));</span>
+<span class="source-line-no">094</span><span id="line.94">        viewer.put("large cactus 1", new Basic('‡', AURORA_MARSH.toEditedFloat(0.04f, 0.11f, -0.03f)));</span>
+<span class="source-line-no">095</span><span id="line.95">        viewer.put("succulent 1", new Basic('§', CW_FLUSH_JADE.toEditedFloat(-0.045f, -0.1f, 0.0f)));</span>
+<span class="source-line-no">096</span><span id="line.96">        viewer.put("seashell 1", new Basic('ˋ', CW_LIGHT_APRICOT.toEditedFloat(0.0f, -0.095f, 0.07f)));</span>
+<span class="source-line-no">097</span><span id="line.97">        viewer.put("seashell 2", new Basic('ˋ', CW_PALE_RED.toEditedFloat(0.0f, -0.2f, 0.1f)));</span>
+<span class="source-line-no">098</span><span id="line.98">        viewer.put("seashell 3", new Basic('ˋ', CW_PALE_YELLOW.toEditedFloat(0.0f, 0.02f, 0.05f)));</span>
+<span class="source-line-no">099</span><span id="line.99">        viewer.put("seashell 4", new Basic('ˋ', CW_PALE_VIOLET.toEditedFloat(0.0f, -0.080f, 0.11f)));</span>
+<span class="source-line-no">100</span><span id="line.100">        viewer.put("driftwood", new Basic('¿', AURORA_DRIFTWOOD.toEditedFloat(0.0f, -0.25f, 0.04f)));</span>
+<span class="source-line-no">101</span><span id="line.101">        viewer.put("boulder", new Basic('●', AURORA_SLOW_CREEK.toEditedFloat(0.0f, -0.01f, 0.0f)));</span>
+<span class="source-line-no">102</span><span id="line.102">        viewer.put("deciduous tree 1", new Basic('¥', AURORA_AVOCADO.toEditedFloat(-0.065f, 0.0f, -0.3f)));</span>
+<span class="source-line-no">103</span><span id="line.103">        viewer.put("small bush 2", new Basic('♣', AURORA_WOODLANDS.toEditedFloat(-0.045f, -0.05f, -0.025f)));</span>
+<span class="source-line-no">104</span><span id="line.104">        viewer.put("deciduous tree 2", new Basic('¥', AURORA_IVY_GREEN.toEditedFloat(-0.02f, 0.0f, 0.0f)));</span>
+<span class="source-line-no">105</span><span id="line.105">        viewer.put("deciduous tree 3", new Basic('¥', AURORA_ASPARAGUS.toEditedFloat(-0.015f, 0.055f, 0.02f)));</span>
+<span class="source-line-no">106</span><span id="line.106">        viewer.put("large bush 2", new Basic('♣', AURORA_VIRIDIAN.toEditedFloat(-0.03f, -0.05f, 0.03f)));</span>
+<span class="source-line-no">107</span><span id="line.107">        viewer.put("tropical tree 1", new Basic('¶', AURORA_FLORAL_FOAM.toEditedFloat(-0.05f, 0.025f, 0.075f)));</span>
+<span class="source-line-no">108</span><span id="line.108">        viewer.put("tropical tree 2", new Basic('¶', AURORA_MAIDENHAIR_FERN.toEditedFloat(0.0f, 0.0f, 0.02f)));</span>
+<span class="source-line-no">109</span><span id="line.109">        viewer.put("large bush 3", new Basic('♣', AURORA_KELLY_GREEN.toEditedFloat(0.0f, 0.025f, 0.02f)));</span>
+<span class="source-line-no">110</span><span id="line.110">        viewer.put("tropical tree 3", new Basic('¶', AURORA_SOFT_TEAL.toEditedFloat(-0.15f, -0.07f, -0.03f)));</span>
+<span class="source-line-no">111</span><span id="line.111">        viewer.put("tropical tree 4", new Basic('¶', AURORA_PRASE.toEditedFloat(-0.04f, -0.02f, -0.02f)));</span>
+<span class="source-line-no">112</span><span id="line.112">        return viewer;</span>
+<span class="source-line-no">113</span><span id="line.113">    }</span>
+<span class="source-line-no">114</span><span id="line.114"></span>
+<span class="source-line-no">115</span><span id="line.115">    public WildMapView()</span>
+<span class="source-line-no">116</span><span id="line.116">    {</span>
+<span class="source-line-no">117</span><span id="line.117">        this(null);</span>
+<span class="source-line-no">118</span><span id="line.118">    }</span>
+<span class="source-line-no">119</span><span id="line.119">    public WildMapView(WildMap wildMap)</span>
+<span class="source-line-no">120</span><span id="line.120">    {</span>
+<span class="source-line-no">121</span><span id="line.121">        if(wildMap == null)</span>
+<span class="source-line-no">122</span><span id="line.122">        {</span>
+<span class="source-line-no">123</span><span id="line.123">            this.wildMap = new WildMap();</span>
+<span class="source-line-no">124</span><span id="line.124">        }</span>
+<span class="source-line-no">125</span><span id="line.125">        else</span>
+<span class="source-line-no">126</span><span id="line.126">        {</span>
+<span class="source-line-no">127</span><span id="line.127">            this.wildMap = wildMap;</span>
+<span class="source-line-no">128</span><span id="line.128">        }</span>
+<span class="source-line-no">129</span><span id="line.129">        this.viewer = defaultViewer();</span>
+<span class="source-line-no">130</span><span id="line.130">        width = this.wildMap.width;</span>
+<span class="source-line-no">131</span><span id="line.131">        height = this.wildMap.height;</span>
+<span class="source-line-no">132</span><span id="line.132">        colorMap = new float[width][height];</span>
+<span class="source-line-no">133</span><span id="line.133">        initialize();</span>
+<span class="source-line-no">134</span><span id="line.134">    }</span>
+<span class="source-line-no">135</span><span id="line.135">    public WildMapView(WildMap wildMap, Map&lt;String, ? extends ICellVisible&gt; viewer)</span>
+<span class="source-line-no">136</span><span id="line.136">    {</span>
+<span class="source-line-no">137</span><span id="line.137">        if(wildMap == null) { // default to forest map, biome 21; ignore given viewer, it may be null</span>
+<span class="source-line-no">138</span><span id="line.138">            this.wildMap = new WildMap();</span>
+<span class="source-line-no">139</span><span id="line.139">            this.viewer = defaultViewer();</span>
+<span class="source-line-no">140</span><span id="line.140">        }</span>
+<span class="source-line-no">141</span><span id="line.141">        else</span>
+<span class="source-line-no">142</span><span id="line.142">        {</span>
+<span class="source-line-no">143</span><span id="line.143">            this.wildMap = wildMap;</span>
+<span class="source-line-no">144</span><span id="line.144">            this.viewer = viewer == null ? defaultViewer() : viewer;</span>
+<span class="source-line-no">145</span><span id="line.145">        }</span>
+<span class="source-line-no">146</span><span id="line.146">        width = this.wildMap.width;</span>
+<span class="source-line-no">147</span><span id="line.147">        height = this.wildMap.height;</span>
+<span class="source-line-no">148</span><span id="line.148">        colorMap = new float[width][height];</span>
+<span class="source-line-no">149</span><span id="line.149">        initialize();</span>
+<span class="source-line-no">150</span><span id="line.150">    }</span>
+<span class="source-line-no">151</span><span id="line.151">    </span>
+<span class="source-line-no">152</span><span id="line.152">    public WildMapView(long seed, int width, int height, int biome)</span>
+<span class="source-line-no">153</span><span id="line.153">    {</span>
+<span class="source-line-no">154</span><span id="line.154">        this(new WildMap(width, height, biome, new SilkRNG(seed)));</span>
+<span class="source-line-no">155</span><span id="line.155">    }</span>
+<span class="source-line-no">156</span><span id="line.156">    </span>
+<span class="source-line-no">157</span><span id="line.157">    protected float[] biomeColors = {</span>
+<span class="source-line-no">158</span><span id="line.158">            desertColor,</span>
+<span class="source-line-no">159</span><span id="line.159">            savannaColor,</span>
+<span class="source-line-no">160</span><span id="line.160">            tropicalRainforestColor,</span>
+<span class="source-line-no">161</span><span id="line.161">            grasslandColor,</span>
+<span class="source-line-no">162</span><span id="line.162">            woodlandColor,</span>
+<span class="source-line-no">163</span><span id="line.163">            seasonalForestColor,</span>
+<span class="source-line-no">164</span><span id="line.164">            temperateRainforestColor,</span>
+<span class="source-line-no">165</span><span id="line.165">            borealForestColor,</span>
+<span class="source-line-no">166</span><span id="line.166">            tundraColor,</span>
+<span class="source-line-no">167</span><span id="line.167">            iceColor,</span>
+<span class="source-line-no">168</span><span id="line.168">            beachColor,</span>
+<span class="source-line-no">169</span><span id="line.169">            rockyColor,</span>
+<span class="source-line-no">170</span><span id="line.170">            shallowColor,</span>
+<span class="source-line-no">171</span><span id="line.171">            deepColor,</span>
+<span class="source-line-no">172</span><span id="line.172">            emptyColor</span>
+<span class="source-line-no">173</span><span id="line.173">    };</span>
+<span class="source-line-no">174</span><span id="line.174">    public final float[] BIOME_COLOR_TABLE = new float[61], BIOME_DARK_COLOR_TABLE = new float[61];</span>
+<span class="source-line-no">175</span><span id="line.175"></span>
+<span class="source-line-no">176</span><span id="line.176">    public void initialize()</span>
+<span class="source-line-no">177</span><span id="line.177">    {</span>
+<span class="source-line-no">178</span><span id="line.178">        initialize(0f, 0f, 0f, 1f);</span>
+<span class="source-line-no">179</span><span id="line.179">    }</span>
+<span class="source-line-no">180</span><span id="line.180"></span>
+<span class="source-line-no">181</span><span id="line.181">    public void initialize(float hue, float saturation, float brightness, float contrast)</span>
+<span class="source-line-no">182</span><span id="line.182">    {</span>
+<span class="source-line-no">183</span><span id="line.183">        float b, diff;</span>
+<span class="source-line-no">184</span><span id="line.184">        for (int i = 0; i &lt; 60; i++) {</span>
+<span class="source-line-no">185</span><span id="line.185">            b = BIOME_TABLE[i];</span>
+<span class="source-line-no">186</span><span id="line.186">            diff = (b % 1.0f - 0.48f) * 0.27f * contrast;</span>
+<span class="source-line-no">187</span><span id="line.187">            BIOME_COLOR_TABLE[i] = b = SColor.toEditedFloat(diff &gt;= 0</span>
+<span class="source-line-no">188</span><span id="line.188">                    ? SColor.lightenFloat(biomeColors[(int)b], diff)</span>
+<span class="source-line-no">189</span><span id="line.189">                    : SColor.darkenFloat(biomeColors[(int)b], -diff), hue, saturation, brightness, 0f);</span>
+<span class="source-line-no">190</span><span id="line.190">            BIOME_DARK_COLOR_TABLE[i] = SColor.darkenFloat(b, 0.08f);</span>
+<span class="source-line-no">191</span><span id="line.191">        }</span>
+<span class="source-line-no">192</span><span id="line.192">        BIOME_COLOR_TABLE[60] = BIOME_DARK_COLOR_TABLE[60] = emptyColor;</span>
+<span class="source-line-no">193</span><span id="line.193">    }</span>
+<span class="source-line-no">194</span><span id="line.194"></span>
+<span class="source-line-no">195</span><span id="line.195">    /**</span>
+<span class="source-line-no">196</span><span id="line.196">     * Initializes the colors to use for each biome (these are almost always mixed with other biome colors in practice).</span>
+<span class="source-line-no">197</span><span id="line.197">     * Each parameter may be null to use the default for an Earth-like world; otherwise it should be a libGDX</span>
+<span class="source-line-no">198</span><span id="line.198">     * {@link Color} or some subclass, like {@link SColor}. All non-null parameters should probably be fully opaque,</span>
+<span class="source-line-no">199</span><span id="line.199">     * except {@code emptyColor}, which is only used for world maps that show empty space (like a globe, as produced by</span>
+<span class="source-line-no">200</span><span id="line.200">     * {@link WorldMapGenerator.RotatingSpaceMap}).</span>
+<span class="source-line-no">201</span><span id="line.201">     * @param desertColor hot, dry, barren land; may be sandy, but many real-world deserts don't have much sand</span>
+<span class="source-line-no">202</span><span id="line.202">     * @param savannaColor hot, mostly-dry land with some parched vegetation; also called scrub or chaparral</span>
+<span class="source-line-no">203</span><span id="line.203">     * @param tropicalRainforestColor hot, extremely wet forests with dense rich vegetation</span>
+<span class="source-line-no">204</span><span id="line.204">     * @param grasslandColor prairies that are dry and usually wind-swept, but not especially hot or cold</span>
+<span class="source-line-no">205</span><span id="line.205">     * @param woodlandColor part-way between a prairie and a forest; not especially hot or cold</span>
+<span class="source-line-no">206</span><span id="line.206">     * @param seasonalForestColor forest that becomes barren in winter (deciduous trees); not especially hot or cold</span>
+<span class="source-line-no">207</span><span id="line.207">     * @param temperateRainforestColor forest that tends to be slightly warm but very wet</span>
+<span class="source-line-no">208</span><span id="line.208">     * @param borealForestColor forest that tends to be cold and very wet</span>
+<span class="source-line-no">209</span><span id="line.209">     * @param tundraColor very cold plains that still have some low-lying vegetation; also called taiga </span>
+<span class="source-line-no">210</span><span id="line.210">     * @param iceColor cold barren land covered in permafrost; also used for rivers and lakes that are frozen</span>
+<span class="source-line-no">211</span><span id="line.211">     * @param beachColor sandy or otherwise light-colored shorelines; here, these are more common in warmer places</span>
+<span class="source-line-no">212</span><span id="line.212">     * @param rockyColor rocky or otherwise rugged shorelines; here, these are more common in colder places</span>
+<span class="source-line-no">213</span><span id="line.213">     * @param shallowColor the color of very shallow water; will be mixed with {@code deepColor} to get most ocean colors</span>
+<span class="source-line-no">214</span><span id="line.214">     * @param deepColor the color of very deep water; will be mixed with {@code shallowColor} to get most ocean colors</span>
+<span class="source-line-no">215</span><span id="line.215">     * @param emptyColor the color used for empty space off the edge of the world map; may be transparent</span>
+<span class="source-line-no">216</span><span id="line.216">     */</span>
+<span class="source-line-no">217</span><span id="line.217">    public void initialize(</span>
+<span class="source-line-no">218</span><span id="line.218">            Color desertColor,</span>
+<span class="source-line-no">219</span><span id="line.219">            Color savannaColor,</span>
+<span class="source-line-no">220</span><span id="line.220">            Color tropicalRainforestColor,</span>
+<span class="source-line-no">221</span><span id="line.221">            Color grasslandColor,</span>
+<span class="source-line-no">222</span><span id="line.222">            Color woodlandColor,</span>
+<span class="source-line-no">223</span><span id="line.223">            Color seasonalForestColor,</span>
+<span class="source-line-no">224</span><span id="line.224">            Color temperateRainforestColor,</span>
+<span class="source-line-no">225</span><span id="line.225">            Color borealForestColor,</span>
+<span class="source-line-no">226</span><span id="line.226">            Color tundraColor,</span>
+<span class="source-line-no">227</span><span id="line.227">            Color iceColor,</span>
+<span class="source-line-no">228</span><span id="line.228">            Color beachColor,</span>
+<span class="source-line-no">229</span><span id="line.229">            Color rockyColor,</span>
+<span class="source-line-no">230</span><span id="line.230">            Color shallowColor,</span>
+<span class="source-line-no">231</span><span id="line.231">            Color deepColor,</span>
+<span class="source-line-no">232</span><span id="line.232">            Color emptyColor</span>
+<span class="source-line-no">233</span><span id="line.233">    )</span>
+<span class="source-line-no">234</span><span id="line.234">    {</span>
+<span class="source-line-no">235</span><span id="line.235">        biomeColors[ 0] = desertColor == null ? WorldMapView.desertColor : desertColor.toFloatBits();</span>
+<span class="source-line-no">236</span><span id="line.236">        biomeColors[ 1] = savannaColor == null ? WorldMapView.savannaColor : savannaColor.toFloatBits();</span>
+<span class="source-line-no">237</span><span id="line.237">        biomeColors[ 2] = tropicalRainforestColor == null ? WorldMapView.tropicalRainforestColor : tropicalRainforestColor.toFloatBits();</span>
+<span class="source-line-no">238</span><span id="line.238">        biomeColors[ 3] = grasslandColor == null ? WorldMapView.grasslandColor : grasslandColor.toFloatBits();</span>
+<span class="source-line-no">239</span><span id="line.239">        biomeColors[ 4] = woodlandColor == null ? WorldMapView.woodlandColor : woodlandColor.toFloatBits();</span>
+<span class="source-line-no">240</span><span id="line.240">        biomeColors[ 5] = seasonalForestColor == null ? WorldMapView.seasonalForestColor : seasonalForestColor.toFloatBits();</span>
+<span class="source-line-no">241</span><span id="line.241">        biomeColors[ 6] = temperateRainforestColor == null ? WorldMapView.temperateRainforestColor : temperateRainforestColor.toFloatBits();</span>
+<span class="source-line-no">242</span><span id="line.242">        biomeColors[ 7] = borealForestColor == null ? WorldMapView.borealForestColor : borealForestColor.toFloatBits();</span>
+<span class="source-line-no">243</span><span id="line.243">        biomeColors[ 8] = tundraColor == null ? WorldMapView.tundraColor : tundraColor.toFloatBits();</span>
+<span class="source-line-no">244</span><span id="line.244">        biomeColors[ 9] = iceColor == null ? WorldMapView.iceColor : iceColor.toFloatBits();</span>
+<span class="source-line-no">245</span><span id="line.245">        biomeColors[10] = beachColor == null ? WorldMapView.beachColor : beachColor.toFloatBits();</span>
+<span class="source-line-no">246</span><span id="line.246">        biomeColors[11] = rockyColor == null ? WorldMapView.rockyColor : rockyColor.toFloatBits();</span>
+<span class="source-line-no">247</span><span id="line.247">        biomeColors[12] = shallowColor == null ? WorldMapView.shallowColor : shallowColor.toFloatBits();</span>
+<span class="source-line-no">248</span><span id="line.248">        biomeColors[13] = deepColor == null ? WorldMapView.deepColor : deepColor.toFloatBits();</span>
+<span class="source-line-no">249</span><span id="line.249">        biomeColors[14] = emptyColor == null ? WorldMapView.emptyColor : emptyColor.toFloatBits();</span>
+<span class="source-line-no">250</span><span id="line.250">        float b, diff;</span>
+<span class="source-line-no">251</span><span id="line.251">        for (int i = 0; i &lt; 60; i++) {</span>
+<span class="source-line-no">252</span><span id="line.252">            b = BIOME_TABLE[i];</span>
+<span class="source-line-no">253</span><span id="line.253">            diff = (b % 1.0f - 0.48f) * 0.27f;</span>
+<span class="source-line-no">254</span><span id="line.254">            BIOME_COLOR_TABLE[i] = b = diff &gt;= 0</span>
+<span class="source-line-no">255</span><span id="line.255">                    ? SColor.lightenFloat(biomeColors[(int)b], diff)</span>
+<span class="source-line-no">256</span><span id="line.256">                    : SColor.darkenFloat(biomeColors[(int)b], -diff);</span>
+<span class="source-line-no">257</span><span id="line.257">            BIOME_DARK_COLOR_TABLE[i] = SColor.darkenFloat(b, 0.08f);</span>
+<span class="source-line-no">258</span><span id="line.258">        }</span>
+<span class="source-line-no">259</span><span id="line.259">        BIOME_COLOR_TABLE[60] = BIOME_DARK_COLOR_TABLE[60] = biomeColors[14];</span>
+<span class="source-line-no">260</span><span id="line.260">        biomeColors[ 0] = WorldMapView.desertColor;</span>
+<span class="source-line-no">261</span><span id="line.261">        biomeColors[ 1] = WorldMapView.savannaColor;</span>
+<span class="source-line-no">262</span><span id="line.262">        biomeColors[ 2] = WorldMapView.tropicalRainforestColor;</span>
+<span class="source-line-no">263</span><span id="line.263">        biomeColors[ 3] = WorldMapView.grasslandColor;</span>
+<span class="source-line-no">264</span><span id="line.264">        biomeColors[ 4] = WorldMapView.woodlandColor;</span>
+<span class="source-line-no">265</span><span id="line.265">        biomeColors[ 5] = WorldMapView.seasonalForestColor;</span>
+<span class="source-line-no">266</span><span id="line.266">        biomeColors[ 6] = WorldMapView.temperateRainforestColor;</span>
+<span class="source-line-no">267</span><span id="line.267">        biomeColors[ 7] = WorldMapView.borealForestColor;</span>
+<span class="source-line-no">268</span><span id="line.268">        biomeColors[ 8] = WorldMapView.tundraColor;</span>
+<span class="source-line-no">269</span><span id="line.269">        biomeColors[ 9] = WorldMapView.iceColor;</span>
+<span class="source-line-no">270</span><span id="line.270">        biomeColors[10] = WorldMapView.beachColor;</span>
+<span class="source-line-no">271</span><span id="line.271">        biomeColors[11] = WorldMapView.rockyColor;</span>
+<span class="source-line-no">272</span><span id="line.272">        biomeColors[12] = WorldMapView.shallowColor;</span>
+<span class="source-line-no">273</span><span id="line.273">        biomeColors[13] = WorldMapView.deepColor;</span>
+<span class="source-line-no">274</span><span id="line.274">        biomeColors[14] = WorldMapView.emptyColor;</span>
+<span class="source-line-no">275</span><span id="line.275">    }</span>
+<span class="source-line-no">276</span><span id="line.276"></span>
+<span class="source-line-no">277</span><span id="line.277"></span>
+<span class="source-line-no">278</span><span id="line.278">    public void generate()</span>
+<span class="source-line-no">279</span><span id="line.279">    {</span>
+<span class="source-line-no">280</span><span id="line.280">        wildMap.generate();</span>
+<span class="source-line-no">281</span><span id="line.281">        float baseColor = BIOME_COLOR_TABLE[wildMap.biome &amp; 1023];</span>
+<span class="source-line-no">282</span><span id="line.282">        int h = 1234567890, change, seed = wildMap.rng.nextInt();</span>
+<span class="source-line-no">283</span><span id="line.283">        ICellVisible icv;</span>
+<span class="source-line-no">284</span><span id="line.284">        for (int x = 0; x &lt; width; x++) {</span>
+<span class="source-line-no">285</span><span id="line.285">            for (int y = 0; y &lt; height; y++) {</span>
+<span class="source-line-no">286</span><span id="line.286">                change = h += IntPointHash.hashAll(x, y, </span>
+<span class="source-line-no">287</span><span id="line.287">                        seed);</span>
+<span class="source-line-no">288</span><span id="line.288">                if((icv = viewer.get(wildMap.floorTypes.get(wildMap.floors[x][y]))) != null) </span>
+<span class="source-line-no">289</span><span id="line.289">                    colorMap[x][y] = SColor.toEditedFloat(icv.getPackedColor(),</span>
+<span class="source-line-no">290</span><span id="line.290">                        0x1p-12f * ((h &amp; 0xFF) - 0x9F + (change &gt;&gt;&gt; 8 &amp; 0x3F)),</span>
+<span class="source-line-no">291</span><span id="line.291">                        0x1.8p-12f * ((h &gt;&gt;&gt; 8 &amp; 0xFF) - 0xB0 + (change &gt;&gt;&gt; 16 &amp; 0x3F)) - 0.0625f,</span>
+<span class="source-line-no">292</span><span id="line.292">                        0x1.3p-12f * ((h &gt;&gt;&gt; 16 &amp; 0xFF) - 0x90 + (change &gt;&gt;&gt; 24 &amp; 0x3F)),</span>
+<span class="source-line-no">293</span><span id="line.293">                        0f);</span>
+<span class="source-line-no">294</span><span id="line.294">                else </span>
+<span class="source-line-no">295</span><span id="line.295">                    colorMap[x][y] = SColor.toEditedFloat(baseColor,</span>
+<span class="source-line-no">296</span><span id="line.296">                        0x1p-12f * ((h &amp; 0xFF) - 0x9F + (change &gt;&gt;&gt; 8 &amp; 0x3F)),</span>
+<span class="source-line-no">297</span><span id="line.297">                        0x1.8p-12f * ((h &gt;&gt;&gt; 8 &amp; 0xFF) - 0xB0 + (change &gt;&gt;&gt; 16 &amp; 0x3F)) - 0.0625f,</span>
+<span class="source-line-no">298</span><span id="line.298">                        0x1.3p-12f * ((h &gt;&gt;&gt; 16 &amp; 0xFF) - 0x90 + (change &gt;&gt;&gt; 24 &amp; 0x3F)),</span>
+<span class="source-line-no">299</span><span id="line.299">                        0f);</span>
+<span class="source-line-no">300</span><span id="line.300"></span>
+<span class="source-line-no">301</span><span id="line.301">            }</span>
+<span class="source-line-no">302</span><span id="line.302">        }</span>
+<span class="source-line-no">303</span><span id="line.303">    }</span>
+<span class="source-line-no">304</span><span id="line.304">    </span>
+<span class="source-line-no">305</span><span id="line.305">    public void show(SparseLayers layers)</span>
+<span class="source-line-no">306</span><span id="line.306">    {</span>
+<span class="source-line-no">307</span><span id="line.307">        ArrayTools.insert(colorMap, layers.backgrounds, 0, 0);</span>
+<span class="source-line-no">308</span><span id="line.308">        int c;</span>
+<span class="source-line-no">309</span><span id="line.309">        ICellVisible icv;</span>
+<span class="source-line-no">310</span><span id="line.310">        for (int x = 0; x &lt; width &amp;&amp; x &lt; layers.gridWidth; x++) {</span>
+<span class="source-line-no">311</span><span id="line.311">            for (int y = 0; y &lt; height &amp;&amp; y &lt; layers.gridHeight; y++) {</span>
+<span class="source-line-no">312</span><span id="line.312">                if((c = wildMap.content[x][y]) &gt;= 0 &amp;&amp; (icv = viewer.get(wildMap.contentTypes.get(c))) != null)</span>
+<span class="source-line-no">313</span><span id="line.313">                    layers.put(x, y, icv.getSymbol(), SColor.contrastLuma(icv.getPackedColor(), colorMap[x][y]));</span>
+<span class="source-line-no">314</span><span id="line.314">                else if((icv = viewer.get(wildMap.floorTypes.get(wildMap.floors[x][y]))) != null)</span>
+<span class="source-line-no">315</span><span id="line.315">                    layers.put(x, y, icv.getSymbol(), SColor.contrastLuma(icv.getPackedColor(), colorMap[x][y]));</span>
+<span class="source-line-no">316</span><span id="line.316">            }</span>
+<span class="source-line-no">317</span><span id="line.317">        }</span>
+<span class="source-line-no">318</span><span id="line.318">    }</span>
+<span class="source-line-no">319</span><span id="line.319">}</span>
 
 
 

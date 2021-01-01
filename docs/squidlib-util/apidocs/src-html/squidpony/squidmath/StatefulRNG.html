@@ -7,105 +7,105 @@
 <meta name="generator" content="javadoc/SourceToHTMLConverter">
 <link rel="stylesheet" type="text/css" href="../../../stylesheet.css" title="Style">
 </head>
-<body class="source">
+<body class="source-page">
 <main role="main">
-<div class="sourceContainer">
-<pre><span class="sourceLineNo">001</span><a id="line.1">package squidpony.squidmath;</a>
-<span class="sourceLineNo">002</span><a id="line.2"></a>
-<span class="sourceLineNo">003</span><a id="line.3">import java.io.Serializable;</a>
-<span class="sourceLineNo">004</span><a id="line.4"></a>
-<span class="sourceLineNo">005</span><a id="line.5">/**</a>
-<span class="sourceLineNo">006</span><a id="line.6"> * A slight variant on RNG that always uses a stateful RandomessSource and so can have its state</a>
-<span class="sourceLineNo">007</span><a id="line.7"> * set or retrieved using setState() or getState().</a>
-<span class="sourceLineNo">008</span><a id="line.8"> * Created by Tommy Ettinger on 9/15/2015.</a>
-<span class="sourceLineNo">009</span><a id="line.9"> * @author Tommy Ettinger</a>
-<span class="sourceLineNo">010</span><a id="line.10"> */</a>
-<span class="sourceLineNo">011</span><a id="line.11">public class StatefulRNG extends RNG implements Serializable, IStatefulRNG {</a>
-<span class="sourceLineNo">012</span><a id="line.12"></a>
-<span class="sourceLineNo">013</span><a id="line.13">        private static final long serialVersionUID = -2456306898212937163L;</a>
-<span class="sourceLineNo">014</span><a id="line.14"></a>
-<span class="sourceLineNo">015</span><a id="line.15">        public StatefulRNG() {</a>
-<span class="sourceLineNo">016</span><a id="line.16">        super();</a>
-<span class="sourceLineNo">017</span><a id="line.17">    }</a>
-<span class="sourceLineNo">018</span><a id="line.18"></a>
-<span class="sourceLineNo">019</span><a id="line.19">    public StatefulRNG(RandomnessSource random) {</a>
-<span class="sourceLineNo">020</span><a id="line.20">        super((random instanceof StatefulRandomness) ? random : new DiverRNG(random.nextLong()));</a>
-<span class="sourceLineNo">021</span><a id="line.21">    }</a>
-<span class="sourceLineNo">022</span><a id="line.22"></a>
-<span class="sourceLineNo">023</span><a id="line.23">    /**</a>
-<span class="sourceLineNo">024</span><a id="line.24">     * Seeded constructor uses DiverRNG, which is of high quality, but low period (which rarely matters for games),</a>
-<span class="sourceLineNo">025</span><a id="line.25">     * and has good speed and tiny state size.</a>
-<span class="sourceLineNo">026</span><a id="line.26">     */</a>
-<span class="sourceLineNo">027</span><a id="line.27">    public StatefulRNG(long seed) {</a>
-<span class="sourceLineNo">028</span><a id="line.28">        this(new DiverRNG(seed));</a>
-<span class="sourceLineNo">029</span><a id="line.29">    }</a>
-<span class="sourceLineNo">030</span><a id="line.30">    /**</a>
-<span class="sourceLineNo">031</span><a id="line.31">     * String-seeded constructor uses the hash of the String as a seed for DiverRNG, which is of high quality, but</a>
-<span class="sourceLineNo">032</span><a id="line.32">     * low period (which rarely matters for games), and has good speed and tiny state size.</a>
-<span class="sourceLineNo">033</span><a id="line.33">     *</a>
-<span class="sourceLineNo">034</span><a id="line.34">     * Note: This constructor changed behavior on April 22, 2017, again on December 23, 2017, and again on June 14,</a>
-<span class="sourceLineNo">035</span><a id="line.35">     * 2018. The first was when it was noticed that it was not seeding very effectively (only assigning to 32 bits of</a>
-<span class="sourceLineNo">036</span><a id="line.36">     * seed instead of all 64). The older behavior isn't fully preserved, since it used a rather low-quality String</a>
-<span class="sourceLineNo">037</span><a id="line.37">     * hashing algorithm and so probably had problems producing good starting seeds, but you can get close by replacing</a>
-<span class="sourceLineNo">038</span><a id="line.38">     * {@code new StatefulRNG(text)} with {@code new StatefulRNG(new LightRNG(CrossHash.hash(text)))}. The new technique</a>
-<span class="sourceLineNo">039</span><a id="line.39">     * assigns to all 64 bits and has less correlation between similar inputs causing similar starting states. It's also</a>
-<span class="sourceLineNo">040</span><a id="line.40">     * faster, but that shouldn't matter in a constructor. It uses a better hashing algorithm because CrossHash no</a>
-<span class="sourceLineNo">041</span><a id="line.41">     * longer has the older, worse one. The latest change in June switched to DiverRNG instead of LightRNG.</a>
-<span class="sourceLineNo">042</span><a id="line.42">     */</a>
-<span class="sourceLineNo">043</span><a id="line.43">    public StatefulRNG(CharSequence seedString) {</a>
-<span class="sourceLineNo">044</span><a id="line.44">        this(new DiverRNG(CrossHash.hash64(seedString)));</a>
-<span class="sourceLineNo">045</span><a id="line.45">    }</a>
-<span class="sourceLineNo">046</span><a id="line.46"></a>
-<span class="sourceLineNo">047</span><a id="line.47">    @Override</a>
-<span class="sourceLineNo">048</span><a id="line.48">    public void setRandomness(RandomnessSource random) {</a>
-<span class="sourceLineNo">049</span><a id="line.49">        super.setRandomness(random == null ? new DiverRNG() :</a>
-<span class="sourceLineNo">050</span><a id="line.50">                (random instanceof StatefulRandomness) ? random : new DiverRNG(random.nextLong()));</a>
-<span class="sourceLineNo">051</span><a id="line.51">    }</a>
-<span class="sourceLineNo">052</span><a id="line.52"></a>
-<span class="sourceLineNo">053</span><a id="line.53">    /**</a>
-<span class="sourceLineNo">054</span><a id="line.54">     * Creates a copy of this StatefulRNG; it will generate the same random numbers, given the same calls in order, as</a>
-<span class="sourceLineNo">055</span><a id="line.55">     * this StatefulRNG at the point copy() is called. The copy will not share references with this StatefulRNG.</a>
-<span class="sourceLineNo">056</span><a id="line.56">     *</a>
-<span class="sourceLineNo">057</span><a id="line.57">     * @return a copy of this StatefulRNG</a>
-<span class="sourceLineNo">058</span><a id="line.58">     */</a>
-<span class="sourceLineNo">059</span><a id="line.59">    @Override</a>
-<span class="sourceLineNo">060</span><a id="line.60">    public StatefulRNG copy() {</a>
-<span class="sourceLineNo">061</span><a id="line.61">        return new StatefulRNG(random.copy());</a>
-<span class="sourceLineNo">062</span><a id="line.62">    }</a>
-<span class="sourceLineNo">063</span><a id="line.63"></a>
-<span class="sourceLineNo">064</span><a id="line.64">    /**</a>
-<span class="sourceLineNo">065</span><a id="line.65">     * Get a long that can be used to reproduce the sequence of random numbers this object will generate starting now.</a>
-<span class="sourceLineNo">066</span><a id="line.66">     * @return a long that can be used as state.</a>
-<span class="sourceLineNo">067</span><a id="line.67">     */</a>
-<span class="sourceLineNo">068</span><a id="line.68">    public long getState()</a>
-<span class="sourceLineNo">069</span><a id="line.69">    {</a>
-<span class="sourceLineNo">070</span><a id="line.70">        return ((StatefulRandomness)random).getState();</a>
-<span class="sourceLineNo">071</span><a id="line.71">    }</a>
-<span class="sourceLineNo">072</span><a id="line.72"></a>
-<span class="sourceLineNo">073</span><a id="line.73">    /**</a>
-<span class="sourceLineNo">074</span><a id="line.74">     * Sets the state of the random number generator to a given long, which will alter future random numbers this</a>
-<span class="sourceLineNo">075</span><a id="line.75">     * produces based on the state.</a>
-<span class="sourceLineNo">076</span><a id="line.76">     * @param state a long, which typically should not be 0 (some implementations may tolerate a state of 0, however).</a>
-<span class="sourceLineNo">077</span><a id="line.77">     */</a>
-<span class="sourceLineNo">078</span><a id="line.78">    public void setState(long state)</a>
-<span class="sourceLineNo">079</span><a id="line.79">    {</a>
-<span class="sourceLineNo">080</span><a id="line.80">        ((StatefulRandomness)random).setState(state);</a>
-<span class="sourceLineNo">081</span><a id="line.81">    }</a>
-<span class="sourceLineNo">082</span><a id="line.82"></a>
-<span class="sourceLineNo">083</span><a id="line.83">    @Override</a>
-<span class="sourceLineNo">084</span><a id="line.84">    public String toString() {</a>
-<span class="sourceLineNo">085</span><a id="line.85">        return "StatefulRNG{" + Long.toHexString(((StatefulRandomness)random).getState()) + "}";</a>
-<span class="sourceLineNo">086</span><a id="line.86">    }</a>
-<span class="sourceLineNo">087</span><a id="line.87">    /**</a>
-<span class="sourceLineNo">088</span><a id="line.88">     * Returns this StatefulRNG in a way that can be deserialized even if only {@link IRNG}'s methods can be called.</a>
-<span class="sourceLineNo">089</span><a id="line.89">     * @return a {@link Serializable} view of this StatefulRNG; always {@code this}</a>
-<span class="sourceLineNo">090</span><a id="line.90">     */</a>
-<span class="sourceLineNo">091</span><a id="line.91">    @Override</a>
-<span class="sourceLineNo">092</span><a id="line.92">    public Serializable toSerializable() {</a>
-<span class="sourceLineNo">093</span><a id="line.93">        return this;</a>
-<span class="sourceLineNo">094</span><a id="line.94">    }</a>
-<span class="sourceLineNo">095</span><a id="line.95"></a>
-<span class="sourceLineNo">096</span><a id="line.96">}</a>
+<div class="source-container">
+<pre><span class="source-line-no">001</span><span id="line.1">package squidpony.squidmath;</span>
+<span class="source-line-no">002</span><span id="line.2"></span>
+<span class="source-line-no">003</span><span id="line.3">import java.io.Serializable;</span>
+<span class="source-line-no">004</span><span id="line.4"></span>
+<span class="source-line-no">005</span><span id="line.5">/**</span>
+<span class="source-line-no">006</span><span id="line.6"> * A slight variant on RNG that always uses a stateful RandomessSource and so can have its state</span>
+<span class="source-line-no">007</span><span id="line.7"> * set or retrieved using setState() or getState().</span>
+<span class="source-line-no">008</span><span id="line.8"> * Created by Tommy Ettinger on 9/15/2015.</span>
+<span class="source-line-no">009</span><span id="line.9"> * @author Tommy Ettinger</span>
+<span class="source-line-no">010</span><span id="line.10"> */</span>
+<span class="source-line-no">011</span><span id="line.11">public class StatefulRNG extends RNG implements Serializable, IStatefulRNG {</span>
+<span class="source-line-no">012</span><span id="line.12"></span>
+<span class="source-line-no">013</span><span id="line.13">        private static final long serialVersionUID = -2456306898212937163L;</span>
+<span class="source-line-no">014</span><span id="line.14"></span>
+<span class="source-line-no">015</span><span id="line.15">        public StatefulRNG() {</span>
+<span class="source-line-no">016</span><span id="line.16">        super();</span>
+<span class="source-line-no">017</span><span id="line.17">    }</span>
+<span class="source-line-no">018</span><span id="line.18"></span>
+<span class="source-line-no">019</span><span id="line.19">    public StatefulRNG(RandomnessSource random) {</span>
+<span class="source-line-no">020</span><span id="line.20">        super((random instanceof StatefulRandomness) ? random : new DiverRNG(random.nextLong()));</span>
+<span class="source-line-no">021</span><span id="line.21">    }</span>
+<span class="source-line-no">022</span><span id="line.22"></span>
+<span class="source-line-no">023</span><span id="line.23">    /**</span>
+<span class="source-line-no">024</span><span id="line.24">     * Seeded constructor uses DiverRNG, which is of high quality, but low period (which rarely matters for games),</span>
+<span class="source-line-no">025</span><span id="line.25">     * and has good speed and tiny state size.</span>
+<span class="source-line-no">026</span><span id="line.26">     */</span>
+<span class="source-line-no">027</span><span id="line.27">    public StatefulRNG(long seed) {</span>
+<span class="source-line-no">028</span><span id="line.28">        this(new DiverRNG(seed));</span>
+<span class="source-line-no">029</span><span id="line.29">    }</span>
+<span class="source-line-no">030</span><span id="line.30">    /**</span>
+<span class="source-line-no">031</span><span id="line.31">     * String-seeded constructor uses the hash of the String as a seed for DiverRNG, which is of high quality, but</span>
+<span class="source-line-no">032</span><span id="line.32">     * low period (which rarely matters for games), and has good speed and tiny state size.</span>
+<span class="source-line-no">033</span><span id="line.33">     *</span>
+<span class="source-line-no">034</span><span id="line.34">     * Note: This constructor changed behavior on April 22, 2017, again on December 23, 2017, and again on June 14,</span>
+<span class="source-line-no">035</span><span id="line.35">     * 2018. The first was when it was noticed that it was not seeding very effectively (only assigning to 32 bits of</span>
+<span class="source-line-no">036</span><span id="line.36">     * seed instead of all 64). The older behavior isn't fully preserved, since it used a rather low-quality String</span>
+<span class="source-line-no">037</span><span id="line.37">     * hashing algorithm and so probably had problems producing good starting seeds, but you can get close by replacing</span>
+<span class="source-line-no">038</span><span id="line.38">     * {@code new StatefulRNG(text)} with {@code new StatefulRNG(new LightRNG(CrossHash.hash(text)))}. The new technique</span>
+<span class="source-line-no">039</span><span id="line.39">     * assigns to all 64 bits and has less correlation between similar inputs causing similar starting states. It's also</span>
+<span class="source-line-no">040</span><span id="line.40">     * faster, but that shouldn't matter in a constructor. It uses a better hashing algorithm because CrossHash no</span>
+<span class="source-line-no">041</span><span id="line.41">     * longer has the older, worse one. The latest change in June switched to DiverRNG instead of LightRNG.</span>
+<span class="source-line-no">042</span><span id="line.42">     */</span>
+<span class="source-line-no">043</span><span id="line.43">    public StatefulRNG(CharSequence seedString) {</span>
+<span class="source-line-no">044</span><span id="line.44">        this(new DiverRNG(CrossHash.hash64(seedString)));</span>
+<span class="source-line-no">045</span><span id="line.45">    }</span>
+<span class="source-line-no">046</span><span id="line.46"></span>
+<span class="source-line-no">047</span><span id="line.47">    @Override</span>
+<span class="source-line-no">048</span><span id="line.48">    public void setRandomness(RandomnessSource random) {</span>
+<span class="source-line-no">049</span><span id="line.49">        super.setRandomness(random == null ? new DiverRNG() :</span>
+<span class="source-line-no">050</span><span id="line.50">                (random instanceof StatefulRandomness) ? random : new DiverRNG(random.nextLong()));</span>
+<span class="source-line-no">051</span><span id="line.51">    }</span>
+<span class="source-line-no">052</span><span id="line.52"></span>
+<span class="source-line-no">053</span><span id="line.53">    /**</span>
+<span class="source-line-no">054</span><span id="line.54">     * Creates a copy of this StatefulRNG; it will generate the same random numbers, given the same calls in order, as</span>
+<span class="source-line-no">055</span><span id="line.55">     * this StatefulRNG at the point copy() is called. The copy will not share references with this StatefulRNG.</span>
+<span class="source-line-no">056</span><span id="line.56">     *</span>
+<span class="source-line-no">057</span><span id="line.57">     * @return a copy of this StatefulRNG</span>
+<span class="source-line-no">058</span><span id="line.58">     */</span>
+<span class="source-line-no">059</span><span id="line.59">    @Override</span>
+<span class="source-line-no">060</span><span id="line.60">    public StatefulRNG copy() {</span>
+<span class="source-line-no">061</span><span id="line.61">        return new StatefulRNG(random.copy());</span>
+<span class="source-line-no">062</span><span id="line.62">    }</span>
+<span class="source-line-no">063</span><span id="line.63"></span>
+<span class="source-line-no">064</span><span id="line.64">    /**</span>
+<span class="source-line-no">065</span><span id="line.65">     * Get a long that can be used to reproduce the sequence of random numbers this object will generate starting now.</span>
+<span class="source-line-no">066</span><span id="line.66">     * @return a long that can be used as state.</span>
+<span class="source-line-no">067</span><span id="line.67">     */</span>
+<span class="source-line-no">068</span><span id="line.68">    public long getState()</span>
+<span class="source-line-no">069</span><span id="line.69">    {</span>
+<span class="source-line-no">070</span><span id="line.70">        return ((StatefulRandomness)random).getState();</span>
+<span class="source-line-no">071</span><span id="line.71">    }</span>
+<span class="source-line-no">072</span><span id="line.72"></span>
+<span class="source-line-no">073</span><span id="line.73">    /**</span>
+<span class="source-line-no">074</span><span id="line.74">     * Sets the state of the random number generator to a given long, which will alter future random numbers this</span>
+<span class="source-line-no">075</span><span id="line.75">     * produces based on the state.</span>
+<span class="source-line-no">076</span><span id="line.76">     * @param state a long, which typically should not be 0 (some implementations may tolerate a state of 0, however).</span>
+<span class="source-line-no">077</span><span id="line.77">     */</span>
+<span class="source-line-no">078</span><span id="line.78">    public void setState(long state)</span>
+<span class="source-line-no">079</span><span id="line.79">    {</span>
+<span class="source-line-no">080</span><span id="line.80">        ((StatefulRandomness)random).setState(state);</span>
+<span class="source-line-no">081</span><span id="line.81">    }</span>
+<span class="source-line-no">082</span><span id="line.82"></span>
+<span class="source-line-no">083</span><span id="line.83">    @Override</span>
+<span class="source-line-no">084</span><span id="line.84">    public String toString() {</span>
+<span class="source-line-no">085</span><span id="line.85">        return "StatefulRNG{" + Long.toHexString(((StatefulRandomness)random).getState()) + "}";</span>
+<span class="source-line-no">086</span><span id="line.86">    }</span>
+<span class="source-line-no">087</span><span id="line.87">    /**</span>
+<span class="source-line-no">088</span><span id="line.88">     * Returns this StatefulRNG in a way that can be deserialized even if only {@link IRNG}'s methods can be called.</span>
+<span class="source-line-no">089</span><span id="line.89">     * @return a {@link Serializable} view of this StatefulRNG; always {@code this}</span>
+<span class="source-line-no">090</span><span id="line.90">     */</span>
+<span class="source-line-no">091</span><span id="line.91">    @Override</span>
+<span class="source-line-no">092</span><span id="line.92">    public Serializable toSerializable() {</span>
+<span class="source-line-no">093</span><span id="line.93">        return this;</span>
+<span class="source-line-no">094</span><span id="line.94">    }</span>
+<span class="source-line-no">095</span><span id="line.95"></span>
+<span class="source-line-no">096</span><span id="line.96">}</span>
 
 
 

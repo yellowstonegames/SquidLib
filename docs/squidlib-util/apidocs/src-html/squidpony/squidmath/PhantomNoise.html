@@ -7,495 +7,531 @@
 <meta name="generator" content="javadoc/SourceToHTMLConverter">
 <link rel="stylesheet" type="text/css" href="../../../stylesheet.css" title="Style">
 </head>
-<body class="source">
+<body class="source-page">
 <main role="main">
-<div class="sourceContainer">
-<pre><span class="sourceLineNo">001</span><a id="line.1">package squidpony.squidmath;</a>
-<span class="sourceLineNo">002</span><a id="line.2"></a>
-<span class="sourceLineNo">003</span><a id="line.3">import squidpony.annotation.Beta;</a>
-<span class="sourceLineNo">004</span><a id="line.4"></a>
-<span class="sourceLineNo">005</span><a id="line.5">/**</a>
-<span class="sourceLineNo">006</span><a id="line.6"> * Arbitrary-dimensional continuous noise that maintains most of the same style even as the dimensionality gets fairly</a>
-<span class="sourceLineNo">007</span><a id="line.7"> * high. If you know what dimension of noise you need, and it's covered by {@link FoamNoise} (meaning it's 2D, 3D, 4D,</a>
-<span class="sourceLineNo">008</span><a id="line.8"> * or 6D noise), then using FoamNoise will give you a significantly faster version of approximately the same algorithm.</a>
-<span class="sourceLineNo">009</span><a id="line.9"> * If your noise has an unknown dimension count, this won't really work either, since PhantomNoise needs to do some</a>
-<span class="sourceLineNo">010</span><a id="line.10"> * preparation and allocation for a specific dimension in its constructor. But, if you know what the range of dimensions</a>
-<span class="sourceLineNo">011</span><a id="line.11"> * is, and the lowest is at least 2D, you can make one PhantomNoise per dimension easily enough.</a>
-<span class="sourceLineNo">012</span><a id="line.12"> * &lt;br&gt;</a>
-<span class="sourceLineNo">013</span><a id="line.13"> * The algorithm this uses is surprisingly simple. To produce N-D noise, it makes N+1 calls to N-D value noise, with</a>
-<span class="sourceLineNo">014</span><a id="line.14"> * each call using a different rotation of the same size of grid. It "domain warps" value noise calls after the first,</a>
-<span class="sourceLineNo">015</span><a id="line.15"> * adding the previous value noise result to one coordinate of the next value noise call. To get a PhantomNoise result,</a>
-<span class="sourceLineNo">016</span><a id="line.16"> * it averages all the value noise calls and curves the output range so it doesn't get more biased toward 0 with higher</a>
-<span class="sourceLineNo">017</span><a id="line.17"> * dimensions (which would happen with a pure average of a rising number of variables). The curving here uses adapted</a>
-<span class="sourceLineNo">018</span><a id="line.18"> * code from libGDX's Interpolation.Pow class; it looks</a>
-<span class="sourceLineNo">019</span><a id="line.19"> * &lt;a href="https://user-images.githubusercontent.com/12948924/75205109-c2194b00-5727-11ea-99e9-614c2f613331.png"&gt;like this for 2D&lt;/a&gt;,</a>
-<span class="sourceLineNo">020</span><a id="line.20"> * &lt;a href="https://user-images.githubusercontent.com/12948924/75205657-36082300-5729-11ea-8636-683fa98d1988.png"&gt;like this for 3D&lt;/a&gt;, and</a>
-<span class="sourceLineNo">021</span><a id="line.21"> * &lt;a href="https://user-images.githubusercontent.com/12948924/75206040-52f12600-572a-11ea-8621-7763df2868e5.png"&gt;like this for 4D&lt;/a&gt;.</a>
-<span class="sourceLineNo">022</span><a id="line.22"> * There's some preparation this does in the constructor, which eliminates the need for allocations during noise</a>
-<span class="sourceLineNo">023</span><a id="line.23"> * generation. For N-D PhantomNoise, this makes N+1 double arrays, one for each rotation for a value noise call, and</a>
-<span class="sourceLineNo">024</span><a id="line.24"> * each rotation array has N items. The rotations match the vertices of an N-simplex, so a triangle in 2D, a tetrahedron</a>
-<span class="sourceLineNo">025</span><a id="line.25"> * in 3D, etc. It also stores two working-room arrays, each with N+1 double items, two frequently-edited int arrays of</a>
-<span class="sourceLineNo">026</span><a id="line.26"> * the floors of doubles it's using, and of modified versions of those floors to be hashed (each with N+1 items), and</a>
-<span class="sourceLineNo">027</span><a id="line.27"> * interestingly, a {@link CrossHash.Yolk} hash functor, seeded in the PhantomNoise constructor.</a>
-<span class="sourceLineNo">028</span><a id="line.28"> * &lt;br&gt;</a>
-<span class="sourceLineNo">029</span><a id="line.29"> * At higher dimensions, Simplex noise (what {@link SeededNoise} produces) starts to change how it looks compared to</a>
-<span class="sourceLineNo">030</span><a id="line.30"> * lower dimensions. PhantomNoise, on the other hand, maintains a fairly consistent blob-like organic look, such as</a>
-<span class="sourceLineNo">031</span><a id="line.31"> * &lt;a href="https://i.imgur.com/wxomHAc.png"&gt;this 6D PhantomNoise sample&lt;/a&gt;. Red and purple mark the highest and lowest</a>
-<span class="sourceLineNo">032</span><a id="line.32"> * possible values, respectively, and while they appear plenty in PhantomNoise, they are absent in</a>
-<span class="sourceLineNo">033</span><a id="line.33"> * &lt;a href="https://i.imgur.com/2t7hRtk.png"&gt;this 6D SeededNoise sample&lt;/a&gt;. There may be differences in how the inputs</a>
-<span class="sourceLineNo">034</span><a id="line.34"> * are handled between the two samples, but 6D Simplex generally suffers from "the curse of dimensionality" more-so than</a>
-<span class="sourceLineNo">035</span><a id="line.35"> * PhantomNoise (or Perlin noise like {@link ClassicNoise}, somewhat surprisingly), with the "curse" affecting the</a>
-<span class="sourceLineNo">036</span><a id="line.36"> * density of information in higher-dimensional space.</a>
-<span class="sourceLineNo">037</span><a id="line.37"> * &lt;br&gt;</a>
-<span class="sourceLineNo">038</span><a id="line.38"> * This is marked Beta because it's still pretty slow at higher dimensions, and if some optimization becomes available</a>
-<span class="sourceLineNo">039</span><a id="line.39"> * here, I'll take it and the output will change from this version.</a>
-<span class="sourceLineNo">040</span><a id="line.40"> */</a>
-<span class="sourceLineNo">041</span><a id="line.41">@Beta</a>
-<span class="sourceLineNo">042</span><a id="line.42">public class PhantomNoise {</a>
-<span class="sourceLineNo">043</span><a id="line.43">    private final CrossHash.Yolk yolk;</a>
-<span class="sourceLineNo">044</span><a id="line.44">    public final int dim;</a>
-<span class="sourceLineNo">045</span><a id="line.45">    private final double inverse;</a>
-<span class="sourceLineNo">046</span><a id="line.46">    private final double[] working, points;</a>
-<span class="sourceLineNo">047</span><a id="line.47">    private final double[][] vertices;</a>
-<span class="sourceLineNo">048</span><a id="line.48">    private final int[] floors, hashFloors;</a>
-<span class="sourceLineNo">049</span><a id="line.49">    public PhantomNoise() {</a>
-<span class="sourceLineNo">050</span><a id="line.50">        this(0xFEEDBEEF1337CAFEL, 3);</a>
-<span class="sourceLineNo">051</span><a id="line.51">    }</a>
-<span class="sourceLineNo">052</span><a id="line.52"></a>
-<span class="sourceLineNo">053</span><a id="line.53">    public PhantomNoise(long seed, int dimension) {</a>
-<span class="sourceLineNo">054</span><a id="line.54">        dim = Math.max(2, dimension);</a>
-<span class="sourceLineNo">055</span><a id="line.55">        working = new double[dim+1];</a>
-<span class="sourceLineNo">056</span><a id="line.56">        points = new double[dim+1];</a>
-<span class="sourceLineNo">057</span><a id="line.57">        vertices = new double[dim+1][dim];</a>
-<span class="sourceLineNo">058</span><a id="line.58">        double id = -1.0 / dim;</a>
-<span class="sourceLineNo">059</span><a id="line.59">        vertices[0][0] = 1.0;</a>
-<span class="sourceLineNo">060</span><a id="line.60">        for (int v = 1; v &lt;= dim; v++) {</a>
-<span class="sourceLineNo">061</span><a id="line.61">            vertices[v][0] = id;</a>
-<span class="sourceLineNo">062</span><a id="line.62">        }</a>
-<span class="sourceLineNo">063</span><a id="line.63">        for (int d = 1; d &lt; dim; d++) {</a>
-<span class="sourceLineNo">064</span><a id="line.64">            double t = 0.0;</a>
-<span class="sourceLineNo">065</span><a id="line.65">            for (int i = 0; i &lt; d; i++) {</a>
-<span class="sourceLineNo">066</span><a id="line.66">                t += vertices[d][i] * vertices[d][i];</a>
-<span class="sourceLineNo">067</span><a id="line.67">            }</a>
-<span class="sourceLineNo">068</span><a id="line.68">            vertices[d][d] = Math.sqrt(1.0 - t);</a>
-<span class="sourceLineNo">069</span><a id="line.69">            t = (id - t) / vertices[d][d];</a>
-<span class="sourceLineNo">070</span><a id="line.70">            for (int v = d + 1; v &lt;= dim; v++) {</a>
-<span class="sourceLineNo">071</span><a id="line.71">                vertices[v][d] = t;</a>
-<span class="sourceLineNo">072</span><a id="line.72">            }</a>
-<span class="sourceLineNo">073</span><a id="line.73">        }</a>
-<span class="sourceLineNo">074</span><a id="line.74">        for (int v = 0; v &lt;= dim; v++) {</a>
-<span class="sourceLineNo">075</span><a id="line.75">            final double theta = NumberTools.atan2(vertices[v][1], vertices[v][0]) + 0.6180339887498949,</a>
-<span class="sourceLineNo">076</span><a id="line.76">                    dist = Math.sqrt(vertices[v][1] * vertices[v][1] + vertices[v][0] * vertices[v][0]);</a>
-<span class="sourceLineNo">077</span><a id="line.77">            vertices[v][0] = NumberTools.cos(theta) * dist;</a>
-<span class="sourceLineNo">078</span><a id="line.78">            vertices[v][1] = NumberTools.sin(theta) * dist;</a>
-<span class="sourceLineNo">079</span><a id="line.79">        }</a>
-<span class="sourceLineNo">080</span><a id="line.80">        floors = new int[dim+1];</a>
-<span class="sourceLineNo">081</span><a id="line.81">        hashFloors = new int[dim+1];</a>
-<span class="sourceLineNo">082</span><a id="line.82">        yolk = new CrossHash.Yolk(seed);</a>
-<span class="sourceLineNo">083</span><a id="line.83">        inverse = 1.0 / (dim + 1.0);</a>
-<span class="sourceLineNo">084</span><a id="line.84">//        printDebugInfo();</a>
-<span class="sourceLineNo">085</span><a id="line.85">    }</a>
-<span class="sourceLineNo">086</span><a id="line.86"></a>
-<span class="sourceLineNo">087</span><a id="line.87">    protected double valueNoise()</a>
-<span class="sourceLineNo">088</span><a id="line.88">    {</a>
-<span class="sourceLineNo">089</span><a id="line.89">        hashFloors[dim] = NumberTools.doubleToMixedIntBits(working[dim]);</a>
-<span class="sourceLineNo">090</span><a id="line.90">        for (int i = 0; i &lt; dim; i++) {</a>
-<span class="sourceLineNo">091</span><a id="line.91">            floors[i] = working[i] &gt;= 0.0 ? (int)working[i] : (int)working[i] - 1;</a>
-<span class="sourceLineNo">092</span><a id="line.92">            working[i] -= floors[i];</a>
-<span class="sourceLineNo">093</span><a id="line.93">            working[i] *= working[i] * (3.0 - 2.0 * working[i]);</a>
-<span class="sourceLineNo">094</span><a id="line.94">        }</a>
-<span class="sourceLineNo">095</span><a id="line.95">        double sum = 0.0, temp;</a>
-<span class="sourceLineNo">096</span><a id="line.96">        final int limit = 1 &lt;&lt; dim;</a>
-<span class="sourceLineNo">097</span><a id="line.97">        int bit;</a>
-<span class="sourceLineNo">098</span><a id="line.98">        for (int i = 0; i &lt; limit; i++) {</a>
-<span class="sourceLineNo">099</span><a id="line.99">            temp = 1.0;</a>
-<span class="sourceLineNo">100</span><a id="line.100">            for (int j = 0; j &lt; dim; j++) {</a>
-<span class="sourceLineNo">101</span><a id="line.101">                bit = (i &gt;&gt;&gt; j &amp; 1);</a>
-<span class="sourceLineNo">102</span><a id="line.102">                temp *= bit + (1|-bit) * working[j];</a>
-<span class="sourceLineNo">103</span><a id="line.103">                hashFloors[j] = floors[j] - bit;</a>
-<span class="sourceLineNo">104</span><a id="line.104">            }</a>
-<span class="sourceLineNo">105</span><a id="line.105">            sum += temp * yolk.hash(hashFloors);</a>
-<span class="sourceLineNo">106</span><a id="line.106">        }</a>
-<span class="sourceLineNo">107</span><a id="line.107">        return (sum * 0x1p-32 + 0.5);</a>
-<span class="sourceLineNo">108</span><a id="line.108">    }</a>
-<span class="sourceLineNo">109</span><a id="line.109">    </a>
-<span class="sourceLineNo">110</span><a id="line.110">    public double getNoise(double... args) {</a>
-<span class="sourceLineNo">111</span><a id="line.111">        for (int v = 0; v &lt;= dim; v++) {</a>
-<span class="sourceLineNo">112</span><a id="line.112">            points[v] = 0.0;</a>
-<span class="sourceLineNo">113</span><a id="line.113">            for (int d = 0; d &lt; dim; d++) {</a>
-<span class="sourceLineNo">114</span><a id="line.114">                points[v] += args[d] * vertices[v][d];</a>
-<span class="sourceLineNo">115</span><a id="line.115">            }</a>
-<span class="sourceLineNo">116</span><a id="line.116">        }</a>
-<span class="sourceLineNo">117</span><a id="line.117">        working[dim] = 0.6180339887498949; // inverse golden ratio; irrational, so its bit representation nears random</a>
-<span class="sourceLineNo">118</span><a id="line.118">        double result = 0.0, warp = 0.0;</a>
-<span class="sourceLineNo">119</span><a id="line.119">        for (int i = 0; i &lt;= dim; i++) {</a>
-<span class="sourceLineNo">120</span><a id="line.120">            for (int j = 0, d = 0; j &lt; dim; j++, d++) {</a>
-<span class="sourceLineNo">121</span><a id="line.121">                if(d == i) d++;</a>
-<span class="sourceLineNo">122</span><a id="line.122">                working[j] = points[d];</a>
-<span class="sourceLineNo">123</span><a id="line.123">            }</a>
-<span class="sourceLineNo">124</span><a id="line.124">            working[0] += warp;</a>
-<span class="sourceLineNo">125</span><a id="line.125">            warp = valueNoise();</a>
-<span class="sourceLineNo">126</span><a id="line.126">            result += warp;</a>
-<span class="sourceLineNo">127</span><a id="line.127">            working[dim] += -0.423310825130748; // e - pi</a>
-<span class="sourceLineNo">128</span><a id="line.128">        }</a>
-<span class="sourceLineNo">129</span><a id="line.129">        result *= inverse;</a>
-<span class="sourceLineNo">130</span><a id="line.130">        return (result &lt;= 0.5)</a>
-<span class="sourceLineNo">131</span><a id="line.131">                ? Math.pow(result * 2, dim) - 1.0</a>
-<span class="sourceLineNo">132</span><a id="line.132">                : Math.pow((result - 1) * 2, dim) * (((dim &amp; 1) &lt;&lt; 1) - 1) + 1.0;</a>
-<span class="sourceLineNo">133</span><a id="line.133">//        for (int i = 1; i &lt; dim; i++) {</a>
-<span class="sourceLineNo">134</span><a id="line.134">//            result *= result * (3.0 - 2.0 * result);</a>
-<span class="sourceLineNo">135</span><a id="line.135">//        }</a>
-<span class="sourceLineNo">136</span><a id="line.136">//        return  (result * result * (6.0 - 4.0 * result) - 1.0);</a>
-<span class="sourceLineNo">137</span><a id="line.137">    }</a>
-<span class="sourceLineNo">138</span><a id="line.138"></a>
-<span class="sourceLineNo">139</span><a id="line.139">    public double getNoise2D(double x, double y) {</a>
-<span class="sourceLineNo">140</span><a id="line.140">        points[0] = -0.4161468365471422 * x + 0.9092974268256818 * y;</a>
-<span class="sourceLineNo">141</span><a id="line.141">        points[1] = -0.5794012529532914 * x + -0.8150424455671962 * y;</a>
-<span class="sourceLineNo">142</span><a id="line.142">        points[2] = 0.9955480895004332 * x + -0.09425498125848553 * y;</a>
-<span class="sourceLineNo">143</span><a id="line.143">        working[dim] = Math.PI;</a>
-<span class="sourceLineNo">144</span><a id="line.144">        double result = 0.0, warp = 0.0;</a>
-<span class="sourceLineNo">145</span><a id="line.145">        for (int i = 0; i &lt;= dim; i++) {</a>
-<span class="sourceLineNo">146</span><a id="line.146">            for (int j = 0, d = 0; j &lt; dim; j++, d++) {</a>
-<span class="sourceLineNo">147</span><a id="line.147">                if(d == i) d++;</a>
-<span class="sourceLineNo">148</span><a id="line.148">                working[j] = points[d] + warp;</a>
-<span class="sourceLineNo">149</span><a id="line.149">            }</a>
-<span class="sourceLineNo">150</span><a id="line.150">            warp = valueNoise();</a>
-<span class="sourceLineNo">151</span><a id="line.151">            result += warp;</a>
-<span class="sourceLineNo">152</span><a id="line.152">            working[dim] += Math.E;</a>
-<span class="sourceLineNo">153</span><a id="line.153">        }</a>
-<span class="sourceLineNo">154</span><a id="line.154">        result *= inverse;</a>
-<span class="sourceLineNo">155</span><a id="line.155">        return (result &lt;= 0.5)</a>
-<span class="sourceLineNo">156</span><a id="line.156">                ? (result * result * 4) - 1.0</a>
-<span class="sourceLineNo">157</span><a id="line.157">                : ((result - 1) * (result - 1) * -4) + 1.0;</a>
-<span class="sourceLineNo">158</span><a id="line.158"></a>
-<span class="sourceLineNo">159</span><a id="line.159">//        result *= result * (3.0 - 2.0 * result);</a>
-<span class="sourceLineNo">160</span><a id="line.160">//        return  (result * result * (6.0 - 4.0 * result) - 1.0);</a>
-<span class="sourceLineNo">161</span><a id="line.161">    }</a>
-<span class="sourceLineNo">162</span><a id="line.162">    </a>
-<span class="sourceLineNo">163</span><a id="line.163">    void printDebugInfo(){         </a>
-<span class="sourceLineNo">164</span><a id="line.164">        System.out.println("PhantomNoise with Dimension " + dim + ":");</a>
-<span class="sourceLineNo">165</span><a id="line.165">        final String dimNames = "xyzwuvabcdefghijklmnopqrst";</a>
-<span class="sourceLineNo">166</span><a id="line.166">        for (int v = 0; v &lt;= dim; v++) {</a>
-<span class="sourceLineNo">167</span><a id="line.167">            System.out.print("points[" + v + "] = ");</a>
-<span class="sourceLineNo">168</span><a id="line.168">            for (int i = 0; i &lt; dim; i++) {</a>
-<span class="sourceLineNo">169</span><a id="line.169">                if(vertices[v][i] != 0.0) </a>
-<span class="sourceLineNo">170</span><a id="line.170">                {</a>
-<span class="sourceLineNo">171</span><a id="line.171">                    if(i &gt; 0)</a>
-<span class="sourceLineNo">172</span><a id="line.172">                        System.out.print(" + ");</a>
-<span class="sourceLineNo">173</span><a id="line.173">                    if(vertices[v][i] == 1.0)</a>
-<span class="sourceLineNo">174</span><a id="line.174">                        System.out.print(dimNames.charAt(i % dimNames.length()));</a>
-<span class="sourceLineNo">175</span><a id="line.175">                    else </a>
-<span class="sourceLineNo">176</span><a id="line.176">                        System.out.print(dimNames.charAt(i % dimNames.length()) + " * " + vertices[v][i]);</a>
-<span class="sourceLineNo">177</span><a id="line.177">                }</a>
-<span class="sourceLineNo">178</span><a id="line.178">            }</a>
-<span class="sourceLineNo">179</span><a id="line.179">            System.out.println(';');</a>
-<span class="sourceLineNo">180</span><a id="line.180">        }</a>
-<span class="sourceLineNo">181</span><a id="line.181">    }</a>
-<span class="sourceLineNo">182</span><a id="line.182"></a>
-<span class="sourceLineNo">183</span><a id="line.183">    public static final double[][] goldenDouble = {</a>
-<span class="sourceLineNo">184</span><a id="line.184">            {0.6180339887498949},</a>
-<span class="sourceLineNo">185</span><a id="line.185">            {0.7548776662466927, 0.5698402909980532},</a>
-<span class="sourceLineNo">186</span><a id="line.186">            {0.8191725133961645, 0.6710436067037893, 0.5497004779019703},</a>
-<span class="sourceLineNo">187</span><a id="line.187">            {0.8566748838545029, 0.733891856627126, 0.6287067210378087, 0.5385972572236101},</a>
-<span class="sourceLineNo">188</span><a id="line.188">            {0.8812714616335696, 0.7766393890897682, 0.6844301295853426, 0.6031687406857282, 0.5315553977157913},</a>
-<span class="sourceLineNo">189</span><a id="line.189">            {0.8986537126286993, 0.8075784952213448, 0.7257334129697598,</a>
-<span class="sourceLineNo">190</span><a id="line.190">                    0.6521830259439717, 0.5860866975779695, 0.5266889867007359}</a>
-<span class="sourceLineNo">191</span><a id="line.191">    };</a>
-<span class="sourceLineNo">192</span><a id="line.192"></a>
-<span class="sourceLineNo">193</span><a id="line.193">    public static final long[][] goldenLong = {</a>
-<span class="sourceLineNo">194</span><a id="line.194">            {0x9E3779B97F4A7C15L},</a>
-<span class="sourceLineNo">195</span><a id="line.195">            {0xC13FA9A902A6328FL, 0x91E10DA5C79E7B1DL},</a>
-<span class="sourceLineNo">196</span><a id="line.196">            {0xD1B54A32D192ED03L, 0xABC98388FB8FAC03L, 0x8CB92BA72F3D8DD7L},</a>
-<span class="sourceLineNo">197</span><a id="line.197">            {0xDB4F0B9175AE2165L, 0xBBE0563303A4615FL, 0xA0F2EC75A1FE1575L, 0x89E182857D9ED689L},</a>
-<span class="sourceLineNo">198</span><a id="line.198">            {0xE19B01AA9D42C633L, 0xC6D1D6C8ED0C9631L, 0xAF36D01EF7518DBBL, 0x9A69443F36F710E7L, 0x881403B9339BD42DL},</a>
-<span class="sourceLineNo">199</span><a id="line.199">            {0xE60E2B722B53AEEBL, 0xCEBD76D9EDB6A8EFL, 0xB9C9AA3A51D00B65L, 0xA6F5777F6F88983FL, 0x9609C71EB7D03F7BL,</a>
-<span class="sourceLineNo">200</span><a id="line.200">                    0x86D516E50B04AB1BL},</a>
-<span class="sourceLineNo">201</span><a id="line.201">            {0xE95E1DD17D35800DL, 0xD4BC74E13F3C782FL, 0xC1EDBC5B5C68AC25L, 0xB0C8AC50F0EDEF5DL,</a>
-<span class="sourceLineNo">202</span><a id="line.202">                    0xA127A31C56D1CDB5L, 0x92E852C80D153DB3L, 0x85EB75C3024385C3L},</a>
-<span class="sourceLineNo">203</span><a id="line.203">            {0xEBEDEED9D803C815L, 0xD96EB1A810CAAF5FL, 0xC862B36DAF790DD5L, 0xB8ACD90C142FE10BL,</a>
-<span class="sourceLineNo">204</span><a id="line.204">                    0xAA324F90DED86B69L, 0x9CDA5E693FEA10AFL, 0x908E3D2C82567A73L, 0x8538ECB5BD456EA3L},</a>
-<span class="sourceLineNo">205</span><a id="line.205">            {0xEDF84ED4185625ADL, 0xDD35B2CD88449739L, 0xCDA146AB203DAD89L, 0xBF25C1FA63435003L,</a>
-<span class="sourceLineNo">206</span><a id="line.206">                    0xB1AF5C04970044E1L, 0xA52BB0C808635D87L, 0x9989A7D8994B239DL, 0x8EB95D05457AA16BL, 0x84AC0AA2B7D7E1C5L},</a>
-<span class="sourceLineNo">207</span><a id="line.207">            {0xEFA239AADFF080FFL, 0xE0504E7A17640707L, 0xD1F91E9D401F2CD3L, 0xC48CA286CD4C4B4DL, 0xB7FBD901347B3E45L,</a>
-<span class="sourceLineNo">208</span><a id="line.208">                    0xAC38B6695442DF75L, 0xA13614FB593F897DL, 0x96E7A62094FC418FL, 0x8D41E4ADD988EA91L, 0x843A0802F95827ADL},</a>
-<span class="sourceLineNo">209</span><a id="line.209">            {0xF104272092F57C5DL, 0xE2E8D1BC93B1BCBFL, 0xD5A0DBC4254CF233L, 0xC91FE60DC666F779L, 0xBD5A4AD0037BF1F9L,</a>
-<span class="sourceLineNo">210</span><a id="line.210">                    0xB24512C7D7E9D953L, 0xA7D5EB01A237A78BL, 0x9E031B3B27A07ECDL, 0x94C37CD5B1796B93L, 0x8C0E724FD5446177L,</a>
-<span class="sourceLineNo">211</span><a id="line.211">                    0x83DBDF3EF6A3B35BL},</a>
-<span class="sourceLineNo">212</span><a id="line.212">            {0xF22EECF611D9436FL, 0xE51CC09B3D83CAFFL, 0xD8BF2D5017352FF9L, 0xCD0C73D06EEC786BL,</a>
-<span class="sourceLineNo">213</span><a id="line.213">                    0xC1FB5B846B56C221L, 0xB7832B3BCCB1A38BL, 0xAD9BA24D9CF0D513L, 0xA43CF216E1960C65L, 0x9B5FB7D32E8D899FL,</a>
-<span class="sourceLineNo">214</span><a id="line.214">                    0x92FCF6CA403AB5A5L, 0x8B0E12CE05E62F5BL, 0x838CCB04C5269A59L},</a>
-<span class="sourceLineNo">215</span><a id="line.215">            {0xF32E81F362A69FDDL, 0xE701532702B6F82DL,</a>
-<span class="sourceLineNo">216</span><a id="line.216">                    0xDB70396E42C39DCBL, 0xD073641228368B05L, 0xC60366898AB7FC8FL, 0xBC193374F397645DL, 0xB2AE17DAC99253B9L,</a>
-<span class="sourceLineNo">217</span><a id="line.217">                    0xA9BBB6A090C6F39DL, 0xA13C043E2FE475FBL, 0x992942A852DFBF6FL, 0x917DFD6F28AFDA5DL, 0x8A35060EDCF5BD75L,</a>
-<span class="sourceLineNo">218</span><a id="line.218">                    0x8349706F500D7573L},</a>
-<span class="sourceLineNo">219</span><a id="line.219">            {0xF40BA295557EB087L, 0xE8A62E740B1030B7L, 0xDDC8F72B7958B04FL, 0xD36DA0129AF999DDL,</a>
-<span class="sourceLineNo">220</span><a id="line.220">                    0xC98E188E5138882DL, 0xC02498843215A687L, 0xB72B9CF7CB66736FL, 0xAE9DE4D05F66AF41L, 0xA6766DC536E4D933L,</a>
-<span class="sourceLineNo">221</span><a id="line.221">                    0x9EB0716EBBC7DEE5L, 0x9747627AA435C841L, 0x9036EA018B2BCF9FL, 0x897AE4FC66EB83E9L, 0x830F61D86049BD33L},</a>
-<span class="sourceLineNo">222</span><a id="line.222">            {0xF4CCD627D640C91BL, 0xEA171C21F30F9703L, 0xDFD9550E85ACC5E5L, 0xD60E418421899E89L, 0xCCB0DCDF5F586A6BL,</a>
-<span class="sourceLineNo">223</span><a id="line.223">                    0xC3BC5AB09BC44545L, 0xBB2C24468285A235L, 0xB2FBD654234A1D55L, 0xAB273EB15C029011L, 0xA3AA5A3471A8B1F5L,</a>
-<span class="sourceLineNo">224</span><a id="line.224">                    0x9C8152A3BD74C39DL, 0x95A87CBE60D27129L, 0x8F1C565AFE309975L, 0x88D9849B80100109L, 0x82DCD235027EF537L},</a>
-<span class="sourceLineNo">225</span><a id="line.225">            {0xF57716BC263D1509L, 0xEB5D28EA462157E9L, 0xE1ADA55D371AAD51L, 0xD8642B04DD8237EDL, 0xCF7C86F34CD519B3L,</a>
-<span class="sourceLineNo">226</span><a id="line.226">                    0xC6F2B276C5AAA9AFL, 0xBEC2D147B3AAF99BL, 0xB6E92FC9D8D36E9DL, 0xAF62415FDC02D5B3L, 0xA82A9ED07916A9A9L,</a>
-<span class="sourceLineNo">227</span><a id="line.227">                    0xA13F04BC98DBF8F5L, 0x9A9C52259EBB171FL, 0x943F870341597D83L, 0x8E25C2E84A744115L, 0x884C43B5A0F27CEDL,</a>
-<span class="sourceLineNo">228</span><a id="line.228">                    0x82B0645B06A50EEBL},</a>
-<span class="sourceLineNo">229</span><a id="line.229">            {0xF60E40931CDDA7E5L, 0xEC7F64E5DBDB09E5L, 0xE34F959426E19C8FL, 0xDA7B216D11305FB7L,</a>
-<span class="sourceLineNo">230</span><a id="line.230">                    0xD1FE7BF6F82D85CBL, 0xC9D63C0265C9E5E3L, 0xC1FF1A4B21B8D3A7L, 0xBA75F026E4723465L, 0xB337B641246F3469L,</a>
-<span class="sourceLineNo">231</span><a id="line.231">                    0xAC4183637B560F87L, 0xA5908B4A25D9127DL, 0x9F221D8425EA5847L, 0x98F3A45E9392C40DL, 0x9302A3DAAD39363DL,</a>
-<span class="sourceLineNo">232</span><a id="line.232">                    0x8D4CB8AE3C78C8BFL, 0x87CF974DE8CBB6C7L, 0x82890B01154E248BL},</a>
-<span class="sourceLineNo">233</span><a id="line.233">            {0xF6955E0400B91807L, 0xED8367D64493823BL,</a>
-<span class="sourceLineNo">234</span><a id="line.234">                    0xE4C6DA7D4C75AFC7L, 0xDC5C91B62A616C9DL, 0xD44186D34B52C711L, 0xCC72CFA5E47D8AB3L, 0xC4ED9D719FBC9AFFL,</a>
-<span class="sourceLineNo">235</span><a id="line.235">                    0xBDAF3BEA26B5C657L, 0xB6B5103A2FC143B5L, 0xAFFC9813B30F3AFBL, 0xA98368C8F1D0B4A7L, 0xA3472E6DFC5547E1L,</a>
-<span class="sourceLineNo">236</span><a id="line.236">                    0x9D45AB02671CFAD7L, 0x977CB5A2E1CF20EBL, 0x91EA39C265DCA3FBL, 0x8C8C366AB54F1765L, 0x8760BD83E4E72E47L,</a>
-<span class="sourceLineNo">237</span><a id="line.237">                    0x8265F322AF35A6BFL},</a>
-<span class="sourceLineNo">238</span><a id="line.238">            {0xF70EDC6AB8A796DBL, 0xEE6DAE32C9C7314DL, 0xE619AA5C2E8EEB25L, 0xDE101EE43CF747A9L,</a>
-<span class="sourceLineNo">239</span><a id="line.239">                    0xD64E71E254B3D023L, 0xCED220B05B087579L, 0xC798BF1ABDC1A781L, 0xC09FF697B9FEC8F7L, 0xB9E58585A5D89199L,</a>
-<span class="sourceLineNo">240</span><a id="line.240">                    0xB3673E6FFE31D46DL, 0xAD23075AFC31BA73L, 0xA716D9157803872DL, 0xA140BE90E0821C0BL, 0x9B9ED43F116D5253L,</a>
-<span class="sourceLineNo">241</span><a id="line.241">                    0x962F4775D3AD8C5DL, 0x90F055D7D4FF2B53L, 0x8BE04CC2E6247F0FL, 0x86FD88C35071DBFDL, 0x8246750C152D54B9L},</a>
-<span class="sourceLineNo">242</span><a id="line.242">            {0xF77CB1D641353E21L, 0xEF41DBE834EDE2F5L, 0xE74D154856960573L, 0xDF9C098CFBA62BC3L, 0xD82C7821AF16CE8DL,</a>
-<span class="sourceLineNo">243</span><a id="line.243">                    0xD0FC339E5B8BC6BBL, 0xCA09212412C75829L, 0xC35137BF42996A17L, 0xBCD27FCF29165CF9L, 0xB68B12725B6A44F9L,</a>
-<span class="sourceLineNo">244</span><a id="line.244">                    0xB07918F83419939BL, 0xAA9ACC56FEEFD88DL, 0xA4EE74A6BA40A66FL, 0x9F7268A046763B11L, 0x9A250D20DE35B0E7L,</a>
-<span class="sourceLineNo">245</span><a id="line.245">                    0x9504D4B1B2A19A37L, 0x90103F13887A534BL, 0x8B45D8CE340773A7L, 0x86A43AC3D2D7E5D9L, 0x822A09C7A37EA76BL},</a>
-<span class="sourceLineNo">246</span><a id="line.246">            {0xF7E0785B8323F5F9L, 0xF002ED136FCACF3FL, 0xE86546245CFD180FL, 0xE1057C8D01770237L, 0xD9E199C40A65E4C5L,</a>
-<span class="sourceLineNo">247</span><a id="line.247">                    0xD2F7B73254740353L, 0xCC45FDB16385F085L, 0xC5CAA50DF6AE27A1L, 0xBF83F38E96F3936DL, 0xB9703D7E0096EF81L,</a>
-<span class="sourceLineNo">248</span><a id="line.248">                    0xB38DE4B947898D35L, 0xADDB584198C64BF5L, 0xA85713D17B33C9EDL, 0xA2FF9F7573A53727L, 0x9DD38F27F07609E7L,</a>
-<span class="sourceLineNo">249</span><a id="line.249">                    0x98D18270621C5493L, 0x93F8240566E5E78DL, 0x8F462971F0E5F545L, 0x8ABA52BD4DE3D4BFL, 0x86536A15F9DFF487L,</a>
-<span class="sourceLineNo">250</span><a id="line.250">                    0x8210437F25824997L},</a>
-<span class="sourceLineNo">251</span><a id="line.251">            {0xF83B8239BBCD51D9L, 0xF0B35A2524B90EF9L, 0xE965B31B1E6CBB7FL, 0xE250C6ACD48A7A13L,</a>
-<span class="sourceLineNo">252</span><a id="line.252">                    0xDB72DC3546A1A6C1L, 0xD4CA486E2E16DE85L, 0xCE556D0823F747B3L, 0xC812B845ED79238BL, 0xC200A49AD6AFC313L,</a>
-<span class="sourceLineNo">253</span><a id="line.253">                    0xBC1DB84C03B717C3L, 0xB6688514A1537297L, 0xB0DFA7CCDEB4C5FBL, 0xAB81C8139ABA1463L, 0xA64D97FAAFB9C87BL,</a>
-<span class="sourceLineNo">254</span><a id="line.254">                    0xA141D3B5C976AD69L, 0x9C5D414BB1874509L, 0x979EB049FF0E766DL, 0x9304F97B17392461L, 0x8E8EFE9E6C844FD5L,</a>
-<span class="sourceLineNo">255</span><a id="line.255">                    0x8A3BAA22EB5B1E49L, 0x8609EEE3832393E3L, 0x81F8C7E5BB542C07L},</a>
-<span class="sourceLineNo">256</span><a id="line.256">            {0xF88EE8EC947BAC23L, 0xF15533119A11FE77L,</a>
-<span class="sourceLineNo">257</span><a id="line.257">                    0xEA51424F9DD1C415L, 0xE381868217F635A9L, 0xDCE47B2644A27E2BL, 0xD678A70494127F57L, 0xD03C9BDC9EF788C5L,</a>
-<span class="sourceLineNo">258</span><a id="line.258">                    0xCA2EF6138C473C7FL, 0xC44E5C64D64E360BL, 0xBE997F955D5F55F7L, 0xB90F1A28B6FBF225L, 0xB3ADF018A8D0B781L,</a>
-<span class="sourceLineNo">259</span><a id="line.259">                    0xAE74CE8EBF5EE175L, 0xA9628B9FF0A1A8E9L, 0xA476060A3B748BC9L, 0x9FAE24F434F06829L, 0x9B09D7AE756374C3L,</a>
-<span class="sourceLineNo">260</span><a id="line.260">                    0x96881576D6F2FC29L, 0x9227DD3D785D806DL, 0x8DE8356B76B8A95BL, 0x89C82BAB51682E05L, 0x85C6D4B2EBE9E125L,</a>
-<span class="sourceLineNo">261</span><a id="line.261">                    0x81E34C0F216F3C09L},</a>
-<span class="sourceLineNo">262</span><a id="line.262">            {0xF8DB9899F68818F9L, 0xF1EA3408C00AAE97L, 0xEB2A65F78A5C978BL, 0xE49ACC3BA426BE8FL,</a>
-<span class="sourceLineNo">263</span><a id="line.263">                    0xDE3A0E8BE3F8B7A7L, 0xD806DE3A15DCA725L, 0xD1FFF5EE60F535A5L, 0xCC24196497159D91L, 0xC672152B60A84E73L,</a>
-<span class="sourceLineNo">264</span><a id="line.264">                    0xC0E8BE65379A4499L, 0xBB86F28B24601C5BL, 0xB64B973130862B7FL, 0xB13599CC82969B59L, 0xAC43EF7B1777ADA7L,</a>
-<span class="sourceLineNo">265</span><a id="line.265">                    0xA77594CD0DB91721L, 0xA2C98D8F7799BE3BL, 0x9E3EE498A8DF438DL, 0x99D4AB95F5E69475L, 0x9589FADAD9A07791L,</a>
-<span class="sourceLineNo">266</span><a id="line.266">                    0x915DF13178769511L, 0x8D4FB3AC765D01CDL, 0x895E6D7A1699DA71L, 0x85894FB89C101161L, 0x81CF914BE11C4529L},</a>
-<span class="sourceLineNo">267</span><a id="line.267">            {0xF92258D8434F8A31L, 0xF273D5706B3800EDL, 0xEBF332215412178BL, 0xE59F33F1FFAA79DBL, 0xDF76A85BFC5FCBEBL,</a>
-<span class="sourceLineNo">268</span><a id="line.268">                    0xD9786511656FDABFL, 0xD3A347C4717A9A2BL, 0xCDF635F0848CE469L, 0xC8701CA4BB4E43A7L, 0xC30FF04FE53469DFL,</a>
-<span class="sourceLineNo">269</span><a id="line.269">                    0xBDD4AC8DE3E46D41L, 0xB8BD53F6662D74EDL, 0xB3C8EFECF54A46EBL, 0xAEF690724B5729F1L, 0xAA454BF6EA27D80DL,</a>
-<span class="sourceLineNo">270</span><a id="line.270">                    0xA5B43F2EE9E5DD71L, 0xA1428CE6F71ABD83L, 0x9CEF5DDA7802A12BL, 0x98B9E08AD13C30D7L, 0x94A14917C2209C1FL,</a>
-<span class="sourceLineNo">271</span><a id="line.271">                    0x90A4D118D143BB19L, 0x8CC3B777C1CFB485L, 0x88FD404C0AA1B13DL, 0x8550B4B7483DEA9DL, 0x81BD62C2A2E0D811L},</a>
-<span class="sourceLineNo">272</span><a id="line.272">            {0xF963D37E6AD397B1L, 0xF2F358592E4FDF43L, 0xECAD6DC073812739L, 0xE690FA59735A5CA5L, 0xE09CEC0D2BB40BEFL,</a>
-<span class="sourceLineNo">273</span><a id="line.273">                    0xDAD037D85A1FAFE9L, 0xD529D99CB4258D85L, 0xCFA8D3F354BAF8AFL, 0xCA4C300056F50BBFL, 0xC512FD479630A193L,</a>
-<span class="sourceLineNo">274</span><a id="line.274">                    0xBFFC51828C1BCC49L, 0xBB074877453F18A7L, 0xB63303D064D5B8FDL, 0xB17EAAF630F33AD9L, 0xACE96AE8A023B92FL,</a>
-<span class="sourceLineNo">275</span><a id="line.275">                    0xA872761A61E09887L, 0xA419044CDB5FCCEDL, 0x9FDC526D126E78A5L, 0x9BBBA27180316765L, 0x97B63B38C5CE8A63L,</a>
-<span class="sourceLineNo">276</span><a id="line.276">                    0x93CB68693D2A2E11L, 0x8FFA7A51600930CBL, 0x8C42C5C9000F11A1L, 0x88A3A4134A3345FDL, 0x851C72C1906CEA55L,</a>
-<span class="sourceLineNo">277</span><a id="line.277">                    0x81AC9396D4769C31L},</a>
-<span class="sourceLineNo">278</span><a id="line.278">            {0xF9A099FB652F7569L, 0xF369D04BE1B34389L, 0xED5AA0254466E043L, 0xE7720D2C9634DC87L,</a>
-<span class="sourceLineNo">279</span><a id="line.279">                    0xE1AF214F0C24C34FL, 0xDC10EC99FF092E81L, 0xD6968513E24AD1C3L, 0xD13F06963376BC15L, 0xCC0992A85C5E894FL,</a>
-<span class="sourceLineNo">280</span><a id="line.280">                    0xC6F5505B81C0B31DL, 0xC2016C273895ABE9L, 0xBD2D17C71C43F3EFL, 0xB8778A194021EF43L, 0xB3DFFEFD76CFF10DL,</a>
-<span class="sourceLineNo">281</span><a id="line.281">                    0xAF65B7356A17BA2BL, 0xAB07F8457E209615L, 0xA6C60C567AE854B7L, 0xA29F4217F711A191L, 0x9E92ECA37F37AC39L,</a>
-<span class="sourceLineNo">282</span><a id="line.282">                    0x9AA063607515C1B5L, 0x96C701E8A1EF5E21L, 0x930627ED77C26777L, 0x8F5D391DFCE9B1DBL, 0x8BCB9D0D5DF1A803L,</a>
-<span class="sourceLineNo">283</span><a id="line.283">                    0x8850BF1A217BFC29L, 0x84EC0E55FA29A321L, 0x819CFD6E329C1075L},</a>
-<span class="sourceLineNo">284</span><a id="line.284">            {0xF9D929986B5EEEB9L, 0xF3D82B220C06E07BL,</a>
-<span class="sourceLineNo">285</span><a id="line.285">                    0xEDFC1BCF7B16B91BL, 0xE844186B738DCE55L, 0xE2AF4336683C2DFFL, 0xDD3CC3C4ED67D397L, 0xD7EBC6DEF1107135L,</a>
-<span class="sourceLineNo">286</span><a id="line.286">                    0xD2BB7E5FBCDABC13L, 0xCDAB2116BCCAB79DL, 0xC8B9EAA90612499FL, 0xC3E71B73995679F7L, 0xBF31F86E5BEA2525L,</a>
-<span class="sourceLineNo">287</span><a id="line.287">                    0xBA99CB0FC3989F53L, 0xB61DE13130B5D161L, 0xB1BD8CF3F243BEB5L, 0xAD7824A6F01725D3L, 0xA94D02ACF6FE122DL,</a>
-<span class="sourceLineNo">288</span><a id="line.288">                    0xA53B8563A303BF93L, 0xA1430F0AE4052279L, 0x9D6305AD18E0C827L, 0x999AD307BDA3917BL, 0x95E9E474A92A0E69L,</a>
-<span class="sourceLineNo">289</span><a id="line.289">                    0x924FAAD3D6C3FB33L, 0x8ECB9A75B87C94B9L, 0x8B5D2B060EBF2C2DL, 0x8803D77742239521L, 0x84BF1DEE3C41BFEBL,</a>
-<span class="sourceLineNo">290</span><a id="line.290">                    0x818E7FAEBC7F0FFBL},</a>
-<span class="sourceLineNo">291</span><a id="line.291">            {0xFA0DEED8E62B756BL, 0xF43F3741C26C457DL, 0xEE93070DBC849FE3L, 0xE90890F198E9682FL,</a>
-<span class="sourceLineNo">292</span><a id="line.292">                    0xE39F0C66B318DD27L, 0xDE55B58EA47EDAA5L, 0xD92BCD1793E4C8BDL, 0xD420982129831E45L, 0xCF33602223E1A33DL,</a>
-<span class="sourceLineNo">293</span><a id="line.293">                    0xCA6372CE89CA5B13L, 0xC5B021FE75A93343L, 0xC118C39576C84389L, 0xBC9CB16A84ED9C1DL, 0xB83B493082F45033L,</a>
-<span class="sourceLineNo">294</span><a id="line.294">                    0xB3F3EC5F4D0EA19FL, 0xAFC6001D4F72F081L, 0xABB0ED29A2485B47L, 0xA7B41FC6A7BAD15BL, 0xA3CF07A52930C135L,</a>
-<span class="sourceLineNo">295</span><a id="line.295">                    0xA00117CFF0AE8395L, 0x9C49C697DB853389L, 0x98A88D80637BC8CFL, 0x951CE92C9BB209A9L, 0x91A6594C9E8D459BL,</a>
-<span class="sourceLineNo">296</span><a id="line.296">                    0x8E44608B6A0EC52DL, 0x8AF6847D28037703L, 0x87BC4D8DDF8BA161L, 0x849546F08D8843C7L, 0x8180FE8EA18A6047L},</a>
-<span class="sourceLineNo">297</span><a id="line.297">            {0xFA3F486F7B176F11L, 0xF49FA91E77C7403FL, 0xEF2063A9CDE20F67L, 0xE9C0BDF597E5D9BFL, 0xE4800214962B496BL,</a>
-<span class="sourceLineNo">298</span><a id="line.298">                    0xDF5D7E301FAC5725L, 0xDA5884709D33B639L, 0xD5706AE68BD8CD09L, 0xD0A48B7403BDE0F3L, 0xCBF443B6C0179A11L,</a>
-<span class="sourceLineNo">299</span><a id="line.299">                    0xC75EF4F2A5961C7DL, 0xC2E403FCC458AB43L, 0xBE82D926D2A51FD9L, 0xBA3AE02B1DAC798FL, 0xB60B8818EDB564FDL,</a>
-<span class="sourceLineNo">300</span><a id="line.300">                    0xB1F443415B14DE55L, 0xADF48724916BFCADL, 0xAA0BCC5F7EB08975L, 0xA6398E99EB9448BFL, 0xA27D4C74FAECC655L,</a>
-<span class="sourceLineNo">301</span><a id="line.301">                    0x9ED6877A0DCB1ABDL, 0x9B44C40A0A006C2DL, 0x97C7894D00D8F3A3L, 0x945E612233E407B1L, 0x9108D81075AC1E93L,</a>
-<span class="sourceLineNo">302</span><a id="line.302">                    0x8DC67D36E44DE1F9L, 0x8A96E23DFBE9515DL, 0x87799B48FEF38DFBL, 0x846E3EE7B27B4743L, 0x817466086C7CD82DL},</a>
-<span class="sourceLineNo">303</span><a id="line.303">            {0xFA6D85BD7B83D8BFL, 0xF4FA18113E772031L, 0xEFA509F857AEFD4BL, 0xEA6DB233E30452E9L, 0xE5536B340D76D84BL,</a>
-<span class="sourceLineNo">304</span><a id="line.304">                    0xE05593038E3D2B9BL, 0xDB738B3392365683L, 0xD6ACB8C8173F6B75L, 0xD2008424B4FDC1ABL, 0xCD6E58F9D0BBE7DDL,</a>
-<span class="sourceLineNo">305</span><a id="line.305">                    0xC8F5A6323A04AC75L, 0xC495DDE12DB49653L, 0xC04E7530BD46DD6DL, 0xBC1EE450982F5FFFL, 0xB806A665351F3943L,</a>
-<span class="sourceLineNo">306</span><a id="line.306">                    0xB4053977591D82B1L, 0xB01A1E63FA696B4DL, 0xAC44D8CC7D2631A7L, 0xA884EF0747DCAEFDL, 0xA4D9EA10ADE9061BL,</a>
-<span class="sourceLineNo">307</span><a id="line.307">                    0xA143557C2DF5AF63L, 0x9DC0BF6602AF8781L, 0x9A51B86503E8B7EFL, 0x96F5D37CD66A4963L, 0x93ACA61068BDF1B3L,</a>
-<span class="sourceLineNo">308</span><a id="line.308">                    0x9075C7D4BB43399BL, 0x8D50D2C3F1EC6CD1L, 0x8A3D6310AE08E88DL, 0x873B1719AE8B4BADL, 0x84498F5DB542C8AFL,</a>
-<span class="sourceLineNo">309</span><a id="line.309">                    0x81686E6FAF87664DL},</a>
-<span class="sourceLineNo">310</span><a id="line.310">            {0xFA98EFEF3C53DD4BL, 0xF54F0FFD0ECC0203L, 0xF021C278AD401597L, 0xEB106D053D813FA3L,</a>
-<span class="sourceLineNo">311</span><a id="line.311">                    0xE61A7887DAAF4445L, 0xE13F5115FBAFF277L, 0xDC7E65E438BC1DFDL, 0xD7D729356E007179L, 0xD349104A395B3CA7L,</a>
-<span class="sourceLineNo">312</span><a id="line.312">                    0xCED39350D14AFF63L, 0xCA762D55332BD5AFL, 0xC6305C31A6EC13F9L, 0xC201A07F966A5779L, 0xBDE97D88B6B90CF3L,</a>
-<span class="sourceLineNo">313</span><a id="line.313">                    0xB9E77938818CFA07L, 0xB5FB1C0DFD25ABBBL, 0xB223F10DD107D0C5L, 0xAE6185B4A5EA78B3L, 0xAAB369E9CF40F355L,</a>
-<span class="sourceLineNo">314</span><a id="line.314">                    0xA7192FF23CD39E85L, 0xA3926C63B2E2553DL, 0xA01EB618475369FBL, 0x9CBDA622227A2153L, 0x996ED7BF82078107L,</a>
-<span class="sourceLineNo">315</span><a id="line.315">                    0x9631E84EFCBFFCC7L, 0x9306774405981503L, 0x8FEC261BACE15EAFL, 0x8CE298519E38A56BL, 0x89E9735559ECED09L,</a>
-<span class="sourceLineNo">316</span><a id="line.316">                    0x87005E7FA89E04BBL, 0x8427030847D82601L, 0x815D0BFBCE78BCDBL},</a>
-<span class="sourceLineNo">317</span><a id="line.317">            {0xFAC1E364FEA8C287L, 0xF59F42F9E9A5D9DDL,</a>
-<span class="sourceLineNo">318</span><a id="line.318">                    0xF0978EA6AB84D035L, 0xEBAA39469D2D7F79L, 0xE6D6B8990D712A5BL, 0xE21C853219B4AFDDL, 0xDD7B1A6BD60CA405L,</a>
-<span class="sourceLineNo">319</span><a id="line.319">                    0xD8F1F657C32ACDEDL, 0xD48099B0908512C5L, 0xD02687CC29263023L, 0xCBE3468E09A0D73BL, 0xC7B65E59DDA5BE8DL,</a>
-<span class="sourceLineNo">320</span><a id="line.320">                    0xC39F5A0663C519BBL, 0xBF9DC6D095EB983DL, 0xBBB1344F1532941BL, 0xB7D93465D7A27B45L, 0xB4155B3A168DB819L,</a>
-<span class="sourceLineNo">321</span><a id="line.321">                    0xB0653F267C3172B1L, 0xACC878AF8F507395L, 0xA93EA2785B833BC7L, 0xA5C7593754FF0D63L, 0xA2623BAB769C24A7L,</a>
-<span class="sourceLineNo">322</span><a id="line.322">                    0x9F0EEA9198E9C3B9L, 0x9BCD089A0124F43BL, 0x989C3A5E26ED0205L, 0x957C2656AF96B259L, 0x926C74D19E051B71L,</a>
-<span class="sourceLineNo">323</span><a id="line.323">                    0x8F6CCFE8B5F4C1FFL, 0x8C7CE37811AB45E7L, 0x899C5D14E9036D5BL, 0x86CAEC0488D2C6B3L, 0x8408413379AB65D1L,</a>
-<span class="sourceLineNo">324</span><a id="line.324">                    0x81540F2CD5017313L},</a>
-<span class="sourceLineNo">325</span><a id="line.325">            {0xFAE842F1FD2D2CA7L, 0xF5EA757A0A98C863L, 0xF10613828C28F7FBL, 0xEC3A9B96914C96B9L,</a>
-<span class="sourceLineNo">326</span><a id="line.326">                    0xE7878ED473415E13L, 0xE2EC70E0B7805833L, 0xDE68C7D934F58C01L, 0xD9FC1C487AAEB91BL, 0xD5A5F91976B3BE43L,</a>
-<span class="sourceLineNo">327</span><a id="line.327">                    0xD165EB8B5BC1E6E5L, 0xCD3B8325C4A9DC47L, 0xC92651AD1416562FL, 0xC525EB170F87E511L, 0xC139E57FB4584EF5L,</a>
-<span class="sourceLineNo">328</span><a id="line.328">                    0xBD61D91E459DF78BL, 0xB99D603A91CDAD27L, 0xB5EC17226EFEF75BL, 0xB24D9C1F6CBCA9C1L, 0xAEC18F6CBA510669L,</a>
-<span class="sourceLineNo">329</span><a id="line.329">                    0xAB47932D40822855L, 0xA7DF4B61EDB8BF7BL, 0xA4885DE033905DEFL, 0xA1427248B4D5B15FL, 0x9E0D31FE22FC05B1L,</a>
-<span class="sourceLineNo">330</span><a id="line.330">                    0x9AE8481C4A185585L, 0x97D3616F4A74FC6BL, 0x94CE2C6AFED5D56BL, 0x91D859228E892EB9L, 0x8EF199402A6682CBL,</a>
-<span class="sourceLineNo">331</span><a id="line.331">                    0x8C199FFCF3E056D3L, 0x895022190D52F827L, 0x8694D5D3D2BE1549L, 0x83E772E43A1B5CC1L, 0x8147B2715A886473L},</a>
-<span class="sourceLineNo">332</span><a id="line.332">            {0xFB0C904DEDC71EABL, 0xF631A396A8EA8405L, 0xF16EC07F404C404BL, 0xECC3700594D89347L, 0xE82F3D74BAE83EF3L,</a>
-<span class="sourceLineNo">333</span><a id="line.333">                    0xE3B1B6599529F247L, 0xDF4A6A77A7F5FB99L, 0xDAF8EBBE23F4F3D7L, 0xD6BCCE3D27077AF3L, 0xD295A81B326269ABL,</a>
-<span class="sourceLineNo">334</span><a id="line.334">                    0xCE83118AD4D80EEDL, 0xCA84A4C0884C271DL, 0xC699FDE8C1553A63L, 0xC2C2BB1E3012F58FL, 0xBEFE7C603145DEB5L,</a>
-<span class="sourceLineNo">335</span><a id="line.335">                    0xBB4CE3896EB97D21L, 0xB7AD9446AE16AAD9L, 0xB420340DCD384DF7L, 0xB0A46A14EB212977L, 0xAD39DF49BCB5D0F1L,</a>
-<span class="sourceLineNo">336</span><a id="line.336">                    0xA9E03E490C621029L, 0xA697335663D548B5L, 0xA35E6C53DF056371L, 0xA03598BA27ABFBAFL, 0x9D1C699098755D61L,</a>
-<span class="sourceLineNo">337</span><a id="line.337">                    0x9A129165871CCFF3L, 0x9717C446B4B57445L, 0x942BB7B9E362B6B3L, 0x914E22B590C6FD67L, 0x8E7EBD99D472D11BL,</a>
-<span class="sourceLineNo">338</span><a id="line.338">                    0x8BBD422961A2424BL, 0x89096B82AB99BF13L, 0x8662F6192BF6EFA7L, 0x83C99FAECA4D7FB3L, 0x813D274D646AFB8FL},</a>
-<span class="sourceLineNo">339</span><a id="line.339">            {0xFB2E70F0672DEAC3L, 0xF67419E4328C5AE5L, 0xF1D08AF9A011B93BL, 0xED43566A0A91EB2DL, 0xE8CC107FC3FB0607L,</a>
-<span class="sourceLineNo">340</span><a id="line.340">                    0xE46A4F8C20778F89L, 0xE01DABDDB18AAEF3L, 0xDBE5BFB6B03F20DBL, 0xD7C2274395861A1BL, 0xD3B28091DFE78B43L,</a>
-<span class="sourceLineNo">341</span><a id="line.341">                    0xCFB66B8705A9661BL, 0xCBCD89D79297A36BL, 0xC7F77EFE709ACF33L, 0xC433F0345A4ED6BFL, 0xC082846776CFB603L,</a>
-<span class="sourceLineNo">342</span><a id="line.342">                    0xBCE2E4331DF57083L, 0xB954B9D7C43C7F5DL, 0xB5D7B1330D9B8881L, 0xB26B77B8068ACC91L, 0xAF0FBC6782854095L,</a>
-<span class="sourceLineNo">343</span><a id="line.343">                    0xABC42FC89F4EBF83L, 0xA88883E16C4E25EFL, 0xA55C6C2FB54D7F91L, 0xA23F9DA1EFF5B477L, 0x9F31CE904B5E5947L,</a>
-<span class="sourceLineNo">344</span><a id="line.344">                    0x9C32B6B5E10D6C97L, 0x99420F2A06C5E287L, 0x965F9259C086E847L, 0x938AFC015220C2F1L, 0x90C40925EFC71851L,</a>
-<span class="sourceLineNo">345</span><a id="line.345">                    0x8E0A780F8D0B4DFBL, 0x8B5E0842C9AC7A2DL, 0x88BE7A7AFBAD244BL, 0x862B90A45621C743L, 0x83A50DD62C2DB015L,</a>
-<span class="sourceLineNo">346</span><a id="line.346">                    0x812AB64D4FA66D45L},</a>
-<span class="sourceLineNo">347</span><a id="line.347">            {0xFB50D0447B78F80DL, 0xF6B791E91E5BBCFBL, 0xF233DE244FEC61C3L, 0xEDC5500DF4CB9F07L,</a>
-<span class="sourceLineNo">348</span><a id="line.348">                    0xE96B84969F82E781L, 0xE5261A7EEA55C0C7L, 0xE0F4B24EF9970D8BL, 0xDCD6EE4E25C47F99L, 0xD8CC727ACCADE12FL,</a>
-<span class="sourceLineNo">349</span><a id="line.349">                    0xD4D4E48248F14DF5L, 0xD0EFEBB90F18CC85L, 0xCD1D3112EFA902DFL, 0xC95C5F1B7D73F963L, 0xC5AD21EE97860B19L,</a>
-<span class="sourceLineNo">350</span><a id="line.350">                    0xC20F273116063D41L, 0xBE821E09996645E9L, 0xBB05B7197B4187B7L, 0xB799A475E04D3A53L, 0xB43D99A0EABED9CFL,</a>
-<span class="sourceLineNo">351</span><a id="line.351">                    0xB0F14B830C90CD01L, 0xADB47064790FFB1BL, 0xAA86BFE6B51FC425L, 0xA767F2FE45A47E49L, 0xA457C3EC7B873C09L,</a>
-<span class="sourceLineNo">352</span><a id="line.352">                    0xA155EE395CC834D1L, 0x9E622EADAA17B30BL, 0x9B7C434D006FE831L, 0x98A3EB50162C79AFL, 0x95D8E71F131EFF4BL,</a>
-<span class="sourceLineNo">353</span><a id="line.353">                    0x931AF84C032207B3L, 0x9069E18D62AE8765L, 0x8DC566B8C4F9DBF5L, 0x8B2D4CBD9324C81FL, 0x88A1599FE405FD95L,</a>
-<span class="sourceLineNo">354</span><a id="line.354">                    0x862154736C1CEF53L, 0x83AD0556853BC35BL, 0x8144356D4D794CB5L},</a>
-<span class="sourceLineNo">355</span><a id="line.355">            {0xFB6D5599BDF133D1L, 0xF6EF948D7C022F77L,</a>
-<span class="sourceLineNo">356</span><a id="line.356">                    0xF2865D3AD18E3E67L, 0xEE3151B6A0B5A4E3L, 0xE9F015C346AAD57BL, 0xE5C24EC8EFB818A7L, 0xE1A7A3CE0E5A4DD5L,</a>
-<span class="sourceLineNo">357</span><a id="line.357">                    0xDD9FBD6FF4D0581BL, 0xD9AA45DB9081A661L, 0xD5C6E8C646A11777L, 0xD1F55366F1743DEDL, 0xCE35346EFDA9BEEDL,</a>
-<span class="sourceLineNo">358</span><a id="line.358">                    0xCA863C03A72C3191L, 0xC6E81BB754E182C5L, 0xC35A868312C97437L, 0xBFDD30C029F0535DL, 0xBC6FD021D5AD80E3L,</a>
-<span class="sourceLineNo">359</span><a id="line.359">                    0xB9121BAF15A7D079L, 0xB5C3CBBC9C1C2DA1L, 0xB28499E6D7E54BD3L, 0xAF54410C19C57735L, 0xAC327D46D475DF91L,</a>
-<span class="sourceLineNo">360</span><a id="line.360">                    0xA91F0BE7F700F123L, 0xA619AB7160EF7EB9L, 0xA3221B906FD2A687L, 0xA0381D18A5B676E5L, 0x9D5B71FE680B6AC1L,</a>
-<span class="sourceLineNo">361</span><a id="line.361">                    0x9A8BDD51D696DE37L, 0x97C92339B9FC9B9FL, 0x951308EE89759779L, 0x926954B58749DF79L, 0x8FCBCDDBF3A5A54DL,</a>
-<span class="sourceLineNo">362</span><a id="line.362">                    0x8D3A3CB2556329E7L, 0x8AB46A87D8652177L, 0x883A21A5C11EF379L, 0x85CB2D4AF4E9FD39L, 0x836759A796C8B7D1L,</a>
-<span class="sourceLineNo">363</span><a id="line.363">                    0x810E73D8B83A55FDL},</a>
-<span class="sourceLineNo">364</span><a id="line.364">            {0xFB8F8AF296473783L, 0xF732CAF4391DFA4FL, 0xF2E9688872F4556DL, 0xEEB30DB72E847BD9L,</a>
-<span class="sourceLineNo">365</span><a id="line.365">                    0xEA8F6605FAB5E921L, 0xE67E1E716C665867L, 0xE27EE5669D93D64BL, 0xDE916ABCC965815BL, 0xDAB55FAF0492CFAFL,</a>
-<span class="sourceLineNo">366</span><a id="line.366">                    0xD6EA76D611AB6957L, 0xD330642250C3D62DL, 0xCF86DCD5CA0D633FL, 0xCBED977E52E1BF99L, 0xC8644BEFCCCCE2EFL,</a>
-<span class="sourceLineNo">367</span><a id="line.367">                    0xC4EAB33E7E21D9CBL, 0xC18087B983A91355L, 0xBE2584E55AF8C3DFL, 0xBAD967768509DE5DL, 0xB79BED4C409E0CB9L,</a>
-<span class="sourceLineNo">368</span><a id="line.368">                    0xB46CD56B5C0CECC5L, 0xB14BDFF91E10ACD5L, 0xAE38CE36452BF031L, 0xAB33627A1D44A8FFL, 0xA83B602DAB115255L,</a>
-<span class="sourceLineNo">369</span><a id="line.369">                    0xA5508BC6ECF7AB17L, 0xA272AAC430FDBFF7L, 0x9FA183A77F6FB9E9L, 0x9CDCDDF219DE8547L, 0x9A2482200E1CFE17L,</a>
-<span class="sourceLineNo">370</span><a id="line.370">                    0x977839A3DCE2DF07L, 0x94D7CEE233BE3A55L, 0x92430D2DB9FDC787L, 0x8FB9C0C2F03FCCE9L, 0x8D3BB6C42252E1F5L,</a>
-<span class="sourceLineNo">371</span><a id="line.371">                    0x8AC8BD356B173707L, 0x8860A2F8CA1077C7L, 0x860337CA4A59C09DL, 0x83B04C3C3AAE7BEFL, 0x8167B1B3763C52A9L},</a>
-<span class="sourceLineNo">372</span><a id="line.372">            {0xFBAD8DEED8FB2209L, 0xF76DC9FB80FEB207L, 0xF340636968788E7FL, 0xEF250AD8F2743C11L, 0xEB1B7241906F3CF1L,</a>
-<span class="sourceLineNo">373</span><a id="line.373">                    0xE7234CEBF7A3CD01L, 0xE33C4F6C6F5BF5B5L, 0xDF662F9D37E0C88DL, 0xDBA0A499099B628BL, 0xD7EB66B5ABFF26C7L,</a>
-<span class="sourceLineNo">374</span><a id="line.374">                    0xD4462F7EA3D6623FL, 0xD0B0B9AFF88C4749L, 0xCD2AC1311010E3E1L, 0xC9B4030FA0F56381L, 0xC64C3D7ABA609379L,</a>
-<span class="sourceLineNo">375</span><a id="line.375">                    0xC2F32FBDE17D3F97L, 0xBFA89A3C4405955BL, 0xBC6C3E6BFF904CA1L, 0xB93DDED17D45DFA9L, 0xB61D3EFAE1A59F8FL,</a>
-<span class="sourceLineNo">376</span><a id="line.376">                    0xB30A237B9003EFEBL, 0xB00451E7C16C6AC5L, 0xAD0B90D02E941EB1L, 0xAA1FA7BDCC8982EBL, 0xA7405F2D9BD12195L,</a>
-<span class="sourceLineNo">377</span><a id="line.377">                    0xA46D808C899F5623L, 0xA1A6D63362E0D645L, 0x9EEC2B62D8C50E0FL, 0x9C3D4C3F967EA489L, 0x999A05CE67EFC51DL,</a>
-<span class="sourceLineNo">378</span><a id="line.378">                    0x970225F070F90BC5L, 0x94757B5F75232DCBL, 0x91F3D5AA2F5CAFF5L, 0x8F7D0530B9862C37L, 0x8D10DB210388D58BL,</a>
-<span class="sourceLineNo">379</span><a id="line.379">                    0x8AAF297359B40FA7L, 0x8857C2E6FA2012D3L, 0x860A7AFEB8D4B141L, 0x83C725FDB2746C03L, 0x818D98E40D2D198FL},</a>
-<span class="sourceLineNo">380</span><a id="line.380">            {0xFBBBA0DAAEEC680DL, 0xF78976F1379136DFL, 0xF3693491C2390A33L, 0xEF5A8D55FEAAF3D3L, 0xEB5D361D9D81532BL,</a>
-<span class="sourceLineNo">381</span><a id="line.381">                    0xE770E508E115260BL, 0xE3955173459932CDL, 0xDFCA33EE40021AE5L, 0xDC0F463C135A0B75L, 0xD864434ABC206085L,</a>
-<span class="sourceLineNo">382</span><a id="line.382">                    0xD4C8E72EF15727A1L, 0xD13CEF1F3AE20029L, 0xCDC0196F1CDB6263L, 0xCA52258A5786DA61L, 0xC6F2D3F03B88419BL,</a>
-<span class="sourceLineNo">383</span><a id="line.383">                    0xC3A1E62F12097969L, 0xC05F1EDF98799989L, 0xBD2A41A08F91F0EDL, 0xBA0313125D4E9BBBL, 0xB6E958D2C189D077L,</a>
-<span class="sourceLineNo">384</span><a id="line.384">                    0xB3DCD9789CEA5F55L, 0xB0DD5C8FC9D731F7L, 0xADEAAA950722E7A5L, 0xAB048CF1F423F1F3L, 0xA82ACDF91DEED89DL,</a>
-<span class="sourceLineNo">385</span><a id="line.385">                    0xA55D38E21D698881L, 0xA29B99C5C5EFC9ADL, 0x9FE5BD9A64422B13L, 0x9D3B72300D79E05BL, 0x9A9C862CFDBD36ABL,</a>
-<span class="sourceLineNo">386</span><a id="line.386">                    0x9808C90A0671690BL, 0x95800B0F0BA7BBF1L, 0x93021D4F9084E135L, 0x908ED1A75262BB93L, 0x8E25FAB6F26DA8EDL,</a>
-<span class="sourceLineNo">387</span><a id="line.387">                    0x8BC76BE0AD7F873DL, 0x8972F94521FBAF7DL, 0x872877C02370254FL, 0x84E7BCE59BC138E5L, 0x82B09EFE79A5D3D9L,</a>
-<span class="sourceLineNo">388</span><a id="line.388">                    0x8082F505AC3B9F93L},</a>
-<span class="sourceLineNo">389</span><a id="line.389">            {0xFBE7BD0A608BAD17L, 0xF7E03E790DA47477L, 0xF3E93FA3A9F8B32BL, 0xF0027CFAFB6A1463L,</a>
-<span class="sourceLineNo">390</span><a id="line.390">                    0xEC2BB4046BDBEE9FL, 0xE864A3559C6B8123L, 0xE4AD0A900AC6AB77L, 0xE104AA5CC856ED81L, 0xDD6B446842F7AE65L,</a>
-<span class="sourceLineNo">391</span><a id="line.391">                    0xD9E09B5E1EEFF399L, 0xD66472E521E8D767L, 0xD2F68F9B2E9B2FDFL, 0xCF96B71150EFF3CDL, 0xCC44AFC7DA5003D5L,</a>
-<span class="sourceLineNo">392</span><a id="line.392">                    0xC900412A8DE11143L, 0xC5C9338CDC6E6BE7L, 0xC29F50262FBD8AFBL, 0xBF82610E450F2C2FL, 0xBC723139968EE63BL,</a>
-<span class="sourceLineNo">393</span><a id="line.393">                    0xB96E8C75D3740AF5L, 0xB6773F666697AF3DL, 0xB38C17810B44A553L, 0xB0ACE30A700728ADL, 0xADD97112E742E8EBL,</a>
-<span class="sourceLineNo">394</span><a id="line.394">                    0xAB11917325570C3BL, 0xA85514C90C18A85BL, 0xA5A3CC74836D14E7L, 0xA2FD8A945ECE591BL, 0xA06222034F84D331L,</a>
-<span class="sourceLineNo">395</span><a id="line.395">                    0x9DD16654E362103BL, 0x9B4B2BD28FC9A05FL, 0x98CF4778C8D584CDL, 0x965D8EF42464A387L, 0x93F5D89E88E277A1L,</a>
-<span class="sourceLineNo">396</span><a id="line.396">                    0x9197FB7C6797FCA7L, 0x8F43CF3A02569879L, 0x8CF92C28BC4E8805L, 0x8AB7EB3C75E31201L, 0x887FE608F34F7DD1L,</a>
-<span class="sourceLineNo">397</span><a id="line.397">                    0x8650F6BF4DF08511L, 0x842AF82B7006ABD1L, 0x820DC5B19AC69DA5L},</a>
-<span class="sourceLineNo">398</span><a id="line.398">            {0xFBF33ADB4A247B63L, 0xF7F6DC82CD3A64A7L,</a>
-<span class="sourceLineNo">399</span><a id="line.399">                    0xF40AA289E556077BL, 0xF02E4B90F15A2E05L, 0xEC61974111819B83L, 0xE8A44647F724B981L, 0xE4F61A53C575AAD9L,</a>
-<span class="sourceLineNo">400</span><a id="line.400">                    0xE156D60F02EE122DL, 0xDDC63D1C9B2AF001L, 0xDA441413F0F40E21L, 0xD6D0207D002D7BBFL, 0xD36A28CC8F72A6ABL,</a>
-<span class="sourceLineNo">401</span><a id="line.401">                    0xD011F460711BA35BL, 0xCCC74B7BD36E35FBL, 0xC989F7439FBD2BEBL, 0xC659C1BAE8398DADL, 0xC33675BF643A2645L,</a>
-<span class="sourceLineNo">402</span><a id="line.402">                    0xC01FDF05FABECDF1L, 0xBD15CA175AF5D381L, 0xBA18044CA28AC8EDL, 0xB7265BCC1186DD6FL, 0xB4409F85CB8BD1DFL,</a>
-<span class="sourceLineNo">403</span><a id="line.403">                    0xB1669F30A6337225L, 0xAE982B47045E59F9L, 0xABD51503BE3DA293L, 0xA91D2E5F15E3EB11L, 0xA6704A0BB82AFE25L,</a>
-<span class="sourceLineNo">404</span><a id="line.404">                    0xA3CE3B73C9BC2527L, 0xA136D6B6000A02EBL, 0x9EA9F0A2C60B978BL, 0x9C275EB96C88D2A3L, 0x99AEF72565C9D9CBL,</a>
-<span class="sourceLineNo">405</span><a id="line.405">                    0x974090BB8C7AE74FL, 0x94DC02F775975F89L, 0x928125F8CD2F733DL, 0x902FD280BDDC5A1BL, 0x8DE7E1EF62B7E2BBL,</a>
-<span class="sourceLineNo">406</span><a id="line.406">                    0x8BA92E4143ACC451L, 0x8973920CDBF5CB1DL, 0x8746E8802AA2A203L, 0x85230D5E4CF9A2E7L, 0x8307DCFD228EBBC1L,</a>
-<span class="sourceLineNo">407</span><a id="line.407">                    0x80F53442FAE81817L},</a>
-<span class="sourceLineNo">408</span><a id="line.408">            {0xFBF8641D0EBD9F37L, 0xF80105531A5B1C69L, 0xF419A2322FD2AF1DL, 0xF041FA520DD315C5L,</a>
-<span class="sourceLineNo">409</span><a id="line.409">                    0xEC79CE4DFE225559L, 0xE8C0DFC0BFBA8355L, 0xE516F140815D3291L, 0xE17BC65AEC5B2B4FL, 0xDDEF23913F4F21DFL,</a>
-<span class="sourceLineNo">410</span><a id="line.410">                    0xDA70CE54788B2693L, 0xD7008D018FF98CB3L, 0xD39E26DDC03304F5L, 0xD0496412DE8CA2FBL, 0xCD020DABC1E17C4DL,</a>
-<span class="sourceLineNo">411</span><a id="line.411">                    0xC9C7ED90B7DC8245L, 0xC69ACE84088827A5L, 0xC37A7C1E87EA4E29L, 0xC066C2CC3573DFF5L, 0xBD5F6FC8E90C5D07L,</a>
-<span class="sourceLineNo">412</span><a id="line.412">                    0xBA64511D0D828555L, 0xB775359A682C2529L, 0xB491ECD8ED7FE2F1L, 0xB1BA4733A274C3BDL, 0xAEEE15C58A73EE4BL,</a>
-<span class="sourceLineNo">413</span><a id="line.413">                    0xAC2D2A66A1AA0429L, 0xA97757A8E386344DL, 0xA6CC70D55D35F399L, 0xA42C49E94BED0D87L, 0xA196B79346CA81D7L,</a>
-<span class="sourceLineNo">414</span><a id="line.414">                    0x9F0B8F30742B63A1L, 0x9C8AA6C9CA3DAADDL, 0x9A13D5115AA5A2F7L, 0x97A6F15FA90957BDL, 0x9543D3B10C5615B5L,</a>
-<span class="sourceLineNo">415</span><a id="line.415">                    0x92EA54A31A94C409L, 0x909A4D721F228C2FL, 0x8E5397F69B23EF17L, 0x8C160EA2D009104FL, 0x89E18C8053FAA5B1L,</a>
-<span class="sourceLineNo">416</span><a id="line.416">                    0x87B5ED2DB0079D91L, 0x85930CDC07EC2E7DL, 0x8378C84CCB4BA1BDL, 0x8166FCCF7036C5DBL, 0x7F5D883F36D98FB9L},</a>
-<span class="sourceLineNo">417</span><a id="line.417">            {0xFC371C6CEDDC7205L, 0xF87C8BD3AE403793L, 0xF4D017FDC4B91205L, 0xF1318B81E30CC827L, 0xEDA0B1C0E0ABFC8DL,</a>
-<span class="sourceLineNo">418</span><a id="line.418">                    0xEA1D56E2BDA00BFFL, 0xE6A747D3B0C88081L, 0xE33E5241413D4A33L, 0xDFE244976AAB90CBL, 0xDC92EDFDCC839099L,</a>
-<span class="sourceLineNo">419</span><a id="line.419">                    0xD9501E54E3CE92E1L, 0xD619A6334F84AC69L, 0xD2EF56E31F3A85D5L, 0xCFD1025F2C00079DL, 0xCCBE7B507B4957D5L,</a>
-<span class="sourceLineNo">420</span><a id="line.420">                    0xC9B7950BABBC29B5L, 0xC6BC238E6BBBEEC7L, 0xC3CBFB7CF9900767L, 0xC0E6F21FACFF9B93L, 0xBE0CDD608A3F4EE1L,</a>
-<span class="sourceLineNo">421</span><a id="line.421">                    0xBB3D93C8DE0D89BFL, 0xB878EC7EE2DA97A9L, 0xB5BEBF436EDA5D9DL, 0xB30EE46FAADDED93L, 0xB06934F2D1D3BB5FL,</a>
-<span class="sourceLineNo">422</span><a id="line.422">                    0xADCD8A4FF8CDB553L, 0xAB3BBE9BDF6CFEBBL, 0xA8B3AC7AC893846FL, 0xA6352F1E5B3C1C03L, 0xA3C022438B5A54A1L,</a>
-<span class="sourceLineNo">423</span><a id="line.423">                    0xA15462308AA39537L, 0x9EF1CBB2C12396F1L, 0x9C983C1CCD7EBBEFL, 0x9A4791448CC53213L, 0x97FFA98129BA3FADL,</a>
-<span class="sourceLineNo">424</span><a id="line.424">                    0x95C063A933738415L, 0x93899F10BB346123L, 0x915B3B87796A2BA5L, 0x8F351956F9AE2877L, 0x8D171940CDB2C21FL,</a>
-<span class="sourceLineNo">425</span><a id="line.425">                    0x8B011C7CC701C767L, 0x88F304B73771E64FL, 0x86ECB40F3839F8BFL, 0x84EE0D14F7891817L, 0x82F6F2C80C8ACBFBL},</a>
-<span class="sourceLineNo">426</span><a id="line.426">            {0xFC58F81E60DA5B81L, 0xF8BF4767540B5989L, 0xF532BD2113F26E23L, 0xF1B32943D2EFE0BBL, 0xEE405C77315E8669L,</a>
-<span class="sourceLineNo">427</span><a id="line.427">                    0xEADA280FBCD3AD3DL, 0xE7805E0C788358CFL, 0xE432D1146EA76C1DL, 0xE0F154744AC8D6D1L, 0xDDBBBC1BFCCA5427L,</a>
-<span class="sourceLineNo">428</span><a id="line.428">                    0xDA91DC9C6494C03BL, 0xD7738B2506457D31L, 0xD4609D81C6BFD51FL, 0xD158EA18B082B6BBL, 0xCE5C47E7C0A49B07L,</a>
-<span class="sourceLineNo">429</span><a id="line.429">                    0xCB6A8E82BBD7D049L, 0xC88396110B59D367L, 0xC5A7374BA1B0CBF9L, 0xC2D54B7AE71AA8D7L, 0xC00DAC74AD91C33BL,</a>
-<span class="sourceLineNo">430</span><a id="line.430">                    0xBD50349A2C4B5513L, 0xBA9CBED60294744FL, 0xB7F3269A41F2A8D9L, 0xB55347DE7F6D94E1L, 0xB2BCFF1DEBE7886DL,</a>
-<span class="sourceLineNo">431</span><a id="line.431">                    0xB0302955736B386BL, 0xADACA401E3552FB7L, 0xAB324D1E173FED4DL, 0xA8C103212C99FE8FL, 0xA658A4FCBCCDBE79L,</a>
-<span class="sourceLineNo">432</span><a id="line.432">                    0xA3F9121B1DE2BB8FL, 0xA1A22A5DA9811E33L, 0x9F53CE1B0A3FBF0DL, 0x9D0DDE1D8F25F2AFL, 0x9AD03BA1854A6351L,</a>
-<span class="sourceLineNo">433</span><a id="line.433">                    0x989AC8539778A469L, 0x966D664F33C77D53L, 0x9447F81CF70A38ADL, 0x922A60B11E07955BL, 0x90148369FC614411L,</a>
-<span class="sourceLineNo">434</span><a id="line.434">                    0x8E06440E7917299BL, 0x8BFF86CC9091E98BL, 0x8A003037DC208843L, 0x880825481ED53CAFL, 0x86174B57D7ADD2E5L,</a>
-<span class="sourceLineNo">435</span><a id="line.435">                    0x842D8822D8F4489BL},</a>
-<span class="sourceLineNo">436</span><a id="line.436">            {0xFC62A7389C25206BL, 0xF8D25F3BE7FB8C7BL, 0xF54EF8CFAF339DF7L, 0xF1D84564732D7D13L,</a>
-<span class="sourceLineNo">437</span><a id="line.437">                    0xEE6E171301EB70CFL, 0xEB10409A15BA9BBFL, 0xE7BE955BFD72A71BL, 0xE478E95C4D2D4FBFL, 0xE13F113D975738FFL,</a>
-<span class="sourceLineNo">438</span><a id="line.438">                    0xDE10E23F2DFBD7D5L, 0xDAEE323AEC2EB61DL, 0xD7D6D7A30774B8DFL, 0xD4CAA97FE9107EFBL, 0xD1C97F6E0F1555D9L,</a>
-<span class="sourceLineNo">439</span><a id="line.439">                    0xCED3319BF524A8EDL, 0xCBE798C804BA364DL, 0xC9068E3E8CEBB6F7L, 0xC62FEBD7C1810C09L, 0xC3638BF5C14A6369L,</a>
-<span class="sourceLineNo">440</span><a id="line.440">                    0xC0A14982A39A269BL, 0xBDE8FFEE8CC8E4CFL, 0xBB3A8B2DC9A9C6D7L, 0xB895C7B6F1D67747L, 0xB5FA928110B9C405L,</a>
-<span class="sourceLineNo">441</span><a id="line.441">                    0xB368C901D54097BFL, 0xB0E0492BC81941F7L, 0xAE60F16C88695B1DL, 0xABEAA0AB0EE2E7F7L, 0xA97D3645F721B3EBL,</a>
-<span class="sourceLineNo">442</span><a id="line.442">                    0xA7189211CF3A2D29L, 0xA4BC94576D635F85L, 0xA2691DD24BA5FC11L, 0xA01E0FAEE97AAAF3L, 0x9DDB4B89334233FBL,</a>
-<span class="sourceLineNo">443</span><a id="line.443">                    0x9BA0B36AEF8257ADL, 0x996E29CA31D27F19L, 0x97439187D363B43DL, 0x9520CDEDF10F9ECFL, 0x9305C2AE6EDA8AB9L,</a>
-<span class="sourceLineNo">444</span><a id="line.444">                    0x90F253E180D4C5C5L, 0x8EE666043947E8FFL, 0x8CE1DDF71C1CE8BBL, 0x8AE4A0FCB7680B4DL, 0x88EE94B841082A9DL,</a>
-<span class="sourceLineNo">445</span><a id="line.445">                    0x86FF9F2C3946E83FL, 0x8517A6B91267BDD5L, 0x8336921BDD1414F1L},</a>
-<span class="sourceLineNo">446</span><a id="line.446">            {0xFC8C1FB2CA6255C7L, 0xF9242B1AADEBBE4FL,</a>
-<span class="sourceLineNo">447</span><a id="line.447">                    0xF5C7F90F371F9D33L, 0xF27760F60D177BB7L, 0xEF323AC106E0D2BFL, 0xEBF85EEC4778D02FL, 0xE8C9A67C604F3EFDL,</a>
-<span class="sourceLineNo">448</span><a id="line.448">                    0xE5A5EAFC7A3A080BL, 0xE28D067C84C30FE3L, 0xDF7ED38F6BBA81FBL, 0xDC7B2D4952F7E615L, 0xD981EF3DD834A6D9L,</a>
-<span class="sourceLineNo">449</span><a id="line.449">                    0xD692F57E5AEAFA9DL, 0xD3AE1C984A2467EFL, 0xD0D3419378236739L, 0xCE0241F073D3E9A5L, 0xCB3AFBA6E7EED305L,</a>
-<span class="sourceLineNo">450</span><a id="line.450">                    0xC87D4D23FFBCB9B5L, 0xC5C91548D1648307L, 0xC31E3368CDB2B5FBL, 0xC07C87483546A027L, 0xBDE3F11A9312A9D7L,</a>
-<span class="sourceLineNo">451</span><a id="line.451">                    0xBB5451813C1D76CFL, 0xB8CD8989D471B091L, 0xB64F7AACD92A95ABL, 0xB3DA06CC2F8BA769L, 0xB16D1031B9120BFDL,</a>
-<span class="sourceLineNo">452</span><a id="line.452">                    0xAF08798DEC6E77A1L, 0xACAC25F67356AA49L, 0xAA57F8E4CD1DCA0FL, 0xA80BD634F6031C45L, 0xA5C7A2241326D801L,</a>
-<span class="sourceLineNo">453</span><a id="line.453">                    0xA38B414F2315052DL, 0xA15698B1B2D69281L, 0x9F298DA497790377L, 0x9D0405DCABFD4D61L, 0x9AE5E769939EAFBBL,</a>
-<span class="sourceLineNo">454</span><a id="line.454">                    0x98CF18B48062888FL, 0x96BF807EFDE25957L, 0x94B705E1C04163FBL, 0x92B5904B773F79F5L, 0x90BB077FA55AC933L,</a>
-<span class="sourceLineNo">455</span><a id="line.455">                    0x8EC753957AF2A37DL, 0x8CDA5CF6B55D6D8DL, 0x8AF40C5E81E41293L, 0x89144AD864958831L, 0x873B01BF22E51D3DL,</a>
-<span class="sourceLineNo">456</span><a id="line.456">                    0x85681ABBB2067B7BL},</a>
-<span class="sourceLineNo">457</span><a id="line.457">            {0xFC7A9A2A032A8977L, 0xF9019A3A031D55E3L, 0xF594D4886ED4F4B3L, 0xF2341E076B6CF033L,</a>
-<span class="sourceLineNo">458</span><a id="line.458">                    0xEEDF4C40B6E4AD29L, 0xEB963553925602DFL, 0xE858AFF2B3835555L, 0xE52693623DA357C7L, 0xE1FFB775C150F88DL,</a>
-<span class="sourceLineNo">459</span><a id="line.459">                    0xDEE3F48E43865153L, 0xDBD323984B89CEFBL, 0xD8CD1E09F7B51BF1L, 0xD5D1BDE118FDADE3L, 0xD2E0DDA155272C7BL,</a>
-<span class="sourceLineNo">460</span><a id="line.460">                    0xCFFA58524F883AE1L, 0xCD1E097DD84A8003L, 0xCA4BCD2E220F1B75L, 0xC7837FEBFDE104C1L, 0xC4C4FEBD1D5F2291L,</a>
-<span class="sourceLineNo">461</span><a id="line.461">                    0xC21027225B083507L, 0xBF64D7160892FBD3L, 0xBCC2ED0A433D4C8DL, 0xBA2A47E74DFD18D1L, 0xB79AC709F17EADA9L,</a>
-<span class="sourceLineNo">462</span><a id="line.462">                    0xB5144A41E1DBBE89L, 0xB296B1D029F71665L, 0xB021DE659C690FE7L, 0xADB5B12149E93C39L, 0xAB520B8EFD21E485L,</a>
-<span class="sourceLineNo">463</span><a id="line.463">                    0xA8F6CFA5BBDA566FL, 0xA6A3DFC64D652EFBL, 0xA4591EB9C640198DL, 0xA2166FB018D2B9ADL, 0x9FDBB63EAB3AB70DL,</a>
-<span class="sourceLineNo">464</span><a id="line.464">                    0x9DA8D65EF213227BL, 0x9B7DB46D1025A921L, 0x995A35267AF44947L, 0x973E3DA8A40A7899L, 0x9529B36FA704E833L,</a>
-<span class="sourceLineNo">465</span><a id="line.465">                    0x931C7C54FC3F4DBFL, 0x91167E8E3017D383L, 0x8F17A0AB9EB80AE7L, 0x8D1FC997345375ABL, 0x8B2EE09331CBF23FL,</a>
-<span class="sourceLineNo">466</span><a id="line.466">                    0x8944CD38F5AC8ED3L, 0x87617777C96B7D5DL, 0x8584C793B2E41889L, 0x83AEA62449FA1E85L, 0x81DEFC1392577B03L},</a>
-<span class="sourceLineNo">467</span><a id="line.467">            {0xFC89901CE7581669L, 0xF91F1DA477858FEDL, 0xF5C07F1263DFFDA1L, 0xF26D8B7221C57113L, 0xEF261A5CF6D22527L,</a>
-<span class="sourceLineNo">468</span><a id="line.468">                    0xEBEA03F80DD3CBDDL, 0xE8B920F29261309BL, 0xE5934A83D2FF2F77L, 0xE2785A6969BC515DL, 0xDF682AE56B2CABA7L,</a>
-<span class="sourceLineNo">469</span><a id="line.469">                    0xDC6296BC9BAFEF53L, 0xD9677934AAEBE025L, 0xD676AE127565B7BFL, 0xD39011984C254301L, 0xD0B38084424CD14FL,</a>
-<span class="sourceLineNo">470</span><a id="line.470">                    0xCDE0D80E809155D9L, 0xCB17F5E79E7E6275L, 0xC858B8370171E9F3L, 0xC5A2FD99413BFD59L, 0xC2F6A51E924EFC1DL,</a>
-<span class="sourceLineNo">471</span><a id="line.471">                    0xC0538E49356CF2EDL, 0xBDB9990BECBF2773L, 0xBB28A5C87645111DL, 0xB8A0954E0B884035L, 0xB62148D7E682F43BL,</a>
-<span class="sourceLineNo">472</span><a id="line.472">                    0xB3AAA20BCBA761E3L, 0xB13C82F898F5E761L, 0xAED6CE14DA10AB17L, 0xAC79663D613B5D61L, 0xAA242EB3E536122FL,</a>
-<span class="sourceLineNo">473</span><a id="line.473">                    0xA7D70B1DA3E261EBL, 0xA591DF8209A23B9BL, 0xA35490495D600B75L, 0xA11F023B713011C9L, 0x9EF11A7E577AFE2FL,</a>
-<span class="sourceLineNo">474</span><a id="line.474">                    0x9CCABE951CA219C3L, 0x9AABD45E850D81E9L, 0x98944213CF952A87L, 0x9683EE477C359391L, 0x947ABFE417015227L,</a>
-<span class="sourceLineNo">475</span><a id="line.475">                    0x92789E2B0740C0CFL, 0x907D70B362B15D3FL, 0x8E891F68C4D68C4DL, 0x8C9B928A2A4DAE11L, 0x8AB4B2A8D0179CD7L,</a>
-<span class="sourceLineNo">476</span><a id="line.476">                    0x88D468A716C9E203L, 0x86FA9DB7699A1B09L, 0x85273B5B293637D3L, 0x835A2B619A5C69D3L, 0x819357E6D825C8C5L}</a>
-<span class="sourceLineNo">477</span><a id="line.477">    };</a>
-<span class="sourceLineNo">478</span><a id="line.478"></a>
-<span class="sourceLineNo">479</span><a id="line.479">    public static final PhantomNoise instance2D = new PhantomNoise(goldenLong[2][0], 2);</a>
-<span class="sourceLineNo">480</span><a id="line.480">    public static final PhantomNoise instance3D = new PhantomNoise(goldenLong[3][0], 3);</a>
-<span class="sourceLineNo">481</span><a id="line.481">    public static final PhantomNoise instance4D = new PhantomNoise(goldenLong[4][0], 4);</a>
-<span class="sourceLineNo">482</span><a id="line.482">    public static final PhantomNoise instance5D = new PhantomNoise(goldenLong[5][0], 5);</a>
-<span class="sourceLineNo">483</span><a id="line.483">    public static final PhantomNoise instance6D = new PhantomNoise(goldenLong[6][0], 6);</a>
-<span class="sourceLineNo">484</span><a id="line.484">    public static final PhantomNoise instance7D = new PhantomNoise(goldenLong[7][0], 7);</a>
-<span class="sourceLineNo">485</span><a id="line.485">    public static final PhantomNoise instance8D = new PhantomNoise(goldenLong[8][0], 8);</a>
-<span class="sourceLineNo">486</span><a id="line.486">}</a>
+<div class="source-container">
+<pre><span class="source-line-no">001</span><span id="line.1">package squidpony.squidmath;</span>
+<span class="source-line-no">002</span><span id="line.2"></span>
+<span class="source-line-no">003</span><span id="line.3">import squidpony.annotation.Beta;</span>
+<span class="source-line-no">004</span><span id="line.4"></span>
+<span class="source-line-no">005</span><span id="line.5">/**</span>
+<span class="source-line-no">006</span><span id="line.6"> * Arbitrary-dimensional continuous noise that maintains most of the same style even as the dimensionality gets fairly</span>
+<span class="source-line-no">007</span><span id="line.7"> * high. If you know what dimension of noise you need, and it's covered by {@link FoamNoise} (meaning it's 2D, 3D, 4D,</span>
+<span class="source-line-no">008</span><span id="line.8"> * or 6D noise), then using FoamNoise will give you a significantly faster version of approximately the same algorithm.</span>
+<span class="source-line-no">009</span><span id="line.9"> * If your noise has an unknown dimension count, this won't really work either, since PhantomNoise needs to do some</span>
+<span class="source-line-no">010</span><span id="line.10"> * preparation and allocation for a specific dimension in its constructor. But, if you know what the range of dimensions</span>
+<span class="source-line-no">011</span><span id="line.11"> * is, and the lowest is at least 2D, you can make one PhantomNoise per dimension easily enough.</span>
+<span class="source-line-no">012</span><span id="line.12"> * &lt;br&gt;</span>
+<span class="source-line-no">013</span><span id="line.13"> * The algorithm this uses is surprisingly simple. To produce N-D noise, it makes N+1 calls to N-D value noise, with</span>
+<span class="source-line-no">014</span><span id="line.14"> * each call using a different rotation of the same size of grid. It "domain warps" value noise calls after the first,</span>
+<span class="source-line-no">015</span><span id="line.15"> * adding the previous value noise result to one coordinate of the next value noise call. To get a PhantomNoise result,</span>
+<span class="source-line-no">016</span><span id="line.16"> * it averages all the value noise calls and curves the output range so it doesn't get more biased toward 0 with higher</span>
+<span class="source-line-no">017</span><span id="line.17"> * dimensions (which would happen with a pure average of a rising number of variables). The curving here uses the</span>
+<span class="source-line-no">018</span><span id="line.18"> * {@link MathExtras#barronSpline(double, double, double)} method for adjustable bias/gain; it looks</span>
+<span class="source-line-no">019</span><span id="line.19"> * &lt;a href="https://i.imgur.com/fchQOuP.png"&gt;like this for 2D&lt;/a&gt;,</span>
+<span class="source-line-no">020</span><span id="line.20"> * &lt;a href="https://i.imgur.com/vpc2XGq.png"&gt;like this for 3D&lt;/a&gt;, and</span>
+<span class="source-line-no">021</span><span id="line.21"> * &lt;a href="https://i.imgur.com/fNWJOEp.png"&gt;like this for 4D&lt;/a&gt;.</span>
+<span class="source-line-no">022</span><span id="line.22"> * There's some preparation this does in the constructor, which eliminates the need for allocations during noise</span>
+<span class="source-line-no">023</span><span id="line.23"> * generation. For N-D PhantomNoise, this makes N+1 double arrays, one for each rotation for a value noise call, and</span>
+<span class="source-line-no">024</span><span id="line.24"> * each rotation array has N items. The rotations match the vertices of an N-simplex, so a triangle in 2D, a tetrahedron</span>
+<span class="source-line-no">025</span><span id="line.25"> * in 3D, etc. It also stores two working-room arrays, each with N+1 double items, two frequently-edited int arrays of</span>
+<span class="source-line-no">026</span><span id="line.26"> * the floors of doubles it's using, and of modified versions of those floors to be hashed (each with N+1 items), and</span>
+<span class="source-line-no">027</span><span id="line.27"> * interestingly, a {@link CrossHash.Curlup} hash functor, seeded in the PhantomNoise constructor.</span>
+<span class="source-line-no">028</span><span id="line.28"> * &lt;br&gt;</span>
+<span class="source-line-no">029</span><span id="line.29"> * At higher dimensions, Simplex noise (what {@link SeededNoise} produces) starts to change how it looks compared to</span>
+<span class="source-line-no">030</span><span id="line.30"> * lower dimensions. PhantomNoise, on the other hand, maintains a fairly consistent blob-like organic look, such as</span>
+<span class="source-line-no">031</span><span id="line.31"> * &lt;a href="https://i.imgur.com/wxomHAc.png"&gt;this 6D PhantomNoise sample&lt;/a&gt;. Red and purple mark the highest and lowest</span>
+<span class="source-line-no">032</span><span id="line.32"> * possible values, respectively, and while they appear plenty in PhantomNoise, they are absent in</span>
+<span class="source-line-no">033</span><span id="line.33"> * &lt;a href="https://i.imgur.com/2t7hRtk.png"&gt;this 6D SeededNoise sample&lt;/a&gt;. There may be differences in how the inputs</span>
+<span class="source-line-no">034</span><span id="line.34"> * are handled between the two samples, but 6D Simplex generally suffers from "the curse of dimensionality" more-so than</span>
+<span class="source-line-no">035</span><span id="line.35"> * PhantomNoise (or Perlin noise like {@link ClassicNoise}, somewhat surprisingly), with the "curse" affecting the</span>
+<span class="source-line-no">036</span><span id="line.36"> * density of information in higher-dimensional space.</span>
+<span class="source-line-no">037</span><span id="line.37"> * &lt;br&gt;</span>
+<span class="source-line-no">038</span><span id="line.38"> * This is marked Beta because it's still pretty slow at higher dimensions, and if some optimization becomes available</span>
+<span class="source-line-no">039</span><span id="line.39"> * here, I'll take it and the output will change from this version.</span>
+<span class="source-line-no">040</span><span id="line.40"> */</span>
+<span class="source-line-no">041</span><span id="line.41">@Beta</span>
+<span class="source-line-no">042</span><span id="line.42">public class PhantomNoise {</span>
+<span class="source-line-no">043</span><span id="line.43">    private final CrossHash.Curlup yolk;</span>
+<span class="source-line-no">044</span><span id="line.44">    public final int dim;</span>
+<span class="source-line-no">045</span><span id="line.45">    private final double inverse, sharpness;</span>
+<span class="source-line-no">046</span><span id="line.46">    private final double[] working, points;</span>
+<span class="source-line-no">047</span><span id="line.47">    private final double[][] vertices;</span>
+<span class="source-line-no">048</span><span id="line.48">    private final int[] floors, hashFloors;</span>
+<span class="source-line-no">049</span><span id="line.49">    public PhantomNoise() {</span>
+<span class="source-line-no">050</span><span id="line.50">        this(0xFEEDBEEF1337CAFEL, 3);</span>
+<span class="source-line-no">051</span><span id="line.51">    }</span>
+<span class="source-line-no">052</span><span id="line.52"></span>
+<span class="source-line-no">053</span><span id="line.53">    public PhantomNoise(long seed, int dimension) {</span>
+<span class="source-line-no">054</span><span id="line.54">        this(seed, dimension, Math.max(2, dimension));</span>
+<span class="source-line-no">055</span><span id="line.55">    }</span>
+<span class="source-line-no">056</span><span id="line.56">    public PhantomNoise(long seed, int dimension, double sharpness) {</span>
+<span class="source-line-no">057</span><span id="line.57">        dim = Math.max(2, dimension);</span>
+<span class="source-line-no">058</span><span id="line.58">        this.sharpness = 0.8375 * sharpness;</span>
+<span class="source-line-no">059</span><span id="line.59">        working = new double[dim+1];</span>
+<span class="source-line-no">060</span><span id="line.60">        points = new double[dim+1];</span>
+<span class="source-line-no">061</span><span id="line.61">        vertices = new double[dim+1][dim];</span>
+<span class="source-line-no">062</span><span id="line.62">        double id = -1.0 / dim;</span>
+<span class="source-line-no">063</span><span id="line.63">        vertices[0][0] = 1.0;</span>
+<span class="source-line-no">064</span><span id="line.64">        for (int v = 1; v &lt;= dim; v++) {</span>
+<span class="source-line-no">065</span><span id="line.65">            vertices[v][0] = id;</span>
+<span class="source-line-no">066</span><span id="line.66">        }</span>
+<span class="source-line-no">067</span><span id="line.67">        for (int d = 1; d &lt; dim; d++) {</span>
+<span class="source-line-no">068</span><span id="line.68">            double t = 0.0;</span>
+<span class="source-line-no">069</span><span id="line.69">            for (int i = 0; i &lt; d; i++) {</span>
+<span class="source-line-no">070</span><span id="line.70">                t += vertices[d][i] * vertices[d][i];</span>
+<span class="source-line-no">071</span><span id="line.71">            }</span>
+<span class="source-line-no">072</span><span id="line.72">            vertices[d][d] = Math.sqrt(1.0 - t);</span>
+<span class="source-line-no">073</span><span id="line.73">            t = (id - t) / vertices[d][d];</span>
+<span class="source-line-no">074</span><span id="line.74">            for (int v = d + 1; v &lt;= dim; v++) {</span>
+<span class="source-line-no">075</span><span id="line.75">                vertices[v][d] = t;</span>
+<span class="source-line-no">076</span><span id="line.76">            }</span>
+<span class="source-line-no">077</span><span id="line.77">        }</span>
+<span class="source-line-no">078</span><span id="line.78">        for (int v = 0; v &lt;= dim; v++) {</span>
+<span class="source-line-no">079</span><span id="line.79">            final double theta = NumberTools.atan2(vertices[v][1], vertices[v][0]) + 0.6180339887498949,</span>
+<span class="source-line-no">080</span><span id="line.80">                    dist = Math.sqrt(vertices[v][1] * vertices[v][1] + vertices[v][0] * vertices[v][0]);</span>
+<span class="source-line-no">081</span><span id="line.81">            vertices[v][0] = NumberTools.cos(theta) * dist;</span>
+<span class="source-line-no">082</span><span id="line.82">            vertices[v][1] = NumberTools.sin(theta) * dist;</span>
+<span class="source-line-no">083</span><span id="line.83">        }</span>
+<span class="source-line-no">084</span><span id="line.84">        floors = new int[dim+1];</span>
+<span class="source-line-no">085</span><span id="line.85">        hashFloors = new int[dim+1];</span>
+<span class="source-line-no">086</span><span id="line.86">        yolk = new CrossHash.Curlup(seed);</span>
+<span class="source-line-no">087</span><span id="line.87">        inverse = 1.0 / (dim + 1.0);</span>
+<span class="source-line-no">088</span><span id="line.88">//        printDebugInfo();</span>
+<span class="source-line-no">089</span><span id="line.89">    }</span>
+<span class="source-line-no">090</span><span id="line.90"></span>
+<span class="source-line-no">091</span><span id="line.91">    protected double valueNoise()</span>
+<span class="source-line-no">092</span><span id="line.92">    {</span>
+<span class="source-line-no">093</span><span id="line.93">        hashFloors[dim] = NumberTools.doubleToMixedIntBits(working[dim]);</span>
+<span class="source-line-no">094</span><span id="line.94">        for (int i = 0; i &lt; dim; i++) {</span>
+<span class="source-line-no">095</span><span id="line.95">            floors[i] = working[i] &gt;= 0.0 ? (int)working[i] : (int)working[i] - 1;</span>
+<span class="source-line-no">096</span><span id="line.96">            working[i] -= floors[i];</span>
+<span class="source-line-no">097</span><span id="line.97">            working[i] *= working[i] * (3.0 - 2.0 * working[i]);</span>
+<span class="source-line-no">098</span><span id="line.98">        }</span>
+<span class="source-line-no">099</span><span id="line.99">        double sum = 0.0, temp;</span>
+<span class="source-line-no">100</span><span id="line.100">        final int limit = 1 &lt;&lt; dim;</span>
+<span class="source-line-no">101</span><span id="line.101">        int bit;</span>
+<span class="source-line-no">102</span><span id="line.102">        for (int i = 0; i &lt; limit; i++) {</span>
+<span class="source-line-no">103</span><span id="line.103">            temp = 1.0;</span>
+<span class="source-line-no">104</span><span id="line.104">            for (int j = 0; j &lt; dim; j++) {</span>
+<span class="source-line-no">105</span><span id="line.105">                bit = (i &gt;&gt;&gt; j &amp; 1);</span>
+<span class="source-line-no">106</span><span id="line.106">                temp *= bit + (1|-bit) * working[j];</span>
+<span class="source-line-no">107</span><span id="line.107">                hashFloors[j] = floors[j] - bit;</span>
+<span class="source-line-no">108</span><span id="line.108">            }</span>
+<span class="source-line-no">109</span><span id="line.109">            sum += temp * yolk.hash(hashFloors);</span>
+<span class="source-line-no">110</span><span id="line.110">        }</span>
+<span class="source-line-no">111</span><span id="line.111">        return (sum * 0x1p-32 + 0.5);</span>
+<span class="source-line-no">112</span><span id="line.112">    }</span>
+<span class="source-line-no">113</span><span id="line.113"></span>
+<span class="source-line-no">114</span><span id="line.114">    protected double valueNoise2D()</span>
+<span class="source-line-no">115</span><span id="line.115">    {</span>
+<span class="source-line-no">116</span><span id="line.116">        hashFloors[2] = NumberTools.doubleToMixedIntBits(working[2]);</span>
+<span class="source-line-no">117</span><span id="line.117">        for (int i = 0; i &lt; 2; i++) {</span>
+<span class="source-line-no">118</span><span id="line.118">            floors[i] = working[i] &gt;= 0.0 ? (int)working[i] : (int)working[i] - 1;</span>
+<span class="source-line-no">119</span><span id="line.119">            working[i] -= floors[i];</span>
+<span class="source-line-no">120</span><span id="line.120">            working[i] *= working[i] * (3.0 - 2.0 * working[i]);</span>
+<span class="source-line-no">121</span><span id="line.121">        }</span>
+<span class="source-line-no">122</span><span id="line.122">        double sum = 0.0, temp;</span>
+<span class="source-line-no">123</span><span id="line.123">        int bit;</span>
+<span class="source-line-no">124</span><span id="line.124">        for (int i = 0; i &lt; 4; i++) {</span>
+<span class="source-line-no">125</span><span id="line.125">            temp = 1.0;</span>
+<span class="source-line-no">126</span><span id="line.126">            </span>
+<span class="source-line-no">127</span><span id="line.127">            bit = i;</span>
+<span class="source-line-no">128</span><span id="line.128">            temp *= bit + (1|-bit) * working[0];</span>
+<span class="source-line-no">129</span><span id="line.129">            hashFloors[0] = floors[0] - bit;</span>
+<span class="source-line-no">130</span><span id="line.130">            </span>
+<span class="source-line-no">131</span><span id="line.131">            bit = i &gt;&gt;&gt; 1;</span>
+<span class="source-line-no">132</span><span id="line.132">            temp *= bit + (1|-bit) * working[1];</span>
+<span class="source-line-no">133</span><span id="line.133">            hashFloors[1] = floors[1] - bit;</span>
+<span class="source-line-no">134</span><span id="line.134">            </span>
+<span class="source-line-no">135</span><span id="line.135">            sum += temp * yolk.hash(hashFloors);</span>
+<span class="source-line-no">136</span><span id="line.136">        }</span>
+<span class="source-line-no">137</span><span id="line.137">        return (sum * 0x1p-32 + 0.5);</span>
+<span class="source-line-no">138</span><span id="line.138">    }</span>
+<span class="source-line-no">139</span><span id="line.139">    </span>
+<span class="source-line-no">140</span><span id="line.140">    public double getNoise(double... args) {</span>
+<span class="source-line-no">141</span><span id="line.141">        for (int v = 0; v &lt;= dim; v++) {</span>
+<span class="source-line-no">142</span><span id="line.142">            points[v] = 0.0;</span>
+<span class="source-line-no">143</span><span id="line.143">            for (int d = 0; d &lt; dim; d++) {</span>
+<span class="source-line-no">144</span><span id="line.144">                points[v] += args[d] * vertices[v][d];</span>
+<span class="source-line-no">145</span><span id="line.145">            }</span>
+<span class="source-line-no">146</span><span id="line.146">        }</span>
+<span class="source-line-no">147</span><span id="line.147">        working[dim] = 0.6180339887498949; // inverse golden ratio; irrational, so its bit representation nears random</span>
+<span class="source-line-no">148</span><span id="line.148">        double result = 0.0, warp = 0.0;</span>
+<span class="source-line-no">149</span><span id="line.149">        for (int i = 0; i &lt;= dim; i++) {</span>
+<span class="source-line-no">150</span><span id="line.150">            for (int j = 0, d = 0; j &lt; dim; j++, d++) {</span>
+<span class="source-line-no">151</span><span id="line.151">                if(d == i) d++;</span>
+<span class="source-line-no">152</span><span id="line.152">                working[j] = points[d];</span>
+<span class="source-line-no">153</span><span id="line.153">            }</span>
+<span class="source-line-no">154</span><span id="line.154">            working[0] += warp;</span>
+<span class="source-line-no">155</span><span id="line.155">            warp = valueNoise();</span>
+<span class="source-line-no">156</span><span id="line.156">            result += warp;</span>
+<span class="source-line-no">157</span><span id="line.157">            working[dim] += -0.423310825130748; // e - pi</span>
+<span class="source-line-no">158</span><span id="line.158">        }</span>
+<span class="source-line-no">159</span><span id="line.159">        result *= inverse;</span>
+<span class="source-line-no">160</span><span id="line.160">        return MathExtras.barronSpline(result, sharpness, 0.5) * 2.0 - 1.0;</span>
+<span class="source-line-no">161</span><span id="line.161">//        return (result &lt;= 0.5)</span>
+<span class="source-line-no">162</span><span id="line.162">//                ? Math.pow(result * 2, dim) - 1.0</span>
+<span class="source-line-no">163</span><span id="line.163">//                : Math.pow((result - 1) * 2, dim) * (((dim &amp; 1) &lt;&lt; 1) - 1) + 1.0;</span>
+<span class="source-line-no">164</span><span id="line.164">        </span>
+<span class="source-line-no">165</span><span id="line.165">//        for (int i = 1; i &lt; dim; i++) {</span>
+<span class="source-line-no">166</span><span id="line.166">//            result *= result * (3.0 - 2.0 * result);</span>
+<span class="source-line-no">167</span><span id="line.167">//        }</span>
+<span class="source-line-no">168</span><span id="line.168">//        return  (result * result * (6.0 - 4.0 * result) - 1.0);</span>
+<span class="source-line-no">169</span><span id="line.169">    }</span>
+<span class="source-line-no">170</span><span id="line.170"></span>
+<span class="source-line-no">171</span><span id="line.171">    public double getNoise2D(double x, double y) {</span>
+<span class="source-line-no">172</span><span id="line.172">        points[0] = -0.4161468365471422 * x + 0.9092974268256818 * y;</span>
+<span class="source-line-no">173</span><span id="line.173">        points[1] = -0.5794012529532914 * x + -0.8150424455671962 * y;</span>
+<span class="source-line-no">174</span><span id="line.174">        points[2] = 0.9955480895004332 * x + -0.09425498125848553 * y;</span>
+<span class="source-line-no">175</span><span id="line.175">        working[2] = 0.6180339887498949;</span>
+<span class="source-line-no">176</span><span id="line.176">        double result = 0.0, warp = 0.0;</span>
+<span class="source-line-no">177</span><span id="line.177">        for (int i = 0; i &lt;= 2; i++) {</span>
+<span class="source-line-no">178</span><span id="line.178">            for (int j = 0, d = 0; j &lt; 2; j++, d++) {</span>
+<span class="source-line-no">179</span><span id="line.179">                if(d == i) d++;</span>
+<span class="source-line-no">180</span><span id="line.180">                working[j] = points[d] + warp;</span>
+<span class="source-line-no">181</span><span id="line.181">            }</span>
+<span class="source-line-no">182</span><span id="line.182">            warp = valueNoise2D();</span>
+<span class="source-line-no">183</span><span id="line.183">            result += warp;</span>
+<span class="source-line-no">184</span><span id="line.184">            working[2] += -0.423310825130748;</span>
+<span class="source-line-no">185</span><span id="line.185">        }</span>
+<span class="source-line-no">186</span><span id="line.186">        result *= inverse;</span>
+<span class="source-line-no">187</span><span id="line.187">        return MathExtras.barronSpline(result, sharpness, 0.5) * 2.0 - 1.0;</span>
+<span class="source-line-no">188</span><span id="line.188">        </span>
+<span class="source-line-no">189</span><span id="line.189">//        return MathExtras.barronSpline(result, dim * (2.0 + 0.5 * dim), 0.5) * 2.0 - 1.0;</span>
+<span class="source-line-no">190</span><span id="line.190">        </span>
+<span class="source-line-no">191</span><span id="line.191">//        return (result &lt;= 0.5)</span>
+<span class="source-line-no">192</span><span id="line.192">//                ? (result * result * 4) - 1.0</span>
+<span class="source-line-no">193</span><span id="line.193">//                : ((result - 1) * (result - 1) * -4) + 1.0;</span>
+<span class="source-line-no">194</span><span id="line.194"></span>
+<span class="source-line-no">195</span><span id="line.195">//        result *= result * (3.0 - 2.0 * result);</span>
+<span class="source-line-no">196</span><span id="line.196">//        return  (result * result * (6.0 - 4.0 * result) - 1.0);</span>
+<span class="source-line-no">197</span><span id="line.197">    }</span>
+<span class="source-line-no">198</span><span id="line.198">    </span>
+<span class="source-line-no">199</span><span id="line.199">    void printDebugInfo(){         </span>
+<span class="source-line-no">200</span><span id="line.200">        System.out.println("PhantomNoise with Dimension " + dim + ":");</span>
+<span class="source-line-no">201</span><span id="line.201">        final String dimNames = "xyzwuvabcdefghijklmnopqrst";</span>
+<span class="source-line-no">202</span><span id="line.202">        for (int v = 0; v &lt;= dim; v++) {</span>
+<span class="source-line-no">203</span><span id="line.203">            System.out.print("points[" + v + "] = ");</span>
+<span class="source-line-no">204</span><span id="line.204">            for (int i = 0; i &lt; dim; i++) {</span>
+<span class="source-line-no">205</span><span id="line.205">                if(vertices[v][i] != 0.0) </span>
+<span class="source-line-no">206</span><span id="line.206">                {</span>
+<span class="source-line-no">207</span><span id="line.207">                    if(i &gt; 0)</span>
+<span class="source-line-no">208</span><span id="line.208">                        System.out.print(" + ");</span>
+<span class="source-line-no">209</span><span id="line.209">                    if(vertices[v][i] == 1.0)</span>
+<span class="source-line-no">210</span><span id="line.210">                        System.out.print(dimNames.charAt(i % dimNames.length()));</span>
+<span class="source-line-no">211</span><span id="line.211">                    else </span>
+<span class="source-line-no">212</span><span id="line.212">                        System.out.print(dimNames.charAt(i % dimNames.length()) + " * " + vertices[v][i]);</span>
+<span class="source-line-no">213</span><span id="line.213">                }</span>
+<span class="source-line-no">214</span><span id="line.214">            }</span>
+<span class="source-line-no">215</span><span id="line.215">            System.out.println(';');</span>
+<span class="source-line-no">216</span><span id="line.216">        }</span>
+<span class="source-line-no">217</span><span id="line.217">    }</span>
+<span class="source-line-no">218</span><span id="line.218"></span>
+<span class="source-line-no">219</span><span id="line.219">    public static final double[][] goldenDouble = {</span>
+<span class="source-line-no">220</span><span id="line.220">            {0.6180339887498949},</span>
+<span class="source-line-no">221</span><span id="line.221">            {0.7548776662466927, 0.5698402909980532},</span>
+<span class="source-line-no">222</span><span id="line.222">            {0.8191725133961645, 0.6710436067037893, 0.5497004779019703},</span>
+<span class="source-line-no">223</span><span id="line.223">            {0.8566748838545029, 0.733891856627126, 0.6287067210378087, 0.5385972572236101},</span>
+<span class="source-line-no">224</span><span id="line.224">            {0.8812714616335696, 0.7766393890897682, 0.6844301295853426, 0.6031687406857282, 0.5315553977157913},</span>
+<span class="source-line-no">225</span><span id="line.225">            {0.8986537126286993, 0.8075784952213448, 0.7257334129697598,</span>
+<span class="source-line-no">226</span><span id="line.226">                    0.6521830259439717, 0.5860866975779695, 0.5266889867007359}</span>
+<span class="source-line-no">227</span><span id="line.227">    };</span>
+<span class="source-line-no">228</span><span id="line.228"></span>
+<span class="source-line-no">229</span><span id="line.229">    public static final long[][] goldenLong = {</span>
+<span class="source-line-no">230</span><span id="line.230">            {0x9E3779B97F4A7C15L},</span>
+<span class="source-line-no">231</span><span id="line.231">            {0xC13FA9A902A6328FL, 0x91E10DA5C79E7B1DL},</span>
+<span class="source-line-no">232</span><span id="line.232">            {0xD1B54A32D192ED03L, 0xABC98388FB8FAC03L, 0x8CB92BA72F3D8DD7L},</span>
+<span class="source-line-no">233</span><span id="line.233">            {0xDB4F0B9175AE2165L, 0xBBE0563303A4615FL, 0xA0F2EC75A1FE1575L, 0x89E182857D9ED689L},</span>
+<span class="source-line-no">234</span><span id="line.234">            {0xE19B01AA9D42C633L, 0xC6D1D6C8ED0C9631L, 0xAF36D01EF7518DBBL, 0x9A69443F36F710E7L, 0x881403B9339BD42DL},</span>
+<span class="source-line-no">235</span><span id="line.235">            {0xE60E2B722B53AEEBL, 0xCEBD76D9EDB6A8EFL, 0xB9C9AA3A51D00B65L, 0xA6F5777F6F88983FL, 0x9609C71EB7D03F7BL,</span>
+<span class="source-line-no">236</span><span id="line.236">                    0x86D516E50B04AB1BL},</span>
+<span class="source-line-no">237</span><span id="line.237">            {0xE95E1DD17D35800DL, 0xD4BC74E13F3C782FL, 0xC1EDBC5B5C68AC25L, 0xB0C8AC50F0EDEF5DL,</span>
+<span class="source-line-no">238</span><span id="line.238">                    0xA127A31C56D1CDB5L, 0x92E852C80D153DB3L, 0x85EB75C3024385C3L},</span>
+<span class="source-line-no">239</span><span id="line.239">            {0xEBEDEED9D803C815L, 0xD96EB1A810CAAF5FL, 0xC862B36DAF790DD5L, 0xB8ACD90C142FE10BL,</span>
+<span class="source-line-no">240</span><span id="line.240">                    0xAA324F90DED86B69L, 0x9CDA5E693FEA10AFL, 0x908E3D2C82567A73L, 0x8538ECB5BD456EA3L},</span>
+<span class="source-line-no">241</span><span id="line.241">            {0xEDF84ED4185625ADL, 0xDD35B2CD88449739L, 0xCDA146AB203DAD89L, 0xBF25C1FA63435003L,</span>
+<span class="source-line-no">242</span><span id="line.242">                    0xB1AF5C04970044E1L, 0xA52BB0C808635D87L, 0x9989A7D8994B239DL, 0x8EB95D05457AA16BL, 0x84AC0AA2B7D7E1C5L},</span>
+<span class="source-line-no">243</span><span id="line.243">            {0xEFA239AADFF080FFL, 0xE0504E7A17640707L, 0xD1F91E9D401F2CD3L, 0xC48CA286CD4C4B4DL, 0xB7FBD901347B3E45L,</span>
+<span class="source-line-no">244</span><span id="line.244">                    0xAC38B6695442DF75L, 0xA13614FB593F897DL, 0x96E7A62094FC418FL, 0x8D41E4ADD988EA91L, 0x843A0802F95827ADL},</span>
+<span class="source-line-no">245</span><span id="line.245">            {0xF104272092F57C5DL, 0xE2E8D1BC93B1BCBFL, 0xD5A0DBC4254CF233L, 0xC91FE60DC666F779L, 0xBD5A4AD0037BF1F9L,</span>
+<span class="source-line-no">246</span><span id="line.246">                    0xB24512C7D7E9D953L, 0xA7D5EB01A237A78BL, 0x9E031B3B27A07ECDL, 0x94C37CD5B1796B93L, 0x8C0E724FD5446177L,</span>
+<span class="source-line-no">247</span><span id="line.247">                    0x83DBDF3EF6A3B35BL},</span>
+<span class="source-line-no">248</span><span id="line.248">            {0xF22EECF611D9436FL, 0xE51CC09B3D83CAFFL, 0xD8BF2D5017352FF9L, 0xCD0C73D06EEC786BL,</span>
+<span class="source-line-no">249</span><span id="line.249">                    0xC1FB5B846B56C221L, 0xB7832B3BCCB1A38BL, 0xAD9BA24D9CF0D513L, 0xA43CF216E1960C65L, 0x9B5FB7D32E8D899FL,</span>
+<span class="source-line-no">250</span><span id="line.250">                    0x92FCF6CA403AB5A5L, 0x8B0E12CE05E62F5BL, 0x838CCB04C5269A59L},</span>
+<span class="source-line-no">251</span><span id="line.251">            {0xF32E81F362A69FDDL, 0xE701532702B6F82DL,</span>
+<span class="source-line-no">252</span><span id="line.252">                    0xDB70396E42C39DCBL, 0xD073641228368B05L, 0xC60366898AB7FC8FL, 0xBC193374F397645DL, 0xB2AE17DAC99253B9L,</span>
+<span class="source-line-no">253</span><span id="line.253">                    0xA9BBB6A090C6F39DL, 0xA13C043E2FE475FBL, 0x992942A852DFBF6FL, 0x917DFD6F28AFDA5DL, 0x8A35060EDCF5BD75L,</span>
+<span class="source-line-no">254</span><span id="line.254">                    0x8349706F500D7573L},</span>
+<span class="source-line-no">255</span><span id="line.255">            {0xF40BA295557EB087L, 0xE8A62E740B1030B7L, 0xDDC8F72B7958B04FL, 0xD36DA0129AF999DDL,</span>
+<span class="source-line-no">256</span><span id="line.256">                    0xC98E188E5138882DL, 0xC02498843215A687L, 0xB72B9CF7CB66736FL, 0xAE9DE4D05F66AF41L, 0xA6766DC536E4D933L,</span>
+<span class="source-line-no">257</span><span id="line.257">                    0x9EB0716EBBC7DEE5L, 0x9747627AA435C841L, 0x9036EA018B2BCF9FL, 0x897AE4FC66EB83E9L, 0x830F61D86049BD33L},</span>
+<span class="source-line-no">258</span><span id="line.258">            {0xF4CCD627D640C91BL, 0xEA171C21F30F9703L, 0xDFD9550E85ACC5E5L, 0xD60E418421899E89L, 0xCCB0DCDF5F586A6BL,</span>
+<span class="source-line-no">259</span><span id="line.259">                    0xC3BC5AB09BC44545L, 0xBB2C24468285A235L, 0xB2FBD654234A1D55L, 0xAB273EB15C029011L, 0xA3AA5A3471A8B1F5L,</span>
+<span class="source-line-no">260</span><span id="line.260">                    0x9C8152A3BD74C39DL, 0x95A87CBE60D27129L, 0x8F1C565AFE309975L, 0x88D9849B80100109L, 0x82DCD235027EF537L},</span>
+<span class="source-line-no">261</span><span id="line.261">            {0xF57716BC263D1509L, 0xEB5D28EA462157E9L, 0xE1ADA55D371AAD51L, 0xD8642B04DD8237EDL, 0xCF7C86F34CD519B3L,</span>
+<span class="source-line-no">262</span><span id="line.262">                    0xC6F2B276C5AAA9AFL, 0xBEC2D147B3AAF99BL, 0xB6E92FC9D8D36E9DL, 0xAF62415FDC02D5B3L, 0xA82A9ED07916A9A9L,</span>
+<span class="source-line-no">263</span><span id="line.263">                    0xA13F04BC98DBF8F5L, 0x9A9C52259EBB171FL, 0x943F870341597D83L, 0x8E25C2E84A744115L, 0x884C43B5A0F27CEDL,</span>
+<span class="source-line-no">264</span><span id="line.264">                    0x82B0645B06A50EEBL},</span>
+<span class="source-line-no">265</span><span id="line.265">            {0xF60E40931CDDA7E5L, 0xEC7F64E5DBDB09E5L, 0xE34F959426E19C8FL, 0xDA7B216D11305FB7L,</span>
+<span class="source-line-no">266</span><span id="line.266">                    0xD1FE7BF6F82D85CBL, 0xC9D63C0265C9E5E3L, 0xC1FF1A4B21B8D3A7L, 0xBA75F026E4723465L, 0xB337B641246F3469L,</span>
+<span class="source-line-no">267</span><span id="line.267">                    0xAC4183637B560F87L, 0xA5908B4A25D9127DL, 0x9F221D8425EA5847L, 0x98F3A45E9392C40DL, 0x9302A3DAAD39363DL,</span>
+<span class="source-line-no">268</span><span id="line.268">                    0x8D4CB8AE3C78C8BFL, 0x87CF974DE8CBB6C7L, 0x82890B01154E248BL},</span>
+<span class="source-line-no">269</span><span id="line.269">            {0xF6955E0400B91807L, 0xED8367D64493823BL,</span>
+<span class="source-line-no">270</span><span id="line.270">                    0xE4C6DA7D4C75AFC7L, 0xDC5C91B62A616C9DL, 0xD44186D34B52C711L, 0xCC72CFA5E47D8AB3L, 0xC4ED9D719FBC9AFFL,</span>
+<span class="source-line-no">271</span><span id="line.271">                    0xBDAF3BEA26B5C657L, 0xB6B5103A2FC143B5L, 0xAFFC9813B30F3AFBL, 0xA98368C8F1D0B4A7L, 0xA3472E6DFC5547E1L,</span>
+<span class="source-line-no">272</span><span id="line.272">                    0x9D45AB02671CFAD7L, 0x977CB5A2E1CF20EBL, 0x91EA39C265DCA3FBL, 0x8C8C366AB54F1765L, 0x8760BD83E4E72E47L,</span>
+<span class="source-line-no">273</span><span id="line.273">                    0x8265F322AF35A6BFL},</span>
+<span class="source-line-no">274</span><span id="line.274">            {0xF70EDC6AB8A796DBL, 0xEE6DAE32C9C7314DL, 0xE619AA5C2E8EEB25L, 0xDE101EE43CF747A9L,</span>
+<span class="source-line-no">275</span><span id="line.275">                    0xD64E71E254B3D023L, 0xCED220B05B087579L, 0xC798BF1ABDC1A781L, 0xC09FF697B9FEC8F7L, 0xB9E58585A5D89199L,</span>
+<span class="source-line-no">276</span><span id="line.276">                    0xB3673E6FFE31D46DL, 0xAD23075AFC31BA73L, 0xA716D9157803872DL, 0xA140BE90E0821C0BL, 0x9B9ED43F116D5253L,</span>
+<span class="source-line-no">277</span><span id="line.277">                    0x962F4775D3AD8C5DL, 0x90F055D7D4FF2B53L, 0x8BE04CC2E6247F0FL, 0x86FD88C35071DBFDL, 0x8246750C152D54B9L},</span>
+<span class="source-line-no">278</span><span id="line.278">            {0xF77CB1D641353E21L, 0xEF41DBE834EDE2F5L, 0xE74D154856960573L, 0xDF9C098CFBA62BC3L, 0xD82C7821AF16CE8DL,</span>
+<span class="source-line-no">279</span><span id="line.279">                    0xD0FC339E5B8BC6BBL, 0xCA09212412C75829L, 0xC35137BF42996A17L, 0xBCD27FCF29165CF9L, 0xB68B12725B6A44F9L,</span>
+<span class="source-line-no">280</span><span id="line.280">                    0xB07918F83419939BL, 0xAA9ACC56FEEFD88DL, 0xA4EE74A6BA40A66FL, 0x9F7268A046763B11L, 0x9A250D20DE35B0E7L,</span>
+<span class="source-line-no">281</span><span id="line.281">                    0x9504D4B1B2A19A37L, 0x90103F13887A534BL, 0x8B45D8CE340773A7L, 0x86A43AC3D2D7E5D9L, 0x822A09C7A37EA76BL},</span>
+<span class="source-line-no">282</span><span id="line.282">            {0xF7E0785B8323F5F9L, 0xF002ED136FCACF3FL, 0xE86546245CFD180FL, 0xE1057C8D01770237L, 0xD9E199C40A65E4C5L,</span>
+<span class="source-line-no">283</span><span id="line.283">                    0xD2F7B73254740353L, 0xCC45FDB16385F085L, 0xC5CAA50DF6AE27A1L, 0xBF83F38E96F3936DL, 0xB9703D7E0096EF81L,</span>
+<span class="source-line-no">284</span><span id="line.284">                    0xB38DE4B947898D35L, 0xADDB584198C64BF5L, 0xA85713D17B33C9EDL, 0xA2FF9F7573A53727L, 0x9DD38F27F07609E7L,</span>
+<span class="source-line-no">285</span><span id="line.285">                    0x98D18270621C5493L, 0x93F8240566E5E78DL, 0x8F462971F0E5F545L, 0x8ABA52BD4DE3D4BFL, 0x86536A15F9DFF487L,</span>
+<span class="source-line-no">286</span><span id="line.286">                    0x8210437F25824997L},</span>
+<span class="source-line-no">287</span><span id="line.287">            {0xF83B8239BBCD51D9L, 0xF0B35A2524B90EF9L, 0xE965B31B1E6CBB7FL, 0xE250C6ACD48A7A13L,</span>
+<span class="source-line-no">288</span><span id="line.288">                    0xDB72DC3546A1A6C1L, 0xD4CA486E2E16DE85L, 0xCE556D0823F747B3L, 0xC812B845ED79238BL, 0xC200A49AD6AFC313L,</span>
+<span class="source-line-no">289</span><span id="line.289">                    0xBC1DB84C03B717C3L, 0xB6688514A1537297L, 0xB0DFA7CCDEB4C5FBL, 0xAB81C8139ABA1463L, 0xA64D97FAAFB9C87BL,</span>
+<span class="source-line-no">290</span><span id="line.290">                    0xA141D3B5C976AD69L, 0x9C5D414BB1874509L, 0x979EB049FF0E766DL, 0x9304F97B17392461L, 0x8E8EFE9E6C844FD5L,</span>
+<span class="source-line-no">291</span><span id="line.291">                    0x8A3BAA22EB5B1E49L, 0x8609EEE3832393E3L, 0x81F8C7E5BB542C07L},</span>
+<span class="source-line-no">292</span><span id="line.292">            {0xF88EE8EC947BAC23L, 0xF15533119A11FE77L,</span>
+<span class="source-line-no">293</span><span id="line.293">                    0xEA51424F9DD1C415L, 0xE381868217F635A9L, 0xDCE47B2644A27E2BL, 0xD678A70494127F57L, 0xD03C9BDC9EF788C5L,</span>
+<span class="source-line-no">294</span><span id="line.294">                    0xCA2EF6138C473C7FL, 0xC44E5C64D64E360BL, 0xBE997F955D5F55F7L, 0xB90F1A28B6FBF225L, 0xB3ADF018A8D0B781L,</span>
+<span class="source-line-no">295</span><span id="line.295">                    0xAE74CE8EBF5EE175L, 0xA9628B9FF0A1A8E9L, 0xA476060A3B748BC9L, 0x9FAE24F434F06829L, 0x9B09D7AE756374C3L,</span>
+<span class="source-line-no">296</span><span id="line.296">                    0x96881576D6F2FC29L, 0x9227DD3D785D806DL, 0x8DE8356B76B8A95BL, 0x89C82BAB51682E05L, 0x85C6D4B2EBE9E125L,</span>
+<span class="source-line-no">297</span><span id="line.297">                    0x81E34C0F216F3C09L},</span>
+<span class="source-line-no">298</span><span id="line.298">            {0xF8DB9899F68818F9L, 0xF1EA3408C00AAE97L, 0xEB2A65F78A5C978BL, 0xE49ACC3BA426BE8FL,</span>
+<span class="source-line-no">299</span><span id="line.299">                    0xDE3A0E8BE3F8B7A7L, 0xD806DE3A15DCA725L, 0xD1FFF5EE60F535A5L, 0xCC24196497159D91L, 0xC672152B60A84E73L,</span>
+<span class="source-line-no">300</span><span id="line.300">                    0xC0E8BE65379A4499L, 0xBB86F28B24601C5BL, 0xB64B973130862B7FL, 0xB13599CC82969B59L, 0xAC43EF7B1777ADA7L,</span>
+<span class="source-line-no">301</span><span id="line.301">                    0xA77594CD0DB91721L, 0xA2C98D8F7799BE3BL, 0x9E3EE498A8DF438DL, 0x99D4AB95F5E69475L, 0x9589FADAD9A07791L,</span>
+<span class="source-line-no">302</span><span id="line.302">                    0x915DF13178769511L, 0x8D4FB3AC765D01CDL, 0x895E6D7A1699DA71L, 0x85894FB89C101161L, 0x81CF914BE11C4529L},</span>
+<span class="source-line-no">303</span><span id="line.303">            {0xF92258D8434F8A31L, 0xF273D5706B3800EDL, 0xEBF332215412178BL, 0xE59F33F1FFAA79DBL, 0xDF76A85BFC5FCBEBL,</span>
+<span class="source-line-no">304</span><span id="line.304">                    0xD9786511656FDABFL, 0xD3A347C4717A9A2BL, 0xCDF635F0848CE469L, 0xC8701CA4BB4E43A7L, 0xC30FF04FE53469DFL,</span>
+<span class="source-line-no">305</span><span id="line.305">                    0xBDD4AC8DE3E46D41L, 0xB8BD53F6662D74EDL, 0xB3C8EFECF54A46EBL, 0xAEF690724B5729F1L, 0xAA454BF6EA27D80DL,</span>
+<span class="source-line-no">306</span><span id="line.306">                    0xA5B43F2EE9E5DD71L, 0xA1428CE6F71ABD83L, 0x9CEF5DDA7802A12BL, 0x98B9E08AD13C30D7L, 0x94A14917C2209C1FL,</span>
+<span class="source-line-no">307</span><span id="line.307">                    0x90A4D118D143BB19L, 0x8CC3B777C1CFB485L, 0x88FD404C0AA1B13DL, 0x8550B4B7483DEA9DL, 0x81BD62C2A2E0D811L},</span>
+<span class="source-line-no">308</span><span id="line.308">            {0xF963D37E6AD397B1L, 0xF2F358592E4FDF43L, 0xECAD6DC073812739L, 0xE690FA59735A5CA5L, 0xE09CEC0D2BB40BEFL,</span>
+<span class="source-line-no">309</span><span id="line.309">                    0xDAD037D85A1FAFE9L, 0xD529D99CB4258D85L, 0xCFA8D3F354BAF8AFL, 0xCA4C300056F50BBFL, 0xC512FD479630A193L,</span>
+<span class="source-line-no">310</span><span id="line.310">                    0xBFFC51828C1BCC49L, 0xBB074877453F18A7L, 0xB63303D064D5B8FDL, 0xB17EAAF630F33AD9L, 0xACE96AE8A023B92FL,</span>
+<span class="source-line-no">311</span><span id="line.311">                    0xA872761A61E09887L, 0xA419044CDB5FCCEDL, 0x9FDC526D126E78A5L, 0x9BBBA27180316765L, 0x97B63B38C5CE8A63L,</span>
+<span class="source-line-no">312</span><span id="line.312">                    0x93CB68693D2A2E11L, 0x8FFA7A51600930CBL, 0x8C42C5C9000F11A1L, 0x88A3A4134A3345FDL, 0x851C72C1906CEA55L,</span>
+<span class="source-line-no">313</span><span id="line.313">                    0x81AC9396D4769C31L},</span>
+<span class="source-line-no">314</span><span id="line.314">            {0xF9A099FB652F7569L, 0xF369D04BE1B34389L, 0xED5AA0254466E043L, 0xE7720D2C9634DC87L,</span>
+<span class="source-line-no">315</span><span id="line.315">                    0xE1AF214F0C24C34FL, 0xDC10EC99FF092E81L, 0xD6968513E24AD1C3L, 0xD13F06963376BC15L, 0xCC0992A85C5E894FL,</span>
+<span class="source-line-no">316</span><span id="line.316">                    0xC6F5505B81C0B31DL, 0xC2016C273895ABE9L, 0xBD2D17C71C43F3EFL, 0xB8778A194021EF43L, 0xB3DFFEFD76CFF10DL,</span>
+<span class="source-line-no">317</span><span id="line.317">                    0xAF65B7356A17BA2BL, 0xAB07F8457E209615L, 0xA6C60C567AE854B7L, 0xA29F4217F711A191L, 0x9E92ECA37F37AC39L,</span>
+<span class="source-line-no">318</span><span id="line.318">                    0x9AA063607515C1B5L, 0x96C701E8A1EF5E21L, 0x930627ED77C26777L, 0x8F5D391DFCE9B1DBL, 0x8BCB9D0D5DF1A803L,</span>
+<span class="source-line-no">319</span><span id="line.319">                    0x8850BF1A217BFC29L, 0x84EC0E55FA29A321L, 0x819CFD6E329C1075L},</span>
+<span class="source-line-no">320</span><span id="line.320">            {0xF9D929986B5EEEB9L, 0xF3D82B220C06E07BL,</span>
+<span class="source-line-no">321</span><span id="line.321">                    0xEDFC1BCF7B16B91BL, 0xE844186B738DCE55L, 0xE2AF4336683C2DFFL, 0xDD3CC3C4ED67D397L, 0xD7EBC6DEF1107135L,</span>
+<span class="source-line-no">322</span><span id="line.322">                    0xD2BB7E5FBCDABC13L, 0xCDAB2116BCCAB79DL, 0xC8B9EAA90612499FL, 0xC3E71B73995679F7L, 0xBF31F86E5BEA2525L,</span>
+<span class="source-line-no">323</span><span id="line.323">                    0xBA99CB0FC3989F53L, 0xB61DE13130B5D161L, 0xB1BD8CF3F243BEB5L, 0xAD7824A6F01725D3L, 0xA94D02ACF6FE122DL,</span>
+<span class="source-line-no">324</span><span id="line.324">                    0xA53B8563A303BF93L, 0xA1430F0AE4052279L, 0x9D6305AD18E0C827L, 0x999AD307BDA3917BL, 0x95E9E474A92A0E69L,</span>
+<span class="source-line-no">325</span><span id="line.325">                    0x924FAAD3D6C3FB33L, 0x8ECB9A75B87C94B9L, 0x8B5D2B060EBF2C2DL, 0x8803D77742239521L, 0x84BF1DEE3C41BFEBL,</span>
+<span class="source-line-no">326</span><span id="line.326">                    0x818E7FAEBC7F0FFBL},</span>
+<span class="source-line-no">327</span><span id="line.327">            {0xFA0DEED8E62B756BL, 0xF43F3741C26C457DL, 0xEE93070DBC849FE3L, 0xE90890F198E9682FL,</span>
+<span class="source-line-no">328</span><span id="line.328">                    0xE39F0C66B318DD27L, 0xDE55B58EA47EDAA5L, 0xD92BCD1793E4C8BDL, 0xD420982129831E45L, 0xCF33602223E1A33DL,</span>
+<span class="source-line-no">329</span><span id="line.329">                    0xCA6372CE89CA5B13L, 0xC5B021FE75A93343L, 0xC118C39576C84389L, 0xBC9CB16A84ED9C1DL, 0xB83B493082F45033L,</span>
+<span class="source-line-no">330</span><span id="line.330">                    0xB3F3EC5F4D0EA19FL, 0xAFC6001D4F72F081L, 0xABB0ED29A2485B47L, 0xA7B41FC6A7BAD15BL, 0xA3CF07A52930C135L,</span>
+<span class="source-line-no">331</span><span id="line.331">                    0xA00117CFF0AE8395L, 0x9C49C697DB853389L, 0x98A88D80637BC8CFL, 0x951CE92C9BB209A9L, 0x91A6594C9E8D459BL,</span>
+<span class="source-line-no">332</span><span id="line.332">                    0x8E44608B6A0EC52DL, 0x8AF6847D28037703L, 0x87BC4D8DDF8BA161L, 0x849546F08D8843C7L, 0x8180FE8EA18A6047L},</span>
+<span class="source-line-no">333</span><span id="line.333">            {0xFA3F486F7B176F11L, 0xF49FA91E77C7403FL, 0xEF2063A9CDE20F67L, 0xE9C0BDF597E5D9BFL, 0xE4800214962B496BL,</span>
+<span class="source-line-no">334</span><span id="line.334">                    0xDF5D7E301FAC5725L, 0xDA5884709D33B639L, 0xD5706AE68BD8CD09L, 0xD0A48B7403BDE0F3L, 0xCBF443B6C0179A11L,</span>
+<span class="source-line-no">335</span><span id="line.335">                    0xC75EF4F2A5961C7DL, 0xC2E403FCC458AB43L, 0xBE82D926D2A51FD9L, 0xBA3AE02B1DAC798FL, 0xB60B8818EDB564FDL,</span>
+<span class="source-line-no">336</span><span id="line.336">                    0xB1F443415B14DE55L, 0xADF48724916BFCADL, 0xAA0BCC5F7EB08975L, 0xA6398E99EB9448BFL, 0xA27D4C74FAECC655L,</span>
+<span class="source-line-no">337</span><span id="line.337">                    0x9ED6877A0DCB1ABDL, 0x9B44C40A0A006C2DL, 0x97C7894D00D8F3A3L, 0x945E612233E407B1L, 0x9108D81075AC1E93L,</span>
+<span class="source-line-no">338</span><span id="line.338">                    0x8DC67D36E44DE1F9L, 0x8A96E23DFBE9515DL, 0x87799B48FEF38DFBL, 0x846E3EE7B27B4743L, 0x817466086C7CD82DL},</span>
+<span class="source-line-no">339</span><span id="line.339">            {0xFA6D85BD7B83D8BFL, 0xF4FA18113E772031L, 0xEFA509F857AEFD4BL, 0xEA6DB233E30452E9L, 0xE5536B340D76D84BL,</span>
+<span class="source-line-no">340</span><span id="line.340">                    0xE05593038E3D2B9BL, 0xDB738B3392365683L, 0xD6ACB8C8173F6B75L, 0xD2008424B4FDC1ABL, 0xCD6E58F9D0BBE7DDL,</span>
+<span class="source-line-no">341</span><span id="line.341">                    0xC8F5A6323A04AC75L, 0xC495DDE12DB49653L, 0xC04E7530BD46DD6DL, 0xBC1EE450982F5FFFL, 0xB806A665351F3943L,</span>
+<span class="source-line-no">342</span><span id="line.342">                    0xB4053977591D82B1L, 0xB01A1E63FA696B4DL, 0xAC44D8CC7D2631A7L, 0xA884EF0747DCAEFDL, 0xA4D9EA10ADE9061BL,</span>
+<span class="source-line-no">343</span><span id="line.343">                    0xA143557C2DF5AF63L, 0x9DC0BF6602AF8781L, 0x9A51B86503E8B7EFL, 0x96F5D37CD66A4963L, 0x93ACA61068BDF1B3L,</span>
+<span class="source-line-no">344</span><span id="line.344">                    0x9075C7D4BB43399BL, 0x8D50D2C3F1EC6CD1L, 0x8A3D6310AE08E88DL, 0x873B1719AE8B4BADL, 0x84498F5DB542C8AFL,</span>
+<span class="source-line-no">345</span><span id="line.345">                    0x81686E6FAF87664DL},</span>
+<span class="source-line-no">346</span><span id="line.346">            {0xFA98EFEF3C53DD4BL, 0xF54F0FFD0ECC0203L, 0xF021C278AD401597L, 0xEB106D053D813FA3L,</span>
+<span class="source-line-no">347</span><span id="line.347">                    0xE61A7887DAAF4445L, 0xE13F5115FBAFF277L, 0xDC7E65E438BC1DFDL, 0xD7D729356E007179L, 0xD349104A395B3CA7L,</span>
+<span class="source-line-no">348</span><span id="line.348">                    0xCED39350D14AFF63L, 0xCA762D55332BD5AFL, 0xC6305C31A6EC13F9L, 0xC201A07F966A5779L, 0xBDE97D88B6B90CF3L,</span>
+<span class="source-line-no">349</span><span id="line.349">                    0xB9E77938818CFA07L, 0xB5FB1C0DFD25ABBBL, 0xB223F10DD107D0C5L, 0xAE6185B4A5EA78B3L, 0xAAB369E9CF40F355L,</span>
+<span class="source-line-no">350</span><span id="line.350">                    0xA7192FF23CD39E85L, 0xA3926C63B2E2553DL, 0xA01EB618475369FBL, 0x9CBDA622227A2153L, 0x996ED7BF82078107L,</span>
+<span class="source-line-no">351</span><span id="line.351">                    0x9631E84EFCBFFCC7L, 0x9306774405981503L, 0x8FEC261BACE15EAFL, 0x8CE298519E38A56BL, 0x89E9735559ECED09L,</span>
+<span class="source-line-no">352</span><span id="line.352">                    0x87005E7FA89E04BBL, 0x8427030847D82601L, 0x815D0BFBCE78BCDBL},</span>
+<span class="source-line-no">353</span><span id="line.353">            {0xFAC1E364FEA8C287L, 0xF59F42F9E9A5D9DDL,</span>
+<span class="source-line-no">354</span><span id="line.354">                    0xF0978EA6AB84D035L, 0xEBAA39469D2D7F79L, 0xE6D6B8990D712A5BL, 0xE21C853219B4AFDDL, 0xDD7B1A6BD60CA405L,</span>
+<span class="source-line-no">355</span><span id="line.355">                    0xD8F1F657C32ACDEDL, 0xD48099B0908512C5L, 0xD02687CC29263023L, 0xCBE3468E09A0D73BL, 0xC7B65E59DDA5BE8DL,</span>
+<span class="source-line-no">356</span><span id="line.356">                    0xC39F5A0663C519BBL, 0xBF9DC6D095EB983DL, 0xBBB1344F1532941BL, 0xB7D93465D7A27B45L, 0xB4155B3A168DB819L,</span>
+<span class="source-line-no">357</span><span id="line.357">                    0xB0653F267C3172B1L, 0xACC878AF8F507395L, 0xA93EA2785B833BC7L, 0xA5C7593754FF0D63L, 0xA2623BAB769C24A7L,</span>
+<span class="source-line-no">358</span><span id="line.358">                    0x9F0EEA9198E9C3B9L, 0x9BCD089A0124F43BL, 0x989C3A5E26ED0205L, 0x957C2656AF96B259L, 0x926C74D19E051B71L,</span>
+<span class="source-line-no">359</span><span id="line.359">                    0x8F6CCFE8B5F4C1FFL, 0x8C7CE37811AB45E7L, 0x899C5D14E9036D5BL, 0x86CAEC0488D2C6B3L, 0x8408413379AB65D1L,</span>
+<span class="source-line-no">360</span><span id="line.360">                    0x81540F2CD5017313L},</span>
+<span class="source-line-no">361</span><span id="line.361">            {0xFAE842F1FD2D2CA7L, 0xF5EA757A0A98C863L, 0xF10613828C28F7FBL, 0xEC3A9B96914C96B9L,</span>
+<span class="source-line-no">362</span><span id="line.362">                    0xE7878ED473415E13L, 0xE2EC70E0B7805833L, 0xDE68C7D934F58C01L, 0xD9FC1C487AAEB91BL, 0xD5A5F91976B3BE43L,</span>
+<span class="source-line-no">363</span><span id="line.363">                    0xD165EB8B5BC1E6E5L, 0xCD3B8325C4A9DC47L, 0xC92651AD1416562FL, 0xC525EB170F87E511L, 0xC139E57FB4584EF5L,</span>
+<span class="source-line-no">364</span><span id="line.364">                    0xBD61D91E459DF78BL, 0xB99D603A91CDAD27L, 0xB5EC17226EFEF75BL, 0xB24D9C1F6CBCA9C1L, 0xAEC18F6CBA510669L,</span>
+<span class="source-line-no">365</span><span id="line.365">                    0xAB47932D40822855L, 0xA7DF4B61EDB8BF7BL, 0xA4885DE033905DEFL, 0xA1427248B4D5B15FL, 0x9E0D31FE22FC05B1L,</span>
+<span class="source-line-no">366</span><span id="line.366">                    0x9AE8481C4A185585L, 0x97D3616F4A74FC6BL, 0x94CE2C6AFED5D56BL, 0x91D859228E892EB9L, 0x8EF199402A6682CBL,</span>
+<span class="source-line-no">367</span><span id="line.367">                    0x8C199FFCF3E056D3L, 0x895022190D52F827L, 0x8694D5D3D2BE1549L, 0x83E772E43A1B5CC1L, 0x8147B2715A886473L},</span>
+<span class="source-line-no">368</span><span id="line.368">            {0xFB0C904DEDC71EABL, 0xF631A396A8EA8405L, 0xF16EC07F404C404BL, 0xECC3700594D89347L, 0xE82F3D74BAE83EF3L,</span>
+<span class="source-line-no">369</span><span id="line.369">                    0xE3B1B6599529F247L, 0xDF4A6A77A7F5FB99L, 0xDAF8EBBE23F4F3D7L, 0xD6BCCE3D27077AF3L, 0xD295A81B326269ABL,</span>
+<span class="source-line-no">370</span><span id="line.370">                    0xCE83118AD4D80EEDL, 0xCA84A4C0884C271DL, 0xC699FDE8C1553A63L, 0xC2C2BB1E3012F58FL, 0xBEFE7C603145DEB5L,</span>
+<span class="source-line-no">371</span><span id="line.371">                    0xBB4CE3896EB97D21L, 0xB7AD9446AE16AAD9L, 0xB420340DCD384DF7L, 0xB0A46A14EB212977L, 0xAD39DF49BCB5D0F1L,</span>
+<span class="source-line-no">372</span><span id="line.372">                    0xA9E03E490C621029L, 0xA697335663D548B5L, 0xA35E6C53DF056371L, 0xA03598BA27ABFBAFL, 0x9D1C699098755D61L,</span>
+<span class="source-line-no">373</span><span id="line.373">                    0x9A129165871CCFF3L, 0x9717C446B4B57445L, 0x942BB7B9E362B6B3L, 0x914E22B590C6FD67L, 0x8E7EBD99D472D11BL,</span>
+<span class="source-line-no">374</span><span id="line.374">                    0x8BBD422961A2424BL, 0x89096B82AB99BF13L, 0x8662F6192BF6EFA7L, 0x83C99FAECA4D7FB3L, 0x813D274D646AFB8FL},</span>
+<span class="source-line-no">375</span><span id="line.375">            {0xFB2E70F0672DEAC3L, 0xF67419E4328C5AE5L, 0xF1D08AF9A011B93BL, 0xED43566A0A91EB2DL, 0xE8CC107FC3FB0607L,</span>
+<span class="source-line-no">376</span><span id="line.376">                    0xE46A4F8C20778F89L, 0xE01DABDDB18AAEF3L, 0xDBE5BFB6B03F20DBL, 0xD7C2274395861A1BL, 0xD3B28091DFE78B43L,</span>
+<span class="source-line-no">377</span><span id="line.377">                    0xCFB66B8705A9661BL, 0xCBCD89D79297A36BL, 0xC7F77EFE709ACF33L, 0xC433F0345A4ED6BFL, 0xC082846776CFB603L,</span>
+<span class="source-line-no">378</span><span id="line.378">                    0xBCE2E4331DF57083L, 0xB954B9D7C43C7F5DL, 0xB5D7B1330D9B8881L, 0xB26B77B8068ACC91L, 0xAF0FBC6782854095L,</span>
+<span class="source-line-no">379</span><span id="line.379">                    0xABC42FC89F4EBF83L, 0xA88883E16C4E25EFL, 0xA55C6C2FB54D7F91L, 0xA23F9DA1EFF5B477L, 0x9F31CE904B5E5947L,</span>
+<span class="source-line-no">380</span><span id="line.380">                    0x9C32B6B5E10D6C97L, 0x99420F2A06C5E287L, 0x965F9259C086E847L, 0x938AFC015220C2F1L, 0x90C40925EFC71851L,</span>
+<span class="source-line-no">381</span><span id="line.381">                    0x8E0A780F8D0B4DFBL, 0x8B5E0842C9AC7A2DL, 0x88BE7A7AFBAD244BL, 0x862B90A45621C743L, 0x83A50DD62C2DB015L,</span>
+<span class="source-line-no">382</span><span id="line.382">                    0x812AB64D4FA66D45L},</span>
+<span class="source-line-no">383</span><span id="line.383">            {0xFB50D0447B78F80DL, 0xF6B791E91E5BBCFBL, 0xF233DE244FEC61C3L, 0xEDC5500DF4CB9F07L,</span>
+<span class="source-line-no">384</span><span id="line.384">                    0xE96B84969F82E781L, 0xE5261A7EEA55C0C7L, 0xE0F4B24EF9970D8BL, 0xDCD6EE4E25C47F99L, 0xD8CC727ACCADE12FL,</span>
+<span class="source-line-no">385</span><span id="line.385">                    0xD4D4E48248F14DF5L, 0xD0EFEBB90F18CC85L, 0xCD1D3112EFA902DFL, 0xC95C5F1B7D73F963L, 0xC5AD21EE97860B19L,</span>
+<span class="source-line-no">386</span><span id="line.386">                    0xC20F273116063D41L, 0xBE821E09996645E9L, 0xBB05B7197B4187B7L, 0xB799A475E04D3A53L, 0xB43D99A0EABED9CFL,</span>
+<span class="source-line-no">387</span><span id="line.387">                    0xB0F14B830C90CD01L, 0xADB47064790FFB1BL, 0xAA86BFE6B51FC425L, 0xA767F2FE45A47E49L, 0xA457C3EC7B873C09L,</span>
+<span class="source-line-no">388</span><span id="line.388">                    0xA155EE395CC834D1L, 0x9E622EADAA17B30BL, 0x9B7C434D006FE831L, 0x98A3EB50162C79AFL, 0x95D8E71F131EFF4BL,</span>
+<span class="source-line-no">389</span><span id="line.389">                    0x931AF84C032207B3L, 0x9069E18D62AE8765L, 0x8DC566B8C4F9DBF5L, 0x8B2D4CBD9324C81FL, 0x88A1599FE405FD95L,</span>
+<span class="source-line-no">390</span><span id="line.390">                    0x862154736C1CEF53L, 0x83AD0556853BC35BL, 0x8144356D4D794CB5L},</span>
+<span class="source-line-no">391</span><span id="line.391">            {0xFB6D5599BDF133D1L, 0xF6EF948D7C022F77L,</span>
+<span class="source-line-no">392</span><span id="line.392">                    0xF2865D3AD18E3E67L, 0xEE3151B6A0B5A4E3L, 0xE9F015C346AAD57BL, 0xE5C24EC8EFB818A7L, 0xE1A7A3CE0E5A4DD5L,</span>
+<span class="source-line-no">393</span><span id="line.393">                    0xDD9FBD6FF4D0581BL, 0xD9AA45DB9081A661L, 0xD5C6E8C646A11777L, 0xD1F55366F1743DEDL, 0xCE35346EFDA9BEEDL,</span>
+<span class="source-line-no">394</span><span id="line.394">                    0xCA863C03A72C3191L, 0xC6E81BB754E182C5L, 0xC35A868312C97437L, 0xBFDD30C029F0535DL, 0xBC6FD021D5AD80E3L,</span>
+<span class="source-line-no">395</span><span id="line.395">                    0xB9121BAF15A7D079L, 0xB5C3CBBC9C1C2DA1L, 0xB28499E6D7E54BD3L, 0xAF54410C19C57735L, 0xAC327D46D475DF91L,</span>
+<span class="source-line-no">396</span><span id="line.396">                    0xA91F0BE7F700F123L, 0xA619AB7160EF7EB9L, 0xA3221B906FD2A687L, 0xA0381D18A5B676E5L, 0x9D5B71FE680B6AC1L,</span>
+<span class="source-line-no">397</span><span id="line.397">                    0x9A8BDD51D696DE37L, 0x97C92339B9FC9B9FL, 0x951308EE89759779L, 0x926954B58749DF79L, 0x8FCBCDDBF3A5A54DL,</span>
+<span class="source-line-no">398</span><span id="line.398">                    0x8D3A3CB2556329E7L, 0x8AB46A87D8652177L, 0x883A21A5C11EF379L, 0x85CB2D4AF4E9FD39L, 0x836759A796C8B7D1L,</span>
+<span class="source-line-no">399</span><span id="line.399">                    0x810E73D8B83A55FDL},</span>
+<span class="source-line-no">400</span><span id="line.400">            {0xFB8F8AF296473783L, 0xF732CAF4391DFA4FL, 0xF2E9688872F4556DL, 0xEEB30DB72E847BD9L,</span>
+<span class="source-line-no">401</span><span id="line.401">                    0xEA8F6605FAB5E921L, 0xE67E1E716C665867L, 0xE27EE5669D93D64BL, 0xDE916ABCC965815BL, 0xDAB55FAF0492CFAFL,</span>
+<span class="source-line-no">402</span><span id="line.402">                    0xD6EA76D611AB6957L, 0xD330642250C3D62DL, 0xCF86DCD5CA0D633FL, 0xCBED977E52E1BF99L, 0xC8644BEFCCCCE2EFL,</span>
+<span class="source-line-no">403</span><span id="line.403">                    0xC4EAB33E7E21D9CBL, 0xC18087B983A91355L, 0xBE2584E55AF8C3DFL, 0xBAD967768509DE5DL, 0xB79BED4C409E0CB9L,</span>
+<span class="source-line-no">404</span><span id="line.404">                    0xB46CD56B5C0CECC5L, 0xB14BDFF91E10ACD5L, 0xAE38CE36452BF031L, 0xAB33627A1D44A8FFL, 0xA83B602DAB115255L,</span>
+<span class="source-line-no">405</span><span id="line.405">                    0xA5508BC6ECF7AB17L, 0xA272AAC430FDBFF7L, 0x9FA183A77F6FB9E9L, 0x9CDCDDF219DE8547L, 0x9A2482200E1CFE17L,</span>
+<span class="source-line-no">406</span><span id="line.406">                    0x977839A3DCE2DF07L, 0x94D7CEE233BE3A55L, 0x92430D2DB9FDC787L, 0x8FB9C0C2F03FCCE9L, 0x8D3BB6C42252E1F5L,</span>
+<span class="source-line-no">407</span><span id="line.407">                    0x8AC8BD356B173707L, 0x8860A2F8CA1077C7L, 0x860337CA4A59C09DL, 0x83B04C3C3AAE7BEFL, 0x8167B1B3763C52A9L},</span>
+<span class="source-line-no">408</span><span id="line.408">            {0xFBAD8DEED8FB2209L, 0xF76DC9FB80FEB207L, 0xF340636968788E7FL, 0xEF250AD8F2743C11L, 0xEB1B7241906F3CF1L,</span>
+<span class="source-line-no">409</span><span id="line.409">                    0xE7234CEBF7A3CD01L, 0xE33C4F6C6F5BF5B5L, 0xDF662F9D37E0C88DL, 0xDBA0A499099B628BL, 0xD7EB66B5ABFF26C7L,</span>
+<span class="source-line-no">410</span><span id="line.410">                    0xD4462F7EA3D6623FL, 0xD0B0B9AFF88C4749L, 0xCD2AC1311010E3E1L, 0xC9B4030FA0F56381L, 0xC64C3D7ABA609379L,</span>
+<span class="source-line-no">411</span><span id="line.411">                    0xC2F32FBDE17D3F97L, 0xBFA89A3C4405955BL, 0xBC6C3E6BFF904CA1L, 0xB93DDED17D45DFA9L, 0xB61D3EFAE1A59F8FL,</span>
+<span class="source-line-no">412</span><span id="line.412">                    0xB30A237B9003EFEBL, 0xB00451E7C16C6AC5L, 0xAD0B90D02E941EB1L, 0xAA1FA7BDCC8982EBL, 0xA7405F2D9BD12195L,</span>
+<span class="source-line-no">413</span><span id="line.413">                    0xA46D808C899F5623L, 0xA1A6D63362E0D645L, 0x9EEC2B62D8C50E0FL, 0x9C3D4C3F967EA489L, 0x999A05CE67EFC51DL,</span>
+<span class="source-line-no">414</span><span id="line.414">                    0x970225F070F90BC5L, 0x94757B5F75232DCBL, 0x91F3D5AA2F5CAFF5L, 0x8F7D0530B9862C37L, 0x8D10DB210388D58BL,</span>
+<span class="source-line-no">415</span><span id="line.415">                    0x8AAF297359B40FA7L, 0x8857C2E6FA2012D3L, 0x860A7AFEB8D4B141L, 0x83C725FDB2746C03L, 0x818D98E40D2D198FL},</span>
+<span class="source-line-no">416</span><span id="line.416">            {0xFBBBA0DAAEEC680DL, 0xF78976F1379136DFL, 0xF3693491C2390A33L, 0xEF5A8D55FEAAF3D3L, 0xEB5D361D9D81532BL,</span>
+<span class="source-line-no">417</span><span id="line.417">                    0xE770E508E115260BL, 0xE3955173459932CDL, 0xDFCA33EE40021AE5L, 0xDC0F463C135A0B75L, 0xD864434ABC206085L,</span>
+<span class="source-line-no">418</span><span id="line.418">                    0xD4C8E72EF15727A1L, 0xD13CEF1F3AE20029L, 0xCDC0196F1CDB6263L, 0xCA52258A5786DA61L, 0xC6F2D3F03B88419BL,</span>
+<span class="source-line-no">419</span><span id="line.419">                    0xC3A1E62F12097969L, 0xC05F1EDF98799989L, 0xBD2A41A08F91F0EDL, 0xBA0313125D4E9BBBL, 0xB6E958D2C189D077L,</span>
+<span class="source-line-no">420</span><span id="line.420">                    0xB3DCD9789CEA5F55L, 0xB0DD5C8FC9D731F7L, 0xADEAAA950722E7A5L, 0xAB048CF1F423F1F3L, 0xA82ACDF91DEED89DL,</span>
+<span class="source-line-no">421</span><span id="line.421">                    0xA55D38E21D698881L, 0xA29B99C5C5EFC9ADL, 0x9FE5BD9A64422B13L, 0x9D3B72300D79E05BL, 0x9A9C862CFDBD36ABL,</span>
+<span class="source-line-no">422</span><span id="line.422">                    0x9808C90A0671690BL, 0x95800B0F0BA7BBF1L, 0x93021D4F9084E135L, 0x908ED1A75262BB93L, 0x8E25FAB6F26DA8EDL,</span>
+<span class="source-line-no">423</span><span id="line.423">                    0x8BC76BE0AD7F873DL, 0x8972F94521FBAF7DL, 0x872877C02370254FL, 0x84E7BCE59BC138E5L, 0x82B09EFE79A5D3D9L,</span>
+<span class="source-line-no">424</span><span id="line.424">                    0x8082F505AC3B9F93L},</span>
+<span class="source-line-no">425</span><span id="line.425">            {0xFBE7BD0A608BAD17L, 0xF7E03E790DA47477L, 0xF3E93FA3A9F8B32BL, 0xF0027CFAFB6A1463L,</span>
+<span class="source-line-no">426</span><span id="line.426">                    0xEC2BB4046BDBEE9FL, 0xE864A3559C6B8123L, 0xE4AD0A900AC6AB77L, 0xE104AA5CC856ED81L, 0xDD6B446842F7AE65L,</span>
+<span class="source-line-no">427</span><span id="line.427">                    0xD9E09B5E1EEFF399L, 0xD66472E521E8D767L, 0xD2F68F9B2E9B2FDFL, 0xCF96B71150EFF3CDL, 0xCC44AFC7DA5003D5L,</span>
+<span class="source-line-no">428</span><span id="line.428">                    0xC900412A8DE11143L, 0xC5C9338CDC6E6BE7L, 0xC29F50262FBD8AFBL, 0xBF82610E450F2C2FL, 0xBC723139968EE63BL,</span>
+<span class="source-line-no">429</span><span id="line.429">                    0xB96E8C75D3740AF5L, 0xB6773F666697AF3DL, 0xB38C17810B44A553L, 0xB0ACE30A700728ADL, 0xADD97112E742E8EBL,</span>
+<span class="source-line-no">430</span><span id="line.430">                    0xAB11917325570C3BL, 0xA85514C90C18A85BL, 0xA5A3CC74836D14E7L, 0xA2FD8A945ECE591BL, 0xA06222034F84D331L,</span>
+<span class="source-line-no">431</span><span id="line.431">                    0x9DD16654E362103BL, 0x9B4B2BD28FC9A05FL, 0x98CF4778C8D584CDL, 0x965D8EF42464A387L, 0x93F5D89E88E277A1L,</span>
+<span class="source-line-no">432</span><span id="line.432">                    0x9197FB7C6797FCA7L, 0x8F43CF3A02569879L, 0x8CF92C28BC4E8805L, 0x8AB7EB3C75E31201L, 0x887FE608F34F7DD1L,</span>
+<span class="source-line-no">433</span><span id="line.433">                    0x8650F6BF4DF08511L, 0x842AF82B7006ABD1L, 0x820DC5B19AC69DA5L},</span>
+<span class="source-line-no">434</span><span id="line.434">            {0xFBF33ADB4A247B63L, 0xF7F6DC82CD3A64A7L,</span>
+<span class="source-line-no">435</span><span id="line.435">                    0xF40AA289E556077BL, 0xF02E4B90F15A2E05L, 0xEC61974111819B83L, 0xE8A44647F724B981L, 0xE4F61A53C575AAD9L,</span>
+<span class="source-line-no">436</span><span id="line.436">                    0xE156D60F02EE122DL, 0xDDC63D1C9B2AF001L, 0xDA441413F0F40E21L, 0xD6D0207D002D7BBFL, 0xD36A28CC8F72A6ABL,</span>
+<span class="source-line-no">437</span><span id="line.437">                    0xD011F460711BA35BL, 0xCCC74B7BD36E35FBL, 0xC989F7439FBD2BEBL, 0xC659C1BAE8398DADL, 0xC33675BF643A2645L,</span>
+<span class="source-line-no">438</span><span id="line.438">                    0xC01FDF05FABECDF1L, 0xBD15CA175AF5D381L, 0xBA18044CA28AC8EDL, 0xB7265BCC1186DD6FL, 0xB4409F85CB8BD1DFL,</span>
+<span class="source-line-no">439</span><span id="line.439">                    0xB1669F30A6337225L, 0xAE982B47045E59F9L, 0xABD51503BE3DA293L, 0xA91D2E5F15E3EB11L, 0xA6704A0BB82AFE25L,</span>
+<span class="source-line-no">440</span><span id="line.440">                    0xA3CE3B73C9BC2527L, 0xA136D6B6000A02EBL, 0x9EA9F0A2C60B978BL, 0x9C275EB96C88D2A3L, 0x99AEF72565C9D9CBL,</span>
+<span class="source-line-no">441</span><span id="line.441">                    0x974090BB8C7AE74FL, 0x94DC02F775975F89L, 0x928125F8CD2F733DL, 0x902FD280BDDC5A1BL, 0x8DE7E1EF62B7E2BBL,</span>
+<span class="source-line-no">442</span><span id="line.442">                    0x8BA92E4143ACC451L, 0x8973920CDBF5CB1DL, 0x8746E8802AA2A203L, 0x85230D5E4CF9A2E7L, 0x8307DCFD228EBBC1L,</span>
+<span class="source-line-no">443</span><span id="line.443">                    0x80F53442FAE81817L},</span>
+<span class="source-line-no">444</span><span id="line.444">            {0xFBF8641D0EBD9F37L, 0xF80105531A5B1C69L, 0xF419A2322FD2AF1DL, 0xF041FA520DD315C5L,</span>
+<span class="source-line-no">445</span><span id="line.445">                    0xEC79CE4DFE225559L, 0xE8C0DFC0BFBA8355L, 0xE516F140815D3291L, 0xE17BC65AEC5B2B4FL, 0xDDEF23913F4F21DFL,</span>
+<span class="source-line-no">446</span><span id="line.446">                    0xDA70CE54788B2693L, 0xD7008D018FF98CB3L, 0xD39E26DDC03304F5L, 0xD0496412DE8CA2FBL, 0xCD020DABC1E17C4DL,</span>
+<span class="source-line-no">447</span><span id="line.447">                    0xC9C7ED90B7DC8245L, 0xC69ACE84088827A5L, 0xC37A7C1E87EA4E29L, 0xC066C2CC3573DFF5L, 0xBD5F6FC8E90C5D07L,</span>
+<span class="source-line-no">448</span><span id="line.448">                    0xBA64511D0D828555L, 0xB775359A682C2529L, 0xB491ECD8ED7FE2F1L, 0xB1BA4733A274C3BDL, 0xAEEE15C58A73EE4BL,</span>
+<span class="source-line-no">449</span><span id="line.449">                    0xAC2D2A66A1AA0429L, 0xA97757A8E386344DL, 0xA6CC70D55D35F399L, 0xA42C49E94BED0D87L, 0xA196B79346CA81D7L,</span>
+<span class="source-line-no">450</span><span id="line.450">                    0x9F0B8F30742B63A1L, 0x9C8AA6C9CA3DAADDL, 0x9A13D5115AA5A2F7L, 0x97A6F15FA90957BDL, 0x9543D3B10C5615B5L,</span>
+<span class="source-line-no">451</span><span id="line.451">                    0x92EA54A31A94C409L, 0x909A4D721F228C2FL, 0x8E5397F69B23EF17L, 0x8C160EA2D009104FL, 0x89E18C8053FAA5B1L,</span>
+<span class="source-line-no">452</span><span id="line.452">                    0x87B5ED2DB0079D91L, 0x85930CDC07EC2E7DL, 0x8378C84CCB4BA1BDL, 0x8166FCCF7036C5DBL, 0x7F5D883F36D98FB9L},</span>
+<span class="source-line-no">453</span><span id="line.453">            {0xFC371C6CEDDC7205L, 0xF87C8BD3AE403793L, 0xF4D017FDC4B91205L, 0xF1318B81E30CC827L, 0xEDA0B1C0E0ABFC8DL,</span>
+<span class="source-line-no">454</span><span id="line.454">                    0xEA1D56E2BDA00BFFL, 0xE6A747D3B0C88081L, 0xE33E5241413D4A33L, 0xDFE244976AAB90CBL, 0xDC92EDFDCC839099L,</span>
+<span class="source-line-no">455</span><span id="line.455">                    0xD9501E54E3CE92E1L, 0xD619A6334F84AC69L, 0xD2EF56E31F3A85D5L, 0xCFD1025F2C00079DL, 0xCCBE7B507B4957D5L,</span>
+<span class="source-line-no">456</span><span id="line.456">                    0xC9B7950BABBC29B5L, 0xC6BC238E6BBBEEC7L, 0xC3CBFB7CF9900767L, 0xC0E6F21FACFF9B93L, 0xBE0CDD608A3F4EE1L,</span>
+<span class="source-line-no">457</span><span id="line.457">                    0xBB3D93C8DE0D89BFL, 0xB878EC7EE2DA97A9L, 0xB5BEBF436EDA5D9DL, 0xB30EE46FAADDED93L, 0xB06934F2D1D3BB5FL,</span>
+<span class="source-line-no">458</span><span id="line.458">                    0xADCD8A4FF8CDB553L, 0xAB3BBE9BDF6CFEBBL, 0xA8B3AC7AC893846FL, 0xA6352F1E5B3C1C03L, 0xA3C022438B5A54A1L,</span>
+<span class="source-line-no">459</span><span id="line.459">                    0xA15462308AA39537L, 0x9EF1CBB2C12396F1L, 0x9C983C1CCD7EBBEFL, 0x9A4791448CC53213L, 0x97FFA98129BA3FADL,</span>
+<span class="source-line-no">460</span><span id="line.460">                    0x95C063A933738415L, 0x93899F10BB346123L, 0x915B3B87796A2BA5L, 0x8F351956F9AE2877L, 0x8D171940CDB2C21FL,</span>
+<span class="source-line-no">461</span><span id="line.461">                    0x8B011C7CC701C767L, 0x88F304B73771E64FL, 0x86ECB40F3839F8BFL, 0x84EE0D14F7891817L, 0x82F6F2C80C8ACBFBL},</span>
+<span class="source-line-no">462</span><span id="line.462">            {0xFC58F81E60DA5B81L, 0xF8BF4767540B5989L, 0xF532BD2113F26E23L, 0xF1B32943D2EFE0BBL, 0xEE405C77315E8669L,</span>
+<span class="source-line-no">463</span><span id="line.463">                    0xEADA280FBCD3AD3DL, 0xE7805E0C788358CFL, 0xE432D1146EA76C1DL, 0xE0F154744AC8D6D1L, 0xDDBBBC1BFCCA5427L,</span>
+<span class="source-line-no">464</span><span id="line.464">                    0xDA91DC9C6494C03BL, 0xD7738B2506457D31L, 0xD4609D81C6BFD51FL, 0xD158EA18B082B6BBL, 0xCE5C47E7C0A49B07L,</span>
+<span class="source-line-no">465</span><span id="line.465">                    0xCB6A8E82BBD7D049L, 0xC88396110B59D367L, 0xC5A7374BA1B0CBF9L, 0xC2D54B7AE71AA8D7L, 0xC00DAC74AD91C33BL,</span>
+<span class="source-line-no">466</span><span id="line.466">                    0xBD50349A2C4B5513L, 0xBA9CBED60294744FL, 0xB7F3269A41F2A8D9L, 0xB55347DE7F6D94E1L, 0xB2BCFF1DEBE7886DL,</span>
+<span class="source-line-no">467</span><span id="line.467">                    0xB0302955736B386BL, 0xADACA401E3552FB7L, 0xAB324D1E173FED4DL, 0xA8C103212C99FE8FL, 0xA658A4FCBCCDBE79L,</span>
+<span class="source-line-no">468</span><span id="line.468">                    0xA3F9121B1DE2BB8FL, 0xA1A22A5DA9811E33L, 0x9F53CE1B0A3FBF0DL, 0x9D0DDE1D8F25F2AFL, 0x9AD03BA1854A6351L,</span>
+<span class="source-line-no">469</span><span id="line.469">                    0x989AC8539778A469L, 0x966D664F33C77D53L, 0x9447F81CF70A38ADL, 0x922A60B11E07955BL, 0x90148369FC614411L,</span>
+<span class="source-line-no">470</span><span id="line.470">                    0x8E06440E7917299BL, 0x8BFF86CC9091E98BL, 0x8A003037DC208843L, 0x880825481ED53CAFL, 0x86174B57D7ADD2E5L,</span>
+<span class="source-line-no">471</span><span id="line.471">                    0x842D8822D8F4489BL},</span>
+<span class="source-line-no">472</span><span id="line.472">            {0xFC62A7389C25206BL, 0xF8D25F3BE7FB8C7BL, 0xF54EF8CFAF339DF7L, 0xF1D84564732D7D13L,</span>
+<span class="source-line-no">473</span><span id="line.473">                    0xEE6E171301EB70CFL, 0xEB10409A15BA9BBFL, 0xE7BE955BFD72A71BL, 0xE478E95C4D2D4FBFL, 0xE13F113D975738FFL,</span>
+<span class="source-line-no">474</span><span id="line.474">                    0xDE10E23F2DFBD7D5L, 0xDAEE323AEC2EB61DL, 0xD7D6D7A30774B8DFL, 0xD4CAA97FE9107EFBL, 0xD1C97F6E0F1555D9L,</span>
+<span class="source-line-no">475</span><span id="line.475">                    0xCED3319BF524A8EDL, 0xCBE798C804BA364DL, 0xC9068E3E8CEBB6F7L, 0xC62FEBD7C1810C09L, 0xC3638BF5C14A6369L,</span>
+<span class="source-line-no">476</span><span id="line.476">                    0xC0A14982A39A269BL, 0xBDE8FFEE8CC8E4CFL, 0xBB3A8B2DC9A9C6D7L, 0xB895C7B6F1D67747L, 0xB5FA928110B9C405L,</span>
+<span class="source-line-no">477</span><span id="line.477">                    0xB368C901D54097BFL, 0xB0E0492BC81941F7L, 0xAE60F16C88695B1DL, 0xABEAA0AB0EE2E7F7L, 0xA97D3645F721B3EBL,</span>
+<span class="source-line-no">478</span><span id="line.478">                    0xA7189211CF3A2D29L, 0xA4BC94576D635F85L, 0xA2691DD24BA5FC11L, 0xA01E0FAEE97AAAF3L, 0x9DDB4B89334233FBL,</span>
+<span class="source-line-no">479</span><span id="line.479">                    0x9BA0B36AEF8257ADL, 0x996E29CA31D27F19L, 0x97439187D363B43DL, 0x9520CDEDF10F9ECFL, 0x9305C2AE6EDA8AB9L,</span>
+<span class="source-line-no">480</span><span id="line.480">                    0x90F253E180D4C5C5L, 0x8EE666043947E8FFL, 0x8CE1DDF71C1CE8BBL, 0x8AE4A0FCB7680B4DL, 0x88EE94B841082A9DL,</span>
+<span class="source-line-no">481</span><span id="line.481">                    0x86FF9F2C3946E83FL, 0x8517A6B91267BDD5L, 0x8336921BDD1414F1L},</span>
+<span class="source-line-no">482</span><span id="line.482">            {0xFC8C1FB2CA6255C7L, 0xF9242B1AADEBBE4FL,</span>
+<span class="source-line-no">483</span><span id="line.483">                    0xF5C7F90F371F9D33L, 0xF27760F60D177BB7L, 0xEF323AC106E0D2BFL, 0xEBF85EEC4778D02FL, 0xE8C9A67C604F3EFDL,</span>
+<span class="source-line-no">484</span><span id="line.484">                    0xE5A5EAFC7A3A080BL, 0xE28D067C84C30FE3L, 0xDF7ED38F6BBA81FBL, 0xDC7B2D4952F7E615L, 0xD981EF3DD834A6D9L,</span>
+<span class="source-line-no">485</span><span id="line.485">                    0xD692F57E5AEAFA9DL, 0xD3AE1C984A2467EFL, 0xD0D3419378236739L, 0xCE0241F073D3E9A5L, 0xCB3AFBA6E7EED305L,</span>
+<span class="source-line-no">486</span><span id="line.486">                    0xC87D4D23FFBCB9B5L, 0xC5C91548D1648307L, 0xC31E3368CDB2B5FBL, 0xC07C87483546A027L, 0xBDE3F11A9312A9D7L,</span>
+<span class="source-line-no">487</span><span id="line.487">                    0xBB5451813C1D76CFL, 0xB8CD8989D471B091L, 0xB64F7AACD92A95ABL, 0xB3DA06CC2F8BA769L, 0xB16D1031B9120BFDL,</span>
+<span class="source-line-no">488</span><span id="line.488">                    0xAF08798DEC6E77A1L, 0xACAC25F67356AA49L, 0xAA57F8E4CD1DCA0FL, 0xA80BD634F6031C45L, 0xA5C7A2241326D801L,</span>
+<span class="source-line-no">489</span><span id="line.489">                    0xA38B414F2315052DL, 0xA15698B1B2D69281L, 0x9F298DA497790377L, 0x9D0405DCABFD4D61L, 0x9AE5E769939EAFBBL,</span>
+<span class="source-line-no">490</span><span id="line.490">                    0x98CF18B48062888FL, 0x96BF807EFDE25957L, 0x94B705E1C04163FBL, 0x92B5904B773F79F5L, 0x90BB077FA55AC933L,</span>
+<span class="source-line-no">491</span><span id="line.491">                    0x8EC753957AF2A37DL, 0x8CDA5CF6B55D6D8DL, 0x8AF40C5E81E41293L, 0x89144AD864958831L, 0x873B01BF22E51D3DL,</span>
+<span class="source-line-no">492</span><span id="line.492">                    0x85681ABBB2067B7BL},</span>
+<span class="source-line-no">493</span><span id="line.493">            {0xFC7A9A2A032A8977L, 0xF9019A3A031D55E3L, 0xF594D4886ED4F4B3L, 0xF2341E076B6CF033L,</span>
+<span class="source-line-no">494</span><span id="line.494">                    0xEEDF4C40B6E4AD29L, 0xEB963553925602DFL, 0xE858AFF2B3835555L, 0xE52693623DA357C7L, 0xE1FFB775C150F88DL,</span>
+<span class="source-line-no">495</span><span id="line.495">                    0xDEE3F48E43865153L, 0xDBD323984B89CEFBL, 0xD8CD1E09F7B51BF1L, 0xD5D1BDE118FDADE3L, 0xD2E0DDA155272C7BL,</span>
+<span class="source-line-no">496</span><span id="line.496">                    0xCFFA58524F883AE1L, 0xCD1E097DD84A8003L, 0xCA4BCD2E220F1B75L, 0xC7837FEBFDE104C1L, 0xC4C4FEBD1D5F2291L,</span>
+<span class="source-line-no">497</span><span id="line.497">                    0xC21027225B083507L, 0xBF64D7160892FBD3L, 0xBCC2ED0A433D4C8DL, 0xBA2A47E74DFD18D1L, 0xB79AC709F17EADA9L,</span>
+<span class="source-line-no">498</span><span id="line.498">                    0xB5144A41E1DBBE89L, 0xB296B1D029F71665L, 0xB021DE659C690FE7L, 0xADB5B12149E93C39L, 0xAB520B8EFD21E485L,</span>
+<span class="source-line-no">499</span><span id="line.499">                    0xA8F6CFA5BBDA566FL, 0xA6A3DFC64D652EFBL, 0xA4591EB9C640198DL, 0xA2166FB018D2B9ADL, 0x9FDBB63EAB3AB70DL,</span>
+<span class="source-line-no">500</span><span id="line.500">                    0x9DA8D65EF213227BL, 0x9B7DB46D1025A921L, 0x995A35267AF44947L, 0x973E3DA8A40A7899L, 0x9529B36FA704E833L,</span>
+<span class="source-line-no">501</span><span id="line.501">                    0x931C7C54FC3F4DBFL, 0x91167E8E3017D383L, 0x8F17A0AB9EB80AE7L, 0x8D1FC997345375ABL, 0x8B2EE09331CBF23FL,</span>
+<span class="source-line-no">502</span><span id="line.502">                    0x8944CD38F5AC8ED3L, 0x87617777C96B7D5DL, 0x8584C793B2E41889L, 0x83AEA62449FA1E85L, 0x81DEFC1392577B03L},</span>
+<span class="source-line-no">503</span><span id="line.503">            {0xFC89901CE7581669L, 0xF91F1DA477858FEDL, 0xF5C07F1263DFFDA1L, 0xF26D8B7221C57113L, 0xEF261A5CF6D22527L,</span>
+<span class="source-line-no">504</span><span id="line.504">                    0xEBEA03F80DD3CBDDL, 0xE8B920F29261309BL, 0xE5934A83D2FF2F77L, 0xE2785A6969BC515DL, 0xDF682AE56B2CABA7L,</span>
+<span class="source-line-no">505</span><span id="line.505">                    0xDC6296BC9BAFEF53L, 0xD9677934AAEBE025L, 0xD676AE127565B7BFL, 0xD39011984C254301L, 0xD0B38084424CD14FL,</span>
+<span class="source-line-no">506</span><span id="line.506">                    0xCDE0D80E809155D9L, 0xCB17F5E79E7E6275L, 0xC858B8370171E9F3L, 0xC5A2FD99413BFD59L, 0xC2F6A51E924EFC1DL,</span>
+<span class="source-line-no">507</span><span id="line.507">                    0xC0538E49356CF2EDL, 0xBDB9990BECBF2773L, 0xBB28A5C87645111DL, 0xB8A0954E0B884035L, 0xB62148D7E682F43BL,</span>
+<span class="source-line-no">508</span><span id="line.508">                    0xB3AAA20BCBA761E3L, 0xB13C82F898F5E761L, 0xAED6CE14DA10AB17L, 0xAC79663D613B5D61L, 0xAA242EB3E536122FL,</span>
+<span class="source-line-no">509</span><span id="line.509">                    0xA7D70B1DA3E261EBL, 0xA591DF8209A23B9BL, 0xA35490495D600B75L, 0xA11F023B713011C9L, 0x9EF11A7E577AFE2FL,</span>
+<span class="source-line-no">510</span><span id="line.510">                    0x9CCABE951CA219C3L, 0x9AABD45E850D81E9L, 0x98944213CF952A87L, 0x9683EE477C359391L, 0x947ABFE417015227L,</span>
+<span class="source-line-no">511</span><span id="line.511">                    0x92789E2B0740C0CFL, 0x907D70B362B15D3FL, 0x8E891F68C4D68C4DL, 0x8C9B928A2A4DAE11L, 0x8AB4B2A8D0179CD7L,</span>
+<span class="source-line-no">512</span><span id="line.512">                    0x88D468A716C9E203L, 0x86FA9DB7699A1B09L, 0x85273B5B293637D3L, 0x835A2B619A5C69D3L, 0x819357E6D825C8C5L}</span>
+<span class="source-line-no">513</span><span id="line.513">    };</span>
+<span class="source-line-no">514</span><span id="line.514"></span>
+<span class="source-line-no">515</span><span id="line.515">    public static final PhantomNoise instance2D = new PhantomNoise(goldenLong[2][0], 2);</span>
+<span class="source-line-no">516</span><span id="line.516">    public static final PhantomNoise instance3D = new PhantomNoise(goldenLong[3][0], 3);</span>
+<span class="source-line-no">517</span><span id="line.517">    public static final PhantomNoise instance4D = new PhantomNoise(goldenLong[4][0], 4);</span>
+<span class="source-line-no">518</span><span id="line.518">    public static final PhantomNoise instance5D = new PhantomNoise(goldenLong[5][0], 5);</span>
+<span class="source-line-no">519</span><span id="line.519">    public static final PhantomNoise instance6D = new PhantomNoise(goldenLong[6][0], 6);</span>
+<span class="source-line-no">520</span><span id="line.520">    public static final PhantomNoise instance7D = new PhantomNoise(goldenLong[7][0], 7);</span>
+<span class="source-line-no">521</span><span id="line.521">    public static final PhantomNoise instance8D = new PhantomNoise(goldenLong[8][0], 8);</span>
+<span class="source-line-no">522</span><span id="line.522">}</span>
 
 
 

@@ -7,501 +7,501 @@
 <meta name="generator" content="javadoc/SourceToHTMLConverter">
 <link rel="stylesheet" type="text/css" href="../../../stylesheet.css" title="Style">
 </head>
-<body class="source">
+<body class="source-page">
 <main role="main">
-<div class="sourceContainer">
-<pre><span class="sourceLineNo">001</span><a id="line.1">package squidpony.squidmath;</a>
-<span class="sourceLineNo">002</span><a id="line.2"></a>
-<span class="sourceLineNo">003</span><a id="line.3">import squidpony.ArrayTools;</a>
-<span class="sourceLineNo">004</span><a id="line.4"></a>
-<span class="sourceLineNo">005</span><a id="line.5">import java.util.Collection;</a>
-<span class="sourceLineNo">006</span><a id="line.6">import java.util.Iterator;</a>
-<span class="sourceLineNo">007</span><a id="line.7">import java.util.SortedSet;</a>
-<span class="sourceLineNo">008</span><a id="line.8"></a>
-<span class="sourceLineNo">009</span><a id="line.9">/**</a>
-<span class="sourceLineNo">010</span><a id="line.10"> * An ordered multi-directional "map" that keeps 1 or more keysets organized so you can look up one key given a key in</a>
-<span class="sourceLineNo">011</span><a id="line.11"> * another keyset, and do the same for the indices of keys. Does not have generic type parameters, which is needed</a>
-<span class="sourceLineNo">012</span><a id="line.12"> * because we handle arbitrary counts of keysets, and each keyset could have its own type. You can use most of the</a>
-<span class="sourceLineNo">013</span><a id="line.13"> * normal Map methods here, though they often need an int as their first argument, {@code which}, that specifies which</a>
-<span class="sourceLineNo">014</span><a id="line.14"> * keyset the method applies to. For example, {@link #contains(int, Object)} checks for the presence of the second</a>
-<span class="sourceLineNo">015</span><a id="line.15"> * parameter in the keyset specified by the first parameter. Adding items to a MultiKey uses {@link #put(Object...)},</a>
-<span class="sourceLineNo">016</span><a id="line.16"> * and that does not take a {@code which} parameter because it needs to add an item to every keyset to succeed, and will</a>
-<span class="sourceLineNo">017</span><a id="line.17"> * do nothing if the array or varargs passed to it has a different length than the {@link #keyCount} of the MultiKey.</a>
-<span class="sourceLineNo">018</span><a id="line.18"> * Created by Tommy Ettinger on 10/23/2016.</a>
-<span class="sourceLineNo">019</span><a id="line.19"> */</a>
-<span class="sourceLineNo">020</span><a id="line.20">@SuppressWarnings("unchecked")</a>
-<span class="sourceLineNo">021</span><a id="line.21">public class MultiKey {</a>
-<span class="sourceLineNo">022</span><a id="line.22">    public final int keyCount;</a>
-<span class="sourceLineNo">023</span><a id="line.23">    private Arrangement[] keys;</a>
-<span class="sourceLineNo">024</span><a id="line.24"></a>
-<span class="sourceLineNo">025</span><a id="line.25">    /**</a>
-<span class="sourceLineNo">026</span><a id="line.26">     * Constructs an empty MultiKey.</a>
-<span class="sourceLineNo">027</span><a id="line.27">     */</a>
-<span class="sourceLineNo">028</span><a id="line.28">    public MultiKey()</a>
-<span class="sourceLineNo">029</span><a id="line.29">    {</a>
-<span class="sourceLineNo">030</span><a id="line.30">        this(3, 16, 0.5f);</a>
-<span class="sourceLineNo">031</span><a id="line.31">    }</a>
-<span class="sourceLineNo">032</span><a id="line.32"></a>
-<span class="sourceLineNo">033</span><a id="line.33">    /**</a>
-<span class="sourceLineNo">034</span><a id="line.34">     * Constructs a MultiKey with the expected number of indices to hold (the number of items in each keyset is always</a>
-<span class="sourceLineNo">035</span><a id="line.35">     * the same, and this will be more efficient if expected is greater than that number).</a>
-<span class="sourceLineNo">036</span><a id="line.36">     * @param expected how many items this should be ready to hold; can resize if needed</a>
-<span class="sourceLineNo">037</span><a id="line.37">     */</a>
-<span class="sourceLineNo">038</span><a id="line.38">    public MultiKey(int keyCount, int expected)</a>
-<span class="sourceLineNo">039</span><a id="line.39">    {</a>
-<span class="sourceLineNo">040</span><a id="line.40">        this(keyCount, expected, 0.5f);</a>
-<span class="sourceLineNo">041</span><a id="line.41">    }</a>
-<span class="sourceLineNo">042</span><a id="line.42"></a>
-<span class="sourceLineNo">043</span><a id="line.43">    /**</a>
-<span class="sourceLineNo">044</span><a id="line.44">     * Constructs a MultiKey with the expected number of indices to hold (the number of items in each keyset is always</a>
-<span class="sourceLineNo">045</span><a id="line.45">     * the same, and this will be more efficient if expected is greater than that number) and the load factor to use,</a>
-<span class="sourceLineNo">046</span><a id="line.46">     * between 0.1f and 0.8f usually (using load factors higher than 0.8f can cause problems).</a>
-<span class="sourceLineNo">047</span><a id="line.47">     * @param expected the amount of indices (the number of items in each keyset is always the same) this should hold</a>
-<span class="sourceLineNo">048</span><a id="line.48">     * @param f the load factor, probably between 0.1f and 0.8f</a>
-<span class="sourceLineNo">049</span><a id="line.49">     */</a>
-<span class="sourceLineNo">050</span><a id="line.50">    public MultiKey(int keyCount, int expected, float f)</a>
-<span class="sourceLineNo">051</span><a id="line.51">    {</a>
-<span class="sourceLineNo">052</span><a id="line.52">        this.keyCount = keyCount;</a>
-<span class="sourceLineNo">053</span><a id="line.53">        keys = new Arrangement[keyCount];</a>
-<span class="sourceLineNo">054</span><a id="line.54">        for (int i = 0; i &lt; keyCount; i++) {</a>
-<span class="sourceLineNo">055</span><a id="line.55">            keys[i] = new Arrangement(expected, f);</a>
-<span class="sourceLineNo">056</span><a id="line.56">        }</a>
-<span class="sourceLineNo">057</span><a id="line.57">    }</a>
-<span class="sourceLineNo">058</span><a id="line.58"></a>
-<span class="sourceLineNo">059</span><a id="line.59">    /**</a>
-<span class="sourceLineNo">060</span><a id="line.60">     * Constructs a MultiKey from a Collection of Iterables that will be processed in tandem, adding a unique item from</a>
-<span class="sourceLineNo">061</span><a id="line.61">     * each keyset in keysets if and only if it can also add a unique item from all other keysets, otherwise skipping</a>
-<span class="sourceLineNo">062</span><a id="line.62">     * that iteration in each Iterable.</a>
-<span class="sourceLineNo">063</span><a id="line.63">     * @param keysets a Collection of Iterable data structures, each containing items that should all be unique</a>
-<span class="sourceLineNo">064</span><a id="line.64">     */</a>
-<span class="sourceLineNo">065</span><a id="line.65">    public MultiKey(Collection&lt;Iterable&gt; keysets) {</a>
-<span class="sourceLineNo">066</span><a id="line.66">        if (keysets == null) {</a>
-<span class="sourceLineNo">067</span><a id="line.67">            keyCount = 0;</a>
-<span class="sourceLineNo">068</span><a id="line.68">            keys = new Arrangement[0];</a>
-<span class="sourceLineNo">069</span><a id="line.69">        } else {</a>
-<span class="sourceLineNo">070</span><a id="line.70">            keyCount = keysets.size();</a>
-<span class="sourceLineNo">071</span><a id="line.71">            keys = new Arrangement[keyCount];</a>
-<span class="sourceLineNo">072</span><a id="line.72">            for (int i = 0; i &lt; keyCount; i++) {</a>
-<span class="sourceLineNo">073</span><a id="line.73">                keys[i] = new Arrangement();</a>
-<span class="sourceLineNo">074</span><a id="line.74">            }</a>
-<span class="sourceLineNo">075</span><a id="line.75">            putAll(keysets);</a>
-<span class="sourceLineNo">076</span><a id="line.76">        }</a>
-<span class="sourceLineNo">077</span><a id="line.77">    }</a>
-<span class="sourceLineNo">078</span><a id="line.78"></a>
-<span class="sourceLineNo">079</span><a id="line.79">    public MultiKey(MultiKey other)</a>
-<span class="sourceLineNo">080</span><a id="line.80">    {</a>
-<span class="sourceLineNo">081</span><a id="line.81">        if(other == null)</a>
-<span class="sourceLineNo">082</span><a id="line.82">        {</a>
-<span class="sourceLineNo">083</span><a id="line.83">            keyCount = 0;</a>
-<span class="sourceLineNo">084</span><a id="line.84">            keys = new Arrangement[0];</a>
-<span class="sourceLineNo">085</span><a id="line.85">        }</a>
-<span class="sourceLineNo">086</span><a id="line.86">        else</a>
-<span class="sourceLineNo">087</span><a id="line.87">        {</a>
-<span class="sourceLineNo">088</span><a id="line.88">            keyCount = other.keyCount;</a>
-<span class="sourceLineNo">089</span><a id="line.89">            keys = new Arrangement[keyCount];</a>
-<span class="sourceLineNo">090</span><a id="line.90">            for (int i = 0; i &lt; keyCount; i++) {</a>
-<span class="sourceLineNo">091</span><a id="line.91">                keys[i] = new Arrangement(other.keys[i]);</a>
-<span class="sourceLineNo">092</span><a id="line.92">            }</a>
-<span class="sourceLineNo">093</span><a id="line.93">        }</a>
-<span class="sourceLineNo">094</span><a id="line.94">    }</a>
-<span class="sourceLineNo">095</span><a id="line.95"></a>
-<span class="sourceLineNo">096</span><a id="line.96">    public MultiKey(Arrangement[] keysets)</a>
-<span class="sourceLineNo">097</span><a id="line.97">    {</a>
-<span class="sourceLineNo">098</span><a id="line.98">        if(keysets == null)</a>
-<span class="sourceLineNo">099</span><a id="line.99">        {</a>
-<span class="sourceLineNo">100</span><a id="line.100">            keyCount = 0;</a>
-<span class="sourceLineNo">101</span><a id="line.101">            keys = new Arrangement[0];</a>
-<span class="sourceLineNo">102</span><a id="line.102">        }</a>
-<span class="sourceLineNo">103</span><a id="line.103">        else</a>
-<span class="sourceLineNo">104</span><a id="line.104">        {</a>
-<span class="sourceLineNo">105</span><a id="line.105">            keyCount = keysets.length;</a>
-<span class="sourceLineNo">106</span><a id="line.106">            keys = new Arrangement[keyCount];</a>
-<span class="sourceLineNo">107</span><a id="line.107">            int minLength = Integer.MAX_VALUE;</a>
-<span class="sourceLineNo">108</span><a id="line.108">            for (int k = 0; k &lt; keyCount; k++) {</a>
-<span class="sourceLineNo">109</span><a id="line.109">                if(keysets[k] == null)</a>
-<span class="sourceLineNo">110</span><a id="line.110">                    return;</a>
-<span class="sourceLineNo">111</span><a id="line.111">                minLength = Math.min(minLength, keysets[k].size);</a>
-<span class="sourceLineNo">112</span><a id="line.112">            }</a>
-<span class="sourceLineNo">113</span><a id="line.113">            for (int k = 0; k &lt; keyCount; k++) {</a>
-<span class="sourceLineNo">114</span><a id="line.114">                keys[k] = keysets[k].take(minLength);</a>
-<span class="sourceLineNo">115</span><a id="line.115">            }</a>
-<span class="sourceLineNo">116</span><a id="line.116">        }</a>
-<span class="sourceLineNo">117</span><a id="line.117">    }</a>
-<span class="sourceLineNo">118</span><a id="line.118">    /**</a>
-<span class="sourceLineNo">119</span><a id="line.119">     * Returns true if this contains key in the keyset specified by which.</a>
-<span class="sourceLineNo">120</span><a id="line.120">     * @param which which keyset to check in</a>
-<span class="sourceLineNo">121</span><a id="line.121">     * @param key the key to check the presence of</a>
-<span class="sourceLineNo">122</span><a id="line.122">     * @return true if key is present in the keyset at which; false otherwise</a>
-<span class="sourceLineNo">123</span><a id="line.123">     */</a>
-<span class="sourceLineNo">124</span><a id="line.124">    public boolean contains(int which, Object key) {</a>
-<span class="sourceLineNo">125</span><a id="line.125">        if(which &gt;= 0 &amp;&amp; which &lt; keyCount)</a>
-<span class="sourceLineNo">126</span><a id="line.126">            return keys[which].containsKey(key);</a>
-<span class="sourceLineNo">127</span><a id="line.127">        return false;</a>
-<span class="sourceLineNo">128</span><a id="line.128">    }</a>
-<span class="sourceLineNo">129</span><a id="line.129"></a>
-<span class="sourceLineNo">130</span><a id="line.130">    /**</a>
-<span class="sourceLineNo">131</span><a id="line.131">     * Returns true if index is between 0 (inclusive) and {@link #size()} (exclusive), or false otherwise.</a>
-<span class="sourceLineNo">132</span><a id="line.132">     * @param index the index to check</a>
-<span class="sourceLineNo">133</span><a id="line.133">     * @return true if index is a valid index in the ordering of this MultiKey</a>
-<span class="sourceLineNo">134</span><a id="line.134">     */</a>
-<span class="sourceLineNo">135</span><a id="line.135">    public boolean containsIndex(int index) {</a>
-<span class="sourceLineNo">136</span><a id="line.136">        if(keyCount &gt; 0) return keys[0].containsValue(index);</a>
-<span class="sourceLineNo">137</span><a id="line.137">        return false;</a>
-<span class="sourceLineNo">138</span><a id="line.138">    }</a>
-<span class="sourceLineNo">139</span><a id="line.139"></a>
-<span class="sourceLineNo">140</span><a id="line.140">    /**</a>
-<span class="sourceLineNo">141</span><a id="line.141">     * Given an index of a keyset (which) and an Object key, finds the position in the ordering that key has in the</a>
-<span class="sourceLineNo">142</span><a id="line.142">     * keyset at which, or -1 if key is not present.</a>
-<span class="sourceLineNo">143</span><a id="line.143">     * &lt;br&gt;</a>
-<span class="sourceLineNo">144</span><a id="line.144">     * Unlike {@link java.util.List#indexOf(Object)}, this runs in constant time.</a>
-<span class="sourceLineNo">145</span><a id="line.145">     * @param which which keyset to check in</a>
-<span class="sourceLineNo">146</span><a id="line.146">     * @param key the key to find the position of</a>
-<span class="sourceLineNo">147</span><a id="line.147">     * @return the int index of key in the ordering, or -1 if it is not present</a>
-<span class="sourceLineNo">148</span><a id="line.148">     */</a>
-<span class="sourceLineNo">149</span><a id="line.149">    public int indexOf(int which, Object key)</a>
-<span class="sourceLineNo">150</span><a id="line.150">    {</a>
-<span class="sourceLineNo">151</span><a id="line.151">        if(which &gt;= 0 &amp;&amp; which &lt; keyCount)</a>
-<span class="sourceLineNo">152</span><a id="line.152">            return keys[which].getInt(key);</a>
-<span class="sourceLineNo">153</span><a id="line.153">        return -1;</a>
-<span class="sourceLineNo">154</span><a id="line.154">    }</a>
-<span class="sourceLineNo">155</span><a id="line.155"></a>
-<span class="sourceLineNo">156</span><a id="line.156">    /**</a>
-<span class="sourceLineNo">157</span><a id="line.157">     * Given an index of a keyset (which) and an int index, finds the associated key in the keyset specified by which</a>
-<span class="sourceLineNo">158</span><a id="line.158">     * (using index as a point in the ordering).</a>
-<span class="sourceLineNo">159</span><a id="line.159">     * @param which which keyset to get from</a>
-<span class="sourceLineNo">160</span><a id="line.160">     * @param index an int index into this MultiKey</a>
-<span class="sourceLineNo">161</span><a id="line.161">     * @return the key (in the keyset found by which) with index for its position in the ordering, or null if index or which was invalid</a>
-<span class="sourceLineNo">162</span><a id="line.162">     */</a>
-<span class="sourceLineNo">163</span><a id="line.163">    public Object getAt(int which, int index)</a>
-<span class="sourceLineNo">164</span><a id="line.164">    {</a>
-<span class="sourceLineNo">165</span><a id="line.165">        if(which &gt;= 0 &amp;&amp; which &lt; keyCount)</a>
-<span class="sourceLineNo">166</span><a id="line.166">            return keys[which].keyAt(index);</a>
-<span class="sourceLineNo">167</span><a id="line.167">        return null;</a>
-<span class="sourceLineNo">168</span><a id="line.168">    }</a>
-<span class="sourceLineNo">169</span><a id="line.169"></a>
-<span class="sourceLineNo">170</span><a id="line.170">    /**</a>
-<span class="sourceLineNo">171</span><a id="line.171">     * Given an int index, finds the associated keys at all keysets (using index as a point in the ordering) and returns</a>
-<span class="sourceLineNo">172</span><a id="line.172">     * them as a newly-allocated Object array.</a>
-<span class="sourceLineNo">173</span><a id="line.173">     * @param index an int index into this MultiKey</a>
-<span class="sourceLineNo">174</span><a id="line.174">     * @return the array of keys with index for their position in the ordering, or an array of null if index was invalid</a>
-<span class="sourceLineNo">175</span><a id="line.175">     * @see #getAllAt(int, Object[]) getAllAt can avoid allocating a new array each time</a>
-<span class="sourceLineNo">176</span><a id="line.176">     */</a>
-<span class="sourceLineNo">177</span><a id="line.177">    public Object[] getAllAt(int index) {</a>
-<span class="sourceLineNo">178</span><a id="line.178">        Object[] os = new Object[keyCount];</a>
-<span class="sourceLineNo">179</span><a id="line.179">        for (int i = 0; i &lt; keyCount; i++) {</a>
-<span class="sourceLineNo">180</span><a id="line.180">            os[i] = keys[i].keyAt(index);</a>
-<span class="sourceLineNo">181</span><a id="line.181">        }</a>
-<span class="sourceLineNo">182</span><a id="line.182">        return os;</a>
-<span class="sourceLineNo">183</span><a id="line.183">    }</a>
-<span class="sourceLineNo">184</span><a id="line.184"></a>
-<span class="sourceLineNo">185</span><a id="line.185">    /**</a>
-<span class="sourceLineNo">186</span><a id="line.186">     * Given an int index and an Object array to reuse, finds the associated keys at all keysets (using index as a point</a>
-<span class="sourceLineNo">187</span><a id="line.187">     * in the ordering) and fills into with those keys, up to keyCount items.</a>
-<span class="sourceLineNo">188</span><a id="line.188">     * @param index an int index into this MultiKey</a>
-<span class="sourceLineNo">189</span><a id="line.189">     * @param into an Object array to reuse and fill with items; will be returned as-is if smaller than keyCount</a>
-<span class="sourceLineNo">190</span><a id="line.190">     * @return the array of keys with index for their position in the ordering, or an array of null if index was invalid</a>
-<span class="sourceLineNo">191</span><a id="line.191">     */</a>
-<span class="sourceLineNo">192</span><a id="line.192">    public Object[] getAllAt(int index, Object[] into) {</a>
-<span class="sourceLineNo">193</span><a id="line.193">        if (into != null &amp;&amp; into.length &gt;= keyCount) {</a>
-<span class="sourceLineNo">194</span><a id="line.194">            for (int i = 0; i &lt; keyCount; i++) {</a>
-<span class="sourceLineNo">195</span><a id="line.195">                into[i] = keys[i].keyAt(index);</a>
-<span class="sourceLineNo">196</span><a id="line.196">            }</a>
-<span class="sourceLineNo">197</span><a id="line.197">        }</a>
-<span class="sourceLineNo">198</span><a id="line.198">        return into;</a>
-<span class="sourceLineNo">199</span><a id="line.199">    }</a>
-<span class="sourceLineNo">200</span><a id="line.200"></a>
-<span class="sourceLineNo">201</span><a id="line.201">    /**</a>
-<span class="sourceLineNo">202</span><a id="line.202">     * Given an index of the keyset to look up a key in (lookingUp), an index of the keyset to get from (getting), and</a>
-<span class="sourceLineNo">203</span><a id="line.203">     * an Object key to look up (key), finds the Object key in the keyset specified by getting that is associated with</a>
-<span class="sourceLineNo">204</span><a id="line.204">     * key in the keyset specified by lookingUp. key and the returned value will be at the same point in the ordering.</a>
-<span class="sourceLineNo">205</span><a id="line.205">     * @param lookingUp which keyset to look up the {@code key} parameter in</a>
-<span class="sourceLineNo">206</span><a id="line.206">     * @param getting which keyset to get a value from</a>
-<span class="sourceLineNo">207</span><a id="line.207">     * @param key an object to use as a key, which should be the right type for the keyset at lookingUp</a>
-<span class="sourceLineNo">208</span><a id="line.208">     * @return the object from getting's keyset that is associated with key, or null if key was not present</a>
-<span class="sourceLineNo">209</span><a id="line.209">     */</a>
-<span class="sourceLineNo">210</span><a id="line.210">    public Object getFrom(int lookingUp, int getting, Object key)</a>
-<span class="sourceLineNo">211</span><a id="line.211">    {</a>
-<span class="sourceLineNo">212</span><a id="line.212">        if(lookingUp &gt;= 0 &amp;&amp; lookingUp &lt; keyCount &amp;&amp; getting &gt;= 0 &amp;&amp; getting &lt; keyCount)</a>
-<span class="sourceLineNo">213</span><a id="line.213">            return keys[getting].keyAt(keys[lookingUp].getInt(key));</a>
-<span class="sourceLineNo">214</span><a id="line.214">        return null;</a>
-<span class="sourceLineNo">215</span><a id="line.215">    }</a>
-<span class="sourceLineNo">216</span><a id="line.216"></a>
-<span class="sourceLineNo">217</span><a id="line.217">    /**</a>
-<span class="sourceLineNo">218</span><a id="line.218">     * Gets a random key from the keyset specified by which using the given IRNG.</a>
-<span class="sourceLineNo">219</span><a id="line.219">     * @param which which keyset to get a random key from</a>
-<span class="sourceLineNo">220</span><a id="line.220">     * @param random generates a random index to get a key with</a>
-<span class="sourceLineNo">221</span><a id="line.221">     * @return a randomly chosen key from the keyset specified, or null if this is empty</a>
-<span class="sourceLineNo">222</span><a id="line.222">     */</a>
-<span class="sourceLineNo">223</span><a id="line.223">    public Object randomKey(int which, IRNG random)</a>
-<span class="sourceLineNo">224</span><a id="line.224">    {</a>
-<span class="sourceLineNo">225</span><a id="line.225">        if(which &gt;= 0 &amp;&amp; which &lt; keyCount)</a>
-<span class="sourceLineNo">226</span><a id="line.226">            return keys[which].randomKey(random);</a>
-<span class="sourceLineNo">227</span><a id="line.227">        return null;</a>
-<span class="sourceLineNo">228</span><a id="line.228">    }</a>
-<span class="sourceLineNo">229</span><a id="line.229">    /**</a>
-<span class="sourceLineNo">230</span><a id="line.230">     * Gets a random key from a random keyset in this MultiKey using the given IRNG.</a>
-<span class="sourceLineNo">231</span><a id="line.231">     * @param random generates a random keyset index and random item index, to get a random key</a>
-<span class="sourceLineNo">232</span><a id="line.232">     * @return a randomly chosen Object key from possibly any keyset in this, or null if this is empty</a>
-<span class="sourceLineNo">233</span><a id="line.233">     */</a>
-<span class="sourceLineNo">234</span><a id="line.234">    public Object randomKey(IRNG random)</a>
-<span class="sourceLineNo">235</span><a id="line.235">    {</a>
-<span class="sourceLineNo">236</span><a id="line.236">        if(keyCount &gt; 0)</a>
-<span class="sourceLineNo">237</span><a id="line.237">            return keys[random.nextInt(keyCount)].randomKey(random);</a>
-<span class="sourceLineNo">238</span><a id="line.238">        return null;</a>
-<span class="sourceLineNo">239</span><a id="line.239">    }</a>
-<span class="sourceLineNo">240</span><a id="line.240"></a>
-<span class="sourceLineNo">241</span><a id="line.241">    /**</a>
-<span class="sourceLineNo">242</span><a id="line.242">     * In the keyset specified by {@code which}, changes an existing key, {@code past}, to another key, {@code future},</a>
-<span class="sourceLineNo">243</span><a id="line.243">     * if past exists in that keyset and future does not yet exist in that keyset. This will retain past's point in the</a>
-<span class="sourceLineNo">244</span><a id="line.244">     * ordering for future, so the associated other key(s) will still be associated in the same way.</a>
-<span class="sourceLineNo">245</span><a id="line.245">     * @param which which keyset to alter the items in</a>
-<span class="sourceLineNo">246</span><a id="line.246">     * @param past a key, that must exist in the keyset specified by which, and will be changed</a>
-<span class="sourceLineNo">247</span><a id="line.247">     * @param future a key, that cannot currently exist in the keyset specified by which, but will if this succeeds</a>
-<span class="sourceLineNo">248</span><a id="line.248">     * @return this for chaining</a>
-<span class="sourceLineNo">249</span><a id="line.249">     */</a>
-<span class="sourceLineNo">250</span><a id="line.250">    public MultiKey alter(int which, Object past, Object future)</a>
-<span class="sourceLineNo">251</span><a id="line.251">    {</a>
-<span class="sourceLineNo">252</span><a id="line.252">        if(which &gt;= 0 &amp;&amp; which &lt; keyCount &amp;&amp; keys[which].containsKey(past) &amp;&amp; !keys[which].containsKey(future))</a>
-<span class="sourceLineNo">253</span><a id="line.253">            keys[which].alter(past, future);</a>
-<span class="sourceLineNo">254</span><a id="line.254">        return this;</a>
-<span class="sourceLineNo">255</span><a id="line.255">    }</a>
-<span class="sourceLineNo">256</span><a id="line.256">    /**</a>
-<span class="sourceLineNo">257</span><a id="line.257">     * In the keyset specified by {@code which}, changes the key at {@code index} to another key, {@code future}, if</a>
-<span class="sourceLineNo">258</span><a id="line.258">     * index is valid and future does not yet exist in that keyset. The position in the ordering for future will be the</a>
-<span class="sourceLineNo">259</span><a id="line.259">     * same as index, and the same as the key this replaced, if this succeeds, so the other key(s) at that position will</a>
-<span class="sourceLineNo">260</span><a id="line.260">     * still be associated in the same way.</a>
-<span class="sourceLineNo">261</span><a id="line.261">     * @param which which keyset to alter the items in</a>
-<span class="sourceLineNo">262</span><a id="line.262">     * @param index a position in the ordering to change; must be at least 0 and less than {@link #size()}</a>
-<span class="sourceLineNo">263</span><a id="line.263">     * @param future a key, that cannot currently exist in the keyset specified by which, but will if this succeeds</a>
-<span class="sourceLineNo">264</span><a id="line.264">     * @return this for chaining</a>
-<span class="sourceLineNo">265</span><a id="line.265">     */</a>
-<span class="sourceLineNo">266</span><a id="line.266">    public MultiKey alterAt(int which, int index, Object future)</a>
-<span class="sourceLineNo">267</span><a id="line.267">    {</a>
-<span class="sourceLineNo">268</span><a id="line.268">        if(which &gt;= 0 &amp;&amp; which &lt; keyCount &amp;&amp; !keys[which].containsKey(future) &amp;&amp; index &gt;= 0 &amp;&amp; index &lt; keys[which].size)</a>
-<span class="sourceLineNo">269</span><a id="line.269">            keys[which].alter(keys[which].keyAt(index), future);</a>
-<span class="sourceLineNo">270</span><a id="line.270">        return this;</a>
-<span class="sourceLineNo">271</span><a id="line.271">    }</a>
-<span class="sourceLineNo">272</span><a id="line.272"></a>
-<span class="sourceLineNo">273</span><a id="line.273">    /**</a>
-<span class="sourceLineNo">274</span><a id="line.274">     * Adds a key to each keyset at the same point in the ordering (the end) of this MultiKey. The length of k must</a>
-<span class="sourceLineNo">275</span><a id="line.275">     * match the keyCount of this MultiKey, and the nth item in k will go into the nth keyset. No item in k can be</a>
-<span class="sourceLineNo">276</span><a id="line.276">     * present in the matching keyset in this before this is called. If you want to change or update an existing key,</a>
-<span class="sourceLineNo">277</span><a id="line.277">     * use {@link #alter(int, Object, Object)} or {@link #alterAt(int, int, Object)}.</a>
-<span class="sourceLineNo">278</span><a id="line.278">     * @param k an array or varargs of keys to add after the last index of this MultiKey; length must equal keyCount</a>
-<span class="sourceLineNo">279</span><a id="line.279">     * @return true if this collection changed as a result of this call</a>
-<span class="sourceLineNo">280</span><a id="line.280">     */</a>
-<span class="sourceLineNo">281</span><a id="line.281">    public boolean put(Object... k)</a>
-<span class="sourceLineNo">282</span><a id="line.282">    {</a>
-<span class="sourceLineNo">283</span><a id="line.283">        if(k != null &amp;&amp; keyCount &gt; 0 &amp;&amp; k.length == keyCount) {</a>
-<span class="sourceLineNo">284</span><a id="line.284">            for (int i = 0; i &lt; keyCount; i++) {</a>
-<span class="sourceLineNo">285</span><a id="line.285">                if(keys[i].containsKey(k[i]))</a>
-<span class="sourceLineNo">286</span><a id="line.286">                    return false;</a>
-<span class="sourceLineNo">287</span><a id="line.287">            }</a>
-<span class="sourceLineNo">288</span><a id="line.288">            for (int i = 0; i &lt; keyCount; i++) {</a>
-<span class="sourceLineNo">289</span><a id="line.289">                keys[i].add(k[i]);</a>
-<span class="sourceLineNo">290</span><a id="line.290">            }</a>
-<span class="sourceLineNo">291</span><a id="line.291">            return true;</a>
-<span class="sourceLineNo">292</span><a id="line.292">        }</a>
-<span class="sourceLineNo">293</span><a id="line.293">        return false;</a>
-<span class="sourceLineNo">294</span><a id="line.294">    }</a>
-<span class="sourceLineNo">295</span><a id="line.295"></a>
-<span class="sourceLineNo">296</span><a id="line.296">    /**</a>
-<span class="sourceLineNo">297</span><a id="line.297">     * Goes through all Iterable items in {@code k} and adds their unique items into their corresponding keyset at the</a>
-<span class="sourceLineNo">298</span><a id="line.298">     * end. If an item from the nth Iterable is already present in the nth keyset in this when this would add one, this</a>
-<span class="sourceLineNo">299</span><a id="line.299">     * will not put any keys at that point in the iteration order, and will place the next unique group of items it</a>
-<span class="sourceLineNo">300</span><a id="line.300">     * finds in the arguments at that position instead.</a>
-<span class="sourceLineNo">301</span><a id="line.301">     * @param k a Collection of Iterable s of keys to add to their respective keysets; should all be unique (like a Set)</a>
-<span class="sourceLineNo">302</span><a id="line.302">     * @return true if this collection changed as a result of this call</a>
-<span class="sourceLineNo">303</span><a id="line.303">     */</a>
-<span class="sourceLineNo">304</span><a id="line.304">    public boolean putAll(Collection&lt;Iterable&gt; k)</a>
-<span class="sourceLineNo">305</span><a id="line.305">    {</a>
-<span class="sourceLineNo">306</span><a id="line.306">        if(k == null || k.size() != keyCount) return false;</a>
-<span class="sourceLineNo">307</span><a id="line.307">        boolean changed = false;</a>
-<span class="sourceLineNo">308</span><a id="line.308">        Iterator[] its = new Iterator[keyCount];</a>
-<span class="sourceLineNo">309</span><a id="line.309">        int idx = 0;</a>
-<span class="sourceLineNo">310</span><a id="line.310">        for (Iterable it : k) {</a>
-<span class="sourceLineNo">311</span><a id="line.311">            its[idx++] = it.iterator();</a>
-<span class="sourceLineNo">312</span><a id="line.312">        }</a>
-<span class="sourceLineNo">313</span><a id="line.313">        Object[] os = new Object[keyCount];</a>
-<span class="sourceLineNo">314</span><a id="line.314">        while (true)</a>
-<span class="sourceLineNo">315</span><a id="line.315">        {</a>
-<span class="sourceLineNo">316</span><a id="line.316">            for (int i = 0; i &lt; keyCount; i++) {</a>
-<span class="sourceLineNo">317</span><a id="line.317">                if(!its[i].hasNext())</a>
-<span class="sourceLineNo">318</span><a id="line.318">                    return changed;</a>
-<span class="sourceLineNo">319</span><a id="line.319">                os[i] = its[i].next();</a>
-<span class="sourceLineNo">320</span><a id="line.320">            }</a>
-<span class="sourceLineNo">321</span><a id="line.321">            changed = put(os) || changed;</a>
-<span class="sourceLineNo">322</span><a id="line.322">        }</a>
-<span class="sourceLineNo">323</span><a id="line.323">    }</a>
-<span class="sourceLineNo">324</span><a id="line.324">    /**</a>
-<span class="sourceLineNo">325</span><a id="line.325">     * Puts all unique keys in {@code other} into this MultiKey, respecting other's ordering. If a key in other is</a>
-<span class="sourceLineNo">326</span><a id="line.326">     * already present when this would add one, this will not put the keys at that point in the iteration</a>
-<span class="sourceLineNo">327</span><a id="line.327">     * order, and will place the next unique items it finds in other at that position instead.</a>
-<span class="sourceLineNo">328</span><a id="line.328">     * @param other another MultiKey collection with the same keyCount</a>
-<span class="sourceLineNo">329</span><a id="line.329">     * @return true if this collection changed as a result of this call</a>
-<span class="sourceLineNo">330</span><a id="line.330">     */</a>
-<span class="sourceLineNo">331</span><a id="line.331">    public boolean putAll(MultiKey other)</a>
-<span class="sourceLineNo">332</span><a id="line.332">    {</a>
-<span class="sourceLineNo">333</span><a id="line.333">        if(other == null || other.keyCount != keyCount) return false;</a>
-<span class="sourceLineNo">334</span><a id="line.334">        boolean changed = false;</a>
-<span class="sourceLineNo">335</span><a id="line.335">        int sz = other.size();</a>
-<span class="sourceLineNo">336</span><a id="line.336">        Object[] os = new Object[keyCount];</a>
-<span class="sourceLineNo">337</span><a id="line.337">        for (int i = 0; i &lt; sz; i++) {</a>
-<span class="sourceLineNo">338</span><a id="line.338">            changed = put(other.getAllAt(i, os)) || changed;</a>
-<span class="sourceLineNo">339</span><a id="line.339">        }</a>
-<span class="sourceLineNo">340</span><a id="line.340">        return changed;</a>
-<span class="sourceLineNo">341</span><a id="line.341">    }</a>
-<span class="sourceLineNo">342</span><a id="line.342"></a>
-<span class="sourceLineNo">343</span><a id="line.343">    /**</a>
-<span class="sourceLineNo">344</span><a id="line.344">     * Adds a key to each keyset at the given index in the ordering of this MultiKey. The length of k must</a>
-<span class="sourceLineNo">345</span><a id="line.345">     * match the keyCount of this MultiKey, and the nth item in k will go into the nth keyset. No item in k can be</a>
-<span class="sourceLineNo">346</span><a id="line.346">     * present in the matching keyset in this before this is called. If you want to change or update an existing key,</a>
-<span class="sourceLineNo">347</span><a id="line.347">     * use {@link #alter(int, Object, Object)} or {@link #alterAt(int, int, Object)}.</a>
-<span class="sourceLineNo">348</span><a id="line.348">     * @param k an array or varargs of keys to add after the last index of this MultiKey; length must equal keyCount</a>
-<span class="sourceLineNo">349</span><a id="line.349">     * @return true if this collection changed as a result of this call</a>
-<span class="sourceLineNo">350</span><a id="line.350">     */</a>
-<span class="sourceLineNo">351</span><a id="line.351">    public boolean putAt(int index, Object... k)</a>
-<span class="sourceLineNo">352</span><a id="line.352">    {</a>
-<span class="sourceLineNo">353</span><a id="line.353">        if(k != null &amp;&amp; keyCount &gt; 0 &amp;&amp; k.length == keyCount) {</a>
-<span class="sourceLineNo">354</span><a id="line.354">            for (int i = 0; i &lt; keyCount; i++) {</a>
-<span class="sourceLineNo">355</span><a id="line.355">                if(keys[i].containsKey(k[i]))</a>
-<span class="sourceLineNo">356</span><a id="line.356">                    return false;</a>
-<span class="sourceLineNo">357</span><a id="line.357">            }</a>
-<span class="sourceLineNo">358</span><a id="line.358">            for (int i = 0; i &lt; keyCount; i++) {</a>
-<span class="sourceLineNo">359</span><a id="line.359">                keys[i].addAt(index, k[i]);</a>
-<span class="sourceLineNo">360</span><a id="line.360">            }</a>
-<span class="sourceLineNo">361</span><a id="line.361">            return true;</a>
-<span class="sourceLineNo">362</span><a id="line.362">        }</a>
-<span class="sourceLineNo">363</span><a id="line.363">        return false;</a>
-<span class="sourceLineNo">364</span><a id="line.364">    }</a>
-<span class="sourceLineNo">365</span><a id="line.365"></a>
-<span class="sourceLineNo">366</span><a id="line.366">    /**</a>
-<span class="sourceLineNo">367</span><a id="line.367">     * Removes a given Object key from the keyset specified by which, if {@code removing} exists in that keyset, and</a>
-<span class="sourceLineNo">368</span><a id="line.368">     * also removes any keys associated with its point in the ordering.</a>
-<span class="sourceLineNo">369</span><a id="line.369">     * @param which which keyset to remove the item from; if {@code removing} isn't in that keyset, this does nothing</a>
-<span class="sourceLineNo">370</span><a id="line.370">     * @param removing the key to remove</a>
-<span class="sourceLineNo">371</span><a id="line.371">     * @return this for chaining</a>
-<span class="sourceLineNo">372</span><a id="line.372">     */</a>
-<span class="sourceLineNo">373</span><a id="line.373">    public MultiKey remove(int which, Object removing)</a>
-<span class="sourceLineNo">374</span><a id="line.374">    {</a>
-<span class="sourceLineNo">375</span><a id="line.375">        if(which &gt;= 0 &amp;&amp; which &lt; keyCount) {</a>
-<span class="sourceLineNo">376</span><a id="line.376">            int i = keys[which].removeInt(removing);</a>
-<span class="sourceLineNo">377</span><a id="line.377">            if(i &gt;= 0) {</a>
-<span class="sourceLineNo">378</span><a id="line.378">                for (int j = 0; j &lt; keyCount; j++) {</a>
-<span class="sourceLineNo">379</span><a id="line.379">                    if(j != which)</a>
-<span class="sourceLineNo">380</span><a id="line.380">                        keys[j].removeAt(i);</a>
-<span class="sourceLineNo">381</span><a id="line.381">                }</a>
-<span class="sourceLineNo">382</span><a id="line.382">            }</a>
-<span class="sourceLineNo">383</span><a id="line.383">        }</a>
-<span class="sourceLineNo">384</span><a id="line.384">        return this;</a>
-<span class="sourceLineNo">385</span><a id="line.385">    }</a>
-<span class="sourceLineNo">386</span><a id="line.386"></a>
-<span class="sourceLineNo">387</span><a id="line.387">    /**</a>
-<span class="sourceLineNo">388</span><a id="line.388">     * Removes a given point in the ordering, if {@code index} is at least 0 and less than {@link #size()}.</a>
-<span class="sourceLineNo">389</span><a id="line.389">     * @param index the position in the ordering to remove</a>
-<span class="sourceLineNo">390</span><a id="line.390">     * @return this for chaining</a>
-<span class="sourceLineNo">391</span><a id="line.391">     */</a>
-<span class="sourceLineNo">392</span><a id="line.392">    public MultiKey removeAt(int index)</a>
-<span class="sourceLineNo">393</span><a id="line.393">    {</a>
-<span class="sourceLineNo">394</span><a id="line.394">        if(index &gt;= 0 &amp;&amp; keyCount &gt; 0 &amp;&amp; index &lt; keys[0].size) {</a>
-<span class="sourceLineNo">395</span><a id="line.395">            for (int i = 0; i &lt; keyCount; i++) {</a>
-<span class="sourceLineNo">396</span><a id="line.396">                keys[i].removeAt(index);</a>
-<span class="sourceLineNo">397</span><a id="line.397">            }</a>
-<span class="sourceLineNo">398</span><a id="line.398">        }</a>
-<span class="sourceLineNo">399</span><a id="line.399">        return this;</a>
-<span class="sourceLineNo">400</span><a id="line.400">    }</a>
-<span class="sourceLineNo">401</span><a id="line.401"></a>
-<span class="sourceLineNo">402</span><a id="line.402">    /**</a>
-<span class="sourceLineNo">403</span><a id="line.403">     * Reorders this MultiKey using {@code ordering}, which have the same length as this MultiKey's {@link #size()}</a>
-<span class="sourceLineNo">404</span><a id="line.404">     * and can be generated with {@link ArrayTools#range(int)} (which, if applied, would produce no</a>
-<span class="sourceLineNo">405</span><a id="line.405">     * change to the current ordering), {@link IRNG#randomOrdering(int)} (which gives a random ordering, and if</a>
-<span class="sourceLineNo">406</span><a id="line.406">     * applied immediately would be the same as calling {@link #shuffle(IRNG)}), or made in some other way. If you</a>
-<span class="sourceLineNo">407</span><a id="line.407">     * already have an ordering and want to make a different ordering that can undo the change, you can use</a>
-<span class="sourceLineNo">408</span><a id="line.408">     * {@link ArrayTools#invertOrdering(int[])} called on the original ordering.</a>
-<span class="sourceLineNo">409</span><a id="line.409">     * @param ordering an int array or vararg that should contain each int from 0 to {@link #size()} (or less)</a>
-<span class="sourceLineNo">410</span><a id="line.410">     * @return this for chaining</a>
-<span class="sourceLineNo">411</span><a id="line.411">     */</a>
-<span class="sourceLineNo">412</span><a id="line.412">    public MultiKey reorder(int... ordering)</a>
-<span class="sourceLineNo">413</span><a id="line.413">    {</a>
-<span class="sourceLineNo">414</span><a id="line.414">        if(ordering != null) {</a>
-<span class="sourceLineNo">415</span><a id="line.415">            for (int i = 0; i &lt; keyCount; i++) {</a>
-<span class="sourceLineNo">416</span><a id="line.416">                keys[i].reorder(ordering);</a>
-<span class="sourceLineNo">417</span><a id="line.417">            }</a>
-<span class="sourceLineNo">418</span><a id="line.418">        }</a>
-<span class="sourceLineNo">419</span><a id="line.419">        return this;</a>
-<span class="sourceLineNo">420</span><a id="line.420">    }</a>
-<span class="sourceLineNo">421</span><a id="line.421"></a>
-<span class="sourceLineNo">422</span><a id="line.422">    /**</a>
-<span class="sourceLineNo">423</span><a id="line.423">     * Generates a random ordering with rng and applies the same ordering to all kinds of keys this has; they will</a>
-<span class="sourceLineNo">424</span><a id="line.424">     * maintain their current association to other keys but their ordering/indices will change.</a>
-<span class="sourceLineNo">425</span><a id="line.425">     * @param rng an IRNG to produce the random ordering this will use</a>
-<span class="sourceLineNo">426</span><a id="line.426">     * @return this for chaining</a>
-<span class="sourceLineNo">427</span><a id="line.427">     */</a>
-<span class="sourceLineNo">428</span><a id="line.428">    public MultiKey shuffle(IRNG rng)</a>
-<span class="sourceLineNo">429</span><a id="line.429">    {</a>
-<span class="sourceLineNo">430</span><a id="line.430">        if(keyCount &gt; 0) {</a>
-<span class="sourceLineNo">431</span><a id="line.431">            int[] ordering = rng.randomOrdering(keys[0].size);</a>
-<span class="sourceLineNo">432</span><a id="line.432">            for (int i = 0; i &lt; keyCount; i++) {</a>
-<span class="sourceLineNo">433</span><a id="line.433">                keys[i].reorder(ordering);</a>
-<span class="sourceLineNo">434</span><a id="line.434">            }</a>
-<span class="sourceLineNo">435</span><a id="line.435">        }</a>
-<span class="sourceLineNo">436</span><a id="line.436">        return this;</a>
-<span class="sourceLineNo">437</span><a id="line.437">    }</a>
-<span class="sourceLineNo">438</span><a id="line.438"></a>
-<span class="sourceLineNo">439</span><a id="line.439">    /**</a>
-<span class="sourceLineNo">440</span><a id="line.440">     * Creates a new iterator over the keys this holds in the keyset specified by which. This can be problematic for</a>
-<span class="sourceLineNo">441</span><a id="line.441">     * garbage collection if called very frequently; it may be better to access items by index (which also lets you</a>
-<span class="sourceLineNo">442</span><a id="line.442">     * access other keys associated with that index) using {@link #getAt(int, int)} in a for(int i=0...) loop.</a>
-<span class="sourceLineNo">443</span><a id="line.443">     * @return a newly-created iterator over this MultiKey's keys in the specified keyset</a>
-<span class="sourceLineNo">444</span><a id="line.444">     */</a>
-<span class="sourceLineNo">445</span><a id="line.445">    public Iterator iterator(int which)</a>
-<span class="sourceLineNo">446</span><a id="line.446">    {</a>
-<span class="sourceLineNo">447</span><a id="line.447">        if(which &gt;= 0 &amp;&amp; which &lt; keyCount)</a>
-<span class="sourceLineNo">448</span><a id="line.448">            return keys[which].iterator();</a>
-<span class="sourceLineNo">449</span><a id="line.449">        return null;</a>
-<span class="sourceLineNo">450</span><a id="line.450">    }</a>
-<span class="sourceLineNo">451</span><a id="line.451"></a>
-<span class="sourceLineNo">452</span><a id="line.452">    /**</a>
-<span class="sourceLineNo">453</span><a id="line.453">     * Gets and caches the keys in the keyset specified by which as a Collection that implements SortedSet (and so also</a>
-<span class="sourceLineNo">454</span><a id="line.454">     * implements Set).</a>
-<span class="sourceLineNo">455</span><a id="line.455">     * @param which which keyset to get as a separate value</a>
-<span class="sourceLineNo">456</span><a id="line.456">     * @return the keys from the keyset specified by which, as a SortedSet</a>
-<span class="sourceLineNo">457</span><a id="line.457">     */</a>
-<span class="sourceLineNo">458</span><a id="line.458">    public SortedSet getSet(int which) {</a>
-<span class="sourceLineNo">459</span><a id="line.459">        if(which &gt;= 0 &amp;&amp; which &lt; keyCount)</a>
-<span class="sourceLineNo">460</span><a id="line.460">            return keys[which].keySet();</a>
-<span class="sourceLineNo">461</span><a id="line.461">        return null;</a>
-<span class="sourceLineNo">462</span><a id="line.462">    }</a>
-<span class="sourceLineNo">463</span><a id="line.463"></a>
-<span class="sourceLineNo">464</span><a id="line.464">    /**</a>
-<span class="sourceLineNo">465</span><a id="line.465">     * To be called sparingly, since this allocates a new OrderedSet instead of reusing one.</a>
-<span class="sourceLineNo">466</span><a id="line.466">     * @param which which keyset to get as a separate value</a>
-<span class="sourceLineNo">467</span><a id="line.467">     * @return the keys from the keyset specified by which, as an OrderedSet</a>
-<span class="sourceLineNo">468</span><a id="line.468">     */</a>
-<span class="sourceLineNo">469</span><a id="line.469">    public OrderedSet getOrderedSet(int which) {</a>
-<span class="sourceLineNo">470</span><a id="line.470">        if(which &gt;= 0 &amp;&amp; which &lt; keyCount)</a>
-<span class="sourceLineNo">471</span><a id="line.471">            return keys[which].keysAsOrderedSet();</a>
-<span class="sourceLineNo">472</span><a id="line.472">        return null;</a>
-<span class="sourceLineNo">473</span><a id="line.473"></a>
-<span class="sourceLineNo">474</span><a id="line.474">    }</a>
-<span class="sourceLineNo">475</span><a id="line.475"></a>
-<span class="sourceLineNo">476</span><a id="line.476">    public int keyCount() {</a>
-<span class="sourceLineNo">477</span><a id="line.477">        return keyCount;</a>
-<span class="sourceLineNo">478</span><a id="line.478">    }</a>
-<span class="sourceLineNo">479</span><a id="line.479">    public int valueCount() {</a>
-<span class="sourceLineNo">480</span><a id="line.480">        return 0;</a>
-<span class="sourceLineNo">481</span><a id="line.481">    }</a>
-<span class="sourceLineNo">482</span><a id="line.482"></a>
-<span class="sourceLineNo">483</span><a id="line.483">    public int size() {</a>
-<span class="sourceLineNo">484</span><a id="line.484">        return (keyCount &gt; 0) ? keys[0].size : 0;</a>
-<span class="sourceLineNo">485</span><a id="line.485">    }</a>
-<span class="sourceLineNo">486</span><a id="line.486"></a>
-<span class="sourceLineNo">487</span><a id="line.487">    public boolean isEmpty()</a>
-<span class="sourceLineNo">488</span><a id="line.488">    {</a>
-<span class="sourceLineNo">489</span><a id="line.489">        return keyCount &gt; 0 &amp;&amp; keys[0].size &gt; 0;</a>
-<span class="sourceLineNo">490</span><a id="line.490">    }</a>
-<span class="sourceLineNo">491</span><a id="line.491"></a>
-<span class="sourceLineNo">492</span><a id="line.492">}</a>
+<div class="source-container">
+<pre><span class="source-line-no">001</span><span id="line.1">package squidpony.squidmath;</span>
+<span class="source-line-no">002</span><span id="line.2"></span>
+<span class="source-line-no">003</span><span id="line.3">import squidpony.ArrayTools;</span>
+<span class="source-line-no">004</span><span id="line.4"></span>
+<span class="source-line-no">005</span><span id="line.5">import java.util.Collection;</span>
+<span class="source-line-no">006</span><span id="line.6">import java.util.Iterator;</span>
+<span class="source-line-no">007</span><span id="line.7">import java.util.SortedSet;</span>
+<span class="source-line-no">008</span><span id="line.8"></span>
+<span class="source-line-no">009</span><span id="line.9">/**</span>
+<span class="source-line-no">010</span><span id="line.10"> * An ordered multi-directional "map" that keeps 1 or more keysets organized so you can look up one key given a key in</span>
+<span class="source-line-no">011</span><span id="line.11"> * another keyset, and do the same for the indices of keys. Does not have generic type parameters, which is needed</span>
+<span class="source-line-no">012</span><span id="line.12"> * because we handle arbitrary counts of keysets, and each keyset could have its own type. You can use most of the</span>
+<span class="source-line-no">013</span><span id="line.13"> * normal Map methods here, though they often need an int as their first argument, {@code which}, that specifies which</span>
+<span class="source-line-no">014</span><span id="line.14"> * keyset the method applies to. For example, {@link #contains(int, Object)} checks for the presence of the second</span>
+<span class="source-line-no">015</span><span id="line.15"> * parameter in the keyset specified by the first parameter. Adding items to a MultiKey uses {@link #put(Object...)},</span>
+<span class="source-line-no">016</span><span id="line.16"> * and that does not take a {@code which} parameter because it needs to add an item to every keyset to succeed, and will</span>
+<span class="source-line-no">017</span><span id="line.17"> * do nothing if the array or varargs passed to it has a different length than the {@link #keyCount} of the MultiKey.</span>
+<span class="source-line-no">018</span><span id="line.18"> * Created by Tommy Ettinger on 10/23/2016.</span>
+<span class="source-line-no">019</span><span id="line.19"> */</span>
+<span class="source-line-no">020</span><span id="line.20">@SuppressWarnings("unchecked")</span>
+<span class="source-line-no">021</span><span id="line.21">public class MultiKey {</span>
+<span class="source-line-no">022</span><span id="line.22">    public final int keyCount;</span>
+<span class="source-line-no">023</span><span id="line.23">    private Arrangement[] keys;</span>
+<span class="source-line-no">024</span><span id="line.24"></span>
+<span class="source-line-no">025</span><span id="line.25">    /**</span>
+<span class="source-line-no">026</span><span id="line.26">     * Constructs an empty MultiKey.</span>
+<span class="source-line-no">027</span><span id="line.27">     */</span>
+<span class="source-line-no">028</span><span id="line.28">    public MultiKey()</span>
+<span class="source-line-no">029</span><span id="line.29">    {</span>
+<span class="source-line-no">030</span><span id="line.30">        this(3, 16, 0.5f);</span>
+<span class="source-line-no">031</span><span id="line.31">    }</span>
+<span class="source-line-no">032</span><span id="line.32"></span>
+<span class="source-line-no">033</span><span id="line.33">    /**</span>
+<span class="source-line-no">034</span><span id="line.34">     * Constructs a MultiKey with the expected number of indices to hold (the number of items in each keyset is always</span>
+<span class="source-line-no">035</span><span id="line.35">     * the same, and this will be more efficient if expected is greater than that number).</span>
+<span class="source-line-no">036</span><span id="line.36">     * @param expected how many items this should be ready to hold; can resize if needed</span>
+<span class="source-line-no">037</span><span id="line.37">     */</span>
+<span class="source-line-no">038</span><span id="line.38">    public MultiKey(int keyCount, int expected)</span>
+<span class="source-line-no">039</span><span id="line.39">    {</span>
+<span class="source-line-no">040</span><span id="line.40">        this(keyCount, expected, 0.5f);</span>
+<span class="source-line-no">041</span><span id="line.41">    }</span>
+<span class="source-line-no">042</span><span id="line.42"></span>
+<span class="source-line-no">043</span><span id="line.43">    /**</span>
+<span class="source-line-no">044</span><span id="line.44">     * Constructs a MultiKey with the expected number of indices to hold (the number of items in each keyset is always</span>
+<span class="source-line-no">045</span><span id="line.45">     * the same, and this will be more efficient if expected is greater than that number) and the load factor to use,</span>
+<span class="source-line-no">046</span><span id="line.46">     * between 0.1f and 0.8f usually (using load factors higher than 0.8f can cause problems).</span>
+<span class="source-line-no">047</span><span id="line.47">     * @param expected the amount of indices (the number of items in each keyset is always the same) this should hold</span>
+<span class="source-line-no">048</span><span id="line.48">     * @param f the load factor, probably between 0.1f and 0.8f</span>
+<span class="source-line-no">049</span><span id="line.49">     */</span>
+<span class="source-line-no">050</span><span id="line.50">    public MultiKey(int keyCount, int expected, float f)</span>
+<span class="source-line-no">051</span><span id="line.51">    {</span>
+<span class="source-line-no">052</span><span id="line.52">        this.keyCount = keyCount;</span>
+<span class="source-line-no">053</span><span id="line.53">        keys = new Arrangement[keyCount];</span>
+<span class="source-line-no">054</span><span id="line.54">        for (int i = 0; i &lt; keyCount; i++) {</span>
+<span class="source-line-no">055</span><span id="line.55">            keys[i] = new Arrangement(expected, f);</span>
+<span class="source-line-no">056</span><span id="line.56">        }</span>
+<span class="source-line-no">057</span><span id="line.57">    }</span>
+<span class="source-line-no">058</span><span id="line.58"></span>
+<span class="source-line-no">059</span><span id="line.59">    /**</span>
+<span class="source-line-no">060</span><span id="line.60">     * Constructs a MultiKey from a Collection of Iterables that will be processed in tandem, adding a unique item from</span>
+<span class="source-line-no">061</span><span id="line.61">     * each keyset in keysets if and only if it can also add a unique item from all other keysets, otherwise skipping</span>
+<span class="source-line-no">062</span><span id="line.62">     * that iteration in each Iterable.</span>
+<span class="source-line-no">063</span><span id="line.63">     * @param keysets a Collection of Iterable data structures, each containing items that should all be unique</span>
+<span class="source-line-no">064</span><span id="line.64">     */</span>
+<span class="source-line-no">065</span><span id="line.65">    public MultiKey(Collection&lt;Iterable&gt; keysets) {</span>
+<span class="source-line-no">066</span><span id="line.66">        if (keysets == null) {</span>
+<span class="source-line-no">067</span><span id="line.67">            keyCount = 0;</span>
+<span class="source-line-no">068</span><span id="line.68">            keys = new Arrangement[0];</span>
+<span class="source-line-no">069</span><span id="line.69">        } else {</span>
+<span class="source-line-no">070</span><span id="line.70">            keyCount = keysets.size();</span>
+<span class="source-line-no">071</span><span id="line.71">            keys = new Arrangement[keyCount];</span>
+<span class="source-line-no">072</span><span id="line.72">            for (int i = 0; i &lt; keyCount; i++) {</span>
+<span class="source-line-no">073</span><span id="line.73">                keys[i] = new Arrangement();</span>
+<span class="source-line-no">074</span><span id="line.74">            }</span>
+<span class="source-line-no">075</span><span id="line.75">            putAll(keysets);</span>
+<span class="source-line-no">076</span><span id="line.76">        }</span>
+<span class="source-line-no">077</span><span id="line.77">    }</span>
+<span class="source-line-no">078</span><span id="line.78"></span>
+<span class="source-line-no">079</span><span id="line.79">    public MultiKey(MultiKey other)</span>
+<span class="source-line-no">080</span><span id="line.80">    {</span>
+<span class="source-line-no">081</span><span id="line.81">        if(other == null)</span>
+<span class="source-line-no">082</span><span id="line.82">        {</span>
+<span class="source-line-no">083</span><span id="line.83">            keyCount = 0;</span>
+<span class="source-line-no">084</span><span id="line.84">            keys = new Arrangement[0];</span>
+<span class="source-line-no">085</span><span id="line.85">        }</span>
+<span class="source-line-no">086</span><span id="line.86">        else</span>
+<span class="source-line-no">087</span><span id="line.87">        {</span>
+<span class="source-line-no">088</span><span id="line.88">            keyCount = other.keyCount;</span>
+<span class="source-line-no">089</span><span id="line.89">            keys = new Arrangement[keyCount];</span>
+<span class="source-line-no">090</span><span id="line.90">            for (int i = 0; i &lt; keyCount; i++) {</span>
+<span class="source-line-no">091</span><span id="line.91">                keys[i] = new Arrangement(other.keys[i]);</span>
+<span class="source-line-no">092</span><span id="line.92">            }</span>
+<span class="source-line-no">093</span><span id="line.93">        }</span>
+<span class="source-line-no">094</span><span id="line.94">    }</span>
+<span class="source-line-no">095</span><span id="line.95"></span>
+<span class="source-line-no">096</span><span id="line.96">    public MultiKey(Arrangement[] keysets)</span>
+<span class="source-line-no">097</span><span id="line.97">    {</span>
+<span class="source-line-no">098</span><span id="line.98">        if(keysets == null)</span>
+<span class="source-line-no">099</span><span id="line.99">        {</span>
+<span class="source-line-no">100</span><span id="line.100">            keyCount = 0;</span>
+<span class="source-line-no">101</span><span id="line.101">            keys = new Arrangement[0];</span>
+<span class="source-line-no">102</span><span id="line.102">        }</span>
+<span class="source-line-no">103</span><span id="line.103">        else</span>
+<span class="source-line-no">104</span><span id="line.104">        {</span>
+<span class="source-line-no">105</span><span id="line.105">            keyCount = keysets.length;</span>
+<span class="source-line-no">106</span><span id="line.106">            keys = new Arrangement[keyCount];</span>
+<span class="source-line-no">107</span><span id="line.107">            int minLength = Integer.MAX_VALUE;</span>
+<span class="source-line-no">108</span><span id="line.108">            for (int k = 0; k &lt; keyCount; k++) {</span>
+<span class="source-line-no">109</span><span id="line.109">                if(keysets[k] == null)</span>
+<span class="source-line-no">110</span><span id="line.110">                    return;</span>
+<span class="source-line-no">111</span><span id="line.111">                minLength = Math.min(minLength, keysets[k].size);</span>
+<span class="source-line-no">112</span><span id="line.112">            }</span>
+<span class="source-line-no">113</span><span id="line.113">            for (int k = 0; k &lt; keyCount; k++) {</span>
+<span class="source-line-no">114</span><span id="line.114">                keys[k] = keysets[k].take(minLength);</span>
+<span class="source-line-no">115</span><span id="line.115">            }</span>
+<span class="source-line-no">116</span><span id="line.116">        }</span>
+<span class="source-line-no">117</span><span id="line.117">    }</span>
+<span class="source-line-no">118</span><span id="line.118">    /**</span>
+<span class="source-line-no">119</span><span id="line.119">     * Returns true if this contains key in the keyset specified by which.</span>
+<span class="source-line-no">120</span><span id="line.120">     * @param which which keyset to check in</span>
+<span class="source-line-no">121</span><span id="line.121">     * @param key the key to check the presence of</span>
+<span class="source-line-no">122</span><span id="line.122">     * @return true if key is present in the keyset at which; false otherwise</span>
+<span class="source-line-no">123</span><span id="line.123">     */</span>
+<span class="source-line-no">124</span><span id="line.124">    public boolean contains(int which, Object key) {</span>
+<span class="source-line-no">125</span><span id="line.125">        if(which &gt;= 0 &amp;&amp; which &lt; keyCount)</span>
+<span class="source-line-no">126</span><span id="line.126">            return keys[which].containsKey(key);</span>
+<span class="source-line-no">127</span><span id="line.127">        return false;</span>
+<span class="source-line-no">128</span><span id="line.128">    }</span>
+<span class="source-line-no">129</span><span id="line.129"></span>
+<span class="source-line-no">130</span><span id="line.130">    /**</span>
+<span class="source-line-no">131</span><span id="line.131">     * Returns true if index is between 0 (inclusive) and {@link #size()} (exclusive), or false otherwise.</span>
+<span class="source-line-no">132</span><span id="line.132">     * @param index the index to check</span>
+<span class="source-line-no">133</span><span id="line.133">     * @return true if index is a valid index in the ordering of this MultiKey</span>
+<span class="source-line-no">134</span><span id="line.134">     */</span>
+<span class="source-line-no">135</span><span id="line.135">    public boolean containsIndex(int index) {</span>
+<span class="source-line-no">136</span><span id="line.136">        if(keyCount &gt; 0) return keys[0].containsValue(index);</span>
+<span class="source-line-no">137</span><span id="line.137">        return false;</span>
+<span class="source-line-no">138</span><span id="line.138">    }</span>
+<span class="source-line-no">139</span><span id="line.139"></span>
+<span class="source-line-no">140</span><span id="line.140">    /**</span>
+<span class="source-line-no">141</span><span id="line.141">     * Given an index of a keyset (which) and an Object key, finds the position in the ordering that key has in the</span>
+<span class="source-line-no">142</span><span id="line.142">     * keyset at which, or -1 if key is not present.</span>
+<span class="source-line-no">143</span><span id="line.143">     * &lt;br&gt;</span>
+<span class="source-line-no">144</span><span id="line.144">     * Unlike {@link java.util.List#indexOf(Object)}, this runs in constant time.</span>
+<span class="source-line-no">145</span><span id="line.145">     * @param which which keyset to check in</span>
+<span class="source-line-no">146</span><span id="line.146">     * @param key the key to find the position of</span>
+<span class="source-line-no">147</span><span id="line.147">     * @return the int index of key in the ordering, or -1 if it is not present</span>
+<span class="source-line-no">148</span><span id="line.148">     */</span>
+<span class="source-line-no">149</span><span id="line.149">    public int indexOf(int which, Object key)</span>
+<span class="source-line-no">150</span><span id="line.150">    {</span>
+<span class="source-line-no">151</span><span id="line.151">        if(which &gt;= 0 &amp;&amp; which &lt; keyCount)</span>
+<span class="source-line-no">152</span><span id="line.152">            return keys[which].getInt(key);</span>
+<span class="source-line-no">153</span><span id="line.153">        return -1;</span>
+<span class="source-line-no">154</span><span id="line.154">    }</span>
+<span class="source-line-no">155</span><span id="line.155"></span>
+<span class="source-line-no">156</span><span id="line.156">    /**</span>
+<span class="source-line-no">157</span><span id="line.157">     * Given an index of a keyset (which) and an int index, finds the associated key in the keyset specified by which</span>
+<span class="source-line-no">158</span><span id="line.158">     * (using index as a point in the ordering).</span>
+<span class="source-line-no">159</span><span id="line.159">     * @param which which keyset to get from</span>
+<span class="source-line-no">160</span><span id="line.160">     * @param index an int index into this MultiKey</span>
+<span class="source-line-no">161</span><span id="line.161">     * @return the key (in the keyset found by which) with index for its position in the ordering, or null if index or which was invalid</span>
+<span class="source-line-no">162</span><span id="line.162">     */</span>
+<span class="source-line-no">163</span><span id="line.163">    public Object getAt(int which, int index)</span>
+<span class="source-line-no">164</span><span id="line.164">    {</span>
+<span class="source-line-no">165</span><span id="line.165">        if(which &gt;= 0 &amp;&amp; which &lt; keyCount)</span>
+<span class="source-line-no">166</span><span id="line.166">            return keys[which].keyAt(index);</span>
+<span class="source-line-no">167</span><span id="line.167">        return null;</span>
+<span class="source-line-no">168</span><span id="line.168">    }</span>
+<span class="source-line-no">169</span><span id="line.169"></span>
+<span class="source-line-no">170</span><span id="line.170">    /**</span>
+<span class="source-line-no">171</span><span id="line.171">     * Given an int index, finds the associated keys at all keysets (using index as a point in the ordering) and returns</span>
+<span class="source-line-no">172</span><span id="line.172">     * them as a newly-allocated Object array.</span>
+<span class="source-line-no">173</span><span id="line.173">     * @param index an int index into this MultiKey</span>
+<span class="source-line-no">174</span><span id="line.174">     * @return the array of keys with index for their position in the ordering, or an array of null if index was invalid</span>
+<span class="source-line-no">175</span><span id="line.175">     * @see #getAllAt(int, Object[]) getAllAt can avoid allocating a new array each time</span>
+<span class="source-line-no">176</span><span id="line.176">     */</span>
+<span class="source-line-no">177</span><span id="line.177">    public Object[] getAllAt(int index) {</span>
+<span class="source-line-no">178</span><span id="line.178">        Object[] os = new Object[keyCount];</span>
+<span class="source-line-no">179</span><span id="line.179">        for (int i = 0; i &lt; keyCount; i++) {</span>
+<span class="source-line-no">180</span><span id="line.180">            os[i] = keys[i].keyAt(index);</span>
+<span class="source-line-no">181</span><span id="line.181">        }</span>
+<span class="source-line-no">182</span><span id="line.182">        return os;</span>
+<span class="source-line-no">183</span><span id="line.183">    }</span>
+<span class="source-line-no">184</span><span id="line.184"></span>
+<span class="source-line-no">185</span><span id="line.185">    /**</span>
+<span class="source-line-no">186</span><span id="line.186">     * Given an int index and an Object array to reuse, finds the associated keys at all keysets (using index as a point</span>
+<span class="source-line-no">187</span><span id="line.187">     * in the ordering) and fills into with those keys, up to keyCount items.</span>
+<span class="source-line-no">188</span><span id="line.188">     * @param index an int index into this MultiKey</span>
+<span class="source-line-no">189</span><span id="line.189">     * @param into an Object array to reuse and fill with items; will be returned as-is if smaller than keyCount</span>
+<span class="source-line-no">190</span><span id="line.190">     * @return the array of keys with index for their position in the ordering, or an array of null if index was invalid</span>
+<span class="source-line-no">191</span><span id="line.191">     */</span>
+<span class="source-line-no">192</span><span id="line.192">    public Object[] getAllAt(int index, Object[] into) {</span>
+<span class="source-line-no">193</span><span id="line.193">        if (into != null &amp;&amp; into.length &gt;= keyCount) {</span>
+<span class="source-line-no">194</span><span id="line.194">            for (int i = 0; i &lt; keyCount; i++) {</span>
+<span class="source-line-no">195</span><span id="line.195">                into[i] = keys[i].keyAt(index);</span>
+<span class="source-line-no">196</span><span id="line.196">            }</span>
+<span class="source-line-no">197</span><span id="line.197">        }</span>
+<span class="source-line-no">198</span><span id="line.198">        return into;</span>
+<span class="source-line-no">199</span><span id="line.199">    }</span>
+<span class="source-line-no">200</span><span id="line.200"></span>
+<span class="source-line-no">201</span><span id="line.201">    /**</span>
+<span class="source-line-no">202</span><span id="line.202">     * Given an index of the keyset to look up a key in (lookingUp), an index of the keyset to get from (getting), and</span>
+<span class="source-line-no">203</span><span id="line.203">     * an Object key to look up (key), finds the Object key in the keyset specified by getting that is associated with</span>
+<span class="source-line-no">204</span><span id="line.204">     * key in the keyset specified by lookingUp. key and the returned value will be at the same point in the ordering.</span>
+<span class="source-line-no">205</span><span id="line.205">     * @param lookingUp which keyset to look up the {@code key} parameter in</span>
+<span class="source-line-no">206</span><span id="line.206">     * @param getting which keyset to get a value from</span>
+<span class="source-line-no">207</span><span id="line.207">     * @param key an object to use as a key, which should be the right type for the keyset at lookingUp</span>
+<span class="source-line-no">208</span><span id="line.208">     * @return the object from getting's keyset that is associated with key, or null if key was not present</span>
+<span class="source-line-no">209</span><span id="line.209">     */</span>
+<span class="source-line-no">210</span><span id="line.210">    public Object getFrom(int lookingUp, int getting, Object key)</span>
+<span class="source-line-no">211</span><span id="line.211">    {</span>
+<span class="source-line-no">212</span><span id="line.212">        if(lookingUp &gt;= 0 &amp;&amp; lookingUp &lt; keyCount &amp;&amp; getting &gt;= 0 &amp;&amp; getting &lt; keyCount)</span>
+<span class="source-line-no">213</span><span id="line.213">            return keys[getting].keyAt(keys[lookingUp].getInt(key));</span>
+<span class="source-line-no">214</span><span id="line.214">        return null;</span>
+<span class="source-line-no">215</span><span id="line.215">    }</span>
+<span class="source-line-no">216</span><span id="line.216"></span>
+<span class="source-line-no">217</span><span id="line.217">    /**</span>
+<span class="source-line-no">218</span><span id="line.218">     * Gets a random key from the keyset specified by which using the given IRNG.</span>
+<span class="source-line-no">219</span><span id="line.219">     * @param which which keyset to get a random key from</span>
+<span class="source-line-no">220</span><span id="line.220">     * @param random generates a random index to get a key with</span>
+<span class="source-line-no">221</span><span id="line.221">     * @return a randomly chosen key from the keyset specified, or null if this is empty</span>
+<span class="source-line-no">222</span><span id="line.222">     */</span>
+<span class="source-line-no">223</span><span id="line.223">    public Object randomKey(int which, IRNG random)</span>
+<span class="source-line-no">224</span><span id="line.224">    {</span>
+<span class="source-line-no">225</span><span id="line.225">        if(which &gt;= 0 &amp;&amp; which &lt; keyCount)</span>
+<span class="source-line-no">226</span><span id="line.226">            return keys[which].randomKey(random);</span>
+<span class="source-line-no">227</span><span id="line.227">        return null;</span>
+<span class="source-line-no">228</span><span id="line.228">    }</span>
+<span class="source-line-no">229</span><span id="line.229">    /**</span>
+<span class="source-line-no">230</span><span id="line.230">     * Gets a random key from a random keyset in this MultiKey using the given IRNG.</span>
+<span class="source-line-no">231</span><span id="line.231">     * @param random generates a random keyset index and random item index, to get a random key</span>
+<span class="source-line-no">232</span><span id="line.232">     * @return a randomly chosen Object key from possibly any keyset in this, or null if this is empty</span>
+<span class="source-line-no">233</span><span id="line.233">     */</span>
+<span class="source-line-no">234</span><span id="line.234">    public Object randomKey(IRNG random)</span>
+<span class="source-line-no">235</span><span id="line.235">    {</span>
+<span class="source-line-no">236</span><span id="line.236">        if(keyCount &gt; 0)</span>
+<span class="source-line-no">237</span><span id="line.237">            return keys[random.nextInt(keyCount)].randomKey(random);</span>
+<span class="source-line-no">238</span><span id="line.238">        return null;</span>
+<span class="source-line-no">239</span><span id="line.239">    }</span>
+<span class="source-line-no">240</span><span id="line.240"></span>
+<span class="source-line-no">241</span><span id="line.241">    /**</span>
+<span class="source-line-no">242</span><span id="line.242">     * In the keyset specified by {@code which}, changes an existing key, {@code past}, to another key, {@code future},</span>
+<span class="source-line-no">243</span><span id="line.243">     * if past exists in that keyset and future does not yet exist in that keyset. This will retain past's point in the</span>
+<span class="source-line-no">244</span><span id="line.244">     * ordering for future, so the associated other key(s) will still be associated in the same way.</span>
+<span class="source-line-no">245</span><span id="line.245">     * @param which which keyset to alter the items in</span>
+<span class="source-line-no">246</span><span id="line.246">     * @param past a key, that must exist in the keyset specified by which, and will be changed</span>
+<span class="source-line-no">247</span><span id="line.247">     * @param future a key, that cannot currently exist in the keyset specified by which, but will if this succeeds</span>
+<span class="source-line-no">248</span><span id="line.248">     * @return this for chaining</span>
+<span class="source-line-no">249</span><span id="line.249">     */</span>
+<span class="source-line-no">250</span><span id="line.250">    public MultiKey alter(int which, Object past, Object future)</span>
+<span class="source-line-no">251</span><span id="line.251">    {</span>
+<span class="source-line-no">252</span><span id="line.252">        if(which &gt;= 0 &amp;&amp; which &lt; keyCount &amp;&amp; keys[which].containsKey(past) &amp;&amp; !keys[which].containsKey(future))</span>
+<span class="source-line-no">253</span><span id="line.253">            keys[which].alter(past, future);</span>
+<span class="source-line-no">254</span><span id="line.254">        return this;</span>
+<span class="source-line-no">255</span><span id="line.255">    }</span>
+<span class="source-line-no">256</span><span id="line.256">    /**</span>
+<span class="source-line-no">257</span><span id="line.257">     * In the keyset specified by {@code which}, changes the key at {@code index} to another key, {@code future}, if</span>
+<span class="source-line-no">258</span><span id="line.258">     * index is valid and future does not yet exist in that keyset. The position in the ordering for future will be the</span>
+<span class="source-line-no">259</span><span id="line.259">     * same as index, and the same as the key this replaced, if this succeeds, so the other key(s) at that position will</span>
+<span class="source-line-no">260</span><span id="line.260">     * still be associated in the same way.</span>
+<span class="source-line-no">261</span><span id="line.261">     * @param which which keyset to alter the items in</span>
+<span class="source-line-no">262</span><span id="line.262">     * @param index a position in the ordering to change; must be at least 0 and less than {@link #size()}</span>
+<span class="source-line-no">263</span><span id="line.263">     * @param future a key, that cannot currently exist in the keyset specified by which, but will if this succeeds</span>
+<span class="source-line-no">264</span><span id="line.264">     * @return this for chaining</span>
+<span class="source-line-no">265</span><span id="line.265">     */</span>
+<span class="source-line-no">266</span><span id="line.266">    public MultiKey alterAt(int which, int index, Object future)</span>
+<span class="source-line-no">267</span><span id="line.267">    {</span>
+<span class="source-line-no">268</span><span id="line.268">        if(which &gt;= 0 &amp;&amp; which &lt; keyCount &amp;&amp; !keys[which].containsKey(future) &amp;&amp; index &gt;= 0 &amp;&amp; index &lt; keys[which].size)</span>
+<span class="source-line-no">269</span><span id="line.269">            keys[which].alter(keys[which].keyAt(index), future);</span>
+<span class="source-line-no">270</span><span id="line.270">        return this;</span>
+<span class="source-line-no">271</span><span id="line.271">    }</span>
+<span class="source-line-no">272</span><span id="line.272"></span>
+<span class="source-line-no">273</span><span id="line.273">    /**</span>
+<span class="source-line-no">274</span><span id="line.274">     * Adds a key to each keyset at the same point in the ordering (the end) of this MultiKey. The length of k must</span>
+<span class="source-line-no">275</span><span id="line.275">     * match the keyCount of this MultiKey, and the nth item in k will go into the nth keyset. No item in k can be</span>
+<span class="source-line-no">276</span><span id="line.276">     * present in the matching keyset in this before this is called. If you want to change or update an existing key,</span>
+<span class="source-line-no">277</span><span id="line.277">     * use {@link #alter(int, Object, Object)} or {@link #alterAt(int, int, Object)}.</span>
+<span class="source-line-no">278</span><span id="line.278">     * @param k an array or varargs of keys to add after the last index of this MultiKey; length must equal keyCount</span>
+<span class="source-line-no">279</span><span id="line.279">     * @return true if this collection changed as a result of this call</span>
+<span class="source-line-no">280</span><span id="line.280">     */</span>
+<span class="source-line-no">281</span><span id="line.281">    public boolean put(Object... k)</span>
+<span class="source-line-no">282</span><span id="line.282">    {</span>
+<span class="source-line-no">283</span><span id="line.283">        if(k != null &amp;&amp; keyCount &gt; 0 &amp;&amp; k.length == keyCount) {</span>
+<span class="source-line-no">284</span><span id="line.284">            for (int i = 0; i &lt; keyCount; i++) {</span>
+<span class="source-line-no">285</span><span id="line.285">                if(keys[i].containsKey(k[i]))</span>
+<span class="source-line-no">286</span><span id="line.286">                    return false;</span>
+<span class="source-line-no">287</span><span id="line.287">            }</span>
+<span class="source-line-no">288</span><span id="line.288">            for (int i = 0; i &lt; keyCount; i++) {</span>
+<span class="source-line-no">289</span><span id="line.289">                keys[i].add(k[i]);</span>
+<span class="source-line-no">290</span><span id="line.290">            }</span>
+<span class="source-line-no">291</span><span id="line.291">            return true;</span>
+<span class="source-line-no">292</span><span id="line.292">        }</span>
+<span class="source-line-no">293</span><span id="line.293">        return false;</span>
+<span class="source-line-no">294</span><span id="line.294">    }</span>
+<span class="source-line-no">295</span><span id="line.295"></span>
+<span class="source-line-no">296</span><span id="line.296">    /**</span>
+<span class="source-line-no">297</span><span id="line.297">     * Goes through all Iterable items in {@code k} and adds their unique items into their corresponding keyset at the</span>
+<span class="source-line-no">298</span><span id="line.298">     * end. If an item from the nth Iterable is already present in the nth keyset in this when this would add one, this</span>
+<span class="source-line-no">299</span><span id="line.299">     * will not put any keys at that point in the iteration order, and will place the next unique group of items it</span>
+<span class="source-line-no">300</span><span id="line.300">     * finds in the arguments at that position instead.</span>
+<span class="source-line-no">301</span><span id="line.301">     * @param k a Collection of Iterable s of keys to add to their respective keysets; should all be unique (like a Set)</span>
+<span class="source-line-no">302</span><span id="line.302">     * @return true if this collection changed as a result of this call</span>
+<span class="source-line-no">303</span><span id="line.303">     */</span>
+<span class="source-line-no">304</span><span id="line.304">    public boolean putAll(Collection&lt;Iterable&gt; k)</span>
+<span class="source-line-no">305</span><span id="line.305">    {</span>
+<span class="source-line-no">306</span><span id="line.306">        if(k == null || k.size() != keyCount) return false;</span>
+<span class="source-line-no">307</span><span id="line.307">        boolean changed = false;</span>
+<span class="source-line-no">308</span><span id="line.308">        Iterator[] its = new Iterator[keyCount];</span>
+<span class="source-line-no">309</span><span id="line.309">        int idx = 0;</span>
+<span class="source-line-no">310</span><span id="line.310">        for (Iterable it : k) {</span>
+<span class="source-line-no">311</span><span id="line.311">            its[idx++] = it.iterator();</span>
+<span class="source-line-no">312</span><span id="line.312">        }</span>
+<span class="source-line-no">313</span><span id="line.313">        Object[] os = new Object[keyCount];</span>
+<span class="source-line-no">314</span><span id="line.314">        while (true)</span>
+<span class="source-line-no">315</span><span id="line.315">        {</span>
+<span class="source-line-no">316</span><span id="line.316">            for (int i = 0; i &lt; keyCount; i++) {</span>
+<span class="source-line-no">317</span><span id="line.317">                if(!its[i].hasNext())</span>
+<span class="source-line-no">318</span><span id="line.318">                    return changed;</span>
+<span class="source-line-no">319</span><span id="line.319">                os[i] = its[i].next();</span>
+<span class="source-line-no">320</span><span id="line.320">            }</span>
+<span class="source-line-no">321</span><span id="line.321">            changed = put(os) || changed;</span>
+<span class="source-line-no">322</span><span id="line.322">        }</span>
+<span class="source-line-no">323</span><span id="line.323">    }</span>
+<span class="source-line-no">324</span><span id="line.324">    /**</span>
+<span class="source-line-no">325</span><span id="line.325">     * Puts all unique keys in {@code other} into this MultiKey, respecting other's ordering. If a key in other is</span>
+<span class="source-line-no">326</span><span id="line.326">     * already present when this would add one, this will not put the keys at that point in the iteration</span>
+<span class="source-line-no">327</span><span id="line.327">     * order, and will place the next unique items it finds in other at that position instead.</span>
+<span class="source-line-no">328</span><span id="line.328">     * @param other another MultiKey collection with the same keyCount</span>
+<span class="source-line-no">329</span><span id="line.329">     * @return true if this collection changed as a result of this call</span>
+<span class="source-line-no">330</span><span id="line.330">     */</span>
+<span class="source-line-no">331</span><span id="line.331">    public boolean putAll(MultiKey other)</span>
+<span class="source-line-no">332</span><span id="line.332">    {</span>
+<span class="source-line-no">333</span><span id="line.333">        if(other == null || other.keyCount != keyCount) return false;</span>
+<span class="source-line-no">334</span><span id="line.334">        boolean changed = false;</span>
+<span class="source-line-no">335</span><span id="line.335">        int sz = other.size();</span>
+<span class="source-line-no">336</span><span id="line.336">        Object[] os = new Object[keyCount];</span>
+<span class="source-line-no">337</span><span id="line.337">        for (int i = 0; i &lt; sz; i++) {</span>
+<span class="source-line-no">338</span><span id="line.338">            changed = put(other.getAllAt(i, os)) || changed;</span>
+<span class="source-line-no">339</span><span id="line.339">        }</span>
+<span class="source-line-no">340</span><span id="line.340">        return changed;</span>
+<span class="source-line-no">341</span><span id="line.341">    }</span>
+<span class="source-line-no">342</span><span id="line.342"></span>
+<span class="source-line-no">343</span><span id="line.343">    /**</span>
+<span class="source-line-no">344</span><span id="line.344">     * Adds a key to each keyset at the given index in the ordering of this MultiKey. The length of k must</span>
+<span class="source-line-no">345</span><span id="line.345">     * match the keyCount of this MultiKey, and the nth item in k will go into the nth keyset. No item in k can be</span>
+<span class="source-line-no">346</span><span id="line.346">     * present in the matching keyset in this before this is called. If you want to change or update an existing key,</span>
+<span class="source-line-no">347</span><span id="line.347">     * use {@link #alter(int, Object, Object)} or {@link #alterAt(int, int, Object)}.</span>
+<span class="source-line-no">348</span><span id="line.348">     * @param k an array or varargs of keys to add after the last index of this MultiKey; length must equal keyCount</span>
+<span class="source-line-no">349</span><span id="line.349">     * @return true if this collection changed as a result of this call</span>
+<span class="source-line-no">350</span><span id="line.350">     */</span>
+<span class="source-line-no">351</span><span id="line.351">    public boolean putAt(int index, Object... k)</span>
+<span class="source-line-no">352</span><span id="line.352">    {</span>
+<span class="source-line-no">353</span><span id="line.353">        if(k != null &amp;&amp; keyCount &gt; 0 &amp;&amp; k.length == keyCount) {</span>
+<span class="source-line-no">354</span><span id="line.354">            for (int i = 0; i &lt; keyCount; i++) {</span>
+<span class="source-line-no">355</span><span id="line.355">                if(keys[i].containsKey(k[i]))</span>
+<span class="source-line-no">356</span><span id="line.356">                    return false;</span>
+<span class="source-line-no">357</span><span id="line.357">            }</span>
+<span class="source-line-no">358</span><span id="line.358">            for (int i = 0; i &lt; keyCount; i++) {</span>
+<span class="source-line-no">359</span><span id="line.359">                keys[i].addAt(index, k[i]);</span>
+<span class="source-line-no">360</span><span id="line.360">            }</span>
+<span class="source-line-no">361</span><span id="line.361">            return true;</span>
+<span class="source-line-no">362</span><span id="line.362">        }</span>
+<span class="source-line-no">363</span><span id="line.363">        return false;</span>
+<span class="source-line-no">364</span><span id="line.364">    }</span>
+<span class="source-line-no">365</span><span id="line.365"></span>
+<span class="source-line-no">366</span><span id="line.366">    /**</span>
+<span class="source-line-no">367</span><span id="line.367">     * Removes a given Object key from the keyset specified by which, if {@code removing} exists in that keyset, and</span>
+<span class="source-line-no">368</span><span id="line.368">     * also removes any keys associated with its point in the ordering.</span>
+<span class="source-line-no">369</span><span id="line.369">     * @param which which keyset to remove the item from; if {@code removing} isn't in that keyset, this does nothing</span>
+<span class="source-line-no">370</span><span id="line.370">     * @param removing the key to remove</span>
+<span class="source-line-no">371</span><span id="line.371">     * @return this for chaining</span>
+<span class="source-line-no">372</span><span id="line.372">     */</span>
+<span class="source-line-no">373</span><span id="line.373">    public MultiKey remove(int which, Object removing)</span>
+<span class="source-line-no">374</span><span id="line.374">    {</span>
+<span class="source-line-no">375</span><span id="line.375">        if(which &gt;= 0 &amp;&amp; which &lt; keyCount) {</span>
+<span class="source-line-no">376</span><span id="line.376">            int i = keys[which].removeInt(removing);</span>
+<span class="source-line-no">377</span><span id="line.377">            if(i &gt;= 0) {</span>
+<span class="source-line-no">378</span><span id="line.378">                for (int j = 0; j &lt; keyCount; j++) {</span>
+<span class="source-line-no">379</span><span id="line.379">                    if(j != which)</span>
+<span class="source-line-no">380</span><span id="line.380">                        keys[j].removeAt(i);</span>
+<span class="source-line-no">381</span><span id="line.381">                }</span>
+<span class="source-line-no">382</span><span id="line.382">            }</span>
+<span class="source-line-no">383</span><span id="line.383">        }</span>
+<span class="source-line-no">384</span><span id="line.384">        return this;</span>
+<span class="source-line-no">385</span><span id="line.385">    }</span>
+<span class="source-line-no">386</span><span id="line.386"></span>
+<span class="source-line-no">387</span><span id="line.387">    /**</span>
+<span class="source-line-no">388</span><span id="line.388">     * Removes a given point in the ordering, if {@code index} is at least 0 and less than {@link #size()}.</span>
+<span class="source-line-no">389</span><span id="line.389">     * @param index the position in the ordering to remove</span>
+<span class="source-line-no">390</span><span id="line.390">     * @return this for chaining</span>
+<span class="source-line-no">391</span><span id="line.391">     */</span>
+<span class="source-line-no">392</span><span id="line.392">    public MultiKey removeAt(int index)</span>
+<span class="source-line-no">393</span><span id="line.393">    {</span>
+<span class="source-line-no">394</span><span id="line.394">        if(index &gt;= 0 &amp;&amp; keyCount &gt; 0 &amp;&amp; index &lt; keys[0].size) {</span>
+<span class="source-line-no">395</span><span id="line.395">            for (int i = 0; i &lt; keyCount; i++) {</span>
+<span class="source-line-no">396</span><span id="line.396">                keys[i].removeAt(index);</span>
+<span class="source-line-no">397</span><span id="line.397">            }</span>
+<span class="source-line-no">398</span><span id="line.398">        }</span>
+<span class="source-line-no">399</span><span id="line.399">        return this;</span>
+<span class="source-line-no">400</span><span id="line.400">    }</span>
+<span class="source-line-no">401</span><span id="line.401"></span>
+<span class="source-line-no">402</span><span id="line.402">    /**</span>
+<span class="source-line-no">403</span><span id="line.403">     * Reorders this MultiKey using {@code ordering}, which have the same length as this MultiKey's {@link #size()}</span>
+<span class="source-line-no">404</span><span id="line.404">     * and can be generated with {@link ArrayTools#range(int)} (which, if applied, would produce no</span>
+<span class="source-line-no">405</span><span id="line.405">     * change to the current ordering), {@link IRNG#randomOrdering(int)} (which gives a random ordering, and if</span>
+<span class="source-line-no">406</span><span id="line.406">     * applied immediately would be the same as calling {@link #shuffle(IRNG)}), or made in some other way. If you</span>
+<span class="source-line-no">407</span><span id="line.407">     * already have an ordering and want to make a different ordering that can undo the change, you can use</span>
+<span class="source-line-no">408</span><span id="line.408">     * {@link ArrayTools#invertOrdering(int[])} called on the original ordering.</span>
+<span class="source-line-no">409</span><span id="line.409">     * @param ordering an int array or vararg that should contain each int from 0 to {@link #size()} (or less)</span>
+<span class="source-line-no">410</span><span id="line.410">     * @return this for chaining</span>
+<span class="source-line-no">411</span><span id="line.411">     */</span>
+<span class="source-line-no">412</span><span id="line.412">    public MultiKey reorder(int... ordering)</span>
+<span class="source-line-no">413</span><span id="line.413">    {</span>
+<span class="source-line-no">414</span><span id="line.414">        if(ordering != null) {</span>
+<span class="source-line-no">415</span><span id="line.415">            for (int i = 0; i &lt; keyCount; i++) {</span>
+<span class="source-line-no">416</span><span id="line.416">                keys[i].reorder(ordering);</span>
+<span class="source-line-no">417</span><span id="line.417">            }</span>
+<span class="source-line-no">418</span><span id="line.418">        }</span>
+<span class="source-line-no">419</span><span id="line.419">        return this;</span>
+<span class="source-line-no">420</span><span id="line.420">    }</span>
+<span class="source-line-no">421</span><span id="line.421"></span>
+<span class="source-line-no">422</span><span id="line.422">    /**</span>
+<span class="source-line-no">423</span><span id="line.423">     * Generates a random ordering with rng and applies the same ordering to all kinds of keys this has; they will</span>
+<span class="source-line-no">424</span><span id="line.424">     * maintain their current association to other keys but their ordering/indices will change.</span>
+<span class="source-line-no">425</span><span id="line.425">     * @param rng an IRNG to produce the random ordering this will use</span>
+<span class="source-line-no">426</span><span id="line.426">     * @return this for chaining</span>
+<span class="source-line-no">427</span><span id="line.427">     */</span>
+<span class="source-line-no">428</span><span id="line.428">    public MultiKey shuffle(IRNG rng)</span>
+<span class="source-line-no">429</span><span id="line.429">    {</span>
+<span class="source-line-no">430</span><span id="line.430">        if(keyCount &gt; 0) {</span>
+<span class="source-line-no">431</span><span id="line.431">            int[] ordering = rng.randomOrdering(keys[0].size);</span>
+<span class="source-line-no">432</span><span id="line.432">            for (int i = 0; i &lt; keyCount; i++) {</span>
+<span class="source-line-no">433</span><span id="line.433">                keys[i].reorder(ordering);</span>
+<span class="source-line-no">434</span><span id="line.434">            }</span>
+<span class="source-line-no">435</span><span id="line.435">        }</span>
+<span class="source-line-no">436</span><span id="line.436">        return this;</span>
+<span class="source-line-no">437</span><span id="line.437">    }</span>
+<span class="source-line-no">438</span><span id="line.438"></span>
+<span class="source-line-no">439</span><span id="line.439">    /**</span>
+<span class="source-line-no">440</span><span id="line.440">     * Creates a new iterator over the keys this holds in the keyset specified by which. This can be problematic for</span>
+<span class="source-line-no">441</span><span id="line.441">     * garbage collection if called very frequently; it may be better to access items by index (which also lets you</span>
+<span class="source-line-no">442</span><span id="line.442">     * access other keys associated with that index) using {@link #getAt(int, int)} in a for(int i=0...) loop.</span>
+<span class="source-line-no">443</span><span id="line.443">     * @return a newly-created iterator over this MultiKey's keys in the specified keyset</span>
+<span class="source-line-no">444</span><span id="line.444">     */</span>
+<span class="source-line-no">445</span><span id="line.445">    public Iterator iterator(int which)</span>
+<span class="source-line-no">446</span><span id="line.446">    {</span>
+<span class="source-line-no">447</span><span id="line.447">        if(which &gt;= 0 &amp;&amp; which &lt; keyCount)</span>
+<span class="source-line-no">448</span><span id="line.448">            return keys[which].iterator();</span>
+<span class="source-line-no">449</span><span id="line.449">        return null;</span>
+<span class="source-line-no">450</span><span id="line.450">    }</span>
+<span class="source-line-no">451</span><span id="line.451"></span>
+<span class="source-line-no">452</span><span id="line.452">    /**</span>
+<span class="source-line-no">453</span><span id="line.453">     * Gets and caches the keys in the keyset specified by which as a Collection that implements SortedSet (and so also</span>
+<span class="source-line-no">454</span><span id="line.454">     * implements Set).</span>
+<span class="source-line-no">455</span><span id="line.455">     * @param which which keyset to get as a separate value</span>
+<span class="source-line-no">456</span><span id="line.456">     * @return the keys from the keyset specified by which, as a SortedSet</span>
+<span class="source-line-no">457</span><span id="line.457">     */</span>
+<span class="source-line-no">458</span><span id="line.458">    public SortedSet getSet(int which) {</span>
+<span class="source-line-no">459</span><span id="line.459">        if(which &gt;= 0 &amp;&amp; which &lt; keyCount)</span>
+<span class="source-line-no">460</span><span id="line.460">            return keys[which].keySet();</span>
+<span class="source-line-no">461</span><span id="line.461">        return null;</span>
+<span class="source-line-no">462</span><span id="line.462">    }</span>
+<span class="source-line-no">463</span><span id="line.463"></span>
+<span class="source-line-no">464</span><span id="line.464">    /**</span>
+<span class="source-line-no">465</span><span id="line.465">     * To be called sparingly, since this allocates a new OrderedSet instead of reusing one.</span>
+<span class="source-line-no">466</span><span id="line.466">     * @param which which keyset to get as a separate value</span>
+<span class="source-line-no">467</span><span id="line.467">     * @return the keys from the keyset specified by which, as an OrderedSet</span>
+<span class="source-line-no">468</span><span id="line.468">     */</span>
+<span class="source-line-no">469</span><span id="line.469">    public OrderedSet getOrderedSet(int which) {</span>
+<span class="source-line-no">470</span><span id="line.470">        if(which &gt;= 0 &amp;&amp; which &lt; keyCount)</span>
+<span class="source-line-no">471</span><span id="line.471">            return keys[which].keysAsOrderedSet();</span>
+<span class="source-line-no">472</span><span id="line.472">        return null;</span>
+<span class="source-line-no">473</span><span id="line.473"></span>
+<span class="source-line-no">474</span><span id="line.474">    }</span>
+<span class="source-line-no">475</span><span id="line.475"></span>
+<span class="source-line-no">476</span><span id="line.476">    public int keyCount() {</span>
+<span class="source-line-no">477</span><span id="line.477">        return keyCount;</span>
+<span class="source-line-no">478</span><span id="line.478">    }</span>
+<span class="source-line-no">479</span><span id="line.479">    public int valueCount() {</span>
+<span class="source-line-no">480</span><span id="line.480">        return 0;</span>
+<span class="source-line-no">481</span><span id="line.481">    }</span>
+<span class="source-line-no">482</span><span id="line.482"></span>
+<span class="source-line-no">483</span><span id="line.483">    public int size() {</span>
+<span class="source-line-no">484</span><span id="line.484">        return (keyCount &gt; 0) ? keys[0].size : 0;</span>
+<span class="source-line-no">485</span><span id="line.485">    }</span>
+<span class="source-line-no">486</span><span id="line.486"></span>
+<span class="source-line-no">487</span><span id="line.487">    public boolean isEmpty()</span>
+<span class="source-line-no">488</span><span id="line.488">    {</span>
+<span class="source-line-no">489</span><span id="line.489">        return keyCount &gt; 0 &amp;&amp; keys[0].size &gt; 0;</span>
+<span class="source-line-no">490</span><span id="line.490">    }</span>
+<span class="source-line-no">491</span><span id="line.491"></span>
+<span class="source-line-no">492</span><span id="line.492">}</span>
 
 
 

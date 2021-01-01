@@ -215,6 +215,7 @@ public class DefaultResources implements LifecycleListener {
             + "void main() {\n"
             + "  vec3 sdf = texture2D(u_texture, v_texCoords).rgb;\n"
             + "  gl_FragColor = vec4(v_color.rgb, clamp((max(min(sdf.r, sdf.g), min(max(sdf.r, sdf.g), sdf.b)) - 0.5) * u_smoothing + 0.5, 0.0, 1.0) * v_color.a);\n"
+            + "}\n";
             //+ " float dist = (max(min(sdf.r, sdf.g), min(max(sdf.r, sdf.g), sdf.b)) - 0.5) / (2.75 * u_smoothing);\n"
             //+ " float d = u_smoothing * 1.75;\n" 
             //+ " float d = fwidth(dist);\n"
@@ -235,7 +236,7 @@ public class DefaultResources implements LifecycleListener {
             //+ "  asum = asum + clamp((max(min(sdf.r, sdf.g), min(max(sdf.r, sdf.g), sdf.b)) - 0.5) / (6.0 * u_smoothing) + 0.5, 0.0, 0.5); +\n"
             //+ "  sdf = texture2D(u_texture, v_texCoords).rgb;\n"
             //+ "  gl_FragColor = vec4(v_color.rgb, clamp(((max(min(sdf.r, sdf.g), min(max(sdf.r, sdf.g), sdf.b)) - 0.625) / (3.0 * u_smoothing) + 0.625 + asum) / 3.0, 0.0, 1.0) * v_color.a);\n"
-            + "}\n";
+            //+ "}\n";
     /**
      * An alternate shader based on {@link DefaultResources#fragmentShader}, but this draws outlines around characters.
      * Only works with distance field fonts. You probably need to create a new ShaderProgram to use this, which would

@@ -7,300 +7,300 @@
 <meta name="generator" content="javadoc/SourceToHTMLConverter">
 <link rel="stylesheet" type="text/css" href="../../../../../stylesheet.css" title="Style">
 </head>
-<body class="source">
+<body class="source-page">
 <main role="main">
-<div class="sourceContainer">
-<pre><span class="sourceLineNo">001</span><a id="line.1">package squidpony.squidgrid.gui.gdx;</a>
-<span class="sourceLineNo">002</span><a id="line.2"></a>
-<span class="sourceLineNo">003</span><a id="line.3">import com.badlogic.gdx.graphics.Color;</a>
-<span class="sourceLineNo">004</span><a id="line.4">import squidpony.StringKit;</a>
-<span class="sourceLineNo">005</span><a id="line.5">import squidpony.squidmath.NumberTools;</a>
-<span class="sourceLineNo">006</span><a id="line.6"></a>
-<span class="sourceLineNo">007</span><a id="line.7">import java.io.Serializable;</a>
-<span class="sourceLineNo">008</span><a id="line.8"></a>
-<span class="sourceLineNo">009</span><a id="line.9">/**</a>
-<span class="sourceLineNo">010</span><a id="line.10"> * Grouping of qualities related to glow and light emission. When a Radiance variable in some object is null, it</a>
-<span class="sourceLineNo">011</span><a id="line.11"> * means that object doesn't emit light; if a Radiance variable is non-null, it will probably emit light unless the</a>
-<span class="sourceLineNo">012</span><a id="line.12"> * color of light it produces is fully transparent. Light may take up one cell or extend into nearby cells, and the</a>
-<span class="sourceLineNo">013</span><a id="line.13"> * radius may change over time in up to two patterns (flicker, which randomly increases and decreases lighting radius,</a>
-<span class="sourceLineNo">014</span><a id="line.14"> * and/or strobe, which increases and decreases lighting radius in an orderly retract-expand-retract-expand pattern).</a>
-<span class="sourceLineNo">015</span><a id="line.15"> * You can set the {@link #flare} variable to some value between 0.0f and 1.0f to temporarily expand the minimum radius</a>
-<span class="sourceLineNo">016</span><a id="line.16"> * for strobe and/or flare, useful for gameplay-dependent brightening of a Radiance.</a>
-<span class="sourceLineNo">017</span><a id="line.17"> * &lt;br&gt;</a>
-<span class="sourceLineNo">018</span><a id="line.18"> * This object has 6 fields, each a float:</a>
-<span class="sourceLineNo">019</span><a id="line.19"> * &lt;ul&gt;</a>
-<span class="sourceLineNo">020</span><a id="line.20"> * &lt;li&gt;range, how far the light extends; 0f is "just this cell"&lt;/li&gt;</a>
-<span class="sourceLineNo">021</span><a id="line.21"> * &lt;li&gt;color, the color of the light as a float; typically opaque and lighter than the glowing object's color&lt;/li&gt;</a>
-<span class="sourceLineNo">022</span><a id="line.22"> * &lt;li&gt;flicker, the rate of random continuous change to radiance range&lt;/li&gt;</a>
-<span class="sourceLineNo">023</span><a id="line.23"> * &lt;li&gt;strobe, the rate of non-random continuous change to radiance range&lt;/li&gt;</a>
-<span class="sourceLineNo">024</span><a id="line.24"> * &lt;li&gt;flare, used to suddenly increase the minimum radius of lighting; expected to be changed after creation&lt;/li&gt;</a>
-<span class="sourceLineNo">025</span><a id="line.25"> * &lt;li&gt;delay, which delays the pattern of effects like strobe so a sequence can be formed with multiple Radiance&lt;/li&gt;</a>
-<span class="sourceLineNo">026</span><a id="line.26"> * &lt;/ul&gt;</a>
-<span class="sourceLineNo">027</span><a id="line.27"> * These all have defaults; if no parameters are specified the light will be white, affect only the current cell, and</a>
-<span class="sourceLineNo">028</span><a id="line.28"> * won't flicker or strobe.</a>
-<span class="sourceLineNo">029</span><a id="line.29"> * &lt;br&gt;</a>
-<span class="sourceLineNo">030</span><a id="line.30"> * Created by Tommy Ettinger on 6/16/2018.</a>
-<span class="sourceLineNo">031</span><a id="line.31"> */</a>
-<span class="sourceLineNo">032</span><a id="line.32">public class Radiance implements Serializable {</a>
-<span class="sourceLineNo">033</span><a id="line.33">    private static final long serialVersionUID = 1L;</a>
-<span class="sourceLineNo">034</span><a id="line.34"></a>
-<span class="sourceLineNo">035</span><a id="line.35">    /**</a>
-<span class="sourceLineNo">036</span><a id="line.36">     * How far the radiated light extends; 0f is "just this cell", anything higher can go into neighboring cells.</a>
-<span class="sourceLineNo">037</span><a id="line.37">     * This is permitted to be a non-integer value, which will make this extend into further cells partially.</a>
-<span class="sourceLineNo">038</span><a id="line.38">     */</a>
-<span class="sourceLineNo">039</span><a id="line.39">    public float range;</a>
-<span class="sourceLineNo">040</span><a id="line.40">    /**</a>
-<span class="sourceLineNo">041</span><a id="line.41">     * The color of light as a float; typically opaque and lighter than the glowing object's symbol.</a>
-<span class="sourceLineNo">042</span><a id="line.42">     */</a>
-<span class="sourceLineNo">043</span><a id="line.43">    public float color;</a>
-<span class="sourceLineNo">044</span><a id="line.44">    /**</a>
-<span class="sourceLineNo">045</span><a id="line.45">     * The rate of random continuous change to radiance range, like the light from a campfire. The random component of</a>
-<span class="sourceLineNo">046</span><a id="line.46">     * the change is determined by the {@link System#identityHashCode(Object)} of this Radiance, which will probably</a>
-<span class="sourceLineNo">047</span><a id="line.47">     * make all flicker effects different when flicker is non-0.</a>
-<span class="sourceLineNo">048</span><a id="line.48">     */</a>
-<span class="sourceLineNo">049</span><a id="line.49">    public float flicker;</a>
-<span class="sourceLineNo">050</span><a id="line.50">    /**</a>
-<span class="sourceLineNo">051</span><a id="line.51">     * The rate of non-random continuous change to radiance range, like a mechanical strobe effect. This looks like a</a>
-<span class="sourceLineNo">052</span><a id="line.52">     * strobe light when the value is high enough, but at lower values it will smoothly pulse, which can be less</a>
-<span class="sourceLineNo">053</span><a id="line.53">     * distracting to players.</a>
-<span class="sourceLineNo">054</span><a id="line.54">     */</a>
-<span class="sourceLineNo">055</span><a id="line.55">    public float strobe;</a>
-<span class="sourceLineNo">056</span><a id="line.56"></a>
-<span class="sourceLineNo">057</span><a id="line.57">    /**</a>
-<span class="sourceLineNo">058</span><a id="line.58">     * A time delay that applies to when the strobe and flicker effects change; useful with strobe to make a strobe</a>
-<span class="sourceLineNo">059</span><a id="line.59">     * expand its lit radius at one point, then expand at a slightly later time at another Radiance with a delay. The</a>
-<span class="sourceLineNo">060</span><a id="line.60">     * range for delay should be considered 0f to 1f, with 0f the default (no delay) and values between 0 and 1f that</a>
-<span class="sourceLineNo">061</span><a id="line.61">     * fraction of a full strobe delayed from that default.</a>
-<span class="sourceLineNo">062</span><a id="line.62">     */</a>
-<span class="sourceLineNo">063</span><a id="line.63">    public float delay;</a>
-<span class="sourceLineNo">064</span><a id="line.64">    /**</a>
-<span class="sourceLineNo">065</span><a id="line.65">     * A temporary increase to the minimum radiance range, meant to brighten a glow during an effect.</a>
-<span class="sourceLineNo">066</span><a id="line.66">     * This should be a float between 0f and 1f, with 0f meaning no change and 1f meaning always max radius.</a>
-<span class="sourceLineNo">067</span><a id="line.67">     */</a>
-<span class="sourceLineNo">068</span><a id="line.68">    public float flare;</a>
-<span class="sourceLineNo">069</span><a id="line.69"></a>
-<span class="sourceLineNo">070</span><a id="line.70">    /**</a>
-<span class="sourceLineNo">071</span><a id="line.71">     * All-default constructor; makes a single-cell unchanging white light.</a>
-<span class="sourceLineNo">072</span><a id="line.72">     */</a>
-<span class="sourceLineNo">073</span><a id="line.73">    public Radiance()</a>
-<span class="sourceLineNo">074</span><a id="line.74">    {</a>
-<span class="sourceLineNo">075</span><a id="line.75">        this(0f, SColor.FLOAT_WHITE, 0f, 0f, 0f, 0f);</a>
-<span class="sourceLineNo">076</span><a id="line.76">    }</a>
-<span class="sourceLineNo">077</span><a id="line.77"></a>
-<span class="sourceLineNo">078</span><a id="line.78">    /**</a>
-<span class="sourceLineNo">079</span><a id="line.79">     * Makes an unchanging white light with the specified range in cells.</a>
-<span class="sourceLineNo">080</span><a id="line.80">     * @param range possibly-non-integer radius to light, in cells</a>
-<span class="sourceLineNo">081</span><a id="line.81">     */</a>
-<span class="sourceLineNo">082</span><a id="line.82">    public Radiance(float range)</a>
-<span class="sourceLineNo">083</span><a id="line.83">    {</a>
-<span class="sourceLineNo">084</span><a id="line.84">        this(range, SColor.FLOAT_WHITE, 0f, 0f, 0f, 0f);</a>
-<span class="sourceLineNo">085</span><a id="line.85">    }</a>
-<span class="sourceLineNo">086</span><a id="line.86"></a>
-<span class="sourceLineNo">087</span><a id="line.87">    /**</a>
-<span class="sourceLineNo">088</span><a id="line.88">     * Makes an unchanging light with the given color (as a packed float) and the specified range in cells.</a>
-<span class="sourceLineNo">089</span><a id="line.89">     * @param range possibly-non-integer radius to light, in cells</a>
-<span class="sourceLineNo">090</span><a id="line.90">     * @param color packed float color, as produced by {@link Color#toFloatBits()}</a>
-<span class="sourceLineNo">091</span><a id="line.91">     */</a>
-<span class="sourceLineNo">092</span><a id="line.92">    public Radiance(float range, float color)</a>
-<span class="sourceLineNo">093</span><a id="line.93">    {</a>
-<span class="sourceLineNo">094</span><a id="line.94">        this(range, color, 0f, 0f, 0f, 0f);</a>
-<span class="sourceLineNo">095</span><a id="line.95">    }</a>
-<span class="sourceLineNo">096</span><a id="line.96"></a>
-<span class="sourceLineNo">097</span><a id="line.97">    /**</a>
-<span class="sourceLineNo">098</span><a id="line.98">     * Makes a flickering light with the given color (as a packed float) and the specified range in cells; the flicker</a>
-<span class="sourceLineNo">099</span><a id="line.99">     * parameter affects the rate at which this will randomly reduce its range and return to normal.</a>
-<span class="sourceLineNo">100</span><a id="line.100">     * @param range possibly-non-integer radius to light, in cells</a>
-<span class="sourceLineNo">101</span><a id="line.101">     * @param color packed float color, as produced by {@link Color#toFloatBits()}</a>
-<span class="sourceLineNo">102</span><a id="line.102">     * @param flicker the rate at which to flicker, as a non-negative float</a>
-<span class="sourceLineNo">103</span><a id="line.103">     */</a>
-<span class="sourceLineNo">104</span><a id="line.104">    public Radiance(float range, float color, float flicker)</a>
-<span class="sourceLineNo">105</span><a id="line.105">    {</a>
-<span class="sourceLineNo">106</span><a id="line.106">        this(range, color, flicker, 0f, 0f, 0f);</a>
-<span class="sourceLineNo">107</span><a id="line.107">    }</a>
-<span class="sourceLineNo">108</span><a id="line.108">    /**</a>
-<span class="sourceLineNo">109</span><a id="line.109">     * Makes a flickering light with the given color (as a packed float) and the specified range in cells; the flicker</a>
-<span class="sourceLineNo">110</span><a id="line.110">     * parameter affects the rate at which this will randomly reduce its range and return to normal, and the strobe</a>
-<span class="sourceLineNo">111</span><a id="line.111">     * parameter affects the rate at which this will steadily reduce its range and return to normal. Usually one of</a>
-<span class="sourceLineNo">112</span><a id="line.112">     * flicker or strobe is 0; if both are non-0, the radius will be smaller than normal.</a>
-<span class="sourceLineNo">113</span><a id="line.113">     * @param range possibly-non-integer radius to light, in cells</a>
-<span class="sourceLineNo">114</span><a id="line.114">     * @param color packed float color, as produced by {@link Color#toFloatBits()}</a>
-<span class="sourceLineNo">115</span><a id="line.115">     * @param flicker the rate at which to flicker, as a non-negative float</a>
-<span class="sourceLineNo">116</span><a id="line.116">     * @param strobe the rate at which to strobe or pulse, as a non-negative float</a>
-<span class="sourceLineNo">117</span><a id="line.117">     */</a>
-<span class="sourceLineNo">118</span><a id="line.118">    public Radiance(float range, float color, float flicker, float strobe)</a>
-<span class="sourceLineNo">119</span><a id="line.119">    {</a>
-<span class="sourceLineNo">120</span><a id="line.120">        this(range, color, flicker, strobe, 0f, 0f);</a>
-<span class="sourceLineNo">121</span><a id="line.121">    }</a>
-<span class="sourceLineNo">122</span><a id="line.122">    /**</a>
-<span class="sourceLineNo">123</span><a id="line.123">     * Makes a flickering light with the given color (as a libGDX Color) and the specified range in cells; the flicker</a>
-<span class="sourceLineNo">124</span><a id="line.124">     * parameter affects the rate at which this will randomly reduce its range and return to normal, and the strobe</a>
-<span class="sourceLineNo">125</span><a id="line.125">     * parameter affects the rate at which this will steadily reduce its range and return to normal. Usually one of</a>
-<span class="sourceLineNo">126</span><a id="line.126">     * flicker or strobe is 0; if both are non-0, the radius will be smaller than normal.</a>
-<span class="sourceLineNo">127</span><a id="line.127">     * @param range possibly-non-integer radius to light, in cells</a>
-<span class="sourceLineNo">128</span><a id="line.128">     * @param color a libGDX Color object; will not be modified</a>
-<span class="sourceLineNo">129</span><a id="line.129">     * @param flicker the rate at which to flicker, as a non-negative float</a>
-<span class="sourceLineNo">130</span><a id="line.130">     * @param strobe the rate at which to strobe or pulse, as a non-negative float</a>
-<span class="sourceLineNo">131</span><a id="line.131">     */</a>
-<span class="sourceLineNo">132</span><a id="line.132">    public Radiance(float range, Color color, float flicker, float strobe)</a>
-<span class="sourceLineNo">133</span><a id="line.133">    {</a>
-<span class="sourceLineNo">134</span><a id="line.134">        this(range, color.toFloatBits(), flicker, strobe, 0f, 0f);</a>
-<span class="sourceLineNo">135</span><a id="line.135">    }</a>
-<span class="sourceLineNo">136</span><a id="line.136">    </a>
-<span class="sourceLineNo">137</span><a id="line.137">    /**</a>
-<span class="sourceLineNo">138</span><a id="line.138">     * Makes a flickering light with the given color (as a packed float) and the specified range in cells; the flicker</a>
-<span class="sourceLineNo">139</span><a id="line.139">     * parameter affects the rate at which this will randomly reduce its range and return to normal, and the strobe</a>
-<span class="sourceLineNo">140</span><a id="line.140">     * parameter affects the rate at which this will steadily reduce its range and return to normal. Usually one of</a>
-<span class="sourceLineNo">141</span><a id="line.141">     * flicker or strobe is 0; if both are non-0, the radius will be smaller than normal. The delay parameter is usually</a>
-<span class="sourceLineNo">142</span><a id="line.142">     * from 0f to 1f, and is almost always 0f unless this is part of a group of related Radiance objects; it affects</a>
-<span class="sourceLineNo">143</span><a id="line.143">     * when strobe and flicker hit "high points" and "low points", and should usually be used with strobe.</a>
-<span class="sourceLineNo">144</span><a id="line.144">     * @param range possibly-non-integer radius to light, in cells</a>
-<span class="sourceLineNo">145</span><a id="line.145">     * @param color packed float color, as produced by {@link Color#toFloatBits()}</a>
-<span class="sourceLineNo">146</span><a id="line.146">     * @param flicker the rate at which to flicker, as a non-negative float</a>
-<span class="sourceLineNo">147</span><a id="line.147">     * @param strobe the rate at which to strobe or pulse, as a non-negative float</a>
-<span class="sourceLineNo">148</span><a id="line.148">     * @param delay a delay applied to the "high points" and "low points" of strobe and flicker, from 0f to 1f</a>
-<span class="sourceLineNo">149</span><a id="line.149">     */</a>
-<span class="sourceLineNo">150</span><a id="line.150">    public Radiance(float range, float color, float flicker, float strobe, float delay)</a>
-<span class="sourceLineNo">151</span><a id="line.151">    {</a>
-<span class="sourceLineNo">152</span><a id="line.152">        this(range, color, flicker, strobe, delay, 0f);</a>
-<span class="sourceLineNo">153</span><a id="line.153">    }</a>
-<span class="sourceLineNo">154</span><a id="line.154">    /**</a>
-<span class="sourceLineNo">155</span><a id="line.155">     * Makes a flickering light with the given color (as a packed float) and the specified range in cells; the flicker</a>
-<span class="sourceLineNo">156</span><a id="line.156">     * parameter affects the rate at which this will randomly reduce its range and return to normal, and the strobe</a>
-<span class="sourceLineNo">157</span><a id="line.157">     * parameter affects the rate at which this will steadily reduce its range and return to normal. Usually one of</a>
-<span class="sourceLineNo">158</span><a id="line.158">     * flicker or strobe is 0; if both are non-0, the radius will be smaller than normal. The delay parameter is usually</a>
-<span class="sourceLineNo">159</span><a id="line.159">     * from 0f to 1f, and is almost always 0f unless this is part of a group of related Radiance objects; it affects</a>
-<span class="sourceLineNo">160</span><a id="line.160">     * when strobe and flicker hit "high points" and "low points", and should usually be used with strobe. This allows</a>
-<span class="sourceLineNo">161</span><a id="line.161">     * setting flare, where flare is used to create a sudden increase in the minimum radius for the Radiance, but flare</a>
-<span class="sourceLineNo">162</span><a id="line.162">     * makes the most sense to set when an event should brighten a Radiance, not in the constructor. Valid values for</a>
-<span class="sourceLineNo">163</span><a id="line.163">     * flare are usually between 0f and 1f.</a>
-<span class="sourceLineNo">164</span><a id="line.164">     * @param range possibly-non-integer radius to light, in cells</a>
-<span class="sourceLineNo">165</span><a id="line.165">     * @param color packed float color, as produced by {@link Color#toFloatBits()}</a>
-<span class="sourceLineNo">166</span><a id="line.166">     * @param flicker the rate at which to flicker, as a non-negative float</a>
-<span class="sourceLineNo">167</span><a id="line.167">     * @param strobe the rate at which to strobe or pulse, as a non-negative float</a>
-<span class="sourceLineNo">168</span><a id="line.168">     * @param delay a delay applied to the "high points" and "low points" of strobe and flicker, from 0f to 1f</a>
-<span class="sourceLineNo">169</span><a id="line.169">     * @param flare affects the minimum radius for the Radiance, from 0f to 1f with a default of 0f</a>
-<span class="sourceLineNo">170</span><a id="line.170">     */</a>
-<span class="sourceLineNo">171</span><a id="line.171">    public Radiance(float range, float color, float flicker, float strobe, float delay, float flare)</a>
-<span class="sourceLineNo">172</span><a id="line.172">    {</a>
-<span class="sourceLineNo">173</span><a id="line.173">        this.range = range;</a>
-<span class="sourceLineNo">174</span><a id="line.174">        this.color = color;</a>
-<span class="sourceLineNo">175</span><a id="line.175">        this.flicker = flicker;</a>
-<span class="sourceLineNo">176</span><a id="line.176">        this.strobe = strobe;</a>
-<span class="sourceLineNo">177</span><a id="line.177">        this.delay = delay;</a>
-<span class="sourceLineNo">178</span><a id="line.178">        this.flare = flare;</a>
-<span class="sourceLineNo">179</span><a id="line.179">    }</a>
-<span class="sourceLineNo">180</span><a id="line.180"></a>
-<span class="sourceLineNo">181</span><a id="line.181">    /**</a>
-<span class="sourceLineNo">182</span><a id="line.182">     * Copies another Radiance exactly, except for the pattern its flicker may have, if any.</a>
-<span class="sourceLineNo">183</span><a id="line.183">     * @param other another Radiance to copy</a>
-<span class="sourceLineNo">184</span><a id="line.184">     */</a>
-<span class="sourceLineNo">185</span><a id="line.185">    public Radiance(Radiance other)</a>
-<span class="sourceLineNo">186</span><a id="line.186">    {</a>
-<span class="sourceLineNo">187</span><a id="line.187">        this(other.range, other.color, other.flicker, other.strobe, other.delay, other.flare);</a>
-<span class="sourceLineNo">188</span><a id="line.188">    }</a>
-<span class="sourceLineNo">189</span><a id="line.189"></a>
-<span class="sourceLineNo">190</span><a id="line.190">    /**</a>
-<span class="sourceLineNo">191</span><a id="line.191">     * Provides the calculated current range adjusted for flicker and strobe at the current time in milliseconds, with</a>
-<span class="sourceLineNo">192</span><a id="line.192">     * flicker seeded with the identity hash code of this Radiance. Higher values of flicker and strobe will increase</a>
-<span class="sourceLineNo">193</span><a id="line.193">     * the frequency at which the range changes but will not allow it to exceed its starting range, only to diminish</a>
-<span class="sourceLineNo">194</span><a id="line.194">     * temporarily. If both flicker and strobe are non-0, the range will usually be smaller than if only one was non-0,</a>
-<span class="sourceLineNo">195</span><a id="line.195">     * and if both are 0, this simply returns range.</a>
-<span class="sourceLineNo">196</span><a id="line.196">     * @return the current range, adjusting for flicker and strobe using the current time</a>
-<span class="sourceLineNo">197</span><a id="line.197">     */</a>
-<span class="sourceLineNo">198</span><a id="line.198">    public float currentRange()</a>
-<span class="sourceLineNo">199</span><a id="line.199">    {</a>
-<span class="sourceLineNo">200</span><a id="line.200">        final float time = (System.currentTimeMillis() &amp; 0x3ffffL) * 0x1.9p-9f;</a>
-<span class="sourceLineNo">201</span><a id="line.201">        float current = range;</a>
-<span class="sourceLineNo">202</span><a id="line.202">        if(flicker != 0f) </a>
-<span class="sourceLineNo">203</span><a id="line.203">            current *= NumberTools.swayRandomized(System.identityHashCode(this), time * flicker + delay) * 0.375f + 0.625f;</a>
-<span class="sourceLineNo">204</span><a id="line.204">        if(strobe != 0f)</a>
-<span class="sourceLineNo">205</span><a id="line.205">            current *= NumberTools.swayTight(time * strobe + delay) * 0.5f + 0.5f;</a>
-<span class="sourceLineNo">206</span><a id="line.206">        return Math.max(current, range * flare);</a>
-<span class="sourceLineNo">207</span><a id="line.207">    }</a>
-<span class="sourceLineNo">208</span><a id="line.208"></a>
-<span class="sourceLineNo">209</span><a id="line.209">    /**</a>
-<span class="sourceLineNo">210</span><a id="line.210">     * Makes a chain of Radiance objects that will pulse in a sequence, expanding from one to the next.</a>
-<span class="sourceLineNo">211</span><a id="line.211">     * This chain is an array of Radiance where the order matters.</a>
-<span class="sourceLineNo">212</span><a id="line.212">     * @param length how many Radiance objects should be in the returned array</a>
-<span class="sourceLineNo">213</span><a id="line.213">     * @param range in cells, how far each Radiance should expand from its start at its greatest radius</a>
-<span class="sourceLineNo">214</span><a id="line.214">     * @param color as a packed float color</a>
-<span class="sourceLineNo">215</span><a id="line.215">     * @param strobe the rate at which the chain will pulse; should be greater than 0</a>
-<span class="sourceLineNo">216</span><a id="line.216">     * @return an array of Radiance objects that will pulse in sequence.</a>
-<span class="sourceLineNo">217</span><a id="line.217">     */</a>
-<span class="sourceLineNo">218</span><a id="line.218">    public static Radiance[] makeChain(int length, float range, float color, float strobe)</a>
-<span class="sourceLineNo">219</span><a id="line.219">    {</a>
-<span class="sourceLineNo">220</span><a id="line.220">        if(length &lt;= 1)</a>
-<span class="sourceLineNo">221</span><a id="line.221">            return new Radiance[]{new Radiance(range, color, 0f, strobe)};</a>
-<span class="sourceLineNo">222</span><a id="line.222">        Radiance[] chain = new Radiance[length];</a>
-<span class="sourceLineNo">223</span><a id="line.223">        float d = -2f / (length);</a>
-<span class="sourceLineNo">224</span><a id="line.224">        for (int i = 0; i &lt; length; i++) {</a>
-<span class="sourceLineNo">225</span><a id="line.225">            chain[i] = new Radiance(range, color, 0f, strobe, d * i);</a>
-<span class="sourceLineNo">226</span><a id="line.226">        }</a>
-<span class="sourceLineNo">227</span><a id="line.227">        return chain;</a>
-<span class="sourceLineNo">228</span><a id="line.228">    }</a>
-<span class="sourceLineNo">229</span><a id="line.229"></a>
-<span class="sourceLineNo">230</span><a id="line.230">    @Override</a>
-<span class="sourceLineNo">231</span><a id="line.231">    public String toString() {</a>
-<span class="sourceLineNo">232</span><a id="line.232">        return "Radiance{" +</a>
-<span class="sourceLineNo">233</span><a id="line.233">                "range=" + range +</a>
-<span class="sourceLineNo">234</span><a id="line.234">                ", color=" + color +</a>
-<span class="sourceLineNo">235</span><a id="line.235">                ", flicker=" + flicker +</a>
-<span class="sourceLineNo">236</span><a id="line.236">                ", strobe=" + strobe +</a>
-<span class="sourceLineNo">237</span><a id="line.237">                ", delay=" + delay +</a>
-<span class="sourceLineNo">238</span><a id="line.238">                ", flare=" + flare +</a>
-<span class="sourceLineNo">239</span><a id="line.239">                '}';</a>
-<span class="sourceLineNo">240</span><a id="line.240">    }</a>
-<span class="sourceLineNo">241</span><a id="line.241"></a>
-<span class="sourceLineNo">242</span><a id="line.242">    @Override</a>
-<span class="sourceLineNo">243</span><a id="line.243">    public boolean equals(Object o) {</a>
-<span class="sourceLineNo">244</span><a id="line.244">        if (this == o) return true;</a>
-<span class="sourceLineNo">245</span><a id="line.245">        if (o == null || getClass() != o.getClass()) return false;</a>
-<span class="sourceLineNo">246</span><a id="line.246"></a>
-<span class="sourceLineNo">247</span><a id="line.247">        Radiance radiance = (Radiance) o;</a>
-<span class="sourceLineNo">248</span><a id="line.248"></a>
-<span class="sourceLineNo">249</span><a id="line.249">        if (Float.compare(radiance.range, range) != 0) return false;</a>
-<span class="sourceLineNo">250</span><a id="line.250">        if (Float.compare(radiance.color, color) != 0) return false;</a>
-<span class="sourceLineNo">251</span><a id="line.251">        if (Float.compare(radiance.flicker, flicker) != 0) return false;</a>
-<span class="sourceLineNo">252</span><a id="line.252">        if (Float.compare(radiance.strobe, strobe) != 0) return false;</a>
-<span class="sourceLineNo">253</span><a id="line.253">        if (Float.compare(radiance.delay, delay) != 0) return false;</a>
-<span class="sourceLineNo">254</span><a id="line.254">        return Float.compare(radiance.flare, flare) == 0;</a>
-<span class="sourceLineNo">255</span><a id="line.255">    }</a>
-<span class="sourceLineNo">256</span><a id="line.256"></a>
-<span class="sourceLineNo">257</span><a id="line.257">    @Override</a>
-<span class="sourceLineNo">258</span><a id="line.258">    public int hashCode() {</a>
-<span class="sourceLineNo">259</span><a id="line.259">        int result = NumberTools.floatToIntBits(range);</a>
-<span class="sourceLineNo">260</span><a id="line.260">        result ^= (result &lt;&lt; 11 | result &gt;&gt;&gt; 21) + (result &lt;&lt; 19 | result &gt;&gt;&gt; 13) + NumberTools.floatToIntBits(color);</a>
-<span class="sourceLineNo">261</span><a id="line.261">        result ^= (result &lt;&lt; 11 | result &gt;&gt;&gt; 21) + (result &lt;&lt; 19 | result &gt;&gt;&gt; 13) + NumberTools.floatToIntBits(flicker);</a>
-<span class="sourceLineNo">262</span><a id="line.262">        result ^= (result &lt;&lt; 11 | result &gt;&gt;&gt; 21) + (result &lt;&lt; 19 | result &gt;&gt;&gt; 13) + NumberTools.floatToIntBits(strobe);</a>
-<span class="sourceLineNo">263</span><a id="line.263">        result ^= (result &lt;&lt; 11 | result &gt;&gt;&gt; 21) + (result &lt;&lt; 19 | result &gt;&gt;&gt; 13) + NumberTools.floatToIntBits(delay);</a>
-<span class="sourceLineNo">264</span><a id="line.264">        result ^= (result &lt;&lt; 11 | result &gt;&gt;&gt; 21) + (result &lt;&lt; 19 | result &gt;&gt;&gt; 13) + NumberTools.floatToIntBits(flare);</a>
-<span class="sourceLineNo">265</span><a id="line.265">        return result;</a>
-<span class="sourceLineNo">266</span><a id="line.266">    }</a>
-<span class="sourceLineNo">267</span><a id="line.267"></a>
-<span class="sourceLineNo">268</span><a id="line.268">    public String serializeToString()</a>
-<span class="sourceLineNo">269</span><a id="line.269">    {</a>
-<span class="sourceLineNo">270</span><a id="line.270">        return  "{" + StringKit.hex(NumberTools.floatToIntBits(range)) +</a>
-<span class="sourceLineNo">271</span><a id="line.271">                "," + StringKit.hex(NumberTools.floatToIntBits(color)) +</a>
-<span class="sourceLineNo">272</span><a id="line.272">                "," + StringKit.hex(NumberTools.floatToIntBits(flicker)) +</a>
-<span class="sourceLineNo">273</span><a id="line.273">                "," + StringKit.hex(NumberTools.floatToIntBits(strobe)) + </a>
-<span class="sourceLineNo">274</span><a id="line.274">                "," + StringKit.hex(NumberTools.floatToIntBits(delay)) +</a>
-<span class="sourceLineNo">275</span><a id="line.275">                "," + StringKit.hex(NumberTools.floatToIntBits(flare)) +</a>
-<span class="sourceLineNo">276</span><a id="line.276">                "}";</a>
-<span class="sourceLineNo">277</span><a id="line.277">    }</a>
-<span class="sourceLineNo">278</span><a id="line.278">    </a>
-<span class="sourceLineNo">279</span><a id="line.279">    public static Radiance deserializeFromString(String data)</a>
-<span class="sourceLineNo">280</span><a id="line.280">    {</a>
-<span class="sourceLineNo">281</span><a id="line.281">        return data != null &amp;&amp; data.length() &gt;= 54</a>
-<span class="sourceLineNo">282</span><a id="line.282">                ? new Radiance(</a>
-<span class="sourceLineNo">283</span><a id="line.283">                NumberTools.intBitsToFloat(StringKit.intFromHex(data, 1, 9)),</a>
-<span class="sourceLineNo">284</span><a id="line.284">                NumberTools.intBitsToFloat(StringKit.intFromHex(data, 10, 18)),</a>
-<span class="sourceLineNo">285</span><a id="line.285">                NumberTools.intBitsToFloat(StringKit.intFromHex(data, 19, 27)),</a>
-<span class="sourceLineNo">286</span><a id="line.286">                NumberTools.intBitsToFloat(StringKit.intFromHex(data, 28, 36)),</a>
-<span class="sourceLineNo">287</span><a id="line.287">                NumberTools.intBitsToFloat(StringKit.intFromHex(data, 37, 45)),</a>
-<span class="sourceLineNo">288</span><a id="line.288">                NumberTools.intBitsToFloat(StringKit.intFromHex(data, 46, 54)))</a>
-<span class="sourceLineNo">289</span><a id="line.289">                : null;</a>
-<span class="sourceLineNo">290</span><a id="line.290">    }</a>
-<span class="sourceLineNo">291</span><a id="line.291">}</a>
+<div class="source-container">
+<pre><span class="source-line-no">001</span><span id="line.1">package squidpony.squidgrid.gui.gdx;</span>
+<span class="source-line-no">002</span><span id="line.2"></span>
+<span class="source-line-no">003</span><span id="line.3">import com.badlogic.gdx.graphics.Color;</span>
+<span class="source-line-no">004</span><span id="line.4">import squidpony.StringKit;</span>
+<span class="source-line-no">005</span><span id="line.5">import squidpony.squidmath.NumberTools;</span>
+<span class="source-line-no">006</span><span id="line.6"></span>
+<span class="source-line-no">007</span><span id="line.7">import java.io.Serializable;</span>
+<span class="source-line-no">008</span><span id="line.8"></span>
+<span class="source-line-no">009</span><span id="line.9">/**</span>
+<span class="source-line-no">010</span><span id="line.10"> * Grouping of qualities related to glow and light emission. When a Radiance variable in some object is null, it</span>
+<span class="source-line-no">011</span><span id="line.11"> * means that object doesn't emit light; if a Radiance variable is non-null, it will probably emit light unless the</span>
+<span class="source-line-no">012</span><span id="line.12"> * color of light it produces is fully transparent. Light may take up one cell or extend into nearby cells, and the</span>
+<span class="source-line-no">013</span><span id="line.13"> * radius may change over time in up to two patterns (flicker, which randomly increases and decreases lighting radius,</span>
+<span class="source-line-no">014</span><span id="line.14"> * and/or strobe, which increases and decreases lighting radius in an orderly retract-expand-retract-expand pattern).</span>
+<span class="source-line-no">015</span><span id="line.15"> * You can set the {@link #flare} variable to some value between 0.0f and 1.0f to temporarily expand the minimum radius</span>
+<span class="source-line-no">016</span><span id="line.16"> * for strobe and/or flare, useful for gameplay-dependent brightening of a Radiance.</span>
+<span class="source-line-no">017</span><span id="line.17"> * &lt;br&gt;</span>
+<span class="source-line-no">018</span><span id="line.18"> * This object has 6 fields, each a float:</span>
+<span class="source-line-no">019</span><span id="line.19"> * &lt;ul&gt;</span>
+<span class="source-line-no">020</span><span id="line.20"> * &lt;li&gt;range, how far the light extends; 0f is "just this cell"&lt;/li&gt;</span>
+<span class="source-line-no">021</span><span id="line.21"> * &lt;li&gt;color, the color of the light as a float; typically opaque and lighter than the glowing object's color&lt;/li&gt;</span>
+<span class="source-line-no">022</span><span id="line.22"> * &lt;li&gt;flicker, the rate of random continuous change to radiance range&lt;/li&gt;</span>
+<span class="source-line-no">023</span><span id="line.23"> * &lt;li&gt;strobe, the rate of non-random continuous change to radiance range&lt;/li&gt;</span>
+<span class="source-line-no">024</span><span id="line.24"> * &lt;li&gt;flare, used to suddenly increase the minimum radius of lighting; expected to be changed after creation&lt;/li&gt;</span>
+<span class="source-line-no">025</span><span id="line.25"> * &lt;li&gt;delay, which delays the pattern of effects like strobe so a sequence can be formed with multiple Radiance&lt;/li&gt;</span>
+<span class="source-line-no">026</span><span id="line.26"> * &lt;/ul&gt;</span>
+<span class="source-line-no">027</span><span id="line.27"> * These all have defaults; if no parameters are specified the light will be white, affect only the current cell, and</span>
+<span class="source-line-no">028</span><span id="line.28"> * won't flicker or strobe.</span>
+<span class="source-line-no">029</span><span id="line.29"> * &lt;br&gt;</span>
+<span class="source-line-no">030</span><span id="line.30"> * Created by Tommy Ettinger on 6/16/2018.</span>
+<span class="source-line-no">031</span><span id="line.31"> */</span>
+<span class="source-line-no">032</span><span id="line.32">public class Radiance implements Serializable {</span>
+<span class="source-line-no">033</span><span id="line.33">    private static final long serialVersionUID = 1L;</span>
+<span class="source-line-no">034</span><span id="line.34"></span>
+<span class="source-line-no">035</span><span id="line.35">    /**</span>
+<span class="source-line-no">036</span><span id="line.36">     * How far the radiated light extends; 0f is "just this cell", anything higher can go into neighboring cells.</span>
+<span class="source-line-no">037</span><span id="line.37">     * This is permitted to be a non-integer value, which will make this extend into further cells partially.</span>
+<span class="source-line-no">038</span><span id="line.38">     */</span>
+<span class="source-line-no">039</span><span id="line.39">    public float range;</span>
+<span class="source-line-no">040</span><span id="line.40">    /**</span>
+<span class="source-line-no">041</span><span id="line.41">     * The color of light as a float; typically opaque and lighter than the glowing object's symbol.</span>
+<span class="source-line-no">042</span><span id="line.42">     */</span>
+<span class="source-line-no">043</span><span id="line.43">    public float color;</span>
+<span class="source-line-no">044</span><span id="line.44">    /**</span>
+<span class="source-line-no">045</span><span id="line.45">     * The rate of random continuous change to radiance range, like the light from a campfire. The random component of</span>
+<span class="source-line-no">046</span><span id="line.46">     * the change is determined by the {@link System#identityHashCode(Object)} of this Radiance, which will probably</span>
+<span class="source-line-no">047</span><span id="line.47">     * make all flicker effects different when flicker is non-0.</span>
+<span class="source-line-no">048</span><span id="line.48">     */</span>
+<span class="source-line-no">049</span><span id="line.49">    public float flicker;</span>
+<span class="source-line-no">050</span><span id="line.50">    /**</span>
+<span class="source-line-no">051</span><span id="line.51">     * The rate of non-random continuous change to radiance range, like a mechanical strobe effect. This looks like a</span>
+<span class="source-line-no">052</span><span id="line.52">     * strobe light when the value is high enough, but at lower values it will smoothly pulse, which can be less</span>
+<span class="source-line-no">053</span><span id="line.53">     * distracting to players.</span>
+<span class="source-line-no">054</span><span id="line.54">     */</span>
+<span class="source-line-no">055</span><span id="line.55">    public float strobe;</span>
+<span class="source-line-no">056</span><span id="line.56"></span>
+<span class="source-line-no">057</span><span id="line.57">    /**</span>
+<span class="source-line-no">058</span><span id="line.58">     * A time delay that applies to when the strobe and flicker effects change; useful with strobe to make a strobe</span>
+<span class="source-line-no">059</span><span id="line.59">     * expand its lit radius at one point, then expand at a slightly later time at another Radiance with a delay. The</span>
+<span class="source-line-no">060</span><span id="line.60">     * range for delay should be considered 0f to 1f, with 0f the default (no delay) and values between 0 and 1f that</span>
+<span class="source-line-no">061</span><span id="line.61">     * fraction of a full strobe delayed from that default.</span>
+<span class="source-line-no">062</span><span id="line.62">     */</span>
+<span class="source-line-no">063</span><span id="line.63">    public float delay;</span>
+<span class="source-line-no">064</span><span id="line.64">    /**</span>
+<span class="source-line-no">065</span><span id="line.65">     * A temporary increase to the minimum radiance range, meant to brighten a glow during an effect.</span>
+<span class="source-line-no">066</span><span id="line.66">     * This should be a float between 0f and 1f, with 0f meaning no change and 1f meaning always max radius.</span>
+<span class="source-line-no">067</span><span id="line.67">     */</span>
+<span class="source-line-no">068</span><span id="line.68">    public float flare;</span>
+<span class="source-line-no">069</span><span id="line.69"></span>
+<span class="source-line-no">070</span><span id="line.70">    /**</span>
+<span class="source-line-no">071</span><span id="line.71">     * All-default constructor; makes a single-cell unchanging white light.</span>
+<span class="source-line-no">072</span><span id="line.72">     */</span>
+<span class="source-line-no">073</span><span id="line.73">    public Radiance()</span>
+<span class="source-line-no">074</span><span id="line.74">    {</span>
+<span class="source-line-no">075</span><span id="line.75">        this(0f, SColor.FLOAT_WHITE, 0f, 0f, 0f, 0f);</span>
+<span class="source-line-no">076</span><span id="line.76">    }</span>
+<span class="source-line-no">077</span><span id="line.77"></span>
+<span class="source-line-no">078</span><span id="line.78">    /**</span>
+<span class="source-line-no">079</span><span id="line.79">     * Makes an unchanging white light with the specified range in cells.</span>
+<span class="source-line-no">080</span><span id="line.80">     * @param range possibly-non-integer radius to light, in cells</span>
+<span class="source-line-no">081</span><span id="line.81">     */</span>
+<span class="source-line-no">082</span><span id="line.82">    public Radiance(float range)</span>
+<span class="source-line-no">083</span><span id="line.83">    {</span>
+<span class="source-line-no">084</span><span id="line.84">        this(range, SColor.FLOAT_WHITE, 0f, 0f, 0f, 0f);</span>
+<span class="source-line-no">085</span><span id="line.85">    }</span>
+<span class="source-line-no">086</span><span id="line.86"></span>
+<span class="source-line-no">087</span><span id="line.87">    /**</span>
+<span class="source-line-no">088</span><span id="line.88">     * Makes an unchanging light with the given color (as a packed float) and the specified range in cells.</span>
+<span class="source-line-no">089</span><span id="line.89">     * @param range possibly-non-integer radius to light, in cells</span>
+<span class="source-line-no">090</span><span id="line.90">     * @param color packed float color, as produced by {@link Color#toFloatBits()}</span>
+<span class="source-line-no">091</span><span id="line.91">     */</span>
+<span class="source-line-no">092</span><span id="line.92">    public Radiance(float range, float color)</span>
+<span class="source-line-no">093</span><span id="line.93">    {</span>
+<span class="source-line-no">094</span><span id="line.94">        this(range, color, 0f, 0f, 0f, 0f);</span>
+<span class="source-line-no">095</span><span id="line.95">    }</span>
+<span class="source-line-no">096</span><span id="line.96"></span>
+<span class="source-line-no">097</span><span id="line.97">    /**</span>
+<span class="source-line-no">098</span><span id="line.98">     * Makes a flickering light with the given color (as a packed float) and the specified range in cells; the flicker</span>
+<span class="source-line-no">099</span><span id="line.99">     * parameter affects the rate at which this will randomly reduce its range and return to normal.</span>
+<span class="source-line-no">100</span><span id="line.100">     * @param range possibly-non-integer radius to light, in cells</span>
+<span class="source-line-no">101</span><span id="line.101">     * @param color packed float color, as produced by {@link Color#toFloatBits()}</span>
+<span class="source-line-no">102</span><span id="line.102">     * @param flicker the rate at which to flicker, as a non-negative float</span>
+<span class="source-line-no">103</span><span id="line.103">     */</span>
+<span class="source-line-no">104</span><span id="line.104">    public Radiance(float range, float color, float flicker)</span>
+<span class="source-line-no">105</span><span id="line.105">    {</span>
+<span class="source-line-no">106</span><span id="line.106">        this(range, color, flicker, 0f, 0f, 0f);</span>
+<span class="source-line-no">107</span><span id="line.107">    }</span>
+<span class="source-line-no">108</span><span id="line.108">    /**</span>
+<span class="source-line-no">109</span><span id="line.109">     * Makes a flickering light with the given color (as a packed float) and the specified range in cells; the flicker</span>
+<span class="source-line-no">110</span><span id="line.110">     * parameter affects the rate at which this will randomly reduce its range and return to normal, and the strobe</span>
+<span class="source-line-no">111</span><span id="line.111">     * parameter affects the rate at which this will steadily reduce its range and return to normal. Usually one of</span>
+<span class="source-line-no">112</span><span id="line.112">     * flicker or strobe is 0; if both are non-0, the radius will be smaller than normal.</span>
+<span class="source-line-no">113</span><span id="line.113">     * @param range possibly-non-integer radius to light, in cells</span>
+<span class="source-line-no">114</span><span id="line.114">     * @param color packed float color, as produced by {@link Color#toFloatBits()}</span>
+<span class="source-line-no">115</span><span id="line.115">     * @param flicker the rate at which to flicker, as a non-negative float</span>
+<span class="source-line-no">116</span><span id="line.116">     * @param strobe the rate at which to strobe or pulse, as a non-negative float</span>
+<span class="source-line-no">117</span><span id="line.117">     */</span>
+<span class="source-line-no">118</span><span id="line.118">    public Radiance(float range, float color, float flicker, float strobe)</span>
+<span class="source-line-no">119</span><span id="line.119">    {</span>
+<span class="source-line-no">120</span><span id="line.120">        this(range, color, flicker, strobe, 0f, 0f);</span>
+<span class="source-line-no">121</span><span id="line.121">    }</span>
+<span class="source-line-no">122</span><span id="line.122">    /**</span>
+<span class="source-line-no">123</span><span id="line.123">     * Makes a flickering light with the given color (as a libGDX Color) and the specified range in cells; the flicker</span>
+<span class="source-line-no">124</span><span id="line.124">     * parameter affects the rate at which this will randomly reduce its range and return to normal, and the strobe</span>
+<span class="source-line-no">125</span><span id="line.125">     * parameter affects the rate at which this will steadily reduce its range and return to normal. Usually one of</span>
+<span class="source-line-no">126</span><span id="line.126">     * flicker or strobe is 0; if both are non-0, the radius will be smaller than normal.</span>
+<span class="source-line-no">127</span><span id="line.127">     * @param range possibly-non-integer radius to light, in cells</span>
+<span class="source-line-no">128</span><span id="line.128">     * @param color a libGDX Color object; will not be modified</span>
+<span class="source-line-no">129</span><span id="line.129">     * @param flicker the rate at which to flicker, as a non-negative float</span>
+<span class="source-line-no">130</span><span id="line.130">     * @param strobe the rate at which to strobe or pulse, as a non-negative float</span>
+<span class="source-line-no">131</span><span id="line.131">     */</span>
+<span class="source-line-no">132</span><span id="line.132">    public Radiance(float range, Color color, float flicker, float strobe)</span>
+<span class="source-line-no">133</span><span id="line.133">    {</span>
+<span class="source-line-no">134</span><span id="line.134">        this(range, color.toFloatBits(), flicker, strobe, 0f, 0f);</span>
+<span class="source-line-no">135</span><span id="line.135">    }</span>
+<span class="source-line-no">136</span><span id="line.136">    </span>
+<span class="source-line-no">137</span><span id="line.137">    /**</span>
+<span class="source-line-no">138</span><span id="line.138">     * Makes a flickering light with the given color (as a packed float) and the specified range in cells; the flicker</span>
+<span class="source-line-no">139</span><span id="line.139">     * parameter affects the rate at which this will randomly reduce its range and return to normal, and the strobe</span>
+<span class="source-line-no">140</span><span id="line.140">     * parameter affects the rate at which this will steadily reduce its range and return to normal. Usually one of</span>
+<span class="source-line-no">141</span><span id="line.141">     * flicker or strobe is 0; if both are non-0, the radius will be smaller than normal. The delay parameter is usually</span>
+<span class="source-line-no">142</span><span id="line.142">     * from 0f to 1f, and is almost always 0f unless this is part of a group of related Radiance objects; it affects</span>
+<span class="source-line-no">143</span><span id="line.143">     * when strobe and flicker hit "high points" and "low points", and should usually be used with strobe.</span>
+<span class="source-line-no">144</span><span id="line.144">     * @param range possibly-non-integer radius to light, in cells</span>
+<span class="source-line-no">145</span><span id="line.145">     * @param color packed float color, as produced by {@link Color#toFloatBits()}</span>
+<span class="source-line-no">146</span><span id="line.146">     * @param flicker the rate at which to flicker, as a non-negative float</span>
+<span class="source-line-no">147</span><span id="line.147">     * @param strobe the rate at which to strobe or pulse, as a non-negative float</span>
+<span class="source-line-no">148</span><span id="line.148">     * @param delay a delay applied to the "high points" and "low points" of strobe and flicker, from 0f to 1f</span>
+<span class="source-line-no">149</span><span id="line.149">     */</span>
+<span class="source-line-no">150</span><span id="line.150">    public Radiance(float range, float color, float flicker, float strobe, float delay)</span>
+<span class="source-line-no">151</span><span id="line.151">    {</span>
+<span class="source-line-no">152</span><span id="line.152">        this(range, color, flicker, strobe, delay, 0f);</span>
+<span class="source-line-no">153</span><span id="line.153">    }</span>
+<span class="source-line-no">154</span><span id="line.154">    /**</span>
+<span class="source-line-no">155</span><span id="line.155">     * Makes a flickering light with the given color (as a packed float) and the specified range in cells; the flicker</span>
+<span class="source-line-no">156</span><span id="line.156">     * parameter affects the rate at which this will randomly reduce its range and return to normal, and the strobe</span>
+<span class="source-line-no">157</span><span id="line.157">     * parameter affects the rate at which this will steadily reduce its range and return to normal. Usually one of</span>
+<span class="source-line-no">158</span><span id="line.158">     * flicker or strobe is 0; if both are non-0, the radius will be smaller than normal. The delay parameter is usually</span>
+<span class="source-line-no">159</span><span id="line.159">     * from 0f to 1f, and is almost always 0f unless this is part of a group of related Radiance objects; it affects</span>
+<span class="source-line-no">160</span><span id="line.160">     * when strobe and flicker hit "high points" and "low points", and should usually be used with strobe. This allows</span>
+<span class="source-line-no">161</span><span id="line.161">     * setting flare, where flare is used to create a sudden increase in the minimum radius for the Radiance, but flare</span>
+<span class="source-line-no">162</span><span id="line.162">     * makes the most sense to set when an event should brighten a Radiance, not in the constructor. Valid values for</span>
+<span class="source-line-no">163</span><span id="line.163">     * flare are usually between 0f and 1f.</span>
+<span class="source-line-no">164</span><span id="line.164">     * @param range possibly-non-integer radius to light, in cells</span>
+<span class="source-line-no">165</span><span id="line.165">     * @param color packed float color, as produced by {@link Color#toFloatBits()}</span>
+<span class="source-line-no">166</span><span id="line.166">     * @param flicker the rate at which to flicker, as a non-negative float</span>
+<span class="source-line-no">167</span><span id="line.167">     * @param strobe the rate at which to strobe or pulse, as a non-negative float</span>
+<span class="source-line-no">168</span><span id="line.168">     * @param delay a delay applied to the "high points" and "low points" of strobe and flicker, from 0f to 1f</span>
+<span class="source-line-no">169</span><span id="line.169">     * @param flare affects the minimum radius for the Radiance, from 0f to 1f with a default of 0f</span>
+<span class="source-line-no">170</span><span id="line.170">     */</span>
+<span class="source-line-no">171</span><span id="line.171">    public Radiance(float range, float color, float flicker, float strobe, float delay, float flare)</span>
+<span class="source-line-no">172</span><span id="line.172">    {</span>
+<span class="source-line-no">173</span><span id="line.173">        this.range = range;</span>
+<span class="source-line-no">174</span><span id="line.174">        this.color = color;</span>
+<span class="source-line-no">175</span><span id="line.175">        this.flicker = flicker;</span>
+<span class="source-line-no">176</span><span id="line.176">        this.strobe = strobe;</span>
+<span class="source-line-no">177</span><span id="line.177">        this.delay = delay;</span>
+<span class="source-line-no">178</span><span id="line.178">        this.flare = flare;</span>
+<span class="source-line-no">179</span><span id="line.179">    }</span>
+<span class="source-line-no">180</span><span id="line.180"></span>
+<span class="source-line-no">181</span><span id="line.181">    /**</span>
+<span class="source-line-no">182</span><span id="line.182">     * Copies another Radiance exactly, except for the pattern its flicker may have, if any.</span>
+<span class="source-line-no">183</span><span id="line.183">     * @param other another Radiance to copy</span>
+<span class="source-line-no">184</span><span id="line.184">     */</span>
+<span class="source-line-no">185</span><span id="line.185">    public Radiance(Radiance other)</span>
+<span class="source-line-no">186</span><span id="line.186">    {</span>
+<span class="source-line-no">187</span><span id="line.187">        this(other.range, other.color, other.flicker, other.strobe, other.delay, other.flare);</span>
+<span class="source-line-no">188</span><span id="line.188">    }</span>
+<span class="source-line-no">189</span><span id="line.189"></span>
+<span class="source-line-no">190</span><span id="line.190">    /**</span>
+<span class="source-line-no">191</span><span id="line.191">     * Provides the calculated current range adjusted for flicker and strobe at the current time in milliseconds, with</span>
+<span class="source-line-no">192</span><span id="line.192">     * flicker seeded with the identity hash code of this Radiance. Higher values of flicker and strobe will increase</span>
+<span class="source-line-no">193</span><span id="line.193">     * the frequency at which the range changes but will not allow it to exceed its starting range, only to diminish</span>
+<span class="source-line-no">194</span><span id="line.194">     * temporarily. If both flicker and strobe are non-0, the range will usually be smaller than if only one was non-0,</span>
+<span class="source-line-no">195</span><span id="line.195">     * and if both are 0, this simply returns range.</span>
+<span class="source-line-no">196</span><span id="line.196">     * @return the current range, adjusting for flicker and strobe using the current time</span>
+<span class="source-line-no">197</span><span id="line.197">     */</span>
+<span class="source-line-no">198</span><span id="line.198">    public float currentRange()</span>
+<span class="source-line-no">199</span><span id="line.199">    {</span>
+<span class="source-line-no">200</span><span id="line.200">        final float time = (System.currentTimeMillis() &amp; 0x3ffffL) * 0x1.9p-9f;</span>
+<span class="source-line-no">201</span><span id="line.201">        float current = range;</span>
+<span class="source-line-no">202</span><span id="line.202">        if(flicker != 0f) </span>
+<span class="source-line-no">203</span><span id="line.203">            current *= NumberTools.swayRandomized(System.identityHashCode(this), time * flicker + delay) * 0.375f + 0.625f;</span>
+<span class="source-line-no">204</span><span id="line.204">        if(strobe != 0f)</span>
+<span class="source-line-no">205</span><span id="line.205">            current *= NumberTools.swayTight(time * strobe + delay) * 0.5f + 0.5f;</span>
+<span class="source-line-no">206</span><span id="line.206">        return Math.max(current, range * flare);</span>
+<span class="source-line-no">207</span><span id="line.207">    }</span>
+<span class="source-line-no">208</span><span id="line.208"></span>
+<span class="source-line-no">209</span><span id="line.209">    /**</span>
+<span class="source-line-no">210</span><span id="line.210">     * Makes a chain of Radiance objects that will pulse in a sequence, expanding from one to the next.</span>
+<span class="source-line-no">211</span><span id="line.211">     * This chain is an array of Radiance where the order matters.</span>
+<span class="source-line-no">212</span><span id="line.212">     * @param length how many Radiance objects should be in the returned array</span>
+<span class="source-line-no">213</span><span id="line.213">     * @param range in cells, how far each Radiance should expand from its start at its greatest radius</span>
+<span class="source-line-no">214</span><span id="line.214">     * @param color as a packed float color</span>
+<span class="source-line-no">215</span><span id="line.215">     * @param strobe the rate at which the chain will pulse; should be greater than 0</span>
+<span class="source-line-no">216</span><span id="line.216">     * @return an array of Radiance objects that will pulse in sequence.</span>
+<span class="source-line-no">217</span><span id="line.217">     */</span>
+<span class="source-line-no">218</span><span id="line.218">    public static Radiance[] makeChain(int length, float range, float color, float strobe)</span>
+<span class="source-line-no">219</span><span id="line.219">    {</span>
+<span class="source-line-no">220</span><span id="line.220">        if(length &lt;= 1)</span>
+<span class="source-line-no">221</span><span id="line.221">            return new Radiance[]{new Radiance(range, color, 0f, strobe)};</span>
+<span class="source-line-no">222</span><span id="line.222">        Radiance[] chain = new Radiance[length];</span>
+<span class="source-line-no">223</span><span id="line.223">        float d = -2f / (length);</span>
+<span class="source-line-no">224</span><span id="line.224">        for (int i = 0; i &lt; length; i++) {</span>
+<span class="source-line-no">225</span><span id="line.225">            chain[i] = new Radiance(range, color, 0f, strobe, d * i);</span>
+<span class="source-line-no">226</span><span id="line.226">        }</span>
+<span class="source-line-no">227</span><span id="line.227">        return chain;</span>
+<span class="source-line-no">228</span><span id="line.228">    }</span>
+<span class="source-line-no">229</span><span id="line.229"></span>
+<span class="source-line-no">230</span><span id="line.230">    @Override</span>
+<span class="source-line-no">231</span><span id="line.231">    public String toString() {</span>
+<span class="source-line-no">232</span><span id="line.232">        return "Radiance{" +</span>
+<span class="source-line-no">233</span><span id="line.233">                "range=" + range +</span>
+<span class="source-line-no">234</span><span id="line.234">                ", color=" + color +</span>
+<span class="source-line-no">235</span><span id="line.235">                ", flicker=" + flicker +</span>
+<span class="source-line-no">236</span><span id="line.236">                ", strobe=" + strobe +</span>
+<span class="source-line-no">237</span><span id="line.237">                ", delay=" + delay +</span>
+<span class="source-line-no">238</span><span id="line.238">                ", flare=" + flare +</span>
+<span class="source-line-no">239</span><span id="line.239">                '}';</span>
+<span class="source-line-no">240</span><span id="line.240">    }</span>
+<span class="source-line-no">241</span><span id="line.241"></span>
+<span class="source-line-no">242</span><span id="line.242">    @Override</span>
+<span class="source-line-no">243</span><span id="line.243">    public boolean equals(Object o) {</span>
+<span class="source-line-no">244</span><span id="line.244">        if (this == o) return true;</span>
+<span class="source-line-no">245</span><span id="line.245">        if (o == null || getClass() != o.getClass()) return false;</span>
+<span class="source-line-no">246</span><span id="line.246"></span>
+<span class="source-line-no">247</span><span id="line.247">        Radiance radiance = (Radiance) o;</span>
+<span class="source-line-no">248</span><span id="line.248"></span>
+<span class="source-line-no">249</span><span id="line.249">        if (Float.compare(radiance.range, range) != 0) return false;</span>
+<span class="source-line-no">250</span><span id="line.250">        if (Float.compare(radiance.color, color) != 0) return false;</span>
+<span class="source-line-no">251</span><span id="line.251">        if (Float.compare(radiance.flicker, flicker) != 0) return false;</span>
+<span class="source-line-no">252</span><span id="line.252">        if (Float.compare(radiance.strobe, strobe) != 0) return false;</span>
+<span class="source-line-no">253</span><span id="line.253">        if (Float.compare(radiance.delay, delay) != 0) return false;</span>
+<span class="source-line-no">254</span><span id="line.254">        return Float.compare(radiance.flare, flare) == 0;</span>
+<span class="source-line-no">255</span><span id="line.255">    }</span>
+<span class="source-line-no">256</span><span id="line.256"></span>
+<span class="source-line-no">257</span><span id="line.257">    @Override</span>
+<span class="source-line-no">258</span><span id="line.258">    public int hashCode() {</span>
+<span class="source-line-no">259</span><span id="line.259">        int result = NumberTools.floatToIntBits(range);</span>
+<span class="source-line-no">260</span><span id="line.260">        result ^= (result &lt;&lt; 11 | result &gt;&gt;&gt; 21) + (result &lt;&lt; 19 | result &gt;&gt;&gt; 13) + NumberTools.floatToIntBits(color);</span>
+<span class="source-line-no">261</span><span id="line.261">        result ^= (result &lt;&lt; 11 | result &gt;&gt;&gt; 21) + (result &lt;&lt; 19 | result &gt;&gt;&gt; 13) + NumberTools.floatToIntBits(flicker);</span>
+<span class="source-line-no">262</span><span id="line.262">        result ^= (result &lt;&lt; 11 | result &gt;&gt;&gt; 21) + (result &lt;&lt; 19 | result &gt;&gt;&gt; 13) + NumberTools.floatToIntBits(strobe);</span>
+<span class="source-line-no">263</span><span id="line.263">        result ^= (result &lt;&lt; 11 | result &gt;&gt;&gt; 21) + (result &lt;&lt; 19 | result &gt;&gt;&gt; 13) + NumberTools.floatToIntBits(delay);</span>
+<span class="source-line-no">264</span><span id="line.264">        result ^= (result &lt;&lt; 11 | result &gt;&gt;&gt; 21) + (result &lt;&lt; 19 | result &gt;&gt;&gt; 13) + NumberTools.floatToIntBits(flare);</span>
+<span class="source-line-no">265</span><span id="line.265">        return result;</span>
+<span class="source-line-no">266</span><span id="line.266">    }</span>
+<span class="source-line-no">267</span><span id="line.267"></span>
+<span class="source-line-no">268</span><span id="line.268">    public String serializeToString()</span>
+<span class="source-line-no">269</span><span id="line.269">    {</span>
+<span class="source-line-no">270</span><span id="line.270">        return  "{" + StringKit.hex(NumberTools.floatToIntBits(range)) +</span>
+<span class="source-line-no">271</span><span id="line.271">                "," + StringKit.hex(NumberTools.floatToIntBits(color)) +</span>
+<span class="source-line-no">272</span><span id="line.272">                "," + StringKit.hex(NumberTools.floatToIntBits(flicker)) +</span>
+<span class="source-line-no">273</span><span id="line.273">                "," + StringKit.hex(NumberTools.floatToIntBits(strobe)) + </span>
+<span class="source-line-no">274</span><span id="line.274">                "," + StringKit.hex(NumberTools.floatToIntBits(delay)) +</span>
+<span class="source-line-no">275</span><span id="line.275">                "," + StringKit.hex(NumberTools.floatToIntBits(flare)) +</span>
+<span class="source-line-no">276</span><span id="line.276">                "}";</span>
+<span class="source-line-no">277</span><span id="line.277">    }</span>
+<span class="source-line-no">278</span><span id="line.278">    </span>
+<span class="source-line-no">279</span><span id="line.279">    public static Radiance deserializeFromString(String data)</span>
+<span class="source-line-no">280</span><span id="line.280">    {</span>
+<span class="source-line-no">281</span><span id="line.281">        return data != null &amp;&amp; data.length() &gt;= 54</span>
+<span class="source-line-no">282</span><span id="line.282">                ? new Radiance(</span>
+<span class="source-line-no">283</span><span id="line.283">                NumberTools.intBitsToFloat(StringKit.intFromHex(data, 1, 9)),</span>
+<span class="source-line-no">284</span><span id="line.284">                NumberTools.intBitsToFloat(StringKit.intFromHex(data, 10, 18)),</span>
+<span class="source-line-no">285</span><span id="line.285">                NumberTools.intBitsToFloat(StringKit.intFromHex(data, 19, 27)),</span>
+<span class="source-line-no">286</span><span id="line.286">                NumberTools.intBitsToFloat(StringKit.intFromHex(data, 28, 36)),</span>
+<span class="source-line-no">287</span><span id="line.287">                NumberTools.intBitsToFloat(StringKit.intFromHex(data, 37, 45)),</span>
+<span class="source-line-no">288</span><span id="line.288">                NumberTools.intBitsToFloat(StringKit.intFromHex(data, 46, 54)))</span>
+<span class="source-line-no">289</span><span id="line.289">                : null;</span>
+<span class="source-line-no">290</span><span id="line.290">    }</span>
+<span class="source-line-no">291</span><span id="line.291">}</span>
 
 
 

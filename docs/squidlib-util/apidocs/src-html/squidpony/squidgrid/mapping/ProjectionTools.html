@@ -7,103 +7,103 @@
 <meta name="generator" content="javadoc/SourceToHTMLConverter">
 <link rel="stylesheet" type="text/css" href="../../../../stylesheet.css" title="Style">
 </head>
-<body class="source">
+<body class="source-page">
 <main role="main">
-<div class="sourceContainer">
-<pre><span class="sourceLineNo">001</span><a id="line.1">/*</a>
-<span class="sourceLineNo">002</span><a id="line.2"> * MIT License</a>
-<span class="sourceLineNo">003</span><a id="line.3"> *</a>
-<span class="sourceLineNo">004</span><a id="line.4"> * Copyright (c) 2017 Justin Kunimune</a>
-<span class="sourceLineNo">005</span><a id="line.5"> *</a>
-<span class="sourceLineNo">006</span><a id="line.6"> * Permission is hereby granted, free of charge, to any person obtaining a copy</a>
-<span class="sourceLineNo">007</span><a id="line.7"> * of this software and associated documentation files (the "Software"), to deal</a>
-<span class="sourceLineNo">008</span><a id="line.8"> * in the Software without restriction, including without limitation the rights</a>
-<span class="sourceLineNo">009</span><a id="line.9"> * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell</a>
-<span class="sourceLineNo">010</span><a id="line.10"> * copies of the Software, and to permit persons to whom the Software is</a>
-<span class="sourceLineNo">011</span><a id="line.11"> * furnished to do so, subject to the following conditions:</a>
-<span class="sourceLineNo">012</span><a id="line.12"> *</a>
-<span class="sourceLineNo">013</span><a id="line.13"> * The above copyright notice and this permission notice shall be included in all</a>
-<span class="sourceLineNo">014</span><a id="line.14"> * copies or substantial portions of the Software.</a>
-<span class="sourceLineNo">015</span><a id="line.15"> *</a>
-<span class="sourceLineNo">016</span><a id="line.16"> * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</a>
-<span class="sourceLineNo">017</span><a id="line.17"> * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,</a>
-<span class="sourceLineNo">018</span><a id="line.18"> * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE</a>
-<span class="sourceLineNo">019</span><a id="line.19"> * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER</a>
-<span class="sourceLineNo">020</span><a id="line.20"> * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,</a>
-<span class="sourceLineNo">021</span><a id="line.21"> * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE</a>
-<span class="sourceLineNo">022</span><a id="line.22"> * SOFTWARE.</a>
-<span class="sourceLineNo">023</span><a id="line.23"> */</a>
-<span class="sourceLineNo">024</span><a id="line.24"></a>
-<span class="sourceLineNo">025</span><a id="line.25">package squidpony.squidgrid.mapping;</a>
-<span class="sourceLineNo">026</span><a id="line.26"></a>
-<span class="sourceLineNo">027</span><a id="line.27">/**</a>
-<span class="sourceLineNo">028</span><a id="line.28"> * Added to SquidLib by Tommy Ettinger on 7/4/2018, using MIT-licensed work by Justin Kunimune from</a>
-<span class="sourceLineNo">029</span><a id="line.29"> * &lt;a href="https://github.com/jkunimune15/Map-Projections/blob/9f820aba788ba0b37a1c67128a4c861d243b4a46/src/utils/NumericalAnalysis.java"&gt;his Map-Projections repo&lt;/a&gt;.</a>
-<span class="sourceLineNo">030</span><a id="line.30"> * @author jkunimune</a>
-<span class="sourceLineNo">031</span><a id="line.31"> * @author Tommy Ettinger</a>
-<span class="sourceLineNo">032</span><a id="line.32"> */</a>
-<span class="sourceLineNo">033</span><a id="line.33">public class ProjectionTools {</a>
-<span class="sourceLineNo">034</span><a id="line.34">    /**</a>
-<span class="sourceLineNo">035</span><a id="line.35">     * Performs a definite integral using Simpson's rule and a constant step size; hard-coded to integrate a</a>
-<span class="sourceLineNo">036</span><a id="line.36">     * hyperellipse function.</a>
-<span class="sourceLineNo">037</span><a id="line.37">     * @param a The start of the integration region</a>
-<span class="sourceLineNo">038</span><a id="line.38">     * @param b The end of the integration region (must be greater than a)</a>
-<span class="sourceLineNo">039</span><a id="line.39">     * @param h The step size (must be positive)</a>
-<span class="sourceLineNo">040</span><a id="line.40">     * @param kappa the kappa value of the hyperellipse</a>
-<span class="sourceLineNo">041</span><a id="line.41">     * @return some magic stuff needed for Tobler Hyperelliptical maps</a>
-<span class="sourceLineNo">042</span><a id="line.42">     */</a>
-<span class="sourceLineNo">043</span><a id="line.43">    public static double simpsonIntegrateHyperellipse(double a, double b, double h, double kappa) {</a>
-<span class="sourceLineNo">044</span><a id="line.44">        double sum = 0, ik = 1/kappa;</a>
-<span class="sourceLineNo">045</span><a id="line.45">        for (double x = a; x &lt; b; x += h) {</a>
-<span class="sourceLineNo">046</span><a id="line.46">            if (x+h &gt; b) h = b-x;</a>
-<span class="sourceLineNo">047</span><a id="line.47">            sum += h/6*(Math.pow(1 - Math.pow(Math.abs(x), kappa), ik) </a>
-<span class="sourceLineNo">048</span><a id="line.48">                    + 4*Math.pow(1 - Math.pow(Math.abs(x + h * 0.5), kappa), ik) </a>
-<span class="sourceLineNo">049</span><a id="line.49">                    + Math.pow(1 - Math.pow(Math.abs(x + h), kappa), ik));</a>
-<span class="sourceLineNo">050</span><a id="line.50">        }</a>
-<span class="sourceLineNo">051</span><a id="line.51">        return sum;</a>
-<span class="sourceLineNo">052</span><a id="line.52">    }</a>
-<span class="sourceLineNo">053</span><a id="line.53"></a>
-<span class="sourceLineNo">054</span><a id="line.54">    /**</a>
-<span class="sourceLineNo">055</span><a id="line.55">     * Solves a simple ODE using Simpson's rule and a constant step size; hard-coded to solve a hyperelliptical map</a>
-<span class="sourceLineNo">056</span><a id="line.56">     * projection task.</a>
-<span class="sourceLineNo">057</span><a id="line.57">     * @param T The maximum time value at which to sample (must be positive)</a>
-<span class="sourceLineNo">058</span><a id="line.58">     * @param y the double array to fill with samples; must not be null and must have length 1 or greater</a>
-<span class="sourceLineNo">059</span><a id="line.59">     * @param h The internal step size (must be positive)</a>
-<span class="sourceLineNo">060</span><a id="line.60">     * @param alpha part of the hyperelliptical projection's parameters </a>
-<span class="sourceLineNo">061</span><a id="line.61">     * @param kappa part of the hyperelliptical projection's parameters</a>
-<span class="sourceLineNo">062</span><a id="line.62">     * @param epsilon calculated beforehand using {@link #simpsonIntegrateHyperellipse(double, double, double, double)}</a>
-<span class="sourceLineNo">063</span><a id="line.63">     * @return y, after modifications</a>
-<span class="sourceLineNo">064</span><a id="line.64">     */</a>
-<span class="sourceLineNo">065</span><a id="line.65">    public static double[] simpsonODESolveHyperellipse(final double T, final double[] y, final double h, final double alpha, final double kappa, final double epsilon)</a>
-<span class="sourceLineNo">066</span><a id="line.66">    {</a>
-<span class="sourceLineNo">067</span><a id="line.67">        final int m = y.length - 1, n = m + 1;</a>
-<span class="sourceLineNo">068</span><a id="line.68">        double t = 0;</a>
-<span class="sourceLineNo">069</span><a id="line.69">        double sum = 0;</a>
-<span class="sourceLineNo">070</span><a id="line.70">        for (int i = 0; i &lt;= m; i++) {</a>
-<span class="sourceLineNo">071</span><a id="line.71">            while (t &lt; i * T / n) {</a>
-<span class="sourceLineNo">072</span><a id="line.72">                final double tph = Math.min(t + h, i * T / n);</a>
-<span class="sourceLineNo">073</span><a id="line.73">                sum += (tph - t) / 6 * (Math.abs((alpha + (1-alpha)*Math.pow(1 - Math.pow(Math.abs(t), kappa), 1.0/kappa)) / (alpha + (1-alpha)*epsilon))</a>
-<span class="sourceLineNo">074</span><a id="line.74">                        + 4 * Math.abs((alpha + (1-alpha)*Math.pow(1 - Math.pow(Math.abs((t + tph) * 0.5), kappa), 1.0/kappa)) / (alpha + (1-alpha)*epsilon))</a>
-<span class="sourceLineNo">075</span><a id="line.75">                        + Math.abs((alpha + (1-alpha)*Math.pow(1 - Math.pow(Math.abs(tph), kappa), 1.0/kappa)) / (alpha + (1-alpha)*epsilon)));</a>
-<span class="sourceLineNo">076</span><a id="line.76">                t = tph;</a>
-<span class="sourceLineNo">077</span><a id="line.77">            }</a>
-<span class="sourceLineNo">078</span><a id="line.78">            y[i] = sum;</a>
-<span class="sourceLineNo">079</span><a id="line.79">        }</a>
-<span class="sourceLineNo">080</span><a id="line.80">        return y;</a>
-<span class="sourceLineNo">081</span><a id="line.81">    }</a>
-<span class="sourceLineNo">082</span><a id="line.82"></a>
-<span class="sourceLineNo">083</span><a id="line.83">    /**</a>
-<span class="sourceLineNo">084</span><a id="line.84">     * Part of computing a hyperellipse; takes only a y parameter corresponding to the y on a map and a kappa parameter</a>
-<span class="sourceLineNo">085</span><a id="line.85">     * used by Tobler's hyperelliptical projection to determine shape.</a>
-<span class="sourceLineNo">086</span><a id="line.86">     * @param y y on a map, usually -1.0 to 1.0</a>
-<span class="sourceLineNo">087</span><a id="line.87">     * @param kappa one of the Tobler parameters</a>
-<span class="sourceLineNo">088</span><a id="line.88">     * @return I'm guessing the actual y used after hyperelliptical distortion; not sure</a>
-<span class="sourceLineNo">089</span><a id="line.89">     */</a>
-<span class="sourceLineNo">090</span><a id="line.90">    public static double hyperellipse(double y, double kappa) {</a>
-<span class="sourceLineNo">091</span><a id="line.91">        return Math.pow(1 - Math.pow(Math.abs(y),kappa), 1/kappa);</a>
-<span class="sourceLineNo">092</span><a id="line.92">    }</a>
-<span class="sourceLineNo">093</span><a id="line.93"></a>
-<span class="sourceLineNo">094</span><a id="line.94">}</a>
+<div class="source-container">
+<pre><span class="source-line-no">001</span><span id="line.1">/*</span>
+<span class="source-line-no">002</span><span id="line.2"> * MIT License</span>
+<span class="source-line-no">003</span><span id="line.3"> *</span>
+<span class="source-line-no">004</span><span id="line.4"> * Copyright (c) 2017 Justin Kunimune</span>
+<span class="source-line-no">005</span><span id="line.5"> *</span>
+<span class="source-line-no">006</span><span id="line.6"> * Permission is hereby granted, free of charge, to any person obtaining a copy</span>
+<span class="source-line-no">007</span><span id="line.7"> * of this software and associated documentation files (the "Software"), to deal</span>
+<span class="source-line-no">008</span><span id="line.8"> * in the Software without restriction, including without limitation the rights</span>
+<span class="source-line-no">009</span><span id="line.9"> * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell</span>
+<span class="source-line-no">010</span><span id="line.10"> * copies of the Software, and to permit persons to whom the Software is</span>
+<span class="source-line-no">011</span><span id="line.11"> * furnished to do so, subject to the following conditions:</span>
+<span class="source-line-no">012</span><span id="line.12"> *</span>
+<span class="source-line-no">013</span><span id="line.13"> * The above copyright notice and this permission notice shall be included in all</span>
+<span class="source-line-no">014</span><span id="line.14"> * copies or substantial portions of the Software.</span>
+<span class="source-line-no">015</span><span id="line.15"> *</span>
+<span class="source-line-no">016</span><span id="line.16"> * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span>
+<span class="source-line-no">017</span><span id="line.17"> * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,</span>
+<span class="source-line-no">018</span><span id="line.18"> * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE</span>
+<span class="source-line-no">019</span><span id="line.19"> * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER</span>
+<span class="source-line-no">020</span><span id="line.20"> * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,</span>
+<span class="source-line-no">021</span><span id="line.21"> * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE</span>
+<span class="source-line-no">022</span><span id="line.22"> * SOFTWARE.</span>
+<span class="source-line-no">023</span><span id="line.23"> */</span>
+<span class="source-line-no">024</span><span id="line.24"></span>
+<span class="source-line-no">025</span><span id="line.25">package squidpony.squidgrid.mapping;</span>
+<span class="source-line-no">026</span><span id="line.26"></span>
+<span class="source-line-no">027</span><span id="line.27">/**</span>
+<span class="source-line-no">028</span><span id="line.28"> * Added to SquidLib by Tommy Ettinger on 7/4/2018, using MIT-licensed work by Justin Kunimune from</span>
+<span class="source-line-no">029</span><span id="line.29"> * &lt;a href="https://github.com/jkunimune15/Map-Projections/blob/9f820aba788ba0b37a1c67128a4c861d243b4a46/src/utils/NumericalAnalysis.java"&gt;his Map-Projections repo&lt;/a&gt;.</span>
+<span class="source-line-no">030</span><span id="line.30"> * @author jkunimune</span>
+<span class="source-line-no">031</span><span id="line.31"> * @author Tommy Ettinger</span>
+<span class="source-line-no">032</span><span id="line.32"> */</span>
+<span class="source-line-no">033</span><span id="line.33">public class ProjectionTools {</span>
+<span class="source-line-no">034</span><span id="line.34">    /**</span>
+<span class="source-line-no">035</span><span id="line.35">     * Performs a definite integral using Simpson's rule and a constant step size; hard-coded to integrate a</span>
+<span class="source-line-no">036</span><span id="line.36">     * hyperellipse function.</span>
+<span class="source-line-no">037</span><span id="line.37">     * @param a The start of the integration region</span>
+<span class="source-line-no">038</span><span id="line.38">     * @param b The end of the integration region (must be greater than a)</span>
+<span class="source-line-no">039</span><span id="line.39">     * @param h The step size (must be positive)</span>
+<span class="source-line-no">040</span><span id="line.40">     * @param kappa the kappa value of the hyperellipse</span>
+<span class="source-line-no">041</span><span id="line.41">     * @return some magic stuff needed for Tobler Hyperelliptical maps</span>
+<span class="source-line-no">042</span><span id="line.42">     */</span>
+<span class="source-line-no">043</span><span id="line.43">    public static double simpsonIntegrateHyperellipse(double a, double b, double h, double kappa) {</span>
+<span class="source-line-no">044</span><span id="line.44">        double sum = 0, ik = 1/kappa;</span>
+<span class="source-line-no">045</span><span id="line.45">        for (double x = a; x &lt; b; x += h) {</span>
+<span class="source-line-no">046</span><span id="line.46">            if (x+h &gt; b) h = b-x;</span>
+<span class="source-line-no">047</span><span id="line.47">            sum += h/6*(Math.pow(1 - Math.pow(Math.abs(x), kappa), ik) </span>
+<span class="source-line-no">048</span><span id="line.48">                    + 4*Math.pow(1 - Math.pow(Math.abs(x + h * 0.5), kappa), ik) </span>
+<span class="source-line-no">049</span><span id="line.49">                    + Math.pow(1 - Math.pow(Math.abs(x + h), kappa), ik));</span>
+<span class="source-line-no">050</span><span id="line.50">        }</span>
+<span class="source-line-no">051</span><span id="line.51">        return sum;</span>
+<span class="source-line-no">052</span><span id="line.52">    }</span>
+<span class="source-line-no">053</span><span id="line.53"></span>
+<span class="source-line-no">054</span><span id="line.54">    /**</span>
+<span class="source-line-no">055</span><span id="line.55">     * Solves a simple ODE using Simpson's rule and a constant step size; hard-coded to solve a hyperelliptical map</span>
+<span class="source-line-no">056</span><span id="line.56">     * projection task.</span>
+<span class="source-line-no">057</span><span id="line.57">     * @param T The maximum time value at which to sample (must be positive)</span>
+<span class="source-line-no">058</span><span id="line.58">     * @param y the double array to fill with samples; must not be null and must have length 1 or greater</span>
+<span class="source-line-no">059</span><span id="line.59">     * @param h The internal step size (must be positive)</span>
+<span class="source-line-no">060</span><span id="line.60">     * @param alpha part of the hyperelliptical projection's parameters </span>
+<span class="source-line-no">061</span><span id="line.61">     * @param kappa part of the hyperelliptical projection's parameters</span>
+<span class="source-line-no">062</span><span id="line.62">     * @param epsilon calculated beforehand using {@link #simpsonIntegrateHyperellipse(double, double, double, double)}</span>
+<span class="source-line-no">063</span><span id="line.63">     * @return y, after modifications</span>
+<span class="source-line-no">064</span><span id="line.64">     */</span>
+<span class="source-line-no">065</span><span id="line.65">    public static double[] simpsonODESolveHyperellipse(final double T, final double[] y, final double h, final double alpha, final double kappa, final double epsilon)</span>
+<span class="source-line-no">066</span><span id="line.66">    {</span>
+<span class="source-line-no">067</span><span id="line.67">        final int m = y.length - 1, n = m + 1;</span>
+<span class="source-line-no">068</span><span id="line.68">        double t = 0;</span>
+<span class="source-line-no">069</span><span id="line.69">        double sum = 0;</span>
+<span class="source-line-no">070</span><span id="line.70">        for (int i = 0; i &lt;= m; i++) {</span>
+<span class="source-line-no">071</span><span id="line.71">            while (t &lt; i * T / n) {</span>
+<span class="source-line-no">072</span><span id="line.72">                final double tph = Math.min(t + h, i * T / n);</span>
+<span class="source-line-no">073</span><span id="line.73">                sum += (tph - t) / 6 * (Math.abs((alpha + (1-alpha)*Math.pow(1 - Math.pow(Math.abs(t), kappa), 1.0/kappa)) / (alpha + (1-alpha)*epsilon))</span>
+<span class="source-line-no">074</span><span id="line.74">                        + 4 * Math.abs((alpha + (1-alpha)*Math.pow(1 - Math.pow(Math.abs((t + tph) * 0.5), kappa), 1.0/kappa)) / (alpha + (1-alpha)*epsilon))</span>
+<span class="source-line-no">075</span><span id="line.75">                        + Math.abs((alpha + (1-alpha)*Math.pow(1 - Math.pow(Math.abs(tph), kappa), 1.0/kappa)) / (alpha + (1-alpha)*epsilon)));</span>
+<span class="source-line-no">076</span><span id="line.76">                t = tph;</span>
+<span class="source-line-no">077</span><span id="line.77">            }</span>
+<span class="source-line-no">078</span><span id="line.78">            y[i] = sum;</span>
+<span class="source-line-no">079</span><span id="line.79">        }</span>
+<span class="source-line-no">080</span><span id="line.80">        return y;</span>
+<span class="source-line-no">081</span><span id="line.81">    }</span>
+<span class="source-line-no">082</span><span id="line.82"></span>
+<span class="source-line-no">083</span><span id="line.83">    /**</span>
+<span class="source-line-no">084</span><span id="line.84">     * Part of computing a hyperellipse; takes only a y parameter corresponding to the y on a map and a kappa parameter</span>
+<span class="source-line-no">085</span><span id="line.85">     * used by Tobler's hyperelliptical projection to determine shape.</span>
+<span class="source-line-no">086</span><span id="line.86">     * @param y y on a map, usually -1.0 to 1.0</span>
+<span class="source-line-no">087</span><span id="line.87">     * @param kappa one of the Tobler parameters</span>
+<span class="source-line-no">088</span><span id="line.88">     * @return I'm guessing the actual y used after hyperelliptical distortion; not sure</span>
+<span class="source-line-no">089</span><span id="line.89">     */</span>
+<span class="source-line-no">090</span><span id="line.90">    public static double hyperellipse(double y, double kappa) {</span>
+<span class="source-line-no">091</span><span id="line.91">        return Math.pow(1 - Math.pow(Math.abs(y),kappa), 1/kappa);</span>
+<span class="source-line-no">092</span><span id="line.92">    }</span>
+<span class="source-line-no">093</span><span id="line.93"></span>
+<span class="source-line-no">094</span><span id="line.94">}</span>
 
 
 

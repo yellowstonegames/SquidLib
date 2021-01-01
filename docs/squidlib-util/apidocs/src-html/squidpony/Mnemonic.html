@@ -7,311 +7,311 @@
 <meta name="generator" content="javadoc/SourceToHTMLConverter">
 <link rel="stylesheet" type="text/css" href="../../stylesheet.css" title="Style">
 </head>
-<body class="source">
+<body class="source-page">
 <main role="main">
-<div class="sourceContainer">
-<pre><span class="sourceLineNo">001</span><a id="line.1">package squidpony;</a>
-<span class="sourceLineNo">002</span><a id="line.2"></a>
-<span class="sourceLineNo">003</span><a id="line.3">import squidpony.squidmath.*;</a>
-<span class="sourceLineNo">004</span><a id="line.4"></a>
-<span class="sourceLineNo">005</span><a id="line.5">import java.util.ArrayList;</a>
-<span class="sourceLineNo">006</span><a id="line.6">import java.util.Collection;</a>
-<span class="sourceLineNo">007</span><a id="line.7"></a>
-<span class="sourceLineNo">008</span><a id="line.8">import static squidpony.Thesaurus.*;</a>
-<span class="sourceLineNo">009</span><a id="line.9"></a>
-<span class="sourceLineNo">010</span><a id="line.10">/**</a>
-<span class="sourceLineNo">011</span><a id="line.11"> * A utility class to print (typically very large) numbers in a way that players can more-meaningfully tell them apart.</a>
-<span class="sourceLineNo">012</span><a id="line.12"> * It isn't that great for this task currently, but it can bi-directionally turn {@code long} values like</a>
-<span class="sourceLineNo">013</span><a id="line.13"> * -8798641734435409502 into {@code String}s like nwihyayeetyoruehyazuetro. The advantage here is that</a>
-<span class="sourceLineNo">014</span><a id="line.14"> * nwihyayeetyoruehyazuetro is very different from protoezlebauyauzlutoatra, even though the numbers they are made from</a>
-<span class="sourceLineNo">015</span><a id="line.15"> * are harder to distinguish (-8798641734435409502 vs. -8032477240987739423, when using the default seed).</a>
-<span class="sourceLineNo">016</span><a id="line.16"> * &lt;br&gt;</a>
-<span class="sourceLineNo">017</span><a id="line.17"> * The constructor optionally takes a seed that can greatly change the generated mnemonics, which may be useful if</a>
-<span class="sourceLineNo">018</span><a id="line.18"> * mnemonic strings produced for some purpose should only be decipherable by that program or that play of the game. If</a>
-<span class="sourceLineNo">019</span><a id="line.19"> * no seed is given, this acts as if the seed is 1. Only 256 possible 3-letter sections are used with any given seed,</a>
-<span class="sourceLineNo">020</span><a id="line.20"> * but 431 sections are possible (hand-selected to avoid the likelihood of producing possibly-vulgar words). Two</a>
-<span class="sourceLineNo">021</span><a id="line.21"> * different seeds may use mostly-different selections of "syllable" sections, though a not-very-small amount of overlap</a>
-<span class="sourceLineNo">022</span><a id="line.22"> * in potential generated mnemonic strings must occur between any two seeds.</a>
-<span class="sourceLineNo">023</span><a id="line.23"> * &lt;br&gt;</a>
-<span class="sourceLineNo">024</span><a id="line.24"> * Created by Tommy Ettinger on 1/24/2018.</a>
-<span class="sourceLineNo">025</span><a id="line.25"> */</a>
-<span class="sourceLineNo">026</span><a id="line.26">public class Mnemonic {</a>
-<span class="sourceLineNo">027</span><a id="line.27">    private static final String baseTriplets =</a>
-<span class="sourceLineNo">028</span><a id="line.28">            "baibaublabyabeabeebeibeoblebrebwebyebiabiebioblibribwibyiboaboeboiboubrobuobyobuabuebuibrubwubyu" +</a>
-<span class="sourceLineNo">029</span><a id="line.29">            "daudradyadeadeedeodredwediodridwidyidoadoedoidoudroduodyoduadueduidrudwudyu" +</a>
-<span class="sourceLineNo">030</span><a id="line.30">            "haihauhmahrahyahwaheaheeheiheohmehrehwehyehiahiehiohmihrihwihyihmohrohuohyohuahuehuihmuhruhwuhyu" +</a>
-<span class="sourceLineNo">031</span><a id="line.31">            "jaijaujyajwajeajeejeijeojwejyejiajiejiojwijyijoajoejoijoujyo" +</a>
-<span class="sourceLineNo">032</span><a id="line.32">            "kaikaukrakyakeakeekeoklekrekyekiakiokrikwikyikoakoekoikouklokrokyokuokuakuekuikrukyu" +</a>
-<span class="sourceLineNo">033</span><a id="line.33">            "lailaulyalwalealeeleileolwelyelialieliolwilyiloaloeloiluolyolualuilwulyu" +</a>
-<span class="sourceLineNo">034</span><a id="line.34">            "maimaumlamramwamyameameemeimeomlemremwemyemiamiemiomlimrimwimyimoamoemoimoumlomromuomyomuamuemuimlumrumwumyu" +</a>
-<span class="sourceLineNo">035</span><a id="line.35">            "nainaunranwanyaneaneeneonrenwenyenianienionrinwinyinoanoenoinounronuonyonuanuenuinrunwunyu" +</a>
-<span class="sourceLineNo">036</span><a id="line.36">            "paipauplaprapwapyapleprepiapiepioplipripwipyipoapoepoiplopropuopyopluprupyu" +</a>
-<span class="sourceLineNo">037</span><a id="line.37">            "quaquequiquo" +</a>
-<span class="sourceLineNo">038</span><a id="line.38">            "rairauryareareereireoryeriarierioryiroaroeroirouryoruarueruiryu" +</a>
-<span class="sourceLineNo">039</span><a id="line.39">            "saisauskaslasmasnaswasyaseaseeseiseoskeslesmesneswesyesiasiesioskislismisniswisyisoasoesoisouskoslosmosnosuosyosuasuesuiskuslusmusnuswusyu" +</a>
-<span class="sourceLineNo">040</span><a id="line.40">            "taitautratsatwatyateateeteiteotretsetwetyetiatiotritwityitoatoetoitoutrotsotuotyotuatuetuitrutsutwutyu" +</a>
-<span class="sourceLineNo">041</span><a id="line.41">            "veeveiveovrevwevyevieviovrivwivyivoevoivrovuovyovuevuivruvwuvyu" +</a>
-<span class="sourceLineNo">042</span><a id="line.42">            "yaiyauyeayeeyeiyeoyiayieyioyoayoeyoiyouyuayueyuiyuo" +</a>
-<span class="sourceLineNo">043</span><a id="line.43">            "zaizauzvazlazwazyazeazeezeizeozvezlezwezyeziazieziozvizlizwizyizoazoezoizouzvozlozuozyozuazuezuizvuzluzwuzyu";</a>
-<span class="sourceLineNo">044</span><a id="line.44">    public final Arrangement&lt;String&gt; items = new Arrangement&lt;&gt;(256, 0.5f, Hashers.caseInsensitiveStringHasher);</a>
-<span class="sourceLineNo">045</span><a id="line.45">    public final Arrangement&lt;String&gt; allAdjectives, allNouns;</a>
-<span class="sourceLineNo">046</span><a id="line.46"></a>
-<span class="sourceLineNo">047</span><a id="line.47">    /**</a>
-<span class="sourceLineNo">048</span><a id="line.48">     * Default constructor for a Mnemonic generator; equivalent to {@code new Mnemonic(1L)}, and probably a good choice</a>
-<span class="sourceLineNo">049</span><a id="line.49">     * unless you know you need different seeds.</a>
-<span class="sourceLineNo">050</span><a id="line.50">     * &lt;br&gt;</a>
-<span class="sourceLineNo">051</span><a id="line.51">     * This depends on the current (at the time this Mnemonic is constructed) contents of {@link Thesaurus#adjective}</a>
-<span class="sourceLineNo">052</span><a id="line.52">     * and {@link Thesaurus#noun}, which can be modified, and if these contents aren't identical for two different</a>
-<span class="sourceLineNo">053</span><a id="line.53">     * Mnemonic objects (possibly constructed at different times, using different SquidLib versions), the Mnemonics will</a>
-<span class="sourceLineNo">054</span><a id="line.54">     * have different encoded and decoded forms. You can either save the key set from {@link #allAdjectives} and</a>
-<span class="sourceLineNo">055</span><a id="line.55">     * {@link #allNouns} and pass them to {@link #Mnemonic(long, Collection, Collection)}, or save the Thesaurus state</a>
-<span class="sourceLineNo">056</span><a id="line.56">     * altogether using {@link Thesaurus#archiveCategories()}, loading it before constructing any Mnemonics with</a>
-<span class="sourceLineNo">057</span><a id="line.57">     * {@link Thesaurus#addArchivedCategories(String)}.</a>
-<span class="sourceLineNo">058</span><a id="line.58">     */</a>
-<span class="sourceLineNo">059</span><a id="line.59">    public Mnemonic()</a>
-<span class="sourceLineNo">060</span><a id="line.60">    {</a>
-<span class="sourceLineNo">061</span><a id="line.61">        this(1L);</a>
-<span class="sourceLineNo">062</span><a id="line.62">    }</a>
-<span class="sourceLineNo">063</span><a id="line.63"></a>
-<span class="sourceLineNo">064</span><a id="line.64">    /**</a>
-<span class="sourceLineNo">065</span><a id="line.65">     * Constructor for a Mnemonic generator that allows a different seed to be chosen, which will alter the syllables</a>
-<span class="sourceLineNo">066</span><a id="line.66">     * produced by {@link #toMnemonic(long)} and the words produced by {@link #toWordMnemonic(int, boolean)} if you give</a>
-<span class="sourceLineNo">067</span><a id="line.67">     * the same numeric argument to differently-seeded Mnemonic generators. Unless you know you need this, you should</a>
-<span class="sourceLineNo">068</span><a id="line.68">     * probably use {@link #Mnemonic()} to ensure that your text can be decoded.</a>
-<span class="sourceLineNo">069</span><a id="line.69">     * &lt;br&gt;</a>
-<span class="sourceLineNo">070</span><a id="line.70">     * This depends on the current (at the time this Mnemonic is constructed) contents of {@link Thesaurus#adjective}</a>
-<span class="sourceLineNo">071</span><a id="line.71">     * and {@link Thesaurus#noun}, which can be modified, and if these contents aren't identical for two different</a>
-<span class="sourceLineNo">072</span><a id="line.72">     * Mnemonic objects (possibly constructed at different times, using different SquidLib versions), the Mnemonics will</a>
-<span class="sourceLineNo">073</span><a id="line.73">     * have different encoded and decoded forms. You can either save the key set from {@link #allAdjectives} and</a>
-<span class="sourceLineNo">074</span><a id="line.74">     * {@link #allNouns} and pass them to {@link #Mnemonic(long, Collection, Collection)}, or save the Thesaurus state</a>
-<span class="sourceLineNo">075</span><a id="line.75">     * altogether using {@link Thesaurus#archiveCategories()}, loading it before constructing any Mnemonics with</a>
-<span class="sourceLineNo">076</span><a id="line.76">     * {@link Thesaurus#addArchivedCategories(String)}.</a>
-<span class="sourceLineNo">077</span><a id="line.77">     * @param seed a long seed that will be used to randomize the syllables and words used.</a>
-<span class="sourceLineNo">078</span><a id="line.78">     */</a>
-<span class="sourceLineNo">079</span><a id="line.79">    public Mnemonic(long seed)</a>
-<span class="sourceLineNo">080</span><a id="line.80">    {</a>
-<span class="sourceLineNo">081</span><a id="line.81">        RNG rng = new RNG(new LightRNG(seed));</a>
-<span class="sourceLineNo">082</span><a id="line.82">        int[] order = rng.randomOrdering(431);</a>
-<span class="sourceLineNo">083</span><a id="line.83">        int o;</a>
-<span class="sourceLineNo">084</span><a id="line.84">        for (int i = 0; i &lt; 256; i++) {</a>
-<span class="sourceLineNo">085</span><a id="line.85">            o = order[i];</a>
-<span class="sourceLineNo">086</span><a id="line.86">            items.add(baseTriplets.substring(o * 3, o * 3 + 3));</a>
-<span class="sourceLineNo">087</span><a id="line.87">        }</a>
-<span class="sourceLineNo">088</span><a id="line.88">        allAdjectives = new Arrangement&lt;&gt;(adjective.size(), 0.5f, Hashers.caseInsensitiveStringHasher);</a>
-<span class="sourceLineNo">089</span><a id="line.89">        allNouns = new Arrangement&lt;&gt;(noun.size(), 0.5f, Hashers.caseInsensitiveStringHasher);</a>
-<span class="sourceLineNo">090</span><a id="line.90">        for (int i = 0; i &lt; adjective.size(); i++) {</a>
-<span class="sourceLineNo">091</span><a id="line.91">            ArrayList&lt;String&gt; words = adjective.getAt(i);</a>
-<span class="sourceLineNo">092</span><a id="line.92">            for (int j = 0; j &lt; words.size(); j++) {</a>
-<span class="sourceLineNo">093</span><a id="line.93">                if(words.get(j).contains(" "))</a>
-<span class="sourceLineNo">094</span><a id="line.94">                    continue;</a>
-<span class="sourceLineNo">095</span><a id="line.95">                allAdjectives.add(words.get(j));</a>
-<span class="sourceLineNo">096</span><a id="line.96">            }</a>
-<span class="sourceLineNo">097</span><a id="line.97">        }</a>
-<span class="sourceLineNo">098</span><a id="line.98">        allAdjectives.shuffle(rng);</a>
-<span class="sourceLineNo">099</span><a id="line.99">        for (int i = 0; i &lt; noun.size(); i++) {</a>
-<span class="sourceLineNo">100</span><a id="line.100">            ArrayList&lt;String&gt; words = noun.getAt(i);</a>
-<span class="sourceLineNo">101</span><a id="line.101">            for (int j = 0; j &lt; words.size(); j++) {</a>
-<span class="sourceLineNo">102</span><a id="line.102">                if(words.get(j).contains(" "))</a>
-<span class="sourceLineNo">103</span><a id="line.103">                    continue;</a>
-<span class="sourceLineNo">104</span><a id="line.104">                allNouns.add(words.get(j));</a>
-<span class="sourceLineNo">105</span><a id="line.105">            }</a>
-<span class="sourceLineNo">106</span><a id="line.106">        }</a>
-<span class="sourceLineNo">107</span><a id="line.107">        allNouns.shuffle(rng);</a>
-<span class="sourceLineNo">108</span><a id="line.108">    }</a>
-<span class="sourceLineNo">109</span><a id="line.109"></a>
-<span class="sourceLineNo">110</span><a id="line.110">    /**</a>
-<span class="sourceLineNo">111</span><a id="line.111">     * Constructor that allows you to specify the adjective and noun collections used by</a>
-<span class="sourceLineNo">112</span><a id="line.112">     * {@link #toWordMnemonic(int, boolean)} as well as a seed. This should be useful when you want to enforce a stable</a>
-<span class="sourceLineNo">113</span><a id="line.113">     * relationship between word mnemonics produced by {@link #toWordMnemonic(int, boolean)} and the int values they</a>
-<span class="sourceLineNo">114</span><a id="line.114">     * decode to with {@link #fromWordMnemonic(String)}, because the default can change if the adjective and noun</a>
-<span class="sourceLineNo">115</span><a id="line.115">     * collections in {@link Thesaurus} change. There should be a fairly large amount of unique adjectives and nouns;</a>
-<span class="sourceLineNo">116</span><a id="line.116">     * {@code (long)adjectives.size() * nouns.size() * adjectives.size() * nouns.size()} should be at least 0x80000000L</a>
-<span class="sourceLineNo">117</span><a id="line.117">     * (2147483648L), with case disregarded. If the total is less than that, not all possible ints can be encoded with</a>
-<span class="sourceLineNo">118</span><a id="line.118">     * {@link #toWordMnemonic(int, boolean)}. Having 216 adjectives and 216 nouns is enough for a rough target. Each</a>
-<span class="sourceLineNo">119</span><a id="line.119">     * word (adjectives and nouns alike) can have any characters in it except for space, since space is used during</a>
-<span class="sourceLineNo">120</span><a id="line.120">     * decoding to separate words.</a>
-<span class="sourceLineNo">121</span><a id="line.121">     * @param seed a long seed that will be used to randomize the syllables and words used.</a>
-<span class="sourceLineNo">122</span><a id="line.122">     * @param adjectives a Collection of unique Strings (case-insensitive) that will be used as adjectives</a>
-<span class="sourceLineNo">123</span><a id="line.123">     * @param nouns a Collection of unique Strings (case-insensitive) that will be used as nouns</a>
-<span class="sourceLineNo">124</span><a id="line.124">     */</a>
-<span class="sourceLineNo">125</span><a id="line.125">    public Mnemonic(long seed, Collection&lt;String&gt; adjectives, Collection&lt;String&gt; nouns)</a>
-<span class="sourceLineNo">126</span><a id="line.126">    {</a>
-<span class="sourceLineNo">127</span><a id="line.127">        RNG rng = new RNG(new LightRNG(seed));</a>
-<span class="sourceLineNo">128</span><a id="line.128">        int[] order = rng.randomOrdering(431);</a>
-<span class="sourceLineNo">129</span><a id="line.129">        int o;</a>
-<span class="sourceLineNo">130</span><a id="line.130">        for (int i = 0; i &lt; 256; i++) {</a>
-<span class="sourceLineNo">131</span><a id="line.131">            o = order[i];</a>
-<span class="sourceLineNo">132</span><a id="line.132">            items.add(baseTriplets.substring(o * 3, o * 3 + 3));</a>
-<span class="sourceLineNo">133</span><a id="line.133">        }</a>
-<span class="sourceLineNo">134</span><a id="line.134">        allAdjectives = new Arrangement&lt;&gt;(adjectives.size(), 0.5f, Hashers.caseInsensitiveStringHasher);</a>
-<span class="sourceLineNo">135</span><a id="line.135">        allNouns = new Arrangement&lt;&gt;(nouns.size(), 0.5f, Hashers.caseInsensitiveStringHasher);</a>
-<span class="sourceLineNo">136</span><a id="line.136">        for(String word : adjectives)</a>
-<span class="sourceLineNo">137</span><a id="line.137">            if(!word.contains(" ")) allAdjectives.add(word);</a>
-<span class="sourceLineNo">138</span><a id="line.138">        allAdjectives.shuffle(rng);</a>
-<span class="sourceLineNo">139</span><a id="line.139">        for(String word : nouns)</a>
-<span class="sourceLineNo">140</span><a id="line.140">            if(!word.contains(" ")) allNouns.add(word);</a>
-<span class="sourceLineNo">141</span><a id="line.141">        allNouns.shuffle(rng);</a>
-<span class="sourceLineNo">142</span><a id="line.142">    }</a>
-<span class="sourceLineNo">143</span><a id="line.143">    /**</a>
-<span class="sourceLineNo">144</span><a id="line.144">     * Constructor that allows you to specify the adjective and noun collections (given as arrays) used by</a>
-<span class="sourceLineNo">145</span><a id="line.145">     * {@link #toWordMnemonic(int, boolean)} as well as a seed. This should be useful when you want to enforce a stable</a>
-<span class="sourceLineNo">146</span><a id="line.146">     * relationship between word mnemonics produced by {@link #toWordMnemonic(int, boolean)} and the int values they</a>
-<span class="sourceLineNo">147</span><a id="line.147">     * decode to with {@link #fromWordMnemonic(String)}, because the default can change if the adjective and noun</a>
-<span class="sourceLineNo">148</span><a id="line.148">     * collections in {@link Thesaurus} change. There should be a fairly large amount of unique adjectives and nouns;</a>
-<span class="sourceLineNo">149</span><a id="line.149">     * {@code (long)adjectives.length * nouns.length * adjectives.length * nouns.length} should be at least 0x80000000L</a>
-<span class="sourceLineNo">150</span><a id="line.150">     * (2147483648L), with case disregarded. If the total is less than that, not all possible ints can be encoded with</a>
-<span class="sourceLineNo">151</span><a id="line.151">     * {@link #toWordMnemonic(int, boolean)}. Having 216 adjectives and 216 nouns is enough for a rough target. Each</a>
-<span class="sourceLineNo">152</span><a id="line.152">     * word (adjectives and nouns alike) can have any characters in it except for space, since space is used during</a>
-<span class="sourceLineNo">153</span><a id="line.153">     * decoding to separate words. You may want to use {@link StringKit#split(String, String)} with space or newline as</a>
-<span class="sourceLineNo">154</span><a id="line.154">     * the delimiter to get a String array from data containing space-separated words or data with one word per line.</a>
-<span class="sourceLineNo">155</span><a id="line.155">     * It's also possible to use {@link String#split(String)}, which can use {@code "\\s"} to split on any whitespace.</a>
-<span class="sourceLineNo">156</span><a id="line.156">     * @param seed a long seed that will be used to randomize the syllables and words used.</a>
-<span class="sourceLineNo">157</span><a id="line.157">     * @param adjectives an array of unique Strings (case-insensitive) that will be used as adjectives</a>
-<span class="sourceLineNo">158</span><a id="line.158">     * @param nouns an array of unique Strings (case-insensitive) that will be used as nouns</a>
-<span class="sourceLineNo">159</span><a id="line.159">     */</a>
-<span class="sourceLineNo">160</span><a id="line.160">    public Mnemonic(long seed, String[] adjectives, String[] nouns)</a>
-<span class="sourceLineNo">161</span><a id="line.161">    {</a>
-<span class="sourceLineNo">162</span><a id="line.162">        RNG rng = new RNG(new LightRNG(seed));</a>
-<span class="sourceLineNo">163</span><a id="line.163">        int[] order = rng.randomOrdering(431);</a>
-<span class="sourceLineNo">164</span><a id="line.164">        int o;</a>
-<span class="sourceLineNo">165</span><a id="line.165">        for (int i = 0; i &lt; 256; i++) {</a>
-<span class="sourceLineNo">166</span><a id="line.166">            o = order[i];</a>
-<span class="sourceLineNo">167</span><a id="line.167">            items.add(baseTriplets.substring(o * 3, o * 3 + 3));</a>
-<span class="sourceLineNo">168</span><a id="line.168">        }</a>
-<span class="sourceLineNo">169</span><a id="line.169">        allAdjectives = new Arrangement&lt;&gt;(adjectives.length, 0.5f, Hashers.caseInsensitiveStringHasher);</a>
-<span class="sourceLineNo">170</span><a id="line.170">        allNouns = new Arrangement&lt;&gt;(nouns.length, 0.5f, Hashers.caseInsensitiveStringHasher);</a>
-<span class="sourceLineNo">171</span><a id="line.171">        for(String word : adjectives)</a>
-<span class="sourceLineNo">172</span><a id="line.172">            if(!word.contains(" ")) allAdjectives.add(word);</a>
-<span class="sourceLineNo">173</span><a id="line.173">        allAdjectives.shuffle(rng);</a>
-<span class="sourceLineNo">174</span><a id="line.174">        for(String word : nouns)</a>
-<span class="sourceLineNo">175</span><a id="line.175">            if(!word.contains(" ")) allNouns.add(word);</a>
-<span class="sourceLineNo">176</span><a id="line.176">        allNouns.shuffle(rng);</a>
-<span class="sourceLineNo">177</span><a id="line.177">    }</a>
-<span class="sourceLineNo">178</span><a id="line.178"></a>
-<span class="sourceLineNo">179</span><a id="line.179">    /**</a>
-<span class="sourceLineNo">180</span><a id="line.180">     * Given any long, generates a slightly-more-memorable gibberish phrase that can be decoded back to the original</a>
-<span class="sourceLineNo">181</span><a id="line.181">     * long with {@link #fromMnemonic(String)}. Examples of what this can produce are "noahritwimoesaidrubiotso" and</a>
-<span class="sourceLineNo">182</span><a id="line.182">     * "loanuiskohaimrunoizlupwi", generated by a Mnemonic with a seed of 1 from -3743983437744699304L and</a>
-<span class="sourceLineNo">183</span><a id="line.183">     * -8967299915041170097L, respectively. The Strings this returns are always 24 chars long, and contain only the</a>
-<span class="sourceLineNo">184</span><a id="line.184">     * letters a-z.</a>
-<span class="sourceLineNo">185</span><a id="line.185">     * @param number any long</a>
-<span class="sourceLineNo">186</span><a id="line.186">     * @return a 24-character String made of gibberish syllables</a>
-<span class="sourceLineNo">187</span><a id="line.187">     */</a>
-<span class="sourceLineNo">188</span><a id="line.188">    public String toMnemonic(long number)</a>
-<span class="sourceLineNo">189</span><a id="line.189">    {</a>
-<span class="sourceLineNo">190</span><a id="line.190">        return toMnemonic(number, false);</a>
-<span class="sourceLineNo">191</span><a id="line.191">    }</a>
-<span class="sourceLineNo">192</span><a id="line.192"></a>
-<span class="sourceLineNo">193</span><a id="line.193">    /**</a>
-<span class="sourceLineNo">194</span><a id="line.194">     * Given any long, generates a slightly-more-memorable gibberish phrase that can be decoded back to the original</a>
-<span class="sourceLineNo">195</span><a id="line.195">     * long with {@link #fromMnemonic(String)}. Examples of what this can produce are "noahritwimoesaidrubiotso" and</a>
-<span class="sourceLineNo">196</span><a id="line.196">     * "loanuiskohaimrunoizlupwi", generated by a Mnemonic with a seed of 1 from -3743983437744699304L and</a>
-<span class="sourceLineNo">197</span><a id="line.197">     * -8967299915041170097L, respectively. The Strings this returns are always 24 chars long. If capitalize is true,</a>
-<span class="sourceLineNo">198</span><a id="line.198">     * then the first letter will be a capital letter from A-Z, all other letters will be a-z (including the first if</a>
-<span class="sourceLineNo">199</span><a id="line.199">     * capitalize is false).</a>
-<span class="sourceLineNo">200</span><a id="line.200">     * @param number any long</a>
-<span class="sourceLineNo">201</span><a id="line.201">     * @param capitalize if true, the initial letter of the returned mnemonic String will be capitalized</a>
-<span class="sourceLineNo">202</span><a id="line.202">     * @return a 24-character String made of gibberish syllables</a>
-<span class="sourceLineNo">203</span><a id="line.203">     */</a>
-<span class="sourceLineNo">204</span><a id="line.204">    public String toMnemonic(long number, boolean capitalize)</a>
-<span class="sourceLineNo">205</span><a id="line.205">    {</a>
-<span class="sourceLineNo">206</span><a id="line.206">        char[] c = new char[24];</a>
-<span class="sourceLineNo">207</span><a id="line.207">        String item;</a>
-<span class="sourceLineNo">208</span><a id="line.208">        int idx = 0;</a>
-<span class="sourceLineNo">209</span><a id="line.209">        item = items.keyAt((int)(number &amp; 0xFF));</a>
-<span class="sourceLineNo">210</span><a id="line.210">        c[idx++] = capitalize ? Character.toUpperCase(item.charAt(0)) : item.charAt(0);</a>
-<span class="sourceLineNo">211</span><a id="line.211">        c[idx++] = item.charAt(1);</a>
-<span class="sourceLineNo">212</span><a id="line.212">        c[idx++] = item.charAt(2);</a>
-<span class="sourceLineNo">213</span><a id="line.213"></a>
-<span class="sourceLineNo">214</span><a id="line.214">        for (int i = 8; i &lt; 64; i+=8) {</a>
-<span class="sourceLineNo">215</span><a id="line.215">            item = items.keyAt((int)(number &gt;&gt;&gt; i &amp; 0xFF));</a>
-<span class="sourceLineNo">216</span><a id="line.216">            c[idx++] = item.charAt(0);</a>
-<span class="sourceLineNo">217</span><a id="line.217">            c[idx++] = item.charAt(1);</a>
-<span class="sourceLineNo">218</span><a id="line.218">            c[idx++] = item.charAt(2);</a>
-<span class="sourceLineNo">219</span><a id="line.219">        }</a>
-<span class="sourceLineNo">220</span><a id="line.220">        return String.valueOf(c);</a>
-<span class="sourceLineNo">221</span><a id="line.221">    }</a>
-<span class="sourceLineNo">222</span><a id="line.222"></a>
-<span class="sourceLineNo">223</span><a id="line.223">    /**</a>
-<span class="sourceLineNo">224</span><a id="line.224">     * Takes a String produced by {@link #toMnemonic(long)} or {@link #toMnemonic(long, boolean)} and returns the long</a>
-<span class="sourceLineNo">225</span><a id="line.225">     * used to encode that gibberish String. This can't take just any String; if the given parameter isn't at least 24</a>
-<span class="sourceLineNo">226</span><a id="line.226">     * characters long, this can throw an {@link IndexOutOfBoundsException}, and if it isn't made purely from the 3-char</a>
-<span class="sourceLineNo">227</span><a id="line.227">     * syllables toMnemonic() produces, it won't produce a meaningful result.</a>
-<span class="sourceLineNo">228</span><a id="line.228">     * @param mnemonic a gibberish String produced by {@link #toMnemonic(long)} or {@link #toMnemonic(long, boolean)}</a>
-<span class="sourceLineNo">229</span><a id="line.229">     * @return the long used to generate {@code mnemonic} originally</a>
-<span class="sourceLineNo">230</span><a id="line.230">     */</a>
-<span class="sourceLineNo">231</span><a id="line.231">    public long fromMnemonic(String mnemonic)</a>
-<span class="sourceLineNo">232</span><a id="line.232">    {</a>
-<span class="sourceLineNo">233</span><a id="line.233">        long result = 0L;</a>
-<span class="sourceLineNo">234</span><a id="line.234">        for (int i = 0; i &lt; 8; i++) {</a>
-<span class="sourceLineNo">235</span><a id="line.235">            result |= (items.getInt(mnemonic.substring(i * 3, i * 3 + 3)) &amp; 0xFFL) &lt;&lt; (i &lt;&lt; 3);</a>
-<span class="sourceLineNo">236</span><a id="line.236">        }</a>
-<span class="sourceLineNo">237</span><a id="line.237">        return result;</a>
-<span class="sourceLineNo">238</span><a id="line.238">    }</a>
-<span class="sourceLineNo">239</span><a id="line.239"></a>
-<span class="sourceLineNo">240</span><a id="line.240">    /**</a>
-<span class="sourceLineNo">241</span><a id="line.241">     * Given any int, generates a short phrase that can be decoded back to the original int with</a>
-<span class="sourceLineNo">242</span><a id="line.242">     * {@link #fromWordMnemonic(String)}. Examples of what this can produce are "Mindful warriors and the pure torch"</a>
-<span class="sourceLineNo">243</span><a id="line.243">     * and "Dynastic earldom and the thousandfold bandit", generated by a Mnemonic with a seed of 1 from -587415991 and</a>
-<span class="sourceLineNo">244</span><a id="line.244">     * -1105099633, respectively. Those Strings were generated using the current state of {@link Thesaurus} and the</a>
-<span class="sourceLineNo">245</span><a id="line.245">     * adjectives and nouns it stores now, and if Thesaurus is added to over time, those Strings won't correspond to</a>
-<span class="sourceLineNo">246</span><a id="line.246">     * those ints any more. The Strings this returns vary in length. The words this uses by default use only the letters</a>
-<span class="sourceLineNo">247</span><a id="line.247">     * a-z and the single quote (with A-Z for the first character if capitalize is true), with space separating words.</a>
-<span class="sourceLineNo">248</span><a id="line.248">     * If you constructed this Mnemonic with adjective and noun collections or arrays, then this will use only those</a>
-<span class="sourceLineNo">249</span><a id="line.249">     * words and will still separate words with space (and it will capitalize the first char if capitalize is true).</a>
-<span class="sourceLineNo">250</span><a id="line.250">     * @param number any int</a>
-<span class="sourceLineNo">251</span><a id="line.251">     * @param capitalize if true, the initial letter of the returned mnemonic String will be capitalized</a>
-<span class="sourceLineNo">252</span><a id="line.252">     * @return a short phrase that will be uniquely related to number</a>
-<span class="sourceLineNo">253</span><a id="line.253">     */</a>
-<span class="sourceLineNo">254</span><a id="line.254">    public String toWordMnemonic(int number, boolean capitalize)</a>
-<span class="sourceLineNo">255</span><a id="line.255">    {</a>
-<span class="sourceLineNo">256</span><a id="line.256">        final int adjectiveCount = allAdjectives.size(), nounCount = allNouns.size();</a>
-<span class="sourceLineNo">257</span><a id="line.257">        StringBuilder sb = new StringBuilder(80);</a>
-<span class="sourceLineNo">258</span><a id="line.258">        //0x000D76CB inverted by 0x000FBEE3</a>
-<span class="sourceLineNo">259</span><a id="line.259">        //0x000D724B inverted by 0x000E4763</a>
-<span class="sourceLineNo">260</span><a id="line.260">        number = (number ^ 0x7F4A7C15) * 0x000FBEE3;</a>
-<span class="sourceLineNo">261</span><a id="line.261">        // http://marc-b-reynolds.github.io/math/2017/10/13/XorRotate.html</a>
-<span class="sourceLineNo">262</span><a id="line.262">        number = ((number &lt;&lt; 5 | number &gt;&gt;&gt; 27) ^ (number &lt;&lt; 10 | number &gt;&gt;&gt; 22) ^ (number &lt;&lt; 26 | number &gt;&gt;&gt; 6)) * 0x000D724B ^ 0x91E10DA5;</a>
-<span class="sourceLineNo">263</span><a id="line.263">        number ^= number &gt;&gt;&gt; 15;</a>
-<span class="sourceLineNo">264</span><a id="line.264">        boolean negative = (number &lt; 0);</a>
-<span class="sourceLineNo">265</span><a id="line.265">        if(negative) number = ~number;</a>
-<span class="sourceLineNo">266</span><a id="line.266">        sb.append(allAdjectives.keyAt(number % adjectiveCount)).append(' ')</a>
-<span class="sourceLineNo">267</span><a id="line.267">                .append(allNouns.keyAt((number /= adjectiveCount) % nounCount))</a>
-<span class="sourceLineNo">268</span><a id="line.268">                .append(negative ? " and the " : " of the ")</a>
-<span class="sourceLineNo">269</span><a id="line.269">                .append(allAdjectives.keyAt((number /= nounCount) % adjectiveCount)).append(' ')</a>
-<span class="sourceLineNo">270</span><a id="line.270">                .append(allNouns.keyAt((number / adjectiveCount) % nounCount));</a>
-<span class="sourceLineNo">271</span><a id="line.271">        if(capitalize)</a>
-<span class="sourceLineNo">272</span><a id="line.272">            sb.setCharAt(0, Character.toUpperCase(sb.charAt(0)));</a>
-<span class="sourceLineNo">273</span><a id="line.273">        return sb.toString();</a>
-<span class="sourceLineNo">274</span><a id="line.274">    }</a>
-<span class="sourceLineNo">275</span><a id="line.275"></a>
-<span class="sourceLineNo">276</span><a id="line.276">    /**</a>
-<span class="sourceLineNo">277</span><a id="line.277">     * Takes a String phrase produced by {@link #toWordMnemonic(int, boolean)} and returns the int used to encode that</a>
-<span class="sourceLineNo">278</span><a id="line.278">     * String. This can't take just any String; it must be produced by {@link #toWordMnemonic(int, boolean)} to give a</a>
-<span class="sourceLineNo">279</span><a id="line.279">     * meaningful result.</a>
-<span class="sourceLineNo">280</span><a id="line.280">     * @param mnemonic a String phrase produced by {@link #toWordMnemonic(int, boolean)}</a>
-<span class="sourceLineNo">281</span><a id="line.281">     * @return the int used to generate {@code mnemonic} originally</a>
-<span class="sourceLineNo">282</span><a id="line.282">     */</a>
-<span class="sourceLineNo">283</span><a id="line.283">    public int fromWordMnemonic(String mnemonic)</a>
-<span class="sourceLineNo">284</span><a id="line.284">    {</a>
-<span class="sourceLineNo">285</span><a id="line.285">        final int adjectiveCount = allAdjectives.size(), nounCount = allNouns.size();</a>
-<span class="sourceLineNo">286</span><a id="line.286">        int idx = mnemonic.indexOf(' '), factor = adjectiveCount;</a>
-<span class="sourceLineNo">287</span><a id="line.287">        boolean negative;</a>
-<span class="sourceLineNo">288</span><a id="line.288">        int result = allAdjectives.getInt(StringKit.safeSubstring(mnemonic, 0, idx));</a>
-<span class="sourceLineNo">289</span><a id="line.289">        result += factor * allNouns.getInt(StringKit.safeSubstring(mnemonic, idx + 1, idx = mnemonic.indexOf(' ', idx + 1)));</a>
-<span class="sourceLineNo">290</span><a id="line.290">        negative = (mnemonic.charAt(idx + 1) == 'a');</a>
-<span class="sourceLineNo">291</span><a id="line.291">        if(negative) idx += 8;</a>
-<span class="sourceLineNo">292</span><a id="line.292">        else idx += 7;</a>
-<span class="sourceLineNo">293</span><a id="line.293">        result += (factor *= nounCount) * allAdjectives.getInt(StringKit.safeSubstring(mnemonic, idx + 1, idx = mnemonic.indexOf(' ', idx + 1)));</a>
-<span class="sourceLineNo">294</span><a id="line.294">        result += factor * adjectiveCount * allNouns.getInt(StringKit.safeSubstring(mnemonic, idx + 1, -1));</a>
-<span class="sourceLineNo">295</span><a id="line.295">        if(negative) result = ~result;</a>
-<span class="sourceLineNo">296</span><a id="line.296">        result ^= result &gt;&gt;&gt; 15 ^ result &gt;&gt;&gt; 30;</a>
-<span class="sourceLineNo">297</span><a id="line.297">        result = (result ^ 0x91E10DA5) * 0x000E4763;</a>
-<span class="sourceLineNo">298</span><a id="line.298">        result ^= (result &lt;&lt; 16 | result &gt;&gt;&gt; 16) ^ (result &lt;&lt; 27 ^ result &gt;&gt;&gt; 5);</a>
-<span class="sourceLineNo">299</span><a id="line.299">        result = result * 0x000D76CB ^ 0x7F4A7C15;</a>
-<span class="sourceLineNo">300</span><a id="line.300">        return result;</a>
-<span class="sourceLineNo">301</span><a id="line.301">    }</a>
-<span class="sourceLineNo">302</span><a id="line.302">}</a>
+<div class="source-container">
+<pre><span class="source-line-no">001</span><span id="line.1">package squidpony;</span>
+<span class="source-line-no">002</span><span id="line.2"></span>
+<span class="source-line-no">003</span><span id="line.3">import squidpony.squidmath.*;</span>
+<span class="source-line-no">004</span><span id="line.4"></span>
+<span class="source-line-no">005</span><span id="line.5">import java.util.ArrayList;</span>
+<span class="source-line-no">006</span><span id="line.6">import java.util.Collection;</span>
+<span class="source-line-no">007</span><span id="line.7"></span>
+<span class="source-line-no">008</span><span id="line.8">import static squidpony.Thesaurus.*;</span>
+<span class="source-line-no">009</span><span id="line.9"></span>
+<span class="source-line-no">010</span><span id="line.10">/**</span>
+<span class="source-line-no">011</span><span id="line.11"> * A utility class to print (typically very large) numbers in a way that players can more-meaningfully tell them apart.</span>
+<span class="source-line-no">012</span><span id="line.12"> * It isn't that great for this task currently, but it can bi-directionally turn {@code long} values like</span>
+<span class="source-line-no">013</span><span id="line.13"> * -8798641734435409502 into {@code String}s like nwihyayeetyoruehyazuetro. The advantage here is that</span>
+<span class="source-line-no">014</span><span id="line.14"> * nwihyayeetyoruehyazuetro is very different from protoezlebauyauzlutoatra, even though the numbers they are made from</span>
+<span class="source-line-no">015</span><span id="line.15"> * are harder to distinguish (-8798641734435409502 vs. -8032477240987739423, when using the default seed).</span>
+<span class="source-line-no">016</span><span id="line.16"> * &lt;br&gt;</span>
+<span class="source-line-no">017</span><span id="line.17"> * The constructor optionally takes a seed that can greatly change the generated mnemonics, which may be useful if</span>
+<span class="source-line-no">018</span><span id="line.18"> * mnemonic strings produced for some purpose should only be decipherable by that program or that play of the game. If</span>
+<span class="source-line-no">019</span><span id="line.19"> * no seed is given, this acts as if the seed is 1. Only 256 possible 3-letter sections are used with any given seed,</span>
+<span class="source-line-no">020</span><span id="line.20"> * but 431 sections are possible (hand-selected to avoid the likelihood of producing possibly-vulgar words). Two</span>
+<span class="source-line-no">021</span><span id="line.21"> * different seeds may use mostly-different selections of "syllable" sections, though a not-very-small amount of overlap</span>
+<span class="source-line-no">022</span><span id="line.22"> * in potential generated mnemonic strings must occur between any two seeds.</span>
+<span class="source-line-no">023</span><span id="line.23"> * &lt;br&gt;</span>
+<span class="source-line-no">024</span><span id="line.24"> * Created by Tommy Ettinger on 1/24/2018.</span>
+<span class="source-line-no">025</span><span id="line.25"> */</span>
+<span class="source-line-no">026</span><span id="line.26">public class Mnemonic {</span>
+<span class="source-line-no">027</span><span id="line.27">    private static final String baseTriplets =</span>
+<span class="source-line-no">028</span><span id="line.28">            "baibaublabyabeabeebeibeoblebrebwebyebiabiebioblibribwibyiboaboeboiboubrobuobyobuabuebuibrubwubyu" +</span>
+<span class="source-line-no">029</span><span id="line.29">            "daudradyadeadeedeodredwediodridwidyidoadoedoidoudroduodyoduadueduidrudwudyu" +</span>
+<span class="source-line-no">030</span><span id="line.30">            "haihauhmahrahyahwaheaheeheiheohmehrehwehyehiahiehiohmihrihwihyihmohrohuohyohuahuehuihmuhruhwuhyu" +</span>
+<span class="source-line-no">031</span><span id="line.31">            "jaijaujyajwajeajeejeijeojwejyejiajiejiojwijyijoajoejoijoujyo" +</span>
+<span class="source-line-no">032</span><span id="line.32">            "kaikaukrakyakeakeekeoklekrekyekiakiokrikwikyikoakoekoikouklokrokyokuokuakuekuikrukyu" +</span>
+<span class="source-line-no">033</span><span id="line.33">            "lailaulyalwalealeeleileolwelyelialieliolwilyiloaloeloiluolyolualuilwulyu" +</span>
+<span class="source-line-no">034</span><span id="line.34">            "maimaumlamramwamyameameemeimeomlemremwemyemiamiemiomlimrimwimyimoamoemoimoumlomromuomyomuamuemuimlumrumwumyu" +</span>
+<span class="source-line-no">035</span><span id="line.35">            "nainaunranwanyaneaneeneonrenwenyenianienionrinwinyinoanoenoinounronuonyonuanuenuinrunwunyu" +</span>
+<span class="source-line-no">036</span><span id="line.36">            "paipauplaprapwapyapleprepiapiepioplipripwipyipoapoepoiplopropuopyopluprupyu" +</span>
+<span class="source-line-no">037</span><span id="line.37">            "quaquequiquo" +</span>
+<span class="source-line-no">038</span><span id="line.38">            "rairauryareareereireoryeriarierioryiroaroeroirouryoruarueruiryu" +</span>
+<span class="source-line-no">039</span><span id="line.39">            "saisauskaslasmasnaswasyaseaseeseiseoskeslesmesneswesyesiasiesioskislismisniswisyisoasoesoisouskoslosmosnosuosyosuasuesuiskuslusmusnuswusyu" +</span>
+<span class="source-line-no">040</span><span id="line.40">            "taitautratsatwatyateateeteiteotretsetwetyetiatiotritwityitoatoetoitoutrotsotuotyotuatuetuitrutsutwutyu" +</span>
+<span class="source-line-no">041</span><span id="line.41">            "veeveiveovrevwevyevieviovrivwivyivoevoivrovuovyovuevuivruvwuvyu" +</span>
+<span class="source-line-no">042</span><span id="line.42">            "yaiyauyeayeeyeiyeoyiayieyioyoayoeyoiyouyuayueyuiyuo" +</span>
+<span class="source-line-no">043</span><span id="line.43">            "zaizauzvazlazwazyazeazeezeizeozvezlezwezyeziazieziozvizlizwizyizoazoezoizouzvozlozuozyozuazuezuizvuzluzwuzyu";</span>
+<span class="source-line-no">044</span><span id="line.44">    public final Arrangement&lt;String&gt; items = new Arrangement&lt;&gt;(256, 0.5f, Hashers.caseInsensitiveStringHasher);</span>
+<span class="source-line-no">045</span><span id="line.45">    public final Arrangement&lt;String&gt; allAdjectives, allNouns;</span>
+<span class="source-line-no">046</span><span id="line.46"></span>
+<span class="source-line-no">047</span><span id="line.47">    /**</span>
+<span class="source-line-no">048</span><span id="line.48">     * Default constructor for a Mnemonic generator; equivalent to {@code new Mnemonic(1L)}, and probably a good choice</span>
+<span class="source-line-no">049</span><span id="line.49">     * unless you know you need different seeds.</span>
+<span class="source-line-no">050</span><span id="line.50">     * &lt;br&gt;</span>
+<span class="source-line-no">051</span><span id="line.51">     * This depends on the current (at the time this Mnemonic is constructed) contents of {@link Thesaurus#adjective}</span>
+<span class="source-line-no">052</span><span id="line.52">     * and {@link Thesaurus#noun}, which can be modified, and if these contents aren't identical for two different</span>
+<span class="source-line-no">053</span><span id="line.53">     * Mnemonic objects (possibly constructed at different times, using different SquidLib versions), the Mnemonics will</span>
+<span class="source-line-no">054</span><span id="line.54">     * have different encoded and decoded forms. You can either save the key set from {@link #allAdjectives} and</span>
+<span class="source-line-no">055</span><span id="line.55">     * {@link #allNouns} and pass them to {@link #Mnemonic(long, Collection, Collection)}, or save the Thesaurus state</span>
+<span class="source-line-no">056</span><span id="line.56">     * altogether using {@link Thesaurus#archiveCategories()}, loading it before constructing any Mnemonics with</span>
+<span class="source-line-no">057</span><span id="line.57">     * {@link Thesaurus#addArchivedCategories(String)}.</span>
+<span class="source-line-no">058</span><span id="line.58">     */</span>
+<span class="source-line-no">059</span><span id="line.59">    public Mnemonic()</span>
+<span class="source-line-no">060</span><span id="line.60">    {</span>
+<span class="source-line-no">061</span><span id="line.61">        this(1L);</span>
+<span class="source-line-no">062</span><span id="line.62">    }</span>
+<span class="source-line-no">063</span><span id="line.63"></span>
+<span class="source-line-no">064</span><span id="line.64">    /**</span>
+<span class="source-line-no">065</span><span id="line.65">     * Constructor for a Mnemonic generator that allows a different seed to be chosen, which will alter the syllables</span>
+<span class="source-line-no">066</span><span id="line.66">     * produced by {@link #toMnemonic(long)} and the words produced by {@link #toWordMnemonic(int, boolean)} if you give</span>
+<span class="source-line-no">067</span><span id="line.67">     * the same numeric argument to differently-seeded Mnemonic generators. Unless you know you need this, you should</span>
+<span class="source-line-no">068</span><span id="line.68">     * probably use {@link #Mnemonic()} to ensure that your text can be decoded.</span>
+<span class="source-line-no">069</span><span id="line.69">     * &lt;br&gt;</span>
+<span class="source-line-no">070</span><span id="line.70">     * This depends on the current (at the time this Mnemonic is constructed) contents of {@link Thesaurus#adjective}</span>
+<span class="source-line-no">071</span><span id="line.71">     * and {@link Thesaurus#noun}, which can be modified, and if these contents aren't identical for two different</span>
+<span class="source-line-no">072</span><span id="line.72">     * Mnemonic objects (possibly constructed at different times, using different SquidLib versions), the Mnemonics will</span>
+<span class="source-line-no">073</span><span id="line.73">     * have different encoded and decoded forms. You can either save the key set from {@link #allAdjectives} and</span>
+<span class="source-line-no">074</span><span id="line.74">     * {@link #allNouns} and pass them to {@link #Mnemonic(long, Collection, Collection)}, or save the Thesaurus state</span>
+<span class="source-line-no">075</span><span id="line.75">     * altogether using {@link Thesaurus#archiveCategories()}, loading it before constructing any Mnemonics with</span>
+<span class="source-line-no">076</span><span id="line.76">     * {@link Thesaurus#addArchivedCategories(String)}.</span>
+<span class="source-line-no">077</span><span id="line.77">     * @param seed a long seed that will be used to randomize the syllables and words used.</span>
+<span class="source-line-no">078</span><span id="line.78">     */</span>
+<span class="source-line-no">079</span><span id="line.79">    public Mnemonic(long seed)</span>
+<span class="source-line-no">080</span><span id="line.80">    {</span>
+<span class="source-line-no">081</span><span id="line.81">        RNG rng = new RNG(new LightRNG(seed));</span>
+<span class="source-line-no">082</span><span id="line.82">        int[] order = rng.randomOrdering(431);</span>
+<span class="source-line-no">083</span><span id="line.83">        int o;</span>
+<span class="source-line-no">084</span><span id="line.84">        for (int i = 0; i &lt; 256; i++) {</span>
+<span class="source-line-no">085</span><span id="line.85">            o = order[i];</span>
+<span class="source-line-no">086</span><span id="line.86">            items.add(baseTriplets.substring(o * 3, o * 3 + 3));</span>
+<span class="source-line-no">087</span><span id="line.87">        }</span>
+<span class="source-line-no">088</span><span id="line.88">        allAdjectives = new Arrangement&lt;&gt;(adjective.size(), 0.5f, Hashers.caseInsensitiveStringHasher);</span>
+<span class="source-line-no">089</span><span id="line.89">        allNouns = new Arrangement&lt;&gt;(noun.size(), 0.5f, Hashers.caseInsensitiveStringHasher);</span>
+<span class="source-line-no">090</span><span id="line.90">        for (int i = 0; i &lt; adjective.size(); i++) {</span>
+<span class="source-line-no">091</span><span id="line.91">            ArrayList&lt;String&gt; words = adjective.getAt(i);</span>
+<span class="source-line-no">092</span><span id="line.92">            for (int j = 0; j &lt; words.size(); j++) {</span>
+<span class="source-line-no">093</span><span id="line.93">                if(words.get(j).contains(" "))</span>
+<span class="source-line-no">094</span><span id="line.94">                    continue;</span>
+<span class="source-line-no">095</span><span id="line.95">                allAdjectives.add(words.get(j));</span>
+<span class="source-line-no">096</span><span id="line.96">            }</span>
+<span class="source-line-no">097</span><span id="line.97">        }</span>
+<span class="source-line-no">098</span><span id="line.98">        allAdjectives.shuffle(rng);</span>
+<span class="source-line-no">099</span><span id="line.99">        for (int i = 0; i &lt; noun.size(); i++) {</span>
+<span class="source-line-no">100</span><span id="line.100">            ArrayList&lt;String&gt; words = noun.getAt(i);</span>
+<span class="source-line-no">101</span><span id="line.101">            for (int j = 0; j &lt; words.size(); j++) {</span>
+<span class="source-line-no">102</span><span id="line.102">                if(words.get(j).contains(" "))</span>
+<span class="source-line-no">103</span><span id="line.103">                    continue;</span>
+<span class="source-line-no">104</span><span id="line.104">                allNouns.add(words.get(j));</span>
+<span class="source-line-no">105</span><span id="line.105">            }</span>
+<span class="source-line-no">106</span><span id="line.106">        }</span>
+<span class="source-line-no">107</span><span id="line.107">        allNouns.shuffle(rng);</span>
+<span class="source-line-no">108</span><span id="line.108">    }</span>
+<span class="source-line-no">109</span><span id="line.109"></span>
+<span class="source-line-no">110</span><span id="line.110">    /**</span>
+<span class="source-line-no">111</span><span id="line.111">     * Constructor that allows you to specify the adjective and noun collections used by</span>
+<span class="source-line-no">112</span><span id="line.112">     * {@link #toWordMnemonic(int, boolean)} as well as a seed. This should be useful when you want to enforce a stable</span>
+<span class="source-line-no">113</span><span id="line.113">     * relationship between word mnemonics produced by {@link #toWordMnemonic(int, boolean)} and the int values they</span>
+<span class="source-line-no">114</span><span id="line.114">     * decode to with {@link #fromWordMnemonic(String)}, because the default can change if the adjective and noun</span>
+<span class="source-line-no">115</span><span id="line.115">     * collections in {@link Thesaurus} change. There should be a fairly large amount of unique adjectives and nouns;</span>
+<span class="source-line-no">116</span><span id="line.116">     * {@code (long)adjectives.size() * nouns.size() * adjectives.size() * nouns.size()} should be at least 0x80000000L</span>
+<span class="source-line-no">117</span><span id="line.117">     * (2147483648L), with case disregarded. If the total is less than that, not all possible ints can be encoded with</span>
+<span class="source-line-no">118</span><span id="line.118">     * {@link #toWordMnemonic(int, boolean)}. Having 216 adjectives and 216 nouns is enough for a rough target. Each</span>
+<span class="source-line-no">119</span><span id="line.119">     * word (adjectives and nouns alike) can have any characters in it except for space, since space is used during</span>
+<span class="source-line-no">120</span><span id="line.120">     * decoding to separate words.</span>
+<span class="source-line-no">121</span><span id="line.121">     * @param seed a long seed that will be used to randomize the syllables and words used.</span>
+<span class="source-line-no">122</span><span id="line.122">     * @param adjectives a Collection of unique Strings (case-insensitive) that will be used as adjectives</span>
+<span class="source-line-no">123</span><span id="line.123">     * @param nouns a Collection of unique Strings (case-insensitive) that will be used as nouns</span>
+<span class="source-line-no">124</span><span id="line.124">     */</span>
+<span class="source-line-no">125</span><span id="line.125">    public Mnemonic(long seed, Collection&lt;String&gt; adjectives, Collection&lt;String&gt; nouns)</span>
+<span class="source-line-no">126</span><span id="line.126">    {</span>
+<span class="source-line-no">127</span><span id="line.127">        RNG rng = new RNG(new LightRNG(seed));</span>
+<span class="source-line-no">128</span><span id="line.128">        int[] order = rng.randomOrdering(431);</span>
+<span class="source-line-no">129</span><span id="line.129">        int o;</span>
+<span class="source-line-no">130</span><span id="line.130">        for (int i = 0; i &lt; 256; i++) {</span>
+<span class="source-line-no">131</span><span id="line.131">            o = order[i];</span>
+<span class="source-line-no">132</span><span id="line.132">            items.add(baseTriplets.substring(o * 3, o * 3 + 3));</span>
+<span class="source-line-no">133</span><span id="line.133">        }</span>
+<span class="source-line-no">134</span><span id="line.134">        allAdjectives = new Arrangement&lt;&gt;(adjectives.size(), 0.5f, Hashers.caseInsensitiveStringHasher);</span>
+<span class="source-line-no">135</span><span id="line.135">        allNouns = new Arrangement&lt;&gt;(nouns.size(), 0.5f, Hashers.caseInsensitiveStringHasher);</span>
+<span class="source-line-no">136</span><span id="line.136">        for(String word : adjectives)</span>
+<span class="source-line-no">137</span><span id="line.137">            if(!word.contains(" ")) allAdjectives.add(word);</span>
+<span class="source-line-no">138</span><span id="line.138">        allAdjectives.shuffle(rng);</span>
+<span class="source-line-no">139</span><span id="line.139">        for(String word : nouns)</span>
+<span class="source-line-no">140</span><span id="line.140">            if(!word.contains(" ")) allNouns.add(word);</span>
+<span class="source-line-no">141</span><span id="line.141">        allNouns.shuffle(rng);</span>
+<span class="source-line-no">142</span><span id="line.142">    }</span>
+<span class="source-line-no">143</span><span id="line.143">    /**</span>
+<span class="source-line-no">144</span><span id="line.144">     * Constructor that allows you to specify the adjective and noun collections (given as arrays) used by</span>
+<span class="source-line-no">145</span><span id="line.145">     * {@link #toWordMnemonic(int, boolean)} as well as a seed. This should be useful when you want to enforce a stable</span>
+<span class="source-line-no">146</span><span id="line.146">     * relationship between word mnemonics produced by {@link #toWordMnemonic(int, boolean)} and the int values they</span>
+<span class="source-line-no">147</span><span id="line.147">     * decode to with {@link #fromWordMnemonic(String)}, because the default can change if the adjective and noun</span>
+<span class="source-line-no">148</span><span id="line.148">     * collections in {@link Thesaurus} change. There should be a fairly large amount of unique adjectives and nouns;</span>
+<span class="source-line-no">149</span><span id="line.149">     * {@code (long)adjectives.length * nouns.length * adjectives.length * nouns.length} should be at least 0x80000000L</span>
+<span class="source-line-no">150</span><span id="line.150">     * (2147483648L), with case disregarded. If the total is less than that, not all possible ints can be encoded with</span>
+<span class="source-line-no">151</span><span id="line.151">     * {@link #toWordMnemonic(int, boolean)}. Having 216 adjectives and 216 nouns is enough for a rough target. Each</span>
+<span class="source-line-no">152</span><span id="line.152">     * word (adjectives and nouns alike) can have any characters in it except for space, since space is used during</span>
+<span class="source-line-no">153</span><span id="line.153">     * decoding to separate words. You may want to use {@link StringKit#split(String, String)} with space or newline as</span>
+<span class="source-line-no">154</span><span id="line.154">     * the delimiter to get a String array from data containing space-separated words or data with one word per line.</span>
+<span class="source-line-no">155</span><span id="line.155">     * It's also possible to use {@link String#split(String)}, which can use {@code "\\s"} to split on any whitespace.</span>
+<span class="source-line-no">156</span><span id="line.156">     * @param seed a long seed that will be used to randomize the syllables and words used.</span>
+<span class="source-line-no">157</span><span id="line.157">     * @param adjectives an array of unique Strings (case-insensitive) that will be used as adjectives</span>
+<span class="source-line-no">158</span><span id="line.158">     * @param nouns an array of unique Strings (case-insensitive) that will be used as nouns</span>
+<span class="source-line-no">159</span><span id="line.159">     */</span>
+<span class="source-line-no">160</span><span id="line.160">    public Mnemonic(long seed, String[] adjectives, String[] nouns)</span>
+<span class="source-line-no">161</span><span id="line.161">    {</span>
+<span class="source-line-no">162</span><span id="line.162">        RNG rng = new RNG(new LightRNG(seed));</span>
+<span class="source-line-no">163</span><span id="line.163">        int[] order = rng.randomOrdering(431);</span>
+<span class="source-line-no">164</span><span id="line.164">        int o;</span>
+<span class="source-line-no">165</span><span id="line.165">        for (int i = 0; i &lt; 256; i++) {</span>
+<span class="source-line-no">166</span><span id="line.166">            o = order[i];</span>
+<span class="source-line-no">167</span><span id="line.167">            items.add(baseTriplets.substring(o * 3, o * 3 + 3));</span>
+<span class="source-line-no">168</span><span id="line.168">        }</span>
+<span class="source-line-no">169</span><span id="line.169">        allAdjectives = new Arrangement&lt;&gt;(adjectives.length, 0.5f, Hashers.caseInsensitiveStringHasher);</span>
+<span class="source-line-no">170</span><span id="line.170">        allNouns = new Arrangement&lt;&gt;(nouns.length, 0.5f, Hashers.caseInsensitiveStringHasher);</span>
+<span class="source-line-no">171</span><span id="line.171">        for(String word : adjectives)</span>
+<span class="source-line-no">172</span><span id="line.172">            if(!word.contains(" ")) allAdjectives.add(word);</span>
+<span class="source-line-no">173</span><span id="line.173">        allAdjectives.shuffle(rng);</span>
+<span class="source-line-no">174</span><span id="line.174">        for(String word : nouns)</span>
+<span class="source-line-no">175</span><span id="line.175">            if(!word.contains(" ")) allNouns.add(word);</span>
+<span class="source-line-no">176</span><span id="line.176">        allNouns.shuffle(rng);</span>
+<span class="source-line-no">177</span><span id="line.177">    }</span>
+<span class="source-line-no">178</span><span id="line.178"></span>
+<span class="source-line-no">179</span><span id="line.179">    /**</span>
+<span class="source-line-no">180</span><span id="line.180">     * Given any long, generates a slightly-more-memorable gibberish phrase that can be decoded back to the original</span>
+<span class="source-line-no">181</span><span id="line.181">     * long with {@link #fromMnemonic(String)}. Examples of what this can produce are "noahritwimoesaidrubiotso" and</span>
+<span class="source-line-no">182</span><span id="line.182">     * "loanuiskohaimrunoizlupwi", generated by a Mnemonic with a seed of 1 from -3743983437744699304L and</span>
+<span class="source-line-no">183</span><span id="line.183">     * -8967299915041170097L, respectively. The Strings this returns are always 24 chars long, and contain only the</span>
+<span class="source-line-no">184</span><span id="line.184">     * letters a-z.</span>
+<span class="source-line-no">185</span><span id="line.185">     * @param number any long</span>
+<span class="source-line-no">186</span><span id="line.186">     * @return a 24-character String made of gibberish syllables</span>
+<span class="source-line-no">187</span><span id="line.187">     */</span>
+<span class="source-line-no">188</span><span id="line.188">    public String toMnemonic(long number)</span>
+<span class="source-line-no">189</span><span id="line.189">    {</span>
+<span class="source-line-no">190</span><span id="line.190">        return toMnemonic(number, false);</span>
+<span class="source-line-no">191</span><span id="line.191">    }</span>
+<span class="source-line-no">192</span><span id="line.192"></span>
+<span class="source-line-no">193</span><span id="line.193">    /**</span>
+<span class="source-line-no">194</span><span id="line.194">     * Given any long, generates a slightly-more-memorable gibberish phrase that can be decoded back to the original</span>
+<span class="source-line-no">195</span><span id="line.195">     * long with {@link #fromMnemonic(String)}. Examples of what this can produce are "noahritwimoesaidrubiotso" and</span>
+<span class="source-line-no">196</span><span id="line.196">     * "loanuiskohaimrunoizlupwi", generated by a Mnemonic with a seed of 1 from -3743983437744699304L and</span>
+<span class="source-line-no">197</span><span id="line.197">     * -8967299915041170097L, respectively. The Strings this returns are always 24 chars long. If capitalize is true,</span>
+<span class="source-line-no">198</span><span id="line.198">     * then the first letter will be a capital letter from A-Z, all other letters will be a-z (including the first if</span>
+<span class="source-line-no">199</span><span id="line.199">     * capitalize is false).</span>
+<span class="source-line-no">200</span><span id="line.200">     * @param number any long</span>
+<span class="source-line-no">201</span><span id="line.201">     * @param capitalize if true, the initial letter of the returned mnemonic String will be capitalized</span>
+<span class="source-line-no">202</span><span id="line.202">     * @return a 24-character String made of gibberish syllables</span>
+<span class="source-line-no">203</span><span id="line.203">     */</span>
+<span class="source-line-no">204</span><span id="line.204">    public String toMnemonic(long number, boolean capitalize)</span>
+<span class="source-line-no">205</span><span id="line.205">    {</span>
+<span class="source-line-no">206</span><span id="line.206">        char[] c = new char[24];</span>
+<span class="source-line-no">207</span><span id="line.207">        String item;</span>
+<span class="source-line-no">208</span><span id="line.208">        int idx = 0;</span>
+<span class="source-line-no">209</span><span id="line.209">        item = items.keyAt((int)(number &amp; 0xFF));</span>
+<span class="source-line-no">210</span><span id="line.210">        c[idx++] = capitalize ? Character.toUpperCase(item.charAt(0)) : item.charAt(0);</span>
+<span class="source-line-no">211</span><span id="line.211">        c[idx++] = item.charAt(1);</span>
+<span class="source-line-no">212</span><span id="line.212">        c[idx++] = item.charAt(2);</span>
+<span class="source-line-no">213</span><span id="line.213"></span>
+<span class="source-line-no">214</span><span id="line.214">        for (int i = 8; i &lt; 64; i+=8) {</span>
+<span class="source-line-no">215</span><span id="line.215">            item = items.keyAt((int)(number &gt;&gt;&gt; i &amp; 0xFF));</span>
+<span class="source-line-no">216</span><span id="line.216">            c[idx++] = item.charAt(0);</span>
+<span class="source-line-no">217</span><span id="line.217">            c[idx++] = item.charAt(1);</span>
+<span class="source-line-no">218</span><span id="line.218">            c[idx++] = item.charAt(2);</span>
+<span class="source-line-no">219</span><span id="line.219">        }</span>
+<span class="source-line-no">220</span><span id="line.220">        return String.valueOf(c);</span>
+<span class="source-line-no">221</span><span id="line.221">    }</span>
+<span class="source-line-no">222</span><span id="line.222"></span>
+<span class="source-line-no">223</span><span id="line.223">    /**</span>
+<span class="source-line-no">224</span><span id="line.224">     * Takes a String produced by {@link #toMnemonic(long)} or {@link #toMnemonic(long, boolean)} and returns the long</span>
+<span class="source-line-no">225</span><span id="line.225">     * used to encode that gibberish String. This can't take just any String; if the given parameter isn't at least 24</span>
+<span class="source-line-no">226</span><span id="line.226">     * characters long, this can throw an {@link IndexOutOfBoundsException}, and if it isn't made purely from the 3-char</span>
+<span class="source-line-no">227</span><span id="line.227">     * syllables toMnemonic() produces, it won't produce a meaningful result.</span>
+<span class="source-line-no">228</span><span id="line.228">     * @param mnemonic a gibberish String produced by {@link #toMnemonic(long)} or {@link #toMnemonic(long, boolean)}</span>
+<span class="source-line-no">229</span><span id="line.229">     * @return the long used to generate {@code mnemonic} originally</span>
+<span class="source-line-no">230</span><span id="line.230">     */</span>
+<span class="source-line-no">231</span><span id="line.231">    public long fromMnemonic(String mnemonic)</span>
+<span class="source-line-no">232</span><span id="line.232">    {</span>
+<span class="source-line-no">233</span><span id="line.233">        long result = 0L;</span>
+<span class="source-line-no">234</span><span id="line.234">        for (int i = 0; i &lt; 8; i++) {</span>
+<span class="source-line-no">235</span><span id="line.235">            result |= (items.getInt(mnemonic.substring(i * 3, i * 3 + 3)) &amp; 0xFFL) &lt;&lt; (i &lt;&lt; 3);</span>
+<span class="source-line-no">236</span><span id="line.236">        }</span>
+<span class="source-line-no">237</span><span id="line.237">        return result;</span>
+<span class="source-line-no">238</span><span id="line.238">    }</span>
+<span class="source-line-no">239</span><span id="line.239"></span>
+<span class="source-line-no">240</span><span id="line.240">    /**</span>
+<span class="source-line-no">241</span><span id="line.241">     * Given any int, generates a short phrase that can be decoded back to the original int with</span>
+<span class="source-line-no">242</span><span id="line.242">     * {@link #fromWordMnemonic(String)}. Examples of what this can produce are "Mindful warriors and the pure torch"</span>
+<span class="source-line-no">243</span><span id="line.243">     * and "Dynastic earldom and the thousandfold bandit", generated by a Mnemonic with a seed of 1 from -587415991 and</span>
+<span class="source-line-no">244</span><span id="line.244">     * -1105099633, respectively. Those Strings were generated using the current state of {@link Thesaurus} and the</span>
+<span class="source-line-no">245</span><span id="line.245">     * adjectives and nouns it stores now, and if Thesaurus is added to over time, those Strings won't correspond to</span>
+<span class="source-line-no">246</span><span id="line.246">     * those ints any more. The Strings this returns vary in length. The words this uses by default use only the letters</span>
+<span class="source-line-no">247</span><span id="line.247">     * a-z and the single quote (with A-Z for the first character if capitalize is true), with space separating words.</span>
+<span class="source-line-no">248</span><span id="line.248">     * If you constructed this Mnemonic with adjective and noun collections or arrays, then this will use only those</span>
+<span class="source-line-no">249</span><span id="line.249">     * words and will still separate words with space (and it will capitalize the first char if capitalize is true).</span>
+<span class="source-line-no">250</span><span id="line.250">     * @param number any int</span>
+<span class="source-line-no">251</span><span id="line.251">     * @param capitalize if true, the initial letter of the returned mnemonic String will be capitalized</span>
+<span class="source-line-no">252</span><span id="line.252">     * @return a short phrase that will be uniquely related to number</span>
+<span class="source-line-no">253</span><span id="line.253">     */</span>
+<span class="source-line-no">254</span><span id="line.254">    public String toWordMnemonic(int number, boolean capitalize)</span>
+<span class="source-line-no">255</span><span id="line.255">    {</span>
+<span class="source-line-no">256</span><span id="line.256">        final int adjectiveCount = allAdjectives.size(), nounCount = allNouns.size();</span>
+<span class="source-line-no">257</span><span id="line.257">        StringBuilder sb = new StringBuilder(80);</span>
+<span class="source-line-no">258</span><span id="line.258">        //0x000D76CB inverted by 0x000FBEE3</span>
+<span class="source-line-no">259</span><span id="line.259">        //0x000D724B inverted by 0x000E4763</span>
+<span class="source-line-no">260</span><span id="line.260">        number = (number ^ 0x7F4A7C15) * 0x000FBEE3;</span>
+<span class="source-line-no">261</span><span id="line.261">        // http://marc-b-reynolds.github.io/math/2017/10/13/XorRotate.html</span>
+<span class="source-line-no">262</span><span id="line.262">        number = ((number &lt;&lt; 5 | number &gt;&gt;&gt; 27) ^ (number &lt;&lt; 10 | number &gt;&gt;&gt; 22) ^ (number &lt;&lt; 26 | number &gt;&gt;&gt; 6)) * 0x000D724B ^ 0x91E10DA5;</span>
+<span class="source-line-no">263</span><span id="line.263">        number ^= number &gt;&gt;&gt; 15;</span>
+<span class="source-line-no">264</span><span id="line.264">        boolean negative = (number &lt; 0);</span>
+<span class="source-line-no">265</span><span id="line.265">        if(negative) number = ~number;</span>
+<span class="source-line-no">266</span><span id="line.266">        sb.append(allAdjectives.keyAt(number % adjectiveCount)).append(' ')</span>
+<span class="source-line-no">267</span><span id="line.267">                .append(allNouns.keyAt((number /= adjectiveCount) % nounCount))</span>
+<span class="source-line-no">268</span><span id="line.268">                .append(negative ? " and the " : " of the ")</span>
+<span class="source-line-no">269</span><span id="line.269">                .append(allAdjectives.keyAt((number /= nounCount) % adjectiveCount)).append(' ')</span>
+<span class="source-line-no">270</span><span id="line.270">                .append(allNouns.keyAt((number / adjectiveCount) % nounCount));</span>
+<span class="source-line-no">271</span><span id="line.271">        if(capitalize)</span>
+<span class="source-line-no">272</span><span id="line.272">            sb.setCharAt(0, Character.toUpperCase(sb.charAt(0)));</span>
+<span class="source-line-no">273</span><span id="line.273">        return sb.toString();</span>
+<span class="source-line-no">274</span><span id="line.274">    }</span>
+<span class="source-line-no">275</span><span id="line.275"></span>
+<span class="source-line-no">276</span><span id="line.276">    /**</span>
+<span class="source-line-no">277</span><span id="line.277">     * Takes a String phrase produced by {@link #toWordMnemonic(int, boolean)} and returns the int used to encode that</span>
+<span class="source-line-no">278</span><span id="line.278">     * String. This can't take just any String; it must be produced by {@link #toWordMnemonic(int, boolean)} to give a</span>
+<span class="source-line-no">279</span><span id="line.279">     * meaningful result.</span>
+<span class="source-line-no">280</span><span id="line.280">     * @param mnemonic a String phrase produced by {@link #toWordMnemonic(int, boolean)}</span>
+<span class="source-line-no">281</span><span id="line.281">     * @return the int used to generate {@code mnemonic} originally</span>
+<span class="source-line-no">282</span><span id="line.282">     */</span>
+<span class="source-line-no">283</span><span id="line.283">    public int fromWordMnemonic(String mnemonic)</span>
+<span class="source-line-no">284</span><span id="line.284">    {</span>
+<span class="source-line-no">285</span><span id="line.285">        final int adjectiveCount = allAdjectives.size(), nounCount = allNouns.size();</span>
+<span class="source-line-no">286</span><span id="line.286">        int idx = mnemonic.indexOf(' '), factor = adjectiveCount;</span>
+<span class="source-line-no">287</span><span id="line.287">        boolean negative;</span>
+<span class="source-line-no">288</span><span id="line.288">        int result = allAdjectives.getInt(StringKit.safeSubstring(mnemonic, 0, idx));</span>
+<span class="source-line-no">289</span><span id="line.289">        result += factor * allNouns.getInt(StringKit.safeSubstring(mnemonic, idx + 1, idx = mnemonic.indexOf(' ', idx + 1)));</span>
+<span class="source-line-no">290</span><span id="line.290">        negative = (mnemonic.charAt(idx + 1) == 'a');</span>
+<span class="source-line-no">291</span><span id="line.291">        if(negative) idx += 8;</span>
+<span class="source-line-no">292</span><span id="line.292">        else idx += 7;</span>
+<span class="source-line-no">293</span><span id="line.293">        result += (factor *= nounCount) * allAdjectives.getInt(StringKit.safeSubstring(mnemonic, idx + 1, idx = mnemonic.indexOf(' ', idx + 1)));</span>
+<span class="source-line-no">294</span><span id="line.294">        result += factor * adjectiveCount * allNouns.getInt(StringKit.safeSubstring(mnemonic, idx + 1, -1));</span>
+<span class="source-line-no">295</span><span id="line.295">        if(negative) result = ~result;</span>
+<span class="source-line-no">296</span><span id="line.296">        result ^= result &gt;&gt;&gt; 15 ^ result &gt;&gt;&gt; 30;</span>
+<span class="source-line-no">297</span><span id="line.297">        result = (result ^ 0x91E10DA5) * 0x000E4763;</span>
+<span class="source-line-no">298</span><span id="line.298">        result ^= (result &lt;&lt; 16 | result &gt;&gt;&gt; 16) ^ (result &lt;&lt; 27 ^ result &gt;&gt;&gt; 5);</span>
+<span class="source-line-no">299</span><span id="line.299">        result = result * 0x000D76CB ^ 0x7F4A7C15;</span>
+<span class="source-line-no">300</span><span id="line.300">        return result;</span>
+<span class="source-line-no">301</span><span id="line.301">    }</span>
+<span class="source-line-no">302</span><span id="line.302">}</span>
 
 
 

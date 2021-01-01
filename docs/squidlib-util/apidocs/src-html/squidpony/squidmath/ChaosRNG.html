@@ -7,111 +7,111 @@
 <meta name="generator" content="javadoc/SourceToHTMLConverter">
 <link rel="stylesheet" type="text/css" href="../../../stylesheet.css" title="Style">
 </head>
-<body class="source">
+<body class="source-page">
 <main role="main">
-<div class="sourceContainer">
-<pre><span class="sourceLineNo">001</span><a id="line.1">package squidpony.squidmath;</a>
-<span class="sourceLineNo">002</span><a id="line.2"></a>
-<span class="sourceLineNo">003</span><a id="line.3">import squidpony.StringKit;</a>
-<span class="sourceLineNo">004</span><a id="line.4"></a>
-<span class="sourceLineNo">005</span><a id="line.5">/**</a>
-<span class="sourceLineNo">006</span><a id="line.6"> * An RNG that cannot be seeded and should be fairly hard to predict what it will return next. Useful for competitions</a>
-<span class="sourceLineNo">007</span><a id="line.7"> * where a seeded RNG is used for dungeon generation and enemy placement but an unpredictable RNG is needed for combat,</a>
-<span class="sourceLineNo">008</span><a id="line.8"> * so players can't abuse the RNG to make improbable events guaranteed or unfavorable outcomes impossible.</a>
-<span class="sourceLineNo">009</span><a id="line.9"> * &lt;br&gt;</a>
-<span class="sourceLineNo">010</span><a id="line.10"> * This is intended to be used as a RandomnessSource for an RNG, and does not have any methods other than those needed</a>
-<span class="sourceLineNo">011</span><a id="line.11"> * for that interface, with one exception -- the randomize() method, which can be used to completely change all (many)</a>
-<span class="sourceLineNo">012</span><a id="line.12"> * bits of state using cryptographic random numbers. If you create a ChaosRNG and keep it around for later, then you can</a>
-<span class="sourceLineNo">013</span><a id="line.13"> * pass it to the RNG constructor and later call randomize() on the ChaosRNG if you suspect it may be becoming</a>
-<span class="sourceLineNo">014</span><a id="line.14"> * predictable. The period on this RNG is preposterously large, since it involves a pair of IsaacRNGs as well as other</a>
-<span class="sourceLineNo">015</span><a id="line.15"> * random state, so predicting it may be essentially impossible unless the user can poke around in the application, use</a>
-<span class="sourceLineNo">016</span><a id="line.16"> * reflection, and so on.</a>
-<span class="sourceLineNo">017</span><a id="line.17"> * Created by Tommy Ettinger on 3/17/2016.</a>
-<span class="sourceLineNo">018</span><a id="line.18"> */</a>
-<span class="sourceLineNo">019</span><a id="line.19">public class ChaosRNG implements RandomnessSource{</a>
-<span class="sourceLineNo">020</span><a id="line.20"></a>
-<span class="sourceLineNo">021</span><a id="line.21">    private transient long[] z;</a>
-<span class="sourceLineNo">022</span><a id="line.22">    private transient int choice;</a>
-<span class="sourceLineNo">023</span><a id="line.23">    private transient IsaacRNG r0, r1;</a>
-<span class="sourceLineNo">024</span><a id="line.24">    private static final long serialVersionUID = -254415589291474491L;</a>
-<span class="sourceLineNo">025</span><a id="line.25"></a>
-<span class="sourceLineNo">026</span><a id="line.26">    private long determine()</a>
-<span class="sourceLineNo">027</span><a id="line.27">    {</a>
-<span class="sourceLineNo">028</span><a id="line.28">        long state = (z[(choice += 0xC6BC278D) &gt;&gt;&gt; 28] += 0x9E3779B97F4A7C15L ^ choice * 0x2C9277B5000000L);</a>
-<span class="sourceLineNo">029</span><a id="line.29">        state = (state ^ state &gt;&gt;&gt; 26) * 0x2545F4914F6CDD1DL;</a>
-<span class="sourceLineNo">030</span><a id="line.30">        return state ^ state &gt;&gt;&gt; 28;</a>
-<span class="sourceLineNo">031</span><a id="line.31"></a>
-<span class="sourceLineNo">032</span><a id="line.32">    }</a>
-<span class="sourceLineNo">033</span><a id="line.33">    /**</a>
-<span class="sourceLineNo">034</span><a id="line.34">     * Builds a ChaosRNG with a fairly-random seed derived from somewhat-OK sources of non-seed randomness, such as time</a>
-<span class="sourceLineNo">035</span><a id="line.35">     * before and after garbage collection. We're forced to use sub-par techniques here due to GWT not supporting any</a>
-<span class="sourceLineNo">036</span><a id="line.36">     * better methods. Future random generation uses less secure methods but should still make it extremely difficult to</a>
-<span class="sourceLineNo">037</span><a id="line.37">     * "divine" the future RNG results from the outputs.</a>
-<span class="sourceLineNo">038</span><a id="line.38">     */</a>
-<span class="sourceLineNo">039</span><a id="line.39">    public ChaosRNG()</a>
-<span class="sourceLineNo">040</span><a id="line.40">    {</a>
-<span class="sourceLineNo">041</span><a id="line.41">        z = new long[16];</a>
-<span class="sourceLineNo">042</span><a id="line.42">        // produces some garbage; this is intentional</a>
-<span class="sourceLineNo">043</span><a id="line.43">        String s = StringKit.hexHash(System.currentTimeMillis(), System.identityHashCode(this), System.identityHashCode(z));</a>
-<span class="sourceLineNo">044</span><a id="line.44">        s += StringKit.LATIN_LETTERS_LOWER;</a>
-<span class="sourceLineNo">045</span><a id="line.45">        // sway causes most of the state of Math's Random field to be non-visible in the output</a>
-<span class="sourceLineNo">046</span><a id="line.46">        s += NumberTools.sway((126.621 + Math.random()) * (17.71 - Math.random()) + (71.17 * Math.random()));</a>
-<span class="sourceLineNo">047</span><a id="line.47">        // this should take some time because of the earlier garbage</a>
-<span class="sourceLineNo">048</span><a id="line.48">        System.gc();</a>
-<span class="sourceLineNo">049</span><a id="line.49">        // so this should have a better chance of being different.</a>
-<span class="sourceLineNo">050</span><a id="line.50">        s += System.currentTimeMillis();</a>
-<span class="sourceLineNo">051</span><a id="line.51">        r0 = new IsaacRNG(s);</a>
-<span class="sourceLineNo">052</span><a id="line.52">        r1 = new IsaacRNG(r0.nextBlock());</a>
-<span class="sourceLineNo">053</span><a id="line.53">        r1.fillBlock(z);</a>
-<span class="sourceLineNo">054</span><a id="line.54">        choice = r0.next(32);</a>
-<span class="sourceLineNo">055</span><a id="line.55">    }</a>
-<span class="sourceLineNo">056</span><a id="line.56"></a>
-<span class="sourceLineNo">057</span><a id="line.57">    @Override</a>
-<span class="sourceLineNo">058</span><a id="line.58">    public final int next( int bits ) {</a>
-<span class="sourceLineNo">059</span><a id="line.59">        return (int)( nextLong() &amp; ( 1L &lt;&lt; bits ) - 1 );</a>
-<span class="sourceLineNo">060</span><a id="line.60">    }</a>
-<span class="sourceLineNo">061</span><a id="line.61"></a>
-<span class="sourceLineNo">062</span><a id="line.62">    /**</a>
-<span class="sourceLineNo">063</span><a id="line.63">     * Can return any long, positive or negative, of any size permissible in a 64-bit signed integer.</a>
-<span class="sourceLineNo">064</span><a id="line.64">     * @return any long, all 64 bits are random</a>
-<span class="sourceLineNo">065</span><a id="line.65">     */</a>
-<span class="sourceLineNo">066</span><a id="line.66">    @Override</a>
-<span class="sourceLineNo">067</span><a id="line.67">    public final long nextLong() {</a>
-<span class="sourceLineNo">068</span><a id="line.68">        long rot = (determine() &amp; 31) + 12;</a>
-<span class="sourceLineNo">069</span><a id="line.69">        return r0.nextLong() &lt;&lt; rot ^ r1.nextLong() &gt;&gt;&gt; 45 - rot;</a>
-<span class="sourceLineNo">070</span><a id="line.70">    }</a>
-<span class="sourceLineNo">071</span><a id="line.71"></a>
-<span class="sourceLineNo">072</span><a id="line.72">    /**</a>
-<span class="sourceLineNo">073</span><a id="line.73">     * Produces another ChaosRNG with no relation to this one; this breaks the normal rules that RandomnessSource.copy</a>
-<span class="sourceLineNo">074</span><a id="line.74">     * abides by because this class should never have its generated number sequence be predictable.</a>
-<span class="sourceLineNo">075</span><a id="line.75">     * @return a new, unrelated ChaosRNG as a RandomnessSource</a>
-<span class="sourceLineNo">076</span><a id="line.76">     */</a>
-<span class="sourceLineNo">077</span><a id="line.77">    @Override</a>
-<span class="sourceLineNo">078</span><a id="line.78">    public ChaosRNG copy() {</a>
-<span class="sourceLineNo">079</span><a id="line.79">        return new ChaosRNG();</a>
-<span class="sourceLineNo">080</span><a id="line.80">    }</a>
-<span class="sourceLineNo">081</span><a id="line.81"></a>
-<span class="sourceLineNo">082</span><a id="line.82">    /**</a>
-<span class="sourceLineNo">083</span><a id="line.83">     * Changes the internal state to a new, fully-random version that should have no relation to the previous state.</a>
-<span class="sourceLineNo">084</span><a id="line.84">     * May be somewhat slow; you shouldn't need to call this often.</a>
-<span class="sourceLineNo">085</span><a id="line.85">     */</a>
-<span class="sourceLineNo">086</span><a id="line.86">    public void randomize()</a>
-<span class="sourceLineNo">087</span><a id="line.87">    {</a>
-<span class="sourceLineNo">088</span><a id="line.88">        String s = System.currentTimeMillis() + "0" + System.identityHashCode(this);</a>
-<span class="sourceLineNo">089</span><a id="line.89">        s += StringKit.LATIN_LETTERS_LOWER;</a>
-<span class="sourceLineNo">090</span><a id="line.90">        System.gc();</a>
-<span class="sourceLineNo">091</span><a id="line.91">        s += System.currentTimeMillis();</a>
-<span class="sourceLineNo">092</span><a id="line.92">        r0.init(s);</a>
-<span class="sourceLineNo">093</span><a id="line.93">        r1.init(r0.nextBlock());</a>
-<span class="sourceLineNo">094</span><a id="line.94">        r1.fillBlock(z);</a>
-<span class="sourceLineNo">095</span><a id="line.95">        choice = r0.next(32);</a>
-<span class="sourceLineNo">096</span><a id="line.96">    }</a>
-<span class="sourceLineNo">097</span><a id="line.97"></a>
-<span class="sourceLineNo">098</span><a id="line.98">    @Override</a>
-<span class="sourceLineNo">099</span><a id="line.99">    public String toString() {</a>
-<span class="sourceLineNo">100</span><a id="line.100">        return "ChaosRNG with hidden state (id is " + System.identityHashCode(this) + ')';</a>
-<span class="sourceLineNo">101</span><a id="line.101">    }</a>
-<span class="sourceLineNo">102</span><a id="line.102">}</a>
+<div class="source-container">
+<pre><span class="source-line-no">001</span><span id="line.1">package squidpony.squidmath;</span>
+<span class="source-line-no">002</span><span id="line.2"></span>
+<span class="source-line-no">003</span><span id="line.3">import squidpony.StringKit;</span>
+<span class="source-line-no">004</span><span id="line.4"></span>
+<span class="source-line-no">005</span><span id="line.5">/**</span>
+<span class="source-line-no">006</span><span id="line.6"> * An RNG that cannot be seeded and should be fairly hard to predict what it will return next. Useful for competitions</span>
+<span class="source-line-no">007</span><span id="line.7"> * where a seeded RNG is used for dungeon generation and enemy placement but an unpredictable RNG is needed for combat,</span>
+<span class="source-line-no">008</span><span id="line.8"> * so players can't abuse the RNG to make improbable events guaranteed or unfavorable outcomes impossible.</span>
+<span class="source-line-no">009</span><span id="line.9"> * &lt;br&gt;</span>
+<span class="source-line-no">010</span><span id="line.10"> * This is intended to be used as a RandomnessSource for an RNG, and does not have any methods other than those needed</span>
+<span class="source-line-no">011</span><span id="line.11"> * for that interface, with one exception -- the randomize() method, which can be used to completely change all (many)</span>
+<span class="source-line-no">012</span><span id="line.12"> * bits of state using cryptographic random numbers. If you create a ChaosRNG and keep it around for later, then you can</span>
+<span class="source-line-no">013</span><span id="line.13"> * pass it to the RNG constructor and later call randomize() on the ChaosRNG if you suspect it may be becoming</span>
+<span class="source-line-no">014</span><span id="line.14"> * predictable. The period on this RNG is preposterously large, since it involves a pair of IsaacRNGs as well as other</span>
+<span class="source-line-no">015</span><span id="line.15"> * random state, so predicting it may be essentially impossible unless the user can poke around in the application, use</span>
+<span class="source-line-no">016</span><span id="line.16"> * reflection, and so on.</span>
+<span class="source-line-no">017</span><span id="line.17"> * Created by Tommy Ettinger on 3/17/2016.</span>
+<span class="source-line-no">018</span><span id="line.18"> */</span>
+<span class="source-line-no">019</span><span id="line.19">public class ChaosRNG implements RandomnessSource{</span>
+<span class="source-line-no">020</span><span id="line.20"></span>
+<span class="source-line-no">021</span><span id="line.21">    private transient long[] z;</span>
+<span class="source-line-no">022</span><span id="line.22">    private transient int choice;</span>
+<span class="source-line-no">023</span><span id="line.23">    private transient IsaacRNG r0, r1;</span>
+<span class="source-line-no">024</span><span id="line.24">    private static final long serialVersionUID = -254415589291474491L;</span>
+<span class="source-line-no">025</span><span id="line.25"></span>
+<span class="source-line-no">026</span><span id="line.26">    private long determine()</span>
+<span class="source-line-no">027</span><span id="line.27">    {</span>
+<span class="source-line-no">028</span><span id="line.28">        long state = (z[(choice += 0xC6BC278D) &gt;&gt;&gt; 28] += 0x9E3779B97F4A7C15L ^ choice * 0x2C9277B5000000L);</span>
+<span class="source-line-no">029</span><span id="line.29">        state = (state ^ state &gt;&gt;&gt; 26) * 0x2545F4914F6CDD1DL;</span>
+<span class="source-line-no">030</span><span id="line.30">        return state ^ state &gt;&gt;&gt; 28;</span>
+<span class="source-line-no">031</span><span id="line.31"></span>
+<span class="source-line-no">032</span><span id="line.32">    }</span>
+<span class="source-line-no">033</span><span id="line.33">    /**</span>
+<span class="source-line-no">034</span><span id="line.34">     * Builds a ChaosRNG with a fairly-random seed derived from somewhat-OK sources of non-seed randomness, such as time</span>
+<span class="source-line-no">035</span><span id="line.35">     * before and after garbage collection. We're forced to use sub-par techniques here due to GWT not supporting any</span>
+<span class="source-line-no">036</span><span id="line.36">     * better methods. Future random generation uses less secure methods but should still make it extremely difficult to</span>
+<span class="source-line-no">037</span><span id="line.37">     * "divine" the future RNG results from the outputs.</span>
+<span class="source-line-no">038</span><span id="line.38">     */</span>
+<span class="source-line-no">039</span><span id="line.39">    public ChaosRNG()</span>
+<span class="source-line-no">040</span><span id="line.40">    {</span>
+<span class="source-line-no">041</span><span id="line.41">        z = new long[16];</span>
+<span class="source-line-no">042</span><span id="line.42">        // produces some garbage; this is intentional</span>
+<span class="source-line-no">043</span><span id="line.43">        String s = StringKit.hexHash(System.currentTimeMillis(), System.identityHashCode(this), System.identityHashCode(z));</span>
+<span class="source-line-no">044</span><span id="line.44">        s += StringKit.LATIN_LETTERS_LOWER;</span>
+<span class="source-line-no">045</span><span id="line.45">        // sway causes most of the state of Math's Random field to be non-visible in the output</span>
+<span class="source-line-no">046</span><span id="line.46">        s += NumberTools.sway((126.621 + Math.random()) * (17.71 - Math.random()) + (71.17 * Math.random()));</span>
+<span class="source-line-no">047</span><span id="line.47">        // this should take some time because of the earlier garbage</span>
+<span class="source-line-no">048</span><span id="line.48">        System.gc();</span>
+<span class="source-line-no">049</span><span id="line.49">        // so this should have a better chance of being different.</span>
+<span class="source-line-no">050</span><span id="line.50">        s += System.currentTimeMillis();</span>
+<span class="source-line-no">051</span><span id="line.51">        r0 = new IsaacRNG(s);</span>
+<span class="source-line-no">052</span><span id="line.52">        r1 = new IsaacRNG(r0.nextBlock());</span>
+<span class="source-line-no">053</span><span id="line.53">        r1.fillBlock(z);</span>
+<span class="source-line-no">054</span><span id="line.54">        choice = r0.next(32);</span>
+<span class="source-line-no">055</span><span id="line.55">    }</span>
+<span class="source-line-no">056</span><span id="line.56"></span>
+<span class="source-line-no">057</span><span id="line.57">    @Override</span>
+<span class="source-line-no">058</span><span id="line.58">    public final int next( int bits ) {</span>
+<span class="source-line-no">059</span><span id="line.59">        return (int)( nextLong() &amp; ( 1L &lt;&lt; bits ) - 1 );</span>
+<span class="source-line-no">060</span><span id="line.60">    }</span>
+<span class="source-line-no">061</span><span id="line.61"></span>
+<span class="source-line-no">062</span><span id="line.62">    /**</span>
+<span class="source-line-no">063</span><span id="line.63">     * Can return any long, positive or negative, of any size permissible in a 64-bit signed integer.</span>
+<span class="source-line-no">064</span><span id="line.64">     * @return any long, all 64 bits are random</span>
+<span class="source-line-no">065</span><span id="line.65">     */</span>
+<span class="source-line-no">066</span><span id="line.66">    @Override</span>
+<span class="source-line-no">067</span><span id="line.67">    public final long nextLong() {</span>
+<span class="source-line-no">068</span><span id="line.68">        long rot = (determine() &amp; 31) + 12;</span>
+<span class="source-line-no">069</span><span id="line.69">        return r0.nextLong() &lt;&lt; rot ^ r1.nextLong() &gt;&gt;&gt; 45 - rot;</span>
+<span class="source-line-no">070</span><span id="line.70">    }</span>
+<span class="source-line-no">071</span><span id="line.71"></span>
+<span class="source-line-no">072</span><span id="line.72">    /**</span>
+<span class="source-line-no">073</span><span id="line.73">     * Produces another ChaosRNG with no relation to this one; this breaks the normal rules that RandomnessSource.copy</span>
+<span class="source-line-no">074</span><span id="line.74">     * abides by because this class should never have its generated number sequence be predictable.</span>
+<span class="source-line-no">075</span><span id="line.75">     * @return a new, unrelated ChaosRNG as a RandomnessSource</span>
+<span class="source-line-no">076</span><span id="line.76">     */</span>
+<span class="source-line-no">077</span><span id="line.77">    @Override</span>
+<span class="source-line-no">078</span><span id="line.78">    public ChaosRNG copy() {</span>
+<span class="source-line-no">079</span><span id="line.79">        return new ChaosRNG();</span>
+<span class="source-line-no">080</span><span id="line.80">    }</span>
+<span class="source-line-no">081</span><span id="line.81"></span>
+<span class="source-line-no">082</span><span id="line.82">    /**</span>
+<span class="source-line-no">083</span><span id="line.83">     * Changes the internal state to a new, fully-random version that should have no relation to the previous state.</span>
+<span class="source-line-no">084</span><span id="line.84">     * May be somewhat slow; you shouldn't need to call this often.</span>
+<span class="source-line-no">085</span><span id="line.85">     */</span>
+<span class="source-line-no">086</span><span id="line.86">    public void randomize()</span>
+<span class="source-line-no">087</span><span id="line.87">    {</span>
+<span class="source-line-no">088</span><span id="line.88">        String s = System.currentTimeMillis() + "0" + System.identityHashCode(this);</span>
+<span class="source-line-no">089</span><span id="line.89">        s += StringKit.LATIN_LETTERS_LOWER;</span>
+<span class="source-line-no">090</span><span id="line.90">        System.gc();</span>
+<span class="source-line-no">091</span><span id="line.91">        s += System.currentTimeMillis();</span>
+<span class="source-line-no">092</span><span id="line.92">        r0.init(s);</span>
+<span class="source-line-no">093</span><span id="line.93">        r1.init(r0.nextBlock());</span>
+<span class="source-line-no">094</span><span id="line.94">        r1.fillBlock(z);</span>
+<span class="source-line-no">095</span><span id="line.95">        choice = r0.next(32);</span>
+<span class="source-line-no">096</span><span id="line.96">    }</span>
+<span class="source-line-no">097</span><span id="line.97"></span>
+<span class="source-line-no">098</span><span id="line.98">    @Override</span>
+<span class="source-line-no">099</span><span id="line.99">    public String toString() {</span>
+<span class="source-line-no">100</span><span id="line.100">        return "ChaosRNG with hidden state (id is " + System.identityHashCode(this) + ')';</span>
+<span class="source-line-no">101</span><span id="line.101">    }</span>
+<span class="source-line-no">102</span><span id="line.102">}</span>
 
 
 

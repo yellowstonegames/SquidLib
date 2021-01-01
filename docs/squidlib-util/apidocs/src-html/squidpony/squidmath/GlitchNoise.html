@@ -7,210 +7,210 @@
 <meta name="generator" content="javadoc/SourceToHTMLConverter">
 <link rel="stylesheet" type="text/css" href="../../../stylesheet.css" title="Style">
 </head>
-<body class="source">
+<body class="source-page">
 <main role="main">
-<div class="sourceContainer">
-<pre><span class="sourceLineNo">001</span><a id="line.1">package squidpony.squidmath;</a>
-<span class="sourceLineNo">002</span><a id="line.2"></a>
-<span class="sourceLineNo">003</span><a id="line.3">/**</a>
-<span class="sourceLineNo">004</span><a id="line.4"> * A noise generator for 1D, 2D, 3D, 4D, or 6D noise that should look "glitchy", with waves of changing values moving</a>
-<span class="sourceLineNo">005</span><a id="line.5"> * through triangular shapes. Intended for aesthetic purposes where something needs to look inorganic, unlike Perlin</a>
-<span class="sourceLineNo">006</span><a id="line.6"> * or Simplex noise.</a>
-<span class="sourceLineNo">007</span><a id="line.7"> */</a>
-<span class="sourceLineNo">008</span><a id="line.8">public class GlitchNoise implements Noise.Noise1D, Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, Noise.Noise6D {</a>
-<span class="sourceLineNo">009</span><a id="line.9"></a>
-<span class="sourceLineNo">010</span><a id="line.10">    public static final GlitchNoise instance = new GlitchNoise();</a>
-<span class="sourceLineNo">011</span><a id="line.11">    public static double zigzagRandomized(long seed, double value)</a>
-<span class="sourceLineNo">012</span><a id="line.12">    {</a>
-<span class="sourceLineNo">013</span><a id="line.13">        final long floor = value &gt;= 0.0 ? (long) value : (long) value - 1L;</a>
-<span class="sourceLineNo">014</span><a id="line.14">        final double start = (((seed += floor * 0x6C8E9CF570932BD5L) ^ (seed &gt;&gt;&gt; 25)) * (seed | 0xA529L)) * 0x0.fffffffffffffbp-62,</a>
-<span class="sourceLineNo">015</span><a id="line.15">                end = (((seed += 0x6C8E9CF570932BD5L) ^ (seed &gt;&gt;&gt; 25)) * (seed | 0xA529L)) * 0x0.fffffffffffffbp-62;</a>
-<span class="sourceLineNo">016</span><a id="line.16">        value -= floor;</a>
-<span class="sourceLineNo">017</span><a id="line.17">//        value *= value * (3.0 - 2.0 * value);</a>
-<span class="sourceLineNo">018</span><a id="line.18">        return (1.0 - value) * start + value * end;</a>
-<span class="sourceLineNo">019</span><a id="line.19">    }</a>
-<span class="sourceLineNo">020</span><a id="line.20"></a>
-<span class="sourceLineNo">021</span><a id="line.21">    public GlitchNoise()</a>
-<span class="sourceLineNo">022</span><a id="line.22">    {</a>
-<span class="sourceLineNo">023</span><a id="line.23">    }</a>
-<span class="sourceLineNo">024</span><a id="line.24">    @Override</a>
-<span class="sourceLineNo">025</span><a id="line.25">    public double getNoise(final double x) {</a>
-<span class="sourceLineNo">026</span><a id="line.26">        return getNoiseWithSeed(x, 0xAEF17502108EF2D9L);</a>
-<span class="sourceLineNo">027</span><a id="line.27">//        return NumberTools.randomSignedDouble((((long)(x + zigzagRandomized(0xAEF17502108EF2D9L, -x)) * 0x6C8E9CF570932BD5L</a>
-<span class="sourceLineNo">028</span><a id="line.28">//        ) &gt;&gt;&gt; 32));</a>
-<span class="sourceLineNo">029</span><a id="line.29"></a>
-<span class="sourceLineNo">030</span><a id="line.30">//        return NumberTools.bounce(</a>
-<span class="sourceLineNo">031</span><a id="line.31">//                TangleRNG.determine((long)(x*0x0.9E3779B9p4 - x*0x0.8329C6DFp3 + x*0x0.953976F9p2))</a>
-<span class="sourceLineNo">032</span><a id="line.32">//                        ^ TangleRNG.determine((long)(x*0x0.953976F9p4 + x*0x0.8329C6DFp3 - x*0x0.9E3779B9p2)));</a>
-<span class="sourceLineNo">033</span><a id="line.33">    }</a>
-<span class="sourceLineNo">034</span><a id="line.34">    @Override</a>
-<span class="sourceLineNo">035</span><a id="line.35">    public double getNoiseWithSeed(final double x, final long seed) {</a>
-<span class="sourceLineNo">036</span><a id="line.36">        return NumberTools.randomSignedDouble((((long)(x + zigzagRandomized(seed, -x)) * 0x6C8E9CF570932BD5L</a>
-<span class="sourceLineNo">037</span><a id="line.37">                ) &gt;&gt;&gt; 32) ^ seed);</a>
-<span class="sourceLineNo">038</span><a id="line.38"></a>
-<span class="sourceLineNo">039</span><a id="line.39">//        return NumberTools.bounce(</a>
-<span class="sourceLineNo">040</span><a id="line.40">//                TangleRNG.determine((long)(x*0x0.9E3779B9p4 - x*0x0.8329C6DFp3 + x*0x0.953976F9p2) + (seed &amp; 0xA5A5A5A5))</a>
-<span class="sourceLineNo">041</span><a id="line.41">//                        ^ TangleRNG.determine((long)(x*0x0.953976F9p4 + x*0x0.8329C6DFp3 - x*0x0.9E3779B9p2) + (seed &amp; 0x5A5A5A5A)));</a>
-<span class="sourceLineNo">042</span><a id="line.42">    }</a>
-<span class="sourceLineNo">043</span><a id="line.43">    @Override</a>
-<span class="sourceLineNo">044</span><a id="line.44">    public double getNoise(final double x, final double y) {</a>
-<span class="sourceLineNo">045</span><a id="line.45">        return getNoiseWithSeed(x, y, 0xAEF17502108EF2D9L);//        return NumberTools.bounce(</a>
-<span class="sourceLineNo">046</span><a id="line.46">//                TangleRNG.determine((long)(x*0x0.9E3779B9p4 + y*0x0.8329C6DFp3 - x*0x0.953976F9p2))</a>
-<span class="sourceLineNo">047</span><a id="line.47">//                        ^ TangleRNG.determine((long)(y*0x0.953976F9p4 + x*0x0.9E3779B9p3 - y*0x0.8329C6DFp2))</a>
-<span class="sourceLineNo">048</span><a id="line.48">//                        ^ TangleRNG.determine((long)(x*0x0.85157AF5p4 - y*0x2.9E3779B9p2 + x*0x4.953976F9p0))</a>
-<span class="sourceLineNo">049</span><a id="line.49">//                        ^ TangleRNG.determine((long)(y*0x0.953976F9p4 - x*0x2.8329C6DFp2 + y*0x4.85157AF5p0)));</a>
-<span class="sourceLineNo">050</span><a id="line.50">    }</a>
-<span class="sourceLineNo">051</span><a id="line.51">    @Override</a>
-<span class="sourceLineNo">052</span><a id="line.52">    public double getNoiseWithSeed(final double x, final double y, final long seed) {</a>
-<span class="sourceLineNo">053</span><a id="line.53">        return NumberTools.randomSignedDouble((((long)(x + zigzagRandomized(seed, y)) * 0x6C8E9CF570932BD5L</a>
-<span class="sourceLineNo">054</span><a id="line.54">                ^ (long)(y + zigzagRandomized(seed + 0xAEF17502108EF2D9L, x)) * 0x9E3779B97F4A7C15L) &gt;&gt;&gt; 32)</a>
-<span class="sourceLineNo">055</span><a id="line.55">                ^ seed);</a>
-<span class="sourceLineNo">056</span><a id="line.56">//        return NumberTools.bounce(</a>
-<span class="sourceLineNo">057</span><a id="line.57">//                TangleRNG.determine((long)(x*0x0.9E3779B9p4 + y*0x0.8329C6DFp3 - x*0x0.953976F9p2) + (seed &amp; 0xA5A5A5A5))</a>
-<span class="sourceLineNo">058</span><a id="line.58">//                        ^ TangleRNG.determine((long)(y*0x0.953976F9p4 + x*0x0.9E3779B9p3 - y*0x0.8329C6DFp2) + (seed &amp; 0x5A5A5A5A))</a>
-<span class="sourceLineNo">059</span><a id="line.59">//                        ^ TangleRNG.determine((long)(x*0x0.85157AF5p4 - y*0x2.9E3779B9p2 - x*0x4.953976F9p0) + (seed &amp; 0x3C3C3C3C))</a>
-<span class="sourceLineNo">060</span><a id="line.60">//                        ^ TangleRNG.determine((long)(y*0x0.953976F9p4 - x*0x2.8329C6DFp2 - y*0x4.85157AF5p0) + (seed &amp; 0xC3C3C3C3)));</a>
-<span class="sourceLineNo">061</span><a id="line.61">    }</a>
-<span class="sourceLineNo">062</span><a id="line.62">    @Override</a>
-<span class="sourceLineNo">063</span><a id="line.63">    public double getNoise(final double x, final double y, final double z) {</a>
-<span class="sourceLineNo">064</span><a id="line.64">        return getNoiseWithSeed(x, y, z, 0xAEF17502108EF2D9L);//        return NumberTools.randomSignedDouble(NumberTools.doubleToLongBits(x) * 0x9E3779B97F4A7C15L</a>
-<span class="sourceLineNo">065</span><a id="line.65">//                + NumberTools.doubleToLongBits(y) * 0x6C8E9CF570932BD5L</a>
-<span class="sourceLineNo">066</span><a id="line.66">//                + NumberTools.doubleToLongBits(z) * 0xC6BC279692B5CC85L);</a>
-<span class="sourceLineNo">067</span><a id="line.67">//        return NumberTools.bounce(</a>
-<span class="sourceLineNo">068</span><a id="line.68">//                TangleRNG.determine((long)(x*0x0.9E3779B9p4 + y*0x0.8329C6DFp3 + z*0x0.953976F9p2))</a>
-<span class="sourceLineNo">069</span><a id="line.69">//                        ^ TangleRNG.determine((long)(y*0x0.953976F9p4 + z*0x0.9E3779B9p3 + x*0x0.8329C6DFp2))</a>
-<span class="sourceLineNo">070</span><a id="line.70">//                        ^ TangleRNG.determine((long)(z*0x0.8329C6DFp4 + x*0x0.953976F9p3 + y*0x0.9E3779B9p2))</a>
-<span class="sourceLineNo">071</span><a id="line.71">//                        ^ TangleRNG.determine((long)(x*0x0.85157AF5p4 - y*0x2.9E3779B9p1 - z*0x3.953976F9p0))</a>
-<span class="sourceLineNo">072</span><a id="line.72">//                        ^ TangleRNG.determine((long)(y*0x0.85157AF5p4 - z*0x2.8329C6DFp1 - y*0x3.9E3779B9p0))</a>
-<span class="sourceLineNo">073</span><a id="line.73">//                        ^ TangleRNG.determine((long)(z+0x0.85157AF5p4 - x*0x2.953976F9p1 - y*0x3.8329C6DFp0)));</a>
-<span class="sourceLineNo">074</span><a id="line.74">    }</a>
-<span class="sourceLineNo">075</span><a id="line.75">    @Override</a>
-<span class="sourceLineNo">076</span><a id="line.76">    public double getNoiseWithSeed(final double x, final double y, final double z, final long seed) {</a>
-<span class="sourceLineNo">077</span><a id="line.77">        return NumberTools.randomSignedDouble((((long)(x + zigzagRandomized(seed, y) + zigzagRandomized(seed, z)) * 0x6C8E9CF570932BD5L</a>
-<span class="sourceLineNo">078</span><a id="line.78">                ^ (long)(y + zigzagRandomized(seed + 0xAEF17502108EF2D9L, x) + zigzagRandomized(seed + 0xAEF17502108EF2D9L, z)) * 0x9E3779B97F4A7C15L</a>
-<span class="sourceLineNo">079</span><a id="line.79">                ^ (long)(z + zigzagRandomized(seed + 0x5DE2EA04211DE5B2L, x) + zigzagRandomized(seed + 0x5DE2EA04211DE5B2L, y)) * 0xC6BC279692B5CC85L</a>
-<span class="sourceLineNo">080</span><a id="line.80">        ) &gt;&gt;&gt; 32)</a>
-<span class="sourceLineNo">081</span><a id="line.81">                ^ seed);</a>
-<span class="sourceLineNo">082</span><a id="line.82">//        return NumberTools.randomSignedDouble(NumberTools.doubleToLongBits(x) * 0x9E3779B97F4A7C15L</a>
-<span class="sourceLineNo">083</span><a id="line.83">//                + NumberTools.doubleToLongBits(y) * 0x6C8E9CF570932BD5L</a>
-<span class="sourceLineNo">084</span><a id="line.84">//                + NumberTools.doubleToLongBits(z) * 0xC6BC279692B5CC85L </a>
-<span class="sourceLineNo">085</span><a id="line.85">//                ^ seed);</a>
-<span class="sourceLineNo">086</span><a id="line.86">//        return NumberTools.bounce(</a>
-<span class="sourceLineNo">087</span><a id="line.87">//                TangleRNG.determine((long)(x*0x0.9E3779B9p4 + y*0x0.8329C6DFp3 + z*0x0.953976F9p2) + (seed &amp; 0x24924924))</a>
-<span class="sourceLineNo">088</span><a id="line.88">//                        ^ TangleRNG.determine((long)(y*0x0.953976F9p4 + z*0x0.9E3779B9p3 + x*0x0.8329C6DFp2) + (seed &amp; 0x49249249))</a>
-<span class="sourceLineNo">089</span><a id="line.89">//                        ^ TangleRNG.determine((long)(z*0x0.8329C6DFp4 + x*0x0.953976F9p3 + y*0x0.9E3779B9p2) + (seed &amp; 0x92492492))</a>
-<span class="sourceLineNo">090</span><a id="line.90">//                        ^ TangleRNG.determine((long)(x*0x0.85157AF5p4 - y*0x2.9E3779B9p1 - z*0x3.953976F9p0) + (seed &amp; 0x49249249))</a>
-<span class="sourceLineNo">091</span><a id="line.91">//                        ^ TangleRNG.determine((long)(y*0x0.85157AF5p4 - z*0x2.8329C6DFp1 - y*0x3.9E3779B9p0) + (seed &amp; 0x92492492))</a>
-<span class="sourceLineNo">092</span><a id="line.92">//                        ^ TangleRNG.determine((long)(z+0x0.85157AF5p4 - x*0x2.953976F9p1 - y*0x3.8329C6DFp0) + (seed &amp; 0x24924924)));</a>
-<span class="sourceLineNo">093</span><a id="line.93">    }</a>
-<span class="sourceLineNo">094</span><a id="line.94">    @Override</a>
-<span class="sourceLineNo">095</span><a id="line.95">    public double getNoise(final double x, final double y, final double z, final double w) {</a>
-<span class="sourceLineNo">096</span><a id="line.96">        return getNoiseWithSeed(x, y, z, w, 0xAEF17502108EF2D9L);</a>
-<span class="sourceLineNo">097</span><a id="line.97">        //        return NumberTools.bounce(</a>
-<span class="sourceLineNo">098</span><a id="line.98">//                (TangleRNG.determine((long)(x*0x0.9E3779B9p4 + y*0x0.8329C6DFp3 + w*0x0.953976F9p2))</a>
-<span class="sourceLineNo">099</span><a id="line.99">//                        ^ TangleRNG.determine((long)(y*0x0.85157AF5p4 + z*0x0.9E3779B9p3 + x*0x0.8329C6DFp2))</a>
-<span class="sourceLineNo">100</span><a id="line.100">//                        ^ TangleRNG.determine((long)(z*0x0.953976F9p4 + w*0x0.85157AF5p3 + y*0x0.9E3779B9p2))</a>
-<span class="sourceLineNo">101</span><a id="line.101">//                        ^ TangleRNG.determine((long)(w*0x0.8329C6DFp4 + x*0x0.953976F9p3 + z*0x0.85157AF5p2))</a>
-<span class="sourceLineNo">102</span><a id="line.102">//                ));</a>
-<span class="sourceLineNo">103</span><a id="line.103">    }</a>
-<span class="sourceLineNo">104</span><a id="line.104">    @Override</a>
-<span class="sourceLineNo">105</span><a id="line.105">    public double getNoiseWithSeed(final double x, final double y, final double z, final double w, final long seed) {</a>
-<span class="sourceLineNo">106</span><a id="line.106">        return NumberTools.randomSignedDouble((((long)(x </a>
-<span class="sourceLineNo">107</span><a id="line.107">                + zigzagRandomized(seed, y) </a>
-<span class="sourceLineNo">108</span><a id="line.108">                + zigzagRandomized(seed, z) </a>
-<span class="sourceLineNo">109</span><a id="line.109">                + zigzagRandomized(seed, w)) * 0x6C8E9CF570932BD5L</a>
-<span class="sourceLineNo">110</span><a id="line.110">                ^ (long)(y</a>
-<span class="sourceLineNo">111</span><a id="line.111">                + zigzagRandomized(seed + 0xAEF17502108EF2D9L, x)</a>
-<span class="sourceLineNo">112</span><a id="line.112">                + zigzagRandomized(seed + 0xAEF17502108EF2D9L, z)</a>
-<span class="sourceLineNo">113</span><a id="line.113">                + zigzagRandomized(seed + 0xAEF17502108EF2D9L, w)) * 0x9E3779B97F4A7C15L</a>
-<span class="sourceLineNo">114</span><a id="line.114">                ^ (long)(z</a>
-<span class="sourceLineNo">115</span><a id="line.115">                + zigzagRandomized(seed + 0x5DE2EA04211DE5B2L, x)</a>
-<span class="sourceLineNo">116</span><a id="line.116">                + zigzagRandomized(seed + 0x5DE2EA04211DE5B2L, y)</a>
-<span class="sourceLineNo">117</span><a id="line.117">                + zigzagRandomized(seed + 0x5DE2EA04211DE5B2L, w)) * 0xC6BC279692B5CC85L</a>
-<span class="sourceLineNo">118</span><a id="line.118">                ^ (long)(w</a>
-<span class="sourceLineNo">119</span><a id="line.119">                + zigzagRandomized(seed + 0x0CD45F0631ACD88BL, x)</a>
-<span class="sourceLineNo">120</span><a id="line.120">                + zigzagRandomized(seed + 0x0CD45F0631ACD88BL, y)</a>
-<span class="sourceLineNo">121</span><a id="line.121">                + zigzagRandomized(seed + 0x0CD45F0631ACD88BL, z)) * 0x352E9CF570932BDDL</a>
-<span class="sourceLineNo">122</span><a id="line.122">        ) &gt;&gt;&gt; 32)</a>
-<span class="sourceLineNo">123</span><a id="line.123">                ^ seed);</a>
-<span class="sourceLineNo">124</span><a id="line.124"></a>
-<span class="sourceLineNo">125</span><a id="line.125">//        return NumberTools.bounce(</a>
-<span class="sourceLineNo">126</span><a id="line.126">//                (TangleRNG.determine((long)(x*0x0.9E3779B9p4 + y*0x0.8329C6DFp3 + w*0x0.953976F9p2) + (seed &amp; 0x81818181))</a>
-<span class="sourceLineNo">127</span><a id="line.127">//                        ^ TangleRNG.determine((long)(y*0x0.85157AF5p4 + z*0x0.9E3779B9p3 + x*0x0.8329C6DFp2) + (seed &amp; 0x18181818))</a>
-<span class="sourceLineNo">128</span><a id="line.128">//                        ^ TangleRNG.determine((long)(z*0x0.953976F9p4 + w*0x0.85157AF5p3 + y*0x0.9E3779B9p2) + (seed &amp; 0x42424242))</a>
-<span class="sourceLineNo">129</span><a id="line.129">//                        ^ TangleRNG.determine((long)(w*0x0.8329C6DFp4 + x*0x0.953976F9p3 + z*0x0.85157AF5p2) + (seed &amp; 0x24242424))</a>
-<span class="sourceLineNo">130</span><a id="line.130">//                        ));</a>
-<span class="sourceLineNo">131</span><a id="line.131">    }</a>
-<span class="sourceLineNo">132</span><a id="line.132">    @Override</a>
-<span class="sourceLineNo">133</span><a id="line.133">    public double getNoise(final double x, final double y, final double z, final double w, final double u, final double v) {</a>
-<span class="sourceLineNo">134</span><a id="line.134">        return getNoiseWithSeed(x, y, z, w, u, v, 0xAEF17502108EF2D9L);</a>
-<span class="sourceLineNo">135</span><a id="line.135"></a>
-<span class="sourceLineNo">136</span><a id="line.136">//        return NumberTools.bounce(</a>
-<span class="sourceLineNo">137</span><a id="line.137">//                (TangleRNG.determine((long)(x*0x0.9E3779B9p4 + y*0x0.8329C6DFp3 + z*0x0.953976F9p2 + w*0x0.85157AF5p1))</a>
-<span class="sourceLineNo">138</span><a id="line.138">//                        ^ TangleRNG.determine((long)(y*0x0.712BE5ABp4 + z*0x0.9E3779B9p3 + x*0x0.8329C6DFp2 + u*0x0.953976F9p1))</a>
-<span class="sourceLineNo">139</span><a id="line.139">//                        ^ TangleRNG.determine((long)(z*0x0.85157AF5p4 + x*0x0.712BE5ABp3 + y*0x0.9E3779B9p2 + v*0x0.8329C6DFp1))</a>
-<span class="sourceLineNo">140</span><a id="line.140">//                        ^ TangleRNG.determine((long)(w*0x0.953976F9p4 + u*0x0.85157AF5p3 + v*0x0.712BE5ABp2 + x*0x0.9E3779B9p1))</a>
-<span class="sourceLineNo">141</span><a id="line.141">//                        ^ TangleRNG.determine((long)(u*0x0.8329C6DFp4 + v*0x0.953976F9p3 + w*0x0.85157AF5p2 + y*0x0.712BE5ABp1))</a>
-<span class="sourceLineNo">142</span><a id="line.142">//                        ^ TangleRNG.determine((long)(v*0x0.9E3779B9p4 + w*0x0.8329C6DFp3 + u*0x0.953976F9p2 + z*0x0.85157AF5p1))));</a>
-<span class="sourceLineNo">143</span><a id="line.143">    }</a>
-<span class="sourceLineNo">144</span><a id="line.144">    @Override</a>
-<span class="sourceLineNo">145</span><a id="line.145">    public double getNoiseWithSeed(final double x, final double y, final double z, final double w, final double u, final double v, final long seed) {</a>
-<span class="sourceLineNo">146</span><a id="line.146">//        return NumberTools.randomSignedDouble((((long)(x + zigzagRandomized(seed, y)) * 0x6C8E9CF570932BD5L</a>
-<span class="sourceLineNo">147</span><a id="line.147">//                ^ (long)(y + zigzagRandomized(seed + 0xAEF17502108EF2D9L, z)) * 0x9E3779B97F4A7C15L</a>
-<span class="sourceLineNo">148</span><a id="line.148">//                ^ (long)(z + zigzagRandomized(seed + 0x5DE2EA04211DE5B2L, w)) * 0xC6BC279692B5CC85L</a>
-<span class="sourceLineNo">149</span><a id="line.149">//                ^ (long)(w + zigzagRandomized(seed + 0x0CD45F0631ACD88BL, u)) * 0x352E9CF570932BDDL</a>
-<span class="sourceLineNo">150</span><a id="line.150">//                ^ (long)(u + zigzagRandomized(seed + 0xBBC5D408423BCB64L, v)) * 0x5851F42D4C957F2DL</a>
-<span class="sourceLineNo">151</span><a id="line.151">//                ^ (long)(v + zigzagRandomized(seed + 0x6AB7490A52CABE3DL, x)) * 0x2545F4914F6CDD1DL</a>
-<span class="sourceLineNo">152</span><a id="line.152">//        ) &gt;&gt;&gt; 32)</a>
-<span class="sourceLineNo">153</span><a id="line.153">//                ^ seed);</a>
-<span class="sourceLineNo">154</span><a id="line.154">        return NumberTools.randomSignedDouble((((long)(x</a>
-<span class="sourceLineNo">155</span><a id="line.155">                + zigzagRandomized(seed, y)</a>
-<span class="sourceLineNo">156</span><a id="line.156">                + zigzagRandomized(seed, z)</a>
-<span class="sourceLineNo">157</span><a id="line.157">                + zigzagRandomized(seed, w)</a>
-<span class="sourceLineNo">158</span><a id="line.158">                + zigzagRandomized(seed, u)</a>
-<span class="sourceLineNo">159</span><a id="line.159">                + zigzagRandomized(seed, v)) * 0x6C8E9CF570932BD5L</a>
-<span class="sourceLineNo">160</span><a id="line.160">                ^ (long)(y</a>
-<span class="sourceLineNo">161</span><a id="line.161">                + zigzagRandomized(seed + 0xAEF17502108EF2D9L, x)</a>
-<span class="sourceLineNo">162</span><a id="line.162">                + zigzagRandomized(seed + 0xAEF17502108EF2D9L, z)</a>
-<span class="sourceLineNo">163</span><a id="line.163">                + zigzagRandomized(seed + 0xAEF17502108EF2D9L, w)</a>
-<span class="sourceLineNo">164</span><a id="line.164">                + zigzagRandomized(seed + 0xAEF17502108EF2D9L, u)</a>
-<span class="sourceLineNo">165</span><a id="line.165">                + zigzagRandomized(seed + 0xAEF17502108EF2D9L, v)) * 0x9E3779B97F4A7C15L</a>
-<span class="sourceLineNo">166</span><a id="line.166">                ^ (long)(z</a>
-<span class="sourceLineNo">167</span><a id="line.167">                + zigzagRandomized(seed + 0x5DE2EA04211DE5B2L, x)</a>
-<span class="sourceLineNo">168</span><a id="line.168">                + zigzagRandomized(seed + 0x5DE2EA04211DE5B2L, y)</a>
-<span class="sourceLineNo">169</span><a id="line.169">                + zigzagRandomized(seed + 0x5DE2EA04211DE5B2L, w)</a>
-<span class="sourceLineNo">170</span><a id="line.170">                + zigzagRandomized(seed + 0x5DE2EA04211DE5B2L, u)</a>
-<span class="sourceLineNo">171</span><a id="line.171">                + zigzagRandomized(seed + 0x5DE2EA04211DE5B2L, v)) * 0xC6BC279692B5CC85L</a>
-<span class="sourceLineNo">172</span><a id="line.172">                ^ (long)(w</a>
-<span class="sourceLineNo">173</span><a id="line.173">                + zigzagRandomized(seed + 0x0CD45F0631ACD88BL, x)</a>
-<span class="sourceLineNo">174</span><a id="line.174">                + zigzagRandomized(seed + 0x0CD45F0631ACD88BL, y)</a>
-<span class="sourceLineNo">175</span><a id="line.175">                + zigzagRandomized(seed + 0x0CD45F0631ACD88BL, z)</a>
-<span class="sourceLineNo">176</span><a id="line.176">                + zigzagRandomized(seed + 0x0CD45F0631ACD88BL, u)</a>
-<span class="sourceLineNo">177</span><a id="line.177">                + zigzagRandomized(seed + 0x0CD45F0631ACD88BL, v)) * 0x352E9CF570932BDDL</a>
-<span class="sourceLineNo">178</span><a id="line.178">                ^ (long)(u</a>
-<span class="sourceLineNo">179</span><a id="line.179">                + zigzagRandomized(seed + 0xBBC5D408423BCB64L, x)</a>
-<span class="sourceLineNo">180</span><a id="line.180">                + zigzagRandomized(seed + 0xBBC5D408423BCB64L, y)</a>
-<span class="sourceLineNo">181</span><a id="line.181">                + zigzagRandomized(seed + 0xBBC5D408423BCB64L, z)</a>
-<span class="sourceLineNo">182</span><a id="line.182">                + zigzagRandomized(seed + 0xBBC5D408423BCB64L, w)</a>
-<span class="sourceLineNo">183</span><a id="line.183">                + zigzagRandomized(seed + 0xBBC5D408423BCB64L, v)) * 0x5851F42D4C957F2DL</a>
-<span class="sourceLineNo">184</span><a id="line.184">                ^ (long)(v</a>
-<span class="sourceLineNo">185</span><a id="line.185">                + zigzagRandomized(seed + 0x6AB7490A52CABE3DL, x)</a>
-<span class="sourceLineNo">186</span><a id="line.186">                + zigzagRandomized(seed + 0x6AB7490A52CABE3DL, y)</a>
-<span class="sourceLineNo">187</span><a id="line.187">                + zigzagRandomized(seed + 0x6AB7490A52CABE3DL, z)</a>
-<span class="sourceLineNo">188</span><a id="line.188">                + zigzagRandomized(seed + 0x6AB7490A52CABE3DL, w)</a>
-<span class="sourceLineNo">189</span><a id="line.189">                + zigzagRandomized(seed + 0x6AB7490A52CABE3DL, u)) * 0x2545F4914F6CDD1DL</a>
-<span class="sourceLineNo">190</span><a id="line.190">        ) &gt;&gt;&gt; 32)</a>
-<span class="sourceLineNo">191</span><a id="line.191">                ^ seed);</a>
-<span class="sourceLineNo">192</span><a id="line.192"></a>
-<span class="sourceLineNo">193</span><a id="line.193">//        return NumberTools.bounce(</a>
-<span class="sourceLineNo">194</span><a id="line.194">//                (TangleRNG.determine((long)(x*0x0.9E3779B9p4 + y*0x0.8329C6DFp3 + z*0x0.953976F9p2 + w*0x0.85157AF5p1) + (seed &amp; 0x24924924))</a>
-<span class="sourceLineNo">195</span><a id="line.195">//                        ^ TangleRNG.determine((long)(y*0x0.712BE5ABp4 + z*0x0.9E3779B9p3 + x*0x0.8329C6DFp2 + u*0x0.953976F9p1) + (seed &amp; 0x49249249))</a>
-<span class="sourceLineNo">196</span><a id="line.196">//                        ^ TangleRNG.determine((long)(z*0x0.85157AF5p4 + x*0x0.712BE5ABp3 + y*0x0.9E3779B9p2 + v*0x0.8329C6DFp1) + (seed &amp; 0x92492492))</a>
-<span class="sourceLineNo">197</span><a id="line.197">//                        ^ TangleRNG.determine((long)(w*0x0.953976F9p4 + u*0x0.85157AF5p3 + v*0x0.712BE5ABp2 + x*0x0.9E3779B9p1) + (seed &amp; 0x24924924))</a>
-<span class="sourceLineNo">198</span><a id="line.198">//                        ^ TangleRNG.determine((long)(u*0x0.8329C6DFp4 + v*0x0.953976F9p3 + w*0x0.85157AF5p2 + y*0x0.712BE5ABp1) + (seed &amp; 0x49249249))</a>
-<span class="sourceLineNo">199</span><a id="line.199">//                        ^ TangleRNG.determine((long)(v*0x0.9E3779B9p4 + w*0x0.8329C6DFp3 + u*0x0.953976F9p2 + z*0x0.85157AF5p1) + (seed &amp; 0x92492492))));</a>
-<span class="sourceLineNo">200</span><a id="line.200">    }</a>
-<span class="sourceLineNo">201</span><a id="line.201">}</a>
+<div class="source-container">
+<pre><span class="source-line-no">001</span><span id="line.1">package squidpony.squidmath;</span>
+<span class="source-line-no">002</span><span id="line.2"></span>
+<span class="source-line-no">003</span><span id="line.3">/**</span>
+<span class="source-line-no">004</span><span id="line.4"> * A noise generator for 1D, 2D, 3D, 4D, or 6D noise that should look "glitchy", with waves of changing values moving</span>
+<span class="source-line-no">005</span><span id="line.5"> * through triangular shapes. Intended for aesthetic purposes where something needs to look inorganic, unlike Perlin</span>
+<span class="source-line-no">006</span><span id="line.6"> * or Simplex noise.</span>
+<span class="source-line-no">007</span><span id="line.7"> */</span>
+<span class="source-line-no">008</span><span id="line.8">public class GlitchNoise implements Noise.Noise1D, Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, Noise.Noise6D {</span>
+<span class="source-line-no">009</span><span id="line.9"></span>
+<span class="source-line-no">010</span><span id="line.10">    public static final GlitchNoise instance = new GlitchNoise();</span>
+<span class="source-line-no">011</span><span id="line.11">    public static double zigzagRandomized(long seed, double value)</span>
+<span class="source-line-no">012</span><span id="line.12">    {</span>
+<span class="source-line-no">013</span><span id="line.13">        final long floor = value &gt;= 0.0 ? (long) value : (long) value - 1L;</span>
+<span class="source-line-no">014</span><span id="line.14">        final double start = (((seed += floor * 0x6C8E9CF570932BD5L) ^ (seed &gt;&gt;&gt; 25)) * (seed | 0xA529L)) * 0x0.fffffffffffffbp-62,</span>
+<span class="source-line-no">015</span><span id="line.15">                end = (((seed += 0x6C8E9CF570932BD5L) ^ (seed &gt;&gt;&gt; 25)) * (seed | 0xA529L)) * 0x0.fffffffffffffbp-62;</span>
+<span class="source-line-no">016</span><span id="line.16">        value -= floor;</span>
+<span class="source-line-no">017</span><span id="line.17">//        value *= value * (3.0 - 2.0 * value);</span>
+<span class="source-line-no">018</span><span id="line.18">        return (1.0 - value) * start + value * end;</span>
+<span class="source-line-no">019</span><span id="line.19">    }</span>
+<span class="source-line-no">020</span><span id="line.20"></span>
+<span class="source-line-no">021</span><span id="line.21">    public GlitchNoise()</span>
+<span class="source-line-no">022</span><span id="line.22">    {</span>
+<span class="source-line-no">023</span><span id="line.23">    }</span>
+<span class="source-line-no">024</span><span id="line.24">    @Override</span>
+<span class="source-line-no">025</span><span id="line.25">    public double getNoise(final double x) {</span>
+<span class="source-line-no">026</span><span id="line.26">        return getNoiseWithSeed(x, 0xAEF17502108EF2D9L);</span>
+<span class="source-line-no">027</span><span id="line.27">//        return NumberTools.randomSignedDouble((((long)(x + zigzagRandomized(0xAEF17502108EF2D9L, -x)) * 0x6C8E9CF570932BD5L</span>
+<span class="source-line-no">028</span><span id="line.28">//        ) &gt;&gt;&gt; 32));</span>
+<span class="source-line-no">029</span><span id="line.29"></span>
+<span class="source-line-no">030</span><span id="line.30">//        return NumberTools.bounce(</span>
+<span class="source-line-no">031</span><span id="line.31">//                TangleRNG.determine((long)(x*0x0.9E3779B9p4 - x*0x0.8329C6DFp3 + x*0x0.953976F9p2))</span>
+<span class="source-line-no">032</span><span id="line.32">//                        ^ TangleRNG.determine((long)(x*0x0.953976F9p4 + x*0x0.8329C6DFp3 - x*0x0.9E3779B9p2)));</span>
+<span class="source-line-no">033</span><span id="line.33">    }</span>
+<span class="source-line-no">034</span><span id="line.34">    @Override</span>
+<span class="source-line-no">035</span><span id="line.35">    public double getNoiseWithSeed(final double x, final long seed) {</span>
+<span class="source-line-no">036</span><span id="line.36">        return NumberTools.randomSignedDouble((((long)(x + zigzagRandomized(seed, -x)) * 0x6C8E9CF570932BD5L</span>
+<span class="source-line-no">037</span><span id="line.37">                ) &gt;&gt;&gt; 32) ^ seed);</span>
+<span class="source-line-no">038</span><span id="line.38"></span>
+<span class="source-line-no">039</span><span id="line.39">//        return NumberTools.bounce(</span>
+<span class="source-line-no">040</span><span id="line.40">//                TangleRNG.determine((long)(x*0x0.9E3779B9p4 - x*0x0.8329C6DFp3 + x*0x0.953976F9p2) + (seed &amp; 0xA5A5A5A5))</span>
+<span class="source-line-no">041</span><span id="line.41">//                        ^ TangleRNG.determine((long)(x*0x0.953976F9p4 + x*0x0.8329C6DFp3 - x*0x0.9E3779B9p2) + (seed &amp; 0x5A5A5A5A)));</span>
+<span class="source-line-no">042</span><span id="line.42">    }</span>
+<span class="source-line-no">043</span><span id="line.43">    @Override</span>
+<span class="source-line-no">044</span><span id="line.44">    public double getNoise(final double x, final double y) {</span>
+<span class="source-line-no">045</span><span id="line.45">        return getNoiseWithSeed(x, y, 0xAEF17502108EF2D9L);//        return NumberTools.bounce(</span>
+<span class="source-line-no">046</span><span id="line.46">//                TangleRNG.determine((long)(x*0x0.9E3779B9p4 + y*0x0.8329C6DFp3 - x*0x0.953976F9p2))</span>
+<span class="source-line-no">047</span><span id="line.47">//                        ^ TangleRNG.determine((long)(y*0x0.953976F9p4 + x*0x0.9E3779B9p3 - y*0x0.8329C6DFp2))</span>
+<span class="source-line-no">048</span><span id="line.48">//                        ^ TangleRNG.determine((long)(x*0x0.85157AF5p4 - y*0x2.9E3779B9p2 + x*0x4.953976F9p0))</span>
+<span class="source-line-no">049</span><span id="line.49">//                        ^ TangleRNG.determine((long)(y*0x0.953976F9p4 - x*0x2.8329C6DFp2 + y*0x4.85157AF5p0)));</span>
+<span class="source-line-no">050</span><span id="line.50">    }</span>
+<span class="source-line-no">051</span><span id="line.51">    @Override</span>
+<span class="source-line-no">052</span><span id="line.52">    public double getNoiseWithSeed(final double x, final double y, final long seed) {</span>
+<span class="source-line-no">053</span><span id="line.53">        return NumberTools.randomSignedDouble((((long)(x + zigzagRandomized(seed, y)) * 0x6C8E9CF570932BD5L</span>
+<span class="source-line-no">054</span><span id="line.54">                ^ (long)(y + zigzagRandomized(seed + 0xAEF17502108EF2D9L, x)) * 0x9E3779B97F4A7C15L) &gt;&gt;&gt; 32)</span>
+<span class="source-line-no">055</span><span id="line.55">                ^ seed);</span>
+<span class="source-line-no">056</span><span id="line.56">//        return NumberTools.bounce(</span>
+<span class="source-line-no">057</span><span id="line.57">//                TangleRNG.determine((long)(x*0x0.9E3779B9p4 + y*0x0.8329C6DFp3 - x*0x0.953976F9p2) + (seed &amp; 0xA5A5A5A5))</span>
+<span class="source-line-no">058</span><span id="line.58">//                        ^ TangleRNG.determine((long)(y*0x0.953976F9p4 + x*0x0.9E3779B9p3 - y*0x0.8329C6DFp2) + (seed &amp; 0x5A5A5A5A))</span>
+<span class="source-line-no">059</span><span id="line.59">//                        ^ TangleRNG.determine((long)(x*0x0.85157AF5p4 - y*0x2.9E3779B9p2 - x*0x4.953976F9p0) + (seed &amp; 0x3C3C3C3C))</span>
+<span class="source-line-no">060</span><span id="line.60">//                        ^ TangleRNG.determine((long)(y*0x0.953976F9p4 - x*0x2.8329C6DFp2 - y*0x4.85157AF5p0) + (seed &amp; 0xC3C3C3C3)));</span>
+<span class="source-line-no">061</span><span id="line.61">    }</span>
+<span class="source-line-no">062</span><span id="line.62">    @Override</span>
+<span class="source-line-no">063</span><span id="line.63">    public double getNoise(final double x, final double y, final double z) {</span>
+<span class="source-line-no">064</span><span id="line.64">        return getNoiseWithSeed(x, y, z, 0xAEF17502108EF2D9L);//        return NumberTools.randomSignedDouble(NumberTools.doubleToLongBits(x) * 0x9E3779B97F4A7C15L</span>
+<span class="source-line-no">065</span><span id="line.65">//                + NumberTools.doubleToLongBits(y) * 0x6C8E9CF570932BD5L</span>
+<span class="source-line-no">066</span><span id="line.66">//                + NumberTools.doubleToLongBits(z) * 0xC6BC279692B5CC85L);</span>
+<span class="source-line-no">067</span><span id="line.67">//        return NumberTools.bounce(</span>
+<span class="source-line-no">068</span><span id="line.68">//                TangleRNG.determine((long)(x*0x0.9E3779B9p4 + y*0x0.8329C6DFp3 + z*0x0.953976F9p2))</span>
+<span class="source-line-no">069</span><span id="line.69">//                        ^ TangleRNG.determine((long)(y*0x0.953976F9p4 + z*0x0.9E3779B9p3 + x*0x0.8329C6DFp2))</span>
+<span class="source-line-no">070</span><span id="line.70">//                        ^ TangleRNG.determine((long)(z*0x0.8329C6DFp4 + x*0x0.953976F9p3 + y*0x0.9E3779B9p2))</span>
+<span class="source-line-no">071</span><span id="line.71">//                        ^ TangleRNG.determine((long)(x*0x0.85157AF5p4 - y*0x2.9E3779B9p1 - z*0x3.953976F9p0))</span>
+<span class="source-line-no">072</span><span id="line.72">//                        ^ TangleRNG.determine((long)(y*0x0.85157AF5p4 - z*0x2.8329C6DFp1 - y*0x3.9E3779B9p0))</span>
+<span class="source-line-no">073</span><span id="line.73">//                        ^ TangleRNG.determine((long)(z+0x0.85157AF5p4 - x*0x2.953976F9p1 - y*0x3.8329C6DFp0)));</span>
+<span class="source-line-no">074</span><span id="line.74">    }</span>
+<span class="source-line-no">075</span><span id="line.75">    @Override</span>
+<span class="source-line-no">076</span><span id="line.76">    public double getNoiseWithSeed(final double x, final double y, final double z, final long seed) {</span>
+<span class="source-line-no">077</span><span id="line.77">        return NumberTools.randomSignedDouble((((long)(x + zigzagRandomized(seed, y) + zigzagRandomized(seed, z)) * 0x6C8E9CF570932BD5L</span>
+<span class="source-line-no">078</span><span id="line.78">                ^ (long)(y + zigzagRandomized(seed + 0xAEF17502108EF2D9L, x) + zigzagRandomized(seed + 0xAEF17502108EF2D9L, z)) * 0x9E3779B97F4A7C15L</span>
+<span class="source-line-no">079</span><span id="line.79">                ^ (long)(z + zigzagRandomized(seed + 0x5DE2EA04211DE5B2L, x) + zigzagRandomized(seed + 0x5DE2EA04211DE5B2L, y)) * 0xC6BC279692B5CC85L</span>
+<span class="source-line-no">080</span><span id="line.80">        ) &gt;&gt;&gt; 32)</span>
+<span class="source-line-no">081</span><span id="line.81">                ^ seed);</span>
+<span class="source-line-no">082</span><span id="line.82">//        return NumberTools.randomSignedDouble(NumberTools.doubleToLongBits(x) * 0x9E3779B97F4A7C15L</span>
+<span class="source-line-no">083</span><span id="line.83">//                + NumberTools.doubleToLongBits(y) * 0x6C8E9CF570932BD5L</span>
+<span class="source-line-no">084</span><span id="line.84">//                + NumberTools.doubleToLongBits(z) * 0xC6BC279692B5CC85L </span>
+<span class="source-line-no">085</span><span id="line.85">//                ^ seed);</span>
+<span class="source-line-no">086</span><span id="line.86">//        return NumberTools.bounce(</span>
+<span class="source-line-no">087</span><span id="line.87">//                TangleRNG.determine((long)(x*0x0.9E3779B9p4 + y*0x0.8329C6DFp3 + z*0x0.953976F9p2) + (seed &amp; 0x24924924))</span>
+<span class="source-line-no">088</span><span id="line.88">//                        ^ TangleRNG.determine((long)(y*0x0.953976F9p4 + z*0x0.9E3779B9p3 + x*0x0.8329C6DFp2) + (seed &amp; 0x49249249))</span>
+<span class="source-line-no">089</span><span id="line.89">//                        ^ TangleRNG.determine((long)(z*0x0.8329C6DFp4 + x*0x0.953976F9p3 + y*0x0.9E3779B9p2) + (seed &amp; 0x92492492))</span>
+<span class="source-line-no">090</span><span id="line.90">//                        ^ TangleRNG.determine((long)(x*0x0.85157AF5p4 - y*0x2.9E3779B9p1 - z*0x3.953976F9p0) + (seed &amp; 0x49249249))</span>
+<span class="source-line-no">091</span><span id="line.91">//                        ^ TangleRNG.determine((long)(y*0x0.85157AF5p4 - z*0x2.8329C6DFp1 - y*0x3.9E3779B9p0) + (seed &amp; 0x92492492))</span>
+<span class="source-line-no">092</span><span id="line.92">//                        ^ TangleRNG.determine((long)(z+0x0.85157AF5p4 - x*0x2.953976F9p1 - y*0x3.8329C6DFp0) + (seed &amp; 0x24924924)));</span>
+<span class="source-line-no">093</span><span id="line.93">    }</span>
+<span class="source-line-no">094</span><span id="line.94">    @Override</span>
+<span class="source-line-no">095</span><span id="line.95">    public double getNoise(final double x, final double y, final double z, final double w) {</span>
+<span class="source-line-no">096</span><span id="line.96">        return getNoiseWithSeed(x, y, z, w, 0xAEF17502108EF2D9L);</span>
+<span class="source-line-no">097</span><span id="line.97">        //        return NumberTools.bounce(</span>
+<span class="source-line-no">098</span><span id="line.98">//                (TangleRNG.determine((long)(x*0x0.9E3779B9p4 + y*0x0.8329C6DFp3 + w*0x0.953976F9p2))</span>
+<span class="source-line-no">099</span><span id="line.99">//                        ^ TangleRNG.determine((long)(y*0x0.85157AF5p4 + z*0x0.9E3779B9p3 + x*0x0.8329C6DFp2))</span>
+<span class="source-line-no">100</span><span id="line.100">//                        ^ TangleRNG.determine((long)(z*0x0.953976F9p4 + w*0x0.85157AF5p3 + y*0x0.9E3779B9p2))</span>
+<span class="source-line-no">101</span><span id="line.101">//                        ^ TangleRNG.determine((long)(w*0x0.8329C6DFp4 + x*0x0.953976F9p3 + z*0x0.85157AF5p2))</span>
+<span class="source-line-no">102</span><span id="line.102">//                ));</span>
+<span class="source-line-no">103</span><span id="line.103">    }</span>
+<span class="source-line-no">104</span><span id="line.104">    @Override</span>
+<span class="source-line-no">105</span><span id="line.105">    public double getNoiseWithSeed(final double x, final double y, final double z, final double w, final long seed) {</span>
+<span class="source-line-no">106</span><span id="line.106">        return NumberTools.randomSignedDouble((((long)(x </span>
+<span class="source-line-no">107</span><span id="line.107">                + zigzagRandomized(seed, y) </span>
+<span class="source-line-no">108</span><span id="line.108">                + zigzagRandomized(seed, z) </span>
+<span class="source-line-no">109</span><span id="line.109">                + zigzagRandomized(seed, w)) * 0x6C8E9CF570932BD5L</span>
+<span class="source-line-no">110</span><span id="line.110">                ^ (long)(y</span>
+<span class="source-line-no">111</span><span id="line.111">                + zigzagRandomized(seed + 0xAEF17502108EF2D9L, x)</span>
+<span class="source-line-no">112</span><span id="line.112">                + zigzagRandomized(seed + 0xAEF17502108EF2D9L, z)</span>
+<span class="source-line-no">113</span><span id="line.113">                + zigzagRandomized(seed + 0xAEF17502108EF2D9L, w)) * 0x9E3779B97F4A7C15L</span>
+<span class="source-line-no">114</span><span id="line.114">                ^ (long)(z</span>
+<span class="source-line-no">115</span><span id="line.115">                + zigzagRandomized(seed + 0x5DE2EA04211DE5B2L, x)</span>
+<span class="source-line-no">116</span><span id="line.116">                + zigzagRandomized(seed + 0x5DE2EA04211DE5B2L, y)</span>
+<span class="source-line-no">117</span><span id="line.117">                + zigzagRandomized(seed + 0x5DE2EA04211DE5B2L, w)) * 0xC6BC279692B5CC85L</span>
+<span class="source-line-no">118</span><span id="line.118">                ^ (long)(w</span>
+<span class="source-line-no">119</span><span id="line.119">                + zigzagRandomized(seed + 0x0CD45F0631ACD88BL, x)</span>
+<span class="source-line-no">120</span><span id="line.120">                + zigzagRandomized(seed + 0x0CD45F0631ACD88BL, y)</span>
+<span class="source-line-no">121</span><span id="line.121">                + zigzagRandomized(seed + 0x0CD45F0631ACD88BL, z)) * 0x352E9CF570932BDDL</span>
+<span class="source-line-no">122</span><span id="line.122">        ) &gt;&gt;&gt; 32)</span>
+<span class="source-line-no">123</span><span id="line.123">                ^ seed);</span>
+<span class="source-line-no">124</span><span id="line.124"></span>
+<span class="source-line-no">125</span><span id="line.125">//        return NumberTools.bounce(</span>
+<span class="source-line-no">126</span><span id="line.126">//                (TangleRNG.determine((long)(x*0x0.9E3779B9p4 + y*0x0.8329C6DFp3 + w*0x0.953976F9p2) + (seed &amp; 0x81818181))</span>
+<span class="source-line-no">127</span><span id="line.127">//                        ^ TangleRNG.determine((long)(y*0x0.85157AF5p4 + z*0x0.9E3779B9p3 + x*0x0.8329C6DFp2) + (seed &amp; 0x18181818))</span>
+<span class="source-line-no">128</span><span id="line.128">//                        ^ TangleRNG.determine((long)(z*0x0.953976F9p4 + w*0x0.85157AF5p3 + y*0x0.9E3779B9p2) + (seed &amp; 0x42424242))</span>
+<span class="source-line-no">129</span><span id="line.129">//                        ^ TangleRNG.determine((long)(w*0x0.8329C6DFp4 + x*0x0.953976F9p3 + z*0x0.85157AF5p2) + (seed &amp; 0x24242424))</span>
+<span class="source-line-no">130</span><span id="line.130">//                        ));</span>
+<span class="source-line-no">131</span><span id="line.131">    }</span>
+<span class="source-line-no">132</span><span id="line.132">    @Override</span>
+<span class="source-line-no">133</span><span id="line.133">    public double getNoise(final double x, final double y, final double z, final double w, final double u, final double v) {</span>
+<span class="source-line-no">134</span><span id="line.134">        return getNoiseWithSeed(x, y, z, w, u, v, 0xAEF17502108EF2D9L);</span>
+<span class="source-line-no">135</span><span id="line.135"></span>
+<span class="source-line-no">136</span><span id="line.136">//        return NumberTools.bounce(</span>
+<span class="source-line-no">137</span><span id="line.137">//                (TangleRNG.determine((long)(x*0x0.9E3779B9p4 + y*0x0.8329C6DFp3 + z*0x0.953976F9p2 + w*0x0.85157AF5p1))</span>
+<span class="source-line-no">138</span><span id="line.138">//                        ^ TangleRNG.determine((long)(y*0x0.712BE5ABp4 + z*0x0.9E3779B9p3 + x*0x0.8329C6DFp2 + u*0x0.953976F9p1))</span>
+<span class="source-line-no">139</span><span id="line.139">//                        ^ TangleRNG.determine((long)(z*0x0.85157AF5p4 + x*0x0.712BE5ABp3 + y*0x0.9E3779B9p2 + v*0x0.8329C6DFp1))</span>
+<span class="source-line-no">140</span><span id="line.140">//                        ^ TangleRNG.determine((long)(w*0x0.953976F9p4 + u*0x0.85157AF5p3 + v*0x0.712BE5ABp2 + x*0x0.9E3779B9p1))</span>
+<span class="source-line-no">141</span><span id="line.141">//                        ^ TangleRNG.determine((long)(u*0x0.8329C6DFp4 + v*0x0.953976F9p3 + w*0x0.85157AF5p2 + y*0x0.712BE5ABp1))</span>
+<span class="source-line-no">142</span><span id="line.142">//                        ^ TangleRNG.determine((long)(v*0x0.9E3779B9p4 + w*0x0.8329C6DFp3 + u*0x0.953976F9p2 + z*0x0.85157AF5p1))));</span>
+<span class="source-line-no">143</span><span id="line.143">    }</span>
+<span class="source-line-no">144</span><span id="line.144">    @Override</span>
+<span class="source-line-no">145</span><span id="line.145">    public double getNoiseWithSeed(final double x, final double y, final double z, final double w, final double u, final double v, final long seed) {</span>
+<span class="source-line-no">146</span><span id="line.146">//        return NumberTools.randomSignedDouble((((long)(x + zigzagRandomized(seed, y)) * 0x6C8E9CF570932BD5L</span>
+<span class="source-line-no">147</span><span id="line.147">//                ^ (long)(y + zigzagRandomized(seed + 0xAEF17502108EF2D9L, z)) * 0x9E3779B97F4A7C15L</span>
+<span class="source-line-no">148</span><span id="line.148">//                ^ (long)(z + zigzagRandomized(seed + 0x5DE2EA04211DE5B2L, w)) * 0xC6BC279692B5CC85L</span>
+<span class="source-line-no">149</span><span id="line.149">//                ^ (long)(w + zigzagRandomized(seed + 0x0CD45F0631ACD88BL, u)) * 0x352E9CF570932BDDL</span>
+<span class="source-line-no">150</span><span id="line.150">//                ^ (long)(u + zigzagRandomized(seed + 0xBBC5D408423BCB64L, v)) * 0x5851F42D4C957F2DL</span>
+<span class="source-line-no">151</span><span id="line.151">//                ^ (long)(v + zigzagRandomized(seed + 0x6AB7490A52CABE3DL, x)) * 0x2545F4914F6CDD1DL</span>
+<span class="source-line-no">152</span><span id="line.152">//        ) &gt;&gt;&gt; 32)</span>
+<span class="source-line-no">153</span><span id="line.153">//                ^ seed);</span>
+<span class="source-line-no">154</span><span id="line.154">        return NumberTools.randomSignedDouble((((long)(x</span>
+<span class="source-line-no">155</span><span id="line.155">                + zigzagRandomized(seed, y)</span>
+<span class="source-line-no">156</span><span id="line.156">                + zigzagRandomized(seed, z)</span>
+<span class="source-line-no">157</span><span id="line.157">                + zigzagRandomized(seed, w)</span>
+<span class="source-line-no">158</span><span id="line.158">                + zigzagRandomized(seed, u)</span>
+<span class="source-line-no">159</span><span id="line.159">                + zigzagRandomized(seed, v)) * 0x6C8E9CF570932BD5L</span>
+<span class="source-line-no">160</span><span id="line.160">                ^ (long)(y</span>
+<span class="source-line-no">161</span><span id="line.161">                + zigzagRandomized(seed + 0xAEF17502108EF2D9L, x)</span>
+<span class="source-line-no">162</span><span id="line.162">                + zigzagRandomized(seed + 0xAEF17502108EF2D9L, z)</span>
+<span class="source-line-no">163</span><span id="line.163">                + zigzagRandomized(seed + 0xAEF17502108EF2D9L, w)</span>
+<span class="source-line-no">164</span><span id="line.164">                + zigzagRandomized(seed + 0xAEF17502108EF2D9L, u)</span>
+<span class="source-line-no">165</span><span id="line.165">                + zigzagRandomized(seed + 0xAEF17502108EF2D9L, v)) * 0x9E3779B97F4A7C15L</span>
+<span class="source-line-no">166</span><span id="line.166">                ^ (long)(z</span>
+<span class="source-line-no">167</span><span id="line.167">                + zigzagRandomized(seed + 0x5DE2EA04211DE5B2L, x)</span>
+<span class="source-line-no">168</span><span id="line.168">                + zigzagRandomized(seed + 0x5DE2EA04211DE5B2L, y)</span>
+<span class="source-line-no">169</span><span id="line.169">                + zigzagRandomized(seed + 0x5DE2EA04211DE5B2L, w)</span>
+<span class="source-line-no">170</span><span id="line.170">                + zigzagRandomized(seed + 0x5DE2EA04211DE5B2L, u)</span>
+<span class="source-line-no">171</span><span id="line.171">                + zigzagRandomized(seed + 0x5DE2EA04211DE5B2L, v)) * 0xC6BC279692B5CC85L</span>
+<span class="source-line-no">172</span><span id="line.172">                ^ (long)(w</span>
+<span class="source-line-no">173</span><span id="line.173">                + zigzagRandomized(seed + 0x0CD45F0631ACD88BL, x)</span>
+<span class="source-line-no">174</span><span id="line.174">                + zigzagRandomized(seed + 0x0CD45F0631ACD88BL, y)</span>
+<span class="source-line-no">175</span><span id="line.175">                + zigzagRandomized(seed + 0x0CD45F0631ACD88BL, z)</span>
+<span class="source-line-no">176</span><span id="line.176">                + zigzagRandomized(seed + 0x0CD45F0631ACD88BL, u)</span>
+<span class="source-line-no">177</span><span id="line.177">                + zigzagRandomized(seed + 0x0CD45F0631ACD88BL, v)) * 0x352E9CF570932BDDL</span>
+<span class="source-line-no">178</span><span id="line.178">                ^ (long)(u</span>
+<span class="source-line-no">179</span><span id="line.179">                + zigzagRandomized(seed + 0xBBC5D408423BCB64L, x)</span>
+<span class="source-line-no">180</span><span id="line.180">                + zigzagRandomized(seed + 0xBBC5D408423BCB64L, y)</span>
+<span class="source-line-no">181</span><span id="line.181">                + zigzagRandomized(seed + 0xBBC5D408423BCB64L, z)</span>
+<span class="source-line-no">182</span><span id="line.182">                + zigzagRandomized(seed + 0xBBC5D408423BCB64L, w)</span>
+<span class="source-line-no">183</span><span id="line.183">                + zigzagRandomized(seed + 0xBBC5D408423BCB64L, v)) * 0x5851F42D4C957F2DL</span>
+<span class="source-line-no">184</span><span id="line.184">                ^ (long)(v</span>
+<span class="source-line-no">185</span><span id="line.185">                + zigzagRandomized(seed + 0x6AB7490A52CABE3DL, x)</span>
+<span class="source-line-no">186</span><span id="line.186">                + zigzagRandomized(seed + 0x6AB7490A52CABE3DL, y)</span>
+<span class="source-line-no">187</span><span id="line.187">                + zigzagRandomized(seed + 0x6AB7490A52CABE3DL, z)</span>
+<span class="source-line-no">188</span><span id="line.188">                + zigzagRandomized(seed + 0x6AB7490A52CABE3DL, w)</span>
+<span class="source-line-no">189</span><span id="line.189">                + zigzagRandomized(seed + 0x6AB7490A52CABE3DL, u)) * 0x2545F4914F6CDD1DL</span>
+<span class="source-line-no">190</span><span id="line.190">        ) &gt;&gt;&gt; 32)</span>
+<span class="source-line-no">191</span><span id="line.191">                ^ seed);</span>
+<span class="source-line-no">192</span><span id="line.192"></span>
+<span class="source-line-no">193</span><span id="line.193">//        return NumberTools.bounce(</span>
+<span class="source-line-no">194</span><span id="line.194">//                (TangleRNG.determine((long)(x*0x0.9E3779B9p4 + y*0x0.8329C6DFp3 + z*0x0.953976F9p2 + w*0x0.85157AF5p1) + (seed &amp; 0x24924924))</span>
+<span class="source-line-no">195</span><span id="line.195">//                        ^ TangleRNG.determine((long)(y*0x0.712BE5ABp4 + z*0x0.9E3779B9p3 + x*0x0.8329C6DFp2 + u*0x0.953976F9p1) + (seed &amp; 0x49249249))</span>
+<span class="source-line-no">196</span><span id="line.196">//                        ^ TangleRNG.determine((long)(z*0x0.85157AF5p4 + x*0x0.712BE5ABp3 + y*0x0.9E3779B9p2 + v*0x0.8329C6DFp1) + (seed &amp; 0x92492492))</span>
+<span class="source-line-no">197</span><span id="line.197">//                        ^ TangleRNG.determine((long)(w*0x0.953976F9p4 + u*0x0.85157AF5p3 + v*0x0.712BE5ABp2 + x*0x0.9E3779B9p1) + (seed &amp; 0x24924924))</span>
+<span class="source-line-no">198</span><span id="line.198">//                        ^ TangleRNG.determine((long)(u*0x0.8329C6DFp4 + v*0x0.953976F9p3 + w*0x0.85157AF5p2 + y*0x0.712BE5ABp1) + (seed &amp; 0x49249249))</span>
+<span class="source-line-no">199</span><span id="line.199">//                        ^ TangleRNG.determine((long)(v*0x0.9E3779B9p4 + w*0x0.8329C6DFp3 + u*0x0.953976F9p2 + z*0x0.85157AF5p1) + (seed &amp; 0x92492492))));</span>
+<span class="source-line-no">200</span><span id="line.200">    }</span>
+<span class="source-line-no">201</span><span id="line.201">}</span>
 
 
 

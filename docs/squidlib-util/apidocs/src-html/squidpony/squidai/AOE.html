@@ -7,208 +7,208 @@
 <meta name="generator" content="javadoc/SourceToHTMLConverter">
 <link rel="stylesheet" type="text/css" href="../../../stylesheet.css" title="Style">
 </head>
-<body class="source">
+<body class="source-page">
 <main role="main">
-<div class="sourceContainer">
-<pre><span class="sourceLineNo">001</span><a id="line.1">package squidpony.squidai;</a>
-<span class="sourceLineNo">002</span><a id="line.2"></a>
-<span class="sourceLineNo">003</span><a id="line.3">import squidpony.squidgrid.Radius;</a>
-<span class="sourceLineNo">004</span><a id="line.4">import squidpony.squidmath.Coord;</a>
-<span class="sourceLineNo">005</span><a id="line.5">import squidpony.squidmath.OrderedMap;</a>
-<span class="sourceLineNo">006</span><a id="line.6"></a>
-<span class="sourceLineNo">007</span><a id="line.7">import java.io.Serializable;</a>
-<span class="sourceLineNo">008</span><a id="line.8">import java.util.ArrayList;</a>
-<span class="sourceLineNo">009</span><a id="line.9">import java.util.Collection;</a>
-<span class="sourceLineNo">010</span><a id="line.10"></a>
-<span class="sourceLineNo">011</span><a id="line.11">/**</a>
-<span class="sourceLineNo">012</span><a id="line.12"> * Area of Effect interface meant to be implemented by various specific burst, line, flowing, and user-made AOE types.</a>
-<span class="sourceLineNo">013</span><a id="line.13"> * Created by Tommy Ettinger on 5/8/2015.</a>
-<span class="sourceLineNo">014</span><a id="line.14"> */</a>
-<span class="sourceLineNo">015</span><a id="line.15">public interface AOE extends Serializable {</a>
-<span class="sourceLineNo">016</span><a id="line.16">    /**</a>
-<span class="sourceLineNo">017</span><a id="line.17">     * After an AOE has been constructed, it may need to have the affected area shifted over to a different position</a>
-<span class="sourceLineNo">018</span><a id="line.18">     * without changing any other properties of the AOE. Some AOE implementations may have an origin where the AOE</a>
-<span class="sourceLineNo">019</span><a id="line.19">     * starts emanating from, but the origin will not be affected by this method; instead the cell specified by target</a>
-<span class="sourceLineNo">020</span><a id="line.20">     * must be enough on its own to select a different target area without the producer of the AOE needing to move.</a>
-<span class="sourceLineNo">021</span><a id="line.21">     * @param aim a  that will be used to change the location of the AOE without its producer needing to move</a>
-<span class="sourceLineNo">022</span><a id="line.22">     */</a>
-<span class="sourceLineNo">023</span><a id="line.23">    void shift(Coord aim);</a>
-<span class="sourceLineNo">024</span><a id="line.24"></a>
-<span class="sourceLineNo">025</span><a id="line.25">    /**</a>
-<span class="sourceLineNo">026</span><a id="line.26">     * Given a Set of Points that the producer of the AOE wants to include in the region of this AOE, this method does</a>
-<span class="sourceLineNo">027</span><a id="line.27">     * a quick approximation to see if there is any possibility that the AOE as currently configured might include one</a>
-<span class="sourceLineNo">028</span><a id="line.28">     * of those Points within itself. It does not do a full, detailed scan, nor does it count how many opponents might</a>
-<span class="sourceLineNo">029</span><a id="line.29">     * be included. It does not check the map to verify that there is any sort of path to a target. It is recommended</a>
-<span class="sourceLineNo">030</span><a id="line.30">     * that the Set of Points consist only of enemies that are within FOV, which cuts down a lot on the amount of checks</a>
-<span class="sourceLineNo">031</span><a id="line.31">     * this needs to make; if the game doesn't restrict the player's FOV, this is still recommended (just with a larger</a>
-<span class="sourceLineNo">032</span><a id="line.32">     * FOV radius) because it prevents checking enemies on the other side of the map and through multiple walls.</a>
-<span class="sourceLineNo">033</span><a id="line.33">     * @param targets a Collection (usually a Set) of Points that are desirable targets to include in this AOE</a>
-<span class="sourceLineNo">034</span><a id="line.34">     * @return true if there could be at least one target within the AOE, false otherwise. Very approximate.</a>
-<span class="sourceLineNo">035</span><a id="line.35">     */</a>
-<span class="sourceLineNo">036</span><a id="line.36">    boolean mayContainTarget(Collection&lt;Coord&gt; targets);</a>
-<span class="sourceLineNo">037</span><a id="line.37"></a>
-<span class="sourceLineNo">038</span><a id="line.38">    /**</a>
-<span class="sourceLineNo">039</span><a id="line.39">     * Returns a OrderedMap of Coord keys and ArrayList of Coord values, where each Coord key is an ideal location to</a>
-<span class="sourceLineNo">040</span><a id="line.40">     * hit as many of the Points in targets as possible without hitting any Points in requiredExclusions, and each value</a>
-<span class="sourceLineNo">041</span><a id="line.41">     * is the collection of targets that will be hit if the associated key is used. The length of any ArrayList in the</a>
-<span class="sourceLineNo">042</span><a id="line.42">     * returned collection's values will be the number of targets likely to be affected by the AOE when shift() is</a>
-<span class="sourceLineNo">043</span><a id="line.43">     * called with the Coord key as an argument; all of the ArrayLists should have the same length. The second argument</a>
-<span class="sourceLineNo">044</span><a id="line.44">     * may be null, in which case this will initialize it to an empty Set of Coord and disregard it.</a>
-<span class="sourceLineNo">045</span><a id="line.45">     *</a>
-<span class="sourceLineNo">046</span><a id="line.46">     * With complex maps and varied arrangements of obstacles and desirable targets, calculating the best points to</a>
-<span class="sourceLineNo">047</span><a id="line.47">     * evaluate for AI can be computationally difficult. This method provides a way to calculate with good accuracy</a>
-<span class="sourceLineNo">048</span><a id="line.48">     * the best Points to pass to shift(Coord) before calling findArea(). For "blackened thrash industrial death metal"</a>
-<span class="sourceLineNo">049</span><a id="line.49">     * levels of brutality for the AI, the results of this can be used verbatim, but for more reasonable AI levels, you</a>
-<span class="sourceLineNo">050</span><a id="line.50">     * can intentionally alter the best options to simulate imperfect aim or environmental variance on the AOE.</a>
-<span class="sourceLineNo">051</span><a id="line.51">     *</a>
-<span class="sourceLineNo">052</span><a id="line.52">     * Beast-like creatures that do not need devious AI should probably not use this method at all and instead use</a>
-<span class="sourceLineNo">053</span><a id="line.53">     * shift(Coord) with the location of some enemy (probably the closest) as its argument.</a>
-<span class="sourceLineNo">054</span><a id="line.54">     * @param targets a Set of Points that are desirable targets to include in this AOE</a>
-<span class="sourceLineNo">055</span><a id="line.55">     * @param requiredExclusions a Set of Points that this tries strongly to avoid including in this AOE</a>
-<span class="sourceLineNo">056</span><a id="line.56">     * @return a OrderedMap of Coord keys and ArrayList of Coord values where keys are ideal locations and values are the target points that will be hit when that key is used.</a>
-<span class="sourceLineNo">057</span><a id="line.57">     */</a>
-<span class="sourceLineNo">058</span><a id="line.58">    OrderedMap&lt;Coord, ArrayList&lt;Coord&gt;&gt; idealLocations(Collection&lt;Coord&gt; targets, Collection&lt;Coord&gt; requiredExclusions);</a>
-<span class="sourceLineNo">059</span><a id="line.59"></a>
-<span class="sourceLineNo">060</span><a id="line.60">    /**</a>
-<span class="sourceLineNo">061</span><a id="line.61">     * A variant of idealLocations that takes two groups of desirable targets, and will rate locations by how many</a>
-<span class="sourceLineNo">062</span><a id="line.62">     * priorityTargets are in the AOE, then by how many lesserTargets are in the AOE, and will only consider locations</a>
-<span class="sourceLineNo">063</span><a id="line.63">     * that do not affect a Coord in requiredExclusions. Unlike the variant of idealLocations that only takes one group</a>
-<span class="sourceLineNo">064</span><a id="line.64">     * of targets, this variant can return a collection with ArrayList values where the same Coord appears four times</a>
-<span class="sourceLineNo">065</span><a id="line.65">     * in the same ArrayList; this is done only for priorityTargets that are affected by the target Coord at the</a>
-<span class="sourceLineNo">066</span><a id="line.66">     * associated key, and is done so that the length of each similar-quality ArrayList should be identical (since a</a>
-<span class="sourceLineNo">067</span><a id="line.67">     * priorityTarget is worth four times what a lesserTarget is worth in the calculation this uses).</a>
-<span class="sourceLineNo">068</span><a id="line.68">     * @param priorityTargets A Set of Points that are the most-wanted targets to include in this AOE</a>
-<span class="sourceLineNo">069</span><a id="line.69">     * @param lesserTargets A Set of Points that are the less-wanted targets to include in this AOE, should not overlap with priorityTargets</a>
-<span class="sourceLineNo">070</span><a id="line.70">     * @param requiredExclusions a Set of Points that this tries strongly to avoid including in this AOE</a>
-<span class="sourceLineNo">071</span><a id="line.71">     * @return a OrderedMap of Coord keys and ArrayList of Coord values where keys are ideal locations and values are the target points that will be hit when that key is used.</a>
-<span class="sourceLineNo">072</span><a id="line.72">     */</a>
-<span class="sourceLineNo">073</span><a id="line.73">    OrderedMap&lt;Coord, ArrayList&lt;Coord&gt;&gt; idealLocations(Collection&lt;Coord&gt; priorityTargets, Collection&lt;Coord&gt; lesserTargets, Collection&lt;Coord&gt; requiredExclusions);</a>
-<span class="sourceLineNo">074</span><a id="line.74"></a>
-<span class="sourceLineNo">075</span><a id="line.75">    /**</a>
-<span class="sourceLineNo">076</span><a id="line.76">     * This must be called before any other methods, and takes a char[][] with '#' for walls, anything else for floors.</a>
-<span class="sourceLineNo">077</span><a id="line.77">     * It must be bounded with walls, which DungeonGenerator does automatically.</a>
-<span class="sourceLineNo">078</span><a id="line.78">     * @param map width first, height second, 2D char array.</a>
-<span class="sourceLineNo">079</span><a id="line.79">     */</a>
-<span class="sourceLineNo">080</span><a id="line.80">    void setMap(char[][] map);</a>
-<span class="sourceLineNo">081</span><a id="line.81"></a>
-<span class="sourceLineNo">082</span><a id="line.82">    /**</a>
-<span class="sourceLineNo">083</span><a id="line.83">     * This is how an AOE interacts with anything that uses it. It expects a map to have already been set with setMap,</a>
-<span class="sourceLineNo">084</span><a id="line.84">     * with '#' for walls, '.' for floors and potentially other chars that implementors can use if they are present in</a>
-<span class="sourceLineNo">085</span><a id="line.85">     * the map. The map must be bounded by walls, which DungeonGenerator does automatically and other generators can</a>
-<span class="sourceLineNo">086</span><a id="line.86">     * easily add with two loops.</a>
-<span class="sourceLineNo">087</span><a id="line.87">     *</a>
-<span class="sourceLineNo">088</span><a id="line.88">     * This returns an OrderedMap of Coord keys to Double values; if a cell is 100% affected by the AOE then the value</a>
-<span class="sourceLineNo">089</span><a id="line.89">     * should be 1.0; if it is 50% affected it should be 0.5, if unaffected should be 0.0, etc. The Coord keys should</a>
-<span class="sourceLineNo">090</span><a id="line.90">     * have the same x and y as the x,y map positions they correspond to.</a>
-<span class="sourceLineNo">091</span><a id="line.91">     * @return an OrderedMap of Coord keys to Double values from 1.0 (fully affected) to 0.0 (unaffected).</a>
-<span class="sourceLineNo">092</span><a id="line.92">     */</a>
-<span class="sourceLineNo">093</span><a id="line.93">    OrderedMap&lt;Coord, Double&gt; findArea();</a>
-<span class="sourceLineNo">094</span><a id="line.94"></a>
-<span class="sourceLineNo">095</span><a id="line.95">    /**</a>
-<span class="sourceLineNo">096</span><a id="line.96">     * Get the position from which the AOE originates, which may be related to the location of the AOE's effect, as for</a>
-<span class="sourceLineNo">097</span><a id="line.97">     * lines, cones, and other emitted effects, or may be unrelated except for determining which enemies can be seen</a>
-<span class="sourceLineNo">098</span><a id="line.98">     * or targeted from a given origin point (as for distant effects that radiate from a chosen central point, but</a>
-<span class="sourceLineNo">099</span><a id="line.99">     * have a maxRange at which they can deliver that effect).</a>
-<span class="sourceLineNo">100</span><a id="line.100">     */</a>
-<span class="sourceLineNo">101</span><a id="line.101">    Coord getOrigin();</a>
-<span class="sourceLineNo">102</span><a id="line.102"></a>
-<span class="sourceLineNo">103</span><a id="line.103">    /**</a>
-<span class="sourceLineNo">104</span><a id="line.104">     * Set the position from which the AOE originates, which may be related to the location of the AOE's effect, as for</a>
-<span class="sourceLineNo">105</span><a id="line.105">     * lines, cones, and other emitted effects, or may be unrelated except for determining which enemies can be seen</a>
-<span class="sourceLineNo">106</span><a id="line.106">     * or targeted from a given origin point (as for distant effects that radiate from a chosen central point, but</a>
-<span class="sourceLineNo">107</span><a id="line.107">     * have a maxRange at which they can deliver that effect).</a>
-<span class="sourceLineNo">108</span><a id="line.108">     */</a>
-<span class="sourceLineNo">109</span><a id="line.109">    void setOrigin(Coord origin);</a>
-<span class="sourceLineNo">110</span><a id="line.110"></a>
-<span class="sourceLineNo">111</span><a id="line.111">    /**</a>
-<span class="sourceLineNo">112</span><a id="line.112">     * Gets the AimLimit enum that can be used to restrict points this checks (defaults to null if not set).</a>
-<span class="sourceLineNo">113</span><a id="line.113">     * You can use limitType to restrict any Points that might be processed based on the given origin (which will be</a>
-<span class="sourceLineNo">114</span><a id="line.114">     * used as the geometric origin for any calculations this makes) with AimLimit values having the following meanings:</a>
-<span class="sourceLineNo">115</span><a id="line.115">     *</a>
-<span class="sourceLineNo">116</span><a id="line.116">     * &lt;ul&gt;</a>
-<span class="sourceLineNo">117</span><a id="line.117">     *     &lt;li&gt;AimLimit.FREE makes no restrictions; it is equivalent here to passing null for limit.&lt;/li&gt;</a>
-<span class="sourceLineNo">118</span><a id="line.118">     *     &lt;li&gt;AimLimit.EIGHT_WAY will only consider Points to be valid targets</a>
-<span class="sourceLineNo">119</span><a id="line.119">     *     if they are along a straight line with an angle that is a multiple of 45 degrees, relative to the positive x</a>
-<span class="sourceLineNo">120</span><a id="line.120">     *     axis. Essentially, this limits the points to those a queen could move to in chess.&lt;/li&gt;</a>
-<span class="sourceLineNo">121</span><a id="line.121">     *     &lt;li&gt;AimLimit.ORTHOGONAL will cause the AOE to only consider Points to be valid targets if</a>
-<span class="sourceLineNo">122</span><a id="line.122">     *     they are along a straight line with an angle that is a multiple of 90 degrees, relative to the positive x</a>
-<span class="sourceLineNo">123</span><a id="line.123">     *     axis. Essentially, this limits the points to those a rook could move to in chess.&lt;/li&gt;</a>
-<span class="sourceLineNo">124</span><a id="line.124">     *     &lt;li&gt;AimLimit.DIAGONAL will cause the AOE to only consider Points to be valid targets if they are along a</a>
-<span class="sourceLineNo">125</span><a id="line.125">     *     straight line with an angle that is 45 degrees greater than a multiple of 90 degrees, relative to the</a>
-<span class="sourceLineNo">126</span><a id="line.126">     *     positive x axis. Essentially, this limits the points to those a bishop could move to in chess.&lt;/li&gt;</a>
-<span class="sourceLineNo">127</span><a id="line.127">     *     &lt;li&gt;null will cause the AOE to consider all points.&lt;/li&gt;</a>
-<span class="sourceLineNo">128</span><a id="line.128">     * &lt;/ul&gt;</a>
-<span class="sourceLineNo">129</span><a id="line.129">     */</a>
-<span class="sourceLineNo">130</span><a id="line.130">    AimLimit getLimitType();</a>
-<span class="sourceLineNo">131</span><a id="line.131">    /**</a>
-<span class="sourceLineNo">132</span><a id="line.132">     * The minimum inclusive range that the AOE can be shift()-ed to using the distance measurement from radiusType.</a>
-<span class="sourceLineNo">133</span><a id="line.133">     */</a>
-<span class="sourceLineNo">134</span><a id="line.134">    int getMinRange();</a>
-<span class="sourceLineNo">135</span><a id="line.135">    /**</a>
-<span class="sourceLineNo">136</span><a id="line.136">     * The maximum inclusive range that the AOE can be shift()-ed to using the distance measurement from radiusType.</a>
-<span class="sourceLineNo">137</span><a id="line.137">     */</a>
-<span class="sourceLineNo">138</span><a id="line.138">    int getMaxRange();</a>
-<span class="sourceLineNo">139</span><a id="line.139">    /**</a>
-<span class="sourceLineNo">140</span><a id="line.140">     * Used to determine distance from origin for the purposes of selecting a target location that is within the bounds</a>
-<span class="sourceLineNo">141</span><a id="line.141">     * of minRange and maxRange. Not necessarily used for the implementation of the AOE (randomized-floodfill-based AOE</a>
-<span class="sourceLineNo">142</span><a id="line.142">     * should almost always use Manhattan distance for its spread due to how the algorithm works, but the positioning of</a>
-<span class="sourceLineNo">143</span><a id="line.143">     * where that floodfill should be allowed to start should likely follow the same distance measurement as the rest of</a>
-<span class="sourceLineNo">144</span><a id="line.144">     * the game, like Radius.SQUARE for Chebyshev distance/8-way movement).</a>
-<span class="sourceLineNo">145</span><a id="line.145">     */</a>
-<span class="sourceLineNo">146</span><a id="line.146">    Radius getMetric();</a>
-<span class="sourceLineNo">147</span><a id="line.147"></a>
-<span class="sourceLineNo">148</span><a id="line.148">    /**</a>
-<span class="sourceLineNo">149</span><a id="line.149">     * Gets the same values returned by getLimitType(), getMinRange(), getMaxRange(), and getMetric() bundled into one</a>
-<span class="sourceLineNo">150</span><a id="line.150">     * Reach object.</a>
-<span class="sourceLineNo">151</span><a id="line.151">     * @return a non-null Reach object.</a>
-<span class="sourceLineNo">152</span><a id="line.152">     */</a>
-<span class="sourceLineNo">153</span><a id="line.153">    Reach getReach();</a>
-<span class="sourceLineNo">154</span><a id="line.154"></a>
-<span class="sourceLineNo">155</span><a id="line.155">    /**</a>
-<span class="sourceLineNo">156</span><a id="line.156">     * You can use limitType to restrict any Points that might be processed based on the given origin (which will be</a>
-<span class="sourceLineNo">157</span><a id="line.157">     * used as the geometric origin for any calculations this makes) with AimLimit values having the following meanings:</a>
-<span class="sourceLineNo">158</span><a id="line.158">     *</a>
-<span class="sourceLineNo">159</span><a id="line.159">     * &lt;ul&gt;</a>
-<span class="sourceLineNo">160</span><a id="line.160">     *     &lt;li&gt;AimLimit.FREE makes no restrictions; it is equivalent here to passing null for limit.&lt;/li&gt;</a>
-<span class="sourceLineNo">161</span><a id="line.161">     *     &lt;li&gt;AimLimit.EIGHT_WAY will only consider Points to be valid targets</a>
-<span class="sourceLineNo">162</span><a id="line.162">     *     if they are along a straight line with an angle that is a multiple of 45 degrees, relative to the positive x</a>
-<span class="sourceLineNo">163</span><a id="line.163">     *     axis. Essentially, this limits the points to those a queen could move to in chess.&lt;/li&gt;</a>
-<span class="sourceLineNo">164</span><a id="line.164">     *     &lt;li&gt;AimLimit.ORTHOGONAL will cause the AOE to only consider Points to be valid targets if</a>
-<span class="sourceLineNo">165</span><a id="line.165">     *     they are along a straight line with an angle that is a multiple of 90 degrees, relative to the positive x</a>
-<span class="sourceLineNo">166</span><a id="line.166">     *     axis. Essentially, this limits the points to those a rook could move to in chess.&lt;/li&gt;</a>
-<span class="sourceLineNo">167</span><a id="line.167">     *     &lt;li&gt;AimLimit.DIAGONAL will cause the AOE to only consider Points to be valid targets if they are along a</a>
-<span class="sourceLineNo">168</span><a id="line.168">     *     straight line with an angle that is 45 degrees greater than a multiple of 90 degrees, relative to the</a>
-<span class="sourceLineNo">169</span><a id="line.169">     *     positive x axis. Essentially, this limits the points to those a bishop could move to in chess.&lt;/li&gt;</a>
-<span class="sourceLineNo">170</span><a id="line.170">     * &lt;/ul&gt;</a>
-<span class="sourceLineNo">171</span><a id="line.171">     *</a>
-<span class="sourceLineNo">172</span><a id="line.172">     * Points that are not valid for this limit will simply not be considered.</a>
-<span class="sourceLineNo">173</span><a id="line.173">     * @param limitType an AimLimit enum</a>
-<span class="sourceLineNo">174</span><a id="line.174">     */</a>
-<span class="sourceLineNo">175</span><a id="line.175">    void setLimitType(AimLimit limitType);</a>
-<span class="sourceLineNo">176</span><a id="line.176">    /**</a>
-<span class="sourceLineNo">177</span><a id="line.177">     * The minimum inclusive range that the AOE can be shift()-ed to using the distance measurement from radiusType.</a>
-<span class="sourceLineNo">178</span><a id="line.178">     */</a>
-<span class="sourceLineNo">179</span><a id="line.179">    void setMinRange(int minRange);</a>
-<span class="sourceLineNo">180</span><a id="line.180">    /**</a>
-<span class="sourceLineNo">181</span><a id="line.181">     * The maximum inclusive range that the AOE can be shift()-ed to using the distance measurement from radiusType.</a>
-<span class="sourceLineNo">182</span><a id="line.182">     */</a>
-<span class="sourceLineNo">183</span><a id="line.183">    void setMaxRange(int maxRange);</a>
-<span class="sourceLineNo">184</span><a id="line.184">    /**</a>
-<span class="sourceLineNo">185</span><a id="line.185">     * Used to determine distance from origin for the purposes of selecting a target location that is within the bounds</a>
-<span class="sourceLineNo">186</span><a id="line.186">     * of minRange and maxRange. Not necessarily used for the implementation of the AOE (randomized-floodfill-based AOE</a>
-<span class="sourceLineNo">187</span><a id="line.187">     * should almost always use Manhattan distance for its spread due to how the algorithm works, but the positioning of</a>
-<span class="sourceLineNo">188</span><a id="line.188">     * where that floodfill should be allowed to start should likely follow the same distance measurement as the rest of</a>
-<span class="sourceLineNo">189</span><a id="line.189">     * the game, like Radius.SQUARE for Chebyshev distance/8-way movement).</a>
-<span class="sourceLineNo">190</span><a id="line.190">     */</a>
-<span class="sourceLineNo">191</span><a id="line.191">    void setMetric(Radius metric);</a>
-<span class="sourceLineNo">192</span><a id="line.192"></a>
-<span class="sourceLineNo">193</span><a id="line.193">    /**</a>
-<span class="sourceLineNo">194</span><a id="line.194">     * Sets the same values as setLimitType(), setMinRange(), setMaxRange(), and setMetric() using one Reach object.</a>
-<span class="sourceLineNo">195</span><a id="line.195">     * @param reach a non-null Reach object.</a>
-<span class="sourceLineNo">196</span><a id="line.196">     */</a>
-<span class="sourceLineNo">197</span><a id="line.197">    void setReach(Reach reach);</a>
-<span class="sourceLineNo">198</span><a id="line.198"></a>
-<span class="sourceLineNo">199</span><a id="line.199">}</a>
+<div class="source-container">
+<pre><span class="source-line-no">001</span><span id="line.1">package squidpony.squidai;</span>
+<span class="source-line-no">002</span><span id="line.2"></span>
+<span class="source-line-no">003</span><span id="line.3">import squidpony.squidgrid.Radius;</span>
+<span class="source-line-no">004</span><span id="line.4">import squidpony.squidmath.Coord;</span>
+<span class="source-line-no">005</span><span id="line.5">import squidpony.squidmath.OrderedMap;</span>
+<span class="source-line-no">006</span><span id="line.6"></span>
+<span class="source-line-no">007</span><span id="line.7">import java.io.Serializable;</span>
+<span class="source-line-no">008</span><span id="line.8">import java.util.ArrayList;</span>
+<span class="source-line-no">009</span><span id="line.9">import java.util.Collection;</span>
+<span class="source-line-no">010</span><span id="line.10"></span>
+<span class="source-line-no">011</span><span id="line.11">/**</span>
+<span class="source-line-no">012</span><span id="line.12"> * Area of Effect interface meant to be implemented by various specific burst, line, flowing, and user-made AOE types.</span>
+<span class="source-line-no">013</span><span id="line.13"> * Created by Tommy Ettinger on 5/8/2015.</span>
+<span class="source-line-no">014</span><span id="line.14"> */</span>
+<span class="source-line-no">015</span><span id="line.15">public interface AOE extends Serializable {</span>
+<span class="source-line-no">016</span><span id="line.16">    /**</span>
+<span class="source-line-no">017</span><span id="line.17">     * After an AOE has been constructed, it may need to have the affected area shifted over to a different position</span>
+<span class="source-line-no">018</span><span id="line.18">     * without changing any other properties of the AOE. Some AOE implementations may have an origin where the AOE</span>
+<span class="source-line-no">019</span><span id="line.19">     * starts emanating from, but the origin will not be affected by this method; instead the cell specified by target</span>
+<span class="source-line-no">020</span><span id="line.20">     * must be enough on its own to select a different target area without the producer of the AOE needing to move.</span>
+<span class="source-line-no">021</span><span id="line.21">     * @param aim a  that will be used to change the location of the AOE without its producer needing to move</span>
+<span class="source-line-no">022</span><span id="line.22">     */</span>
+<span class="source-line-no">023</span><span id="line.23">    void shift(Coord aim);</span>
+<span class="source-line-no">024</span><span id="line.24"></span>
+<span class="source-line-no">025</span><span id="line.25">    /**</span>
+<span class="source-line-no">026</span><span id="line.26">     * Given a Set of Points that the producer of the AOE wants to include in the region of this AOE, this method does</span>
+<span class="source-line-no">027</span><span id="line.27">     * a quick approximation to see if there is any possibility that the AOE as currently configured might include one</span>
+<span class="source-line-no">028</span><span id="line.28">     * of those Points within itself. It does not do a full, detailed scan, nor does it count how many opponents might</span>
+<span class="source-line-no">029</span><span id="line.29">     * be included. It does not check the map to verify that there is any sort of path to a target. It is recommended</span>
+<span class="source-line-no">030</span><span id="line.30">     * that the Set of Points consist only of enemies that are within FOV, which cuts down a lot on the amount of checks</span>
+<span class="source-line-no">031</span><span id="line.31">     * this needs to make; if the game doesn't restrict the player's FOV, this is still recommended (just with a larger</span>
+<span class="source-line-no">032</span><span id="line.32">     * FOV radius) because it prevents checking enemies on the other side of the map and through multiple walls.</span>
+<span class="source-line-no">033</span><span id="line.33">     * @param targets a Collection (usually a Set) of Points that are desirable targets to include in this AOE</span>
+<span class="source-line-no">034</span><span id="line.34">     * @return true if there could be at least one target within the AOE, false otherwise. Very approximate.</span>
+<span class="source-line-no">035</span><span id="line.35">     */</span>
+<span class="source-line-no">036</span><span id="line.36">    boolean mayContainTarget(Collection&lt;Coord&gt; targets);</span>
+<span class="source-line-no">037</span><span id="line.37"></span>
+<span class="source-line-no">038</span><span id="line.38">    /**</span>
+<span class="source-line-no">039</span><span id="line.39">     * Returns a OrderedMap of Coord keys and ArrayList of Coord values, where each Coord key is an ideal location to</span>
+<span class="source-line-no">040</span><span id="line.40">     * hit as many of the Points in targets as possible without hitting any Points in requiredExclusions, and each value</span>
+<span class="source-line-no">041</span><span id="line.41">     * is the collection of targets that will be hit if the associated key is used. The length of any ArrayList in the</span>
+<span class="source-line-no">042</span><span id="line.42">     * returned collection's values will be the number of targets likely to be affected by the AOE when shift() is</span>
+<span class="source-line-no">043</span><span id="line.43">     * called with the Coord key as an argument; all of the ArrayLists should have the same length. The second argument</span>
+<span class="source-line-no">044</span><span id="line.44">     * may be null, in which case this will initialize it to an empty Set of Coord and disregard it.</span>
+<span class="source-line-no">045</span><span id="line.45">     *</span>
+<span class="source-line-no">046</span><span id="line.46">     * With complex maps and varied arrangements of obstacles and desirable targets, calculating the best points to</span>
+<span class="source-line-no">047</span><span id="line.47">     * evaluate for AI can be computationally difficult. This method provides a way to calculate with good accuracy</span>
+<span class="source-line-no">048</span><span id="line.48">     * the best Points to pass to shift(Coord) before calling findArea(). For "blackened thrash industrial death metal"</span>
+<span class="source-line-no">049</span><span id="line.49">     * levels of brutality for the AI, the results of this can be used verbatim, but for more reasonable AI levels, you</span>
+<span class="source-line-no">050</span><span id="line.50">     * can intentionally alter the best options to simulate imperfect aim or environmental variance on the AOE.</span>
+<span class="source-line-no">051</span><span id="line.51">     *</span>
+<span class="source-line-no">052</span><span id="line.52">     * Beast-like creatures that do not need devious AI should probably not use this method at all and instead use</span>
+<span class="source-line-no">053</span><span id="line.53">     * shift(Coord) with the location of some enemy (probably the closest) as its argument.</span>
+<span class="source-line-no">054</span><span id="line.54">     * @param targets a Set of Points that are desirable targets to include in this AOE</span>
+<span class="source-line-no">055</span><span id="line.55">     * @param requiredExclusions a Set of Points that this tries strongly to avoid including in this AOE</span>
+<span class="source-line-no">056</span><span id="line.56">     * @return a OrderedMap of Coord keys and ArrayList of Coord values where keys are ideal locations and values are the target points that will be hit when that key is used.</span>
+<span class="source-line-no">057</span><span id="line.57">     */</span>
+<span class="source-line-no">058</span><span id="line.58">    OrderedMap&lt;Coord, ArrayList&lt;Coord&gt;&gt; idealLocations(Collection&lt;Coord&gt; targets, Collection&lt;Coord&gt; requiredExclusions);</span>
+<span class="source-line-no">059</span><span id="line.59"></span>
+<span class="source-line-no">060</span><span id="line.60">    /**</span>
+<span class="source-line-no">061</span><span id="line.61">     * A variant of idealLocations that takes two groups of desirable targets, and will rate locations by how many</span>
+<span class="source-line-no">062</span><span id="line.62">     * priorityTargets are in the AOE, then by how many lesserTargets are in the AOE, and will only consider locations</span>
+<span class="source-line-no">063</span><span id="line.63">     * that do not affect a Coord in requiredExclusions. Unlike the variant of idealLocations that only takes one group</span>
+<span class="source-line-no">064</span><span id="line.64">     * of targets, this variant can return a collection with ArrayList values where the same Coord appears four times</span>
+<span class="source-line-no">065</span><span id="line.65">     * in the same ArrayList; this is done only for priorityTargets that are affected by the target Coord at the</span>
+<span class="source-line-no">066</span><span id="line.66">     * associated key, and is done so that the length of each similar-quality ArrayList should be identical (since a</span>
+<span class="source-line-no">067</span><span id="line.67">     * priorityTarget is worth four times what a lesserTarget is worth in the calculation this uses).</span>
+<span class="source-line-no">068</span><span id="line.68">     * @param priorityTargets A Set of Points that are the most-wanted targets to include in this AOE</span>
+<span class="source-line-no">069</span><span id="line.69">     * @param lesserTargets A Set of Points that are the less-wanted targets to include in this AOE, should not overlap with priorityTargets</span>
+<span class="source-line-no">070</span><span id="line.70">     * @param requiredExclusions a Set of Points that this tries strongly to avoid including in this AOE</span>
+<span class="source-line-no">071</span><span id="line.71">     * @return a OrderedMap of Coord keys and ArrayList of Coord values where keys are ideal locations and values are the target points that will be hit when that key is used.</span>
+<span class="source-line-no">072</span><span id="line.72">     */</span>
+<span class="source-line-no">073</span><span id="line.73">    OrderedMap&lt;Coord, ArrayList&lt;Coord&gt;&gt; idealLocations(Collection&lt;Coord&gt; priorityTargets, Collection&lt;Coord&gt; lesserTargets, Collection&lt;Coord&gt; requiredExclusions);</span>
+<span class="source-line-no">074</span><span id="line.74"></span>
+<span class="source-line-no">075</span><span id="line.75">    /**</span>
+<span class="source-line-no">076</span><span id="line.76">     * This must be called before any other methods, and takes a char[][] with '#' for walls, anything else for floors.</span>
+<span class="source-line-no">077</span><span id="line.77">     * It must be bounded with walls, which DungeonGenerator does automatically.</span>
+<span class="source-line-no">078</span><span id="line.78">     * @param map width first, height second, 2D char array.</span>
+<span class="source-line-no">079</span><span id="line.79">     */</span>
+<span class="source-line-no">080</span><span id="line.80">    void setMap(char[][] map);</span>
+<span class="source-line-no">081</span><span id="line.81"></span>
+<span class="source-line-no">082</span><span id="line.82">    /**</span>
+<span class="source-line-no">083</span><span id="line.83">     * This is how an AOE interacts with anything that uses it. It expects a map to have already been set with setMap,</span>
+<span class="source-line-no">084</span><span id="line.84">     * with '#' for walls, '.' for floors and potentially other chars that implementors can use if they are present in</span>
+<span class="source-line-no">085</span><span id="line.85">     * the map. The map must be bounded by walls, which DungeonGenerator does automatically and other generators can</span>
+<span class="source-line-no">086</span><span id="line.86">     * easily add with two loops.</span>
+<span class="source-line-no">087</span><span id="line.87">     *</span>
+<span class="source-line-no">088</span><span id="line.88">     * This returns an OrderedMap of Coord keys to Double values; if a cell is 100% affected by the AOE then the value</span>
+<span class="source-line-no">089</span><span id="line.89">     * should be 1.0; if it is 50% affected it should be 0.5, if unaffected should be 0.0, etc. The Coord keys should</span>
+<span class="source-line-no">090</span><span id="line.90">     * have the same x and y as the x,y map positions they correspond to.</span>
+<span class="source-line-no">091</span><span id="line.91">     * @return an OrderedMap of Coord keys to Double values from 1.0 (fully affected) to 0.0 (unaffected).</span>
+<span class="source-line-no">092</span><span id="line.92">     */</span>
+<span class="source-line-no">093</span><span id="line.93">    OrderedMap&lt;Coord, Double&gt; findArea();</span>
+<span class="source-line-no">094</span><span id="line.94"></span>
+<span class="source-line-no">095</span><span id="line.95">    /**</span>
+<span class="source-line-no">096</span><span id="line.96">     * Get the position from which the AOE originates, which may be related to the location of the AOE's effect, as for</span>
+<span class="source-line-no">097</span><span id="line.97">     * lines, cones, and other emitted effects, or may be unrelated except for determining which enemies can be seen</span>
+<span class="source-line-no">098</span><span id="line.98">     * or targeted from a given origin point (as for distant effects that radiate from a chosen central point, but</span>
+<span class="source-line-no">099</span><span id="line.99">     * have a maxRange at which they can deliver that effect).</span>
+<span class="source-line-no">100</span><span id="line.100">     */</span>
+<span class="source-line-no">101</span><span id="line.101">    Coord getOrigin();</span>
+<span class="source-line-no">102</span><span id="line.102"></span>
+<span class="source-line-no">103</span><span id="line.103">    /**</span>
+<span class="source-line-no">104</span><span id="line.104">     * Set the position from which the AOE originates, which may be related to the location of the AOE's effect, as for</span>
+<span class="source-line-no">105</span><span id="line.105">     * lines, cones, and other emitted effects, or may be unrelated except for determining which enemies can be seen</span>
+<span class="source-line-no">106</span><span id="line.106">     * or targeted from a given origin point (as for distant effects that radiate from a chosen central point, but</span>
+<span class="source-line-no">107</span><span id="line.107">     * have a maxRange at which they can deliver that effect).</span>
+<span class="source-line-no">108</span><span id="line.108">     */</span>
+<span class="source-line-no">109</span><span id="line.109">    void setOrigin(Coord origin);</span>
+<span class="source-line-no">110</span><span id="line.110"></span>
+<span class="source-line-no">111</span><span id="line.111">    /**</span>
+<span class="source-line-no">112</span><span id="line.112">     * Gets the AimLimit enum that can be used to restrict points this checks (defaults to null if not set).</span>
+<span class="source-line-no">113</span><span id="line.113">     * You can use limitType to restrict any Points that might be processed based on the given origin (which will be</span>
+<span class="source-line-no">114</span><span id="line.114">     * used as the geometric origin for any calculations this makes) with AimLimit values having the following meanings:</span>
+<span class="source-line-no">115</span><span id="line.115">     *</span>
+<span class="source-line-no">116</span><span id="line.116">     * &lt;ul&gt;</span>
+<span class="source-line-no">117</span><span id="line.117">     *     &lt;li&gt;AimLimit.FREE makes no restrictions; it is equivalent here to passing null for limit.&lt;/li&gt;</span>
+<span class="source-line-no">118</span><span id="line.118">     *     &lt;li&gt;AimLimit.EIGHT_WAY will only consider Points to be valid targets</span>
+<span class="source-line-no">119</span><span id="line.119">     *     if they are along a straight line with an angle that is a multiple of 45 degrees, relative to the positive x</span>
+<span class="source-line-no">120</span><span id="line.120">     *     axis. Essentially, this limits the points to those a queen could move to in chess.&lt;/li&gt;</span>
+<span class="source-line-no">121</span><span id="line.121">     *     &lt;li&gt;AimLimit.ORTHOGONAL will cause the AOE to only consider Points to be valid targets if</span>
+<span class="source-line-no">122</span><span id="line.122">     *     they are along a straight line with an angle that is a multiple of 90 degrees, relative to the positive x</span>
+<span class="source-line-no">123</span><span id="line.123">     *     axis. Essentially, this limits the points to those a rook could move to in chess.&lt;/li&gt;</span>
+<span class="source-line-no">124</span><span id="line.124">     *     &lt;li&gt;AimLimit.DIAGONAL will cause the AOE to only consider Points to be valid targets if they are along a</span>
+<span class="source-line-no">125</span><span id="line.125">     *     straight line with an angle that is 45 degrees greater than a multiple of 90 degrees, relative to the</span>
+<span class="source-line-no">126</span><span id="line.126">     *     positive x axis. Essentially, this limits the points to those a bishop could move to in chess.&lt;/li&gt;</span>
+<span class="source-line-no">127</span><span id="line.127">     *     &lt;li&gt;null will cause the AOE to consider all points.&lt;/li&gt;</span>
+<span class="source-line-no">128</span><span id="line.128">     * &lt;/ul&gt;</span>
+<span class="source-line-no">129</span><span id="line.129">     */</span>
+<span class="source-line-no">130</span><span id="line.130">    AimLimit getLimitType();</span>
+<span class="source-line-no">131</span><span id="line.131">    /**</span>
+<span class="source-line-no">132</span><span id="line.132">     * The minimum inclusive range that the AOE can be shift()-ed to using the distance measurement from radiusType.</span>
+<span class="source-line-no">133</span><span id="line.133">     */</span>
+<span class="source-line-no">134</span><span id="line.134">    int getMinRange();</span>
+<span class="source-line-no">135</span><span id="line.135">    /**</span>
+<span class="source-line-no">136</span><span id="line.136">     * The maximum inclusive range that the AOE can be shift()-ed to using the distance measurement from radiusType.</span>
+<span class="source-line-no">137</span><span id="line.137">     */</span>
+<span class="source-line-no">138</span><span id="line.138">    int getMaxRange();</span>
+<span class="source-line-no">139</span><span id="line.139">    /**</span>
+<span class="source-line-no">140</span><span id="line.140">     * Used to determine distance from origin for the purposes of selecting a target location that is within the bounds</span>
+<span class="source-line-no">141</span><span id="line.141">     * of minRange and maxRange. Not necessarily used for the implementation of the AOE (randomized-floodfill-based AOE</span>
+<span class="source-line-no">142</span><span id="line.142">     * should almost always use Manhattan distance for its spread due to how the algorithm works, but the positioning of</span>
+<span class="source-line-no">143</span><span id="line.143">     * where that floodfill should be allowed to start should likely follow the same distance measurement as the rest of</span>
+<span class="source-line-no">144</span><span id="line.144">     * the game, like Radius.SQUARE for Chebyshev distance/8-way movement).</span>
+<span class="source-line-no">145</span><span id="line.145">     */</span>
+<span class="source-line-no">146</span><span id="line.146">    Radius getMetric();</span>
+<span class="source-line-no">147</span><span id="line.147"></span>
+<span class="source-line-no">148</span><span id="line.148">    /**</span>
+<span class="source-line-no">149</span><span id="line.149">     * Gets the same values returned by getLimitType(), getMinRange(), getMaxRange(), and getMetric() bundled into one</span>
+<span class="source-line-no">150</span><span id="line.150">     * Reach object.</span>
+<span class="source-line-no">151</span><span id="line.151">     * @return a non-null Reach object.</span>
+<span class="source-line-no">152</span><span id="line.152">     */</span>
+<span class="source-line-no">153</span><span id="line.153">    Reach getReach();</span>
+<span class="source-line-no">154</span><span id="line.154"></span>
+<span class="source-line-no">155</span><span id="line.155">    /**</span>
+<span class="source-line-no">156</span><span id="line.156">     * You can use limitType to restrict any Points that might be processed based on the given origin (which will be</span>
+<span class="source-line-no">157</span><span id="line.157">     * used as the geometric origin for any calculations this makes) with AimLimit values having the following meanings:</span>
+<span class="source-line-no">158</span><span id="line.158">     *</span>
+<span class="source-line-no">159</span><span id="line.159">     * &lt;ul&gt;</span>
+<span class="source-line-no">160</span><span id="line.160">     *     &lt;li&gt;AimLimit.FREE makes no restrictions; it is equivalent here to passing null for limit.&lt;/li&gt;</span>
+<span class="source-line-no">161</span><span id="line.161">     *     &lt;li&gt;AimLimit.EIGHT_WAY will only consider Points to be valid targets</span>
+<span class="source-line-no">162</span><span id="line.162">     *     if they are along a straight line with an angle that is a multiple of 45 degrees, relative to the positive x</span>
+<span class="source-line-no">163</span><span id="line.163">     *     axis. Essentially, this limits the points to those a queen could move to in chess.&lt;/li&gt;</span>
+<span class="source-line-no">164</span><span id="line.164">     *     &lt;li&gt;AimLimit.ORTHOGONAL will cause the AOE to only consider Points to be valid targets if</span>
+<span class="source-line-no">165</span><span id="line.165">     *     they are along a straight line with an angle that is a multiple of 90 degrees, relative to the positive x</span>
+<span class="source-line-no">166</span><span id="line.166">     *     axis. Essentially, this limits the points to those a rook could move to in chess.&lt;/li&gt;</span>
+<span class="source-line-no">167</span><span id="line.167">     *     &lt;li&gt;AimLimit.DIAGONAL will cause the AOE to only consider Points to be valid targets if they are along a</span>
+<span class="source-line-no">168</span><span id="line.168">     *     straight line with an angle that is 45 degrees greater than a multiple of 90 degrees, relative to the</span>
+<span class="source-line-no">169</span><span id="line.169">     *     positive x axis. Essentially, this limits the points to those a bishop could move to in chess.&lt;/li&gt;</span>
+<span class="source-line-no">170</span><span id="line.170">     * &lt;/ul&gt;</span>
+<span class="source-line-no">171</span><span id="line.171">     *</span>
+<span class="source-line-no">172</span><span id="line.172">     * Points that are not valid for this limit will simply not be considered.</span>
+<span class="source-line-no">173</span><span id="line.173">     * @param limitType an AimLimit enum</span>
+<span class="source-line-no">174</span><span id="line.174">     */</span>
+<span class="source-line-no">175</span><span id="line.175">    void setLimitType(AimLimit limitType);</span>
+<span class="source-line-no">176</span><span id="line.176">    /**</span>
+<span class="source-line-no">177</span><span id="line.177">     * The minimum inclusive range that the AOE can be shift()-ed to using the distance measurement from radiusType.</span>
+<span class="source-line-no">178</span><span id="line.178">     */</span>
+<span class="source-line-no">179</span><span id="line.179">    void setMinRange(int minRange);</span>
+<span class="source-line-no">180</span><span id="line.180">    /**</span>
+<span class="source-line-no">181</span><span id="line.181">     * The maximum inclusive range that the AOE can be shift()-ed to using the distance measurement from radiusType.</span>
+<span class="source-line-no">182</span><span id="line.182">     */</span>
+<span class="source-line-no">183</span><span id="line.183">    void setMaxRange(int maxRange);</span>
+<span class="source-line-no">184</span><span id="line.184">    /**</span>
+<span class="source-line-no">185</span><span id="line.185">     * Used to determine distance from origin for the purposes of selecting a target location that is within the bounds</span>
+<span class="source-line-no">186</span><span id="line.186">     * of minRange and maxRange. Not necessarily used for the implementation of the AOE (randomized-floodfill-based AOE</span>
+<span class="source-line-no">187</span><span id="line.187">     * should almost always use Manhattan distance for its spread due to how the algorithm works, but the positioning of</span>
+<span class="source-line-no">188</span><span id="line.188">     * where that floodfill should be allowed to start should likely follow the same distance measurement as the rest of</span>
+<span class="source-line-no">189</span><span id="line.189">     * the game, like Radius.SQUARE for Chebyshev distance/8-way movement).</span>
+<span class="source-line-no">190</span><span id="line.190">     */</span>
+<span class="source-line-no">191</span><span id="line.191">    void setMetric(Radius metric);</span>
+<span class="source-line-no">192</span><span id="line.192"></span>
+<span class="source-line-no">193</span><span id="line.193">    /**</span>
+<span class="source-line-no">194</span><span id="line.194">     * Sets the same values as setLimitType(), setMinRange(), setMaxRange(), and setMetric() using one Reach object.</span>
+<span class="source-line-no">195</span><span id="line.195">     * @param reach a non-null Reach object.</span>
+<span class="source-line-no">196</span><span id="line.196">     */</span>
+<span class="source-line-no">197</span><span id="line.197">    void setReach(Reach reach);</span>
+<span class="source-line-no">198</span><span id="line.198"></span>
+<span class="source-line-no">199</span><span id="line.199">}</span>
 
 
 

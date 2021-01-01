@@ -7,365 +7,365 @@
 <meta name="generator" content="javadoc/SourceToHTMLConverter">
 <link rel="stylesheet" type="text/css" href="../../../../../stylesheet.css" title="Style">
 </head>
-<body class="source">
+<body class="source-page">
 <main role="main">
-<div class="sourceContainer">
-<pre><span class="sourceLineNo">001</span><a id="line.1">package squidpony.squidgrid.gui.gdx;</a>
-<span class="sourceLineNo">002</span><a id="line.2"></a>
-<span class="sourceLineNo">003</span><a id="line.3">import squidpony.squidmath.FastNoise;</a>
-<span class="sourceLineNo">004</span><a id="line.4">import squidpony.squidmath.GWTRNG;</a>
-<span class="sourceLineNo">005</span><a id="line.5">import squidpony.squidmath.NumberTools;</a>
-<span class="sourceLineNo">006</span><a id="line.6"></a>
-<span class="sourceLineNo">007</span><a id="line.7">import static squidpony.squidmath.IntPointHash.hashAll;</a>
-<span class="sourceLineNo">008</span><a id="line.8">import static squidpony.squidmath.Noise.fastFloor;</a>
-<span class="sourceLineNo">009</span><a id="line.9"></a>
-<span class="sourceLineNo">010</span><a id="line.10">/**</a>
-<span class="sourceLineNo">011</span><a id="line.11"> * Created by Tommy Ettinger on 6/12/2017.</a>
-<span class="sourceLineNo">012</span><a id="line.12"> */</a>
-<span class="sourceLineNo">013</span><a id="line.13">public class ColorNoise extends FastNoise {</a>
-<span class="sourceLineNo">014</span><a id="line.14">    public static final ColorNoise instance = new ColorNoise();</a>
-<span class="sourceLineNo">015</span><a id="line.15">    public ColorNoise() {</a>
-<span class="sourceLineNo">016</span><a id="line.16">    }</a>
-<span class="sourceLineNo">017</span><a id="line.17"></a>
-<span class="sourceLineNo">018</span><a id="line.18">    public ColorNoise(int seed) {</a>
-<span class="sourceLineNo">019</span><a id="line.19">        super(seed);</a>
-<span class="sourceLineNo">020</span><a id="line.20">    }</a>
-<span class="sourceLineNo">021</span><a id="line.21"></a>
-<span class="sourceLineNo">022</span><a id="line.22">    public static int bounce256(final int s) { return (s ^ -((s &amp; 0x100) &gt;&gt; 8)) &amp; 0xff; }</a>
-<span class="sourceLineNo">023</span><a id="line.23"></a>
-<span class="sourceLineNo">024</span><a id="line.24">    public float colorNoise(final double noise)</a>
-<span class="sourceLineNo">025</span><a id="line.25">    {</a>
-<span class="sourceLineNo">026</span><a id="line.26">        return SColor.floatGetHSV(NumberTools.zigzag((float) (noise * 16.0)), 0.75f + (float) NumberTools.zigzag(noise * 9.0) * 0.25f, 0.7f + (float) NumberTools.zigzag(noise * 7.0 + 0.5) * 0.3f, 1f);</a>
-<span class="sourceLineNo">027</span><a id="line.27">//        return NumberTools.intBitsToFloat(0xfe000000 |</a>
-<span class="sourceLineNo">028</span><a id="line.28">//                (bounce256((int) ((noise * 1.29 + 1.39) * (0x3DF9f)) &gt;&gt;&gt; 8) &lt;&lt; 16) |</a>
-<span class="sourceLineNo">029</span><a id="line.29">//                (bounce256((int) ((noise * 1.18 + 1.45) * (0x3EB9f)) &gt;&gt;&gt; 8) &lt;&lt; 8) |</a>
-<span class="sourceLineNo">030</span><a id="line.30">//                (bounce256((int) ((noise * 1.07 + 1.51) * (0x3E99f)) &gt;&gt;&gt; 8)));</a>
-<span class="sourceLineNo">031</span><a id="line.31">    }</a>
-<span class="sourceLineNo">032</span><a id="line.32"></a>
-<span class="sourceLineNo">033</span><a id="line.33">    /**</a>
-<span class="sourceLineNo">034</span><a id="line.34">     * 2D simplex noise that produces a color, as a packed float.</a>
-<span class="sourceLineNo">035</span><a id="line.35">     *</a>
-<span class="sourceLineNo">036</span><a id="line.36">     * @param xin X input; works well if between 0.0 and 1.0, but anything is accepted</a>
-<span class="sourceLineNo">037</span><a id="line.37">     * @param yin Y input; works well if between 0.0 and 1.0, but anything is accepted</a>
-<span class="sourceLineNo">038</span><a id="line.38">     * @param seed a seed that will change how and when any colors will be produced</a>
-<span class="sourceLineNo">039</span><a id="line.39">     * @return noise in the form of a packed float color</a>
-<span class="sourceLineNo">040</span><a id="line.40">     */</a>
-<span class="sourceLineNo">041</span><a id="line.41">    public float colorNoise(final float xin, final float yin, final int seed) {</a>
-<span class="sourceLineNo">042</span><a id="line.42">        float noise0, noise1, noise2; // from the three corners</a>
-<span class="sourceLineNo">043</span><a id="line.43">        // Skew the input space to figure out which simplex cell we're in</a>
-<span class="sourceLineNo">044</span><a id="line.44">        float skew = (xin + yin) * F2f; // Hairy factor for 2D</a>
-<span class="sourceLineNo">045</span><a id="line.45">        int i = fastFloor(xin + skew);</a>
-<span class="sourceLineNo">046</span><a id="line.46">        int j = fastFloor(yin + skew);</a>
-<span class="sourceLineNo">047</span><a id="line.47">        float t = (i + j) * G2f;</a>
-<span class="sourceLineNo">048</span><a id="line.48">        float X0 = i - t; // Unskew the cell origin back to (x,y) space</a>
-<span class="sourceLineNo">049</span><a id="line.49">        float Y0 = j - t;</a>
-<span class="sourceLineNo">050</span><a id="line.50">        float x0 = xin - X0; // The x,y distances from the cell origin</a>
-<span class="sourceLineNo">051</span><a id="line.51">        float y0 = yin - Y0;</a>
-<span class="sourceLineNo">052</span><a id="line.52">        // For the 2D case, the simplex shape is an equilateral triangle.</a>
-<span class="sourceLineNo">053</span><a id="line.53">        // determine which simplex we are in.</a>
-<span class="sourceLineNo">054</span><a id="line.54">        int i1, j1; // Offsets for second (middle) corner of simplex in (i,j)</a>
-<span class="sourceLineNo">055</span><a id="line.55">        // coords</a>
-<span class="sourceLineNo">056</span><a id="line.56">        if (x0 &gt; y0) {</a>
-<span class="sourceLineNo">057</span><a id="line.57">            i1 = 1;</a>
-<span class="sourceLineNo">058</span><a id="line.58">            j1 = 0;</a>
-<span class="sourceLineNo">059</span><a id="line.59">        } // lower triangle, XY order: (0,0)-&gt;(1,0)-&gt;(1,1)</a>
-<span class="sourceLineNo">060</span><a id="line.60">        else {</a>
-<span class="sourceLineNo">061</span><a id="line.61">            i1 = 0;</a>
-<span class="sourceLineNo">062</span><a id="line.62">            j1 = 1;</a>
-<span class="sourceLineNo">063</span><a id="line.63">        } // upper triangle, YX order: (0,0)-&gt;(0,1)-&gt;(1,1)</a>
-<span class="sourceLineNo">064</span><a id="line.64">        // A step of (1,0) in (i,j) means a step of (1-c,-c) in (x,y), and</a>
-<span class="sourceLineNo">065</span><a id="line.65">        // a step of (0,1) in (i,j) means a step of (-c,1-c) in (x,y),</a>
-<span class="sourceLineNo">066</span><a id="line.66">        // where</a>
-<span class="sourceLineNo">067</span><a id="line.67">        // c = (3-sqrt(3))/6</a>
-<span class="sourceLineNo">068</span><a id="line.68">        float x1 = x0 - i1 + G2f; // Offsets for middle corner in (x,y)</a>
-<span class="sourceLineNo">069</span><a id="line.69">        // unskewed coords</a>
-<span class="sourceLineNo">070</span><a id="line.70">        float y1 = y0 - j1 + G2f;</a>
-<span class="sourceLineNo">071</span><a id="line.71">        float x2 = x0 - 1f + 2f * G2f; // Offsets for last corner in (x,y)</a>
-<span class="sourceLineNo">072</span><a id="line.72">        // unskewed coords</a>
-<span class="sourceLineNo">073</span><a id="line.73">        float y2 = y0 - 1f + 2f * G2f;</a>
-<span class="sourceLineNo">074</span><a id="line.74">        // Work out the hashed gradient indices of the three simplex corners</a>
-<span class="sourceLineNo">075</span><a id="line.75">//        int gi0 = (int)(determine(seed + i + determine(j)) &gt;&gt;&gt; 16);</a>
-<span class="sourceLineNo">076</span><a id="line.76">//        int gi1 = (int)(determine(seed + i + i1 + determine(j + j1)) &gt;&gt;&gt; 16);</a>
-<span class="sourceLineNo">077</span><a id="line.77">//        int gi2 = (int)(determine(seed + i + 1 + determine(j + 1)) &gt;&gt;&gt; 16);</a>
-<span class="sourceLineNo">078</span><a id="line.78">        int gi0 = (hashAll(i, j, seed) &amp; 0xFFFFFF);</a>
-<span class="sourceLineNo">079</span><a id="line.79">        int gi1 = (hashAll(i + i1, j + j1, seed) &amp; 0xFFFFFF);</a>
-<span class="sourceLineNo">080</span><a id="line.80">        int gi2 = (hashAll(i + 1, j + 1, seed) &amp; 0xFFFFFF);</a>
-<span class="sourceLineNo">081</span><a id="line.81"></a>
-<span class="sourceLineNo">082</span><a id="line.82">        float luma, cb, cr, t0, t1, t2;</a>
-<span class="sourceLineNo">083</span><a id="line.83">        // Calculate the contribution from the three corners</a>
-<span class="sourceLineNo">084</span><a id="line.84">        t0 = 0.75f - x0 * x0 - y0 * y0;</a>
-<span class="sourceLineNo">085</span><a id="line.85">        if (t0 &lt; 0) {</a>
-<span class="sourceLineNo">086</span><a id="line.86">            noise0 = 0f;</a>
-<span class="sourceLineNo">087</span><a id="line.87">        } else {</a>
-<span class="sourceLineNo">088</span><a id="line.88">            t0 *= t0;</a>
-<span class="sourceLineNo">089</span><a id="line.89">            noise0 = t0 * t0 * dotf(phiGrad2f[gi0 &amp; 255], x0, y0);</a>
-<span class="sourceLineNo">090</span><a id="line.90">        }</a>
-<span class="sourceLineNo">091</span><a id="line.91">        t1 = 0.75f - x1 * x1 - y1 * y1;</a>
-<span class="sourceLineNo">092</span><a id="line.92">        if (t1 &lt; 0) {</a>
-<span class="sourceLineNo">093</span><a id="line.93">            noise1 = 0f;</a>
-<span class="sourceLineNo">094</span><a id="line.94">        } else {</a>
-<span class="sourceLineNo">095</span><a id="line.95">            t1 *= t1;</a>
-<span class="sourceLineNo">096</span><a id="line.96">            noise1 = t1 * t1 * dotf(phiGrad2f[gi1 &amp; 255], x1, y1);</a>
-<span class="sourceLineNo">097</span><a id="line.97">        }</a>
-<span class="sourceLineNo">098</span><a id="line.98">        t2 = 0.75f - x2 * x2 - y2 * y2;</a>
-<span class="sourceLineNo">099</span><a id="line.99">        if (t2 &lt; 0) {</a>
-<span class="sourceLineNo">100</span><a id="line.100">            noise2 = 0f;</a>
-<span class="sourceLineNo">101</span><a id="line.101">        } else {</a>
-<span class="sourceLineNo">102</span><a id="line.102">            t2 *= t2;</a>
-<span class="sourceLineNo">103</span><a id="line.103">            noise2 = t2 * t2 * dotf(phiGrad2f[gi2 &amp; 255], x2, y2);</a>
-<span class="sourceLineNo">104</span><a id="line.104">        }</a>
-<span class="sourceLineNo">105</span><a id="line.105">        // Add contributions from each corner to get the final noise value.</a>
-<span class="sourceLineNo">106</span><a id="line.106">        // The result is scaled to return values in the interval [0,1].</a>
-<span class="sourceLineNo">107</span><a id="line.107">        luma = 4.5625f * (noise0 + noise1 + noise2) + 0.5f;</a>
-<span class="sourceLineNo">108</span><a id="line.108">        gi0 &gt;&gt;&gt;= 8;</a>
-<span class="sourceLineNo">109</span><a id="line.109">        gi1 &gt;&gt;&gt;= 8;</a>
-<span class="sourceLineNo">110</span><a id="line.110">        gi2 &gt;&gt;&gt;= 8;</a>
-<span class="sourceLineNo">111</span><a id="line.111"></a>
-<span class="sourceLineNo">112</span><a id="line.112">        // Calculate the contribution from the three corners</a>
-<span class="sourceLineNo">113</span><a id="line.113">        t0 = 0.75f - x0 * x0 - y0 * y0;</a>
-<span class="sourceLineNo">114</span><a id="line.114">        if (t0 &lt; 0) {</a>
-<span class="sourceLineNo">115</span><a id="line.115">            noise0 = 0f;</a>
-<span class="sourceLineNo">116</span><a id="line.116">        } else {</a>
-<span class="sourceLineNo">117</span><a id="line.117">            t0 *= t0;</a>
-<span class="sourceLineNo">118</span><a id="line.118">            noise0 = t0 * t0 * dotf(phiGrad2f[gi0 &amp; 255], x0, y0);</a>
-<span class="sourceLineNo">119</span><a id="line.119">        }</a>
-<span class="sourceLineNo">120</span><a id="line.120">        t1 = 0.75f - x1 * x1 - y1 * y1;</a>
-<span class="sourceLineNo">121</span><a id="line.121">        if (t1 &lt; 0) {</a>
-<span class="sourceLineNo">122</span><a id="line.122">            noise1 = 0f;</a>
-<span class="sourceLineNo">123</span><a id="line.123">        } else {</a>
-<span class="sourceLineNo">124</span><a id="line.124">            t1 *= t1;</a>
-<span class="sourceLineNo">125</span><a id="line.125">            noise1 = t1 * t1 * dotf(phiGrad2f[gi1 &amp; 255], x1, y1);</a>
-<span class="sourceLineNo">126</span><a id="line.126">        }</a>
-<span class="sourceLineNo">127</span><a id="line.127">        t2 = 0.75f - x2 * x2 - y2 * y2;</a>
-<span class="sourceLineNo">128</span><a id="line.128">        if (t2 &lt; 0) {</a>
-<span class="sourceLineNo">129</span><a id="line.129">            noise2 = 0f;</a>
-<span class="sourceLineNo">130</span><a id="line.130">        } else {</a>
-<span class="sourceLineNo">131</span><a id="line.131">            t2 *= t2;</a>
-<span class="sourceLineNo">132</span><a id="line.132">            noise2 = t2 * t2 * dotf(phiGrad2f[gi2 &amp; 255], x2, y2);</a>
-<span class="sourceLineNo">133</span><a id="line.133">        }</a>
-<span class="sourceLineNo">134</span><a id="line.134">        // Add contributions from each corner to get the final noise value.</a>
-<span class="sourceLineNo">135</span><a id="line.135">        // The result is scaled to return values in the interval [-0.5,0.5].</a>
-<span class="sourceLineNo">136</span><a id="line.136">        cb = 4.5625f * (noise0 + noise1 + noise2);</a>
-<span class="sourceLineNo">137</span><a id="line.137">        gi0 &gt;&gt;&gt;= 8;</a>
-<span class="sourceLineNo">138</span><a id="line.138">        gi1 &gt;&gt;&gt;= 8;</a>
-<span class="sourceLineNo">139</span><a id="line.139">        gi2 &gt;&gt;&gt;= 8;</a>
-<span class="sourceLineNo">140</span><a id="line.140">        // Calculate the contribution from the three corners</a>
-<span class="sourceLineNo">141</span><a id="line.141">        t0 = 0.75f - x0 * x0 - y0 * y0;</a>
-<span class="sourceLineNo">142</span><a id="line.142">        if (t0 &lt; 0) {</a>
-<span class="sourceLineNo">143</span><a id="line.143">            noise0 = 0f;</a>
-<span class="sourceLineNo">144</span><a id="line.144">        } else {</a>
-<span class="sourceLineNo">145</span><a id="line.145">            t0 *= t0;</a>
-<span class="sourceLineNo">146</span><a id="line.146">            noise0 = t0 * t0 * dotf(phiGrad2f[gi0 &amp; 255], x0, y0);</a>
-<span class="sourceLineNo">147</span><a id="line.147">        }</a>
-<span class="sourceLineNo">148</span><a id="line.148">        t1 = 0.75f - x1 * x1 - y1 * y1;</a>
-<span class="sourceLineNo">149</span><a id="line.149">        if (t1 &lt; 0) {</a>
-<span class="sourceLineNo">150</span><a id="line.150">            noise1 = 0f;</a>
-<span class="sourceLineNo">151</span><a id="line.151">        } else {</a>
-<span class="sourceLineNo">152</span><a id="line.152">            t1 *= t1;</a>
-<span class="sourceLineNo">153</span><a id="line.153">            noise1 = t1 * t1 * dotf(phiGrad2f[gi1 &amp; 255], x1, y1);</a>
-<span class="sourceLineNo">154</span><a id="line.154">        }</a>
-<span class="sourceLineNo">155</span><a id="line.155">        t2 = 0.75f - x2 * x2 - y2 * y2;</a>
-<span class="sourceLineNo">156</span><a id="line.156">        if (t2 &lt; 0) {</a>
-<span class="sourceLineNo">157</span><a id="line.157">            noise2 = 0f;</a>
-<span class="sourceLineNo">158</span><a id="line.158">        } else {</a>
-<span class="sourceLineNo">159</span><a id="line.159">            t2 *= t2;</a>
-<span class="sourceLineNo">160</span><a id="line.160">            noise2 = t2 * t2 * dotf(phiGrad2f[gi2 &amp; 255], x2, y2);</a>
-<span class="sourceLineNo">161</span><a id="line.161">        }</a>
-<span class="sourceLineNo">162</span><a id="line.162">        // Add contributions from each corner to get the final noise value.</a>
-<span class="sourceLineNo">163</span><a id="line.163">        // The result is scaled to return values in the interval [-0.5,0.5].</a>
-<span class="sourceLineNo">164</span><a id="line.164">        cr = 4.5625f * (noise0 + noise1 + noise2);</a>
-<span class="sourceLineNo">165</span><a id="line.165">        return SColor.floatGetYCbCr(luma, cb, cr, 1f);</a>
-<span class="sourceLineNo">166</span><a id="line.166">    }</a>
-<span class="sourceLineNo">167</span><a id="line.167"></a>
-<span class="sourceLineNo">168</span><a id="line.168"></a>
-<span class="sourceLineNo">169</span><a id="line.169"></a>
-<span class="sourceLineNo">170</span><a id="line.170">    /**</a>
-<span class="sourceLineNo">171</span><a id="line.171">     * 3D simplex noise that produces a color, as a packed float.</a>
-<span class="sourceLineNo">172</span><a id="line.172">     *</a>
-<span class="sourceLineNo">173</span><a id="line.173">     * @param xin X input; works well if between 0.0 and 1.0, but anything is accepted</a>
-<span class="sourceLineNo">174</span><a id="line.174">     * @param yin Y input; works well if between 0.0 and 1.0, but anything is accepted</a>
-<span class="sourceLineNo">175</span><a id="line.175">     * @param zin Z input; works well if between 0.0 and 1.0, but anything is accepted</a>
-<span class="sourceLineNo">176</span><a id="line.176">     * @param seed a seed that will change how and when any colors will be produced</a>
-<span class="sourceLineNo">177</span><a id="line.177">     * @return noise in the form of a packed float color</a>
-<span class="sourceLineNo">178</span><a id="line.178">     */</a>
-<span class="sourceLineNo">179</span><a id="line.179">    public float colorNoise(final float xin, final float yin, final float zin, final int seed) {</a>
-<span class="sourceLineNo">180</span><a id="line.180">        float n0, n1, n2, n3; // Noise contributions from the four corners</a>
-<span class="sourceLineNo">181</span><a id="line.181">        // Skew the input space to figure out which simplex cell we're in</a>
-<span class="sourceLineNo">182</span><a id="line.182">        float s = (xin + yin + zin) * F3f; // Very nice and simple skew</a>
-<span class="sourceLineNo">183</span><a id="line.183">        // factor for 3D</a>
-<span class="sourceLineNo">184</span><a id="line.184">        int i = fastFloor(xin + s);</a>
-<span class="sourceLineNo">185</span><a id="line.185">        int j = fastFloor(yin + s);</a>
-<span class="sourceLineNo">186</span><a id="line.186">        int k = fastFloor(zin + s);</a>
-<span class="sourceLineNo">187</span><a id="line.187">        float t = (i + j + k) * G3f;</a>
-<span class="sourceLineNo">188</span><a id="line.188">        float X0 = i - t; // Unskew the cell origin back to (x,y,z) space</a>
-<span class="sourceLineNo">189</span><a id="line.189">        float Y0 = j - t;</a>
-<span class="sourceLineNo">190</span><a id="line.190">        float Z0 = k - t;</a>
-<span class="sourceLineNo">191</span><a id="line.191">        float x0 = xin - X0; // The x,y,z distances from the cell origin</a>
-<span class="sourceLineNo">192</span><a id="line.192">        float y0 = yin - Y0;</a>
-<span class="sourceLineNo">193</span><a id="line.193">        float z0 = zin - Z0;</a>
-<span class="sourceLineNo">194</span><a id="line.194">        // For the 3D case, the simplex shape is a slightly irregular</a>
-<span class="sourceLineNo">195</span><a id="line.195">        // tetrahedron.</a>
-<span class="sourceLineNo">196</span><a id="line.196">        // determine which simplex we are in.</a>
-<span class="sourceLineNo">197</span><a id="line.197">        int i1, j1, k1; // Offsets for second corner of simplex in (i,j,k) coords</a>
-<span class="sourceLineNo">198</span><a id="line.198">        int i2, j2, k2; // Offsets for third corner of simplex in (i,j,k) coords</a>
-<span class="sourceLineNo">199</span><a id="line.199">        if (x0 &gt;= y0) {</a>
-<span class="sourceLineNo">200</span><a id="line.200">            if (y0 &gt;= z0) {</a>
-<span class="sourceLineNo">201</span><a id="line.201">                i1 = 1;</a>
-<span class="sourceLineNo">202</span><a id="line.202">                j1 = 0;</a>
-<span class="sourceLineNo">203</span><a id="line.203">                k1 = 0;</a>
-<span class="sourceLineNo">204</span><a id="line.204">                i2 = 1;</a>
-<span class="sourceLineNo">205</span><a id="line.205">                j2 = 1;</a>
-<span class="sourceLineNo">206</span><a id="line.206">                k2 = 0;</a>
-<span class="sourceLineNo">207</span><a id="line.207">            } // X Y Z order</a>
-<span class="sourceLineNo">208</span><a id="line.208">            else if (x0 &gt;= z0) {</a>
-<span class="sourceLineNo">209</span><a id="line.209">                i1 = 1;</a>
-<span class="sourceLineNo">210</span><a id="line.210">                j1 = 0;</a>
-<span class="sourceLineNo">211</span><a id="line.211">                k1 = 0;</a>
-<span class="sourceLineNo">212</span><a id="line.212">                i2 = 1;</a>
-<span class="sourceLineNo">213</span><a id="line.213">                j2 = 0;</a>
-<span class="sourceLineNo">214</span><a id="line.214">                k2 = 1;</a>
-<span class="sourceLineNo">215</span><a id="line.215">            } // X Z Y order</a>
-<span class="sourceLineNo">216</span><a id="line.216">            else {</a>
-<span class="sourceLineNo">217</span><a id="line.217">                i1 = 0;</a>
-<span class="sourceLineNo">218</span><a id="line.218">                j1 = 0;</a>
-<span class="sourceLineNo">219</span><a id="line.219">                k1 = 1;</a>
-<span class="sourceLineNo">220</span><a id="line.220">                i2 = 1;</a>
-<span class="sourceLineNo">221</span><a id="line.221">                j2 = 0;</a>
-<span class="sourceLineNo">222</span><a id="line.222">                k2 = 1;</a>
-<span class="sourceLineNo">223</span><a id="line.223">            } // Z X Y order</a>
-<span class="sourceLineNo">224</span><a id="line.224">        } else { // x0&lt;y0</a>
-<span class="sourceLineNo">225</span><a id="line.225">            if (y0 &lt; z0) {</a>
-<span class="sourceLineNo">226</span><a id="line.226">                i1 = 0;</a>
-<span class="sourceLineNo">227</span><a id="line.227">                j1 = 0;</a>
-<span class="sourceLineNo">228</span><a id="line.228">                k1 = 1;</a>
-<span class="sourceLineNo">229</span><a id="line.229">                i2 = 0;</a>
-<span class="sourceLineNo">230</span><a id="line.230">                j2 = 1;</a>
-<span class="sourceLineNo">231</span><a id="line.231">                k2 = 1;</a>
-<span class="sourceLineNo">232</span><a id="line.232">            } // Z Y X order</a>
-<span class="sourceLineNo">233</span><a id="line.233">            else if (x0 &lt; z0) {</a>
-<span class="sourceLineNo">234</span><a id="line.234">                i1 = 0;</a>
-<span class="sourceLineNo">235</span><a id="line.235">                j1 = 1;</a>
-<span class="sourceLineNo">236</span><a id="line.236">                k1 = 0;</a>
-<span class="sourceLineNo">237</span><a id="line.237">                i2 = 0;</a>
-<span class="sourceLineNo">238</span><a id="line.238">                j2 = 1;</a>
-<span class="sourceLineNo">239</span><a id="line.239">                k2 = 1;</a>
-<span class="sourceLineNo">240</span><a id="line.240">            } // Y Z X order</a>
-<span class="sourceLineNo">241</span><a id="line.241">            else {</a>
-<span class="sourceLineNo">242</span><a id="line.242">                i1 = 0;</a>
-<span class="sourceLineNo">243</span><a id="line.243">                j1 = 1;</a>
-<span class="sourceLineNo">244</span><a id="line.244">                k1 = 0;</a>
-<span class="sourceLineNo">245</span><a id="line.245">                i2 = 1;</a>
-<span class="sourceLineNo">246</span><a id="line.246">                j2 = 1;</a>
-<span class="sourceLineNo">247</span><a id="line.247">                k2 = 0;</a>
-<span class="sourceLineNo">248</span><a id="line.248">            } // Y X Z order</a>
-<span class="sourceLineNo">249</span><a id="line.249">        }</a>
-<span class="sourceLineNo">250</span><a id="line.250">        // A step of (1,0,0) in (i,j,k) means a step of (1-c,-c,-c) in (x,y,z),</a>
-<span class="sourceLineNo">251</span><a id="line.251">        // a step of (0,1,0) in (i,j,k) means a step of (-c,1-c,-c) in (x,y,z), and</a>
-<span class="sourceLineNo">252</span><a id="line.252">        // a step of (0,0,1) in (i,j,k) means a step of (-c,-c,1-c) in (x,y,z), where c = 1/6.</a>
-<span class="sourceLineNo">253</span><a id="line.253">        float x1 = x0 - i1 + G3f; // Offsets for second corner in (x,y,z) coords</a>
-<span class="sourceLineNo">254</span><a id="line.254">        float y1 = y0 - j1 + G3f;</a>
-<span class="sourceLineNo">255</span><a id="line.255">        float z1 = z0 - k1 + G3f;</a>
-<span class="sourceLineNo">256</span><a id="line.256">        float x2 = x0 - i2 + F3f; // Offsets for third corner in (x,y,z) coords</a>
-<span class="sourceLineNo">257</span><a id="line.257">        float y2 = y0 - j2 + F3f;</a>
-<span class="sourceLineNo">258</span><a id="line.258">        float z2 = z0 - k2 + F3f;</a>
-<span class="sourceLineNo">259</span><a id="line.259">        float x3 = x0 - 0.5f; // Offsets for last corner in (x,y,z) coords</a>
-<span class="sourceLineNo">260</span><a id="line.260">        float y3 = y0 - 0.5f;</a>
-<span class="sourceLineNo">261</span><a id="line.261">        float z3 = z0 - 0.5f;</a>
-<span class="sourceLineNo">262</span><a id="line.262">        int seed1 = GWTRNG.determineInt(~seed);</a>
-<span class="sourceLineNo">263</span><a id="line.263">        int seed2 = GWTRNG.determineInt(seed ^ seed1);</a>
-<span class="sourceLineNo">264</span><a id="line.264">        float dist0 = 0.6f - x0 * x0 - y0 * y0 - z0 * z0;</a>
-<span class="sourceLineNo">265</span><a id="line.265">        float dist1 = 0.6f - x1 * x1 - y1 * y1 - z1 * z1;</a>
-<span class="sourceLineNo">266</span><a id="line.266">        float dist2 = 0.6f - x2 * x2 - y2 * y2 - z2 * z2;</a>
-<span class="sourceLineNo">267</span><a id="line.267">        float dist3 = 0.6f - x3 * x3 - y3 * y3 - z3 * z3;</a>
-<span class="sourceLineNo">268</span><a id="line.268">        float luma, cb, cr;</a>
-<span class="sourceLineNo">269</span><a id="line.269">        float n = 0;</a>
-<span class="sourceLineNo">270</span><a id="line.270"></a>
-<span class="sourceLineNo">271</span><a id="line.271">        t = dist0;</a>
-<span class="sourceLineNo">272</span><a id="line.272">        if (t &gt; 0) {</a>
-<span class="sourceLineNo">273</span><a id="line.273">            t *= t;</a>
-<span class="sourceLineNo">274</span><a id="line.274">            n += t * t * gradCoord3D(seed, i, j, k, x0, y0, z0);</a>
-<span class="sourceLineNo">275</span><a id="line.275">        }</a>
-<span class="sourceLineNo">276</span><a id="line.276"></a>
-<span class="sourceLineNo">277</span><a id="line.277">        t = dist1;</a>
-<span class="sourceLineNo">278</span><a id="line.278">        if (t &gt; 0) {</a>
-<span class="sourceLineNo">279</span><a id="line.279">            t *= t;</a>
-<span class="sourceLineNo">280</span><a id="line.280">            n += t * t * gradCoord3D(seed, i + i1, j + j1, k + k1, x1, y1, z1);</a>
-<span class="sourceLineNo">281</span><a id="line.281">        }</a>
-<span class="sourceLineNo">282</span><a id="line.282"></a>
-<span class="sourceLineNo">283</span><a id="line.283">        t = dist2;</a>
-<span class="sourceLineNo">284</span><a id="line.284">        if (t &gt; 0) {</a>
-<span class="sourceLineNo">285</span><a id="line.285">            t *= t;</a>
-<span class="sourceLineNo">286</span><a id="line.286">            n += t * t * gradCoord3D(seed, i + i2, j + j2, k + k2, x2, y2, z2);</a>
-<span class="sourceLineNo">287</span><a id="line.287">        }</a>
-<span class="sourceLineNo">288</span><a id="line.288"></a>
-<span class="sourceLineNo">289</span><a id="line.289">        t = dist3;</a>
-<span class="sourceLineNo">290</span><a id="line.290">        if (t &gt; 0)  {</a>
-<span class="sourceLineNo">291</span><a id="line.291">            t *= t;</a>
-<span class="sourceLineNo">292</span><a id="line.292">            n += t * t * gradCoord3D(seed, i + 1, j + 1, k + 1, x3, y3, z3);</a>
-<span class="sourceLineNo">293</span><a id="line.293">        }</a>
-<span class="sourceLineNo">294</span><a id="line.294"></a>
-<span class="sourceLineNo">295</span><a id="line.295">        // Add contributions from each corner to get the final noise value.</a>
-<span class="sourceLineNo">296</span><a id="line.296">        // The result is scaled to stay just inside [0,1]</a>
-<span class="sourceLineNo">297</span><a id="line.297">        luma = 15.75f * n + 0.5f;</a>
-<span class="sourceLineNo">298</span><a id="line.298">        n = 0;</a>
-<span class="sourceLineNo">299</span><a id="line.299">        // Calculate the contribution from the four corners</a>
-<span class="sourceLineNo">300</span><a id="line.300">        t = dist0;</a>
-<span class="sourceLineNo">301</span><a id="line.301">        if (t &gt; 0) {</a>
-<span class="sourceLineNo">302</span><a id="line.302">            t *= t;</a>
-<span class="sourceLineNo">303</span><a id="line.303">            n += t * t * gradCoord3D(seed1, i, j, k, x0, y0, z0);</a>
-<span class="sourceLineNo">304</span><a id="line.304">        }</a>
-<span class="sourceLineNo">305</span><a id="line.305"></a>
-<span class="sourceLineNo">306</span><a id="line.306">        t = dist1;</a>
-<span class="sourceLineNo">307</span><a id="line.307">        if (t &gt; 0) {</a>
-<span class="sourceLineNo">308</span><a id="line.308">            t *= t;</a>
-<span class="sourceLineNo">309</span><a id="line.309">            n += t * t * gradCoord3D(seed1, i + i1, j + j1, k + k1, x1, y1, z1);</a>
-<span class="sourceLineNo">310</span><a id="line.310">        }</a>
-<span class="sourceLineNo">311</span><a id="line.311"></a>
-<span class="sourceLineNo">312</span><a id="line.312">        t = dist2;</a>
-<span class="sourceLineNo">313</span><a id="line.313">        if (t &gt; 0) {</a>
-<span class="sourceLineNo">314</span><a id="line.314">            t *= t;</a>
-<span class="sourceLineNo">315</span><a id="line.315">            n += t * t * gradCoord3D(seed1, i + i2, j + j2, k + k2, x2, y2, z2);</a>
-<span class="sourceLineNo">316</span><a id="line.316">        }</a>
-<span class="sourceLineNo">317</span><a id="line.317"></a>
-<span class="sourceLineNo">318</span><a id="line.318">        t = dist3;</a>
-<span class="sourceLineNo">319</span><a id="line.319">        if (t &gt; 0)  {</a>
-<span class="sourceLineNo">320</span><a id="line.320">            t *= t;</a>
-<span class="sourceLineNo">321</span><a id="line.321">            n += t * t * gradCoord3D(seed1, i + 1, j + 1, k + 1, x3, y3, z3);</a>
-<span class="sourceLineNo">322</span><a id="line.322">        }</a>
-<span class="sourceLineNo">323</span><a id="line.323">        // Add contributions from each corner to get the final noise value.</a>
-<span class="sourceLineNo">324</span><a id="line.324">        // The result is scaled to stay just inside [-0.5,0.5]</a>
-<span class="sourceLineNo">325</span><a id="line.325">        cb = 15.75f * n;</a>
-<span class="sourceLineNo">326</span><a id="line.326">        n = 0;</a>
-<span class="sourceLineNo">327</span><a id="line.327">        // Calculate the contribution from the four corners</a>
-<span class="sourceLineNo">328</span><a id="line.328">        t = dist0;</a>
-<span class="sourceLineNo">329</span><a id="line.329">        if (t &gt; 0) {</a>
-<span class="sourceLineNo">330</span><a id="line.330">            t *= t;</a>
-<span class="sourceLineNo">331</span><a id="line.331">            n += t * t * gradCoord3D(seed2, i, j, k, x0, y0, z0);</a>
-<span class="sourceLineNo">332</span><a id="line.332">        }</a>
-<span class="sourceLineNo">333</span><a id="line.333"></a>
-<span class="sourceLineNo">334</span><a id="line.334">        t = dist1;</a>
-<span class="sourceLineNo">335</span><a id="line.335">        if (t &gt; 0) {</a>
-<span class="sourceLineNo">336</span><a id="line.336">            t *= t;</a>
-<span class="sourceLineNo">337</span><a id="line.337">            n += t * t * gradCoord3D(seed2, i + i1, j + j1, k + k1, x1, y1, z1);</a>
-<span class="sourceLineNo">338</span><a id="line.338">        }</a>
-<span class="sourceLineNo">339</span><a id="line.339"></a>
-<span class="sourceLineNo">340</span><a id="line.340">        t = dist2;</a>
-<span class="sourceLineNo">341</span><a id="line.341">        if (t &gt; 0) {</a>
-<span class="sourceLineNo">342</span><a id="line.342">            t *= t;</a>
-<span class="sourceLineNo">343</span><a id="line.343">            n += t * t * gradCoord3D(seed2, i + i2, j + j2, k + k2, x2, y2, z2);</a>
-<span class="sourceLineNo">344</span><a id="line.344">        }</a>
-<span class="sourceLineNo">345</span><a id="line.345"></a>
-<span class="sourceLineNo">346</span><a id="line.346">        t = dist3;</a>
-<span class="sourceLineNo">347</span><a id="line.347">        if (t &gt; 0)  {</a>
-<span class="sourceLineNo">348</span><a id="line.348">            t *= t;</a>
-<span class="sourceLineNo">349</span><a id="line.349">            n += t * t * gradCoord3D(seed2, i + 1, j + 1, k + 1, x3, y3, z3);</a>
-<span class="sourceLineNo">350</span><a id="line.350">        }</a>
-<span class="sourceLineNo">351</span><a id="line.351">        // Add contributions from each corner to get the final noise value.</a>
-<span class="sourceLineNo">352</span><a id="line.352">        // The result is scaled to stay just inside [-0.5,0.5]</a>
-<span class="sourceLineNo">353</span><a id="line.353">        cr = 15.75f * n;</a>
-<span class="sourceLineNo">354</span><a id="line.354">        return SColor.floatGetYCbCr(luma, cb, cr, 1f);</a>
-<span class="sourceLineNo">355</span><a id="line.355">    }</a>
-<span class="sourceLineNo">356</span><a id="line.356">}</a>
+<div class="source-container">
+<pre><span class="source-line-no">001</span><span id="line.1">package squidpony.squidgrid.gui.gdx;</span>
+<span class="source-line-no">002</span><span id="line.2"></span>
+<span class="source-line-no">003</span><span id="line.3">import squidpony.squidmath.FastNoise;</span>
+<span class="source-line-no">004</span><span id="line.4">import squidpony.squidmath.GWTRNG;</span>
+<span class="source-line-no">005</span><span id="line.5">import squidpony.squidmath.NumberTools;</span>
+<span class="source-line-no">006</span><span id="line.6"></span>
+<span class="source-line-no">007</span><span id="line.7">import static squidpony.squidmath.IntPointHash.hashAll;</span>
+<span class="source-line-no">008</span><span id="line.8">import static squidpony.squidmath.Noise.fastFloor;</span>
+<span class="source-line-no">009</span><span id="line.9"></span>
+<span class="source-line-no">010</span><span id="line.10">/**</span>
+<span class="source-line-no">011</span><span id="line.11"> * Created by Tommy Ettinger on 6/12/2017.</span>
+<span class="source-line-no">012</span><span id="line.12"> */</span>
+<span class="source-line-no">013</span><span id="line.13">public class ColorNoise extends FastNoise {</span>
+<span class="source-line-no">014</span><span id="line.14">    public static final ColorNoise instance = new ColorNoise();</span>
+<span class="source-line-no">015</span><span id="line.15">    public ColorNoise() {</span>
+<span class="source-line-no">016</span><span id="line.16">    }</span>
+<span class="source-line-no">017</span><span id="line.17"></span>
+<span class="source-line-no">018</span><span id="line.18">    public ColorNoise(int seed) {</span>
+<span class="source-line-no">019</span><span id="line.19">        super(seed);</span>
+<span class="source-line-no">020</span><span id="line.20">    }</span>
+<span class="source-line-no">021</span><span id="line.21"></span>
+<span class="source-line-no">022</span><span id="line.22">    public static int bounce256(final int s) { return (s ^ -((s &amp; 0x100) &gt;&gt; 8)) &amp; 0xff; }</span>
+<span class="source-line-no">023</span><span id="line.23"></span>
+<span class="source-line-no">024</span><span id="line.24">    public float colorNoise(final double noise)</span>
+<span class="source-line-no">025</span><span id="line.25">    {</span>
+<span class="source-line-no">026</span><span id="line.26">        return SColor.floatGetHSV(NumberTools.zigzag((float) (noise * 16.0)), 0.75f + (float) NumberTools.zigzag(noise * 9.0) * 0.25f, 0.7f + (float) NumberTools.zigzag(noise * 7.0 + 0.5) * 0.3f, 1f);</span>
+<span class="source-line-no">027</span><span id="line.27">//        return NumberTools.intBitsToFloat(0xfe000000 |</span>
+<span class="source-line-no">028</span><span id="line.28">//                (bounce256((int) ((noise * 1.29 + 1.39) * (0x3DF9f)) &gt;&gt;&gt; 8) &lt;&lt; 16) |</span>
+<span class="source-line-no">029</span><span id="line.29">//                (bounce256((int) ((noise * 1.18 + 1.45) * (0x3EB9f)) &gt;&gt;&gt; 8) &lt;&lt; 8) |</span>
+<span class="source-line-no">030</span><span id="line.30">//                (bounce256((int) ((noise * 1.07 + 1.51) * (0x3E99f)) &gt;&gt;&gt; 8)));</span>
+<span class="source-line-no">031</span><span id="line.31">    }</span>
+<span class="source-line-no">032</span><span id="line.32"></span>
+<span class="source-line-no">033</span><span id="line.33">    /**</span>
+<span class="source-line-no">034</span><span id="line.34">     * 2D simplex noise that produces a color, as a packed float.</span>
+<span class="source-line-no">035</span><span id="line.35">     *</span>
+<span class="source-line-no">036</span><span id="line.36">     * @param xin X input; works well if between 0.0 and 1.0, but anything is accepted</span>
+<span class="source-line-no">037</span><span id="line.37">     * @param yin Y input; works well if between 0.0 and 1.0, but anything is accepted</span>
+<span class="source-line-no">038</span><span id="line.38">     * @param seed a seed that will change how and when any colors will be produced</span>
+<span class="source-line-no">039</span><span id="line.39">     * @return noise in the form of a packed float color</span>
+<span class="source-line-no">040</span><span id="line.40">     */</span>
+<span class="source-line-no">041</span><span id="line.41">    public float colorNoise(final float xin, final float yin, final int seed) {</span>
+<span class="source-line-no">042</span><span id="line.42">        float noise0, noise1, noise2; // from the three corners</span>
+<span class="source-line-no">043</span><span id="line.43">        // Skew the input space to figure out which simplex cell we're in</span>
+<span class="source-line-no">044</span><span id="line.44">        float skew = (xin + yin) * F2f; // Hairy factor for 2D</span>
+<span class="source-line-no">045</span><span id="line.45">        int i = fastFloor(xin + skew);</span>
+<span class="source-line-no">046</span><span id="line.46">        int j = fastFloor(yin + skew);</span>
+<span class="source-line-no">047</span><span id="line.47">        float t = (i + j) * G2f;</span>
+<span class="source-line-no">048</span><span id="line.48">        float X0 = i - t; // Unskew the cell origin back to (x,y) space</span>
+<span class="source-line-no">049</span><span id="line.49">        float Y0 = j - t;</span>
+<span class="source-line-no">050</span><span id="line.50">        float x0 = xin - X0; // The x,y distances from the cell origin</span>
+<span class="source-line-no">051</span><span id="line.51">        float y0 = yin - Y0;</span>
+<span class="source-line-no">052</span><span id="line.52">        // For the 2D case, the simplex shape is an equilateral triangle.</span>
+<span class="source-line-no">053</span><span id="line.53">        // determine which simplex we are in.</span>
+<span class="source-line-no">054</span><span id="line.54">        int i1, j1; // Offsets for second (middle) corner of simplex in (i,j)</span>
+<span class="source-line-no">055</span><span id="line.55">        // coords</span>
+<span class="source-line-no">056</span><span id="line.56">        if (x0 &gt; y0) {</span>
+<span class="source-line-no">057</span><span id="line.57">            i1 = 1;</span>
+<span class="source-line-no">058</span><span id="line.58">            j1 = 0;</span>
+<span class="source-line-no">059</span><span id="line.59">        } // lower triangle, XY order: (0,0)-&gt;(1,0)-&gt;(1,1)</span>
+<span class="source-line-no">060</span><span id="line.60">        else {</span>
+<span class="source-line-no">061</span><span id="line.61">            i1 = 0;</span>
+<span class="source-line-no">062</span><span id="line.62">            j1 = 1;</span>
+<span class="source-line-no">063</span><span id="line.63">        } // upper triangle, YX order: (0,0)-&gt;(0,1)-&gt;(1,1)</span>
+<span class="source-line-no">064</span><span id="line.64">        // A step of (1,0) in (i,j) means a step of (1-c,-c) in (x,y), and</span>
+<span class="source-line-no">065</span><span id="line.65">        // a step of (0,1) in (i,j) means a step of (-c,1-c) in (x,y),</span>
+<span class="source-line-no">066</span><span id="line.66">        // where</span>
+<span class="source-line-no">067</span><span id="line.67">        // c = (3-sqrt(3))/6</span>
+<span class="source-line-no">068</span><span id="line.68">        float x1 = x0 - i1 + G2f; // Offsets for middle corner in (x,y)</span>
+<span class="source-line-no">069</span><span id="line.69">        // unskewed coords</span>
+<span class="source-line-no">070</span><span id="line.70">        float y1 = y0 - j1 + G2f;</span>
+<span class="source-line-no">071</span><span id="line.71">        float x2 = x0 - 1f + 2f * G2f; // Offsets for last corner in (x,y)</span>
+<span class="source-line-no">072</span><span id="line.72">        // unskewed coords</span>
+<span class="source-line-no">073</span><span id="line.73">        float y2 = y0 - 1f + 2f * G2f;</span>
+<span class="source-line-no">074</span><span id="line.74">        // Work out the hashed gradient indices of the three simplex corners</span>
+<span class="source-line-no">075</span><span id="line.75">//        int gi0 = (int)(determine(seed + i + determine(j)) &gt;&gt;&gt; 16);</span>
+<span class="source-line-no">076</span><span id="line.76">//        int gi1 = (int)(determine(seed + i + i1 + determine(j + j1)) &gt;&gt;&gt; 16);</span>
+<span class="source-line-no">077</span><span id="line.77">//        int gi2 = (int)(determine(seed + i + 1 + determine(j + 1)) &gt;&gt;&gt; 16);</span>
+<span class="source-line-no">078</span><span id="line.78">        int gi0 = (hashAll(i, j, seed) &amp; 0xFFFFFF);</span>
+<span class="source-line-no">079</span><span id="line.79">        int gi1 = (hashAll(i + i1, j + j1, seed) &amp; 0xFFFFFF);</span>
+<span class="source-line-no">080</span><span id="line.80">        int gi2 = (hashAll(i + 1, j + 1, seed) &amp; 0xFFFFFF);</span>
+<span class="source-line-no">081</span><span id="line.81"></span>
+<span class="source-line-no">082</span><span id="line.82">        float luma, cb, cr, t0, t1, t2;</span>
+<span class="source-line-no">083</span><span id="line.83">        // Calculate the contribution from the three corners</span>
+<span class="source-line-no">084</span><span id="line.84">        t0 = 0.75f - x0 * x0 - y0 * y0;</span>
+<span class="source-line-no">085</span><span id="line.85">        if (t0 &lt; 0) {</span>
+<span class="source-line-no">086</span><span id="line.86">            noise0 = 0f;</span>
+<span class="source-line-no">087</span><span id="line.87">        } else {</span>
+<span class="source-line-no">088</span><span id="line.88">            t0 *= t0;</span>
+<span class="source-line-no">089</span><span id="line.89">            noise0 = t0 * t0 * dotf(grad2f[gi0 &amp; 255], x0, y0);</span>
+<span class="source-line-no">090</span><span id="line.90">        }</span>
+<span class="source-line-no">091</span><span id="line.91">        t1 = 0.75f - x1 * x1 - y1 * y1;</span>
+<span class="source-line-no">092</span><span id="line.92">        if (t1 &lt; 0) {</span>
+<span class="source-line-no">093</span><span id="line.93">            noise1 = 0f;</span>
+<span class="source-line-no">094</span><span id="line.94">        } else {</span>
+<span class="source-line-no">095</span><span id="line.95">            t1 *= t1;</span>
+<span class="source-line-no">096</span><span id="line.96">            noise1 = t1 * t1 * dotf(grad2f[gi1 &amp; 255], x1, y1);</span>
+<span class="source-line-no">097</span><span id="line.97">        }</span>
+<span class="source-line-no">098</span><span id="line.98">        t2 = 0.75f - x2 * x2 - y2 * y2;</span>
+<span class="source-line-no">099</span><span id="line.99">        if (t2 &lt; 0) {</span>
+<span class="source-line-no">100</span><span id="line.100">            noise2 = 0f;</span>
+<span class="source-line-no">101</span><span id="line.101">        } else {</span>
+<span class="source-line-no">102</span><span id="line.102">            t2 *= t2;</span>
+<span class="source-line-no">103</span><span id="line.103">            noise2 = t2 * t2 * dotf(grad2f[gi2 &amp; 255], x2, y2);</span>
+<span class="source-line-no">104</span><span id="line.104">        }</span>
+<span class="source-line-no">105</span><span id="line.105">        // Add contributions from each corner to get the final noise value.</span>
+<span class="source-line-no">106</span><span id="line.106">        // The result is scaled to return values in the interval [0,1].</span>
+<span class="source-line-no">107</span><span id="line.107">        luma = 4.5625f * (noise0 + noise1 + noise2) + 0.5f;</span>
+<span class="source-line-no">108</span><span id="line.108">        gi0 &gt;&gt;&gt;= 8;</span>
+<span class="source-line-no">109</span><span id="line.109">        gi1 &gt;&gt;&gt;= 8;</span>
+<span class="source-line-no">110</span><span id="line.110">        gi2 &gt;&gt;&gt;= 8;</span>
+<span class="source-line-no">111</span><span id="line.111"></span>
+<span class="source-line-no">112</span><span id="line.112">        // Calculate the contribution from the three corners</span>
+<span class="source-line-no">113</span><span id="line.113">        t0 = 0.75f - x0 * x0 - y0 * y0;</span>
+<span class="source-line-no">114</span><span id="line.114">        if (t0 &lt; 0) {</span>
+<span class="source-line-no">115</span><span id="line.115">            noise0 = 0f;</span>
+<span class="source-line-no">116</span><span id="line.116">        } else {</span>
+<span class="source-line-no">117</span><span id="line.117">            t0 *= t0;</span>
+<span class="source-line-no">118</span><span id="line.118">            noise0 = t0 * t0 * dotf(grad2f[gi0 &amp; 255], x0, y0);</span>
+<span class="source-line-no">119</span><span id="line.119">        }</span>
+<span class="source-line-no">120</span><span id="line.120">        t1 = 0.75f - x1 * x1 - y1 * y1;</span>
+<span class="source-line-no">121</span><span id="line.121">        if (t1 &lt; 0) {</span>
+<span class="source-line-no">122</span><span id="line.122">            noise1 = 0f;</span>
+<span class="source-line-no">123</span><span id="line.123">        } else {</span>
+<span class="source-line-no">124</span><span id="line.124">            t1 *= t1;</span>
+<span class="source-line-no">125</span><span id="line.125">            noise1 = t1 * t1 * dotf(grad2f[gi1 &amp; 255], x1, y1);</span>
+<span class="source-line-no">126</span><span id="line.126">        }</span>
+<span class="source-line-no">127</span><span id="line.127">        t2 = 0.75f - x2 * x2 - y2 * y2;</span>
+<span class="source-line-no">128</span><span id="line.128">        if (t2 &lt; 0) {</span>
+<span class="source-line-no">129</span><span id="line.129">            noise2 = 0f;</span>
+<span class="source-line-no">130</span><span id="line.130">        } else {</span>
+<span class="source-line-no">131</span><span id="line.131">            t2 *= t2;</span>
+<span class="source-line-no">132</span><span id="line.132">            noise2 = t2 * t2 * dotf(grad2f[gi2 &amp; 255], x2, y2);</span>
+<span class="source-line-no">133</span><span id="line.133">        }</span>
+<span class="source-line-no">134</span><span id="line.134">        // Add contributions from each corner to get the final noise value.</span>
+<span class="source-line-no">135</span><span id="line.135">        // The result is scaled to return values in the interval [-0.5,0.5].</span>
+<span class="source-line-no">136</span><span id="line.136">        cb = 4.5625f * (noise0 + noise1 + noise2);</span>
+<span class="source-line-no">137</span><span id="line.137">        gi0 &gt;&gt;&gt;= 8;</span>
+<span class="source-line-no">138</span><span id="line.138">        gi1 &gt;&gt;&gt;= 8;</span>
+<span class="source-line-no">139</span><span id="line.139">        gi2 &gt;&gt;&gt;= 8;</span>
+<span class="source-line-no">140</span><span id="line.140">        // Calculate the contribution from the three corners</span>
+<span class="source-line-no">141</span><span id="line.141">        t0 = 0.75f - x0 * x0 - y0 * y0;</span>
+<span class="source-line-no">142</span><span id="line.142">        if (t0 &lt; 0) {</span>
+<span class="source-line-no">143</span><span id="line.143">            noise0 = 0f;</span>
+<span class="source-line-no">144</span><span id="line.144">        } else {</span>
+<span class="source-line-no">145</span><span id="line.145">            t0 *= t0;</span>
+<span class="source-line-no">146</span><span id="line.146">            noise0 = t0 * t0 * dotf(grad2f[gi0 &amp; 255], x0, y0);</span>
+<span class="source-line-no">147</span><span id="line.147">        }</span>
+<span class="source-line-no">148</span><span id="line.148">        t1 = 0.75f - x1 * x1 - y1 * y1;</span>
+<span class="source-line-no">149</span><span id="line.149">        if (t1 &lt; 0) {</span>
+<span class="source-line-no">150</span><span id="line.150">            noise1 = 0f;</span>
+<span class="source-line-no">151</span><span id="line.151">        } else {</span>
+<span class="source-line-no">152</span><span id="line.152">            t1 *= t1;</span>
+<span class="source-line-no">153</span><span id="line.153">            noise1 = t1 * t1 * dotf(grad2f[gi1 &amp; 255], x1, y1);</span>
+<span class="source-line-no">154</span><span id="line.154">        }</span>
+<span class="source-line-no">155</span><span id="line.155">        t2 = 0.75f - x2 * x2 - y2 * y2;</span>
+<span class="source-line-no">156</span><span id="line.156">        if (t2 &lt; 0) {</span>
+<span class="source-line-no">157</span><span id="line.157">            noise2 = 0f;</span>
+<span class="source-line-no">158</span><span id="line.158">        } else {</span>
+<span class="source-line-no">159</span><span id="line.159">            t2 *= t2;</span>
+<span class="source-line-no">160</span><span id="line.160">            noise2 = t2 * t2 * dotf(grad2f[gi2 &amp; 255], x2, y2);</span>
+<span class="source-line-no">161</span><span id="line.161">        }</span>
+<span class="source-line-no">162</span><span id="line.162">        // Add contributions from each corner to get the final noise value.</span>
+<span class="source-line-no">163</span><span id="line.163">        // The result is scaled to return values in the interval [-0.5,0.5].</span>
+<span class="source-line-no">164</span><span id="line.164">        cr = 4.5625f * (noise0 + noise1 + noise2);</span>
+<span class="source-line-no">165</span><span id="line.165">        return SColor.floatGetYCbCr(luma, cb, cr, 1f);</span>
+<span class="source-line-no">166</span><span id="line.166">    }</span>
+<span class="source-line-no">167</span><span id="line.167"></span>
+<span class="source-line-no">168</span><span id="line.168"></span>
+<span class="source-line-no">169</span><span id="line.169"></span>
+<span class="source-line-no">170</span><span id="line.170">    /**</span>
+<span class="source-line-no">171</span><span id="line.171">     * 3D simplex noise that produces a color, as a packed float.</span>
+<span class="source-line-no">172</span><span id="line.172">     *</span>
+<span class="source-line-no">173</span><span id="line.173">     * @param xin X input; works well if between 0.0 and 1.0, but anything is accepted</span>
+<span class="source-line-no">174</span><span id="line.174">     * @param yin Y input; works well if between 0.0 and 1.0, but anything is accepted</span>
+<span class="source-line-no">175</span><span id="line.175">     * @param zin Z input; works well if between 0.0 and 1.0, but anything is accepted</span>
+<span class="source-line-no">176</span><span id="line.176">     * @param seed a seed that will change how and when any colors will be produced</span>
+<span class="source-line-no">177</span><span id="line.177">     * @return noise in the form of a packed float color</span>
+<span class="source-line-no">178</span><span id="line.178">     */</span>
+<span class="source-line-no">179</span><span id="line.179">    public float colorNoise(final float xin, final float yin, final float zin, final int seed) {</span>
+<span class="source-line-no">180</span><span id="line.180">        float n0, n1, n2, n3; // Noise contributions from the four corners</span>
+<span class="source-line-no">181</span><span id="line.181">        // Skew the input space to figure out which simplex cell we're in</span>
+<span class="source-line-no">182</span><span id="line.182">        float s = (xin + yin + zin) * F3f; // Very nice and simple skew</span>
+<span class="source-line-no">183</span><span id="line.183">        // factor for 3D</span>
+<span class="source-line-no">184</span><span id="line.184">        int i = fastFloor(xin + s);</span>
+<span class="source-line-no">185</span><span id="line.185">        int j = fastFloor(yin + s);</span>
+<span class="source-line-no">186</span><span id="line.186">        int k = fastFloor(zin + s);</span>
+<span class="source-line-no">187</span><span id="line.187">        float t = (i + j + k) * G3f;</span>
+<span class="source-line-no">188</span><span id="line.188">        float X0 = i - t; // Unskew the cell origin back to (x,y,z) space</span>
+<span class="source-line-no">189</span><span id="line.189">        float Y0 = j - t;</span>
+<span class="source-line-no">190</span><span id="line.190">        float Z0 = k - t;</span>
+<span class="source-line-no">191</span><span id="line.191">        float x0 = xin - X0; // The x,y,z distances from the cell origin</span>
+<span class="source-line-no">192</span><span id="line.192">        float y0 = yin - Y0;</span>
+<span class="source-line-no">193</span><span id="line.193">        float z0 = zin - Z0;</span>
+<span class="source-line-no">194</span><span id="line.194">        // For the 3D case, the simplex shape is a slightly irregular</span>
+<span class="source-line-no">195</span><span id="line.195">        // tetrahedron.</span>
+<span class="source-line-no">196</span><span id="line.196">        // determine which simplex we are in.</span>
+<span class="source-line-no">197</span><span id="line.197">        int i1, j1, k1; // Offsets for second corner of simplex in (i,j,k) coords</span>
+<span class="source-line-no">198</span><span id="line.198">        int i2, j2, k2; // Offsets for third corner of simplex in (i,j,k) coords</span>
+<span class="source-line-no">199</span><span id="line.199">        if (x0 &gt;= y0) {</span>
+<span class="source-line-no">200</span><span id="line.200">            if (y0 &gt;= z0) {</span>
+<span class="source-line-no">201</span><span id="line.201">                i1 = 1;</span>
+<span class="source-line-no">202</span><span id="line.202">                j1 = 0;</span>
+<span class="source-line-no">203</span><span id="line.203">                k1 = 0;</span>
+<span class="source-line-no">204</span><span id="line.204">                i2 = 1;</span>
+<span class="source-line-no">205</span><span id="line.205">                j2 = 1;</span>
+<span class="source-line-no">206</span><span id="line.206">                k2 = 0;</span>
+<span class="source-line-no">207</span><span id="line.207">            } // X Y Z order</span>
+<span class="source-line-no">208</span><span id="line.208">            else if (x0 &gt;= z0) {</span>
+<span class="source-line-no">209</span><span id="line.209">                i1 = 1;</span>
+<span class="source-line-no">210</span><span id="line.210">                j1 = 0;</span>
+<span class="source-line-no">211</span><span id="line.211">                k1 = 0;</span>
+<span class="source-line-no">212</span><span id="line.212">                i2 = 1;</span>
+<span class="source-line-no">213</span><span id="line.213">                j2 = 0;</span>
+<span class="source-line-no">214</span><span id="line.214">                k2 = 1;</span>
+<span class="source-line-no">215</span><span id="line.215">            } // X Z Y order</span>
+<span class="source-line-no">216</span><span id="line.216">            else {</span>
+<span class="source-line-no">217</span><span id="line.217">                i1 = 0;</span>
+<span class="source-line-no">218</span><span id="line.218">                j1 = 0;</span>
+<span class="source-line-no">219</span><span id="line.219">                k1 = 1;</span>
+<span class="source-line-no">220</span><span id="line.220">                i2 = 1;</span>
+<span class="source-line-no">221</span><span id="line.221">                j2 = 0;</span>
+<span class="source-line-no">222</span><span id="line.222">                k2 = 1;</span>
+<span class="source-line-no">223</span><span id="line.223">            } // Z X Y order</span>
+<span class="source-line-no">224</span><span id="line.224">        } else { // x0&lt;y0</span>
+<span class="source-line-no">225</span><span id="line.225">            if (y0 &lt; z0) {</span>
+<span class="source-line-no">226</span><span id="line.226">                i1 = 0;</span>
+<span class="source-line-no">227</span><span id="line.227">                j1 = 0;</span>
+<span class="source-line-no">228</span><span id="line.228">                k1 = 1;</span>
+<span class="source-line-no">229</span><span id="line.229">                i2 = 0;</span>
+<span class="source-line-no">230</span><span id="line.230">                j2 = 1;</span>
+<span class="source-line-no">231</span><span id="line.231">                k2 = 1;</span>
+<span class="source-line-no">232</span><span id="line.232">            } // Z Y X order</span>
+<span class="source-line-no">233</span><span id="line.233">            else if (x0 &lt; z0) {</span>
+<span class="source-line-no">234</span><span id="line.234">                i1 = 0;</span>
+<span class="source-line-no">235</span><span id="line.235">                j1 = 1;</span>
+<span class="source-line-no">236</span><span id="line.236">                k1 = 0;</span>
+<span class="source-line-no">237</span><span id="line.237">                i2 = 0;</span>
+<span class="source-line-no">238</span><span id="line.238">                j2 = 1;</span>
+<span class="source-line-no">239</span><span id="line.239">                k2 = 1;</span>
+<span class="source-line-no">240</span><span id="line.240">            } // Y Z X order</span>
+<span class="source-line-no">241</span><span id="line.241">            else {</span>
+<span class="source-line-no">242</span><span id="line.242">                i1 = 0;</span>
+<span class="source-line-no">243</span><span id="line.243">                j1 = 1;</span>
+<span class="source-line-no">244</span><span id="line.244">                k1 = 0;</span>
+<span class="source-line-no">245</span><span id="line.245">                i2 = 1;</span>
+<span class="source-line-no">246</span><span id="line.246">                j2 = 1;</span>
+<span class="source-line-no">247</span><span id="line.247">                k2 = 0;</span>
+<span class="source-line-no">248</span><span id="line.248">            } // Y X Z order</span>
+<span class="source-line-no">249</span><span id="line.249">        }</span>
+<span class="source-line-no">250</span><span id="line.250">        // A step of (1,0,0) in (i,j,k) means a step of (1-c,-c,-c) in (x,y,z),</span>
+<span class="source-line-no">251</span><span id="line.251">        // a step of (0,1,0) in (i,j,k) means a step of (-c,1-c,-c) in (x,y,z), and</span>
+<span class="source-line-no">252</span><span id="line.252">        // a step of (0,0,1) in (i,j,k) means a step of (-c,-c,1-c) in (x,y,z), where c = 1/6.</span>
+<span class="source-line-no">253</span><span id="line.253">        float x1 = x0 - i1 + G3f; // Offsets for second corner in (x,y,z) coords</span>
+<span class="source-line-no">254</span><span id="line.254">        float y1 = y0 - j1 + G3f;</span>
+<span class="source-line-no">255</span><span id="line.255">        float z1 = z0 - k1 + G3f;</span>
+<span class="source-line-no">256</span><span id="line.256">        float x2 = x0 - i2 + F3f; // Offsets for third corner in (x,y,z) coords</span>
+<span class="source-line-no">257</span><span id="line.257">        float y2 = y0 - j2 + F3f;</span>
+<span class="source-line-no">258</span><span id="line.258">        float z2 = z0 - k2 + F3f;</span>
+<span class="source-line-no">259</span><span id="line.259">        float x3 = x0 - 0.5f; // Offsets for last corner in (x,y,z) coords</span>
+<span class="source-line-no">260</span><span id="line.260">        float y3 = y0 - 0.5f;</span>
+<span class="source-line-no">261</span><span id="line.261">        float z3 = z0 - 0.5f;</span>
+<span class="source-line-no">262</span><span id="line.262">        int seed1 = GWTRNG.determineInt(~seed);</span>
+<span class="source-line-no">263</span><span id="line.263">        int seed2 = GWTRNG.determineInt(seed ^ seed1);</span>
+<span class="source-line-no">264</span><span id="line.264">        float dist0 = 0.6f - x0 * x0 - y0 * y0 - z0 * z0;</span>
+<span class="source-line-no">265</span><span id="line.265">        float dist1 = 0.6f - x1 * x1 - y1 * y1 - z1 * z1;</span>
+<span class="source-line-no">266</span><span id="line.266">        float dist2 = 0.6f - x2 * x2 - y2 * y2 - z2 * z2;</span>
+<span class="source-line-no">267</span><span id="line.267">        float dist3 = 0.6f - x3 * x3 - y3 * y3 - z3 * z3;</span>
+<span class="source-line-no">268</span><span id="line.268">        float luma, cb, cr;</span>
+<span class="source-line-no">269</span><span id="line.269">        float n = 0;</span>
+<span class="source-line-no">270</span><span id="line.270"></span>
+<span class="source-line-no">271</span><span id="line.271">        t = dist0;</span>
+<span class="source-line-no">272</span><span id="line.272">        if (t &gt; 0) {</span>
+<span class="source-line-no">273</span><span id="line.273">            t *= t;</span>
+<span class="source-line-no">274</span><span id="line.274">            n += t * t * gradCoord3D(seed, i, j, k, x0, y0, z0);</span>
+<span class="source-line-no">275</span><span id="line.275">        }</span>
+<span class="source-line-no">276</span><span id="line.276"></span>
+<span class="source-line-no">277</span><span id="line.277">        t = dist1;</span>
+<span class="source-line-no">278</span><span id="line.278">        if (t &gt; 0) {</span>
+<span class="source-line-no">279</span><span id="line.279">            t *= t;</span>
+<span class="source-line-no">280</span><span id="line.280">            n += t * t * gradCoord3D(seed, i + i1, j + j1, k + k1, x1, y1, z1);</span>
+<span class="source-line-no">281</span><span id="line.281">        }</span>
+<span class="source-line-no">282</span><span id="line.282"></span>
+<span class="source-line-no">283</span><span id="line.283">        t = dist2;</span>
+<span class="source-line-no">284</span><span id="line.284">        if (t &gt; 0) {</span>
+<span class="source-line-no">285</span><span id="line.285">            t *= t;</span>
+<span class="source-line-no">286</span><span id="line.286">            n += t * t * gradCoord3D(seed, i + i2, j + j2, k + k2, x2, y2, z2);</span>
+<span class="source-line-no">287</span><span id="line.287">        }</span>
+<span class="source-line-no">288</span><span id="line.288"></span>
+<span class="source-line-no">289</span><span id="line.289">        t = dist3;</span>
+<span class="source-line-no">290</span><span id="line.290">        if (t &gt; 0)  {</span>
+<span class="source-line-no">291</span><span id="line.291">            t *= t;</span>
+<span class="source-line-no">292</span><span id="line.292">            n += t * t * gradCoord3D(seed, i + 1, j + 1, k + 1, x3, y3, z3);</span>
+<span class="source-line-no">293</span><span id="line.293">        }</span>
+<span class="source-line-no">294</span><span id="line.294"></span>
+<span class="source-line-no">295</span><span id="line.295">        // Add contributions from each corner to get the final noise value.</span>
+<span class="source-line-no">296</span><span id="line.296">        // The result is scaled to stay just inside [0,1]</span>
+<span class="source-line-no">297</span><span id="line.297">        luma = 15.75f * n + 0.5f;</span>
+<span class="source-line-no">298</span><span id="line.298">        n = 0;</span>
+<span class="source-line-no">299</span><span id="line.299">        // Calculate the contribution from the four corners</span>
+<span class="source-line-no">300</span><span id="line.300">        t = dist0;</span>
+<span class="source-line-no">301</span><span id="line.301">        if (t &gt; 0) {</span>
+<span class="source-line-no">302</span><span id="line.302">            t *= t;</span>
+<span class="source-line-no">303</span><span id="line.303">            n += t * t * gradCoord3D(seed1, i, j, k, x0, y0, z0);</span>
+<span class="source-line-no">304</span><span id="line.304">        }</span>
+<span class="source-line-no">305</span><span id="line.305"></span>
+<span class="source-line-no">306</span><span id="line.306">        t = dist1;</span>
+<span class="source-line-no">307</span><span id="line.307">        if (t &gt; 0) {</span>
+<span class="source-line-no">308</span><span id="line.308">            t *= t;</span>
+<span class="source-line-no">309</span><span id="line.309">            n += t * t * gradCoord3D(seed1, i + i1, j + j1, k + k1, x1, y1, z1);</span>
+<span class="source-line-no">310</span><span id="line.310">        }</span>
+<span class="source-line-no">311</span><span id="line.311"></span>
+<span class="source-line-no">312</span><span id="line.312">        t = dist2;</span>
+<span class="source-line-no">313</span><span id="line.313">        if (t &gt; 0) {</span>
+<span class="source-line-no">314</span><span id="line.314">            t *= t;</span>
+<span class="source-line-no">315</span><span id="line.315">            n += t * t * gradCoord3D(seed1, i + i2, j + j2, k + k2, x2, y2, z2);</span>
+<span class="source-line-no">316</span><span id="line.316">        }</span>
+<span class="source-line-no">317</span><span id="line.317"></span>
+<span class="source-line-no">318</span><span id="line.318">        t = dist3;</span>
+<span class="source-line-no">319</span><span id="line.319">        if (t &gt; 0)  {</span>
+<span class="source-line-no">320</span><span id="line.320">            t *= t;</span>
+<span class="source-line-no">321</span><span id="line.321">            n += t * t * gradCoord3D(seed1, i + 1, j + 1, k + 1, x3, y3, z3);</span>
+<span class="source-line-no">322</span><span id="line.322">        }</span>
+<span class="source-line-no">323</span><span id="line.323">        // Add contributions from each corner to get the final noise value.</span>
+<span class="source-line-no">324</span><span id="line.324">        // The result is scaled to stay just inside [-0.5,0.5]</span>
+<span class="source-line-no">325</span><span id="line.325">        cb = 15.75f * n;</span>
+<span class="source-line-no">326</span><span id="line.326">        n = 0;</span>
+<span class="source-line-no">327</span><span id="line.327">        // Calculate the contribution from the four corners</span>
+<span class="source-line-no">328</span><span id="line.328">        t = dist0;</span>
+<span class="source-line-no">329</span><span id="line.329">        if (t &gt; 0) {</span>
+<span class="source-line-no">330</span><span id="line.330">            t *= t;</span>
+<span class="source-line-no">331</span><span id="line.331">            n += t * t * gradCoord3D(seed2, i, j, k, x0, y0, z0);</span>
+<span class="source-line-no">332</span><span id="line.332">        }</span>
+<span class="source-line-no">333</span><span id="line.333"></span>
+<span class="source-line-no">334</span><span id="line.334">        t = dist1;</span>
+<span class="source-line-no">335</span><span id="line.335">        if (t &gt; 0) {</span>
+<span class="source-line-no">336</span><span id="line.336">            t *= t;</span>
+<span class="source-line-no">337</span><span id="line.337">            n += t * t * gradCoord3D(seed2, i + i1, j + j1, k + k1, x1, y1, z1);</span>
+<span class="source-line-no">338</span><span id="line.338">        }</span>
+<span class="source-line-no">339</span><span id="line.339"></span>
+<span class="source-line-no">340</span><span id="line.340">        t = dist2;</span>
+<span class="source-line-no">341</span><span id="line.341">        if (t &gt; 0) {</span>
+<span class="source-line-no">342</span><span id="line.342">            t *= t;</span>
+<span class="source-line-no">343</span><span id="line.343">            n += t * t * gradCoord3D(seed2, i + i2, j + j2, k + k2, x2, y2, z2);</span>
+<span class="source-line-no">344</span><span id="line.344">        }</span>
+<span class="source-line-no">345</span><span id="line.345"></span>
+<span class="source-line-no">346</span><span id="line.346">        t = dist3;</span>
+<span class="source-line-no">347</span><span id="line.347">        if (t &gt; 0)  {</span>
+<span class="source-line-no">348</span><span id="line.348">            t *= t;</span>
+<span class="source-line-no">349</span><span id="line.349">            n += t * t * gradCoord3D(seed2, i + 1, j + 1, k + 1, x3, y3, z3);</span>
+<span class="source-line-no">350</span><span id="line.350">        }</span>
+<span class="source-line-no">351</span><span id="line.351">        // Add contributions from each corner to get the final noise value.</span>
+<span class="source-line-no">352</span><span id="line.352">        // The result is scaled to stay just inside [-0.5,0.5]</span>
+<span class="source-line-no">353</span><span id="line.353">        cr = 15.75f * n;</span>
+<span class="source-line-no">354</span><span id="line.354">        return SColor.floatGetYCbCr(luma, cb, cr, 1f);</span>
+<span class="source-line-no">355</span><span id="line.355">    }</span>
+<span class="source-line-no">356</span><span id="line.356">}</span>
 
 
 

@@ -7,32 +7,32 @@
 <meta name="generator" content="javadoc/SourceToHTMLConverter">
 <link rel="stylesheet" type="text/css" href="../../../../stylesheet.css" title="Style">
 </head>
-<body class="source">
+<body class="source-page">
 <main role="main">
-<div class="sourceContainer">
-<pre><span class="sourceLineNo">001</span><a id="line.1">package squidpony.squidgrid.zone;</a>
-<span class="sourceLineNo">002</span><a id="line.2"></a>
-<span class="sourceLineNo">003</span><a id="line.3">/**</a>
-<span class="sourceLineNo">004</span><a id="line.4"> * Created by Tommy Ettinger on 11/24/2016.</a>
-<span class="sourceLineNo">005</span><a id="line.5"> */</a>
-<span class="sourceLineNo">006</span><a id="line.6">public interface ImmutableZone extends Zone {</a>
-<span class="sourceLineNo">007</span><a id="line.7">    /**</a>
-<span class="sourceLineNo">008</span><a id="line.8">     * Expands the area of this Zone in the four cardinal directions, performing the expansion consecutively</a>
-<span class="sourceLineNo">009</span><a id="line.9">     * {@code distance} times. Does not modify this Zone; returns a new Zone with the requested changes.</a>
-<span class="sourceLineNo">010</span><a id="line.10">     * @param distance the amount to expand outward using Manhattan distance (diamond shape)</a>
-<span class="sourceLineNo">011</span><a id="line.11">     * @return a freshly-constructed Zone with the requested changes</a>
-<span class="sourceLineNo">012</span><a id="line.12">     */</a>
-<span class="sourceLineNo">013</span><a id="line.13">    Zone expand(int distance);</a>
-<span class="sourceLineNo">014</span><a id="line.14"></a>
-<span class="sourceLineNo">015</span><a id="line.15">    /**</a>
-<span class="sourceLineNo">016</span><a id="line.16">     * Expands the area of this Zone in the four cardinal and four diagonal directions, performing the expansion</a>
-<span class="sourceLineNo">017</span><a id="line.17">     * consecutively {@code distance} times. Does not modify this Zone; returns a new Zone with the requested changes.</a>
-<span class="sourceLineNo">018</span><a id="line.18">     * @param distance the amount to expand outward using Chebyshev distance (square shape)</a>
-<span class="sourceLineNo">019</span><a id="line.19">     * @return a freshly-constructed Zone with the requested changes</a>
-<span class="sourceLineNo">020</span><a id="line.20">     */</a>
-<span class="sourceLineNo">021</span><a id="line.21">    Zone expand8way(int distance);</a>
-<span class="sourceLineNo">022</span><a id="line.22"></a>
-<span class="sourceLineNo">023</span><a id="line.23">}</a>
+<div class="source-container">
+<pre><span class="source-line-no">001</span><span id="line.1">package squidpony.squidgrid.zone;</span>
+<span class="source-line-no">002</span><span id="line.2"></span>
+<span class="source-line-no">003</span><span id="line.3">/**</span>
+<span class="source-line-no">004</span><span id="line.4"> * Created by Tommy Ettinger on 11/24/2016.</span>
+<span class="source-line-no">005</span><span id="line.5"> */</span>
+<span class="source-line-no">006</span><span id="line.6">public interface ImmutableZone extends Zone {</span>
+<span class="source-line-no">007</span><span id="line.7">    /**</span>
+<span class="source-line-no">008</span><span id="line.8">     * Expands the area of this Zone in the four cardinal directions, performing the expansion consecutively</span>
+<span class="source-line-no">009</span><span id="line.9">     * {@code distance} times. Does not modify this Zone; returns a new Zone with the requested changes.</span>
+<span class="source-line-no">010</span><span id="line.10">     * @param distance the amount to expand outward using Manhattan distance (diamond shape)</span>
+<span class="source-line-no">011</span><span id="line.11">     * @return a freshly-constructed Zone with the requested changes</span>
+<span class="source-line-no">012</span><span id="line.12">     */</span>
+<span class="source-line-no">013</span><span id="line.13">    Zone expand(int distance);</span>
+<span class="source-line-no">014</span><span id="line.14"></span>
+<span class="source-line-no">015</span><span id="line.15">    /**</span>
+<span class="source-line-no">016</span><span id="line.16">     * Expands the area of this Zone in the four cardinal and four diagonal directions, performing the expansion</span>
+<span class="source-line-no">017</span><span id="line.17">     * consecutively {@code distance} times. Does not modify this Zone; returns a new Zone with the requested changes.</span>
+<span class="source-line-no">018</span><span id="line.18">     * @param distance the amount to expand outward using Chebyshev distance (square shape)</span>
+<span class="source-line-no">019</span><span id="line.19">     * @return a freshly-constructed Zone with the requested changes</span>
+<span class="source-line-no">020</span><span id="line.20">     */</span>
+<span class="source-line-no">021</span><span id="line.21">    Zone expand8way(int distance);</span>
+<span class="source-line-no">022</span><span id="line.22"></span>
+<span class="source-line-no">023</span><span id="line.23">}</span>
 
 
 

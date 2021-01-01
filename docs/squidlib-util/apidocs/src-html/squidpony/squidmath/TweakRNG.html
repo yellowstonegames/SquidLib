@@ -7,178 +7,178 @@
 <meta name="generator" content="javadoc/SourceToHTMLConverter">
 <link rel="stylesheet" type="text/css" href="../../../stylesheet.css" title="Style">
 </head>
-<body class="source">
+<body class="source-page">
 <main role="main">
-<div class="sourceContainer">
-<pre><span class="sourceLineNo">001</span><a id="line.1">package squidpony.squidmath;</a>
-<span class="sourceLineNo">002</span><a id="line.2"></a>
-<span class="sourceLineNo">003</span><a id="line.3">import java.io.Serializable;</a>
-<span class="sourceLineNo">004</span><a id="line.4"></a>
-<span class="sourceLineNo">005</span><a id="line.5">/**</a>
-<span class="sourceLineNo">006</span><a id="line.6"> * Somewhat experimental RNG that can be configured to smoothly transition between producing mostly values in the</a>
-<span class="sourceLineNo">007</span><a id="line.7"> * center of its range, to producing more values at or near the extremes, as well as favoring high or low results.</a>
-<span class="sourceLineNo">008</span><a id="line.8"> * The probability distribution is... unusual, with lumps that rise or fall based on centrality.</a>
-<span class="sourceLineNo">009</span><a id="line.9"> * &lt;br&gt;</a>
-<span class="sourceLineNo">010</span><a id="line.10"> * Even though this is experimental, it's still usable. Mostly the useful parts of this relate to changing centrality,</a>
-<span class="sourceLineNo">011</span><a id="line.11"> * making results occur more or less frequently in the center of the output range. You can also change the "favor" to</a>
-<span class="sourceLineNo">012</span><a id="line.12"> * bias results towards higher or lower parts of the same output range, though if favor is non-zero it may have</a>
-<span class="sourceLineNo">013</span><a id="line.13"> * counterintuitive results for {@link #nextLong()}.</a>
-<span class="sourceLineNo">014</span><a id="line.14"> * &lt;br&gt;</a>
-<span class="sourceLineNo">015</span><a id="line.15"> * Internally, this acts as a {@link TangleRNG}, which is a fairly solid, very fast algorithm, and uses its results two</a>
-<span class="sourceLineNo">016</span><a id="line.16"> * at a time to give to an atan2 calculation (specifically, {@link NumberTools#atan2_(float, float)} or</a>
-<span class="sourceLineNo">017</span><a id="line.17"> * {@link NumberTools#atan2_(double, double)}. These particular approximations of atan2 range from 0.0 to 1.0 instead of</a>
-<span class="sourceLineNo">018</span><a id="line.18"> * -pi to pi. This means atan2 inputs with positive x and small y are likely to return values near 1.0 or near 0.0, but</a>
-<span class="sourceLineNo">019</span><a id="line.19"> * not between 0.25 and 0.75. The opposite is true for inputs with negative x and small y; that is likely to be near 0.5</a>
-<span class="sourceLineNo">020</span><a id="line.20"> * and can't be between 0.0 and 0.25 or between 0.75 and 1.0. TweakRNG uses this property to implement centrality,</a>
-<span class="sourceLineNo">021</span><a id="line.21"> * changing the inputs to its internal atan2 usage so x is positive when centrality is positive, or negative when</a>
-<span class="sourceLineNo">022</span><a id="line.22"> * centrality is negative. Likewise, favor is implemented by changing y, though reversed; positive favor makes the atan2</a>
-<span class="sourceLineNo">023</span><a id="line.23"> * calculation adjusted with negative y, making it more likely to be between 0.5 and 1.0, while negative favor pushes it</a>
-<span class="sourceLineNo">024</span><a id="line.24"> * back to between 0.0 and 0.5.</a>
-<span class="sourceLineNo">025</span><a id="line.25"> * &lt;br&gt;</a>
-<span class="sourceLineNo">026</span><a id="line.26"> * &lt;a href="https://i.imgur.com/VCvtlSc.gifv"&gt;Here's an animation of the distribution graph changing.&lt;/a&gt;</a>
-<span class="sourceLineNo">027</span><a id="line.27"> * &lt;br&gt;</a>
-<span class="sourceLineNo">028</span><a id="line.28"> * Created by Tommy Ettinger on 10/6/2019.</a>
-<span class="sourceLineNo">029</span><a id="line.29"> */</a>
-<span class="sourceLineNo">030</span><a id="line.30">public class TweakRNG extends AbstractRNG implements Serializable {</a>
-<span class="sourceLineNo">031</span><a id="line.31"></a>
-<span class="sourceLineNo">032</span><a id="line.32">    private static final long serialVersionUID = 1L;</a>
-<span class="sourceLineNo">033</span><a id="line.33"></a>
-<span class="sourceLineNo">034</span><a id="line.34">    private long stateA, stateB, centrality, favor;</a>
-<span class="sourceLineNo">035</span><a id="line.35">    public TweakRNG() {</a>
-<span class="sourceLineNo">036</span><a id="line.36">        this((long) ((Math.random() - 0.5) * 0x10000000000000L)</a>
-<span class="sourceLineNo">037</span><a id="line.37">                        ^ (long) (((Math.random() - 0.5) * 2.0) * 0x8000000000000000L),</a>
-<span class="sourceLineNo">038</span><a id="line.38">                (long) ((Math.random() - 0.5) * 0x10000000000000L)</a>
-<span class="sourceLineNo">039</span><a id="line.39">                        ^ (long) (((Math.random() - 0.5) * 2.0) * 0x8000000000000000L),</a>
-<span class="sourceLineNo">040</span><a id="line.40">                0L);</a>
-<span class="sourceLineNo">041</span><a id="line.41">    }</a>
-<span class="sourceLineNo">042</span><a id="line.42"></a>
-<span class="sourceLineNo">043</span><a id="line.43">    public TweakRNG(long seed) {</a>
-<span class="sourceLineNo">044</span><a id="line.44">        this((seed = ((seed = (((seed * 0x632BE59BD9B4E019L) ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L)) ^ seed &gt;&gt;&gt; 27) * 0xAEF17502108EF2D9L) ^ seed &gt;&gt;&gt; 25, </a>
-<span class="sourceLineNo">045</span><a id="line.45">                ((seed = ((seed = (((seed * 0x632BE59BD9B4E019L) ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L)) ^ seed &gt;&gt;&gt; 27) * 0xAEF17502108EF2D9L) ^ seed &gt;&gt;&gt; 25),</a>
-<span class="sourceLineNo">046</span><a id="line.46">                0L);</a>
-<span class="sourceLineNo">047</span><a id="line.47">    }</a>
-<span class="sourceLineNo">048</span><a id="line.48"></a>
-<span class="sourceLineNo">049</span><a id="line.49">    public TweakRNG(final long seedA, final long seedB, final long centrality) {</a>
-<span class="sourceLineNo">050</span><a id="line.50">        stateA = seedA;</a>
-<span class="sourceLineNo">051</span><a id="line.51">        stateB = seedB | 1L;</a>
-<span class="sourceLineNo">052</span><a id="line.52">        this.centrality = centrality % 0x10000L;</a>
-<span class="sourceLineNo">053</span><a id="line.53">        this.favor = 0L;</a>
-<span class="sourceLineNo">054</span><a id="line.54">    }</a>
-<span class="sourceLineNo">055</span><a id="line.55"></a>
-<span class="sourceLineNo">056</span><a id="line.56">    public TweakRNG(final long seedA, final long seedB, final long centrality, final long favor) {</a>
-<span class="sourceLineNo">057</span><a id="line.57">        stateA = seedA;</a>
-<span class="sourceLineNo">058</span><a id="line.58">        stateB = seedB | 1L;</a>
-<span class="sourceLineNo">059</span><a id="line.59">        this.centrality = centrality % 0x10000L;</a>
-<span class="sourceLineNo">060</span><a id="line.60">        this.favor = favor % 0x10000L;</a>
-<span class="sourceLineNo">061</span><a id="line.61">    }</a>
-<span class="sourceLineNo">062</span><a id="line.62"></a>
-<span class="sourceLineNo">063</span><a id="line.63">    @Override</a>
-<span class="sourceLineNo">064</span><a id="line.64">    public int next(int bits) {</a>
-<span class="sourceLineNo">065</span><a id="line.65">        return (int)(nextLong() &gt;&gt;&gt; 64 - bits);</a>
-<span class="sourceLineNo">066</span><a id="line.66">    }</a>
-<span class="sourceLineNo">067</span><a id="line.67"></a>
-<span class="sourceLineNo">068</span><a id="line.68">    @Override</a>
-<span class="sourceLineNo">069</span><a id="line.69">    public int nextInt() {</a>
-<span class="sourceLineNo">070</span><a id="line.70">        return (int) (nextLong() &gt;&gt;&gt; 32);</a>
-<span class="sourceLineNo">071</span><a id="line.71">    }</a>
-<span class="sourceLineNo">072</span><a id="line.72"></a>
-<span class="sourceLineNo">073</span><a id="line.73">    @Override</a>
-<span class="sourceLineNo">074</span><a id="line.74">    public long nextLong() {</a>
-<span class="sourceLineNo">075</span><a id="line.75">        final long r = internalLong(), s = internalLong();</a>
-<span class="sourceLineNo">076</span><a id="line.76">        return (long) (NumberTools.atan2_(((r &amp; 0xFF) - (r &gt;&gt;&gt; 8 &amp; 0xFF)) * ((r &gt;&gt;&gt; 16 &amp; 0xFF) - (r &gt;&gt;&gt; 24 &amp; 0xFF)) - (double)favor,</a>
-<span class="sourceLineNo">077</span><a id="line.77">                ((r &gt;&gt;&gt; 32 &amp; 0xFF) - (r &gt;&gt;&gt; 40 &amp; 0xFF)) * ((r &gt;&gt;&gt; 48 &amp; 0xFF) - (r &gt;&gt;&gt; 56 &amp; 0xFF)) + centrality) * 0x6000000000000000L)</a>
-<span class="sourceLineNo">078</span><a id="line.78">                + (s &amp; 0x1FFFFFFFFFFFFFFFL) &lt;&lt; 1 ^ (s &gt;&gt;&gt; 63);</a>
-<span class="sourceLineNo">079</span><a id="line.79">    }</a>
-<span class="sourceLineNo">080</span><a id="line.80"></a>
-<span class="sourceLineNo">081</span><a id="line.81">    @Override</a>
-<span class="sourceLineNo">082</span><a id="line.82">    public boolean nextBoolean() {</a>
-<span class="sourceLineNo">083</span><a id="line.83">        return nextLong() &lt; 0;</a>
-<span class="sourceLineNo">084</span><a id="line.84">    }</a>
-<span class="sourceLineNo">085</span><a id="line.85">    </a>
-<span class="sourceLineNo">086</span><a id="line.86">    @Override</a>
-<span class="sourceLineNo">087</span><a id="line.87">    public double nextDouble() {</a>
-<span class="sourceLineNo">088</span><a id="line.88">        final long r = internalLong();</a>
-<span class="sourceLineNo">089</span><a id="line.89">        return NumberTools.atan2_(((r &amp; 0xFF) - (r &gt;&gt;&gt; 8 &amp; 0xFF)) * ((r &gt;&gt;&gt; 16 &amp; 0xFF) - (r &gt;&gt;&gt; 24 &amp; 0xFF)) - favor,</a>
-<span class="sourceLineNo">090</span><a id="line.90">                ((r &gt;&gt;&gt; 32 &amp; 0xFF) - (r &gt;&gt;&gt; 40 &amp; 0xFF)) * ((r &gt;&gt;&gt; 48 &amp; 0xFF) - (r &gt;&gt;&gt; 56 &amp; 0xFF)) + (double)centrality) * 0.75</a>
-<span class="sourceLineNo">091</span><a id="line.91">                + (internalLong() &amp; 0xfffffffffffffL) * 0x1p-54;</a>
-<span class="sourceLineNo">092</span><a id="line.92">    }</a>
-<span class="sourceLineNo">093</span><a id="line.93"></a>
-<span class="sourceLineNo">094</span><a id="line.94">    @Override</a>
-<span class="sourceLineNo">095</span><a id="line.95">    public float nextFloat() {</a>
-<span class="sourceLineNo">096</span><a id="line.96">        final long r = internalLong();</a>
-<span class="sourceLineNo">097</span><a id="line.97">        return NumberTools.atan2_(((r &amp; 0xFF) - (r &gt;&gt;&gt; 8 &amp; 0xFF)) * ((r &gt;&gt;&gt; 16 &amp; 0xFF) - (r &gt;&gt;&gt; 24 &amp; 0xFF)) - favor,</a>
-<span class="sourceLineNo">098</span><a id="line.98">                ((r &gt;&gt;&gt; 32 &amp; 0xFF) - (r &gt;&gt;&gt; 40 &amp; 0xFF)) * ((r &gt;&gt;&gt; 48 &amp; 0xFF) - (r &gt;&gt;&gt; 56 &amp; 0xFF)) + centrality) * 0.75f</a>
-<span class="sourceLineNo">099</span><a id="line.99">                + (internalLong() &amp; 0x7fffffL) * 0x1p-25f;</a>
-<span class="sourceLineNo">100</span><a id="line.100">    }</a>
-<span class="sourceLineNo">101</span><a id="line.101">    </a>
-<span class="sourceLineNo">102</span><a id="line.102">    @Override</a>
-<span class="sourceLineNo">103</span><a id="line.103">    public TweakRNG copy() {</a>
-<span class="sourceLineNo">104</span><a id="line.104">        return this;</a>
-<span class="sourceLineNo">105</span><a id="line.105">    }</a>
-<span class="sourceLineNo">106</span><a id="line.106"></a>
-<span class="sourceLineNo">107</span><a id="line.107">    @Override</a>
-<span class="sourceLineNo">108</span><a id="line.108">    public Serializable toSerializable() {</a>
-<span class="sourceLineNo">109</span><a id="line.109">        return this;</a>
-<span class="sourceLineNo">110</span><a id="line.110">    }</a>
-<span class="sourceLineNo">111</span><a id="line.111"></a>
-<span class="sourceLineNo">112</span><a id="line.112">    public long getStateA() {</a>
-<span class="sourceLineNo">113</span><a id="line.113">        return stateA;</a>
-<span class="sourceLineNo">114</span><a id="line.114">    }</a>
-<span class="sourceLineNo">115</span><a id="line.115"></a>
-<span class="sourceLineNo">116</span><a id="line.116">    public void setStateA(long stateA) {</a>
-<span class="sourceLineNo">117</span><a id="line.117">        this.stateA = stateA;</a>
-<span class="sourceLineNo">118</span><a id="line.118">    }</a>
-<span class="sourceLineNo">119</span><a id="line.119"></a>
-<span class="sourceLineNo">120</span><a id="line.120">    public long getStateB() {</a>
-<span class="sourceLineNo">121</span><a id="line.121">        return stateB;</a>
-<span class="sourceLineNo">122</span><a id="line.122">    }</a>
-<span class="sourceLineNo">123</span><a id="line.123"></a>
-<span class="sourceLineNo">124</span><a id="line.124">    public void setStateB(long stateB) {</a>
-<span class="sourceLineNo">125</span><a id="line.125">        this.stateB = stateB | 1L;</a>
-<span class="sourceLineNo">126</span><a id="line.126">    }</a>
-<span class="sourceLineNo">127</span><a id="line.127"></a>
-<span class="sourceLineNo">128</span><a id="line.128">    public long getCentrality() {</a>
-<span class="sourceLineNo">129</span><a id="line.129">        return centrality;</a>
-<span class="sourceLineNo">130</span><a id="line.130">    }</a>
-<span class="sourceLineNo">131</span><a id="line.131"></a>
-<span class="sourceLineNo">132</span><a id="line.132">    /**</a>
-<span class="sourceLineNo">133</span><a id="line.133">     * Adjusts the central bias of this TweakRNG, often to positive numbers (which bias toward the center of the range),</a>
-<span class="sourceLineNo">134</span><a id="line.134">     * but also often to negative numbers (which bias toward extreme values, though still within the range).</a>
-<span class="sourceLineNo">135</span><a id="line.135">     * @param centrality should be between -65535 and 65535; positive values bias toward the center of the range</a>
-<span class="sourceLineNo">136</span><a id="line.136">     */</a>
-<span class="sourceLineNo">137</span><a id="line.137">    public void setCentrality(long centrality) {</a>
-<span class="sourceLineNo">138</span><a id="line.138">        this.centrality = centrality % 65536L;</a>
-<span class="sourceLineNo">139</span><a id="line.139">    }</a>
-<span class="sourceLineNo">140</span><a id="line.140"></a>
-<span class="sourceLineNo">141</span><a id="line.141"></a>
-<span class="sourceLineNo">142</span><a id="line.142">    public long getFavor() {</a>
-<span class="sourceLineNo">143</span><a id="line.143">        return favor;</a>
-<span class="sourceLineNo">144</span><a id="line.144">    }</a>
-<span class="sourceLineNo">145</span><a id="line.145"></a>
-<span class="sourceLineNo">146</span><a id="line.146">    /**</a>
-<span class="sourceLineNo">147</span><a id="line.147">     * Adjusts the value bias of this TweakRNG, often to positive numbers (which bias toward higher results), but also</a>
-<span class="sourceLineNo">148</span><a id="line.148">     * often to negative numbers (which bias toward lower results). All results will still be in their normal range, but</a>
-<span class="sourceLineNo">149</span><a id="line.149">     * will change how often high or low values occur. Unusual results will occur if favor is non-zero and you get a</a>
-<span class="sourceLineNo">150</span><a id="line.150">     * long with {@link #nextLong()}; in that case, the values are treated as higher when unsigned, so positive favor</a>
-<span class="sourceLineNo">151</span><a id="line.151">     * makes both high positive values and all negative values more common. Doubles and floats will behave normally.</a>
-<span class="sourceLineNo">152</span><a id="line.152">     * @param favor should be between -65535 and 65535; positive values bias toward higher (unsigned for longs) results</a>
-<span class="sourceLineNo">153</span><a id="line.153">     */</a>
-<span class="sourceLineNo">154</span><a id="line.154">    public void setFavor(long favor) {</a>
-<span class="sourceLineNo">155</span><a id="line.155">        this.favor = favor % 65536L;</a>
-<span class="sourceLineNo">156</span><a id="line.156">    }</a>
-<span class="sourceLineNo">157</span><a id="line.157"></a>
-<span class="sourceLineNo">158</span><a id="line.158">    /**</a>
-<span class="sourceLineNo">159</span><a id="line.159">     *{@link TangleRNG}'s algorithm; not all longs will be returned by any individual generator, but all generators as a</a>
-<span class="sourceLineNo">160</span><a id="line.160">     * whole will return all longs with equal likelihood.</a>
-<span class="sourceLineNo">161</span><a id="line.161">     * @return a random long in the full range; each state is advanced by 1 step.</a>
-<span class="sourceLineNo">162</span><a id="line.162">     */</a>
-<span class="sourceLineNo">163</span><a id="line.163">    private long internalLong()</a>
-<span class="sourceLineNo">164</span><a id="line.164">    {</a>
-<span class="sourceLineNo">165</span><a id="line.165">        final long s = (stateA += 0xC6BC279692B5C323L);</a>
-<span class="sourceLineNo">166</span><a id="line.166">        final long z = (s ^ s &gt;&gt;&gt; 31) * (stateB += 0x9E3779B97F4A7C16L);</a>
-<span class="sourceLineNo">167</span><a id="line.167">        return z ^ z &gt;&gt;&gt; 26 ^ z &gt;&gt;&gt; 6;</a>
-<span class="sourceLineNo">168</span><a id="line.168">    }</a>
-<span class="sourceLineNo">169</span><a id="line.169">}</a>
+<div class="source-container">
+<pre><span class="source-line-no">001</span><span id="line.1">package squidpony.squidmath;</span>
+<span class="source-line-no">002</span><span id="line.2"></span>
+<span class="source-line-no">003</span><span id="line.3">import java.io.Serializable;</span>
+<span class="source-line-no">004</span><span id="line.4"></span>
+<span class="source-line-no">005</span><span id="line.5">/**</span>
+<span class="source-line-no">006</span><span id="line.6"> * Somewhat experimental RNG that can be configured to smoothly transition between producing mostly values in the</span>
+<span class="source-line-no">007</span><span id="line.7"> * center of its range, to producing more values at or near the extremes, as well as favoring high or low results.</span>
+<span class="source-line-no">008</span><span id="line.8"> * The probability distribution is... unusual, with lumps that rise or fall based on centrality.</span>
+<span class="source-line-no">009</span><span id="line.9"> * &lt;br&gt;</span>
+<span class="source-line-no">010</span><span id="line.10"> * Even though this is experimental, it's still usable. Mostly the useful parts of this relate to changing centrality,</span>
+<span class="source-line-no">011</span><span id="line.11"> * making results occur more or less frequently in the center of the output range. You can also change the "favor" to</span>
+<span class="source-line-no">012</span><span id="line.12"> * bias results towards higher or lower parts of the same output range, though if favor is non-zero it may have</span>
+<span class="source-line-no">013</span><span id="line.13"> * counterintuitive results for {@link #nextLong()}.</span>
+<span class="source-line-no">014</span><span id="line.14"> * &lt;br&gt;</span>
+<span class="source-line-no">015</span><span id="line.15"> * Internally, this acts as a {@link TangleRNG}, which is a fairly solid, very fast algorithm, and uses its results two</span>
+<span class="source-line-no">016</span><span id="line.16"> * at a time to give to an atan2 calculation (specifically, {@link NumberTools#atan2_(float, float)} or</span>
+<span class="source-line-no">017</span><span id="line.17"> * {@link NumberTools#atan2_(double, double)}. These particular approximations of atan2 range from 0.0 to 1.0 instead of</span>
+<span class="source-line-no">018</span><span id="line.18"> * -pi to pi. This means atan2 inputs with positive x and small y are likely to return values near 1.0 or near 0.0, but</span>
+<span class="source-line-no">019</span><span id="line.19"> * not between 0.25 and 0.75. The opposite is true for inputs with negative x and small y; that is likely to be near 0.5</span>
+<span class="source-line-no">020</span><span id="line.20"> * and can't be between 0.0 and 0.25 or between 0.75 and 1.0. TweakRNG uses this property to implement centrality,</span>
+<span class="source-line-no">021</span><span id="line.21"> * changing the inputs to its internal atan2 usage so x is positive when centrality is positive, or negative when</span>
+<span class="source-line-no">022</span><span id="line.22"> * centrality is negative. Likewise, favor is implemented by changing y, though reversed; positive favor makes the atan2</span>
+<span class="source-line-no">023</span><span id="line.23"> * calculation adjusted with negative y, making it more likely to be between 0.5 and 1.0, while negative favor pushes it</span>
+<span class="source-line-no">024</span><span id="line.24"> * back to between 0.0 and 0.5.</span>
+<span class="source-line-no">025</span><span id="line.25"> * &lt;br&gt;</span>
+<span class="source-line-no">026</span><span id="line.26"> * &lt;a href="https://i.imgur.com/VCvtlSc.gifv"&gt;Here's an animation of the distribution graph changing.&lt;/a&gt;</span>
+<span class="source-line-no">027</span><span id="line.27"> * &lt;br&gt;</span>
+<span class="source-line-no">028</span><span id="line.28"> * Created by Tommy Ettinger on 10/6/2019.</span>
+<span class="source-line-no">029</span><span id="line.29"> */</span>
+<span class="source-line-no">030</span><span id="line.30">public class TweakRNG extends AbstractRNG implements Serializable {</span>
+<span class="source-line-no">031</span><span id="line.31"></span>
+<span class="source-line-no">032</span><span id="line.32">    private static final long serialVersionUID = 1L;</span>
+<span class="source-line-no">033</span><span id="line.33"></span>
+<span class="source-line-no">034</span><span id="line.34">    private long stateA, stateB, centrality, favor;</span>
+<span class="source-line-no">035</span><span id="line.35">    public TweakRNG() {</span>
+<span class="source-line-no">036</span><span id="line.36">        this((long) ((Math.random() - 0.5) * 0x10000000000000L)</span>
+<span class="source-line-no">037</span><span id="line.37">                        ^ (long) (((Math.random() - 0.5) * 2.0) * 0x8000000000000000L),</span>
+<span class="source-line-no">038</span><span id="line.38">                (long) ((Math.random() - 0.5) * 0x10000000000000L)</span>
+<span class="source-line-no">039</span><span id="line.39">                        ^ (long) (((Math.random() - 0.5) * 2.0) * 0x8000000000000000L),</span>
+<span class="source-line-no">040</span><span id="line.40">                0L);</span>
+<span class="source-line-no">041</span><span id="line.41">    }</span>
+<span class="source-line-no">042</span><span id="line.42"></span>
+<span class="source-line-no">043</span><span id="line.43">    public TweakRNG(long seed) {</span>
+<span class="source-line-no">044</span><span id="line.44">        this((seed = ((seed = (((seed * 0x632BE59BD9B4E019L) ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L)) ^ seed &gt;&gt;&gt; 27) * 0xAEF17502108EF2D9L) ^ seed &gt;&gt;&gt; 25, </span>
+<span class="source-line-no">045</span><span id="line.45">                ((seed = ((seed = (((seed * 0x632BE59BD9B4E019L) ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L)) ^ seed &gt;&gt;&gt; 27) * 0xAEF17502108EF2D9L) ^ seed &gt;&gt;&gt; 25),</span>
+<span class="source-line-no">046</span><span id="line.46">                0L);</span>
+<span class="source-line-no">047</span><span id="line.47">    }</span>
+<span class="source-line-no">048</span><span id="line.48"></span>
+<span class="source-line-no">049</span><span id="line.49">    public TweakRNG(final long seedA, final long seedB, final long centrality) {</span>
+<span class="source-line-no">050</span><span id="line.50">        stateA = seedA;</span>
+<span class="source-line-no">051</span><span id="line.51">        stateB = seedB | 1L;</span>
+<span class="source-line-no">052</span><span id="line.52">        this.centrality = centrality % 0x10000L;</span>
+<span class="source-line-no">053</span><span id="line.53">        this.favor = 0L;</span>
+<span class="source-line-no">054</span><span id="line.54">    }</span>
+<span class="source-line-no">055</span><span id="line.55"></span>
+<span class="source-line-no">056</span><span id="line.56">    public TweakRNG(final long seedA, final long seedB, final long centrality, final long favor) {</span>
+<span class="source-line-no">057</span><span id="line.57">        stateA = seedA;</span>
+<span class="source-line-no">058</span><span id="line.58">        stateB = seedB | 1L;</span>
+<span class="source-line-no">059</span><span id="line.59">        this.centrality = centrality % 0x10000L;</span>
+<span class="source-line-no">060</span><span id="line.60">        this.favor = favor % 0x10000L;</span>
+<span class="source-line-no">061</span><span id="line.61">    }</span>
+<span class="source-line-no">062</span><span id="line.62"></span>
+<span class="source-line-no">063</span><span id="line.63">    @Override</span>
+<span class="source-line-no">064</span><span id="line.64">    public int next(int bits) {</span>
+<span class="source-line-no">065</span><span id="line.65">        return (int)(nextLong() &gt;&gt;&gt; 64 - bits);</span>
+<span class="source-line-no">066</span><span id="line.66">    }</span>
+<span class="source-line-no">067</span><span id="line.67"></span>
+<span class="source-line-no">068</span><span id="line.68">    @Override</span>
+<span class="source-line-no">069</span><span id="line.69">    public int nextInt() {</span>
+<span class="source-line-no">070</span><span id="line.70">        return (int) (nextLong() &gt;&gt;&gt; 32);</span>
+<span class="source-line-no">071</span><span id="line.71">    }</span>
+<span class="source-line-no">072</span><span id="line.72"></span>
+<span class="source-line-no">073</span><span id="line.73">    @Override</span>
+<span class="source-line-no">074</span><span id="line.74">    public long nextLong() {</span>
+<span class="source-line-no">075</span><span id="line.75">        final long r = internalLong(), s = internalLong();</span>
+<span class="source-line-no">076</span><span id="line.76">        return (long) (NumberTools.atan2_(((r &amp; 0xFF) - (r &gt;&gt;&gt; 8 &amp; 0xFF)) * ((r &gt;&gt;&gt; 16 &amp; 0xFF) - (r &gt;&gt;&gt; 24 &amp; 0xFF)) - (double)favor,</span>
+<span class="source-line-no">077</span><span id="line.77">                ((r &gt;&gt;&gt; 32 &amp; 0xFF) - (r &gt;&gt;&gt; 40 &amp; 0xFF)) * ((r &gt;&gt;&gt; 48 &amp; 0xFF) - (r &gt;&gt;&gt; 56 &amp; 0xFF)) + centrality) * 0x6000000000000000L)</span>
+<span class="source-line-no">078</span><span id="line.78">                + (s &amp; 0x1FFFFFFFFFFFFFFFL) &lt;&lt; 1 ^ (s &gt;&gt;&gt; 63);</span>
+<span class="source-line-no">079</span><span id="line.79">    }</span>
+<span class="source-line-no">080</span><span id="line.80"></span>
+<span class="source-line-no">081</span><span id="line.81">    @Override</span>
+<span class="source-line-no">082</span><span id="line.82">    public boolean nextBoolean() {</span>
+<span class="source-line-no">083</span><span id="line.83">        return nextLong() &lt; 0;</span>
+<span class="source-line-no">084</span><span id="line.84">    }</span>
+<span class="source-line-no">085</span><span id="line.85">    </span>
+<span class="source-line-no">086</span><span id="line.86">    @Override</span>
+<span class="source-line-no">087</span><span id="line.87">    public double nextDouble() {</span>
+<span class="source-line-no">088</span><span id="line.88">        final long r = internalLong();</span>
+<span class="source-line-no">089</span><span id="line.89">        return NumberTools.atan2_(((r &amp; 0xFF) - (r &gt;&gt;&gt; 8 &amp; 0xFF)) * ((r &gt;&gt;&gt; 16 &amp; 0xFF) - (r &gt;&gt;&gt; 24 &amp; 0xFF)) - favor,</span>
+<span class="source-line-no">090</span><span id="line.90">                ((r &gt;&gt;&gt; 32 &amp; 0xFF) - (r &gt;&gt;&gt; 40 &amp; 0xFF)) * ((r &gt;&gt;&gt; 48 &amp; 0xFF) - (r &gt;&gt;&gt; 56 &amp; 0xFF)) + (double)centrality) * 0.75</span>
+<span class="source-line-no">091</span><span id="line.91">                + (internalLong() &amp; 0xfffffffffffffL) * 0x1p-54;</span>
+<span class="source-line-no">092</span><span id="line.92">    }</span>
+<span class="source-line-no">093</span><span id="line.93"></span>
+<span class="source-line-no">094</span><span id="line.94">    @Override</span>
+<span class="source-line-no">095</span><span id="line.95">    public float nextFloat() {</span>
+<span class="source-line-no">096</span><span id="line.96">        final long r = internalLong();</span>
+<span class="source-line-no">097</span><span id="line.97">        return NumberTools.atan2_(((r &amp; 0xFF) - (r &gt;&gt;&gt; 8 &amp; 0xFF)) * ((r &gt;&gt;&gt; 16 &amp; 0xFF) - (r &gt;&gt;&gt; 24 &amp; 0xFF)) - favor,</span>
+<span class="source-line-no">098</span><span id="line.98">                ((r &gt;&gt;&gt; 32 &amp; 0xFF) - (r &gt;&gt;&gt; 40 &amp; 0xFF)) * ((r &gt;&gt;&gt; 48 &amp; 0xFF) - (r &gt;&gt;&gt; 56 &amp; 0xFF)) + centrality) * 0.75f</span>
+<span class="source-line-no">099</span><span id="line.99">                + (internalLong() &amp; 0x7fffffL) * 0x1p-25f;</span>
+<span class="source-line-no">100</span><span id="line.100">    }</span>
+<span class="source-line-no">101</span><span id="line.101">    </span>
+<span class="source-line-no">102</span><span id="line.102">    @Override</span>
+<span class="source-line-no">103</span><span id="line.103">    public TweakRNG copy() {</span>
+<span class="source-line-no">104</span><span id="line.104">        return this;</span>
+<span class="source-line-no">105</span><span id="line.105">    }</span>
+<span class="source-line-no">106</span><span id="line.106"></span>
+<span class="source-line-no">107</span><span id="line.107">    @Override</span>
+<span class="source-line-no">108</span><span id="line.108">    public Serializable toSerializable() {</span>
+<span class="source-line-no">109</span><span id="line.109">        return this;</span>
+<span class="source-line-no">110</span><span id="line.110">    }</span>
+<span class="source-line-no">111</span><span id="line.111"></span>
+<span class="source-line-no">112</span><span id="line.112">    public long getStateA() {</span>
+<span class="source-line-no">113</span><span id="line.113">        return stateA;</span>
+<span class="source-line-no">114</span><span id="line.114">    }</span>
+<span class="source-line-no">115</span><span id="line.115"></span>
+<span class="source-line-no">116</span><span id="line.116">    public void setStateA(long stateA) {</span>
+<span class="source-line-no">117</span><span id="line.117">        this.stateA = stateA;</span>
+<span class="source-line-no">118</span><span id="line.118">    }</span>
+<span class="source-line-no">119</span><span id="line.119"></span>
+<span class="source-line-no">120</span><span id="line.120">    public long getStateB() {</span>
+<span class="source-line-no">121</span><span id="line.121">        return stateB;</span>
+<span class="source-line-no">122</span><span id="line.122">    }</span>
+<span class="source-line-no">123</span><span id="line.123"></span>
+<span class="source-line-no">124</span><span id="line.124">    public void setStateB(long stateB) {</span>
+<span class="source-line-no">125</span><span id="line.125">        this.stateB = stateB | 1L;</span>
+<span class="source-line-no">126</span><span id="line.126">    }</span>
+<span class="source-line-no">127</span><span id="line.127"></span>
+<span class="source-line-no">128</span><span id="line.128">    public long getCentrality() {</span>
+<span class="source-line-no">129</span><span id="line.129">        return centrality;</span>
+<span class="source-line-no">130</span><span id="line.130">    }</span>
+<span class="source-line-no">131</span><span id="line.131"></span>
+<span class="source-line-no">132</span><span id="line.132">    /**</span>
+<span class="source-line-no">133</span><span id="line.133">     * Adjusts the central bias of this TweakRNG, often to positive numbers (which bias toward the center of the range),</span>
+<span class="source-line-no">134</span><span id="line.134">     * but also often to negative numbers (which bias toward extreme values, though still within the range).</span>
+<span class="source-line-no">135</span><span id="line.135">     * @param centrality should be between -65535 and 65535; positive values bias toward the center of the range</span>
+<span class="source-line-no">136</span><span id="line.136">     */</span>
+<span class="source-line-no">137</span><span id="line.137">    public void setCentrality(long centrality) {</span>
+<span class="source-line-no">138</span><span id="line.138">        this.centrality = centrality % 65536L;</span>
+<span class="source-line-no">139</span><span id="line.139">    }</span>
+<span class="source-line-no">140</span><span id="line.140"></span>
+<span class="source-line-no">141</span><span id="line.141"></span>
+<span class="source-line-no">142</span><span id="line.142">    public long getFavor() {</span>
+<span class="source-line-no">143</span><span id="line.143">        return favor;</span>
+<span class="source-line-no">144</span><span id="line.144">    }</span>
+<span class="source-line-no">145</span><span id="line.145"></span>
+<span class="source-line-no">146</span><span id="line.146">    /**</span>
+<span class="source-line-no">147</span><span id="line.147">     * Adjusts the value bias of this TweakRNG, often to positive numbers (which bias toward higher results), but also</span>
+<span class="source-line-no">148</span><span id="line.148">     * often to negative numbers (which bias toward lower results). All results will still be in their normal range, but</span>
+<span class="source-line-no">149</span><span id="line.149">     * will change how often high or low values occur. Unusual results will occur if favor is non-zero and you get a</span>
+<span class="source-line-no">150</span><span id="line.150">     * long with {@link #nextLong()}; in that case, the values are treated as higher when unsigned, so positive favor</span>
+<span class="source-line-no">151</span><span id="line.151">     * makes both high positive values and all negative values more common. Doubles and floats will behave normally.</span>
+<span class="source-line-no">152</span><span id="line.152">     * @param favor should be between -65535 and 65535; positive values bias toward higher (unsigned for longs) results</span>
+<span class="source-line-no">153</span><span id="line.153">     */</span>
+<span class="source-line-no">154</span><span id="line.154">    public void setFavor(long favor) {</span>
+<span class="source-line-no">155</span><span id="line.155">        this.favor = favor % 65536L;</span>
+<span class="source-line-no">156</span><span id="line.156">    }</span>
+<span class="source-line-no">157</span><span id="line.157"></span>
+<span class="source-line-no">158</span><span id="line.158">    /**</span>
+<span class="source-line-no">159</span><span id="line.159">     *{@link TangleRNG}'s algorithm; not all longs will be returned by any individual generator, but all generators as a</span>
+<span class="source-line-no">160</span><span id="line.160">     * whole will return all longs with equal likelihood.</span>
+<span class="source-line-no">161</span><span id="line.161">     * @return a random long in the full range; each state is advanced by 1 step.</span>
+<span class="source-line-no">162</span><span id="line.162">     */</span>
+<span class="source-line-no">163</span><span id="line.163">    private long internalLong()</span>
+<span class="source-line-no">164</span><span id="line.164">    {</span>
+<span class="source-line-no">165</span><span id="line.165">        final long s = (stateA += 0xC6BC279692B5C323L);</span>
+<span class="source-line-no">166</span><span id="line.166">        final long z = (s ^ s &gt;&gt;&gt; 31) * (stateB += 0x9E3779B97F4A7C16L);</span>
+<span class="source-line-no">167</span><span id="line.167">        return z ^ z &gt;&gt;&gt; 26 ^ z &gt;&gt;&gt; 6;</span>
+<span class="source-line-no">168</span><span id="line.168">    }</span>
+<span class="source-line-no">169</span><span id="line.169">}</span>
 
 
 

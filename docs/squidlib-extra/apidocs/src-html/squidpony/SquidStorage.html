@@ -7,196 +7,196 @@
 <meta name="generator" content="javadoc/SourceToHTMLConverter">
 <link rel="stylesheet" type="text/css" href="../../stylesheet.css" title="Style">
 </head>
-<body class="source">
+<body class="source-page">
 <main role="main">
-<div class="sourceContainer">
-<pre><span class="sourceLineNo">001</span><a id="line.1">package squidpony;</a>
-<span class="sourceLineNo">002</span><a id="line.2"></a>
-<span class="sourceLineNo">003</span><a id="line.3">import squidpony.store.json.JsonStorage;</a>
-<span class="sourceLineNo">004</span><a id="line.4"></a>
-<span class="sourceLineNo">005</span><a id="line.5">/**</a>
-<span class="sourceLineNo">006</span><a id="line.6"> * Helps games store information in libGDX's Preferences class as Strings, then get it back out.</a>
-<span class="sourceLineNo">007</span><a id="line.7"> * Created by Tommy Ettinger on 9/16/2016.</a>
-<span class="sourceLineNo">008</span><a id="line.8"> */</a>
-<span class="sourceLineNo">009</span><a id="line.9">public class SquidStorage extends JsonStorage {</a>
-<span class="sourceLineNo">010</span><a id="line.10">    /**</a>
-<span class="sourceLineNo">011</span><a id="line.11">     * Please don't use this constructor if possible; it simply calls {@link #SquidStorage(String)} with the constant</a>
-<span class="sourceLineNo">012</span><a id="line.12">     * String "nameless". This could easily overlap with other files/sections in Preferences, so you should always</a>
-<span class="sourceLineNo">013</span><a id="line.13">     * prefer giving a String argument to the constructor, typically the name of the game.</a>
-<span class="sourceLineNo">014</span><a id="line.14">     * @see #SquidStorage(String) the recommended constructor to use</a>
-<span class="sourceLineNo">015</span><a id="line.15">     */</a>
-<span class="sourceLineNo">016</span><a id="line.16">    public SquidStorage()</a>
-<span class="sourceLineNo">017</span><a id="line.17">    {</a>
-<span class="sourceLineNo">018</span><a id="line.18">        super("nameless");</a>
-<span class="sourceLineNo">019</span><a id="line.19">    }</a>
-<span class="sourceLineNo">020</span><a id="line.20"></a>
-<span class="sourceLineNo">021</span><a id="line.21">    /**</a>
-<span class="sourceLineNo">022</span><a id="line.22">     * Creates a SquidStorage with the given fileName to save using Preferences from libGDX. The name should generally</a>
-<span class="sourceLineNo">023</span><a id="line.23">     * be the name of this game or application, and must be a valid name for a file (so no slashes, backslashes, colons,</a>
-<span class="sourceLineNo">024</span><a id="line.24">     * semicolons, or commas for certain, and other non-alphanumeric characters are also probably invalid). You should</a>
-<span class="sourceLineNo">025</span><a id="line.25">     * not assume anything is present in the Preferences storage unless you have put it there, and this applies doubly</a>
-<span class="sourceLineNo">026</span><a id="line.26">     * to games or applications other than your own; you should avoid values for fileName that might overlap with</a>
-<span class="sourceLineNo">027</span><a id="line.27">     * another game's Preferences values.</a>
-<span class="sourceLineNo">028</span><a id="line.28">     * &lt;br&gt;</a>
-<span class="sourceLineNo">029</span><a id="line.29">     * To organize saved data into sub-sections, you specify logical units (like different players' saved games) with a</a>
-<span class="sourceLineNo">030</span><a id="line.30">     * String outerName when you call {@link #store(String)}, and can further distinguish data under the outerName when</a>
-<span class="sourceLineNo">031</span><a id="line.31">     * you call {@link #put(String, Object)} to put each individual item into the saved storage with its own innerName.</a>
-<span class="sourceLineNo">032</span><a id="line.32">     * &lt;br&gt;</a>
-<span class="sourceLineNo">033</span><a id="line.33">     * Calling this also sets up custom serializers for several important types in SquidLib; char[][], OrderedMap,</a>
-<span class="sourceLineNo">034</span><a id="line.34">     * IntDoubleOrderedMap, FakeLanguageGen, GreasedRegion, and notably Pattern from RegExodus all have smaller</a>
-<span class="sourceLineNo">035</span><a id="line.35">     * serialized representations than the default. OrderedMap allows non-String keys, which gets around a limitation in</a>
-<span class="sourceLineNo">036</span><a id="line.36">     * JSON maps normally, and both FakeLanguageGen and Pattern are amazingly smaller with the custom representation.</a>
-<span class="sourceLineNo">037</span><a id="line.37">     * The custom char[][] representation is about half the normal size by omitting commas after each char.</a>
-<span class="sourceLineNo">038</span><a id="line.38">     * @param fileName the valid file name to create or open from Preferences; typically the name of the game/app.</a>
-<span class="sourceLineNo">039</span><a id="line.39">     */</a>
-<span class="sourceLineNo">040</span><a id="line.40">    public SquidStorage(final String fileName)</a>
-<span class="sourceLineNo">041</span><a id="line.41">    {</a>
-<span class="sourceLineNo">042</span><a id="line.42">        super(fileName);</a>
-<span class="sourceLineNo">043</span><a id="line.43">    }</a>
-<span class="sourceLineNo">044</span><a id="line.44">    /**</a>
-<span class="sourceLineNo">045</span><a id="line.45">     * Creates a SquidStorage with the given fileName to save using Preferences from libGDX. The name should generally</a>
-<span class="sourceLineNo">046</span><a id="line.46">     * be the name of this game or application, and must be a valid name for a file (so no slashes, backslashes, colons,</a>
-<span class="sourceLineNo">047</span><a id="line.47">     * semicolons, or commas for certain, and other non-alphanumeric characters are also probably invalid). You should</a>
-<span class="sourceLineNo">048</span><a id="line.48">     * not assume anything is present in the Preferences storage unless you have put it there, and this applies doubly</a>
-<span class="sourceLineNo">049</span><a id="line.49">     * to games or applications other than your own; you should avoid values for fileName that might overlap with</a>
-<span class="sourceLineNo">050</span><a id="line.50">     * another game's Preferences values. This constructor also allows you to specify a "garble" String; if this is</a>
-<span class="sourceLineNo">051</span><a id="line.51">     * non-null, it will be used as a key to obfuscate the output and de-obfuscate the loaded input using fairly basic</a>
-<span class="sourceLineNo">052</span><a id="line.52">     * methods. If garble is null, it is ignored.</a>
-<span class="sourceLineNo">053</span><a id="line.53">     * &lt;br&gt;</a>
-<span class="sourceLineNo">054</span><a id="line.54">     * To organize saved data into sub-sections, you specify logical units (like different players' saved games) with a</a>
-<span class="sourceLineNo">055</span><a id="line.55">     * String outerName when you call {@link #store(String)}, and can further distinguish data under the outerName when</a>
-<span class="sourceLineNo">056</span><a id="line.56">     * you call {@link #put(String, Object)} to put each individual item into the saved storage with its own innerName.</a>
-<span class="sourceLineNo">057</span><a id="line.57">     * &lt;br&gt;</a>
-<span class="sourceLineNo">058</span><a id="line.58">     * Calling this also sets up custom serializers for several important types in SquidLib; char[][], OrderedMap,</a>
-<span class="sourceLineNo">059</span><a id="line.59">     * IntDoubleOrderedMap, FakeLanguageGen, GreasedRegion, and notably Pattern from RegExodus all have smaller</a>
-<span class="sourceLineNo">060</span><a id="line.60">     * serialized representations than the default. OrderedMap allows non-String keys, which gets around a limitation in</a>
-<span class="sourceLineNo">061</span><a id="line.61">     * JSON maps normally, and both FakeLanguageGen and Pattern are amazingly smaller with the custom representation.</a>
-<span class="sourceLineNo">062</span><a id="line.62">     * The custom char[][] representation is about half the normal size by omitting commas after each char.</a>
-<span class="sourceLineNo">063</span><a id="line.63">     * @param fileName the valid file name to create or open from Preferences; typically the name of the game/app.</a>
-<span class="sourceLineNo">064</span><a id="line.64">     * @param garble a String that will be used as a key to obfuscate the saved output if non-null</a>
-<span class="sourceLineNo">065</span><a id="line.65">     */</a>
-<span class="sourceLineNo">066</span><a id="line.66">    public SquidStorage(final String fileName, final String garble)</a>
-<span class="sourceLineNo">067</span><a id="line.67">    {</a>
-<span class="sourceLineNo">068</span><a id="line.68">        super(fileName, garble);</a>
-<span class="sourceLineNo">069</span><a id="line.69">    }</a>
-<span class="sourceLineNo">070</span><a id="line.70">    /**</a>
-<span class="sourceLineNo">071</span><a id="line.71">     * Creates a SquidStorage with the given fileName to save using Preferences from libGDX. The name should generally</a>
-<span class="sourceLineNo">072</span><a id="line.72">     * be the name of this game or application, and must be a valid name for a file (so no slashes, backslashes, colons,</a>
-<span class="sourceLineNo">073</span><a id="line.73">     * semicolons, or commas for certain, and other non-alphanumeric characters are also probably invalid). You should</a>
-<span class="sourceLineNo">074</span><a id="line.74">     * not assume anything is present in the Preferences storage unless you have put it there, and this applies doubly</a>
-<span class="sourceLineNo">075</span><a id="line.75">     * to games or applications other than your own; you should avoid values for fileName that might overlap with</a>
-<span class="sourceLineNo">076</span><a id="line.76">     * another game's Preferences values. This constructor also allows you to specify a "garble" long array; if this is</a>
-<span class="sourceLineNo">077</span><a id="line.77">     * non-empty, it will be used as a key to obfuscate the output and de-obfuscate the loaded input using fairly basic</a>
-<span class="sourceLineNo">078</span><a id="line.78">     * methods. If garble is null or empty, it is ignored.</a>
-<span class="sourceLineNo">079</span><a id="line.79">     * &lt;br&gt;</a>
-<span class="sourceLineNo">080</span><a id="line.80">     * To organize saved data into sub-sections, you specify logical units (like different players' saved games) with a</a>
-<span class="sourceLineNo">081</span><a id="line.81">     * String outerName when you call {@link #store(String)}, and can further distinguish data under the outerName when</a>
-<span class="sourceLineNo">082</span><a id="line.82">     * you call {@link #put(String, Object)} to put each individual item into the saved storage with its own innerName.</a>
-<span class="sourceLineNo">083</span><a id="line.83">     * &lt;br&gt;</a>
-<span class="sourceLineNo">084</span><a id="line.84">     * Calling this also sets up custom serializers for several important types in SquidLib; char[][], OrderedMap,</a>
-<span class="sourceLineNo">085</span><a id="line.85">     * IntDoubleOrderedMap, FakeLanguageGen, GreasedRegion, and notably Pattern from RegExodus all have smaller</a>
-<span class="sourceLineNo">086</span><a id="line.86">     * serialized representations than the default. OrderedMap allows non-String keys, which gets around a limitation in</a>
-<span class="sourceLineNo">087</span><a id="line.87">     * JSON maps normally, and both FakeLanguageGen and Pattern are amazingly smaller with the custom representation.</a>
-<span class="sourceLineNo">088</span><a id="line.88">     * The custom char[][] representation is about half the normal size by omitting commas after each char.</a>
-<span class="sourceLineNo">089</span><a id="line.89">     * @param fileName the valid file name to create or open from Preferences; typically the name of the game/app.</a>
-<span class="sourceLineNo">090</span><a id="line.90">     * @param garble a long array that will be used as a key to obfuscate the saved output if non-null</a>
-<span class="sourceLineNo">091</span><a id="line.91">     */</a>
-<span class="sourceLineNo">092</span><a id="line.92">    public SquidStorage(final String fileName, final long[] garble)</a>
-<span class="sourceLineNo">093</span><a id="line.93">    {</a>
-<span class="sourceLineNo">094</span><a id="line.94">        super(fileName, garble);</a>
-<span class="sourceLineNo">095</span><a id="line.95">    }</a>
-<span class="sourceLineNo">096</span><a id="line.96">    /**</a>
-<span class="sourceLineNo">097</span><a id="line.97">     * Prepares to store the Object {@code o} to be retrieved with {@code innerName} in the current group of objects.</a>
-<span class="sourceLineNo">098</span><a id="line.98">     * Does not write to a permanent location until {@link #store(String)} is called. The innerName used to store an</a>
-<span class="sourceLineNo">099</span><a id="line.99">     * object is required to get it back again, and can also be used to remove it before storing (or storing again).</a>
-<span class="sourceLineNo">100</span><a id="line.100">     * @param innerName one of the two Strings needed to retrieve this later</a>
-<span class="sourceLineNo">101</span><a id="line.101">     * @param o the Object to prepare to store</a>
-<span class="sourceLineNo">102</span><a id="line.102">     * @return this for chaining</a>
-<span class="sourceLineNo">103</span><a id="line.103">     */</a>
-<span class="sourceLineNo">104</span><a id="line.104">    public SquidStorage put(String innerName, Object o)</a>
-<span class="sourceLineNo">105</span><a id="line.105">    {</a>
-<span class="sourceLineNo">106</span><a id="line.106">        super.put(innerName, o);</a>
-<span class="sourceLineNo">107</span><a id="line.107">        return this;</a>
-<span class="sourceLineNo">108</span><a id="line.108">    }</a>
-<span class="sourceLineNo">109</span><a id="line.109"></a>
-<span class="sourceLineNo">110</span><a id="line.110">    /**</a>
-<span class="sourceLineNo">111</span><a id="line.111">     * Actually stores all objects that had previously been prepared with {@link #put(String, Object)}, with</a>
-<span class="sourceLineNo">112</span><a id="line.112">     * {@code outerName} used as a key to retrieve any object in the current group. Flushes the preferences, making the</a>
-<span class="sourceLineNo">113</span><a id="line.113">     * changes permanent (until overwritten), but does not change the current group (you may want to call this method</a>
-<span class="sourceLineNo">114</span><a id="line.114">     * again with additional items in the current group, and that would simply involve calling put() again). If you want</a>
-<span class="sourceLineNo">115</span><a id="line.115">     * to clear the current group, use {@link #clear()}. If you want to remove just one object from the current group,</a>
-<span class="sourceLineNo">116</span><a id="line.116">     * use {@link #remove(String)}.</a>
-<span class="sourceLineNo">117</span><a id="line.117">     * @param outerName one of the two Strings needed to retrieve any of the objects in the current group</a>
-<span class="sourceLineNo">118</span><a id="line.118">     * @return this for chaining</a>
-<span class="sourceLineNo">119</span><a id="line.119">     */</a>
-<span class="sourceLineNo">120</span><a id="line.120">    public SquidStorage store(String outerName)</a>
-<span class="sourceLineNo">121</span><a id="line.121">    {</a>
-<span class="sourceLineNo">122</span><a id="line.122">        super.store(outerName);</a>
-<span class="sourceLineNo">123</span><a id="line.123">        return this;</a>
-<span class="sourceLineNo">124</span><a id="line.124">    }</a>
-<span class="sourceLineNo">125</span><a id="line.125"></a>
-<span class="sourceLineNo">126</span><a id="line.126">    /**</a>
-<span class="sourceLineNo">127</span><a id="line.127">     * Gets a String representation of the data that would be saved when {@link #store(String)} is called. This can be</a>
-<span class="sourceLineNo">128</span><a id="line.128">     * useful for finding particularly problematic objects that require unnecessary space when serialized.</a>
-<span class="sourceLineNo">129</span><a id="line.129">     * @return a String that previews what would be stored permanently when {@link #store(String)} is called</a>
-<span class="sourceLineNo">130</span><a id="line.130">     */</a>
-<span class="sourceLineNo">131</span><a id="line.131">    public String show()</a>
-<span class="sourceLineNo">132</span><a id="line.132">    {</a>
-<span class="sourceLineNo">133</span><a id="line.133">        return super.show();</a>
-<span class="sourceLineNo">134</span><a id="line.134">    }</a>
-<span class="sourceLineNo">135</span><a id="line.135"></a>
-<span class="sourceLineNo">136</span><a id="line.136">    /**</a>
-<span class="sourceLineNo">137</span><a id="line.137">     * Clears the current group of objects; recommended if you intend to store under multiple outerName keys.</a>
-<span class="sourceLineNo">138</span><a id="line.138">     * @return this for chaining</a>
-<span class="sourceLineNo">139</span><a id="line.139">     */</a>
-<span class="sourceLineNo">140</span><a id="line.140">    public SquidStorage clear()</a>
-<span class="sourceLineNo">141</span><a id="line.141">    {</a>
-<span class="sourceLineNo">142</span><a id="line.142">        super.clear();</a>
-<span class="sourceLineNo">143</span><a id="line.143">        return this;</a>
-<span class="sourceLineNo">144</span><a id="line.144">    }</a>
-<span class="sourceLineNo">145</span><a id="line.145"></a>
-<span class="sourceLineNo">146</span><a id="line.146">    /**</a>
-<span class="sourceLineNo">147</span><a id="line.147">     * Removes one object from the current group by the {@code innerName} it was prepared with using</a>
-<span class="sourceLineNo">148</span><a id="line.148">     * {@link #put(String, Object)}. This does not affect already-stored objects unless {@link #store(String)} is called</a>
-<span class="sourceLineNo">149</span><a id="line.149">     * after this, in which case the new version of the current group, without the object this removed, is stored.</a>
-<span class="sourceLineNo">150</span><a id="line.150">     * @param innerName the String key used to put an object in the current group with {@link #put(String, Object)}</a>
-<span class="sourceLineNo">151</span><a id="line.151">     * @return this for chaining</a>
-<span class="sourceLineNo">152</span><a id="line.152">     */</a>
-<span class="sourceLineNo">153</span><a id="line.153">    public SquidStorage remove(String innerName)</a>
-<span class="sourceLineNo">154</span><a id="line.154">    {</a>
-<span class="sourceLineNo">155</span><a id="line.155">        super.remove(innerName);</a>
-<span class="sourceLineNo">156</span><a id="line.156">        return this;</a>
-<span class="sourceLineNo">157</span><a id="line.157">    }</a>
-<span class="sourceLineNo">158</span><a id="line.158"></a>
-<span class="sourceLineNo">159</span><a id="line.159">    /**</a>
-<span class="sourceLineNo">160</span><a id="line.160">     * Gets an object from the storage by the given {@code outerName} key from {@link #store(String)} and</a>
-<span class="sourceLineNo">161</span><a id="line.161">     * {@code innerName} key from {@link #put(String, Object)}, and uses the class given by {@code type} for the</a>
-<span class="sourceLineNo">162</span><a id="line.162">     * returned value, assuming it matches the object that was originally put with those keys. If no such object is</a>
-<span class="sourceLineNo">163</span><a id="line.163">     * present, returns null. Results are undefined if {@code type} doesn't match the actual class of the stored object.</a>
-<span class="sourceLineNo">164</span><a id="line.164">     * @param outerName the key used to store the group of objects with {@link #store(String)}</a>
-<span class="sourceLineNo">165</span><a id="line.165">     * @param innerName the key used to store the specific object with {@link #put(String, Object)}</a>
-<span class="sourceLineNo">166</span><a id="line.166">     * @param type the class of the value; for a class like RNG, use {@code RNG.class}, but changed to fit</a>
-<span class="sourceLineNo">167</span><a id="line.167">     * @param &lt;T&gt; the type of the value to retrieve; if type was {@code RNG.class}, this would be {@code RNG}</a>
-<span class="sourceLineNo">168</span><a id="line.168">     * @return the retrieved value if successful, or null otherwise</a>
-<span class="sourceLineNo">169</span><a id="line.169">     */</a>
-<span class="sourceLineNo">170</span><a id="line.170">    public &lt;T&gt; T get(String outerName, String innerName, Class&lt;T&gt; type)</a>
-<span class="sourceLineNo">171</span><a id="line.171">    {</a>
-<span class="sourceLineNo">172</span><a id="line.172">        return super.get(outerName, innerName, type);</a>
-<span class="sourceLineNo">173</span><a id="line.173">    }</a>
-<span class="sourceLineNo">174</span><a id="line.174"></a>
-<span class="sourceLineNo">175</span><a id="line.175">    /**</a>
-<span class="sourceLineNo">176</span><a id="line.176">     * Gets the approximate size of the currently-stored preferences. This assumes UTF-16 storage, which is the case for</a>
-<span class="sourceLineNo">177</span><a id="line.177">     * GWT's LocalStorage. Since GWT is restricted to the size the browser permits for LocalStorage, and this limit can</a>
-<span class="sourceLineNo">178</span><a id="line.178">     * be rather small (about 5 MB, sometimes more but not reliably), this method is especially useful there, but it may</a>
-<span class="sourceLineNo">179</span><a id="line.179">     * yield inaccurate sizes on other platforms that save Preferences data differently.</a>
-<span class="sourceLineNo">180</span><a id="line.180">     * @return the size, in bytes, of the already-stored preferences</a>
-<span class="sourceLineNo">181</span><a id="line.181">     */</a>
-<span class="sourceLineNo">182</span><a id="line.182">    public int preferencesSize()</a>
-<span class="sourceLineNo">183</span><a id="line.183">    {</a>
-<span class="sourceLineNo">184</span><a id="line.184">        return super.preferencesSize();</a>
-<span class="sourceLineNo">185</span><a id="line.185">    }</a>
-<span class="sourceLineNo">186</span><a id="line.186"></a>
-<span class="sourceLineNo">187</span><a id="line.187">}</a>
+<div class="source-container">
+<pre><span class="source-line-no">001</span><span id="line.1">package squidpony;</span>
+<span class="source-line-no">002</span><span id="line.2"></span>
+<span class="source-line-no">003</span><span id="line.3">import squidpony.store.json.JsonStorage;</span>
+<span class="source-line-no">004</span><span id="line.4"></span>
+<span class="source-line-no">005</span><span id="line.5">/**</span>
+<span class="source-line-no">006</span><span id="line.6"> * Helps games store information in libGDX's Preferences class as Strings, then get it back out.</span>
+<span class="source-line-no">007</span><span id="line.7"> * Created by Tommy Ettinger on 9/16/2016.</span>
+<span class="source-line-no">008</span><span id="line.8"> */</span>
+<span class="source-line-no">009</span><span id="line.9">public class SquidStorage extends JsonStorage {</span>
+<span class="source-line-no">010</span><span id="line.10">    /**</span>
+<span class="source-line-no">011</span><span id="line.11">     * Please don't use this constructor if possible; it simply calls {@link #SquidStorage(String)} with the constant</span>
+<span class="source-line-no">012</span><span id="line.12">     * String "nameless". This could easily overlap with other files/sections in Preferences, so you should always</span>
+<span class="source-line-no">013</span><span id="line.13">     * prefer giving a String argument to the constructor, typically the name of the game.</span>
+<span class="source-line-no">014</span><span id="line.14">     * @see #SquidStorage(String) the recommended constructor to use</span>
+<span class="source-line-no">015</span><span id="line.15">     */</span>
+<span class="source-line-no">016</span><span id="line.16">    public SquidStorage()</span>
+<span class="source-line-no">017</span><span id="line.17">    {</span>
+<span class="source-line-no">018</span><span id="line.18">        super("nameless");</span>
+<span class="source-line-no">019</span><span id="line.19">    }</span>
+<span class="source-line-no">020</span><span id="line.20"></span>
+<span class="source-line-no">021</span><span id="line.21">    /**</span>
+<span class="source-line-no">022</span><span id="line.22">     * Creates a SquidStorage with the given fileName to save using Preferences from libGDX. The name should generally</span>
+<span class="source-line-no">023</span><span id="line.23">     * be the name of this game or application, and must be a valid name for a file (so no slashes, backslashes, colons,</span>
+<span class="source-line-no">024</span><span id="line.24">     * semicolons, or commas for certain, and other non-alphanumeric characters are also probably invalid). You should</span>
+<span class="source-line-no">025</span><span id="line.25">     * not assume anything is present in the Preferences storage unless you have put it there, and this applies doubly</span>
+<span class="source-line-no">026</span><span id="line.26">     * to games or applications other than your own; you should avoid values for fileName that might overlap with</span>
+<span class="source-line-no">027</span><span id="line.27">     * another game's Preferences values.</span>
+<span class="source-line-no">028</span><span id="line.28">     * &lt;br&gt;</span>
+<span class="source-line-no">029</span><span id="line.29">     * To organize saved data into sub-sections, you specify logical units (like different players' saved games) with a</span>
+<span class="source-line-no">030</span><span id="line.30">     * String outerName when you call {@link #store(String)}, and can further distinguish data under the outerName when</span>
+<span class="source-line-no">031</span><span id="line.31">     * you call {@link #put(String, Object)} to put each individual item into the saved storage with its own innerName.</span>
+<span class="source-line-no">032</span><span id="line.32">     * &lt;br&gt;</span>
+<span class="source-line-no">033</span><span id="line.33">     * Calling this also sets up custom serializers for several important types in SquidLib; char[][], OrderedMap,</span>
+<span class="source-line-no">034</span><span id="line.34">     * IntDoubleOrderedMap, FakeLanguageGen, GreasedRegion, and notably Pattern from RegExodus all have smaller</span>
+<span class="source-line-no">035</span><span id="line.35">     * serialized representations than the default. OrderedMap allows non-String keys, which gets around a limitation in</span>
+<span class="source-line-no">036</span><span id="line.36">     * JSON maps normally, and both FakeLanguageGen and Pattern are amazingly smaller with the custom representation.</span>
+<span class="source-line-no">037</span><span id="line.37">     * The custom char[][] representation is about half the normal size by omitting commas after each char.</span>
+<span class="source-line-no">038</span><span id="line.38">     * @param fileName the valid file name to create or open from Preferences; typically the name of the game/app.</span>
+<span class="source-line-no">039</span><span id="line.39">     */</span>
+<span class="source-line-no">040</span><span id="line.40">    public SquidStorage(final String fileName)</span>
+<span class="source-line-no">041</span><span id="line.41">    {</span>
+<span class="source-line-no">042</span><span id="line.42">        super(fileName);</span>
+<span class="source-line-no">043</span><span id="line.43">    }</span>
+<span class="source-line-no">044</span><span id="line.44">    /**</span>
+<span class="source-line-no">045</span><span id="line.45">     * Creates a SquidStorage with the given fileName to save using Preferences from libGDX. The name should generally</span>
+<span class="source-line-no">046</span><span id="line.46">     * be the name of this game or application, and must be a valid name for a file (so no slashes, backslashes, colons,</span>
+<span class="source-line-no">047</span><span id="line.47">     * semicolons, or commas for certain, and other non-alphanumeric characters are also probably invalid). You should</span>
+<span class="source-line-no">048</span><span id="line.48">     * not assume anything is present in the Preferences storage unless you have put it there, and this applies doubly</span>
+<span class="source-line-no">049</span><span id="line.49">     * to games or applications other than your own; you should avoid values for fileName that might overlap with</span>
+<span class="source-line-no">050</span><span id="line.50">     * another game's Preferences values. This constructor also allows you to specify a "garble" String; if this is</span>
+<span class="source-line-no">051</span><span id="line.51">     * non-null, it will be used as a key to obfuscate the output and de-obfuscate the loaded input using fairly basic</span>
+<span class="source-line-no">052</span><span id="line.52">     * methods. If garble is null, it is ignored.</span>
+<span class="source-line-no">053</span><span id="line.53">     * &lt;br&gt;</span>
+<span class="source-line-no">054</span><span id="line.54">     * To organize saved data into sub-sections, you specify logical units (like different players' saved games) with a</span>
+<span class="source-line-no">055</span><span id="line.55">     * String outerName when you call {@link #store(String)}, and can further distinguish data under the outerName when</span>
+<span class="source-line-no">056</span><span id="line.56">     * you call {@link #put(String, Object)} to put each individual item into the saved storage with its own innerName.</span>
+<span class="source-line-no">057</span><span id="line.57">     * &lt;br&gt;</span>
+<span class="source-line-no">058</span><span id="line.58">     * Calling this also sets up custom serializers for several important types in SquidLib; char[][], OrderedMap,</span>
+<span class="source-line-no">059</span><span id="line.59">     * IntDoubleOrderedMap, FakeLanguageGen, GreasedRegion, and notably Pattern from RegExodus all have smaller</span>
+<span class="source-line-no">060</span><span id="line.60">     * serialized representations than the default. OrderedMap allows non-String keys, which gets around a limitation in</span>
+<span class="source-line-no">061</span><span id="line.61">     * JSON maps normally, and both FakeLanguageGen and Pattern are amazingly smaller with the custom representation.</span>
+<span class="source-line-no">062</span><span id="line.62">     * The custom char[][] representation is about half the normal size by omitting commas after each char.</span>
+<span class="source-line-no">063</span><span id="line.63">     * @param fileName the valid file name to create or open from Preferences; typically the name of the game/app.</span>
+<span class="source-line-no">064</span><span id="line.64">     * @param garble a String that will be used as a key to obfuscate the saved output if non-null</span>
+<span class="source-line-no">065</span><span id="line.65">     */</span>
+<span class="source-line-no">066</span><span id="line.66">    public SquidStorage(final String fileName, final String garble)</span>
+<span class="source-line-no">067</span><span id="line.67">    {</span>
+<span class="source-line-no">068</span><span id="line.68">        super(fileName, garble);</span>
+<span class="source-line-no">069</span><span id="line.69">    }</span>
+<span class="source-line-no">070</span><span id="line.70">    /**</span>
+<span class="source-line-no">071</span><span id="line.71">     * Creates a SquidStorage with the given fileName to save using Preferences from libGDX. The name should generally</span>
+<span class="source-line-no">072</span><span id="line.72">     * be the name of this game or application, and must be a valid name for a file (so no slashes, backslashes, colons,</span>
+<span class="source-line-no">073</span><span id="line.73">     * semicolons, or commas for certain, and other non-alphanumeric characters are also probably invalid). You should</span>
+<span class="source-line-no">074</span><span id="line.74">     * not assume anything is present in the Preferences storage unless you have put it there, and this applies doubly</span>
+<span class="source-line-no">075</span><span id="line.75">     * to games or applications other than your own; you should avoid values for fileName that might overlap with</span>
+<span class="source-line-no">076</span><span id="line.76">     * another game's Preferences values. This constructor also allows you to specify a "garble" long array; if this is</span>
+<span class="source-line-no">077</span><span id="line.77">     * non-empty, it will be used as a key to obfuscate the output and de-obfuscate the loaded input using fairly basic</span>
+<span class="source-line-no">078</span><span id="line.78">     * methods. If garble is null or empty, it is ignored.</span>
+<span class="source-line-no">079</span><span id="line.79">     * &lt;br&gt;</span>
+<span class="source-line-no">080</span><span id="line.80">     * To organize saved data into sub-sections, you specify logical units (like different players' saved games) with a</span>
+<span class="source-line-no">081</span><span id="line.81">     * String outerName when you call {@link #store(String)}, and can further distinguish data under the outerName when</span>
+<span class="source-line-no">082</span><span id="line.82">     * you call {@link #put(String, Object)} to put each individual item into the saved storage with its own innerName.</span>
+<span class="source-line-no">083</span><span id="line.83">     * &lt;br&gt;</span>
+<span class="source-line-no">084</span><span id="line.84">     * Calling this also sets up custom serializers for several important types in SquidLib; char[][], OrderedMap,</span>
+<span class="source-line-no">085</span><span id="line.85">     * IntDoubleOrderedMap, FakeLanguageGen, GreasedRegion, and notably Pattern from RegExodus all have smaller</span>
+<span class="source-line-no">086</span><span id="line.86">     * serialized representations than the default. OrderedMap allows non-String keys, which gets around a limitation in</span>
+<span class="source-line-no">087</span><span id="line.87">     * JSON maps normally, and both FakeLanguageGen and Pattern are amazingly smaller with the custom representation.</span>
+<span class="source-line-no">088</span><span id="line.88">     * The custom char[][] representation is about half the normal size by omitting commas after each char.</span>
+<span class="source-line-no">089</span><span id="line.89">     * @param fileName the valid file name to create or open from Preferences; typically the name of the game/app.</span>
+<span class="source-line-no">090</span><span id="line.90">     * @param garble a long array that will be used as a key to obfuscate the saved output if non-null</span>
+<span class="source-line-no">091</span><span id="line.91">     */</span>
+<span class="source-line-no">092</span><span id="line.92">    public SquidStorage(final String fileName, final long[] garble)</span>
+<span class="source-line-no">093</span><span id="line.93">    {</span>
+<span class="source-line-no">094</span><span id="line.94">        super(fileName, garble);</span>
+<span class="source-line-no">095</span><span id="line.95">    }</span>
+<span class="source-line-no">096</span><span id="line.96">    /**</span>
+<span class="source-line-no">097</span><span id="line.97">     * Prepares to store the Object {@code o} to be retrieved with {@code innerName} in the current group of objects.</span>
+<span class="source-line-no">098</span><span id="line.98">     * Does not write to a permanent location until {@link #store(String)} is called. The innerName used to store an</span>
+<span class="source-line-no">099</span><span id="line.99">     * object is required to get it back again, and can also be used to remove it before storing (or storing again).</span>
+<span class="source-line-no">100</span><span id="line.100">     * @param innerName one of the two Strings needed to retrieve this later</span>
+<span class="source-line-no">101</span><span id="line.101">     * @param o the Object to prepare to store</span>
+<span class="source-line-no">102</span><span id="line.102">     * @return this for chaining</span>
+<span class="source-line-no">103</span><span id="line.103">     */</span>
+<span class="source-line-no">104</span><span id="line.104">    public SquidStorage put(String innerName, Object o)</span>
+<span class="source-line-no">105</span><span id="line.105">    {</span>
+<span class="source-line-no">106</span><span id="line.106">        super.put(innerName, o);</span>
+<span class="source-line-no">107</span><span id="line.107">        return this;</span>
+<span class="source-line-no">108</span><span id="line.108">    }</span>
+<span class="source-line-no">109</span><span id="line.109"></span>
+<span class="source-line-no">110</span><span id="line.110">    /**</span>
+<span class="source-line-no">111</span><span id="line.111">     * Actually stores all objects that had previously been prepared with {@link #put(String, Object)}, with</span>
+<span class="source-line-no">112</span><span id="line.112">     * {@code outerName} used as a key to retrieve any object in the current group. Flushes the preferences, making the</span>
+<span class="source-line-no">113</span><span id="line.113">     * changes permanent (until overwritten), but does not change the current group (you may want to call this method</span>
+<span class="source-line-no">114</span><span id="line.114">     * again with additional items in the current group, and that would simply involve calling put() again). If you want</span>
+<span class="source-line-no">115</span><span id="line.115">     * to clear the current group, use {@link #clear()}. If you want to remove just one object from the current group,</span>
+<span class="source-line-no">116</span><span id="line.116">     * use {@link #remove(String)}.</span>
+<span class="source-line-no">117</span><span id="line.117">     * @param outerName one of the two Strings needed to retrieve any of the objects in the current group</span>
+<span class="source-line-no">118</span><span id="line.118">     * @return this for chaining</span>
+<span class="source-line-no">119</span><span id="line.119">     */</span>
+<span class="source-line-no">120</span><span id="line.120">    public SquidStorage store(String outerName)</span>
+<span class="source-line-no">121</span><span id="line.121">    {</span>
+<span class="source-line-no">122</span><span id="line.122">        super.store(outerName);</span>
+<span class="source-line-no">123</span><span id="line.123">        return this;</span>
+<span class="source-line-no">124</span><span id="line.124">    }</span>
+<span class="source-line-no">125</span><span id="line.125"></span>
+<span class="source-line-no">126</span><span id="line.126">    /**</span>
+<span class="source-line-no">127</span><span id="line.127">     * Gets a String representation of the data that would be saved when {@link #store(String)} is called. This can be</span>
+<span class="source-line-no">128</span><span id="line.128">     * useful for finding particularly problematic objects that require unnecessary space when serialized.</span>
+<span class="source-line-no">129</span><span id="line.129">     * @return a String that previews what would be stored permanently when {@link #store(String)} is called</span>
+<span class="source-line-no">130</span><span id="line.130">     */</span>
+<span class="source-line-no">131</span><span id="line.131">    public String show()</span>
+<span class="source-line-no">132</span><span id="line.132">    {</span>
+<span class="source-line-no">133</span><span id="line.133">        return super.show();</span>
+<span class="source-line-no">134</span><span id="line.134">    }</span>
+<span class="source-line-no">135</span><span id="line.135"></span>
+<span class="source-line-no">136</span><span id="line.136">    /**</span>
+<span class="source-line-no">137</span><span id="line.137">     * Clears the current group of objects; recommended if you intend to store under multiple outerName keys.</span>
+<span class="source-line-no">138</span><span id="line.138">     * @return this for chaining</span>
+<span class="source-line-no">139</span><span id="line.139">     */</span>
+<span class="source-line-no">140</span><span id="line.140">    public SquidStorage clear()</span>
+<span class="source-line-no">141</span><span id="line.141">    {</span>
+<span class="source-line-no">142</span><span id="line.142">        super.clear();</span>
+<span class="source-line-no">143</span><span id="line.143">        return this;</span>
+<span class="source-line-no">144</span><span id="line.144">    }</span>
+<span class="source-line-no">145</span><span id="line.145"></span>
+<span class="source-line-no">146</span><span id="line.146">    /**</span>
+<span class="source-line-no">147</span><span id="line.147">     * Removes one object from the current group by the {@code innerName} it was prepared with using</span>
+<span class="source-line-no">148</span><span id="line.148">     * {@link #put(String, Object)}. This does not affect already-stored objects unless {@link #store(String)} is called</span>
+<span class="source-line-no">149</span><span id="line.149">     * after this, in which case the new version of the current group, without the object this removed, is stored.</span>
+<span class="source-line-no">150</span><span id="line.150">     * @param innerName the String key used to put an object in the current group with {@link #put(String, Object)}</span>
+<span class="source-line-no">151</span><span id="line.151">     * @return this for chaining</span>
+<span class="source-line-no">152</span><span id="line.152">     */</span>
+<span class="source-line-no">153</span><span id="line.153">    public SquidStorage remove(String innerName)</span>
+<span class="source-line-no">154</span><span id="line.154">    {</span>
+<span class="source-line-no">155</span><span id="line.155">        super.remove(innerName);</span>
+<span class="source-line-no">156</span><span id="line.156">        return this;</span>
+<span class="source-line-no">157</span><span id="line.157">    }</span>
+<span class="source-line-no">158</span><span id="line.158"></span>
+<span class="source-line-no">159</span><span id="line.159">    /**</span>
+<span class="source-line-no">160</span><span id="line.160">     * Gets an object from the storage by the given {@code outerName} key from {@link #store(String)} and</span>
+<span class="source-line-no">161</span><span id="line.161">     * {@code innerName} key from {@link #put(String, Object)}, and uses the class given by {@code type} for the</span>
+<span class="source-line-no">162</span><span id="line.162">     * returned value, assuming it matches the object that was originally put with those keys. If no such object is</span>
+<span class="source-line-no">163</span><span id="line.163">     * present, returns null. Results are undefined if {@code type} doesn't match the actual class of the stored object.</span>
+<span class="source-line-no">164</span><span id="line.164">     * @param outerName the key used to store the group of objects with {@link #store(String)}</span>
+<span class="source-line-no">165</span><span id="line.165">     * @param innerName the key used to store the specific object with {@link #put(String, Object)}</span>
+<span class="source-line-no">166</span><span id="line.166">     * @param type the class of the value; for a class like RNG, use {@code RNG.class}, but changed to fit</span>
+<span class="source-line-no">167</span><span id="line.167">     * @param &lt;T&gt; the type of the value to retrieve; if type was {@code RNG.class}, this would be {@code RNG}</span>
+<span class="source-line-no">168</span><span id="line.168">     * @return the retrieved value if successful, or null otherwise</span>
+<span class="source-line-no">169</span><span id="line.169">     */</span>
+<span class="source-line-no">170</span><span id="line.170">    public &lt;T&gt; T get(String outerName, String innerName, Class&lt;T&gt; type)</span>
+<span class="source-line-no">171</span><span id="line.171">    {</span>
+<span class="source-line-no">172</span><span id="line.172">        return super.get(outerName, innerName, type);</span>
+<span class="source-line-no">173</span><span id="line.173">    }</span>
+<span class="source-line-no">174</span><span id="line.174"></span>
+<span class="source-line-no">175</span><span id="line.175">    /**</span>
+<span class="source-line-no">176</span><span id="line.176">     * Gets the approximate size of the currently-stored preferences. This assumes UTF-16 storage, which is the case for</span>
+<span class="source-line-no">177</span><span id="line.177">     * GWT's LocalStorage. Since GWT is restricted to the size the browser permits for LocalStorage, and this limit can</span>
+<span class="source-line-no">178</span><span id="line.178">     * be rather small (about 5 MB, sometimes more but not reliably), this method is especially useful there, but it may</span>
+<span class="source-line-no">179</span><span id="line.179">     * yield inaccurate sizes on other platforms that save Preferences data differently.</span>
+<span class="source-line-no">180</span><span id="line.180">     * @return the size, in bytes, of the already-stored preferences</span>
+<span class="source-line-no">181</span><span id="line.181">     */</span>
+<span class="source-line-no">182</span><span id="line.182">    public int preferencesSize()</span>
+<span class="source-line-no">183</span><span id="line.183">    {</span>
+<span class="source-line-no">184</span><span id="line.184">        return super.preferencesSize();</span>
+<span class="source-line-no">185</span><span id="line.185">    }</span>
+<span class="source-line-no">186</span><span id="line.186"></span>
+<span class="source-line-no">187</span><span id="line.187">}</span>
 
 
 

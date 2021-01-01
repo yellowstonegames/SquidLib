@@ -7,75 +7,75 @@
 <meta name="generator" content="javadoc/SourceToHTMLConverter">
 <link rel="stylesheet" type="text/css" href="../../../../../stylesheet.css" title="Style">
 </head>
-<body class="source">
+<body class="source-page">
 <main role="main">
-<div class="sourceContainer">
-<pre><span class="sourceLineNo">001</span><a id="line.1">package squidpony.squidgrid.gui.gdx;</a>
-<span class="sourceLineNo">002</span><a id="line.2"></a>
-<span class="sourceLineNo">003</span><a id="line.3">import com.badlogic.gdx.graphics.Color;</a>
-<span class="sourceLineNo">004</span><a id="line.4">import com.badlogic.gdx.scenes.scene2d.Actor;</a>
-<span class="sourceLineNo">005</span><a id="line.5">import com.badlogic.gdx.scenes.scene2d.ui.Label;</a>
-<span class="sourceLineNo">006</span><a id="line.6">import squidpony.squidgrid.Direction;</a>
-<span class="sourceLineNo">007</span><a id="line.7"></a>
-<span class="sourceLineNo">008</span><a id="line.8">import java.util.Collection;</a>
-<span class="sourceLineNo">009</span><a id="line.9"></a>
-<span class="sourceLineNo">010</span><a id="line.10">/**</a>
-<span class="sourceLineNo">011</span><a id="line.11"> * A simple class that wraps an Actor with its grid position, animating state, and if it is a double-width Actor.</a>
-<span class="sourceLineNo">012</span><a id="line.12"> * Created by Tommy Ettinger on 7/22/2015.</a>
-<span class="sourceLineNo">013</span><a id="line.13"> */</a>
-<span class="sourceLineNo">014</span><a id="line.14">public class AnimatedEntity {</a>
-<span class="sourceLineNo">015</span><a id="line.15">    public Actor actor;</a>
-<span class="sourceLineNo">016</span><a id="line.16">    public int gridX, gridY;</a>
-<span class="sourceLineNo">017</span><a id="line.17">    public boolean animating;</a>
-<span class="sourceLineNo">018</span><a id="line.18">    public boolean doubleWidth;</a>
-<span class="sourceLineNo">019</span><a id="line.19">    public AnimatedEntity(Actor actor, int x, int y)</a>
-<span class="sourceLineNo">020</span><a id="line.20">    {</a>
-<span class="sourceLineNo">021</span><a id="line.21">        this.actor = actor;</a>
-<span class="sourceLineNo">022</span><a id="line.22">        gridX = x;</a>
-<span class="sourceLineNo">023</span><a id="line.23">        gridY = y;</a>
-<span class="sourceLineNo">024</span><a id="line.24">    }</a>
-<span class="sourceLineNo">025</span><a id="line.25">    public AnimatedEntity(Actor actor, int x, int y, boolean doubleWidth)</a>
-<span class="sourceLineNo">026</span><a id="line.26">    {</a>
-<span class="sourceLineNo">027</span><a id="line.27">        this.actor = actor;</a>
-<span class="sourceLineNo">028</span><a id="line.28">        gridX = x;</a>
-<span class="sourceLineNo">029</span><a id="line.29">        gridY = y;</a>
-<span class="sourceLineNo">030</span><a id="line.30">        this.doubleWidth = doubleWidth;</a>
-<span class="sourceLineNo">031</span><a id="line.31">    }</a>
-<span class="sourceLineNo">032</span><a id="line.32">    public void setText(String text)</a>
-<span class="sourceLineNo">033</span><a id="line.33">    {</a>
-<span class="sourceLineNo">034</span><a id="line.34">        if(actor instanceof Label)</a>
-<span class="sourceLineNo">035</span><a id="line.35">        {</a>
-<span class="sourceLineNo">036</span><a id="line.36">            ((Label)actor).setText(text);</a>
-<span class="sourceLineNo">037</span><a id="line.37">        }</a>
-<span class="sourceLineNo">038</span><a id="line.38">    }</a>
-<span class="sourceLineNo">039</span><a id="line.39"></a>
-<span class="sourceLineNo">040</span><a id="line.40">    /**</a>
-<span class="sourceLineNo">041</span><a id="line.41">     * Rotates this so that "up" points in the specified direction. Only some Actors can actually be rotated; Images</a>
-<span class="sourceLineNo">042</span><a id="line.42">     * can, for example, but Labels cannot. This method is most likely to be used with</a>
-<span class="sourceLineNo">043</span><a id="line.43">     * {@link TextCellFactory#makeDirectionMarker(Color)},</a>
-<span class="sourceLineNo">044</span><a id="line.44">     * {@link TextCellFactory#makeDirectionMarker(Collection, float, boolean)}, or one of the directionMarker methods</a>
-<span class="sourceLineNo">045</span><a id="line.45">     * in SquidPanel or SquidLayers, since those produce an Image (or {@link ColorChangeImage}) that can be sensibly</a>
-<span class="sourceLineNo">046</span><a id="line.46">     * rotated to indicate a direction over a cell.</a>
-<span class="sourceLineNo">047</span><a id="line.47">     * @param dir the direction that "up" for this should point toward</a>
-<span class="sourceLineNo">048</span><a id="line.48">     */</a>
-<span class="sourceLineNo">049</span><a id="line.49">    public void setDirection(Direction dir) {</a>
-<span class="sourceLineNo">050</span><a id="line.50">        actor.setRotation(directionToDegrees(dir));</a>
-<span class="sourceLineNo">051</span><a id="line.51">    }</a>
-<span class="sourceLineNo">052</span><a id="line.52">    private static float directionToDegrees(Direction d)</a>
-<span class="sourceLineNo">053</span><a id="line.53">    {</a>
-<span class="sourceLineNo">054</span><a id="line.54">        switch (d)</a>
-<span class="sourceLineNo">055</span><a id="line.55">        {</a>
-<span class="sourceLineNo">056</span><a id="line.56">            case UP_LEFT: return 45f;</a>
-<span class="sourceLineNo">057</span><a id="line.57">            case LEFT: return 90f;</a>
-<span class="sourceLineNo">058</span><a id="line.58">            case DOWN_LEFT: return 135f;</a>
-<span class="sourceLineNo">059</span><a id="line.59">            case DOWN: return 180f;</a>
-<span class="sourceLineNo">060</span><a id="line.60">            case DOWN_RIGHT: return 225f;</a>
-<span class="sourceLineNo">061</span><a id="line.61">            case RIGHT: return 270f;</a>
-<span class="sourceLineNo">062</span><a id="line.62">            case UP_RIGHT: return 315f;</a>
-<span class="sourceLineNo">063</span><a id="line.63">            default: return 0f;</a>
-<span class="sourceLineNo">064</span><a id="line.64">        }</a>
-<span class="sourceLineNo">065</span><a id="line.65">    }</a>
-<span class="sourceLineNo">066</span><a id="line.66">}</a>
+<div class="source-container">
+<pre><span class="source-line-no">001</span><span id="line.1">package squidpony.squidgrid.gui.gdx;</span>
+<span class="source-line-no">002</span><span id="line.2"></span>
+<span class="source-line-no">003</span><span id="line.3">import com.badlogic.gdx.graphics.Color;</span>
+<span class="source-line-no">004</span><span id="line.4">import com.badlogic.gdx.scenes.scene2d.Actor;</span>
+<span class="source-line-no">005</span><span id="line.5">import com.badlogic.gdx.scenes.scene2d.ui.Label;</span>
+<span class="source-line-no">006</span><span id="line.6">import squidpony.squidgrid.Direction;</span>
+<span class="source-line-no">007</span><span id="line.7"></span>
+<span class="source-line-no">008</span><span id="line.8">import java.util.Collection;</span>
+<span class="source-line-no">009</span><span id="line.9"></span>
+<span class="source-line-no">010</span><span id="line.10">/**</span>
+<span class="source-line-no">011</span><span id="line.11"> * A simple class that wraps an Actor with its grid position, animating state, and if it is a double-width Actor.</span>
+<span class="source-line-no">012</span><span id="line.12"> * Created by Tommy Ettinger on 7/22/2015.</span>
+<span class="source-line-no">013</span><span id="line.13"> */</span>
+<span class="source-line-no">014</span><span id="line.14">public class AnimatedEntity {</span>
+<span class="source-line-no">015</span><span id="line.15">    public Actor actor;</span>
+<span class="source-line-no">016</span><span id="line.16">    public int gridX, gridY;</span>
+<span class="source-line-no">017</span><span id="line.17">    public boolean animating;</span>
+<span class="source-line-no">018</span><span id="line.18">    public boolean doubleWidth;</span>
+<span class="source-line-no">019</span><span id="line.19">    public AnimatedEntity(Actor actor, int x, int y)</span>
+<span class="source-line-no">020</span><span id="line.20">    {</span>
+<span class="source-line-no">021</span><span id="line.21">        this.actor = actor;</span>
+<span class="source-line-no">022</span><span id="line.22">        gridX = x;</span>
+<span class="source-line-no">023</span><span id="line.23">        gridY = y;</span>
+<span class="source-line-no">024</span><span id="line.24">    }</span>
+<span class="source-line-no">025</span><span id="line.25">    public AnimatedEntity(Actor actor, int x, int y, boolean doubleWidth)</span>
+<span class="source-line-no">026</span><span id="line.26">    {</span>
+<span class="source-line-no">027</span><span id="line.27">        this.actor = actor;</span>
+<span class="source-line-no">028</span><span id="line.28">        gridX = x;</span>
+<span class="source-line-no">029</span><span id="line.29">        gridY = y;</span>
+<span class="source-line-no">030</span><span id="line.30">        this.doubleWidth = doubleWidth;</span>
+<span class="source-line-no">031</span><span id="line.31">    }</span>
+<span class="source-line-no">032</span><span id="line.32">    public void setText(String text)</span>
+<span class="source-line-no">033</span><span id="line.33">    {</span>
+<span class="source-line-no">034</span><span id="line.34">        if(actor instanceof Label)</span>
+<span class="source-line-no">035</span><span id="line.35">        {</span>
+<span class="source-line-no">036</span><span id="line.36">            ((Label)actor).setText(text);</span>
+<span class="source-line-no">037</span><span id="line.37">        }</span>
+<span class="source-line-no">038</span><span id="line.38">    }</span>
+<span class="source-line-no">039</span><span id="line.39"></span>
+<span class="source-line-no">040</span><span id="line.40">    /**</span>
+<span class="source-line-no">041</span><span id="line.41">     * Rotates this so that "up" points in the specified direction. Only some Actors can actually be rotated; Images</span>
+<span class="source-line-no">042</span><span id="line.42">     * can, for example, but Labels cannot. This method is most likely to be used with</span>
+<span class="source-line-no">043</span><span id="line.43">     * {@link TextCellFactory#makeDirectionMarker(Color)},</span>
+<span class="source-line-no">044</span><span id="line.44">     * {@link TextCellFactory#makeDirectionMarker(Collection, float, boolean)}, or one of the directionMarker methods</span>
+<span class="source-line-no">045</span><span id="line.45">     * in SquidPanel or SquidLayers, since those produce an Image (or {@link ColorChangeImage}) that can be sensibly</span>
+<span class="source-line-no">046</span><span id="line.46">     * rotated to indicate a direction over a cell.</span>
+<span class="source-line-no">047</span><span id="line.47">     * @param dir the direction that "up" for this should point toward</span>
+<span class="source-line-no">048</span><span id="line.48">     */</span>
+<span class="source-line-no">049</span><span id="line.49">    public void setDirection(Direction dir) {</span>
+<span class="source-line-no">050</span><span id="line.50">        actor.setRotation(directionToDegrees(dir));</span>
+<span class="source-line-no">051</span><span id="line.51">    }</span>
+<span class="source-line-no">052</span><span id="line.52">    private static float directionToDegrees(Direction d)</span>
+<span class="source-line-no">053</span><span id="line.53">    {</span>
+<span class="source-line-no">054</span><span id="line.54">        switch (d)</span>
+<span class="source-line-no">055</span><span id="line.55">        {</span>
+<span class="source-line-no">056</span><span id="line.56">            case UP_LEFT: return 45f;</span>
+<span class="source-line-no">057</span><span id="line.57">            case LEFT: return 90f;</span>
+<span class="source-line-no">058</span><span id="line.58">            case DOWN_LEFT: return 135f;</span>
+<span class="source-line-no">059</span><span id="line.59">            case DOWN: return 180f;</span>
+<span class="source-line-no">060</span><span id="line.60">            case DOWN_RIGHT: return 225f;</span>
+<span class="source-line-no">061</span><span id="line.61">            case RIGHT: return 270f;</span>
+<span class="source-line-no">062</span><span id="line.62">            case UP_RIGHT: return 315f;</span>
+<span class="source-line-no">063</span><span id="line.63">            default: return 0f;</span>
+<span class="source-line-no">064</span><span id="line.64">        }</span>
+<span class="source-line-no">065</span><span id="line.65">    }</span>
+<span class="source-line-no">066</span><span id="line.66">}</span>
 
 
 

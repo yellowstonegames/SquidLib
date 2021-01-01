@@ -7,244 +7,244 @@
 <meta name="generator" content="javadoc/SourceToHTMLConverter">
 <link rel="stylesheet" type="text/css" href="../../stylesheet.css" title="Style">
 </head>
-<body class="source">
+<body class="source-page">
 <main role="main">
-<div class="sourceContainer">
-<pre><span class="sourceLineNo">001</span><a id="line.1">package squidpony;</a>
-<span class="sourceLineNo">002</span><a id="line.2"></a>
-<span class="sourceLineNo">003</span><a id="line.3">import regexodus.Matcher;</a>
-<span class="sourceLineNo">004</span><a id="line.4">import regexodus.Pattern;</a>
-<span class="sourceLineNo">005</span><a id="line.5">import squidpony.squidmath.CrossHash;</a>
-<span class="sourceLineNo">006</span><a id="line.6">import squidpony.squidmath.K2;</a>
-<span class="sourceLineNo">007</span><a id="line.7"></a>
-<span class="sourceLineNo">008</span><a id="line.8">import java.util.Objects;</a>
-<span class="sourceLineNo">009</span><a id="line.9"></a>
-<span class="sourceLineNo">010</span><a id="line.10">/**</a>
-<span class="sourceLineNo">011</span><a id="line.11"> * Used to standardize conversion for a given type, {@code T}, to and from a serialized String format.</a>
-<span class="sourceLineNo">012</span><a id="line.12"> * This abstract class should usually be made concrete by a single-purpose class (not the type T itself).</a>
-<span class="sourceLineNo">013</span><a id="line.13"> * Also includes a static registry of types as CharSequence arrays (including the classes of generic type parameters in</a>
-<span class="sourceLineNo">014</span><a id="line.14"> * array elements after the first) to the  corresponding StringConvert objects that have been constructed for those</a>
-<span class="sourceLineNo">015</span><a id="line.15"> * types, although the registry must store the StringConvert objects without any further types (you can cast the</a>
-<span class="sourceLineNo">016</span><a id="line.16"> * StringConvert to a StringConvert with the desired generic type, or call {@link #restore(String)} on the</a>
-<span class="sourceLineNo">017</span><a id="line.17"> * un-parametrized type and get back an Object that can be cast to the correct type, but we aren't able to store the</a>
-<span class="sourceLineNo">018</span><a id="line.18"> * actual type). The static method {@link #lookup(CharSequence[])} can be used to find the StringConvert registered for</a>
-<span class="sourceLineNo">019</span><a id="line.19"> * a type name combination. The static method {@link #get(CharSequence)} can be used to find a StringConvert by its</a>
-<span class="sourceLineNo">020</span><a id="line.20"> * name. The static utility method {@link #asArray(CharSequence[])} can be used to reduce the amount of arrays produced</a>
-<span class="sourceLineNo">021</span><a id="line.21"> * by varargs, especially when you have a bunch of Class items and need Strings, but the array it returns must not be</a>
-<span class="sourceLineNo">022</span><a id="line.22"> * edited once used to construct a StringConvert.</a>
-<span class="sourceLineNo">023</span><a id="line.23"> */</a>
-<span class="sourceLineNo">024</span><a id="line.24">public abstract class StringConvert&lt;T&gt; {</a>
-<span class="sourceLineNo">025</span><a id="line.25">    public final CharSequence name;</a>
-<span class="sourceLineNo">026</span><a id="line.26">    public final CharSequence[] typeNames;</a>
-<span class="sourceLineNo">027</span><a id="line.27">    public final String specificName;</a>
-<span class="sourceLineNo">028</span><a id="line.28">    public final boolean isArray;</a>
-<span class="sourceLineNo">029</span><a id="line.29">    private static final Matcher specificMatcher = Pattern.compile("\\p{Js}\\p{Jp}*").matcher();</a>
-<span class="sourceLineNo">030</span><a id="line.30">    /**</a>
-<span class="sourceLineNo">031</span><a id="line.31">     * Constructs a StringConvert using a vararg or array of CharSequence objects, such as Strings, as well as a boolean</a>
-<span class="sourceLineNo">032</span><a id="line.32">     * flag to determine if the StringConvert works on an array instead of a normal object. If an array of types is</a>
-<span class="sourceLineNo">033</span><a id="line.33">     * passed, it must not be altered after usage. If no varargs are passed, if types is null, or if the first item of</a>
-<span class="sourceLineNo">034</span><a id="line.34">     * types is null, then this uses a special type representation where the name is "void" and typeNames has "void" as</a>
-<span class="sourceLineNo">035</span><a id="line.35">     * its only element. If types has length 1, then the name will be the "simple name" of the first element in types,</a>
-<span class="sourceLineNo">036</span><a id="line.36">     * as produced by {@link Class#getSimpleName()} (note that this produces an empty string for anonymous classes), and</a>
-<span class="sourceLineNo">037</span><a id="line.37">     * typeNames will again have that simple name as its only value. Otherwise, this considers items after the first to</a>
-<span class="sourceLineNo">038</span><a id="line.38">     * be the names of generic type arguments of the first, using normal Java syntax of {@code "Outer&lt;A,B&gt;"} if given</a>
-<span class="sourceLineNo">039</span><a id="line.39">     * the Strings for types {@code "Outer", "A", "B"}. No spaces will be present in the name, but thanks to some</a>
-<span class="sourceLineNo">040</span><a id="line.40">     * customization of the registry, you can give a String with spaces in it to {@link #get(CharSequence)} and still</a>
-<span class="sourceLineNo">041</span><a id="line.41">     * find the correct one). You can give type names with generic components as the names of generic type arguments,</a>
-<span class="sourceLineNo">042</span><a id="line.42">     * such as {@code new StringConvert("OrderedMap", "String", "OrderedSet&lt;String&gt;")} for a mapping of String keys to</a>
-<span class="sourceLineNo">043</span><a id="line.43">     * values that are themselves sets of Strings. After constructing a StringConvert, it is automatically registered</a>
-<span class="sourceLineNo">044</span><a id="line.44">     * so it can be looked up by name with {@link #get(CharSequence)} or by component generic types with</a>
-<span class="sourceLineNo">045</span><a id="line.45">     * {@link #lookup(CharSequence...)}; both of these will not return a StringConvert with type info for what it</a>
-<span class="sourceLineNo">046</span><a id="line.46">     * takes and returns beyond "Object", but the result can be cast to a StringConvert with the correct type.</a>
-<span class="sourceLineNo">047</span><a id="line.47">     * @param isArray true if this should convert an array type as opposed to a normal object or primitive type</a>
-<span class="sourceLineNo">048</span><a id="line.48">     * @param types a vararg of Class objects representing the type this can convert, including generic type parameters</a>
-<span class="sourceLineNo">049</span><a id="line.49">     *              of the first element, if there are any, at positions after the first</a>
-<span class="sourceLineNo">050</span><a id="line.50">     */</a>
-<span class="sourceLineNo">051</span><a id="line.51">    public StringConvert(final boolean isArray, final CharSequence... types) {</a>
-<span class="sourceLineNo">052</span><a id="line.52">        this.isArray = isArray;</a>
-<span class="sourceLineNo">053</span><a id="line.53">        if (types == null || types.length &lt;= 0 || types[0] == null) {</a>
-<span class="sourceLineNo">054</span><a id="line.54">            name = "void";</a>
-<span class="sourceLineNo">055</span><a id="line.55">            typeNames = new String[]{"void"};</a>
-<span class="sourceLineNo">056</span><a id="line.56">            specificName = "void";</a>
-<span class="sourceLineNo">057</span><a id="line.57">        } else if (types.length == 1) {</a>
-<span class="sourceLineNo">058</span><a id="line.58">            name = types[0];</a>
-<span class="sourceLineNo">059</span><a id="line.59">            typeNames = types;</a>
-<span class="sourceLineNo">060</span><a id="line.60">            specificMatcher.setTarget(name);</a>
-<span class="sourceLineNo">061</span><a id="line.61">            if(specificMatcher.find())</a>
-<span class="sourceLineNo">062</span><a id="line.62">                specificName = specificMatcher.group();</a>
-<span class="sourceLineNo">063</span><a id="line.63">            else</a>
-<span class="sourceLineNo">064</span><a id="line.64">                specificName = "void";</a>
-<span class="sourceLineNo">065</span><a id="line.65">        } else {</a>
-<span class="sourceLineNo">066</span><a id="line.66">            name = new StringBuilder(64);</a>
-<span class="sourceLineNo">067</span><a id="line.67">            ((StringBuilder) name).append(types[0]).append('&lt;').append(types[1]);</a>
-<span class="sourceLineNo">068</span><a id="line.68">            for (int i = 2; i &lt; types.length; i++) {</a>
-<span class="sourceLineNo">069</span><a id="line.69">                ((StringBuilder) name).append(',').append(types[i]);</a>
-<span class="sourceLineNo">070</span><a id="line.70">            }</a>
-<span class="sourceLineNo">071</span><a id="line.71">            ((StringBuilder) name).append('&gt;');</a>
-<span class="sourceLineNo">072</span><a id="line.72">            typeNames = types;</a>
-<span class="sourceLineNo">073</span><a id="line.73">            specificMatcher.setTarget(name);</a>
-<span class="sourceLineNo">074</span><a id="line.74">            if(specificMatcher.find())</a>
-<span class="sourceLineNo">075</span><a id="line.75">                specificName = specificMatcher.group();</a>
-<span class="sourceLineNo">076</span><a id="line.76">            else</a>
-<span class="sourceLineNo">077</span><a id="line.77">                specificName = "void";</a>
-<span class="sourceLineNo">078</span><a id="line.78"></a>
-<span class="sourceLineNo">079</span><a id="line.79"></a>
-<span class="sourceLineNo">080</span><a id="line.80">        }</a>
-<span class="sourceLineNo">081</span><a id="line.81">    }</a>
-<span class="sourceLineNo">082</span><a id="line.82">    /**</a>
-<span class="sourceLineNo">083</span><a id="line.83">     * Constructs a StringConvert using a vararg or array of CharSequence objects, such as Strings. If an array is</a>
-<span class="sourceLineNo">084</span><a id="line.84">     * passed, it must not be altered after usage. If no arguments are passed, if types is null, or if the first item of</a>
-<span class="sourceLineNo">085</span><a id="line.85">     * types is null, then this uses a special type representation where the name is "void" and typeNames has "void" as</a>
-<span class="sourceLineNo">086</span><a id="line.86">     * its only element. If types has length 1, then the name will be the "simple name" of the first element in types,</a>
-<span class="sourceLineNo">087</span><a id="line.87">     * as produced by {@link Class#getSimpleName()} (note that this produces an empty string for anonymous classes), and</a>
-<span class="sourceLineNo">088</span><a id="line.88">     * typeNames will again have that simple name as its only value. Otherwise, this considers items after the first to</a>
-<span class="sourceLineNo">089</span><a id="line.89">     * be the names of generic type arguments of the first, using normal Java syntax of {@code "Outer&lt;A,B&gt;"} if given</a>
-<span class="sourceLineNo">090</span><a id="line.90">     * the Strings for types {@code "Outer", "A", "B"}. No spaces will be present in the name, but thanks to some</a>
-<span class="sourceLineNo">091</span><a id="line.91">     * customization of the registry, you can give a String with spaces in it to {@link #get(CharSequence)} and still</a>
-<span class="sourceLineNo">092</span><a id="line.92">     * find the correct one). You can give type names with generic components as the names of generic type arguments,</a>
-<span class="sourceLineNo">093</span><a id="line.93">     * such as {@code new StringConvert("OrderedMap", "String", "OrderedSet&lt;String&gt;")} for a mapping of String keys to</a>
-<span class="sourceLineNo">094</span><a id="line.94">     * values that are themselves sets of Strings. After constructing a StringConvert, it is automatically registered</a>
-<span class="sourceLineNo">095</span><a id="line.95">     * so it can be looked up by name with {@link #get(CharSequence)} or by component generic types with</a>
-<span class="sourceLineNo">096</span><a id="line.96">     * {@link #lookup(CharSequence...)}; both of these will not return a StringConvert with type info for what it</a>
-<span class="sourceLineNo">097</span><a id="line.97">     * takes and returns beyond "Object", but the result can be cast to a StringConvert with the correct type.</a>
-<span class="sourceLineNo">098</span><a id="line.98">     * @param types a vararg of Class objects representing the type this can convert, including generic type parameters</a>
-<span class="sourceLineNo">099</span><a id="line.99">     *              of the first element, if there are any, at positions after the first</a>
-<span class="sourceLineNo">100</span><a id="line.100">     */</a>
-<span class="sourceLineNo">101</span><a id="line.101">    public StringConvert(final CharSequence... types)</a>
-<span class="sourceLineNo">102</span><a id="line.102">    {</a>
-<span class="sourceLineNo">103</span><a id="line.103">        this(false, types);</a>
-<span class="sourceLineNo">104</span><a id="line.104">    }</a>
-<span class="sourceLineNo">105</span><a id="line.105">    public CharSequence getName() {return name;}</a>
-<span class="sourceLineNo">106</span><a id="line.106">    public abstract String stringify(T item);</a>
-<span class="sourceLineNo">107</span><a id="line.107">    public abstract T restore(String text);</a>
-<span class="sourceLineNo">108</span><a id="line.108"></a>
-<span class="sourceLineNo">109</span><a id="line.109">    /**</a>
-<span class="sourceLineNo">110</span><a id="line.110">     * Attempts to restore a specific type of value from the given text. Useful when this StringConvert does not have</a>
-<span class="sourceLineNo">111</span><a id="line.111">     * meaningful generic type information (e.g. {@code StringConvert&lt;?&gt;}), and you know the correct type externally.</a>
-<span class="sourceLineNo">112</span><a id="line.112">     * May throw a ClassCastException if type is not compatible with the type this deserializes to (that is, T).</a>
-<span class="sourceLineNo">113</span><a id="line.113">     * @param text the text to try to read as serialized data describing a T2 object</a>
-<span class="sourceLineNo">114</span><a id="line.114">     * @param type the Class of the data to try to produce, which should be as specific as possible</a>
-<span class="sourceLineNo">115</span><a id="line.115">     * @param &lt;T2&gt; you must be able to cast from a T (the type described by this class' {@link #specificName}) to a T2</a>
-<span class="sourceLineNo">116</span><a id="line.116">     * @return if this is successful, a T2 drawn from the data in text; otherwise, this may throw an exception</a>
-<span class="sourceLineNo">117</span><a id="line.117">     */</a>
-<span class="sourceLineNo">118</span><a id="line.118">    @SuppressWarnings("unchecked")</a>
-<span class="sourceLineNo">119</span><a id="line.119">    public &lt;T2&gt; T2 restore(String text, Class&lt;T2&gt; type)</a>
-<span class="sourceLineNo">120</span><a id="line.120">    {</a>
-<span class="sourceLineNo">121</span><a id="line.121">        return (T2)restore(text);</a>
-<span class="sourceLineNo">122</span><a id="line.122">    }</a>
-<span class="sourceLineNo">123</span><a id="line.123">    /**</a>
-<span class="sourceLineNo">124</span><a id="line.124">     * Gets the registered StringConvert for the given type name, if there is one, or returns null otherwise.</a>
-<span class="sourceLineNo">125</span><a id="line.125">     * The name can have the normal parts of a generic type, such as "OrderedMap&amp;lt;String, ArrayList&amp;lt;String&amp;gt;&amp;gt;",</a>
-<span class="sourceLineNo">126</span><a id="line.126">     * as long as such a type was fully registered. For that example, you could use</a>
-<span class="sourceLineNo">127</span><a id="line.127">     * {@code Converters.convertOrderedMap(Converters.convertString, Converters.convertArrayList(Converters.convertString))}</a>
-<span class="sourceLineNo">128</span><a id="line.128">     * to produce and register a StringConvert for the aforementioned generic type.</a>
-<span class="sourceLineNo">129</span><a id="line.129">     * @param name the name of the type to find a registered StringConvert, such as "ArrayList&amp;lt;String&amp;gt;" or "char[]"</a>
-<span class="sourceLineNo">130</span><a id="line.130">     * @return the registered StringConvert, if it was found, or null if none was found</a>
-<span class="sourceLineNo">131</span><a id="line.131">     */</a>
-<span class="sourceLineNo">132</span><a id="line.132">    public static StringConvert&lt;?&gt; get(final CharSequence name)</a>
-<span class="sourceLineNo">133</span><a id="line.133">    {</a>
-<span class="sourceLineNo">134</span><a id="line.134">        int i = registry.indexOfA(name);</a>
-<span class="sourceLineNo">135</span><a id="line.135">        if(i &lt; 0) return null;</a>
-<span class="sourceLineNo">136</span><a id="line.136">        return registry.getAAt(i);</a>
-<span class="sourceLineNo">137</span><a id="line.137">    }</a>
-<span class="sourceLineNo">138</span><a id="line.138">    /**</a>
-<span class="sourceLineNo">139</span><a id="line.139">     * Looks up the StringConvert for a given vararg of Class instances (if an array of Classes is used other than a</a>
-<span class="sourceLineNo">140</span><a id="line.140">     * vararg, it must not be altered in the future, nor reused in a way that modifies its elements). Returns null if no</a>
-<span class="sourceLineNo">141</span><a id="line.141">     * StringConvert is found. You should usually cast the returned StringConvert, if non-null, to the specific</a>
-<span class="sourceLineNo">142</span><a id="line.142">     * StringConvert generic type you want.</a>
-<span class="sourceLineNo">143</span><a id="line.143">     * @param types the vararg of types to look up</a>
-<span class="sourceLineNo">144</span><a id="line.144">     * @return the StringConvert registered for the given types, or null if none has been made</a>
-<span class="sourceLineNo">145</span><a id="line.145">     */</a>
-<span class="sourceLineNo">146</span><a id="line.146">    public static StringConvert&lt;?&gt; lookup(final CharSequence... types)</a>
-<span class="sourceLineNo">147</span><a id="line.147">    {</a>
-<span class="sourceLineNo">148</span><a id="line.148">        return registry.getAFromB(types);</a>
-<span class="sourceLineNo">149</span><a id="line.149">    }</a>
-<span class="sourceLineNo">150</span><a id="line.150"></a>
-<span class="sourceLineNo">151</span><a id="line.151">    /**</a>
-<span class="sourceLineNo">152</span><a id="line.152">     * Simply takes a vararg of Class and returns the simple names of the Classes as a String array.</a>
-<span class="sourceLineNo">153</span><a id="line.153">     * Can be handy to avoid re-creating arrays implicitly from varargs of Class items.</a>
-<span class="sourceLineNo">154</span><a id="line.154">     * @param types a vararg of Class</a>
-<span class="sourceLineNo">155</span><a id="line.155">     * @return the String simple names of types as an array</a>
-<span class="sourceLineNo">156</span><a id="line.156">     */</a>
-<span class="sourceLineNo">157</span><a id="line.157">    public static CharSequence[] asArray(final CharSequence... types)</a>
-<span class="sourceLineNo">158</span><a id="line.158">    {</a>
-<span class="sourceLineNo">159</span><a id="line.159">        return types;</a>
-<span class="sourceLineNo">160</span><a id="line.160">    }</a>
-<span class="sourceLineNo">161</span><a id="line.161"></a>
-<span class="sourceLineNo">162</span><a id="line.162">    public static final CrossHash.IHasher spaceIgnoringHasher = new CrossHash.IHasher() {</a>
-<span class="sourceLineNo">163</span><a id="line.163">        @Override</a>
-<span class="sourceLineNo">164</span><a id="line.164">        public int hash(Object data) {</a>
-<span class="sourceLineNo">165</span><a id="line.165">            if (!(data instanceof StringConvert || data instanceof CharSequence))</a>
-<span class="sourceLineNo">166</span><a id="line.166">                return 0;</a>
-<span class="sourceLineNo">167</span><a id="line.167">            final CharSequence s;</a>
-<span class="sourceLineNo">168</span><a id="line.168">            if(data instanceof StringConvert) s = ((StringConvert) data).getName();</a>
-<span class="sourceLineNo">169</span><a id="line.169">            else s = (CharSequence) data;</a>
-<span class="sourceLineNo">170</span><a id="line.170"></a>
-<span class="sourceLineNo">171</span><a id="line.171">            long result = 0x1A976FDF6BF60B8EL, z = 0x60642E2A34326F15L;</a>
-<span class="sourceLineNo">172</span><a id="line.172">            final int len = s.length();</a>
-<span class="sourceLineNo">173</span><a id="line.173">            for (int i = 0; i &lt; len; i++) {</a>
-<span class="sourceLineNo">174</span><a id="line.174">                result ^= (z += (s.charAt(i) ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</a>
-<span class="sourceLineNo">175</span><a id="line.175">                result = (result &lt;&lt; 54 | result &gt;&gt;&gt; 10);</a>
-<span class="sourceLineNo">176</span><a id="line.176">            }</a>
-<span class="sourceLineNo">177</span><a id="line.177">            result += (z ^ z &gt;&gt;&gt; 26) * 0x632BE59BD9B4E019L;</a>
-<span class="sourceLineNo">178</span><a id="line.178">            result = (result ^ result &gt;&gt;&gt; 33) * 0xFF51AFD7ED558CCDL;</a>
-<span class="sourceLineNo">179</span><a id="line.179">            return (int) ((result ^ result &gt;&gt;&gt; 33) * 0xC4CEB9FE1A85EC53L);</a>
-<span class="sourceLineNo">180</span><a id="line.180">        }</a>
-<span class="sourceLineNo">181</span><a id="line.181"></a>
-<span class="sourceLineNo">182</span><a id="line.182">        @Override</a>
-<span class="sourceLineNo">183</span><a id="line.183">        public boolean areEqual(Object left, Object right) {</a>
-<span class="sourceLineNo">184</span><a id="line.184">            if (left == right) return true;</a>
-<span class="sourceLineNo">185</span><a id="line.185">            if(!((left instanceof StringConvert || left instanceof CharSequence)</a>
-<span class="sourceLineNo">186</span><a id="line.186">                    &amp;&amp; (right instanceof StringConvert || right instanceof CharSequence)))</a>
-<span class="sourceLineNo">187</span><a id="line.187">                return false;</a>
-<span class="sourceLineNo">188</span><a id="line.188">            final CharSequence ls, rs;</a>
-<span class="sourceLineNo">189</span><a id="line.189">            if(left instanceof StringConvert) ls = ((StringConvert) left).getName();</a>
-<span class="sourceLineNo">190</span><a id="line.190">            else ls = (CharSequence)left;</a>
-<span class="sourceLineNo">191</span><a id="line.191">            if(right instanceof StringConvert) rs = ((StringConvert) right).getName();</a>
-<span class="sourceLineNo">192</span><a id="line.192">            else rs = (CharSequence)right;</a>
-<span class="sourceLineNo">193</span><a id="line.193">            final int llen = ls.length(), rlen = rs.length();</a>
-<span class="sourceLineNo">194</span><a id="line.194">            char lc = ' ', rc = ' ';</a>
-<span class="sourceLineNo">195</span><a id="line.195">            for (int l = 0, r = 0; l &lt; llen &amp;&amp; r &lt; rlen; l++, r++) {</a>
-<span class="sourceLineNo">196</span><a id="line.196">                while (l &lt; llen &amp;&amp; (lc = ls.charAt(l)) == ' ') ++l;</a>
-<span class="sourceLineNo">197</span><a id="line.197">                while (r &lt; rlen &amp;&amp; (rc = rs.charAt(r)) == ' ') ++r;</a>
-<span class="sourceLineNo">198</span><a id="line.198">                if(lc != rc)</a>
-<span class="sourceLineNo">199</span><a id="line.199">                    return false;</a>
-<span class="sourceLineNo">200</span><a id="line.200">            }</a>
-<span class="sourceLineNo">201</span><a id="line.201">            return true;</a>
-<span class="sourceLineNo">202</span><a id="line.202">        }</a>
-<span class="sourceLineNo">203</span><a id="line.203">    };</a>
-<span class="sourceLineNo">204</span><a id="line.204"></a>
-<span class="sourceLineNo">205</span><a id="line.205">    public static final CrossHash.IHasher spaceIgnoringArrayHasher = new CrossHash.IHasher() {</a>
-<span class="sourceLineNo">206</span><a id="line.206">        @Override</a>
-<span class="sourceLineNo">207</span><a id="line.207">        public int hash(final Object data) {</a>
-<span class="sourceLineNo">208</span><a id="line.208">            if (data == null)</a>
-<span class="sourceLineNo">209</span><a id="line.209">                return 0;</a>
-<span class="sourceLineNo">210</span><a id="line.210">            if(!(data instanceof CharSequence[]))</a>
-<span class="sourceLineNo">211</span><a id="line.211">                return data.hashCode();</a>
-<span class="sourceLineNo">212</span><a id="line.212">            CharSequence[] data2 = (CharSequence[])data;</a>
-<span class="sourceLineNo">213</span><a id="line.213"></a>
-<span class="sourceLineNo">214</span><a id="line.214">            long result = 0x1A976FDF6BF60B8EL, z = 0x60642E2A34326F15L;</a>
-<span class="sourceLineNo">215</span><a id="line.215">            final int len = data2.length;</a>
-<span class="sourceLineNo">216</span><a id="line.216">            for (int i = 0; i &lt; len; i++) {</a>
-<span class="sourceLineNo">217</span><a id="line.217">                result ^= (z += (spaceIgnoringHasher.hash(data2[i]) ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</a>
-<span class="sourceLineNo">218</span><a id="line.218">                result = (result &lt;&lt; 54 | result &gt;&gt;&gt; 10);</a>
-<span class="sourceLineNo">219</span><a id="line.219">            }</a>
-<span class="sourceLineNo">220</span><a id="line.220">            result += (z ^ z &gt;&gt;&gt; 26) * 0x632BE59BD9B4E019L;</a>
-<span class="sourceLineNo">221</span><a id="line.221">            result = (result ^ result &gt;&gt;&gt; 33) * 0xFF51AFD7ED558CCDL;</a>
-<span class="sourceLineNo">222</span><a id="line.222">            return (int) ((result ^ result &gt;&gt;&gt; 33) * 0xC4CEB9FE1A85EC53L);</a>
-<span class="sourceLineNo">223</span><a id="line.223">        }</a>
-<span class="sourceLineNo">224</span><a id="line.224"></a>
-<span class="sourceLineNo">225</span><a id="line.225">        @Override</a>
-<span class="sourceLineNo">226</span><a id="line.226">        public boolean areEqual(Object left, Object right) {</a>
-<span class="sourceLineNo">227</span><a id="line.227">            return left == right || ((left instanceof CharSequence[] &amp;&amp; right instanceof CharSequence[]) ? CrossHash.equalityHelper((CharSequence[]) left, (CharSequence[]) right, spaceIgnoringHasher) : Objects.equals(left, right));</a>
-<span class="sourceLineNo">228</span><a id="line.228">        }</a>
-<span class="sourceLineNo">229</span><a id="line.229">    };</a>
-<span class="sourceLineNo">230</span><a id="line.230"></a>
-<span class="sourceLineNo">231</span><a id="line.231">    public static final K2&lt;StringConvert, CharSequence[]&gt; registry =</a>
-<span class="sourceLineNo">232</span><a id="line.232">            new K2&lt;&gt;(128, 0.75f, spaceIgnoringHasher, spaceIgnoringArrayHasher);</a>
-<span class="sourceLineNo">233</span><a id="line.233"></a>
-<span class="sourceLineNo">234</span><a id="line.234"></a>
-<span class="sourceLineNo">235</span><a id="line.235">}</a>
+<div class="source-container">
+<pre><span class="source-line-no">001</span><span id="line.1">package squidpony;</span>
+<span class="source-line-no">002</span><span id="line.2"></span>
+<span class="source-line-no">003</span><span id="line.3">import regexodus.Matcher;</span>
+<span class="source-line-no">004</span><span id="line.4">import regexodus.Pattern;</span>
+<span class="source-line-no">005</span><span id="line.5">import squidpony.squidmath.CrossHash;</span>
+<span class="source-line-no">006</span><span id="line.6">import squidpony.squidmath.K2;</span>
+<span class="source-line-no">007</span><span id="line.7"></span>
+<span class="source-line-no">008</span><span id="line.8">import java.util.Objects;</span>
+<span class="source-line-no">009</span><span id="line.9"></span>
+<span class="source-line-no">010</span><span id="line.10">/**</span>
+<span class="source-line-no">011</span><span id="line.11"> * Used to standardize conversion for a given type, {@code T}, to and from a serialized String format.</span>
+<span class="source-line-no">012</span><span id="line.12"> * This abstract class should usually be made concrete by a single-purpose class (not the type T itself).</span>
+<span class="source-line-no">013</span><span id="line.13"> * Also includes a static registry of types as CharSequence arrays (including the classes of generic type parameters in</span>
+<span class="source-line-no">014</span><span id="line.14"> * array elements after the first) to the  corresponding StringConvert objects that have been constructed for those</span>
+<span class="source-line-no">015</span><span id="line.15"> * types, although the registry must store the StringConvert objects without any further types (you can cast the</span>
+<span class="source-line-no">016</span><span id="line.16"> * StringConvert to a StringConvert with the desired generic type, or call {@link #restore(String)} on the</span>
+<span class="source-line-no">017</span><span id="line.17"> * un-parametrized type and get back an Object that can be cast to the correct type, but we aren't able to store the</span>
+<span class="source-line-no">018</span><span id="line.18"> * actual type). The static method {@link #lookup(CharSequence[])} can be used to find the StringConvert registered for</span>
+<span class="source-line-no">019</span><span id="line.19"> * a type name combination. The static method {@link #get(CharSequence)} can be used to find a StringConvert by its</span>
+<span class="source-line-no">020</span><span id="line.20"> * name. The static utility method {@link #asArray(CharSequence[])} can be used to reduce the amount of arrays produced</span>
+<span class="source-line-no">021</span><span id="line.21"> * by varargs, especially when you have a bunch of Class items and need Strings, but the array it returns must not be</span>
+<span class="source-line-no">022</span><span id="line.22"> * edited once used to construct a StringConvert.</span>
+<span class="source-line-no">023</span><span id="line.23"> */</span>
+<span class="source-line-no">024</span><span id="line.24">public abstract class StringConvert&lt;T&gt; {</span>
+<span class="source-line-no">025</span><span id="line.25">    public final CharSequence name;</span>
+<span class="source-line-no">026</span><span id="line.26">    public final CharSequence[] typeNames;</span>
+<span class="source-line-no">027</span><span id="line.27">    public final String specificName;</span>
+<span class="source-line-no">028</span><span id="line.28">    public final boolean isArray;</span>
+<span class="source-line-no">029</span><span id="line.29">    private static final Matcher specificMatcher = Pattern.compile("\\p{Js}\\p{Jp}*").matcher();</span>
+<span class="source-line-no">030</span><span id="line.30">    /**</span>
+<span class="source-line-no">031</span><span id="line.31">     * Constructs a StringConvert using a vararg or array of CharSequence objects, such as Strings, as well as a boolean</span>
+<span class="source-line-no">032</span><span id="line.32">     * flag to determine if the StringConvert works on an array instead of a normal object. If an array of types is</span>
+<span class="source-line-no">033</span><span id="line.33">     * passed, it must not be altered after usage. If no varargs are passed, if types is null, or if the first item of</span>
+<span class="source-line-no">034</span><span id="line.34">     * types is null, then this uses a special type representation where the name is "void" and typeNames has "void" as</span>
+<span class="source-line-no">035</span><span id="line.35">     * its only element. If types has length 1, then the name will be the "simple name" of the first element in types,</span>
+<span class="source-line-no">036</span><span id="line.36">     * as produced by {@link Class#getSimpleName()} (note that this produces an empty string for anonymous classes), and</span>
+<span class="source-line-no">037</span><span id="line.37">     * typeNames will again have that simple name as its only value. Otherwise, this considers items after the first to</span>
+<span class="source-line-no">038</span><span id="line.38">     * be the names of generic type arguments of the first, using normal Java syntax of {@code "Outer&lt;A,B&gt;"} if given</span>
+<span class="source-line-no">039</span><span id="line.39">     * the Strings for types {@code "Outer", "A", "B"}. No spaces will be present in the name, but thanks to some</span>
+<span class="source-line-no">040</span><span id="line.40">     * customization of the registry, you can give a String with spaces in it to {@link #get(CharSequence)} and still</span>
+<span class="source-line-no">041</span><span id="line.41">     * find the correct one). You can give type names with generic components as the names of generic type arguments,</span>
+<span class="source-line-no">042</span><span id="line.42">     * such as {@code new StringConvert("OrderedMap", "String", "OrderedSet&lt;String&gt;")} for a mapping of String keys to</span>
+<span class="source-line-no">043</span><span id="line.43">     * values that are themselves sets of Strings. After constructing a StringConvert, it is automatically registered</span>
+<span class="source-line-no">044</span><span id="line.44">     * so it can be looked up by name with {@link #get(CharSequence)} or by component generic types with</span>
+<span class="source-line-no">045</span><span id="line.45">     * {@link #lookup(CharSequence...)}; both of these will not return a StringConvert with type info for what it</span>
+<span class="source-line-no">046</span><span id="line.46">     * takes and returns beyond "Object", but the result can be cast to a StringConvert with the correct type.</span>
+<span class="source-line-no">047</span><span id="line.47">     * @param isArray true if this should convert an array type as opposed to a normal object or primitive type</span>
+<span class="source-line-no">048</span><span id="line.48">     * @param types a vararg of Class objects representing the type this can convert, including generic type parameters</span>
+<span class="source-line-no">049</span><span id="line.49">     *              of the first element, if there are any, at positions after the first</span>
+<span class="source-line-no">050</span><span id="line.50">     */</span>
+<span class="source-line-no">051</span><span id="line.51">    public StringConvert(final boolean isArray, final CharSequence... types) {</span>
+<span class="source-line-no">052</span><span id="line.52">        this.isArray = isArray;</span>
+<span class="source-line-no">053</span><span id="line.53">        if (types == null || types.length &lt;= 0 || types[0] == null) {</span>
+<span class="source-line-no">054</span><span id="line.54">            name = "void";</span>
+<span class="source-line-no">055</span><span id="line.55">            typeNames = new String[]{"void"};</span>
+<span class="source-line-no">056</span><span id="line.56">            specificName = "void";</span>
+<span class="source-line-no">057</span><span id="line.57">        } else if (types.length == 1) {</span>
+<span class="source-line-no">058</span><span id="line.58">            name = types[0];</span>
+<span class="source-line-no">059</span><span id="line.59">            typeNames = types;</span>
+<span class="source-line-no">060</span><span id="line.60">            specificMatcher.setTarget(name);</span>
+<span class="source-line-no">061</span><span id="line.61">            if(specificMatcher.find())</span>
+<span class="source-line-no">062</span><span id="line.62">                specificName = specificMatcher.group();</span>
+<span class="source-line-no">063</span><span id="line.63">            else</span>
+<span class="source-line-no">064</span><span id="line.64">                specificName = "void";</span>
+<span class="source-line-no">065</span><span id="line.65">        } else {</span>
+<span class="source-line-no">066</span><span id="line.66">            name = new StringBuilder(64);</span>
+<span class="source-line-no">067</span><span id="line.67">            ((StringBuilder) name).append(types[0]).append('&lt;').append(types[1]);</span>
+<span class="source-line-no">068</span><span id="line.68">            for (int i = 2; i &lt; types.length; i++) {</span>
+<span class="source-line-no">069</span><span id="line.69">                ((StringBuilder) name).append(',').append(types[i]);</span>
+<span class="source-line-no">070</span><span id="line.70">            }</span>
+<span class="source-line-no">071</span><span id="line.71">            ((StringBuilder) name).append('&gt;');</span>
+<span class="source-line-no">072</span><span id="line.72">            typeNames = types;</span>
+<span class="source-line-no">073</span><span id="line.73">            specificMatcher.setTarget(name);</span>
+<span class="source-line-no">074</span><span id="line.74">            if(specificMatcher.find())</span>
+<span class="source-line-no">075</span><span id="line.75">                specificName = specificMatcher.group();</span>
+<span class="source-line-no">076</span><span id="line.76">            else</span>
+<span class="source-line-no">077</span><span id="line.77">                specificName = "void";</span>
+<span class="source-line-no">078</span><span id="line.78"></span>
+<span class="source-line-no">079</span><span id="line.79"></span>
+<span class="source-line-no">080</span><span id="line.80">        }</span>
+<span class="source-line-no">081</span><span id="line.81">    }</span>
+<span class="source-line-no">082</span><span id="line.82">    /**</span>
+<span class="source-line-no">083</span><span id="line.83">     * Constructs a StringConvert using a vararg or array of CharSequence objects, such as Strings. If an array is</span>
+<span class="source-line-no">084</span><span id="line.84">     * passed, it must not be altered after usage. If no arguments are passed, if types is null, or if the first item of</span>
+<span class="source-line-no">085</span><span id="line.85">     * types is null, then this uses a special type representation where the name is "void" and typeNames has "void" as</span>
+<span class="source-line-no">086</span><span id="line.86">     * its only element. If types has length 1, then the name will be the "simple name" of the first element in types,</span>
+<span class="source-line-no">087</span><span id="line.87">     * as produced by {@link Class#getSimpleName()} (note that this produces an empty string for anonymous classes), and</span>
+<span class="source-line-no">088</span><span id="line.88">     * typeNames will again have that simple name as its only value. Otherwise, this considers items after the first to</span>
+<span class="source-line-no">089</span><span id="line.89">     * be the names of generic type arguments of the first, using normal Java syntax of {@code "Outer&lt;A,B&gt;"} if given</span>
+<span class="source-line-no">090</span><span id="line.90">     * the Strings for types {@code "Outer", "A", "B"}. No spaces will be present in the name, but thanks to some</span>
+<span class="source-line-no">091</span><span id="line.91">     * customization of the registry, you can give a String with spaces in it to {@link #get(CharSequence)} and still</span>
+<span class="source-line-no">092</span><span id="line.92">     * find the correct one). You can give type names with generic components as the names of generic type arguments,</span>
+<span class="source-line-no">093</span><span id="line.93">     * such as {@code new StringConvert("OrderedMap", "String", "OrderedSet&lt;String&gt;")} for a mapping of String keys to</span>
+<span class="source-line-no">094</span><span id="line.94">     * values that are themselves sets of Strings. After constructing a StringConvert, it is automatically registered</span>
+<span class="source-line-no">095</span><span id="line.95">     * so it can be looked up by name with {@link #get(CharSequence)} or by component generic types with</span>
+<span class="source-line-no">096</span><span id="line.96">     * {@link #lookup(CharSequence...)}; both of these will not return a StringConvert with type info for what it</span>
+<span class="source-line-no">097</span><span id="line.97">     * takes and returns beyond "Object", but the result can be cast to a StringConvert with the correct type.</span>
+<span class="source-line-no">098</span><span id="line.98">     * @param types a vararg of Class objects representing the type this can convert, including generic type parameters</span>
+<span class="source-line-no">099</span><span id="line.99">     *              of the first element, if there are any, at positions after the first</span>
+<span class="source-line-no">100</span><span id="line.100">     */</span>
+<span class="source-line-no">101</span><span id="line.101">    public StringConvert(final CharSequence... types)</span>
+<span class="source-line-no">102</span><span id="line.102">    {</span>
+<span class="source-line-no">103</span><span id="line.103">        this(false, types);</span>
+<span class="source-line-no">104</span><span id="line.104">    }</span>
+<span class="source-line-no">105</span><span id="line.105">    public CharSequence getName() {return name;}</span>
+<span class="source-line-no">106</span><span id="line.106">    public abstract String stringify(T item);</span>
+<span class="source-line-no">107</span><span id="line.107">    public abstract T restore(String text);</span>
+<span class="source-line-no">108</span><span id="line.108"></span>
+<span class="source-line-no">109</span><span id="line.109">    /**</span>
+<span class="source-line-no">110</span><span id="line.110">     * Attempts to restore a specific type of value from the given text. Useful when this StringConvert does not have</span>
+<span class="source-line-no">111</span><span id="line.111">     * meaningful generic type information (e.g. {@code StringConvert&lt;?&gt;}), and you know the correct type externally.</span>
+<span class="source-line-no">112</span><span id="line.112">     * May throw a ClassCastException if type is not compatible with the type this deserializes to (that is, T).</span>
+<span class="source-line-no">113</span><span id="line.113">     * @param text the text to try to read as serialized data describing a T2 object</span>
+<span class="source-line-no">114</span><span id="line.114">     * @param type the Class of the data to try to produce, which should be as specific as possible</span>
+<span class="source-line-no">115</span><span id="line.115">     * @param &lt;T2&gt; you must be able to cast from a T (the type described by this class' {@link #specificName}) to a T2</span>
+<span class="source-line-no">116</span><span id="line.116">     * @return if this is successful, a T2 drawn from the data in text; otherwise, this may throw an exception</span>
+<span class="source-line-no">117</span><span id="line.117">     */</span>
+<span class="source-line-no">118</span><span id="line.118">    @SuppressWarnings("unchecked")</span>
+<span class="source-line-no">119</span><span id="line.119">    public &lt;T2&gt; T2 restore(String text, Class&lt;T2&gt; type)</span>
+<span class="source-line-no">120</span><span id="line.120">    {</span>
+<span class="source-line-no">121</span><span id="line.121">        return (T2)restore(text);</span>
+<span class="source-line-no">122</span><span id="line.122">    }</span>
+<span class="source-line-no">123</span><span id="line.123">    /**</span>
+<span class="source-line-no">124</span><span id="line.124">     * Gets the registered StringConvert for the given type name, if there is one, or returns null otherwise.</span>
+<span class="source-line-no">125</span><span id="line.125">     * The name can have the normal parts of a generic type, such as "OrderedMap&amp;lt;String, ArrayList&amp;lt;String&amp;gt;&amp;gt;",</span>
+<span class="source-line-no">126</span><span id="line.126">     * as long as such a type was fully registered. For that example, you could use</span>
+<span class="source-line-no">127</span><span id="line.127">     * {@code Converters.convertOrderedMap(Converters.convertString, Converters.convertArrayList(Converters.convertString))}</span>
+<span class="source-line-no">128</span><span id="line.128">     * to produce and register a StringConvert for the aforementioned generic type.</span>
+<span class="source-line-no">129</span><span id="line.129">     * @param name the name of the type to find a registered StringConvert, such as "ArrayList&amp;lt;String&amp;gt;" or "char[]"</span>
+<span class="source-line-no">130</span><span id="line.130">     * @return the registered StringConvert, if it was found, or null if none was found</span>
+<span class="source-line-no">131</span><span id="line.131">     */</span>
+<span class="source-line-no">132</span><span id="line.132">    public static StringConvert&lt;?&gt; get(final CharSequence name)</span>
+<span class="source-line-no">133</span><span id="line.133">    {</span>
+<span class="source-line-no">134</span><span id="line.134">        int i = registry.indexOfA(name);</span>
+<span class="source-line-no">135</span><span id="line.135">        if(i &lt; 0) return null;</span>
+<span class="source-line-no">136</span><span id="line.136">        return registry.getAAt(i);</span>
+<span class="source-line-no">137</span><span id="line.137">    }</span>
+<span class="source-line-no">138</span><span id="line.138">    /**</span>
+<span class="source-line-no">139</span><span id="line.139">     * Looks up the StringConvert for a given vararg of Class instances (if an array of Classes is used other than a</span>
+<span class="source-line-no">140</span><span id="line.140">     * vararg, it must not be altered in the future, nor reused in a way that modifies its elements). Returns null if no</span>
+<span class="source-line-no">141</span><span id="line.141">     * StringConvert is found. You should usually cast the returned StringConvert, if non-null, to the specific</span>
+<span class="source-line-no">142</span><span id="line.142">     * StringConvert generic type you want.</span>
+<span class="source-line-no">143</span><span id="line.143">     * @param types the vararg of types to look up</span>
+<span class="source-line-no">144</span><span id="line.144">     * @return the StringConvert registered for the given types, or null if none has been made</span>
+<span class="source-line-no">145</span><span id="line.145">     */</span>
+<span class="source-line-no">146</span><span id="line.146">    public static StringConvert&lt;?&gt; lookup(final CharSequence... types)</span>
+<span class="source-line-no">147</span><span id="line.147">    {</span>
+<span class="source-line-no">148</span><span id="line.148">        return registry.getAFromB(types);</span>
+<span class="source-line-no">149</span><span id="line.149">    }</span>
+<span class="source-line-no">150</span><span id="line.150"></span>
+<span class="source-line-no">151</span><span id="line.151">    /**</span>
+<span class="source-line-no">152</span><span id="line.152">     * Simply takes a vararg of Class and returns the simple names of the Classes as a String array.</span>
+<span class="source-line-no">153</span><span id="line.153">     * Can be handy to avoid re-creating arrays implicitly from varargs of Class items.</span>
+<span class="source-line-no">154</span><span id="line.154">     * @param types a vararg of Class</span>
+<span class="source-line-no">155</span><span id="line.155">     * @return the String simple names of types as an array</span>
+<span class="source-line-no">156</span><span id="line.156">     */</span>
+<span class="source-line-no">157</span><span id="line.157">    public static CharSequence[] asArray(final CharSequence... types)</span>
+<span class="source-line-no">158</span><span id="line.158">    {</span>
+<span class="source-line-no">159</span><span id="line.159">        return types;</span>
+<span class="source-line-no">160</span><span id="line.160">    }</span>
+<span class="source-line-no">161</span><span id="line.161"></span>
+<span class="source-line-no">162</span><span id="line.162">    public static final CrossHash.IHasher spaceIgnoringHasher = new CrossHash.IHasher() {</span>
+<span class="source-line-no">163</span><span id="line.163">        @Override</span>
+<span class="source-line-no">164</span><span id="line.164">        public int hash(Object data) {</span>
+<span class="source-line-no">165</span><span id="line.165">            if (!(data instanceof StringConvert || data instanceof CharSequence))</span>
+<span class="source-line-no">166</span><span id="line.166">                return 0;</span>
+<span class="source-line-no">167</span><span id="line.167">            final CharSequence s;</span>
+<span class="source-line-no">168</span><span id="line.168">            if(data instanceof StringConvert) s = ((StringConvert) data).getName();</span>
+<span class="source-line-no">169</span><span id="line.169">            else s = (CharSequence) data;</span>
+<span class="source-line-no">170</span><span id="line.170"></span>
+<span class="source-line-no">171</span><span id="line.171">            long result = 0x1A976FDF6BF60B8EL, z = 0x60642E2A34326F15L;</span>
+<span class="source-line-no">172</span><span id="line.172">            final int len = s.length();</span>
+<span class="source-line-no">173</span><span id="line.173">            for (int i = 0; i &lt; len; i++) {</span>
+<span class="source-line-no">174</span><span id="line.174">                result ^= (z += (s.charAt(i) ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
+<span class="source-line-no">175</span><span id="line.175">                result = (result &lt;&lt; 54 | result &gt;&gt;&gt; 10);</span>
+<span class="source-line-no">176</span><span id="line.176">            }</span>
+<span class="source-line-no">177</span><span id="line.177">            result += (z ^ z &gt;&gt;&gt; 26) * 0x632BE59BD9B4E019L;</span>
+<span class="source-line-no">178</span><span id="line.178">            result = (result ^ result &gt;&gt;&gt; 33) * 0xFF51AFD7ED558CCDL;</span>
+<span class="source-line-no">179</span><span id="line.179">            return (int) ((result ^ result &gt;&gt;&gt; 33) * 0xC4CEB9FE1A85EC53L);</span>
+<span class="source-line-no">180</span><span id="line.180">        }</span>
+<span class="source-line-no">181</span><span id="line.181"></span>
+<span class="source-line-no">182</span><span id="line.182">        @Override</span>
+<span class="source-line-no">183</span><span id="line.183">        public boolean areEqual(Object left, Object right) {</span>
+<span class="source-line-no">184</span><span id="line.184">            if (left == right) return true;</span>
+<span class="source-line-no">185</span><span id="line.185">            if(!((left instanceof StringConvert || left instanceof CharSequence)</span>
+<span class="source-line-no">186</span><span id="line.186">                    &amp;&amp; (right instanceof StringConvert || right instanceof CharSequence)))</span>
+<span class="source-line-no">187</span><span id="line.187">                return false;</span>
+<span class="source-line-no">188</span><span id="line.188">            final CharSequence ls, rs;</span>
+<span class="source-line-no">189</span><span id="line.189">            if(left instanceof StringConvert) ls = ((StringConvert) left).getName();</span>
+<span class="source-line-no">190</span><span id="line.190">            else ls = (CharSequence)left;</span>
+<span class="source-line-no">191</span><span id="line.191">            if(right instanceof StringConvert) rs = ((StringConvert) right).getName();</span>
+<span class="source-line-no">192</span><span id="line.192">            else rs = (CharSequence)right;</span>
+<span class="source-line-no">193</span><span id="line.193">            final int llen = ls.length(), rlen = rs.length();</span>
+<span class="source-line-no">194</span><span id="line.194">            char lc = ' ', rc = ' ';</span>
+<span class="source-line-no">195</span><span id="line.195">            for (int l = 0, r = 0; l &lt; llen &amp;&amp; r &lt; rlen; l++, r++) {</span>
+<span class="source-line-no">196</span><span id="line.196">                while (l &lt; llen &amp;&amp; (lc = ls.charAt(l)) == ' ') ++l;</span>
+<span class="source-line-no">197</span><span id="line.197">                while (r &lt; rlen &amp;&amp; (rc = rs.charAt(r)) == ' ') ++r;</span>
+<span class="source-line-no">198</span><span id="line.198">                if(lc != rc)</span>
+<span class="source-line-no">199</span><span id="line.199">                    return false;</span>
+<span class="source-line-no">200</span><span id="line.200">            }</span>
+<span class="source-line-no">201</span><span id="line.201">            return true;</span>
+<span class="source-line-no">202</span><span id="line.202">        }</span>
+<span class="source-line-no">203</span><span id="line.203">    };</span>
+<span class="source-line-no">204</span><span id="line.204"></span>
+<span class="source-line-no">205</span><span id="line.205">    public static final CrossHash.IHasher spaceIgnoringArrayHasher = new CrossHash.IHasher() {</span>
+<span class="source-line-no">206</span><span id="line.206">        @Override</span>
+<span class="source-line-no">207</span><span id="line.207">        public int hash(final Object data) {</span>
+<span class="source-line-no">208</span><span id="line.208">            if (data == null)</span>
+<span class="source-line-no">209</span><span id="line.209">                return 0;</span>
+<span class="source-line-no">210</span><span id="line.210">            if(!(data instanceof CharSequence[]))</span>
+<span class="source-line-no">211</span><span id="line.211">                return data.hashCode();</span>
+<span class="source-line-no">212</span><span id="line.212">            CharSequence[] data2 = (CharSequence[])data;</span>
+<span class="source-line-no">213</span><span id="line.213"></span>
+<span class="source-line-no">214</span><span id="line.214">            long result = 0x1A976FDF6BF60B8EL, z = 0x60642E2A34326F15L;</span>
+<span class="source-line-no">215</span><span id="line.215">            final int len = data2.length;</span>
+<span class="source-line-no">216</span><span id="line.216">            for (int i = 0; i &lt; len; i++) {</span>
+<span class="source-line-no">217</span><span id="line.217">                result ^= (z += (spaceIgnoringHasher.hash(data2[i]) ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
+<span class="source-line-no">218</span><span id="line.218">                result = (result &lt;&lt; 54 | result &gt;&gt;&gt; 10);</span>
+<span class="source-line-no">219</span><span id="line.219">            }</span>
+<span class="source-line-no">220</span><span id="line.220">            result += (z ^ z &gt;&gt;&gt; 26) * 0x632BE59BD9B4E019L;</span>
+<span class="source-line-no">221</span><span id="line.221">            result = (result ^ result &gt;&gt;&gt; 33) * 0xFF51AFD7ED558CCDL;</span>
+<span class="source-line-no">222</span><span id="line.222">            return (int) ((result ^ result &gt;&gt;&gt; 33) * 0xC4CEB9FE1A85EC53L);</span>
+<span class="source-line-no">223</span><span id="line.223">        }</span>
+<span class="source-line-no">224</span><span id="line.224"></span>
+<span class="source-line-no">225</span><span id="line.225">        @Override</span>
+<span class="source-line-no">226</span><span id="line.226">        public boolean areEqual(Object left, Object right) {</span>
+<span class="source-line-no">227</span><span id="line.227">            return left == right || ((left instanceof CharSequence[] &amp;&amp; right instanceof CharSequence[]) ? CrossHash.equalityHelper((CharSequence[]) left, (CharSequence[]) right, spaceIgnoringHasher) : Objects.equals(left, right));</span>
+<span class="source-line-no">228</span><span id="line.228">        }</span>
+<span class="source-line-no">229</span><span id="line.229">    };</span>
+<span class="source-line-no">230</span><span id="line.230"></span>
+<span class="source-line-no">231</span><span id="line.231">    public static final K2&lt;StringConvert, CharSequence[]&gt; registry =</span>
+<span class="source-line-no">232</span><span id="line.232">            new K2&lt;&gt;(128, 0.75f, spaceIgnoringHasher, spaceIgnoringArrayHasher);</span>
+<span class="source-line-no">233</span><span id="line.233"></span>
+<span class="source-line-no">234</span><span id="line.234"></span>
+<span class="source-line-no">235</span><span id="line.235">}</span>
 
 
 

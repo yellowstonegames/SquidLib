@@ -7,358 +7,358 @@
 <meta name="generator" content="javadoc/SourceToHTMLConverter">
 <link rel="stylesheet" type="text/css" href="../../../../stylesheet.css" title="Style">
 </head>
-<body class="source">
+<body class="source-page">
 <main role="main">
-<div class="sourceContainer">
-<pre><span class="sourceLineNo">001</span><a id="line.1">/*</a>
-<span class="sourceLineNo">002</span><a id="line.2">MIT License</a>
-<span class="sourceLineNo">003</span><a id="line.3"></a>
-<span class="sourceLineNo">004</span><a id="line.4">Copyright (c) 2020 earlygrey</a>
-<span class="sourceLineNo">005</span><a id="line.5"></a>
-<span class="sourceLineNo">006</span><a id="line.6">Permission is hereby granted, free of charge, to any person obtaining a copy</a>
-<span class="sourceLineNo">007</span><a id="line.7">of this software and associated documentation files (the "Software"), to deal</a>
-<span class="sourceLineNo">008</span><a id="line.8">in the Software without restriction, including without limitation the rights</a>
-<span class="sourceLineNo">009</span><a id="line.9">to use, copy, modify, merge, publish, distribute, sublicense, and/or sell</a>
-<span class="sourceLineNo">010</span><a id="line.10">copies of the Software, and to permit persons to whom the Software is</a>
-<span class="sourceLineNo">011</span><a id="line.11">furnished to do so, subject to the following conditions:</a>
-<span class="sourceLineNo">012</span><a id="line.12"></a>
-<span class="sourceLineNo">013</span><a id="line.13">The above copyright notice and this permission notice shall be included in all</a>
-<span class="sourceLineNo">014</span><a id="line.14">copies or substantial portions of the Software.</a>
-<span class="sourceLineNo">015</span><a id="line.15"></a>
-<span class="sourceLineNo">016</span><a id="line.16">THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</a>
-<span class="sourceLineNo">017</span><a id="line.17">IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,</a>
-<span class="sourceLineNo">018</span><a id="line.18">FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE</a>
-<span class="sourceLineNo">019</span><a id="line.19">AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER</a>
-<span class="sourceLineNo">020</span><a id="line.20">LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,</a>
-<span class="sourceLineNo">021</span><a id="line.21">OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE</a>
-<span class="sourceLineNo">022</span><a id="line.22">SOFTWARE.</a>
-<span class="sourceLineNo">023</span><a id="line.23"> */</a>
-<span class="sourceLineNo">024</span><a id="line.24">package squidpony.squidai.graph;</a>
-<span class="sourceLineNo">025</span><a id="line.25"></a>
-<span class="sourceLineNo">026</span><a id="line.26">import squidpony.squidmath.OrderedMap;</a>
-<span class="sourceLineNo">027</span><a id="line.27"></a>
-<span class="sourceLineNo">028</span><a id="line.28">import java.util.*;</a>
-<span class="sourceLineNo">029</span><a id="line.29"></a>
-<span class="sourceLineNo">030</span><a id="line.30">/**</a>
-<span class="sourceLineNo">031</span><a id="line.31"> * Abstract superclass of actual Graph types, like {@link DirectedGraph} and {@link UndirectedGraph}.</a>
-<span class="sourceLineNo">032</span><a id="line.32"> * @param &lt;V&gt; the vertex type; often {@link squidpony.squidmath.Coord}</a>
-<span class="sourceLineNo">033</span><a id="line.33"> * @author earlygrey</a>
-<span class="sourceLineNo">034</span><a id="line.34"> */</a>
-<span class="sourceLineNo">035</span><a id="line.35">public abstract class Graph&lt;V&gt; {</a>
-<span class="sourceLineNo">036</span><a id="line.36"></a>
-<span class="sourceLineNo">037</span><a id="line.37">    //================================================================================</a>
-<span class="sourceLineNo">038</span><a id="line.38">    // Members</a>
-<span class="sourceLineNo">039</span><a id="line.39">    //================================================================================</a>
-<span class="sourceLineNo">040</span><a id="line.40">    </a>
-<span class="sourceLineNo">041</span><a id="line.41">    protected final OrderedMap&lt;V, Node&lt;V&gt;&gt; vertexMap;</a>
-<span class="sourceLineNo">042</span><a id="line.42">    protected final OrderedMap&lt;Connection&lt;V&gt;, Connection&lt;V&gt;&gt; edgeMap;</a>
-<span class="sourceLineNo">043</span><a id="line.43">    </a>
-<span class="sourceLineNo">044</span><a id="line.44">    //================================================================================</a>
-<span class="sourceLineNo">045</span><a id="line.45">    // Constructors</a>
-<span class="sourceLineNo">046</span><a id="line.46">    //================================================================================</a>
-<span class="sourceLineNo">047</span><a id="line.47"></a>
-<span class="sourceLineNo">048</span><a id="line.48">    protected Graph() {</a>
-<span class="sourceLineNo">049</span><a id="line.49">        vertexMap = new OrderedMap&lt;&gt;();</a>
-<span class="sourceLineNo">050</span><a id="line.50">        edgeMap = new OrderedMap&lt;&gt;();</a>
-<span class="sourceLineNo">051</span><a id="line.51">    }</a>
-<span class="sourceLineNo">052</span><a id="line.52"></a>
-<span class="sourceLineNo">053</span><a id="line.53">    protected Graph(Collection&lt;V&gt; vertices) {</a>
-<span class="sourceLineNo">054</span><a id="line.54">        this();</a>
-<span class="sourceLineNo">055</span><a id="line.55">        for (V v : vertices) {</a>
-<span class="sourceLineNo">056</span><a id="line.56">            addVertex(v);</a>
-<span class="sourceLineNo">057</span><a id="line.57">        }</a>
-<span class="sourceLineNo">058</span><a id="line.58">    }</a>
-<span class="sourceLineNo">059</span><a id="line.59"></a>
-<span class="sourceLineNo">060</span><a id="line.60">    //================================================================================</a>
-<span class="sourceLineNo">061</span><a id="line.61">    // Graph Builders</a>
-<span class="sourceLineNo">062</span><a id="line.62">    //================================================================================</a>
-<span class="sourceLineNo">063</span><a id="line.63"></a>
-<span class="sourceLineNo">064</span><a id="line.64">    //--------------------</a>
-<span class="sourceLineNo">065</span><a id="line.65">    //  Abstract Methods</a>
-<span class="sourceLineNo">066</span><a id="line.66">    //--------------------</a>
-<span class="sourceLineNo">067</span><a id="line.67"></a>
-<span class="sourceLineNo">068</span><a id="line.68">    protected abstract Connection&lt;V&gt; obtainEdge();</a>
-<span class="sourceLineNo">069</span><a id="line.69">    protected abstract Graph&lt;V&gt; createNew();</a>
-<span class="sourceLineNo">070</span><a id="line.70">    public abstract Algorithms&lt;V&gt; algorithms();</a>
-<span class="sourceLineNo">071</span><a id="line.71"></a>
-<span class="sourceLineNo">072</span><a id="line.72">    //--------------------</a>
-<span class="sourceLineNo">073</span><a id="line.73">    //  Public Methods</a>
-<span class="sourceLineNo">074</span><a id="line.74">    //--------------------</a>
-<span class="sourceLineNo">075</span><a id="line.75"></a>
-<span class="sourceLineNo">076</span><a id="line.76">    /**</a>
-<span class="sourceLineNo">077</span><a id="line.77">     * Adds a vertex to the graph.</a>
-<span class="sourceLineNo">078</span><a id="line.78">     * @param v the vertex to be added</a>
-<span class="sourceLineNo">079</span><a id="line.79">     * @return true if the vertex was not already in the graph, false otherwise</a>
-<span class="sourceLineNo">080</span><a id="line.80">     */</a>
-<span class="sourceLineNo">081</span><a id="line.81"></a>
-<span class="sourceLineNo">082</span><a id="line.82">    public boolean addVertex(V v) {</a>
-<span class="sourceLineNo">083</span><a id="line.83">        Node&lt;V&gt; node = getNode(v);</a>
-<span class="sourceLineNo">084</span><a id="line.84">        if (node!=null) return false;</a>
-<span class="sourceLineNo">085</span><a id="line.85">        node = new Node&lt;&gt;(v, this);</a>
-<span class="sourceLineNo">086</span><a id="line.86">        vertexMap.put(v, node);</a>
-<span class="sourceLineNo">087</span><a id="line.87">        return true;</a>
-<span class="sourceLineNo">088</span><a id="line.88">    }</a>
-<span class="sourceLineNo">089</span><a id="line.89"></a>
-<span class="sourceLineNo">090</span><a id="line.90">    /**</a>
-<span class="sourceLineNo">091</span><a id="line.91">     * Adds all the vertices in the collection to the graph.</a>
-<span class="sourceLineNo">092</span><a id="line.92">     * @param vertices a collection of vertices to be added</a>
-<span class="sourceLineNo">093</span><a id="line.93">     */</a>
-<span class="sourceLineNo">094</span><a id="line.94">    public void addVertices(Collection&lt;V&gt; vertices) {</a>
-<span class="sourceLineNo">095</span><a id="line.95">        for (V v : vertices) {</a>
-<span class="sourceLineNo">096</span><a id="line.96">            addVertex(v);</a>
-<span class="sourceLineNo">097</span><a id="line.97">        }</a>
-<span class="sourceLineNo">098</span><a id="line.98">    }</a>
-<span class="sourceLineNo">099</span><a id="line.99"></a>
-<span class="sourceLineNo">100</span><a id="line.100">    /**</a>
-<span class="sourceLineNo">101</span><a id="line.101">     * Removes a vertex from the graph, and any adjacent edges.</a>
-<span class="sourceLineNo">102</span><a id="line.102">     * @param v the vertex to be removed</a>
-<span class="sourceLineNo">103</span><a id="line.103">     * @return true if the vertex was in the graph, false otherwise</a>
-<span class="sourceLineNo">104</span><a id="line.104">     */</a>
-<span class="sourceLineNo">105</span><a id="line.105">    public boolean removeVertex(V v) {</a>
-<span class="sourceLineNo">106</span><a id="line.106">        Node&lt;V&gt; existing = getNode(v);</a>
-<span class="sourceLineNo">107</span><a id="line.107">        if (existing==null) return false;</a>
-<span class="sourceLineNo">108</span><a id="line.108">        removeNode(existing);</a>
-<span class="sourceLineNo">109</span><a id="line.109">        return true;</a>
-<span class="sourceLineNo">110</span><a id="line.110">    }</a>
-<span class="sourceLineNo">111</span><a id="line.111"></a>
-<span class="sourceLineNo">112</span><a id="line.112">    /**</a>
-<span class="sourceLineNo">113</span><a id="line.113">     * Removes all the vertices in the collection from the graph, and any adjacent edges.</a>
-<span class="sourceLineNo">114</span><a id="line.114">     * @param vertices vertices a collection of vertices to be removed</a>
-<span class="sourceLineNo">115</span><a id="line.115">     */</a>
-<span class="sourceLineNo">116</span><a id="line.116">    public void removeVertices(Collection&lt;V&gt; vertices) {</a>
-<span class="sourceLineNo">117</span><a id="line.117">        for (V v : vertices) {</a>
-<span class="sourceLineNo">118</span><a id="line.118">            removeVertex(v);</a>
-<span class="sourceLineNo">119</span><a id="line.119">        }</a>
-<span class="sourceLineNo">120</span><a id="line.120">    }</a>
-<span class="sourceLineNo">121</span><a id="line.121"></a>
-<span class="sourceLineNo">122</span><a id="line.122">    /**</a>
-<span class="sourceLineNo">123</span><a id="line.123">     * Add an edge to the graph, from v to w. The edge will have a default weight of 1.</a>
-<span class="sourceLineNo">124</span><a id="line.124">     * If there is already an edge between v and w, its weight will be set to 1.</a>
-<span class="sourceLineNo">125</span><a id="line.125">     * @param v the source vertex of the edge</a>
-<span class="sourceLineNo">126</span><a id="line.126">     * @param w the destination vertex of the edge</a>
-<span class="sourceLineNo">127</span><a id="line.127">     * @return the edge</a>
-<span class="sourceLineNo">128</span><a id="line.128">     */</a>
-<span class="sourceLineNo">129</span><a id="line.129">    public Connection&lt;V&gt; addEdge(V v, V w) {</a>
-<span class="sourceLineNo">130</span><a id="line.130">        return addEdge(v, w, Connection.DEFAULT_WEIGHT);</a>
-<span class="sourceLineNo">131</span><a id="line.131">    }</a>
-<span class="sourceLineNo">132</span><a id="line.132"></a>
-<span class="sourceLineNo">133</span><a id="line.133">    /**</a>
-<span class="sourceLineNo">134</span><a id="line.134">     * Add an edge to the graph, from v to w and with the specified weight.</a>
-<span class="sourceLineNo">135</span><a id="line.135">     * If there is already an edge between v and w, its weight will be set to the specified weight.</a>
-<span class="sourceLineNo">136</span><a id="line.136">     * @param v the source vertex of the edge</a>
-<span class="sourceLineNo">137</span><a id="line.137">     * @param w the destination vertex of the edge</a>
-<span class="sourceLineNo">138</span><a id="line.138">     * @param weight the weight of the edge</a>
-<span class="sourceLineNo">139</span><a id="line.139">     * @return the edge</a>
-<span class="sourceLineNo">140</span><a id="line.140">     */</a>
-<span class="sourceLineNo">141</span><a id="line.141">    public Connection&lt;V&gt; addEdge(V v, V w, float weight) {</a>
-<span class="sourceLineNo">142</span><a id="line.142">        if (v == null || w == null) throw new IllegalArgumentException("Vertices cannot be null");</a>
-<span class="sourceLineNo">143</span><a id="line.143">        if (v.equals(w)) throw new IllegalArgumentException("Self loops are not allowed");</a>
-<span class="sourceLineNo">144</span><a id="line.144">        Node&lt;V&gt; a = getNode(v);</a>
-<span class="sourceLineNo">145</span><a id="line.145">        Node&lt;V&gt; b = getNode(w);</a>
-<span class="sourceLineNo">146</span><a id="line.146">        if (a == null  || b == null) throw new IllegalArgumentException("At least one vertex is not in the graph");</a>
-<span class="sourceLineNo">147</span><a id="line.147">        return addConnection(a, b, weight);</a>
-<span class="sourceLineNo">148</span><a id="line.148">    }</a>
-<span class="sourceLineNo">149</span><a id="line.149"></a>
-<span class="sourceLineNo">150</span><a id="line.150">    /**</a>
-<span class="sourceLineNo">151</span><a id="line.151">     * Removes the edge from v to w from the graph.</a>
-<span class="sourceLineNo">152</span><a id="line.152">     * @param v the source vertex of the edge</a>
-<span class="sourceLineNo">153</span><a id="line.153">     * @param w the destination vertex of the edge</a>
-<span class="sourceLineNo">154</span><a id="line.154">     * @return the edge if there exists an edge from v to w, or null if there is no edge</a>
-<span class="sourceLineNo">155</span><a id="line.155">     */</a>
-<span class="sourceLineNo">156</span><a id="line.156">    public boolean removeEdge(V v, V w) {</a>
-<span class="sourceLineNo">157</span><a id="line.157">        Node&lt;V&gt; a = getNode(v), b = getNode(w);</a>
-<span class="sourceLineNo">158</span><a id="line.158">        if (a == null  || b == null) throw new IllegalArgumentException("At least one vertex is not in the graph");</a>
-<span class="sourceLineNo">159</span><a id="line.159">        return removeConnection(a, b);</a>
-<span class="sourceLineNo">160</span><a id="line.160">    }</a>
-<span class="sourceLineNo">161</span><a id="line.161"></a>
-<span class="sourceLineNo">162</span><a id="line.162">    public boolean removeEdge(Edge&lt;V&gt; edge) {</a>
-<span class="sourceLineNo">163</span><a id="line.163">        return removeConnection(edge.getInternalNodeA(), edge.getInternalNodeB());</a>
-<span class="sourceLineNo">164</span><a id="line.164">    }</a>
-<span class="sourceLineNo">165</span><a id="line.165"></a>
-<span class="sourceLineNo">166</span><a id="line.166">    /**</a>
-<span class="sourceLineNo">167</span><a id="line.167">     * Removes all edges from the graph.</a>
-<span class="sourceLineNo">168</span><a id="line.168">     */</a>
-<span class="sourceLineNo">169</span><a id="line.169">    public void removeAllEdges() {</a>
-<span class="sourceLineNo">170</span><a id="line.170">        for (Node&lt;V&gt; v : getNodes()) {</a>
-<span class="sourceLineNo">171</span><a id="line.171">            v.disconnect();</a>
-<span class="sourceLineNo">172</span><a id="line.172">        }</a>
-<span class="sourceLineNo">173</span><a id="line.173">        edgeMap.clear();</a>
-<span class="sourceLineNo">174</span><a id="line.174">    }</a>
-<span class="sourceLineNo">175</span><a id="line.175"></a>
-<span class="sourceLineNo">176</span><a id="line.176">    /**</a>
-<span class="sourceLineNo">177</span><a id="line.177">     * Removes all vertices and edges from the graph.</a>
-<span class="sourceLineNo">178</span><a id="line.178">     */</a>
-<span class="sourceLineNo">179</span><a id="line.179">    public void removeAllVertices() {</a>
-<span class="sourceLineNo">180</span><a id="line.180">        edgeMap.clear();</a>
-<span class="sourceLineNo">181</span><a id="line.181">        vertexMap.clear();</a>
-<span class="sourceLineNo">182</span><a id="line.182">    }</a>
-<span class="sourceLineNo">183</span><a id="line.183"></a>
-<span class="sourceLineNo">184</span><a id="line.184">    /**</a>
-<span class="sourceLineNo">185</span><a id="line.185">     * Sort the vertices using the provided comparator. This is reflected in the iteration order of the collection returned</a>
-<span class="sourceLineNo">186</span><a id="line.186">     * by {@link #getVertices()}, as well as algorithms which involve iterating over all vertices.</a>
-<span class="sourceLineNo">187</span><a id="line.187">     * @param comparator a comparator for comparing vertices</a>
-<span class="sourceLineNo">188</span><a id="line.188">     */</a>
-<span class="sourceLineNo">189</span><a id="line.189">    public void sortVertices(Comparator&lt;V&gt; comparator) {</a>
-<span class="sourceLineNo">190</span><a id="line.190">        vertexMap.sort(comparator);</a>
-<span class="sourceLineNo">191</span><a id="line.191">    }</a>
-<span class="sourceLineNo">192</span><a id="line.192"></a>
-<span class="sourceLineNo">193</span><a id="line.193">    /**</a>
-<span class="sourceLineNo">194</span><a id="line.194">     * Sort the edges using the provided comparator. This is reflected in the iteration order of the collection returned</a>
-<span class="sourceLineNo">195</span><a id="line.195">     * by {@link #getEdges()}, as well as algorithms which involve iterating over all edges.</a>
-<span class="sourceLineNo">196</span><a id="line.196">     * @param comparator a comparator for comparing edges</a>
-<span class="sourceLineNo">197</span><a id="line.197">     */</a>
-<span class="sourceLineNo">198</span><a id="line.198">    public void sortEdges(Comparator&lt;Connection&lt;V&gt;&gt; comparator) {</a>
-<span class="sourceLineNo">199</span><a id="line.199">        edgeMap.sort(comparator);</a>
-<span class="sourceLineNo">200</span><a id="line.200">    }</a>
-<span class="sourceLineNo">201</span><a id="line.201"></a>
-<span class="sourceLineNo">202</span><a id="line.202">    //--------------------</a>
-<span class="sourceLineNo">203</span><a id="line.203">    //  Internal Methods</a>
-<span class="sourceLineNo">204</span><a id="line.204">    //--------------------</a>
-<span class="sourceLineNo">205</span><a id="line.205"></a>
-<span class="sourceLineNo">206</span><a id="line.206">    protected void removeNode(Node&lt;V&gt; node) {</a>
-<span class="sourceLineNo">207</span><a id="line.207">        for (int i = node.outEdges.size()-1; i &gt;= 0; i--) {</a>
-<span class="sourceLineNo">208</span><a id="line.208">            removeConnection(node.outEdges.get(i).b, node);</a>
-<span class="sourceLineNo">209</span><a id="line.209">        }</a>
-<span class="sourceLineNo">210</span><a id="line.210">        node.disconnect();</a>
-<span class="sourceLineNo">211</span><a id="line.211">        vertexMap.remove(node.object);</a>
-<span class="sourceLineNo">212</span><a id="line.212">    }</a>
-<span class="sourceLineNo">213</span><a id="line.213"></a>
-<span class="sourceLineNo">214</span><a id="line.214">    protected Connection&lt;V&gt; addConnection(Node&lt;V&gt; a, Node&lt;V&gt; b) {</a>
-<span class="sourceLineNo">215</span><a id="line.215">        Connection&lt;V&gt; e = a.addEdge(b, Connection.DEFAULT_WEIGHT);</a>
-<span class="sourceLineNo">216</span><a id="line.216">        edgeMap.put(e, e);</a>
-<span class="sourceLineNo">217</span><a id="line.217">        return e;</a>
-<span class="sourceLineNo">218</span><a id="line.218">    }</a>
-<span class="sourceLineNo">219</span><a id="line.219"></a>
-<span class="sourceLineNo">220</span><a id="line.220">    protected Connection&lt;V&gt; addConnection(Node&lt;V&gt; a, Node&lt;V&gt; b, float weight) {</a>
-<span class="sourceLineNo">221</span><a id="line.221">        Connection&lt;V&gt; e = a.addEdge(b, weight);</a>
-<span class="sourceLineNo">222</span><a id="line.222">        edgeMap.put(e, e);</a>
-<span class="sourceLineNo">223</span><a id="line.223">        return e;</a>
-<span class="sourceLineNo">224</span><a id="line.224">    }</a>
-<span class="sourceLineNo">225</span><a id="line.225"></a>
-<span class="sourceLineNo">226</span><a id="line.226">    protected boolean removeConnection(Node&lt;V&gt; a, Node&lt;V&gt; b) {</a>
-<span class="sourceLineNo">227</span><a id="line.227">        Connection&lt;V&gt; e = a.removeEdge(b);</a>
-<span class="sourceLineNo">228</span><a id="line.228">        if (e == null) return false;</a>
-<span class="sourceLineNo">229</span><a id="line.229">        edgeMap.remove(e);</a>
-<span class="sourceLineNo">230</span><a id="line.230">        return true;</a>
-<span class="sourceLineNo">231</span><a id="line.231">    }</a>
-<span class="sourceLineNo">232</span><a id="line.232"></a>
-<span class="sourceLineNo">233</span><a id="line.233">    //================================================================================</a>
-<span class="sourceLineNo">234</span><a id="line.234">    // Getters</a>
-<span class="sourceLineNo">235</span><a id="line.235">    //================================================================================</a>
-<span class="sourceLineNo">236</span><a id="line.236"></a>
-<span class="sourceLineNo">237</span><a id="line.237">    //--------------------</a>
-<span class="sourceLineNo">238</span><a id="line.238">    //  Public Getters</a>
-<span class="sourceLineNo">239</span><a id="line.239">    //--------------------</a>
-<span class="sourceLineNo">240</span><a id="line.240"></a>
-<span class="sourceLineNo">241</span><a id="line.241">    /**</a>
-<span class="sourceLineNo">242</span><a id="line.242">     * Check if the graph contains a vertex.</a>
-<span class="sourceLineNo">243</span><a id="line.243">     * @param v the vertex with which to check</a>
-<span class="sourceLineNo">244</span><a id="line.244">     * @return true if the graph contains the vertex, false otherwise</a>
-<span class="sourceLineNo">245</span><a id="line.245">     */</a>
-<span class="sourceLineNo">246</span><a id="line.246">    public boolean contains(V v) {</a>
-<span class="sourceLineNo">247</span><a id="line.247">        return vertexMap.containsKey(v);</a>
-<span class="sourceLineNo">248</span><a id="line.248">    }</a>
-<span class="sourceLineNo">249</span><a id="line.249"></a>
-<span class="sourceLineNo">250</span><a id="line.250">    /**</a>
-<span class="sourceLineNo">251</span><a id="line.251">     * Retrieve the edge which is from v to w.</a>
-<span class="sourceLineNo">252</span><a id="line.252">     * @param v the source vertex of the edge</a>
-<span class="sourceLineNo">253</span><a id="line.253">     * @param w the destination vertex of the edge</a>
-<span class="sourceLineNo">254</span><a id="line.254">     * @return the edge if it is in the graph, otherwise null</a>
-<span class="sourceLineNo">255</span><a id="line.255">     */</a>
-<span class="sourceLineNo">256</span><a id="line.256">    public Edge&lt;V&gt; getEdge(V v, V w) {</a>
-<span class="sourceLineNo">257</span><a id="line.257">        Node&lt;V&gt; a = getNode(v), b = getNode(w);</a>
-<span class="sourceLineNo">258</span><a id="line.258">        if (a == null  || b == null) throw new IllegalArgumentException("At least one vertex is not in the graph");</a>
-<span class="sourceLineNo">259</span><a id="line.259">        return getEdge(a, b);</a>
-<span class="sourceLineNo">260</span><a id="line.260">    }</a>
-<span class="sourceLineNo">261</span><a id="line.261"></a>
-<span class="sourceLineNo">262</span><a id="line.262">    /**</a>
-<span class="sourceLineNo">263</span><a id="line.263">     * Check if the graph contains an edge from v to w.</a>
-<span class="sourceLineNo">264</span><a id="line.264">     * @param v the source vertex of the edge</a>
-<span class="sourceLineNo">265</span><a id="line.265">     * @param w the destination vertex of the edge</a>
-<span class="sourceLineNo">266</span><a id="line.266">     * @return true if the edge is in the graph, false otherwise</a>
-<span class="sourceLineNo">267</span><a id="line.267">     */</a>
-<span class="sourceLineNo">268</span><a id="line.268">    public boolean edgeExists(V v, V w) {</a>
-<span class="sourceLineNo">269</span><a id="line.269">        Node&lt;V&gt; a = getNode(v), b = getNode(w);</a>
-<span class="sourceLineNo">270</span><a id="line.270">        if (a == null  || b == null) throw new IllegalArgumentException("At least one vertex is not in the graph");</a>
-<span class="sourceLineNo">271</span><a id="line.271">        return connectionExists(a, b);</a>
-<span class="sourceLineNo">272</span><a id="line.272">    }</a>
-<span class="sourceLineNo">273</span><a id="line.273"></a>
-<span class="sourceLineNo">274</span><a id="line.274">    /**</a>
-<span class="sourceLineNo">275</span><a id="line.275">     * Get a collection containing all the edges which have v as a source.</a>
-<span class="sourceLineNo">276</span><a id="line.276">     * @param v the source vertex of all the edges</a>
-<span class="sourceLineNo">277</span><a id="line.277">     * @return an unmodifiable collection of edges</a>
-<span class="sourceLineNo">278</span><a id="line.278">     */</a>
-<span class="sourceLineNo">279</span><a id="line.279">    public List&lt;? extends Edge&lt;V&gt;&gt; getEdges(V v) {</a>
-<span class="sourceLineNo">280</span><a id="line.280">        Node&lt;V&gt; node = getNode(v);</a>
-<span class="sourceLineNo">281</span><a id="line.281">        if (node==null) return null;</a>
-<span class="sourceLineNo">282</span><a id="line.282">        return Collections.unmodifiableList(node.outEdges);</a>
-<span class="sourceLineNo">283</span><a id="line.283">    }</a>
-<span class="sourceLineNo">284</span><a id="line.284"></a>
-<span class="sourceLineNo">285</span><a id="line.285">    /**</a>
-<span class="sourceLineNo">286</span><a id="line.286">     * Get a collection containing all the edges in the graph.</a>
-<span class="sourceLineNo">287</span><a id="line.287">     * @return an unmodifiable collection of all the edges in the graph</a>
-<span class="sourceLineNo">288</span><a id="line.288">     */</a>
-<span class="sourceLineNo">289</span><a id="line.289">    public SortedSet&lt;? extends Edge&lt;V&gt;&gt; getEdges() {</a>
-<span class="sourceLineNo">290</span><a id="line.290">        return Collections.unmodifiableSortedSet(edgeMap.keySet());</a>
-<span class="sourceLineNo">291</span><a id="line.291">    }</a>
-<span class="sourceLineNo">292</span><a id="line.292"></a>
-<span class="sourceLineNo">293</span><a id="line.293">    /**</a>
-<span class="sourceLineNo">294</span><a id="line.294">     * Get a collection containing all the vertices in the graph.</a>
-<span class="sourceLineNo">295</span><a id="line.295">     * @return an unmodifiable collection of all the vertices in the graph</a>
-<span class="sourceLineNo">296</span><a id="line.296">     */</a>
-<span class="sourceLineNo">297</span><a id="line.297">    public SortedSet&lt;V&gt; getVertices() {</a>
-<span class="sourceLineNo">298</span><a id="line.298">        return Collections.unmodifiableSortedSet(vertexMap.keySet());</a>
-<span class="sourceLineNo">299</span><a id="line.299">    }</a>
-<span class="sourceLineNo">300</span><a id="line.300"></a>
-<span class="sourceLineNo">301</span><a id="line.301"></a>
-<span class="sourceLineNo">302</span><a id="line.302">    /**</a>
-<span class="sourceLineNo">303</span><a id="line.303">     * Check if the graph is directed, that is whether the edges form an ordered pair or a set.</a>
-<span class="sourceLineNo">304</span><a id="line.304">     * @return whether the graph is directed</a>
-<span class="sourceLineNo">305</span><a id="line.305">     */</a>
-<span class="sourceLineNo">306</span><a id="line.306">    public boolean isDirected() {</a>
-<span class="sourceLineNo">307</span><a id="line.307">        return true;</a>
-<span class="sourceLineNo">308</span><a id="line.308">    }</a>
-<span class="sourceLineNo">309</span><a id="line.309"></a>
-<span class="sourceLineNo">310</span><a id="line.310">    /**</a>
-<span class="sourceLineNo">311</span><a id="line.311">     * Get the number of vertices in the graph.</a>
-<span class="sourceLineNo">312</span><a id="line.312">     * @return the number of vertices</a>
-<span class="sourceLineNo">313</span><a id="line.313">     */</a>
-<span class="sourceLineNo">314</span><a id="line.314">    public int size() {</a>
-<span class="sourceLineNo">315</span><a id="line.315">        return vertexMap.size();</a>
-<span class="sourceLineNo">316</span><a id="line.316">    }</a>
-<span class="sourceLineNo">317</span><a id="line.317"></a>
-<span class="sourceLineNo">318</span><a id="line.318">    /**</a>
-<span class="sourceLineNo">319</span><a id="line.319">     * Get the number of edges in the graph.</a>
-<span class="sourceLineNo">320</span><a id="line.320">     * @return the number of edges</a>
-<span class="sourceLineNo">321</span><a id="line.321">     */</a>
-<span class="sourceLineNo">322</span><a id="line.322">    public int getEdgeCount() {</a>
-<span class="sourceLineNo">323</span><a id="line.323">        return edgeMap.size();</a>
-<span class="sourceLineNo">324</span><a id="line.324">    }</a>
-<span class="sourceLineNo">325</span><a id="line.325"></a>
-<span class="sourceLineNo">326</span><a id="line.326"></a>
-<span class="sourceLineNo">327</span><a id="line.327">    //--------------------</a>
-<span class="sourceLineNo">328</span><a id="line.328">    //  Internal Getters</a>
-<span class="sourceLineNo">329</span><a id="line.329">    //--------------------</a>
-<span class="sourceLineNo">330</span><a id="line.330"></a>
-<span class="sourceLineNo">331</span><a id="line.331">    protected Node&lt;V&gt; getNode(V v) {</a>
-<span class="sourceLineNo">332</span><a id="line.332">        return vertexMap.get(v);</a>
-<span class="sourceLineNo">333</span><a id="line.333">    }</a>
-<span class="sourceLineNo">334</span><a id="line.334"></a>
-<span class="sourceLineNo">335</span><a id="line.335">    protected Collection&lt;Node&lt;V&gt;&gt; getNodes() {</a>
-<span class="sourceLineNo">336</span><a id="line.336">        return vertexMap.values();</a>
-<span class="sourceLineNo">337</span><a id="line.337">    }</a>
-<span class="sourceLineNo">338</span><a id="line.338"></a>
-<span class="sourceLineNo">339</span><a id="line.339">    protected boolean connectionExists(Node&lt;V&gt; u, Node&lt;V&gt; v) {</a>
-<span class="sourceLineNo">340</span><a id="line.340">        return u.getEdge(v) != null;</a>
-<span class="sourceLineNo">341</span><a id="line.341">    }</a>
-<span class="sourceLineNo">342</span><a id="line.342"></a>
-<span class="sourceLineNo">343</span><a id="line.343">    protected Connection&lt;V&gt; getEdge(Node&lt;V&gt; a, Node&lt;V&gt; b) {</a>
-<span class="sourceLineNo">344</span><a id="line.344">        return a.getEdge(b);</a>
-<span class="sourceLineNo">345</span><a id="line.345">    }</a>
-<span class="sourceLineNo">346</span><a id="line.346"></a>
-<span class="sourceLineNo">347</span><a id="line.347"></a>
-<span class="sourceLineNo">348</span><a id="line.348"></a>
-<span class="sourceLineNo">349</span><a id="line.349">}</a>
+<div class="source-container">
+<pre><span class="source-line-no">001</span><span id="line.1">/*</span>
+<span class="source-line-no">002</span><span id="line.2">MIT License</span>
+<span class="source-line-no">003</span><span id="line.3"></span>
+<span class="source-line-no">004</span><span id="line.4">Copyright (c) 2020 earlygrey</span>
+<span class="source-line-no">005</span><span id="line.5"></span>
+<span class="source-line-no">006</span><span id="line.6">Permission is hereby granted, free of charge, to any person obtaining a copy</span>
+<span class="source-line-no">007</span><span id="line.7">of this software and associated documentation files (the "Software"), to deal</span>
+<span class="source-line-no">008</span><span id="line.8">in the Software without restriction, including without limitation the rights</span>
+<span class="source-line-no">009</span><span id="line.9">to use, copy, modify, merge, publish, distribute, sublicense, and/or sell</span>
+<span class="source-line-no">010</span><span id="line.10">copies of the Software, and to permit persons to whom the Software is</span>
+<span class="source-line-no">011</span><span id="line.11">furnished to do so, subject to the following conditions:</span>
+<span class="source-line-no">012</span><span id="line.12"></span>
+<span class="source-line-no">013</span><span id="line.13">The above copyright notice and this permission notice shall be included in all</span>
+<span class="source-line-no">014</span><span id="line.14">copies or substantial portions of the Software.</span>
+<span class="source-line-no">015</span><span id="line.15"></span>
+<span class="source-line-no">016</span><span id="line.16">THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span>
+<span class="source-line-no">017</span><span id="line.17">IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,</span>
+<span class="source-line-no">018</span><span id="line.18">FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE</span>
+<span class="source-line-no">019</span><span id="line.19">AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER</span>
+<span class="source-line-no">020</span><span id="line.20">LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,</span>
+<span class="source-line-no">021</span><span id="line.21">OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE</span>
+<span class="source-line-no">022</span><span id="line.22">SOFTWARE.</span>
+<span class="source-line-no">023</span><span id="line.23"> */</span>
+<span class="source-line-no">024</span><span id="line.24">package squidpony.squidai.graph;</span>
+<span class="source-line-no">025</span><span id="line.25"></span>
+<span class="source-line-no">026</span><span id="line.26">import squidpony.squidmath.OrderedMap;</span>
+<span class="source-line-no">027</span><span id="line.27"></span>
+<span class="source-line-no">028</span><span id="line.28">import java.util.*;</span>
+<span class="source-line-no">029</span><span id="line.29"></span>
+<span class="source-line-no">030</span><span id="line.30">/**</span>
+<span class="source-line-no">031</span><span id="line.31"> * Abstract superclass of actual Graph types, like {@link DirectedGraph} and {@link UndirectedGraph}.</span>
+<span class="source-line-no">032</span><span id="line.32"> * @param &lt;V&gt; the vertex type; often {@link squidpony.squidmath.Coord}</span>
+<span class="source-line-no">033</span><span id="line.33"> * @author earlygrey</span>
+<span class="source-line-no">034</span><span id="line.34"> */</span>
+<span class="source-line-no">035</span><span id="line.35">public abstract class Graph&lt;V&gt; {</span>
+<span class="source-line-no">036</span><span id="line.36"></span>
+<span class="source-line-no">037</span><span id="line.37">    //================================================================================</span>
+<span class="source-line-no">038</span><span id="line.38">    // Members</span>
+<span class="source-line-no">039</span><span id="line.39">    //================================================================================</span>
+<span class="source-line-no">040</span><span id="line.40">    </span>
+<span class="source-line-no">041</span><span id="line.41">    protected final OrderedMap&lt;V, Node&lt;V&gt;&gt; vertexMap;</span>
+<span class="source-line-no">042</span><span id="line.42">    protected final OrderedMap&lt;Connection&lt;V&gt;, Connection&lt;V&gt;&gt; edgeMap;</span>
+<span class="source-line-no">043</span><span id="line.43">    </span>
+<span class="source-line-no">044</span><span id="line.44">    //================================================================================</span>
+<span class="source-line-no">045</span><span id="line.45">    // Constructors</span>
+<span class="source-line-no">046</span><span id="line.46">    //================================================================================</span>
+<span class="source-line-no">047</span><span id="line.47"></span>
+<span class="source-line-no">048</span><span id="line.48">    protected Graph() {</span>
+<span class="source-line-no">049</span><span id="line.49">        vertexMap = new OrderedMap&lt;&gt;();</span>
+<span class="source-line-no">050</span><span id="line.50">        edgeMap = new OrderedMap&lt;&gt;();</span>
+<span class="source-line-no">051</span><span id="line.51">    }</span>
+<span class="source-line-no">052</span><span id="line.52"></span>
+<span class="source-line-no">053</span><span id="line.53">    protected Graph(Collection&lt;V&gt; vertices) {</span>
+<span class="source-line-no">054</span><span id="line.54">        this();</span>
+<span class="source-line-no">055</span><span id="line.55">        for (V v : vertices) {</span>
+<span class="source-line-no">056</span><span id="line.56">            addVertex(v);</span>
+<span class="source-line-no">057</span><span id="line.57">        }</span>
+<span class="source-line-no">058</span><span id="line.58">    }</span>
+<span class="source-line-no">059</span><span id="line.59"></span>
+<span class="source-line-no">060</span><span id="line.60">    //================================================================================</span>
+<span class="source-line-no">061</span><span id="line.61">    // Graph Builders</span>
+<span class="source-line-no">062</span><span id="line.62">    //================================================================================</span>
+<span class="source-line-no">063</span><span id="line.63"></span>
+<span class="source-line-no">064</span><span id="line.64">    //--------------------</span>
+<span class="source-line-no">065</span><span id="line.65">    //  Abstract Methods</span>
+<span class="source-line-no">066</span><span id="line.66">    //--------------------</span>
+<span class="source-line-no">067</span><span id="line.67"></span>
+<span class="source-line-no">068</span><span id="line.68">    protected abstract Connection&lt;V&gt; obtainEdge();</span>
+<span class="source-line-no">069</span><span id="line.69">    protected abstract Graph&lt;V&gt; createNew();</span>
+<span class="source-line-no">070</span><span id="line.70">    public abstract Algorithms&lt;V&gt; algorithms();</span>
+<span class="source-line-no">071</span><span id="line.71"></span>
+<span class="source-line-no">072</span><span id="line.72">    //--------------------</span>
+<span class="source-line-no">073</span><span id="line.73">    //  Public Methods</span>
+<span class="source-line-no">074</span><span id="line.74">    //--------------------</span>
+<span class="source-line-no">075</span><span id="line.75"></span>
+<span class="source-line-no">076</span><span id="line.76">    /**</span>
+<span class="source-line-no">077</span><span id="line.77">     * Adds a vertex to the graph.</span>
+<span class="source-line-no">078</span><span id="line.78">     * @param v the vertex to be added</span>
+<span class="source-line-no">079</span><span id="line.79">     * @return true if the vertex was not already in the graph, false otherwise</span>
+<span class="source-line-no">080</span><span id="line.80">     */</span>
+<span class="source-line-no">081</span><span id="line.81"></span>
+<span class="source-line-no">082</span><span id="line.82">    public boolean addVertex(V v) {</span>
+<span class="source-line-no">083</span><span id="line.83">        Node&lt;V&gt; node = getNode(v);</span>
+<span class="source-line-no">084</span><span id="line.84">        if (node!=null) return false;</span>
+<span class="source-line-no">085</span><span id="line.85">        node = new Node&lt;&gt;(v, this);</span>
+<span class="source-line-no">086</span><span id="line.86">        vertexMap.put(v, node);</span>
+<span class="source-line-no">087</span><span id="line.87">        return true;</span>
+<span class="source-line-no">088</span><span id="line.88">    }</span>
+<span class="source-line-no">089</span><span id="line.89"></span>
+<span class="source-line-no">090</span><span id="line.90">    /**</span>
+<span class="source-line-no">091</span><span id="line.91">     * Adds all the vertices in the collection to the graph.</span>
+<span class="source-line-no">092</span><span id="line.92">     * @param vertices a collection of vertices to be added</span>
+<span class="source-line-no">093</span><span id="line.93">     */</span>
+<span class="source-line-no">094</span><span id="line.94">    public void addVertices(Collection&lt;V&gt; vertices) {</span>
+<span class="source-line-no">095</span><span id="line.95">        for (V v : vertices) {</span>
+<span class="source-line-no">096</span><span id="line.96">            addVertex(v);</span>
+<span class="source-line-no">097</span><span id="line.97">        }</span>
+<span class="source-line-no">098</span><span id="line.98">    }</span>
+<span class="source-line-no">099</span><span id="line.99"></span>
+<span class="source-line-no">100</span><span id="line.100">    /**</span>
+<span class="source-line-no">101</span><span id="line.101">     * Removes a vertex from the graph, and any adjacent edges.</span>
+<span class="source-line-no">102</span><span id="line.102">     * @param v the vertex to be removed</span>
+<span class="source-line-no">103</span><span id="line.103">     * @return true if the vertex was in the graph, false otherwise</span>
+<span class="source-line-no">104</span><span id="line.104">     */</span>
+<span class="source-line-no">105</span><span id="line.105">    public boolean removeVertex(V v) {</span>
+<span class="source-line-no">106</span><span id="line.106">        Node&lt;V&gt; existing = getNode(v);</span>
+<span class="source-line-no">107</span><span id="line.107">        if (existing==null) return false;</span>
+<span class="source-line-no">108</span><span id="line.108">        removeNode(existing);</span>
+<span class="source-line-no">109</span><span id="line.109">        return true;</span>
+<span class="source-line-no">110</span><span id="line.110">    }</span>
+<span class="source-line-no">111</span><span id="line.111"></span>
+<span class="source-line-no">112</span><span id="line.112">    /**</span>
+<span class="source-line-no">113</span><span id="line.113">     * Removes all the vertices in the collection from the graph, and any adjacent edges.</span>
+<span class="source-line-no">114</span><span id="line.114">     * @param vertices vertices a collection of vertices to be removed</span>
+<span class="source-line-no">115</span><span id="line.115">     */</span>
+<span class="source-line-no">116</span><span id="line.116">    public void removeVertices(Collection&lt;V&gt; vertices) {</span>
+<span class="source-line-no">117</span><span id="line.117">        for (V v : vertices) {</span>
+<span class="source-line-no">118</span><span id="line.118">            removeVertex(v);</span>
+<span class="source-line-no">119</span><span id="line.119">        }</span>
+<span class="source-line-no">120</span><span id="line.120">    }</span>
+<span class="source-line-no">121</span><span id="line.121"></span>
+<span class="source-line-no">122</span><span id="line.122">    /**</span>
+<span class="source-line-no">123</span><span id="line.123">     * Add an edge to the graph, from v to w. The edge will have a default weight of 1.</span>
+<span class="source-line-no">124</span><span id="line.124">     * If there is already an edge between v and w, its weight will be set to 1.</span>
+<span class="source-line-no">125</span><span id="line.125">     * @param v the source vertex of the edge</span>
+<span class="source-line-no">126</span><span id="line.126">     * @param w the destination vertex of the edge</span>
+<span class="source-line-no">127</span><span id="line.127">     * @return the edge</span>
+<span class="source-line-no">128</span><span id="line.128">     */</span>
+<span class="source-line-no">129</span><span id="line.129">    public Connection&lt;V&gt; addEdge(V v, V w) {</span>
+<span class="source-line-no">130</span><span id="line.130">        return addEdge(v, w, Connection.DEFAULT_WEIGHT);</span>
+<span class="source-line-no">131</span><span id="line.131">    }</span>
+<span class="source-line-no">132</span><span id="line.132"></span>
+<span class="source-line-no">133</span><span id="line.133">    /**</span>
+<span class="source-line-no">134</span><span id="line.134">     * Add an edge to the graph, from v to w and with the specified weight.</span>
+<span class="source-line-no">135</span><span id="line.135">     * If there is already an edge between v and w, its weight will be set to the specified weight.</span>
+<span class="source-line-no">136</span><span id="line.136">     * @param v the source vertex of the edge</span>
+<span class="source-line-no">137</span><span id="line.137">     * @param w the destination vertex of the edge</span>
+<span class="source-line-no">138</span><span id="line.138">     * @param weight the weight of the edge</span>
+<span class="source-line-no">139</span><span id="line.139">     * @return the edge</span>
+<span class="source-line-no">140</span><span id="line.140">     */</span>
+<span class="source-line-no">141</span><span id="line.141">    public Connection&lt;V&gt; addEdge(V v, V w, float weight) {</span>
+<span class="source-line-no">142</span><span id="line.142">        if (v == null || w == null) throw new IllegalArgumentException("Vertices cannot be null");</span>
+<span class="source-line-no">143</span><span id="line.143">        if (v.equals(w)) throw new IllegalArgumentException("Self loops are not allowed");</span>
+<span class="source-line-no">144</span><span id="line.144">        Node&lt;V&gt; a = getNode(v);</span>
+<span class="source-line-no">145</span><span id="line.145">        Node&lt;V&gt; b = getNode(w);</span>
+<span class="source-line-no">146</span><span id="line.146">        if (a == null  || b == null) throw new IllegalArgumentException("At least one vertex is not in the graph");</span>
+<span class="source-line-no">147</span><span id="line.147">        return addConnection(a, b, weight);</span>
+<span class="source-line-no">148</span><span id="line.148">    }</span>
+<span class="source-line-no">149</span><span id="line.149"></span>
+<span class="source-line-no">150</span><span id="line.150">    /**</span>
+<span class="source-line-no">151</span><span id="line.151">     * Removes the edge from v to w from the graph.</span>
+<span class="source-line-no">152</span><span id="line.152">     * @param v the source vertex of the edge</span>
+<span class="source-line-no">153</span><span id="line.153">     * @param w the destination vertex of the edge</span>
+<span class="source-line-no">154</span><span id="line.154">     * @return the edge if there exists an edge from v to w, or null if there is no edge</span>
+<span class="source-line-no">155</span><span id="line.155">     */</span>
+<span class="source-line-no">156</span><span id="line.156">    public boolean removeEdge(V v, V w) {</span>
+<span class="source-line-no">157</span><span id="line.157">        Node&lt;V&gt; a = getNode(v), b = getNode(w);</span>
+<span class="source-line-no">158</span><span id="line.158">        if (a == null  || b == null) throw new IllegalArgumentException("At least one vertex is not in the graph");</span>
+<span class="source-line-no">159</span><span id="line.159">        return removeConnection(a, b);</span>
+<span class="source-line-no">160</span><span id="line.160">    }</span>
+<span class="source-line-no">161</span><span id="line.161"></span>
+<span class="source-line-no">162</span><span id="line.162">    public boolean removeEdge(Edge&lt;V&gt; edge) {</span>
+<span class="source-line-no">163</span><span id="line.163">        return removeConnection(edge.getInternalNodeA(), edge.getInternalNodeB());</span>
+<span class="source-line-no">164</span><span id="line.164">    }</span>
+<span class="source-line-no">165</span><span id="line.165"></span>
+<span class="source-line-no">166</span><span id="line.166">    /**</span>
+<span class="source-line-no">167</span><span id="line.167">     * Removes all edges from the graph.</span>
+<span class="source-line-no">168</span><span id="line.168">     */</span>
+<span class="source-line-no">169</span><span id="line.169">    public void removeAllEdges() {</span>
+<span class="source-line-no">170</span><span id="line.170">        for (Node&lt;V&gt; v : getNodes()) {</span>
+<span class="source-line-no">171</span><span id="line.171">            v.disconnect();</span>
+<span class="source-line-no">172</span><span id="line.172">        }</span>
+<span class="source-line-no">173</span><span id="line.173">        edgeMap.clear();</span>
+<span class="source-line-no">174</span><span id="line.174">    }</span>
+<span class="source-line-no">175</span><span id="line.175"></span>
+<span class="source-line-no">176</span><span id="line.176">    /**</span>
+<span class="source-line-no">177</span><span id="line.177">     * Removes all vertices and edges from the graph.</span>
+<span class="source-line-no">178</span><span id="line.178">     */</span>
+<span class="source-line-no">179</span><span id="line.179">    public void removeAllVertices() {</span>
+<span class="source-line-no">180</span><span id="line.180">        edgeMap.clear();</span>
+<span class="source-line-no">181</span><span id="line.181">        vertexMap.clear();</span>
+<span class="source-line-no">182</span><span id="line.182">    }</span>
+<span class="source-line-no">183</span><span id="line.183"></span>
+<span class="source-line-no">184</span><span id="line.184">    /**</span>
+<span class="source-line-no">185</span><span id="line.185">     * Sort the vertices using the provided comparator. This is reflected in the iteration order of the collection returned</span>
+<span class="source-line-no">186</span><span id="line.186">     * by {@link #getVertices()}, as well as algorithms which involve iterating over all vertices.</span>
+<span class="source-line-no">187</span><span id="line.187">     * @param comparator a comparator for comparing vertices</span>
+<span class="source-line-no">188</span><span id="line.188">     */</span>
+<span class="source-line-no">189</span><span id="line.189">    public void sortVertices(Comparator&lt;V&gt; comparator) {</span>
+<span class="source-line-no">190</span><span id="line.190">        vertexMap.sort(comparator);</span>
+<span class="source-line-no">191</span><span id="line.191">    }</span>
+<span class="source-line-no">192</span><span id="line.192"></span>
+<span class="source-line-no">193</span><span id="line.193">    /**</span>
+<span class="source-line-no">194</span><span id="line.194">     * Sort the edges using the provided comparator. This is reflected in the iteration order of the collection returned</span>
+<span class="source-line-no">195</span><span id="line.195">     * by {@link #getEdges()}, as well as algorithms which involve iterating over all edges.</span>
+<span class="source-line-no">196</span><span id="line.196">     * @param comparator a comparator for comparing edges</span>
+<span class="source-line-no">197</span><span id="line.197">     */</span>
+<span class="source-line-no">198</span><span id="line.198">    public void sortEdges(Comparator&lt;Connection&lt;V&gt;&gt; comparator) {</span>
+<span class="source-line-no">199</span><span id="line.199">        edgeMap.sort(comparator);</span>
+<span class="source-line-no">200</span><span id="line.200">    }</span>
+<span class="source-line-no">201</span><span id="line.201"></span>
+<span class="source-line-no">202</span><span id="line.202">    //--------------------</span>
+<span class="source-line-no">203</span><span id="line.203">    //  Internal Methods</span>
+<span class="source-line-no">204</span><span id="line.204">    //--------------------</span>
+<span class="source-line-no">205</span><span id="line.205"></span>
+<span class="source-line-no">206</span><span id="line.206">    protected void removeNode(Node&lt;V&gt; node) {</span>
+<span class="source-line-no">207</span><span id="line.207">        for (int i = node.outEdges.size()-1; i &gt;= 0; i--) {</span>
+<span class="source-line-no">208</span><span id="line.208">            removeConnection(node.outEdges.get(i).b, node);</span>
+<span class="source-line-no">209</span><span id="line.209">        }</span>
+<span class="source-line-no">210</span><span id="line.210">        node.disconnect();</span>
+<span class="source-line-no">211</span><span id="line.211">        vertexMap.remove(node.object);</span>
+<span class="source-line-no">212</span><span id="line.212">    }</span>
+<span class="source-line-no">213</span><span id="line.213"></span>
+<span class="source-line-no">214</span><span id="line.214">    protected Connection&lt;V&gt; addConnection(Node&lt;V&gt; a, Node&lt;V&gt; b) {</span>
+<span class="source-line-no">215</span><span id="line.215">        Connection&lt;V&gt; e = a.addEdge(b, Connection.DEFAULT_WEIGHT);</span>
+<span class="source-line-no">216</span><span id="line.216">        edgeMap.put(e, e);</span>
+<span class="source-line-no">217</span><span id="line.217">        return e;</span>
+<span class="source-line-no">218</span><span id="line.218">    }</span>
+<span class="source-line-no">219</span><span id="line.219"></span>
+<span class="source-line-no">220</span><span id="line.220">    protected Connection&lt;V&gt; addConnection(Node&lt;V&gt; a, Node&lt;V&gt; b, float weight) {</span>
+<span class="source-line-no">221</span><span id="line.221">        Connection&lt;V&gt; e = a.addEdge(b, weight);</span>
+<span class="source-line-no">222</span><span id="line.222">        edgeMap.put(e, e);</span>
+<span class="source-line-no">223</span><span id="line.223">        return e;</span>
+<span class="source-line-no">224</span><span id="line.224">    }</span>
+<span class="source-line-no">225</span><span id="line.225"></span>
+<span class="source-line-no">226</span><span id="line.226">    protected boolean removeConnection(Node&lt;V&gt; a, Node&lt;V&gt; b) {</span>
+<span class="source-line-no">227</span><span id="line.227">        Connection&lt;V&gt; e = a.removeEdge(b);</span>
+<span class="source-line-no">228</span><span id="line.228">        if (e == null) return false;</span>
+<span class="source-line-no">229</span><span id="line.229">        edgeMap.remove(e);</span>
+<span class="source-line-no">230</span><span id="line.230">        return true;</span>
+<span class="source-line-no">231</span><span id="line.231">    }</span>
+<span class="source-line-no">232</span><span id="line.232"></span>
+<span class="source-line-no">233</span><span id="line.233">    //================================================================================</span>
+<span class="source-line-no">234</span><span id="line.234">    // Getters</span>
+<span class="source-line-no">235</span><span id="line.235">    //================================================================================</span>
+<span class="source-line-no">236</span><span id="line.236"></span>
+<span class="source-line-no">237</span><span id="line.237">    //--------------------</span>
+<span class="source-line-no">238</span><span id="line.238">    //  Public Getters</span>
+<span class="source-line-no">239</span><span id="line.239">    //--------------------</span>
+<span class="source-line-no">240</span><span id="line.240"></span>
+<span class="source-line-no">241</span><span id="line.241">    /**</span>
+<span class="source-line-no">242</span><span id="line.242">     * Check if the graph contains a vertex.</span>
+<span class="source-line-no">243</span><span id="line.243">     * @param v the vertex with which to check</span>
+<span class="source-line-no">244</span><span id="line.244">     * @return true if the graph contains the vertex, false otherwise</span>
+<span class="source-line-no">245</span><span id="line.245">     */</span>
+<span class="source-line-no">246</span><span id="line.246">    public boolean contains(V v) {</span>
+<span class="source-line-no">247</span><span id="line.247">        return vertexMap.containsKey(v);</span>
+<span class="source-line-no">248</span><span id="line.248">    }</span>
+<span class="source-line-no">249</span><span id="line.249"></span>
+<span class="source-line-no">250</span><span id="line.250">    /**</span>
+<span class="source-line-no">251</span><span id="line.251">     * Retrieve the edge which is from v to w.</span>
+<span class="source-line-no">252</span><span id="line.252">     * @param v the source vertex of the edge</span>
+<span class="source-line-no">253</span><span id="line.253">     * @param w the destination vertex of the edge</span>
+<span class="source-line-no">254</span><span id="line.254">     * @return the edge if it is in the graph, otherwise null</span>
+<span class="source-line-no">255</span><span id="line.255">     */</span>
+<span class="source-line-no">256</span><span id="line.256">    public Edge&lt;V&gt; getEdge(V v, V w) {</span>
+<span class="source-line-no">257</span><span id="line.257">        Node&lt;V&gt; a = getNode(v), b = getNode(w);</span>
+<span class="source-line-no">258</span><span id="line.258">        if (a == null  || b == null) throw new IllegalArgumentException("At least one vertex is not in the graph");</span>
+<span class="source-line-no">259</span><span id="line.259">        return getEdge(a, b);</span>
+<span class="source-line-no">260</span><span id="line.260">    }</span>
+<span class="source-line-no">261</span><span id="line.261"></span>
+<span class="source-line-no">262</span><span id="line.262">    /**</span>
+<span class="source-line-no">263</span><span id="line.263">     * Check if the graph contains an edge from v to w.</span>
+<span class="source-line-no">264</span><span id="line.264">     * @param v the source vertex of the edge</span>
+<span class="source-line-no">265</span><span id="line.265">     * @param w the destination vertex of the edge</span>
+<span class="source-line-no">266</span><span id="line.266">     * @return true if the edge is in the graph, false otherwise</span>
+<span class="source-line-no">267</span><span id="line.267">     */</span>
+<span class="source-line-no">268</span><span id="line.268">    public boolean edgeExists(V v, V w) {</span>
+<span class="source-line-no">269</span><span id="line.269">        Node&lt;V&gt; a = getNode(v), b = getNode(w);</span>
+<span class="source-line-no">270</span><span id="line.270">        if (a == null  || b == null) throw new IllegalArgumentException("At least one vertex is not in the graph");</span>
+<span class="source-line-no">271</span><span id="line.271">        return connectionExists(a, b);</span>
+<span class="source-line-no">272</span><span id="line.272">    }</span>
+<span class="source-line-no">273</span><span id="line.273"></span>
+<span class="source-line-no">274</span><span id="line.274">    /**</span>
+<span class="source-line-no">275</span><span id="line.275">     * Get a collection containing all the edges which have v as a source.</span>
+<span class="source-line-no">276</span><span id="line.276">     * @param v the source vertex of all the edges</span>
+<span class="source-line-no">277</span><span id="line.277">     * @return an unmodifiable collection of edges</span>
+<span class="source-line-no">278</span><span id="line.278">     */</span>
+<span class="source-line-no">279</span><span id="line.279">    public List&lt;? extends Edge&lt;V&gt;&gt; getEdges(V v) {</span>
+<span class="source-line-no">280</span><span id="line.280">        Node&lt;V&gt; node = getNode(v);</span>
+<span class="source-line-no">281</span><span id="line.281">        if (node==null) return null;</span>
+<span class="source-line-no">282</span><span id="line.282">        return Collections.unmodifiableList(node.outEdges);</span>
+<span class="source-line-no">283</span><span id="line.283">    }</span>
+<span class="source-line-no">284</span><span id="line.284"></span>
+<span class="source-line-no">285</span><span id="line.285">    /**</span>
+<span class="source-line-no">286</span><span id="line.286">     * Get a collection containing all the edges in the graph.</span>
+<span class="source-line-no">287</span><span id="line.287">     * @return an unmodifiable collection of all the edges in the graph</span>
+<span class="source-line-no">288</span><span id="line.288">     */</span>
+<span class="source-line-no">289</span><span id="line.289">    public SortedSet&lt;? extends Edge&lt;V&gt;&gt; getEdges() {</span>
+<span class="source-line-no">290</span><span id="line.290">        return Collections.unmodifiableSortedSet(edgeMap.keySet());</span>
+<span class="source-line-no">291</span><span id="line.291">    }</span>
+<span class="source-line-no">292</span><span id="line.292"></span>
+<span class="source-line-no">293</span><span id="line.293">    /**</span>
+<span class="source-line-no">294</span><span id="line.294">     * Get a collection containing all the vertices in the graph.</span>
+<span class="source-line-no">295</span><span id="line.295">     * @return an unmodifiable collection of all the vertices in the graph</span>
+<span class="source-line-no">296</span><span id="line.296">     */</span>
+<span class="source-line-no">297</span><span id="line.297">    public SortedSet&lt;V&gt; getVertices() {</span>
+<span class="source-line-no">298</span><span id="line.298">        return Collections.unmodifiableSortedSet(vertexMap.keySet());</span>
+<span class="source-line-no">299</span><span id="line.299">    }</span>
+<span class="source-line-no">300</span><span id="line.300"></span>
+<span class="source-line-no">301</span><span id="line.301"></span>
+<span class="source-line-no">302</span><span id="line.302">    /**</span>
+<span class="source-line-no">303</span><span id="line.303">     * Check if the graph is directed, that is whether the edges form an ordered pair or a set.</span>
+<span class="source-line-no">304</span><span id="line.304">     * @return whether the graph is directed</span>
+<span class="source-line-no">305</span><span id="line.305">     */</span>
+<span class="source-line-no">306</span><span id="line.306">    public boolean isDirected() {</span>
+<span class="source-line-no">307</span><span id="line.307">        return true;</span>
+<span class="source-line-no">308</span><span id="line.308">    }</span>
+<span class="source-line-no">309</span><span id="line.309"></span>
+<span class="source-line-no">310</span><span id="line.310">    /**</span>
+<span class="source-line-no">311</span><span id="line.311">     * Get the number of vertices in the graph.</span>
+<span class="source-line-no">312</span><span id="line.312">     * @return the number of vertices</span>
+<span class="source-line-no">313</span><span id="line.313">     */</span>
+<span class="source-line-no">314</span><span id="line.314">    public int size() {</span>
+<span class="source-line-no">315</span><span id="line.315">        return vertexMap.size();</span>
+<span class="source-line-no">316</span><span id="line.316">    }</span>
+<span class="source-line-no">317</span><span id="line.317"></span>
+<span class="source-line-no">318</span><span id="line.318">    /**</span>
+<span class="source-line-no">319</span><span id="line.319">     * Get the number of edges in the graph.</span>
+<span class="source-line-no">320</span><span id="line.320">     * @return the number of edges</span>
+<span class="source-line-no">321</span><span id="line.321">     */</span>
+<span class="source-line-no">322</span><span id="line.322">    public int getEdgeCount() {</span>
+<span class="source-line-no">323</span><span id="line.323">        return edgeMap.size();</span>
+<span class="source-line-no">324</span><span id="line.324">    }</span>
+<span class="source-line-no">325</span><span id="line.325"></span>
+<span class="source-line-no">326</span><span id="line.326"></span>
+<span class="source-line-no">327</span><span id="line.327">    //--------------------</span>
+<span class="source-line-no">328</span><span id="line.328">    //  Internal Getters</span>
+<span class="source-line-no">329</span><span id="line.329">    //--------------------</span>
+<span class="source-line-no">330</span><span id="line.330"></span>
+<span class="source-line-no">331</span><span id="line.331">    protected Node&lt;V&gt; getNode(V v) {</span>
+<span class="source-line-no">332</span><span id="line.332">        return vertexMap.get(v);</span>
+<span class="source-line-no">333</span><span id="line.333">    }</span>
+<span class="source-line-no">334</span><span id="line.334"></span>
+<span class="source-line-no">335</span><span id="line.335">    protected Collection&lt;Node&lt;V&gt;&gt; getNodes() {</span>
+<span class="source-line-no">336</span><span id="line.336">        return vertexMap.values();</span>
+<span class="source-line-no">337</span><span id="line.337">    }</span>
+<span class="source-line-no">338</span><span id="line.338"></span>
+<span class="source-line-no">339</span><span id="line.339">    protected boolean connectionExists(Node&lt;V&gt; u, Node&lt;V&gt; v) {</span>
+<span class="source-line-no">340</span><span id="line.340">        return u.getEdge(v) != null;</span>
+<span class="source-line-no">341</span><span id="line.341">    }</span>
+<span class="source-line-no">342</span><span id="line.342"></span>
+<span class="source-line-no">343</span><span id="line.343">    protected Connection&lt;V&gt; getEdge(Node&lt;V&gt; a, Node&lt;V&gt; b) {</span>
+<span class="source-line-no">344</span><span id="line.344">        return a.getEdge(b);</span>
+<span class="source-line-no">345</span><span id="line.345">    }</span>
+<span class="source-line-no">346</span><span id="line.346"></span>
+<span class="source-line-no">347</span><span id="line.347"></span>
+<span class="source-line-no">348</span><span id="line.348"></span>
+<span class="source-line-no">349</span><span id="line.349">}</span>
 
 
 

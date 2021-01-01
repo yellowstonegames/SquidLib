@@ -7,394 +7,394 @@
 <meta name="generator" content="javadoc/SourceToHTMLConverter">
 <link rel="stylesheet" type="text/css" href="../../../../stylesheet.css" title="Style">
 </head>
-<body class="source">
+<body class="source-page">
 <main role="main">
-<div class="sourceContainer">
-<pre><span class="sourceLineNo">001</span><a id="line.1">package squidpony.squidgrid.mapping;</a>
-<span class="sourceLineNo">002</span><a id="line.2"></a>
-<span class="sourceLineNo">003</span><a id="line.3">import squidpony.ArrayTools;</a>
-<span class="sourceLineNo">004</span><a id="line.4"></a>
-<span class="sourceLineNo">005</span><a id="line.5">import squidpony.squidmath.GWTRNG;</a>
-<span class="sourceLineNo">006</span><a id="line.6">import squidpony.squidmath.GreasedRegion;</a>
-<span class="sourceLineNo">007</span><a id="line.7">import squidpony.squidmath.IRNG;</a>
-<span class="sourceLineNo">008</span><a id="line.8">import squidpony.squidmath.IntIntOrderedMap;</a>
-<span class="sourceLineNo">009</span><a id="line.9">import squidpony.squidmath.IntVLA;</a>
-<span class="sourceLineNo">010</span><a id="line.10"></a>
-<span class="sourceLineNo">011</span><a id="line.11">/**</a>
-<span class="sourceLineNo">012</span><a id="line.12"> * A room placing algorithm developed by Rayvolution for his game Fail To Hero, this was simple to implement but</a>
-<span class="sourceLineNo">013</span><a id="line.13"> * delivers complex connectivity. It is meant to ensure all rooms are connected, but usually not directly, and many</a>
-<span class="sourceLineNo">014</span><a id="line.14"> * routes need to wind throughout the map to get to a goal.</a>
-<span class="sourceLineNo">015</span><a id="line.15"> * &lt;br&gt;</a>
-<span class="sourceLineNo">016</span><a id="line.16"> * With {@link #roomWidth} and {@link #roomHeight} set to 3, and {@link #wallThickness} set to 2:</a>
-<span class="sourceLineNo">017</span><a id="line.17"> * &lt;pre&gt;{@code</a>
-<span class="sourceLineNo">018</span><a id="line.18"> * ┌────────────────────────────┐┌────────┐┌────────┐┌────────┐</a>
-<span class="sourceLineNo">019</span><a id="line.19"> * │............................││........││........││........│</a>
-<span class="sourceLineNo">020</span><a id="line.20"> * │............................││........││........││........│</a>
-<span class="sourceLineNo">021</span><a id="line.21"> * │............................││........││........││........│</a>
-<span class="sourceLineNo">022</span><a id="line.22"> * │...┌──────────┐...┌─────┐...││...┌┐...│└────┐...││...┌────┘</a>
-<span class="sourceLineNo">023</span><a id="line.23"> * │...│┌───┐┌────┘...│┌────┘...└┘...││...└────┐│...││...└────┐</a>
-<span class="sourceLineNo">024</span><a id="line.24"> * │...││...││........││.............││........││...││........│</a>
-<span class="sourceLineNo">025</span><a id="line.25"> * │...││...││........││.............││........││...││........│</a>
-<span class="sourceLineNo">026</span><a id="line.26"> * │...││...││........││.......&lt;.....││........││...││........│</a>
-<span class="sourceLineNo">027</span><a id="line.27"> * └───┘│...││...┌────┘│...┌─────────┘└────────┘│...│└────┐...│</a>
-<span class="sourceLineNo">028</span><a id="line.28"> * ┌────┘...││...└────┐│...│┌───────────────────┘...└─────┘...│</a>
-<span class="sourceLineNo">029</span><a id="line.29"> * │........││........││...││.................................│</a>
-<span class="sourceLineNo">030</span><a id="line.30"> * │.......&gt;││........││...││.................................│</a>
-<span class="sourceLineNo">031</span><a id="line.31"> * │........││........││...││.................................│</a>
-<span class="sourceLineNo">032</span><a id="line.32"> * │...┌────┘└────┐...│└───┘│...┌─────────────────────────────┘</a>
-<span class="sourceLineNo">033</span><a id="line.33"> * │...│┌────────┐│...└─────┘...└────┐┌───┐┌────────┐┌────────┐</a>
-<span class="sourceLineNo">034</span><a id="line.34"> * │...││........││..................││...││........││........│</a>
-<span class="sourceLineNo">035</span><a id="line.35"> * │...││........││..................││...││........││........│</a>
-<span class="sourceLineNo">036</span><a id="line.36"> * │...││........││..................││...││........││........│</a>
-<span class="sourceLineNo">037</span><a id="line.37"> * │...││...┌┐...│└────┐...┌─────────┘│...│└────┐...│└────┐...│</a>
-<span class="sourceLineNo">038</span><a id="line.38"> * │...││...││...└─────┘...│┌────────┐│...└────┐│...└─────┘...│</a>
-<span class="sourceLineNo">039</span><a id="line.39"> * │...││...││.............││........││........││.............│</a>
-<span class="sourceLineNo">040</span><a id="line.40"> * │...││...││.............││........││........││.............│</a>
-<span class="sourceLineNo">041</span><a id="line.41"> * │...││...││.............││........││........││.............│</a>
-<span class="sourceLineNo">042</span><a id="line.42"> * │...││...││...┌─────────┘│...┌┐...││...┌────┘│...┌─────┐...│</a>
-<span class="sourceLineNo">043</span><a id="line.43"> * │...└┘...││...└──────────┘...││...└┘...└─────┘...│┌────┘...│</a>
-<span class="sourceLineNo">044</span><a id="line.44"> * │........││..................││..................││........│</a>
-<span class="sourceLineNo">045</span><a id="line.45"> * │........││..................││..................││........│</a>
-<span class="sourceLineNo">046</span><a id="line.46"> * │........││..................││..................││........│</a>
-<span class="sourceLineNo">047</span><a id="line.47"> * └────────┘└──────────────────┘└──────────────────┘└────────┘</a>
-<span class="sourceLineNo">048</span><a id="line.48"> * }&lt;/pre&gt;</a>
-<span class="sourceLineNo">049</span><a id="line.49"> * &lt;br&gt;</a>
-<span class="sourceLineNo">050</span><a id="line.50"> * With {@link #roomWidth}, {@link #roomHeight}, and {@link #wallThickness} all set to 1:</a>
-<span class="sourceLineNo">051</span><a id="line.51"> * &lt;pre&gt;{@code</a>
-<span class="sourceLineNo">052</span><a id="line.52"> * ┌───────────────┬─┬───────────┬─────┬───┬─────────┬─┬───┬─┐</a>
-<span class="sourceLineNo">053</span><a id="line.53"> * │...............│.│...........│.....│...│.........│.│...│.│</a>
-<span class="sourceLineNo">054</span><a id="line.54"> * │.┌──────────.┌─┘.│.┌──.────┬─┤.┌───┤.│.│.──┐.──┐.│.│.│.│.│</a>
-<span class="sourceLineNo">055</span><a id="line.55"> * │.│...........│.....│.......│.│.│...│.│.....│...│.│...│...│</a>
-<span class="sourceLineNo">056</span><a id="line.56"> * ├─┘.┌────.┌─┐.└─────┘.┌──.│.│.│.│.┌─┘.│.│.──┼───┤.└─┬─┘.│.│</a>
-<span class="sourceLineNo">057</span><a id="line.57"> * │...│.....│.│.........│...│.│...│.│...│.│...│...│...│...│.│</a>
-<span class="sourceLineNo">058</span><a id="line.58"> * │.┌─┴───┬─┘.│.┌──.┌───┤.──┤.│.┌─┤.│.┌─┴─┼─┐.│.│.└───┤.│.└─┤</a>
-<span class="sourceLineNo">059</span><a id="line.59"> * │.│.....│...│.│...│...│...│.│.│.│...│...│.│...│.....│.│...│</a>
-<span class="sourceLineNo">060</span><a id="line.60"> * ├─┤.│.│.│.──┘.│.│.└─┐.├───┤.│.│.│.──┤.│.│.│.──┤.│.│.│.└─┐.│</a>
-<span class="sourceLineNo">061</span><a id="line.61"> * │.│.│.│.......│.│...│.│...│.│.......│.│...│...│.│.│.│...│.│</a>
-<span class="sourceLineNo">062</span><a id="line.62"> * │.│.└─┼────.┌─┘.└───┘.│.│.└─┴─┬─┬──.├─┤.──┴───┼─┤.├─┴─┐.└─┤</a>
-<span class="sourceLineNo">063</span><a id="line.63"> * │.│...│&gt;....│.........│.│.....│.│...│.│.......│.│.│...│...│</a>
-<span class="sourceLineNo">064</span><a id="line.64"> * │.└─┐.│.┌───┴────.│.│.│.└─┬───┘.│.┌─┘.├───┐.┌─┘.├─┘.│.│.│&lt;│</a>
-<span class="sourceLineNo">065</span><a id="line.65"> * │...│.│.│.........│.│.....│.......│...│...│.│...│...│...│.│</a>
-<span class="sourceLineNo">066</span><a id="line.66"> * ├──.├─┼─┴──.│.│.┌─┘.├───┐.└──.──┬─┘.┌─┘.│.│.│.┌─┘.──┴───┤.│</a>
-<span class="sourceLineNo">067</span><a id="line.67"> * │...│.│.....│.│.│...│...│.......│...│...│...│.│.........│.│</a>
-<span class="sourceLineNo">068</span><a id="line.68"> * ├─┐.│.│.──┬─┘.├─┘.┌─┤.──┼───┐.│.│.│.└──.└───┤.│.│.┌─┐.│.│.│</a>
-<span class="sourceLineNo">069</span><a id="line.69"> * │.│...│...│...│...│.│...│...│.│.│.│.........│.│.│.│.│.│.│.│</a>
-<span class="sourceLineNo">070</span><a id="line.70"> * │.│.│.└─┬─┴─┬─┴─┬─┤.├──.│.──┘.│.│.├──────.│.│.└─┤.│.│.└─┤.│</a>
-<span class="sourceLineNo">071</span><a id="line.71"> * │...│...│...│...│.│.│.........│...│.......│.....│.│.│...│.│</a>
-<span class="sourceLineNo">072</span><a id="line.72"> * │.┌─┤.│.│.│.│.│.│.│.│.──┐.──┐.├──.└───────┴─────┘.│.├──.├─┤</a>
-<span class="sourceLineNo">073</span><a id="line.73"> * │.│.│.│.│.│.│.│...│.│...│...│.│...................│.│...│.│</a>
-<span class="sourceLineNo">074</span><a id="line.74"> * │.│.├─┘.│.│.│.├──.│.└───┴─┐.│.└───────┐.──┐.──┬─┐.│.│.──┘.│</a>
-<span class="sourceLineNo">075</span><a id="line.75"> * │.│.│.....│.│.│...│.......│.│.........│...│...│.│...│.....│</a>
-<span class="sourceLineNo">076</span><a id="line.76"> * ├─┘.│.┌──.│.└─┘.┌─┴────.│.│.├───────┐.└─┐.├──.│.└─┬─┘.┌──.│</a>
-<span class="sourceLineNo">077</span><a id="line.77"> * │.....│...│.....│.......│...│.......│...│.│.......│...│...│</a>
-<span class="sourceLineNo">078</span><a id="line.78"> * │.────┴─┐.├────.│.│.────┤.──┘.┌────.├───┘.│.┌────.├──.│.──┤</a>
-<span class="sourceLineNo">079</span><a id="line.79"> * │.......│.│.......│.....│.....│.....│.....│.│.....│...│...│</a>
-<span class="sourceLineNo">080</span><a id="line.80"> * └───────┴─┴───────┴─────┴─────┴─────┴─────┴─┴─────┴───┴───┘</a>
-<span class="sourceLineNo">081</span><a id="line.81"> * }&lt;/pre&gt;</a>
-<span class="sourceLineNo">082</span><a id="line.82"> * &lt;br&gt;</a>
-<span class="sourceLineNo">083</span><a id="line.83"> * With {@link #divideRooms} set to 0.65:</a>
-<span class="sourceLineNo">084</span><a id="line.84"> * &lt;pre&gt;{@code</a>
-<span class="sourceLineNo">085</span><a id="line.85"> * ┌─────┬───────────┬───────────┬─────┬─────┬─────┬─────┬─────┐</a>
-<span class="sourceLineNo">086</span><a id="line.86"> * │.....+...........│...........│.....│.....│.....│.....+.....│</a>
-<span class="sourceLineNo">087</span><a id="line.87"> * │.....│...........│...........│.....+.....│.....│.....│.....│</a>
-<span class="sourceLineNo">088</span><a id="line.88"> * │.....│...........│...........+.....│.....│.....│.....│.....│</a>
-<span class="sourceLineNo">089</span><a id="line.89"> * │.....│...........│...........│.....│.....│.....│.....│.....│</a>
-<span class="sourceLineNo">090</span><a id="line.90"> * │.....│.......................│.....│.....│.....│.....│.....│</a>
-<span class="sourceLineNo">091</span><a id="line.91"> * │.....│.....┌─────┬───+─┬─────┼─────┼─────┼──+──┼────+┼──+──┤</a>
-<span class="sourceLineNo">092</span><a id="line.92"> * │.....│.....│.....│.....│.....│.....│.....│.....│.....│.....│</a>
-<span class="sourceLineNo">093</span><a id="line.93"> * │.....│.....│.....│.....│.....│.....│.....│.....│.....│.....│</a>
-<span class="sourceLineNo">094</span><a id="line.94"> * │.....│.....│.....│.....│.....│.....+.....│.....│.....│.....│</a>
-<span class="sourceLineNo">095</span><a id="line.95"> * │.....│.....│.....│.....│.....+.....│.....│.....│.....│.....│</a>
-<span class="sourceLineNo">096</span><a id="line.96"> * │.....│.....│.....│.....+.....│.....│.....+.....│.....│.....│</a>
-<span class="sourceLineNo">097</span><a id="line.97"> * ├────+┼───+─┼────+┼─────┴─────┴─────┘.....├─────┼─────┤.....│</a>
-<span class="sourceLineNo">098</span><a id="line.98"> * │.....│.....│.....│.......................│.....│....&gt;│.....│</a>
-<span class="sourceLineNo">099</span><a id="line.99"> * │.....│.....│.....│.....│.................│.....│.....│.....│</a>
-<span class="sourceLineNo">100</span><a id="line.100"> * │.....│.....│..&lt;..│.....│.................│.....│.....│.....│</a>
-<span class="sourceLineNo">101</span><a id="line.101"> * │.....│.....│.....+.....│.................│.....│.....+.....│</a>
-<span class="sourceLineNo">102</span><a id="line.102"> * │.....│.....│.....│.....│.................│.....│.....│.....│</a>
-<span class="sourceLineNo">103</span><a id="line.103"> * │.────┼────.├─────┼─────┴───────────┬────.├────.├──+──┼──+──┤</a>
-<span class="sourceLineNo">104</span><a id="line.104"> * │.....│.....│.....│.................│.....│.....│.....│.....│</a>
-<span class="sourceLineNo">105</span><a id="line.105"> * │.....│.....│.....│.................│.....│.....│.....│.....│</a>
-<span class="sourceLineNo">106</span><a id="line.106"> * │.....│.....│.....│.................│.....│.....│.....│.....│</a>
-<span class="sourceLineNo">107</span><a id="line.107"> * │.....│.....│.....│.................│.....│.....+.....│.....│</a>
-<span class="sourceLineNo">108</span><a id="line.108"> * │.....│.....+.....│.................│.....│.....│.....│.....│</a>
-<span class="sourceLineNo">109</span><a id="line.109"> * ├───+─┼─────┼───+─┼────+──────┐.....└+────┼─────┼─────┼─.───┤</a>
-<span class="sourceLineNo">110</span><a id="line.110"> * │.....│.....│.....│...........│...........│.....│.....+.....│</a>
-<span class="sourceLineNo">111</span><a id="line.111"> * │.....│.....│.....│...........│...........│...........│.....│</a>
-<span class="sourceLineNo">112</span><a id="line.112"> * │.....│.....│.....│...........│...........+.....│.....│.....│</a>
-<span class="sourceLineNo">113</span><a id="line.113"> * │.....│.....│.....│...........│...........│.....│.....│.....│</a>
-<span class="sourceLineNo">114</span><a id="line.114"> * │.....+.....│.....│...........│...........│.....│.....│.....│</a>
-<span class="sourceLineNo">115</span><a id="line.115"> * └─────┴─────┴─────┴───────────┴───────────┴─────┴─────┴─────┘</a>
-<span class="sourceLineNo">116</span><a id="line.116"> * }&lt;/pre&gt;</a>
-<span class="sourceLineNo">117</span><a id="line.117"> * &lt;br&gt;</a>
-<span class="sourceLineNo">118</span><a id="line.118"> * Created by Tommy Ettinger on 5/7/2019.</a>
-<span class="sourceLineNo">119</span><a id="line.119"> */</a>
-<span class="sourceLineNo">120</span><a id="line.120">public class ConnectingMapGenerator implements IDungeonGenerator {</a>
-<span class="sourceLineNo">121</span><a id="line.121">    </a>
-<span class="sourceLineNo">122</span><a id="line.122">    public int width;</a>
-<span class="sourceLineNo">123</span><a id="line.123">    public int height;</a>
-<span class="sourceLineNo">124</span><a id="line.124">    public int roomWidth;</a>
-<span class="sourceLineNo">125</span><a id="line.125">    public int roomHeight;</a>
-<span class="sourceLineNo">126</span><a id="line.126">    public int wallThickness;</a>
-<span class="sourceLineNo">127</span><a id="line.127">    public char[][] dungeon;</a>
-<span class="sourceLineNo">128</span><a id="line.128">    public int[][] environment;</a>
-<span class="sourceLineNo">129</span><a id="line.129">    public GreasedRegion region;</a>
-<span class="sourceLineNo">130</span><a id="line.130">    public double divideRooms;</a>
-<span class="sourceLineNo">131</span><a id="line.131">    private final transient GreasedRegion tempRegion;</a>
-<span class="sourceLineNo">132</span><a id="line.132">    public IRNG rng;</a>
-<span class="sourceLineNo">133</span><a id="line.133"></a>
-<span class="sourceLineNo">134</span><a id="line.134">    /**</a>
-<span class="sourceLineNo">135</span><a id="line.135">     * Calls {@link #ConnectingMapGenerator(int, int, int, int, IRNG, int)} with width 80, height 80, roomWidth 8,</a>
-<span class="sourceLineNo">136</span><a id="line.136">     * roomHeight 8, a new {@link GWTRNG} for random, and wallThickness 2.</a>
-<span class="sourceLineNo">137</span><a id="line.137">     */</a>
-<span class="sourceLineNo">138</span><a id="line.138">    public ConnectingMapGenerator()</a>
-<span class="sourceLineNo">139</span><a id="line.139">    {</a>
-<span class="sourceLineNo">140</span><a id="line.140">        this(80, 80, 8, 8, new GWTRNG(), 2);</a>
-<span class="sourceLineNo">141</span><a id="line.141">    }</a>
-<span class="sourceLineNo">142</span><a id="line.142">    /**</a>
-<span class="sourceLineNo">143</span><a id="line.143">     * Determines room width and room height by dividing width or height by 10; wallThickness is 2. </a>
-<span class="sourceLineNo">144</span><a id="line.144">     * @param width total width of the map, in cells</a>
-<span class="sourceLineNo">145</span><a id="line.145">     * @param height total height of the map, in cells</a>
-<span class="sourceLineNo">146</span><a id="line.146">     * @param random an IRNG to make random choices for connecting rooms</a>
-<span class="sourceLineNo">147</span><a id="line.147">     */</a>
-<span class="sourceLineNo">148</span><a id="line.148"></a>
-<span class="sourceLineNo">149</span><a id="line.149">    public ConnectingMapGenerator(int width, int height, IRNG random)</a>
-<span class="sourceLineNo">150</span><a id="line.150">    {</a>
-<span class="sourceLineNo">151</span><a id="line.151">        this(width, height, width / 10, height / 10, random, 2);</a>
-<span class="sourceLineNo">152</span><a id="line.152">    }</a>
-<span class="sourceLineNo">153</span><a id="line.153">    /**</a>
-<span class="sourceLineNo">154</span><a id="line.154">     * Exactly like {@link #ConnectingMapGenerator(int, int, int, int, IRNG, int)} with wallThickness 2.</a>
-<span class="sourceLineNo">155</span><a id="line.155">     * @param width total width of the map, in cells</a>
-<span class="sourceLineNo">156</span><a id="line.156">     * @param height total height of the map, in cells</a>
-<span class="sourceLineNo">157</span><a id="line.157">     * @param roomWidth target width of each room, in cells; only counts the center floor area of a room</a>
-<span class="sourceLineNo">158</span><a id="line.158">     * @param roomHeight target height of each room, in cells; only counts the center floor area of a room</a>
-<span class="sourceLineNo">159</span><a id="line.159">     * @param random an IRNG to make random choices for connecting rooms</a>
-<span class="sourceLineNo">160</span><a id="line.160">     */</a>
-<span class="sourceLineNo">161</span><a id="line.161">    public ConnectingMapGenerator(int width, int height, int roomWidth, int roomHeight, IRNG random)</a>
-<span class="sourceLineNo">162</span><a id="line.162">    {</a>
-<span class="sourceLineNo">163</span><a id="line.163">        this(width, height, roomWidth, roomHeight, random, 2);</a>
-<span class="sourceLineNo">164</span><a id="line.164">    }</a>
-<span class="sourceLineNo">165</span><a id="line.165"></a>
-<span class="sourceLineNo">166</span><a id="line.166">    /**</a>
-<span class="sourceLineNo">167</span><a id="line.167">     * </a>
-<span class="sourceLineNo">168</span><a id="line.168">     * @param width total width of the map, in cells</a>
-<span class="sourceLineNo">169</span><a id="line.169">     * @param height total height of the map, in cells</a>
-<span class="sourceLineNo">170</span><a id="line.170">     * @param roomWidth target width of each room, in cells; only counts the center floor area of a room</a>
-<span class="sourceLineNo">171</span><a id="line.171">     * @param roomHeight target height of each room, in cells; only counts the center floor area of a room</a>
-<span class="sourceLineNo">172</span><a id="line.172">     * @param random an IRNG to make random choices for connecting rooms</a>
-<span class="sourceLineNo">173</span><a id="line.173">     * @param wallThickness how thick a wall between two rooms should be, in cells; 1 is minimum, and this usually</a>
-<span class="sourceLineNo">174</span><a id="line.174">     *                      shouldn't be much more than roomWidth or roomHeight</a>
-<span class="sourceLineNo">175</span><a id="line.175">     */</a>
-<span class="sourceLineNo">176</span><a id="line.176">    public ConnectingMapGenerator(int width, int height, int roomWidth, int roomHeight, IRNG random, int wallThickness) {</a>
-<span class="sourceLineNo">177</span><a id="line.177">        this(width, height, roomWidth, roomHeight, random, wallThickness, 0.0);</a>
-<span class="sourceLineNo">178</span><a id="line.178">    }</a>
-<span class="sourceLineNo">179</span><a id="line.179">    /**</a>
-<span class="sourceLineNo">180</span><a id="line.180">     * </a>
-<span class="sourceLineNo">181</span><a id="line.181">     * @param width total width of the map, in cells</a>
-<span class="sourceLineNo">182</span><a id="line.182">     * @param height total height of the map, in cells</a>
-<span class="sourceLineNo">183</span><a id="line.183">     * @param roomWidth target width of each room, in cells; only counts the center floor area of a room</a>
-<span class="sourceLineNo">184</span><a id="line.184">     * @param roomHeight target height of each room, in cells; only counts the center floor area of a room</a>
-<span class="sourceLineNo">185</span><a id="line.185">     * @param random an IRNG to make random choices for connecting rooms</a>
-<span class="sourceLineNo">186</span><a id="line.186">     * @param wallThickness how thick a wall between two rooms should be, in cells; 1 is minimum, and this usually</a>
-<span class="sourceLineNo">187</span><a id="line.187">     *                      shouldn't be much more than roomWidth or roomHeight</a>
-<span class="sourceLineNo">188</span><a id="line.188">     */</a>
-<span class="sourceLineNo">189</span><a id="line.189">    public ConnectingMapGenerator(int width, int height, int roomWidth, int roomHeight, IRNG random, int wallThickness,</a>
-<span class="sourceLineNo">190</span><a id="line.190">                                  double divideRooms)</a>
-<span class="sourceLineNo">191</span><a id="line.191">    {</a>
-<span class="sourceLineNo">192</span><a id="line.192">        this.width = Math.max(1, width);</a>
-<span class="sourceLineNo">193</span><a id="line.193">        this.height = Math.max(1, height);</a>
-<span class="sourceLineNo">194</span><a id="line.194">        this.region = new GreasedRegion(this.width, this.height);</a>
-<span class="sourceLineNo">195</span><a id="line.195">        tempRegion = new GreasedRegion(this.width, this.height);</a>
-<span class="sourceLineNo">196</span><a id="line.196">        this.roomWidth = Math.max(1, roomWidth);</a>
-<span class="sourceLineNo">197</span><a id="line.197">        this.roomHeight = Math.max(1, roomHeight);</a>
-<span class="sourceLineNo">198</span><a id="line.198">        this.wallThickness = Math.max(1, wallThickness);</a>
-<span class="sourceLineNo">199</span><a id="line.199">        dungeon = ArrayTools.fill(' ', this.width, this.height);</a>
-<span class="sourceLineNo">200</span><a id="line.200">        environment = new int[this.width][this.height];</a>
-<span class="sourceLineNo">201</span><a id="line.201">        this.divideRooms = divideRooms;</a>
-<span class="sourceLineNo">202</span><a id="line.202">        rng = random;</a>
-<span class="sourceLineNo">203</span><a id="line.203">    }</a>
-<span class="sourceLineNo">204</span><a id="line.204">    /**</a>
-<span class="sourceLineNo">205</span><a id="line.205">     * Generates a dungeon or other map as a 2D char array. Uses the convention of '#' representing a wall and '.'</a>
-<span class="sourceLineNo">206</span><a id="line.206">     * representing a bare floor, and also fills {@link #environment} with appropriate constants from DungeonUtility,</a>
-<span class="sourceLineNo">207</span><a id="line.207">     * like {@link DungeonUtility#ROOM_FLOOR} and {@link DungeonUtility#ROOM_WALL}.</a>
-<span class="sourceLineNo">208</span><a id="line.208">     * </a>
-<span class="sourceLineNo">209</span><a id="line.209">     * @return a 2D char array representing a room-based map, using standard conventions for walls/floors</a>
-<span class="sourceLineNo">210</span><a id="line.210">     */</a>
-<span class="sourceLineNo">211</span><a id="line.211">    @Override</a>
-<span class="sourceLineNo">212</span><a id="line.212">    public char[][] generate() {</a>
-<span class="sourceLineNo">213</span><a id="line.213">        int gridWidth = (width + wallThickness - 2) / (roomWidth + wallThickness), gridHeight = (height + wallThickness - 2) / (roomHeight + wallThickness), gridMax = gridWidth * gridHeight;</a>
-<span class="sourceLineNo">214</span><a id="line.214">        if(gridWidth &lt;= 0 || gridHeight &lt;= 0)</a>
-<span class="sourceLineNo">215</span><a id="line.215">            return dungeon;</a>
-<span class="sourceLineNo">216</span><a id="line.216">        ArrayTools.fill(dungeon, '#');</a>
-<span class="sourceLineNo">217</span><a id="line.217">        ArrayTools.fill(environment, DungeonUtility.UNTOUCHED);</a>
-<span class="sourceLineNo">218</span><a id="line.218">        region.resizeAndEmpty(width, height);</a>
-<span class="sourceLineNo">219</span><a id="line.219">        IntIntOrderedMap links = new IntIntOrderedMap(gridMax), surface = new IntIntOrderedMap(gridMax);</a>
-<span class="sourceLineNo">220</span><a id="line.220">        IntVLA choices = new IntVLA(4);</a>
-<span class="sourceLineNo">221</span><a id="line.221">        int dx = rng.nextSignedInt(gridWidth), dy = rng.nextSignedInt(gridHeight),</a>
-<span class="sourceLineNo">222</span><a id="line.222">                d = dy &lt;&lt; 16 | dx;</a>
-<span class="sourceLineNo">223</span><a id="line.223">        links.put(d, 0);</a>
-<span class="sourceLineNo">224</span><a id="line.224">        surface.put(d, 0);</a>
-<span class="sourceLineNo">225</span><a id="line.225">        for (int i = 0; i &lt; 15 &amp;&amp; links.size() &lt; gridMax &amp;&amp; !surface.isEmpty(); i++) {</a>
-<span class="sourceLineNo">226</span><a id="line.226">            choices.clear();</a>
-<span class="sourceLineNo">227</span><a id="line.227">            if (dx &lt; gridWidth - 1 &amp;&amp; !links.containsKey(d + 1)) choices.add(1);</a>
-<span class="sourceLineNo">228</span><a id="line.228">            if (dy &lt; gridHeight - 1 &amp;&amp; !links.containsKey(d + 0x10000)) choices.add(2);</a>
-<span class="sourceLineNo">229</span><a id="line.229">            if (dx &gt; 0 &amp;&amp; !links.containsKey(d - 1)) choices.add(4);</a>
-<span class="sourceLineNo">230</span><a id="line.230">            if (dy &gt; 0 &amp;&amp; !links.containsKey(d - 0x10000)) choices.add(8);</a>
-<span class="sourceLineNo">231</span><a id="line.231">            if (choices.isEmpty()) {</a>
-<span class="sourceLineNo">232</span><a id="line.232">                surface.remove(d);</a>
-<span class="sourceLineNo">233</span><a id="line.233">                break;</a>
-<span class="sourceLineNo">234</span><a id="line.234">            }</a>
-<span class="sourceLineNo">235</span><a id="line.235">            int choice = choices.getRandomElement(rng);</a>
-<span class="sourceLineNo">236</span><a id="line.236">            links.replace(d, links.get(d) | choice);</a>
-<span class="sourceLineNo">237</span><a id="line.237">            if (choices.size == 1)</a>
-<span class="sourceLineNo">238</span><a id="line.238">                surface.remove(d);</a>
-<span class="sourceLineNo">239</span><a id="line.239">            switch (choice) {</a>
-<span class="sourceLineNo">240</span><a id="line.240">                case 1:</a>
-<span class="sourceLineNo">241</span><a id="line.241">                    d += 1;</a>
-<span class="sourceLineNo">242</span><a id="line.242">                    links.put(d, 4);</a>
-<span class="sourceLineNo">243</span><a id="line.243">                    surface.put(d, 4);</a>
-<span class="sourceLineNo">244</span><a id="line.244">                    break;</a>
-<span class="sourceLineNo">245</span><a id="line.245">                case 2:</a>
-<span class="sourceLineNo">246</span><a id="line.246">                    d += 0x10000;</a>
-<span class="sourceLineNo">247</span><a id="line.247">                    links.put(d, 8);</a>
-<span class="sourceLineNo">248</span><a id="line.248">                    surface.put(d, 8);</a>
-<span class="sourceLineNo">249</span><a id="line.249">                    break;</a>
-<span class="sourceLineNo">250</span><a id="line.250">                case 4:</a>
-<span class="sourceLineNo">251</span><a id="line.251">                    d -= 1;</a>
-<span class="sourceLineNo">252</span><a id="line.252">                    links.put(d, 1);</a>
-<span class="sourceLineNo">253</span><a id="line.253">                    surface.put(d, 1);</a>
-<span class="sourceLineNo">254</span><a id="line.254">                    break;</a>
-<span class="sourceLineNo">255</span><a id="line.255">                default:</a>
-<span class="sourceLineNo">256</span><a id="line.256">                    d -= 0x10000;</a>
-<span class="sourceLineNo">257</span><a id="line.257">                    links.put(d, 2);</a>
-<span class="sourceLineNo">258</span><a id="line.258">                    surface.put(d, 2);</a>
-<span class="sourceLineNo">259</span><a id="line.259">                    break;</a>
-<span class="sourceLineNo">260</span><a id="line.260">            }</a>
-<span class="sourceLineNo">261</span><a id="line.261">            dx = d &amp; 0xFFFF;</a>
-<span class="sourceLineNo">262</span><a id="line.262">            dy = d &gt;&gt;&gt; 16;</a>
-<span class="sourceLineNo">263</span><a id="line.263">        }</a>
-<span class="sourceLineNo">264</span><a id="line.264">        while(links.size() &lt; gridMax)</a>
-<span class="sourceLineNo">265</span><a id="line.265">        {</a>
-<span class="sourceLineNo">266</span><a id="line.266">            d = surface.randomKey(rng);</a>
-<span class="sourceLineNo">267</span><a id="line.267">            dx = d &amp; 0xFFFF;</a>
-<span class="sourceLineNo">268</span><a id="line.268">            dy = d &gt;&gt;&gt; 16;</a>
-<span class="sourceLineNo">269</span><a id="line.269">            for (int i = 0; i &lt; 5 &amp;&amp; links.size() &lt; gridMax &amp;&amp; !surface.isEmpty(); i++) {</a>
-<span class="sourceLineNo">270</span><a id="line.270">                choices.clear();</a>
-<span class="sourceLineNo">271</span><a id="line.271">                if (dx &lt; gridWidth - 1 &amp;&amp; !links.containsKey(d + 1)) choices.add(1);</a>
-<span class="sourceLineNo">272</span><a id="line.272">                if (dy &lt; gridHeight - 1 &amp;&amp; !links.containsKey(d + 0x10000)) choices.add(2);</a>
-<span class="sourceLineNo">273</span><a id="line.273">                if (dx &gt; 0 &amp;&amp; !links.containsKey(d - 1)) choices.add(4);</a>
-<span class="sourceLineNo">274</span><a id="line.274">                if (dy &gt; 0 &amp;&amp; !links.containsKey(d - 0x10000)) choices.add(8);</a>
-<span class="sourceLineNo">275</span><a id="line.275">                if (choices.isEmpty()) {</a>
-<span class="sourceLineNo">276</span><a id="line.276">                    surface.remove(d);</a>
-<span class="sourceLineNo">277</span><a id="line.277">                    break;</a>
-<span class="sourceLineNo">278</span><a id="line.278">                }</a>
-<span class="sourceLineNo">279</span><a id="line.279">                int choice = choices.getRandomElement(rng);</a>
-<span class="sourceLineNo">280</span><a id="line.280">                links.replace(d, links.get(d) | choice);</a>
-<span class="sourceLineNo">281</span><a id="line.281">                if (choices.size == 1)</a>
-<span class="sourceLineNo">282</span><a id="line.282">                    surface.remove(d);</a>
-<span class="sourceLineNo">283</span><a id="line.283">                switch (choice) {</a>
-<span class="sourceLineNo">284</span><a id="line.284">                    case 1:</a>
-<span class="sourceLineNo">285</span><a id="line.285">                        d += 1;</a>
-<span class="sourceLineNo">286</span><a id="line.286">                        links.put(d, 4);</a>
-<span class="sourceLineNo">287</span><a id="line.287">                        surface.put(d, 4);</a>
-<span class="sourceLineNo">288</span><a id="line.288">                        break;</a>
-<span class="sourceLineNo">289</span><a id="line.289">                    case 2:</a>
-<span class="sourceLineNo">290</span><a id="line.290">                        d += 0x10000;</a>
-<span class="sourceLineNo">291</span><a id="line.291">                        links.put(d, 8);</a>
-<span class="sourceLineNo">292</span><a id="line.292">                        surface.put(d, 8);</a>
-<span class="sourceLineNo">293</span><a id="line.293">                        break;</a>
-<span class="sourceLineNo">294</span><a id="line.294">                    case 4:</a>
-<span class="sourceLineNo">295</span><a id="line.295">                        d -= 1;</a>
-<span class="sourceLineNo">296</span><a id="line.296">                        links.put(d, 1);</a>
-<span class="sourceLineNo">297</span><a id="line.297">                        surface.put(d, 1);</a>
-<span class="sourceLineNo">298</span><a id="line.298">                        break;</a>
-<span class="sourceLineNo">299</span><a id="line.299">                    default:</a>
-<span class="sourceLineNo">300</span><a id="line.300">                        d -= 0x10000;</a>
-<span class="sourceLineNo">301</span><a id="line.301">                        links.put(d, 2);</a>
-<span class="sourceLineNo">302</span><a id="line.302">                        surface.put(d, 2);</a>
-<span class="sourceLineNo">303</span><a id="line.303">                        break;</a>
-<span class="sourceLineNo">304</span><a id="line.304">                }</a>
-<span class="sourceLineNo">305</span><a id="line.305">                dx = d &amp; 0xFFFF;</a>
-<span class="sourceLineNo">306</span><a id="line.306">                dy = d &gt;&gt;&gt; 16;</a>
-<span class="sourceLineNo">307</span><a id="line.307">            }</a>
-<span class="sourceLineNo">308</span><a id="line.308">        }</a>
-<span class="sourceLineNo">309</span><a id="line.309">        for (int i = 0; i &lt; links.size(); i++) {</a>
-<span class="sourceLineNo">310</span><a id="line.310">            d = links.keyAt(i);</a>
-<span class="sourceLineNo">311</span><a id="line.311">            dx = d &amp; 0xFFFF;</a>
-<span class="sourceLineNo">312</span><a id="line.312">            dy = d &gt;&gt;&gt; 16;</a>
-<span class="sourceLineNo">313</span><a id="line.313">            int conn = links.getAt(i);</a>
-<span class="sourceLineNo">314</span><a id="line.314"></a>
-<span class="sourceLineNo">315</span><a id="line.315">            region.insertRectangle(1 + dx * (roomWidth + wallThickness), 1 + dy * (roomHeight + wallThickness), roomWidth, roomHeight);</a>
-<span class="sourceLineNo">316</span><a id="line.316">            if (divideRooms &gt; 0.0 &amp;&amp; rng.nextDouble() &lt; divideRooms) {</a>
-<span class="sourceLineNo">317</span><a id="line.317">                if ((conn &amp; 1) != 0)</a>
-<span class="sourceLineNo">318</span><a id="line.318">                {</a>
-<span class="sourceLineNo">319</span><a id="line.319">                    region.removeRectangle(1 + dx * (roomWidth + wallThickness) + roomWidth, 1 + dy * (roomHeight + wallThickness), wallThickness, roomHeight);</a>
-<span class="sourceLineNo">320</span><a id="line.320">                    region.insertRectangle(1 + dx * (roomWidth + wallThickness) + roomWidth, 1 + dy * (roomHeight + wallThickness) + rng.nextSignedInt(roomHeight), wallThickness, 1);</a>
-<span class="sourceLineNo">321</span><a id="line.321">                }</a>
-<span class="sourceLineNo">322</span><a id="line.322">                if ((conn &amp; 2) != 0)</a>
-<span class="sourceLineNo">323</span><a id="line.323">                {</a>
-<span class="sourceLineNo">324</span><a id="line.324">                    region.removeRectangle(1 + dx * (roomWidth + wallThickness), 1 + dy * (roomHeight + wallThickness) + roomHeight, roomWidth, wallThickness);</a>
-<span class="sourceLineNo">325</span><a id="line.325">                    region.insertRectangle(1 + dx * (roomWidth + wallThickness) + rng.nextSignedInt(roomWidth), 1 + dy * (roomHeight + wallThickness) + roomHeight, 1, wallThickness);</a>
-<span class="sourceLineNo">326</span><a id="line.326">                }</a>
-<span class="sourceLineNo">327</span><a id="line.327">                if ((conn &amp; 4) != 0)</a>
-<span class="sourceLineNo">328</span><a id="line.328">                {</a>
-<span class="sourceLineNo">329</span><a id="line.329">                    region.removeRectangle(1 + dx * (roomWidth + wallThickness) - wallThickness, 1 + dy * (roomHeight + wallThickness), wallThickness, roomHeight);</a>
-<span class="sourceLineNo">330</span><a id="line.330">                    region.insertRectangle(1 + dx * (roomWidth + wallThickness) - wallThickness, 1 + dy * (roomHeight + wallThickness) + rng.nextSignedInt(roomHeight), wallThickness, 1);</a>
-<span class="sourceLineNo">331</span><a id="line.331">                }</a>
-<span class="sourceLineNo">332</span><a id="line.332">                if ((conn &amp; 8) != 0)</a>
-<span class="sourceLineNo">333</span><a id="line.333">                {</a>
-<span class="sourceLineNo">334</span><a id="line.334">                    region.removeRectangle(1 + dx * (roomWidth + wallThickness), 1 + dy * (roomHeight + wallThickness) - wallThickness, roomWidth, wallThickness);</a>
-<span class="sourceLineNo">335</span><a id="line.335">                    region.insertRectangle(1 + dx * (roomWidth + wallThickness) + rng.nextSignedInt(roomWidth), 1 + dy * (roomHeight + wallThickness) - wallThickness, 1, wallThickness);</a>
-<span class="sourceLineNo">336</span><a id="line.336">                }</a>
-<span class="sourceLineNo">337</span><a id="line.337">            } else {</a>
-<span class="sourceLineNo">338</span><a id="line.338">                if ((conn &amp; 1) != 0)</a>
-<span class="sourceLineNo">339</span><a id="line.339">                    region.insertRectangle(1 + dx * (roomWidth + wallThickness) + roomWidth, 1 + dy * (roomHeight + wallThickness), wallThickness, roomHeight);</a>
-<span class="sourceLineNo">340</span><a id="line.340">                if ((conn &amp; 2) != 0)</a>
-<span class="sourceLineNo">341</span><a id="line.341">                    region.insertRectangle(1 + dx * (roomWidth + wallThickness), 1 + dy * (roomHeight + wallThickness) + roomHeight, roomWidth, wallThickness);</a>
-<span class="sourceLineNo">342</span><a id="line.342">                if ((conn &amp; 4) != 0)</a>
-<span class="sourceLineNo">343</span><a id="line.343">                    region.insertRectangle(1 + dx * (roomWidth + wallThickness) - wallThickness, 1 + dy * (roomHeight + wallThickness), wallThickness, roomHeight);</a>
-<span class="sourceLineNo">344</span><a id="line.344">                if ((conn &amp; 8) != 0)</a>
-<span class="sourceLineNo">345</span><a id="line.345">                    region.insertRectangle(1 + dx * (roomWidth + wallThickness), 1 + dy * (roomHeight + wallThickness) - wallThickness, roomWidth, wallThickness);</a>
-<span class="sourceLineNo">346</span><a id="line.346">            }</a>
-<span class="sourceLineNo">347</span><a id="line.347">        }</a>
-<span class="sourceLineNo">348</span><a id="line.348">        region.writeCharsInto(dungeon, '.');</a>
-<span class="sourceLineNo">349</span><a id="line.349">        region.writeIntsInto(environment, DungeonUtility.ROOM_FLOOR);</a>
-<span class="sourceLineNo">350</span><a id="line.350">        tempRegion.remake(region).fringe8way().writeIntsInto(environment, DungeonUtility.ROOM_WALL);</a>
-<span class="sourceLineNo">351</span><a id="line.351">        return dungeon;</a>
-<span class="sourceLineNo">352</span><a id="line.352">    }</a>
-<span class="sourceLineNo">353</span><a id="line.353"></a>
-<span class="sourceLineNo">354</span><a id="line.354">    /**</a>
-<span class="sourceLineNo">355</span><a id="line.355">     * Gets the most recently-produced dungeon as a 2D char array, usually produced by calling {@link #generate()} or</a>
-<span class="sourceLineNo">356</span><a id="line.356">     * some similar method present in a specific implementation. This normally passes a direct reference and not a copy,</a>
-<span class="sourceLineNo">357</span><a id="line.357">     * so you can normally modify the returned array to propagate changes back into this IDungeonGenerator.</a>
-<span class="sourceLineNo">358</span><a id="line.358">     *</a>
-<span class="sourceLineNo">359</span><a id="line.359">     * @return the most recently-produced dungeon/map as a 2D char array</a>
-<span class="sourceLineNo">360</span><a id="line.360">     */</a>
-<span class="sourceLineNo">361</span><a id="line.361">    @Override</a>
-<span class="sourceLineNo">362</span><a id="line.362">    public char[][] getDungeon() {</a>
-<span class="sourceLineNo">363</span><a id="line.363">        return dungeon;</a>
-<span class="sourceLineNo">364</span><a id="line.364">    }</a>
-<span class="sourceLineNo">365</span><a id="line.365">    /**</a>
-<span class="sourceLineNo">366</span><a id="line.366">     * Gets a 2D array of int constants, each representing a type of environment corresponding to a static field of</a>
-<span class="sourceLineNo">367</span><a id="line.367">     * DungeonUtility. This array will have the same size as the last char 2D array produced by generate(); the value</a>
-<span class="sourceLineNo">368</span><a id="line.368">     * of this method if called before generate() is undefined, but probably will be a 2D array of all 0 (UNTOUCHED).</a>
-<span class="sourceLineNo">369</span><a id="line.369">     * &lt;ul&gt;</a>
-<span class="sourceLineNo">370</span><a id="line.370">     * &lt;li&gt;DungeonUtility.UNTOUCHED, equal to 0, is used for any cells that aren't near a floor.&lt;/li&gt;</a>
-<span class="sourceLineNo">371</span><a id="line.371">     * &lt;li&gt;DungeonUtility.ROOM_FLOOR, equal to 1, is used for floor cells inside wide room areas.&lt;/li&gt;</a>
-<span class="sourceLineNo">372</span><a id="line.372">     * &lt;li&gt;DungeonUtility.ROOM_WALL, equal to 2, is used for wall cells around wide room areas.&lt;/li&gt;</a>
-<span class="sourceLineNo">373</span><a id="line.373">     * &lt;li&gt;DungeonUtility.CAVE_FLOOR, equal to 3, is used for floor cells inside rough cave areas.&lt;/li&gt;</a>
-<span class="sourceLineNo">374</span><a id="line.374">     * &lt;li&gt;DungeonUtility.CAVE_WALL, equal to 4, is used for wall cells around rough cave areas.&lt;/li&gt;</a>
-<span class="sourceLineNo">375</span><a id="line.375">     * &lt;li&gt;DungeonUtility.CORRIDOR_FLOOR, equal to 5, is used for floor cells inside narrow corridor areas.&lt;/li&gt;</a>
-<span class="sourceLineNo">376</span><a id="line.376">     * &lt;li&gt;DungeonUtility.CORRIDOR_WALL, equal to 6, is used for wall cells around narrow corridor areas.&lt;/li&gt;</a>
-<span class="sourceLineNo">377</span><a id="line.377">     * &lt;/ul&gt;</a>
-<span class="sourceLineNo">378</span><a id="line.378">     *</a>
-<span class="sourceLineNo">379</span><a id="line.379">     * @return a 2D int array where each element is an environment type constant in DungeonUtility</a>
-<span class="sourceLineNo">380</span><a id="line.380">     */</a>
-<span class="sourceLineNo">381</span><a id="line.381">    public int[][] getEnvironment() {</a>
-<span class="sourceLineNo">382</span><a id="line.382">        return environment;</a>
-<span class="sourceLineNo">383</span><a id="line.383">    }</a>
-<span class="sourceLineNo">384</span><a id="line.384"></a>
-<span class="sourceLineNo">385</span><a id="line.385">}</a>
+<div class="source-container">
+<pre><span class="source-line-no">001</span><span id="line.1">package squidpony.squidgrid.mapping;</span>
+<span class="source-line-no">002</span><span id="line.2"></span>
+<span class="source-line-no">003</span><span id="line.3">import squidpony.ArrayTools;</span>
+<span class="source-line-no">004</span><span id="line.4"></span>
+<span class="source-line-no">005</span><span id="line.5">import squidpony.squidmath.GWTRNG;</span>
+<span class="source-line-no">006</span><span id="line.6">import squidpony.squidmath.GreasedRegion;</span>
+<span class="source-line-no">007</span><span id="line.7">import squidpony.squidmath.IRNG;</span>
+<span class="source-line-no">008</span><span id="line.8">import squidpony.squidmath.IntIntOrderedMap;</span>
+<span class="source-line-no">009</span><span id="line.9">import squidpony.squidmath.IntVLA;</span>
+<span class="source-line-no">010</span><span id="line.10"></span>
+<span class="source-line-no">011</span><span id="line.11">/**</span>
+<span class="source-line-no">012</span><span id="line.12"> * A room placing algorithm developed by Rayvolution for his game Fail To Hero, this was simple to implement but</span>
+<span class="source-line-no">013</span><span id="line.13"> * delivers complex connectivity. It is meant to ensure all rooms are connected, but usually not directly, and many</span>
+<span class="source-line-no">014</span><span id="line.14"> * routes need to wind throughout the map to get to a goal.</span>
+<span class="source-line-no">015</span><span id="line.15"> * &lt;br&gt;</span>
+<span class="source-line-no">016</span><span id="line.16"> * With {@link #roomWidth} and {@link #roomHeight} set to 3, and {@link #wallThickness} set to 2:</span>
+<span class="source-line-no">017</span><span id="line.17"> * &lt;pre&gt;{@code</span>
+<span class="source-line-no">018</span><span id="line.18"> * ┌────────────────────────────┐┌────────┐┌────────┐┌────────┐</span>
+<span class="source-line-no">019</span><span id="line.19"> * │............................││........││........││........│</span>
+<span class="source-line-no">020</span><span id="line.20"> * │............................││........││........││........│</span>
+<span class="source-line-no">021</span><span id="line.21"> * │............................││........││........││........│</span>
+<span class="source-line-no">022</span><span id="line.22"> * │...┌──────────┐...┌─────┐...││...┌┐...│└────┐...││...┌────┘</span>
+<span class="source-line-no">023</span><span id="line.23"> * │...│┌───┐┌────┘...│┌────┘...└┘...││...└────┐│...││...└────┐</span>
+<span class="source-line-no">024</span><span id="line.24"> * │...││...││........││.............││........││...││........│</span>
+<span class="source-line-no">025</span><span id="line.25"> * │...││...││........││.............││........││...││........│</span>
+<span class="source-line-no">026</span><span id="line.26"> * │...││...││........││.......&lt;.....││........││...││........│</span>
+<span class="source-line-no">027</span><span id="line.27"> * └───┘│...││...┌────┘│...┌─────────┘└────────┘│...│└────┐...│</span>
+<span class="source-line-no">028</span><span id="line.28"> * ┌────┘...││...└────┐│...│┌───────────────────┘...└─────┘...│</span>
+<span class="source-line-no">029</span><span id="line.29"> * │........││........││...││.................................│</span>
+<span class="source-line-no">030</span><span id="line.30"> * │.......&gt;││........││...││.................................│</span>
+<span class="source-line-no">031</span><span id="line.31"> * │........││........││...││.................................│</span>
+<span class="source-line-no">032</span><span id="line.32"> * │...┌────┘└────┐...│└───┘│...┌─────────────────────────────┘</span>
+<span class="source-line-no">033</span><span id="line.33"> * │...│┌────────┐│...└─────┘...└────┐┌───┐┌────────┐┌────────┐</span>
+<span class="source-line-no">034</span><span id="line.34"> * │...││........││..................││...││........││........│</span>
+<span class="source-line-no">035</span><span id="line.35"> * │...││........││..................││...││........││........│</span>
+<span class="source-line-no">036</span><span id="line.36"> * │...││........││..................││...││........││........│</span>
+<span class="source-line-no">037</span><span id="line.37"> * │...││...┌┐...│└────┐...┌─────────┘│...│└────┐...│└────┐...│</span>
+<span class="source-line-no">038</span><span id="line.38"> * │...││...││...└─────┘...│┌────────┐│...└────┐│...└─────┘...│</span>
+<span class="source-line-no">039</span><span id="line.39"> * │...││...││.............││........││........││.............│</span>
+<span class="source-line-no">040</span><span id="line.40"> * │...││...││.............││........││........││.............│</span>
+<span class="source-line-no">041</span><span id="line.41"> * │...││...││.............││........││........││.............│</span>
+<span class="source-line-no">042</span><span id="line.42"> * │...││...││...┌─────────┘│...┌┐...││...┌────┘│...┌─────┐...│</span>
+<span class="source-line-no">043</span><span id="line.43"> * │...└┘...││...└──────────┘...││...└┘...└─────┘...│┌────┘...│</span>
+<span class="source-line-no">044</span><span id="line.44"> * │........││..................││..................││........│</span>
+<span class="source-line-no">045</span><span id="line.45"> * │........││..................││..................││........│</span>
+<span class="source-line-no">046</span><span id="line.46"> * │........││..................││..................││........│</span>
+<span class="source-line-no">047</span><span id="line.47"> * └────────┘└──────────────────┘└──────────────────┘└────────┘</span>
+<span class="source-line-no">048</span><span id="line.48"> * }&lt;/pre&gt;</span>
+<span class="source-line-no">049</span><span id="line.49"> * &lt;br&gt;</span>
+<span class="source-line-no">050</span><span id="line.50"> * With {@link #roomWidth}, {@link #roomHeight}, and {@link #wallThickness} all set to 1:</span>
+<span class="source-line-no">051</span><span id="line.51"> * &lt;pre&gt;{@code</span>
+<span class="source-line-no">052</span><span id="line.52"> * ┌───────────────┬─┬───────────┬─────┬───┬─────────┬─┬───┬─┐</span>
+<span class="source-line-no">053</span><span id="line.53"> * │...............│.│...........│.....│...│.........│.│...│.│</span>
+<span class="source-line-no">054</span><span id="line.54"> * │.┌──────────.┌─┘.│.┌──.────┬─┤.┌───┤.│.│.──┐.──┐.│.│.│.│.│</span>
+<span class="source-line-no">055</span><span id="line.55"> * │.│...........│.....│.......│.│.│...│.│.....│...│.│...│...│</span>
+<span class="source-line-no">056</span><span id="line.56"> * ├─┘.┌────.┌─┐.└─────┘.┌──.│.│.│.│.┌─┘.│.│.──┼───┤.└─┬─┘.│.│</span>
+<span class="source-line-no">057</span><span id="line.57"> * │...│.....│.│.........│...│.│...│.│...│.│...│...│...│...│.│</span>
+<span class="source-line-no">058</span><span id="line.58"> * │.┌─┴───┬─┘.│.┌──.┌───┤.──┤.│.┌─┤.│.┌─┴─┼─┐.│.│.└───┤.│.└─┤</span>
+<span class="source-line-no">059</span><span id="line.59"> * │.│.....│...│.│...│...│...│.│.│.│...│...│.│...│.....│.│...│</span>
+<span class="source-line-no">060</span><span id="line.60"> * ├─┤.│.│.│.──┘.│.│.└─┐.├───┤.│.│.│.──┤.│.│.│.──┤.│.│.│.└─┐.│</span>
+<span class="source-line-no">061</span><span id="line.61"> * │.│.│.│.......│.│...│.│...│.│.......│.│...│...│.│.│.│...│.│</span>
+<span class="source-line-no">062</span><span id="line.62"> * │.│.└─┼────.┌─┘.└───┘.│.│.└─┴─┬─┬──.├─┤.──┴───┼─┤.├─┴─┐.└─┤</span>
+<span class="source-line-no">063</span><span id="line.63"> * │.│...│&gt;....│.........│.│.....│.│...│.│.......│.│.│...│...│</span>
+<span class="source-line-no">064</span><span id="line.64"> * │.└─┐.│.┌───┴────.│.│.│.└─┬───┘.│.┌─┘.├───┐.┌─┘.├─┘.│.│.│&lt;│</span>
+<span class="source-line-no">065</span><span id="line.65"> * │...│.│.│.........│.│.....│.......│...│...│.│...│...│...│.│</span>
+<span class="source-line-no">066</span><span id="line.66"> * ├──.├─┼─┴──.│.│.┌─┘.├───┐.└──.──┬─┘.┌─┘.│.│.│.┌─┘.──┴───┤.│</span>
+<span class="source-line-no">067</span><span id="line.67"> * │...│.│.....│.│.│...│...│.......│...│...│...│.│.........│.│</span>
+<span class="source-line-no">068</span><span id="line.68"> * ├─┐.│.│.──┬─┘.├─┘.┌─┤.──┼───┐.│.│.│.└──.└───┤.│.│.┌─┐.│.│.│</span>
+<span class="source-line-no">069</span><span id="line.69"> * │.│...│...│...│...│.│...│...│.│.│.│.........│.│.│.│.│.│.│.│</span>
+<span class="source-line-no">070</span><span id="line.70"> * │.│.│.└─┬─┴─┬─┴─┬─┤.├──.│.──┘.│.│.├──────.│.│.└─┤.│.│.└─┤.│</span>
+<span class="source-line-no">071</span><span id="line.71"> * │...│...│...│...│.│.│.........│...│.......│.....│.│.│...│.│</span>
+<span class="source-line-no">072</span><span id="line.72"> * │.┌─┤.│.│.│.│.│.│.│.│.──┐.──┐.├──.└───────┴─────┘.│.├──.├─┤</span>
+<span class="source-line-no">073</span><span id="line.73"> * │.│.│.│.│.│.│.│...│.│...│...│.│...................│.│...│.│</span>
+<span class="source-line-no">074</span><span id="line.74"> * │.│.├─┘.│.│.│.├──.│.└───┴─┐.│.└───────┐.──┐.──┬─┐.│.│.──┘.│</span>
+<span class="source-line-no">075</span><span id="line.75"> * │.│.│.....│.│.│...│.......│.│.........│...│...│.│...│.....│</span>
+<span class="source-line-no">076</span><span id="line.76"> * ├─┘.│.┌──.│.└─┘.┌─┴────.│.│.├───────┐.└─┐.├──.│.└─┬─┘.┌──.│</span>
+<span class="source-line-no">077</span><span id="line.77"> * │.....│...│.....│.......│...│.......│...│.│.......│...│...│</span>
+<span class="source-line-no">078</span><span id="line.78"> * │.────┴─┐.├────.│.│.────┤.──┘.┌────.├───┘.│.┌────.├──.│.──┤</span>
+<span class="source-line-no">079</span><span id="line.79"> * │.......│.│.......│.....│.....│.....│.....│.│.....│...│...│</span>
+<span class="source-line-no">080</span><span id="line.80"> * └───────┴─┴───────┴─────┴─────┴─────┴─────┴─┴─────┴───┴───┘</span>
+<span class="source-line-no">081</span><span id="line.81"> * }&lt;/pre&gt;</span>
+<span class="source-line-no">082</span><span id="line.82"> * &lt;br&gt;</span>
+<span class="source-line-no">083</span><span id="line.83"> * With {@link #divideRooms} set to 0.65:</span>
+<span class="source-line-no">084</span><span id="line.84"> * &lt;pre&gt;{@code</span>
+<span class="source-line-no">085</span><span id="line.85"> * ┌─────┬───────────┬───────────┬─────┬─────┬─────┬─────┬─────┐</span>
+<span class="source-line-no">086</span><span id="line.86"> * │.....+...........│...........│.....│.....│.....│.....+.....│</span>
+<span class="source-line-no">087</span><span id="line.87"> * │.....│...........│...........│.....+.....│.....│.....│.....│</span>
+<span class="source-line-no">088</span><span id="line.88"> * │.....│...........│...........+.....│.....│.....│.....│.....│</span>
+<span class="source-line-no">089</span><span id="line.89"> * │.....│...........│...........│.....│.....│.....│.....│.....│</span>
+<span class="source-line-no">090</span><span id="line.90"> * │.....│.......................│.....│.....│.....│.....│.....│</span>
+<span class="source-line-no">091</span><span id="line.91"> * │.....│.....┌─────┬───+─┬─────┼─────┼─────┼──+──┼────+┼──+──┤</span>
+<span class="source-line-no">092</span><span id="line.92"> * │.....│.....│.....│.....│.....│.....│.....│.....│.....│.....│</span>
+<span class="source-line-no">093</span><span id="line.93"> * │.....│.....│.....│.....│.....│.....│.....│.....│.....│.....│</span>
+<span class="source-line-no">094</span><span id="line.94"> * │.....│.....│.....│.....│.....│.....+.....│.....│.....│.....│</span>
+<span class="source-line-no">095</span><span id="line.95"> * │.....│.....│.....│.....│.....+.....│.....│.....│.....│.....│</span>
+<span class="source-line-no">096</span><span id="line.96"> * │.....│.....│.....│.....+.....│.....│.....+.....│.....│.....│</span>
+<span class="source-line-no">097</span><span id="line.97"> * ├────+┼───+─┼────+┼─────┴─────┴─────┘.....├─────┼─────┤.....│</span>
+<span class="source-line-no">098</span><span id="line.98"> * │.....│.....│.....│.......................│.....│....&gt;│.....│</span>
+<span class="source-line-no">099</span><span id="line.99"> * │.....│.....│.....│.....│.................│.....│.....│.....│</span>
+<span class="source-line-no">100</span><span id="line.100"> * │.....│.....│..&lt;..│.....│.................│.....│.....│.....│</span>
+<span class="source-line-no">101</span><span id="line.101"> * │.....│.....│.....+.....│.................│.....│.....+.....│</span>
+<span class="source-line-no">102</span><span id="line.102"> * │.....│.....│.....│.....│.................│.....│.....│.....│</span>
+<span class="source-line-no">103</span><span id="line.103"> * │.────┼────.├─────┼─────┴───────────┬────.├────.├──+──┼──+──┤</span>
+<span class="source-line-no">104</span><span id="line.104"> * │.....│.....│.....│.................│.....│.....│.....│.....│</span>
+<span class="source-line-no">105</span><span id="line.105"> * │.....│.....│.....│.................│.....│.....│.....│.....│</span>
+<span class="source-line-no">106</span><span id="line.106"> * │.....│.....│.....│.................│.....│.....│.....│.....│</span>
+<span class="source-line-no">107</span><span id="line.107"> * │.....│.....│.....│.................│.....│.....+.....│.....│</span>
+<span class="source-line-no">108</span><span id="line.108"> * │.....│.....+.....│.................│.....│.....│.....│.....│</span>
+<span class="source-line-no">109</span><span id="line.109"> * ├───+─┼─────┼───+─┼────+──────┐.....└+────┼─────┼─────┼─.───┤</span>
+<span class="source-line-no">110</span><span id="line.110"> * │.....│.....│.....│...........│...........│.....│.....+.....│</span>
+<span class="source-line-no">111</span><span id="line.111"> * │.....│.....│.....│...........│...........│...........│.....│</span>
+<span class="source-line-no">112</span><span id="line.112"> * │.....│.....│.....│...........│...........+.....│.....│.....│</span>
+<span class="source-line-no">113</span><span id="line.113"> * │.....│.....│.....│...........│...........│.....│.....│.....│</span>
+<span class="source-line-no">114</span><span id="line.114"> * │.....+.....│.....│...........│...........│.....│.....│.....│</span>
+<span class="source-line-no">115</span><span id="line.115"> * └─────┴─────┴─────┴───────────┴───────────┴─────┴─────┴─────┘</span>
+<span class="source-line-no">116</span><span id="line.116"> * }&lt;/pre&gt;</span>
+<span class="source-line-no">117</span><span id="line.117"> * &lt;br&gt;</span>
+<span class="source-line-no">118</span><span id="line.118"> * Created by Tommy Ettinger on 5/7/2019.</span>
+<span class="source-line-no">119</span><span id="line.119"> */</span>
+<span class="source-line-no">120</span><span id="line.120">public class ConnectingMapGenerator implements IDungeonGenerator {</span>
+<span class="source-line-no">121</span><span id="line.121">    </span>
+<span class="source-line-no">122</span><span id="line.122">    public int width;</span>
+<span class="source-line-no">123</span><span id="line.123">    public int height;</span>
+<span class="source-line-no">124</span><span id="line.124">    public int roomWidth;</span>
+<span class="source-line-no">125</span><span id="line.125">    public int roomHeight;</span>
+<span class="source-line-no">126</span><span id="line.126">    public int wallThickness;</span>
+<span class="source-line-no">127</span><span id="line.127">    public char[][] dungeon;</span>
+<span class="source-line-no">128</span><span id="line.128">    public int[][] environment;</span>
+<span class="source-line-no">129</span><span id="line.129">    public GreasedRegion region;</span>
+<span class="source-line-no">130</span><span id="line.130">    public double divideRooms;</span>
+<span class="source-line-no">131</span><span id="line.131">    private final transient GreasedRegion tempRegion;</span>
+<span class="source-line-no">132</span><span id="line.132">    public IRNG rng;</span>
+<span class="source-line-no">133</span><span id="line.133"></span>
+<span class="source-line-no">134</span><span id="line.134">    /**</span>
+<span class="source-line-no">135</span><span id="line.135">     * Calls {@link #ConnectingMapGenerator(int, int, int, int, IRNG, int)} with width 80, height 80, roomWidth 8,</span>
+<span class="source-line-no">136</span><span id="line.136">     * roomHeight 8, a new {@link GWTRNG} for random, and wallThickness 2.</span>
+<span class="source-line-no">137</span><span id="line.137">     */</span>
+<span class="source-line-no">138</span><span id="line.138">    public ConnectingMapGenerator()</span>
+<span class="source-line-no">139</span><span id="line.139">    {</span>
+<span class="source-line-no">140</span><span id="line.140">        this(80, 80, 8, 8, new GWTRNG(), 2);</span>
+<span class="source-line-no">141</span><span id="line.141">    }</span>
+<span class="source-line-no">142</span><span id="line.142">    /**</span>
+<span class="source-line-no">143</span><span id="line.143">     * Determines room width and room height by dividing width or height by 10; wallThickness is 2. </span>
+<span class="source-line-no">144</span><span id="line.144">     * @param width total width of the map, in cells</span>
+<span class="source-line-no">145</span><span id="line.145">     * @param height total height of the map, in cells</span>
+<span class="source-line-no">146</span><span id="line.146">     * @param random an IRNG to make random choices for connecting rooms</span>
+<span class="source-line-no">147</span><span id="line.147">     */</span>
+<span class="source-line-no">148</span><span id="line.148"></span>
+<span class="source-line-no">149</span><span id="line.149">    public ConnectingMapGenerator(int width, int height, IRNG random)</span>
+<span class="source-line-no">150</span><span id="line.150">    {</span>
+<span class="source-line-no">151</span><span id="line.151">        this(width, height, width / 10, height / 10, random, 2);</span>
+<span class="source-line-no">152</span><span id="line.152">    }</span>
+<span class="source-line-no">153</span><span id="line.153">    /**</span>
+<span class="source-line-no">154</span><span id="line.154">     * Exactly like {@link #ConnectingMapGenerator(int, int, int, int, IRNG, int)} with wallThickness 2.</span>
+<span class="source-line-no">155</span><span id="line.155">     * @param width total width of the map, in cells</span>
+<span class="source-line-no">156</span><span id="line.156">     * @param height total height of the map, in cells</span>
+<span class="source-line-no">157</span><span id="line.157">     * @param roomWidth target width of each room, in cells; only counts the center floor area of a room</span>
+<span class="source-line-no">158</span><span id="line.158">     * @param roomHeight target height of each room, in cells; only counts the center floor area of a room</span>
+<span class="source-line-no">159</span><span id="line.159">     * @param random an IRNG to make random choices for connecting rooms</span>
+<span class="source-line-no">160</span><span id="line.160">     */</span>
+<span class="source-line-no">161</span><span id="line.161">    public ConnectingMapGenerator(int width, int height, int roomWidth, int roomHeight, IRNG random)</span>
+<span class="source-line-no">162</span><span id="line.162">    {</span>
+<span class="source-line-no">163</span><span id="line.163">        this(width, height, roomWidth, roomHeight, random, 2);</span>
+<span class="source-line-no">164</span><span id="line.164">    }</span>
+<span class="source-line-no">165</span><span id="line.165"></span>
+<span class="source-line-no">166</span><span id="line.166">    /**</span>
+<span class="source-line-no">167</span><span id="line.167">     * </span>
+<span class="source-line-no">168</span><span id="line.168">     * @param width total width of the map, in cells</span>
+<span class="source-line-no">169</span><span id="line.169">     * @param height total height of the map, in cells</span>
+<span class="source-line-no">170</span><span id="line.170">     * @param roomWidth target width of each room, in cells; only counts the center floor area of a room</span>
+<span class="source-line-no">171</span><span id="line.171">     * @param roomHeight target height of each room, in cells; only counts the center floor area of a room</span>
+<span class="source-line-no">172</span><span id="line.172">     * @param random an IRNG to make random choices for connecting rooms</span>
+<span class="source-line-no">173</span><span id="line.173">     * @param wallThickness how thick a wall between two rooms should be, in cells; 1 is minimum, and this usually</span>
+<span class="source-line-no">174</span><span id="line.174">     *                      shouldn't be much more than roomWidth or roomHeight</span>
+<span class="source-line-no">175</span><span id="line.175">     */</span>
+<span class="source-line-no">176</span><span id="line.176">    public ConnectingMapGenerator(int width, int height, int roomWidth, int roomHeight, IRNG random, int wallThickness) {</span>
+<span class="source-line-no">177</span><span id="line.177">        this(width, height, roomWidth, roomHeight, random, wallThickness, 0.0);</span>
+<span class="source-line-no">178</span><span id="line.178">    }</span>
+<span class="source-line-no">179</span><span id="line.179">    /**</span>
+<span class="source-line-no">180</span><span id="line.180">     * </span>
+<span class="source-line-no">181</span><span id="line.181">     * @param width total width of the map, in cells</span>
+<span class="source-line-no">182</span><span id="line.182">     * @param height total height of the map, in cells</span>
+<span class="source-line-no">183</span><span id="line.183">     * @param roomWidth target width of each room, in cells; only counts the center floor area of a room</span>
+<span class="source-line-no">184</span><span id="line.184">     * @param roomHeight target height of each room, in cells; only counts the center floor area of a room</span>
+<span class="source-line-no">185</span><span id="line.185">     * @param random an IRNG to make random choices for connecting rooms</span>
+<span class="source-line-no">186</span><span id="line.186">     * @param wallThickness how thick a wall between two rooms should be, in cells; 1 is minimum, and this usually</span>
+<span class="source-line-no">187</span><span id="line.187">     *                      shouldn't be much more than roomWidth or roomHeight</span>
+<span class="source-line-no">188</span><span id="line.188">     */</span>
+<span class="source-line-no">189</span><span id="line.189">    public ConnectingMapGenerator(int width, int height, int roomWidth, int roomHeight, IRNG random, int wallThickness,</span>
+<span class="source-line-no">190</span><span id="line.190">                                  double divideRooms)</span>
+<span class="source-line-no">191</span><span id="line.191">    {</span>
+<span class="source-line-no">192</span><span id="line.192">        this.width = Math.max(1, width);</span>
+<span class="source-line-no">193</span><span id="line.193">        this.height = Math.max(1, height);</span>
+<span class="source-line-no">194</span><span id="line.194">        this.region = new GreasedRegion(this.width, this.height);</span>
+<span class="source-line-no">195</span><span id="line.195">        tempRegion = new GreasedRegion(this.width, this.height);</span>
+<span class="source-line-no">196</span><span id="line.196">        this.roomWidth = Math.max(1, roomWidth);</span>
+<span class="source-line-no">197</span><span id="line.197">        this.roomHeight = Math.max(1, roomHeight);</span>
+<span class="source-line-no">198</span><span id="line.198">        this.wallThickness = Math.max(1, wallThickness);</span>
+<span class="source-line-no">199</span><span id="line.199">        dungeon = ArrayTools.fill(' ', this.width, this.height);</span>
+<span class="source-line-no">200</span><span id="line.200">        environment = new int[this.width][this.height];</span>
+<span class="source-line-no">201</span><span id="line.201">        this.divideRooms = divideRooms;</span>
+<span class="source-line-no">202</span><span id="line.202">        rng = random;</span>
+<span class="source-line-no">203</span><span id="line.203">    }</span>
+<span class="source-line-no">204</span><span id="line.204">    /**</span>
+<span class="source-line-no">205</span><span id="line.205">     * Generates a dungeon or other map as a 2D char array. Uses the convention of '#' representing a wall and '.'</span>
+<span class="source-line-no">206</span><span id="line.206">     * representing a bare floor, and also fills {@link #environment} with appropriate constants from DungeonUtility,</span>
+<span class="source-line-no">207</span><span id="line.207">     * like {@link DungeonUtility#ROOM_FLOOR} and {@link DungeonUtility#ROOM_WALL}.</span>
+<span class="source-line-no">208</span><span id="line.208">     * </span>
+<span class="source-line-no">209</span><span id="line.209">     * @return a 2D char array representing a room-based map, using standard conventions for walls/floors</span>
+<span class="source-line-no">210</span><span id="line.210">     */</span>
+<span class="source-line-no">211</span><span id="line.211">    @Override</span>
+<span class="source-line-no">212</span><span id="line.212">    public char[][] generate() {</span>
+<span class="source-line-no">213</span><span id="line.213">        int gridWidth = (width + wallThickness - 2) / (roomWidth + wallThickness), gridHeight = (height + wallThickness - 2) / (roomHeight + wallThickness), gridMax = gridWidth * gridHeight;</span>
+<span class="source-line-no">214</span><span id="line.214">        if(gridWidth &lt;= 0 || gridHeight &lt;= 0)</span>
+<span class="source-line-no">215</span><span id="line.215">            return dungeon;</span>
+<span class="source-line-no">216</span><span id="line.216">        ArrayTools.fill(dungeon, '#');</span>
+<span class="source-line-no">217</span><span id="line.217">        ArrayTools.fill(environment, DungeonUtility.UNTOUCHED);</span>
+<span class="source-line-no">218</span><span id="line.218">        region.resizeAndEmpty(width, height);</span>
+<span class="source-line-no">219</span><span id="line.219">        IntIntOrderedMap links = new IntIntOrderedMap(gridMax), surface = new IntIntOrderedMap(gridMax);</span>
+<span class="source-line-no">220</span><span id="line.220">        IntVLA choices = new IntVLA(4);</span>
+<span class="source-line-no">221</span><span id="line.221">        int dx = rng.nextSignedInt(gridWidth), dy = rng.nextSignedInt(gridHeight),</span>
+<span class="source-line-no">222</span><span id="line.222">                d = dy &lt;&lt; 16 | dx;</span>
+<span class="source-line-no">223</span><span id="line.223">        links.put(d, 0);</span>
+<span class="source-line-no">224</span><span id="line.224">        surface.put(d, 0);</span>
+<span class="source-line-no">225</span><span id="line.225">        for (int i = 0; i &lt; 15 &amp;&amp; links.size() &lt; gridMax &amp;&amp; !surface.isEmpty(); i++) {</span>
+<span class="source-line-no">226</span><span id="line.226">            choices.clear();</span>
+<span class="source-line-no">227</span><span id="line.227">            if (dx &lt; gridWidth - 1 &amp;&amp; !links.containsKey(d + 1)) choices.add(1);</span>
+<span class="source-line-no">228</span><span id="line.228">            if (dy &lt; gridHeight - 1 &amp;&amp; !links.containsKey(d + 0x10000)) choices.add(2);</span>
+<span class="source-line-no">229</span><span id="line.229">            if (dx &gt; 0 &amp;&amp; !links.containsKey(d - 1)) choices.add(4);</span>
+<span class="source-line-no">230</span><span id="line.230">            if (dy &gt; 0 &amp;&amp; !links.containsKey(d - 0x10000)) choices.add(8);</span>
+<span class="source-line-no">231</span><span id="line.231">            if (choices.isEmpty()) {</span>
+<span class="source-line-no">232</span><span id="line.232">                surface.remove(d);</span>
+<span class="source-line-no">233</span><span id="line.233">                break;</span>
+<span class="source-line-no">234</span><span id="line.234">            }</span>
+<span class="source-line-no">235</span><span id="line.235">            int choice = choices.getRandomElement(rng);</span>
+<span class="source-line-no">236</span><span id="line.236">            links.replace(d, links.get(d) | choice);</span>
+<span class="source-line-no">237</span><span id="line.237">            if (choices.size == 1)</span>
+<span class="source-line-no">238</span><span id="line.238">                surface.remove(d);</span>
+<span class="source-line-no">239</span><span id="line.239">            switch (choice) {</span>
+<span class="source-line-no">240</span><span id="line.240">                case 1:</span>
+<span class="source-line-no">241</span><span id="line.241">                    d += 1;</span>
+<span class="source-line-no">242</span><span id="line.242">                    links.put(d, 4);</span>
+<span class="source-line-no">243</span><span id="line.243">                    surface.put(d, 4);</span>
+<span class="source-line-no">244</span><span id="line.244">                    break;</span>
+<span class="source-line-no">245</span><span id="line.245">                case 2:</span>
+<span class="source-line-no">246</span><span id="line.246">                    d += 0x10000;</span>
+<span class="source-line-no">247</span><span id="line.247">                    links.put(d, 8);</span>
+<span class="source-line-no">248</span><span id="line.248">                    surface.put(d, 8);</span>
+<span class="source-line-no">249</span><span id="line.249">                    break;</span>
+<span class="source-line-no">250</span><span id="line.250">                case 4:</span>
+<span class="source-line-no">251</span><span id="line.251">                    d -= 1;</span>
+<span class="source-line-no">252</span><span id="line.252">                    links.put(d, 1);</span>
+<span class="source-line-no">253</span><span id="line.253">                    surface.put(d, 1);</span>
+<span class="source-line-no">254</span><span id="line.254">                    break;</span>
+<span class="source-line-no">255</span><span id="line.255">                default:</span>
+<span class="source-line-no">256</span><span id="line.256">                    d -= 0x10000;</span>
+<span class="source-line-no">257</span><span id="line.257">                    links.put(d, 2);</span>
+<span class="source-line-no">258</span><span id="line.258">                    surface.put(d, 2);</span>
+<span class="source-line-no">259</span><span id="line.259">                    break;</span>
+<span class="source-line-no">260</span><span id="line.260">            }</span>
+<span class="source-line-no">261</span><span id="line.261">            dx = d &amp; 0xFFFF;</span>
+<span class="source-line-no">262</span><span id="line.262">            dy = d &gt;&gt;&gt; 16;</span>
+<span class="source-line-no">263</span><span id="line.263">        }</span>
+<span class="source-line-no">264</span><span id="line.264">        while(links.size() &lt; gridMax)</span>
+<span class="source-line-no">265</span><span id="line.265">        {</span>
+<span class="source-line-no">266</span><span id="line.266">            d = surface.randomKey(rng);</span>
+<span class="source-line-no">267</span><span id="line.267">            dx = d &amp; 0xFFFF;</span>
+<span class="source-line-no">268</span><span id="line.268">            dy = d &gt;&gt;&gt; 16;</span>
+<span class="source-line-no">269</span><span id="line.269">            for (int i = 0; i &lt; 5 &amp;&amp; links.size() &lt; gridMax &amp;&amp; !surface.isEmpty(); i++) {</span>
+<span class="source-line-no">270</span><span id="line.270">                choices.clear();</span>
+<span class="source-line-no">271</span><span id="line.271">                if (dx &lt; gridWidth - 1 &amp;&amp; !links.containsKey(d + 1)) choices.add(1);</span>
+<span class="source-line-no">272</span><span id="line.272">                if (dy &lt; gridHeight - 1 &amp;&amp; !links.containsKey(d + 0x10000)) choices.add(2);</span>
+<span class="source-line-no">273</span><span id="line.273">                if (dx &gt; 0 &amp;&amp; !links.containsKey(d - 1)) choices.add(4);</span>
+<span class="source-line-no">274</span><span id="line.274">                if (dy &gt; 0 &amp;&amp; !links.containsKey(d - 0x10000)) choices.add(8);</span>
+<span class="source-line-no">275</span><span id="line.275">                if (choices.isEmpty()) {</span>
+<span class="source-line-no">276</span><span id="line.276">                    surface.remove(d);</span>
+<span class="source-line-no">277</span><span id="line.277">                    break;</span>
+<span class="source-line-no">278</span><span id="line.278">                }</span>
+<span class="source-line-no">279</span><span id="line.279">                int choice = choices.getRandomElement(rng);</span>
+<span class="source-line-no">280</span><span id="line.280">                links.replace(d, links.get(d) | choice);</span>
+<span class="source-line-no">281</span><span id="line.281">                if (choices.size == 1)</span>
+<span class="source-line-no">282</span><span id="line.282">                    surface.remove(d);</span>
+<span class="source-line-no">283</span><span id="line.283">                switch (choice) {</span>
+<span class="source-line-no">284</span><span id="line.284">                    case 1:</span>
+<span class="source-line-no">285</span><span id="line.285">                        d += 1;</span>
+<span class="source-line-no">286</span><span id="line.286">                        links.put(d, 4);</span>
+<span class="source-line-no">287</span><span id="line.287">                        surface.put(d, 4);</span>
+<span class="source-line-no">288</span><span id="line.288">                        break;</span>
+<span class="source-line-no">289</span><span id="line.289">                    case 2:</span>
+<span class="source-line-no">290</span><span id="line.290">                        d += 0x10000;</span>
+<span class="source-line-no">291</span><span id="line.291">                        links.put(d, 8);</span>
+<span class="source-line-no">292</span><span id="line.292">                        surface.put(d, 8);</span>
+<span class="source-line-no">293</span><span id="line.293">                        break;</span>
+<span class="source-line-no">294</span><span id="line.294">                    case 4:</span>
+<span class="source-line-no">295</span><span id="line.295">                        d -= 1;</span>
+<span class="source-line-no">296</span><span id="line.296">                        links.put(d, 1);</span>
+<span class="source-line-no">297</span><span id="line.297">                        surface.put(d, 1);</span>
+<span class="source-line-no">298</span><span id="line.298">                        break;</span>
+<span class="source-line-no">299</span><span id="line.299">                    default:</span>
+<span class="source-line-no">300</span><span id="line.300">                        d -= 0x10000;</span>
+<span class="source-line-no">301</span><span id="line.301">                        links.put(d, 2);</span>
+<span class="source-line-no">302</span><span id="line.302">                        surface.put(d, 2);</span>
+<span class="source-line-no">303</span><span id="line.303">                        break;</span>
+<span class="source-line-no">304</span><span id="line.304">                }</span>
+<span class="source-line-no">305</span><span id="line.305">                dx = d &amp; 0xFFFF;</span>
+<span class="source-line-no">306</span><span id="line.306">                dy = d &gt;&gt;&gt; 16;</span>
+<span class="source-line-no">307</span><span id="line.307">            }</span>
+<span class="source-line-no">308</span><span id="line.308">        }</span>
+<span class="source-line-no">309</span><span id="line.309">        for (int i = 0; i &lt; links.size(); i++) {</span>
+<span class="source-line-no">310</span><span id="line.310">            d = links.keyAt(i);</span>
+<span class="source-line-no">311</span><span id="line.311">            dx = d &amp; 0xFFFF;</span>
+<span class="source-line-no">312</span><span id="line.312">            dy = d &gt;&gt;&gt; 16;</span>
+<span class="source-line-no">313</span><span id="line.313">            int conn = links.getAt(i);</span>
+<span class="source-line-no">314</span><span id="line.314"></span>
+<span class="source-line-no">315</span><span id="line.315">            region.insertRectangle(1 + dx * (roomWidth + wallThickness), 1 + dy * (roomHeight + wallThickness), roomWidth, roomHeight);</span>
+<span class="source-line-no">316</span><span id="line.316">            if (divideRooms &gt; 0.0 &amp;&amp; rng.nextDouble() &lt; divideRooms) {</span>
+<span class="source-line-no">317</span><span id="line.317">                if ((conn &amp; 1) != 0)</span>
+<span class="source-line-no">318</span><span id="line.318">                {</span>
+<span class="source-line-no">319</span><span id="line.319">                    region.removeRectangle(1 + dx * (roomWidth + wallThickness) + roomWidth, 1 + dy * (roomHeight + wallThickness), wallThickness, roomHeight);</span>
+<span class="source-line-no">320</span><span id="line.320">                    region.insertRectangle(1 + dx * (roomWidth + wallThickness) + roomWidth, 1 + dy * (roomHeight + wallThickness) + rng.nextSignedInt(roomHeight), wallThickness, 1);</span>
+<span class="source-line-no">321</span><span id="line.321">                }</span>
+<span class="source-line-no">322</span><span id="line.322">                if ((conn &amp; 2) != 0)</span>
+<span class="source-line-no">323</span><span id="line.323">                {</span>
+<span class="source-line-no">324</span><span id="line.324">                    region.removeRectangle(1 + dx * (roomWidth + wallThickness), 1 + dy * (roomHeight + wallThickness) + roomHeight, roomWidth, wallThickness);</span>
+<span class="source-line-no">325</span><span id="line.325">                    region.insertRectangle(1 + dx * (roomWidth + wallThickness) + rng.nextSignedInt(roomWidth), 1 + dy * (roomHeight + wallThickness) + roomHeight, 1, wallThickness);</span>
+<span class="source-line-no">326</span><span id="line.326">                }</span>
+<span class="source-line-no">327</span><span id="line.327">                if ((conn &amp; 4) != 0)</span>
+<span class="source-line-no">328</span><span id="line.328">                {</span>
+<span class="source-line-no">329</span><span id="line.329">                    region.removeRectangle(1 + dx * (roomWidth + wallThickness) - wallThickness, 1 + dy * (roomHeight + wallThickness), wallThickness, roomHeight);</span>
+<span class="source-line-no">330</span><span id="line.330">                    region.insertRectangle(1 + dx * (roomWidth + wallThickness) - wallThickness, 1 + dy * (roomHeight + wallThickness) + rng.nextSignedInt(roomHeight), wallThickness, 1);</span>
+<span class="source-line-no">331</span><span id="line.331">                }</span>
+<span class="source-line-no">332</span><span id="line.332">                if ((conn &amp; 8) != 0)</span>
+<span class="source-line-no">333</span><span id="line.333">                {</span>
+<span class="source-line-no">334</span><span id="line.334">                    region.removeRectangle(1 + dx * (roomWidth + wallThickness), 1 + dy * (roomHeight + wallThickness) - wallThickness, roomWidth, wallThickness);</span>
+<span class="source-line-no">335</span><span id="line.335">                    region.insertRectangle(1 + dx * (roomWidth + wallThickness) + rng.nextSignedInt(roomWidth), 1 + dy * (roomHeight + wallThickness) - wallThickness, 1, wallThickness);</span>
+<span class="source-line-no">336</span><span id="line.336">                }</span>
+<span class="source-line-no">337</span><span id="line.337">            } else {</span>
+<span class="source-line-no">338</span><span id="line.338">                if ((conn &amp; 1) != 0)</span>
+<span class="source-line-no">339</span><span id="line.339">                    region.insertRectangle(1 + dx * (roomWidth + wallThickness) + roomWidth, 1 + dy * (roomHeight + wallThickness), wallThickness, roomHeight);</span>
+<span class="source-line-no">340</span><span id="line.340">                if ((conn &amp; 2) != 0)</span>
+<span class="source-line-no">341</span><span id="line.341">                    region.insertRectangle(1 + dx * (roomWidth + wallThickness), 1 + dy * (roomHeight + wallThickness) + roomHeight, roomWidth, wallThickness);</span>
+<span class="source-line-no">342</span><span id="line.342">                if ((conn &amp; 4) != 0)</span>
+<span class="source-line-no">343</span><span id="line.343">                    region.insertRectangle(1 + dx * (roomWidth + wallThickness) - wallThickness, 1 + dy * (roomHeight + wallThickness), wallThickness, roomHeight);</span>
+<span class="source-line-no">344</span><span id="line.344">                if ((conn &amp; 8) != 0)</span>
+<span class="source-line-no">345</span><span id="line.345">                    region.insertRectangle(1 + dx * (roomWidth + wallThickness), 1 + dy * (roomHeight + wallThickness) - wallThickness, roomWidth, wallThickness);</span>
+<span class="source-line-no">346</span><span id="line.346">            }</span>
+<span class="source-line-no">347</span><span id="line.347">        }</span>
+<span class="source-line-no">348</span><span id="line.348">        region.writeCharsInto(dungeon, '.');</span>
+<span class="source-line-no">349</span><span id="line.349">        region.writeIntsInto(environment, DungeonUtility.ROOM_FLOOR);</span>
+<span class="source-line-no">350</span><span id="line.350">        tempRegion.remake(region).fringe8way().writeIntsInto(environment, DungeonUtility.ROOM_WALL);</span>
+<span class="source-line-no">351</span><span id="line.351">        return dungeon;</span>
+<span class="source-line-no">352</span><span id="line.352">    }</span>
+<span class="source-line-no">353</span><span id="line.353"></span>
+<span class="source-line-no">354</span><span id="line.354">    /**</span>
+<span class="source-line-no">355</span><span id="line.355">     * Gets the most recently-produced dungeon as a 2D char array, usually produced by calling {@link #generate()} or</span>
+<span class="source-line-no">356</span><span id="line.356">     * some similar method present in a specific implementation. This normally passes a direct reference and not a copy,</span>
+<span class="source-line-no">357</span><span id="line.357">     * so you can normally modify the returned array to propagate changes back into this IDungeonGenerator.</span>
+<span class="source-line-no">358</span><span id="line.358">     *</span>
+<span class="source-line-no">359</span><span id="line.359">     * @return the most recently-produced dungeon/map as a 2D char array</span>
+<span class="source-line-no">360</span><span id="line.360">     */</span>
+<span class="source-line-no">361</span><span id="line.361">    @Override</span>
+<span class="source-line-no">362</span><span id="line.362">    public char[][] getDungeon() {</span>
+<span class="source-line-no">363</span><span id="line.363">        return dungeon;</span>
+<span class="source-line-no">364</span><span id="line.364">    }</span>
+<span class="source-line-no">365</span><span id="line.365">    /**</span>
+<span class="source-line-no">366</span><span id="line.366">     * Gets a 2D array of int constants, each representing a type of environment corresponding to a static field of</span>
+<span class="source-line-no">367</span><span id="line.367">     * DungeonUtility. This array will have the same size as the last char 2D array produced by generate(); the value</span>
+<span class="source-line-no">368</span><span id="line.368">     * of this method if called before generate() is undefined, but probably will be a 2D array of all 0 (UNTOUCHED).</span>
+<span class="source-line-no">369</span><span id="line.369">     * &lt;ul&gt;</span>
+<span class="source-line-no">370</span><span id="line.370">     * &lt;li&gt;DungeonUtility.UNTOUCHED, equal to 0, is used for any cells that aren't near a floor.&lt;/li&gt;</span>
+<span class="source-line-no">371</span><span id="line.371">     * &lt;li&gt;DungeonUtility.ROOM_FLOOR, equal to 1, is used for floor cells inside wide room areas.&lt;/li&gt;</span>
+<span class="source-line-no">372</span><span id="line.372">     * &lt;li&gt;DungeonUtility.ROOM_WALL, equal to 2, is used for wall cells around wide room areas.&lt;/li&gt;</span>
+<span class="source-line-no">373</span><span id="line.373">     * &lt;li&gt;DungeonUtility.CAVE_FLOOR, equal to 3, is used for floor cells inside rough cave areas.&lt;/li&gt;</span>
+<span class="source-line-no">374</span><span id="line.374">     * &lt;li&gt;DungeonUtility.CAVE_WALL, equal to 4, is used for wall cells around rough cave areas.&lt;/li&gt;</span>
+<span class="source-line-no">375</span><span id="line.375">     * &lt;li&gt;DungeonUtility.CORRIDOR_FLOOR, equal to 5, is used for floor cells inside narrow corridor areas.&lt;/li&gt;</span>
+<span class="source-line-no">376</span><span id="line.376">     * &lt;li&gt;DungeonUtility.CORRIDOR_WALL, equal to 6, is used for wall cells around narrow corridor areas.&lt;/li&gt;</span>
+<span class="source-line-no">377</span><span id="line.377">     * &lt;/ul&gt;</span>
+<span class="source-line-no">378</span><span id="line.378">     *</span>
+<span class="source-line-no">379</span><span id="line.379">     * @return a 2D int array where each element is an environment type constant in DungeonUtility</span>
+<span class="source-line-no">380</span><span id="line.380">     */</span>
+<span class="source-line-no">381</span><span id="line.381">    public int[][] getEnvironment() {</span>
+<span class="source-line-no">382</span><span id="line.382">        return environment;</span>
+<span class="source-line-no">383</span><span id="line.383">    }</span>
+<span class="source-line-no">384</span><span id="line.384"></span>
+<span class="source-line-no">385</span><span id="line.385">}</span>
 
 
 

@@ -7,428 +7,428 @@
 <meta name="generator" content="javadoc/SourceToHTMLConverter">
 <link rel="stylesheet" type="text/css" href="../../../stylesheet.css" title="Style">
 </head>
-<body class="source">
+<body class="source-page">
 <main role="main">
-<div class="sourceContainer">
-<pre><span class="sourceLineNo">001</span><a id="line.1">package squidpony.squidmath;</a>
-<span class="sourceLineNo">002</span><a id="line.2"></a>
-<span class="sourceLineNo">003</span><a id="line.3">import static squidpony.squidmath.Noise.*;</a>
-<span class="sourceLineNo">004</span><a id="line.4">import static squidpony.squidmath.SeededNoise.*;</a>
-<span class="sourceLineNo">005</span><a id="line.5"></a>
-<span class="sourceLineNo">006</span><a id="line.6">/**</a>
-<span class="sourceLineNo">007</span><a id="line.7"> * "Classic Perlin" noise, as opposed to the Simplex Noise also created by Ken Perlin (which is produced by</a>
-<span class="sourceLineNo">008</span><a id="line.8"> * {@link SeededNoise}; both can be produced by {@link FastNoise}).</a>
-<span class="sourceLineNo">009</span><a id="line.9"> * This noise can in theory be scaled up to arbitrary dimensions, but in practice uses unreasonably hefty amounts of</a>
-<span class="sourceLineNo">010</span><a id="line.10"> * memory when dimensionality exceeds 10 or so, since it needs to hash {@code Math.pow(2, dimensionality)} points per</a>
-<span class="sourceLineNo">011</span><a id="line.11"> * sample of noise, which involves over a thousand points in 10 dimensions and over a million points in 20 dimensions.</a>
-<span class="sourceLineNo">012</span><a id="line.12"> * For that reason, it's limited to 6D noise here, and also implements 2D, 3D, and 4D. Its performance is surprisingly</a>
-<span class="sourceLineNo">013</span><a id="line.13"> * good at 2D, 3D, and 4D but trails off quickly at 6D. Its quality is worse than normal simplex noise in 2D, but you</a>
-<span class="sourceLineNo">014</span><a id="line.14"> * can use {@link JitterNoise} (which takes the same algorithm and distorts the grid pseudo-randomly) to get unusually</a>
-<span class="sourceLineNo">015</span><a id="line.15"> * high-quality 2D noise. The quality is actually quite good in 4D and higher; there's often some rhythmic patterns in</a>
-<span class="sourceLineNo">016</span><a id="line.16"> * 3D when time is z, but with 4 or 6 dimensions this can have fewer artifacts than Simplex in the same dimension. The</a>
-<span class="sourceLineNo">017</span><a id="line.17"> * 3D and higher dimensionality versions don't seem to need jitter to avoid grid artifacts, at least most of the time.</a>
-<span class="sourceLineNo">018</span><a id="line.18"> * This uses different gradient vectors than what was recommended in the "Improved Perlin Noise" paper, since the ones</a>
-<span class="sourceLineNo">019</span><a id="line.19"> * this uses avoid 45-degree angular artifacts in all dimensions implemented.</a>
-<span class="sourceLineNo">020</span><a id="line.20"> * &lt;br&gt;</a>
-<span class="sourceLineNo">021</span><a id="line.21"> * ClassicNoise is a good choice with parts of {@link squidpony.squidgrid.mapping.WorldMapGenerator} that need a</a>
-<span class="sourceLineNo">022</span><a id="line.22"> * Noise3D implementation, and it tends to about as fast as {@link SeededNoise} in 3D. It is not recommended for 2D</a>
-<span class="sourceLineNo">023</span><a id="line.23"> * use; prefer {@link JitterNoise} or {@link SeededNoise} for that. You can also use {@link FastNoise} with</a>
-<span class="sourceLineNo">024</span><a id="line.24"> * {@link FastNoise#PERLIN_FRACTAL} as the noiseType if you primarily want to use float input and get float output.</a>
-<span class="sourceLineNo">025</span><a id="line.25"> * If you want higher-dimensional noise than this supports, you can use {@link PhantomNoise}.</a>
-<span class="sourceLineNo">026</span><a id="line.26"> */</a>
-<span class="sourceLineNo">027</span><a id="line.27">public class ClassicNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, Noise.Noise5D, Noise.Noise6D {</a>
-<span class="sourceLineNo">028</span><a id="line.28">    public static final ClassicNoise instance = new ClassicNoise();</a>
-<span class="sourceLineNo">029</span><a id="line.29">    public long seed;</a>
-<span class="sourceLineNo">030</span><a id="line.30">    public ClassicNoise() {</a>
-<span class="sourceLineNo">031</span><a id="line.31">        this(0x1337BEEFCAFEL);</a>
-<span class="sourceLineNo">032</span><a id="line.32">    }</a>
-<span class="sourceLineNo">033</span><a id="line.33"></a>
-<span class="sourceLineNo">034</span><a id="line.34">    public ClassicNoise(final long seed) {</a>
-<span class="sourceLineNo">035</span><a id="line.35">        this.seed = seed;</a>
-<span class="sourceLineNo">036</span><a id="line.36">    }</a>
-<span class="sourceLineNo">037</span><a id="line.37">    protected static double gradCoord2D(long seed, int x, int y,</a>
-<span class="sourceLineNo">038</span><a id="line.38">                                        double xd, double yd) {</a>
-<span class="sourceLineNo">039</span><a id="line.39">        final int hash = ((int)(((seed ^= 0xB4C4D * x ^ 0xEE2C3 * y) ^ seed &gt;&gt;&gt; 13) * (seed)));</a>
-<span class="sourceLineNo">040</span><a id="line.40">        final double[] grad = grad2d[hash &gt;&gt;&gt; 24];</a>
-<span class="sourceLineNo">041</span><a id="line.41">        return xd * grad[0] + yd * grad[1];</a>
-<span class="sourceLineNo">042</span><a id="line.42">    }</a>
-<span class="sourceLineNo">043</span><a id="line.43">    protected static double gradCoord3D(long seed, int x, int y, int z, double xd, double yd, double zd) {</a>
-<span class="sourceLineNo">044</span><a id="line.44">        final int hash =</a>
-<span class="sourceLineNo">045</span><a id="line.45">                ((int)(((seed ^= 0xB4C4D * x ^ 0xEE2C1 * y ^ 0xA7E07 * z) ^ seed &gt;&gt;&gt; 13) * (seed))</a>
-<span class="sourceLineNo">046</span><a id="line.46">                        &gt;&gt;&gt; 27) * 3;</a>
-<span class="sourceLineNo">047</span><a id="line.47">        return (xd * grad3d[hash] + yd * grad3d[hash + 1] + zd * grad3d[hash + 2]);</a>
-<span class="sourceLineNo">048</span><a id="line.48">    }</a>
-<span class="sourceLineNo">049</span><a id="line.49">    protected static double gradCoord4D(long seed, int x, int y, int z, int w,</a>
-<span class="sourceLineNo">050</span><a id="line.50">                                        double xd, double yd, double zd, double wd) {</a>
-<span class="sourceLineNo">051</span><a id="line.51">        final int hash =</a>
-<span class="sourceLineNo">052</span><a id="line.52">                ((int)(((seed ^= 0xB4C4D * x ^ 0xEE2C1 * y ^ 0xA7E07 * z ^ 0xCD5E9 * w) ^ seed &gt;&gt;&gt; 13) * (seed))</a>
-<span class="sourceLineNo">053</span><a id="line.53">                        &gt;&gt;&gt; 24) &amp; -4;</a>
-<span class="sourceLineNo">054</span><a id="line.54">        return xd * grad4d[hash] + yd * grad4d[hash + 1] + zd * grad4d[hash + 2] + wd * grad4d[hash + 3];</a>
-<span class="sourceLineNo">055</span><a id="line.55">    }</a>
-<span class="sourceLineNo">056</span><a id="line.56">    protected static double gradCoord5D(long seed, int x, int y, int z, int w, int u,</a>
-<span class="sourceLineNo">057</span><a id="line.57">                                        double xd, double yd, double zd, double wd, double ud) {</a>
-<span class="sourceLineNo">058</span><a id="line.58">        final int hash =</a>
-<span class="sourceLineNo">059</span><a id="line.59">                ((int)(((seed ^= 0xB4C4D * x ^ 0xEE2C1 * y ^ 0xA7E07 * z ^ 0xCD5E9 * w ^ 0x94B5B * u)</a>
-<span class="sourceLineNo">060</span><a id="line.60">                        ^ seed &gt;&gt;&gt; 13) * (seed))</a>
-<span class="sourceLineNo">061</span><a id="line.61">                        &gt;&gt;&gt; 24) * 5;</a>
-<span class="sourceLineNo">062</span><a id="line.62">        return xd * grad5d[hash] + yd * grad5d[hash + 1] + zd * grad5d[hash + 2]</a>
-<span class="sourceLineNo">063</span><a id="line.63">                + wd * grad5d[hash + 3] + ud * grad5d[hash + 4];</a>
-<span class="sourceLineNo">064</span><a id="line.64">    }</a>
-<span class="sourceLineNo">065</span><a id="line.65">    </a>
-<span class="sourceLineNo">066</span><a id="line.66">    protected static double gradCoord6D(long seed, int x, int y, int z, int w, int u, int v,</a>
-<span class="sourceLineNo">067</span><a id="line.67">                                        double xd, double yd, double zd, double wd, double ud, double vd) {</a>
-<span class="sourceLineNo">068</span><a id="line.68">        final int hash =</a>
-<span class="sourceLineNo">069</span><a id="line.69">                ((int)(((seed ^= 0xB4C4D * x ^ 0xEE2C1 * y ^ 0xA7E07 * z ^ 0xCD5E9 * w ^ 0x94B5B * u ^ 0xD2385 * v)</a>
-<span class="sourceLineNo">070</span><a id="line.70">                        ^ seed &gt;&gt;&gt; 13) * (seed))</a>
-<span class="sourceLineNo">071</span><a id="line.71">                        &gt;&gt;&gt; 24) * 6;</a>
-<span class="sourceLineNo">072</span><a id="line.72">        return xd * grad6d[hash] + yd * grad6d[hash + 1] + zd * grad6d[hash + 2]</a>
-<span class="sourceLineNo">073</span><a id="line.73">                + wd * grad6d[hash + 3] + ud * grad6d[hash + 4] + vd * grad6d[hash + 5];</a>
-<span class="sourceLineNo">074</span><a id="line.74">    }</a>
-<span class="sourceLineNo">075</span><a id="line.75">    </a>
-<span class="sourceLineNo">076</span><a id="line.76">    </a>
-<span class="sourceLineNo">077</span><a id="line.77">//    protected static double gradCoord2DJitter(long seed, int x, int y,</a>
-<span class="sourceLineNo">078</span><a id="line.78">//                                              double xd, double yd) {</a>
-<span class="sourceLineNo">079</span><a id="line.79">//        final int hash = ((int)(((seed ^= 0xB4C4D * x ^ 0xEE2C3 * y) ^ seed &gt;&gt;&gt; 13) * (seed)));</a>
-<span class="sourceLineNo">080</span><a id="line.80">//        final double[] grad = phiGrad2[hash &gt;&gt;&gt; 24], jitter = phiGrad2[hash &gt;&gt;&gt; 16 &amp; 0xFF];</a>
-<span class="sourceLineNo">081</span><a id="line.81">//        return (xd + jitter[0] * 0.5) * grad[0] + (yd + jitter[1] * 0.5) * grad[1];</a>
-<span class="sourceLineNo">082</span><a id="line.82">//    }</a>
-<span class="sourceLineNo">083</span><a id="line.83"></a>
-<span class="sourceLineNo">084</span><a id="line.84">    @Override</a>
-<span class="sourceLineNo">085</span><a id="line.85">    public double getNoise(final double x, final double y) {</a>
-<span class="sourceLineNo">086</span><a id="line.86">        return getNoiseWithSeed(x, y, seed);</a>
-<span class="sourceLineNo">087</span><a id="line.87">    }</a>
-<span class="sourceLineNo">088</span><a id="line.88"></a>
-<span class="sourceLineNo">089</span><a id="line.89">    @Override</a>
-<span class="sourceLineNo">090</span><a id="line.90">    public double getNoiseWithSeed(double x, double y, final long seed) {</a>
-<span class="sourceLineNo">091</span><a id="line.91">        x *= 2.0;</a>
-<span class="sourceLineNo">092</span><a id="line.92">        y *= 2.0;</a>
-<span class="sourceLineNo">093</span><a id="line.93">        final int</a>
-<span class="sourceLineNo">094</span><a id="line.94">                x0 = fastFloor(x),</a>
-<span class="sourceLineNo">095</span><a id="line.95">                y0 = fastFloor(y);         </a>
-<span class="sourceLineNo">096</span><a id="line.96">//        final double res =</a>
-<span class="sourceLineNo">097</span><a id="line.97">        return </a>
-<span class="sourceLineNo">098</span><a id="line.98">                Noise.emphasizeSigned(cerp(cerp(gradCoord2D(seed, x0, y0, x - x0, y - y0), gradCoord2D(seed, x0+1, y0, x - x0 - 1, y - y0), x - x0),</a>
-<span class="sourceLineNo">099</span><a id="line.99">                                cerp(gradCoord2D(seed, x0, y0+1, x - x0, y - y0-1), gradCoord2D(seed, x0+1, y0+1, x - x0 - 1, y - y0 - 1), x - x0),</a>
-<span class="sourceLineNo">100</span><a id="line.100">                                y - y0) * 1.4142);//* 0.875;// * 1.4142;</a>
-<span class="sourceLineNo">101</span><a id="line.101">//        if(res &lt; -1.0 || res &gt; 1.0) System.out.println(res);</a>
-<span class="sourceLineNo">102</span><a id="line.102">//        return res;</a>
-<span class="sourceLineNo">103</span><a id="line.103">    }</a>
-<span class="sourceLineNo">104</span><a id="line.104"></a>
-<span class="sourceLineNo">105</span><a id="line.105">    @Override</a>
-<span class="sourceLineNo">106</span><a id="line.106">    public double getNoise(final double x, final double y, final double z) {</a>
-<span class="sourceLineNo">107</span><a id="line.107">        return getNoiseWithSeed(x, y, z, seed);</a>
-<span class="sourceLineNo">108</span><a id="line.108">    }</a>
-<span class="sourceLineNo">109</span><a id="line.109"></a>
-<span class="sourceLineNo">110</span><a id="line.110">    @Override</a>
-<span class="sourceLineNo">111</span><a id="line.111">    public double getNoiseWithSeed(double x, double y, double z, final long seed) {</a>
-<span class="sourceLineNo">112</span><a id="line.112">        x *= 2.0;</a>
-<span class="sourceLineNo">113</span><a id="line.113">        y *= 2.0;</a>
-<span class="sourceLineNo">114</span><a id="line.114">        z *= 2.0;</a>
-<span class="sourceLineNo">115</span><a id="line.115">        final int</a>
-<span class="sourceLineNo">116</span><a id="line.116">                x0 = fastFloor(x),</a>
-<span class="sourceLineNo">117</span><a id="line.117">                y0 = fastFloor(y),</a>
-<span class="sourceLineNo">118</span><a id="line.118">                z0 = fastFloor(z);</a>
-<span class="sourceLineNo">119</span><a id="line.119">//        final double res =</a>
-<span class="sourceLineNo">120</span><a id="line.120">         return </a>
-<span class="sourceLineNo">121</span><a id="line.121">                 Noise.emphasizeSigned(cerp(cerp(cerp(gradCoord3D(seed, x0, y0, z0, x - x0, y - y0, z - z0), gradCoord3D(seed, x0+1, y0, z0, x - x0 - 1, y - y0, z - z0), x - x0),</a>
-<span class="sourceLineNo">122</span><a id="line.122">                cerp(gradCoord3D(seed, x0, y0+1, z0, x - x0, y - y0-1, z - z0), gradCoord3D(seed, x0+1, y0+1, z0, x - x0 - 1, y - y0 - 1, z - z0), x - x0),</a>
-<span class="sourceLineNo">123</span><a id="line.123">                y - y0),</a>
-<span class="sourceLineNo">124</span><a id="line.124">                cerp(cerp(gradCoord3D(seed, x0, y0, z0+1, x - x0, y - y0, z - z0-1), gradCoord3D(seed, x0+1, y0, z0+1, x - x0 - 1, y - y0, z - z0-1), x - x0),</a>
-<span class="sourceLineNo">125</span><a id="line.125">                        cerp(gradCoord3D(seed, x0, y0+1, z0+1, x - x0, y - y0-1, z - z0-1), gradCoord3D(seed, x0+1, y0+1, z0+1, x - x0 - 1, y - y0 - 1, z - z0-1), x - x0),</a>
-<span class="sourceLineNo">126</span><a id="line.126">                        y - y0), z - z0) * 1.0625);</a>
-<span class="sourceLineNo">127</span><a id="line.127">//        if(res &lt; -1 || res &gt; 1) System.out.println(res);</a>
-<span class="sourceLineNo">128</span><a id="line.128">//        return res;</a>
-<span class="sourceLineNo">129</span><a id="line.129">    }</a>
-<span class="sourceLineNo">130</span><a id="line.130"></a>
-<span class="sourceLineNo">131</span><a id="line.131">    @Override</a>
-<span class="sourceLineNo">132</span><a id="line.132">    public double getNoise(final double x, final double y, final double z, final double w) {</a>
-<span class="sourceLineNo">133</span><a id="line.133">        return getNoiseWithSeed(x, y, z, w, seed);</a>
-<span class="sourceLineNo">134</span><a id="line.134">    }</a>
-<span class="sourceLineNo">135</span><a id="line.135"></a>
-<span class="sourceLineNo">136</span><a id="line.136">    @Override</a>
-<span class="sourceLineNo">137</span><a id="line.137">    public double getNoiseWithSeed(double x, double y, double z, double w, final long seed) {</a>
-<span class="sourceLineNo">138</span><a id="line.138">        x *= 2.0;</a>
-<span class="sourceLineNo">139</span><a id="line.139">        y *= 2.0;</a>
-<span class="sourceLineNo">140</span><a id="line.140">        z *= 2.0;</a>
-<span class="sourceLineNo">141</span><a id="line.141">        w *= 2.0;</a>
-<span class="sourceLineNo">142</span><a id="line.142">        final int</a>
-<span class="sourceLineNo">143</span><a id="line.143">                x0 = fastFloor(x),</a>
-<span class="sourceLineNo">144</span><a id="line.144">                y0 = fastFloor(y),</a>
-<span class="sourceLineNo">145</span><a id="line.145">                z0 = fastFloor(z),</a>
-<span class="sourceLineNo">146</span><a id="line.146">                w0 = fastFloor(w);</a>
-<span class="sourceLineNo">147</span><a id="line.147">//        final double res =</a>
-<span class="sourceLineNo">148</span><a id="line.148">        return</a>
-<span class="sourceLineNo">149</span><a id="line.149">                Noise.emphasizeSigned(cerp(cerp(cerp(cerp(gradCoord4D(seed, x0, y0, z0, w0, x - x0, y - y0, z - z0, w - w0), gradCoord4D(seed, x0+1, y0, z0, w0, x - x0 - 1, y - y0, z - z0, w - w0), x - x0),</a>
-<span class="sourceLineNo">150</span><a id="line.150">                        cerp(gradCoord4D(seed, x0, y0+1, z0, w0, x - x0, y - y0-1, z - z0, w - w0), gradCoord4D(seed, x0+1, y0+1, z0, w0, x - x0 - 1, y - y0 - 1, z - z0, w - w0), x - x0),</a>
-<span class="sourceLineNo">151</span><a id="line.151">                        y - y0),</a>
-<span class="sourceLineNo">152</span><a id="line.152">                        cerp(cerp(gradCoord4D(seed, x0, y0, z0+1, w0, x - x0, y - y0, z - z0-1, w - w0), gradCoord4D(seed, x0+1, y0, z0+1, w0, x - x0 - 1, y - y0, z - z0-1, w - w0), x - x0),</a>
-<span class="sourceLineNo">153</span><a id="line.153">                                cerp(gradCoord4D(seed, x0, y0+1, z0+1, w0, x - x0, y - y0-1, z - z0-1, w - w0), gradCoord4D(seed, x0+1, y0+1, z0+1, w0, x - x0 - 1, y - y0 - 1, z - z0-1, w - w0), x - x0),</a>
-<span class="sourceLineNo">154</span><a id="line.154">                                y - y0), </a>
-<span class="sourceLineNo">155</span><a id="line.155">                        z - z0),</a>
-<span class="sourceLineNo">156</span><a id="line.156">                        cerp(cerp(cerp(gradCoord4D(seed, x0, y0, z0, w0+1, x - x0, y - y0, z - z0, w - w0 - 1), gradCoord4D(seed, x0+1, y0, z0, w0+1, x - x0 - 1, y - y0, z - z0, w - w0 - 1), x - x0),</a>
-<span class="sourceLineNo">157</span><a id="line.157">                                cerp(gradCoord4D(seed, x0, y0+1, z0, w0+1, x - x0, y - y0-1, z - z0, w - w0 - 1), gradCoord4D(seed, x0+1, y0+1, z0, w0+1, x - x0 - 1, y - y0 - 1, z - z0, w - w0 - 1), x - x0),</a>
-<span class="sourceLineNo">158</span><a id="line.158">                                y - y0),</a>
-<span class="sourceLineNo">159</span><a id="line.159">                                cerp(cerp(gradCoord4D(seed, x0, y0, z0+1, w0+1, x - x0, y - y0, z - z0-1, w - w0 - 1), gradCoord4D(seed, x0+1, y0, z0+1, w0+1, x - x0 - 1, y - y0, z - z0-1, w - w0 - 1), x - x0),</a>
-<span class="sourceLineNo">160</span><a id="line.160">                                        cerp(gradCoord4D(seed, x0, y0+1, z0+1, w0+1, x - x0, y - y0-1, z - z0-1, w - w0 - 1), gradCoord4D(seed, x0+1, y0+1, z0+1, w0+1, x - x0 - 1, y - y0 - 1, z - z0-1, w - w0 - 1), x - x0),</a>
-<span class="sourceLineNo">161</span><a id="line.161">                                        y - y0),</a>
-<span class="sourceLineNo">162</span><a id="line.162">                                z - z0),</a>
-<span class="sourceLineNo">163</span><a id="line.163">                        w - w0) * 0.555);</a>
-<span class="sourceLineNo">164</span><a id="line.164">//        if(res &lt; -1 || res &gt; 1) System.out.println(res);</a>
-<span class="sourceLineNo">165</span><a id="line.165">//        return res;</a>
-<span class="sourceLineNo">166</span><a id="line.166">    }</a>
-<span class="sourceLineNo">167</span><a id="line.167"></a>
-<span class="sourceLineNo">168</span><a id="line.168"></a>
-<span class="sourceLineNo">169</span><a id="line.169">    @Override</a>
-<span class="sourceLineNo">170</span><a id="line.170">    public double getNoise(final double x, final double y, final double z, final double w, final double u) {</a>
-<span class="sourceLineNo">171</span><a id="line.171">        return getNoiseWithSeed(x, y, z, w, u, seed);</a>
-<span class="sourceLineNo">172</span><a id="line.172">    }</a>
-<span class="sourceLineNo">173</span><a id="line.173"></a>
-<span class="sourceLineNo">174</span><a id="line.174">    @Override</a>
-<span class="sourceLineNo">175</span><a id="line.175">    public double getNoiseWithSeed(double x, double y, double z, double w, double u, long seed) {</a>
-<span class="sourceLineNo">176</span><a id="line.176">        x *= 2.0;</a>
-<span class="sourceLineNo">177</span><a id="line.177">        y *= 2.0;</a>
-<span class="sourceLineNo">178</span><a id="line.178">        z *= 2.0;</a>
-<span class="sourceLineNo">179</span><a id="line.179">        w *= 2.0;</a>
-<span class="sourceLineNo">180</span><a id="line.180">        u *= 2.0;</a>
-<span class="sourceLineNo">181</span><a id="line.181">        final int</a>
-<span class="sourceLineNo">182</span><a id="line.182">                x0 = fastFloor(x),</a>
-<span class="sourceLineNo">183</span><a id="line.183">                y0 = fastFloor(y),</a>
-<span class="sourceLineNo">184</span><a id="line.184">                z0 = fastFloor(z),</a>
-<span class="sourceLineNo">185</span><a id="line.185">                w0 = fastFloor(w),</a>
-<span class="sourceLineNo">186</span><a id="line.186">                u0 = fastFloor(u);</a>
-<span class="sourceLineNo">187</span><a id="line.187">        final double xd = x - x0, yd = y - y0, zd = z - z0, wd = w - w0, ud = u - u0;</a>
-<span class="sourceLineNo">188</span><a id="line.188">        //ad * ad * ad * (ad * (ad * 6.0 - 15.0) + 10.0)</a>
-<span class="sourceLineNo">189</span><a id="line.189">        final double xc = xd * xd * xd * (xd * (xd * 6.0 - 15.0) + 10.0);</a>
-<span class="sourceLineNo">190</span><a id="line.190">        final double yc = yd * yd * yd * (yd * (yd * 6.0 - 15.0) + 10.0);</a>
-<span class="sourceLineNo">191</span><a id="line.191">        final double zc = zd * zd * zd * (zd * (zd * 6.0 - 15.0) + 10.0);</a>
-<span class="sourceLineNo">192</span><a id="line.192">        final double wc = wd * wd * wd * (wd * (wd * 6.0 - 15.0) + 10.0);</a>
-<span class="sourceLineNo">193</span><a id="line.193">        final double uc = ud * ud * ud * (ud * (ud * 6.0 - 15.0) + 10.0);</a>
-<span class="sourceLineNo">194</span><a id="line.194">//        </a>
-<span class="sourceLineNo">195</span><a id="line.195">//        final double xc = xd * xd * (3.0 - 2.0 * xd);</a>
-<span class="sourceLineNo">196</span><a id="line.196">//        final double yc = yd * yd * (3.0 - 2.0 * yd);</a>
-<span class="sourceLineNo">197</span><a id="line.197">//        final double zc = zd * zd * (3.0 - 2.0 * zd);</a>
-<span class="sourceLineNo">198</span><a id="line.198">//        final double wc = wd * wd * (3.0 - 2.0 * wd);</a>
-<span class="sourceLineNo">199</span><a id="line.199">//        final double uc = ud * ud * (3.0 - 2.0 * ud);</a>
-<span class="sourceLineNo">200</span><a id="line.200">//        </a>
-<span class="sourceLineNo">201</span><a id="line.201">//        final double res =</a>
-<span class="sourceLineNo">202</span><a id="line.202">        return </a>
-<span class="sourceLineNo">203</span><a id="line.203">                Noise.emphasizeSigned(</a>
-<span class="sourceLineNo">204</span><a id="line.204">                lerp(lerp(</a>
-<span class="sourceLineNo">205</span><a id="line.205">                        lerp(</a>
-<span class="sourceLineNo">206</span><a id="line.206">                                lerp(</a>
-<span class="sourceLineNo">207</span><a id="line.207">                                        lerp(gradCoord5D(seed, x0, y0, z0, w0, u0, xd, yd, zd, wd, ud),</a>
-<span class="sourceLineNo">208</span><a id="line.208">                                                gradCoord5D(seed, x0+1, y0, z0, w0, u0, xd-1, yd, zd, wd, ud), xc),</a>
-<span class="sourceLineNo">209</span><a id="line.209">                                        lerp(gradCoord5D(seed, x0, y0+1, z0, w0, u0, xd, yd-1, zd, wd, ud),</a>
-<span class="sourceLineNo">210</span><a id="line.210">                                                gradCoord5D(seed, x0+1, y0+1, z0, w0, u0, xd-1, yd-1, zd, wd, ud), xc),</a>
-<span class="sourceLineNo">211</span><a id="line.211">                                        yc),</a>
-<span class="sourceLineNo">212</span><a id="line.212">                                lerp(</a>
-<span class="sourceLineNo">213</span><a id="line.213">                                        lerp(gradCoord5D(seed, x0, y0, z0+1, w0, u0, xd, yd, zd-1, wd, ud),</a>
-<span class="sourceLineNo">214</span><a id="line.214">                                                gradCoord5D(seed, x0+1, y0, z0+1, w0, u0, xd-1, yd, zd-1, wd, ud), xc),</a>
-<span class="sourceLineNo">215</span><a id="line.215">                                        lerp(gradCoord5D(seed, x0, y0+1, z0+1, w0, u0, xd, yd-1, zd-1, wd, ud),</a>
-<span class="sourceLineNo">216</span><a id="line.216">                                                gradCoord5D(seed, x0+1, y0+1, z0+1, w0, u0, xd-1, yd-1, zd-1, wd, ud), xc),</a>
-<span class="sourceLineNo">217</span><a id="line.217">                                        yc),</a>
-<span class="sourceLineNo">218</span><a id="line.218">                                zc),</a>
-<span class="sourceLineNo">219</span><a id="line.219">                        lerp(</a>
-<span class="sourceLineNo">220</span><a id="line.220">                                lerp(</a>
-<span class="sourceLineNo">221</span><a id="line.221">                                        lerp(gradCoord5D(seed, x0, y0, z0, w0+1, u0, xd, yd, zd, wd-1, ud),</a>
-<span class="sourceLineNo">222</span><a id="line.222">                                                gradCoord5D(seed, x0+1, y0, z0, w0+1, u0, xd-1, yd, zd, wd-1, ud), xc),</a>
-<span class="sourceLineNo">223</span><a id="line.223">                                        lerp(gradCoord5D(seed, x0, y0+1, z0, w0+1, u0, xd, yd-1, zd, wd-1, ud),</a>
-<span class="sourceLineNo">224</span><a id="line.224">                                                gradCoord5D(seed, x0+1, y0+1, z0, w0+1, u0, xd-1, yd-1, zd, wd-1, ud), xc),</a>
-<span class="sourceLineNo">225</span><a id="line.225">                                        yc),</a>
-<span class="sourceLineNo">226</span><a id="line.226">                                lerp(</a>
-<span class="sourceLineNo">227</span><a id="line.227">                                        lerp(gradCoord5D(seed, x0, y0, z0+1, w0+1, u0, xd, yd, zd-1, wd-1, ud),</a>
-<span class="sourceLineNo">228</span><a id="line.228">                                                gradCoord5D(seed, x0+1, y0, z0+1, w0+1, u0, xd-1, yd, zd-1, wd-1, ud), xc),</a>
-<span class="sourceLineNo">229</span><a id="line.229">                                        lerp(gradCoord5D(seed, x0, y0+1, z0+1, w0+1, u0, xd, yd-1, zd-1, wd-1, ud),</a>
-<span class="sourceLineNo">230</span><a id="line.230">                                                gradCoord5D(seed, x0+1, y0+1, z0+1, w0+1, u0, xd-1, yd-1, zd-1, wd-1, ud), xc),</a>
-<span class="sourceLineNo">231</span><a id="line.231">                                        yc),</a>
-<span class="sourceLineNo">232</span><a id="line.232">                                zc),</a>
-<span class="sourceLineNo">233</span><a id="line.233">                        wc),</a>
-<span class="sourceLineNo">234</span><a id="line.234">                        lerp(</a>
-<span class="sourceLineNo">235</span><a id="line.235">                                lerp(</a>
-<span class="sourceLineNo">236</span><a id="line.236">                                        lerp(</a>
-<span class="sourceLineNo">237</span><a id="line.237">                                                lerp(gradCoord5D(seed, x0, y0, z0, w0, u0+1, xd, yd, zd, wd, ud-1),</a>
-<span class="sourceLineNo">238</span><a id="line.238">                                                        gradCoord5D(seed, x0+1, y0, z0, w0, u0+1, xd-1, yd, zd, wd, ud-1), xc),</a>
-<span class="sourceLineNo">239</span><a id="line.239">                                                lerp(gradCoord5D(seed, x0, y0+1, z0, w0, u0+1, xd, yd-1, zd, wd, ud-1),</a>
-<span class="sourceLineNo">240</span><a id="line.240">                                                        gradCoord5D(seed, x0+1, y0+1, z0, w0, u0+1, xd-1, yd-1, zd, wd, ud-1), xc),</a>
-<span class="sourceLineNo">241</span><a id="line.241">                                                yc),</a>
-<span class="sourceLineNo">242</span><a id="line.242">                                        lerp(</a>
-<span class="sourceLineNo">243</span><a id="line.243">                                                lerp(gradCoord5D(seed, x0, y0, z0+1, w0, u0+1, xd, yd, zd-1, wd, ud-1),</a>
-<span class="sourceLineNo">244</span><a id="line.244">                                                        gradCoord5D(seed, x0+1, y0, z0+1, w0, u0+1, xd-1, yd, zd-1, wd, ud-1), xc),</a>
-<span class="sourceLineNo">245</span><a id="line.245">                                                lerp(gradCoord5D(seed, x0, y0+1, z0+1, w0, u0+1, xd, yd-1, zd-1, wd, ud-1),</a>
-<span class="sourceLineNo">246</span><a id="line.246">                                                        gradCoord5D(seed, x0+1, y0+1, z0+1, w0, u0+1, xd-1, yd-1, zd-1, wd, ud-1), xc),</a>
-<span class="sourceLineNo">247</span><a id="line.247">                                                yc),</a>
-<span class="sourceLineNo">248</span><a id="line.248">                                        zc),</a>
-<span class="sourceLineNo">249</span><a id="line.249">                                lerp(</a>
-<span class="sourceLineNo">250</span><a id="line.250">                                        lerp(</a>
-<span class="sourceLineNo">251</span><a id="line.251">                                                lerp(gradCoord5D(seed, x0, y0, z0, w0+1, u0+1, xd, yd, zd, wd-1, ud-1),</a>
-<span class="sourceLineNo">252</span><a id="line.252">                                                        gradCoord5D(seed, x0+1, y0, z0, w0+1, u0+1, xd-1, yd, zd, wd-1, ud-1), xc),</a>
-<span class="sourceLineNo">253</span><a id="line.253">                                                lerp(gradCoord5D(seed, x0, y0+1, z0, w0+1, u0+1, xd, yd-1, zd, wd-1, ud-1),</a>
-<span class="sourceLineNo">254</span><a id="line.254">                                                        gradCoord5D(seed, x0+1, y0+1, z0, w0+1, u0+1, xd-1, yd-1, zd, wd-1, ud-1), xc),</a>
-<span class="sourceLineNo">255</span><a id="line.255">                                                yc),</a>
-<span class="sourceLineNo">256</span><a id="line.256">                                        lerp(</a>
-<span class="sourceLineNo">257</span><a id="line.257">                                                lerp(gradCoord5D(seed, x0, y0, z0+1, w0+1, u0+1, xd, yd, zd-1, wd-1, ud-1),</a>
-<span class="sourceLineNo">258</span><a id="line.258">                                                        gradCoord5D(seed, x0+1, y0, z0+1, w0+1, u0+1, xd-1, yd, zd-1, wd-1, ud-1), xc),</a>
-<span class="sourceLineNo">259</span><a id="line.259">                                                lerp(gradCoord5D(seed, x0, y0+1, z0+1, w0+1, u0+1, xd, yd-1, zd-1, wd-1, ud-1),</a>
-<span class="sourceLineNo">260</span><a id="line.260">                                                        gradCoord5D(seed, x0+1, y0+1, z0+1, w0+1, u0+1, xd-1, yd-1, zd-1, wd-1, ud-1), xc),</a>
-<span class="sourceLineNo">261</span><a id="line.261">                                                yc),</a>
-<span class="sourceLineNo">262</span><a id="line.262">                                        zc),</a>
-<span class="sourceLineNo">263</span><a id="line.263">                                wc),</a>
-<span class="sourceLineNo">264</span><a id="line.264">                        uc) );</a>
-<span class="sourceLineNo">265</span><a id="line.265">//        if(res &lt; -1 || res &gt; 1) System.out.println(res);</a>
-<span class="sourceLineNo">266</span><a id="line.266">//        return res;</a>
-<span class="sourceLineNo">267</span><a id="line.267">    }</a>
-<span class="sourceLineNo">268</span><a id="line.268"></a>
-<span class="sourceLineNo">269</span><a id="line.269">    @Override</a>
-<span class="sourceLineNo">270</span><a id="line.270">    public double getNoise(final double x, final double y, final double z, final double w, final double u, final double v) {</a>
-<span class="sourceLineNo">271</span><a id="line.271">        return getNoiseWithSeed(x, y, z, w, u, v, seed);</a>
-<span class="sourceLineNo">272</span><a id="line.272">    }</a>
-<span class="sourceLineNo">273</span><a id="line.273"></a>
-<span class="sourceLineNo">274</span><a id="line.274">    @Override</a>
-<span class="sourceLineNo">275</span><a id="line.275">    public double getNoiseWithSeed(double x, double y, double z, double w, double u, double v, long seed) {</a>
-<span class="sourceLineNo">276</span><a id="line.276">        x *= 2.0;</a>
-<span class="sourceLineNo">277</span><a id="line.277">        y *= 2.0;</a>
-<span class="sourceLineNo">278</span><a id="line.278">        z *= 2.0;</a>
-<span class="sourceLineNo">279</span><a id="line.279">        w *= 2.0;</a>
-<span class="sourceLineNo">280</span><a id="line.280">        u *= 2.0;</a>
-<span class="sourceLineNo">281</span><a id="line.281">        v *= 2.0;</a>
-<span class="sourceLineNo">282</span><a id="line.282">        final int</a>
-<span class="sourceLineNo">283</span><a id="line.283">                x0 = fastFloor(x),</a>
-<span class="sourceLineNo">284</span><a id="line.284">                y0 = fastFloor(y),</a>
-<span class="sourceLineNo">285</span><a id="line.285">                z0 = fastFloor(z),</a>
-<span class="sourceLineNo">286</span><a id="line.286">                w0 = fastFloor(w),</a>
-<span class="sourceLineNo">287</span><a id="line.287">                u0 = fastFloor(u),</a>
-<span class="sourceLineNo">288</span><a id="line.288">                v0 = fastFloor(v);</a>
-<span class="sourceLineNo">289</span><a id="line.289">        final double xd = x - x0, yd = y - y0, zd = z - z0, wd = w - w0, ud = u - u0, vd = v - v0;</a>
-<span class="sourceLineNo">290</span><a id="line.290">//        final double res =</a>
-<span class="sourceLineNo">291</span><a id="line.291">        return Noise.emphasizeSigned(</a>
-<span class="sourceLineNo">292</span><a id="line.292">                cerp(cerp(cerp(</a>
-<span class="sourceLineNo">293</span><a id="line.293">                        cerp(</a>
-<span class="sourceLineNo">294</span><a id="line.294">                                cerp(</a>
-<span class="sourceLineNo">295</span><a id="line.295">                                        cerp(gradCoord6D(seed, x0, y0, z0, w0, u0, v0, xd, yd, zd, wd, ud, vd),</a>
-<span class="sourceLineNo">296</span><a id="line.296">                                                gradCoord6D(seed, x0+1, y0, z0, w0, u0, v0, xd-1, yd, zd, wd, ud, vd), xd),</a>
-<span class="sourceLineNo">297</span><a id="line.297">                                        cerp(gradCoord6D(seed, x0, y0+1, z0, w0, u0, v0, xd, yd-1, zd, wd, ud, vd),</a>
-<span class="sourceLineNo">298</span><a id="line.298">                                                gradCoord6D(seed, x0+1, y0+1, z0, w0, u0, v0, xd-1, yd-1, zd, wd, ud, vd), xd),</a>
-<span class="sourceLineNo">299</span><a id="line.299">                                        yd),</a>
-<span class="sourceLineNo">300</span><a id="line.300">                                cerp(</a>
-<span class="sourceLineNo">301</span><a id="line.301">                                        cerp(gradCoord6D(seed, x0, y0, z0+1, w0, u0, v0, xd, yd, zd-1, wd, ud, vd),</a>
-<span class="sourceLineNo">302</span><a id="line.302">                                                gradCoord6D(seed, x0+1, y0, z0+1, w0, u0, v0, xd-1, yd, zd-1, wd, ud, vd), xd),</a>
-<span class="sourceLineNo">303</span><a id="line.303">                                        cerp(gradCoord6D(seed, x0, y0+1, z0+1, w0, u0, v0, xd, yd-1, zd-1, wd, ud, vd),</a>
-<span class="sourceLineNo">304</span><a id="line.304">                                                gradCoord6D(seed, x0+1, y0+1, z0+1, w0, u0, v0, xd-1, yd-1, zd-1, wd, ud, vd), xd),</a>
-<span class="sourceLineNo">305</span><a id="line.305">                                        yd),</a>
-<span class="sourceLineNo">306</span><a id="line.306">                                zd),</a>
-<span class="sourceLineNo">307</span><a id="line.307">                        cerp(</a>
-<span class="sourceLineNo">308</span><a id="line.308">                                cerp(</a>
-<span class="sourceLineNo">309</span><a id="line.309">                                        cerp(gradCoord6D(seed, x0, y0, z0, w0+1, u0, v0, xd, yd, zd, wd-1, ud, vd),</a>
-<span class="sourceLineNo">310</span><a id="line.310">                                                gradCoord6D(seed, x0+1, y0, z0, w0+1, u0, v0, xd-1, yd, zd, wd-1, ud, vd), xd),</a>
-<span class="sourceLineNo">311</span><a id="line.311">                                        cerp(gradCoord6D(seed, x0, y0+1, z0, w0+1, u0, v0, xd, yd-1, zd, wd-1, ud, vd),</a>
-<span class="sourceLineNo">312</span><a id="line.312">                                                gradCoord6D(seed, x0+1, y0+1, z0, w0+1, u0, v0, xd-1, yd-1, zd, wd-1, ud, vd), xd),</a>
-<span class="sourceLineNo">313</span><a id="line.313">                                        yd),</a>
-<span class="sourceLineNo">314</span><a id="line.314">                                cerp(</a>
-<span class="sourceLineNo">315</span><a id="line.315">                                        cerp(gradCoord6D(seed, x0, y0, z0+1, w0+1, u0, v0, xd, yd, zd-1, wd-1, ud, vd),</a>
-<span class="sourceLineNo">316</span><a id="line.316">                                                gradCoord6D(seed, x0+1, y0, z0+1, w0+1, u0, v0, xd-1, yd, zd-1, wd-1, ud, vd), xd),</a>
-<span class="sourceLineNo">317</span><a id="line.317">                                        cerp(gradCoord6D(seed, x0, y0+1, z0+1, w0+1, u0, v0, xd, yd-1, zd-1, wd-1, ud, vd),</a>
-<span class="sourceLineNo">318</span><a id="line.318">                                                gradCoord6D(seed, x0+1, y0+1, z0+1, w0+1, u0, v0, xd-1, yd-1, zd-1, wd-1, ud, vd), xd),</a>
-<span class="sourceLineNo">319</span><a id="line.319">                                        yd),</a>
-<span class="sourceLineNo">320</span><a id="line.320">                                zd),</a>
-<span class="sourceLineNo">321</span><a id="line.321">                        wd),</a>
-<span class="sourceLineNo">322</span><a id="line.322">                        cerp(</a>
-<span class="sourceLineNo">323</span><a id="line.323">                                cerp(</a>
-<span class="sourceLineNo">324</span><a id="line.324">                                        cerp(</a>
-<span class="sourceLineNo">325</span><a id="line.325">                                                cerp(gradCoord6D(seed, x0, y0, z0, w0, u0+1, v0, xd, yd, zd, wd, ud-1, vd),</a>
-<span class="sourceLineNo">326</span><a id="line.326">                                                        gradCoord6D(seed, x0+1, y0, z0, w0, u0+1, v0, xd-1, yd, zd, wd, ud-1, vd), xd),</a>
-<span class="sourceLineNo">327</span><a id="line.327">                                                cerp(gradCoord6D(seed, x0, y0+1, z0, w0, u0+1, v0, xd, yd-1, zd, wd, ud-1, vd),</a>
-<span class="sourceLineNo">328</span><a id="line.328">                                                        gradCoord6D(seed, x0+1, y0+1, z0, w0, u0+1, v0, xd-1, yd-1, zd, wd, ud-1, vd), xd),</a>
-<span class="sourceLineNo">329</span><a id="line.329">                                                yd),</a>
-<span class="sourceLineNo">330</span><a id="line.330">                                        cerp(</a>
-<span class="sourceLineNo">331</span><a id="line.331">                                                cerp(gradCoord6D(seed, x0, y0, z0+1, w0, u0+1, v0, xd, yd, zd-1, wd, ud-1, vd),</a>
-<span class="sourceLineNo">332</span><a id="line.332">                                                        gradCoord6D(seed, x0+1, y0, z0+1, w0, u0+1, v0, xd-1, yd, zd-1, wd, ud-1, vd), xd),</a>
-<span class="sourceLineNo">333</span><a id="line.333">                                                cerp(gradCoord6D(seed, x0, y0+1, z0+1, w0, u0+1, v0, xd, yd-1, zd-1, wd, ud-1, vd),</a>
-<span class="sourceLineNo">334</span><a id="line.334">                                                        gradCoord6D(seed, x0+1, y0+1, z0+1, w0, u0+1, v0, xd-1, yd-1, zd-1, wd, ud-1, vd), xd),</a>
-<span class="sourceLineNo">335</span><a id="line.335">                                                yd),</a>
-<span class="sourceLineNo">336</span><a id="line.336">                                        zd),</a>
-<span class="sourceLineNo">337</span><a id="line.337">                                cerp(</a>
-<span class="sourceLineNo">338</span><a id="line.338">                                        cerp(</a>
-<span class="sourceLineNo">339</span><a id="line.339">                                                cerp(gradCoord6D(seed, x0, y0, z0, w0+1, u0+1, v0, xd, yd, zd, wd-1, ud-1, vd),</a>
-<span class="sourceLineNo">340</span><a id="line.340">                                                        gradCoord6D(seed, x0+1, y0, z0, w0+1, u0+1, v0, xd-1, yd, zd, wd-1, ud-1, vd), xd),</a>
-<span class="sourceLineNo">341</span><a id="line.341">                                                cerp(gradCoord6D(seed, x0, y0+1, z0, w0+1, u0+1, v0, xd, yd-1, zd, wd-1, ud-1, vd),</a>
-<span class="sourceLineNo">342</span><a id="line.342">                                                        gradCoord6D(seed, x0+1, y0+1, z0, w0+1, u0+1, v0, xd-1, yd-1, zd, wd-1, ud-1, vd), xd),</a>
-<span class="sourceLineNo">343</span><a id="line.343">                                                yd),</a>
-<span class="sourceLineNo">344</span><a id="line.344">                                        cerp(</a>
-<span class="sourceLineNo">345</span><a id="line.345">                                                cerp(gradCoord6D(seed, x0, y0, z0+1, w0+1, u0+1, v0, xd, yd, zd-1, wd-1, ud-1, vd),</a>
-<span class="sourceLineNo">346</span><a id="line.346">                                                        gradCoord6D(seed, x0+1, y0, z0+1, w0+1, u0+1, v0, xd-1, yd, zd-1, wd-1, ud-1, vd), xd),</a>
-<span class="sourceLineNo">347</span><a id="line.347">                                                cerp(gradCoord6D(seed, x0, y0+1, z0+1, w0+1, u0+1, v0, xd, yd-1, zd-1, wd-1, ud-1, vd),</a>
-<span class="sourceLineNo">348</span><a id="line.348">                                                        gradCoord6D(seed, x0+1, y0+1, z0+1, w0+1, u0+1, v0, xd-1, yd-1, zd-1, wd-1, ud-1, vd), xd),</a>
-<span class="sourceLineNo">349</span><a id="line.349">                                                yd),</a>
-<span class="sourceLineNo">350</span><a id="line.350">                                        zd),</a>
-<span class="sourceLineNo">351</span><a id="line.351">                                wd),</a>
-<span class="sourceLineNo">352</span><a id="line.352">                        ud),</a>
-<span class="sourceLineNo">353</span><a id="line.353">                        cerp(</a>
-<span class="sourceLineNo">354</span><a id="line.354">                                cerp(</a>
-<span class="sourceLineNo">355</span><a id="line.355">                                        cerp(</a>
-<span class="sourceLineNo">356</span><a id="line.356">                                                cerp(</a>
-<span class="sourceLineNo">357</span><a id="line.357">                                                        cerp(gradCoord6D(seed, x0, y0, z0, w0, u0, v0+1, xd, yd, zd, wd, ud, vd-1),</a>
-<span class="sourceLineNo">358</span><a id="line.358">                                                                gradCoord6D(seed, x0+1, y0, z0, w0, u0, v0+1, xd-1, yd, zd, wd, ud, vd-1), xd),</a>
-<span class="sourceLineNo">359</span><a id="line.359">                                                        cerp(gradCoord6D(seed, x0, y0+1, z0, w0, u0, v0+1, xd, yd-1, zd, wd, ud, vd-1),</a>
-<span class="sourceLineNo">360</span><a id="line.360">                                                                gradCoord6D(seed, x0+1, y0+1, z0, w0, u0, v0+1, xd-1, yd-1, zd, wd, ud, vd-1), xd),</a>
-<span class="sourceLineNo">361</span><a id="line.361">                                                        yd),</a>
-<span class="sourceLineNo">362</span><a id="line.362">                                                cerp(</a>
-<span class="sourceLineNo">363</span><a id="line.363">                                                        cerp(gradCoord6D(seed, x0, y0, z0+1, w0, u0, v0+1, xd, yd, zd-1, wd, ud, vd-1),</a>
-<span class="sourceLineNo">364</span><a id="line.364">                                                                gradCoord6D(seed, x0+1, y0, z0+1, w0, u0, v0+1, xd-1, yd, zd-1, wd, ud, vd-1), xd),</a>
-<span class="sourceLineNo">365</span><a id="line.365">                                                        cerp(gradCoord6D(seed, x0, y0+1, z0+1, w0, u0, v0+1, xd, yd-1, zd-1, wd, ud, vd-1),</a>
-<span class="sourceLineNo">366</span><a id="line.366">                                                                gradCoord6D(seed, x0+1, y0+1, z0+1, w0, u0, v0+1, xd-1, yd-1, zd-1, wd, ud, vd-1), xd),</a>
-<span class="sourceLineNo">367</span><a id="line.367">                                                        yd),</a>
-<span class="sourceLineNo">368</span><a id="line.368">                                                zd),</a>
-<span class="sourceLineNo">369</span><a id="line.369">                                        cerp(</a>
-<span class="sourceLineNo">370</span><a id="line.370">                                                cerp(</a>
-<span class="sourceLineNo">371</span><a id="line.371">                                                        cerp(gradCoord6D(seed, x0, y0, z0, w0+1, u0, v0+1, xd, yd, zd, wd-1, ud, vd-1),</a>
-<span class="sourceLineNo">372</span><a id="line.372">                                                                gradCoord6D(seed, x0+1, y0, z0, w0+1, u0, v0+1, xd-1, yd, zd, wd-1, ud, vd-1), xd),</a>
-<span class="sourceLineNo">373</span><a id="line.373">                                                        cerp(gradCoord6D(seed, x0, y0+1, z0, w0+1, u0, v0+1, xd, yd-1, zd, wd-1, ud, vd-1),</a>
-<span class="sourceLineNo">374</span><a id="line.374">                                                                gradCoord6D(seed, x0+1, y0+1, z0, w0+1, u0, v0+1, xd-1, yd-1, zd, wd-1, ud, vd-1), xd),</a>
-<span class="sourceLineNo">375</span><a id="line.375">                                                        yd),</a>
-<span class="sourceLineNo">376</span><a id="line.376">                                                cerp(</a>
-<span class="sourceLineNo">377</span><a id="line.377">                                                        cerp(gradCoord6D(seed, x0, y0, z0+1, w0+1, u0, v0+1, xd, yd, zd-1, wd-1, ud, vd-1),</a>
-<span class="sourceLineNo">378</span><a id="line.378">                                                                gradCoord6D(seed, x0+1, y0, z0+1, w0+1, u0, v0+1, xd-1, yd, zd-1, wd-1, ud, vd-1), xd),</a>
-<span class="sourceLineNo">379</span><a id="line.379">                                                        cerp(gradCoord6D(seed, x0, y0+1, z0+1, w0+1, u0, v0+1, xd, yd-1, zd-1, wd-1, ud, vd-1),</a>
-<span class="sourceLineNo">380</span><a id="line.380">                                                                gradCoord6D(seed, x0+1, y0+1, z0+1, w0+1, u0, v0+1, xd-1, yd-1, zd-1, wd-1, ud, vd-1), xd),</a>
-<span class="sourceLineNo">381</span><a id="line.381">                                                        yd),</a>
-<span class="sourceLineNo">382</span><a id="line.382">                                                zd),</a>
-<span class="sourceLineNo">383</span><a id="line.383">                                        wd),</a>
-<span class="sourceLineNo">384</span><a id="line.384">                                cerp(</a>
-<span class="sourceLineNo">385</span><a id="line.385">                                        cerp(</a>
-<span class="sourceLineNo">386</span><a id="line.386">                                                cerp(</a>
-<span class="sourceLineNo">387</span><a id="line.387">                                                        cerp(gradCoord6D(seed, x0, y0, z0, w0, u0+1, v0+1, xd, yd, zd, wd, ud-1, vd-1),</a>
-<span class="sourceLineNo">388</span><a id="line.388">                                                                gradCoord6D(seed, x0+1, y0, z0, w0, u0+1, v0+1, xd-1, yd, zd, wd, ud-1, vd-1), xd),</a>
-<span class="sourceLineNo">389</span><a id="line.389">                                                        cerp(gradCoord6D(seed, x0, y0+1, z0, w0, u0+1, v0+1, xd, yd-1, zd, wd, ud-1, vd-1),</a>
-<span class="sourceLineNo">390</span><a id="line.390">                                                                gradCoord6D(seed, x0+1, y0+1, z0, w0, u0+1, v0+1, xd-1, yd-1, zd, wd, ud-1, vd-1), xd),</a>
-<span class="sourceLineNo">391</span><a id="line.391">                                                        yd),</a>
-<span class="sourceLineNo">392</span><a id="line.392">                                                cerp(</a>
-<span class="sourceLineNo">393</span><a id="line.393">                                                        cerp(gradCoord6D(seed, x0, y0, z0+1, w0, u0+1, v0+1, xd, yd, zd-1, wd, ud-1, vd-1),</a>
-<span class="sourceLineNo">394</span><a id="line.394">                                                                gradCoord6D(seed, x0+1, y0, z0+1, w0, u0+1, v0+1, xd-1, yd, zd-1, wd, ud-1, vd-1), xd),</a>
-<span class="sourceLineNo">395</span><a id="line.395">                                                        cerp(gradCoord6D(seed, x0, y0+1, z0+1, w0, u0+1, v0+1, xd, yd-1, zd-1, wd, ud-1, vd-1),</a>
-<span class="sourceLineNo">396</span><a id="line.396">                                                                gradCoord6D(seed, x0+1, y0+1, z0+1, w0, u0+1, v0+1, xd-1, yd-1, zd-1, wd, ud-1, vd-1), xd),</a>
-<span class="sourceLineNo">397</span><a id="line.397">                                                        yd),</a>
-<span class="sourceLineNo">398</span><a id="line.398">                                                zd),</a>
-<span class="sourceLineNo">399</span><a id="line.399">                                        cerp(</a>
-<span class="sourceLineNo">400</span><a id="line.400">                                                cerp(</a>
-<span class="sourceLineNo">401</span><a id="line.401">                                                        cerp(gradCoord6D(seed, x0, y0, z0, w0+1, u0+1, v0+1, xd, yd, zd, wd-1, ud-1, vd-1),</a>
-<span class="sourceLineNo">402</span><a id="line.402">                                                                gradCoord6D(seed, x0+1, y0, z0, w0+1, u0+1, v0+1, xd-1, yd, zd, wd-1, ud-1, vd-1), xd),</a>
-<span class="sourceLineNo">403</span><a id="line.403">                                                        cerp(gradCoord6D(seed, x0, y0+1, z0, w0+1, u0+1, v0+1, xd, yd-1, zd, wd-1, ud-1, vd-1),</a>
-<span class="sourceLineNo">404</span><a id="line.404">                                                                gradCoord6D(seed, x0+1, y0+1, z0, w0+1, u0+1, v0+1, xd-1, yd-1, zd, wd-1, ud-1, vd-1), xd),</a>
-<span class="sourceLineNo">405</span><a id="line.405">                                                        yd),</a>
-<span class="sourceLineNo">406</span><a id="line.406">                                                cerp(</a>
-<span class="sourceLineNo">407</span><a id="line.407">                                                        cerp(gradCoord6D(seed, x0, y0, z0+1, w0+1, u0+1, v0+1, xd, yd, zd-1, wd-1, ud-1, vd-1),</a>
-<span class="sourceLineNo">408</span><a id="line.408">                                                                gradCoord6D(seed, x0+1, y0, z0+1, w0+1, u0+1, v0+1, xd-1, yd, zd-1, wd-1, ud-1, vd-1), xd),</a>
-<span class="sourceLineNo">409</span><a id="line.409">                                                        cerp(gradCoord6D(seed, x0, y0+1, z0+1, w0+1, u0+1, v0+1, xd, yd-1, zd-1, wd-1, ud-1, vd-1),</a>
-<span class="sourceLineNo">410</span><a id="line.410">                                                                gradCoord6D(seed, x0+1, y0+1, z0+1, w0+1, u0+1, v0+1, xd-1, yd-1, zd-1, wd-1, ud-1, vd-1), xd),</a>
-<span class="sourceLineNo">411</span><a id="line.411">                                                        yd),</a>
-<span class="sourceLineNo">412</span><a id="line.412">                                                zd),</a>
-<span class="sourceLineNo">413</span><a id="line.413">                                        wd),</a>
-<span class="sourceLineNo">414</span><a id="line.414">                                ud),</a>
-<span class="sourceLineNo">415</span><a id="line.415">                        vd) * 1.875);</a>
-<span class="sourceLineNo">416</span><a id="line.416">//        if(res &lt; -1 || res &gt; 1) System.out.println(res);</a>
-<span class="sourceLineNo">417</span><a id="line.417">//        return res;</a>
-<span class="sourceLineNo">418</span><a id="line.418">    }</a>
-<span class="sourceLineNo">419</span><a id="line.419">}</a>
+<div class="source-container">
+<pre><span class="source-line-no">001</span><span id="line.1">package squidpony.squidmath;</span>
+<span class="source-line-no">002</span><span id="line.2"></span>
+<span class="source-line-no">003</span><span id="line.3">import static squidpony.squidmath.Noise.*;</span>
+<span class="source-line-no">004</span><span id="line.4">import static squidpony.squidmath.SeededNoise.*;</span>
+<span class="source-line-no">005</span><span id="line.5"></span>
+<span class="source-line-no">006</span><span id="line.6">/**</span>
+<span class="source-line-no">007</span><span id="line.7"> * "Classic Perlin" noise, as opposed to the Simplex Noise also created by Ken Perlin (which is produced by</span>
+<span class="source-line-no">008</span><span id="line.8"> * {@link SeededNoise}; both can be produced by {@link FastNoise}).</span>
+<span class="source-line-no">009</span><span id="line.9"> * This noise can in theory be scaled up to arbitrary dimensions, but in practice uses unreasonably hefty amounts of</span>
+<span class="source-line-no">010</span><span id="line.10"> * memory when dimensionality exceeds 10 or so, since it needs to hash {@code Math.pow(2, dimensionality)} points per</span>
+<span class="source-line-no">011</span><span id="line.11"> * sample of noise, which involves over a thousand points in 10 dimensions and over a million points in 20 dimensions.</span>
+<span class="source-line-no">012</span><span id="line.12"> * For that reason, it's limited to 6D noise here, and also implements 2D, 3D, and 4D. Its performance is surprisingly</span>
+<span class="source-line-no">013</span><span id="line.13"> * good at 2D, 3D, and 4D but trails off quickly at 6D. Its quality is worse than normal simplex noise in 2D, but you</span>
+<span class="source-line-no">014</span><span id="line.14"> * can use {@link JitterNoise} (which takes the same algorithm and distorts the grid pseudo-randomly) to get unusually</span>
+<span class="source-line-no">015</span><span id="line.15"> * high-quality 2D noise. The quality is actually quite good in 4D and higher; there's often some rhythmic patterns in</span>
+<span class="source-line-no">016</span><span id="line.16"> * 3D when time is z, but with 4 or 6 dimensions this can have fewer artifacts than Simplex in the same dimension. The</span>
+<span class="source-line-no">017</span><span id="line.17"> * 3D and higher dimensionality versions don't seem to need jitter to avoid grid artifacts, at least most of the time.</span>
+<span class="source-line-no">018</span><span id="line.18"> * This uses different gradient vectors than what was recommended in the "Improved Perlin Noise" paper, since the ones</span>
+<span class="source-line-no">019</span><span id="line.19"> * this uses avoid 45-degree angular artifacts in all dimensions implemented.</span>
+<span class="source-line-no">020</span><span id="line.20"> * &lt;br&gt;</span>
+<span class="source-line-no">021</span><span id="line.21"> * ClassicNoise is a good choice with parts of {@link squidpony.squidgrid.mapping.WorldMapGenerator} that need a</span>
+<span class="source-line-no">022</span><span id="line.22"> * Noise3D implementation, and it tends to about as fast as {@link SeededNoise} in 3D. It is not recommended for 2D</span>
+<span class="source-line-no">023</span><span id="line.23"> * use; prefer {@link JitterNoise} or {@link SeededNoise} for that. You can also use {@link FastNoise} with</span>
+<span class="source-line-no">024</span><span id="line.24"> * {@link FastNoise#PERLIN_FRACTAL} as the noiseType if you primarily want to use float input and get float output.</span>
+<span class="source-line-no">025</span><span id="line.25"> * If you want higher-dimensional noise than this supports, you can use {@link PhantomNoise}.</span>
+<span class="source-line-no">026</span><span id="line.26"> */</span>
+<span class="source-line-no">027</span><span id="line.27">public class ClassicNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, Noise.Noise5D, Noise.Noise6D {</span>
+<span class="source-line-no">028</span><span id="line.28">    public static final ClassicNoise instance = new ClassicNoise();</span>
+<span class="source-line-no">029</span><span id="line.29">    public long seed;</span>
+<span class="source-line-no">030</span><span id="line.30">    public ClassicNoise() {</span>
+<span class="source-line-no">031</span><span id="line.31">        this(0x1337BEEFCAFEL);</span>
+<span class="source-line-no">032</span><span id="line.32">    }</span>
+<span class="source-line-no">033</span><span id="line.33"></span>
+<span class="source-line-no">034</span><span id="line.34">    public ClassicNoise(final long seed) {</span>
+<span class="source-line-no">035</span><span id="line.35">        this.seed = seed;</span>
+<span class="source-line-no">036</span><span id="line.36">    }</span>
+<span class="source-line-no">037</span><span id="line.37">    protected static double gradCoord2D(long seed, int x, int y,</span>
+<span class="source-line-no">038</span><span id="line.38">                                        double xd, double yd) {</span>
+<span class="source-line-no">039</span><span id="line.39">        final int hash = ((int)(((seed ^= 0xB4C4D * x ^ 0xEE2C3 * y) ^ seed &gt;&gt;&gt; 13) * (seed)));</span>
+<span class="source-line-no">040</span><span id="line.40">        final double[] grad = grad2d[hash &gt;&gt;&gt; 24];</span>
+<span class="source-line-no">041</span><span id="line.41">        return xd * grad[0] + yd * grad[1];</span>
+<span class="source-line-no">042</span><span id="line.42">    }</span>
+<span class="source-line-no">043</span><span id="line.43">    protected static double gradCoord3D(long seed, int x, int y, int z, double xd, double yd, double zd) {</span>
+<span class="source-line-no">044</span><span id="line.44">        final int hash =</span>
+<span class="source-line-no">045</span><span id="line.45">                ((int)(((seed ^= 0xB4C4D * x ^ 0xEE2C1 * y ^ 0xA7E07 * z) ^ seed &gt;&gt;&gt; 13) * (seed))</span>
+<span class="source-line-no">046</span><span id="line.46">                        &gt;&gt;&gt; 27) * 3;</span>
+<span class="source-line-no">047</span><span id="line.47">        return (xd * grad3d[hash] + yd * grad3d[hash + 1] + zd * grad3d[hash + 2]);</span>
+<span class="source-line-no">048</span><span id="line.48">    }</span>
+<span class="source-line-no">049</span><span id="line.49">    protected static double gradCoord4D(long seed, int x, int y, int z, int w,</span>
+<span class="source-line-no">050</span><span id="line.50">                                        double xd, double yd, double zd, double wd) {</span>
+<span class="source-line-no">051</span><span id="line.51">        final int hash =</span>
+<span class="source-line-no">052</span><span id="line.52">                ((int)(((seed ^= 0xB4C4D * x ^ 0xEE2C1 * y ^ 0xA7E07 * z ^ 0xCD5E9 * w) ^ seed &gt;&gt;&gt; 13) * (seed))</span>
+<span class="source-line-no">053</span><span id="line.53">                        &gt;&gt;&gt; 24) &amp; -4;</span>
+<span class="source-line-no">054</span><span id="line.54">        return xd * grad4d[hash] + yd * grad4d[hash + 1] + zd * grad4d[hash + 2] + wd * grad4d[hash + 3];</span>
+<span class="source-line-no">055</span><span id="line.55">    }</span>
+<span class="source-line-no">056</span><span id="line.56">    protected static double gradCoord5D(long seed, int x, int y, int z, int w, int u,</span>
+<span class="source-line-no">057</span><span id="line.57">                                        double xd, double yd, double zd, double wd, double ud) {</span>
+<span class="source-line-no">058</span><span id="line.58">        final int hash =</span>
+<span class="source-line-no">059</span><span id="line.59">                ((int)(((seed ^= 0xB4C4D * x ^ 0xEE2C1 * y ^ 0xA7E07 * z ^ 0xCD5E9 * w ^ 0x94B5B * u)</span>
+<span class="source-line-no">060</span><span id="line.60">                        ^ seed &gt;&gt;&gt; 13) * (seed))</span>
+<span class="source-line-no">061</span><span id="line.61">                        &gt;&gt;&gt; 24) * 5;</span>
+<span class="source-line-no">062</span><span id="line.62">        return xd * grad5d[hash] + yd * grad5d[hash + 1] + zd * grad5d[hash + 2]</span>
+<span class="source-line-no">063</span><span id="line.63">                + wd * grad5d[hash + 3] + ud * grad5d[hash + 4];</span>
+<span class="source-line-no">064</span><span id="line.64">    }</span>
+<span class="source-line-no">065</span><span id="line.65">    </span>
+<span class="source-line-no">066</span><span id="line.66">    protected static double gradCoord6D(long seed, int x, int y, int z, int w, int u, int v,</span>
+<span class="source-line-no">067</span><span id="line.67">                                        double xd, double yd, double zd, double wd, double ud, double vd) {</span>
+<span class="source-line-no">068</span><span id="line.68">        final int hash =</span>
+<span class="source-line-no">069</span><span id="line.69">                ((int)(((seed ^= 0xB4C4D * x ^ 0xEE2C1 * y ^ 0xA7E07 * z ^ 0xCD5E9 * w ^ 0x94B5B * u ^ 0xD2385 * v)</span>
+<span class="source-line-no">070</span><span id="line.70">                        ^ seed &gt;&gt;&gt; 13) * (seed))</span>
+<span class="source-line-no">071</span><span id="line.71">                        &gt;&gt;&gt; 24) * 6;</span>
+<span class="source-line-no">072</span><span id="line.72">        return xd * grad6d[hash] + yd * grad6d[hash + 1] + zd * grad6d[hash + 2]</span>
+<span class="source-line-no">073</span><span id="line.73">                + wd * grad6d[hash + 3] + ud * grad6d[hash + 4] + vd * grad6d[hash + 5];</span>
+<span class="source-line-no">074</span><span id="line.74">    }</span>
+<span class="source-line-no">075</span><span id="line.75">    </span>
+<span class="source-line-no">076</span><span id="line.76">    </span>
+<span class="source-line-no">077</span><span id="line.77">//    protected static double gradCoord2DJitter(long seed, int x, int y,</span>
+<span class="source-line-no">078</span><span id="line.78">//                                              double xd, double yd) {</span>
+<span class="source-line-no">079</span><span id="line.79">//        final int hash = ((int)(((seed ^= 0xB4C4D * x ^ 0xEE2C3 * y) ^ seed &gt;&gt;&gt; 13) * (seed)));</span>
+<span class="source-line-no">080</span><span id="line.80">//        final double[] grad = phiGrad2[hash &gt;&gt;&gt; 24], jitter = phiGrad2[hash &gt;&gt;&gt; 16 &amp; 0xFF];</span>
+<span class="source-line-no">081</span><span id="line.81">//        return (xd + jitter[0] * 0.5) * grad[0] + (yd + jitter[1] * 0.5) * grad[1];</span>
+<span class="source-line-no">082</span><span id="line.82">//    }</span>
+<span class="source-line-no">083</span><span id="line.83"></span>
+<span class="source-line-no">084</span><span id="line.84">    @Override</span>
+<span class="source-line-no">085</span><span id="line.85">    public double getNoise(final double x, final double y) {</span>
+<span class="source-line-no">086</span><span id="line.86">        return getNoiseWithSeed(x, y, seed);</span>
+<span class="source-line-no">087</span><span id="line.87">    }</span>
+<span class="source-line-no">088</span><span id="line.88"></span>
+<span class="source-line-no">089</span><span id="line.89">    @Override</span>
+<span class="source-line-no">090</span><span id="line.90">    public double getNoiseWithSeed(double x, double y, final long seed) {</span>
+<span class="source-line-no">091</span><span id="line.91">        x *= 2.0;</span>
+<span class="source-line-no">092</span><span id="line.92">        y *= 2.0;</span>
+<span class="source-line-no">093</span><span id="line.93">        final int</span>
+<span class="source-line-no">094</span><span id="line.94">                x0 = fastFloor(x),</span>
+<span class="source-line-no">095</span><span id="line.95">                y0 = fastFloor(y);         </span>
+<span class="source-line-no">096</span><span id="line.96">//        final double res =</span>
+<span class="source-line-no">097</span><span id="line.97">        return </span>
+<span class="source-line-no">098</span><span id="line.98">                Noise.emphasizeSigned(cerp(cerp(gradCoord2D(seed, x0, y0, x - x0, y - y0), gradCoord2D(seed, x0+1, y0, x - x0 - 1, y - y0), x - x0),</span>
+<span class="source-line-no">099</span><span id="line.99">                                cerp(gradCoord2D(seed, x0, y0+1, x - x0, y - y0-1), gradCoord2D(seed, x0+1, y0+1, x - x0 - 1, y - y0 - 1), x - x0),</span>
+<span class="source-line-no">100</span><span id="line.100">                                y - y0) * 1.4142);//* 0.875;// * 1.4142;</span>
+<span class="source-line-no">101</span><span id="line.101">//        if(res &lt; -1.0 || res &gt; 1.0) System.out.println(res);</span>
+<span class="source-line-no">102</span><span id="line.102">//        return res;</span>
+<span class="source-line-no">103</span><span id="line.103">    }</span>
+<span class="source-line-no">104</span><span id="line.104"></span>
+<span class="source-line-no">105</span><span id="line.105">    @Override</span>
+<span class="source-line-no">106</span><span id="line.106">    public double getNoise(final double x, final double y, final double z) {</span>
+<span class="source-line-no">107</span><span id="line.107">        return getNoiseWithSeed(x, y, z, seed);</span>
+<span class="source-line-no">108</span><span id="line.108">    }</span>
+<span class="source-line-no">109</span><span id="line.109"></span>
+<span class="source-line-no">110</span><span id="line.110">    @Override</span>
+<span class="source-line-no">111</span><span id="line.111">    public double getNoiseWithSeed(double x, double y, double z, final long seed) {</span>
+<span class="source-line-no">112</span><span id="line.112">        x *= 2.0;</span>
+<span class="source-line-no">113</span><span id="line.113">        y *= 2.0;</span>
+<span class="source-line-no">114</span><span id="line.114">        z *= 2.0;</span>
+<span class="source-line-no">115</span><span id="line.115">        final int</span>
+<span class="source-line-no">116</span><span id="line.116">                x0 = fastFloor(x),</span>
+<span class="source-line-no">117</span><span id="line.117">                y0 = fastFloor(y),</span>
+<span class="source-line-no">118</span><span id="line.118">                z0 = fastFloor(z);</span>
+<span class="source-line-no">119</span><span id="line.119">//        final double res =</span>
+<span class="source-line-no">120</span><span id="line.120">         return </span>
+<span class="source-line-no">121</span><span id="line.121">                 Noise.emphasizeSigned(cerp(cerp(cerp(gradCoord3D(seed, x0, y0, z0, x - x0, y - y0, z - z0), gradCoord3D(seed, x0+1, y0, z0, x - x0 - 1, y - y0, z - z0), x - x0),</span>
+<span class="source-line-no">122</span><span id="line.122">                cerp(gradCoord3D(seed, x0, y0+1, z0, x - x0, y - y0-1, z - z0), gradCoord3D(seed, x0+1, y0+1, z0, x - x0 - 1, y - y0 - 1, z - z0), x - x0),</span>
+<span class="source-line-no">123</span><span id="line.123">                y - y0),</span>
+<span class="source-line-no">124</span><span id="line.124">                cerp(cerp(gradCoord3D(seed, x0, y0, z0+1, x - x0, y - y0, z - z0-1), gradCoord3D(seed, x0+1, y0, z0+1, x - x0 - 1, y - y0, z - z0-1), x - x0),</span>
+<span class="source-line-no">125</span><span id="line.125">                        cerp(gradCoord3D(seed, x0, y0+1, z0+1, x - x0, y - y0-1, z - z0-1), gradCoord3D(seed, x0+1, y0+1, z0+1, x - x0 - 1, y - y0 - 1, z - z0-1), x - x0),</span>
+<span class="source-line-no">126</span><span id="line.126">                        y - y0), z - z0) * 1.0625);</span>
+<span class="source-line-no">127</span><span id="line.127">//        if(res &lt; -1 || res &gt; 1) System.out.println(res);</span>
+<span class="source-line-no">128</span><span id="line.128">//        return res;</span>
+<span class="source-line-no">129</span><span id="line.129">    }</span>
+<span class="source-line-no">130</span><span id="line.130"></span>
+<span class="source-line-no">131</span><span id="line.131">    @Override</span>
+<span class="source-line-no">132</span><span id="line.132">    public double getNoise(final double x, final double y, final double z, final double w) {</span>
+<span class="source-line-no">133</span><span id="line.133">        return getNoiseWithSeed(x, y, z, w, seed);</span>
+<span class="source-line-no">134</span><span id="line.134">    }</span>
+<span class="source-line-no">135</span><span id="line.135"></span>
+<span class="source-line-no">136</span><span id="line.136">    @Override</span>
+<span class="source-line-no">137</span><span id="line.137">    public double getNoiseWithSeed(double x, double y, double z, double w, final long seed) {</span>
+<span class="source-line-no">138</span><span id="line.138">        x *= 2.0;</span>
+<span class="source-line-no">139</span><span id="line.139">        y *= 2.0;</span>
+<span class="source-line-no">140</span><span id="line.140">        z *= 2.0;</span>
+<span class="source-line-no">141</span><span id="line.141">        w *= 2.0;</span>
+<span class="source-line-no">142</span><span id="line.142">        final int</span>
+<span class="source-line-no">143</span><span id="line.143">                x0 = fastFloor(x),</span>
+<span class="source-line-no">144</span><span id="line.144">                y0 = fastFloor(y),</span>
+<span class="source-line-no">145</span><span id="line.145">                z0 = fastFloor(z),</span>
+<span class="source-line-no">146</span><span id="line.146">                w0 = fastFloor(w);</span>
+<span class="source-line-no">147</span><span id="line.147">//        final double res =</span>
+<span class="source-line-no">148</span><span id="line.148">        return</span>
+<span class="source-line-no">149</span><span id="line.149">                Noise.emphasizeSigned(cerp(cerp(cerp(cerp(gradCoord4D(seed, x0, y0, z0, w0, x - x0, y - y0, z - z0, w - w0), gradCoord4D(seed, x0+1, y0, z0, w0, x - x0 - 1, y - y0, z - z0, w - w0), x - x0),</span>
+<span class="source-line-no">150</span><span id="line.150">                        cerp(gradCoord4D(seed, x0, y0+1, z0, w0, x - x0, y - y0-1, z - z0, w - w0), gradCoord4D(seed, x0+1, y0+1, z0, w0, x - x0 - 1, y - y0 - 1, z - z0, w - w0), x - x0),</span>
+<span class="source-line-no">151</span><span id="line.151">                        y - y0),</span>
+<span class="source-line-no">152</span><span id="line.152">                        cerp(cerp(gradCoord4D(seed, x0, y0, z0+1, w0, x - x0, y - y0, z - z0-1, w - w0), gradCoord4D(seed, x0+1, y0, z0+1, w0, x - x0 - 1, y - y0, z - z0-1, w - w0), x - x0),</span>
+<span class="source-line-no">153</span><span id="line.153">                                cerp(gradCoord4D(seed, x0, y0+1, z0+1, w0, x - x0, y - y0-1, z - z0-1, w - w0), gradCoord4D(seed, x0+1, y0+1, z0+1, w0, x - x0 - 1, y - y0 - 1, z - z0-1, w - w0), x - x0),</span>
+<span class="source-line-no">154</span><span id="line.154">                                y - y0), </span>
+<span class="source-line-no">155</span><span id="line.155">                        z - z0),</span>
+<span class="source-line-no">156</span><span id="line.156">                        cerp(cerp(cerp(gradCoord4D(seed, x0, y0, z0, w0+1, x - x0, y - y0, z - z0, w - w0 - 1), gradCoord4D(seed, x0+1, y0, z0, w0+1, x - x0 - 1, y - y0, z - z0, w - w0 - 1), x - x0),</span>
+<span class="source-line-no">157</span><span id="line.157">                                cerp(gradCoord4D(seed, x0, y0+1, z0, w0+1, x - x0, y - y0-1, z - z0, w - w0 - 1), gradCoord4D(seed, x0+1, y0+1, z0, w0+1, x - x0 - 1, y - y0 - 1, z - z0, w - w0 - 1), x - x0),</span>
+<span class="source-line-no">158</span><span id="line.158">                                y - y0),</span>
+<span class="source-line-no">159</span><span id="line.159">                                cerp(cerp(gradCoord4D(seed, x0, y0, z0+1, w0+1, x - x0, y - y0, z - z0-1, w - w0 - 1), gradCoord4D(seed, x0+1, y0, z0+1, w0+1, x - x0 - 1, y - y0, z - z0-1, w - w0 - 1), x - x0),</span>
+<span class="source-line-no">160</span><span id="line.160">                                        cerp(gradCoord4D(seed, x0, y0+1, z0+1, w0+1, x - x0, y - y0-1, z - z0-1, w - w0 - 1), gradCoord4D(seed, x0+1, y0+1, z0+1, w0+1, x - x0 - 1, y - y0 - 1, z - z0-1, w - w0 - 1), x - x0),</span>
+<span class="source-line-no">161</span><span id="line.161">                                        y - y0),</span>
+<span class="source-line-no">162</span><span id="line.162">                                z - z0),</span>
+<span class="source-line-no">163</span><span id="line.163">                        w - w0) * 0.555);</span>
+<span class="source-line-no">164</span><span id="line.164">//        if(res &lt; -1 || res &gt; 1) System.out.println(res);</span>
+<span class="source-line-no">165</span><span id="line.165">//        return res;</span>
+<span class="source-line-no">166</span><span id="line.166">    }</span>
+<span class="source-line-no">167</span><span id="line.167"></span>
+<span class="source-line-no">168</span><span id="line.168"></span>
+<span class="source-line-no">169</span><span id="line.169">    @Override</span>
+<span class="source-line-no">170</span><span id="line.170">    public double getNoise(final double x, final double y, final double z, final double w, final double u) {</span>
+<span class="source-line-no">171</span><span id="line.171">        return getNoiseWithSeed(x, y, z, w, u, seed);</span>
+<span class="source-line-no">172</span><span id="line.172">    }</span>
+<span class="source-line-no">173</span><span id="line.173"></span>
+<span class="source-line-no">174</span><span id="line.174">    @Override</span>
+<span class="source-line-no">175</span><span id="line.175">    public double getNoiseWithSeed(double x, double y, double z, double w, double u, long seed) {</span>
+<span class="source-line-no">176</span><span id="line.176">        x *= 2.0;</span>
+<span class="source-line-no">177</span><span id="line.177">        y *= 2.0;</span>
+<span class="source-line-no">178</span><span id="line.178">        z *= 2.0;</span>
+<span class="source-line-no">179</span><span id="line.179">        w *= 2.0;</span>
+<span class="source-line-no">180</span><span id="line.180">        u *= 2.0;</span>
+<span class="source-line-no">181</span><span id="line.181">        final int</span>
+<span class="source-line-no">182</span><span id="line.182">                x0 = fastFloor(x),</span>
+<span class="source-line-no">183</span><span id="line.183">                y0 = fastFloor(y),</span>
+<span class="source-line-no">184</span><span id="line.184">                z0 = fastFloor(z),</span>
+<span class="source-line-no">185</span><span id="line.185">                w0 = fastFloor(w),</span>
+<span class="source-line-no">186</span><span id="line.186">                u0 = fastFloor(u);</span>
+<span class="source-line-no">187</span><span id="line.187">        final double xd = x - x0, yd = y - y0, zd = z - z0, wd = w - w0, ud = u - u0;</span>
+<span class="source-line-no">188</span><span id="line.188">        //ad * ad * ad * (ad * (ad * 6.0 - 15.0) + 10.0)</span>
+<span class="source-line-no">189</span><span id="line.189">        final double xc = xd * xd * xd * (xd * (xd * 6.0 - 15.0) + 10.0);</span>
+<span class="source-line-no">190</span><span id="line.190">        final double yc = yd * yd * yd * (yd * (yd * 6.0 - 15.0) + 10.0);</span>
+<span class="source-line-no">191</span><span id="line.191">        final double zc = zd * zd * zd * (zd * (zd * 6.0 - 15.0) + 10.0);</span>
+<span class="source-line-no">192</span><span id="line.192">        final double wc = wd * wd * wd * (wd * (wd * 6.0 - 15.0) + 10.0);</span>
+<span class="source-line-no">193</span><span id="line.193">        final double uc = ud * ud * ud * (ud * (ud * 6.0 - 15.0) + 10.0);</span>
+<span class="source-line-no">194</span><span id="line.194">//        </span>
+<span class="source-line-no">195</span><span id="line.195">//        final double xc = xd * xd * (3.0 - 2.0 * xd);</span>
+<span class="source-line-no">196</span><span id="line.196">//        final double yc = yd * yd * (3.0 - 2.0 * yd);</span>
+<span class="source-line-no">197</span><span id="line.197">//        final double zc = zd * zd * (3.0 - 2.0 * zd);</span>
+<span class="source-line-no">198</span><span id="line.198">//        final double wc = wd * wd * (3.0 - 2.0 * wd);</span>
+<span class="source-line-no">199</span><span id="line.199">//        final double uc = ud * ud * (3.0 - 2.0 * ud);</span>
+<span class="source-line-no">200</span><span id="line.200">//        </span>
+<span class="source-line-no">201</span><span id="line.201">//        final double res =</span>
+<span class="source-line-no">202</span><span id="line.202">        return </span>
+<span class="source-line-no">203</span><span id="line.203">                Noise.emphasizeSigned(</span>
+<span class="source-line-no">204</span><span id="line.204">                lerp(lerp(</span>
+<span class="source-line-no">205</span><span id="line.205">                        lerp(</span>
+<span class="source-line-no">206</span><span id="line.206">                                lerp(</span>
+<span class="source-line-no">207</span><span id="line.207">                                        lerp(gradCoord5D(seed, x0, y0, z0, w0, u0, xd, yd, zd, wd, ud),</span>
+<span class="source-line-no">208</span><span id="line.208">                                                gradCoord5D(seed, x0+1, y0, z0, w0, u0, xd-1, yd, zd, wd, ud), xc),</span>
+<span class="source-line-no">209</span><span id="line.209">                                        lerp(gradCoord5D(seed, x0, y0+1, z0, w0, u0, xd, yd-1, zd, wd, ud),</span>
+<span class="source-line-no">210</span><span id="line.210">                                                gradCoord5D(seed, x0+1, y0+1, z0, w0, u0, xd-1, yd-1, zd, wd, ud), xc),</span>
+<span class="source-line-no">211</span><span id="line.211">                                        yc),</span>
+<span class="source-line-no">212</span><span id="line.212">                                lerp(</span>
+<span class="source-line-no">213</span><span id="line.213">                                        lerp(gradCoord5D(seed, x0, y0, z0+1, w0, u0, xd, yd, zd-1, wd, ud),</span>
+<span class="source-line-no">214</span><span id="line.214">                                                gradCoord5D(seed, x0+1, y0, z0+1, w0, u0, xd-1, yd, zd-1, wd, ud), xc),</span>
+<span class="source-line-no">215</span><span id="line.215">                                        lerp(gradCoord5D(seed, x0, y0+1, z0+1, w0, u0, xd, yd-1, zd-1, wd, ud),</span>
+<span class="source-line-no">216</span><span id="line.216">                                                gradCoord5D(seed, x0+1, y0+1, z0+1, w0, u0, xd-1, yd-1, zd-1, wd, ud), xc),</span>
+<span class="source-line-no">217</span><span id="line.217">                                        yc),</span>
+<span class="source-line-no">218</span><span id="line.218">                                zc),</span>
+<span class="source-line-no">219</span><span id="line.219">                        lerp(</span>
+<span class="source-line-no">220</span><span id="line.220">                                lerp(</span>
+<span class="source-line-no">221</span><span id="line.221">                                        lerp(gradCoord5D(seed, x0, y0, z0, w0+1, u0, xd, yd, zd, wd-1, ud),</span>
+<span class="source-line-no">222</span><span id="line.222">                                                gradCoord5D(seed, x0+1, y0, z0, w0+1, u0, xd-1, yd, zd, wd-1, ud), xc),</span>
+<span class="source-line-no">223</span><span id="line.223">                                        lerp(gradCoord5D(seed, x0, y0+1, z0, w0+1, u0, xd, yd-1, zd, wd-1, ud),</span>
+<span class="source-line-no">224</span><span id="line.224">                                                gradCoord5D(seed, x0+1, y0+1, z0, w0+1, u0, xd-1, yd-1, zd, wd-1, ud), xc),</span>
+<span class="source-line-no">225</span><span id="line.225">                                        yc),</span>
+<span class="source-line-no">226</span><span id="line.226">                                lerp(</span>
+<span class="source-line-no">227</span><span id="line.227">                                        lerp(gradCoord5D(seed, x0, y0, z0+1, w0+1, u0, xd, yd, zd-1, wd-1, ud),</span>
+<span class="source-line-no">228</span><span id="line.228">                                                gradCoord5D(seed, x0+1, y0, z0+1, w0+1, u0, xd-1, yd, zd-1, wd-1, ud), xc),</span>
+<span class="source-line-no">229</span><span id="line.229">                                        lerp(gradCoord5D(seed, x0, y0+1, z0+1, w0+1, u0, xd, yd-1, zd-1, wd-1, ud),</span>
+<span class="source-line-no">230</span><span id="line.230">                                                gradCoord5D(seed, x0+1, y0+1, z0+1, w0+1, u0, xd-1, yd-1, zd-1, wd-1, ud), xc),</span>
+<span class="source-line-no">231</span><span id="line.231">                                        yc),</span>
+<span class="source-line-no">232</span><span id="line.232">                                zc),</span>
+<span class="source-line-no">233</span><span id="line.233">                        wc),</span>
+<span class="source-line-no">234</span><span id="line.234">                        lerp(</span>
+<span class="source-line-no">235</span><span id="line.235">                                lerp(</span>
+<span class="source-line-no">236</span><span id="line.236">                                        lerp(</span>
+<span class="source-line-no">237</span><span id="line.237">                                                lerp(gradCoord5D(seed, x0, y0, z0, w0, u0+1, xd, yd, zd, wd, ud-1),</span>
+<span class="source-line-no">238</span><span id="line.238">                                                        gradCoord5D(seed, x0+1, y0, z0, w0, u0+1, xd-1, yd, zd, wd, ud-1), xc),</span>
+<span class="source-line-no">239</span><span id="line.239">                                                lerp(gradCoord5D(seed, x0, y0+1, z0, w0, u0+1, xd, yd-1, zd, wd, ud-1),</span>
+<span class="source-line-no">240</span><span id="line.240">                                                        gradCoord5D(seed, x0+1, y0+1, z0, w0, u0+1, xd-1, yd-1, zd, wd, ud-1), xc),</span>
+<span class="source-line-no">241</span><span id="line.241">                                                yc),</span>
+<span class="source-line-no">242</span><span id="line.242">                                        lerp(</span>
+<span class="source-line-no">243</span><span id="line.243">                                                lerp(gradCoord5D(seed, x0, y0, z0+1, w0, u0+1, xd, yd, zd-1, wd, ud-1),</span>
+<span class="source-line-no">244</span><span id="line.244">                                                        gradCoord5D(seed, x0+1, y0, z0+1, w0, u0+1, xd-1, yd, zd-1, wd, ud-1), xc),</span>
+<span class="source-line-no">245</span><span id="line.245">                                                lerp(gradCoord5D(seed, x0, y0+1, z0+1, w0, u0+1, xd, yd-1, zd-1, wd, ud-1),</span>
+<span class="source-line-no">246</span><span id="line.246">                                                        gradCoord5D(seed, x0+1, y0+1, z0+1, w0, u0+1, xd-1, yd-1, zd-1, wd, ud-1), xc),</span>
+<span class="source-line-no">247</span><span id="line.247">                                                yc),</span>
+<span class="source-line-no">248</span><span id="line.248">                                        zc),</span>
+<span class="source-line-no">249</span><span id="line.249">                                lerp(</span>
+<span class="source-line-no">250</span><span id="line.250">                                        lerp(</span>
+<span class="source-line-no">251</span><span id="line.251">                                                lerp(gradCoord5D(seed, x0, y0, z0, w0+1, u0+1, xd, yd, zd, wd-1, ud-1),</span>
+<span class="source-line-no">252</span><span id="line.252">                                                        gradCoord5D(seed, x0+1, y0, z0, w0+1, u0+1, xd-1, yd, zd, wd-1, ud-1), xc),</span>
+<span class="source-line-no">253</span><span id="line.253">                                                lerp(gradCoord5D(seed, x0, y0+1, z0, w0+1, u0+1, xd, yd-1, zd, wd-1, ud-1),</span>
+<span class="source-line-no">254</span><span id="line.254">                                                        gradCoord5D(seed, x0+1, y0+1, z0, w0+1, u0+1, xd-1, yd-1, zd, wd-1, ud-1), xc),</span>
+<span class="source-line-no">255</span><span id="line.255">                                                yc),</span>
+<span class="source-line-no">256</span><span id="line.256">                                        lerp(</span>
+<span class="source-line-no">257</span><span id="line.257">                                                lerp(gradCoord5D(seed, x0, y0, z0+1, w0+1, u0+1, xd, yd, zd-1, wd-1, ud-1),</span>
+<span class="source-line-no">258</span><span id="line.258">                                                        gradCoord5D(seed, x0+1, y0, z0+1, w0+1, u0+1, xd-1, yd, zd-1, wd-1, ud-1), xc),</span>
+<span class="source-line-no">259</span><span id="line.259">                                                lerp(gradCoord5D(seed, x0, y0+1, z0+1, w0+1, u0+1, xd, yd-1, zd-1, wd-1, ud-1),</span>
+<span class="source-line-no">260</span><span id="line.260">                                                        gradCoord5D(seed, x0+1, y0+1, z0+1, w0+1, u0+1, xd-1, yd-1, zd-1, wd-1, ud-1), xc),</span>
+<span class="source-line-no">261</span><span id="line.261">                                                yc),</span>
+<span class="source-line-no">262</span><span id="line.262">                                        zc),</span>
+<span class="source-line-no">263</span><span id="line.263">                                wc),</span>
+<span class="source-line-no">264</span><span id="line.264">                        uc) * 0.7777777 );</span>
+<span class="source-line-no">265</span><span id="line.265">//        if(res &lt; -1 || res &gt; 1) System.out.println(res);</span>
+<span class="source-line-no">266</span><span id="line.266">//        return res;</span>
+<span class="source-line-no">267</span><span id="line.267">    }</span>
+<span class="source-line-no">268</span><span id="line.268"></span>
+<span class="source-line-no">269</span><span id="line.269">    @Override</span>
+<span class="source-line-no">270</span><span id="line.270">    public double getNoise(final double x, final double y, final double z, final double w, final double u, final double v) {</span>
+<span class="source-line-no">271</span><span id="line.271">        return getNoiseWithSeed(x, y, z, w, u, v, seed);</span>
+<span class="source-line-no">272</span><span id="line.272">    }</span>
+<span class="source-line-no">273</span><span id="line.273"></span>
+<span class="source-line-no">274</span><span id="line.274">    @Override</span>
+<span class="source-line-no">275</span><span id="line.275">    public double getNoiseWithSeed(double x, double y, double z, double w, double u, double v, long seed) {</span>
+<span class="source-line-no">276</span><span id="line.276">        x *= 2.0;</span>
+<span class="source-line-no">277</span><span id="line.277">        y *= 2.0;</span>
+<span class="source-line-no">278</span><span id="line.278">        z *= 2.0;</span>
+<span class="source-line-no">279</span><span id="line.279">        w *= 2.0;</span>
+<span class="source-line-no">280</span><span id="line.280">        u *= 2.0;</span>
+<span class="source-line-no">281</span><span id="line.281">        v *= 2.0;</span>
+<span class="source-line-no">282</span><span id="line.282">        final int</span>
+<span class="source-line-no">283</span><span id="line.283">                x0 = fastFloor(x),</span>
+<span class="source-line-no">284</span><span id="line.284">                y0 = fastFloor(y),</span>
+<span class="source-line-no">285</span><span id="line.285">                z0 = fastFloor(z),</span>
+<span class="source-line-no">286</span><span id="line.286">                w0 = fastFloor(w),</span>
+<span class="source-line-no">287</span><span id="line.287">                u0 = fastFloor(u),</span>
+<span class="source-line-no">288</span><span id="line.288">                v0 = fastFloor(v);</span>
+<span class="source-line-no">289</span><span id="line.289">        final double xd = x - x0, yd = y - y0, zd = z - z0, wd = w - w0, ud = u - u0, vd = v - v0;</span>
+<span class="source-line-no">290</span><span id="line.290">//        final double res =</span>
+<span class="source-line-no">291</span><span id="line.291">        return Noise.emphasizeSigned(</span>
+<span class="source-line-no">292</span><span id="line.292">                cerp(cerp(cerp(</span>
+<span class="source-line-no">293</span><span id="line.293">                        cerp(</span>
+<span class="source-line-no">294</span><span id="line.294">                                cerp(</span>
+<span class="source-line-no">295</span><span id="line.295">                                        cerp(gradCoord6D(seed, x0, y0, z0, w0, u0, v0, xd, yd, zd, wd, ud, vd),</span>
+<span class="source-line-no">296</span><span id="line.296">                                                gradCoord6D(seed, x0+1, y0, z0, w0, u0, v0, xd-1, yd, zd, wd, ud, vd), xd),</span>
+<span class="source-line-no">297</span><span id="line.297">                                        cerp(gradCoord6D(seed, x0, y0+1, z0, w0, u0, v0, xd, yd-1, zd, wd, ud, vd),</span>
+<span class="source-line-no">298</span><span id="line.298">                                                gradCoord6D(seed, x0+1, y0+1, z0, w0, u0, v0, xd-1, yd-1, zd, wd, ud, vd), xd),</span>
+<span class="source-line-no">299</span><span id="line.299">                                        yd),</span>
+<span class="source-line-no">300</span><span id="line.300">                                cerp(</span>
+<span class="source-line-no">301</span><span id="line.301">                                        cerp(gradCoord6D(seed, x0, y0, z0+1, w0, u0, v0, xd, yd, zd-1, wd, ud, vd),</span>
+<span class="source-line-no">302</span><span id="line.302">                                                gradCoord6D(seed, x0+1, y0, z0+1, w0, u0, v0, xd-1, yd, zd-1, wd, ud, vd), xd),</span>
+<span class="source-line-no">303</span><span id="line.303">                                        cerp(gradCoord6D(seed, x0, y0+1, z0+1, w0, u0, v0, xd, yd-1, zd-1, wd, ud, vd),</span>
+<span class="source-line-no">304</span><span id="line.304">                                                gradCoord6D(seed, x0+1, y0+1, z0+1, w0, u0, v0, xd-1, yd-1, zd-1, wd, ud, vd), xd),</span>
+<span class="source-line-no">305</span><span id="line.305">                                        yd),</span>
+<span class="source-line-no">306</span><span id="line.306">                                zd),</span>
+<span class="source-line-no">307</span><span id="line.307">                        cerp(</span>
+<span class="source-line-no">308</span><span id="line.308">                                cerp(</span>
+<span class="source-line-no">309</span><span id="line.309">                                        cerp(gradCoord6D(seed, x0, y0, z0, w0+1, u0, v0, xd, yd, zd, wd-1, ud, vd),</span>
+<span class="source-line-no">310</span><span id="line.310">                                                gradCoord6D(seed, x0+1, y0, z0, w0+1, u0, v0, xd-1, yd, zd, wd-1, ud, vd), xd),</span>
+<span class="source-line-no">311</span><span id="line.311">                                        cerp(gradCoord6D(seed, x0, y0+1, z0, w0+1, u0, v0, xd, yd-1, zd, wd-1, ud, vd),</span>
+<span class="source-line-no">312</span><span id="line.312">                                                gradCoord6D(seed, x0+1, y0+1, z0, w0+1, u0, v0, xd-1, yd-1, zd, wd-1, ud, vd), xd),</span>
+<span class="source-line-no">313</span><span id="line.313">                                        yd),</span>
+<span class="source-line-no">314</span><span id="line.314">                                cerp(</span>
+<span class="source-line-no">315</span><span id="line.315">                                        cerp(gradCoord6D(seed, x0, y0, z0+1, w0+1, u0, v0, xd, yd, zd-1, wd-1, ud, vd),</span>
+<span class="source-line-no">316</span><span id="line.316">                                                gradCoord6D(seed, x0+1, y0, z0+1, w0+1, u0, v0, xd-1, yd, zd-1, wd-1, ud, vd), xd),</span>
+<span class="source-line-no">317</span><span id="line.317">                                        cerp(gradCoord6D(seed, x0, y0+1, z0+1, w0+1, u0, v0, xd, yd-1, zd-1, wd-1, ud, vd),</span>
+<span class="source-line-no">318</span><span id="line.318">                                                gradCoord6D(seed, x0+1, y0+1, z0+1, w0+1, u0, v0, xd-1, yd-1, zd-1, wd-1, ud, vd), xd),</span>
+<span class="source-line-no">319</span><span id="line.319">                                        yd),</span>
+<span class="source-line-no">320</span><span id="line.320">                                zd),</span>
+<span class="source-line-no">321</span><span id="line.321">                        wd),</span>
+<span class="source-line-no">322</span><span id="line.322">                        cerp(</span>
+<span class="source-line-no">323</span><span id="line.323">                                cerp(</span>
+<span class="source-line-no">324</span><span id="line.324">                                        cerp(</span>
+<span class="source-line-no">325</span><span id="line.325">                                                cerp(gradCoord6D(seed, x0, y0, z0, w0, u0+1, v0, xd, yd, zd, wd, ud-1, vd),</span>
+<span class="source-line-no">326</span><span id="line.326">                                                        gradCoord6D(seed, x0+1, y0, z0, w0, u0+1, v0, xd-1, yd, zd, wd, ud-1, vd), xd),</span>
+<span class="source-line-no">327</span><span id="line.327">                                                cerp(gradCoord6D(seed, x0, y0+1, z0, w0, u0+1, v0, xd, yd-1, zd, wd, ud-1, vd),</span>
+<span class="source-line-no">328</span><span id="line.328">                                                        gradCoord6D(seed, x0+1, y0+1, z0, w0, u0+1, v0, xd-1, yd-1, zd, wd, ud-1, vd), xd),</span>
+<span class="source-line-no">329</span><span id="line.329">                                                yd),</span>
+<span class="source-line-no">330</span><span id="line.330">                                        cerp(</span>
+<span class="source-line-no">331</span><span id="line.331">                                                cerp(gradCoord6D(seed, x0, y0, z0+1, w0, u0+1, v0, xd, yd, zd-1, wd, ud-1, vd),</span>
+<span class="source-line-no">332</span><span id="line.332">                                                        gradCoord6D(seed, x0+1, y0, z0+1, w0, u0+1, v0, xd-1, yd, zd-1, wd, ud-1, vd), xd),</span>
+<span class="source-line-no">333</span><span id="line.333">                                                cerp(gradCoord6D(seed, x0, y0+1, z0+1, w0, u0+1, v0, xd, yd-1, zd-1, wd, ud-1, vd),</span>
+<span class="source-line-no">334</span><span id="line.334">                                                        gradCoord6D(seed, x0+1, y0+1, z0+1, w0, u0+1, v0, xd-1, yd-1, zd-1, wd, ud-1, vd), xd),</span>
+<span class="source-line-no">335</span><span id="line.335">                                                yd),</span>
+<span class="source-line-no">336</span><span id="line.336">                                        zd),</span>
+<span class="source-line-no">337</span><span id="line.337">                                cerp(</span>
+<span class="source-line-no">338</span><span id="line.338">                                        cerp(</span>
+<span class="source-line-no">339</span><span id="line.339">                                                cerp(gradCoord6D(seed, x0, y0, z0, w0+1, u0+1, v0, xd, yd, zd, wd-1, ud-1, vd),</span>
+<span class="source-line-no">340</span><span id="line.340">                                                        gradCoord6D(seed, x0+1, y0, z0, w0+1, u0+1, v0, xd-1, yd, zd, wd-1, ud-1, vd), xd),</span>
+<span class="source-line-no">341</span><span id="line.341">                                                cerp(gradCoord6D(seed, x0, y0+1, z0, w0+1, u0+1, v0, xd, yd-1, zd, wd-1, ud-1, vd),</span>
+<span class="source-line-no">342</span><span id="line.342">                                                        gradCoord6D(seed, x0+1, y0+1, z0, w0+1, u0+1, v0, xd-1, yd-1, zd, wd-1, ud-1, vd), xd),</span>
+<span class="source-line-no">343</span><span id="line.343">                                                yd),</span>
+<span class="source-line-no">344</span><span id="line.344">                                        cerp(</span>
+<span class="source-line-no">345</span><span id="line.345">                                                cerp(gradCoord6D(seed, x0, y0, z0+1, w0+1, u0+1, v0, xd, yd, zd-1, wd-1, ud-1, vd),</span>
+<span class="source-line-no">346</span><span id="line.346">                                                        gradCoord6D(seed, x0+1, y0, z0+1, w0+1, u0+1, v0, xd-1, yd, zd-1, wd-1, ud-1, vd), xd),</span>
+<span class="source-line-no">347</span><span id="line.347">                                                cerp(gradCoord6D(seed, x0, y0+1, z0+1, w0+1, u0+1, v0, xd, yd-1, zd-1, wd-1, ud-1, vd),</span>
+<span class="source-line-no">348</span><span id="line.348">                                                        gradCoord6D(seed, x0+1, y0+1, z0+1, w0+1, u0+1, v0, xd-1, yd-1, zd-1, wd-1, ud-1, vd), xd),</span>
+<span class="source-line-no">349</span><span id="line.349">                                                yd),</span>
+<span class="source-line-no">350</span><span id="line.350">                                        zd),</span>
+<span class="source-line-no">351</span><span id="line.351">                                wd),</span>
+<span class="source-line-no">352</span><span id="line.352">                        ud),</span>
+<span class="source-line-no">353</span><span id="line.353">                        cerp(</span>
+<span class="source-line-no">354</span><span id="line.354">                                cerp(</span>
+<span class="source-line-no">355</span><span id="line.355">                                        cerp(</span>
+<span class="source-line-no">356</span><span id="line.356">                                                cerp(</span>
+<span class="source-line-no">357</span><span id="line.357">                                                        cerp(gradCoord6D(seed, x0, y0, z0, w0, u0, v0+1, xd, yd, zd, wd, ud, vd-1),</span>
+<span class="source-line-no">358</span><span id="line.358">                                                                gradCoord6D(seed, x0+1, y0, z0, w0, u0, v0+1, xd-1, yd, zd, wd, ud, vd-1), xd),</span>
+<span class="source-line-no">359</span><span id="line.359">                                                        cerp(gradCoord6D(seed, x0, y0+1, z0, w0, u0, v0+1, xd, yd-1, zd, wd, ud, vd-1),</span>
+<span class="source-line-no">360</span><span id="line.360">                                                                gradCoord6D(seed, x0+1, y0+1, z0, w0, u0, v0+1, xd-1, yd-1, zd, wd, ud, vd-1), xd),</span>
+<span class="source-line-no">361</span><span id="line.361">                                                        yd),</span>
+<span class="source-line-no">362</span><span id="line.362">                                                cerp(</span>
+<span class="source-line-no">363</span><span id="line.363">                                                        cerp(gradCoord6D(seed, x0, y0, z0+1, w0, u0, v0+1, xd, yd, zd-1, wd, ud, vd-1),</span>
+<span class="source-line-no">364</span><span id="line.364">                                                                gradCoord6D(seed, x0+1, y0, z0+1, w0, u0, v0+1, xd-1, yd, zd-1, wd, ud, vd-1), xd),</span>
+<span class="source-line-no">365</span><span id="line.365">                                                        cerp(gradCoord6D(seed, x0, y0+1, z0+1, w0, u0, v0+1, xd, yd-1, zd-1, wd, ud, vd-1),</span>
+<span class="source-line-no">366</span><span id="line.366">                                                                gradCoord6D(seed, x0+1, y0+1, z0+1, w0, u0, v0+1, xd-1, yd-1, zd-1, wd, ud, vd-1), xd),</span>
+<span class="source-line-no">367</span><span id="line.367">                                                        yd),</span>
+<span class="source-line-no">368</span><span id="line.368">                                                zd),</span>
+<span class="source-line-no">369</span><span id="line.369">                                        cerp(</span>
+<span class="source-line-no">370</span><span id="line.370">                                                cerp(</span>
+<span class="source-line-no">371</span><span id="line.371">                                                        cerp(gradCoord6D(seed, x0, y0, z0, w0+1, u0, v0+1, xd, yd, zd, wd-1, ud, vd-1),</span>
+<span class="source-line-no">372</span><span id="line.372">                                                                gradCoord6D(seed, x0+1, y0, z0, w0+1, u0, v0+1, xd-1, yd, zd, wd-1, ud, vd-1), xd),</span>
+<span class="source-line-no">373</span><span id="line.373">                                                        cerp(gradCoord6D(seed, x0, y0+1, z0, w0+1, u0, v0+1, xd, yd-1, zd, wd-1, ud, vd-1),</span>
+<span class="source-line-no">374</span><span id="line.374">                                                                gradCoord6D(seed, x0+1, y0+1, z0, w0+1, u0, v0+1, xd-1, yd-1, zd, wd-1, ud, vd-1), xd),</span>
+<span class="source-line-no">375</span><span id="line.375">                                                        yd),</span>
+<span class="source-line-no">376</span><span id="line.376">                                                cerp(</span>
+<span class="source-line-no">377</span><span id="line.377">                                                        cerp(gradCoord6D(seed, x0, y0, z0+1, w0+1, u0, v0+1, xd, yd, zd-1, wd-1, ud, vd-1),</span>
+<span class="source-line-no">378</span><span id="line.378">                                                                gradCoord6D(seed, x0+1, y0, z0+1, w0+1, u0, v0+1, xd-1, yd, zd-1, wd-1, ud, vd-1), xd),</span>
+<span class="source-line-no">379</span><span id="line.379">                                                        cerp(gradCoord6D(seed, x0, y0+1, z0+1, w0+1, u0, v0+1, xd, yd-1, zd-1, wd-1, ud, vd-1),</span>
+<span class="source-line-no">380</span><span id="line.380">                                                                gradCoord6D(seed, x0+1, y0+1, z0+1, w0+1, u0, v0+1, xd-1, yd-1, zd-1, wd-1, ud, vd-1), xd),</span>
+<span class="source-line-no">381</span><span id="line.381">                                                        yd),</span>
+<span class="source-line-no">382</span><span id="line.382">                                                zd),</span>
+<span class="source-line-no">383</span><span id="line.383">                                        wd),</span>
+<span class="source-line-no">384</span><span id="line.384">                                cerp(</span>
+<span class="source-line-no">385</span><span id="line.385">                                        cerp(</span>
+<span class="source-line-no">386</span><span id="line.386">                                                cerp(</span>
+<span class="source-line-no">387</span><span id="line.387">                                                        cerp(gradCoord6D(seed, x0, y0, z0, w0, u0+1, v0+1, xd, yd, zd, wd, ud-1, vd-1),</span>
+<span class="source-line-no">388</span><span id="line.388">                                                                gradCoord6D(seed, x0+1, y0, z0, w0, u0+1, v0+1, xd-1, yd, zd, wd, ud-1, vd-1), xd),</span>
+<span class="source-line-no">389</span><span id="line.389">                                                        cerp(gradCoord6D(seed, x0, y0+1, z0, w0, u0+1, v0+1, xd, yd-1, zd, wd, ud-1, vd-1),</span>
+<span class="source-line-no">390</span><span id="line.390">                                                                gradCoord6D(seed, x0+1, y0+1, z0, w0, u0+1, v0+1, xd-1, yd-1, zd, wd, ud-1, vd-1), xd),</span>
+<span class="source-line-no">391</span><span id="line.391">                                                        yd),</span>
+<span class="source-line-no">392</span><span id="line.392">                                                cerp(</span>
+<span class="source-line-no">393</span><span id="line.393">                                                        cerp(gradCoord6D(seed, x0, y0, z0+1, w0, u0+1, v0+1, xd, yd, zd-1, wd, ud-1, vd-1),</span>
+<span class="source-line-no">394</span><span id="line.394">                                                                gradCoord6D(seed, x0+1, y0, z0+1, w0, u0+1, v0+1, xd-1, yd, zd-1, wd, ud-1, vd-1), xd),</span>
+<span class="source-line-no">395</span><span id="line.395">                                                        cerp(gradCoord6D(seed, x0, y0+1, z0+1, w0, u0+1, v0+1, xd, yd-1, zd-1, wd, ud-1, vd-1),</span>
+<span class="source-line-no">396</span><span id="line.396">                                                                gradCoord6D(seed, x0+1, y0+1, z0+1, w0, u0+1, v0+1, xd-1, yd-1, zd-1, wd, ud-1, vd-1), xd),</span>
+<span class="source-line-no">397</span><span id="line.397">                                                        yd),</span>
+<span class="source-line-no">398</span><span id="line.398">                                                zd),</span>
+<span class="source-line-no">399</span><span id="line.399">                                        cerp(</span>
+<span class="source-line-no">400</span><span id="line.400">                                                cerp(</span>
+<span class="source-line-no">401</span><span id="line.401">                                                        cerp(gradCoord6D(seed, x0, y0, z0, w0+1, u0+1, v0+1, xd, yd, zd, wd-1, ud-1, vd-1),</span>
+<span class="source-line-no">402</span><span id="line.402">                                                                gradCoord6D(seed, x0+1, y0, z0, w0+1, u0+1, v0+1, xd-1, yd, zd, wd-1, ud-1, vd-1), xd),</span>
+<span class="source-line-no">403</span><span id="line.403">                                                        cerp(gradCoord6D(seed, x0, y0+1, z0, w0+1, u0+1, v0+1, xd, yd-1, zd, wd-1, ud-1, vd-1),</span>
+<span class="source-line-no">404</span><span id="line.404">                                                                gradCoord6D(seed, x0+1, y0+1, z0, w0+1, u0+1, v0+1, xd-1, yd-1, zd, wd-1, ud-1, vd-1), xd),</span>
+<span class="source-line-no">405</span><span id="line.405">                                                        yd),</span>
+<span class="source-line-no">406</span><span id="line.406">                                                cerp(</span>
+<span class="source-line-no">407</span><span id="line.407">                                                        cerp(gradCoord6D(seed, x0, y0, z0+1, w0+1, u0+1, v0+1, xd, yd, zd-1, wd-1, ud-1, vd-1),</span>
+<span class="source-line-no">408</span><span id="line.408">                                                                gradCoord6D(seed, x0+1, y0, z0+1, w0+1, u0+1, v0+1, xd-1, yd, zd-1, wd-1, ud-1, vd-1), xd),</span>
+<span class="source-line-no">409</span><span id="line.409">                                                        cerp(gradCoord6D(seed, x0, y0+1, z0+1, w0+1, u0+1, v0+1, xd, yd-1, zd-1, wd-1, ud-1, vd-1),</span>
+<span class="source-line-no">410</span><span id="line.410">                                                                gradCoord6D(seed, x0+1, y0+1, z0+1, w0+1, u0+1, v0+1, xd-1, yd-1, zd-1, wd-1, ud-1, vd-1), xd),</span>
+<span class="source-line-no">411</span><span id="line.411">                                                        yd),</span>
+<span class="source-line-no">412</span><span id="line.412">                                                zd),</span>
+<span class="source-line-no">413</span><span id="line.413">                                        wd),</span>
+<span class="source-line-no">414</span><span id="line.414">                                ud),</span>
+<span class="source-line-no">415</span><span id="line.415">                        vd) * 1.61);</span>
+<span class="source-line-no">416</span><span id="line.416">//        if(res &lt; -1 || res &gt; 1) System.out.println(res);</span>
+<span class="source-line-no">417</span><span id="line.417">//        return res;</span>
+<span class="source-line-no">418</span><span id="line.418">    }</span>
+<span class="source-line-no">419</span><span id="line.419">}</span>
 
 
 

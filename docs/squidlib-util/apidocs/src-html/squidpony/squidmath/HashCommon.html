@@ -7,177 +7,177 @@
 <meta name="generator" content="javadoc/SourceToHTMLConverter">
 <link rel="stylesheet" type="text/css" href="../../../stylesheet.css" title="Style">
 </head>
-<body class="source">
+<body class="source-page">
 <main role="main">
-<div class="sourceContainer">
-<pre><span class="sourceLineNo">001</span><a id="line.1">package squidpony.squidmath;</a>
-<span class="sourceLineNo">002</span><a id="line.2"></a>
-<span class="sourceLineNo">003</span><a id="line.3">import java.util.Objects;</a>
-<span class="sourceLineNo">004</span><a id="line.4"></a>
-<span class="sourceLineNo">005</span><a id="line.5">/**</a>
-<span class="sourceLineNo">006</span><a id="line.6"> * Code used internally for hashing OrderedMap, OrderedSet, IntDoubleOrderedMap, Arrangement, and so on.</a>
-<span class="sourceLineNo">007</span><a id="line.7"> * Has some methods and constants that may be useful in other kinds of code.</a>
-<span class="sourceLineNo">008</span><a id="line.8"> * Created by Tommy Ettinger on 7/28/2017.</a>
-<span class="sourceLineNo">009</span><a id="line.9"> */</a>
-<span class="sourceLineNo">010</span><a id="line.10">public class HashCommon {</a>
-<span class="sourceLineNo">011</span><a id="line.11">    public static class EnumHasher implements CrossHash.IHasher</a>
-<span class="sourceLineNo">012</span><a id="line.12">    {</a>
-<span class="sourceLineNo">013</span><a id="line.13">        @Override</a>
-<span class="sourceLineNo">014</span><a id="line.14">        public int hash(Object data) {</a>
-<span class="sourceLineNo">015</span><a id="line.15">            return (data instanceof Enum) ? ((Enum)data).ordinal() : -1;</a>
-<span class="sourceLineNo">016</span><a id="line.16">        }</a>
-<span class="sourceLineNo">017</span><a id="line.17"></a>
-<span class="sourceLineNo">018</span><a id="line.18">        @Override</a>
-<span class="sourceLineNo">019</span><a id="line.19">        public boolean areEqual(Object left, Object right) {</a>
-<span class="sourceLineNo">020</span><a id="line.20">            return Objects.equals(left, right);</a>
-<span class="sourceLineNo">021</span><a id="line.21">        }</a>
-<span class="sourceLineNo">022</span><a id="line.22">    }</a>
-<span class="sourceLineNo">023</span><a id="line.23">    public static final EnumHasher enumHasher = new EnumHasher();</a>
-<span class="sourceLineNo">024</span><a id="line.24"></a>
-<span class="sourceLineNo">025</span><a id="line.25">    private HashCommon() {</a>
-<span class="sourceLineNo">026</span><a id="line.26">    }</a>
-<span class="sourceLineNo">027</span><a id="line.27"></a>
-<span class="sourceLineNo">028</span><a id="line.28">    /**</a>
-<span class="sourceLineNo">029</span><a id="line.29">     * 2&lt;sup&gt;32&lt;/sup&gt; &amp;middot; &amp;phi;, &amp;phi; = (&amp;#x221A;5 &amp;minus; 1)/2.</a>
-<span class="sourceLineNo">030</span><a id="line.30">     */</a>
-<span class="sourceLineNo">031</span><a id="line.31">    public static final int INT_PHI = 0x9E3779B9;</a>
-<span class="sourceLineNo">032</span><a id="line.32">    /**</a>
-<span class="sourceLineNo">033</span><a id="line.33">     * The reciprocal of {@link #INT_PHI} modulo 2&lt;sup&gt;32&lt;/sup&gt;.</a>
-<span class="sourceLineNo">034</span><a id="line.34">     */</a>
-<span class="sourceLineNo">035</span><a id="line.35">    public static final int INV_INT_PHI = 0x144cbc89;</a>
-<span class="sourceLineNo">036</span><a id="line.36">    /**</a>
-<span class="sourceLineNo">037</span><a id="line.37">     * 2&lt;sup&gt;64&lt;/sup&gt; &amp;middot; &amp;phi;, &amp;phi; = (&amp;#x221A;5 &amp;minus; 1)/2.</a>
-<span class="sourceLineNo">038</span><a id="line.38">     */</a>
-<span class="sourceLineNo">039</span><a id="line.39">    public static final long LONG_PHI = 0x9E3779B97F4A7C15L;</a>
-<span class="sourceLineNo">040</span><a id="line.40">    /**</a>
-<span class="sourceLineNo">041</span><a id="line.41">     * The reciprocal of {@link #LONG_PHI} modulo 2&lt;sup&gt;64&lt;/sup&gt;.</a>
-<span class="sourceLineNo">042</span><a id="line.42">     */</a>
-<span class="sourceLineNo">043</span><a id="line.43">    public static final long INV_LONG_PHI = 0xf1de83e19937733dL;</a>
-<span class="sourceLineNo">044</span><a id="line.44"></a>
-<span class="sourceLineNo">045</span><a id="line.45">    /**</a>
-<span class="sourceLineNo">046</span><a id="line.46">     * Quickly mixes the bits of an integer.</a>
-<span class="sourceLineNo">047</span><a id="line.47">     * &lt;br&gt;This method mixes the bits of the argument by multiplying by the golden ratio and</a>
-<span class="sourceLineNo">048</span><a id="line.48">     * xorshifting the result. It is borrowed from &lt;a href="https://github.com/OpenHFT/Koloboke"&gt;Koloboke&lt;/a&gt;, and</a>
-<span class="sourceLineNo">049</span><a id="line.49">     * it has slightly worse behaviour than MurmurHash3 (in open-addressing hash tables the average number of probes</a>
-<span class="sourceLineNo">050</span><a id="line.50">     * is slightly larger), but it's much faster.</a>
-<span class="sourceLineNo">051</span><a id="line.51">     *</a>
-<span class="sourceLineNo">052</span><a id="line.52">     * @param x an integer.</a>
-<span class="sourceLineNo">053</span><a id="line.53">     * @return a hash value obtained by mixing the bits of {@code x}.</a>
-<span class="sourceLineNo">054</span><a id="line.54">     //* @see #invMix(int)</a>
-<span class="sourceLineNo">055</span><a id="line.55">     */</a>
-<span class="sourceLineNo">056</span><a id="line.56">    static int mixOriginal(final int x) {</a>
-<span class="sourceLineNo">057</span><a id="line.57">        final int h = x * INT_PHI;</a>
-<span class="sourceLineNo">058</span><a id="line.58">        return h ^ (h &gt;&gt;&gt; 16);</a>
-<span class="sourceLineNo">059</span><a id="line.59">    }</a>
-<span class="sourceLineNo">060</span><a id="line.60">    /**</a>
-<span class="sourceLineNo">061</span><a id="line.61">     * Thoroughly mixes the bits of an integer.</a>
-<span class="sourceLineNo">062</span><a id="line.62">     * &lt;br&gt;</a>
-<span class="sourceLineNo">063</span><a id="line.63">     * This method mixes the bits of the argument using a multiplication by a smaller int (19 bits) followed by XOR with</a>
-<span class="sourceLineNo">064</span><a id="line.64">     * two different rotations of the earlier product; it should work well even on GWT, where overflow can't be relied</a>
-<span class="sourceLineNo">065</span><a id="line.65">     * on without bitwise operations being used. The previous mix(int) method would lose precision rather than</a>
-<span class="sourceLineNo">066</span><a id="line.66">     * overflowing on GWT, which could have serious effects on the performance of a hash table (where lost precision</a>
-<span class="sourceLineNo">067</span><a id="line.67">     * means more collisions). This is a little slower than {@link #mix(int)}, and does almost exactly as well at</a>
-<span class="sourceLineNo">068</span><a id="line.68">     * avoiding collisions on most input, so mix() is preferred.</a>
-<span class="sourceLineNo">069</span><a id="line.69">     *</a>
-<span class="sourceLineNo">070</span><a id="line.70">     * @param x an integer.</a>
-<span class="sourceLineNo">071</span><a id="line.71">     * @return a hash value obtained by mixing the bits of {@code x}.</a>
-<span class="sourceLineNo">072</span><a id="line.72">     */</a>
-<span class="sourceLineNo">073</span><a id="line.73">    public static int mixOther(int x)</a>
-<span class="sourceLineNo">074</span><a id="line.74">    {</a>
-<span class="sourceLineNo">075</span><a id="line.75">//        x = ((x *= 0x62BD5) ^ x &gt;&gt;&gt; 13) * ((x &amp; 0xFFFF8) ^ 0xCD7B5);</a>
-<span class="sourceLineNo">076</span><a id="line.76">//        return ((x &lt;&lt; 21) | (x &gt;&gt;&gt; 11)) ^ (((x &lt;&lt; 7) | (x &gt;&gt;&gt; 25)) * 0x62BD5);</a>
-<span class="sourceLineNo">077</span><a id="line.77">        return (x *= 0x62BD5) ^ ((x &lt;&lt; 17) | (x &gt;&gt;&gt; 15)) ^ ((x &lt;&lt; 9) | (x &gt;&gt;&gt; 23));</a>
-<span class="sourceLineNo">078</span><a id="line.78">    }</a>
-<span class="sourceLineNo">079</span><a id="line.79">    /**</a>
-<span class="sourceLineNo">080</span><a id="line.80">     * Thoroughly mixes the bits of an integer.</a>
-<span class="sourceLineNo">081</span><a id="line.81">     * &lt;br&gt;</a>
-<span class="sourceLineNo">082</span><a id="line.82">     * This method acts like {@link #mixOriginal(int)} (which is used by Koloboke and Fastutil), but doesn't multiply by</a>
-<span class="sourceLineNo">083</span><a id="line.83">     * any too-large numbers to ease compatibility with GWT. Specifically, it multiplies {@code n} by {@code 0x9E375}</a>
-<span class="sourceLineNo">084</span><a id="line.84">     * (found using the golden ratio times 2 to the 20, minus 2 to improve quality slightly) then xors that with itself</a>
-<span class="sourceLineNo">085</span><a id="line.85">     * unsigned-right-shifted by 16 before returning. It tends to have less pathologically-bad cases than using an</a>
-<span class="sourceLineNo">086</span><a id="line.86">     * unmixed integer in a hash table, but will still often have more collisions than an unmixed integer if that hash</a>
-<span class="sourceLineNo">087</span><a id="line.87">     * table is filled with numbers that vary in their lower bits. The value of this is that when ints are given that</a>
-<span class="sourceLineNo">088</span><a id="line.88">     * only differ in their upper bits, if you didn't mix a hash code you would have 95% or higher collision rates in</a>
-<span class="sourceLineNo">089</span><a id="line.89">     * some cases. This acts as a safeguard for that kind of scenario.</a>
-<span class="sourceLineNo">090</span><a id="line.90">     * &lt;br&gt;</a>
-<span class="sourceLineNo">091</span><a id="line.91">     * This replaces {@link #mixOther(int)}, which is also GWT-compatible but is a little slower without offering any</a>
-<span class="sourceLineNo">092</span><a id="line.92">     * improvement in collision rates.</a>
-<span class="sourceLineNo">093</span><a id="line.93">     * &lt;br&gt;</a>
-<span class="sourceLineNo">094</span><a id="line.94">     * This is used in {@link IntDoubleOrderedMap} and {@link IntIntOrderedMap}, at the least. The algorithm this uses</a>
-<span class="sourceLineNo">095</span><a id="line.95">     * is also used by {@link CrossHash#defaultHasher}.</a>
-<span class="sourceLineNo">096</span><a id="line.96">     * @param n an integer.</a>
-<span class="sourceLineNo">097</span><a id="line.97">     * @return a hash value obtained by mixing the bits of {@code x}.</a>
-<span class="sourceLineNo">098</span><a id="line.98">     */</a>
-<span class="sourceLineNo">099</span><a id="line.99">    public static int mix(final int n){</a>
-<span class="sourceLineNo">100</span><a id="line.100">        final int h = n * 0x9E375;</a>
-<span class="sourceLineNo">101</span><a id="line.101">        return h ^ (h &gt;&gt;&gt; 16);</a>
-<span class="sourceLineNo">102</span><a id="line.102">    }</a>
-<span class="sourceLineNo">103</span><a id="line.103"></a>
-<span class="sourceLineNo">104</span><a id="line.104">//    /**</a>
-<span class="sourceLineNo">105</span><a id="line.105">//     * The inverse of {@link #mix(int)}. This method is mainly useful to create unit tests.</a>
-<span class="sourceLineNo">106</span><a id="line.106">//     *</a>
-<span class="sourceLineNo">107</span><a id="line.107">//     * @param x an integer.</a>
-<span class="sourceLineNo">108</span><a id="line.108">//     * @return a value that passed through {@link #mix(int)} would give {@code x}.</a>
-<span class="sourceLineNo">109</span><a id="line.109">//     */</a>
-<span class="sourceLineNo">110</span><a id="line.110">//    static int invMix(final int x) {</a>
-<span class="sourceLineNo">111</span><a id="line.111">//        return (x ^ x &gt;&gt;&gt; 16) * INV_INT_PHI;</a>
-<span class="sourceLineNo">112</span><a id="line.112">//    }</a>
-<span class="sourceLineNo">113</span><a id="line.113"></a>
-<span class="sourceLineNo">114</span><a id="line.114">    /**</a>
-<span class="sourceLineNo">115</span><a id="line.115">     * Quickly mixes the bits of a long integer.</a>
-<span class="sourceLineNo">116</span><a id="line.116">     * &lt;br&gt;This method mixes the bits of the argument by multiplying by the golden ratio and</a>
-<span class="sourceLineNo">117</span><a id="line.117">     * xorshifting twice the result. It is borrowed from &lt;a href="https://github.com/OpenHFT/Koloboke"&gt;Koloboke&lt;/a&gt;, and</a>
-<span class="sourceLineNo">118</span><a id="line.118">     * it has slightly worse behaviour than MurmurHash3 (in open-addressing hash tables the average number of probes</a>
-<span class="sourceLineNo">119</span><a id="line.119">     * is slightly larger), but it's much faster.</a>
-<span class="sourceLineNo">120</span><a id="line.120">     *</a>
-<span class="sourceLineNo">121</span><a id="line.121">     * @param x a long integer.</a>
-<span class="sourceLineNo">122</span><a id="line.122">     * @return a hash value obtained by mixing the bits of {@code x}.</a>
-<span class="sourceLineNo">123</span><a id="line.123">     * @see #invMix(long)</a>
-<span class="sourceLineNo">124</span><a id="line.124">     */</a>
-<span class="sourceLineNo">125</span><a id="line.125">    public static long mix(final long x) {</a>
-<span class="sourceLineNo">126</span><a id="line.126">        long h = x * LONG_PHI;</a>
-<span class="sourceLineNo">127</span><a id="line.127">        h ^= h &gt;&gt;&gt; 32;</a>
-<span class="sourceLineNo">128</span><a id="line.128">        return h ^ (h &gt;&gt;&gt; 16);</a>
-<span class="sourceLineNo">129</span><a id="line.129">    }</a>
-<span class="sourceLineNo">130</span><a id="line.130"></a>
-<span class="sourceLineNo">131</span><a id="line.131">    /**</a>
-<span class="sourceLineNo">132</span><a id="line.132">     * The inverse of {@link #mix(long)}. This method is mainly useful to create unit tests.</a>
-<span class="sourceLineNo">133</span><a id="line.133">     *</a>
-<span class="sourceLineNo">134</span><a id="line.134">     * @param x a long integer.</a>
-<span class="sourceLineNo">135</span><a id="line.135">     * @return a value that passed through {@link #mix(long)} would give {@code x}.</a>
-<span class="sourceLineNo">136</span><a id="line.136">     */</a>
-<span class="sourceLineNo">137</span><a id="line.137">    static long invMix(long x) {</a>
-<span class="sourceLineNo">138</span><a id="line.138">        x ^= x &gt;&gt;&gt; 32;</a>
-<span class="sourceLineNo">139</span><a id="line.139">        x ^= x &gt;&gt;&gt; 16;</a>
-<span class="sourceLineNo">140</span><a id="line.140">        return (x ^ x &gt;&gt;&gt; 32) * INV_LONG_PHI;</a>
-<span class="sourceLineNo">141</span><a id="line.141">    }</a>
-<span class="sourceLineNo">142</span><a id="line.142"></a>
-<span class="sourceLineNo">143</span><a id="line.143">    /**</a>
-<span class="sourceLineNo">144</span><a id="line.144">     * Return the least power of two greater than or equal to the specified value.</a>
-<span class="sourceLineNo">145</span><a id="line.145">     * &lt;br&gt;</a>
-<span class="sourceLineNo">146</span><a id="line.146">     * Note that this function will return 1 when the argument is 0.</a>
-<span class="sourceLineNo">147</span><a id="line.147">     * &lt;br&gt;</a>
-<span class="sourceLineNo">148</span><a id="line.148">     * This is a cleaned-up Java version of &lt;a href="https://jameshfisher.com/2018/03/30/round-up-power-2/"&gt;this C code&lt;/a&gt;.</a>
-<span class="sourceLineNo">149</span><a id="line.149">     * @param x a non-negative int.</a>
-<span class="sourceLineNo">150</span><a id="line.150">     * @return the least power of two greater than or equal to the specified value.</a>
-<span class="sourceLineNo">151</span><a id="line.151">     */</a>
-<span class="sourceLineNo">152</span><a id="line.152">    public static int nextPowerOfTwo(final int x) {</a>
-<span class="sourceLineNo">153</span><a id="line.153">        return 1 &lt;&lt; -Integer.numberOfLeadingZeros(x - 1);</a>
-<span class="sourceLineNo">154</span><a id="line.154">    }</a>
-<span class="sourceLineNo">155</span><a id="line.155"></a>
-<span class="sourceLineNo">156</span><a id="line.156">    /**</a>
-<span class="sourceLineNo">157</span><a id="line.157">     * Return the least power of two greater than or equal to the specified value.</a>
-<span class="sourceLineNo">158</span><a id="line.158">     * &lt;br&gt;</a>
-<span class="sourceLineNo">159</span><a id="line.159">     * Note that this function will return 1 when the argument is 0.</a>
-<span class="sourceLineNo">160</span><a id="line.160">     * &lt;br&gt;</a>
-<span class="sourceLineNo">161</span><a id="line.161">     * This is a cleaned-up Java version of &lt;a href="https://jameshfisher.com/2018/03/30/round-up-power-2/"&gt;this C code&lt;/a&gt;.</a>
-<span class="sourceLineNo">162</span><a id="line.162">     * @param x a non-negative long.</a>
-<span class="sourceLineNo">163</span><a id="line.163">     * @return the least power of two greater than or equal to the specified value.</a>
-<span class="sourceLineNo">164</span><a id="line.164">     */</a>
-<span class="sourceLineNo">165</span><a id="line.165">    public static long nextPowerOfTwo(final long x) {</a>
-<span class="sourceLineNo">166</span><a id="line.166">        return 1L &lt;&lt; -Long.numberOfLeadingZeros(x - 1);</a>
-<span class="sourceLineNo">167</span><a id="line.167">    }</a>
-<span class="sourceLineNo">168</span><a id="line.168">}</a>
+<div class="source-container">
+<pre><span class="source-line-no">001</span><span id="line.1">package squidpony.squidmath;</span>
+<span class="source-line-no">002</span><span id="line.2"></span>
+<span class="source-line-no">003</span><span id="line.3">import java.util.Objects;</span>
+<span class="source-line-no">004</span><span id="line.4"></span>
+<span class="source-line-no">005</span><span id="line.5">/**</span>
+<span class="source-line-no">006</span><span id="line.6"> * Code used internally for hashing OrderedMap, OrderedSet, IntDoubleOrderedMap, Arrangement, and so on.</span>
+<span class="source-line-no">007</span><span id="line.7"> * Has some methods and constants that may be useful in other kinds of code.</span>
+<span class="source-line-no">008</span><span id="line.8"> * Created by Tommy Ettinger on 7/28/2017.</span>
+<span class="source-line-no">009</span><span id="line.9"> */</span>
+<span class="source-line-no">010</span><span id="line.10">public class HashCommon {</span>
+<span class="source-line-no">011</span><span id="line.11">    public static class EnumHasher implements CrossHash.IHasher</span>
+<span class="source-line-no">012</span><span id="line.12">    {</span>
+<span class="source-line-no">013</span><span id="line.13">        @Override</span>
+<span class="source-line-no">014</span><span id="line.14">        public int hash(Object data) {</span>
+<span class="source-line-no">015</span><span id="line.15">            return (data instanceof Enum) ? ((Enum)data).ordinal() : -1;</span>
+<span class="source-line-no">016</span><span id="line.16">        }</span>
+<span class="source-line-no">017</span><span id="line.17"></span>
+<span class="source-line-no">018</span><span id="line.18">        @Override</span>
+<span class="source-line-no">019</span><span id="line.19">        public boolean areEqual(Object left, Object right) {</span>
+<span class="source-line-no">020</span><span id="line.20">            return Objects.equals(left, right);</span>
+<span class="source-line-no">021</span><span id="line.21">        }</span>
+<span class="source-line-no">022</span><span id="line.22">    }</span>
+<span class="source-line-no">023</span><span id="line.23">    public static final EnumHasher enumHasher = new EnumHasher();</span>
+<span class="source-line-no">024</span><span id="line.24"></span>
+<span class="source-line-no">025</span><span id="line.25">    private HashCommon() {</span>
+<span class="source-line-no">026</span><span id="line.26">    }</span>
+<span class="source-line-no">027</span><span id="line.27"></span>
+<span class="source-line-no">028</span><span id="line.28">    /**</span>
+<span class="source-line-no">029</span><span id="line.29">     * 2&lt;sup&gt;32&lt;/sup&gt; &amp;middot; &amp;phi;, &amp;phi; = (&amp;#x221A;5 &amp;minus; 1)/2.</span>
+<span class="source-line-no">030</span><span id="line.30">     */</span>
+<span class="source-line-no">031</span><span id="line.31">    public static final int INT_PHI = 0x9E3779B9;</span>
+<span class="source-line-no">032</span><span id="line.32">    /**</span>
+<span class="source-line-no">033</span><span id="line.33">     * The reciprocal of {@link #INT_PHI} modulo 2&lt;sup&gt;32&lt;/sup&gt;.</span>
+<span class="source-line-no">034</span><span id="line.34">     */</span>
+<span class="source-line-no">035</span><span id="line.35">    public static final int INV_INT_PHI = 0x144cbc89;</span>
+<span class="source-line-no">036</span><span id="line.36">    /**</span>
+<span class="source-line-no">037</span><span id="line.37">     * 2&lt;sup&gt;64&lt;/sup&gt; &amp;middot; &amp;phi;, &amp;phi; = (&amp;#x221A;5 &amp;minus; 1)/2.</span>
+<span class="source-line-no">038</span><span id="line.38">     */</span>
+<span class="source-line-no">039</span><span id="line.39">    public static final long LONG_PHI = 0x9E3779B97F4A7C15L;</span>
+<span class="source-line-no">040</span><span id="line.40">    /**</span>
+<span class="source-line-no">041</span><span id="line.41">     * The reciprocal of {@link #LONG_PHI} modulo 2&lt;sup&gt;64&lt;/sup&gt;.</span>
+<span class="source-line-no">042</span><span id="line.42">     */</span>
+<span class="source-line-no">043</span><span id="line.43">    public static final long INV_LONG_PHI = 0xf1de83e19937733dL;</span>
+<span class="source-line-no">044</span><span id="line.44"></span>
+<span class="source-line-no">045</span><span id="line.45">    /**</span>
+<span class="source-line-no">046</span><span id="line.46">     * Quickly mixes the bits of an integer.</span>
+<span class="source-line-no">047</span><span id="line.47">     * &lt;br&gt;This method mixes the bits of the argument by multiplying by the golden ratio and</span>
+<span class="source-line-no">048</span><span id="line.48">     * xorshifting the result. It is borrowed from &lt;a href="https://github.com/OpenHFT/Koloboke"&gt;Koloboke&lt;/a&gt;, and</span>
+<span class="source-line-no">049</span><span id="line.49">     * it has slightly worse behaviour than MurmurHash3 (in open-addressing hash tables the average number of probes</span>
+<span class="source-line-no">050</span><span id="line.50">     * is slightly larger), but it's much faster.</span>
+<span class="source-line-no">051</span><span id="line.51">     *</span>
+<span class="source-line-no">052</span><span id="line.52">     * @param x an integer.</span>
+<span class="source-line-no">053</span><span id="line.53">     * @return a hash value obtained by mixing the bits of {@code x}.</span>
+<span class="source-line-no">054</span><span id="line.54">     //* @see #invMix(int)</span>
+<span class="source-line-no">055</span><span id="line.55">     */</span>
+<span class="source-line-no">056</span><span id="line.56">    static int mixOriginal(final int x) {</span>
+<span class="source-line-no">057</span><span id="line.57">        final int h = x * INT_PHI;</span>
+<span class="source-line-no">058</span><span id="line.58">        return h ^ (h &gt;&gt;&gt; 16);</span>
+<span class="source-line-no">059</span><span id="line.59">    }</span>
+<span class="source-line-no">060</span><span id="line.60">    /**</span>
+<span class="source-line-no">061</span><span id="line.61">     * Thoroughly mixes the bits of an integer.</span>
+<span class="source-line-no">062</span><span id="line.62">     * &lt;br&gt;</span>
+<span class="source-line-no">063</span><span id="line.63">     * This method mixes the bits of the argument using a multiplication by a smaller int (19 bits) followed by XOR with</span>
+<span class="source-line-no">064</span><span id="line.64">     * two different rotations of the earlier product; it should work well even on GWT, where overflow can't be relied</span>
+<span class="source-line-no">065</span><span id="line.65">     * on without bitwise operations being used. The previous mix(int) method would lose precision rather than</span>
+<span class="source-line-no">066</span><span id="line.66">     * overflowing on GWT, which could have serious effects on the performance of a hash table (where lost precision</span>
+<span class="source-line-no">067</span><span id="line.67">     * means more collisions). This is a little slower than {@link #mix(int)}, and does almost exactly as well at</span>
+<span class="source-line-no">068</span><span id="line.68">     * avoiding collisions on most input, so mix() is preferred.</span>
+<span class="source-line-no">069</span><span id="line.69">     *</span>
+<span class="source-line-no">070</span><span id="line.70">     * @param x an integer.</span>
+<span class="source-line-no">071</span><span id="line.71">     * @return a hash value obtained by mixing the bits of {@code x}.</span>
+<span class="source-line-no">072</span><span id="line.72">     */</span>
+<span class="source-line-no">073</span><span id="line.73">    public static int mixOther(int x)</span>
+<span class="source-line-no">074</span><span id="line.74">    {</span>
+<span class="source-line-no">075</span><span id="line.75">//        x = ((x *= 0x62BD5) ^ x &gt;&gt;&gt; 13) * ((x &amp; 0xFFFF8) ^ 0xCD7B5);</span>
+<span class="source-line-no">076</span><span id="line.76">//        return ((x &lt;&lt; 21) | (x &gt;&gt;&gt; 11)) ^ (((x &lt;&lt; 7) | (x &gt;&gt;&gt; 25)) * 0x62BD5);</span>
+<span class="source-line-no">077</span><span id="line.77">        return (x *= 0x62BD5) ^ ((x &lt;&lt; 17) | (x &gt;&gt;&gt; 15)) ^ ((x &lt;&lt; 9) | (x &gt;&gt;&gt; 23));</span>
+<span class="source-line-no">078</span><span id="line.78">    }</span>
+<span class="source-line-no">079</span><span id="line.79">    /**</span>
+<span class="source-line-no">080</span><span id="line.80">     * Thoroughly mixes the bits of an integer.</span>
+<span class="source-line-no">081</span><span id="line.81">     * &lt;br&gt;</span>
+<span class="source-line-no">082</span><span id="line.82">     * This method acts like {@link #mixOriginal(int)} (which is used by Koloboke and Fastutil), but doesn't multiply by</span>
+<span class="source-line-no">083</span><span id="line.83">     * any too-large numbers to ease compatibility with GWT. Specifically, it multiplies {@code n} by {@code 0x9E375}</span>
+<span class="source-line-no">084</span><span id="line.84">     * (found using the golden ratio times 2 to the 20, minus 2 to improve quality slightly) then xors that with itself</span>
+<span class="source-line-no">085</span><span id="line.85">     * unsigned-right-shifted by 16 before returning. It tends to have less pathologically-bad cases than using an</span>
+<span class="source-line-no">086</span><span id="line.86">     * unmixed integer in a hash table, but will still often have more collisions than an unmixed integer if that hash</span>
+<span class="source-line-no">087</span><span id="line.87">     * table is filled with numbers that vary in their lower bits. The value of this is that when ints are given that</span>
+<span class="source-line-no">088</span><span id="line.88">     * only differ in their upper bits, if you didn't mix a hash code you would have 95% or higher collision rates in</span>
+<span class="source-line-no">089</span><span id="line.89">     * some cases. This acts as a safeguard for that kind of scenario.</span>
+<span class="source-line-no">090</span><span id="line.90">     * &lt;br&gt;</span>
+<span class="source-line-no">091</span><span id="line.91">     * This replaces {@link #mixOther(int)}, which is also GWT-compatible but is a little slower without offering any</span>
+<span class="source-line-no">092</span><span id="line.92">     * improvement in collision rates.</span>
+<span class="source-line-no">093</span><span id="line.93">     * &lt;br&gt;</span>
+<span class="source-line-no">094</span><span id="line.94">     * This is used in {@link IntDoubleOrderedMap} and {@link IntIntOrderedMap}, at the least. The algorithm this uses</span>
+<span class="source-line-no">095</span><span id="line.95">     * is also used by {@link CrossHash#defaultHasher}.</span>
+<span class="source-line-no">096</span><span id="line.96">     * @param n an integer.</span>
+<span class="source-line-no">097</span><span id="line.97">     * @return a hash value obtained by mixing the bits of {@code x}.</span>
+<span class="source-line-no">098</span><span id="line.98">     */</span>
+<span class="source-line-no">099</span><span id="line.99">    public static int mix(final int n){</span>
+<span class="source-line-no">100</span><span id="line.100">        final int h = n * 0x9E375;</span>
+<span class="source-line-no">101</span><span id="line.101">        return h ^ (h &gt;&gt;&gt; 16);</span>
+<span class="source-line-no">102</span><span id="line.102">    }</span>
+<span class="source-line-no">103</span><span id="line.103"></span>
+<span class="source-line-no">104</span><span id="line.104">//    /**</span>
+<span class="source-line-no">105</span><span id="line.105">//     * The inverse of {@link #mix(int)}. This method is mainly useful to create unit tests.</span>
+<span class="source-line-no">106</span><span id="line.106">//     *</span>
+<span class="source-line-no">107</span><span id="line.107">//     * @param x an integer.</span>
+<span class="source-line-no">108</span><span id="line.108">//     * @return a value that passed through {@link #mix(int)} would give {@code x}.</span>
+<span class="source-line-no">109</span><span id="line.109">//     */</span>
+<span class="source-line-no">110</span><span id="line.110">//    static int invMix(final int x) {</span>
+<span class="source-line-no">111</span><span id="line.111">//        return (x ^ x &gt;&gt;&gt; 16) * INV_INT_PHI;</span>
+<span class="source-line-no">112</span><span id="line.112">//    }</span>
+<span class="source-line-no">113</span><span id="line.113"></span>
+<span class="source-line-no">114</span><span id="line.114">    /**</span>
+<span class="source-line-no">115</span><span id="line.115">     * Quickly mixes the bits of a long integer.</span>
+<span class="source-line-no">116</span><span id="line.116">     * &lt;br&gt;This method mixes the bits of the argument by multiplying by the golden ratio and</span>
+<span class="source-line-no">117</span><span id="line.117">     * xorshifting twice the result. It is borrowed from &lt;a href="https://github.com/OpenHFT/Koloboke"&gt;Koloboke&lt;/a&gt;, and</span>
+<span class="source-line-no">118</span><span id="line.118">     * it has slightly worse behaviour than MurmurHash3 (in open-addressing hash tables the average number of probes</span>
+<span class="source-line-no">119</span><span id="line.119">     * is slightly larger), but it's much faster.</span>
+<span class="source-line-no">120</span><span id="line.120">     *</span>
+<span class="source-line-no">121</span><span id="line.121">     * @param x a long integer.</span>
+<span class="source-line-no">122</span><span id="line.122">     * @return a hash value obtained by mixing the bits of {@code x}.</span>
+<span class="source-line-no">123</span><span id="line.123">     * @see #invMix(long)</span>
+<span class="source-line-no">124</span><span id="line.124">     */</span>
+<span class="source-line-no">125</span><span id="line.125">    public static long mix(final long x) {</span>
+<span class="source-line-no">126</span><span id="line.126">        long h = x * LONG_PHI;</span>
+<span class="source-line-no">127</span><span id="line.127">        h ^= h &gt;&gt;&gt; 32;</span>
+<span class="source-line-no">128</span><span id="line.128">        return h ^ (h &gt;&gt;&gt; 16);</span>
+<span class="source-line-no">129</span><span id="line.129">    }</span>
+<span class="source-line-no">130</span><span id="line.130"></span>
+<span class="source-line-no">131</span><span id="line.131">    /**</span>
+<span class="source-line-no">132</span><span id="line.132">     * The inverse of {@link #mix(long)}. This method is mainly useful to create unit tests.</span>
+<span class="source-line-no">133</span><span id="line.133">     *</span>
+<span class="source-line-no">134</span><span id="line.134">     * @param x a long integer.</span>
+<span class="source-line-no">135</span><span id="line.135">     * @return a value that passed through {@link #mix(long)} would give {@code x}.</span>
+<span class="source-line-no">136</span><span id="line.136">     */</span>
+<span class="source-line-no">137</span><span id="line.137">    static long invMix(long x) {</span>
+<span class="source-line-no">138</span><span id="line.138">        x ^= x &gt;&gt;&gt; 32;</span>
+<span class="source-line-no">139</span><span id="line.139">        x ^= x &gt;&gt;&gt; 16;</span>
+<span class="source-line-no">140</span><span id="line.140">        return (x ^ x &gt;&gt;&gt; 32) * INV_LONG_PHI;</span>
+<span class="source-line-no">141</span><span id="line.141">    }</span>
+<span class="source-line-no">142</span><span id="line.142"></span>
+<span class="source-line-no">143</span><span id="line.143">    /**</span>
+<span class="source-line-no">144</span><span id="line.144">     * Return the least power of two greater than or equal to the specified value.</span>
+<span class="source-line-no">145</span><span id="line.145">     * &lt;br&gt;</span>
+<span class="source-line-no">146</span><span id="line.146">     * Note that this function will return 1 when the argument is 0.</span>
+<span class="source-line-no">147</span><span id="line.147">     * &lt;br&gt;</span>
+<span class="source-line-no">148</span><span id="line.148">     * This is a cleaned-up Java version of &lt;a href="https://jameshfisher.com/2018/03/30/round-up-power-2/"&gt;this C code&lt;/a&gt;.</span>
+<span class="source-line-no">149</span><span id="line.149">     * @param x a non-negative int.</span>
+<span class="source-line-no">150</span><span id="line.150">     * @return the least power of two greater than or equal to the specified value.</span>
+<span class="source-line-no">151</span><span id="line.151">     */</span>
+<span class="source-line-no">152</span><span id="line.152">    public static int nextPowerOfTwo(final int x) {</span>
+<span class="source-line-no">153</span><span id="line.153">        return 1 &lt;&lt; -Integer.numberOfLeadingZeros(x - 1);</span>
+<span class="source-line-no">154</span><span id="line.154">    }</span>
+<span class="source-line-no">155</span><span id="line.155"></span>
+<span class="source-line-no">156</span><span id="line.156">    /**</span>
+<span class="source-line-no">157</span><span id="line.157">     * Return the least power of two greater than or equal to the specified value.</span>
+<span class="source-line-no">158</span><span id="line.158">     * &lt;br&gt;</span>
+<span class="source-line-no">159</span><span id="line.159">     * Note that this function will return 1 when the argument is 0.</span>
+<span class="source-line-no">160</span><span id="line.160">     * &lt;br&gt;</span>
+<span class="source-line-no">161</span><span id="line.161">     * This is a cleaned-up Java version of &lt;a href="https://jameshfisher.com/2018/03/30/round-up-power-2/"&gt;this C code&lt;/a&gt;.</span>
+<span class="source-line-no">162</span><span id="line.162">     * @param x a non-negative long.</span>
+<span class="source-line-no">163</span><span id="line.163">     * @return the least power of two greater than or equal to the specified value.</span>
+<span class="source-line-no">164</span><span id="line.164">     */</span>
+<span class="source-line-no">165</span><span id="line.165">    public static long nextPowerOfTwo(final long x) {</span>
+<span class="source-line-no">166</span><span id="line.166">        return 1L &lt;&lt; -Long.numberOfLeadingZeros(x - 1);</span>
+<span class="source-line-no">167</span><span id="line.167">    }</span>
+<span class="source-line-no">168</span><span id="line.168">}</span>
 
 
 

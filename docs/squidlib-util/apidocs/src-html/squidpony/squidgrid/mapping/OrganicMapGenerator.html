@@ -7,172 +7,172 @@
 <meta name="generator" content="javadoc/SourceToHTMLConverter">
 <link rel="stylesheet" type="text/css" href="../../../../stylesheet.css" title="Style">
 </head>
-<body class="source">
+<body class="source-page">
 <main role="main">
-<div class="sourceContainer">
-<pre><span class="sourceLineNo">001</span><a id="line.1">package squidpony.squidgrid.mapping;</a>
-<span class="sourceLineNo">002</span><a id="line.2"></a>
-<span class="sourceLineNo">003</span><a id="line.3">import squidpony.ArrayTools;</a>
-<span class="sourceLineNo">004</span><a id="line.4">import squidpony.squidgrid.Radius;</a>
-<span class="sourceLineNo">005</span><a id="line.5">import squidpony.squidmath.BathtubDistribution;</a>
-<span class="sourceLineNo">006</span><a id="line.6">import squidpony.squidmath.FastNoise;</a>
-<span class="sourceLineNo">007</span><a id="line.7">import squidpony.squidmath.GWTRNG;</a>
-<span class="sourceLineNo">008</span><a id="line.8">import squidpony.squidmath.GreasedRegion;</a>
-<span class="sourceLineNo">009</span><a id="line.9">import squidpony.squidmath.IRNG;</a>
-<span class="sourceLineNo">010</span><a id="line.10"></a>
-<span class="sourceLineNo">011</span><a id="line.11">/**</a>
-<span class="sourceLineNo">012</span><a id="line.12"> * Map generator that produces erratic, non-artificial-looking areas that could be cave complexes. This works by</a>
-<span class="sourceLineNo">013</span><a id="line.13"> * generating a region of continuous noise and two distant points in it, progressively using larger</a>
-<span class="sourceLineNo">014</span><a id="line.14"> * portions of the noise until it connects the points. The algorithm was discovered by tann, a libGDX user and noise</a>
-<span class="sourceLineNo">015</span><a id="line.15"> * aficionado, and it works a little more cleanly than the old approach this class used.</a>
-<span class="sourceLineNo">016</span><a id="line.16"> * &lt;br&gt;</a>
-<span class="sourceLineNo">017</span><a id="line.17"> * Initially created by Tommy Ettinger on 4/18/2016, reworked a few times, now mostly tann's work.</a>
-<span class="sourceLineNo">018</span><a id="line.18"> */</a>
-<span class="sourceLineNo">019</span><a id="line.19">public class OrganicMapGenerator implements IDungeonGenerator {</a>
-<span class="sourceLineNo">020</span><a id="line.20">    public char[][] map;</a>
-<span class="sourceLineNo">021</span><a id="line.21">    public int[][] environment;</a>
-<span class="sourceLineNo">022</span><a id="line.22">    public GreasedRegion floors;</a>
-<span class="sourceLineNo">023</span><a id="line.23">    public IRNG rng;</a>
-<span class="sourceLineNo">024</span><a id="line.24">    protected int width, height;</a>
-<span class="sourceLineNo">025</span><a id="line.25">    public double noiseMin, noiseMax;</a>
-<span class="sourceLineNo">026</span><a id="line.26">    protected FastNoise noise;</a>
-<span class="sourceLineNo">027</span><a id="line.27"></a>
-<span class="sourceLineNo">028</span><a id="line.28">    public OrganicMapGenerator()</a>
-<span class="sourceLineNo">029</span><a id="line.29">    {</a>
-<span class="sourceLineNo">030</span><a id="line.30">        this(0.55, 0.65, 80, 30, new GWTRNG());</a>
-<span class="sourceLineNo">031</span><a id="line.31">    }</a>
-<span class="sourceLineNo">032</span><a id="line.32">    public OrganicMapGenerator(int width, int height)</a>
-<span class="sourceLineNo">033</span><a id="line.33">    {</a>
-<span class="sourceLineNo">034</span><a id="line.34">        this(0.55, 0.65, width, height, new GWTRNG());</a>
-<span class="sourceLineNo">035</span><a id="line.35">    }</a>
-<span class="sourceLineNo">036</span><a id="line.36">    public OrganicMapGenerator(int width, int height, IRNG rng)</a>
-<span class="sourceLineNo">037</span><a id="line.37">    {</a>
-<span class="sourceLineNo">038</span><a id="line.38">        this(0.55, 0.65, width, height, rng);</a>
-<span class="sourceLineNo">039</span><a id="line.39">    }</a>
-<span class="sourceLineNo">040</span><a id="line.40">    public OrganicMapGenerator(double noiseMin, double noiseMax, int width, int height, IRNG rng)</a>
-<span class="sourceLineNo">041</span><a id="line.41">    {</a>
-<span class="sourceLineNo">042</span><a id="line.42">        this.rng = rng;</a>
-<span class="sourceLineNo">043</span><a id="line.43">        this.width = Math.max(3, width);</a>
-<span class="sourceLineNo">044</span><a id="line.44">        this.height = Math.max(3, height);</a>
-<span class="sourceLineNo">045</span><a id="line.45">        this.noiseMin = Math.min(0.9, Math.max(-1.0, noiseMin - 0.1));</a>
-<span class="sourceLineNo">046</span><a id="line.46">        this.noiseMax = Math.min(1.0, Math.max(noiseMin + 0.05, noiseMax + 0.1));</a>
-<span class="sourceLineNo">047</span><a id="line.47">        map = new char[this.width][this.height];</a>
-<span class="sourceLineNo">048</span><a id="line.48">        environment = new int[this.width][this.height];</a>
-<span class="sourceLineNo">049</span><a id="line.49">        floors = new GreasedRegion(width, height);</a>
-<span class="sourceLineNo">050</span><a id="line.50">        noise = new FastNoise(1, 0.375f, FastNoise.HONEY_FRACTAL, 2);</a>
-<span class="sourceLineNo">051</span><a id="line.51">    }</a>
-<span class="sourceLineNo">052</span><a id="line.52"></a>
-<span class="sourceLineNo">053</span><a id="line.53">    /**</a>
-<span class="sourceLineNo">054</span><a id="line.54">     * Generate a map as a 2D char array using the width and height specified in the constructor.</a>
-<span class="sourceLineNo">055</span><a id="line.55">     * Should produce an organic, cave-like map.</a>
-<span class="sourceLineNo">056</span><a id="line.56">     * @return a 2D char array for the map that should be organic-looking.</a>
-<span class="sourceLineNo">057</span><a id="line.57">     */</a>
-<span class="sourceLineNo">058</span><a id="line.58">    public char[][] generate() {</a>
-<span class="sourceLineNo">059</span><a id="line.59">        noise.setSeed(rng.nextInt());</a>
-<span class="sourceLineNo">060</span><a id="line.60">        double[][] noiseMap = new double[width][height];</a>
-<span class="sourceLineNo">061</span><a id="line.61">        for (int x = 0; x &lt; width; x++) {</a>
-<span class="sourceLineNo">062</span><a id="line.62">            for (int y = 0; y &lt; height; y++) {</a>
-<span class="sourceLineNo">063</span><a id="line.63">                noiseMap[x][y] = noise.getConfiguredNoise(x, y);</a>
-<span class="sourceLineNo">064</span><a id="line.64">            }</a>
-<span class="sourceLineNo">065</span><a id="line.65">        }</a>
-<span class="sourceLineNo">066</span><a id="line.66">        int w2 = width - 2, h2 = height - 2;</a>
-<span class="sourceLineNo">067</span><a id="line.67">        int startX = (int) (BathtubDistribution.instance.nextDouble(rng) * w2) + 1;</a>
-<span class="sourceLineNo">068</span><a id="line.68">        int endX = (int) (BathtubDistribution.instance.nextDouble(rng) * w2) + 1;</a>
-<span class="sourceLineNo">069</span><a id="line.69">        int startY = (int) (BathtubDistribution.instance.nextDouble(rng) * h2) + 1;</a>
-<span class="sourceLineNo">070</span><a id="line.70">        int endY = (int) (BathtubDistribution.instance.nextDouble(rng) * h2) + 1;</a>
-<span class="sourceLineNo">071</span><a id="line.71">        while (Radius.CIRCLE.radius(startX, startY, endX, endY) * 3 &lt; width + height){</a>
-<span class="sourceLineNo">072</span><a id="line.72">            startX = (int) (BathtubDistribution.instance.nextDouble(rng) * w2) + 1;</a>
-<span class="sourceLineNo">073</span><a id="line.73">            endX = (int) (BathtubDistribution.instance.nextDouble(rng) * w2) + 1;</a>
-<span class="sourceLineNo">074</span><a id="line.74">            startY = (int) (BathtubDistribution.instance.nextDouble(rng) * h2) + 1;</a>
-<span class="sourceLineNo">075</span><a id="line.75">            endY = (int) (BathtubDistribution.instance.nextDouble(rng) * h2) + 1;</a>
-<span class="sourceLineNo">076</span><a id="line.76">        }</a>
-<span class="sourceLineNo">077</span><a id="line.77">        GreasedRegion region = new GreasedRegion(width, height), linking;</a>
-<span class="sourceLineNo">078</span><a id="line.78">        for (int i = 1; i &lt;= 25; i++) {</a>
-<span class="sourceLineNo">079</span><a id="line.79">            noiseMax = 0.04 * i;</a>
-<span class="sourceLineNo">080</span><a id="line.80">            floors.refill(noiseMap, -noiseMax, noiseMax);</a>
-<span class="sourceLineNo">081</span><a id="line.81">            if(floors.contains(startX, startY) &amp;&amp; floors.contains(endX, endY) &amp;&amp; </a>
-<span class="sourceLineNo">082</span><a id="line.82">                    region.empty().insert(startX, startY).flood(floors, width * height).contains(endX, endY))</a>
-<span class="sourceLineNo">083</span><a id="line.83">                break;</a>
-<span class="sourceLineNo">084</span><a id="line.84">        }</a>
-<span class="sourceLineNo">085</span><a id="line.85">        floors.intoChars(map, '.', '#');</a>
-<span class="sourceLineNo">086</span><a id="line.86">        ArrayTools.fill(environment, DungeonUtility.UNTOUCHED);</a>
-<span class="sourceLineNo">087</span><a id="line.87">        floors.writeIntsInto(environment, DungeonUtility.CAVE_FLOOR);</a>
-<span class="sourceLineNo">088</span><a id="line.88">        region.remake(floors).fringe8way().writeIntsInto(environment, DungeonUtility.CAVE_WALL);</a>
-<span class="sourceLineNo">089</span><a id="line.89">        int upperY = height - 1;</a>
-<span class="sourceLineNo">090</span><a id="line.90">        int upperX = width - 1;</a>
-<span class="sourceLineNo">091</span><a id="line.91">        for (int i = 0; i &lt; width; i++) {</a>
-<span class="sourceLineNo">092</span><a id="line.92">            map[i][0] = '#';</a>
-<span class="sourceLineNo">093</span><a id="line.93">            map[i][upperY] = '#';</a>
-<span class="sourceLineNo">094</span><a id="line.94">            environment[i][0] = DungeonUtility.UNTOUCHED;</a>
-<span class="sourceLineNo">095</span><a id="line.95">            environment[i][upperY] = DungeonUtility.UNTOUCHED;</a>
-<span class="sourceLineNo">096</span><a id="line.96">        }</a>
-<span class="sourceLineNo">097</span><a id="line.97">        for (int i = 0; i &lt; height; i++) {</a>
-<span class="sourceLineNo">098</span><a id="line.98">            map[0][i] = '#';</a>
-<span class="sourceLineNo">099</span><a id="line.99">            map[upperX][i] = '#';</a>
-<span class="sourceLineNo">100</span><a id="line.100">            environment[0][i] = DungeonUtility.UNTOUCHED;</a>
-<span class="sourceLineNo">101</span><a id="line.101">            environment[upperX][i] = DungeonUtility.UNTOUCHED;</a>
-<span class="sourceLineNo">102</span><a id="line.102">        }</a>
-<span class="sourceLineNo">103</span><a id="line.103">        </a>
-<span class="sourceLineNo">104</span><a id="line.104">        return map;</a>
-<span class="sourceLineNo">105</span><a id="line.105">    }</a>
-<span class="sourceLineNo">106</span><a id="line.106"></a>
-<span class="sourceLineNo">107</span><a id="line.107"></a>
-<span class="sourceLineNo">108</span><a id="line.108">    /**</a>
-<span class="sourceLineNo">109</span><a id="line.109">     * Gets a 2D array of int constants, each representing a type of environment corresponding to a static field of</a>
-<span class="sourceLineNo">110</span><a id="line.110">     * MixedGenerator. This array will have the same size as the last char 2D array produced by generate(); the value</a>
-<span class="sourceLineNo">111</span><a id="line.111">     * of this method if called before generate() is undefined, but probably will be a 2D array of all 0 (UNTOUCHED).</a>
-<span class="sourceLineNo">112</span><a id="line.112">     * &lt;ul&gt;</a>
-<span class="sourceLineNo">113</span><a id="line.113">     *     &lt;li&gt;MixedGenerator.UNTOUCHED, equal to 0, is used for any cells that aren't near a floor.&lt;/li&gt;</a>
-<span class="sourceLineNo">114</span><a id="line.114">     *     &lt;li&gt;MixedGenerator.ROOM_FLOOR, equal to 1, is used for floor cells inside wide room areas.&lt;/li&gt;</a>
-<span class="sourceLineNo">115</span><a id="line.115">     *     &lt;li&gt;MixedGenerator.ROOM_WALL, equal to 2, is used for wall cells around wide room areas.&lt;/li&gt;</a>
-<span class="sourceLineNo">116</span><a id="line.116">     *     &lt;li&gt;MixedGenerator.CAVE_FLOOR, equal to 3, is used for floor cells inside rough cave areas.&lt;/li&gt;</a>
-<span class="sourceLineNo">117</span><a id="line.117">     *     &lt;li&gt;MixedGenerator.CAVE_WALL, equal to 4, is used for wall cells around rough cave areas.&lt;/li&gt;</a>
-<span class="sourceLineNo">118</span><a id="line.118">     *     &lt;li&gt;MixedGenerator.CORRIDOR_FLOOR, equal to 5, is used for floor cells inside narrow corridor areas.&lt;/li&gt;</a>
-<span class="sourceLineNo">119</span><a id="line.119">     *     &lt;li&gt;MixedGenerator.CORRIDOR_WALL, equal to 6, is used for wall cells around narrow corridor areas.&lt;/li&gt;</a>
-<span class="sourceLineNo">120</span><a id="line.120">     * &lt;/ul&gt;</a>
-<span class="sourceLineNo">121</span><a id="line.121">     * @return a 2D int array where each element is an environment type constant in MixedGenerator</a>
-<span class="sourceLineNo">122</span><a id="line.122">     */</a>
-<span class="sourceLineNo">123</span><a id="line.123">    public int[][] getEnvironment()</a>
-<span class="sourceLineNo">124</span><a id="line.124">    {</a>
-<span class="sourceLineNo">125</span><a id="line.125">        return environment;</a>
-<span class="sourceLineNo">126</span><a id="line.126">    }</a>
-<span class="sourceLineNo">127</span><a id="line.127"></a>
-<span class="sourceLineNo">128</span><a id="line.128">    public char[][] getDungeon() {</a>
-<span class="sourceLineNo">129</span><a id="line.129">        return map;</a>
-<span class="sourceLineNo">130</span><a id="line.130">    }</a>
-<span class="sourceLineNo">131</span><a id="line.131">    public int getWidth() {</a>
-<span class="sourceLineNo">132</span><a id="line.132">        return width;</a>
-<span class="sourceLineNo">133</span><a id="line.133">    }</a>
-<span class="sourceLineNo">134</span><a id="line.134"></a>
-<span class="sourceLineNo">135</span><a id="line.135">    public void setWidth(int width) {</a>
-<span class="sourceLineNo">136</span><a id="line.136">        this.width = width;</a>
-<span class="sourceLineNo">137</span><a id="line.137">    }</a>
-<span class="sourceLineNo">138</span><a id="line.138"></a>
-<span class="sourceLineNo">139</span><a id="line.139">    public int getHeight() {</a>
-<span class="sourceLineNo">140</span><a id="line.140">        return height;</a>
-<span class="sourceLineNo">141</span><a id="line.141">    }</a>
-<span class="sourceLineNo">142</span><a id="line.142"></a>
-<span class="sourceLineNo">143</span><a id="line.143">    public void setHeight(int height) {</a>
-<span class="sourceLineNo">144</span><a id="line.144">        this.height = height;</a>
-<span class="sourceLineNo">145</span><a id="line.145">    }</a>
-<span class="sourceLineNo">146</span><a id="line.146"></a>
-<span class="sourceLineNo">147</span><a id="line.147">    public double getNoiseMin() {</a>
-<span class="sourceLineNo">148</span><a id="line.148">        return noiseMin;</a>
-<span class="sourceLineNo">149</span><a id="line.149">    }</a>
-<span class="sourceLineNo">150</span><a id="line.150"></a>
-<span class="sourceLineNo">151</span><a id="line.151">    public void setNoiseMin(double noiseMin) {</a>
-<span class="sourceLineNo">152</span><a id="line.152">        this.noiseMin = noiseMin;</a>
-<span class="sourceLineNo">153</span><a id="line.153">    }</a>
-<span class="sourceLineNo">154</span><a id="line.154"></a>
-<span class="sourceLineNo">155</span><a id="line.155">    public double getNoiseMax() {</a>
-<span class="sourceLineNo">156</span><a id="line.156">        return noiseMax;</a>
-<span class="sourceLineNo">157</span><a id="line.157">    }</a>
-<span class="sourceLineNo">158</span><a id="line.158"></a>
-<span class="sourceLineNo">159</span><a id="line.159">    public void setNoiseMax(double noiseMax) {</a>
-<span class="sourceLineNo">160</span><a id="line.160">        this.noiseMax = noiseMax;</a>
-<span class="sourceLineNo">161</span><a id="line.161">    }</a>
-<span class="sourceLineNo">162</span><a id="line.162"></a>
-<span class="sourceLineNo">163</span><a id="line.163">}</a>
+<div class="source-container">
+<pre><span class="source-line-no">001</span><span id="line.1">package squidpony.squidgrid.mapping;</span>
+<span class="source-line-no">002</span><span id="line.2"></span>
+<span class="source-line-no">003</span><span id="line.3">import squidpony.ArrayTools;</span>
+<span class="source-line-no">004</span><span id="line.4">import squidpony.squidgrid.Radius;</span>
+<span class="source-line-no">005</span><span id="line.5">import squidpony.squidmath.BathtubDistribution;</span>
+<span class="source-line-no">006</span><span id="line.6">import squidpony.squidmath.FastNoise;</span>
+<span class="source-line-no">007</span><span id="line.7">import squidpony.squidmath.GWTRNG;</span>
+<span class="source-line-no">008</span><span id="line.8">import squidpony.squidmath.GreasedRegion;</span>
+<span class="source-line-no">009</span><span id="line.9">import squidpony.squidmath.IRNG;</span>
+<span class="source-line-no">010</span><span id="line.10"></span>
+<span class="source-line-no">011</span><span id="line.11">/**</span>
+<span class="source-line-no">012</span><span id="line.12"> * Map generator that produces erratic, non-artificial-looking areas that could be cave complexes. This works by</span>
+<span class="source-line-no">013</span><span id="line.13"> * generating a region of continuous noise and two distant points in it, progressively using larger</span>
+<span class="source-line-no">014</span><span id="line.14"> * portions of the noise until it connects the points. The algorithm was discovered by tann, a libGDX user and noise</span>
+<span class="source-line-no">015</span><span id="line.15"> * aficionado, and it works a little more cleanly than the old approach this class used.</span>
+<span class="source-line-no">016</span><span id="line.16"> * &lt;br&gt;</span>
+<span class="source-line-no">017</span><span id="line.17"> * Initially created by Tommy Ettinger on 4/18/2016, reworked a few times, now mostly tann's work.</span>
+<span class="source-line-no">018</span><span id="line.18"> */</span>
+<span class="source-line-no">019</span><span id="line.19">public class OrganicMapGenerator implements IDungeonGenerator {</span>
+<span class="source-line-no">020</span><span id="line.20">    public char[][] map;</span>
+<span class="source-line-no">021</span><span id="line.21">    public int[][] environment;</span>
+<span class="source-line-no">022</span><span id="line.22">    public GreasedRegion floors;</span>
+<span class="source-line-no">023</span><span id="line.23">    public IRNG rng;</span>
+<span class="source-line-no">024</span><span id="line.24">    protected int width, height;</span>
+<span class="source-line-no">025</span><span id="line.25">    public double noiseMin, noiseMax;</span>
+<span class="source-line-no">026</span><span id="line.26">    protected FastNoise noise;</span>
+<span class="source-line-no">027</span><span id="line.27"></span>
+<span class="source-line-no">028</span><span id="line.28">    public OrganicMapGenerator()</span>
+<span class="source-line-no">029</span><span id="line.29">    {</span>
+<span class="source-line-no">030</span><span id="line.30">        this(0.55, 0.65, 80, 30, new GWTRNG());</span>
+<span class="source-line-no">031</span><span id="line.31">    }</span>
+<span class="source-line-no">032</span><span id="line.32">    public OrganicMapGenerator(int width, int height)</span>
+<span class="source-line-no">033</span><span id="line.33">    {</span>
+<span class="source-line-no">034</span><span id="line.34">        this(0.55, 0.65, width, height, new GWTRNG());</span>
+<span class="source-line-no">035</span><span id="line.35">    }</span>
+<span class="source-line-no">036</span><span id="line.36">    public OrganicMapGenerator(int width, int height, IRNG rng)</span>
+<span class="source-line-no">037</span><span id="line.37">    {</span>
+<span class="source-line-no">038</span><span id="line.38">        this(0.55, 0.65, width, height, rng);</span>
+<span class="source-line-no">039</span><span id="line.39">    }</span>
+<span class="source-line-no">040</span><span id="line.40">    public OrganicMapGenerator(double noiseMin, double noiseMax, int width, int height, IRNG rng)</span>
+<span class="source-line-no">041</span><span id="line.41">    {</span>
+<span class="source-line-no">042</span><span id="line.42">        this.rng = rng;</span>
+<span class="source-line-no">043</span><span id="line.43">        this.width = Math.max(3, width);</span>
+<span class="source-line-no">044</span><span id="line.44">        this.height = Math.max(3, height);</span>
+<span class="source-line-no">045</span><span id="line.45">        this.noiseMin = Math.min(0.9, Math.max(-1.0, noiseMin - 0.1));</span>
+<span class="source-line-no">046</span><span id="line.46">        this.noiseMax = Math.min(1.0, Math.max(noiseMin + 0.05, noiseMax + 0.1));</span>
+<span class="source-line-no">047</span><span id="line.47">        map = new char[this.width][this.height];</span>
+<span class="source-line-no">048</span><span id="line.48">        environment = new int[this.width][this.height];</span>
+<span class="source-line-no">049</span><span id="line.49">        floors = new GreasedRegion(width, height);</span>
+<span class="source-line-no">050</span><span id="line.50">        noise = new FastNoise(1, 0.375f, FastNoise.HONEY_FRACTAL, 2);</span>
+<span class="source-line-no">051</span><span id="line.51">    }</span>
+<span class="source-line-no">052</span><span id="line.52"></span>
+<span class="source-line-no">053</span><span id="line.53">    /**</span>
+<span class="source-line-no">054</span><span id="line.54">     * Generate a map as a 2D char array using the width and height specified in the constructor.</span>
+<span class="source-line-no">055</span><span id="line.55">     * Should produce an organic, cave-like map.</span>
+<span class="source-line-no">056</span><span id="line.56">     * @return a 2D char array for the map that should be organic-looking.</span>
+<span class="source-line-no">057</span><span id="line.57">     */</span>
+<span class="source-line-no">058</span><span id="line.58">    public char[][] generate() {</span>
+<span class="source-line-no">059</span><span id="line.59">        noise.setSeed(rng.nextInt());</span>
+<span class="source-line-no">060</span><span id="line.60">        double[][] noiseMap = new double[width][height];</span>
+<span class="source-line-no">061</span><span id="line.61">        for (int x = 0; x &lt; width; x++) {</span>
+<span class="source-line-no">062</span><span id="line.62">            for (int y = 0; y &lt; height; y++) {</span>
+<span class="source-line-no">063</span><span id="line.63">                noiseMap[x][y] = noise.getConfiguredNoise(x, y);</span>
+<span class="source-line-no">064</span><span id="line.64">            }</span>
+<span class="source-line-no">065</span><span id="line.65">        }</span>
+<span class="source-line-no">066</span><span id="line.66">        int w2 = width - 2, h2 = height - 2;</span>
+<span class="source-line-no">067</span><span id="line.67">        int startX = (int) (BathtubDistribution.instance.nextDouble(rng) * w2) + 1;</span>
+<span class="source-line-no">068</span><span id="line.68">        int endX = (int) (BathtubDistribution.instance.nextDouble(rng) * w2) + 1;</span>
+<span class="source-line-no">069</span><span id="line.69">        int startY = (int) (BathtubDistribution.instance.nextDouble(rng) * h2) + 1;</span>
+<span class="source-line-no">070</span><span id="line.70">        int endY = (int) (BathtubDistribution.instance.nextDouble(rng) * h2) + 1;</span>
+<span class="source-line-no">071</span><span id="line.71">        while (Radius.CIRCLE.radius(startX, startY, endX, endY) * 3 &lt; width + height){</span>
+<span class="source-line-no">072</span><span id="line.72">            startX = (int) (BathtubDistribution.instance.nextDouble(rng) * w2) + 1;</span>
+<span class="source-line-no">073</span><span id="line.73">            endX = (int) (BathtubDistribution.instance.nextDouble(rng) * w2) + 1;</span>
+<span class="source-line-no">074</span><span id="line.74">            startY = (int) (BathtubDistribution.instance.nextDouble(rng) * h2) + 1;</span>
+<span class="source-line-no">075</span><span id="line.75">            endY = (int) (BathtubDistribution.instance.nextDouble(rng) * h2) + 1;</span>
+<span class="source-line-no">076</span><span id="line.76">        }</span>
+<span class="source-line-no">077</span><span id="line.77">        GreasedRegion region = new GreasedRegion(width, height), linking;</span>
+<span class="source-line-no">078</span><span id="line.78">        for (int i = 1; i &lt;= 25; i++) {</span>
+<span class="source-line-no">079</span><span id="line.79">            noiseMax = 0.04 * i;</span>
+<span class="source-line-no">080</span><span id="line.80">            floors.refill(noiseMap, -noiseMax, noiseMax);</span>
+<span class="source-line-no">081</span><span id="line.81">            if(floors.contains(startX, startY) &amp;&amp; floors.contains(endX, endY) &amp;&amp; </span>
+<span class="source-line-no">082</span><span id="line.82">                    region.empty().insert(startX, startY).flood(floors, width * height).contains(endX, endY))</span>
+<span class="source-line-no">083</span><span id="line.83">                break;</span>
+<span class="source-line-no">084</span><span id="line.84">        }</span>
+<span class="source-line-no">085</span><span id="line.85">        floors.intoChars(map, '.', '#');</span>
+<span class="source-line-no">086</span><span id="line.86">        ArrayTools.fill(environment, DungeonUtility.UNTOUCHED);</span>
+<span class="source-line-no">087</span><span id="line.87">        floors.writeIntsInto(environment, DungeonUtility.CAVE_FLOOR);</span>
+<span class="source-line-no">088</span><span id="line.88">        region.remake(floors).fringe8way().writeIntsInto(environment, DungeonUtility.CAVE_WALL);</span>
+<span class="source-line-no">089</span><span id="line.89">        int upperY = height - 1;</span>
+<span class="source-line-no">090</span><span id="line.90">        int upperX = width - 1;</span>
+<span class="source-line-no">091</span><span id="line.91">        for (int i = 0; i &lt; width; i++) {</span>
+<span class="source-line-no">092</span><span id="line.92">            map[i][0] = '#';</span>
+<span class="source-line-no">093</span><span id="line.93">            map[i][upperY] = '#';</span>
+<span class="source-line-no">094</span><span id="line.94">            environment[i][0] = DungeonUtility.UNTOUCHED;</span>
+<span class="source-line-no">095</span><span id="line.95">            environment[i][upperY] = DungeonUtility.UNTOUCHED;</span>
+<span class="source-line-no">096</span><span id="line.96">        }</span>
+<span class="source-line-no">097</span><span id="line.97">        for (int i = 0; i &lt; height; i++) {</span>
+<span class="source-line-no">098</span><span id="line.98">            map[0][i] = '#';</span>
+<span class="source-line-no">099</span><span id="line.99">            map[upperX][i] = '#';</span>
+<span class="source-line-no">100</span><span id="line.100">            environment[0][i] = DungeonUtility.UNTOUCHED;</span>
+<span class="source-line-no">101</span><span id="line.101">            environment[upperX][i] = DungeonUtility.UNTOUCHED;</span>
+<span class="source-line-no">102</span><span id="line.102">        }</span>
+<span class="source-line-no">103</span><span id="line.103">        </span>
+<span class="source-line-no">104</span><span id="line.104">        return map;</span>
+<span class="source-line-no">105</span><span id="line.105">    }</span>
+<span class="source-line-no">106</span><span id="line.106"></span>
+<span class="source-line-no">107</span><span id="line.107"></span>
+<span class="source-line-no">108</span><span id="line.108">    /**</span>
+<span class="source-line-no">109</span><span id="line.109">     * Gets a 2D array of int constants, each representing a type of environment corresponding to a static field of</span>
+<span class="source-line-no">110</span><span id="line.110">     * MixedGenerator. This array will have the same size as the last char 2D array produced by generate(); the value</span>
+<span class="source-line-no">111</span><span id="line.111">     * of this method if called before generate() is undefined, but probably will be a 2D array of all 0 (UNTOUCHED).</span>
+<span class="source-line-no">112</span><span id="line.112">     * &lt;ul&gt;</span>
+<span class="source-line-no">113</span><span id="line.113">     *     &lt;li&gt;MixedGenerator.UNTOUCHED, equal to 0, is used for any cells that aren't near a floor.&lt;/li&gt;</span>
+<span class="source-line-no">114</span><span id="line.114">     *     &lt;li&gt;MixedGenerator.ROOM_FLOOR, equal to 1, is used for floor cells inside wide room areas.&lt;/li&gt;</span>
+<span class="source-line-no">115</span><span id="line.115">     *     &lt;li&gt;MixedGenerator.ROOM_WALL, equal to 2, is used for wall cells around wide room areas.&lt;/li&gt;</span>
+<span class="source-line-no">116</span><span id="line.116">     *     &lt;li&gt;MixedGenerator.CAVE_FLOOR, equal to 3, is used for floor cells inside rough cave areas.&lt;/li&gt;</span>
+<span class="source-line-no">117</span><span id="line.117">     *     &lt;li&gt;MixedGenerator.CAVE_WALL, equal to 4, is used for wall cells around rough cave areas.&lt;/li&gt;</span>
+<span class="source-line-no">118</span><span id="line.118">     *     &lt;li&gt;MixedGenerator.CORRIDOR_FLOOR, equal to 5, is used for floor cells inside narrow corridor areas.&lt;/li&gt;</span>
+<span class="source-line-no">119</span><span id="line.119">     *     &lt;li&gt;MixedGenerator.CORRIDOR_WALL, equal to 6, is used for wall cells around narrow corridor areas.&lt;/li&gt;</span>
+<span class="source-line-no">120</span><span id="line.120">     * &lt;/ul&gt;</span>
+<span class="source-line-no">121</span><span id="line.121">     * @return a 2D int array where each element is an environment type constant in MixedGenerator</span>
+<span class="source-line-no">122</span><span id="line.122">     */</span>
+<span class="source-line-no">123</span><span id="line.123">    public int[][] getEnvironment()</span>
+<span class="source-line-no">124</span><span id="line.124">    {</span>
+<span class="source-line-no">125</span><span id="line.125">        return environment;</span>
+<span class="source-line-no">126</span><span id="line.126">    }</span>
+<span class="source-line-no">127</span><span id="line.127"></span>
+<span class="source-line-no">128</span><span id="line.128">    public char[][] getDungeon() {</span>
+<span class="source-line-no">129</span><span id="line.129">        return map;</span>
+<span class="source-line-no">130</span><span id="line.130">    }</span>
+<span class="source-line-no">131</span><span id="line.131">    public int getWidth() {</span>
+<span class="source-line-no">132</span><span id="line.132">        return width;</span>
+<span class="source-line-no">133</span><span id="line.133">    }</span>
+<span class="source-line-no">134</span><span id="line.134"></span>
+<span class="source-line-no">135</span><span id="line.135">    public void setWidth(int width) {</span>
+<span class="source-line-no">136</span><span id="line.136">        this.width = width;</span>
+<span class="source-line-no">137</span><span id="line.137">    }</span>
+<span class="source-line-no">138</span><span id="line.138"></span>
+<span class="source-line-no">139</span><span id="line.139">    public int getHeight() {</span>
+<span class="source-line-no">140</span><span id="line.140">        return height;</span>
+<span class="source-line-no">141</span><span id="line.141">    }</span>
+<span class="source-line-no">142</span><span id="line.142"></span>
+<span class="source-line-no">143</span><span id="line.143">    public void setHeight(int height) {</span>
+<span class="source-line-no">144</span><span id="line.144">        this.height = height;</span>
+<span class="source-line-no">145</span><span id="line.145">    }</span>
+<span class="source-line-no">146</span><span id="line.146"></span>
+<span class="source-line-no">147</span><span id="line.147">    public double getNoiseMin() {</span>
+<span class="source-line-no">148</span><span id="line.148">        return noiseMin;</span>
+<span class="source-line-no">149</span><span id="line.149">    }</span>
+<span class="source-line-no">150</span><span id="line.150"></span>
+<span class="source-line-no">151</span><span id="line.151">    public void setNoiseMin(double noiseMin) {</span>
+<span class="source-line-no">152</span><span id="line.152">        this.noiseMin = noiseMin;</span>
+<span class="source-line-no">153</span><span id="line.153">    }</span>
+<span class="source-line-no">154</span><span id="line.154"></span>
+<span class="source-line-no">155</span><span id="line.155">    public double getNoiseMax() {</span>
+<span class="source-line-no">156</span><span id="line.156">        return noiseMax;</span>
+<span class="source-line-no">157</span><span id="line.157">    }</span>
+<span class="source-line-no">158</span><span id="line.158"></span>
+<span class="source-line-no">159</span><span id="line.159">    public void setNoiseMax(double noiseMax) {</span>
+<span class="source-line-no">160</span><span id="line.160">        this.noiseMax = noiseMax;</span>
+<span class="source-line-no">161</span><span id="line.161">    }</span>
+<span class="source-line-no">162</span><span id="line.162"></span>
+<span class="source-line-no">163</span><span id="line.163">}</span>
 
 
 

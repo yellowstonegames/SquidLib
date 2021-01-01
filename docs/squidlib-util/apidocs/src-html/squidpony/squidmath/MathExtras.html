@@ -7,378 +7,422 @@
 <meta name="generator" content="javadoc/SourceToHTMLConverter">
 <link rel="stylesheet" type="text/css" href="../../../stylesheet.css" title="Style">
 </head>
-<body class="source">
+<body class="source-page">
 <main role="main">
-<div class="sourceContainer">
-<pre><span class="sourceLineNo">001</span><a id="line.1">// ============================================================================</a>
-<span class="sourceLineNo">002</span><a id="line.2">//   Copyright 2006-2012 Daniel W. Dyer</a>
-<span class="sourceLineNo">003</span><a id="line.3">//</a>
-<span class="sourceLineNo">004</span><a id="line.4">//   Licensed under the Apache License, Version 2.0 (the "License");</a>
-<span class="sourceLineNo">005</span><a id="line.5">//   you may not use this file except in compliance with the License.</a>
-<span class="sourceLineNo">006</span><a id="line.6">//   You may obtain a copy of the License at</a>
-<span class="sourceLineNo">007</span><a id="line.7">//</a>
-<span class="sourceLineNo">008</span><a id="line.8">//       http://www.apache.org/licenses/LICENSE-2.0</a>
-<span class="sourceLineNo">009</span><a id="line.9">//</a>
-<span class="sourceLineNo">010</span><a id="line.10">//   Unless required by applicable law or agreed to in writing, software</a>
-<span class="sourceLineNo">011</span><a id="line.11">//   distributed under the License is distributed on an "AS IS" BASIS,</a>
-<span class="sourceLineNo">012</span><a id="line.12">//   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</a>
-<span class="sourceLineNo">013</span><a id="line.13">//   See the License for the specific language governing permissions and</a>
-<span class="sourceLineNo">014</span><a id="line.14">//   limitations under the License.</a>
-<span class="sourceLineNo">015</span><a id="line.15">// ============================================================================</a>
-<span class="sourceLineNo">016</span><a id="line.16">package squidpony.squidmath;</a>
-<span class="sourceLineNo">017</span><a id="line.17"></a>
-<span class="sourceLineNo">018</span><a id="line.18">import squidpony.annotation.GwtIncompatible;</a>
-<span class="sourceLineNo">019</span><a id="line.19"></a>
-<span class="sourceLineNo">020</span><a id="line.20">import java.math.BigInteger;</a>
-<span class="sourceLineNo">021</span><a id="line.21">import java.util.Random;</a>
-<span class="sourceLineNo">022</span><a id="line.22"></a>
-<span class="sourceLineNo">023</span><a id="line.23">/**</a>
-<span class="sourceLineNo">024</span><a id="line.24"> * Mathematical operations not provided by {@link Math java.lang.Math}.</a>
-<span class="sourceLineNo">025</span><a id="line.25"> * &lt;br&gt;</a>
-<span class="sourceLineNo">026</span><a id="line.26"> * Originally part of the &lt;a href="http://maths.uncommons.org/"&gt;Uncommon Maths software package&lt;/a&gt; as Maths.</a>
-<span class="sourceLineNo">027</span><a id="line.27"> * @author Daniel Dyer</a>
-<span class="sourceLineNo">028</span><a id="line.28"> */</a>
-<span class="sourceLineNo">029</span><a id="line.29">public final class MathExtras</a>
-<span class="sourceLineNo">030</span><a id="line.30">{</a>
-<span class="sourceLineNo">031</span><a id="line.31">    // The biggest factorial that can be calculated using 64-bit signed longs.</a>
-<span class="sourceLineNo">032</span><a id="line.32">    private static final int MAX_LONG_FACTORIAL = 20;</a>
-<span class="sourceLineNo">033</span><a id="line.33"></a>
-<span class="sourceLineNo">034</span><a id="line.34">    // Cache BigInteger factorial values because they are expensive to generate.</a>
-<span class="sourceLineNo">035</span><a id="line.35">    private static final int CACHE_SIZE = 256;</a>
-<span class="sourceLineNo">036</span><a id="line.36">    static final long[] factorialsStart = new long[]{</a>
-<span class="sourceLineNo">037</span><a id="line.37">            0, 1, 2, 6, 24, 120, 720, 5040, 40320, 362880, 3628800, 39916800, 479001600,</a>
-<span class="sourceLineNo">038</span><a id="line.38">            6227020800L, 87178291200L, 1307674368000L, 20922789888000L, 355687428096000L,</a>
-<span class="sourceLineNo">039</span><a id="line.39">            6402373705728000L, 121645100408832000L, 2432902008176640000L</a>
-<span class="sourceLineNo">040</span><a id="line.40">    };</a>
-<span class="sourceLineNo">041</span><a id="line.41">    private static final OrderedMap&lt;Integer, BigInteger&gt; BIG_FACTORIALS</a>
-<span class="sourceLineNo">042</span><a id="line.42">        = new OrderedMap&lt;Integer, BigInteger&gt;();</a>
-<span class="sourceLineNo">043</span><a id="line.43"></a>
-<span class="sourceLineNo">044</span><a id="line.44"></a>
-<span class="sourceLineNo">045</span><a id="line.45">    private MathExtras()</a>
-<span class="sourceLineNo">046</span><a id="line.46">    {</a>
-<span class="sourceLineNo">047</span><a id="line.47">        // Prevent instantiation.</a>
-<span class="sourceLineNo">048</span><a id="line.48">    }</a>
-<span class="sourceLineNo">049</span><a id="line.49"></a>
-<span class="sourceLineNo">050</span><a id="line.50"></a>
-<span class="sourceLineNo">051</span><a id="line.51">    /**</a>
-<span class="sourceLineNo">052</span><a id="line.52">     * Calculates the factorial of n where n is a number in the</a>
-<span class="sourceLineNo">053</span><a id="line.53">     * range 0 - 20.  Zero factorial is equal to 1.  For values of</a>
-<span class="sourceLineNo">054</span><a id="line.54">     * n greater than 20 you must use {@link #bigFactorial(int)}.</a>
-<span class="sourceLineNo">055</span><a id="line.55">     * @param n The factorial to calculate.</a>
-<span class="sourceLineNo">056</span><a id="line.56">     * @return The factorial of n.</a>
-<span class="sourceLineNo">057</span><a id="line.57">     * @see #bigFactorial(int)</a>
-<span class="sourceLineNo">058</span><a id="line.58">     */</a>
-<span class="sourceLineNo">059</span><a id="line.59">    public static long factorial(int n)</a>
-<span class="sourceLineNo">060</span><a id="line.60">    {</a>
-<span class="sourceLineNo">061</span><a id="line.61">        if (n &lt; 0 || n &gt; MAX_LONG_FACTORIAL)</a>
-<span class="sourceLineNo">062</span><a id="line.62">        {</a>
-<span class="sourceLineNo">063</span><a id="line.63">            throw new IllegalArgumentException("Argument must be in the range 0 - 20.");</a>
-<span class="sourceLineNo">064</span><a id="line.64">        }</a>
-<span class="sourceLineNo">065</span><a id="line.65">        /*</a>
-<span class="sourceLineNo">066</span><a id="line.66">        long factorial = 1;</a>
-<span class="sourceLineNo">067</span><a id="line.67">        for (int i = n; i &gt; 1; i--)</a>
-<span class="sourceLineNo">068</span><a id="line.68">        {</a>
-<span class="sourceLineNo">069</span><a id="line.69">            factorial *= i;</a>
-<span class="sourceLineNo">070</span><a id="line.70">        }*/</a>
-<span class="sourceLineNo">071</span><a id="line.71">        return factorialsStart[n];</a>
-<span class="sourceLineNo">072</span><a id="line.72">    }</a>
-<span class="sourceLineNo">073</span><a id="line.73"></a>
-<span class="sourceLineNo">074</span><a id="line.74"></a>
-<span class="sourceLineNo">075</span><a id="line.75">    /**</a>
-<span class="sourceLineNo">076</span><a id="line.76">     * Calculates the factorial of n where n is a positive integer.</a>
-<span class="sourceLineNo">077</span><a id="line.77">     * Zero factorial is equal to 1.  For values of n up to 20, consider</a>
-<span class="sourceLineNo">078</span><a id="line.78">     * using {@link #factorial(int)} instead since it uses a faster</a>
-<span class="sourceLineNo">079</span><a id="line.79">     * implementation.</a>
-<span class="sourceLineNo">080</span><a id="line.80">     * @param n The factorial to calculate.</a>
-<span class="sourceLineNo">081</span><a id="line.81">     * @return The factorial of n.</a>
-<span class="sourceLineNo">082</span><a id="line.82">     * @see #factorial(int)</a>
-<span class="sourceLineNo">083</span><a id="line.83">     */</a>
-<span class="sourceLineNo">084</span><a id="line.84">    public static BigInteger bigFactorial(int n)</a>
-<span class="sourceLineNo">085</span><a id="line.85">    {</a>
-<span class="sourceLineNo">086</span><a id="line.86">        if (n &lt; 0)</a>
-<span class="sourceLineNo">087</span><a id="line.87">        {</a>
-<span class="sourceLineNo">088</span><a id="line.88">            throw new IllegalArgumentException("Argument must greater than or equal to zero.");</a>
-<span class="sourceLineNo">089</span><a id="line.89">        }</a>
-<span class="sourceLineNo">090</span><a id="line.90"></a>
-<span class="sourceLineNo">091</span><a id="line.91">        BigInteger factorial = null;</a>
-<span class="sourceLineNo">092</span><a id="line.92">        if (n &lt; CACHE_SIZE) // Check for a cached value.</a>
-<span class="sourceLineNo">093</span><a id="line.93">        {</a>
-<span class="sourceLineNo">094</span><a id="line.94">            factorial = BIG_FACTORIALS.get(n);</a>
-<span class="sourceLineNo">095</span><a id="line.95">        }</a>
-<span class="sourceLineNo">096</span><a id="line.96"></a>
-<span class="sourceLineNo">097</span><a id="line.97">        if (factorial == null)</a>
-<span class="sourceLineNo">098</span><a id="line.98">        {</a>
-<span class="sourceLineNo">099</span><a id="line.99">            factorial = BigInteger.ONE;</a>
-<span class="sourceLineNo">100</span><a id="line.100">            for (int i = n; i &gt; 1; i--)</a>
-<span class="sourceLineNo">101</span><a id="line.101">            {</a>
-<span class="sourceLineNo">102</span><a id="line.102">                factorial = factorial.multiply(BigInteger.valueOf(i));</a>
-<span class="sourceLineNo">103</span><a id="line.103">            }</a>
-<span class="sourceLineNo">104</span><a id="line.104">            if (n &lt; CACHE_SIZE) // Cache value.</a>
-<span class="sourceLineNo">105</span><a id="line.105">            {</a>
-<span class="sourceLineNo">106</span><a id="line.106">                if(!BIG_FACTORIALS.containsKey(n))</a>
-<span class="sourceLineNo">107</span><a id="line.107">                    BIG_FACTORIALS.put(n, factorial);</a>
-<span class="sourceLineNo">108</span><a id="line.108">            }</a>
-<span class="sourceLineNo">109</span><a id="line.109">        }</a>
-<span class="sourceLineNo">110</span><a id="line.110"></a>
-<span class="sourceLineNo">111</span><a id="line.111">        return factorial;</a>
-<span class="sourceLineNo">112</span><a id="line.112">    }</a>
-<span class="sourceLineNo">113</span><a id="line.113"></a>
-<span class="sourceLineNo">114</span><a id="line.114"></a>
-<span class="sourceLineNo">115</span><a id="line.115">    /**</a>
-<span class="sourceLineNo">116</span><a id="line.116">     * Calculate the first argument raised to the power of the second.</a>
-<span class="sourceLineNo">117</span><a id="line.117">     * This method only supports non-negative powers.</a>
-<span class="sourceLineNo">118</span><a id="line.118">     * @param value The number to be raised.</a>
-<span class="sourceLineNo">119</span><a id="line.119">     * @param power The exponent (must be positive).</a>
-<span class="sourceLineNo">120</span><a id="line.120">     * @return {@code value} raised to {@code power}.</a>
-<span class="sourceLineNo">121</span><a id="line.121">     */</a>
-<span class="sourceLineNo">122</span><a id="line.122">    public static long raiseToPower(int value, int power)</a>
-<span class="sourceLineNo">123</span><a id="line.123">    {</a>
-<span class="sourceLineNo">124</span><a id="line.124">        if (power &lt; 0)</a>
-<span class="sourceLineNo">125</span><a id="line.125">        {</a>
-<span class="sourceLineNo">126</span><a id="line.126">            throw new IllegalArgumentException("This method does not support negative powers.");</a>
-<span class="sourceLineNo">127</span><a id="line.127">        }</a>
-<span class="sourceLineNo">128</span><a id="line.128">        long result = 1;</a>
-<span class="sourceLineNo">129</span><a id="line.129">        for (int i = 0; i &lt; power; i++)</a>
-<span class="sourceLineNo">130</span><a id="line.130">        {</a>
-<span class="sourceLineNo">131</span><a id="line.131">            result *= value;</a>
-<span class="sourceLineNo">132</span><a id="line.132">        }</a>
-<span class="sourceLineNo">133</span><a id="line.133">        return result;</a>
-<span class="sourceLineNo">134</span><a id="line.134">    }</a>
-<span class="sourceLineNo">135</span><a id="line.135"></a>
-<span class="sourceLineNo">136</span><a id="line.136"></a>
-<span class="sourceLineNo">137</span><a id="line.137">    /**</a>
-<span class="sourceLineNo">138</span><a id="line.138">     * Calculate logarithms for arbitrary bases.</a>
-<span class="sourceLineNo">139</span><a id="line.139">     * @param base The base for the logarithm.</a>
-<span class="sourceLineNo">140</span><a id="line.140">     * @param arg The value to calculate the logarithm for.</a>
-<span class="sourceLineNo">141</span><a id="line.141">     * @return The log of {@code arg} in the specified {@code base}.</a>
-<span class="sourceLineNo">142</span><a id="line.142">     */</a>
-<span class="sourceLineNo">143</span><a id="line.143">    public static double log(double base, double arg)</a>
-<span class="sourceLineNo">144</span><a id="line.144">    {</a>
-<span class="sourceLineNo">145</span><a id="line.145">        // Use natural logarithms and change the base.</a>
-<span class="sourceLineNo">146</span><a id="line.146">        return Math.log(arg) / Math.log(base);</a>
-<span class="sourceLineNo">147</span><a id="line.147">    }</a>
-<span class="sourceLineNo">148</span><a id="line.148"></a>
-<span class="sourceLineNo">149</span><a id="line.149"></a>
-<span class="sourceLineNo">150</span><a id="line.150">    /**</a>
-<span class="sourceLineNo">151</span><a id="line.151">     * Checks that two values are approximately equal (plus or minus a specified tolerance).</a>
-<span class="sourceLineNo">152</span><a id="line.152">     * @param value1 The first value to compare.</a>
-<span class="sourceLineNo">153</span><a id="line.153">     * @param value2 The second value to compare.</a>
-<span class="sourceLineNo">154</span><a id="line.154">     * @param tolerance How much (in percentage terms, as a percentage of the first value)</a>
-<span class="sourceLineNo">155</span><a id="line.155">     * the values are allowed to differ and still be considered equal.  Expressed as a value</a>
-<span class="sourceLineNo">156</span><a id="line.156">     * between 0 and 1.</a>
-<span class="sourceLineNo">157</span><a id="line.157">     * @return true if the values are approximately equal, false otherwise.</a>
-<span class="sourceLineNo">158</span><a id="line.158">     */</a>
-<span class="sourceLineNo">159</span><a id="line.159">    public static boolean approxEquals(double value1,</a>
-<span class="sourceLineNo">160</span><a id="line.160">                                       double value2,</a>
-<span class="sourceLineNo">161</span><a id="line.161">                                       double tolerance)</a>
-<span class="sourceLineNo">162</span><a id="line.162">    {</a>
-<span class="sourceLineNo">163</span><a id="line.163">        if (tolerance &lt; 0 || tolerance &gt; 1)</a>
-<span class="sourceLineNo">164</span><a id="line.164">        {</a>
-<span class="sourceLineNo">165</span><a id="line.165">            throw new IllegalArgumentException("Tolerance must be between 0 and 1.");</a>
-<span class="sourceLineNo">166</span><a id="line.166">        }</a>
-<span class="sourceLineNo">167</span><a id="line.167">        return Math.abs(value1 - value2) &lt;= value1 * tolerance;</a>
-<span class="sourceLineNo">168</span><a id="line.168">    }</a>
-<span class="sourceLineNo">169</span><a id="line.169"></a>
-<span class="sourceLineNo">170</span><a id="line.170"></a>
-<span class="sourceLineNo">171</span><a id="line.171">    /**</a>
-<span class="sourceLineNo">172</span><a id="line.172">     * If the specified value is not greater than or equal to the specified minimum and</a>
-<span class="sourceLineNo">173</span><a id="line.173">     * less than or equal to the specified maximum, adjust it so that it is.</a>
-<span class="sourceLineNo">174</span><a id="line.174">     * @param value The value to check.</a>
-<span class="sourceLineNo">175</span><a id="line.175">     * @param min The minimum permitted value.</a>
-<span class="sourceLineNo">176</span><a id="line.176">     * @param max The maximum permitted value.</a>
-<span class="sourceLineNo">177</span><a id="line.177">     * @return {@code value} if it is between the specified limits, {@code min} if the value</a>
-<span class="sourceLineNo">178</span><a id="line.178">     * is too low, or {@code max} if the value is too high.</a>
-<span class="sourceLineNo">179</span><a id="line.179">     */</a>
-<span class="sourceLineNo">180</span><a id="line.180">    public static int clamp(int value, int min, int max)</a>
-<span class="sourceLineNo">181</span><a id="line.181">    {</a>
-<span class="sourceLineNo">182</span><a id="line.182">        return Math.min(Math.max(value, min), max);</a>
-<span class="sourceLineNo">183</span><a id="line.183">    }</a>
-<span class="sourceLineNo">184</span><a id="line.184"></a>
-<span class="sourceLineNo">185</span><a id="line.185"></a>
-<span class="sourceLineNo">186</span><a id="line.186">    /**</a>
-<span class="sourceLineNo">187</span><a id="line.187">     * If the specified value is not greater than or equal to the specified minimum and</a>
-<span class="sourceLineNo">188</span><a id="line.188">     * less than or equal to the specified maximum, adjust it so that it is.</a>
-<span class="sourceLineNo">189</span><a id="line.189">     * @param value The value to check.</a>
-<span class="sourceLineNo">190</span><a id="line.190">     * @param min The minimum permitted value.</a>
-<span class="sourceLineNo">191</span><a id="line.191">     * @param max The maximum permitted value.</a>
-<span class="sourceLineNo">192</span><a id="line.192">     * @return {@code value} if it is between the specified limits, {@code min} if the value</a>
-<span class="sourceLineNo">193</span><a id="line.193">     * is too low, or {@code max} if the value is too high.</a>
-<span class="sourceLineNo">194</span><a id="line.194">     */</a>
-<span class="sourceLineNo">195</span><a id="line.195">    public static long clamp(long value, long min, long max)</a>
-<span class="sourceLineNo">196</span><a id="line.196">    {</a>
-<span class="sourceLineNo">197</span><a id="line.197">        return Math.min(Math.max(value, min), max);</a>
-<span class="sourceLineNo">198</span><a id="line.198">    }</a>
-<span class="sourceLineNo">199</span><a id="line.199"></a>
-<span class="sourceLineNo">200</span><a id="line.200"></a>
-<span class="sourceLineNo">201</span><a id="line.201">    /**</a>
-<span class="sourceLineNo">202</span><a id="line.202">     * If the specified value is not greater than or equal to the specified minimum and</a>
-<span class="sourceLineNo">203</span><a id="line.203">     * less than or equal to the specified maximum, adjust it so that it is.</a>
-<span class="sourceLineNo">204</span><a id="line.204">     * @param value The value to check.</a>
-<span class="sourceLineNo">205</span><a id="line.205">     * @param min The minimum permitted value.</a>
-<span class="sourceLineNo">206</span><a id="line.206">     * @param max The maximum permitted value.</a>
-<span class="sourceLineNo">207</span><a id="line.207">     * @return {@code value} if it is between the specified limits, {@code min} if the value</a>
-<span class="sourceLineNo">208</span><a id="line.208">     * is too low, or {@code max} if the value is too high.</a>
-<span class="sourceLineNo">209</span><a id="line.209">     */</a>
-<span class="sourceLineNo">210</span><a id="line.210">    public static double clamp(double value, double min, double max)</a>
-<span class="sourceLineNo">211</span><a id="line.211">    {</a>
-<span class="sourceLineNo">212</span><a id="line.212">        return Math.min(Math.max(value, min), max);</a>
-<span class="sourceLineNo">213</span><a id="line.213">    }</a>
-<span class="sourceLineNo">214</span><a id="line.214"></a>
-<span class="sourceLineNo">215</span><a id="line.215">    /**</a>
-<span class="sourceLineNo">216</span><a id="line.216">     * If the specified value is not greater than or equal to the specified minimum and</a>
-<span class="sourceLineNo">217</span><a id="line.217">     * less than or equal to the specified maximum, adjust it so that it is.</a>
-<span class="sourceLineNo">218</span><a id="line.218">     * @param value The value to check.</a>
-<span class="sourceLineNo">219</span><a id="line.219">     * @param min The minimum permitted value.</a>
-<span class="sourceLineNo">220</span><a id="line.220">     * @param max The maximum permitted value.</a>
-<span class="sourceLineNo">221</span><a id="line.221">     * @return {@code value} if it is between the specified limits, {@code min} if the value</a>
-<span class="sourceLineNo">222</span><a id="line.222">     * is too low, or {@code max} if the value is too high.</a>
-<span class="sourceLineNo">223</span><a id="line.223">     */</a>
-<span class="sourceLineNo">224</span><a id="line.224">    public static float clamp(float value, float min, float max)</a>
-<span class="sourceLineNo">225</span><a id="line.225">    {</a>
-<span class="sourceLineNo">226</span><a id="line.226">        return Math.min(Math.max(value, min), max);</a>
-<span class="sourceLineNo">227</span><a id="line.227">    }</a>
-<span class="sourceLineNo">228</span><a id="line.228"></a>
-<span class="sourceLineNo">229</span><a id="line.229">    /**</a>
-<span class="sourceLineNo">230</span><a id="line.230">     * Like the modulo operator {@code %}, but the result will always match the sign of {@code d} instead of {@code op}.</a>
-<span class="sourceLineNo">231</span><a id="line.231">     * @param op the dividend; negative values are permitted and wrap instead of producing negative results</a>
-<span class="sourceLineNo">232</span><a id="line.232">     * @param d the divisor; if this is negative then the result will be negative, otherwise it will be positive</a>
-<span class="sourceLineNo">233</span><a id="line.233">     * @return the remainder of the division of op by d, with a sign matching d</a>
-<span class="sourceLineNo">234</span><a id="line.234">     */</a>
-<span class="sourceLineNo">235</span><a id="line.235">    public static double remainder(final double op, final double d) {</a>
-<span class="sourceLineNo">236</span><a id="line.236">        return (op % d + d) % d;</a>
-<span class="sourceLineNo">237</span><a id="line.237">    }</a>
-<span class="sourceLineNo">238</span><a id="line.238"></a>
-<span class="sourceLineNo">239</span><a id="line.239">    /**</a>
-<span class="sourceLineNo">240</span><a id="line.240">     * Determines the greatest common divisor of a pair of natural numbers</a>
-<span class="sourceLineNo">241</span><a id="line.241">     * using the Euclidean algorithm.  This method only works with natural</a>
-<span class="sourceLineNo">242</span><a id="line.242">     * numbers.  If negative integers are passed in, the absolute values will</a>
-<span class="sourceLineNo">243</span><a id="line.243">     * be used.  The return value is always positive.</a>
-<span class="sourceLineNo">244</span><a id="line.244">     * @param a The first value.</a>
-<span class="sourceLineNo">245</span><a id="line.245">     * @param b The second value.</a>
-<span class="sourceLineNo">246</span><a id="line.246">     * @return The greatest common divisor.</a>
-<span class="sourceLineNo">247</span><a id="line.247">     */</a>
-<span class="sourceLineNo">248</span><a id="line.248">    public static long greatestCommonDivisor(long a, long b)</a>
-<span class="sourceLineNo">249</span><a id="line.249">    {</a>
-<span class="sourceLineNo">250</span><a id="line.250">        a = Math.abs(a);</a>
-<span class="sourceLineNo">251</span><a id="line.251">        b = Math.abs(b);</a>
-<span class="sourceLineNo">252</span><a id="line.252">        while (b != 0)</a>
-<span class="sourceLineNo">253</span><a id="line.253">        {</a>
-<span class="sourceLineNo">254</span><a id="line.254">            long temp = b;</a>
-<span class="sourceLineNo">255</span><a id="line.255">            b = a % b;</a>
-<span class="sourceLineNo">256</span><a id="line.256">            a = temp;</a>
-<span class="sourceLineNo">257</span><a id="line.257">        }</a>
-<span class="sourceLineNo">258</span><a id="line.258">        return a;</a>
-<span class="sourceLineNo">259</span><a id="line.259">    }</a>
-<span class="sourceLineNo">260</span><a id="line.260"></a>
-<span class="sourceLineNo">261</span><a id="line.261">    /**</a>
-<span class="sourceLineNo">262</span><a id="line.262">     * Given any odd int {@code a}, this finds another odd int {@code b} such that {@code a * b == 1}.</a>
-<span class="sourceLineNo">263</span><a id="line.263">     * &lt;br&gt;</a>
-<span class="sourceLineNo">264</span><a id="line.264">     * This is incompatible with GWT, but it should usually only find uses in exploratory code or in tests anyway...</a>
-<span class="sourceLineNo">265</span><a id="line.265">     * It is only incompatible because it tends to rely on multiplication overflow to work.</a>
-<span class="sourceLineNo">266</span><a id="line.266">     * @param a any odd int; note that even numbers do not have inverses modulo 2 to the 32</a>
-<span class="sourceLineNo">267</span><a id="line.267">     * @return the multiplicative inverse of {@code a} modulo 4294967296 (or, 2 to the 32)</a>
-<span class="sourceLineNo">268</span><a id="line.268">     */</a>
-<span class="sourceLineNo">269</span><a id="line.269">    @GwtIncompatible</a>
-<span class="sourceLineNo">270</span><a id="line.270">    public static int modularMultiplicativeInverse(int a)</a>
-<span class="sourceLineNo">271</span><a id="line.271">    {</a>
-<span class="sourceLineNo">272</span><a id="line.272">        int x = 2 ^ a * 3;     //  5 bits</a>
-<span class="sourceLineNo">273</span><a id="line.273">        x *= 2 - a * x;        // 10</a>
-<span class="sourceLineNo">274</span><a id="line.274">        x *= 2 - a * x;        // 20</a>
-<span class="sourceLineNo">275</span><a id="line.275">        x *= 2 - a * x;        // 40 -- 32 low bits</a>
-<span class="sourceLineNo">276</span><a id="line.276">        return x;</a>
-<span class="sourceLineNo">277</span><a id="line.277">    }</a>
-<span class="sourceLineNo">278</span><a id="line.278"></a>
-<span class="sourceLineNo">279</span><a id="line.279">    /**</a>
-<span class="sourceLineNo">280</span><a id="line.280">     * Given any odd long {@code a}, this finds another odd long {@code b} such that {@code a * b == 1L}.</a>
-<span class="sourceLineNo">281</span><a id="line.281">     * @param a any odd long; note that even numbers do not have inverses modulo 2 to the 64</a>
-<span class="sourceLineNo">282</span><a id="line.282">     * @return the multiplicative inverse of {@code a} modulo 18446744073709551616 (or, 2 to the 64)</a>
-<span class="sourceLineNo">283</span><a id="line.283">     */</a>
-<span class="sourceLineNo">284</span><a id="line.284">    public static long modularMultiplicativeInverse(long a)</a>
-<span class="sourceLineNo">285</span><a id="line.285">    {</a>
-<span class="sourceLineNo">286</span><a id="line.286">        long x = 2 ^ a * 3;    //  5 bits</a>
-<span class="sourceLineNo">287</span><a id="line.287">        x *= 2 - a * x;        // 10</a>
-<span class="sourceLineNo">288</span><a id="line.288">        x *= 2 - a * x;        // 20</a>
-<span class="sourceLineNo">289</span><a id="line.289">        x *= 2 - a * x;        // 40</a>
-<span class="sourceLineNo">290</span><a id="line.290">        x *= 2 - a * x;        // 80 -- 64 low bits</a>
-<span class="sourceLineNo">291</span><a id="line.291">        return x;</a>
-<span class="sourceLineNo">292</span><a id="line.292">    }</a>
-<span class="sourceLineNo">293</span><a id="line.293"></a>
-<span class="sourceLineNo">294</span><a id="line.294">    /**</a>
-<span class="sourceLineNo">295</span><a id="line.295">     * A way of taking a double in the (0.0, 1.0) range and mapping it to a Gaussian or normal distribution, so high</a>
-<span class="sourceLineNo">296</span><a id="line.296">     * inputs correspond to high outputs, and similarly for the low range. This is centered on 0.0 and its standard</a>
-<span class="sourceLineNo">297</span><a id="line.297">     * deviation seems to be 1.0 (the same as {@link Random#nextGaussian()}). If this is given an input of 0.0</a>
-<span class="sourceLineNo">298</span><a id="line.298">     * or less, it returns -38.5, which is slightly less than the result when given {@link Double#MIN_VALUE}. If it is</a>
-<span class="sourceLineNo">299</span><a id="line.299">     * given an input of 1.0 or more, it returns 38.5, which is significantly larger than the result when given the</a>
-<span class="sourceLineNo">300</span><a id="line.300">     * largest double less than 1.0 (this value is further from 1.0 than {@link Double#MIN_VALUE} is from 0.0). If</a>
-<span class="sourceLineNo">301</span><a id="line.301">     * given {@link Double#NaN}, it returns whatever {@link Math#copySign(double, double)} returns for the arguments</a>
-<span class="sourceLineNo">302</span><a id="line.302">     * {@code 38.5, Double.NaN}, which is implementation-dependent. It uses an algorithm by Peter John Acklam, as</a>
-<span class="sourceLineNo">303</span><a id="line.303">     * implemented by Sherali Karimov.</a>
-<span class="sourceLineNo">304</span><a id="line.304">     * &lt;a href="https://web.archive.org/web/20150910002142/http://home.online.no/~pjacklam/notes/invnorm/impl/karimov/StatUtil.java"&gt;Original source&lt;/a&gt;.</a>
-<span class="sourceLineNo">305</span><a id="line.305">     * &lt;a href="https://web.archive.org/web/20151030215612/http://home.online.no/~pjacklam/notes/invnorm/"&gt;Information on the algorithm&lt;/a&gt;.</a>
-<span class="sourceLineNo">306</span><a id="line.306">     * &lt;a href="https://en.wikipedia.org/wiki/Probit_function"&gt;Wikipedia's page on the probit function&lt;/a&gt; may help, but</a>
-<span class="sourceLineNo">307</span><a id="line.307">     * is more likely to just be confusing.</a>
-<span class="sourceLineNo">308</span><a id="line.308">     * &lt;br&gt;</a>
-<span class="sourceLineNo">309</span><a id="line.309">     * Acklam's algorithm and Karimov's implementation are both quite fast. This appears faster than generating</a>
-<span class="sourceLineNo">310</span><a id="line.310">     * Gaussian-distributed numbers using either the Box-Muller Transform or Marsaglia's Polar Method, though it isn't</a>
-<span class="sourceLineNo">311</span><a id="line.311">     * as precise and can't produce as extreme min and max results in the extreme cases they should appear. If given</a>
-<span class="sourceLineNo">312</span><a id="line.312">     * a typical uniform random {@code double} that's exclusive on 1.0, it won't produce a result higher than</a>
-<span class="sourceLineNo">313</span><a id="line.313">     * {@code 8.209536145151493}, and will only produce results of at least {@code -8.209536145151493} if 0.0 is</a>
-<span class="sourceLineNo">314</span><a id="line.314">     * excluded from the inputs (if 0.0 is an input, the result is {@code 38.5}). A chief advantage of using this with</a>
-<span class="sourceLineNo">315</span><a id="line.315">     * a random number generator is that it only requires one random double to obtain one Gaussian value;</a>
-<span class="sourceLineNo">316</span><a id="line.316">     * {@link Random#nextGaussian()} generates at least two random doubles for each two Gaussian values, but may rarely</a>
-<span class="sourceLineNo">317</span><a id="line.317">     * require much more random generation.</a>
-<span class="sourceLineNo">318</span><a id="line.318">     * &lt;br&gt;</a>
-<span class="sourceLineNo">319</span><a id="line.319">     * This can be used both as an optimization for generating Gaussian random values, and as a way of generating</a>
-<span class="sourceLineNo">320</span><a id="line.320">     * Gaussian values that match a pattern present in the inputs (which you could have by using a sub-random sequence</a>
-<span class="sourceLineNo">321</span><a id="line.321">     * as the input, such as those produced by {@link VanDerCorputQRNG#determine(int, int)} or the R2 sequence).</a>
-<span class="sourceLineNo">322</span><a id="line.322">     * @param d should be between 0 and 1, exclusive, but other values are tolerated</a>
-<span class="sourceLineNo">323</span><a id="line.323">     * @return a normal-distributed double centered on 0.0; all results will be between -38.5 and 38.5, both inclusive</a>
-<span class="sourceLineNo">324</span><a id="line.324">     */</a>
-<span class="sourceLineNo">325</span><a id="line.325">    public static double probit(final double d) {</a>
-<span class="sourceLineNo">326</span><a id="line.326">        if (d &lt;= 0 || d &gt;= 1) {</a>
-<span class="sourceLineNo">327</span><a id="line.327">            return Math.copySign(38.5, d - 0.5);</a>
-<span class="sourceLineNo">328</span><a id="line.328">        }</a>
-<span class="sourceLineNo">329</span><a id="line.329">        // Rational approximation for lower region:</a>
-<span class="sourceLineNo">330</span><a id="line.330">        else if (d &lt; 0.02425) {</a>
-<span class="sourceLineNo">331</span><a id="line.331">            final double q = Math.sqrt(-2.0 * Math.log(d));</a>
-<span class="sourceLineNo">332</span><a id="line.332">            return (((((-7.784894002430293e-03 * q + -3.223964580411365e-01) * q + -2.400758277161838e+00) * q + -2.549732539343734e+00) * q + 4.374664141464968e+00) * q + 2.938163982698783e+00)</a>
-<span class="sourceLineNo">333</span><a id="line.333">                    / ((((7.784695709041462e-03 * q + 3.224671290700398e-01) * q + 2.445134137142996e+00) * q + 3.754408661907416e+00) * q + 1.0);</a>
-<span class="sourceLineNo">334</span><a id="line.334">        }</a>
-<span class="sourceLineNo">335</span><a id="line.335">        // Rational approximation for upper region:</a>
-<span class="sourceLineNo">336</span><a id="line.336">        else if (0.97575 &lt; d) {</a>
-<span class="sourceLineNo">337</span><a id="line.337">            final double q = Math.sqrt(-2.0 * Math.log(1 - d));</a>
-<span class="sourceLineNo">338</span><a id="line.338">            return -(((((-7.784894002430293e-03 * q + -3.223964580411365e-01) * q + -2.400758277161838e+00) * q + -2.549732539343734e+00) * q + 4.374664141464968e+00) * q + 2.938163982698783e+00)</a>
-<span class="sourceLineNo">339</span><a id="line.339">                    / ((((7.784695709041462e-03 * q + 3.224671290700398e-01) * q + 2.445134137142996e+00) * q + 3.754408661907416e+00) * q + 1.0);</a>
-<span class="sourceLineNo">340</span><a id="line.340">        }</a>
-<span class="sourceLineNo">341</span><a id="line.341">        // Rational approximation for central region:</a>
-<span class="sourceLineNo">342</span><a id="line.342">        else {</a>
-<span class="sourceLineNo">343</span><a id="line.343">            final double q = d - 0.5;</a>
-<span class="sourceLineNo">344</span><a id="line.344">            final double r = q * q;</a>
-<span class="sourceLineNo">345</span><a id="line.345">            return (((((-3.969683028665376e+01 * r + 2.209460984245205e+02) * r + -2.759285104469687e+02) * r + 1.383577518672690e+02) * r + -3.066479806614716e+01) * r + 2.506628277459239e+00) * q</a>
-<span class="sourceLineNo">346</span><a id="line.346">                    / (((((-5.447609879822406e+01 * r + 1.615858368580409e+02) * r + -1.556989798598866e+02) * r + 6.680131188771972e+01) * r + -1.328068155288572e+01) * r + 1.0);</a>
-<span class="sourceLineNo">347</span><a id="line.347">        }</a>
-<span class="sourceLineNo">348</span><a id="line.348">    }</a>
-<span class="sourceLineNo">349</span><a id="line.349"></a>
-<span class="sourceLineNo">350</span><a id="line.350">    /**</a>
-<span class="sourceLineNo">351</span><a id="line.351">     * Integer square root (using floor), maintaining correct results even for very large {@code long} values. This</a>
-<span class="sourceLineNo">352</span><a id="line.352">     * version treats negative inputs as unsigned and returns positive square roots for them (these are usually large).</a>
-<span class="sourceLineNo">353</span><a id="line.353">     * &lt;br&gt;</a>
-<span class="sourceLineNo">354</span><a id="line.354">     * This is based on &lt;a href="https://github.com/python/cpython/pull/13244"&gt;code recently added to Python&lt;/a&gt;, but</a>
-<span class="sourceLineNo">355</span><a id="line.355">     * isn't identical. Notably, this doesn't branch except in the for loop, and it handles negative inputs differently.</a>
-<span class="sourceLineNo">356</span><a id="line.356">     * @param n a {@code long} value that will be treated as if unsigned</a>
-<span class="sourceLineNo">357</span><a id="line.357">     * @return the square root of n, rounded down to the next lower {@code long} if the result isn't already a {@code long}</a>
-<span class="sourceLineNo">358</span><a id="line.358">     */</a>
-<span class="sourceLineNo">359</span><a id="line.359">    public static long isqrt(final long n) {</a>
-<span class="sourceLineNo">360</span><a id="line.360">        final int c = 63 - Long.numberOfLeadingZeros(n) &gt;&gt; 1;</a>
-<span class="sourceLineNo">361</span><a id="line.361">        long a = 1, d = 0, e;</a>
-<span class="sourceLineNo">362</span><a id="line.362">        for(int s = 31 &amp; 32 - Integer.numberOfLeadingZeros(c); s &gt; 0;) {</a>
-<span class="sourceLineNo">363</span><a id="line.363">            e = d;</a>
-<span class="sourceLineNo">364</span><a id="line.364">            d = c &gt;&gt;&gt; --s;</a>
-<span class="sourceLineNo">365</span><a id="line.365">            a = (a &lt;&lt; d - e - 1) + (n &gt;&gt;&gt; c + c - e - d + 1) / a;</a>
-<span class="sourceLineNo">366</span><a id="line.366">        }</a>
-<span class="sourceLineNo">367</span><a id="line.367">        return a - (n - a * a &gt;&gt;&gt; 63);</a>
-<span class="sourceLineNo">368</span><a id="line.368">    }</a>
-<span class="sourceLineNo">369</span><a id="line.369">}</a>
+<div class="source-container">
+<pre><span class="source-line-no">001</span><span id="line.1">// ============================================================================</span>
+<span class="source-line-no">002</span><span id="line.2">//   Copyright 2006-2012 Daniel W. Dyer</span>
+<span class="source-line-no">003</span><span id="line.3">//</span>
+<span class="source-line-no">004</span><span id="line.4">//   Licensed under the Apache License, Version 2.0 (the "License");</span>
+<span class="source-line-no">005</span><span id="line.5">//   you may not use this file except in compliance with the License.</span>
+<span class="source-line-no">006</span><span id="line.6">//   You may obtain a copy of the License at</span>
+<span class="source-line-no">007</span><span id="line.7">//</span>
+<span class="source-line-no">008</span><span id="line.8">//       http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="source-line-no">009</span><span id="line.9">//</span>
+<span class="source-line-no">010</span><span id="line.10">//   Unless required by applicable law or agreed to in writing, software</span>
+<span class="source-line-no">011</span><span id="line.11">//   distributed under the License is distributed on an "AS IS" BASIS,</span>
+<span class="source-line-no">012</span><span id="line.12">//   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="source-line-no">013</span><span id="line.13">//   See the License for the specific language governing permissions and</span>
+<span class="source-line-no">014</span><span id="line.14">//   limitations under the License.</span>
+<span class="source-line-no">015</span><span id="line.15">// ============================================================================</span>
+<span class="source-line-no">016</span><span id="line.16">package squidpony.squidmath;</span>
+<span class="source-line-no">017</span><span id="line.17"></span>
+<span class="source-line-no">018</span><span id="line.18">import squidpony.annotation.GwtIncompatible;</span>
+<span class="source-line-no">019</span><span id="line.19"></span>
+<span class="source-line-no">020</span><span id="line.20">import java.math.BigInteger;</span>
+<span class="source-line-no">021</span><span id="line.21">import java.util.Random;</span>
+<span class="source-line-no">022</span><span id="line.22"></span>
+<span class="source-line-no">023</span><span id="line.23">/**</span>
+<span class="source-line-no">024</span><span id="line.24"> * Mathematical operations not provided by {@link Math java.lang.Math}.</span>
+<span class="source-line-no">025</span><span id="line.25"> * &lt;br&gt;</span>
+<span class="source-line-no">026</span><span id="line.26"> * Originally part of the &lt;a href="http://maths.uncommons.org/"&gt;Uncommon Maths software package&lt;/a&gt; as Maths.</span>
+<span class="source-line-no">027</span><span id="line.27"> * @author Daniel Dyer</span>
+<span class="source-line-no">028</span><span id="line.28"> */</span>
+<span class="source-line-no">029</span><span id="line.29">public final class MathExtras</span>
+<span class="source-line-no">030</span><span id="line.30">{</span>
+<span class="source-line-no">031</span><span id="line.31">    // The biggest factorial that can be calculated using 64-bit signed longs.</span>
+<span class="source-line-no">032</span><span id="line.32">    private static final int MAX_LONG_FACTORIAL = 20;</span>
+<span class="source-line-no">033</span><span id="line.33"></span>
+<span class="source-line-no">034</span><span id="line.34">    // Cache BigInteger factorial values because they are expensive to generate.</span>
+<span class="source-line-no">035</span><span id="line.35">    private static final int CACHE_SIZE = 256;</span>
+<span class="source-line-no">036</span><span id="line.36">    static final long[] factorialsStart = new long[]{</span>
+<span class="source-line-no">037</span><span id="line.37">            0, 1, 2, 6, 24, 120, 720, 5040, 40320, 362880, 3628800, 39916800, 479001600,</span>
+<span class="source-line-no">038</span><span id="line.38">            6227020800L, 87178291200L, 1307674368000L, 20922789888000L, 355687428096000L,</span>
+<span class="source-line-no">039</span><span id="line.39">            6402373705728000L, 121645100408832000L, 2432902008176640000L</span>
+<span class="source-line-no">040</span><span id="line.40">    };</span>
+<span class="source-line-no">041</span><span id="line.41">    private static final OrderedMap&lt;Integer, BigInteger&gt; BIG_FACTORIALS</span>
+<span class="source-line-no">042</span><span id="line.42">        = new OrderedMap&lt;Integer, BigInteger&gt;();</span>
+<span class="source-line-no">043</span><span id="line.43"></span>
+<span class="source-line-no">044</span><span id="line.44"></span>
+<span class="source-line-no">045</span><span id="line.45">    private MathExtras()</span>
+<span class="source-line-no">046</span><span id="line.46">    {</span>
+<span class="source-line-no">047</span><span id="line.47">        // Prevent instantiation.</span>
+<span class="source-line-no">048</span><span id="line.48">    }</span>
+<span class="source-line-no">049</span><span id="line.49"></span>
+<span class="source-line-no">050</span><span id="line.50"></span>
+<span class="source-line-no">051</span><span id="line.51">    /**</span>
+<span class="source-line-no">052</span><span id="line.52">     * Calculates the factorial of n where n is a number in the</span>
+<span class="source-line-no">053</span><span id="line.53">     * range 0 - 20.  Zero factorial is equal to 1.  For values of</span>
+<span class="source-line-no">054</span><span id="line.54">     * n greater than 20 you must use {@link #bigFactorial(int)}.</span>
+<span class="source-line-no">055</span><span id="line.55">     * @param n The factorial to calculate.</span>
+<span class="source-line-no">056</span><span id="line.56">     * @return The factorial of n.</span>
+<span class="source-line-no">057</span><span id="line.57">     * @see #bigFactorial(int)</span>
+<span class="source-line-no">058</span><span id="line.58">     */</span>
+<span class="source-line-no">059</span><span id="line.59">    public static long factorial(int n)</span>
+<span class="source-line-no">060</span><span id="line.60">    {</span>
+<span class="source-line-no">061</span><span id="line.61">        if (n &lt; 0 || n &gt; MAX_LONG_FACTORIAL)</span>
+<span class="source-line-no">062</span><span id="line.62">        {</span>
+<span class="source-line-no">063</span><span id="line.63">            throw new IllegalArgumentException("Argument must be in the range 0 - 20.");</span>
+<span class="source-line-no">064</span><span id="line.64">        }</span>
+<span class="source-line-no">065</span><span id="line.65">        /*</span>
+<span class="source-line-no">066</span><span id="line.66">        long factorial = 1;</span>
+<span class="source-line-no">067</span><span id="line.67">        for (int i = n; i &gt; 1; i--)</span>
+<span class="source-line-no">068</span><span id="line.68">        {</span>
+<span class="source-line-no">069</span><span id="line.69">            factorial *= i;</span>
+<span class="source-line-no">070</span><span id="line.70">        }*/</span>
+<span class="source-line-no">071</span><span id="line.71">        return factorialsStart[n];</span>
+<span class="source-line-no">072</span><span id="line.72">    }</span>
+<span class="source-line-no">073</span><span id="line.73"></span>
+<span class="source-line-no">074</span><span id="line.74"></span>
+<span class="source-line-no">075</span><span id="line.75">    /**</span>
+<span class="source-line-no">076</span><span id="line.76">     * Calculates the factorial of n where n is a positive integer.</span>
+<span class="source-line-no">077</span><span id="line.77">     * Zero factorial is equal to 1.  For values of n up to 20, consider</span>
+<span class="source-line-no">078</span><span id="line.78">     * using {@link #factorial(int)} instead since it uses a faster</span>
+<span class="source-line-no">079</span><span id="line.79">     * implementation.</span>
+<span class="source-line-no">080</span><span id="line.80">     * @param n The factorial to calculate.</span>
+<span class="source-line-no">081</span><span id="line.81">     * @return The factorial of n.</span>
+<span class="source-line-no">082</span><span id="line.82">     * @see #factorial(int)</span>
+<span class="source-line-no">083</span><span id="line.83">     */</span>
+<span class="source-line-no">084</span><span id="line.84">    public static BigInteger bigFactorial(int n)</span>
+<span class="source-line-no">085</span><span id="line.85">    {</span>
+<span class="source-line-no">086</span><span id="line.86">        if (n &lt; 0)</span>
+<span class="source-line-no">087</span><span id="line.87">        {</span>
+<span class="source-line-no">088</span><span id="line.88">            throw new IllegalArgumentException("Argument must greater than or equal to zero.");</span>
+<span class="source-line-no">089</span><span id="line.89">        }</span>
+<span class="source-line-no">090</span><span id="line.90"></span>
+<span class="source-line-no">091</span><span id="line.91">        BigInteger factorial = null;</span>
+<span class="source-line-no">092</span><span id="line.92">        if (n &lt; CACHE_SIZE) // Check for a cached value.</span>
+<span class="source-line-no">093</span><span id="line.93">        {</span>
+<span class="source-line-no">094</span><span id="line.94">            factorial = BIG_FACTORIALS.get(n);</span>
+<span class="source-line-no">095</span><span id="line.95">        }</span>
+<span class="source-line-no">096</span><span id="line.96"></span>
+<span class="source-line-no">097</span><span id="line.97">        if (factorial == null)</span>
+<span class="source-line-no">098</span><span id="line.98">        {</span>
+<span class="source-line-no">099</span><span id="line.99">            factorial = BigInteger.ONE;</span>
+<span class="source-line-no">100</span><span id="line.100">            for (int i = n; i &gt; 1; i--)</span>
+<span class="source-line-no">101</span><span id="line.101">            {</span>
+<span class="source-line-no">102</span><span id="line.102">                factorial = factorial.multiply(BigInteger.valueOf(i));</span>
+<span class="source-line-no">103</span><span id="line.103">            }</span>
+<span class="source-line-no">104</span><span id="line.104">            if (n &lt; CACHE_SIZE) // Cache value.</span>
+<span class="source-line-no">105</span><span id="line.105">            {</span>
+<span class="source-line-no">106</span><span id="line.106">                if(!BIG_FACTORIALS.containsKey(n))</span>
+<span class="source-line-no">107</span><span id="line.107">                    BIG_FACTORIALS.put(n, factorial);</span>
+<span class="source-line-no">108</span><span id="line.108">            }</span>
+<span class="source-line-no">109</span><span id="line.109">        }</span>
+<span class="source-line-no">110</span><span id="line.110"></span>
+<span class="source-line-no">111</span><span id="line.111">        return factorial;</span>
+<span class="source-line-no">112</span><span id="line.112">    }</span>
+<span class="source-line-no">113</span><span id="line.113"></span>
+<span class="source-line-no">114</span><span id="line.114"></span>
+<span class="source-line-no">115</span><span id="line.115">    /**</span>
+<span class="source-line-no">116</span><span id="line.116">     * Calculate the first argument raised to the power of the second.</span>
+<span class="source-line-no">117</span><span id="line.117">     * This method only supports non-negative powers.</span>
+<span class="source-line-no">118</span><span id="line.118">     * @param value The number to be raised.</span>
+<span class="source-line-no">119</span><span id="line.119">     * @param power The exponent (must be positive).</span>
+<span class="source-line-no">120</span><span id="line.120">     * @return {@code value} raised to {@code power}.</span>
+<span class="source-line-no">121</span><span id="line.121">     */</span>
+<span class="source-line-no">122</span><span id="line.122">    public static long raiseToPower(int value, int power)</span>
+<span class="source-line-no">123</span><span id="line.123">    {</span>
+<span class="source-line-no">124</span><span id="line.124">        if (power &lt; 0)</span>
+<span class="source-line-no">125</span><span id="line.125">        {</span>
+<span class="source-line-no">126</span><span id="line.126">            throw new IllegalArgumentException("This method does not support negative powers.");</span>
+<span class="source-line-no">127</span><span id="line.127">        }</span>
+<span class="source-line-no">128</span><span id="line.128">        long result = 1;</span>
+<span class="source-line-no">129</span><span id="line.129">        for (int i = 0; i &lt; power; i++)</span>
+<span class="source-line-no">130</span><span id="line.130">        {</span>
+<span class="source-line-no">131</span><span id="line.131">            result *= value;</span>
+<span class="source-line-no">132</span><span id="line.132">        }</span>
+<span class="source-line-no">133</span><span id="line.133">        return result;</span>
+<span class="source-line-no">134</span><span id="line.134">    }</span>
+<span class="source-line-no">135</span><span id="line.135"></span>
+<span class="source-line-no">136</span><span id="line.136"></span>
+<span class="source-line-no">137</span><span id="line.137">    /**</span>
+<span class="source-line-no">138</span><span id="line.138">     * Calculate logarithms for arbitrary bases.</span>
+<span class="source-line-no">139</span><span id="line.139">     * @param base The base for the logarithm.</span>
+<span class="source-line-no">140</span><span id="line.140">     * @param arg The value to calculate the logarithm for.</span>
+<span class="source-line-no">141</span><span id="line.141">     * @return The log of {@code arg} in the specified {@code base}.</span>
+<span class="source-line-no">142</span><span id="line.142">     */</span>
+<span class="source-line-no">143</span><span id="line.143">    public static double log(double base, double arg)</span>
+<span class="source-line-no">144</span><span id="line.144">    {</span>
+<span class="source-line-no">145</span><span id="line.145">        // Use natural logarithms and change the base.</span>
+<span class="source-line-no">146</span><span id="line.146">        return Math.log(arg) / Math.log(base);</span>
+<span class="source-line-no">147</span><span id="line.147">    }</span>
+<span class="source-line-no">148</span><span id="line.148"></span>
+<span class="source-line-no">149</span><span id="line.149"></span>
+<span class="source-line-no">150</span><span id="line.150">    /**</span>
+<span class="source-line-no">151</span><span id="line.151">     * Checks that two values are approximately equal (plus or minus a specified tolerance).</span>
+<span class="source-line-no">152</span><span id="line.152">     * @param value1 The first value to compare.</span>
+<span class="source-line-no">153</span><span id="line.153">     * @param value2 The second value to compare.</span>
+<span class="source-line-no">154</span><span id="line.154">     * @param tolerance How much (in percentage terms, as a percentage of the first value)</span>
+<span class="source-line-no">155</span><span id="line.155">     * the values are allowed to differ and still be considered equal.  Expressed as a value</span>
+<span class="source-line-no">156</span><span id="line.156">     * between 0 and 1.</span>
+<span class="source-line-no">157</span><span id="line.157">     * @return true if the values are approximately equal, false otherwise.</span>
+<span class="source-line-no">158</span><span id="line.158">     */</span>
+<span class="source-line-no">159</span><span id="line.159">    public static boolean approxEquals(double value1,</span>
+<span class="source-line-no">160</span><span id="line.160">                                       double value2,</span>
+<span class="source-line-no">161</span><span id="line.161">                                       double tolerance)</span>
+<span class="source-line-no">162</span><span id="line.162">    {</span>
+<span class="source-line-no">163</span><span id="line.163">        if (tolerance &lt; 0 || tolerance &gt; 1)</span>
+<span class="source-line-no">164</span><span id="line.164">        {</span>
+<span class="source-line-no">165</span><span id="line.165">            throw new IllegalArgumentException("Tolerance must be between 0 and 1.");</span>
+<span class="source-line-no">166</span><span id="line.166">        }</span>
+<span class="source-line-no">167</span><span id="line.167">        return Math.abs(value1 - value2) &lt;= value1 * tolerance;</span>
+<span class="source-line-no">168</span><span id="line.168">    }</span>
+<span class="source-line-no">169</span><span id="line.169"></span>
+<span class="source-line-no">170</span><span id="line.170"></span>
+<span class="source-line-no">171</span><span id="line.171">    /**</span>
+<span class="source-line-no">172</span><span id="line.172">     * If the specified value is not greater than or equal to the specified minimum and</span>
+<span class="source-line-no">173</span><span id="line.173">     * less than or equal to the specified maximum, adjust it so that it is.</span>
+<span class="source-line-no">174</span><span id="line.174">     * @param value The value to check.</span>
+<span class="source-line-no">175</span><span id="line.175">     * @param min The minimum permitted value.</span>
+<span class="source-line-no">176</span><span id="line.176">     * @param max The maximum permitted value.</span>
+<span class="source-line-no">177</span><span id="line.177">     * @return {@code value} if it is between the specified limits, {@code min} if the value</span>
+<span class="source-line-no">178</span><span id="line.178">     * is too low, or {@code max} if the value is too high.</span>
+<span class="source-line-no">179</span><span id="line.179">     */</span>
+<span class="source-line-no">180</span><span id="line.180">    public static int clamp(int value, int min, int max)</span>
+<span class="source-line-no">181</span><span id="line.181">    {</span>
+<span class="source-line-no">182</span><span id="line.182">        return Math.min(Math.max(value, min), max);</span>
+<span class="source-line-no">183</span><span id="line.183">    }</span>
+<span class="source-line-no">184</span><span id="line.184"></span>
+<span class="source-line-no">185</span><span id="line.185"></span>
+<span class="source-line-no">186</span><span id="line.186">    /**</span>
+<span class="source-line-no">187</span><span id="line.187">     * If the specified value is not greater than or equal to the specified minimum and</span>
+<span class="source-line-no">188</span><span id="line.188">     * less than or equal to the specified maximum, adjust it so that it is.</span>
+<span class="source-line-no">189</span><span id="line.189">     * @param value The value to check.</span>
+<span class="source-line-no">190</span><span id="line.190">     * @param min The minimum permitted value.</span>
+<span class="source-line-no">191</span><span id="line.191">     * @param max The maximum permitted value.</span>
+<span class="source-line-no">192</span><span id="line.192">     * @return {@code value} if it is between the specified limits, {@code min} if the value</span>
+<span class="source-line-no">193</span><span id="line.193">     * is too low, or {@code max} if the value is too high.</span>
+<span class="source-line-no">194</span><span id="line.194">     */</span>
+<span class="source-line-no">195</span><span id="line.195">    public static long clamp(long value, long min, long max)</span>
+<span class="source-line-no">196</span><span id="line.196">    {</span>
+<span class="source-line-no">197</span><span id="line.197">        return Math.min(Math.max(value, min), max);</span>
+<span class="source-line-no">198</span><span id="line.198">    }</span>
+<span class="source-line-no">199</span><span id="line.199"></span>
+<span class="source-line-no">200</span><span id="line.200"></span>
+<span class="source-line-no">201</span><span id="line.201">    /**</span>
+<span class="source-line-no">202</span><span id="line.202">     * If the specified value is not greater than or equal to the specified minimum and</span>
+<span class="source-line-no">203</span><span id="line.203">     * less than or equal to the specified maximum, adjust it so that it is.</span>
+<span class="source-line-no">204</span><span id="line.204">     * @param value The value to check.</span>
+<span class="source-line-no">205</span><span id="line.205">     * @param min The minimum permitted value.</span>
+<span class="source-line-no">206</span><span id="line.206">     * @param max The maximum permitted value.</span>
+<span class="source-line-no">207</span><span id="line.207">     * @return {@code value} if it is between the specified limits, {@code min} if the value</span>
+<span class="source-line-no">208</span><span id="line.208">     * is too low, or {@code max} if the value is too high.</span>
+<span class="source-line-no">209</span><span id="line.209">     */</span>
+<span class="source-line-no">210</span><span id="line.210">    public static double clamp(double value, double min, double max)</span>
+<span class="source-line-no">211</span><span id="line.211">    {</span>
+<span class="source-line-no">212</span><span id="line.212">        return Math.min(Math.max(value, min), max);</span>
+<span class="source-line-no">213</span><span id="line.213">    }</span>
+<span class="source-line-no">214</span><span id="line.214"></span>
+<span class="source-line-no">215</span><span id="line.215">    /**</span>
+<span class="source-line-no">216</span><span id="line.216">     * If the specified value is not greater than or equal to the specified minimum and</span>
+<span class="source-line-no">217</span><span id="line.217">     * less than or equal to the specified maximum, adjust it so that it is.</span>
+<span class="source-line-no">218</span><span id="line.218">     * @param value The value to check.</span>
+<span class="source-line-no">219</span><span id="line.219">     * @param min The minimum permitted value.</span>
+<span class="source-line-no">220</span><span id="line.220">     * @param max The maximum permitted value.</span>
+<span class="source-line-no">221</span><span id="line.221">     * @return {@code value} if it is between the specified limits, {@code min} if the value</span>
+<span class="source-line-no">222</span><span id="line.222">     * is too low, or {@code max} if the value is too high.</span>
+<span class="source-line-no">223</span><span id="line.223">     */</span>
+<span class="source-line-no">224</span><span id="line.224">    public static float clamp(float value, float min, float max)</span>
+<span class="source-line-no">225</span><span id="line.225">    {</span>
+<span class="source-line-no">226</span><span id="line.226">        return Math.min(Math.max(value, min), max);</span>
+<span class="source-line-no">227</span><span id="line.227">    }</span>
+<span class="source-line-no">228</span><span id="line.228"></span>
+<span class="source-line-no">229</span><span id="line.229">    /**</span>
+<span class="source-line-no">230</span><span id="line.230">     * Like the modulo operator {@code %}, but the result will always match the sign of {@code d} instead of {@code op}.</span>
+<span class="source-line-no">231</span><span id="line.231">     * @param op the dividend; negative values are permitted and wrap instead of producing negative results</span>
+<span class="source-line-no">232</span><span id="line.232">     * @param d the divisor; if this is negative then the result will be negative, otherwise it will be positive</span>
+<span class="source-line-no">233</span><span id="line.233">     * @return the remainder of the division of op by d, with a sign matching d</span>
+<span class="source-line-no">234</span><span id="line.234">     */</span>
+<span class="source-line-no">235</span><span id="line.235">    public static double remainder(final double op, final double d) {</span>
+<span class="source-line-no">236</span><span id="line.236">        return (op % d + d) % d;</span>
+<span class="source-line-no">237</span><span id="line.237">    }</span>
+<span class="source-line-no">238</span><span id="line.238"></span>
+<span class="source-line-no">239</span><span id="line.239">    /**</span>
+<span class="source-line-no">240</span><span id="line.240">     * Determines the greatest common divisor of a pair of natural numbers</span>
+<span class="source-line-no">241</span><span id="line.241">     * using the Euclidean algorithm.  This method only works with natural</span>
+<span class="source-line-no">242</span><span id="line.242">     * numbers.  If negative integers are passed in, the absolute values will</span>
+<span class="source-line-no">243</span><span id="line.243">     * be used.  The return value is always positive.</span>
+<span class="source-line-no">244</span><span id="line.244">     * @param a The first value.</span>
+<span class="source-line-no">245</span><span id="line.245">     * @param b The second value.</span>
+<span class="source-line-no">246</span><span id="line.246">     * @return The greatest common divisor.</span>
+<span class="source-line-no">247</span><span id="line.247">     */</span>
+<span class="source-line-no">248</span><span id="line.248">    public static long greatestCommonDivisor(long a, long b)</span>
+<span class="source-line-no">249</span><span id="line.249">    {</span>
+<span class="source-line-no">250</span><span id="line.250">        a = Math.abs(a);</span>
+<span class="source-line-no">251</span><span id="line.251">        b = Math.abs(b);</span>
+<span class="source-line-no">252</span><span id="line.252">        while (b != 0)</span>
+<span class="source-line-no">253</span><span id="line.253">        {</span>
+<span class="source-line-no">254</span><span id="line.254">            long temp = b;</span>
+<span class="source-line-no">255</span><span id="line.255">            b = a % b;</span>
+<span class="source-line-no">256</span><span id="line.256">            a = temp;</span>
+<span class="source-line-no">257</span><span id="line.257">        }</span>
+<span class="source-line-no">258</span><span id="line.258">        return a;</span>
+<span class="source-line-no">259</span><span id="line.259">    }</span>
+<span class="source-line-no">260</span><span id="line.260"></span>
+<span class="source-line-no">261</span><span id="line.261">    /**</span>
+<span class="source-line-no">262</span><span id="line.262">     * Given any odd int {@code a}, this finds another odd int {@code b} such that {@code a * b == 1}.</span>
+<span class="source-line-no">263</span><span id="line.263">     * &lt;br&gt;</span>
+<span class="source-line-no">264</span><span id="line.264">     * This is incompatible with GWT, but it should usually only find uses in exploratory code or in tests anyway...</span>
+<span class="source-line-no">265</span><span id="line.265">     * It is only incompatible because it tends to rely on multiplication overflow to work.</span>
+<span class="source-line-no">266</span><span id="line.266">     * @param a any odd int; note that even numbers do not have inverses modulo 2 to the 32</span>
+<span class="source-line-no">267</span><span id="line.267">     * @return the multiplicative inverse of {@code a} modulo 4294967296 (or, 2 to the 32)</span>
+<span class="source-line-no">268</span><span id="line.268">     */</span>
+<span class="source-line-no">269</span><span id="line.269">    @GwtIncompatible</span>
+<span class="source-line-no">270</span><span id="line.270">    public static int modularMultiplicativeInverse(int a)</span>
+<span class="source-line-no">271</span><span id="line.271">    {</span>
+<span class="source-line-no">272</span><span id="line.272">        int x = 2 ^ a * 3;     //  5 bits</span>
+<span class="source-line-no">273</span><span id="line.273">        x *= 2 - a * x;        // 10</span>
+<span class="source-line-no">274</span><span id="line.274">        x *= 2 - a * x;        // 20</span>
+<span class="source-line-no">275</span><span id="line.275">        x *= 2 - a * x;        // 40 -- 32 low bits</span>
+<span class="source-line-no">276</span><span id="line.276">        return x;</span>
+<span class="source-line-no">277</span><span id="line.277">    }</span>
+<span class="source-line-no">278</span><span id="line.278"></span>
+<span class="source-line-no">279</span><span id="line.279">    /**</span>
+<span class="source-line-no">280</span><span id="line.280">     * Given any odd long {@code a}, this finds another odd long {@code b} such that {@code a * b == 1L}.</span>
+<span class="source-line-no">281</span><span id="line.281">     * @param a any odd long; note that even numbers do not have inverses modulo 2 to the 64</span>
+<span class="source-line-no">282</span><span id="line.282">     * @return the multiplicative inverse of {@code a} modulo 18446744073709551616 (or, 2 to the 64)</span>
+<span class="source-line-no">283</span><span id="line.283">     */</span>
+<span class="source-line-no">284</span><span id="line.284">    public static long modularMultiplicativeInverse(long a)</span>
+<span class="source-line-no">285</span><span id="line.285">    {</span>
+<span class="source-line-no">286</span><span id="line.286">        long x = 2 ^ a * 3;    //  5 bits</span>
+<span class="source-line-no">287</span><span id="line.287">        x *= 2 - a * x;        // 10</span>
+<span class="source-line-no">288</span><span id="line.288">        x *= 2 - a * x;        // 20</span>
+<span class="source-line-no">289</span><span id="line.289">        x *= 2 - a * x;        // 40</span>
+<span class="source-line-no">290</span><span id="line.290">        x *= 2 - a * x;        // 80 -- 64 low bits</span>
+<span class="source-line-no">291</span><span id="line.291">        return x;</span>
+<span class="source-line-no">292</span><span id="line.292">    }</span>
+<span class="source-line-no">293</span><span id="line.293"></span>
+<span class="source-line-no">294</span><span id="line.294">    /**</span>
+<span class="source-line-no">295</span><span id="line.295">     * A way of taking a double in the (0.0, 1.0) range and mapping it to a Gaussian or normal distribution, so high</span>
+<span class="source-line-no">296</span><span id="line.296">     * inputs correspond to high outputs, and similarly for the low range. This is centered on 0.0 and its standard</span>
+<span class="source-line-no">297</span><span id="line.297">     * deviation seems to be 1.0 (the same as {@link Random#nextGaussian()}). If this is given an input of 0.0</span>
+<span class="source-line-no">298</span><span id="line.298">     * or less, it returns -38.5, which is slightly less than the result when given {@link Double#MIN_VALUE}. If it is</span>
+<span class="source-line-no">299</span><span id="line.299">     * given an input of 1.0 or more, it returns 38.5, which is significantly larger than the result when given the</span>
+<span class="source-line-no">300</span><span id="line.300">     * largest double less than 1.0 (this value is further from 1.0 than {@link Double#MIN_VALUE} is from 0.0). If</span>
+<span class="source-line-no">301</span><span id="line.301">     * given {@link Double#NaN}, it returns whatever {@link Math#copySign(double, double)} returns for the arguments</span>
+<span class="source-line-no">302</span><span id="line.302">     * {@code 38.5, Double.NaN}, which is implementation-dependent. It uses an algorithm by Peter John Acklam, as</span>
+<span class="source-line-no">303</span><span id="line.303">     * implemented by Sherali Karimov.</span>
+<span class="source-line-no">304</span><span id="line.304">     * &lt;a href="https://web.archive.org/web/20150910002142/http://home.online.no/~pjacklam/notes/invnorm/impl/karimov/StatUtil.java"&gt;Original source&lt;/a&gt;.</span>
+<span class="source-line-no">305</span><span id="line.305">     * &lt;a href="https://web.archive.org/web/20151030215612/http://home.online.no/~pjacklam/notes/invnorm/"&gt;Information on the algorithm&lt;/a&gt;.</span>
+<span class="source-line-no">306</span><span id="line.306">     * &lt;a href="https://en.wikipedia.org/wiki/Probit_function"&gt;Wikipedia's page on the probit function&lt;/a&gt; may help, but</span>
+<span class="source-line-no">307</span><span id="line.307">     * is more likely to just be confusing.</span>
+<span class="source-line-no">308</span><span id="line.308">     * &lt;br&gt;</span>
+<span class="source-line-no">309</span><span id="line.309">     * Acklam's algorithm and Karimov's implementation are both quite fast. This appears faster than generating</span>
+<span class="source-line-no">310</span><span id="line.310">     * Gaussian-distributed numbers using either the Box-Muller Transform or Marsaglia's Polar Method, though it isn't</span>
+<span class="source-line-no">311</span><span id="line.311">     * as precise and can't produce as extreme min and max results in the extreme cases they should appear. If given</span>
+<span class="source-line-no">312</span><span id="line.312">     * a typical uniform random {@code double} that's exclusive on 1.0, it won't produce a result higher than</span>
+<span class="source-line-no">313</span><span id="line.313">     * {@code 8.209536145151493}, and will only produce results of at least {@code -8.209536145151493} if 0.0 is</span>
+<span class="source-line-no">314</span><span id="line.314">     * excluded from the inputs (if 0.0 is an input, the result is {@code 38.5}). A chief advantage of using this with</span>
+<span class="source-line-no">315</span><span id="line.315">     * a random number generator is that it only requires one random double to obtain one Gaussian value;</span>
+<span class="source-line-no">316</span><span id="line.316">     * {@link Random#nextGaussian()} generates at least two random doubles for each two Gaussian values, but may rarely</span>
+<span class="source-line-no">317</span><span id="line.317">     * require much more random generation.</span>
+<span class="source-line-no">318</span><span id="line.318">     * &lt;br&gt;</span>
+<span class="source-line-no">319</span><span id="line.319">     * This can be used both as an optimization for generating Gaussian random values, and as a way of generating</span>
+<span class="source-line-no">320</span><span id="line.320">     * Gaussian values that match a pattern present in the inputs (which you could have by using a sub-random sequence</span>
+<span class="source-line-no">321</span><span id="line.321">     * as the input, such as those produced by {@link VanDerCorputQRNG#determine(int, int)} or the R2 sequence).</span>
+<span class="source-line-no">322</span><span id="line.322">     * @param d should be between 0 and 1, exclusive, but other values are tolerated</span>
+<span class="source-line-no">323</span><span id="line.323">     * @return a normal-distributed double centered on 0.0; all results will be between -38.5 and 38.5, both inclusive</span>
+<span class="source-line-no">324</span><span id="line.324">     */</span>
+<span class="source-line-no">325</span><span id="line.325">    public static double probit(final double d) {</span>
+<span class="source-line-no">326</span><span id="line.326">        if (d &lt;= 0 || d &gt;= 1) {</span>
+<span class="source-line-no">327</span><span id="line.327">            return Math.copySign(38.5, d - 0.5);</span>
+<span class="source-line-no">328</span><span id="line.328">        }</span>
+<span class="source-line-no">329</span><span id="line.329">        // Rational approximation for lower region:</span>
+<span class="source-line-no">330</span><span id="line.330">        else if (d &lt; 0.02425) {</span>
+<span class="source-line-no">331</span><span id="line.331">            final double q = Math.sqrt(-2.0 * Math.log(d));</span>
+<span class="source-line-no">332</span><span id="line.332">            return (((((-7.784894002430293e-03 * q + -3.223964580411365e-01) * q + -2.400758277161838e+00) * q + -2.549732539343734e+00) * q + 4.374664141464968e+00) * q + 2.938163982698783e+00)</span>
+<span class="source-line-no">333</span><span id="line.333">                    / ((((7.784695709041462e-03 * q + 3.224671290700398e-01) * q + 2.445134137142996e+00) * q + 3.754408661907416e+00) * q + 1.0);</span>
+<span class="source-line-no">334</span><span id="line.334">        }</span>
+<span class="source-line-no">335</span><span id="line.335">        // Rational approximation for upper region:</span>
+<span class="source-line-no">336</span><span id="line.336">        else if (0.97575 &lt; d) {</span>
+<span class="source-line-no">337</span><span id="line.337">            final double q = Math.sqrt(-2.0 * Math.log(1 - d));</span>
+<span class="source-line-no">338</span><span id="line.338">            return -(((((-7.784894002430293e-03 * q + -3.223964580411365e-01) * q + -2.400758277161838e+00) * q + -2.549732539343734e+00) * q + 4.374664141464968e+00) * q + 2.938163982698783e+00)</span>
+<span class="source-line-no">339</span><span id="line.339">                    / ((((7.784695709041462e-03 * q + 3.224671290700398e-01) * q + 2.445134137142996e+00) * q + 3.754408661907416e+00) * q + 1.0);</span>
+<span class="source-line-no">340</span><span id="line.340">        }</span>
+<span class="source-line-no">341</span><span id="line.341">        // Rational approximation for central region:</span>
+<span class="source-line-no">342</span><span id="line.342">        else {</span>
+<span class="source-line-no">343</span><span id="line.343">            final double q = d - 0.5;</span>
+<span class="source-line-no">344</span><span id="line.344">            final double r = q * q;</span>
+<span class="source-line-no">345</span><span id="line.345">            return (((((-3.969683028665376e+01 * r + 2.209460984245205e+02) * r + -2.759285104469687e+02) * r + 1.383577518672690e+02) * r + -3.066479806614716e+01) * r + 2.506628277459239e+00) * q</span>
+<span class="source-line-no">346</span><span id="line.346">                    / (((((-5.447609879822406e+01 * r + 1.615858368580409e+02) * r + -1.556989798598866e+02) * r + 6.680131188771972e+01) * r + -1.328068155288572e+01) * r + 1.0);</span>
+<span class="source-line-no">347</span><span id="line.347">        }</span>
+<span class="source-line-no">348</span><span id="line.348">    }</span>
+<span class="source-line-no">349</span><span id="line.349"></span>
+<span class="source-line-no">350</span><span id="line.350">    /**</span>
+<span class="source-line-no">351</span><span id="line.351">     * Integer square root (using floor), maintaining correct results even for very large {@code long} values. This</span>
+<span class="source-line-no">352</span><span id="line.352">     * version treats negative inputs as unsigned and returns positive square roots for them (these are usually large).</span>
+<span class="source-line-no">353</span><span id="line.353">     * &lt;br&gt;</span>
+<span class="source-line-no">354</span><span id="line.354">     * This is based on &lt;a href="https://github.com/python/cpython/pull/13244"&gt;code recently added to Python&lt;/a&gt;, but</span>
+<span class="source-line-no">355</span><span id="line.355">     * isn't identical. Notably, this doesn't branch except in the for loop, and it handles negative inputs differently.</span>
+<span class="source-line-no">356</span><span id="line.356">     * @param n a {@code long} value that will be treated as if unsigned</span>
+<span class="source-line-no">357</span><span id="line.357">     * @return the square root of n, rounded down to the next lower {@code long} if the result isn't already a {@code long}</span>
+<span class="source-line-no">358</span><span id="line.358">     */</span>
+<span class="source-line-no">359</span><span id="line.359">    public static long isqrt(final long n) {</span>
+<span class="source-line-no">360</span><span id="line.360">        final int c = 63 - Long.numberOfLeadingZeros(n) &gt;&gt; 1;</span>
+<span class="source-line-no">361</span><span id="line.361">        long a = 1, d = 0, e;</span>
+<span class="source-line-no">362</span><span id="line.362">        for(int s = 31 &amp; 32 - Integer.numberOfLeadingZeros(c); s &gt; 0;) {</span>
+<span class="source-line-no">363</span><span id="line.363">            e = d;</span>
+<span class="source-line-no">364</span><span id="line.364">            d = c &gt;&gt;&gt; --s;</span>
+<span class="source-line-no">365</span><span id="line.365">            a = (a &lt;&lt; d - e - 1) + (n &gt;&gt;&gt; c + c - e - d + 1) / a;</span>
+<span class="source-line-no">366</span><span id="line.366">        }</span>
+<span class="source-line-no">367</span><span id="line.367">        return a - (n - a * a &gt;&gt;&gt; 63);</span>
+<span class="source-line-no">368</span><span id="line.368">    }</span>
+<span class="source-line-no">369</span><span id="line.369"></span>
+<span class="source-line-no">370</span><span id="line.370">    /**</span>
+<span class="source-line-no">371</span><span id="line.371">     * A generalization on bias and gain functions that can represent both; this version is branch-less.</span>
+<span class="source-line-no">372</span><span id="line.372">     * This is based on &lt;a href="https://arxiv.org/abs/2010.09714"&gt;this micro-paper&lt;/a&gt; by Jon Barron, which</span>
+<span class="source-line-no">373</span><span id="line.373">     * generalizes the earlier bias and gain rational functions by Schlick. The second and final page of the</span>
+<span class="source-line-no">374</span><span id="line.374">     * paper has useful graphs of what the s (shape) and t (turning point) parameters do; shape should be 0</span>
+<span class="source-line-no">375</span><span id="line.375">     * or greater, while turning must be between 0 and 1, inclusive. This effectively combines two different</span>
+<span class="source-line-no">376</span><span id="line.376">     * curving functions so they continue into each other when x equals turning. The shape parameter will</span>
+<span class="source-line-no">377</span><span id="line.377">     * cause this to imitate "smoothstep-like" splines when greater than 1 (where the values ease into their</span>
+<span class="source-line-no">378</span><span id="line.378">     * starting and ending levels), or to be the inverse when less than 1 (where values start like square</span>
+<span class="source-line-no">379</span><span id="line.379">     * root does, taking off very quickly, but also end like square does, landing abruptly at the ending</span>
+<span class="source-line-no">380</span><span id="line.380">     * level). You should only give x values between 0 and 1, inclusive.</span>
+<span class="source-line-no">381</span><span id="line.381">     * @param x progress through the spline, from 0 to 1, inclusive</span>
+<span class="source-line-no">382</span><span id="line.382">     * @param shape must be greater than or equal to 0; values greater than 1 are "normal interpolations" </span>
+<span class="source-line-no">383</span><span id="line.383">     * @param turning a value between 0.0 and 1.0, inclusive, where the shape changes</span>
+<span class="source-line-no">384</span><span id="line.384">     * @return a float between 0 and 1, inclusive</span>
+<span class="source-line-no">385</span><span id="line.385">     */</span>
+<span class="source-line-no">386</span><span id="line.386">    public static float barronSpline(final float x, final float shape, final float turning) {</span>
+<span class="source-line-no">387</span><span id="line.387">        final float d = turning - x;</span>
+<span class="source-line-no">388</span><span id="line.388">        final int f = NumberTools.floatToIntBits(d) &gt;&gt; 31, n = f | 1;</span>
+<span class="source-line-no">389</span><span id="line.389">        return ((turning * n - f) * (x + f)) / (Float.MIN_VALUE - f + (x + shape * d) * n) - f;</span>
+<span class="source-line-no">390</span><span id="line.390">    }</span>
+<span class="source-line-no">391</span><span id="line.391"></span>
+<span class="source-line-no">392</span><span id="line.392">    /**</span>
+<span class="source-line-no">393</span><span id="line.393">     * A generalization on bias and gain functions that can represent both; this version is branch-less.</span>
+<span class="source-line-no">394</span><span id="line.394">     * This is based on &lt;a href="https://arxiv.org/abs/2010.09714"&gt;this micro-paper&lt;/a&gt; by Jon Barron, which</span>
+<span class="source-line-no">395</span><span id="line.395">     * generalizes the earlier bias and gain rational functions by Schlick. The second and final page of the</span>
+<span class="source-line-no">396</span><span id="line.396">     * paper has useful graphs of what the s (shape) and t (turning point) parameters do; shape should be 0</span>
+<span class="source-line-no">397</span><span id="line.397">     * or greater, while turning must be between 0 and 1, inclusive. This effectively combines two different</span>
+<span class="source-line-no">398</span><span id="line.398">     * curving functions so they continue into each other when x equals turning. The shape parameter will</span>
+<span class="source-line-no">399</span><span id="line.399">     * cause this to imitate "smoothstep-like" splines when greater than 1 (where the values ease into their</span>
+<span class="source-line-no">400</span><span id="line.400">     * starting and ending levels), or to be the inverse when less than 1 (where values start like square</span>
+<span class="source-line-no">401</span><span id="line.401">     * root does, taking off very quickly, but also end like square does, landing abruptly at the ending</span>
+<span class="source-line-no">402</span><span id="line.402">     * level). You should only give x values between 0 and 1, inclusive.</span>
+<span class="source-line-no">403</span><span id="line.403">     * @param x progress through the spline, from 0 to 1, inclusive</span>
+<span class="source-line-no">404</span><span id="line.404">     * @param shape must be greater than or equal to 0; values greater than 1 are "normal interpolations" </span>
+<span class="source-line-no">405</span><span id="line.405">     * @param turning a value between 0.0 and 1.0, inclusive, where the shape changes</span>
+<span class="source-line-no">406</span><span id="line.406">     * @return a double between 0 and 1, inclusive</span>
+<span class="source-line-no">407</span><span id="line.407">     */</span>
+<span class="source-line-no">408</span><span id="line.408">    public static double barronSpline(final double x, final double shape, final double turning) {</span>
+<span class="source-line-no">409</span><span id="line.409">        final double d = turning - x;</span>
+<span class="source-line-no">410</span><span id="line.410">        final int f = NumberTools.doubleToHighIntBits(d) &gt;&gt; 31, n = f | 1;</span>
+<span class="source-line-no">411</span><span id="line.411">        return ((turning * n - f) * (x + f)) / (Double.MIN_VALUE - f + (x + shape * d) * n) - f;</span>
+<span class="source-line-no">412</span><span id="line.412">    }</span>
+<span class="source-line-no">413</span><span id="line.413">}</span>
 
 
 

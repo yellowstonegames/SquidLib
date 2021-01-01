@@ -7,143 +7,143 @@
 <meta name="generator" content="javadoc/SourceToHTMLConverter">
 <link rel="stylesheet" type="text/css" href="../../../../../stylesheet.css" title="Style">
 </head>
-<body class="source">
+<body class="source-page">
 <main role="main">
-<div class="sourceContainer">
-<pre><span class="sourceLineNo">001</span><a id="line.1">package squidpony.squidgrid.gui.gdx;</a>
-<span class="sourceLineNo">002</span><a id="line.2"></a>
-<span class="sourceLineNo">003</span><a id="line.3">import squidpony.squidmath.Coord;</a>
-<span class="sourceLineNo">004</span><a id="line.4"></a>
-<span class="sourceLineNo">005</span><a id="line.5">/**</a>
-<span class="sourceLineNo">006</span><a id="line.6"> * A container that keeps tracks of the sizes of margins and cells. It is at the</a>
-<span class="sourceLineNo">007</span><a id="line.7"> * screen-level, i.e. it is intended to keep track of the full screen, not of a</a>
-<span class="sourceLineNo">008</span><a id="line.8"> * nested panel. Given the screen's size and the desired cell size, it computes</a>
-<span class="sourceLineNo">009</span><a id="line.9"> * the margins around the usable part of the screen, and hence the position of</a>
-<span class="sourceLineNo">010</span><a id="line.10"> * the full-screen SquidPanel ({@code (leftMargin,botMargin)}).</a>
-<span class="sourceLineNo">011</span><a id="line.11"> * </a>
-<span class="sourceLineNo">012</span><a id="line.12"> * @author smelC</a>
-<span class="sourceLineNo">013</span><a id="line.13"> */</a>
-<span class="sourceLineNo">014</span><a id="line.14">public class ScreenSizeManager {</a>
-<span class="sourceLineNo">015</span><a id="line.15"></a>
-<span class="sourceLineNo">016</span><a id="line.16">        /** The screen's width, as given at creation time. */</a>
-<span class="sourceLineNo">017</span><a id="line.17">        public final int screenWidth;</a>
-<span class="sourceLineNo">018</span><a id="line.18">        /** The screen's height, as given at creation time. */</a>
-<span class="sourceLineNo">019</span><a id="line.19">        public final int screenHeight;</a>
-<span class="sourceLineNo">020</span><a id="line.20"></a>
-<span class="sourceLineNo">021</span><a id="line.21">        /** The top margin */</a>
-<span class="sourceLineNo">022</span><a id="line.22">        public final int topMargin;</a>
-<span class="sourceLineNo">023</span><a id="line.23">        /**</a>
-<span class="sourceLineNo">024</span><a id="line.24">         * The bottom margin, which has at most a 1 pixel difference with</a>
-<span class="sourceLineNo">025</span><a id="line.25">         * {@link #topMargin}.</a>
-<span class="sourceLineNo">026</span><a id="line.26">         */</a>
-<span class="sourceLineNo">027</span><a id="line.27">        public final int botMargin;</a>
-<span class="sourceLineNo">028</span><a id="line.28">        /** The left margin */</a>
-<span class="sourceLineNo">029</span><a id="line.29">        public final int leftMargin;</a>
-<span class="sourceLineNo">030</span><a id="line.30">        /**</a>
-<span class="sourceLineNo">031</span><a id="line.31">         * The right margin, which has at most a 1 pixel difference with</a>
-<span class="sourceLineNo">032</span><a id="line.32">         * {@link #leftMargin}.</a>
-<span class="sourceLineNo">033</span><a id="line.33">         */</a>
-<span class="sourceLineNo">034</span><a id="line.34">        public final int rightMargin;</a>
-<span class="sourceLineNo">035</span><a id="line.35"></a>
-<span class="sourceLineNo">036</span><a id="line.36">        /** A cell's width, as given at creation time. */</a>
-<span class="sourceLineNo">037</span><a id="line.37">        public final int cellWidth;</a>
-<span class="sourceLineNo">038</span><a id="line.38"></a>
-<span class="sourceLineNo">039</span><a id="line.39">        /** A cell's height, as given at creation time. */</a>
-<span class="sourceLineNo">040</span><a id="line.40">        public final int cellHeight;</a>
-<span class="sourceLineNo">041</span><a id="line.41"></a>
-<span class="sourceLineNo">042</span><a id="line.42">        /** The number of cells, horizontally */</a>
-<span class="sourceLineNo">043</span><a id="line.43">        public final int wCells;</a>
-<span class="sourceLineNo">044</span><a id="line.44"></a>
-<span class="sourceLineNo">045</span><a id="line.45">        /** The number of cells, vertically */</a>
-<span class="sourceLineNo">046</span><a id="line.46">        public final int hCells;</a>
-<span class="sourceLineNo">047</span><a id="line.47"></a>
-<span class="sourceLineNo">048</span><a id="line.48">        /**</a>
-<span class="sourceLineNo">049</span><a id="line.49">         * A fresh size manager, for the given screen size and the given cell size.</a>
-<span class="sourceLineNo">050</span><a id="line.50">         * </a>
-<span class="sourceLineNo">051</span><a id="line.51">         * @param screenWidth</a>
-<span class="sourceLineNo">052</span><a id="line.52">         * @param screenHeight</a>
-<span class="sourceLineNo">053</span><a id="line.53">         * @param cellWidth</a>
-<span class="sourceLineNo">054</span><a id="line.54">         *            The desired cell width.</a>
-<span class="sourceLineNo">055</span><a id="line.55">         * @param cellHeight</a>
-<span class="sourceLineNo">056</span><a id="line.56">         *            The desired cell height.</a>
-<span class="sourceLineNo">057</span><a id="line.57">         * @throws IllegalStateException</a>
-<span class="sourceLineNo">058</span><a id="line.58">         *             If a size is negative.</a>
-<span class="sourceLineNo">059</span><a id="line.59">         */</a>
-<span class="sourceLineNo">060</span><a id="line.60">        public ScreenSizeManager(int screenWidth, int screenHeight, int cellWidth, int cellHeight) {</a>
-<span class="sourceLineNo">061</span><a id="line.61">                this.screenWidth = screenWidth;</a>
-<span class="sourceLineNo">062</span><a id="line.62">                if (this.screenWidth &lt; 0)</a>
-<span class="sourceLineNo">063</span><a id="line.63">                        throw new IllegalStateException("Screen width should not be negative");</a>
-<span class="sourceLineNo">064</span><a id="line.64">                this.screenHeight = screenHeight;</a>
-<span class="sourceLineNo">065</span><a id="line.65">                if (this.screenHeight &lt; 0)</a>
-<span class="sourceLineNo">066</span><a id="line.66">                        throw new IllegalStateException("Screen height should not be negative");</a>
-<span class="sourceLineNo">067</span><a id="line.67"></a>
-<span class="sourceLineNo">068</span><a id="line.68">                if (cellWidth &lt; 0)</a>
-<span class="sourceLineNo">069</span><a id="line.69">                        throw new IllegalStateException("Cell width should not be negative");</a>
-<span class="sourceLineNo">070</span><a id="line.70">                this.cellWidth = cellWidth;</a>
-<span class="sourceLineNo">071</span><a id="line.71"></a>
-<span class="sourceLineNo">072</span><a id="line.72">                if (cellHeight &lt; 0)</a>
-<span class="sourceLineNo">073</span><a id="line.73">                        throw new IllegalStateException("Cell height should not be negative");</a>
-<span class="sourceLineNo">074</span><a id="line.74">                this.cellHeight = cellHeight;</a>
-<span class="sourceLineNo">075</span><a id="line.75"></a>
-<span class="sourceLineNo">076</span><a id="line.76">                {</a>
-<span class="sourceLineNo">077</span><a id="line.77">                        this.wCells = screenWidth / cellWidth;</a>
-<span class="sourceLineNo">078</span><a id="line.78">                        final int xmargin = screenWidth - (wCells * cellWidth);</a>
-<span class="sourceLineNo">079</span><a id="line.79">                        assert 0 &lt;= xmargin;</a>
-<span class="sourceLineNo">080</span><a id="line.80">                        final int xmargindiv2 = xmargin / 2;</a>
-<span class="sourceLineNo">081</span><a id="line.81">                        if (isEven(xmargin)) {</a>
-<span class="sourceLineNo">082</span><a id="line.82">                                this.leftMargin = xmargindiv2;</a>
-<span class="sourceLineNo">083</span><a id="line.83">                                this.rightMargin = xmargindiv2;</a>
-<span class="sourceLineNo">084</span><a id="line.84">                        } else {</a>
-<span class="sourceLineNo">085</span><a id="line.85">                                this.leftMargin = xmargindiv2;</a>
-<span class="sourceLineNo">086</span><a id="line.86">                                this.rightMargin = xmargindiv2 + 1;</a>
-<span class="sourceLineNo">087</span><a id="line.87">                        }</a>
-<span class="sourceLineNo">088</span><a id="line.88"></a>
-<span class="sourceLineNo">089</span><a id="line.89">                        assert leftMargin + rightMargin == xmargin;</a>
-<span class="sourceLineNo">090</span><a id="line.90">                }</a>
-<span class="sourceLineNo">091</span><a id="line.91"></a>
-<span class="sourceLineNo">092</span><a id="line.92">                {</a>
-<span class="sourceLineNo">093</span><a id="line.93">                        this.hCells = screenHeight / cellHeight;</a>
-<span class="sourceLineNo">094</span><a id="line.94">                        final int ymargin = screenHeight - (hCells * cellHeight);</a>
-<span class="sourceLineNo">095</span><a id="line.95">                        assert 0 &lt;= ymargin;</a>
-<span class="sourceLineNo">096</span><a id="line.96">                        final int ymargindiv2 = ymargin / 2;</a>
-<span class="sourceLineNo">097</span><a id="line.97">                        if (isEven(ymargin)) {</a>
-<span class="sourceLineNo">098</span><a id="line.98">                                this.topMargin = ymargindiv2;</a>
-<span class="sourceLineNo">099</span><a id="line.99">                                this.botMargin = ymargindiv2;</a>
-<span class="sourceLineNo">100</span><a id="line.100">                        } else {</a>
-<span class="sourceLineNo">101</span><a id="line.101">                                this.topMargin = ymargindiv2;</a>
-<span class="sourceLineNo">102</span><a id="line.102">                                this.botMargin = ymargindiv2 + 1;</a>
-<span class="sourceLineNo">103</span><a id="line.103">                        }</a>
-<span class="sourceLineNo">104</span><a id="line.104"></a>
-<span class="sourceLineNo">105</span><a id="line.105">                        assert topMargin + botMargin == ymargin;</a>
-<span class="sourceLineNo">106</span><a id="line.106">                }</a>
-<span class="sourceLineNo">107</span><a id="line.107"></a>
-<span class="sourceLineNo">108</span><a id="line.108">                assert leftMargin + (wCells * cellWidth) + rightMargin == screenWidth;</a>
-<span class="sourceLineNo">109</span><a id="line.109">                assert botMargin + (hCells * cellHeight) + topMargin == screenHeight;</a>
-<span class="sourceLineNo">110</span><a id="line.110">        }</a>
-<span class="sourceLineNo">111</span><a id="line.111"></a>
-<span class="sourceLineNo">112</span><a id="line.112">        public void log() {</a>
-<span class="sourceLineNo">113</span><a id="line.113">                /*</a>
-<span class="sourceLineNo">114</span><a id="line.114">                Gdx.app.log(SquidTags.LAYOUT, String.format("Screen size: %dx%d", screenWidth, screenHeight));</a>
-<span class="sourceLineNo">115</span><a id="line.115">                Gdx.app.log(SquidTags.LAYOUT,</a>
-<span class="sourceLineNo">116</span><a id="line.116">                                String.format("Displaying %d cells horizontally and %d cells vertically", wCells, hCells));</a>
-<span class="sourceLineNo">117</span><a id="line.117">                Gdx.app.log(SquidTags.LAYOUT,</a>
-<span class="sourceLineNo">118</span><a id="line.118">                                String.format("Margins (in pixels): left:%d, right:%d, top:%d, bottom:%d", leftMargin,</a>
-<span class="sourceLineNo">119</span><a id="line.119">                                                rightMargin, topMargin, botMargin));</a>
-<span class="sourceLineNo">120</span><a id="line.120">                */</a>
-<span class="sourceLineNo">121</span><a id="line.121">        }</a>
-<span class="sourceLineNo">122</span><a id="line.122"></a>
-<span class="sourceLineNo">123</span><a id="line.123">        public Coord toScreenSize() {</a>
-<span class="sourceLineNo">124</span><a id="line.124">                return Coord.get(screenWidth, screenHeight);</a>
-<span class="sourceLineNo">125</span><a id="line.125">        }</a>
-<span class="sourceLineNo">126</span><a id="line.126"></a>
-<span class="sourceLineNo">127</span><a id="line.127">        public ScreenSizeManager changeScreenSize(int x, int y) {</a>
-<span class="sourceLineNo">128</span><a id="line.128">                return new ScreenSizeManager(x, y, cellWidth, cellHeight);</a>
-<span class="sourceLineNo">129</span><a id="line.129">        }</a>
-<span class="sourceLineNo">130</span><a id="line.130"></a>
-<span class="sourceLineNo">131</span><a id="line.131">        private static boolean isEven(int i) {</a>
-<span class="sourceLineNo">132</span><a id="line.132">                return (i &amp; 1) == 0;</a>
-<span class="sourceLineNo">133</span><a id="line.133">        }</a>
-<span class="sourceLineNo">134</span><a id="line.134">}</a>
+<div class="source-container">
+<pre><span class="source-line-no">001</span><span id="line.1">package squidpony.squidgrid.gui.gdx;</span>
+<span class="source-line-no">002</span><span id="line.2"></span>
+<span class="source-line-no">003</span><span id="line.3">import squidpony.squidmath.Coord;</span>
+<span class="source-line-no">004</span><span id="line.4"></span>
+<span class="source-line-no">005</span><span id="line.5">/**</span>
+<span class="source-line-no">006</span><span id="line.6"> * A container that keeps tracks of the sizes of margins and cells. It is at the</span>
+<span class="source-line-no">007</span><span id="line.7"> * screen-level, i.e. it is intended to keep track of the full screen, not of a</span>
+<span class="source-line-no">008</span><span id="line.8"> * nested panel. Given the screen's size and the desired cell size, it computes</span>
+<span class="source-line-no">009</span><span id="line.9"> * the margins around the usable part of the screen, and hence the position of</span>
+<span class="source-line-no">010</span><span id="line.10"> * the full-screen SquidPanel ({@code (leftMargin,botMargin)}).</span>
+<span class="source-line-no">011</span><span id="line.11"> * </span>
+<span class="source-line-no">012</span><span id="line.12"> * @author smelC</span>
+<span class="source-line-no">013</span><span id="line.13"> */</span>
+<span class="source-line-no">014</span><span id="line.14">public class ScreenSizeManager {</span>
+<span class="source-line-no">015</span><span id="line.15"></span>
+<span class="source-line-no">016</span><span id="line.16">        /** The screen's width, as given at creation time. */</span>
+<span class="source-line-no">017</span><span id="line.17">        public final int screenWidth;</span>
+<span class="source-line-no">018</span><span id="line.18">        /** The screen's height, as given at creation time. */</span>
+<span class="source-line-no">019</span><span id="line.19">        public final int screenHeight;</span>
+<span class="source-line-no">020</span><span id="line.20"></span>
+<span class="source-line-no">021</span><span id="line.21">        /** The top margin */</span>
+<span class="source-line-no">022</span><span id="line.22">        public final int topMargin;</span>
+<span class="source-line-no">023</span><span id="line.23">        /**</span>
+<span class="source-line-no">024</span><span id="line.24">         * The bottom margin, which has at most a 1 pixel difference with</span>
+<span class="source-line-no">025</span><span id="line.25">         * {@link #topMargin}.</span>
+<span class="source-line-no">026</span><span id="line.26">         */</span>
+<span class="source-line-no">027</span><span id="line.27">        public final int botMargin;</span>
+<span class="source-line-no">028</span><span id="line.28">        /** The left margin */</span>
+<span class="source-line-no">029</span><span id="line.29">        public final int leftMargin;</span>
+<span class="source-line-no">030</span><span id="line.30">        /**</span>
+<span class="source-line-no">031</span><span id="line.31">         * The right margin, which has at most a 1 pixel difference with</span>
+<span class="source-line-no">032</span><span id="line.32">         * {@link #leftMargin}.</span>
+<span class="source-line-no">033</span><span id="line.33">         */</span>
+<span class="source-line-no">034</span><span id="line.34">        public final int rightMargin;</span>
+<span class="source-line-no">035</span><span id="line.35"></span>
+<span class="source-line-no">036</span><span id="line.36">        /** A cell's width, as given at creation time. */</span>
+<span class="source-line-no">037</span><span id="line.37">        public final int cellWidth;</span>
+<span class="source-line-no">038</span><span id="line.38"></span>
+<span class="source-line-no">039</span><span id="line.39">        /** A cell's height, as given at creation time. */</span>
+<span class="source-line-no">040</span><span id="line.40">        public final int cellHeight;</span>
+<span class="source-line-no">041</span><span id="line.41"></span>
+<span class="source-line-no">042</span><span id="line.42">        /** The number of cells, horizontally */</span>
+<span class="source-line-no">043</span><span id="line.43">        public final int wCells;</span>
+<span class="source-line-no">044</span><span id="line.44"></span>
+<span class="source-line-no">045</span><span id="line.45">        /** The number of cells, vertically */</span>
+<span class="source-line-no">046</span><span id="line.46">        public final int hCells;</span>
+<span class="source-line-no">047</span><span id="line.47"></span>
+<span class="source-line-no">048</span><span id="line.48">        /**</span>
+<span class="source-line-no">049</span><span id="line.49">         * A fresh size manager, for the given screen size and the given cell size.</span>
+<span class="source-line-no">050</span><span id="line.50">         * </span>
+<span class="source-line-no">051</span><span id="line.51">         * @param screenWidth</span>
+<span class="source-line-no">052</span><span id="line.52">         * @param screenHeight</span>
+<span class="source-line-no">053</span><span id="line.53">         * @param cellWidth</span>
+<span class="source-line-no">054</span><span id="line.54">         *            The desired cell width.</span>
+<span class="source-line-no">055</span><span id="line.55">         * @param cellHeight</span>
+<span class="source-line-no">056</span><span id="line.56">         *            The desired cell height.</span>
+<span class="source-line-no">057</span><span id="line.57">         * @throws IllegalStateException</span>
+<span class="source-line-no">058</span><span id="line.58">         *             If a size is negative.</span>
+<span class="source-line-no">059</span><span id="line.59">         */</span>
+<span class="source-line-no">060</span><span id="line.60">        public ScreenSizeManager(int screenWidth, int screenHeight, int cellWidth, int cellHeight) {</span>
+<span class="source-line-no">061</span><span id="line.61">                this.screenWidth = screenWidth;</span>
+<span class="source-line-no">062</span><span id="line.62">                if (this.screenWidth &lt; 0)</span>
+<span class="source-line-no">063</span><span id="line.63">                        throw new IllegalStateException("Screen width should not be negative");</span>
+<span class="source-line-no">064</span><span id="line.64">                this.screenHeight = screenHeight;</span>
+<span class="source-line-no">065</span><span id="line.65">                if (this.screenHeight &lt; 0)</span>
+<span class="source-line-no">066</span><span id="line.66">                        throw new IllegalStateException("Screen height should not be negative");</span>
+<span class="source-line-no">067</span><span id="line.67"></span>
+<span class="source-line-no">068</span><span id="line.68">                if (cellWidth &lt; 0)</span>
+<span class="source-line-no">069</span><span id="line.69">                        throw new IllegalStateException("Cell width should not be negative");</span>
+<span class="source-line-no">070</span><span id="line.70">                this.cellWidth = cellWidth;</span>
+<span class="source-line-no">071</span><span id="line.71"></span>
+<span class="source-line-no">072</span><span id="line.72">                if (cellHeight &lt; 0)</span>
+<span class="source-line-no">073</span><span id="line.73">                        throw new IllegalStateException("Cell height should not be negative");</span>
+<span class="source-line-no">074</span><span id="line.74">                this.cellHeight = cellHeight;</span>
+<span class="source-line-no">075</span><span id="line.75"></span>
+<span class="source-line-no">076</span><span id="line.76">                {</span>
+<span class="source-line-no">077</span><span id="line.77">                        this.wCells = screenWidth / cellWidth;</span>
+<span class="source-line-no">078</span><span id="line.78">                        final int xmargin = screenWidth - (wCells * cellWidth);</span>
+<span class="source-line-no">079</span><span id="line.79">                        assert 0 &lt;= xmargin;</span>
+<span class="source-line-no">080</span><span id="line.80">                        final int xmargindiv2 = xmargin / 2;</span>
+<span class="source-line-no">081</span><span id="line.81">                        if (isEven(xmargin)) {</span>
+<span class="source-line-no">082</span><span id="line.82">                                this.leftMargin = xmargindiv2;</span>
+<span class="source-line-no">083</span><span id="line.83">                                this.rightMargin = xmargindiv2;</span>
+<span class="source-line-no">084</span><span id="line.84">                        } else {</span>
+<span class="source-line-no">085</span><span id="line.85">                                this.leftMargin = xmargindiv2;</span>
+<span class="source-line-no">086</span><span id="line.86">                                this.rightMargin = xmargindiv2 + 1;</span>
+<span class="source-line-no">087</span><span id="line.87">                        }</span>
+<span class="source-line-no">088</span><span id="line.88"></span>
+<span class="source-line-no">089</span><span id="line.89">                        assert leftMargin + rightMargin == xmargin;</span>
+<span class="source-line-no">090</span><span id="line.90">                }</span>
+<span class="source-line-no">091</span><span id="line.91"></span>
+<span class="source-line-no">092</span><span id="line.92">                {</span>
+<span class="source-line-no">093</span><span id="line.93">                        this.hCells = screenHeight / cellHeight;</span>
+<span class="source-line-no">094</span><span id="line.94">                        final int ymargin = screenHeight - (hCells * cellHeight);</span>
+<span class="source-line-no">095</span><span id="line.95">                        assert 0 &lt;= ymargin;</span>
+<span class="source-line-no">096</span><span id="line.96">                        final int ymargindiv2 = ymargin / 2;</span>
+<span class="source-line-no">097</span><span id="line.97">                        if (isEven(ymargin)) {</span>
+<span class="source-line-no">098</span><span id="line.98">                                this.topMargin = ymargindiv2;</span>
+<span class="source-line-no">099</span><span id="line.99">                                this.botMargin = ymargindiv2;</span>
+<span class="source-line-no">100</span><span id="line.100">                        } else {</span>
+<span class="source-line-no">101</span><span id="line.101">                                this.topMargin = ymargindiv2;</span>
+<span class="source-line-no">102</span><span id="line.102">                                this.botMargin = ymargindiv2 + 1;</span>
+<span class="source-line-no">103</span><span id="line.103">                        }</span>
+<span class="source-line-no">104</span><span id="line.104"></span>
+<span class="source-line-no">105</span><span id="line.105">                        assert topMargin + botMargin == ymargin;</span>
+<span class="source-line-no">106</span><span id="line.106">                }</span>
+<span class="source-line-no">107</span><span id="line.107"></span>
+<span class="source-line-no">108</span><span id="line.108">                assert leftMargin + (wCells * cellWidth) + rightMargin == screenWidth;</span>
+<span class="source-line-no">109</span><span id="line.109">                assert botMargin + (hCells * cellHeight) + topMargin == screenHeight;</span>
+<span class="source-line-no">110</span><span id="line.110">        }</span>
+<span class="source-line-no">111</span><span id="line.111"></span>
+<span class="source-line-no">112</span><span id="line.112">        public void log() {</span>
+<span class="source-line-no">113</span><span id="line.113">                /*</span>
+<span class="source-line-no">114</span><span id="line.114">                Gdx.app.log(SquidTags.LAYOUT, String.format("Screen size: %dx%d", screenWidth, screenHeight));</span>
+<span class="source-line-no">115</span><span id="line.115">                Gdx.app.log(SquidTags.LAYOUT,</span>
+<span class="source-line-no">116</span><span id="line.116">                                String.format("Displaying %d cells horizontally and %d cells vertically", wCells, hCells));</span>
+<span class="source-line-no">117</span><span id="line.117">                Gdx.app.log(SquidTags.LAYOUT,</span>
+<span class="source-line-no">118</span><span id="line.118">                                String.format("Margins (in pixels): left:%d, right:%d, top:%d, bottom:%d", leftMargin,</span>
+<span class="source-line-no">119</span><span id="line.119">                                                rightMargin, topMargin, botMargin));</span>
+<span class="source-line-no">120</span><span id="line.120">                */</span>
+<span class="source-line-no">121</span><span id="line.121">        }</span>
+<span class="source-line-no">122</span><span id="line.122"></span>
+<span class="source-line-no">123</span><span id="line.123">        public Coord toScreenSize() {</span>
+<span class="source-line-no">124</span><span id="line.124">                return Coord.get(screenWidth, screenHeight);</span>
+<span class="source-line-no">125</span><span id="line.125">        }</span>
+<span class="source-line-no">126</span><span id="line.126"></span>
+<span class="source-line-no">127</span><span id="line.127">        public ScreenSizeManager changeScreenSize(int x, int y) {</span>
+<span class="source-line-no">128</span><span id="line.128">                return new ScreenSizeManager(x, y, cellWidth, cellHeight);</span>
+<span class="source-line-no">129</span><span id="line.129">        }</span>
+<span class="source-line-no">130</span><span id="line.130"></span>
+<span class="source-line-no">131</span><span id="line.131">        private static boolean isEven(int i) {</span>
+<span class="source-line-no">132</span><span id="line.132">                return (i &amp; 1) == 0;</span>
+<span class="source-line-no">133</span><span id="line.133">        }</span>
+<span class="source-line-no">134</span><span id="line.134">}</span>
 
 
 

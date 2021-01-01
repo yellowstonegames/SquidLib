@@ -7,555 +7,555 @@
 <meta name="generator" content="javadoc/SourceToHTMLConverter">
 <link rel="stylesheet" type="text/css" href="../../stylesheet.css" title="Style">
 </head>
-<body class="source">
+<body class="source-page">
 <main role="main">
-<div class="sourceContainer">
-<pre><span class="sourceLineNo">001</span><a id="line.1">package squidpony;</a>
-<span class="sourceLineNo">002</span><a id="line.2"></a>
-<span class="sourceLineNo">003</span><a id="line.3">import squidpony.squidmath.*;</a>
-<span class="sourceLineNo">004</span><a id="line.4"></a>
-<span class="sourceLineNo">005</span><a id="line.5">import java.util.*;</a>
-<span class="sourceLineNo">006</span><a id="line.6"></a>
-<span class="sourceLineNo">007</span><a id="line.7">/**</a>
-<span class="sourceLineNo">008</span><a id="line.8"> * Utility methods for more easily constructing data structures, particularly those in Java's standard library.</a>
-<span class="sourceLineNo">009</span><a id="line.9"> * All static methods and inner classes; meant to be imported with {@code import static squidpony.Maker.*}.</a>
-<span class="sourceLineNo">010</span><a id="line.10"> * Created by Tommy Ettinger on 5/19/2016.</a>
-<span class="sourceLineNo">011</span><a id="line.11"> */</a>
-<span class="sourceLineNo">012</span><a id="line.12">public class Maker {</a>
-<span class="sourceLineNo">013</span><a id="line.13"></a>
-<span class="sourceLineNo">014</span><a id="line.14">    /**</a>
-<span class="sourceLineNo">015</span><a id="line.15">     * Stores any information relating to non-fatal issues, such as caught and handled Exceptions that still change the</a>
-<span class="sourceLineNo">016</span><a id="line.16">     * behavior of methods. Typically shouldn't be cleared while debugging, since it could be useful later on, and</a>
-<span class="sourceLineNo">017</span><a id="line.17">     * hopefully won't need to be written to in a release build.</a>
-<span class="sourceLineNo">018</span><a id="line.18">     */</a>
-<span class="sourceLineNo">019</span><a id="line.19">    public static final StringBuilder issueLog = new StringBuilder(1024);</a>
-<span class="sourceLineNo">020</span><a id="line.20">    /**</a>
-<span class="sourceLineNo">021</span><a id="line.21">     * Makes a LinkedHashMap (LHM) with key and value types inferred from the types of k0 and v0, and considers all</a>
-<span class="sourceLineNo">022</span><a id="line.22">     * parameters key-value pairs, casting the Objects at positions 0, 2, 4... etc. to K and the objects at positions</a>
-<span class="sourceLineNo">023</span><a id="line.23">     * 1, 3, 5... etc. to V. If rest has an odd-number length, then it discards the last item. If any pair of items in</a>
-<span class="sourceLineNo">024</span><a id="line.24">     * rest cannot be cast to the correct type of K or V, then this inserts nothing for that pair and logs information</a>
-<span class="sourceLineNo">025</span><a id="line.25">     * on the problematic pair to the static Maker.issueLog field.</a>
-<span class="sourceLineNo">026</span><a id="line.26">     * @param k0 the first key; used to infer the types of other keys if generic parameters aren't specified.</a>
-<span class="sourceLineNo">027</span><a id="line.27">     * @param v0 the first value; used to infer the types of other values if generic parameters aren't specified.</a>
-<span class="sourceLineNo">028</span><a id="line.28">     * @param rest an array or vararg of keys and values in pairs; should contain alternating K, V, K, V... elements</a>
-<span class="sourceLineNo">029</span><a id="line.29">     * @param &lt;K&gt; the type of keys in the returned LinkedHashMap; if not specified, will be inferred from k0</a>
-<span class="sourceLineNo">030</span><a id="line.30">     * @param &lt;V&gt; the type of values in the returned LinkedHashMap; if not specified, will be inferred from v0</a>
-<span class="sourceLineNo">031</span><a id="line.31">     * @return a freshly-made LinkedHashMap with K keys and V values, using k0, v0, and the contents of rest to fill it</a>
-<span class="sourceLineNo">032</span><a id="line.32">     */</a>
-<span class="sourceLineNo">033</span><a id="line.33">    @SuppressWarnings("unchecked")</a>
-<span class="sourceLineNo">034</span><a id="line.34">    public static &lt;K, V&gt; LinkedHashMap&lt;K, V&gt; makeLHM(K k0, V v0, Object... rest)</a>
-<span class="sourceLineNo">035</span><a id="line.35">    {</a>
-<span class="sourceLineNo">036</span><a id="line.36">        if(rest == null || rest.length == 0)</a>
-<span class="sourceLineNo">037</span><a id="line.37">        {</a>
-<span class="sourceLineNo">038</span><a id="line.38">            LinkedHashMap&lt;K, V&gt; lhm = new LinkedHashMap&lt;&gt;(2);</a>
-<span class="sourceLineNo">039</span><a id="line.39">            lhm.put(k0, v0);</a>
-<span class="sourceLineNo">040</span><a id="line.40">            return lhm;</a>
-<span class="sourceLineNo">041</span><a id="line.41">        }</a>
-<span class="sourceLineNo">042</span><a id="line.42">        LinkedHashMap&lt;K, V&gt; lhm = new LinkedHashMap&lt;&gt;(1 + (rest.length / 2));</a>
-<span class="sourceLineNo">043</span><a id="line.43">        lhm.put(k0, v0);</a>
-<span class="sourceLineNo">044</span><a id="line.44"></a>
-<span class="sourceLineNo">045</span><a id="line.45">        for (int i = 0; i &lt; rest.length - 1; i+=2) {</a>
-<span class="sourceLineNo">046</span><a id="line.46">            try {</a>
-<span class="sourceLineNo">047</span><a id="line.47">                lhm.put((K) rest[i], (V) rest[i + 1]);</a>
-<span class="sourceLineNo">048</span><a id="line.48">            }catch (ClassCastException cce) {</a>
-<span class="sourceLineNo">049</span><a id="line.49">                issueLog.append("makeLHM call had a casting problem with pair at rest[")</a>
-<span class="sourceLineNo">050</span><a id="line.50">                        .append(i)</a>
-<span class="sourceLineNo">051</span><a id="line.51">                        .append("] and/or rest[")</a>
-<span class="sourceLineNo">052</span><a id="line.52">                        .append(i + 1)</a>
-<span class="sourceLineNo">053</span><a id="line.53">                        .append("], with contents: ")</a>
-<span class="sourceLineNo">054</span><a id="line.54">                        .append(rest[i])</a>
-<span class="sourceLineNo">055</span><a id="line.55">                        .append(", ")</a>
-<span class="sourceLineNo">056</span><a id="line.56">                        .append(rest[i + 1])</a>
-<span class="sourceLineNo">057</span><a id="line.57">                        .append(".\n\nException messages:\n")</a>
-<span class="sourceLineNo">058</span><a id="line.58">                        .append(cce);</a>
-<span class="sourceLineNo">059</span><a id="line.59">                String msg = cce.getMessage();</a>
-<span class="sourceLineNo">060</span><a id="line.60">                if (msg != null) {</a>
-<span class="sourceLineNo">061</span><a id="line.61">                    issueLog.append('\n').append(msg);</a>
-<span class="sourceLineNo">062</span><a id="line.62">                }</a>
-<span class="sourceLineNo">063</span><a id="line.63">                issueLog.append('\n');</a>
-<span class="sourceLineNo">064</span><a id="line.64">            }</a>
-<span class="sourceLineNo">065</span><a id="line.65">        }</a>
-<span class="sourceLineNo">066</span><a id="line.66">        return lhm;</a>
-<span class="sourceLineNo">067</span><a id="line.67">    }</a>
-<span class="sourceLineNo">068</span><a id="line.68"></a>
-<span class="sourceLineNo">069</span><a id="line.69">    /**</a>
-<span class="sourceLineNo">070</span><a id="line.70">     * Makes an empty LinkedHashMap (LHM); needs key and value types to be specified in order to work. For an empty</a>
-<span class="sourceLineNo">071</span><a id="line.71">     * LinkedHashMap with String keys and Coord values, you could use {@code Maker.&lt;String, Coord&gt;makeLHM();}. Using</a>
-<span class="sourceLineNo">072</span><a id="line.72">     * the new keyword is probably just as easy in this case; this method is provided for completeness relative to</a>
-<span class="sourceLineNo">073</span><a id="line.73">     * makeLHM() with 2 or more parameters.</a>
-<span class="sourceLineNo">074</span><a id="line.74">     * @param &lt;K&gt; the type of keys in the returned LinkedHashMap; cannot be inferred and must be specified</a>
-<span class="sourceLineNo">075</span><a id="line.75">     * @param &lt;V&gt; the type of values in the returned LinkedHashMap; cannot be inferred and must be specified</a>
-<span class="sourceLineNo">076</span><a id="line.76">     * @return an empty LinkedHashMap with the given key and value types.</a>
-<span class="sourceLineNo">077</span><a id="line.77">     */</a>
-<span class="sourceLineNo">078</span><a id="line.78">    public static &lt;K, V&gt; LinkedHashMap&lt;K, V&gt; makeLHM()</a>
-<span class="sourceLineNo">079</span><a id="line.79">    {</a>
-<span class="sourceLineNo">080</span><a id="line.80">        return new LinkedHashMap&lt;&gt;();</a>
-<span class="sourceLineNo">081</span><a id="line.81">    }</a>
-<span class="sourceLineNo">082</span><a id="line.82">    /**</a>
-<span class="sourceLineNo">083</span><a id="line.83">     * Makes a HashMap (HM) with key and value types inferred from the types of k0 and v0, and considers all</a>
-<span class="sourceLineNo">084</span><a id="line.84">     * parameters key-value pairs, casting the Objects at positions 0, 2, 4... etc. to K and the objects at positions</a>
-<span class="sourceLineNo">085</span><a id="line.85">     * 1, 3, 5... etc. to V. If rest has an odd-number length, then it discards the last item. If any pair of items in</a>
-<span class="sourceLineNo">086</span><a id="line.86">     * rest cannot be cast to the correct type of K or V, then this inserts nothing for that pair and logs information</a>
-<span class="sourceLineNo">087</span><a id="line.87">     * on the problematic pair to the static Maker.issueLog field.</a>
-<span class="sourceLineNo">088</span><a id="line.88">     * @param k0 the first key; used to infer the types of other keys if generic parameters aren't specified.</a>
-<span class="sourceLineNo">089</span><a id="line.89">     * @param v0 the first value; used to infer the types of other values if generic parameters aren't specified.</a>
-<span class="sourceLineNo">090</span><a id="line.90">     * @param rest an array or vararg of keys and values in pairs; should contain alternating K, V, K, V... elements</a>
-<span class="sourceLineNo">091</span><a id="line.91">     * @param &lt;K&gt; the type of keys in the returned HashMap; if not specified, will be inferred from k0</a>
-<span class="sourceLineNo">092</span><a id="line.92">     * @param &lt;V&gt; the type of values in the returned HashMap; if not specified, will be inferred from v0</a>
-<span class="sourceLineNo">093</span><a id="line.93">     * @return a freshly-made HashMap with K keys and V values, using k0, v0, and the contents of rest to fill it</a>
-<span class="sourceLineNo">094</span><a id="line.94">     */</a>
-<span class="sourceLineNo">095</span><a id="line.95">    @SuppressWarnings("unchecked")</a>
-<span class="sourceLineNo">096</span><a id="line.96">    public static &lt;K, V&gt; HashMap&lt;K, V&gt; makeHM(K k0, V v0, Object... rest)</a>
-<span class="sourceLineNo">097</span><a id="line.97">    {</a>
-<span class="sourceLineNo">098</span><a id="line.98">        if(rest == null || rest.length == 0)</a>
-<span class="sourceLineNo">099</span><a id="line.99">        {</a>
-<span class="sourceLineNo">100</span><a id="line.100">            HashMap&lt;K, V&gt; hm = new HashMap&lt;&gt;(2);</a>
-<span class="sourceLineNo">101</span><a id="line.101">            hm.put(k0, v0);</a>
-<span class="sourceLineNo">102</span><a id="line.102">            return hm;</a>
-<span class="sourceLineNo">103</span><a id="line.103">        }</a>
-<span class="sourceLineNo">104</span><a id="line.104">        HashMap&lt;K, V&gt; hm = new HashMap&lt;&gt;(1 + (rest.length / 2));</a>
-<span class="sourceLineNo">105</span><a id="line.105">        hm.put(k0, v0);</a>
-<span class="sourceLineNo">106</span><a id="line.106"></a>
-<span class="sourceLineNo">107</span><a id="line.107">        for (int i = 0; i &lt; rest.length - 1; i+=2) {</a>
-<span class="sourceLineNo">108</span><a id="line.108">            try {</a>
-<span class="sourceLineNo">109</span><a id="line.109">                hm.put((K) rest[i], (V) rest[i + 1]);</a>
-<span class="sourceLineNo">110</span><a id="line.110">            }catch (ClassCastException cce) {</a>
-<span class="sourceLineNo">111</span><a id="line.111">                issueLog.append("makeHM call had a casting problem with pair at rest[")</a>
-<span class="sourceLineNo">112</span><a id="line.112">                        .append(i).append("] and/or rest[")</a>
-<span class="sourceLineNo">113</span><a id="line.113">                        .append(i + 1).append("], with contents: ")</a>
-<span class="sourceLineNo">114</span><a id="line.114">                        .append(rest[i]).append(", ")</a>
-<span class="sourceLineNo">115</span><a id="line.115">                        .append(rest[i + 1]).append(".\n\nException messages:\n")</a>
-<span class="sourceLineNo">116</span><a id="line.116">                        .append(cce);</a>
-<span class="sourceLineNo">117</span><a id="line.117">                String msg = cce.getMessage();</a>
-<span class="sourceLineNo">118</span><a id="line.118">                if (msg != null) {</a>
-<span class="sourceLineNo">119</span><a id="line.119">                    issueLog.append('\n').append(msg);</a>
-<span class="sourceLineNo">120</span><a id="line.120">                }</a>
-<span class="sourceLineNo">121</span><a id="line.121">                issueLog.append('\n');</a>
-<span class="sourceLineNo">122</span><a id="line.122">            }</a>
-<span class="sourceLineNo">123</span><a id="line.123">        }</a>
-<span class="sourceLineNo">124</span><a id="line.124">        return hm;</a>
-<span class="sourceLineNo">125</span><a id="line.125">    }</a>
-<span class="sourceLineNo">126</span><a id="line.126"></a>
-<span class="sourceLineNo">127</span><a id="line.127">    /**</a>
-<span class="sourceLineNo">128</span><a id="line.128">     * Makes an empty HashMap (HM); needs key and value types to be specified in order to work. For an empty</a>
-<span class="sourceLineNo">129</span><a id="line.129">     * HashMap with String keys and Coord values, you could use {@code Maker.&lt;String, Coord&gt;makeHM();}. Using</a>
-<span class="sourceLineNo">130</span><a id="line.130">     * the new keyword is probably just as easy in this case; this method is provided for completeness relative to</a>
-<span class="sourceLineNo">131</span><a id="line.131">     * makeHM() with 2 or more parameters.</a>
-<span class="sourceLineNo">132</span><a id="line.132">     * @param &lt;K&gt; the type of keys in the returned HashMap; cannot be inferred and must be specified</a>
-<span class="sourceLineNo">133</span><a id="line.133">     * @param &lt;V&gt; the type of values in the returned HashMap; cannot be inferred and must be specified</a>
-<span class="sourceLineNo">134</span><a id="line.134">     * @return an empty HashMap with the given key and value types.</a>
-<span class="sourceLineNo">135</span><a id="line.135">     */</a>
-<span class="sourceLineNo">136</span><a id="line.136">    public static &lt;K, V&gt; HashMap&lt;K, V&gt; makeHM()</a>
-<span class="sourceLineNo">137</span><a id="line.137">    {</a>
-<span class="sourceLineNo">138</span><a id="line.138">        return new HashMap&lt;&gt;();</a>
-<span class="sourceLineNo">139</span><a id="line.139">    }</a>
-<span class="sourceLineNo">140</span><a id="line.140"></a>
-<span class="sourceLineNo">141</span><a id="line.141">    /**</a>
-<span class="sourceLineNo">142</span><a id="line.142">     * Makes an ArrayList of T given an array or vararg of T elements.</a>
-<span class="sourceLineNo">143</span><a id="line.143">     * @param elements an array or vararg of T</a>
-<span class="sourceLineNo">144</span><a id="line.144">     * @param &lt;T&gt; just about any non-primitive type</a>
-<span class="sourceLineNo">145</span><a id="line.145">     * @return a newly-allocated ArrayList containing all of elements, in order</a>
-<span class="sourceLineNo">146</span><a id="line.146">     */</a>
-<span class="sourceLineNo">147</span><a id="line.147">    @SuppressWarnings("unchecked")</a>
-<span class="sourceLineNo">148</span><a id="line.148">    public static &lt;T&gt; ArrayList&lt;T&gt; makeList(T... elements) {</a>
-<span class="sourceLineNo">149</span><a id="line.149">        if(elements == null) return null;</a>
-<span class="sourceLineNo">150</span><a id="line.150">        ArrayList&lt;T&gt; list = new ArrayList&lt;&gt;(elements.length);</a>
-<span class="sourceLineNo">151</span><a id="line.151">        Collections.addAll(list, elements);</a>
-<span class="sourceLineNo">152</span><a id="line.152">        return list;</a>
-<span class="sourceLineNo">153</span><a id="line.153">    }</a>
-<span class="sourceLineNo">154</span><a id="line.154"></a>
-<span class="sourceLineNo">155</span><a id="line.155">    /**</a>
-<span class="sourceLineNo">156</span><a id="line.156">     * Makes an ArrayList of T given a single T element; avoids creating an array for varargs as</a>
-<span class="sourceLineNo">157</span><a id="line.157">     * {@link #makeList(Object[])} would do, but only allows one item.</a>
-<span class="sourceLineNo">158</span><a id="line.158">     * @param element an array or vararg of T</a>
-<span class="sourceLineNo">159</span><a id="line.159">     * @param &lt;T&gt; just about any non-primitive, non-array type (arrays would cause confusion with the vararg method)</a>
-<span class="sourceLineNo">160</span><a id="line.160">     * @return a newly-allocated ArrayList containing only element</a>
-<span class="sourceLineNo">161</span><a id="line.161">     */</a>
-<span class="sourceLineNo">162</span><a id="line.162">    public static &lt;T&gt; ArrayList&lt;T&gt; makeList(T element) {</a>
-<span class="sourceLineNo">163</span><a id="line.163">        ArrayList&lt;T&gt; list = new ArrayList&lt;&gt;(1);</a>
-<span class="sourceLineNo">164</span><a id="line.164">        list.add(element);</a>
-<span class="sourceLineNo">165</span><a id="line.165">        return list;</a>
-<span class="sourceLineNo">166</span><a id="line.166">    }</a>
-<span class="sourceLineNo">167</span><a id="line.167"></a>
-<span class="sourceLineNo">168</span><a id="line.168">    /**</a>
-<span class="sourceLineNo">169</span><a id="line.169">     * Makes a LinkedHashSet (LHS) of T given an array or vararg of T elements. Duplicate items in elements will have</a>
-<span class="sourceLineNo">170</span><a id="line.170">     * all but one item discarded, using the later item in elements.</a>
-<span class="sourceLineNo">171</span><a id="line.171">     * @param elements an array or vararg of T</a>
-<span class="sourceLineNo">172</span><a id="line.172">     * @param &lt;T&gt; just about any non-primitive type</a>
-<span class="sourceLineNo">173</span><a id="line.173">     * @return a newly-allocated LinkedHashSet containing all of the non-duplicate items in elements, in order</a>
-<span class="sourceLineNo">174</span><a id="line.174">     */</a>
-<span class="sourceLineNo">175</span><a id="line.175">    @SuppressWarnings("unchecked")</a>
-<span class="sourceLineNo">176</span><a id="line.176">    public static &lt;T&gt; LinkedHashSet&lt;T&gt; makeLHS(T... elements) {</a>
-<span class="sourceLineNo">177</span><a id="line.177">        if(elements == null) return null;</a>
-<span class="sourceLineNo">178</span><a id="line.178">        LinkedHashSet&lt;T&gt; set = new LinkedHashSet&lt;&gt;(elements.length);</a>
-<span class="sourceLineNo">179</span><a id="line.179">        Collections.addAll(set, elements);</a>
-<span class="sourceLineNo">180</span><a id="line.180">        return set;</a>
-<span class="sourceLineNo">181</span><a id="line.181">    }</a>
-<span class="sourceLineNo">182</span><a id="line.182"></a>
-<span class="sourceLineNo">183</span><a id="line.183">    /**</a>
-<span class="sourceLineNo">184</span><a id="line.184">     * Makes a LinkedHashSet (LHS) of T given a single T element.</a>
-<span class="sourceLineNo">185</span><a id="line.185">     * @param element a single T</a>
-<span class="sourceLineNo">186</span><a id="line.186">     * @param &lt;T&gt; just about any non-primitive type</a>
-<span class="sourceLineNo">187</span><a id="line.187">     * @return a newly-allocated LinkedHashSet containing only {@code element}</a>
-<span class="sourceLineNo">188</span><a id="line.188">     */</a>
-<span class="sourceLineNo">189</span><a id="line.189">    public static &lt;T&gt; LinkedHashSet&lt;T&gt; makeLHS(T element) {</a>
-<span class="sourceLineNo">190</span><a id="line.190">        LinkedHashSet&lt;T&gt; set = new LinkedHashSet&lt;T&gt;(1);</a>
-<span class="sourceLineNo">191</span><a id="line.191">        set.add(element);</a>
-<span class="sourceLineNo">192</span><a id="line.192">        return set;</a>
-<span class="sourceLineNo">193</span><a id="line.193">    }</a>
-<span class="sourceLineNo">194</span><a id="line.194"></a>
-<span class="sourceLineNo">195</span><a id="line.195">    /**</a>
-<span class="sourceLineNo">196</span><a id="line.196">     * Makes a HashSet (HS) of T given an array or vararg of T elements. Duplicate items in elements will have</a>
-<span class="sourceLineNo">197</span><a id="line.197">     * all but one item discarded, using the later item in elements.</a>
-<span class="sourceLineNo">198</span><a id="line.198">     * @param elements an array or vararg of T</a>
-<span class="sourceLineNo">199</span><a id="line.199">     * @param &lt;T&gt; just about any non-primitive type</a>
-<span class="sourceLineNo">200</span><a id="line.200">     * @return a newly-allocated HashSet containing all of the non-duplicate items in elements, in order</a>
-<span class="sourceLineNo">201</span><a id="line.201">     */</a>
-<span class="sourceLineNo">202</span><a id="line.202">    @SuppressWarnings("unchecked")</a>
-<span class="sourceLineNo">203</span><a id="line.203">    public static &lt;T&gt; HashSet&lt;T&gt; makeHS(T... elements) {</a>
-<span class="sourceLineNo">204</span><a id="line.204">        if(elements == null) return null;</a>
-<span class="sourceLineNo">205</span><a id="line.205">        HashSet&lt;T&gt; set = new HashSet&lt;&gt;(elements.length);</a>
-<span class="sourceLineNo">206</span><a id="line.206">        Collections.addAll(set, elements);</a>
-<span class="sourceLineNo">207</span><a id="line.207">        return set;</a>
-<span class="sourceLineNo">208</span><a id="line.208">    }</a>
-<span class="sourceLineNo">209</span><a id="line.209"></a>
-<span class="sourceLineNo">210</span><a id="line.210">    /**</a>
-<span class="sourceLineNo">211</span><a id="line.211">     * Makes a HashSet (HS) of T given a single T element.</a>
-<span class="sourceLineNo">212</span><a id="line.212">     * @param element a single T</a>
-<span class="sourceLineNo">213</span><a id="line.213">     * @param &lt;T&gt; just about any non-primitive type</a>
-<span class="sourceLineNo">214</span><a id="line.214">     * @return a newly-allocated HashSet containing only {@code element}</a>
-<span class="sourceLineNo">215</span><a id="line.215">     */</a>
-<span class="sourceLineNo">216</span><a id="line.216">    public static &lt;T&gt; HashSet&lt;T&gt; makeHS(T element) {</a>
-<span class="sourceLineNo">217</span><a id="line.217">        HashSet&lt;T&gt; set = new HashSet&lt;T&gt;(1);</a>
-<span class="sourceLineNo">218</span><a id="line.218">        set.add(element);</a>
-<span class="sourceLineNo">219</span><a id="line.219">        return set;</a>
-<span class="sourceLineNo">220</span><a id="line.220">    }</a>
-<span class="sourceLineNo">221</span><a id="line.221"></a>
-<span class="sourceLineNo">222</span><a id="line.222">    /**</a>
-<span class="sourceLineNo">223</span><a id="line.223">     * Makes an OrderedMap (OM) with key and value types inferred from the types of k0 and v0, and considers all</a>
-<span class="sourceLineNo">224</span><a id="line.224">     * parameters key-value pairs, casting the Objects at positions 0, 2, 4... etc. to K and the objects at positions</a>
-<span class="sourceLineNo">225</span><a id="line.225">     * 1, 3, 5... etc. to V. If rest has an odd-number length, then it discards the last item. If any pair of items in</a>
-<span class="sourceLineNo">226</span><a id="line.226">     * rest cannot be cast to the correct type of K or V, then this inserts nothing for that pair and logs information</a>
-<span class="sourceLineNo">227</span><a id="line.227">     * on the problematic pair to the static Maker.issueLog field.</a>
-<span class="sourceLineNo">228</span><a id="line.228">     * @param k0 the first key; used to infer the types of other keys if generic parameters aren't specified.</a>
-<span class="sourceLineNo">229</span><a id="line.229">     * @param v0 the first value; used to infer the types of other values if generic parameters aren't specified.</a>
-<span class="sourceLineNo">230</span><a id="line.230">     * @param rest an array or vararg of keys and values in pairs; should contain alternating K, V, K, V... elements</a>
-<span class="sourceLineNo">231</span><a id="line.231">     * @param &lt;K&gt; the type of keys in the returned OrderedMap; if not specified, will be inferred from k0</a>
-<span class="sourceLineNo">232</span><a id="line.232">     * @param &lt;V&gt; the type of values in the returned OrderedMap; if not specified, will be inferred from v0</a>
-<span class="sourceLineNo">233</span><a id="line.233">     * @return a freshly-made OrderedMap with K keys and V values, using k0, v0, and the contents of rest to fill it</a>
-<span class="sourceLineNo">234</span><a id="line.234">     */</a>
-<span class="sourceLineNo">235</span><a id="line.235">    public static &lt;K, V&gt; OrderedMap&lt;K, V&gt; makeOM(K k0, V v0, Object... rest)</a>
-<span class="sourceLineNo">236</span><a id="line.236">    {</a>
-<span class="sourceLineNo">237</span><a id="line.237">        return makeOM(0.625f, k0, v0, rest);</a>
-<span class="sourceLineNo">238</span><a id="line.238">    }</a>
-<span class="sourceLineNo">239</span><a id="line.239">    /**</a>
-<span class="sourceLineNo">240</span><a id="line.240">     * Makes an OrderedMap (OM) with the given load factor (which should be between 0.1 and 0.9), key and value types</a>
-<span class="sourceLineNo">241</span><a id="line.241">     * inferred from the types of k0 and v0, and considers all remaining parameters key-value pairs, casting the Objects</a>
-<span class="sourceLineNo">242</span><a id="line.242">     * at positions 0, 2, 4... etc. to K and the objects at positions 1, 3, 5... etc. to V. If rest has an odd-number</a>
-<span class="sourceLineNo">243</span><a id="line.243">     * length, then it discards the last item. If any pair of items in rest cannot be cast to the correct type of K or</a>
-<span class="sourceLineNo">244</span><a id="line.244">     * V, then this inserts nothing for that pair and logs information on the problematic pair to the static</a>
-<span class="sourceLineNo">245</span><a id="line.245">     * Maker.issueLog field.</a>
-<span class="sourceLineNo">246</span><a id="line.246">     * @param factor the load factor; should be between 0.1 and 0.9, and 0.75f is a safe choice</a>
-<span class="sourceLineNo">247</span><a id="line.247">     * @param k0 the first key; used to infer the types of other keys if generic parameters aren't specified.</a>
-<span class="sourceLineNo">248</span><a id="line.248">     * @param v0 the first value; used to infer the types of other values if generic parameters aren't specified.</a>
-<span class="sourceLineNo">249</span><a id="line.249">     * @param rest an array or vararg of keys and values in pairs; should contain alternating K, V, K, V... elements</a>
-<span class="sourceLineNo">250</span><a id="line.250">     * @param &lt;K&gt; the type of keys in the returned OrderedMap; if not specified, will be inferred from k0</a>
-<span class="sourceLineNo">251</span><a id="line.251">     * @param &lt;V&gt; the type of values in the returned OrderedMap; if not specified, will be inferred from v0</a>
-<span class="sourceLineNo">252</span><a id="line.252">     * @return a freshly-made OrderedMap with K keys and V values, using k0, v0, and the contents of rest to fill it</a>
-<span class="sourceLineNo">253</span><a id="line.253">     */</a>
-<span class="sourceLineNo">254</span><a id="line.254">    @SuppressWarnings("unchecked")</a>
-<span class="sourceLineNo">255</span><a id="line.255">    public static &lt;K, V&gt; OrderedMap&lt;K, V&gt; makeOM(float factor, K k0, V v0, Object... rest)</a>
-<span class="sourceLineNo">256</span><a id="line.256">    {</a>
-<span class="sourceLineNo">257</span><a id="line.257">        if(rest == null || rest.length == 0)</a>
-<span class="sourceLineNo">258</span><a id="line.258">        {</a>
-<span class="sourceLineNo">259</span><a id="line.259">            OrderedMap&lt;K, V&gt; om = new OrderedMap&lt;&gt;(2, factor);</a>
-<span class="sourceLineNo">260</span><a id="line.260">            om.put(k0, v0);</a>
-<span class="sourceLineNo">261</span><a id="line.261">            return om;</a>
-<span class="sourceLineNo">262</span><a id="line.262">        }</a>
-<span class="sourceLineNo">263</span><a id="line.263">        OrderedMap&lt;K, V&gt; om = new OrderedMap&lt;&gt;(1 + (rest.length / 2), factor);</a>
-<span class="sourceLineNo">264</span><a id="line.264">        om.put(k0, v0);</a>
-<span class="sourceLineNo">265</span><a id="line.265"></a>
-<span class="sourceLineNo">266</span><a id="line.266">        for (int i = 0; i &lt; rest.length - 1; i+=2) {</a>
-<span class="sourceLineNo">267</span><a id="line.267">            try {</a>
-<span class="sourceLineNo">268</span><a id="line.268">                om.put((K) rest[i], (V) rest[i + 1]);</a>
-<span class="sourceLineNo">269</span><a id="line.269">            }catch (ClassCastException cce) {</a>
-<span class="sourceLineNo">270</span><a id="line.270">                issueLog.append("makeOM call had a casting problem with pair at rest[")</a>
-<span class="sourceLineNo">271</span><a id="line.271">                          .append(i)</a>
-<span class="sourceLineNo">272</span><a id="line.272">                          .append("] and/or rest[")</a>
-<span class="sourceLineNo">273</span><a id="line.273">                          .append(i + 1)</a>
-<span class="sourceLineNo">274</span><a id="line.274">                          .append("], with contents: ")</a>
-<span class="sourceLineNo">275</span><a id="line.275">                          .append(rest[i])</a>
-<span class="sourceLineNo">276</span><a id="line.276">                          .append(", ")</a>
-<span class="sourceLineNo">277</span><a id="line.277">                          .append(rest[i+1])</a>
-<span class="sourceLineNo">278</span><a id="line.278">                          .append(".\n\nException messages:\n")</a>
-<span class="sourceLineNo">279</span><a id="line.279">                          .append(cce);</a>
-<span class="sourceLineNo">280</span><a id="line.280">                String msg = cce.getMessage();</a>
-<span class="sourceLineNo">281</span><a id="line.281">                if (msg != null) {</a>
-<span class="sourceLineNo">282</span><a id="line.282">                    issueLog.append('\n').append(msg);</a>
-<span class="sourceLineNo">283</span><a id="line.283">                }</a>
-<span class="sourceLineNo">284</span><a id="line.284">                issueLog.append('\n');</a>
-<span class="sourceLineNo">285</span><a id="line.285">            }</a>
-<span class="sourceLineNo">286</span><a id="line.286">        }</a>
-<span class="sourceLineNo">287</span><a id="line.287">        return om;</a>
-<span class="sourceLineNo">288</span><a id="line.288">    }</a>
-<span class="sourceLineNo">289</span><a id="line.289"></a>
-<span class="sourceLineNo">290</span><a id="line.290">    /**</a>
-<span class="sourceLineNo">291</span><a id="line.291">     * Makes an empty OrderedMap (OM); needs key and value types to be specified in order to work. For an empty</a>
-<span class="sourceLineNo">292</span><a id="line.292">     * OrderedMap with String keys and Coord values, you could use {@code Maker.&lt;String, Coord&gt;makeOM()}. Using</a>
-<span class="sourceLineNo">293</span><a id="line.293">     * the new keyword is probably just as easy in this case; this method is provided for completeness relative to</a>
-<span class="sourceLineNo">294</span><a id="line.294">     * makeOM() with 2 or more parameters.</a>
-<span class="sourceLineNo">295</span><a id="line.295">     * @param &lt;K&gt; the type of keys in the returned OrderedMap; cannot be inferred and must be specified</a>
-<span class="sourceLineNo">296</span><a id="line.296">     * @param &lt;V&gt; the type of values in the returned OrderedMap; cannot be inferred and must be specified</a>
-<span class="sourceLineNo">297</span><a id="line.297">     * @return an empty OrderedMap with the given key and value types.</a>
-<span class="sourceLineNo">298</span><a id="line.298">     */</a>
-<span class="sourceLineNo">299</span><a id="line.299">    public static &lt;K, V&gt; OrderedMap&lt;K, V&gt; makeOM()</a>
-<span class="sourceLineNo">300</span><a id="line.300">    {</a>
-<span class="sourceLineNo">301</span><a id="line.301">        return new OrderedMap&lt;&gt;();</a>
-<span class="sourceLineNo">302</span><a id="line.302">    }</a>
-<span class="sourceLineNo">303</span><a id="line.303"></a>
-<span class="sourceLineNo">304</span><a id="line.304">    /**</a>
-<span class="sourceLineNo">305</span><a id="line.305">     * Makes an OrderedSet (OS) of T given an array or vararg of T elements. Duplicate items in elements will have</a>
-<span class="sourceLineNo">306</span><a id="line.306">     * all but one item discarded, using the later item in elements.</a>
-<span class="sourceLineNo">307</span><a id="line.307">     * @param elements an array or vararg of T</a>
-<span class="sourceLineNo">308</span><a id="line.308">     * @param &lt;T&gt; just about any non-primitive type</a>
-<span class="sourceLineNo">309</span><a id="line.309">     * @return a newly-allocated OrderedSet containing all of the non-duplicate items in elements, in order</a>
-<span class="sourceLineNo">310</span><a id="line.310">     */</a>
-<span class="sourceLineNo">311</span><a id="line.311">    @SuppressWarnings("unchecked")</a>
-<span class="sourceLineNo">312</span><a id="line.312">    public static &lt;T&gt; OrderedSet&lt;T&gt; makeOS(T... elements) {</a>
-<span class="sourceLineNo">313</span><a id="line.313">        if(elements == null) return null;</a>
-<span class="sourceLineNo">314</span><a id="line.314">        return new OrderedSet&lt;&gt;(elements);</a>
-<span class="sourceLineNo">315</span><a id="line.315">    }</a>
-<span class="sourceLineNo">316</span><a id="line.316"></a>
-<span class="sourceLineNo">317</span><a id="line.317">    /**</a>
-<span class="sourceLineNo">318</span><a id="line.318">     * Makes an OrderedSet of T given a single T element; avoids creating an array for varargs as</a>
-<span class="sourceLineNo">319</span><a id="line.319">     * {@link #makeOS(Object[])} would do, but only allows one item.</a>
-<span class="sourceLineNo">320</span><a id="line.320">     * @param element an array or vararg of T</a>
-<span class="sourceLineNo">321</span><a id="line.321">     * @param &lt;T&gt; just about any non-primitive, non-array type (arrays would cause confusion with the vararg method)</a>
-<span class="sourceLineNo">322</span><a id="line.322">     * @return a newly-allocated OrderedSet containing only element</a>
-<span class="sourceLineNo">323</span><a id="line.323">     */</a>
-<span class="sourceLineNo">324</span><a id="line.324">    public static &lt;T&gt; OrderedSet&lt;T&gt; makeOS(T element) {</a>
-<span class="sourceLineNo">325</span><a id="line.325">        OrderedSet&lt;T&gt; set = new OrderedSet&lt;&gt;(1);</a>
-<span class="sourceLineNo">326</span><a id="line.326">        set.add(element);</a>
-<span class="sourceLineNo">327</span><a id="line.327">        return set;</a>
-<span class="sourceLineNo">328</span><a id="line.328">    }</a>
-<span class="sourceLineNo">329</span><a id="line.329">    </a>
-<span class="sourceLineNo">330</span><a id="line.330">    /**</a>
-<span class="sourceLineNo">331</span><a id="line.331">     * Makes an UnorderedSet (UOS) of T given an array or vararg of T elements. Duplicate items in elements will have</a>
-<span class="sourceLineNo">332</span><a id="line.332">     * all but one item discarded, using the later item in elements; order will not be kept.</a>
-<span class="sourceLineNo">333</span><a id="line.333">     * @param elements an array or vararg of T</a>
-<span class="sourceLineNo">334</span><a id="line.334">     * @param &lt;T&gt; just about any non-primitive type</a>
-<span class="sourceLineNo">335</span><a id="line.335">     * @return a newly-allocated UnorderedSet containing all of the non-duplicate items in elements, in order</a>
-<span class="sourceLineNo">336</span><a id="line.336">     */</a>
-<span class="sourceLineNo">337</span><a id="line.337">    @SuppressWarnings("unchecked")</a>
-<span class="sourceLineNo">338</span><a id="line.338">    public static &lt;T&gt; UnorderedSet&lt;T&gt; makeUOS(T... elements) {</a>
-<span class="sourceLineNo">339</span><a id="line.339">        if(elements == null) return null;</a>
-<span class="sourceLineNo">340</span><a id="line.340">        return new UnorderedSet&lt;&gt;(elements);</a>
-<span class="sourceLineNo">341</span><a id="line.341">    }</a>
-<span class="sourceLineNo">342</span><a id="line.342"></a>
-<span class="sourceLineNo">343</span><a id="line.343">    /**</a>
-<span class="sourceLineNo">344</span><a id="line.344">     * Makes an UnorderedSet of T given a single T element; avoids creating an array for varargs as</a>
-<span class="sourceLineNo">345</span><a id="line.345">     * {@link #makeOS(Object[])} would do, but only allows one item.</a>
-<span class="sourceLineNo">346</span><a id="line.346">     * @param element an array or vararg of T</a>
-<span class="sourceLineNo">347</span><a id="line.347">     * @param &lt;T&gt; just about any non-primitive, non-array type (arrays would cause confusion with the vararg method)</a>
-<span class="sourceLineNo">348</span><a id="line.348">     * @return a newly-allocated UnorderedSet containing only element</a>
-<span class="sourceLineNo">349</span><a id="line.349">     */</a>
-<span class="sourceLineNo">350</span><a id="line.350">    public static &lt;T&gt; UnorderedSet&lt;T&gt; makeUOS(T element) {</a>
-<span class="sourceLineNo">351</span><a id="line.351">        UnorderedSet&lt;T&gt; set = new UnorderedSet&lt;&gt;(1);</a>
-<span class="sourceLineNo">352</span><a id="line.352">        set.add(element);</a>
-<span class="sourceLineNo">353</span><a id="line.353">        return set;</a>
-<span class="sourceLineNo">354</span><a id="line.354">    }</a>
-<span class="sourceLineNo">355</span><a id="line.355"></a>
-<span class="sourceLineNo">356</span><a id="line.356">    /**</a>
-<span class="sourceLineNo">357</span><a id="line.357">     * Makes a EnumOrderedSet (OS) of the enum type T given at least one T element followed by an array or vararg of any</a>
-<span class="sourceLineNo">358</span><a id="line.358">     * number of additional T elements. Duplicate items in elements will have all but one item discarded, using the</a>
-<span class="sourceLineNo">359</span><a id="line.359">     * later item in elements. The order given here will be kept in the result, like in OrderedSet, and</a>
-<span class="sourceLineNo">360</span><a id="line.360">     * you can use {@link EnumOrderedSet#getAt(int)} to get a T value at a given index, like you would with a List.</a>
-<span class="sourceLineNo">361</span><a id="line.361">     * @param initial the first item to insert into the EnumOrderedSet; if initial is null, the method returns null</a>
-<span class="sourceLineNo">362</span><a id="line.362">     * @param elements an array or vararg of T; allowed to be empty</a>
-<span class="sourceLineNo">363</span><a id="line.363">     * @param &lt;T&gt; an enum type</a>
-<span class="sourceLineNo">364</span><a id="line.364">     * @return a newly-allocated OrderedSet containing all of the non-duplicate items in elements, in order</a>
-<span class="sourceLineNo">365</span><a id="line.365">     */</a>
-<span class="sourceLineNo">366</span><a id="line.366">    @SuppressWarnings("unchecked")</a>
-<span class="sourceLineNo">367</span><a id="line.367">    public static &lt;T extends Enum&lt;?&gt;&gt; EnumOrderedSet&lt;T&gt; makeEOS(T initial, T... elements)</a>
-<span class="sourceLineNo">368</span><a id="line.368">    {</a>
-<span class="sourceLineNo">369</span><a id="line.369">        if(initial == null) return null;</a>
-<span class="sourceLineNo">370</span><a id="line.370">        EnumOrderedSet&lt;T&gt; eos = new EnumOrderedSet&lt;&gt;(initial);</a>
-<span class="sourceLineNo">371</span><a id="line.371">        eos.add(initial);</a>
-<span class="sourceLineNo">372</span><a id="line.372">        if(elements != null)</a>
-<span class="sourceLineNo">373</span><a id="line.373">            eos.addAll(elements);</a>
-<span class="sourceLineNo">374</span><a id="line.374">        return eos;</a>
-<span class="sourceLineNo">375</span><a id="line.375">    }</a>
-<span class="sourceLineNo">376</span><a id="line.376"></a>
-<span class="sourceLineNo">377</span><a id="line.377">    /**</a>
-<span class="sourceLineNo">378</span><a id="line.378">     * Makes an empty EnumOrderedSet (EOS); needs item type to be specified in order to work. For an empty</a>
-<span class="sourceLineNo">379</span><a id="line.379">     * EnumOrderedSet with Radius items, you could use {@code Maker.&lt;Radius&gt;makeEOS()}. Using the new keyword is</a>
-<span class="sourceLineNo">380</span><a id="line.380">     * probably just as easy in this case; this method is provided for completeness relative to makeEOS() with 1 or more</a>
-<span class="sourceLineNo">381</span><a id="line.381">     * parameters.</a>
-<span class="sourceLineNo">382</span><a id="line.382">     * @param &lt;T&gt; the type of Enum keys in the returned EnumOrderedSet; cannot be inferred and must be specified</a>
-<span class="sourceLineNo">383</span><a id="line.383">     * @return an empty EnumOrderedSet with the given item type</a>
-<span class="sourceLineNo">384</span><a id="line.384">     */</a>
-<span class="sourceLineNo">385</span><a id="line.385">    public static &lt;T extends Enum&lt;T&gt;&gt; EnumOrderedSet&lt;T&gt; makeEOS() { return new EnumOrderedSet&lt;&gt;(); }</a>
-<span class="sourceLineNo">386</span><a id="line.386"></a>
-<span class="sourceLineNo">387</span><a id="line.387">    /**</a>
-<span class="sourceLineNo">388</span><a id="line.388">     * Makes a Arrangement (Arrange) of T given an array or vararg of T elements. Duplicate items in elements will have</a>
-<span class="sourceLineNo">389</span><a id="line.389">     * all but one item discarded, using the later item in elements. As is always the case with Arrangement, each item</a>
-<span class="sourceLineNo">390</span><a id="line.390">     * will be mapped bi-directionally to its index in the iteration order, and an item can be retrieved with</a>
-<span class="sourceLineNo">391</span><a id="line.391">     * {@link Arrangement#keyAt(int)} if you only know its index, or the int index for an item can be retrieved with</a>
-<span class="sourceLineNo">392</span><a id="line.392">     * {@link Arrangement#getInt(Object)} if you only have an item.</a>
-<span class="sourceLineNo">393</span><a id="line.393">     * @param elements an array or vararg of T</a>
-<span class="sourceLineNo">394</span><a id="line.394">     * @param &lt;T&gt; just about any non-primitive type</a>
-<span class="sourceLineNo">395</span><a id="line.395">     * @return a newly-allocated Arrangement containing all of the non-duplicate items in elements, in order</a>
-<span class="sourceLineNo">396</span><a id="line.396">     */</a>
-<span class="sourceLineNo">397</span><a id="line.397">    @SuppressWarnings("unchecked")</a>
-<span class="sourceLineNo">398</span><a id="line.398">    public static &lt;T&gt; Arrangement&lt;T&gt; makeArrange(T... elements) {</a>
-<span class="sourceLineNo">399</span><a id="line.399">        if(elements == null) return null;</a>
-<span class="sourceLineNo">400</span><a id="line.400">        return new Arrangement&lt;&gt;(elements);</a>
-<span class="sourceLineNo">401</span><a id="line.401">    }</a>
-<span class="sourceLineNo">402</span><a id="line.402">    /**</a>
-<span class="sourceLineNo">403</span><a id="line.403">     * Makes a K2 (two-key set/bimap) with A and B key types inferred from the types of a0 and b0, and considers all</a>
-<span class="sourceLineNo">404</span><a id="line.404">     * parameters A-B pairs, casting the Objects at positions 0, 2, 4... etc. to A and the objects at positions</a>
-<span class="sourceLineNo">405</span><a id="line.405">     * 1, 3, 5... etc. to B. If rest has an odd-number length, then it discards the last item. If any pair of items in</a>
-<span class="sourceLineNo">406</span><a id="line.406">     * rest cannot be cast to the correct type of A or B, then this inserts nothing for that pair and logs information</a>
-<span class="sourceLineNo">407</span><a id="line.407">     * on the problematic pair to the static Maker.issueLog field.</a>
-<span class="sourceLineNo">408</span><a id="line.408">     * @param a0 the first A key; used to infer the types of other keys if generic parameters aren't specified.</a>
-<span class="sourceLineNo">409</span><a id="line.409">     * @param b0 the first B key; used to infer the types of other values if generic parameters aren't specified.</a>
-<span class="sourceLineNo">410</span><a id="line.410">     * @param rest an array or vararg of keys and values in pairs; should contain alternating A, B, A, B... elements</a>
-<span class="sourceLineNo">411</span><a id="line.411">     * @param &lt;A&gt; a type of keys in the returned K2; if not specified, will be inferred from a0</a>
-<span class="sourceLineNo">412</span><a id="line.412">     * @param &lt;B&gt; a type of keys in the returned K2; if not specified, will be inferred from b0</a>
-<span class="sourceLineNo">413</span><a id="line.413">     * @return a freshly-made K2 with A and B keys, using a0, b0, and the contents of rest to fill it</a>
-<span class="sourceLineNo">414</span><a id="line.414">     */</a>
-<span class="sourceLineNo">415</span><a id="line.415">    public static &lt;A, B&gt; K2&lt;A, B&gt; makeK2(A a0, B b0, Object... rest)</a>
-<span class="sourceLineNo">416</span><a id="line.416">    {</a>
-<span class="sourceLineNo">417</span><a id="line.417">        return makeK2(0.625f, a0, b0, rest);</a>
-<span class="sourceLineNo">418</span><a id="line.418">    }</a>
-<span class="sourceLineNo">419</span><a id="line.419">    /**</a>
-<span class="sourceLineNo">420</span><a id="line.420">     * Makes a K2 (two-key set/bimap) with the given load factor (which should be between 0.1 and 0.9), A and B key</a>
-<span class="sourceLineNo">421</span><a id="line.421">     * types inferred from the types of a0 and b0, and considers all parameters A-B pairs, casting the Objects at</a>
-<span class="sourceLineNo">422</span><a id="line.422">     * positions 0, 2, 4... etc. to A and the objects at positions 1, 3, 5... etc. to B. If rest has an odd-number</a>
-<span class="sourceLineNo">423</span><a id="line.423">     * length, then it discards the last item. If any pair of items in rest cannot be cast to the correct type of A or</a>
-<span class="sourceLineNo">424</span><a id="line.424">     * B, then this inserts nothing for that pair and logs information on the problematic pair to the static</a>
-<span class="sourceLineNo">425</span><a id="line.425">     * Maker.issueLog field.</a>
-<span class="sourceLineNo">426</span><a id="line.426">     * @param factor the load factor; should be between 0.1 and 0.9, and 0.75f is a safe choice</a>
-<span class="sourceLineNo">427</span><a id="line.427">     * @param a0 the first A key; used to infer the types of other keys if generic parameters aren't specified.</a>
-<span class="sourceLineNo">428</span><a id="line.428">     * @param b0 the first B key; used to infer the types of other values if generic parameters aren't specified.</a>
-<span class="sourceLineNo">429</span><a id="line.429">     * @param rest an array or vararg of keys and values in pairs; should contain alternating A, B, A, B... elements</a>
-<span class="sourceLineNo">430</span><a id="line.430">     * @param &lt;A&gt; a type of keys in the returned K2; if not specified, will be inferred from a0</a>
-<span class="sourceLineNo">431</span><a id="line.431">     * @param &lt;B&gt; a type of keys in the returned K2; if not specified, will be inferred from b0</a>
-<span class="sourceLineNo">432</span><a id="line.432">     * @return a freshly-made K2 with A and B keys, using a0, b0, and the contents of rest to fill it</a>
-<span class="sourceLineNo">433</span><a id="line.433">     */</a>
-<span class="sourceLineNo">434</span><a id="line.434">    @SuppressWarnings("unchecked")</a>
-<span class="sourceLineNo">435</span><a id="line.435">    public static &lt;A, B&gt; K2&lt;A, B&gt; makeK2(float factor, A a0, B b0, Object... rest)</a>
-<span class="sourceLineNo">436</span><a id="line.436">    {</a>
-<span class="sourceLineNo">437</span><a id="line.437">        if(rest == null || rest.length == 0)</a>
-<span class="sourceLineNo">438</span><a id="line.438">        {</a>
-<span class="sourceLineNo">439</span><a id="line.439">            K2&lt;A, B&gt; k2 = new K2&lt;&gt;(2, factor);</a>
-<span class="sourceLineNo">440</span><a id="line.440">            k2.put(a0, b0);</a>
-<span class="sourceLineNo">441</span><a id="line.441">            return k2;</a>
-<span class="sourceLineNo">442</span><a id="line.442">        }</a>
-<span class="sourceLineNo">443</span><a id="line.443">        K2&lt;A, B&gt; k2 = new K2&lt;&gt;(1 + (rest.length &gt;&gt; 1), factor);</a>
-<span class="sourceLineNo">444</span><a id="line.444">        k2.put(a0, b0);</a>
-<span class="sourceLineNo">445</span><a id="line.445"></a>
-<span class="sourceLineNo">446</span><a id="line.446">        for (int i = 0; i &lt; rest.length - 1; i+=2) {</a>
-<span class="sourceLineNo">447</span><a id="line.447">            try {</a>
-<span class="sourceLineNo">448</span><a id="line.448">                k2.put((A) rest[i], (B) rest[i + 1]);</a>
-<span class="sourceLineNo">449</span><a id="line.449">            }catch (ClassCastException cce) {</a>
-<span class="sourceLineNo">450</span><a id="line.450">                issueLog.append("makeK2 call had a casting problem with pair at rest[")</a>
-<span class="sourceLineNo">451</span><a id="line.451">                          .append(i)</a>
-<span class="sourceLineNo">452</span><a id="line.452">                          .append("] and/or rest[")</a>
-<span class="sourceLineNo">453</span><a id="line.453">                          .append(i + 1)</a>
-<span class="sourceLineNo">454</span><a id="line.454">                          .append("], with contents: ")</a>
-<span class="sourceLineNo">455</span><a id="line.455">                          .append(rest[i])</a>
-<span class="sourceLineNo">456</span><a id="line.456">                          .append(", ")</a>
-<span class="sourceLineNo">457</span><a id="line.457">                          .append(rest[i+1])</a>
-<span class="sourceLineNo">458</span><a id="line.458">                          .append(".\n\nException messages:\n")</a>
-<span class="sourceLineNo">459</span><a id="line.459">                          .append(cce);</a>
-<span class="sourceLineNo">460</span><a id="line.460">                String msg = cce.getMessage();</a>
-<span class="sourceLineNo">461</span><a id="line.461">                if (msg != null) {</a>
-<span class="sourceLineNo">462</span><a id="line.462">                    issueLog.append('\n').append(msg);</a>
-<span class="sourceLineNo">463</span><a id="line.463">                }</a>
-<span class="sourceLineNo">464</span><a id="line.464">                issueLog.append('\n');</a>
-<span class="sourceLineNo">465</span><a id="line.465">            }</a>
-<span class="sourceLineNo">466</span><a id="line.466">        }</a>
-<span class="sourceLineNo">467</span><a id="line.467">        return k2;</a>
-<span class="sourceLineNo">468</span><a id="line.468">    }</a>
-<span class="sourceLineNo">469</span><a id="line.469"></a>
-<span class="sourceLineNo">470</span><a id="line.470">    /**</a>
-<span class="sourceLineNo">471</span><a id="line.471">     * Makes an empty K2 (two-key set/bimap); needs A and B key types to be specified in order to work. For an empty</a>
-<span class="sourceLineNo">472</span><a id="line.472">     * K2 with String A keys Coord B keys, you could use {@code Maker.&lt;String, Coord&gt;makeK2();}. Using</a>
-<span class="sourceLineNo">473</span><a id="line.473">     * the new keyword is probably just as easy in this case; this method is provided for completeness relative to</a>
-<span class="sourceLineNo">474</span><a id="line.474">     * makeK2() with 2 or more parameters.</a>
-<span class="sourceLineNo">475</span><a id="line.475">     * @param &lt;A&gt; the type of "A" keys in the returned K2; cannot be inferred and must be specified</a>
-<span class="sourceLineNo">476</span><a id="line.476">     * @param &lt;B&gt; the type of "B" keys in the returned K2; cannot be inferred and must be specified</a>
-<span class="sourceLineNo">477</span><a id="line.477">     * @return an empty K2 with the given key and value types.</a>
-<span class="sourceLineNo">478</span><a id="line.478">     */</a>
-<span class="sourceLineNo">479</span><a id="line.479">    public static &lt;A, B&gt; K2&lt;A, B&gt; makeK2()</a>
-<span class="sourceLineNo">480</span><a id="line.480">    {</a>
-<span class="sourceLineNo">481</span><a id="line.481">        return new K2&lt;&gt;();</a>
-<span class="sourceLineNo">482</span><a id="line.482">    }</a>
-<span class="sourceLineNo">483</span><a id="line.483">    /**</a>
-<span class="sourceLineNo">484</span><a id="line.484">     * Makes an EnumOrderedMap (EOM) with key and value types inferred from the types of k0 and v0, and considers all</a>
-<span class="sourceLineNo">485</span><a id="line.485">     * remaining parameters key-value pairs, casting the Objects at positions 0, 2, 4... etc. to K and the objects at</a>
-<span class="sourceLineNo">486</span><a id="line.486">     * positions 1, 3, 5... etc. to V. If rest has an odd-number length, then it discards the last item. If any pair of</a>
-<span class="sourceLineNo">487</span><a id="line.487">     * items in rest cannot be cast to the correct type of K or V, then this inserts nothing for that pair and logs</a>
-<span class="sourceLineNo">488</span><a id="line.488">     * information on the problematic pair to the static Maker.issueLog field. The order given here will be kept in the</a>
-<span class="sourceLineNo">489</span><a id="line.489">     * result, unlike in the JDK's EnumMap class, and you can use {@link EnumOrderedMap#keyAt(int)} or</a>
-<span class="sourceLineNo">490</span><a id="line.490">     * {@link EnumOrderedMap#getAt(int)} to get a key or value at a given index, like you would with a List.</a>
-<span class="sourceLineNo">491</span><a id="line.491">     *</a>
-<span class="sourceLineNo">492</span><a id="line.492">     * @param k0 the first key, which must be an Enum; used to infer the types of other keys if generic parameters aren't specified.</a>
-<span class="sourceLineNo">493</span><a id="line.493">     * @param v0 the first value; used to infer the types of other values if generic parameters aren't specified.</a>
-<span class="sourceLineNo">494</span><a id="line.494">     * @param rest an array or vararg of keys and values in pairs; should contain alternating K, V, K, V... elements</a>
-<span class="sourceLineNo">495</span><a id="line.495">     * @param &lt;K&gt; the type of Enum keys in the returned EnumOrderedMap; if not specified, will be inferred from k0</a>
-<span class="sourceLineNo">496</span><a id="line.496">     * @param &lt;V&gt; the type of values in the returned EnumOrderedMap; if not specified, will be inferred from v0</a>
-<span class="sourceLineNo">497</span><a id="line.497">     * @return a freshly-made EnumOrderedMap with K keys and V values, using k0, v0, and the contents of rest to fill it</a>
-<span class="sourceLineNo">498</span><a id="line.498">     */</a>
-<span class="sourceLineNo">499</span><a id="line.499">    @SuppressWarnings("unchecked")</a>
-<span class="sourceLineNo">500</span><a id="line.500">    public static &lt;K extends Enum&lt;?&gt;, V&gt; EnumOrderedMap&lt;K, V&gt; makeEOM(K k0, V v0, Object... rest)</a>
-<span class="sourceLineNo">501</span><a id="line.501">    {</a>
-<span class="sourceLineNo">502</span><a id="line.502">        if(rest == null || rest.length == 0)</a>
-<span class="sourceLineNo">503</span><a id="line.503">        {</a>
-<span class="sourceLineNo">504</span><a id="line.504">            EnumOrderedMap&lt;K, V&gt; eom = new EnumOrderedMap&lt;&gt;();</a>
-<span class="sourceLineNo">505</span><a id="line.505">            eom.put(k0, v0);</a>
-<span class="sourceLineNo">506</span><a id="line.506">            return eom;</a>
-<span class="sourceLineNo">507</span><a id="line.507">        }</a>
-<span class="sourceLineNo">508</span><a id="line.508">        EnumOrderedMap&lt;K, V&gt; eom = new EnumOrderedMap&lt;&gt;(k0);</a>
-<span class="sourceLineNo">509</span><a id="line.509">        eom.put(k0, v0);</a>
-<span class="sourceLineNo">510</span><a id="line.510"></a>
-<span class="sourceLineNo">511</span><a id="line.511">        for (int i = 0; i &lt; rest.length - 1; i+=2) {</a>
-<span class="sourceLineNo">512</span><a id="line.512">            try {</a>
-<span class="sourceLineNo">513</span><a id="line.513">                eom.put((K) rest[i], (V) rest[i + 1]);</a>
-<span class="sourceLineNo">514</span><a id="line.514">            }catch (ClassCastException cce) {</a>
-<span class="sourceLineNo">515</span><a id="line.515">                issueLog.append("makeEOM call had a casting problem with pair at rest[")</a>
-<span class="sourceLineNo">516</span><a id="line.516">                          .append(i)</a>
-<span class="sourceLineNo">517</span><a id="line.517">                          .append("] and/or rest[")</a>
-<span class="sourceLineNo">518</span><a id="line.518">                          .append(i + 1)</a>
-<span class="sourceLineNo">519</span><a id="line.519">                          .append("], with contents: ")</a>
-<span class="sourceLineNo">520</span><a id="line.520">                          .append(rest[i])</a>
-<span class="sourceLineNo">521</span><a id="line.521">                          .append(", ")</a>
-<span class="sourceLineNo">522</span><a id="line.522">                          .append(rest[i+1])</a>
-<span class="sourceLineNo">523</span><a id="line.523">                          .append(".\n\nException messages:\n")</a>
-<span class="sourceLineNo">524</span><a id="line.524">                          .append(cce);</a>
-<span class="sourceLineNo">525</span><a id="line.525">                String msg = cce.getMessage();</a>
-<span class="sourceLineNo">526</span><a id="line.526">                if (msg != null) {</a>
-<span class="sourceLineNo">527</span><a id="line.527">                    issueLog.append('\n').append(msg);</a>
-<span class="sourceLineNo">528</span><a id="line.528">                }</a>
-<span class="sourceLineNo">529</span><a id="line.529">                issueLog.append('\n');</a>
-<span class="sourceLineNo">530</span><a id="line.530">            }</a>
-<span class="sourceLineNo">531</span><a id="line.531">        }</a>
-<span class="sourceLineNo">532</span><a id="line.532">        return eom;</a>
-<span class="sourceLineNo">533</span><a id="line.533">    }</a>
-<span class="sourceLineNo">534</span><a id="line.534"></a>
-<span class="sourceLineNo">535</span><a id="line.535">    /**</a>
-<span class="sourceLineNo">536</span><a id="line.536">     * Makes an empty EnumOrderedMap (EOM); needs key and value types to be specified in order to work. For an empty</a>
-<span class="sourceLineNo">537</span><a id="line.537">     * EnumOrderedMap with Radius keys and Coord values, you could use {@code Maker.&lt;Radius, Coord&gt;makeEOM()}. Using</a>
-<span class="sourceLineNo">538</span><a id="line.538">     * the new keyword is probably just as easy in this case; this method is provided for completeness relative to</a>
-<span class="sourceLineNo">539</span><a id="line.539">     * makeEOM() with 2 or more parameters.</a>
-<span class="sourceLineNo">540</span><a id="line.540">     * @param &lt;K&gt; the type of Enum keys in the returned EnumOrderedMap; cannot be inferred and must be specified</a>
-<span class="sourceLineNo">541</span><a id="line.541">     * @param &lt;V&gt; the type of values in the returned EnumOrderedMap; cannot be inferred and must be specified</a>
-<span class="sourceLineNo">542</span><a id="line.542">     * @return an empty EnumOrderedMap with the given key and value types.</a>
-<span class="sourceLineNo">543</span><a id="line.543">     */</a>
-<span class="sourceLineNo">544</span><a id="line.544">    public static &lt;K extends Enum&lt;K&gt;, V&gt; EnumOrderedMap&lt;K, V&gt; makeEOM() { return new EnumOrderedMap&lt;&gt;(); }</a>
-<span class="sourceLineNo">545</span><a id="line.545"></a>
-<span class="sourceLineNo">546</span><a id="line.546">}</a>
+<div class="source-container">
+<pre><span class="source-line-no">001</span><span id="line.1">package squidpony;</span>
+<span class="source-line-no">002</span><span id="line.2"></span>
+<span class="source-line-no">003</span><span id="line.3">import squidpony.squidmath.*;</span>
+<span class="source-line-no">004</span><span id="line.4"></span>
+<span class="source-line-no">005</span><span id="line.5">import java.util.*;</span>
+<span class="source-line-no">006</span><span id="line.6"></span>
+<span class="source-line-no">007</span><span id="line.7">/**</span>
+<span class="source-line-no">008</span><span id="line.8"> * Utility methods for more easily constructing data structures, particularly those in Java's standard library.</span>
+<span class="source-line-no">009</span><span id="line.9"> * All static methods and inner classes; meant to be imported with {@code import static squidpony.Maker.*}.</span>
+<span class="source-line-no">010</span><span id="line.10"> * Created by Tommy Ettinger on 5/19/2016.</span>
+<span class="source-line-no">011</span><span id="line.11"> */</span>
+<span class="source-line-no">012</span><span id="line.12">public class Maker {</span>
+<span class="source-line-no">013</span><span id="line.13"></span>
+<span class="source-line-no">014</span><span id="line.14">    /**</span>
+<span class="source-line-no">015</span><span id="line.15">     * Stores any information relating to non-fatal issues, such as caught and handled Exceptions that still change the</span>
+<span class="source-line-no">016</span><span id="line.16">     * behavior of methods. Typically shouldn't be cleared while debugging, since it could be useful later on, and</span>
+<span class="source-line-no">017</span><span id="line.17">     * hopefully won't need to be written to in a release build.</span>
+<span class="source-line-no">018</span><span id="line.18">     */</span>
+<span class="source-line-no">019</span><span id="line.19">    public static final StringBuilder issueLog = new StringBuilder(1024);</span>
+<span class="source-line-no">020</span><span id="line.20">    /**</span>
+<span class="source-line-no">021</span><span id="line.21">     * Makes a LinkedHashMap (LHM) with key and value types inferred from the types of k0 and v0, and considers all</span>
+<span class="source-line-no">022</span><span id="line.22">     * parameters key-value pairs, casting the Objects at positions 0, 2, 4... etc. to K and the objects at positions</span>
+<span class="source-line-no">023</span><span id="line.23">     * 1, 3, 5... etc. to V. If rest has an odd-number length, then it discards the last item. If any pair of items in</span>
+<span class="source-line-no">024</span><span id="line.24">     * rest cannot be cast to the correct type of K or V, then this inserts nothing for that pair and logs information</span>
+<span class="source-line-no">025</span><span id="line.25">     * on the problematic pair to the static Maker.issueLog field.</span>
+<span class="source-line-no">026</span><span id="line.26">     * @param k0 the first key; used to infer the types of other keys if generic parameters aren't specified.</span>
+<span class="source-line-no">027</span><span id="line.27">     * @param v0 the first value; used to infer the types of other values if generic parameters aren't specified.</span>
+<span class="source-line-no">028</span><span id="line.28">     * @param rest an array or vararg of keys and values in pairs; should contain alternating K, V, K, V... elements</span>
+<span class="source-line-no">029</span><span id="line.29">     * @param &lt;K&gt; the type of keys in the returned LinkedHashMap; if not specified, will be inferred from k0</span>
+<span class="source-line-no">030</span><span id="line.30">     * @param &lt;V&gt; the type of values in the returned LinkedHashMap; if not specified, will be inferred from v0</span>
+<span class="source-line-no">031</span><span id="line.31">     * @return a freshly-made LinkedHashMap with K keys and V values, using k0, v0, and the contents of rest to fill it</span>
+<span class="source-line-no">032</span><span id="line.32">     */</span>
+<span class="source-line-no">033</span><span id="line.33">    @SuppressWarnings("unchecked")</span>
+<span class="source-line-no">034</span><span id="line.34">    public static &lt;K, V&gt; LinkedHashMap&lt;K, V&gt; makeLHM(K k0, V v0, Object... rest)</span>
+<span class="source-line-no">035</span><span id="line.35">    {</span>
+<span class="source-line-no">036</span><span id="line.36">        if(rest == null || rest.length == 0)</span>
+<span class="source-line-no">037</span><span id="line.37">        {</span>
+<span class="source-line-no">038</span><span id="line.38">            LinkedHashMap&lt;K, V&gt; lhm = new LinkedHashMap&lt;&gt;(2);</span>
+<span class="source-line-no">039</span><span id="line.39">            lhm.put(k0, v0);</span>
+<span class="source-line-no">040</span><span id="line.40">            return lhm;</span>
+<span class="source-line-no">041</span><span id="line.41">        }</span>
+<span class="source-line-no">042</span><span id="line.42">        LinkedHashMap&lt;K, V&gt; lhm = new LinkedHashMap&lt;&gt;(1 + (rest.length / 2));</span>
+<span class="source-line-no">043</span><span id="line.43">        lhm.put(k0, v0);</span>
+<span class="source-line-no">044</span><span id="line.44"></span>
+<span class="source-line-no">045</span><span id="line.45">        for (int i = 0; i &lt; rest.length - 1; i+=2) {</span>
+<span class="source-line-no">046</span><span id="line.46">            try {</span>
+<span class="source-line-no">047</span><span id="line.47">                lhm.put((K) rest[i], (V) rest[i + 1]);</span>
+<span class="source-line-no">048</span><span id="line.48">            }catch (ClassCastException cce) {</span>
+<span class="source-line-no">049</span><span id="line.49">                issueLog.append("makeLHM call had a casting problem with pair at rest[")</span>
+<span class="source-line-no">050</span><span id="line.50">                        .append(i)</span>
+<span class="source-line-no">051</span><span id="line.51">                        .append("] and/or rest[")</span>
+<span class="source-line-no">052</span><span id="line.52">                        .append(i + 1)</span>
+<span class="source-line-no">053</span><span id="line.53">                        .append("], with contents: ")</span>
+<span class="source-line-no">054</span><span id="line.54">                        .append(rest[i])</span>
+<span class="source-line-no">055</span><span id="line.55">                        .append(", ")</span>
+<span class="source-line-no">056</span><span id="line.56">                        .append(rest[i + 1])</span>
+<span class="source-line-no">057</span><span id="line.57">                        .append(".\n\nException messages:\n")</span>
+<span class="source-line-no">058</span><span id="line.58">                        .append(cce);</span>
+<span class="source-line-no">059</span><span id="line.59">                String msg = cce.getMessage();</span>
+<span class="source-line-no">060</span><span id="line.60">                if (msg != null) {</span>
+<span class="source-line-no">061</span><span id="line.61">                    issueLog.append('\n').append(msg);</span>
+<span class="source-line-no">062</span><span id="line.62">                }</span>
+<span class="source-line-no">063</span><span id="line.63">                issueLog.append('\n');</span>
+<span class="source-line-no">064</span><span id="line.64">            }</span>
+<span class="source-line-no">065</span><span id="line.65">        }</span>
+<span class="source-line-no">066</span><span id="line.66">        return lhm;</span>
+<span class="source-line-no">067</span><span id="line.67">    }</span>
+<span class="source-line-no">068</span><span id="line.68"></span>
+<span class="source-line-no">069</span><span id="line.69">    /**</span>
+<span class="source-line-no">070</span><span id="line.70">     * Makes an empty LinkedHashMap (LHM); needs key and value types to be specified in order to work. For an empty</span>
+<span class="source-line-no">071</span><span id="line.71">     * LinkedHashMap with String keys and Coord values, you could use {@code Maker.&lt;String, Coord&gt;makeLHM();}. Using</span>
+<span class="source-line-no">072</span><span id="line.72">     * the new keyword is probably just as easy in this case; this method is provided for completeness relative to</span>
+<span class="source-line-no">073</span><span id="line.73">     * makeLHM() with 2 or more parameters.</span>
+<span class="source-line-no">074</span><span id="line.74">     * @param &lt;K&gt; the type of keys in the returned LinkedHashMap; cannot be inferred and must be specified</span>
+<span class="source-line-no">075</span><span id="line.75">     * @param &lt;V&gt; the type of values in the returned LinkedHashMap; cannot be inferred and must be specified</span>
+<span class="source-line-no">076</span><span id="line.76">     * @return an empty LinkedHashMap with the given key and value types.</span>
+<span class="source-line-no">077</span><span id="line.77">     */</span>
+<span class="source-line-no">078</span><span id="line.78">    public static &lt;K, V&gt; LinkedHashMap&lt;K, V&gt; makeLHM()</span>
+<span class="source-line-no">079</span><span id="line.79">    {</span>
+<span class="source-line-no">080</span><span id="line.80">        return new LinkedHashMap&lt;&gt;();</span>
+<span class="source-line-no">081</span><span id="line.81">    }</span>
+<span class="source-line-no">082</span><span id="line.82">    /**</span>
+<span class="source-line-no">083</span><span id="line.83">     * Makes a HashMap (HM) with key and value types inferred from the types of k0 and v0, and considers all</span>
+<span class="source-line-no">084</span><span id="line.84">     * parameters key-value pairs, casting the Objects at positions 0, 2, 4... etc. to K and the objects at positions</span>
+<span class="source-line-no">085</span><span id="line.85">     * 1, 3, 5... etc. to V. If rest has an odd-number length, then it discards the last item. If any pair of items in</span>
+<span class="source-line-no">086</span><span id="line.86">     * rest cannot be cast to the correct type of K or V, then this inserts nothing for that pair and logs information</span>
+<span class="source-line-no">087</span><span id="line.87">     * on the problematic pair to the static Maker.issueLog field.</span>
+<span class="source-line-no">088</span><span id="line.88">     * @param k0 the first key; used to infer the types of other keys if generic parameters aren't specified.</span>
+<span class="source-line-no">089</span><span id="line.89">     * @param v0 the first value; used to infer the types of other values if generic parameters aren't specified.</span>
+<span class="source-line-no">090</span><span id="line.90">     * @param rest an array or vararg of keys and values in pairs; should contain alternating K, V, K, V... elements</span>
+<span class="source-line-no">091</span><span id="line.91">     * @param &lt;K&gt; the type of keys in the returned HashMap; if not specified, will be inferred from k0</span>
+<span class="source-line-no">092</span><span id="line.92">     * @param &lt;V&gt; the type of values in the returned HashMap; if not specified, will be inferred from v0</span>
+<span class="source-line-no">093</span><span id="line.93">     * @return a freshly-made HashMap with K keys and V values, using k0, v0, and the contents of rest to fill it</span>
+<span class="source-line-no">094</span><span id="line.94">     */</span>
+<span class="source-line-no">095</span><span id="line.95">    @SuppressWarnings("unchecked")</span>
+<span class="source-line-no">096</span><span id="line.96">    public static &lt;K, V&gt; HashMap&lt;K, V&gt; makeHM(K k0, V v0, Object... rest)</span>
+<span class="source-line-no">097</span><span id="line.97">    {</span>
+<span class="source-line-no">098</span><span id="line.98">        if(rest == null || rest.length == 0)</span>
+<span class="source-line-no">099</span><span id="line.99">        {</span>
+<span class="source-line-no">100</span><span id="line.100">            HashMap&lt;K, V&gt; hm = new HashMap&lt;&gt;(2);</span>
+<span class="source-line-no">101</span><span id="line.101">            hm.put(k0, v0);</span>
+<span class="source-line-no">102</span><span id="line.102">            return hm;</span>
+<span class="source-line-no">103</span><span id="line.103">        }</span>
+<span class="source-line-no">104</span><span id="line.104">        HashMap&lt;K, V&gt; hm = new HashMap&lt;&gt;(1 + (rest.length / 2));</span>
+<span class="source-line-no">105</span><span id="line.105">        hm.put(k0, v0);</span>
+<span class="source-line-no">106</span><span id="line.106"></span>
+<span class="source-line-no">107</span><span id="line.107">        for (int i = 0; i &lt; rest.length - 1; i+=2) {</span>
+<span class="source-line-no">108</span><span id="line.108">            try {</span>
+<span class="source-line-no">109</span><span id="line.109">                hm.put((K) rest[i], (V) rest[i + 1]);</span>
+<span class="source-line-no">110</span><span id="line.110">            }catch (ClassCastException cce) {</span>
+<span class="source-line-no">111</span><span id="line.111">                issueLog.append("makeHM call had a casting problem with pair at rest[")</span>
+<span class="source-line-no">112</span><span id="line.112">                        .append(i).append("] and/or rest[")</span>
+<span class="source-line-no">113</span><span id="line.113">                        .append(i + 1).append("], with contents: ")</span>
+<span class="source-line-no">114</span><span id="line.114">                        .append(rest[i]).append(", ")</span>
+<span class="source-line-no">115</span><span id="line.115">                        .append(rest[i + 1]).append(".\n\nException messages:\n")</span>
+<span class="source-line-no">116</span><span id="line.116">                        .append(cce);</span>
+<span class="source-line-no">117</span><span id="line.117">                String msg = cce.getMessage();</span>
+<span class="source-line-no">118</span><span id="line.118">                if (msg != null) {</span>
+<span class="source-line-no">119</span><span id="line.119">                    issueLog.append('\n').append(msg);</span>
+<span class="source-line-no">120</span><span id="line.120">                }</span>
+<span class="source-line-no">121</span><span id="line.121">                issueLog.append('\n');</span>
+<span class="source-line-no">122</span><span id="line.122">            }</span>
+<span class="source-line-no">123</span><span id="line.123">        }</span>
+<span class="source-line-no">124</span><span id="line.124">        return hm;</span>
+<span class="source-line-no">125</span><span id="line.125">    }</span>
+<span class="source-line-no">126</span><span id="line.126"></span>
+<span class="source-line-no">127</span><span id="line.127">    /**</span>
+<span class="source-line-no">128</span><span id="line.128">     * Makes an empty HashMap (HM); needs key and value types to be specified in order to work. For an empty</span>
+<span class="source-line-no">129</span><span id="line.129">     * HashMap with String keys and Coord values, you could use {@code Maker.&lt;String, Coord&gt;makeHM();}. Using</span>
+<span class="source-line-no">130</span><span id="line.130">     * the new keyword is probably just as easy in this case; this method is provided for completeness relative to</span>
+<span class="source-line-no">131</span><span id="line.131">     * makeHM() with 2 or more parameters.</span>
+<span class="source-line-no">132</span><span id="line.132">     * @param &lt;K&gt; the type of keys in the returned HashMap; cannot be inferred and must be specified</span>
+<span class="source-line-no">133</span><span id="line.133">     * @param &lt;V&gt; the type of values in the returned HashMap; cannot be inferred and must be specified</span>
+<span class="source-line-no">134</span><span id="line.134">     * @return an empty HashMap with the given key and value types.</span>
+<span class="source-line-no">135</span><span id="line.135">     */</span>
+<span class="source-line-no">136</span><span id="line.136">    public static &lt;K, V&gt; HashMap&lt;K, V&gt; makeHM()</span>
+<span class="source-line-no">137</span><span id="line.137">    {</span>
+<span class="source-line-no">138</span><span id="line.138">        return new HashMap&lt;&gt;();</span>
+<span class="source-line-no">139</span><span id="line.139">    }</span>
+<span class="source-line-no">140</span><span id="line.140"></span>
+<span class="source-line-no">141</span><span id="line.141">    /**</span>
+<span class="source-line-no">142</span><span id="line.142">     * Makes an ArrayList of T given an array or vararg of T elements.</span>
+<span class="source-line-no">143</span><span id="line.143">     * @param elements an array or vararg of T</span>
+<span class="source-line-no">144</span><span id="line.144">     * @param &lt;T&gt; just about any non-primitive type</span>
+<span class="source-line-no">145</span><span id="line.145">     * @return a newly-allocated ArrayList containing all of elements, in order</span>
+<span class="source-line-no">146</span><span id="line.146">     */</span>
+<span class="source-line-no">147</span><span id="line.147">    @SuppressWarnings("unchecked")</span>
+<span class="source-line-no">148</span><span id="line.148">    public static &lt;T&gt; ArrayList&lt;T&gt; makeList(T... elements) {</span>
+<span class="source-line-no">149</span><span id="line.149">        if(elements == null) return null;</span>
+<span class="source-line-no">150</span><span id="line.150">        ArrayList&lt;T&gt; list = new ArrayList&lt;&gt;(elements.length);</span>
+<span class="source-line-no">151</span><span id="line.151">        Collections.addAll(list, elements);</span>
+<span class="source-line-no">152</span><span id="line.152">        return list;</span>
+<span class="source-line-no">153</span><span id="line.153">    }</span>
+<span class="source-line-no">154</span><span id="line.154"></span>
+<span class="source-line-no">155</span><span id="line.155">    /**</span>
+<span class="source-line-no">156</span><span id="line.156">     * Makes an ArrayList of T given a single T element; avoids creating an array for varargs as</span>
+<span class="source-line-no">157</span><span id="line.157">     * {@link #makeList(Object[])} would do, but only allows one item.</span>
+<span class="source-line-no">158</span><span id="line.158">     * @param element an array or vararg of T</span>
+<span class="source-line-no">159</span><span id="line.159">     * @param &lt;T&gt; just about any non-primitive, non-array type (arrays would cause confusion with the vararg method)</span>
+<span class="source-line-no">160</span><span id="line.160">     * @return a newly-allocated ArrayList containing only element</span>
+<span class="source-line-no">161</span><span id="line.161">     */</span>
+<span class="source-line-no">162</span><span id="line.162">    public static &lt;T&gt; ArrayList&lt;T&gt; makeList(T element) {</span>
+<span class="source-line-no">163</span><span id="line.163">        ArrayList&lt;T&gt; list = new ArrayList&lt;&gt;(1);</span>
+<span class="source-line-no">164</span><span id="line.164">        list.add(element);</span>
+<span class="source-line-no">165</span><span id="line.165">        return list;</span>
+<span class="source-line-no">166</span><span id="line.166">    }</span>
+<span class="source-line-no">167</span><span id="line.167"></span>
+<span class="source-line-no">168</span><span id="line.168">    /**</span>
+<span class="source-line-no">169</span><span id="line.169">     * Makes a LinkedHashSet (LHS) of T given an array or vararg of T elements. Duplicate items in elements will have</span>
+<span class="source-line-no">170</span><span id="line.170">     * all but one item discarded, using the later item in elements.</span>
+<span class="source-line-no">171</span><span id="line.171">     * @param elements an array or vararg of T</span>
+<span class="source-line-no">172</span><span id="line.172">     * @param &lt;T&gt; just about any non-primitive type</span>
+<span class="source-line-no">173</span><span id="line.173">     * @return a newly-allocated LinkedHashSet containing all of the non-duplicate items in elements, in order</span>
+<span class="source-line-no">174</span><span id="line.174">     */</span>
+<span class="source-line-no">175</span><span id="line.175">    @SuppressWarnings("unchecked")</span>
+<span class="source-line-no">176</span><span id="line.176">    public static &lt;T&gt; LinkedHashSet&lt;T&gt; makeLHS(T... elements) {</span>
+<span class="source-line-no">177</span><span id="line.177">        if(elements == null) return null;</span>
+<span class="source-line-no">178</span><span id="line.178">        LinkedHashSet&lt;T&gt; set = new LinkedHashSet&lt;&gt;(elements.length);</span>
+<span class="source-line-no">179</span><span id="line.179">        Collections.addAll(set, elements);</span>
+<span class="source-line-no">180</span><span id="line.180">        return set;</span>
+<span class="source-line-no">181</span><span id="line.181">    }</span>
+<span class="source-line-no">182</span><span id="line.182"></span>
+<span class="source-line-no">183</span><span id="line.183">    /**</span>
+<span class="source-line-no">184</span><span id="line.184">     * Makes a LinkedHashSet (LHS) of T given a single T element.</span>
+<span class="source-line-no">185</span><span id="line.185">     * @param element a single T</span>
+<span class="source-line-no">186</span><span id="line.186">     * @param &lt;T&gt; just about any non-primitive type</span>
+<span class="source-line-no">187</span><span id="line.187">     * @return a newly-allocated LinkedHashSet containing only {@code element}</span>
+<span class="source-line-no">188</span><span id="line.188">     */</span>
+<span class="source-line-no">189</span><span id="line.189">    public static &lt;T&gt; LinkedHashSet&lt;T&gt; makeLHS(T element) {</span>
+<span class="source-line-no">190</span><span id="line.190">        LinkedHashSet&lt;T&gt; set = new LinkedHashSet&lt;T&gt;(1);</span>
+<span class="source-line-no">191</span><span id="line.191">        set.add(element);</span>
+<span class="source-line-no">192</span><span id="line.192">        return set;</span>
+<span class="source-line-no">193</span><span id="line.193">    }</span>
+<span class="source-line-no">194</span><span id="line.194"></span>
+<span class="source-line-no">195</span><span id="line.195">    /**</span>
+<span class="source-line-no">196</span><span id="line.196">     * Makes a HashSet (HS) of T given an array or vararg of T elements. Duplicate items in elements will have</span>
+<span class="source-line-no">197</span><span id="line.197">     * all but one item discarded, using the later item in elements.</span>
+<span class="source-line-no">198</span><span id="line.198">     * @param elements an array or vararg of T</span>
+<span class="source-line-no">199</span><span id="line.199">     * @param &lt;T&gt; just about any non-primitive type</span>
+<span class="source-line-no">200</span><span id="line.200">     * @return a newly-allocated HashSet containing all of the non-duplicate items in elements, in order</span>
+<span class="source-line-no">201</span><span id="line.201">     */</span>
+<span class="source-line-no">202</span><span id="line.202">    @SuppressWarnings("unchecked")</span>
+<span class="source-line-no">203</span><span id="line.203">    public static &lt;T&gt; HashSet&lt;T&gt; makeHS(T... elements) {</span>
+<span class="source-line-no">204</span><span id="line.204">        if(elements == null) return null;</span>
+<span class="source-line-no">205</span><span id="line.205">        HashSet&lt;T&gt; set = new HashSet&lt;&gt;(elements.length);</span>
+<span class="source-line-no">206</span><span id="line.206">        Collections.addAll(set, elements);</span>
+<span class="source-line-no">207</span><span id="line.207">        return set;</span>
+<span class="source-line-no">208</span><span id="line.208">    }</span>
+<span class="source-line-no">209</span><span id="line.209"></span>
+<span class="source-line-no">210</span><span id="line.210">    /**</span>
+<span class="source-line-no">211</span><span id="line.211">     * Makes a HashSet (HS) of T given a single T element.</span>
+<span class="source-line-no">212</span><span id="line.212">     * @param element a single T</span>
+<span class="source-line-no">213</span><span id="line.213">     * @param &lt;T&gt; just about any non-primitive type</span>
+<span class="source-line-no">214</span><span id="line.214">     * @return a newly-allocated HashSet containing only {@code element}</span>
+<span class="source-line-no">215</span><span id="line.215">     */</span>
+<span class="source-line-no">216</span><span id="line.216">    public static &lt;T&gt; HashSet&lt;T&gt; makeHS(T element) {</span>
+<span class="source-line-no">217</span><span id="line.217">        HashSet&lt;T&gt; set = new HashSet&lt;T&gt;(1);</span>
+<span class="source-line-no">218</span><span id="line.218">        set.add(element);</span>
+<span class="source-line-no">219</span><span id="line.219">        return set;</span>
+<span class="source-line-no">220</span><span id="line.220">    }</span>
+<span class="source-line-no">221</span><span id="line.221"></span>
+<span class="source-line-no">222</span><span id="line.222">    /**</span>
+<span class="source-line-no">223</span><span id="line.223">     * Makes an OrderedMap (OM) with key and value types inferred from the types of k0 and v0, and considers all</span>
+<span class="source-line-no">224</span><span id="line.224">     * parameters key-value pairs, casting the Objects at positions 0, 2, 4... etc. to K and the objects at positions</span>
+<span class="source-line-no">225</span><span id="line.225">     * 1, 3, 5... etc. to V. If rest has an odd-number length, then it discards the last item. If any pair of items in</span>
+<span class="source-line-no">226</span><span id="line.226">     * rest cannot be cast to the correct type of K or V, then this inserts nothing for that pair and logs information</span>
+<span class="source-line-no">227</span><span id="line.227">     * on the problematic pair to the static Maker.issueLog field.</span>
+<span class="source-line-no">228</span><span id="line.228">     * @param k0 the first key; used to infer the types of other keys if generic parameters aren't specified.</span>
+<span class="source-line-no">229</span><span id="line.229">     * @param v0 the first value; used to infer the types of other values if generic parameters aren't specified.</span>
+<span class="source-line-no">230</span><span id="line.230">     * @param rest an array or vararg of keys and values in pairs; should contain alternating K, V, K, V... elements</span>
+<span class="source-line-no">231</span><span id="line.231">     * @param &lt;K&gt; the type of keys in the returned OrderedMap; if not specified, will be inferred from k0</span>
+<span class="source-line-no">232</span><span id="line.232">     * @param &lt;V&gt; the type of values in the returned OrderedMap; if not specified, will be inferred from v0</span>
+<span class="source-line-no">233</span><span id="line.233">     * @return a freshly-made OrderedMap with K keys and V values, using k0, v0, and the contents of rest to fill it</span>
+<span class="source-line-no">234</span><span id="line.234">     */</span>
+<span class="source-line-no">235</span><span id="line.235">    public static &lt;K, V&gt; OrderedMap&lt;K, V&gt; makeOM(K k0, V v0, Object... rest)</span>
+<span class="source-line-no">236</span><span id="line.236">    {</span>
+<span class="source-line-no">237</span><span id="line.237">        return makeOM(0.625f, k0, v0, rest);</span>
+<span class="source-line-no">238</span><span id="line.238">    }</span>
+<span class="source-line-no">239</span><span id="line.239">    /**</span>
+<span class="source-line-no">240</span><span id="line.240">     * Makes an OrderedMap (OM) with the given load factor (which should be between 0.1 and 0.9), key and value types</span>
+<span class="source-line-no">241</span><span id="line.241">     * inferred from the types of k0 and v0, and considers all remaining parameters key-value pairs, casting the Objects</span>
+<span class="source-line-no">242</span><span id="line.242">     * at positions 0, 2, 4... etc. to K and the objects at positions 1, 3, 5... etc. to V. If rest has an odd-number</span>
+<span class="source-line-no">243</span><span id="line.243">     * length, then it discards the last item. If any pair of items in rest cannot be cast to the correct type of K or</span>
+<span class="source-line-no">244</span><span id="line.244">     * V, then this inserts nothing for that pair and logs information on the problematic pair to the static</span>
+<span class="source-line-no">245</span><span id="line.245">     * Maker.issueLog field.</span>
+<span class="source-line-no">246</span><span id="line.246">     * @param factor the load factor; should be between 0.1 and 0.9, and 0.75f is a safe choice</span>
+<span class="source-line-no">247</span><span id="line.247">     * @param k0 the first key; used to infer the types of other keys if generic parameters aren't specified.</span>
+<span class="source-line-no">248</span><span id="line.248">     * @param v0 the first value; used to infer the types of other values if generic parameters aren't specified.</span>
+<span class="source-line-no">249</span><span id="line.249">     * @param rest an array or vararg of keys and values in pairs; should contain alternating K, V, K, V... elements</span>
+<span class="source-line-no">250</span><span id="line.250">     * @param &lt;K&gt; the type of keys in the returned OrderedMap; if not specified, will be inferred from k0</span>
+<span class="source-line-no">251</span><span id="line.251">     * @param &lt;V&gt; the type of values in the returned OrderedMap; if not specified, will be inferred from v0</span>
+<span class="source-line-no">252</span><span id="line.252">     * @return a freshly-made OrderedMap with K keys and V values, using k0, v0, and the contents of rest to fill it</span>
+<span class="source-line-no">253</span><span id="line.253">     */</span>
+<span class="source-line-no">254</span><span id="line.254">    @SuppressWarnings("unchecked")</span>
+<span class="source-line-no">255</span><span id="line.255">    public static &lt;K, V&gt; OrderedMap&lt;K, V&gt; makeOM(float factor, K k0, V v0, Object... rest)</span>
+<span class="source-line-no">256</span><span id="line.256">    {</span>
+<span class="source-line-no">257</span><span id="line.257">        if(rest == null || rest.length == 0)</span>
+<span class="source-line-no">258</span><span id="line.258">        {</span>
+<span class="source-line-no">259</span><span id="line.259">            OrderedMap&lt;K, V&gt; om = new OrderedMap&lt;&gt;(2, factor);</span>
+<span class="source-line-no">260</span><span id="line.260">            om.put(k0, v0);</span>
+<span class="source-line-no">261</span><span id="line.261">            return om;</span>
+<span class="source-line-no">262</span><span id="line.262">        }</span>
+<span class="source-line-no">263</span><span id="line.263">        OrderedMap&lt;K, V&gt; om = new OrderedMap&lt;&gt;(1 + (rest.length / 2), factor);</span>
+<span class="source-line-no">264</span><span id="line.264">        om.put(k0, v0);</span>
+<span class="source-line-no">265</span><span id="line.265"></span>
+<span class="source-line-no">266</span><span id="line.266">        for (int i = 0; i &lt; rest.length - 1; i+=2) {</span>
+<span class="source-line-no">267</span><span id="line.267">            try {</span>
+<span class="source-line-no">268</span><span id="line.268">                om.put((K) rest[i], (V) rest[i + 1]);</span>
+<span class="source-line-no">269</span><span id="line.269">            }catch (ClassCastException cce) {</span>
+<span class="source-line-no">270</span><span id="line.270">                issueLog.append("makeOM call had a casting problem with pair at rest[")</span>
+<span class="source-line-no">271</span><span id="line.271">                          .append(i)</span>
+<span class="source-line-no">272</span><span id="line.272">                          .append("] and/or rest[")</span>
+<span class="source-line-no">273</span><span id="line.273">                          .append(i + 1)</span>
+<span class="source-line-no">274</span><span id="line.274">                          .append("], with contents: ")</span>
+<span class="source-line-no">275</span><span id="line.275">                          .append(rest[i])</span>
+<span class="source-line-no">276</span><span id="line.276">                          .append(", ")</span>
+<span class="source-line-no">277</span><span id="line.277">                          .append(rest[i+1])</span>
+<span class="source-line-no">278</span><span id="line.278">                          .append(".\n\nException messages:\n")</span>
+<span class="source-line-no">279</span><span id="line.279">                          .append(cce);</span>
+<span class="source-line-no">280</span><span id="line.280">                String msg = cce.getMessage();</span>
+<span class="source-line-no">281</span><span id="line.281">                if (msg != null) {</span>
+<span class="source-line-no">282</span><span id="line.282">                    issueLog.append('\n').append(msg);</span>
+<span class="source-line-no">283</span><span id="line.283">                }</span>
+<span class="source-line-no">284</span><span id="line.284">                issueLog.append('\n');</span>
+<span class="source-line-no">285</span><span id="line.285">            }</span>
+<span class="source-line-no">286</span><span id="line.286">        }</span>
+<span class="source-line-no">287</span><span id="line.287">        return om;</span>
+<span class="source-line-no">288</span><span id="line.288">    }</span>
+<span class="source-line-no">289</span><span id="line.289"></span>
+<span class="source-line-no">290</span><span id="line.290">    /**</span>
+<span class="source-line-no">291</span><span id="line.291">     * Makes an empty OrderedMap (OM); needs key and value types to be specified in order to work. For an empty</span>
+<span class="source-line-no">292</span><span id="line.292">     * OrderedMap with String keys and Coord values, you could use {@code Maker.&lt;String, Coord&gt;makeOM()}. Using</span>
+<span class="source-line-no">293</span><span id="line.293">     * the new keyword is probably just as easy in this case; this method is provided for completeness relative to</span>
+<span class="source-line-no">294</span><span id="line.294">     * makeOM() with 2 or more parameters.</span>
+<span class="source-line-no">295</span><span id="line.295">     * @param &lt;K&gt; the type of keys in the returned OrderedMap; cannot be inferred and must be specified</span>
+<span class="source-line-no">296</span><span id="line.296">     * @param &lt;V&gt; the type of values in the returned OrderedMap; cannot be inferred and must be specified</span>
+<span class="source-line-no">297</span><span id="line.297">     * @return an empty OrderedMap with the given key and value types.</span>
+<span class="source-line-no">298</span><span id="line.298">     */</span>
+<span class="source-line-no">299</span><span id="line.299">    public static &lt;K, V&gt; OrderedMap&lt;K, V&gt; makeOM()</span>
+<span class="source-line-no">300</span><span id="line.300">    {</span>
+<span class="source-line-no">301</span><span id="line.301">        return new OrderedMap&lt;&gt;();</span>
+<span class="source-line-no">302</span><span id="line.302">    }</span>
+<span class="source-line-no">303</span><span id="line.303"></span>
+<span class="source-line-no">304</span><span id="line.304">    /**</span>
+<span class="source-line-no">305</span><span id="line.305">     * Makes an OrderedSet (OS) of T given an array or vararg of T elements. Duplicate items in elements will have</span>
+<span class="source-line-no">306</span><span id="line.306">     * all but one item discarded, using the later item in elements.</span>
+<span class="source-line-no">307</span><span id="line.307">     * @param elements an array or vararg of T</span>
+<span class="source-line-no">308</span><span id="line.308">     * @param &lt;T&gt; just about any non-primitive type</span>
+<span class="source-line-no">309</span><span id="line.309">     * @return a newly-allocated OrderedSet containing all of the non-duplicate items in elements, in order</span>
+<span class="source-line-no">310</span><span id="line.310">     */</span>
+<span class="source-line-no">311</span><span id="line.311">    @SuppressWarnings("unchecked")</span>
+<span class="source-line-no">312</span><span id="line.312">    public static &lt;T&gt; OrderedSet&lt;T&gt; makeOS(T... elements) {</span>
+<span class="source-line-no">313</span><span id="line.313">        if(elements == null) return null;</span>
+<span class="source-line-no">314</span><span id="line.314">        return new OrderedSet&lt;&gt;(elements);</span>
+<span class="source-line-no">315</span><span id="line.315">    }</span>
+<span class="source-line-no">316</span><span id="line.316"></span>
+<span class="source-line-no">317</span><span id="line.317">    /**</span>
+<span class="source-line-no">318</span><span id="line.318">     * Makes an OrderedSet of T given a single T element; avoids creating an array for varargs as</span>
+<span class="source-line-no">319</span><span id="line.319">     * {@link #makeOS(Object[])} would do, but only allows one item.</span>
+<span class="source-line-no">320</span><span id="line.320">     * @param element an array or vararg of T</span>
+<span class="source-line-no">321</span><span id="line.321">     * @param &lt;T&gt; just about any non-primitive, non-array type (arrays would cause confusion with the vararg method)</span>
+<span class="source-line-no">322</span><span id="line.322">     * @return a newly-allocated OrderedSet containing only element</span>
+<span class="source-line-no">323</span><span id="line.323">     */</span>
+<span class="source-line-no">324</span><span id="line.324">    public static &lt;T&gt; OrderedSet&lt;T&gt; makeOS(T element) {</span>
+<span class="source-line-no">325</span><span id="line.325">        OrderedSet&lt;T&gt; set = new OrderedSet&lt;&gt;(1);</span>
+<span class="source-line-no">326</span><span id="line.326">        set.add(element);</span>
+<span class="source-line-no">327</span><span id="line.327">        return set;</span>
+<span class="source-line-no">328</span><span id="line.328">    }</span>
+<span class="source-line-no">329</span><span id="line.329">    </span>
+<span class="source-line-no">330</span><span id="line.330">    /**</span>
+<span class="source-line-no">331</span><span id="line.331">     * Makes an UnorderedSet (UOS) of T given an array or vararg of T elements. Duplicate items in elements will have</span>
+<span class="source-line-no">332</span><span id="line.332">     * all but one item discarded, using the later item in elements; order will not be kept.</span>
+<span class="source-line-no">333</span><span id="line.333">     * @param elements an array or vararg of T</span>
+<span class="source-line-no">334</span><span id="line.334">     * @param &lt;T&gt; just about any non-primitive type</span>
+<span class="source-line-no">335</span><span id="line.335">     * @return a newly-allocated UnorderedSet containing all of the non-duplicate items in elements, in order</span>
+<span class="source-line-no">336</span><span id="line.336">     */</span>
+<span class="source-line-no">337</span><span id="line.337">    @SuppressWarnings("unchecked")</span>
+<span class="source-line-no">338</span><span id="line.338">    public static &lt;T&gt; UnorderedSet&lt;T&gt; makeUOS(T... elements) {</span>
+<span class="source-line-no">339</span><span id="line.339">        if(elements == null) return null;</span>
+<span class="source-line-no">340</span><span id="line.340">        return new UnorderedSet&lt;&gt;(elements);</span>
+<span class="source-line-no">341</span><span id="line.341">    }</span>
+<span class="source-line-no">342</span><span id="line.342"></span>
+<span class="source-line-no">343</span><span id="line.343">    /**</span>
+<span class="source-line-no">344</span><span id="line.344">     * Makes an UnorderedSet of T given a single T element; avoids creating an array for varargs as</span>
+<span class="source-line-no">345</span><span id="line.345">     * {@link #makeOS(Object[])} would do, but only allows one item.</span>
+<span class="source-line-no">346</span><span id="line.346">     * @param element an array or vararg of T</span>
+<span class="source-line-no">347</span><span id="line.347">     * @param &lt;T&gt; just about any non-primitive, non-array type (arrays would cause confusion with the vararg method)</span>
+<span class="source-line-no">348</span><span id="line.348">     * @return a newly-allocated UnorderedSet containing only element</span>
+<span class="source-line-no">349</span><span id="line.349">     */</span>
+<span class="source-line-no">350</span><span id="line.350">    public static &lt;T&gt; UnorderedSet&lt;T&gt; makeUOS(T element) {</span>
+<span class="source-line-no">351</span><span id="line.351">        UnorderedSet&lt;T&gt; set = new UnorderedSet&lt;&gt;(1);</span>
+<span class="source-line-no">352</span><span id="line.352">        set.add(element);</span>
+<span class="source-line-no">353</span><span id="line.353">        return set;</span>
+<span class="source-line-no">354</span><span id="line.354">    }</span>
+<span class="source-line-no">355</span><span id="line.355"></span>
+<span class="source-line-no">356</span><span id="line.356">    /**</span>
+<span class="source-line-no">357</span><span id="line.357">     * Makes a EnumOrderedSet (OS) of the enum type T given at least one T element followed by an array or vararg of any</span>
+<span class="source-line-no">358</span><span id="line.358">     * number of additional T elements. Duplicate items in elements will have all but one item discarded, using the</span>
+<span class="source-line-no">359</span><span id="line.359">     * later item in elements. The order given here will be kept in the result, like in OrderedSet, and</span>
+<span class="source-line-no">360</span><span id="line.360">     * you can use {@link EnumOrderedSet#getAt(int)} to get a T value at a given index, like you would with a List.</span>
+<span class="source-line-no">361</span><span id="line.361">     * @param initial the first item to insert into the EnumOrderedSet; if initial is null, the method returns null</span>
+<span class="source-line-no">362</span><span id="line.362">     * @param elements an array or vararg of T; allowed to be empty</span>
+<span class="source-line-no">363</span><span id="line.363">     * @param &lt;T&gt; an enum type</span>
+<span class="source-line-no">364</span><span id="line.364">     * @return a newly-allocated OrderedSet containing all of the non-duplicate items in elements, in order</span>
+<span class="source-line-no">365</span><span id="line.365">     */</span>
+<span class="source-line-no">366</span><span id="line.366">    @SuppressWarnings("unchecked")</span>
+<span class="source-line-no">367</span><span id="line.367">    public static &lt;T extends Enum&lt;?&gt;&gt; EnumOrderedSet&lt;T&gt; makeEOS(T initial, T... elements)</span>
+<span class="source-line-no">368</span><span id="line.368">    {</span>
+<span class="source-line-no">369</span><span id="line.369">        if(initial == null) return null;</span>
+<span class="source-line-no">370</span><span id="line.370">        EnumOrderedSet&lt;T&gt; eos = new EnumOrderedSet&lt;&gt;(initial);</span>
+<span class="source-line-no">371</span><span id="line.371">        eos.add(initial);</span>
+<span class="source-line-no">372</span><span id="line.372">        if(elements != null)</span>
+<span class="source-line-no">373</span><span id="line.373">            eos.addAll(elements);</span>
+<span class="source-line-no">374</span><span id="line.374">        return eos;</span>
+<span class="source-line-no">375</span><span id="line.375">    }</span>
+<span class="source-line-no">376</span><span id="line.376"></span>
+<span class="source-line-no">377</span><span id="line.377">    /**</span>
+<span class="source-line-no">378</span><span id="line.378">     * Makes an empty EnumOrderedSet (EOS); needs item type to be specified in order to work. For an empty</span>
+<span class="source-line-no">379</span><span id="line.379">     * EnumOrderedSet with Radius items, you could use {@code Maker.&lt;Radius&gt;makeEOS()}. Using the new keyword is</span>
+<span class="source-line-no">380</span><span id="line.380">     * probably just as easy in this case; this method is provided for completeness relative to makeEOS() with 1 or more</span>
+<span class="source-line-no">381</span><span id="line.381">     * parameters.</span>
+<span class="source-line-no">382</span><span id="line.382">     * @param &lt;T&gt; the type of Enum keys in the returned EnumOrderedSet; cannot be inferred and must be specified</span>
+<span class="source-line-no">383</span><span id="line.383">     * @return an empty EnumOrderedSet with the given item type</span>
+<span class="source-line-no">384</span><span id="line.384">     */</span>
+<span class="source-line-no">385</span><span id="line.385">    public static &lt;T extends Enum&lt;T&gt;&gt; EnumOrderedSet&lt;T&gt; makeEOS() { return new EnumOrderedSet&lt;&gt;(); }</span>
+<span class="source-line-no">386</span><span id="line.386"></span>
+<span class="source-line-no">387</span><span id="line.387">    /**</span>
+<span class="source-line-no">388</span><span id="line.388">     * Makes a Arrangement (Arrange) of T given an array or vararg of T elements. Duplicate items in elements will have</span>
+<span class="source-line-no">389</span><span id="line.389">     * all but one item discarded, using the later item in elements. As is always the case with Arrangement, each item</span>
+<span class="source-line-no">390</span><span id="line.390">     * will be mapped bi-directionally to its index in the iteration order, and an item can be retrieved with</span>
+<span class="source-line-no">391</span><span id="line.391">     * {@link Arrangement#keyAt(int)} if you only know its index, or the int index for an item can be retrieved with</span>
+<span class="source-line-no">392</span><span id="line.392">     * {@link Arrangement#getInt(Object)} if you only have an item.</span>
+<span class="source-line-no">393</span><span id="line.393">     * @param elements an array or vararg of T</span>
+<span class="source-line-no">394</span><span id="line.394">     * @param &lt;T&gt; just about any non-primitive type</span>
+<span class="source-line-no">395</span><span id="line.395">     * @return a newly-allocated Arrangement containing all of the non-duplicate items in elements, in order</span>
+<span class="source-line-no">396</span><span id="line.396">     */</span>
+<span class="source-line-no">397</span><span id="line.397">    @SuppressWarnings("unchecked")</span>
+<span class="source-line-no">398</span><span id="line.398">    public static &lt;T&gt; Arrangement&lt;T&gt; makeArrange(T... elements) {</span>
+<span class="source-line-no">399</span><span id="line.399">        if(elements == null) return null;</span>
+<span class="source-line-no">400</span><span id="line.400">        return new Arrangement&lt;&gt;(elements);</span>
+<span class="source-line-no">401</span><span id="line.401">    }</span>
+<span class="source-line-no">402</span><span id="line.402">    /**</span>
+<span class="source-line-no">403</span><span id="line.403">     * Makes a K2 (two-key set/bimap) with A and B key types inferred from the types of a0 and b0, and considers all</span>
+<span class="source-line-no">404</span><span id="line.404">     * parameters A-B pairs, casting the Objects at positions 0, 2, 4... etc. to A and the objects at positions</span>
+<span class="source-line-no">405</span><span id="line.405">     * 1, 3, 5... etc. to B. If rest has an odd-number length, then it discards the last item. If any pair of items in</span>
+<span class="source-line-no">406</span><span id="line.406">     * rest cannot be cast to the correct type of A or B, then this inserts nothing for that pair and logs information</span>
+<span class="source-line-no">407</span><span id="line.407">     * on the problematic pair to the static Maker.issueLog field.</span>
+<span class="source-line-no">408</span><span id="line.408">     * @param a0 the first A key; used to infer the types of other keys if generic parameters aren't specified.</span>
+<span class="source-line-no">409</span><span id="line.409">     * @param b0 the first B key; used to infer the types of other values if generic parameters aren't specified.</span>
+<span class="source-line-no">410</span><span id="line.410">     * @param rest an array or vararg of keys and values in pairs; should contain alternating A, B, A, B... elements</span>
+<span class="source-line-no">411</span><span id="line.411">     * @param &lt;A&gt; a type of keys in the returned K2; if not specified, will be inferred from a0</span>
+<span class="source-line-no">412</span><span id="line.412">     * @param &lt;B&gt; a type of keys in the returned K2; if not specified, will be inferred from b0</span>
+<span class="source-line-no">413</span><span id="line.413">     * @return a freshly-made K2 with A and B keys, using a0, b0, and the contents of rest to fill it</span>
+<span class="source-line-no">414</span><span id="line.414">     */</span>
+<span class="source-line-no">415</span><span id="line.415">    public static &lt;A, B&gt; K2&lt;A, B&gt; makeK2(A a0, B b0, Object... rest)</span>
+<span class="source-line-no">416</span><span id="line.416">    {</span>
+<span class="source-line-no">417</span><span id="line.417">        return makeK2(0.625f, a0, b0, rest);</span>
+<span class="source-line-no">418</span><span id="line.418">    }</span>
+<span class="source-line-no">419</span><span id="line.419">    /**</span>
+<span class="source-line-no">420</span><span id="line.420">     * Makes a K2 (two-key set/bimap) with the given load factor (which should be between 0.1 and 0.9), A and B key</span>
+<span class="source-line-no">421</span><span id="line.421">     * types inferred from the types of a0 and b0, and considers all parameters A-B pairs, casting the Objects at</span>
+<span class="source-line-no">422</span><span id="line.422">     * positions 0, 2, 4... etc. to A and the objects at positions 1, 3, 5... etc. to B. If rest has an odd-number</span>
+<span class="source-line-no">423</span><span id="line.423">     * length, then it discards the last item. If any pair of items in rest cannot be cast to the correct type of A or</span>
+<span class="source-line-no">424</span><span id="line.424">     * B, then this inserts nothing for that pair and logs information on the problematic pair to the static</span>
+<span class="source-line-no">425</span><span id="line.425">     * Maker.issueLog field.</span>
+<span class="source-line-no">426</span><span id="line.426">     * @param factor the load factor; should be between 0.1 and 0.9, and 0.75f is a safe choice</span>
+<span class="source-line-no">427</span><span id="line.427">     * @param a0 the first A key; used to infer the types of other keys if generic parameters aren't specified.</span>
+<span class="source-line-no">428</span><span id="line.428">     * @param b0 the first B key; used to infer the types of other values if generic parameters aren't specified.</span>
+<span class="source-line-no">429</span><span id="line.429">     * @param rest an array or vararg of keys and values in pairs; should contain alternating A, B, A, B... elements</span>
+<span class="source-line-no">430</span><span id="line.430">     * @param &lt;A&gt; a type of keys in the returned K2; if not specified, will be inferred from a0</span>
+<span class="source-line-no">431</span><span id="line.431">     * @param &lt;B&gt; a type of keys in the returned K2; if not specified, will be inferred from b0</span>
+<span class="source-line-no">432</span><span id="line.432">     * @return a freshly-made K2 with A and B keys, using a0, b0, and the contents of rest to fill it</span>
+<span class="source-line-no">433</span><span id="line.433">     */</span>
+<span class="source-line-no">434</span><span id="line.434">    @SuppressWarnings("unchecked")</span>
+<span class="source-line-no">435</span><span id="line.435">    public static &lt;A, B&gt; K2&lt;A, B&gt; makeK2(float factor, A a0, B b0, Object... rest)</span>
+<span class="source-line-no">436</span><span id="line.436">    {</span>
+<span class="source-line-no">437</span><span id="line.437">        if(rest == null || rest.length == 0)</span>
+<span class="source-line-no">438</span><span id="line.438">        {</span>
+<span class="source-line-no">439</span><span id="line.439">            K2&lt;A, B&gt; k2 = new K2&lt;&gt;(2, factor);</span>
+<span class="source-line-no">440</span><span id="line.440">            k2.put(a0, b0);</span>
+<span class="source-line-no">441</span><span id="line.441">            return k2;</span>
+<span class="source-line-no">442</span><span id="line.442">        }</span>
+<span class="source-line-no">443</span><span id="line.443">        K2&lt;A, B&gt; k2 = new K2&lt;&gt;(1 + (rest.length &gt;&gt; 1), factor);</span>
+<span class="source-line-no">444</span><span id="line.444">        k2.put(a0, b0);</span>
+<span class="source-line-no">445</span><span id="line.445"></span>
+<span class="source-line-no">446</span><span id="line.446">        for (int i = 0; i &lt; rest.length - 1; i+=2) {</span>
+<span class="source-line-no">447</span><span id="line.447">            try {</span>
+<span class="source-line-no">448</span><span id="line.448">                k2.put((A) rest[i], (B) rest[i + 1]);</span>
+<span class="source-line-no">449</span><span id="line.449">            }catch (ClassCastException cce) {</span>
+<span class="source-line-no">450</span><span id="line.450">                issueLog.append("makeK2 call had a casting problem with pair at rest[")</span>
+<span class="source-line-no">451</span><span id="line.451">                          .append(i)</span>
+<span class="source-line-no">452</span><span id="line.452">                          .append("] and/or rest[")</span>
+<span class="source-line-no">453</span><span id="line.453">                          .append(i + 1)</span>
+<span class="source-line-no">454</span><span id="line.454">                          .append("], with contents: ")</span>
+<span class="source-line-no">455</span><span id="line.455">                          .append(rest[i])</span>
+<span class="source-line-no">456</span><span id="line.456">                          .append(", ")</span>
+<span class="source-line-no">457</span><span id="line.457">                          .append(rest[i+1])</span>
+<span class="source-line-no">458</span><span id="line.458">                          .append(".\n\nException messages:\n")</span>
+<span class="source-line-no">459</span><span id="line.459">                          .append(cce);</span>
+<span class="source-line-no">460</span><span id="line.460">                String msg = cce.getMessage();</span>
+<span class="source-line-no">461</span><span id="line.461">                if (msg != null) {</span>
+<span class="source-line-no">462</span><span id="line.462">                    issueLog.append('\n').append(msg);</span>
+<span class="source-line-no">463</span><span id="line.463">                }</span>
+<span class="source-line-no">464</span><span id="line.464">                issueLog.append('\n');</span>
+<span class="source-line-no">465</span><span id="line.465">            }</span>
+<span class="source-line-no">466</span><span id="line.466">        }</span>
+<span class="source-line-no">467</span><span id="line.467">        return k2;</span>
+<span class="source-line-no">468</span><span id="line.468">    }</span>
+<span class="source-line-no">469</span><span id="line.469"></span>
+<span class="source-line-no">470</span><span id="line.470">    /**</span>
+<span class="source-line-no">471</span><span id="line.471">     * Makes an empty K2 (two-key set/bimap); needs A and B key types to be specified in order to work. For an empty</span>
+<span class="source-line-no">472</span><span id="line.472">     * K2 with String A keys Coord B keys, you could use {@code Maker.&lt;String, Coord&gt;makeK2();}. Using</span>
+<span class="source-line-no">473</span><span id="line.473">     * the new keyword is probably just as easy in this case; this method is provided for completeness relative to</span>
+<span class="source-line-no">474</span><span id="line.474">     * makeK2() with 2 or more parameters.</span>
+<span class="source-line-no">475</span><span id="line.475">     * @param &lt;A&gt; the type of "A" keys in the returned K2; cannot be inferred and must be specified</span>
+<span class="source-line-no">476</span><span id="line.476">     * @param &lt;B&gt; the type of "B" keys in the returned K2; cannot be inferred and must be specified</span>
+<span class="source-line-no">477</span><span id="line.477">     * @return an empty K2 with the given key and value types.</span>
+<span class="source-line-no">478</span><span id="line.478">     */</span>
+<span class="source-line-no">479</span><span id="line.479">    public static &lt;A, B&gt; K2&lt;A, B&gt; makeK2()</span>
+<span class="source-line-no">480</span><span id="line.480">    {</span>
+<span class="source-line-no">481</span><span id="line.481">        return new K2&lt;&gt;();</span>
+<span class="source-line-no">482</span><span id="line.482">    }</span>
+<span class="source-line-no">483</span><span id="line.483">    /**</span>
+<span class="source-line-no">484</span><span id="line.484">     * Makes an EnumOrderedMap (EOM) with key and value types inferred from the types of k0 and v0, and considers all</span>
+<span class="source-line-no">485</span><span id="line.485">     * remaining parameters key-value pairs, casting the Objects at positions 0, 2, 4... etc. to K and the objects at</span>
+<span class="source-line-no">486</span><span id="line.486">     * positions 1, 3, 5... etc. to V. If rest has an odd-number length, then it discards the last item. If any pair of</span>
+<span class="source-line-no">487</span><span id="line.487">     * items in rest cannot be cast to the correct type of K or V, then this inserts nothing for that pair and logs</span>
+<span class="source-line-no">488</span><span id="line.488">     * information on the problematic pair to the static Maker.issueLog field. The order given here will be kept in the</span>
+<span class="source-line-no">489</span><span id="line.489">     * result, unlike in the JDK's EnumMap class, and you can use {@link EnumOrderedMap#keyAt(int)} or</span>
+<span class="source-line-no">490</span><span id="line.490">     * {@link EnumOrderedMap#getAt(int)} to get a key or value at a given index, like you would with a List.</span>
+<span class="source-line-no">491</span><span id="line.491">     *</span>
+<span class="source-line-no">492</span><span id="line.492">     * @param k0 the first key, which must be an Enum; used to infer the types of other keys if generic parameters aren't specified.</span>
+<span class="source-line-no">493</span><span id="line.493">     * @param v0 the first value; used to infer the types of other values if generic parameters aren't specified.</span>
+<span class="source-line-no">494</span><span id="line.494">     * @param rest an array or vararg of keys and values in pairs; should contain alternating K, V, K, V... elements</span>
+<span class="source-line-no">495</span><span id="line.495">     * @param &lt;K&gt; the type of Enum keys in the returned EnumOrderedMap; if not specified, will be inferred from k0</span>
+<span class="source-line-no">496</span><span id="line.496">     * @param &lt;V&gt; the type of values in the returned EnumOrderedMap; if not specified, will be inferred from v0</span>
+<span class="source-line-no">497</span><span id="line.497">     * @return a freshly-made EnumOrderedMap with K keys and V values, using k0, v0, and the contents of rest to fill it</span>
+<span class="source-line-no">498</span><span id="line.498">     */</span>
+<span class="source-line-no">499</span><span id="line.499">    @SuppressWarnings("unchecked")</span>
+<span class="source-line-no">500</span><span id="line.500">    public static &lt;K extends Enum&lt;?&gt;, V&gt; EnumOrderedMap&lt;K, V&gt; makeEOM(K k0, V v0, Object... rest)</span>
+<span class="source-line-no">501</span><span id="line.501">    {</span>
+<span class="source-line-no">502</span><span id="line.502">        if(rest == null || rest.length == 0)</span>
+<span class="source-line-no">503</span><span id="line.503">        {</span>
+<span class="source-line-no">504</span><span id="line.504">            EnumOrderedMap&lt;K, V&gt; eom = new EnumOrderedMap&lt;&gt;();</span>
+<span class="source-line-no">505</span><span id="line.505">            eom.put(k0, v0);</span>
+<span class="source-line-no">506</span><span id="line.506">            return eom;</span>
+<span class="source-line-no">507</span><span id="line.507">        }</span>
+<span class="source-line-no">508</span><span id="line.508">        EnumOrderedMap&lt;K, V&gt; eom = new EnumOrderedMap&lt;&gt;(k0);</span>
+<span class="source-line-no">509</span><span id="line.509">        eom.put(k0, v0);</span>
+<span class="source-line-no">510</span><span id="line.510"></span>
+<span class="source-line-no">511</span><span id="line.511">        for (int i = 0; i &lt; rest.length - 1; i+=2) {</span>
+<span class="source-line-no">512</span><span id="line.512">            try {</span>
+<span class="source-line-no">513</span><span id="line.513">                eom.put((K) rest[i], (V) rest[i + 1]);</span>
+<span class="source-line-no">514</span><span id="line.514">            }catch (ClassCastException cce) {</span>
+<span class="source-line-no">515</span><span id="line.515">                issueLog.append("makeEOM call had a casting problem with pair at rest[")</span>
+<span class="source-line-no">516</span><span id="line.516">                          .append(i)</span>
+<span class="source-line-no">517</span><span id="line.517">                          .append("] and/or rest[")</span>
+<span class="source-line-no">518</span><span id="line.518">                          .append(i + 1)</span>
+<span class="source-line-no">519</span><span id="line.519">                          .append("], with contents: ")</span>
+<span class="source-line-no">520</span><span id="line.520">                          .append(rest[i])</span>
+<span class="source-line-no">521</span><span id="line.521">                          .append(", ")</span>
+<span class="source-line-no">522</span><span id="line.522">                          .append(rest[i+1])</span>
+<span class="source-line-no">523</span><span id="line.523">                          .append(".\n\nException messages:\n")</span>
+<span class="source-line-no">524</span><span id="line.524">                          .append(cce);</span>
+<span class="source-line-no">525</span><span id="line.525">                String msg = cce.getMessage();</span>
+<span class="source-line-no">526</span><span id="line.526">                if (msg != null) {</span>
+<span class="source-line-no">527</span><span id="line.527">                    issueLog.append('\n').append(msg);</span>
+<span class="source-line-no">528</span><span id="line.528">                }</span>
+<span class="source-line-no">529</span><span id="line.529">                issueLog.append('\n');</span>
+<span class="source-line-no">530</span><span id="line.530">            }</span>
+<span class="source-line-no">531</span><span id="line.531">        }</span>
+<span class="source-line-no">532</span><span id="line.532">        return eom;</span>
+<span class="source-line-no">533</span><span id="line.533">    }</span>
+<span class="source-line-no">534</span><span id="line.534"></span>
+<span class="source-line-no">535</span><span id="line.535">    /**</span>
+<span class="source-line-no">536</span><span id="line.536">     * Makes an empty EnumOrderedMap (EOM); needs key and value types to be specified in order to work. For an empty</span>
+<span class="source-line-no">537</span><span id="line.537">     * EnumOrderedMap with Radius keys and Coord values, you could use {@code Maker.&lt;Radius, Coord&gt;makeEOM()}. Using</span>
+<span class="source-line-no">538</span><span id="line.538">     * the new keyword is probably just as easy in this case; this method is provided for completeness relative to</span>
+<span class="source-line-no">539</span><span id="line.539">     * makeEOM() with 2 or more parameters.</span>
+<span class="source-line-no">540</span><span id="line.540">     * @param &lt;K&gt; the type of Enum keys in the returned EnumOrderedMap; cannot be inferred and must be specified</span>
+<span class="source-line-no">541</span><span id="line.541">     * @param &lt;V&gt; the type of values in the returned EnumOrderedMap; cannot be inferred and must be specified</span>
+<span class="source-line-no">542</span><span id="line.542">     * @return an empty EnumOrderedMap with the given key and value types.</span>
+<span class="source-line-no">543</span><span id="line.543">     */</span>
+<span class="source-line-no">544</span><span id="line.544">    public static &lt;K extends Enum&lt;K&gt;, V&gt; EnumOrderedMap&lt;K, V&gt; makeEOM() { return new EnumOrderedMap&lt;&gt;(); }</span>
+<span class="source-line-no">545</span><span id="line.545"></span>
+<span class="source-line-no">546</span><span id="line.546">}</span>
 
 
 

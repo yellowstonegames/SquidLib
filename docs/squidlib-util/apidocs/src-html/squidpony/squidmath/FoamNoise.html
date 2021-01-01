@@ -7,423 +7,450 @@
 <meta name="generator" content="javadoc/SourceToHTMLConverter">
 <link rel="stylesheet" type="text/css" href="../../../stylesheet.css" title="Style">
 </head>
-<body class="source">
+<body class="source-page">
 <main role="main">
-<div class="sourceContainer">
-<pre><span class="sourceLineNo">001</span><a id="line.1">package squidpony.squidmath;</a>
-<span class="sourceLineNo">002</span><a id="line.2"></a>
-<span class="sourceLineNo">003</span><a id="line.3">import static squidpony.squidmath.ValueNoise.valueNoise;</a>
-<span class="sourceLineNo">004</span><a id="line.4"></a>
-<span class="sourceLineNo">005</span><a id="line.5">/**</a>
-<span class="sourceLineNo">006</span><a id="line.6"> * An unusual continuous noise generator that tends to produce organic-looking forms, currently supporting 2D, 3D, 4D</a>
-<span class="sourceLineNo">007</span><a id="line.7"> * and 6D. Produces noise values from -1.0 inclusive to 1.0 exclusive. Typically needs fewer octaves than the Simplex</a>
-<span class="sourceLineNo">008</span><a id="line.8"> * option in FastNoise to produce roughly comparable quality, but it also has about a third the speed. A useful property</a>
-<span class="sourceLineNo">009</span><a id="line.9"> * of FoamNoise is how its visual "character" doesn't change much as dimensions are added; whereas 6D simplex noise</a>
-<span class="sourceLineNo">010</span><a id="line.10"> * tends to separate into "surflets" separated by spans of 0, and higher dimensions of simplex only have larger such</a>
-<span class="sourceLineNo">011</span><a id="line.11"> * spans, FoamNoise seems to stay approximately as coherent in 2D, 3D, and 4D. Verifying this claim about FoamNoise is</a>
-<span class="sourceLineNo">012</span><a id="line.12"> * not easy, but it makes sense intuitively because of how this generator works. Simplex noise in N dimensions relies on</a>
-<span class="sourceLineNo">013</span><a id="line.13"> * a lattice of N-simplices (such as triangles in 2D or tetrahedra in 3D) and evaluates the noise at a point by hashing</a>
-<span class="sourceLineNo">014</span><a id="line.14"> * each of the N+1 vertices, looking up a gradient vector for each vertex from a pre-calculated array, and combining the</a>
-<span class="sourceLineNo">015</span><a id="line.15"> * gradient vectors based on proximity of the evaluated point to each vertex. FoamNoise in N dimensions is not nearly as</a>
-<span class="sourceLineNo">016</span><a id="line.16"> * complex; it relies on making N+1 averaged calls to N-dimensional value noise, each call using a rotated (and</a>
-<span class="sourceLineNo">017</span><a id="line.17"> * potentially skewed) set of axes, with each call's result also affecting the inputs to the next call (domain warping).</a>
-<span class="sourceLineNo">018</span><a id="line.18"> * Value noise uses a cubic lattice or its hypercube equivalent in higher dimensions, which seems to be more "stable" as</a>
-<span class="sourceLineNo">019</span><a id="line.19"> * dimensionality increases, and the number of value noise calls increases at the same rate as simplex noise adds</a>
-<span class="sourceLineNo">020</span><a id="line.20"> * gradient vectors. Averaging more calls causes the distribution of the noise to gradually approach Gaussian (biased</a>
-<span class="sourceLineNo">021</span><a id="line.21"> * toward results in the center of the range), but adjustments this does at the end counteract this well enough. </a>
-<span class="sourceLineNo">022</span><a id="line.22"> * &lt;br&gt;</a>
-<span class="sourceLineNo">023</span><a id="line.23"> * It's encouraged to experiment with the lacunarity parameter in {@link Noise.Layered3D} and similar classes if you use</a>
-<span class="sourceLineNo">024</span><a id="line.24"> * one of those variants, which also probably needs adjustments to frequency. Changing lacunarity wit multiple octaves</a>
-<span class="sourceLineNo">025</span><a id="line.25"> * can be useful to edit how tightly the noise clumps together. FoamNoise tends to look about the same with 3 octaves as</a>
-<span class="sourceLineNo">026</span><a id="line.26"> * it does with 4 octaves; for perceived quality, the returns seem to diminish quickly from added octaves. This isn't</a>
-<span class="sourceLineNo">027</span><a id="line.27"> * accurate for all frequencies, so you should definitely run through your options for what kinds of noise look good for</a>
-<span class="sourceLineNo">028</span><a id="line.28"> * a particular scenario. Mixing Simplex and Foam noise can produce a good water effect when applied to grid cells.</a>
-<span class="sourceLineNo">029</span><a id="line.29"> * &lt;br&gt;</a>
-<span class="sourceLineNo">030</span><a id="line.30"> * &lt;a href="https://i.imgur.com/WpUz1xP.png"&gt;2D FoamNoise, one octave&lt;/a&gt;,</a>
-<span class="sourceLineNo">031</span><a id="line.31"> * &lt;a href="https://i.imgur.com/CDXcQRW.png"&gt;2D FoamNoise, one octave colorized&lt;/a&gt;,</a>
-<span class="sourceLineNo">032</span><a id="line.32"> * &lt;a href="https://i.imgur.com/XYUN8y4.png"&gt;2D FoamNoise, two octaves colorized&lt;/a&gt; (note fewer peaks and valleys),</a>
-<span class="sourceLineNo">033</span><a id="line.33"> * &lt;a href="https://i.imgur.com/cSiXzgW.gifv"&gt;3D FoamNoise animated over time, one octave colorized&lt;/a&gt;,</a>
-<span class="sourceLineNo">034</span><a id="line.34"> * &lt;a href="https://i.imgur.com/a2xO1Tb.gifv"&gt;3D FoamNoise animated over time, two octaves colorized&lt;/a&gt;,</a>
-<span class="sourceLineNo">035</span><a id="line.35"> * &lt;a href="https://i.imgur.com/MMnPn8C.gifv"&gt;4D FoamNoise animated over time, one octave colorized&lt;/a&gt;,</a>
-<span class="sourceLineNo">036</span><a id="line.36"> * &lt;a href="https://i.imgur.com/0ZHicDs.gifv"&gt;4D FoamNoise animated over time, two octaves colorized&lt;/a&gt;,</a>
-<span class="sourceLineNo">037</span><a id="line.37"> * &lt;a href="https://i.imgur.com/pjuFork.gifv"&gt;6D FoamNoise animated over time, one octave colorized&lt;/a&gt;,</a>
-<span class="sourceLineNo">038</span><a id="line.38"> * &lt;a href="https://i.imgur.com/CvWFFyI.gifv"&gt;6D FoamNoise animated over time, two octaves colorized&lt;/a&gt;,</a>
-<span class="sourceLineNo">039</span><a id="line.39"> * &lt;a href="https://i.imgur.com/ktCTiIK.jpg"&gt;World map made using FoamNoise&lt;/a&gt;.</a>
-<span class="sourceLineNo">040</span><a id="line.40"> */</a>
-<span class="sourceLineNo">041</span><a id="line.41">public class FoamNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, Noise.Noise5D, Noise.Noise6D {</a>
-<span class="sourceLineNo">042</span><a id="line.42">    public static final FoamNoise instance = new FoamNoise();</a>
-<span class="sourceLineNo">043</span><a id="line.43">    </a>
-<span class="sourceLineNo">044</span><a id="line.44">    public int seed = 0xD1CEBEEF;</a>
-<span class="sourceLineNo">045</span><a id="line.45">    public FoamNoise() {</a>
-<span class="sourceLineNo">046</span><a id="line.46">    }</a>
-<span class="sourceLineNo">047</span><a id="line.47"></a>
-<span class="sourceLineNo">048</span><a id="line.48">    public FoamNoise(int seed) {</a>
-<span class="sourceLineNo">049</span><a id="line.49">        this.seed = seed;</a>
-<span class="sourceLineNo">050</span><a id="line.50">    }</a>
-<span class="sourceLineNo">051</span><a id="line.51"></a>
-<span class="sourceLineNo">052</span><a id="line.52">    public FoamNoise(long seed) {</a>
-<span class="sourceLineNo">053</span><a id="line.53">        this.seed = (int) (seed ^ seed &gt;&gt;&gt; 32);</a>
-<span class="sourceLineNo">054</span><a id="line.54">    }</a>
-<span class="sourceLineNo">055</span><a id="line.55"></a>
-<span class="sourceLineNo">056</span><a id="line.56">    public static double foamNoise(final double x, final double y, int seed) {</a>
-<span class="sourceLineNo">057</span><a id="line.57">        final double p0 = x;</a>
-<span class="sourceLineNo">058</span><a id="line.58">        final double p1 = x * -0.5 + y * 0.8660254037844386;</a>
-<span class="sourceLineNo">059</span><a id="line.59">        final double p2 = x * -0.5 + y * -0.8660254037844387;</a>
-<span class="sourceLineNo">060</span><a id="line.60"></a>
-<span class="sourceLineNo">061</span><a id="line.61">        double xin = p1;</a>
-<span class="sourceLineNo">062</span><a id="line.62">        double yin = p2;</a>
-<span class="sourceLineNo">063</span><a id="line.63">        //double xin = x * 0.540302 + y * 0.841471; // sin and cos of 1</a>
-<span class="sourceLineNo">064</span><a id="line.64">        //double yin = x * -0.841471 + y * 0.540302;</a>
-<span class="sourceLineNo">065</span><a id="line.65">        final double a = valueNoise(seed, xin, yin);</a>
-<span class="sourceLineNo">066</span><a id="line.66">        seed += 0x9E3779BD;</a>
-<span class="sourceLineNo">067</span><a id="line.67">        seed = (seed ^ seed &gt;&gt;&gt; 12) * 0xDAB;</a>
-<span class="sourceLineNo">068</span><a id="line.68">        seed ^= seed &gt;&gt;&gt; 14;</a>
-<span class="sourceLineNo">069</span><a id="line.69">        xin = p2;</a>
-<span class="sourceLineNo">070</span><a id="line.70">        yin = p0;</a>
-<span class="sourceLineNo">071</span><a id="line.71">        //xin = x * -0.989992 + y * 0.141120; // sin and cos of 3</a>
-<span class="sourceLineNo">072</span><a id="line.72">        //yin = x * -0.141120 + y * -0.989992;</a>
-<span class="sourceLineNo">073</span><a id="line.73">        final double b = valueNoise(seed, xin + a, yin);</a>
-<span class="sourceLineNo">074</span><a id="line.74">        seed += 0x9E3779BD;</a>
-<span class="sourceLineNo">075</span><a id="line.75">        seed = (seed ^ seed &gt;&gt;&gt; 12) * 0xDAB;</a>
-<span class="sourceLineNo">076</span><a id="line.76">        seed ^= seed &gt;&gt;&gt; 14;</a>
-<span class="sourceLineNo">077</span><a id="line.77">        xin = p0;</a>
-<span class="sourceLineNo">078</span><a id="line.78">        yin = p1;</a>
-<span class="sourceLineNo">079</span><a id="line.79">        //xin = x * 0.283662 + y * -0.958924; // sin and cos of 5</a>
-<span class="sourceLineNo">080</span><a id="line.80">        //yin = x * 0.958924 + y * 0.283662;</a>
-<span class="sourceLineNo">081</span><a id="line.81">        final double c = valueNoise(seed, xin + b, yin);</a>
-<span class="sourceLineNo">082</span><a id="line.82">        final double result = a * 0.3125 + (b + c) * 0.34375;</a>
-<span class="sourceLineNo">083</span><a id="line.83">//        return result * result * (6.0 - 4.0 * result) - 1.0;</a>
-<span class="sourceLineNo">084</span><a id="line.84">        return (result &lt;= 0.5)</a>
-<span class="sourceLineNo">085</span><a id="line.85">                ? (result * result * 4.0) - 1.0</a>
-<span class="sourceLineNo">086</span><a id="line.86">                : 1.0 - ((result - 1.0) * (result - 1.0) * 4.0);</a>
-<span class="sourceLineNo">087</span><a id="line.87">    }</a>
-<span class="sourceLineNo">088</span><a id="line.88">    </a>
-<span class="sourceLineNo">089</span><a id="line.89">    /*</a>
-<span class="sourceLineNo">090</span><a id="line.90">x * -0.185127 + y * -0.791704 + z * -0.582180;</a>
-<span class="sourceLineNo">091</span><a id="line.91">x * -0.776796 + y * 0.628752 + z * -0.035464;</a>
-<span class="sourceLineNo">092</span><a id="line.92">x * 0.822283 + y * 0.467437 + z * -0.324582;</a>
-<span class="sourceLineNo">093</span><a id="line.93"></a>
-<span class="sourceLineNo">094</span><a id="line.94">x * 0.139640 + y * -0.304485 + z * 0.942226;</a>
-<span class="sourceLineNo">095</span><a id="line.95">x * -0.776796 + y * 0.628752 + z * -0.035464;</a>
-<span class="sourceLineNo">096</span><a id="line.96">x * 0.822283 + y * 0.467437 + z * -0.324582;</a>
-<span class="sourceLineNo">097</span><a id="line.97"></a>
-<span class="sourceLineNo">098</span><a id="line.98">x * 0.139640 + y * -0.304485 + z * 0.942226;</a>
-<span class="sourceLineNo">099</span><a id="line.99">x * -0.185127 + y * -0.791704 + z * -0.582180;</a>
-<span class="sourceLineNo">100</span><a id="line.100">x * 0.822283 + y * 0.467437 + z * -0.324582;</a>
-<span class="sourceLineNo">101</span><a id="line.101"></a>
-<span class="sourceLineNo">102</span><a id="line.102">x * 0.139640 + y * -0.304485 + z * 0.942226;</a>
-<span class="sourceLineNo">103</span><a id="line.103">x * -0.185127 + y * -0.791704 + z * -0.582180;</a>
-<span class="sourceLineNo">104</span><a id="line.104">x * -0.776796 + y * 0.628752 + z * -0.035464;</a>
-<span class="sourceLineNo">105</span><a id="line.105">     */</a>
-<span class="sourceLineNo">106</span><a id="line.106"></a>
-<span class="sourceLineNo">107</span><a id="line.107"></a>
-<span class="sourceLineNo">108</span><a id="line.108">    public static double foamNoise(final double x, final double y, final double z, int seed) {</a>
-<span class="sourceLineNo">109</span><a id="line.109">        final double p0 = x;</a>
-<span class="sourceLineNo">110</span><a id="line.110">        final double p1 = x * -0.3333333333333333 + y * 0.9428090415820634;</a>
-<span class="sourceLineNo">111</span><a id="line.111">        final double p2 = x * -0.3333333333333333 + y * -0.4714045207910317 + z * 0.816496580927726;</a>
-<span class="sourceLineNo">112</span><a id="line.112">        final double p3 = x * -0.3333333333333333 + y * -0.4714045207910317 + z * -0.816496580927726;</a>
-<span class="sourceLineNo">113</span><a id="line.113"></a>
-<span class="sourceLineNo">114</span><a id="line.114">        //final double p0 = (x + y + z);// * 0.5;</a>
-<span class="sourceLineNo">115</span><a id="line.115">        //final double p1 = x - (y + z);// * 0.25;</a>
-<span class="sourceLineNo">116</span><a id="line.116">        //final double p2 = y - (x + z);// * 0.25;</a>
-<span class="sourceLineNo">117</span><a id="line.117">        //final double p3 = z - (x + y);// * 0.25;</a>
-<span class="sourceLineNo">118</span><a id="line.118">////rotated version of above points on a tetrahedron; the ones below are "more correct" but more complex (and slower?)       </a>
-<span class="sourceLineNo">119</span><a id="line.119">//        final double p0 = x * 0.139640 + y * -0.304485 + z * 0.942226;</a>
-<span class="sourceLineNo">120</span><a id="line.120">//        final double p1 = x * -0.185127 + y * -0.791704 + z * -0.582180;</a>
-<span class="sourceLineNo">121</span><a id="line.121">//        final double p2 = x * -0.776796 + y * 0.628752 + z * -0.035464;</a>
-<span class="sourceLineNo">122</span><a id="line.122">//        final double p3 = x * 0.822283 + y * 0.467437 + z * -0.324582;</a>
-<span class="sourceLineNo">123</span><a id="line.123">        double xin = p1;</a>
-<span class="sourceLineNo">124</span><a id="line.124">        double yin = p2;</a>
-<span class="sourceLineNo">125</span><a id="line.125">        double zin = p3;</a>
-<span class="sourceLineNo">126</span><a id="line.126">        final double a = valueNoise(seed, xin, yin, zin);</a>
-<span class="sourceLineNo">127</span><a id="line.127">        //seed = (seed ^ 0x9E3779BD) * 0xDAB;</a>
-<span class="sourceLineNo">128</span><a id="line.128">        seed += 0x9E3779BD;</a>
-<span class="sourceLineNo">129</span><a id="line.129">        seed = (seed ^ seed &gt;&gt;&gt; 12) * 0xDAB;</a>
-<span class="sourceLineNo">130</span><a id="line.130">        seed ^= seed &gt;&gt;&gt; 14;</a>
-<span class="sourceLineNo">131</span><a id="line.131">        xin = p0;</a>
-<span class="sourceLineNo">132</span><a id="line.132">        yin = p2;</a>
-<span class="sourceLineNo">133</span><a id="line.133">        zin = p3;</a>
-<span class="sourceLineNo">134</span><a id="line.134">        final double b = valueNoise(seed, xin + a, yin, zin);</a>
-<span class="sourceLineNo">135</span><a id="line.135">        //seed = (seed ^ 0x9E3779BD) * 0xDAB;</a>
-<span class="sourceLineNo">136</span><a id="line.136">        seed += 0x9E3779BD;</a>
-<span class="sourceLineNo">137</span><a id="line.137">        seed = (seed ^ seed &gt;&gt;&gt; 12) * 0xDAB;</a>
-<span class="sourceLineNo">138</span><a id="line.138">        seed ^= seed &gt;&gt;&gt; 14;</a>
-<span class="sourceLineNo">139</span><a id="line.139">        xin = p0;</a>
-<span class="sourceLineNo">140</span><a id="line.140">        yin = p1;</a>
-<span class="sourceLineNo">141</span><a id="line.141">        zin = p3;</a>
-<span class="sourceLineNo">142</span><a id="line.142">        final double c = valueNoise(seed, xin + b, yin, zin);</a>
-<span class="sourceLineNo">143</span><a id="line.143">        //seed = (seed ^ 0x9E3779BD) * 0xDAB;</a>
-<span class="sourceLineNo">144</span><a id="line.144">        seed += 0x9E3779BD;</a>
-<span class="sourceLineNo">145</span><a id="line.145">        seed = (seed ^ seed &gt;&gt;&gt; 12) * 0xDAB;</a>
-<span class="sourceLineNo">146</span><a id="line.146">        seed ^= seed &gt;&gt;&gt; 14;</a>
-<span class="sourceLineNo">147</span><a id="line.147">        xin = p0;</a>
-<span class="sourceLineNo">148</span><a id="line.148">        yin = p1;</a>
-<span class="sourceLineNo">149</span><a id="line.149">        zin = p2;</a>
-<span class="sourceLineNo">150</span><a id="line.150">        final double d = valueNoise(seed, xin + c, yin, zin);</a>
-<span class="sourceLineNo">151</span><a id="line.151"></a>
-<span class="sourceLineNo">152</span><a id="line.152">        final double result = (a + b + c + d) * 0.25;</a>
-<span class="sourceLineNo">153</span><a id="line.153">//        return  (result * result * (6.0 - 4.0 * result) - 1.0);</a>
-<span class="sourceLineNo">154</span><a id="line.154">        return (result &lt;= 0.5)</a>
-<span class="sourceLineNo">155</span><a id="line.155">                ? Math.pow(result * 2, 3.0) - 1.0</a>
-<span class="sourceLineNo">156</span><a id="line.156">                : Math.pow((result - 1) * 2, 3.0) + 1.0;</a>
-<span class="sourceLineNo">157</span><a id="line.157">    }</a>
-<span class="sourceLineNo">158</span><a id="line.158"></a>
-<span class="sourceLineNo">159</span><a id="line.159">    public static double foamNoise(final double x, final double y, final double z, final double w, int seed) {</a>
-<span class="sourceLineNo">160</span><a id="line.160">        final double p0 = x;</a>
-<span class="sourceLineNo">161</span><a id="line.161">        final double p1 = x * -0.25 + y * 0.9682458365518543;</a>
-<span class="sourceLineNo">162</span><a id="line.162">        final double p2 = x * -0.25 + y * -0.3227486121839514 + z * 0.9128709291752769;</a>
-<span class="sourceLineNo">163</span><a id="line.163">        final double p3 = x * -0.25 + y * -0.3227486121839514 + z * -0.45643546458763834 + w * 0.7905694150420949;</a>
-<span class="sourceLineNo">164</span><a id="line.164">        final double p4 = x * -0.25 + y * -0.3227486121839514 + z * -0.45643546458763834 + w * -0.7905694150420947;</a>
-<span class="sourceLineNo">165</span><a id="line.165">////orthogonal 5-cell, like a right triangle; probably incorrect</a>
-<span class="sourceLineNo">166</span><a id="line.166">        //final double p0 = (x + y + z + w);</a>
-<span class="sourceLineNo">167</span><a id="line.167">        //final double p1 = x - (y + z + w);</a>
-<span class="sourceLineNo">168</span><a id="line.168">        //final double p2 = y - (x + z + w);</a>
-<span class="sourceLineNo">169</span><a id="line.169">        //final double p3 = z - (x + y + w);</a>
-<span class="sourceLineNo">170</span><a id="line.170">        //final double p4 = w - (x + y + z);</a>
-<span class="sourceLineNo">171</span><a id="line.171">////rotated version of above points on a 5-cell; the ones below are "more correct" but more complex (and slower?)       </a>
-<span class="sourceLineNo">172</span><a id="line.172">//        final double p0 = x * 0.139640 + y * -0.304485 + z * 0.942226;</a>
-<span class="sourceLineNo">173</span><a id="line.173">//        final double p1 = x * -0.185127 + y * -0.791704 + z * -0.582180;</a>
-<span class="sourceLineNo">174</span><a id="line.174">//        final double p2 = x * -0.776796 + y * 0.628752 + z * -0.035464;</a>
-<span class="sourceLineNo">175</span><a id="line.175">//        final double p3 = x * 0.822283 + y * 0.467437 + z * -0.324582;</a>
-<span class="sourceLineNo">176</span><a id="line.176">        double xin = p1;</a>
-<span class="sourceLineNo">177</span><a id="line.177">        double yin = p2;</a>
-<span class="sourceLineNo">178</span><a id="line.178">        double zin = p3;</a>
-<span class="sourceLineNo">179</span><a id="line.179">        double win = p4;</a>
-<span class="sourceLineNo">180</span><a id="line.180">        final double a = valueNoise(seed, xin, yin, zin, win);</a>
-<span class="sourceLineNo">181</span><a id="line.181">        //seed = (seed ^ 0x9E3779BD) * 0xDAB;</a>
-<span class="sourceLineNo">182</span><a id="line.182">        seed += 0x9E3779BD;</a>
-<span class="sourceLineNo">183</span><a id="line.183">        seed = (seed ^ seed &gt;&gt;&gt; 12) * 0xDAB;</a>
-<span class="sourceLineNo">184</span><a id="line.184">        seed ^= seed &gt;&gt;&gt; 14;</a>
-<span class="sourceLineNo">185</span><a id="line.185">        xin = p0;</a>
-<span class="sourceLineNo">186</span><a id="line.186">        yin = p2;</a>
-<span class="sourceLineNo">187</span><a id="line.187">        zin = p3;</a>
-<span class="sourceLineNo">188</span><a id="line.188">        win = p4;</a>
-<span class="sourceLineNo">189</span><a id="line.189">        final double b = valueNoise(seed, xin + a, yin, zin, win);</a>
-<span class="sourceLineNo">190</span><a id="line.190">        //seed = (seed ^ 0x9E3779BD) * 0xDAB;</a>
-<span class="sourceLineNo">191</span><a id="line.191">        seed += 0x9E3779BD;</a>
-<span class="sourceLineNo">192</span><a id="line.192">        seed = (seed ^ seed &gt;&gt;&gt; 12) * 0xDAB;</a>
-<span class="sourceLineNo">193</span><a id="line.193">        seed ^= seed &gt;&gt;&gt; 14;</a>
-<span class="sourceLineNo">194</span><a id="line.194">        xin = p0;</a>
-<span class="sourceLineNo">195</span><a id="line.195">        yin = p1;</a>
-<span class="sourceLineNo">196</span><a id="line.196">        zin = p3;</a>
-<span class="sourceLineNo">197</span><a id="line.197">        win = p4;</a>
-<span class="sourceLineNo">198</span><a id="line.198">        final double c = valueNoise(seed, xin + b, yin, zin, win);</a>
-<span class="sourceLineNo">199</span><a id="line.199">        //seed = (seed ^ 0x9E3779BD) * 0xDAB;</a>
-<span class="sourceLineNo">200</span><a id="line.200">        seed += 0x9E3779BD;</a>
-<span class="sourceLineNo">201</span><a id="line.201">        seed = (seed ^ seed &gt;&gt;&gt; 12) * 0xDAB;</a>
-<span class="sourceLineNo">202</span><a id="line.202">        seed ^= seed &gt;&gt;&gt; 14;</a>
-<span class="sourceLineNo">203</span><a id="line.203">        xin = p0;</a>
-<span class="sourceLineNo">204</span><a id="line.204">        yin = p1;</a>
-<span class="sourceLineNo">205</span><a id="line.205">        zin = p2;</a>
-<span class="sourceLineNo">206</span><a id="line.206">        win = p4;</a>
-<span class="sourceLineNo">207</span><a id="line.207">        final double d = valueNoise(seed, xin + c, yin, zin, win);</a>
-<span class="sourceLineNo">208</span><a id="line.208">        seed += 0x9E3779BD;</a>
-<span class="sourceLineNo">209</span><a id="line.209">        seed = (seed ^ seed &gt;&gt;&gt; 12) * 0xDAB;</a>
-<span class="sourceLineNo">210</span><a id="line.210">        seed ^= seed &gt;&gt;&gt; 14;</a>
-<span class="sourceLineNo">211</span><a id="line.211">        xin = p0;</a>
-<span class="sourceLineNo">212</span><a id="line.212">        yin = p1;</a>
-<span class="sourceLineNo">213</span><a id="line.213">        zin = p2;</a>
-<span class="sourceLineNo">214</span><a id="line.214">        win = p3;</a>
-<span class="sourceLineNo">215</span><a id="line.215">        final double e = valueNoise(seed, xin + d, yin, zin, win);</a>
-<span class="sourceLineNo">216</span><a id="line.216"></a>
-<span class="sourceLineNo">217</span><a id="line.217">        final double result = (a + b + c + d + e) * 0.2;</a>
-<span class="sourceLineNo">218</span><a id="line.218">        return (result &lt;= 0.5)</a>
-<span class="sourceLineNo">219</span><a id="line.219">                ? Math.pow(result * 2, 4.0) - 1.0</a>
-<span class="sourceLineNo">220</span><a id="line.220">                : 1.0 - Math.pow((result - 1) * 2, 4.0);</a>
-<span class="sourceLineNo">221</span><a id="line.221"></a>
-<span class="sourceLineNo">222</span><a id="line.222">//        return  (result * result * (6.0 - 4.0 * result) - 1.0);</a>
-<span class="sourceLineNo">223</span><a id="line.223">    }</a>
-<span class="sourceLineNo">224</span><a id="line.224">    public static double foamNoise(final double x, final double y, final double z,</a>
-<span class="sourceLineNo">225</span><a id="line.225">                                   final double w, final double u, int seed) {</a>
-<span class="sourceLineNo">226</span><a id="line.226">        final double p0 = x * 0.8157559148337911 + y * 0.5797766823136037;</a>
-<span class="sourceLineNo">227</span><a id="line.227">        final double p1 = x * -0.7314923478726791 + y * 0.6832997137249108;</a>
-<span class="sourceLineNo">228</span><a id="line.228">        final double p2 = x * -0.0208603044412437 + y * -0.3155296974329846 + z * 0.9486832980505138;</a>
-<span class="sourceLineNo">229</span><a id="line.229">        final double p3 = x * -0.0208603044412437 + y * -0.3155296974329846 + z * -0.316227766016838 + w * 0.8944271909999159;</a>
-<span class="sourceLineNo">230</span><a id="line.230">        final double p4 = x * -0.0208603044412437 + y * -0.3155296974329846 + z * -0.316227766016838 + w * -0.44721359549995804 + u * 0.7745966692414833;</a>
-<span class="sourceLineNo">231</span><a id="line.231">        final double p5 = x * -0.0208603044412437 + y * -0.3155296974329846 + z * -0.316227766016838 + w * -0.44721359549995804 + u * -0.7745966692414836;</a>
-<span class="sourceLineNo">232</span><a id="line.232"></a>
-<span class="sourceLineNo">233</span><a id="line.233">        double xin = p1;</a>
-<span class="sourceLineNo">234</span><a id="line.234">        double yin = p2;</a>
-<span class="sourceLineNo">235</span><a id="line.235">        double zin = p3;</a>
-<span class="sourceLineNo">236</span><a id="line.236">        double win = p4;</a>
-<span class="sourceLineNo">237</span><a id="line.237">        double uin = p5;</a>
-<span class="sourceLineNo">238</span><a id="line.238">        final double a = valueNoise(seed, xin, yin, zin, win, uin);</a>
-<span class="sourceLineNo">239</span><a id="line.239">        seed += 0x9E3779BD;</a>
-<span class="sourceLineNo">240</span><a id="line.240">        seed = (seed ^ seed &gt;&gt;&gt; 12) * 0xDAB;</a>
-<span class="sourceLineNo">241</span><a id="line.241">        seed ^= seed &gt;&gt;&gt; 14;</a>
-<span class="sourceLineNo">242</span><a id="line.242">        xin = p0;</a>
-<span class="sourceLineNo">243</span><a id="line.243">        yin = p2;</a>
-<span class="sourceLineNo">244</span><a id="line.244">        zin = p3;</a>
-<span class="sourceLineNo">245</span><a id="line.245">        win = p4;</a>
-<span class="sourceLineNo">246</span><a id="line.246">        uin = p5;</a>
-<span class="sourceLineNo">247</span><a id="line.247">        final double b = valueNoise(seed, xin + a, yin, zin, win, uin);</a>
-<span class="sourceLineNo">248</span><a id="line.248">        seed += 0x9E3779BD;</a>
-<span class="sourceLineNo">249</span><a id="line.249">        seed = (seed ^ seed &gt;&gt;&gt; 12) * 0xDAB;</a>
-<span class="sourceLineNo">250</span><a id="line.250">        seed ^= seed &gt;&gt;&gt; 14;</a>
-<span class="sourceLineNo">251</span><a id="line.251">        xin = p0;</a>
-<span class="sourceLineNo">252</span><a id="line.252">        yin = p1;</a>
-<span class="sourceLineNo">253</span><a id="line.253">        zin = p3;</a>
-<span class="sourceLineNo">254</span><a id="line.254">        win = p4;</a>
-<span class="sourceLineNo">255</span><a id="line.255">        uin = p5;</a>
-<span class="sourceLineNo">256</span><a id="line.256">        final double c = valueNoise(seed, xin + b, yin, zin, win, uin);</a>
-<span class="sourceLineNo">257</span><a id="line.257">        seed += 0x9E3779BD;</a>
-<span class="sourceLineNo">258</span><a id="line.258">        seed = (seed ^ seed &gt;&gt;&gt; 12) * 0xDAB;</a>
-<span class="sourceLineNo">259</span><a id="line.259">        seed ^= seed &gt;&gt;&gt; 14;</a>
-<span class="sourceLineNo">260</span><a id="line.260">        xin = p0;</a>
-<span class="sourceLineNo">261</span><a id="line.261">        yin = p1;</a>
-<span class="sourceLineNo">262</span><a id="line.262">        zin = p2;</a>
-<span class="sourceLineNo">263</span><a id="line.263">        win = p4;</a>
-<span class="sourceLineNo">264</span><a id="line.264">        uin = p5;</a>
-<span class="sourceLineNo">265</span><a id="line.265">        final double d = valueNoise(seed, xin + c, yin, zin, win, uin);</a>
-<span class="sourceLineNo">266</span><a id="line.266">        seed += 0x9E3779BD;</a>
-<span class="sourceLineNo">267</span><a id="line.267">        seed = (seed ^ seed &gt;&gt;&gt; 12) * 0xDAB;</a>
-<span class="sourceLineNo">268</span><a id="line.268">        seed ^= seed &gt;&gt;&gt; 14;</a>
-<span class="sourceLineNo">269</span><a id="line.269">        xin = p0;</a>
-<span class="sourceLineNo">270</span><a id="line.270">        yin = p1;</a>
-<span class="sourceLineNo">271</span><a id="line.271">        zin = p2;</a>
-<span class="sourceLineNo">272</span><a id="line.272">        win = p3;</a>
-<span class="sourceLineNo">273</span><a id="line.273">        uin = p5;</a>
-<span class="sourceLineNo">274</span><a id="line.274">        final double e = valueNoise(seed, xin + d, yin, zin, win, uin);</a>
-<span class="sourceLineNo">275</span><a id="line.275">        seed += 0x9E3779BD;</a>
-<span class="sourceLineNo">276</span><a id="line.276">        seed = (seed ^ seed &gt;&gt;&gt; 12) * 0xDAB;</a>
-<span class="sourceLineNo">277</span><a id="line.277">        seed ^= seed &gt;&gt;&gt; 14;</a>
-<span class="sourceLineNo">278</span><a id="line.278">        xin = p0;</a>
-<span class="sourceLineNo">279</span><a id="line.279">        yin = p1;</a>
-<span class="sourceLineNo">280</span><a id="line.280">        zin = p2;</a>
-<span class="sourceLineNo">281</span><a id="line.281">        win = p3;</a>
-<span class="sourceLineNo">282</span><a id="line.282">        uin = p4;</a>
-<span class="sourceLineNo">283</span><a id="line.283">        final double f = valueNoise(seed, xin + e, yin, zin, win, uin);</a>
-<span class="sourceLineNo">284</span><a id="line.284"></a>
-<span class="sourceLineNo">285</span><a id="line.285">        final double result = (a + b + c + d + e + f) * 0.16666666666666666;</a>
-<span class="sourceLineNo">286</span><a id="line.286">        return (result &lt;= 0.5)</a>
-<span class="sourceLineNo">287</span><a id="line.287">                ? 32.0 * result * result * result * result * result - 1.0</a>
-<span class="sourceLineNo">288</span><a id="line.288">                : 32.0 * (result - 1) * (result - 1) * (result - 1) * (result - 1) * (result - 1) + 1.0;</a>
-<span class="sourceLineNo">289</span><a id="line.289">    }</a>
-<span class="sourceLineNo">290</span><a id="line.290"></a>
-<span class="sourceLineNo">291</span><a id="line.291">    public static double foamNoise(final double x, final double y, final double z,</a>
-<span class="sourceLineNo">292</span><a id="line.292">                                   final double w, final double u, final double v, int seed) {</a>
-<span class="sourceLineNo">293</span><a id="line.293">        final double p0 = x;</a>
-<span class="sourceLineNo">294</span><a id="line.294">        final double p1 = x * -0.16666666666666666 + y * 0.9860132971832694;</a>
-<span class="sourceLineNo">295</span><a id="line.295">        final double p2 = x * -0.16666666666666666 + y * -0.19720265943665383 + z * 0.9660917830792959;</a>
-<span class="sourceLineNo">296</span><a id="line.296">        final double p3 = x * -0.16666666666666666 + y * -0.19720265943665383 + z * -0.24152294576982394 + w * 0.9354143466934853;</a>
-<span class="sourceLineNo">297</span><a id="line.297">        final double p4 = x * -0.16666666666666666 + y * -0.19720265943665383 + z * -0.24152294576982394 + w * -0.31180478223116176 + u * 0.8819171036881969;</a>
-<span class="sourceLineNo">298</span><a id="line.298">        final double p5 = x * -0.16666666666666666 + y * -0.19720265943665383 + z * -0.24152294576982394 + w * -0.31180478223116176 + u * -0.4409585518440984 + v * 0.7637626158259734;</a>
-<span class="sourceLineNo">299</span><a id="line.299">        final double p6 = x * -0.16666666666666666 + y * -0.19720265943665383 + z * -0.24152294576982394 + w * -0.31180478223116176 + u * -0.4409585518440984 + v * -0.7637626158259732;</a>
-<span class="sourceLineNo">300</span><a id="line.300">        double xin = p1;</a>
-<span class="sourceLineNo">301</span><a id="line.301">        double yin = p2;</a>
-<span class="sourceLineNo">302</span><a id="line.302">        double zin = p3;</a>
-<span class="sourceLineNo">303</span><a id="line.303">        double win = p4;</a>
-<span class="sourceLineNo">304</span><a id="line.304">        double uin = p5;</a>
-<span class="sourceLineNo">305</span><a id="line.305">        double vin = p6;</a>
-<span class="sourceLineNo">306</span><a id="line.306">        final double a = valueNoise(seed, xin, yin, zin, win, uin, vin);</a>
-<span class="sourceLineNo">307</span><a id="line.307">        seed += 0x9E3779BD;</a>
-<span class="sourceLineNo">308</span><a id="line.308">        seed = (seed ^ seed &gt;&gt;&gt; 12) * 0xDAB;</a>
-<span class="sourceLineNo">309</span><a id="line.309">        seed ^= seed &gt;&gt;&gt; 14;</a>
-<span class="sourceLineNo">310</span><a id="line.310">        xin = p0;</a>
-<span class="sourceLineNo">311</span><a id="line.311">        yin = p2;</a>
-<span class="sourceLineNo">312</span><a id="line.312">        zin = p3;</a>
-<span class="sourceLineNo">313</span><a id="line.313">        win = p4;</a>
-<span class="sourceLineNo">314</span><a id="line.314">        uin = p5;</a>
-<span class="sourceLineNo">315</span><a id="line.315">        vin = p6;</a>
-<span class="sourceLineNo">316</span><a id="line.316">        final double b = valueNoise(seed, xin + a, yin, zin, win, uin, vin);</a>
-<span class="sourceLineNo">317</span><a id="line.317">        seed += 0x9E3779BD;</a>
-<span class="sourceLineNo">318</span><a id="line.318">        seed = (seed ^ seed &gt;&gt;&gt; 12) * 0xDAB;</a>
-<span class="sourceLineNo">319</span><a id="line.319">        seed ^= seed &gt;&gt;&gt; 14;</a>
-<span class="sourceLineNo">320</span><a id="line.320">        xin = p0;</a>
-<span class="sourceLineNo">321</span><a id="line.321">        yin = p1;</a>
-<span class="sourceLineNo">322</span><a id="line.322">        zin = p3;</a>
-<span class="sourceLineNo">323</span><a id="line.323">        win = p4;</a>
-<span class="sourceLineNo">324</span><a id="line.324">        uin = p5;</a>
-<span class="sourceLineNo">325</span><a id="line.325">        vin = p6;</a>
-<span class="sourceLineNo">326</span><a id="line.326">        final double c = valueNoise(seed, xin + b, yin, zin, win, uin, vin);</a>
-<span class="sourceLineNo">327</span><a id="line.327">        seed += 0x9E3779BD;</a>
-<span class="sourceLineNo">328</span><a id="line.328">        seed = (seed ^ seed &gt;&gt;&gt; 12) * 0xDAB;</a>
-<span class="sourceLineNo">329</span><a id="line.329">        seed ^= seed &gt;&gt;&gt; 14;</a>
-<span class="sourceLineNo">330</span><a id="line.330">        xin = p0;</a>
-<span class="sourceLineNo">331</span><a id="line.331">        yin = p1;</a>
-<span class="sourceLineNo">332</span><a id="line.332">        zin = p2;</a>
-<span class="sourceLineNo">333</span><a id="line.333">        win = p4;</a>
-<span class="sourceLineNo">334</span><a id="line.334">        uin = p5;</a>
-<span class="sourceLineNo">335</span><a id="line.335">        vin = p6;</a>
-<span class="sourceLineNo">336</span><a id="line.336">        final double d = valueNoise(seed, xin + c, yin, zin, win, uin, vin);</a>
-<span class="sourceLineNo">337</span><a id="line.337">        seed += 0x9E3779BD;</a>
-<span class="sourceLineNo">338</span><a id="line.338">        seed = (seed ^ seed &gt;&gt;&gt; 12) * 0xDAB;</a>
-<span class="sourceLineNo">339</span><a id="line.339">        seed ^= seed &gt;&gt;&gt; 14;</a>
-<span class="sourceLineNo">340</span><a id="line.340">        xin = p0;</a>
-<span class="sourceLineNo">341</span><a id="line.341">        yin = p1;</a>
-<span class="sourceLineNo">342</span><a id="line.342">        zin = p2;</a>
-<span class="sourceLineNo">343</span><a id="line.343">        win = p3;</a>
-<span class="sourceLineNo">344</span><a id="line.344">        uin = p5;</a>
-<span class="sourceLineNo">345</span><a id="line.345">        vin = p6;</a>
-<span class="sourceLineNo">346</span><a id="line.346">        final double e = valueNoise(seed, xin + d, yin, zin, win, uin, vin);</a>
-<span class="sourceLineNo">347</span><a id="line.347">        seed += 0x9E3779BD;</a>
-<span class="sourceLineNo">348</span><a id="line.348">        seed = (seed ^ seed &gt;&gt;&gt; 12) * 0xDAB;</a>
-<span class="sourceLineNo">349</span><a id="line.349">        seed ^= seed &gt;&gt;&gt; 14;</a>
-<span class="sourceLineNo">350</span><a id="line.350">        xin = p0;</a>
-<span class="sourceLineNo">351</span><a id="line.351">        yin = p1;</a>
-<span class="sourceLineNo">352</span><a id="line.352">        zin = p2;</a>
-<span class="sourceLineNo">353</span><a id="line.353">        win = p3;</a>
-<span class="sourceLineNo">354</span><a id="line.354">        uin = p4;</a>
-<span class="sourceLineNo">355</span><a id="line.355">        vin = p6;</a>
-<span class="sourceLineNo">356</span><a id="line.356">        final double f = valueNoise(seed, xin + e, yin, zin, win, uin, vin);</a>
-<span class="sourceLineNo">357</span><a id="line.357">        seed += 0x9E3779BD;</a>
-<span class="sourceLineNo">358</span><a id="line.358">        seed = (seed ^ seed &gt;&gt;&gt; 12) * 0xDAB;</a>
-<span class="sourceLineNo">359</span><a id="line.359">        seed ^= seed &gt;&gt;&gt; 14;</a>
-<span class="sourceLineNo">360</span><a id="line.360">        xin = p0;</a>
-<span class="sourceLineNo">361</span><a id="line.361">        yin = p1;</a>
-<span class="sourceLineNo">362</span><a id="line.362">        zin = p2;</a>
-<span class="sourceLineNo">363</span><a id="line.363">        win = p3;</a>
-<span class="sourceLineNo">364</span><a id="line.364">        uin = p4;</a>
-<span class="sourceLineNo">365</span><a id="line.365">        vin = p5;</a>
-<span class="sourceLineNo">366</span><a id="line.366">        final double g = valueNoise(seed, xin + f, yin, zin, win, uin, vin);</a>
-<span class="sourceLineNo">367</span><a id="line.367"></a>
-<span class="sourceLineNo">368</span><a id="line.368">        final double result = (a + b + c + d + e + f + g) * 0.14285714285714285;</a>
-<span class="sourceLineNo">369</span><a id="line.369">        return (result &lt;= 0.5)</a>
-<span class="sourceLineNo">370</span><a id="line.370">                ? Math.pow(result * 2, 6.0) - 1.0</a>
-<span class="sourceLineNo">371</span><a id="line.371">                : 1.0 - Math.pow((result - 1) * 2, 6.0); </a>
-<span class="sourceLineNo">372</span><a id="line.372">    }</a>
-<span class="sourceLineNo">373</span><a id="line.373"></a>
-<span class="sourceLineNo">374</span><a id="line.374">    @Override</a>
-<span class="sourceLineNo">375</span><a id="line.375">    public double getNoise(double x, double y) {</a>
-<span class="sourceLineNo">376</span><a id="line.376">        return foamNoise(x, y, seed);</a>
-<span class="sourceLineNo">377</span><a id="line.377">    }</a>
-<span class="sourceLineNo">378</span><a id="line.378">    @Override</a>
-<span class="sourceLineNo">379</span><a id="line.379">    public double getNoiseWithSeed(double x, double y, long seed) {</a>
-<span class="sourceLineNo">380</span><a id="line.380">        return foamNoise(x, y, (int) (seed ^ seed &gt;&gt;&gt; 32));</a>
-<span class="sourceLineNo">381</span><a id="line.381">    }</a>
-<span class="sourceLineNo">382</span><a id="line.382">    @Override</a>
-<span class="sourceLineNo">383</span><a id="line.383">    public double getNoise(double x, double y, double z) {</a>
-<span class="sourceLineNo">384</span><a id="line.384">        return foamNoise(x, y, z, seed);</a>
-<span class="sourceLineNo">385</span><a id="line.385">    }</a>
-<span class="sourceLineNo">386</span><a id="line.386">    @Override</a>
-<span class="sourceLineNo">387</span><a id="line.387">    public double getNoiseWithSeed(double x, double y, double z, long seed) {</a>
-<span class="sourceLineNo">388</span><a id="line.388">        return foamNoise(x, y, z, (int) (seed ^ seed &gt;&gt;&gt; 32));</a>
-<span class="sourceLineNo">389</span><a id="line.389">    }</a>
-<span class="sourceLineNo">390</span><a id="line.390">    @Override</a>
-<span class="sourceLineNo">391</span><a id="line.391">    public double getNoise(double x, double y, double z, double w) {</a>
-<span class="sourceLineNo">392</span><a id="line.392">        return foamNoise(x, y, z, w, seed);</a>
-<span class="sourceLineNo">393</span><a id="line.393">    }</a>
-<span class="sourceLineNo">394</span><a id="line.394">    @Override</a>
-<span class="sourceLineNo">395</span><a id="line.395">    public double getNoiseWithSeed(double x, double y, double z, double w, long seed) {</a>
-<span class="sourceLineNo">396</span><a id="line.396">        return foamNoise(x, y, z, w, (int) (seed ^ seed &gt;&gt;&gt; 32));</a>
-<span class="sourceLineNo">397</span><a id="line.397">    }</a>
-<span class="sourceLineNo">398</span><a id="line.398">    @Override</a>
-<span class="sourceLineNo">399</span><a id="line.399">    public double getNoise(double x, double y, double z, double w, double u) {</a>
-<span class="sourceLineNo">400</span><a id="line.400">        return foamNoise(x, y, z, w, u, seed);</a>
-<span class="sourceLineNo">401</span><a id="line.401">    }</a>
-<span class="sourceLineNo">402</span><a id="line.402">    @Override</a>
-<span class="sourceLineNo">403</span><a id="line.403">    public double getNoiseWithSeed(double x, double y, double z, double w, double u, long seed) {</a>
-<span class="sourceLineNo">404</span><a id="line.404">        return foamNoise(x, y, z, w, u, (int) (seed ^ seed &gt;&gt;&gt; 32));</a>
-<span class="sourceLineNo">405</span><a id="line.405">    }</a>
-<span class="sourceLineNo">406</span><a id="line.406">    @Override</a>
-<span class="sourceLineNo">407</span><a id="line.407">    public double getNoise(double x, double y, double z, double w, double u, double v) {</a>
-<span class="sourceLineNo">408</span><a id="line.408">        return foamNoise(x, y, z, w, u, v, seed);</a>
-<span class="sourceLineNo">409</span><a id="line.409">    }</a>
-<span class="sourceLineNo">410</span><a id="line.410">    @Override</a>
-<span class="sourceLineNo">411</span><a id="line.411">    public double getNoiseWithSeed(double x, double y, double z, double w, double u, double v, long seed) {</a>
-<span class="sourceLineNo">412</span><a id="line.412">        return foamNoise(x, y, z, w, u, v, (int) (seed ^ seed &gt;&gt;&gt; 32));</a>
-<span class="sourceLineNo">413</span><a id="line.413">    }</a>
-<span class="sourceLineNo">414</span><a id="line.414">}</a>
+<div class="source-container">
+<pre><span class="source-line-no">001</span><span id="line.1">package squidpony.squidmath;</span>
+<span class="source-line-no">002</span><span id="line.2"></span>
+<span class="source-line-no">003</span><span id="line.3">import static squidpony.squidmath.ValueNoise.valueNoise;</span>
+<span class="source-line-no">004</span><span id="line.4"></span>
+<span class="source-line-no">005</span><span id="line.5">/**</span>
+<span class="source-line-no">006</span><span id="line.6"> * An unusual continuous noise generator that tends to produce organic-looking forms, currently supporting 2D, 3D, 4D</span>
+<span class="source-line-no">007</span><span id="line.7"> * and 6D. Produces noise values from -1.0 inclusive to 1.0 exclusive. Typically needs fewer octaves than the Simplex</span>
+<span class="source-line-no">008</span><span id="line.8"> * option in FastNoise to produce roughly comparable quality, but it also has about a third the speed. A useful property</span>
+<span class="source-line-no">009</span><span id="line.9"> * of FoamNoise is how its visual "character" doesn't change much as dimensions are added; whereas 6D simplex noise</span>
+<span class="source-line-no">010</span><span id="line.10"> * tends to separate into "surflets" separated by spans of 0, and higher dimensions of simplex only have larger such</span>
+<span class="source-line-no">011</span><span id="line.11"> * spans, FoamNoise seems to stay approximately as coherent in 2D, 3D, and 4D. Verifying this claim about FoamNoise is</span>
+<span class="source-line-no">012</span><span id="line.12"> * not easy, but it makes sense intuitively because of how this generator works. Simplex noise in N dimensions relies on</span>
+<span class="source-line-no">013</span><span id="line.13"> * a lattice of N-simplices (such as triangles in 2D or tetrahedra in 3D) and evaluates the noise at a point by hashing</span>
+<span class="source-line-no">014</span><span id="line.14"> * each of the N+1 vertices, looking up a gradient vector for each vertex from a pre-calculated array, and combining the</span>
+<span class="source-line-no">015</span><span id="line.15"> * gradient vectors based on proximity of the evaluated point to each vertex. FoamNoise in N dimensions is not nearly as</span>
+<span class="source-line-no">016</span><span id="line.16"> * complex; it relies on making N+1 averaged calls to N-dimensional value noise, each call using a rotated (and</span>
+<span class="source-line-no">017</span><span id="line.17"> * potentially skewed) set of axes, with each call's result also affecting the inputs to the next call (domain warping).</span>
+<span class="source-line-no">018</span><span id="line.18"> * Value noise uses a cubic lattice or its hypercube equivalent in higher dimensions, which seems to be more "stable" as</span>
+<span class="source-line-no">019</span><span id="line.19"> * dimensionality increases, and the number of value noise calls increases at the same rate as simplex noise adds</span>
+<span class="source-line-no">020</span><span id="line.20"> * gradient vectors. Averaging more calls causes the distribution of the noise to gradually approach Gaussian (biased</span>
+<span class="source-line-no">021</span><span id="line.21"> * toward results in the center of the range), but adjustments this does at the end counteract this well enough. </span>
+<span class="source-line-no">022</span><span id="line.22"> * &lt;br&gt;</span>
+<span class="source-line-no">023</span><span id="line.23"> * It's encouraged to experiment with the lacunarity parameter in {@link Noise.Layered3D} and similar classes if you use</span>
+<span class="source-line-no">024</span><span id="line.24"> * one of those variants, which also probably needs adjustments to frequency. Changing lacunarity wit multiple octaves</span>
+<span class="source-line-no">025</span><span id="line.25"> * can be useful to edit how tightly the noise clumps together. FoamNoise tends to look about the same with 3 octaves as</span>
+<span class="source-line-no">026</span><span id="line.26"> * it does with 4 octaves; for perceived quality, the returns seem to diminish quickly from added octaves. This isn't</span>
+<span class="source-line-no">027</span><span id="line.27"> * accurate for all frequencies, so you should definitely run through your options for what kinds of noise look good for</span>
+<span class="source-line-no">028</span><span id="line.28"> * a particular scenario. Mixing Simplex and Foam noise can produce a good water effect when applied to grid cells.</span>
+<span class="source-line-no">029</span><span id="line.29"> * &lt;br&gt;</span>
+<span class="source-line-no">030</span><span id="line.30"> * &lt;a href="https://i.imgur.com/WpUz1xP.png"&gt;2D FoamNoise, one octave&lt;/a&gt;,</span>
+<span class="source-line-no">031</span><span id="line.31"> * &lt;a href="https://i.imgur.com/CDXcQRW.png"&gt;2D FoamNoise, one octave colorized&lt;/a&gt;,</span>
+<span class="source-line-no">032</span><span id="line.32"> * &lt;a href="https://i.imgur.com/XYUN8y4.png"&gt;2D FoamNoise, two octaves colorized&lt;/a&gt; (note fewer peaks and valleys),</span>
+<span class="source-line-no">033</span><span id="line.33"> * &lt;a href="https://i.imgur.com/cSiXzgW.gifv"&gt;3D FoamNoise animated over time, one octave colorized&lt;/a&gt;,</span>
+<span class="source-line-no">034</span><span id="line.34"> * &lt;a href="https://i.imgur.com/a2xO1Tb.gifv"&gt;3D FoamNoise animated over time, two octaves colorized&lt;/a&gt;,</span>
+<span class="source-line-no">035</span><span id="line.35"> * &lt;a href="https://i.imgur.com/MMnPn8C.gifv"&gt;4D FoamNoise animated over time, one octave colorized&lt;/a&gt;,</span>
+<span class="source-line-no">036</span><span id="line.36"> * &lt;a href="https://i.imgur.com/0ZHicDs.gifv"&gt;4D FoamNoise animated over time, two octaves colorized&lt;/a&gt;,</span>
+<span class="source-line-no">037</span><span id="line.37"> * &lt;a href="https://i.imgur.com/pjuFork.gifv"&gt;6D FoamNoise animated over time, one octave colorized&lt;/a&gt;,</span>
+<span class="source-line-no">038</span><span id="line.38"> * &lt;a href="https://i.imgur.com/CvWFFyI.gifv"&gt;6D FoamNoise animated over time, two octaves colorized&lt;/a&gt;,</span>
+<span class="source-line-no">039</span><span id="line.39"> * &lt;a href="https://i.imgur.com/ktCTiIK.jpg"&gt;World map made using FoamNoise&lt;/a&gt;.</span>
+<span class="source-line-no">040</span><span id="line.40"> */</span>
+<span class="source-line-no">041</span><span id="line.41">public class FoamNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, Noise.Noise5D, Noise.Noise6D {</span>
+<span class="source-line-no">042</span><span id="line.42">    public static final FoamNoise instance = new FoamNoise();</span>
+<span class="source-line-no">043</span><span id="line.43">    </span>
+<span class="source-line-no">044</span><span id="line.44">    public int seed = 0xD1CEBEEF;</span>
+<span class="source-line-no">045</span><span id="line.45">    public double sharpness = 0.75;</span>
+<span class="source-line-no">046</span><span id="line.46">    public FoamNoise() {</span>
+<span class="source-line-no">047</span><span id="line.47">    }</span>
+<span class="source-line-no">048</span><span id="line.48"></span>
+<span class="source-line-no">049</span><span id="line.49">    public FoamNoise(int seed) {</span>
+<span class="source-line-no">050</span><span id="line.50">        this.seed = seed;</span>
+<span class="source-line-no">051</span><span id="line.51">    }</span>
+<span class="source-line-no">052</span><span id="line.52"></span>
+<span class="source-line-no">053</span><span id="line.53">    public FoamNoise(long seed) {</span>
+<span class="source-line-no">054</span><span id="line.54">        this.seed = (int) (seed ^ seed &gt;&gt;&gt; 32);</span>
+<span class="source-line-no">055</span><span id="line.55">    }</span>
+<span class="source-line-no">056</span><span id="line.56"></span>
+<span class="source-line-no">057</span><span id="line.57">    public FoamNoise(long seed, double sharpness) {</span>
+<span class="source-line-no">058</span><span id="line.58">        this(seed);</span>
+<span class="source-line-no">059</span><span id="line.59">        this.sharpness = 0.75 * sharpness;</span>
+<span class="source-line-no">060</span><span id="line.60">        </span>
+<span class="source-line-no">061</span><span id="line.61">    }</span>
+<span class="source-line-no">062</span><span id="line.62"></span>
+<span class="source-line-no">063</span><span id="line.63">    public double foamNoise(final double x, final double y, int seed) {</span>
+<span class="source-line-no">064</span><span id="line.64">        final double p0 = x;</span>
+<span class="source-line-no">065</span><span id="line.65">        final double p1 = x * -0.5 + y * 0.8660254037844386;</span>
+<span class="source-line-no">066</span><span id="line.66">        final double p2 = x * -0.5 + y * -0.8660254037844387;</span>
+<span class="source-line-no">067</span><span id="line.67"></span>
+<span class="source-line-no">068</span><span id="line.68">        double xin = p1;</span>
+<span class="source-line-no">069</span><span id="line.69">        double yin = p2;</span>
+<span class="source-line-no">070</span><span id="line.70">        //double xin = x * 0.540302 + y * 0.841471; // sin and cos of 1</span>
+<span class="source-line-no">071</span><span id="line.71">        //double yin = x * -0.841471 + y * 0.540302;</span>
+<span class="source-line-no">072</span><span id="line.72">        final double a = valueNoise(seed, xin, yin);</span>
+<span class="source-line-no">073</span><span id="line.73">        seed += 0x9E3779BD;</span>
+<span class="source-line-no">074</span><span id="line.74">        seed = (seed ^ seed &gt;&gt;&gt; 12) * 0xDAB;</span>
+<span class="source-line-no">075</span><span id="line.75">        seed ^= seed &gt;&gt;&gt; 14;</span>
+<span class="source-line-no">076</span><span id="line.76">        xin = p2;</span>
+<span class="source-line-no">077</span><span id="line.77">        yin = p0;</span>
+<span class="source-line-no">078</span><span id="line.78">        //xin = x * -0.989992 + y * 0.141120; // sin and cos of 3</span>
+<span class="source-line-no">079</span><span id="line.79">        //yin = x * -0.141120 + y * -0.989992;</span>
+<span class="source-line-no">080</span><span id="line.80">        final double b = valueNoise(seed, xin + a, yin);</span>
+<span class="source-line-no">081</span><span id="line.81">        seed += 0x9E3779BD;</span>
+<span class="source-line-no">082</span><span id="line.82">        seed = (seed ^ seed &gt;&gt;&gt; 12) * 0xDAB;</span>
+<span class="source-line-no">083</span><span id="line.83">        seed ^= seed &gt;&gt;&gt; 14;</span>
+<span class="source-line-no">084</span><span id="line.84">        xin = p0;</span>
+<span class="source-line-no">085</span><span id="line.85">        yin = p1;</span>
+<span class="source-line-no">086</span><span id="line.86">        //xin = x * 0.283662 + y * -0.958924; // sin and cos of 5</span>
+<span class="source-line-no">087</span><span id="line.87">        //yin = x * 0.958924 + y * 0.283662;</span>
+<span class="source-line-no">088</span><span id="line.88">        final double c = valueNoise(seed, xin + b, yin);</span>
+<span class="source-line-no">089</span><span id="line.89">        final double result = a * 0.3125 + (b + c) * 0.34375;</span>
+<span class="source-line-no">090</span><span id="line.90">//        return result * result * (6.0 - 4.0 * result) - 1.0;</span>
+<span class="source-line-no">091</span><span id="line.91">//        return (result &lt;= 0.5)</span>
+<span class="source-line-no">092</span><span id="line.92">//                ? (result * result * 4.0) - 1.0</span>
+<span class="source-line-no">093</span><span id="line.93">//                : 1.0 - ((result - 1.0) * (result - 1.0) * 4.0);</span>
+<span class="source-line-no">094</span><span id="line.94">        final double sharp = sharpness * 2.2;</span>
+<span class="source-line-no">095</span><span id="line.95">        final double diff = 0.5 - result;</span>
+<span class="source-line-no">096</span><span id="line.96">        final int sign = NumberTools.doubleToHighIntBits(diff) &gt;&gt; 31, one = sign | 1;</span>
+<span class="source-line-no">097</span><span id="line.97">        return ((( 0.5 * one - sign) * (result + sign)) / (Double.MIN_VALUE - sign + (result + sharp * diff) * one) - sign) * 2.0 - 1.0;</span>
+<span class="source-line-no">098</span><span id="line.98">    }</span>
+<span class="source-line-no">099</span><span id="line.99">    </span>
+<span class="source-line-no">100</span><span id="line.100">    /*</span>
+<span class="source-line-no">101</span><span id="line.101">x * -0.185127 + y * -0.791704 + z * -0.582180;</span>
+<span class="source-line-no">102</span><span id="line.102">x * -0.776796 + y * 0.628752 + z * -0.035464;</span>
+<span class="source-line-no">103</span><span id="line.103">x * 0.822283 + y * 0.467437 + z * -0.324582;</span>
+<span class="source-line-no">104</span><span id="line.104"></span>
+<span class="source-line-no">105</span><span id="line.105">x * 0.139640 + y * -0.304485 + z * 0.942226;</span>
+<span class="source-line-no">106</span><span id="line.106">x * -0.776796 + y * 0.628752 + z * -0.035464;</span>
+<span class="source-line-no">107</span><span id="line.107">x * 0.822283 + y * 0.467437 + z * -0.324582;</span>
+<span class="source-line-no">108</span><span id="line.108"></span>
+<span class="source-line-no">109</span><span id="line.109">x * 0.139640 + y * -0.304485 + z * 0.942226;</span>
+<span class="source-line-no">110</span><span id="line.110">x * -0.185127 + y * -0.791704 + z * -0.582180;</span>
+<span class="source-line-no">111</span><span id="line.111">x * 0.822283 + y * 0.467437 + z * -0.324582;</span>
+<span class="source-line-no">112</span><span id="line.112"></span>
+<span class="source-line-no">113</span><span id="line.113">x * 0.139640 + y * -0.304485 + z * 0.942226;</span>
+<span class="source-line-no">114</span><span id="line.114">x * -0.185127 + y * -0.791704 + z * -0.582180;</span>
+<span class="source-line-no">115</span><span id="line.115">x * -0.776796 + y * 0.628752 + z * -0.035464;</span>
+<span class="source-line-no">116</span><span id="line.116">     */</span>
+<span class="source-line-no">117</span><span id="line.117"></span>
+<span class="source-line-no">118</span><span id="line.118"></span>
+<span class="source-line-no">119</span><span id="line.119">    public double foamNoise(final double x, final double y, final double z, int seed) {</span>
+<span class="source-line-no">120</span><span id="line.120">        final double p0 = x;</span>
+<span class="source-line-no">121</span><span id="line.121">        final double p1 = x * -0.3333333333333333 + y * 0.9428090415820634;</span>
+<span class="source-line-no">122</span><span id="line.122">        final double p2 = x * -0.3333333333333333 + y * -0.4714045207910317 + z * 0.816496580927726;</span>
+<span class="source-line-no">123</span><span id="line.123">        final double p3 = x * -0.3333333333333333 + y * -0.4714045207910317 + z * -0.816496580927726;</span>
+<span class="source-line-no">124</span><span id="line.124"></span>
+<span class="source-line-no">125</span><span id="line.125">        //final double p0 = (x + y + z);// * 0.5;</span>
+<span class="source-line-no">126</span><span id="line.126">        //final double p1 = x - (y + z);// * 0.25;</span>
+<span class="source-line-no">127</span><span id="line.127">        //final double p2 = y - (x + z);// * 0.25;</span>
+<span class="source-line-no">128</span><span id="line.128">        //final double p3 = z - (x + y);// * 0.25;</span>
+<span class="source-line-no">129</span><span id="line.129">////rotated version of above points on a tetrahedron; the ones below are "more correct" but more complex (and slower?)       </span>
+<span class="source-line-no">130</span><span id="line.130">//        final double p0 = x * 0.139640 + y * -0.304485 + z * 0.942226;</span>
+<span class="source-line-no">131</span><span id="line.131">//        final double p1 = x * -0.185127 + y * -0.791704 + z * -0.582180;</span>
+<span class="source-line-no">132</span><span id="line.132">//        final double p2 = x * -0.776796 + y * 0.628752 + z * -0.035464;</span>
+<span class="source-line-no">133</span><span id="line.133">//        final double p3 = x * 0.822283 + y * 0.467437 + z * -0.324582;</span>
+<span class="source-line-no">134</span><span id="line.134">        double xin = p1;</span>
+<span class="source-line-no">135</span><span id="line.135">        double yin = p2;</span>
+<span class="source-line-no">136</span><span id="line.136">        double zin = p3;</span>
+<span class="source-line-no">137</span><span id="line.137">        final double a = valueNoise(seed, xin, yin, zin);</span>
+<span class="source-line-no">138</span><span id="line.138">        //seed = (seed ^ 0x9E3779BD) * 0xDAB;</span>
+<span class="source-line-no">139</span><span id="line.139">        seed += 0x9E3779BD;</span>
+<span class="source-line-no">140</span><span id="line.140">        seed = (seed ^ seed &gt;&gt;&gt; 12) * 0xDAB;</span>
+<span class="source-line-no">141</span><span id="line.141">        seed ^= seed &gt;&gt;&gt; 14;</span>
+<span class="source-line-no">142</span><span id="line.142">        xin = p0;</span>
+<span class="source-line-no">143</span><span id="line.143">        yin = p2;</span>
+<span class="source-line-no">144</span><span id="line.144">        zin = p3;</span>
+<span class="source-line-no">145</span><span id="line.145">        final double b = valueNoise(seed, xin + a, yin, zin);</span>
+<span class="source-line-no">146</span><span id="line.146">        //seed = (seed ^ 0x9E3779BD) * 0xDAB;</span>
+<span class="source-line-no">147</span><span id="line.147">        seed += 0x9E3779BD;</span>
+<span class="source-line-no">148</span><span id="line.148">        seed = (seed ^ seed &gt;&gt;&gt; 12) * 0xDAB;</span>
+<span class="source-line-no">149</span><span id="line.149">        seed ^= seed &gt;&gt;&gt; 14;</span>
+<span class="source-line-no">150</span><span id="line.150">        xin = p0;</span>
+<span class="source-line-no">151</span><span id="line.151">        yin = p1;</span>
+<span class="source-line-no">152</span><span id="line.152">        zin = p3;</span>
+<span class="source-line-no">153</span><span id="line.153">        final double c = valueNoise(seed, xin + b, yin, zin);</span>
+<span class="source-line-no">154</span><span id="line.154">        //seed = (seed ^ 0x9E3779BD) * 0xDAB;</span>
+<span class="source-line-no">155</span><span id="line.155">        seed += 0x9E3779BD;</span>
+<span class="source-line-no">156</span><span id="line.156">        seed = (seed ^ seed &gt;&gt;&gt; 12) * 0xDAB;</span>
+<span class="source-line-no">157</span><span id="line.157">        seed ^= seed &gt;&gt;&gt; 14;</span>
+<span class="source-line-no">158</span><span id="line.158">        xin = p0;</span>
+<span class="source-line-no">159</span><span id="line.159">        yin = p1;</span>
+<span class="source-line-no">160</span><span id="line.160">        zin = p2;</span>
+<span class="source-line-no">161</span><span id="line.161">        final double d = valueNoise(seed, xin + c, yin, zin);</span>
+<span class="source-line-no">162</span><span id="line.162"></span>
+<span class="source-line-no">163</span><span id="line.163">        final double result = (a + b + c + d) * 0.25;</span>
+<span class="source-line-no">164</span><span id="line.164">//        return  (result * result * (6.0 - 4.0 * result) - 1.0);</span>
+<span class="source-line-no">165</span><span id="line.165">//        return (result &lt;= 0.5)</span>
+<span class="source-line-no">166</span><span id="line.166">//                ? Math.pow(result * 2, 3.0) - 1.0</span>
+<span class="source-line-no">167</span><span id="line.167">//                : Math.pow((result - 1) * 2, 3.0) + 1.0;</span>
+<span class="source-line-no">168</span><span id="line.168">        final double sharp = sharpness * 3.3;</span>
+<span class="source-line-no">169</span><span id="line.169">        final double diff = 0.5 - result;</span>
+<span class="source-line-no">170</span><span id="line.170">        final int sign = NumberTools.doubleToHighIntBits(diff) &gt;&gt; 31, one = sign | 1;</span>
+<span class="source-line-no">171</span><span id="line.171">        return ((( 0.5 * one - sign) * (result + sign)) / (Double.MIN_VALUE - sign + (result + sharp * diff) * one) - sign) * 2.0 - 1.0;</span>
+<span class="source-line-no">172</span><span id="line.172"></span>
+<span class="source-line-no">173</span><span id="line.173">    }</span>
+<span class="source-line-no">174</span><span id="line.174"></span>
+<span class="source-line-no">175</span><span id="line.175">    public double foamNoise(final double x, final double y, final double z, final double w, int seed) {</span>
+<span class="source-line-no">176</span><span id="line.176">        final double p0 = x;</span>
+<span class="source-line-no">177</span><span id="line.177">        final double p1 = x * -0.25 + y * 0.9682458365518543;</span>
+<span class="source-line-no">178</span><span id="line.178">        final double p2 = x * -0.25 + y * -0.3227486121839514 + z * 0.9128709291752769;</span>
+<span class="source-line-no">179</span><span id="line.179">        final double p3 = x * -0.25 + y * -0.3227486121839514 + z * -0.45643546458763834 + w * 0.7905694150420949;</span>
+<span class="source-line-no">180</span><span id="line.180">        final double p4 = x * -0.25 + y * -0.3227486121839514 + z * -0.45643546458763834 + w * -0.7905694150420947;</span>
+<span class="source-line-no">181</span><span id="line.181">////orthogonal 5-cell, like a right triangle; probably incorrect</span>
+<span class="source-line-no">182</span><span id="line.182">        //final double p0 = (x + y + z + w);</span>
+<span class="source-line-no">183</span><span id="line.183">        //final double p1 = x - (y + z + w);</span>
+<span class="source-line-no">184</span><span id="line.184">        //final double p2 = y - (x + z + w);</span>
+<span class="source-line-no">185</span><span id="line.185">        //final double p3 = z - (x + y + w);</span>
+<span class="source-line-no">186</span><span id="line.186">        //final double p4 = w - (x + y + z);</span>
+<span class="source-line-no">187</span><span id="line.187">////rotated version of above points on a 5-cell; the ones below are "more correct" but more complex (and slower?)       </span>
+<span class="source-line-no">188</span><span id="line.188">//        final double p0 = x * 0.139640 + y * -0.304485 + z * 0.942226;</span>
+<span class="source-line-no">189</span><span id="line.189">//        final double p1 = x * -0.185127 + y * -0.791704 + z * -0.582180;</span>
+<span class="source-line-no">190</span><span id="line.190">//        final double p2 = x * -0.776796 + y * 0.628752 + z * -0.035464;</span>
+<span class="source-line-no">191</span><span id="line.191">//        final double p3 = x * 0.822283 + y * 0.467437 + z * -0.324582;</span>
+<span class="source-line-no">192</span><span id="line.192">        double xin = p1;</span>
+<span class="source-line-no">193</span><span id="line.193">        double yin = p2;</span>
+<span class="source-line-no">194</span><span id="line.194">        double zin = p3;</span>
+<span class="source-line-no">195</span><span id="line.195">        double win = p4;</span>
+<span class="source-line-no">196</span><span id="line.196">        final double a = valueNoise(seed, xin, yin, zin, win);</span>
+<span class="source-line-no">197</span><span id="line.197">        //seed = (seed ^ 0x9E3779BD) * 0xDAB;</span>
+<span class="source-line-no">198</span><span id="line.198">        seed += 0x9E3779BD;</span>
+<span class="source-line-no">199</span><span id="line.199">        seed = (seed ^ seed &gt;&gt;&gt; 12) * 0xDAB;</span>
+<span class="source-line-no">200</span><span id="line.200">        seed ^= seed &gt;&gt;&gt; 14;</span>
+<span class="source-line-no">201</span><span id="line.201">        xin = p0;</span>
+<span class="source-line-no">202</span><span id="line.202">        yin = p2;</span>
+<span class="source-line-no">203</span><span id="line.203">        zin = p3;</span>
+<span class="source-line-no">204</span><span id="line.204">        win = p4;</span>
+<span class="source-line-no">205</span><span id="line.205">        final double b = valueNoise(seed, xin + a, yin, zin, win);</span>
+<span class="source-line-no">206</span><span id="line.206">        //seed = (seed ^ 0x9E3779BD) * 0xDAB;</span>
+<span class="source-line-no">207</span><span id="line.207">        seed += 0x9E3779BD;</span>
+<span class="source-line-no">208</span><span id="line.208">        seed = (seed ^ seed &gt;&gt;&gt; 12) * 0xDAB;</span>
+<span class="source-line-no">209</span><span id="line.209">        seed ^= seed &gt;&gt;&gt; 14;</span>
+<span class="source-line-no">210</span><span id="line.210">        xin = p0;</span>
+<span class="source-line-no">211</span><span id="line.211">        yin = p1;</span>
+<span class="source-line-no">212</span><span id="line.212">        zin = p3;</span>
+<span class="source-line-no">213</span><span id="line.213">        win = p4;</span>
+<span class="source-line-no">214</span><span id="line.214">        final double c = valueNoise(seed, xin + b, yin, zin, win);</span>
+<span class="source-line-no">215</span><span id="line.215">        //seed = (seed ^ 0x9E3779BD) * 0xDAB;</span>
+<span class="source-line-no">216</span><span id="line.216">        seed += 0x9E3779BD;</span>
+<span class="source-line-no">217</span><span id="line.217">        seed = (seed ^ seed &gt;&gt;&gt; 12) * 0xDAB;</span>
+<span class="source-line-no">218</span><span id="line.218">        seed ^= seed &gt;&gt;&gt; 14;</span>
+<span class="source-line-no">219</span><span id="line.219">        xin = p0;</span>
+<span class="source-line-no">220</span><span id="line.220">        yin = p1;</span>
+<span class="source-line-no">221</span><span id="line.221">        zin = p2;</span>
+<span class="source-line-no">222</span><span id="line.222">        win = p4;</span>
+<span class="source-line-no">223</span><span id="line.223">        final double d = valueNoise(seed, xin + c, yin, zin, win);</span>
+<span class="source-line-no">224</span><span id="line.224">        seed += 0x9E3779BD;</span>
+<span class="source-line-no">225</span><span id="line.225">        seed = (seed ^ seed &gt;&gt;&gt; 12) * 0xDAB;</span>
+<span class="source-line-no">226</span><span id="line.226">        seed ^= seed &gt;&gt;&gt; 14;</span>
+<span class="source-line-no">227</span><span id="line.227">        xin = p0;</span>
+<span class="source-line-no">228</span><span id="line.228">        yin = p1;</span>
+<span class="source-line-no">229</span><span id="line.229">        zin = p2;</span>
+<span class="source-line-no">230</span><span id="line.230">        win = p3;</span>
+<span class="source-line-no">231</span><span id="line.231">        final double e = valueNoise(seed, xin + d, yin, zin, win);</span>
+<span class="source-line-no">232</span><span id="line.232"></span>
+<span class="source-line-no">233</span><span id="line.233">        final double result = (a + b + c + d + e) * 0.2;</span>
+<span class="source-line-no">234</span><span id="line.234">//        return (result &lt;= 0.5)</span>
+<span class="source-line-no">235</span><span id="line.235">//                ? Math.pow(result * 2, 4.0) - 1.0</span>
+<span class="source-line-no">236</span><span id="line.236">//                : 1.0 - Math.pow((result - 1) * 2, 4.0);</span>
+<span class="source-line-no">237</span><span id="line.237">//        return  (result * result * (6.0 - 4.0 * result) - 1.0);</span>
+<span class="source-line-no">238</span><span id="line.238">        final double sharp = sharpness * 4.4;</span>
+<span class="source-line-no">239</span><span id="line.239">        final double diff = 0.5 - result;</span>
+<span class="source-line-no">240</span><span id="line.240">        final int sign = NumberTools.doubleToHighIntBits(diff) &gt;&gt; 31, one = sign | 1;</span>
+<span class="source-line-no">241</span><span id="line.241">        return ((( 0.5 * one - sign) * (result + sign)) / (Double.MIN_VALUE - sign + (result + sharp * diff) * one) - sign) * 2.0 - 1.0;</span>
+<span class="source-line-no">242</span><span id="line.242">    }</span>
+<span class="source-line-no">243</span><span id="line.243">    public double foamNoise(final double x, final double y, final double z,</span>
+<span class="source-line-no">244</span><span id="line.244">                                   final double w, final double u, int seed) {</span>
+<span class="source-line-no">245</span><span id="line.245">        final double p0 = x * 0.8157559148337911 + y * 0.5797766823136037;</span>
+<span class="source-line-no">246</span><span id="line.246">        final double p1 = x * -0.7314923478726791 + y * 0.6832997137249108;</span>
+<span class="source-line-no">247</span><span id="line.247">        final double p2 = x * -0.0208603044412437 + y * -0.3155296974329846 + z * 0.9486832980505138;</span>
+<span class="source-line-no">248</span><span id="line.248">        final double p3 = x * -0.0208603044412437 + y * -0.3155296974329846 + z * -0.316227766016838 + w * 0.8944271909999159;</span>
+<span class="source-line-no">249</span><span id="line.249">        final double p4 = x * -0.0208603044412437 + y * -0.3155296974329846 + z * -0.316227766016838 + w * -0.44721359549995804 + u * 0.7745966692414833;</span>
+<span class="source-line-no">250</span><span id="line.250">        final double p5 = x * -0.0208603044412437 + y * -0.3155296974329846 + z * -0.316227766016838 + w * -0.44721359549995804 + u * -0.7745966692414836;</span>
+<span class="source-line-no">251</span><span id="line.251"></span>
+<span class="source-line-no">252</span><span id="line.252">        double xin = p1;</span>
+<span class="source-line-no">253</span><span id="line.253">        double yin = p2;</span>
+<span class="source-line-no">254</span><span id="line.254">        double zin = p3;</span>
+<span class="source-line-no">255</span><span id="line.255">        double win = p4;</span>
+<span class="source-line-no">256</span><span id="line.256">        double uin = p5;</span>
+<span class="source-line-no">257</span><span id="line.257">        final double a = valueNoise(seed, xin, yin, zin, win, uin);</span>
+<span class="source-line-no">258</span><span id="line.258">        seed += 0x9E3779BD;</span>
+<span class="source-line-no">259</span><span id="line.259">        seed = (seed ^ seed &gt;&gt;&gt; 12) * 0xDAB;</span>
+<span class="source-line-no">260</span><span id="line.260">        seed ^= seed &gt;&gt;&gt; 14;</span>
+<span class="source-line-no">261</span><span id="line.261">        xin = p0;</span>
+<span class="source-line-no">262</span><span id="line.262">        yin = p2;</span>
+<span class="source-line-no">263</span><span id="line.263">        zin = p3;</span>
+<span class="source-line-no">264</span><span id="line.264">        win = p4;</span>
+<span class="source-line-no">265</span><span id="line.265">        uin = p5;</span>
+<span class="source-line-no">266</span><span id="line.266">        final double b = valueNoise(seed, xin + a, yin, zin, win, uin);</span>
+<span class="source-line-no">267</span><span id="line.267">        seed += 0x9E3779BD;</span>
+<span class="source-line-no">268</span><span id="line.268">        seed = (seed ^ seed &gt;&gt;&gt; 12) * 0xDAB;</span>
+<span class="source-line-no">269</span><span id="line.269">        seed ^= seed &gt;&gt;&gt; 14;</span>
+<span class="source-line-no">270</span><span id="line.270">        xin = p0;</span>
+<span class="source-line-no">271</span><span id="line.271">        yin = p1;</span>
+<span class="source-line-no">272</span><span id="line.272">        zin = p3;</span>
+<span class="source-line-no">273</span><span id="line.273">        win = p4;</span>
+<span class="source-line-no">274</span><span id="line.274">        uin = p5;</span>
+<span class="source-line-no">275</span><span id="line.275">        final double c = valueNoise(seed, xin + b, yin, zin, win, uin);</span>
+<span class="source-line-no">276</span><span id="line.276">        seed += 0x9E3779BD;</span>
+<span class="source-line-no">277</span><span id="line.277">        seed = (seed ^ seed &gt;&gt;&gt; 12) * 0xDAB;</span>
+<span class="source-line-no">278</span><span id="line.278">        seed ^= seed &gt;&gt;&gt; 14;</span>
+<span class="source-line-no">279</span><span id="line.279">        xin = p0;</span>
+<span class="source-line-no">280</span><span id="line.280">        yin = p1;</span>
+<span class="source-line-no">281</span><span id="line.281">        zin = p2;</span>
+<span class="source-line-no">282</span><span id="line.282">        win = p4;</span>
+<span class="source-line-no">283</span><span id="line.283">        uin = p5;</span>
+<span class="source-line-no">284</span><span id="line.284">        final double d = valueNoise(seed, xin + c, yin, zin, win, uin);</span>
+<span class="source-line-no">285</span><span id="line.285">        seed += 0x9E3779BD;</span>
+<span class="source-line-no">286</span><span id="line.286">        seed = (seed ^ seed &gt;&gt;&gt; 12) * 0xDAB;</span>
+<span class="source-line-no">287</span><span id="line.287">        seed ^= seed &gt;&gt;&gt; 14;</span>
+<span class="source-line-no">288</span><span id="line.288">        xin = p0;</span>
+<span class="source-line-no">289</span><span id="line.289">        yin = p1;</span>
+<span class="source-line-no">290</span><span id="line.290">        zin = p2;</span>
+<span class="source-line-no">291</span><span id="line.291">        win = p3;</span>
+<span class="source-line-no">292</span><span id="line.292">        uin = p5;</span>
+<span class="source-line-no">293</span><span id="line.293">        final double e = valueNoise(seed, xin + d, yin, zin, win, uin);</span>
+<span class="source-line-no">294</span><span id="line.294">        seed += 0x9E3779BD;</span>
+<span class="source-line-no">295</span><span id="line.295">        seed = (seed ^ seed &gt;&gt;&gt; 12) * 0xDAB;</span>
+<span class="source-line-no">296</span><span id="line.296">        seed ^= seed &gt;&gt;&gt; 14;</span>
+<span class="source-line-no">297</span><span id="line.297">        xin = p0;</span>
+<span class="source-line-no">298</span><span id="line.298">        yin = p1;</span>
+<span class="source-line-no">299</span><span id="line.299">        zin = p2;</span>
+<span class="source-line-no">300</span><span id="line.300">        win = p3;</span>
+<span class="source-line-no">301</span><span id="line.301">        uin = p4;</span>
+<span class="source-line-no">302</span><span id="line.302">        final double f = valueNoise(seed, xin + e, yin, zin, win, uin);</span>
+<span class="source-line-no">303</span><span id="line.303"></span>
+<span class="source-line-no">304</span><span id="line.304">        final double result = (a + b + c + d + e + f) * 0.16666666666666666;</span>
+<span class="source-line-no">305</span><span id="line.305">//        return (result &lt;= 0.5)</span>
+<span class="source-line-no">306</span><span id="line.306">//                ? 32.0 * result * result * result * result * result - 1.0</span>
+<span class="source-line-no">307</span><span id="line.307">//                : 32.0 * (result - 1) * (result - 1) * (result - 1) * (result - 1) * (result - 1) + 1.0;</span>
+<span class="source-line-no">308</span><span id="line.308">        final double sharp = sharpness * 5.5;</span>
+<span class="source-line-no">309</span><span id="line.309">        final double diff = 0.5 - result;</span>
+<span class="source-line-no">310</span><span id="line.310">        final int sign = NumberTools.doubleToHighIntBits(diff) &gt;&gt; 31, one = sign | 1;</span>
+<span class="source-line-no">311</span><span id="line.311">        return ((( 0.5 * one - sign) * (result + sign)) / (Double.MIN_VALUE - sign + (result + sharp * diff) * one) - sign) * 2.0 - 1.0;</span>
+<span class="source-line-no">312</span><span id="line.312">    }</span>
+<span class="source-line-no">313</span><span id="line.313"></span>
+<span class="source-line-no">314</span><span id="line.314">    public double foamNoise(final double x, final double y, final double z,</span>
+<span class="source-line-no">315</span><span id="line.315">                                   final double w, final double u, final double v, int seed) {</span>
+<span class="source-line-no">316</span><span id="line.316">        final double p0 = x;</span>
+<span class="source-line-no">317</span><span id="line.317">        final double p1 = x * -0.16666666666666666 + y * 0.9860132971832694;</span>
+<span class="source-line-no">318</span><span id="line.318">        final double p2 = x * -0.16666666666666666 + y * -0.19720265943665383 + z * 0.9660917830792959;</span>
+<span class="source-line-no">319</span><span id="line.319">        final double p3 = x * -0.16666666666666666 + y * -0.19720265943665383 + z * -0.24152294576982394 + w * 0.9354143466934853;</span>
+<span class="source-line-no">320</span><span id="line.320">        final double p4 = x * -0.16666666666666666 + y * -0.19720265943665383 + z * -0.24152294576982394 + w * -0.31180478223116176 + u * 0.8819171036881969;</span>
+<span class="source-line-no">321</span><span id="line.321">        final double p5 = x * -0.16666666666666666 + y * -0.19720265943665383 + z * -0.24152294576982394 + w * -0.31180478223116176 + u * -0.4409585518440984 + v * 0.7637626158259734;</span>
+<span class="source-line-no">322</span><span id="line.322">        final double p6 = x * -0.16666666666666666 + y * -0.19720265943665383 + z * -0.24152294576982394 + w * -0.31180478223116176 + u * -0.4409585518440984 + v * -0.7637626158259732;</span>
+<span class="source-line-no">323</span><span id="line.323">        double xin = p1;</span>
+<span class="source-line-no">324</span><span id="line.324">        double yin = p2;</span>
+<span class="source-line-no">325</span><span id="line.325">        double zin = p3;</span>
+<span class="source-line-no">326</span><span id="line.326">        double win = p4;</span>
+<span class="source-line-no">327</span><span id="line.327">        double uin = p5;</span>
+<span class="source-line-no">328</span><span id="line.328">        double vin = p6;</span>
+<span class="source-line-no">329</span><span id="line.329">        final double a = valueNoise(seed, xin, yin, zin, win, uin, vin);</span>
+<span class="source-line-no">330</span><span id="line.330">        seed += 0x9E3779BD;</span>
+<span class="source-line-no">331</span><span id="line.331">        seed = (seed ^ seed &gt;&gt;&gt; 12) * 0xDAB;</span>
+<span class="source-line-no">332</span><span id="line.332">        seed ^= seed &gt;&gt;&gt; 14;</span>
+<span class="source-line-no">333</span><span id="line.333">        xin = p0;</span>
+<span class="source-line-no">334</span><span id="line.334">        yin = p2;</span>
+<span class="source-line-no">335</span><span id="line.335">        zin = p3;</span>
+<span class="source-line-no">336</span><span id="line.336">        win = p4;</span>
+<span class="source-line-no">337</span><span id="line.337">        uin = p5;</span>
+<span class="source-line-no">338</span><span id="line.338">        vin = p6;</span>
+<span class="source-line-no">339</span><span id="line.339">        final double b = valueNoise(seed, xin + a, yin, zin, win, uin, vin);</span>
+<span class="source-line-no">340</span><span id="line.340">        seed += 0x9E3779BD;</span>
+<span class="source-line-no">341</span><span id="line.341">        seed = (seed ^ seed &gt;&gt;&gt; 12) * 0xDAB;</span>
+<span class="source-line-no">342</span><span id="line.342">        seed ^= seed &gt;&gt;&gt; 14;</span>
+<span class="source-line-no">343</span><span id="line.343">        xin = p0;</span>
+<span class="source-line-no">344</span><span id="line.344">        yin = p1;</span>
+<span class="source-line-no">345</span><span id="line.345">        zin = p3;</span>
+<span class="source-line-no">346</span><span id="line.346">        win = p4;</span>
+<span class="source-line-no">347</span><span id="line.347">        uin = p5;</span>
+<span class="source-line-no">348</span><span id="line.348">        vin = p6;</span>
+<span class="source-line-no">349</span><span id="line.349">        final double c = valueNoise(seed, xin + b, yin, zin, win, uin, vin);</span>
+<span class="source-line-no">350</span><span id="line.350">        seed += 0x9E3779BD;</span>
+<span class="source-line-no">351</span><span id="line.351">        seed = (seed ^ seed &gt;&gt;&gt; 12) * 0xDAB;</span>
+<span class="source-line-no">352</span><span id="line.352">        seed ^= seed &gt;&gt;&gt; 14;</span>
+<span class="source-line-no">353</span><span id="line.353">        xin = p0;</span>
+<span class="source-line-no">354</span><span id="line.354">        yin = p1;</span>
+<span class="source-line-no">355</span><span id="line.355">        zin = p2;</span>
+<span class="source-line-no">356</span><span id="line.356">        win = p4;</span>
+<span class="source-line-no">357</span><span id="line.357">        uin = p5;</span>
+<span class="source-line-no">358</span><span id="line.358">        vin = p6;</span>
+<span class="source-line-no">359</span><span id="line.359">        final double d = valueNoise(seed, xin + c, yin, zin, win, uin, vin);</span>
+<span class="source-line-no">360</span><span id="line.360">        seed += 0x9E3779BD;</span>
+<span class="source-line-no">361</span><span id="line.361">        seed = (seed ^ seed &gt;&gt;&gt; 12) * 0xDAB;</span>
+<span class="source-line-no">362</span><span id="line.362">        seed ^= seed &gt;&gt;&gt; 14;</span>
+<span class="source-line-no">363</span><span id="line.363">        xin = p0;</span>
+<span class="source-line-no">364</span><span id="line.364">        yin = p1;</span>
+<span class="source-line-no">365</span><span id="line.365">        zin = p2;</span>
+<span class="source-line-no">366</span><span id="line.366">        win = p3;</span>
+<span class="source-line-no">367</span><span id="line.367">        uin = p5;</span>
+<span class="source-line-no">368</span><span id="line.368">        vin = p6;</span>
+<span class="source-line-no">369</span><span id="line.369">        final double e = valueNoise(seed, xin + d, yin, zin, win, uin, vin);</span>
+<span class="source-line-no">370</span><span id="line.370">        seed += 0x9E3779BD;</span>
+<span class="source-line-no">371</span><span id="line.371">        seed = (seed ^ seed &gt;&gt;&gt; 12) * 0xDAB;</span>
+<span class="source-line-no">372</span><span id="line.372">        seed ^= seed &gt;&gt;&gt; 14;</span>
+<span class="source-line-no">373</span><span id="line.373">        xin = p0;</span>
+<span class="source-line-no">374</span><span id="line.374">        yin = p1;</span>
+<span class="source-line-no">375</span><span id="line.375">        zin = p2;</span>
+<span class="source-line-no">376</span><span id="line.376">        win = p3;</span>
+<span class="source-line-no">377</span><span id="line.377">        uin = p4;</span>
+<span class="source-line-no">378</span><span id="line.378">        vin = p6;</span>
+<span class="source-line-no">379</span><span id="line.379">        final double f = valueNoise(seed, xin + e, yin, zin, win, uin, vin);</span>
+<span class="source-line-no">380</span><span id="line.380">        seed += 0x9E3779BD;</span>
+<span class="source-line-no">381</span><span id="line.381">        seed = (seed ^ seed &gt;&gt;&gt; 12) * 0xDAB;</span>
+<span class="source-line-no">382</span><span id="line.382">        seed ^= seed &gt;&gt;&gt; 14;</span>
+<span class="source-line-no">383</span><span id="line.383">        xin = p0;</span>
+<span class="source-line-no">384</span><span id="line.384">        yin = p1;</span>
+<span class="source-line-no">385</span><span id="line.385">        zin = p2;</span>
+<span class="source-line-no">386</span><span id="line.386">        win = p3;</span>
+<span class="source-line-no">387</span><span id="line.387">        uin = p4;</span>
+<span class="source-line-no">388</span><span id="line.388">        vin = p5;</span>
+<span class="source-line-no">389</span><span id="line.389">        final double g = valueNoise(seed, xin + f, yin, zin, win, uin, vin);</span>
+<span class="source-line-no">390</span><span id="line.390"></span>
+<span class="source-line-no">391</span><span id="line.391">        final double result = (a + b + c + d + e + f + g) * 0.14285714285714285;</span>
+<span class="source-line-no">392</span><span id="line.392">//        return (result &lt;= 0.5)</span>
+<span class="source-line-no">393</span><span id="line.393">//                ? Math.pow(result * 2, 6.0) - 1.0</span>
+<span class="source-line-no">394</span><span id="line.394">//                : 1.0 - Math.pow((result - 1) * 2, 6.0);</span>
+<span class="source-line-no">395</span><span id="line.395">        final double sharp = sharpness * 6.6;</span>
+<span class="source-line-no">396</span><span id="line.396">        final double diff = 0.5 - result;</span>
+<span class="source-line-no">397</span><span id="line.397">        final int sign = NumberTools.doubleToHighIntBits(diff) &gt;&gt; 31, one = sign | 1;</span>
+<span class="source-line-no">398</span><span id="line.398">        return ((( 0.5 * one - sign) * (result + sign)) / (Double.MIN_VALUE - sign + (result + sharp * diff) * one) - sign) * 2.0 - 1.0;</span>
+<span class="source-line-no">399</span><span id="line.399">    }</span>
+<span class="source-line-no">400</span><span id="line.400"></span>
+<span class="source-line-no">401</span><span id="line.401">    @Override</span>
+<span class="source-line-no">402</span><span id="line.402">    public double getNoise(double x, double y) {</span>
+<span class="source-line-no">403</span><span id="line.403">        return foamNoise(x, y, seed);</span>
+<span class="source-line-no">404</span><span id="line.404">    }</span>
+<span class="source-line-no">405</span><span id="line.405">    @Override</span>
+<span class="source-line-no">406</span><span id="line.406">    public double getNoiseWithSeed(double x, double y, long seed) {</span>
+<span class="source-line-no">407</span><span id="line.407">        return foamNoise(x, y, (int) (seed ^ seed &gt;&gt;&gt; 32));</span>
+<span class="source-line-no">408</span><span id="line.408">    }</span>
+<span class="source-line-no">409</span><span id="line.409">    @Override</span>
+<span class="source-line-no">410</span><span id="line.410">    public double getNoise(double x, double y, double z) {</span>
+<span class="source-line-no">411</span><span id="line.411">        return foamNoise(x, y, z, seed);</span>
+<span class="source-line-no">412</span><span id="line.412">    }</span>
+<span class="source-line-no">413</span><span id="line.413">    @Override</span>
+<span class="source-line-no">414</span><span id="line.414">    public double getNoiseWithSeed(double x, double y, double z, long seed) {</span>
+<span class="source-line-no">415</span><span id="line.415">        return foamNoise(x, y, z, (int) (seed ^ seed &gt;&gt;&gt; 32));</span>
+<span class="source-line-no">416</span><span id="line.416">    }</span>
+<span class="source-line-no">417</span><span id="line.417">    @Override</span>
+<span class="source-line-no">418</span><span id="line.418">    public double getNoise(double x, double y, double z, double w) {</span>
+<span class="source-line-no">419</span><span id="line.419">        return foamNoise(x, y, z, w, seed);</span>
+<span class="source-line-no">420</span><span id="line.420">    }</span>
+<span class="source-line-no">421</span><span id="line.421">    @Override</span>
+<span class="source-line-no">422</span><span id="line.422">    public double getNoiseWithSeed(double x, double y, double z, double w, long seed) {</span>
+<span class="source-line-no">423</span><span id="line.423">        return foamNoise(x, y, z, w, (int) (seed ^ seed &gt;&gt;&gt; 32));</span>
+<span class="source-line-no">424</span><span id="line.424">    }</span>
+<span class="source-line-no">425</span><span id="line.425">    @Override</span>
+<span class="source-line-no">426</span><span id="line.426">    public double getNoise(double x, double y, double z, double w, double u) {</span>
+<span class="source-line-no">427</span><span id="line.427">        return foamNoise(x, y, z, w, u, seed);</span>
+<span class="source-line-no">428</span><span id="line.428">    }</span>
+<span class="source-line-no">429</span><span id="line.429">    @Override</span>
+<span class="source-line-no">430</span><span id="line.430">    public double getNoiseWithSeed(double x, double y, double z, double w, double u, long seed) {</span>
+<span class="source-line-no">431</span><span id="line.431">        return foamNoise(x, y, z, w, u, (int) (seed ^ seed &gt;&gt;&gt; 32));</span>
+<span class="source-line-no">432</span><span id="line.432">    }</span>
+<span class="source-line-no">433</span><span id="line.433">    @Override</span>
+<span class="source-line-no">434</span><span id="line.434">    public double getNoise(double x, double y, double z, double w, double u, double v) {</span>
+<span class="source-line-no">435</span><span id="line.435">        return foamNoise(x, y, z, w, u, v, seed);</span>
+<span class="source-line-no">436</span><span id="line.436">    }</span>
+<span class="source-line-no">437</span><span id="line.437">    @Override</span>
+<span class="source-line-no">438</span><span id="line.438">    public double getNoiseWithSeed(double x, double y, double z, double w, double u, double v, long seed) {</span>
+<span class="source-line-no">439</span><span id="line.439">        return foamNoise(x, y, z, w, u, v, (int) (seed ^ seed &gt;&gt;&gt; 32));</span>
+<span class="source-line-no">440</span><span id="line.440">    }</span>
+<span class="source-line-no">441</span><span id="line.441">}</span>
 
 
 
