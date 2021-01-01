@@ -5,7 +5,7 @@
 
     <groupId>com.squidpony</groupId>
     <artifactId>squidlib-parent</artifactId>
-    <version>3.0.3</version>
+    <version>3.0.4-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>squidlib-parent</name>
@@ -62,7 +62,7 @@
         <maven.gpg.version>1.6</maven.gpg.version>
         <jdk.version>1.7</jdk.version>
         <releaseVersion>7</releaseVersion>
-        <gdx.version>1.9.12</gdx.version>
+        <gdx.version>1.9.13</gdx.version>
         <junit.version>4.13.1</junit.version>
         <regexodus.version>0.1.10</regexodus.version>
         <anim8.version>0.2.4</anim8.version>

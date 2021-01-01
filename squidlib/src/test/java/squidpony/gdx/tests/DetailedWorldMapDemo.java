@@ -917,7 +917,8 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         Gdx.gl.glClearColor(SColor.DB_INK.r, SColor.DB_INK.g, SColor.DB_INK.b, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         Gdx.gl.glDisable(GL20.GL_BLEND);
-        season = ((System.currentTimeMillis() & 0xfffff) * 0x1p-10f) % 4f;
+        if(seasons)
+            season = ((System.currentTimeMillis() & 0xfffff) * 0x1p-10f) % 4f;
         if(spinning) 
             rotate();
         // need to display the map every frame, since we clear the screen to avoid artifacts.
