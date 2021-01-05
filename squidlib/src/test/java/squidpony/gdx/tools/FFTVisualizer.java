@@ -81,7 +81,7 @@ public class FFTVisualizer extends ApplicationAdapter {
         norm = new OrderedMap<>(width * height, 0.75f);
         shuffler = new StatefulRNG(0x1234567890ABCDEFL);
         noise.setNoiseType(FastNoise.CUBIC_FRACTAL);
-        noise.setPointHash(torus);
+        noise.setPointHash(pointHashes[hashIndex]);
         Pixmap pm = new Pixmap(Gdx.files.internal("special/BlueNoise512x512.png"));
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
