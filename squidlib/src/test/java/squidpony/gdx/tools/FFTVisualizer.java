@@ -34,7 +34,7 @@ public class FFTVisualizer extends ApplicationAdapter {
 //    private FlawedPointHash.FNVHash fnv = new FlawedPointHash.FNVHash(1);
     private final IPointHash[] pointHashes = new IPointHash[] {iph, torus, cube, rug, quilt};
     private int hashIndex = 0;
-    private static final int MODE_LIMIT = 10;
+    private static final int MODE_LIMIT = 12;
     private int mode = 0;
     private int dim; // this can be 0, 1, 2, or 3; add 2 to get the actual dimensions
     private int octaves = 3;
@@ -635,15 +635,6 @@ public class FFTVisualizer extends ApplicationAdapter {
                         }
                     }
                     break;
-//                    for (int x = 0; x < width; x++) {
-//                        for (int y = 0; y < height; y++) {
-//                            bright = region.contains(x, y) ? 1 : 0;
-//                            real[x][y] = bright;
-//                            renderer.color(bright, bright, bright, 1f);
-//                            renderer.vertex(x, y, 0);
-//                        }
-//                    }
-//                    break;
             }
         }
         else if(mode == 9){
@@ -688,17 +679,29 @@ public class FFTVisualizer extends ApplicationAdapter {
                         }
                     }
                     break;
-//                    for (int x = 0; x < width; x++) {
-//                        for (int y = 0; y < height; y++) {
-//                            bright = region.contains(x, y) ? 1 : 0;
-//                            real[x][y] = bright;
-//                            renderer.color(bright, bright, bright, 1f);
-//                            renderer.vertex(x, y, 0);
-//                        }
-//                    }
-//                    break;
             }
         }
+        else if(mode == 10) {
+            for (int x = 0; x < width; x++) {
+                for (int y = 0; y < height; y++) {
+                    bright = (float) (db = (getWobbled(x, y) + 128) / 255f);
+                    real[x][y] = db;
+                    renderer.color(bright, bright, bright, 1f);
+                    renderer.vertex(x, y, 0);
+                }
+            }
+        }
+        else if(mode == 11) {
+            for (int x = 0; x < width; x++) {
+                for (int y = 0; y < height; y++) {
+                    bright = (getWobbled(x, y) + 128) / 255f <= threshold ? 1 : 0;
+                    real[x][y] = bright;
+                    renderer.color(bright, bright, bright, 1f);
+                    renderer.vertex(x, y, 0);
+                }
+            }
+        }
+
         Fft.transform2D(real, imag);
         Fft.getColors(real, imag, colors);
         for (int x = 0; x < width; x++) {
@@ -785,6 +788,66 @@ public class FFTVisualizer extends ApplicationAdapter {
         // this transposes x and y again, it seems to help with the particular blue noise textures we have
         h ^= (ax >>> 6) * 0x1827F5 ^ (ay >>> 6) * 0x123C21;
         return noises[(h ^ (h << 19 | h >>> 13) ^ (h << 5 | h >>> 27) ^ 0xD1B54A35) * 0x125493 >>> 26][(x << 6 & 0xFC0) | (y & 0x3F)];
+    }
+
+    public static byte getWobbled(int x, int y) {
+//        return (byte) (15 - (x & 15) | (y & 15) << 4);
+        final int h = Integer.reverse(posToHilbertNoLUT(x, y));
+//        final int h = Integer.reverse(CoordPacker.mortonEncode(x, y));
+        return (byte) ((h >>> 24 ^ h >>> 23 ^ h >>> 22 ^ y ^ x)); // ^ CoordPacker.mortonEncode(511 - (x & 511), (y & 511) << 9)
+    }
+    private static int posToHilbertNoLUT(int x, int y )
+    {
+        x &= 511;
+        y &= 511;
+        int hilbert = 0, remap = 0xb4, mcode, hcode;
+
+        mcode = ( ( x >>> 8 ) & 1 ) | ( ( ( y >>> ( 8 ) ) & 1 ) << 1);
+        hcode = ( ( remap >>> ( mcode << 1 ) ) & 3 );
+        remap ^= ( 0x82000028 >>> ( hcode << 3 ) );
+        hilbert = ( (hilbert << 2) + hcode );
+
+        mcode = ( ( x >>> 7 ) & 1 ) | ( ( ( y >>> ( 7 ) ) & 1 ) << 1);
+        hcode = ( ( remap >>> ( mcode << 1 ) ) & 3 );
+        remap ^= ( 0x82000028 >>> ( hcode << 3 ) );
+        hilbert = ( (hilbert << 2) + hcode );
+
+        mcode = ( ( x >>> 6 ) & 1 ) | ( ( ( y >>> ( 6 ) ) & 1 ) << 1);
+        hcode = ( ( remap >>> ( mcode << 1 ) ) & 3 );
+        remap ^= ( 0x82000028 >>> ( hcode << 3 ) );
+        hilbert = ( ( hilbert << 2 ) + hcode );
+
+        mcode = ( ( x >>> 5 ) & 1 ) | ( ( ( y >>> ( 5 ) ) & 1 ) << 1);
+        hcode = ( ( remap >>> ( mcode << 1 ) ) & 3 );
+        remap ^= ( 0x82000028 >>> ( hcode << 3 ) );
+        hilbert = ( ( hilbert << 2 ) + hcode );
+
+        mcode = ( ( x >>> 4 ) & 1 ) | ( ( ( y >>> ( 4 ) ) & 1 ) << 1);
+        hcode = ( ( remap >>> ( mcode << 1 ) ) & 3 );
+        remap ^= ( 0x82000028 >>> ( hcode << 3 ) );
+        hilbert = ( ( hilbert << 2 ) + hcode );
+
+        mcode = ( ( x >>> 3 ) & 1 ) | ( ( ( y >>> ( 3 ) ) & 1 ) << 1);
+        hcode = ( ( remap >>> ( mcode << 1 ) ) & 3 );
+        remap ^= ( 0x82000028 >>> ( hcode << 3 ) );
+        hilbert = ( ( hilbert << 2 ) + hcode );
+
+        mcode = ( ( x >>> 2 ) & 1 ) | ( ( ( y >>> ( 2 ) ) & 1 ) << 1);
+        hcode = ( ( remap >>> ( mcode << 1 ) ) & 3 );
+        remap ^= ( 0x82000028 >>> ( hcode << 3 ) );
+        hilbert = ( ( hilbert << 2 ) + hcode );
+
+        mcode = ( ( x >>> 1 ) & 1 ) | ( ( ( y >>> ( 1 ) ) & 1 ) << 1);
+        hcode = ( ( remap >>> ( mcode << 1 ) ) & 3 );
+        remap ^= ( 0x82000028 >>> ( hcode << 3 ) );
+        hilbert = ( ( hilbert << 2 ) + hcode );
+
+        mcode = ( x & 1 ) | ( ( y & 1 ) << 1);
+        hcode = ( ( remap >>> ( mcode << 1 ) ) & 3 );
+
+        hilbert = ( ( hilbert << 2 ) + hcode );
+
+        return hilbert;
     }
 
     @Override

@@ -113,9 +113,9 @@ public class BalancedPermutations {
 		GreasedRegion region = new GreasedRegion(size2, size2);
 		int px, py = 0;
 		for (int x = 0; x < size; x++) {
-			px = size - 1 + x * size;
+			px = size + x * size;
 			for (int y = 0; y < size; y++) {
-				region.insert(px--, py + y * size);
+				region.insert(--px, py + y * size);
 			}
 			py++;
 		}
