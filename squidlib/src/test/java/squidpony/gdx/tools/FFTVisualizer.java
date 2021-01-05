@@ -682,23 +682,50 @@ public class FFTVisualizer extends ApplicationAdapter {
             }
         }
         else if(mode == 10) {
-            for (int x = 0; x < width; x++) {
-                for (int y = 0; y < height; y++) {
-                    bright = (float) (db = (getWobbled(x, y) + 128) / 255f);
-                    real[x][y] = db;
-                    renderer.color(bright, bright, bright, 1f);
-                    renderer.vertex(x, y, 0);
-                }
+            switch (dim) {
+                case 0:
+                    for (int x = 0; x < width; x++) {
+                        for (int y = 0; y < height; y++) {
+                            bright = (float) (db = (getWobbled(x, y) + 128) / 255f);
+                            real[x][y] = db;
+                            renderer.color(bright, bright, bright, 1f);
+                            renderer.vertex(x, y, 0);
+                        }
+                    }
+                    break;
+                default:
+                    for (int x = 0; x < width; x++) {
+                        for (int y = 0; y < height; y++) {
+                            bright = (float) (db = (getWobbled(x, y) + getWobbled(y + 421, x + 107) + 256) / 510f);
+                            real[x][y] = db;
+                            renderer.color(bright, bright, bright, 1f);
+                            renderer.vertex(x, y, 0);
+                        }
+                    }
             }
         }
         else if(mode == 11) {
-            for (int x = 0; x < width; x++) {
-                for (int y = 0; y < height; y++) {
-                    bright = (getWobbled(x, y) + 128) / 255f <= threshold ? 1 : 0;
-                    real[x][y] = bright;
-                    renderer.color(bright, bright, bright, 1f);
-                    renderer.vertex(x, y, 0);
-                }
+            switch (dim) {
+                case 0:
+                    for (int x = 0; x < width; x++) {
+                        for (int y = 0; y < height; y++) {
+                            bright = (getWobbled(x, y) + 128) / 255f <= threshold ? 1 : 0;
+                            real[x][y] = bright;
+                            renderer.color(bright, bright, bright, 1f);
+                            renderer.vertex(x, y, 0);
+                        }
+                    }
+                    break;
+                default:
+                    for (int x = 0; x < width; x++) {
+                        for (int y = 0; y < height; y++) {
+                            bright = (getWobbled(x, y) + getWobbled(y + 421, x + 107) + 256) / 510f <= threshold ? 1 : 0;
+                            real[x][y] = bright;
+                            renderer.color(bright, bright, bright, 1f);
+                            renderer.vertex(x, y, 0);
+                        }
+                    }
+
             }
         }
 

@@ -76,7 +76,7 @@ public class DefaultResources implements LifecycleListener {
             distanceDejaVu, distanceOrbit, distanceHeavySquare,
             distanceSlab, distanceSlabLight,
             distanceLean, distanceLeanLight,
-            msdfSlab, msdfLean, msdfDejaVu, msdfCascadia,
+            msdfSlab, msdfLean, msdfDejaVu, msdfCascadia, msdfSmooth,
             msdfCurvySquare, msdfCarved, msdfRoboto, msdfOctagonalSquare,
             msdfIcons;
     private TextFamily familyLean, familySlab, familyGo,
@@ -145,7 +145,9 @@ public class DefaultResources implements LifecycleListener {
             crispOctagonalSquare = "a-starry-msdf.fnt",
             crispOctagonalSquareTexture = "a-starry-msdf.png",
             crispIcons = "awesome-solid-msdf.fnt",
-            crispIconsTexture = "awesome-solid-msdf.png"
+            crispIconsTexture = "awesome-solid-msdf.png",
+            crispSmooth = "Inconsolata-LGC-Custom-msdf.fnt",
+            crispSmoothTexture = "Inconsolata-LGC-Custom-msdf.png"
                     ;
     public static final String vertexShader = "attribute vec4 " + ShaderProgram.POSITION_ATTRIBUTE + ";\n"
             + "attribute vec4 " + ShaderProgram.COLOR_ATTRIBUTE + ";\n"
@@ -491,7 +493,8 @@ public class DefaultResources implements LifecycleListener {
     /**
      * Returns a 8x18px, very smooth and generally good-looking font (based on Inconsolata) as an embedded resource.
      * This font fully supports Latin, Greek, Cyrillic, and of particular interest to SquidLib, Box Drawing characters.
-     * Caches the font for later calls.
+     * Caches the font for later calls. You may prefer {@link #getCrispSmoothFont()}, which is the same font but should
+     * scale to more sizes and aspect ratios very smoothly.
      * <br>
      * Needs files:
      * <ul>
@@ -516,7 +519,8 @@ public class DefaultResources implements LifecycleListener {
     /**
      * Returns a 12x24px, very smooth and generally good-looking font (based on Inconsolata) as an embedded resource.
      * This font fully supports Latin, Greek, Cyrillic, and of particular interest to SquidLib, Box Drawing characters.
-     * Caches the font for later calls.
+     * Caches the font for later calls. You may prefer {@link #getCrispSmoothFont()}, which is the same font but should
+     * scale to more sizes and aspect ratios very smoothly.
      * <br>
      * Needs files:
      * <ul>
@@ -891,8 +895,10 @@ public class DefaultResources implements LifecycleListener {
     }
 
     /**
-     * Returns a TextCellFactory already configured to use a square font that should scale cleanly to many sizes. Caches
-     * the result for later calls.
+     * Returns a TextCellFactory already configured to use a square font that should scale cleanly to many sizes. This
+     * font is Inconsolata-LGC with the weight adjusted and some glyphs added from DejaVu Sans Mono. It supports a good
+     * range of Latin glyphs (not enough for Vietnamese, but enough for Western European languages), as well as the
+     * Greek and Cyrillic alphabets, box drawing characters, and some dingbats. Caches the result for later calls.
      * <br>
      * Preview: http://i.imgur.com/DD1RkPa.png
      * <br>
@@ -1045,7 +1051,10 @@ public class DefaultResources implements LifecycleListener {
 
     /**
      * Returns a TextCellFactory already configured to use a narrow font (twice as tall as it is wide) that should scale
-     * cleanly to many sizes. Caches the result for later calls.
+     * cleanly to many sizes. This font is Inconsolata-LGC with the weight adjusted and some glyphs added from DejaVu
+     * Sans Mono. It supports a good range of Latin glyphs (not enough for Vietnamese, but enough for Western European
+     * languages), as well as the Greek and Cyrillic alphabets, box drawing characters, and some dingbats. Caches the
+     * result for later calls.
      * <br>
      * Preview: http://i.imgur.com/dvEEMqo.png
      * <br>
@@ -1690,7 +1699,42 @@ public class DefaultResources implements LifecycleListener {
             return instance.msdfDejaVu.copy();
         return null;
     }
-    
+    /**
+     * Returns a TextCellFactory already configured to use a narrow font (twice as tall as it is wide) that should scale
+     * cleanly to many sizes. This font is Inconsolata-LGC with the weight adjusted and some glyphs added from DejaVu
+     * Sans Mono. It supports a good range of Latin glyphs (not enough for Vietnamese, but enough for Western European
+     * languages), as well as the Greek and Cyrillic alphabets, box drawing characters, and some dingbats. This uses the
+     * Multi-channel Signed Distance Field technique as opposed to the normal Signed Distance Field technique, which
+     * should allow sharper edges. Caches the result for later calls.
+     * <br>
+     * This creates a TextCellFactory instead of a BitmapFont because it needs to set some extra information so the
+     * multi-channel distance field font technique this uses can work.
+     * <br>
+     * Needs files:
+     * <ul>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/Inconsolata-LGC-Custom-msdf.fnt</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/Inconsolata-LGC-Custom-msdf.png</li>
+     *     <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/Inconsolata-LGC-License.txt</li>
+     * </ul>
+     * @return the TextCellFactory object that can represent many sizes of the font Inconsolata-LGC-Custom.ttf with an MSDF effect
+     */
+    public static TextCellFactory getCrispSmoothFont()
+    {
+        initialize();
+        if(instance.msdfSmooth == null)
+        {
+            try {
+                instance.msdfSmooth = new TextCellFactory()
+                        .fontMultiDistanceField(crispSmooth, crispSmoothTexture).setSmoothingMultiplier(4f);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        if(instance.msdfSmooth != null)
+            return instance.msdfSmooth.copy();
+        return null;
+    }
+
     /**
      * Returns a TextFamily already configured to use a highly-legible fixed-width font with good Unicode support and a
      * slab-serif geometric style, that should scale cleanly to many sizes and supports 4 styles (regular, bold, italic,

@@ -112,8 +112,8 @@ public class BasicDemo2 extends ApplicationAdapter {
         // the distance field effect allows the font to be stretched without getting blurry or grainy too easily.
         // this font is covered under the SIL Open Font License (fully free), so there's no reason it can't be used.
         display = new SquidLayers(gridWidth, gridHeight + bonusHeight, cellWidth, cellHeight,
-                new TextCellFactory().font(DefaultResources.getSevenTwelveFont())
-                //DefaultResources.getCrispDejaVuFont()
+//                new TextCellFactory().font(DefaultResources.getSevenTwelveFont())
+                DefaultResources.getCrispSmoothFont()
         );//.setSmoothingMultiplier(1.625f));
         
         // a bit of a hack to increase the text height slightly without changing the size of the cells they're in.
