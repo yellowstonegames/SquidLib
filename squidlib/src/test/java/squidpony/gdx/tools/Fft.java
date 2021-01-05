@@ -155,14 +155,12 @@ public final class Fft {
 			transformRadix2(real[x], imag[x]);
 		}
 	}
-	
+
 	public static void getColors(double[][] real, double[][] imag, float[][] background){
 		final int n = real.length, mask = n - 1, half = n >>> 1;
 		double max = 0.0, mag, r, i;
 		for (int x = 0; x < n; x++) {
 			for (int y = 0; y < n; y++) {
-//				r = real[x][y];
-//				i = imag[x][y];
 				r = real[x + half & mask][y + half & mask];
 				i = imag[x + half & mask][y + half & mask];
 				mag = Math.sqrt(r * r + i * i);
@@ -171,18 +169,45 @@ public final class Fft {
 			}
 		}
 		if(max <= 0.0)
-			max = 1.0;
+			max = 0.001;
 		double c = 255.0 / Math.log1p(max);
-		int g;
+		int cb;
 		for (int x = 0; x < n; x++) {
 			for (int y = 0; y < n; y++) {
-				g = (int)(c * Math.log1p(background[x][y]));
-				background[x][y] = Float.intBitsToFloat(g * 0x010101 | 0xFE000000);
+				cb = (int)(c * Math.log1p(background[x][y]));
+				background[x][y] = Float.intBitsToFloat(cb * 0x010101 | 0xFE000000);
 			}
 		}
 	}
-	
-	/* 
+
+	public static void getColorsRG(double[][] real, double[][] imag, float[][] background){
+		final int n = real.length, mask = n - 1, half = n >>> 1;
+		double maxR = 0.0, maxI = 0.0, r, i;
+		for (int x = 0; x < n; x++) {
+			for (int y = 0; y < n; y++) {
+				r = real[x & mask][y & mask] *= real[x & mask][y & mask];
+				i = imag[x & mask][y & mask] *= imag[x & mask][y & mask];
+				maxR = Math.max(r, maxR);
+				maxI = Math.max(i, maxI);
+			}
+		}
+		if(maxR <= 0.0)
+			maxR = 0.001;
+		if(maxI <= 0.0)
+			maxI = 0.001;
+		double cr = 255.0 / Math.log1p(maxR);
+		double ci = 255.0 / Math.log1p(maxI);
+		for (int x = 0; x < n; x++) {
+			for (int y = 0; y < n; y++) {
+				background[x][y] = Float.intBitsToFloat(
+						(int)(ci * Math.log1p(imag[x + half & mask][y + half & mask])) << 8 |
+								(int)(cr * Math.log1p(real[x + half & mask][y + half & mask])) |
+								0xFE000000);
+			}
+		}
+	}
+
+	/*
 	 * Computes the discrete Fourier transform (DFT) of the given complex vector, storing the result back into the vector.
 	 * The vector can have any length. This requires the convolution function, which in turn requires the radix-2 FFT function.
 	 * Uses Bluestein's chirp z-transform algorithm.
