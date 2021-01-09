@@ -89,9 +89,6 @@ public class TextCellFactory implements Disposable {
     protected float descent, lineHeight;
     protected Label.LabelStyle style;
     protected CharCharMap swap = new CharCharMap(8);
-    {
-        swap.defaultReturnValue('\uffff');
-    }
     protected char directionGlyph = '^';
     protected OrderedMap<Character, TextureRegion> glyphTextures = new OrderedMap<>(16);
 
@@ -119,6 +116,7 @@ public class TextCellFactory implements Disposable {
     public TextCellFactory(/* Nullable */ AssetManager assetManager) {
         this.assetManager = assetManager;
         scc = DefaultResources.getSCC();
+        swap.defaultReturnValue('\uffff');
         swap.put('\u0006', ' ');
     }
 
@@ -129,8 +127,9 @@ public class TextCellFactory implements Disposable {
             bmpFont = DefaultResources.getIncludedFont();
         next.bmpFont = DefaultResources.copyFont(bmpFont);
         next.block = block;
-        next.swap = swap.clone(); // explicitly implemented by CharCharMap
-        next.swap.defaultReturnValue('\uffff'); // ... but it forgets to copy this field
+        next.swap.clear();
+        next.swap.defaultReturnValue(swap.defaultReturnValue);
+        next.swap.putAll(swap);
         next.distanceField = distanceField;
         next.msdf = msdf;
         next.distanceFieldScaleX = distanceFieldScaleX;
@@ -878,8 +877,7 @@ public class TextCellFactory implements Disposable {
     
     private char getOrDefault(final char toGet)
     {
-        final char got = swap.get(toGet);
-        return got == '\uffff' ? toGet : got;
+        return swap.getOrDefault(toGet, toGet);
     }
     /**
      * Use the specified Batch to draw a String or other CharSequence (often just one char long) with the default color
