@@ -55,8 +55,9 @@ public class TextFamily extends TextCellFactory {
             bmpFont = DefaultResources.getIncludedFont();
         next.bmpFont = DefaultResources.copyFont(bmpFont);
         next.block = block;
-        next.swap = swap.clone(); // explicitly implemented by CharCharMap
-        next.swap.defaultReturnValue('\uffff'); // ... but it forgets to copy this field
+        next.swap.clear();
+        next.swap.defaultReturnValue(swap.defaultReturnValue);
+        next.swap.putAll(swap);
         next.distanceField = distanceField;
         next.msdf = msdf;
         next.distanceFieldScaleX = distanceFieldScaleX;

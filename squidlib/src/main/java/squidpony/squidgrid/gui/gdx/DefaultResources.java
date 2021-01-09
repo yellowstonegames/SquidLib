@@ -1547,7 +1547,7 @@ public class DefaultResources implements LifecycleListener {
         {
             try {
                 instance.msdfSlab = new TextCellFactory()
-                        .fontMultiDistanceField(crispSlab, crispSlabTexture);
+                        .fontMultiDistanceField(crispSlab, crispSlabTexture).setSmoothingMultiplier(2.5f);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -1598,7 +1598,7 @@ public class DefaultResources implements LifecycleListener {
         {
             try {
                 instance.msdfLean = new TextCellFactory()
-                        .fontMultiDistanceField(crispLean, crispLeanTexture);
+                        .fontMultiDistanceField(crispLean, crispLeanTexture).setSmoothingMultiplier(2.5f);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -1690,7 +1690,7 @@ public class DefaultResources implements LifecycleListener {
         {
             try {
                 instance.msdfDejaVu = new TextCellFactory()
-                        .fontMultiDistanceField(crispDejaVu, crispDejaVuTexture).setSmoothingMultiplier(1f);
+                        .fontMultiDistanceField(crispDejaVu, crispDejaVuTexture).setSmoothingMultiplier(2.5f);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -1725,7 +1725,7 @@ public class DefaultResources implements LifecycleListener {
         {
             try {
                 instance.msdfSmooth = new TextCellFactory()
-                        .fontMultiDistanceField(crispSmooth, crispSmoothTexture).setSmoothingMultiplier(4f);
+                        .fontMultiDistanceField(crispSmooth, crispSmoothTexture).setSmoothingMultiplier(2.5f);
             } catch (Exception e) {
                 e.printStackTrace();
             }
