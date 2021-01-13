@@ -10,10 +10,8 @@ import squidpony.StringKit;
 import squidpony.squidgrid.Radius;
 import squidpony.squidmath.*;
 
-import java.util.Arrays;
-import java.util.BitSet;
-import java.util.HashSet;
-import java.util.Objects;
+import java.math.BigInteger;
+import java.util.*;
 
 /**
  * Created by Tommy Ettinger on 8/15/2016.
@@ -1276,17 +1274,17 @@ public class HashQualityTest {
 //                    for (int i = 0; i < 31; i++) {
 //                        colliders[i] = new IntSet(SIZE, 0.5f);
 //                    }
-                        DiverRNG rng = new DiverRNG(1L);
-                        ShuffledIntSequence
-                                xShuffle = new ShuffledIntSequence(WIDTH, 1),
-                                yShuffle = new ShuffledIntSequence(HEIGHT, -1),
-                                zShuffle = new ShuffledIntSequence(DEPTH, rng.nextInt());
+                        DiverRNG rng = new DiverRNG(SIZE);
+//                        ShuffledIntSequence
+//                                xShuffle = new ShuffledIntSequence(WIDTH, rng.nextInt()),
+//                                yShuffle = new ShuffledIntSequence(HEIGHT, rng.nextInt()),
+//                                zShuffle = new ShuffledIntSequence(DEPTH, rng.nextInt());
                         UnorderedSet<Coord3D> points = new UnorderedSet<>(SIZE);
-                        for (int i = 0; i < WIDTH; i++) {
-                            for (int j = 0; j < HEIGHT; j++) {
-                                for (int k = 0; k < DEPTH; k++) {
+                        for (int x = -w; x <= w; x++) {
+                            for (int y = -h; y <= h; y++) {
+                                for (int z = -d; z <= d; z++) {
 //                            int x = xShuffle.next(), y = yShuffle.next();
-                                    int x = xShuffle.next() ^ -rng.next(1), y = yShuffle.next() ^ -rng.next(1), z = zShuffle.next() ^ -rng.next(1);
+//                                    int x = xShuffle.next() ^ -rng.next(1), y = yShuffle.next() ^ -rng.next(1), z = zShuffle.next() ^ -rng.next(1);
                                     Coord3D c = Coord3D.get(x, y, z);
                                     if (rng.next(3) > reduction || points.contains(c)) {
                                         --SIZE;
@@ -1294,7 +1292,8 @@ public class HashQualityTest {
                                     }
                                     points.add(c);
                                     colliderBase.add(IntPointHash.hashAll(x, y, z, 0x9E3779B9) & restrict);
-                                    colliderPelo.add(peloton3D(x, y, z) & restrict);
+                                    colliderPelo.add((23 * 23 * 23 * x + 23 * 23 * y + 23 * z) & restrict);
+//                                    colliderPelo.add((0xD1B54A33 * x + 0xABC98383 * y + 0x8CB92BA7 * z) & restrict);
                                     colliderSzud.add(szudzikCoord(z, szudzikCoord(x, y)) & restrict);
                                     colliderCant.add(cantorCoord(z, cantorCoord(x, y)) & restrict);
                                     colliderHast.add(rosenbergStrong3D(x, y, z) & restrict);
@@ -1367,7 +1366,76 @@ public class HashQualityTest {
 //            System.out.println("TOTAL Lath_"+(i+1)+" collisions: " + confTotals[i] + " (" + (confTotals[i] * 100.0 / total) + "%)");
 //        }
     }
+    @Test
+    @Ignore
+    public void testCoordPrimes() {
+        final int[] params = ArrayTools.range(8, 14);// new int[]{33, 65, 129, 257, 513};
+//        final int[] params = new int[]{64, 128, 256, 512};
+        Random r = new Random(123456);
+//        BigInteger prime = BigInteger.valueOf(10);
+        for (int i = 0; i < 100; i++) {
+//            prime = prime.nextProbablePrime();
+//            int p = prime.intValue();
+            int p1 = BigInteger.probablePrime(5, r).intValue();
+            int p2 = BigInteger.probablePrime(11, r).intValue();
+            int p3 = BigInteger.probablePrime(17, r).intValue();
+            long total = 0L,
+                    baseTotal = 0L,
+                    baseBest = 1000000L,
+                    baseWorst = 0L,
+                    t;
+//        long[] confTotals = new long[31];
+            for (int reduction = 7; reduction >= 0; reduction--) {
 
+                for (int d : params) {
+                    int DEPTH = d * 3;
+                    for (int w : params) {
+                        int WIDTH = w * 3;
+                        for (int h : params) {
+                            int HEIGHT = h * 3;
+                            int SIZE = WIDTH * HEIGHT * DEPTH;
+                            int restrict = HashCommon.nextPowerOfTwo(SIZE) - 1;
+
+                            IntSet colliderBase = new IntSet(SIZE, 0.5f);
+// TOTAL Obje collisions: 35610709 (77.4917716409743%), BEST 8911, WORST 39636
+                            DiverRNG rng = new DiverRNG(SIZE);
+                            UnorderedSet<Coord3D> points = new UnorderedSet<>(SIZE);
+                            for (int x = -w; x <= w; x++) {
+                                for (int y = -h; y <= h; y++) {
+                                    for (int z = -d; z <= d; z++) {
+                                        Coord3D c = Coord3D.get(x, y, z);
+                                        if (rng.next(3) > reduction || points.contains(c)) {
+                                            --SIZE;
+                                            continue;
+                                        }
+                                        points.add(c);
+                                        colliderBase.add((p1 * x + p2 * y + p3 * z) & restrict);
+//                                        colliderBase.add((p * p * p * x + p * p * y + p * z) & restrict);
+                                    }
+                                }
+                            }
+//                    System.out.println("WIDTH: " + WIDTH + ", HEIGHT: " + HEIGHT + ", SIZE: " + SIZE);
+                            t = (SIZE - colliderBase.size);
+                            baseBest = Math.min(t, baseBest);
+                            baseWorst = Math.max(t, baseWorst);
+                            baseTotal += (SIZE - colliderBase.size);
+                            total += SIZE;
+                        }
+                    }
+                }
+//            System.out.println("INTERMEDIATE number of Coords added: " + total + " on reduction " + reduction);
+//            System.out.println("INTERMEDIATE Base collisions: " + baseTotal + " (" + (baseTotal * 100.0 / total) + "%), BEST " + baseBest + ", WORST " + baseWorst);
+//            System.out.println("INTERMEDIATE Szud collisions: " + szudTotal + " (" + (szudTotal * 100.0 / total) + "%), BEST " + szudBest + ", WORST " + szudWorst);
+//            System.out.println("INTERMEDIATE Pelo collisions: " + peloTotal + " (" + (peloTotal * 100.0 / total) + "%), BEST " + peloBest + ", WORST " + peloWorst);
+//            System.out.println("INTERMEDIATE Cant collisions: " + cantTotal + " (" + (cantTotal * 100.0 / total) + "%), BEST " + cantBest + ", WORST " + cantWorst);
+//            System.out.println("INTERMEDIATE RoSt collisions: " + hastTotal + " (" + (hastTotal * 100.0 / total) + "%), BEST " + hastBest + ", WORST " + hastWorst);
+//            System.out.println("INTERMEDIATE Obje collisions: " + objeTotal + " (" + (objeTotal * 100.0 / total) + "%), BEST " + objeBest + ", WORST " + objeWorst);
+//
+            }
+            System.out.println(p1 + "," + p2 + "," + p3 + ": Number of Coords added: " + total);
+            System.out.println(p1 + "," + p2 + "," + p3 + ": TOTAL Base collisions: " + baseTotal + " (" + (baseTotal * 100.0 / total) + "%), BEST " + baseBest + ", WORST " + baseWorst);
+        }
+    }
 
 
 
