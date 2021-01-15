@@ -892,13 +892,30 @@ public class HashQualityTest {
     
     public static int rosenbergStrong3D(int x, int y, int z)
     {
-//        x = x << 1 ^ x >> 31;
-//        y = y << 1 ^ y >> 31;
-//        z = z << 1 ^ z >> 31;
-//        int n = (x >= y ? x * x + x + x - y : y * y + x);
-//        x += ((n >= z ? n * n + n + n - z : z * z + n) ^ 0xD1B54A35) * 0x9E375 + y + z;
+        //x = (x << 1 ^ x >> 31);// * 29;
+        //y = (y << 1 ^ y >> 31);// * 463;
+        //z = (z << 1 ^ z >> 31);// * 5867;
+        x = (x | (x << 16)) & 0x030000FF;
+        x = (x | (x <<  8)) & 0x0300F00F;
+        x = (x | (x <<  4)) & 0x030C30C3;
+        x = (x | (x <<  2)) & 0x09249249;
+        y = (y | (y << 16)) & 0x030000FF;
+        y = (y | (y <<  8)) & 0x0300F00F;
+        y = (y | (y <<  4)) & 0x030C30C3;
+        y = (y | (y <<  2)) & 0x09249249;
+        z = (z | (z << 16)) & 0x030000FF;
+        z = (z | (z <<  8)) & 0x0300F00F;
+        z = (z | (z <<  4)) & 0x030C30C3;
+        z = (z | (z <<  2)) & 0x09249249;
+        return (x | y << 1 | z << 2);
+//        int n = (x >= y ? x * (x + 2) - y : y * y + x);
+//        return (n >= z ? n * (n + 2) - z : z * z + n);
+
+//        x += ((n >= z ? n * (n + 2) - z : z * z + n) ^ 0xD1B54A35) * 0x9E375 + y + z;
 //        return x ^ x >>> 11 ^ x << 15;
-        return 0xABC9B * (0x8CBA5 * (0x346D5 * x + y ^ 0xD1B54A33) + z ^ 0xABC98389) ^ 0x8CB92BA7;
+
+//        return 0xABC9B * (0x8CBA5 * (0x346D5 * x + y ^ 0xD1B54A33) + z ^ 0xABC98389) ^ 0x8CB92BA7;
+
         // the commented out one below is better, but doesn't work on GWT
 //        return 0x8CB92BA7 * (0xABC98389 * (0xD1B54A33 * x + y) + z);
     }
@@ -1015,6 +1032,9 @@ public class HashQualityTest {
     }
 
     public static int peloton3D(int x, int y, int z) {
+        final int n = (29 * (x << 1 ^ x >> 31) + 463 * (y << 1 ^ y >> 31) + 5867 * (z << 1 ^ z >> 31));
+        return n ^ n >>> 14;
+
 //        int s = 42 ^ x + y + z;
 //        s = (x ^ (x << 7 | x >>> 25) ^ (x << 19 | x >>> 13) ^ s) * 0x1A36A9;// ^ 0x02A6328F;
 //        s ^= s >>> 10 ^ s >>> 15 ^ s << 7;
@@ -1038,9 +1058,6 @@ public class HashQualityTest {
         //s ^= s << 8 ^ s >>> 15 ^ s >>> 9;
 //        int s = 0x9E3779B9 ^ x * 0x1A36A9 ^ y * 0x157931 ^ z * 0x119725;
 
-        x = x << 1 ^ x >> 31;
-        y = y << 1 ^ y >> 31;
-        z = z << 1 ^ z >> 31;
 
 //        x ^= x >> 31;
 //        y ^= y >> 31;
@@ -1048,10 +1065,11 @@ public class HashQualityTest {
 
 //        x += (x >= z ? x * x + z : z * z);
 //        y += (y >= x ? y * y + x : x * x);
-        y += ((z+y) * (z+y+1) >> 1);
-        y += ((x+y) * (x+y+1) >> 1);
-        y ^= y >>> 1 ^ y >>> 6;
-        return (y ^ (y << 15 | y >>> 17) ^ (y << 21 | y >>> 11)) * 0x125493 ^ 0xD1B54A35;
+
+        //y += ((z+y) * (z+y+1) >> 1);
+        //y += ((x+y) * (x+y+1) >> 1);
+        //y ^= y >>> 1 ^ y >>> 6;
+        //return (y ^ (y << 15 | y >>> 17) ^ (y << 21 | y >>> 11)) * 0x125493 ^ 0xD1B54A35;
 
 //        int s = 0x9E3779B9 ^ x * 0x1A36A9 ^ y * 0x157931 ^ z * 0x119725;
 //        return (s = (s ^ (s << 19 | s >>> 13) ^ (s << 6 | s >>> 26) ^ 0xD1B54A35) * 0x125493) ^ s >>> 15;
@@ -1242,7 +1260,7 @@ public class HashQualityTest {
     @Test
     @Ignore
     public void testCoord3() {
-        final int[] params = ArrayTools.range(8, 14);// new int[]{33, 65, 129, 257, 513};
+        final int[] params = ArrayTools.range(8, 25);// new int[]{33, 65, 129, 257, 513};
 //        final int[] params = new int[]{64, 128, 256, 512};
         long baseTotal = 0L, objeTotal = 0L, peloTotal = 0L, hastTotal = 0L, szudTotal = 0L, cantTotal = 0L, total = 0L,
                 baseBest = 1000000L,
@@ -1256,11 +1274,11 @@ public class HashQualityTest {
         for (int reduction = 7; reduction >= 0; reduction--) {
 
             for (int d : params) {
-                int DEPTH = d * 3;
+                int DEPTH = d + d + 1;
                 for (int w : params) {
-                    int WIDTH = w * 3;
+                    int WIDTH = w + w + 1;
                     for (int h : params) {
-                        int HEIGHT = h * 3;
+                        int HEIGHT = h + h + 1;
                         int SIZE = WIDTH * HEIGHT * DEPTH;
                         int restrict = HashCommon.nextPowerOfTwo(SIZE) - 1;
 
@@ -1292,7 +1310,8 @@ public class HashQualityTest {
                                     }
                                     points.add(c);
                                     colliderBase.add(IntPointHash.hashAll(x, y, z, 0x9E3779B9) & restrict);
-                                    colliderPelo.add((23 * 23 * 23 * x + 23 * 23 * y + 23 * z) & restrict);
+                                    colliderPelo.add(peloton3D(x, y, z) & restrict);
+//                                    colliderPelo.add((29 * (x << 1 ^ x >> 31) + 1721 * (y << 1 ^ y >> 31) + 95713 * (z << 1 ^ z >> 31)) & restrict);
 //                                    colliderPelo.add((0xD1B54A33 * x + 0xABC98383 * y + 0x8CB92BA7 * z) & restrict);
                                     colliderSzud.add(szudzikCoord(z, szudzikCoord(x, y)) & restrict);
                                     colliderCant.add(cantorCoord(z, cantorCoord(x, y)) & restrict);
@@ -1373,12 +1392,15 @@ public class HashQualityTest {
 //        final int[] params = new int[]{64, 128, 256, 512};
         Random r = new Random(123456);
 //        BigInteger prime = BigInteger.valueOf(10);
-        for (int i = 0; i < 100; i++) {
+        long bestTotal = Long.MAX_VALUE;
+        long usedTotal = 1;
+        int best1 = 1, best2 = 1, best3 = 1;
+        for (int i = 0; i < 1000; i++) {
 //            prime = prime.nextProbablePrime();
 //            int p = prime.intValue();
             int p1 = BigInteger.probablePrime(5, r).intValue();
-            int p2 = BigInteger.probablePrime(11, r).intValue();
-            int p3 = BigInteger.probablePrime(17, r).intValue();
+            int p2 = BigInteger.probablePrime(9, r).intValue();
+            int p3 = BigInteger.probablePrime(13, r).intValue();
             long total = 0L,
                     baseTotal = 0L,
                     baseBest = 1000000L,
@@ -1388,17 +1410,17 @@ public class HashQualityTest {
             for (int reduction = 7; reduction >= 0; reduction--) {
 
                 for (int d : params) {
-                    int DEPTH = d * 3;
+                    int DEPTH = d + d + 1;
                     for (int w : params) {
-                        int WIDTH = w * 3;
+                        int WIDTH = w + w + 1;
                         for (int h : params) {
-                            int HEIGHT = h * 3;
+                            int HEIGHT = h + h + 1;
                             int SIZE = WIDTH * HEIGHT * DEPTH;
                             int restrict = HashCommon.nextPowerOfTwo(SIZE) - 1;
 
                             IntSet colliderBase = new IntSet(SIZE, 0.5f);
 // TOTAL Obje collisions: 35610709 (77.4917716409743%), BEST 8911, WORST 39636
-                            DiverRNG rng = new DiverRNG(SIZE);
+                            DiverRNG rng = new DiverRNG(123);
                             UnorderedSet<Coord3D> points = new UnorderedSet<>(SIZE);
                             for (int x = -w; x <= w; x++) {
                                 for (int y = -h; y <= h; y++) {
@@ -1432,9 +1454,19 @@ public class HashQualityTest {
 //            System.out.println("INTERMEDIATE Obje collisions: " + objeTotal + " (" + (objeTotal * 100.0 / total) + "%), BEST " + objeBest + ", WORST " + objeWorst);
 //
             }
-            System.out.println(p1 + "," + p2 + "," + p3 + ": Number of Coords added: " + total);
+//            System.out.println(p1 + "," + p2 + "," + p3 + ": Number of Coords added: " + total);
             System.out.println(p1 + "," + p2 + "," + p3 + ": TOTAL Base collisions: " + baseTotal + " (" + (baseTotal * 100.0 / total) + "%), BEST " + baseBest + ", WORST " + baseWorst);
+            if(bestTotal > baseTotal){
+                bestTotal = baseTotal;
+                usedTotal = total;
+                best1 = p1;
+                best2 = p2;
+                best3 = p3;
+            }
         }
+        System.out.println();
+        System.out.println("BEST SO FAR:");
+        System.out.println(best1 + "," + best2 + "," + best3 + ", with " + bestTotal + " collisions (" + (bestTotal * 100.0 / usedTotal) + "%)");
     }
 
 
