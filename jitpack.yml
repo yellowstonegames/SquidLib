@@ -1,5 +1,6 @@
 jdk:
-  - openjdk14
+  - openjdk15
 install:
-  - echo "Installing with Maven, ignoring Gradle project"
-  - mvn clean install -DskipTests
+  - echo "Installing with Gradle"
+  - chmod 755 gradlew
+  - ./gradlew clean install

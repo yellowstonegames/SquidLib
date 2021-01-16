@@ -1,0 +1,38 @@
+modifyPom {
+    project {
+        description "A diverse toolbox for working with procedural generation in games."
+        url 'https://github.com/yellowstonegames/SquidLib'
+        inceptionYear '2012'
+
+        scm {
+            url 'https://github.com/yellowstonegames/SquidLib'
+            connection 'scm:https://yellowstonegames@github.com/yellowstonegames/SquidLib.git'
+            developerConnection 'scm:git://github.com/yellowstonegames/SquidLib.git'
+        }
+
+        licenses {
+            license {
+                name 'Apache Public License'
+                url 'https://www.apache.org/licenses/LICENSE-2.0.html'
+                distribution 'repo'
+            }
+        }
+
+        developers {
+            developer {
+                id 'tommyettinger'
+                name 'Tommy Ettinger'
+                email 'tommy.ettinger@gmail.com'
+            }
+            developer {
+                id 'SquidPony'
+                name 'Eben Howard'
+                email 'example@example.com'
+            }
+        }
+    }
+}
+
+nexusStaging {
+    packageGroup = 'com.squidpony'
+}
