@@ -1,101 +1,75 @@
-apply plugin: 'java'
-// Using Maven to build this project is strongly recommended.
-// If you want to delve into using Gradle, you can comment out or remove the following line.
-throw new InstantiationException("The Gradle build is unmaintained; use Maven (the pom.xml file) instead.")
-
-// note from smelC: starting with Eclipse Neon, you should not use
-// gradle's Eclipse plugin (gradle :eclipse). Instead you should use Eclipse's buildship project (shipped by default with Eclipse):
-// https://projects.eclipse.org/projects/tools.buildship
-// buildship takes care of generating .classpath and .project files according to your build.gradle files
-// (right-click on a project > Gradle > Refresh Gradle Project).
-
-//Support UTF-8 file encoding even on Windows, where it defaults to something terrible.
-[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
-
-
-// In this section you declare where to find the dependencies of your project
-repositories {
-    // Use 'jcenter' and Maven Central for resolving your dependencies.
-    // You can declare any Maven/Ivy/file repository here.
-    jcenter()
-    mavenCentral()
-}
-
-project.ext.assetsDir = new File("assets");
-
-sourceSets {
-    main {
-        java {
-            srcDirs 'squidlib/src/main/java'
-            srcDirs 'squidlib-util/src/main/java'
-            srcDirs 'squidlib-extra/src/main/java'
-
-            // srcDirs 'squidlib-util/etc' <- No. Solely contains TilesetsGenerator
-	    // which isn't useful anymore.
-        }
-        resources {
-            srcDirs 'squidlib-util/src/main/resources'
-        }
+buildscript {
+	repositories {
+		mavenLocal()
+		mavenCentral()
+		maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
+        jcenter()
     }
-    test {
-    	java {
-            srcDirs 'squidlib/src/test/java'
-            srcDirs 'squidlib-util/src/test/java'
-            srcDirs 'squidlib-extra/src/test/java'
-            // srcDirs 'squidlib-performance/src/main/java' <- requires org.openjdk
-    	}
-        resources {
-            srcDirs 'squidlib/src/test/resources'
-            srcDirs 'squidlib-extra/src/test/resources'
-        }
+    dependencies {
+        classpath 'com.bmuschko:gradle-nexus-plugin:2.3.1'
+        classpath "io.codearte.gradle.nexus:gradle-nexus-staging-plugin:0.21.0"
     }
 }
 
-// define 'gdxVersion' if not defined yet. This allows
-// a project depending on SquidLib (like: your game) to define
-// 'gdxVersion' itself, and yet be able to build SquidLib standalone too.
-def gdxVersion = System.getenv("gdxVersion") ?: "1.9.11" // As in pom.xml
-project.sourceCompatibility = 1.7
+apply plugin: 'java-library'
+apply plugin: 'com.bmuschko.nexus'
+apply plugin: 'io.codearte.nexus-staging'
+apply plugin: 'maven'
+apply from: 'publish.gradle'
 
-// In this section you declare the dependencies for your production and test code
-dependencies {
-	compile "com.badlogicgames.gdx:gdx:$gdxVersion"
-    compile "com.github.tommyettinger:regexodus:0.1.10"
-	testCompile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
-	testCompile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
-	testCompile 'junit:junit:4.13.1'
+def projectName = 'squidlib-parent'
+modifyPom {
+    project {
+        name projectName
+    }
+}
+version '3.0.4-SNAPSHOT'
+group 'com.squidpony'
+
+allprojects {
+    apply plugin: 'eclipse'
+    apply plugin: 'idea'
+    [compileJava, compileTestJava, javadoc]*.options*.encoding = 'UTF-8'
+
 }
 
-// Execute with 'gradle everythingDemo' (add --info to get debug info)
-task(everythingDemo, type: JavaExec) {
-    main = 'squidpony.gdx.examples.desktop.EverythingDemoLauncher'
-    // smelC: It would be nice to automatically add the three following
-    // lines to any 'JavaExec' task, but I could not find how to do it.
-    classpath(sourceSets.test.runtimeClasspath,project.assetsDir)
-    standardInput = System.in
-    ignoreExitValue = true
+configure(subprojects) {
+    apply plugin: 'java-library'
+    apply plugin: 'com.bmuschko.nexus'
+    apply from: '../publish.gradle'
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+    compileJava {
+        options.incremental = true
+    }
 }
 
-// Execute with 'gradle basicDemo' (add --info to get debug info)
-task(basicDemo, type: JavaExec) {
-    main = 'squidpony.gdx.examples.desktop.BasicDemoLauncher'
-    classpath(sourceSets.test.runtimeClasspath,project.assetsDir)
-    standardInput = System.in
-    ignoreExitValue = true
+subprojects {
+	version = "$parent.version"
+    group = parent.group
+    ext.projectName = 'SquidLib'
+	repositories {
+		mavenLocal()
+		mavenCentral()
+		maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
+		jcenter()
+	}
+    compileJava.exclude("emu")
+    javadoc.exclude("emu")
+    javadoc.options.source("15")
+    javadoc.destinationDir = file("../docs/$name/apidocs")
+
 }
 
-// Execute with 'gradle iconDemo' (add --info to get debug info)
-task(iconDemo, type: JavaExec) {
-    main = 'squidpony.gdx.tests.IconsTest'
-    classpath(sourceSets.test.runtimeClasspath,project.assetsDir)
-    standardInput = System.in
-    ignoreExitValue = true
-}
-
-// Execute with 'gradle dataDemo' (add --info to get debug info)
-task(dataDemo, type: JavaExec) {
-    main = 'squidpony.DataDemo'
-    classpath(sourceSets.test.runtimeClasspath,project.assetsDir)
-    standardInput = System.in
-    ignoreExitValue = true
+// Disable JDK 8's doclint
+// http://blog.joda.org/2014/02/turning-off-doclint-in-jdk-8-javadoc.html
+if (JavaVersion.current().isJava8Compatible()) {
+    allprojects {
+        tasks.withType(Javadoc) {
+            // The -quiet is because of some sort of weird JDK JavaCompiler bug:
+            // https://discuss.gradle.org/t/passing-arguments-to-compiler-and-javadoc/1661
+            options.addStringOption('Xdoclint:none,-missing', '-quiet')
+            options.tags('apiNote:a:"API Note"', 'implSpec:a:"Implementation Requirements"', 'implNote:a:"Implementation Note"')
+        }
+    }
 }

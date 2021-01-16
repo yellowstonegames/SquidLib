@@ -1,0 +1,23 @@
+[compileJava, compileTestJava, javadoc]*.options*.encoding = 'UTF-8'
+ext.projectName = 'squidlib'
+eclipse.project.name = ext.projectName
+modifyPom {
+    project {
+        name ext.projectName
+    }
+}
+
+dependencies {
+    api project(':squidlib-util')
+    api "com.badlogicgames.gdx:gdx:$gdxVersion"
+    testImplementation "junit:junit:4.13.1"
+    testImplementation "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
+    testImplementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+}
+
+jar {
+    archiveBaseName.set(project.name)
+    manifest {
+        attributes 'Implementation-Title': projectName, 'Implementation-Version': archiveVersion
+    }
+}
