@@ -1,5 +1,5 @@
 [compileJava, compileTestJava, javadoc]*.options*.encoding = 'UTF-8'
-ext.projectName = 'squidlib'
+ext.projectName = 'squidlib-extra'
 eclipse.project.name = ext.projectName
 modifyPom {
     project {
