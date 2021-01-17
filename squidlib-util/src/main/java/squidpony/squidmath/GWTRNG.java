@@ -206,7 +206,6 @@ public final class GWTRNG extends AbstractRNG implements IStatefulRNG, Serializa
      * 
      * @return a copy of this GWTRNG
      */
-    @Override
     public GWTRNG copy() {
         return new GWTRNG(stateA, stateB);
     }

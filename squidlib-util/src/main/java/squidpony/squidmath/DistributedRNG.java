@@ -157,7 +157,6 @@ public class DistributedRNG extends AbstractRNG implements IStatefulRNG, Statefu
      *
      * @return a copy of this IRNG
      */
-    @Override
     public DistributedRNG copy() {
         return new DistributedRNG(rng.getState(), distribution);
     }

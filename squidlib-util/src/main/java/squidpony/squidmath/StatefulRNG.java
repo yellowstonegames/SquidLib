@@ -56,7 +56,6 @@ public class StatefulRNG extends RNG implements Serializable, IStatefulRNG {
      *
      * @return a copy of this StatefulRNG
      */
-    @Override
     public StatefulRNG copy() {
         return new StatefulRNG(random.copy());
     }

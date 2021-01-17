@@ -967,7 +967,6 @@ public class RNG implements Serializable, IRNG {
      *
      * @return a copy of this RNG
      */
-    @Override
     public RNG copy() {
         return new RNG(random.copy());
     }

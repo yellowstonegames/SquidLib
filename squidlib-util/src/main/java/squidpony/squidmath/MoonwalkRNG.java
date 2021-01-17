@@ -181,7 +181,6 @@ public class MoonwalkRNG extends AbstractRNG implements IStatefulRNG, SkippingRa
      * this MoonwalkRNG at the point copy() is called. The copy will not share references with this MoonwalkRNG.
      * @return a copy of this IRNG
      */
-    @Override
     public MoonwalkRNG copy() {
         return new MoonwalkRNG(state);
     }

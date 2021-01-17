@@ -65,9 +65,9 @@ public class GapShuffler<T> implements Iterator<T>, Iterable<T>, Serializable {
      * @param items a Collection of T that will not be modified
      * @param rng an IRNG that can be pre-seeded; will be copied and not used directly
      */
-    public GapShuffler(Collection<T> items, IRNG rng)
+    public GapShuffler(Collection<T> items, RandomnessSource rng)
     {
-        this.rng = rng.copy();
+        this.rng = new RNG(rng.copy());
         elements = this.rng.shuffle(items);
         index = 0;
     }
@@ -91,7 +91,7 @@ public class GapShuffler<T> implements Iterator<T>, Iterable<T>, Serializable {
      */
     public GapShuffler(Collection<T> items, IRNG rng, boolean shareRNG)
     {
-        this.rng = shareRNG ? rng : rng.copy();
+        this.rng = shareRNG ? rng : new RNG(rng.copy());
         elements = this.rng.shuffle(items);
         index = 0;
     }
@@ -132,9 +132,9 @@ public class GapShuffler<T> implements Iterator<T>, Iterable<T>, Serializable {
      * @param items a Collection of T that will not be modified
      * @param rng an IRNG that can be pre-seeded; will be copied and not used directly
      */
-    public GapShuffler(T[] items, IRNG rng)
+    public GapShuffler(T[] items, RandomnessSource rng)
     {
-        this.rng = rng.copy();
+        this.rng = new RNG(rng.copy());
         elements = Maker.makeList(items);
         this.rng.shuffleInPlace(elements);
         index = 0;
@@ -159,7 +159,7 @@ public class GapShuffler<T> implements Iterator<T>, Iterable<T>, Serializable {
      */
     public GapShuffler(T[] items, IRNG rng, boolean shareRNG)
     {
-        this.rng = shareRNG ? rng : rng.copy();
+        this.rng = shareRNG ? rng : new RNG(rng.copy());
         elements = Maker.makeList(items);
         this.rng.shuffleInPlace(elements);
         index = 0;
@@ -242,7 +242,7 @@ public class GapShuffler<T> implements Iterator<T>, Iterable<T>, Serializable {
      * @param shareRNG if false, {@code rng} will be copied and no reference will be kept; if true, {@code rng} will be shared with the outside code
      */
     public void setRNG(IRNG rng, boolean shareRNG) {
-        this.rng = shareRNG ? rng : rng.copy();
+        this.rng = shareRNG ? rng : new RNG(rng.copy());
         this.rng.shuffleInPlace(elements);
     }
 

@@ -536,7 +536,6 @@ public abstract class AbstractRNG implements IRNG {
      * This is abstract because every implementation is likely to have different specifics for this.
      * @return a copy of this IRNG
      */
-    @Override
     public abstract IRNG copy();
 
     /**
