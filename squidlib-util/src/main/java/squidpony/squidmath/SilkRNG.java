@@ -199,7 +199,6 @@ public final class SilkRNG extends AbstractRNG implements IStatefulRNG, Serializ
      * 
      * @return a copy of this SilkRNG
      */
-    @Override
     public SilkRNG copy() {
         return new SilkRNG(stateA, stateB);
     }

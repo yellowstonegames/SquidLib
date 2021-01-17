@@ -381,7 +381,6 @@ public class DeckRNG extends StatefulRNG implements Serializable {
      *
      * @return a copy of this DeckRNG
      */
-    @Override
     public DeckRNG copy()
     {
         DeckRNG next = new DeckRNG(lastShuffledState);

@@ -548,23 +548,22 @@
 <span class="source-line-no">536</span><span id="line.536">     * This is abstract because every implementation is likely to have different specifics for this.</span>
 <span class="source-line-no">537</span><span id="line.537">     * @return a copy of this IRNG</span>
 <span class="source-line-no">538</span><span id="line.538">     */</span>
-<span class="source-line-no">539</span><span id="line.539">    @Override</span>
-<span class="source-line-no">540</span><span id="line.540">    public abstract IRNG copy();</span>
-<span class="source-line-no">541</span><span id="line.541"></span>
-<span class="source-line-no">542</span><span id="line.542">    /**</span>
-<span class="source-line-no">543</span><span id="line.543">     * Gets a view of this IRNG in a way that implements {@link Serializable}, which may simply be this IRNG if it</span>
-<span class="source-line-no">544</span><span id="line.544">     * implements Serializable as well as IRNG.</span>
-<span class="source-line-no">545</span><span id="line.545">     * &lt;br&gt;</span>
-<span class="source-line-no">546</span><span id="line.546">     * For implementors: It is suggested to return an {@link RNG} initialized by calling</span>
-<span class="source-line-no">547</span><span id="line.547">     * {@link RNG#RNG(long)} with {@link #nextLong()} if you are unable to save the current state of this IRNG and the</span>
-<span class="source-line-no">548</span><span id="line.548">     * caller still needs something saved. This won't preserve the current state or the choice of IRNG implementation,</span>
-<span class="source-line-no">549</span><span id="line.549">     * however, so it is simply a last resort in case you don't want to throw an exception.</span>
-<span class="source-line-no">550</span><span id="line.550">     *</span>
-<span class="source-line-no">551</span><span id="line.551">     * @return a {@link Serializable} view of this IRNG or a similar one; may be {@code this}</span>
-<span class="source-line-no">552</span><span id="line.552">     */</span>
-<span class="source-line-no">553</span><span id="line.553">    @Override</span>
-<span class="source-line-no">554</span><span id="line.554">    public abstract Serializable toSerializable();</span>
-<span class="source-line-no">555</span><span id="line.555">}</span>
+<span class="source-line-no">539</span><span id="line.539">    public abstract IRNG copy();</span>
+<span class="source-line-no">540</span><span id="line.540"></span>
+<span class="source-line-no">541</span><span id="line.541">    /**</span>
+<span class="source-line-no">542</span><span id="line.542">     * Gets a view of this IRNG in a way that implements {@link Serializable}, which may simply be this IRNG if it</span>
+<span class="source-line-no">543</span><span id="line.543">     * implements Serializable as well as IRNG.</span>
+<span class="source-line-no">544</span><span id="line.544">     * &lt;br&gt;</span>
+<span class="source-line-no">545</span><span id="line.545">     * For implementors: It is suggested to return an {@link RNG} initialized by calling</span>
+<span class="source-line-no">546</span><span id="line.546">     * {@link RNG#RNG(long)} with {@link #nextLong()} if you are unable to save the current state of this IRNG and the</span>
+<span class="source-line-no">547</span><span id="line.547">     * caller still needs something saved. This won't preserve the current state or the choice of IRNG implementation,</span>
+<span class="source-line-no">548</span><span id="line.548">     * however, so it is simply a last resort in case you don't want to throw an exception.</span>
+<span class="source-line-no">549</span><span id="line.549">     *</span>
+<span class="source-line-no">550</span><span id="line.550">     * @return a {@link Serializable} view of this IRNG or a similar one; may be {@code this}</span>
+<span class="source-line-no">551</span><span id="line.551">     */</span>
+<span class="source-line-no">552</span><span id="line.552">    @Override</span>
+<span class="source-line-no">553</span><span id="line.553">    public abstract Serializable toSerializable();</span>
+<span class="source-line-no">554</span><span id="line.554">}</span>
 
 
 

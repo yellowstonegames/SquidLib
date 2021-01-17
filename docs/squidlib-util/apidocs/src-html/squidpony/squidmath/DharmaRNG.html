@@ -318,58 +318,57 @@
 <span class="source-line-no">306</span><span id="line.306">     *</span>
 <span class="source-line-no">307</span><span id="line.307">     * @return a copy of this DharmaRNG</span>
 <span class="source-line-no">308</span><span id="line.308">     */</span>
-<span class="source-line-no">309</span><span id="line.309">    @Override</span>
-<span class="source-line-no">310</span><span id="line.310">    public DharmaRNG copy() {</span>
-<span class="source-line-no">311</span><span id="line.311">        DharmaRNG next = new DharmaRNG(random.copy(), fairness);</span>
-<span class="source-line-no">312</span><span id="line.312">        next.produced = produced;</span>
-<span class="source-line-no">313</span><span id="line.313">        next.baseline = baseline;</span>
-<span class="source-line-no">314</span><span id="line.314">        return next;</span>
-<span class="source-line-no">315</span><span id="line.315">    }</span>
-<span class="source-line-no">316</span><span id="line.316"></span>
-<span class="source-line-no">317</span><span id="line.317">    @Override</span>
-<span class="source-line-no">318</span><span id="line.318">    public String toString() {</span>
-<span class="source-line-no">319</span><span id="line.319">        return "DharmaRNG{" +</span>
-<span class="source-line-no">320</span><span id="line.320">                "fairness=" + fairness +</span>
-<span class="source-line-no">321</span><span id="line.321">                ", produced=" + produced +</span>
-<span class="source-line-no">322</span><span id="line.322">                ", baseline=" + baseline +</span>
-<span class="source-line-no">323</span><span id="line.323">                ", Randomness Source=" + random +</span>
-<span class="source-line-no">324</span><span id="line.324">                '}';</span>
-<span class="source-line-no">325</span><span id="line.325">    }</span>
-<span class="source-line-no">326</span><span id="line.326"></span>
-<span class="source-line-no">327</span><span id="line.327">    @Override</span>
-<span class="source-line-no">328</span><span id="line.328">    public boolean equals(Object o) {</span>
-<span class="source-line-no">329</span><span id="line.329">        if (this == o) return true;</span>
-<span class="source-line-no">330</span><span id="line.330">        if (o == null || getClass() != o.getClass()) return false;</span>
-<span class="source-line-no">331</span><span id="line.331"></span>
-<span class="source-line-no">332</span><span id="line.332">        DharmaRNG dharmaRNG = (DharmaRNG) o;</span>
-<span class="source-line-no">333</span><span id="line.333"></span>
-<span class="source-line-no">334</span><span id="line.334">        if (Double.compare(dharmaRNG.fairness, fairness) != 0) return false;</span>
-<span class="source-line-no">335</span><span id="line.335">        return Double.compare(dharmaRNG.produced, produced) == 0 &amp;&amp; Double.compare(dharmaRNG.baseline, baseline) == 0;</span>
-<span class="source-line-no">336</span><span id="line.336"></span>
-<span class="source-line-no">337</span><span id="line.337">    }</span>
-<span class="source-line-no">338</span><span id="line.338"></span>
-<span class="source-line-no">339</span><span id="line.339">    @Override</span>
-<span class="source-line-no">340</span><span id="line.340">    public int hashCode() {</span>
-<span class="source-line-no">341</span><span id="line.341">        int result;</span>
-<span class="source-line-no">342</span><span id="line.342">        long temp;</span>
-<span class="source-line-no">343</span><span id="line.343">        temp = NumberTools.doubleToLongBits(fairness);</span>
-<span class="source-line-no">344</span><span id="line.344">        result = (int) (temp ^ (temp &gt;&gt;&gt; 32));</span>
-<span class="source-line-no">345</span><span id="line.345">        temp = NumberTools.doubleToLongBits(produced);</span>
-<span class="source-line-no">346</span><span id="line.346">        result = 31 * result + (int) (temp ^ (temp &gt;&gt;&gt; 32));</span>
-<span class="source-line-no">347</span><span id="line.347">        temp = NumberTools.doubleToLongBits(baseline);</span>
-<span class="source-line-no">348</span><span id="line.348">        result = 31 * result + (int) (temp ^ (temp &gt;&gt;&gt; 32));</span>
-<span class="source-line-no">349</span><span id="line.349">        return result;</span>
-<span class="source-line-no">350</span><span id="line.350">    }</span>
-<span class="source-line-no">351</span><span id="line.351">    /**</span>
-<span class="source-line-no">352</span><span id="line.352">     * Returns this DharmaRNG in a way that can be deserialized even if only {@link IRNG}'s methods can be called.</span>
-<span class="source-line-no">353</span><span id="line.353">     * @return a {@link Serializable} view of this DharmaRNG; always {@code this}</span>
-<span class="source-line-no">354</span><span id="line.354">     */</span>
-<span class="source-line-no">355</span><span id="line.355">    @Override</span>
-<span class="source-line-no">356</span><span id="line.356">    public Serializable toSerializable() {</span>
-<span class="source-line-no">357</span><span id="line.357">        return this;</span>
-<span class="source-line-no">358</span><span id="line.358">    }</span>
-<span class="source-line-no">359</span><span id="line.359"></span>
-<span class="source-line-no">360</span><span id="line.360">}</span>
+<span class="source-line-no">309</span><span id="line.309">    public DharmaRNG copy() {</span>
+<span class="source-line-no">310</span><span id="line.310">        DharmaRNG next = new DharmaRNG(random.copy(), fairness);</span>
+<span class="source-line-no">311</span><span id="line.311">        next.produced = produced;</span>
+<span class="source-line-no">312</span><span id="line.312">        next.baseline = baseline;</span>
+<span class="source-line-no">313</span><span id="line.313">        return next;</span>
+<span class="source-line-no">314</span><span id="line.314">    }</span>
+<span class="source-line-no">315</span><span id="line.315"></span>
+<span class="source-line-no">316</span><span id="line.316">    @Override</span>
+<span class="source-line-no">317</span><span id="line.317">    public String toString() {</span>
+<span class="source-line-no">318</span><span id="line.318">        return "DharmaRNG{" +</span>
+<span class="source-line-no">319</span><span id="line.319">                "fairness=" + fairness +</span>
+<span class="source-line-no">320</span><span id="line.320">                ", produced=" + produced +</span>
+<span class="source-line-no">321</span><span id="line.321">                ", baseline=" + baseline +</span>
+<span class="source-line-no">322</span><span id="line.322">                ", Randomness Source=" + random +</span>
+<span class="source-line-no">323</span><span id="line.323">                '}';</span>
+<span class="source-line-no">324</span><span id="line.324">    }</span>
+<span class="source-line-no">325</span><span id="line.325"></span>
+<span class="source-line-no">326</span><span id="line.326">    @Override</span>
+<span class="source-line-no">327</span><span id="line.327">    public boolean equals(Object o) {</span>
+<span class="source-line-no">328</span><span id="line.328">        if (this == o) return true;</span>
+<span class="source-line-no">329</span><span id="line.329">        if (o == null || getClass() != o.getClass()) return false;</span>
+<span class="source-line-no">330</span><span id="line.330"></span>
+<span class="source-line-no">331</span><span id="line.331">        DharmaRNG dharmaRNG = (DharmaRNG) o;</span>
+<span class="source-line-no">332</span><span id="line.332"></span>
+<span class="source-line-no">333</span><span id="line.333">        if (Double.compare(dharmaRNG.fairness, fairness) != 0) return false;</span>
+<span class="source-line-no">334</span><span id="line.334">        return Double.compare(dharmaRNG.produced, produced) == 0 &amp;&amp; Double.compare(dharmaRNG.baseline, baseline) == 0;</span>
+<span class="source-line-no">335</span><span id="line.335"></span>
+<span class="source-line-no">336</span><span id="line.336">    }</span>
+<span class="source-line-no">337</span><span id="line.337"></span>
+<span class="source-line-no">338</span><span id="line.338">    @Override</span>
+<span class="source-line-no">339</span><span id="line.339">    public int hashCode() {</span>
+<span class="source-line-no">340</span><span id="line.340">        int result;</span>
+<span class="source-line-no">341</span><span id="line.341">        long temp;</span>
+<span class="source-line-no">342</span><span id="line.342">        temp = NumberTools.doubleToLongBits(fairness);</span>
+<span class="source-line-no">343</span><span id="line.343">        result = (int) (temp ^ (temp &gt;&gt;&gt; 32));</span>
+<span class="source-line-no">344</span><span id="line.344">        temp = NumberTools.doubleToLongBits(produced);</span>
+<span class="source-line-no">345</span><span id="line.345">        result = 31 * result + (int) (temp ^ (temp &gt;&gt;&gt; 32));</span>
+<span class="source-line-no">346</span><span id="line.346">        temp = NumberTools.doubleToLongBits(baseline);</span>
+<span class="source-line-no">347</span><span id="line.347">        result = 31 * result + (int) (temp ^ (temp &gt;&gt;&gt; 32));</span>
+<span class="source-line-no">348</span><span id="line.348">        return result;</span>
+<span class="source-line-no">349</span><span id="line.349">    }</span>
+<span class="source-line-no">350</span><span id="line.350">    /**</span>
+<span class="source-line-no">351</span><span id="line.351">     * Returns this DharmaRNG in a way that can be deserialized even if only {@link IRNG}'s methods can be called.</span>
+<span class="source-line-no">352</span><span id="line.352">     * @return a {@link Serializable} view of this DharmaRNG; always {@code this}</span>
+<span class="source-line-no">353</span><span id="line.353">     */</span>
+<span class="source-line-no">354</span><span id="line.354">    @Override</span>
+<span class="source-line-no">355</span><span id="line.355">    public Serializable toSerializable() {</span>
+<span class="source-line-no">356</span><span id="line.356">        return this;</span>
+<span class="source-line-no">357</span><span id="line.357">    }</span>
+<span class="source-line-no">358</span><span id="line.358"></span>
+<span class="source-line-no">359</span><span id="line.359">}</span>
 
 
 

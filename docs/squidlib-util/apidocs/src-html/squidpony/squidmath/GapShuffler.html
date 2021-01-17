@@ -77,9 +77,9 @@
 <span class="source-line-no">065</span><span id="line.65">     * @param items a Collection of T that will not be modified</span>
 <span class="source-line-no">066</span><span id="line.66">     * @param rng an IRNG that can be pre-seeded; will be copied and not used directly</span>
 <span class="source-line-no">067</span><span id="line.67">     */</span>
-<span class="source-line-no">068</span><span id="line.68">    public GapShuffler(Collection&lt;T&gt; items, IRNG rng)</span>
+<span class="source-line-no">068</span><span id="line.68">    public GapShuffler(Collection&lt;T&gt; items, RandomnessSource rng)</span>
 <span class="source-line-no">069</span><span id="line.69">    {</span>
-<span class="source-line-no">070</span><span id="line.70">        this.rng = rng.copy();</span>
+<span class="source-line-no">070</span><span id="line.70">        this.rng = new RNG(rng.copy());</span>
 <span class="source-line-no">071</span><span id="line.71">        elements = this.rng.shuffle(items);</span>
 <span class="source-line-no">072</span><span id="line.72">        index = 0;</span>
 <span class="source-line-no">073</span><span id="line.73">    }</span>
@@ -103,7 +103,7 @@
 <span class="source-line-no">091</span><span id="line.91">     */</span>
 <span class="source-line-no">092</span><span id="line.92">    public GapShuffler(Collection&lt;T&gt; items, IRNG rng, boolean shareRNG)</span>
 <span class="source-line-no">093</span><span id="line.93">    {</span>
-<span class="source-line-no">094</span><span id="line.94">        this.rng = shareRNG ? rng : rng.copy();</span>
+<span class="source-line-no">094</span><span id="line.94">        this.rng = shareRNG ? rng : new RNG(rng.copy());</span>
 <span class="source-line-no">095</span><span id="line.95">        elements = this.rng.shuffle(items);</span>
 <span class="source-line-no">096</span><span id="line.96">        index = 0;</span>
 <span class="source-line-no">097</span><span id="line.97">    }</span>
@@ -144,9 +144,9 @@
 <span class="source-line-no">132</span><span id="line.132">     * @param items a Collection of T that will not be modified</span>
 <span class="source-line-no">133</span><span id="line.133">     * @param rng an IRNG that can be pre-seeded; will be copied and not used directly</span>
 <span class="source-line-no">134</span><span id="line.134">     */</span>
-<span class="source-line-no">135</span><span id="line.135">    public GapShuffler(T[] items, IRNG rng)</span>
+<span class="source-line-no">135</span><span id="line.135">    public GapShuffler(T[] items, RandomnessSource rng)</span>
 <span class="source-line-no">136</span><span id="line.136">    {</span>
-<span class="source-line-no">137</span><span id="line.137">        this.rng = rng.copy();</span>
+<span class="source-line-no">137</span><span id="line.137">        this.rng = new RNG(rng.copy());</span>
 <span class="source-line-no">138</span><span id="line.138">        elements = Maker.makeList(items);</span>
 <span class="source-line-no">139</span><span id="line.139">        this.rng.shuffleInPlace(elements);</span>
 <span class="source-line-no">140</span><span id="line.140">        index = 0;</span>
@@ -171,7 +171,7 @@
 <span class="source-line-no">159</span><span id="line.159">     */</span>
 <span class="source-line-no">160</span><span id="line.160">    public GapShuffler(T[] items, IRNG rng, boolean shareRNG)</span>
 <span class="source-line-no">161</span><span id="line.161">    {</span>
-<span class="source-line-no">162</span><span id="line.162">        this.rng = shareRNG ? rng : rng.copy();</span>
+<span class="source-line-no">162</span><span id="line.162">        this.rng = shareRNG ? rng : new RNG(rng.copy());</span>
 <span class="source-line-no">163</span><span id="line.163">        elements = Maker.makeList(items);</span>
 <span class="source-line-no">164</span><span id="line.164">        this.rng.shuffleInPlace(elements);</span>
 <span class="source-line-no">165</span><span id="line.165">        index = 0;</span>
@@ -254,7 +254,7 @@
 <span class="source-line-no">242</span><span id="line.242">     * @param shareRNG if false, {@code rng} will be copied and no reference will be kept; if true, {@code rng} will be shared with the outside code</span>
 <span class="source-line-no">243</span><span id="line.243">     */</span>
 <span class="source-line-no">244</span><span id="line.244">    public void setRNG(IRNG rng, boolean shareRNG) {</span>
-<span class="source-line-no">245</span><span id="line.245">        this.rng = shareRNG ? rng : rng.copy();</span>
+<span class="source-line-no">245</span><span id="line.245">        this.rng = shareRNG ? rng : new RNG(rng.copy());</span>
 <span class="source-line-no">246</span><span id="line.246">        this.rng.shuffleInPlace(elements);</span>
 <span class="source-line-no">247</span><span id="line.247">    }</span>
 <span class="source-line-no">248</span><span id="line.248"></span>

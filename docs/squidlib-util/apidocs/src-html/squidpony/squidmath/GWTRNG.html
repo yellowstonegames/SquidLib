@@ -218,198 +218,197 @@
 <span class="source-line-no">206</span><span id="line.206">     * </span>
 <span class="source-line-no">207</span><span id="line.207">     * @return a copy of this GWTRNG</span>
 <span class="source-line-no">208</span><span id="line.208">     */</span>
-<span class="source-line-no">209</span><span id="line.209">    @Override</span>
-<span class="source-line-no">210</span><span id="line.210">    public GWTRNG copy() {</span>
-<span class="source-line-no">211</span><span id="line.211">        return new GWTRNG(stateA, stateB);</span>
-<span class="source-line-no">212</span><span id="line.212">    }</span>
-<span class="source-line-no">213</span><span id="line.213"></span>
-<span class="source-line-no">214</span><span id="line.214">    /**</span>
-<span class="source-line-no">215</span><span id="line.215">     * Gets a view of this IRNG in a way that implements {@link Serializable}, which is simply this IRNG.</span>
-<span class="source-line-no">216</span><span id="line.216">     * @return a {@link Serializable} view of this IRNG or a similar one; always {@code this}</span>
-<span class="source-line-no">217</span><span id="line.217">     */</span>
-<span class="source-line-no">218</span><span id="line.218">    @Override</span>
-<span class="source-line-no">219</span><span id="line.219">    public Serializable toSerializable() {</span>
-<span class="source-line-no">220</span><span id="line.220">        return this;</span>
-<span class="source-line-no">221</span><span id="line.221">    }</span>
-<span class="source-line-no">222</span><span id="line.222">    /**</span>
-<span class="source-line-no">223</span><span id="line.223">     * Sets the state of this generator using one int, running it through Zog32RNG's algorithm two times to get </span>
-<span class="source-line-no">224</span><span id="line.224">     * two ints. If the states would both be 0, state A is assigned 1 instead.</span>
-<span class="source-line-no">225</span><span id="line.225">     * @param seed the int to use to produce this generator's state</span>
-<span class="source-line-no">226</span><span id="line.226">     */</span>
-<span class="source-line-no">227</span><span id="line.227">    public void setSeed(final int seed) {</span>
-<span class="source-line-no">228</span><span id="line.228">        int z = seed + 0xC74EAD55, a = seed ^ z;</span>
-<span class="source-line-no">229</span><span id="line.229">        a ^= a &gt;&gt;&gt; 14;</span>
-<span class="source-line-no">230</span><span id="line.230">        z = (z ^ z &gt;&gt;&gt; 10) * 0xA5CB3;</span>
-<span class="source-line-no">231</span><span id="line.231">        a ^= a &gt;&gt;&gt; 15;</span>
-<span class="source-line-no">232</span><span id="line.232">        stateA = (z ^ z &gt;&gt;&gt; 20) + (a ^= a &lt;&lt; 13);</span>
-<span class="source-line-no">233</span><span id="line.233">        z = seed + 0x8E9D5AAA;</span>
-<span class="source-line-no">234</span><span id="line.234">        a ^= a &gt;&gt;&gt; 14;</span>
-<span class="source-line-no">235</span><span id="line.235">        z = (z ^ z &gt;&gt;&gt; 10) * 0xA5CB3;</span>
-<span class="source-line-no">236</span><span id="line.236">        a ^= a &gt;&gt;&gt; 15;</span>
-<span class="source-line-no">237</span><span id="line.237">        stateB = (z ^ z &gt;&gt;&gt; 20) + (a ^ a &lt;&lt; 13);</span>
-<span class="source-line-no">238</span><span id="line.238">        if((stateA | stateB) == 0)</span>
-<span class="source-line-no">239</span><span id="line.239">            stateA = 1;</span>
-<span class="source-line-no">240</span><span id="line.240">    }</span>
-<span class="source-line-no">241</span><span id="line.241"></span>
-<span class="source-line-no">242</span><span id="line.242">    public int getStateA()</span>
-<span class="source-line-no">243</span><span id="line.243">    {</span>
-<span class="source-line-no">244</span><span id="line.244">        return stateA;</span>
-<span class="source-line-no">245</span><span id="line.245">    }</span>
-<span class="source-line-no">246</span><span id="line.246">    /**</span>
-<span class="source-line-no">247</span><span id="line.247">     * Sets the first part of the state to the given int. As a special case, if the parameter is 0 and stateB is</span>
-<span class="source-line-no">248</span><span id="line.248">     * already 0, this will set stateA to 1 instead, since both states cannot be 0 at the same time. Usually, you</span>
-<span class="source-line-no">249</span><span id="line.249">     * should use {@link #setState(int, int)} to set both states at once, but the result will be the same if you call</span>
-<span class="source-line-no">250</span><span id="line.250">     * setStateA() and then setStateB() or if you call setStateB() and then setStateA().</span>
-<span class="source-line-no">251</span><span id="line.251">     * @param stateA any int</span>
-<span class="source-line-no">252</span><span id="line.252">     */</span>
-<span class="source-line-no">253</span><span id="line.253"></span>
-<span class="source-line-no">254</span><span id="line.254">    public void setStateA(int stateA)</span>
-<span class="source-line-no">255</span><span id="line.255">    {</span>
-<span class="source-line-no">256</span><span id="line.256">        this.stateA = (stateA | stateB) == 0 ? 1 : stateA;</span>
-<span class="source-line-no">257</span><span id="line.257">    }</span>
-<span class="source-line-no">258</span><span id="line.258">    public int getStateB()</span>
-<span class="source-line-no">259</span><span id="line.259">    {</span>
-<span class="source-line-no">260</span><span id="line.260">        return stateB;</span>
-<span class="source-line-no">261</span><span id="line.261">    }</span>
-<span class="source-line-no">262</span><span id="line.262"></span>
-<span class="source-line-no">263</span><span id="line.263">    /**</span>
-<span class="source-line-no">264</span><span id="line.264">     * Sets the second part of the state to the given int. As a special case, if the parameter is 0 and stateA is</span>
-<span class="source-line-no">265</span><span id="line.265">     * already 0, this will set stateA to 1 and stateB to 0, since both cannot be 0 at the same time. Usually, you</span>
-<span class="source-line-no">266</span><span id="line.266">     * should use {@link #setState(int, int)} to set both states at once, but the result will be the same if you call</span>
-<span class="source-line-no">267</span><span id="line.267">     * setStateA() and then setStateB() or if you call setStateB() and then setStateA().</span>
-<span class="source-line-no">268</span><span id="line.268">     * @param stateB any int</span>
-<span class="source-line-no">269</span><span id="line.269">     */</span>
-<span class="source-line-no">270</span><span id="line.270">    public void setStateB(int stateB)</span>
-<span class="source-line-no">271</span><span id="line.271">    {</span>
-<span class="source-line-no">272</span><span id="line.272">        this.stateB = stateB;</span>
-<span class="source-line-no">273</span><span id="line.273">        if((stateB | stateA) == 0) stateA = 1;</span>
-<span class="source-line-no">274</span><span id="line.274">    }</span>
-<span class="source-line-no">275</span><span id="line.275"></span>
-<span class="source-line-no">276</span><span id="line.276">    /**</span>
-<span class="source-line-no">277</span><span id="line.277">     * Sets the current internal state of this GWTRNG with three ints, where stateA and stateB can each be any int</span>
-<span class="source-line-no">278</span><span id="line.278">     * unless they are both 0 (which will be treated as if stateA is 1 and stateB is 0).</span>
-<span class="source-line-no">279</span><span id="line.279">     * @param stateA any int (if stateA and stateB are both 0, this will be treated as 1)</span>
-<span class="source-line-no">280</span><span id="line.280">     * @param stateB any int</span>
-<span class="source-line-no">281</span><span id="line.281">     */</span>
-<span class="source-line-no">282</span><span id="line.282">    public void setState(int stateA, int stateB)</span>
-<span class="source-line-no">283</span><span id="line.283">    {</span>
-<span class="source-line-no">284</span><span id="line.284">        this.stateA = stateA == 0 &amp;&amp; stateB == 0 ? 1 : stateA;</span>
-<span class="source-line-no">285</span><span id="line.285">        this.stateB = stateB;</span>
-<span class="source-line-no">286</span><span id="line.286">    }</span>
-<span class="source-line-no">287</span><span id="line.287"></span>
-<span class="source-line-no">288</span><span id="line.288">    /**</span>
-<span class="source-line-no">289</span><span id="line.289">     * Get the current internal state of the StatefulRandomness as a long.</span>
-<span class="source-line-no">290</span><span id="line.290">     *</span>
-<span class="source-line-no">291</span><span id="line.291">     * @return the current internal state of this object.</span>
-<span class="source-line-no">292</span><span id="line.292">     */</span>
-<span class="source-line-no">293</span><span id="line.293">    @Override</span>
-<span class="source-line-no">294</span><span id="line.294">    public long getState() {</span>
-<span class="source-line-no">295</span><span id="line.295">        return stateA &amp; 0xFFFFFFFFL | ((long)stateB) &lt;&lt; 32;</span>
-<span class="source-line-no">296</span><span id="line.296">    }</span>
-<span class="source-line-no">297</span><span id="line.297"></span>
-<span class="source-line-no">298</span><span id="line.298">    /**</span>
-<span class="source-line-no">299</span><span id="line.299">     * Set the current internal state of this StatefulRandomness with a long.</span>
-<span class="source-line-no">300</span><span id="line.300">     *</span>
-<span class="source-line-no">301</span><span id="line.301">     * @param state a 64-bit long. You should avoid passing 0; this implementation will treat it as 1.</span>
-<span class="source-line-no">302</span><span id="line.302">     */</span>
-<span class="source-line-no">303</span><span id="line.303">    @Override</span>
-<span class="source-line-no">304</span><span id="line.304">    public void setState(long state) {</span>
-<span class="source-line-no">305</span><span id="line.305">        stateA = state == 0 ? 1 : (int)(state &amp; 0xFFFFFFFFL);</span>
-<span class="source-line-no">306</span><span id="line.306">        stateB = (int)(state &gt;&gt;&gt; 32);</span>
-<span class="source-line-no">307</span><span id="line.307">    }</span>
-<span class="source-line-no">308</span><span id="line.308"></span>
-<span class="source-line-no">309</span><span id="line.309">    @Override</span>
-<span class="source-line-no">310</span><span id="line.310">    public boolean equals(Object o) {</span>
-<span class="source-line-no">311</span><span id="line.311">        if (this == o) return true;</span>
-<span class="source-line-no">312</span><span id="line.312">        if (o == null || getClass() != o.getClass()) return false;</span>
-<span class="source-line-no">313</span><span id="line.313"></span>
-<span class="source-line-no">314</span><span id="line.314">        GWTRNG gwtrng = (GWTRNG) o;</span>
-<span class="source-line-no">315</span><span id="line.315"></span>
-<span class="source-line-no">316</span><span id="line.316">        if (stateA != gwtrng.stateA) return false;</span>
-<span class="source-line-no">317</span><span id="line.317">        return stateB == gwtrng.stateB;</span>
-<span class="source-line-no">318</span><span id="line.318">    }</span>
-<span class="source-line-no">319</span><span id="line.319"></span>
-<span class="source-line-no">320</span><span id="line.320">    @Override</span>
-<span class="source-line-no">321</span><span id="line.321">    public int hashCode() {</span>
-<span class="source-line-no">322</span><span id="line.322">        return 31 * stateA + stateB;</span>
-<span class="source-line-no">323</span><span id="line.323">    }</span>
-<span class="source-line-no">324</span><span id="line.324">    </span>
-<span class="source-line-no">325</span><span id="line.325">    @Override</span>
-<span class="source-line-no">326</span><span id="line.326">    public String toString() {</span>
-<span class="source-line-no">327</span><span id="line.327">        return "GWTRNG with stateA 0x" + StringKit.hex(stateA) + " and stateB 0x" + StringKit.hex(stateB);</span>
-<span class="source-line-no">328</span><span id="line.328">    }</span>
-<span class="source-line-no">329</span><span id="line.329"></span>
-<span class="source-line-no">330</span><span id="line.330">    /**</span>
-<span class="source-line-no">331</span><span id="line.331">     * A deterministic random int generator that, given one int {@code state} as input, irreversibly returns an </span>
-<span class="source-line-no">332</span><span id="line.332">     * almost-always-different int as a result. Unlike the rest of GWTRNG, this will not produce all possible ints given</span>
-<span class="source-line-no">333</span><span id="line.333">     * all ints as inputs, and probably a third of all possible ints cannot be returned. You should call this with</span>
-<span class="source-line-no">334</span><span id="line.334">     * {@code GWTRNG.determineInt(state = state + 1 | 0)} (you can subtract 1 to go backwards instead of forwards),</span>
-<span class="source-line-no">335</span><span id="line.335">     * which will allow overflow in the incremented state to be handled the same on GWT as on desktop.</span>
-<span class="source-line-no">336</span><span id="line.336">     * @param state an int that should go up or down by 1 each call, as with {@code GWTRNG.determineInt(state = state + 1 | 0)} to handle overflow </span>
-<span class="source-line-no">337</span><span id="line.337">     * @return a not-necessarily-unique int that is usually very different from {@code state}</span>
-<span class="source-line-no">338</span><span id="line.338">     */</span>
-<span class="source-line-no">339</span><span id="line.339">    public static int determineInt(int state) {</span>
-<span class="source-line-no">340</span><span id="line.340">        return (state = ((state = (state ^ 0xD1B54A35) * 0x102473) ^ state &gt;&gt;&gt; 11 ^ state &gt;&gt;&gt; 21) * (state | 0xFFE00001)) ^ state &gt;&gt;&gt; 13 ^ state &gt;&gt;&gt; 19;</span>
-<span class="source-line-no">341</span><span id="line.341">    }</span>
-<span class="source-line-no">342</span><span id="line.342">    </span>
-<span class="source-line-no">343</span><span id="line.343">    /**</span>
-<span class="source-line-no">344</span><span id="line.344">     * A deterministic random int generator that, given one int {@code state} and an outer int {@code bound} as input,</span>
-<span class="source-line-no">345</span><span id="line.345">     * returns an int between 0 (inclusive) and {@code bound} (exclusive) as a result, which should have no noticeable</span>
-<span class="source-line-no">346</span><span id="line.346">     * correlation between {@code state} and the result. You should call this with</span>
-<span class="source-line-no">347</span><span id="line.347">     * {@code GWTRNG.determineBound(state = state + 1 | 0, bound)} (you can subtract 1 to go backwards instead of</span>
-<span class="source-line-no">348</span><span id="line.348">     * forwards), which will allow overflow in the incremented state to be handled the same on GWT as on desktop.</span>
-<span class="source-line-no">349</span><span id="line.349">     * Like most bounded int generation in SquidLib, this uses some long math, but most of the function uses ints.</span>
-<span class="source-line-no">350</span><span id="line.350">     * @param state an int that should go up or down by 1 each call, as with {@code GWTRNG.determineBounded(state = state + 1 | 0, bound)} to handle overflow</span>
-<span class="source-line-no">351</span><span id="line.351">     * @param bound the outer exclusive bound, as an int; may be positive or negative</span>
-<span class="source-line-no">352</span><span id="line.352">     * @return an int between 0 (inclusive) and {@code bound} (exclusive)</span>
-<span class="source-line-no">353</span><span id="line.353">     */</span>
-<span class="source-line-no">354</span><span id="line.354">    public static int determineBounded(int state, final int bound)</span>
-<span class="source-line-no">355</span><span id="line.355">    {</span>
-<span class="source-line-no">356</span><span id="line.356">        return (state = (int) ((((state = ((state = (state ^ 0xD1B54A35) * 0x102473) ^ state &gt;&gt;&gt; 11 ^ state &gt;&gt;&gt; 21) * (state | 0xFFE00001)) ^ state &gt;&gt;&gt; 13 ^ state &gt;&gt;&gt; 19) &amp; 0xFFFFFFFFL) * bound &gt;&gt; 32)) + (state &gt;&gt;&gt; 31);</span>
-<span class="source-line-no">357</span><span id="line.357">    }</span>
-<span class="source-line-no">358</span><span id="line.358">    /**</span>
-<span class="source-line-no">359</span><span id="line.359">     * A deterministic random long generator that, given one int {@code state} as input, returns an </span>
-<span class="source-line-no">360</span><span id="line.360">     * almost-always-different long as a result. This can only return a tiny fraction of all possible longs, since there</span>
-<span class="source-line-no">361</span><span id="line.361">     * are at most 2 to the 32 possible ints and this doesn't even return different values for each of those. You should</span>
-<span class="source-line-no">362</span><span id="line.362">     * call this with {@code GWTRNG.determine(state = state + 1 | 0)} (you can subtract 1 to go backwards instead of</span>
-<span class="source-line-no">363</span><span id="line.363">     * forwards), which will allow overflow in the incremented state to be handled the same on GWT as on desktop.</span>
-<span class="source-line-no">364</span><span id="line.364">     * @param state an int that should go up or down by 1 each call, as with {@code GWTRNG.determine(state = state + 1 | 0)} to handle overflow </span>
-<span class="source-line-no">365</span><span id="line.365">     * @return a not-necessarily-unique long that is usually very different from {@code state}</span>
-<span class="source-line-no">366</span><span id="line.366">     */</span>
-<span class="source-line-no">367</span><span id="line.367">    public static long determine(int state)</span>
-<span class="source-line-no">368</span><span id="line.368">    {</span>
-<span class="source-line-no">369</span><span id="line.369">        int r = (state ^ 0xD1B54A35) * 0x102473;</span>
-<span class="source-line-no">370</span><span id="line.370">        return ((long) ((r = (r ^ r &gt;&gt;&gt; 11 ^ r &gt;&gt;&gt; 21) * (r | 0xFFE00001)) ^ r &gt;&gt;&gt; 13 ^ r &gt;&gt;&gt; 19) &lt;&lt; 32) </span>
-<span class="source-line-no">371</span><span id="line.371">                | (((state = ((state = (r ^ 0xD1B54A35) * 0x102473) ^ state &gt;&gt;&gt; 11 ^ state &gt;&gt;&gt; 21) * (state | 0xFFE00001)) ^ state &gt;&gt;&gt; 13 ^ state &gt;&gt;&gt; 19) &amp; 0xFFFFFFFFL);</span>
-<span class="source-line-no">372</span><span id="line.372">    }</span>
-<span class="source-line-no">373</span><span id="line.373">    /**</span>
-<span class="source-line-no">374</span><span id="line.374">     * A deterministic random float generator that, given one int {@code state} as input, returns an </span>
-<span class="source-line-no">375</span><span id="line.375">     * almost-always-different float between 0.0f and 1.0f as a result. Unlike the rest of GWTRNG, this might not</span>
-<span class="source-line-no">376</span><span id="line.376">     * produce all possible floats given all ints as inputs, and some fraction of possible floats cannot be returned.</span>
-<span class="source-line-no">377</span><span id="line.377">     * You should call this with {@code GWTRNG.determineFloat(state = state + 1 | 0)} (you can subtract 1 to go</span>
-<span class="source-line-no">378</span><span id="line.378">     * backwards instead of forwards), which will allow overflow in the incremented state to be handled the same on GWT</span>
-<span class="source-line-no">379</span><span id="line.379">     * as on desktop.</span>
-<span class="source-line-no">380</span><span id="line.380">     * @param state an int that should go up or down by 1 each call, as with {@code GWTRNG.determineFloat(state = state + 1 | 0)} to handle overflow </span>
-<span class="source-line-no">381</span><span id="line.381">     * @return a not-necessarily-unique float from 0.0f to 1.0f that is usually very different from {@code state}</span>
-<span class="source-line-no">382</span><span id="line.382">     */</span>
-<span class="source-line-no">383</span><span id="line.383">    public static float determineFloat(int state) {</span>
-<span class="source-line-no">384</span><span id="line.384">        return (((state = ((state = (state ^ 0xD1B54A35) * 0x102473) ^ state &gt;&gt;&gt; 11 ^ state &gt;&gt;&gt; 21) * (state | 0xFFE00001)) ^ state &gt;&gt;&gt; 13 ^ state &gt;&gt;&gt; 19) &amp; 0xFFFFFF) * 0x1p-24f;</span>
-<span class="source-line-no">385</span><span id="line.385">    }</span>
-<span class="source-line-no">386</span><span id="line.386">    /**</span>
-<span class="source-line-no">387</span><span id="line.387">     * A deterministic random double generator that, given one int {@code state} as input, returns an </span>
-<span class="source-line-no">388</span><span id="line.388">     * almost-always-different double between 0.0 and 1.0 as a result. This cannot produce more than a tiny fraction of</span>
-<span class="source-line-no">389</span><span id="line.389">     * all possible doubles because the input is 32 bits and at least 53 bits are needed to represent most doubles from</span>
-<span class="source-line-no">390</span><span id="line.390">     * 0.0 to 1.0. You should call this with {@code GWTRNG.determineDouble(state = state + 1 | 0)} (you can subtract 1</span>
-<span class="source-line-no">391</span><span id="line.391">     * to go backwards instead of forwards), which will allow overflow in the incremented state to be handled the same</span>
-<span class="source-line-no">392</span><span id="line.392">     * on GWT as on desktop.</span>
-<span class="source-line-no">393</span><span id="line.393">     * @param state an int that should go up or down by 1 each call, as with {@code GWTRNG.determineDouble(state = state + 1 | 0)} to handle overflow </span>
-<span class="source-line-no">394</span><span id="line.394">     * @return a not-necessarily-unique double from 0.0 to 1.0 that is usually very different from {@code state}</span>
-<span class="source-line-no">395</span><span id="line.395">     */</span>
-<span class="source-line-no">396</span><span id="line.396">    public static double determineDouble(int state)</span>
-<span class="source-line-no">397</span><span id="line.397">    {</span>
-<span class="source-line-no">398</span><span id="line.398">        return ((state = ((state = (state ^ 0xD1B54A35) * 0x102473) ^ state &gt;&gt;&gt; 11 ^ state &gt;&gt;&gt; 21) * (state | 0xFFE00001)) ^ state &gt;&gt;&gt; 13 ^ state &gt;&gt;&gt; 19) * 0x1p-32 + 0.5;</span>
-<span class="source-line-no">399</span><span id="line.399">    }</span>
-<span class="source-line-no">400</span><span id="line.400">}</span>
+<span class="source-line-no">209</span><span id="line.209">    public GWTRNG copy() {</span>
+<span class="source-line-no">210</span><span id="line.210">        return new GWTRNG(stateA, stateB);</span>
+<span class="source-line-no">211</span><span id="line.211">    }</span>
+<span class="source-line-no">212</span><span id="line.212"></span>
+<span class="source-line-no">213</span><span id="line.213">    /**</span>
+<span class="source-line-no">214</span><span id="line.214">     * Gets a view of this IRNG in a way that implements {@link Serializable}, which is simply this IRNG.</span>
+<span class="source-line-no">215</span><span id="line.215">     * @return a {@link Serializable} view of this IRNG or a similar one; always {@code this}</span>
+<span class="source-line-no">216</span><span id="line.216">     */</span>
+<span class="source-line-no">217</span><span id="line.217">    @Override</span>
+<span class="source-line-no">218</span><span id="line.218">    public Serializable toSerializable() {</span>
+<span class="source-line-no">219</span><span id="line.219">        return this;</span>
+<span class="source-line-no">220</span><span id="line.220">    }</span>
+<span class="source-line-no">221</span><span id="line.221">    /**</span>
+<span class="source-line-no">222</span><span id="line.222">     * Sets the state of this generator using one int, running it through Zog32RNG's algorithm two times to get </span>
+<span class="source-line-no">223</span><span id="line.223">     * two ints. If the states would both be 0, state A is assigned 1 instead.</span>
+<span class="source-line-no">224</span><span id="line.224">     * @param seed the int to use to produce this generator's state</span>
+<span class="source-line-no">225</span><span id="line.225">     */</span>
+<span class="source-line-no">226</span><span id="line.226">    public void setSeed(final int seed) {</span>
+<span class="source-line-no">227</span><span id="line.227">        int z = seed + 0xC74EAD55, a = seed ^ z;</span>
+<span class="source-line-no">228</span><span id="line.228">        a ^= a &gt;&gt;&gt; 14;</span>
+<span class="source-line-no">229</span><span id="line.229">        z = (z ^ z &gt;&gt;&gt; 10) * 0xA5CB3;</span>
+<span class="source-line-no">230</span><span id="line.230">        a ^= a &gt;&gt;&gt; 15;</span>
+<span class="source-line-no">231</span><span id="line.231">        stateA = (z ^ z &gt;&gt;&gt; 20) + (a ^= a &lt;&lt; 13);</span>
+<span class="source-line-no">232</span><span id="line.232">        z = seed + 0x8E9D5AAA;</span>
+<span class="source-line-no">233</span><span id="line.233">        a ^= a &gt;&gt;&gt; 14;</span>
+<span class="source-line-no">234</span><span id="line.234">        z = (z ^ z &gt;&gt;&gt; 10) * 0xA5CB3;</span>
+<span class="source-line-no">235</span><span id="line.235">        a ^= a &gt;&gt;&gt; 15;</span>
+<span class="source-line-no">236</span><span id="line.236">        stateB = (z ^ z &gt;&gt;&gt; 20) + (a ^ a &lt;&lt; 13);</span>
+<span class="source-line-no">237</span><span id="line.237">        if((stateA | stateB) == 0)</span>
+<span class="source-line-no">238</span><span id="line.238">            stateA = 1;</span>
+<span class="source-line-no">239</span><span id="line.239">    }</span>
+<span class="source-line-no">240</span><span id="line.240"></span>
+<span class="source-line-no">241</span><span id="line.241">    public int getStateA()</span>
+<span class="source-line-no">242</span><span id="line.242">    {</span>
+<span class="source-line-no">243</span><span id="line.243">        return stateA;</span>
+<span class="source-line-no">244</span><span id="line.244">    }</span>
+<span class="source-line-no">245</span><span id="line.245">    /**</span>
+<span class="source-line-no">246</span><span id="line.246">     * Sets the first part of the state to the given int. As a special case, if the parameter is 0 and stateB is</span>
+<span class="source-line-no">247</span><span id="line.247">     * already 0, this will set stateA to 1 instead, since both states cannot be 0 at the same time. Usually, you</span>
+<span class="source-line-no">248</span><span id="line.248">     * should use {@link #setState(int, int)} to set both states at once, but the result will be the same if you call</span>
+<span class="source-line-no">249</span><span id="line.249">     * setStateA() and then setStateB() or if you call setStateB() and then setStateA().</span>
+<span class="source-line-no">250</span><span id="line.250">     * @param stateA any int</span>
+<span class="source-line-no">251</span><span id="line.251">     */</span>
+<span class="source-line-no">252</span><span id="line.252"></span>
+<span class="source-line-no">253</span><span id="line.253">    public void setStateA(int stateA)</span>
+<span class="source-line-no">254</span><span id="line.254">    {</span>
+<span class="source-line-no">255</span><span id="line.255">        this.stateA = (stateA | stateB) == 0 ? 1 : stateA;</span>
+<span class="source-line-no">256</span><span id="line.256">    }</span>
+<span class="source-line-no">257</span><span id="line.257">    public int getStateB()</span>
+<span class="source-line-no">258</span><span id="line.258">    {</span>
+<span class="source-line-no">259</span><span id="line.259">        return stateB;</span>
+<span class="source-line-no">260</span><span id="line.260">    }</span>
+<span class="source-line-no">261</span><span id="line.261"></span>
+<span class="source-line-no">262</span><span id="line.262">    /**</span>
+<span class="source-line-no">263</span><span id="line.263">     * Sets the second part of the state to the given int. As a special case, if the parameter is 0 and stateA is</span>
+<span class="source-line-no">264</span><span id="line.264">     * already 0, this will set stateA to 1 and stateB to 0, since both cannot be 0 at the same time. Usually, you</span>
+<span class="source-line-no">265</span><span id="line.265">     * should use {@link #setState(int, int)} to set both states at once, but the result will be the same if you call</span>
+<span class="source-line-no">266</span><span id="line.266">     * setStateA() and then setStateB() or if you call setStateB() and then setStateA().</span>
+<span class="source-line-no">267</span><span id="line.267">     * @param stateB any int</span>
+<span class="source-line-no">268</span><span id="line.268">     */</span>
+<span class="source-line-no">269</span><span id="line.269">    public void setStateB(int stateB)</span>
+<span class="source-line-no">270</span><span id="line.270">    {</span>
+<span class="source-line-no">271</span><span id="line.271">        this.stateB = stateB;</span>
+<span class="source-line-no">272</span><span id="line.272">        if((stateB | stateA) == 0) stateA = 1;</span>
+<span class="source-line-no">273</span><span id="line.273">    }</span>
+<span class="source-line-no">274</span><span id="line.274"></span>
+<span class="source-line-no">275</span><span id="line.275">    /**</span>
+<span class="source-line-no">276</span><span id="line.276">     * Sets the current internal state of this GWTRNG with three ints, where stateA and stateB can each be any int</span>
+<span class="source-line-no">277</span><span id="line.277">     * unless they are both 0 (which will be treated as if stateA is 1 and stateB is 0).</span>
+<span class="source-line-no">278</span><span id="line.278">     * @param stateA any int (if stateA and stateB are both 0, this will be treated as 1)</span>
+<span class="source-line-no">279</span><span id="line.279">     * @param stateB any int</span>
+<span class="source-line-no">280</span><span id="line.280">     */</span>
+<span class="source-line-no">281</span><span id="line.281">    public void setState(int stateA, int stateB)</span>
+<span class="source-line-no">282</span><span id="line.282">    {</span>
+<span class="source-line-no">283</span><span id="line.283">        this.stateA = stateA == 0 &amp;&amp; stateB == 0 ? 1 : stateA;</span>
+<span class="source-line-no">284</span><span id="line.284">        this.stateB = stateB;</span>
+<span class="source-line-no">285</span><span id="line.285">    }</span>
+<span class="source-line-no">286</span><span id="line.286"></span>
+<span class="source-line-no">287</span><span id="line.287">    /**</span>
+<span class="source-line-no">288</span><span id="line.288">     * Get the current internal state of the StatefulRandomness as a long.</span>
+<span class="source-line-no">289</span><span id="line.289">     *</span>
+<span class="source-line-no">290</span><span id="line.290">     * @return the current internal state of this object.</span>
+<span class="source-line-no">291</span><span id="line.291">     */</span>
+<span class="source-line-no">292</span><span id="line.292">    @Override</span>
+<span class="source-line-no">293</span><span id="line.293">    public long getState() {</span>
+<span class="source-line-no">294</span><span id="line.294">        return stateA &amp; 0xFFFFFFFFL | ((long)stateB) &lt;&lt; 32;</span>
+<span class="source-line-no">295</span><span id="line.295">    }</span>
+<span class="source-line-no">296</span><span id="line.296"></span>
+<span class="source-line-no">297</span><span id="line.297">    /**</span>
+<span class="source-line-no">298</span><span id="line.298">     * Set the current internal state of this StatefulRandomness with a long.</span>
+<span class="source-line-no">299</span><span id="line.299">     *</span>
+<span class="source-line-no">300</span><span id="line.300">     * @param state a 64-bit long. You should avoid passing 0; this implementation will treat it as 1.</span>
+<span class="source-line-no">301</span><span id="line.301">     */</span>
+<span class="source-line-no">302</span><span id="line.302">    @Override</span>
+<span class="source-line-no">303</span><span id="line.303">    public void setState(long state) {</span>
+<span class="source-line-no">304</span><span id="line.304">        stateA = state == 0 ? 1 : (int)(state &amp; 0xFFFFFFFFL);</span>
+<span class="source-line-no">305</span><span id="line.305">        stateB = (int)(state &gt;&gt;&gt; 32);</span>
+<span class="source-line-no">306</span><span id="line.306">    }</span>
+<span class="source-line-no">307</span><span id="line.307"></span>
+<span class="source-line-no">308</span><span id="line.308">    @Override</span>
+<span class="source-line-no">309</span><span id="line.309">    public boolean equals(Object o) {</span>
+<span class="source-line-no">310</span><span id="line.310">        if (this == o) return true;</span>
+<span class="source-line-no">311</span><span id="line.311">        if (o == null || getClass() != o.getClass()) return false;</span>
+<span class="source-line-no">312</span><span id="line.312"></span>
+<span class="source-line-no">313</span><span id="line.313">        GWTRNG gwtrng = (GWTRNG) o;</span>
+<span class="source-line-no">314</span><span id="line.314"></span>
+<span class="source-line-no">315</span><span id="line.315">        if (stateA != gwtrng.stateA) return false;</span>
+<span class="source-line-no">316</span><span id="line.316">        return stateB == gwtrng.stateB;</span>
+<span class="source-line-no">317</span><span id="line.317">    }</span>
+<span class="source-line-no">318</span><span id="line.318"></span>
+<span class="source-line-no">319</span><span id="line.319">    @Override</span>
+<span class="source-line-no">320</span><span id="line.320">    public int hashCode() {</span>
+<span class="source-line-no">321</span><span id="line.321">        return 31 * stateA + stateB;</span>
+<span class="source-line-no">322</span><span id="line.322">    }</span>
+<span class="source-line-no">323</span><span id="line.323">    </span>
+<span class="source-line-no">324</span><span id="line.324">    @Override</span>
+<span class="source-line-no">325</span><span id="line.325">    public String toString() {</span>
+<span class="source-line-no">326</span><span id="line.326">        return "GWTRNG with stateA 0x" + StringKit.hex(stateA) + " and stateB 0x" + StringKit.hex(stateB);</span>
+<span class="source-line-no">327</span><span id="line.327">    }</span>
+<span class="source-line-no">328</span><span id="line.328"></span>
+<span class="source-line-no">329</span><span id="line.329">    /**</span>
+<span class="source-line-no">330</span><span id="line.330">     * A deterministic random int generator that, given one int {@code state} as input, irreversibly returns an </span>
+<span class="source-line-no">331</span><span id="line.331">     * almost-always-different int as a result. Unlike the rest of GWTRNG, this will not produce all possible ints given</span>
+<span class="source-line-no">332</span><span id="line.332">     * all ints as inputs, and probably a third of all possible ints cannot be returned. You should call this with</span>
+<span class="source-line-no">333</span><span id="line.333">     * {@code GWTRNG.determineInt(state = state + 1 | 0)} (you can subtract 1 to go backwards instead of forwards),</span>
+<span class="source-line-no">334</span><span id="line.334">     * which will allow overflow in the incremented state to be handled the same on GWT as on desktop.</span>
+<span class="source-line-no">335</span><span id="line.335">     * @param state an int that should go up or down by 1 each call, as with {@code GWTRNG.determineInt(state = state + 1 | 0)} to handle overflow </span>
+<span class="source-line-no">336</span><span id="line.336">     * @return a not-necessarily-unique int that is usually very different from {@code state}</span>
+<span class="source-line-no">337</span><span id="line.337">     */</span>
+<span class="source-line-no">338</span><span id="line.338">    public static int determineInt(int state) {</span>
+<span class="source-line-no">339</span><span id="line.339">        return (state = ((state = (state ^ 0xD1B54A35) * 0x102473) ^ state &gt;&gt;&gt; 11 ^ state &gt;&gt;&gt; 21) * (state | 0xFFE00001)) ^ state &gt;&gt;&gt; 13 ^ state &gt;&gt;&gt; 19;</span>
+<span class="source-line-no">340</span><span id="line.340">    }</span>
+<span class="source-line-no">341</span><span id="line.341">    </span>
+<span class="source-line-no">342</span><span id="line.342">    /**</span>
+<span class="source-line-no">343</span><span id="line.343">     * A deterministic random int generator that, given one int {@code state} and an outer int {@code bound} as input,</span>
+<span class="source-line-no">344</span><span id="line.344">     * returns an int between 0 (inclusive) and {@code bound} (exclusive) as a result, which should have no noticeable</span>
+<span class="source-line-no">345</span><span id="line.345">     * correlation between {@code state} and the result. You should call this with</span>
+<span class="source-line-no">346</span><span id="line.346">     * {@code GWTRNG.determineBound(state = state + 1 | 0, bound)} (you can subtract 1 to go backwards instead of</span>
+<span class="source-line-no">347</span><span id="line.347">     * forwards), which will allow overflow in the incremented state to be handled the same on GWT as on desktop.</span>
+<span class="source-line-no">348</span><span id="line.348">     * Like most bounded int generation in SquidLib, this uses some long math, but most of the function uses ints.</span>
+<span class="source-line-no">349</span><span id="line.349">     * @param state an int that should go up or down by 1 each call, as with {@code GWTRNG.determineBounded(state = state + 1 | 0, bound)} to handle overflow</span>
+<span class="source-line-no">350</span><span id="line.350">     * @param bound the outer exclusive bound, as an int; may be positive or negative</span>
+<span class="source-line-no">351</span><span id="line.351">     * @return an int between 0 (inclusive) and {@code bound} (exclusive)</span>
+<span class="source-line-no">352</span><span id="line.352">     */</span>
+<span class="source-line-no">353</span><span id="line.353">    public static int determineBounded(int state, final int bound)</span>
+<span class="source-line-no">354</span><span id="line.354">    {</span>
+<span class="source-line-no">355</span><span id="line.355">        return (state = (int) ((((state = ((state = (state ^ 0xD1B54A35) * 0x102473) ^ state &gt;&gt;&gt; 11 ^ state &gt;&gt;&gt; 21) * (state | 0xFFE00001)) ^ state &gt;&gt;&gt; 13 ^ state &gt;&gt;&gt; 19) &amp; 0xFFFFFFFFL) * bound &gt;&gt; 32)) + (state &gt;&gt;&gt; 31);</span>
+<span class="source-line-no">356</span><span id="line.356">    }</span>
+<span class="source-line-no">357</span><span id="line.357">    /**</span>
+<span class="source-line-no">358</span><span id="line.358">     * A deterministic random long generator that, given one int {@code state} as input, returns an </span>
+<span class="source-line-no">359</span><span id="line.359">     * almost-always-different long as a result. This can only return a tiny fraction of all possible longs, since there</span>
+<span class="source-line-no">360</span><span id="line.360">     * are at most 2 to the 32 possible ints and this doesn't even return different values for each of those. You should</span>
+<span class="source-line-no">361</span><span id="line.361">     * call this with {@code GWTRNG.determine(state = state + 1 | 0)} (you can subtract 1 to go backwards instead of</span>
+<span class="source-line-no">362</span><span id="line.362">     * forwards), which will allow overflow in the incremented state to be handled the same on GWT as on desktop.</span>
+<span class="source-line-no">363</span><span id="line.363">     * @param state an int that should go up or down by 1 each call, as with {@code GWTRNG.determine(state = state + 1 | 0)} to handle overflow </span>
+<span class="source-line-no">364</span><span id="line.364">     * @return a not-necessarily-unique long that is usually very different from {@code state}</span>
+<span class="source-line-no">365</span><span id="line.365">     */</span>
+<span class="source-line-no">366</span><span id="line.366">    public static long determine(int state)</span>
+<span class="source-line-no">367</span><span id="line.367">    {</span>
+<span class="source-line-no">368</span><span id="line.368">        int r = (state ^ 0xD1B54A35) * 0x102473;</span>
+<span class="source-line-no">369</span><span id="line.369">        return ((long) ((r = (r ^ r &gt;&gt;&gt; 11 ^ r &gt;&gt;&gt; 21) * (r | 0xFFE00001)) ^ r &gt;&gt;&gt; 13 ^ r &gt;&gt;&gt; 19) &lt;&lt; 32) </span>
+<span class="source-line-no">370</span><span id="line.370">                | (((state = ((state = (r ^ 0xD1B54A35) * 0x102473) ^ state &gt;&gt;&gt; 11 ^ state &gt;&gt;&gt; 21) * (state | 0xFFE00001)) ^ state &gt;&gt;&gt; 13 ^ state &gt;&gt;&gt; 19) &amp; 0xFFFFFFFFL);</span>
+<span class="source-line-no">371</span><span id="line.371">    }</span>
+<span class="source-line-no">372</span><span id="line.372">    /**</span>
+<span class="source-line-no">373</span><span id="line.373">     * A deterministic random float generator that, given one int {@code state} as input, returns an </span>
+<span class="source-line-no">374</span><span id="line.374">     * almost-always-different float between 0.0f and 1.0f as a result. Unlike the rest of GWTRNG, this might not</span>
+<span class="source-line-no">375</span><span id="line.375">     * produce all possible floats given all ints as inputs, and some fraction of possible floats cannot be returned.</span>
+<span class="source-line-no">376</span><span id="line.376">     * You should call this with {@code GWTRNG.determineFloat(state = state + 1 | 0)} (you can subtract 1 to go</span>
+<span class="source-line-no">377</span><span id="line.377">     * backwards instead of forwards), which will allow overflow in the incremented state to be handled the same on GWT</span>
+<span class="source-line-no">378</span><span id="line.378">     * as on desktop.</span>
+<span class="source-line-no">379</span><span id="line.379">     * @param state an int that should go up or down by 1 each call, as with {@code GWTRNG.determineFloat(state = state + 1 | 0)} to handle overflow </span>
+<span class="source-line-no">380</span><span id="line.380">     * @return a not-necessarily-unique float from 0.0f to 1.0f that is usually very different from {@code state}</span>
+<span class="source-line-no">381</span><span id="line.381">     */</span>
+<span class="source-line-no">382</span><span id="line.382">    public static float determineFloat(int state) {</span>
+<span class="source-line-no">383</span><span id="line.383">        return (((state = ((state = (state ^ 0xD1B54A35) * 0x102473) ^ state &gt;&gt;&gt; 11 ^ state &gt;&gt;&gt; 21) * (state | 0xFFE00001)) ^ state &gt;&gt;&gt; 13 ^ state &gt;&gt;&gt; 19) &amp; 0xFFFFFF) * 0x1p-24f;</span>
+<span class="source-line-no">384</span><span id="line.384">    }</span>
+<span class="source-line-no">385</span><span id="line.385">    /**</span>
+<span class="source-line-no">386</span><span id="line.386">     * A deterministic random double generator that, given one int {@code state} as input, returns an </span>
+<span class="source-line-no">387</span><span id="line.387">     * almost-always-different double between 0.0 and 1.0 as a result. This cannot produce more than a tiny fraction of</span>
+<span class="source-line-no">388</span><span id="line.388">     * all possible doubles because the input is 32 bits and at least 53 bits are needed to represent most doubles from</span>
+<span class="source-line-no">389</span><span id="line.389">     * 0.0 to 1.0. You should call this with {@code GWTRNG.determineDouble(state = state + 1 | 0)} (you can subtract 1</span>
+<span class="source-line-no">390</span><span id="line.390">     * to go backwards instead of forwards), which will allow overflow in the incremented state to be handled the same</span>
+<span class="source-line-no">391</span><span id="line.391">     * on GWT as on desktop.</span>
+<span class="source-line-no">392</span><span id="line.392">     * @param state an int that should go up or down by 1 each call, as with {@code GWTRNG.determineDouble(state = state + 1 | 0)} to handle overflow </span>
+<span class="source-line-no">393</span><span id="line.393">     * @return a not-necessarily-unique double from 0.0 to 1.0 that is usually very different from {@code state}</span>
+<span class="source-line-no">394</span><span id="line.394">     */</span>
+<span class="source-line-no">395</span><span id="line.395">    public static double determineDouble(int state)</span>
+<span class="source-line-no">396</span><span id="line.396">    {</span>
+<span class="source-line-no">397</span><span id="line.397">        return ((state = ((state = (state ^ 0xD1B54A35) * 0x102473) ^ state &gt;&gt;&gt; 11 ^ state &gt;&gt;&gt; 21) * (state | 0xFFE00001)) ^ state &gt;&gt;&gt; 13 ^ state &gt;&gt;&gt; 19) * 0x1p-32 + 0.5;</span>
+<span class="source-line-no">398</span><span id="line.398">    }</span>
+<span class="source-line-no">399</span><span id="line.399">}</span>
 
 
 

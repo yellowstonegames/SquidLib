@@ -67,43 +67,44 @@
 <span class="source-line-no">055</span><span id="line.55">            bmpFont = DefaultResources.getIncludedFont();</span>
 <span class="source-line-no">056</span><span id="line.56">        next.bmpFont = DefaultResources.copyFont(bmpFont);</span>
 <span class="source-line-no">057</span><span id="line.57">        next.block = block;</span>
-<span class="source-line-no">058</span><span id="line.58">        next.swap = swap.clone(); // explicitly implemented by CharCharMap</span>
-<span class="source-line-no">059</span><span id="line.59">        next.swap.defaultReturnValue('\uffff'); // ... but it forgets to copy this field</span>
-<span class="source-line-no">060</span><span id="line.60">        next.distanceField = distanceField;</span>
-<span class="source-line-no">061</span><span id="line.61">        next.msdf = msdf;</span>
-<span class="source-line-no">062</span><span id="line.62">        next.distanceFieldScaleX = distanceFieldScaleX;</span>
-<span class="source-line-no">063</span><span id="line.63">        next.distanceFieldScaleY = distanceFieldScaleY;</span>
-<span class="source-line-no">064</span><span id="line.64">        next.shader = null;</span>
-<span class="source-line-no">065</span><span id="line.65">        next.fitting = fitting;</span>
-<span class="source-line-no">066</span><span id="line.66">        next.height = height;</span>
-<span class="source-line-no">067</span><span id="line.67">        next.width = width;</span>
-<span class="source-line-no">068</span><span id="line.68">        next.actualCellWidth = actualCellWidth;</span>
-<span class="source-line-no">069</span><span id="line.69">        next.actualCellHeight = actualCellHeight;</span>
-<span class="source-line-no">070</span><span id="line.70">        next.descent = descent;</span>
-<span class="source-line-no">071</span><span id="line.71">        next.lineHeight = lineHeight;</span>
-<span class="source-line-no">072</span><span id="line.72">        next.smoothingMultiplier = smoothingMultiplier;</span>
-<span class="source-line-no">073</span><span id="line.73">        next.scc = scc;</span>
-<span class="source-line-no">074</span><span id="line.74">        next.directionGlyph = directionGlyph;</span>
-<span class="source-line-no">075</span><span id="line.75">        if(initializedBySize)</span>
-<span class="source-line-no">076</span><span id="line.76">            next.initBySize();</span>
-<span class="source-line-no">077</span><span id="line.77">        else if(initializedByFont)</span>
-<span class="source-line-no">078</span><span id="line.78">            next.initByFont();</span>
-<span class="source-line-no">079</span><span id="line.79">        return next;</span>
-<span class="source-line-no">080</span><span id="line.80">    }</span>
-<span class="source-line-no">081</span><span id="line.81">    public TextFamily defaultFamilyLeanDistance()</span>
-<span class="source-line-no">082</span><span id="line.82">    {</span>
-<span class="source-line-no">083</span><span id="line.83">        fontDistanceField("Iosevka-Family-distance.fnt", "Iosevka-Family-distance.png");</span>
-<span class="source-line-no">084</span><span id="line.84">        setSmoothingMultiplier(2.1f);</span>
-<span class="source-line-no">085</span><span id="line.85">        return this;</span>
-<span class="source-line-no">086</span><span id="line.86">    }</span>
-<span class="source-line-no">087</span><span id="line.87">    public TextFamily defaultFamilySlabDistance()</span>
-<span class="source-line-no">088</span><span id="line.88">    {</span>
-<span class="source-line-no">089</span><span id="line.89">        fontDistanceField("Iosevka-Slab-Family-distance.fnt", "Iosevka-Slab-Family-distance.png");</span>
-<span class="source-line-no">090</span><span id="line.90">        setSmoothingMultiplier(2.1f);</span>
-<span class="source-line-no">091</span><span id="line.91">        return this;</span>
-<span class="source-line-no">092</span><span id="line.92">    }</span>
-<span class="source-line-no">093</span><span id="line.93"></span>
-<span class="source-line-no">094</span><span id="line.94">}</span>
+<span class="source-line-no">058</span><span id="line.58">        next.swap.clear();</span>
+<span class="source-line-no">059</span><span id="line.59">        next.swap.defaultReturnValue(swap.defaultReturnValue);</span>
+<span class="source-line-no">060</span><span id="line.60">        next.swap.putAll(swap);</span>
+<span class="source-line-no">061</span><span id="line.61">        next.distanceField = distanceField;</span>
+<span class="source-line-no">062</span><span id="line.62">        next.msdf = msdf;</span>
+<span class="source-line-no">063</span><span id="line.63">        next.distanceFieldScaleX = distanceFieldScaleX;</span>
+<span class="source-line-no">064</span><span id="line.64">        next.distanceFieldScaleY = distanceFieldScaleY;</span>
+<span class="source-line-no">065</span><span id="line.65">        next.shader = null;</span>
+<span class="source-line-no">066</span><span id="line.66">        next.fitting = fitting;</span>
+<span class="source-line-no">067</span><span id="line.67">        next.height = height;</span>
+<span class="source-line-no">068</span><span id="line.68">        next.width = width;</span>
+<span class="source-line-no">069</span><span id="line.69">        next.actualCellWidth = actualCellWidth;</span>
+<span class="source-line-no">070</span><span id="line.70">        next.actualCellHeight = actualCellHeight;</span>
+<span class="source-line-no">071</span><span id="line.71">        next.descent = descent;</span>
+<span class="source-line-no">072</span><span id="line.72">        next.lineHeight = lineHeight;</span>
+<span class="source-line-no">073</span><span id="line.73">        next.smoothingMultiplier = smoothingMultiplier;</span>
+<span class="source-line-no">074</span><span id="line.74">        next.scc = scc;</span>
+<span class="source-line-no">075</span><span id="line.75">        next.directionGlyph = directionGlyph;</span>
+<span class="source-line-no">076</span><span id="line.76">        if(initializedBySize)</span>
+<span class="source-line-no">077</span><span id="line.77">            next.initBySize();</span>
+<span class="source-line-no">078</span><span id="line.78">        else if(initializedByFont)</span>
+<span class="source-line-no">079</span><span id="line.79">            next.initByFont();</span>
+<span class="source-line-no">080</span><span id="line.80">        return next;</span>
+<span class="source-line-no">081</span><span id="line.81">    }</span>
+<span class="source-line-no">082</span><span id="line.82">    public TextFamily defaultFamilyLeanDistance()</span>
+<span class="source-line-no">083</span><span id="line.83">    {</span>
+<span class="source-line-no">084</span><span id="line.84">        fontDistanceField("Iosevka-Family-distance.fnt", "Iosevka-Family-distance.png");</span>
+<span class="source-line-no">085</span><span id="line.85">        setSmoothingMultiplier(2.1f);</span>
+<span class="source-line-no">086</span><span id="line.86">        return this;</span>
+<span class="source-line-no">087</span><span id="line.87">    }</span>
+<span class="source-line-no">088</span><span id="line.88">    public TextFamily defaultFamilySlabDistance()</span>
+<span class="source-line-no">089</span><span id="line.89">    {</span>
+<span class="source-line-no">090</span><span id="line.90">        fontDistanceField("Iosevka-Slab-Family-distance.fnt", "Iosevka-Slab-Family-distance.png");</span>
+<span class="source-line-no">091</span><span id="line.91">        setSmoothingMultiplier(2.1f);</span>
+<span class="source-line-no">092</span><span id="line.92">        return this;</span>
+<span class="source-line-no">093</span><span id="line.93">    }</span>
+<span class="source-line-no">094</span><span id="line.94"></span>
+<span class="source-line-no">095</span><span id="line.95">}</span>
 
 
 

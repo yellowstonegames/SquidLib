@@ -125,9 +125,9 @@
 <span class="source-line-no">113</span><span id="line.113">                GreasedRegion region = new GreasedRegion(size2, size2);</span>
 <span class="source-line-no">114</span><span id="line.114">                int px, py = 0;</span>
 <span class="source-line-no">115</span><span id="line.115">                for (int x = 0; x &lt; size; x++) {</span>
-<span class="source-line-no">116</span><span id="line.116">                        px = size - 1 + x * size;</span>
+<span class="source-line-no">116</span><span id="line.116">                        px = size + x * size;</span>
 <span class="source-line-no">117</span><span id="line.117">                        for (int y = 0; y &lt; size; y++) {</span>
-<span class="source-line-no">118</span><span id="line.118">                                region.insert(px--, py + y * size);</span>
+<span class="source-line-no">118</span><span id="line.118">                                region.insert(--px, py + y * size);</span>
 <span class="source-line-no">119</span><span id="line.119">                        }</span>
 <span class="source-line-no">120</span><span id="line.120">                        py++;</span>
 <span class="source-line-no">121</span><span id="line.121">                }</span>

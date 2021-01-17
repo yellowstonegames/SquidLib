@@ -320,28 +320,19 @@
 <span class="source-line-no">308</span><span id="line.308">     * @return output, after {@code Math.min(output.length, data.length)} unique items have been put into it from data</span>
 <span class="source-line-no">309</span><span id="line.309">     */</span>
 <span class="source-line-no">310</span><span id="line.310">    &lt;T&gt; T[] randomPortion(T[] data, T[] output);</span>
-<span class="source-line-no">311</span><span id="line.311">    /**</span>
-<span class="source-line-no">312</span><span id="line.312">     * Creates a copy of this IRNG; it will generate the same random numbers, given the same calls in order, as this</span>
-<span class="source-line-no">313</span><span id="line.313">     * IRNG at the point copy() is called. The copy will not share references with this IRNG. If this IRNG does not</span>
-<span class="source-line-no">314</span><span id="line.314">     * permit copying itself, it is suggested to either throw an {@link UnsupportedOperationException} or return a new</span>
-<span class="source-line-no">315</span><span id="line.315">     * IRNG of the same type but with a random seed, with the latter meant as a partial defense against cheating.</span>
-<span class="source-line-no">316</span><span id="line.316">     *</span>
-<span class="source-line-no">317</span><span id="line.317">     * @return a copy of this IRNG</span>
-<span class="source-line-no">318</span><span id="line.318">     */</span>
-<span class="source-line-no">319</span><span id="line.319">    IRNG copy();</span>
-<span class="source-line-no">320</span><span id="line.320"></span>
-<span class="source-line-no">321</span><span id="line.321">    /**</span>
-<span class="source-line-no">322</span><span id="line.322">     * Gets a view of this IRNG in a way that implements {@link Serializable}, which may simply be this IRNG if it</span>
-<span class="source-line-no">323</span><span id="line.323">     * implements Serializable as well as IRNG.</span>
-<span class="source-line-no">324</span><span id="line.324">     * &lt;br&gt;</span>
-<span class="source-line-no">325</span><span id="line.325">     * For implementors: It is suggested to return an {@link RNG} initialized by calling </span>
-<span class="source-line-no">326</span><span id="line.326">     * {@link RNG#RNG(long)} with {@link #nextLong()} if you are unable to save the current state of this IRNG and the</span>
-<span class="source-line-no">327</span><span id="line.327">     * caller still needs something saved. This won't preserve the current state or the choice of IRNG implementation,</span>
-<span class="source-line-no">328</span><span id="line.328">     * however, so it is simply a last resort in case you don't want to throw an exception.</span>
-<span class="source-line-no">329</span><span id="line.329">     * @return a {@link Serializable} view of this IRNG or a similar one; may be {@code this}</span>
-<span class="source-line-no">330</span><span id="line.330">     */</span>
-<span class="source-line-no">331</span><span id="line.331">    Serializable toSerializable();</span>
-<span class="source-line-no">332</span><span id="line.332">}</span>
+<span class="source-line-no">311</span><span id="line.311"></span>
+<span class="source-line-no">312</span><span id="line.312">    /**</span>
+<span class="source-line-no">313</span><span id="line.313">     * Gets a view of this IRNG in a way that implements {@link Serializable}, which may simply be this IRNG if it</span>
+<span class="source-line-no">314</span><span id="line.314">     * implements Serializable as well as IRNG.</span>
+<span class="source-line-no">315</span><span id="line.315">     * &lt;br&gt;</span>
+<span class="source-line-no">316</span><span id="line.316">     * For implementors: It is suggested to return an {@link RNG} initialized by calling </span>
+<span class="source-line-no">317</span><span id="line.317">     * {@link RNG#RNG(long)} with {@link #nextLong()} if you are unable to save the current state of this IRNG and the</span>
+<span class="source-line-no">318</span><span id="line.318">     * caller still needs something saved. This won't preserve the current state or the choice of IRNG implementation,</span>
+<span class="source-line-no">319</span><span id="line.319">     * however, so it is simply a last resort in case you don't want to throw an exception.</span>
+<span class="source-line-no">320</span><span id="line.320">     * @return a {@link Serializable} view of this IRNG or a similar one; may be {@code this}</span>
+<span class="source-line-no">321</span><span id="line.321">     */</span>
+<span class="source-line-no">322</span><span id="line.322">    Serializable toSerializable();</span>
+<span class="source-line-no">323</span><span id="line.323">}</span>
 
 
 

@@ -99,7 +99,6 @@ public class TweakRNG extends AbstractRNG implements Serializable {
                 + (internalLong() & 0x7fffffL) * 0x1p-25f;
     }
     
-    @Override
     public TweakRNG copy() {
         return this;
     }

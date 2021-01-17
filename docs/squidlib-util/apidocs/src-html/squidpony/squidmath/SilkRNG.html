@@ -211,188 +211,187 @@
 <span class="source-line-no">199</span><span id="line.199">     * </span>
 <span class="source-line-no">200</span><span id="line.200">     * @return a copy of this SilkRNG</span>
 <span class="source-line-no">201</span><span id="line.201">     */</span>
-<span class="source-line-no">202</span><span id="line.202">    @Override</span>
-<span class="source-line-no">203</span><span id="line.203">    public SilkRNG copy() {</span>
-<span class="source-line-no">204</span><span id="line.204">        return new SilkRNG(stateA, stateB);</span>
-<span class="source-line-no">205</span><span id="line.205">    }</span>
-<span class="source-line-no">206</span><span id="line.206"></span>
-<span class="source-line-no">207</span><span id="line.207">    /**</span>
-<span class="source-line-no">208</span><span id="line.208">     * Gets a view of this IRNG in a way that implements {@link Serializable}, which is simply this IRNG.</span>
-<span class="source-line-no">209</span><span id="line.209">     * @return a {@link Serializable} view of this IRNG or a similar one; always {@code this}</span>
-<span class="source-line-no">210</span><span id="line.210">     */</span>
-<span class="source-line-no">211</span><span id="line.211">    @Override</span>
-<span class="source-line-no">212</span><span id="line.212">    public Serializable toSerializable() {</span>
-<span class="source-line-no">213</span><span id="line.213">        return this;</span>
-<span class="source-line-no">214</span><span id="line.214">    }</span>
-<span class="source-line-no">215</span><span id="line.215">    /**</span>
-<span class="source-line-no">216</span><span id="line.216">     * Sets the state of this generator using one int, running it through Zog32RNG's algorithm two times to get </span>
-<span class="source-line-no">217</span><span id="line.217">     * two ints. If the states would both be 0, state A is assigned 1 instead.</span>
-<span class="source-line-no">218</span><span id="line.218">     * @param seed the int to use to produce this generator's state</span>
-<span class="source-line-no">219</span><span id="line.219">     */</span>
-<span class="source-line-no">220</span><span id="line.220">    public void setSeed(final int seed) {</span>
-<span class="source-line-no">221</span><span id="line.221">        int z = seed + 0xC74EAD55, a = seed ^ z;</span>
-<span class="source-line-no">222</span><span id="line.222">        a ^= a &gt;&gt;&gt; 14;</span>
-<span class="source-line-no">223</span><span id="line.223">        z = (z ^ z &gt;&gt;&gt; 10) * 0xA5CB3;</span>
-<span class="source-line-no">224</span><span id="line.224">        a ^= a &gt;&gt;&gt; 15;</span>
-<span class="source-line-no">225</span><span id="line.225">        stateA = (z ^ z &gt;&gt;&gt; 20) + (a ^= a &lt;&lt; 13);</span>
-<span class="source-line-no">226</span><span id="line.226">        z = seed + 0x8E9D5AAA;</span>
-<span class="source-line-no">227</span><span id="line.227">        a ^= a &gt;&gt;&gt; 14;</span>
-<span class="source-line-no">228</span><span id="line.228">        z = (z ^ z &gt;&gt;&gt; 10) * 0xA5CB3;</span>
-<span class="source-line-no">229</span><span id="line.229">        a ^= a &gt;&gt;&gt; 15;</span>
-<span class="source-line-no">230</span><span id="line.230">        stateB = (z ^ z &gt;&gt;&gt; 20) + (a ^ a &lt;&lt; 13);</span>
-<span class="source-line-no">231</span><span id="line.231">    }</span>
-<span class="source-line-no">232</span><span id="line.232"></span>
-<span class="source-line-no">233</span><span id="line.233">    public int getStateA()</span>
-<span class="source-line-no">234</span><span id="line.234">    {</span>
-<span class="source-line-no">235</span><span id="line.235">        return stateA;</span>
-<span class="source-line-no">236</span><span id="line.236">    }</span>
-<span class="source-line-no">237</span><span id="line.237">    /**</span>
-<span class="source-line-no">238</span><span id="line.238">     * Sets the first part of the state to the given int.</span>
-<span class="source-line-no">239</span><span id="line.239">     * @param stateA any int</span>
-<span class="source-line-no">240</span><span id="line.240">     */</span>
-<span class="source-line-no">241</span><span id="line.241"></span>
-<span class="source-line-no">242</span><span id="line.242">    public void setStateA(int stateA)</span>
-<span class="source-line-no">243</span><span id="line.243">    {</span>
-<span class="source-line-no">244</span><span id="line.244">        this.stateA = stateA;</span>
-<span class="source-line-no">245</span><span id="line.245">    }</span>
-<span class="source-line-no">246</span><span id="line.246">    public int getStateB()</span>
-<span class="source-line-no">247</span><span id="line.247">    {</span>
-<span class="source-line-no">248</span><span id="line.248">        return stateB;</span>
-<span class="source-line-no">249</span><span id="line.249">    }</span>
-<span class="source-line-no">250</span><span id="line.250"></span>
-<span class="source-line-no">251</span><span id="line.251">    /**</span>
-<span class="source-line-no">252</span><span id="line.252">     * Sets the second part of the state to the given int.</span>
-<span class="source-line-no">253</span><span id="line.253">     * @param stateB any int</span>
-<span class="source-line-no">254</span><span id="line.254">     */</span>
-<span class="source-line-no">255</span><span id="line.255">    public void setStateB(int stateB)</span>
-<span class="source-line-no">256</span><span id="line.256">    {</span>
-<span class="source-line-no">257</span><span id="line.257">        this.stateB = stateB;</span>
-<span class="source-line-no">258</span><span id="line.258">    }</span>
-<span class="source-line-no">259</span><span id="line.259"></span>
-<span class="source-line-no">260</span><span id="line.260">    /**</span>
-<span class="source-line-no">261</span><span id="line.261">     * Sets the current internal state of this SilkRNG with two ints, where stateA and stateB can each be any int.</span>
-<span class="source-line-no">262</span><span id="line.262">     * @param stateA any int</span>
-<span class="source-line-no">263</span><span id="line.263">     * @param stateB any int</span>
-<span class="source-line-no">264</span><span id="line.264">     */</span>
-<span class="source-line-no">265</span><span id="line.265">    public void setState(int stateA, int stateB)</span>
-<span class="source-line-no">266</span><span id="line.266">    {</span>
-<span class="source-line-no">267</span><span id="line.267">        this.stateA = stateA;</span>
-<span class="source-line-no">268</span><span id="line.268">        this.stateB = stateB;</span>
-<span class="source-line-no">269</span><span id="line.269">    }</span>
-<span class="source-line-no">270</span><span id="line.270"></span>
-<span class="source-line-no">271</span><span id="line.271">    /**</span>
-<span class="source-line-no">272</span><span id="line.272">     * Get the current internal state of the StatefulRandomness as a long.</span>
-<span class="source-line-no">273</span><span id="line.273">     *</span>
-<span class="source-line-no">274</span><span id="line.274">     * @return the current internal state of this object.</span>
-<span class="source-line-no">275</span><span id="line.275">     */</span>
-<span class="source-line-no">276</span><span id="line.276">    @Override</span>
-<span class="source-line-no">277</span><span id="line.277">    public long getState() {</span>
-<span class="source-line-no">278</span><span id="line.278">        return stateA &amp; 0xFFFFFFFFL | ((long)stateB) &lt;&lt; 32;</span>
-<span class="source-line-no">279</span><span id="line.279">    }</span>
-<span class="source-line-no">280</span><span id="line.280"></span>
-<span class="source-line-no">281</span><span id="line.281">    /**</span>
-<span class="source-line-no">282</span><span id="line.282">     * Set the current internal state of this StatefulRandomness with a long.</span>
-<span class="source-line-no">283</span><span id="line.283">     *</span>
-<span class="source-line-no">284</span><span id="line.284">     * @param state a 64-bit long. You should avoid passing 0; this implementation will treat it as 1.</span>
-<span class="source-line-no">285</span><span id="line.285">     */</span>
-<span class="source-line-no">286</span><span id="line.286">    @Override</span>
-<span class="source-line-no">287</span><span id="line.287">    public void setState(final long state) {</span>
-<span class="source-line-no">288</span><span id="line.288">        stateA = (int)(state &amp; 0xFFFFFFFFL);</span>
-<span class="source-line-no">289</span><span id="line.289">        stateB = (int)(state &gt;&gt;&gt; 32);</span>
-<span class="source-line-no">290</span><span id="line.290">    }</span>
-<span class="source-line-no">291</span><span id="line.291"></span>
-<span class="source-line-no">292</span><span id="line.292">    @Override</span>
-<span class="source-line-no">293</span><span id="line.293">    public boolean equals(Object o) {</span>
-<span class="source-line-no">294</span><span id="line.294">        if (this == o) return true;</span>
-<span class="source-line-no">295</span><span id="line.295">        if (o == null || getClass() != o.getClass()) return false;</span>
-<span class="source-line-no">296</span><span id="line.296"></span>
-<span class="source-line-no">297</span><span id="line.297">        SilkRNG silkRNG = (SilkRNG) o;</span>
-<span class="source-line-no">298</span><span id="line.298"></span>
-<span class="source-line-no">299</span><span id="line.299">        if (stateA != silkRNG.stateA) return false;</span>
-<span class="source-line-no">300</span><span id="line.300">        return stateB == silkRNG.stateB;</span>
-<span class="source-line-no">301</span><span id="line.301">    }</span>
-<span class="source-line-no">302</span><span id="line.302"></span>
-<span class="source-line-no">303</span><span id="line.303">    @Override</span>
-<span class="source-line-no">304</span><span id="line.304">    public int hashCode() {</span>
-<span class="source-line-no">305</span><span id="line.305">        return 31 * stateA + stateB;</span>
-<span class="source-line-no">306</span><span id="line.306">    }</span>
-<span class="source-line-no">307</span><span id="line.307">    </span>
-<span class="source-line-no">308</span><span id="line.308">    @Override</span>
-<span class="source-line-no">309</span><span id="line.309">    public String toString() {</span>
-<span class="source-line-no">310</span><span id="line.310">        return "SilkRNG with stateA 0x" + StringKit.hex(stateA) + " and stateB 0x" + StringKit.hex(stateB);</span>
-<span class="source-line-no">311</span><span id="line.311">    }</span>
-<span class="source-line-no">312</span><span id="line.312"></span>
-<span class="source-line-no">313</span><span id="line.313">    /**</span>
-<span class="source-line-no">314</span><span id="line.314">     * A deterministic random int generator that, given one int {@code state} as input, irreversibly returns an </span>
-<span class="source-line-no">315</span><span id="line.315">     * almost-always-different int as a result. Unlike the rest of SilkRNG, this will not produce all possible ints given</span>
-<span class="source-line-no">316</span><span id="line.316">     * all ints as inputs, and probably a third of all possible ints cannot be returned. You should call this with</span>
-<span class="source-line-no">317</span><span id="line.317">     * {@code SilkRNG.determineInt(state = state + 1 | 0)} (you can subtract 1 to go backwards instead of forwards),</span>
-<span class="source-line-no">318</span><span id="line.318">     * which will allow overflow in the incremented state to be handled the same on GWT as on desktop.</span>
-<span class="source-line-no">319</span><span id="line.319">     * @param state an int that should go up or down by 1 each call, as with {@code SilkRNG.determineInt(state = state + 1 | 0)} to handle overflow </span>
-<span class="source-line-no">320</span><span id="line.320">     * @return a not-necessarily-unique int that is usually very different from {@code state}</span>
-<span class="source-line-no">321</span><span id="line.321">     */</span>
-<span class="source-line-no">322</span><span id="line.322">    public static int determineInt(int state) {</span>
-<span class="source-line-no">323</span><span id="line.323">        return (state = ((state = (state ^ 0xD1B54A35) * 0x102473) ^ state &gt;&gt;&gt; 11 ^ state &gt;&gt;&gt; 21) * (state | 0xFFE00001)) ^ state &gt;&gt;&gt; 13 ^ state &gt;&gt;&gt; 19;</span>
-<span class="source-line-no">324</span><span id="line.324">    }</span>
-<span class="source-line-no">325</span><span id="line.325">    </span>
-<span class="source-line-no">326</span><span id="line.326">    /**</span>
-<span class="source-line-no">327</span><span id="line.327">     * A deterministic random int generator that, given one int {@code state} and an outer int {@code bound} as input,</span>
-<span class="source-line-no">328</span><span id="line.328">     * returns an int between 0 (inclusive) and {@code bound} (exclusive) as a result, which should have no noticeable</span>
-<span class="source-line-no">329</span><span id="line.329">     * correlation between {@code state} and the result. You should call this with</span>
-<span class="source-line-no">330</span><span id="line.330">     * {@code SilkRNG.determineBound(state = state + 1 | 0, bound)} (you can subtract 1 to go backwards instead of</span>
-<span class="source-line-no">331</span><span id="line.331">     * forwards), which will allow overflow in the incremented state to be handled the same on GWT as on desktop.</span>
-<span class="source-line-no">332</span><span id="line.332">     * Like most bounded int generation in SquidLib, this uses some long math, but most of the function uses ints.</span>
-<span class="source-line-no">333</span><span id="line.333">     * @param state an int that should go up or down by 1 each call, as with {@code SilkRNG.determineBounded(state = state + 1 | 0, bound)} to handle overflow</span>
-<span class="source-line-no">334</span><span id="line.334">     * @param bound the outer exclusive bound, as an int; may be positive or negative</span>
-<span class="source-line-no">335</span><span id="line.335">     * @return an int between 0 (inclusive) and {@code bound} (exclusive)</span>
-<span class="source-line-no">336</span><span id="line.336">     */</span>
-<span class="source-line-no">337</span><span id="line.337">    public static int determineBounded(int state, final int bound)</span>
-<span class="source-line-no">338</span><span id="line.338">    {</span>
-<span class="source-line-no">339</span><span id="line.339">        return (state = (int) ((((state = ((state = (state ^ 0xD1B54A35) * 0x102473) ^ state &gt;&gt;&gt; 11 ^ state &gt;&gt;&gt; 21) * (state | 0xFFE00001)) ^ state &gt;&gt;&gt; 13 ^ state &gt;&gt;&gt; 19) &amp; 0xFFFFFFFFL) * bound &gt;&gt; 32)) + (state &gt;&gt;&gt; 31);</span>
-<span class="source-line-no">340</span><span id="line.340">    }</span>
-<span class="source-line-no">341</span><span id="line.341">    /**</span>
-<span class="source-line-no">342</span><span id="line.342">     * A deterministic random long generator that, given one int {@code state} as input, returns an </span>
-<span class="source-line-no">343</span><span id="line.343">     * almost-always-different long as a result. This can only return a tiny fraction of all possible longs, since there</span>
-<span class="source-line-no">344</span><span id="line.344">     * are at most 2 to the 32 possible ints and this doesn't even return different values for each of those. You should</span>
-<span class="source-line-no">345</span><span id="line.345">     * call this with {@code SilkRNG.determine(state = state + 1 | 0)} (you can subtract 1 to go backwards instead of</span>
-<span class="source-line-no">346</span><span id="line.346">     * forwards), which will allow overflow in the incremented state to be handled the same on GWT as on desktop.</span>
-<span class="source-line-no">347</span><span id="line.347">     * @param state an int that should go up or down by 1 each call, as with {@code SilkRNG.determine(state = state + 1 | 0)} to handle overflow </span>
-<span class="source-line-no">348</span><span id="line.348">     * @return a not-necessarily-unique long that is usually very different from {@code state}</span>
-<span class="source-line-no">349</span><span id="line.349">     */</span>
-<span class="source-line-no">350</span><span id="line.350">    public static long determine(int state)</span>
-<span class="source-line-no">351</span><span id="line.351">    {</span>
-<span class="source-line-no">352</span><span id="line.352">        int r = (state ^ 0xD1B54A35) * 0x102473;</span>
-<span class="source-line-no">353</span><span id="line.353">        return ((long) ((r = (r ^ r &gt;&gt;&gt; 11 ^ r &gt;&gt;&gt; 21) * (r | 0xFFE00001)) ^ r &gt;&gt;&gt; 13 ^ r &gt;&gt;&gt; 19) &lt;&lt; 32)</span>
-<span class="source-line-no">354</span><span id="line.354">                | (((state = ((state = (r ^ 0xD1B54A35) * 0x102473) ^ state &gt;&gt;&gt; 11 ^ state &gt;&gt;&gt; 21) * (state | 0xFFE00001)) ^ state &gt;&gt;&gt; 13 ^ state &gt;&gt;&gt; 19) &amp; 0xFFFFFFFFL);</span>
-<span class="source-line-no">355</span><span id="line.355">    }</span>
-<span class="source-line-no">356</span><span id="line.356">    /**</span>
-<span class="source-line-no">357</span><span id="line.357">     * A deterministic random float generator that, given one int {@code state} as input, returns an </span>
-<span class="source-line-no">358</span><span id="line.358">     * almost-always-different float between 0.0f and 1.0f as a result. Unlike the rest of SilkRNG, this might not</span>
-<span class="source-line-no">359</span><span id="line.359">     * produce all possible floats given all ints as inputs, and some fraction of possible floats cannot be returned.</span>
-<span class="source-line-no">360</span><span id="line.360">     * You should call this with {@code SilkRNG.determineFloat(state = state + 1 | 0)} (you can subtract 1 to go</span>
-<span class="source-line-no">361</span><span id="line.361">     * backwards instead of forwards), which will allow overflow in the incremented state to be handled the same on GWT</span>
-<span class="source-line-no">362</span><span id="line.362">     * as on desktop.</span>
-<span class="source-line-no">363</span><span id="line.363">     * @param state an int that should go up or down by 1 each call, as with {@code SilkRNG.determineFloat(state = state + 1 | 0)} to handle overflow </span>
-<span class="source-line-no">364</span><span id="line.364">     * @return a not-necessarily-unique float from 0.0f to 1.0f that is usually very different from {@code state}</span>
-<span class="source-line-no">365</span><span id="line.365">     */</span>
-<span class="source-line-no">366</span><span id="line.366">    public static float determineFloat(int state) {</span>
-<span class="source-line-no">367</span><span id="line.367">        return (((state = ((state = (state ^ 0xD1B54A35) * 0x102473) ^ state &gt;&gt;&gt; 11 ^ state &gt;&gt;&gt; 21) * (state | 0xFFE00001)) ^ state &gt;&gt;&gt; 13 ^ state &gt;&gt;&gt; 19) &amp; 0xFFFFFF) * 0x1p-24f;</span>
-<span class="source-line-no">368</span><span id="line.368">    }</span>
-<span class="source-line-no">369</span><span id="line.369">    /**</span>
-<span class="source-line-no">370</span><span id="line.370">     * A deterministic random double generator that, given one int {@code state} as input, returns an </span>
-<span class="source-line-no">371</span><span id="line.371">     * almost-always-different double between 0.0 and 1.0 as a result. This cannot produce more than a tiny fraction of</span>
-<span class="source-line-no">372</span><span id="line.372">     * all possible doubles because the input is 32 bits and at least 53 bits are needed to represent most doubles from</span>
-<span class="source-line-no">373</span><span id="line.373">     * 0.0 to 1.0. You should call this with {@code SilkRNG.determineDouble(state = state + 1 | 0)} (you can subtract 1</span>
-<span class="source-line-no">374</span><span id="line.374">     * to go backwards instead of forwards), which will allow overflow in the incremented state to be handled the same</span>
-<span class="source-line-no">375</span><span id="line.375">     * on GWT as on desktop.</span>
-<span class="source-line-no">376</span><span id="line.376">     * @param state an int that should go up or down by 1 each call, as with {@code SilkRNG.determineDouble(state = state + 1 | 0)} to handle overflow </span>
-<span class="source-line-no">377</span><span id="line.377">     * @return a not-necessarily-unique double from 0.0 to 1.0 that is usually very different from {@code state}</span>
-<span class="source-line-no">378</span><span id="line.378">     */</span>
-<span class="source-line-no">379</span><span id="line.379">    public static double determineDouble(int state)</span>
-<span class="source-line-no">380</span><span id="line.380">    {</span>
-<span class="source-line-no">381</span><span id="line.381">        return ((state = ((state = (state ^ 0xD1B54A35) * 0x102473) ^ state &gt;&gt;&gt; 11 ^ state &gt;&gt;&gt; 21) * (state | 0xFFE00001)) ^ state &gt;&gt;&gt; 13 ^ state &gt;&gt;&gt; 19) * 0x1p-32 + 0.5;</span>
-<span class="source-line-no">382</span><span id="line.382">    }</span>
-<span class="source-line-no">383</span><span id="line.383">}</span>
+<span class="source-line-no">202</span><span id="line.202">    public SilkRNG copy() {</span>
+<span class="source-line-no">203</span><span id="line.203">        return new SilkRNG(stateA, stateB);</span>
+<span class="source-line-no">204</span><span id="line.204">    }</span>
+<span class="source-line-no">205</span><span id="line.205"></span>
+<span class="source-line-no">206</span><span id="line.206">    /**</span>
+<span class="source-line-no">207</span><span id="line.207">     * Gets a view of this IRNG in a way that implements {@link Serializable}, which is simply this IRNG.</span>
+<span class="source-line-no">208</span><span id="line.208">     * @return a {@link Serializable} view of this IRNG or a similar one; always {@code this}</span>
+<span class="source-line-no">209</span><span id="line.209">     */</span>
+<span class="source-line-no">210</span><span id="line.210">    @Override</span>
+<span class="source-line-no">211</span><span id="line.211">    public Serializable toSerializable() {</span>
+<span class="source-line-no">212</span><span id="line.212">        return this;</span>
+<span class="source-line-no">213</span><span id="line.213">    }</span>
+<span class="source-line-no">214</span><span id="line.214">    /**</span>
+<span class="source-line-no">215</span><span id="line.215">     * Sets the state of this generator using one int, running it through Zog32RNG's algorithm two times to get </span>
+<span class="source-line-no">216</span><span id="line.216">     * two ints. If the states would both be 0, state A is assigned 1 instead.</span>
+<span class="source-line-no">217</span><span id="line.217">     * @param seed the int to use to produce this generator's state</span>
+<span class="source-line-no">218</span><span id="line.218">     */</span>
+<span class="source-line-no">219</span><span id="line.219">    public void setSeed(final int seed) {</span>
+<span class="source-line-no">220</span><span id="line.220">        int z = seed + 0xC74EAD55, a = seed ^ z;</span>
+<span class="source-line-no">221</span><span id="line.221">        a ^= a &gt;&gt;&gt; 14;</span>
+<span class="source-line-no">222</span><span id="line.222">        z = (z ^ z &gt;&gt;&gt; 10) * 0xA5CB3;</span>
+<span class="source-line-no">223</span><span id="line.223">        a ^= a &gt;&gt;&gt; 15;</span>
+<span class="source-line-no">224</span><span id="line.224">        stateA = (z ^ z &gt;&gt;&gt; 20) + (a ^= a &lt;&lt; 13);</span>
+<span class="source-line-no">225</span><span id="line.225">        z = seed + 0x8E9D5AAA;</span>
+<span class="source-line-no">226</span><span id="line.226">        a ^= a &gt;&gt;&gt; 14;</span>
+<span class="source-line-no">227</span><span id="line.227">        z = (z ^ z &gt;&gt;&gt; 10) * 0xA5CB3;</span>
+<span class="source-line-no">228</span><span id="line.228">        a ^= a &gt;&gt;&gt; 15;</span>
+<span class="source-line-no">229</span><span id="line.229">        stateB = (z ^ z &gt;&gt;&gt; 20) + (a ^ a &lt;&lt; 13);</span>
+<span class="source-line-no">230</span><span id="line.230">    }</span>
+<span class="source-line-no">231</span><span id="line.231"></span>
+<span class="source-line-no">232</span><span id="line.232">    public int getStateA()</span>
+<span class="source-line-no">233</span><span id="line.233">    {</span>
+<span class="source-line-no">234</span><span id="line.234">        return stateA;</span>
+<span class="source-line-no">235</span><span id="line.235">    }</span>
+<span class="source-line-no">236</span><span id="line.236">    /**</span>
+<span class="source-line-no">237</span><span id="line.237">     * Sets the first part of the state to the given int.</span>
+<span class="source-line-no">238</span><span id="line.238">     * @param stateA any int</span>
+<span class="source-line-no">239</span><span id="line.239">     */</span>
+<span class="source-line-no">240</span><span id="line.240"></span>
+<span class="source-line-no">241</span><span id="line.241">    public void setStateA(int stateA)</span>
+<span class="source-line-no">242</span><span id="line.242">    {</span>
+<span class="source-line-no">243</span><span id="line.243">        this.stateA = stateA;</span>
+<span class="source-line-no">244</span><span id="line.244">    }</span>
+<span class="source-line-no">245</span><span id="line.245">    public int getStateB()</span>
+<span class="source-line-no">246</span><span id="line.246">    {</span>
+<span class="source-line-no">247</span><span id="line.247">        return stateB;</span>
+<span class="source-line-no">248</span><span id="line.248">    }</span>
+<span class="source-line-no">249</span><span id="line.249"></span>
+<span class="source-line-no">250</span><span id="line.250">    /**</span>
+<span class="source-line-no">251</span><span id="line.251">     * Sets the second part of the state to the given int.</span>
+<span class="source-line-no">252</span><span id="line.252">     * @param stateB any int</span>
+<span class="source-line-no">253</span><span id="line.253">     */</span>
+<span class="source-line-no">254</span><span id="line.254">    public void setStateB(int stateB)</span>
+<span class="source-line-no">255</span><span id="line.255">    {</span>
+<span class="source-line-no">256</span><span id="line.256">        this.stateB = stateB;</span>
+<span class="source-line-no">257</span><span id="line.257">    }</span>
+<span class="source-line-no">258</span><span id="line.258"></span>
+<span class="source-line-no">259</span><span id="line.259">    /**</span>
+<span class="source-line-no">260</span><span id="line.260">     * Sets the current internal state of this SilkRNG with two ints, where stateA and stateB can each be any int.</span>
+<span class="source-line-no">261</span><span id="line.261">     * @param stateA any int</span>
+<span class="source-line-no">262</span><span id="line.262">     * @param stateB any int</span>
+<span class="source-line-no">263</span><span id="line.263">     */</span>
+<span class="source-line-no">264</span><span id="line.264">    public void setState(int stateA, int stateB)</span>
+<span class="source-line-no">265</span><span id="line.265">    {</span>
+<span class="source-line-no">266</span><span id="line.266">        this.stateA = stateA;</span>
+<span class="source-line-no">267</span><span id="line.267">        this.stateB = stateB;</span>
+<span class="source-line-no">268</span><span id="line.268">    }</span>
+<span class="source-line-no">269</span><span id="line.269"></span>
+<span class="source-line-no">270</span><span id="line.270">    /**</span>
+<span class="source-line-no">271</span><span id="line.271">     * Get the current internal state of the StatefulRandomness as a long.</span>
+<span class="source-line-no">272</span><span id="line.272">     *</span>
+<span class="source-line-no">273</span><span id="line.273">     * @return the current internal state of this object.</span>
+<span class="source-line-no">274</span><span id="line.274">     */</span>
+<span class="source-line-no">275</span><span id="line.275">    @Override</span>
+<span class="source-line-no">276</span><span id="line.276">    public long getState() {</span>
+<span class="source-line-no">277</span><span id="line.277">        return stateA &amp; 0xFFFFFFFFL | ((long)stateB) &lt;&lt; 32;</span>
+<span class="source-line-no">278</span><span id="line.278">    }</span>
+<span class="source-line-no">279</span><span id="line.279"></span>
+<span class="source-line-no">280</span><span id="line.280">    /**</span>
+<span class="source-line-no">281</span><span id="line.281">     * Set the current internal state of this StatefulRandomness with a long.</span>
+<span class="source-line-no">282</span><span id="line.282">     *</span>
+<span class="source-line-no">283</span><span id="line.283">     * @param state a 64-bit long. You should avoid passing 0; this implementation will treat it as 1.</span>
+<span class="source-line-no">284</span><span id="line.284">     */</span>
+<span class="source-line-no">285</span><span id="line.285">    @Override</span>
+<span class="source-line-no">286</span><span id="line.286">    public void setState(final long state) {</span>
+<span class="source-line-no">287</span><span id="line.287">        stateA = (int)(state &amp; 0xFFFFFFFFL);</span>
+<span class="source-line-no">288</span><span id="line.288">        stateB = (int)(state &gt;&gt;&gt; 32);</span>
+<span class="source-line-no">289</span><span id="line.289">    }</span>
+<span class="source-line-no">290</span><span id="line.290"></span>
+<span class="source-line-no">291</span><span id="line.291">    @Override</span>
+<span class="source-line-no">292</span><span id="line.292">    public boolean equals(Object o) {</span>
+<span class="source-line-no">293</span><span id="line.293">        if (this == o) return true;</span>
+<span class="source-line-no">294</span><span id="line.294">        if (o == null || getClass() != o.getClass()) return false;</span>
+<span class="source-line-no">295</span><span id="line.295"></span>
+<span class="source-line-no">296</span><span id="line.296">        SilkRNG silkRNG = (SilkRNG) o;</span>
+<span class="source-line-no">297</span><span id="line.297"></span>
+<span class="source-line-no">298</span><span id="line.298">        if (stateA != silkRNG.stateA) return false;</span>
+<span class="source-line-no">299</span><span id="line.299">        return stateB == silkRNG.stateB;</span>
+<span class="source-line-no">300</span><span id="line.300">    }</span>
+<span class="source-line-no">301</span><span id="line.301"></span>
+<span class="source-line-no">302</span><span id="line.302">    @Override</span>
+<span class="source-line-no">303</span><span id="line.303">    public int hashCode() {</span>
+<span class="source-line-no">304</span><span id="line.304">        return 31 * stateA + stateB;</span>
+<span class="source-line-no">305</span><span id="line.305">    }</span>
+<span class="source-line-no">306</span><span id="line.306">    </span>
+<span class="source-line-no">307</span><span id="line.307">    @Override</span>
+<span class="source-line-no">308</span><span id="line.308">    public String toString() {</span>
+<span class="source-line-no">309</span><span id="line.309">        return "SilkRNG with stateA 0x" + StringKit.hex(stateA) + " and stateB 0x" + StringKit.hex(stateB);</span>
+<span class="source-line-no">310</span><span id="line.310">    }</span>
+<span class="source-line-no">311</span><span id="line.311"></span>
+<span class="source-line-no">312</span><span id="line.312">    /**</span>
+<span class="source-line-no">313</span><span id="line.313">     * A deterministic random int generator that, given one int {@code state} as input, irreversibly returns an </span>
+<span class="source-line-no">314</span><span id="line.314">     * almost-always-different int as a result. Unlike the rest of SilkRNG, this will not produce all possible ints given</span>
+<span class="source-line-no">315</span><span id="line.315">     * all ints as inputs, and probably a third of all possible ints cannot be returned. You should call this with</span>
+<span class="source-line-no">316</span><span id="line.316">     * {@code SilkRNG.determineInt(state = state + 1 | 0)} (you can subtract 1 to go backwards instead of forwards),</span>
+<span class="source-line-no">317</span><span id="line.317">     * which will allow overflow in the incremented state to be handled the same on GWT as on desktop.</span>
+<span class="source-line-no">318</span><span id="line.318">     * @param state an int that should go up or down by 1 each call, as with {@code SilkRNG.determineInt(state = state + 1 | 0)} to handle overflow </span>
+<span class="source-line-no">319</span><span id="line.319">     * @return a not-necessarily-unique int that is usually very different from {@code state}</span>
+<span class="source-line-no">320</span><span id="line.320">     */</span>
+<span class="source-line-no">321</span><span id="line.321">    public static int determineInt(int state) {</span>
+<span class="source-line-no">322</span><span id="line.322">        return (state = ((state = (state ^ 0xD1B54A35) * 0x102473) ^ state &gt;&gt;&gt; 11 ^ state &gt;&gt;&gt; 21) * (state | 0xFFE00001)) ^ state &gt;&gt;&gt; 13 ^ state &gt;&gt;&gt; 19;</span>
+<span class="source-line-no">323</span><span id="line.323">    }</span>
+<span class="source-line-no">324</span><span id="line.324">    </span>
+<span class="source-line-no">325</span><span id="line.325">    /**</span>
+<span class="source-line-no">326</span><span id="line.326">     * A deterministic random int generator that, given one int {@code state} and an outer int {@code bound} as input,</span>
+<span class="source-line-no">327</span><span id="line.327">     * returns an int between 0 (inclusive) and {@code bound} (exclusive) as a result, which should have no noticeable</span>
+<span class="source-line-no">328</span><span id="line.328">     * correlation between {@code state} and the result. You should call this with</span>
+<span class="source-line-no">329</span><span id="line.329">     * {@code SilkRNG.determineBound(state = state + 1 | 0, bound)} (you can subtract 1 to go backwards instead of</span>
+<span class="source-line-no">330</span><span id="line.330">     * forwards), which will allow overflow in the incremented state to be handled the same on GWT as on desktop.</span>
+<span class="source-line-no">331</span><span id="line.331">     * Like most bounded int generation in SquidLib, this uses some long math, but most of the function uses ints.</span>
+<span class="source-line-no">332</span><span id="line.332">     * @param state an int that should go up or down by 1 each call, as with {@code SilkRNG.determineBounded(state = state + 1 | 0, bound)} to handle overflow</span>
+<span class="source-line-no">333</span><span id="line.333">     * @param bound the outer exclusive bound, as an int; may be positive or negative</span>
+<span class="source-line-no">334</span><span id="line.334">     * @return an int between 0 (inclusive) and {@code bound} (exclusive)</span>
+<span class="source-line-no">335</span><span id="line.335">     */</span>
+<span class="source-line-no">336</span><span id="line.336">    public static int determineBounded(int state, final int bound)</span>
+<span class="source-line-no">337</span><span id="line.337">    {</span>
+<span class="source-line-no">338</span><span id="line.338">        return (state = (int) ((((state = ((state = (state ^ 0xD1B54A35) * 0x102473) ^ state &gt;&gt;&gt; 11 ^ state &gt;&gt;&gt; 21) * (state | 0xFFE00001)) ^ state &gt;&gt;&gt; 13 ^ state &gt;&gt;&gt; 19) &amp; 0xFFFFFFFFL) * bound &gt;&gt; 32)) + (state &gt;&gt;&gt; 31);</span>
+<span class="source-line-no">339</span><span id="line.339">    }</span>
+<span class="source-line-no">340</span><span id="line.340">    /**</span>
+<span class="source-line-no">341</span><span id="line.341">     * A deterministic random long generator that, given one int {@code state} as input, returns an </span>
+<span class="source-line-no">342</span><span id="line.342">     * almost-always-different long as a result. This can only return a tiny fraction of all possible longs, since there</span>
+<span class="source-line-no">343</span><span id="line.343">     * are at most 2 to the 32 possible ints and this doesn't even return different values for each of those. You should</span>
+<span class="source-line-no">344</span><span id="line.344">     * call this with {@code SilkRNG.determine(state = state + 1 | 0)} (you can subtract 1 to go backwards instead of</span>
+<span class="source-line-no">345</span><span id="line.345">     * forwards), which will allow overflow in the incremented state to be handled the same on GWT as on desktop.</span>
+<span class="source-line-no">346</span><span id="line.346">     * @param state an int that should go up or down by 1 each call, as with {@code SilkRNG.determine(state = state + 1 | 0)} to handle overflow </span>
+<span class="source-line-no">347</span><span id="line.347">     * @return a not-necessarily-unique long that is usually very different from {@code state}</span>
+<span class="source-line-no">348</span><span id="line.348">     */</span>
+<span class="source-line-no">349</span><span id="line.349">    public static long determine(int state)</span>
+<span class="source-line-no">350</span><span id="line.350">    {</span>
+<span class="source-line-no">351</span><span id="line.351">        int r = (state ^ 0xD1B54A35) * 0x102473;</span>
+<span class="source-line-no">352</span><span id="line.352">        return ((long) ((r = (r ^ r &gt;&gt;&gt; 11 ^ r &gt;&gt;&gt; 21) * (r | 0xFFE00001)) ^ r &gt;&gt;&gt; 13 ^ r &gt;&gt;&gt; 19) &lt;&lt; 32)</span>
+<span class="source-line-no">353</span><span id="line.353">                | (((state = ((state = (r ^ 0xD1B54A35) * 0x102473) ^ state &gt;&gt;&gt; 11 ^ state &gt;&gt;&gt; 21) * (state | 0xFFE00001)) ^ state &gt;&gt;&gt; 13 ^ state &gt;&gt;&gt; 19) &amp; 0xFFFFFFFFL);</span>
+<span class="source-line-no">354</span><span id="line.354">    }</span>
+<span class="source-line-no">355</span><span id="line.355">    /**</span>
+<span class="source-line-no">356</span><span id="line.356">     * A deterministic random float generator that, given one int {@code state} as input, returns an </span>
+<span class="source-line-no">357</span><span id="line.357">     * almost-always-different float between 0.0f and 1.0f as a result. Unlike the rest of SilkRNG, this might not</span>
+<span class="source-line-no">358</span><span id="line.358">     * produce all possible floats given all ints as inputs, and some fraction of possible floats cannot be returned.</span>
+<span class="source-line-no">359</span><span id="line.359">     * You should call this with {@code SilkRNG.determineFloat(state = state + 1 | 0)} (you can subtract 1 to go</span>
+<span class="source-line-no">360</span><span id="line.360">     * backwards instead of forwards), which will allow overflow in the incremented state to be handled the same on GWT</span>
+<span class="source-line-no">361</span><span id="line.361">     * as on desktop.</span>
+<span class="source-line-no">362</span><span id="line.362">     * @param state an int that should go up or down by 1 each call, as with {@code SilkRNG.determineFloat(state = state + 1 | 0)} to handle overflow </span>
+<span class="source-line-no">363</span><span id="line.363">     * @return a not-necessarily-unique float from 0.0f to 1.0f that is usually very different from {@code state}</span>
+<span class="source-line-no">364</span><span id="line.364">     */</span>
+<span class="source-line-no">365</span><span id="line.365">    public static float determineFloat(int state) {</span>
+<span class="source-line-no">366</span><span id="line.366">        return (((state = ((state = (state ^ 0xD1B54A35) * 0x102473) ^ state &gt;&gt;&gt; 11 ^ state &gt;&gt;&gt; 21) * (state | 0xFFE00001)) ^ state &gt;&gt;&gt; 13 ^ state &gt;&gt;&gt; 19) &amp; 0xFFFFFF) * 0x1p-24f;</span>
+<span class="source-line-no">367</span><span id="line.367">    }</span>
+<span class="source-line-no">368</span><span id="line.368">    /**</span>
+<span class="source-line-no">369</span><span id="line.369">     * A deterministic random double generator that, given one int {@code state} as input, returns an </span>
+<span class="source-line-no">370</span><span id="line.370">     * almost-always-different double between 0.0 and 1.0 as a result. This cannot produce more than a tiny fraction of</span>
+<span class="source-line-no">371</span><span id="line.371">     * all possible doubles because the input is 32 bits and at least 53 bits are needed to represent most doubles from</span>
+<span class="source-line-no">372</span><span id="line.372">     * 0.0 to 1.0. You should call this with {@code SilkRNG.determineDouble(state = state + 1 | 0)} (you can subtract 1</span>
+<span class="source-line-no">373</span><span id="line.373">     * to go backwards instead of forwards), which will allow overflow in the incremented state to be handled the same</span>
+<span class="source-line-no">374</span><span id="line.374">     * on GWT as on desktop.</span>
+<span class="source-line-no">375</span><span id="line.375">     * @param state an int that should go up or down by 1 each call, as with {@code SilkRNG.determineDouble(state = state + 1 | 0)} to handle overflow </span>
+<span class="source-line-no">376</span><span id="line.376">     * @return a not-necessarily-unique double from 0.0 to 1.0 that is usually very different from {@code state}</span>
+<span class="source-line-no">377</span><span id="line.377">     */</span>
+<span class="source-line-no">378</span><span id="line.378">    public static double determineDouble(int state)</span>
+<span class="source-line-no">379</span><span id="line.379">    {</span>
+<span class="source-line-no">380</span><span id="line.380">        return ((state = ((state = (state ^ 0xD1B54A35) * 0x102473) ^ state &gt;&gt;&gt; 11 ^ state &gt;&gt;&gt; 21) * (state | 0xFFE00001)) ^ state &gt;&gt;&gt; 13 ^ state &gt;&gt;&gt; 19) * 0x1p-32 + 0.5;</span>
+<span class="source-line-no">381</span><span id="line.381">    }</span>
+<span class="source-line-no">382</span><span id="line.382">}</span>
 
 
 

@@ -308,15 +308,6 @@ public interface IRNG extends RandomnessSource {
      * @return output, after {@code Math.min(output.length, data.length)} unique items have been put into it from data
      */
     <T> T[] randomPortion(T[] data, T[] output);
-    /**
-     * Creates a copy of this IRNG; it will generate the same random numbers, given the same calls in order, as this
-     * IRNG at the point copy() is called. The copy will not share references with this IRNG. If this IRNG does not
-     * permit copying itself, it is suggested to either throw an {@link UnsupportedOperationException} or return a new
-     * IRNG of the same type but with a random seed, with the latter meant as a partial defense against cheating.
-     *
-     * @return a copy of this IRNG
-     */
-    IRNG copy();
 
     /**
      * Gets a view of this IRNG in a way that implements {@link Serializable}, which may simply be this IRNG if it
