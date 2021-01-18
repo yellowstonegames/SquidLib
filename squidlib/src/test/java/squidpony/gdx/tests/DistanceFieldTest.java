@@ -53,12 +53,12 @@ public class DistanceFieldTest extends ApplicationAdapter {
     public void create() {
         batch = new FilterBatch();
         factories = new TextCellFactory[]{
-                DefaultResources.getCrispLeanFont().width(32).height(64).initBySize(),//.setSmoothingMultiplier(1f),
-                DefaultResources.getStretchableLeanFont().width(32).height(64).initBySize(),
+                DefaultResources.getCrispLeanFamily().width(32).height(64).initBySize(),//.setSmoothingMultiplier(1f),
+                DefaultResources.getLeanFamily().width(32).height(64).initBySize(),
         };
         factory = factories[0];
-        //factories[0].font().setUseIntegerPositions(true);
-        //factories[1].font().setUseIntegerPositions(true);
+        factories[0].font().setUseIntegerPositions(false);
+        factories[1].font().setUseIntegerPositions(false);
         worldWidth = factory.width() * width;
         worldHeight = factory.height() * height;
         viewport = new StretchViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -155,9 +155,9 @@ public class DistanceFieldTest extends ApplicationAdapter {
         config.setTitle("SquidLib Demo: Fonts, preview 1/2 (press any key)");
 //        config.width = totalWidth = Lwjgl3ApplicationConfiguration.getDesktopDisplayMode().width - 10;
 //        config.height = totalHeight = Lwjgl3ApplicationConfiguration.getDesktopDisplayMode().height - 128;
-        config.useVsync(false);
+        config.useVsync(true);
         config.setWindowedMode(totalWidth = 1100, totalHeight = 550);
-        config.setWindowPosition(0, 0);
+        config.setWindowPosition(40, 40);
         config.setWindowIcon(Files.FileType.Internal, "Tentacle-128.png", "Tentacle-64.png", "Tentacle-32.png", "Tentacle-16.png");
         new Lwjgl3Application(new DistanceFieldTest(), config);
     }

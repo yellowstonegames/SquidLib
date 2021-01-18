@@ -7,6 +7,9 @@ modifyPom {
     }
 }
 
+sourceSets.test.resources.srcDirs += [ file('src/test/resources').path ]
+sourceSets.test.resources.srcDirs += [ file('../assets').path ]
+
 dependencies {
     api project(':squidlib-util')
     api "com.badlogicgames.gdx:gdx:$gdxVersion"
