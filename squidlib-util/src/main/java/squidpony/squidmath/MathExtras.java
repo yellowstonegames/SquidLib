@@ -368,6 +368,36 @@ public final class MathExtras
     }
 
     /**
+     * An approximation of the cube-root function for float inputs and outputs.
+     * This can be about twice as fast as {@link Math#cbrt(double)}. It
+     * correctly returns negative results when given negative inputs.
+     * <br>
+     * Has very low relative error (less than 1E-9) when inputs are uniformly
+     * distributed between -512 and 512, and absolute mean error of less than
+     * 1E-6 in the same scenario. Uses a bit-twiddling method similar to one
+     * presented in Hacker's Delight and also used in early 3D graphics (see
+     * https://en.wikipedia.org/wiki/Fast_inverse_square_root for more, but
+     * this code approximates cbrt(x) and not 1/sqrt(x)). This specific code
+     * was originally by Marc B. Reynolds, posted in his "Stand-alone-junk"
+     * repo: https://github.com/Marc-B-Reynolds/Stand-alone-junk/blob/master/src/Posts/ballcube.c#L182-L197 .
+     * @param x any finite float to find the cube root of
+     * @return the cube root of x, approximated
+     */
+    public static float cbrt(float x) {
+        int ix = NumberTools.floatToRawIntBits(x);
+        final int sign = ix & 0x80000000;
+        ix &= 0x7FFFFFFF;
+        final float x0 = x;
+        ix = (ix>>>2) + (ix>>>4);
+        ix += (ix>>>4);
+        ix = ix + (ix>>>8) + 0x2A5137A0 | sign;
+        x  = NumberTools.intBitsToFloat(ix);
+        x  = 0.33333334f*(2f * x + x0/(x*x));
+        x  = 0.33333334f*(2f * x + x0/(x*x));
+        return x;
+    }
+
+    /**
      * A generalization on bias and gain functions that can represent both; this version is branch-less.
      * This is based on <a href="https://arxiv.org/abs/2010.09714">this micro-paper</a> by Jon Barron, which
      * generalizes the earlier bias and gain rational functions by Schlick. The second and final page of the
