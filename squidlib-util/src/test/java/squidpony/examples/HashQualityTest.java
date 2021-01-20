@@ -1753,4 +1753,23 @@ public class HashQualityTest {
 //            System.out.println("TOTAL Lath_"+(i+1)+" collisions: " + confTotals[i] + " (" + (confTotals[i] * 100.0 / total) + "%)");
 //        }
     }
+
+    @Test
+    @Ignore
+    public void testSimpleHashCodes()
+    {
+        int hamCollisions = 0, fibCollisions = 0, mask = 0x7FFFFF;
+        IntSet ham = new IntSet(mask, 0.75f), fib = new IntSet(mask, 0.75f);
+        for (int x = -1000; x <= 1000; x++) {
+            for (int y = -1000; y <= 1000; y++) {
+                int basic = x << 16 ^ y;
+                int h = (basic ^ basic >>> 16) & mask;
+                int f = (int) (basic * 0x9E3779B97F4A7C15L >>> 41);
+                if(!ham.add(h)) hamCollisions++;
+                if(!fib.add(f)) fibCollisions++;
+            }
+        }
+        System.out.println("HashMap Collisons:   " + hamCollisions);
+        System.out.println("Fibonacci Collisons: " + fibCollisions);
+    }
 }
