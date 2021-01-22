@@ -892,9 +892,11 @@ public class HashQualityTest {
     
     public static int rosenbergStrong3D(int x, int y, int z)
     {
-        //x = (x << 1 ^ x >> 31);// * 29;
-        //y = (y << 1 ^ y >> 31);// * 463;
-        //z = (z << 1 ^ z >> 31);// * 5867;
+//        return (x =  (int) (0xD1B54A32D192ED03L * (x << 1 ^ x >> 31) + 0xABC98388FB8FAC03L * (y << 1 ^ y >> 31) + 0x8CB92BA72F3D8DD7L * (z << 1 ^ z >> 31) >>> 32)) ^ x >>> 15;
+//        x = (x << 1 ^ x >> 31);// * 29;
+//        y = (y << 1 ^ y >> 31);// * 463;
+//        z = (z << 1 ^ z >> 31);// * 5867;
+//
         x = (x | (x << 16)) & 0x030000FF;
         x = (x | (x <<  8)) & 0x0300F00F;
         x = (x | (x <<  4)) & 0x030C30C3;
@@ -907,7 +909,8 @@ public class HashQualityTest {
         z = (z | (z <<  8)) & 0x0300F00F;
         z = (z | (z <<  4)) & 0x030C30C3;
         z = (z | (z <<  2)) & 0x09249249;
-        return (x | y << 1 | z << 2);
+        return (x |= y << 1 | z << 2) ^ x >>> 16;
+
 //        int n = (x >= y ? x * (x + 2) - y : y * y + x);
 //        return (n >= z ? n * (n + 2) - z : z * z + n);
 
