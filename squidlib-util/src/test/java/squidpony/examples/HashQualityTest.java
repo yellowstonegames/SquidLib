@@ -888,15 +888,15 @@ public class HashQualityTest {
 //        y = y << 1 ^ y >> 31;
 //        x += ((x >= y ? x * x + x + x - y : y * y + x) ^ 0xD1B54A35) * 0x9E375 + y;
 //        return x ^ x >>> 11 ^ x << 15;
-    
-    
-    public static int rosenbergStrong3D(int x, int y, int z)
-    {
+
 //        return (x =  (int) (0xD1B54A32D192ED03L * (x << 1 ^ x >> 31) + 0xABC98388FB8FAC03L * (y << 1 ^ y >> 31) + 0x8CB92BA72F3D8DD7L * (z << 1 ^ z >> 31) >>> 32)) ^ x >>> 15;
 //        x = (x << 1 ^ x >> 31);// * 29;
 //        y = (y << 1 ^ y >> 31);// * 463;
 //        z = (z << 1 ^ z >> 31);// * 5867;
 //
+
+    public static int interleaveXorShiftHash(int x, int y, int z)
+    {
         x = (x | (x << 16)) & 0x030000FF;
         x = (x | (x <<  8)) & 0x0300F00F;
         x = (x | (x <<  4)) & 0x030C30C3;
@@ -922,6 +922,18 @@ public class HashQualityTest {
         // the commented out one below is better, but doesn't work on GWT
 //        return 0x8CB92BA7 * (0xABC98389 * (0xD1B54A33 * x + y) + z);
     }
+    public static int wranglerHash3D(int x, int y, int z) {
+//        x = (int)(((x * 0xD1B54A32D192ED03L >>> 32) & 0x49249249) | ((y * 0xABC98388FB8FAC03L >>> 32) & 0x92492492) | ((z * 0x8CB92BA72F3D8DD7L >>> 32) & 0x24924924));
+        y ^= ((x << 1 ^ x >> 31 ^ z) * 29  );
+        z ^= ((y << 1 ^ y >> 31 ^ x) * 463 );
+        x ^= ((z << 1 ^ z >> 31 ^ y) * 5867);
+
+        //y ^= (int)((x ^ (x << 11 | x >>> 21) ^ (x << 19 | x >>> 13)) * 0xD1B54A32D192ED03L);
+        //z ^= (int)((y ^ (y << 11 | y >>> 21) ^ (y << 19 | y >>> 13)) * 0xABC98388FB8FAC03L);
+        //x ^= (int)((z ^ (z << 11 | z >>> 21) ^ (z << 19 | z >>> 13)) * 0x8CB92BA72F3D8DD7L);
+        return x;
+    }
+
     public static int szudzik2Coord(int x, int y)
     {
 //        s = 42 ^ s * 0x1827F5 ^ y * 0x123C21;
@@ -1316,9 +1328,10 @@ public class HashQualityTest {
                                     colliderPelo.add(peloton3D(x, y, z) & restrict);
 //                                    colliderPelo.add((29 * (x << 1 ^ x >> 31) + 1721 * (y << 1 ^ y >> 31) + 95713 * (z << 1 ^ z >> 31)) & restrict);
 //                                    colliderPelo.add((0xD1B54A33 * x + 0xABC98383 * y + 0x8CB92BA7 * z) & restrict);
-                                    colliderSzud.add(szudzikCoord(z, szudzikCoord(x, y)) & restrict);
+                                    colliderSzud.add(wranglerHash3D(x, y, z) & restrict);
+//                                    colliderSzud.add(szudzikCoord(z, szudzikCoord(x, y)) & restrict);
                                     colliderCant.add(cantorCoord(z, cantorCoord(x, y)) & restrict);
-                                    colliderHast.add(rosenbergStrong3D(x, y, z) & restrict);
+                                    colliderHast.add(interleaveXorShiftHash(x, y, z) & restrict);
 //                                    colliderHast.add(rosenbergStrongCoord(z, rosenbergStrongCoord(x, y)) & restrict);
 //                                    colliderHast.add((int) Noise.HastyPointHash.hashAll(x, y, z, 0x9E3779B9L) & restrict);
                                     colliderObje.add(Objects.hash(x, y, z) & restrict);
@@ -1370,19 +1383,19 @@ public class HashQualityTest {
             }
             System.out.println("INTERMEDIATE number of Coords added: " + total + " on reduction " + reduction);
             System.out.println("INTERMEDIATE Base collisions: " + baseTotal + " (" + (baseTotal * 100.0 / total) + "%), BEST " + baseBest + ", WORST " + baseWorst);
-            System.out.println("INTERMEDIATE Szud collisions: " + szudTotal + " (" + (szudTotal * 100.0 / total) + "%), BEST " + szudBest + ", WORST " + szudWorst);
+            System.out.println("INTERMEDIATE Wran collisions: " + szudTotal + " (" + (szudTotal * 100.0 / total) + "%), BEST " + szudBest + ", WORST " + szudWorst);
             System.out.println("INTERMEDIATE Pelo collisions: " + peloTotal + " (" + (peloTotal * 100.0 / total) + "%), BEST " + peloBest + ", WORST " + peloWorst);
             System.out.println("INTERMEDIATE Cant collisions: " + cantTotal + " (" + (cantTotal * 100.0 / total) + "%), BEST " + cantBest + ", WORST " + cantWorst);
-            System.out.println("INTERMEDIATE RoSt collisions: " + hastTotal + " (" + (hastTotal * 100.0 / total) + "%), BEST " + hastBest + ", WORST " + hastWorst);
+            System.out.println("INTERMEDIATE InXS collisions: " + hastTotal + " (" + (hastTotal * 100.0 / total) + "%), BEST " + hastBest + ", WORST " + hastWorst);
             System.out.println("INTERMEDIATE Obje collisions: " + objeTotal + " (" + (objeTotal * 100.0 / total) + "%), BEST " + objeBest + ", WORST " + objeWorst);
 
         }
         System.out.println("Number of Coords added: " + total);
         System.out.println("TOTAL Base collisions: " + baseTotal + " (" + (baseTotal * 100.0 / total) + "%), BEST " + baseBest + ", WORST " + baseWorst);
-        System.out.println("TOTAL Szud collisions: " + szudTotal + " (" + (szudTotal * 100.0 / total) + "%), BEST " + szudBest + ", WORST " + szudWorst);
+        System.out.println("TOTAL Wran collisions: " + szudTotal + " (" + (szudTotal * 100.0 / total) + "%), BEST " + szudBest + ", WORST " + szudWorst);
         System.out.println("TOTAL Pelo collisions: " + peloTotal + " (" + (peloTotal * 100.0 / total) + "%), BEST " + peloBest + ", WORST " + peloWorst);
         System.out.println("TOTAL Cant collisions: " + cantTotal + " (" + (cantTotal * 100.0 / total) + "%), BEST " + cantBest + ", WORST " + cantWorst);
-        System.out.println("TOTAL RoSt collisions: " + hastTotal + " (" + (hastTotal * 100.0 / total) + "%), BEST " + hastBest + ", WORST " + hastWorst);
+        System.out.println("TOTAL InXS collisions: " + hastTotal + " (" + (hastTotal * 100.0 / total) + "%), BEST " + hastBest + ", WORST " + hastWorst);
         System.out.println("TOTAL Obje collisions: " + objeTotal + " (" + (objeTotal * 100.0 / total) + "%), BEST " + objeBest + ", WORST " + objeWorst);
 //        for (int i = 0; i < 31; i++) {
 //            System.out.println("TOTAL Lath_"+(i+1)+" collisions: " + confTotals[i] + " (" + (confTotals[i] * 100.0 / total) + "%)");
