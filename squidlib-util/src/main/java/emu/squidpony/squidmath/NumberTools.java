@@ -126,6 +126,21 @@ public class NumberTools {
         floor = (-(floor & 1) | 1);
         return value * value * value * (value * (value * 6f - 15f) + 10f) * (floor << 1) - floor;
     }
+    public static double swayCubic(double value)
+    {
+        long floor = (value >= 0.0 ? (long) value : (long) value - 1L);
+        value -= floor;
+        floor = (-(floor & 1L) | 1L);
+        return value * value * (3.0 - value * 2.0) * (floor << 1) - floor;
+    }
+
+    public static float swayCubic(float value)
+    {
+        int floor = (value >= 0f ? (int) value : (int) value - 1);
+        value -= floor;
+        floor = (-(floor & 1) | 1);
+        return value * value * (3f - value * 2f) * (floor << 1) - floor;
+    }
 
     public static float swayTight(float value)
     {

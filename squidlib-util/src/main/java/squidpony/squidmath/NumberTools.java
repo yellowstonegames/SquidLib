@@ -228,14 +228,11 @@ public final class NumberTools {
     }
 
     /**
-     * Limited-use; takes any double and produces a double in the -1 to 1 range, with a graph of input to output that
-     * looks much like a sine wave, curving to have a flat slope when given an integer input and a steep slope when the
-     * input is halfway between two integers, smoothly curving at any points between those extremes. This is meant for
-     * noise, where it may be useful to limit the amount of change between nearby points' noise values and prevent both
-     * sudden "jumps" in noise value and "cracks" where a line takes a sudden jagged movement at an angle. It is very
-     * similar to {@link #bounce(double)} and {@link #zigzag(double)}, but unlike bounce() this will maintain its
-     * frequency of returning max or min values, regardless of the magnitude of its input (as long as there is enough
-     * floating-point precision to represent changes smaller than 1.0), and unlike zigzag() this will smooth its path.
+     * Very similar to {@link #sin_(double)} with half frequency, or {@link Math#sin(double)} with {@link Math#PI}
+     * frequency, but optimized (and shaped) a little differently. This looks like a squished sine wave when graphed,
+     * and is essentially just interpolating between each pair of odd and even inputs using what FastNoise calls
+     * {@code QUINTIC} interpolation. This interpolation is slightly flatter at peaks and valleys than a sine wave is.
+     * <br>
      * An input of any even number should produce something very close to -1.0, any odd number should produce something
      * very close to 1.0, and any number halfway between two incremental integers (like 8.5 or -10.5) should produce 0.0
      * or a very small fraction. In the (unlikely) event that this is given a double that is too large to represent
@@ -252,14 +249,11 @@ public final class NumberTools {
     }
 
     /**
-     * Limited-use; takes any float and produces a float in the -1f to 1f range, with a graph of input to output that
-     * looks much like a sine wave, curving to have a flat slope when given an integer input and a steep slope when the
-     * input is halfway between two integers, smoothly curving at any points between those extremes. This is meant for
-     * noise, where it may be useful to limit the amount of change between nearby points' noise values and prevent both
-     * sudden "jumps" in noise value and "cracks" where a line takes a sudden jagged movement at an angle. It is very
-     * similar to {@link #bounce(float)} and {@link #zigzag(float)}, but unlike bounce() this will maintain its
-     * frequency of returning max or min values, regardless of the magnitude of its input (as long as there is enough
-     * floating-point precision to represent changes smaller than 1f), and unlike zigzag() this will smooth its path.
+     * Very similar to {@link #sin_(float)} with half frequency, or {@link Math#sin(double)} with {@link Math#PI}
+     * frequency, but optimized (and shaped) a little differently. This looks like a squished sine wave when graphed,
+     * and is essentially just interpolating between each pair of odd and even inputs using what FastNoise calls
+     * {@code QUINTIC} interpolation. This interpolation is slightly flatter at peaks and valleys than a sine wave is.
+     * <br>
      * An input of any even number should produce something very close to -1f, any odd number should produce something
      * very close to 1f, and any number halfway between two incremental integers (like 8.5f or -10.5f) should produce 0f
      * or a very small fraction. In the (unlikely) event that this is given a float that is too large to represent
@@ -273,6 +267,50 @@ public final class NumberTools {
         value -= floor;
         floor = (-(floor & 1) | 1);
         return value * value * value * (value * (value * 6f - 15f) + 10f) * (floor << 1) - floor;
+    }
+
+    /**
+     * Very similar to {@link #sin_(double)} with half frequency, or {@link Math#sin(double)} with {@link Math#PI}
+     * frequency, but optimized (and shaped) a little differently. This looks like a squished sine wave when graphed,
+     * and is essentially just interpolating between each pair of odd and even inputs using what FastNoise calls
+     * {@code HERMITE} interpolation. This interpolation is rounder at peaks and valleys than a sine wave is; it is
+     * also called {@code smoothstep} in GLSL, and is called Cubic here because it gets the third power of a value.
+     * <br>
+     * An input of any even number should produce something very close to -1.0, any odd number should produce something
+     * very close to 1.0, and any number halfway between two incremental integers (like 8.5 or -10.5) should produce 0.0
+     * or a very small fraction. In the (unlikely) event that this is given a double that is too large to represent
+     * many or any non-integer values, this will simply return -1.0 or 1.0.
+     * @param value any double other than NaN or infinite values; extremely large values can't work properly
+     * @return a double from -1.0 (inclusive) to 1.0 (inclusive)
+     */
+    public static double swayCubic(double value)
+    {
+        long floor = (value >= 0.0 ? (long) value : (long) value - 1L);
+        value -= floor;
+        floor = (-(floor & 1L) | 1L);
+        return value * value * (3.0 - value * 2.0) * (floor << 1) - floor;
+    }
+
+    /**
+     * Very similar to {@link #sin_(float)} with half frequency, or {@link Math#sin(double)} with {@link Math#PI}
+     * frequency, but optimized (and shaped) a little differently. This looks like a squished sine wave when graphed,
+     * and is essentially just interpolating between each pair of odd and even inputs using what FastNoise calls
+     * {@code HERMITE} interpolation. This interpolation is rounder at peaks and valleys than a sine wave is; it is
+     * also called {@code smoothstep} in GLSL, and is called Cubic here because it gets the third power of a value.
+     * <br>
+     * An input of any even number should produce something very close to -1f, any odd number should produce something
+     * very close to 1f, and any number halfway between two incremental integers (like 8.5f or -10.5f) should produce 0f
+     * or a very small fraction. In the (unlikely) event that this is given a float that is too large to represent
+     * many or any non-integer values, this will simply return -1f or 1f.
+     * @param value any float other than NaN or infinite values; extremely large values can't work properly
+     * @return a float from -1f (inclusive) to 1f (inclusive)
+     */
+    public static float swayCubic(float value)
+    {
+        int floor = (value >= 0f ? (int) value : (int) value - 1);
+        value -= floor;
+        floor = (-(floor & 1) | 1);
+        return value * value * (3f - value * 2f) * (floor << 1) - floor;
     }
 
     /**
