@@ -924,14 +924,32 @@ public class HashQualityTest {
     }
     public static int wranglerHash3D(int x, int y, int z) {
 //        x = (int)(((x * 0xD1B54A32D192ED03L >>> 32) & 0x49249249) | ((y * 0xABC98388FB8FAC03L >>> 32) & 0x92492492) | ((z * 0x8CB92BA72F3D8DD7L >>> 32) & 0x24924924));
-        y ^= ((x << 1 ^ x >> 31 ^ z) * 29  );
-        z ^= ((y << 1 ^ y >> 31 ^ x) * 463 );
-        x ^= ((z << 1 ^ z >> 31 ^ y) * 5867);
-
+        //y ^= ((x << 1 ^ x >> 31) * 29  );
+        //z ^= ((y << 1 ^ y >> 31) * 463 );
+        //x ^= ((z << 1 ^ z >> 31) * 5867);
+        ////0x9E3779B97F4A7C15L
         //y ^= (int)((x ^ (x << 11 | x >>> 21) ^ (x << 19 | x >>> 13)) * 0xD1B54A32D192ED03L);
         //z ^= (int)((y ^ (y << 11 | y >>> 21) ^ (y << 19 | y >>> 13)) * 0xABC98388FB8FAC03L);
         //x ^= (int)((z ^ (z << 11 | z >>> 21) ^ (z << 19 | z >>> 13)) * 0x8CB92BA72F3D8DD7L);
-        return x;
+        //y = (x << 1 ^ x >> 31);
+        //z = (y << 1 ^ y >> 31);
+        //x = (z << 1 ^ z >> 31);
+        //long a = (x * 0x9E3L) ^ (y * (0x779L << 22)) ^ (z * (0xB97L << 43));
+        //return (int)DiverRNG.randomize(x * 0xD1B54A32D192ED03L + DiverRNG.randomize(y * 0xABC98388FB8FAC03L + DiverRNG.randomize(z * 0x8CB92BA72F3D8DD7L)));
+        //return (x = (x * 0xD1B55 & 0x49249249) ^ (y * 0xABC99 & 0x92492492) ^ (z * 0x8CB93 & 0x24924924)) ^ x >>> 16;
+        x = (x + (x << 16)) & 0x030000FF;
+        x = (x + (x <<  8)) & 0x0300F00F;
+        x = (x + (x <<  4)) & 0x030C30C3;
+        x = (x + (x <<  2)) & 0x09249249;
+        y = (y + (y << 16)) & 0x030000FF;
+        y = (y + (y <<  8)) & 0x0300F00F;
+        y = (y + (y <<  4)) & 0x030C30C3;
+        y = (y + (y <<  2)) & 0x09249249;
+        z = (z + (z << 16)) & 0x030000FF;
+        z = (z + (z <<  8)) & 0x0300F00F;
+        z = (z + (z <<  4)) & 0x030C30C3;
+        z = (z + (z <<  2)) & 0x09249249;
+        return (x |= y << 1 | z << 2) ^ x >>> 16;
     }
 
     public static int szudzik2Coord(int x, int y)
@@ -977,6 +995,14 @@ public class HashQualityTest {
 //        return y ^ y >>> 1;
 
 //        return (((x+y) * (x+y+1) >> 1) + y);// * 0xA5CB3;
+    }
+
+    public static int cantor3D(int x, int y, int z){
+        x = x << 1 ^ x >> 31;
+        y = y << 1 ^ y >> 31;
+        z = z << 1 ^ z >> 31;
+        y += ((x+y) * (x+y+1) >> 1);
+        return z + ((z+y) * (z+y+1) >> 1);
     }
 
     public static int goldCoord(int x, int y)
@@ -1328,7 +1354,7 @@ public class HashQualityTest {
                                     colliderPelo.add(peloton3D(x, y, z) & restrict);
 //                                    colliderPelo.add((29 * (x << 1 ^ x >> 31) + 1721 * (y << 1 ^ y >> 31) + 95713 * (z << 1 ^ z >> 31)) & restrict);
 //                                    colliderPelo.add((0xD1B54A33 * x + 0xABC98383 * y + 0x8CB92BA7 * z) & restrict);
-                                    colliderSzud.add(wranglerHash3D(x, y, z) & restrict);
+                                    colliderSzud.add(cantor3D(x, y, z) & restrict);
 //                                    colliderSzud.add(szudzikCoord(z, szudzikCoord(x, y)) & restrict);
                                     colliderCant.add(cantorCoord(z, cantorCoord(x, y)) & restrict);
                                     colliderHast.add(interleaveXorShiftHash(x, y, z) & restrict);

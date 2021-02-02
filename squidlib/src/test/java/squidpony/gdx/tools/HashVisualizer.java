@@ -68,7 +68,7 @@ public class HashVisualizer extends ApplicationAdapter {
     // 5 RNG results
     private int testType = 4;
     private static final int NOISE_LIMIT = 148;
-    private int hashMode, rngMode, noiseMode = 105, otherMode = 17;//142
+    private int hashMode, rngMode, noiseMode = 103, otherMode = 17;//142
 
     /**
      * If you're editing the source of HashVisualizer, you can comment out one line and uncomment another to change
@@ -4643,10 +4643,11 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int i = 0; i < width - 1; i++)
                             System.arraycopy(back[i+1], 0, back[i], 0, width);
                         Arrays.fill(back[almost], FLOAT_WHITE);
-                        if((ctr & 3) == 0)
+                        //if((ctr & 3) == 0)
                         {
                             bright = SColor.floatGetHSV(ctr * 0x1.44cbc89p-8f, 1, 1,1);
-                            iBright = (int)(basic1D.getNoise(ctr * 0.015625) * 0x.fp0 * half);
+                            iBright = (int)(NumberTools.swayCubic(ctr * 0x1p-9f) * 0x.fp0 * half);
+//                            iBright = (int)(basic1D.getNoise(ctr * 0.015625) * 0x.fp0 * half);
                             back[width - 1][half - 1 + iBright] =  bright;
                             back[width - 1][half + 0 + iBright] =  bright;
                             back[width - 1][half + 1 + iBright] =  bright;
@@ -4665,9 +4666,10 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int i = 0; i < width - 1; i++)
                             System.arraycopy(back[i+1], 0, back[i], 0, width);
                         Arrays.fill(back[width - 1], FLOAT_WHITE);
-                        if((ctr & 3) == 0)
+                        //if((ctr & 3) == 0)
                         {
-                            iBright = (int)(layered1D.getNoise(ctr * 0.015625) * 0x.fp0 * half);
+                            iBright = (int)(NumberTools.sin_(ctr * 0x1p-10f) * 0x.fp0 * half);
+//                            iBright = (int)(layered1D.getNoise(ctr * 0.015625) * 0x.fp0 * half);
                             bright = SColor.floatGetHSV(ctr * 0x1.44cbc89p-8f, 1, 1,1);
                             back[width - 1][half - 1 + iBright] =  bright;
                             back[width - 1][half + 0 + iBright] =  bright;
