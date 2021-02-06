@@ -158,7 +158,12 @@ extends java.lang.Enum&lt;<a href="Messaging.NounTrait.html" title="enum in squi
 <tr class="row-color">
 <th class="col-first" scope="row"><code><span class="member-name-link"><a href="#FEMALE_GENDER">FEMALE_GENDER</a></span></code></th>
 <td class="col-last">
-<div class="block">Female pronoun preference, as in "She is her own boss."</div>
+<div class="block">Female pronoun preference, as in "She is her own boss."
+ <br>
+ name/name_s/i/me/my/mine/myself
+ <br>
+ Name/Name's/she/she/her/hers/herself
+ "$i hurr$$$" becomes "she hurries".</div>
 </td>
 </tr>
 <tr class="alt-color">
@@ -183,13 +188,23 @@ extends java.lang.Enum&lt;<a href="Messaging.NounTrait.html" title="enum in squi
 <tr class="row-color">
 <th class="col-first" scope="row"><code><span class="member-name-link"><a href="#MALE_GENDER">MALE_GENDER</a></span></code></th>
 <td class="col-last">
-<div class="block">Male pronoun preference, as in "He is his own boss."</div>
+<div class="block">Male pronoun preference, as in "He is his own boss."
+ <br>
+ name/name_s/i/me/my/mine/myself
+ <br>
+ Name/Name's/he/he/his/his/himself
+ "$i hurr$$$" becomes "he hurries".</div>
 </td>
 </tr>
 <tr class="alt-color">
 <th class="col-first" scope="row"><code><span class="member-name-link"><a href="#NO_GENDER">NO_GENDER</a></span></code></th>
 <td class="col-last">
-<div class="block">Inanimate objects or beings without gender, as in "It is its own boss."</div>
+<div class="block">Inanimate objects or beings without gender, as in "It is its own boss."
+ <br>
+ name/name_s/i/me/my/mine/myself
+ <br>
+ Name/Name's/it/it/its/its/itself
+ "$i hurr$$$" becomes "it hurries".</div>
 </td>
 </tr>
 <tr class="row-color">
@@ -213,7 +228,12 @@ extends java.lang.Enum&lt;<a href="Messaging.NounTrait.html" title="enum in squi
 <tr class="alt-color">
 <th class="col-first" scope="row"><code><span class="member-name-link"><a href="#UNSPECIFIED_GENDER">UNSPECIFIED_GENDER</a></span></code></th>
 <td class="col-last">
-<div class="block">"Singular they" pronoun preference or to be used when preference is unknown, as in "They are their own boss."</div>
+<div class="block">"Singular they" pronoun preference or to be used when preference is unknown, as in "They are their own boss."
+ <br>
+ name/name_s/i/me/my/mine/myself
+ <br>
+ Name/Name's/they/them/their/theirs/themself
+ "$i hurr$$$" becomes "they hurry".</div>
 </td>
 </tr>
 </tbody>
@@ -356,81 +376,147 @@ the order they are declared.</div>
 <li>
 <section class="detail" id="FIRST_PERSON_SINGULAR">
 <h3>FIRST_PERSON_SINGULAR</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="Messaging.NounTrait.html" title="enum in squidpony">Messaging.NounTrait</a></span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Messaging.NounTrait.html#line.104">FIRST_PERSON_SINGULAR</a></span></div>
-<div class="block">As in, "I am my own boss." Doesn't reference gender.</div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="Messaging.NounTrait.html" title="enum in squidpony">Messaging.NounTrait</a></span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Messaging.NounTrait.html#line.110">FIRST_PERSON_SINGULAR</a></span></div>
+<div class="block">As in, "I am my own boss." Doesn't reference gender.
+ <br>
+ name/name_s/i/me/my/mine/myself
+ <br>
+ I/my/I/me/my/mine/myself
+ "$i hurr$$$" becomes "I hurry".
+ Does not pluralize.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="SECOND_PERSON_SINGULAR">
 <h3>SECOND_PERSON_SINGULAR</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="Messaging.NounTrait.html" title="enum in squidpony">Messaging.NounTrait</a></span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Messaging.NounTrait.html#line.108">SECOND_PERSON_SINGULAR</a></span></div>
-<div class="block">As in, "You are your own boss." Doesn't reference gender.</div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="Messaging.NounTrait.html" title="enum in squidpony">Messaging.NounTrait</a></span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Messaging.NounTrait.html#line.120">SECOND_PERSON_SINGULAR</a></span></div>
+<div class="block">As in, "You are your own boss." Doesn't reference gender.
+ <br>
+ name/name_s/i/me/my/mine/myself
+ <br>
+ you/your/you/you/your/yours/yourself
+ "$i hurr$$$" becomes "you hurry".
+ Does not pluralize.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="FIRST_PERSON_PLURAL">
 <h3>FIRST_PERSON_PLURAL</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="Messaging.NounTrait.html" title="enum in squidpony">Messaging.NounTrait</a></span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Messaging.NounTrait.html#line.112">FIRST_PERSON_PLURAL</a></span></div>
-<div class="block">As in, "We are our own bosses." Doesn't reference gender, and applies to groups.</div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="Messaging.NounTrait.html" title="enum in squidpony">Messaging.NounTrait</a></span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Messaging.NounTrait.html#line.130">FIRST_PERSON_PLURAL</a></span></div>
+<div class="block">As in, "We are our own bosses." Doesn't reference gender, and applies to groups.
+ <br>
+ name/name_s/i/me/my/mine/myself
+ <br>
+ we/our/we/us/our/ours/ourselves
+ "$i hurr$$$" becomes "we hurry".
+ Pluralizes.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="SECOND_PERSON_PLURAL">
 <h3>SECOND_PERSON_PLURAL</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="Messaging.NounTrait.html" title="enum in squidpony">Messaging.NounTrait</a></span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Messaging.NounTrait.html#line.116">SECOND_PERSON_PLURAL</a></span></div>
-<div class="block">As in, "You are your own bosses." Doesn't reference gender, and applies to groups.</div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="Messaging.NounTrait.html" title="enum in squidpony">Messaging.NounTrait</a></span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Messaging.NounTrait.html#line.140">SECOND_PERSON_PLURAL</a></span></div>
+<div class="block">As in, "You are your own bosses." Doesn't reference gender, and applies to groups.
+ <br>
+ name/name_s/i/me/my/mine/myself
+ <br>
+ you/your/you/you/your/yours/yourselves
+ "$i hurr$$$" becomes "you hurry".
+ Pluralizes.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="NO_GENDER">
 <h3>NO_GENDER</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="Messaging.NounTrait.html" title="enum in squidpony">Messaging.NounTrait</a></span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Messaging.NounTrait.html#line.120">NO_GENDER</a></span></div>
-<div class="block">Inanimate objects or beings without gender, as in "It is its own boss."</div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="Messaging.NounTrait.html" title="enum in squidpony">Messaging.NounTrait</a></span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Messaging.NounTrait.html#line.150">NO_GENDER</a></span></div>
+<div class="block">Inanimate objects or beings without gender, as in "It is its own boss."
+ <br>
+ name/name_s/i/me/my/mine/myself
+ <br>
+ Name/Name's/it/it/its/its/itself
+ "$i hurr$$$" becomes "it hurries".
+ Does not pluralize.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="MALE_GENDER">
 <h3>MALE_GENDER</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="Messaging.NounTrait.html" title="enum in squidpony">Messaging.NounTrait</a></span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Messaging.NounTrait.html#line.124">MALE_GENDER</a></span></div>
-<div class="block">Male pronoun preference, as in "He is his own boss."</div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="Messaging.NounTrait.html" title="enum in squidpony">Messaging.NounTrait</a></span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Messaging.NounTrait.html#line.160">MALE_GENDER</a></span></div>
+<div class="block">Male pronoun preference, as in "He is his own boss."
+ <br>
+ name/name_s/i/me/my/mine/myself
+ <br>
+ Name/Name's/he/he/his/his/himself
+ "$i hurr$$$" becomes "he hurries".
+ Does not pluralize.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="FEMALE_GENDER">
 <h3>FEMALE_GENDER</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="Messaging.NounTrait.html" title="enum in squidpony">Messaging.NounTrait</a></span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Messaging.NounTrait.html#line.128">FEMALE_GENDER</a></span></div>
-<div class="block">Female pronoun preference, as in "She is her own boss."</div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="Messaging.NounTrait.html" title="enum in squidpony">Messaging.NounTrait</a></span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Messaging.NounTrait.html#line.170">FEMALE_GENDER</a></span></div>
+<div class="block">Female pronoun preference, as in "She is her own boss."
+ <br>
+ name/name_s/i/me/my/mine/myself
+ <br>
+ Name/Name's/she/she/her/hers/herself
+ "$i hurr$$$" becomes "she hurries".
+ Does not pluralize.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="UNSPECIFIED_GENDER">
 <h3>UNSPECIFIED_GENDER</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="Messaging.NounTrait.html" title="enum in squidpony">Messaging.NounTrait</a></span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Messaging.NounTrait.html#line.132">UNSPECIFIED_GENDER</a></span></div>
-<div class="block">"Singular they" pronoun preference or to be used when preference is unknown, as in "They are their own boss."</div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="Messaging.NounTrait.html" title="enum in squidpony">Messaging.NounTrait</a></span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Messaging.NounTrait.html#line.180">UNSPECIFIED_GENDER</a></span></div>
+<div class="block">"Singular they" pronoun preference or to be used when preference is unknown, as in "They are their own boss."
+ <br>
+ name/name_s/i/me/my/mine/myself
+ <br>
+ Name/Name's/they/them/their/theirs/themself
+ "$i hurr$$$" becomes "they hurry".
+ Does not pluralize.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="ADDITIONAL_GENDER">
 <h3>ADDITIONAL_GENDER</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="Messaging.NounTrait.html" title="enum in squidpony">Messaging.NounTrait</a></span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Messaging.NounTrait.html#line.137">ADDITIONAL_GENDER</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="Messaging.NounTrait.html" title="enum in squidpony">Messaging.NounTrait</a></span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Messaging.NounTrait.html#line.191">ADDITIONAL_GENDER</a></span></div>
 <div class="block">Third-gender pronoun preference, potentially relevant for cultures with non-binary gender terms. As in, "Xe
- is xis own boss."</div>
+ is xis own boss."
+ <br>
+ name/name_s/i/me/my/mine/myself
+ <br>
+ Name/Name's/xe/xim/xis/xis/ximself
+ "$i hurr$$$" becomes "xe hurries".
+ Does not pluralize.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="SPECIAL_CASE_GENDER">
 <h3>SPECIAL_CASE_GENDER</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="Messaging.NounTrait.html" title="enum in squidpony">Messaging.NounTrait</a></span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Messaging.NounTrait.html#line.142">SPECIAL_CASE_GENDER</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="Messaging.NounTrait.html" title="enum in squidpony">Messaging.NounTrait</a></span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Messaging.NounTrait.html#line.202">SPECIAL_CASE_GENDER</a></span></div>
 <div class="block">Unpronounceable words that can be processed specially for more complex cases of pronoun preference. As in,
- "Qvqe is qvqis own boss."</div>
+ "Qvqe is qvqis own boss."
+ <br>
+ name/name_s/i/me/my/mine/myself
+ <br>
+ Name/Name's/qvqe/qvqim/qvqis/qvqims/qvqimself
+ "$i hurr$$$" becomes "qvqe hurries".
+ Does not pluralize.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="GROUP">
 <h3>GROUP</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="Messaging.NounTrait.html" title="enum in squidpony">Messaging.NounTrait</a></span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Messaging.NounTrait.html#line.147">GROUP</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="Messaging.NounTrait.html" title="enum in squidpony">Messaging.NounTrait</a></span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Messaging.NounTrait.html#line.213">GROUP</a></span></div>
 <div class="block">Any third-person plural, as in "They are their own bosses." Not to be confused with UNSPECIFIED_GENDER, which
- is for singular beings, but usually uses "they" in the same way (not always).</div>
+ is for singular beings, but usually uses "they" in the same way (not always).
+ <br>
+ name/name_s/i/me/my/mine/myself
+ <br>
+ Name/Name's/they/them/their/theirs/themselves
+ "$i hurr$$$" becomes "they hurry".
+ Pluralizes.</div>
 </section>
 </li>
 </ul>
@@ -475,97 +561,97 @@ not permitted.)</div>
 <li>
 <section class="detail" id="nameText(java.lang.String)">
 <h3>nameText</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">java.lang.String</span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Messaging.NounTrait.html#line.149">nameText</a></span>&#8203;(<span class="parameters">java.lang.String&nbsp;term)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">java.lang.String</span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Messaging.NounTrait.html#line.215">nameText</a></span>&#8203;(<span class="parameters">java.lang.String&nbsp;term)</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="name_sText(java.lang.String)">
 <h3>name_sText</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">java.lang.String</span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Messaging.NounTrait.html#line.162">name_sText</a></span>&#8203;(<span class="parameters">java.lang.String&nbsp;term)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">java.lang.String</span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Messaging.NounTrait.html#line.228">name_sText</a></span>&#8203;(<span class="parameters">java.lang.String&nbsp;term)</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="iText()">
 <h3>iText</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">java.lang.String</span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Messaging.NounTrait.html#line.178">iText</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">java.lang.String</span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Messaging.NounTrait.html#line.244">iText</a></span>()</div>
 </section>
 </li>
 <li>
 <section class="detail" id="meText()">
 <h3>meText</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">java.lang.String</span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Messaging.NounTrait.html#line.202">meText</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">java.lang.String</span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Messaging.NounTrait.html#line.268">meText</a></span>()</div>
 </section>
 </li>
 <li>
 <section class="detail" id="myText()">
 <h3>myText</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">java.lang.String</span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Messaging.NounTrait.html#line.227">myText</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">java.lang.String</span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Messaging.NounTrait.html#line.293">myText</a></span>()</div>
 </section>
 </li>
 <li>
 <section class="detail" id="mineText()">
 <h3>mineText</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">java.lang.String</span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Messaging.NounTrait.html#line.251">mineText</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">java.lang.String</span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Messaging.NounTrait.html#line.317">mineText</a></span>()</div>
 </section>
 </li>
 <li>
 <section class="detail" id="myselfText()">
 <h3>myselfText</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">java.lang.String</span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Messaging.NounTrait.html#line.276">myselfText</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">java.lang.String</span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Messaging.NounTrait.html#line.342">myselfText</a></span>()</div>
 </section>
 </li>
 <li>
 <section class="detail" id="sText()">
 <h3>sText</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">java.lang.String</span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Messaging.NounTrait.html#line.303">sText</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">java.lang.String</span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Messaging.NounTrait.html#line.369">sText</a></span>()</div>
 </section>
 </li>
 <li>
 <section class="detail" id="ssText()">
 <h3>ssText</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">java.lang.String</span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Messaging.NounTrait.html#line.313">ssText</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">java.lang.String</span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Messaging.NounTrait.html#line.379">ssText</a></span>()</div>
 </section>
 </li>
 <li>
 <section class="detail" id="sssText()">
 <h3>sssText</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">java.lang.String</span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Messaging.NounTrait.html#line.323">sssText</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">java.lang.String</span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Messaging.NounTrait.html#line.389">sssText</a></span>()</div>
 </section>
 </li>
 <li>
 <section class="detail" id="usiText()">
 <h3>usiText</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">java.lang.String</span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Messaging.NounTrait.html#line.333">usiText</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">java.lang.String</span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Messaging.NounTrait.html#line.399">usiText</a></span>()</div>
 </section>
 </li>
 <li>
 <section class="detail" id="fvesText()">
 <h3>fvesText</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">java.lang.String</span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Messaging.NounTrait.html#line.343">fvesText</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">java.lang.String</span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Messaging.NounTrait.html#line.409">fvesText</a></span>()</div>
 </section>
 </li>
 <li>
 <section class="detail" id="$Text()">
 <h3>$Text</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">java.lang.String</span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Messaging.NounTrait.html#line.354">$Text</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">java.lang.String</span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Messaging.NounTrait.html#line.420">$Text</a></span>()</div>
 </section>
 </li>
 <li>
 <section class="detail" id="$$Text()">
 <h3>$$Text</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">java.lang.String</span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Messaging.NounTrait.html#line.367">$$Text</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">java.lang.String</span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Messaging.NounTrait.html#line.433">$$Text</a></span>()</div>
 </section>
 </li>
 <li>
 <section class="detail" id="$$$Text()">
 <h3>$$$Text</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">java.lang.String</span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Messaging.NounTrait.html#line.380">$$$Text</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">java.lang.String</span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Messaging.NounTrait.html#line.446">$$$Text</a></span>()</div>
 </section>
 </li>
 <li>
 <section class="detail" id="directText(java.lang.String)">
 <h3>directText</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">java.lang.String</span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Messaging.NounTrait.html#line.394">directText</a></span>&#8203;(<span class="parameters">java.lang.String&nbsp;term)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">java.lang.String</span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Messaging.NounTrait.html#line.460">directText</a></span>&#8203;(<span class="parameters">java.lang.String&nbsp;term)</span></div>
 </section>
 </li>
 </ul>

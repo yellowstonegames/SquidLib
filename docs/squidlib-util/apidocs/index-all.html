@@ -2539,6 +2539,10 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><span class="member-name-link"><a href="squidpony/tileset/CavesTinyCorridors.html#%3Cinit%3E()">CavesTinyCorridors()</a></span> - Constructor for class squidpony.tileset.<a href="squidpony/tileset/CavesTinyCorridors.html" title="class in squidpony.tileset">CavesTinyCorridors</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="member-name-link"><a href="squidpony/squidmath/MathExtras.html#cbrt(float)">cbrt(float)</a></span> - Static method in class squidpony.squidmath.<a href="squidpony/squidmath/MathExtras.html" title="class in squidpony.squidmath">MathExtras</a></dt>
+<dd>
+<div class="block">An approximation of the cube-root function for float inputs and outputs.</div>
+</dd>
 <dt><span class="member-name-link"><a href="squidpony/squidgrid/FOV.html#ccw">ccw</a></span> - Static variable in class squidpony.squidgrid.<a href="squidpony/squidgrid/FOV.html" title="class in squidpony.squidgrid">FOV</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="member-name-link"><a href="squidpony/squidgrid/FOV.html#ccw_full">ccw_full</a></span> - Static variable in class squidpony.squidgrid.<a href="squidpony/squidgrid/FOV.html" title="class in squidpony.squidgrid">FOV</a></dt>
@@ -7015,7 +7019,12 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><span class="member-name-link"><a href="squidpony/Messaging.NounTrait.html#FEMALE_GENDER">FEMALE_GENDER</a></span> - squidpony.<a href="squidpony/Messaging.NounTrait.html" title="enum in squidpony">Messaging.NounTrait</a></dt>
 <dd>
-<div class="block">Female pronoun preference, as in "She is her own boss."</div>
+<div class="block">Female pronoun preference, as in "She is her own boss."
+ <br>
+ name/name_s/i/me/my/mine/myself
+ <br>
+ Name/Name's/she/she/her/hers/herself
+ "$i hurr$$$" becomes "she hurries".</div>
 </dd>
 <dt><span class="member-name-link"><a href="squidpony/squidmath/GreasedRegion.html#fill(boolean)">fill(boolean)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></dt>
 <dd>
@@ -16472,7 +16481,12 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><span class="member-name-link"><a href="squidpony/Messaging.NounTrait.html#MALE_GENDER">MALE_GENDER</a></span> - squidpony.<a href="squidpony/Messaging.NounTrait.html" title="enum in squidpony">Messaging.NounTrait</a></dt>
 <dd>
-<div class="block">Male pronoun preference, as in "He is his own boss."</div>
+<div class="block">Male pronoun preference, as in "He is his own boss."
+ <br>
+ name/name_s/i/me/my/mine/myself
+ <br>
+ Name/Name's/he/he/his/his/himself
+ "$i hurr$$$" becomes "he hurries".</div>
 </dd>
 <dt><span class="member-name-link"><a href="squidpony/squidmath/CrossHash.Curlup.html#malphas">malphas</a></span> - Static variable in class squidpony.squidmath.<a href="squidpony/squidmath/CrossHash.Curlup.html" title="class in squidpony.squidmath">CrossHash.Curlup</a></dt>
 <dd>&nbsp;</dd>
@@ -19265,7 +19279,12 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><span class="member-name-link"><a href="squidpony/Messaging.NounTrait.html#NO_GENDER">NO_GENDER</a></span> - squidpony.<a href="squidpony/Messaging.NounTrait.html" title="enum in squidpony">Messaging.NounTrait</a></dt>
 <dd>
-<div class="block">Inanimate objects or beings without gender, as in "It is its own boss."</div>
+<div class="block">Inanimate objects or beings without gender, as in "It is its own boss."
+ <br>
+ name/name_s/i/me/my/mine/myself
+ <br>
+ Name/Name's/it/it/its/its/itself
+ "$i hurr$$$" becomes "it hurries".</div>
 </dd>
 <dt><a href="squidpony/squidai/graph/Node.html" title="class in squidpony.squidai.graph"><span class="type-name-link">Node</span></a>&lt;<a href="squidpony/squidai/graph/Node.html" title="type parameter in Node">V</a>&gt; - Class in <a href="squidpony/squidai/graph/package-summary.html">squidpony.squidai.graph</a></dt>
 <dd>
@@ -27182,15 +27201,13 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><span class="member-name-link"><a href="squidpony/squidmath/NumberTools.html#sway(double)">sway(double)</a></span> - Static method in class squidpony.squidmath.<a href="squidpony/squidmath/NumberTools.html" title="class in squidpony.squidmath">NumberTools</a></dt>
 <dd>
-<div class="block">Limited-use; takes any double and produces a double in the -1 to 1 range, with a graph of input to output that
- looks much like a sine wave, curving to have a flat slope when given an integer input and a steep slope when the
- input is halfway between two integers, smoothly curving at any points between those extremes.</div>
+<div class="block">Very similar to <a href="squidpony/squidmath/NumberTools.html#sin_(double)"><code>NumberTools.sin_(double)</code></a> with half frequency, or <code>Math.sin(double)</code> with <code>Math.PI</code>
+ frequency, but optimized (and shaped) a little differently.</div>
 </dd>
 <dt><span class="member-name-link"><a href="squidpony/squidmath/NumberTools.html#sway(float)">sway(float)</a></span> - Static method in class squidpony.squidmath.<a href="squidpony/squidmath/NumberTools.html" title="class in squidpony.squidmath">NumberTools</a></dt>
 <dd>
-<div class="block">Limited-use; takes any float and produces a float in the -1f to 1f range, with a graph of input to output that
- looks much like a sine wave, curving to have a flat slope when given an integer input and a steep slope when the
- input is halfway between two integers, smoothly curving at any points between those extremes.</div>
+<div class="block">Very similar to <a href="squidpony/squidmath/NumberTools.html#sin_(float)"><code>NumberTools.sin_(float)</code></a> with half frequency, or <code>Math.sin(double)</code> with <code>Math.PI</code>
+ frequency, but optimized (and shaped) a little differently.</div>
 </dd>
 <dt><span class="member-name-link"><a href="squidpony/squidmath/Noise.Sway1D.html#%3Cinit%3E()">Sway1D()</a></span> - Constructor for class squidpony.squidmath.<a href="squidpony/squidmath/Noise.Sway1D.html" title="class in squidpony.squidmath">Noise.Sway1D</a></dt>
 <dd>&nbsp;</dd>
@@ -27204,6 +27221,16 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">A 1D "noise" method that produces smooth transitions like <a href="squidpony/squidmath/NumberTools.html#sway(float)"><code>NumberTools.sway(float)</code></a>, but also wrapping around at pi *
  2 so this can be used to get smoothly-changing random angles.</div>
+</dd>
+<dt><span class="member-name-link"><a href="squidpony/squidmath/NumberTools.html#swayCubic(double)">swayCubic(double)</a></span> - Static method in class squidpony.squidmath.<a href="squidpony/squidmath/NumberTools.html" title="class in squidpony.squidmath">NumberTools</a></dt>
+<dd>
+<div class="block">Very similar to <a href="squidpony/squidmath/NumberTools.html#sin_(double)"><code>NumberTools.sin_(double)</code></a> with half frequency, or <code>Math.sin(double)</code> with <code>Math.PI</code>
+ frequency, but optimized (and shaped) a little differently.</div>
+</dd>
+<dt><span class="member-name-link"><a href="squidpony/squidmath/NumberTools.html#swayCubic(float)">swayCubic(float)</a></span> - Static method in class squidpony.squidmath.<a href="squidpony/squidmath/NumberTools.html" title="class in squidpony.squidmath">NumberTools</a></dt>
+<dd>
+<div class="block">Very similar to <a href="squidpony/squidmath/NumberTools.html#sin_(float)"><code>NumberTools.sin_(float)</code></a> with half frequency, or <code>Math.sin(double)</code> with <code>Math.PI</code>
+ frequency, but optimized (and shaped) a little differently.</div>
 </dd>
 <dt><span class="member-name-link"><a href="squidpony/squidmath/NumberTools.html#swayRandomized(int,double)">swayRandomized(int, double)</a></span> - Static method in class squidpony.squidmath.<a href="squidpony/squidmath/NumberTools.html" title="class in squidpony.squidmath">NumberTools</a></dt>
 <dd>
@@ -28615,7 +28642,12 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><span class="member-name-link"><a href="squidpony/Messaging.NounTrait.html#UNSPECIFIED_GENDER">UNSPECIFIED_GENDER</a></span> - squidpony.<a href="squidpony/Messaging.NounTrait.html" title="enum in squidpony">Messaging.NounTrait</a></dt>
 <dd>
-<div class="block">"Singular they" pronoun preference or to be used when preference is unknown, as in "They are their own boss."</div>
+<div class="block">"Singular they" pronoun preference or to be used when preference is unknown, as in "They are their own boss."
+ <br>
+ name/name_s/i/me/my/mine/myself
+ <br>
+ Name/Name's/they/them/their/theirs/themself
+ "$i hurr$$$" becomes "they hurry".</div>
 </dd>
 <dt><span class="member-name-link"><a href="squidpony/squidgrid/mapping/DungeonUtility.html#UNTOUCHED">UNTOUCHED</a></span> - Static variable in class squidpony.squidgrid.mapping.<a href="squidpony/squidgrid/mapping/DungeonUtility.html" title="class in squidpony.squidgrid.mapping">DungeonUtility</a></dt>
 <dd>

@@ -100,49 +100,115 @@ public class Messaging {
     public enum NounTrait {
         /**
          * As in, "I am my own boss." Doesn't reference gender.
+         * <br>
+         * name/name_s/i/me/my/mine/myself
+         * <br>
+         * I/my/I/me/my/mine/myself
+         * "$i hurr$$$" becomes "I hurry".
+         * Does not pluralize.
          */
         FIRST_PERSON_SINGULAR,
         /**
          * As in, "You are your own boss." Doesn't reference gender.
+         * <br>
+         * name/name_s/i/me/my/mine/myself
+         * <br>
+         * you/your/you/you/your/yours/yourself
+         * "$i hurr$$$" becomes "you hurry".
+         * Does not pluralize.
          */
         SECOND_PERSON_SINGULAR,
         /**
          * As in, "We are our own bosses." Doesn't reference gender, and applies to groups.
+         * <br>
+         * name/name_s/i/me/my/mine/myself
+         * <br>
+         * we/our/we/us/our/ours/ourselves
+         * "$i hurr$$$" becomes "we hurry".
+         * Pluralizes.
          */
         FIRST_PERSON_PLURAL,
         /**
          * As in, "You are your own bosses." Doesn't reference gender, and applies to groups.
+         * <br>
+         * name/name_s/i/me/my/mine/myself
+         * <br>
+         * you/your/you/you/your/yours/yourselves
+         * "$i hurr$$$" becomes "you hurry".
+         * Pluralizes.
          */
         SECOND_PERSON_PLURAL,
         /**
          * Inanimate objects or beings without gender, as in "It is its own boss."
+         * <br>
+         * name/name_s/i/me/my/mine/myself
+         * <br>
+         * Name/Name's/it/it/its/its/itself
+         * "$i hurr$$$" becomes "it hurries".
+         * Does not pluralize.
          */
         NO_GENDER,
         /**
          * Male pronoun preference, as in "He is his own boss."
+         * <br>
+         * name/name_s/i/me/my/mine/myself
+         * <br>
+         * Name/Name's/he/he/his/his/himself
+         * "$i hurr$$$" becomes "he hurries".
+         * Does not pluralize.
          */
         MALE_GENDER,
         /**
          * Female pronoun preference, as in "She is her own boss."
+         * <br>
+         * name/name_s/i/me/my/mine/myself
+         * <br>
+         * Name/Name's/she/she/her/hers/herself
+         * "$i hurr$$$" becomes "she hurries".
+         * Does not pluralize.
          */
         FEMALE_GENDER,
         /**
          * "Singular they" pronoun preference or to be used when preference is unknown, as in "They are their own boss."
+         * <br>
+         * name/name_s/i/me/my/mine/myself
+         * <br>
+         * Name/Name's/they/them/their/theirs/themself
+         * "$i hurr$$$" becomes "they hurry".
+         * Does not pluralize.
          */
         UNSPECIFIED_GENDER,
         /**
          * Third-gender pronoun preference, potentially relevant for cultures with non-binary gender terms. As in, "Xe
          * is xis own boss."
+         * <br>
+         * name/name_s/i/me/my/mine/myself
+         * <br>
+         * Name/Name's/xe/xim/xis/xis/ximself
+         * "$i hurr$$$" becomes "xe hurries".
+         * Does not pluralize.
          */
         ADDITIONAL_GENDER,
         /**
          * Unpronounceable words that can be processed specially for more complex cases of pronoun preference. As in,
          * "Qvqe is qvqis own boss."
+         * <br>
+         * name/name_s/i/me/my/mine/myself
+         * <br>
+         * Name/Name's/qvqe/qvqim/qvqis/qvqims/qvqimself
+         * "$i hurr$$$" becomes "qvqe hurries".
+         * Does not pluralize.
          */
         SPECIAL_CASE_GENDER,
         /**
          * Any third-person plural, as in "They are their own bosses." Not to be confused with UNSPECIFIED_GENDER, which
          * is for singular beings, but usually uses "they" in the same way (not always).
+         * <br>
+         * name/name_s/i/me/my/mine/myself
+         * <br>
+         * Name/Name's/they/them/their/theirs/themselves
+         * "$i hurr$$$" becomes "they hurry".
+         * Pluralizes.
          */
         GROUP;
 

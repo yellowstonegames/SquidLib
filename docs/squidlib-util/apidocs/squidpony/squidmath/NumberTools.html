@@ -15,7 +15,7 @@
 <script type="text/javascript" src="../../script-dir/jquery-ui.min.js"></script>
 </head>
 <body class="class-declaration-page">
-<script type="text/javascript">var data = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9,"i10":9,"i11":9,"i12":9,"i13":9,"i14":9,"i15":9,"i16":9,"i17":9,"i18":9,"i19":9,"i20":9,"i21":9,"i22":9,"i23":9,"i24":9,"i25":9,"i26":9,"i27":9,"i28":9,"i29":9,"i30":9,"i31":9,"i32":9,"i33":9,"i34":9,"i35":9,"i36":9,"i37":9,"i38":9,"i39":9,"i40":9,"i41":9,"i42":9,"i43":9,"i44":9,"i45":9,"i46":9,"i47":9,"i48":9,"i49":9,"i50":9,"i51":9,"i52":9,"i53":9,"i54":9,"i55":9,"i56":9,"i57":9,"i58":9,"i59":9,"i60":9,"i61":9,"i62":9,"i63":9,"i64":9,"i65":9,"i66":9,"i67":9,"i68":9,"i69":9,"i70":9,"i71":9,"i72":9};
+<script type="text/javascript">var data = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9,"i10":9,"i11":9,"i12":9,"i13":9,"i14":9,"i15":9,"i16":9,"i17":9,"i18":9,"i19":9,"i20":9,"i21":9,"i22":9,"i23":9,"i24":9,"i25":9,"i26":9,"i27":9,"i28":9,"i29":9,"i30":9,"i31":9,"i32":9,"i33":9,"i34":9,"i35":9,"i36":9,"i37":9,"i38":9,"i39":9,"i40":9,"i41":9,"i42":9,"i43":9,"i44":9,"i45":9,"i46":9,"i47":9,"i48":9,"i49":9,"i50":9,"i51":9,"i52":9,"i53":9,"i54":9,"i55":9,"i56":9,"i57":9,"i58":9,"i59":9,"i60":9,"i61":9,"i62":9,"i63":9,"i64":9,"i65":9,"i66":9,"i67":9,"i68":9,"i69":9,"i70":9,"i71":9,"i72":9,"i73":9,"i74":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "alt-color";
 var rowColor = "row-color";
@@ -650,18 +650,16 @@ byte&nbsp;newValue)</code></th>
 <td class="col-first"><code>static double</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#sway(double)">sway</a></span>&#8203;(double&nbsp;value)</code></th>
 <td class="col-last">
-<div class="block">Limited-use; takes any double and produces a double in the -1 to 1 range, with a graph of input to output that
- looks much like a sine wave, curving to have a flat slope when given an integer input and a steep slope when the
- input is halfway between two integers, smoothly curving at any points between those extremes.</div>
+<div class="block">Very similar to <a href="#sin_(double)"><code>sin_(double)</code></a> with half frequency, or <code>Math.sin(double)</code> with <code>Math.PI</code>
+ frequency, but optimized (and shaped) a little differently.</div>
 </td>
 </tr>
 <tr class="row-color" id="i63">
 <td class="col-first"><code>static float</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#sway(float)">sway</a></span>&#8203;(float&nbsp;value)</code></th>
 <td class="col-last">
-<div class="block">Limited-use; takes any float and produces a float in the -1f to 1f range, with a graph of input to output that
- looks much like a sine wave, curving to have a flat slope when given an integer input and a steep slope when the
- input is halfway between two integers, smoothly curving at any points between those extremes.</div>
+<div class="block">Very similar to <a href="#sin_(float)"><code>sin_(float)</code></a> with half frequency, or <code>Math.sin(double)</code> with <code>Math.PI</code>
+ frequency, but optimized (and shaped) a little differently.</div>
 </td>
 </tr>
 <tr class="alt-color" id="i64">
@@ -675,6 +673,22 @@ float&nbsp;value)</code></th>
 </tr>
 <tr class="row-color" id="i65">
 <td class="col-first"><code>static double</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#swayCubic(double)">swayCubic</a></span>&#8203;(double&nbsp;value)</code></th>
+<td class="col-last">
+<div class="block">Very similar to <a href="#sin_(double)"><code>sin_(double)</code></a> with half frequency, or <code>Math.sin(double)</code> with <code>Math.PI</code>
+ frequency, but optimized (and shaped) a little differently.</div>
+</td>
+</tr>
+<tr class="alt-color" id="i66">
+<td class="col-first"><code>static float</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#swayCubic(float)">swayCubic</a></span>&#8203;(float&nbsp;value)</code></th>
+<td class="col-last">
+<div class="block">Very similar to <a href="#sin_(float)"><code>sin_(float)</code></a> with half frequency, or <code>Math.sin(double)</code> with <code>Math.PI</code>
+ frequency, but optimized (and shaped) a little differently.</div>
+</td>
+</tr>
+<tr class="row-color" id="i67">
+<td class="col-first"><code>static double</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#swayRandomized(int,double)">swayRandomized</a></span>&#8203;(int&nbsp;seed,
 double&nbsp;value)</code></th>
 <td class="col-last">
@@ -682,7 +696,7 @@ double&nbsp;value)</code></th>
  usage on GWT.</div>
 </td>
 </tr>
-<tr class="alt-color" id="i66">
+<tr class="alt-color" id="i68">
 <td class="col-first"><code>static float</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#swayRandomized(int,float)">swayRandomized</a></span>&#8203;(int&nbsp;seed,
 float&nbsp;value)</code></th>
@@ -691,7 +705,7 @@ float&nbsp;value)</code></th>
  usage on GWT.</div>
 </td>
 </tr>
-<tr class="row-color" id="i67">
+<tr class="row-color" id="i69">
 <td class="col-first"><code>static double</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#swayRandomized(long,double)">swayRandomized</a></span>&#8203;(long&nbsp;seed,
 double&nbsp;value)</code></th>
@@ -700,7 +714,7 @@ double&nbsp;value)</code></th>
  1.0 (both exclusive).</div>
 </td>
 </tr>
-<tr class="alt-color" id="i68">
+<tr class="alt-color" id="i70">
 <td class="col-first"><code>static float</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#swayRandomized(long,float)">swayRandomized</a></span>&#8203;(long&nbsp;seed,
 float&nbsp;value)</code></th>
@@ -709,7 +723,7 @@ float&nbsp;value)</code></th>
  1f (both exclusive).</div>
 </td>
 </tr>
-<tr class="row-color" id="i69">
+<tr class="row-color" id="i71">
 <td class="col-first"><code>static double</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#swayTight(double)">swayTight</a></span>&#8203;(double&nbsp;value)</code></th>
 <td class="col-last">
@@ -718,7 +732,7 @@ float&nbsp;value)</code></th>
  input is halfway between two integers, smoothly curving at any points between those extremes.</div>
 </td>
 </tr>
-<tr class="alt-color" id="i70">
+<tr class="alt-color" id="i72">
 <td class="col-first"><code>static float</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#swayTight(float)">swayTight</a></span>&#8203;(float&nbsp;value)</code></th>
 <td class="col-last">
@@ -727,7 +741,7 @@ float&nbsp;value)</code></th>
  input is halfway between two integers, smoothly curving at any points between those extremes.</div>
 </td>
 </tr>
-<tr class="row-color" id="i71">
+<tr class="row-color" id="i73">
 <td class="col-first"><code>static double</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#zigzag(double)">zigzag</a></span>&#8203;(double&nbsp;value)</code></th>
 <td class="col-last">
@@ -735,7 +749,7 @@ float&nbsp;value)</code></th>
  close to a consistent rate of up and down through the range.</div>
 </td>
 </tr>
-<tr class="alt-color" id="i72">
+<tr class="alt-color" id="i74">
 <td class="col-first"><code>static float</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#zigzag(float)">zigzag</a></span>&#8203;(float&nbsp;value)</code></th>
 <td class="col-last">
@@ -1033,15 +1047,12 @@ int&nbsp;valueHigh)</span></div>
 <li>
 <section class="detail" id="sway(double)">
 <h3>sway</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.246">sway</a></span>&#8203;(<span class="parameters">double&nbsp;value)</span></div>
-<div class="block">Limited-use; takes any double and produces a double in the -1 to 1 range, with a graph of input to output that
- looks much like a sine wave, curving to have a flat slope when given an integer input and a steep slope when the
- input is halfway between two integers, smoothly curving at any points between those extremes. This is meant for
- noise, where it may be useful to limit the amount of change between nearby points' noise values and prevent both
- sudden "jumps" in noise value and "cracks" where a line takes a sudden jagged movement at an angle. It is very
- similar to <a href="#bounce(double)"><code>bounce(double)</code></a> and <a href="#zigzag(double)"><code>zigzag(double)</code></a>, but unlike bounce() this will maintain its
- frequency of returning max or min values, regardless of the magnitude of its input (as long as there is enough
- floating-point precision to represent changes smaller than 1.0), and unlike zigzag() this will smooth its path.
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.243">sway</a></span>&#8203;(<span class="parameters">double&nbsp;value)</span></div>
+<div class="block">Very similar to <a href="#sin_(double)"><code>sin_(double)</code></a> with half frequency, or <code>Math.sin(double)</code> with <code>Math.PI</code>
+ frequency, but optimized (and shaped) a little differently. This looks like a squished sine wave when graphed,
+ and is essentially just interpolating between each pair of odd and even inputs using what FastNoise calls
+ <code>QUINTIC</code> interpolation. This interpolation is slightly flatter at peaks and valleys than a sine wave is.
+ <br>
  An input of any even number should produce something very close to -1.0, any odd number should produce something
  very close to 1.0, and any number halfway between two incremental integers (like 8.5 or -10.5) should produce 0.0
  or a very small fraction. In the (unlikely) event that this is given a double that is too large to represent
@@ -1057,15 +1068,56 @@ int&nbsp;valueHigh)</span></div>
 <li>
 <section class="detail" id="sway(float)">
 <h3>sway</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">float</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.270">sway</a></span>&#8203;(<span class="parameters">float&nbsp;value)</span></div>
-<div class="block">Limited-use; takes any float and produces a float in the -1f to 1f range, with a graph of input to output that
- looks much like a sine wave, curving to have a flat slope when given an integer input and a steep slope when the
- input is halfway between two integers, smoothly curving at any points between those extremes. This is meant for
- noise, where it may be useful to limit the amount of change between nearby points' noise values and prevent both
- sudden "jumps" in noise value and "cracks" where a line takes a sudden jagged movement at an angle. It is very
- similar to <a href="#bounce(float)"><code>bounce(float)</code></a> and <a href="#zigzag(float)"><code>zigzag(float)</code></a>, but unlike bounce() this will maintain its
- frequency of returning max or min values, regardless of the magnitude of its input (as long as there is enough
- floating-point precision to represent changes smaller than 1f), and unlike zigzag() this will smooth its path.
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">float</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.264">sway</a></span>&#8203;(<span class="parameters">float&nbsp;value)</span></div>
+<div class="block">Very similar to <a href="#sin_(float)"><code>sin_(float)</code></a> with half frequency, or <code>Math.sin(double)</code> with <code>Math.PI</code>
+ frequency, but optimized (and shaped) a little differently. This looks like a squished sine wave when graphed,
+ and is essentially just interpolating between each pair of odd and even inputs using what FastNoise calls
+ <code>QUINTIC</code> interpolation. This interpolation is slightly flatter at peaks and valleys than a sine wave is.
+ <br>
+ An input of any even number should produce something very close to -1f, any odd number should produce something
+ very close to 1f, and any number halfway between two incremental integers (like 8.5f or -10.5f) should produce 0f
+ or a very small fraction. In the (unlikely) event that this is given a float that is too large to represent
+ many or any non-integer values, this will simply return -1f or 1f.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>value</code> - any float other than NaN or infinite values; extremely large values can't work properly</dd>
+<dt>Returns:</dt>
+<dd>a float from -1f (inclusive) to 1f (inclusive)</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="swayCubic(double)">
+<h3>swayCubic</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.286">swayCubic</a></span>&#8203;(<span class="parameters">double&nbsp;value)</span></div>
+<div class="block">Very similar to <a href="#sin_(double)"><code>sin_(double)</code></a> with half frequency, or <code>Math.sin(double)</code> with <code>Math.PI</code>
+ frequency, but optimized (and shaped) a little differently. This looks like a squished sine wave when graphed,
+ and is essentially just interpolating between each pair of odd and even inputs using what FastNoise calls
+ <code>HERMITE</code> interpolation. This interpolation is rounder at peaks and valleys than a sine wave is; it is
+ also called <code>smoothstep</code> in GLSL, and is called Cubic here because it gets the third power of a value.
+ <br>
+ An input of any even number should produce something very close to -1.0, any odd number should produce something
+ very close to 1.0, and any number halfway between two incremental integers (like 8.5 or -10.5) should produce 0.0
+ or a very small fraction. In the (unlikely) event that this is given a double that is too large to represent
+ many or any non-integer values, this will simply return -1.0 or 1.0.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>value</code> - any double other than NaN or infinite values; extremely large values can't work properly</dd>
+<dt>Returns:</dt>
+<dd>a double from -1.0 (inclusive) to 1.0 (inclusive)</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="swayCubic(float)">
+<h3>swayCubic</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">float</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.308">swayCubic</a></span>&#8203;(<span class="parameters">float&nbsp;value)</span></div>
+<div class="block">Very similar to <a href="#sin_(float)"><code>sin_(float)</code></a> with half frequency, or <code>Math.sin(double)</code> with <code>Math.PI</code>
+ frequency, but optimized (and shaped) a little differently. This looks like a squished sine wave when graphed,
+ and is essentially just interpolating between each pair of odd and even inputs using what FastNoise calls
+ <code>HERMITE</code> interpolation. This interpolation is rounder at peaks and valleys than a sine wave is; it is
+ also called <code>smoothstep</code> in GLSL, and is called Cubic here because it gets the third power of a value.
+ <br>
  An input of any even number should produce something very close to -1f, any odd number should produce something
  very close to 1f, and any number halfway between two incremental integers (like 8.5f or -10.5f) should produce 0f
  or a very small fraction. In the (unlikely) event that this is given a float that is too large to represent
@@ -1081,7 +1133,7 @@ int&nbsp;valueHigh)</span></div>
 <li>
 <section class="detail" id="swayTight(float)">
 <h3>swayTight</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">float</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.295">swayTight</a></span>&#8203;(<span class="parameters">float&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">float</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.333">swayTight</a></span>&#8203;(<span class="parameters">float&nbsp;value)</span></div>
 <div class="block">Limited-use; takes any float and produces a float in the 0f to 1f range, with a graph of input to output that
  looks much like a sine wave, curving to have a flat slope when given an integer input and a steep slope when the
  input is halfway between two integers, smoothly curving at any points between those extremes. This is meant for
@@ -1106,7 +1158,7 @@ int&nbsp;valueHigh)</span></div>
 <li>
 <section class="detail" id="swayTight(double)">
 <h3>swayTight</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.320">swayTight</a></span>&#8203;(<span class="parameters">double&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.358">swayTight</a></span>&#8203;(<span class="parameters">double&nbsp;value)</span></div>
 <div class="block">Limited-use; takes any double and produces a double in the 0.0 to 1.0 range, with a graph of input to output that
  looks much like a sine wave, curving to have a flat slope when given an integer input and a steep slope when the
  input is halfway between two integers, smoothly curving at any points between those extremes. This is meant for
@@ -1131,7 +1183,7 @@ int&nbsp;valueHigh)</span></div>
 <li>
 <section class="detail" id="swayRandomized(long,double)">
 <h3>swayRandomized</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.343">swayRandomized</a></span>&#8203;(<span class="parameters">long&nbsp;seed,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.381">swayRandomized</a></span>&#8203;(<span class="parameters">long&nbsp;seed,
 double&nbsp;value)</span></div>
 <div class="block">A mix of the smooth transitions of <a href="#sway(double)"><code>sway(double)</code></a> with (seeded) random peaks and valleys between -1.0 and
  1.0 (both exclusive). The pattern this will produces will be completely different if the seed changes, and it is
@@ -1155,7 +1207,7 @@ double&nbsp;value)</span></div>
 <li>
 <section class="detail" id="swayRandomized(long,float)">
 <h3>swayRandomized</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">float</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.373">swayRandomized</a></span>&#8203;(<span class="parameters">long&nbsp;seed,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">float</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.411">swayRandomized</a></span>&#8203;(<span class="parameters">long&nbsp;seed,
 float&nbsp;value)</span></div>
 <div class="block">A mix of the smooth transitions of <a href="#sway(float)"><code>sway(float)</code></a> with (seeded) random peaks and valleys between -1f and
  1f (both exclusive). The pattern this will produces will be completely different if the seed changes, and it is
@@ -1179,7 +1231,7 @@ float&nbsp;value)</span></div>
 <li>
 <section class="detail" id="swayRandomized(int,double)">
 <h3>swayRandomized</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.391">swayRandomized</a></span>&#8203;(<span class="parameters">int&nbsp;seed,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.429">swayRandomized</a></span>&#8203;(<span class="parameters">int&nbsp;seed,
 double&nbsp;value)</span></div>
 <div class="block">A variant on <a href="#swayRandomized(long,double)"><code>swayRandomized(long, double)</code></a> that takes an int seed instead of a long, and is optimized for
  usage on GWT. Like the version with a long seed, this uses cubic interpolation between random peak or valley
@@ -1196,7 +1248,7 @@ double&nbsp;value)</span></div>
 <li>
 <section class="detail" id="swayRandomized(int,float)">
 <h3>swayRandomized</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">float</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.410">swayRandomized</a></span>&#8203;(<span class="parameters">int&nbsp;seed,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">float</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.448">swayRandomized</a></span>&#8203;(<span class="parameters">int&nbsp;seed,
 float&nbsp;value)</span></div>
 <div class="block">A variant on <a href="#swayRandomized(long,float)"><code>swayRandomized(long, float)</code></a> that takes an int seed instead of a long, and is optimized for
  usage on GWT. Like the version with a long seed, this uses cubic interpolation between random peak or valley
@@ -1213,7 +1265,7 @@ float&nbsp;value)</span></div>
 <li>
 <section class="detail" id="swayAngleRandomized(long,float)">
 <h3>swayAngleRandomized</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">float</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.433">swayAngleRandomized</a></span>&#8203;(<span class="parameters">long&nbsp;seed,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">float</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.471">swayAngleRandomized</a></span>&#8203;(<span class="parameters">long&nbsp;seed,
 float&nbsp;value)</span></div>
 <div class="block">A 1D "noise" method that produces smooth transitions like <a href="#sway(float)"><code>sway(float)</code></a>, but also wrapping around at pi *
  2 so this can be used to get smoothly-changing random angles. Has (seeded) random peaks and valleys where it
@@ -1235,7 +1287,7 @@ float&nbsp;value)</span></div>
 <li>
 <section class="detail" id="floatToIntBits(float)">
 <h3>floatToIntBits</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.453">floatToIntBits</a></span>&#8203;(<span class="parameters">float&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.491">floatToIntBits</a></span>&#8203;(<span class="parameters">float&nbsp;value)</span></div>
 <div class="block">Identical to <code>Float.floatToIntBits(float)</code> on desktop; optimized on GWT. Uses JS typed arrays on GWT, which
  are well-supported now across all recent browsers and have fallbacks in GWT in the unlikely event of a browser
  not supporting them.</div>
@@ -1250,7 +1302,7 @@ float&nbsp;value)</span></div>
 <li>
 <section class="detail" id="floatToRawIntBits(float)">
 <h3>floatToRawIntBits</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.466">floatToRawIntBits</a></span>&#8203;(<span class="parameters">float&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.504">floatToRawIntBits</a></span>&#8203;(<span class="parameters">float&nbsp;value)</span></div>
 <div class="block">Identical to <code>Float.floatToIntBits(float)</code> on desktop (note, not <code>Float.floatToRawIntBits(float)</code>);
  optimized on GWT. When compiling to JS via GWT, there is no way to distinguish NaN values with different bits but
  that are still NaN, so this doesn't try to somehow permit that. Uses JS typed arrays on GWT, which are
@@ -1267,7 +1319,7 @@ float&nbsp;value)</span></div>
 <li>
 <section class="detail" id="floatToReversedIntBits(float)">
 <h3>floatToReversedIntBits</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.479">floatToReversedIntBits</a></span>&#8203;(<span class="parameters">float&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.517">floatToReversedIntBits</a></span>&#8203;(<span class="parameters">float&nbsp;value)</span></div>
 <div class="block">Gets the bit representation of the given float <code>value</code>, but with reversed byte order. On desktop, this is
  equivalent to calling <code>Integer.reverseBytes(Float.floatToIntBits(value))</code>, but it is implemented using
  typed arrays on GWT.</div>
@@ -1282,7 +1334,7 @@ float&nbsp;value)</span></div>
 <li>
 <section class="detail" id="reversedIntBitsToFloat(int)">
 <h3>reversedIntBitsToFloat</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">float</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.490">reversedIntBitsToFloat</a></span>&#8203;(<span class="parameters">int&nbsp;bits)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">float</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.528">reversedIntBitsToFloat</a></span>&#8203;(<span class="parameters">int&nbsp;bits)</span></div>
 <div class="block">Reverses the byte order of <code>bits</code> and converts that to a float. On desktop, this is
  equivalent to calling <code>Float.intBitsToFloat(Integer.reverseBytes(bits))</code>, but it is implemented using
  typed arrays on GWT.</div>
@@ -1297,7 +1349,7 @@ float&nbsp;value)</span></div>
 <li>
 <section class="detail" id="intBitsToFloat(int)">
 <h3>intBitsToFloat</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">float</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.501">intBitsToFloat</a></span>&#8203;(<span class="parameters">int&nbsp;bits)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">float</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.539">intBitsToFloat</a></span>&#8203;(<span class="parameters">int&nbsp;bits)</span></div>
 <div class="block">Identical to <code>Float.intBitsToFloat(int)</code> on desktop; optimized on GWT. Uses JS typed arrays on GWT, which
  are well-supported now across all recent browsers and have fallbacks in GWT in the unlikely event of a browser
  not supporting them.</div>
@@ -1312,7 +1364,7 @@ float&nbsp;value)</span></div>
 <li>
 <section class="detail" id="getSelectedByte(float,int)">
 <h3>getSelectedByte</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">byte</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.513">getSelectedByte</a></span>&#8203;(<span class="parameters">float&nbsp;value,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">byte</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.551">getSelectedByte</a></span>&#8203;(<span class="parameters">float&nbsp;value,
 int&nbsp;whichByte)</span></div>
 <div class="block">Gets an 8-bit section of the given float <code>value</code>, using <code>whichByte</code> to select whether this should
  return byte 0 (least significant), 1, 2, or 3 (most significant).</div>
@@ -1328,7 +1380,7 @@ int&nbsp;whichByte)</span></div>
 <li>
 <section class="detail" id="setSelectedByte(float,int,byte)">
 <h3>setSelectedByte</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">float</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.527">setSelectedByte</a></span>&#8203;(<span class="parameters">float&nbsp;value,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">float</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.565">setSelectedByte</a></span>&#8203;(<span class="parameters">float&nbsp;value,
 int&nbsp;whichByte,
 byte&nbsp;newValue)</span></div>
 <div class="block">Like <a href="#getSelectedByte(float,int)"><code>getSelectedByte(float, int)</code></a>, this sets the byte at a selected position in the int representation of
@@ -1347,7 +1399,7 @@ byte&nbsp;newValue)</span></div>
 <li>
 <section class="detail" id="randomDouble(long)">
 <h3>randomDouble</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.543">randomDouble</a></span>&#8203;(<span class="parameters">long&nbsp;seed)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.581">randomDouble</a></span>&#8203;(<span class="parameters">long&nbsp;seed)</span></div>
 <div class="block">Generates a pseudo-random double between 0.0 (inclusive) and 1.0 (exclusive) using the given long seed, passing
  it once through the (decent-quality and very fast) <a href="ThrustAltRNG.html" title="class in squidpony.squidmath"><code>ThrustAltRNG</code></a> algorithm.
  <br>
@@ -1365,7 +1417,7 @@ byte&nbsp;newValue)</span></div>
 <li>
 <section class="detail" id="randomSignedDouble(long)">
 <h3>randomSignedDouble</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.558">randomSignedDouble</a></span>&#8203;(<span class="parameters">long&nbsp;seed)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.596">randomSignedDouble</a></span>&#8203;(<span class="parameters">long&nbsp;seed)</span></div>
 <div class="block">Generates a pseudo-random double between -1.0 (inclusive) and 1.0 (exclusive) using the given long seed, passing
  it once through the (decent-quality and very fast) <a href="ThrustAltRNG.html" title="class in squidpony.squidmath"><code>ThrustAltRNG</code></a> algorithm.
  <br>
@@ -1383,7 +1435,7 @@ byte&nbsp;newValue)</span></div>
 <li>
 <section class="detail" id="randomFloat(long)">
 <h3>randomFloat</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">float</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.572">randomFloat</a></span>&#8203;(<span class="parameters">long&nbsp;seed)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">float</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.610">randomFloat</a></span>&#8203;(<span class="parameters">long&nbsp;seed)</span></div>
 <div class="block">Generates a pseudo-random float between 0f (inclusive) and 1f (exclusive) using the given long seed, passing it
  once through the (decent-quality and very fast) <a href="ThrustAltRNG.html" title="class in squidpony.squidmath"><code>ThrustAltRNG</code></a> algorithm.
  <br>
@@ -1401,7 +1453,7 @@ byte&nbsp;newValue)</span></div>
 <li>
 <section class="detail" id="randomSignedFloat(long)">
 <h3>randomSignedFloat</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">float</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.588">randomSignedFloat</a></span>&#8203;(<span class="parameters">long&nbsp;seed)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">float</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.626">randomSignedFloat</a></span>&#8203;(<span class="parameters">long&nbsp;seed)</span></div>
 <div class="block">Generates a pseudo-random float between -1f (inclusive) and 1f (exclusive) using the given long seed, passing
  it once through the (decent-quality and very fast) <a href="ThrustAltRNG.html" title="class in squidpony.squidmath"><code>ThrustAltRNG</code></a> algorithm. This can be useful as a
  multiplier that has approximately equal likelihood of changing or leaving the sign of its multiplicand, and won't
@@ -1421,7 +1473,7 @@ byte&nbsp;newValue)</span></div>
 <li>
 <section class="detail" id="randomFloatCurved(long)">
 <h3>randomFloatCurved</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">float</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.605">randomFloatCurved</a></span>&#8203;(<span class="parameters">long&nbsp;seed)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">float</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.643">randomFloatCurved</a></span>&#8203;(<span class="parameters">long&nbsp;seed)</span></div>
 <div class="block">Generates a pseudo-random double between -1.0 (exclusive) and 1.0 (exclusive) with a distribution that has a
  strong central bias (around 0.0). Uses the given long seed, passing it once through the (decent-quality and very
  fast) <a href="ThrustAltRNG.html" title="class in squidpony.squidmath"><code>ThrustAltRNG</code></a> algorithm. This produces a pseudo-random long, which this simply passes to
@@ -1441,7 +1493,7 @@ byte&nbsp;newValue)</span></div>
 <li>
 <section class="detail" id="formFloat(int)">
 <h3>formFloat</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">float</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.616">formFloat</a></span>&#8203;(<span class="parameters">int&nbsp;seed)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">float</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.654">formFloat</a></span>&#8203;(<span class="parameters">int&nbsp;seed)</span></div>
 <div class="block">Given an int as a seed, this uses its least-significant 23 bits to produce a float between 0f (inclusive) and 1f
  (exclusive). This does not randomize the seed at all, and the upper 9 bits of the seed are ignored.</div>
 <dl class="notes">
@@ -1455,7 +1507,7 @@ byte&nbsp;newValue)</span></div>
 <li>
 <section class="detail" id="formSignedFloat(int)">
 <h3>formSignedFloat</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">float</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.626">formSignedFloat</a></span>&#8203;(<span class="parameters">int&nbsp;seed)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">float</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.664">formSignedFloat</a></span>&#8203;(<span class="parameters">int&nbsp;seed)</span></div>
 <div class="block">Given an int as a seed, this uses its least-significant 23 bits to produce a float between -1f (inclusive) and 1f
  (exclusive). This does not randomize the seed at all, and the upper 9 bits of the seed are ignored.</div>
 <dl class="notes">
@@ -1469,7 +1521,7 @@ byte&nbsp;newValue)</span></div>
 <li>
 <section class="detail" id="formDouble(long)">
 <h3>formDouble</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.637">formDouble</a></span>&#8203;(<span class="parameters">long&nbsp;seed)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.675">formDouble</a></span>&#8203;(<span class="parameters">long&nbsp;seed)</span></div>
 <div class="block">Given a long as a seed, this uses its least-significant 52 bits to produce a double between 0 (inclusive) and 1
  (exclusive). This does not randomize the seed at all, and the upper 12 bits of the seed are ignored.</div>
 <dl class="notes">
@@ -1483,7 +1535,7 @@ byte&nbsp;newValue)</span></div>
 <li>
 <section class="detail" id="formSignedDouble(long)">
 <h3>formSignedDouble</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.647">formSignedDouble</a></span>&#8203;(<span class="parameters">long&nbsp;seed)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.685">formSignedDouble</a></span>&#8203;(<span class="parameters">long&nbsp;seed)</span></div>
 <div class="block">Given a long as a seed, this uses its least-significant 52 bits to produce a double between -1 (inclusive) and 1
  (exclusive). This does not randomize the seed at all, and the upper 12 bits of the seed are ignored.</div>
 <dl class="notes">
@@ -1497,7 +1549,7 @@ byte&nbsp;newValue)</span></div>
 <li>
 <section class="detail" id="formCurvedDouble(long)">
 <h3>formCurvedDouble</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.660">formCurvedDouble</a></span>&#8203;(<span class="parameters">long&nbsp;start)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.698">formCurvedDouble</a></span>&#8203;(<span class="parameters">long&nbsp;start)</span></div>
 <div class="block">A different kind of determine-like method that expects to be given a random long and produces a random double
  with a curved distribution that centers on 0 (where it has a bias) and can (rarely) approach -1f and 1f.
  The distribution for the values is similar to Irwin-Hall, and is frequently near 0 but not too-rarely near -1.0
@@ -1513,7 +1565,7 @@ byte&nbsp;newValue)</span></div>
 <li>
 <section class="detail" id="formCurvedDoubleTight(long)">
 <h3>formCurvedDoubleTight</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.675">formCurvedDoubleTight</a></span>&#8203;(<span class="parameters">long&nbsp;start)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.713">formCurvedDoubleTight</a></span>&#8203;(<span class="parameters">long&nbsp;start)</span></div>
 <div class="block">A different kind of determine-like method that expects to be given a random long and produces a random double
  with a curved distribution that centers on 0 (where it has a bias) and can (rarely) approach 0.0 and 1.0.
  The distribution for the values is similar to Irwin-Hall, and is frequently near 0 but not too-rarely near 0.0 or
@@ -1529,7 +1581,7 @@ byte&nbsp;newValue)</span></div>
 <li>
 <section class="detail" id="formCurvedFloat(long)">
 <h3>formCurvedFloat</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">float</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.691">formCurvedFloat</a></span>&#8203;(<span class="parameters">long&nbsp;start)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">float</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.729">formCurvedFloat</a></span>&#8203;(<span class="parameters">long&nbsp;start)</span></div>
 <div class="block">A different kind of determine-like method that expects to be given a random long and produces a random float with
  a curved distribution that centers on 0 (where it has a bias) and can (rarely) approach -1f and 1f.
  The distribution for the values is similar to Irwin-Hall, and is frequently near 0 but not too-rarely near -1f or
@@ -1545,7 +1597,7 @@ byte&nbsp;newValue)</span></div>
 <li>
 <section class="detail" id="formCurvedFloat(int,int)">
 <h3>formCurvedFloat</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">float</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.708">formCurvedFloat</a></span>&#8203;(<span class="parameters">int&nbsp;start1,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">float</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.746">formCurvedFloat</a></span>&#8203;(<span class="parameters">int&nbsp;start1,
 int&nbsp;start2)</span></div>
 <div class="block">A different kind of determine-like method that expects to be given random ints and produces a random float with
  a curved distribution that centers on 0 (where it has a bias) and can (rarely) approach -1f and 1f.
@@ -1563,7 +1615,7 @@ int&nbsp;start2)</span></div>
 <li>
 <section class="detail" id="formCurvedFloat(int)">
 <h3>formCurvedFloat</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">float</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.723">formCurvedFloat</a></span>&#8203;(<span class="parameters">int&nbsp;start)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">float</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.761">formCurvedFloat</a></span>&#8203;(<span class="parameters">int&nbsp;start)</span></div>
 <div class="block">A different kind of determine-like method that expects to be given a random int and produces a random float with
  a curved distribution that centers on 0 (where it has a bias) and can (rarely) approach -1f and 1f.
  The distribution for the values is similar to Irwin-Hall, and is frequently near 0 but not too-rarely near -1f or
@@ -1579,7 +1631,7 @@ int&nbsp;start2)</span></div>
 <li>
 <section class="detail" id="lowestOneBit(int)">
 <h3>lowestOneBit</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.746">lowestOneBit</a></span>&#8203;(<span class="parameters">int&nbsp;num)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.784">lowestOneBit</a></span>&#8203;(<span class="parameters">int&nbsp;num)</span></div>
 <div class="block">Returns an int value with at most a single one-bit, in the position of the lowest-order ("rightmost") one-bit in
  the specified int value. Returns zero if the specified value has no one-bits in its two's complement binary
  representation, that is, if it is equal to zero.
@@ -1602,7 +1654,7 @@ int&nbsp;start2)</span></div>
 <li>
 <section class="detail" id="lowestOneBit(long)">
 <h3>lowestOneBit</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.765">lowestOneBit</a></span>&#8203;(<span class="parameters">long&nbsp;num)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.803">lowestOneBit</a></span>&#8203;(<span class="parameters">long&nbsp;num)</span></div>
 <div class="block">Returns an long value with at most a single one-bit, in the position of the lowest-order ("rightmost") one-bit in
  the specified long value. Returns zero if the specified value has no one-bits in its two's complement binary
  representation, that is, if it is equal to zero.
@@ -1625,7 +1677,7 @@ int&nbsp;start2)</span></div>
 <li>
 <section class="detail" id="sin(double)">
 <h3>sin</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.799">sin</a></span>&#8203;(<span class="parameters">double&nbsp;radians)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.837">sin</a></span>&#8203;(<span class="parameters">double&nbsp;radians)</span></div>
 <div class="block">A fairly-close approximation of <code>Math.sin(double)</code> that can be significantly faster (between 8x and 80x
  faster sin() calls in benchmarking; if you have access to libGDX you should consider its sometimes-more-precise
  and sometimes-faster MathUtils.sin() method. Because this method doesn't rely on a
@@ -1661,7 +1713,7 @@ int&nbsp;start2)</span></div>
 <li>
 <section class="detail" id="cos(double)">
 <h3>cos</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.835">cos</a></span>&#8203;(<span class="parameters">double&nbsp;radians)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.873">cos</a></span>&#8203;(<span class="parameters">double&nbsp;radians)</span></div>
 <div class="block">A fairly-close approximation of <code>Math.cos(double)</code> that can be significantly faster (between 8x and 80x
  faster cos() calls in benchmarking; if you have access to libGDX you should consider its sometimes-more-precise
  and sometimes-faster MathUtils.cos() method. Because this method doesn't rely on a
@@ -1696,7 +1748,7 @@ int&nbsp;start2)</span></div>
 <li>
 <section class="detail" id="sin(float)">
 <h3>sin</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">float</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.872">sin</a></span>&#8203;(<span class="parameters">float&nbsp;radians)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">float</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.910">sin</a></span>&#8203;(<span class="parameters">float&nbsp;radians)</span></div>
 <div class="block">A fairly-close approximation of <code>Math.sin(double)</code> that can be significantly faster (between 8x and 80x
  faster sin() calls in benchmarking, and both takes and returns floats; if you have access to libGDX you should
  consider its more-precise and sometimes-faster MathUtils.sin() method. Because this method doesn't rely on a
@@ -1732,7 +1784,7 @@ int&nbsp;start2)</span></div>
 <li>
 <section class="detail" id="cos(float)">
 <h3>cos</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">float</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.909">cos</a></span>&#8203;(<span class="parameters">float&nbsp;radians)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">float</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.947">cos</a></span>&#8203;(<span class="parameters">float&nbsp;radians)</span></div>
 <div class="block">A fairly-close approximation of <code>Math.cos(double)</code> that can be significantly faster (between 8x and 80x
  faster cos() calls in benchmarking, and both takes and returns floats; if you have access to libGDX you should
  consider its more-precise and sometimes-faster MathUtils.cos() method. Because this method doesn't rely on a
@@ -1768,7 +1820,7 @@ int&nbsp;start2)</span></div>
 <li>
 <section class="detail" id="sinDegrees(float)">
 <h3>sinDegrees</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">float</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.945">sinDegrees</a></span>&#8203;(<span class="parameters">float&nbsp;degrees)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">float</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.983">sinDegrees</a></span>&#8203;(<span class="parameters">float&nbsp;degrees)</span></div>
 <div class="block">A fairly-close approximation of <code>Math.sin(double)</code> that can be significantly faster (between 8x and 80x
  faster sin() calls in benchmarking, and both takes and returns floats; if you have access to libGDX, you should
  consider its more-precise and sometimes-faster MathUtils.sinDeg() method. Because this method doesn't rely on a
@@ -1804,7 +1856,7 @@ int&nbsp;start2)</span></div>
 <li>
 <section class="detail" id="cosDegrees(float)">
 <h3>cosDegrees</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">float</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.982">cosDegrees</a></span>&#8203;(<span class="parameters">float&nbsp;degrees)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">float</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.1020">cosDegrees</a></span>&#8203;(<span class="parameters">float&nbsp;degrees)</span></div>
 <div class="block">A fairly-close approximation of <code>Math.cos(double)</code> that can be significantly faster (between 8x and 80x
  faster cos() calls in benchmarking, and both takes and returns floats; if you have access to libGDX, you should
  consider its more-precise and sometimes-faster MathUtils.cosDeg() method. Because this method doesn't rely on a
@@ -1840,7 +1892,7 @@ int&nbsp;start2)</span></div>
 <li>
 <section class="detail" id="sin_(double)">
 <h3>sin_</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.1013">sin_</a></span>&#8203;(<span class="parameters">double&nbsp;turns)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.1051">sin_</a></span>&#8203;(<span class="parameters">double&nbsp;turns)</span></div>
 <div class="block">A variation on <code>Math.sin(double)</code> that takes its input as a fraction of a turn instead of in radians; one
  turn is equal to 360 degrees or two*PI radians. This can be useful as a building block for other measurements;
  to make a sine method that takes its input in grad (with 400 grad equal to 360 degrees), you would just divide
@@ -1870,7 +1922,7 @@ int&nbsp;start2)</span></div>
 <li>
 <section class="detail" id="cos_(double)">
 <h3>cos_</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.1044">cos_</a></span>&#8203;(<span class="parameters">double&nbsp;turns)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.1082">cos_</a></span>&#8203;(<span class="parameters">double&nbsp;turns)</span></div>
 <div class="block">A variation on <code>Math.cos(double)</code> that takes its input as a fraction of a turn instead of in radians; one
  turn is equal to 360 degrees or two*PI radians. This can be useful as a building block for other measurements;
  to make a cosine method that takes its input in grad (with 400 grad equal to 360 degrees), you would just divide
@@ -1900,7 +1952,7 @@ int&nbsp;start2)</span></div>
 <li>
 <section class="detail" id="sin_(float)">
 <h3>sin_</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">float</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.1076">sin_</a></span>&#8203;(<span class="parameters">float&nbsp;turns)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">float</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.1114">sin_</a></span>&#8203;(<span class="parameters">float&nbsp;turns)</span></div>
 <div class="block">A variation on <code>Math.sin(double)</code> that takes its input as a fraction of a turn instead of in radians (it
  also takes and returns a float); one turn is equal to 360 degrees or two*PI radians. This can be useful as a
  building block for other measurements; to make a sine method that takes its input in grad (with 400 grad equal to
@@ -1931,7 +1983,7 @@ int&nbsp;start2)</span></div>
 <li>
 <section class="detail" id="cos_(float)">
 <h3>cos_</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">float</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.1108">cos_</a></span>&#8203;(<span class="parameters">float&nbsp;turns)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">float</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.1146">cos_</a></span>&#8203;(<span class="parameters">float&nbsp;turns)</span></div>
 <div class="block">A variation on <code>Math.cos(double)</code> that takes its input as a fraction of a turn instead of in radians (it
  also takes and returns a float); one turn is equal to 360 degrees or two*PI radians. This can be useful as a
  building block for other measurements; to make a cosine method that takes its input in grad (with 400 grad equal
@@ -1962,7 +2014,7 @@ int&nbsp;start2)</span></div>
 <li>
 <section class="detail" id="atan2(double,double)">
 <h3>atan2</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.1134">atan2</a></span>&#8203;(<span class="parameters">double&nbsp;y,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.1172">atan2</a></span>&#8203;(<span class="parameters">double&nbsp;y,
 double&nbsp;x)</span></div>
 <div class="block">Close approximation of the frequently-used trigonometric method atan2, with higher precision than libGDX's atan2
  approximation. Maximum error is below 0.001 radians.
@@ -1988,7 +2040,7 @@ double&nbsp;x)</span></div>
 <li>
 <section class="detail" id="atan2(float,float)">
 <h3>atan2</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">float</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.1163">atan2</a></span>&#8203;(<span class="parameters">float&nbsp;y,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">float</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.1201">atan2</a></span>&#8203;(<span class="parameters">float&nbsp;y,
 float&nbsp;x)</span></div>
 <div class="block">Close approximation of the frequently-used trigonometric method atan2, with higher precision than libGDX's atan2
  approximation. Maximum error is below 0.001 radians.
@@ -2014,7 +2066,7 @@ float&nbsp;x)</span></div>
 <li>
 <section class="detail" id="atan2_(double,double)">
 <h3>atan2_</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.1189">atan2_</a></span>&#8203;(<span class="parameters">double&nbsp;y,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.1227">atan2_</a></span>&#8203;(<span class="parameters">double&nbsp;y,
 double&nbsp;x)</span></div>
 <div class="block">Altered-range approximation of the frequently-used trigonometric method atan2, taking y and x positions as 
  doubles and returning an angle measured in turns from 0.0 to 1.0 (inclusive), with one cycle over the range
@@ -2038,7 +2090,7 @@ double&nbsp;x)</span></div>
 <li>
 <section class="detail" id="atan2_(float,float)">
 <h3>atan2_</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">float</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.1216">atan2_</a></span>&#8203;(<span class="parameters">float&nbsp;y,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">float</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.1254">atan2_</a></span>&#8203;(<span class="parameters">float&nbsp;y,
 float&nbsp;x)</span></div>
 <div class="block">Altered-range approximation of the frequently-used trigonometric method atan2, taking y and x positions as floats
  and returning an angle measured in turns from 0.0f to 1.0f, with one cycle over the range equivalent to 360
@@ -2062,7 +2114,7 @@ float&nbsp;x)</span></div>
 <li>
 <section class="detail" id="atan2Degrees(double,double)">
 <h3>atan2Degrees</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.1245">atan2Degrees</a></span>&#8203;(<span class="parameters">double&nbsp;y,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.1283">atan2Degrees</a></span>&#8203;(<span class="parameters">double&nbsp;y,
 double&nbsp;x)</span></div>
 <div class="block">Close approximation of the frequently-used trigonometric method atan2, with higher precision than libGDX's atan2
  approximation, and giving a result in degrees from -180 to 180. Maximum error is below 0.1 degrees.
@@ -2088,7 +2140,7 @@ double&nbsp;x)</span></div>
 <li>
 <section class="detail" id="atan2Degrees(float,float)">
 <h3>atan2Degrees</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">float</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.1274">atan2Degrees</a></span>&#8203;(<span class="parameters">float&nbsp;y,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">float</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.1312">atan2Degrees</a></span>&#8203;(<span class="parameters">float&nbsp;y,
 float&nbsp;x)</span></div>
 <div class="block">Close approximation of the frequently-used trigonometric method atan2, with higher precision than libGDX's atan2
  approximation, and giving a result in degrees from -180 to 180. Maximum error is below 0.1 degrees.
@@ -2114,7 +2166,7 @@ float&nbsp;x)</span></div>
 <li>
 <section class="detail" id="atan2Degrees360(double,double)">
 <h3>atan2Degrees360</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.1303">atan2Degrees360</a></span>&#8203;(<span class="parameters">double&nbsp;y,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.1341">atan2Degrees360</a></span>&#8203;(<span class="parameters">double&nbsp;y,
 double&nbsp;x)</span></div>
 <div class="block">Close approximation of the frequently-used trigonometric method atan2, with higher precision than libGDX's atan2
  approximation, and giving a result in degrees from 0 to 360 (both inclusive). Maximum error is below 0.1 degrees.
@@ -2140,7 +2192,7 @@ double&nbsp;x)</span></div>
 <li>
 <section class="detail" id="atan2Degrees360(float,float)">
 <h3>atan2Degrees360</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">float</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.1331">atan2Degrees360</a></span>&#8203;(<span class="parameters">float&nbsp;y,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">float</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.1369">atan2Degrees360</a></span>&#8203;(<span class="parameters">float&nbsp;y,
 float&nbsp;x)</span></div>
 <div class="block">Close approximation of the frequently-used trigonometric method atan2, with higher precision than libGDX's atan2
  approximation, and giving a result in degrees from 0 to 360 (both inclusive). Maximum error is below 0.1 degrees.
@@ -2166,7 +2218,7 @@ float&nbsp;x)</span></div>
 <li>
 <section class="detail" id="asin(float)">
 <h3>asin</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">float</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.1351">asin</a></span>&#8203;(<span class="parameters">float&nbsp;x)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">float</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.1389">asin</a></span>&#8203;(<span class="parameters">float&nbsp;x)</span></div>
 <div class="block">Arc sine approximation with very low error, using an algorithm from the 1955 research study
  "Approximations for Digital Computers," by RAND Corporation (this is sheet 35's algorithm, which is the fastest
  and least precise). This method is usually much faster than <code>Math.asin(double)</code>, but is somewhat less
@@ -2182,7 +2234,7 @@ float&nbsp;x)</span></div>
 <li>
 <section class="detail" id="acos(float)">
 <h3>acos</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">float</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.1373">acos</a></span>&#8203;(<span class="parameters">float&nbsp;x)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">float</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.1411">acos</a></span>&#8203;(<span class="parameters">float&nbsp;x)</span></div>
 <div class="block">Arc cosine approximation with very low error, using an algorithm from the 1955 research study
  "Approximations for Digital Computers," by RAND Corporation (this is sheet 35's algorithm, which is the fastest
  and least precise). This method is usually much faster than <code>Math.acos(double)</code>, but is somewhat less
@@ -2200,7 +2252,7 @@ float&nbsp;x)</span></div>
 <li>
 <section class="detail" id="asin(double)">
 <h3>asin</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.1395">asin</a></span>&#8203;(<span class="parameters">double&nbsp;x)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.1433">asin</a></span>&#8203;(<span class="parameters">double&nbsp;x)</span></div>
 <div class="block">Arc sine approximation with very low error, using an algorithm from the 1955 research study
  "Approximations for Digital Computers," by RAND Corporation (this is sheet 35's algorithm, which is the fastest
  and least precise). This method is usually much faster than <code>Math.asin(double)</code>, but is somewhat less
@@ -2219,7 +2271,7 @@ float&nbsp;x)</span></div>
 <li>
 <section class="detail" id="acos(double)">
 <h3>acos</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.1418">acos</a></span>&#8203;(<span class="parameters">double&nbsp;x)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.1456">acos</a></span>&#8203;(<span class="parameters">double&nbsp;x)</span></div>
 <div class="block">Arc cosine approximation with very low error, using an algorithm from the 1955 research study
  "Approximations for Digital Computers," by RAND Corporation (this is sheet 35's algorithm, which is the fastest
  and least precise). This method is usually much faster than <code>Math.acos(double)</code>, but is somewhat less
@@ -2238,7 +2290,7 @@ float&nbsp;x)</span></div>
 <li>
 <section class="detail" id="asin_(double)">
 <h3>asin_</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.1436">asin_</a></span>&#8203;(<span class="parameters">double&nbsp;x)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.1474">asin_</a></span>&#8203;(<span class="parameters">double&nbsp;x)</span></div>
 <div class="block">Inverse sine function (arcsine) but with output measured in turns instead of radians. Possible results for this
  range from 0.75 (inclusive) to 1.0 (exclusive), and continuing past that to 0.0 (inclusive) to 0.25 (inclusive).
  <br>
@@ -2254,7 +2306,7 @@ float&nbsp;x)</span></div>
 <li>
 <section class="detail" id="acos_(double)">
 <h3>acos_</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.1457">acos_</a></span>&#8203;(<span class="parameters">double&nbsp;x)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.1495">acos_</a></span>&#8203;(<span class="parameters">double&nbsp;x)</span></div>
 <div class="block">Inverse cosine function (arccos) but with output measured in turns instead of radians. Possible results for this
  range from 0.0 (inclusive) to 0.5 (inclusive).
  <br>
@@ -2270,7 +2322,7 @@ float&nbsp;x)</span></div>
 <li>
 <section class="detail" id="asin_(float)">
 <h3>asin_</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">float</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.1479">asin_</a></span>&#8203;(<span class="parameters">float&nbsp;x)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">float</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.1517">asin_</a></span>&#8203;(<span class="parameters">float&nbsp;x)</span></div>
 <div class="block">Inverse sine function (arcsine) but with output measured in turns instead of radians. Possible results for this
  range from 0.75f (inclusive) to 1.0f (exclusive), and continuing past that to 0.0f (inclusive) to 0.25f
  (inclusive).
@@ -2287,7 +2339,7 @@ float&nbsp;x)</span></div>
 <li>
 <section class="detail" id="acos_(float)">
 <h3>acos_</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">float</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.1500">acos_</a></span>&#8203;(<span class="parameters">float&nbsp;x)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">float</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/NumberTools.html#line.1538">acos_</a></span>&#8203;(<span class="parameters">float&nbsp;x)</span></div>
 <div class="block">Inverse cosine function (arccos) but with output measured in turns instead of radians. Possible results for this
  range from 0.0f (inclusive) to 0.5f (inclusive).
  <br>

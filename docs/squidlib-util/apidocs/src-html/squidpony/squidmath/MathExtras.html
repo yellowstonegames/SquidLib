@@ -380,49 +380,79 @@
 <span class="source-line-no">368</span><span id="line.368">    }</span>
 <span class="source-line-no">369</span><span id="line.369"></span>
 <span class="source-line-no">370</span><span id="line.370">    /**</span>
-<span class="source-line-no">371</span><span id="line.371">     * A generalization on bias and gain functions that can represent both; this version is branch-less.</span>
-<span class="source-line-no">372</span><span id="line.372">     * This is based on &lt;a href="https://arxiv.org/abs/2010.09714"&gt;this micro-paper&lt;/a&gt; by Jon Barron, which</span>
-<span class="source-line-no">373</span><span id="line.373">     * generalizes the earlier bias and gain rational functions by Schlick. The second and final page of the</span>
-<span class="source-line-no">374</span><span id="line.374">     * paper has useful graphs of what the s (shape) and t (turning point) parameters do; shape should be 0</span>
-<span class="source-line-no">375</span><span id="line.375">     * or greater, while turning must be between 0 and 1, inclusive. This effectively combines two different</span>
-<span class="source-line-no">376</span><span id="line.376">     * curving functions so they continue into each other when x equals turning. The shape parameter will</span>
-<span class="source-line-no">377</span><span id="line.377">     * cause this to imitate "smoothstep-like" splines when greater than 1 (where the values ease into their</span>
-<span class="source-line-no">378</span><span id="line.378">     * starting and ending levels), or to be the inverse when less than 1 (where values start like square</span>
-<span class="source-line-no">379</span><span id="line.379">     * root does, taking off very quickly, but also end like square does, landing abruptly at the ending</span>
-<span class="source-line-no">380</span><span id="line.380">     * level). You should only give x values between 0 and 1, inclusive.</span>
-<span class="source-line-no">381</span><span id="line.381">     * @param x progress through the spline, from 0 to 1, inclusive</span>
-<span class="source-line-no">382</span><span id="line.382">     * @param shape must be greater than or equal to 0; values greater than 1 are "normal interpolations" </span>
-<span class="source-line-no">383</span><span id="line.383">     * @param turning a value between 0.0 and 1.0, inclusive, where the shape changes</span>
-<span class="source-line-no">384</span><span id="line.384">     * @return a float between 0 and 1, inclusive</span>
+<span class="source-line-no">371</span><span id="line.371">     * An approximation of the cube-root function for float inputs and outputs.</span>
+<span class="source-line-no">372</span><span id="line.372">     * This can be about twice as fast as {@link Math#cbrt(double)}. It</span>
+<span class="source-line-no">373</span><span id="line.373">     * correctly returns negative results when given negative inputs.</span>
+<span class="source-line-no">374</span><span id="line.374">     * &lt;br&gt;</span>
+<span class="source-line-no">375</span><span id="line.375">     * Has very low relative error (less than 1E-9) when inputs are uniformly</span>
+<span class="source-line-no">376</span><span id="line.376">     * distributed between -512 and 512, and absolute mean error of less than</span>
+<span class="source-line-no">377</span><span id="line.377">     * 1E-6 in the same scenario. Uses a bit-twiddling method similar to one</span>
+<span class="source-line-no">378</span><span id="line.378">     * presented in Hacker's Delight and also used in early 3D graphics (see</span>
+<span class="source-line-no">379</span><span id="line.379">     * https://en.wikipedia.org/wiki/Fast_inverse_square_root for more, but</span>
+<span class="source-line-no">380</span><span id="line.380">     * this code approximates cbrt(x) and not 1/sqrt(x)). This specific code</span>
+<span class="source-line-no">381</span><span id="line.381">     * was originally by Marc B. Reynolds, posted in his "Stand-alone-junk"</span>
+<span class="source-line-no">382</span><span id="line.382">     * repo: https://github.com/Marc-B-Reynolds/Stand-alone-junk/blob/master/src/Posts/ballcube.c#L182-L197 .</span>
+<span class="source-line-no">383</span><span id="line.383">     * @param x any finite float to find the cube root of</span>
+<span class="source-line-no">384</span><span id="line.384">     * @return the cube root of x, approximated</span>
 <span class="source-line-no">385</span><span id="line.385">     */</span>
-<span class="source-line-no">386</span><span id="line.386">    public static float barronSpline(final float x, final float shape, final float turning) {</span>
-<span class="source-line-no">387</span><span id="line.387">        final float d = turning - x;</span>
-<span class="source-line-no">388</span><span id="line.388">        final int f = NumberTools.floatToIntBits(d) &gt;&gt; 31, n = f | 1;</span>
-<span class="source-line-no">389</span><span id="line.389">        return ((turning * n - f) * (x + f)) / (Float.MIN_VALUE - f + (x + shape * d) * n) - f;</span>
-<span class="source-line-no">390</span><span id="line.390">    }</span>
-<span class="source-line-no">391</span><span id="line.391"></span>
-<span class="source-line-no">392</span><span id="line.392">    /**</span>
-<span class="source-line-no">393</span><span id="line.393">     * A generalization on bias and gain functions that can represent both; this version is branch-less.</span>
-<span class="source-line-no">394</span><span id="line.394">     * This is based on &lt;a href="https://arxiv.org/abs/2010.09714"&gt;this micro-paper&lt;/a&gt; by Jon Barron, which</span>
-<span class="source-line-no">395</span><span id="line.395">     * generalizes the earlier bias and gain rational functions by Schlick. The second and final page of the</span>
-<span class="source-line-no">396</span><span id="line.396">     * paper has useful graphs of what the s (shape) and t (turning point) parameters do; shape should be 0</span>
-<span class="source-line-no">397</span><span id="line.397">     * or greater, while turning must be between 0 and 1, inclusive. This effectively combines two different</span>
-<span class="source-line-no">398</span><span id="line.398">     * curving functions so they continue into each other when x equals turning. The shape parameter will</span>
-<span class="source-line-no">399</span><span id="line.399">     * cause this to imitate "smoothstep-like" splines when greater than 1 (where the values ease into their</span>
-<span class="source-line-no">400</span><span id="line.400">     * starting and ending levels), or to be the inverse when less than 1 (where values start like square</span>
-<span class="source-line-no">401</span><span id="line.401">     * root does, taking off very quickly, but also end like square does, landing abruptly at the ending</span>
-<span class="source-line-no">402</span><span id="line.402">     * level). You should only give x values between 0 and 1, inclusive.</span>
-<span class="source-line-no">403</span><span id="line.403">     * @param x progress through the spline, from 0 to 1, inclusive</span>
-<span class="source-line-no">404</span><span id="line.404">     * @param shape must be greater than or equal to 0; values greater than 1 are "normal interpolations" </span>
-<span class="source-line-no">405</span><span id="line.405">     * @param turning a value between 0.0 and 1.0, inclusive, where the shape changes</span>
-<span class="source-line-no">406</span><span id="line.406">     * @return a double between 0 and 1, inclusive</span>
-<span class="source-line-no">407</span><span id="line.407">     */</span>
-<span class="source-line-no">408</span><span id="line.408">    public static double barronSpline(final double x, final double shape, final double turning) {</span>
-<span class="source-line-no">409</span><span id="line.409">        final double d = turning - x;</span>
-<span class="source-line-no">410</span><span id="line.410">        final int f = NumberTools.doubleToHighIntBits(d) &gt;&gt; 31, n = f | 1;</span>
-<span class="source-line-no">411</span><span id="line.411">        return ((turning * n - f) * (x + f)) / (Double.MIN_VALUE - f + (x + shape * d) * n) - f;</span>
-<span class="source-line-no">412</span><span id="line.412">    }</span>
-<span class="source-line-no">413</span><span id="line.413">}</span>
+<span class="source-line-no">386</span><span id="line.386">    public static float cbrt(float x) {</span>
+<span class="source-line-no">387</span><span id="line.387">        int ix = NumberTools.floatToRawIntBits(x);</span>
+<span class="source-line-no">388</span><span id="line.388">        final int sign = ix &amp; 0x80000000;</span>
+<span class="source-line-no">389</span><span id="line.389">        ix &amp;= 0x7FFFFFFF;</span>
+<span class="source-line-no">390</span><span id="line.390">        final float x0 = x;</span>
+<span class="source-line-no">391</span><span id="line.391">        ix = (ix&gt;&gt;&gt;2) + (ix&gt;&gt;&gt;4);</span>
+<span class="source-line-no">392</span><span id="line.392">        ix += (ix&gt;&gt;&gt;4);</span>
+<span class="source-line-no">393</span><span id="line.393">        ix = ix + (ix&gt;&gt;&gt;8) + 0x2A5137A0 | sign;</span>
+<span class="source-line-no">394</span><span id="line.394">        x  = NumberTools.intBitsToFloat(ix);</span>
+<span class="source-line-no">395</span><span id="line.395">        x  = 0.33333334f*(2f * x + x0/(x*x));</span>
+<span class="source-line-no">396</span><span id="line.396">        x  = 0.33333334f*(2f * x + x0/(x*x));</span>
+<span class="source-line-no">397</span><span id="line.397">        return x;</span>
+<span class="source-line-no">398</span><span id="line.398">    }</span>
+<span class="source-line-no">399</span><span id="line.399"></span>
+<span class="source-line-no">400</span><span id="line.400">    /**</span>
+<span class="source-line-no">401</span><span id="line.401">     * A generalization on bias and gain functions that can represent both; this version is branch-less.</span>
+<span class="source-line-no">402</span><span id="line.402">     * This is based on &lt;a href="https://arxiv.org/abs/2010.09714"&gt;this micro-paper&lt;/a&gt; by Jon Barron, which</span>
+<span class="source-line-no">403</span><span id="line.403">     * generalizes the earlier bias and gain rational functions by Schlick. The second and final page of the</span>
+<span class="source-line-no">404</span><span id="line.404">     * paper has useful graphs of what the s (shape) and t (turning point) parameters do; shape should be 0</span>
+<span class="source-line-no">405</span><span id="line.405">     * or greater, while turning must be between 0 and 1, inclusive. This effectively combines two different</span>
+<span class="source-line-no">406</span><span id="line.406">     * curving functions so they continue into each other when x equals turning. The shape parameter will</span>
+<span class="source-line-no">407</span><span id="line.407">     * cause this to imitate "smoothstep-like" splines when greater than 1 (where the values ease into their</span>
+<span class="source-line-no">408</span><span id="line.408">     * starting and ending levels), or to be the inverse when less than 1 (where values start like square</span>
+<span class="source-line-no">409</span><span id="line.409">     * root does, taking off very quickly, but also end like square does, landing abruptly at the ending</span>
+<span class="source-line-no">410</span><span id="line.410">     * level). You should only give x values between 0 and 1, inclusive.</span>
+<span class="source-line-no">411</span><span id="line.411">     * @param x progress through the spline, from 0 to 1, inclusive</span>
+<span class="source-line-no">412</span><span id="line.412">     * @param shape must be greater than or equal to 0; values greater than 1 are "normal interpolations" </span>
+<span class="source-line-no">413</span><span id="line.413">     * @param turning a value between 0.0 and 1.0, inclusive, where the shape changes</span>
+<span class="source-line-no">414</span><span id="line.414">     * @return a float between 0 and 1, inclusive</span>
+<span class="source-line-no">415</span><span id="line.415">     */</span>
+<span class="source-line-no">416</span><span id="line.416">    public static float barronSpline(final float x, final float shape, final float turning) {</span>
+<span class="source-line-no">417</span><span id="line.417">        final float d = turning - x;</span>
+<span class="source-line-no">418</span><span id="line.418">        final int f = NumberTools.floatToIntBits(d) &gt;&gt; 31, n = f | 1;</span>
+<span class="source-line-no">419</span><span id="line.419">        return ((turning * n - f) * (x + f)) / (Float.MIN_VALUE - f + (x + shape * d) * n) - f;</span>
+<span class="source-line-no">420</span><span id="line.420">    }</span>
+<span class="source-line-no">421</span><span id="line.421"></span>
+<span class="source-line-no">422</span><span id="line.422">    /**</span>
+<span class="source-line-no">423</span><span id="line.423">     * A generalization on bias and gain functions that can represent both; this version is branch-less.</span>
+<span class="source-line-no">424</span><span id="line.424">     * This is based on &lt;a href="https://arxiv.org/abs/2010.09714"&gt;this micro-paper&lt;/a&gt; by Jon Barron, which</span>
+<span class="source-line-no">425</span><span id="line.425">     * generalizes the earlier bias and gain rational functions by Schlick. The second and final page of the</span>
+<span class="source-line-no">426</span><span id="line.426">     * paper has useful graphs of what the s (shape) and t (turning point) parameters do; shape should be 0</span>
+<span class="source-line-no">427</span><span id="line.427">     * or greater, while turning must be between 0 and 1, inclusive. This effectively combines two different</span>
+<span class="source-line-no">428</span><span id="line.428">     * curving functions so they continue into each other when x equals turning. The shape parameter will</span>
+<span class="source-line-no">429</span><span id="line.429">     * cause this to imitate "smoothstep-like" splines when greater than 1 (where the values ease into their</span>
+<span class="source-line-no">430</span><span id="line.430">     * starting and ending levels), or to be the inverse when less than 1 (where values start like square</span>
+<span class="source-line-no">431</span><span id="line.431">     * root does, taking off very quickly, but also end like square does, landing abruptly at the ending</span>
+<span class="source-line-no">432</span><span id="line.432">     * level). You should only give x values between 0 and 1, inclusive.</span>
+<span class="source-line-no">433</span><span id="line.433">     * @param x progress through the spline, from 0 to 1, inclusive</span>
+<span class="source-line-no">434</span><span id="line.434">     * @param shape must be greater than or equal to 0; values greater than 1 are "normal interpolations" </span>
+<span class="source-line-no">435</span><span id="line.435">     * @param turning a value between 0.0 and 1.0, inclusive, where the shape changes</span>
+<span class="source-line-no">436</span><span id="line.436">     * @return a double between 0 and 1, inclusive</span>
+<span class="source-line-no">437</span><span id="line.437">     */</span>
+<span class="source-line-no">438</span><span id="line.438">    public static double barronSpline(final double x, final double shape, final double turning) {</span>
+<span class="source-line-no">439</span><span id="line.439">        final double d = turning - x;</span>
+<span class="source-line-no">440</span><span id="line.440">        final int f = NumberTools.doubleToHighIntBits(d) &gt;&gt; 31, n = f | 1;</span>
+<span class="source-line-no">441</span><span id="line.441">        return ((turning * n - f) * (x + f)) / (Double.MIN_VALUE - f + (x + shape * d) * n) - f;</span>
+<span class="source-line-no">442</span><span id="line.442">    }</span>
+<span class="source-line-no">443</span><span id="line.443">}</span>
 
 
 
