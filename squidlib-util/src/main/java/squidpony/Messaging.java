@@ -1,6 +1,11 @@
 package squidpony;
 
-import regexodus.*;
+import regexodus.MatchResult;
+import regexodus.Pattern;
+import regexodus.Replacer;
+import regexodus.Substitution;
+import regexodus.TextBuffer;
+
 import java.util.HashMap;
 
 /**
@@ -104,7 +109,7 @@ public class Messaging {
          * name/name_s/i/me/my/mine/myself
          * <br>
          * I/my/I/me/my/mine/myself
-         * "$i hurr$$$" becomes "I hurry".
+         * "^i hurr^$$$" becomes "I hurry".
          * Does not pluralize.
          */
         FIRST_PERSON_SINGULAR,
@@ -114,7 +119,7 @@ public class Messaging {
          * name/name_s/i/me/my/mine/myself
          * <br>
          * you/your/you/you/your/yours/yourself
-         * "$i hurr$$$" becomes "you hurry".
+         * "^i hurr^$$$" becomes "you hurry".
          * Does not pluralize.
          */
         SECOND_PERSON_SINGULAR,
@@ -124,7 +129,7 @@ public class Messaging {
          * name/name_s/i/me/my/mine/myself
          * <br>
          * we/our/we/us/our/ours/ourselves
-         * "$i hurr$$$" becomes "we hurry".
+         * "^i hurr^$$$" becomes "we hurry".
          * Pluralizes.
          */
         FIRST_PERSON_PLURAL,
@@ -134,7 +139,7 @@ public class Messaging {
          * name/name_s/i/me/my/mine/myself
          * <br>
          * you/your/you/you/your/yours/yourselves
-         * "$i hurr$$$" becomes "you hurry".
+         * "^i hurr^$$$" becomes "you hurry".
          * Pluralizes.
          */
         SECOND_PERSON_PLURAL,
@@ -144,7 +149,7 @@ public class Messaging {
          * name/name_s/i/me/my/mine/myself
          * <br>
          * Name/Name's/it/it/its/its/itself
-         * "$i hurr$$$" becomes "it hurries".
+         * "^i hurr^$$$" becomes "it hurries".
          * Does not pluralize.
          */
         NO_GENDER,
@@ -154,7 +159,7 @@ public class Messaging {
          * name/name_s/i/me/my/mine/myself
          * <br>
          * Name/Name's/he/he/his/his/himself
-         * "$i hurr$$$" becomes "he hurries".
+         * "^i hurr^$$$" becomes "he hurries".
          * Does not pluralize.
          */
         MALE_GENDER,
@@ -164,7 +169,7 @@ public class Messaging {
          * name/name_s/i/me/my/mine/myself
          * <br>
          * Name/Name's/she/she/her/hers/herself
-         * "$i hurr$$$" becomes "she hurries".
+         * "^i hurr^$$$" becomes "she hurries".
          * Does not pluralize.
          */
         FEMALE_GENDER,
@@ -174,7 +179,7 @@ public class Messaging {
          * name/name_s/i/me/my/mine/myself
          * <br>
          * Name/Name's/they/them/their/theirs/themself
-         * "$i hurr$$$" becomes "they hurry".
+         * "^i hurr^$$$" becomes "they hurry".
          * Does not pluralize.
          */
         UNSPECIFIED_GENDER,
@@ -185,7 +190,7 @@ public class Messaging {
          * name/name_s/i/me/my/mine/myself
          * <br>
          * Name/Name's/xe/xim/xis/xis/ximself
-         * "$i hurr$$$" becomes "xe hurries".
+         * "^i hurr^$$$" becomes "xe hurries".
          * Does not pluralize.
          */
         ADDITIONAL_GENDER,
@@ -196,7 +201,7 @@ public class Messaging {
          * name/name_s/i/me/my/mine/myself
          * <br>
          * Name/Name's/qvqe/qvqim/qvqis/qvqims/qvqimself
-         * "$i hurr$$$" becomes "qvqe hurries".
+         * "^i hurr^$$$" becomes "qvqe hurries".
          * Does not pluralize.
          */
         SPECIAL_CASE_GENDER,
@@ -207,7 +212,7 @@ public class Messaging {
          * name/name_s/i/me/my/mine/myself
          * <br>
          * Name/Name's/they/them/their/theirs/themselves
-         * "$i hurr$$$" becomes "they hurry".
+         * "^i hurr^$$$" becomes "they hurry".
          * Pluralizes.
          */
         GROUP;

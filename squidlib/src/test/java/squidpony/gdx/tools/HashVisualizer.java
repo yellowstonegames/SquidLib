@@ -68,7 +68,7 @@ public class HashVisualizer extends ApplicationAdapter {
     // 5 RNG results
     private int testType = 4;
     private static final int NOISE_LIMIT = 148;
-    private int hashMode, rngMode, noiseMode = 103, otherMode = 17;//142
+    private int hashMode, rngMode, noiseMode = 83, otherMode = 17;//142
 
     /**
      * If you're editing the source of HashVisualizer, you can comment out one line and uncomment another to change
@@ -206,7 +206,7 @@ public class HashVisualizer extends ApplicationAdapter {
     private final MitchellNoise mitchell = new MitchellNoise(0x1337BEEF, 6); 
 
     private final Noise.Basic1D basic1D = new Noise.Basic1D();
-    private final Noise.Layered1D layered1D = new Noise.Layered1D(new Noise.Basic1D(), 5, 5.0);
+    private final Noise.Layered1D layered1D = new Noise.Layered1D(new Noise.Basic1D(), 30, 0x1p28);
 
     private final Noise.Sway1D sway1D = new Noise.Sway1D();
     private final Noise.Layered1D layeredSway1D = new Noise.Layered1D(new Noise.Sway1D(123L), 5, 5.0);
@@ -4404,28 +4404,42 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         }
                         break;
                     case 84:
-                        Gdx.graphics.setTitle("FastNoise 2D Noise, 1 octave, at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("FastNoise 2D Noise, 15 octaves, at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         layeredFN.setSeed(123456);
-                        layeredFN.setFractalOctaves(1);
+                        layeredFN.setFractalOctaves(15);
                         layeredFN.setFrequency(0.03125f);
-                        layeredFN.setFractalLacunarity(0.5f);
-                        layeredFN.setFractalGain(2f);
+                        layeredFN.setFractalLacunarity(2f);
+                        layeredFN.setFractalGain(0.5f);
                         for (int x = 0; x < width; x++) {
                             s0 = (x + ctr);
                             for (int y = 0; y < height; y++) {
-                                bright = basicPrepare(layeredFN.getSimplex(s0, (y + ctr)));
+                                bright = basicPrepare(layeredFN.getSimplexFractal(s0, (y + ctr)));
                                 back[x][y] = getGray(bright);
                             }
                         }
                         break;
                     case 85:
-                        Gdx.graphics.setTitle("Whirling 3D Noise, 1 octave, at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("FastNoise 2D Noise, 30 octaves, at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        layeredFN.setSeed(123456);
+                        layeredFN.setFractalOctaves(30);
+                        layeredFN.setFrequency(0.03125f);
+                        layeredFN.setFractalLacunarity(2f);
+                        layeredFN.setFractalGain(0.5f);
                         for (int x = 0; x < width; x++) {
+                            s0 = (x + ctr);
                             for (int y = 0; y < height; y++) {
-                                bright = basicPrepare(WhirlingNoise.noise(x * 0.03125f, y * 0.03125f, ctr * 0.045f, 123456)); // , 1.5f
+                                bright = basicPrepare(layeredFN.getSimplexFractal(s0, (y + ctr)));
                                 back[x][y] = getGray(bright);
                             }
                         }
+
+//                        Gdx.graphics.setTitle("Whirling 3D Noise, 1 octave, at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+//                        for (int x = 0; x < width; x++) {
+//                            for (int y = 0; y < height; y++) {
+//                                bright = basicPrepare(WhirlingNoise.noise(x * 0.03125f, y * 0.03125f, ctr * 0.045f, 123456)); // , 1.5f
+//                                back[x][y] = getGray(bright);
+//                            }
+//                        }
                         break;
                     case 86:
                         Gdx.graphics.setTitle("Seeded 3D Noise, 1 octave, at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
@@ -4441,8 +4455,8 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         layeredFN.setSeed(123456);
                         layeredFN.setFractalOctaves(1);
                         layeredFN.setFrequency(0.03125f);
-                        layeredFN.setFractalLacunarity(0.5f);
-                        layeredFN.setFractalGain(2f);
+                        layeredFN.setFractalLacunarity(2f);
+                        layeredFN.setFractalGain(0.5f);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = basicPrepare(layeredFN.getSimplex(x, y, ctr)); // , 1.5f
@@ -4475,8 +4489,8 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         layeredFN.setSeed(123456);
                         layeredFN.setFractalOctaves(1);
                         layeredFN.setFrequency(1f);
-                        layeredFN.setFractalLacunarity(0.5f);
-                        layeredFN.setFractalGain(2f);
+                        layeredFN.setFractalLacunarity(2f);
+                        layeredFN.setFractalGain(0.5f);
                         s0 = 1.5f * NumberTools.swayRandomized(12345, 0.03125f * ctr);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
@@ -4646,8 +4660,8 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         //if((ctr & 3) == 0)
                         {
                             bright = SColor.floatGetHSV(ctr * 0x1.44cbc89p-8f, 1, 1,1);
-                            iBright = (int)(NumberTools.swayCubic(ctr * 0x1p-9f) * 0x.fp0 * half);
-//                            iBright = (int)(basic1D.getNoise(ctr * 0.015625) * 0x.fp0 * half);
+//                            iBright = (int)(NumberTools.swayCubic(ctr * 0x1p-9f) * 0x.fp0 * half);
+                            iBright = (int)(basic1D.getNoise(ctr * 0.015625) * 0x.fp0 * half);
                             back[width - 1][half - 1 + iBright] =  bright;
                             back[width - 1][half + 0 + iBright] =  bright;
                             back[width - 1][half + 1 + iBright] =  bright;
@@ -4662,14 +4676,14 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         }
                         break;
                     case 105:
-                        Gdx.graphics.setTitle("Basic 1D Noise, five inverse octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("Basic 1D Noise, 30 octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int i = 0; i < width - 1; i++)
                             System.arraycopy(back[i+1], 0, back[i], 0, width);
                         Arrays.fill(back[width - 1], FLOAT_WHITE);
                         //if((ctr & 3) == 0)
                         {
-                            iBright = (int)(NumberTools.sin_(ctr * 0x1p-10f) * 0x.fp0 * half);
-//                            iBright = (int)(layered1D.getNoise(ctr * 0.015625) * 0x.fp0 * half);
+//                            iBright = (int)(NumberTools.sin_(ctr * 0x1p-10f) * 0x.fp0 * half);
+                            iBright = (int)(layered1D.getNoise(ctr * 0.015625) * 0x.fp0 * half);
                             bright = SColor.floatGetHSV(ctr * 0x1.44cbc89p-8f, 1, 1,1);
                             back[width - 1][half - 1 + iBright] =  bright;
                             back[width - 1][half + 0 + iBright] =  bright;
@@ -4952,8 +4966,8 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         layeredFN.setSeed(123456);
                         layeredFN.setFractalOctaves(1);
                         layeredFN.setFrequency(1f);
-                        layeredFN.setFractalLacunarity(0.5f);
-                        layeredFN.setFractalGain(2f);
+                        layeredFN.setFractalLacunarity(2f);
+                        layeredFN.setFractalGain(0.5f);
                         c1 = ctr * 0.045f;
                         for (int x = 0; x < width; x++) {
                             c0 = x * 0.03125f;
@@ -4984,12 +4998,13 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         }
                         break;
                     case 117:
-                        Gdx.graphics.setTitle("FastNoise 4D Noise, 1 octave, at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("FastNoise 4D Noise, 5 octaves, at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        layeredFN.setNoiseType(FastNoise.SIMPLEX_FRACTAL);
                         layeredFN.setSeed(123456);
-                        layeredFN.setFractalOctaves(1);
+                        layeredFN.setFractalOctaves(5);
                         layeredFN.setFrequency(1f);
-                        layeredFN.setFractalLacunarity(0.5f);
-                        layeredFN.setFractalGain(2f);
+                        layeredFN.setFractalLacunarity(2f);
+                        layeredFN.setFractalGain(0.5f);
                         s0 = 1.5f * NumberTools.swayRandomized(12345, 0.03125f * ctr);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
