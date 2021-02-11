@@ -6,6 +6,9 @@ import org.junit.Test;
 import squidpony.StringKit;
 import squidpony.squidmath.*;
 
+import java.io.Serializable;
+
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static squidpony.examples.TestConfiguration.PRINTING;
 
@@ -33,7 +36,7 @@ public class RNGFeatureTest {
             }
         }
         // using a Set to test for uniqueness
-        assertTrue(set.size() == width * height / 4);
+        assertEquals(set.size(), width * height / 4);
     }
     @Test
     @Ignore
@@ -69,10 +72,62 @@ public class RNGFeatureTest {
 
         int[] ord2 = new int[20];
         rng.randomOrdering(20, ord2);
-        if (PRINTING) {
-            System.out.println(StringKit.join(", ", ord1));
-            System.out.println(StringKit.join(", ", ord2));
-        }
+        TestConfiguration.println(StringKit.join(", ", ord1));
+        TestConfiguration.println(StringKit.join(", ", ord2));
         Assert.assertArrayEquals(ord1, ord2);
+    }
+
+    @Test
+    public void testAbstractNextLong() {
+        SpecifiedRandomness r = new SpecifiedRandomness(0L, Long.MAX_VALUE, Long.MIN_VALUE, -1L,
+                0xFFFFFFFF7FFFFFFFL, 0xFFFFFFFF00000000L, 0x00000000FFFFFFFFL, 0x80000000L);
+        AbstractRNG arng = new AbstractRNG() {
+            @Override
+            public int next(int bits) {
+                return r.next(bits);
+            }
+
+            @Override
+            public int nextInt() {
+                return r.next(32);
+            }
+
+            @Override
+            public long nextLong() {
+                return r.nextLong();
+            }
+
+            @Override
+            public boolean nextBoolean() {
+                return r.nextLong() < 0L;
+            }
+
+            @Override
+            public double nextDouble() {
+                return (r.nextLong() >>> 11) * 0x1p-53;
+            }
+
+            @Override
+            public float nextFloat() {
+                return r.next(24) * 0x1p-24f;
+            }
+
+            @Override
+            public IRNG copy() {
+                return new StatefulRNG(new SpecifiedRandomness(r));
+            }
+
+            @Override
+            public Serializable toSerializable() {
+                return this;
+            }
+        };
+        IRNG srng = arng.copy();
+        for (int i = 0; i < 8; i++) {
+            long a = arng.between(Integer.MIN_VALUE, Long.MAX_VALUE);
+            Assert.assertTrue("AbstractRNG went out-of-bounds: on " + i + ", a was " + a, a >= Integer.MIN_VALUE && a < Long.MAX_VALUE);
+            long s = srng.between(Integer.MIN_VALUE, Long.MAX_VALUE);
+            Assert.assertTrue("StatefulRNG incorrectly went out-of-bounds", s >= Integer.MIN_VALUE && s < Long.MAX_VALUE);
+        }
     }
 }
