@@ -108,7 +108,7 @@ import static squidpony.squidmath.NumberTools.intBitsToFloat;
  * @author Tommy Ettinger
  * @author smelC
  */
-public class RNG implements Serializable, IRNG {
+public class RNG extends AbstractRNG implements Serializable {
 
 	protected RandomnessSource random;
 	protected Random ran;
@@ -243,53 +243,6 @@ public class RNG implements Serializable, IRNG {
         }
         return ran;
     }
-
-    /**
-     * Returns a value from an even distribution from min (inclusive) to max
-     * (exclusive).
-     *
-     * @param min the minimum bound on the return value (inclusive)
-     * @param max the maximum bound on the return value (exclusive)
-     * @return the found value
-     */
-    @Override
-    public double between(double min, double max) {
-        return min + (max - min) * nextDouble();
-    }
-
-    /**
-     * Returns a value between min (inclusive) and max (exclusive).
-     * <br>
-     * The inclusive and exclusive behavior is to match the behavior of the similar
-     * method that deals with floating point values.
-     * <br>
-     * If {@code min} and {@code max} happen to be the same, {@code min} is returned
-     * (breaking the exclusive behavior, but it's convenient to do so).
-     *
-     * @param min the minimum bound on the return value (inclusive)
-     * @param max the maximum bound on the return value (exclusive)
-     * @return the found value
-     */
-    @Override
-    public int between(int min, int max) {
-        return nextInt(max - min) + min;
-    }
-
-    /**
-     * Returns a value between min (inclusive) and max (exclusive).
-     * <p>
-     * The inclusive and exclusive behavior is to match the behavior of the
-     * similar method that deals with floating point values.
-     *
-     * @param min the minimum bound on the return value (inclusive)
-     * @param max the maximum bound on the return value (exclusive)
-     * @return the found value
-     */
-    @Override
-    public long between(long min, long max) {
-        return nextLong(max - min) + min;
-    }
-
     /**
      * Returns the average of a number of randomly selected numbers from the
      * provided range, with min being inclusive and max being exclusive. It will
@@ -330,54 +283,6 @@ public class RNG implements Serializable, IRNG {
         return array[nextInt(array.length)];
     }
 
-    /**
-     * Returns a random element from the provided list. If the list is empty
-     * then null is returned.
-     *
-     * @param <T>  the type of the returned object
-     * @param list the list to get an element from
-     * @return the randomly selected element
-     */
-    @Override
-    public <T> T getRandomElement(List<T> list) {
-        if (list.isEmpty()) {
-            return null;
-        }
-        return list.get(nextInt(list.size()));
-    }
-
-    /**
-     * Returns a random element from the provided Collection, which should have predictable iteration order if you want
-     * predictable behavior for identical RNG seeds, though it will get a random element just fine for any Collection
-     * (just not predictably in all cases). If you give this a Set, it should be a LinkedHashSet or some form of sorted
-     * Set like TreeSet if you want predictable results. Any List or Queue should be fine. Map does not implement
-     * Collection, thank you very much Java library designers, so you can't actually pass a Map to this, though you can
-     * pass the keys or values. If coll is empty, returns null.
-     * <p>
-     * <p>
-     * Requires iterating through a random amount of coll's elements, so performance depends on the size of coll but is
-     * likely to be decent, as long as iteration isn't unusually slow. This replaces {@code getRandomElement(Queue)},
-     * since Queue implements Collection and the older Queue-using implementation was probably less efficient.
-     * </p>
-     *
-     * @param <T>  the type of the returned object
-     * @param coll the Collection to get an element from; remember, Map does not implement Collection
-     * @return the randomly selected element
-     */
-    @Override
-    public <T> T getRandomElement(Collection<T> coll) {
-        int n;
-        if ((n = coll.size()) <= 0) {
-            return null;
-        }
-        n = nextInt(n);
-        T t = null;
-        Iterator<T> it = coll.iterator();
-        while (n-- >= 0 && it.hasNext())
-            t = it.next();
-        return t;
-    }
-    
     /**
      * Given a {@link List} l, this selects a random element of l to be the first value in the returned list l2. It
      * retains the order of elements in l after that random element and makes them follow the first element in l2, and
@@ -481,19 +386,6 @@ public class RNG implements Serializable, IRNG {
                 };
             }
         };
-    }
-
-
-    /**
-     * Mutates the array arr by switching the contents at pos1 and pos2.
-     * @param arr an array of T; must not be null
-     * @param pos1 an index into arr; must be at least 0 and no greater than arr.length
-     * @param pos2 an index into arr; must be at least 0 and no greater than arr.length
-     */
-    private static <T> void swap(T[] arr, int pos1, int pos2) {
-        final T tmp = arr[pos1];
-        arr[pos1] = arr[pos2];
-        arr[pos2] = tmp;
     }
 
     /**
@@ -733,19 +625,6 @@ public class RNG implements Serializable, IRNG {
     }
 
     /**
-     * This returns a random double between 0.0 (inclusive) and outer (exclusive). The value for outer can be positive
-     * or negative. Because of how math on doubles works, there are at most 2 to the 53 values this can return for any
-     * given outer bound, and very large values for outer will not necessarily produce all numbers you might expect.
-     *
-     * @param outer the outer exclusive bound as a double; can be negative or positive
-     * @return a double between 0.0 (inclusive) and outer (exclusive)
-     */
-    @Override
-    public double nextDouble(final double outer) {
-        return (random.nextLong() & 0x1fffffffffffffL) * 0x1p-53 * outer;
-    }
-
-    /**
      * Gets a random float between 0.0f inclusive and 1.0f exclusive.
      * This returns a maximum of 0.99999994 because that is the largest float value that is less than 1.0f .
      *
@@ -754,18 +633,6 @@ public class RNG implements Serializable, IRNG {
     @Override
     public float nextFloat() {
         return random.next(24) * 0x1p-24f;
-    }
-    /**
-     * This returns a random float between 0.0f (inclusive) and outer (exclusive). The value for outer can be positive
-     * or negative. Because of how math on floats works, there are at most 2 to the 24 values this can return for any
-     * given outer bound, and very large values for outer will not necessarily produce all numbers you might expect.
-     *
-     * @param outer the outer exclusive bound as a float; can be negative or positive
-     * @return a float between 0f (inclusive) and outer (exclusive)
-     */
-    @Override
-    public float nextFloat(final float outer) {
-        return random.next(24) * 0x1p-24f * outer;
     }
 
     /**
@@ -791,111 +658,6 @@ public class RNG implements Serializable, IRNG {
     @Override
     public long nextLong() {
         return random.nextLong();
-    }
-
-    /**
-     * Gets a pseudo-random long between 0 and bound. 
-     * Exclusive on bound (which must be positive), with an inner bound of 0 If bound is negative or 0, this always
-     * returns 0. You can use {@link #nextSignedLong(long)} to use a negative bound. The technique that 
-     * <br>
-     * Credit for this method goes to <a href="https://oroboro.com/large-random-in-range/">Rafael Baptista's blog</a>
-     * for the original idea, and the JDK10 Math class' usage of Karatsuba multiplication for the current algorithm. 
-     * This method is drastically faster than the previous implementation when the bound varies often (roughly 4x
-     * faster, possibly more). It also always gets exactly one random long, so by default it advances the state as much
-     * as {@link #nextLong()}.
-     * 
-     * @param bound the outer exclusive bound; should be positive, otherwise this always returns 0L
-     * @return a random long between 0 (inclusive) and bound (exclusive)
-     */
-    public long nextLong(long bound) {
-        long rand = random.nextLong();
-        if (bound <= 0) return 0;
-        final long randLow = rand & 0xFFFFFFFFL;
-        final long boundLow = bound & 0xFFFFFFFFL;
-        rand >>>= 32;
-        bound >>>= 32;
-        final long a = rand * bound;
-        final long b = randLow * boundLow;
-        return (((b >>> 32) + (rand + randLow) * (bound + boundLow) - a - b) >>> 32) + a;
-    }
-    /**
-     * Exclusive on bound (which may be positive or negative), with an inner bound of 0.
-     * If bound is negative this returns a negative long; if bound is positive this returns a positive long. The bound
-     * can even be 0, which will cause this to return 0L every time. This uses a biased technique to get numbers from
-     * large ranges, but the amount of bias is incredibly small (expected to be under 1/1000 if enough random ranged
-     * numbers are requested, which is about the same as an unbiased method that was also considered). It may have
-     * noticeable bias if the generator's period is exhausted by only calls to this method. Unlike all unbiased methods,
-     * this advances the state by an equivalent to exactly one call to {@link #nextLong()}, where rejection sampling
-     * would sometimes advance by one call, but other times by arbitrarily many more.
-     * <br>
-     * Credit for this method goes to <a href="https://oroboro.com/large-random-in-range/">Rafael Baptista's blog</a>
-     * for the original idea, and the JDK10 Math class' usage of Hacker's Delight code for the current algorithm. 
-     * This method is drastically faster than the previous implementation when the bound varies often (roughly 4x
-     * faster, possibly more). It also always gets exactly one random long, so by default it advances the state as much
-     * as {@link #nextLong()}.
-     *
-     * @param outerBound the outer exclusive bound; can be positive or negative
-     * @return a random long between 0 (inclusive) and bound (exclusive)
-     */
-    public long nextSignedLong(long outerBound) {
-        long rand = random.nextLong();
-        final long randLow = rand & 0xFFFFFFFFL;
-        final long boundLow = outerBound & 0xFFFFFFFFL;
-        rand >>= 32;
-        outerBound >>= 32;
-        long a = rand * outerBound;
-        final long b = randLow * boundLow;
-        return a + (((b >>> 32) + (rand + randLow) * (outerBound + boundLow) - a - b) >> 32);
-    }
-
-    /**
-     * Returns a random non-negative integer between 0 (inclusive) and the given bound (exclusive),
-     * or 0 if the bound is 0. The bound can be negative, which will produce 0 or a negative result.
-     * This is almost identical to the earlier {@link #nextIntHasty(int)} except that it will perform better when the
-     * RandomnessSource this uses natively produces 32-bit output. It was added to the existing nextIntHasty() so
-     * existing code using nextIntHasty would produce the same results, but new code matches the API with
-     * {@link #nextSignedLong(long)}. This is implemented slightly differently in {@link AbstractRNG}, and different
-     * results should be expected when using code based on that abstract class.
-     * <br>
-     * Credit goes to Daniel Lemire, http://lemire.me/blog/2016/06/27/a-fast-alternative-to-the-modulo-reduction/
-     *
-     * @param outerBound the outer bound (exclusive), can be negative or positive
-     * @return the found number
-     */
-    public int nextSignedInt(int outerBound) {
-        outerBound = (int) ((outerBound * (long)random.next(31)) >> 31);
-        return outerBound + (outerBound >>> 31);
-    }
-
-    /**
-     * Returns a random non-negative integer below the given bound, or 0 if the bound is 0 or
-     * negative. Always makes one call to the {@link RandomnessSource#next(int)} method of the RandomnessSource that
-     * would be returned by {@link #getRandomness()}, even if bound is 0 or negative, to avoid branching and also to
-     * ensure consistent advancement rates for the RandomnessSource (this can be important if you use a
-     * {@link SkippingRandomness} and want to go back before a result was produced).
-     * <br>
-     * This method changed a fair amount on April 5, 2018 to better support RandomnessSource implementations with a
-     * slower nextLong() method, such as {@link Lathe32RNG}, and to avoid branching/irregular state advancement/modulus
-     * operations. It is now almost identical to {@link #nextIntHasty(int)}, but won't return negative results if bound
-     * is negative (matching its previous behavior). This may have statistical issues (small ones) if bound is very
-     * large (the estimate is still at least a bound of a billion or more before issues are observable). Consider
-     * {@link #nextSignedInt(int)} if the bound should be allowed to be negative; {@link #nextIntHasty(int)} is here for
-     * compatibility with earlier versions, but the two methods are very similar.
-     * <br>
-     * Credit goes to Daniel Lemire, http://lemire.me/blog/2016/06/27/a-fast-alternative-to-the-modulo-reduction/
-     *
-     * @param bound the upper bound (exclusive)
-     * @return the found number
-     */
-    @Override
-    public int nextInt(final int bound) {
-        return (int) ((bound * ((long)random.next(31))) >>> 31) & ~(bound >> 31);
-//        int threshold = (0x7fffffff - bound + 1) % bound;
-//        for (; ; ) {
-//            int bits = random.next(31);
-//            if (bits >= threshold)
-//                return bits % bound;
-//        }
     }
 
     /**

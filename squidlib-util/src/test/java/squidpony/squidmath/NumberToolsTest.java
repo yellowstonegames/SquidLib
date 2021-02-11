@@ -7,7 +7,7 @@ public class NumberToolsTest {
   
   public static float TOLERANCE = 0x1p-12f; // 1.0 / 4096.0
   public static float WEAK_TOLERANCE = 0x1.2p-10f; // 1.125 / 1024.0
-  public static float DEGREE_TOLERANCE = 0.05f; // 1.0 / 20.0, only permitted for degree measurements
+  public static float DEGREE_TOLERANCE = (float) (WEAK_TOLERANCE * 180.0 / Math.PI); // WEAK_TOLERANCE converted to degrees
 
   public static double atan2_Math(double y, double x){
     final double a = Math.atan2(y, x) * (0.5 / Math.PI) + 1.0;

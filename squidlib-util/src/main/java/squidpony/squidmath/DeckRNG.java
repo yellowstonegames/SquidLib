@@ -317,10 +317,6 @@ public class DeckRNG extends StatefulRNG implements Serializable {
      */
     @Override
     public int next(int bits) {
-        if(bits <= 0)
-            return 0;
-        if(bits > 32)
-            bits = 32;
         return (int)(nextDouble() * (1L << bits));
 
     }
@@ -340,13 +336,13 @@ public class DeckRNG extends StatefulRNG implements Serializable {
      * The inclusive and exclusive behavior is to match the behavior of the
      * similar method that deals with floating point values.
      *
-     * @param min the minimum bound on the return value (inclusive)
-     * @param max the maximum bound on the return value (exclusive)
+     * @param inner the minimum bound on the return value (inclusive)
+     * @param outer the maximum bound on the return value (exclusive)
      * @return the found value
      */
     @Override
-    public long between(long min, long max) {
-        return nextLong(max - min) + min;
+    public long between(long inner, long outer) {
+        return nextLong(outer - inner) + inner;
     }
     
     @Override
