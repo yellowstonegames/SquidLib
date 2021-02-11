@@ -125,9 +125,21 @@ public class RNGFeatureTest {
         IRNG srng = arng.copy();
         for (int i = 0; i < 8; i++) {
             long a = arng.between(Integer.MIN_VALUE, Long.MAX_VALUE);
+//            System.out.printf("a: %016X\n", a);
             Assert.assertTrue("AbstractRNG went out-of-bounds: on " + i + ", a was " + a, a >= Integer.MIN_VALUE && a < Long.MAX_VALUE);
             long s = srng.between(Integer.MIN_VALUE, Long.MAX_VALUE);
+//            System.out.printf("s: %016X\n", s);
             Assert.assertTrue("StatefulRNG incorrectly went out-of-bounds", s >= Integer.MIN_VALUE && s < Long.MAX_VALUE);
         }
+        for (int i = 0; i < 8; i++) {
+            long a = arng.between(Long.MAX_VALUE, Integer.MIN_VALUE);
+//            System.out.printf("a: %016X\n", a);
+            Assert.assertTrue("AbstractRNG went out-of-bounds: on " + i + ", a was " + a, a > Integer.MIN_VALUE);
+            long s = srng.between(Long.MAX_VALUE, Integer.MIN_VALUE);
+//            System.out.printf("s: %016X\n", s);
+            Assert.assertTrue("StatefulRNG incorrectly went out-of-bounds", s > Integer.MIN_VALUE);
+        }
+//        System.out.println(arng.between(0L, -2L));
+//        System.out.println(arng.between(-2L, 0L));
     }
 }
