@@ -62,7 +62,7 @@ public abstract class AbstractRNG implements IRNG {
      * If bound is negative or 0 this always returns 0.
      * <br>
      * Credit for this method goes to <a href="https://oroboro.com/large-random-in-range/">Rafael Baptista's blog</a>
-     * for the original idea, and the JDK10 Math class' usage of Karatsuba multiplication for the current algorithm. 
+     * for the algorithm, though the technique is not new.
      * This method is drastically faster than the previous implementation when the bound varies often (roughly 4x
      * faster, possibly more). It also always gets exactly one random long, so by default it advances the state as much
      * as {@link #nextLong()}; subclasses can generate two ints instead of one long if they prefer.

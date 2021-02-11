@@ -256,13 +256,13 @@ public class DharmaRNG extends RNG implements Serializable{
      * The inclusive and exclusive behavior is to match the behavior of the
      * similar method that deals with floating point values.
      *
-     * @param min the minimum bound on the return value (inclusive)
-     * @param max the maximum bound on the return value (exclusive)
+     * @param inner the minimum bound on the return value (inclusive)
+     * @param outer the maximum bound on the return value (exclusive)
      * @return the found value
      */
     @Override
-    public long between(long min, long max) {
-        return min + nextLong(max - min);
+    public long between(long inner, long outer) {
+        return inner + nextLong(outer - inner);
     }
 
     /**
