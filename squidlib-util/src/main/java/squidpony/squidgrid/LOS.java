@@ -140,15 +140,16 @@ public class LOS implements Serializable {
      */
     public boolean isReachable(char[][] walls, int startx, int starty, int targetx, int targety) {
         if(walls.length < 1) return false;
-        double[][] resMap = new double[walls.length][walls[0].length];
+        if(resistanceMap == null || resistanceMap.length != walls.length || resistanceMap[0].length != walls[0].length)
+            resistanceMap = new double[walls.length][walls[0].length];
         for(int x = 0; x < walls.length; x++)
         {
             for(int y = 0; y < walls[0].length; y++)
             {
-                resMap[x][y] = (walls[x][y] == '#') ? 1.0 : 0.0;
+                resistanceMap[x][y] = (walls[x][y] == '#') ? 1.0 : 0.0;
             }
         }
-        return isReachable(resMap, startx, starty, targetx, targety, radiusStrategy);
+        return isReachable(resistanceMap, startx, starty, targetx, targety, radiusStrategy);
     }
 
     /**
@@ -220,15 +221,16 @@ public class LOS implements Serializable {
      */
     public boolean isReachable(char[][] walls, int startx, int starty, int targetx, int targety, Radius radiusStrategy) {
         if(walls.length < 1) return false;
-        double[][] resMap = new double[walls.length][walls[0].length];
+        if(resistanceMap == null || resistanceMap.length != walls.length || resistanceMap[0].length != walls[0].length)
+            resistanceMap = new double[walls.length][walls[0].length];
         for(int x = 0; x < walls.length; x++)
         {
             for(int y = 0; y < walls[0].length; y++)
             {
-                resMap[x][y] = (walls[x][y] == '#') ? 1.0 : 0.0;
+                resistanceMap[x][y] = (walls[x][y] == '#') ? 1.0 : 0.0;
             }
         }
-        return isReachable(resMap, startx, starty, targetx, targety, radiusStrategy);
+        return isReachable(resistanceMap, startx, starty, targetx, targety, radiusStrategy);
     }
 
     /**
@@ -247,7 +249,8 @@ public class LOS implements Serializable {
      */
     public boolean spreadReachable(char[][] walls, int startx, int starty, int targetx, int targety, Radius radiusStrategy, int spread) {
         if(walls.length < 1) return false;
-        resistanceMap = new double[walls.length][walls[0].length];
+        if(resistanceMap == null || resistanceMap.length != walls.length || resistanceMap[0].length != walls[0].length)
+            resistanceMap = new double[walls.length][walls[0].length];
         for(int x = 0; x < walls.length; x++)
         {
             for(int y = 0; y < walls[0].length; y++)
@@ -320,7 +323,7 @@ public class LOS implements Serializable {
 */
     private boolean bresenhamReachable(Radius radiusStrategy) {
         Coord[] path = Bresenham.line2D_(startx, starty, targetx, targety);
-        lastPath = new ArrayDeque<>();
+        lastPath.clear();
         double rad = radiusStrategy.radius(startx, starty, targetx, targety);
         if(rad == 0.0) {
             lastPath.add(Coord.get(startx, starty));
@@ -348,13 +351,13 @@ public class LOS implements Serializable {
 
     private boolean orthoReachable(Radius radiusStrategy) {
         Coord[] path = OrthoLine.line_(startx, starty, targetx, targety);
-        lastPath = new ArrayDeque<>();
+        lastPath.clear();
         double rad = radiusStrategy.radius(startx, starty, targetx, targety);
         if(rad == 0.0) {
             lastPath.add(Coord.get(startx, starty));
             return true; // already at the point; we can see our own feet just fine!
         }
-        double decay = 1 / rad;
+        double decay = 1.0 / rad;
         double currentForce = 1;
         Coord p;
         for (int i = 0; i < path.length; i++) {
@@ -376,7 +379,7 @@ public class LOS implements Serializable {
 
     private boolean ddaReachable(Radius radiusStrategy) {
         Coord[] path = DDALine.line_(startx, starty, targetx, targety);
-        lastPath = new ArrayDeque<>();
+        lastPath.clear();
         double rad = radiusStrategy.radius(startx, starty, targetx, targety);
         if(rad == 0.0) {
             lastPath.add(Coord.get(startx, starty));
@@ -404,7 +407,7 @@ public class LOS implements Serializable {
     }
 
     private boolean thickReachable(Radius radiusStrategy) {
-        lastPath = new ArrayDeque<>();
+        lastPath.clear();
         double dist = radiusStrategy.radius(startx, starty, targetx, targety);
         double decay = 1.0 / dist; // note: decay can be positive infinity if dist is 0; this is actually OK
         OrderedSet<Coord> visited = new OrderedSet<>((int) dist + 3);
@@ -517,7 +520,7 @@ public class LOS implements Serializable {
     }
 
     private boolean rayReachable(Radius radiusStrategy) {
-        lastPath = new ArrayDeque<>();//save path for later retrieval
+        lastPath.clear();//save path for later retrieval
         if (startx == targetx && starty == targety) {//already there!
             lastPath.add(Coord.get(startx, starty));
             return true;
