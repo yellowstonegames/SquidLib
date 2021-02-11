@@ -213,7 +213,12 @@ public abstract class AbstractRNG implements IRNG {
     @Override
     public long between(long inner, long outer) {
         final long rand = nextLong();
-        final long bound = (outer >= inner) ? outer - inner : inner - outer;
+        if(outer < inner) {
+            long t = outer;
+            outer = inner + 1L;
+            inner = t + 1L;
+        }
+        final long bound = outer - inner;
         final long randLow = rand & 0xFFFFFFFFL;
         final long boundLow = bound & 0xFFFFFFFFL;
         final long randHigh = (rand >>> 32);
