@@ -72,15 +72,7 @@ public abstract class AbstractRNG implements IRNG {
      */
     @Override
     public long nextLong(long bound) {
-        long rand = nextLong();
-        if (bound <= 0) return 0;
-        final long randLow = rand & 0xFFFFFFFFL;
-        final long boundLow = bound & 0xFFFFFFFFL;
-        rand >>>= 32;
-        bound >>>= 32;
-        final long a = rand * bound;
-        final long b = randLow * boundLow;
-        return (((b >>> 32) + (rand + randLow) * (bound + boundLow) - a - b) >>> 32) + a;
+        return between(0L, bound) & (bound | -bound) >> 63;
     }
 
     /**
@@ -167,14 +159,7 @@ public abstract class AbstractRNG implements IRNG {
      */
     @Override
     public long nextSignedLong(long outerBound) {
-        long rand = nextLong();
-        final long randLow = rand & 0xFFFFFFFFL;
-        final long boundLow = outerBound & 0xFFFFFFFFL;
-        rand >>= 32;
-        outerBound >>= 32;
-        long a = rand * outerBound;
-        final long b = randLow * boundLow;
-        return a + (((b >>> 32) + (rand + randLow) * (outerBound + boundLow) - a - b) >> 32);
+        return between(0, outerBound);
     }
 
     /**
@@ -206,25 +191,34 @@ public abstract class AbstractRNG implements IRNG {
      */
     @Override
     public int between(int min, int max) {
-        return nextInt(max - min) + min;
+        return nextSignedInt(max - min) + min;
     }
 
     /**
-     * Returns a value between min (inclusive) and max (exclusive) as longs.
+     * Returns a value between inner (inclusive) and outer (exclusive) as longs.
      * <br>
      * The inclusive and exclusive behavior is to match the behavior of the similar
-     * method that deals with floating point values.
+     * method that deals with floating point values. Either or both bounds may be
+     * negative, but inner remains inclusive and outer exclusive.
      * <br>
-     * If {@code min} and {@code max} happen to be the same, {@code min} is returned
+     * If {@code inner} and {@code outer} happen to be the same, {@code inner} is returned
      * (breaking the exclusive behavior, but it's convenient to do so).
+     * <br>
+     * Credit to Rafael Baptista, https://oroboro.com/large-random-in-range/ , for this technique.
      *
-     * @param min the minimum bound on the return value (inclusive)
-     * @param max the maximum bound on the return value (exclusive)
+     * @param inner the inner bound on the return value (inclusive)
+     * @param outer the outer bound on the return value (exclusive)
      * @return the found value
      */
     @Override
-    public long between(long min, long max) {
-        return nextLong(max - min) + min;
+    public long between(long inner, long outer) {
+        final long rand = nextLong();
+        final long bound = (outer <= inner) ? outer - inner : inner - outer;
+        final long randLow = rand & 0xFFFFFFFFL;
+        final long boundLow = bound & 0xFFFFFFFFL;
+        final long randHigh = (rand >>> 32);
+        final long boundHigh = (bound >>> 32);
+        return inner + (randHigh * boundLow >>> 32) + (randLow * boundHigh >>> 32) + randHigh * boundHigh;
     }
 
     /**
