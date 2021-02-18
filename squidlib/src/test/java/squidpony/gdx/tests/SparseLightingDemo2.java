@@ -25,14 +25,14 @@ import java.util.ArrayList;
 
 /**
  * Tests colored lighting using various methods in {@link FOV}, {@link SColor}, and {@link MapUtility}, along with their
- * usage in {@link SquidLayers}.
+ * usage in {@link SparseLayers}.
  * <br>
  * Created by Tommy Ettinger on 4/6/2016.
  */
-public class LightingTest extends ApplicationAdapter{
+public class SparseLightingDemo2 extends ApplicationAdapter{
     public static final int gridWidth = 80, gridHeight = 40, cellWidth = 11, cellHeight = 20;
-
-    private SquidLayers layers;
+//★
+    private SparseLayers layers;
     private char[][] map, displayedMap;
     private Color[][] fgColors, bgColors;
     private StatefulRNG rng;
@@ -42,7 +42,7 @@ public class LightingTest extends ApplicationAdapter{
     private int colorIndex;
     private Coord[] points;
     private int[] offsets;
-    private AnimatedEntity[] markers;
+    private TextCellFactory.Glyph[] markers;
     private double[][] resMap;
     private float ctr;
     private LightingHandler lighting;
@@ -54,7 +54,7 @@ public class LightingTest extends ApplicationAdapter{
         super.create();
         rng = new StatefulRNG(0x9876543210L);
 
-        layers = new SquidLayers(gridWidth, gridHeight, cellWidth, cellHeight,
+        layers = new SparseLayers(gridWidth, gridHeight, cellWidth, cellHeight,
                 //DefaultResources.getStretchableCodeFont());
                 DefaultResources.getCrispLeanFont());
         //new TextCellFactory().fontDistanceField("SourceCodePro-Medium-distance.fnt", "SourceCodePro-Medium-distance.png"));
@@ -64,7 +64,6 @@ public class LightingTest extends ApplicationAdapter{
         colors = DefaultResources.getSCC().rainbow(0.85f, 1.0f, 512);
         mColors = DefaultResources.getSCC().loopingGradient(SColor.BLACK, SColor.WHITE, 523);
         //colors.addAll(DefaultResources.getSCC().zigzagGradient(Color.MAGENTA, Color.RED, 200));
-        layers.setLightingColor(SColor.WHITE);
         //PacMazeGenerator maze = new PacMazeGenerator(gridWidth, gridHeight, rng);
         //OrganicMapGenerator org = new OrganicMapGenerator(gridWidth, gridHeight, rng);
 //        SerpentMapGenerator org = new SerpentMapGenerator(gridWidth, gridHeight, rng, 0.1);
@@ -87,7 +86,7 @@ public class LightingTest extends ApplicationAdapter{
         GreasedRegion packed = new GreasedRegion(gen.getBareDungeon(), '.');
         points = packed.randomScatter(rng, 7, 32).asCoords();
         offsets = new int[points.length];
-        markers = new AnimatedEntity[points.length];
+        markers = new TextCellFactory.Glyph[points.length];
         Coord pt;
         for(int c = 0; c < points.length; c++)
         {
@@ -97,7 +96,7 @@ public class LightingTest extends ApplicationAdapter{
 //            FOV.reuseFOV(resMap, tempLit, pt.x, pt.y, 8.5);
 //            SColor.colorLightingInto(tempColorful, tempLit, colors.get((colorIndex + offsets[c]) & 511).toFloatBits());
 //            SColor.mixColoredLighting(colorful, tempColorful);
-            markers[c] = layers.directionMarker(pt.x, pt.y, mColors, 4f, 2, false);
+            markers[c] = layers.glyph('★', SColor.FLOAT_WHITE, pt.x, pt.y);
         }
 
         lighting.updateAll();
@@ -133,16 +132,15 @@ public class LightingTest extends ApplicationAdapter{
                         lighting.moveLight(pt, alter);
                         pt = alter;
                         points[i] = pt;
-                        markers[i].setDirection(d);
-                        layers.slide(markers[i], alter.x, alter.y, 2, 0.25f);
+                        layers.slide(markers[i], layers.gridX(markers[i].getX()), layers.gridY(markers[i].getY()), alter.x, alter.y, 0.25f, null);
                         break;
                     }
                 }
             }
         }
         lighting.updateAll();
-        layers.put(0, 0, displayedMap, fgColors, bgColors);
-        lighting.draw(layers.getBackgroundLayer());
+        layers.put(displayedMap, fgColors, bgColors);
+        lighting.draw(layers);
         //layers.setLightingColor(colors.get(colorIndex = (colorIndex + 1) % colors.size()));
 //        for (int x = 0; x < gridWidth; x++) {
 //            for (int y = 0; y < gridHeight; y++) {
@@ -153,10 +151,10 @@ public class LightingTest extends ApplicationAdapter{
         stage.getViewport().apply(false);
         stage.draw();
         stage.act();
-        int aeLen = layers.getForegroundLayer().animatedEntities.size();
+        int aeLen = layers.glyphs.size();
         batch.begin();
         for (int i = 0; i < aeLen; i++) {
-            layers.drawActor(batch, 1f, layers.getForegroundLayer().animatedEntities.getAt(i), 2);
+            layers.glyphs.get(i).draw(batch, 1f);
         }
         batch.end();
     }
@@ -167,6 +165,6 @@ public class LightingTest extends ApplicationAdapter{
         config.useVsync(false);
         config.setWindowedMode(gridWidth * cellWidth, gridHeight * cellHeight);
         config.setWindowIcon(Files.FileType.Internal, "Tentacle-128.png", "Tentacle-64.png", "Tentacle-32.png", "Tentacle-16.png");
-        new Lwjgl3Application(new LightingTest(), config);
+        new Lwjgl3Application(new SparseLightingDemo2(), config);
     }
 }
