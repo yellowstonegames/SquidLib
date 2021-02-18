@@ -186,7 +186,7 @@ public class SparseDemo2 extends ApplicationAdapter {
         //Some classes in SquidLib need access to a batch to render certain things, so it's a good idea to have one.
         // FilterBatch is exactly like the normal libGDX SpriteBatch except that it filters all colors used for text or
         // for tinting images.
-        batch = new FilterBatch(id);
+        batch = new FilterBatch(16383, id);
         StretchViewport mainViewport = new StretchViewport(gridWidth * cellWidth, gridHeight * cellHeight),
                 languageViewport = new StretchViewport(gridWidth * cellWidth, bonusHeight * cellHeight);
         mainViewport.setScreenBounds(0, 0, gridWidth * cellWidth, gridHeight * cellHeight);
@@ -754,6 +754,7 @@ public class SparseDemo2 extends ApplicationAdapter {
         tempSB.append(Gdx.graphics.getFramesPerSecond())
                 .append(" FPS, Draw Calls: ").append(drawCalls)
                 .append(", Calls: ").append(calls)
+                .append(", Max Sprites: ").append(batch.maxSpritesInBatch)
                 .append(",\nTexture Binds: ").append(textureBindings)
                 .append(", Shader Switches: ").append(switches);
         screenPosition.set(cellWidth * gridWidth * 0.5f, cellHeight);

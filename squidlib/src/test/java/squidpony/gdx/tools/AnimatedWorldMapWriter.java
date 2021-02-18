@@ -42,16 +42,16 @@ public class AnimatedWorldMapWriter extends ApplicationAdapter {
 //    private static final int width = 512, height = 256; // mimic, elliptical
 //    private static final int width = 1024, height = 512; // mimic, elliptical
 //    private static final int width = 2048, height = 1024; // mimic, elliptical
-    private static final int width = 256, height = 256; // space view
+//    private static final int width = 256, height = 256; // space view
 //    private static final int width = 1200, height = 400; // squat
-//    private static final int width = 400, height = 400;
+    private static final int width = 300, height = 300;
     //private static final int width = 314 * 4, height = 400;
-    //private static final int width = 512, height = 512;
+//    private static final int width = 512, height = 512;
 
     private static final int LIMIT = 5;
     private static final boolean MEASURE_BOUNDS = false;
     private static final boolean FLOWING_LAND = false;
-    private static final boolean ALIEN_COLORS = true;
+    private static final boolean ALIEN_COLORS = false;
 
     private FilterBatch batch;
 //    private OrderedSet<String> adjective = new OrderedSet<>(256), noun = new OrderedSet<>(256);
@@ -81,8 +81,8 @@ public class AnimatedWorldMapWriter extends ApplicationAdapter {
     private AnimatedGif writer;
     
     private String date, path;
-    private Noise.Noise3D noise;
-//    private Noise.Adapted3DFrom5D noise;
+//    private Noise.Noise3D noise;
+    private Noise.Adapted3DFrom5D noise;
 //    private double mutationA = NumberTools.cos(0.75) * 3.0, mutationB = NumberTools.sin(0.75) * 3.0;
     public IntMap<int[]> bounds = new IntMap<>(20);
 //    private double mutationC = NumberTools.cos(1.5), mutationD = NumberTools.sin(1.5);
@@ -134,8 +134,8 @@ World #5, SavoryMelonAlder, completed in 64338 ms
 //        path = "out/worldsAnimated/" + date + "/SpaceView/";
 //        path = "out/worldsAnimated/" + date + "/SpaceViewMutantClassic/";
 //        path = "out/worldsAnimated/" + date + "/SpaceViewMutantFoam/";
-//        path = "out/worldsAnimated/" + date + "/SpaceViewMutantHoney/";
-        path = "out/worldsAnimated/" + date + "/SpaceViewHoney/";
+        path = "out/worldsAnimated/" + date + "/SpaceViewMutantHoney/";
+//        path = "out/worldsAnimated/" + date + "/SpaceViewHoney/";
 //        path = "out/worldsAnimated/" + date + "/SpaceViewFoam/";
 //        path = "out/worldsAnimated/" + date + "/SpaceViewRidged/";
 //        path = "out/worldsAnimated/" + date + "/SpaceViewMutantMaelstrom/";
@@ -211,7 +211,7 @@ World #5, SavoryMelonAlder, completed in 64338 ms
 //        WorldMapGenerator.DEFAULT_NOISE.setFractalGain(1.25f);
         VastNoise fn = new VastNoise((int) seed, 1.25f, VastNoise.HONEY, 1);
         
-        noise = fn;//new Noise.Adapted3DFrom5D(fn);
+        noise = new Noise.Adapted3DFrom5D(fn);
 //        WorldMapGenerator.DEFAULT_NOISE.setNoiseType(FastNoise.HONEY);
 //        WorldMapGenerator.DEFAULT_NOISE.setFrequency(1.25f);
 //        WorldMapGenerator.DEFAULT_NOISE.setFractalOctaves(1);
@@ -293,7 +293,7 @@ World #5, SavoryMelonAlder, completed in 64338 ms
 //        world = new WorldMapGenerator.TilingMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.75);
 //        world = new WorldMapGenerator.EllipticalMap(seed, width, height, noise, 1.75);
 //        world = new WorldMapGenerator.MimicMap(seed, WorldMapGenerator.DEFAULT_NOISE, 1.75);
-        world = new WorldMapGenerator.SpaceViewMap(seed, width, height, noise, 0.58);
+        world = new WorldMapGenerator.SpaceViewMap(seed, width, height, noise, 0.8);
 //        world = new WorldMapGenerator.SpaceViewMap(seed, width, height, noise, 0.5);
 //        world = new WorldMapGenerator.RoundSideMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.75);
 //        world = new WorldMapGenerator.HyperellipticalMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 0.8, 0.03125, 2.5);
@@ -334,7 +334,6 @@ World #5, SavoryMelonAlder, completed in 64338 ms
         }
 //        wmv.generate();
         wmv.generate(
-                //1.45,
                 1.0 + NumberTools.formCurvedDouble(world.seedA * 0x123456789ABCDEFL ^ world.seedB) * 0.1875,
                 1.0625 + DiverRNG.determineDouble(world.seedB * 0x123456789ABL ^ world.seedA) * 0.375);
         ttg = System.currentTimeMillis() - startTime;
@@ -352,8 +351,8 @@ World #5, SavoryMelonAlder, completed in 64338 ms
         for (int i = 0; i < pm.length; i++) {
             double angle = (Math.PI * 2.0 / pm.length) * i;
 
-//            noise.w = NumberTools.cos(angle) * 0.3125;
-//            noise.u = NumberTools.sin(angle) * 0.3125;
+            noise.w = NumberTools.cos(angle) * 0.3125;
+            noise.u = NumberTools.sin(angle) * 0.3125;
             
             world.setCenterLongitude(angle);
             generate(hash);
