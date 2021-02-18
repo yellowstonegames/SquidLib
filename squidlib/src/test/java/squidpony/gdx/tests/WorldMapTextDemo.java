@@ -393,7 +393,7 @@ public class WorldMapTextDemo extends ApplicationAdapter {
     public static void main(String[] arg) {
         Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
         config.setTitle("SquidLib Demo: Detailed World Map");
-        config.useVsync(false);
+        config.useVsync(true);
         config.setWindowedMode(shownWidth * cellWidth, shownHeight * cellHeight);
         config.setWindowIcon(Files.FileType.Internal, "Tentacle-128.png", "Tentacle-64.png", "Tentacle-32.png", "Tentacle-16.png");
         new Lwjgl3Application(new WorldMapTextDemo(), config);

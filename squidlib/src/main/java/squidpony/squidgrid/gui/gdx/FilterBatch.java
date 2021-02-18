@@ -133,8 +133,8 @@ public class FilterBatch implements Batch {
      * @param size The max number of sprites in a single batch. Max of 8191.
      * @param defaultShader The default shader to use. This is not owned by the FilterBatch and must be disposed separately. */
     public FilterBatch (int size, ShaderProgram defaultShader, FloatFilter filter) {
-        // 32767 is max vertex index, so 32767 / 4 vertices per sprite = 8191 sprites max.
-        if (size > 8191) throw new IllegalArgumentException("Can't have more than 8191 sprites per batch: " + size);
+        // 65535 is max vertex index, so 65535 / 4 vertices per sprite = 16383 sprites max.
+        if (size > 16383) throw new IllegalArgumentException("Can't have more than 8191 sprites per batch: " + size);
 
         Mesh.VertexDataType vertexDataType = (Gdx.gl30 != null) ? Mesh.VertexDataType.VertexBufferObjectWithVAO : Mesh.VertexDataType.VertexArray;
 
@@ -221,7 +221,7 @@ public class FilterBatch implements Batch {
     @Override
     public void end () {
         if (!drawing) throw new IllegalStateException("FilterBatch.begin must be called before end.");
-        if (idx > 0) flush();
+        if (idx != 0) flush();
         lastTexture = null;
         drawing = false;
 

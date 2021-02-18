@@ -89,7 +89,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
 
     private boolean spinning;
 
-    private boolean seasons = true;
+    private boolean seasons = false;
 
     private boolean cloudy;
 //    private float nation = 0f;

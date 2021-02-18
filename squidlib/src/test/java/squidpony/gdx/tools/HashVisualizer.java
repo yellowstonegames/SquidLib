@@ -68,7 +68,7 @@ public class HashVisualizer extends ApplicationAdapter {
     // 5 RNG results
     private int testType = 4;
     private static final int NOISE_LIMIT = 148;
-    private int hashMode, rngMode, noiseMode = 83, otherMode = 17;//142
+    private int hashMode, rngMode, noiseMode = 104, otherMode = 17;//142
 
     /**
      * If you're editing the source of HashVisualizer, you can comment out one line and uncomment another to change
@@ -4661,7 +4661,8 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         {
                             bright = SColor.floatGetHSV(ctr * 0x1.44cbc89p-8f, 1, 1,1);
 //                            iBright = (int)(NumberTools.swayCubic(ctr * 0x1p-9f) * 0x.fp0 * half);
-                            iBright = (int)(basic1D.getNoise(ctr * 0.015625) * 0x.fp0 * half);
+//                            iBright = (int)(basic1D.getNoise(ctr * 0.015625) * 0x.fp0 * half);
+                            iBright = (int)(basic1D.getNoise(ctr * 0.015625) * 0x.fp0 * 0x1p+15f) >> 7;
                             back[width - 1][half - 1 + iBright] =  bright;
                             back[width - 1][half + 0 + iBright] =  bright;
                             back[width - 1][half + 1 + iBright] =  bright;
@@ -4683,7 +4684,8 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         //if((ctr & 3) == 0)
                         {
 //                            iBright = (int)(NumberTools.sin_(ctr * 0x1p-10f) * 0x.fp0 * half);
-                            iBright = (int)(layered1D.getNoise(ctr * 0.015625) * 0x.fp0 * half);
+//                            iBright = (int)(layered1D.getNoise(ctr * 0.015625) * 0x.fp0 * half);
+                            iBright = (int)(layered1D.getNoise(ctr * 0.015625) * 0x.fp0 * 0x1p+15f) >> 7;
                             bright = SColor.floatGetHSV(ctr * 0x1.44cbc89p-8f, 1, 1,1);
                             back[width - 1][half - 1 + iBright] =  bright;
                             back[width - 1][half + 0 + iBright] =  bright;

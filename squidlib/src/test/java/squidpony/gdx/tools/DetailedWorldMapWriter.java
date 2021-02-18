@@ -36,7 +36,7 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
 //    private static final int width = 2048, height = 1024; // mimic, elliptical
 //    private static final int width = 1000, height = 1000; // space view
 //    private static final int width = 1200, height = 400; // squat
-    private static final int LIMIT = 5;
+    private static final int LIMIT = 10;
     //private static final int width = 256, height = 128;
     //private static final int width = 314 * 4, height = 400;
     //private static final int width = 512, height = 512;
@@ -82,14 +82,14 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
         date = DateFormat.getDateInstance().format(new Date());
 //        path = "out/worlds/" + date + "/Sphere/";
 //        path = "out/worlds/" + date + "/SphereQuilt/";
-        path = "out/worlds/" + date + "/SphereCube/";
+//        path = "out/worlds/" + date + "/SphereCube/";
 //        path = "out/worlds/" + date + "/SphereExpo/";
 //        path = "out/worlds/" + date + "/Ellipse/";
 //        path = "out/worlds/" + date + "/EllipseExpo/";
 //        path = "out/worlds/" + date + "/Mimic/";
 //        path = "out/worlds/" + date + "/SpaceView/";
 //        path = "out/worlds/" + date + "/Sphere_Classic/";
-//        path = "out/worlds/" + date + "/Hyperellipse/";
+        path = "out/worlds/" + date + "/Hyperellipse/";
 //        path = "out/worlds/" + date + "/HyperellipseExpo/";
 //        path = "out/worlds/" + date + "/HyperellipseQuilt/";
 //        path = "out/worlds/" + date + "/Tiling/";
@@ -163,13 +163,13 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
 //        WorldMapGenerator.DEFAULT_NOISE.setFractalLacunarity(0.8f);
 //        WorldMapGenerator.DEFAULT_NOISE.setFractalGain(1.25f);
         
-        world = new WorldMapGenerator.SphereMap(seed, width, height, noise, 1.0);
+//        world = new WorldMapGenerator.SphereMap(seed, width, height, noise, 1.0);
 //        world = new WorldMapGenerator.TilingMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.75);
 //        world = new WorldMapGenerator.EllipticalMap(seed, width, height, noise, 1.75);
 //        world = new WorldMapGenerator.MimicMap(seed, WorldMapGenerator.DEFAULT_NOISE, 1.75);
 //        world = new WorldMapGenerator.SpaceViewMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.75);
 //        world = new WorldMapGenerator.RoundSideMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.75);
-//        world = new WorldMapGenerator.HyperellipticalMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 0.8, 0.03125, 2.5);
+        world = new WorldMapGenerator.HyperellipticalMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.75, 0.03125, 2.5);
 //        world = new WorldMapGenerator.EllipticalHammerMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.75);
 //        world = new WorldMapGenerator.LocalMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.75);
 //        world = new WorldMapGenerator.LocalMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 0.8);
@@ -198,9 +198,8 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
         world.seedB = world.rng.stateB;
 //        wmv.generate();
         wmv.generate(
-                //1.45,
                 1.0 + NumberTools.formCurvedDouble(world.seedA * 0x123456789ABCDEFL ^ world.seedB) * 0.1875,
-                1.0 + DiverRNG.determineDouble(world.seedB * 0x123456789ABL ^ world.seedA) * 0.3125);
+                1.0625 + DiverRNG.determineDouble(world.seedB * 0x123456789ABL ^ world.seedA) * 0.375);
         ttg = System.currentTimeMillis() - startTime;
     }
 
