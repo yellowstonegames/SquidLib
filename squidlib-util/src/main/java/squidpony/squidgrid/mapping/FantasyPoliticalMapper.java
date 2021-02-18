@@ -113,7 +113,7 @@ public class FantasyPoliticalMapper implements Serializable {
          * Constructor that sets the language to the specified FakeLanguageGen, sets the name to the specified name and
          * the shortName to the specified shortName, and makes the only blocked biome "Ocean".
          * @param language the FakeLanguageGen to use for potentially generating place names
-         * @param name the name of the Faction, such as "The United States of America"
+         * @param name the formal name of the Faction, such as "The United States of America"
          * @param shortName the short name of the Faction, such as "America"
          */
         public Faction(FakeLanguageGen language, String name, String shortName)
@@ -130,7 +130,7 @@ public class FantasyPoliticalMapper implements Serializable {
          * in preferredBiomes, and makes the only blocked biome "Ocean". The exact String names that are viable for
          * biomes can be obtained from a BiomeMapper with {@link WorldMapGenerator.BiomeMapper#getBiomeNameTable()}.
          * @param language the FakeLanguageGen to use for potentially generating place names
-         * @param name the name of the Faction, such as "The United States of America"
+         * @param name the formal name of the Faction, such as "The United States of America"
          * @param shortName the short name of the Faction, such as "America"
          * @param preferredBiomes a String array of biome names that this Faction prefers, typically taken from a BiomeMapper's {@link WorldMapGenerator.BiomeMapper#getBiomeNameTable()} value
          * 
@@ -152,7 +152,7 @@ public class FantasyPoliticalMapper implements Serializable {
          * blockedBiomes. The exact String names that are viable for biomes can be obtained from a BiomeMapper with
          * {@link WorldMapGenerator.BiomeMapper#getBiomeNameTable()}.
          * @param language the FakeLanguageGen to use for potentially generating place names
-         * @param name the name of the Faction, such as "The United States of America"
+         * @param name the formal name of the Faction, such as "The United States of America"
          * @param shortName the short name of the Faction, such as "America"
          * @param preferredBiomes a String array of biome names that this Faction prefers, typically taken from a BiomeMapper's {@link WorldMapGenerator.BiomeMapper#getBiomeNameTable()} value
          * @param blockedBiomes a String array of biome names that this Faction will never claim; if empty, this Faction may claim oceans
@@ -175,7 +175,7 @@ public class FantasyPoliticalMapper implements Serializable {
          * 8 being the highest peaks). The exact String names that are viable for biomes can be obtained from a
          * BiomeMapper with {@link WorldMapGenerator.BiomeMapper#getBiomeNameTable()}.
          * @param language the FakeLanguageGen to use for potentially generating place names
-         * @param name the name of the Faction, such as "The United States of America"
+         * @param name the formal name of the Faction, such as "The United States of America"
          * @param shortName the short name of the Faction, such as "America"
          * @param preferredBiomes a String array of biome names that this Faction prefers, typically taken from a BiomeMapper's {@link WorldMapGenerator.BiomeMapper#getBiomeNameTable()} value
          * @param blockedBiomes a String array of biome names that this Faction will never claim; if empty, this Faction may claim oceans
@@ -203,7 +203,7 @@ public class FantasyPoliticalMapper implements Serializable {
          * that are viable for biomes can be obtained from a BiomeMapper with
          * {@link WorldMapGenerator.BiomeMapper#getBiomeNameTable()}.
          * @param language the FakeLanguageGen to use for potentially generating place names
-         * @param name the name of the Faction, such as "The United States of America"
+         * @param name the formal name of the Faction, such as "The United States of America"
          * @param shortName the short name of the Faction, such as "America"
          * @param preferredBiomes a String array of biome names that this Faction prefers, typically taken from a BiomeMapper's {@link WorldMapGenerator.BiomeMapper#getBiomeNameTable()} value
          * @param blockedBiomes a String array of biome names that this Faction will never claim; if empty, this Faction may claim oceans
@@ -234,7 +234,7 @@ public class FantasyPoliticalMapper implements Serializable {
          * range from driest to wettest). The exact String names that are viable for biomes can be obtained from a
          * BiomeMapper with {@link WorldMapGenerator.BiomeMapper#getBiomeNameTable()}.
          * @param language the FakeLanguageGen to use for potentially generating place names
-         * @param name the name of the Faction, such as "The United States of America"
+         * @param name the formal name of the Faction, such as "The United States of America"
          * @param shortName the short name of the Faction, such as "America"
          * @param preferredBiomes a String array of biome names that this Faction prefers, typically taken from a BiomeMapper's {@link WorldMapGenerator.BiomeMapper#getBiomeNameTable()} value
          * @param blockedBiomes a String array of biome names that this Faction will never claim; if empty, this Faction may claim oceans
