@@ -43,7 +43,7 @@ public class LightingHandler implements Serializable {
     public Radius radiusStrategy;
     /**
      * The 2D array of light-resistance values from 0.0 to 1.0 for each cell on the map, as produced by
-     * {@link squidpony.squidgrid.mapping.DungeonUtility#generateResistances(char[][])}.
+     * {@link FOV#generateResistances(char[][])}.
      */
     public double[][] resistances;
     /**
@@ -116,8 +116,8 @@ public class LightingHandler implements Serializable {
     }
 
     /**
-     * Given a resistance array as produced by {@link squidpony.squidgrid.mapping.DungeonUtility#generateResistances(char[][])}
-     * or {@link squidpony.squidgrid.mapping.DungeonUtility#generateSimpleResistances(char[][])}, makes a
+     * Given a resistance array as produced by {@link FOV#generateResistances(char[][])}
+     * or {@link FOV#generateSimpleResistances(char[][])}, makes a
      * LightingHandler that can have {@link Radiance} objects added to it in various locations. This will use a solid
      * black background when it casts light on cells without existing lighting. The viewer vision range will be 4.0, and
      * lights will use a circular shape.
@@ -128,8 +128,8 @@ public class LightingHandler implements Serializable {
         this(resistance, SColor.FLOAT_BLACK, Radius.CIRCLE, 4.0);
     }
     /**
-     * Given a resistance array as produced by {@link squidpony.squidgrid.mapping.DungeonUtility#generateResistances(char[][])}
-     * or {@link squidpony.squidgrid.mapping.DungeonUtility#generateSimpleResistances(char[][])}, makes a
+     * Given a resistance array as produced by {@link FOV#generateResistances(char[][])}
+     * or {@link FOV#generateSimpleResistances(char[][])}, makes a
      * LightingHandler that can have {@link Radiance} objects added to it in various locations.
      * @param resistance a resistance array as produced by DungeonUtility
      * @param backgroundColor the background color to use, as a libGDX color
@@ -142,8 +142,8 @@ public class LightingHandler implements Serializable {
         this(resistance, backgroundColor.toFloatBits(), radiusStrategy, viewerVisionRange);
     }
     /**
-     * Given a resistance array as produced by {@link squidpony.squidgrid.mapping.DungeonUtility#generateResistances(char[][])}
-     * or {@link squidpony.squidgrid.mapping.DungeonUtility#generateSimpleResistances(char[][])}, makes a
+     * Given a resistance array as produced by {@link FOV#generateResistances(char[][])}
+     * or {@link FOV#generateSimpleResistances(char[][])}, makes a
      * LightingHandler that can have {@link Radiance} objects added to it in various locations.
      * @param resistance a resistance array as produced by DungeonUtility
      * @param backgroundColor the background color to use, as a packed float (produced by {@link Color#toFloatBits()})
@@ -421,7 +421,6 @@ public class LightingHandler implements Serializable {
                 continue;
             radiance = lights.getAt(i);
             FOV.reuseFOV(resistances, tempFOV, pos.x, pos.y, radiance.currentRange());
-            //SColor.colorLightingInto(tempColorLighting, tempFOV, radiance.color);
             mixColoredLighting(radiance.flare, radiance.color);
         }
     }
@@ -456,7 +455,6 @@ public class LightingHandler implements Serializable {
             pos = lights.keyAt(i);
             radiance = lights.getAt(i);
             FOV.reuseFOV(resistances, tempFOV, pos.x, pos.y, radiance.currentRange());
-            //SColor.colorLightingInto(tempColorLighting, tempFOV, radiance.color);
             mixColoredLighting(radiance.flare, radiance.color);
         }
         for (int x = 0; x < width; x++) {
@@ -494,7 +492,6 @@ public class LightingHandler implements Serializable {
     public void updateUI(int lightX, int lightY, Radiance radiance)
     {
         FOV.reuseFOV(resistances, tempFOV, lightX, lightY, radiance.currentRange());
-        //SColor.colorLightingInto(tempColorLighting, tempFOV, radiance.color);
         mixColoredLighting(radiance.flare, radiance.color);
     }
 
@@ -628,7 +625,6 @@ public class LightingHandler implements Serializable {
                 continue;
             radiance = lights.getAt(i);
             FOV.reuseFOV(resistances, tempFOV, pos.x, pos.y, radiance.range);
-            //SColor.colorLightingInto(tempColorLighting, tempFOV, radiance.color);
             mixColoredLighting(radiance.flare, radiance.color);
         }
         for (int x = Math.max(0, minX); x < maxX && x < width; x++) {

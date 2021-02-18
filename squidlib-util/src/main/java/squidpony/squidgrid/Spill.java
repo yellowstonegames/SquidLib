@@ -1,14 +1,17 @@
 package squidpony.squidgrid;
 
+import squidpony.ArrayTools;
 import squidpony.squidgrid.mapping.IDungeonGenerator;
 import squidpony.squidmath.*;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Set;
 /**
  * A randomized flood-fill implementation that can be used for level generation (e.g. filling ponds and lakes), for
  * gas propagation, or for all sorts of fluid-dynamics-on-the-cheap.
+ * <br>
  * Created by Tommy Ettinger on 4/7/2015.
  */
 public class Spill implements Serializable {
@@ -104,7 +107,7 @@ public class Spill implements Serializable {
      */
     public Spill(final boolean[][] level) {
         rng = new GWTRNG();
-
+        fresh = new OrderedSet<>();
         initialize(level);
     }
     /**
@@ -114,9 +117,8 @@ public class Spill implements Serializable {
      */
     public Spill(final boolean[][] level, Measurement measurement) {
         rng = new GWTRNG();
-
+        fresh = new OrderedSet<>();
         this.measurement = measurement;
-
         initialize(level);
     }
 
@@ -130,7 +132,7 @@ public class Spill implements Serializable {
      */
     public Spill(final char[][] level) {
         rng = new GWTRNG();
-
+        fresh = new OrderedSet<>();
         initialize(level);
     }
     /**
@@ -144,7 +146,7 @@ public class Spill implements Serializable {
      */
     public Spill(final char[][] level, char alternateWall) {
         rng = new GWTRNG();
-
+        fresh = new OrderedSet<>();
         initialize(level, alternateWall);
     }
 
@@ -159,8 +161,8 @@ public class Spill implements Serializable {
      */
     public Spill(final char[][] level, Measurement measurement) {
         rng = new GWTRNG();
+        fresh = new OrderedSet<>();
         this.measurement = measurement;
-
         initialize(level);
     }
     /**
@@ -178,8 +180,8 @@ public class Spill implements Serializable {
      */
     public Spill(final char[][] level, Measurement measurement, IRNG random) {
         rng = new GWTRNG(random.nextInt(), random.nextInt());
+        fresh = new OrderedSet<>();
         this.measurement = measurement;
-
         initialize(level);
     }
     /**
@@ -196,8 +198,8 @@ public class Spill implements Serializable {
      */
     public Spill(final char[][] level, Measurement measurement, IStatefulRNG random) {
         rng = random;
+        fresh = new OrderedSet<>();
         this.measurement = measurement;
-
         initialize(level);
     }
 
@@ -208,15 +210,11 @@ public class Spill implements Serializable {
      * @return this Spill after initialization has completed, for chaining
      */
     public Spill initialize(final boolean[][] level) {
-        fresh = new OrderedSet<>();
+        fresh.clear();
         width = level.length;
         height = level[0].length;
-        spillMap = new boolean[width][height];
-        physicalMap = new boolean[width][height];
-        for (int x = 0; x < width; x++) {
-            System.arraycopy(level, 0, physicalMap, 0, height);
-            System.arraycopy(level, 0, spillMap, 0, height);
-        }
+        spillMap = ArrayTools.copy(level);
+        physicalMap = ArrayTools.copy(level);
         initialized = true;
         return this;
     }
@@ -228,7 +226,7 @@ public class Spill implements Serializable {
      * @return this Spill after initialization has completed, for chaining
      */
     public Spill initialize(final char[][] level) {
-        fresh = new OrderedSet<>();
+        fresh.clear();
         width = level.length;
         height = level[0].length;
         spillMap = new boolean[width][height];
@@ -252,7 +250,7 @@ public class Spill implements Serializable {
      * @return this Spill after initialization has completed, for chaining
      */
     public Spill initialize(final char[][] level, char alternateWall) {
-        fresh = new OrderedSet<>();
+        fresh.clear();
         width = level.length;
         height = level[0].length;
         spillMap = new boolean[width][height];
@@ -272,11 +270,7 @@ public class Spill implements Serializable {
      */
     public void resetMap() {
         if(!initialized) return;
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                spillMap[x][y] = false;
-            }
-        }
+        ArrayTools.fill(spillMap, false);
     }
 
     /**
@@ -338,12 +332,12 @@ public class Spill implements Serializable {
      *
      * @param entry The first cell to spread from, which should really be passable.
      * @param volume The total number of cells to attempt to fill, which must be non-negative.
-     * @param impassable A Set of Position keys representing the locations of moving obstacles to a
+     * @param impassable A Set or other Collection of Coord keys representing the locations of moving obstacles to a
      *                   path that cannot be moved through; this can be null if there are no such obstacles.
-     * @return An ArrayList of Points that this will enter, in order starting with entry at index 0, until it
+     * @return An ArrayList of Coords that this will enter, in order starting with entry at index 0, until it
      * reaches its volume or fills its boundaries completely.
      */
-    public ArrayList<Coord> start(Coord entry, int volume, Set<Coord> impassable) {
+    public ArrayList<Coord> start(Coord entry, int volume, Collection<Coord> impassable) {
         if(!initialized) return null;
         if(!physicalMap[entry.x][entry.y] || (impassable != null && impassable.contains(entry)))
             return null;
@@ -362,7 +356,7 @@ public class Spill implements Serializable {
 
         Direction[] dirs = (measurement == Measurement.MANHATTAN) ? Direction.CARDINALS : Direction.OUTWARDS;
         while (!fresh.isEmpty() && spreadPattern.size() < volume) {
-            Coord cell = fresh.randomItem(rng);//toArray(new Coord[fresh.size()])[rng.nextInt(fresh.size())];
+            Coord cell = fresh.randomItem(rng);
             spreadPattern.add(cell);
             spillMap[cell.x][cell.y] = true;
             for (int d = 0; d < dirs.length; d++) {

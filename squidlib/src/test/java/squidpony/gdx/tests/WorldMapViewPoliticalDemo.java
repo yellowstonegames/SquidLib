@@ -63,7 +63,7 @@ public class WorldMapViewPoliticalDemo extends ApplicationAdapter {
         //// for your game; here it always renders pixels
         batch = new ImmediateModeRenderer20(width * height, false, true, 0);
         view = new StretchViewport(width, height);
-        seed = 42;
+        seed = 1337;
         rng = new StatefulRNG(seed);
         //// NOTE: this FastNoise has a different frequency (1f) than the default (1/32f), and that
         //// makes a huge difference on world map quality. It also uses extra octaves.
@@ -102,13 +102,13 @@ public class WorldMapViewPoliticalDemo extends ApplicationAdapter {
 //        };
         VastNoise noise = new VastNoise(rng.nextInt(), 1f, VastNoise.HONEY_FRACTAL, 2);
 //        world = new WorldMapGenerator.TilingMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.25);
-        world = new WorldMapGenerator.EllipticalMap(seed, width, height, noise, 0.6);
+//        world = new WorldMapGenerator.EllipticalMap(seed, width, height, noise, 0.6);
         //world = new WorldMapGenerator.EllipticalHammerMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 0.75);
 //        world = new WorldMapGenerator.MimicMap(seed, new FastNoise(rng.nextInt(), 1f, FastNoise.SIMPLEX_FRACTAL, 2), 0.7);
 //        world = new WorldMapGenerator.SpaceViewMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 0.7);
 //        world = new WorldMapGenerator.RotatingSpaceMap(seed, width, height, new FastNoise(rng.nextInt(), 1f, FastNoise.SIMPLEX_FRACTAL, 2), 0.7);
         //world = new WorldMapGenerator.RoundSideMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 0.8);
-//        world = new WorldMapGenerator.HyperellipticalMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.2, 0.0625, 2.5);
+        world = new WorldMapGenerator.HyperellipticalMap(seed, width, height, noise, 1.2, 0.0625, 2.5);
 //        world = new WorldMapGenerator.HyperellipticalMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.2, 0.0, 2.0);
 //        world = new WorldMapGenerator.SphereMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 0.6);
 //        world = new WorldMapGenerator.LocalMimicMap(seed, WorldMapGenerator.DEFAULT_NOISE, 0.65);
