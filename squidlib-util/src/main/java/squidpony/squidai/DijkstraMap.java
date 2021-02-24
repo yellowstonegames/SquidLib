@@ -6,20 +6,37 @@ import squidpony.squidgrid.Direction;
 import squidpony.squidgrid.LOS;
 import squidpony.squidgrid.Measurement;
 import squidpony.squidgrid.Radius;
-import squidpony.squidmath.*;
+import squidpony.squidmath.Coord;
+import squidpony.squidmath.GWTRNG;
+import squidpony.squidmath.GreasedRegion;
+import squidpony.squidmath.IRNG;
+import squidpony.squidmath.IntVLA;
+import squidpony.squidmath.OrderedMap;
+import squidpony.squidmath.RNG;
+import squidpony.squidmath.StatefulRNG;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
 
 /**
- * An alternative to AStarSearch when you want to fully explore a search space, or when you want a gradient floodfill.
- * It's currently significantly faster that AStarSearch, and also supports pathfinding to the nearest of multiple
- * goals, which is not possible with AStarSearch. This last feature enables a whole host of others, like pathfinding
- * for creatures that can attack targets between a specified minimum and maximum distance, and there's also the
- * standard uses of Dijkstra Maps such as finding ideal paths to run away. One unique optimization made possible by
- * Dijkstra Maps is for when only one endpoint of a path can change in some section of a game, such as when you want to
- * draw a path from the player's current cell to the cell the mouse is over, and while the mouse can move quickly, the
- * player doesn't move until instructed to. This can be done very efficiently by setting the player as a goal with
+ * A group of pathfinding algorithms that explore in all directions equally, and are commonly used when there is more
+ * than one valid goal, or when you want a gradient floodfill to mark each cell in an area with its distance from a
+ * goal. This type of pathfinding is called a Dijkstra Map because it produces the same type of grid of
+ * distances from the nearest goal as Dijkstra's Pathfinding Algorithm can, but the actual algorithm used here is
+ * simpler than Dijkstra's Algorithm, and is more comparable to an optimized breadth-first search that doesn't consider
+ * edge costs. You can set more than one goal with {@link #setGoal(Coord)} or {@link #setGoals(Iterable)}, unlike A*,
+ * which enables such features as pathfinding for creatures that can attack targets between a specified minimum and
+ * maximum distance, and the standard uses of Dijkstra Maps such as finding ideal paths to run away. All these features
+ * have some cost; when paths are short or unobstructed, A* tends to be faster, though some convoluted map shapes can
+ * slow down A* more than DijkstraMap.
+ * <br>
+ * One unique optimization made possible by Dijkstra Maps is for when only one endpoint of a path can change in some
+ * section of a game, such as when you want to draw a path from the (stationary) player's current cell to the cell the
+ * mouse is over, and the mouse can move quickly. This can be done very efficiently by setting the player as a goal with
  * {@link #setGoal(Coord)}, scanning the map to find distances with {@link #scan(Collection)}, and then as long as the
  * player's position is unchanged (and no obstacles are added/moved), you can get the path by calling
  * {@link #findPathPreScanned(Coord)} and giving it the mouse position as a Coord. If various parts of the path can
@@ -32,10 +49,11 @@ import java.util.*;
  * should pathfind toward (it could be just one Coord, with or without explicitly putting it in an array, or it could be
  * more and the NPC will pick the closest).
  * <br>
- * As a bit of introduction, the article http://www.roguebasin.com/index.php?title=Dijkstra_Maps_Visualized can
- * provide some useful information on how these work and how to visualize the information they can produce, while
- * http://www.roguebasin.com/index.php?title=The_Incredible_Power_of_Dijkstra_Maps is an inspiring list of the
- * various features Dijkstra Maps can enable.
+ * As a bit of introduction, <a href="http://www.roguebasin.com/index.php?title=Dijkstra_Maps_Visualized">this article
+ * on RogueBasin</a> can provide some useful information on how these work and how to visualize the information they can
+ * produce, while
+ * <a href="http://www.roguebasin.com/index.php?title=The_Incredible_Power_of_Dijkstra_Maps">the original article that
+ * introduced Dijkstra Maps</a> is an inspiring list of the various features Dijkstra Maps can enable.
  * <br>
  * If you can't remember how to spell this, just remember: Does It Just Know Stuff? That's Really Awesome!
  * Created by Tommy Ettinger on 4/4/2015.

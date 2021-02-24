@@ -1,8 +1,14 @@
 package squidpony.squidgrid.mapping;
 
-import squidpony.*;
+import squidpony.ArrayTools;
+import squidpony.FakeLanguageGen;
+import squidpony.Maker;
+import squidpony.Thesaurus;
 import squidpony.squidgrid.Direction;
-import squidpony.squidmath.*;
+import squidpony.squidmath.GreasedRegion;
+import squidpony.squidmath.IntVLA;
+import squidpony.squidmath.OrderedMap;
+import squidpony.squidmath.StatefulRNG;
 
 import java.io.Serializable;
 import java.util.ArrayList;

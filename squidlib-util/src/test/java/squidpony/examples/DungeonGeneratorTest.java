@@ -80,7 +80,7 @@ import java.util.ArrayList;
  * @author Tommy Ettinger - https://github.com/tommyettinger
  */
 public class DungeonGeneratorTest {
-    public static int width = 60, height = 60, depth = 8;
+    public static int width = 50, height = 30, depth = 8;
     public static GreasedRegion expandIsolated(GreasedRegion gr)
     {
         int fst = gr.firstTight();
@@ -131,6 +131,23 @@ public class DungeonGeneratorTest {
         }
 
         char[][] map, sdungeon;
+
+        System.out.println("Default Dungeon\n");
+        rng.setState(2252637788195L);
+        dungeonGenerator.clearEffects();
+//        dungeonGenerator.addWater(10);
+//        dungeonGenerator.addGrass(12);
+        dungeon = dungeonGenerator.generate(TilesetType.DEFAULT_DUNGEON);
+        dungeon[dungeonGenerator.stairsUp.x][dungeonGenerator.stairsUp.y] = '<';
+        dungeon[dungeonGenerator.stairsDown.x][dungeonGenerator.stairsDown.y] = '>';
+
+        dungeonGenerator.setDungeon(
+                DungeonUtility.hashesToLines(dungeon, true));
+        System.out.println(dungeonGenerator);
+        System.out.println();
+        dungeonGenerator.setDungeon(DungeonUtility.linesToHashes(dungeonGenerator.getDungeon()));
+        System.out.println(dungeonGenerator);
+        System.out.println("------------------------------------------------------------");
 
         GrowingTreeMazeGenerator mazeGenerator = new GrowingTreeMazeGenerator(39, 19, rng);
         int methodIndex = 0;
@@ -189,7 +206,7 @@ public class DungeonGeneratorTest {
 
         System.out.println("Opened Maze Generator");
         mazeGenerator = new GrowingTreeMazeGenerator(29, 29, rng);
-        for (int i = 2000; i < 2020; i++) {
+        for (int i = 2001; i <= 2002; i++) {
             rng.setState(i);
             map = mazeGenerator.generate();
 
@@ -232,7 +249,7 @@ public class DungeonGeneratorTest {
             System.out.println("------------------------------------------------------------");
         }
         System.out.println("Less Opened Maze Generator");
-        for (int i = 1; i <= 20; i++) {
+        for (int i = 1; i <= 2; i++) {
             rng.setState(i);
             map = mazeGenerator.generate();
 
