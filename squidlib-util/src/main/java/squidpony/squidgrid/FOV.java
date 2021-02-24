@@ -852,13 +852,15 @@ public class FOV implements Serializable {
         }
     }
 
+    private static final ArrayList<Coord> neighbors = new ArrayList<Coord>(8);
+
     private static double nearRippleLight(int x, int y, int rippleNeighbors, int startx, int starty, double decay, double[][] lightMap, double[][] map, GreasedRegion indirect, Radius radiusStrategy) {
         if (x == startx && y == starty) {
             return 1;
         }
         int width = lightMap.length;
         int height = lightMap[0].length;
-        List<Coord> neighbors = new ArrayList<>();
+        neighbors.clear();
         double tmpDistance = 0, testDistance;
         Coord c;
         for (Direction di : Direction.OUTWARDS) {
@@ -883,23 +885,11 @@ public class FOV implements Serializable {
         if (neighbors.isEmpty()) {
             return 0;
         }
-        neighbors = neighbors.subList(0, Math.min(neighbors.size(), rippleNeighbors));
-/*
-        while (neighbors.size() > rippleNeighbors) {
-            Coord p = neighbors.remove(0);
-            double dist = radiusStrategy.radius(startx, starty, p.x, p.y);
-            double dist2 = 0;
-            for (Coord p2 : neighbors) {
-                dist2 = Math.max(dist2, radiusStrategy.radius(startx, starty, p2.x, p2.y));
-            }
-            if (dist < dist2) {//not the largest, put it back
-                neighbors.add(p);
-            }
-        }
-*/
+        int max = Math.min(neighbors.size(), rippleNeighbors);
         double light = 0;
         int lit = 0, indirects = 0;
-        for (Coord p : neighbors) {
+        for (int i = 0; i < max; i++) {
+            Coord p = neighbors.get(i);
             if (lightMap[p.x][p.y] > 0) {
                 lit++;
                 if (indirect.contains(p)) {

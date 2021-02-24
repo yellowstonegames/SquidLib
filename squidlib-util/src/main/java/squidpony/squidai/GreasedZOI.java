@@ -2,7 +2,11 @@ package squidpony.squidai;
 
 import squidpony.squidgrid.Direction;
 import squidpony.squidgrid.Radius;
-import squidpony.squidmath.*;
+import squidpony.squidmath.Coord;
+import squidpony.squidmath.GreasedRegion;
+import squidpony.squidmath.IRNG;
+import squidpony.squidmath.IntVLA;
+import squidpony.squidmath.OrderedSet;
 
 import java.io.Serializable;
 import java.util.Collection;

@@ -282,8 +282,8 @@ public class MoonwalkRNG extends AbstractRNG implements IStatefulRNG, SkippingRa
         out *= 0x96DE1B173F119089L;
         out ^= out >>> 30;
         return (out ^ out >>> 60) - 0x9E3779B97F4A7C15L;
-        //0x96DE1B173F119089L 0x319642B2D24D8EC3L 0xF1DE83E19937733DL
     }
+    //0x96DE1B173F119089L 0x319642B2D24D8EC3L 0xF1DE83E19937733DL
 
     /**
      * Returns the number of steps (where a step is equal to one call to most random number methods in this class)

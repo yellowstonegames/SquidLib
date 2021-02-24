@@ -90,7 +90,7 @@ class AlgorithmImplementations<V> {
         queue.addLast(vertex);
 
         while(!queue.isEmpty()) {
-            Node<V> v = queue.poll();
+            Node<V> v = queue.pollFirst();
             tree.addVertex(v.object);
             if (v.prev != null) tree.addEdge(v.object, v.prev.object);
             if (v.i == maxDepth) continue;
@@ -119,7 +119,7 @@ class AlgorithmImplementations<V> {
         queue.addLast(vertex);
 
         while(!queue.isEmpty()) {
-            Node<V> v = queue.poll();
+            Node<V> v = queue.pollFirst();
             if (!v.visited) {
                 tree.addVertex(v.object);
                 if (v.prev != null) tree.addEdge(v.object, v.prev.object);
