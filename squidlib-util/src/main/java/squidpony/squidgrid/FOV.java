@@ -124,6 +124,7 @@ public class FOV implements Serializable {
             Direction.LEFT, Direction.DOWN_LEFT, Direction.DOWN, Direction.DOWN_RIGHT};
     private static final ArrayDeque<Coord> dq = new ArrayDeque<>();
     private static final GreasedRegion lightWorkspace = new GreasedRegion(64, 64);
+    private static final OrderedSet<Coord> workingSet = new OrderedSet<>(256, CrossHash.mildHasher);
 
     /**
      * Creates a solver which will use the default SHADOW solver.
@@ -1773,5 +1774,94 @@ public class FOV implements Serializable {
         }
         return portion;
     }
+
+    public static double[][] reuseBurstFOV(double[][] resistanceMap, double[][] light, int rippleLooseness, int x, int y, double radius, Radius radiusTechnique) {
+        ArrayTools.fill(light, 0);
+        light[x][y] = Math.min(1.0, radius);//make the starting space full power unless radius is tiny
+        workingSet.clear();
+        doBurstFOV(light, MathExtras.clamp(rippleLooseness, 1, 6), x, y, 1.0 / radius, radius, resistanceMap, radiusTechnique);
+        return light;
+    }
+    private static void doBurstFOV(double[][] lightMap, int ripple, int x, int y, double decay, double radius, double[][] map, Radius radiusStrategy) {
+        dq.clear();
+        int width = lightMap.length;
+        int height = lightMap[0].length;
+        dq.offer(Coord.get(x, y));
+        while (!dq.isEmpty()) {
+            Coord p = dq.removeFirst();
+            if (lightMap[p.x][p.y] <= 0 || workingSet.contains(p)) {
+                continue;//no light to spread
+            }
+
+            for (Direction dir : Direction.OUTWARDS) {
+                int x2 = p.x + dir.deltaX;
+                int y2 = p.y + dir.deltaY;
+                if (x2 < 0 || x2 >= width || y2 < 0 || y2 >= height //out of bounds
+                        || radiusStrategy.radius(x, y, x2, y2) > radius) {
+                    continue;
+                }
+
+                double surroundingLight = doBurstLight(x2, y2, ripple, x, y, decay, lightMap, map, radiusStrategy);
+                if (lightMap[x2][y2] < surroundingLight) {
+                    if (map[x2][y2] < 1) {//make sure it's not a wall
+                        dq.offer(Coord.get(x2, y2));//redo neighbors since this one's light changed
+                    }
+                    lightMap[x2][y2] = surroundingLight;
+
+                }
+            }
+        }
+    }
+    private static double doBurstLight(int x, int y, int rippleNeighbors, int startx, int starty, double decay, double[][] lightMap, double[][] map, Radius radiusStrategy) {
+        if (x == startx && y == starty) {
+            return 1;
+        }
+        int width = lightMap.length;
+        int height = lightMap[0].length;
+        neighbors.clear();
+        double tmpDistance = 0, testDistance;
+        Coord c;
+        for (Direction di : Direction.OUTWARDS) {
+            int x2 = x + di.deltaX;
+            int y2 = y + di.deltaY;
+            if (x2 >= 0 && x2 < width && y2 >= 0 && y2 < height) {
+                tmpDistance = radiusStrategy.radius(startx, starty, x2, y2);
+                int idx = 0;
+                for(int i = 0; i < neighbors.size() && i <= rippleNeighbors; i++)
+                {
+                    c = neighbors.get(i);
+                    testDistance = radiusStrategy.radius(startx, starty, c.x, c.y);
+                    if(tmpDistance >= testDistance) {
+                        idx++;
+                    }
+                }
+                neighbors.add(idx, Coord.get(x2, y2));
+            }
+        }
+
+        if (neighbors.isEmpty()) {
+            return 0;
+        }
+        int max = Math.min(neighbors.size(), rippleNeighbors);
+        double light = 0;
+        int lit = 0, indirects = 0;
+        for (int i = 0; i < max; i++) {
+            Coord p = neighbors.get(i);
+            if (lightMap[p.x][p.y] > 0) {
+                lit++;
+                if (workingSet.contains(p)) {
+                    indirects++;
+                }
+                light = Math.max(light, lightMap[p.x][p.y]
+                        - radiusStrategy.radius(x, y, p.x, p.y) * decay - map[p.x][p.y]);
+            }
+        }
+
+        if (map[x][y] >= 1 || indirects >= lit) {
+            workingSet.add(Coord.get(x, y));
+        }
+        return light;
+    }
+
 
 }
