@@ -17,8 +17,8 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 abstract class AbstractPerformanceTest {
 	// we want predictable outcome for our test
-	protected static final StatefulRandomness SOURCE = new LightRNG(0x1337BEEF);
-	protected static final StatefulRNG RNG = new StatefulRNG(SOURCE);
+	protected final StatefulRandomness SOURCE = new LightRNG(0x1337BEEF);
+	protected final StatefulRNG RNG = new StatefulRNG(SOURCE);
 
 	protected static final int NUM_THREADS = 1;
 	protected static final int NUM_TASKS = 32;
