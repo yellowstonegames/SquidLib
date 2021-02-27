@@ -96,7 +96,7 @@ public class OpenSimplex2F implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4
 		double value = 0;
 		
 		// Get base points and offsets
-		int xsb = fastFloor(xs), ysb = fastFloor(ys);
+		long xsb = Noise.longFloor(xs), ysb = Noise.longFloor(ys);
 		double xsi = xs - xsb, ysi = ys - ysb;
 		
 		// Index to point list
@@ -113,7 +113,7 @@ public class OpenSimplex2F implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4
 			double attn = 0.5 - dx * dx - dy * dy;
 			if (attn <= 0) continue;
 
-			int pxm = (xsb + c.xsv) & PMASK, pym = (ysb + c.ysv) & PMASK;
+			int pxm = ((int) xsb + c.xsv) & PMASK, pym = ((int) ysb + c.ysv) & PMASK;
 			Grad2 grad = permGrad2[perm[pxm] ^ pym];
 			double extrapolation = grad.dx * dx + grad.dy * dy;
 			
@@ -194,7 +194,7 @@ public class OpenSimplex2F implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4
 	private double noise3_BCC(double xr, double yr, double zr) {
 		
 		// Get base and offsets inside cube of first lattice.
-		int xrb = fastFloor(xr), yrb = fastFloor(yr), zrb = fastFloor(zr);
+		long xrb = Noise.longFloor(xr), yrb = Noise.longFloor(yr), zrb = Noise.longFloor(zr);
 		double xri = xr - xrb, yri = yr - yrb, zri = zr - zrb;
 		
 		// Identify which octant of the cube we're in. This determines which cell
@@ -211,7 +211,7 @@ public class OpenSimplex2F implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4
 			if (attn < 0) {
 				c = c.nextOnFailure;
 			} else {
-				int pxm = (xrb + c.xrv) & PMASK, pym = (yrb + c.yrv) & PMASK, pzm = (zrb + c.zrv) & PMASK;
+				int pxm = ((int) xrb + c.xrv) & PMASK, pym = ((int) yrb + c.yrv) & PMASK, pzm = ((int) zrb + c.zrv) & PMASK;
 				Grad3 grad = permGrad3[perm[perm[pxm] ^ pym] ^ pzm];
 				double extrapolation = grad.dx * dxr + grad.dy * dyr + grad.dz * dzr;
 				
@@ -286,7 +286,7 @@ public class OpenSimplex2F implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4
 		double value = 0;
 		
 		// Get base points and offsets
-		int xsb = fastFloor(xs), ysb = fastFloor(ys), zsb = fastFloor(zs), wsb = fastFloor(ws);
+		long xsb = Noise.longFloor(xs), ysb = Noise.longFloor(ys), zsb = Noise.longFloor(zs), wsb = Noise.longFloor(ws);
 		double xsi = xs - xsb, ysi = ys - ysb, zsi = zs - zsb, wsi = ws - wsb;
 		
 		// If we're in the lower half, flip so we can repeat the code for the upper half. We'll flip back later.
@@ -353,7 +353,7 @@ public class OpenSimplex2F implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4
 			double dx = xi + c.dx, dy = yi + c.dy, dz = zi + c.dz, dw = wi + c.dw;
 			double attn = 0.5 - dx * dx - dy * dy - dz * dz - dw * dw;
 			if (attn > 0) {
-				int pxm = xsb & PMASK, pym = ysb & PMASK, pzm = zsb & PMASK, pwm = wsb & PMASK;
+				int pxm = (int) xsb & PMASK, pym = (int) ysb & PMASK, pzm = (int) zsb & PMASK, pwm = (int) wsb & PMASK;
 				Grad4 grad = permGrad4[perm[perm[perm[pxm] ^ pym] ^ pzm] ^ pwm];
 				double ramped = grad.dx * dx + grad.dy * dy + grad.dz * dz + grad.dw * dw;
 				
