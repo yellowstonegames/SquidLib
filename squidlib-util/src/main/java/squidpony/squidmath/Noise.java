@@ -1623,14 +1623,14 @@ public class Noise {
             x *= frequency;
             y *= frequency;
             for (int i = 0; i < octaves; i++) {
-                n = basis.getNoise(x + (i << 6), y + (i << 7));
-                n = 1.0 - Math.abs(n);
-                correction += (exp *= 0.5);
-                sum += n * exp;
-                x *= 2.0;
-                y *= 2.0;
+                n = basis.getNoise(x + (i << 6), y + (i << 7)); // n is between -1 and 1
+                n = 1.0 - Math.abs(n);                          // n is now between 0 and 1
+                correction += (exp *= 0.5);                     // exp goes to 1 here, correction too
+                sum += n * exp;                                 // sum is between 0 and 1
+                x *= 2.0;                                       // exaggerate details for the next
+                y *= 2.0;                                       // octave, by zooming in
             }
-            return sum * 2.0 / correction - 1.0;
+            return sum * 2.0 / correction - 1.0;                // for 1 octave, this is between -1 and 1
         }
 
         @Override

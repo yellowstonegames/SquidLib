@@ -27,16 +27,16 @@ public class OpenSimplexNoiseVisualizer extends ApplicationAdapter {
     private OpenSimplex2F osf = new OpenSimplex2F();
     private OpenSimplex2S oss = new OpenSimplex2S();
     private FastNoise fast = new FastNoise(1234567890, 1f, FastNoise.SIMPLEX, 1);
-    private int noiseType = 0; // 0 for osf, 1 for oss, 2 for fast
+    private int noiseType = 0; // 0 for osf, 1 for oss, 2 for fast, 3 for experimental
     private int dim = 0; // this can be 0, 1, or 2; add 2 to get the actual dimensions
-    private int octaves = 1;
-    private float freq = 1f;
+    private int octaves = 0;
+    private float freq = (float) Math.exp(-4.0);
     private boolean ridged = false;
     private long seed = 0x9E3779B97F4A7C15L;
 
-    private Noise.Noise2D current2 = new Noise.Layered2D(osf, octaves, freq);
-    private Noise.Noise3D current3 = new Noise.Layered3D(osf, octaves, freq);
-    private Noise.Noise4D current4 = new Noise.Layered4D(osf, octaves, freq);
+    private Noise.Noise2D current2 = new Noise.Layered2D(osf, octaves + 1, freq);
+    private Noise.Noise3D current3 = new Noise.Layered3D(osf, octaves + 1, freq);
+    private Noise.Noise4D current4 = new Noise.Layered4D(osf, octaves + 1, freq);
 
     private ImmediateModeRenderer20 renderer;
 
@@ -67,6 +67,7 @@ public class OpenSimplexNoiseVisualizer extends ApplicationAdapter {
                     current4 = new Noise.Ridged4D(oss, octaves + 1, freq);
                     break;
                 case 2:
+                case 3:
                     current2 = new Noise.Ridged2D(fast, octaves + 1, freq);
                     current3 = new Noise.Ridged3D(fast, octaves + 1, freq);
                     current4 = new Noise.Ridged4D(fast, octaves + 1, freq);
@@ -86,6 +87,7 @@ public class OpenSimplexNoiseVisualizer extends ApplicationAdapter {
                     current4 = new Noise.Layered4D(oss, octaves + 1, freq);
                     break;
                 case 2:
+                case 3:
                     current2 = new Noise.Layered2D(fast, octaves + 1, freq);
                     current3 = new Noise.Layered3D(fast, octaves + 1, freq);
                     current4 = new Noise.Layered4D(fast, octaves + 1, freq);
@@ -114,12 +116,12 @@ public class OpenSimplexNoiseVisualizer extends ApplicationAdapter {
                         seed += 0x9E3779B97F4A7C15L;
                         break;
                     case MINUS:
-                        noiseType = (noiseType + 2) % 3;
+                        noiseType = (noiseType + 3) & 3;
                         break;
                     case N: // noise type
                     case EQUALS:
                     case ENTER:
-                        noiseType = (noiseType + 1) % 3;
+                        noiseType = (noiseType + 1) & 3;
                         break;
                     case D: //dimension
                         dim = (dim + 1) % 3;
@@ -154,34 +156,73 @@ public class OpenSimplexNoiseVisualizer extends ApplicationAdapter {
     public void putMap() {
         renderer.begin(view.getCamera().combined, GL_POINTS);
         float bright, c = ctr * 0.5f;
-        switch (dim) {
-            case 0:
-                for (int x = 0; x < width; x++) {
-                    for (int y = 0; y < height; y++) {
-                        bright = basicPrepare(current2.getNoiseWithSeed(x + ctr, y + ctr, seed));
-                        renderer.color(bright, bright, bright, 1f);
-                        renderer.vertex(x, y, 0);
+        if(noiseType != 3) {
+            switch (dim) {
+                case 0:
+                    for (int x = 0; x < width; x++) {
+                        for (int y = 0; y < height; y++) {
+                            bright = basicPrepare(current2.getNoiseWithSeed(x + ctr, y + ctr, seed));
+                            renderer.color(bright, bright, bright, 1f);
+                            renderer.vertex(x, y, 0);
+                        }
                     }
-                }
-                break;
-            case 1:
-                for (int x = 0; x < width; x++) {
-                    for (int y = 0; y < height; y++) {
-                        bright = basicPrepare(current3.getNoiseWithSeed(x, y, c, seed));
-                        renderer.color(bright, bright, bright, 1f);
-                        renderer.vertex(x, y, 0);
+                    break;
+                case 1:
+                    for (int x = 0; x < width; x++) {
+                        for (int y = 0; y < height; y++) {
+                            bright = basicPrepare(current3.getNoiseWithSeed(x, y, c, seed));
+                            renderer.color(bright, bright, bright, 1f);
+                            renderer.vertex(x, y, 0);
+                        }
                     }
-                }
-                break;
-            case 2:
-                for (int x = 0; x < width; x++) {
-                    for (int y = 0; y < height; y++) {
-                        bright = basicPrepare(current4.getNoiseWithSeed(x, y, ctr, 0x1p-4f * (x + y - ctr), seed));
-                        renderer.color(bright, bright, bright, 1f);
-                        renderer.vertex(x, y, 0);
+                    break;
+                case 2:
+                    for (int x = 0; x < width; x++) {
+                        for (int y = 0; y < height; y++) {
+                            bright = basicPrepare(current4.getNoiseWithSeed(x, y, ctr, 0x1p-4f * (x + y - ctr), seed));
+                            renderer.color(bright, bright, bright, 1f);
+                            renderer.vertex(x, y, 0);
+                        }
                     }
-                }
-                break;
+                    break;
+            }
+        }
+        else {
+            switch (dim) {
+                case 0:
+                    for (int x = 0; x < width; x++) {
+                        for (int y = 0; y < height; y++) {
+                            final double bump = current2.getNoiseWithSeed((x + ctr) * 0.25, (y+ctr) * 0.25, ~seed);
+                            bright = (float) (Math.pow(2.0 - 2.0 * Math.abs(current2.getNoiseWithSeed(x + ctr, y + ctr, seed)),
+                                    1.25 + 0.75 * bump) + bump * 0.5 + 0.5) * 0.2f;
+                            renderer.color(bright, bright, bright, 1f);
+                            renderer.vertex(x, y, 0);
+                        }
+                    }
+                    break;
+                case 1:
+                    for (int x = 0; x < width; x++) {
+                        for (int y = 0; y < height; y++) {
+                            final double bump = current3.getNoiseWithSeed(x * 0.25, y * 0.25, c * 0.25, ~seed);
+                            bright = (float) (Math.pow(2.0 - 2.0 * Math.abs(current3.getNoiseWithSeed(x, y, c, seed)),
+                                    1.25 + 0.75 * bump) + bump * 0.5 + 0.5) * 0.2f;
+                            renderer.color(bright, bright, bright, 1f);
+                            renderer.vertex(x, y, 0);
+                        }
+                    }
+                    break;
+                case 2:
+                    for (int x = 0; x < width; x++) {
+                        for (int y = 0; y < height; y++) {
+                            final double bump = current4.getNoiseWithSeed(x * 0.25, y * 0.25, ctr * 0.25, 0x1p-6 * (x + y - ctr), ~seed);
+                            bright = (float) (Math.pow(2.0 - 2.0 * Math.abs(current4.getNoiseWithSeed(x, y, ctr, 0x1p-4f * (x + y - ctr), seed)),
+                                    1.25 + 0.75 * bump) + bump * 0.5 + 0.5) * 0.2f;
+                            renderer.color(bright, bright, bright, 1f);
+                            renderer.vertex(x, y, 0);
+                        }
+                    }
+                    break;
+            }
         }
         renderer.end();
 
