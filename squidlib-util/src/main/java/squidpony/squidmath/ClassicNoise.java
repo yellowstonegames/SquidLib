@@ -34,31 +34,31 @@ public class ClassicNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D
     public ClassicNoise(final long seed) {
         this.seed = seed;
     }
+    //0xE60E2B722B53AEEBL, 0xCEBD76D9EDB6A8EFL, 0xB9C9AA3A51D00B65L, 0xA6F5777F6F88983FL, 0x9609C71EB7D03F7BL, 0x86D516E50B04AB1BL
     protected static double gradCoord2D(long seed, int x, int y,
                                         double xd, double yd) {
-        final int hash = ((int)(((seed ^= 0xB4C4D * x ^ 0xEE2C3 * y) ^ seed >>> 13) * (seed)));
-        final double[] grad = grad2d[hash >>> 24];
+        final int hash = (int)((seed ^= 0xE60E2B722B53AEEBL * x ^ 0xCEBD76D9EDB6A8EFL * y) * (seed) >>> 56);
+        final double[] grad = grad2d[hash];
         return xd * grad[0] + yd * grad[1];
     }
     protected static double gradCoord3D(long seed, int x, int y, int z, double xd, double yd, double zd) {
         final int hash =
-                ((int)(((seed ^= 0xB4C4D * x ^ 0xEE2C1 * y ^ 0xA7E07 * z) ^ seed >>> 13) * (seed))
-                        >>> 27) * 3;
+                (int)((seed ^= 0xE60E2B722B53AEEBL * x ^ 0xCEBD76D9EDB6A8EFL * y ^ 0xB9C9AA3A51D00B65L * z) * (seed)
+                        >>> 59) * 3;
         return (xd * grad3d[hash] + yd * grad3d[hash + 1] + zd * grad3d[hash + 2]);
     }
     protected static double gradCoord4D(long seed, int x, int y, int z, int w,
                                         double xd, double yd, double zd, double wd) {
         final int hash =
-                ((int)(((seed ^= 0xB4C4D * x ^ 0xEE2C1 * y ^ 0xA7E07 * z ^ 0xCD5E9 * w) ^ seed >>> 13) * (seed))
-                        >>> 24) & -4;
+                (int) ((seed ^= 0xE60E2B722B53AEEBL * x ^ 0xCEBD76D9EDB6A8EFL * y ^ 0xB9C9AA3A51D00B65L * z ^ 0xA6F5777F6F88983FL * w) * (seed)
+                        >>> 56) & -4;
         return xd * grad4d[hash] + yd * grad4d[hash + 1] + zd * grad4d[hash + 2] + wd * grad4d[hash + 3];
     }
     protected static double gradCoord5D(long seed, int x, int y, int z, int w, int u,
                                         double xd, double yd, double zd, double wd, double ud) {
         final int hash =
-                ((int)(((seed ^= 0xB4C4D * x ^ 0xEE2C1 * y ^ 0xA7E07 * z ^ 0xCD5E9 * w ^ 0x94B5B * u)
-                        ^ seed >>> 13) * (seed))
-                        >>> 24) * 5;
+                (int)((seed ^= 0xE60E2B722B53AEEBL * x ^ 0xCEBD76D9EDB6A8EFL * y ^ 0xB9C9AA3A51D00B65L * z ^ 0xA6F5777F6F88983FL * w ^ 0x9609C71EB7D03F7BL * u)
+                        * (seed) >>> 56) * 5;
         return xd * grad5d[hash] + yd * grad5d[hash + 1] + zd * grad5d[hash + 2]
                 + wd * grad5d[hash + 3] + ud * grad5d[hash + 4];
     }
@@ -66,9 +66,10 @@ public class ClassicNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D
     protected static double gradCoord6D(long seed, int x, int y, int z, int w, int u, int v,
                                         double xd, double yd, double zd, double wd, double ud, double vd) {
         final int hash =
-                ((int)(((seed ^= 0xB4C4D * x ^ 0xEE2C1 * y ^ 0xA7E07 * z ^ 0xCD5E9 * w ^ 0x94B5B * u ^ 0xD2385 * v)
-                        ^ seed >>> 13) * (seed))
-                        >>> 24) * 6;
+                (int)(
+                        (seed ^= 0xE60E2B722B53AEEBL * x ^ 0xCEBD76D9EDB6A8EFL * y ^ 0xB9C9AA3A51D00B65L *
+                                z ^ 0xA6F5777F6F88983FL * w ^ 0x9609C71EB7D03F7BL * u ^ 0x86D516E50B04AB1BL * v) * (seed)
+                        >>> 56) * 6;
         return xd * grad6d[hash] + yd * grad6d[hash + 1] + zd * grad6d[hash + 2]
                 + wd * grad6d[hash + 3] + ud * grad6d[hash + 4] + vd * grad6d[hash + 5];
     }
