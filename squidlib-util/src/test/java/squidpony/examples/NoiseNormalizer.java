@@ -32,9 +32,9 @@ public class NoiseNormalizer {
 	
 	// Squared radius of kernel
 	// for OpenSimplex2F
-	public static double RADIUS_SQ = 0.5;
+//	public static double RADIUS_SQ = 0.5;
 	// for OpenSimplex2S
-//	public static double RADIUS_SQ = 2.0 / 3.0;
+	public static double RADIUS_SQ = 2.0 / 3.0;
 
 	public static double RATE = 1 / 32768d;
 	
