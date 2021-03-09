@@ -52,7 +52,7 @@ public class DelaunayTest extends ApplicationAdapter {
 //            double x = ((i * 0xD1B54A32D192ED03L) >>> 3) * 0x1p-52;
 //            double y = ((i * 0xABC98388FB8FAC03L) >>> 3) * 0x1p-52;
             //// compares z of R3 to SeededNoise, both -1 to 1 range
-            if(SeededNoise.noise(x, y, 1L) < ((i * 0x8CB92BA72F3D8DD7L) >> 11) * 0x1p-52)
+//            if(SeededNoise.noise(x, y, 1L) < ((i * 0x8CB92BA72F3D8DD7L) >> 11) * 0x1p-52)
                 points.add(new CoordDouble(x, y));
         }
         tri = new DelaunayTriangulator(points);
