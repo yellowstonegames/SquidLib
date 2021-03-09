@@ -764,22 +764,21 @@ public class OpenSimplex2S implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4
 	/*
 	 * Gradients
 	 */
-	
-	private static class Grad2 {
+	static class Grad2 {
 		double dx, dy;
 		public Grad2(double dx, double dy) {
 			this.dx = dx; this.dy = dy;
 		}
 	}
 	
-	private static class Grad3 {
+	static class Grad3 {
 		double dx, dy, dz;
 		public Grad3(double dx, double dy, double dz) {
 			this.dx = dx; this.dy = dy; this.dz = dz;
 		}
 	}
 	
-	private static class Grad4 {
+	static class Grad4 {
 		double dx, dy, dz, dw;
 		public Grad4(double dx, double dy, double dz,  double dw) {
 			this.dx = dx; this.dy = dy; this.dz = dz; this.dw = dw;
