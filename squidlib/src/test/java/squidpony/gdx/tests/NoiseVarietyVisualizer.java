@@ -20,9 +20,9 @@ import static com.badlogic.gdx.graphics.GL20.GL_POINTS;
 public class NoiseVarietyVisualizer extends ApplicationAdapter {
 
     private ClassicNoise classic = new ClassicNoise(1234567890);
-    private FoamNoise foam = new FoamNoise(1234567890);
+    private WaveNoise foam = new WaveNoise(1234567890);
     private FastNoise fast = new FastNoise(1234567890, 1f, FastNoise.SIMPLEX, 1);
-    private int noiseType = 0; // 0 for classic, 1 for foam, 2 for fast, 3 for experimental
+    private int noiseType = 0; // 0 for classic, 1 for wave, 2 for fast, 3 for experimental
     private int dim = 0; // this can be 0, 1, or 2; add 2 to get the actual dimensions
     private int octaves = 0;
     private float freq = (float) Math.exp(-4.0);
