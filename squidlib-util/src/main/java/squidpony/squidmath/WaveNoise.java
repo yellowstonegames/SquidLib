@@ -23,11 +23,25 @@ public class WaveNoise implements Noise2D, Noise3D, Noise4D, Noise5D, Noise6D {
     public WaveNoise(final long seed) {
         this.seed = seed;
     }
+
+    /**
+     * Just in case we need a version of {@link NumberTools#zigzag(double)} that outputs 0.0 to 1.0.
+     * @param value any double (except NaN)
+     * @return a number between 0 and 1, linearly interpolating between the two at each integer peak or valley
+     */
+    protected static double zigzagTight(double value)
+    {
+        long floor = (value >= 0.0 ? (long) value : (long) value - 1L);
+        value -= floor;
+        floor &= 1L;
+        return value * (-floor | 1L) + floor;
+    }
+
     //0xE60E2B722B53AEEBL, 0xCEBD76D9EDB6A8EFL, 0xB9C9AA3A51D00B65L, 0xA6F5777F6F88983FL, 0x9609C71EB7D03F7BL, 0x86D516E50B04AB1BL
     protected static double gradCoord2D(long seed, int x, int y,
                                         double xd, double yd) {
         seed += 0xE60E2B722B53AEEBL * x + 0xCEBD76D9EDB6A8EFL * y;
-        return NumberTools.swayCubic((xd * ((seed *= (seed ^ 0x9E3779B97F4A7C15L)) >> 44) + yd * ((seed * (seed ^ 0x9E3779B97F4A7C15L)) >> 44)) * 0x1p-19);
+        return NumberTools.zigzag((xd * ((seed *= seed) >>> 44) + yd * ((seed * seed) >>> 44)) * 0x1p-20);
     }
     protected static double gradCoord3D(long seed, int x, int y, int z, double xd, double yd, double zd) {
         final int hash =
@@ -83,7 +97,7 @@ public class WaveNoise implements Noise2D, Noise3D, Noise4D, Noise5D, Noise6D {
         final double xf = x - x0, yf = y - y0;
         final double xa = Noise.emphasize(xf), ya = Noise.emphasize(yf);
 //        final double res =
-        return
+        return Noise.emphasizeSigned(
                 lerp(
                         lerp(
                                 gradCoord2D(seed, x0, y0, x, y),
@@ -93,7 +107,7 @@ public class WaveNoise implements Noise2D, Noise3D, Noise4D, Noise5D, Noise6D {
                                 gradCoord2D(seed, x0, y0 + 1, x, y),
                                 gradCoord2D(seed, x0 + 1, y0 + 1, x, y),
                                 xa),
-                        ya);//* 0.875;// * 1.4142;
+                        ya));//* 0.875;// * 1.4142;
 //        if(res < -1.0 || res > 1.0) System.out.println(res);
 //        return res;
     }
