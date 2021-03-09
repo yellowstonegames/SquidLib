@@ -785,8 +785,8 @@ public class OpenSimplex2S implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4
 		}
 	}
 	
-//	private static final double N2 = 0.0551779947884094; // used for the FastNoise gradients
-	private static final double N2 = 0.05481866495625118; // used for the OpenSimplex2S original gradients
+	private static final double N2 = 0.0551779947884094; // used for the FastNoise gradients
+//	private static final double N2 = 0.05481866495625118; // used for the OpenSimplex2S original gradients
 	private static final double N3 = 0.2781926117527186;
 	private static final double N4 = 0.11127401889945551;
 	private static final Grad2[] GRADIENTS_2D;
