@@ -558,12 +558,13 @@ public class OpenSimplex2F implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4
 //		}
 //	}
 //// FastNoise gradients constant
-	private static final double N2 = 0.0100799; // not sure if this is optimal, but the normalizer is taking ages...
-	// it currently has a max value of 0.01007971220433742, and has stayed at 0.01007971... for a while.
-	// 1 hour, 11 minutes and counting... 0.0100799 appears to stay in-bounds in the demos I have run.
-//// original OpenSimplex2S constant
+	private static final double N2 = 0.010079713; // not sure if this is optimal, but the normalizer is taking ages...
+	// after 5 and a half hours, it has a max value of 0.010079712204621751, and the above is only slightly larger.
+//// original OpenSimplex2F constant
 //	private static final double N2 = 0.01001634121365712;
-	private static final double N3 = 0.030485933181293584;
+	private static final double N3 = 0.0116;
+	//// original OpenSimplex2F constant
+//	private static final double N3 = 0.030485933181293584;
 	private static final double N4 = 0.009202377986303158;
 	private static final Grad2[] GRADIENTS_2D;
 	private static final Grad3[] GRADIENTS_3D;
@@ -866,6 +867,8 @@ public class OpenSimplex2F implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4
 		
 		GRADIENTS_3D = new Grad3[PSIZE];
 		Grad3[] grad3 = {
+				/*
+				//OpenSimplex2F gradients
 			new Grad3(-2.22474487139,      -2.22474487139,      -1.0),
 			new Grad3(-2.22474487139,      -2.22474487139,       1.0),
 			new Grad3(-3.0862664687972017, -1.1721513422464978,  0.0),
@@ -914,6 +917,40 @@ public class OpenSimplex2F implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4
 			new Grad3( 2.22474487139,       2.22474487139,       1.0),
 			new Grad3( 3.0862664687972017,  1.1721513422464978,  0.0),
 			new Grad3( 1.1721513422464978,  3.0862664687972017,  0.0)
+				 */
+				//FastNoise gradients
+				new Grad3(-0.448549002408981,  1.174316525459290,  0.000000000000001),
+				new Grad3( 0.000000000000001,  1.069324374198914,  0.660878777503967),
+				new Grad3( 0.448549002408981,  1.174316525459290,  0.000000000000001),
+				new Grad3( 0.000000000000001,  1.069324374198914, -0.660878777503967),
+				new Grad3(-0.725767493247986,  0.725767493247986, -0.725767493247986),
+				new Grad3(-1.069324374198914,  0.660878777503967,  0.000000000000001),
+				new Grad3(-0.725767493247986,  0.725767493247986,  0.725767493247986),
+				new Grad3( 0.725767493247986,  0.725767493247986,  0.725767493247986),
+				new Grad3( 1.069324374198914,  0.660878777503967,  0.000000000000000),
+				new Grad3( 0.725767493247986,  0.725767493247986, -0.725767493247986),
+				new Grad3(-0.660878777503967,  0.000000000000003, -1.069324374198914),
+				new Grad3(-1.174316525459290,  0.000000000000003, -0.448549002408981),
+				new Grad3( 0.000000000000000,  0.448549002408981, -1.174316525459290),
+				new Grad3(-0.660878777503967,  0.000000000000001,  1.069324374198914),
+				new Grad3( 0.000000000000001,  0.448549002408981,  1.174316525459290),
+				new Grad3(-1.174316525459290,  0.000000000000001,  0.448549002408981),
+				new Grad3( 0.660878777503967,  0.000000000000001,  1.069324374198914),
+				new Grad3( 1.174316525459290,  0.000000000000001,  0.448549002408981),
+				new Grad3( 0.660878777503967,  0.000000000000001, -1.069324374198914),
+				new Grad3( 1.174316525459290,  0.000000000000001, -0.448549002408981),
+				new Grad3(-0.725767493247986, -0.725767493247986, -0.725767493247986),
+				new Grad3(-1.069324374198914, -0.660878777503967, -0.000000000000001),
+				new Grad3(-0.000000000000001, -0.448549002408981, -1.174316525459290),
+				new Grad3(-0.000000000000001, -0.448549002408981,  1.174316525459290),
+				new Grad3(-0.725767493247986, -0.725767493247986,  0.725767493247986),
+				new Grad3( 0.725767493247986, -0.725767493247986,  0.725767493247986),
+				new Grad3( 1.069324374198914, -0.660878777503967,  0.000000000000001),
+				new Grad3( 0.725767493247986, -0.725767493247986, -0.725767493247986),
+				new Grad3(-0.000000000000004, -1.069324374198914, -0.660878777503967),
+				new Grad3(-0.448549002408981, -1.174316525459290, -0.000000000000003),
+				new Grad3(-0.000000000000003, -1.069324374198914,  0.660878777503967),
+				new Grad3( 0.448549002408981, -1.174316525459290,  0.000000000000003),
 		};
 		for (int i = 0; i < grad3.length; i++) {
 			grad3[i].dx /= N3; grad3[i].dy /= N3; grad3[i].dz /= N3;
