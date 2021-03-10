@@ -41,13 +41,11 @@ public class WaveNoise implements Noise2D, Noise3D, Noise4D, Noise5D, Noise6D {
     protected static double gradCoord2D(long seed, int x, int y,
                                         double xd, double yd) {
         seed += 0xE60E2B722B53AEEBL * x + 0xCEBD76D9EDB6A8EFL * y;
-        return NumberTools.zigzag((xd * ((seed *= seed) >>> 44) + yd * ((seed * seed) >>> 44)) * 0x1p-20);
+        return NumberTools.swayCubic((xd * ((seed *= seed) >>> 44) + yd * ((seed * seed) >>> 44)) * 0x1p-20);
     }
     protected static double gradCoord3D(long seed, int x, int y, int z, double xd, double yd, double zd) {
-        final int hash =
-                (int)((seed ^= 0xE60E2B722B53AEEBL * x ^ 0xCEBD76D9EDB6A8EFL * y ^ 0xB9C9AA3A51D00B65L * z) * (seed)
-                        >>> 59) * 3;
-        return (xd * grad3d[hash] + yd * grad3d[hash + 1] + zd * grad3d[hash + 2]);
+        seed += 0xE60E2B722B53AEEBL * x + 0xCEBD76D9EDB6A8EFL * y + 0xB9C9AA3A51D00B65L * z;
+        return NumberTools.swayCubic((xd * ((seed *= seed) >>> 44) + yd * ((seed *= seed) >>> 44) + zd * ((seed * seed) >>> 44)) * 0x1p-20);
     }
     protected static double gradCoord4D(long seed, int x, int y, int z, int w,
                                         double xd, double yd, double zd, double wd) {
@@ -94,10 +92,9 @@ public class WaveNoise implements Noise2D, Noise3D, Noise4D, Noise5D, Noise6D {
         final int
                 x0 = fastFloor(x),
                 y0 = fastFloor(y);
-        final double xf = x - x0, yf = y - y0;
-        final double xa = Noise.emphasize(xf), ya = Noise.emphasize(yf);
+        final double xa = Noise.emphasize(x - x0), ya = Noise.emphasize(y - y0);
 //        final double res =
-        return Noise.emphasizeSigned(
+        return
                 lerp(
                         lerp(
                                 gradCoord2D(seed, x0, y0, x, y),
@@ -107,7 +104,7 @@ public class WaveNoise implements Noise2D, Noise3D, Noise4D, Noise5D, Noise6D {
                                 gradCoord2D(seed, x0, y0 + 1, x, y),
                                 gradCoord2D(seed, x0 + 1, y0 + 1, x, y),
                                 xa),
-                        ya));//* 0.875;// * 1.4142;
+                        ya);//* 0.875;// * 1.4142;
 //        if(res < -1.0 || res > 1.0) System.out.println(res);
 //        return res;
     }
@@ -119,40 +116,36 @@ public class WaveNoise implements Noise2D, Noise3D, Noise4D, Noise5D, Noise6D {
 
     @Override
     public double getNoiseWithSeed(double x, double y, double z, final long seed) {
-        x *= 2.0;
-        y *= 2.0;
-        z *= 2.0;
         final int
                 x0 = fastFloor(x),
                 y0 = fastFloor(y),
                 z0 = fastFloor(z);
-        final double xf = x - x0, yf = y - y0, zf = z - z0;
-        final double xa = Noise.emphasize(xf), ya = Noise.emphasize(yf), za = Noise.emphasize(zf);
+        final double xa = Noise.emphasize(x - x0), ya = Noise.emphasize(y - y0), za = Noise.emphasize(z - z0);
 //        final double res =
          return
-                 Noise.emphasizeSigned(
+
                          lerp(
                                  lerp(
                                          lerp(
-                                                 gradCoord3D(seed, x0, y0, z0, xf, yf, zf),
-                                                 gradCoord3D(seed, x0+1, y0, z0, xf - 1, yf, zf),
+                                                 gradCoord3D(seed, x0, y0, z0, x, y, z),
+                                                 gradCoord3D(seed, x0+1, y0, z0, x, y, z),
                                                  xa),
                                          lerp(
-                                                 gradCoord3D(seed, x0, y0+1, z0, xf, yf-1, zf),
-                                                 gradCoord3D(seed, x0+1, y0+1, z0, xf - 1, yf - 1, zf),
+                                                 gradCoord3D(seed, x0, y0+1, z0, x, y, z),
+                                                 gradCoord3D(seed, x0+1, y0+1, z0, x, y, z),
                                                  xa),
                                          ya),
                                  lerp(
                                          lerp(
-                                                 gradCoord3D(seed, x0, y0, z0+1, xf, yf, zf-1),
-                                                 gradCoord3D(seed, x0+1, y0, z0+1, xf - 1, yf, zf-1),
+                                                 gradCoord3D(seed, x0, y0, z0+1, x, y, z),
+                                                 gradCoord3D(seed, x0+1, y0, z0+1, x, y, z),
                                                  xa),
                                          lerp(
-                                                 gradCoord3D(seed, x0, y0+1, z0+1, xf, yf-1, zf-1),
-                                                 gradCoord3D(seed, x0+1, y0+1, z0+1, xf - 1, yf - 1, zf-1),
+                                                 gradCoord3D(seed, x0, y0+1, z0+1, x, y, z),
+                                                 gradCoord3D(seed, x0+1, y0+1, z0+1, x, y, z),
                                                  xa),
                                          ya),
-                                 za) * 1.0625);
+                                 za);
 //        if(res < -1 || res > 1) System.out.println(res);
 //        return res;
     }
