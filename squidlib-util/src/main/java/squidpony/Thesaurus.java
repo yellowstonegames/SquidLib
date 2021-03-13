@@ -30,7 +30,7 @@ public class Thesaurus implements Serializable{
     public ArrayList<FakeLanguageGen.Alteration> alterations = new ArrayList<>(4);
     public SilkRNG rng;
     protected GapShuffler<String> plantTermShuffler, fruitTermShuffler, nutTermShuffler, flowerTermShuffler,
-            potionTermShuffler;
+            potionTermShuffler, vegetableTermShuffler;
     public FakeLanguageGen defaultLanguage = FakeLanguageGen.SIMPLISH;
     public transient ArrayList<FakeLanguageGen> randomLanguages = new ArrayList<>(2);
     public transient String latestGenerated = "Nationia";
@@ -201,7 +201,8 @@ public class Thesaurus implements Serializable{
      *     <li>lake`noun` : bog, fen, glade, lake, pond, puddle, sea, swamp</li>
      *     <li>leaf`noun` : bark, blossom, branch, bud, cress, flower, leaf, root, sap, seed, shoot, stalk, stem, thorn, twig, vine, wood, wort</li>
      *     <li>fruit`noun` : apple, banana, berry, cherry, date, fig, fruit, grape, juniper, lime, mango, melon, papaya, peach, pear, quince</li>
-     *     <li>nut`noun` : almond, bean, cashew, chestnut, hazelnut, nut, pea, peanut, pecan, walnut</li>
+     *     <li>nut`noun` : almond, bean, cashew, chestnut, hazelnut, lentil, nut, pea, peanut, pecan, walnut</li>
+     *     <li>vegetable`noun` : asparagus, beet, broccoli, cabbage, carrot, cauliflower, celery, corn, eggplant, kale, lettuce, mushroom, potato, pumpkin, radish, spinach, taro, yam, zucchini</li>
      *     <li>flower`noun` : amaryllis, camellia, chrysanthemum, daisy, dandelion, flower, gardenia, hibiscus, jasmine, lantana, lilac, lily, lotus, mallow, oleander, orchid, peony, petunia, phlox, rose, tulip</li>
      *     <li>tree`noun` : alder, beech, birch, cactus, cedar, elm, hazel, juniper, larch, magnolia, mangrove, maple, oak, palm, pine, tree, willow</li>
      *     <li>flavor`noun` : acid, grease, herb, salt, smoke, spice, sugar</li>
@@ -213,7 +214,7 @@ public class Thesaurus implements Serializable{
      *     <li>liquid`adj` : bubbling, congealing, effervescent, milky, murky, slimy, sloshing, swirling, thick</li>
      *     <li>bottle`noun` : bottle, canister, flagon, flask, jug, phial, vial</li>
      *     <li>bottle`adj` : brown glass, clear glass, curvaceous glass, dull pewter, fluted crystal, green glass, rough-cut glass, sharp-edged tin, shining silver, smoky glass, tarnished silver</li>
-     *     <li>calabash`adj` : calabash, hollow gourd, milk carton, waterskin, wineskin</li>
+     *     <li>calabash`noun` : calabash, hollow gourd, milk carton, waterskin, wineskin</li>
      *     <li>smart`adj` : aware, brilliant, clever, cunning, genius, mindful, smart, wise</li>
      *     <li>smart`noun` : acumen, awareness, cunning, genius, knowledge, mindfulness, smarts, wisdom</li>
      *     <li>stupid`adj` : careless, complacent, dull, dumb, foolish, idiotic, moronic, reckless, sloppy, stupid</li>
@@ -255,7 +256,7 @@ public class Thesaurus implements Serializable{
      *     <li>fruit`term` : @'s color`adj` fruit`noun`, @'s flavor`adj` fruit`noun`, @'s fruit`noun`, color`adj` fruit`noun`-fruit`noun`, flavor`adj` fruit`noun`-fruit`noun`, fruit`noun` of @</li>
      *     <li>nut`term` : @'s color`adj` nut`noun`, @'s flavor`adj` nut`noun`, @'s nut`noun`, color`adj` nut`noun`, color`adj` nut`noun` of @, flavor`adj` nut`noun`, nut`noun` of @, sensory`adj` nut`noun`</li>
      *     <li>flower`term` : @'s color`adj` flower`noun`, @'s flower`noun`, @'s shape`adj` flower`noun`, color`adj` flower`noun`, color`adj` flower`noun` of @, color`adj`-leaf`noun` flower`noun`, flower`noun` of @, ground`noun`	flower`noun`, sensory`adj` flower`noun` of @, sensory`adj` flower`noun`-flower`noun`, sensory`adj`-leaf`noun` flower`noun`, shape`adj` flower`noun`, shape`adj`-leaf`noun` flower`noun`</li>
-     *     <li>potion`term` : a bottle`adj` bottle`noun` containing a few drops of a color`adj` liquid`noun`, a bottle`adj` bottle`noun` filled with a color`adj` liquid`noun`, a bottle`adj` bottle`noun` filled with a liquid`adj` color`adj` liquid`noun`, a bottle`adj` bottle`noun` half-filled with a liquid`adj` color`adj` liquid`noun`, a calabash`adj` filled with a color`adj` liquid`noun`</li>
+     *     <li>potion`term` : a bottle`adj` bottle`noun` containing a few drops of a color`adj` liquid`noun`, a bottle`adj` bottle`noun` filled with a color`adj` liquid`noun`, a bottle`adj` bottle`noun` filled with a liquid`adj` color`adj` liquid`noun`, a bottle`adj` bottle`noun` half-filled with a liquid`adj` color`adj` liquid`noun`, a calabash`noun` filled with a color`adj` liquid`noun`</li>
      * </ul>
      * Capitalizing the first letter in the keyword where it appears in text you call process() on will capitalize the
      * first letter of the produced fake word. Capitalizing the second letter will capitalize the whole produced fake
@@ -268,11 +269,12 @@ public class Thesaurus implements Serializable{
         {
             addCategory(kv.getKey(), kv.getValue());
         }
-        plantTermShuffler =  mappings.get("plant`term`");
-        fruitTermShuffler =  mappings.get("fruit`term`");
-        nutTermShuffler =    mappings.get("nut`term`");  
-        flowerTermShuffler = mappings.get("flower`term`");
-        potionTermShuffler = mappings.get("potion`term`");
+        plantTermShuffler =     mappings.get("plant`term`");
+        fruitTermShuffler =     mappings.get("fruit`term`");
+        nutTermShuffler =       mappings.get("nut`term`");
+        vegetableTermShuffler = mappings.get("vegetable`term`");
+        flowerTermShuffler =    mappings.get("flower`term`");
+        potionTermShuffler =    mappings.get("potion`term`");
         return this;
     }
 
@@ -337,6 +339,7 @@ public class Thesaurus implements Serializable{
         plantTermShuffler =  mappings.get("plant`term`");
         fruitTermShuffler =  mappings.get("fruit`term`");
         nutTermShuffler =    mappings.get("nut`term`");
+        vegetableTermShuffler = mappings.get("vegetable`term`");
         flowerTermShuffler = mappings.get("flower`term`");
         potionTermShuffler = mappings.get("potion`term`");
 
@@ -892,6 +895,64 @@ public class Thesaurus implements Serializable{
         return replacer.replace(working).replace("\t", "");
     }
 
+
+    /**
+     * Generates a random possible name for a vegetable, such as "miniature yam" or Iliakshe's spicy zucchini".
+     * May use accented characters, as in "Fëangoh's blue cauliflower", if the given language can
+     * produce them; if you want to strip these out and replace accented chars with their un-accented counterparts, you
+     * can use {@link FakeLanguageGen#removeAccents(CharSequence)}, which returns a CharSequence that can be converted
+     * to String if needed. Shortly after calling this method, but before
+     * calling it again, you can retrieve the generated random languages, if any were used while making names, by
+     * getting the FakeLanguageGen elements of this class' {@link #randomLanguages} field. Using one of these
+     * FakeLanguageGen objects, you can produce many more words with a similar style to the person or place name, like
+     * "Drayo" in "The Last Drayo Commonwealth". Calling this method replaces the current contents of
+     * randomLanguages, so if you want to use those languages, get them while you can.
+     *
+     * @return a random name for a vegetable, as a String
+     */
+    public String makeVegetableName()
+    {
+        if(!this.mappings.containsKey("vegetable`noun`"))
+        {
+            addKnownCategories();
+        }
+        String working = process(vegetableTermShuffler.next());
+        int frustration = 0;
+        while (frustration++ < 8 && similarFinder.matches(working))
+            working = process(vegetableTermShuffler.next());
+        randomLanguages.clear();
+        RandomLanguageSubstitution sub = new RandomLanguageSubstitution();
+        Replacer replacer = Pattern.compile("@(-@)?").replacer(sub);
+        return replacer.replace(working).replace("\t", "");
+    }
+    /**
+     * Generates a random possible name for a vegetable, such as "miniature yam" or Iliakshe's spicy zucchini".
+     * with the FakeLanguageGen already available instead of randomly created.
+     * May use accented characters, as in "Fëangoh's blue cauliflower", if the given language can
+     * produce them; if you want to strip these out and replace accented chars with their un-accented counterparts, you
+     * can use {@link FakeLanguageGen#removeAccents(CharSequence)}, which
+     * returns a CharSequence that can be converted to String if needed, or simply get an accent-less language by
+     * calling {@link FakeLanguageGen#removeAccents()} on the FakeLanguageGen you would give this.
+     *
+     * @param language a FakeLanguageGen that will be used to construct any non-English names
+     * @return a random name for a vegetable, as a String
+     */
+    public String makeVegetableName(FakeLanguageGen language)
+    {
+        if(!this.mappings.containsKey("vegetable`noun`"))
+        {
+            addKnownCategories();
+        }
+        String working = process(vegetableTermShuffler.next());
+        int frustration = 0;
+        while (frustration++ < 8 && similarFinder.matches(working))
+            working = process(vegetableTermShuffler.next());
+        randomLanguages.clear();
+        KnownLanguageSubstitution sub = new KnownLanguageSubstitution(language);
+        Replacer replacer = Pattern.compile("@(-@)?").replacer(sub);
+        return replacer.replace(working).replace("\t", "");
+    }
+
     /**
      * Generates a random possible name for a plant or tree, such as "tulip of Jirui" or "Komert's thorny lilac".
      * May use accented characters, as in "Emôa's greenwood", if the given language can
@@ -1131,15 +1192,25 @@ public class Thesaurus implements Serializable{
             "shape`adj`-leaf`noun` flower`noun`",
             "sensory`adj` flower`noun`-flower`noun`",
             "sensory`adj`-leaf`noun` flower`noun`",
-            "ground`noun`\tflower`noun`"
+            "ground`noun`\tflower`noun`",
+            "ground`noun`\tvegetable`noun`",
+            "vegetable`noun`-leaf`noun` tree`noun`",
+            "color`adj`-vegetable`noun` tree`noun`",
+            "shape`adj`-vegetable`noun` tree`noun`"
     );
     private static final ArrayList<String> fruitTerms = Maker.makeList(
             "fruit`noun` of @",
+            "color`adj` fruit`noun` of @",
+            "flavor`adj` fruit`noun` of @",
             "@'s fruit`noun`",
             "@'s flavor`adj` fruit`noun`",
             "@'s color`adj` fruit`noun`",
+            "flavor`adj` fruit`noun`",
+            "color`adj` fruit`noun`",
+            "shape`adj` fruit`noun`",
             "flavor`adj` fruit`noun`-fruit`noun`",
-            "color`adj` fruit`noun`-fruit`noun`"
+            "color`adj` fruit`noun`-fruit`noun`",
+            "shape`adj` fruit`noun`-fruit`noun`"
     );
     private static final ArrayList<String> nutTerms = Maker.makeList(
             "nut`noun` of @",
@@ -1150,6 +1221,17 @@ public class Thesaurus implements Serializable{
             "flavor`adj` nut`noun`",
             "color`adj` nut`noun`",
             "sensory`adj` nut`noun`"
+            );
+    private static final ArrayList<String> vegetableTerms = Maker.makeList(
+            "vegetable`noun` of @",
+            "color`adj` vegetable`noun` of @",
+            "@'s vegetable`noun`",
+            "@'s flavor`adj` vegetable`noun`",
+            "@'s color`adj` vegetable`noun`",
+            "flavor`adj` vegetable`noun`",
+            "color`adj` vegetable`noun`",
+            "sensory`adj` vegetable`noun`",
+            "shape`adj` vegetable`noun`"
             );
     private static final ArrayList<String> flowerTerms = Maker.makeList(
             "flower`noun` of @",
@@ -1169,7 +1251,7 @@ public class Thesaurus implements Serializable{
     private static final ArrayList<String> potionTerms = Maker.makeList(
             "a bottle`adj` bottle`noun` filled with a liquid`adj` color`adj` liquid`noun`",
             "a bottle`adj` bottle`noun` filled with a color`adj` liquid`noun`",
-            "a calabash`adj` filled with a color`adj` liquid`noun`",
+            "a calabash`noun` filled with a color`adj` liquid`noun`",
             "a bottle`adj` bottle`noun` half-filled with a liquid`adj` color`adj` liquid`noun`",
             "a bottle`adj` bottle`noun` containing a few drops of a color`adj` liquid`noun`"
         );
@@ -1325,7 +1407,9 @@ public class Thesaurus implements Serializable{
             "fruit`noun`",
             makeList("fruit", "berry", "apple", "peach", "cherry", "melon", "lime", "fig", "date", "mango", "banana", "juniper", "grape", "papaya", "pear", "quince"),
             "nut`noun`",
-            makeList("nut", "bean", "almond", "peanut", "pecan", "walnut", "cashew", "pea", "chestnut", "hazelnut"),
+            makeList("nut", "bean", "almond", "peanut", "pecan", "walnut", "cashew", "pea", "chestnut", "hazelnut", "lentil"),
+            "vegetable`noun`",
+            makeList("carrot", "corn", "radish", "potato", "pumpkin", "zucchini", "taro", "yam", "mushroom", "spinach", "lettuce", "cabbage", "kale", "asparagus", "eggplant", "broccoli", "cauliflower", "celery", "beet"),
             "flower`noun`",
             makeList("flower", "rose", "lilac", "orchid", "peony", "oleander", "chrysanthemum", "amaryllis", "camellia", "mallow", "lily", "gardenia", "daisy", "hibiscus", "dandelion", "jasmine", "lotus", "lantana", "phlox", "petunia", "tulip"),
             "tree`noun`",
@@ -1335,7 +1419,7 @@ public class Thesaurus implements Serializable{
             "flavor`adj`",
             makeList("sweet", "spicy", "sour", "bitter", "salty", "savory", "smoky"),
             "color`adj`",
-            makeList("black", "white", "red", "orange", "yellow", "green", "blue", "violet", "gray", "brown"),
+            makeList("black", "white", "red", "orange", "yellow", "green", "blue", "violet", "gray", "brown", "pink"),
             "shape`adj`",
             makeList("hollow", "tufted", "drooping", "fibrous", "giant", "miniature", "delicate", "hardy", "spiny", "thorny", "fragile", "sturdy", "long", "stubby", "stiff", "yielding"),
             "sensory`adj`",
@@ -1348,7 +1432,7 @@ public class Thesaurus implements Serializable{
             makeList("bottle", "flask", "vial", "jug", "phial", "flagon", "canister"),
             "bottle`adj`",
             makeList("clear glass", "smoky glass", "green glass", "brown glass", "fluted crystal", "tarnished silver", "dull pewter", "shining silver", "curvaceous glass", "rough-cut glass", "sharp-edged tin"),
-            "calabash`adj`",
+            "calabash`noun`",
             makeList("hollow gourd", "calabash", "milk carton", "waterskin", "wineskin"),
             "smart`adj`",
             makeList("brilliant", "smart", "genius", "wise", "clever", "cunning", "mindful", "aware"),
@@ -1417,6 +1501,7 @@ public class Thesaurus implements Serializable{
             "plant`term`",  plantTerms ,
             "fruit`term`",  fruitTerms ,
             "nut`term`",    nutTerms   ,
+            "vegetable`term`",    vegetableTerms   ,
             "flower`term`", flowerTerms,
             "potion`term`", potionTerms
             );
