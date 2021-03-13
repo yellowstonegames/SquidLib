@@ -95,5 +95,14 @@ public class ThesaurusTest {
                 System.out.println("Mnemonic(" + j + "), encoding " + StringKit.hex(a) + ": "+ words + ", decoding to " + StringKit.hex(m[j].fromWordMnemonic(words)));
             }
         }
+        text.setLength(0);
+        for (int i = 0; i < 60; i++) {
+            text.append("vegetable`term`, ");
+        }
+        text.setLength(text.length() - 2);
+        for(String s : StringKit.wrap(thesaurus.process(text), 80))
+        {
+            System.out.println(s);
+        }
     }
 }
