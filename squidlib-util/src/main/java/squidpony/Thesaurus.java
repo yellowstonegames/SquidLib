@@ -1580,6 +1580,14 @@ public class Thesaurus implements Serializable{
      * like dis speakah." You may be familiar with a certain sci-fi game that has orks who sound like this.
      */
     public static Thesaurus ORK = new Thesaurus("WAAAAAGH!");
+
+    /**
+     * Thesaurus preset that sharply reduces the used letters to only: a, b, g, h, m, n, r, and z. This apparently is
+     * the canonical set of letters that zombies can use? This will abuse the rules of proper English spelling, using r
+     * and h as vowels, kind-of, in addition to a.
+     */
+    public static Thesaurus ZOMBIE = new Thesaurus("zrrmbrh grh BRRRNZ!");
+
     static {
         ORK.alterations.add(new FakeLanguageGen.Alteration("\\bth", "d"));
         ORK.alterations.add(new FakeLanguageGen.Alteration("th", "dd"));
@@ -1596,6 +1604,28 @@ public class Thesaurus implements Serializable{
                 .addReplacement("rhythm", "riddim")
                 .addReplacement("get", "git")
                 .addReplacement("good", "gud");
+
+        ZOMBIE.alterations.add(new FakeLanguageGen.Alteration("(?[[\\p{L}]-[A-Za-z]])", "r"));
+        ZOMBIE.alterations.add(new FakeLanguageGen.Alteration("[pcst]h", "h"));
+        ZOMBIE.alterations.add(new FakeLanguageGen.Alteration("[eiu]([tckhd]+)", "rh"));
+        ZOMBIE.alterations.add(new FakeLanguageGen.Alteration("[aei][aeiy]", "aa"));
+        ZOMBIE.alterations.add(new FakeLanguageGen.Alteration("o[hw]", "ah"));
+        ZOMBIE.alterations.add(new FakeLanguageGen.Alteration("n[cdtkq]", "nh"));
+        ZOMBIE.alterations.add(new FakeLanguageGen.Alteration("m\\b", "mm"));
+        ZOMBIE.alterations.add(new FakeLanguageGen.Alteration("[td]+", "bh"));
+        ZOMBIE.alterations.add(new FakeLanguageGen.Alteration("[ckq]+", "gh"));
+        ZOMBIE.alterations.add(new FakeLanguageGen.Alteration("[ai]", "a"));
+        ZOMBIE.alterations.add(new FakeLanguageGen.Alteration("[bvp]", "b"));
+        ZOMBIE.alterations.add(new FakeLanguageGen.Alteration("[jg]", "g"));
+        ZOMBIE.alterations.add(new FakeLanguageGen.Alteration("[fwyh]", "h"));
+        ZOMBIE.alterations.add(new FakeLanguageGen.Alteration("[m]", "m"));
+        ZOMBIE.alterations.add(new FakeLanguageGen.Alteration("[n]", "n"));
+        ZOMBIE.alterations.add(new FakeLanguageGen.Alteration("[lreou]", "r"));
+        ZOMBIE.alterations.add(new FakeLanguageGen.Alteration("[sxz]", "z"));
+        ZOMBIE.alterations.add(new FakeLanguageGen.Alteration("([ahmnrz])\\b", "$1$1", 0.2));
+        ZOMBIE.alterations.add(new FakeLanguageGen.Alteration("(\\b\\w+\\b)", "${!1}", 0.125));
+    }
+    static {
         
         // not related to ORK; this filters out synonyms that aren't in the appropriate list
         Iterator<String> it = adjective.keySet().iterator();
