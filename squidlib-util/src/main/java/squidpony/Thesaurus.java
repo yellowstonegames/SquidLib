@@ -200,16 +200,16 @@ public class Thesaurus implements Serializable{
      *     <li>ground`noun` : clay, dirt, earth, loam, mud, peat, sand, soil</li>
      *     <li>lake`noun` : bog, fen, glade, lake, pond, puddle, sea, swamp</li>
      *     <li>leaf`noun` : bark, blossom, branch, bud, cress, flower, leaf, root, sap, seed, shoot, stalk, stem, thorn, twig, vine, wood, wort</li>
-     *     <li>fruit`noun` : apple, banana, berry, cherry, date, fig, fruit, grape, juniper, lime, mango, melon, papaya, peach, pear, quince</li>
-     *     <li>nut`noun` : almond, bean, cashew, chestnut, hazelnut, lentil, nut, pea, peanut, pecan, walnut</li>
-     *     <li>vegetable`noun` : asparagus, beet, broccoli, cabbage, carrot, cauliflower, celery, corn, eggplant, kale, lettuce, mushroom, potato, pumpkin, radish, spinach, taro, yam, zucchini</li>
+     *     <li>fruit`noun` : apple, banana, berry, cherry, citron, date, fig, fruit, grape, juniper, kumquat, lemon, lime, loquat, mango, melon, papaya, peach, pear, pineapple, plum, quince</li>
+     *     <li>nut`noun` : almond, bean, cashew, chestnut, coconut, hazelnut, lentil, nut, pea, peanut, pecan, walnut</li>
+     *     <li>vegetable`noun` : artichoke, asparagus, avocado, beet, broccoli, cabbage, carrot, cauliflower, celery, corn, eggplant, kale, leek, lettuce, mushroom, onion, potato, pumpkin, radish, rutabaga, spinach, taro, tomato, truffle, yam, zucchini</li>
      *     <li>flower`noun` : amaryllis, camellia, chrysanthemum, daisy, dandelion, flower, gardenia, hibiscus, jasmine, lantana, lilac, lily, lotus, mallow, oleander, orchid, peony, petunia, phlox, rose, tulip</li>
      *     <li>tree`noun` : alder, beech, birch, cactus, cedar, elm, hazel, juniper, larch, magnolia, mangrove, maple, oak, palm, pine, tree, willow</li>
-     *     <li>flavor`noun` : acid, grease, herb, salt, smoke, spice, sugar</li>
+     *     <li>flavor`noun` : acid, grease, salt, smoke, soap, spice, sugar</li>
      *     <li>flavor`adj` : bitter, salty, savory, smoky, sour, spicy, sweet</li>
-     *     <li>color`adj` : black, blue, brown, gray, green, orange, red, violet, white, yellow</li>
-     *     <li>shape`adj` : delicate, drooping, fibrous, fragile, giant, hardy, hollow, long, miniature, spiny, stiff, stubby, sturdy, thorny, tufted, yielding</li>
-     *     <li>sensory`adj` : aromatic, fragrant, fuzzy, glossy, pungent, rough, rustling, smooth, soft, weeping</li>
+     *     <li>color`adj` : black, blue, brown, gray, green, orange, pink, red, violet, white, yellow</li>
+     *     <li>shape`adj` : arched, crusty, delicate, diminutive, drooping, fibrous, flat, fragile, giant, hardy, hollow, large, long, massive, miniature, ovate, pored, ridged, small, spiny, spongy, stiff, stubby, sturdy, tattered, thorny, toothy, tufted, yielding</li>
+     *     <li>sensory`adj` : aromatic, feathery, fragrant, furry, fuzzy, glossy, hairy, pungent, rough, rustling, scaly, shaggy, smooth, soft, spotted, striped, weeping</li>
      *     <li>liquid`noun` : brew, broth, elixir, fluid, liquid, potion, serum, tonic</li>
      *     <li>liquid`adj` : bubbling, congealing, effervescent, milky, murky, slimy, sloshing, swirling, thick</li>
      *     <li>bottle`noun` : bottle, canister, flagon, flask, jug, phial, vial</li>
@@ -249,13 +249,14 @@ public class Thesaurus implements Serializable{
      *     <li>power`adj` : authoritative, dominant, forceful, potent, powerful, strong</li>
      * </ul>
      * There are also terms, which typically produce multiple words procedurally and may use {@link #defaultLanguage}.
-     * See {@link #makePlantName()}, {@link #makeFruitName()}, {@link #makeNutName()}, {@link #makeFlowerName()}, and
-     * {@link #makePotionDescription()} for more info and examples.
+     * See {@link #makePlantName()}, {@link #makeFruitName()}, {@link #makeNutName()}, {@link #makeFlowerName()},
+     * {@link #makeVegetableName()}, and {@link #makePotionDescription()} for more info and examples.
      * <li>
-     *     <li>plant`term` : @'s color`adj`	leaf`noun`, @'s color`adj` flower`noun`, @'s color`adj` tree`noun`, @'s flower`noun`, @'s ground`noun`	leaf`noun`, @'s sensory`adj`-leaf`noun`, @'s shape`adj` flower`noun`, @'s tree`noun`, color`adj` flower`noun`, color`adj` flower`noun` of @, color`adj` fruit`noun` tree`noun`, color`adj` nut`noun` tree`noun`, color`adj`-leaf`noun` flower`noun`, flavor`adj` fruit`noun` tree`noun`, flavor`adj` nut`noun` tree`noun`, flavor`noun`	leaf`noun` tree`noun`, flower`noun` of @, ground`noun`	flower`noun`, ground`noun`	leaf`noun`, ground`noun`	leaf`noun` of @, leaf`noun` of @, sensory`adj` flower`noun` of @, sensory`adj` flower`noun`-flower`noun`, sensory`adj` tree`noun` of @, sensory`adj` tree`noun`-tree`noun`, sensory`adj`-leaf`noun` flower`noun`, sensory`adj`-leaf`noun` tree`noun`, shape`adj` flower`noun`, shape`adj`-fruit`noun` tree`noun`, shape`adj`-leaf`noun` flower`noun`, shape`adj`-leaf`noun` tree`noun`</li>
-     *     <li>fruit`term` : @'s color`adj` fruit`noun`, @'s flavor`adj` fruit`noun`, @'s fruit`noun`, color`adj` fruit`noun`-fruit`noun`, flavor`adj` fruit`noun`-fruit`noun`, fruit`noun` of @</li>
+     *     <li>plant`term` : @'s color`adj`\tleaf`noun`, @'s color`adj` flower`noun`, @'s color`adj` tree`noun`, @'s flower`noun`, @'s ground`noun`\tleaf`noun`, @'s sensory`adj`-leaf`noun`, @'s shape`adj` flower`noun`, @'s tree`noun`, color`adj` flower`noun`, color`adj` flower`noun` of @, color`adj` fruit`noun` tree`noun`, color`adj` nut`noun` tree`noun`, color`adj`-leaf`noun` flower`noun`, color`adj`-vegetable`noun` tree`noun`, flavor`adj` fruit`noun` tree`noun`, flavor`adj` nut`noun` tree`noun`, flavor`noun`\tleaf`noun` tree`noun`, flower`noun` of @, ground`noun`\tflower`noun`, ground`noun`\tleaf`noun`, ground`noun`\tleaf`noun` of @, ground`noun`\tvegetable`noun`, leaf`noun` of @, sensory`adj` flower`noun` of @, sensory`adj` flower`noun`-flower`noun`, sensory`adj` tree`noun` of @, sensory`adj` tree`noun`-tree`noun`, sensory`adj`-leaf`noun` flower`noun`, sensory`adj`-leaf`noun` tree`noun`, shape`adj` flower`noun`, shape`adj`-fruit`noun` tree`noun`, shape`adj`-leaf`noun` flower`noun`, shape`adj`-leaf`noun` tree`noun`, shape`adj`-vegetable`noun` tree`noun`, vegetable`noun`-leaf`noun` tree`noun`</li>
+     *     <li>fruit`term` : @'s color`adj` fruit`noun`, @'s flavor`adj` fruit`noun`, @'s fruit`noun`, color`adj` fruit`noun`, color`adj` fruit`noun` of @, color`adj` fruit`noun`-fruit`noun`, flavor`adj` fruit`noun`, flavor`adj` fruit`noun` of @, flavor`adj` fruit`noun`-fruit`noun`, fruit`noun` of @, shape`adj` fruit`noun`, shape`adj` fruit`noun`-fruit`noun`</li>
      *     <li>nut`term` : @'s color`adj` nut`noun`, @'s flavor`adj` nut`noun`, @'s nut`noun`, color`adj` nut`noun`, color`adj` nut`noun` of @, flavor`adj` nut`noun`, nut`noun` of @, sensory`adj` nut`noun`</li>
-     *     <li>flower`term` : @'s color`adj` flower`noun`, @'s flower`noun`, @'s shape`adj` flower`noun`, color`adj` flower`noun`, color`adj` flower`noun` of @, color`adj`-leaf`noun` flower`noun`, flower`noun` of @, ground`noun`	flower`noun`, sensory`adj` flower`noun` of @, sensory`adj` flower`noun`-flower`noun`, sensory`adj`-leaf`noun` flower`noun`, shape`adj` flower`noun`, shape`adj`-leaf`noun` flower`noun`</li>
+     *     <li>vegetable`term` : @'s color`adj` vegetable`noun`, @'s flavor`adj` vegetable`noun`, @'s vegetable`noun`, @'s vegetable`noun`-vegetable`noun`, color`adj` sensory`adj` vegetable`noun`, color`adj` vegetable`noun`, color`adj` vegetable`noun` of @, color`adj` vegetable`noun`-vegetable`noun`, flavor`adj` vegetable`noun`, flavor`adj` vegetable`noun`-vegetable`noun`, sensory`adj` shape`adj` vegetable`noun`, sensory`adj` vegetable`noun`, sensory`adj` vegetable`noun`-vegetable`noun`, shape`adj` color`adj` vegetable`noun`, shape`adj` vegetable`noun`, shape`adj` vegetable`noun`-vegetable`noun`, vegetable`noun` of @</li>
+     *     <li>flower`term` : @'s color`adj` flower`noun`, @'s flower`noun`, @'s shape`adj` flower`noun`, color`adj` flower`noun`, color`adj` flower`noun` of @, color`adj`-leaf`noun` flower`noun`, flower`noun` of @, ground`noun`\tflower`noun`, sensory`adj` flower`noun` of @, sensory`adj` flower`noun`-flower`noun`, sensory`adj`-leaf`noun` flower`noun`, shape`adj` flower`noun`, shape`adj`-leaf`noun` flower`noun`</li>
      *     <li>potion`term` : a bottle`adj` bottle`noun` containing a few drops of a color`adj` liquid`noun`, a bottle`adj` bottle`noun` filled with a color`adj` liquid`noun`, a bottle`adj` bottle`noun` filled with a liquid`adj` color`adj` liquid`noun`, a bottle`adj` bottle`noun` half-filled with a liquid`adj` color`adj` liquid`noun`, a calabash`noun` filled with a color`adj` liquid`noun`</li>
      * </ul>
      * Capitalizing the first letter in the keyword where it appears in text you call process() on will capitalize the
@@ -782,7 +783,7 @@ public class Thesaurus implements Serializable{
     }
 
     /**
-     * Generates a random possible name for a plant or tree, such as "green lime-melon" or "Ung's date".
+     * Generates a random possible name for a fruit, such as "green lime-melon" or "Ung's date".
      * May use accented characters, as in "Emôa's greenwood", if the given language can
      * produce them; if you want to strip these out and replace accented chars with their un-accented counterparts, you
      * can use {@link FakeLanguageGen#removeAccents(CharSequence)}, which returns a CharSequence that can be converted
@@ -811,7 +812,7 @@ public class Thesaurus implements Serializable{
         return replacer.replace(working).replace("\t", "");
     }
     /**
-     * Generates a random possible name for a plant or tree, such as "green lime-melon" or "Ung's date",
+     * Generates a random possible name for a fruit, such as "green lime-melon" or "Ung's date",
      * with the FakeLanguageGen already available instead of randomly created. May use accented characters, as in
      * "Emôa's greenwood", if the given language can
      * produce them; if you want to strip these out and replace accented chars with their un-accented counterparts, you
@@ -839,7 +840,7 @@ public class Thesaurus implements Serializable{
     }
 
     /**
-     * Generates a random possible name for a plant or tree, such as "nut of Gikoim" or "Pelyt's cashew".
+     * Generates a random possible name for a nut or bean, such as "nut of Gikoim" or "Pelyt's cashew".
      * May use accented characters, as in "Emôa's greenwood", if the given language can
      * produce them; if you want to strip these out and replace accented chars with their un-accented counterparts, you
      * can use {@link FakeLanguageGen#removeAccents(CharSequence)}, which returns a CharSequence that can be converted
@@ -868,7 +869,7 @@ public class Thesaurus implements Serializable{
         return replacer.replace(working).replace("\t", "");
     }
     /**
-     * Generates a random possible name for a plant or tree, such as "nut of Gikoim" or "Pelyt's cashew",
+     * Generates a random possible name for a nut or bean, such as "nut of Gikoim" or "Pelyt's cashew",
      * with the FakeLanguageGen already available instead of randomly created.
      * May use accented characters, as in "Emôa's greenwood", if the given language can
      * produce them; if you want to strip these out and replace accented chars with their un-accented counterparts, you
@@ -954,7 +955,7 @@ public class Thesaurus implements Serializable{
     }
 
     /**
-     * Generates a random possible name for a plant or tree, such as "tulip of Jirui" or "Komert's thorny lilac".
+     * Generates a random possible name for a flower or flowering plant, such as "tulip of Jirui" or "thorny lilac".
      * May use accented characters, as in "Emôa's greenwood", if the given language can
      * produce them; if you want to strip these out and replace accented chars with their un-accented counterparts, you
      * can use {@link FakeLanguageGen#removeAccents(CharSequence)}, which returns a CharSequence that can be converted
@@ -983,7 +984,7 @@ public class Thesaurus implements Serializable{
         return replacer.replace(working).replace("\t", "");
     }
     /**
-     * Generates a random possible name for a plant or tree, such as "tulip of Jirui" or "Komert's thorny lilac",
+     * Generates a random possible name for a flower or flowering plant, such as "tulip of Jirui" or "thorny lilac",
      * with the FakeLanguageGen already available instead of randomly created. May use accented characters, as in
      * "Emôa's greenwood", if the given language can
      * produce them; if you want to strip these out and replace accented chars with their un-accented counterparts, you
@@ -1506,12 +1507,12 @@ public class Thesaurus implements Serializable{
             makeList("power", "force", "potency", "strength", "authority", "dominance"),
             "power`adj`",
             makeList("powerful", "forceful", "potent", "strong", "authoritative", "dominant"),
-            "plant`term`",  plantTerms ,
-            "fruit`term`",  fruitTerms ,
-            "nut`term`",    nutTerms   ,
-            "vegetable`term`",    vegetableTerms   ,
-            "flower`term`", flowerTerms,
-            "potion`term`", potionTerms
+            "plant`term`",     plantTerms,
+            "fruit`term`",     fruitTerms,
+            "nut`term`",       nutTerms,
+            "vegetable`term`", vegetableTerms,
+            "flower`term`",    flowerTerms,
+            "potion`term`",    potionTerms
             );
     public static final OrderedMap<String, ArrayList<String>>
             adjective = new OrderedMap<>(categories),
