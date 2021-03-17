@@ -12,24 +12,29 @@ public class ThesaurusArchiver extends ApplicationAdapter {
 	public static final String ARCHIVE_VERSION = "3-0-0";
 	@Override
 	public void create() {
-		String archive = Thesaurus.archiveCategories();
-		Gdx.files.local("Thesaurus-" + ARCHIVE_VERSION + ".txt").writeString(archive, false, "UTF-8");
-		String archive2 = Gdx.files.local("Thesaurus-" + ARCHIVE_VERSION + ".txt").readString("UTF-8");
-		System.out.println(
-				archive2.equals(archive));
+		String archiveContents = Gdx.files.local("archives/Thesaurus-" + ARCHIVE_VERSION + ".txt").readString("UTF-8");
+		String archiveContentsAlt = Gdx.files.local("Thesaurus-" + ARCHIVE_VERSION + ".alt.txt").readString("UTF-8");
 		Thesaurus thesaurus = new Thesaurus(0L);
-		thesaurus.addArchivedCategories(archive2);
+		thesaurus.addArchivedCategories(archiveContents);
+		String archive = Thesaurus.archiveCategories();
+		String archiveAlt = Thesaurus.archiveCategoriesAlternate();
+		Gdx.files.local("Thesaurus-" + ARCHIVE_VERSION + ".txt").writeString(archive, false, "UTF-8");
+		Gdx.files.local("Thesaurus-" + ARCHIVE_VERSION + ".alt.txt").writeString(archiveAlt, false, "UTF-8");
+		System.out.println(
+				archiveContents.equals(archive));
+		thesaurus = new Thesaurus(0L);
+		thesaurus.addArchivedCategories(archiveContents);
 		Thesaurus thesaurus2 = new Thesaurus(0L);
-		thesaurus2.addKnownCategories();
-		String testing;
-		System.out.println((testing = thesaurus.makeFlowerName()) + "  \t  " + testing.equals(thesaurus2.makeFlowerName()));
-		System.out.println((testing = thesaurus.makeFruitName() ) + "  \t  " + testing.equals(thesaurus2.makeFruitName()));
-		System.out.println((testing = thesaurus.makeNutName()   ) + "  \t  " + testing.equals(thesaurus2.makeNutName()));
-		System.out.println((testing = thesaurus.makePlantName() ) + "  \t  " + testing.equals(thesaurus2.makePlantName()));
-		System.out.println((testing = thesaurus.makeNationName()) + "  \t  " + testing.equals(thesaurus2.makeNationName()));
-		System.out.println((testing = thesaurus.makeNationName()) + "  \t  " + testing.equals(thesaurus2.makeNationName()));
-		System.out.println((testing = thesaurus.makeNationName()) + "  \t  " + testing.equals(thesaurus2.makeNationName()));
-		System.out.println((testing = thesaurus.makeNationName()) + "  \t  " + testing.equals(thesaurus2.makeNationName()));
+		thesaurus2.addArchivedCategoriesAlternate(archiveContentsAlt);
+		String testing, testing2;
+		System.out.println((testing = thesaurus.makeFlowerName()) + "  \t  " + (testing.equals(testing2 = thesaurus2.makeFlowerName()) ? "== " : "!= ") + testing2);
+		System.out.println((testing = thesaurus.makeFruitName() ) + "  \t  " + (testing.equals(testing2 = thesaurus2.makeFruitName()) ? "== " : "!= ") + testing2);
+		System.out.println((testing = thesaurus.makeNutName()   ) + "  \t  " + (testing.equals(testing2 = thesaurus2.makeNutName()) ? "== " : "!= ") + testing2);
+		System.out.println((testing = thesaurus.makePlantName() ) + "  \t  " + (testing.equals(testing2 = thesaurus2.makePlantName()) ? "== " : "!= ") + testing2);
+		System.out.println((testing = thesaurus.makeNationName()) + "  \t  " + (testing.equals(testing2 = thesaurus2.makeNationName()) ? "== " : "!= ") + testing2);
+		System.out.println((testing = thesaurus.makeNationName()) + "  \t  " + (testing.equals(testing2 = thesaurus2.makeNationName()) ? "== " : "!= ") + testing2);
+		System.out.println((testing = thesaurus.makeNationName()) + "  \t  " + (testing.equals(testing2 = thesaurus2.makeNationName()) ? "== " : "!= ") + testing2);
+		System.out.println((testing = thesaurus.makeNationName()) + "  \t  " + (testing.equals(testing2 = thesaurus2.makeNationName()) ? "== " : "!= ") + testing2);
 		Gdx.app.exit();
 	}
 	public static void main(String[] args)

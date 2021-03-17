@@ -285,7 +285,7 @@ public class Thesaurus implements Serializable{
      * modifies the {@link #mappings} field and the {@link #categories}, {@link #adjective}, {@link #noun}, and
      * {@link #nouns} static fields, so it can affect other Thesaurus objects produced later (it won't change
      * previously-made ones, probably).
-     * 
+     * <br>
      * If you didn't have an archive of the categories from some version of SquidLib, you can download one of the small
      * files from <a href="https://github.com/yellowstonegames/SquidLib/tree/master/archives">the 'archives' folder of the
      * SquidLib repo</a>; there's an archive that acts as a snapshot of SquidLib 3.0.0's Thesaurus class, for instance.
@@ -317,6 +317,76 @@ public class Thesaurus implements Serializable{
         nouns.clear();
         nouns.putAll(cat);
         
+        Iterator<String> it = adjective.keySet().iterator();
+        while (it.hasNext()){
+            if(!it.next().contains("`adj`"))
+                it.remove();
+        }
+        it = noun.keySet().iterator();
+        while (it.hasNext()){
+            if(!it.next().contains("`noun`"))
+                it.remove();
+        }
+        it = nouns.keySet().iterator();
+        while (it.hasNext()){
+            if(!it.next().contains("`nouns`"))
+                it.remove();
+        }
+
+        for(Map.Entry<String, ArrayList<String>> kv : categories.entrySet())
+        {
+            addCategory(kv.getKey(), kv.getValue());
+        }
+        plantTermShuffler =  mappings.get("plant`term`");
+        fruitTermShuffler =  mappings.get("fruit`term`");
+        nutTermShuffler =    mappings.get("nut`term`");
+        vegetableTermShuffler = mappings.get("vegetable`term`");
+        flowerTermShuffler = mappings.get("flower`term`");
+        potionTermShuffler = mappings.get("potion`term`");
+
+        return this;
+
+    }
+
+
+    /**
+     * Given an archive String saved by {@link #archiveCategoriesAlternate()} (probably from another version of
+     * SquidLib), this makes the Thesaurus class act like it did in that archive, assuming the {@link #rng} is seeded
+     * the same and uses the same algorithm/RandomnessSource. This modifies the {@link #mappings} field and the
+     * {@link #categories}, {@link #adjective}, {@link #noun}, and {@link #nouns} static fields, so it can affect other
+     * Thesaurus objects produced later (it won't change previously-made ones, probably).
+     * <br>
+     * If you didn't have an archive of the categories from some version of SquidLib, you can download one of the small
+     * files from <a href="https://github.com/yellowstonegames/SquidLib/tree/master/archives">the 'archives' folder of the
+     * SquidLib repo</a>; there's an archive that acts as a snapshot of SquidLib 3.0.0's Thesaurus class, for instance.
+     * The files that use this method's format end in {@code .alt.txt}, while the other format just uses {@code .txt}.
+     * If you save the 3.0.0 archive in a libGDX application's assets folder, you can reload the 3.0.0 definitions into
+     * a Thesaurus called {@code myThesaurus} with:
+     * <br>
+     * {@code myThesaurus.addArchivedCategoriesAlternate(Gdx.files.internal("Thesaurus-3-0-0.alt.txt").readString("UTF-8"));}
+     *
+     * @param archive an archived String of categories produced by {@link #archiveCategoriesAlternate()}
+     * @return this Thesaurus, but static state of the class will also be modified so this may affect other Thesaurus objects
+     */
+    public Thesaurus addArchivedCategoriesAlternate(String archive){
+        String[] lines = archive.split("\r?\n");
+        mappings.clear();
+
+        categories.clear();
+        for (int i = 0, n = lines.length; i < n; i++) {
+            int idx = lines[i].indexOf('\u00A0');
+            categories.put(lines[i].substring(0, idx), Maker.makeList(StringKit.split(lines[i].substring(idx + 1), "\u00A0")));
+        }
+
+        adjective.clear();
+        adjective.putAll(categories);
+
+        noun.clear();
+        noun.putAll(categories);
+
+        nouns.clear();
+        nouns.putAll(categories);
+
         Iterator<String> it = adjective.keySet().iterator();
         while (it.hasNext()){
             if(!it.next().contains("`adj`"))
@@ -1657,5 +1727,26 @@ public class Thesaurus implements Serializable{
                         Converters.convertString,
                         Converters.convertArrayList(Converters.convertString)
                 ).stringify(categories);
+    }
+
+    /**
+     * Gets a stable (large) String that stores all categories this version of Thesaurus knows, as well as all of the
+     * words each category includes. This can be useful in conjunction with
+     * {@link #addArchivedCategoriesAlternate(String)} to load a set of categories stored from an earlier version of
+     * SquidLib, but its intended purpose is to provide a simpler format for archival that doesn't use {@link ObText}.
+     * <br>
+     * This yields a String that describes an OrderedMap of String keys (categories) mapped to ArrayList of String
+     * values (the words each category knows). Each key-value pair is one line, typically separated by {@code "\n"} (but
+     * because various OS properties can affect line endings, {@code "\r\n"} must also be handled). Items within the
+     * line are separated by the non-breaking space character, Unicode 00A0. The first item on a line is the key, or the
+     * category name. Remaining items are words the category knows. This may produce a trailing newline.
+     * @return a category archive String that can be passed to {@link #addArchivedCategories(String)}
+     */
+    public static String archiveCategoriesAlternate(){
+        StringBuilder sb = new StringBuilder(8192);
+        for (int i = 0, n = categories.size(); i < n; i++) {
+            sb.append(categories.keyAt(i)).append('\u00A0').append(StringKit.join("\u00A0", categories.getAt(i))).append('\n');
+        }
+        return sb.toString();
     }
 }
