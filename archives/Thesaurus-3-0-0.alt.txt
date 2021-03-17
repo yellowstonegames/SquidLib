@@ -1,0 +1,122 @@
+calm`adj` harmonious peaceful pleasant serene placid tranquil calm
+calm`noun` harmony peace kindness serenity tranquility calm
+org`noun` fraternity brotherhood order group foundation association guild fellowship partnership
+org`nouns` fraternities brotherhoods orders groups foundations associations guilds fellowships partnerships
+empire`adj` imperial prince's king's sultan's regal dynastic royal hegemonic monarchic ascendant emir's lordly
+empire`noun` empire emirate kingdom sultanate dominion dynasty imperium hegemony triumvirate ascendancy monarchy commonwealth
+empire`nouns` empires emirates kingdoms sultanates dominions dynasties imperia hegemonies triumvirates ascendancies monarchies commonwealths
+emperor`noun` emperor emir king sultan lord ruler pharaoh
+emperor`nouns` emperors emirs kings sultans lords rulers pharaohs
+empress`noun` empress emira queen sultana lady ruler pharaoh
+empress`nouns` empresses emiras queens sultanas ladies rulers pharaohs
+union`adj` united allied people's confederated federated congressional independent associated unified democratic
+union`noun` union alliance coalition confederation federation congress confederacy league faction republic
+union`nouns` unions alliances coalitions confederations federations congresses confederacies leagues factions republics
+militia`noun` rebellion resistance militia liberators warriors fighters militants front irregulars
+militia`nouns` rebellions resistances militias liberators warriors fighters militants fronts irregulars
+gang`noun` gang syndicate mob crew posse mafia cartel
+gang`nouns` gangs syndicates mobs crews posses mafias cartels
+duke`noun` duke earl baron fief lord shogun
+duke`nouns` dukes earls barons fiefs lords shoguns
+duchy`noun` duchy earldom barony fiefdom lordship shogunate
+duchy`nouns` duchies earldoms baronies fiefdoms lordships shogunates
+magical`adj` arcane enchanted sorcerous ensorcelled magical mystical
+holy`adj` auspicious divine holy sacred prophetic blessed godly virtuous
+priest`noun` priest bishop chaplain cleric cardinal preacher
+priest`nouns` priests bishops chaplains clergy cardinals preachers
+unholy`adj` bewitched occult unholy macabre accursed profane vile
+witch`noun` witch warlock necromancer cultist occultist defiler
+witch`nouns` witches warlocks necromancers cultists occultists defilers
+forest`adj` natural primal verdant lush fertile bountiful
+forest`noun` nature forest greenery jungle woodland grove copse glen
+shaman`noun` shaman druid warden animist
+shaman`nouns` shamans druids wardens animists
+fancy`adj` grand glorious magnificent magnanimous majestic great powerful
+evil`adj` heinous scurrilous terrible horrible debased wicked evil malevolent nefarious vile cruel abhorrent
+villain`noun` villain knave evildoer killer blasphemer monster murderer
+villain`nouns` villains knaves evildoers killers blasphemers monsters murderers
+monster`noun` fiend abomination demon devil ghoul monster beast creature
+monsters`nouns` fiends abominations demons devils ghouls monsters beasts creatures
+good`adj` righteous moral good pure compassionate flawless perfect kind
+lethal`adj` silent lethal deadly fatal venomous cutthroat murderous bloodstained stalking poisonous
+lethal`noun` silence killer assassin ninja venom poison snake murder blood razor tiger slayer
+blade`noun` blade knife sword axe stiletto katana scimitar hatchet spear glaive halberd hammer maul flail mace sickle scythe whip lance nunchaku saber cutlass trident
+bow`noun` bow longbow shortbow crossbow sling atlatl bolas javelin net shuriken dagger
+weapon`noun` blade knife sword axe stiletto katana scimitar hatchet spear glaive halberd hammer maul flail mace sickle scythe whip lance nunchaku saber cutlass trident bow longbow shortbow crossbow sling atlatl bolas javelin net shuriken dagger
+musket`noun` arquebus blunderbuss musket matchlock flintlock wheellock cannon
+grenade`noun` rocket grenade missile bomb warhead explosive flamethrower
+rifle`noun` pistol rifle handgun firearm longarm shotgun
+blade`nouns` blades knives swords axes stilettos katana scimitars hatchets spears glaives halberds hammers mauls flails maces sickles scythes whips lances nunchaku sabers cutlasses tridents
+bow`nouns` bows longbows shortbows crossbows slings atlatls bolases javelins nets shuriken daggers
+weapon`nouns` blades knives swords axes stilettos katana scimitars hatchets spears glaives halberds hammers mauls flails maces sickles scythes whips lances nunchaku sabers cutlasses tridents bows longbows shortbows crossbows slings atlatls bolases javelins nets shuriken daggers
+musket`nouns` arquebusses blunderbusses muskets matchlocks flintlocks wheellocks cannons
+grenade`nouns` rockets grenades missiles bombs warheads explosives flamethrowers
+rifle`nouns` pistols rifles handguns firearms longarms shotguns
+scifi`adj` plasma warp tachyonic phase gravitational photonic nanoscale laser quantum genetic
+tech`adj` cyber digital electronic techno hacker crypto turbo mechanical servo
+sole`adj` sole true singular total ultimate final last
+light`adj` bright glowing solar stellar lunar radiant luminous shimmering gleaming
+light`noun` light glow sun star moon radiance dawn torch shimmer gleam
+light`nouns` lights glimmers suns stars moons torches
+shadow`noun` shadow darkness gloom blackness murk twilight
+shadow`nouns` shadows darkness gloom blackness murk twilight
+fire`noun` fire flame inferno conflagration pyre blaze
+fire`nouns` fires flames infernos conflagrations pyres blazes
+ice`noun` ice frost snow chill blizzard cold
+ice`nouns` ice frosts snow chills blizzards cold
+lightning`noun` lightning thunder thunderbolt storm spark shock
+lightning`nouns` lightning thunder thunderbolts storms sparks shocks
+ground`noun` earth sand soil loam dirt clay mud peat
+lake`noun` puddle pond lake sea swamp bog fen glade
+leaf`noun` leaf bark root thorn seed branch twig wort cress flower wood vine sap bud blossom shoot stalk stem
+fruit`noun` fruit berry apple peach cherry melon lime fig date mango banana juniper grape papaya pear quince
+nut`noun` nut bean almond peanut pecan walnut cashew pea chestnut hazelnut
+flower`noun` flower rose lilac orchid peony oleander chrysanthemum amaryllis camellia mallow lily gardenia daisy hibiscus dandelion jasmine lotus lantana phlox petunia tulip
+tree`noun` tree oak pine juniper maple beech birch larch willow alder cedar palm magnolia hazel cactus mangrove elm
+flavor`noun` sugar spice acid herb salt grease smoke
+flavor`adj` sweet spicy sour bitter salty savory smoky
+color`adj` black white red orange yellow green blue violet gray brown
+shape`adj` hollow tufted drooping fibrous giant miniature delicate hardy spiny thorny fragile sturdy long stubby stiff yielding
+sensory`adj` fragrant pungent rustling fuzzy glossy weeping rough smooth soft aromatic
+liquid`noun` liquid elixir tonic fluid brew broth potion serum
+liquid`adj` bubbling effervescent swirling murky thick congealing sloshing slimy milky
+bottle`noun` bottle flask vial jug phial flagon canister
+bottle`adj` clear glass smoky glass green glass brown glass fluted crystal tarnished silver dull pewter shining silver curvaceous glass rough-cut glass sharp-edged tin
+calabash`adj` hollow gourd calabash milk carton waterskin wineskin
+smart`adj` brilliant smart genius wise clever cunning mindful aware
+smart`noun` genius wisdom cunning awareness mindfulness acumen smarts knowledge
+stupid`adj` stupid dumb idiotic foolish reckless careless sloppy dull moronic complacent
+stupid`noun` stupidity idiocy foolishness recklessness carelessness sloppiness complacency
+bandit`noun` thief raider bandit rogue brigand highwayman pirate
+bandit`nouns` thieves raiders bandits rogues brigands highwaymen pirates
+soldier`noun` soldier warrior fighter mercenary trooper combatant
+soldier`nouns` soldiers warriors fighters mercenaries troops combatants
+guard`noun` protector guardian warden defender guard shield sentinel watchman knight paladin templar
+guard`nouns` protectors guardians wardens defenders guards shields sentinels watchmen knights paladins templars
+hunter`noun` hunter poacher trapper warden stalker tracker
+explorer`noun` explorer pathfinder seeker questant wanderer nomad
+hunter`nouns` hunters poachers trappers wardens stalkers trackers
+explorer`nouns` explorers pathfinders seekers questants wanderers nomads
+rage`noun` rage fury anger wrath frenzy vengeance
+ominous`adj` ominous foreboding fateful baleful portentous
+many`adj` many myriad thousandfold infinite countless unlimited manifold
+impossible`adj` impossible forbidden incomprehensible ineffable unearthly abominable unspeakable indescribable
+gaze`noun` eye gaze stare observation purveyance watch
+pain`noun` pain agony misery excruciation torture
+god`noun` god deity ruler king father lord lordship
+goddess`noun` goddess deity ruler queen mother lady ladyship
+hero`noun` hero champion savior crusader knight
+heroes`nouns` heroes champions saviors crusaders knights
+heroine`noun` heroine champion savior crusader knight maiden
+heroines`nouns` heroines champions saviors crusaders knights maidens
+popular`adj` beloved adored revered worshipped
+unpopular`adj` reviled despised hated loathed
+glyph`noun` glyph sign symbol sigil seal mark
+glyph`nouns` glyphs signs symbols sigils seals marks
+power`noun` power force potency strength authority dominance
+power`adj` powerful forceful potent strong authoritative dominant
+plant`term` @'s color`adj`	leaf`noun` @'s tree`noun` @'s color`adj` tree`noun` @'s flower`noun` @'s shape`adj` flower`noun` @'s color`adj` flower`noun` flower`noun` of @ leaf`noun` of @ @'s ground`noun`	leaf`noun` ground`noun`	leaf`noun` of @ sensory`adj` tree`noun` of @ sensory`adj` flower`noun` of @ color`adj` flower`noun` of @ @'s sensory`adj`-leaf`noun` ground`noun`	leaf`noun` shape`adj` flower`noun` color`adj` flower`noun` flavor`noun`	leaf`noun` tree`noun` flavor`adj` fruit`noun` tree`noun` flavor`adj` nut`noun` tree`noun` color`adj` fruit`noun` tree`noun` color`adj` nut`noun` tree`noun` shape`adj`-fruit`noun` tree`noun` shape`adj`-leaf`noun` tree`noun` sensory`adj` tree`noun`-tree`noun` sensory`adj`-leaf`noun` tree`noun` color`adj`-leaf`noun` flower`noun` shape`adj`-leaf`noun` flower`noun` sensory`adj` flower`noun`-flower`noun` sensory`adj`-leaf`noun` flower`noun` ground`noun`	flower`noun`
+fruit`term` fruit`noun` of @ @'s fruit`noun` @'s flavor`adj` fruit`noun` @'s color`adj` fruit`noun` flavor`adj` fruit`noun`-fruit`noun` color`adj` fruit`noun`-fruit`noun`
+nut`term` nut`noun` of @ color`adj` nut`noun` of @ @'s nut`noun` @'s flavor`adj` nut`noun` @'s color`adj` nut`noun` flavor`adj` nut`noun` color`adj` nut`noun` sensory`adj` nut`noun`
+flower`term` flower`noun` of @ sensory`adj` flower`noun` of @ color`adj` flower`noun` of @ @'s flower`noun` @'s shape`adj` flower`noun` @'s color`adj` flower`noun` shape`adj` flower`noun` color`adj` flower`noun` color`adj`-leaf`noun` flower`noun` shape`adj`-leaf`noun` flower`noun` sensory`adj` flower`noun`-flower`noun` sensory`adj`-leaf`noun` flower`noun` ground`noun`	flower`noun`
+potion`term` a bottle`adj` bottle`noun` filled with a liquid`adj` color`adj` liquid`noun` a bottle`adj` bottle`noun` filled with a color`adj` liquid`noun` a calabash`adj` filled with a color`adj` liquid`noun` a bottle`adj` bottle`noun` half-filled with a liquid`adj` color`adj` liquid`noun` a bottle`adj` bottle`noun` containing a few drops of a color`adj` liquid`noun`
