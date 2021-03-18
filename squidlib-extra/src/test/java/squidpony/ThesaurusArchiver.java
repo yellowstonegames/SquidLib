@@ -12,13 +12,13 @@ public class ThesaurusArchiver extends ApplicationAdapter {
 	public static final String ARCHIVE_VERSION = "3-0-0";
 	@Override
 	public void create() {
-		String archiveContents = Gdx.files.local("archives/Thesaurus-" + ARCHIVE_VERSION + ".txt").readString("UTF-8");
+		String archiveContents = Gdx.files.local("archives/Thesaurus-" + ARCHIVE_VERSION + ".squid.txt").readString("UTF-8");
 		String archiveContentsAlt = Gdx.files.local("Thesaurus-" + ARCHIVE_VERSION + ".alt.txt").readString("UTF-8");
 		Thesaurus thesaurus = new Thesaurus(0L);
 		thesaurus.addArchivedCategories(archiveContents);
 		String archive = Thesaurus.archiveCategories();
 		String archiveAlt = Thesaurus.archiveCategoriesAlternate();
-		Gdx.files.local("Thesaurus-" + ARCHIVE_VERSION + ".txt").writeString(archive, false, "UTF-8");
+		Gdx.files.local("Thesaurus-" + ARCHIVE_VERSION + ".squid.txt").writeString(archive, false, "UTF-8");
 		Gdx.files.local("Thesaurus-" + ARCHIVE_VERSION + ".alt.txt").writeString(archiveAlt, false, "UTF-8");
 		System.out.println(
 				archiveContents.equals(archive));
