@@ -77,9 +77,11 @@ loadScripts(document, 'script');</script>
 <h1 title="Class DeckRNG" class="title">Class DeckRNG</h1>
 </div>
 <div class="inheritance" title="Inheritance Tree">java.lang.Object
+<div class="inheritance"><a href="AbstractRNG.html" title="class in squidpony.squidmath">squidpony.squidmath.AbstractRNG</a>
 <div class="inheritance"><a href="RNG.html" title="class in squidpony.squidmath">squidpony.squidmath.RNG</a>
 <div class="inheritance"><a href="StatefulRNG.html" title="class in squidpony.squidmath">squidpony.squidmath.StatefulRNG</a>
 <div class="inheritance">squidpony.squidmath.DeckRNG</div>
+</div>
 </div>
 </div>
 </div>
@@ -210,8 +212,8 @@ int&nbsp;max)</code></th>
 </tr>
 <tr class="row-color" id="i3">
 <td class="col-first"><code>long</code></td>
-<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#between(long,long)">between</a></span>&#8203;(long&nbsp;min,
-long&nbsp;max)</code></th>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#between(long,long)">between</a></span>&#8203;(long&nbsp;inner,
+long&nbsp;outer)</code></th>
 <td class="col-last">
 <div class="block">Returns a value between min (inclusive) and max (exclusive).</div>
 </td>
@@ -411,7 +413,10 @@ int&nbsp;samples)</code></th>
 </div>
 <div class="inherited-list">
 <h3 id="methods.inherited.from.class.squidpony.squidmath.RNG">Methods inherited from class&nbsp;squidpony.squidmath.<a href="RNG.html" title="class in squidpony.squidmath">RNG</a></h3>
-<code><a href="RNG.html#approximateBits(int)">approximateBits</a>, <a href="RNG.html#getRandomCellsIterable(int,int,int)">getRandomCellsIterable</a>, <a href="RNG.html#getRandomStartIterable(java.util.List)">getRandomStartIterable</a>, <a href="RNG.html#getRandomUniqueCells(int,int,int,int)">getRandomUniqueCells</a>, <a href="RNG.html#getRandomUniqueCells(int,int,int,int,int)">getRandomUniqueCells</a>, <a href="RNG.html#getRandomUniqueCells(int,int,int,int,squidpony.squidmath.Coord%5B%5D)">getRandomUniqueCells</a>, <a href="RNG.html#maxDoubleOf(double,int)">maxDoubleOf</a>, <a href="RNG.html#maxFloatOf(float,int)">maxFloatOf</a>, <a href="RNG.html#maxIntOf(int,int)">maxIntOf</a>, <a href="RNG.html#maxLongOf(long,int)">maxLongOf</a>, <a href="RNG.html#minDoubleOf(double,int)">minDoubleOf</a>, <a href="RNG.html#minFloatOf(float,int)">minFloatOf</a>, <a href="RNG.html#minIntOf(int,int)">minIntOf</a>, <a href="RNG.html#minLongOf(long,int)">minLongOf</a>, <a href="RNG.html#nextBytes(byte%5B%5D)">nextBytes</a>, <a href="RNG.html#nextCoord(int,int)">nextCoord</a>, <a href="RNG.html#nextCurvedFloat()">nextCurvedFloat</a>, <a href="RNG.html#nextDoubleInclusive()">nextDoubleInclusive</a>, <a href="RNG.html#nextDoubleInclusive(double)">nextDoubleInclusive</a>, <a href="RNG.html#nextFloat(float)">nextFloat</a>, <a href="RNG.html#nextFloatInclusive()">nextFloatInclusive</a>, <a href="RNG.html#nextFloatInclusive(float)">nextFloatInclusive</a>, <a href="RNG.html#nextSignedInt(int)">nextSignedInt</a>, <a href="RNG.html#nextSignedLong(long)">nextSignedLong</a>, <a href="RNG.html#randomInterleave()">randomInterleave</a>, <a href="RNG.html#randomOrdering(int,int%5B%5D)">randomOrdering</a>, <a href="RNG.html#randomPortion(java.util.Collection,int)">randomPortion</a>, <a href="RNG.html#randomPortion(T%5B%5D,T%5B%5D)">randomPortion</a>, <a href="RNG.html#randomRange(int,int,int)">randomRange</a>, <a href="RNG.html#randomRotation(java.util.List)">randomRotation</a>, <a href="RNG.html#shuffle(java.util.Collection)">shuffle</a>, <a href="RNG.html#shuffle(java.util.Collection,java.util.ArrayList)">shuffle</a>, <a href="RNG.html#shuffle(T%5B%5D,T%5B%5D)">shuffle</a>, <a href="RNG.html#shuffleInPlace(java.util.List)">shuffleInPlace</a>, <a href="RNG.html#shuffleInPlace(T%5B%5D)">shuffleInPlace</a></code></div>
+<code><a href="RNG.html#approximateBits(int)">approximateBits</a>, <a href="RNG.html#getRandomCellsIterable(int,int,int)">getRandomCellsIterable</a>, <a href="RNG.html#getRandomStartIterable(java.util.List)">getRandomStartIterable</a>, <a href="RNG.html#getRandomUniqueCells(int,int,int,int)">getRandomUniqueCells</a>, <a href="RNG.html#getRandomUniqueCells(int,int,int,int,int)">getRandomUniqueCells</a>, <a href="RNG.html#getRandomUniqueCells(int,int,int,int,squidpony.squidmath.Coord%5B%5D)">getRandomUniqueCells</a>, <a href="RNG.html#maxDoubleOf(double,int)">maxDoubleOf</a>, <a href="RNG.html#maxFloatOf(float,int)">maxFloatOf</a>, <a href="RNG.html#maxIntOf(int,int)">maxIntOf</a>, <a href="RNG.html#maxLongOf(long,int)">maxLongOf</a>, <a href="RNG.html#minDoubleOf(double,int)">minDoubleOf</a>, <a href="RNG.html#minFloatOf(float,int)">minFloatOf</a>, <a href="RNG.html#minIntOf(int,int)">minIntOf</a>, <a href="RNG.html#minLongOf(long,int)">minLongOf</a>, <a href="RNG.html#nextBytes(byte%5B%5D)">nextBytes</a>, <a href="RNG.html#nextCoord(int,int)">nextCoord</a>, <a href="RNG.html#nextCurvedFloat()">nextCurvedFloat</a>, <a href="RNG.html#nextDoubleInclusive()">nextDoubleInclusive</a>, <a href="RNG.html#nextDoubleInclusive(double)">nextDoubleInclusive</a>, <a href="RNG.html#nextFloatInclusive()">nextFloatInclusive</a>, <a href="RNG.html#nextFloatInclusive(float)">nextFloatInclusive</a>, <a href="RNG.html#randomInterleave()">randomInterleave</a>, <a href="RNG.html#randomOrdering(int,int%5B%5D)">randomOrdering</a>, <a href="RNG.html#randomPortion(java.util.Collection,int)">randomPortion</a>, <a href="RNG.html#randomPortion(T%5B%5D,T%5B%5D)">randomPortion</a>, <a href="RNG.html#randomRange(int,int,int)">randomRange</a>, <a href="RNG.html#randomRotation(java.util.List)">randomRotation</a>, <a href="RNG.html#shuffle(java.util.Collection)">shuffle</a>, <a href="RNG.html#shuffle(java.util.Collection,java.util.ArrayList)">shuffle</a>, <a href="RNG.html#shuffle(T%5B%5D,T%5B%5D)">shuffle</a>, <a href="RNG.html#shuffleInPlace(java.util.List)">shuffleInPlace</a>, <a href="RNG.html#shuffleInPlace(T%5B%5D)">shuffleInPlace</a></code></div>
+<div class="inherited-list">
+<h3 id="methods.inherited.from.class.squidpony.squidmath.AbstractRNG">Methods inherited from class&nbsp;squidpony.squidmath.<a href="AbstractRNG.html" title="class in squidpony.squidmath">AbstractRNG</a></h3>
+<code><a href="AbstractRNG.html#nextFloat(float)">nextFloat</a>, <a href="AbstractRNG.html#nextSignedInt(int)">nextSignedInt</a>, <a href="AbstractRNG.html#nextSignedLong(long)">nextSignedLong</a>, <a href="AbstractRNG.html#swap(T%5B%5D,int,int)">swap</a></code></div>
 <div class="inherited-list">
 <h3 id="methods.inherited.from.class.java.lang.Object">Methods inherited from class&nbsp;java.lang.Object</h3>
 <code>clone, finalize, getClass, notify, notifyAll, wait, wait, wait</code></div>
@@ -504,7 +509,7 @@ int&nbsp;samples)</code></th>
 <dt>Specified by:</dt>
 <dd><code><a href="IRNG.html#nextDouble(double)">nextDouble</a></code>&nbsp;in interface&nbsp;<code><a href="IRNG.html" title="interface in squidpony.squidmath">IRNG</a></code></dd>
 <dt>Overrides:</dt>
-<dd><code><a href="RNG.html#nextDouble(double)">nextDouble</a></code>&nbsp;in class&nbsp;<code><a href="RNG.html" title="class in squidpony.squidmath">RNG</a></code></dd>
+<dd><code><a href="AbstractRNG.html#nextDouble(double)">nextDouble</a></code>&nbsp;in class&nbsp;<code><a href="AbstractRNG.html" title="class in squidpony.squidmath">AbstractRNG</a></code></dd>
 <dt>Parameters:</dt>
 <dd><code>max</code> - the outer exclusive bound as a double; can be negative or positive</dd>
 <dt>Returns:</dt>
@@ -523,7 +528,7 @@ double&nbsp;max)</span></div>
 <dt>Specified by:</dt>
 <dd><code><a href="IRNG.html#between(double,double)">between</a></code>&nbsp;in interface&nbsp;<code><a href="IRNG.html" title="interface in squidpony.squidmath">IRNG</a></code></dd>
 <dt>Overrides:</dt>
-<dd><code><a href="RNG.html#between(double,double)">between</a></code>&nbsp;in class&nbsp;<code><a href="RNG.html" title="class in squidpony.squidmath">RNG</a></code></dd>
+<dd><code><a href="AbstractRNG.html#between(double,double)">between</a></code>&nbsp;in class&nbsp;<code><a href="AbstractRNG.html" title="class in squidpony.squidmath">AbstractRNG</a></code></dd>
 <dt>Parameters:</dt>
 <dd><code>min</code> - the minimum bound on the return value (inclusive)</dd>
 <dd><code>max</code> - the maximum bound on the return value (exclusive)</dd>
@@ -545,7 +550,7 @@ int&nbsp;max)</span></div>
 <dt>Specified by:</dt>
 <dd><code><a href="IRNG.html#between(int,int)">between</a></code>&nbsp;in interface&nbsp;<code><a href="IRNG.html" title="interface in squidpony.squidmath">IRNG</a></code></dd>
 <dt>Overrides:</dt>
-<dd><code><a href="RNG.html#between(int,int)">between</a></code>&nbsp;in class&nbsp;<code><a href="RNG.html" title="class in squidpony.squidmath">RNG</a></code></dd>
+<dd><code><a href="AbstractRNG.html#between(int,int)">between</a></code>&nbsp;in class&nbsp;<code><a href="AbstractRNG.html" title="class in squidpony.squidmath">AbstractRNG</a></code></dd>
 <dt>Parameters:</dt>
 <dd><code>min</code> - the minimum bound on the return value (inclusive)</dd>
 <dd><code>max</code> - the maximum bound on the return value (exclusive)</dd>
@@ -610,7 +615,7 @@ int&nbsp;samples)</span></div>
 <dt>Specified by:</dt>
 <dd><code><a href="IRNG.html#getRandomElement(java.util.List)">getRandomElement</a></code>&nbsp;in interface&nbsp;<code><a href="IRNG.html" title="interface in squidpony.squidmath">IRNG</a></code></dd>
 <dt>Overrides:</dt>
-<dd><code><a href="RNG.html#getRandomElement(java.util.List)">getRandomElement</a></code>&nbsp;in class&nbsp;<code><a href="RNG.html" title="class in squidpony.squidmath">RNG</a></code></dd>
+<dd><code><a href="AbstractRNG.html#getRandomElement(java.util.List)">getRandomElement</a></code>&nbsp;in class&nbsp;<code><a href="AbstractRNG.html" title="class in squidpony.squidmath">AbstractRNG</a></code></dd>
 <dt>Type Parameters:</dt>
 <dd><code>T</code> - the type of the returned object</dd>
 <dt>Parameters:</dt>
@@ -640,7 +645,7 @@ int&nbsp;samples)</span></div>
 <dt>Specified by:</dt>
 <dd><code><a href="IRNG.html#getRandomElement(java.util.Collection)">getRandomElement</a></code>&nbsp;in interface&nbsp;<code><a href="IRNG.html" title="interface in squidpony.squidmath">IRNG</a></code></dd>
 <dt>Overrides:</dt>
-<dd><code><a href="RNG.html#getRandomElement(java.util.Collection)">getRandomElement</a></code>&nbsp;in class&nbsp;<code><a href="RNG.html" title="class in squidpony.squidmath">RNG</a></code></dd>
+<dd><code><a href="AbstractRNG.html#getRandomElement(java.util.Collection)">getRandomElement</a></code>&nbsp;in class&nbsp;<code><a href="AbstractRNG.html" title="class in squidpony.squidmath">AbstractRNG</a></code></dd>
 <dt>Type Parameters:</dt>
 <dd><code>T</code> - the type of the returned object</dd>
 <dt>Parameters:</dt>
@@ -660,7 +665,7 @@ int&nbsp;samples)</span></div>
 <dt>Specified by:</dt>
 <dd><code><a href="IRNG.html#nextInt(int)">nextInt</a></code>&nbsp;in interface&nbsp;<code><a href="IRNG.html" title="interface in squidpony.squidmath">IRNG</a></code></dd>
 <dt>Overrides:</dt>
-<dd><code><a href="RNG.html#nextInt(int)">nextInt</a></code>&nbsp;in class&nbsp;<code><a href="RNG.html" title="class in squidpony.squidmath">RNG</a></code></dd>
+<dd><code><a href="AbstractRNG.html#nextInt(int)">nextInt</a></code>&nbsp;in class&nbsp;<code><a href="AbstractRNG.html" title="class in squidpony.squidmath">AbstractRNG</a></code></dd>
 <dt>Parameters:</dt>
 <dd><code>bound</code> - the upper bound (exclusive)</dd>
 <dt>Returns:</dt>
@@ -768,7 +773,7 @@ int&nbsp;samples)</span></div>
 <dt>Specified by:</dt>
 <dd><code><a href="IRNG.html#nextLong(long)">nextLong</a></code>&nbsp;in interface&nbsp;<code><a href="IRNG.html" title="interface in squidpony.squidmath">IRNG</a></code></dd>
 <dt>Overrides:</dt>
-<dd><code><a href="RNG.html#nextLong(long)">nextLong</a></code>&nbsp;in class&nbsp;<code><a href="RNG.html" title="class in squidpony.squidmath">RNG</a></code></dd>
+<dd><code><a href="AbstractRNG.html#nextLong(long)">nextLong</a></code>&nbsp;in class&nbsp;<code><a href="AbstractRNG.html" title="class in squidpony.squidmath">AbstractRNG</a></code></dd>
 <dt>Parameters:</dt>
 <dd><code>bound</code> - the upper bound (exclusive)</dd>
 <dt>Returns:</dt>
@@ -800,7 +805,7 @@ int&nbsp;samples)</span></div>
 <li>
 <section class="detail" id="asRandom()">
 <h3>asRandom</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">java.util.Random</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/DeckRNG.html#line.328">asRandom</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">java.util.Random</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/DeckRNG.html#line.324">asRandom</a></span>()</div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="RNG.html#asRandom()">asRandom</a></code>&nbsp;in class&nbsp;<code><a href="RNG.html" title="class in squidpony.squidmath">RNG</a></code></dd>
@@ -812,8 +817,8 @@ int&nbsp;samples)</span></div>
 <li>
 <section class="detail" id="between(long,long)">
 <h3>between</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/DeckRNG.html#line.347">between</a></span>&#8203;(<span class="parameters">long&nbsp;min,
-long&nbsp;max)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/DeckRNG.html#line.343">between</a></span>&#8203;(<span class="parameters">long&nbsp;inner,
+long&nbsp;outer)</span></div>
 <div class="block">Returns a value between min (inclusive) and max (exclusive).
  <p/>
  The inclusive and exclusive behavior is to match the behavior of the
@@ -822,10 +827,10 @@ long&nbsp;max)</span></div>
 <dt>Specified by:</dt>
 <dd><code><a href="IRNG.html#between(long,long)">between</a></code>&nbsp;in interface&nbsp;<code><a href="IRNG.html" title="interface in squidpony.squidmath">IRNG</a></code></dd>
 <dt>Overrides:</dt>
-<dd><code><a href="RNG.html#between(long,long)">between</a></code>&nbsp;in class&nbsp;<code><a href="RNG.html" title="class in squidpony.squidmath">RNG</a></code></dd>
+<dd><code><a href="AbstractRNG.html#between(long,long)">between</a></code>&nbsp;in class&nbsp;<code><a href="AbstractRNG.html" title="class in squidpony.squidmath">AbstractRNG</a></code></dd>
 <dt>Parameters:</dt>
-<dd><code>min</code> - the minimum bound on the return value (inclusive)</dd>
-<dd><code>max</code> - the maximum bound on the return value (exclusive)</dd>
+<dd><code>inner</code> - the minimum bound on the return value (inclusive)</dd>
+<dd><code>outer</code> - the maximum bound on the return value (exclusive)</dd>
 <dt>Returns:</dt>
 <dd>the found value</dd>
 </dl>
@@ -834,7 +839,7 @@ long&nbsp;max)</span></div>
 <li>
 <section class="detail" id="nextFloat()">
 <h3>nextFloat</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">float</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/DeckRNG.html#line.352">nextFloat</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">float</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/DeckRNG.html#line.348">nextFloat</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="RNG.html#nextFloat()">RNG</a></code></span></div>
 <div class="block">Gets a random float between 0.0f inclusive and 1.0f exclusive.
  This returns a maximum of 0.99999994 because that is the largest float value that is less than 1.0f .</div>
@@ -851,7 +856,7 @@ long&nbsp;max)</span></div>
 <li>
 <section class="detail" id="nextBoolean()">
 <h3>nextBoolean</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/DeckRNG.html#line.357">nextBoolean</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/DeckRNG.html#line.353">nextBoolean</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="RNG.html#nextBoolean()">RNG</a></code></span></div>
 <div class="block">Get a random bit of state, interpreted as true or false with approximately equal likelihood.
  This may have better behavior than <code>rng.next(1)</code>, depending on the RandomnessSource implementation; the
@@ -873,7 +878,7 @@ long&nbsp;max)</span></div>
 <li>
 <section class="detail" id="getRandomness()">
 <h3>getRandomness</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a></span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/DeckRNG.html#line.362">getRandomness</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a></span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/DeckRNG.html#line.358">getRandomness</a></span>()</div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="RNG.html#getRandomness()">getRandomness</a></code>&nbsp;in class&nbsp;<code><a href="RNG.html" title="class in squidpony.squidmath">RNG</a></code></dd>
@@ -883,7 +888,7 @@ long&nbsp;max)</span></div>
 <li>
 <section class="detail" id="setRandomness(squidpony.squidmath.RandomnessSource)">
 <h3>setRandomness</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/DeckRNG.html#line.372">setRandomness</a></span>&#8203;(<span class="parameters"><a href="RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a>&nbsp;random)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/DeckRNG.html#line.368">setRandomness</a></span>&#8203;(<span class="parameters"><a href="RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a>&nbsp;random)</span></div>
 <div class="block">Reseeds this DeckRNG using the RandomnessSource it is given. Does not assign the RandomnessSource to any fields
  that would affect future pseudo-random number generation.</div>
 <dl class="notes">
@@ -897,7 +902,7 @@ long&nbsp;max)</span></div>
 <li>
 <section class="detail" id="copy()">
 <h3>copy</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="DeckRNG.html" title="class in squidpony.squidmath">DeckRNG</a></span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/DeckRNG.html#line.384">copy</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="DeckRNG.html" title="class in squidpony.squidmath">DeckRNG</a></span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/DeckRNG.html#line.380">copy</a></span>()</div>
 <div class="block">Creates a copy of this DeckRNG; it will generate the same random numbers, given the same calls in order, as
  this DeckRNG at the point copy() is called. The copy will not share references with this DeckRNG.</div>
 <dl class="notes">
@@ -915,7 +920,7 @@ long&nbsp;max)</span></div>
 <li>
 <section class="detail" id="getState()">
 <h3>getState</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/DeckRNG.html#line.426">getState</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/DeckRNG.html#line.422">getState</a></span>()</div>
 <div class="block">Get a long that can be used to reproduce the sequence of random numbers this object will generate starting now.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
@@ -930,7 +935,7 @@ long&nbsp;max)</span></div>
 <li>
 <section class="detail" id="setState(long)">
 <h3>setState</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/DeckRNG.html#line.437">setState</a></span>&#8203;(<span class="parameters">long&nbsp;state)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/DeckRNG.html#line.433">setState</a></span>&#8203;(<span class="parameters">long&nbsp;state)</span></div>
 <div class="block">Sets the state of the random number generator to a given long, which will alter future random numbers this
  produces based on the state. Setting the state always causes the "deck" of random grades to be shuffled.</div>
 <dl class="notes">
@@ -946,7 +951,7 @@ long&nbsp;max)</span></div>
 <li>
 <section class="detail" id="toString()">
 <h3>toString</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">java.lang.String</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/DeckRNG.html#line.444">toString</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">java.lang.String</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/DeckRNG.html#line.440">toString</a></span>()</div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="StatefulRNG.html#toString()">toString</a></code>&nbsp;in class&nbsp;<code><a href="StatefulRNG.html" title="class in squidpony.squidmath">StatefulRNG</a></code></dd>
@@ -956,7 +961,7 @@ long&nbsp;max)</span></div>
 <li>
 <section class="detail" id="equals(java.lang.Object)">
 <h3>equals</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/DeckRNG.html#line.449">equals</a></span>&#8203;(<span class="parameters">java.lang.Object&nbsp;o)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/DeckRNG.html#line.445">equals</a></span>&#8203;(<span class="parameters">java.lang.Object&nbsp;o)</span></div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="RNG.html#equals(java.lang.Object)">equals</a></code>&nbsp;in class&nbsp;<code><a href="RNG.html" title="class in squidpony.squidmath">RNG</a></code></dd>
@@ -966,7 +971,7 @@ long&nbsp;max)</span></div>
 <li>
 <section class="detail" id="hashCode()">
 <h3>hashCode</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/DeckRNG.html#line.460">hashCode</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/DeckRNG.html#line.456">hashCode</a></span>()</div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="RNG.html#hashCode()">hashCode</a></code>&nbsp;in class&nbsp;<code><a href="RNG.html" title="class in squidpony.squidmath">RNG</a></code></dd>
@@ -976,19 +981,19 @@ long&nbsp;max)</span></div>
 <li>
 <section class="detail" id="getStep()">
 <h3>getStep</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/DeckRNG.html#line.468">getStep</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/DeckRNG.html#line.464">getStep</a></span>()</div>
 </section>
 </li>
 <li>
 <section class="detail" id="setStep(int)">
 <h3>setStep</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/DeckRNG.html#line.472">setStep</a></span>&#8203;(<span class="parameters">int&nbsp;step)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/DeckRNG.html#line.468">setStep</a></span>&#8203;(<span class="parameters">int&nbsp;step)</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="toSerializable()">
 <h3>toSerializable</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">java.io.Serializable</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/DeckRNG.html#line.480">toSerializable</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">java.io.Serializable</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/DeckRNG.html#line.476">toSerializable</a></span>()</div>
 <div class="block">Returns this DeckRNG in a way that can be deserialized even if only <a href="IRNG.html" title="interface in squidpony.squidmath"><code>IRNG</code></a>'s methods can be called.</div>
 <dl class="notes">
 <dt>Specified by:</dt>

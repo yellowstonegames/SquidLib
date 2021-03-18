@@ -152,479 +152,482 @@
 <span class="source-line-no">140</span><span id="line.140">     */</span>
 <span class="source-line-no">141</span><span id="line.141">    public boolean isReachable(char[][] walls, int startx, int starty, int targetx, int targety) {</span>
 <span class="source-line-no">142</span><span id="line.142">        if(walls.length &lt; 1) return false;</span>
-<span class="source-line-no">143</span><span id="line.143">        double[][] resMap = new double[walls.length][walls[0].length];</span>
-<span class="source-line-no">144</span><span id="line.144">        for(int x = 0; x &lt; walls.length; x++)</span>
-<span class="source-line-no">145</span><span id="line.145">        {</span>
-<span class="source-line-no">146</span><span id="line.146">            for(int y = 0; y &lt; walls[0].length; y++)</span>
-<span class="source-line-no">147</span><span id="line.147">            {</span>
-<span class="source-line-no">148</span><span id="line.148">                resMap[x][y] = (walls[x][y] == '#') ? 1.0 : 0.0;</span>
-<span class="source-line-no">149</span><span id="line.149">            }</span>
-<span class="source-line-no">150</span><span id="line.150">        }</span>
-<span class="source-line-no">151</span><span id="line.151">        return isReachable(resMap, startx, starty, targetx, targety, radiusStrategy);</span>
-<span class="source-line-no">152</span><span id="line.152">    }</span>
-<span class="source-line-no">153</span><span id="line.153"></span>
-<span class="source-line-no">154</span><span id="line.154">    /**</span>
-<span class="source-line-no">155</span><span id="line.155">     * Returns true if a line can be drawn from the start point to the target</span>
-<span class="source-line-no">156</span><span id="line.156">     * point without intervening obstructions.</span>
-<span class="source-line-no">157</span><span id="line.157">     *</span>
-<span class="source-line-no">158</span><span id="line.158">     * Does not take into account resistance less than opaque or distance cost.</span>
-<span class="source-line-no">159</span><span id="line.159">     *</span>
-<span class="source-line-no">160</span><span id="line.160">     * Uses RadiusStrategy.CIRCLE, or whatever RadiusStrategy was set with setRadiusStrategy .</span>
-<span class="source-line-no">161</span><span id="line.161">     *</span>
-<span class="source-line-no">162</span><span id="line.162">     * @param resistanceMap 0.0 is fully transparent, 1.0 is fully opaque, as always this uses x,y indexing.</span>
-<span class="source-line-no">163</span><span id="line.163">     * @param startx starting x position on the grid</span>
-<span class="source-line-no">164</span><span id="line.164">     * @param starty starting y position on the grid</span>
-<span class="source-line-no">165</span><span id="line.165">     * @param targetx ending x position on the grid</span>
-<span class="source-line-no">166</span><span id="line.166">     * @param targety ending y position on the grid</span>
-<span class="source-line-no">167</span><span id="line.167">     * @return true if a line can be drawn without being obstructed, false otherwise</span>
-<span class="source-line-no">168</span><span id="line.168">     */</span>
-<span class="source-line-no">169</span><span id="line.169">    public boolean isReachable(double[][] resistanceMap, int startx, int starty, int targetx, int targety) {</span>
-<span class="source-line-no">170</span><span id="line.170">        return isReachable(resistanceMap, startx, starty, targetx, targety, radiusStrategy);</span>
-<span class="source-line-no">171</span><span id="line.171">    }</span>
-<span class="source-line-no">172</span><span id="line.172"></span>
-<span class="source-line-no">173</span><span id="line.173">    /**</span>
-<span class="source-line-no">174</span><span id="line.174">     * Returns true if a line can be drawn from the start point to the target</span>
-<span class="source-line-no">175</span><span id="line.175">     * point without intervening obstructions.</span>
-<span class="source-line-no">176</span><span id="line.176">     *</span>
-<span class="source-line-no">177</span><span id="line.177">     * @param resistanceMap 0.0 is fully transparent, 1.0 is fully opaque, as always this uses x,y indexing.</span>
-<span class="source-line-no">178</span><span id="line.178">     * @param startx starting x position on the grid</span>
-<span class="source-line-no">179</span><span id="line.179">     * @param starty starting y position on the grid</span>
-<span class="source-line-no">180</span><span id="line.180">     * @param targetx ending x position on the grid</span>
-<span class="source-line-no">181</span><span id="line.181">     * @param targety ending y position on the grid</span>
-<span class="source-line-no">182</span><span id="line.182">     * @param radiusStrategy the strategy to use in computing unit distance</span>
-<span class="source-line-no">183</span><span id="line.183">     * @return true if a line can be drawn without being obstructed, false otherwise</span>
-<span class="source-line-no">184</span><span id="line.184">     */</span>
-<span class="source-line-no">185</span><span id="line.185">    public boolean isReachable(double[][] resistanceMap, int startx, int starty, int targetx, int targety, Radius radiusStrategy) {</span>
-<span class="source-line-no">186</span><span id="line.186">        if(resistanceMap.length &lt; 1) return false;</span>
-<span class="source-line-no">187</span><span id="line.187">        this.resistanceMap = resistanceMap;</span>
-<span class="source-line-no">188</span><span id="line.188">        this.startx = startx;</span>
-<span class="source-line-no">189</span><span id="line.189">        this.starty = starty;</span>
-<span class="source-line-no">190</span><span id="line.190">        this.targetx = targetx;</span>
-<span class="source-line-no">191</span><span id="line.191">        this.targety = targety;</span>
-<span class="source-line-no">192</span><span id="line.192">        switch (type) {</span>
-<span class="source-line-no">193</span><span id="line.193">            case BRESENHAM:</span>
-<span class="source-line-no">194</span><span id="line.194">                return bresenhamReachable(radiusStrategy);</span>
-<span class="source-line-no">195</span><span id="line.195">            case ELIAS:</span>
-<span class="source-line-no">196</span><span id="line.196">                return eliasReachable(radiusStrategy);</span>
-<span class="source-line-no">197</span><span id="line.197">            case RAY:</span>
-<span class="source-line-no">198</span><span id="line.198">                return rayReachable(radiusStrategy);</span>
-<span class="source-line-no">199</span><span id="line.199">            case ORTHO:</span>
-<span class="source-line-no">200</span><span id="line.200">                return orthoReachable(radiusStrategy);</span>
-<span class="source-line-no">201</span><span id="line.201">            case DDA:</span>
-<span class="source-line-no">202</span><span id="line.202">                return ddaReachable(radiusStrategy);</span>
-<span class="source-line-no">203</span><span id="line.203">            case THICK:</span>
-<span class="source-line-no">204</span><span id="line.204">                return thickReachable(radiusStrategy);</span>
-<span class="source-line-no">205</span><span id="line.205">        }</span>
-<span class="source-line-no">206</span><span id="line.206">        return false;</span>
-<span class="source-line-no">207</span><span id="line.207">    }</span>
-<span class="source-line-no">208</span><span id="line.208"></span>
-<span class="source-line-no">209</span><span id="line.209">    /**</span>
-<span class="source-line-no">210</span><span id="line.210">     * Returns true if a line can be drawn from the start point to the target</span>
-<span class="source-line-no">211</span><span id="line.211">     * point without intervening obstructions.</span>
-<span class="source-line-no">212</span><span id="line.212">     *</span>
-<span class="source-line-no">213</span><span id="line.213">     * @param walls '#' is fully opaque, anything else is fully transparent, as always this uses x,y indexing.</span>
-<span class="source-line-no">214</span><span id="line.214">     * @param startx starting x position on the grid</span>
-<span class="source-line-no">215</span><span id="line.215">     * @param starty starting y position on the grid</span>
-<span class="source-line-no">216</span><span id="line.216">     * @param targetx ending x position on the grid</span>
-<span class="source-line-no">217</span><span id="line.217">     * @param targety ending y position on the grid</span>
-<span class="source-line-no">218</span><span id="line.218">     * @param radiusStrategy the strategy to use in computing unit distance</span>
-<span class="source-line-no">219</span><span id="line.219">     * @return true if a line can be drawn without being obstructed, false otherwise</span>
-<span class="source-line-no">220</span><span id="line.220">     */</span>
-<span class="source-line-no">221</span><span id="line.221">    public boolean isReachable(char[][] walls, int startx, int starty, int targetx, int targety, Radius radiusStrategy) {</span>
-<span class="source-line-no">222</span><span id="line.222">        if(walls.length &lt; 1) return false;</span>
-<span class="source-line-no">223</span><span id="line.223">        double[][] resMap = new double[walls.length][walls[0].length];</span>
-<span class="source-line-no">224</span><span id="line.224">        for(int x = 0; x &lt; walls.length; x++)</span>
-<span class="source-line-no">225</span><span id="line.225">        {</span>
-<span class="source-line-no">226</span><span id="line.226">            for(int y = 0; y &lt; walls[0].length; y++)</span>
-<span class="source-line-no">227</span><span id="line.227">            {</span>
-<span class="source-line-no">228</span><span id="line.228">                resMap[x][y] = (walls[x][y] == '#') ? 1.0 : 0.0;</span>
-<span class="source-line-no">229</span><span id="line.229">            }</span>
-<span class="source-line-no">230</span><span id="line.230">        }</span>
-<span class="source-line-no">231</span><span id="line.231">        return isReachable(resMap, startx, starty, targetx, targety, radiusStrategy);</span>
-<span class="source-line-no">232</span><span id="line.232">    }</span>
-<span class="source-line-no">233</span><span id="line.233"></span>
-<span class="source-line-no">234</span><span id="line.234">    /**</span>
-<span class="source-line-no">235</span><span id="line.235">     * Returns true if a line can be drawn from the any of the points within spread cells of the start point,</span>
-<span class="source-line-no">236</span><span id="line.236">     * to any of the corresponding points at the same direction and distance from the target point, without</span>
-<span class="source-line-no">237</span><span id="line.237">     * intervening obstructions. Primarily useful to paint a broad line that can be retrieved with getLastPath.</span>
-<span class="source-line-no">238</span><span id="line.238">     *</span>
-<span class="source-line-no">239</span><span id="line.239">     * @param walls '#' is fully opaque, anything else is fully transparent, as always this uses x,y indexing.</span>
-<span class="source-line-no">240</span><span id="line.240">     * @param startx starting x position on the grid</span>
-<span class="source-line-no">241</span><span id="line.241">     * @param starty starting y position on the grid</span>
-<span class="source-line-no">242</span><span id="line.242">     * @param targetx ending x position on the grid</span>
-<span class="source-line-no">243</span><span id="line.243">     * @param targety ending y position on the grid</span>
-<span class="source-line-no">244</span><span id="line.244">     * @param radiusStrategy the strategy to use in computing unit distance</span>
-<span class="source-line-no">245</span><span id="line.245">     * @param spread the number of cells outward, measured by radiusStrategy, to place extra start and target points</span>
-<span class="source-line-no">246</span><span id="line.246">     * @return true if a line can be drawn without being obstructed, false otherwise</span>
-<span class="source-line-no">247</span><span id="line.247">     */</span>
-<span class="source-line-no">248</span><span id="line.248">    public boolean spreadReachable(char[][] walls, int startx, int starty, int targetx, int targety, Radius radiusStrategy, int spread) {</span>
-<span class="source-line-no">249</span><span id="line.249">        if(walls.length &lt; 1) return false;</span>
-<span class="source-line-no">250</span><span id="line.250">        resistanceMap = new double[walls.length][walls[0].length];</span>
-<span class="source-line-no">251</span><span id="line.251">        for(int x = 0; x &lt; walls.length; x++)</span>
-<span class="source-line-no">252</span><span id="line.252">        {</span>
-<span class="source-line-no">253</span><span id="line.253">            for(int y = 0; y &lt; walls[0].length; y++)</span>
-<span class="source-line-no">254</span><span id="line.254">            {</span>
-<span class="source-line-no">255</span><span id="line.255">                resistanceMap[x][y] = (walls[x][y] == '#') ? 1.0 : 0.0;</span>
-<span class="source-line-no">256</span><span id="line.256">            }</span>
-<span class="source-line-no">257</span><span id="line.257">        }</span>
-<span class="source-line-no">258</span><span id="line.258">        this.startx = startx;</span>
-<span class="source-line-no">259</span><span id="line.259">        this.starty = starty;</span>
-<span class="source-line-no">260</span><span id="line.260">        this.targetx = targetx;</span>
-<span class="source-line-no">261</span><span id="line.261">        this.targety = targety;</span>
-<span class="source-line-no">262</span><span id="line.262"></span>
-<span class="source-line-no">263</span><span id="line.263">        return brushReachable(radiusStrategy, spread);</span>
-<span class="source-line-no">264</span><span id="line.264">    }</span>
-<span class="source-line-no">265</span><span id="line.265">    /**</span>
-<span class="source-line-no">266</span><span id="line.266">     * Returns true if a line can be drawn from the any of the points within spread cells of the start point,</span>
-<span class="source-line-no">267</span><span id="line.267">     * to any of the corresponding points at the same direction and distance from the target point, without</span>
-<span class="source-line-no">268</span><span id="line.268">     * intervening obstructions. Primarily useful to paint a broad line that can be retrieved with getLastPath.</span>
-<span class="source-line-no">269</span><span id="line.269">     *</span>
-<span class="source-line-no">270</span><span id="line.270">     * @param resistanceMap 0.0 is fully transparent, 1.0 is fully opaque, as always this uses x,y indexing.</span>
-<span class="source-line-no">271</span><span id="line.271">     * @param startx starting x position on the grid</span>
-<span class="source-line-no">272</span><span id="line.272">     * @param starty starting y position on the grid</span>
-<span class="source-line-no">273</span><span id="line.273">     * @param targetx ending x position on the grid</span>
-<span class="source-line-no">274</span><span id="line.274">     * @param targety ending y position on the grid</span>
-<span class="source-line-no">275</span><span id="line.275">     * @param radiusStrategy the strategy to use in computing unit distance</span>
-<span class="source-line-no">276</span><span id="line.276">     * @param spread the number of cells outward, measured by radiusStrategy, to place extra start and target points</span>
-<span class="source-line-no">277</span><span id="line.277">     * @return true if a line can be drawn without being obstructed, false otherwise</span>
-<span class="source-line-no">278</span><span id="line.278">     */</span>
-<span class="source-line-no">279</span><span id="line.279">    public boolean spreadReachable(double[][] resistanceMap, int startx, int starty, int targetx, int targety, Radius radiusStrategy, int spread) {</span>
-<span class="source-line-no">280</span><span id="line.280">        if(resistanceMap.length &lt; 1) return false;</span>
-<span class="source-line-no">281</span><span id="line.281">        this.resistanceMap = resistanceMap;</span>
-<span class="source-line-no">282</span><span id="line.282">        this.startx = startx;</span>
-<span class="source-line-no">283</span><span id="line.283">        this.starty = starty;</span>
-<span class="source-line-no">284</span><span id="line.284">        this.targetx = targetx;</span>
-<span class="source-line-no">285</span><span id="line.285">        this.targety = targety;</span>
-<span class="source-line-no">286</span><span id="line.286"></span>
-<span class="source-line-no">287</span><span id="line.287">        return brushReachable(radiusStrategy, spread);</span>
-<span class="source-line-no">288</span><span id="line.288">    }</span>
-<span class="source-line-no">289</span><span id="line.289">    /**</span>
-<span class="source-line-no">290</span><span id="line.290">     * Returns the path of the last LOS calculation, with the starting point as</span>
-<span class="source-line-no">291</span><span id="line.291">     * the head of the queue.</span>
-<span class="source-line-no">292</span><span id="line.292">     *</span>
-<span class="source-line-no">293</span><span id="line.293">     * @return the last path found during LOS calculation, as a ArrayDeque of Coord with the starting point at the head</span>
-<span class="source-line-no">294</span><span id="line.294">     */</span>
-<span class="source-line-no">295</span><span id="line.295">    public ArrayDeque&lt;Coord&gt; getLastPath() {</span>
-<span class="source-line-no">296</span><span id="line.296">        return lastPath;</span>
-<span class="source-line-no">297</span><span id="line.297">    }</span>
-<span class="source-line-no">298</span><span id="line.298">/*</span>
-<span class="source-line-no">299</span><span id="line.299">    private boolean bresenhamReachable(Radius radiusStrategy) {</span>
-<span class="source-line-no">300</span><span id="line.300">        Queue&lt;Coord&gt; path = Bresenham.line2D(startx, starty, targetx, targety);</span>
-<span class="source-line-no">301</span><span id="line.301">        lastPath = new ArrayDeque&lt;&gt;();</span>
-<span class="source-line-no">302</span><span id="line.302">        lastPath.add(Coord.get(startx, starty));</span>
-<span class="source-line-no">303</span><span id="line.303">        double decay = 1 / radiusStrategy.radius(startx, starty, targetx, targety);</span>
-<span class="source-line-no">304</span><span id="line.304">        double currentForce = 1;</span>
-<span class="source-line-no">305</span><span id="line.305">        for (Coord p : path) {</span>
-<span class="source-line-no">306</span><span id="line.306">            lastPath.offer(p);</span>
-<span class="source-line-no">307</span><span id="line.307">            if (p.x == targetx &amp;&amp; p.y == targety) {</span>
-<span class="source-line-no">308</span><span id="line.308">                return true;//reached the end </span>
-<span class="source-line-no">309</span><span id="line.309">            }</span>
-<span class="source-line-no">310</span><span id="line.310">            if (p.x != startx || p.y != starty) {//don't discount the start location even if on resistant cell</span>
-<span class="source-line-no">311</span><span id="line.311">                currentForce -= resistanceMap[p.x][p.y];</span>
+<span class="source-line-no">143</span><span id="line.143">        if(resistanceMap == null || resistanceMap.length != walls.length || resistanceMap[0].length != walls[0].length)</span>
+<span class="source-line-no">144</span><span id="line.144">            resistanceMap = new double[walls.length][walls[0].length];</span>
+<span class="source-line-no">145</span><span id="line.145">        for(int x = 0; x &lt; walls.length; x++)</span>
+<span class="source-line-no">146</span><span id="line.146">        {</span>
+<span class="source-line-no">147</span><span id="line.147">            for(int y = 0; y &lt; walls[0].length; y++)</span>
+<span class="source-line-no">148</span><span id="line.148">            {</span>
+<span class="source-line-no">149</span><span id="line.149">                resistanceMap[x][y] = (walls[x][y] == '#') ? 1.0 : 0.0;</span>
+<span class="source-line-no">150</span><span id="line.150">            }</span>
+<span class="source-line-no">151</span><span id="line.151">        }</span>
+<span class="source-line-no">152</span><span id="line.152">        return isReachable(resistanceMap, startx, starty, targetx, targety, radiusStrategy);</span>
+<span class="source-line-no">153</span><span id="line.153">    }</span>
+<span class="source-line-no">154</span><span id="line.154"></span>
+<span class="source-line-no">155</span><span id="line.155">    /**</span>
+<span class="source-line-no">156</span><span id="line.156">     * Returns true if a line can be drawn from the start point to the target</span>
+<span class="source-line-no">157</span><span id="line.157">     * point without intervening obstructions.</span>
+<span class="source-line-no">158</span><span id="line.158">     *</span>
+<span class="source-line-no">159</span><span id="line.159">     * Does not take into account resistance less than opaque or distance cost.</span>
+<span class="source-line-no">160</span><span id="line.160">     *</span>
+<span class="source-line-no">161</span><span id="line.161">     * Uses RadiusStrategy.CIRCLE, or whatever RadiusStrategy was set with setRadiusStrategy .</span>
+<span class="source-line-no">162</span><span id="line.162">     *</span>
+<span class="source-line-no">163</span><span id="line.163">     * @param resistanceMap 0.0 is fully transparent, 1.0 is fully opaque, as always this uses x,y indexing.</span>
+<span class="source-line-no">164</span><span id="line.164">     * @param startx starting x position on the grid</span>
+<span class="source-line-no">165</span><span id="line.165">     * @param starty starting y position on the grid</span>
+<span class="source-line-no">166</span><span id="line.166">     * @param targetx ending x position on the grid</span>
+<span class="source-line-no">167</span><span id="line.167">     * @param targety ending y position on the grid</span>
+<span class="source-line-no">168</span><span id="line.168">     * @return true if a line can be drawn without being obstructed, false otherwise</span>
+<span class="source-line-no">169</span><span id="line.169">     */</span>
+<span class="source-line-no">170</span><span id="line.170">    public boolean isReachable(double[][] resistanceMap, int startx, int starty, int targetx, int targety) {</span>
+<span class="source-line-no">171</span><span id="line.171">        return isReachable(resistanceMap, startx, starty, targetx, targety, radiusStrategy);</span>
+<span class="source-line-no">172</span><span id="line.172">    }</span>
+<span class="source-line-no">173</span><span id="line.173"></span>
+<span class="source-line-no">174</span><span id="line.174">    /**</span>
+<span class="source-line-no">175</span><span id="line.175">     * Returns true if a line can be drawn from the start point to the target</span>
+<span class="source-line-no">176</span><span id="line.176">     * point without intervening obstructions.</span>
+<span class="source-line-no">177</span><span id="line.177">     *</span>
+<span class="source-line-no">178</span><span id="line.178">     * @param resistanceMap 0.0 is fully transparent, 1.0 is fully opaque, as always this uses x,y indexing.</span>
+<span class="source-line-no">179</span><span id="line.179">     * @param startx starting x position on the grid</span>
+<span class="source-line-no">180</span><span id="line.180">     * @param starty starting y position on the grid</span>
+<span class="source-line-no">181</span><span id="line.181">     * @param targetx ending x position on the grid</span>
+<span class="source-line-no">182</span><span id="line.182">     * @param targety ending y position on the grid</span>
+<span class="source-line-no">183</span><span id="line.183">     * @param radiusStrategy the strategy to use in computing unit distance</span>
+<span class="source-line-no">184</span><span id="line.184">     * @return true if a line can be drawn without being obstructed, false otherwise</span>
+<span class="source-line-no">185</span><span id="line.185">     */</span>
+<span class="source-line-no">186</span><span id="line.186">    public boolean isReachable(double[][] resistanceMap, int startx, int starty, int targetx, int targety, Radius radiusStrategy) {</span>
+<span class="source-line-no">187</span><span id="line.187">        if(resistanceMap.length &lt; 1) return false;</span>
+<span class="source-line-no">188</span><span id="line.188">        this.resistanceMap = resistanceMap;</span>
+<span class="source-line-no">189</span><span id="line.189">        this.startx = startx;</span>
+<span class="source-line-no">190</span><span id="line.190">        this.starty = starty;</span>
+<span class="source-line-no">191</span><span id="line.191">        this.targetx = targetx;</span>
+<span class="source-line-no">192</span><span id="line.192">        this.targety = targety;</span>
+<span class="source-line-no">193</span><span id="line.193">        switch (type) {</span>
+<span class="source-line-no">194</span><span id="line.194">            case BRESENHAM:</span>
+<span class="source-line-no">195</span><span id="line.195">                return bresenhamReachable(radiusStrategy);</span>
+<span class="source-line-no">196</span><span id="line.196">            case ELIAS:</span>
+<span class="source-line-no">197</span><span id="line.197">                return eliasReachable(radiusStrategy);</span>
+<span class="source-line-no">198</span><span id="line.198">            case RAY:</span>
+<span class="source-line-no">199</span><span id="line.199">                return rayReachable(radiusStrategy);</span>
+<span class="source-line-no">200</span><span id="line.200">            case ORTHO:</span>
+<span class="source-line-no">201</span><span id="line.201">                return orthoReachable(radiusStrategy);</span>
+<span class="source-line-no">202</span><span id="line.202">            case DDA:</span>
+<span class="source-line-no">203</span><span id="line.203">                return ddaReachable(radiusStrategy);</span>
+<span class="source-line-no">204</span><span id="line.204">            case THICK:</span>
+<span class="source-line-no">205</span><span id="line.205">                return thickReachable(radiusStrategy);</span>
+<span class="source-line-no">206</span><span id="line.206">        }</span>
+<span class="source-line-no">207</span><span id="line.207">        return false;</span>
+<span class="source-line-no">208</span><span id="line.208">    }</span>
+<span class="source-line-no">209</span><span id="line.209"></span>
+<span class="source-line-no">210</span><span id="line.210">    /**</span>
+<span class="source-line-no">211</span><span id="line.211">     * Returns true if a line can be drawn from the start point to the target</span>
+<span class="source-line-no">212</span><span id="line.212">     * point without intervening obstructions.</span>
+<span class="source-line-no">213</span><span id="line.213">     *</span>
+<span class="source-line-no">214</span><span id="line.214">     * @param walls '#' is fully opaque, anything else is fully transparent, as always this uses x,y indexing.</span>
+<span class="source-line-no">215</span><span id="line.215">     * @param startx starting x position on the grid</span>
+<span class="source-line-no">216</span><span id="line.216">     * @param starty starting y position on the grid</span>
+<span class="source-line-no">217</span><span id="line.217">     * @param targetx ending x position on the grid</span>
+<span class="source-line-no">218</span><span id="line.218">     * @param targety ending y position on the grid</span>
+<span class="source-line-no">219</span><span id="line.219">     * @param radiusStrategy the strategy to use in computing unit distance</span>
+<span class="source-line-no">220</span><span id="line.220">     * @return true if a line can be drawn without being obstructed, false otherwise</span>
+<span class="source-line-no">221</span><span id="line.221">     */</span>
+<span class="source-line-no">222</span><span id="line.222">    public boolean isReachable(char[][] walls, int startx, int starty, int targetx, int targety, Radius radiusStrategy) {</span>
+<span class="source-line-no">223</span><span id="line.223">        if(walls.length &lt; 1) return false;</span>
+<span class="source-line-no">224</span><span id="line.224">        if(resistanceMap == null || resistanceMap.length != walls.length || resistanceMap[0].length != walls[0].length)</span>
+<span class="source-line-no">225</span><span id="line.225">            resistanceMap = new double[walls.length][walls[0].length];</span>
+<span class="source-line-no">226</span><span id="line.226">        for(int x = 0; x &lt; walls.length; x++)</span>
+<span class="source-line-no">227</span><span id="line.227">        {</span>
+<span class="source-line-no">228</span><span id="line.228">            for(int y = 0; y &lt; walls[0].length; y++)</span>
+<span class="source-line-no">229</span><span id="line.229">            {</span>
+<span class="source-line-no">230</span><span id="line.230">                resistanceMap[x][y] = (walls[x][y] == '#') ? 1.0 : 0.0;</span>
+<span class="source-line-no">231</span><span id="line.231">            }</span>
+<span class="source-line-no">232</span><span id="line.232">        }</span>
+<span class="source-line-no">233</span><span id="line.233">        return isReachable(resistanceMap, startx, starty, targetx, targety, radiusStrategy);</span>
+<span class="source-line-no">234</span><span id="line.234">    }</span>
+<span class="source-line-no">235</span><span id="line.235"></span>
+<span class="source-line-no">236</span><span id="line.236">    /**</span>
+<span class="source-line-no">237</span><span id="line.237">     * Returns true if a line can be drawn from the any of the points within spread cells of the start point,</span>
+<span class="source-line-no">238</span><span id="line.238">     * to any of the corresponding points at the same direction and distance from the target point, without</span>
+<span class="source-line-no">239</span><span id="line.239">     * intervening obstructions. Primarily useful to paint a broad line that can be retrieved with getLastPath.</span>
+<span class="source-line-no">240</span><span id="line.240">     *</span>
+<span class="source-line-no">241</span><span id="line.241">     * @param walls '#' is fully opaque, anything else is fully transparent, as always this uses x,y indexing.</span>
+<span class="source-line-no">242</span><span id="line.242">     * @param startx starting x position on the grid</span>
+<span class="source-line-no">243</span><span id="line.243">     * @param starty starting y position on the grid</span>
+<span class="source-line-no">244</span><span id="line.244">     * @param targetx ending x position on the grid</span>
+<span class="source-line-no">245</span><span id="line.245">     * @param targety ending y position on the grid</span>
+<span class="source-line-no">246</span><span id="line.246">     * @param radiusStrategy the strategy to use in computing unit distance</span>
+<span class="source-line-no">247</span><span id="line.247">     * @param spread the number of cells outward, measured by radiusStrategy, to place extra start and target points</span>
+<span class="source-line-no">248</span><span id="line.248">     * @return true if a line can be drawn without being obstructed, false otherwise</span>
+<span class="source-line-no">249</span><span id="line.249">     */</span>
+<span class="source-line-no">250</span><span id="line.250">    public boolean spreadReachable(char[][] walls, int startx, int starty, int targetx, int targety, Radius radiusStrategy, int spread) {</span>
+<span class="source-line-no">251</span><span id="line.251">        if(walls.length &lt; 1) return false;</span>
+<span class="source-line-no">252</span><span id="line.252">        if(resistanceMap == null || resistanceMap.length != walls.length || resistanceMap[0].length != walls[0].length)</span>
+<span class="source-line-no">253</span><span id="line.253">            resistanceMap = new double[walls.length][walls[0].length];</span>
+<span class="source-line-no">254</span><span id="line.254">        for(int x = 0; x &lt; walls.length; x++)</span>
+<span class="source-line-no">255</span><span id="line.255">        {</span>
+<span class="source-line-no">256</span><span id="line.256">            for(int y = 0; y &lt; walls[0].length; y++)</span>
+<span class="source-line-no">257</span><span id="line.257">            {</span>
+<span class="source-line-no">258</span><span id="line.258">                resistanceMap[x][y] = (walls[x][y] == '#') ? 1.0 : 0.0;</span>
+<span class="source-line-no">259</span><span id="line.259">            }</span>
+<span class="source-line-no">260</span><span id="line.260">        }</span>
+<span class="source-line-no">261</span><span id="line.261">        this.startx = startx;</span>
+<span class="source-line-no">262</span><span id="line.262">        this.starty = starty;</span>
+<span class="source-line-no">263</span><span id="line.263">        this.targetx = targetx;</span>
+<span class="source-line-no">264</span><span id="line.264">        this.targety = targety;</span>
+<span class="source-line-no">265</span><span id="line.265"></span>
+<span class="source-line-no">266</span><span id="line.266">        return brushReachable(radiusStrategy, spread);</span>
+<span class="source-line-no">267</span><span id="line.267">    }</span>
+<span class="source-line-no">268</span><span id="line.268">    /**</span>
+<span class="source-line-no">269</span><span id="line.269">     * Returns true if a line can be drawn from the any of the points within spread cells of the start point,</span>
+<span class="source-line-no">270</span><span id="line.270">     * to any of the corresponding points at the same direction and distance from the target point, without</span>
+<span class="source-line-no">271</span><span id="line.271">     * intervening obstructions. Primarily useful to paint a broad line that can be retrieved with getLastPath.</span>
+<span class="source-line-no">272</span><span id="line.272">     *</span>
+<span class="source-line-no">273</span><span id="line.273">     * @param resistanceMap 0.0 is fully transparent, 1.0 is fully opaque, as always this uses x,y indexing.</span>
+<span class="source-line-no">274</span><span id="line.274">     * @param startx starting x position on the grid</span>
+<span class="source-line-no">275</span><span id="line.275">     * @param starty starting y position on the grid</span>
+<span class="source-line-no">276</span><span id="line.276">     * @param targetx ending x position on the grid</span>
+<span class="source-line-no">277</span><span id="line.277">     * @param targety ending y position on the grid</span>
+<span class="source-line-no">278</span><span id="line.278">     * @param radiusStrategy the strategy to use in computing unit distance</span>
+<span class="source-line-no">279</span><span id="line.279">     * @param spread the number of cells outward, measured by radiusStrategy, to place extra start and target points</span>
+<span class="source-line-no">280</span><span id="line.280">     * @return true if a line can be drawn without being obstructed, false otherwise</span>
+<span class="source-line-no">281</span><span id="line.281">     */</span>
+<span class="source-line-no">282</span><span id="line.282">    public boolean spreadReachable(double[][] resistanceMap, int startx, int starty, int targetx, int targety, Radius radiusStrategy, int spread) {</span>
+<span class="source-line-no">283</span><span id="line.283">        if(resistanceMap.length &lt; 1) return false;</span>
+<span class="source-line-no">284</span><span id="line.284">        this.resistanceMap = resistanceMap;</span>
+<span class="source-line-no">285</span><span id="line.285">        this.startx = startx;</span>
+<span class="source-line-no">286</span><span id="line.286">        this.starty = starty;</span>
+<span class="source-line-no">287</span><span id="line.287">        this.targetx = targetx;</span>
+<span class="source-line-no">288</span><span id="line.288">        this.targety = targety;</span>
+<span class="source-line-no">289</span><span id="line.289"></span>
+<span class="source-line-no">290</span><span id="line.290">        return brushReachable(radiusStrategy, spread);</span>
+<span class="source-line-no">291</span><span id="line.291">    }</span>
+<span class="source-line-no">292</span><span id="line.292">    /**</span>
+<span class="source-line-no">293</span><span id="line.293">     * Returns the path of the last LOS calculation, with the starting point as</span>
+<span class="source-line-no">294</span><span id="line.294">     * the head of the queue.</span>
+<span class="source-line-no">295</span><span id="line.295">     *</span>
+<span class="source-line-no">296</span><span id="line.296">     * @return the last path found during LOS calculation, as a ArrayDeque of Coord with the starting point at the head</span>
+<span class="source-line-no">297</span><span id="line.297">     */</span>
+<span class="source-line-no">298</span><span id="line.298">    public ArrayDeque&lt;Coord&gt; getLastPath() {</span>
+<span class="source-line-no">299</span><span id="line.299">        return lastPath;</span>
+<span class="source-line-no">300</span><span id="line.300">    }</span>
+<span class="source-line-no">301</span><span id="line.301">/*</span>
+<span class="source-line-no">302</span><span id="line.302">    private boolean bresenhamReachable(Radius radiusStrategy) {</span>
+<span class="source-line-no">303</span><span id="line.303">        Queue&lt;Coord&gt; path = Bresenham.line2D(startx, starty, targetx, targety);</span>
+<span class="source-line-no">304</span><span id="line.304">        lastPath = new ArrayDeque&lt;&gt;();</span>
+<span class="source-line-no">305</span><span id="line.305">        lastPath.add(Coord.get(startx, starty));</span>
+<span class="source-line-no">306</span><span id="line.306">        double decay = 1 / radiusStrategy.radius(startx, starty, targetx, targety);</span>
+<span class="source-line-no">307</span><span id="line.307">        double currentForce = 1;</span>
+<span class="source-line-no">308</span><span id="line.308">        for (Coord p : path) {</span>
+<span class="source-line-no">309</span><span id="line.309">            lastPath.offer(p);</span>
+<span class="source-line-no">310</span><span id="line.310">            if (p.x == targetx &amp;&amp; p.y == targety) {</span>
+<span class="source-line-no">311</span><span id="line.311">                return true;//reached the end </span>
 <span class="source-line-no">312</span><span id="line.312">            }</span>
-<span class="source-line-no">313</span><span id="line.313">            double r = radiusStrategy.radius(startx, starty, p.x, p.y);</span>
-<span class="source-line-no">314</span><span id="line.314">            if (currentForce - (r * decay) &lt;= 0) {</span>
-<span class="source-line-no">315</span><span id="line.315">                return false;//too much resistance</span>
-<span class="source-line-no">316</span><span id="line.316">            }</span>
-<span class="source-line-no">317</span><span id="line.317">        }</span>
-<span class="source-line-no">318</span><span id="line.318">        return false;//never got to the target point</span>
-<span class="source-line-no">319</span><span id="line.319">    }</span>
-<span class="source-line-no">320</span><span id="line.320">*/</span>
-<span class="source-line-no">321</span><span id="line.321">    private boolean bresenhamReachable(Radius radiusStrategy) {</span>
-<span class="source-line-no">322</span><span id="line.322">        Coord[] path = Bresenham.line2D_(startx, starty, targetx, targety);</span>
-<span class="source-line-no">323</span><span id="line.323">        lastPath = new ArrayDeque&lt;&gt;();</span>
-<span class="source-line-no">324</span><span id="line.324">        double rad = radiusStrategy.radius(startx, starty, targetx, targety);</span>
-<span class="source-line-no">325</span><span id="line.325">        if(rad == 0.0) {</span>
-<span class="source-line-no">326</span><span id="line.326">            lastPath.add(Coord.get(startx, starty));</span>
-<span class="source-line-no">327</span><span id="line.327">            return true; // already at the point; we can see our own feet just fine!</span>
-<span class="source-line-no">328</span><span id="line.328">        }</span>
-<span class="source-line-no">329</span><span id="line.329">        double decay = 1 / rad;</span>
-<span class="source-line-no">330</span><span id="line.330">        double currentForce = 1;</span>
-<span class="source-line-no">331</span><span id="line.331">        Coord p;</span>
-<span class="source-line-no">332</span><span id="line.332">        for (int i = 0; i &lt; path.length; i++) {</span>
-<span class="source-line-no">333</span><span id="line.333">            p = path[i];</span>
-<span class="source-line-no">334</span><span id="line.334">            lastPath.offer(p);</span>
-<span class="source-line-no">335</span><span id="line.335">            if (p.x == targetx &amp;&amp; p.y == targety) {</span>
-<span class="source-line-no">336</span><span id="line.336">                return true;//reached the end</span>
-<span class="source-line-no">337</span><span id="line.337">            }</span>
-<span class="source-line-no">338</span><span id="line.338">            if (p.x != startx || p.y != starty) {//don't discount the start location even if on resistant cell</span>
-<span class="source-line-no">339</span><span id="line.339">                currentForce -= resistanceMap[p.x][p.y];</span>
+<span class="source-line-no">313</span><span id="line.313">            if (p.x != startx || p.y != starty) {//don't discount the start location even if on resistant cell</span>
+<span class="source-line-no">314</span><span id="line.314">                currentForce -= resistanceMap[p.x][p.y];</span>
+<span class="source-line-no">315</span><span id="line.315">            }</span>
+<span class="source-line-no">316</span><span id="line.316">            double r = radiusStrategy.radius(startx, starty, p.x, p.y);</span>
+<span class="source-line-no">317</span><span id="line.317">            if (currentForce - (r * decay) &lt;= 0) {</span>
+<span class="source-line-no">318</span><span id="line.318">                return false;//too much resistance</span>
+<span class="source-line-no">319</span><span id="line.319">            }</span>
+<span class="source-line-no">320</span><span id="line.320">        }</span>
+<span class="source-line-no">321</span><span id="line.321">        return false;//never got to the target point</span>
+<span class="source-line-no">322</span><span id="line.322">    }</span>
+<span class="source-line-no">323</span><span id="line.323">*/</span>
+<span class="source-line-no">324</span><span id="line.324">    private boolean bresenhamReachable(Radius radiusStrategy) {</span>
+<span class="source-line-no">325</span><span id="line.325">        Coord[] path = Bresenham.line2D_(startx, starty, targetx, targety);</span>
+<span class="source-line-no">326</span><span id="line.326">        lastPath.clear();</span>
+<span class="source-line-no">327</span><span id="line.327">        double rad = radiusStrategy.radius(startx, starty, targetx, targety);</span>
+<span class="source-line-no">328</span><span id="line.328">        if(rad == 0.0) {</span>
+<span class="source-line-no">329</span><span id="line.329">            lastPath.add(Coord.get(startx, starty));</span>
+<span class="source-line-no">330</span><span id="line.330">            return true; // already at the point; we can see our own feet just fine!</span>
+<span class="source-line-no">331</span><span id="line.331">        }</span>
+<span class="source-line-no">332</span><span id="line.332">        double decay = 1 / rad;</span>
+<span class="source-line-no">333</span><span id="line.333">        double currentForce = 1;</span>
+<span class="source-line-no">334</span><span id="line.334">        Coord p;</span>
+<span class="source-line-no">335</span><span id="line.335">        for (int i = 0; i &lt; path.length; i++) {</span>
+<span class="source-line-no">336</span><span id="line.336">            p = path[i];</span>
+<span class="source-line-no">337</span><span id="line.337">            lastPath.offer(p);</span>
+<span class="source-line-no">338</span><span id="line.338">            if (p.x == targetx &amp;&amp; p.y == targety) {</span>
+<span class="source-line-no">339</span><span id="line.339">                return true;//reached the end</span>
 <span class="source-line-no">340</span><span id="line.340">            }</span>
-<span class="source-line-no">341</span><span id="line.341">            double r = radiusStrategy.radius(startx, starty, p.x, p.y);</span>
-<span class="source-line-no">342</span><span id="line.342">            if (currentForce - (r * decay) &lt;= 0) {</span>
-<span class="source-line-no">343</span><span id="line.343">                return false;//too much resistance</span>
-<span class="source-line-no">344</span><span id="line.344">            }</span>
-<span class="source-line-no">345</span><span id="line.345">        }</span>
-<span class="source-line-no">346</span><span id="line.346">        return false;//never got to the target point</span>
-<span class="source-line-no">347</span><span id="line.347">    }</span>
-<span class="source-line-no">348</span><span id="line.348"></span>
-<span class="source-line-no">349</span><span id="line.349">    private boolean orthoReachable(Radius radiusStrategy) {</span>
-<span class="source-line-no">350</span><span id="line.350">        Coord[] path = OrthoLine.line_(startx, starty, targetx, targety);</span>
-<span class="source-line-no">351</span><span id="line.351">        lastPath = new ArrayDeque&lt;&gt;();</span>
-<span class="source-line-no">352</span><span id="line.352">        double rad = radiusStrategy.radius(startx, starty, targetx, targety);</span>
-<span class="source-line-no">353</span><span id="line.353">        if(rad == 0.0) {</span>
-<span class="source-line-no">354</span><span id="line.354">            lastPath.add(Coord.get(startx, starty));</span>
-<span class="source-line-no">355</span><span id="line.355">            return true; // already at the point; we can see our own feet just fine!</span>
-<span class="source-line-no">356</span><span id="line.356">        }</span>
-<span class="source-line-no">357</span><span id="line.357">        double decay = 1 / rad;</span>
-<span class="source-line-no">358</span><span id="line.358">        double currentForce = 1;</span>
-<span class="source-line-no">359</span><span id="line.359">        Coord p;</span>
-<span class="source-line-no">360</span><span id="line.360">        for (int i = 0; i &lt; path.length; i++) {</span>
-<span class="source-line-no">361</span><span id="line.361">            p = path[i];</span>
-<span class="source-line-no">362</span><span id="line.362">            lastPath.offer(p);</span>
-<span class="source-line-no">363</span><span id="line.363">            if (p.x == targetx &amp;&amp; p.y == targety) {</span>
-<span class="source-line-no">364</span><span id="line.364">                return true;//reached the end</span>
-<span class="source-line-no">365</span><span id="line.365">            }</span>
-<span class="source-line-no">366</span><span id="line.366">            if (p.x != startx || p.y != starty) {//don't discount the start location even if on resistant cell</span>
-<span class="source-line-no">367</span><span id="line.367">                currentForce -= resistanceMap[p.x][p.y];</span>
+<span class="source-line-no">341</span><span id="line.341">            if (p.x != startx || p.y != starty) {//don't discount the start location even if on resistant cell</span>
+<span class="source-line-no">342</span><span id="line.342">                currentForce -= resistanceMap[p.x][p.y];</span>
+<span class="source-line-no">343</span><span id="line.343">            }</span>
+<span class="source-line-no">344</span><span id="line.344">            double r = radiusStrategy.radius(startx, starty, p.x, p.y);</span>
+<span class="source-line-no">345</span><span id="line.345">            if (currentForce - (r * decay) &lt;= 0) {</span>
+<span class="source-line-no">346</span><span id="line.346">                return false;//too much resistance</span>
+<span class="source-line-no">347</span><span id="line.347">            }</span>
+<span class="source-line-no">348</span><span id="line.348">        }</span>
+<span class="source-line-no">349</span><span id="line.349">        return false;//never got to the target point</span>
+<span class="source-line-no">350</span><span id="line.350">    }</span>
+<span class="source-line-no">351</span><span id="line.351"></span>
+<span class="source-line-no">352</span><span id="line.352">    private boolean orthoReachable(Radius radiusStrategy) {</span>
+<span class="source-line-no">353</span><span id="line.353">        Coord[] path = OrthoLine.line_(startx, starty, targetx, targety);</span>
+<span class="source-line-no">354</span><span id="line.354">        lastPath.clear();</span>
+<span class="source-line-no">355</span><span id="line.355">        double rad = radiusStrategy.radius(startx, starty, targetx, targety);</span>
+<span class="source-line-no">356</span><span id="line.356">        if(rad == 0.0) {</span>
+<span class="source-line-no">357</span><span id="line.357">            lastPath.add(Coord.get(startx, starty));</span>
+<span class="source-line-no">358</span><span id="line.358">            return true; // already at the point; we can see our own feet just fine!</span>
+<span class="source-line-no">359</span><span id="line.359">        }</span>
+<span class="source-line-no">360</span><span id="line.360">        double decay = 1.0 / rad;</span>
+<span class="source-line-no">361</span><span id="line.361">        double currentForce = 1;</span>
+<span class="source-line-no">362</span><span id="line.362">        Coord p;</span>
+<span class="source-line-no">363</span><span id="line.363">        for (int i = 0; i &lt; path.length; i++) {</span>
+<span class="source-line-no">364</span><span id="line.364">            p = path[i];</span>
+<span class="source-line-no">365</span><span id="line.365">            lastPath.offer(p);</span>
+<span class="source-line-no">366</span><span id="line.366">            if (p.x == targetx &amp;&amp; p.y == targety) {</span>
+<span class="source-line-no">367</span><span id="line.367">                return true;//reached the end</span>
 <span class="source-line-no">368</span><span id="line.368">            }</span>
-<span class="source-line-no">369</span><span id="line.369">            double r = radiusStrategy.radius(startx, starty, p.x, p.y);</span>
-<span class="source-line-no">370</span><span id="line.370">            if (currentForce - (r * decay) &lt;= 0) {</span>
-<span class="source-line-no">371</span><span id="line.371">                return false;//too much resistance</span>
-<span class="source-line-no">372</span><span id="line.372">            }</span>
-<span class="source-line-no">373</span><span id="line.373">        }</span>
-<span class="source-line-no">374</span><span id="line.374">        return false;//never got to the target point</span>
-<span class="source-line-no">375</span><span id="line.375">    }</span>
-<span class="source-line-no">376</span><span id="line.376"></span>
-<span class="source-line-no">377</span><span id="line.377">    private boolean ddaReachable(Radius radiusStrategy) {</span>
-<span class="source-line-no">378</span><span id="line.378">        Coord[] path = DDALine.line_(startx, starty, targetx, targety);</span>
-<span class="source-line-no">379</span><span id="line.379">        lastPath = new ArrayDeque&lt;&gt;();</span>
-<span class="source-line-no">380</span><span id="line.380">        double rad = radiusStrategy.radius(startx, starty, targetx, targety);</span>
-<span class="source-line-no">381</span><span id="line.381">        if(rad == 0.0) {</span>
-<span class="source-line-no">382</span><span id="line.382">            lastPath.add(Coord.get(startx, starty));</span>
-<span class="source-line-no">383</span><span id="line.383">            return true; // already at the point; we can see our own feet just fine!</span>
-<span class="source-line-no">384</span><span id="line.384">        }</span>
-<span class="source-line-no">385</span><span id="line.385">        double decay = 1 / rad;</span>
-<span class="source-line-no">386</span><span id="line.386">        double currentForce = 1;</span>
-<span class="source-line-no">387</span><span id="line.387">        Coord p;</span>
-<span class="source-line-no">388</span><span id="line.388">        for (int i = 0; i &lt; path.length; i++) {</span>
-<span class="source-line-no">389</span><span id="line.389">            p = path[i];</span>
-<span class="source-line-no">390</span><span id="line.390">            if (p.x == targetx &amp;&amp; p.y == targety) {</span>
-<span class="source-line-no">391</span><span id="line.391">                lastPath.offer(p);</span>
-<span class="source-line-no">392</span><span id="line.392">                return true;//reached the end</span>
-<span class="source-line-no">393</span><span id="line.393">            }</span>
-<span class="source-line-no">394</span><span id="line.394">            if (p.x != startx || p.y != starty) {//don't discount the start location even if on resistant cell</span>
-<span class="source-line-no">395</span><span id="line.395">                currentForce -= resistanceMap[p.x][p.y];</span>
+<span class="source-line-no">369</span><span id="line.369">            if (p.x != startx || p.y != starty) {//don't discount the start location even if on resistant cell</span>
+<span class="source-line-no">370</span><span id="line.370">                currentForce -= resistanceMap[p.x][p.y];</span>
+<span class="source-line-no">371</span><span id="line.371">            }</span>
+<span class="source-line-no">372</span><span id="line.372">            double r = radiusStrategy.radius(startx, starty, p.x, p.y);</span>
+<span class="source-line-no">373</span><span id="line.373">            if (currentForce - (r * decay) &lt;= 0) {</span>
+<span class="source-line-no">374</span><span id="line.374">                return false;//too much resistance</span>
+<span class="source-line-no">375</span><span id="line.375">            }</span>
+<span class="source-line-no">376</span><span id="line.376">        }</span>
+<span class="source-line-no">377</span><span id="line.377">        return false;//never got to the target point</span>
+<span class="source-line-no">378</span><span id="line.378">    }</span>
+<span class="source-line-no">379</span><span id="line.379"></span>
+<span class="source-line-no">380</span><span id="line.380">    private boolean ddaReachable(Radius radiusStrategy) {</span>
+<span class="source-line-no">381</span><span id="line.381">        Coord[] path = DDALine.line_(startx, starty, targetx, targety);</span>
+<span class="source-line-no">382</span><span id="line.382">        lastPath.clear();</span>
+<span class="source-line-no">383</span><span id="line.383">        double rad = radiusStrategy.radius(startx, starty, targetx, targety);</span>
+<span class="source-line-no">384</span><span id="line.384">        if(rad == 0.0) {</span>
+<span class="source-line-no">385</span><span id="line.385">            lastPath.add(Coord.get(startx, starty));</span>
+<span class="source-line-no">386</span><span id="line.386">            return true; // already at the point; we can see our own feet just fine!</span>
+<span class="source-line-no">387</span><span id="line.387">        }</span>
+<span class="source-line-no">388</span><span id="line.388">        double decay = 1 / rad;</span>
+<span class="source-line-no">389</span><span id="line.389">        double currentForce = 1;</span>
+<span class="source-line-no">390</span><span id="line.390">        Coord p;</span>
+<span class="source-line-no">391</span><span id="line.391">        for (int i = 0; i &lt; path.length; i++) {</span>
+<span class="source-line-no">392</span><span id="line.392">            p = path[i];</span>
+<span class="source-line-no">393</span><span id="line.393">            if (p.x == targetx &amp;&amp; p.y == targety) {</span>
+<span class="source-line-no">394</span><span id="line.394">                lastPath.offer(p);</span>
+<span class="source-line-no">395</span><span id="line.395">                return true;//reached the end</span>
 <span class="source-line-no">396</span><span id="line.396">            }</span>
-<span class="source-line-no">397</span><span id="line.397">            double r = radiusStrategy.radius(startx, starty, p.x, p.y);</span>
-<span class="source-line-no">398</span><span id="line.398">            if (currentForce - (r * decay) &lt;= 0) {</span>
-<span class="source-line-no">399</span><span id="line.399">                return false;//too much resistance</span>
-<span class="source-line-no">400</span><span id="line.400">            }</span>
-<span class="source-line-no">401</span><span id="line.401">            lastPath.offer(p);</span>
-<span class="source-line-no">402</span><span id="line.402">        }</span>
-<span class="source-line-no">403</span><span id="line.403">        return false;//never got to the target point</span>
-<span class="source-line-no">404</span><span id="line.404">    }</span>
-<span class="source-line-no">405</span><span id="line.405"></span>
-<span class="source-line-no">406</span><span id="line.406">    private boolean thickReachable(Radius radiusStrategy) {</span>
-<span class="source-line-no">407</span><span id="line.407">        lastPath = new ArrayDeque&lt;&gt;();</span>
-<span class="source-line-no">408</span><span id="line.408">        double dist = radiusStrategy.radius(startx, starty, targetx, targety);</span>
-<span class="source-line-no">409</span><span id="line.409">        double decay = 1.0 / dist; // note: decay can be positive infinity if dist is 0; this is actually OK</span>
-<span class="source-line-no">410</span><span id="line.410">        OrderedSet&lt;Coord&gt; visited = new OrderedSet&lt;&gt;((int) dist + 3);</span>
-<span class="source-line-no">411</span><span id="line.411">        List&lt;List&lt;Coord&gt;&gt; paths = new ArrayList&lt;&gt;(4);</span>
-<span class="source-line-no">412</span><span id="line.412">        /* // actual corners</span>
-<span class="source-line-no">413</span><span id="line.413">        paths.add(DDALine.line(startx, starty, targetx, targety, 0, 0));</span>
-<span class="source-line-no">414</span><span id="line.414">        paths.add(DDALine.line(startx, starty, targetx, targety, 0, 0xffff));</span>
-<span class="source-line-no">415</span><span id="line.415">        paths.add(DDALine.line(startx, starty, targetx, targety, 0xffff, 0));</span>
-<span class="source-line-no">416</span><span id="line.416">        paths.add(DDALine.line(startx, starty, targetx, targety, 0xffff, 0xffff));</span>
-<span class="source-line-no">417</span><span id="line.417">        */</span>
-<span class="source-line-no">418</span><span id="line.418">        // halfway between the center and a corner</span>
-<span class="source-line-no">419</span><span id="line.419">        paths.add(DDALine.line(startx, starty, targetx, targety, 0x3fff, 0x3fff));</span>
-<span class="source-line-no">420</span><span id="line.420">        paths.add(DDALine.line(startx, starty, targetx, targety, 0x3fff, 0xbfff));</span>
-<span class="source-line-no">421</span><span id="line.421">        paths.add(DDALine.line(startx, starty, targetx, targety, 0xbfff, 0x3fff));</span>
-<span class="source-line-no">422</span><span id="line.422">        paths.add(DDALine.line(startx, starty, targetx, targety, 0xbfff, 0xbfff));</span>
-<span class="source-line-no">423</span><span id="line.423"></span>
-<span class="source-line-no">424</span><span id="line.424">        int length = Math.max(paths.get(0).size(), Math.max(paths.get(1).size(),</span>
-<span class="source-line-no">425</span><span id="line.425">                Math.max(paths.get(2).size(), paths.get(3).size())));</span>
-<span class="source-line-no">426</span><span id="line.426">        double[] forces = new double[]{1,1,1,1};</span>
-<span class="source-line-no">427</span><span id="line.427">        boolean[] go = new boolean[]{true, true, true, true};</span>
-<span class="source-line-no">428</span><span id="line.428">        Coord p;</span>
-<span class="source-line-no">429</span><span id="line.429">        for (int d = 0; d &lt; length; d++) {</span>
-<span class="source-line-no">430</span><span id="line.430">            for (int pc = 0; pc &lt; 4; pc++) {</span>
-<span class="source-line-no">431</span><span id="line.431">                List&lt;Coord&gt; path = paths.get(pc);</span>
-<span class="source-line-no">432</span><span id="line.432">                if(d &lt; path.size() &amp;&amp; go[pc])</span>
-<span class="source-line-no">433</span><span id="line.433">                    p = path.get(d);</span>
-<span class="source-line-no">434</span><span id="line.434">                else continue;</span>
-<span class="source-line-no">435</span><span id="line.435">                if (p.x == targetx &amp;&amp; p.y == targety) {</span>
-<span class="source-line-no">436</span><span id="line.436">                    visited.add(p);</span>
-<span class="source-line-no">437</span><span id="line.437">                    lastPath.addAll(visited);</span>
-<span class="source-line-no">438</span><span id="line.438">                    return true;//reached the end</span>
-<span class="source-line-no">439</span><span id="line.439">                }</span>
-<span class="source-line-no">440</span><span id="line.440">                if (p.x != startx || p.y != starty) {//don't discount the start location even if on resistant cell</span>
-<span class="source-line-no">441</span><span id="line.441">                    forces[pc] -= resistanceMap[p.x][p.y];</span>
+<span class="source-line-no">397</span><span id="line.397">            if (p.x != startx || p.y != starty) {//don't discount the start location even if on resistant cell</span>
+<span class="source-line-no">398</span><span id="line.398">                currentForce -= resistanceMap[p.x][p.y];</span>
+<span class="source-line-no">399</span><span id="line.399">            }</span>
+<span class="source-line-no">400</span><span id="line.400">            double r = radiusStrategy.radius(startx, starty, p.x, p.y);</span>
+<span class="source-line-no">401</span><span id="line.401">            if (currentForce - (r * decay) &lt;= 0) {</span>
+<span class="source-line-no">402</span><span id="line.402">                return false;//too much resistance</span>
+<span class="source-line-no">403</span><span id="line.403">            }</span>
+<span class="source-line-no">404</span><span id="line.404">            lastPath.offer(p);</span>
+<span class="source-line-no">405</span><span id="line.405">        }</span>
+<span class="source-line-no">406</span><span id="line.406">        return false;//never got to the target point</span>
+<span class="source-line-no">407</span><span id="line.407">    }</span>
+<span class="source-line-no">408</span><span id="line.408"></span>
+<span class="source-line-no">409</span><span id="line.409">    private boolean thickReachable(Radius radiusStrategy) {</span>
+<span class="source-line-no">410</span><span id="line.410">        lastPath.clear();</span>
+<span class="source-line-no">411</span><span id="line.411">        double dist = radiusStrategy.radius(startx, starty, targetx, targety);</span>
+<span class="source-line-no">412</span><span id="line.412">        double decay = 1.0 / dist; // note: decay can be positive infinity if dist is 0; this is actually OK</span>
+<span class="source-line-no">413</span><span id="line.413">        OrderedSet&lt;Coord&gt; visited = new OrderedSet&lt;&gt;((int) dist + 3);</span>
+<span class="source-line-no">414</span><span id="line.414">        List&lt;List&lt;Coord&gt;&gt; paths = new ArrayList&lt;&gt;(4);</span>
+<span class="source-line-no">415</span><span id="line.415">        /* // actual corners</span>
+<span class="source-line-no">416</span><span id="line.416">        paths.add(DDALine.line(startx, starty, targetx, targety, 0, 0));</span>
+<span class="source-line-no">417</span><span id="line.417">        paths.add(DDALine.line(startx, starty, targetx, targety, 0, 0xffff));</span>
+<span class="source-line-no">418</span><span id="line.418">        paths.add(DDALine.line(startx, starty, targetx, targety, 0xffff, 0));</span>
+<span class="source-line-no">419</span><span id="line.419">        paths.add(DDALine.line(startx, starty, targetx, targety, 0xffff, 0xffff));</span>
+<span class="source-line-no">420</span><span id="line.420">        */</span>
+<span class="source-line-no">421</span><span id="line.421">        // halfway between the center and a corner</span>
+<span class="source-line-no">422</span><span id="line.422">        paths.add(DDALine.line(startx, starty, targetx, targety, 0x3fff, 0x3fff));</span>
+<span class="source-line-no">423</span><span id="line.423">        paths.add(DDALine.line(startx, starty, targetx, targety, 0x3fff, 0xbfff));</span>
+<span class="source-line-no">424</span><span id="line.424">        paths.add(DDALine.line(startx, starty, targetx, targety, 0xbfff, 0x3fff));</span>
+<span class="source-line-no">425</span><span id="line.425">        paths.add(DDALine.line(startx, starty, targetx, targety, 0xbfff, 0xbfff));</span>
+<span class="source-line-no">426</span><span id="line.426"></span>
+<span class="source-line-no">427</span><span id="line.427">        int length = Math.max(paths.get(0).size(), Math.max(paths.get(1).size(),</span>
+<span class="source-line-no">428</span><span id="line.428">                Math.max(paths.get(2).size(), paths.get(3).size())));</span>
+<span class="source-line-no">429</span><span id="line.429">        double[] forces = new double[]{1,1,1,1};</span>
+<span class="source-line-no">430</span><span id="line.430">        boolean[] go = new boolean[]{true, true, true, true};</span>
+<span class="source-line-no">431</span><span id="line.431">        Coord p;</span>
+<span class="source-line-no">432</span><span id="line.432">        for (int d = 0; d &lt; length; d++) {</span>
+<span class="source-line-no">433</span><span id="line.433">            for (int pc = 0; pc &lt; 4; pc++) {</span>
+<span class="source-line-no">434</span><span id="line.434">                List&lt;Coord&gt; path = paths.get(pc);</span>
+<span class="source-line-no">435</span><span id="line.435">                if(d &lt; path.size() &amp;&amp; go[pc])</span>
+<span class="source-line-no">436</span><span id="line.436">                    p = path.get(d);</span>
+<span class="source-line-no">437</span><span id="line.437">                else continue;</span>
+<span class="source-line-no">438</span><span id="line.438">                if (p.x == targetx &amp;&amp; p.y == targety) {</span>
+<span class="source-line-no">439</span><span id="line.439">                    visited.add(p);</span>
+<span class="source-line-no">440</span><span id="line.440">                    lastPath.addAll(visited);</span>
+<span class="source-line-no">441</span><span id="line.441">                    return true;//reached the end</span>
 <span class="source-line-no">442</span><span id="line.442">                }</span>
-<span class="source-line-no">443</span><span id="line.443">                double r = radiusStrategy.radius(startx, starty, p.x, p.y);</span>
-<span class="source-line-no">444</span><span id="line.444">                if (forces[pc] - (r * decay) &lt;= 0) {</span>
-<span class="source-line-no">445</span><span id="line.445">                    go[pc] = false;</span>
-<span class="source-line-no">446</span><span id="line.446">                    continue;//too much resistance</span>
-<span class="source-line-no">447</span><span id="line.447">                }</span>
-<span class="source-line-no">448</span><span id="line.448">                visited.add(p);</span>
-<span class="source-line-no">449</span><span id="line.449">            }</span>
-<span class="source-line-no">450</span><span id="line.450">        }</span>
-<span class="source-line-no">451</span><span id="line.451">        lastPath.addAll(visited);</span>
-<span class="source-line-no">452</span><span id="line.452">        return false;//never got to the target point</span>
-<span class="source-line-no">453</span><span id="line.453">    }</span>
-<span class="source-line-no">454</span><span id="line.454"></span>
-<span class="source-line-no">455</span><span id="line.455">    private boolean brushReachable(Radius radiusStrategy, int spread) {</span>
-<span class="source-line-no">456</span><span id="line.456">        lastPath.clear();</span>
-<span class="source-line-no">457</span><span id="line.457">        double dist = radiusStrategy.radius(startx, starty, targetx, targety) + spread * 2;</span>
-<span class="source-line-no">458</span><span id="line.458">        OrderedSet&lt;Coord&gt; visited = new OrderedSet&lt;&gt;((int) (dist + 3) * spread);</span>
-<span class="source-line-no">459</span><span id="line.459">//        List&lt;List&lt;Coord&gt;&gt; paths = new ArrayList&lt;&gt;((int) (radiusStrategy.volume2D(spread) * 1.25));</span>
-<span class="source-line-no">460</span><span id="line.460">//        int length = 0;</span>
-<span class="source-line-no">461</span><span id="line.461">//        List&lt;Coord&gt; currentPath;</span>
-<span class="source-line-no">462</span><span id="line.462">        int sx = startx, sy = starty, tx = targetx, ty = targety;</span>
-<span class="source-line-no">463</span><span id="line.463">        for (int i = -spread; i &lt;= spread; i++) {</span>
-<span class="source-line-no">464</span><span id="line.464">            startx = sx + i;</span>
-<span class="source-line-no">465</span><span id="line.465">            targetx = tx + i;</span>
-<span class="source-line-no">466</span><span id="line.466">            for (int j = -spread; j &lt;= spread; j++) {</span>
-<span class="source-line-no">467</span><span id="line.467">                if(radiusStrategy.inRange(sx, sy, sx + i, sy + j, 0, spread)</span>
-<span class="source-line-no">468</span><span id="line.468">                        &amp;&amp; sx + i &gt;= 0 &amp;&amp; sy + j &gt;= 0</span>
-<span class="source-line-no">469</span><span id="line.469">                        &amp;&amp; sx + i &lt; resistanceMap.length &amp;&amp; sy + j &lt; resistanceMap[0].length</span>
-<span class="source-line-no">470</span><span id="line.470">                        &amp;&amp; tx + i &gt;= 0 &amp;&amp; ty + j &gt;= 0</span>
-<span class="source-line-no">471</span><span id="line.471">                        &amp;&amp; tx + i &lt; resistanceMap.length &amp;&amp; ty + j &lt; resistanceMap[0].length) {</span>
-<span class="source-line-no">472</span><span id="line.472">//                    for (int q = 0x3fff; q &lt; 0xffff; q += 0x8000) {</span>
-<span class="source-line-no">473</span><span id="line.473">//                        for (int r = 0x3fff; r &lt; 0xffff; r += 0x8000) {</span>
-<span class="source-line-no">474</span><span id="line.474">                            starty = sy + j;</span>
-<span class="source-line-no">475</span><span id="line.475">                            targety = ty + j;</span>
-<span class="source-line-no">476</span><span id="line.476">                            if(ddaReachable(radiusStrategy))</span>
-<span class="source-line-no">477</span><span id="line.477">                                visited.addAll(lastPath);</span>
-<span class="source-line-no">478</span><span id="line.478">//                            currentPath = DDALine.line(startx+i, starty+j, targetx+i, targety+j, q, r);</span>
-<span class="source-line-no">479</span><span id="line.479">//                            paths.add(currentPath);</span>
-<span class="source-line-no">480</span><span id="line.480">//                            length = Math.max(length, currentPath.size());</span>
-<span class="source-line-no">481</span><span id="line.481"></span>
-<span class="source-line-no">482</span><span id="line.482">//                        }</span>
-<span class="source-line-no">483</span><span id="line.483">//                    }</span>
-<span class="source-line-no">484</span><span id="line.484">                }</span>
-<span class="source-line-no">485</span><span id="line.485">            }</span>
-<span class="source-line-no">486</span><span id="line.486">        }</span>
-<span class="source-line-no">487</span><span id="line.487">        lastPath.clear();</span>
-<span class="source-line-no">488</span><span id="line.488">        lastPath.addAll(visited);</span>
-<span class="source-line-no">489</span><span id="line.489">        return !lastPath.isEmpty();</span>
-<span class="source-line-no">490</span><span id="line.490">//        double force;</span>
-<span class="source-line-no">491</span><span id="line.491">////        boolean[] go = new boolean[paths.size()];</span>
-<span class="source-line-no">492</span><span id="line.492">////        Arrays.fill(go, true);</span>
-<span class="source-line-no">493</span><span id="line.493">//        Coord p;</span>
-<span class="source-line-no">494</span><span id="line.494">////        boolean found = false;</span>
-<span class="source-line-no">495</span><span id="line.495">//        for (int pc = 0; pc &lt; paths.size(); pc++) {</span>
-<span class="source-line-no">496</span><span id="line.496">//            List&lt;Coord&gt; path = paths.get(pc);</span>
-<span class="source-line-no">497</span><span id="line.497">//            force = 1.0;</span>
-<span class="source-line-no">498</span><span id="line.498">//            for (int d = 0; d &lt; path.size(); d++) {                  </span>
-<span class="source-line-no">499</span><span id="line.499">//                p = path.get(d);</span>
-<span class="source-line-no">500</span><span id="line.500">//                //else continue;</span>
-<span class="source-line-no">501</span><span id="line.501">////                if (p.x == targetx &amp;&amp; p.y == targety) {</span>
-<span class="source-line-no">502</span><span id="line.502">////                    found = true;</span>
-<span class="source-line-no">503</span><span id="line.503">////                }</span>
-<span class="source-line-no">504</span><span id="line.504">//                if (p.x != startx || p.y != starty) {//don't discount the start location even if on resistant cell</span>
-<span class="source-line-no">505</span><span id="line.505">//                    force -= resistanceMap[p.x][p.y];</span>
-<span class="source-line-no">506</span><span id="line.506">//                }</span>
-<span class="source-line-no">507</span><span id="line.507">//                //double r = radiusStrategy.radius(startx, starty, p.x, p.y);</span>
-<span class="source-line-no">508</span><span id="line.508">//                if (force &lt;= 0) {</span>
-<span class="source-line-no">509</span><span id="line.509">//                    //go[pc] = false;</span>
-<span class="source-line-no">510</span><span id="line.510">//                    break;//too much resistance</span>
-<span class="source-line-no">511</span><span id="line.511">//                }</span>
-<span class="source-line-no">512</span><span id="line.512">//                visited.add(p);</span>
-<span class="source-line-no">513</span><span id="line.513">//            }</span>
-<span class="source-line-no">514</span><span id="line.514">//        }</span>
-<span class="source-line-no">515</span><span id="line.515">//        lastPath.addAll(visited);</span>
-<span class="source-line-no">516</span><span id="line.516">//        return true;//visited.contains(Coord.get(targetx, targety));</span>
-<span class="source-line-no">517</span><span id="line.517">    }</span>
-<span class="source-line-no">518</span><span id="line.518"></span>
-<span class="source-line-no">519</span><span id="line.519">    private boolean rayReachable(Radius radiusStrategy) {</span>
-<span class="source-line-no">520</span><span id="line.520">        lastPath = new ArrayDeque&lt;&gt;();//save path for later retrieval</span>
-<span class="source-line-no">521</span><span id="line.521">        if (startx == targetx &amp;&amp; starty == targety) {//already there!</span>
-<span class="source-line-no">522</span><span id="line.522">            lastPath.add(Coord.get(startx, starty));</span>
-<span class="source-line-no">523</span><span id="line.523">            return true;</span>
-<span class="source-line-no">524</span><span id="line.524">        }</span>
-<span class="source-line-no">525</span><span id="line.525"></span>
-<span class="source-line-no">526</span><span id="line.526">        int width = resistanceMap.length;</span>
-<span class="source-line-no">527</span><span id="line.527">        int height = resistanceMap[0].length;</span>
+<span class="source-line-no">443</span><span id="line.443">                if (p.x != startx || p.y != starty) {//don't discount the start location even if on resistant cell</span>
+<span class="source-line-no">444</span><span id="line.444">                    forces[pc] -= resistanceMap[p.x][p.y];</span>
+<span class="source-line-no">445</span><span id="line.445">                }</span>
+<span class="source-line-no">446</span><span id="line.446">                double r = radiusStrategy.radius(startx, starty, p.x, p.y);</span>
+<span class="source-line-no">447</span><span id="line.447">                if (forces[pc] - (r * decay) &lt;= 0) {</span>
+<span class="source-line-no">448</span><span id="line.448">                    go[pc] = false;</span>
+<span class="source-line-no">449</span><span id="line.449">                    continue;//too much resistance</span>
+<span class="source-line-no">450</span><span id="line.450">                }</span>
+<span class="source-line-no">451</span><span id="line.451">                visited.add(p);</span>
+<span class="source-line-no">452</span><span id="line.452">            }</span>
+<span class="source-line-no">453</span><span id="line.453">        }</span>
+<span class="source-line-no">454</span><span id="line.454">        lastPath.addAll(visited);</span>
+<span class="source-line-no">455</span><span id="line.455">        return false;//never got to the target point</span>
+<span class="source-line-no">456</span><span id="line.456">    }</span>
+<span class="source-line-no">457</span><span id="line.457"></span>
+<span class="source-line-no">458</span><span id="line.458">    private boolean brushReachable(Radius radiusStrategy, int spread) {</span>
+<span class="source-line-no">459</span><span id="line.459">        lastPath.clear();</span>
+<span class="source-line-no">460</span><span id="line.460">        double dist = radiusStrategy.radius(startx, starty, targetx, targety) + spread * 2;</span>
+<span class="source-line-no">461</span><span id="line.461">        OrderedSet&lt;Coord&gt; visited = new OrderedSet&lt;&gt;((int) (dist + 3) * spread);</span>
+<span class="source-line-no">462</span><span id="line.462">//        List&lt;List&lt;Coord&gt;&gt; paths = new ArrayList&lt;&gt;((int) (radiusStrategy.volume2D(spread) * 1.25));</span>
+<span class="source-line-no">463</span><span id="line.463">//        int length = 0;</span>
+<span class="source-line-no">464</span><span id="line.464">//        List&lt;Coord&gt; currentPath;</span>
+<span class="source-line-no">465</span><span id="line.465">        int sx = startx, sy = starty, tx = targetx, ty = targety;</span>
+<span class="source-line-no">466</span><span id="line.466">        for (int i = -spread; i &lt;= spread; i++) {</span>
+<span class="source-line-no">467</span><span id="line.467">            startx = sx + i;</span>
+<span class="source-line-no">468</span><span id="line.468">            targetx = tx + i;</span>
+<span class="source-line-no">469</span><span id="line.469">            for (int j = -spread; j &lt;= spread; j++) {</span>
+<span class="source-line-no">470</span><span id="line.470">                if(radiusStrategy.inRange(sx, sy, sx + i, sy + j, 0, spread)</span>
+<span class="source-line-no">471</span><span id="line.471">                        &amp;&amp; sx + i &gt;= 0 &amp;&amp; sy + j &gt;= 0</span>
+<span class="source-line-no">472</span><span id="line.472">                        &amp;&amp; sx + i &lt; resistanceMap.length &amp;&amp; sy + j &lt; resistanceMap[0].length</span>
+<span class="source-line-no">473</span><span id="line.473">                        &amp;&amp; tx + i &gt;= 0 &amp;&amp; ty + j &gt;= 0</span>
+<span class="source-line-no">474</span><span id="line.474">                        &amp;&amp; tx + i &lt; resistanceMap.length &amp;&amp; ty + j &lt; resistanceMap[0].length) {</span>
+<span class="source-line-no">475</span><span id="line.475">//                    for (int q = 0x3fff; q &lt; 0xffff; q += 0x8000) {</span>
+<span class="source-line-no">476</span><span id="line.476">//                        for (int r = 0x3fff; r &lt; 0xffff; r += 0x8000) {</span>
+<span class="source-line-no">477</span><span id="line.477">                            starty = sy + j;</span>
+<span class="source-line-no">478</span><span id="line.478">                            targety = ty + j;</span>
+<span class="source-line-no">479</span><span id="line.479">                            if(ddaReachable(radiusStrategy))</span>
+<span class="source-line-no">480</span><span id="line.480">                                visited.addAll(lastPath);</span>
+<span class="source-line-no">481</span><span id="line.481">//                            currentPath = DDALine.line(startx+i, starty+j, targetx+i, targety+j, q, r);</span>
+<span class="source-line-no">482</span><span id="line.482">//                            paths.add(currentPath);</span>
+<span class="source-line-no">483</span><span id="line.483">//                            length = Math.max(length, currentPath.size());</span>
+<span class="source-line-no">484</span><span id="line.484"></span>
+<span class="source-line-no">485</span><span id="line.485">//                        }</span>
+<span class="source-line-no">486</span><span id="line.486">//                    }</span>
+<span class="source-line-no">487</span><span id="line.487">                }</span>
+<span class="source-line-no">488</span><span id="line.488">            }</span>
+<span class="source-line-no">489</span><span id="line.489">        }</span>
+<span class="source-line-no">490</span><span id="line.490">        lastPath.clear();</span>
+<span class="source-line-no">491</span><span id="line.491">        lastPath.addAll(visited);</span>
+<span class="source-line-no">492</span><span id="line.492">        return !lastPath.isEmpty();</span>
+<span class="source-line-no">493</span><span id="line.493">//        double force;</span>
+<span class="source-line-no">494</span><span id="line.494">////        boolean[] go = new boolean[paths.size()];</span>
+<span class="source-line-no">495</span><span id="line.495">////        Arrays.fill(go, true);</span>
+<span class="source-line-no">496</span><span id="line.496">//        Coord p;</span>
+<span class="source-line-no">497</span><span id="line.497">////        boolean found = false;</span>
+<span class="source-line-no">498</span><span id="line.498">//        for (int pc = 0; pc &lt; paths.size(); pc++) {</span>
+<span class="source-line-no">499</span><span id="line.499">//            List&lt;Coord&gt; path = paths.get(pc);</span>
+<span class="source-line-no">500</span><span id="line.500">//            force = 1.0;</span>
+<span class="source-line-no">501</span><span id="line.501">//            for (int d = 0; d &lt; path.size(); d++) {                  </span>
+<span class="source-line-no">502</span><span id="line.502">//                p = path.get(d);</span>
+<span class="source-line-no">503</span><span id="line.503">//                //else continue;</span>
+<span class="source-line-no">504</span><span id="line.504">////                if (p.x == targetx &amp;&amp; p.y == targety) {</span>
+<span class="source-line-no">505</span><span id="line.505">////                    found = true;</span>
+<span class="source-line-no">506</span><span id="line.506">////                }</span>
+<span class="source-line-no">507</span><span id="line.507">//                if (p.x != startx || p.y != starty) {//don't discount the start location even if on resistant cell</span>
+<span class="source-line-no">508</span><span id="line.508">//                    force -= resistanceMap[p.x][p.y];</span>
+<span class="source-line-no">509</span><span id="line.509">//                }</span>
+<span class="source-line-no">510</span><span id="line.510">//                //double r = radiusStrategy.radius(startx, starty, p.x, p.y);</span>
+<span class="source-line-no">511</span><span id="line.511">//                if (force &lt;= 0) {</span>
+<span class="source-line-no">512</span><span id="line.512">//                    //go[pc] = false;</span>
+<span class="source-line-no">513</span><span id="line.513">//                    break;//too much resistance</span>
+<span class="source-line-no">514</span><span id="line.514">//                }</span>
+<span class="source-line-no">515</span><span id="line.515">//                visited.add(p);</span>
+<span class="source-line-no">516</span><span id="line.516">//            }</span>
+<span class="source-line-no">517</span><span id="line.517">//        }</span>
+<span class="source-line-no">518</span><span id="line.518">//        lastPath.addAll(visited);</span>
+<span class="source-line-no">519</span><span id="line.519">//        return true;//visited.contains(Coord.get(targetx, targety));</span>
+<span class="source-line-no">520</span><span id="line.520">    }</span>
+<span class="source-line-no">521</span><span id="line.521"></span>
+<span class="source-line-no">522</span><span id="line.522">    private boolean rayReachable(Radius radiusStrategy) {</span>
+<span class="source-line-no">523</span><span id="line.523">        lastPath.clear();//save path for later retrieval</span>
+<span class="source-line-no">524</span><span id="line.524">        if (startx == targetx &amp;&amp; starty == targety) {//already there!</span>
+<span class="source-line-no">525</span><span id="line.525">            lastPath.add(Coord.get(startx, starty));</span>
+<span class="source-line-no">526</span><span id="line.526">            return true;</span>
+<span class="source-line-no">527</span><span id="line.527">        }</span>
 <span class="source-line-no">528</span><span id="line.528"></span>
-<span class="source-line-no">529</span><span id="line.529">        Coord end = Coord.get(targetx, targety);</span>
-<span class="source-line-no">530</span><span id="line.530">        //find out which direction to step, on each axis</span>
-<span class="source-line-no">531</span><span id="line.531">        int stepX = targetx == startx ? 0 : (targetx - startx &gt;&gt; 31 | 1), // signum with less converting to/from float</span>
-<span class="source-line-no">532</span><span id="line.532">                stepY = targety == starty ? 0 : (targety - starty &gt;&gt; 31 | 1);</span>
-<span class="source-line-no">533</span><span id="line.533"></span>
-<span class="source-line-no">534</span><span id="line.534">        int deltaY = Math.abs(targetx - startx),</span>
-<span class="source-line-no">535</span><span id="line.535">                deltaX = Math.abs(targety - starty);</span>
+<span class="source-line-no">529</span><span id="line.529">        int width = resistanceMap.length;</span>
+<span class="source-line-no">530</span><span id="line.530">        int height = resistanceMap[0].length;</span>
+<span class="source-line-no">531</span><span id="line.531"></span>
+<span class="source-line-no">532</span><span id="line.532">        Coord end = Coord.get(targetx, targety);</span>
+<span class="source-line-no">533</span><span id="line.533">        //find out which direction to step, on each axis</span>
+<span class="source-line-no">534</span><span id="line.534">        int stepX = targetx == startx ? 0 : (targetx - startx &gt;&gt; 31 | 1), // signum with less converting to/from float</span>
+<span class="source-line-no">535</span><span id="line.535">                stepY = targety == starty ? 0 : (targety - starty &gt;&gt; 31 | 1);</span>
 <span class="source-line-no">536</span><span id="line.536"></span>
-<span class="source-line-no">537</span><span id="line.537">        int testX = startx,</span>
-<span class="source-line-no">538</span><span id="line.538">                testY = starty;</span>
+<span class="source-line-no">537</span><span id="line.537">        int deltaY = Math.abs(targetx - startx),</span>
+<span class="source-line-no">538</span><span id="line.538">                deltaX = Math.abs(targety - starty);</span>
 <span class="source-line-no">539</span><span id="line.539"></span>
-<span class="source-line-no">540</span><span id="line.540">        int maxX = deltaX,</span>
-<span class="source-line-no">541</span><span id="line.541">                maxY = deltaY;</span>
+<span class="source-line-no">540</span><span id="line.540">        int testX = startx,</span>
+<span class="source-line-no">541</span><span id="line.541">                testY = starty;</span>
 <span class="source-line-no">542</span><span id="line.542"></span>
-<span class="source-line-no">543</span><span id="line.543">        while (testX &gt;= 0 &amp;&amp; testX &lt; width &amp;&amp; testY &gt;= 0 &amp;&amp; testY &lt; height &amp;&amp; (testX != targetx || testY != targety)) {</span>
-<span class="source-line-no">544</span><span id="line.544">            lastPath.add(Coord.get(testX, testY));</span>
-<span class="source-line-no">545</span><span id="line.545">            if (maxY - maxX &gt; deltaX) {</span>
-<span class="source-line-no">546</span><span id="line.546">                maxX += deltaX;</span>
-<span class="source-line-no">547</span><span id="line.547">                testX += stepX;</span>
-<span class="source-line-no">548</span><span id="line.548">                if (resistanceMap[testX][testY] &gt;= 1f) {</span>
-<span class="source-line-no">549</span><span id="line.549">                    end = Coord.get(testX, testY);</span>
-<span class="source-line-no">550</span><span id="line.550">                    break;</span>
-<span class="source-line-no">551</span><span id="line.551">                }</span>
-<span class="source-line-no">552</span><span id="line.552">            } else if (maxX - maxY &gt; deltaY) {</span>
-<span class="source-line-no">553</span><span id="line.553">                maxY += deltaY;</span>
-<span class="source-line-no">554</span><span id="line.554">                testY += stepY;</span>
-<span class="source-line-no">555</span><span id="line.555">                if (resistanceMap[testX][testY] &gt;= 1f) {</span>
-<span class="source-line-no">556</span><span id="line.556">                    end = Coord.get(testX, testY);</span>
-<span class="source-line-no">557</span><span id="line.557">                    break;</span>
-<span class="source-line-no">558</span><span id="line.558">                }</span>
-<span class="source-line-no">559</span><span id="line.559">            } else {//directly on diagonal, move both full step</span>
-<span class="source-line-no">560</span><span id="line.560">                maxY += deltaY;</span>
-<span class="source-line-no">561</span><span id="line.561">                testY += stepY;</span>
-<span class="source-line-no">562</span><span id="line.562">                maxX += deltaX;</span>
-<span class="source-line-no">563</span><span id="line.563">                testX += stepX;</span>
-<span class="source-line-no">564</span><span id="line.564">                if (resistanceMap[testX][testY] &gt;= 1f) {</span>
-<span class="source-line-no">565</span><span id="line.565">                    end = Coord.get(testX, testY);</span>
-<span class="source-line-no">566</span><span id="line.566">                    break;</span>
-<span class="source-line-no">567</span><span id="line.567">                }</span>
-<span class="source-line-no">568</span><span id="line.568">            }</span>
-<span class="source-line-no">569</span><span id="line.569">            if (radiusStrategy.radius(testX, testY, startx, starty) &gt; radiusStrategy.radius(startx, starty, end.x, end.y)) {//went too far</span>
-<span class="source-line-no">570</span><span id="line.570">                break;</span>
+<span class="source-line-no">543</span><span id="line.543">        int maxX = deltaX,</span>
+<span class="source-line-no">544</span><span id="line.544">                maxY = deltaY;</span>
+<span class="source-line-no">545</span><span id="line.545"></span>
+<span class="source-line-no">546</span><span id="line.546">        while (testX &gt;= 0 &amp;&amp; testX &lt; width &amp;&amp; testY &gt;= 0 &amp;&amp; testY &lt; height &amp;&amp; (testX != targetx || testY != targety)) {</span>
+<span class="source-line-no">547</span><span id="line.547">            lastPath.add(Coord.get(testX, testY));</span>
+<span class="source-line-no">548</span><span id="line.548">            if (maxY - maxX &gt; deltaX) {</span>
+<span class="source-line-no">549</span><span id="line.549">                maxX += deltaX;</span>
+<span class="source-line-no">550</span><span id="line.550">                testX += stepX;</span>
+<span class="source-line-no">551</span><span id="line.551">                if (resistanceMap[testX][testY] &gt;= 1f) {</span>
+<span class="source-line-no">552</span><span id="line.552">                    end = Coord.get(testX, testY);</span>
+<span class="source-line-no">553</span><span id="line.553">                    break;</span>
+<span class="source-line-no">554</span><span id="line.554">                }</span>
+<span class="source-line-no">555</span><span id="line.555">            } else if (maxX - maxY &gt; deltaY) {</span>
+<span class="source-line-no">556</span><span id="line.556">                maxY += deltaY;</span>
+<span class="source-line-no">557</span><span id="line.557">                testY += stepY;</span>
+<span class="source-line-no">558</span><span id="line.558">                if (resistanceMap[testX][testY] &gt;= 1f) {</span>
+<span class="source-line-no">559</span><span id="line.559">                    end = Coord.get(testX, testY);</span>
+<span class="source-line-no">560</span><span id="line.560">                    break;</span>
+<span class="source-line-no">561</span><span id="line.561">                }</span>
+<span class="source-line-no">562</span><span id="line.562">            } else {//directly on diagonal, move both full step</span>
+<span class="source-line-no">563</span><span id="line.563">                maxY += deltaY;</span>
+<span class="source-line-no">564</span><span id="line.564">                testY += stepY;</span>
+<span class="source-line-no">565</span><span id="line.565">                maxX += deltaX;</span>
+<span class="source-line-no">566</span><span id="line.566">                testX += stepX;</span>
+<span class="source-line-no">567</span><span id="line.567">                if (resistanceMap[testX][testY] &gt;= 1f) {</span>
+<span class="source-line-no">568</span><span id="line.568">                    end = Coord.get(testX, testY);</span>
+<span class="source-line-no">569</span><span id="line.569">                    break;</span>
+<span class="source-line-no">570</span><span id="line.570">                }</span>
 <span class="source-line-no">571</span><span id="line.571">            }</span>
-<span class="source-line-no">572</span><span id="line.572">        }</span>
-<span class="source-line-no">573</span><span id="line.573"></span>
-<span class="source-line-no">574</span><span id="line.574">        if (end.x &gt;= 0 &amp;&amp; end.x &lt; width &amp;&amp; end.y &gt;= 0 &amp;&amp; end.y &lt; height) {</span>
-<span class="source-line-no">575</span><span id="line.575">            lastPath.add(Coord.get(end.x, end.y));</span>
-<span class="source-line-no">576</span><span id="line.576">        }</span>
-<span class="source-line-no">577</span><span id="line.577"></span>
-<span class="source-line-no">578</span><span id="line.578">        return end.x == targetx &amp;&amp; end.y == targety;</span>
-<span class="source-line-no">579</span><span id="line.579">    }</span>
+<span class="source-line-no">572</span><span id="line.572">            if (radiusStrategy.radius(testX, testY, startx, starty) &gt; radiusStrategy.radius(startx, starty, end.x, end.y)) {//went too far</span>
+<span class="source-line-no">573</span><span id="line.573">                break;</span>
+<span class="source-line-no">574</span><span id="line.574">            }</span>
+<span class="source-line-no">575</span><span id="line.575">        }</span>
+<span class="source-line-no">576</span><span id="line.576"></span>
+<span class="source-line-no">577</span><span id="line.577">        if (end.x &gt;= 0 &amp;&amp; end.x &lt; width &amp;&amp; end.y &gt;= 0 &amp;&amp; end.y &lt; height) {</span>
+<span class="source-line-no">578</span><span id="line.578">            lastPath.add(Coord.get(end.x, end.y));</span>
+<span class="source-line-no">579</span><span id="line.579">        }</span>
 <span class="source-line-no">580</span><span id="line.580"></span>
-<span class="source-line-no">581</span><span id="line.581">    private boolean eliasReachable(Radius radiusStrategy) {</span>
-<span class="source-line-no">582</span><span id="line.582">        if(elias == null)</span>
-<span class="source-line-no">583</span><span id="line.583">        {</span>
-<span class="source-line-no">584</span><span id="line.584">            elias = new Elias();</span>
-<span class="source-line-no">585</span><span id="line.585">            los1 = new LOS(BRESENHAM);</span>
-<span class="source-line-no">586</span><span id="line.586">            los2 = new LOS(BRESENHAM);</span>
-<span class="source-line-no">587</span><span id="line.587">        }</span>
-<span class="source-line-no">588</span><span id="line.588">        final ArrayList&lt;Coord&gt; ePath = elias.line(startx, starty, targetx, targety);</span>
-<span class="source-line-no">589</span><span id="line.589">//        // very similar to RNG.shuffleInPlace(); this may be handy for getting an early shortcut return</span>
-<span class="source-line-no">590</span><span id="line.590">//        final int n = ePath.size();</span>
-<span class="source-line-no">591</span><span id="line.591">//        long state = 0x58476D1CE4E5B9BFL;</span>
-<span class="source-line-no">592</span><span id="line.592">//        for (int i = n; i &gt; 1; i--) {</span>
-<span class="source-line-no">593</span><span id="line.593">//            // inlined LightRNG.determineBounded(); can replace *= with usually-faster +=</span>
-<span class="source-line-no">594</span><span id="line.594">//            Collections.swap(ePath, (int)((i * (((state = ((state = ((state += 0x9E3779B97F4A7C15L) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL) ^ state &gt;&gt;&gt; 31) &amp; 0x7FFFFFFFL)) &gt;&gt; 31), i - 1);</span>
-<span class="source-line-no">595</span><span id="line.595">//        }</span>
-<span class="source-line-no">596</span><span id="line.596">        for(Coord p : ePath)</span>
-<span class="source-line-no">597</span><span id="line.597">        {</span>
-<span class="source-line-no">598</span><span id="line.598">            //if a non-solid midpoint on the path can see both the start and end, consider the two ends to be able to see each other</span>
-<span class="source-line-no">599</span><span id="line.599">            if (resistanceMap[p.x][p.y] &lt; 1</span>
-<span class="source-line-no">600</span><span id="line.600">                    &amp;&amp; radiusStrategy.radius(startx, starty, p.x, p.y) &lt;= radiusStrategy.radius(startx, starty, targetx, targety)</span>
-<span class="source-line-no">601</span><span id="line.601">                    &amp;&amp; los1.isReachable(resistanceMap, p.x, p.y, targetx, targety, radiusStrategy)</span>
-<span class="source-line-no">602</span><span id="line.602">                    &amp;&amp; los2.isReachable(resistanceMap, startx, starty, p.x, p.y, radiusStrategy)) {</span>
-<span class="source-line-no">603</span><span id="line.603"></span>
-<span class="source-line-no">604</span><span id="line.604">                //record actual sight path used</span>
-<span class="source-line-no">605</span><span id="line.605">                lastPath.clear();</span>
-<span class="source-line-no">606</span><span id="line.606">                lastPath.addAll(los2.lastPath);</span>
-<span class="source-line-no">607</span><span id="line.607">                lastPath.remove(p); // should be the only overlapping point</span>
-<span class="source-line-no">608</span><span id="line.608">                lastPath.addAll(los1.lastPath);</span>
-<span class="source-line-no">609</span><span id="line.609">                return true;</span>
-<span class="source-line-no">610</span><span id="line.610">            }</span>
-<span class="source-line-no">611</span><span id="line.611"></span>
-<span class="source-line-no">612</span><span id="line.612">        }</span>
-<span class="source-line-no">613</span><span id="line.613">        return false;//never got to the target point</span>
-<span class="source-line-no">614</span><span id="line.614">    }</span>
-<span class="source-line-no">615</span><span id="line.615">}</span>
+<span class="source-line-no">581</span><span id="line.581">        return end.x == targetx &amp;&amp; end.y == targety;</span>
+<span class="source-line-no">582</span><span id="line.582">    }</span>
+<span class="source-line-no">583</span><span id="line.583"></span>
+<span class="source-line-no">584</span><span id="line.584">    private boolean eliasReachable(Radius radiusStrategy) {</span>
+<span class="source-line-no">585</span><span id="line.585">        if(elias == null)</span>
+<span class="source-line-no">586</span><span id="line.586">        {</span>
+<span class="source-line-no">587</span><span id="line.587">            elias = new Elias();</span>
+<span class="source-line-no">588</span><span id="line.588">            los1 = new LOS(BRESENHAM);</span>
+<span class="source-line-no">589</span><span id="line.589">            los2 = new LOS(BRESENHAM);</span>
+<span class="source-line-no">590</span><span id="line.590">        }</span>
+<span class="source-line-no">591</span><span id="line.591">        final ArrayList&lt;Coord&gt; ePath = elias.line(startx, starty, targetx, targety);</span>
+<span class="source-line-no">592</span><span id="line.592">//        // very similar to RNG.shuffleInPlace(); this may be handy for getting an early shortcut return</span>
+<span class="source-line-no">593</span><span id="line.593">//        final int n = ePath.size();</span>
+<span class="source-line-no">594</span><span id="line.594">//        long state = 0x58476D1CE4E5B9BFL;</span>
+<span class="source-line-no">595</span><span id="line.595">//        for (int i = n; i &gt; 1; i--) {</span>
+<span class="source-line-no">596</span><span id="line.596">//            // inlined LightRNG.determineBounded(); can replace *= with usually-faster +=</span>
+<span class="source-line-no">597</span><span id="line.597">//            Collections.swap(ePath, (int)((i * (((state = ((state = ((state += 0x9E3779B97F4A7C15L) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL) ^ state &gt;&gt;&gt; 31) &amp; 0x7FFFFFFFL)) &gt;&gt; 31), i - 1);</span>
+<span class="source-line-no">598</span><span id="line.598">//        }</span>
+<span class="source-line-no">599</span><span id="line.599">        for(Coord p : ePath)</span>
+<span class="source-line-no">600</span><span id="line.600">        {</span>
+<span class="source-line-no">601</span><span id="line.601">            //if a non-solid midpoint on the path can see both the start and end, consider the two ends to be able to see each other</span>
+<span class="source-line-no">602</span><span id="line.602">            if (resistanceMap[p.x][p.y] &lt; 1</span>
+<span class="source-line-no">603</span><span id="line.603">                    &amp;&amp; radiusStrategy.radius(startx, starty, p.x, p.y) &lt;= radiusStrategy.radius(startx, starty, targetx, targety)</span>
+<span class="source-line-no">604</span><span id="line.604">                    &amp;&amp; los1.isReachable(resistanceMap, p.x, p.y, targetx, targety, radiusStrategy)</span>
+<span class="source-line-no">605</span><span id="line.605">                    &amp;&amp; los2.isReachable(resistanceMap, startx, starty, p.x, p.y, radiusStrategy)) {</span>
+<span class="source-line-no">606</span><span id="line.606"></span>
+<span class="source-line-no">607</span><span id="line.607">                //record actual sight path used</span>
+<span class="source-line-no">608</span><span id="line.608">                lastPath.clear();</span>
+<span class="source-line-no">609</span><span id="line.609">                lastPath.addAll(los2.lastPath);</span>
+<span class="source-line-no">610</span><span id="line.610">                lastPath.remove(p); // should be the only overlapping point</span>
+<span class="source-line-no">611</span><span id="line.611">                lastPath.addAll(los1.lastPath);</span>
+<span class="source-line-no">612</span><span id="line.612">                return true;</span>
+<span class="source-line-no">613</span><span id="line.613">            }</span>
+<span class="source-line-no">614</span><span id="line.614"></span>
+<span class="source-line-no">615</span><span id="line.615">        }</span>
+<span class="source-line-no">616</span><span id="line.616">        return false;//never got to the target point</span>
+<span class="source-line-no">617</span><span id="line.617">    }</span>
+<span class="source-line-no">618</span><span id="line.618">}</span>
 
 
 

@@ -1635,14 +1635,14 @@
 <span class="source-line-no">1623</span><span id="line.1623">            x *= frequency;</span>
 <span class="source-line-no">1624</span><span id="line.1624">            y *= frequency;</span>
 <span class="source-line-no">1625</span><span id="line.1625">            for (int i = 0; i &lt; octaves; i++) {</span>
-<span class="source-line-no">1626</span><span id="line.1626">                n = basis.getNoise(x + (i &lt;&lt; 6), y + (i &lt;&lt; 7));</span>
-<span class="source-line-no">1627</span><span id="line.1627">                n = 1.0 - Math.abs(n);</span>
-<span class="source-line-no">1628</span><span id="line.1628">                correction += (exp *= 0.5);</span>
-<span class="source-line-no">1629</span><span id="line.1629">                sum += n * exp;</span>
-<span class="source-line-no">1630</span><span id="line.1630">                x *= 2.0;</span>
-<span class="source-line-no">1631</span><span id="line.1631">                y *= 2.0;</span>
+<span class="source-line-no">1626</span><span id="line.1626">                n = basis.getNoise(x + (i &lt;&lt; 6), y + (i &lt;&lt; 7)); // n is between -1 and 1</span>
+<span class="source-line-no">1627</span><span id="line.1627">                n = 1.0 - Math.abs(n);                          // n is now between 0 and 1</span>
+<span class="source-line-no">1628</span><span id="line.1628">                correction += (exp *= 0.5);                     // exp goes to 1 here, correction too</span>
+<span class="source-line-no">1629</span><span id="line.1629">                sum += n * exp;                                 // sum is between 0 and 1</span>
+<span class="source-line-no">1630</span><span id="line.1630">                x *= 2.0;                                       // exaggerate details for the next</span>
+<span class="source-line-no">1631</span><span id="line.1631">                y *= 2.0;                                       // octave, by zooming in</span>
 <span class="source-line-no">1632</span><span id="line.1632">            }</span>
-<span class="source-line-no">1633</span><span id="line.1633">            return sum * 2.0 / correction - 1.0;</span>
+<span class="source-line-no">1633</span><span id="line.1633">            return sum * 2.0 / correction - 1.0;                // for 1 octave, this is between -1 and 1</span>
 <span class="source-line-no">1634</span><span id="line.1634">        }</span>
 <span class="source-line-no">1635</span><span id="line.1635"></span>
 <span class="source-line-no">1636</span><span id="line.1636">        @Override</span>

@@ -86,7 +86,7 @@ loadScripts(document, 'script');</script>
 </dl>
 <dl class="notes">
 <dt>Direct Known Subclasses:</dt>
-<dd><code><a href="DistributedRNG.html" title="class in squidpony.squidmath">DistributedRNG</a></code>, <code><a href="GWTRNG.html" title="class in squidpony.squidmath">GWTRNG</a></code>, <code><a href="MoonwalkRNG.html" title="class in squidpony.squidmath">MoonwalkRNG</a></code>, <code><a href="SilkRNG.html" title="class in squidpony.squidmath">SilkRNG</a></code>, <code><a href="TweakRNG.html" title="class in squidpony.squidmath">TweakRNG</a></code></dd>
+<dd><code><a href="DistributedRNG.html" title="class in squidpony.squidmath">DistributedRNG</a></code>, <code><a href="GWTRNG.html" title="class in squidpony.squidmath">GWTRNG</a></code>, <code><a href="MoonwalkRNG.html" title="class in squidpony.squidmath">MoonwalkRNG</a></code>, <code><a href="RNG.html" title="class in squidpony.squidmath">RNG</a></code>, <code><a href="SilkRNG.html" title="class in squidpony.squidmath">SilkRNG</a></code>, <code><a href="TweakRNG.html" title="class in squidpony.squidmath">TweakRNG</a></code></dd>
 </dl>
 <hr>
 <pre>public abstract class <a href="../../src-html/squidpony/squidmath/AbstractRNG.html#line.22">AbstractRNG</a>
@@ -164,10 +164,10 @@ int&nbsp;max)</code></th>
 </tr>
 <tr class="alt-color" id="i2">
 <td class="col-first"><code>long</code></td>
-<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#between(long,long)">between</a></span>&#8203;(long&nbsp;min,
-long&nbsp;max)</code></th>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#between(long,long)">between</a></span>&#8203;(long&nbsp;inner,
+long&nbsp;outer)</code></th>
 <td class="col-last">
-<div class="block">Returns a value between min (inclusive) and max (exclusive) as longs.</div>
+<div class="block">Returns a value between inner (inclusive) and outer (exclusive) as longs.</div>
 </td>
 </tr>
 <tr class="row-color" id="i3">
@@ -478,7 +478,7 @@ int&nbsp;pos2)</code></th>
  If bound is negative or 0 this always returns 0.
  <br>
  Credit for this method goes to <a href="https://oroboro.com/large-random-in-range/">Rafael Baptista's blog</a>
- for the original idea, and the JDK10 Math class' usage of Karatsuba multiplication for the current algorithm. 
+ for the algorithm, though the technique is not new.
  This method is drastically faster than the previous implementation when the bound varies often (roughly 4x
  faster, possibly more). It also always gets exactly one random long, so by default it advances the state as much
  as <a href="#nextLong()"><code>nextLong()</code></a>; subclasses can generate two ints instead of one long if they prefer.</div>
@@ -495,7 +495,7 @@ int&nbsp;pos2)</code></th>
 <li>
 <section class="detail" id="nextBoolean()">
 <h3>nextBoolean</h3>
-<div class="member-signature"><span class="modifiers">public abstract</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/AbstractRNG.html#line.97">nextBoolean</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public abstract</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/AbstractRNG.html#line.89">nextBoolean</a></span>()</div>
 <div class="block">Get a random bit of state, interpreted as true or false with approximately equal likelihood.
  <br>
  Note: This is abstract because some implementations may be best served by using <a href="#next(int)"><code>next(int)</code></a> to get 1 bit,
@@ -515,7 +515,7 @@ int&nbsp;pos2)</code></th>
 <li>
 <section class="detail" id="nextDouble()">
 <h3>nextDouble</h3>
-<div class="member-signature"><span class="modifiers">public abstract</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/AbstractRNG.html#line.108">nextDouble</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public abstract</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/AbstractRNG.html#line.100">nextDouble</a></span>()</div>
 <div class="block">Gets a random double between 0.0 inclusive and 1.0 exclusive.
  This returns a maximum of 0.9999999999999999 because that is the largest double value that is less than 1.0 .
  <br>
@@ -533,7 +533,7 @@ int&nbsp;pos2)</code></th>
 <li>
 <section class="detail" id="nextDouble(double)">
 <h3>nextDouble</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/AbstractRNG.html#line.118">nextDouble</a></span>&#8203;(<span class="parameters">double&nbsp;outer)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/AbstractRNG.html#line.110">nextDouble</a></span>&#8203;(<span class="parameters">double&nbsp;outer)</span></div>
 <div class="block">This returns a random double between 0.0 (inclusive) and outer (exclusive). The value for outer can be positive
  or negative. Because of how math on doubles works, there are at most 2 to the 53 values this can return for any
  given outer bound, and very large values for outer will not necessarily produce all numbers you might expect.</div>
@@ -550,7 +550,7 @@ int&nbsp;pos2)</code></th>
 <li>
 <section class="detail" id="nextFloat()">
 <h3>nextFloat</h3>
-<div class="member-signature"><span class="modifiers">public abstract</span>&nbsp;<span class="return-type">float</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/AbstractRNG.html#line.134">nextFloat</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public abstract</span>&nbsp;<span class="return-type">float</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/AbstractRNG.html#line.126">nextFloat</a></span>()</div>
 <div class="block">Gets a random float between 0.0f inclusive and 1.0f exclusive.
  This returns a maximum of 0.99999994 because that is the largest float value that is less than 1.0f .
  <br>
@@ -570,7 +570,7 @@ int&nbsp;pos2)</code></th>
 <li>
 <section class="detail" id="nextFloat(float)">
 <h3>nextFloat</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">float</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/AbstractRNG.html#line.144">nextFloat</a></span>&#8203;(<span class="parameters">float&nbsp;outer)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">float</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/AbstractRNG.html#line.136">nextFloat</a></span>&#8203;(<span class="parameters">float&nbsp;outer)</span></div>
 <div class="block">This returns a random float between 0.0f (inclusive) and outer (exclusive). The value for outer can be positive
  or negative. Because of how math on floats works, there are at most 2 to the 24 values this can return for any
  given outer bound, and very large values for outer will not necessarily produce all numbers you might expect.</div>
@@ -587,7 +587,7 @@ int&nbsp;pos2)</code></th>
 <li>
 <section class="detail" id="nextSignedLong(long)">
 <h3>nextSignedLong</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/AbstractRNG.html#line.168">nextSignedLong</a></span>&#8203;(<span class="parameters">long&nbsp;outerBound)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/AbstractRNG.html#line.160">nextSignedLong</a></span>&#8203;(<span class="parameters">long&nbsp;outerBound)</span></div>
 <div class="block">Exclusive on bound (which may be positive or negative), with an inner bound of 0.
  If bound is negative this returns a negative long; if bound is positive this returns a positive long. The bound
  can even be 0, which will cause this to return 0L every time. This uses a biased technique to get numbers from
@@ -616,7 +616,7 @@ int&nbsp;pos2)</code></th>
 <li>
 <section class="detail" id="nextSignedInt(int)">
 <h3>nextSignedInt</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/AbstractRNG.html#line.189">nextSignedInt</a></span>&#8203;(<span class="parameters">int&nbsp;outerBound)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/AbstractRNG.html#line.174">nextSignedInt</a></span>&#8203;(<span class="parameters">int&nbsp;outerBound)</span></div>
 <div class="block">Returns a random non-negative integer between 0 (inclusive) and the given bound (exclusive),
  or 0 if the bound is 0. The bound can be negative, which will produce 0 or a negative result.
  <br>
@@ -634,7 +634,7 @@ int&nbsp;pos2)</code></th>
 <li>
 <section class="detail" id="between(int,int)">
 <h3>between</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/AbstractRNG.html#line.207">between</a></span>&#8203;(<span class="parameters">int&nbsp;min,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/AbstractRNG.html#line.192">between</a></span>&#8203;(<span class="parameters">int&nbsp;min,
 int&nbsp;max)</span></div>
 <div class="block">Returns a value between min (inclusive) and max (exclusive) as ints.
  <br>
@@ -657,21 +657,24 @@ int&nbsp;max)</span></div>
 <li>
 <section class="detail" id="between(long,long)">
 <h3>between</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/AbstractRNG.html#line.225">between</a></span>&#8203;(<span class="parameters">long&nbsp;min,
-long&nbsp;max)</span></div>
-<div class="block">Returns a value between min (inclusive) and max (exclusive) as longs.
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/AbstractRNG.html#line.213">between</a></span>&#8203;(<span class="parameters">long&nbsp;inner,
+long&nbsp;outer)</span></div>
+<div class="block">Returns a value between inner (inclusive) and outer (exclusive) as longs.
  <br>
  The inclusive and exclusive behavior is to match the behavior of the similar
- method that deals with floating point values.
+ method that deals with floating point values. Either or both bounds may be
+ negative, but inner remains inclusive and outer exclusive.
  <br>
- If <code>min</code> and <code>max</code> happen to be the same, <code>min</code> is returned
- (breaking the exclusive behavior, but it's convenient to do so).</div>
+ If <code>inner</code> and <code>outer</code> happen to be the same, <code>inner</code> is returned
+ (breaking the exclusive behavior, but it's convenient to do so).
+ <br>
+ Credit to Rafael Baptista, https://oroboro.com/large-random-in-range/ , for this technique.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="IRNG.html#between(long,long)">between</a></code>&nbsp;in interface&nbsp;<code><a href="IRNG.html" title="interface in squidpony.squidmath">IRNG</a></code></dd>
 <dt>Parameters:</dt>
-<dd><code>min</code> - the minimum bound on the return value (inclusive)</dd>
-<dd><code>max</code> - the maximum bound on the return value (exclusive)</dd>
+<dd><code>inner</code> - the inner bound on the return value (inclusive)</dd>
+<dd><code>outer</code> - the outer bound on the return value (exclusive)</dd>
 <dt>Returns:</dt>
 <dd>the found value</dd>
 </dl>
@@ -680,7 +683,7 @@ long&nbsp;max)</span></div>
 <li>
 <section class="detail" id="between(double,double)">
 <h3>between</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/AbstractRNG.html#line.238">between</a></span>&#8203;(<span class="parameters">double&nbsp;min,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/AbstractRNG.html#line.237">between</a></span>&#8203;(<span class="parameters">double&nbsp;min,
 double&nbsp;max)</span></div>
 <div class="block">Returns a value from a uniform distribution from min (inclusive) to max
  (exclusive).</div>
@@ -698,7 +701,7 @@ double&nbsp;max)</span></div>
 <li>
 <section class="detail" id="getRandomElement(T[])">
 <h3 id="getRandomElement(java.lang.Object[])">getRandomElement</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/AbstractRNG.html#line.250">getRandomElement</a></span>&#8203;(<span class="parameters">T[]&nbsp;array)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/AbstractRNG.html#line.249">getRandomElement</a></span>&#8203;(<span class="parameters">T[]&nbsp;array)</span></div>
 <div class="block">Returns a random element from the provided array and maintains object
  type.</div>
 <dl class="notes">
@@ -716,7 +719,7 @@ double&nbsp;max)</span></div>
 <li>
 <section class="detail" id="getRandomElement(java.util.List)">
 <h3>getRandomElement</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/AbstractRNG.html#line.267">getRandomElement</a></span>&#8203;(<span class="parameters">java.util.List&lt;T&gt;&nbsp;list)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/AbstractRNG.html#line.266">getRandomElement</a></span>&#8203;(<span class="parameters">java.util.List&lt;T&gt;&nbsp;list)</span></div>
 <div class="block">Returns a random element from the provided list. If the list is empty
  then null is returned. This will perform well on Lists that allow random access,
  but will not perform as well on <code>LinkedList</code> or similar classes
@@ -736,7 +739,7 @@ double&nbsp;max)</span></div>
 <li>
 <section class="detail" id="getRandomElement(java.util.Collection)">
 <h3>getRandomElement</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/AbstractRNG.html#line.293">getRandomElement</a></span>&#8203;(<span class="parameters">java.util.Collection&lt;T&gt;&nbsp;coll)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/AbstractRNG.html#line.292">getRandomElement</a></span>&#8203;(<span class="parameters">java.util.Collection&lt;T&gt;&nbsp;coll)</span></div>
 <div class="block">Returns a random element from the provided Collection, which should have predictable iteration order if you want
  predictable behavior for identical RNG seeds, though it will get a random element just fine for any Collection
  (just not predictably in all cases). If you give this a Set, it should be a LinkedHashSet or some form of sorted
@@ -765,7 +768,7 @@ double&nbsp;max)</span></div>
 <li>
 <section class="detail" id="swap(T[],int,int)">
 <h3 id="swap(java.lang.Object[],int,int)">swap</h3>
-<div class="member-signature"><span class="modifiers">protected static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/AbstractRNG.html#line.313">swap</a></span>&#8203;(<span class="parameters">T[]&nbsp;arr,
+<div class="member-signature"><span class="modifiers">protected static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/AbstractRNG.html#line.312">swap</a></span>&#8203;(<span class="parameters">T[]&nbsp;arr,
 int&nbsp;pos1,
 int&nbsp;pos2)</span></div>
 <div class="block">Mutates the array arr by switching the contents at pos1 and pos2.</div>
@@ -780,7 +783,7 @@ int&nbsp;pos2)</span></div>
 <li>
 <section class="detail" id="shuffle(T[])">
 <h3 id="shuffle(java.lang.Object[])">shuffle</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T[]</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/AbstractRNG.html#line.328">shuffle</a></span>&#8203;(<span class="parameters">T[]&nbsp;elements)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T[]</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/AbstractRNG.html#line.327">shuffle</a></span>&#8203;(<span class="parameters">T[]&nbsp;elements)</span></div>
 <div class="block">Shuffle an array using the Fisher-Yates algorithm and returns a shuffled copy, freshly-allocated, without
  modifying elements.
  <br>
@@ -800,7 +803,7 @@ int&nbsp;pos2)</span></div>
 <li>
 <section class="detail" id="shuffleInPlace(T[])">
 <h3 id="shuffleInPlace(java.lang.Object[])">shuffleInPlace</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T[]</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/AbstractRNG.html#line.347">shuffleInPlace</a></span>&#8203;(<span class="parameters">T[]&nbsp;elements)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T[]</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/AbstractRNG.html#line.346">shuffleInPlace</a></span>&#8203;(<span class="parameters">T[]&nbsp;elements)</span></div>
 <div class="block">Shuffles an array in-place using the Fisher-Yates algorithm.
  If you don't want the array modified, use <a href="#shuffle(T%5B%5D,T%5B%5D)"><code>shuffle(Object[], Object[])</code></a>.
  <br>
@@ -820,7 +823,7 @@ int&nbsp;pos2)</span></div>
 <li>
 <section class="detail" id="shuffle(T[],T[])">
 <h3 id="shuffle(java.lang.Object[],java.lang.Object[])">shuffle</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T[]</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/AbstractRNG.html#line.370">shuffle</a></span>&#8203;(<span class="parameters">T[]&nbsp;elements,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T[]</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/AbstractRNG.html#line.369">shuffle</a></span>&#8203;(<span class="parameters">T[]&nbsp;elements,
 T[]&nbsp;dest)</span></div>
 <div class="block">Shuffle an array using the Fisher-Yates algorithm. If possible, create a new array or reuse an existing array
  with the same length as elements and pass it in as dest; the dest array will contain the shuffled contents of
@@ -845,7 +848,7 @@ T[]&nbsp;dest)</span></div>
 <li>
 <section class="detail" id="shuffle(java.util.Collection)">
 <h3>shuffle</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">java.util.ArrayList&lt;T&gt;</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/AbstractRNG.html#line.387">shuffle</a></span>&#8203;(<span class="parameters">java.util.Collection&lt;T&gt;&nbsp;elements)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">java.util.ArrayList&lt;T&gt;</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/AbstractRNG.html#line.386">shuffle</a></span>&#8203;(<span class="parameters">java.util.Collection&lt;T&gt;&nbsp;elements)</span></div>
 <div class="block">Shuffles a <code>Collection</code> of T using the Fisher-Yates algorithm and returns an ArrayList of T.
  <br>
  <a href="https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle">Wikipedia has more on this algorithm</a>.</div>
@@ -864,7 +867,7 @@ T[]&nbsp;dest)</span></div>
 <li>
 <section class="detail" id="shuffle(java.util.Collection,java.util.ArrayList)">
 <h3>shuffle</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">java.util.ArrayList&lt;T&gt;</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/AbstractRNG.html#line.404">shuffle</a></span>&#8203;(<span class="parameters">java.util.Collection&lt;T&gt;&nbsp;elements,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">java.util.ArrayList&lt;T&gt;</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/AbstractRNG.html#line.403">shuffle</a></span>&#8203;(<span class="parameters">java.util.Collection&lt;T&gt;&nbsp;elements,
 java.util.ArrayList&lt;T&gt;&nbsp;buf)</span></div>
 <div class="block">Shuffles a <code>Collection</code> of T using the Fisher-Yates algorithm and puts it in a buffer.
  The result is allocated if <code>buf</code> is null or if <code>buf</code> isn't empty,
@@ -888,7 +891,7 @@ java.util.ArrayList&lt;T&gt;&nbsp;buf)</span></div>
 <li>
 <section class="detail" id="shuffleInPlace(java.util.List)">
 <h3>shuffleInPlace</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">java.util.List&lt;T&gt;</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/AbstractRNG.html#line.430">shuffleInPlace</a></span>&#8203;(<span class="parameters">java.util.List&lt;T&gt;&nbsp;elements)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">java.util.List&lt;T&gt;</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/AbstractRNG.html#line.429">shuffleInPlace</a></span>&#8203;(<span class="parameters">java.util.List&lt;T&gt;&nbsp;elements)</span></div>
 <div class="block">Shuffles a Collection of T items in-place using the Fisher-Yates algorithm.
  This only shuffles List data structures.
  If you don't want the array modified, use <a href="#shuffle(java.util.Collection)"><code>shuffle(Collection)</code></a>, which returns a List as well.
@@ -909,7 +912,7 @@ java.util.ArrayList&lt;T&gt;&nbsp;buf)</span></div>
 <li>
 <section class="detail" id="randomOrdering(int)">
 <h3>randomOrdering</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int[]</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/AbstractRNG.html#line.446">randomOrdering</a></span>&#8203;(<span class="parameters">int&nbsp;length)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int[]</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/AbstractRNG.html#line.445">randomOrdering</a></span>&#8203;(<span class="parameters">int&nbsp;length)</span></div>
 <div class="block">Generates a random permutation of the range from 0 (inclusive) to length (exclusive).
  Useful for passing to OrderedMap or OrderedSet's reorder() methods.</div>
 <dl class="notes">
@@ -925,7 +928,7 @@ java.util.ArrayList&lt;T&gt;&nbsp;buf)</span></div>
 <li>
 <section class="detail" id="randomOrdering(int,int[])">
 <h3>randomOrdering</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int[]</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/AbstractRNG.html#line.462">randomOrdering</a></span>&#8203;(<span class="parameters">int&nbsp;length,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int[]</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/AbstractRNG.html#line.461">randomOrdering</a></span>&#8203;(<span class="parameters">int&nbsp;length,
 int[]&nbsp;dest)</span></div>
 <div class="block">Generates a random permutation of the range from 0 (inclusive) to length (exclusive) and stores it in
  the dest parameter, avoiding allocations.
@@ -944,7 +947,7 @@ int[]&nbsp;dest)</span></div>
 <li>
 <section class="detail" id="randomPortion(T[],T[])">
 <h3 id="randomPortion(java.lang.Object[],java.lang.Object[])">randomPortion</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T[]</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/AbstractRNG.html#line.491">randomPortion</a></span>&#8203;(<span class="parameters">T[]&nbsp;data,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T[]</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/AbstractRNG.html#line.490">randomPortion</a></span>&#8203;(<span class="parameters">T[]&nbsp;data,
 T[]&nbsp;output)</span></div>
 <div class="block">Gets a random portion of data (an array), assigns that portion to output (an array) so that it fills as much as
  it can, and then returns output. Will only use a given position in the given data at most once; uses a Feistel
@@ -968,7 +971,7 @@ T[]&nbsp;output)</span></div>
 <li>
 <section class="detail" id="copy()">
 <h3>copy</h3>
-<div class="member-signature"><span class="modifiers">public abstract</span>&nbsp;<span class="return-type"><a href="IRNG.html" title="interface in squidpony.squidmath">IRNG</a></span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/AbstractRNG.html#line.539">copy</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public abstract</span>&nbsp;<span class="return-type"><a href="IRNG.html" title="interface in squidpony.squidmath">IRNG</a></span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/AbstractRNG.html#line.538">copy</a></span>()</div>
 <div class="block">Creates a copy of this IRNG; it will generate the same random numbers, given the same calls in order, as this
  IRNG at the point copy() is called. The copy will not share references with this IRNG. If this IRNG does not
  permit copying itself, it is suggested to either throw an <code>UnsupportedOperationException</code> or return a new
@@ -986,7 +989,7 @@ T[]&nbsp;output)</span></div>
 <li>
 <section class="detail" id="toSerializable()">
 <h3>toSerializable</h3>
-<div class="member-signature"><span class="modifiers">public abstract</span>&nbsp;<span class="return-type">java.io.Serializable</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/AbstractRNG.html#line.552">toSerializable</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public abstract</span>&nbsp;<span class="return-type">java.io.Serializable</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/AbstractRNG.html#line.551">toSerializable</a></span>()</div>
 <div class="block">Gets a view of this IRNG in a way that implements <code>Serializable</code>, which may simply be this IRNG if it
  implements Serializable as well as IRNG.
  <br>

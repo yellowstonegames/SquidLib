@@ -90,10 +90,38 @@ loadScripts(document, 'script');</script>
 <tbody>
 <tr class="alt-color">
 <td class="col-first"><code>class&nbsp;</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="../CriticalRNG.html" title="class in squidpony.squidmath">CriticalRNG</a></span></code></th>
+<td class="col-last">
+<div class="block">A type of RNG that can generate values larger or smaller than the normal maximum or minimum, based on a modifier.</div>
+</td>
+</tr>
+<tr class="row-color">
+<td class="col-first"><code>class&nbsp;</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="../DeckRNG.html" title="class in squidpony.squidmath">DeckRNG</a></span></code></th>
+<td class="col-last">
+<div class="block">An RNG variant that has 16 possible grades of value it can produce and shuffles them like a deck of cards.</div>
+</td>
+</tr>
+<tr class="alt-color">
+<td class="col-first"><code>class&nbsp;</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="../DharmaRNG.html" title="class in squidpony.squidmath">DharmaRNG</a></span></code></th>
+<td class="col-last">
+<div class="block">An alteration to a RandomnessSource that attempts to produce values that are perceived as fair to an imperfect user.</div>
+</td>
+</tr>
+<tr class="row-color">
+<td class="col-first"><code>class&nbsp;</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="../DistributedRNG.html" title="class in squidpony.squidmath">DistributedRNG</a></span></code></th>
 <td class="col-last">
 <div class="block">An implementation of <a href="../IRNG.html" title="interface in squidpony.squidmath"><code>IRNG</code></a> that allows specifying a distribution for all random numbers it produces via a
  <a href="../IDistribution.SimpleDistribution.html" title="class in squidpony.squidmath"><code>IDistribution.SimpleDistribution</code></a> value.</div>
+</td>
+</tr>
+<tr class="alt-color">
+<td class="col-first"><code>class&nbsp;</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="../EditRNG.html" title="class in squidpony.squidmath">EditRNG</a></span></code></th>
+<td class="col-last">
+<div class="block">A subclass of StatefulRNG (and thus RNG) that allows customizing many parts of the random number generation.</div>
 </td>
 </tr>
 <tr class="row-color">
@@ -116,11 +144,26 @@ loadScripts(document, 'script');</script>
 </tr>
 <tr class="row-color">
 <td class="col-first"><code>class&nbsp;</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="../RNG.html" title="class in squidpony.squidmath">RNG</a></span></code></th>
+<td class="col-last">
+<div class="block">A wrapper class for working with random number generators in a more friendly way.</div>
+</td>
+</tr>
+<tr class="alt-color">
+<td class="col-first"><code>class&nbsp;</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="../SilkRNG.html" title="class in squidpony.squidmath">SilkRNG</a></span></code></th>
 <td class="col-last">
 <div class="block">An IStatefulRNG implementation that is meant to provide random numbers very quickly when targeting GWT but also to
  produce the same numbers when used on desktop, Android, or other platforms, and that can have its state read as a
  StatefulRandomness; it is thus like <a href="../GWTRNG.html" title="class in squidpony.squidmath"><code>GWTRNG</code></a> but should perform better on recent desktop JVMs.</div>
+</td>
+</tr>
+<tr class="row-color">
+<td class="col-first"><code>class&nbsp;</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="../StatefulRNG.html" title="class in squidpony.squidmath">StatefulRNG</a></span></code></th>
+<td class="col-last">
+<div class="block">A slight variant on RNG that always uses a stateful RandomessSource and so can have its state
+ set or retrieved using setState() or getState().</div>
 </td>
 </tr>
 <tr class="alt-color">

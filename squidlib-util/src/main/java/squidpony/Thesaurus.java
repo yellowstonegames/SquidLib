@@ -287,12 +287,14 @@ public class Thesaurus implements Serializable{
      * previously-made ones, probably).
      * <br>
      * If you didn't have an archive of the categories from some version of SquidLib, you can download one of the small
-     * files from <a href="https://github.com/yellowstonegames/SquidLib/tree/master/archives">the 'archives' folder of the
-     * SquidLib repo</a>; there's an archive that acts as a snapshot of SquidLib 3.0.0's Thesaurus class, for instance.
-     * If you save the 3.0.0 archive in a libGDX application's assets folder, you can reload the 3.0.0 definitions into
-     * a Thesaurus called {@code myThesaurus} with:
+     * files from <a href="https://github.com/yellowstonegames/SquidLib/tree/master/archives">the 'archives' folder of
+     * the SquidLib repo</a>; there's an archive that acts as a snapshot of SquidLib 3.0.0's Thesaurus class, for
+     * instance. This method expects files saved with a particular format, and SquidLib also supports a different format
+     * (used with {@link #addArchivedCategoriesAlternate(String)}). The files with the correct format for this end in
+     * {@code .squid.txt}. If you save the 3.0.0 {@code .squid.txt} archive in a libGDX application's assets folder, you
+     * can reload the 3.0.0 definitions into a Thesaurus called {@code myThesaurus} with:
      * <br>
-     * {@code myThesaurus.addArchivedCategories(Gdx.files.internal("Thesaurus-3-0-0.txt").readString("UTF-8"));}
+     * {@code myThesaurus.addArchivedCategories(Gdx.files.internal("Thesaurus-3-0-0.squid.txt").readString("UTF-8"));}
      * 
      * @param archive an archived String of categories produced by {@link #archiveCategories()}
      * @return this Thesaurus, but static state of the class will also be modified so this may affect other Thesaurus objects
@@ -345,9 +347,7 @@ public class Thesaurus implements Serializable{
         potionTermShuffler = mappings.get("potion`term`");
 
         return this;
-
     }
-
 
     /**
      * Given an archive String saved by {@link #archiveCategoriesAlternate()} (probably from another version of
@@ -359,7 +359,7 @@ public class Thesaurus implements Serializable{
      * If you didn't have an archive of the categories from some version of SquidLib, you can download one of the small
      * files from <a href="https://github.com/yellowstonegames/SquidLib/tree/master/archives">the 'archives' folder of the
      * SquidLib repo</a>; there's an archive that acts as a snapshot of SquidLib 3.0.0's Thesaurus class, for instance.
-     * The files that use this method's format end in {@code .alt.txt}, while the other format just uses {@code .txt}.
+     * The files that use this method's format end in {@code .alt.txt}, while the other format uses {@code .squid.txt}.
      * If you save the 3.0.0 archive in a libGDX application's assets folder, you can reload the 3.0.0 definitions into
      * a Thesaurus called {@code myThesaurus} with:
      * <br>
@@ -415,7 +415,6 @@ public class Thesaurus implements Serializable{
         potionTermShuffler = mappings.get("potion`term`");
 
         return this;
-
     }
 
     /**
@@ -1740,7 +1739,7 @@ public class Thesaurus implements Serializable{
      * because various OS properties can affect line endings, {@code "\r\n"} must also be handled). Items within the
      * line are separated by the non-breaking space character, Unicode 00A0. The first item on a line is the key, or the
      * category name. Remaining items are words the category knows. This may produce a trailing newline.
-     * @return a category archive String that can be passed to {@link #addArchivedCategories(String)}
+     * @return a category archive String that can be passed to {@link #addArchivedCategoriesAlternate(String)}
      */
     public static String archiveCategoriesAlternate(){
         StringBuilder sb = new StringBuilder(8192);

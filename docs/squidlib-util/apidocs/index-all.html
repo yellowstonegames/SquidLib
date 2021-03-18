@@ -362,6 +362,12 @@ loadScripts(document, 'script');</script>
 <div class="block">Given an archive String saved by <a href="squidpony/Thesaurus.html#archiveCategories()"><code>Thesaurus.archiveCategories()</code></a> (probably from another version of SquidLib), this
  makes the Thesaurus class act like it did in that archive, assuming the <a href="squidpony/Thesaurus.html#rng"><code>Thesaurus.rng</code></a> is seeded the same.</div>
 </dd>
+<dt><span class="member-name-link"><a href="squidpony/Thesaurus.html#addArchivedCategoriesAlternate(java.lang.String)">addArchivedCategoriesAlternate(String)</a></span> - Method in class squidpony.<a href="squidpony/Thesaurus.html" title="class in squidpony">Thesaurus</a></dt>
+<dd>
+<div class="block">Given an archive String saved by <a href="squidpony/Thesaurus.html#archiveCategoriesAlternate()"><code>Thesaurus.archiveCategoriesAlternate()</code></a> (probably from another version of
+ SquidLib), this makes the Thesaurus class act like it did in that archive, assuming the <a href="squidpony/Thesaurus.html#rng"><code>Thesaurus.rng</code></a> is seeded
+ the same and uses the same algorithm/RandomnessSource.</div>
+</dd>
 <dt><span class="member-name-link"><a href="squidpony/squidmath/Arrangement.html#addAt(int,K)">addAt(int, K)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/Arrangement.html" title="class in squidpony.squidmath">Arrangement</a></dt>
 <dd>
 <div class="block">Equivalent to <a href="squidpony/squidmath/Arrangement.html#add(K)"><code>Arrangement.add(Object)</code></a>, except that it can place k at any point in the ordering (shifting up later
@@ -1204,6 +1210,11 @@ loadScripts(document, 'script');</script>
 <div class="block">Gets a stable (large) String that stores all categories this version of Thesaurus knows, as well as all of the
  words each category includes.</div>
 </dd>
+<dt><span class="member-name-link"><a href="squidpony/Thesaurus.html#archiveCategoriesAlternate()">archiveCategoriesAlternate()</a></span> - Static method in class squidpony.<a href="squidpony/Thesaurus.html" title="class in squidpony">Thesaurus</a></dt>
+<dd>
+<div class="block">Gets a stable (large) String that stores all categories this version of Thesaurus knows, as well as all of the
+ words each category includes.</div>
+</dd>
 <dt><a href="squidpony/squidai/AreaUtils.html" title="class in squidpony.squidai"><span class="type-name-link">AreaUtils</span></a> - Class in <a href="squidpony/squidai/package-summary.html">squidpony.squidai</a></dt>
 <dd>
 <div class="block">Static utilities for use in AOE and anything else that might need HashMaps of Coord keys to Double values.</div>
@@ -1935,11 +1946,6 @@ loadScripts(document, 'script');</script>
 <div class="block">Returns a value from a uniform distribution from min (inclusive) to max
  (exclusive).</div>
 </dd>
-<dt><span class="member-name-link"><a href="squidpony/squidmath/RNG.html#between(double,double)">between(double, double)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a></dt>
-<dd>
-<div class="block">Returns a value from an even distribution from min (inclusive) to max
- (exclusive).</div>
-</dd>
 <dt><span class="member-name-link"><a href="squidpony/squidmath/AbstractRNG.html#between(int,int)">between(int, int)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/AbstractRNG.html" title="class in squidpony.squidmath">AbstractRNG</a></dt>
 <dd>
 <div class="block">Returns a value between min (inclusive) and max (exclusive) as ints.</div>
@@ -1952,13 +1958,9 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Returns a value between min (inclusive) and max (exclusive) as ints.</div>
 </dd>
-<dt><span class="member-name-link"><a href="squidpony/squidmath/RNG.html#between(int,int)">between(int, int)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a></dt>
-<dd>
-<div class="block">Returns a value between min (inclusive) and max (exclusive).</div>
-</dd>
 <dt><span class="member-name-link"><a href="squidpony/squidmath/AbstractRNG.html#between(long,long)">between(long, long)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/AbstractRNG.html" title="class in squidpony.squidmath">AbstractRNG</a></dt>
 <dd>
-<div class="block">Returns a value between min (inclusive) and max (exclusive) as longs.</div>
+<div class="block">Returns a value between inner (inclusive) and outer (exclusive) as longs.</div>
 </dd>
 <dt><span class="member-name-link"><a href="squidpony/squidmath/DeckRNG.html#between(long,long)">between(long, long)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/DeckRNG.html" title="class in squidpony.squidmath">DeckRNG</a></dt>
 <dd>
@@ -1971,10 +1973,6 @@ loadScripts(document, 'script');</script>
 <dt><span class="member-name-link"><a href="squidpony/squidmath/IRNG.html#between(long,long)">between(long, long)</a></span> - Method in interface squidpony.squidmath.<a href="squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a></dt>
 <dd>
 <div class="block">Returns a value between min (inclusive) and max (exclusive) as longs.</div>
-</dd>
-<dt><span class="member-name-link"><a href="squidpony/squidmath/RNG.html#between(long,long)">between(long, long)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a></dt>
-<dd>
-<div class="block">Returns a value between min (inclusive) and max (exclusive).</div>
 </dd>
 <dt><span class="member-name-link"><a href="squidpony/squidmath/DeckRNG.html#betweenWeighted(int,int,int)">betweenWeighted(int, int, int)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/DeckRNG.html" title="class in squidpony.squidmath">DeckRNG</a></dt>
 <dd>
@@ -3993,6 +3991,11 @@ loadScripts(document, 'script');</script>
 <div class="block">Produces a copy of this RandomnessSource that, if next() and/or nextLong() are called on this object and the
  copy, both will generate the same sequence of random numbers from the point copy() was called.</div>
 </dd>
+<dt><span class="member-name-link"><a href="squidpony/squidmath/SpecifiedRandomness.html#copy()">copy()</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/SpecifiedRandomness.html" title="class in squidpony.squidmath">SpecifiedRandomness</a></dt>
+<dd>
+<div class="block">Produces a copy of this SpecifiedRandomness that, if next() and/or nextLong() are called on this object and the
+ copy, both will generate the same sequence of random numbers from the point copy() was called.</div>
+</dd>
 <dt><span class="member-name-link"><a href="squidpony/squidmath/Starfish32RNG.html#copy()">copy()</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/Starfish32RNG.html" title="class in squidpony.squidmath">Starfish32RNG</a></dt>
 <dd>
 <div class="block">Produces a copy of this RandomnessSource that, if next() and/or nextLong() are called on this object and the
@@ -5434,7 +5437,9 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="squidpony/squidai/DijkstraMap.html" title="class in squidpony.squidai"><span class="type-name-link">DijkstraMap</span></a> - Class in <a href="squidpony/squidai/package-summary.html">squidpony.squidai</a></dt>
 <dd>
-<div class="block">An alternative to AStarSearch when you want to fully explore a search space, or when you want a gradient floodfill.</div>
+<div class="block">A group of pathfinding algorithms that explore in all directions equally, and are commonly used when there is more
+ than one valid goal, or when you want a gradient floodfill to mark each cell in an area with its distance from a
+ goal.</div>
 </dd>
 <dt><span class="member-name-link"><a href="squidpony/squidai/DijkstraMap.html#%3Cinit%3E()">DijkstraMap()</a></span> - Constructor for class squidpony.squidai.<a href="squidpony/squidai/DijkstraMap.html" title="class in squidpony.squidai">DijkstraMap</a></dt>
 <dd>
@@ -9619,9 +9624,15 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><span class="member-name-link"><a href="squidpony/squidmath/Noise.Warped2D.html#getNoise(double,double)">getNoise(double, double)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/Noise.Warped2D.html" title="class in squidpony.squidmath">Noise.Warped2D</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="member-name-link"><a href="squidpony/squidmath/OpenSimplex2F.html#getNoise(double,double)">getNoise(double, double)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/OpenSimplex2F.html" title="class in squidpony.squidmath">OpenSimplex2F</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="member-name-link"><a href="squidpony/squidmath/OpenSimplex2S.html#getNoise(double,double)">getNoise(double, double)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/OpenSimplex2S.html" title="class in squidpony.squidmath">OpenSimplex2S</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="member-name-link"><a href="squidpony/squidmath/SeededNoise.html#getNoise(double,double)">getNoise(double, double)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/SeededNoise.html" title="class in squidpony.squidmath">SeededNoise</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="member-name-link"><a href="squidpony/squidmath/ValueNoise.html#getNoise(double,double)">getNoise(double, double)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/ValueNoise.html" title="class in squidpony.squidmath">ValueNoise</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="member-name-link"><a href="squidpony/squidmath/WaveNoise.html#getNoise(double,double)">getNoise(double, double)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/WaveNoise.html" title="class in squidpony.squidmath">WaveNoise</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="member-name-link"><a href="squidpony/squidmath/WhirlingNoise.html#getNoise(double,double)">getNoise(double, double)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/WhirlingNoise.html" title="class in squidpony.squidmath">WhirlingNoise</a></dt>
 <dd>
@@ -9673,9 +9684,15 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><span class="member-name-link"><a href="squidpony/squidmath/Noise.Warped3D.html#getNoise(double,double,double)">getNoise(double, double, double)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/Noise.Warped3D.html" title="class in squidpony.squidmath">Noise.Warped3D</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="member-name-link"><a href="squidpony/squidmath/OpenSimplex2F.html#getNoise(double,double,double)">getNoise(double, double, double)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/OpenSimplex2F.html" title="class in squidpony.squidmath">OpenSimplex2F</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="member-name-link"><a href="squidpony/squidmath/OpenSimplex2S.html#getNoise(double,double,double)">getNoise(double, double, double)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/OpenSimplex2S.html" title="class in squidpony.squidmath">OpenSimplex2S</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="member-name-link"><a href="squidpony/squidmath/SeededNoise.html#getNoise(double,double,double)">getNoise(double, double, double)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/SeededNoise.html" title="class in squidpony.squidmath">SeededNoise</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="member-name-link"><a href="squidpony/squidmath/ValueNoise.html#getNoise(double,double,double)">getNoise(double, double, double)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/ValueNoise.html" title="class in squidpony.squidmath">ValueNoise</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="member-name-link"><a href="squidpony/squidmath/WaveNoise.html#getNoise(double,double,double)">getNoise(double, double, double)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/WaveNoise.html" title="class in squidpony.squidmath">WaveNoise</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="member-name-link"><a href="squidpony/squidmath/WhirlingNoise.html#getNoise(double,double,double)">getNoise(double, double, double)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/WhirlingNoise.html" title="class in squidpony.squidmath">WhirlingNoise</a></dt>
 <dd>
@@ -9721,9 +9738,15 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><span class="member-name-link"><a href="squidpony/squidmath/Noise.Warped4D.html#getNoise(double,double,double,double)">getNoise(double, double, double, double)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/Noise.Warped4D.html" title="class in squidpony.squidmath">Noise.Warped4D</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="member-name-link"><a href="squidpony/squidmath/OpenSimplex2F.html#getNoise(double,double,double,double)">getNoise(double, double, double, double)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/OpenSimplex2F.html" title="class in squidpony.squidmath">OpenSimplex2F</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="member-name-link"><a href="squidpony/squidmath/OpenSimplex2S.html#getNoise(double,double,double,double)">getNoise(double, double, double, double)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/OpenSimplex2S.html" title="class in squidpony.squidmath">OpenSimplex2S</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="member-name-link"><a href="squidpony/squidmath/SeededNoise.html#getNoise(double,double,double,double)">getNoise(double, double, double, double)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/SeededNoise.html" title="class in squidpony.squidmath">SeededNoise</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="member-name-link"><a href="squidpony/squidmath/ValueNoise.html#getNoise(double,double,double,double)">getNoise(double, double, double, double)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/ValueNoise.html" title="class in squidpony.squidmath">ValueNoise</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="member-name-link"><a href="squidpony/squidmath/WaveNoise.html#getNoise(double,double,double,double)">getNoise(double, double, double, double)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/WaveNoise.html" title="class in squidpony.squidmath">WaveNoise</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="member-name-link"><a href="squidpony/squidmath/WhirlingNoise.html#getNoise(double,double,double,double)">getNoise(double, double, double, double)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/WhirlingNoise.html" title="class in squidpony.squidmath">WhirlingNoise</a></dt>
 <dd>
@@ -9754,6 +9777,8 @@ loadScripts(document, 'script');</script>
 <dt><span class="member-name-link"><a href="squidpony/squidmath/Noise.Warped5D.html#getNoise(double,double,double,double,double)">getNoise(double, double, double, double, double)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/Noise.Warped5D.html" title="class in squidpony.squidmath">Noise.Warped5D</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="member-name-link"><a href="squidpony/squidmath/SeededNoise.html#getNoise(double,double,double,double,double)">getNoise(double, double, double, double, double)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/SeededNoise.html" title="class in squidpony.squidmath">SeededNoise</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="member-name-link"><a href="squidpony/squidmath/WaveNoise.html#getNoise(double,double,double,double,double)">getNoise(double, double, double, double, double)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/WaveNoise.html" title="class in squidpony.squidmath">WaveNoise</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="member-name-link"><a href="squidpony/squidmath/ClassicNoise.html#getNoise(double,double,double,double,double,double)">getNoise(double, double, double, double, double, double)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/ClassicNoise.html" title="class in squidpony.squidmath">ClassicNoise</a></dt>
 <dd>&nbsp;</dd>
@@ -9794,6 +9819,8 @@ loadScripts(document, 'script');</script>
 <dt><span class="member-name-link"><a href="squidpony/squidmath/Noise.Warped6D.html#getNoise(double,double,double,double,double,double)">getNoise(double, double, double, double, double, double)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/Noise.Warped6D.html" title="class in squidpony.squidmath">Noise.Warped6D</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="member-name-link"><a href="squidpony/squidmath/SeededNoise.html#getNoise(double,double,double,double,double,double)">getNoise(double, double, double, double, double, double)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/SeededNoise.html" title="class in squidpony.squidmath">SeededNoise</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="member-name-link"><a href="squidpony/squidmath/WaveNoise.html#getNoise(double,double,double,double,double,double)">getNoise(double, double, double, double, double, double)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/WaveNoise.html" title="class in squidpony.squidmath">WaveNoise</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="member-name-link"><a href="squidpony/squidmath/WhiteNoise.html#getNoise(double,double,double,double,double,double)">getNoise(double, double, double, double, double, double)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/WhiteNoise.html" title="class in squidpony.squidmath">WhiteNoise</a></dt>
 <dd>&nbsp;</dd>
@@ -9852,6 +9879,8 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><span class="member-name-link"><a href="squidpony/squidmath/SeededNoise.html#getNoiseWithSeed(double,double,double,double,double,double,long)">getNoiseWithSeed(double, double, double, double, double, double, long)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/SeededNoise.html" title="class in squidpony.squidmath">SeededNoise</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="member-name-link"><a href="squidpony/squidmath/WaveNoise.html#getNoiseWithSeed(double,double,double,double,double,double,long)">getNoiseWithSeed(double, double, double, double, double, double, long)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/WaveNoise.html" title="class in squidpony.squidmath">WaveNoise</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="member-name-link"><a href="squidpony/squidmath/WhiteNoise.html#getNoiseWithSeed(double,double,double,double,double,double,long)">getNoiseWithSeed(double, double, double, double, double, double, long)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/WhiteNoise.html" title="class in squidpony.squidmath">WhiteNoise</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="member-name-link"><a href="squidpony/squidmath/ClassicNoise.html#getNoiseWithSeed(double,double,double,double,double,long)">getNoiseWithSeed(double, double, double, double, double, long)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/ClassicNoise.html" title="class in squidpony.squidmath">ClassicNoise</a></dt>
@@ -9879,6 +9908,8 @@ loadScripts(document, 'script');</script>
 <dt><span class="member-name-link"><a href="squidpony/squidmath/Noise.Warped5D.html#getNoiseWithSeed(double,double,double,double,double,long)">getNoiseWithSeed(double, double, double, double, double, long)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/Noise.Warped5D.html" title="class in squidpony.squidmath">Noise.Warped5D</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="member-name-link"><a href="squidpony/squidmath/SeededNoise.html#getNoiseWithSeed(double,double,double,double,double,long)">getNoiseWithSeed(double, double, double, double, double, long)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/SeededNoise.html" title="class in squidpony.squidmath">SeededNoise</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="member-name-link"><a href="squidpony/squidmath/WaveNoise.html#getNoiseWithSeed(double,double,double,double,double,long)">getNoiseWithSeed(double, double, double, double, double, long)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/WaveNoise.html" title="class in squidpony.squidmath">WaveNoise</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="member-name-link"><a href="squidpony/squidmath/ClassicNoise.html#getNoiseWithSeed(double,double,double,double,long)">getNoiseWithSeed(double, double, double, double, long)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/ClassicNoise.html" title="class in squidpony.squidmath">ClassicNoise</a></dt>
 <dd>&nbsp;</dd>
@@ -9918,9 +9949,15 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><span class="member-name-link"><a href="squidpony/squidmath/Noise.Warped4D.html#getNoiseWithSeed(double,double,double,double,long)">getNoiseWithSeed(double, double, double, double, long)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/Noise.Warped4D.html" title="class in squidpony.squidmath">Noise.Warped4D</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="member-name-link"><a href="squidpony/squidmath/OpenSimplex2F.html#getNoiseWithSeed(double,double,double,double,long)">getNoiseWithSeed(double, double, double, double, long)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/OpenSimplex2F.html" title="class in squidpony.squidmath">OpenSimplex2F</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="member-name-link"><a href="squidpony/squidmath/OpenSimplex2S.html#getNoiseWithSeed(double,double,double,double,long)">getNoiseWithSeed(double, double, double, double, long)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/OpenSimplex2S.html" title="class in squidpony.squidmath">OpenSimplex2S</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="member-name-link"><a href="squidpony/squidmath/SeededNoise.html#getNoiseWithSeed(double,double,double,double,long)">getNoiseWithSeed(double, double, double, double, long)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/SeededNoise.html" title="class in squidpony.squidmath">SeededNoise</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="member-name-link"><a href="squidpony/squidmath/ValueNoise.html#getNoiseWithSeed(double,double,double,double,long)">getNoiseWithSeed(double, double, double, double, long)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/ValueNoise.html" title="class in squidpony.squidmath">ValueNoise</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="member-name-link"><a href="squidpony/squidmath/WaveNoise.html#getNoiseWithSeed(double,double,double,double,long)">getNoiseWithSeed(double, double, double, double, long)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/WaveNoise.html" title="class in squidpony.squidmath">WaveNoise</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="member-name-link"><a href="squidpony/squidmath/WhirlingNoise.html#getNoiseWithSeed(double,double,double,double,long)">getNoiseWithSeed(double, double, double, double, long)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/WhirlingNoise.html" title="class in squidpony.squidmath">WhirlingNoise</a></dt>
 <dd>
@@ -9972,9 +10009,15 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><span class="member-name-link"><a href="squidpony/squidmath/Noise.Warped3D.html#getNoiseWithSeed(double,double,double,long)">getNoiseWithSeed(double, double, double, long)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/Noise.Warped3D.html" title="class in squidpony.squidmath">Noise.Warped3D</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="member-name-link"><a href="squidpony/squidmath/OpenSimplex2F.html#getNoiseWithSeed(double,double,double,long)">getNoiseWithSeed(double, double, double, long)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/OpenSimplex2F.html" title="class in squidpony.squidmath">OpenSimplex2F</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="member-name-link"><a href="squidpony/squidmath/OpenSimplex2S.html#getNoiseWithSeed(double,double,double,long)">getNoiseWithSeed(double, double, double, long)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/OpenSimplex2S.html" title="class in squidpony.squidmath">OpenSimplex2S</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="member-name-link"><a href="squidpony/squidmath/SeededNoise.html#getNoiseWithSeed(double,double,double,long)">getNoiseWithSeed(double, double, double, long)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/SeededNoise.html" title="class in squidpony.squidmath">SeededNoise</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="member-name-link"><a href="squidpony/squidmath/ValueNoise.html#getNoiseWithSeed(double,double,double,long)">getNoiseWithSeed(double, double, double, long)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/ValueNoise.html" title="class in squidpony.squidmath">ValueNoise</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="member-name-link"><a href="squidpony/squidmath/WaveNoise.html#getNoiseWithSeed(double,double,double,long)">getNoiseWithSeed(double, double, double, long)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/WaveNoise.html" title="class in squidpony.squidmath">WaveNoise</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="member-name-link"><a href="squidpony/squidmath/WhirlingNoise.html#getNoiseWithSeed(double,double,double,long)">getNoiseWithSeed(double, double, double, long)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/WhirlingNoise.html" title="class in squidpony.squidmath">WhirlingNoise</a></dt>
 <dd>
@@ -10028,9 +10071,15 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><span class="member-name-link"><a href="squidpony/squidmath/Noise.Warped2D.html#getNoiseWithSeed(double,double,long)">getNoiseWithSeed(double, double, long)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/Noise.Warped2D.html" title="class in squidpony.squidmath">Noise.Warped2D</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="member-name-link"><a href="squidpony/squidmath/OpenSimplex2F.html#getNoiseWithSeed(double,double,long)">getNoiseWithSeed(double, double, long)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/OpenSimplex2F.html" title="class in squidpony.squidmath">OpenSimplex2F</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="member-name-link"><a href="squidpony/squidmath/OpenSimplex2S.html#getNoiseWithSeed(double,double,long)">getNoiseWithSeed(double, double, long)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/OpenSimplex2S.html" title="class in squidpony.squidmath">OpenSimplex2S</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="member-name-link"><a href="squidpony/squidmath/SeededNoise.html#getNoiseWithSeed(double,double,long)">getNoiseWithSeed(double, double, long)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/SeededNoise.html" title="class in squidpony.squidmath">SeededNoise</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="member-name-link"><a href="squidpony/squidmath/ValueNoise.html#getNoiseWithSeed(double,double,long)">getNoiseWithSeed(double, double, long)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/ValueNoise.html" title="class in squidpony.squidmath">ValueNoise</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="member-name-link"><a href="squidpony/squidmath/WaveNoise.html#getNoiseWithSeed(double,double,long)">getNoiseWithSeed(double, double, long)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/WaveNoise.html" title="class in squidpony.squidmath">WaveNoise</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="member-name-link"><a href="squidpony/squidmath/WhirlingNoise.html#getNoiseWithSeed(double,double,long)">getNoiseWithSeed(double, double, long)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/WhirlingNoise.html" title="class in squidpony.squidmath">WhirlingNoise</a></dt>
 <dd>
@@ -10237,12 +10286,6 @@ loadScripts(document, 'script');</script>
  predictable behavior for identical RNG seeds, though it will get a random element just fine for any Collection
  (just not predictably in all cases).</div>
 </dd>
-<dt><span class="member-name-link"><a href="squidpony/squidmath/RNG.html#getRandomElement(java.util.Collection)">getRandomElement(Collection&lt;T&gt;)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a></dt>
-<dd>
-<div class="block">Returns a random element from the provided Collection, which should have predictable iteration order if you want
- predictable behavior for identical RNG seeds, though it will get a random element just fine for any Collection
- (just not predictably in all cases).</div>
-</dd>
 <dt><span class="member-name-link"><a href="squidpony/squidmath/AbstractRNG.html#getRandomElement(java.util.List)">getRandomElement(List&lt;T&gt;)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/AbstractRNG.html" title="class in squidpony.squidmath">AbstractRNG</a></dt>
 <dd>
 <div class="block">Returns a random element from the provided list.</div>
@@ -10254,10 +10297,6 @@ loadScripts(document, 'script');</script>
 <div class="block">Returns a random element from the provided list.</div>
 </dd>
 <dt><span class="member-name-link"><a href="squidpony/squidmath/IRNG.html#getRandomElement(java.util.List)">getRandomElement(List&lt;T&gt;)</a></span> - Method in interface squidpony.squidmath.<a href="squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a></dt>
-<dd>
-<div class="block">Returns a random element from the provided list.</div>
-</dd>
-<dt><span class="member-name-link"><a href="squidpony/squidmath/RNG.html#getRandomElement(java.util.List)">getRandomElement(List&lt;T&gt;)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a></dt>
 <dd>
 <div class="block">Returns a random element from the provided list.</div>
 </dd>
@@ -10561,6 +10600,10 @@ loadScripts(document, 'script');</script>
 <div class="block">Gets the current state of this generator.</div>
 </dd>
 <dt><span class="member-name-link"><a href="squidpony/squidmath/SilkRNG.html#getState()">getState()</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/SilkRNG.html" title="class in squidpony.squidmath">SilkRNG</a></dt>
+<dd>
+<div class="block">Get the current internal state of the StatefulRandomness as a long.</div>
+</dd>
+<dt><span class="member-name-link"><a href="squidpony/squidmath/SpecifiedRandomness.html#getState()">getState()</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/SpecifiedRandomness.html" title="class in squidpony.squidmath">SpecifiedRandomness</a></dt>
 <dd>
 <div class="block">Get the current internal state of the StatefulRandomness as a long.</div>
 </dd>
@@ -10953,6 +10996,8 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><span class="member-name-link"><a href="squidpony/squidmath/JitterNoise.html#gradCoord2D(long,int,int,double,double)">gradCoord2D(long, int, int, double, double)</a></span> - Static method in class squidpony.squidmath.<a href="squidpony/squidmath/JitterNoise.html" title="class in squidpony.squidmath">JitterNoise</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="member-name-link"><a href="squidpony/squidmath/WaveNoise.html#gradCoord2D(long,int,int,double,double)">gradCoord2D(long, int, int, double, double)</a></span> - Static method in class squidpony.squidmath.<a href="squidpony/squidmath/WaveNoise.html" title="class in squidpony.squidmath">WaveNoise</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="member-name-link"><a href="squidpony/squidmath/FastNoise.html#gradCoord3D(int,int,int,int,float,float,float)">gradCoord3D(int, int, int, int, float, float, float)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/FastNoise.html" title="class in squidpony.squidmath">FastNoise</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="member-name-link"><a href="squidpony/squidmath/ClassicNoise.html#gradCoord3D(long,int,int,int,double,double,double)">gradCoord3D(long, int, int, int, double, double, double)</a></span> - Static method in class squidpony.squidmath.<a href="squidpony/squidmath/ClassicNoise.html" title="class in squidpony.squidmath">ClassicNoise</a></dt>
@@ -10963,11 +11008,15 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Computes the hash for a 3D int point and its dot product with a 3D double point as one step.</div>
 </dd>
+<dt><span class="member-name-link"><a href="squidpony/squidmath/WaveNoise.html#gradCoord3D(long,int,int,int,double,double,double)">gradCoord3D(long, int, int, int, double, double, double)</a></span> - Static method in class squidpony.squidmath.<a href="squidpony/squidmath/WaveNoise.html" title="class in squidpony.squidmath">WaveNoise</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="member-name-link"><a href="squidpony/squidmath/FastNoise.html#gradCoord4D(int,int,int,int,int,float,float,float,float)">gradCoord4D(int, int, int, int, int, float, float, float, float)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/FastNoise.html" title="class in squidpony.squidmath">FastNoise</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="member-name-link"><a href="squidpony/squidmath/ClassicNoise.html#gradCoord4D(long,int,int,int,int,double,double,double,double)">gradCoord4D(long, int, int, int, int, double, double, double, double)</a></span> - Static method in class squidpony.squidmath.<a href="squidpony/squidmath/ClassicNoise.html" title="class in squidpony.squidmath">ClassicNoise</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="member-name-link"><a href="squidpony/squidmath/JitterNoise.html#gradCoord4D(long,int,int,int,int,double,double,double,double)">gradCoord4D(long, int, int, int, int, double, double, double, double)</a></span> - Static method in class squidpony.squidmath.<a href="squidpony/squidmath/JitterNoise.html" title="class in squidpony.squidmath">JitterNoise</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="member-name-link"><a href="squidpony/squidmath/WaveNoise.html#gradCoord4D(long,int,int,int,int,double,double,double,double)">gradCoord4D(long, int, int, int, int, double, double, double, double)</a></span> - Static method in class squidpony.squidmath.<a href="squidpony/squidmath/WaveNoise.html" title="class in squidpony.squidmath">WaveNoise</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="member-name-link"><a href="squidpony/squidmath/FastNoise.html#gradCoord5D(int,int,int,int,int,int,float,float,float,float,float)">gradCoord5D(int, int, int, int, int, int, float, float, float, float, float)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/FastNoise.html" title="class in squidpony.squidmath">FastNoise</a></dt>
 <dd>&nbsp;</dd>
@@ -10975,11 +11024,15 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><span class="member-name-link"><a href="squidpony/squidmath/SeededNoise.html#gradCoord5D(long,int,int,int,int,int,double,double,double,double,double)">gradCoord5D(long, int, int, int, int, int, double, double, double, double, double)</a></span> - Static method in class squidpony.squidmath.<a href="squidpony/squidmath/SeededNoise.html" title="class in squidpony.squidmath">SeededNoise</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="member-name-link"><a href="squidpony/squidmath/WaveNoise.html#gradCoord5D(long,int,int,int,int,int,double,double,double,double,double)">gradCoord5D(long, int, int, int, int, int, double, double, double, double, double)</a></span> - Static method in class squidpony.squidmath.<a href="squidpony/squidmath/WaveNoise.html" title="class in squidpony.squidmath">WaveNoise</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="member-name-link"><a href="squidpony/squidmath/FastNoise.html#gradCoord6D(int,int,int,int,int,int,int,float,float,float,float,float,float)">gradCoord6D(int, int, int, int, int, int, int, float, float, float, float, float, float)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/FastNoise.html" title="class in squidpony.squidmath">FastNoise</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="member-name-link"><a href="squidpony/squidmath/ClassicNoise.html#gradCoord6D(long,int,int,int,int,int,int,double,double,double,double,double,double)">gradCoord6D(long, int, int, int, int, int, int, double, double, double, double, double, double)</a></span> - Static method in class squidpony.squidmath.<a href="squidpony/squidmath/ClassicNoise.html" title="class in squidpony.squidmath">ClassicNoise</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="member-name-link"><a href="squidpony/squidmath/JitterNoise.html#gradCoord6D(long,int,int,int,int,int,int,double,double,double,double,double,double)">gradCoord6D(long, int, int, int, int, int, int, double, double, double, double, double, double)</a></span> - Static method in class squidpony.squidmath.<a href="squidpony/squidmath/JitterNoise.html" title="class in squidpony.squidmath">JitterNoise</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="member-name-link"><a href="squidpony/squidmath/WaveNoise.html#gradCoord6D(long,int,int,int,int,int,int,double,double,double,double,double,double)">gradCoord6D(long, int, int, int, int, int, int, double, double, double, double, double, double)</a></span> - Static method in class squidpony.squidmath.<a href="squidpony/squidmath/WaveNoise.html" title="class in squidpony.squidmath">WaveNoise</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="member-name-link"><a href="squidpony/IColorCenter.html#gradient(T,T)">gradient(T, T)</a></span> - Method in interface squidpony.<a href="squidpony/IColorCenter.html" title="interface in squidpony">IColorCenter</a></dt>
 <dd>
@@ -14109,6 +14162,8 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><span class="member-name-link"><a href="squidpony/squidmath/ValueNoise.html#instance">instance</a></span> - Static variable in class squidpony.squidmath.<a href="squidpony/squidmath/ValueNoise.html" title="class in squidpony.squidmath">ValueNoise</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="member-name-link"><a href="squidpony/squidmath/WaveNoise.html#instance">instance</a></span> - Static variable in class squidpony.squidmath.<a href="squidpony/squidmath/WaveNoise.html" title="class in squidpony.squidmath">WaveNoise</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="member-name-link"><a href="squidpony/squidmath/WhirlingNoise.html#instance">instance</a></span> - Static variable in class squidpony.squidmath.<a href="squidpony/squidmath/WhirlingNoise.html" title="class in squidpony.squidmath">WhirlingNoise</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="member-name-link"><a href="squidpony/squidmath/WhiteNoise.html#instance">instance</a></span> - Static variable in class squidpony.squidmath.<a href="squidpony/squidmath/WhiteNoise.html" title="class in squidpony.squidmath">WhiteNoise</a></dt>
@@ -16258,20 +16313,20 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><span class="member-name-link"><a href="squidpony/Thesaurus.html#makeFlowerName()">makeFlowerName()</a></span> - Method in class squidpony.<a href="squidpony/Thesaurus.html" title="class in squidpony">Thesaurus</a></dt>
 <dd>
-<div class="block">Generates a random possible name for a plant or tree, such as "tulip of Jirui" or "Komert's thorny lilac".</div>
+<div class="block">Generates a random possible name for a flower or flowering plant, such as "tulip of Jirui" or "thorny lilac".</div>
 </dd>
 <dt><span class="member-name-link"><a href="squidpony/Thesaurus.html#makeFlowerName(squidpony.FakeLanguageGen)">makeFlowerName(FakeLanguageGen)</a></span> - Method in class squidpony.<a href="squidpony/Thesaurus.html" title="class in squidpony">Thesaurus</a></dt>
 <dd>
-<div class="block">Generates a random possible name for a plant or tree, such as "tulip of Jirui" or "Komert's thorny lilac",
+<div class="block">Generates a random possible name for a flower or flowering plant, such as "tulip of Jirui" or "thorny lilac",
  with the FakeLanguageGen already available instead of randomly created.</div>
 </dd>
 <dt><span class="member-name-link"><a href="squidpony/Thesaurus.html#makeFruitName()">makeFruitName()</a></span> - Method in class squidpony.<a href="squidpony/Thesaurus.html" title="class in squidpony">Thesaurus</a></dt>
 <dd>
-<div class="block">Generates a random possible name for a plant or tree, such as "green lime-melon" or "Ung's date".</div>
+<div class="block">Generates a random possible name for a fruit, such as "green lime-melon" or "Ung's date".</div>
 </dd>
 <dt><span class="member-name-link"><a href="squidpony/Thesaurus.html#makeFruitName(squidpony.FakeLanguageGen)">makeFruitName(FakeLanguageGen)</a></span> - Method in class squidpony.<a href="squidpony/Thesaurus.html" title="class in squidpony">Thesaurus</a></dt>
 <dd>
-<div class="block">Generates a random possible name for a plant or tree, such as "green lime-melon" or "Ung's date",
+<div class="block">Generates a random possible name for a fruit, such as "green lime-melon" or "Ung's date",
  with the FakeLanguageGen already available instead of randomly created.</div>
 </dd>
 <dt><span class="member-name-link"><a href="squidpony/squidgrid/mapping/MetsaMapFactory.html#makeHeightMap()">makeHeightMap()</a></span> - Method in class squidpony.squidgrid.mapping.<a href="squidpony/squidgrid/mapping/MetsaMapFactory.html" title="class in squidpony.squidgrid.mapping">MetsaMapFactory</a></dt>
@@ -16398,11 +16453,11 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><span class="member-name-link"><a href="squidpony/Thesaurus.html#makeNutName()">makeNutName()</a></span> - Method in class squidpony.<a href="squidpony/Thesaurus.html" title="class in squidpony">Thesaurus</a></dt>
 <dd>
-<div class="block">Generates a random possible name for a plant or tree, such as "nut of Gikoim" or "Pelyt's cashew".</div>
+<div class="block">Generates a random possible name for a nut or bean, such as "nut of Gikoim" or "Pelyt's cashew".</div>
 </dd>
 <dt><span class="member-name-link"><a href="squidpony/Thesaurus.html#makeNutName(squidpony.FakeLanguageGen)">makeNutName(FakeLanguageGen)</a></span> - Method in class squidpony.<a href="squidpony/Thesaurus.html" title="class in squidpony">Thesaurus</a></dt>
 <dd>
-<div class="block">Generates a random possible name for a plant or tree, such as "nut of Gikoim" or "Pelyt's cashew",
+<div class="block">Generates a random possible name for a nut or bean, such as "nut of Gikoim" or "Pelyt's cashew",
  with the FakeLanguageGen already available instead of randomly created.</div>
 </dd>
 <dt><span class="member-name-link"><a href="squidpony/squidmath/Coord.html#makeOdd()">makeOdd()</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></dt>
@@ -16470,6 +16525,14 @@ loadScripts(document, 'script');</script>
 <dt><span class="member-name-link"><a href="squidpony/Maker.html#makeUOS(T...)">makeUOS(T...)</a></span> - Static method in class squidpony.<a href="squidpony/Maker.html" title="class in squidpony">Maker</a></dt>
 <dd>
 <div class="block">Makes an UnorderedSet (UOS) of T given an array or vararg of T elements.</div>
+</dd>
+<dt><span class="member-name-link"><a href="squidpony/Thesaurus.html#makeVegetableName()">makeVegetableName()</a></span> - Method in class squidpony.<a href="squidpony/Thesaurus.html" title="class in squidpony">Thesaurus</a></dt>
+<dd>
+<div class="block">Generates a random possible name for a vegetable, such as "miniature yam" or Iliakshe's spicy zucchini".</div>
+</dd>
+<dt><span class="member-name-link"><a href="squidpony/Thesaurus.html#makeVegetableName(squidpony.FakeLanguageGen)">makeVegetableName(FakeLanguageGen)</a></span> - Method in class squidpony.<a href="squidpony/Thesaurus.html" title="class in squidpony">Thesaurus</a></dt>
+<dd>
+<div class="block">Generates a random possible name for a vegetable, such as "miniature yam" or Iliakshe's spicy zucchini".</div>
 </dd>
 <dt><span class="member-name-link"><a href="squidpony/squidgrid/mapping/WildMap.html#makeVegetation(squidpony.squidmath.IRNG,int,double,squidpony.FakeLanguageGen)">makeVegetation(IRNG, int, double, FakeLanguageGen)</a></span> - Static method in class squidpony.squidgrid.mapping.<a href="squidpony/squidgrid/mapping/WildMap.html" title="class in squidpony.squidgrid.mapping">WildMap</a></dt>
 <dd>&nbsp;</dd>
@@ -18176,6 +18239,11 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><span class="member-name-link"><a href="squidpony/squidmath/SobolQRNG.html#next(int)">next(int)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/SobolQRNG.html" title="class in squidpony.squidmath">SobolQRNG</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="member-name-link"><a href="squidpony/squidmath/SpecifiedRandomness.html#next(int)">next(int)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/SpecifiedRandomness.html" title="class in squidpony.squidmath">SpecifiedRandomness</a></dt>
+<dd>
+<div class="block">Using this method, any algorithm that might use the built-in Java Random
+ can interface with this randomness source.</div>
+</dd>
 <dt><span class="member-name-link"><a href="squidpony/squidmath/Starfish32RNG.html#next(int)">next(int)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/Starfish32RNG.html" title="class in squidpony.squidmath">Starfish32RNG</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="member-name-link"><a href="squidpony/squidmath/TangleRNG.html#next(int)">next(int)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/TangleRNG.html" title="class in squidpony.squidmath">TangleRNG</a></dt>
@@ -18485,10 +18553,6 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Gets a uniform random double in the range [0.0,outer) given a positive parameter outer.</div>
 </dd>
-<dt><span class="member-name-link"><a href="squidpony/squidmath/RNG.html#nextDouble(double)">nextDouble(double)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a></dt>
-<dd>
-<div class="block">This returns a random double between 0.0 (inclusive) and outer (exclusive).</div>
-</dd>
 <dt><span class="member-name-link"><a href="squidpony/squidmath/SobolQRNG.html#nextDouble(double)">nextDouble(double)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/SobolQRNG.html" title="class in squidpony.squidmath">SobolQRNG</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="member-name-link"><a href="squidpony/squidmath/BathtubDistribution.html#nextDouble(squidpony.squidmath.IRNG)">nextDouble(IRNG)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/BathtubDistribution.html" title="class in squidpony.squidmath">BathtubDistribution</a></dt>
@@ -18611,10 +18675,6 @@ loadScripts(document, 'script');</script>
 <div class="block">This returns a random float between 0.0f (inclusive) and outer (exclusive).</div>
 </dd>
 <dt><span class="member-name-link"><a href="squidpony/squidmath/IRNG.html#nextFloat(float)">nextFloat(float)</a></span> - Method in interface squidpony.squidmath.<a href="squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a></dt>
-<dd>
-<div class="block">This returns a random float between 0.0f (inclusive) and outer (exclusive).</div>
-</dd>
-<dt><span class="member-name-link"><a href="squidpony/squidmath/RNG.html#nextFloat(float)">nextFloat(float)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a></dt>
 <dd>
 <div class="block">This returns a random float between 0.0f (inclusive) and outer (exclusive).</div>
 </dd>
@@ -18834,11 +18894,6 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Exclusive on the outer bound.</div>
 </dd>
-<dt><span class="member-name-link"><a href="squidpony/squidmath/RNG.html#nextInt(int)">nextInt(int)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a></dt>
-<dd>
-<div class="block">Returns a random non-negative integer below the given bound, or 0 if the bound is 0 or
- negative.</div>
-</dd>
 <dt><span class="member-name-link"><a href="squidpony/squidmath/SilkRNG.html#nextInt(int)">nextInt(int)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/SilkRNG.html" title="class in squidpony.squidmath">SilkRNG</a></dt>
 <dd>
 <div class="block">Returns a random non-negative integer below the given bound, or 0 if the bound is 0 or
@@ -19051,6 +19106,11 @@ loadScripts(document, 'script');</script>
 <div class="block">Using this method, any algorithm that needs to efficiently generate more
  than 32 bits of random data can interface with this randomness source.</div>
 </dd>
+<dt><span class="member-name-link"><a href="squidpony/squidmath/SpecifiedRandomness.html#nextLong()">nextLong()</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/SpecifiedRandomness.html" title="class in squidpony.squidmath">SpecifiedRandomness</a></dt>
+<dd>
+<div class="block">Using this method, any algorithm that needs to efficiently generate more
+ than 32 bits of random data can interface with this randomness source.</div>
+</dd>
 <dt><span class="member-name-link"><a href="squidpony/squidmath/Starfish32RNG.html#nextLong()">nextLong()</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/Starfish32RNG.html" title="class in squidpony.squidmath">Starfish32RNG</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="member-name-link"><a href="squidpony/squidmath/TangleRNG.html#nextLong()">nextLong()</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/TangleRNG.html" title="class in squidpony.squidmath">TangleRNG</a></dt>
@@ -19143,10 +19203,6 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Exclusive on bound (which may be positive or negative), with an inner bound of 0.</div>
 </dd>
-<dt><span class="member-name-link"><a href="squidpony/squidmath/RNG.html#nextLong(long)">nextLong(long)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a></dt>
-<dd>
-<div class="block">Gets a pseudo-random long between 0 and bound.</div>
-</dd>
 <dt><span class="member-name-link"><a href="squidpony/squidmath/XoRoRNG.html#nextLong(long)">nextLong(long)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/XoRoRNG.html" title="class in squidpony.squidmath">XoRoRNG</a></dt>
 <dd>
 <div class="block">Exclusive on the outer bound; the inner bound is 0.</div>
@@ -19232,11 +19288,6 @@ loadScripts(document, 'script');</script>
 <div class="block">Returns a random non-negative integer between 0 (inclusive) and the given bound (exclusive),
  or 0 if the bound is 0.</div>
 </dd>
-<dt><span class="member-name-link"><a href="squidpony/squidmath/RNG.html#nextSignedInt(int)">nextSignedInt(int)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a></dt>
-<dd>
-<div class="block">Returns a random non-negative integer between 0 (inclusive) and the given bound (exclusive),
- or 0 if the bound is 0.</div>
-</dd>
 <dt><span class="member-name-link"><a href="squidpony/squidmath/AbstractRNG.html#nextSignedLong(long)">nextSignedLong(long)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/AbstractRNG.html" title="class in squidpony.squidmath">AbstractRNG</a></dt>
 <dd>
 <div class="block">Exclusive on bound (which may be positive or negative), with an inner bound of 0.</div>
@@ -19246,10 +19297,6 @@ loadScripts(document, 'script');</script>
 <div class="block">Exclusive on bound (which may be positive or negative), with an inner bound of 0.</div>
 </dd>
 <dt><span class="member-name-link"><a href="squidpony/squidmath/IRNG.html#nextSignedLong(long)">nextSignedLong(long)</a></span> - Method in interface squidpony.squidmath.<a href="squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a></dt>
-<dd>
-<div class="block">Exclusive on bound (which may be positive or negative), with an inner bound of 0.</div>
-</dd>
-<dt><span class="member-name-link"><a href="squidpony/squidmath/RNG.html#nextSignedLong(long)">nextSignedLong(long)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a></dt>
 <dd>
 <div class="block">Exclusive on bound (which may be positive or negative), with an inner bound of 0.</div>
 </dd>
@@ -19519,6 +19566,22 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="squidpony/squidmath/Noise.Warped6D.html" title="class in squidpony.squidmath"><span class="type-name-link">Noise.Warped6D</span></a> - Class in <a href="squidpony/squidmath/package-summary.html">squidpony.squidmath</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="member-name-link"><a href="squidpony/squidmath/OpenSimplex2F.html#noise2(double,double)">noise2(double, double)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/OpenSimplex2F.html" title="class in squidpony.squidmath">OpenSimplex2F</a></dt>
+<dd>
+<div class="block">2D Simplex noise, standard lattice orientation.</div>
+</dd>
+<dt><span class="member-name-link"><a href="squidpony/squidmath/OpenSimplex2S.html#noise2(double,double)">noise2(double, double)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/OpenSimplex2S.html" title="class in squidpony.squidmath">OpenSimplex2S</a></dt>
+<dd>
+<div class="block">2D SuperSimplex noise, standard lattice orientation.</div>
+</dd>
+<dt><span class="member-name-link"><a href="squidpony/squidmath/OpenSimplex2F.html#noise2_XBeforeY(double,double)">noise2_XBeforeY(double, double)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/OpenSimplex2F.html" title="class in squidpony.squidmath">OpenSimplex2F</a></dt>
+<dd>
+<div class="block">2D Simplex noise, with Y pointing down the main diagonal.</div>
+</dd>
+<dt><span class="member-name-link"><a href="squidpony/squidmath/OpenSimplex2S.html#noise2_XBeforeY(double,double)">noise2_XBeforeY(double, double)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/OpenSimplex2S.html" title="class in squidpony.squidmath">OpenSimplex2S</a></dt>
+<dd>
+<div class="block">2D SuperSimplex noise, with Y pointing down the main diagonal.</div>
+</dd>
 <dt><span class="member-name-link"><a href="squidpony/squidmath/MerlinNoise.html#noise2D(long,long)">noise2D(long, long)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/MerlinNoise.html" title="class in squidpony.squidmath">MerlinNoise</a></dt>
 <dd>
 <div class="block">2D Merlin noise; black and white much of the time but curving instead of angular.</div>
@@ -19531,6 +19594,32 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">2D Merlin noise; black and white much of the time but curving instead of angular.</div>
 </dd>
+<dt><span class="member-name-link"><a href="squidpony/squidmath/OpenSimplex2F.html#noise3_Classic(double,double,double)">noise3_Classic(double, double, double)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/OpenSimplex2F.html" title="class in squidpony.squidmath">OpenSimplex2F</a></dt>
+<dd>
+<div class="block">3D Re-oriented 4-point BCC noise, classic orientation.</div>
+</dd>
+<dt><span class="member-name-link"><a href="squidpony/squidmath/OpenSimplex2S.html#noise3_Classic(double,double,double)">noise3_Classic(double, double, double)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/OpenSimplex2S.html" title="class in squidpony.squidmath">OpenSimplex2S</a></dt>
+<dd>
+<div class="block">3D Re-oriented 8-point BCC noise, classic orientation
+ Proper substitute for what 3D SuperSimplex would be,
+ in light of Forbidden Formulae.</div>
+</dd>
+<dt><span class="member-name-link"><a href="squidpony/squidmath/OpenSimplex2F.html#noise3_XYBeforeZ(double,double,double)">noise3_XYBeforeZ(double, double, double)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/OpenSimplex2F.html" title="class in squidpony.squidmath">OpenSimplex2F</a></dt>
+<dd>
+<div class="block">3D Re-oriented 4-point BCC noise, with better visual isotropy in (X, Y).</div>
+</dd>
+<dt><span class="member-name-link"><a href="squidpony/squidmath/OpenSimplex2S.html#noise3_XYBeforeZ(double,double,double)">noise3_XYBeforeZ(double, double, double)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/OpenSimplex2S.html" title="class in squidpony.squidmath">OpenSimplex2S</a></dt>
+<dd>
+<div class="block">3D Re-oriented 8-point BCC noise, with better visual isotropy in (X, Y).</div>
+</dd>
+<dt><span class="member-name-link"><a href="squidpony/squidmath/OpenSimplex2F.html#noise3_XZBeforeY(double,double,double)">noise3_XZBeforeY(double, double, double)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/OpenSimplex2F.html" title="class in squidpony.squidmath">OpenSimplex2F</a></dt>
+<dd>
+<div class="block">3D Re-oriented 4-point BCC noise, with better visual isotropy in (X, Z).</div>
+</dd>
+<dt><span class="member-name-link"><a href="squidpony/squidmath/OpenSimplex2S.html#noise3_XZBeforeY(double,double,double)">noise3_XZBeforeY(double, double, double)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/OpenSimplex2S.html" title="class in squidpony.squidmath">OpenSimplex2S</a></dt>
+<dd>
+<div class="block">3D Re-oriented 8-point BCC noise, with better visual isotropy in (X, Z).</div>
+</dd>
 <dt><span class="member-name-link"><a href="squidpony/squidmath/MerlinNoise.html#noise3D(long,long,long)">noise3D(long, long, long)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/MerlinNoise.html" title="class in squidpony.squidmath">MerlinNoise</a></dt>
 <dd>
 <div class="block">3D Merlin noise; black and white much of the time but curving instead of angular.</div>
@@ -19542,6 +19631,40 @@ loadScripts(document, 'script');</script>
 <dt><span class="member-name-link"><a href="squidpony/squidmath/MerlinNoise.html#noise3D(long,long,long,long,int,int)">noise3D(long, long, long, long, int, int)</a></span> - Static method in class squidpony.squidmath.<a href="squidpony/squidmath/MerlinNoise.html" title="class in squidpony.squidmath">MerlinNoise</a></dt>
 <dd>
 <div class="block">3D merlin noise.</div>
+</dd>
+<dt><span class="member-name-link"><a href="squidpony/squidmath/OpenSimplex2F.html#noise4_Classic(double,double,double,double)">noise4_Classic(double, double, double, double)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/OpenSimplex2F.html" title="class in squidpony.squidmath">OpenSimplex2F</a></dt>
+<dd>
+<div class="block">4D OpenSimplex2F noise, classic lattice orientation.</div>
+</dd>
+<dt><span class="member-name-link"><a href="squidpony/squidmath/OpenSimplex2S.html#noise4_Classic(double,double,double,double)">noise4_Classic(double, double, double, double)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/OpenSimplex2S.html" title="class in squidpony.squidmath">OpenSimplex2S</a></dt>
+<dd>
+<div class="block">4D SuperSimplex noise, classic lattice orientation.</div>
+</dd>
+<dt><span class="member-name-link"><a href="squidpony/squidmath/OpenSimplex2F.html#noise4_XYBeforeZW(double,double,double,double)">noise4_XYBeforeZW(double, double, double, double)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/OpenSimplex2F.html" title="class in squidpony.squidmath">OpenSimplex2F</a></dt>
+<dd>
+<div class="block">4D OpenSimplex2F noise, with XY and ZW forming orthogonal triangular-based planes.</div>
+</dd>
+<dt><span class="member-name-link"><a href="squidpony/squidmath/OpenSimplex2S.html#noise4_XYBeforeZW(double,double,double,double)">noise4_XYBeforeZW(double, double, double, double)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/OpenSimplex2S.html" title="class in squidpony.squidmath">OpenSimplex2S</a></dt>
+<dd>
+<div class="block">4D SuperSimplex noise, with XY and ZW forming orthogonal triangular-based planes.</div>
+</dd>
+<dt><span class="member-name-link"><a href="squidpony/squidmath/OpenSimplex2F.html#noise4_XYZBeforeW(double,double,double,double)">noise4_XYZBeforeW(double, double, double, double)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/OpenSimplex2F.html" title="class in squidpony.squidmath">OpenSimplex2F</a></dt>
+<dd>
+<div class="block">4D OpenSimplex2F noise, with XYZ oriented like noise3_Classic,
+ and W for an extra degree of freedom.</div>
+</dd>
+<dt><span class="member-name-link"><a href="squidpony/squidmath/OpenSimplex2S.html#noise4_XYZBeforeW(double,double,double,double)">noise4_XYZBeforeW(double, double, double, double)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/OpenSimplex2S.html" title="class in squidpony.squidmath">OpenSimplex2S</a></dt>
+<dd>
+<div class="block">4D SuperSimplex noise, with XYZ oriented like noise3_Classic,
+ and W for an extra degree of freedom.</div>
+</dd>
+<dt><span class="member-name-link"><a href="squidpony/squidmath/OpenSimplex2F.html#noise4_XZBeforeYW(double,double,double,double)">noise4_XZBeforeYW(double, double, double, double)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/OpenSimplex2F.html" title="class in squidpony.squidmath">OpenSimplex2F</a></dt>
+<dd>
+<div class="block">4D OpenSimplex2F noise, with XZ and YW forming orthogonal triangular-based planes.</div>
+</dd>
+<dt><span class="member-name-link"><a href="squidpony/squidmath/OpenSimplex2S.html#noise4_XZBeforeYW(double,double,double,double)">noise4_XZBeforeYW(double, double, double, double)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/OpenSimplex2S.html" title="class in squidpony.squidmath">OpenSimplex2S</a></dt>
+<dd>
+<div class="block">4D SuperSimplex noise, with XZ and YW forming orthogonal triangular-based planes.</div>
 </dd>
 <dt><span class="member-name-link"><a href="squidpony/squidmath/WhirlingNoise.html#noiseAlt(double,double)">noiseAlt(double, double)</a></span> - Static method in class squidpony.squidmath.<a href="squidpony/squidmath/WhirlingNoise.html" title="class in squidpony.squidmath">WhirlingNoise</a></dt>
 <dd>
@@ -19870,6 +19993,26 @@ loadScripts(document, 'script');</script>
 <dt><span class="member-name-link"><a href="squidpony/FakeLanguageGen.html#openingVowels">openingVowels</a></span> - Variable in class squidpony.<a href="squidpony/FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="member-name-link"><a href="squidpony/squidgrid/MimicFill.html#openRooms">openRooms</a></span> - Static variable in class squidpony.squidgrid.<a href="squidpony/squidgrid/MimicFill.html" title="class in squidpony.squidgrid">MimicFill</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="squidpony/squidmath/OpenSimplex2F.html" title="class in squidpony.squidmath"><span class="type-name-link">OpenSimplex2F</span></a> - Class in <a href="squidpony/squidmath/package-summary.html">squidpony.squidmath</a></dt>
+<dd>
+<div class="block">K.jpg's OpenSimplex 2, faster variant
+ <br>
+ Using OpenSimplex 2 in its July 5, 2020 revision.</div>
+</dd>
+<dt><span class="member-name-link"><a href="squidpony/squidmath/OpenSimplex2F.html#%3Cinit%3E()">OpenSimplex2F()</a></span> - Constructor for class squidpony.squidmath.<a href="squidpony/squidmath/OpenSimplex2F.html" title="class in squidpony.squidmath">OpenSimplex2F</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="member-name-link"><a href="squidpony/squidmath/OpenSimplex2F.html#%3Cinit%3E(long)">OpenSimplex2F(long)</a></span> - Constructor for class squidpony.squidmath.<a href="squidpony/squidmath/OpenSimplex2F.html" title="class in squidpony.squidmath">OpenSimplex2F</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="squidpony/squidmath/OpenSimplex2S.html" title="class in squidpony.squidmath"><span class="type-name-link">OpenSimplex2S</span></a> - Class in <a href="squidpony/squidmath/package-summary.html">squidpony.squidmath</a></dt>
+<dd>
+<div class="block">K.jpg's OpenSimplex 2, smooth variant ("SuperSimplex")
+ <br>
+ Using OpenSimplex 2 in its July 5, 2020 revision.</div>
+</dd>
+<dt><span class="member-name-link"><a href="squidpony/squidmath/OpenSimplex2S.html#%3Cinit%3E()">OpenSimplex2S()</a></span> - Constructor for class squidpony.squidmath.<a href="squidpony/squidmath/OpenSimplex2S.html" title="class in squidpony.squidmath">OpenSimplex2S</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="member-name-link"><a href="squidpony/squidmath/OpenSimplex2S.html#%3Cinit%3E(long)">OpenSimplex2S(long)</a></span> - Constructor for class squidpony.squidmath.<a href="squidpony/squidmath/OpenSimplex2S.html" title="class in squidpony.squidmath">OpenSimplex2S</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="member-name-link"><a href="squidpony/squidgrid/Direction.html#opposite()">opposite()</a></span> - Method in enum squidpony.squidgrid.<a href="squidpony/squidgrid/Direction.html" title="enum in squidpony.squidgrid">Direction</a></dt>
 <dd>
@@ -23238,6 +23381,8 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><span class="member-name-link"><a href="squidpony/squidgrid/MimicWFC.html#result()">result()</a></span> - Method in class squidpony.squidgrid.<a href="squidpony/squidgrid/MimicWFC.html" title="class in squidpony.squidgrid">MimicWFC</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="member-name-link"><a href="squidpony/squidmath/SpecifiedRandomness.html#results">results</a></span> - Variable in class squidpony.squidmath.<a href="squidpony/squidmath/SpecifiedRandomness.html" title="class in squidpony.squidmath">SpecifiedRandomness</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="member-name-link"><a href="squidpony/squidgrid/zone/CoordPackerZone.html#retainAll(java.util.Collection)">retainAll(Collection&lt;?&gt;)</a></span> - Method in class squidpony.squidgrid.zone.<a href="squidpony/squidgrid/zone/CoordPackerZone.html" title="class in squidpony.squidgrid.zone">CoordPackerZone</a></dt>
 <dd>
 <div class="block">Does nothing (this Zone is immutable).</div>
@@ -23316,6 +23461,8 @@ loadScripts(document, 'script');</script>
 <dt><span class="member-name-link"><a href="squidpony/squidmath/GreasedRegion.html#retractSeriesToLimit()">retractSeriesToLimit()</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="member-name-link"><a href="squidpony/squidmath/GreasedRegion.html#retractSeriesToLimit8way()">retractSeriesToLimit8way()</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="member-name-link"><a href="squidpony/squidgrid/FOV.html#reuseBurstFOV(double%5B%5D%5B%5D,double%5B%5D%5B%5D,int,int,int,double,squidpony.squidgrid.Radius)">reuseBurstFOV(double[][], double[][], int, int, int, double, Radius)</a></span> - Static method in class squidpony.squidgrid.<a href="squidpony/squidgrid/FOV.html" title="class in squidpony.squidgrid">FOV</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="member-name-link"><a href="squidpony/squidgrid/FOV.html#reuseFOV(double%5B%5D%5B%5D,double%5B%5D%5B%5D,int,int)">reuseFOV(double[][], double[][], int, int)</a></span> - Static method in class squidpony.squidgrid.<a href="squidpony/squidgrid/FOV.html" title="class in squidpony.squidgrid">FOV</a></dt>
 <dd>
@@ -24296,6 +24443,8 @@ loadScripts(document, 'script');</script>
 <dt><span class="member-name-link"><a href="squidpony/squidmath/ShuffledIntSequence.html#seed">seed</a></span> - Variable in class squidpony.squidmath.<a href="squidpony/squidmath/ShuffledIntSequence.html" title="class in squidpony.squidmath">ShuffledIntSequence</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="member-name-link"><a href="squidpony/squidmath/ValueNoise.html#seed">seed</a></span> - Variable in class squidpony.squidmath.<a href="squidpony/squidmath/ValueNoise.html" title="class in squidpony.squidmath">ValueNoise</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="member-name-link"><a href="squidpony/squidmath/WaveNoise.html#seed">seed</a></span> - Variable in class squidpony.squidmath.<a href="squidpony/squidmath/WaveNoise.html" title="class in squidpony.squidmath">WaveNoise</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="member-name-link"><a href="squidpony/squidmath/BasicRandom64.html#seed(int)">seed(int)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/BasicRandom64.html" title="class in squidpony.squidmath">BasicRandom64</a></dt>
 <dd>
@@ -25289,6 +25438,10 @@ loadScripts(document, 'script');</script>
 <div class="block">Sets the seed (also the current state) of this generator.</div>
 </dd>
 <dt><span class="member-name-link"><a href="squidpony/squidmath/SilkRNG.html#setState(long)">setState(long)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/SilkRNG.html" title="class in squidpony.squidmath">SilkRNG</a></dt>
+<dd>
+<div class="block">Set the current internal state of this StatefulRandomness with a long.</div>
+</dd>
+<dt><span class="member-name-link"><a href="squidpony/squidmath/SpecifiedRandomness.html#setState(long)">setState(long)</a></span> - Method in class squidpony.squidmath.<a href="squidpony/squidmath/SpecifiedRandomness.html" title="class in squidpony.squidmath">SpecifiedRandomness</a></dt>
 <dd>
 <div class="block">Set the current internal state of this StatefulRandomness with a long.</div>
 </dd>
@@ -26453,6 +26606,25 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><span class="member-name-link"><a href="squidpony/StringConvert.html#specificName">specificName</a></span> - Variable in class squidpony.<a href="squidpony/StringConvert.html" title="class in squidpony">StringConvert</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="squidpony/squidmath/SpecifiedRandomness.html" title="class in squidpony.squidmath"><span class="type-name-link">SpecifiedRandomness</span></a> - Class in <a href="squidpony/squidmath/package-summary.html">squidpony.squidmath</a></dt>
+<dd>
+<div class="block">A specialized StatefulRandomness that produces a pre-determined sequence of results as <a href="squidpony/squidmath/SpecifiedRandomness.html#nextLong()"><code>SpecifiedRandomness.nextLong()</code></a>
+ and/or <a href="squidpony/squidmath/SpecifiedRandomness.html#next(int)"><code>SpecifiedRandomness.next(int)</code></a> are called.</div>
+</dd>
+<dt><span class="member-name-link"><a href="squidpony/squidmath/SpecifiedRandomness.html#%3Cinit%3E()">SpecifiedRandomness()</a></span> - Constructor for class squidpony.squidmath.<a href="squidpony/squidmath/SpecifiedRandomness.html" title="class in squidpony.squidmath">SpecifiedRandomness</a></dt>
+<dd>
+<div class="block">Constructs a SpecifiedRandomness that will produce the sequence:
+ <code>-1, 0, 9223372036854775807, -9223372036854775808</code>
+ in a cycle.</div>
+</dd>
+<dt><span class="member-name-link"><a href="squidpony/squidmath/SpecifiedRandomness.html#%3Cinit%3E(long...)">SpecifiedRandomness(long...)</a></span> - Constructor for class squidpony.squidmath.<a href="squidpony/squidmath/SpecifiedRandomness.html" title="class in squidpony.squidmath">SpecifiedRandomness</a></dt>
+<dd>
+<div class="block">Constructs a SpecifiedRandomness given a non-null, non-empty array or vararg of long results.</div>
+</dd>
+<dt><span class="member-name-link"><a href="squidpony/squidmath/SpecifiedRandomness.html#%3Cinit%3E(squidpony.squidmath.SpecifiedRandomness)">SpecifiedRandomness(SpecifiedRandomness)</a></span> - Constructor for class squidpony.squidmath.<a href="squidpony/squidmath/SpecifiedRandomness.html" title="class in squidpony.squidmath">SpecifiedRandomness</a></dt>
+<dd>
+<div class="block">Copies the given SpecifiedRandomness into a new one, using the same state and results sequence.</div>
+</dd>
 <dt><span class="member-name-link"><a href="squidpony/squidgrid/Radius.html#SPHERE">SPHERE</a></span> - squidpony.squidgrid.<a href="squidpony/squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a></dt>
 <dd>
 <div class="block">In an unobstructed area the FOV would be a sphere.</div>
@@ -26836,7 +27008,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Recalculate the spillMap and return the spreadPattern.</div>
 </dd>
-<dt><span class="member-name-link"><a href="squidpony/squidgrid/Spill.html#start(squidpony.squidmath.Coord,int,java.util.Set)">start(Coord, int, Set&lt;Coord&gt;)</a></span> - Method in class squidpony.squidgrid.<a href="squidpony/squidgrid/Spill.html" title="class in squidpony.squidgrid">Spill</a></dt>
+<dt><span class="member-name-link"><a href="squidpony/squidgrid/Spill.html#start(squidpony.squidmath.Coord,int,java.util.Collection)">start(Coord, int, Collection&lt;Coord&gt;)</a></span> - Method in class squidpony.squidgrid.<a href="squidpony/squidgrid/Spill.html" title="class in squidpony.squidgrid">Spill</a></dt>
 <dd>
 <div class="block">Recalculate the spillMap and return the spreadPattern.</div>
 </dd>
@@ -26885,6 +27057,8 @@ loadScripts(document, 'script');</script>
 <div class="block">The state can be seeded with any value.</div>
 </dd>
 <dt><span class="member-name-link"><a href="squidpony/squidmath/PintRNG.html#state">state</a></span> - Variable in class squidpony.squidmath.<a href="squidpony/squidmath/PintRNG.html" title="class in squidpony.squidmath">PintRNG</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="member-name-link"><a href="squidpony/squidmath/SpecifiedRandomness.html#state">state</a></span> - Variable in class squidpony.squidmath.<a href="squidpony/squidmath/SpecifiedRandomness.html" title="class in squidpony.squidmath">SpecifiedRandomness</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="member-name-link"><a href="squidpony/squidmath/ThrustAltRNG.html#state">state</a></span> - Variable in class squidpony.squidmath.<a href="squidpony/squidmath/ThrustAltRNG.html" title="class in squidpony.squidmath">ThrustAltRNG</a></dt>
 <dd>
@@ -29083,6 +29257,8 @@ the order they are declared.</div>
 <dd>&nbsp;</dd>
 <dt><span class="member-name-link"><a href="squidpony/squidmath/MitchellNoise.Vec4.html#%3Cinit%3E(double,double,double,double)">Vec4(double, double, double, double)</a></span> - Constructor for class squidpony.squidmath.<a href="squidpony/squidmath/MitchellNoise.Vec4.html" title="class in squidpony.squidmath">MitchellNoise.Vec4</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="member-name-link"><a href="squidpony/Thesaurus.html#vegetableTermShuffler">vegetableTermShuffler</a></span> - Variable in class squidpony.<a href="squidpony/Thesaurus.html" title="class in squidpony">Thesaurus</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="member-name-link"><a href="squidpony/squidmath/CrossHash.Curlup.html#vepar">vepar</a></span> - Static variable in class squidpony.squidmath.<a href="squidpony/squidmath/CrossHash.Curlup.html" title="class in squidpony.squidmath">CrossHash.Curlup</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="member-name-link"><a href="squidpony/squidmath/CrossHash.Yolk.html#vepar">vepar</a></span> - Static variable in class squidpony.squidmath.<a href="squidpony/squidmath/CrossHash.Yolk.html" title="class in squidpony.squidmath">CrossHash.Yolk</a></dt>
@@ -29381,6 +29557,15 @@ the order they are declared.</div>
 <dd>
 <div class="block">Water, represented by '~'</div>
 </dd>
+<dt><a href="squidpony/squidmath/WaveNoise.html" title="class in squidpony.squidmath"><span class="type-name-link">WaveNoise</span></a> - Class in <a href="squidpony/squidmath/package-summary.html">squidpony.squidmath</a></dt>
+<dd>
+<div class="block">A variant on gradient or Perlin noise, <a href="https://www.shadertoy.com/view/tldSRj">explored by Inigo Quilez
+ here</a> and initially discovered by "robobo1221".</div>
+</dd>
+<dt><span class="member-name-link"><a href="squidpony/squidmath/WaveNoise.html#%3Cinit%3E()">WaveNoise()</a></span> - Constructor for class squidpony.squidmath.<a href="squidpony/squidmath/WaveNoise.html" title="class in squidpony.squidmath">WaveNoise</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="member-name-link"><a href="squidpony/squidmath/WaveNoise.html#%3Cinit%3E(long)">WaveNoise(long)</a></span> - Constructor for class squidpony.squidmath.<a href="squidpony/squidmath/WaveNoise.html" title="class in squidpony.squidmath">WaveNoise</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="squidpony/squidai/WaypointPathfinder.html" title="class in squidpony.squidai"><span class="type-name-link">WaypointPathfinder</span></a> - Class in <a href="squidpony/squidai/package-summary.html">squidpony.squidai</a></dt>
 <dd>
 <div class="block">Pathfind to known connections between rooms or other "chokepoints" without needing full-map Dijkstra scans.</div>
@@ -30099,6 +30284,10 @@ the order they are declared.</div>
 </dd>
 <dt><span class="member-name-link"><a href="squidpony/squidmath/GlitchNoise.html#zigzagRandomized(long,double)">zigzagRandomized(long, double)</a></span> - Static method in class squidpony.squidmath.<a href="squidpony/squidmath/GlitchNoise.html" title="class in squidpony.squidmath">GlitchNoise</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="member-name-link"><a href="squidpony/squidmath/WaveNoise.html#zigzagTight(double)">zigzagTight(double)</a></span> - Static method in class squidpony.squidmath.<a href="squidpony/squidmath/WaveNoise.html" title="class in squidpony.squidmath">WaveNoise</a></dt>
+<dd>
+<div class="block">Just in case we need a version of <a href="squidpony/squidmath/NumberTools.html#zigzag(double)"><code>NumberTools.zigzag(double)</code></a> that outputs 0.0 to 1.0.</div>
+</dd>
 <dt><a href="squidpony/squidai/ZOI.html" title="class in squidpony.squidai"><span class="type-name-link">ZOI</span></a> - Class in <a href="squidpony/squidai/package-summary.html">squidpony.squidai</a></dt>
 <dd>
 <div class="block">Calculates the Zone of Influence, also known as Zone of Control, for different points on a map.</div>
@@ -30110,6 +30299,10 @@ the order they are declared.</div>
 <dt><span class="member-name-link"><a href="squidpony/squidai/ZOI.html#%3Cinit%3E(squidpony.squidmath.Coord%5B%5D,char%5B%5D%5B%5D,squidpony.squidgrid.Radius)">ZOI(Coord[], char[][], Radius)</a></span> - Constructor for class squidpony.squidai.<a href="squidpony/squidai/ZOI.html" title="class in squidpony.squidai">ZOI</a></dt>
 <dd>
 <div class="block">Constructs a Zone of Influence map.</div>
+</dd>
+<dt><span class="member-name-link"><a href="squidpony/Thesaurus.html#ZOMBIE">ZOMBIE</a></span> - Static variable in class squidpony.<a href="squidpony/Thesaurus.html" title="class in squidpony">Thesaurus</a></dt>
+<dd>
+<div class="block">Thesaurus preset that sharply reduces the used letters to only: a, b, g, h, m, n, r, and z.</div>
 </dd>
 <dt><a href="squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone"><span class="type-name-link">Zone</span></a> - Interface in <a href="squidpony/squidgrid/zone/package-summary.html">squidpony.squidgrid.zone</a></dt>
 <dd>

@@ -268,13 +268,13 @@
 <span class="source-line-no">256</span><span id="line.256">     * The inclusive and exclusive behavior is to match the behavior of the</span>
 <span class="source-line-no">257</span><span id="line.257">     * similar method that deals with floating point values.</span>
 <span class="source-line-no">258</span><span id="line.258">     *</span>
-<span class="source-line-no">259</span><span id="line.259">     * @param min the minimum bound on the return value (inclusive)</span>
-<span class="source-line-no">260</span><span id="line.260">     * @param max the maximum bound on the return value (exclusive)</span>
+<span class="source-line-no">259</span><span id="line.259">     * @param inner the minimum bound on the return value (inclusive)</span>
+<span class="source-line-no">260</span><span id="line.260">     * @param outer the maximum bound on the return value (exclusive)</span>
 <span class="source-line-no">261</span><span id="line.261">     * @return the found value</span>
 <span class="source-line-no">262</span><span id="line.262">     */</span>
 <span class="source-line-no">263</span><span id="line.263">    @Override</span>
-<span class="source-line-no">264</span><span id="line.264">    public long between(long min, long max) {</span>
-<span class="source-line-no">265</span><span id="line.265">        return min + nextLong(max - min);</span>
+<span class="source-line-no">264</span><span id="line.264">    public long between(long inner, long outer) {</span>
+<span class="source-line-no">265</span><span id="line.265">        return inner + nextLong(outer - inner);</span>
 <span class="source-line-no">266</span><span id="line.266">    }</span>
 <span class="source-line-no">267</span><span id="line.267"></span>
 <span class="source-line-no">268</span><span id="line.268">    /**</span>

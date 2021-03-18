@@ -85,11 +85,12 @@ loadScripts(document, 'script');</script>
 <dd><code>java.io.Serializable</code></dd>
 </dl>
 <hr>
-<pre>public class <a href="../../src-html/squidpony/squidgrid/Spill.html#line.14">Spill</a>
+<pre>public class <a href="../../src-html/squidpony/squidgrid/Spill.html#line.17">Spill</a>
 extends java.lang.Object
 implements java.io.Serializable</pre>
 <div class="block">A randomized flood-fill implementation that can be used for level generation (e.g. filling ponds and lakes), for
  gas propagation, or for all sorts of fluid-dynamics-on-the-cheap.
+ <br>
  Created by Tommy Ettinger on 4/7/2015.</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -355,9 +356,9 @@ int&nbsp;y)</code></th>
 </tr>
 <tr class="row-color" id="i9">
 <td class="col-first"><code>java.util.ArrayList&lt;<a href="../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
-<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#start(squidpony.squidmath.Coord,int,java.util.Set)">start</a></span>&#8203;(<a href="../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;entry,
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#start(squidpony.squidmath.Coord,int,java.util.Collection)">start</a></span>&#8203;(<a href="../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;entry,
 int&nbsp;volume,
-java.util.Set&lt;<a href="../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;impassable)</code></th>
+java.util.Collection&lt;<a href="../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;impassable)</code></th>
 <td class="col-last">
 <div class="block">Recalculate the spillMap and return the spreadPattern.</div>
 </td>
@@ -383,7 +384,7 @@ java.util.Set&lt;<a href="../squidmath/Coord.html" title="class in squidpony.squ
 <li>
 <section class="detail" id="measurement">
 <h3>measurement</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Measurement.html" title="enum in squidpony.squidgrid">Measurement</a></span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidgrid/Spill.html#line.27">measurement</a></span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Measurement.html" title="enum in squidpony.squidgrid">Measurement</a></span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidgrid/Spill.html#line.30">measurement</a></span></div>
 <div class="block">This affects how distance is measured on diagonal directions vs. orthogonal directions. MANHATTAN should form a
  diamond shape on a featureless map, while CHEBYSHEV and EUCLIDEAN will form a square. If you only call
  Spill.start() once, you should strongly prefer MANHATTAN, even if the rest of the game uses another
@@ -397,7 +398,7 @@ java.util.Set&lt;<a href="../squidmath/Coord.html" title="class in squidpony.squ
 <li>
 <section class="detail" id="physicalMap">
 <h3>physicalMap</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean[][]</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidgrid/Spill.html#line.35">physicalMap</a></span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean[][]</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidgrid/Spill.html#line.38">physicalMap</a></span></div>
 <div class="block">Stores which parts of the map are accessible (with a value of true) and which are not (with a value of false,
  including both walls and unreachable sections of the map). Should not be changed unless the actual physical
  terrain has changed. You should call initialize() with a new map instead of changing this directly.</div>
@@ -406,14 +407,14 @@ java.util.Set&lt;<a href="../squidmath/Coord.html" title="class in squidpony.squ
 <li>
 <section class="detail" id="spillMap">
 <h3>spillMap</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean[][]</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidgrid/Spill.html#line.39">spillMap</a></span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean[][]</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidgrid/Spill.html#line.42">spillMap</a></span></div>
 <div class="block">The cells that are filled by the Spill when it reaches its volume or limits will be true; others will be false.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="spreadPattern">
 <h3>spreadPattern</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">java.util.ArrayList&lt;<a href="../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidgrid/Spill.html#line.45">spreadPattern</a></span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">java.util.ArrayList&lt;<a href="../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidgrid/Spill.html#line.48">spreadPattern</a></span></div>
 <div class="block">The list of points that the Spill will randomly fill, starting with what is passed to start(), in order of when
  they are reached.</div>
 </section>
@@ -421,21 +422,21 @@ java.util.Set&lt;<a href="../squidmath/Coord.html" title="class in squidpony.squ
 <li>
 <section class="detail" id="height">
 <h3>height</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidgrid/Spill.html#line.49">height</a></span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidgrid/Spill.html#line.52">height</a></span></div>
 <div class="block">Height of the map. Exciting stuff. Don't change this, instead call initialize().</div>
 </section>
 </li>
 <li>
 <section class="detail" id="width">
 <h3>width</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidgrid/Spill.html#line.53">width</a></span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidgrid/Spill.html#line.56">width</a></span></div>
 <div class="block">Width of the map. Exciting stuff. Don't change this, instead call initialize().</div>
 </section>
 </li>
 <li>
 <section class="detail" id="filled">
 <h3>filled</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidgrid/Spill.html#line.58">filled</a></span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidgrid/Spill.html#line.61">filled</a></span></div>
 <div class="block">The amount of cells filled by this Spill, which may be less than the volume passed to start() if the boundaries
  are reached on all sides and the Spill has no more room to fill.</div>
 </section>
@@ -443,7 +444,7 @@ java.util.Set&lt;<a href="../squidmath/Coord.html" title="class in squidpony.squ
 <li>
 <section class="detail" id="rng">
 <h3>rng</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../squidmath/IStatefulRNG.html" title="interface in squidpony.squidmath">IStatefulRNG</a></span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidgrid/Spill.html#line.64">rng</a></span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../squidmath/IStatefulRNG.html" title="interface in squidpony.squidmath">IStatefulRNG</a></span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidgrid/Spill.html#line.67">rng</a></span></div>
 <div class="block">The IStatefulRNG used to decide which one of multiple equally-short paths to take. Typically, this is a
  <a href="../squidmath/GWTRNG.html" title="class in squidpony.squidmath"><code>GWTRNG</code></a> or <a href="../squidmath/StatefulRNG.html" title="class in squidpony.squidmath"><code>StatefulRNG</code></a>.</div>
 </section>
@@ -459,7 +460,7 @@ java.util.Set&lt;<a href="../squidmath/Coord.html" title="class in squidpony.squ
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>Spill</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidgrid/Spill.html#line.71">Spill</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidgrid/Spill.html#line.74">Spill</a></span>()</div>
 <div class="block">Construct a Spill without a level to actually scan. If you use this constructor, you must call an
  initialize() method before using this class.</div>
 </section>
@@ -467,7 +468,7 @@ java.util.Set&lt;<a href="../squidmath/Coord.html" title="class in squidpony.squ
 <li>
 <section class="detail" id="&lt;init&gt;(squidpony.squidmath.IRNG)">
 <h3>Spill</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidgrid/Spill.html#line.83">Spill</a></span>&#8203;(<span class="parameters"><a href="../squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;random)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidgrid/Spill.html#line.86">Spill</a></span>&#8203;(<span class="parameters"><a href="../squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;random)</span></div>
 <div class="block">Construct a Spill without a level to actually scan. This constructor allows you to specify an RNG, but the actual
  RandomnessSource the RNG that this object uses will not be identical to the one passed as random (two ints will
  be requested from the passed RNG, and that will be used to seed this class' RNG).
@@ -478,7 +479,7 @@ java.util.Set&lt;<a href="../squidmath/Coord.html" title="class in squidpony.squ
 <li>
 <section class="detail" id="&lt;init&gt;(squidpony.squidmath.IStatefulRNG)">
 <h3>Spill</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidgrid/Spill.html#line.95">Spill</a></span>&#8203;(<span class="parameters"><a href="../squidmath/IStatefulRNG.html" title="interface in squidpony.squidmath">IStatefulRNG</a>&nbsp;random)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidgrid/Spill.html#line.98">Spill</a></span>&#8203;(<span class="parameters"><a href="../squidmath/IStatefulRNG.html" title="interface in squidpony.squidmath">IStatefulRNG</a>&nbsp;random)</span></div>
 <div class="block">Construct a Spill without a level to actually scan. This constructor allows you to specify an IStatefulRNG such
  as <a href="../squidmath/StatefulRNG.html" title="class in squidpony.squidmath"><code>StatefulRNG</code></a> or <a href="../squidmath/GWTRNG.html" title="class in squidpony.squidmath"><code>GWTRNG</code></a>, which will be referenced in this class (if the state of random changes
  because this object needed a random number, the state change will be reflected in the code that passed random to
@@ -488,7 +489,7 @@ java.util.Set&lt;<a href="../squidmath/Coord.html" title="class in squidpony.squ
 <li>
 <section class="detail" id="&lt;init&gt;(boolean[][])">
 <h3>Spill</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidgrid/Spill.html#line.105">Spill</a></span>&#8203;(<span class="parameters">boolean[][]&nbsp;level)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidgrid/Spill.html#line.108">Spill</a></span>&#8203;(<span class="parameters">boolean[][]&nbsp;level)</span></div>
 <div class="block">Used to construct a Spill from the output of another.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -499,7 +500,7 @@ java.util.Set&lt;<a href="../squidmath/Coord.html" title="class in squidpony.squ
 <li>
 <section class="detail" id="&lt;init&gt;(boolean[][],squidpony.squidgrid.Measurement)">
 <h3>Spill</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidgrid/Spill.html#line.115">Spill</a></span>&#8203;(<span class="parameters">boolean[][]&nbsp;level,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidgrid/Spill.html#line.118">Spill</a></span>&#8203;(<span class="parameters">boolean[][]&nbsp;level,
 <a href="Measurement.html" title="enum in squidpony.squidgrid">Measurement</a>&nbsp;measurement)</span></div>
 <div class="block">Used to construct a Spill from the output of another, specifying a distance calculation.</div>
 <dl class="notes">
@@ -512,7 +513,7 @@ java.util.Set&lt;<a href="../squidmath/Coord.html" title="class in squidpony.squ
 <li>
 <section class="detail" id="&lt;init&gt;(char[][])">
 <h3>Spill</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidgrid/Spill.html#line.131">Spill</a></span>&#8203;(<span class="parameters">char[][]&nbsp;level)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidgrid/Spill.html#line.133">Spill</a></span>&#8203;(<span class="parameters">char[][]&nbsp;level)</span></div>
 <div class="block">Constructor meant to take a char[][] returned by <a href="mapping/IDungeonGenerator.html#generate()"><code>IDungeonGenerator.generate()</code></a>, or any other
  char[][] where '#' means a wall and anything else is a walkable tile. If you only have
  a map that uses box-drawing characters, use DungeonUtility.linesToHashes() to get a
@@ -526,7 +527,7 @@ java.util.Set&lt;<a href="../squidmath/Coord.html" title="class in squidpony.squ
 <li>
 <section class="detail" id="&lt;init&gt;(char[][],char)">
 <h3>Spill</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidgrid/Spill.html#line.145">Spill</a></span>&#8203;(<span class="parameters">char[][]&nbsp;level,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidgrid/Spill.html#line.147">Spill</a></span>&#8203;(<span class="parameters">char[][]&nbsp;level,
 char&nbsp;alternateWall)</span></div>
 <div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where one char means a wall and anything else is a walkable tile. If you only have
@@ -542,7 +543,7 @@ char&nbsp;alternateWall)</span></div>
 <li>
 <section class="detail" id="&lt;init&gt;(char[][],squidpony.squidgrid.Measurement)">
 <h3>Spill</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidgrid/Spill.html#line.160">Spill</a></span>&#8203;(<span class="parameters">char[][]&nbsp;level,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidgrid/Spill.html#line.162">Spill</a></span>&#8203;(<span class="parameters">char[][]&nbsp;level,
 <a href="Measurement.html" title="enum in squidpony.squidgrid">Measurement</a>&nbsp;measurement)</span></div>
 <div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where '#' means a wall and anything else is a walkable tile. If you only have
@@ -558,7 +559,7 @@ char&nbsp;alternateWall)</span></div>
 <li>
 <section class="detail" id="&lt;init&gt;(char[][],squidpony.squidgrid.Measurement,squidpony.squidmath.IRNG)">
 <h3>Spill</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidgrid/Spill.html#line.179">Spill</a></span>&#8203;(<span class="parameters">char[][]&nbsp;level,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidgrid/Spill.html#line.181">Spill</a></span>&#8203;(<span class="parameters">char[][]&nbsp;level,
 <a href="Measurement.html" title="enum in squidpony.squidgrid">Measurement</a>&nbsp;measurement,
 <a href="../squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;random)</span></div>
 <div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
@@ -579,7 +580,7 @@ char&nbsp;alternateWall)</span></div>
 <li>
 <section class="detail" id="&lt;init&gt;(char[][],squidpony.squidgrid.Measurement,squidpony.squidmath.IStatefulRNG)">
 <h3>Spill</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidgrid/Spill.html#line.197">Spill</a></span>&#8203;(<span class="parameters">char[][]&nbsp;level,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidgrid/Spill.html#line.199">Spill</a></span>&#8203;(<span class="parameters">char[][]&nbsp;level,
 <a href="Measurement.html" title="enum in squidpony.squidgrid">Measurement</a>&nbsp;measurement,
 <a href="../squidmath/IStatefulRNG.html" title="interface in squidpony.squidmath">IStatefulRNG</a>&nbsp;random)</span></div>
 <div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
@@ -608,7 +609,7 @@ char&nbsp;alternateWall)</span></div>
 <li>
 <section class="detail" id="initialize(boolean[][])">
 <h3>initialize</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Spill.html" title="class in squidpony.squidgrid">Spill</a></span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidgrid/Spill.html#line.210">initialize</a></span>&#8203;(<span class="parameters">boolean[][]&nbsp;level)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Spill.html" title="class in squidpony.squidgrid">Spill</a></span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidgrid/Spill.html#line.212">initialize</a></span>&#8203;(<span class="parameters">boolean[][]&nbsp;level)</span></div>
 <div class="block">Used to initialize or re-initialize a Spill that needs a new PhysicalMap because it either wasn't given
  one when it was constructed, or because the contents of the terrain have changed permanently.</div>
 <dl class="notes">
@@ -622,7 +623,7 @@ char&nbsp;alternateWall)</span></div>
 <li>
 <section class="detail" id="initialize(char[][])">
 <h3>initialize</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Spill.html" title="class in squidpony.squidgrid">Spill</a></span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidgrid/Spill.html#line.230">initialize</a></span>&#8203;(<span class="parameters">char[][]&nbsp;level)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Spill.html" title="class in squidpony.squidgrid">Spill</a></span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidgrid/Spill.html#line.228">initialize</a></span>&#8203;(<span class="parameters">char[][]&nbsp;level)</span></div>
 <div class="block">Used to initialize or re-initialize a Spill that needs a new PhysicalMap because it either wasn't given
  one when it was constructed, or because the contents of the terrain have changed permanently.</div>
 <dl class="notes">
@@ -636,7 +637,7 @@ char&nbsp;alternateWall)</span></div>
 <li>
 <section class="detail" id="initialize(char[][],char)">
 <h3>initialize</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Spill.html" title="class in squidpony.squidgrid">Spill</a></span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidgrid/Spill.html#line.254">initialize</a></span>&#8203;(<span class="parameters">char[][]&nbsp;level,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Spill.html" title="class in squidpony.squidgrid">Spill</a></span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidgrid/Spill.html#line.252">initialize</a></span>&#8203;(<span class="parameters">char[][]&nbsp;level,
 char&nbsp;alternateWall)</span></div>
 <div class="block">Used to initialize or re-initialize a Spill that needs a new PhysicalMap because it either wasn't given
  one when it was constructed, or because the contents of the terrain have changed permanently. This
@@ -653,21 +654,21 @@ char&nbsp;alternateWall)</span></div>
 <li>
 <section class="detail" id="resetMap()">
 <h3>resetMap</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidgrid/Spill.html#line.273">resetMap</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidgrid/Spill.html#line.271">resetMap</a></span>()</div>
 <div class="block">Resets the spillMap to being empty.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="reset()">
 <h3>reset</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidgrid/Spill.html#line.285">reset</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidgrid/Spill.html#line.279">reset</a></span>()</div>
 <div class="block">Resets this Spill to a state with an empty spillMap and an empty spreadPattern.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="resetCell(int,int)">
 <h3>resetCell</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidgrid/Spill.html#line.296">resetCell</a></span>&#8203;(<span class="parameters">int&nbsp;x,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidgrid/Spill.html#line.290">resetCell</a></span>&#8203;(<span class="parameters">int&nbsp;x,
 int&nbsp;y)</span></div>
 <div class="block">Reverts a cell to an unfilled state (false in spillMap).</div>
 <dl class="notes">
@@ -680,7 +681,7 @@ int&nbsp;y)</span></div>
 <li>
 <section class="detail" id="resetCell(squidpony.squidmath.Coord)">
 <h3>resetCell</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidgrid/Spill.html#line.305">resetCell</a></span>&#8203;(<span class="parameters"><a href="../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;pt)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidgrid/Spill.html#line.299">resetCell</a></span>&#8203;(<span class="parameters"><a href="../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;pt)</span></div>
 <div class="block">Reverts a cell to an unfilled state (false in spillMap).</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -691,7 +692,7 @@ int&nbsp;y)</span></div>
 <li>
 <section class="detail" id="setFresh(int,int)">
 <h3>setFresh</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidgrid/Spill.html#line.315">setFresh</a></span>&#8203;(<span class="parameters">int&nbsp;x,
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidgrid/Spill.html#line.309">setFresh</a></span>&#8203;(<span class="parameters">int&nbsp;x,
 int&nbsp;y)</span></div>
 <div class="block">Used internally to mark a cell as just-now being expanded from.</div>
 <dl class="notes">
@@ -704,7 +705,7 @@ int&nbsp;y)</span></div>
 <li>
 <section class="detail" id="setFresh(squidpony.squidmath.Coord)">
 <h3>setFresh</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidgrid/Spill.html#line.324">setFresh</a></span>&#8203;(<span class="parameters"><a href="../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;pt)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidgrid/Spill.html#line.318">setFresh</a></span>&#8203;(<span class="parameters"><a href="../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;pt)</span></div>
 <div class="block">Used internally to mark a cell as just-now being expanded from.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -713,11 +714,11 @@ int&nbsp;y)</span></div>
 </section>
 </li>
 <li>
-<section class="detail" id="start(squidpony.squidmath.Coord,int,java.util.Set)">
+<section class="detail" id="start(squidpony.squidmath.Coord,int,java.util.Collection)">
 <h3>start</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">java.util.ArrayList&lt;<a href="../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidgrid/Spill.html#line.346">start</a></span>&#8203;(<span class="parameters"><a href="../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;entry,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">java.util.ArrayList&lt;<a href="../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidgrid/Spill.html#line.340">start</a></span>&#8203;(<span class="parameters"><a href="../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;entry,
 int&nbsp;volume,
-java.util.Set&lt;<a href="../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;impassable)</span></div>
+java.util.Collection&lt;<a href="../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;impassable)</span></div>
 <div class="block">Recalculate the spillMap and return the spreadPattern. The cell corresponding to entry will be true,
  the cells near that will be true if chosen at random from all passable cells adjacent to a
  filled (true) cell, and all other cells will be false. This takes a total number of cells to attempt
@@ -730,10 +731,10 @@ java.util.Set&lt;<a href="../squidmath/Coord.html" title="class in squidpony.squ
 <dt>Parameters:</dt>
 <dd><code>entry</code> - The first cell to spread from, which should really be passable.</dd>
 <dd><code>volume</code> - The total number of cells to attempt to fill, which must be non-negative.</dd>
-<dd><code>impassable</code> - A Set of Position keys representing the locations of moving obstacles to a
+<dd><code>impassable</code> - A Set or other Collection of Coord keys representing the locations of moving obstacles to a
                    path that cannot be moved through; this can be null if there are no such obstacles.</dd>
 <dt>Returns:</dt>
-<dd>An ArrayList of Points that this will enter, in order starting with entry at index 0, until it
+<dd>An ArrayList of Coords that this will enter, in order starting with entry at index 0, until it
  reaches its volume or fills its boundaries completely.</dd>
 </dl>
 </section>

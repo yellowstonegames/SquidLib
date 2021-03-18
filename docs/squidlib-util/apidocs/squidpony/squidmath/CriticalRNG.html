@@ -77,8 +77,10 @@ loadScripts(document, 'script');</script>
 <h1 title="Class CriticalRNG" class="title">Class CriticalRNG</h1>
 </div>
 <div class="inheritance" title="Inheritance Tree">java.lang.Object
+<div class="inheritance"><a href="AbstractRNG.html" title="class in squidpony.squidmath">squidpony.squidmath.AbstractRNG</a>
 <div class="inheritance"><a href="RNG.html" title="class in squidpony.squidmath">squidpony.squidmath.RNG</a>
 <div class="inheritance">squidpony.squidmath.CriticalRNG</div>
+</div>
 </div>
 </div>
 <section class="description">
@@ -321,7 +323,7 @@ float&nbsp;luck)</code></th>
 <td class="col-first"><code>long</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#nextLong(long)">nextLong</a></span>&#8203;(long&nbsp;bound)</code></th>
 <td class="col-last">
-<div class="block">Gets a pseudo-random long between 0 and bound.</div>
+<div class="block">Exclusive on bound (which must be positive), with an inner bound of 0.</div>
 </td>
 </tr>
 </tbody>
@@ -330,7 +332,10 @@ float&nbsp;luck)</code></th>
 </div>
 <div class="inherited-list">
 <h3 id="methods.inherited.from.class.squidpony.squidmath.RNG">Methods inherited from class&nbsp;squidpony.squidmath.<a href="RNG.html" title="class in squidpony.squidmath">RNG</a></h3>
-<code><a href="RNG.html#approximateBits(int)">approximateBits</a>, <a href="RNG.html#asRandom()">asRandom</a>, <a href="RNG.html#between(double,double)">between</a>, <a href="RNG.html#between(int,int)">between</a>, <a href="RNG.html#between(long,long)">between</a>, <a href="RNG.html#betweenWeighted(int,int,int)">betweenWeighted</a>, <a href="RNG.html#copy()">copy</a>, <a href="RNG.html#equals(java.lang.Object)">equals</a>, <a href="RNG.html#getRandomCellsIterable(int,int,int)">getRandomCellsIterable</a>, <a href="RNG.html#getRandomness()">getRandomness</a>, <a href="RNG.html#getRandomStartIterable(java.util.List)">getRandomStartIterable</a>, <a href="RNG.html#getRandomUniqueCells(int,int,int,int)">getRandomUniqueCells</a>, <a href="RNG.html#getRandomUniqueCells(int,int,int,int,int)">getRandomUniqueCells</a>, <a href="RNG.html#getRandomUniqueCells(int,int,int,int,squidpony.squidmath.Coord%5B%5D)">getRandomUniqueCells</a>, <a href="RNG.html#hashCode()">hashCode</a>, <a href="RNG.html#maxDoubleOf(double,int)">maxDoubleOf</a>, <a href="RNG.html#maxFloatOf(float,int)">maxFloatOf</a>, <a href="RNG.html#maxIntOf(int,int)">maxIntOf</a>, <a href="RNG.html#maxLongOf(long,int)">maxLongOf</a>, <a href="RNG.html#minDoubleOf(double,int)">minDoubleOf</a>, <a href="RNG.html#minFloatOf(float,int)">minFloatOf</a>, <a href="RNG.html#minIntOf(int,int)">minIntOf</a>, <a href="RNG.html#minLongOf(long,int)">minLongOf</a>, <a href="RNG.html#next(int)">next</a>, <a href="RNG.html#nextBytes(byte%5B%5D)">nextBytes</a>, <a href="RNG.html#nextCoord(int,int)">nextCoord</a>, <a href="RNG.html#nextCurvedFloat()">nextCurvedFloat</a>, <a href="RNG.html#nextDoubleInclusive()">nextDoubleInclusive</a>, <a href="RNG.html#nextDoubleInclusive(double)">nextDoubleInclusive</a>, <a href="RNG.html#nextFloat(float)">nextFloat</a>, <a href="RNG.html#nextFloatInclusive()">nextFloatInclusive</a>, <a href="RNG.html#nextFloatInclusive(float)">nextFloatInclusive</a>, <a href="RNG.html#nextSignedInt(int)">nextSignedInt</a>, <a href="RNG.html#nextSignedLong(long)">nextSignedLong</a>, <a href="RNG.html#randomInterleave()">randomInterleave</a>, <a href="RNG.html#randomOrdering(int)">randomOrdering</a>, <a href="RNG.html#randomOrdering(int,int%5B%5D)">randomOrdering</a>, <a href="RNG.html#randomPortion(java.util.Collection,int)">randomPortion</a>, <a href="RNG.html#randomPortion(T%5B%5D,T%5B%5D)">randomPortion</a>, <a href="RNG.html#randomRange(int,int,int)">randomRange</a>, <a href="RNG.html#randomRotation(java.util.List)">randomRotation</a>, <a href="RNG.html#setRandomness(squidpony.squidmath.RandomnessSource)">setRandomness</a>, <a href="RNG.html#shuffle(java.util.Collection)">shuffle</a>, <a href="RNG.html#shuffle(java.util.Collection,java.util.ArrayList)">shuffle</a>, <a href="RNG.html#shuffle(T%5B%5D)">shuffle</a>, <a href="RNG.html#shuffle(T%5B%5D,T%5B%5D)">shuffle</a>, <a href="RNG.html#shuffleInPlace(java.util.List)">shuffleInPlace</a>, <a href="RNG.html#shuffleInPlace(T%5B%5D)">shuffleInPlace</a>, <a href="RNG.html#toSerializable()">toSerializable</a>, <a href="RNG.html#toString()">toString</a></code></div>
+<code><a href="RNG.html#approximateBits(int)">approximateBits</a>, <a href="RNG.html#asRandom()">asRandom</a>, <a href="RNG.html#betweenWeighted(int,int,int)">betweenWeighted</a>, <a href="RNG.html#copy()">copy</a>, <a href="RNG.html#equals(java.lang.Object)">equals</a>, <a href="RNG.html#getRandomCellsIterable(int,int,int)">getRandomCellsIterable</a>, <a href="RNG.html#getRandomness()">getRandomness</a>, <a href="RNG.html#getRandomStartIterable(java.util.List)">getRandomStartIterable</a>, <a href="RNG.html#getRandomUniqueCells(int,int,int,int)">getRandomUniqueCells</a>, <a href="RNG.html#getRandomUniqueCells(int,int,int,int,int)">getRandomUniqueCells</a>, <a href="RNG.html#getRandomUniqueCells(int,int,int,int,squidpony.squidmath.Coord%5B%5D)">getRandomUniqueCells</a>, <a href="RNG.html#hashCode()">hashCode</a>, <a href="RNG.html#maxDoubleOf(double,int)">maxDoubleOf</a>, <a href="RNG.html#maxFloatOf(float,int)">maxFloatOf</a>, <a href="RNG.html#maxIntOf(int,int)">maxIntOf</a>, <a href="RNG.html#maxLongOf(long,int)">maxLongOf</a>, <a href="RNG.html#minDoubleOf(double,int)">minDoubleOf</a>, <a href="RNG.html#minFloatOf(float,int)">minFloatOf</a>, <a href="RNG.html#minIntOf(int,int)">minIntOf</a>, <a href="RNG.html#minLongOf(long,int)">minLongOf</a>, <a href="RNG.html#next(int)">next</a>, <a href="RNG.html#nextBytes(byte%5B%5D)">nextBytes</a>, <a href="RNG.html#nextCoord(int,int)">nextCoord</a>, <a href="RNG.html#nextCurvedFloat()">nextCurvedFloat</a>, <a href="RNG.html#nextDoubleInclusive()">nextDoubleInclusive</a>, <a href="RNG.html#nextDoubleInclusive(double)">nextDoubleInclusive</a>, <a href="RNG.html#nextFloatInclusive()">nextFloatInclusive</a>, <a href="RNG.html#nextFloatInclusive(float)">nextFloatInclusive</a>, <a href="RNG.html#randomInterleave()">randomInterleave</a>, <a href="RNG.html#randomOrdering(int)">randomOrdering</a>, <a href="RNG.html#randomOrdering(int,int%5B%5D)">randomOrdering</a>, <a href="RNG.html#randomPortion(java.util.Collection,int)">randomPortion</a>, <a href="RNG.html#randomPortion(T%5B%5D,T%5B%5D)">randomPortion</a>, <a href="RNG.html#randomRange(int,int,int)">randomRange</a>, <a href="RNG.html#randomRotation(java.util.List)">randomRotation</a>, <a href="RNG.html#setRandomness(squidpony.squidmath.RandomnessSource)">setRandomness</a>, <a href="RNG.html#shuffle(java.util.Collection)">shuffle</a>, <a href="RNG.html#shuffle(java.util.Collection,java.util.ArrayList)">shuffle</a>, <a href="RNG.html#shuffle(T%5B%5D)">shuffle</a>, <a href="RNG.html#shuffle(T%5B%5D,T%5B%5D)">shuffle</a>, <a href="RNG.html#shuffleInPlace(java.util.List)">shuffleInPlace</a>, <a href="RNG.html#shuffleInPlace(T%5B%5D)">shuffleInPlace</a>, <a href="RNG.html#toSerializable()">toSerializable</a>, <a href="RNG.html#toString()">toString</a></code></div>
+<div class="inherited-list">
+<h3 id="methods.inherited.from.class.squidpony.squidmath.AbstractRNG">Methods inherited from class&nbsp;squidpony.squidmath.<a href="AbstractRNG.html" title="class in squidpony.squidmath">AbstractRNG</a></h3>
+<code><a href="AbstractRNG.html#between(double,double)">between</a>, <a href="AbstractRNG.html#between(int,int)">between</a>, <a href="AbstractRNG.html#between(long,long)">between</a>, <a href="AbstractRNG.html#nextFloat(float)">nextFloat</a>, <a href="AbstractRNG.html#nextSignedInt(int)">nextSignedInt</a>, <a href="AbstractRNG.html#nextSignedLong(long)">nextSignedLong</a>, <a href="AbstractRNG.html#swap(T%5B%5D,int,int)">swap</a></code></div>
 <div class="inherited-list">
 <h3 id="methods.inherited.from.class.java.lang.Object">Methods inherited from class&nbsp;java.lang.Object</h3>
 <code>clone, finalize, getClass, notify, notifyAll, wait, wait, wait</code></div>
@@ -481,7 +486,7 @@ float&nbsp;luck)</span></div>
 <section class="detail" id="nextDouble(double)">
 <h3>nextDouble</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/CriticalRNG.html#line.101">nextDouble</a></span>&#8203;(<span class="parameters">double&nbsp;max)</span></div>
-<div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="RNG.html#nextDouble(double)">RNG</a></code></span></div>
+<div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="AbstractRNG.html#nextDouble(double)">AbstractRNG</a></code></span></div>
 <div class="block">This returns a random double between 0.0 (inclusive) and outer (exclusive). The value for outer can be positive
  or negative. Because of how math on doubles works, there are at most 2 to the 53 values this can return for any
  given outer bound, and very large values for outer will not necessarily produce all numbers you might expect.</div>
@@ -489,7 +494,7 @@ float&nbsp;luck)</span></div>
 <dt>Specified by:</dt>
 <dd><code><a href="IRNG.html#nextDouble(double)">nextDouble</a></code>&nbsp;in interface&nbsp;<code><a href="IRNG.html" title="interface in squidpony.squidmath">IRNG</a></code></dd>
 <dt>Overrides:</dt>
-<dd><code><a href="RNG.html#nextDouble(double)">nextDouble</a></code>&nbsp;in class&nbsp;<code><a href="RNG.html" title="class in squidpony.squidmath">RNG</a></code></dd>
+<dd><code><a href="AbstractRNG.html#nextDouble(double)">nextDouble</a></code>&nbsp;in class&nbsp;<code><a href="AbstractRNG.html" title="class in squidpony.squidmath">AbstractRNG</a></code></dd>
 <dt>Parameters:</dt>
 <dd><code>max</code> - the outer exclusive bound as a double; can be negative or positive</dd>
 <dt>Returns:</dt>
@@ -558,21 +563,20 @@ float&nbsp;luck)</span></div>
 <section class="detail" id="nextLong(long)">
 <h3>nextLong</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/CriticalRNG.html#line.128">nextLong</a></span>&#8203;(<span class="parameters">long&nbsp;bound)</span></div>
-<div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="RNG.html#nextLong(long)">RNG</a></code></span></div>
-<div class="block">Gets a pseudo-random long between 0 and bound. 
- Exclusive on bound (which must be positive), with an inner bound of 0 If bound is negative or 0, this always
- returns 0. You can use <a href="RNG.html#nextSignedLong(long)"><code>RNG.nextSignedLong(long)</code></a> to use a negative bound. The technique that 
+<div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="AbstractRNG.html#nextLong(long)">AbstractRNG</a></code></span></div>
+<div class="block">Exclusive on bound (which must be positive), with an inner bound of 0.
+ If bound is negative or 0 this always returns 0.
  <br>
  Credit for this method goes to <a href="https://oroboro.com/large-random-in-range/">Rafael Baptista's blog</a>
- for the original idea, and the JDK10 Math class' usage of Karatsuba multiplication for the current algorithm. 
+ for the algorithm, though the technique is not new.
  This method is drastically faster than the previous implementation when the bound varies often (roughly 4x
  faster, possibly more). It also always gets exactly one random long, so by default it advances the state as much
- as <a href="RNG.html#nextLong()"><code>RNG.nextLong()</code></a>.</div>
+ as <a href="AbstractRNG.html#nextLong()"><code>AbstractRNG.nextLong()</code></a>; subclasses can generate two ints instead of one long if they prefer.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="IRNG.html#nextLong(long)">nextLong</a></code>&nbsp;in interface&nbsp;<code><a href="IRNG.html" title="interface in squidpony.squidmath">IRNG</a></code></dd>
 <dt>Overrides:</dt>
-<dd><code><a href="RNG.html#nextLong(long)">nextLong</a></code>&nbsp;in class&nbsp;<code><a href="RNG.html" title="class in squidpony.squidmath">RNG</a></code></dd>
+<dd><code><a href="AbstractRNG.html#nextLong(long)">nextLong</a></code>&nbsp;in class&nbsp;<code><a href="AbstractRNG.html" title="class in squidpony.squidmath">AbstractRNG</a></code></dd>
 <dt>Parameters:</dt>
 <dd><code>bound</code> - the outer exclusive bound; should be positive, otherwise this always returns 0L</dd>
 <dt>Returns:</dt>
@@ -584,27 +588,14 @@ float&nbsp;luck)</span></div>
 <section class="detail" id="nextInt(int)">
 <h3>nextInt</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/CriticalRNG.html#line.133">nextInt</a></span>&#8203;(<span class="parameters">int&nbsp;bound)</span></div>
-<div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="RNG.html#nextInt(int)">RNG</a></code></span></div>
+<div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="AbstractRNG.html#nextInt(int)">AbstractRNG</a></code></span></div>
 <div class="block">Returns a random non-negative integer below the given bound, or 0 if the bound is 0 or
- negative. Always makes one call to the <a href="RandomnessSource.html#next(int)"><code>RandomnessSource.next(int)</code></a> method of the RandomnessSource that
- would be returned by <a href="RNG.html#getRandomness()"><code>RNG.getRandomness()</code></a>, even if bound is 0 or negative, to avoid branching and also to
- ensure consistent advancement rates for the RandomnessSource (this can be important if you use a
- <a href="SkippingRandomness.html" title="interface in squidpony.squidmath"><code>SkippingRandomness</code></a> and want to go back before a result was produced).
- <br>
- This method changed a fair amount on April 5, 2018 to better support RandomnessSource implementations with a
- slower nextLong() method, such as <a href="Lathe32RNG.html" title="class in squidpony.squidmath"><code>Lathe32RNG</code></a>, and to avoid branching/irregular state advancement/modulus
- operations. It is now almost identical to <a href="RNG.html#nextIntHasty(int)"><code>RNG.nextIntHasty(int)</code></a>, but won't return negative results if bound
- is negative (matching its previous behavior). This may have statistical issues (small ones) if bound is very
- large (the estimate is still at least a bound of a billion or more before issues are observable). Consider
- <a href="RNG.html#nextSignedInt(int)"><code>RNG.nextSignedInt(int)</code></a> if the bound should be allowed to be negative; <a href="RNG.html#nextIntHasty(int)"><code>RNG.nextIntHasty(int)</code></a> is here for
- compatibility with earlier versions, but the two methods are very similar.
- <br>
- Credit goes to Daniel Lemire, http://lemire.me/blog/2016/06/27/a-fast-alternative-to-the-modulo-reduction/</div>
+ negative.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="IRNG.html#nextInt(int)">nextInt</a></code>&nbsp;in interface&nbsp;<code><a href="IRNG.html" title="interface in squidpony.squidmath">IRNG</a></code></dd>
 <dt>Overrides:</dt>
-<dd><code><a href="RNG.html#nextInt(int)">nextInt</a></code>&nbsp;in class&nbsp;<code><a href="RNG.html" title="class in squidpony.squidmath">RNG</a></code></dd>
+<dd><code><a href="AbstractRNG.html#nextInt(int)">nextInt</a></code>&nbsp;in class&nbsp;<code><a href="AbstractRNG.html" title="class in squidpony.squidmath">AbstractRNG</a></code></dd>
 <dt>Parameters:</dt>
 <dd><code>bound</code> - the upper bound (exclusive)</dd>
 <dt>Returns:</dt>
@@ -620,7 +611,7 @@ float&nbsp;luck)</span></div>
 <div class="block">Returns a random non-negative integer between 0 (inclusive) and the given bound (exclusive),
  or 0 if the bound is 0. The bound can be negative, which will produce 0 or a negative result.
  Uses an aggressively optimized technique that has some bias, but mostly for values of
- bound over 1 billion. This method is no more "hasty" than <a href="RNG.html#nextInt(int)"><code>RNG.nextInt(int)</code></a>, but it is a little
+ bound over 1 billion. This method is no more "hasty" than <a href="AbstractRNG.html#nextInt(int)"><code>AbstractRNG.nextInt(int)</code></a>, but it is a little
  faster than that method because this avoids special behavior for when bound is negative.
  <br>
  Credit goes to Daniel Lemire, http://lemire.me/blog/2016/06/27/a-fast-alternative-to-the-modulo-reduction/</div>
@@ -675,14 +666,16 @@ float&nbsp;luck)</span></div>
 <section class="detail" id="getRandomElement(java.util.List)">
 <h3>getRandomElement</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/CriticalRNG.html#line.156">getRandomElement</a></span>&#8203;(<span class="parameters">java.util.List&lt;T&gt;&nbsp;list)</span></div>
-<div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="RNG.html#getRandomElement(java.util.List)">RNG</a></code></span></div>
+<div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="AbstractRNG.html#getRandomElement(java.util.List)">AbstractRNG</a></code></span></div>
 <div class="block">Returns a random element from the provided list. If the list is empty
- then null is returned.</div>
+ then null is returned. This will perform well on Lists that allow random access,
+ but will not perform as well on <code>LinkedList</code> or similar classes
+ that need to iterate one-by-one in their <code>List.get(int)</code> method.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="IRNG.html#getRandomElement(java.util.List)">getRandomElement</a></code>&nbsp;in interface&nbsp;<code><a href="IRNG.html" title="interface in squidpony.squidmath">IRNG</a></code></dd>
 <dt>Overrides:</dt>
-<dd><code><a href="RNG.html#getRandomElement(java.util.List)">getRandomElement</a></code>&nbsp;in class&nbsp;<code><a href="RNG.html" title="class in squidpony.squidmath">RNG</a></code></dd>
+<dd><code><a href="AbstractRNG.html#getRandomElement(java.util.List)">getRandomElement</a></code>&nbsp;in class&nbsp;<code><a href="AbstractRNG.html" title="class in squidpony.squidmath">AbstractRNG</a></code></dd>
 <dt>Type Parameters:</dt>
 <dd><code>T</code> - the type of the returned object</dd>
 <dt>Parameters:</dt>
@@ -696,24 +689,25 @@ float&nbsp;luck)</span></div>
 <section class="detail" id="getRandomElement(java.util.Collection)">
 <h3>getRandomElement</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/CriticalRNG.html#line.164">getRandomElement</a></span>&#8203;(<span class="parameters">java.util.Collection&lt;T&gt;&nbsp;coll)</span></div>
-<div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="RNG.html#getRandomElement(java.util.Collection)">RNG</a></code></span></div>
+<div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="AbstractRNG.html#getRandomElement(java.util.Collection)">AbstractRNG</a></code></span></div>
 <div class="block">Returns a random element from the provided Collection, which should have predictable iteration order if you want
  predictable behavior for identical RNG seeds, though it will get a random element just fine for any Collection
  (just not predictably in all cases). If you give this a Set, it should be a LinkedHashSet or some form of sorted
  Set like TreeSet if you want predictable results. Any List or Queue should be fine. Map does not implement
  Collection, thank you very much Java library designers, so you can't actually pass a Map to this, though you can
  pass the keys or values. If coll is empty, returns null.
- <p>
- <p>
+ <br>
  Requires iterating through a random amount of coll's elements, so performance depends on the size of coll but is
  likely to be decent, as long as iteration isn't unusually slow. This replaces <code>getRandomElement(Queue)</code>,
  since Queue implements Collection and the older Queue-using implementation was probably less efficient.
- </p></div>
+ <br>
+ You should generally prefer <a href="AbstractRNG.html#getRandomElement(java.util.List)"><code>AbstractRNG.getRandomElement(List)</code></a> whenever possible, or in some cases you can use
+ methods that get a random value on the Collection (or Map, in the case of OrderedMap) itself.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="IRNG.html#getRandomElement(java.util.Collection)">getRandomElement</a></code>&nbsp;in interface&nbsp;<code><a href="IRNG.html" title="interface in squidpony.squidmath">IRNG</a></code></dd>
 <dt>Overrides:</dt>
-<dd><code><a href="RNG.html#getRandomElement(java.util.Collection)">getRandomElement</a></code>&nbsp;in class&nbsp;<code><a href="RNG.html" title="class in squidpony.squidmath">RNG</a></code></dd>
+<dd><code><a href="AbstractRNG.html#getRandomElement(java.util.Collection)">getRandomElement</a></code>&nbsp;in class&nbsp;<code><a href="AbstractRNG.html" title="class in squidpony.squidmath">AbstractRNG</a></code></dd>
 <dt>Type Parameters:</dt>
 <dd><code>T</code> - the type of the returned object</dd>
 <dt>Parameters:</dt>

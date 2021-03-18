@@ -55,7 +55,7 @@
 <span class="source-line-no">043</span><span id="line.43">    public Radius radiusStrategy;</span>
 <span class="source-line-no">044</span><span id="line.44">    /**</span>
 <span class="source-line-no">045</span><span id="line.45">     * The 2D array of light-resistance values from 0.0 to 1.0 for each cell on the map, as produced by</span>
-<span class="source-line-no">046</span><span id="line.46">     * {@link squidpony.squidgrid.mapping.DungeonUtility#generateResistances(char[][])}.</span>
+<span class="source-line-no">046</span><span id="line.46">     * {@link FOV#generateResistances(char[][])}.</span>
 <span class="source-line-no">047</span><span id="line.47">     */</span>
 <span class="source-line-no">048</span><span id="line.48">    public double[][] resistances;</span>
 <span class="source-line-no">049</span><span id="line.49">    /**</span>
@@ -128,8 +128,8 @@
 <span class="source-line-no">116</span><span id="line.116">    }</span>
 <span class="source-line-no">117</span><span id="line.117"></span>
 <span class="source-line-no">118</span><span id="line.118">    /**</span>
-<span class="source-line-no">119</span><span id="line.119">     * Given a resistance array as produced by {@link squidpony.squidgrid.mapping.DungeonUtility#generateResistances(char[][])}</span>
-<span class="source-line-no">120</span><span id="line.120">     * or {@link squidpony.squidgrid.mapping.DungeonUtility#generateSimpleResistances(char[][])}, makes a</span>
+<span class="source-line-no">119</span><span id="line.119">     * Given a resistance array as produced by {@link FOV#generateResistances(char[][])}</span>
+<span class="source-line-no">120</span><span id="line.120">     * or {@link FOV#generateSimpleResistances(char[][])}, makes a</span>
 <span class="source-line-no">121</span><span id="line.121">     * LightingHandler that can have {@link Radiance} objects added to it in various locations. This will use a solid</span>
 <span class="source-line-no">122</span><span id="line.122">     * black background when it casts light on cells without existing lighting. The viewer vision range will be 4.0, and</span>
 <span class="source-line-no">123</span><span id="line.123">     * lights will use a circular shape.</span>
@@ -140,8 +140,8 @@
 <span class="source-line-no">128</span><span id="line.128">        this(resistance, SColor.FLOAT_BLACK, Radius.CIRCLE, 4.0);</span>
 <span class="source-line-no">129</span><span id="line.129">    }</span>
 <span class="source-line-no">130</span><span id="line.130">    /**</span>
-<span class="source-line-no">131</span><span id="line.131">     * Given a resistance array as produced by {@link squidpony.squidgrid.mapping.DungeonUtility#generateResistances(char[][])}</span>
-<span class="source-line-no">132</span><span id="line.132">     * or {@link squidpony.squidgrid.mapping.DungeonUtility#generateSimpleResistances(char[][])}, makes a</span>
+<span class="source-line-no">131</span><span id="line.131">     * Given a resistance array as produced by {@link FOV#generateResistances(char[][])}</span>
+<span class="source-line-no">132</span><span id="line.132">     * or {@link FOV#generateSimpleResistances(char[][])}, makes a</span>
 <span class="source-line-no">133</span><span id="line.133">     * LightingHandler that can have {@link Radiance} objects added to it in various locations.</span>
 <span class="source-line-no">134</span><span id="line.134">     * @param resistance a resistance array as produced by DungeonUtility</span>
 <span class="source-line-no">135</span><span id="line.135">     * @param backgroundColor the background color to use, as a libGDX color</span>
@@ -154,8 +154,8 @@
 <span class="source-line-no">142</span><span id="line.142">        this(resistance, backgroundColor.toFloatBits(), radiusStrategy, viewerVisionRange);</span>
 <span class="source-line-no">143</span><span id="line.143">    }</span>
 <span class="source-line-no">144</span><span id="line.144">    /**</span>
-<span class="source-line-no">145</span><span id="line.145">     * Given a resistance array as produced by {@link squidpony.squidgrid.mapping.DungeonUtility#generateResistances(char[][])}</span>
-<span class="source-line-no">146</span><span id="line.146">     * or {@link squidpony.squidgrid.mapping.DungeonUtility#generateSimpleResistances(char[][])}, makes a</span>
+<span class="source-line-no">145</span><span id="line.145">     * Given a resistance array as produced by {@link FOV#generateResistances(char[][])}</span>
+<span class="source-line-no">146</span><span id="line.146">     * or {@link FOV#generateSimpleResistances(char[][])}, makes a</span>
 <span class="source-line-no">147</span><span id="line.147">     * LightingHandler that can have {@link Radiance} objects added to it in various locations.</span>
 <span class="source-line-no">148</span><span id="line.148">     * @param resistance a resistance array as produced by DungeonUtility</span>
 <span class="source-line-no">149</span><span id="line.149">     * @param backgroundColor the background color to use, as a packed float (produced by {@link Color#toFloatBits()})</span>
@@ -433,227 +433,223 @@
 <span class="source-line-no">421</span><span id="line.421">                continue;</span>
 <span class="source-line-no">422</span><span id="line.422">            radiance = lights.getAt(i);</span>
 <span class="source-line-no">423</span><span id="line.423">            FOV.reuseFOV(resistances, tempFOV, pos.x, pos.y, radiance.currentRange());</span>
-<span class="source-line-no">424</span><span id="line.424">            //SColor.colorLightingInto(tempColorLighting, tempFOV, radiance.color);</span>
-<span class="source-line-no">425</span><span id="line.425">            mixColoredLighting(radiance.flare, radiance.color);</span>
-<span class="source-line-no">426</span><span id="line.426">        }</span>
-<span class="source-line-no">427</span><span id="line.427">    }</span>
-<span class="source-line-no">428</span><span id="line.428">    /**</span>
-<span class="source-line-no">429</span><span id="line.429">     * Typically called every frame when there isn't a single viewer, this updates the flicker and strobe effects of</span>
-<span class="source-line-no">430</span><span id="line.430">     * Radiance objects and applies those changes in lighting color and strength to the various fields of this</span>
-<span class="source-line-no">431</span><span id="line.431">     * LightingHandler. This method is usually called before each call to {@link #draw(float[][])}, but other code may</span>
-<span class="source-line-no">432</span><span id="line.432">     * be between the calls and may affect the lighting in customized ways. This overload has no viewer, so all cells</span>
-<span class="source-line-no">433</span><span id="line.433">     * are considered visible unless they are fully obstructed (solid cells behind walls, for example). Unlike update(),</span>
-<span class="source-line-no">434</span><span id="line.434">     * this method does not need {@link #calculateFOV(Coord)} to be called for it to work properly.</span>
-<span class="source-line-no">435</span><span id="line.435">     */</span>
-<span class="source-line-no">436</span><span id="line.436">    public void updateAll()</span>
-<span class="source-line-no">437</span><span id="line.437">    {</span>
-<span class="source-line-no">438</span><span id="line.438">        Radiance radiance;</span>
-<span class="source-line-no">439</span><span id="line.439">        for (int x = 0; x &lt; width; x++) {</span>
-<span class="source-line-no">440</span><span id="line.440">            PER_CELL:</span>
-<span class="source-line-no">441</span><span id="line.441">            for (int y = 0; y &lt; height; y++) {</span>
-<span class="source-line-no">442</span><span id="line.442">                for (int xx = Math.max(0, x - 1), xi = 0; xi &lt; 3 &amp;&amp; xx &lt; width; xi++, xx++) {</span>
-<span class="source-line-no">443</span><span id="line.443">                    for (int yy = Math.max(0, y - 1), yi = 0; yi &lt; 3 &amp;&amp; yy &lt; height; yi++, yy++) {</span>
-<span class="source-line-no">444</span><span id="line.444">                        if(resistances[xx][yy] &lt; 1.0){</span>
-<span class="source-line-no">445</span><span id="line.445">                            losResult[x][y] = 1.0;</span>
-<span class="source-line-no">446</span><span id="line.446">                            continue PER_CELL;</span>
-<span class="source-line-no">447</span><span id="line.447">                        }</span>
-<span class="source-line-no">448</span><span id="line.448">                    }</span>
-<span class="source-line-no">449</span><span id="line.449">                }</span>
-<span class="source-line-no">450</span><span id="line.450">            }</span>
-<span class="source-line-no">451</span><span id="line.451">        }</span>
-<span class="source-line-no">452</span><span id="line.452">        SColor.eraseColoredLighting(colorLighting);</span>
-<span class="source-line-no">453</span><span id="line.453">        final int sz = lights.size();</span>
-<span class="source-line-no">454</span><span id="line.454">        Coord pos;</span>
-<span class="source-line-no">455</span><span id="line.455">        for (int i = 0; i &lt; sz; i++) {</span>
-<span class="source-line-no">456</span><span id="line.456">            pos = lights.keyAt(i);</span>
-<span class="source-line-no">457</span><span id="line.457">            radiance = lights.getAt(i);</span>
-<span class="source-line-no">458</span><span id="line.458">            FOV.reuseFOV(resistances, tempFOV, pos.x, pos.y, radiance.currentRange());</span>
-<span class="source-line-no">459</span><span id="line.459">            //SColor.colorLightingInto(tempColorLighting, tempFOV, radiance.color);</span>
-<span class="source-line-no">460</span><span id="line.460">            mixColoredLighting(radiance.flare, radiance.color);</span>
-<span class="source-line-no">461</span><span id="line.461">        }</span>
-<span class="source-line-no">462</span><span id="line.462">        for (int x = 0; x &lt; width; x++) {</span>
-<span class="source-line-no">463</span><span id="line.463">            for (int y = 0; y &lt; height; y++) {</span>
-<span class="source-line-no">464</span><span id="line.464">                if (losResult[x][y] &gt; 0.0) {</span>
-<span class="source-line-no">465</span><span id="line.465">                    fovResult[x][y] = MathUtils.clamp(losResult[x][y] + colorLighting[0][x][y], 0, 1);</span>
-<span class="source-line-no">466</span><span id="line.466">                }</span>
-<span class="source-line-no">467</span><span id="line.467">            }</span>
-<span class="source-line-no">468</span><span id="line.468">        }</span>
-<span class="source-line-no">469</span><span id="line.469">    }</span>
-<span class="source-line-no">470</span><span id="line.470">    /**</span>
-<span class="source-line-no">471</span><span id="line.471">     * Updates the flicker and strobe effects of a Radiance object and applies the lighting from just that Radiance to</span>
-<span class="source-line-no">472</span><span id="line.472">     * just the {@link #colorLighting} field, without changing FOV. This method is meant to be used for GUI effects that</span>
-<span class="source-line-no">473</span><span id="line.473">     * aren't representative of something a character in the game could interact with. It is usually called after</span>
-<span class="source-line-no">474</span><span id="line.474">     * {@link #update()} and before each call to {@link #draw(float[][])}, but other code may be between the calls</span>
-<span class="source-line-no">475</span><span id="line.475">     * and may affect the lighting in customized ways.</span>
-<span class="source-line-no">476</span><span id="line.476">     * @param pos the position of the light effect</span>
-<span class="source-line-no">477</span><span id="line.477">     * @param radiance the Radiance to update standalone, which does not need to be already added to this </span>
-<span class="source-line-no">478</span><span id="line.478">     */</span>
-<span class="source-line-no">479</span><span id="line.479">    public void updateUI(Coord pos, Radiance radiance)</span>
-<span class="source-line-no">480</span><span id="line.480">    {</span>
-<span class="source-line-no">481</span><span id="line.481">        updateUI(pos.x, pos.y, radiance);</span>
-<span class="source-line-no">482</span><span id="line.482">    }</span>
-<span class="source-line-no">483</span><span id="line.483"></span>
-<span class="source-line-no">484</span><span id="line.484">    /**</span>
-<span class="source-line-no">485</span><span id="line.485">     * Updates the flicker and strobe effects of a Radiance object and applies the lighting from just that Radiance to</span>
-<span class="source-line-no">486</span><span id="line.486">     * just the {@link #colorLighting} field, without changing FOV. This method is meant to be used for GUI effects that</span>
-<span class="source-line-no">487</span><span id="line.487">     * aren't representative of something a character in the game could interact with. It is usually called after</span>
-<span class="source-line-no">488</span><span id="line.488">     * {@link #update()} and before each call to {@link #draw(float[][])}, but other code may be between the calls</span>
-<span class="source-line-no">489</span><span id="line.489">     * and may affect the lighting in customized ways.</span>
-<span class="source-line-no">490</span><span id="line.490">     * @param lightX the x-position of the light effect</span>
-<span class="source-line-no">491</span><span id="line.491">     * @param lightY the y-position of the light effect</span>
-<span class="source-line-no">492</span><span id="line.492">     * @param radiance the Radiance to update standalone, which does not need to be already added to this </span>
-<span class="source-line-no">493</span><span id="line.493">     */</span>
-<span class="source-line-no">494</span><span id="line.494">    public void updateUI(int lightX, int lightY, Radiance radiance)</span>
-<span class="source-line-no">495</span><span id="line.495">    {</span>
-<span class="source-line-no">496</span><span id="line.496">        FOV.reuseFOV(resistances, tempFOV, lightX, lightY, radiance.currentRange());</span>
-<span class="source-line-no">497</span><span id="line.497">        //SColor.colorLightingInto(tempColorLighting, tempFOV, radiance.color);</span>
-<span class="source-line-no">498</span><span id="line.498">        mixColoredLighting(radiance.flare, radiance.color);</span>
-<span class="source-line-no">499</span><span id="line.499">    }</span>
-<span class="source-line-no">500</span><span id="line.500"></span>
-<span class="source-line-no">501</span><span id="line.501">    /**</span>
-<span class="source-line-no">502</span><span id="line.502">     * Given a SparseLayers, fills the SparseLayers with different colors based on what lights are present in line of</span>
-<span class="source-line-no">503</span><span id="line.503">     * sight of the viewer and the various flicker or strobe effects that Radiance light sources can do. You should</span>
-<span class="source-line-no">504</span><span id="line.504">     * usually call {@link #update()} before each call to draw(), but you may want to make custom changes to the</span>
-<span class="source-line-no">505</span><span id="line.505">     * lighting in between those two calls (that is the only place those changes will be noticed).</span>
-<span class="source-line-no">506</span><span id="line.506">     * @param layers a SparseLayers that may have existing background colors (these will be mixed in)</span>
-<span class="source-line-no">507</span><span id="line.507">     */</span>
-<span class="source-line-no">508</span><span id="line.508">    public void draw(SparseLayers layers)</span>
-<span class="source-line-no">509</span><span id="line.509">    {</span>
-<span class="source-line-no">510</span><span id="line.510">        draw(layers.backgrounds);</span>
-<span class="source-line-no">511</span><span id="line.511">    }</span>
-<span class="source-line-no">512</span><span id="line.512">    /**</span>
-<span class="source-line-no">513</span><span id="line.513">     * Given a SquidPanel that should be only solid blocks (such as the background of a SquidLayers) and a position for</span>
-<span class="source-line-no">514</span><span id="line.514">     * the viewer (typically the player), fills the SquidPanel with different colors based on what lights are present in</span>
-<span class="source-line-no">515</span><span id="line.515">     * line of sight of the viewer and the various flickering or pulsing effects that Radiance light sources can do. </span>
-<span class="source-line-no">516</span><span id="line.516">     * Given a SquidPanel that should be only solid blocks (such as the background of a SquidLayers), fills the</span>
-<span class="source-line-no">517</span><span id="line.517">     * SquidPanel with different colors based on what lights are present in line of sight of the viewer and the various</span>
-<span class="source-line-no">518</span><span id="line.518">     * flicker or strobe effects that Radiance light sources can do. You should usually call {@link #update()}</span>
-<span class="source-line-no">519</span><span id="line.519">     * before each call to draw(), but you may want to make custom changes to the lighting in between those two calls</span>
-<span class="source-line-no">520</span><span id="line.520">     * (that is the only place those changes will be noticed).</span>
-<span class="source-line-no">521</span><span id="line.521">     * @param background a SquidPanel used as a background, such as the back Panel of a SquidLayers</span>
-<span class="source-line-no">522</span><span id="line.522">     */</span>
-<span class="source-line-no">523</span><span id="line.523">    public void draw(SquidPanel background)</span>
-<span class="source-line-no">524</span><span id="line.524">    {</span>
-<span class="source-line-no">525</span><span id="line.525">        draw(background.colors);</span>
-<span class="source-line-no">526</span><span id="line.526">    }</span>
-<span class="source-line-no">527</span><span id="line.527"></span>
-<span class="source-line-no">528</span><span id="line.528">    /**</span>
-<span class="source-line-no">529</span><span id="line.529">     * Given a 2D array of packed float colors, fills the 2D array with different colors based on what lights are</span>
-<span class="source-line-no">530</span><span id="line.530">     * present in line of sight of the viewer and the various flicker or strobe effects that Radiance light sources can</span>
-<span class="source-line-no">531</span><span id="line.531">     * do. You should usually call {@link #update()} before each call to draw(), but you may want to make custom</span>
-<span class="source-line-no">532</span><span id="line.532">     * changes to the lighting in between those two calls (that is the only place those changes will be noticed).</span>
-<span class="source-line-no">533</span><span id="line.533">     * @param backgrounds a 2D float array, typically obtained from {@link squidpony.squidgrid.gui.gdx.SquidPanel#colors} or {@link squidpony.squidgrid.gui.gdx.SparseLayers#backgrounds}</span>
-<span class="source-line-no">534</span><span id="line.534">     */</span>
-<span class="source-line-no">535</span><span id="line.535">    public void draw(float[][] backgrounds)</span>
-<span class="source-line-no">536</span><span id="line.536">    {</span>
-<span class="source-line-no">537</span><span id="line.537">        float current;</span>
-<span class="source-line-no">538</span><span id="line.538">        for (int x = 0; x &lt; width; x++) {</span>
-<span class="source-line-no">539</span><span id="line.539">            for (int y = 0; y &lt; height; y++) {</span>
-<span class="source-line-no">540</span><span id="line.540">                if (losResult[x][y] &gt; 0.0 &amp;&amp; fovResult[x][y] &gt; 0.0) {</span>
-<span class="source-line-no">541</span><span id="line.541">                        current = backgrounds[x][y];</span>
-<span class="source-line-no">542</span><span id="line.542">                        if(current == 0f)</span>
-<span class="source-line-no">543</span><span id="line.543">                            current = backgroundColor;</span>
-<span class="source-line-no">544</span><span id="line.544">                        backgrounds[x][y] = lerpFloatColorsBlended(current,</span>
-<span class="source-line-no">545</span><span id="line.545">                                colorLighting[1][x][y], colorLighting[0][x][y] * 0.4f);</span>
-<span class="source-line-no">546</span><span id="line.546">                }</span>
-<span class="source-line-no">547</span><span id="line.547">            }</span>
-<span class="source-line-no">548</span><span id="line.548">        }</span>
-<span class="source-line-no">549</span><span id="line.549">    }</span>
-<span class="source-line-no">550</span><span id="line.550">    /**</span>
-<span class="source-line-no">551</span><span id="line.551">     * Used to calculate what cells are visible as if any flicker or strobe effects were simply constant light sources.</span>
-<span class="source-line-no">552</span><span id="line.552">     * Runs part of the calculations to draw lighting as if all radii are at their widest, but does no actual drawing.</span>
-<span class="source-line-no">553</span><span id="line.553">     * This should be called any time the viewer moves to a different cell, and it is critical that this is called (at</span>
-<span class="source-line-no">554</span><span id="line.554">     * least) once after a move but before {@link #update()} gets called to change lighting at the new cell. This sets</span>
-<span class="source-line-no">555</span><span id="line.555">     * important information on what lights might need to be calculated during each update(Coord) call; it does not need</span>
-<span class="source-line-no">556</span><span id="line.556">     * to be called before {@link #updateAll()} (with no arguments) because that doesn't need a viewer. Sets</span>
-<span class="source-line-no">557</span><span id="line.557">     * {@link #fovResult}, {@link #losResult}, and {@link #noticeable} based on the given viewer position and any lights</span>
-<span class="source-line-no">558</span><span id="line.558">     * in {@link #lights}.</span>
-<span class="source-line-no">559</span><span id="line.559">     * @param viewer the position of the player or other viewer</span>
-<span class="source-line-no">560</span><span id="line.560">     * @return the calculated FOV 2D array, which is also stored in {@link #fovResult}</span>
-<span class="source-line-no">561</span><span id="line.561">     */</span>
-<span class="source-line-no">562</span><span id="line.562">    public double[][] calculateFOV(Coord viewer)</span>
-<span class="source-line-no">563</span><span id="line.563">    {</span>
-<span class="source-line-no">564</span><span id="line.564">        return calculateFOV(viewer.x, viewer.y);</span>
-<span class="source-line-no">565</span><span id="line.565">    }</span>
-<span class="source-line-no">566</span><span id="line.566"></span>
-<span class="source-line-no">567</span><span id="line.567">    /**</span>
-<span class="source-line-no">568</span><span id="line.568">     * Used to calculate what cells are visible as if any flicker or strobe effects were simply constant light sources.</span>
-<span class="source-line-no">569</span><span id="line.569">     * Runs part of the calculations to draw lighting as if all radii are at their widest, but does no actual drawing.</span>
-<span class="source-line-no">570</span><span id="line.570">     * This should be called any time the viewer moves to a different cell, and it is critical that this is called (at</span>
-<span class="source-line-no">571</span><span id="line.571">     * least) once after a move but before {@link #update()} gets called to change lighting at the new cell. This sets</span>
-<span class="source-line-no">572</span><span id="line.572">     * important information on what lights might need to be calculated during each update(Coord) call; it does not need</span>
-<span class="source-line-no">573</span><span id="line.573">     * to be called before {@link #updateAll()} (with no arguments) because that doesn't need a viewer. Sets</span>
-<span class="source-line-no">574</span><span id="line.574">     * {@link #fovResult}, {@link #losResult}, and {@link #noticeable} based on the given viewer position and any lights</span>
-<span class="source-line-no">575</span><span id="line.575">     * in {@link #lights}.</span>
-<span class="source-line-no">576</span><span id="line.576">     * @param viewerX the x-position of the player or other viewer</span>
-<span class="source-line-no">577</span><span id="line.577">     * @param viewerY the y-position of the player or other viewer</span>
-<span class="source-line-no">578</span><span id="line.578">     * @return the calculated FOV 2D array, which is also stored in {@link #fovResult}</span>
-<span class="source-line-no">579</span><span id="line.579">     */</span>
-<span class="source-line-no">580</span><span id="line.580">    public double[][] calculateFOV(int viewerX, int viewerY)</span>
-<span class="source-line-no">581</span><span id="line.581">    {</span>
-<span class="source-line-no">582</span><span id="line.582">        return calculateFOV(viewerX, viewerY, 0, 0, width, height);</span>
-<span class="source-line-no">583</span><span id="line.583">    }</span>
-<span class="source-line-no">584</span><span id="line.584"></span>
-<span class="source-line-no">585</span><span id="line.585">    /**</span>
-<span class="source-line-no">586</span><span id="line.586">     * Used to calculate what cells are visible as if any flicker or strobe effects were simply constant light sources.</span>
-<span class="source-line-no">587</span><span id="line.587">     * Runs part of the calculations to draw lighting as if all radii are at their widest, but does no actual drawing.</span>
-<span class="source-line-no">588</span><span id="line.588">     * This should be called any time the viewer moves to a different cell, and it is critical that this is called (at</span>
-<span class="source-line-no">589</span><span id="line.589">     * least) once after a move but before {@link #update()} gets called to change lighting at the new cell. This sets</span>
-<span class="source-line-no">590</span><span id="line.590">     * important information on what lights might need to be calculated during each update(Coord) call; it does not need</span>
-<span class="source-line-no">591</span><span id="line.591">     * to be called before {@link #updateAll()} (with no arguments) because that doesn't need a viewer. This overload</span>
-<span class="source-line-no">592</span><span id="line.592">     * allows the area this processes to be restricted to a rectangle between {@code minX} and {@code maxX} and between</span>
-<span class="source-line-no">593</span><span id="line.593">     * {@code minY} and {@code maxY}, ignoring any lights outside that area (typically because they are a long way out</span>
-<span class="source-line-no">594</span><span id="line.594">     * from the map's shown area). Sets {@link #fovResult}, {@link #losResult}, and {@link #noticeable} based on the</span>
-<span class="source-line-no">595</span><span id="line.595">     * given viewer position and any lights in {@link #lights}.</span>
-<span class="source-line-no">596</span><span id="line.596">     * @param viewerX the x-position of the player or other viewer</span>
-<span class="source-line-no">597</span><span id="line.597">     * @param viewerY the y-position of the player or other viewer</span>
-<span class="source-line-no">598</span><span id="line.598">     * @param minX inclusive lower bound on x to calculate</span>
-<span class="source-line-no">599</span><span id="line.599">     * @param minY inclusive lower bound on y to calculate</span>
-<span class="source-line-no">600</span><span id="line.600">     * @param maxX exclusive upper bound on x to calculate</span>
-<span class="source-line-no">601</span><span id="line.601">     * @param maxY exclusive upper bound on y to calculate</span>
-<span class="source-line-no">602</span><span id="line.602">     * @return the calculated FOV 2D array, which is also stored in {@link #fovResult}</span>
-<span class="source-line-no">603</span><span id="line.603">     */</span>
-<span class="source-line-no">604</span><span id="line.604">    public double[][] calculateFOV(int viewerX, int viewerY, int minX, int minY, int maxX, int maxY)</span>
-<span class="source-line-no">605</span><span id="line.605">    {</span>
-<span class="source-line-no">606</span><span id="line.606">        Radiance radiance;</span>
-<span class="source-line-no">607</span><span id="line.607">        minX = MathUtils.clamp(minX, 0, width);</span>
-<span class="source-line-no">608</span><span id="line.608">        maxX = MathUtils.clamp(maxX, 0, width);</span>
-<span class="source-line-no">609</span><span id="line.609">        minY = MathUtils.clamp(minY, 0, height);</span>
-<span class="source-line-no">610</span><span id="line.610">        maxY = MathUtils.clamp(maxY, 0, height);</span>
-<span class="source-line-no">611</span><span id="line.611">        FOV.reuseFOV(resistances, fovResult, viewerX, viewerY, viewerRange, radiusStrategy);</span>
-<span class="source-line-no">612</span><span id="line.612">        SColor.eraseColoredLighting(colorLighting);</span>
-<span class="source-line-no">613</span><span id="line.613">        final int sz = lights.size();</span>
-<span class="source-line-no">614</span><span id="line.614">        float maxRange = 0, range;</span>
-<span class="source-line-no">615</span><span id="line.615">        Coord pos;</span>
-<span class="source-line-no">616</span><span id="line.616">        for (int i = 0; i &lt; sz; i++) {</span>
-<span class="source-line-no">617</span><span id="line.617">            pos = lights.keyAt(i);</span>
-<span class="source-line-no">618</span><span id="line.618">            range = lights.getAt(i).range;</span>
-<span class="source-line-no">619</span><span id="line.619">            if(range &gt; maxRange &amp;&amp; </span>
-<span class="source-line-no">620</span><span id="line.620">                    pos.x + range &gt;= minX &amp;&amp; pos.x - range &lt; maxX &amp;&amp; pos.y + range &gt;= minY &amp;&amp; pos.y - range &lt; maxY) </span>
-<span class="source-line-no">621</span><span id="line.621">                maxRange = range;</span>
-<span class="source-line-no">622</span><span id="line.622">        }</span>
-<span class="source-line-no">623</span><span id="line.623">        FOV.reuseLOS(resistances, losResult, viewerX, viewerY, minX, minY, maxX, maxY);</span>
-<span class="source-line-no">624</span><span id="line.624">        noticeable.refill(losResult, 0.0001, Double.POSITIVE_INFINITY).expand8way((int) Math.ceil(maxRange));</span>
-<span class="source-line-no">625</span><span id="line.625">        for (int i = 0; i &lt; sz; i++) {</span>
-<span class="source-line-no">626</span><span id="line.626">            pos = lights.keyAt(i);</span>
-<span class="source-line-no">627</span><span id="line.627">            if(!noticeable.contains(pos))</span>
-<span class="source-line-no">628</span><span id="line.628">                continue;</span>
-<span class="source-line-no">629</span><span id="line.629">            radiance = lights.getAt(i);</span>
-<span class="source-line-no">630</span><span id="line.630">            FOV.reuseFOV(resistances, tempFOV, pos.x, pos.y, radiance.range);</span>
-<span class="source-line-no">631</span><span id="line.631">            //SColor.colorLightingInto(tempColorLighting, tempFOV, radiance.color);</span>
-<span class="source-line-no">632</span><span id="line.632">            mixColoredLighting(radiance.flare, radiance.color);</span>
-<span class="source-line-no">633</span><span id="line.633">        }</span>
-<span class="source-line-no">634</span><span id="line.634">        for (int x = Math.max(0, minX); x &lt; maxX &amp;&amp; x &lt; width; x++) {</span>
-<span class="source-line-no">635</span><span id="line.635">            for (int y = Math.max(0, minY); y &lt; maxY &amp;&amp; y &lt; height; y++) {</span>
-<span class="source-line-no">636</span><span id="line.636">                if (losResult[x][y] &gt; 0.0) {</span>
-<span class="source-line-no">637</span><span id="line.637">                    fovResult[x][y] = MathUtils.clamp(fovResult[x][y] + colorLighting[0][x][y], 0, 1);</span>
-<span class="source-line-no">638</span><span id="line.638">                }</span>
-<span class="source-line-no">639</span><span id="line.639">            }</span>
-<span class="source-line-no">640</span><span id="line.640">        }</span>
-<span class="source-line-no">641</span><span id="line.641">        return fovResult;</span>
-<span class="source-line-no">642</span><span id="line.642">    }</span>
-<span class="source-line-no">643</span><span id="line.643"></span>
-<span class="source-line-no">644</span><span id="line.644">}</span>
+<span class="source-line-no">424</span><span id="line.424">            mixColoredLighting(radiance.flare, radiance.color);</span>
+<span class="source-line-no">425</span><span id="line.425">        }</span>
+<span class="source-line-no">426</span><span id="line.426">    }</span>
+<span class="source-line-no">427</span><span id="line.427">    /**</span>
+<span class="source-line-no">428</span><span id="line.428">     * Typically called every frame when there isn't a single viewer, this updates the flicker and strobe effects of</span>
+<span class="source-line-no">429</span><span id="line.429">     * Radiance objects and applies those changes in lighting color and strength to the various fields of this</span>
+<span class="source-line-no">430</span><span id="line.430">     * LightingHandler. This method is usually called before each call to {@link #draw(float[][])}, but other code may</span>
+<span class="source-line-no">431</span><span id="line.431">     * be between the calls and may affect the lighting in customized ways. This overload has no viewer, so all cells</span>
+<span class="source-line-no">432</span><span id="line.432">     * are considered visible unless they are fully obstructed (solid cells behind walls, for example). Unlike update(),</span>
+<span class="source-line-no">433</span><span id="line.433">     * this method does not need {@link #calculateFOV(Coord)} to be called for it to work properly.</span>
+<span class="source-line-no">434</span><span id="line.434">     */</span>
+<span class="source-line-no">435</span><span id="line.435">    public void updateAll()</span>
+<span class="source-line-no">436</span><span id="line.436">    {</span>
+<span class="source-line-no">437</span><span id="line.437">        Radiance radiance;</span>
+<span class="source-line-no">438</span><span id="line.438">        for (int x = 0; x &lt; width; x++) {</span>
+<span class="source-line-no">439</span><span id="line.439">            PER_CELL:</span>
+<span class="source-line-no">440</span><span id="line.440">            for (int y = 0; y &lt; height; y++) {</span>
+<span class="source-line-no">441</span><span id="line.441">                for (int xx = Math.max(0, x - 1), xi = 0; xi &lt; 3 &amp;&amp; xx &lt; width; xi++, xx++) {</span>
+<span class="source-line-no">442</span><span id="line.442">                    for (int yy = Math.max(0, y - 1), yi = 0; yi &lt; 3 &amp;&amp; yy &lt; height; yi++, yy++) {</span>
+<span class="source-line-no">443</span><span id="line.443">                        if(resistances[xx][yy] &lt; 1.0){</span>
+<span class="source-line-no">444</span><span id="line.444">                            losResult[x][y] = 1.0;</span>
+<span class="source-line-no">445</span><span id="line.445">                            continue PER_CELL;</span>
+<span class="source-line-no">446</span><span id="line.446">                        }</span>
+<span class="source-line-no">447</span><span id="line.447">                    }</span>
+<span class="source-line-no">448</span><span id="line.448">                }</span>
+<span class="source-line-no">449</span><span id="line.449">            }</span>
+<span class="source-line-no">450</span><span id="line.450">        }</span>
+<span class="source-line-no">451</span><span id="line.451">        SColor.eraseColoredLighting(colorLighting);</span>
+<span class="source-line-no">452</span><span id="line.452">        final int sz = lights.size();</span>
+<span class="source-line-no">453</span><span id="line.453">        Coord pos;</span>
+<span class="source-line-no">454</span><span id="line.454">        for (int i = 0; i &lt; sz; i++) {</span>
+<span class="source-line-no">455</span><span id="line.455">            pos = lights.keyAt(i);</span>
+<span class="source-line-no">456</span><span id="line.456">            radiance = lights.getAt(i);</span>
+<span class="source-line-no">457</span><span id="line.457">            FOV.reuseFOV(resistances, tempFOV, pos.x, pos.y, radiance.currentRange());</span>
+<span class="source-line-no">458</span><span id="line.458">            mixColoredLighting(radiance.flare, radiance.color);</span>
+<span class="source-line-no">459</span><span id="line.459">        }</span>
+<span class="source-line-no">460</span><span id="line.460">        for (int x = 0; x &lt; width; x++) {</span>
+<span class="source-line-no">461</span><span id="line.461">            for (int y = 0; y &lt; height; y++) {</span>
+<span class="source-line-no">462</span><span id="line.462">                if (losResult[x][y] &gt; 0.0) {</span>
+<span class="source-line-no">463</span><span id="line.463">                    fovResult[x][y] = MathUtils.clamp(losResult[x][y] + colorLighting[0][x][y], 0, 1);</span>
+<span class="source-line-no">464</span><span id="line.464">                }</span>
+<span class="source-line-no">465</span><span id="line.465">            }</span>
+<span class="source-line-no">466</span><span id="line.466">        }</span>
+<span class="source-line-no">467</span><span id="line.467">    }</span>
+<span class="source-line-no">468</span><span id="line.468">    /**</span>
+<span class="source-line-no">469</span><span id="line.469">     * Updates the flicker and strobe effects of a Radiance object and applies the lighting from just that Radiance to</span>
+<span class="source-line-no">470</span><span id="line.470">     * just the {@link #colorLighting} field, without changing FOV. This method is meant to be used for GUI effects that</span>
+<span class="source-line-no">471</span><span id="line.471">     * aren't representative of something a character in the game could interact with. It is usually called after</span>
+<span class="source-line-no">472</span><span id="line.472">     * {@link #update()} and before each call to {@link #draw(float[][])}, but other code may be between the calls</span>
+<span class="source-line-no">473</span><span id="line.473">     * and may affect the lighting in customized ways.</span>
+<span class="source-line-no">474</span><span id="line.474">     * @param pos the position of the light effect</span>
+<span class="source-line-no">475</span><span id="line.475">     * @param radiance the Radiance to update standalone, which does not need to be already added to this </span>
+<span class="source-line-no">476</span><span id="line.476">     */</span>
+<span class="source-line-no">477</span><span id="line.477">    public void updateUI(Coord pos, Radiance radiance)</span>
+<span class="source-line-no">478</span><span id="line.478">    {</span>
+<span class="source-line-no">479</span><span id="line.479">        updateUI(pos.x, pos.y, radiance);</span>
+<span class="source-line-no">480</span><span id="line.480">    }</span>
+<span class="source-line-no">481</span><span id="line.481"></span>
+<span class="source-line-no">482</span><span id="line.482">    /**</span>
+<span class="source-line-no">483</span><span id="line.483">     * Updates the flicker and strobe effects of a Radiance object and applies the lighting from just that Radiance to</span>
+<span class="source-line-no">484</span><span id="line.484">     * just the {@link #colorLighting} field, without changing FOV. This method is meant to be used for GUI effects that</span>
+<span class="source-line-no">485</span><span id="line.485">     * aren't representative of something a character in the game could interact with. It is usually called after</span>
+<span class="source-line-no">486</span><span id="line.486">     * {@link #update()} and before each call to {@link #draw(float[][])}, but other code may be between the calls</span>
+<span class="source-line-no">487</span><span id="line.487">     * and may affect the lighting in customized ways.</span>
+<span class="source-line-no">488</span><span id="line.488">     * @param lightX the x-position of the light effect</span>
+<span class="source-line-no">489</span><span id="line.489">     * @param lightY the y-position of the light effect</span>
+<span class="source-line-no">490</span><span id="line.490">     * @param radiance the Radiance to update standalone, which does not need to be already added to this </span>
+<span class="source-line-no">491</span><span id="line.491">     */</span>
+<span class="source-line-no">492</span><span id="line.492">    public void updateUI(int lightX, int lightY, Radiance radiance)</span>
+<span class="source-line-no">493</span><span id="line.493">    {</span>
+<span class="source-line-no">494</span><span id="line.494">        FOV.reuseFOV(resistances, tempFOV, lightX, lightY, radiance.currentRange());</span>
+<span class="source-line-no">495</span><span id="line.495">        mixColoredLighting(radiance.flare, radiance.color);</span>
+<span class="source-line-no">496</span><span id="line.496">    }</span>
+<span class="source-line-no">497</span><span id="line.497"></span>
+<span class="source-line-no">498</span><span id="line.498">    /**</span>
+<span class="source-line-no">499</span><span id="line.499">     * Given a SparseLayers, fills the SparseLayers with different colors based on what lights are present in line of</span>
+<span class="source-line-no">500</span><span id="line.500">     * sight of the viewer and the various flicker or strobe effects that Radiance light sources can do. You should</span>
+<span class="source-line-no">501</span><span id="line.501">     * usually call {@link #update()} before each call to draw(), but you may want to make custom changes to the</span>
+<span class="source-line-no">502</span><span id="line.502">     * lighting in between those two calls (that is the only place those changes will be noticed).</span>
+<span class="source-line-no">503</span><span id="line.503">     * @param layers a SparseLayers that may have existing background colors (these will be mixed in)</span>
+<span class="source-line-no">504</span><span id="line.504">     */</span>
+<span class="source-line-no">505</span><span id="line.505">    public void draw(SparseLayers layers)</span>
+<span class="source-line-no">506</span><span id="line.506">    {</span>
+<span class="source-line-no">507</span><span id="line.507">        draw(layers.backgrounds);</span>
+<span class="source-line-no">508</span><span id="line.508">    }</span>
+<span class="source-line-no">509</span><span id="line.509">    /**</span>
+<span class="source-line-no">510</span><span id="line.510">     * Given a SquidPanel that should be only solid blocks (such as the background of a SquidLayers) and a position for</span>
+<span class="source-line-no">511</span><span id="line.511">     * the viewer (typically the player), fills the SquidPanel with different colors based on what lights are present in</span>
+<span class="source-line-no">512</span><span id="line.512">     * line of sight of the viewer and the various flickering or pulsing effects that Radiance light sources can do. </span>
+<span class="source-line-no">513</span><span id="line.513">     * Given a SquidPanel that should be only solid blocks (such as the background of a SquidLayers), fills the</span>
+<span class="source-line-no">514</span><span id="line.514">     * SquidPanel with different colors based on what lights are present in line of sight of the viewer and the various</span>
+<span class="source-line-no">515</span><span id="line.515">     * flicker or strobe effects that Radiance light sources can do. You should usually call {@link #update()}</span>
+<span class="source-line-no">516</span><span id="line.516">     * before each call to draw(), but you may want to make custom changes to the lighting in between those two calls</span>
+<span class="source-line-no">517</span><span id="line.517">     * (that is the only place those changes will be noticed).</span>
+<span class="source-line-no">518</span><span id="line.518">     * @param background a SquidPanel used as a background, such as the back Panel of a SquidLayers</span>
+<span class="source-line-no">519</span><span id="line.519">     */</span>
+<span class="source-line-no">520</span><span id="line.520">    public void draw(SquidPanel background)</span>
+<span class="source-line-no">521</span><span id="line.521">    {</span>
+<span class="source-line-no">522</span><span id="line.522">        draw(background.colors);</span>
+<span class="source-line-no">523</span><span id="line.523">    }</span>
+<span class="source-line-no">524</span><span id="line.524"></span>
+<span class="source-line-no">525</span><span id="line.525">    /**</span>
+<span class="source-line-no">526</span><span id="line.526">     * Given a 2D array of packed float colors, fills the 2D array with different colors based on what lights are</span>
+<span class="source-line-no">527</span><span id="line.527">     * present in line of sight of the viewer and the various flicker or strobe effects that Radiance light sources can</span>
+<span class="source-line-no">528</span><span id="line.528">     * do. You should usually call {@link #update()} before each call to draw(), but you may want to make custom</span>
+<span class="source-line-no">529</span><span id="line.529">     * changes to the lighting in between those two calls (that is the only place those changes will be noticed).</span>
+<span class="source-line-no">530</span><span id="line.530">     * @param backgrounds a 2D float array, typically obtained from {@link squidpony.squidgrid.gui.gdx.SquidPanel#colors} or {@link squidpony.squidgrid.gui.gdx.SparseLayers#backgrounds}</span>
+<span class="source-line-no">531</span><span id="line.531">     */</span>
+<span class="source-line-no">532</span><span id="line.532">    public void draw(float[][] backgrounds)</span>
+<span class="source-line-no">533</span><span id="line.533">    {</span>
+<span class="source-line-no">534</span><span id="line.534">        float current;</span>
+<span class="source-line-no">535</span><span id="line.535">        for (int x = 0; x &lt; width; x++) {</span>
+<span class="source-line-no">536</span><span id="line.536">            for (int y = 0; y &lt; height; y++) {</span>
+<span class="source-line-no">537</span><span id="line.537">                if (losResult[x][y] &gt; 0.0 &amp;&amp; fovResult[x][y] &gt; 0.0) {</span>
+<span class="source-line-no">538</span><span id="line.538">                        current = backgrounds[x][y];</span>
+<span class="source-line-no">539</span><span id="line.539">                        if(current == 0f)</span>
+<span class="source-line-no">540</span><span id="line.540">                            current = backgroundColor;</span>
+<span class="source-line-no">541</span><span id="line.541">                        backgrounds[x][y] = lerpFloatColorsBlended(current,</span>
+<span class="source-line-no">542</span><span id="line.542">                                colorLighting[1][x][y], colorLighting[0][x][y] * 0.4f);</span>
+<span class="source-line-no">543</span><span id="line.543">                }</span>
+<span class="source-line-no">544</span><span id="line.544">            }</span>
+<span class="source-line-no">545</span><span id="line.545">        }</span>
+<span class="source-line-no">546</span><span id="line.546">    }</span>
+<span class="source-line-no">547</span><span id="line.547">    /**</span>
+<span class="source-line-no">548</span><span id="line.548">     * Used to calculate what cells are visible as if any flicker or strobe effects were simply constant light sources.</span>
+<span class="source-line-no">549</span><span id="line.549">     * Runs part of the calculations to draw lighting as if all radii are at their widest, but does no actual drawing.</span>
+<span class="source-line-no">550</span><span id="line.550">     * This should be called any time the viewer moves to a different cell, and it is critical that this is called (at</span>
+<span class="source-line-no">551</span><span id="line.551">     * least) once after a move but before {@link #update()} gets called to change lighting at the new cell. This sets</span>
+<span class="source-line-no">552</span><span id="line.552">     * important information on what lights might need to be calculated during each update(Coord) call; it does not need</span>
+<span class="source-line-no">553</span><span id="line.553">     * to be called before {@link #updateAll()} (with no arguments) because that doesn't need a viewer. Sets</span>
+<span class="source-line-no">554</span><span id="line.554">     * {@link #fovResult}, {@link #losResult}, and {@link #noticeable} based on the given viewer position and any lights</span>
+<span class="source-line-no">555</span><span id="line.555">     * in {@link #lights}.</span>
+<span class="source-line-no">556</span><span id="line.556">     * @param viewer the position of the player or other viewer</span>
+<span class="source-line-no">557</span><span id="line.557">     * @return the calculated FOV 2D array, which is also stored in {@link #fovResult}</span>
+<span class="source-line-no">558</span><span id="line.558">     */</span>
+<span class="source-line-no">559</span><span id="line.559">    public double[][] calculateFOV(Coord viewer)</span>
+<span class="source-line-no">560</span><span id="line.560">    {</span>
+<span class="source-line-no">561</span><span id="line.561">        return calculateFOV(viewer.x, viewer.y);</span>
+<span class="source-line-no">562</span><span id="line.562">    }</span>
+<span class="source-line-no">563</span><span id="line.563"></span>
+<span class="source-line-no">564</span><span id="line.564">    /**</span>
+<span class="source-line-no">565</span><span id="line.565">     * Used to calculate what cells are visible as if any flicker or strobe effects were simply constant light sources.</span>
+<span class="source-line-no">566</span><span id="line.566">     * Runs part of the calculations to draw lighting as if all radii are at their widest, but does no actual drawing.</span>
+<span class="source-line-no">567</span><span id="line.567">     * This should be called any time the viewer moves to a different cell, and it is critical that this is called (at</span>
+<span class="source-line-no">568</span><span id="line.568">     * least) once after a move but before {@link #update()} gets called to change lighting at the new cell. This sets</span>
+<span class="source-line-no">569</span><span id="line.569">     * important information on what lights might need to be calculated during each update(Coord) call; it does not need</span>
+<span class="source-line-no">570</span><span id="line.570">     * to be called before {@link #updateAll()} (with no arguments) because that doesn't need a viewer. Sets</span>
+<span class="source-line-no">571</span><span id="line.571">     * {@link #fovResult}, {@link #losResult}, and {@link #noticeable} based on the given viewer position and any lights</span>
+<span class="source-line-no">572</span><span id="line.572">     * in {@link #lights}.</span>
+<span class="source-line-no">573</span><span id="line.573">     * @param viewerX the x-position of the player or other viewer</span>
+<span class="source-line-no">574</span><span id="line.574">     * @param viewerY the y-position of the player or other viewer</span>
+<span class="source-line-no">575</span><span id="line.575">     * @return the calculated FOV 2D array, which is also stored in {@link #fovResult}</span>
+<span class="source-line-no">576</span><span id="line.576">     */</span>
+<span class="source-line-no">577</span><span id="line.577">    public double[][] calculateFOV(int viewerX, int viewerY)</span>
+<span class="source-line-no">578</span><span id="line.578">    {</span>
+<span class="source-line-no">579</span><span id="line.579">        return calculateFOV(viewerX, viewerY, 0, 0, width, height);</span>
+<span class="source-line-no">580</span><span id="line.580">    }</span>
+<span class="source-line-no">581</span><span id="line.581"></span>
+<span class="source-line-no">582</span><span id="line.582">    /**</span>
+<span class="source-line-no">583</span><span id="line.583">     * Used to calculate what cells are visible as if any flicker or strobe effects were simply constant light sources.</span>
+<span class="source-line-no">584</span><span id="line.584">     * Runs part of the calculations to draw lighting as if all radii are at their widest, but does no actual drawing.</span>
+<span class="source-line-no">585</span><span id="line.585">     * This should be called any time the viewer moves to a different cell, and it is critical that this is called (at</span>
+<span class="source-line-no">586</span><span id="line.586">     * least) once after a move but before {@link #update()} gets called to change lighting at the new cell. This sets</span>
+<span class="source-line-no">587</span><span id="line.587">     * important information on what lights might need to be calculated during each update(Coord) call; it does not need</span>
+<span class="source-line-no">588</span><span id="line.588">     * to be called before {@link #updateAll()} (with no arguments) because that doesn't need a viewer. This overload</span>
+<span class="source-line-no">589</span><span id="line.589">     * allows the area this processes to be restricted to a rectangle between {@code minX} and {@code maxX} and between</span>
+<span class="source-line-no">590</span><span id="line.590">     * {@code minY} and {@code maxY}, ignoring any lights outside that area (typically because they are a long way out</span>
+<span class="source-line-no">591</span><span id="line.591">     * from the map's shown area). Sets {@link #fovResult}, {@link #losResult}, and {@link #noticeable} based on the</span>
+<span class="source-line-no">592</span><span id="line.592">     * given viewer position and any lights in {@link #lights}.</span>
+<span class="source-line-no">593</span><span id="line.593">     * @param viewerX the x-position of the player or other viewer</span>
+<span class="source-line-no">594</span><span id="line.594">     * @param viewerY the y-position of the player or other viewer</span>
+<span class="source-line-no">595</span><span id="line.595">     * @param minX inclusive lower bound on x to calculate</span>
+<span class="source-line-no">596</span><span id="line.596">     * @param minY inclusive lower bound on y to calculate</span>
+<span class="source-line-no">597</span><span id="line.597">     * @param maxX exclusive upper bound on x to calculate</span>
+<span class="source-line-no">598</span><span id="line.598">     * @param maxY exclusive upper bound on y to calculate</span>
+<span class="source-line-no">599</span><span id="line.599">     * @return the calculated FOV 2D array, which is also stored in {@link #fovResult}</span>
+<span class="source-line-no">600</span><span id="line.600">     */</span>
+<span class="source-line-no">601</span><span id="line.601">    public double[][] calculateFOV(int viewerX, int viewerY, int minX, int minY, int maxX, int maxY)</span>
+<span class="source-line-no">602</span><span id="line.602">    {</span>
+<span class="source-line-no">603</span><span id="line.603">        Radiance radiance;</span>
+<span class="source-line-no">604</span><span id="line.604">        minX = MathUtils.clamp(minX, 0, width);</span>
+<span class="source-line-no">605</span><span id="line.605">        maxX = MathUtils.clamp(maxX, 0, width);</span>
+<span class="source-line-no">606</span><span id="line.606">        minY = MathUtils.clamp(minY, 0, height);</span>
+<span class="source-line-no">607</span><span id="line.607">        maxY = MathUtils.clamp(maxY, 0, height);</span>
+<span class="source-line-no">608</span><span id="line.608">        FOV.reuseFOV(resistances, fovResult, viewerX, viewerY, viewerRange, radiusStrategy);</span>
+<span class="source-line-no">609</span><span id="line.609">        SColor.eraseColoredLighting(colorLighting);</span>
+<span class="source-line-no">610</span><span id="line.610">        final int sz = lights.size();</span>
+<span class="source-line-no">611</span><span id="line.611">        float maxRange = 0, range;</span>
+<span class="source-line-no">612</span><span id="line.612">        Coord pos;</span>
+<span class="source-line-no">613</span><span id="line.613">        for (int i = 0; i &lt; sz; i++) {</span>
+<span class="source-line-no">614</span><span id="line.614">            pos = lights.keyAt(i);</span>
+<span class="source-line-no">615</span><span id="line.615">            range = lights.getAt(i).range;</span>
+<span class="source-line-no">616</span><span id="line.616">            if(range &gt; maxRange &amp;&amp; </span>
+<span class="source-line-no">617</span><span id="line.617">                    pos.x + range &gt;= minX &amp;&amp; pos.x - range &lt; maxX &amp;&amp; pos.y + range &gt;= minY &amp;&amp; pos.y - range &lt; maxY) </span>
+<span class="source-line-no">618</span><span id="line.618">                maxRange = range;</span>
+<span class="source-line-no">619</span><span id="line.619">        }</span>
+<span class="source-line-no">620</span><span id="line.620">        FOV.reuseLOS(resistances, losResult, viewerX, viewerY, minX, minY, maxX, maxY);</span>
+<span class="source-line-no">621</span><span id="line.621">        noticeable.refill(losResult, 0.0001, Double.POSITIVE_INFINITY).expand8way((int) Math.ceil(maxRange));</span>
+<span class="source-line-no">622</span><span id="line.622">        for (int i = 0; i &lt; sz; i++) {</span>
+<span class="source-line-no">623</span><span id="line.623">            pos = lights.keyAt(i);</span>
+<span class="source-line-no">624</span><span id="line.624">            if(!noticeable.contains(pos))</span>
+<span class="source-line-no">625</span><span id="line.625">                continue;</span>
+<span class="source-line-no">626</span><span id="line.626">            radiance = lights.getAt(i);</span>
+<span class="source-line-no">627</span><span id="line.627">            FOV.reuseFOV(resistances, tempFOV, pos.x, pos.y, radiance.range);</span>
+<span class="source-line-no">628</span><span id="line.628">            mixColoredLighting(radiance.flare, radiance.color);</span>
+<span class="source-line-no">629</span><span id="line.629">        }</span>
+<span class="source-line-no">630</span><span id="line.630">        for (int x = Math.max(0, minX); x &lt; maxX &amp;&amp; x &lt; width; x++) {</span>
+<span class="source-line-no">631</span><span id="line.631">            for (int y = Math.max(0, minY); y &lt; maxY &amp;&amp; y &lt; height; y++) {</span>
+<span class="source-line-no">632</span><span id="line.632">                if (losResult[x][y] &gt; 0.0) {</span>
+<span class="source-line-no">633</span><span id="line.633">                    fovResult[x][y] = MathUtils.clamp(fovResult[x][y] + colorLighting[0][x][y], 0, 1);</span>
+<span class="source-line-no">634</span><span id="line.634">                }</span>
+<span class="source-line-no">635</span><span id="line.635">            }</span>
+<span class="source-line-no">636</span><span id="line.636">        }</span>
+<span class="source-line-no">637</span><span id="line.637">        return fovResult;</span>
+<span class="source-line-no">638</span><span id="line.638">    }</span>
+<span class="source-line-no">639</span><span id="line.639"></span>
+<span class="source-line-no">640</span><span id="line.640">}</span>
 
 
 

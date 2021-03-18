@@ -195,7 +195,7 @@ implements java.io.Serializable</pre>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#resistances">resistances</a></span></code></th>
 <td class="col-last">
 <div class="block">The 2D array of light-resistance values from 0.0 to 1.0 for each cell on the map, as produced by
- <code>DungeonUtility.generateResistances(char[][])</code>.</div>
+ <code>FOV.generateResistances(char[][])</code>.</div>
 </td>
 </tr>
 <tr class="row-color">
@@ -257,8 +257,8 @@ implements java.io.Serializable</pre>
 <tr class="row-color">
 <th class="col-constructor-name" scope="row"><code><span class="member-name-link"><a href="#%3Cinit%3E(double%5B%5D%5B%5D)">LightingHandler</a></span>&#8203;(double[][]&nbsp;resistance)</code></th>
 <td class="col-last">
-<div class="block">Given a resistance array as produced by <code>DungeonUtility.generateResistances(char[][])</code>
- or <code>DungeonUtility.generateSimpleResistances(char[][])</code>, makes a
+<div class="block">Given a resistance array as produced by <code>FOV.generateResistances(char[][])</code>
+ or <code>FOV.generateSimpleResistances(char[][])</code>, makes a
  LightingHandler that can have <a href="Radiance.html" title="class in squidpony.squidgrid.gui.gdx"><code>Radiance</code></a> objects added to it in various locations.</div>
 </td>
 </tr>
@@ -268,8 +268,8 @@ float&nbsp;backgroundColor,
 squidpony.squidgrid.Radius&nbsp;radiusStrategy,
 double&nbsp;viewerVisionRange)</code></th>
 <td class="col-last">
-<div class="block">Given a resistance array as produced by <code>DungeonUtility.generateResistances(char[][])</code>
- or <code>DungeonUtility.generateSimpleResistances(char[][])</code>, makes a
+<div class="block">Given a resistance array as produced by <code>FOV.generateResistances(char[][])</code>
+ or <code>FOV.generateSimpleResistances(char[][])</code>, makes a
  LightingHandler that can have <a href="Radiance.html" title="class in squidpony.squidgrid.gui.gdx"><code>Radiance</code></a> objects added to it in various locations.</div>
 </td>
 </tr>
@@ -279,8 +279,8 @@ com.badlogic.gdx.graphics.Color&nbsp;backgroundColor,
 squidpony.squidgrid.Radius&nbsp;radiusStrategy,
 double&nbsp;viewerVisionRange)</code></th>
 <td class="col-last">
-<div class="block">Given a resistance array as produced by <code>DungeonUtility.generateResistances(char[][])</code>
- or <code>DungeonUtility.generateSimpleResistances(char[][])</code>, makes a
+<div class="block">Given a resistance array as produced by <code>FOV.generateResistances(char[][])</code>
+ or <code>FOV.generateSimpleResistances(char[][])</code>, makes a
  LightingHandler that can have <a href="Radiance.html" title="class in squidpony.squidgrid.gui.gdx"><code>Radiance</code></a> objects added to it in various locations.</div>
 </td>
 </tr>
@@ -510,7 +510,7 @@ int&nbsp;lightY,
 <h3>resistances</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">double[][]</span>&nbsp;<span class="member-name"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LightingHandler.html#line.48">resistances</a></span></div>
 <div class="block">The 2D array of light-resistance values from 0.0 to 1.0 for each cell on the map, as produced by
- <code>DungeonUtility.generateResistances(char[][])</code>.</div>
+ <code>FOV.generateResistances(char[][])</code>.</div>
 </section>
 </li>
 <li>
@@ -624,8 +624,8 @@ int&nbsp;lightY,
 <section class="detail" id="&lt;init&gt;(double[][])">
 <h3>LightingHandler</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="member-name"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LightingHandler.html#line.126">LightingHandler</a></span>&#8203;(<span class="parameters">double[][]&nbsp;resistance)</span></div>
-<div class="block">Given a resistance array as produced by <code>DungeonUtility.generateResistances(char[][])</code>
- or <code>DungeonUtility.generateSimpleResistances(char[][])</code>, makes a
+<div class="block">Given a resistance array as produced by <code>FOV.generateResistances(char[][])</code>
+ or <code>FOV.generateSimpleResistances(char[][])</code>, makes a
  LightingHandler that can have <a href="Radiance.html" title="class in squidpony.squidgrid.gui.gdx"><code>Radiance</code></a> objects added to it in various locations. This will use a solid
  black background when it casts light on cells without existing lighting. The viewer vision range will be 4.0, and
  lights will use a circular shape.</div>
@@ -642,8 +642,8 @@ int&nbsp;lightY,
 com.badlogic.gdx.graphics.Color&nbsp;backgroundColor,
 squidpony.squidgrid.Radius&nbsp;radiusStrategy,
 double&nbsp;viewerVisionRange)</span></div>
-<div class="block">Given a resistance array as produced by <code>DungeonUtility.generateResistances(char[][])</code>
- or <code>DungeonUtility.generateSimpleResistances(char[][])</code>, makes a
+<div class="block">Given a resistance array as produced by <code>FOV.generateResistances(char[][])</code>
+ or <code>FOV.generateSimpleResistances(char[][])</code>, makes a
  LightingHandler that can have <a href="Radiance.html" title="class in squidpony.squidgrid.gui.gdx"><code>Radiance</code></a> objects added to it in various locations.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -662,8 +662,8 @@ double&nbsp;viewerVisionRange)</span></div>
 float&nbsp;backgroundColor,
 squidpony.squidgrid.Radius&nbsp;radiusStrategy,
 double&nbsp;viewerVisionRange)</span></div>
-<div class="block">Given a resistance array as produced by <code>DungeonUtility.generateResistances(char[][])</code>
- or <code>DungeonUtility.generateSimpleResistances(char[][])</code>, makes a
+<div class="block">Given a resistance array as produced by <code>FOV.generateResistances(char[][])</code>
+ or <code>FOV.generateSimpleResistances(char[][])</code>, makes a
  LightingHandler that can have <a href="Radiance.html" title="class in squidpony.squidgrid.gui.gdx"><code>Radiance</code></a> objects added to it in various locations.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -851,7 +851,7 @@ float&nbsp;color)</span></div>
 <li>
 <section class="detail" id="updateAll()">
 <h3>updateAll</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LightingHandler.html#line.436">updateAll</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LightingHandler.html#line.435">updateAll</a></span>()</div>
 <div class="block">Typically called every frame when there isn't a single viewer, this updates the flicker and strobe effects of
  Radiance objects and applies those changes in lighting color and strength to the various fields of this
  LightingHandler. This method is usually called before each call to <a href="#draw(float%5B%5D%5B%5D)"><code>draw(float[][])</code></a>, but other code may
@@ -863,7 +863,7 @@ float&nbsp;color)</span></div>
 <li>
 <section class="detail" id="updateUI(squidpony.squidmath.Coord,squidpony.squidgrid.gui.gdx.Radiance)">
 <h3>updateUI</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LightingHandler.html#line.479">updateUI</a></span>&#8203;(<span class="parameters">squidpony.squidmath.Coord&nbsp;pos,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LightingHandler.html#line.477">updateUI</a></span>&#8203;(<span class="parameters">squidpony.squidmath.Coord&nbsp;pos,
 <a href="Radiance.html" title="class in squidpony.squidgrid.gui.gdx">Radiance</a>&nbsp;radiance)</span></div>
 <div class="block">Updates the flicker and strobe effects of a Radiance object and applies the lighting from just that Radiance to
  just the <a href="#colorLighting"><code>colorLighting</code></a> field, without changing FOV. This method is meant to be used for GUI effects that
@@ -880,7 +880,7 @@ float&nbsp;color)</span></div>
 <li>
 <section class="detail" id="updateUI(int,int,squidpony.squidgrid.gui.gdx.Radiance)">
 <h3>updateUI</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LightingHandler.html#line.494">updateUI</a></span>&#8203;(<span class="parameters">int&nbsp;lightX,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LightingHandler.html#line.492">updateUI</a></span>&#8203;(<span class="parameters">int&nbsp;lightX,
 int&nbsp;lightY,
 <a href="Radiance.html" title="class in squidpony.squidgrid.gui.gdx">Radiance</a>&nbsp;radiance)</span></div>
 <div class="block">Updates the flicker and strobe effects of a Radiance object and applies the lighting from just that Radiance to
@@ -899,7 +899,7 @@ int&nbsp;lightY,
 <li>
 <section class="detail" id="draw(squidpony.squidgrid.gui.gdx.SparseLayers)">
 <h3>draw</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LightingHandler.html#line.508">draw</a></span>&#8203;(<span class="parameters"><a href="SparseLayers.html" title="class in squidpony.squidgrid.gui.gdx">SparseLayers</a>&nbsp;layers)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LightingHandler.html#line.505">draw</a></span>&#8203;(<span class="parameters"><a href="SparseLayers.html" title="class in squidpony.squidgrid.gui.gdx">SparseLayers</a>&nbsp;layers)</span></div>
 <div class="block">Given a SparseLayers, fills the SparseLayers with different colors based on what lights are present in line of
  sight of the viewer and the various flicker or strobe effects that Radiance light sources can do. You should
  usually call <a href="#update()"><code>update()</code></a> before each call to draw(), but you may want to make custom changes to the
@@ -913,7 +913,7 @@ int&nbsp;lightY,
 <li>
 <section class="detail" id="draw(squidpony.squidgrid.gui.gdx.SquidPanel)">
 <h3>draw</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LightingHandler.html#line.523">draw</a></span>&#8203;(<span class="parameters"><a href="SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">SquidPanel</a>&nbsp;background)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LightingHandler.html#line.520">draw</a></span>&#8203;(<span class="parameters"><a href="SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">SquidPanel</a>&nbsp;background)</span></div>
 <div class="block">Given a SquidPanel that should be only solid blocks (such as the background of a SquidLayers) and a position for
  the viewer (typically the player), fills the SquidPanel with different colors based on what lights are present in
  line of sight of the viewer and the various flickering or pulsing effects that Radiance light sources can do. 
@@ -931,7 +931,7 @@ int&nbsp;lightY,
 <li>
 <section class="detail" id="draw(float[][])">
 <h3>draw</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LightingHandler.html#line.535">draw</a></span>&#8203;(<span class="parameters">float[][]&nbsp;backgrounds)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LightingHandler.html#line.532">draw</a></span>&#8203;(<span class="parameters">float[][]&nbsp;backgrounds)</span></div>
 <div class="block">Given a 2D array of packed float colors, fills the 2D array with different colors based on what lights are
  present in line of sight of the viewer and the various flicker or strobe effects that Radiance light sources can
  do. You should usually call <a href="#update()"><code>update()</code></a> before each call to draw(), but you may want to make custom
@@ -945,7 +945,7 @@ int&nbsp;lightY,
 <li>
 <section class="detail" id="calculateFOV(squidpony.squidmath.Coord)">
 <h3>calculateFOV</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">double[][]</span>&nbsp;<span class="member-name"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LightingHandler.html#line.562">calculateFOV</a></span>&#8203;(<span class="parameters">squidpony.squidmath.Coord&nbsp;viewer)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">double[][]</span>&nbsp;<span class="member-name"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LightingHandler.html#line.559">calculateFOV</a></span>&#8203;(<span class="parameters">squidpony.squidmath.Coord&nbsp;viewer)</span></div>
 <div class="block">Used to calculate what cells are visible as if any flicker or strobe effects were simply constant light sources.
  Runs part of the calculations to draw lighting as if all radii are at their widest, but does no actual drawing.
  This should be called any time the viewer moves to a different cell, and it is critical that this is called (at
@@ -965,7 +965,7 @@ int&nbsp;lightY,
 <li>
 <section class="detail" id="calculateFOV(int,int)">
 <h3>calculateFOV</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">double[][]</span>&nbsp;<span class="member-name"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LightingHandler.html#line.580">calculateFOV</a></span>&#8203;(<span class="parameters">int&nbsp;viewerX,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">double[][]</span>&nbsp;<span class="member-name"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LightingHandler.html#line.577">calculateFOV</a></span>&#8203;(<span class="parameters">int&nbsp;viewerX,
 int&nbsp;viewerY)</span></div>
 <div class="block">Used to calculate what cells are visible as if any flicker or strobe effects were simply constant light sources.
  Runs part of the calculations to draw lighting as if all radii are at their widest, but does no actual drawing.
@@ -987,7 +987,7 @@ int&nbsp;viewerY)</span></div>
 <li>
 <section class="detail" id="calculateFOV(int,int,int,int,int,int)">
 <h3>calculateFOV</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">double[][]</span>&nbsp;<span class="member-name"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LightingHandler.html#line.604">calculateFOV</a></span>&#8203;(<span class="parameters">int&nbsp;viewerX,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">double[][]</span>&nbsp;<span class="member-name"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LightingHandler.html#line.601">calculateFOV</a></span>&#8203;(<span class="parameters">int&nbsp;viewerX,
 int&nbsp;viewerY,
 int&nbsp;minX,
 int&nbsp;minY,

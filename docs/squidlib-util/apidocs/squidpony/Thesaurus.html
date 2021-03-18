@@ -15,7 +15,7 @@
 <script type="text/javascript" src="../script-dir/jquery-ui.min.js"></script>
 </head>
 <body class="class-declaration-page">
-<script type="text/javascript">var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":9,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":9,"i19":10,"i20":9,"i21":10,"i22":10,"i23":10,"i24":10};
+<script type="text/javascript">var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":9,"i7":9,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":9,"i23":10,"i24":9,"i25":10,"i26":10,"i27":10,"i28":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "alt-color";
 var rowColor = "row-color";
@@ -222,9 +222,21 @@ implements java.io.Serializable</pre>
 <td class="col-last">&nbsp;</td>
 </tr>
 <tr class="alt-color">
+<td class="col-first"><code>protected <a href="squidmath/GapShuffler.html" title="class in squidpony.squidmath">GapShuffler</a>&lt;java.lang.String&gt;</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#vegetableTermShuffler">vegetableTermShuffler</a></span></code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+<tr class="row-color">
 <td class="col-first"><code>protected static regexodus.Pattern</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#wordMatch">wordMatch</a></span></code></th>
 <td class="col-last">&nbsp;</td>
+</tr>
+<tr class="alt-color">
+<td class="col-first"><code>static <a href="Thesaurus.html" title="class in squidpony">Thesaurus</a></code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#ZOMBIE">ZOMBIE</a></span></code></th>
+<td class="col-last">
+<div class="block">Thesaurus preset that sharply reduces the used letters to only: a, b, g, h, m, n, r, and z.</div>
+</td>
 </tr>
 </tbody>
 </table>
@@ -300,6 +312,15 @@ implements java.io.Serializable</pre>
 </tr>
 <tr class="row-color" id="i1">
 <td class="col-first"><code><a href="Thesaurus.html" title="class in squidpony">Thesaurus</a></code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#addArchivedCategoriesAlternate(java.lang.String)">addArchivedCategoriesAlternate</a></span>&#8203;(java.lang.String&nbsp;archive)</code></th>
+<td class="col-last">
+<div class="block">Given an archive String saved by <a href="#archiveCategoriesAlternate()"><code>archiveCategoriesAlternate()</code></a> (probably from another version of
+ SquidLib), this makes the Thesaurus class act like it did in that archive, assuming the <a href="#rng"><code>rng</code></a> is seeded
+ the same and uses the same algorithm/RandomnessSource.</div>
+</td>
+</tr>
+<tr class="alt-color" id="i2">
+<td class="col-first"><code><a href="Thesaurus.html" title="class in squidpony">Thesaurus</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#addCategory(java.lang.String,java.util.Collection)">addCategory</a></span>&#8203;(java.lang.String&nbsp;keyword,
 java.util.Collection&lt;java.lang.String&gt;&nbsp;synonyms)</code></th>
 <td class="col-last">
@@ -308,7 +329,7 @@ java.util.Collection&lt;java.lang.String&gt;&nbsp;synonyms)</code></th>
  order).</div>
 </td>
 </tr>
-<tr class="alt-color" id="i2">
+<tr class="row-color" id="i3">
 <td class="col-first"><code><a href="Thesaurus.html" title="class in squidpony">Thesaurus</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#addFakeWords()">addFakeWords</a></span>()</code></th>
 <td class="col-last">
@@ -316,7 +337,7 @@ java.util.Collection&lt;java.lang.String&gt;&nbsp;synonyms)</code></th>
  accessible with a keyword based on the language.</div>
 </td>
 </tr>
-<tr class="row-color" id="i3">
+<tr class="alt-color" id="i4">
 <td class="col-first"><code><a href="Thesaurus.html" title="class in squidpony">Thesaurus</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#addKnownCategories()">addKnownCategories</a></span>()</code></th>
 <td class="col-last">
@@ -324,13 +345,13 @@ java.util.Collection&lt;java.lang.String&gt;&nbsp;synonyms)</code></th>
  words with synonyms (only categories, which contain backticks in the name).</div>
 </td>
 </tr>
-<tr class="alt-color" id="i4">
+<tr class="row-color" id="i5">
 <td class="col-first"><code><a href="Thesaurus.html" title="class in squidpony">Thesaurus</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#addReplacement(java.lang.CharSequence,java.lang.String)">addReplacement</a></span>&#8203;(java.lang.CharSequence&nbsp;before,
 java.lang.String&nbsp;after)</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="row-color" id="i5">
+<tr class="alt-color" id="i6">
 <td class="col-first"><code>static java.lang.String</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#archiveCategories()">archiveCategories</a></span>()</code></th>
 <td class="col-last">
@@ -338,49 +359,57 @@ java.lang.String&nbsp;after)</code></th>
  words each category includes.</div>
 </td>
 </tr>
-<tr class="alt-color" id="i6">
-<td class="col-first"><code>java.lang.String</code></td>
-<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#lookup(java.lang.String)">lookup</a></span>&#8203;(java.lang.String&nbsp;word)</code></th>
-<td class="col-last">&nbsp;</td>
-</tr>
 <tr class="row-color" id="i7">
-<td class="col-first"><code>java.lang.String</code></td>
-<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#makeFlowerName()">makeFlowerName</a></span>()</code></th>
+<td class="col-first"><code>static java.lang.String</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#archiveCategoriesAlternate()">archiveCategoriesAlternate</a></span>()</code></th>
 <td class="col-last">
-<div class="block">Generates a random possible name for a plant or tree, such as "tulip of Jirui" or "Komert's thorny lilac".</div>
+<div class="block">Gets a stable (large) String that stores all categories this version of Thesaurus knows, as well as all of the
+ words each category includes.</div>
 </td>
 </tr>
 <tr class="alt-color" id="i8">
 <td class="col-first"><code>java.lang.String</code></td>
-<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#makeFlowerName(squidpony.FakeLanguageGen)">makeFlowerName</a></span>&#8203;(<a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>&nbsp;language)</code></th>
-<td class="col-last">
-<div class="block">Generates a random possible name for a plant or tree, such as "tulip of Jirui" or "Komert's thorny lilac",
- with the FakeLanguageGen already available instead of randomly created.</div>
-</td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#lookup(java.lang.String)">lookup</a></span>&#8203;(java.lang.String&nbsp;word)</code></th>
+<td class="col-last">&nbsp;</td>
 </tr>
 <tr class="row-color" id="i9">
 <td class="col-first"><code>java.lang.String</code></td>
-<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#makeFruitName()">makeFruitName</a></span>()</code></th>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#makeFlowerName()">makeFlowerName</a></span>()</code></th>
 <td class="col-last">
-<div class="block">Generates a random possible name for a plant or tree, such as "green lime-melon" or "Ung's date".</div>
+<div class="block">Generates a random possible name for a flower or flowering plant, such as "tulip of Jirui" or "thorny lilac".</div>
 </td>
 </tr>
 <tr class="alt-color" id="i10">
 <td class="col-first"><code>java.lang.String</code></td>
-<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#makeFruitName(squidpony.FakeLanguageGen)">makeFruitName</a></span>&#8203;(<a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>&nbsp;language)</code></th>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#makeFlowerName(squidpony.FakeLanguageGen)">makeFlowerName</a></span>&#8203;(<a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>&nbsp;language)</code></th>
 <td class="col-last">
-<div class="block">Generates a random possible name for a plant or tree, such as "green lime-melon" or "Ung's date",
+<div class="block">Generates a random possible name for a flower or flowering plant, such as "tulip of Jirui" or "thorny lilac",
  with the FakeLanguageGen already available instead of randomly created.</div>
 </td>
 </tr>
 <tr class="row-color" id="i11">
+<td class="col-first"><code>java.lang.String</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#makeFruitName()">makeFruitName</a></span>()</code></th>
+<td class="col-last">
+<div class="block">Generates a random possible name for a fruit, such as "green lime-melon" or "Ung's date".</div>
+</td>
+</tr>
+<tr class="alt-color" id="i12">
+<td class="col-first"><code>java.lang.String</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#makeFruitName(squidpony.FakeLanguageGen)">makeFruitName</a></span>&#8203;(<a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>&nbsp;language)</code></th>
+<td class="col-last">
+<div class="block">Generates a random possible name for a fruit, such as "green lime-melon" or "Ung's date",
+ with the FakeLanguageGen already available instead of randomly created.</div>
+</td>
+</tr>
+<tr class="row-color" id="i13">
 <td class="col-first"><code>java.lang.String</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#makeNationName()">makeNationName</a></span>()</code></th>
 <td class="col-last">
 <div class="block">Generates a random possible name for a nation, such as "Iond-Gouccief Alliance" or "The Last Drayo Commonwealth".</div>
 </td>
 </tr>
-<tr class="alt-color" id="i12">
+<tr class="alt-color" id="i14">
 <td class="col-first"><code>java.lang.String</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#makeNationName(squidpony.FakeLanguageGen)">makeNationName</a></span>&#8203;(<a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>&nbsp;language)</code></th>
 <td class="col-last">
@@ -388,29 +417,29 @@ java.lang.String&nbsp;after)</code></th>
  with the FakeLanguageGen already available instead of randomly created.</div>
 </td>
 </tr>
-<tr class="row-color" id="i13">
+<tr class="row-color" id="i15">
 <td class="col-first"><code>java.lang.String</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#makeNutName()">makeNutName</a></span>()</code></th>
 <td class="col-last">
-<div class="block">Generates a random possible name for a plant or tree, such as "nut of Gikoim" or "Pelyt's cashew".</div>
+<div class="block">Generates a random possible name for a nut or bean, such as "nut of Gikoim" or "Pelyt's cashew".</div>
 </td>
 </tr>
-<tr class="alt-color" id="i14">
+<tr class="alt-color" id="i16">
 <td class="col-first"><code>java.lang.String</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#makeNutName(squidpony.FakeLanguageGen)">makeNutName</a></span>&#8203;(<a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>&nbsp;language)</code></th>
 <td class="col-last">
-<div class="block">Generates a random possible name for a plant or tree, such as "nut of Gikoim" or "Pelyt's cashew",
+<div class="block">Generates a random possible name for a nut or bean, such as "nut of Gikoim" or "Pelyt's cashew",
  with the FakeLanguageGen already available instead of randomly created.</div>
 </td>
 </tr>
-<tr class="row-color" id="i15">
+<tr class="row-color" id="i17">
 <td class="col-first"><code>java.lang.String</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#makePlantName()">makePlantName</a></span>()</code></th>
 <td class="col-last">
 <div class="block">Generates a random possible name for a plant or tree, such as "Ikesheha's maple" or "sugarleaf birch".</div>
 </td>
 </tr>
-<tr class="alt-color" id="i16">
+<tr class="alt-color" id="i18">
 <td class="col-first"><code>java.lang.String</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#makePlantName(squidpony.FakeLanguageGen)">makePlantName</a></span>&#8203;(<a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>&nbsp;language)</code></th>
 <td class="col-last">
@@ -418,7 +447,7 @@ java.lang.String&nbsp;after)</code></th>
  with the FakeLanguageGen already available instead of randomly created.</div>
 </td>
 </tr>
-<tr class="row-color" id="i17">
+<tr class="row-color" id="i19">
 <td class="col-first"><code>java.lang.String</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#makePotionDescription()">makePotionDescription</a></span>()</code></th>
 <td class="col-last">
@@ -427,7 +456,21 @@ java.lang.String&nbsp;after)</code></th>
  effervescent violet potion", or "a wineskin filled with a black serum".</div>
 </td>
 </tr>
-<tr class="alt-color" id="i18">
+<tr class="alt-color" id="i20">
+<td class="col-first"><code>java.lang.String</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#makeVegetableName()">makeVegetableName</a></span>()</code></th>
+<td class="col-last">
+<div class="block">Generates a random possible name for a vegetable, such as "miniature yam" or Iliakshe's spicy zucchini".</div>
+</td>
+</tr>
+<tr class="row-color" id="i21">
+<td class="col-first"><code>java.lang.String</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#makeVegetableName(squidpony.FakeLanguageGen)">makeVegetableName</a></span>&#8203;(<a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>&nbsp;language)</code></th>
+<td class="col-last">
+<div class="block">Generates a random possible name for a vegetable, such as "miniature yam" or Iliakshe's spicy zucchini".</div>
+</td>
+</tr>
+<tr class="alt-color" id="i22">
 <td class="col-first"><code>static java.lang.String</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#numberAdjective(int)">numberAdjective</a></span>&#8203;(int&nbsp;number)</code></th>
 <td class="col-last">
@@ -435,7 +478,7 @@ java.lang.String&nbsp;after)</code></th>
  "eleventh").</div>
 </td>
 </tr>
-<tr class="row-color" id="i19">
+<tr class="row-color" id="i23">
 <td class="col-first"><code>java.lang.String</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#numberAdjectiveInRange(int,int)">numberAdjectiveInRange</a></span>&#8203;(int&nbsp;lowest,
 int&nbsp;highest)</code></th>
@@ -444,14 +487,14 @@ int&nbsp;highest)</code></th>
  "eleventh"), where the number is chosen randomly between lowest and highest, both inclusive.</div>
 </td>
 </tr>
-<tr class="alt-color" id="i20">
+<tr class="alt-color" id="i24">
 <td class="col-first"><code>static java.lang.String</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#numberWord(int)">numberWord</a></span>&#8203;(int&nbsp;number)</code></th>
 <td class="col-last">
 <div class="block">Gets an English word for a given number, if this knows it.</div>
 </td>
 </tr>
-<tr class="row-color" id="i21">
+<tr class="row-color" id="i25">
 <td class="col-first"><code>java.lang.String</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#numberWordInRange(int,int)">numberWordInRange</a></span>&#8203;(int&nbsp;lowest,
 int&nbsp;highest)</code></th>
@@ -460,7 +503,7 @@ int&nbsp;highest)</code></th>
  highest, both inclusive.</div>
 </td>
 </tr>
-<tr class="alt-color" id="i22">
+<tr class="alt-color" id="i26">
 <td class="col-first"><code>java.lang.String</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#process(java.lang.CharSequence)">process</a></span>&#8203;(java.lang.CharSequence&nbsp;text)</code></th>
 <td class="col-last">
@@ -468,7 +511,7 @@ int&nbsp;highest)</code></th>
  replaces each occurrence of such a known word with one of its synonyms, leaving unknown words untouched.</div>
 </td>
 </tr>
-<tr class="row-color" id="i23">
+<tr class="row-color" id="i27">
 <td class="col-first"><code>void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#refresh(int,int)">refresh</a></span>&#8203;(int&nbsp;stateA,
 int&nbsp;stateB)</code></th>
@@ -477,7 +520,7 @@ int&nbsp;stateB)</code></th>
  different version that knows all the same synonyms and categories but will produce different results.</div>
 </td>
 </tr>
-<tr class="alt-color" id="i24">
+<tr class="alt-color" id="i28">
 <td class="col-first"><code>void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#refresh(long)">refresh</a></span>&#8203;(long&nbsp;state)</code></th>
 <td class="col-last">
@@ -564,6 +607,12 @@ int&nbsp;stateB)</code></th>
 </section>
 </li>
 <li>
+<section class="detail" id="vegetableTermShuffler">
+<h3>vegetableTermShuffler</h3>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="squidmath/GapShuffler.html" title="class in squidpony.squidmath">GapShuffler</a>&lt;java.lang.String&gt;</span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Thesaurus.html#line.32">vegetableTermShuffler</a></span></div>
+</section>
+</li>
+<li>
 <section class="detail" id="defaultLanguage">
 <h3>defaultLanguage</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Thesaurus.html#line.34">defaultLanguage</a></span></div>
@@ -584,51 +633,60 @@ int&nbsp;stateB)</code></th>
 <li>
 <section class="detail" id="categories">
 <h3>categories</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;java.lang.String,&#8203;java.util.ArrayList&lt;java.lang.String&gt;&gt;</span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Thesaurus.html#line.1176">categories</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;java.lang.String,&#8203;java.util.ArrayList&lt;java.lang.String&gt;&gt;</span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Thesaurus.html#line.1336">categories</a></span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="adjective">
 <h3>adjective</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;java.lang.String,&#8203;java.util.ArrayList&lt;java.lang.String&gt;&gt;</span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Thesaurus.html#line.1423">adjective</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;java.lang.String,&#8203;java.util.ArrayList&lt;java.lang.String&gt;&gt;</span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Thesaurus.html#line.1586">adjective</a></span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="noun">
 <h3>noun</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;java.lang.String,&#8203;java.util.ArrayList&lt;java.lang.String&gt;&gt;</span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Thesaurus.html#line.1423">noun</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;java.lang.String,&#8203;java.util.ArrayList&lt;java.lang.String&gt;&gt;</span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Thesaurus.html#line.1586">noun</a></span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="nouns">
 <h3>nouns</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;java.lang.String,&#8203;java.util.ArrayList&lt;java.lang.String&gt;&gt;</span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Thesaurus.html#line.1423">nouns</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;java.lang.String,&#8203;java.util.ArrayList&lt;java.lang.String&gt;&gt;</span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Thesaurus.html#line.1586">nouns</a></span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="languages">
 <h3>languages</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;java.lang.CharSequence,&#8203;<a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>&gt;</span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Thesaurus.html#line.1427">languages</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;java.lang.CharSequence,&#8203;<a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>&gt;</span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Thesaurus.html#line.1590">languages</a></span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="numbers">
 <h3>numbers</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;java.lang.CharSequence,&#8203;java.lang.Integer&gt;</span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Thesaurus.html#line.1434">numbers</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;java.lang.CharSequence,&#8203;java.lang.Integer&gt;</span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Thesaurus.html#line.1597">numbers</a></span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="numberAdjectives">
 <h3>numberAdjectives</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;java.lang.CharSequence,&#8203;java.lang.Integer&gt;</span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Thesaurus.html#line.1434">numberAdjectives</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;java.lang.CharSequence,&#8203;java.lang.Integer&gt;</span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Thesaurus.html#line.1597">numberAdjectives</a></span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="ORK">
 <h3>ORK</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Thesaurus.html" title="class in squidpony">Thesaurus</a></span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Thesaurus.html#line.1489">ORK</a></span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Thesaurus.html" title="class in squidpony">Thesaurus</a></span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Thesaurus.html#line.1652">ORK</a></span></div>
 <div class="block">Thesaurus preset that changes all text to sound like this speaker: "Desaurus preset dat changez all text to sound
  like dis speakah." You may be familiar with a certain sci-fi game that has orks who sound like this.</div>
+</section>
+</li>
+<li>
+<section class="detail" id="ZOMBIE">
+<h3>ZOMBIE</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Thesaurus.html" title="class in squidpony">Thesaurus</a></span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Thesaurus.html#line.1659">ZOMBIE</a></span></div>
+<div class="block">Thesaurus preset that sharply reduces the used letters to only: a, b, g, h, m, n, r, and z. This apparently is
+ the canonical set of letters that zombies can use? This will abuse the rules of proper English spelling, using r
+ and h as vowels, kind-of, in addition to a.</div>
 </section>
 </li>
 </ul>
@@ -741,7 +799,7 @@ java.util.Collection&lt;java.lang.String&gt;&nbsp;synonyms)</span></div>
 <li>
 <section class="detail" id="addKnownCategories()">
 <h3>addKnownCategories</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Thesaurus.html" title="class in squidpony">Thesaurus</a></span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Thesaurus.html#line.265">addKnownCategories</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Thesaurus.html" title="class in squidpony">Thesaurus</a></span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Thesaurus.html#line.267">addKnownCategories</a></span>()</div>
 <div class="block">Adds several pre-made categories to this Thesaurus' known categories, but won't cause it to try to replace normal
  words with synonyms (only categories, which contain backticks in the name). The keywords this currently knows,
  and the words it will replace those keywords with, are:
@@ -818,20 +876,21 @@ java.util.Collection&lt;java.lang.String&gt;&nbsp;synonyms)</span></div>
      <li>ground`noun` : clay, dirt, earth, loam, mud, peat, sand, soil</li>
      <li>lake`noun` : bog, fen, glade, lake, pond, puddle, sea, swamp</li>
      <li>leaf`noun` : bark, blossom, branch, bud, cress, flower, leaf, root, sap, seed, shoot, stalk, stem, thorn, twig, vine, wood, wort</li>
-     <li>fruit`noun` : apple, banana, berry, cherry, date, fig, fruit, grape, juniper, lime, mango, melon, papaya, peach, pear, quince</li>
-     <li>nut`noun` : almond, bean, cashew, chestnut, hazelnut, nut, pea, peanut, pecan, walnut</li>
+     <li>fruit`noun` : apple, banana, berry, cherry, citron, date, fig, fruit, grape, juniper, kumquat, lemon, lime, loquat, mango, melon, papaya, peach, pear, pineapple, plum, quince</li>
+     <li>nut`noun` : almond, bean, cashew, chestnut, coconut, hazelnut, lentil, nut, pea, peanut, pecan, walnut</li>
+     <li>vegetable`noun` : artichoke, asparagus, avocado, beet, broccoli, cabbage, carrot, cauliflower, celery, corn, eggplant, kale, leek, lettuce, mushroom, onion, potato, pumpkin, radish, rutabaga, spinach, taro, tomato, truffle, yam, zucchini</li>
      <li>flower`noun` : amaryllis, camellia, chrysanthemum, daisy, dandelion, flower, gardenia, hibiscus, jasmine, lantana, lilac, lily, lotus, mallow, oleander, orchid, peony, petunia, phlox, rose, tulip</li>
      <li>tree`noun` : alder, beech, birch, cactus, cedar, elm, hazel, juniper, larch, magnolia, mangrove, maple, oak, palm, pine, tree, willow</li>
-     <li>flavor`noun` : acid, grease, herb, salt, smoke, spice, sugar</li>
+     <li>flavor`noun` : acid, grease, salt, smoke, soap, spice, sugar</li>
      <li>flavor`adj` : bitter, salty, savory, smoky, sour, spicy, sweet</li>
-     <li>color`adj` : black, blue, brown, gray, green, orange, red, violet, white, yellow</li>
-     <li>shape`adj` : delicate, drooping, fibrous, fragile, giant, hardy, hollow, long, miniature, spiny, stiff, stubby, sturdy, thorny, tufted, yielding</li>
-     <li>sensory`adj` : aromatic, fragrant, fuzzy, glossy, pungent, rough, rustling, smooth, soft, weeping</li>
+     <li>color`adj` : black, blue, brown, gray, green, orange, pink, red, violet, white, yellow</li>
+     <li>shape`adj` : arched, crusty, delicate, diminutive, drooping, fibrous, flat, fragile, giant, hardy, hollow, large, long, massive, miniature, ovate, pored, ridged, small, spiny, spongy, stiff, stubby, sturdy, tattered, thorny, toothy, tufted, yielding</li>
+     <li>sensory`adj` : aromatic, feathery, fragrant, furry, fuzzy, glossy, hairy, pungent, rough, rustling, scaly, shaggy, smooth, soft, spotted, striped, weeping</li>
      <li>liquid`noun` : brew, broth, elixir, fluid, liquid, potion, serum, tonic</li>
      <li>liquid`adj` : bubbling, congealing, effervescent, milky, murky, slimy, sloshing, swirling, thick</li>
      <li>bottle`noun` : bottle, canister, flagon, flask, jug, phial, vial</li>
      <li>bottle`adj` : brown glass, clear glass, curvaceous glass, dull pewter, fluted crystal, green glass, rough-cut glass, sharp-edged tin, shining silver, smoky glass, tarnished silver</li>
-     <li>calabash`adj` : calabash, hollow gourd, milk carton, waterskin, wineskin</li>
+     <li>calabash`noun` : calabash, hollow gourd, milk carton, waterskin, wineskin</li>
      <li>smart`adj` : aware, brilliant, clever, cunning, genius, mindful, smart, wise</li>
      <li>smart`noun` : acumen, awareness, cunning, genius, knowledge, mindfulness, smarts, wisdom</li>
      <li>stupid`adj` : careless, complacent, dull, dumb, foolish, idiotic, moronic, reckless, sloppy, stupid</li>
@@ -866,14 +925,15 @@ java.util.Collection&lt;java.lang.String&gt;&nbsp;synonyms)</span></div>
      <li>power`adj` : authoritative, dominant, forceful, potent, powerful, strong</li>
  </ul>
  There are also terms, which typically produce multiple words procedurally and may use <a href="#defaultLanguage"><code>defaultLanguage</code></a>.
- See <a href="#makePlantName()"><code>makePlantName()</code></a>, <a href="#makeFruitName()"><code>makeFruitName()</code></a>, <a href="#makeNutName()"><code>makeNutName()</code></a>, <a href="#makeFlowerName()"><code>makeFlowerName()</code></a>, and
- <a href="#makePotionDescription()"><code>makePotionDescription()</code></a> for more info and examples.
+ See <a href="#makePlantName()"><code>makePlantName()</code></a>, <a href="#makeFruitName()"><code>makeFruitName()</code></a>, <a href="#makeNutName()"><code>makeNutName()</code></a>, <a href="#makeFlowerName()"><code>makeFlowerName()</code></a>,
+ <a href="#makeVegetableName()"><code>makeVegetableName()</code></a>, and <a href="#makePotionDescription()"><code>makePotionDescription()</code></a> for more info and examples.
  <li>
-     <li>plant`term` : @'s color`adj`    leaf`noun`, @'s color`adj` flower`noun`, @'s color`adj` tree`noun`, @'s flower`noun`, @'s ground`noun`  leaf`noun`, @'s sensory`adj`-leaf`noun`, @'s shape`adj` flower`noun`, @'s tree`noun`, color`adj` flower`noun`, color`adj` flower`noun` of @, color`adj` fruit`noun` tree`noun`, color`adj` nut`noun` tree`noun`, color`adj`-leaf`noun` flower`noun`, flavor`adj` fruit`noun` tree`noun`, flavor`adj` nut`noun` tree`noun`, flavor`noun` leaf`noun` tree`noun`, flower`noun` of @, ground`noun`  flower`noun`, ground`noun`      leaf`noun`, ground`noun`        leaf`noun` of @, leaf`noun` of @, sensory`adj` flower`noun` of @, sensory`adj` flower`noun`-flower`noun`, sensory`adj` tree`noun` of @, sensory`adj` tree`noun`-tree`noun`, sensory`adj`-leaf`noun` flower`noun`, sensory`adj`-leaf`noun` tree`noun`, shape`adj` flower`noun`, shape`adj`-fruit`noun` tree`noun`, shape`adj`-leaf`noun` flower`noun`, shape`adj`-leaf`noun` tree`noun`</li>
-     <li>fruit`term` : @'s color`adj` fruit`noun`, @'s flavor`adj` fruit`noun`, @'s fruit`noun`, color`adj` fruit`noun`-fruit`noun`, flavor`adj` fruit`noun`-fruit`noun`, fruit`noun` of @</li>
+     <li>plant`term` : @'s color`adj`\tleaf`noun`, @'s color`adj` flower`noun`, @'s color`adj` tree`noun`, @'s flower`noun`, @'s ground`noun`\tleaf`noun`, @'s sensory`adj`-leaf`noun`, @'s shape`adj` flower`noun`, @'s tree`noun`, color`adj` flower`noun`, color`adj` flower`noun` of @, color`adj` fruit`noun` tree`noun`, color`adj` nut`noun` tree`noun`, color`adj`-leaf`noun` flower`noun`, color`adj`-vegetable`noun` tree`noun`, flavor`adj` fruit`noun` tree`noun`, flavor`adj` nut`noun` tree`noun`, flavor`noun`\tleaf`noun` tree`noun`, flower`noun` of @, ground`noun`\tflower`noun`, ground`noun`\tleaf`noun`, ground`noun`\tleaf`noun` of @, ground`noun`\tvegetable`noun`, leaf`noun` of @, sensory`adj` flower`noun` of @, sensory`adj` flower`noun`-flower`noun`, sensory`adj` tree`noun` of @, sensory`adj` tree`noun`-tree`noun`, sensory`adj`-leaf`noun` flower`noun`, sensory`adj`-leaf`noun` tree`noun`, shape`adj` flower`noun`, shape`adj`-fruit`noun` tree`noun`, shape`adj`-leaf`noun` flower`noun`, shape`adj`-leaf`noun` tree`noun`, shape`adj`-vegetable`noun` tree`noun`, vegetable`noun`-leaf`noun` tree`noun`</li>
+     <li>fruit`term` : @'s color`adj` fruit`noun`, @'s flavor`adj` fruit`noun`, @'s fruit`noun`, color`adj` fruit`noun`, color`adj` fruit`noun` of @, color`adj` fruit`noun`-fruit`noun`, flavor`adj` fruit`noun`, flavor`adj` fruit`noun` of @, flavor`adj` fruit`noun`-fruit`noun`, fruit`noun` of @, shape`adj` fruit`noun`, shape`adj` fruit`noun`-fruit`noun`</li>
      <li>nut`term` : @'s color`adj` nut`noun`, @'s flavor`adj` nut`noun`, @'s nut`noun`, color`adj` nut`noun`, color`adj` nut`noun` of @, flavor`adj` nut`noun`, nut`noun` of @, sensory`adj` nut`noun`</li>
-     <li>flower`term` : @'s color`adj` flower`noun`, @'s flower`noun`, @'s shape`adj` flower`noun`, color`adj` flower`noun`, color`adj` flower`noun` of @, color`adj`-leaf`noun` flower`noun`, flower`noun` of @, ground`noun`   flower`noun`, sensory`adj` flower`noun` of @, sensory`adj` flower`noun`-flower`noun`, sensory`adj`-leaf`noun` flower`noun`, shape`adj` flower`noun`, shape`adj`-leaf`noun` flower`noun`</li>
-     <li>potion`term` : a bottle`adj` bottle`noun` containing a few drops of a color`adj` liquid`noun`, a bottle`adj` bottle`noun` filled with a color`adj` liquid`noun`, a bottle`adj` bottle`noun` filled with a liquid`adj` color`adj` liquid`noun`, a bottle`adj` bottle`noun` half-filled with a liquid`adj` color`adj` liquid`noun`, a calabash`adj` filled with a color`adj` liquid`noun`</li>
+     <li>vegetable`term` : @'s color`adj` vegetable`noun`, @'s flavor`adj` vegetable`noun`, @'s vegetable`noun`, @'s vegetable`noun`-vegetable`noun`, color`adj` sensory`adj` vegetable`noun`, color`adj` vegetable`noun`, color`adj` vegetable`noun` of @, color`adj` vegetable`noun`-vegetable`noun`, flavor`adj` vegetable`noun`, flavor`adj` vegetable`noun`-vegetable`noun`, sensory`adj` shape`adj` vegetable`noun`, sensory`adj` vegetable`noun`, sensory`adj` vegetable`noun`-vegetable`noun`, shape`adj` color`adj` vegetable`noun`, shape`adj` vegetable`noun`, shape`adj` vegetable`noun`-vegetable`noun`, vegetable`noun` of @</li>
+     <li>flower`term` : @'s color`adj` flower`noun`, @'s flower`noun`, @'s shape`adj` flower`noun`, color`adj` flower`noun`, color`adj` flower`noun` of @, color`adj`-leaf`noun` flower`noun`, flower`noun` of @, ground`noun`\tflower`noun`, sensory`adj` flower`noun` of @, sensory`adj` flower`noun`-flower`noun`, sensory`adj`-leaf`noun` flower`noun`, shape`adj` flower`noun`, shape`adj`-leaf`noun` flower`noun`</li>
+     <li>potion`term` : a bottle`adj` bottle`noun` containing a few drops of a color`adj` liquid`noun`, a bottle`adj` bottle`noun` filled with a color`adj` liquid`noun`, a bottle`adj` bottle`noun` filled with a liquid`adj` color`adj` liquid`noun`, a bottle`adj` bottle`noun` half-filled with a liquid`adj` color`adj` liquid`noun`, a calabash`noun` filled with a color`adj` liquid`noun`</li>
  </ul>
  Capitalizing the first letter in the keyword where it appears in text you call process() on will capitalize the
  first letter of the produced fake word. Capitalizing the second letter will capitalize the whole produced fake
@@ -887,20 +947,22 @@ java.util.Collection&lt;java.lang.String&gt;&nbsp;synonyms)</span></div>
 <li>
 <section class="detail" id="addArchivedCategories(java.lang.String)">
 <h3>addArchivedCategories</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Thesaurus.html" title="class in squidpony">Thesaurus</a></span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Thesaurus.html#line.297">addArchivedCategories</a></span>&#8203;(<span class="parameters">java.lang.String&nbsp;archive)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Thesaurus.html" title="class in squidpony">Thesaurus</a></span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Thesaurus.html#line.302">addArchivedCategories</a></span>&#8203;(<span class="parameters">java.lang.String&nbsp;archive)</span></div>
 <div class="block">Given an archive String saved by <a href="#archiveCategories()"><code>archiveCategories()</code></a> (probably from another version of SquidLib), this
  makes the Thesaurus class act like it did in that archive, assuming the <a href="#rng"><code>rng</code></a> is seeded the same. This
  modifies the <a href="#mappings"><code>mappings</code></a> field and the <a href="#categories"><code>categories</code></a>, <a href="#adjective"><code>adjective</code></a>, <a href="#noun"><code>noun</code></a>, and
  <a href="#nouns"><code>nouns</code></a> static fields, so it can affect other Thesaurus objects produced later (it won't change
  previously-made ones, probably).
- 
- If you didn't have an archive of the categories from some version of SquidLib, you can download one of the small
- files from <a href="https://github.com/yellowstonegames/SquidLib/tree/master/archives">the 'archives' folder of the
- SquidLib repo</a>; there's an archive that acts as a snapshot of SquidLib 3.0.0's Thesaurus class, for instance.
- If you save the 3.0.0 archive in a libGDX application's assets folder, you can reload the 3.0.0 definitions into
- a Thesaurus called <code>myThesaurus</code> with:
  <br>
- <code>myThesaurus.addArchivedCategories(Gdx.files.internal("Thesaurus-3-0-0.txt").readString("UTF-8"));</code></div>
+ If you didn't have an archive of the categories from some version of SquidLib, you can download one of the small
+ files from <a href="https://github.com/yellowstonegames/SquidLib/tree/master/archives">the 'archives' folder of
+ the SquidLib repo</a>; there's an archive that acts as a snapshot of SquidLib 3.0.0's Thesaurus class, for
+ instance. This method expects files saved with a particular format, and SquidLib also supports a different format
+ (used with <a href="#addArchivedCategoriesAlternate(java.lang.String)"><code>addArchivedCategoriesAlternate(String)</code></a>). The files with the correct format for this end in
+ <code>.squid.txt</code>. If you save the 3.0.0 <code>.squid.txt</code> archive in a libGDX application's assets folder, you
+ can reload the 3.0.0 definitions into a Thesaurus called <code>myThesaurus</code> with:
+ <br>
+ <code>myThesaurus.addArchivedCategories(Gdx.files.internal("Thesaurus-3-0-0.squid.txt").readString("UTF-8"));</code></div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>archive</code> - an archived String of categories produced by <a href="#archiveCategories()"><code>archiveCategories()</code></a></dd>
@@ -910,9 +972,35 @@ java.util.Collection&lt;java.lang.String&gt;&nbsp;synonyms)</span></div>
 </section>
 </li>
 <li>
+<section class="detail" id="addArchivedCategoriesAlternate(java.lang.String)">
+<h3>addArchivedCategoriesAlternate</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Thesaurus.html" title="class in squidpony">Thesaurus</a></span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Thesaurus.html#line.371">addArchivedCategoriesAlternate</a></span>&#8203;(<span class="parameters">java.lang.String&nbsp;archive)</span></div>
+<div class="block">Given an archive String saved by <a href="#archiveCategoriesAlternate()"><code>archiveCategoriesAlternate()</code></a> (probably from another version of
+ SquidLib), this makes the Thesaurus class act like it did in that archive, assuming the <a href="#rng"><code>rng</code></a> is seeded
+ the same and uses the same algorithm/RandomnessSource. This modifies the <a href="#mappings"><code>mappings</code></a> field and the
+ <a href="#categories"><code>categories</code></a>, <a href="#adjective"><code>adjective</code></a>, <a href="#noun"><code>noun</code></a>, and <a href="#nouns"><code>nouns</code></a> static fields, so it can affect other
+ Thesaurus objects produced later (it won't change previously-made ones, probably).
+ <br>
+ If you didn't have an archive of the categories from some version of SquidLib, you can download one of the small
+ files from <a href="https://github.com/yellowstonegames/SquidLib/tree/master/archives">the 'archives' folder of the
+ SquidLib repo</a>; there's an archive that acts as a snapshot of SquidLib 3.0.0's Thesaurus class, for instance.
+ The files that use this method's format end in <code>.alt.txt</code>, while the other format uses <code>.squid.txt</code>.
+ If you save the 3.0.0 archive in a libGDX application's assets folder, you can reload the 3.0.0 definitions into
+ a Thesaurus called <code>myThesaurus</code> with:
+ <br>
+ <code>myThesaurus.addArchivedCategoriesAlternate(Gdx.files.internal("Thesaurus-3-0-0.alt.txt").readString("UTF-8"));</code></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>archive</code> - an archived String of categories produced by <a href="#archiveCategoriesAlternate()"><code>archiveCategoriesAlternate()</code></a></dd>
+<dt>Returns:</dt>
+<dd>this Thesaurus, but static state of the class will also be modified so this may affect other Thesaurus objects</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="addFakeWords()">
 <h3>addFakeWords</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Thesaurus.html" title="class in squidpony">Thesaurus</a></span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Thesaurus.html#line.376">addFakeWords</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Thesaurus.html" title="class in squidpony">Thesaurus</a></span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Thesaurus.html#line.449">addFakeWords</a></span>()</div>
 <div class="block">Adds a large list of words pre-generated by FakeLanguageGen and hand-picked for fitness, and makes them
  accessible with a keyword based on the language. The keywords this currently knows:
  <br>
@@ -948,7 +1036,7 @@ java.util.Collection&lt;java.lang.String&gt;&nbsp;synonyms)</span></div>
 <li>
 <section class="detail" id="process(java.lang.CharSequence)">
 <h3>process</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">java.lang.String</span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Thesaurus.html#line.438">process</a></span>&#8203;(<span class="parameters">java.lang.CharSequence&nbsp;text)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">java.lang.String</span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Thesaurus.html#line.511">process</a></span>&#8203;(<span class="parameters">java.lang.CharSequence&nbsp;text)</span></div>
 <div class="block">Given a String, StringBuilder, or other CharSequence that should contain words this knows synonyms for, this
  replaces each occurrence of such a known word with one of its synonyms, leaving unknown words untouched. Words
  that were learned together as synonyms with addSynonyms() will be replaced in such a way that an individual
@@ -966,13 +1054,13 @@ java.util.Collection&lt;java.lang.String&gt;&nbsp;synonyms)</span></div>
 <li>
 <section class="detail" id="lookup(java.lang.String)">
 <h3>lookup</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">java.lang.String</span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Thesaurus.html#line.467">lookup</a></span>&#8203;(<span class="parameters">java.lang.String&nbsp;word)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">java.lang.String</span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Thesaurus.html#line.540">lookup</a></span>&#8203;(<span class="parameters">java.lang.String&nbsp;word)</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="makeNationName()">
 <h3>makeNationName</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">java.lang.String</span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Thesaurus.html#line.673">makeNationName</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">java.lang.String</span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Thesaurus.html#line.746">makeNationName</a></span>()</div>
 <div class="block">Generates a random possible name for a nation, such as "Iond-Gouccief Alliance" or "The Last Drayo Commonwealth".
  May use accented characters, as in
  "Thùdshù-Hyóttiálb Hegemony" or "The Glorious Chô Empire"; if you want to strip these out and replace accented
@@ -997,7 +1085,7 @@ java.util.Collection&lt;java.lang.String&gt;&nbsp;synonyms)</span></div>
 <li>
 <section class="detail" id="makeNationName(squidpony.FakeLanguageGen)">
 <h3>makeNationName</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">java.lang.String</span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Thesaurus.html#line.708">makeNationName</a></span>&#8203;(<span class="parameters"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>&nbsp;language)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">java.lang.String</span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Thesaurus.html#line.781">makeNationName</a></span>&#8203;(<span class="parameters"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>&nbsp;language)</span></div>
 <div class="block">Generates a random possible name for a nation, such as "Iond-Gouccief Alliance" or "The Last Drayo Commonwealth",
  with the FakeLanguageGen already available instead of randomly created. May use accented characters, as in
  "Thùdshù Hegemony" or "The Glorious Chô Empire",
@@ -1024,7 +1112,7 @@ java.util.Collection&lt;java.lang.String&gt;&nbsp;synonyms)</span></div>
 <li>
 <section class="detail" id="makePlantName()">
 <h3>makePlantName</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">java.lang.String</span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Thesaurus.html#line.738">makePlantName</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">java.lang.String</span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Thesaurus.html#line.811">makePlantName</a></span>()</div>
 <div class="block">Generates a random possible name for a plant or tree, such as "Ikesheha's maple" or "sugarleaf birch".
  May use accented characters, as in "Emôa's greenwood", if the given language can
  produce them; if you want to strip these out and replace accented chars with their un-accented counterparts, you
@@ -1044,7 +1132,7 @@ java.util.Collection&lt;java.lang.String&gt;&nbsp;synonyms)</span></div>
 <li>
 <section class="detail" id="makePlantName(squidpony.FakeLanguageGen)">
 <h3>makePlantName</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">java.lang.String</span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Thesaurus.html#line.765">makePlantName</a></span>&#8203;(<span class="parameters"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>&nbsp;language)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">java.lang.String</span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Thesaurus.html#line.838">makePlantName</a></span>&#8203;(<span class="parameters"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>&nbsp;language)</span></div>
 <div class="block">Generates a random possible name for a plant or tree, such as "Ikesheha's maple" or "sugarleaf birch",
  with the FakeLanguageGen already available instead of randomly created. May use accented characters, as in
  "Emôa's greenwood", if the given language can
@@ -1063,8 +1151,8 @@ java.util.Collection&lt;java.lang.String&gt;&nbsp;synonyms)</span></div>
 <li>
 <section class="detail" id="makeFruitName()">
 <h3>makeFruitName</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">java.lang.String</span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Thesaurus.html#line.795">makeFruitName</a></span>()</div>
-<div class="block">Generates a random possible name for a plant or tree, such as "green lime-melon" or "Ung's date".
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">java.lang.String</span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Thesaurus.html#line.868">makeFruitName</a></span>()</div>
+<div class="block">Generates a random possible name for a fruit, such as "green lime-melon" or "Ung's date".
  May use accented characters, as in "Emôa's greenwood", if the given language can
  produce them; if you want to strip these out and replace accented chars with their un-accented counterparts, you
  can use <a href="FakeLanguageGen.html#removeAccents(java.lang.CharSequence)"><code>FakeLanguageGen.removeAccents(CharSequence)</code></a>, which returns a CharSequence that can be converted
@@ -1083,8 +1171,8 @@ java.util.Collection&lt;java.lang.String&gt;&nbsp;synonyms)</span></div>
 <li>
 <section class="detail" id="makeFruitName(squidpony.FakeLanguageGen)">
 <h3>makeFruitName</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">java.lang.String</span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Thesaurus.html#line.822">makeFruitName</a></span>&#8203;(<span class="parameters"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>&nbsp;language)</span></div>
-<div class="block">Generates a random possible name for a plant or tree, such as "green lime-melon" or "Ung's date",
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">java.lang.String</span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Thesaurus.html#line.895">makeFruitName</a></span>&#8203;(<span class="parameters"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>&nbsp;language)</span></div>
+<div class="block">Generates a random possible name for a fruit, such as "green lime-melon" or "Ung's date",
  with the FakeLanguageGen already available instead of randomly created. May use accented characters, as in
  "Emôa's greenwood", if the given language can
  produce them; if you want to strip these out and replace accented chars with their un-accented counterparts, you
@@ -1102,8 +1190,8 @@ java.util.Collection&lt;java.lang.String&gt;&nbsp;synonyms)</span></div>
 <li>
 <section class="detail" id="makeNutName()">
 <h3>makeNutName</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">java.lang.String</span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Thesaurus.html#line.852">makeNutName</a></span>()</div>
-<div class="block">Generates a random possible name for a plant or tree, such as "nut of Gikoim" or "Pelyt's cashew".
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">java.lang.String</span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Thesaurus.html#line.925">makeNutName</a></span>()</div>
+<div class="block">Generates a random possible name for a nut or bean, such as "nut of Gikoim" or "Pelyt's cashew".
  May use accented characters, as in "Emôa's greenwood", if the given language can
  produce them; if you want to strip these out and replace accented chars with their un-accented counterparts, you
  can use <a href="FakeLanguageGen.html#removeAccents(java.lang.CharSequence)"><code>FakeLanguageGen.removeAccents(CharSequence)</code></a>, which returns a CharSequence that can be converted
@@ -1122,8 +1210,8 @@ java.util.Collection&lt;java.lang.String&gt;&nbsp;synonyms)</span></div>
 <li>
 <section class="detail" id="makeNutName(squidpony.FakeLanguageGen)">
 <h3>makeNutName</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">java.lang.String</span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Thesaurus.html#line.879">makeNutName</a></span>&#8203;(<span class="parameters"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>&nbsp;language)</span></div>
-<div class="block">Generates a random possible name for a plant or tree, such as "nut of Gikoim" or "Pelyt's cashew",
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">java.lang.String</span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Thesaurus.html#line.952">makeNutName</a></span>&#8203;(<span class="parameters"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>&nbsp;language)</span></div>
+<div class="block">Generates a random possible name for a nut or bean, such as "nut of Gikoim" or "Pelyt's cashew",
  with the FakeLanguageGen already available instead of randomly created.
  May use accented characters, as in "Emôa's greenwood", if the given language can
  produce them; if you want to strip these out and replace accented chars with their un-accented counterparts, you
@@ -1139,10 +1227,49 @@ java.util.Collection&lt;java.lang.String&gt;&nbsp;synonyms)</span></div>
 </section>
 </li>
 <li>
+<section class="detail" id="makeVegetableName()">
+<h3>makeVegetableName</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">java.lang.String</span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Thesaurus.html#line.983">makeVegetableName</a></span>()</div>
+<div class="block">Generates a random possible name for a vegetable, such as "miniature yam" or Iliakshe's spicy zucchini".
+ May use accented characters, as in "Fëangoh's blue cauliflower", if the given language can
+ produce them; if you want to strip these out and replace accented chars with their un-accented counterparts, you
+ can use <a href="FakeLanguageGen.html#removeAccents(java.lang.CharSequence)"><code>FakeLanguageGen.removeAccents(CharSequence)</code></a>, which returns a CharSequence that can be converted
+ to String if needed. Shortly after calling this method, but before
+ calling it again, you can retrieve the generated random languages, if any were used while making names, by
+ getting the FakeLanguageGen elements of this class' <a href="#randomLanguages"><code>randomLanguages</code></a> field. Using one of these
+ FakeLanguageGen objects, you can produce many more words with a similar style to the person or place name, like
+ "Drayo" in "The Last Drayo Commonwealth". Calling this method replaces the current contents of
+ randomLanguages, so if you want to use those languages, get them while you can.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>a random name for a vegetable, as a String</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="makeVegetableName(squidpony.FakeLanguageGen)">
+<h3>makeVegetableName</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">java.lang.String</span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Thesaurus.html#line.1010">makeVegetableName</a></span>&#8203;(<span class="parameters"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>&nbsp;language)</span></div>
+<div class="block">Generates a random possible name for a vegetable, such as "miniature yam" or Iliakshe's spicy zucchini".
+ with the FakeLanguageGen already available instead of randomly created.
+ May use accented characters, as in "Fëangoh's blue cauliflower", if the given language can
+ produce them; if you want to strip these out and replace accented chars with their un-accented counterparts, you
+ can use <a href="FakeLanguageGen.html#removeAccents(java.lang.CharSequence)"><code>FakeLanguageGen.removeAccents(CharSequence)</code></a>, which
+ returns a CharSequence that can be converted to String if needed, or simply get an accent-less language by
+ calling <a href="FakeLanguageGen.html#removeAccents()"><code>FakeLanguageGen.removeAccents()</code></a> on the FakeLanguageGen you would give this.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>language</code> - a FakeLanguageGen that will be used to construct any non-English names</dd>
+<dt>Returns:</dt>
+<dd>a random name for a vegetable, as a String</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="makeFlowerName()">
 <h3>makeFlowerName</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">java.lang.String</span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Thesaurus.html#line.909">makeFlowerName</a></span>()</div>
-<div class="block">Generates a random possible name for a plant or tree, such as "tulip of Jirui" or "Komert's thorny lilac".
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">java.lang.String</span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Thesaurus.html#line.1040">makeFlowerName</a></span>()</div>
+<div class="block">Generates a random possible name for a flower or flowering plant, such as "tulip of Jirui" or "thorny lilac".
  May use accented characters, as in "Emôa's greenwood", if the given language can
  produce them; if you want to strip these out and replace accented chars with their un-accented counterparts, you
  can use <a href="FakeLanguageGen.html#removeAccents(java.lang.CharSequence)"><code>FakeLanguageGen.removeAccents(CharSequence)</code></a>, which returns a CharSequence that can be converted
@@ -1161,8 +1288,8 @@ java.util.Collection&lt;java.lang.String&gt;&nbsp;synonyms)</span></div>
 <li>
 <section class="detail" id="makeFlowerName(squidpony.FakeLanguageGen)">
 <h3>makeFlowerName</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">java.lang.String</span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Thesaurus.html#line.936">makeFlowerName</a></span>&#8203;(<span class="parameters"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>&nbsp;language)</span></div>
-<div class="block">Generates a random possible name for a plant or tree, such as "tulip of Jirui" or "Komert's thorny lilac",
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">java.lang.String</span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Thesaurus.html#line.1067">makeFlowerName</a></span>&#8203;(<span class="parameters"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>&nbsp;language)</span></div>
+<div class="block">Generates a random possible name for a flower or flowering plant, such as "tulip of Jirui" or "thorny lilac",
  with the FakeLanguageGen already available instead of randomly created. May use accented characters, as in
  "Emôa's greenwood", if the given language can
  produce them; if you want to strip these out and replace accented chars with their un-accented counterparts, you
@@ -1180,7 +1307,7 @@ java.util.Collection&lt;java.lang.String&gt;&nbsp;synonyms)</span></div>
 <li>
 <section class="detail" id="makePotionDescription()">
 <h3>makePotionDescription</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">java.lang.String</span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Thesaurus.html#line.959">makePotionDescription</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">java.lang.String</span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Thesaurus.html#line.1090">makePotionDescription</a></span>()</div>
 <div class="block">Generates a random possible description for a potion in a container, such as "a smoky glass flask containing a
  few drops of an orange tonic", "a milk carton filled with a red fluid", "a shining silver bottle filled with an
  effervescent violet potion", or "a wineskin filled with a black serum".</div>
@@ -1193,7 +1320,7 @@ java.util.Collection&lt;java.lang.String&gt;&nbsp;synonyms)</span></div>
 <li>
 <section class="detail" id="numberWord(int)">
 <h3>numberWord</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">java.lang.String</span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Thesaurus.html#line.979">numberWord</a></span>&#8203;(<span class="parameters">int&nbsp;number)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">java.lang.String</span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Thesaurus.html#line.1110">numberWord</a></span>&#8203;(<span class="parameters">int&nbsp;number)</span></div>
 <div class="block">Gets an English word for a given number, if this knows it. These words are known from 0 ("zero") to 20
  ("twenty"), as well as some higher numbers. If a word isn't known for a number, this returns the number as a
  String, such as "537" or "-1".</div>
@@ -1208,7 +1335,7 @@ java.util.Collection&lt;java.lang.String&gt;&nbsp;synonyms)</span></div>
 <li>
 <section class="detail" id="numberAdjective(int)">
 <h3>numberAdjective</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">java.lang.String</span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Thesaurus.html#line.1026">numberAdjective</a></span>&#8203;(<span class="parameters">int&nbsp;number)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">java.lang.String</span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Thesaurus.html#line.1157">numberAdjective</a></span>&#8203;(<span class="parameters">int&nbsp;number)</span></div>
 <div class="block">Gets an English word that describes a numbered position in some sequence, if this knows it (such as "second" or
  "eleventh"). These words are known from 1 ("first") to 20 ("twentieth"), as well as some higher numbers. If a
  word isn't known for a number, this appends a suffix based on the last base-10 digit to the number, as with "0th"
@@ -1224,7 +1351,7 @@ java.util.Collection&lt;java.lang.String&gt;&nbsp;synonyms)</span></div>
 <li>
 <section class="detail" id="numberWordInRange(int,int)">
 <h3>numberWordInRange</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">java.lang.String</span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Thesaurus.html#line.1080">numberWordInRange</a></span>&#8203;(<span class="parameters">int&nbsp;lowest,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">java.lang.String</span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Thesaurus.html#line.1211">numberWordInRange</a></span>&#8203;(<span class="parameters">int&nbsp;lowest,
 int&nbsp;highest)</span></div>
 <div class="block">Gets an English word for a number, if this knows it, where the number is chosen randomly between lowest and
  highest, both inclusive. These words are known from 0 ("zero") to 20 ("twenty"), as well as some higher numbers.
@@ -1241,7 +1368,7 @@ int&nbsp;highest)</span></div>
 <li>
 <section class="detail" id="numberAdjectiveInRange(int,int)">
 <h3>numberAdjectiveInRange</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">java.lang.String</span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Thesaurus.html#line.1092">numberAdjectiveInRange</a></span>&#8203;(<span class="parameters">int&nbsp;lowest,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">java.lang.String</span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Thesaurus.html#line.1223">numberAdjectiveInRange</a></span>&#8203;(<span class="parameters">int&nbsp;lowest,
 int&nbsp;highest)</span></div>
 <div class="block">Gets an English word that describes a numbered position in some sequence, if this knows it (such as "second" or
  "eleventh"), where the number is chosen randomly between lowest and highest, both inclusive. These words are
@@ -1258,13 +1385,33 @@ int&nbsp;highest)</span></div>
 <li>
 <section class="detail" id="archiveCategories()">
 <h3>archiveCategories</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">java.lang.String</span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Thesaurus.html#line.1531">archiveCategories</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">java.lang.String</span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Thesaurus.html#line.1724">archiveCategories</a></span>()</div>
 <div class="block">Gets a stable (large) String that stores all categories this version of Thesaurus knows, as well as all of the
  words each category includes. This can be useful in conjunction with <a href="#addArchivedCategories(java.lang.String)"><code>addArchivedCategories(String)</code></a> to
  load a set of categories stored from an earlier version of SquidLib.</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>a category archive String that can be passed to <a href="#addArchivedCategories(java.lang.String)"><code>addArchivedCategories(String)</code></a></dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="archiveCategoriesAlternate()">
+<h3>archiveCategoriesAlternate</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">java.lang.String</span>&nbsp;<span class="member-name"><a href="../src-html/squidpony/Thesaurus.html#line.1744">archiveCategoriesAlternate</a></span>()</div>
+<div class="block">Gets a stable (large) String that stores all categories this version of Thesaurus knows, as well as all of the
+ words each category includes. This can be useful in conjunction with
+ <a href="#addArchivedCategoriesAlternate(java.lang.String)"><code>addArchivedCategoriesAlternate(String)</code></a> to load a set of categories stored from an earlier version of
+ SquidLib, but its intended purpose is to provide a simpler format for archival that doesn't use <a href="ObText.html" title="class in squidpony"><code>ObText</code></a>.
+ <br>
+ This yields a String that describes an OrderedMap of String keys (categories) mapped to ArrayList of String
+ values (the words each category knows). Each key-value pair is one line, typically separated by <code>"\n"</code> (but
+ because various OS properties can affect line endings, <code>"\r\n"</code> must also be handled). Items within the
+ line are separated by the non-breaking space character, Unicode 00A0. The first item on a line is the key, or the
+ category name. Remaining items are words the category knows. This may produce a trailing newline.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>a category archive String that can be passed to <a href="#addArchivedCategoriesAlternate(java.lang.String)"><code>addArchivedCategoriesAlternate(String)</code></a></dd>
 </dl>
 </section>
 </li>

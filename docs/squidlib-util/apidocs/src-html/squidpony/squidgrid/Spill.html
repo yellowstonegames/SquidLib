@@ -12,385 +12,379 @@
 <div class="source-container">
 <pre><span class="source-line-no">001</span><span id="line.1">package squidpony.squidgrid;</span>
 <span class="source-line-no">002</span><span id="line.2"></span>
-<span class="source-line-no">003</span><span id="line.3">import squidpony.squidgrid.mapping.IDungeonGenerator;</span>
-<span class="source-line-no">004</span><span id="line.4">import squidpony.squidmath.*;</span>
-<span class="source-line-no">005</span><span id="line.5"></span>
-<span class="source-line-no">006</span><span id="line.6">import java.io.Serializable;</span>
-<span class="source-line-no">007</span><span id="line.7">import java.util.ArrayList;</span>
-<span class="source-line-no">008</span><span id="line.8">import java.util.Set;</span>
-<span class="source-line-no">009</span><span id="line.9">/**</span>
-<span class="source-line-no">010</span><span id="line.10"> * A randomized flood-fill implementation that can be used for level generation (e.g. filling ponds and lakes), for</span>
-<span class="source-line-no">011</span><span id="line.11"> * gas propagation, or for all sorts of fluid-dynamics-on-the-cheap.</span>
-<span class="source-line-no">012</span><span id="line.12"> * Created by Tommy Ettinger on 4/7/2015.</span>
-<span class="source-line-no">013</span><span id="line.13"> */</span>
-<span class="source-line-no">014</span><span id="line.14">public class Spill implements Serializable {</span>
-<span class="source-line-no">015</span><span id="line.15">    private static final long serialVersionUID = 1L;</span>
-<span class="source-line-no">016</span><span id="line.16">    </span>
-<span class="source-line-no">017</span><span id="line.17">    /**</span>
-<span class="source-line-no">018</span><span id="line.18">     * This affects how distance is measured on diagonal directions vs. orthogonal directions. MANHATTAN should form a</span>
-<span class="source-line-no">019</span><span id="line.19">     * diamond shape on a featureless map, while CHEBYSHEV and EUCLIDEAN will form a square. If you only call</span>
-<span class="source-line-no">020</span><span id="line.20">     * Spill.start() once, you should strongly prefer MANHATTAN, even if the rest of the game uses another</span>
-<span class="source-line-no">021</span><span id="line.21">     * measurement, because CHEBYSHEV and EUCLIDEAN can produce odd, gap-filled flood-fills.  Any case where you have</span>
-<span class="source-line-no">022</span><span id="line.22">     * too many gaps can be corrected to varying extent by calling start() more than once with slowly increasing values.</span>
-<span class="source-line-no">023</span><span id="line.23">     * Because start() will extend from the existing area of the Spill, holes are likely to be filled after a few calls,</span>
-<span class="source-line-no">024</span><span id="line.24">     * but if the last call to start() tries to fill too many more cells than the previous one, it can cause holes on</span>
-<span class="source-line-no">025</span><span id="line.25">     * the periphery of the Spill area.</span>
-<span class="source-line-no">026</span><span id="line.26">     */</span>
-<span class="source-line-no">027</span><span id="line.27">    public Measurement measurement = Measurement.MANHATTAN;</span>
-<span class="source-line-no">028</span><span id="line.28"></span>
-<span class="source-line-no">029</span><span id="line.29"></span>
-<span class="source-line-no">030</span><span id="line.30">    /**</span>
-<span class="source-line-no">031</span><span id="line.31">     * Stores which parts of the map are accessible (with a value of true) and which are not (with a value of false,</span>
-<span class="source-line-no">032</span><span id="line.32">     * including both walls and unreachable sections of the map). Should not be changed unless the actual physical</span>
-<span class="source-line-no">033</span><span id="line.33">     * terrain has changed. You should call initialize() with a new map instead of changing this directly.</span>
-<span class="source-line-no">034</span><span id="line.34">     */</span>
-<span class="source-line-no">035</span><span id="line.35">    public boolean[][] physicalMap;</span>
-<span class="source-line-no">036</span><span id="line.36">    /**</span>
-<span class="source-line-no">037</span><span id="line.37">     * The cells that are filled by the Spill when it reaches its volume or limits will be true; others will be false.</span>
-<span class="source-line-no">038</span><span id="line.38">     */</span>
-<span class="source-line-no">039</span><span id="line.39">    public boolean[][] spillMap;</span>
-<span class="source-line-no">040</span><span id="line.40"></span>
-<span class="source-line-no">041</span><span id="line.41">    /**</span>
-<span class="source-line-no">042</span><span id="line.42">     * The list of points that the Spill will randomly fill, starting with what is passed to start(), in order of when</span>
-<span class="source-line-no">043</span><span id="line.43">     * they are reached.</span>
-<span class="source-line-no">044</span><span id="line.44">     */</span>
-<span class="source-line-no">045</span><span id="line.45">    public ArrayList&lt;Coord&gt; spreadPattern;</span>
-<span class="source-line-no">046</span><span id="line.46">    /**</span>
-<span class="source-line-no">047</span><span id="line.47">     * Height of the map. Exciting stuff. Don't change this, instead call initialize().</span>
-<span class="source-line-no">048</span><span id="line.48">     */</span>
-<span class="source-line-no">049</span><span id="line.49">    public int height;</span>
-<span class="source-line-no">050</span><span id="line.50">    /**</span>
-<span class="source-line-no">051</span><span id="line.51">     * Width of the map. Exciting stuff. Don't change this, instead call initialize().</span>
-<span class="source-line-no">052</span><span id="line.52">     */</span>
-<span class="source-line-no">053</span><span id="line.53">    public int width;</span>
-<span class="source-line-no">054</span><span id="line.54">    /**</span>
-<span class="source-line-no">055</span><span id="line.55">     * The amount of cells filled by this Spill, which may be less than the volume passed to start() if the boundaries</span>
-<span class="source-line-no">056</span><span id="line.56">     * are reached on all sides and the Spill has no more room to fill.</span>
-<span class="source-line-no">057</span><span id="line.57">     */</span>
-<span class="source-line-no">058</span><span id="line.58">    public int filled;</span>
-<span class="source-line-no">059</span><span id="line.59">    private OrderedSet&lt;Coord&gt; fresh;</span>
-<span class="source-line-no">060</span><span id="line.60">    /**</span>
-<span class="source-line-no">061</span><span id="line.61">     * The IStatefulRNG used to decide which one of multiple equally-short paths to take. Typically, this is a</span>
-<span class="source-line-no">062</span><span id="line.62">     * {@link GWTRNG} or {@link StatefulRNG}.</span>
-<span class="source-line-no">063</span><span id="line.63">     */</span>
-<span class="source-line-no">064</span><span id="line.64">    public IStatefulRNG rng;</span>
-<span class="source-line-no">065</span><span id="line.65"></span>
-<span class="source-line-no">066</span><span id="line.66">    private boolean initialized;</span>
-<span class="source-line-no">067</span><span id="line.67">    /**</span>
-<span class="source-line-no">068</span><span id="line.68">     * Construct a Spill without a level to actually scan. If you use this constructor, you must call an</span>
-<span class="source-line-no">069</span><span id="line.69">     * initialize() method before using this class.</span>
-<span class="source-line-no">070</span><span id="line.70">     */</span>
-<span class="source-line-no">071</span><span id="line.71">    public Spill() {</span>
-<span class="source-line-no">072</span><span id="line.72">        rng = new GWTRNG();</span>
-<span class="source-line-no">073</span><span id="line.73"></span>
-<span class="source-line-no">074</span><span id="line.74">        fresh = new OrderedSet&lt;&gt;();</span>
-<span class="source-line-no">075</span><span id="line.75">    }</span>
-<span class="source-line-no">076</span><span id="line.76">    /**</span>
-<span class="source-line-no">077</span><span id="line.77">     * Construct a Spill without a level to actually scan. This constructor allows you to specify an RNG, but the actual</span>
-<span class="source-line-no">078</span><span id="line.78">     * RandomnessSource the RNG that this object uses will not be identical to the one passed as random (two ints will</span>
-<span class="source-line-no">079</span><span id="line.79">     * be requested from the passed RNG, and that will be used to seed this class' RNG).</span>
-<span class="source-line-no">080</span><span id="line.80">     *</span>
-<span class="source-line-no">081</span><span id="line.81">     * If you use this constructor, you must call an  initialize() method before using this class.</span>
-<span class="source-line-no">082</span><span id="line.82">     */</span>
-<span class="source-line-no">083</span><span id="line.83">    public Spill(IRNG random) {</span>
-<span class="source-line-no">084</span><span id="line.84">        rng = new GWTRNG(random.nextInt(), random.nextInt());</span>
-<span class="source-line-no">085</span><span id="line.85"></span>
-<span class="source-line-no">086</span><span id="line.86">        fresh = new OrderedSet&lt;&gt;();</span>
-<span class="source-line-no">087</span><span id="line.87">    }</span>
+<span class="source-line-no">003</span><span id="line.3">import squidpony.ArrayTools;</span>
+<span class="source-line-no">004</span><span id="line.4">import squidpony.squidgrid.mapping.IDungeonGenerator;</span>
+<span class="source-line-no">005</span><span id="line.5">import squidpony.squidmath.*;</span>
+<span class="source-line-no">006</span><span id="line.6"></span>
+<span class="source-line-no">007</span><span id="line.7">import java.io.Serializable;</span>
+<span class="source-line-no">008</span><span id="line.8">import java.util.ArrayList;</span>
+<span class="source-line-no">009</span><span id="line.9">import java.util.Collection;</span>
+<span class="source-line-no">010</span><span id="line.10">import java.util.Set;</span>
+<span class="source-line-no">011</span><span id="line.11">/**</span>
+<span class="source-line-no">012</span><span id="line.12"> * A randomized flood-fill implementation that can be used for level generation (e.g. filling ponds and lakes), for</span>
+<span class="source-line-no">013</span><span id="line.13"> * gas propagation, or for all sorts of fluid-dynamics-on-the-cheap.</span>
+<span class="source-line-no">014</span><span id="line.14"> * &lt;br&gt;</span>
+<span class="source-line-no">015</span><span id="line.15"> * Created by Tommy Ettinger on 4/7/2015.</span>
+<span class="source-line-no">016</span><span id="line.16"> */</span>
+<span class="source-line-no">017</span><span id="line.17">public class Spill implements Serializable {</span>
+<span class="source-line-no">018</span><span id="line.18">    private static final long serialVersionUID = 1L;</span>
+<span class="source-line-no">019</span><span id="line.19">    </span>
+<span class="source-line-no">020</span><span id="line.20">    /**</span>
+<span class="source-line-no">021</span><span id="line.21">     * This affects how distance is measured on diagonal directions vs. orthogonal directions. MANHATTAN should form a</span>
+<span class="source-line-no">022</span><span id="line.22">     * diamond shape on a featureless map, while CHEBYSHEV and EUCLIDEAN will form a square. If you only call</span>
+<span class="source-line-no">023</span><span id="line.23">     * Spill.start() once, you should strongly prefer MANHATTAN, even if the rest of the game uses another</span>
+<span class="source-line-no">024</span><span id="line.24">     * measurement, because CHEBYSHEV and EUCLIDEAN can produce odd, gap-filled flood-fills.  Any case where you have</span>
+<span class="source-line-no">025</span><span id="line.25">     * too many gaps can be corrected to varying extent by calling start() more than once with slowly increasing values.</span>
+<span class="source-line-no">026</span><span id="line.26">     * Because start() will extend from the existing area of the Spill, holes are likely to be filled after a few calls,</span>
+<span class="source-line-no">027</span><span id="line.27">     * but if the last call to start() tries to fill too many more cells than the previous one, it can cause holes on</span>
+<span class="source-line-no">028</span><span id="line.28">     * the periphery of the Spill area.</span>
+<span class="source-line-no">029</span><span id="line.29">     */</span>
+<span class="source-line-no">030</span><span id="line.30">    public Measurement measurement = Measurement.MANHATTAN;</span>
+<span class="source-line-no">031</span><span id="line.31"></span>
+<span class="source-line-no">032</span><span id="line.32"></span>
+<span class="source-line-no">033</span><span id="line.33">    /**</span>
+<span class="source-line-no">034</span><span id="line.34">     * Stores which parts of the map are accessible (with a value of true) and which are not (with a value of false,</span>
+<span class="source-line-no">035</span><span id="line.35">     * including both walls and unreachable sections of the map). Should not be changed unless the actual physical</span>
+<span class="source-line-no">036</span><span id="line.36">     * terrain has changed. You should call initialize() with a new map instead of changing this directly.</span>
+<span class="source-line-no">037</span><span id="line.37">     */</span>
+<span class="source-line-no">038</span><span id="line.38">    public boolean[][] physicalMap;</span>
+<span class="source-line-no">039</span><span id="line.39">    /**</span>
+<span class="source-line-no">040</span><span id="line.40">     * The cells that are filled by the Spill when it reaches its volume or limits will be true; others will be false.</span>
+<span class="source-line-no">041</span><span id="line.41">     */</span>
+<span class="source-line-no">042</span><span id="line.42">    public boolean[][] spillMap;</span>
+<span class="source-line-no">043</span><span id="line.43"></span>
+<span class="source-line-no">044</span><span id="line.44">    /**</span>
+<span class="source-line-no">045</span><span id="line.45">     * The list of points that the Spill will randomly fill, starting with what is passed to start(), in order of when</span>
+<span class="source-line-no">046</span><span id="line.46">     * they are reached.</span>
+<span class="source-line-no">047</span><span id="line.47">     */</span>
+<span class="source-line-no">048</span><span id="line.48">    public ArrayList&lt;Coord&gt; spreadPattern;</span>
+<span class="source-line-no">049</span><span id="line.49">    /**</span>
+<span class="source-line-no">050</span><span id="line.50">     * Height of the map. Exciting stuff. Don't change this, instead call initialize().</span>
+<span class="source-line-no">051</span><span id="line.51">     */</span>
+<span class="source-line-no">052</span><span id="line.52">    public int height;</span>
+<span class="source-line-no">053</span><span id="line.53">    /**</span>
+<span class="source-line-no">054</span><span id="line.54">     * Width of the map. Exciting stuff. Don't change this, instead call initialize().</span>
+<span class="source-line-no">055</span><span id="line.55">     */</span>
+<span class="source-line-no">056</span><span id="line.56">    public int width;</span>
+<span class="source-line-no">057</span><span id="line.57">    /**</span>
+<span class="source-line-no">058</span><span id="line.58">     * The amount of cells filled by this Spill, which may be less than the volume passed to start() if the boundaries</span>
+<span class="source-line-no">059</span><span id="line.59">     * are reached on all sides and the Spill has no more room to fill.</span>
+<span class="source-line-no">060</span><span id="line.60">     */</span>
+<span class="source-line-no">061</span><span id="line.61">    public int filled;</span>
+<span class="source-line-no">062</span><span id="line.62">    private OrderedSet&lt;Coord&gt; fresh;</span>
+<span class="source-line-no">063</span><span id="line.63">    /**</span>
+<span class="source-line-no">064</span><span id="line.64">     * The IStatefulRNG used to decide which one of multiple equally-short paths to take. Typically, this is a</span>
+<span class="source-line-no">065</span><span id="line.65">     * {@link GWTRNG} or {@link StatefulRNG}.</span>
+<span class="source-line-no">066</span><span id="line.66">     */</span>
+<span class="source-line-no">067</span><span id="line.67">    public IStatefulRNG rng;</span>
+<span class="source-line-no">068</span><span id="line.68"></span>
+<span class="source-line-no">069</span><span id="line.69">    private boolean initialized;</span>
+<span class="source-line-no">070</span><span id="line.70">    /**</span>
+<span class="source-line-no">071</span><span id="line.71">     * Construct a Spill without a level to actually scan. If you use this constructor, you must call an</span>
+<span class="source-line-no">072</span><span id="line.72">     * initialize() method before using this class.</span>
+<span class="source-line-no">073</span><span id="line.73">     */</span>
+<span class="source-line-no">074</span><span id="line.74">    public Spill() {</span>
+<span class="source-line-no">075</span><span id="line.75">        rng = new GWTRNG();</span>
+<span class="source-line-no">076</span><span id="line.76"></span>
+<span class="source-line-no">077</span><span id="line.77">        fresh = new OrderedSet&lt;&gt;();</span>
+<span class="source-line-no">078</span><span id="line.78">    }</span>
+<span class="source-line-no">079</span><span id="line.79">    /**</span>
+<span class="source-line-no">080</span><span id="line.80">     * Construct a Spill without a level to actually scan. This constructor allows you to specify an RNG, but the actual</span>
+<span class="source-line-no">081</span><span id="line.81">     * RandomnessSource the RNG that this object uses will not be identical to the one passed as random (two ints will</span>
+<span class="source-line-no">082</span><span id="line.82">     * be requested from the passed RNG, and that will be used to seed this class' RNG).</span>
+<span class="source-line-no">083</span><span id="line.83">     *</span>
+<span class="source-line-no">084</span><span id="line.84">     * If you use this constructor, you must call an  initialize() method before using this class.</span>
+<span class="source-line-no">085</span><span id="line.85">     */</span>
+<span class="source-line-no">086</span><span id="line.86">    public Spill(IRNG random) {</span>
+<span class="source-line-no">087</span><span id="line.87">        rng = new GWTRNG(random.nextInt(), random.nextInt());</span>
 <span class="source-line-no">088</span><span id="line.88"></span>
-<span class="source-line-no">089</span><span id="line.89">    /**</span>
-<span class="source-line-no">090</span><span id="line.90">     * Construct a Spill without a level to actually scan. This constructor allows you to specify an IStatefulRNG such</span>
-<span class="source-line-no">091</span><span id="line.91">     * as {@link StatefulRNG} or {@link GWTRNG}, which will be referenced in this class (if the state of random changes</span>
-<span class="source-line-no">092</span><span id="line.92">     * because this object needed a random number, the state change will be reflected in the code that passed random to</span>
-<span class="source-line-no">093</span><span id="line.93">     * here). If you use this constructor, you must call an  initialize() method before using this class.</span>
-<span class="source-line-no">094</span><span id="line.94">     */</span>
-<span class="source-line-no">095</span><span id="line.95">    public Spill(IStatefulRNG random) {</span>
-<span class="source-line-no">096</span><span id="line.96">        rng = random;</span>
-<span class="source-line-no">097</span><span id="line.97"></span>
-<span class="source-line-no">098</span><span id="line.98">        fresh = new OrderedSet&lt;&gt;();</span>
-<span class="source-line-no">099</span><span id="line.99">    }</span>
+<span class="source-line-no">089</span><span id="line.89">        fresh = new OrderedSet&lt;&gt;();</span>
+<span class="source-line-no">090</span><span id="line.90">    }</span>
+<span class="source-line-no">091</span><span id="line.91"></span>
+<span class="source-line-no">092</span><span id="line.92">    /**</span>
+<span class="source-line-no">093</span><span id="line.93">     * Construct a Spill without a level to actually scan. This constructor allows you to specify an IStatefulRNG such</span>
+<span class="source-line-no">094</span><span id="line.94">     * as {@link StatefulRNG} or {@link GWTRNG}, which will be referenced in this class (if the state of random changes</span>
+<span class="source-line-no">095</span><span id="line.95">     * because this object needed a random number, the state change will be reflected in the code that passed random to</span>
+<span class="source-line-no">096</span><span id="line.96">     * here). If you use this constructor, you must call an  initialize() method before using this class.</span>
+<span class="source-line-no">097</span><span id="line.97">     */</span>
+<span class="source-line-no">098</span><span id="line.98">    public Spill(IStatefulRNG random) {</span>
+<span class="source-line-no">099</span><span id="line.99">        rng = random;</span>
 <span class="source-line-no">100</span><span id="line.100"></span>
-<span class="source-line-no">101</span><span id="line.101">    /**</span>
-<span class="source-line-no">102</span><span id="line.102">     * Used to construct a Spill from the output of another.</span>
-<span class="source-line-no">103</span><span id="line.103">     * @param level the level as a 2D rectangular boolean array, using {@code false} to represent walls</span>
-<span class="source-line-no">104</span><span id="line.104">     */</span>
-<span class="source-line-no">105</span><span id="line.105">    public Spill(final boolean[][] level) {</span>
-<span class="source-line-no">106</span><span id="line.106">        rng = new GWTRNG();</span>
-<span class="source-line-no">107</span><span id="line.107"></span>
-<span class="source-line-no">108</span><span id="line.108">        initialize(level);</span>
-<span class="source-line-no">109</span><span id="line.109">    }</span>
-<span class="source-line-no">110</span><span id="line.110">    /**</span>
-<span class="source-line-no">111</span><span id="line.111">     * Used to construct a Spill from the output of another, specifying a distance calculation.</span>
-<span class="source-line-no">112</span><span id="line.112">     * @param level the level as a 2D rectangular boolean array, using {@code false} to represent walls</span>
-<span class="source-line-no">113</span><span id="line.113">     * @param measurement a {@link Measurement} enum; usually {@link Measurement#MANHATTAN} is ideal</span>
-<span class="source-line-no">114</span><span id="line.114">     */</span>
-<span class="source-line-no">115</span><span id="line.115">    public Spill(final boolean[][] level, Measurement measurement) {</span>
-<span class="source-line-no">116</span><span id="line.116">        rng = new GWTRNG();</span>
-<span class="source-line-no">117</span><span id="line.117"></span>
-<span class="source-line-no">118</span><span id="line.118">        this.measurement = measurement;</span>
-<span class="source-line-no">119</span><span id="line.119"></span>
-<span class="source-line-no">120</span><span id="line.120">        initialize(level);</span>
-<span class="source-line-no">121</span><span id="line.121">    }</span>
-<span class="source-line-no">122</span><span id="line.122"></span>
-<span class="source-line-no">123</span><span id="line.123">    /**</span>
-<span class="source-line-no">124</span><span id="line.124">     * Constructor meant to take a char[][] returned by {@link IDungeonGenerator#generate()}, or any other</span>
-<span class="source-line-no">125</span><span id="line.125">     * char[][] where '#' means a wall and anything else is a walkable tile. If you only have</span>
-<span class="source-line-no">126</span><span id="line.126">     * a map that uses box-drawing characters, use DungeonUtility.linesToHashes() to get a</span>
-<span class="source-line-no">127</span><span id="line.127">     * map that can be used here.</span>
-<span class="source-line-no">128</span><span id="line.128">     *</span>
-<span class="source-line-no">129</span><span id="line.129">     * @param level the level as a 2D rectangular char array, using {@code '#'} to represent walls</span>
-<span class="source-line-no">130</span><span id="line.130">     */</span>
-<span class="source-line-no">131</span><span id="line.131">    public Spill(final char[][] level) {</span>
-<span class="source-line-no">132</span><span id="line.132">        rng = new GWTRNG();</span>
-<span class="source-line-no">133</span><span id="line.133"></span>
-<span class="source-line-no">134</span><span id="line.134">        initialize(level);</span>
-<span class="source-line-no">135</span><span id="line.135">    }</span>
-<span class="source-line-no">136</span><span id="line.136">    /**</span>
-<span class="source-line-no">137</span><span id="line.137">     * Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other</span>
-<span class="source-line-no">138</span><span id="line.138">     * char[][] where one char means a wall and anything else is a walkable tile. If you only have</span>
-<span class="source-line-no">139</span><span id="line.139">     * a map that uses box-drawing characters, use DungeonUtility.linesToHashes() to get a</span>
-<span class="source-line-no">140</span><span id="line.140">     * map that can be used here. You can specify the character used for walls.</span>
-<span class="source-line-no">141</span><span id="line.141">     *</span>
-<span class="source-line-no">142</span><span id="line.142">     * @param level the level as a 2D rectangular char array, using {@code alternateWall} to represent walls</span>
-<span class="source-line-no">143</span><span id="line.143">     * @param alternateWall the char that will be interpreted as a wall in {@code level}</span>
-<span class="source-line-no">144</span><span id="line.144">     */</span>
-<span class="source-line-no">145</span><span id="line.145">    public Spill(final char[][] level, char alternateWall) {</span>
-<span class="source-line-no">146</span><span id="line.146">        rng = new GWTRNG();</span>
-<span class="source-line-no">147</span><span id="line.147"></span>
-<span class="source-line-no">148</span><span id="line.148">        initialize(level, alternateWall);</span>
-<span class="source-line-no">149</span><span id="line.149">    }</span>
-<span class="source-line-no">150</span><span id="line.150"></span>
-<span class="source-line-no">151</span><span id="line.151">    /**</span>
-<span class="source-line-no">152</span><span id="line.152">     * Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other</span>
-<span class="source-line-no">153</span><span id="line.153">     * char[][] where '#' means a wall and anything else is a walkable tile. If you only have</span>
-<span class="source-line-no">154</span><span id="line.154">     * a map that uses box-drawing characters, use DungeonUtility.linesToHashes() to get a</span>
-<span class="source-line-no">155</span><span id="line.155">     * map that can be used here. This constructor specifies a distance measurement.</span>
-<span class="source-line-no">156</span><span id="line.156">     *</span>
-<span class="source-line-no">157</span><span id="line.157">     * @param level the level as a 2D rectangular char array, using {@code '#'} to represent walls</span>
-<span class="source-line-no">158</span><span id="line.158">     * @param measurement a {@link Measurement} enum; usually {@link Measurement#MANHATTAN} is ideal</span>
-<span class="source-line-no">159</span><span id="line.159">     */</span>
-<span class="source-line-no">160</span><span id="line.160">    public Spill(final char[][] level, Measurement measurement) {</span>
-<span class="source-line-no">161</span><span id="line.161">        rng = new GWTRNG();</span>
-<span class="source-line-no">162</span><span id="line.162">        this.measurement = measurement;</span>
-<span class="source-line-no">163</span><span id="line.163"></span>
-<span class="source-line-no">164</span><span id="line.164">        initialize(level);</span>
-<span class="source-line-no">165</span><span id="line.165">    }</span>
-<span class="source-line-no">166</span><span id="line.166">    /**</span>
-<span class="source-line-no">167</span><span id="line.167">     * Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other</span>
-<span class="source-line-no">168</span><span id="line.168">     * char[][] where '#' means a wall and anything else is a walkable tile. If you only have</span>
-<span class="source-line-no">169</span><span id="line.169">     * a map that uses box-drawing characters, use DungeonUtility.linesToHashes() to get a</span>
-<span class="source-line-no">170</span><span id="line.170">     * map that can be used here. This constructor specifies a distance measurement.</span>
-<span class="source-line-no">171</span><span id="line.171">     *</span>
-<span class="source-line-no">172</span><span id="line.172">     * This constructor allows you to specify an RNG, but the actual RandomnessSource the RNG that this object uses</span>
-<span class="source-line-no">173</span><span id="line.173">     * will not be identical to the one passed as random (two ints will be requested from the passed RNG, and that will</span>
-<span class="source-line-no">174</span><span id="line.174">     * be used to seed this class' RNG).</span>
-<span class="source-line-no">175</span><span id="line.175">     *</span>
-<span class="source-line-no">176</span><span id="line.176">     * @param level the level as a 2D rectangular char array, using {@code '#'} to represent walls</span>
-<span class="source-line-no">177</span><span id="line.177">     * @param measurement a {@link Measurement} enum; usually {@link Measurement#MANHATTAN} is ideal</span>
-<span class="source-line-no">178</span><span id="line.178">     */</span>
-<span class="source-line-no">179</span><span id="line.179">    public Spill(final char[][] level, Measurement measurement, IRNG random) {</span>
-<span class="source-line-no">180</span><span id="line.180">        rng = new GWTRNG(random.nextInt(), random.nextInt());</span>
-<span class="source-line-no">181</span><span id="line.181">        this.measurement = measurement;</span>
-<span class="source-line-no">182</span><span id="line.182"></span>
-<span class="source-line-no">183</span><span id="line.183">        initialize(level);</span>
-<span class="source-line-no">184</span><span id="line.184">    }</span>
-<span class="source-line-no">185</span><span id="line.185">    /**</span>
-<span class="source-line-no">186</span><span id="line.186">     * Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other</span>
-<span class="source-line-no">187</span><span id="line.187">     * char[][] where '#' means a wall and anything else is a walkable tile. If you only have</span>
-<span class="source-line-no">188</span><span id="line.188">     * a map that uses box-drawing characters, use DungeonUtility.linesToHashes() to get a</span>
-<span class="source-line-no">189</span><span id="line.189">     * map that can be used here. This constructor specifies a distance measurement.</span>
-<span class="source-line-no">190</span><span id="line.190">     *</span>
-<span class="source-line-no">191</span><span id="line.191">     * This constructor allows you to specify an IStatefulRNG such as GWTRNG or StatefulRNG, which will be referenced in</span>
-<span class="source-line-no">192</span><span id="line.192">     * this class (if the state of random changes because this object needed a random number, the state change will be</span>
-<span class="source-line-no">193</span><span id="line.193">     * reflected in the code that passed random to here).</span>
-<span class="source-line-no">194</span><span id="line.194">     * @param level the level as a 2D rectangular char array, using {@code '#'} to represent walls</span>
-<span class="source-line-no">195</span><span id="line.195">     * @param measurement a {@link Measurement} enum; usually {@link Measurement#MANHATTAN} is ideal</span>
-<span class="source-line-no">196</span><span id="line.196">     */</span>
-<span class="source-line-no">197</span><span id="line.197">    public Spill(final char[][] level, Measurement measurement, IStatefulRNG random) {</span>
-<span class="source-line-no">198</span><span id="line.198">        rng = random;</span>
-<span class="source-line-no">199</span><span id="line.199">        this.measurement = measurement;</span>
-<span class="source-line-no">200</span><span id="line.200"></span>
-<span class="source-line-no">201</span><span id="line.201">        initialize(level);</span>
-<span class="source-line-no">202</span><span id="line.202">    }</span>
-<span class="source-line-no">203</span><span id="line.203"></span>
-<span class="source-line-no">204</span><span id="line.204">    /**</span>
-<span class="source-line-no">205</span><span id="line.205">     * Used to initialize or re-initialize a Spill that needs a new PhysicalMap because it either wasn't given</span>
-<span class="source-line-no">206</span><span id="line.206">     * one when it was constructed, or because the contents of the terrain have changed permanently.</span>
-<span class="source-line-no">207</span><span id="line.207">     * @param level the level as a 2D rectangular boolean array, using {@code false} to represent walls</span>
-<span class="source-line-no">208</span><span id="line.208">     * @return this Spill after initialization has completed, for chaining</span>
-<span class="source-line-no">209</span><span id="line.209">     */</span>
-<span class="source-line-no">210</span><span id="line.210">    public Spill initialize(final boolean[][] level) {</span>
-<span class="source-line-no">211</span><span id="line.211">        fresh = new OrderedSet&lt;&gt;();</span>
-<span class="source-line-no">212</span><span id="line.212">        width = level.length;</span>
-<span class="source-line-no">213</span><span id="line.213">        height = level[0].length;</span>
-<span class="source-line-no">214</span><span id="line.214">        spillMap = new boolean[width][height];</span>
-<span class="source-line-no">215</span><span id="line.215">        physicalMap = new boolean[width][height];</span>
-<span class="source-line-no">216</span><span id="line.216">        for (int x = 0; x &lt; width; x++) {</span>
-<span class="source-line-no">217</span><span id="line.217">            System.arraycopy(level, 0, physicalMap, 0, height);</span>
-<span class="source-line-no">218</span><span id="line.218">            System.arraycopy(level, 0, spillMap, 0, height);</span>
-<span class="source-line-no">219</span><span id="line.219">        }</span>
-<span class="source-line-no">220</span><span id="line.220">        initialized = true;</span>
-<span class="source-line-no">221</span><span id="line.221">        return this;</span>
-<span class="source-line-no">222</span><span id="line.222">    }</span>
-<span class="source-line-no">223</span><span id="line.223"></span>
-<span class="source-line-no">224</span><span id="line.224">    /**</span>
-<span class="source-line-no">225</span><span id="line.225">     * Used to initialize or re-initialize a Spill that needs a new PhysicalMap because it either wasn't given</span>
-<span class="source-line-no">226</span><span id="line.226">     * one when it was constructed, or because the contents of the terrain have changed permanently.</span>
-<span class="source-line-no">227</span><span id="line.227">     * @param level the level as a 2D rectangular char array, using {@code '#'} to represent walls</span>
-<span class="source-line-no">228</span><span id="line.228">     * @return this Spill after initialization has completed, for chaining</span>
-<span class="source-line-no">229</span><span id="line.229">     */</span>
-<span class="source-line-no">230</span><span id="line.230">    public Spill initialize(final char[][] level) {</span>
-<span class="source-line-no">231</span><span id="line.231">        fresh = new OrderedSet&lt;&gt;();</span>
-<span class="source-line-no">232</span><span id="line.232">        width = level.length;</span>
-<span class="source-line-no">233</span><span id="line.233">        height = level[0].length;</span>
-<span class="source-line-no">234</span><span id="line.234">        spillMap = new boolean[width][height];</span>
-<span class="source-line-no">235</span><span id="line.235">        physicalMap = new boolean[width][height];</span>
-<span class="source-line-no">236</span><span id="line.236">        for (int y = 0; y &lt; height; y++) {</span>
-<span class="source-line-no">237</span><span id="line.237">            for (int x = 0; x &lt; width; x++) {</span>
-<span class="source-line-no">238</span><span id="line.238">                spillMap[x][y] = false;</span>
-<span class="source-line-no">239</span><span id="line.239">                physicalMap[x][y] = level[x][y] != '#';</span>
-<span class="source-line-no">240</span><span id="line.240">            }</span>
-<span class="source-line-no">241</span><span id="line.241">        }</span>
-<span class="source-line-no">242</span><span id="line.242">        initialized = true;</span>
-<span class="source-line-no">243</span><span id="line.243">        return this;</span>
-<span class="source-line-no">244</span><span id="line.244">    }</span>
-<span class="source-line-no">245</span><span id="line.245"></span>
-<span class="source-line-no">246</span><span id="line.246">    /**</span>
-<span class="source-line-no">247</span><span id="line.247">     * Used to initialize or re-initialize a Spill that needs a new PhysicalMap because it either wasn't given</span>
-<span class="source-line-no">248</span><span id="line.248">     * one when it was constructed, or because the contents of the terrain have changed permanently. This</span>
-<span class="source-line-no">249</span><span id="line.249">     * initialize() method allows you to specify an alternate wall char other than the default character, {@code '#'}.</span>
-<span class="source-line-no">250</span><span id="line.250">     * @param level the level as a 2D rectangular char array, using {@code alternateWall} to represent walls</span>
-<span class="source-line-no">251</span><span id="line.251">     * @param alternateWall the char that will be interpreted as a wall in {@code level}</span>
-<span class="source-line-no">252</span><span id="line.252">     * @return this Spill after initialization has completed, for chaining</span>
-<span class="source-line-no">253</span><span id="line.253">     */</span>
-<span class="source-line-no">254</span><span id="line.254">    public Spill initialize(final char[][] level, char alternateWall) {</span>
-<span class="source-line-no">255</span><span id="line.255">        fresh = new OrderedSet&lt;&gt;();</span>
-<span class="source-line-no">256</span><span id="line.256">        width = level.length;</span>
-<span class="source-line-no">257</span><span id="line.257">        height = level[0].length;</span>
-<span class="source-line-no">258</span><span id="line.258">        spillMap = new boolean[width][height];</span>
-<span class="source-line-no">259</span><span id="line.259">        physicalMap = new boolean[width][height];</span>
-<span class="source-line-no">260</span><span id="line.260">        for (int y = 0; y &lt; height; y++) {</span>
-<span class="source-line-no">261</span><span id="line.261">            for (int x = 0; x &lt; width; x++) {</span>
-<span class="source-line-no">262</span><span id="line.262">                spillMap[x][y] = false;</span>
-<span class="source-line-no">263</span><span id="line.263">                physicalMap[x][y] = level[x][y] != alternateWall;</span>
-<span class="source-line-no">264</span><span id="line.264">            }</span>
-<span class="source-line-no">265</span><span id="line.265">        }</span>
-<span class="source-line-no">266</span><span id="line.266">        initialized = true;</span>
-<span class="source-line-no">267</span><span id="line.267">        return this;</span>
-<span class="source-line-no">268</span><span id="line.268">    }</span>
-<span class="source-line-no">269</span><span id="line.269"></span>
-<span class="source-line-no">270</span><span id="line.270">    /**</span>
-<span class="source-line-no">271</span><span id="line.271">     * Resets the spillMap to being empty.</span>
-<span class="source-line-no">272</span><span id="line.272">     */</span>
-<span class="source-line-no">273</span><span id="line.273">    public void resetMap() {</span>
-<span class="source-line-no">274</span><span id="line.274">        if(!initialized) return;</span>
-<span class="source-line-no">275</span><span id="line.275">        for (int y = 0; y &lt; height; y++) {</span>
-<span class="source-line-no">276</span><span id="line.276">            for (int x = 0; x &lt; width; x++) {</span>
-<span class="source-line-no">277</span><span id="line.277">                spillMap[x][y] = false;</span>
-<span class="source-line-no">278</span><span id="line.278">            }</span>
-<span class="source-line-no">279</span><span id="line.279">        }</span>
-<span class="source-line-no">280</span><span id="line.280">    }</span>
-<span class="source-line-no">281</span><span id="line.281"></span>
-<span class="source-line-no">282</span><span id="line.282">    /**</span>
-<span class="source-line-no">283</span><span id="line.283">     * Resets this Spill to a state with an empty spillMap and an empty spreadPattern.</span>
-<span class="source-line-no">284</span><span id="line.284">     */</span>
-<span class="source-line-no">285</span><span id="line.285">    public void reset() {</span>
-<span class="source-line-no">286</span><span id="line.286">        resetMap();</span>
-<span class="source-line-no">287</span><span id="line.287">        spreadPattern.clear();</span>
-<span class="source-line-no">288</span><span id="line.288">        fresh.clear();</span>
-<span class="source-line-no">289</span><span id="line.289">    }</span>
-<span class="source-line-no">290</span><span id="line.290"></span>
-<span class="source-line-no">291</span><span id="line.291">    /**</span>
-<span class="source-line-no">292</span><span id="line.292">     * Reverts a cell to an unfilled state (false in spillMap).</span>
-<span class="source-line-no">293</span><span id="line.293">     * @param x the x position of the cell to reset</span>
-<span class="source-line-no">294</span><span id="line.294">     * @param y the y position of the cell to reset</span>
-<span class="source-line-no">295</span><span id="line.295">     */</span>
-<span class="source-line-no">296</span><span id="line.296">    public void resetCell(int x, int y) {</span>
-<span class="source-line-no">297</span><span id="line.297">        if(!initialized) return;</span>
-<span class="source-line-no">298</span><span id="line.298">        spillMap[x][y] = false;</span>
-<span class="source-line-no">299</span><span id="line.299">    }</span>
-<span class="source-line-no">300</span><span id="line.300"></span>
-<span class="source-line-no">301</span><span id="line.301">    /**</span>
-<span class="source-line-no">302</span><span id="line.302">     * Reverts a cell to an unfilled state (false in spillMap).</span>
-<span class="source-line-no">303</span><span id="line.303">     * @param pt the position of the cell to reset</span>
-<span class="source-line-no">304</span><span id="line.304">     */</span>
-<span class="source-line-no">305</span><span id="line.305">    public void resetCell(Coord pt) {</span>
-<span class="source-line-no">306</span><span id="line.306">        if(!initialized) return;</span>
-<span class="source-line-no">307</span><span id="line.307">        spillMap[pt.x][pt.y] = false;</span>
-<span class="source-line-no">308</span><span id="line.308">    }</span>
-<span class="source-line-no">309</span><span id="line.309"></span>
-<span class="source-line-no">310</span><span id="line.310">    /**</span>
-<span class="source-line-no">311</span><span id="line.311">     * Used internally to mark a cell as just-now being expanded from.</span>
-<span class="source-line-no">312</span><span id="line.312">     * @param x the x position of the cell to reset</span>
-<span class="source-line-no">313</span><span id="line.313">     * @param y the y position of the cell to reset</span>
-<span class="source-line-no">314</span><span id="line.314">     */</span>
-<span class="source-line-no">315</span><span id="line.315">    protected void setFresh(int x, int y) {</span>
-<span class="source-line-no">316</span><span id="line.316">        if(!initialized) return;</span>
-<span class="source-line-no">317</span><span id="line.317">        fresh.add(Coord.get(x, y));</span>
-<span class="source-line-no">318</span><span id="line.318">    }</span>
-<span class="source-line-no">319</span><span id="line.319"></span>
-<span class="source-line-no">320</span><span id="line.320">    /**</span>
-<span class="source-line-no">321</span><span id="line.321">     * Used internally to mark a cell as just-now being expanded from.</span>
-<span class="source-line-no">322</span><span id="line.322">     * @param pt the position of the cell to reset</span>
-<span class="source-line-no">323</span><span id="line.323">     */</span>
-<span class="source-line-no">324</span><span id="line.324">    protected void setFresh(final Coord pt) {</span>
-<span class="source-line-no">325</span><span id="line.325">        if(!initialized) return;</span>
-<span class="source-line-no">326</span><span id="line.326">        fresh.add(pt);</span>
-<span class="source-line-no">327</span><span id="line.327">    }</span>
-<span class="source-line-no">328</span><span id="line.328"></span>
-<span class="source-line-no">329</span><span id="line.329">    /**</span>
-<span class="source-line-no">330</span><span id="line.330">     * Recalculate the spillMap and return the spreadPattern. The cell corresponding to entry will be true,</span>
-<span class="source-line-no">331</span><span id="line.331">     * the cells near that will be true if chosen at random from all passable cells adjacent to a</span>
-<span class="source-line-no">332</span><span id="line.332">     * filled (true) cell, and all other cells will be false. This takes a total number of cells to attempt</span>
-<span class="source-line-no">333</span><span id="line.333">     * to fill (the volume parameter), and will fill less if it has completely exhausted all passable cells.</span>
-<span class="source-line-no">334</span><span id="line.334">     * If the measurement this Spill uses is anything other than MANHATTAN, you can expect many gaps in the first</span>
-<span class="source-line-no">335</span><span id="line.335">     * filled area.  Subsequent calls to start() with the same entry and a higher volume will expand the area</span>
-<span class="source-line-no">336</span><span id="line.336">     * of the Spill, and are likely to fill any gaps after a few subsequent calls. Increasing the volume slowly</span>
-<span class="source-line-no">337</span><span id="line.337">     * is the best way to ensure that gaps only exist on the very edge if you use a non-MANHATTAN measurement.</span>
-<span class="source-line-no">338</span><span id="line.338">     *</span>
-<span class="source-line-no">339</span><span id="line.339">     * @param entry The first cell to spread from, which should really be passable.</span>
-<span class="source-line-no">340</span><span id="line.340">     * @param volume The total number of cells to attempt to fill, which must be non-negative.</span>
-<span class="source-line-no">341</span><span id="line.341">     * @param impassable A Set of Position keys representing the locations of moving obstacles to a</span>
-<span class="source-line-no">342</span><span id="line.342">     *                   path that cannot be moved through; this can be null if there are no such obstacles.</span>
-<span class="source-line-no">343</span><span id="line.343">     * @return An ArrayList of Points that this will enter, in order starting with entry at index 0, until it</span>
-<span class="source-line-no">344</span><span id="line.344">     * reaches its volume or fills its boundaries completely.</span>
-<span class="source-line-no">345</span><span id="line.345">     */</span>
-<span class="source-line-no">346</span><span id="line.346">    public ArrayList&lt;Coord&gt; start(Coord entry, int volume, Set&lt;Coord&gt; impassable) {</span>
-<span class="source-line-no">347</span><span id="line.347">        if(!initialized) return null;</span>
-<span class="source-line-no">348</span><span id="line.348">        if(!physicalMap[entry.x][entry.y] || (impassable != null &amp;&amp; impassable.contains(entry)))</span>
-<span class="source-line-no">349</span><span id="line.349">            return null;</span>
-<span class="source-line-no">350</span><span id="line.350">        spreadPattern = new ArrayList&lt;&gt;(volume);</span>
-<span class="source-line-no">351</span><span id="line.351">        spillMap[entry.x][entry.y] = true;</span>
-<span class="source-line-no">352</span><span id="line.352">        Coord temp;</span>
-<span class="source-line-no">353</span><span id="line.353">        for(int x = 0; x &lt; spillMap.length; x++)</span>
-<span class="source-line-no">354</span><span id="line.354">        {</span>
-<span class="source-line-no">355</span><span id="line.355">            for(int y = 0; y &lt; spillMap[x].length; y++)</span>
-<span class="source-line-no">356</span><span id="line.356">            {</span>
-<span class="source-line-no">357</span><span id="line.357">                temp = Coord.get(x, y);</span>
-<span class="source-line-no">358</span><span id="line.358">                if(spillMap[x][y] &amp;&amp; (impassable == null || !impassable.contains(temp)))</span>
-<span class="source-line-no">359</span><span id="line.359">                    fresh.add(temp);</span>
-<span class="source-line-no">360</span><span id="line.360">            }</span>
-<span class="source-line-no">361</span><span id="line.361">        }</span>
-<span class="source-line-no">362</span><span id="line.362"></span>
-<span class="source-line-no">363</span><span id="line.363">        Direction[] dirs = (measurement == Measurement.MANHATTAN) ? Direction.CARDINALS : Direction.OUTWARDS;</span>
-<span class="source-line-no">364</span><span id="line.364">        while (!fresh.isEmpty() &amp;&amp; spreadPattern.size() &lt; volume) {</span>
-<span class="source-line-no">365</span><span id="line.365">            Coord cell = fresh.randomItem(rng);//toArray(new Coord[fresh.size()])[rng.nextInt(fresh.size())];</span>
-<span class="source-line-no">366</span><span id="line.366">            spreadPattern.add(cell);</span>
-<span class="source-line-no">367</span><span id="line.367">            spillMap[cell.x][cell.y] = true;</span>
-<span class="source-line-no">368</span><span id="line.368">            for (int d = 0; d &lt; dirs.length; d++) {</span>
-<span class="source-line-no">369</span><span id="line.369">                Coord adj = cell.translate(dirs[d].deltaX, dirs[d].deltaY);</span>
-<span class="source-line-no">370</span><span id="line.370">                double h = measurement.heuristic(dirs[d]);</span>
-<span class="source-line-no">371</span><span id="line.371">                if (physicalMap[adj.x][adj.y] &amp;&amp; !spillMap[adj.x][adj.y] &amp;&amp; (impassable == null || !impassable.contains(adj)) &amp;&amp; rng.nextDouble() &lt;= 1.0 / h) {</span>
-<span class="source-line-no">372</span><span id="line.372">                    setFresh(adj);</span>
-<span class="source-line-no">373</span><span id="line.373">                }</span>
-<span class="source-line-no">374</span><span id="line.374">            }</span>
-<span class="source-line-no">375</span><span id="line.375">            fresh.remove(cell);</span>
-<span class="source-line-no">376</span><span id="line.376">        }</span>
-<span class="source-line-no">377</span><span id="line.377">        filled = spreadPattern.size();</span>
-<span class="source-line-no">378</span><span id="line.378">        return spreadPattern;</span>
-<span class="source-line-no">379</span><span id="line.379">    }</span>
-<span class="source-line-no">380</span><span id="line.380"></span>
-<span class="source-line-no">381</span><span id="line.381">}</span>
+<span class="source-line-no">101</span><span id="line.101">        fresh = new OrderedSet&lt;&gt;();</span>
+<span class="source-line-no">102</span><span id="line.102">    }</span>
+<span class="source-line-no">103</span><span id="line.103"></span>
+<span class="source-line-no">104</span><span id="line.104">    /**</span>
+<span class="source-line-no">105</span><span id="line.105">     * Used to construct a Spill from the output of another.</span>
+<span class="source-line-no">106</span><span id="line.106">     * @param level the level as a 2D rectangular boolean array, using {@code false} to represent walls</span>
+<span class="source-line-no">107</span><span id="line.107">     */</span>
+<span class="source-line-no">108</span><span id="line.108">    public Spill(final boolean[][] level) {</span>
+<span class="source-line-no">109</span><span id="line.109">        rng = new GWTRNG();</span>
+<span class="source-line-no">110</span><span id="line.110">        fresh = new OrderedSet&lt;&gt;();</span>
+<span class="source-line-no">111</span><span id="line.111">        initialize(level);</span>
+<span class="source-line-no">112</span><span id="line.112">    }</span>
+<span class="source-line-no">113</span><span id="line.113">    /**</span>
+<span class="source-line-no">114</span><span id="line.114">     * Used to construct a Spill from the output of another, specifying a distance calculation.</span>
+<span class="source-line-no">115</span><span id="line.115">     * @param level the level as a 2D rectangular boolean array, using {@code false} to represent walls</span>
+<span class="source-line-no">116</span><span id="line.116">     * @param measurement a {@link Measurement} enum; usually {@link Measurement#MANHATTAN} is ideal</span>
+<span class="source-line-no">117</span><span id="line.117">     */</span>
+<span class="source-line-no">118</span><span id="line.118">    public Spill(final boolean[][] level, Measurement measurement) {</span>
+<span class="source-line-no">119</span><span id="line.119">        rng = new GWTRNG();</span>
+<span class="source-line-no">120</span><span id="line.120">        fresh = new OrderedSet&lt;&gt;();</span>
+<span class="source-line-no">121</span><span id="line.121">        this.measurement = measurement;</span>
+<span class="source-line-no">122</span><span id="line.122">        initialize(level);</span>
+<span class="source-line-no">123</span><span id="line.123">    }</span>
+<span class="source-line-no">124</span><span id="line.124"></span>
+<span class="source-line-no">125</span><span id="line.125">    /**</span>
+<span class="source-line-no">126</span><span id="line.126">     * Constructor meant to take a char[][] returned by {@link IDungeonGenerator#generate()}, or any other</span>
+<span class="source-line-no">127</span><span id="line.127">     * char[][] where '#' means a wall and anything else is a walkable tile. If you only have</span>
+<span class="source-line-no">128</span><span id="line.128">     * a map that uses box-drawing characters, use DungeonUtility.linesToHashes() to get a</span>
+<span class="source-line-no">129</span><span id="line.129">     * map that can be used here.</span>
+<span class="source-line-no">130</span><span id="line.130">     *</span>
+<span class="source-line-no">131</span><span id="line.131">     * @param level the level as a 2D rectangular char array, using {@code '#'} to represent walls</span>
+<span class="source-line-no">132</span><span id="line.132">     */</span>
+<span class="source-line-no">133</span><span id="line.133">    public Spill(final char[][] level) {</span>
+<span class="source-line-no">134</span><span id="line.134">        rng = new GWTRNG();</span>
+<span class="source-line-no">135</span><span id="line.135">        fresh = new OrderedSet&lt;&gt;();</span>
+<span class="source-line-no">136</span><span id="line.136">        initialize(level);</span>
+<span class="source-line-no">137</span><span id="line.137">    }</span>
+<span class="source-line-no">138</span><span id="line.138">    /**</span>
+<span class="source-line-no">139</span><span id="line.139">     * Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other</span>
+<span class="source-line-no">140</span><span id="line.140">     * char[][] where one char means a wall and anything else is a walkable tile. If you only have</span>
+<span class="source-line-no">141</span><span id="line.141">     * a map that uses box-drawing characters, use DungeonUtility.linesToHashes() to get a</span>
+<span class="source-line-no">142</span><span id="line.142">     * map that can be used here. You can specify the character used for walls.</span>
+<span class="source-line-no">143</span><span id="line.143">     *</span>
+<span class="source-line-no">144</span><span id="line.144">     * @param level the level as a 2D rectangular char array, using {@code alternateWall} to represent walls</span>
+<span class="source-line-no">145</span><span id="line.145">     * @param alternateWall the char that will be interpreted as a wall in {@code level}</span>
+<span class="source-line-no">146</span><span id="line.146">     */</span>
+<span class="source-line-no">147</span><span id="line.147">    public Spill(final char[][] level, char alternateWall) {</span>
+<span class="source-line-no">148</span><span id="line.148">        rng = new GWTRNG();</span>
+<span class="source-line-no">149</span><span id="line.149">        fresh = new OrderedSet&lt;&gt;();</span>
+<span class="source-line-no">150</span><span id="line.150">        initialize(level, alternateWall);</span>
+<span class="source-line-no">151</span><span id="line.151">    }</span>
+<span class="source-line-no">152</span><span id="line.152"></span>
+<span class="source-line-no">153</span><span id="line.153">    /**</span>
+<span class="source-line-no">154</span><span id="line.154">     * Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other</span>
+<span class="source-line-no">155</span><span id="line.155">     * char[][] where '#' means a wall and anything else is a walkable tile. If you only have</span>
+<span class="source-line-no">156</span><span id="line.156">     * a map that uses box-drawing characters, use DungeonUtility.linesToHashes() to get a</span>
+<span class="source-line-no">157</span><span id="line.157">     * map that can be used here. This constructor specifies a distance measurement.</span>
+<span class="source-line-no">158</span><span id="line.158">     *</span>
+<span class="source-line-no">159</span><span id="line.159">     * @param level the level as a 2D rectangular char array, using {@code '#'} to represent walls</span>
+<span class="source-line-no">160</span><span id="line.160">     * @param measurement a {@link Measurement} enum; usually {@link Measurement#MANHATTAN} is ideal</span>
+<span class="source-line-no">161</span><span id="line.161">     */</span>
+<span class="source-line-no">162</span><span id="line.162">    public Spill(final char[][] level, Measurement measurement) {</span>
+<span class="source-line-no">163</span><span id="line.163">        rng = new GWTRNG();</span>
+<span class="source-line-no">164</span><span id="line.164">        fresh = new OrderedSet&lt;&gt;();</span>
+<span class="source-line-no">165</span><span id="line.165">        this.measurement = measurement;</span>
+<span class="source-line-no">166</span><span id="line.166">        initialize(level);</span>
+<span class="source-line-no">167</span><span id="line.167">    }</span>
+<span class="source-line-no">168</span><span id="line.168">    /**</span>
+<span class="source-line-no">169</span><span id="line.169">     * Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other</span>
+<span class="source-line-no">170</span><span id="line.170">     * char[][] where '#' means a wall and anything else is a walkable tile. If you only have</span>
+<span class="source-line-no">171</span><span id="line.171">     * a map that uses box-drawing characters, use DungeonUtility.linesToHashes() to get a</span>
+<span class="source-line-no">172</span><span id="line.172">     * map that can be used here. This constructor specifies a distance measurement.</span>
+<span class="source-line-no">173</span><span id="line.173">     *</span>
+<span class="source-line-no">174</span><span id="line.174">     * This constructor allows you to specify an RNG, but the actual RandomnessSource the RNG that this object uses</span>
+<span class="source-line-no">175</span><span id="line.175">     * will not be identical to the one passed as random (two ints will be requested from the passed RNG, and that will</span>
+<span class="source-line-no">176</span><span id="line.176">     * be used to seed this class' RNG).</span>
+<span class="source-line-no">177</span><span id="line.177">     *</span>
+<span class="source-line-no">178</span><span id="line.178">     * @param level the level as a 2D rectangular char array, using {@code '#'} to represent walls</span>
+<span class="source-line-no">179</span><span id="line.179">     * @param measurement a {@link Measurement} enum; usually {@link Measurement#MANHATTAN} is ideal</span>
+<span class="source-line-no">180</span><span id="line.180">     */</span>
+<span class="source-line-no">181</span><span id="line.181">    public Spill(final char[][] level, Measurement measurement, IRNG random) {</span>
+<span class="source-line-no">182</span><span id="line.182">        rng = new GWTRNG(random.nextInt(), random.nextInt());</span>
+<span class="source-line-no">183</span><span id="line.183">        fresh = new OrderedSet&lt;&gt;();</span>
+<span class="source-line-no">184</span><span id="line.184">        this.measurement = measurement;</span>
+<span class="source-line-no">185</span><span id="line.185">        initialize(level);</span>
+<span class="source-line-no">186</span><span id="line.186">    }</span>
+<span class="source-line-no">187</span><span id="line.187">    /**</span>
+<span class="source-line-no">188</span><span id="line.188">     * Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other</span>
+<span class="source-line-no">189</span><span id="line.189">     * char[][] where '#' means a wall and anything else is a walkable tile. If you only have</span>
+<span class="source-line-no">190</span><span id="line.190">     * a map that uses box-drawing characters, use DungeonUtility.linesToHashes() to get a</span>
+<span class="source-line-no">191</span><span id="line.191">     * map that can be used here. This constructor specifies a distance measurement.</span>
+<span class="source-line-no">192</span><span id="line.192">     *</span>
+<span class="source-line-no">193</span><span id="line.193">     * This constructor allows you to specify an IStatefulRNG such as GWTRNG or StatefulRNG, which will be referenced in</span>
+<span class="source-line-no">194</span><span id="line.194">     * this class (if the state of random changes because this object needed a random number, the state change will be</span>
+<span class="source-line-no">195</span><span id="line.195">     * reflected in the code that passed random to here).</span>
+<span class="source-line-no">196</span><span id="line.196">     * @param level the level as a 2D rectangular char array, using {@code '#'} to represent walls</span>
+<span class="source-line-no">197</span><span id="line.197">     * @param measurement a {@link Measurement} enum; usually {@link Measurement#MANHATTAN} is ideal</span>
+<span class="source-line-no">198</span><span id="line.198">     */</span>
+<span class="source-line-no">199</span><span id="line.199">    public Spill(final char[][] level, Measurement measurement, IStatefulRNG random) {</span>
+<span class="source-line-no">200</span><span id="line.200">        rng = random;</span>
+<span class="source-line-no">201</span><span id="line.201">        fresh = new OrderedSet&lt;&gt;();</span>
+<span class="source-line-no">202</span><span id="line.202">        this.measurement = measurement;</span>
+<span class="source-line-no">203</span><span id="line.203">        initialize(level);</span>
+<span class="source-line-no">204</span><span id="line.204">    }</span>
+<span class="source-line-no">205</span><span id="line.205"></span>
+<span class="source-line-no">206</span><span id="line.206">    /**</span>
+<span class="source-line-no">207</span><span id="line.207">     * Used to initialize or re-initialize a Spill that needs a new PhysicalMap because it either wasn't given</span>
+<span class="source-line-no">208</span><span id="line.208">     * one when it was constructed, or because the contents of the terrain have changed permanently.</span>
+<span class="source-line-no">209</span><span id="line.209">     * @param level the level as a 2D rectangular boolean array, using {@code false} to represent walls</span>
+<span class="source-line-no">210</span><span id="line.210">     * @return this Spill after initialization has completed, for chaining</span>
+<span class="source-line-no">211</span><span id="line.211">     */</span>
+<span class="source-line-no">212</span><span id="line.212">    public Spill initialize(final boolean[][] level) {</span>
+<span class="source-line-no">213</span><span id="line.213">        fresh.clear();</span>
+<span class="source-line-no">214</span><span id="line.214">        width = level.length;</span>
+<span class="source-line-no">215</span><span id="line.215">        height = level[0].length;</span>
+<span class="source-line-no">216</span><span id="line.216">        spillMap = ArrayTools.copy(level);</span>
+<span class="source-line-no">217</span><span id="line.217">        physicalMap = ArrayTools.copy(level);</span>
+<span class="source-line-no">218</span><span id="line.218">        initialized = true;</span>
+<span class="source-line-no">219</span><span id="line.219">        return this;</span>
+<span class="source-line-no">220</span><span id="line.220">    }</span>
+<span class="source-line-no">221</span><span id="line.221"></span>
+<span class="source-line-no">222</span><span id="line.222">    /**</span>
+<span class="source-line-no">223</span><span id="line.223">     * Used to initialize or re-initialize a Spill that needs a new PhysicalMap because it either wasn't given</span>
+<span class="source-line-no">224</span><span id="line.224">     * one when it was constructed, or because the contents of the terrain have changed permanently.</span>
+<span class="source-line-no">225</span><span id="line.225">     * @param level the level as a 2D rectangular char array, using {@code '#'} to represent walls</span>
+<span class="source-line-no">226</span><span id="line.226">     * @return this Spill after initialization has completed, for chaining</span>
+<span class="source-line-no">227</span><span id="line.227">     */</span>
+<span class="source-line-no">228</span><span id="line.228">    public Spill initialize(final char[][] level) {</span>
+<span class="source-line-no">229</span><span id="line.229">        fresh.clear();</span>
+<span class="source-line-no">230</span><span id="line.230">        width = level.length;</span>
+<span class="source-line-no">231</span><span id="line.231">        height = level[0].length;</span>
+<span class="source-line-no">232</span><span id="line.232">        spillMap = new boolean[width][height];</span>
+<span class="source-line-no">233</span><span id="line.233">        physicalMap = new boolean[width][height];</span>
+<span class="source-line-no">234</span><span id="line.234">        for (int y = 0; y &lt; height; y++) {</span>
+<span class="source-line-no">235</span><span id="line.235">            for (int x = 0; x &lt; width; x++) {</span>
+<span class="source-line-no">236</span><span id="line.236">                spillMap[x][y] = false;</span>
+<span class="source-line-no">237</span><span id="line.237">                physicalMap[x][y] = level[x][y] != '#';</span>
+<span class="source-line-no">238</span><span id="line.238">            }</span>
+<span class="source-line-no">239</span><span id="line.239">        }</span>
+<span class="source-line-no">240</span><span id="line.240">        initialized = true;</span>
+<span class="source-line-no">241</span><span id="line.241">        return this;</span>
+<span class="source-line-no">242</span><span id="line.242">    }</span>
+<span class="source-line-no">243</span><span id="line.243"></span>
+<span class="source-line-no">244</span><span id="line.244">    /**</span>
+<span class="source-line-no">245</span><span id="line.245">     * Used to initialize or re-initialize a Spill that needs a new PhysicalMap because it either wasn't given</span>
+<span class="source-line-no">246</span><span id="line.246">     * one when it was constructed, or because the contents of the terrain have changed permanently. This</span>
+<span class="source-line-no">247</span><span id="line.247">     * initialize() method allows you to specify an alternate wall char other than the default character, {@code '#'}.</span>
+<span class="source-line-no">248</span><span id="line.248">     * @param level the level as a 2D rectangular char array, using {@code alternateWall} to represent walls</span>
+<span class="source-line-no">249</span><span id="line.249">     * @param alternateWall the char that will be interpreted as a wall in {@code level}</span>
+<span class="source-line-no">250</span><span id="line.250">     * @return this Spill after initialization has completed, for chaining</span>
+<span class="source-line-no">251</span><span id="line.251">     */</span>
+<span class="source-line-no">252</span><span id="line.252">    public Spill initialize(final char[][] level, char alternateWall) {</span>
+<span class="source-line-no">253</span><span id="line.253">        fresh.clear();</span>
+<span class="source-line-no">254</span><span id="line.254">        width = level.length;</span>
+<span class="source-line-no">255</span><span id="line.255">        height = level[0].length;</span>
+<span class="source-line-no">256</span><span id="line.256">        spillMap = new boolean[width][height];</span>
+<span class="source-line-no">257</span><span id="line.257">        physicalMap = new boolean[width][height];</span>
+<span class="source-line-no">258</span><span id="line.258">        for (int y = 0; y &lt; height; y++) {</span>
+<span class="source-line-no">259</span><span id="line.259">            for (int x = 0; x &lt; width; x++) {</span>
+<span class="source-line-no">260</span><span id="line.260">                spillMap[x][y] = false;</span>
+<span class="source-line-no">261</span><span id="line.261">                physicalMap[x][y] = level[x][y] != alternateWall;</span>
+<span class="source-line-no">262</span><span id="line.262">            }</span>
+<span class="source-line-no">263</span><span id="line.263">        }</span>
+<span class="source-line-no">264</span><span id="line.264">        initialized = true;</span>
+<span class="source-line-no">265</span><span id="line.265">        return this;</span>
+<span class="source-line-no">266</span><span id="line.266">    }</span>
+<span class="source-line-no">267</span><span id="line.267"></span>
+<span class="source-line-no">268</span><span id="line.268">    /**</span>
+<span class="source-line-no">269</span><span id="line.269">     * Resets the spillMap to being empty.</span>
+<span class="source-line-no">270</span><span id="line.270">     */</span>
+<span class="source-line-no">271</span><span id="line.271">    public void resetMap() {</span>
+<span class="source-line-no">272</span><span id="line.272">        if(!initialized) return;</span>
+<span class="source-line-no">273</span><span id="line.273">        ArrayTools.fill(spillMap, false);</span>
+<span class="source-line-no">274</span><span id="line.274">    }</span>
+<span class="source-line-no">275</span><span id="line.275"></span>
+<span class="source-line-no">276</span><span id="line.276">    /**</span>
+<span class="source-line-no">277</span><span id="line.277">     * Resets this Spill to a state with an empty spillMap and an empty spreadPattern.</span>
+<span class="source-line-no">278</span><span id="line.278">     */</span>
+<span class="source-line-no">279</span><span id="line.279">    public void reset() {</span>
+<span class="source-line-no">280</span><span id="line.280">        resetMap();</span>
+<span class="source-line-no">281</span><span id="line.281">        spreadPattern.clear();</span>
+<span class="source-line-no">282</span><span id="line.282">        fresh.clear();</span>
+<span class="source-line-no">283</span><span id="line.283">    }</span>
+<span class="source-line-no">284</span><span id="line.284"></span>
+<span class="source-line-no">285</span><span id="line.285">    /**</span>
+<span class="source-line-no">286</span><span id="line.286">     * Reverts a cell to an unfilled state (false in spillMap).</span>
+<span class="source-line-no">287</span><span id="line.287">     * @param x the x position of the cell to reset</span>
+<span class="source-line-no">288</span><span id="line.288">     * @param y the y position of the cell to reset</span>
+<span class="source-line-no">289</span><span id="line.289">     */</span>
+<span class="source-line-no">290</span><span id="line.290">    public void resetCell(int x, int y) {</span>
+<span class="source-line-no">291</span><span id="line.291">        if(!initialized) return;</span>
+<span class="source-line-no">292</span><span id="line.292">        spillMap[x][y] = false;</span>
+<span class="source-line-no">293</span><span id="line.293">    }</span>
+<span class="source-line-no">294</span><span id="line.294"></span>
+<span class="source-line-no">295</span><span id="line.295">    /**</span>
+<span class="source-line-no">296</span><span id="line.296">     * Reverts a cell to an unfilled state (false in spillMap).</span>
+<span class="source-line-no">297</span><span id="line.297">     * @param pt the position of the cell to reset</span>
+<span class="source-line-no">298</span><span id="line.298">     */</span>
+<span class="source-line-no">299</span><span id="line.299">    public void resetCell(Coord pt) {</span>
+<span class="source-line-no">300</span><span id="line.300">        if(!initialized) return;</span>
+<span class="source-line-no">301</span><span id="line.301">        spillMap[pt.x][pt.y] = false;</span>
+<span class="source-line-no">302</span><span id="line.302">    }</span>
+<span class="source-line-no">303</span><span id="line.303"></span>
+<span class="source-line-no">304</span><span id="line.304">    /**</span>
+<span class="source-line-no">305</span><span id="line.305">     * Used internally to mark a cell as just-now being expanded from.</span>
+<span class="source-line-no">306</span><span id="line.306">     * @param x the x position of the cell to reset</span>
+<span class="source-line-no">307</span><span id="line.307">     * @param y the y position of the cell to reset</span>
+<span class="source-line-no">308</span><span id="line.308">     */</span>
+<span class="source-line-no">309</span><span id="line.309">    protected void setFresh(int x, int y) {</span>
+<span class="source-line-no">310</span><span id="line.310">        if(!initialized) return;</span>
+<span class="source-line-no">311</span><span id="line.311">        fresh.add(Coord.get(x, y));</span>
+<span class="source-line-no">312</span><span id="line.312">    }</span>
+<span class="source-line-no">313</span><span id="line.313"></span>
+<span class="source-line-no">314</span><span id="line.314">    /**</span>
+<span class="source-line-no">315</span><span id="line.315">     * Used internally to mark a cell as just-now being expanded from.</span>
+<span class="source-line-no">316</span><span id="line.316">     * @param pt the position of the cell to reset</span>
+<span class="source-line-no">317</span><span id="line.317">     */</span>
+<span class="source-line-no">318</span><span id="line.318">    protected void setFresh(final Coord pt) {</span>
+<span class="source-line-no">319</span><span id="line.319">        if(!initialized) return;</span>
+<span class="source-line-no">320</span><span id="line.320">        fresh.add(pt);</span>
+<span class="source-line-no">321</span><span id="line.321">    }</span>
+<span class="source-line-no">322</span><span id="line.322"></span>
+<span class="source-line-no">323</span><span id="line.323">    /**</span>
+<span class="source-line-no">324</span><span id="line.324">     * Recalculate the spillMap and return the spreadPattern. The cell corresponding to entry will be true,</span>
+<span class="source-line-no">325</span><span id="line.325">     * the cells near that will be true if chosen at random from all passable cells adjacent to a</span>
+<span class="source-line-no">326</span><span id="line.326">     * filled (true) cell, and all other cells will be false. This takes a total number of cells to attempt</span>
+<span class="source-line-no">327</span><span id="line.327">     * to fill (the volume parameter), and will fill less if it has completely exhausted all passable cells.</span>
+<span class="source-line-no">328</span><span id="line.328">     * If the measurement this Spill uses is anything other than MANHATTAN, you can expect many gaps in the first</span>
+<span class="source-line-no">329</span><span id="line.329">     * filled area.  Subsequent calls to start() with the same entry and a higher volume will expand the area</span>
+<span class="source-line-no">330</span><span id="line.330">     * of the Spill, and are likely to fill any gaps after a few subsequent calls. Increasing the volume slowly</span>
+<span class="source-line-no">331</span><span id="line.331">     * is the best way to ensure that gaps only exist on the very edge if you use a non-MANHATTAN measurement.</span>
+<span class="source-line-no">332</span><span id="line.332">     *</span>
+<span class="source-line-no">333</span><span id="line.333">     * @param entry The first cell to spread from, which should really be passable.</span>
+<span class="source-line-no">334</span><span id="line.334">     * @param volume The total number of cells to attempt to fill, which must be non-negative.</span>
+<span class="source-line-no">335</span><span id="line.335">     * @param impassable A Set or other Collection of Coord keys representing the locations of moving obstacles to a</span>
+<span class="source-line-no">336</span><span id="line.336">     *                   path that cannot be moved through; this can be null if there are no such obstacles.</span>
+<span class="source-line-no">337</span><span id="line.337">     * @return An ArrayList of Coords that this will enter, in order starting with entry at index 0, until it</span>
+<span class="source-line-no">338</span><span id="line.338">     * reaches its volume or fills its boundaries completely.</span>
+<span class="source-line-no">339</span><span id="line.339">     */</span>
+<span class="source-line-no">340</span><span id="line.340">    public ArrayList&lt;Coord&gt; start(Coord entry, int volume, Collection&lt;Coord&gt; impassable) {</span>
+<span class="source-line-no">341</span><span id="line.341">        if(!initialized) return null;</span>
+<span class="source-line-no">342</span><span id="line.342">        if(!physicalMap[entry.x][entry.y] || (impassable != null &amp;&amp; impassable.contains(entry)))</span>
+<span class="source-line-no">343</span><span id="line.343">            return null;</span>
+<span class="source-line-no">344</span><span id="line.344">        spreadPattern = new ArrayList&lt;&gt;(volume);</span>
+<span class="source-line-no">345</span><span id="line.345">        spillMap[entry.x][entry.y] = true;</span>
+<span class="source-line-no">346</span><span id="line.346">        Coord temp;</span>
+<span class="source-line-no">347</span><span id="line.347">        for(int x = 0; x &lt; spillMap.length; x++)</span>
+<span class="source-line-no">348</span><span id="line.348">        {</span>
+<span class="source-line-no">349</span><span id="line.349">            for(int y = 0; y &lt; spillMap[x].length; y++)</span>
+<span class="source-line-no">350</span><span id="line.350">            {</span>
+<span class="source-line-no">351</span><span id="line.351">                temp = Coord.get(x, y);</span>
+<span class="source-line-no">352</span><span id="line.352">                if(spillMap[x][y] &amp;&amp; (impassable == null || !impassable.contains(temp)))</span>
+<span class="source-line-no">353</span><span id="line.353">                    fresh.add(temp);</span>
+<span class="source-line-no">354</span><span id="line.354">            }</span>
+<span class="source-line-no">355</span><span id="line.355">        }</span>
+<span class="source-line-no">356</span><span id="line.356"></span>
+<span class="source-line-no">357</span><span id="line.357">        Direction[] dirs = (measurement == Measurement.MANHATTAN) ? Direction.CARDINALS : Direction.OUTWARDS;</span>
+<span class="source-line-no">358</span><span id="line.358">        while (!fresh.isEmpty() &amp;&amp; spreadPattern.size() &lt; volume) {</span>
+<span class="source-line-no">359</span><span id="line.359">            Coord cell = fresh.randomItem(rng);</span>
+<span class="source-line-no">360</span><span id="line.360">            spreadPattern.add(cell);</span>
+<span class="source-line-no">361</span><span id="line.361">            spillMap[cell.x][cell.y] = true;</span>
+<span class="source-line-no">362</span><span id="line.362">            for (int d = 0; d &lt; dirs.length; d++) {</span>
+<span class="source-line-no">363</span><span id="line.363">                Coord adj = cell.translate(dirs[d].deltaX, dirs[d].deltaY);</span>
+<span class="source-line-no">364</span><span id="line.364">                double h = measurement.heuristic(dirs[d]);</span>
+<span class="source-line-no">365</span><span id="line.365">                if (physicalMap[adj.x][adj.y] &amp;&amp; !spillMap[adj.x][adj.y] &amp;&amp; (impassable == null || !impassable.contains(adj)) &amp;&amp; rng.nextDouble() &lt;= 1.0 / h) {</span>
+<span class="source-line-no">366</span><span id="line.366">                    setFresh(adj);</span>
+<span class="source-line-no">367</span><span id="line.367">                }</span>
+<span class="source-line-no">368</span><span id="line.368">            }</span>
+<span class="source-line-no">369</span><span id="line.369">            fresh.remove(cell);</span>
+<span class="source-line-no">370</span><span id="line.370">        }</span>
+<span class="source-line-no">371</span><span id="line.371">        filled = spreadPattern.size();</span>
+<span class="source-line-no">372</span><span id="line.372">        return spreadPattern;</span>
+<span class="source-line-no">373</span><span id="line.373">    }</span>
+<span class="source-line-no">374</span><span id="line.374"></span>
+<span class="source-line-no">375</span><span id="line.375">}</span>
 
 
 

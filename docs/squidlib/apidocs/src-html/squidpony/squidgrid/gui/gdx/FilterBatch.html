@@ -145,8 +145,8 @@
 <span class="source-line-no">133</span><span id="line.133">     * @param size The max number of sprites in a single batch. Max of 8191.</span>
 <span class="source-line-no">134</span><span id="line.134">     * @param defaultShader The default shader to use. This is not owned by the FilterBatch and must be disposed separately. */</span>
 <span class="source-line-no">135</span><span id="line.135">    public FilterBatch (int size, ShaderProgram defaultShader, FloatFilter filter) {</span>
-<span class="source-line-no">136</span><span id="line.136">        // 32767 is max vertex index, so 32767 / 4 vertices per sprite = 8191 sprites max.</span>
-<span class="source-line-no">137</span><span id="line.137">        if (size &gt; 8191) throw new IllegalArgumentException("Can't have more than 8191 sprites per batch: " + size);</span>
+<span class="source-line-no">136</span><span id="line.136">        // 65535 is max vertex index, so 65535 / 4 vertices per sprite = 16383 sprites max.</span>
+<span class="source-line-no">137</span><span id="line.137">        if (size &gt; 16383) throw new IllegalArgumentException("Can't have more than 8191 sprites per batch: " + size);</span>
 <span class="source-line-no">138</span><span id="line.138"></span>
 <span class="source-line-no">139</span><span id="line.139">        Mesh.VertexDataType vertexDataType = (Gdx.gl30 != null) ? Mesh.VertexDataType.VertexBufferObjectWithVAO : Mesh.VertexDataType.VertexArray;</span>
 <span class="source-line-no">140</span><span id="line.140"></span>
@@ -233,7 +233,7 @@
 <span class="source-line-no">221</span><span id="line.221">    @Override</span>
 <span class="source-line-no">222</span><span id="line.222">    public void end () {</span>
 <span class="source-line-no">223</span><span id="line.223">        if (!drawing) throw new IllegalStateException("FilterBatch.begin must be called before end.");</span>
-<span class="source-line-no">224</span><span id="line.224">        if (idx &gt; 0) flush();</span>
+<span class="source-line-no">224</span><span id="line.224">        if (idx != 0) flush();</span>
 <span class="source-line-no">225</span><span id="line.225">        lastTexture = null;</span>
 <span class="source-line-no">226</span><span id="line.226">        drawing = false;</span>
 <span class="source-line-no">227</span><span id="line.227"></span>

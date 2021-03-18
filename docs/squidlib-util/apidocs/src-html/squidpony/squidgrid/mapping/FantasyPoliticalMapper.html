@@ -12,571 +12,577 @@
 <div class="source-container">
 <pre><span class="source-line-no">001</span><span id="line.1">package squidpony.squidgrid.mapping;</span>
 <span class="source-line-no">002</span><span id="line.2"></span>
-<span class="source-line-no">003</span><span id="line.3">import squidpony.*;</span>
-<span class="source-line-no">004</span><span id="line.4">import squidpony.squidgrid.Direction;</span>
-<span class="source-line-no">005</span><span id="line.5">import squidpony.squidmath.*;</span>
-<span class="source-line-no">006</span><span id="line.6"></span>
-<span class="source-line-no">007</span><span id="line.7">import java.io.Serializable;</span>
-<span class="source-line-no">008</span><span id="line.8">import java.util.ArrayList;</span>
-<span class="source-line-no">009</span><span id="line.9">import java.util.Collection;</span>
-<span class="source-line-no">010</span><span id="line.10">import java.util.Collections;</span>
-<span class="source-line-no">011</span><span id="line.11">import java.util.HashSet;</span>
+<span class="source-line-no">003</span><span id="line.3">import squidpony.ArrayTools;</span>
+<span class="source-line-no">004</span><span id="line.4">import squidpony.FakeLanguageGen;</span>
+<span class="source-line-no">005</span><span id="line.5">import squidpony.Maker;</span>
+<span class="source-line-no">006</span><span id="line.6">import squidpony.Thesaurus;</span>
+<span class="source-line-no">007</span><span id="line.7">import squidpony.squidgrid.Direction;</span>
+<span class="source-line-no">008</span><span id="line.8">import squidpony.squidmath.GreasedRegion;</span>
+<span class="source-line-no">009</span><span id="line.9">import squidpony.squidmath.IntVLA;</span>
+<span class="source-line-no">010</span><span id="line.10">import squidpony.squidmath.OrderedMap;</span>
+<span class="source-line-no">011</span><span id="line.11">import squidpony.squidmath.StatefulRNG;</span>
 <span class="source-line-no">012</span><span id="line.12"></span>
-<span class="source-line-no">013</span><span id="line.13">/**</span>
-<span class="source-line-no">014</span><span id="line.14"> * When you have a world map as produced by {@link WorldMapGenerator}, you may want to fill it with claims by various</span>
-<span class="source-line-no">015</span><span id="line.15"> * factions, where each faction may be hand-made and may consist of humans or some fantasy species, such as goblins,</span>
-<span class="source-line-no">016</span><span id="line.16"> * elves, or demons. This can assign contiguous areas of land to various factions, while acknowledging any preferences</span>
-<span class="source-line-no">017</span><span id="line.17"> * some species may have for specific types of land (elves may strongly prefer forest terrain, or flying demons may be</span>
-<span class="source-line-no">018</span><span id="line.18"> * the ideal residents for difficult mountainous terrain). This needs both a {@link WorldMapGenerator} and a</span>
-<span class="source-line-no">019</span><span id="line.19"> * {@link squidpony.squidgrid.mapping.WorldMapGenerator.BiomeMapper} to allocate biomes and height/moisture info.</span>
-<span class="source-line-no">020</span><span id="line.20"> * The WorldMapGenerator is commonly a {@link squidpony.squidgrid.mapping.WorldMapGenerator.SphereMap} or a</span>
-<span class="source-line-no">021</span><span id="line.21"> * {@link squidpony.squidgrid.mapping.WorldMapGenerator.EllipticalMap} for a world map because they are fairly familiar</span>
-<span class="source-line-no">022</span><span id="line.22"> * map projections ({@link squidpony.squidgrid.mapping.WorldMapGenerator.HyperellipticalMap} can look better if</span>
-<span class="source-line-no">023</span><span id="line.23"> * important areas are in the corners of the rectangular area, but it's less familiar). If you're making a political map</span>
-<span class="source-line-no">024</span><span id="line.24"> * for an island or isolated area, then you may want {@link squidpony.squidgrid.mapping.WorldMapGenerator.LocalMap} or</span>
-<span class="source-line-no">025</span><span id="line.25"> * {@link squidpony.squidgrid.mapping.WorldMapGenerator.LocalMimicMap} instead, which don't have world-scale features</span>
-<span class="source-line-no">026</span><span id="line.26"> * like polar ice caps or a warm equator.</span>
-<span class="source-line-no">027</span><span id="line.27"> */</span>
-<span class="source-line-no">028</span><span id="line.28">public class FantasyPoliticalMapper implements Serializable {</span>
-<span class="source-line-no">029</span><span id="line.29">    private static final long serialVersionUID = 0L;</span>
-<span class="source-line-no">030</span><span id="line.30"></span>
-<span class="source-line-no">031</span><span id="line.31">    /**</span>
-<span class="source-line-no">032</span><span id="line.32">     * Represents a group that claims territory on a world-map, such as a nation. Each Faction has a name, a short name</span>
-<span class="source-line-no">033</span><span id="line.33">     * that may be the same as the regular name, a FakeLanguageGen that would be used to generate place names in that</span>
-<span class="source-line-no">034</span><span id="line.34">     * Faction's territory, and a number of (possibly null) arrays and Sets that represent what terrains this Faction</span>
-<span class="source-line-no">035</span><span id="line.35">     * wants to claim and which it will avoid (e.g. elves may prefer claiming forests, while frost giants won't claim</span>
-<span class="source-line-no">036</span><span id="line.36">     * anywhere that's even remotely warm).</span>
-<span class="source-line-no">037</span><span id="line.37">     */</span>
-<span class="source-line-no">038</span><span id="line.38">    public static class Faction implements Serializable</span>
-<span class="source-line-no">039</span><span id="line.39">    {</span>
-<span class="source-line-no">040</span><span id="line.40">        private static final long serialVersionUID = 0L;</span>
-<span class="source-line-no">041</span><span id="line.41"></span>
-<span class="source-line-no">042</span><span id="line.42">        public String name, shortName;</span>
-<span class="source-line-no">043</span><span id="line.43">        public FakeLanguageGen language;</span>
-<span class="source-line-no">044</span><span id="line.44">        /**</span>
-<span class="source-line-no">045</span><span id="line.45">         * A HashSet of String keys, where each key is the name of a biome this Faction wants to occupy.</span>
-<span class="source-line-no">046</span><span id="line.46">         * May be null if no biomes are specifically preferred.</span>
-<span class="source-line-no">047</span><span id="line.47">         */</span>
-<span class="source-line-no">048</span><span id="line.48">        public HashSet&lt;String&gt; preferredBiomes;</span>
-<span class="source-line-no">049</span><span id="line.49">        /**</span>
-<span class="source-line-no">050</span><span id="line.50">         * A HashSet of String keys, where each key is the name of a biome this Faction will never occupy.</span>
-<span class="source-line-no">051</span><span id="line.51">         * May be null if all biomes are available, but unless this is specified in a constructor, the default will be</span>
-<span class="source-line-no">052</span><span id="line.52">         * to consider "Ocean" blocked.</span>
+<span class="source-line-no">013</span><span id="line.13">import java.io.Serializable;</span>
+<span class="source-line-no">014</span><span id="line.14">import java.util.ArrayList;</span>
+<span class="source-line-no">015</span><span id="line.15">import java.util.Collection;</span>
+<span class="source-line-no">016</span><span id="line.16">import java.util.Collections;</span>
+<span class="source-line-no">017</span><span id="line.17">import java.util.HashSet;</span>
+<span class="source-line-no">018</span><span id="line.18"></span>
+<span class="source-line-no">019</span><span id="line.19">/**</span>
+<span class="source-line-no">020</span><span id="line.20"> * When you have a world map as produced by {@link WorldMapGenerator}, you may want to fill it with claims by various</span>
+<span class="source-line-no">021</span><span id="line.21"> * factions, where each faction may be hand-made and may consist of humans or some fantasy species, such as goblins,</span>
+<span class="source-line-no">022</span><span id="line.22"> * elves, or demons. This can assign contiguous areas of land to various factions, while acknowledging any preferences</span>
+<span class="source-line-no">023</span><span id="line.23"> * some species may have for specific types of land (elves may strongly prefer forest terrain, or flying demons may be</span>
+<span class="source-line-no">024</span><span id="line.24"> * the ideal residents for difficult mountainous terrain). This needs both a {@link WorldMapGenerator} and a</span>
+<span class="source-line-no">025</span><span id="line.25"> * {@link squidpony.squidgrid.mapping.WorldMapGenerator.BiomeMapper} to allocate biomes and height/moisture info.</span>
+<span class="source-line-no">026</span><span id="line.26"> * The WorldMapGenerator is commonly a {@link squidpony.squidgrid.mapping.WorldMapGenerator.SphereMap} or a</span>
+<span class="source-line-no">027</span><span id="line.27"> * {@link squidpony.squidgrid.mapping.WorldMapGenerator.EllipticalMap} for a world map because they are fairly familiar</span>
+<span class="source-line-no">028</span><span id="line.28"> * map projections ({@link squidpony.squidgrid.mapping.WorldMapGenerator.HyperellipticalMap} can look better if</span>
+<span class="source-line-no">029</span><span id="line.29"> * important areas are in the corners of the rectangular area, but it's less familiar). If you're making a political map</span>
+<span class="source-line-no">030</span><span id="line.30"> * for an island or isolated area, then you may want {@link squidpony.squidgrid.mapping.WorldMapGenerator.LocalMap} or</span>
+<span class="source-line-no">031</span><span id="line.31"> * {@link squidpony.squidgrid.mapping.WorldMapGenerator.LocalMimicMap} instead, which don't have world-scale features</span>
+<span class="source-line-no">032</span><span id="line.32"> * like polar ice caps or a warm equator.</span>
+<span class="source-line-no">033</span><span id="line.33"> */</span>
+<span class="source-line-no">034</span><span id="line.34">public class FantasyPoliticalMapper implements Serializable {</span>
+<span class="source-line-no">035</span><span id="line.35">    private static final long serialVersionUID = 0L;</span>
+<span class="source-line-no">036</span><span id="line.36"></span>
+<span class="source-line-no">037</span><span id="line.37">    /**</span>
+<span class="source-line-no">038</span><span id="line.38">     * Represents a group that claims territory on a world-map, such as a nation. Each Faction has a name, a short name</span>
+<span class="source-line-no">039</span><span id="line.39">     * that may be the same as the regular name, a FakeLanguageGen that would be used to generate place names in that</span>
+<span class="source-line-no">040</span><span id="line.40">     * Faction's territory, and a number of (possibly null) arrays and Sets that represent what terrains this Faction</span>
+<span class="source-line-no">041</span><span id="line.41">     * wants to claim and which it will avoid (e.g. elves may prefer claiming forests, while frost giants won't claim</span>
+<span class="source-line-no">042</span><span id="line.42">     * anywhere that's even remotely warm).</span>
+<span class="source-line-no">043</span><span id="line.43">     */</span>
+<span class="source-line-no">044</span><span id="line.44">    public static class Faction implements Serializable</span>
+<span class="source-line-no">045</span><span id="line.45">    {</span>
+<span class="source-line-no">046</span><span id="line.46">        private static final long serialVersionUID = 0L;</span>
+<span class="source-line-no">047</span><span id="line.47"></span>
+<span class="source-line-no">048</span><span id="line.48">        public String name, shortName;</span>
+<span class="source-line-no">049</span><span id="line.49">        public FakeLanguageGen language;</span>
+<span class="source-line-no">050</span><span id="line.50">        /**</span>
+<span class="source-line-no">051</span><span id="line.51">         * A HashSet of String keys, where each key is the name of a biome this Faction wants to occupy.</span>
+<span class="source-line-no">052</span><span id="line.52">         * May be null if no biomes are specifically preferred.</span>
 <span class="source-line-no">053</span><span id="line.53">         */</span>
-<span class="source-line-no">054</span><span id="line.54">        public HashSet&lt;String&gt; blockedBiomes;</span>
-<span class="source-line-no">055</span><span id="line.55"></span>
-<span class="source-line-no">056</span><span id="line.56">        /**</span>
-<span class="source-line-no">057</span><span id="line.57">         * An int array of height codes that this Faction prefers; 0, 1, 2, and 3 are all oceans, while 4 is shoreline</span>
-<span class="source-line-no">058</span><span id="line.58">         * or low-lying land and higher numbers (up to 8, inclusive) are used for increasing elevations.</span>
+<span class="source-line-no">054</span><span id="line.54">        public HashSet&lt;String&gt; preferredBiomes;</span>
+<span class="source-line-no">055</span><span id="line.55">        /**</span>
+<span class="source-line-no">056</span><span id="line.56">         * A HashSet of String keys, where each key is the name of a biome this Faction will never occupy.</span>
+<span class="source-line-no">057</span><span id="line.57">         * May be null if all biomes are available, but unless this is specified in a constructor, the default will be</span>
+<span class="source-line-no">058</span><span id="line.58">         * to consider "Ocean" blocked.</span>
 <span class="source-line-no">059</span><span id="line.59">         */</span>
-<span class="source-line-no">060</span><span id="line.60">        public int[] preferredHeight;</span>
-<span class="source-line-no">061</span><span id="line.61">        /**</span>
-<span class="source-line-no">062</span><span id="line.62">         * An int array of heat codes that this Faction prefers; typically a 6-code scale is used where 0, 1, and 2 are</span>
-<span class="source-line-no">063</span><span id="line.63">         * cold and getting progressively warmer, while 3, 4, and 5 are warm to warmest.</span>
-<span class="source-line-no">064</span><span id="line.64">         */</span>
-<span class="source-line-no">065</span><span id="line.65">        public int[] preferredHeat;</span>
-<span class="source-line-no">066</span><span id="line.66">        /**</span>
-<span class="source-line-no">067</span><span id="line.67">         * An int array of moisture codes that this Faction prefers; typically a 6-code scale is used where 0, 1, and 2</span>
-<span class="source-line-no">068</span><span id="line.68">         * are dry and getting progressively more precipitation, while 3, 4, and 5 are wet to wettest.</span>
-<span class="source-line-no">069</span><span id="line.69">         */</span>
-<span class="source-line-no">070</span><span id="line.70">        public int[] preferredMoisture;</span>
-<span class="source-line-no">071</span><span id="line.71"></span>
+<span class="source-line-no">060</span><span id="line.60">        public HashSet&lt;String&gt; blockedBiomes;</span>
+<span class="source-line-no">061</span><span id="line.61"></span>
+<span class="source-line-no">062</span><span id="line.62">        /**</span>
+<span class="source-line-no">063</span><span id="line.63">         * An int array of height codes that this Faction prefers; 0, 1, 2, and 3 are all oceans, while 4 is shoreline</span>
+<span class="source-line-no">064</span><span id="line.64">         * or low-lying land and higher numbers (up to 8, inclusive) are used for increasing elevations.</span>
+<span class="source-line-no">065</span><span id="line.65">         */</span>
+<span class="source-line-no">066</span><span id="line.66">        public int[] preferredHeight;</span>
+<span class="source-line-no">067</span><span id="line.67">        /**</span>
+<span class="source-line-no">068</span><span id="line.68">         * An int array of heat codes that this Faction prefers; typically a 6-code scale is used where 0, 1, and 2 are</span>
+<span class="source-line-no">069</span><span id="line.69">         * cold and getting progressively warmer, while 3, 4, and 5 are warm to warmest.</span>
+<span class="source-line-no">070</span><span id="line.70">         */</span>
+<span class="source-line-no">071</span><span id="line.71">        public int[] preferredHeat;</span>
 <span class="source-line-no">072</span><span id="line.72">        /**</span>
-<span class="source-line-no">073</span><span id="line.73">         * Zero-arg constructor that sets the language to a random FakeLanguageGen (using</span>
-<span class="source-line-no">074</span><span id="line.74">         * {@link FakeLanguageGen#randomLanguage(long)}), then generates a name/shortName with that FakeLanguageGen, and</span>
-<span class="source-line-no">075</span><span id="line.75">         * makes the only blocked biome "Ocean".</span>
-<span class="source-line-no">076</span><span id="line.76">         */</span>
-<span class="source-line-no">077</span><span id="line.77">        public Faction()</span>
-<span class="source-line-no">078</span><span id="line.78">        {</span>
-<span class="source-line-no">079</span><span id="line.79">            language = FakeLanguageGen.randomLanguage(</span>
-<span class="source-line-no">080</span><span id="line.80">                    (long) ((Math.random() - 0.5) * 0x10000000000000L)</span>
-<span class="source-line-no">081</span><span id="line.81">                            ^ (long) (((Math.random() - 0.5) * 2.0) * 0x8000000000000000L));</span>
-<span class="source-line-no">082</span><span id="line.82">            shortName = name = language.word(true);</span>
-<span class="source-line-no">083</span><span id="line.83">            this.blockedBiomes = new HashSet&lt;&gt;(1, 0.75f);</span>
-<span class="source-line-no">084</span><span id="line.84">            blockedBiomes.add("Ocean");</span>
-<span class="source-line-no">085</span><span id="line.85">        }</span>
-<span class="source-line-no">086</span><span id="line.86"></span>
-<span class="source-line-no">087</span><span id="line.87">        /**</span>
-<span class="source-line-no">088</span><span id="line.88">         * Constructor that sets the language to the specified FakeLanguageGen, then generates a name/shortName with</span>
-<span class="source-line-no">089</span><span id="line.89">         * that FakeLanguageGen, and makes the only blocked biome "Ocean".</span>
-<span class="source-line-no">090</span><span id="line.90">         * @param language the FakeLanguageGen to use for generating the name of the Faction and potentially place names</span>
-<span class="source-line-no">091</span><span id="line.91">         */</span>
-<span class="source-line-no">092</span><span id="line.92">        public Faction(FakeLanguageGen language)</span>
-<span class="source-line-no">093</span><span id="line.93">        {</span>
-<span class="source-line-no">094</span><span id="line.94">            this.language = language;</span>
-<span class="source-line-no">095</span><span id="line.95">            shortName = name = language.word(true);</span>
-<span class="source-line-no">096</span><span id="line.96">            this.blockedBiomes = new HashSet&lt;&gt;(1, 0.75f);</span>
-<span class="source-line-no">097</span><span id="line.97">            blockedBiomes.add("Ocean");</span>
-<span class="source-line-no">098</span><span id="line.98">        }</span>
-<span class="source-line-no">099</span><span id="line.99">        /**</span>
-<span class="source-line-no">100</span><span id="line.100">         * Constructor that sets the language to the specified FakeLanguageGen, sets the name and shortName to the</span>
-<span class="source-line-no">101</span><span id="line.101">         * specified name, and makes the only blocked biome "Ocean".</span>
-<span class="source-line-no">102</span><span id="line.102">         * @param language the FakeLanguageGen to use for potentially generating place names</span>
-<span class="source-line-no">103</span><span id="line.103">         * @param name the name of the Faction, such as "The United States of America"; will also be the shortName</span>
-<span class="source-line-no">104</span><span id="line.104">         */</span>
-<span class="source-line-no">105</span><span id="line.105">        public Faction(FakeLanguageGen language, String name)</span>
-<span class="source-line-no">106</span><span id="line.106">        {</span>
-<span class="source-line-no">107</span><span id="line.107">            this.language = language;</span>
-<span class="source-line-no">108</span><span id="line.108">            shortName = this.name = name;</span>
-<span class="source-line-no">109</span><span id="line.109">            this.blockedBiomes = new HashSet&lt;&gt;(1, 0.75f);</span>
-<span class="source-line-no">110</span><span id="line.110">            blockedBiomes.add("Ocean");</span>
-<span class="source-line-no">111</span><span id="line.111">        }</span>
-<span class="source-line-no">112</span><span id="line.112">        /**</span>
-<span class="source-line-no">113</span><span id="line.113">         * Constructor that sets the language to the specified FakeLanguageGen, sets the name to the specified name and</span>
-<span class="source-line-no">114</span><span id="line.114">         * the shortName to the specified shortName, and makes the only blocked biome "Ocean".</span>
-<span class="source-line-no">115</span><span id="line.115">         * @param language the FakeLanguageGen to use for potentially generating place names</span>
-<span class="source-line-no">116</span><span id="line.116">         * @param name the name of the Faction, such as "The United States of America"</span>
-<span class="source-line-no">117</span><span id="line.117">         * @param shortName the short name of the Faction, such as "America"</span>
-<span class="source-line-no">118</span><span id="line.118">         */</span>
-<span class="source-line-no">119</span><span id="line.119">        public Faction(FakeLanguageGen language, String name, String shortName)</span>
-<span class="source-line-no">120</span><span id="line.120">        {</span>
-<span class="source-line-no">121</span><span id="line.121">            this.language = language;</span>
-<span class="source-line-no">122</span><span id="line.122">            this.name = name;</span>
-<span class="source-line-no">123</span><span id="line.123">            this.shortName = shortName;</span>
-<span class="source-line-no">124</span><span id="line.124">            this.blockedBiomes = new HashSet&lt;&gt;(1, 0.75f);</span>
-<span class="source-line-no">125</span><span id="line.125">            blockedBiomes.add("Ocean");</span>
-<span class="source-line-no">126</span><span id="line.126">        }</span>
-<span class="source-line-no">127</span><span id="line.127">        /**</span>
-<span class="source-line-no">128</span><span id="line.128">         * Constructor that sets the language to the specified FakeLanguageGen, sets the name to the specified name and</span>
-<span class="source-line-no">129</span><span id="line.129">         * the shortName to the specified shortName, sets the preferredBiomes to be a Set containing the given Strings</span>
-<span class="source-line-no">130</span><span id="line.130">         * in preferredBiomes, and makes the only blocked biome "Ocean". The exact String names that are viable for</span>
-<span class="source-line-no">131</span><span id="line.131">         * biomes can be obtained from a BiomeMapper with {@link WorldMapGenerator.BiomeMapper#getBiomeNameTable()}.</span>
-<span class="source-line-no">132</span><span id="line.132">         * @param language the FakeLanguageGen to use for potentially generating place names</span>
-<span class="source-line-no">133</span><span id="line.133">         * @param name the name of the Faction, such as "The United States of America"</span>
-<span class="source-line-no">134</span><span id="line.134">         * @param shortName the short name of the Faction, such as "America"</span>
-<span class="source-line-no">135</span><span id="line.135">         * @param preferredBiomes a String array of biome names that this Faction prefers, typically taken from a BiomeMapper's {@link WorldMapGenerator.BiomeMapper#getBiomeNameTable()} value</span>
-<span class="source-line-no">136</span><span id="line.136">         * </span>
-<span class="source-line-no">137</span><span id="line.137">         */</span>
-<span class="source-line-no">138</span><span id="line.138">        public Faction(FakeLanguageGen language, String name, String shortName, String[] preferredBiomes)</span>
-<span class="source-line-no">139</span><span id="line.139">        {</span>
-<span class="source-line-no">140</span><span id="line.140">            this.language = language;</span>
-<span class="source-line-no">141</span><span id="line.141">            this.name = name;</span>
-<span class="source-line-no">142</span><span id="line.142">            this.shortName = shortName;</span>
-<span class="source-line-no">143</span><span id="line.143">            this.preferredBiomes = new HashSet&lt;&gt;(preferredBiomes.length, 0.75f);</span>
-<span class="source-line-no">144</span><span id="line.144">            Collections.addAll(this.preferredBiomes, preferredBiomes);</span>
-<span class="source-line-no">145</span><span id="line.145">            this.blockedBiomes = new HashSet&lt;&gt;(1, 0.75f);</span>
-<span class="source-line-no">146</span><span id="line.146">            blockedBiomes.add("Ocean");</span>
-<span class="source-line-no">147</span><span id="line.147">        }</span>
-<span class="source-line-no">148</span><span id="line.148">        /**</span>
-<span class="source-line-no">149</span><span id="line.149">         * Constructor that sets the language to the specified FakeLanguageGen, sets the name to the specified name and</span>
-<span class="source-line-no">150</span><span id="line.150">         * the shortName to the specified shortName, sets the preferredBiomes to be a Set containing the given Strings</span>
-<span class="source-line-no">151</span><span id="line.151">         * in preferredBiomes, and sets the blocked biomes to be a Set containing exactly the given Strings in</span>
-<span class="source-line-no">152</span><span id="line.152">         * blockedBiomes. The exact String names that are viable for biomes can be obtained from a BiomeMapper with</span>
-<span class="source-line-no">153</span><span id="line.153">         * {@link WorldMapGenerator.BiomeMapper#getBiomeNameTable()}.</span>
-<span class="source-line-no">154</span><span id="line.154">         * @param language the FakeLanguageGen to use for potentially generating place names</span>
-<span class="source-line-no">155</span><span id="line.155">         * @param name the name of the Faction, such as "The United States of America"</span>
-<span class="source-line-no">156</span><span id="line.156">         * @param shortName the short name of the Faction, such as "America"</span>
-<span class="source-line-no">157</span><span id="line.157">         * @param preferredBiomes a String array of biome names that this Faction prefers, typically taken from a BiomeMapper's {@link WorldMapGenerator.BiomeMapper#getBiomeNameTable()} value</span>
-<span class="source-line-no">158</span><span id="line.158">         * @param blockedBiomes a String array of biome names that this Faction will never claim; if empty, this Faction may claim oceans</span>
-<span class="source-line-no">159</span><span id="line.159">         */</span>
-<span class="source-line-no">160</span><span id="line.160">        public Faction(FakeLanguageGen language, String name, String shortName, String[] preferredBiomes, String[] blockedBiomes)</span>
-<span class="source-line-no">161</span><span id="line.161">        {</span>
-<span class="source-line-no">162</span><span id="line.162">            this.language = language;</span>
-<span class="source-line-no">163</span><span id="line.163">            this.name = name;</span>
-<span class="source-line-no">164</span><span id="line.164">            this.shortName = shortName;</span>
-<span class="source-line-no">165</span><span id="line.165">            this.preferredBiomes = new HashSet&lt;&gt;(preferredBiomes.length, 0.75f);</span>
-<span class="source-line-no">166</span><span id="line.166">            Collections.addAll(this.preferredBiomes, preferredBiomes);</span>
-<span class="source-line-no">167</span><span id="line.167">            this.blockedBiomes = new HashSet&lt;&gt;(blockedBiomes.length, 0.75f);</span>
-<span class="source-line-no">168</span><span id="line.168">            Collections.addAll(this.blockedBiomes, blockedBiomes);</span>
-<span class="source-line-no">169</span><span id="line.169">        }</span>
-<span class="source-line-no">170</span><span id="line.170">        /**</span>
-<span class="source-line-no">171</span><span id="line.171">         * Constructor that sets the language to the specified FakeLanguageGen, sets the name to the specified name and</span>
-<span class="source-line-no">172</span><span id="line.172">         * the shortName to the specified shortName, sets the preferredBiomes to be a Set containing the given Strings</span>
-<span class="source-line-no">173</span><span id="line.173">         * in preferredBiomes, sets the blocked biomes to be a Set containing exactly the given Strings in</span>
-<span class="source-line-no">174</span><span id="line.174">         * blockedBiomes, and sets the preferred height codes to the ints in preferredHeight (with 4 being sea level and</span>
-<span class="source-line-no">175</span><span id="line.175">         * 8 being the highest peaks). The exact String names that are viable for biomes can be obtained from a</span>
-<span class="source-line-no">176</span><span id="line.176">         * BiomeMapper with {@link WorldMapGenerator.BiomeMapper#getBiomeNameTable()}.</span>
-<span class="source-line-no">177</span><span id="line.177">         * @param language the FakeLanguageGen to use for potentially generating place names</span>
-<span class="source-line-no">178</span><span id="line.178">         * @param name the name of the Faction, such as "The United States of America"</span>
-<span class="source-line-no">179</span><span id="line.179">         * @param shortName the short name of the Faction, such as "America"</span>
-<span class="source-line-no">180</span><span id="line.180">         * @param preferredBiomes a String array of biome names that this Faction prefers, typically taken from a BiomeMapper's {@link WorldMapGenerator.BiomeMapper#getBiomeNameTable()} value</span>
-<span class="source-line-no">181</span><span id="line.181">         * @param blockedBiomes a String array of biome names that this Faction will never claim; if empty, this Faction may claim oceans</span>
-<span class="source-line-no">182</span><span id="line.182">         * @param preferredHeight an int array of height codes this Faction prefers to claim; 4 is sea level and 8 is highest</span>
-<span class="source-line-no">183</span><span id="line.183">         */</span>
-<span class="source-line-no">184</span><span id="line.184">        public Faction(FakeLanguageGen language, String name, String shortName, String[] preferredBiomes, String[] blockedBiomes, int[] preferredHeight)</span>
-<span class="source-line-no">185</span><span id="line.185">        {</span>
-<span class="source-line-no">186</span><span id="line.186">            this.language = language;</span>
-<span class="source-line-no">187</span><span id="line.187">            this.name = name;</span>
-<span class="source-line-no">188</span><span id="line.188">            this.shortName = shortName;</span>
-<span class="source-line-no">189</span><span id="line.189">            this.preferredBiomes = new HashSet&lt;&gt;(preferredBiomes.length, 0.75f);</span>
-<span class="source-line-no">190</span><span id="line.190">            Collections.addAll(this.preferredBiomes, preferredBiomes);</span>
-<span class="source-line-no">191</span><span id="line.191">            this.blockedBiomes = new HashSet&lt;&gt;(blockedBiomes.length, 0.75f);</span>
-<span class="source-line-no">192</span><span id="line.192">            Collections.addAll(this.blockedBiomes, blockedBiomes);</span>
-<span class="source-line-no">193</span><span id="line.193">            this.preferredHeight = preferredHeight;</span>
-<span class="source-line-no">194</span><span id="line.194">        }</span>
-<span class="source-line-no">195</span><span id="line.195"></span>
-<span class="source-line-no">196</span><span id="line.196">        /**</span>
-<span class="source-line-no">197</span><span id="line.197">         * Constructor that sets the language to the specified FakeLanguageGen, sets the name to the specified name and</span>
-<span class="source-line-no">198</span><span id="line.198">         * the shortName to the specified shortName, sets the preferredBiomes to be a Set containing the given Strings</span>
-<span class="source-line-no">199</span><span id="line.199">         * in preferredBiomes, sets the blocked biomes to be a Set containing exactly the given Strings in</span>
-<span class="source-line-no">200</span><span id="line.200">         * blockedBiomes, sets the preferred height codes to the ints in preferredHeight (with 4 being sea level and 8</span>
-<span class="source-line-no">201</span><span id="line.201">         * being the highest peaks), and sets the preferred heat codes to the ints in preferredHeat (with the exact</span>
-<span class="source-line-no">202</span><span id="line.202">         * values depending on the BiomeMapper, but usually 0-5 range from coldest to hottest). The exact String names</span>
-<span class="source-line-no">203</span><span id="line.203">         * that are viable for biomes can be obtained from a BiomeMapper with</span>
-<span class="source-line-no">204</span><span id="line.204">         * {@link WorldMapGenerator.BiomeMapper#getBiomeNameTable()}.</span>
-<span class="source-line-no">205</span><span id="line.205">         * @param language the FakeLanguageGen to use for potentially generating place names</span>
-<span class="source-line-no">206</span><span id="line.206">         * @param name the name of the Faction, such as "The United States of America"</span>
-<span class="source-line-no">207</span><span id="line.207">         * @param shortName the short name of the Faction, such as "America"</span>
-<span class="source-line-no">208</span><span id="line.208">         * @param preferredBiomes a String array of biome names that this Faction prefers, typically taken from a BiomeMapper's {@link WorldMapGenerator.BiomeMapper#getBiomeNameTable()} value</span>
-<span class="source-line-no">209</span><span id="line.209">         * @param blockedBiomes a String array of biome names that this Faction will never claim; if empty, this Faction may claim oceans</span>
-<span class="source-line-no">210</span><span id="line.210">         * @param preferredHeight an int array of height codes this Faction prefers to claim; 4 is sea level and 8 is highest</span>
-<span class="source-line-no">211</span><span id="line.211">         * @param preferredHeat an int array of heat codes this Faction prefers to claim; typically 0 is coldest and 5 is hottest</span>
-<span class="source-line-no">212</span><span id="line.212">         */</span>
-<span class="source-line-no">213</span><span id="line.213">        public Faction(FakeLanguageGen language, String name, String shortName, String[] preferredBiomes, String[] blockedBiomes,</span>
-<span class="source-line-no">214</span><span id="line.214">                       int[] preferredHeight, int[] preferredHeat)</span>
-<span class="source-line-no">215</span><span id="line.215">        {</span>
-<span class="source-line-no">216</span><span id="line.216">            this.language = language;</span>
-<span class="source-line-no">217</span><span id="line.217">            this.name = name;</span>
-<span class="source-line-no">218</span><span id="line.218">            this.shortName = shortName;</span>
-<span class="source-line-no">219</span><span id="line.219">            this.preferredBiomes = new HashSet&lt;&gt;(preferredBiomes.length, 0.75f);</span>
-<span class="source-line-no">220</span><span id="line.220">            Collections.addAll(this.preferredBiomes, preferredBiomes);</span>
-<span class="source-line-no">221</span><span id="line.221">            this.blockedBiomes = new HashSet&lt;&gt;(blockedBiomes.length, 0.75f);</span>
-<span class="source-line-no">222</span><span id="line.222">            Collections.addAll(this.blockedBiomes, blockedBiomes);</span>
-<span class="source-line-no">223</span><span id="line.223">            this.preferredHeight = preferredHeight;</span>
-<span class="source-line-no">224</span><span id="line.224">            this.preferredHeat = preferredHeat;</span>
-<span class="source-line-no">225</span><span id="line.225">        }</span>
-<span class="source-line-no">226</span><span id="line.226">        /**</span>
-<span class="source-line-no">227</span><span id="line.227">         * Constructor that sets the language to the specified FakeLanguageGen, sets the name to the specified name and</span>
-<span class="source-line-no">228</span><span id="line.228">         * the shortName to the specified shortName, sets the preferredBiomes to be a Set containing the given Strings</span>
-<span class="source-line-no">229</span><span id="line.229">         * in preferredBiomes, sets the blocked biomes to be a Set containing exactly the given Strings in</span>
-<span class="source-line-no">230</span><span id="line.230">         * blockedBiomes, sets the preferred height codes to the ints in preferredHeight (with 4 being sea level and 8</span>
-<span class="source-line-no">231</span><span id="line.231">         * being the highest peaks), sets the preferred heat codes to the ints in preferredHeat (with the exact values</span>
-<span class="source-line-no">232</span><span id="line.232">         * depending on the BiomeMapper, but usually 0-5 range from coldest to hottest), and sets the preferred moisture</span>
-<span class="source-line-no">233</span><span id="line.233">         * codes to the ints in preferredMoisture (withe the exact values depending on the BiomeMapper, but usually 0-5</span>
-<span class="source-line-no">234</span><span id="line.234">         * range from driest to wettest). The exact String names that are viable for biomes can be obtained from a</span>
-<span class="source-line-no">235</span><span id="line.235">         * BiomeMapper with {@link WorldMapGenerator.BiomeMapper#getBiomeNameTable()}.</span>
-<span class="source-line-no">236</span><span id="line.236">         * @param language the FakeLanguageGen to use for potentially generating place names</span>
-<span class="source-line-no">237</span><span id="line.237">         * @param name the name of the Faction, such as "The United States of America"</span>
-<span class="source-line-no">238</span><span id="line.238">         * @param shortName the short name of the Faction, such as "America"</span>
-<span class="source-line-no">239</span><span id="line.239">         * @param preferredBiomes a String array of biome names that this Faction prefers, typically taken from a BiomeMapper's {@link WorldMapGenerator.BiomeMapper#getBiomeNameTable()} value</span>
-<span class="source-line-no">240</span><span id="line.240">         * @param blockedBiomes a String array of biome names that this Faction will never claim; if empty, this Faction may claim oceans</span>
-<span class="source-line-no">241</span><span id="line.241">         * @param preferredHeight an int array of height codes this Faction prefers to claim; 4 is sea level and 8 is highest</span>
-<span class="source-line-no">242</span><span id="line.242">         * @param preferredHeat an int array of heat codes this Faction prefers to claim; typically 0 is coldest and 5 is hottest</span>
-<span class="source-line-no">243</span><span id="line.243">         * @param preferredMoisture an int array of moisture codes this Faction prefers to claim; typically 0 is driest and 5 is wettest</span>
-<span class="source-line-no">244</span><span id="line.244">         */</span>
-<span class="source-line-no">245</span><span id="line.245">        public Faction(FakeLanguageGen language, String name, String shortName, String[] preferredBiomes, String[] blockedBiomes,</span>
-<span class="source-line-no">246</span><span id="line.246">                       int[] preferredHeight, int[] preferredHeat, int[] preferredMoisture)</span>
-<span class="source-line-no">247</span><span id="line.247">        {</span>
-<span class="source-line-no">248</span><span id="line.248">            this.language = language;</span>
-<span class="source-line-no">249</span><span id="line.249">            this.name = name;</span>
-<span class="source-line-no">250</span><span id="line.250">            this.shortName = shortName;</span>
-<span class="source-line-no">251</span><span id="line.251">            this.preferredBiomes = new HashSet&lt;&gt;(preferredBiomes.length, 0.75f);</span>
-<span class="source-line-no">252</span><span id="line.252">            Collections.addAll(this.preferredBiomes, preferredBiomes);</span>
-<span class="source-line-no">253</span><span id="line.253">            this.blockedBiomes = new HashSet&lt;&gt;(blockedBiomes.length, 0.75f);</span>
-<span class="source-line-no">254</span><span id="line.254">            Collections.addAll(this.blockedBiomes, blockedBiomes);</span>
-<span class="source-line-no">255</span><span id="line.255">            this.preferredHeight = preferredHeight;</span>
-<span class="source-line-no">256</span><span id="line.256">            this.preferredHeat = preferredHeat;</span>
-<span class="source-line-no">257</span><span id="line.257">            this.preferredMoisture = preferredMoisture;</span>
-<span class="source-line-no">258</span><span id="line.258">        }</span>
-<span class="source-line-no">259</span><span id="line.259">    }</span>
-<span class="source-line-no">260</span><span id="line.260"></span>
-<span class="source-line-no">261</span><span id="line.261">    public int width;</span>
-<span class="source-line-no">262</span><span id="line.262">    public int height;</span>
-<span class="source-line-no">263</span><span id="line.263">    public StatefulRNG rng;</span>
-<span class="source-line-no">264</span><span id="line.264">    public String name;</span>
-<span class="source-line-no">265</span><span id="line.265">    public char[][] politicalMap;</span>
-<span class="source-line-no">266</span><span id="line.266">    public char[][] zoomedMap;</span>
-<span class="source-line-no">267</span><span id="line.267">    public WorldMapGenerator wmg;</span>
-<span class="source-line-no">268</span><span id="line.268">    public WorldMapGenerator.BiomeMapper biomeMapper;</span>
-<span class="source-line-no">269</span><span id="line.269">    private static final ArrayList&lt;Character&gt; letters = Maker.makeList(</span>
-<span class="source-line-no">270</span><span id="line.270">            '~', '%', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y',</span>
-<span class="source-line-no">271</span><span id="line.271">            'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',</span>
-<span class="source-line-no">272</span><span id="line.272">            'À', 'Á', 'Â', 'Ã', 'Ä', 'Å', 'Æ', 'Ç', 'È', 'É', 'Ê', 'Ë', 'Ì', 'Í', 'Î', 'Ï', 'Ð', 'Ñ', 'Ò', 'Ó', 'Ô', 'Õ', 'Ö', 'Ø', 'Ù', 'Ú', 'Û',</span>
-<span class="source-line-no">273</span><span id="line.273">            'Ü', 'Ý', 'Þ', 'ß', 'à', 'á', 'â', 'ã', 'ä', 'å', 'æ', 'ç', 'è', 'é', 'ê', 'ë', 'ì', 'í', 'î', 'ï', 'ð', 'ñ', 'ò', 'ó', 'ô', 'õ', 'ö',</span>
-<span class="source-line-no">274</span><span id="line.274">            'ø', 'ù', 'ú', 'û', 'ü', 'ý', 'þ', 'ÿ', 'Ā', 'ā', 'Ă', 'ă', 'Ą', 'ą', 'Ć', 'ć', 'Ĉ', 'ĉ', 'Ċ', 'ċ', 'Č', 'č', 'Ď', 'ď', 'Đ', 'đ', 'Ē',</span>
-<span class="source-line-no">275</span><span id="line.275">            'ē', 'Ĕ', 'ĕ', 'Ė', 'ė', 'Ę', 'ę', 'Ě', 'ě', 'Ĝ', 'ĝ', 'Ğ', 'ğ', 'Ġ', 'ġ', 'Ģ', 'ģ', 'Ĥ', 'ĥ', 'Ħ', 'ħ', 'Ĩ', 'ĩ', 'Ī', 'ī', 'Ĭ', 'ĭ',</span>
-<span class="source-line-no">276</span><span id="line.276">            'Į', 'į', 'İ', 'ı', 'Ĵ', 'ĵ', 'Ķ', 'ķ', 'ĸ', 'Ĺ', 'ĺ', 'Ļ', 'ļ', 'Ľ', 'ľ', 'Ŀ', 'ŀ', 'Ł', 'ł', 'Ń', 'ń', 'Ņ', 'ņ', 'Ň', 'ň', 'ŉ', 'Ō',</span>
-<span class="source-line-no">277</span><span id="line.277">            'ō', 'Ŏ', 'ŏ', 'Ő', 'ő', 'Œ', 'œ', 'Ŕ', 'ŕ', 'Ŗ', 'ŗ', 'Ř', 'ř', 'Ś', 'ś', 'Ŝ', 'ŝ', 'Ş', 'ş', 'Š', 'š', 'Ţ', 'ţ', 'Ť', 'ť', 'Ŧ', 'ŧ',</span>
-<span class="source-line-no">278</span><span id="line.278">            'Ũ', 'ũ', 'Ū', 'ū', 'Ŭ', 'ŭ', 'Ů', 'ů', 'Ű', 'ű', 'Ų', 'ų', 'Ŵ', 'ŵ', 'Ŷ', 'ŷ', 'Ÿ', 'Ź', 'ź', 'Ż', 'ż', 'Ž', 'ž', 'Ǿ', 'ǿ', 'Ș', 'ș',</span>
-<span class="source-line-no">279</span><span id="line.279">            'Ț', 'ț', 'Γ', 'Δ', 'Θ', 'Λ', 'Ξ', 'Π', 'Σ', 'Φ', 'Ψ', 'Ω', 'α');</span>
-<span class="source-line-no">280</span><span id="line.280">    /**</span>
-<span class="source-line-no">281</span><span id="line.281">     * Maps chars, as found in the returned array from generate(), to Strings that store the full name of nations.</span>
-<span class="source-line-no">282</span><span id="line.282">     */</span>
-<span class="source-line-no">283</span><span id="line.283">    public OrderedMap&lt;Character, Faction&gt; atlas;</span>
-<span class="source-line-no">284</span><span id="line.284"></span>
-<span class="source-line-no">285</span><span id="line.285">    /**</span>
-<span class="source-line-no">286</span><span id="line.286">     * Constructs a FantasyPoliticalMapper, but doesn't do anything with a map; you need to call</span>
-<span class="source-line-no">287</span><span id="line.287">     * {@link #generate(long, WorldMapGenerator, WorldMapGenerator.BiomeMapper, Collection, int, double)} for results.</span>
+<span class="source-line-no">073</span><span id="line.73">         * An int array of moisture codes that this Faction prefers; typically a 6-code scale is used where 0, 1, and 2</span>
+<span class="source-line-no">074</span><span id="line.74">         * are dry and getting progressively more precipitation, while 3, 4, and 5 are wet to wettest.</span>
+<span class="source-line-no">075</span><span id="line.75">         */</span>
+<span class="source-line-no">076</span><span id="line.76">        public int[] preferredMoisture;</span>
+<span class="source-line-no">077</span><span id="line.77"></span>
+<span class="source-line-no">078</span><span id="line.78">        /**</span>
+<span class="source-line-no">079</span><span id="line.79">         * Zero-arg constructor that sets the language to a random FakeLanguageGen (using</span>
+<span class="source-line-no">080</span><span id="line.80">         * {@link FakeLanguageGen#randomLanguage(long)}), then generates a name/shortName with that FakeLanguageGen, and</span>
+<span class="source-line-no">081</span><span id="line.81">         * makes the only blocked biome "Ocean".</span>
+<span class="source-line-no">082</span><span id="line.82">         */</span>
+<span class="source-line-no">083</span><span id="line.83">        public Faction()</span>
+<span class="source-line-no">084</span><span id="line.84">        {</span>
+<span class="source-line-no">085</span><span id="line.85">            language = FakeLanguageGen.randomLanguage(</span>
+<span class="source-line-no">086</span><span id="line.86">                    (long) ((Math.random() - 0.5) * 0x10000000000000L)</span>
+<span class="source-line-no">087</span><span id="line.87">                            ^ (long) (((Math.random() - 0.5) * 2.0) * 0x8000000000000000L));</span>
+<span class="source-line-no">088</span><span id="line.88">            shortName = name = language.word(true);</span>
+<span class="source-line-no">089</span><span id="line.89">            this.blockedBiomes = new HashSet&lt;&gt;(1, 0.75f);</span>
+<span class="source-line-no">090</span><span id="line.90">            blockedBiomes.add("Ocean");</span>
+<span class="source-line-no">091</span><span id="line.91">        }</span>
+<span class="source-line-no">092</span><span id="line.92"></span>
+<span class="source-line-no">093</span><span id="line.93">        /**</span>
+<span class="source-line-no">094</span><span id="line.94">         * Constructor that sets the language to the specified FakeLanguageGen, then generates a name/shortName with</span>
+<span class="source-line-no">095</span><span id="line.95">         * that FakeLanguageGen, and makes the only blocked biome "Ocean".</span>
+<span class="source-line-no">096</span><span id="line.96">         * @param language the FakeLanguageGen to use for generating the name of the Faction and potentially place names</span>
+<span class="source-line-no">097</span><span id="line.97">         */</span>
+<span class="source-line-no">098</span><span id="line.98">        public Faction(FakeLanguageGen language)</span>
+<span class="source-line-no">099</span><span id="line.99">        {</span>
+<span class="source-line-no">100</span><span id="line.100">            this.language = language;</span>
+<span class="source-line-no">101</span><span id="line.101">            shortName = name = language.word(true);</span>
+<span class="source-line-no">102</span><span id="line.102">            this.blockedBiomes = new HashSet&lt;&gt;(1, 0.75f);</span>
+<span class="source-line-no">103</span><span id="line.103">            blockedBiomes.add("Ocean");</span>
+<span class="source-line-no">104</span><span id="line.104">        }</span>
+<span class="source-line-no">105</span><span id="line.105">        /**</span>
+<span class="source-line-no">106</span><span id="line.106">         * Constructor that sets the language to the specified FakeLanguageGen, sets the name and shortName to the</span>
+<span class="source-line-no">107</span><span id="line.107">         * specified name, and makes the only blocked biome "Ocean".</span>
+<span class="source-line-no">108</span><span id="line.108">         * @param language the FakeLanguageGen to use for potentially generating place names</span>
+<span class="source-line-no">109</span><span id="line.109">         * @param name the name of the Faction, such as "The United States of America"; will also be the shortName</span>
+<span class="source-line-no">110</span><span id="line.110">         */</span>
+<span class="source-line-no">111</span><span id="line.111">        public Faction(FakeLanguageGen language, String name)</span>
+<span class="source-line-no">112</span><span id="line.112">        {</span>
+<span class="source-line-no">113</span><span id="line.113">            this.language = language;</span>
+<span class="source-line-no">114</span><span id="line.114">            shortName = this.name = name;</span>
+<span class="source-line-no">115</span><span id="line.115">            this.blockedBiomes = new HashSet&lt;&gt;(1, 0.75f);</span>
+<span class="source-line-no">116</span><span id="line.116">            blockedBiomes.add("Ocean");</span>
+<span class="source-line-no">117</span><span id="line.117">        }</span>
+<span class="source-line-no">118</span><span id="line.118">        /**</span>
+<span class="source-line-no">119</span><span id="line.119">         * Constructor that sets the language to the specified FakeLanguageGen, sets the name to the specified name and</span>
+<span class="source-line-no">120</span><span id="line.120">         * the shortName to the specified shortName, and makes the only blocked biome "Ocean".</span>
+<span class="source-line-no">121</span><span id="line.121">         * @param language the FakeLanguageGen to use for potentially generating place names</span>
+<span class="source-line-no">122</span><span id="line.122">         * @param name the formal name of the Faction, such as "The United States of America"</span>
+<span class="source-line-no">123</span><span id="line.123">         * @param shortName the short name of the Faction, such as "America"</span>
+<span class="source-line-no">124</span><span id="line.124">         */</span>
+<span class="source-line-no">125</span><span id="line.125">        public Faction(FakeLanguageGen language, String name, String shortName)</span>
+<span class="source-line-no">126</span><span id="line.126">        {</span>
+<span class="source-line-no">127</span><span id="line.127">            this.language = language;</span>
+<span class="source-line-no">128</span><span id="line.128">            this.name = name;</span>
+<span class="source-line-no">129</span><span id="line.129">            this.shortName = shortName;</span>
+<span class="source-line-no">130</span><span id="line.130">            this.blockedBiomes = new HashSet&lt;&gt;(1, 0.75f);</span>
+<span class="source-line-no">131</span><span id="line.131">            blockedBiomes.add("Ocean");</span>
+<span class="source-line-no">132</span><span id="line.132">        }</span>
+<span class="source-line-no">133</span><span id="line.133">        /**</span>
+<span class="source-line-no">134</span><span id="line.134">         * Constructor that sets the language to the specified FakeLanguageGen, sets the name to the specified name and</span>
+<span class="source-line-no">135</span><span id="line.135">         * the shortName to the specified shortName, sets the preferredBiomes to be a Set containing the given Strings</span>
+<span class="source-line-no">136</span><span id="line.136">         * in preferredBiomes, and makes the only blocked biome "Ocean". The exact String names that are viable for</span>
+<span class="source-line-no">137</span><span id="line.137">         * biomes can be obtained from a BiomeMapper with {@link WorldMapGenerator.BiomeMapper#getBiomeNameTable()}.</span>
+<span class="source-line-no">138</span><span id="line.138">         * @param language the FakeLanguageGen to use for potentially generating place names</span>
+<span class="source-line-no">139</span><span id="line.139">         * @param name the formal name of the Faction, such as "The United States of America"</span>
+<span class="source-line-no">140</span><span id="line.140">         * @param shortName the short name of the Faction, such as "America"</span>
+<span class="source-line-no">141</span><span id="line.141">         * @param preferredBiomes a String array of biome names that this Faction prefers, typically taken from a BiomeMapper's {@link WorldMapGenerator.BiomeMapper#getBiomeNameTable()} value</span>
+<span class="source-line-no">142</span><span id="line.142">         * </span>
+<span class="source-line-no">143</span><span id="line.143">         */</span>
+<span class="source-line-no">144</span><span id="line.144">        public Faction(FakeLanguageGen language, String name, String shortName, String[] preferredBiomes)</span>
+<span class="source-line-no">145</span><span id="line.145">        {</span>
+<span class="source-line-no">146</span><span id="line.146">            this.language = language;</span>
+<span class="source-line-no">147</span><span id="line.147">            this.name = name;</span>
+<span class="source-line-no">148</span><span id="line.148">            this.shortName = shortName;</span>
+<span class="source-line-no">149</span><span id="line.149">            this.preferredBiomes = new HashSet&lt;&gt;(preferredBiomes.length, 0.75f);</span>
+<span class="source-line-no">150</span><span id="line.150">            Collections.addAll(this.preferredBiomes, preferredBiomes);</span>
+<span class="source-line-no">151</span><span id="line.151">            this.blockedBiomes = new HashSet&lt;&gt;(1, 0.75f);</span>
+<span class="source-line-no">152</span><span id="line.152">            blockedBiomes.add("Ocean");</span>
+<span class="source-line-no">153</span><span id="line.153">        }</span>
+<span class="source-line-no">154</span><span id="line.154">        /**</span>
+<span class="source-line-no">155</span><span id="line.155">         * Constructor that sets the language to the specified FakeLanguageGen, sets the name to the specified name and</span>
+<span class="source-line-no">156</span><span id="line.156">         * the shortName to the specified shortName, sets the preferredBiomes to be a Set containing the given Strings</span>
+<span class="source-line-no">157</span><span id="line.157">         * in preferredBiomes, and sets the blocked biomes to be a Set containing exactly the given Strings in</span>
+<span class="source-line-no">158</span><span id="line.158">         * blockedBiomes. The exact String names that are viable for biomes can be obtained from a BiomeMapper with</span>
+<span class="source-line-no">159</span><span id="line.159">         * {@link WorldMapGenerator.BiomeMapper#getBiomeNameTable()}.</span>
+<span class="source-line-no">160</span><span id="line.160">         * @param language the FakeLanguageGen to use for potentially generating place names</span>
+<span class="source-line-no">161</span><span id="line.161">         * @param name the formal name of the Faction, such as "The United States of America"</span>
+<span class="source-line-no">162</span><span id="line.162">         * @param shortName the short name of the Faction, such as "America"</span>
+<span class="source-line-no">163</span><span id="line.163">         * @param preferredBiomes a String array of biome names that this Faction prefers, typically taken from a BiomeMapper's {@link WorldMapGenerator.BiomeMapper#getBiomeNameTable()} value</span>
+<span class="source-line-no">164</span><span id="line.164">         * @param blockedBiomes a String array of biome names that this Faction will never claim; if empty, this Faction may claim oceans</span>
+<span class="source-line-no">165</span><span id="line.165">         */</span>
+<span class="source-line-no">166</span><span id="line.166">        public Faction(FakeLanguageGen language, String name, String shortName, String[] preferredBiomes, String[] blockedBiomes)</span>
+<span class="source-line-no">167</span><span id="line.167">        {</span>
+<span class="source-line-no">168</span><span id="line.168">            this.language = language;</span>
+<span class="source-line-no">169</span><span id="line.169">            this.name = name;</span>
+<span class="source-line-no">170</span><span id="line.170">            this.shortName = shortName;</span>
+<span class="source-line-no">171</span><span id="line.171">            this.preferredBiomes = new HashSet&lt;&gt;(preferredBiomes.length, 0.75f);</span>
+<span class="source-line-no">172</span><span id="line.172">            Collections.addAll(this.preferredBiomes, preferredBiomes);</span>
+<span class="source-line-no">173</span><span id="line.173">            this.blockedBiomes = new HashSet&lt;&gt;(blockedBiomes.length, 0.75f);</span>
+<span class="source-line-no">174</span><span id="line.174">            Collections.addAll(this.blockedBiomes, blockedBiomes);</span>
+<span class="source-line-no">175</span><span id="line.175">        }</span>
+<span class="source-line-no">176</span><span id="line.176">        /**</span>
+<span class="source-line-no">177</span><span id="line.177">         * Constructor that sets the language to the specified FakeLanguageGen, sets the name to the specified name and</span>
+<span class="source-line-no">178</span><span id="line.178">         * the shortName to the specified shortName, sets the preferredBiomes to be a Set containing the given Strings</span>
+<span class="source-line-no">179</span><span id="line.179">         * in preferredBiomes, sets the blocked biomes to be a Set containing exactly the given Strings in</span>
+<span class="source-line-no">180</span><span id="line.180">         * blockedBiomes, and sets the preferred height codes to the ints in preferredHeight (with 4 being sea level and</span>
+<span class="source-line-no">181</span><span id="line.181">         * 8 being the highest peaks). The exact String names that are viable for biomes can be obtained from a</span>
+<span class="source-line-no">182</span><span id="line.182">         * BiomeMapper with {@link WorldMapGenerator.BiomeMapper#getBiomeNameTable()}.</span>
+<span class="source-line-no">183</span><span id="line.183">         * @param language the FakeLanguageGen to use for potentially generating place names</span>
+<span class="source-line-no">184</span><span id="line.184">         * @param name the formal name of the Faction, such as "The United States of America"</span>
+<span class="source-line-no">185</span><span id="line.185">         * @param shortName the short name of the Faction, such as "America"</span>
+<span class="source-line-no">186</span><span id="line.186">         * @param preferredBiomes a String array of biome names that this Faction prefers, typically taken from a BiomeMapper's {@link WorldMapGenerator.BiomeMapper#getBiomeNameTable()} value</span>
+<span class="source-line-no">187</span><span id="line.187">         * @param blockedBiomes a String array of biome names that this Faction will never claim; if empty, this Faction may claim oceans</span>
+<span class="source-line-no">188</span><span id="line.188">         * @param preferredHeight an int array of height codes this Faction prefers to claim; 4 is sea level and 8 is highest</span>
+<span class="source-line-no">189</span><span id="line.189">         */</span>
+<span class="source-line-no">190</span><span id="line.190">        public Faction(FakeLanguageGen language, String name, String shortName, String[] preferredBiomes, String[] blockedBiomes, int[] preferredHeight)</span>
+<span class="source-line-no">191</span><span id="line.191">        {</span>
+<span class="source-line-no">192</span><span id="line.192">            this.language = language;</span>
+<span class="source-line-no">193</span><span id="line.193">            this.name = name;</span>
+<span class="source-line-no">194</span><span id="line.194">            this.shortName = shortName;</span>
+<span class="source-line-no">195</span><span id="line.195">            this.preferredBiomes = new HashSet&lt;&gt;(preferredBiomes.length, 0.75f);</span>
+<span class="source-line-no">196</span><span id="line.196">            Collections.addAll(this.preferredBiomes, preferredBiomes);</span>
+<span class="source-line-no">197</span><span id="line.197">            this.blockedBiomes = new HashSet&lt;&gt;(blockedBiomes.length, 0.75f);</span>
+<span class="source-line-no">198</span><span id="line.198">            Collections.addAll(this.blockedBiomes, blockedBiomes);</span>
+<span class="source-line-no">199</span><span id="line.199">            this.preferredHeight = preferredHeight;</span>
+<span class="source-line-no">200</span><span id="line.200">        }</span>
+<span class="source-line-no">201</span><span id="line.201"></span>
+<span class="source-line-no">202</span><span id="line.202">        /**</span>
+<span class="source-line-no">203</span><span id="line.203">         * Constructor that sets the language to the specified FakeLanguageGen, sets the name to the specified name and</span>
+<span class="source-line-no">204</span><span id="line.204">         * the shortName to the specified shortName, sets the preferredBiomes to be a Set containing the given Strings</span>
+<span class="source-line-no">205</span><span id="line.205">         * in preferredBiomes, sets the blocked biomes to be a Set containing exactly the given Strings in</span>
+<span class="source-line-no">206</span><span id="line.206">         * blockedBiomes, sets the preferred height codes to the ints in preferredHeight (with 4 being sea level and 8</span>
+<span class="source-line-no">207</span><span id="line.207">         * being the highest peaks), and sets the preferred heat codes to the ints in preferredHeat (with the exact</span>
+<span class="source-line-no">208</span><span id="line.208">         * values depending on the BiomeMapper, but usually 0-5 range from coldest to hottest). The exact String names</span>
+<span class="source-line-no">209</span><span id="line.209">         * that are viable for biomes can be obtained from a BiomeMapper with</span>
+<span class="source-line-no">210</span><span id="line.210">         * {@link WorldMapGenerator.BiomeMapper#getBiomeNameTable()}.</span>
+<span class="source-line-no">211</span><span id="line.211">         * @param language the FakeLanguageGen to use for potentially generating place names</span>
+<span class="source-line-no">212</span><span id="line.212">         * @param name the formal name of the Faction, such as "The United States of America"</span>
+<span class="source-line-no">213</span><span id="line.213">         * @param shortName the short name of the Faction, such as "America"</span>
+<span class="source-line-no">214</span><span id="line.214">         * @param preferredBiomes a String array of biome names that this Faction prefers, typically taken from a BiomeMapper's {@link WorldMapGenerator.BiomeMapper#getBiomeNameTable()} value</span>
+<span class="source-line-no">215</span><span id="line.215">         * @param blockedBiomes a String array of biome names that this Faction will never claim; if empty, this Faction may claim oceans</span>
+<span class="source-line-no">216</span><span id="line.216">         * @param preferredHeight an int array of height codes this Faction prefers to claim; 4 is sea level and 8 is highest</span>
+<span class="source-line-no">217</span><span id="line.217">         * @param preferredHeat an int array of heat codes this Faction prefers to claim; typically 0 is coldest and 5 is hottest</span>
+<span class="source-line-no">218</span><span id="line.218">         */</span>
+<span class="source-line-no">219</span><span id="line.219">        public Faction(FakeLanguageGen language, String name, String shortName, String[] preferredBiomes, String[] blockedBiomes,</span>
+<span class="source-line-no">220</span><span id="line.220">                       int[] preferredHeight, int[] preferredHeat)</span>
+<span class="source-line-no">221</span><span id="line.221">        {</span>
+<span class="source-line-no">222</span><span id="line.222">            this.language = language;</span>
+<span class="source-line-no">223</span><span id="line.223">            this.name = name;</span>
+<span class="source-line-no">224</span><span id="line.224">            this.shortName = shortName;</span>
+<span class="source-line-no">225</span><span id="line.225">            this.preferredBiomes = new HashSet&lt;&gt;(preferredBiomes.length, 0.75f);</span>
+<span class="source-line-no">226</span><span id="line.226">            Collections.addAll(this.preferredBiomes, preferredBiomes);</span>
+<span class="source-line-no">227</span><span id="line.227">            this.blockedBiomes = new HashSet&lt;&gt;(blockedBiomes.length, 0.75f);</span>
+<span class="source-line-no">228</span><span id="line.228">            Collections.addAll(this.blockedBiomes, blockedBiomes);</span>
+<span class="source-line-no">229</span><span id="line.229">            this.preferredHeight = preferredHeight;</span>
+<span class="source-line-no">230</span><span id="line.230">            this.preferredHeat = preferredHeat;</span>
+<span class="source-line-no">231</span><span id="line.231">        }</span>
+<span class="source-line-no">232</span><span id="line.232">        /**</span>
+<span class="source-line-no">233</span><span id="line.233">         * Constructor that sets the language to the specified FakeLanguageGen, sets the name to the specified name and</span>
+<span class="source-line-no">234</span><span id="line.234">         * the shortName to the specified shortName, sets the preferredBiomes to be a Set containing the given Strings</span>
+<span class="source-line-no">235</span><span id="line.235">         * in preferredBiomes, sets the blocked biomes to be a Set containing exactly the given Strings in</span>
+<span class="source-line-no">236</span><span id="line.236">         * blockedBiomes, sets the preferred height codes to the ints in preferredHeight (with 4 being sea level and 8</span>
+<span class="source-line-no">237</span><span id="line.237">         * being the highest peaks), sets the preferred heat codes to the ints in preferredHeat (with the exact values</span>
+<span class="source-line-no">238</span><span id="line.238">         * depending on the BiomeMapper, but usually 0-5 range from coldest to hottest), and sets the preferred moisture</span>
+<span class="source-line-no">239</span><span id="line.239">         * codes to the ints in preferredMoisture (withe the exact values depending on the BiomeMapper, but usually 0-5</span>
+<span class="source-line-no">240</span><span id="line.240">         * range from driest to wettest). The exact String names that are viable for biomes can be obtained from a</span>
+<span class="source-line-no">241</span><span id="line.241">         * BiomeMapper with {@link WorldMapGenerator.BiomeMapper#getBiomeNameTable()}.</span>
+<span class="source-line-no">242</span><span id="line.242">         * @param language the FakeLanguageGen to use for potentially generating place names</span>
+<span class="source-line-no">243</span><span id="line.243">         * @param name the formal name of the Faction, such as "The United States of America"</span>
+<span class="source-line-no">244</span><span id="line.244">         * @param shortName the short name of the Faction, such as "America"</span>
+<span class="source-line-no">245</span><span id="line.245">         * @param preferredBiomes a String array of biome names that this Faction prefers, typically taken from a BiomeMapper's {@link WorldMapGenerator.BiomeMapper#getBiomeNameTable()} value</span>
+<span class="source-line-no">246</span><span id="line.246">         * @param blockedBiomes a String array of biome names that this Faction will never claim; if empty, this Faction may claim oceans</span>
+<span class="source-line-no">247</span><span id="line.247">         * @param preferredHeight an int array of height codes this Faction prefers to claim; 4 is sea level and 8 is highest</span>
+<span class="source-line-no">248</span><span id="line.248">         * @param preferredHeat an int array of heat codes this Faction prefers to claim; typically 0 is coldest and 5 is hottest</span>
+<span class="source-line-no">249</span><span id="line.249">         * @param preferredMoisture an int array of moisture codes this Faction prefers to claim; typically 0 is driest and 5 is wettest</span>
+<span class="source-line-no">250</span><span id="line.250">         */</span>
+<span class="source-line-no">251</span><span id="line.251">        public Faction(FakeLanguageGen language, String name, String shortName, String[] preferredBiomes, String[] blockedBiomes,</span>
+<span class="source-line-no">252</span><span id="line.252">                       int[] preferredHeight, int[] preferredHeat, int[] preferredMoisture)</span>
+<span class="source-line-no">253</span><span id="line.253">        {</span>
+<span class="source-line-no">254</span><span id="line.254">            this.language = language;</span>
+<span class="source-line-no">255</span><span id="line.255">            this.name = name;</span>
+<span class="source-line-no">256</span><span id="line.256">            this.shortName = shortName;</span>
+<span class="source-line-no">257</span><span id="line.257">            this.preferredBiomes = new HashSet&lt;&gt;(preferredBiomes.length, 0.75f);</span>
+<span class="source-line-no">258</span><span id="line.258">            Collections.addAll(this.preferredBiomes, preferredBiomes);</span>
+<span class="source-line-no">259</span><span id="line.259">            this.blockedBiomes = new HashSet&lt;&gt;(blockedBiomes.length, 0.75f);</span>
+<span class="source-line-no">260</span><span id="line.260">            Collections.addAll(this.blockedBiomes, blockedBiomes);</span>
+<span class="source-line-no">261</span><span id="line.261">            this.preferredHeight = preferredHeight;</span>
+<span class="source-line-no">262</span><span id="line.262">            this.preferredHeat = preferredHeat;</span>
+<span class="source-line-no">263</span><span id="line.263">            this.preferredMoisture = preferredMoisture;</span>
+<span class="source-line-no">264</span><span id="line.264">        }</span>
+<span class="source-line-no">265</span><span id="line.265">    }</span>
+<span class="source-line-no">266</span><span id="line.266"></span>
+<span class="source-line-no">267</span><span id="line.267">    public int width;</span>
+<span class="source-line-no">268</span><span id="line.268">    public int height;</span>
+<span class="source-line-no">269</span><span id="line.269">    public StatefulRNG rng;</span>
+<span class="source-line-no">270</span><span id="line.270">    public String name;</span>
+<span class="source-line-no">271</span><span id="line.271">    public char[][] politicalMap;</span>
+<span class="source-line-no">272</span><span id="line.272">    public char[][] zoomedMap;</span>
+<span class="source-line-no">273</span><span id="line.273">    public WorldMapGenerator wmg;</span>
+<span class="source-line-no">274</span><span id="line.274">    public WorldMapGenerator.BiomeMapper biomeMapper;</span>
+<span class="source-line-no">275</span><span id="line.275">    private static final ArrayList&lt;Character&gt; letters = Maker.makeList(</span>
+<span class="source-line-no">276</span><span id="line.276">            '~', '%', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y',</span>
+<span class="source-line-no">277</span><span id="line.277">            'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',</span>
+<span class="source-line-no">278</span><span id="line.278">            'À', 'Á', 'Â', 'Ã', 'Ä', 'Å', 'Æ', 'Ç', 'È', 'É', 'Ê', 'Ë', 'Ì', 'Í', 'Î', 'Ï', 'Ð', 'Ñ', 'Ò', 'Ó', 'Ô', 'Õ', 'Ö', 'Ø', 'Ù', 'Ú', 'Û',</span>
+<span class="source-line-no">279</span><span id="line.279">            'Ü', 'Ý', 'Þ', 'ß', 'à', 'á', 'â', 'ã', 'ä', 'å', 'æ', 'ç', 'è', 'é', 'ê', 'ë', 'ì', 'í', 'î', 'ï', 'ð', 'ñ', 'ò', 'ó', 'ô', 'õ', 'ö',</span>
+<span class="source-line-no">280</span><span id="line.280">            'ø', 'ù', 'ú', 'û', 'ü', 'ý', 'þ', 'ÿ', 'Ā', 'ā', 'Ă', 'ă', 'Ą', 'ą', 'Ć', 'ć', 'Ĉ', 'ĉ', 'Ċ', 'ċ', 'Č', 'č', 'Ď', 'ď', 'Đ', 'đ', 'Ē',</span>
+<span class="source-line-no">281</span><span id="line.281">            'ē', 'Ĕ', 'ĕ', 'Ė', 'ė', 'Ę', 'ę', 'Ě', 'ě', 'Ĝ', 'ĝ', 'Ğ', 'ğ', 'Ġ', 'ġ', 'Ģ', 'ģ', 'Ĥ', 'ĥ', 'Ħ', 'ħ', 'Ĩ', 'ĩ', 'Ī', 'ī', 'Ĭ', 'ĭ',</span>
+<span class="source-line-no">282</span><span id="line.282">            'Į', 'į', 'İ', 'ı', 'Ĵ', 'ĵ', 'Ķ', 'ķ', 'ĸ', 'Ĺ', 'ĺ', 'Ļ', 'ļ', 'Ľ', 'ľ', 'Ŀ', 'ŀ', 'Ł', 'ł', 'Ń', 'ń', 'Ņ', 'ņ', 'Ň', 'ň', 'ŉ', 'Ō',</span>
+<span class="source-line-no">283</span><span id="line.283">            'ō', 'Ŏ', 'ŏ', 'Ő', 'ő', 'Œ', 'œ', 'Ŕ', 'ŕ', 'Ŗ', 'ŗ', 'Ř', 'ř', 'Ś', 'ś', 'Ŝ', 'ŝ', 'Ş', 'ş', 'Š', 'š', 'Ţ', 'ţ', 'Ť', 'ť', 'Ŧ', 'ŧ',</span>
+<span class="source-line-no">284</span><span id="line.284">            'Ũ', 'ũ', 'Ū', 'ū', 'Ŭ', 'ŭ', 'Ů', 'ů', 'Ű', 'ű', 'Ų', 'ų', 'Ŵ', 'ŵ', 'Ŷ', 'ŷ', 'Ÿ', 'Ź', 'ź', 'Ż', 'ż', 'Ž', 'ž', 'Ǿ', 'ǿ', 'Ș', 'ș',</span>
+<span class="source-line-no">285</span><span id="line.285">            'Ț', 'ț', 'Γ', 'Δ', 'Θ', 'Λ', 'Ξ', 'Π', 'Σ', 'Φ', 'Ψ', 'Ω', 'α');</span>
+<span class="source-line-no">286</span><span id="line.286">    /**</span>
+<span class="source-line-no">287</span><span id="line.287">     * Maps chars, as found in the returned array from generate(), to Strings that store the full name of nations.</span>
 <span class="source-line-no">288</span><span id="line.288">     */</span>
-<span class="source-line-no">289</span><span id="line.289">    public FantasyPoliticalMapper()</span>
-<span class="source-line-no">290</span><span id="line.290">    {</span>
-<span class="source-line-no">291</span><span id="line.291">        rng = new StatefulRNG();</span>
-<span class="source-line-no">292</span><span id="line.292">    }</span>
-<span class="source-line-no">293</span><span id="line.293"></span>
-<span class="source-line-no">294</span><span id="line.294">    /**</span>
-<span class="source-line-no">295</span><span id="line.295">     * For when you really don't care what arguments you give this, you can use this zero-parameter overload of</span>
-<span class="source-line-no">296</span><span id="line.296">     * generate() to produce a 128x128 {@link squidpony.squidgrid.mapping.WorldMapGenerator.TilingMap} world map with a</span>
-<span class="source-line-no">297</span><span id="line.297">     * {@link squidpony.squidgrid.mapping.WorldMapGenerator.SimpleBiomeMapper} biome mapper, filling it with 30 random</span>
-<span class="source-line-no">298</span><span id="line.298">     * Factions and trying to avoid unclaimed land. You may need to use {@link #atlas} to make sense of the randomly</span>
-<span class="source-line-no">299</span><span id="line.299">     * generated Factions. The seed will be random here.</span>
-<span class="source-line-no">300</span><span id="line.300">     * @return a 2D char array where each char can be used as a key into {@link #atlas} to find the Faction that claims it</span>
-<span class="source-line-no">301</span><span id="line.301">     */</span>
-<span class="source-line-no">302</span><span id="line.302">    public char[][] generate() {</span>
-<span class="source-line-no">303</span><span id="line.303">        wmg = new WorldMapGenerator.TilingMap(rng.nextLong(),128, 128);</span>
-<span class="source-line-no">304</span><span id="line.304">        wmg.generate();</span>
-<span class="source-line-no">305</span><span id="line.305">        biomeMapper = new WorldMapGenerator.SimpleBiomeMapper();</span>
-<span class="source-line-no">306</span><span id="line.306">        biomeMapper.makeBiomes(wmg);</span>
-<span class="source-line-no">307</span><span id="line.307">        return generate(rng.nextLong(), wmg, biomeMapper, null, 30, 1.0);</span>
-<span class="source-line-no">308</span><span id="line.308">    }</span>
-<span class="source-line-no">309</span><span id="line.309"></span>
-<span class="source-line-no">310</span><span id="line.310">    /**</span>
-<span class="source-line-no">311</span><span id="line.311">     * Generates a 2D char array that represents the claims to the land described by the WorldMapGenerator {@code wmg}</span>
-<span class="source-line-no">312</span><span id="line.312">     * and the BiomeMapper {@code biomeMapper} by various Factions, where {@link Faction} is an inner class.</span>
-<span class="source-line-no">313</span><span id="line.313">     * This starts with two default Factions for "Ocean" and "Wilderness" (unclaimed land) and adds randomly generated</span>
-<span class="source-line-no">314</span><span id="line.314">     * Factions to fill factionCount (the two default factions aren't counted against this limit). These Factions</span>
-<span class="source-line-no">315</span><span id="line.315">     * typically claim contiguous spans of land stretching out from a starting point that matches the Faction's</span>
-<span class="source-line-no">316</span><span id="line.316">     * preferences for biome, land height, heat, and moisture. If a Faction requires a biome (like "TropicalRainforest") </span>
-<span class="source-line-no">317</span><span id="line.317">     * and the world has none of that type, then that Faction won't claim any land. If the WorldMapGenerator zooms in or</span>
-<span class="source-line-no">318</span><span id="line.318">     * out, you should call {@link #adjustZoom()} to get a different 2D char array that represents the zoomed-in area.</span>
-<span class="source-line-no">319</span><span id="line.319">     * This overload tries to claim all land that can be reached by an existing Faction, though islands will often be</span>
-<span class="source-line-no">320</span><span id="line.320">     * unclaimed.</span>
-<span class="source-line-no">321</span><span id="line.321">     * @param seed the seed that determines how Factions will randomly spread around the world</span>
-<span class="source-line-no">322</span><span id="line.322">     * @param wmg a WorldMapGenerator, which must have produced a map by calling its generate() method</span>
-<span class="source-line-no">323</span><span id="line.323">     * @param biomeMapper a WorldMapGenerator.BiomeMapper, which must have been initialized with wmg and refer to the same world</span>
-<span class="source-line-no">324</span><span id="line.324">     * @param factionCount the number of factions to have claiming land; cannot be negative or more than 253</span>
-<span class="source-line-no">325</span><span id="line.325">     * @return a 2D char array where each char can be used as a key into {@link #atlas} to find the Faction that claims it</span>
-<span class="source-line-no">326</span><span id="line.326">     */</span>
-<span class="source-line-no">327</span><span id="line.327">    public char[][] generate(long seed, WorldMapGenerator wmg, WorldMapGenerator.BiomeMapper biomeMapper,</span>
-<span class="source-line-no">328</span><span id="line.328">                             int factionCount) {</span>
-<span class="source-line-no">329</span><span id="line.329">        return generate(seed, wmg, biomeMapper, null, factionCount, 1.0);</span>
-<span class="source-line-no">330</span><span id="line.330">    }</span>
-<span class="source-line-no">331</span><span id="line.331">    /**</span>
-<span class="source-line-no">332</span><span id="line.332">     * Generates a 2D char array that represents the claims to the land described by the WorldMapGenerator {@code wmg}</span>
-<span class="source-line-no">333</span><span id="line.333">     * and the BiomeMapper {@code biomeMapper} by various Factions, where {@link Faction} is an inner class.</span>
-<span class="source-line-no">334</span><span id="line.334">     * This starts with two default Factions for "Ocean" and "Wilderness" (unclaimed land) and adds randomly generated</span>
-<span class="source-line-no">335</span><span id="line.335">     * Factions to fill factionCount (the two default factions aren't counted against this limit). These Factions</span>
-<span class="source-line-no">336</span><span id="line.336">     * typically claim contiguous spans of land stretching out from a starting point that matches the Faction's</span>
-<span class="source-line-no">337</span><span id="line.337">     * preferences for biome, land height, heat, and moisture. If a Faction requires a biome (like "TropicalRainforest") </span>
-<span class="source-line-no">338</span><span id="line.338">     * and the world has none of that type, then that Faction won't claim any land. If the WorldMapGenerator zooms in or</span>
-<span class="source-line-no">339</span><span id="line.339">     * out, you should call {@link #adjustZoom()} to get a different 2D char array that represents the zoomed-in area.</span>
-<span class="source-line-no">340</span><span id="line.340">     * This overload tries to claim the given {@code controlledFraction} of land in total, though 1.0 can rarely be</span>
-<span class="source-line-no">341</span><span id="line.341">     * reached unless there are many factions and few islands.</span>
-<span class="source-line-no">342</span><span id="line.342">     * @param seed the seed that determines how Factions will randomly spread around the world</span>
-<span class="source-line-no">343</span><span id="line.343">     * @param wmg a WorldMapGenerator, which must have produced a map by calling its generate() method</span>
-<span class="source-line-no">344</span><span id="line.344">     * @param biomeMapper a WorldMapGenerator.BiomeMapper, which must have been initialized with wmg and refer to the same world</span>
-<span class="source-line-no">345</span><span id="line.345">     * @param factionCount the number of factions to have claiming land; cannot be negative or more than 253</span>
-<span class="source-line-no">346</span><span id="line.346">     * @param controlledFraction between 0.0 and 1.0 inclusive; higher means more land has a letter, lower has more '%'</span>
-<span class="source-line-no">347</span><span id="line.347">     * @return a 2D char array where each char can be used as a key into {@link #atlas} to find the Faction that claims it</span>
-<span class="source-line-no">348</span><span id="line.348">     */</span>
-<span class="source-line-no">349</span><span id="line.349">    public char[][] generate(long seed, WorldMapGenerator wmg, WorldMapGenerator.BiomeMapper biomeMapper,</span>
-<span class="source-line-no">350</span><span id="line.350">                             int factionCount, double controlledFraction) {</span>
-<span class="source-line-no">351</span><span id="line.351">        return generate(seed, wmg, biomeMapper, null, factionCount, controlledFraction);</span>
-<span class="source-line-no">352</span><span id="line.352">    }</span>
-<span class="source-line-no">353</span><span id="line.353">    /**</span>
-<span class="source-line-no">354</span><span id="line.354">     * Generates a 2D char array that represents the claims to the land described by the WorldMapGenerator {@code wmg}</span>
-<span class="source-line-no">355</span><span id="line.355">     * and the BiomeMapper {@code biomeMapper} by various Factions, where {@link Faction} is an inner class.</span>
-<span class="source-line-no">356</span><span id="line.356">     * This starts with two default Factions for "Ocean" and "Wilderness" (unclaimed land) and adds all of</span>
-<span class="source-line-no">357</span><span id="line.357">     * {@code factions} until {@code factionCount} is reached; if it isn't reached, random Factions will be generated to</span>
-<span class="source-line-no">358</span><span id="line.358">     * fill factionCount (the two default factions aren't counted against this limit). These Factions typically claim</span>
-<span class="source-line-no">359</span><span id="line.359">     * contiguous spans of land stretching out from a starting point that matches the Faction's preferences for biome,</span>
-<span class="source-line-no">360</span><span id="line.360">     * land height, heat, and moisture. If a Faction requires a biome (like "TropicalRainforest") and the world has none</span>
-<span class="source-line-no">361</span><span id="line.361">     * of that type, then that Faction won't claim any land. If the WorldMapGenerator zooms in or out, you should call</span>
-<span class="source-line-no">362</span><span id="line.362">     * {@link #adjustZoom()} to get a different 2D char array that represents the zoomed-in area. This overload tries to</span>
-<span class="source-line-no">363</span><span id="line.363">     * claim the given {@code controlledFraction} of land in total, though 1.0 can rarely be reached unless there are</span>
-<span class="source-line-no">364</span><span id="line.364">     * many factions and few islands.</span>
-<span class="source-line-no">365</span><span id="line.365">     *</span>
-<span class="source-line-no">366</span><span id="line.366">     * @param seed the seed that determines how Factions will randomly spread around the world</span>
-<span class="source-line-no">367</span><span id="line.367">     * @param wmg a WorldMapGenerator, which must have produced a map by calling its generate() method</span>
-<span class="source-line-no">368</span><span id="line.368">     * @param biomeMapper a WorldMapGenerator.BiomeMapper, which must have been initialized with wmg and refer to the same world</span>
-<span class="source-line-no">369</span><span id="line.369">     * @param factions a Collection of {@link Faction} that will be copied, shuffled and used before adding any random Factions</span>
-<span class="source-line-no">370</span><span id="line.370">     * @param factionCount the number of factions to have claiming land; cannot be negative or more than 253</span>
-<span class="source-line-no">371</span><span id="line.371">     * @param controlledFraction between 0.0 and 1.0 inclusive; higher means more land has a letter, lower has more '%'</span>
-<span class="source-line-no">372</span><span id="line.372">     * @return a 2D char array where each char can be used as a key into {@link #atlas} to find the Faction that claims it</span>
-<span class="source-line-no">373</span><span id="line.373">     */</span>
-<span class="source-line-no">374</span><span id="line.374">    public char[][] generate(long seed, WorldMapGenerator wmg, WorldMapGenerator.BiomeMapper biomeMapper,</span>
-<span class="source-line-no">375</span><span id="line.375">                                  Collection&lt;Faction&gt; factions, int factionCount, double controlledFraction) {</span>
-<span class="source-line-no">376</span><span id="line.376">        rng.setState(seed);</span>
-<span class="source-line-no">377</span><span id="line.377">        factionCount = Math.abs(factionCount % 254);</span>
-<span class="source-line-no">378</span><span id="line.378">        Thesaurus th = new Thesaurus(rng.nextLong());</span>
-<span class="source-line-no">379</span><span id="line.379">        ArrayList&lt;Faction&gt; fact = factions == null ? new ArrayList&lt;Faction&gt;() : rng.shuffle(factions);</span>
-<span class="source-line-no">380</span><span id="line.380">        for (int i = fact.size(); i &lt; factionCount; i++) {</span>
-<span class="source-line-no">381</span><span id="line.381">            String name = th.makeNationName(), shortName = th.latestGenerated;</span>
-<span class="source-line-no">382</span><span id="line.382">            FakeLanguageGen lang;</span>
-<span class="source-line-no">383</span><span id="line.383">            if(th.randomLanguages == null || th.randomLanguages.isEmpty())</span>
-<span class="source-line-no">384</span><span id="line.384">                lang = FakeLanguageGen.randomLanguage(rng);</span>
-<span class="source-line-no">385</span><span id="line.385">            else</span>
-<span class="source-line-no">386</span><span id="line.386">                lang = th.randomLanguages.get(0);</span>
-<span class="source-line-no">387</span><span id="line.387">            fact.add(new Faction(lang, name, shortName));</span>
-<span class="source-line-no">388</span><span id="line.388">        }</span>
-<span class="source-line-no">389</span><span id="line.389">        if(factionCount &gt; 0)</span>
-<span class="source-line-no">390</span><span id="line.390">            rng.shuffleInPlace(fact);</span>
-<span class="source-line-no">391</span><span id="line.391">        fact.add(0, new Faction(FakeLanguageGen.DEMONIC, "The Lost Wilderness", "Wilderness"));</span>
-<span class="source-line-no">392</span><span id="line.392">        fact.add(0, new Faction(FakeLanguageGen.ALIEN_O, "The Vast Domain of the Seafolk", "Seafolk", new String[]{"Ocean"}));</span>
-<span class="source-line-no">393</span><span id="line.393">        atlas = new OrderedMap&lt;&gt;(letters.subList(0, factionCount + 2), fact.subList(0, factionCount + 2), 0.5f);</span>
-<span class="source-line-no">394</span><span id="line.394">        this.wmg = wmg;</span>
-<span class="source-line-no">395</span><span id="line.395">        this.biomeMapper = biomeMapper;</span>
-<span class="source-line-no">396</span><span id="line.396">        width = wmg.width;</span>
-<span class="source-line-no">397</span><span id="line.397">        height = wmg.height;</span>
-<span class="source-line-no">398</span><span id="line.398">        GreasedRegion land = new GreasedRegion(wmg.heightCodeData, 4, 999);</span>
-<span class="source-line-no">399</span><span id="line.399">        politicalMap = land.toChars('%', '~');</span>
-<span class="source-line-no">400</span><span id="line.400">        int controlled = (int) (land.size() * Math.max(0.0, Math.min(1.0, controlledFraction)));</span>
-<span class="source-line-no">401</span><span id="line.401"></span>
-<span class="source-line-no">402</span><span id="line.402">        int[] centers = land.copy().randomScatter(rng, (int) (Math.sqrt(width * height) * 0.1 + 0.999), factionCount).asTightEncoded();</span>
-<span class="source-line-no">403</span><span id="line.403">        int cen, cx, cy, cx2, cy2, biome, high, hot, moist, count = centers.length, re;</span>
-<span class="source-line-no">404</span><span id="line.404">        String biomeName;</span>
-<span class="source-line-no">405</span><span id="line.405">        String[] biomeTable = biomeMapper.getBiomeNameTable();</span>
-<span class="source-line-no">406</span><span id="line.406">        int[] reorder = new int[count];</span>
-<span class="source-line-no">407</span><span id="line.407">        Faction current;</span>
-<span class="source-line-no">408</span><span id="line.408">        int[] factionIndices = new int[count];</span>
-<span class="source-line-no">409</span><span id="line.409">        for (int c = 0; c &lt; count; c++) {</span>
-<span class="source-line-no">410</span><span id="line.410">            cen = centers[c];</span>
-<span class="source-line-no">411</span><span id="line.411">            cx = cen % width;</span>
-<span class="source-line-no">412</span><span id="line.412">            cy = cen / width;</span>
-<span class="source-line-no">413</span><span id="line.413">            biome = biomeMapper.getBiomeCode(cx, cy);</span>
-<span class="source-line-no">414</span><span id="line.414">            biomeName = biomeTable[biome];</span>
-<span class="source-line-no">415</span><span id="line.415">            high = wmg.heightCodeData[cx][cy];</span>
-<span class="source-line-no">416</span><span id="line.416">            hot = biomeMapper.getHeatCode(cx, cy);</span>
-<span class="source-line-no">417</span><span id="line.417">            moist = biomeMapper.getMoistureCode(cx, cy);</span>
-<span class="source-line-no">418</span><span id="line.418">            rng.randomOrdering(count, reorder);</span>
-<span class="source-line-no">419</span><span id="line.419">            PER_FACTION:</span>
-<span class="source-line-no">420</span><span id="line.420">            for (int i = 0; i &lt; count; i++) {</span>
-<span class="source-line-no">421</span><span id="line.421">                current = fact.get(re = reorder[i]);</span>
-<span class="source-line-no">422</span><span id="line.422">                if(current.preferredBiomes == null || current.preferredBiomes.contains(biomeName))</span>
-<span class="source-line-no">423</span><span id="line.423">                {</span>
-<span class="source-line-no">424</span><span id="line.424">                    factionIndices[c] = re;</span>
-<span class="source-line-no">425</span><span id="line.425">                    break;</span>
-<span class="source-line-no">426</span><span id="line.426">                }</span>
-<span class="source-line-no">427</span><span id="line.427">                if(current.blockedBiomes != null &amp;&amp; current.blockedBiomes.contains(biomeName))</span>
-<span class="source-line-no">428</span><span id="line.428">                    continue;</span>
-<span class="source-line-no">429</span><span id="line.429">                if(current.preferredHeight != null)</span>
-<span class="source-line-no">430</span><span id="line.430">                {</span>
-<span class="source-line-no">431</span><span id="line.431">                    for (int j = 0; j &lt; current.preferredHeight.length; j++) {</span>
-<span class="source-line-no">432</span><span id="line.432">                        if(high == current.preferredHeight[j])</span>
-<span class="source-line-no">433</span><span id="line.433">                        {</span>
-<span class="source-line-no">434</span><span id="line.434">                            factionIndices[c] = re;</span>
-<span class="source-line-no">435</span><span id="line.435">                            break PER_FACTION;</span>
-<span class="source-line-no">436</span><span id="line.436">                        }</span>
-<span class="source-line-no">437</span><span id="line.437">                    }</span>
-<span class="source-line-no">438</span><span id="line.438">                }</span>
-<span class="source-line-no">439</span><span id="line.439">                if(current.preferredHeat != null)</span>
-<span class="source-line-no">440</span><span id="line.440">                {</span>
-<span class="source-line-no">441</span><span id="line.441">                    for (int j = 0; j &lt; current.preferredHeat.length; j++) {</span>
-<span class="source-line-no">442</span><span id="line.442">                        if(hot == current.preferredHeat[j])</span>
-<span class="source-line-no">443</span><span id="line.443">                        {</span>
-<span class="source-line-no">444</span><span id="line.444">                            factionIndices[c] = re;</span>
-<span class="source-line-no">445</span><span id="line.445">                            break PER_FACTION;</span>
-<span class="source-line-no">446</span><span id="line.446">                        }</span>
-<span class="source-line-no">447</span><span id="line.447">                    }</span>
-<span class="source-line-no">448</span><span id="line.448">                }</span>
-<span class="source-line-no">449</span><span id="line.449">                if(current.preferredMoisture != null)</span>
-<span class="source-line-no">450</span><span id="line.450">                {</span>
-<span class="source-line-no">451</span><span id="line.451">                    for (int j = 0; j &lt; current.preferredMoisture.length; j++) {</span>
-<span class="source-line-no">452</span><span id="line.452">                        if(moist == current.preferredMoisture[j])</span>
-<span class="source-line-no">453</span><span id="line.453">                        {</span>
-<span class="source-line-no">454</span><span id="line.454">                            factionIndices[c] = re;</span>
-<span class="source-line-no">455</span><span id="line.455">                            break PER_FACTION;</span>
-<span class="source-line-no">456</span><span id="line.456">                        }</span>
-<span class="source-line-no">457</span><span id="line.457">                    }</span>
-<span class="source-line-no">458</span><span id="line.458">                }</span>
-<span class="source-line-no">459</span><span id="line.459">            }</span>
-<span class="source-line-no">460</span><span id="line.460">        }</span>
-<span class="source-line-no">461</span><span id="line.461">        IntVLA[] fresh = new IntVLA[count];</span>
-<span class="source-line-no">462</span><span id="line.462">        int filled = 0;</span>
-<span class="source-line-no">463</span><span id="line.463">        boolean hasFresh = false;</span>
-<span class="source-line-no">464</span><span id="line.464">        int approximateArea = (controlled * 4) / (count * 3);</span>
-<span class="source-line-no">465</span><span id="line.465">        char[] keys = new char[count];</span>
-<span class="source-line-no">466</span><span id="line.466">        double[] biases = new double[count];</span>
-<span class="source-line-no">467</span><span id="line.467">        for (int i = 0; i &lt; count; i++) {</span>
-<span class="source-line-no">468</span><span id="line.468">            fresh[i] = new IntVLA(approximateArea);</span>
-<span class="source-line-no">469</span><span id="line.469">            cen = centers[i];</span>
-<span class="source-line-no">470</span><span id="line.470">            fresh[i].add(cen);</span>
-<span class="source-line-no">471</span><span id="line.471">            cx = cen % width;</span>
-<span class="source-line-no">472</span><span id="line.472">            cy = cen / width;</span>
-<span class="source-line-no">473</span><span id="line.473">            politicalMap[cx][cy] = keys[i] = atlas.keyAt(factionIndices[i] + 2);</span>
-<span class="source-line-no">474</span><span id="line.474">            biases[i] = rng.nextDouble() * rng.nextDouble() + rng.nextDouble() + 0.03125;</span>
-<span class="source-line-no">475</span><span id="line.475">            hasFresh = true;</span>
-<span class="source-line-no">476</span><span id="line.476">        }</span>
-<span class="source-line-no">477</span><span id="line.477">        Direction[] dirs = Direction.CARDINALS;</span>
-<span class="source-line-no">478</span><span id="line.478">        IntVLA currentFresh;</span>
-<span class="source-line-no">479</span><span id="line.479">        GreasedRegion anySpillMap = new GreasedRegion(width, height),</span>
-<span class="source-line-no">480</span><span id="line.480">                anyFreshMap = new GreasedRegion(width, height);</span>
-<span class="source-line-no">481</span><span id="line.481"></span>
-<span class="source-line-no">482</span><span id="line.482">        while (hasFresh &amp;&amp; filled &lt; controlled) {</span>
-<span class="source-line-no">483</span><span id="line.483">            hasFresh = false;</span>
-<span class="source-line-no">484</span><span id="line.484">            for (int i = 0; i &lt; count &amp;&amp; filled &lt; controlled; i++) {</span>
-<span class="source-line-no">485</span><span id="line.485">                currentFresh = fresh[i];</span>
-<span class="source-line-no">486</span><span id="line.486">                if (currentFresh.isEmpty())</span>
-<span class="source-line-no">487</span><span id="line.487">                    continue;</span>
-<span class="source-line-no">488</span><span id="line.488">                else</span>
-<span class="source-line-no">489</span><span id="line.489">                    hasFresh = true;</span>
-<span class="source-line-no">490</span><span id="line.490">                if (rng.nextDouble() &lt; biases[i]) {</span>
-<span class="source-line-no">491</span><span id="line.491">                    int index = rng.nextIntHasty(currentFresh.size), cell = currentFresh.get(index);</span>
-<span class="source-line-no">492</span><span id="line.492">                    cx = cell % width;</span>
-<span class="source-line-no">493</span><span id="line.493">                    cy = cell / width;</span>
-<span class="source-line-no">494</span><span id="line.494"></span>
-<span class="source-line-no">495</span><span id="line.495"></span>
-<span class="source-line-no">496</span><span id="line.496">                    politicalMap[cx][cy] = keys[i];</span>
-<span class="source-line-no">497</span><span id="line.497">                    filled++;</span>
-<span class="source-line-no">498</span><span id="line.498">                    anySpillMap.insert(cx, cy);</span>
-<span class="source-line-no">499</span><span id="line.499"></span>
-<span class="source-line-no">500</span><span id="line.500">                    for (int d = 0; d &lt; dirs.length; d++) {</span>
-<span class="source-line-no">501</span><span id="line.501">                        cx2 = wmg.wrapX(cx + dirs[d].deltaX, cy);</span>
-<span class="source-line-no">502</span><span id="line.502">                        cy2 = wmg.wrapY(cx, cy + dirs[d].deltaY);</span>
-<span class="source-line-no">503</span><span id="line.503">                        if (cx == cx2 &amp;&amp; cy == cy2)</span>
-<span class="source-line-no">504</span><span id="line.504">                            continue;</span>
-<span class="source-line-no">505</span><span id="line.505">                        if (land.contains(cx2, cy2) &amp;&amp; !anySpillMap.contains(cx2, cy2)) {</span>
-<span class="source-line-no">506</span><span id="line.506">                            if(!anyFreshMap.contains(cx2, cy2)) {</span>
-<span class="source-line-no">507</span><span id="line.507">                                currentFresh.add(cx2 + cy2 * width);</span>
-<span class="source-line-no">508</span><span id="line.508">                                anyFreshMap.insert(cx2, cy2);</span>
-<span class="source-line-no">509</span><span id="line.509">                            }</span>
-<span class="source-line-no">510</span><span id="line.510">                        }</span>
-<span class="source-line-no">511</span><span id="line.511">                    }</span>
-<span class="source-line-no">512</span><span id="line.512">                    currentFresh.removeIndex(index);</span>
-<span class="source-line-no">513</span><span id="line.513">                    anyFreshMap.remove(cx, cy);</span>
-<span class="source-line-no">514</span><span id="line.514">                }</span>
-<span class="source-line-no">515</span><span id="line.515">            }</span>
-<span class="source-line-no">516</span><span id="line.516">        }</span>
-<span class="source-line-no">517</span><span id="line.517">        zoomedMap = ArrayTools.copy(politicalMap);</span>
-<span class="source-line-no">518</span><span id="line.518">        return politicalMap;</span>
-<span class="source-line-no">519</span><span id="line.519">    }</span>
-<span class="source-line-no">520</span><span id="line.520"></span>
-<span class="source-line-no">521</span><span id="line.521">    /**</span>
-<span class="source-line-no">522</span><span id="line.522">     * If the WorldMapGenerator used by</span>
-<span class="source-line-no">523</span><span id="line.523">     * {@link #generate(long, WorldMapGenerator, WorldMapGenerator.BiomeMapper, Collection, int, double)} zooms in or</span>
-<span class="source-line-no">524</span><span id="line.524">     * out, you can call this method to make the {@link #zoomedMap} 2D char array match its zoom. The world-scale map,</span>
-<span class="source-line-no">525</span><span id="line.525">     * {@link #politicalMap}, will remain unchanged unless generate() is called again, but zoomedMap will change each</span>
-<span class="source-line-no">526</span><span id="line.526">     * time either generate() or adjustZoom() is called. This method isn't 100% precise on how it places borders; for</span>
-<span class="source-line-no">527</span><span id="line.527">     * aesthetic reasons, the borders are tattered with {@link GreasedRegion#fray(double)} so they don't look like a</span>
-<span class="source-line-no">528</span><span id="line.528">     * wall of angular bubbles. Using fray() at each level of zoom is quasi-random, so if you zoom in on the same</span>
-<span class="source-line-no">529</span><span id="line.529">     * sequence of points on two different occasions, the change from fray() will be the same, but it may be slightly</span>
-<span class="source-line-no">530</span><span id="line.530">     * different if any point of zoom is different.</span>
-<span class="source-line-no">531</span><span id="line.531">     * @return a direct reference to {@link #zoomedMap}, which will hold the correctly-zoomed version of {@link #politicalMap}</span>
-<span class="source-line-no">532</span><span id="line.532">     */</span>
-<span class="source-line-no">533</span><span id="line.533">    public char[][] adjustZoom() {</span>
-<span class="source-line-no">534</span><span id="line.534">        if(wmg.zoom &lt;= 0)</span>
-<span class="source-line-no">535</span><span id="line.535">        {</span>
-<span class="source-line-no">536</span><span id="line.536">            return ArrayTools.insert(politicalMap, zoomedMap, 0, 0);</span>
-<span class="source-line-no">537</span><span id="line.537">        }</span>
-<span class="source-line-no">538</span><span id="line.538">        ArrayTools.fill(zoomedMap, ' ');</span>
-<span class="source-line-no">539</span><span id="line.539">        char c;</span>
-<span class="source-line-no">540</span><span id="line.540">        int stx = Math.min(Math.max((wmg.zoomStartX - (width  &gt;&gt; 1)) / ((2 &lt;&lt; wmg.zoom) - 2), 0), width ),</span>
-<span class="source-line-no">541</span><span id="line.541">                sty = Math.min(Math.max((wmg.zoomStartY - (height &gt;&gt; 1)) / ((2 &lt;&lt; wmg.zoom) - 2), 0), height);</span>
-<span class="source-line-no">542</span><span id="line.542">        GreasedRegion nation = new GreasedRegion(wmg.landData);</span>
-<span class="source-line-no">543</span><span id="line.543">        GreasedRegion fillable = new GreasedRegion(politicalMap, '~').not();</span>
-<span class="source-line-no">544</span><span id="line.544">        for (int i = 0; i &lt; wmg.zoom; i++) {</span>
-<span class="source-line-no">545</span><span id="line.545">            fillable.zoom(stx, sty);</span>
-<span class="source-line-no">546</span><span id="line.546">        }</span>
-<span class="source-line-no">547</span><span id="line.547">        fillable.flood(nation, width + height);</span>
-<span class="source-line-no">548</span><span id="line.548">        for (int i = 1; i &lt; atlas.size(); i++) {</span>
-<span class="source-line-no">549</span><span id="line.549">            nation.refill(politicalMap, c = atlas.keyAt(i));</span>
-<span class="source-line-no">550</span><span id="line.550">            if(nation.isEmpty()) continue;</span>
-<span class="source-line-no">551</span><span id="line.551">            for (int z = 0; z &lt; wmg.zoom; z++) {</span>
-<span class="source-line-no">552</span><span id="line.552">                nation.zoom(stx, sty).expand8way().expand().fray(0.5);</span>
-<span class="source-line-no">553</span><span id="line.553">            }</span>
-<span class="source-line-no">554</span><span id="line.554">            fillable.andNot(nation);</span>
-<span class="source-line-no">555</span><span id="line.555">            nation.intoChars(zoomedMap, c);</span>
-<span class="source-line-no">556</span><span id="line.556">        }</span>
-<span class="source-line-no">557</span><span id="line.557">        for (int i = 1; i &lt; atlas.size(); i++) {</span>
-<span class="source-line-no">558</span><span id="line.558">            nation.refill(zoomedMap, c = atlas.keyAt(i));</span>
-<span class="source-line-no">559</span><span id="line.559">            if(nation.isEmpty()) continue;</span>
-<span class="source-line-no">560</span><span id="line.560">            nation.flood(fillable, 4 &lt;&lt; wmg.zoom).intoChars(zoomedMap, c);</span>
-<span class="source-line-no">561</span><span id="line.561">        }</span>
-<span class="source-line-no">562</span><span id="line.562">        nation.refill(wmg.heightCodeData, 4, 999).and(new GreasedRegion(zoomedMap, ' ')).intoChars(zoomedMap, '%');</span>
-<span class="source-line-no">563</span><span id="line.563">        nation.refill(wmg.heightCodeData, -999, 4).intoChars(zoomedMap, '~');</span>
-<span class="source-line-no">564</span><span id="line.564">        return zoomedMap;</span>
-<span class="source-line-no">565</span><span id="line.565">    }</span>
-<span class="source-line-no">566</span><span id="line.566"></span>
-<span class="source-line-no">567</span><span id="line.567">}</span>
+<span class="source-line-no">289</span><span id="line.289">    public OrderedMap&lt;Character, Faction&gt; atlas;</span>
+<span class="source-line-no">290</span><span id="line.290"></span>
+<span class="source-line-no">291</span><span id="line.291">    /**</span>
+<span class="source-line-no">292</span><span id="line.292">     * Constructs a FantasyPoliticalMapper, but doesn't do anything with a map; you need to call</span>
+<span class="source-line-no">293</span><span id="line.293">     * {@link #generate(long, WorldMapGenerator, WorldMapGenerator.BiomeMapper, Collection, int, double)} for results.</span>
+<span class="source-line-no">294</span><span id="line.294">     */</span>
+<span class="source-line-no">295</span><span id="line.295">    public FantasyPoliticalMapper()</span>
+<span class="source-line-no">296</span><span id="line.296">    {</span>
+<span class="source-line-no">297</span><span id="line.297">        rng = new StatefulRNG();</span>
+<span class="source-line-no">298</span><span id="line.298">    }</span>
+<span class="source-line-no">299</span><span id="line.299"></span>
+<span class="source-line-no">300</span><span id="line.300">    /**</span>
+<span class="source-line-no">301</span><span id="line.301">     * For when you really don't care what arguments you give this, you can use this zero-parameter overload of</span>
+<span class="source-line-no">302</span><span id="line.302">     * generate() to produce a 128x128 {@link squidpony.squidgrid.mapping.WorldMapGenerator.TilingMap} world map with a</span>
+<span class="source-line-no">303</span><span id="line.303">     * {@link squidpony.squidgrid.mapping.WorldMapGenerator.SimpleBiomeMapper} biome mapper, filling it with 30 random</span>
+<span class="source-line-no">304</span><span id="line.304">     * Factions and trying to avoid unclaimed land. You may need to use {@link #atlas} to make sense of the randomly</span>
+<span class="source-line-no">305</span><span id="line.305">     * generated Factions. The seed will be random here.</span>
+<span class="source-line-no">306</span><span id="line.306">     * @return a 2D char array where each char can be used as a key into {@link #atlas} to find the Faction that claims it</span>
+<span class="source-line-no">307</span><span id="line.307">     */</span>
+<span class="source-line-no">308</span><span id="line.308">    public char[][] generate() {</span>
+<span class="source-line-no">309</span><span id="line.309">        wmg = new WorldMapGenerator.TilingMap(rng.nextLong(),128, 128);</span>
+<span class="source-line-no">310</span><span id="line.310">        wmg.generate();</span>
+<span class="source-line-no">311</span><span id="line.311">        biomeMapper = new WorldMapGenerator.SimpleBiomeMapper();</span>
+<span class="source-line-no">312</span><span id="line.312">        biomeMapper.makeBiomes(wmg);</span>
+<span class="source-line-no">313</span><span id="line.313">        return generate(rng.nextLong(), wmg, biomeMapper, null, 30, 1.0);</span>
+<span class="source-line-no">314</span><span id="line.314">    }</span>
+<span class="source-line-no">315</span><span id="line.315"></span>
+<span class="source-line-no">316</span><span id="line.316">    /**</span>
+<span class="source-line-no">317</span><span id="line.317">     * Generates a 2D char array that represents the claims to the land described by the WorldMapGenerator {@code wmg}</span>
+<span class="source-line-no">318</span><span id="line.318">     * and the BiomeMapper {@code biomeMapper} by various Factions, where {@link Faction} is an inner class.</span>
+<span class="source-line-no">319</span><span id="line.319">     * This starts with two default Factions for "Ocean" and "Wilderness" (unclaimed land) and adds randomly generated</span>
+<span class="source-line-no">320</span><span id="line.320">     * Factions to fill factionCount (the two default factions aren't counted against this limit). These Factions</span>
+<span class="source-line-no">321</span><span id="line.321">     * typically claim contiguous spans of land stretching out from a starting point that matches the Faction's</span>
+<span class="source-line-no">322</span><span id="line.322">     * preferences for biome, land height, heat, and moisture. If a Faction requires a biome (like "TropicalRainforest") </span>
+<span class="source-line-no">323</span><span id="line.323">     * and the world has none of that type, then that Faction won't claim any land. If the WorldMapGenerator zooms in or</span>
+<span class="source-line-no">324</span><span id="line.324">     * out, you should call {@link #adjustZoom()} to get a different 2D char array that represents the zoomed-in area.</span>
+<span class="source-line-no">325</span><span id="line.325">     * This overload tries to claim all land that can be reached by an existing Faction, though islands will often be</span>
+<span class="source-line-no">326</span><span id="line.326">     * unclaimed.</span>
+<span class="source-line-no">327</span><span id="line.327">     * @param seed the seed that determines how Factions will randomly spread around the world</span>
+<span class="source-line-no">328</span><span id="line.328">     * @param wmg a WorldMapGenerator, which must have produced a map by calling its generate() method</span>
+<span class="source-line-no">329</span><span id="line.329">     * @param biomeMapper a WorldMapGenerator.BiomeMapper, which must have been initialized with wmg and refer to the same world</span>
+<span class="source-line-no">330</span><span id="line.330">     * @param factionCount the number of factions to have claiming land; cannot be negative or more than 253</span>
+<span class="source-line-no">331</span><span id="line.331">     * @return a 2D char array where each char can be used as a key into {@link #atlas} to find the Faction that claims it</span>
+<span class="source-line-no">332</span><span id="line.332">     */</span>
+<span class="source-line-no">333</span><span id="line.333">    public char[][] generate(long seed, WorldMapGenerator wmg, WorldMapGenerator.BiomeMapper biomeMapper,</span>
+<span class="source-line-no">334</span><span id="line.334">                             int factionCount) {</span>
+<span class="source-line-no">335</span><span id="line.335">        return generate(seed, wmg, biomeMapper, null, factionCount, 1.0);</span>
+<span class="source-line-no">336</span><span id="line.336">    }</span>
+<span class="source-line-no">337</span><span id="line.337">    /**</span>
+<span class="source-line-no">338</span><span id="line.338">     * Generates a 2D char array that represents the claims to the land described by the WorldMapGenerator {@code wmg}</span>
+<span class="source-line-no">339</span><span id="line.339">     * and the BiomeMapper {@code biomeMapper} by various Factions, where {@link Faction} is an inner class.</span>
+<span class="source-line-no">340</span><span id="line.340">     * This starts with two default Factions for "Ocean" and "Wilderness" (unclaimed land) and adds randomly generated</span>
+<span class="source-line-no">341</span><span id="line.341">     * Factions to fill factionCount (the two default factions aren't counted against this limit). These Factions</span>
+<span class="source-line-no">342</span><span id="line.342">     * typically claim contiguous spans of land stretching out from a starting point that matches the Faction's</span>
+<span class="source-line-no">343</span><span id="line.343">     * preferences for biome, land height, heat, and moisture. If a Faction requires a biome (like "TropicalRainforest") </span>
+<span class="source-line-no">344</span><span id="line.344">     * and the world has none of that type, then that Faction won't claim any land. If the WorldMapGenerator zooms in or</span>
+<span class="source-line-no">345</span><span id="line.345">     * out, you should call {@link #adjustZoom()} to get a different 2D char array that represents the zoomed-in area.</span>
+<span class="source-line-no">346</span><span id="line.346">     * This overload tries to claim the given {@code controlledFraction} of land in total, though 1.0 can rarely be</span>
+<span class="source-line-no">347</span><span id="line.347">     * reached unless there are many factions and few islands.</span>
+<span class="source-line-no">348</span><span id="line.348">     * @param seed the seed that determines how Factions will randomly spread around the world</span>
+<span class="source-line-no">349</span><span id="line.349">     * @param wmg a WorldMapGenerator, which must have produced a map by calling its generate() method</span>
+<span class="source-line-no">350</span><span id="line.350">     * @param biomeMapper a WorldMapGenerator.BiomeMapper, which must have been initialized with wmg and refer to the same world</span>
+<span class="source-line-no">351</span><span id="line.351">     * @param factionCount the number of factions to have claiming land; cannot be negative or more than 253</span>
+<span class="source-line-no">352</span><span id="line.352">     * @param controlledFraction between 0.0 and 1.0 inclusive; higher means more land has a letter, lower has more '%'</span>
+<span class="source-line-no">353</span><span id="line.353">     * @return a 2D char array where each char can be used as a key into {@link #atlas} to find the Faction that claims it</span>
+<span class="source-line-no">354</span><span id="line.354">     */</span>
+<span class="source-line-no">355</span><span id="line.355">    public char[][] generate(long seed, WorldMapGenerator wmg, WorldMapGenerator.BiomeMapper biomeMapper,</span>
+<span class="source-line-no">356</span><span id="line.356">                             int factionCount, double controlledFraction) {</span>
+<span class="source-line-no">357</span><span id="line.357">        return generate(seed, wmg, biomeMapper, null, factionCount, controlledFraction);</span>
+<span class="source-line-no">358</span><span id="line.358">    }</span>
+<span class="source-line-no">359</span><span id="line.359">    /**</span>
+<span class="source-line-no">360</span><span id="line.360">     * Generates a 2D char array that represents the claims to the land described by the WorldMapGenerator {@code wmg}</span>
+<span class="source-line-no">361</span><span id="line.361">     * and the BiomeMapper {@code biomeMapper} by various Factions, where {@link Faction} is an inner class.</span>
+<span class="source-line-no">362</span><span id="line.362">     * This starts with two default Factions for "Ocean" and "Wilderness" (unclaimed land) and adds all of</span>
+<span class="source-line-no">363</span><span id="line.363">     * {@code factions} until {@code factionCount} is reached; if it isn't reached, random Factions will be generated to</span>
+<span class="source-line-no">364</span><span id="line.364">     * fill factionCount (the two default factions aren't counted against this limit). These Factions typically claim</span>
+<span class="source-line-no">365</span><span id="line.365">     * contiguous spans of land stretching out from a starting point that matches the Faction's preferences for biome,</span>
+<span class="source-line-no">366</span><span id="line.366">     * land height, heat, and moisture. If a Faction requires a biome (like "TropicalRainforest") and the world has none</span>
+<span class="source-line-no">367</span><span id="line.367">     * of that type, then that Faction won't claim any land. If the WorldMapGenerator zooms in or out, you should call</span>
+<span class="source-line-no">368</span><span id="line.368">     * {@link #adjustZoom()} to get a different 2D char array that represents the zoomed-in area. This overload tries to</span>
+<span class="source-line-no">369</span><span id="line.369">     * claim the given {@code controlledFraction} of land in total, though 1.0 can rarely be reached unless there are</span>
+<span class="source-line-no">370</span><span id="line.370">     * many factions and few islands.</span>
+<span class="source-line-no">371</span><span id="line.371">     *</span>
+<span class="source-line-no">372</span><span id="line.372">     * @param seed the seed that determines how Factions will randomly spread around the world</span>
+<span class="source-line-no">373</span><span id="line.373">     * @param wmg a WorldMapGenerator, which must have produced a map by calling its generate() method</span>
+<span class="source-line-no">374</span><span id="line.374">     * @param biomeMapper a WorldMapGenerator.BiomeMapper, which must have been initialized with wmg and refer to the same world</span>
+<span class="source-line-no">375</span><span id="line.375">     * @param factions a Collection of {@link Faction} that will be copied, shuffled and used before adding any random Factions</span>
+<span class="source-line-no">376</span><span id="line.376">     * @param factionCount the number of factions to have claiming land; cannot be negative or more than 253</span>
+<span class="source-line-no">377</span><span id="line.377">     * @param controlledFraction between 0.0 and 1.0 inclusive; higher means more land has a letter, lower has more '%'</span>
+<span class="source-line-no">378</span><span id="line.378">     * @return a 2D char array where each char can be used as a key into {@link #atlas} to find the Faction that claims it</span>
+<span class="source-line-no">379</span><span id="line.379">     */</span>
+<span class="source-line-no">380</span><span id="line.380">    public char[][] generate(long seed, WorldMapGenerator wmg, WorldMapGenerator.BiomeMapper biomeMapper,</span>
+<span class="source-line-no">381</span><span id="line.381">                                  Collection&lt;Faction&gt; factions, int factionCount, double controlledFraction) {</span>
+<span class="source-line-no">382</span><span id="line.382">        rng.setState(seed);</span>
+<span class="source-line-no">383</span><span id="line.383">        factionCount = Math.abs(factionCount % 254);</span>
+<span class="source-line-no">384</span><span id="line.384">        Thesaurus th = new Thesaurus(rng.nextLong());</span>
+<span class="source-line-no">385</span><span id="line.385">        ArrayList&lt;Faction&gt; fact = factions == null ? new ArrayList&lt;Faction&gt;() : rng.shuffle(factions);</span>
+<span class="source-line-no">386</span><span id="line.386">        for (int i = fact.size(); i &lt; factionCount; i++) {</span>
+<span class="source-line-no">387</span><span id="line.387">            String name = th.makeNationName(), shortName = th.latestGenerated;</span>
+<span class="source-line-no">388</span><span id="line.388">            FakeLanguageGen lang;</span>
+<span class="source-line-no">389</span><span id="line.389">            if(th.randomLanguages == null || th.randomLanguages.isEmpty())</span>
+<span class="source-line-no">390</span><span id="line.390">                lang = FakeLanguageGen.randomLanguage(rng);</span>
+<span class="source-line-no">391</span><span id="line.391">            else</span>
+<span class="source-line-no">392</span><span id="line.392">                lang = th.randomLanguages.get(0);</span>
+<span class="source-line-no">393</span><span id="line.393">            fact.add(new Faction(lang, name, shortName));</span>
+<span class="source-line-no">394</span><span id="line.394">        }</span>
+<span class="source-line-no">395</span><span id="line.395">        if(factionCount &gt; 0)</span>
+<span class="source-line-no">396</span><span id="line.396">            rng.shuffleInPlace(fact);</span>
+<span class="source-line-no">397</span><span id="line.397">        fact.add(0, new Faction(FakeLanguageGen.DEMONIC, "The Lost Wilderness", "Wilderness"));</span>
+<span class="source-line-no">398</span><span id="line.398">        fact.add(0, new Faction(FakeLanguageGen.ALIEN_O, "The Vast Domain of the Seafolk", "Seafolk", new String[]{"Ocean"}));</span>
+<span class="source-line-no">399</span><span id="line.399">        atlas = new OrderedMap&lt;&gt;(letters.subList(0, factionCount + 2), fact.subList(0, factionCount + 2), 0.5f);</span>
+<span class="source-line-no">400</span><span id="line.400">        this.wmg = wmg;</span>
+<span class="source-line-no">401</span><span id="line.401">        this.biomeMapper = biomeMapper;</span>
+<span class="source-line-no">402</span><span id="line.402">        width = wmg.width;</span>
+<span class="source-line-no">403</span><span id="line.403">        height = wmg.height;</span>
+<span class="source-line-no">404</span><span id="line.404">        GreasedRegion land = new GreasedRegion(wmg.heightCodeData, 4, 999);</span>
+<span class="source-line-no">405</span><span id="line.405">        politicalMap = land.toChars('%', '~');</span>
+<span class="source-line-no">406</span><span id="line.406">        int controlled = (int) (land.size() * Math.max(0.0, Math.min(1.0, controlledFraction)));</span>
+<span class="source-line-no">407</span><span id="line.407"></span>
+<span class="source-line-no">408</span><span id="line.408">        int[] centers = land.copy().randomScatter(rng, (int) (Math.sqrt(width * height) * 0.1 + 0.999), factionCount).asTightEncoded();</span>
+<span class="source-line-no">409</span><span id="line.409">        int cen, cx, cy, cx2, cy2, biome, high, hot, moist, count = centers.length, re;</span>
+<span class="source-line-no">410</span><span id="line.410">        String biomeName;</span>
+<span class="source-line-no">411</span><span id="line.411">        String[] biomeTable = biomeMapper.getBiomeNameTable();</span>
+<span class="source-line-no">412</span><span id="line.412">        int[] reorder = new int[count];</span>
+<span class="source-line-no">413</span><span id="line.413">        Faction current;</span>
+<span class="source-line-no">414</span><span id="line.414">        int[] factionIndices = new int[count];</span>
+<span class="source-line-no">415</span><span id="line.415">        for (int c = 0; c &lt; count; c++) {</span>
+<span class="source-line-no">416</span><span id="line.416">            cen = centers[c];</span>
+<span class="source-line-no">417</span><span id="line.417">            cx = cen % width;</span>
+<span class="source-line-no">418</span><span id="line.418">            cy = cen / width;</span>
+<span class="source-line-no">419</span><span id="line.419">            biome = biomeMapper.getBiomeCode(cx, cy);</span>
+<span class="source-line-no">420</span><span id="line.420">            biomeName = biomeTable[biome];</span>
+<span class="source-line-no">421</span><span id="line.421">            high = wmg.heightCodeData[cx][cy];</span>
+<span class="source-line-no">422</span><span id="line.422">            hot = biomeMapper.getHeatCode(cx, cy);</span>
+<span class="source-line-no">423</span><span id="line.423">            moist = biomeMapper.getMoistureCode(cx, cy);</span>
+<span class="source-line-no">424</span><span id="line.424">            rng.randomOrdering(count, reorder);</span>
+<span class="source-line-no">425</span><span id="line.425">            PER_FACTION:</span>
+<span class="source-line-no">426</span><span id="line.426">            for (int i = 0; i &lt; count; i++) {</span>
+<span class="source-line-no">427</span><span id="line.427">                current = fact.get(re = reorder[i]);</span>
+<span class="source-line-no">428</span><span id="line.428">                if(current.preferredBiomes == null || current.preferredBiomes.contains(biomeName))</span>
+<span class="source-line-no">429</span><span id="line.429">                {</span>
+<span class="source-line-no">430</span><span id="line.430">                    factionIndices[c] = re;</span>
+<span class="source-line-no">431</span><span id="line.431">                    break;</span>
+<span class="source-line-no">432</span><span id="line.432">                }</span>
+<span class="source-line-no">433</span><span id="line.433">                if(current.blockedBiomes != null &amp;&amp; current.blockedBiomes.contains(biomeName))</span>
+<span class="source-line-no">434</span><span id="line.434">                    continue;</span>
+<span class="source-line-no">435</span><span id="line.435">                if(current.preferredHeight != null)</span>
+<span class="source-line-no">436</span><span id="line.436">                {</span>
+<span class="source-line-no">437</span><span id="line.437">                    for (int j = 0; j &lt; current.preferredHeight.length; j++) {</span>
+<span class="source-line-no">438</span><span id="line.438">                        if(high == current.preferredHeight[j])</span>
+<span class="source-line-no">439</span><span id="line.439">                        {</span>
+<span class="source-line-no">440</span><span id="line.440">                            factionIndices[c] = re;</span>
+<span class="source-line-no">441</span><span id="line.441">                            break PER_FACTION;</span>
+<span class="source-line-no">442</span><span id="line.442">                        }</span>
+<span class="source-line-no">443</span><span id="line.443">                    }</span>
+<span class="source-line-no">444</span><span id="line.444">                }</span>
+<span class="source-line-no">445</span><span id="line.445">                if(current.preferredHeat != null)</span>
+<span class="source-line-no">446</span><span id="line.446">                {</span>
+<span class="source-line-no">447</span><span id="line.447">                    for (int j = 0; j &lt; current.preferredHeat.length; j++) {</span>
+<span class="source-line-no">448</span><span id="line.448">                        if(hot == current.preferredHeat[j])</span>
+<span class="source-line-no">449</span><span id="line.449">                        {</span>
+<span class="source-line-no">450</span><span id="line.450">                            factionIndices[c] = re;</span>
+<span class="source-line-no">451</span><span id="line.451">                            break PER_FACTION;</span>
+<span class="source-line-no">452</span><span id="line.452">                        }</span>
+<span class="source-line-no">453</span><span id="line.453">                    }</span>
+<span class="source-line-no">454</span><span id="line.454">                }</span>
+<span class="source-line-no">455</span><span id="line.455">                if(current.preferredMoisture != null)</span>
+<span class="source-line-no">456</span><span id="line.456">                {</span>
+<span class="source-line-no">457</span><span id="line.457">                    for (int j = 0; j &lt; current.preferredMoisture.length; j++) {</span>
+<span class="source-line-no">458</span><span id="line.458">                        if(moist == current.preferredMoisture[j])</span>
+<span class="source-line-no">459</span><span id="line.459">                        {</span>
+<span class="source-line-no">460</span><span id="line.460">                            factionIndices[c] = re;</span>
+<span class="source-line-no">461</span><span id="line.461">                            break PER_FACTION;</span>
+<span class="source-line-no">462</span><span id="line.462">                        }</span>
+<span class="source-line-no">463</span><span id="line.463">                    }</span>
+<span class="source-line-no">464</span><span id="line.464">                }</span>
+<span class="source-line-no">465</span><span id="line.465">            }</span>
+<span class="source-line-no">466</span><span id="line.466">        }</span>
+<span class="source-line-no">467</span><span id="line.467">        IntVLA[] fresh = new IntVLA[count];</span>
+<span class="source-line-no">468</span><span id="line.468">        int filled = 0;</span>
+<span class="source-line-no">469</span><span id="line.469">        boolean hasFresh = false;</span>
+<span class="source-line-no">470</span><span id="line.470">        int approximateArea = (controlled * 4) / (count * 3);</span>
+<span class="source-line-no">471</span><span id="line.471">        char[] keys = new char[count];</span>
+<span class="source-line-no">472</span><span id="line.472">        double[] biases = new double[count];</span>
+<span class="source-line-no">473</span><span id="line.473">        for (int i = 0; i &lt; count; i++) {</span>
+<span class="source-line-no">474</span><span id="line.474">            fresh[i] = new IntVLA(approximateArea);</span>
+<span class="source-line-no">475</span><span id="line.475">            cen = centers[i];</span>
+<span class="source-line-no">476</span><span id="line.476">            fresh[i].add(cen);</span>
+<span class="source-line-no">477</span><span id="line.477">            cx = cen % width;</span>
+<span class="source-line-no">478</span><span id="line.478">            cy = cen / width;</span>
+<span class="source-line-no">479</span><span id="line.479">            politicalMap[cx][cy] = keys[i] = atlas.keyAt(factionIndices[i] + 2);</span>
+<span class="source-line-no">480</span><span id="line.480">            biases[i] = rng.nextDouble() * rng.nextDouble() + rng.nextDouble() + 0.03125;</span>
+<span class="source-line-no">481</span><span id="line.481">            hasFresh = true;</span>
+<span class="source-line-no">482</span><span id="line.482">        }</span>
+<span class="source-line-no">483</span><span id="line.483">        Direction[] dirs = Direction.CARDINALS;</span>
+<span class="source-line-no">484</span><span id="line.484">        IntVLA currentFresh;</span>
+<span class="source-line-no">485</span><span id="line.485">        GreasedRegion anySpillMap = new GreasedRegion(width, height),</span>
+<span class="source-line-no">486</span><span id="line.486">                anyFreshMap = new GreasedRegion(width, height);</span>
+<span class="source-line-no">487</span><span id="line.487"></span>
+<span class="source-line-no">488</span><span id="line.488">        while (hasFresh &amp;&amp; filled &lt; controlled) {</span>
+<span class="source-line-no">489</span><span id="line.489">            hasFresh = false;</span>
+<span class="source-line-no">490</span><span id="line.490">            for (int i = 0; i &lt; count &amp;&amp; filled &lt; controlled; i++) {</span>
+<span class="source-line-no">491</span><span id="line.491">                currentFresh = fresh[i];</span>
+<span class="source-line-no">492</span><span id="line.492">                if (currentFresh.isEmpty())</span>
+<span class="source-line-no">493</span><span id="line.493">                    continue;</span>
+<span class="source-line-no">494</span><span id="line.494">                else</span>
+<span class="source-line-no">495</span><span id="line.495">                    hasFresh = true;</span>
+<span class="source-line-no">496</span><span id="line.496">                if (rng.nextDouble() &lt; biases[i]) {</span>
+<span class="source-line-no">497</span><span id="line.497">                    int index = rng.nextIntHasty(currentFresh.size), cell = currentFresh.get(index);</span>
+<span class="source-line-no">498</span><span id="line.498">                    cx = cell % width;</span>
+<span class="source-line-no">499</span><span id="line.499">                    cy = cell / width;</span>
+<span class="source-line-no">500</span><span id="line.500"></span>
+<span class="source-line-no">501</span><span id="line.501"></span>
+<span class="source-line-no">502</span><span id="line.502">                    politicalMap[cx][cy] = keys[i];</span>
+<span class="source-line-no">503</span><span id="line.503">                    filled++;</span>
+<span class="source-line-no">504</span><span id="line.504">                    anySpillMap.insert(cx, cy);</span>
+<span class="source-line-no">505</span><span id="line.505"></span>
+<span class="source-line-no">506</span><span id="line.506">                    for (int d = 0; d &lt; dirs.length; d++) {</span>
+<span class="source-line-no">507</span><span id="line.507">                        cx2 = wmg.wrapX(cx + dirs[d].deltaX, cy);</span>
+<span class="source-line-no">508</span><span id="line.508">                        cy2 = wmg.wrapY(cx, cy + dirs[d].deltaY);</span>
+<span class="source-line-no">509</span><span id="line.509">                        if (cx == cx2 &amp;&amp; cy == cy2)</span>
+<span class="source-line-no">510</span><span id="line.510">                            continue;</span>
+<span class="source-line-no">511</span><span id="line.511">                        if (land.contains(cx2, cy2) &amp;&amp; !anySpillMap.contains(cx2, cy2)) {</span>
+<span class="source-line-no">512</span><span id="line.512">                            if(!anyFreshMap.contains(cx2, cy2)) {</span>
+<span class="source-line-no">513</span><span id="line.513">                                currentFresh.add(cx2 + cy2 * width);</span>
+<span class="source-line-no">514</span><span id="line.514">                                anyFreshMap.insert(cx2, cy2);</span>
+<span class="source-line-no">515</span><span id="line.515">                            }</span>
+<span class="source-line-no">516</span><span id="line.516">                        }</span>
+<span class="source-line-no">517</span><span id="line.517">                    }</span>
+<span class="source-line-no">518</span><span id="line.518">                    currentFresh.removeIndex(index);</span>
+<span class="source-line-no">519</span><span id="line.519">                    anyFreshMap.remove(cx, cy);</span>
+<span class="source-line-no">520</span><span id="line.520">                }</span>
+<span class="source-line-no">521</span><span id="line.521">            }</span>
+<span class="source-line-no">522</span><span id="line.522">        }</span>
+<span class="source-line-no">523</span><span id="line.523">        zoomedMap = ArrayTools.copy(politicalMap);</span>
+<span class="source-line-no">524</span><span id="line.524">        return politicalMap;</span>
+<span class="source-line-no">525</span><span id="line.525">    }</span>
+<span class="source-line-no">526</span><span id="line.526"></span>
+<span class="source-line-no">527</span><span id="line.527">    /**</span>
+<span class="source-line-no">528</span><span id="line.528">     * If the WorldMapGenerator used by</span>
+<span class="source-line-no">529</span><span id="line.529">     * {@link #generate(long, WorldMapGenerator, WorldMapGenerator.BiomeMapper, Collection, int, double)} zooms in or</span>
+<span class="source-line-no">530</span><span id="line.530">     * out, you can call this method to make the {@link #zoomedMap} 2D char array match its zoom. The world-scale map,</span>
+<span class="source-line-no">531</span><span id="line.531">     * {@link #politicalMap}, will remain unchanged unless generate() is called again, but zoomedMap will change each</span>
+<span class="source-line-no">532</span><span id="line.532">     * time either generate() or adjustZoom() is called. This method isn't 100% precise on how it places borders; for</span>
+<span class="source-line-no">533</span><span id="line.533">     * aesthetic reasons, the borders are tattered with {@link GreasedRegion#fray(double)} so they don't look like a</span>
+<span class="source-line-no">534</span><span id="line.534">     * wall of angular bubbles. Using fray() at each level of zoom is quasi-random, so if you zoom in on the same</span>
+<span class="source-line-no">535</span><span id="line.535">     * sequence of points on two different occasions, the change from fray() will be the same, but it may be slightly</span>
+<span class="source-line-no">536</span><span id="line.536">     * different if any point of zoom is different.</span>
+<span class="source-line-no">537</span><span id="line.537">     * @return a direct reference to {@link #zoomedMap}, which will hold the correctly-zoomed version of {@link #politicalMap}</span>
+<span class="source-line-no">538</span><span id="line.538">     */</span>
+<span class="source-line-no">539</span><span id="line.539">    public char[][] adjustZoom() {</span>
+<span class="source-line-no">540</span><span id="line.540">        if(wmg.zoom &lt;= 0)</span>
+<span class="source-line-no">541</span><span id="line.541">        {</span>
+<span class="source-line-no">542</span><span id="line.542">            return ArrayTools.insert(politicalMap, zoomedMap, 0, 0);</span>
+<span class="source-line-no">543</span><span id="line.543">        }</span>
+<span class="source-line-no">544</span><span id="line.544">        ArrayTools.fill(zoomedMap, ' ');</span>
+<span class="source-line-no">545</span><span id="line.545">        char c;</span>
+<span class="source-line-no">546</span><span id="line.546">        int stx = Math.min(Math.max((wmg.zoomStartX - (width  &gt;&gt; 1)) / ((2 &lt;&lt; wmg.zoom) - 2), 0), width ),</span>
+<span class="source-line-no">547</span><span id="line.547">                sty = Math.min(Math.max((wmg.zoomStartY - (height &gt;&gt; 1)) / ((2 &lt;&lt; wmg.zoom) - 2), 0), height);</span>
+<span class="source-line-no">548</span><span id="line.548">        GreasedRegion nation = new GreasedRegion(wmg.landData);</span>
+<span class="source-line-no">549</span><span id="line.549">        GreasedRegion fillable = new GreasedRegion(politicalMap, '~').not();</span>
+<span class="source-line-no">550</span><span id="line.550">        for (int i = 0; i &lt; wmg.zoom; i++) {</span>
+<span class="source-line-no">551</span><span id="line.551">            fillable.zoom(stx, sty);</span>
+<span class="source-line-no">552</span><span id="line.552">        }</span>
+<span class="source-line-no">553</span><span id="line.553">        fillable.flood(nation, width + height);</span>
+<span class="source-line-no">554</span><span id="line.554">        for (int i = 1; i &lt; atlas.size(); i++) {</span>
+<span class="source-line-no">555</span><span id="line.555">            nation.refill(politicalMap, c = atlas.keyAt(i));</span>
+<span class="source-line-no">556</span><span id="line.556">            if(nation.isEmpty()) continue;</span>
+<span class="source-line-no">557</span><span id="line.557">            for (int z = 0; z &lt; wmg.zoom; z++) {</span>
+<span class="source-line-no">558</span><span id="line.558">                nation.zoom(stx, sty).expand8way().expand().fray(0.5);</span>
+<span class="source-line-no">559</span><span id="line.559">            }</span>
+<span class="source-line-no">560</span><span id="line.560">            fillable.andNot(nation);</span>
+<span class="source-line-no">561</span><span id="line.561">            nation.intoChars(zoomedMap, c);</span>
+<span class="source-line-no">562</span><span id="line.562">        }</span>
+<span class="source-line-no">563</span><span id="line.563">        for (int i = 1; i &lt; atlas.size(); i++) {</span>
+<span class="source-line-no">564</span><span id="line.564">            nation.refill(zoomedMap, c = atlas.keyAt(i));</span>
+<span class="source-line-no">565</span><span id="line.565">            if(nation.isEmpty()) continue;</span>
+<span class="source-line-no">566</span><span id="line.566">            nation.flood(fillable, 4 &lt;&lt; wmg.zoom).intoChars(zoomedMap, c);</span>
+<span class="source-line-no">567</span><span id="line.567">        }</span>
+<span class="source-line-no">568</span><span id="line.568">        nation.refill(wmg.heightCodeData, 4, 999).and(new GreasedRegion(zoomedMap, ' ')).intoChars(zoomedMap, '%');</span>
+<span class="source-line-no">569</span><span id="line.569">        nation.refill(wmg.heightCodeData, -999, 4).intoChars(zoomedMap, '~');</span>
+<span class="source-line-no">570</span><span id="line.570">        return zoomedMap;</span>
+<span class="source-line-no">571</span><span id="line.571">    }</span>
+<span class="source-line-no">572</span><span id="line.572"></span>
+<span class="source-line-no">573</span><span id="line.573">}</span>
 
 
 
