@@ -23,8 +23,8 @@ import java.util.Random;
  * Created by Tommy Ettinger on 1/13/2018.
  */
 public class MathVisualizer extends ApplicationAdapter {
-    private int mode = 10;
-    private int modes = 51;
+    private int mode = 51;
+    private int modes = 52;
     private FilterBatch batch;
     private SparseLayers layers;
     private InputAdapter input;
@@ -486,8 +486,8 @@ public class MathVisualizer extends ApplicationAdapter {
         xsp = new XSP();
         tweak = new TweakRNG();
         batch = new FilterBatch();
-        stage = new Stage(new StretchViewport(520, 520), batch);
-        layers = new SparseLayers(520, 520, 1, 1, new TextCellFactory().includedFont());
+        stage = new Stage(new StretchViewport(512, 520), batch);
+        layers = new SparseLayers(512, 520, 1, 1, new TextCellFactory().includedFont());
         layers.setDefaultForeground(SColor.WHITE);
         input = new InputAdapter(){
             @Override
@@ -821,7 +821,8 @@ public class MathVisualizer extends ApplicationAdapter {
 //            }
 //            break;
             case 12: {
-                Gdx.graphics.setTitle("Math Visualizer: Mode " + mode);
+                Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
+                        " RandomXS128.nextFloat() * 512");
                 for (int i = 0; i < 0x1000000; i++) {
                     amounts[(int) (xs128.nextFloat() * 512)]++;
                 }
@@ -1987,6 +1988,38 @@ public class MathVisualizer extends ApplicationAdapter {
                         layers.backgrounds[x][y] = SColor.FLOAT_BLACK;
                 }
             }
+            break;
+            case 51: {
+                Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
+                        " DiverRNG, bits of random.nextDouble()");
+                //DiverRNG diver = new DiverRNG();
+                for (int i = 0; i < 1000000; i++) {
+                    long bits = Double.doubleToLongBits(diver.nextDouble());
+                    for (int j = 0, jj = 504; j < 64; j++, jj -= 8) {
+                        if(1L == (bits >>> j & 1L))
+                            amounts[jj] = amounts[jj+1] = amounts[jj+2] = amounts[jj+3]
+                                    = amounts[jj+4] = amounts[jj+5] = ++amounts[jj+6];
+                    }
+                }
+                for (int i = 0; i < 512; i++) {
+                    if((i & 7) == 3){
+                        for (int j = 510 - (amounts[i] >> 12); j < 520; j++) {
+                            layers.backgrounds[i][j] = -0x1.c98066p126F;
+                        }
+                    }
+                    else {
+                        for (int j = 519 - (amounts[i] >> 12); j < 520; j++) {
+                            layers.backgrounds[i][j] = -0x1.d08864p126F;
+                        }
+                    }
+                }
+                for (int i = 0; i < 10; i++) {
+                    for (int j = 8; j < 520; j += 32) {
+                        layers.backgrounds[i][j] = -0x1.7677e8p125F;
+                    }
+                }
+            }
+            break;
         }
     }
     
@@ -2096,7 +2129,7 @@ public class MathVisualizer extends ApplicationAdapter {
         Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
         config.setTitle("SquidLib Visualizer for Math Testing/Checking");
         config.useVsync(false);
-        config.setWindowedMode(520, 520);
+        config.setWindowedMode(512, 520);
         config.setWindowIcon(Files.FileType.Internal, "Tentacle-128.png", "Tentacle-64.png", "Tentacle-32.png", "Tentacle-16.png");
         new Lwjgl3Application(new MathVisualizer(), config);
     }
