@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.NumberUtils;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import squidpony.ArrayTools;
@@ -23,8 +24,8 @@ import java.util.Random;
  * Created by Tommy Ettinger on 1/13/2018.
  */
 public class MathVisualizer extends ApplicationAdapter {
-    private int mode = 15;
-    private int modes = 53;
+    private int mode = 51;
+    private int modes = 55;
     private FilterBatch batch;
     private SparseLayers layers;
     private InputAdapter input;
@@ -928,7 +929,7 @@ public class MathVisualizer extends ApplicationAdapter {
                 Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
                         " probit");
                 for (int i = 0; i < 0x50000; i++) {
-                    double d = MathExtras.probit(alternateNextDouble()) * 64.0 + 256.0;
+                    double d = MathExtras.probit(nextExclusiveDouble()) * 64.0 + 256.0;
                     if(d >= 0 && d < 512)
                         amounts[(int)d]++;
                 }
@@ -1991,10 +1992,10 @@ public class MathVisualizer extends ApplicationAdapter {
             break;
             case 51: {
                 Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
-                        " DiverRNG, bits of random.nextDouble()");
+                        " RandomXS128, bits of random.nextDouble()");
                 //DiverRNG diver = new DiverRNG();
                 for (int i = 0; i < 0x10000; i++) {
-                    long bits = Double.doubleToLongBits(diver.nextDouble());
+                    long bits = Double.doubleToLongBits(xs128.nextDouble());
                     for (int j = 0, jj = 504; j < 64; j++, jj -= 8) {
                         if(1L == (bits >>> j & 1L))
                             amounts[jj] = amounts[jj+1] = amounts[jj+2] = amounts[jj+3]
@@ -2022,11 +2023,72 @@ public class MathVisualizer extends ApplicationAdapter {
             break;
             case 52: {
                 Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
-                        " DiverRNG, bits of alternate nextDouble()");
+                        " RandomXS128, bits of nextExclusiveDouble()");
                 for (int i = 0; i < 0x10000; i++) {
-                    long bits = Double.doubleToLongBits(alternateNextDouble());
+                    long bits = Double.doubleToLongBits(nextExclusiveDouble());
                     for (int j = 0, jj = 504; j < 64; j++, jj -= 8) {
                         if(1L == (bits >>> j & 1L))
+                            amounts[jj] = amounts[jj+1] = amounts[jj+2] = amounts[jj+3]
+                                    = amounts[jj+4] = amounts[jj+5] = ++amounts[jj+6];
+                    }
+                }
+                for (int i = 0; i < 512; i++) {
+                    if((i & 7) == 3){
+                        for (int j = 510 - (amounts[i] >> 8); j < 520; j++) {
+                            layers.backgrounds[i][j] = -0x1.c98066p126F;
+                        }
+                    }
+                    else {
+                        for (int j = 519 - (amounts[i] >> 8); j < 520; j++) {
+                            layers.backgrounds[i][j] = -0x1.d08864p126F;
+                        }
+                    }
+                }
+                for (int i = 0; i < 10; i++) {
+                    for (int j = 8; j < 520; j += 32) {
+                        layers.backgrounds[i][j] = -0x1.7677e8p125F;
+                    }
+                }
+            }
+            break;
+            case 53: {
+                Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
+                        " RandomXS128, bits of nextFloat()");
+                //DiverRNG diver = new DiverRNG();
+                for (int i = 0; i < 0x10000; i++) {
+                    int bits = Float.floatToIntBits(xs128.nextFloat());
+                    for (int j = 0, jj = 504 - 128; j < 32; j++, jj -= 8) {
+                        if(1 == (bits >>> j & 1))
+                            amounts[jj] = amounts[jj+1] = amounts[jj+2] = amounts[jj+3]
+                                    = amounts[jj+4] = amounts[jj+5] = ++amounts[jj+6];
+                    }
+                }
+                for (int i = 0; i < 512; i++) {
+                    if((i & 7) == 3){
+                        for (int j = 510 - (amounts[i] >> 8); j < 520; j++) {
+                            layers.backgrounds[i][j] = -0x1.c98066p126F;
+                        }
+                    }
+                    else {
+                        for (int j = 519 - (amounts[i] >> 8); j < 520; j++) {
+                            layers.backgrounds[i][j] = -0x1.d08864p126F;
+                        }
+                    }
+                }
+                for (int i = 0; i < 10; i++) {
+                    for (int j = 8; j < 520; j += 32) {
+                        layers.backgrounds[i][j] = -0x1.7677e8p125F;
+                    }
+                }
+            }
+            break;
+            case 54: {
+                Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
+                        " RandomXS128, bits of nextExclusiveFloat()");
+                for (int i = 0; i < 0x10000; i++) {
+                    int bits = Float.floatToIntBits(nextExclusiveFloat());
+                    for (int j = 0, jj = 504 - 128; j < 32; j++, jj -= 8) {
+                        if(1 == (bits >>> j & 1))
                             amounts[jj] = amounts[jj+1] = amounts[jj+2] = amounts[jj+3]
                                     = amounts[jj+4] = amounts[jj+5] = ++amounts[jj+6];
                     }
@@ -2055,15 +2117,37 @@ public class MathVisualizer extends ApplicationAdapter {
 
     /**
      * This is a simplified version of <a href="https://allendowney.com/research/rand/">this
-     * algorithm by Allen Downey</a>.
-     * @return a random uniform double between 0 (inclusive) and 1 (exclusive)
+     * algorithm by Allen Downey</a>. This version can return double values between 2.710505431213761E-20 and
+     * 0.9999999999999999, or 0x1.0p-65 and 0x1.fffffffffffffp-1 in hex notation. It cannot return 0 or 1. It has much
+     * more uniform bit distribution across its mantissa/significand bits than {@link Random#nextDouble()}. Where Random
+     * is less likely to produce a "1" bit for its lowest 5 bits of mantissa (the least significant bits numerically,
+     * but potentially important for some uses), with the least significant bit produced half as often as the most
+     * significant bit in the mantissa, this has approximately the same likelihood of producing a "1" bit for any
+     * positions in the mantissa.
+     * @return a random uniform double between 0 and 1 (both exclusive, unlike most nextDouble() implementations)
      */
-    public static double alternateNextDouble(){
+    public static double nextExclusiveDouble(){
         final long bits = MathUtils.random.nextLong();
-        return Double.longBitsToDouble(1022L - Long.numberOfTrailingZeros(bits) << 52
+        return NumberUtils.longBitsToDouble(1022L - Long.numberOfTrailingZeros(bits) << 52
                 | bits >>> 12);
     }
-    
+    /**
+     * This is a simplified version of <a href="https://allendowney.com/research/rand/">this
+     * algorithm by Allen Downey</a>. This version can return double values between 2.7105054E-20 to 0.99999994, or
+     * 0x1.0p-65 to 0x1.fffffep-1 in hex notation. It cannot return 0 or 1. It has much
+     * more uniform bit distribution across its mantissa/significand bits than {@link Random#nextDouble()}. Where Random
+     * is less likely to produce a "1" bit for its lowest 5 bits of mantissa (the least significant bits numerically,
+     * but potentially important for some uses), with the least significant bit produced half as often as the most
+     * significant bit in the mantissa, this has approximately the same likelihood of producing a "1" bit for any
+     * positions in the mantissa.
+     * @return a random uniform double between 0 and 1 (both exclusive, unlike most nextDouble() implementations)
+     */
+    public static float nextExclusiveFloat(){
+        final long bits = MathUtils.random.nextLong();
+        return NumberUtils.intBitsToFloat(126 - Long.numberOfTrailingZeros(bits) << 23
+                | (int)(bits >>> 41));
+    }
+
     private double acbrt(double r)
     {
         double a = 1.4774329094 - 0.8414323527/(r+0.7387320679),
