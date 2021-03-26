@@ -24,7 +24,7 @@ import java.util.Random;
  */
 public class MathVisualizer extends ApplicationAdapter {
     private int mode = 51;
-    private int modes = 52;
+    private int modes = 53;
     private FilterBatch batch;
     private SparseLayers layers;
     private InputAdapter input;
@@ -1993,7 +1993,7 @@ public class MathVisualizer extends ApplicationAdapter {
                 Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
                         " DiverRNG, bits of random.nextDouble()");
                 //DiverRNG diver = new DiverRNG();
-                for (int i = 0; i < 1000000; i++) {
+                for (int i = 0; i < 0x10000; i++) {
                     long bits = Double.doubleToLongBits(diver.nextDouble());
                     for (int j = 0, jj = 504; j < 64; j++, jj -= 8) {
                         if(1L == (bits >>> j & 1L))
@@ -2003,12 +2003,42 @@ public class MathVisualizer extends ApplicationAdapter {
                 }
                 for (int i = 0; i < 512; i++) {
                     if((i & 7) == 3){
-                        for (int j = 510 - (amounts[i] >> 12); j < 520; j++) {
+                        for (int j = 510 - (amounts[i] >> 8); j < 520; j++) {
                             layers.backgrounds[i][j] = -0x1.c98066p126F;
                         }
                     }
                     else {
-                        for (int j = 519 - (amounts[i] >> 12); j < 520; j++) {
+                        for (int j = 519 - (amounts[i] >> 8); j < 520; j++) {
+                            layers.backgrounds[i][j] = -0x1.d08864p126F;
+                        }
+                    }
+                }
+                for (int i = 0; i < 10; i++) {
+                    for (int j = 8; j < 520; j += 32) {
+                        layers.backgrounds[i][j] = -0x1.7677e8p125F;
+                    }
+                }
+            }
+            break;
+            case 52: {
+                Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
+                        " DiverRNG, bits of alternate nextDouble()");
+                for (int i = 0; i < 0x10000; i++) {
+                    long bits = Double.doubleToLongBits(alternateNextDouble());
+                    for (int j = 0, jj = 504; j < 64; j++, jj -= 8) {
+                        if(1L == (bits >>> j & 1L))
+                            amounts[jj] = amounts[jj+1] = amounts[jj+2] = amounts[jj+3]
+                                    = amounts[jj+4] = amounts[jj+5] = ++amounts[jj+6];
+                    }
+                }
+                for (int i = 0; i < 512; i++) {
+                    if((i & 7) == 3){
+                        for (int j = 510 - (amounts[i] >> 8); j < 520; j++) {
+                            layers.backgrounds[i][j] = -0x1.c98066p126F;
+                        }
+                    }
+                    else {
+                        for (int j = 519 - (amounts[i] >> 8); j < 520; j++) {
                             layers.backgrounds[i][j] = -0x1.d08864p126F;
                         }
                     }
@@ -2021,6 +2051,17 @@ public class MathVisualizer extends ApplicationAdapter {
             }
             break;
         }
+    }
+
+    /**
+     * This is a simplified version of <a href="https://allendowney.com/research/rand/">this
+     * algorithm by Allen Downey</a>.
+     * @return a random uniform double between 0 (inclusive) and 1 (exclusive)
+     */
+    private double alternateNextDouble(){
+        final long bits = diver.nextLong();
+        return Double.longBitsToDouble(1022L - Long.numberOfTrailingZeros(bits) << 52
+                | bits >>> 12);
     }
     
     private double acbrt(double r)
