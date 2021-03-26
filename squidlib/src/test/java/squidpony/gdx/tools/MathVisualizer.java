@@ -23,7 +23,7 @@ import java.util.Random;
  * Created by Tommy Ettinger on 1/13/2018.
  */
 public class MathVisualizer extends ApplicationAdapter {
-    private int mode = 51;
+    private int mode = 15;
     private int modes = 53;
     private FilterBatch batch;
     private SparseLayers layers;
@@ -928,7 +928,7 @@ public class MathVisualizer extends ApplicationAdapter {
                 Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
                         " probit");
                 for (int i = 0; i < 0x50000; i++) {
-                    double d = MathExtras.probit(diver.nextDouble()) * 64.0 + 256.0;
+                    double d = MathExtras.probit(alternateNextDouble()) * 64.0 + 256.0;
                     if(d >= 0 && d < 512)
                         amounts[(int)d]++;
                 }
@@ -2058,8 +2058,8 @@ public class MathVisualizer extends ApplicationAdapter {
      * algorithm by Allen Downey</a>.
      * @return a random uniform double between 0 (inclusive) and 1 (exclusive)
      */
-    private double alternateNextDouble(){
-        final long bits = diver.nextLong();
+    public static double alternateNextDouble(){
+        final long bits = MathUtils.random.nextLong();
         return Double.longBitsToDouble(1022L - Long.numberOfTrailingZeros(bits) << 52
                 | bits >>> 12);
     }
