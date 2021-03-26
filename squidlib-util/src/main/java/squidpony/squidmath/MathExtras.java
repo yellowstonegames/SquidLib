@@ -326,19 +326,19 @@ public final class MathExtras
         if (d <= 0 || d >= 1) {
             return Math.copySign(38.5, d - 0.5);
         }
-        // Rational approximation for lower region:
+        /* Rational approximation for lower region: */
         else if (d < 0.02425) {
             final double q = Math.sqrt(-2.0 * Math.log(d));
             return (((((-7.784894002430293e-03 * q + -3.223964580411365e-01) * q + -2.400758277161838e+00) * q + -2.549732539343734e+00) * q + 4.374664141464968e+00) * q + 2.938163982698783e+00)
                     / ((((7.784695709041462e-03 * q + 3.224671290700398e-01) * q + 2.445134137142996e+00) * q + 3.754408661907416e+00) * q + 1.0);
         }
-        // Rational approximation for upper region:
+        /* Rational approximation for upper region: */
         else if (0.97575 < d) {
             final double q = Math.sqrt(-2.0 * Math.log(1 - d));
             return -(((((-7.784894002430293e-03 * q + -3.223964580411365e-01) * q + -2.400758277161838e+00) * q + -2.549732539343734e+00) * q + 4.374664141464968e+00) * q + 2.938163982698783e+00)
                     / ((((7.784695709041462e-03 * q + 3.224671290700398e-01) * q + 2.445134137142996e+00) * q + 3.754408661907416e+00) * q + 1.0);
         }
-        // Rational approximation for central region:
+        /* Rational approximation for central region: */
         else {
             final double q = d - 0.5;
             final double r = q * q;
