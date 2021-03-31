@@ -437,51 +437,99 @@ public class NumberTools {
         turns *= 2f - turns;
         return turns * (-0.775f - 0.225f * turns) * ((floor & 2L) - 1L);
     }
-    public static double atan2(double y, double x)
-    {
-        if(y == 0.0 && x >= 0.0) return 0.0;
-        double ay = Math.abs(y), ax = Math.abs(x);
-        boolean invert = ay > ax;
-        double z = invert ? ax / ay : ay / ax;
-        z = ((((0.141499  * z) - 0.343315 ) * z - 0.016224 ) * z + 1.003839 ) * z - 0.000158 ;
-        if (invert) z = 1.5707963267948966 - z;
-        if (x < 0) z = 3.141592653589793 - z;
-        return Math.copySign(z, y);
+    public static double atan(final double i) {
+        final double n = Math.abs(i);
+        final double c = (n - 1.0) / (n + 1.0);
+        final double c2 = c * c;
+        final double c3 = c * c2;
+        final double c5 = c3 * c2;
+        final double c7 = c5 * c2;
+        return Math.copySign(0.7853981633974483 +
+                (0.999215 * c - 0.3211819 * c3 + 0.1462766 * c5 - 0.0389929 * c7), i);
     }
-
-    public static float atan2(float y, float x) {
-        if (y == 0f && x >= 0f) return 0f;
-        float ay = Math.abs(y), ax = Math.abs(x);
-        boolean invert = ay > ax;
-        float z = invert ? ax / ay : ay / ax;
-        z = ((((0.141499f * z) - 0.343315f) * z - 0.016224f) * z + 1.003839f) * z - 0.000158f;
-        if (invert) z = 1.5707963267948966f - z;
-        if (x < 0) z = 3.141592653589793f - z;
-        return Math.copySign(z, y);
+    public static float atan(final float i) {
+        final float n = Math.abs(i);
+        final float c = (n - 1f) / (n + 1f);
+        final float c2 = c * c;
+        final float c3 = c * c2;
+        final float c5 = c3 * c2;
+        final float c7 = c5 * c2;
+        return Math.copySign(0.7853981633974483f +
+                (0.999215f * c - 0.3211819f * c3 + 0.1462766f * c5 - 0.0389929f * c7), i);
     }
-
-    public static double atan2_(double y, double x)
-    {
-        if(y == 0.0 && x >= 0.0) return 0.0;
-        double ay = Math.abs(y), ax = Math.abs(x);
-        boolean invert = ay > ax;
-        double z = invert ? ax/ay : ay/ax;
-        z = (((((0.022520265292560102) * z) - (0.054640279287594046)) * z - (0.0025821297967229097)) * z + (0.1597659389184251)) * z - (0.000025146481008519463);
-        if(invert) z = 0.25 - z;
-        if(x < 0) z = 0.5 - z;
-        return y < 0 ? (int)(1+z) - z : z;
-
+    public static double atan2(final double y, final double x) {
+        if(x > 0)
+            return atan(y / x);
+        else if(x < 0) {
+            if(y >= 0)
+                return atan(y / x) + 3.14159265358979323846;
+            else
+                return atan(y / x) - 3.14159265358979323846;
+        }
+        else if(y > 0) return 1.5707963267948966;
+        else if(y < 0) return -1.5707963267948966;
+        else return 0.0;
     }
-    public static float atan2_(float y, float x)
-    {
-        if(y == 0.0 && x >= 0.0) return 0f;
-        float ay = Math.abs(y), ax = Math.abs(x);
-        boolean invert = ay > ax;
-        float z = invert ? ax/ay : ay/ax;
-        z = (((((0.022520265292560102f) * z) - (0.054640279287594046f)) * z - (0.0025821297967229097f)) * z + (0.1597659389184251f)) * z - (0.000025146481008519463f);
-        if(invert) z = 0.25f - z;
-        if(x < 0) z = 0.5f - z;
-        return y < 0 ? (int)(1+z) - z : z;
+    public static float atan2(final float y, final float x) {
+        if(x > 0)
+            return atan(y / x);
+        else if(x < 0) {
+            if(y >= 0)
+                return atan(y / x) + 3.14159265358979323846f;
+            else
+                return atan(y / x) - 3.14159265358979323846f;
+        }
+        else if(y > 0) return 1.5707963267948966f;
+        else if(y < 0) return -1.5707963267948966f;
+        else return 0.0f;
+    }
+    private static double atan_(final double v) {
+        final double n = Math.abs(v);
+        final double c = (n - 1.0) / (n + 1.0);
+        final double c2 = c * c;
+        final double c3 = c * c2;
+        final double c5 = c3 * c2;
+        final double c7 = c5 * c2;
+        return Math.copySign(0.125 + 0.1590300064615682 * c - 0.051117687016646825 * c3 + 0.02328064394867594 * c5
+                - 0.006205912780487965 * c7, v);
+    }
+    private static float atan_(final float v) {
+        final float n = Math.abs(v);
+        final float c = (n - 1f) / (n + 1f);
+        final float c2 = c * c;
+        final float c3 = c * c2;
+        final float c5 = c3 * c2;
+        final float c7 = c5 * c2;
+        return Math.copySign(0.125f + 0.1590300064615682f * c - 0.051117687016646825f * c3 + 0.02328064394867594f * c5
+                - 0.006205912780487965f * c7, v);
+    }
+    public static double atan2_(final double y, final double x) {
+        if(x > 0) {
+            if(y >= 0)
+                return atan_(y / x);
+            else
+                return atan_(y / x) + 1.0;
+        }
+        else if(x < 0) {
+            return atan_(y / x) + 0.5;
+        }
+        else if(y > 0) return 0.25;
+        else if(y < 0) return 0.75;
+        else return 0.0;
+    }
+    public static float atan2_(final float y, final float x) {
+        if(x > 0) {
+            if(y >= 0)
+                return atan_(y / x);
+            else
+                return atan_(y / x) + 1f;
+        }
+        else if(x < 0) {
+            return atan_(y / x) + 0.5f;
+        }
+        else if(y > 0) return 0.25f;
+        else if(y < 0) return 0.75f;
+        else return 0f;
     }
 
     public static double atan2Degrees(double y, double x)
