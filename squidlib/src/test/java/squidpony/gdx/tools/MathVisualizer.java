@@ -24,8 +24,8 @@ import java.util.Random;
  * Created by Tommy Ettinger on 1/13/2018.
  */
 public class MathVisualizer extends ApplicationAdapter {
-    private int mode = 51;
-    private int modes = 55;
+    private int mode = 55;
+    private int modes = 56;
     private FilterBatch batch;
     private SparseLayers layers;
     private InputAdapter input;
@@ -2112,6 +2112,29 @@ public class MathVisualizer extends ApplicationAdapter {
                 }
             }
             break;
+            case 55: {
+                Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
+                        " cbrt lines");
+                for (int i = 0; i < 512; i++) {
+                    float in = (i - 255);
+                    double m = Math.cbrt(in);
+                    if(m >= -15 && m <= 15)
+                        layers.backgrounds[i][(int) (m * 16 + 255)] = -0x1.d08864p126F;
+                    float a = MathExtras.cbrt(in);
+                    if(a >= -15 && a <= 15)
+                        layers.backgrounds[i][(int) (a * 16 + 255)] = -0x1.6a9704p125F;
+                    float s = cbrtShape(in);
+                    if(s >= -15 && s <= 15)
+                        layers.backgrounds[i][(int) (s * 16 + 255)] = -0x1.30012cp125F;
+                }
+                for (int i = 0; i < 10; i++) {
+                    for (int j = 8; j < 520; j += 32) {
+                        layers.backgrounds[i][j] = -0x1.7677e8p125F;
+                    }
+                }
+            }
+            break;
+
         }
     }
 
@@ -2155,6 +2178,11 @@ public class MathVisualizer extends ApplicationAdapter {
                 a3 = a * a * a, a3r = a3 + r;
         //a *= ((a3r + r) / (a3 + a3r));
         return a * ((a3r + r) / (a3 + a3r));
+    }
+
+    private float cbrtShape(float x){
+        final int i = NumberTools.floatToRawIntBits(x);
+        return NumberTools.intBitsToFloat(((i & 0x7FFFFFFF) - 0x3F800000) / 3 + 0x3F800000 | (i & 0x80000000));
     }
     
     private double isqrt(long x)
