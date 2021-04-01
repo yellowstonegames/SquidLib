@@ -1161,7 +1161,7 @@ public final class NumberTools {
      * @return an output from the inverse tangent function, from PI/-2.0 to PI/2.0 inclusive
      */
     public static double atan(final double i) {
-        final double n = Math.abs(i);
+        final double n = Math.min(Math.abs(i), Double.MAX_VALUE);
         final double c = (n - 1.0) / (n + 1.0);
         final double c2 = c * c;
         final double c3 = c * c2;
@@ -1180,7 +1180,7 @@ public final class NumberTools {
      * @return an output from the inverse tangent function, from PI/-2.0 to PI/2.0 inclusive
      */
     public static float atan(final float i) {
-        final float n = Math.abs(i);
+        final float n = Math.min(Math.abs(i), Float.MAX_VALUE);
         final float c = (n - 1f) / (n + 1f);
         final float c2 = c * c;
         final float c3 = c * c2;
@@ -1266,7 +1266,7 @@ public final class NumberTools {
      * @return between -0.25 and 0.25
      */
     private static double atan_(final double v) {
-        final double n = Math.abs(v);
+        final double n = Math.min(Math.abs(v), Double.MAX_VALUE);
         final double c = (n - 1.0) / (n + 1.0);
         final double c2 = c * c;
         final double c3 = c * c2;
@@ -1282,7 +1282,7 @@ public final class NumberTools {
      * @return between -0.25 and 0.25
      */
     private static float atan_(final float v) {
-        final float n = Math.abs(v);
+        final float n = Math.min(Math.abs(v), Float.MAX_VALUE);
         final float c = (n - 1f) / (n + 1f);
         final float c2 = c * c;
         final float c3 = c * c2;
@@ -1371,14 +1371,14 @@ public final class NumberTools {
      * @return an output from the inverse tangent function in degrees, from -90 to 90 inclusive
      */
     public static double atanDegrees(final double i) {
-        final double n = Math.abs(i);
+        final double n = Math.min(Math.abs(i), Double.MAX_VALUE);
         final double c = (n - 1.0) / (n + 1.0);
         final double c2 = c * c;
         final double c3 = c * c2;
         final double c5 = c3 * c2;
         final double c7 = c5 * c2;
         return Math.copySign(45.0 +
-                (114.5016046523291 * c - 36.80473465198571 * c3 + 16.762063643046677 * c5 - 4.468257201951335 * c7), i);
+                (57.25080271739779 * c - 18.402366944901082 * c3 + 8.381031432388337 * c5 - 2.2341286239715488 * c7), i);
     }
 
     /**
@@ -1391,14 +1391,15 @@ public final class NumberTools {
      * @return an output from the inverse tangent function, from -90 to 90 inclusive
      */
     public static float atanDegrees(final float i) {
-        final float n = Math.abs(i);
+        final float n = Math.min(Math.abs(i), Float.MAX_VALUE);
         final float c = (n - 1f) / (n + 1f);
         final float c2 = c * c;
         final float c3 = c * c2;
         final float c5 = c3 * c2;
         final float c7 = c5 * c2;
         return Math.copySign(45f +
-                (114.5016046523291f * c - 36.80473465198571f * c3 + 16.762063643046677f * c5 - 4.468257201951335f * c7), i);
+                (57.25080271739779f * c - 18.402366944901082f * c3 + 8.381031432388337f * c5 - 2.2341286239715488f * c7), i);
+
     }
 
     /**
@@ -1475,7 +1476,7 @@ public final class NumberTools {
      * @return between -90 and 90
      */
     private static double atanDegrees360(final double v) {
-        final double n = Math.abs(v);
+        final double n = Math.min(Math.abs(v), Double.MAX_VALUE);
         final double c = (n - 1.0) / (n + 1.0);
         final double c2 = c * c;
         final double c3 = c * c2;
@@ -1491,7 +1492,7 @@ public final class NumberTools {
      * @return between -90 and 90
      */
     private static float atanDegrees360(final float v) {
-        final float n = Math.abs(v);
+        final float n = Math.min(Math.abs(v), Float.MAX_VALUE);
         final float c = (n - 1f) / (n + 1f);
         final float c2 = c * c;
         final float c3 = c * c2;
