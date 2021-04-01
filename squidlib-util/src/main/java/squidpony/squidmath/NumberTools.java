@@ -1220,9 +1220,9 @@ public final class NumberTools {
             else
                 return atan(y / x) - 3.14159265358979323846;
         }
-        else if(y > 0) return 1.5707963267948966;
-        else if(y < 0) return -1.5707963267948966;
-        else return 0.0;
+        else if(y > 0) return x + 1.5707963267948966;
+        else if(y < 0) return x - 1.5707963267948966;
+        else return x + y; // returns 0 for 0,0 or NaN if either y or x is NaN
     }
 
     /**
@@ -1255,9 +1255,9 @@ public final class NumberTools {
             else
                 return atan(y / x) - 3.14159265358979323846f;
         }
-        else if(y > 0) return 1.5707963267948966f;
-        else if(y < 0) return -1.5707963267948966f;
-        else return 0.0f;
+        else if(y > 0) return x + 1.5707963267948966f;
+        else if(y < 0) return x - 1.5707963267948966f;
+        else return x + y; // returns 0 for 0,0 or NaN if either y or x is NaN
     }
 
     /**
@@ -1321,9 +1321,9 @@ public final class NumberTools {
         else if(x < 0) {
             return atan_(y / x) + 0.5;
         }
-        else if(y > 0) return 0.25;
-        else if(y < 0) return 0.75;
-        else return 0.0;
+        else if(y > 0) return x + 0.25;
+        else if(y < 0) return x + 0.75;
+        else return x + y; // returns 0 for 0,0 or NaN if either y or x is NaN
     }
 
     /**
@@ -1356,124 +1356,214 @@ public final class NumberTools {
         else if(x < 0) {
             return atan_(y / x) + 0.5f;
         }
-        else if(y > 0) return 0.25f;
-        else if(y < 0) return 0.75f;
-        else return 0f;
+        else if(y > 0) return x + 0.25f;
+        else if(y < 0) return x + 0.75f;
+        else return x + y; // returns 0 for 0,0 or NaN if either y or x is NaN
     }
 
     /**
-     * Close approximation of the frequently-used trigonometric method atan2, with higher precision than libGDX's atan2
-     * approximation, and giving a result in degrees from -180 to 180. Maximum error is below 0.1 degrees.
+     * Arc tangent approximation measured in degrees, using an algorithm from the 1955 research study
+     * "Approximations for Digital Computers," by RAND Corporation (this is sheet 9's algorithm, which is the
+     * second-fastest and second-least precise). This method is usually much faster than {@link Math#atan(double)},
+     * but is somewhat less precise than Math's implementation. This implementation can return negative or positive
+     * results in degrees.
+     * @param i an input to the inverse tangent function; any finite double is accepted
+     * @return an output from the inverse tangent function in degrees, from -90 to 90 inclusive
+     */
+    public static double atanDegrees(final double i) {
+        final double n = Math.abs(i);
+        final double c = (n - 1.0) / (n + 1.0);
+        final double c2 = c * c;
+        final double c3 = c * c2;
+        final double c5 = c3 * c2;
+        final double c7 = c5 * c2;
+        return Math.copySign(45.0 +
+                (114.5016046523291 * c - 36.80473465198571 * c3 + 16.762063643046677 * c5 - 4.468257201951335 * c7), i);
+    }
+
+    /**
+     * Arc tangent approximation measured in degrees, using an algorithm from the 1955 research study
+     * "Approximations for Digital Computers," by RAND Corporation (this is sheet 9's algorithm, which is the
+     * second-fastest and second-least precise). This method is usually much faster than {@link Math#atan(double)},
+     * but is somewhat less precise than Math's implementation. This implementation can return negative or positive
+     * results in degrees.
+     * @param i an input to the inverse tangent function; any finite float is accepted
+     * @return an output from the inverse tangent function, from -90 to 90 inclusive
+     */
+    public static float atanDegrees(final float i) {
+        final float n = Math.abs(i);
+        final float c = (n - 1f) / (n + 1f);
+        final float c2 = c * c;
+        final float c3 = c * c2;
+        final float c5 = c3 * c2;
+        final float c7 = c5 * c2;
+        return Math.copySign(45f +
+                (114.5016046523291f * c - 36.80473465198571f * c3 + 16.762063643046677f * c5 - 4.468257201951335f * c7), i);
+    }
+
+    /**
+     * Close approximation of the frequently-used trigonometric method atan2 measured in degrees, with higher precision
+     * than libGDX's atan2 approximation. The range for this is -180 to 180.
      * Takes y and x (in that unusual order) as doubles, and returns the angle from the origin to that point in degrees.
-     * It is about 5 times faster than {@link Math#atan2(double, double)} (roughly 17 ns instead of roughly 88 ns for
-     * Math, though the computer was under some load during testing). It is almost identical in speed to libGDX'
-     * MathUtils approximation after converting to degrees; MathUtils seems to have worse average error, though.
-     * Credit to Nic Taylor and imuli, with Taylor publishing
-     * <a href="https://www.dsprelated.com/showarticle/1052.php">this nice post</a> and imuli commenting with very
-     * handy information that makes this approach usable.
+     * It is about 5 times faster than {@link Math#atan2(double, double)} (roughly 12 ns instead of roughly 62 ns for
+     * Math, on Java 8 HotSpot). It is slightly faster than libGDX' MathUtils approximation of the same method;
+     * MathUtils seems to have worse average error, as well.
      * <br>
-     * See also {@link #atan2Degrees360(double, double)}, which is just like this but returns an angle from 0 to 360,
-     * instead of -180 to 180, in case negative angles are undesirable.
+     * Credit for this goes to the 1955 research study "Approximations for Digital Computers," by RAND Corporation. This
+     * is sheet 9's algorithm, which is the second-fastest and second-least precise. The algorithm on sheet 8 is faster,
+     * but only by a very small degree, and is considerably less precise. That study provides an {@link #atan(double)}
+     * method, and the small code to make that work as atan2Degrees() was worked out from Wikipedia.
+     * <br>
+     * See also {@link #atan2_(double, double)} for a version that returns a measurement as a fraction of a turn, or
+     * {@link #atan2(double, double)} for the typical radians. You
+     * can also use {@link #atan2Degrees360(double, double)} to produce a result in degrees from 0 to 360.
      * @param y y-component of the point to find the angle towards; note the parameter order is unusual by convention
      * @param x x-component of the point to find the angle towards; note the parameter order is unusual by convention
-     * @return the angle to the given point, in degrees as a double
+     * @return the angle to the given point, in radians as a double; ranges from -180 to 180
      */
-    public static double atan2Degrees(double y, double x)
-    {
-        if(y == 0.0 && x >= 0.0) return 0.0;
-        double ay = Math.abs(y), ax = Math.abs(x);
-        boolean invert = ay > ax;
-        double z = invert ? ax / ay : ay / ax;
-        z = (((((8.107295505321636)  * z) - (19.670500543533855) ) * z - (0.9295667268202475) ) * z + (57.51573801063304) ) * z - (0.009052733163067006) ;
-        if (invert) z = 90 - z;
-        if (x < 0) z = 180 - z;
-        return Math.copySign(z, y);
+    public static double atan2Degrees(final double y, final double x) {
+        if(x > 0)
+            return atanDegrees(y / x);
+        else if(x < 0) {
+            if(y >= 0)
+                return atanDegrees(y / x) + 180.0;
+            else
+                return atanDegrees(y / x) - 180.0;
+        }
+        else if(y > 0) return x + 90.0;
+        else if(y < 0) return x - 90.0;
+        else return x + y; // returns 0 for 0,0 or NaN if either y or x is NaN
     }
 
     /**
-     * Close approximation of the frequently-used trigonometric method atan2, with higher precision than libGDX's atan2
-     * approximation, and giving a result in degrees from -180 to 180. Maximum error is below 0.1 degrees.
+     * Close approximation of the frequently-used trigonometric method atan2 measured in degrees, with higher precision
+     * than libGDX's atan2 approximation. The range for this is -180 to 180.
      * Takes y and x (in that unusual order) as floats, and returns the angle from the origin to that point in degrees.
-     * It is about 5 times faster than {@link Math#atan2(double, double)} (roughly 17 ns instead of roughly 88 ns for
-     * Math, though the computer was under some load during testing). It is almost identical in speed to libGDX'
-     * MathUtils approximation after converting to degrees; MathUtils seems to have worse average error, though.
-     * Credit to Nic Taylor and imuli, with Taylor publishing
-     * <a href="https://www.dsprelated.com/showarticle/1052.php">this nice post</a> and imuli commenting with very
-     * handy information that makes this approach usable.
+     * It is about 5 times faster than {@link Math#atan2(double, double)} (roughly 12 ns instead of roughly 62 ns for
+     * Math, on Java 8 HotSpot). It is slightly faster than libGDX' MathUtils approximation of the same method;
+     * MathUtils seems to have worse average error, as well.
      * <br>
-     * See also {@link #atan2Degrees360(float, float)}, which is just like this but returns an angle from 0 to 360,
-     * instead of -180 to 180, in case negative angles are undesirable.
+     * Credit for this goes to the 1955 research study "Approximations for Digital Computers," by RAND Corporation. This
+     * is sheet 9's algorithm, which is the second-fastest and second-least precise. The algorithm on sheet 8 is faster,
+     * but only by a very small degree, and is considerably less precise. That study provides an {@link #atan(float)}
+     * method, and the small code to make that work as atan2Degrees() was worked out from Wikipedia.
+     * <br>
+     * See also {@link #atan2_(float, float)} for a version that returns a measurement as a fraction of a turn, or
+     * {@link #atan2(float, float)} for the typical radians. You
+     * can also use {@link #atan2Degrees360(float, float)} to produce a result in degrees from 0 to 360.
      * @param y y-component of the point to find the angle towards; note the parameter order is unusual by convention
      * @param x x-component of the point to find the angle towards; note the parameter order is unusual by convention
-     * @return the angle to the given point, in degrees as a float
+     * @return the angle to the given point, in radians as a float; ranges from -180 to 180
      */
-    public static float atan2Degrees(float y, float x)
-    {
-        if(y == 0f && x >= 0f) return 0f;
-        float ax = Math.abs(x), ay = Math.abs(y);
-        boolean invert = ay > ax;
-        float z = invert ? ax / ay : ay / ax;
-        z = (((((8.107295505321636f)  * z) - (19.670500543533855f) ) * z - (0.9295667268202475f) ) * z + (57.51573801063304f) ) * z - (0.009052733163067006f) ;
-        if (invert) z = 90 - z;
-        if (x < 0) z = 180 - z;
-        return Math.copySign(z, y);
+    public static float atan2Degrees(final float y, final float x) {
+        if(x > 0)
+            return atanDegrees(y / x);
+        else if(x < 0) {
+            if(y >= 0)
+                return atanDegrees(y / x) + 180f;
+            else
+                return atanDegrees(y / x) - 180f;
+        }
+        else if(y > 0) return x + 90f;
+        else if(y < 0) return x - 90f;
+        else return x + y; // returns 0 for 0,0 or NaN if either y or x is NaN
     }
 
     /**
-     * Close approximation of the frequently-used trigonometric method atan2, with higher precision than libGDX's atan2
-     * approximation, and giving a result in degrees from 0 to 360 (both inclusive). Maximum error is below 0.1 degrees.
-     * Takes y and x (in that unusual order) as doubles, and returns the angle from the origin to that point in degrees.
-     * It is about 5 times faster than {@link Math#atan2(double, double)} (roughly 17 ns instead of roughly 88 ns for
-     * Math, though the computer was under some load during testing). It is almost identical in speed to libGDX'
-     * MathUtils approximation after converting to degrees; MathUtils seems to have worse average error, though.
-     * Credit to Nic Taylor and imuli, with Taylor publishing
-     * <a href="https://www.dsprelated.com/showarticle/1052.php">this nice post</a> and imuli commenting with very
-     * handy information that makes this approach usable.
-     * <br>
-     * See also {@link #atan2Degrees(double, double)}, which is just like this but returns an angle from -180 to 180,
-     * matching {@link Math#atan2(double, double)}'s convention.
-     * @param y y-component of the point to find the angle towards; note the parameter order is unusual by convention
-     * @param x x-component of the point to find the angle towards; note the parameter order is unusual by convention
-     * @return the angle to the given point, in degrees as a double
+     * This one's weird; unlike {@link #atan2Degrees360(double, double)}, it can return negative results.
+     * @param v any finite double
+     * @return between -90 and 90
      */
-    public static double atan2Degrees360(double y, double x)
-    {
-        if(y == 0.0 && x >= 0.0) return 0.0;
-        double ay = Math.abs(y), ax = Math.abs(x);
-        boolean invert = ay > ax;
-        double z = invert ? ax / ay : ay / ax;
-        z = (((((8.107295505321636)  * z) - (19.670500543533855) ) * z - (0.9295667268202475) ) * z + (57.51573801063304) ) * z - (0.009052733163067006) ;
-        if (invert) z = 90 - z;
-        if (x < 0) z = 180 - z;
-        return y < 0 ? 360 - z : z;
+    private static double atanDegrees360(final double v) {
+        final double n = Math.abs(v);
+        final double c = (n - 1.0) / (n + 1.0);
+        final double c2 = c * c;
+        final double c3 = c * c2;
+        final double c5 = c3 * c2;
+        final double c7 = c5 * c2;
+        return Math.copySign(45.0 + 57.25080232616455 * c - 18.402367325992856 * c3
+                + 8.381031821523338 * c5 - 2.2341286009756676 * c7, v);
+    }
+
+    /**
+     * This one's weird; unlike {@link #atan2Degrees360(float, float)}, it can return negative results.
+     * @param v any finite float
+     * @return between -90 and 90
+     */
+    private static float atanDegrees360(final float v) {
+        final float n = Math.abs(v);
+        final float c = (n - 1f) / (n + 1f);
+        final float c2 = c * c;
+        final float c3 = c * c2;
+        final float c5 = c3 * c2;
+        final float c7 = c5 * c2;
+        return Math.copySign(45f + 57.25080232616455f * c - 18.402367325992856f * c3
+                + 8.381031821523338f * c5 - 2.2341286009756676f * c7, v);
     }
     /**
-     * Close approximation of the frequently-used trigonometric method atan2, with higher precision than libGDX's atan2
-     * approximation, and giving a result in degrees from 0 to 360 (both inclusive). Maximum error is below 0.1 degrees.
-     * Takes y and x (in that unusual order) as floats, and returns the angle from the origin to that point in degrees.
-     * It is about 5 times faster than {@link Math#atan2(double, double)} (roughly 17 ns instead of roughly 88 ns for
-     * Math, though the computer was under some load during testing). It is almost identical in speed to libGDX'
-     * MathUtils approximation after converting to degrees; MathUtils seems to have worse average error, though.
-     * Credit to Nic Taylor and imuli, with Taylor publishing
-     * <a href="https://www.dsprelated.com/showarticle/1052.php">this nice post</a> and imuli commenting with very
-     * handy information that makes this approach usable.
+     * Altered-range approximation of the frequently-used trigonometric method atan2, taking y and x positions as
+     * doubles and returning an angle measured in turns from 0.0 to 360.0 (inclusive), with one cycle over the range
+     * equivalent to 2PI radians or 1 turn. Takes y and x (in that unusual order) as doubles. Will never return a
+     * negative number, which may help avoid costly floating-point modulus when you actually want a positive number.
      * <br>
-     * See also {@link #atan2Degrees(float, float)}, which is just like this but returns an angle from -180 to 180,
-     * matching {@link Math#atan2(double, double)}'s convention.
+     * Credit for this goes to the 1955 research study "Approximations for Digital Computers," by RAND Corporation. This
+     * is sheet 9's algorithm, which is the second-fastest and second-least precise. The algorithm on sheet 8 is faster,
+     * but only by a very small degree, and is considerably less precise. That study provides an {@link #atan(double)}
+     * method, and the small code to make that work as atan2Degrees360() was worked out from Wikipedia.
+     * <br>
+     * See also {@link #atan2_(double, double)} for a version that returns a measurement as a fraction of a turn, or
+     * {@link #atan2(double, double)} for the typical radians. You
+     * can also use {@link #atan2Degrees(double, double)} to produce a result in degrees from -180 to 180.
      * @param y y-component of the point to find the angle towards; note the parameter order is unusual by convention
      * @param x x-component of the point to find the angle towards; note the parameter order is unusual by convention
-     * @return the angle to the given point, in degrees as a float
+     * @return the angle to the given point, as a double from 0.0 to 360.0, inclusive
      */
-    public static float atan2Degrees360(float y, float x)
-    {
-        if(y == 0f && x >= 0f) return 0f;
-        float ax = Math.abs(x), ay = Math.abs(y);
-        boolean invert = ay > ax;
-        float z = invert ? ax / ay : ay / ax;
-        z = (((((8.107295505321636f)  * z) - (19.670500543533855f) ) * z - (0.9295667268202475f) ) * z + (57.51573801063304f) ) * z - (0.009052733163067006f) ;
-        if (invert) z = 90 - z;
-        if (x < 0) z = 180 - z;
-        return y < 0 ? 360 - z : z;
+    public static double atan2Degrees360(final double y, final double x) {
+        if(x > 0) {
+            if(y >= 0)
+                return atanDegrees360(y / x);
+            else
+                return atanDegrees360(y / x) + 360.0;
+        }
+        else if(x < 0) {
+            return atanDegrees360(y / x) + 180.0;
+        }
+        else if(y > 0) return x + 90.0;
+        else if(y < 0) return x + 270.0;
+        else return x + y; // returns 0 for 0,0 or NaN if either y or x is NaN
+    }
+
+    /**
+     * Altered-range approximation of the frequently-used trigonometric method atan2, taking y and x positions as
+     * floats and returning an angle measured in turns from 0.0 to 360.0 (inclusive), with one cycle over the range
+     * equivalent to 2PI radians or 1 turn. Takes y and x (in that unusual order) as floats. Will never return a
+     * negative number, which may help avoid costly floating-point modulus when you actually want a positive number.
+     * <br>
+     * Credit for this goes to the 1955 research study "Approximations for Digital Computers," by RAND Corporation. This
+     * is sheet 9's algorithm, which is the second-fastest and second-least precise. The algorithm on sheet 8 is faster,
+     * but only by a very small degree, and is considerably less precise. That study provides an {@link #atan(float)}
+     * method, and the small code to make that work as atan2Degrees360() was worked out from Wikipedia.
+     * <br>
+     * See also {@link #atan2_(float, float)} for a version that returns a measurement as a fraction of a turn, or
+     * {@link #atan2(float, float)} for the typical radians. You
+     * can also use {@link #atan2Degrees(float, float)} to produce a result in degrees from -180 to 180.
+     * @param y y-component of the point to find the angle towards; note the parameter order is unusual by convention
+     * @param x x-component of the point to find the angle towards; note the parameter order is unusual by convention
+     * @return the angle to the given point, as a float from 0.0 to 360.0, inclusive
+     */
+    public static float atan2Degrees360(final float y, final float x) {
+        if(x > 0) {
+            if(y >= 0)
+                return atanDegrees360(y / x);
+            else
+                return atanDegrees360(y / x) + 360f;
+        }
+        else if(x < 0) {
+            return atanDegrees360(y / x) + 180f;
+        }
+        else if(y > 0) return x + 90f;
+        else if(y < 0) return x + 270f;
+        else return x + y; // returns 0 for 0,0 or NaN if either y or x is NaN
     }
 
     /**
