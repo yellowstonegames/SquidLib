@@ -564,49 +564,131 @@ public class NumberTools {
         else return x + y; // returns 0 for 0,0 or NaN if either y or x is NaN
     }
 
-    public static double atan2Degrees(double y, double x)
-    {
-        if(y == 0.0 && x >= 0.0) return 0.0;
-        double ay = Math.abs(y), ax = Math.abs(x);
-        boolean invert = ay > ax;
-        double z = invert ? ax / ay : ay / ax;
-        z = (((((8.107295505321636)  * z) - (19.670500543533855) ) * z - (0.9295667268202475) ) * z + (57.51573801063304) ) * z - (0.009052733163067006) ;
-        if (invert) z = 90 - z;
-        if (x < 0) z = 180 - z;
-        return Math.copySign(z, y);
+    public static double atanDegrees(final double i) {
+        final double n = Math.min(Math.abs(i), Double.MAX_VALUE);
+        final double c = (n - 1.0) / (n + 1.0);
+        final double c2 = c * c;
+        final double c3 = c * c2;
+        final double c5 = c3 * c2;
+        final double c7 = c5 * c2;
+        return Math.copySign(45.0 +
+                (57.25080271739779 * c - 18.402366944901082 * c3 + 8.381031432388337 * c5 - 2.2341286239715488 * c7), i);
     }
-    public static float atan2Degrees(float y, float x)
-    {
-        if(y == 0f && x >= 0f) return 0f;
-        float ax = Math.abs(x), ay = Math.abs(y);
-        boolean invert = ay > ax;
-        float z = invert ? ax / ay : ay / ax;
-        z = (((((8.107295505321636f)  * z) - (19.670500543533855f) ) * z - (0.9295667268202475f) ) * z + (57.51573801063304f) ) * z - (0.009052733163067006f) ;
-        if (invert) z = 90 - z;
-        if (x < 0) z = 180 - z;
-        return Math.copySign(z, y);
+    public static float atanDegrees(final float i) {
+        final float n = Math.min(Math.abs(i), Float.MAX_VALUE);
+        final float c = (n - 1f) / (n + 1f);
+        final float c2 = c * c;
+        final float c3 = c * c2;
+        final float c5 = c3 * c2;
+        final float c7 = c5 * c2;
+        return Math.copySign(45f +
+                (57.25080271739779f * c - 18.402366944901082f * c3 + 8.381031432388337f * c5 - 2.2341286239715488f * c7), i);
     }
-    public static double atan2Degrees360(double y, double x)
-    {
-        if(y == 0.0 && x >= 0.0) return 0.0;
-        double ay = Math.abs(y), ax = Math.abs(x);
-        boolean invert = ay > ax;
-        double z = invert ? ax / ay : ay / ax;
-        z = (((((8.107295505321636)  * z) - (19.670500543533855) ) * z - (0.9295667268202475) ) * z + (57.51573801063304) ) * z - (0.009052733163067006) ;
-        if (invert) z = 90 - z;
-        if (x < 0) z = 180 - z;
-        return y < 0 ? 360 - z : z;
+    private static double atnDegrees(final double i) {
+        final double n = Math.abs(i);
+        final double c = (n - 1.0) / (n + 1.0);
+        final double c2 = c * c;
+        final double c3 = c * c2;
+        final double c5 = c3 * c2;
+        final double c7 = c5 * c2;
+        return Math.copySign(45.0 +
+                (57.25080271739779 * c - 18.402366944901082 * c3 + 8.381031432388337 * c5 - 2.2341286239715488 * c7), i);
     }
-    public static float atan2Degrees360(float y, float x)
-    {
-        if(y == 0f && x >= 0f) return 0f;
-        float ax = Math.abs(x), ay = Math.abs(y);
-        boolean invert = ay > ax;
-        float z = invert ? ax / ay : ay / ax;
-        z = (((((8.107295505321636f)  * z) - (19.670500543533855f) ) * z - (0.9295667268202475f) ) * z + (57.51573801063304f) ) * z - (0.009052733163067006f) ;
-        if (invert) z = 90 - z;
-        if (x < 0) z = 180 - z;
-        return y < 0 ? 360 - z : z;
+    private static float atnDegrees(final float i) {
+        final float n = Math.abs(i);
+        final float c = (n - 1f) / (n + 1f);
+        final float c2 = c * c;
+        final float c3 = c * c2;
+        final float c5 = c3 * c2;
+        final float c7 = c5 * c2;
+        return Math.copySign(45f +
+                (57.25080271739779f * c - 18.402366944901082f * c3 + 8.381031432388337f * c5 - 2.2341286239715488f * c7), i);
+    }
+    public static double atan2Degrees(final double y, double x) {
+        double n = y / x;
+        if(n != n) n = (y == x ? 1.0 : -1.0); // if both y and x are infinite, n would be NaN
+        else if(n - n != n - n) x = 0.0; // if n is infinite, y is infinitely larger than x.
+        if(x > 0)
+            return atnDegrees(n);
+        else if(x < 0) {
+            if(y >= 0)
+                return atnDegrees(n) + 180.0;
+            else
+                return atnDegrees(n) - 180.0;
+        }
+        else if(y > 0) return x + 90.0;
+        else if(y < 0) return x - 90.0;
+        else return x + y; // returns 0 for 0,0 or NaN if either y or x is NaN
+    }
+    public static float atan2Degrees(final float y, float x) {
+        float n = y / x;
+        if(n != n) n = (y == x ? 1f : -1f); // if both y and x are infinite, n would be NaN
+        else if(n - n != n - n) x = 0f; // if n is infinite, y is infinitely larger than x.
+        if(x > 0)
+            return atnDegrees(n);
+        else if(x < 0) {
+            if(y >= 0)
+                return atnDegrees(n) + 180f;
+            else
+                return atnDegrees(n) - 180f;
+        }
+        else if(y > 0) return x + 90f;
+        else if(y < 0) return x - 90f;
+        else return x + y; // returns 0 for 0,0 or NaN if either y or x is NaN
+    }
+    private static double atnDegrees360(final double v) {
+        final double n = Math.abs(v);
+        final double c = (n - 1.0) / (n + 1.0);
+        final double c2 = c * c;
+        final double c3 = c * c2;
+        final double c5 = c3 * c2;
+        final double c7 = c5 * c2;
+        return Math.copySign(45.0 + 57.25080232616455 * c - 18.402367325992856 * c3
+                + 8.381031821523338 * c5 - 2.2341286009756676 * c7, v);
+    }
+    private static float atnDegrees360(final float v) {
+        final float n = Math.abs(v);
+        final float c = (n - 1f) / (n + 1f);
+        final float c2 = c * c;
+        final float c3 = c * c2;
+        final float c5 = c3 * c2;
+        final float c7 = c5 * c2;
+        return Math.copySign(45f + 57.25080232616455f * c - 18.402367325992856f * c3
+                + 8.381031821523338f * c5 - 2.2341286009756676f * c7, v);
+    }
+    public static double atan2Degrees360(final double y, double x) {
+        double n = y / x;
+        if(n != n) n = (y == x ? 1.0 : -1.0); // if both y and x are infinite, n would be NaN
+        else if(n - n != n - n) x = 0.0; // if n is infinite, y is infinitely larger than x.
+        if(x > 0) {
+            if(y >= 0)
+                return atnDegrees360(n);
+            else
+                return atnDegrees360(n) + 360.0;
+        }
+        else if(x < 0) {
+            return atnDegrees360(n) + 180.0;
+        }
+        else if(y > 0) return x + 90.0;
+        else if(y < 0) return x + 270.0;
+        else return x + y; // returns 0 for 0,0 or NaN if either y or x is NaN
+    }
+    public static float atan2Degrees360(final float y, float x) {
+        float n = y / x;
+        if(n != n) n = (y == x ? 1f : -1f); // if both y and x are infinite, n would be NaN
+        else if(n - n != n - n) x = 0f; // if n is infinite, y is infinitely larger than x.
+        if(x > 0) {
+            if(y >= 0)
+                return atnDegrees360(n);
+            else
+                return atnDegrees360(n) + 360f;
+        }
+        else if(x < 0) {
+            return atnDegrees360(n) + 180f;
+        }
+        else if(y > 0) return x + 90f;
+        else if(y < 0) return x + 270f;
+        else return x + y; // returns 0 for 0,0 or NaN if either y or x is NaN
     }
 
     public static float asin(final float x) {

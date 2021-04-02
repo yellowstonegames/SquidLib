@@ -1412,7 +1412,7 @@ public final class NumberTools {
      * second-fastest and second-least precise). This method is usually much faster than {@link Math#atan(double)},
      * but is somewhat less precise than Math's implementation. This implementation can return negative or positive
      * results in degrees.
-     * @param i an input to the inverse tangent function; any finite double is accepted
+     * @param i an input to the inverse tangent function; any double is accepted
      * @return an output from the inverse tangent function in degrees, from -90 to 90 inclusive
      */
     public static double atanDegrees(final double i) {
@@ -1432,11 +1432,41 @@ public final class NumberTools {
      * second-fastest and second-least precise). This method is usually much faster than {@link Math#atan(double)},
      * but is somewhat less precise than Math's implementation. This implementation can return negative or positive
      * results in degrees.
-     * @param i an input to the inverse tangent function; any finite float is accepted
+     * @param i an input to the inverse tangent function; any float is accepted
      * @return an output from the inverse tangent function, from -90 to 90 inclusive
      */
     public static float atanDegrees(final float i) {
         final float n = Math.min(Math.abs(i), Float.MAX_VALUE);
+        final float c = (n - 1f) / (n + 1f);
+        final float c2 = c * c;
+        final float c3 = c * c2;
+        final float c5 = c3 * c2;
+        final float c7 = c5 * c2;
+        return Math.copySign(45f +
+                (57.25080271739779f * c - 18.402366944901082f * c3 + 8.381031432388337f * c5 - 2.2341286239715488f * c7), i);
+    }
+    /**
+     * A variant on {@link #atanDegrees(double)} that does not tolerate infinite inputs, and is slightly faster.
+     * @param i any finite double
+     * @return an output from the inverse tangent function, from PI/-2.0 to PI/2.0 inclusive
+     */
+    private static double atnDegrees(final double i) {
+        final double n = Math.abs(i);
+        final double c = (n - 1.0) / (n + 1.0);
+        final double c2 = c * c;
+        final double c3 = c * c2;
+        final double c5 = c3 * c2;
+        final double c7 = c5 * c2;
+        return Math.copySign(45.0 +
+                (57.25080271739779 * c - 18.402366944901082 * c3 + 8.381031432388337 * c5 - 2.2341286239715488 * c7), i);
+    }
+    /**
+     * A variant on {@link #atan(float)} that does not tolerate infinite inputs, and is slightly faster.
+     * @param i any finite float
+     * @return an output from the inverse tangent function, from PI/-2.0 to PI/2.0 inclusive
+     */
+    private static float atnDegrees(final float i) {
+        final float n = Math.abs(i);
         final float c = (n - 1f) / (n + 1f);
         final float c2 = c * c;
         final float c3 = c * c2;
@@ -1466,14 +1496,17 @@ public final class NumberTools {
      * @param x x-component of the point to find the angle towards; note the parameter order is unusual by convention
      * @return the angle to the given point, in radians as a double; ranges from -180 to 180
      */
-    public static double atan2Degrees(final double y, final double x) {
+    public static double atan2Degrees(final double y, double x) {
+        double n = y / x;
+        if(n != n) n = (y == x ? 1.0 : -1.0); // if both y and x are infinite, n would be NaN
+        else if(n - n != n - n) x = 0.0; // if n is infinite, y is infinitely larger than x.
         if(x > 0)
-            return atanDegrees(y / x);
+            return atnDegrees(n);
         else if(x < 0) {
             if(y >= 0)
-                return atanDegrees(y / x) + 180.0;
+                return atnDegrees(n) + 180.0;
             else
-                return atanDegrees(y / x) - 180.0;
+                return atnDegrees(n) - 180.0;
         }
         else if(y > 0) return x + 90.0;
         else if(y < 0) return x - 90.0;
@@ -1500,14 +1533,17 @@ public final class NumberTools {
      * @param x x-component of the point to find the angle towards; note the parameter order is unusual by convention
      * @return the angle to the given point, in radians as a float; ranges from -180 to 180
      */
-    public static float atan2Degrees(final float y, final float x) {
+    public static float atan2Degrees(final float y, float x) {
+        float n = y / x;
+        if(n != n) n = (y == x ? 1f : -1f); // if both y and x are infinite, n would be NaN
+        else if(n - n != n - n) x = 0f; // if n is infinite, y is infinitely larger than x.
         if(x > 0)
-            return atanDegrees(y / x);
+            return atnDegrees(n);
         else if(x < 0) {
             if(y >= 0)
-                return atanDegrees(y / x) + 180f;
+                return atnDegrees(n) + 180f;
             else
-                return atanDegrees(y / x) - 180f;
+                return atnDegrees(n) - 180f;
         }
         else if(y > 0) return x + 90f;
         else if(y < 0) return x - 90f;
@@ -1519,8 +1555,8 @@ public final class NumberTools {
      * @param v any finite double
      * @return between -90 and 90
      */
-    private static double atanDegrees360(final double v) {
-        final double n = Math.min(Math.abs(v), Double.MAX_VALUE);
+    private static double atnDegrees360(final double v) {
+        final double n = Math.abs(v);
         final double c = (n - 1.0) / (n + 1.0);
         final double c2 = c * c;
         final double c3 = c * c2;
@@ -1535,8 +1571,8 @@ public final class NumberTools {
      * @param v any finite float
      * @return between -90 and 90
      */
-    private static float atanDegrees360(final float v) {
-        final float n = Math.min(Math.abs(v), Float.MAX_VALUE);
+    private static float atnDegrees360(final float v) {
+        final float n = Math.abs(v);
         final float c = (n - 1f) / (n + 1f);
         final float c2 = c * c;
         final float c3 = c * c2;
@@ -1563,15 +1599,18 @@ public final class NumberTools {
      * @param x x-component of the point to find the angle towards; note the parameter order is unusual by convention
      * @return the angle to the given point, as a double from 0.0 to 360.0, inclusive
      */
-    public static double atan2Degrees360(final double y, final double x) {
+    public static double atan2Degrees360(final double y, double x) {
+        double n = y / x;
+        if(n != n) n = (y == x ? 1.0 : -1.0); // if both y and x are infinite, n would be NaN
+        else if(n - n != n - n) x = 0.0; // if n is infinite, y is infinitely larger than x.
         if(x > 0) {
             if(y >= 0)
-                return atanDegrees360(y / x);
+                return atnDegrees360(n);
             else
-                return atanDegrees360(y / x) + 360.0;
+                return atnDegrees360(n) + 360.0;
         }
         else if(x < 0) {
-            return atanDegrees360(y / x) + 180.0;
+            return atnDegrees360(n) + 180.0;
         }
         else if(y > 0) return x + 90.0;
         else if(y < 0) return x + 270.0;
@@ -1596,15 +1635,18 @@ public final class NumberTools {
      * @param x x-component of the point to find the angle towards; note the parameter order is unusual by convention
      * @return the angle to the given point, as a float from 0.0 to 360.0, inclusive
      */
-    public static float atan2Degrees360(final float y, final float x) {
+    public static float atan2Degrees360(final float y, float x) {
+        float n = y / x;
+        if(n != n) n = (y == x ? 1f : -1f); // if both y and x are infinite, n would be NaN
+        else if(n - n != n - n) x = 0f; // if n is infinite, y is infinitely larger than x.
         if(x > 0) {
             if(y >= 0)
-                return atanDegrees360(y / x);
+                return atnDegrees360(n);
             else
-                return atanDegrees360(y / x) + 360f;
+                return atnDegrees360(n) + 360f;
         }
         else if(x < 0) {
-            return atanDegrees360(y / x) + 180f;
+            return atnDegrees360(n) + 180f;
         }
         else if(y > 0) return x + 90f;
         else if(y < 0) return x + 270f;
