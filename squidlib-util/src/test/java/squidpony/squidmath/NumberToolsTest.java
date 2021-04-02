@@ -39,6 +39,7 @@ public class NumberToolsTest {
     assertEqualsWrapping(atan2_Math(0.0f, -0x1.800002p-1f), NumberTools.atan2_(0.0f, -0x1.800002p-1f), TOLERANCE);
     assertEqualsWrapping(atan2_Math(0.0f, 0.0f), NumberTools.atan2_(0.0f, 0.0f), TOLERANCE);
     assertEqualsWrapping(atan2_Math(0.0, 0.0), NumberTools.atan2_(0.0, 0.0), TOLERANCE);
+    assertEquals(Math.atan2(Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY), NumberTools.atan2(Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY), TOLERANCE);
     assertEquals(Math.atan2(Double.NEGATIVE_INFINITY, -0.25), NumberTools.atan2(Double.NEGATIVE_INFINITY, -0.25), TOLERANCE);
     assertEquals(Math.atan2(Double.NEGATIVE_INFINITY, 0.25), NumberTools.atan2(Double.NEGATIVE_INFINITY, 0.25), TOLERANCE);
     assertEquals(Math.atan2(-0x1.8p-1022, Double.NaN), NumberTools.atan2(-0x1.8p-1022, Double.NaN), TOLERANCE);

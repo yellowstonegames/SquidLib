@@ -438,7 +438,7 @@ public class NumberTools {
         return turns * (-0.775f - 0.225f * turns) * ((floor & 2L) - 1L);
     }
     public static double atan(final double i) {
-        final double n = Math.abs(i);
+        final double n = Math.min(Math.abs(i), Double.MAX_VALUE);
         final double c = (n - 1.0) / (n + 1.0);
         final double c2 = c * c;
         final double c3 = c * c2;
@@ -448,6 +448,26 @@ public class NumberTools {
                 (0.999215 * c - 0.3211819 * c3 + 0.1462766 * c5 - 0.0389929 * c7), i);
     }
     public static float atan(final float i) {
+        final float n = Math.min(Math.abs(i), Float.MAX_VALUE);
+        final float c = (n - 1f) / (n + 1f);
+        final float c2 = c * c;
+        final float c3 = c * c2;
+        final float c5 = c3 * c2;
+        final float c7 = c5 * c2;
+        return Math.copySign(0.7853981633974483f +
+                (0.999215f * c - 0.3211819f * c3 + 0.1462766f * c5 - 0.0389929f * c7), i);
+    }
+    private static double atn(final double i) {
+        final double n = Math.abs(i);
+        final double c = (n - 1.0) / (n + 1.0);
+        final double c2 = c * c;
+        final double c3 = c * c2;
+        final double c5 = c3 * c2;
+        final double c7 = c5 * c2;
+        return Math.copySign(0.7853981633974483 +
+                (0.999215 * c - 0.3211819 * c3 + 0.1462766 * c5 - 0.0389929 * c7), i);
+    }
+    private static float atn(final float i) {
         final float n = Math.abs(i);
         final float c = (n - 1f) / (n + 1f);
         final float c2 = c * c;
@@ -457,33 +477,39 @@ public class NumberTools {
         return Math.copySign(0.7853981633974483f +
                 (0.999215f * c - 0.3211819f * c3 + 0.1462766f * c5 - 0.0389929f * c7), i);
     }
-    public static double atan2(final double y, final double x) {
+    public static double atan2(final double y, double x) {
+        double n = y / x;
+        if(n != n) n = (y == x ? 1.0 : -1.0); // if both y and x are infinite, n would be NaN
+        else if(n - n != n - n) x = 0.0; // if n is infinite, y is infinitely larger than x.
         if(x > 0)
-            return atan(y / x);
+            return atn(n);
         else if(x < 0) {
             if(y >= 0)
-                return atan(y / x) + 3.14159265358979323846;
+                return atn(n) + 3.14159265358979323846;
             else
-                return atan(y / x) - 3.14159265358979323846;
+                return atn(n) - 3.14159265358979323846;
         }
-        else if(y > 0) return 1.5707963267948966;
-        else if(y < 0) return -1.5707963267948966;
-        else return 0.0;
+        else if(y > 0) return x + 1.5707963267948966;
+        else if(y < 0) return x - 1.5707963267948966;
+        else return x + y; // returns 0 for 0,0 or NaN if either y or x is NaN
     }
-    public static float atan2(final float y, final float x) {
+    public static float atan2(final float y, float x) {
+        float n = y / x;
+        if(n != n) n = (y == x ? 1f : -1f); // if both y and x are infinite, n would be NaN
+        else if(n - n != n - n) x = 0f; // if n is infinite, y is infinitely larger than x.
         if(x > 0)
-            return atan(y / x);
+            return atn(n);
         else if(x < 0) {
             if(y >= 0)
-                return atan(y / x) + 3.14159265358979323846f;
+                return atn(n) + 3.14159265358979323846f;
             else
-                return atan(y / x) - 3.14159265358979323846f;
+                return atn(n) - 3.14159265358979323846f;
         }
-        else if(y > 0) return 1.5707963267948966f;
-        else if(y < 0) return -1.5707963267948966f;
-        else return 0.0f;
+        else if(y > 0) return x + 1.5707963267948966f;
+        else if(y < 0) return x - 1.5707963267948966f;
+        else return x + y; // returns 0 for 0,0 or NaN if either y or x is NaN
     }
-    private static double atan_(final double v) {
+    private static double atn_(final double v) {
         final double n = Math.abs(v);
         final double c = (n - 1.0) / (n + 1.0);
         final double c2 = c * c;
@@ -493,7 +519,7 @@ public class NumberTools {
         return Math.copySign(0.125 + 0.1590300064615682 * c - 0.051117687016646825 * c3 + 0.02328064394867594 * c5
                 - 0.006205912780487965 * c7, v);
     }
-    private static float atan_(final float v) {
+    private static float atn_(final float v) {
         final float n = Math.abs(v);
         final float c = (n - 1f) / (n + 1f);
         final float c2 = c * c;
@@ -503,33 +529,39 @@ public class NumberTools {
         return Math.copySign(0.125f + 0.1590300064615682f * c - 0.051117687016646825f * c3 + 0.02328064394867594f * c5
                 - 0.006205912780487965f * c7, v);
     }
-    public static double atan2_(final double y, final double x) {
+    public static double atan2_(final double y, double x) {
+        double n = y / x;
+        if(n != n) n = (y == x ? 1f : -1f); // if both y and x are infinite, n would be NaN
+        else if(n - n != n - n) x = 0.0; // if n is infinite, y is infinitely larger than x.
         if(x > 0) {
             if(y >= 0)
-                return atan_(y / x);
+                return atn_(n);
             else
-                return atan_(y / x) + 1.0;
+                return atn_(n) + 1.0;
         }
         else if(x < 0) {
-            return atan_(y / x) + 0.5;
+            return atn_(n) + 0.5;
         }
-        else if(y > 0) return 0.25;
-        else if(y < 0) return 0.75;
-        else return 0.0;
+        else if(y > 0) return x + 0.25;
+        else if(y < 0) return x + 0.75;
+        else return x + y; // returns 0 for 0,0 or NaN if either y or x is NaN
     }
-    public static float atan2_(final float y, final float x) {
+    public static float atan2_(final float y, float x) {
+        float n = y / x;
+        if(n != n) n = (y == x ? 1f : -1f); // if both y and x are infinite, n would be NaN
+        else if(n - n != n - n) x = 0f; // if n is infinite, y is infinitely larger than x.
         if(x > 0) {
             if(y >= 0)
-                return atan_(y / x);
+                return atn_(n);
             else
-                return atan_(y / x) + 1f;
+                return atn_(n) + 1f;
         }
         else if(x < 0) {
-            return atan_(y / x) + 0.5f;
+            return atn_(n) + 0.5f;
         }
-        else if(y > 0) return 0.25f;
-        else if(y < 0) return 0.75f;
-        else return 0f;
+        else if(y > 0) return x + 0.25f;
+        else if(y < 0) return x + 0.75f;
+        else return x + y; // returns 0 for 0,0 or NaN if either y or x is NaN
     }
 
     public static double atan2Degrees(double y, double x)
