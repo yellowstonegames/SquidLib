@@ -148,23 +148,17 @@ public final class MathExtras
 
 
     /**
-     * Checks that two values are approximately equal (plus or minus a specified tolerance).
+     * Checks that two values are approximately equal (plus or minus a specified absolute tolerance).
      * @param value1 The first value to compare.
      * @param value2 The second value to compare.
-     * @param tolerance How much (in percentage terms, as a percentage of the first value)
-     * the values are allowed to differ and still be considered equal.  Expressed as a value
-     * between 0 and 1.
-     * @return true if the values are approximately equal, false otherwise.
+     * @param tolerance How much the values are allowed to differ and still be considered equal, as an absolute amount.
+     * @return true if the values are approximately equal (give or take tolerance), false otherwise.
      */
     public static boolean approxEquals(double value1,
                                        double value2,
                                        double tolerance)
     {
-        if (tolerance < 0 || tolerance > 1)
-        {
-            throw new IllegalArgumentException("Tolerance must be between 0 and 1.");
-        }
-        return Math.abs(value1 - value2) <= value1 * tolerance;
+        return Math.abs(value1 - value2) <= tolerance;
     }
 
 

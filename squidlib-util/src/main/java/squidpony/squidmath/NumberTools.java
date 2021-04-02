@@ -1157,7 +1157,7 @@ public final class NumberTools {
      * "Approximations for Digital Computers," by RAND Corporation (this is sheet 9's algorithm, which is the
      * second-fastest and second-least precise). This method is usually much faster than {@link Math#atan(double)},
      * but is somewhat less precise than Math's implementation.
-     * @param i an input to the inverse tangent function; any finite double is accepted
+     * @param i an input to the inverse tangent function; any double is accepted
      * @return an output from the inverse tangent function, from PI/-2.0 to PI/2.0 inclusive
      */
     public static double atan(final double i) {
@@ -1176,7 +1176,7 @@ public final class NumberTools {
      * "Approximations for Digital Computers," by RAND Corporation (this is sheet 9's algorithm, which is the
      * second-fastest and second-least precise). This method is usually much faster than {@link Math#atan(double)},
      * but is somewhat less precise than Math's implementation.
-     * @param i an input to the inverse tangent function; any finite float is accepted
+     * @param i an input to the inverse tangent function; any float is accepted
      * @return an output from the inverse tangent function, from PI/-2.0 to PI/2.0 inclusive
      */
     public static float atan(final float i) {
@@ -1189,6 +1189,39 @@ public final class NumberTools {
         return Math.copySign(0.7853981633974483f +
                 (0.999215f * c - 0.3211819f * c3 + 0.1462766f * c5 - 0.0389929f * c7), i);
     }
+
+
+    /**
+     * A variant on {@link #atan(double)} that does not tolerate infinite inputs, and is slightly faster.
+     * @param i any finite double
+     * @return an output from the inverse tangent function, from PI/-2.0 to PI/2.0 inclusive
+     */
+    private static double atn(final double i) {
+        final double n = Math.abs(i);
+        final double c = (n - 1.0) / (n + 1.0);
+        final double c2 = c * c;
+        final double c3 = c * c2;
+        final double c5 = c3 * c2;
+        final double c7 = c5 * c2;
+        return Math.copySign(0.7853981633974483 +
+                (0.999215 * c - 0.3211819 * c3 + 0.1462766 * c5 - 0.0389929 * c7), i);
+    }
+    /**
+     * A variant on {@link #atan(float)} that does not tolerate infinite inputs, and is slightly faster.
+     * @param i any finite float
+     * @return an output from the inverse tangent function, from PI/-2.0 to PI/2.0 inclusive
+     */
+    private static float atn(final float i) {
+        final float n = Math.abs(i);
+        final float c = (n - 1f) / (n + 1f);
+        final float c2 = c * c;
+        final float c3 = c * c2;
+        final float c5 = c3 * c2;
+        final float c7 = c5 * c2;
+        return Math.copySign(0.7853981633974483f +
+                (0.999215f * c - 0.3211819f * c3 + 0.1462766f * c5 - 0.0389929f * c7), i);
+    }
+
 
     /**
      * Close approximation of the frequently-used trigonometric method atan2, with higher precision than libGDX's atan2
@@ -1211,14 +1244,17 @@ public final class NumberTools {
      * @param x x-component of the point to find the angle towards; note the parameter order is unusual by convention
      * @return the angle to the given point, in radians as a double; ranges from -PI to PI
      */
-    public static double atan2(final double y, final double x) {
+    public static double atan2(final double y, double x) {
+        double n = y / x;
+        if(n != n) n = (y == x ? 1.0 : -1.0); // if both y and x are infinite, n would be NaN
+        else if(n - n != n - n) x = 0.0; // if n is infinite, y is infinitely larger than x.
         if(x > 0)
-            return atan(y / x);
+            return atn(n);
         else if(x < 0) {
             if(y >= 0)
-                return atan(y / x) + 3.14159265358979323846;
+                return atn(n) + 3.14159265358979323846;
             else
-                return atan(y / x) - 3.14159265358979323846;
+                return atn(n) - 3.14159265358979323846;
         }
         else if(y > 0) return x + 1.5707963267948966;
         else if(y < 0) return x - 1.5707963267948966;
@@ -1246,14 +1282,17 @@ public final class NumberTools {
      * @param x x-component of the point to find the angle towards; note the parameter order is unusual by convention
      * @return the angle to the given point, in radians as a float; ranges from -PI to PI
      */
-    public static float atan2(final float y, final float x) {
+    public static float atan2(final float y, float x) {
+        float n = y / x;
+        if(n != n) n = (y == x ? 1f : -1f); // if both y and x are infinite, n would be NaN
+        else if(n - n != n - n) x = 0f; // if n is infinite, y is infinitely larger than x.
         if(x > 0)
-            return atan(y / x);
+            return atn(n);
         else if(x < 0) {
             if(y >= 0)
-                return atan(y / x) + 3.14159265358979323846f;
+                return atn(n) + 3.14159265358979323846f;
             else
-                return atan(y / x) - 3.14159265358979323846f;
+                return atn(n) - 3.14159265358979323846f;
         }
         else if(y > 0) return x + 1.5707963267948966f;
         else if(y < 0) return x - 1.5707963267948966f;
@@ -1265,8 +1304,8 @@ public final class NumberTools {
      * @param v any finite double
      * @return between -0.25 and 0.25
      */
-    private static double atan_(final double v) {
-        final double n = Math.min(Math.abs(v), Double.MAX_VALUE);
+    private static double atn_(final double v) {
+        final double n = Math.abs(v);
         final double c = (n - 1.0) / (n + 1.0);
         final double c2 = c * c;
         final double c3 = c * c2;
@@ -1281,8 +1320,8 @@ public final class NumberTools {
      * @param v any finite float
      * @return between -0.25 and 0.25
      */
-    private static float atan_(final float v) {
-        final float n = Math.min(Math.abs(v), Float.MAX_VALUE);
+    private static float atn_(final float v) {
+        final float n = Math.abs(v);
         final float c = (n - 1f) / (n + 1f);
         final float c2 = c * c;
         final float c3 = c * c2;
@@ -1311,15 +1350,18 @@ public final class NumberTools {
      * @param x x-component of the point to find the angle towards; note the parameter order is unusual by convention
      * @return the angle to the given point, as a double from 0.0 to 1.0, inclusive
      */
-    public static double atan2_(final double y, final double x) {
+    public static double atan2_(final double y, double x) {
+        double n = y / x;
+        if(n != n) n = (y == x ? 1f : -1f); // if both y and x are infinite, n would be NaN
+        else if(n - n != n - n) x = 0.0; // if n is infinite, y is infinitely larger than x.
         if(x > 0) {
             if(y >= 0)
-                return atan_(y / x);
+                return atn_(n);
             else
-                return atan_(y / x) + 1.0;
+                return atn_(n) + 1.0;
         }
         else if(x < 0) {
-            return atan_(y / x) + 0.5;
+            return atn_(n) + 0.5;
         }
         else if(y > 0) return x + 0.25;
         else if(y < 0) return x + 0.75;
@@ -1346,15 +1388,18 @@ public final class NumberTools {
      * @param x x-component of the point to find the angle towards; note the parameter order is unusual by convention
      * @return the angle to the given point, as a float from 0.0f to 1.0f, inclusive
      */
-    public static float atan2_(final float y, final float x) {
+    public static float atan2_(final float y, float x) {
+        float n = y / x;
+        if(n != n) n = (y == x ? 1f : -1f); // if both y and x are infinite, n would be NaN
+        else if(n - n != n - n) x = 0f; // if n is infinite, y is infinitely larger than x.
         if(x > 0) {
             if(y >= 0)
-                return atan_(y / x);
+                return atn_(n);
             else
-                return atan_(y / x) + 1f;
+                return atn_(n) + 1f;
         }
         else if(x < 0) {
-            return atan_(y / x) + 0.5f;
+            return atn_(n) + 0.5f;
         }
         else if(y > 0) return x + 0.25f;
         else if(y < 0) return x + 0.75f;
@@ -1399,7 +1444,6 @@ public final class NumberTools {
         final float c7 = c5 * c2;
         return Math.copySign(45f +
                 (57.25080271739779f * c - 18.402366944901082f * c3 + 8.381031432388337f * c5 - 2.2341286239715488f * c7), i);
-
     }
 
     /**
