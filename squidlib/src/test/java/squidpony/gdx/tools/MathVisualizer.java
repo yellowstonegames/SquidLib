@@ -24,7 +24,7 @@ import java.util.Random;
  * Created by Tommy Ettinger on 1/13/2018.
  */
 public class MathVisualizer extends ApplicationAdapter {
-    private int mode = 55;
+    private int mode = 15;
     private int modes = 56;
     private FilterBatch batch;
     private SparseLayers layers;
@@ -972,11 +972,12 @@ public class MathVisualizer extends ApplicationAdapter {
             break;
             case 16: {
                 Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
-                        " editedCurve");
-                for (int i = 0; i < 0x50000; i++) {
-                    float f = editedCurve() * 64f + 256f;
-                    if(f >= 0 && f < 512) 
-                        amounts[MathUtils.floor(f)]++;
+                        " probit cubed");
+                for (int i = 0; i < 0x40000; i++) {
+                    double d = Math.cbrt(MathExtras.probit(nextExclusiveDouble()));
+                    d = d * 64.0 + 256.0;
+                    if(d >= 0 && d < 512)
+                        amounts[(int)d]++;
                 }
                 for (int i = 0; i < 512; i++) {
                     float color = (i & 63) == 0
@@ -991,6 +992,27 @@ public class MathVisualizer extends ApplicationAdapter {
                         layers.backgrounds[i][j] = -0x1.7677e8p125F;
                     }
                 }
+
+//                Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
+//                        " editedCurve");
+//                for (int i = 0; i < 0x50000; i++) {
+//                    float f = editedCurve() * 64f + 256f;
+//                    if(f >= 0 && f < 512)
+//                        amounts[MathUtils.floor(f)]++;
+//                }
+//                for (int i = 0; i < 512; i++) {
+//                    float color = (i & 63) == 0
+//                            ? -0x1.c98066p126F // CW Azure
+//                            : -0x1.d08864p126F; // CW Sapphire
+//                    for (int j = Math.max(0, 519 - (amounts[i] >> 3)); j < 520; j++) {
+//                        layers.backgrounds[i][j] = color;
+//                    }
+//                }
+//                for (int i = 0; i < 10; i++) {
+//                    for (int j = 8; j < 520; j += 32) {
+//                        layers.backgrounds[i][j] = -0x1.7677e8p125F;
+//                    }
+//                }
 
 //                Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
 //                        " XSP, traditional & 0x1FFL");
