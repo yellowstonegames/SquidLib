@@ -32,8 +32,8 @@
 <span class="source-line-no">020</span><span id="line.20"> */</span>
 <span class="source-line-no">021</span><span id="line.21">public class SquidMouse extends InputAdapter {</span>
 <span class="source-line-no">022</span><span id="line.22"></span>
-<span class="source-line-no">023</span><span id="line.23">        protected float cellWidth, cellHeight, gridWidth, gridHeight;</span>
-<span class="source-line-no">024</span><span id="line.24">    protected int  offsetX, offsetY;</span>
+<span class="source-line-no">023</span><span id="line.23">    protected float cellWidth, cellHeight, gridWidth, gridHeight;</span>
+<span class="source-line-no">024</span><span id="line.24">    protected int offsetX, offsetY;</span>
 <span class="source-line-no">025</span><span id="line.25">    protected InputProcessor processor;</span>
 <span class="source-line-no">026</span><span id="line.26"></span>
 <span class="source-line-no">027</span><span id="line.27">    /**</span>
@@ -137,88 +137,110 @@
 <span class="source-line-no">125</span><span id="line.125">        this.gridHeight = gridHeight;</span>
 <span class="source-line-no">126</span><span id="line.126">    }</span>
 <span class="source-line-no">127</span><span id="line.127"></span>
-<span class="source-line-no">128</span><span id="line.128"></span>
-<span class="source-line-no">129</span><span id="line.129">    public void reinitialize(float cellWidth, float cellHeight)</span>
-<span class="source-line-no">130</span><span id="line.130">    {</span>
-<span class="source-line-no">131</span><span id="line.131">        this.cellWidth = cellWidth;</span>
-<span class="source-line-no">132</span><span id="line.132">        this.cellHeight = cellHeight;</span>
-<span class="source-line-no">133</span><span id="line.133">        offsetX = 0;</span>
-<span class="source-line-no">134</span><span id="line.134">        offsetY = 0;</span>
-<span class="source-line-no">135</span><span id="line.135">        gridWidth = Gdx.graphics.getWidth() / cellWidth;</span>
-<span class="source-line-no">136</span><span id="line.136">        gridHeight = Gdx.graphics.getHeight() / cellHeight;</span>
-<span class="source-line-no">137</span><span id="line.137">    }</span>
-<span class="source-line-no">138</span><span id="line.138">    public void reinitialize(float cellWidth, float cellHeight, float gridWidth, float gridHeight, int offsetX, int offsetY)</span>
-<span class="source-line-no">139</span><span id="line.139">    {</span>
-<span class="source-line-no">140</span><span id="line.140">        this.cellWidth = cellWidth;</span>
-<span class="source-line-no">141</span><span id="line.141">        this.cellHeight = cellHeight;</span>
-<span class="source-line-no">142</span><span id="line.142">        this.offsetX = offsetX;</span>
-<span class="source-line-no">143</span><span id="line.143">        this.offsetY = offsetY;</span>
-<span class="source-line-no">144</span><span id="line.144">        this.gridWidth = gridWidth;</span>
-<span class="source-line-no">145</span><span id="line.145">        this.gridHeight = gridHeight;</span>
-<span class="source-line-no">146</span><span id="line.146">    }</span>
-<span class="source-line-no">147</span><span id="line.147"></span>
-<span class="source-line-no">148</span><span id="line.148">    /**</span>
-<span class="source-line-no">149</span><span id="line.149">     * Gets the InputProcessor this object uses to handle mouse input.</span>
-<span class="source-line-no">150</span><span id="line.150">     * @return the wrapped InputProcessor.</span>
-<span class="source-line-no">151</span><span id="line.151">     */</span>
-<span class="source-line-no">152</span><span id="line.152">    public InputProcessor getProcessor() {</span>
-<span class="source-line-no">153</span><span id="line.153">        return processor;</span>
-<span class="source-line-no">154</span><span id="line.154">    }</span>
-<span class="source-line-no">155</span><span id="line.155"></span>
-<span class="source-line-no">156</span><span id="line.156">    /**</span>
-<span class="source-line-no">157</span><span id="line.157">     * Sets the InputProcessor this object uses to handle mouse input.</span>
+<span class="source-line-no">128</span><span id="line.128">    public void reinitialize(float cellWidth, float cellHeight) {</span>
+<span class="source-line-no">129</span><span id="line.129">        this.cellWidth = cellWidth;</span>
+<span class="source-line-no">130</span><span id="line.130">        this.cellHeight = cellHeight;</span>
+<span class="source-line-no">131</span><span id="line.131">        offsetX = 0;</span>
+<span class="source-line-no">132</span><span id="line.132">        offsetY = 0;</span>
+<span class="source-line-no">133</span><span id="line.133">        gridWidth = Gdx.graphics.getWidth() / cellWidth;</span>
+<span class="source-line-no">134</span><span id="line.134">        gridHeight = Gdx.graphics.getHeight() / cellHeight;</span>
+<span class="source-line-no">135</span><span id="line.135">    }</span>
+<span class="source-line-no">136</span><span id="line.136"></span>
+<span class="source-line-no">137</span><span id="line.137">    public void reinitialize(float cellWidth, float cellHeight, float gridWidth, float gridHeight, int offsetX, int offsetY) {</span>
+<span class="source-line-no">138</span><span id="line.138">        this.cellWidth = cellWidth;</span>
+<span class="source-line-no">139</span><span id="line.139">        this.cellHeight = cellHeight;</span>
+<span class="source-line-no">140</span><span id="line.140">        this.offsetX = offsetX;</span>
+<span class="source-line-no">141</span><span id="line.141">        this.offsetY = offsetY;</span>
+<span class="source-line-no">142</span><span id="line.142">        this.gridWidth = gridWidth;</span>
+<span class="source-line-no">143</span><span id="line.143">        this.gridHeight = gridHeight;</span>
+<span class="source-line-no">144</span><span id="line.144">    }</span>
+<span class="source-line-no">145</span><span id="line.145"></span>
+<span class="source-line-no">146</span><span id="line.146">    /**</span>
+<span class="source-line-no">147</span><span id="line.147">     * Gets the InputProcessor this object uses to handle mouse input.</span>
+<span class="source-line-no">148</span><span id="line.148">     *</span>
+<span class="source-line-no">149</span><span id="line.149">     * @return the wrapped InputProcessor.</span>
+<span class="source-line-no">150</span><span id="line.150">     */</span>
+<span class="source-line-no">151</span><span id="line.151">    public InputProcessor getProcessor() {</span>
+<span class="source-line-no">152</span><span id="line.152">        return processor;</span>
+<span class="source-line-no">153</span><span id="line.153">    }</span>
+<span class="source-line-no">154</span><span id="line.154"></span>
+<span class="source-line-no">155</span><span id="line.155">    /**</span>
+<span class="source-line-no">156</span><span id="line.156">     * Sets the InputProcessor this object uses to handle mouse input.</span>
+<span class="source-line-no">157</span><span id="line.157">     *</span>
 <span class="source-line-no">158</span><span id="line.158">     * @param processor an InputProcessor that implements some of touchUp(), touchDown(), touchDragged(), mouseMoved(), or scrolled().</span>
 <span class="source-line-no">159</span><span id="line.159">     */</span>
 <span class="source-line-no">160</span><span id="line.160">    public void setProcessor(InputProcessor processor) {</span>
 <span class="source-line-no">161</span><span id="line.161">        this.processor = processor;</span>
 <span class="source-line-no">162</span><span id="line.162">    }</span>
 <span class="source-line-no">163</span><span id="line.163"></span>
-<span class="source-line-no">164</span><span id="line.164">        protected int translateX(int screenX) {</span>
-<span class="source-line-no">165</span><span id="line.165">                return MathUtils.floor((screenX + offsetX) / cellWidth);</span>
-<span class="source-line-no">166</span><span id="line.166">        }</span>
-<span class="source-line-no">167</span><span id="line.167"></span>
-<span class="source-line-no">168</span><span id="line.168">        protected int translateY(int screenY) {</span>
-<span class="source-line-no">169</span><span id="line.169">                return MathUtils.floor((screenY + offsetY) / cellHeight);</span>
-<span class="source-line-no">170</span><span id="line.170">        }</span>
-<span class="source-line-no">171</span><span id="line.171"></span>
-<span class="source-line-no">172</span><span id="line.172">    public boolean onGrid(int screenX, int screenY)</span>
-<span class="source-line-no">173</span><span id="line.173">    {</span>
-<span class="source-line-no">174</span><span id="line.174">        return screenX &gt;= 0 &amp;&amp; screenX &lt; gridWidth &amp;&amp; screenY &gt;= 0 &amp;&amp; screenY &lt; gridHeight;</span>
-<span class="source-line-no">175</span><span id="line.175">    }</span>
-<span class="source-line-no">176</span><span id="line.176"></span>
-<span class="source-line-no">177</span><span id="line.177">    @Override</span>
-<span class="source-line-no">178</span><span id="line.178">    public boolean touchDown(int screenX, int screenY, int pointer, int button) {</span>
-<span class="source-line-no">179</span><span id="line.179">        if(onGrid(screenX = translateX(screenX), screenY = translateY(screenY)))</span>
-<span class="source-line-no">180</span><span id="line.180">            return processor.touchDown(screenX, screenY, pointer, button);</span>
-<span class="source-line-no">181</span><span id="line.181">        return false;</span>
+<span class="source-line-no">164</span><span id="line.164">    /**</span>
+<span class="source-line-no">165</span><span id="line.165">     * Translates the given screen pixel coordinate to the underlying grid coordinate, taking into account the related offset.</span>
+<span class="source-line-no">166</span><span id="line.166">     *</span>
+<span class="source-line-no">167</span><span id="line.167">     * @param screenX</span>
+<span class="source-line-no">168</span><span id="line.168">     * @return</span>
+<span class="source-line-no">169</span><span id="line.169">     */</span>
+<span class="source-line-no">170</span><span id="line.170">    public int translateX(int screenX) {</span>
+<span class="source-line-no">171</span><span id="line.171">        return MathUtils.floor((screenX + offsetX) / cellWidth);</span>
+<span class="source-line-no">172</span><span id="line.172">    }</span>
+<span class="source-line-no">173</span><span id="line.173"></span>
+<span class="source-line-no">174</span><span id="line.174">    /**</span>
+<span class="source-line-no">175</span><span id="line.175">     * Translates the given screen pixel coordinate to the underlying grid coordinate, taking into account the related offset.</span>
+<span class="source-line-no">176</span><span id="line.176">     *</span>
+<span class="source-line-no">177</span><span id="line.177">     * @param screenY</span>
+<span class="source-line-no">178</span><span id="line.178">     * @return</span>
+<span class="source-line-no">179</span><span id="line.179">     */</span>
+<span class="source-line-no">180</span><span id="line.180">    public int translateY(int screenY) {</span>
+<span class="source-line-no">181</span><span id="line.181">        return MathUtils.floor((screenY + offsetY) / cellHeight);</span>
 <span class="source-line-no">182</span><span id="line.182">    }</span>
 <span class="source-line-no">183</span><span id="line.183"></span>
-<span class="source-line-no">184</span><span id="line.184">    @Override</span>
-<span class="source-line-no">185</span><span id="line.185">    public boolean touchUp(int screenX, int screenY, int pointer, int button) {</span>
-<span class="source-line-no">186</span><span id="line.186">        if(onGrid(screenX = translateX(screenX), screenY = translateY(screenY)))</span>
-<span class="source-line-no">187</span><span id="line.187">            return processor.touchUp(screenX, screenY, pointer, button);</span>
-<span class="source-line-no">188</span><span id="line.188">        return false;</span>
-<span class="source-line-no">189</span><span id="line.189">    }</span>
-<span class="source-line-no">190</span><span id="line.190"></span>
-<span class="source-line-no">191</span><span id="line.191">    @Override</span>
-<span class="source-line-no">192</span><span id="line.192">    public boolean touchDragged(int screenX, int screenY, int pointer) {</span>
-<span class="source-line-no">193</span><span id="line.193">        if(onGrid(screenX = translateX(screenX), screenY = translateY(screenY)))</span>
-<span class="source-line-no">194</span><span id="line.194">            return processor.touchDragged(screenX, screenY, pointer);</span>
-<span class="source-line-no">195</span><span id="line.195">        return false;</span>
-<span class="source-line-no">196</span><span id="line.196">    }</span>
-<span class="source-line-no">197</span><span id="line.197"></span>
-<span class="source-line-no">198</span><span id="line.198">    @Override</span>
-<span class="source-line-no">199</span><span id="line.199">    public boolean mouseMoved(int screenX, int screenY) {</span>
-<span class="source-line-no">200</span><span id="line.200">        if(onGrid(screenX = translateX(screenX), screenY = translateY(screenY)))</span>
-<span class="source-line-no">201</span><span id="line.201">            return processor.mouseMoved(screenX, screenY);</span>
-<span class="source-line-no">202</span><span id="line.202">        return false;</span>
-<span class="source-line-no">203</span><span id="line.203">    }</span>
-<span class="source-line-no">204</span><span id="line.204"></span>
-<span class="source-line-no">205</span><span id="line.205">    @Override</span>
-<span class="source-line-no">206</span><span id="line.206">    public boolean scrolled(float amountX, float amountY) {</span>
-<span class="source-line-no">207</span><span id="line.207">        return processor.scrolled(amountX, amountY);</span>
-<span class="source-line-no">208</span><span id="line.208">    }</span>
-<span class="source-line-no">209</span><span id="line.209">}</span>
+<span class="source-line-no">184</span><span id="line.184">    /**</span>
+<span class="source-line-no">185</span><span id="line.185">     * Returns true if the provided screen coordinate is on the grid, ignoring the current offset.</span>
+<span class="source-line-no">186</span><span id="line.186">     *</span>
+<span class="source-line-no">187</span><span id="line.187">     * @param screenX</span>
+<span class="source-line-no">188</span><span id="line.188">     * @param screenY</span>
+<span class="source-line-no">189</span><span id="line.189">     * @return</span>
+<span class="source-line-no">190</span><span id="line.190">     */</span>
+<span class="source-line-no">191</span><span id="line.191">    public boolean onGrid(int screenX, int screenY) {</span>
+<span class="source-line-no">192</span><span id="line.192">        return screenX &gt;= 0 &amp;&amp; screenX &lt; gridWidth &amp;&amp; screenY &gt;= 0 &amp;&amp; screenY &lt; gridHeight;</span>
+<span class="source-line-no">193</span><span id="line.193">    }</span>
+<span class="source-line-no">194</span><span id="line.194"></span>
+<span class="source-line-no">195</span><span id="line.195">    @Override</span>
+<span class="source-line-no">196</span><span id="line.196">    public boolean touchDown(int screenX, int screenY, int pointer, int button) {</span>
+<span class="source-line-no">197</span><span id="line.197">        if (onGrid(screenX = translateX(screenX), screenY = translateY(screenY))) {</span>
+<span class="source-line-no">198</span><span id="line.198">            return processor.touchDown(screenX, screenY, pointer, button);</span>
+<span class="source-line-no">199</span><span id="line.199">        }</span>
+<span class="source-line-no">200</span><span id="line.200">        return false;</span>
+<span class="source-line-no">201</span><span id="line.201">    }</span>
+<span class="source-line-no">202</span><span id="line.202"></span>
+<span class="source-line-no">203</span><span id="line.203">    @Override</span>
+<span class="source-line-no">204</span><span id="line.204">    public boolean touchUp(int screenX, int screenY, int pointer, int button) {</span>
+<span class="source-line-no">205</span><span id="line.205">        if (onGrid(screenX = translateX(screenX), screenY = translateY(screenY))) {</span>
+<span class="source-line-no">206</span><span id="line.206">            return processor.touchUp(screenX, screenY, pointer, button);</span>
+<span class="source-line-no">207</span><span id="line.207">        }</span>
+<span class="source-line-no">208</span><span id="line.208">        return false;</span>
+<span class="source-line-no">209</span><span id="line.209">    }</span>
+<span class="source-line-no">210</span><span id="line.210"></span>
+<span class="source-line-no">211</span><span id="line.211">    @Override</span>
+<span class="source-line-no">212</span><span id="line.212">    public boolean touchDragged(int screenX, int screenY, int pointer) {</span>
+<span class="source-line-no">213</span><span id="line.213">        if (onGrid(screenX = translateX(screenX), screenY = translateY(screenY))) {</span>
+<span class="source-line-no">214</span><span id="line.214">            return processor.touchDragged(screenX, screenY, pointer);</span>
+<span class="source-line-no">215</span><span id="line.215">        }</span>
+<span class="source-line-no">216</span><span id="line.216">        return false;</span>
+<span class="source-line-no">217</span><span id="line.217">    }</span>
+<span class="source-line-no">218</span><span id="line.218"></span>
+<span class="source-line-no">219</span><span id="line.219">    @Override</span>
+<span class="source-line-no">220</span><span id="line.220">    public boolean mouseMoved(int screenX, int screenY) {</span>
+<span class="source-line-no">221</span><span id="line.221">        if (onGrid(screenX = translateX(screenX), screenY = translateY(screenY))) {</span>
+<span class="source-line-no">222</span><span id="line.222">            return processor.mouseMoved(screenX, screenY);</span>
+<span class="source-line-no">223</span><span id="line.223">        }</span>
+<span class="source-line-no">224</span><span id="line.224">        return false;</span>
+<span class="source-line-no">225</span><span id="line.225">    }</span>
+<span class="source-line-no">226</span><span id="line.226"></span>
+<span class="source-line-no">227</span><span id="line.227">    @Override</span>
+<span class="source-line-no">228</span><span id="line.228">    public boolean scrolled(float amountX, float amountY) {</span>
+<span class="source-line-no">229</span><span id="line.229">        return processor.scrolled(amountX, amountY);</span>
+<span class="source-line-no">230</span><span id="line.230">    }</span>
+<span class="source-line-no">231</span><span id="line.231">}</span>
 
 
 

@@ -111,7 +111,7 @@ extends java.lang.Object</pre>
 double&nbsp;value2,
 double&nbsp;tolerance)</code></th>
 <td class="col-last">
-<div class="block">Checks that two values are approximately equal (plus or minus a specified tolerance).</div>
+<div class="block">Checks that two values are approximately equal (plus or minus a specified absolute tolerance).</div>
 </td>
 </tr>
 <tr class="row-color" id="i1">
@@ -343,26 +343,24 @@ double&nbsp;arg)</span></div>
 <li>
 <section class="detail" id="approxEquals(double,double,double)">
 <h3>approxEquals</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/MathExtras.html#line.159">approxEquals</a></span>&#8203;(<span class="parameters">double&nbsp;value1,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/MathExtras.html#line.157">approxEquals</a></span>&#8203;(<span class="parameters">double&nbsp;value1,
 double&nbsp;value2,
 double&nbsp;tolerance)</span></div>
-<div class="block">Checks that two values are approximately equal (plus or minus a specified tolerance).</div>
+<div class="block">Checks that two values are approximately equal (plus or minus a specified absolute tolerance).</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>value1</code> - The first value to compare.</dd>
 <dd><code>value2</code> - The second value to compare.</dd>
-<dd><code>tolerance</code> - How much (in percentage terms, as a percentage of the first value)
- the values are allowed to differ and still be considered equal.  Expressed as a value
- between 0 and 1.</dd>
+<dd><code>tolerance</code> - How much the values are allowed to differ and still be considered equal, as an absolute amount.</dd>
 <dt>Returns:</dt>
-<dd>true if the values are approximately equal, false otherwise.</dd>
+<dd>true if the values are approximately equal (give or take tolerance), false otherwise.</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="clamp(int,int,int)">
 <h3>clamp</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/MathExtras.html#line.180">clamp</a></span>&#8203;(<span class="parameters">int&nbsp;value,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/MathExtras.html#line.174">clamp</a></span>&#8203;(<span class="parameters">int&nbsp;value,
 int&nbsp;min,
 int&nbsp;max)</span></div>
 <div class="block">If the specified value is not greater than or equal to the specified minimum and
@@ -381,7 +379,7 @@ int&nbsp;max)</span></div>
 <li>
 <section class="detail" id="clamp(long,long,long)">
 <h3>clamp</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/MathExtras.html#line.195">clamp</a></span>&#8203;(<span class="parameters">long&nbsp;value,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/MathExtras.html#line.189">clamp</a></span>&#8203;(<span class="parameters">long&nbsp;value,
 long&nbsp;min,
 long&nbsp;max)</span></div>
 <div class="block">If the specified value is not greater than or equal to the specified minimum and
@@ -400,7 +398,7 @@ long&nbsp;max)</span></div>
 <li>
 <section class="detail" id="clamp(double,double,double)">
 <h3>clamp</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/MathExtras.html#line.210">clamp</a></span>&#8203;(<span class="parameters">double&nbsp;value,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/MathExtras.html#line.204">clamp</a></span>&#8203;(<span class="parameters">double&nbsp;value,
 double&nbsp;min,
 double&nbsp;max)</span></div>
 <div class="block">If the specified value is not greater than or equal to the specified minimum and
@@ -419,7 +417,7 @@ double&nbsp;max)</span></div>
 <li>
 <section class="detail" id="clamp(float,float,float)">
 <h3>clamp</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">float</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/MathExtras.html#line.224">clamp</a></span>&#8203;(<span class="parameters">float&nbsp;value,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">float</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/MathExtras.html#line.218">clamp</a></span>&#8203;(<span class="parameters">float&nbsp;value,
 float&nbsp;min,
 float&nbsp;max)</span></div>
 <div class="block">If the specified value is not greater than or equal to the specified minimum and
@@ -438,7 +436,7 @@ float&nbsp;max)</span></div>
 <li>
 <section class="detail" id="remainder(double,double)">
 <h3>remainder</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/MathExtras.html#line.235">remainder</a></span>&#8203;(<span class="parameters">double&nbsp;op,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/MathExtras.html#line.229">remainder</a></span>&#8203;(<span class="parameters">double&nbsp;op,
 double&nbsp;d)</span></div>
 <div class="block">Like the modulo operator <code>%</code>, but the result will always match the sign of <code>d</code> instead of <code>op</code>.</div>
 <dl class="notes">
@@ -453,7 +451,7 @@ double&nbsp;d)</span></div>
 <li>
 <section class="detail" id="greatestCommonDivisor(long,long)">
 <h3>greatestCommonDivisor</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/MathExtras.html#line.248">greatestCommonDivisor</a></span>&#8203;(<span class="parameters">long&nbsp;a,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/MathExtras.html#line.242">greatestCommonDivisor</a></span>&#8203;(<span class="parameters">long&nbsp;a,
 long&nbsp;b)</span></div>
 <div class="block">Determines the greatest common divisor of a pair of natural numbers
  using the Euclidean algorithm.  This method only works with natural
@@ -471,7 +469,7 @@ long&nbsp;b)</span></div>
 <li>
 <section class="detail" id="modularMultiplicativeInverse(int)">
 <h3>modularMultiplicativeInverse</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/MathExtras.html#line.269">modularMultiplicativeInverse</a></span>&#8203;(<span class="parameters">int&nbsp;a)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/MathExtras.html#line.263">modularMultiplicativeInverse</a></span>&#8203;(<span class="parameters">int&nbsp;a)</span></div>
 <div class="block">Given any odd int <code>a</code>, this finds another odd int <code>b</code> such that <code>a * b == 1</code>.
  <br>
  This is incompatible with GWT, but it should usually only find uses in exploratory code or in tests anyway...
@@ -487,7 +485,7 @@ long&nbsp;b)</span></div>
 <li>
 <section class="detail" id="modularMultiplicativeInverse(long)">
 <h3>modularMultiplicativeInverse</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/MathExtras.html#line.284">modularMultiplicativeInverse</a></span>&#8203;(<span class="parameters">long&nbsp;a)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/MathExtras.html#line.278">modularMultiplicativeInverse</a></span>&#8203;(<span class="parameters">long&nbsp;a)</span></div>
 <div class="block">Given any odd long <code>a</code>, this finds another odd long <code>b</code> such that <code>a * b == 1L</code>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -500,7 +498,7 @@ long&nbsp;b)</span></div>
 <li>
 <section class="detail" id="probit(double)">
 <h3>probit</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/MathExtras.html#line.325">probit</a></span>&#8203;(<span class="parameters">double&nbsp;d)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/MathExtras.html#line.319">probit</a></span>&#8203;(<span class="parameters">double&nbsp;d)</span></div>
 <div class="block">A way of taking a double in the (0.0, 1.0) range and mapping it to a Gaussian or normal distribution, so high
  inputs correspond to high outputs, and similarly for the low range. This is centered on 0.0 and its standard
  deviation seems to be 1.0 (the same as <code>Random.nextGaussian()</code>). If this is given an input of 0.0
@@ -539,7 +537,7 @@ long&nbsp;b)</span></div>
 <li>
 <section class="detail" id="isqrt(long)">
 <h3>isqrt</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/MathExtras.html#line.359">isqrt</a></span>&#8203;(<span class="parameters">long&nbsp;n)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/MathExtras.html#line.353">isqrt</a></span>&#8203;(<span class="parameters">long&nbsp;n)</span></div>
 <div class="block">Integer square root (using floor), maintaining correct results even for very large <code>long</code> values. This
  version treats negative inputs as unsigned and returns positive square roots for them (these are usually large).
  <br>
@@ -556,7 +554,7 @@ long&nbsp;b)</span></div>
 <li>
 <section class="detail" id="cbrt(float)">
 <h3>cbrt</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">float</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/MathExtras.html#line.386">cbrt</a></span>&#8203;(<span class="parameters">float&nbsp;x)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">float</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/MathExtras.html#line.380">cbrt</a></span>&#8203;(<span class="parameters">float&nbsp;x)</span></div>
 <div class="block">An approximation of the cube-root function for float inputs and outputs.
  This can be about twice as fast as <code>Math.cbrt(double)</code>. It
  correctly returns negative results when given negative inputs.
@@ -580,7 +578,7 @@ long&nbsp;b)</span></div>
 <li>
 <section class="detail" id="barronSpline(float,float,float)">
 <h3>barronSpline</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">float</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/MathExtras.html#line.416">barronSpline</a></span>&#8203;(<span class="parameters">float&nbsp;x,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">float</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/MathExtras.html#line.410">barronSpline</a></span>&#8203;(<span class="parameters">float&nbsp;x,
 float&nbsp;shape,
 float&nbsp;turning)</span></div>
 <div class="block">A generalization on bias and gain functions that can represent both; this version is branch-less.
@@ -606,7 +604,7 @@ float&nbsp;turning)</span></div>
 <li>
 <section class="detail" id="barronSpline(double,double,double)">
 <h3>barronSpline</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/MathExtras.html#line.438">barronSpline</a></span>&#8203;(<span class="parameters">double&nbsp;x,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="member-name"><a href="../../src-html/squidpony/squidmath/MathExtras.html#line.432">barronSpline</a></span>&#8203;(<span class="parameters">double&nbsp;x,
 double&nbsp;shape,
 double&nbsp;turning)</span></div>
 <div class="block">A generalization on bias and gain functions that can represent both; this version is branch-less.

@@ -258,7 +258,9 @@ int&nbsp;screenY)</code></th>
 <td class="col-first"><code>boolean</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#onGrid(int,int)">onGrid</a></span>&#8203;(int&nbsp;screenX,
 int&nbsp;screenY)</code></th>
-<td class="col-last">&nbsp;</td>
+<td class="col-last">
+<div class="block">Returns true if the provided screen coordinate is on the grid, ignoring the current offset.</div>
+</td>
 </tr>
 <tr class="row-color" id="i9">
 <td class="col-first"><code>void</code></td>
@@ -343,14 +345,18 @@ int&nbsp;button)</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
 <tr class="alt-color" id="i22">
-<td class="col-first"><code>protected int</code></td>
+<td class="col-first"><code>int</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#translateX(int)">translateX</a></span>&#8203;(int&nbsp;screenX)</code></th>
-<td class="col-last">&nbsp;</td>
+<td class="col-last">
+<div class="block">Translates the given screen pixel coordinate to the underlying grid coordinate, taking into account the related offset.</div>
+</td>
 </tr>
 <tr class="row-color" id="i23">
-<td class="col-first"><code>protected int</code></td>
+<td class="col-first"><code>int</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#translateY(int)">translateY</a></span>&#8203;(int&nbsp;screenY)</code></th>
-<td class="col-last">&nbsp;</td>
+<td class="col-last">
+<div class="block">Translates the given screen pixel coordinate to the underlying grid coordinate, taking into account the related offset.</div>
+</td>
 </tr>
 </tbody>
 </table>
@@ -559,14 +565,14 @@ com.badlogic.gdx.InputProcessor&nbsp;processor)</span></div>
 <li>
 <section class="detail" id="reinitialize(float,float)">
 <h3>reinitialize</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidMouse.html#line.129">reinitialize</a></span>&#8203;(<span class="parameters">float&nbsp;cellWidth,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidMouse.html#line.128">reinitialize</a></span>&#8203;(<span class="parameters">float&nbsp;cellWidth,
 float&nbsp;cellHeight)</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="reinitialize(float,float,float,float,int,int)">
 <h3>reinitialize</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidMouse.html#line.138">reinitialize</a></span>&#8203;(<span class="parameters">float&nbsp;cellWidth,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidMouse.html#line.137">reinitialize</a></span>&#8203;(<span class="parameters">float&nbsp;cellWidth,
 float&nbsp;cellHeight,
 float&nbsp;gridWidth,
 float&nbsp;gridHeight,
@@ -577,7 +583,7 @@ int&nbsp;offsetY)</span></div>
 <li>
 <section class="detail" id="getProcessor()">
 <h3>getProcessor</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">com.badlogic.gdx.InputProcessor</span>&nbsp;<span class="member-name"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidMouse.html#line.152">getProcessor</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">com.badlogic.gdx.InputProcessor</span>&nbsp;<span class="member-name"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidMouse.html#line.151">getProcessor</a></span>()</div>
 <div class="block">Gets the InputProcessor this object uses to handle mouse input.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -599,26 +605,45 @@ int&nbsp;offsetY)</span></div>
 <li>
 <section class="detail" id="translateX(int)">
 <h3>translateX</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="member-name"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidMouse.html#line.164">translateX</a></span>&#8203;(<span class="parameters">int&nbsp;screenX)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="member-name"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidMouse.html#line.170">translateX</a></span>&#8203;(<span class="parameters">int&nbsp;screenX)</span></div>
+<div class="block">Translates the given screen pixel coordinate to the underlying grid coordinate, taking into account the related offset.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>screenX</code> - </dd>
+<dt>Returns:</dt>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="translateY(int)">
 <h3>translateY</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="member-name"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidMouse.html#line.168">translateY</a></span>&#8203;(<span class="parameters">int&nbsp;screenY)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="member-name"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidMouse.html#line.180">translateY</a></span>&#8203;(<span class="parameters">int&nbsp;screenY)</span></div>
+<div class="block">Translates the given screen pixel coordinate to the underlying grid coordinate, taking into account the related offset.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>screenY</code> - </dd>
+<dt>Returns:</dt>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="onGrid(int,int)">
 <h3>onGrid</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="member-name"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidMouse.html#line.172">onGrid</a></span>&#8203;(<span class="parameters">int&nbsp;screenX,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="member-name"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidMouse.html#line.191">onGrid</a></span>&#8203;(<span class="parameters">int&nbsp;screenX,
 int&nbsp;screenY)</span></div>
+<div class="block">Returns true if the provided screen coordinate is on the grid, ignoring the current offset.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>screenX</code> - </dd>
+<dd><code>screenY</code> - </dd>
+<dt>Returns:</dt>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="touchDown(int,int,int,int)">
 <h3>touchDown</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="member-name"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidMouse.html#line.177">touchDown</a></span>&#8203;(<span class="parameters">int&nbsp;screenX,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="member-name"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidMouse.html#line.195">touchDown</a></span>&#8203;(<span class="parameters">int&nbsp;screenX,
 int&nbsp;screenY,
 int&nbsp;pointer,
 int&nbsp;button)</span></div>
@@ -633,7 +658,7 @@ int&nbsp;button)</span></div>
 <li>
 <section class="detail" id="touchUp(int,int,int,int)">
 <h3>touchUp</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="member-name"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidMouse.html#line.184">touchUp</a></span>&#8203;(<span class="parameters">int&nbsp;screenX,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="member-name"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidMouse.html#line.203">touchUp</a></span>&#8203;(<span class="parameters">int&nbsp;screenX,
 int&nbsp;screenY,
 int&nbsp;pointer,
 int&nbsp;button)</span></div>
@@ -648,7 +673,7 @@ int&nbsp;button)</span></div>
 <li>
 <section class="detail" id="touchDragged(int,int,int)">
 <h3>touchDragged</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="member-name"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidMouse.html#line.191">touchDragged</a></span>&#8203;(<span class="parameters">int&nbsp;screenX,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="member-name"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidMouse.html#line.211">touchDragged</a></span>&#8203;(<span class="parameters">int&nbsp;screenX,
 int&nbsp;screenY,
 int&nbsp;pointer)</span></div>
 <dl class="notes">
@@ -662,7 +687,7 @@ int&nbsp;pointer)</span></div>
 <li>
 <section class="detail" id="mouseMoved(int,int)">
 <h3>mouseMoved</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="member-name"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidMouse.html#line.198">mouseMoved</a></span>&#8203;(<span class="parameters">int&nbsp;screenX,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="member-name"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidMouse.html#line.219">mouseMoved</a></span>&#8203;(<span class="parameters">int&nbsp;screenX,
 int&nbsp;screenY)</span></div>
 <dl class="notes">
 <dt>Specified by:</dt>
@@ -675,7 +700,7 @@ int&nbsp;screenY)</span></div>
 <li>
 <section class="detail" id="scrolled(float,float)">
 <h3>scrolled</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="member-name"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidMouse.html#line.205">scrolled</a></span>&#8203;(<span class="parameters">float&nbsp;amountX,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="member-name"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidMouse.html#line.227">scrolled</a></span>&#8203;(<span class="parameters">float&nbsp;amountX,
 float&nbsp;amountY)</span></div>
 <dl class="notes">
 <dt>Specified by:</dt>
