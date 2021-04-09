@@ -20,8 +20,8 @@ import com.badlogic.gdx.math.MathUtils;
  */
 public class SquidMouse extends InputAdapter {
 
-	protected float cellWidth, cellHeight, gridWidth, gridHeight;
-    protected int  offsetX, offsetY;
+    protected float cellWidth, cellHeight, gridWidth, gridHeight;
+    protected int offsetX, offsetY;
     protected InputProcessor processor;
 
     /**
@@ -125,9 +125,7 @@ public class SquidMouse extends InputAdapter {
         this.gridHeight = gridHeight;
     }
 
-
-    public void reinitialize(float cellWidth, float cellHeight)
-    {
+    public void reinitialize(float cellWidth, float cellHeight) {
         this.cellWidth = cellWidth;
         this.cellHeight = cellHeight;
         offsetX = 0;
@@ -135,8 +133,8 @@ public class SquidMouse extends InputAdapter {
         gridWidth = Gdx.graphics.getWidth() / cellWidth;
         gridHeight = Gdx.graphics.getHeight() / cellHeight;
     }
-    public void reinitialize(float cellWidth, float cellHeight, float gridWidth, float gridHeight, int offsetX, int offsetY)
-    {
+
+    public void reinitialize(float cellWidth, float cellHeight, float gridWidth, float gridHeight, int offsetX, int offsetY) {
         this.cellWidth = cellWidth;
         this.cellHeight = cellHeight;
         this.offsetX = offsetX;
@@ -147,6 +145,7 @@ public class SquidMouse extends InputAdapter {
 
     /**
      * Gets the InputProcessor this object uses to handle mouse input.
+     *
      * @return the wrapped InputProcessor.
      */
     public InputProcessor getProcessor() {
@@ -155,50 +154,73 @@ public class SquidMouse extends InputAdapter {
 
     /**
      * Sets the InputProcessor this object uses to handle mouse input.
+     *
      * @param processor an InputProcessor that implements some of touchUp(), touchDown(), touchDragged(), mouseMoved(), or scrolled().
      */
     public void setProcessor(InputProcessor processor) {
         this.processor = processor;
     }
 
-	protected int translateX(int screenX) {
-		return MathUtils.floor((screenX + offsetX) / cellWidth);
-	}
+    /**
+     * Translates the given screen pixel coordinate to the underlying grid coordinate, taking into account the related offset.
+     *
+     * @param screenX
+     * @return
+     */
+    public int translateX(int screenX) {
+        return MathUtils.floor((screenX + offsetX) / cellWidth);
+    }
 
-	protected int translateY(int screenY) {
-		return MathUtils.floor((screenY + offsetY) / cellHeight);
-	}
+    /**
+     * Translates the given screen pixel coordinate to the underlying grid coordinate, taking into account the related offset.
+     *
+     * @param screenY
+     * @return
+     */
+    public int translateY(int screenY) {
+        return MathUtils.floor((screenY + offsetY) / cellHeight);
+    }
 
-    public boolean onGrid(int screenX, int screenY)
-    {
+    /**
+     * Returns true if the provided screen coordinate is on the grid, ignoring the current offset.
+     *
+     * @param screenX
+     * @param screenY
+     * @return
+     */
+    public boolean onGrid(int screenX, int screenY) {
         return screenX >= 0 && screenX < gridWidth && screenY >= 0 && screenY < gridHeight;
     }
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        if(onGrid(screenX = translateX(screenX), screenY = translateY(screenY)))
+        if (onGrid(screenX = translateX(screenX), screenY = translateY(screenY))) {
             return processor.touchDown(screenX, screenY, pointer, button);
+        }
         return false;
     }
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        if(onGrid(screenX = translateX(screenX), screenY = translateY(screenY)))
+        if (onGrid(screenX = translateX(screenX), screenY = translateY(screenY))) {
             return processor.touchUp(screenX, screenY, pointer, button);
+        }
         return false;
     }
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
-        if(onGrid(screenX = translateX(screenX), screenY = translateY(screenY)))
+        if (onGrid(screenX = translateX(screenX), screenY = translateY(screenY))) {
             return processor.touchDragged(screenX, screenY, pointer);
+        }
         return false;
     }
 
     @Override
     public boolean mouseMoved(int screenX, int screenY) {
-        if(onGrid(screenX = translateX(screenX), screenY = translateY(screenY)))
+        if (onGrid(screenX = translateX(screenX), screenY = translateY(screenY))) {
             return processor.mouseMoved(screenX, screenY);
+        }
         return false;
     }
 
