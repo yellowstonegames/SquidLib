@@ -24,8 +24,6 @@ public class SquidMouse extends InputAdapter {
     protected int offsetX, offsetY;
     protected InputProcessor processor;
     
-    private int gridX, gridY;
-
     /**
      * Sets the size of the cell so that all mouse input can be evaluated as
      * relative to the grid. All input is passed to the provided InputProcessor once
@@ -166,8 +164,8 @@ public class SquidMouse extends InputAdapter {
     /**
      * Translates the given screen pixel coordinate to the underlying grid coordinate, taking into account the related offset.
      *
-     * @param screenX
-     * @return
+     * @param screenX a screen x position, usually in pixels
+     * @return a grid x position
      */
     public int translateX(int screenX) {
         return MathUtils.floor((screenX + offsetX) / cellWidth);
@@ -176,8 +174,8 @@ public class SquidMouse extends InputAdapter {
     /**
      * Translates the given screen pixel coordinate to the underlying grid coordinate, taking into account the related offset.
      *
-     * @param screenY
-     * @return
+     * @param screenY a screen y position, usually in pixels
+     * @return a grid y position
      */
     public int translateY(int screenY) {
         return MathUtils.floor((screenY + offsetY) / cellHeight);
@@ -186,9 +184,9 @@ public class SquidMouse extends InputAdapter {
     /**
      * Returns true if the provided screen coordinate is on the grid, ignoring the current offset.
      *
-     * @param gridX
-     * @param gridY
-     * @return
+     * @param gridX x-coordinate measured in grid cells, not pixels
+     * @param gridY y-coordinate measured in grid cells, not pixels
+     * @return true if the given gridX and gridY are on the grid, or false if they are outside it
      */
     public boolean onGrid(int gridX, int gridY) {
         return gridX >= 0 && gridX < gridWidth && gridY >= 0 && gridY < gridHeight;
@@ -196,8 +194,8 @@ public class SquidMouse extends InputAdapter {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        gridX = translateX(screenX);
-        gridY = translateY(screenY);
+        final int gridX = translateX(screenX);
+        final int gridY = translateY(screenY);
         if (onGrid(gridX, gridY)) {
             return processor.touchDown(gridX, gridY, pointer, button);
         }
@@ -206,8 +204,8 @@ public class SquidMouse extends InputAdapter {
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        gridX = translateX(screenX);
-        gridY = translateY(screenY);
+        final int gridX = translateX(screenX);
+        final int gridY = translateY(screenY);
         if (onGrid(gridX, gridY)) {
             return processor.touchUp(screenX, screenY, pointer, button);
         }
@@ -216,8 +214,8 @@ public class SquidMouse extends InputAdapter {
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
-        gridX = translateX(screenX);
-        gridY = translateY(screenY);
+        final int gridX = translateX(screenX);
+        final int gridY = translateY(screenY);
         if (onGrid(gridX, gridY)) {
             return processor.touchDragged(screenX, screenY, pointer);
         }
@@ -226,8 +224,8 @@ public class SquidMouse extends InputAdapter {
 
     @Override
     public boolean mouseMoved(int screenX, int screenY) {
-        gridX = translateX(screenX);
-        gridY = translateY(screenY);
+        final int gridX = translateX(screenX);
+        final int gridY = translateY(screenY);
         if (onGrid(gridX, gridY)) {
             return processor.mouseMoved(screenX, screenY);
         }
