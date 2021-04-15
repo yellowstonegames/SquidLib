@@ -1,28 +1,20 @@
 buildscript {
-	repositories {
-		mavenLocal()
-		mavenCentral()
-		maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
         gradlePluginPortal()
     }
     dependencies {
-        classpath 'com.bmuschko:gradle-nexus-plugin:2.3.1'
-        classpath "io.codearte.gradle.nexus:gradle-nexus-staging-plugin:0.21.0"
+        classpath 'com.vanniktech:gradle-maven-publish-plugin:0.14.2'
     }
 }
 
 apply plugin: 'java-library'
-apply plugin: 'com.bmuschko.nexus'
-apply plugin: 'io.codearte.nexus-staging'
-apply plugin: 'maven'
-apply from: 'publish.gradle'
+apply plugin: 'com.vanniktech.maven.publish'
 
 def projectName = 'squidlib-parent'
-modifyPom {
-    project {
-        name projectName
-    }
-}
+
 version '3.0.4-SNAPSHOT'
 group 'com.squidpony'
 
@@ -35,8 +27,7 @@ allprojects {
 
 configure(subprojects) {
     apply plugin: 'java-library'
-    apply plugin: 'com.bmuschko.nexus'
-    apply from: '../publish.gradle'
+    apply plugin: 'com.vanniktech.maven.publish'
     sourceCompatibility = 1.8
     targetCompatibility = 1.8
     compileJava {
@@ -75,6 +66,13 @@ if (JavaVersion.current().isJava8Compatible()) {
             // https://discuss.gradle.org/t/passing-arguments-to-compiler-and-javadoc/1661
             options.addStringOption('Xdoclint:none,-missing', '-quiet')
             options.tags('apiNote:a:"API Note"', 'implSpec:a:"Implementation Requirements"', 'implNote:a:"Implementation Note"')
+        }
+    }
+}
+if(JavaVersion.current().isJava9Compatible()) {
+    allprojects {
+        tasks.withType(JavaCompile) {
+            options.release.set(8)
         }
     }
 }
