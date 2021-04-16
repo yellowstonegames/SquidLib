@@ -936,12 +936,12 @@ public class Converters {
             if(item[0] == null)
                 sb.append('n');
             else
-                sb.append(StringKit.joinAlt(item[0]));
+                StringKit.appendJoinedAlt(sb, item[0]);
             for (int i = 1; i < len; i++) {
                 if(item[i] == null)
                     sb.append(";n");
                 else
-                    sb.append(';').append(StringKit.joinAlt(item[i]));
+                    StringKit.appendJoinedAlt(sb.append(';'), item[i]);
             }
             return sb.toString();
         }
@@ -984,12 +984,12 @@ public class Converters {
             if(item[0] == null)
                 sb.append('n');
             else
-                sb.append(StringKit.join(",", item[0]));
+                StringKit.appendJoined(sb, ",", item[0]);
             for (int i = 1; i < len; i++) {
-                if(item[i] == null)
+                if (item[i] == null)
                     sb.append(";n");
                 else
-                    sb.append(';').append(StringKit.join(",", item[i]));
+                    StringKit.appendJoined(sb.append(';'), ",", item[i]);
             }
             return sb.toString();
         }
@@ -1045,12 +1045,12 @@ public class Converters {
             if(item[0] == null)
                 sb.append('n');
             else
-                sb.append(StringKit.join(",", item[0]));
+                StringKit.appendJoined(sb, ",", item[0]);
             for (int i = 1; i < len; i++) {
-                if(item[i] == null)
+                if (item[i] == null)
                     sb.append(";n");
                 else
-                    sb.append(';').append(StringKit.join(",", item[i]));
+                    StringKit.appendJoined(sb.append(';'), ",", item[i]);
             }
             return sb.toString();
         }
@@ -1105,12 +1105,12 @@ public class Converters {
             if(item[0] == null)
                 sb.append('n');
             else
-                sb.append(StringKit.join(",", item[0]));
+                StringKit.appendJoined(sb, ",", item[0]);
             for (int i = 1; i < len; i++) {
-                if(item[i] == null)
+                if (item[i] == null)
                     sb.append(";n");
                 else
-                    sb.append(';').append(StringKit.join(",", item[i]));
+                    StringKit.appendJoined(sb.append(';'), ",", item[i]);
             }
             return sb.toString();
         }
@@ -1165,12 +1165,12 @@ public class Converters {
             if(item[0] == null)
                 sb.append('n');
             else
-                sb.append(StringKit.join(",", item[0]));
+                StringKit.appendJoined(sb, ",", item[0]);
             for (int i = 1; i < len; i++) {
-                if(item[i] == null)
+                if (item[i] == null)
                     sb.append(";n");
                 else
-                    sb.append(';').append(StringKit.join(",", item[i]));
+                    StringKit.appendJoined(sb.append(';'), ",", item[i]);
             }
             return sb.toString();
         }
@@ -1225,12 +1225,12 @@ public class Converters {
             if(item[0] == null)
                 sb.append('n');
             else
-                sb.append(StringKit.join(",", item[0]));
+                StringKit.appendJoined(sb, ",", item[0]);
             for (int i = 1; i < len; i++) {
-                if(item[i] == null)
+                if (item[i] == null)
                     sb.append(";n");
                 else
-                    sb.append(';').append(StringKit.join(",", item[i]));
+                    StringKit.appendJoined(sb.append(';'), ",", item[i]);
             }
             return sb.toString();
         }
@@ -1285,12 +1285,12 @@ public class Converters {
             if(item[0] == null)
                 sb.append('n');
             else
-                sb.append(StringKit.join(",", item[0]));
+                StringKit.appendJoined(sb, ",", item[0]);
             for (int i = 1; i < len; i++) {
-                if(item[i] == null)
+                if (item[i] == null)
                     sb.append(";n");
                 else
-                    sb.append(';').append(StringKit.join(",", item[i]));
+                    StringKit.appendJoined(sb.append(';'), ",", item[i]);
             }
             return sb.toString();
         }
