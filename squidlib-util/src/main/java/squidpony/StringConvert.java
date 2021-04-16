@@ -45,8 +45,8 @@ public abstract class StringConvert<T> {
      * {@link #lookup(CharSequence...)}; both of these will not return a StringConvert with type info for what it
      * takes and returns beyond "Object", but the result can be cast to a StringConvert with the correct type.
      * @param isArray true if this should convert an array type as opposed to a normal object or primitive type
-     * @param types a vararg of Class objects representing the type this can convert, including generic type parameters
-     *              of the first element, if there are any, at positions after the first
+     * @param types a vararg of CharSequence objects representing the type this can convert, including generic type
+     *              parameters of the first element, if there are any, at positions after the first
      */
     public StringConvert(final boolean isArray, final CharSequence... types) {
         this.isArray = isArray;
@@ -95,8 +95,8 @@ public abstract class StringConvert<T> {
      * so it can be looked up by name with {@link #get(CharSequence)} or by component generic types with
      * {@link #lookup(CharSequence...)}; both of these will not return a StringConvert with type info for what it
      * takes and returns beyond "Object", but the result can be cast to a StringConvert with the correct type.
-     * @param types a vararg of Class objects representing the type this can convert, including generic type parameters
-     *              of the first element, if there are any, at positions after the first
+     * @param types a vararg of CharSequence objects representing the type this can convert, including generic type
+     *              parameters of the first element, if there are any, at positions after the first
      */
     public StringConvert(final CharSequence... types)
     {

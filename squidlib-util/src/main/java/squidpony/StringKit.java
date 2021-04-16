@@ -207,6 +207,99 @@ public class StringKit {
         return sb.toString();
     }
 
+    public static StringBuilder appendJoined(StringBuilder sb, CharSequence delimiter, CharSequence... elements) {
+        if (sb == null || elements == null || elements.length == 0) return sb;
+        sb.append(elements[0]);
+        for (int i = 1; i < elements.length; i++) {
+            sb.append(delimiter).append(elements[i]);
+        }
+        return sb;
+    }
+
+    public static StringBuilder appendJoined(StringBuilder sb, CharSequence delimiter, Collection<? extends CharSequence> elements) {
+        if (sb == null || elements == null || elements.isEmpty()) return sb;
+        Iterator<? extends CharSequence> it = elements.iterator();
+        sb.append(it.next());
+        while(it.hasNext()) {
+            sb.append(delimiter).append(it.next());
+        }
+        return sb;
+    }
+
+    public static StringBuilder appendJoinedArrays(StringBuilder sb, CharSequence delimiter, char[]... elements) {
+        if (sb == null || elements == null || elements.length == 0) return sb;
+        sb.append(elements[0]);
+        for (int i = 1; i < elements.length; i++) {
+            sb.append(delimiter).append(elements[i]);
+        }
+        return sb;
+    }
+
+    public static StringBuilder appendJoined(StringBuilder sb, CharSequence delimiter, long... elements) {
+        if (sb == null || elements == null || elements.length == 0) return sb;
+        sb.append(elements[0]);
+        for (int i = 1; i < elements.length; i++) {
+            sb.append(delimiter).append(elements[i]);
+        }
+        return sb;
+    }
+    public static StringBuilder appendJoined(StringBuilder sb, CharSequence delimiter, double... elements) {
+        if (sb == null || elements == null || elements.length == 0) return sb;
+        sb.append(elements[0]);
+        for (int i = 1; i < elements.length; i++) {
+            sb.append(delimiter).append(elements[i]);
+        }
+        return sb;
+    }
+    public static StringBuilder appendJoined(StringBuilder sb, CharSequence delimiter, int... elements) {
+        if (sb == null || elements == null || elements.length == 0) return sb;
+        sb.append(elements[0]);
+        for (int i = 1; i < elements.length; i++) {
+            sb.append(delimiter).append(elements[i]);
+        }
+        return sb;
+    }
+    public static StringBuilder appendJoined(StringBuilder sb, CharSequence delimiter, float... elements) {
+        if (sb == null || elements == null || elements.length == 0) return sb;
+        sb.append(elements[0]);
+        for (int i = 1; i < elements.length; i++) {
+            sb.append(delimiter).append(elements[i]);
+        }
+        return sb;
+    }
+    public static StringBuilder appendJoined(StringBuilder sb, CharSequence delimiter, short... elements) {
+        if (sb == null || elements == null || elements.length == 0) return sb;
+        sb.append(elements[0]);
+        for (int i = 1; i < elements.length; i++) {
+            sb.append(delimiter).append(elements[i]);
+        }
+        return sb;
+    }
+    public static StringBuilder appendJoined(StringBuilder sb, CharSequence delimiter, char... elements) {
+        if (sb == null || elements == null || elements.length == 0) return sb;
+        sb.append(elements[0]);
+        for (int i = 1; i < elements.length; i++) {
+            sb.append(delimiter).append(elements[i]);
+        }
+        return sb;
+    }
+    public static StringBuilder appendJoined(StringBuilder sb, CharSequence delimiter, byte... elements) {
+        if (sb == null || elements == null || elements.length == 0) return sb;
+        sb.append(elements[0]);
+        for (int i = 1; i < elements.length; i++) {
+            sb.append(delimiter).append(elements[i]);
+        }
+        return sb;
+    }
+    public static StringBuilder appendJoined(StringBuilder sb, CharSequence delimiter, boolean... elements) {
+        if (sb == null || elements == null || elements.length == 0) return sb;
+        sb.append(elements[0]);
+        for (int i = 1; i < elements.length; i++) {
+            sb.append(delimiter).append(elements[i]);
+        }
+        return sb;
+    }
+
     /**
      * Joins the items in {@code elements} by calling their toString method on them (or just using the String "null" for
      * null items), and separating each item with {@code delimiter}. Unlike other join methods in this class, this does
