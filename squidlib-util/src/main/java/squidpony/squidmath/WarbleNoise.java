@@ -12,7 +12,12 @@ public class WarbleNoise implements Noise.Noise3D {
         workSeed[2] = workSeed[5] = DiverRNG.determineDouble(seed + 2L) + 0.5;
     }
     protected long seed;
-    protected final double[] results = new double[6];
+    /**
+     * Where the extra outputs of {@link #getNoise(double, double, double)} and
+     * {@link #getNoiseWithSeed(double, double, double, long)} are stored; for 3D noise, items 0 through 2 store valid
+     * results, and for higher-dimensional noise up to 6 outputs can be requested.
+     */
+    public final double[] results = new double[6];
     private final double[] working = new double[18];
     private final double[] workSeed = new double[12];
 
