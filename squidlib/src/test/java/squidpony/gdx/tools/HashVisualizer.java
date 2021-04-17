@@ -67,8 +67,8 @@ public class HashVisualizer extends ApplicationAdapter {
     // 4 noise
     // 5 RNG results
     private int testType = 4;
-    private static final int NOISE_LIMIT = 148;
-    private int hashMode, rngMode, noiseMode = 104, otherMode = 17;//142
+    private static final int NOISE_LIMIT = 150;
+    private int hashMode, rngMode, noiseMode = 148, otherMode = 17;//142
 
     /**
      * If you're editing the source of HashVisualizer, you can comment out one line and uncomment another to change
@@ -143,6 +143,9 @@ public class HashVisualizer extends ApplicationAdapter {
     private final Noise.Noise4D foam4D_2 = new Noise.Layered4D(FoamNoise.instance, 2, 0x1p-0);
     private final Noise.Noise6D foam6D_1 = new Noise.Layered6D(FoamNoise.instance, 1, 0x1p-0);
     private final Noise.Noise6D foam6D_2 = new Noise.Layered6D(FoamNoise.instance, 2, 0x1p-0);
+
+    private final WarbleNoise warble3D = new WarbleNoise(0x1337BEEF);
+
     private final PhantomNoise phantom2D = new PhantomNoise(0x1337BEEF, 2);
     private final PhantomNoise phantom3D = new PhantomNoise(0x1337BEEF, 3);
     private final PhantomNoise phantom4D = new PhantomNoise(0x1337BEEF, 4);
@@ -5453,6 +5456,29 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                         basicPrepare(phantom7D.getNoise(point7D)
                                         );
                                 back[x][y] = getGray(bright);
+                            }
+                        }
+                        break;
+                    case 148:
+                        Gdx.graphics.setTitle("Warble3D Noise, unprocessed, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                alter3D(x + ctr, y + ctr, ctr << 1);
+                                bright =
+                                        basicPrepare(warble3D.getNoise(point3D[0], point3D[1], point3D[2])
+                                        );
+                                back[x][y] = getGray(bright);
+                            }
+                        }
+                        break;
+                    case 149:
+                        Gdx.graphics.setTitle("Warble3D Noise, color, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                alter3D(x + ctr, y + ctr, ctr << 1);
+                                warble3D.getNoise(point3D[0], point3D[1], point3D[2]);
+                                back[x][y] = floatGet(basicPrepare(warble3D.results[0]),
+                                        basicPrepare(warble3D.results[1]), basicPrepare(warble3D.results[2]), 1f);
                             }
                         }
                         break;
