@@ -207,7 +207,7 @@ public class SquidMouse extends InputAdapter {
         final int gridX = translateX(screenX);
         final int gridY = translateY(screenY);
         if (onGrid(gridX, gridY)) {
-            return processor.touchUp(screenX, screenY, pointer, button);
+            return processor.touchUp(gridX, gridY, pointer, button);
         }
         return false;
     }
@@ -217,7 +217,7 @@ public class SquidMouse extends InputAdapter {
         final int gridX = translateX(screenX);
         final int gridY = translateY(screenY);
         if (onGrid(gridX, gridY)) {
-            return processor.touchDragged(screenX, screenY, pointer);
+            return processor.touchDragged(gridX, gridY, pointer);
         }
         return false;
     }
@@ -227,7 +227,7 @@ public class SquidMouse extends InputAdapter {
         final int gridX = translateX(screenX);
         final int gridY = translateY(screenY);
         if (onGrid(gridX, gridY)) {
-            return processor.mouseMoved(screenX, screenY);
+            return processor.mouseMoved(gridX, gridY);
         }
         return false;
     }
