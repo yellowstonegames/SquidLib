@@ -1133,9 +1133,30 @@ public class HashQualityTest {
 
         x *= 0x9E3779B9;
         y *= 0x632BE5AB;
-        return ((x ^ y) >>> ((x & 7) + (y & 7))) * 0x85157AF5;
+        return ((x + y) >>> ((x & 15) ^ (y & 15))) * 0x85157AF5;
     }
-    
+    public static int scratcherCoord(int x, int y, int n) {
+        /*
+    const uvec2 m = uvec2(0xA0F2EC75u, 0x91E10DA5u); //0xd1342543de82ef95L, 0xf7c2ebc08f67f2b5L
+    const uvec2 a = uvec2(0x1b873593u, 0xcc9e2d51u); //0xa812d533b278e4adL, 0x9c8f2d355d1346b5L
+    p = p * m + a;
+    uint u = p.x + p.y;
+    u ^= u >> 16u;
+    u = u * 0x9E3779BDu;
+    return u ^ u >> 6u ^ u >> 26u;
+         */
+//        n ^= (x * 0x7C8A5 + 0x91E10DA5) + (y * 0x7E57D + 0xA0F2EC75);
+        n ^= (x * 0x7C8A5) + (y * 0x7E57D);
+        n ^= n >>> 16;
+        n *= 0x9E375;
+        return n ^ n >>> 16;
+    }
+
+    public static int iphHash(int x, int y, int s) {
+        s ^= x * 0x1827F5 ^ y * 0x123C21;
+        return (s = (s ^ (s << 19 | s >>> 13) ^ (s << 5 | s >>> 27) ^ 0xD1B54A35) * 0x125493) ^ s >>> 16;
+    }
+
 //        y ^= (s ^ 0xD192ED03) * 0x1A36A9;
 //        x ^= (y ^ 0xFB8FAC03) * 0x157931;
 //        s ^= (x ^ 0x2F3D8DD7) * 0x119725;
@@ -1242,11 +1263,11 @@ public class HashQualityTest {
                             }
                             points.set(c);
                             colliderLath.add(latheCoord(x, y) & restrict);
-                            colliderSzud.add(szudzikCoord(x, y) & restrict);
-                            colliderPelo.add(pelotonCoord(x, y) & restrict);
+                            colliderSzud.add(goRogueCoord(x, y) & restrict);
+                            colliderPelo.add(iphHash(x, y, 0x1337BEEF) & restrict);
                             colliderCant.add(Coord.cantorHashCode(x, y) & restrict);
                             colliderRoSt.add(Coord.rosenbergStrongHashCode(x, y) & restrict);
-                            colliderXoro.add(goRogueCoord(x, y) & restrict);
+                            colliderXoro.add(scratcherCoord(x, y, 0x1337BEEF) & restrict);
                             colliderObje.add(Objects.hash(x, y) & restrict);
                             
 //                            for (int i = 0; i < 31; i++) {
@@ -1287,11 +1308,11 @@ public class HashQualityTest {
         }
         System.out.println("Number of Coords added: " + total);
         System.out.println("TOTAL Lath collisions: " + lathTotal + " (" + (lathTotal * 100.0 / total) + "%), BEST " + lathBest + ", WORST " + lathWorst);
-        System.out.println("TOTAL Szud collisions: " + szudTotal + " (" + (szudTotal * 100.0 / total) + "%), BEST " + szudBest + ", WORST " + szudWorst);
-        System.out.println("TOTAL Pelo collisions: " + peloTotal + " (" + (peloTotal * 100.0 / total) + "%), BEST " + peloBest + ", WORST " + peloWorst);
+        System.out.println("TOTAL GoRo collisions: " + szudTotal + " (" + (szudTotal * 100.0 / total) + "%), BEST " + szudBest + ", WORST " + szudWorst);
+        System.out.println("TOTAL InPo collisions: " + peloTotal + " (" + (peloTotal * 100.0 / total) + "%), BEST " + peloBest + ", WORST " + peloWorst);
         System.out.println("TOTAL Cant collisions: " + cantTotal + " (" + (cantTotal * 100.0 / total) + "%), BEST " + cantBest + ", WORST " + cantWorst);
         System.out.println("TOTAL RoSt collisions: " + rostTotal + " (" + (rostTotal * 100.0 / total) + "%), BEST " + rostBest + ", WORST " + rostWorst);
-        System.out.println("TOTAL GoRo collisions: " + xoroTotal + " (" + (xoroTotal * 100.0 / total) + "%), BEST " + xoroBest + ", WORST " + xoroWorst);
+        System.out.println("TOTAL Scra collisions: " + xoroTotal + " (" + (xoroTotal * 100.0 / total) + "%), BEST " + xoroBest + ", WORST " + xoroWorst);
         System.out.println("TOTAL Obje collisions: " + objeTotal + " (" + (objeTotal * 100.0 / total) + "%), BEST " + objeBest + ", WORST " + objeWorst);
 //        for (int i = 0; i < 31; i++) {
 //            System.out.println("TOTAL Lath_"+(i+1)+" collisions: " + confTotals[i] + " (" + (confTotals[i] * 100.0 / total) + "%)");
