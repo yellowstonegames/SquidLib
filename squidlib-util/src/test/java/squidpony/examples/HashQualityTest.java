@@ -1145,11 +1145,23 @@ public class HashQualityTest {
     u = u * 0x9E3779BDu;
     return u ^ u >> 6u ^ u >> 26u;
          */
-//        n ^= (x * 0x7C8A5 + 0x91E10DA5) + (y * 0x7E57D + 0xA0F2EC75);
-        n ^= (x * 0x7C8A5) + (y * 0x7E57D);
-        n ^= n >>> 16;
-        n *= 0x9E375;
+        //(n << 13 | n >>> 19) ^ (n << 29 | n >>> 3) ^
+//        n += (x * 0x7C735) + (y * 0x75915);
+//        return (n >>> ((x & 15) ^ (y & 15))) * 0x9E373;
+        n ^= (((x * 0x7C735) + (y * 0x75915) - n ^ 0xD1B54A35) * 0x9E373 ^ 0x91E10DA5) * 0x125493;
         return n ^ n >>> 16;
+//        n += (x * 0xFAAE1A75) + (y * 0xEE5C155D);
+//        return (n >>> ((x & 15) ^ (y & 15))) * 0x93D765DD;
+
+        //n += y + ((x + y) * (x + y + 1) >>> 1);
+//        n = (n ^ n >>> 15) * 0x9E373;
+//        n = (n ^ n >>> 15) * 0x7C8A5;
+//        return n ^ n >>> 16;
+
+//        n ^= (x * 0x7C8A5) + (y * 0x7E57D);
+//        n ^= n >>> 16;
+//        n *= 0x9E375;
+//        return n ^ n >>> 16;
     }
 
     public static int iphHash(int x, int y, int s) {
