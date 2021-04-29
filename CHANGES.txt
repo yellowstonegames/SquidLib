@@ -1,8 +1,45 @@
+3.0.4-SNAPSHOT
+Dependencies:
+ - squidlib-util: RegExodus 0.1.12
+ - squidlib: libGDX 1.10.0, anim8-gdx 0.2.8
+ - squidlib-extra: libGDX 1.10.0
+Changes:
+ - BREAKING: AbstractRNG's code that generated longs in a bounded range had some issues, and so did RNG. Both have been fixed, which may change bounded long generation (which tends to be rare).
+ - OpenSimplex2's "S" (smooth) and "F" (fast) versions have been added to SquidLib, though they have to "fake seeds" by sampling different coordinates for different seeds.
+ - SEED BREAKING (unless you use an archive): Thesaurus can now generate vegetable names, and not just fruit.
+ - Thesaurus also has a ZOMBIE mode, for the enlightened few of the walking dead that can murmur out partial sentences.
+ - StrinkKit.appendJoined() methods simultaneously join items from an array or Collection and append them to a StringBuilder.
+ - Some changes to SquidMouse, mostly for readability.
+ - Speedup for NumberTools.atan2(), plus an implementation for atan() to round out the trigonometric functions.
+ - Inconsolata LGC now has an MSDF version in the assets.
+
+3.0.3
+Dependencies:
+ - squidlib-util: RegExodus 0.1.10
+ - squidlib: libGDX 1.9.12, anim8-gdx 0.2.4
+ - squidlib-extra: libGDX 1.9.12
+Changes:
+ - SEED BREAKING: SerpentDeepMapGenerator had a rare out-of-bounds crash issue that has been fixed, though this may change the output of that generator.
+ - FakeLanguageGen can now detect some uncommon accents and remove them with its removeAccents() method; previously it could produce some accented vowels but not remove them.
+ - New math stuff; MathExtras.barronSpline(), speedups to NumberTools.acos() and NumberTools.asin(), and so on.
+ - Triangular-mapped blue noise is available in BlueNoise.TRI_NOISE, as well as in some methods there.
+ - Cascadia Mono has been added to the assets as an MSDF font; it has a nice, comfortable and different look.
+
+3.0.2
+Dependencies:
+ - squidlib-util: RegExodus 0.1.10
+ - squidlib: libGDX 1.9.11, anim8-gdx 0.2.2
+ - squidlib-extra: libGDX 1.9.11
+Changes:
+ - IMPORTANT: 3.0.2 fixes some critical incompatibilities in 3.0.1 with Java 7 and 8.
+ - BREAKING: The behavior of IRNG.nextSignedInt() and IRNG.nextSignedLong() was buggy for negative bounds, and has been corrected, though this changes existing results.
+ - SEED BREAKING: OrganicMapGenerator's implementation is completely different, and tends to produce better organic shapes.
+ - SparseLayers.frontChars() is new, and lets you get a simple view of a SparseLayers to put in, say, a text file.
 
 3.0.1
 Dependencies:
  - squidlib-util: RegExodus 0.1.10
- - squidlib: libGDX 1.9.11, anim8-gdx 0.2.0 
+ - squidlib: libGDX 1.9.11, anim8-gdx 0.2.0
  - squidlib-extra: libGDX 1.9.11
 Changes:
  - 5D noise has been added to fit in-between the existing 4D and 6D.

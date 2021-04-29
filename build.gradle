@@ -52,7 +52,6 @@ subprojects {
     ((StandardJavadocDocletOptions)javadoc.options).noTimestamp(true)
     ((StandardJavadocDocletOptions)javadoc.options).use(true)
     ((StandardJavadocDocletOptions)javadoc.options).bottom("Copyright &#169; Eben Howard 2012&#x2013;2021. All rights reserved.")
-    javadoc.setExecutable("${System.env.JAVA_HOME}/bin/javadoc")
     javadoc.destinationDir = file("../docs/$name/apidocs")
 
 }

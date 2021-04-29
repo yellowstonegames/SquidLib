@@ -5,11 +5,12 @@ import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.utils.GdxRuntimeException;
-import squidpony.squidgrid.gui.gdx.SColor;
-import squidpony.squidmath.*;
+import squidpony.squidmath.Coord;
+import squidpony.squidmath.StatefulRNG;
 
 import java.io.IOException;
 import java.text.DateFormat;
@@ -19,9 +20,11 @@ import java.util.Date;
 /**
  * Porting Bart Wronski's blue noise generator from NumPy to Java, see
  * https://bartwronski.com/2021/04/21/superfast-void-and-cluster-blue-noise-in-python-numpy-jax/ for more.
+ * The actual code was finished in SquidSquad, where it uses some of the unusual features in jdkgdxds.
+ * https://github.com/yellowstonegames/SquidSquad/blob/6a94cd26187d0c5a7064d48ef732e9da7f52a504/squidworld/src/test/java/com/github/yellowstonegames/world/BlueNoiseGenerator.java
  */
 public class BlueNoiseGenerator extends ApplicationAdapter {
-    private static final int size = 64, height = 64;
+    private static final int shift = 6, size = 1 << shift;
     private static final double sigma = 1.9, sigma2 = sigma * sigma;
     private Pixmap pm;
     private StatefulRNG rng;
@@ -43,7 +46,7 @@ public class BlueNoiseGenerator extends ApplicationAdapter {
         writer = new PixmapIO.PNG((int)(pm.getWidth() * pm.getHeight() * 1.5f)); // Guess at deflated size.
         writer.setFlipY(false);
         writer.setCompression(6);
-        rng = new StatefulRNG(CrossHash.hash64(date));
+        rng = new StatefulRNG(date.hashCode());
         //rng.setState(rng.nextLong() + 2000L); // change addend when you need different results on the same date  
         //rng = new StatefulRNG(0L);
         seed = rng.getState();
@@ -71,12 +74,12 @@ public class BlueNoiseGenerator extends ApplicationAdapter {
         final int limit = (size >>> 3) * (size >>> 3);
         ArrayList<Coord> initial = new ArrayList<>(limit);
         for (int i = 1; i <= limit; i++) {
-            initial.add(VanDerCorputQRNG.roberts(size, size, 0, 0, i));
+            initial.add(Coord.get((int) (0xC13FA9A902A6328FL * i >>> 64 - shift), (int)(0x91E10DA5C79E7B1DL * i >>> 64 - shift)));
         }
         rng.shuffleInPlace(initial);
 
 
-        pm.setColor(SColor.BLACK);
+        pm.setColor(Color.BLACK);
         pm.fill();
         for (int x = 0; x < size; x++) {
             for (int y = 0; y < size; y++) {
