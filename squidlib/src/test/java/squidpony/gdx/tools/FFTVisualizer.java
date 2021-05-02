@@ -35,7 +35,7 @@ public class FFTVisualizer extends ApplicationAdapter {
     private final IPointHash[] pointHashes = new IPointHash[] {iph, torus, cube, rug, quilt};
     private int hashIndex = 0;
     private static final int MODE_LIMIT = 12;
-    private int mode = 0;
+    private int mode = 6;
     private int dim; // this can be 0, 1, 2, or 3; add 2 to get the actual dimensions
     private int octaves = 3;
     private float freq = 0.125f;
@@ -540,7 +540,7 @@ public class FFTVisualizer extends ApplicationAdapter {
                 case 3:
                     for (int x = 0; x < width; x++) {
                         for (int y = 0; y < height; y++) {
-                            bright = (float) (db = 0x1p-8 * (getChosen(x, y, noise.getSeed()) + 128));
+                            bright = (float) (db = 0x1p-8 * (BlueNoise.getSeededTiling(x, y, noise.getSeed()) + 128));
                             real[x][y] = db;
                             renderer.color(bright, bright, bright, 1f);
                             renderer.vertex(x, y, 0);
@@ -628,7 +628,7 @@ public class FFTVisualizer extends ApplicationAdapter {
                 case 3:
                     for (int x = 0; x < width; x++) {
                         for (int y = 0; y < height; y++) {
-                            bright = 0x1p-8 * (getChosen(x, y, noise.getSeed()) + 128) <= threshold ? 1 : 0;
+                            bright = 0x1p-8 * (BlueNoise.getSeededTiling(x, y, noise.getSeed()) + 128) <= threshold ? 1 : 0;
                             real[x][y] = bright;
                             renderer.color(bright, bright, bright, 1f);
                             renderer.vertex(x, y, 0);
