@@ -159,50 +159,51 @@ public class FastNoiseVisualizer extends ApplicationAdapter {
                         Gdx.files.local("out/").mkdirs();
                         gif.write(Gdx.files.local("out/cube.gif"), frames, 12);
                         break;
-                    case P: //pause
-                        keepGoing = !keepGoing;
-                    case C:
-                        ctr++;
-                        break;
-                    case E: //earlier seed
-                        noise.setSeed(noise.getSeed() - 1);
-                        break;
-                    case S: //seed
-                        noise.setSeed(noise.getSeed() + 1);
-                        break;
-                    case N: // noise type
-                    case EQUALS:
-                    case ENTER:
-                        noise.setNoiseType((noise.getNoiseType() + 1) % 14);
-                        break;
-                    case MINUS:
-                        noise.setNoiseType((noise.getNoiseType() + 13) % 14);
-                        break;
-                    case D: //dimension
-                        dim = (dim + 1) % 5;
-                        break;
-                    case F: // frequency
+                case P: //pause
+                    keepGoing = !keepGoing;
+                case C:
+                    ctr++;
+                    break;
+                case E: //earlier seed
+                    noise.setSeed(noise.getSeed() - 1);
+                    break;
+                case S: //seed
+                    noise.setSeed(noise.getSeed() + 1);
+                    break;
+                case N: // noise type
+                case EQUALS:
+                case ENTER:
+                    noise.setNoiseType((noise.getNoiseType() + 1) % 14);
+                    break;
+                case M:
+                case MINUS:
+                    noise.setNoiseType((noise.getNoiseType() + 13) % 14);
+                    break;
+                case D: //dimension
+                    dim = (dim + 1) % 5;
+                    break;
+                case F: // frequency
 //                        noise.setFrequency(NumberTools.sin(freq += 0.125f) * 0.25f + 0.25f + 0x1p-7f);
-                        noise.setFrequency((float) Math.exp((System.currentTimeMillis() >>> 9 & 7) - 5));
-                        break;
-                    case R: // fRactal type
-                        noise.setFractalType((noise.getFractalType() + 1) % 3);
-                        break;
-                    case G: // GLITCH!
-                        noise.setPointHash(pointHashes[hashIndex = (hashIndex + 1) % pointHashes.length]);
-                        break;
-                    case H: // higher octaves
-                        noise.setFractalOctaves((octaves = octaves + 1 & 7) + 1);
-                        break;
-                    case L: // lower octaves
-                        noise.setFractalOctaves((octaves = octaves + 7 & 7) + 1);
-                        break;
-                    case I: // inverse mode
-                        if (inverse = !inverse) {
-                            noise.setFractalLacunarity(0.5f);
-                            noise.setFractalGain(2f);
-                        } else {
-                            noise.setFractalLacunarity(2f);
+                    noise.setFrequency((float) Math.exp((System.currentTimeMillis() >>> 9 & 7) - 5));
+                    break;
+                case R: // fRactal type
+                    noise.setFractalType((noise.getFractalType() + 1) % 3);
+                    break;
+                case G: // GLITCH!
+                    noise.setPointHash(pointHashes[hashIndex = (hashIndex + 1) % pointHashes.length]);
+                    break;
+                case H: // higher octaves
+                    noise.setFractalOctaves((octaves = octaves + 1 & 7) + 1);
+                    break;
+                case L: // lower octaves
+                    noise.setFractalOctaves((octaves = octaves + 7 & 7) + 1);
+                    break;
+                case I: // inverse mode
+                    if (inverse = !inverse) {
+                        noise.setFractalLacunarity(0.5f);
+                        noise.setFractalGain(2f);
+                    } else {
+                        noise.setFractalLacunarity(2f);
                             noise.setFractalGain(0.5f);
                         }
                         break;
