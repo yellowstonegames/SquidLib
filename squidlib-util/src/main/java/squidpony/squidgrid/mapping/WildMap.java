@@ -417,7 +417,7 @@ public class WildMap implements Serializable {
         BlueNoise.blueSpill(floors, floorLimit, rng);
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
-                if((b = BlueNoise.getChosen(x, y, seed) + 128) < limit)
+                if((b = BlueNoise.getSeededOmniTiling(x, y, seed) + 128) < limit)
                     content[x][y] = b;
             }
         }

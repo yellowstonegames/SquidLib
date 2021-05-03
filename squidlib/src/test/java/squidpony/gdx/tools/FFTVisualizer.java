@@ -6,7 +6,6 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.glutils.ImmediateModeRenderer20;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -25,7 +24,7 @@ import static squidpony.squidmath.BlueNoise.TRI_NOISE;
  */
 public class FFTVisualizer extends ApplicationAdapter {
 
-    private final FastNoise noise = new FastNoise(1, 0.25f);
+    private final FastNoise noise = new FastNoise(0x1337BEEF, 0.25f);
     private final IntPointHash iph = new IntPointHash();
     private final FlawedPointHash.RugHash rug = new FlawedPointHash.RugHash(1);
     private final FlawedPointHash.QuiltHash quilt = new FlawedPointHash.QuiltHash(1, 32);
@@ -531,7 +530,7 @@ public class FFTVisualizer extends ApplicationAdapter {
                 case 2:
                     for (int x = 0; x < width; x++) {
                         for (int y = 0; y < height; y++) {
-                            bright = (float) (db = 0x1p-8 * (BlueNoise.getSeededTiling(x, y, noise.getSeed()) + 128));
+                            bright = (float) (db = 0x1p-8 * (getSeededOmniTiling(x, y, noise.getSeed()) + 128));
                             real[x][y] = db;
                             renderer.color(bright, bright, bright, 1f);
                             renderer.vertex(x, y, 0);
@@ -541,7 +540,7 @@ public class FFTVisualizer extends ApplicationAdapter {
                 case 3:
                     for (int x = 0; x < width; x++) {
                         for (int y = 0; y < height; y++) {
-                            bright = (float) (db = 0x1p-8 * (BlueNoise.getSeededTilingOmni(x, y, noise.getSeed()) + 128));
+                            bright = (float) (db = 0x1p-8 * (BlueNoise.getSeededOmniTiling(x, y, noise.getSeed()) + 128));
                             real[x][y] = db;
                             renderer.color(bright, bright, bright, 1f);
                             renderer.vertex(x, y, 0);
@@ -575,7 +574,7 @@ public class FFTVisualizer extends ApplicationAdapter {
                 case 2:
                     for (int x = 0; x < width; x++) {
                         for (int y = 0; y < height; y++) {
-                            bright = (float) (db = 0x1p-8 * (BlueNoise.getChosen(x, y, noise.getSeed(), TRI_NOISE) + 128));
+                            bright = (float) (db = 0x1p-8 * (BlueNoise.getSeededTriangular(x, y, noise.getSeed()) + 128));
                             real[x][y] = db;
                             renderer.color(bright, bright, bright, 1f);
                             renderer.vertex(x, y, 0);
@@ -585,7 +584,7 @@ public class FFTVisualizer extends ApplicationAdapter {
                 case 3:
                     for (int x = 0; x < width; x++) {
                         for (int y = 0; y < height; y++) {
-                            bright = (float) (db = 0x1p-8 * (BlueNoise.getSeededTriangular(x, y, noise.getSeed()) + 128));
+                            bright = (float) (db = 0x1p-8 * (BlueNoise.getSeededTriOmniTiling(x, y, noise.getSeed()) + 128));
                             real[x][y] = db;
                             renderer.color(bright, bright, bright, 1f);
                             renderer.vertex(x, y, 0);
@@ -620,7 +619,7 @@ public class FFTVisualizer extends ApplicationAdapter {
                 case 2:
                     for (int x = 0; x < width; x++) {
                         for (int y = 0; y < height; y++) {
-                            bright = 0x1p-8 * (BlueNoise.getSeededTiling(x, y, noise.getSeed()) + 128) <= threshold ? 1 : 0;
+                            bright = 0x1p-8 * (getSeededOmniTiling(x, y, noise.getSeed()) + 128) <= threshold ? 1 : 0;
                             real[x][y] = bright;
                             renderer.color(bright, bright, bright, 1f);
                             renderer.vertex(x, y, 0);
@@ -630,7 +629,7 @@ public class FFTVisualizer extends ApplicationAdapter {
                 case 3:
                     for (int x = 0; x < width; x++) {
                         for (int y = 0; y < height; y++) {
-                            bright = 0x1p-8 * (BlueNoise.getSeededTilingOmni(x, y, noise.getSeed()) + 128) <= threshold ? 1 : 0;
+                            bright = 0x1p-8 * (BlueNoise.getSeededOmniTiling(x, y, noise.getSeed()) + 128) <= threshold ? 1 : 0;
                             real[x][y] = bright;
                             renderer.color(bright, bright, bright, 1f);
                             renderer.vertex(x, y, 0);
@@ -664,7 +663,7 @@ public class FFTVisualizer extends ApplicationAdapter {
                 case 2:
                     for (int x = 0; x < width; x++) {
                         for (int y = 0; y < height; y++) {
-                            bright = 0x1p-8 * (BlueNoise.getChosen(x, y, noise.getSeed(), TRI_NOISE) + 128) <= threshold ? 1 : 0;
+                            bright = 0x1p-8 * (BlueNoise.getSeededTriangular(x, y, noise.getSeed()) + 128) <= threshold ? 1 : 0;
                             real[x][y] = bright;
                             renderer.color(bright, bright, bright, 1f);
                             renderer.vertex(x, y, 0);
@@ -674,7 +673,7 @@ public class FFTVisualizer extends ApplicationAdapter {
                 case 3:
                     for (int x = 0; x < width; x++) {
                         for (int y = 0; y < height; y++) {
-                            bright = 0x1p-8 * (BlueNoise.getSeededTriangular(x, y, noise.getSeed()) + 128) <= threshold ? 1 : 0;
+                            bright = 0x1p-8 * (BlueNoise.getSeededTriOmniTiling(x, y, noise.getSeed()) + 128) <= threshold ? 1 : 0;
                             real[x][y] = bright;
                             renderer.color(bright, bright, bright, 1f);
                             renderer.vertex(x, y, 0);
@@ -878,6 +877,13 @@ public class FFTVisualizer extends ApplicationAdapter {
 
         return hilbert;
     }
+
+    public static byte getSeededOmniTiling(final int x, final int y, final int seed) {
+        final int a = x >>> 6;
+        final int b = y >>> 6;
+        return BlueNoise.TILE_NOISE[seed + b + ((a + b) * (a + b + 1) >> 1) & 63][(y << 6 & 0xFC0) | (x & 0x3F)];
+    }
+
 
     @Override
     public void render() {
