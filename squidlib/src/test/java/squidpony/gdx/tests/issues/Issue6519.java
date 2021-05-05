@@ -9,9 +9,9 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import squidpony.squidmath.Coord;
 
 public class Issue6519 extends ApplicationAdapter {
     public static class GraphicalTerm {
@@ -61,8 +61,8 @@ public class Issue6519 extends ApplicationAdapter {
             return this.Width;
         }
 
-        public Coord GetCurrentPos() {
-            return Coord.get(this.x,this.y);
+        public GridPoint2 GetCurrentPos() {
+            return new GridPoint2(this.x,this.y);
         }
 
         public boolean SetPos(int x, int y) {
