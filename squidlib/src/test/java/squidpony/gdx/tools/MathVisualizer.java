@@ -24,8 +24,8 @@ import java.util.Random;
  * Created by Tommy Ettinger on 1/13/2018.
  */
 public class MathVisualizer extends ApplicationAdapter {
-    private int mode = 15;
-    private int modes = 56;
+    private int mode = 55;
+    private int modes = 57;
     private FilterBatch batch;
     private SparseLayers layers;
     private InputAdapter input;
@@ -33,7 +33,7 @@ public class MathVisualizer extends ApplicationAdapter {
     private int[] amounts = new int[512];
     private double[] dAmounts = new double[512];
     private DiverRNG diver;
-    private SilkRNG rng;
+    private MoonwalkRNG rng;
     private boolean hasGauss;
     private double followingGauss;
     private RandomBias bias;
@@ -479,7 +479,7 @@ public class MathVisualizer extends ApplicationAdapter {
         startTime = TimeUtils.millis();
         Coord.expandPoolTo(512, 512);
         diver = new DiverRNG(1234567890L);
-        rng = new SilkRNG(1234567890);
+        rng = new MoonwalkRNG(1234567890);
         seed = DiverRNG.determine(12345L);
         bias = new RandomBias();
         edit = new EditRNG();
@@ -734,9 +734,9 @@ public class MathVisualizer extends ApplicationAdapter {
             }
             break;
             case 10: {
-                float s = (float)Math.exp(Math.sin((System.currentTimeMillis() & 0xFFFF) * 0x1p-9) * 2);
+                float s = (float) Math.exp(Math.sin((System.currentTimeMillis() & 0xFFFF) * 0x1p-9) * 2);
                 float t = 0.5f;
-                Gdx.graphics.setTitle("s="+s+", t="+t);
+                Gdx.graphics.setTitle("s=" + s + ", t=" + t);
                 //DiverRNG diver = new DiverRNG();
                 for (int i = 0; i < 0x100000; i++) {
                     amounts[(int) (MathExtras.barronSpline(diver.nextFloat(), s, t) * 511.999)]++;
@@ -759,7 +759,7 @@ public class MathVisualizer extends ApplicationAdapter {
             case 11: {
                 float s = 8;
                 float t = (float) Math.sin((System.currentTimeMillis() & 0xFFFF) * 0x1p-9) * 0.5f + 0.5f;
-                Gdx.graphics.setTitle("s="+s+", t="+t);
+                Gdx.graphics.setTitle("s=" + s + ", t=" + t);
                 //DiverRNG diver = new DiverRNG();
                 for (int i = 0; i < 0x100000; i++) {
                     amounts[(int) (MathExtras.barronSpline(diver.nextFloat(), s, t) * 511.999)]++;
@@ -869,8 +869,8 @@ public class MathVisualizer extends ApplicationAdapter {
                         " nextGaussian()");
                 for (int i = 0; i < 0x50000; i++) {
                     double d = nextGaussian() * 64.0 + 256.0;
-                    if(d >= 0 && d < 512)
-                        amounts[(int)d]++;
+                    if (d >= 0 && d < 512)
+                        amounts[(int) d]++;
                 }
                 for (int i = 0; i < 512; i++) {
                     float color = (i & 63) == 0
@@ -930,8 +930,8 @@ public class MathVisualizer extends ApplicationAdapter {
                         " probit");
                 for (int i = 0; i < 0x50000; i++) {
                     double d = MathExtras.probit(nextExclusiveDouble()) * 64.0 + 256.0;
-                    if(d >= 0 && d < 512)
-                        amounts[(int)d]++;
+                    if (d >= 0 && d < 512)
+                        amounts[(int) d]++;
                 }
                 for (int i = 0; i < 512; i++) {
                     float color = (i & 63) == 0
@@ -976,8 +976,8 @@ public class MathVisualizer extends ApplicationAdapter {
                 for (int i = 0; i < 0x40000; i++) {
                     double d = Math.cbrt(MathExtras.probit(nextExclusiveDouble()));
                     d = d * 64.0 + 256.0;
-                    if(d >= 0 && d < 512)
-                        amounts[(int)d]++;
+                    if (d >= 0 && d < 512)
+                        amounts[(int) d]++;
                 }
                 for (int i = 0; i < 512; i++) {
                     float color = (i & 63) == 0
@@ -1489,19 +1489,18 @@ public class MathVisualizer extends ApplicationAdapter {
             case 31: {
                 Gdx.graphics.setTitle("Sine frequencies");
                 float p = MathUtils.PI;
-                if((TimeUtils.timeSinceMillis(startTime) & 512L) == 0L) {
+                if ((TimeUtils.timeSinceMillis(startTime) & 512L) == 0L) {
                     for (int i = 1; i <= 0x400000; i++, p = (p + 1.6180339887498949f) % MathUtils.PI2) {
 //                    amounts[MathUtils.round(MathUtils.sinDeg(p) * 255f + 256f)]++;           // libGDX's LUT way
                         amounts[MathUtils.round((NumberTools.sin(p)) * 255f + 256f)]++;   // SquidLib's no-LUT way
                     }
-                }
-                else {
+                } else {
                     for (int i = 1; i <= 0x400000; i++, p = (p + 1.6180339887498949f) % MathUtils.PI2) {
-                    amounts[MathUtils.round(MathUtils.sin(p) * 255f + 256f)]++;           // libGDX's LUT way
+                        amounts[MathUtils.round(MathUtils.sin(p) * 255f + 256f)]++;           // libGDX's LUT way
 //                    amounts[MathUtils.round(minimaxSin(p) * 255f + 256f)]++;           // libGDX's LUT way
 //                        amounts[MathUtils.round((NumberTools.sinDegrees(p)) * 255f + 256f)]++;   // SquidLib's no-LUT way
                     }
-                    
+
                 }
 //                float q = 0.6180339887498949f;
 //                for (int i = 1; i <= 0x1000000; i++, p = (p + 1.6180339887498949f) % 360f, q = (q + MathUtils.PI) % 360f) {
@@ -1651,7 +1650,7 @@ public class MathVisualizer extends ApplicationAdapter {
                 for (int i = 1; i <= 0x100000; i++) {
                     long r = diver.nextLong();
                     amounts[(int) ((NumberTools.sin_((r & 0xFFFL) * 0x1p-12f) * tm
-                    + ((r >>> 16 & 0xFFFL) - (r >>> 28 & 0xFFFL) + (r >>> 40 & 0xFFFL) - (r >>> 52)) * 0x1p-13f * (0.5f - tm)
+                            + ((r >>> 16 & 0xFFFL) - (r >>> 28 & 0xFFFL) + (r >>> 40 & 0xFFFL) - (r >>> 52)) * 0x1p-13f * (0.5f - tm)
 //                    + (NumberTools.asin_((r >>> 32 & 0xFFFF) * 0x1p-16f) - NumberTools.asin_((r >>> 48) * 0x1p-16f)) * (2f - tm)
                             + 0.5f) * 511f)]++;
                 }
@@ -1942,11 +1941,10 @@ public class MathVisualizer extends ApplicationAdapter {
                 for (int x = -8; x < 8; x++) {
                     for (int y = -8; y < 8; y++) {
                         int m, sign, g;
-                        if((x + (x >> 31) ^ x >> 31) >= (y + (y >> 31) ^ y >> 31)) {
+                        if ((x + (x >> 31) ^ x >> 31) >= (y + (y >> 31) ^ y >> 31)) {
                             m = -x;
                             sign = -1;
-                        }
-                        else {
+                        } else {
                             m = y;
                             sign = 0;
                         }
@@ -1965,19 +1963,19 @@ public class MathVisualizer extends ApplicationAdapter {
                 // thanks to Jonathan M, https://stackoverflow.com/a/20591835
                 Gdx.graphics.setTitle("Spiral Numbering Thing, from index");
                 for (int g = 0; g < 256; g++) {
-                    final int root = (int)(Math.sqrt(g));
+                    final int root = (int) (Math.sqrt(g));
                     final int sign = -(root & 1);
-                    final int big  = (root * (root + 1)) - g << 1;
-                    final int y=((root + 1 >> 1) + sign ^ sign) + ((sign ^ sign + Math.min(big, 0)) >> 1);
-                    final int x=((root + 1 >> 1) + sign ^ sign) - ((sign ^ sign + Math.max(big, 0)) >> 1);
+                    final int big = (root * (root + 1)) - g << 1;
+                    final int y = ((root + 1 >> 1) + sign ^ sign) + ((sign ^ sign + Math.min(big, 0)) >> 1);
+                    final int x = ((root + 1 >> 1) + sign ^ sign) - ((sign ^ sign + Math.max(big, 0)) >> 1);
                     float color = SColor.floatGetI(g, g, g);
-                        for (int a = 0; a < 32; a++) {
-                            for (int b = 0; b < 32; b++) {
-                                layers.backgrounds[256 + 8 + (x << 5) + a][256 + (y << 5) + b] = color;
-                            }
+                    for (int a = 0; a < 32; a++) {
+                        for (int b = 0; b < 32; b++) {
+                            layers.backgrounds[256 + 8 + (x << 5) + a][256 + (y << 5) + b] = color;
                         }
                     }
                 }
+            }
             break;
             case 49: {
                 Gdx.graphics.setTitle("Jitter Test at " + Gdx.graphics.getFramesPerSecond() + " FPS");
@@ -1987,8 +1985,8 @@ public class MathVisualizer extends ApplicationAdapter {
                 for (int j = 0; j < 10000; j++) {
 //                    x = Noise.fastFloor(Math.cbrt(((short)r) * ((short)(r >>> 16)) * 0x1p-32) * 250 + 260);
 //                    y = Noise.fastFloor(Math.cbrt(((short)(r>>>32)) * ((short)(r >>> 48)) * 0x1p-32) * 250 + 260);
-                    x = ((int)((Long.bitCount(r += 0xC13FA9A902A633EBL) - Long.bitCount(r += 0xC13FA9A902A633EBL) + (int)(r += 0xC13FA9A902A633EBL) * 0x1.4p-30) * 4 + 256) & 511) + 4;
-                    y = ((int)((Long.bitCount(s += 0x9E3779B97F4C0401L) - Long.bitCount(s += 0x9E3779B97F4C0401L) + (int)(s += 0x9E3779B97F4C0401L) * 0x1.4p-30) * 4 + 256) & 511) + 4;
+                    x = ((int) ((Long.bitCount(r += 0xC13FA9A902A633EBL) - Long.bitCount(r += 0xC13FA9A902A633EBL) + (int) (r += 0xC13FA9A902A633EBL) * 0x1.4p-30) * 4 + 256) & 511) + 4;
+                    y = ((int) ((Long.bitCount(s += 0x9E3779B97F4C0401L) - Long.bitCount(s += 0x9E3779B97F4C0401L) + (int) (s += 0x9E3779B97F4C0401L) * 0x1.4p-30) * 4 + 256) & 511) + 4;
                     // 0xC13FA9A902A6328FL 0x9E3779B97F4A7C15L
                     // changed to (bit counts are better)
                     // 0xC13FA9A902A633EBL 0x9E3779B97F4C0401L
@@ -2002,8 +2000,8 @@ public class MathVisualizer extends ApplicationAdapter {
                 int x, y;
                 for (int i = 0; i < size; i++) {
                     BlueNoise.indexedBlueNoisePoint(circleCoord, i, 1.0);
-                    x = (int)(circleCoord[0] * 512);
-                    y = (int)(circleCoord[1] * 512);
+                    x = (int) (circleCoord[0] * 512);
+                    y = (int) (circleCoord[1] * 512);
                     if (layers.backgrounds[x][y] != 0f) {
                         layers.backgrounds[x][y] = -0x1.7677e8p125F;
                         System.out.println("Overlap on index " + i);
@@ -2019,18 +2017,17 @@ public class MathVisualizer extends ApplicationAdapter {
                 for (int i = 0; i < 0x10000; i++) {
                     long bits = Double.doubleToLongBits(xs128.nextDouble());
                     for (int j = 0, jj = 504; j < 64; j++, jj -= 8) {
-                        if(1L == (bits >>> j & 1L))
-                            amounts[jj] = amounts[jj+1] = amounts[jj+2] = amounts[jj+3]
-                                    = amounts[jj+4] = amounts[jj+5] = ++amounts[jj+6];
+                        if (1L == (bits >>> j & 1L))
+                            amounts[jj] = amounts[jj + 1] = amounts[jj + 2] = amounts[jj + 3]
+                                    = amounts[jj + 4] = amounts[jj + 5] = ++amounts[jj + 6];
                     }
                 }
                 for (int i = 0; i < 512; i++) {
-                    if((i & 7) == 3){
+                    if ((i & 7) == 3) {
                         for (int j = 510 - (amounts[i] >> 8); j < 520; j++) {
                             layers.backgrounds[i][j] = -0x1.c98066p126F;
                         }
-                    }
-                    else {
+                    } else {
                         for (int j = 519 - (amounts[i] >> 8); j < 520; j++) {
                             layers.backgrounds[i][j] = -0x1.d08864p126F;
                         }
@@ -2049,18 +2046,17 @@ public class MathVisualizer extends ApplicationAdapter {
                 for (int i = 0; i < 0x10000; i++) {
                     long bits = Double.doubleToLongBits(nextExclusiveDouble());
                     for (int j = 0, jj = 504; j < 64; j++, jj -= 8) {
-                        if(1L == (bits >>> j & 1L))
-                            amounts[jj] = amounts[jj+1] = amounts[jj+2] = amounts[jj+3]
-                                    = amounts[jj+4] = amounts[jj+5] = ++amounts[jj+6];
+                        if (1L == (bits >>> j & 1L))
+                            amounts[jj] = amounts[jj + 1] = amounts[jj + 2] = amounts[jj + 3]
+                                    = amounts[jj + 4] = amounts[jj + 5] = ++amounts[jj + 6];
                     }
                 }
                 for (int i = 0; i < 512; i++) {
-                    if((i & 7) == 3){
+                    if ((i & 7) == 3) {
                         for (int j = 510 - (amounts[i] >> 8); j < 520; j++) {
                             layers.backgrounds[i][j] = -0x1.c98066p126F;
                         }
-                    }
-                    else {
+                    } else {
                         for (int j = 519 - (amounts[i] >> 8); j < 520; j++) {
                             layers.backgrounds[i][j] = -0x1.d08864p126F;
                         }
@@ -2080,18 +2076,17 @@ public class MathVisualizer extends ApplicationAdapter {
                 for (int i = 0; i < 0x10000; i++) {
                     int bits = Float.floatToIntBits(xs128.nextFloat());
                     for (int j = 0, jj = 504 - 128; j < 32; j++, jj -= 8) {
-                        if(1 == (bits >>> j & 1))
-                            amounts[jj] = amounts[jj+1] = amounts[jj+2] = amounts[jj+3]
-                                    = amounts[jj+4] = amounts[jj+5] = ++amounts[jj+6];
+                        if (1 == (bits >>> j & 1))
+                            amounts[jj] = amounts[jj + 1] = amounts[jj + 2] = amounts[jj + 3]
+                                    = amounts[jj + 4] = amounts[jj + 5] = ++amounts[jj + 6];
                     }
                 }
                 for (int i = 0; i < 512; i++) {
-                    if((i & 7) == 3){
+                    if ((i & 7) == 3) {
                         for (int j = 510 - (amounts[i] >> 8); j < 520; j++) {
                             layers.backgrounds[i][j] = -0x1.c98066p126F;
                         }
-                    }
-                    else {
+                    } else {
                         for (int j = 519 - (amounts[i] >> 8); j < 520; j++) {
                             layers.backgrounds[i][j] = -0x1.d08864p126F;
                         }
@@ -2110,18 +2105,17 @@ public class MathVisualizer extends ApplicationAdapter {
                 for (int i = 0; i < 0x10000; i++) {
                     int bits = Float.floatToIntBits(nextExclusiveFloat());
                     for (int j = 0, jj = 504 - 128; j < 32; j++, jj -= 8) {
-                        if(1 == (bits >>> j & 1))
-                            amounts[jj] = amounts[jj+1] = amounts[jj+2] = amounts[jj+3]
-                                    = amounts[jj+4] = amounts[jj+5] = ++amounts[jj+6];
+                        if (1 == (bits >>> j & 1))
+                            amounts[jj] = amounts[jj + 1] = amounts[jj + 2] = amounts[jj + 3]
+                                    = amounts[jj + 4] = amounts[jj + 5] = ++amounts[jj + 6];
                     }
                 }
                 for (int i = 0; i < 512; i++) {
-                    if((i & 7) == 3){
+                    if ((i & 7) == 3) {
                         for (int j = 510 - (amounts[i] >> 8); j < 520; j++) {
                             layers.backgrounds[i][j] = -0x1.c98066p126F;
                         }
-                    }
-                    else {
+                    } else {
                         for (int j = 519 - (amounts[i] >> 8); j < 520; j++) {
                             layers.backgrounds[i][j] = -0x1.d08864p126F;
                         }
@@ -2140,13 +2134,13 @@ public class MathVisualizer extends ApplicationAdapter {
                 for (int i = 0; i < 512; i++) {
                     float in = (i - 255);
                     double m = Math.cbrt(in);
-                    if(m >= -15 && m <= 15)
+                    if (m >= -15 && m <= 15)
                         layers.backgrounds[i][(int) (m * 16 + 255)] = -0x1.d08864p126F;
                     float a = MathExtras.cbrt(in);
-                    if(a >= -15 && a <= 15)
+                    if (a >= -15 && a <= 15)
                         layers.backgrounds[i][(int) (a * 16 + 255)] = -0x1.6a9704p125F;
                     float s = cbrtShape(in);
-                    if(s >= -15 && s <= 15)
+                    if (s >= -15 && s <= 15)
                         layers.backgrounds[i][(int) (s * 16 + 255)] = -0x1.30012cp125F;
                 }
                 for (int i = 0; i < 10; i++) {
@@ -2156,7 +2150,31 @@ public class MathVisualizer extends ApplicationAdapter {
                 }
             }
             break;
-
+            case 56:
+                Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
+                        " gaussian bits");
+                for (int i = 0; i < 0x2000; i++) {
+//                    long bits = diver.nextLong(), expo = 997L + Long.bitCount(bits) << 52;
+//                    double d = NumberTools.longBitsToDouble((bits & ~0x7FF0_0000_0000_0000L) | expo) * 64.0 + 256.0;
+//                    double d = (diver.nextLong() >>> 12) / NumberTools.longBitsToDouble(((diver.nextLong() & 0xB00F_FFFF_FFFF_FFFFL) | 0x4340_0000_0000_0000L)) * 64.0 + 256.0;
+                    long d = (Double.doubleToLongBits(nextGaussian()) >>> 52 & 0x7FFL) - 0x300L;
+                    if (d >= 0 && d < 512)
+                        amounts[(int) d]++;
+                }
+                for (int i = 0; i < 512; i++) {
+                    float color = (i & 63) == 0
+                            ? -0x1.c98066p126F // CW Azure
+                            : -0x1.d08864p126F; // CW Sapphire
+                    for (int j = Math.max(0, 519 - (amounts[i] >> 3)); j < 520; j++) {
+                        layers.backgrounds[i][j] = color;
+                    }
+                }
+                for (int i = 0; i < 10; i++) {
+                    for (int j = 8; j < 520; j += 32) {
+                        layers.backgrounds[i][j] = -0x1.7677e8p125F;
+                    }
+                }
+                break;
         }
     }
 
