@@ -24,16 +24,16 @@ public class Issue6519 extends ApplicationAdapter {
         public final char[][] Buffer;
         public final Color[][][] ColorBuffer;
 
-        private int x,y;
+        private int x, y;
 
-        public GraphicalTerm( int height, int width, int top ){
-            this.Top   = height * 12;
+        public GraphicalTerm(int height, int width, int top) {
+            this.Top = height * 12;
             this.Height = height;
             this.Width = width;
             this.Buffer = new char[width][height];
             this.ColorBuffer = new Color[width][height][2];
-            for(int i = 0; i < this.Width; i++){
-                for( int j = 0; j < this.Height; j++){
+            for (int i = 0; i < this.Width; i++) {
+                for (int j = 0; j < this.Height; j++) {
                     this.Buffer[i][j] = ' ';
                     this.ColorBuffer[i][j][0] = Color.WHITE;
                     this.ColorBuffer[i][j][1] = Color.WHITE;
@@ -41,13 +41,13 @@ public class Issue6519 extends ApplicationAdapter {
             }
 
             char render = 33;
-            for(int i = 0; i < this.Width; i++){
-                render ++;
+            for (int i = 0; i < this.Width; i++) {
+                render++;
                 if (render > 137) {
                     render = 33;
                 }
-                for( int j = 0; j < this.Height; j++){
-                    this.ColorBuffer[i][j][1] = colarray[(i+j)%colarray.length];
+                for (int j = 0; j < this.Height; j++) {
+                    this.ColorBuffer[i][j][1] = colarray[(i + j) % colarray.length];
                     this.Buffer[i][j] = render;
                 }
             }
@@ -62,7 +62,7 @@ public class Issue6519 extends ApplicationAdapter {
         }
 
         public GridPoint2 GetCurrentPos() {
-            return new GridPoint2(this.x,this.y);
+            return new GridPoint2(this.x, this.y);
         }
 
         public boolean SetPos(int x, int y) {
@@ -76,52 +76,69 @@ public class Issue6519 extends ApplicationAdapter {
             return true;
         }
 
-        public void Create(){
+        public void Create() {
             font = new BitmapFont(GNUnicode, GNUnicode_images, false);
             font.setUseIntegerPositions(false);
-            font.setFixedWidthGlyphs("");
+            setAllFixedWidth(font);
         }
 
-        public void Render(Batch b){
-            for(int i = 0; i < this.Width; i++){
-                for( int j = 0; j < this.Height; j++){
+        public void Render(Batch b) {
+            for (int i = 0; i < this.Width; i++) {
+                for (int j = 0; j < this.Height; j++) {
                     font.setColor(ColorBuffer[i][j][1]);
-                    font.draw(b, Character.toString(this.Buffer[i][j]), i*10, this.Top-(font.getLineHeight()*j));
+                    font.draw(b, Character.toString(this.Buffer[i][j]), i * 10, this.Top - (font.getLineHeight() * j));
                 }
             }
         }
 
-        public static final Color[] colarray =
-                {
-                        new Color(0, 0, 1, 1),
-                        new Color(0, 0, 0.5f, 1),
-                        new Color(0x4169e1ff),
-                        new Color(0x708090ff),
-                        new Color(0x87ceebff),
-                        new Color(0, 1, 1, 1),
-                        new Color(0, 0.5f, 0.5f, 1),
-                        new Color(0x00ff00ff),
-                        new Color(0x7fff00ff),
-                        new Color(0x32cd32ff),
-                        new Color(0x228b22ff),
-                        new Color(0x6b8e23ff),
-                        new Color(0xffff00ff),
-                        new Color(0xffd700ff),
-                        new Color(0xdaa520ff),
-                        new Color(0xffa500ff),
-                        new Color(0x8b4513ff),
-                        new Color(0xd2b48cff),
-                        new Color(0xb22222ff),
-                        new Color(0xff0000ff),
-                        new Color(0xff341cff),
-                        new Color(0xff7f50ff),
-                        new Color(0xfa8072ff),
-                        new Color(0xff69b4ff),
-                        new Color(1, 0, 1, 1),
-                        new Color(0xa020f0ff),
-                        new Color(0xee82eeff),
-                        new Color(0xb03060ff),
-                };
+        public static final Color[] colarray = {
+                new Color(0x0000ffff),
+                new Color(0x000080ff),
+                new Color(0x4169e1ff),
+                new Color(0x708090ff),
+                new Color(0x87ceebff),
+                new Color(0x00ffffff),
+                new Color(0x008080ff),
+                new Color(0x00ff00ff),
+                new Color(0x7fff00ff),
+                new Color(0x32cd32ff),
+                new Color(0x228b22ff),
+                new Color(0x6b8e23ff),
+                new Color(0xffff00ff),
+                new Color(0xffd700ff),
+                new Color(0xdaa520ff),
+                new Color(0xffa500ff),
+                new Color(0x8b4513ff),
+                new Color(0xd2b48cff),
+                new Color(0xb22222ff),
+                new Color(0xff0000ff),
+                new Color(0xff341cff),
+                new Color(0xff7f50ff),
+                new Color(0xfa8072ff),
+                new Color(0xff69b4ff),
+                new Color(0xff00ffff),
+                new Color(0xa020f0ff),
+                new Color(0xee82eeff),
+                new Color(0xb03060ff),
+        };
+
+        public static void setAllFixedWidth(BitmapFont font) {
+            BitmapFont.BitmapFontData data = font.getData();
+            int maxAdvance = 0;
+            for (int index = 0, end = 65536; index < end; index++) {
+                BitmapFont.Glyph g = data.getGlyph((char) index);
+                if (g != null && g.xadvance > maxAdvance) maxAdvance = g.xadvance;
+            }
+            for (int index = 0, end = 65536; index < end; index++) {
+                BitmapFont.Glyph g = data.getGlyph((char) index);
+                if (g == null) continue;
+                g.xoffset += (maxAdvance - g.xadvance) / 2;
+                g.xadvance = maxAdvance;
+                g.kerning = null;
+                g.fixedWidth = true;
+            }
+        }
+
     }
 
     ScreenViewport viewport;
