@@ -151,21 +151,70 @@ public class TextCellFactory implements Disposable {
             next.initByFont();
         return next;
     }
+
+    /**
+     * Returns a String containing all chars in the font (not considering the missing glyph).
+     * @param font a BitmapFont that will not be changed
+     * @return a String containing all chars in the font
+     */
+    public static String getGlyphs(BitmapFont font) {
+        BitmapFont.BitmapFontData data = font.getData();
+        StringBuilder sb = new StringBuilder(512);
+        for (int index = 0, end = 65536; index < end; index++) {
+            if (data.getGlyph((char) index) != null)
+                sb.append((char) index);
+        }
+        return sb.toString();
+    }
+
+    /**
+     * Sets all glyphs in the given BitmapFont to be fixed-width and have an xadvance
+     * equal to the largest width for any glyph in the font. This returns a String
+     * containing all chars in the font (not considering the missing glyph).
+     * @param font a BitmapFont that will be modified in-place
+     * @return a String containing all chars in the font
+     */
+    public static String setAllFixedWidth(BitmapFont font) {
+        BitmapFont.BitmapFontData data = font.getData();
+        int maxAdvance = 0;
+        StringBuilder sb = new StringBuilder(512);
+        for (int index = 0, end = 65536; index < end; index++) {
+            BitmapFont.Glyph g = data.getGlyph((char) index);
+            if (g != null && g.xadvance > maxAdvance) maxAdvance = g.xadvance;
+        }
+        for (int index = 0, end = 65536; index < end; index++) {
+            BitmapFont.Glyph g = data.getGlyph((char) index);
+            if (g == null) continue;
+            g.xoffset += (maxAdvance - g.xadvance) / 2;
+            g.xadvance = maxAdvance;
+            g.kerning = null;
+            g.fixedWidth = true;
+            sb.append((char) index);
+        }
+        return sb.toString();
+    }
+
     /**
      * Initializes the factory to then be able to create text cells on demand.
+     * This is not usually the method you want; {@link #initBySize()} is used
+     * almost always instead of this method. This can be used when you don't
+     * care what size the font actually will be, and are fine delegating that
+     * responsibility to any initial configuration in the given BitmapFont.
      * <br>
      * Will match the width and height to the space width of the font and the
      * line height of the font, respectively. Calling this after the factory
      * has already been initialized will re-initialize it. This will not work
      * with distance field or MSDF fonts; for those, use {@link #initBySize()}.
+     * <br>
+     * This sets the fitting (accessible by {@link #fit()}) to a String
+     * containing all chars in the font, and makes all chars fixed-width.
      *
      * @return this for method chaining
      */
     public TextCellFactory initByFont() {
         if(bmpFont == null)
             bmpFont = DefaultResources.getIncludedFont();
-        bmpFont.setFixedWidthGlyphs(fitting);
-        width = bmpFont.getSpaceXadvance();
+        fitAll();
         lineHeight = bmpFont.getLineHeight();
         height = (lineHeight);
         descent = bmpFont.getDescent();
@@ -205,6 +254,11 @@ public class TextCellFactory implements Disposable {
      * If you need to re-initialize often to adjust size, use {@link #resetSize()},
      * which does not allocate new objects if this was already initialized, and
      * will just delegate to this method if this wasn't initialized.
+     * <br>
+     * You may want to call {@link #fit(String)} or {@link #fitAll()} to ensure
+     * that chars are rendered with fixed-width, which mostly affects any gaps at
+     * the left side of a char. Using fitAll() either before or after calling
+     * this is recommended.
      *
      * @return this for method chaining
      */
@@ -670,20 +724,21 @@ public class TextCellFactory implements Disposable {
     }
 
     /**
-     * Returns the current String of code points that are used for sizing the
-     * cells.
+     * Returns the current String that is used for sizing the cells.
+     * If you have called {@link #fitAll()}, this will include every char in
+     * the font. If instead you have called {@link #fit(String)} (potentially
+     * with {@link #addFit(String)}), then this will typically be a smaller
+     * String and may not include all chars in the font. If no method has set
+     * the fitting, it will default to {@link #SQUID_FITTING}.
      *
-     * Note that this is actually a set of codepoints and treating them as an
-     * array of chars might give undesired results.
-     *
-     * @return the String used for sizing calculations
+     * @return the String of fixed-width chars used for sizing calculations
      */
     public String fit() {
         return fitting;
     }
 
     /**
-     * Sets the characters that will be guaranteed to fit to the provided ones.
+     * Sets the characters that will be guaranteed to fit as fixed-width to the provided ones.
      * This will override any previously set string.
      *
      * @param fit the String of code points to size to
@@ -697,8 +752,20 @@ public class TextCellFactory implements Disposable {
     }
 
     /**
+     * Sets all valid characters to be guaranteed to fit as fixed-width.
+     * This will override any previously set string.
+     *
+     * @return this factory for method chaining
+     */
+    public TextCellFactory fitAll() {
+        fitting = setAllFixedWidth(bmpFont);
+        width = bmpFont.getSpaceXadvance();
+        return this;
+    }
+
+    /**
      * Adds the code points in the string to the list of characters that will be
-     * guaranteed to fit.
+     * guaranteed to fit as fixed-width.
      *
      * @param fit the String of code points to size to
      * @return this factory for method chaining
