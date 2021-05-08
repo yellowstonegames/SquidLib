@@ -36,7 +36,7 @@ public class MimicWFC {
     private int stacksize;
 
     public IRNG random;
-    private int FMX, FMY, totalOptions;
+    private int targetWidth, targetHeight, totalOptions;
     private boolean periodic;
 
     private double[] baseWeights;
@@ -54,18 +54,17 @@ public class MimicWFC {
 
     public MimicWFC(int[][] itemGrid, int order, int width, int height, boolean periodicInput, boolean periodicOutput, int symmetry, int ground)
     {
-        FMX = width;
-        FMY = height;
+        targetWidth = width;
+        targetHeight = height;
 
         this.order = order;
         periodic = periodicOutput;
 
-        int SMX = itemGrid.length, SMY = itemGrid[0].length;
-        //colors = new List<Color>();
-        choices = new IntIntOrderedMap(SMX * SMY);
-        int[][] sample = new int[SMX][SMY];
-        for (int y = 0; y < SMY; y++) {
-            for (int x = 0; x < SMX; x++)
+        int sampleWidth = itemGrid.length, sampleHeight = itemGrid[0].length;
+        choices = new IntIntOrderedMap(sampleWidth * sampleHeight);
+        int[][] sample = new int[sampleWidth][sampleHeight];
+        for (int y = 0; y < sampleHeight; y++) {
+            for (int x = 0; x < sampleWidth; x++)
             {
                 int color = itemGrid[x][y];
                 int i = choices.getOrDefault(color, choices.size());
@@ -82,11 +81,11 @@ public class MimicWFC {
 //        List<long> ordering = new List<long>();
         OrderedMap<int[], Integer> weights = new OrderedMap<>(CrossHash.intHasher);
 
-        for (int y = 0; y < (periodicInput ? SMY : SMY - order + 1); y++) {
-            for (int x = 0; x < (periodicInput ? SMX : SMX - order + 1); x++) {
+        for (int y = 0; y < (periodicInput ? sampleHeight : sampleHeight - order + 1); y++) {
+            for (int x = 0; x < (periodicInput ? sampleWidth : sampleWidth - order + 1); x++) {
                 int[][] ps = new int[8][];
 
-                ps[0] = patternFromSample(x, y, sample, SMX, SMY);
+                ps[0] = patternFromSample(x, y, sample, sampleWidth, sampleHeight);
                 ps[1] = reflect(ps[0]);
                 ps[2] = rotate(ps[0]);
                 ps[3] = reflect(ps[2]);
@@ -208,7 +207,7 @@ public class MimicWFC {
 
     private void init()
     {
-        wave = new boolean[FMX * FMY][];
+        wave = new boolean[targetWidth * targetHeight][];
         compatible = new int[wave.length][][];
         for (int i = 0; i < wave.length; i++)
         {
@@ -230,10 +229,10 @@ public class MimicWFC {
 
         startingEntropy = Math.log(sumOfWeights) - sumOfWeightLogWeights / sumOfWeights;
 
-        sumsOfOnes = new int[FMX * FMY];
-        sumsOfWeights = new double[FMX * FMY];
-        sumsOfWeightLogWeights = new double[FMX * FMY];
-        entropies = new double[FMX * FMY];
+        sumsOfOnes = new int[targetWidth * targetHeight];
+        sumsOfWeights = new double[targetWidth * targetHeight];
+        sumsOfWeightLogWeights = new double[targetWidth * targetHeight];
+        entropies = new double[targetWidth * targetHeight];
 
         stack = new int[wave.length * totalOptions << 1];
         stacksize = 0;
@@ -246,7 +245,7 @@ public class MimicWFC {
 
         for (int i = 0; i < wave.length; i++)
         {
-            if (onBoundary(i % FMX, i / FMX)) continue;
+            if (onBoundary(i % targetWidth, i / targetWidth)) continue;
 
             int amount = sumsOfOnes[i];
             if (amount == 0) return false;
@@ -265,7 +264,7 @@ public class MimicWFC {
 
         if (argmin == -1)
         {
-            observed = new int[FMX * FMY];
+            observed = new int[targetWidth * targetHeight];
             for (int i = 0; i < wave.length; i++) {
                 for (int t = 0; t < totalOptions; t++) {
                     if (wave[i][t]) { 
@@ -305,7 +304,7 @@ public class MimicWFC {
         {
             int i1 = stack[stacksize - 2], e2 = stack[stacksize - 1];
             stacksize -= 2;
-            int x1 = i1 % FMX, y1 = i1 / FMX;
+            int x1 = i1 % targetWidth, y1 = i1 / targetWidth;
 
             for (int d = 0; d < 4; d++)
             {
@@ -313,12 +312,12 @@ public class MimicWFC {
                 int x2 = x1 + dx, y2 = y1 + dy;
                 if (onBoundary(x2, y2)) continue;
 
-                if (x2 < 0) x2 += FMX;
-                else if (x2 >= FMX) x2 -= FMX;
-                if (y2 < 0) y2 += FMY;
-                else if (y2 >= FMY) y2 -= FMY;
+                if (x2 < 0) x2 += targetWidth;
+                else if (x2 >= targetWidth) x2 -= targetWidth;
+                if (y2 < 0) y2 += targetHeight;
+                else if (y2 >= targetHeight) y2 -= targetHeight;
 
-                int i2 = x2 + y2 * FMX;
+                int i2 = x2 + y2 * targetWidth;
                 int[] p = propagator[d][e2];
                 int[][] compat = compatible[i2];
 
@@ -390,22 +389,22 @@ public class MimicWFC {
 
 
     private boolean onBoundary(int x, int y) {
-        return !periodic && (x + order > FMX || y + order > FMY || x < 0 || y < 0);
+        return !periodic && (x + order > targetWidth || y + order > targetHeight || x < 0 || y < 0);
     }
 
     public int[][] result()
     {
-        int[][] result = new int[FMX][FMY];
+        int[][] result = new int[targetWidth][targetHeight];
 
         if (observed != null)
         {
-            for (int y = 0; y < FMY; y++)
+            for (int y = 0; y < targetHeight; y++)
             {
-                int dy = y < FMY - order + 1 ? 0 : order - 1;
-                for (int x = 0; x < FMX; x++)
+                int dy = y < targetHeight - order + 1 ? 0 : order - 1;
+                for (int x = 0; x < targetWidth; x++)
                 {
-                    int dx = x < FMX - order + 1 ? 0 : order - 1;
-                    result[x][y] = choices.keyAt(patterns[observed[x - dx + (y - dy) * FMX]][dx + dy * order]);
+                    int dx = x < targetWidth - order + 1 ? 0 : order - 1;
+                    result[x][y] = choices.keyAt(patterns[observed[x - dx + (y - dy) * targetWidth]][dx + dy * order]);
                 }
             }
         }
@@ -431,10 +430,10 @@ public class MimicWFC {
 
         if (ground != 0)
         {
-            for (int x = 0; x < FMX; x++)
+            for (int x = 0; x < targetWidth; x++)
             {
-                for (int t = 0; t < totalOptions; t++) if (t != ground) ban(x + (FMY - 1) * FMX, t);
-                for (int y = 0; y < FMY - 1; y++) ban(x + y * FMX, ground);
+                for (int t = 0; t < totalOptions; t++) if (t != ground) ban(x + (targetHeight - 1) * targetWidth, t);
+                for (int y = 0; y < targetHeight - 1; y++) ban(x + y * targetWidth, ground);
             }
 
             propagate();
