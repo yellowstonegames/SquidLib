@@ -1,7 +1,7 @@
 3.0.4-SNAPSHOT
 Dependencies:
  - squidlib-util: RegExodus 0.1.12
- - squidlib: libGDX 1.10.0, anim8-gdx 0.2.8
+ - squidlib: libGDX 1.10.0, anim8-gdx 0.2.9
  - squidlib-extra: libGDX 1.10.0
 Changes:
  - BREAKING: AbstractRNG's code that generated longs in a bounded range had some issues, and so did RNG. Both have been fixed, which may change bounded long generation (which tends to be rare).
