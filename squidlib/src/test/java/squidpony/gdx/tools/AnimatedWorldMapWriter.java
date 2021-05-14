@@ -50,7 +50,7 @@ public class AnimatedWorldMapWriter extends ApplicationAdapter {
 
     private static final int LIMIT = 5;
     private static final boolean MEASURE_BOUNDS = false;
-    private static final boolean FLOWING_LAND = true;
+    private static final boolean FLOWING_LAND = false;
     private static final boolean ALIEN_COLORS = false;
 
     private Thesaurus thesaurus;
@@ -80,7 +80,7 @@ public class AnimatedWorldMapWriter extends ApplicationAdapter {
     
     private String date, path;
 //    private Noise.Noise3D noise;
-    private Noise.Adapted3DFrom5D noise;
+    private Noise.Noise3D noise;
 //    private double mutationA = NumberTools.cos(0.75) * 3.0, mutationB = NumberTools.sin(0.75) * 3.0;
     public IntMap<int[]> bounds = new IntMap<>(20);
 //    private double mutationC = NumberTools.cos(1.5), mutationD = NumberTools.sin(1.5);
@@ -130,10 +130,11 @@ World #5, SavoryMelonAlder, completed in 64338 ms
 //        path = "out/worldsAnimated/" + date + "/Mimic/";
 //        path = "out/worldsAnimated/" + date + "/SpaceView/";
 //        path = "out/worldsAnimated/" + date + "/SpaceViewMutantClassic/";
-        path = "out/worldsAnimated/" + date + "/SpaceViewMutantFoam/";
+//        path = "out/worldsAnimated/" + date + "/SpaceViewMutantFoam/";
 //        path = "out/worldsAnimated/" + date + "/SpaceViewMutantHoney/";
 //        path = "out/worldsAnimated/" + date + "/SpaceViewHoney/";
 //        path = "out/worldsAnimated/" + date + "/SpaceViewFoam/";
+        path = "out/worldsAnimated/" + date + "/SpaceViewSimplex/";
 //        path = "out/worldsAnimated/" + date + "/SpaceViewRidged/";
 //        path = "out/worldsAnimated/" + date + "/SpaceViewMutantMaelstrom/";
 //        path = "out/worldsAnimated/" + date + "/HyperellipseWrithing/";
@@ -206,10 +207,14 @@ World #5, SavoryMelonAlder, completed in 64338 ms
 //        WorldMapGenerator.DEFAULT_NOISE.setFractalGain(5f);
 //        WorldMapGenerator.DEFAULT_NOISE.setFractalLacunarity(0.8f);
 //        WorldMapGenerator.DEFAULT_NOISE.setFractalGain(1.25f);
-        VastNoise fn = new VastNoise((int) seed, 2.75f, VastNoise.FOAM, 1);
+//        VastNoise fn = new VastNoise((int) seed, 2f, VastNoise.FOAM, 1);
+        VastNoise fn = new VastNoise((int) seed, 1f, VastNoise.SIMPLEX_FRACTAL, 2);
 //        VastNoise fn = new VastNoise((int) seed, 1.25f, VastNoise.HONEY, 1);
 
-        noise = new Noise.Adapted3DFrom5D(fn);
+        if(FLOWING_LAND)
+            noise = new Noise.Adapted3DFrom5D(fn);
+        else
+            noise = fn;
 //        WorldMapGenerator.DEFAULT_NOISE.setNoiseType(FastNoise.HONEY);
 //        WorldMapGenerator.DEFAULT_NOISE.setFrequency(1.25f);
 //        WorldMapGenerator.DEFAULT_NOISE.setFractalOctaves(1);
@@ -348,10 +353,10 @@ World #5, SavoryMelonAlder, completed in 64338 ms
             bounds.clear();
         for (int i = 0; i < pm.length; i++) {
             double angle = (Math.PI * 2.0 / pm.length) * i;
-
-            noise.w = NumberTools.cos(angle) * 0.3125;
-            noise.u = NumberTools.sin(angle) * 0.3125;
-            
+            if(FLOWING_LAND) {
+                ((Noise.Adapted3DFrom5D)noise).w = NumberTools.cos(angle) * 0.3125;
+                ((Noise.Adapted3DFrom5D)noise).u = NumberTools.sin(angle) * 0.3125;
+            }
             world.setCenterLongitude(angle);
             generate(hash);
             wmv.getBiomeMapper().makeBiomes(world);
