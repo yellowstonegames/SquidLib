@@ -286,15 +286,12 @@ public interface FlawedPointHash extends IPointHash, IFlawed {
             x &= mask;
             y &= mask;
             z &= mask;
-//            s ^= (x) * 0xD1B54A32D192ED03L;
-//            s ^= (y) * 0xABC98388FB8FAC03L;
-//            s ^= (z) * 0x8CB92BA72F3D8DD7L;
             x *= x * 0xD1B54A32D192ED03L;
             y *= y * 0xABC98388FB8FAC03L;
             z *= z * 0x8CB92BA72F3D8DD7L;
-            x = x & mask;
-            y = y & mask;
-            z = z & mask;
+            x &= mask;
+            y &= mask;
+            z &= mask;
             long t;
             if (x < y) {
                 t = x;

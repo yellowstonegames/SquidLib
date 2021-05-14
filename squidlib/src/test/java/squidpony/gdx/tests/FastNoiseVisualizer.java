@@ -26,9 +26,9 @@ import static com.badlogic.gdx.graphics.GL20.GL_POINTS;
  */
 public class FastNoiseVisualizer extends ApplicationAdapter {
 
-    private FastNoise noise = new FastNoise(1, 0.0625f, FastNoise.PERLIN_FRACTAL, 1);
+    private FastNoise noise = new FastNoise(1, 0.0625f, FastNoise.CUBIC_FRACTAL, 1);
     private int dim = 1; // this can be 0, 1, 2, 3, or 4; add 2 to get the actual dimensions
-    private int octaves = 1;
+    private int octaves = 2;
     private float freq = 1f;
     private boolean inverse;
     private ImmediateModeRenderer20 renderer;
@@ -43,7 +43,7 @@ public class FastNoiseVisualizer extends ApplicationAdapter {
     private FlawedPointHash.CubeHash cube = new FlawedPointHash.CubeHash(1, 32);
     private FlawedPointHash.FNVHash fnv = new FlawedPointHash.FNVHash(1);
     private IPointHash[] pointHashes = new IPointHash[] {ph, hph, iph, fnv, gold, rug, quilt, cube};
-    private int hashIndex = 0;
+    private int hashIndex = 7;
 
     private static final int width = 512, height = 512;
 
@@ -54,7 +54,7 @@ public class FastNoiseVisualizer extends ApplicationAdapter {
     private boolean keepGoing = true;
     
     private AnimatedGif gif;
-    private Array<Pixmap> frames = new Array<>(64);
+    private Array<Pixmap> frames = new Array<>(128);
 
     public static float basicPrepare(float n)
     {
@@ -69,7 +69,7 @@ public class FastNoiseVisualizer extends ApplicationAdapter {
         noise.setPointHash(pointHashes[hashIndex]);
         noise.setFractalType(FastNoise.RIDGED_MULTI);
         gif = new AnimatedGif();
-        gif.setDitherAlgorithm(Dithered.DitherAlgorithm.SCATTER);
+        gif.setDitherAlgorithm(Dithered.DitherAlgorithm.NONE);
         gif.palette = new PaletteReducer(new int[] {
                 0x00000000, 0x010101FF, 0x020202FF, 0x030303FF, 0x040404FF, 0x050505FF, 0x060606FF, 0x070707FF,
                 0x080808FF, 0x090909FF, 0x0A0A0AFF, 0x0B0B0BFF, 0x0C0C0CFF, 0x0D0D0DFF, 0x0E0E0EFF, 0x0F0F0FFF,
@@ -144,10 +144,11 @@ public class FastNoiseVisualizer extends ApplicationAdapter {
                 switch (keycode) {
                     case W:
                         frames.clear();
-                        for (int c = 0; c < 64; c++) {
-                            Pixmap p = new Pixmap(128, 128, Pixmap.Format.RGBA8888);
-                            for (int x = 0; x < 128; x++) {
-                                for (int y = 0; y < 128; y++) {
+                        noise.setFrequency(0x1p-3f);
+                        for (int c = 0; c < 256; c++) {
+                            Pixmap p = new Pixmap(256, 256, Pixmap.Format.RGBA8888);
+                            for (int x = 0; x < 256; x++) {
+                                for (int y = 0; y < 256; y++) {
                                     float color = basicPrepare(noise.getConfiguredNoise(x, y, c));
 //                                    color *= color * 0.8125f;
                                     p.setColor(color, color, color, 1f);
