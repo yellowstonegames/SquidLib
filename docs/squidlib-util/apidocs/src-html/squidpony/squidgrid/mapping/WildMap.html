@@ -430,7 +430,7 @@
 <span class="source-line-no">417</span><span id="line.417">        BlueNoise.blueSpill(floors, floorLimit, rng);</span>
 <span class="source-line-no">418</span><span id="line.418">        for (int x = 0; x &lt; width; x++) {</span>
 <span class="source-line-no">419</span><span id="line.419">            for (int y = 0; y &lt; height; y++) {</span>
-<span class="source-line-no">420</span><span id="line.420">                if((b = BlueNoise.getChosen(x, y, seed) + 128) &lt; limit)</span>
+<span class="source-line-no">420</span><span id="line.420">                if((b = BlueNoise.getSeededOmniTiling(x, y, seed) + 128) &lt; limit)</span>
 <span class="source-line-no">421</span><span id="line.421">                    content[x][y] = b;</span>
 <span class="source-line-no">422</span><span id="line.422">            }</span>
 <span class="source-line-no">423</span><span id="line.423">        }</span>

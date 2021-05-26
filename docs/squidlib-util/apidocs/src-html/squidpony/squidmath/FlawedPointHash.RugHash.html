@@ -299,122 +299,119 @@
 <span class="source-line-no">286</span><span id="line.286">            x &amp;= mask;</span>
 <span class="source-line-no">287</span><span id="line.287">            y &amp;= mask;</span>
 <span class="source-line-no">288</span><span id="line.288">            z &amp;= mask;</span>
-<span class="source-line-no">289</span><span id="line.289">//            s ^= (x) * 0xD1B54A32D192ED03L;</span>
-<span class="source-line-no">290</span><span id="line.290">//            s ^= (y) * 0xABC98388FB8FAC03L;</span>
-<span class="source-line-no">291</span><span id="line.291">//            s ^= (z) * 0x8CB92BA72F3D8DD7L;</span>
-<span class="source-line-no">292</span><span id="line.292">            x *= x * 0xD1B54A32D192ED03L;</span>
-<span class="source-line-no">293</span><span id="line.293">            y *= y * 0xABC98388FB8FAC03L;</span>
-<span class="source-line-no">294</span><span id="line.294">            z *= z * 0x8CB92BA72F3D8DD7L;</span>
-<span class="source-line-no">295</span><span id="line.295">            x = x &amp; mask;</span>
-<span class="source-line-no">296</span><span id="line.296">            y = y &amp; mask;</span>
-<span class="source-line-no">297</span><span id="line.297">            z = z &amp; mask;</span>
-<span class="source-line-no">298</span><span id="line.298">            long t;</span>
-<span class="source-line-no">299</span><span id="line.299">            if (x &lt; y) {</span>
-<span class="source-line-no">300</span><span id="line.300">                t = x;</span>
-<span class="source-line-no">301</span><span id="line.301">                x = y;</span>
-<span class="source-line-no">302</span><span id="line.302">                y = t;</span>
-<span class="source-line-no">303</span><span id="line.303">            }</span>
-<span class="source-line-no">304</span><span id="line.304">            if(x &lt; z){</span>
-<span class="source-line-no">305</span><span id="line.305">                t = x;</span>
-<span class="source-line-no">306</span><span id="line.306">                x = z;</span>
-<span class="source-line-no">307</span><span id="line.307">                z = t;</span>
-<span class="source-line-no">308</span><span id="line.308">            }</span>
-<span class="source-line-no">309</span><span id="line.309">            if(y &lt; z){</span>
-<span class="source-line-no">310</span><span id="line.310">                t = y;</span>
-<span class="source-line-no">311</span><span id="line.311">                y = z;</span>
-<span class="source-line-no">312</span><span id="line.312">                z = t;</span>
-<span class="source-line-no">313</span><span id="line.313">            }</span>
-<span class="source-line-no">314</span><span id="line.314">            x = (x + 0x9E3779B97F4A7C15L ^ x) * (s + z);</span>
-<span class="source-line-no">315</span><span id="line.315">            y = (y + 0x9E3779B97F4A7C15L ^ y) * (x + s);</span>
-<span class="source-line-no">316</span><span id="line.316">            z = (z + 0x9E3779B97F4A7C15L ^ z) * (y + x);</span>
-<span class="source-line-no">317</span><span id="line.317">            s = (s + 0x9E3779B97F4A7C15L ^ s) * (z + y);</span>
-<span class="source-line-no">318</span><span id="line.318">            return s;</span>
-<span class="source-line-no">319</span><span id="line.319">        }</span>
-<span class="source-line-no">320</span><span id="line.320"></span>
-<span class="source-line-no">321</span><span id="line.321">        public long hashLongs(long x, long y, long z, long w, long s) {</span>
-<span class="source-line-no">322</span><span id="line.322">            return hashLongs(x, hashLongs(y, hashLongs(z, w, s), s), s);</span>
-<span class="source-line-no">323</span><span id="line.323">        }</span>
-<span class="source-line-no">324</span><span id="line.324"></span>
-<span class="source-line-no">325</span><span id="line.325">        public long hashLongs(long x, long y, long z, long w, long u, long s) {</span>
-<span class="source-line-no">326</span><span id="line.326">            return hashLongs(x, hashLongs(y, hashLongs(z, hashLongs(w, u, s), s), s), s);</span>
-<span class="source-line-no">327</span><span id="line.327">        }</span>
-<span class="source-line-no">328</span><span id="line.328"></span>
-<span class="source-line-no">329</span><span id="line.329">        public long hashLongs(long x, long y, long z, long w, long u, long v, long s) {</span>
-<span class="source-line-no">330</span><span id="line.330">            return hashLongs(x, hashLongs(y, hashLongs(z, hashLongs(w, hashLongs(u, v, s), s), s), s), s);</span>
-<span class="source-line-no">331</span><span id="line.331">        }</span>
-<span class="source-line-no">332</span><span id="line.332"></span>
-<span class="source-line-no">333</span><span id="line.333">        @Override</span>
-<span class="source-line-no">334</span><span id="line.334">        public int hashWithState(int x, int y, int state) {</span>
-<span class="source-line-no">335</span><span id="line.335">            return (int)(hashLongs(x, y, state) &gt;&gt;&gt; 32);</span>
-<span class="source-line-no">336</span><span id="line.336">        }</span>
-<span class="source-line-no">337</span><span id="line.337"></span>
-<span class="source-line-no">338</span><span id="line.338">        @Override</span>
-<span class="source-line-no">339</span><span id="line.339">        public int hashWithState(int x, int y, int z, int state) {</span>
-<span class="source-line-no">340</span><span id="line.340">            return (int)(hashLongs(x, y, z, state) &gt;&gt;&gt; 32);</span>
-<span class="source-line-no">341</span><span id="line.341">        }</span>
-<span class="source-line-no">342</span><span id="line.342"></span>
-<span class="source-line-no">343</span><span id="line.343">        @Override</span>
-<span class="source-line-no">344</span><span id="line.344">        public int hashWithState(int x, int y, int z, int w, int state) {</span>
-<span class="source-line-no">345</span><span id="line.345">            return (int)(hashLongs(x, y, z, w, state) &gt;&gt;&gt; 32);</span>
-<span class="source-line-no">346</span><span id="line.346">        }</span>
-<span class="source-line-no">347</span><span id="line.347"></span>
-<span class="source-line-no">348</span><span id="line.348">        @Override</span>
-<span class="source-line-no">349</span><span id="line.349">        public int hashWithState(int x, int y, int z, int w, int u, int state) {</span>
-<span class="source-line-no">350</span><span id="line.350">            return (int)(hashLongs(x, y, z, w, u, state) &gt;&gt;&gt; 32);</span>
-<span class="source-line-no">351</span><span id="line.351">        }</span>
-<span class="source-line-no">352</span><span id="line.352"></span>
-<span class="source-line-no">353</span><span id="line.353">        @Override</span>
-<span class="source-line-no">354</span><span id="line.354">        public int hashWithState(int x, int y, int z, int w, int u, int v, int state) {</span>
-<span class="source-line-no">355</span><span id="line.355">            return (int)(hashLongs(x, y, z, w, u, v, state) &gt;&gt;&gt; 32);</span>
-<span class="source-line-no">356</span><span id="line.356">        }</span>
-<span class="source-line-no">357</span><span id="line.357">    }</span>
-<span class="source-line-no">358</span><span id="line.358"></span>
-<span class="source-line-no">359</span><span id="line.359">    /**</span>
-<span class="source-line-no">360</span><span id="line.360">     * FNV32a is OK as a hash for bytes when used in some hash tables, but it has major issues on its low-order bits</span>
-<span class="source-line-no">361</span><span id="line.361">     * when used as a point hash (the high bits aren't much better). Unfortunately, it is not aesthetically pleasing as</span>
-<span class="source-line-no">362</span><span id="line.362">     * a point hash. Some usages might be able to use it to apply a grimy, glitchy effect.</span>
-<span class="source-line-no">363</span><span id="line.363">     */</span>
-<span class="source-line-no">364</span><span id="line.364">    class FNVHash extends IntImpl implements FlawedPointHash {</span>
-<span class="source-line-no">365</span><span id="line.365"></span>
-<span class="source-line-no">366</span><span id="line.366">        public FNVHash() {</span>
-<span class="source-line-no">367</span><span id="line.367">            super();</span>
-<span class="source-line-no">368</span><span id="line.368">        }</span>
-<span class="source-line-no">369</span><span id="line.369"></span>
-<span class="source-line-no">370</span><span id="line.370">        public FNVHash(int state) {</span>
-<span class="source-line-no">371</span><span id="line.371">            super(state);</span>
-<span class="source-line-no">372</span><span id="line.372">        }</span>
-<span class="source-line-no">373</span><span id="line.373"></span>
-<span class="source-line-no">374</span><span id="line.374">        public int getState() {</span>
-<span class="source-line-no">375</span><span id="line.375">            return state;</span>
-<span class="source-line-no">376</span><span id="line.376">        }</span>
-<span class="source-line-no">377</span><span id="line.377">        @Override</span>
-<span class="source-line-no">378</span><span id="line.378">        public int hashWithState(int x, int y, int state) {</span>
-<span class="source-line-no">379</span><span id="line.379">            return ((state ^ 0x811c9dc5 ^ x) * 0x1000193 ^ y) * 0x1000193;</span>
-<span class="source-line-no">380</span><span id="line.380">        }</span>
-<span class="source-line-no">381</span><span id="line.381"></span>
-<span class="source-line-no">382</span><span id="line.382">        @Override</span>
-<span class="source-line-no">383</span><span id="line.383">        public int hashWithState(int x, int y, int z, int state) {</span>
-<span class="source-line-no">384</span><span id="line.384">            return (((state ^ 0x811c9dc5 ^ x) * 0x1000193 ^ y) * 0x1000193 ^ z) * 0x1000193;</span>
-<span class="source-line-no">385</span><span id="line.385">        }</span>
-<span class="source-line-no">386</span><span id="line.386"></span>
-<span class="source-line-no">387</span><span id="line.387">        @Override</span>
-<span class="source-line-no">388</span><span id="line.388">        public int hashWithState(int x, int y, int z, int w, int state) {</span>
-<span class="source-line-no">389</span><span id="line.389">            return ((((state ^ 0x811c9dc5 ^ x) * 0x1000193 ^ y) * 0x1000193 ^ z) * 0x1000193 ^ w) * 0x1000193;</span>
-<span class="source-line-no">390</span><span id="line.390">        }</span>
-<span class="source-line-no">391</span><span id="line.391"></span>
-<span class="source-line-no">392</span><span id="line.392">        @Override</span>
-<span class="source-line-no">393</span><span id="line.393">        public int hashWithState(int x, int y, int z, int w, int u, int state) {</span>
-<span class="source-line-no">394</span><span id="line.394">            return (((((state ^ 0x811c9dc5 ^ x) * 0x1000193 ^ y) * 0x1000193 ^ z) * 0x1000193</span>
-<span class="source-line-no">395</span><span id="line.395">                    ^ w) * 0x1000193 ^ u) * 0x1000193;</span>
-<span class="source-line-no">396</span><span id="line.396">        }</span>
-<span class="source-line-no">397</span><span id="line.397"></span>
-<span class="source-line-no">398</span><span id="line.398">        @Override</span>
-<span class="source-line-no">399</span><span id="line.399">        public int hashWithState(int x, int y, int z, int w, int u, int v, int state) {</span>
-<span class="source-line-no">400</span><span id="line.400">            return ((((((state ^ 0x811c9dc5 ^ x) * 0x1000193 ^ y) * 0x1000193 ^ z) * 0x1000193</span>
-<span class="source-line-no">401</span><span id="line.401">                    ^ w) * 0x1000193 ^ u) * 0x1000193 ^ v) * 0x1000193;</span>
-<span class="source-line-no">402</span><span id="line.402">        }</span>
-<span class="source-line-no">403</span><span id="line.403">    }</span>
-<span class="source-line-no">404</span><span id="line.404">}</span>
+<span class="source-line-no">289</span><span id="line.289">            x *= x * 0xD1B54A32D192ED03L;</span>
+<span class="source-line-no">290</span><span id="line.290">            y *= y * 0xABC98388FB8FAC03L;</span>
+<span class="source-line-no">291</span><span id="line.291">            z *= z * 0x8CB92BA72F3D8DD7L;</span>
+<span class="source-line-no">292</span><span id="line.292">            x &amp;= mask;</span>
+<span class="source-line-no">293</span><span id="line.293">            y &amp;= mask;</span>
+<span class="source-line-no">294</span><span id="line.294">            z &amp;= mask;</span>
+<span class="source-line-no">295</span><span id="line.295">            long t;</span>
+<span class="source-line-no">296</span><span id="line.296">            if (x &lt; y) {</span>
+<span class="source-line-no">297</span><span id="line.297">                t = x;</span>
+<span class="source-line-no">298</span><span id="line.298">                x = y;</span>
+<span class="source-line-no">299</span><span id="line.299">                y = t;</span>
+<span class="source-line-no">300</span><span id="line.300">            }</span>
+<span class="source-line-no">301</span><span id="line.301">            if(x &lt; z){</span>
+<span class="source-line-no">302</span><span id="line.302">                t = x;</span>
+<span class="source-line-no">303</span><span id="line.303">                x = z;</span>
+<span class="source-line-no">304</span><span id="line.304">                z = t;</span>
+<span class="source-line-no">305</span><span id="line.305">            }</span>
+<span class="source-line-no">306</span><span id="line.306">            if(y &lt; z){</span>
+<span class="source-line-no">307</span><span id="line.307">                t = y;</span>
+<span class="source-line-no">308</span><span id="line.308">                y = z;</span>
+<span class="source-line-no">309</span><span id="line.309">                z = t;</span>
+<span class="source-line-no">310</span><span id="line.310">            }</span>
+<span class="source-line-no">311</span><span id="line.311">            x = (x + 0x9E3779B97F4A7C15L ^ x) * (s + z);</span>
+<span class="source-line-no">312</span><span id="line.312">            y = (y + 0x9E3779B97F4A7C15L ^ y) * (x + s);</span>
+<span class="source-line-no">313</span><span id="line.313">            z = (z + 0x9E3779B97F4A7C15L ^ z) * (y + x);</span>
+<span class="source-line-no">314</span><span id="line.314">            s = (s + 0x9E3779B97F4A7C15L ^ s) * (z + y);</span>
+<span class="source-line-no">315</span><span id="line.315">            return s;</span>
+<span class="source-line-no">316</span><span id="line.316">        }</span>
+<span class="source-line-no">317</span><span id="line.317"></span>
+<span class="source-line-no">318</span><span id="line.318">        public long hashLongs(long x, long y, long z, long w, long s) {</span>
+<span class="source-line-no">319</span><span id="line.319">            return hashLongs(x, hashLongs(y, hashLongs(z, w, s), s), s);</span>
+<span class="source-line-no">320</span><span id="line.320">        }</span>
+<span class="source-line-no">321</span><span id="line.321"></span>
+<span class="source-line-no">322</span><span id="line.322">        public long hashLongs(long x, long y, long z, long w, long u, long s) {</span>
+<span class="source-line-no">323</span><span id="line.323">            return hashLongs(x, hashLongs(y, hashLongs(z, hashLongs(w, u, s), s), s), s);</span>
+<span class="source-line-no">324</span><span id="line.324">        }</span>
+<span class="source-line-no">325</span><span id="line.325"></span>
+<span class="source-line-no">326</span><span id="line.326">        public long hashLongs(long x, long y, long z, long w, long u, long v, long s) {</span>
+<span class="source-line-no">327</span><span id="line.327">            return hashLongs(x, hashLongs(y, hashLongs(z, hashLongs(w, hashLongs(u, v, s), s), s), s), s);</span>
+<span class="source-line-no">328</span><span id="line.328">        }</span>
+<span class="source-line-no">329</span><span id="line.329"></span>
+<span class="source-line-no">330</span><span id="line.330">        @Override</span>
+<span class="source-line-no">331</span><span id="line.331">        public int hashWithState(int x, int y, int state) {</span>
+<span class="source-line-no">332</span><span id="line.332">            return (int)(hashLongs(x, y, state) &gt;&gt;&gt; 32);</span>
+<span class="source-line-no">333</span><span id="line.333">        }</span>
+<span class="source-line-no">334</span><span id="line.334"></span>
+<span class="source-line-no">335</span><span id="line.335">        @Override</span>
+<span class="source-line-no">336</span><span id="line.336">        public int hashWithState(int x, int y, int z, int state) {</span>
+<span class="source-line-no">337</span><span id="line.337">            return (int)(hashLongs(x, y, z, state) &gt;&gt;&gt; 32);</span>
+<span class="source-line-no">338</span><span id="line.338">        }</span>
+<span class="source-line-no">339</span><span id="line.339"></span>
+<span class="source-line-no">340</span><span id="line.340">        @Override</span>
+<span class="source-line-no">341</span><span id="line.341">        public int hashWithState(int x, int y, int z, int w, int state) {</span>
+<span class="source-line-no">342</span><span id="line.342">            return (int)(hashLongs(x, y, z, w, state) &gt;&gt;&gt; 32);</span>
+<span class="source-line-no">343</span><span id="line.343">        }</span>
+<span class="source-line-no">344</span><span id="line.344"></span>
+<span class="source-line-no">345</span><span id="line.345">        @Override</span>
+<span class="source-line-no">346</span><span id="line.346">        public int hashWithState(int x, int y, int z, int w, int u, int state) {</span>
+<span class="source-line-no">347</span><span id="line.347">            return (int)(hashLongs(x, y, z, w, u, state) &gt;&gt;&gt; 32);</span>
+<span class="source-line-no">348</span><span id="line.348">        }</span>
+<span class="source-line-no">349</span><span id="line.349"></span>
+<span class="source-line-no">350</span><span id="line.350">        @Override</span>
+<span class="source-line-no">351</span><span id="line.351">        public int hashWithState(int x, int y, int z, int w, int u, int v, int state) {</span>
+<span class="source-line-no">352</span><span id="line.352">            return (int)(hashLongs(x, y, z, w, u, v, state) &gt;&gt;&gt; 32);</span>
+<span class="source-line-no">353</span><span id="line.353">        }</span>
+<span class="source-line-no">354</span><span id="line.354">    }</span>
+<span class="source-line-no">355</span><span id="line.355"></span>
+<span class="source-line-no">356</span><span id="line.356">    /**</span>
+<span class="source-line-no">357</span><span id="line.357">     * FNV32a is OK as a hash for bytes when used in some hash tables, but it has major issues on its low-order bits</span>
+<span class="source-line-no">358</span><span id="line.358">     * when used as a point hash (the high bits aren't much better). Unfortunately, it is not aesthetically pleasing as</span>
+<span class="source-line-no">359</span><span id="line.359">     * a point hash. Some usages might be able to use it to apply a grimy, glitchy effect.</span>
+<span class="source-line-no">360</span><span id="line.360">     */</span>
+<span class="source-line-no">361</span><span id="line.361">    class FNVHash extends IntImpl implements FlawedPointHash {</span>
+<span class="source-line-no">362</span><span id="line.362"></span>
+<span class="source-line-no">363</span><span id="line.363">        public FNVHash() {</span>
+<span class="source-line-no">364</span><span id="line.364">            super();</span>
+<span class="source-line-no">365</span><span id="line.365">        }</span>
+<span class="source-line-no">366</span><span id="line.366"></span>
+<span class="source-line-no">367</span><span id="line.367">        public FNVHash(int state) {</span>
+<span class="source-line-no">368</span><span id="line.368">            super(state);</span>
+<span class="source-line-no">369</span><span id="line.369">        }</span>
+<span class="source-line-no">370</span><span id="line.370"></span>
+<span class="source-line-no">371</span><span id="line.371">        public int getState() {</span>
+<span class="source-line-no">372</span><span id="line.372">            return state;</span>
+<span class="source-line-no">373</span><span id="line.373">        }</span>
+<span class="source-line-no">374</span><span id="line.374">        @Override</span>
+<span class="source-line-no">375</span><span id="line.375">        public int hashWithState(int x, int y, int state) {</span>
+<span class="source-line-no">376</span><span id="line.376">            return ((state ^ 0x811c9dc5 ^ x) * 0x1000193 ^ y) * 0x1000193;</span>
+<span class="source-line-no">377</span><span id="line.377">        }</span>
+<span class="source-line-no">378</span><span id="line.378"></span>
+<span class="source-line-no">379</span><span id="line.379">        @Override</span>
+<span class="source-line-no">380</span><span id="line.380">        public int hashWithState(int x, int y, int z, int state) {</span>
+<span class="source-line-no">381</span><span id="line.381">            return (((state ^ 0x811c9dc5 ^ x) * 0x1000193 ^ y) * 0x1000193 ^ z) * 0x1000193;</span>
+<span class="source-line-no">382</span><span id="line.382">        }</span>
+<span class="source-line-no">383</span><span id="line.383"></span>
+<span class="source-line-no">384</span><span id="line.384">        @Override</span>
+<span class="source-line-no">385</span><span id="line.385">        public int hashWithState(int x, int y, int z, int w, int state) {</span>
+<span class="source-line-no">386</span><span id="line.386">            return ((((state ^ 0x811c9dc5 ^ x) * 0x1000193 ^ y) * 0x1000193 ^ z) * 0x1000193 ^ w) * 0x1000193;</span>
+<span class="source-line-no">387</span><span id="line.387">        }</span>
+<span class="source-line-no">388</span><span id="line.388"></span>
+<span class="source-line-no">389</span><span id="line.389">        @Override</span>
+<span class="source-line-no">390</span><span id="line.390">        public int hashWithState(int x, int y, int z, int w, int u, int state) {</span>
+<span class="source-line-no">391</span><span id="line.391">            return (((((state ^ 0x811c9dc5 ^ x) * 0x1000193 ^ y) * 0x1000193 ^ z) * 0x1000193</span>
+<span class="source-line-no">392</span><span id="line.392">                    ^ w) * 0x1000193 ^ u) * 0x1000193;</span>
+<span class="source-line-no">393</span><span id="line.393">        }</span>
+<span class="source-line-no">394</span><span id="line.394"></span>
+<span class="source-line-no">395</span><span id="line.395">        @Override</span>
+<span class="source-line-no">396</span><span id="line.396">        public int hashWithState(int x, int y, int z, int w, int u, int v, int state) {</span>
+<span class="source-line-no">397</span><span id="line.397">            return ((((((state ^ 0x811c9dc5 ^ x) * 0x1000193 ^ y) * 0x1000193 ^ z) * 0x1000193</span>
+<span class="source-line-no">398</span><span id="line.398">                    ^ w) * 0x1000193 ^ u) * 0x1000193 ^ v) * 0x1000193;</span>
+<span class="source-line-no">399</span><span id="line.399">        }</span>
+<span class="source-line-no">400</span><span id="line.400">    }</span>
+<span class="source-line-no">401</span><span id="line.401">}</span>
 
 
 

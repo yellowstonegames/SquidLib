@@ -79,7 +79,7 @@ public class RNGFeatureTest {
 
     @Test
     public void testAbstractNextLong() {
-        SpecifiedRandomness r = new SpecifiedRandomness(0L, Long.MAX_VALUE, Long.MIN_VALUE, -1L,
+        final SpecifiedRandomness r = new SpecifiedRandomness(0L, Long.MAX_VALUE, Long.MIN_VALUE, -1L,
                 0xFFFFFFFF7FFFFFFFL, 0xFFFFFFFF00000000L, 0x00000000FFFFFFFFL, 0x80000000L);
         AbstractRNG arng = new AbstractRNG() {
             @Override

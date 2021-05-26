@@ -343,6 +343,7 @@ public class TextCellFactory implements Disposable {
         {
             bmpFont.getData().setScale(width / distanceFieldScaleX, height / distanceFieldScaleY);
         }
+
         lineHeight = bmpFont.getLineHeight();
         descent = bmpFont.getDescent();
 
@@ -2060,7 +2061,7 @@ public class TextCellFactory implements Disposable {
             else if (distanceField) {
                 if(!shader.equals(batch.getShader()))
                     batch.setShader(shader);
-                shader.setUniformf("u_smoothing", 0.35f / (1.9f * smoothingMultiplier * (bmpFont.getData().scaleX + bmpFont.getData().scaleY)));
+                shader.setUniformf("u_smoothing", 0.125f / (smoothingMultiplier * (bmpFont.getData().scaleX)));
             }
         }
     }
