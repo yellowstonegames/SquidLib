@@ -63,10 +63,10 @@
         <maven.surefire.version>3.0.0-M5</maven.surefire.version>
         <jdk.version>1.7</jdk.version>
         <releaseVersion>7</releaseVersion>
-        <gdx.version>1.9.13</gdx.version>
+        <gdx.version>1.10.0</gdx.version>
         <junit.version>4.13.1</junit.version>
-        <regexodus.version>0.1.11</regexodus.version>
-        <anim8.version>0.2.6</anim8.version>
+        <regexodus.version>0.1.12</regexodus.version>
+        <anim8.version>0.2.9</anim8.version>
     </properties>
 
     <issueManagement>

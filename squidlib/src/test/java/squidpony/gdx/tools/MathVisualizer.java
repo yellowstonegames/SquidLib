@@ -24,7 +24,7 @@ import java.util.Random;
  * Created by Tommy Ettinger on 1/13/2018.
  */
 public class MathVisualizer extends ApplicationAdapter {
-    private int mode = 55;
+    private int mode = 14;
     private int modes = 57;
     private FilterBatch batch;
     private SparseLayers layers;
@@ -247,6 +247,24 @@ public class MathVisualizer extends ApplicationAdapter {
         }
         else return followingGauss;
     }
+
+    /**
+     * <a href="https://marc-b-reynolds.github.io/distribution/2021/03/18/CheapGaussianApprox.html">Credit to Marc B.
+     * Reynolds</a>. The fairly-weird method to only have to sample one random number is mine, but could certainly be
+     * improved by anyone who has the time to test the range on different XOR constants or multipliers.
+     * @return a normal-distributed double with standard deviation 1.0, actually ranging from -7.881621123730187 to 7.7975656902966115
+     */
+    private double nextGaussianCountX(){
+		final long u1 = rng.nextLong();
+        return 0x1.fb760cp-35 * ((Long.bitCount(u1 * 0xC6BC279692B5C323L ^ 0xC6AC29E5C6AC29E5L) - 32L << 32) + (u1 & 0xFFFFFFFFL) - (u1 >>> 32));
+	}
+
+    private double nextGaussianCountDual(){
+		final long u1 = rng.nextLong();
+		return 0x1.fb760cp-35 * ((Long.bitCount(rng.nextLong()) - 32L << 32) + (u1 & 0xFFFFFFFFL) - (u1 >>> 32));
+	}
+
+
     public void insideBallBoxMuller(final double[] vector)
     {
         double mag = 0.0;
@@ -867,7 +885,7 @@ public class MathVisualizer extends ApplicationAdapter {
             case 14: {
                 Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
                         " nextGaussian()");
-                for (int i = 0; i < 0x50000; i++) {
+                for (int i = 0; i < 0x500000; i++) {
                     double d = nextGaussian() * 64.0 + 256.0;
                     if (d >= 0 && d < 512)
                         amounts[(int) d]++;
@@ -876,7 +894,7 @@ public class MathVisualizer extends ApplicationAdapter {
                     float color = (i & 63) == 0
                             ? -0x1.c98066p126F // CW Azure
                             : -0x1.d08864p126F; // CW Sapphire
-                    for (int j = Math.max(0, 519 - (amounts[i] >> 3)); j < 520; j++) {
+                    for (int j = Math.max(0, 519 - (amounts[i] >> 7)); j < 520; j++) {
                         layers.backgrounds[i][j] = color;
                     }
                 }
@@ -928,7 +946,7 @@ public class MathVisualizer extends ApplicationAdapter {
             case 15: {
                 Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
                         " probit");
-                for (int i = 0; i < 0x50000; i++) {
+                for (int i = 0; i < 0x500000; i++) {
                     double d = MathExtras.probit(nextExclusiveDouble()) * 64.0 + 256.0;
                     if (d >= 0 && d < 512)
                         amounts[(int) d]++;
@@ -937,7 +955,7 @@ public class MathVisualizer extends ApplicationAdapter {
                     float color = (i & 63) == 0
                             ? -0x1.c98066p126F // CW Azure
                             : -0x1.d08864p126F; // CW Sapphire
-                    for (int j = Math.max(0, 519 - (amounts[i] >> 3)); j < 520; j++) {
+                    for (int j = Math.max(0, 519 - (amounts[i] >> 7)); j < 520; j++) {
                         layers.backgrounds[i][j] = color;
                     }
                 }
@@ -972,10 +990,9 @@ public class MathVisualizer extends ApplicationAdapter {
             break;
             case 16: {
                 Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
-                        " probit cubed");
-                for (int i = 0; i < 0x40000; i++) {
-                    double d = Math.cbrt(MathExtras.probit(nextExclusiveDouble()));
-                    d = d * 64.0 + 256.0;
+                        " nextGaussianCountX()");
+                for (int i = 0; i < 0x500000; i++) {
+                    double d = nextGaussianCountX() * 64.0 + 256.0;
                     if (d >= 0 && d < 512)
                         amounts[(int) d]++;
                 }
@@ -983,7 +1000,7 @@ public class MathVisualizer extends ApplicationAdapter {
                     float color = (i & 63) == 0
                             ? -0x1.c98066p126F // CW Azure
                             : -0x1.d08864p126F; // CW Sapphire
-                    for (int j = Math.max(0, 519 - (amounts[i] >> 3)); j < 520; j++) {
+                    for (int j = Math.max(0, 519 - (amounts[i] >> 7)); j < 520; j++) {
                         layers.backgrounds[i][j] = color;
                     }
                 }
@@ -992,6 +1009,28 @@ public class MathVisualizer extends ApplicationAdapter {
                         layers.backgrounds[i][j] = -0x1.7677e8p125F;
                     }
                 }
+
+//                Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
+//                        " probit cubed");
+//                for (int i = 0; i < 0x40000; i++) {
+//                    double d = Math.cbrt(MathExtras.probit(nextExclusiveDouble()));
+//                    d = d * 64.0 + 256.0;
+//                    if (d >= 0 && d < 512)
+//                        amounts[(int) d]++;
+//                }
+//                for (int i = 0; i < 512; i++) {
+//                    float color = (i & 63) == 0
+//                            ? -0x1.c98066p126F // CW Azure
+//                            : -0x1.d08864p126F; // CW Sapphire
+//                    for (int j = Math.max(0, 519 - (amounts[i] >> 3)); j < 520; j++) {
+//                        layers.backgrounds[i][j] = color;
+//                    }
+//                }
+//                for (int i = 0; i < 10; i++) {
+//                    for (int j = 8; j < 520; j += 32) {
+//                        layers.backgrounds[i][j] = -0x1.7677e8p125F;
+//                    }
+//                }
 
 //                Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
 //                        " editedCurve");
@@ -1056,15 +1095,17 @@ public class MathVisualizer extends ApplicationAdapter {
             break;
             case 17: {
                 Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
-                        " MathUtils.random(0x0FFFFFFFFFFFFFFFL) & 0x1FFL // UH OH");
-                for (int i = 0; i < 0x1000000; i++) {
-                    amounts[(int) (MathUtils.random(0x0FFFFFFFFFFFFFFFL) & 0x1FFL)]++;
+                        " nextGaussianCountDual()");
+                for (int i = 0; i < 0x500000; i++) {
+                    double d = nextGaussianCountDual() * 64.0 + 256.0;
+                    if (d >= 0 && d < 512)
+                        amounts[(int) d]++;
                 }
                 for (int i = 0; i < 512; i++) {
                     float color = (i & 63) == 0
                             ? -0x1.c98066p126F // CW Azure
                             : -0x1.d08864p126F; // CW Sapphire
-                    for (int j = Math.max(0, 519 - (amounts[i] >> 8)); j < 520; j++) {
+                    for (int j = Math.max(0, 519 - (amounts[i] >> 7)); j < 520; j++) {
                         layers.backgrounds[i][j] = color;
                     }
                 }
@@ -1073,6 +1114,25 @@ public class MathVisualizer extends ApplicationAdapter {
                         layers.backgrounds[i][j] = -0x1.7677e8p125F;
                     }
                 }
+
+//                Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
+//                        " MathUtils.random(0x0FFFFFFFFFFFFFFFL) & 0x1FFL // UH OH");
+//                for (int i = 0; i < 0x1000000; i++) {
+//                    amounts[(int) (MathUtils.random(0x0FFFFFFFFFFFFFFFL) & 0x1FFL)]++;
+//                }
+//                for (int i = 0; i < 512; i++) {
+//                    float color = (i & 63) == 0
+//                            ? -0x1.c98066p126F // CW Azure
+//                            : -0x1.d08864p126F; // CW Sapphire
+//                    for (int j = Math.max(0, 519 - (amounts[i] >> 8)); j < 520; j++) {
+//                        layers.backgrounds[i][j] = color;
+//                    }
+//                }
+//                for (int i = 0; i < 10; i++) {
+//                    for (int j = 8; j < 520; j += 32) {
+//                        layers.backgrounds[i][j] = -0x1.7677e8p125F;
+//                    }
+//                }
             }
             break;
             case 18: {
