@@ -1,9 +1,6 @@
 package squidpony.gdx.tests;
 
-import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.Files;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.*;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.graphics.GL20;
@@ -67,7 +64,7 @@ public class DistanceFieldTest extends ApplicationAdapter {
                 new SparseLayers(width, height, 32, 64, factories[1]),
         };
         StringBuilder sb = new StringBuilder(width * height);
-        long seed = System.nanoTime();
+        long seed = 123456789012345L;//System.nanoTime();
         FakeLanguageGen lang = FakeLanguageGen.randomLanguage(seed);
         while (sb.length() < width * (height - 2))
         {
@@ -98,11 +95,16 @@ public class DistanceFieldTest extends ApplicationAdapter {
         Gdx.input.setInputProcessor(new InputAdapter() {
             @Override
             public boolean keyUp(int keycode) {
-                    index = ((index + 1) % factories.length);                     
-                    display = displays[index];
-                    stage.clear();
-                    stage.addActor(display);
-                Gdx.graphics.setTitle("SquidLib Demo: Fonts, preview " + (index+1) + "/" + factories.length + " (press any key)");
+                if(keycode == Input.Keys.SHIFT_LEFT ||
+                        keycode == Input.Keys.CONTROL_LEFT ||
+                        keycode == Input.Keys.ALT_LEFT ||
+                        keycode == Input.Keys.PRINT_SCREEN)
+                    return false;
+                index = ((index + 1) % factories.length);
+                display = displays[index];
+                stage.clear();
+                stage.addActor(display);
+                Gdx.graphics.setTitle("SquidLib Demo: Fonts, preview " + (index + 1) + "/" + factories.length + " (press any key)");
                 return true;
             }
         });
