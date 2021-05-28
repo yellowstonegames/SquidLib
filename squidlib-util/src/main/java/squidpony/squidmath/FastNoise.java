@@ -272,6 +272,8 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
     private FastNoise cellularNoiseLookup;
     private float gradientPerturbAmp = 1f / 0.45f;
 
+    private float foamSharpness = 1f;
+
     private IPointHash pointHash = new IntPointHash();
 
     /**
@@ -571,7 +573,39 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
     public void setGradientPerturbAmp(float gradientPerturbAmp) {
         this.gradientPerturbAmp = gradientPerturbAmp / (float) 0.45;
     }
-    
+
+    /**
+     * Gets the "sharpness" for the {@link #FOAM} and {@link #FOAM_FRACTAL} noise types, which is usually
+     * around 0.25f to 2.0f, and defaults to 1.0f. High values produce extreme results more often, and
+     * low values produce mid-range values more often.
+     * @return the current "sharpness" {@link #FOAM} and {@link #FOAM_FRACTAL} noise types
+     */
+    public float getFoamSharpness() {
+        return foamSharpness;
+    }
+
+    /**
+     * Only used with {@link #FOAM} and {@link #FOAM_FRACTAL} noise types, this affects how often the
+     * noise will produce very high and very low results (more often with high values of foamSharpness),
+     * as opposed to mid-range (more often with low values of foamSharpness).
+     * <br>
+     * This defaults to 1.0f if not set.
+     * @param foamSharpness higher results (above 1) tend to produce extremes, lower results (below 1) produce mid-range
+     */
+    public void setFoamSharpness(float foamSharpness) {
+        this.foamSharpness = foamSharpness;
+    }
+
+    /**
+     * Sets the point hash, an object implementing {@link IPointHash} that is used to take 2 or more
+     * coordinates and a seed and produce a usually-random-seeming hash value. You may want to use a
+     * flawed IPointHash (one that is not random) for artistic reasons, like
+     * {@link FlawedPointHash.QuiltHash} or {@link FlawedPointHash.CubeHash}, but these mostly work
+     * well when the noise type is {@link #CUBIC} or {@link #CUBIC_FRACTAL}.
+     * <br>
+     * The default setting is an {@link IntPointHash}.
+     * @param hash an IPointHash; will be ignored if null
+     */
     public void setPointHash(IPointHash hash){
         if(hash != null) this.pointHash = hash;
     }
@@ -2244,7 +2278,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         yin = p1;
         final float c = valueNoise(seed, xin + b, yin);
         final float result = (a + b + c) * F3f;
-        final float sharp = 0.75f * 2.2f;
+        final float sharp = foamSharpness * 2.2f;
         final float diff = 0.5f - result;
         final int sign = NumberTools.floatToIntBits(diff) >> 31, one = sign | 1;
         return (((one * 0.5f - sign) * (result + sign)) / (Float.MIN_VALUE - sign + (result + sharp * diff) * one) - sign) * 2f - 1f;
@@ -2415,7 +2449,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         final float d = valueNoise(seed, xin + c, yin, zin);
 
         final float result = (a + b + c + d) * 0.25f;
-        final float sharp = 0.75f * 3.3f;
+        final float sharp = foamSharpness * 3.3f;
         final float diff = 0.5f - result;
         final int sign = NumberTools.floatToIntBits(diff) >> 31, one = sign | 1;
         return (((one * 0.5f - sign) * (result + sign)) / (Float.MIN_VALUE - sign + (result + sharp * diff) * one) - sign) * 2f - 1f;
@@ -2520,7 +2554,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         final float e = valueNoise(seed, xin + d, yin, zin, win);
 
         final float result = (a + b + c + d + e) * 0.2f;
-        final float sharp = 0.75f * 4.4f;
+        final float sharp = foamSharpness * 4.4f;
         final float diff = 0.5f - result;
         final int sign = NumberTools.floatToIntBits(diff) >> 31, one = sign | 1;
         return (((one * 0.5f - sign) * (result + sign)) / (Float.MIN_VALUE - sign + (result + sharp * diff) * one) - sign) * 2f - 1f;
@@ -2658,7 +2692,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         final float f = valueNoise(seed, xin + e, yin, zin, win, uin);
 
         final float result = (a + b + c + d + e + f) * 0.16666666666666666f;
-        final float sharp = 0.75f * 5.5f;
+        final float sharp = foamSharpness * 5.5f;
         final float diff = 0.5f - result;
         final int sign = NumberTools.floatToIntBits(diff) >> 31, one = sign | 1;
         return (((one * 0.5f - sign) * (result + sign)) / (Float.MIN_VALUE - sign + (result + sharp * diff) * one) - sign) * 2f - 1f;
@@ -2816,7 +2850,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         vin = p0;
         final float g = valueNoise(seed, xin + f, yin, zin, win, uin, vin);
         final float result = (a + b + c + d + e + f + g) * 0.14285714285714285f;
-        final float sharp = 0.75f * 6.6f;
+        final float sharp = foamSharpness * 6.6f;
         final float diff = 0.5f - result;
         final int sign = NumberTools.floatToIntBits(diff) >> 31, one = sign | 1;
         return (((one * 0.5f - sign) * (result + sign)) / (Float.MIN_VALUE - sign + (result + sharp * diff) * one) - sign) * 2f - 1f;
