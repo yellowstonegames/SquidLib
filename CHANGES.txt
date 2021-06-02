@@ -1,17 +1,18 @@
 3.0.4-SNAPSHOT
 Dependencies:
  - squidlib-util: RegExodus 0.1.12
- - squidlib: libGDX 1.10.0, anim8-gdx 0.2.9
+ - squidlib: libGDX 1.10.0, anim8-gdx 0.2.10
  - squidlib-extra: libGDX 1.10.0
 Changes:
  - BREAKING: AbstractRNG's code that generated longs in a bounded range had some issues, and so did RNG. Both have been fixed, which may change bounded long generation (which tends to be rare).
  - OpenSimplex2's "S" (smooth) and "F" (fast) versions have been added to SquidLib, though they have to "fake seeds" by sampling different coordinates for different seeds.
  - SEED BREAKING (unless you use an archive): Thesaurus can now generate vegetable names, and not just fruit.
  - Thesaurus also has a ZOMBIE mode, for the enlightened few of the walking dead that can murmur out partial sentences.
- - StrinkKit.appendJoined() methods simultaneously join items from an array or Collection and append them to a StringBuilder.
+ - StringKit.appendJoined() methods simultaneously join items from an array or Collection and append them to a StringBuilder.
  - Some changes to SquidMouse, mostly for readability.
  - Speedup for NumberTools.atan2(), plus an implementation for atan() to round out the trigonometric functions.
  - Inconsolata LGC now has an MSDF version in the assets.
+ - Lots of improvements and small visual changes to existing fonts (mostly "stretchable" distance field fonts).
 
 3.0.3
 Dependencies:

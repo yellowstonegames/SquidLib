@@ -70,7 +70,7 @@ public class FontTest extends ApplicationAdapter {
         //heights = new int[]{20, 21, 20, 28, 18, 20, 22, 25, 25, 25};
         widths =  new int[]{120, 160, 120, 160, 160,  50,  50,  100, 95,  90,  110, 120, 120, 120, 120, 130, 70,  90,  120, 105, 100, 100, 100, 250, 250};
         heights = new int[]{22,  29,  22,  29,  24,   25,  25,  20,  21,  20,  28,  22,  22,  22,  22,  45,  25,  25,  22,  27,  27,  25,  25,  20,  20};
-        index = widths.length - 1;
+        index = widths.length - 2;
         factories = new TextCellFactory[]{
                 DefaultResources.getCrispSlabFont().width(11).height(21).initBySize(),
                 DefaultResources.getCrispSlabFamily().width(11).height(21).initBySize(),
