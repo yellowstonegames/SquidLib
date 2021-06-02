@@ -259,6 +259,18 @@ public class MathVisualizer extends ApplicationAdapter {
         return 0x1.fb760cp-35 * ((Long.bitCount(u1 * 0xC6BC279692B5C323L ^ 0xC6AC29E5C6AC29E5L) - 32L << 32) + (u1 & 0xFFFFFFFFL) - (u1 >>> 32));
 	}
 
+    /**
+     * <a href="https://marc-b-reynolds.github.io/distribution/2021/03/18/CheapGaussianApprox.html">Credit to Marc B.
+     * Reynolds</a>. This version probably could be optimized to minimize maximum error, but I don't really know how.
+     * The multiplier was very carefully chosen so the highest and lowest possible results are equally far from 0.
+     * @return a normal-distributed double with standard deviation 1.0, actually ranging from -7.929080009460449 to 7.929080009460449
+     */
+    private double nextGaussianCountX3(){
+        long u = rng.nextLong(), c = Long.bitCount(u) - 32L << 32;
+        u *= 0xC6AC29E4C6AC29E5L;
+        return 0x1.fb760cp-35 * (c + (u & 0xFFFFFFFFL) - (u >>> 32));
+	}
+
     private double nextGaussianCountDual(){
 		final long u1 = rng.nextLong();
 		return 0x1.fb760cp-35 * ((Long.bitCount(rng.nextLong()) - 32L << 32) + (u1 & 0xFFFFFFFFL) - (u1 >>> 32));
@@ -1095,9 +1107,9 @@ public class MathVisualizer extends ApplicationAdapter {
             break;
             case 17: {
                 Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
-                        " nextGaussianCountDual()");
+                        " nextGaussianCountX3()");
                 for (int i = 0; i < 0x500000; i++) {
-                    double d = nextGaussianCountDual() * 64.0 + 256.0;
+                    double d = nextGaussianCountX3() * 64.0 + 256.0;
                     if (d >= 0 && d < 512)
                         amounts[(int) d]++;
                 }
