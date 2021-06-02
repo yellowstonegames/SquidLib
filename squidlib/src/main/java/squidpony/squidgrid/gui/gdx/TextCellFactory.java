@@ -639,7 +639,7 @@ public class TextCellFactory implements Disposable {
      */
     public TextCellFactory defaultDistanceFieldFont()
     {
-        fontDistanceField(DefaultResources.distanceFieldSquare, DefaultResources.distanceFieldSquareTexture);
+        fontDistanceField(DefaultResources.distanceFieldSquare, DefaultResources.distanceFieldSquareTexture).setSmoothingMultiplier(2.50f);
         return this;
     }
     /**
@@ -651,7 +651,7 @@ public class TextCellFactory implements Disposable {
      */
     public TextCellFactory defaultNarrowDistanceFieldFont()
     {
-        fontDistanceField(DefaultResources.distanceFieldNarrow, DefaultResources.distanceFieldNarrowTexture);
+        fontDistanceField(DefaultResources.distanceFieldNarrow, DefaultResources.distanceFieldNarrowTexture).setSmoothingMultiplier(3.50f);
         return this;
     }
 
@@ -2061,7 +2061,7 @@ public class TextCellFactory implements Disposable {
             else if (distanceField) {
                 if(!shader.equals(batch.getShader()))
                     batch.setShader(shader);
-                shader.setUniformf("u_smoothing", 0.125f / (smoothingMultiplier * (bmpFont.getData().scaleX)));
+                shader.setUniformf("u_smoothing", 0.25f / (smoothingMultiplier * (bmpFont.getData().scaleX)));
             }
         }
     }

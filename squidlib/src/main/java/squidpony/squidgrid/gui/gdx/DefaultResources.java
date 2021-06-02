@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.LifecycleListener;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.DistanceFieldFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
@@ -163,28 +164,53 @@ public class DefaultResources implements LifecycleListener {
             + "	gl_Position =  u_projTrans * " + ShaderProgram.POSITION_ATTRIBUTE + ";\n"
             + "}\n";
 
-    public static final String fragmentShader = "#ifdef GL_ES\n"
-            + " precision mediump float;\n"
-            + " precision mediump int;\n"
-            + "#endif\n"
-            + "\n"
-            + "uniform sampler2D u_texture;\n"
-            + "uniform float u_smoothing;\n"
-            + "varying vec4 v_color;\n"
-            + "varying vec2 v_texCoords;\n"
-            + "\n"
-            + "void main() {\n"
-            + "	 if (u_smoothing > 0.0) {\n"
-            + "	   vec4 box = vec4(v_texCoords-0.000125, v_texCoords+0.000125);\n"
-            + "	   float asum = smoothstep(0.5 - u_smoothing, 0.5 + u_smoothing, texture2D(u_texture, box.xy).a) +\n"
-            + "                 smoothstep(0.5 - u_smoothing, 0.5 + u_smoothing, texture2D(u_texture, box.zw).a) +\n"
-            + "                 smoothstep(0.5 - u_smoothing, 0.5 + u_smoothing, texture2D(u_texture, box.xw).a) +\n"
-            + "                 smoothstep(0.5 - u_smoothing, 0.5 + u_smoothing, texture2D(u_texture, box.zy).a);\n"
-            + "    gl_FragColor = vec4(v_color.rgb, ((smoothstep(0.5 - u_smoothing, 0.5 + u_smoothing, texture2D(u_texture, v_texCoords).a) + 0.5 * asum) / 3.0) * v_color.a);\n"
-            + "	 } else {\n"
-            + "		gl_FragColor = v_color * texture2D(u_texture, v_texCoords);\n"
-            + "	 }\n"
-            + "}\n";
+    public static final String fragmentShader =
+            "#ifdef GL_ES\n" //
+                    + "	precision mediump float;\n" //
+                    + "	precision mediump int;\n" //
+                    + "#endif\n" //
+                    + "\n" //
+                    + "uniform sampler2D u_texture;\n" //
+                    + "uniform float u_smoothing;\n" //
+                    + "varying vec4 v_color;\n" //
+                    + "varying vec2 v_texCoords;\n" //
+                    + "\n" //
+                    + "void main() {\n" //
+                    + "	if (u_smoothing > 0.0) {\n" //
+                    + "		float smoothing = u_smoothing;\n" //
+                    + "		float distance = texture2D(u_texture, v_texCoords).a;\n" //
+                    + "		float alpha = smoothstep(0.5 - smoothing, 0.5 + smoothing, distance);\n" //
+                    + "		gl_FragColor = vec4(v_color.rgb, alpha * v_color.a);\n" //
+                    + "	} else {\n" //
+                    + "		gl_FragColor = v_color * texture2D(u_texture, v_texCoords);\n" //
+                    + "	}\n" //
+                    + "}\n";
+
+
+//            "#ifdef GL_ES\n"
+//            + " precision mediump float;\n"
+//            + " precision mediump int;\n"
+//            + "#endif\n"
+//            + "\n"
+//            + "uniform sampler2D u_texture;\n"
+//            + "uniform float u_smoothing;\n"
+//            + "varying vec4 v_color;\n"
+//            + "varying vec2 v_texCoords;\n"
+//            + "\n"
+//            + "void main() {\n"
+//            + "	 if (u_smoothing > 0.0) {\n"
+//            + "	   vec4 box = vec4(v_texCoords-0.000125, v_texCoords+0.000125);\n"
+//            + "	   float asum = smoothstep(0.5 - u_smoothing, 0.5 + u_smoothing, texture2D(u_texture, box.xy).a) +\n"
+//            + "                 smoothstep(0.5 - u_smoothing, 0.5 + u_smoothing, texture2D(u_texture, box.zw).a) +\n"
+//            + "                 smoothstep(0.5 - u_smoothing, 0.5 + u_smoothing, texture2D(u_texture, box.xw).a) +\n"
+//            + "                 smoothstep(0.5 - u_smoothing, 0.5 + u_smoothing, texture2D(u_texture, box.zy).a);\n"
+//            + "    gl_FragColor = vec4(v_color.rgb, ((smoothstep(0.5 - u_smoothing, 0.5 + u_smoothing, texture2D(u_texture, v_texCoords).a) + 0.5 * asum) / 3.0) * v_color.a);\n"
+//            + "	 } else {\n"
+//            + "		gl_FragColor = v_color * texture2D(u_texture, v_texCoords);\n"
+//            + "	 }\n"
+//            + "}\n";
+
+
 //    public static final String fragmentShader = "#ifdef GL_ES\n"
 //            + "	precision mediump float;\n"
 //            + "	precision mediump int;\n"
@@ -856,7 +882,7 @@ public class DefaultResources implements LifecycleListener {
             try {
                 instance.distanceHeavySquare = new TextCellFactory()
                         .fontDistanceField(distanceFieldHeavySquare, distanceFieldHeavySquareTexture)
-                        .setSmoothingMultiplier(2.125f);
+                        .setSmoothingMultiplier(2.50f);
             } catch (Exception ignored) {
             }
         }
@@ -1009,7 +1035,7 @@ public class DefaultResources implements LifecycleListener {
         {
             try {
                 instance.typewriterDistanceNarrow = new TextCellFactory()
-                        .fontDistanceField(distanceFieldTypewriterNarrow, distanceFieldTypewriterNarrowTexture);
+                        .fontDistanceField(distanceFieldTypewriterNarrow, distanceFieldTypewriterNarrowTexture).setSmoothingMultiplier(3.50f);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -1047,7 +1073,7 @@ public class DefaultResources implements LifecycleListener {
         {
             try {
                 instance.distanceCode = new TextCellFactory()
-                        .fontDistanceField(distanceFieldCode, distanceFieldCodeTexture);
+                        .fontDistanceField(distanceFieldCode, distanceFieldCodeTexture).setSmoothingMultiplier(3.50f);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -1086,7 +1112,7 @@ public class DefaultResources implements LifecycleListener {
         {
             try {
                 instance.distanceCodeJP = new TextCellFactory()
-                        .fontDistanceField(distanceFieldCodeJP, distanceFieldCodeJPTexture).setSmoothingMultiplier(1.125f);
+                        .fontDistanceField(distanceFieldCodeJP, distanceFieldCodeJPTexture).setSmoothingMultiplier(2.5f);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -1130,7 +1156,7 @@ public class DefaultResources implements LifecycleListener {
         {
             try {
                 instance.distanceLean = new TextCellFactory()
-                        .fontDistanceField(distanceFieldLean, distanceFieldLeanTexture);
+                        .fontDistanceField(distanceFieldLean, distanceFieldLeanTexture).setSmoothingMultiplier(3.50f);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -1175,7 +1201,7 @@ public class DefaultResources implements LifecycleListener {
         {
             try {
                 instance.distanceSlab = new TextCellFactory()
-                        .fontDistanceField(distanceFieldSlab, distanceFieldSlabTexture);
+                        .fontDistanceField(distanceFieldSlab, distanceFieldSlabTexture).setSmoothingMultiplier(2.50f);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -1219,7 +1245,7 @@ public class DefaultResources implements LifecycleListener {
         {
             try {
                 instance.distanceLeanLight = new TextCellFactory()
-                        .fontDistanceField(distanceFieldLeanLight, distanceFieldLeanLightTexture);
+                        .fontDistanceField(distanceFieldLeanLight, distanceFieldLeanLightTexture).setSmoothingMultiplier(2.50f);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -1264,7 +1290,7 @@ public class DefaultResources implements LifecycleListener {
         {
             try {
                 instance.distanceSlabLight = new TextCellFactory()
-                        .fontDistanceField(distanceFieldSlabLight, distanceFieldSlabLightTexture);
+                        .fontDistanceField(distanceFieldSlabLight, distanceFieldSlabLightTexture).setSmoothingMultiplier(2.50f);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -1301,7 +1327,7 @@ public class DefaultResources implements LifecycleListener {
         if(instance.distanceDejaVu == null)
         {
             try {
-                instance.distanceDejaVu = new TextCellFactory().fontDistanceField(distanceFieldDejaVu, distanceFieldDejaVuTexture);
+                instance.distanceDejaVu = new TextCellFactory().fontDistanceField(distanceFieldDejaVu, distanceFieldDejaVuTexture).setSmoothingMultiplier(3.50f);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -1332,7 +1358,7 @@ public class DefaultResources implements LifecycleListener {
         initialize();
         if (instance.distancePrint == null) {
             try {
-                instance.distancePrint = new TextCellFactory().fontDistanceField(distanceFieldPrint, distanceFieldPrintTexture)
+                instance.distancePrint = new TextCellFactory().fontDistanceField(distanceFieldPrint, distanceFieldPrintTexture).setSmoothingMultiplier(2.50f)
                         .height(30).width(7);
                 instance.distancePrint.bmpFont.setUseIntegerPositions(false);
                 
@@ -1370,7 +1396,7 @@ public class DefaultResources implements LifecycleListener {
             try {
                 instance.distanceOrbit = new TextCellFactory().setDirectionGlyph('ˆ')
                         .fontDistanceField(distanceFieldOrbit, distanceFieldOrbitTexture)
-                        .setSmoothingMultiplier(1.3f).height(30).width(11);
+                        .setSmoothingMultiplier(2.50f).height(30).width(11);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -1406,7 +1432,7 @@ public class DefaultResources implements LifecycleListener {
         if (instance.distanceClean == null) {
             try {
                 instance.distanceClean = new TextCellFactory().fontDistanceField(distanceFieldClean, distanceFieldCleanTexture)
-                        .setSmoothingMultiplier(0.8f).height(30).width(5);
+                        .setSmoothingMultiplier(2.50f).height(30).width(5);
                 instance.distanceClean.bmpFont.setUseIntegerPositions(false);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -1749,7 +1775,7 @@ public class DefaultResources implements LifecycleListener {
         {
             try {
                 instance.familyGo = new TextFamily();
-                instance.familyGo.fontDistanceField("GoMono-Family-distance.fnt", "GoMono-Family-distance.png");
+                instance.familyGo.fontDistanceField("GoMono-Family-distance.fnt", "GoMono-Family-distance.png").setSmoothingMultiplier(4.00f);
             } catch (Exception e) {
                 e.printStackTrace();
             }

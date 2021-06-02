@@ -50,8 +50,8 @@ public class DistanceFieldTest extends ApplicationAdapter {
     public void create() {
         batch = new FilterBatch();
         factories = new TextCellFactory[]{
-                DefaultResources.getCrispLeanFamily().width(32).height(64).initBySize(),//.setSmoothingMultiplier(1f),
-                DefaultResources.getLeanFamily().width(32).height(64).initBySize(),
+                DefaultResources.getCrispLeanFont().width(32).height(64).initBySize(),//.setSmoothingMultiplier(1f),
+                DefaultResources.getStretchableLeanFont().width(32).height(64).initBySize(),
         };
         factory = factories[0];
         factories[0].font().setUseIntegerPositions(false);
