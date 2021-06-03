@@ -428,11 +428,16 @@ public class Dice implements Serializable {
 
     public IntVLA parseRollRuleInto(IntVLA into, String rollCode){
         mat.setTarget(rollCode);
-        into.add('+');
+        boolean starting = true;
         while (mat.find()) {
+            if(starting && !mat.isCaptured(6)){
+                into.add('+');
+                starting = false;
+            }
             if(mat.isCaptured(6)) // math op
             {
-                into.set(into.size - 1, mat.charAt(0, 6)); // gets char 0 from the math op group
+                into.add(mat.charAt(0, 6)); // gets char 0 from the math op group
+                starting = false;
                 continue;
             }
 
@@ -455,5 +460,97 @@ public class Dice implements Serializable {
             into.add(endN);
         }
         return into;
+    }
+
+    public int runRollRule(IntVLA rollRule) {
+        if(rollRule == null || rollRule.isEmpty()) return 0;
+        int currentResult, previousTotal = 0;
+        for (int i = 0; i < rollRule.size; i+=6) {
+            int currentMode = rollRule.get(i);
+            currentResult = 0;
+
+
+            int startN = rollRule.get(i+1); // number constant
+            int midMode = rollRule.get(i+2); // between notation
+            int midN = rollRule.get(i+3); // number constant
+            int mainMode = rollRule.get(i+4); // dice, range, or explode
+            int endN = rollRule.get(i+5); // number constant
+
+            if (startN != 0 && endN != 0) {
+                if (midMode != 0) {
+                    if ('>' == midMode) {
+                        if ('d' == (mainMode)) {
+                            currentResult = bestOf(startN, midN, endN);
+                        }
+                        else if('!' == (mainMode))
+                        {
+                            currentResult = bestOfExploding(startN, midN, endN);
+                        }
+                    }
+                    else if('<' == midMode)
+                    {
+                        if ('d' == (mainMode)) {
+                            currentResult = worstOf(startN, midN, endN);
+                        }
+                        else if('!' == (mainMode))
+                        {
+                            currentResult = worstOfExploding(startN, midN, endN);
+                        }
+                    }
+                    else
+                    // Here, wmode is ":", there is a constant lower bound for the range, and the upper bound is some
+                    // dice roll or other range. This can be negative, easily, if the random upper bound is negative
+                    {
+                        if ('d' == (mainMode)) {
+                            currentResult = startN + rng.nextSignedInt(rollDice(midN, endN) + 1 - startN);
+                        } else if ('!' == (mainMode)) {
+                            currentResult = startN + rng.nextSignedInt(rollExplodingDice(midN, endN) + 1 - startN);
+                        } else if (':' == (mainMode)) {
+                            currentResult = startN + rng.nextSignedInt(midN + rng.nextSignedInt(endN + 1 - midN) + 1 - startN);
+                        }
+                    }
+                } else if ('d' == (mainMode)) {
+                    currentResult = rollDice(startN, endN);
+                } else if ('!' == (mainMode)) {
+                    currentResult = rollExplodingDice(startN, endN);
+                } else if (':' == (mainMode)) {
+                    currentResult = startN + rng.nextSignedInt(endN + 1 - startN);
+                }
+            } else if (mainMode != 0) {
+                switch (mainMode) {
+                    case 'd':
+                        currentResult = rollDice(1, endN);
+                        break;
+                    case '!':
+                        currentResult = rollExplodingDice(1, endN);
+                        break;
+                    case ':':
+                        currentResult = rng.nextSignedInt(endN + 1);
+                        break;
+                }
+            } else {
+                if (':' == (midMode)) {
+                    currentResult = startN + rng.nextSignedInt(midN + 1 - startN);
+                } else {
+                    currentResult = startN;
+                }
+            }
+            switch (currentMode)
+            {
+                case '-':
+                    previousTotal -= currentResult;
+                    break;
+                case '*':
+                    previousTotal *= currentResult;
+                    break;
+                case '/':
+                    previousTotal /= currentResult;
+                    break;
+                default:
+                    previousTotal += currentResult;
+                    break;
+            }
+        }
+        return previousTotal;
     }
 }
