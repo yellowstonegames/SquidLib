@@ -318,7 +318,7 @@ public class Dice implements Serializable {
      *     <li>{@code +4} : add 4 to the value</li>
      *     <li>{@code -3} : subtract 3 from the value</li>
      *     <li>{@code *100} : multiply value by 100</li>
-     *     <li>{@code /8} : divide value by 8</li>
+     *     <li>{@code /8} : integer-divide value by 8</li>
      * </ul>
      * @param rollCode dice string using the above notation
      * @return a random number that is possible with the given dice string
@@ -424,5 +424,36 @@ public class Dice implements Serializable {
             currentMode = '+';
         }
         return prev;
+    }
+
+    public IntVLA parseRollRuleInto(IntVLA into, String rollCode){
+        mat.setTarget(rollCode);
+        into.add('+');
+        while (mat.find()) {
+            if(mat.isCaptured(6)) // math op
+            {
+                into.set(into.size - 1, mat.charAt(0, 6)); // gets char 0 from the math op group
+                continue;
+            }
+
+            boolean startNum = mat.isCaptured(1); // number constant
+            int midMode = mat.charAt(0, 2); // between, best, or worst notation
+            boolean midNum = mat.isCaptured(3); // number constant
+            int mainMode = mat.charAt(0, 4); // dice, range, or explode
+            boolean endNum = mat.isCaptured(5); // number constant
+
+            int startN = startNum ? StringKit.intFromDec(rollCode, mat.start(1), mat.end(1)) : 0;
+            int midN = midNum ? StringKit.intFromDec(rollCode, mat.start(3), mat.end(3)) : 0;
+            if(!startNum && endNum && mainMode != ':')
+                midN = 1;
+            int endN = endNum ? StringKit.intFromDec(rollCode, mat.start(5), mat.end(5)) : 0;
+
+            into.add(startN);
+            into.add(midMode);
+            into.add(midN);
+            into.add(mainMode);
+            into.add(endN);
+        }
+        return into;
     }
 }
