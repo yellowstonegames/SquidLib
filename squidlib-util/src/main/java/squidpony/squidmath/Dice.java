@@ -442,11 +442,12 @@ public class Dice implements Serializable {
             }
 
             boolean startNum = mat.isCaptured(1); // number constant
-            int midMode = mat.charAt(0, 2); // between, best, or worst notation
+            int midMode = mat.isCaptured(2) ? mat.charAt(0, 2) : 0; // between, best, or worst notation
             boolean midNum = mat.isCaptured(3); // number constant
-            int mainMode = mat.charAt(0, 4); // dice, range, or explode
+            int mainMode = mat.isCaptured(4) ? mat.charAt(0, 4) : 0; // dice, range, or explode
             boolean endNum = mat.isCaptured(5); // number constant
-
+            if(!(startNum || midNum || endNum))
+                break;
             int startN = startNum ? StringKit.intFromDec(rollCode, mat.start(1), mat.end(1)) : 0;
             int midN = midNum ? StringKit.intFromDec(rollCode, mat.start(3), mat.end(3)) : 0;
             if(!startNum && endNum && mainMode != ':')
