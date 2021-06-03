@@ -23,6 +23,10 @@ public class DiceRollRuleTest {
     {
         Dice d = new Dice(new SilkRNG(12345));
         IntVLA rule = new IntVLA();
+        d.parseRollRuleInto(rule, "-10");
+        System.out.println(rule);
+        rollMany(d, rule);
+        rule.clear();
         d.parseRollRuleInto(rule, "2d6");
         System.out.println(rule);
         rollMany(d, rule);
@@ -31,7 +35,11 @@ public class DiceRollRuleTest {
         System.out.println(rule);
         rollMany(d, rule);
         rule.clear();
-        d.parseRollRuleInto(rule, "1:3d6");
+        d.parseRollRuleInto(rule, "0:10:100");
+        System.out.println(rule);
+        rollMany(d, rule);
+        rule.clear();
+        d.parseRollRuleInto(rule, "2d4+3");
         System.out.println(rule);
         rollMany(d, rule);
 
