@@ -26,6 +26,7 @@ public class Dice implements Serializable {
 
     // The Creature.
     private static final Matcher mat = Pattern.compile("\\s*(?:(?:(-?\\d+)?\\s*(?:([:><])\\s*(\\d+))?\\s*(?:([d:!])\\s*(\\d+))?)|([+/*-]))\\s*").matcher();
+    private static final Matcher mat2 = Pattern.compile("\\s*(?:({=op}[+/*-])?\\s*({=sn}-?\\d+)?\\s*(?:({=im}[:><])\\s*({=mn}\\d+))?\\s*(?:({=mm}[d:!])\\s*({=en}\\d+))?)\\s*").matcher();
     private IRNG rng;
     private transient IntVLA temp = new IntVLA(20);
     /**
@@ -427,35 +428,41 @@ public class Dice implements Serializable {
     }
 
     public IntVLA parseRollRuleInto(IntVLA into, String rollCode){
-        mat.setTarget(rollCode);
+        mat2.setTarget(rollCode);
+        int op = mat2.pattern().groupId("op");
+        int sn = mat2.pattern().groupId("sn");
+        int im = mat2.pattern().groupId("im");
+        int mn = mat2.pattern().groupId("mn");
+        int mm = mat2.pattern().groupId("mm");
+        int en = mat2.pattern().groupId("en");
         boolean starting = true;
-        while (mat.find()) {
-            if(starting && !mat.isCaptured(6)){
+        while (mat2.find()) {
+            System.out.println(mat2.group());
+            if(starting && !mat2.isCaptured(op)){
                 into.add('+');
                 starting = false;
             }
-            if(mat.isCaptured(6)) // math op
+            if(mat2.isCaptured("op")) // math op
             {
-                into.add(mat.charAt(0, 6)); // gets char 0 from the math op group
+                into.add(mat2.charAt(0, op)); // gets char 0 from the math op group
                 starting = false;
-                continue;
             }
 
-            boolean startNum = mat.isCaptured(1); // number constant
-            int midMode = mat.isCaptured(2) ? mat.charAt(0, 2) : 0; // between, best, or worst notation
-            boolean midNum = mat.isCaptured(3); // number constant
-            int mainMode = mat.isCaptured(4) ? mat.charAt(0, 4) : 0; // dice, range, or explode
-            boolean endNum = mat.isCaptured(5); // number constant
+            boolean startNum = mat2.isCaptured(sn); // number constant
+            int initialMode = mat2.isCaptured(im) ? mat2.charAt(0, im) : 0; // between, best, or worst notation
+            boolean midNum = mat2.isCaptured(mn); // number constant
+            int mainMode = mat2.isCaptured(mm) ? mat2.charAt(0, mm) : 0; // dice, range, or explode
+            boolean endNum = mat2.isCaptured(en); // number constant
             if(!(startNum || midNum || endNum))
                 break;
-            int startN = startNum ? StringKit.intFromDec(rollCode, mat.start(1), mat.end(1)) : 0;
-            int midN = midNum ? StringKit.intFromDec(rollCode, mat.start(3), mat.end(3)) : 0;
+            int startN = startNum ? StringKit.intFromDec(rollCode, mat2.start(sn), mat2.end(sn)) : 0;
+            int midN = midNum ? StringKit.intFromDec(rollCode, mat2.start(mn), mat2.end(mn)) : 0;
             if(!startNum && endNum && mainMode != ':')
                 midN = 1;
-            int endN = endNum ? StringKit.intFromDec(rollCode, mat.start(5), mat.end(5)) : 0;
+            int endN = endNum ? StringKit.intFromDec(rollCode, mat2.start(en), mat2.end(en)) : 0;
 
             into.add(startN);
-            into.add(midMode);
+            into.add(initialMode);
             into.add(midN);
             into.add(mainMode);
             into.add(endN);
@@ -477,7 +484,7 @@ public class Dice implements Serializable {
             int mainMode = rollRule.get(i+4); // dice, range, or explode
             int endN = rollRule.get(i+5); // number constant
 
-            if (startN != 0 && endN != 0) {
+            if (mainMode != 0) {
                 if (midMode != 0) {
                     if ('>' == midMode) {
                         if ('d' == (mainMode)) {
@@ -499,7 +506,7 @@ public class Dice implements Serializable {
                         }
                     }
                     else
-                    // Here, wmode is ":", there is a constant lower bound for the range, and the upper bound is some
+                    // Here, midMode is ":", there is a constant lower bound for the range, and the upper bound is some
                     // dice roll or other range. This can be negative, easily, if the random upper bound is negative
                     {
                         if ('d' == (mainMode)) {
@@ -516,18 +523,6 @@ public class Dice implements Serializable {
                     currentResult = rollExplodingDice(startN, endN);
                 } else if (':' == (mainMode)) {
                     currentResult = startN + rng.nextSignedInt(endN + 1 - startN);
-                }
-            } else if (mainMode != 0) {
-                switch (mainMode) {
-                    case 'd':
-                        currentResult = rollDice(1, endN);
-                        break;
-                    case '!':
-                        currentResult = rollExplodingDice(1, endN);
-                        break;
-                    case ':':
-                        currentResult = rng.nextSignedInt(endN + 1);
-                        break;
                 }
             } else {
                 if (':' == (midMode)) {
