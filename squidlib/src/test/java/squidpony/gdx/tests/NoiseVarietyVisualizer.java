@@ -26,7 +26,7 @@ public class NoiseVarietyVisualizer extends ApplicationAdapter {
     private int dim = 0; // this can be 0, 1, or 2; add 2 to get the actual dimensions
     private int octaves = 0;
     private float freq = (float) Math.exp(-4.0);
-    private boolean ridged = false;
+    private int alternate = 0;
     private long seed = 1234567890;
 
     private Noise.Noise2D current2 = new Noise.Layered2D(classic, octaves + 1, freq);
@@ -48,46 +48,72 @@ public class NoiseVarietyVisualizer extends ApplicationAdapter {
         return (float) n * 0.5f + 0.5f;
     }
 
-    private void refresh(){
-        if(ridged) {
-            switch (noiseType) {
-                case 0:
-                    current2 = new Noise.Ridged2D(classic, octaves + 1, freq);
-                    current3 = new Noise.Ridged3D(classic, octaves + 1, freq);
-                    current4 = new Noise.Ridged4D(classic, octaves + 1, freq);
-                    break;
-                case 1:
-                    current2 = new Noise.Ridged2D(foam, octaves + 1, freq);
-                    current3 = new Noise.Ridged3D(foam, octaves + 1, freq);
-                    current4 = new Noise.Ridged4D(foam, octaves + 1, freq);
-                    break;
-                case 2:
-                case 3:
-                    current2 = new Noise.Ridged2D(fast, octaves + 1, freq);
-                    current3 = new Noise.Ridged3D(fast, octaves + 1, freq);
-                    current4 = new Noise.Ridged4D(fast, octaves + 1, freq);
-                    break;
+    private void refresh() {
+        switch (alternate) {
+            case 0: {
+                switch (noiseType) {
+                    case 0:
+                        current2 = new Noise.Layered2D(classic, octaves + 1, freq);
+                        current3 = new Noise.Layered3D(classic, octaves + 1, freq);
+                        current4 = new Noise.Layered4D(classic, octaves + 1, freq);
+                        break;
+                    case 1:
+                        current2 = new Noise.Layered2D(foam, octaves + 1, freq);
+                        current3 = new Noise.Layered3D(foam, octaves + 1, freq);
+                        current4 = new Noise.Layered4D(foam, octaves + 1, freq);
+                        break;
+                    case 2:
+                    case 3:
+                        current2 = new Noise.Layered2D(fast, octaves + 1, freq);
+                        current3 = new Noise.Layered3D(fast, octaves + 1, freq);
+                        current4 = new Noise.Layered4D(fast, octaves + 1, freq);
+                        break;
+                }
             }
-        }
-        else {
-            switch (noiseType) {
-                case 0:
-                    current2 = new Noise.Layered2D(classic, octaves + 1, freq);
-                    current3 = new Noise.Layered3D(classic, octaves + 1, freq);
-                    current4 = new Noise.Layered4D(classic, octaves + 1, freq);
-                    break;
-                case 1:
-                    current2 = new Noise.Layered2D(foam, octaves + 1, freq);
-                    current3 = new Noise.Layered3D(foam, octaves + 1, freq);
-                    current4 = new Noise.Layered4D(foam, octaves + 1, freq);
-                    break;
-                case 2:
-                case 3:
-                    current2 = new Noise.Layered2D(fast, octaves + 1, freq);
-                    current3 = new Noise.Layered3D(fast, octaves + 1, freq);
-                    current4 = new Noise.Layered4D(fast, octaves + 1, freq);
-                    break;
+            break;
+            case 1: {
+                switch (noiseType) {
+                    case 0:
+                        current2 = new Noise.LayeredSpiral2D(classic, octaves + 1, freq);
+                        current3 = new Noise.Ridged3D(classic, octaves + 1, freq);
+                        current4 = new Noise.Ridged4D(classic, octaves + 1, freq);
+                        break;
+                    case 1:
+                        current2 = new Noise.LayeredSpiral2D(foam, octaves + 1, freq);
+                        current3 = new Noise.Ridged3D(foam, octaves + 1, freq);
+                        current4 = new Noise.Ridged4D(foam, octaves + 1, freq);
+                        break;
+                    case 2:
+                    case 3:
+                        current2 = new Noise.LayeredSpiral2D(fast, octaves + 1, freq);
+                        current3 = new Noise.Ridged3D(fast, octaves + 1, freq);
+                        current4 = new Noise.Ridged4D(fast, octaves + 1, freq);
+                        break;
+                }
             }
+            break;
+            case 2: {
+                switch (noiseType) {
+                    case 0:
+                        current2 = new Noise.Ridged2D(classic, octaves + 1, freq);
+                        current3 = new Noise.Ridged3D(classic, octaves + 1, freq);
+                        current4 = new Noise.Ridged4D(classic, octaves + 1, freq);
+                        break;
+                    case 1:
+                        current2 = new Noise.Ridged2D(foam, octaves + 1, freq);
+                        current3 = new Noise.Ridged3D(foam, octaves + 1, freq);
+                        current4 = new Noise.Ridged4D(foam, octaves + 1, freq);
+                        break;
+                    case 2:
+                    case 3:
+                        current2 = new Noise.Ridged2D(fast, octaves + 1, freq);
+                        current3 = new Noise.Ridged3D(fast, octaves + 1, freq);
+                        current4 = new Noise.Ridged4D(fast, octaves + 1, freq);
+                        break;
+                }
+            }
+            break;
+
         }
     }
     @Override
@@ -124,8 +150,9 @@ public class NoiseVarietyVisualizer extends ApplicationAdapter {
                     case F: // frequency
                         freq = ((float) Math.exp((System.currentTimeMillis() >>> 9 & 7) - 5));
                         break;
+                    case A:
                     case R: // ridged
-                        ridged = !ridged;
+                        alternate = (alternate + 1) % 3;
                         break;
                     case H: // higher octaves
                         octaves = octaves + 1 & 7;
