@@ -131,7 +131,7 @@ public abstract class WorldMapGenerator implements Serializable {
             shallowWaterLower = -0.3, shallowWaterUpper = -0.1,  // 2
             coastalWaterLower = -0.1, coastalWaterUpper = 0.02,   // 3
             sandLower = 0.02, sandUpper = 0.12,                   // 4
-            grassLower = 0.14, grassUpper = 0.35,                // 5
+            grassLower = 0.12, grassUpper = 0.35,                // 5
             forestLower = 0.35, forestUpper = 0.6,               // 6
             rockLower = 0.6, rockUpper = 0.8,                    // 7
             snowLower = 0.8, snowUpper = 1.0;                    // 8
