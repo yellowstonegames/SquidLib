@@ -1,6 +1,8 @@
 package squidpony.examples;
 
+import squidpony.ArrayTools;
 import squidpony.squidgrid.mapping.DungeonGenerator;
+import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidgrid.mapping.SerpentDeepMapGenerator;
 import squidpony.squidmath.*;
 
@@ -31,6 +33,21 @@ public class PoissonDiskTest {
 
             System.out.println();
         }
-    }
+        ArrayTools.fill(dun, '.');
+        DungeonUtility.wallWrap(dun);
 
+        OrderedSet<Coord> points = PoissonDisk.sampleRectangle(
+                Coord.get(1, 1), Coord.get(78, 78), 2.5f,
+                80, 80, 30, rng);
+        for (int i = 0; i < points.size(); i++) {
+            Coord c = points.getAt(i);
+            dun[c.x][c.y] = '*';
+        }
+        dg.setDungeon(dun);
+        if (TestConfiguration.PRINTING) {
+
+            System.out.println(dg);
+            System.out.println();
+        }
+    }
 }
