@@ -3423,4 +3423,83 @@ public class Noise {
         }
 
     }
+
+    /*
+final double x2 = x * +0.6084388609788620 + y * -0.7936007512916964, y2 = x * +0.7936007512916964 + y * +0.6084388609788620; x = x2; y = y2;
+final double x2 = x * -0.0918123620555776 + y * +0.9957763253732113, y2 = x * -0.9957763253732113 + y * -0.0918123620555776; x = x2; y = y2;
+final double x2 = x * -0.2516046209882993 + y * -0.9678301063189418, y2 = x * +0.9678301063189418 + y * -0.2516046209882993; x = x2; y = y2;
+final double x2 = x * -0.9645864935883297 + y * +0.2637667461735297, y2 = x * -0.2637667461735297 + y * -0.9645864935883297; x = x2; y = y2;
+final double x2 = x * +0.9965985265626721 + y * +0.0824098104178797, y2 = x * -0.0824098104178797 + y * +0.9965985265626721; x = x2; y = y2;
+final double x2 = x * -0.5923434555167486 + y * -0.8056855656560304, y2 = x * +0.8056855656560304 + y * -0.5923434555167486; x = x2; y = y2;
+final double x2 = x * -0.9047610925124910 + y * -0.4259194354283491, y2 = x * +0.4259194354283491 + y * -0.9047610925124910; x = x2; y = y2;
+final double x2 = x * +0.2989874110614460 + y * +0.9542570555289460, y2 = x * -0.9542570555289460 + y * +0.2989874110614460; x = x2; y = y2;
+final double x2 = x * +0.7547468926269891 + y * -0.6560161035141623, y2 = x * +0.6560161035141623 + y * +0.7547468926269891; x = x2; y = y2;
+final double x2 = x * -0.7468118748321353 + y * -0.6650353551576872, y2 = x * +0.6650353551576872 + y * -0.7468118748321353; x = x2; y = y2;
+final double x2 = x * -0.6187762047720489 + y * -0.7855673162803423, y2 = x * +0.7855673162803423 + y * -0.6187762047720489; x = x2; y = y2;
+final double x2 = x * -0.4813030396500039 + y * +0.8765542675862498, y2 = x * -0.8765542675862498 + y * -0.4813030396500039; x = x2; y = y2;
+final double x2 = x * +0.9444650735295208 + y * +0.3286118148863135, y2 = x * -0.3286118148863135 + y * +0.9444650735295208; x = x2; y = y2;
+final double x2 = x * +0.3652381556420138 + y * -0.9309141150843186, y2 = x * +0.9309141150843186 + y * +0.3652381556420138; x = x2; y = y2;
+final double x2 = x * -0.8282576512523020 + y * -0.5603474485906222, y2 = x * +0.5603474485906222 + y * -0.8282576512523020; x = x2; y = y2;
+final double x2 = x * -0.3330497920128330 + y * -0.9429092406166187, y2 = x * +0.9429092406166187 + y * -0.3330497920128330; x = x2; y = y2;
+final double x2 = x * -0.8844570114424437 + y * +0.4666216828548594, y2 = x * -0.4666216828548594 + y * -0.8844570114424437; x = x2; y = y2;
+final double x2 = x * +0.4416297825973796 + y * +0.8971973780183440, y2 = x * -0.8971973780183440 + y * +0.4416297825973796; x = x2; y = y2;
+final double x2 = x * +0.9629636172464402 + y * -0.2696313629006305, y2 = x * +0.2696313629006305 + y * +0.9629636172464402; x = x2; y = y2;
+final double x2 = x * +0.0518763971259185 + y * -0.9986535131972620, y2 = x * +0.9986535131972620 + y * +0.0518763971259185; x = x2; y = y2;
+final double x2 = x * -0.8761039177722382 + y * -0.4821223135928635, y2 = x * +0.4821223135928635 + y * -0.8761039177722382; x = x2; y = y2;     */
+
+    public static class LayeredSpiral2D implements Noise2D {
+        protected int octaves;
+        protected Noise2D basis;
+        public double frequency;
+        public double lacunarity;
+        public LayeredSpiral2D() {
+            this(SeededNoise.instance);
+        }
+
+        public LayeredSpiral2D(Noise2D basis) {
+            this(basis, 2);
+        }
+
+        public LayeredSpiral2D(Noise2D basis, final int octaves) {
+            this(basis, octaves, 1.0);
+        }
+        public LayeredSpiral2D(Noise2D basis, final int octaves, double frequency) {
+            this(basis, octaves, frequency, 0.5);
+        }
+        public LayeredSpiral2D(Noise2D basis, final int octaves, double frequency, double lacunarity) {
+            this.basis = basis;
+            this.frequency = frequency;
+            this.octaves = Math.max(1, Math.min(63, octaves));
+            this.lacunarity = lacunarity;
+        }
+
+        @Override
+        public double getNoise(double x, double y) {
+            x *= frequency;
+            y *= frequency;
+            int s = 1;
+            double n = 0.0;
+            for (int o = 0; o < octaves; o++, s <<= 1) {
+                n += basis.getNoise(x, y) * s;
+                final double x2 = x * +0.6084388609788620 + y * -0.7936007512916964, y2 = x * +0.7936007512916964 + y * +0.6084388609788620;
+                x = x2 * lacunarity + (o<<6); y = y2 * lacunarity + (o<<6);
+            }
+            return n / ((1 << octaves) - 1.0);
+        }
+
+        @Override
+        public double getNoiseWithSeed(double x, double y, long seed) {
+            x *= frequency;
+            y *= frequency;
+            int s = 1;
+            double n = 0.0;
+            for (int o = 0; o < octaves; o++, s <<= 1) {
+                n += basis.getNoiseWithSeed(x, y, (seed += 0x9E3779B97F4A7C15L)) * s;
+                final double x2 = x * +0.6084388609788620 + y * -0.7936007512916964, y2 = x * +0.7936007512916964 + y * +0.6084388609788620;
+                x = x2 * lacunarity + (o<<6); y = y2 * lacunarity + (o<<6);
+            }
+            return n / ((1 << octaves) - 1.0);
+        }
+    }
+
 }
