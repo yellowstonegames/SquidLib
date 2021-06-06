@@ -3481,7 +3481,8 @@ final double x2 = x * -0.8761039177722382 + y * -0.4821223135928635, y2 = x * +0
             double n = 0.0;
             for (int o = 0; o < octaves; o++, s <<= 1) {
                 n += basis.getNoise(x, y) * s;
-                final double x2 = x * +0.6084388609788620 + y * -0.7936007512916964, y2 = x * +0.7936007512916964 + y * +0.6084388609788620;
+                final double x2 = x * -0.7381125910503885 + y * -0.6761345613300207;
+                final double y2 = x * +0.6761345613300207 + y * -0.7381125910503885;
                 x = x2 * lacunarity + (o<<6); y = y2 * lacunarity + (o<<6);
             }
             return n / ((1 << octaves) - 1.0);
@@ -3495,8 +3496,70 @@ final double x2 = x * -0.8761039177722382 + y * -0.4821223135928635, y2 = x * +0
             double n = 0.0;
             for (int o = 0; o < octaves; o++, s <<= 1) {
                 n += basis.getNoiseWithSeed(x, y, (seed += 0x9E3779B97F4A7C15L)) * s;
-                final double x2 = x * +0.6084388609788620 + y * -0.7936007512916964, y2 = x * +0.7936007512916964 + y * +0.6084388609788620;
+                final double x2 = x * -0.7381125910503885 + y * -0.6761345613300207;
+                final double y2 = x * +0.6761345613300207 + y * -0.7381125910503885;
                 x = x2 * lacunarity + (o<<6); y = y2 * lacunarity + (o<<6);
+            }
+            return n / ((1 << octaves) - 1.0);
+        }
+    }
+
+    public static class LayeredSpiral3D implements Noise3D {
+        protected int octaves;
+        protected Noise3D basis;
+        public double frequency;
+        public double lacunarity;
+        public LayeredSpiral3D() {
+            this(SeededNoise.instance);
+        }
+
+        public LayeredSpiral3D(Noise3D basis) {
+            this(basis, 2);
+        }
+
+        public LayeredSpiral3D(Noise3D basis, final int octaves) {
+            this(basis, octaves, 1.0);
+        }
+        public LayeredSpiral3D(Noise3D basis, final int octaves, double frequency) {
+            this(basis, octaves, frequency, 0.5);
+        }
+        public LayeredSpiral3D(Noise3D basis, final int octaves, double frequency, double lacunarity) {
+            this.basis = basis;
+            this.frequency = frequency;
+            this.octaves = Math.max(1, Math.min(63, octaves));
+            this.lacunarity = lacunarity;
+        }
+
+        @Override
+        public double getNoise(double x, double y, double z) {
+            x *= frequency;
+            y *= frequency;
+            z *= frequency;
+            int s = 1;
+            double n = 0.0;
+            for (int o = 0; o < octaves; o++, s <<= 1) {
+                n += basis.getNoise(x, y, z) * s;
+                final double x2 = x * -0.0274288894836461 + y * +0.7290764961819305 + z * +0.6853079636883495;
+                final double y2 = x * -0.9053457947767863 + y * -0.3092463840200059 + z * +0.2927177497885901;
+                final double z2 = x * +0.4245136549634499 + y * -0.6124211435583022 + z * +0.6685588682179822;
+                x = x2 * lacunarity + (o<<6); y = y2 * lacunarity + (o<<6); z = z2 * lacunarity + (o<<6);
+            }
+            return n / ((1 << octaves) - 1.0);
+        }
+
+        @Override
+        public double getNoiseWithSeed(double x, double y, double z, long seed) {
+            x *= frequency;
+            y *= frequency;
+            z *= frequency;
+            int s = 1;
+            double n = 0.0;
+            for (int o = 0; o < octaves; o++, s <<= 1) {
+                n += basis.getNoiseWithSeed(x, y, z, (seed += 0x9E3779B97F4A7C15L)) * s;
+                final double x2 = x * -0.0274288894836461 + y * +0.7290764961819305 + z * +0.6853079636883495;
+                final double y2 = x * -0.9053457947767863 + y * -0.3092463840200059 + z * +0.2927177497885901;
+                final double z2 = x * +0.4245136549634499 + y * -0.6124211435583022 + z * +0.6685588682179822;
+                x = x2 * lacunarity + (o<<6); y = y2 * lacunarity + (o<<6); z = z2 * lacunarity + (o<<6);
             }
             return n / ((1 << octaves) - 1.0);
         }
