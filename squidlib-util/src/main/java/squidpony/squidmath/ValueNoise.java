@@ -11,7 +11,8 @@ package squidpony.squidmath;
  * @see FoamNoise FoamNoise produces high-quality noise by combining a few rotated results of ValueNoise with domain warping.
  * @see PhantomNoise PhantomNoise doesn't use this class directly, but does have its own way of generating arbitrary-dimensional value noise.
  */
-public class ValueNoise implements Noise.Noise1D, Noise.Noise2D, Noise.Noise3D, Noise.Noise4D {
+public class ValueNoise implements Noise.Noise1D, Noise.Noise2D, Noise.Noise3D,
+        Noise.Noise4D, Noise.Noise5D, Noise.Noise6D {
     public static final ValueNoise instance = new ValueNoise();
     
     public int seed = 0xD1CEBEEF;
@@ -358,5 +359,21 @@ public class ValueNoise implements Noise.Noise1D, Noise.Noise2D, Noise.Noise3D, 
     @Override
     public double getNoiseWithSeed(double x, double y, double z, double w, long seed) {
         return valueNoise((int) (seed ^ seed >>> 32), x, y, z, w) * 2 - 1;
+    }
+    @Override
+    public double getNoise(double x, double y, double z, double w, double u) {
+        return valueNoise(seed, x, y, z, w, u) * 2 - 1;
+    }
+    @Override
+    public double getNoiseWithSeed(double x, double y, double z, double w, double u, long seed) {
+        return valueNoise((int) (seed ^ seed >>> 32), x, y, z, w, u) * 2 - 1;
+    }
+    @Override
+    public double getNoise(double x, double y, double z, double w, double u, double v) {
+        return valueNoise(seed, x, y, z, w, u, v) * 2 - 1;
+    }
+    @Override
+    public double getNoiseWithSeed(double x, double y, double z, double w, double u, double v, long seed) {
+        return valueNoise((int) (seed ^ seed >>> 32), x, y, z, w, u, v) * 2 - 1;
     }
 }
