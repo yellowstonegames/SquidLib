@@ -6,10 +6,14 @@ import squidpony.squidmath.NumberTools;
 import squidpony.squidmath.PhantomNoise;
 
 /*
+2x2:
+final double x2 = x * -0.7381125910503885 + y * -0.6761345613300207;
+final double y2 = x * +0.6761345613300207 + y * -0.7381125910503885;
+
 3x3:
--0.0274288894836461, +0.7290764961819305, +0.6853079636883495,
--0.9053457947767863, -0.3092463840200059, +0.2927177497885901,
-+0.4245136549634499, -0.6124211435583022, +0.6685588682179822,
+final double x2 = x * -0.0274288894836461 + y * +0.7290764961819305 + z * +0.6853079636883495;
+final double y2 = x * -0.9053457947767863 + y * -0.3092463840200059 + z * +0.2927177497885901;
+final double z2 = x * +0.4245136549634499 + y * -0.6124211435583022 + z * +0.6685588682179822;
 
 4x4:
 +0.1905791786518885, +0.3861174185764629, -0.5847328850860769, -0.6893092454147123,
@@ -40,6 +44,14 @@ public class MatrixWork {
                 {cg, sg,},
                 {-sg, cg,},
         };
+        System.out.printf("%dx%d: \n", 2, 2);
+        for (int y = 0; y < 2; y++) {
+            for (int x = 0; x < 2; x++) {
+                System.out.printf("%+1.16f, ", seed[y][x]);
+            }
+            System.out.println();
+        }
+        System.out.println();
         for (int d = 3; d <= 6; d++) {
             double[][] L = new double[d][d], R = new double[d][d], W = new double[d][d];
             gold = PhantomNoise.goldenDouble[d-2][0];
