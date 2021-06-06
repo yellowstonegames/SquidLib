@@ -20,8 +20,9 @@ import static com.badlogic.gdx.graphics.GL20.GL_POINTS;
 public class NoiseVarietyVisualizer extends ApplicationAdapter {
 
     private ClassicNoise classic = new ClassicNoise(1234567890);
-    private WaveNoise foam = new WaveNoise(1234567890);
+    private FastNoise foam = new FastNoise(1234567890, 2f, FastNoise.FOAM, 1);
     private FastNoise fast = new FastNoise(1234567890, 1f, FastNoise.SIMPLEX, 1);
+    private FastNoise value = new FastNoise(1234567890, 1f, FastNoise.VALUE, 1);
     private int noiseType = 0; // 0 for classic, 1 for wave, 2 for fast, 3 for experimental
     private int dim = 0; // this can be 0, 1, or 2; add 2 to get the actual dimensions
     private int octaves = 0;
@@ -63,10 +64,14 @@ public class NoiseVarietyVisualizer extends ApplicationAdapter {
                         current4 = new Noise.Layered4D(foam, octaves + 1, freq);
                         break;
                     case 2:
-                    case 3:
                         current2 = new Noise.Layered2D(fast, octaves + 1, freq);
                         current3 = new Noise.Layered3D(fast, octaves + 1, freq);
                         current4 = new Noise.Layered4D(fast, octaves + 1, freq);
+                        break;
+                    case 3:
+                        current2 = new Noise.Layered2D(value, octaves + 1, freq);
+                        current3 = new Noise.Layered3D(value, octaves + 1, freq);
+                        current4 = new Noise.Layered4D(value, octaves + 1, freq);
                         break;
                 }
             }
@@ -75,19 +80,23 @@ public class NoiseVarietyVisualizer extends ApplicationAdapter {
                 switch (noiseType) {
                     case 0:
                         current2 = new Noise.LayeredSpiral2D(classic, octaves + 1, freq);
-                        current3 = new Noise.Ridged3D(classic, octaves + 1, freq);
-                        current4 = new Noise.Ridged4D(classic, octaves + 1, freq);
+                        current3 = new Noise.LayeredSpiral3D(classic, octaves + 1, freq);
+                        current4 = new Noise.Layered4D(classic, octaves + 1, freq);
                         break;
                     case 1:
                         current2 = new Noise.LayeredSpiral2D(foam, octaves + 1, freq);
-                        current3 = new Noise.Ridged3D(foam, octaves + 1, freq);
-                        current4 = new Noise.Ridged4D(foam, octaves + 1, freq);
+                        current3 = new Noise.LayeredSpiral3D(foam, octaves + 1, freq);
+                        current4 = new Noise.Layered4D(foam, octaves + 1, freq);
                         break;
                     case 2:
-                    case 3:
                         current2 = new Noise.LayeredSpiral2D(fast, octaves + 1, freq);
-                        current3 = new Noise.Ridged3D(fast, octaves + 1, freq);
-                        current4 = new Noise.Ridged4D(fast, octaves + 1, freq);
+                        current3 = new Noise.LayeredSpiral3D(fast, octaves + 1, freq);
+                        current4 = new Noise.Layered4D(fast, octaves + 1, freq);
+                        break;
+                    case 3:
+                        current2 = new Noise.LayeredSpiral2D(value, octaves + 1, freq);
+                        current3 = new Noise.LayeredSpiral3D(value, octaves + 1, freq);
+                        current4 = new Noise.Layered4D(value, octaves + 1, freq);
                         break;
                 }
             }
@@ -105,10 +114,14 @@ public class NoiseVarietyVisualizer extends ApplicationAdapter {
                         current4 = new Noise.Ridged4D(foam, octaves + 1, freq);
                         break;
                     case 2:
-                    case 3:
                         current2 = new Noise.Ridged2D(fast, octaves + 1, freq);
                         current3 = new Noise.Ridged3D(fast, octaves + 1, freq);
                         current4 = new Noise.Ridged4D(fast, octaves + 1, freq);
+                        break;
+                    case 3:
+                        current2 = new Noise.Ridged2D(value, octaves + 1, freq);
+                        current3 = new Noise.Ridged3D(value, octaves + 1, freq);
+                        current4 = new Noise.Ridged4D(value, octaves + 1, freq);
                         break;
                 }
             }
@@ -178,7 +191,8 @@ public class NoiseVarietyVisualizer extends ApplicationAdapter {
     public void putMap() {
         renderer.begin(view.getCamera().combined, GL_POINTS);
         float bright, c = ctr * 0.5f;
-        if(noiseType != 3) {
+        if(true) {
+//        if(noiseType != 3) {
             switch (dim) {
                 case 0:
                     for (int x = 0; x < width; x++) {
