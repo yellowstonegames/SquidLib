@@ -1622,13 +1622,17 @@ public class Noise {
             double sum = 0.0, n, exp = 2.0, correction = 0.0;
             x *= frequency;
             y *= frequency;
-            for (int i = 0; i < octaves; i++) {
-                n = basis.getNoise(x + (i << 6), y + (i << 7)); // n is between -1 and 1
+            for (int o = 0; o < octaves; o++) {
+                n = basis.getNoise(x + (o << 6), y + (o << 7)); // n is between -1 and 1
                 n = 1.0 - Math.abs(n);                          // n is now between 0 and 1
                 correction += (exp *= 0.5);                     // exp goes to 1 here, correction too
                 sum += n * exp;                                 // sum is between 0 and 1
-                x *= 2.0;                                       // exaggerate details for the next
-                y *= 2.0;                                       // octave, by zooming in
+                //x *= 2.0;                                       // exaggerate details for the next
+                //y *= 2.0;                                       // octave, by zooming in
+                final double x2 = x * -0.7381125910503885 + y * -0.6761345613300207;
+                final double y2 = x * +0.6761345613300207 + y * -0.7381125910503885;
+                x = x2 * 2.0 + (o<<6); y = y2 * 2.0 + (o<<6);
+
             }
             return sum * 2.0 / correction - 1.0;                // for 1 octave, this is between -1 and 1
         }
@@ -1638,13 +1642,16 @@ public class Noise {
             double sum = 0.0, n, exp = 2.0, correction = 0.0;
             x *= frequency;
             y *= frequency;
-            for (int i = 0; i < octaves; i++) { 
+            for (int o = 0; o < octaves; o++) {
                 n = basis.getNoiseWithSeed(x, y, (seed += 0x9E3779B97F4A7C15L));
                 n = 1.0 - Math.abs(n);
                 correction += (exp *= 0.5);
                 sum += n * exp;
-                x *= 2.0;
-                y *= 2.0;
+                //x *= 2.0;                                       // exaggerate details for the next
+                //y *= 2.0;                                       // octave, by zooming in
+                final double x2 = x * -0.7381125910503885 + y * -0.6761345613300207;
+                final double y2 = x * +0.6761345613300207 + y * -0.7381125910503885;
+                x = x2 * 2.0 + (o<<6); y = y2 * 2.0 + (o<<6);
             }
             return sum * 2.0 / correction - 1.0;
         }
@@ -1681,14 +1688,15 @@ public class Noise {
             x *= frequency;
             y *= frequency;
             z *= frequency;
-            for (int i = 0; i < octaves; ++i) {
-                n = basis.getNoise(x + (i << 6), y + (i << 7), z + (i << 8));
+            for (int o = 0; o < octaves; ++o) {
+                n = basis.getNoise(x + (o << 6), y + (o << 7), z + (o << 8));
                 n = 1.0 - Math.abs(n);
                 correction += (exp *= 0.5);
                 sum += n * exp;
-                x *= 2.0;
-                y *= 2.0;
-                z *= 2.0;
+                final double x2 = x * -0.0274288894836461 + y * +0.7290764961819305 + z * +0.6853079636883495;
+                final double y2 = x * -0.9053457947767863 + y * -0.3092463840200059 + z * +0.2927177497885901;
+                final double z2 = x * +0.4245136549634499 + y * -0.6124211435583022 + z * +0.6685588682179822;
+                x = x2 * 2.0 + (o<<6); y = y2 * 2.0 + (o<<6); z = z2 * 2.0 + (o<<6);
             }
             return sum * 2.0 / correction - 1.0;
         }
@@ -1699,14 +1707,15 @@ public class Noise {
             x *= frequency;
             y *= frequency;
             z *= frequency;
-            for (int i = 0; i < octaves; ++i) {
+            for (int o = 0; o < octaves; ++o) {
                 n = basis.getNoiseWithSeed(x, y, z, (seed += 0x9E3779B97F4A7C15L));
                 n = 1.0 - Math.abs(n);
                 correction += (exp *= 0.5);
                 sum += n * exp;
-                x *= 2.0;
-                y *= 2.0;
-                z *= 2.0;
+                final double x2 = x * -0.0274288894836461 + y * +0.7290764961819305 + z * +0.6853079636883495;
+                final double y2 = x * -0.9053457947767863 + y * -0.3092463840200059 + z * +0.2927177497885901;
+                final double z2 = x * +0.4245136549634499 + y * -0.6124211435583022 + z * +0.6685588682179822;
+                x = x2 * 2.0 + (o<<6); y = y2 * 2.0 + (o<<6); z = z2 * 2.0 + (o<<6);
             }
             return sum * 2.0 / correction - 1.0;
         }
@@ -1743,15 +1752,16 @@ public class Noise {
             y *= frequency;
             z *= frequency;
             w *= frequency;
-            for (int i = 0; i < octaves; ++i) {
-                n = basis.getNoise(x + (i << 6), y + (i << 7), z + (i << 8), w + (i << 9));
+            for (int o = 0; o < octaves; ++o) {
+                n = basis.getNoise(x + (o << 6), y + (o << 7), z + (o << 8), w + (o << 9));
                 n = 1.0 - Math.abs(n);
                 correction += (exp *= 0.5);
                 sum += n * exp;
-                x *= 2.0;
-                y *= 2.0;
-                z *= 2.0;
-                w *= 2.0;
+                final double x2 = x * +0.1905791786518885 + y * +0.3861174185764629 + z * -0.5847328850860769 + w * -0.6893092454147123;
+                final double y2 = x * +0.4111245283526767 + y * +0.7677083019755620 + z * +0.4726745850368516 + w * +0.1429766710123569;
+                final double z2 = x * -0.8377519222061313 + y * +0.3163846746990775 + z * +0.3122834687899689 + w * -0.3195533236867484;
+                final double w2 = x * +0.3063633089361206 + y * -0.4041101515389197 + z * +0.5829861966402288 + w * -0.6364257601360758;
+                x = x2 * 2.0 + (o<<6); y = y2 * 2.0 + (o<<6); z = z2 * 2.0 + (o<<6);  w = w2 * 2.0 + (o<<6);
             }
             return sum * 2.0 / correction - 1.0;
         }
@@ -1763,15 +1773,16 @@ public class Noise {
             y *= frequency;
             z *= frequency;
             w *= frequency;
-            for (int i = 0; i < octaves; ++i) {
+            for (int o = 0; o < octaves; ++o) {
                 n = basis.getNoiseWithSeed(x, y, z, w, (seed += 0x9E3779B97F4A7C15L));
                 n = 1.0 - Math.abs(n);
                 correction += (exp *= 0.5);
                 sum += n * exp;
-                x *= 2.0;
-                y *= 2.0;
-                z *= 2.0;
-                w *= 2.0;
+                final double x2 = x * +0.1905791786518885 + y * +0.3861174185764629 + z * -0.5847328850860769 + w * -0.6893092454147123;
+                final double y2 = x * +0.4111245283526767 + y * +0.7677083019755620 + z * +0.4726745850368516 + w * +0.1429766710123569;
+                final double z2 = x * -0.8377519222061313 + y * +0.3163846746990775 + z * +0.3122834687899689 + w * -0.3195533236867484;
+                final double w2 = x * +0.3063633089361206 + y * -0.4041101515389197 + z * +0.5829861966402288 + w * -0.6364257601360758;
+                x = x2 * 2.0 + (o<<6); y = y2 * 2.0 + (o<<6); z = z2 * 2.0 + (o<<6);  w = w2 * 2.0 + (o<<6);
             }
             return sum * 2.0 / correction - 1.0;
         }
@@ -3756,7 +3767,7 @@ final double x2 = x * -0.8761039177722382 + y * -0.4821223135928635, y2 = x * +0
             u *= frequency;
             v *= frequency;
             int s = 1;
-            double n = 0.0, i_s = 1.0 / lacunarity;
+            double n = 0.0;
             for (int o = 0; o < octaves; o++, s <<= 1) {
                 n += basis.getNoiseWithSeed(x, y, z, w, u, v, (seed += 0x9E3779B97F4A7C15L)) * s;
                 final double x2 = x * -0.0380778061544851 + y * -0.0303724527465320 + z * +0.4356293160913650 + w * +0.7933753851627695 + u * +0.4197685953950022 + v * +0.0894521710543777;
