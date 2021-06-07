@@ -3629,4 +3629,72 @@ final double x2 = x * -0.8761039177722382 + y * -0.4821223135928635, y2 = x * +0
             return n / ((1 << octaves) - 1.0);
         }
     }
+    public static class LayeredSpiral5D implements Noise5D {
+        protected int octaves;
+        protected Noise5D basis;
+        public double frequency;
+        public double lacunarity;
+        public LayeredSpiral5D() {
+            this(SeededNoise.instance);
+        }
+
+        public LayeredSpiral5D(Noise5D basis) {
+            this(basis, 2);
+        }
+
+        public LayeredSpiral5D(Noise5D basis, final int octaves) {
+            this(basis, octaves, 1.0);
+        }
+        public LayeredSpiral5D(Noise5D basis, final int octaves, double frequency) {
+            this(basis, octaves, frequency, 0.5);
+        }
+        public LayeredSpiral5D(Noise5D basis, final int octaves, double frequency, double lacunarity) {
+            this.basis = basis;
+            this.frequency = frequency;
+            this.octaves = Math.max(1, Math.min(63, octaves));
+            this.lacunarity = lacunarity;
+        }
+
+        @Override
+        public double getNoise(double x, double y, double z, double w, double u) {
+            x *= frequency;
+            y *= frequency;
+            z *= frequency;
+            w *= frequency;
+            u *= frequency;
+            int s = 1;
+            double n = 0.0;
+            for (int o = 0; o < octaves; o++, s <<= 1) {
+                n += basis.getNoise(x, y, z, w, u) * s;
+                final double x2 = x * -0.0417804356625072 + y * -0.4447059379310900 + z * -0.7593004186144269 + w * +0.1743978892123604 + u * +0.4444146757006882;
+                final double y2 = x * -0.0527174114260949 + y * -0.2540107473276194 + z * -0.3358591819841499 + w * -0.7222118862871126 + u * -0.5500306916666624;
+                final double z2 = x * +0.6676221025365682 + y * +0.6127355630197416 + z * -0.3712597762050637 + w * -0.1764713764044092 + u * +0.1112639238877099;
+                final double w2 = x * -0.7030600537850631 + y * +0.5259486213519964 + z * -0.1486959515977248 + w * -0.3167611363905264 + u * +0.3310376957845657;
+                final double u2 = x * +0.2390983145240142 + y * -0.2974569502761614 + z * +0.3923621717947575 + w * -0.5660380699891813 + u * +0.6179240795663868;
+                x = x2 * lacunarity + (o<<6); y = y2 * lacunarity + (o<<6); z = z2 * lacunarity + (o<<6);  w = w2 * lacunarity + (o<<6); u = u2 * lacunarity + (o<<6);
+            }
+            return n / ((1 << octaves) - 1.0);
+        }
+
+        @Override
+        public double getNoiseWithSeed(double x, double y, double z, double w, double u, long seed) {
+            x *= frequency;
+            y *= frequency;
+            z *= frequency;
+            w *= frequency;
+            u *= frequency;
+            int s = 1;
+            double n = 0.0;
+            for (int o = 0; o < octaves; o++, s <<= 1) {
+                n += basis.getNoiseWithSeed(x, y, z, w, u, (seed += 0x9E3779B97F4A7C15L)) * s;
+                final double x2 = x * -0.0417804356625072 + y * -0.4447059379310900 + z * -0.7593004186144269 + w * +0.1743978892123604 + u * +0.4444146757006882;
+                final double y2 = x * -0.0527174114260949 + y * -0.2540107473276194 + z * -0.3358591819841499 + w * -0.7222118862871126 + u * -0.5500306916666624;
+                final double z2 = x * +0.6676221025365682 + y * +0.6127355630197416 + z * -0.3712597762050637 + w * -0.1764713764044092 + u * +0.1112639238877099;
+                final double w2 = x * -0.7030600537850631 + y * +0.5259486213519964 + z * -0.1486959515977248 + w * -0.3167611363905264 + u * +0.3310376957845657;
+                final double u2 = x * +0.2390983145240142 + y * -0.2974569502761614 + z * +0.3923621717947575 + w * -0.5660380699891813 + u * +0.6179240795663868;
+                x = x2 * lacunarity + (o<<6); y = y2 * lacunarity + (o<<6); z = z2 * lacunarity + (o<<6);  w = w2 * lacunarity + (o<<6); u = u2 * lacunarity + (o<<6);
+            }
+            return n / ((1 << octaves) - 1.0);
+        }
+    }
 }
