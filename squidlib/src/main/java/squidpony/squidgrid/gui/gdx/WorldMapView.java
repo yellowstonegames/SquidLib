@@ -97,8 +97,9 @@ public class WorldMapView {
     public static float emptyColor = SColor.floatGet(34 << 24 | 32 << 16 | 52 << 8 | 255);
 
     // water colors
-    public static float deepColor = SColor.floatGet(0 << 24 | 42 << 16 | 88 << 8 | 255);
-    public static float shallowColor = SColor.floatGet(20 << 24 | 145 << 16 | 197 << 8 | 255);
+    public static float deepColor = SColor.floatGet(8 << 24 | 64 << 16 | 76 << 8 | 255);
+    public static float shallowColor = SColor.floatGet(24 << 24 | 120 << 16 | 128 << 8 | 255);
+//    public static float shallowColor = SColor.floatGet(20 << 24 | 145 << 16 | 197 << 8 | 255);
     public static float foamColor = SColor.floatGet(61 << 24 | 162 << 16 | 215 << 8 | 255);
 
     protected float[] biomeColors = {
@@ -336,7 +337,7 @@ public class WorldMapView {
                     case 3:
                         colorMap[x][y] = SColor.lerpFloatColors(
                                 BIOME_COLOR_TABLE[56], BIOME_COLOR_TABLE[43],
-                                (MathUtils.clamp((float) (((heightData[x][y] + 0.06) * 8.0) / (WorldMapGenerator.sandLower + 1.0)), 0f, 1f)));
+                                (MathUtils.clamp((float) (((heightData[x][y] + 0.1) * 7.0) / (WorldMapGenerator.sandLower + 1.0)), 0f, 1f)));
                         break;
                     default:
                         colorMap[x][y] = SColor.lerpFloatColors(BIOME_COLOR_TABLE[biomeMapper.extractPartB(bc)],
