@@ -132,9 +132,12 @@ World #5, SavoryMelonAlder, completed in 64338 ms
 //        path = "out/worldsAnimated/" + date + "/SpaceViewMutantClassic/";
 //        path = "out/worldsAnimated/" + date + "/SpaceViewMutantFoam/";
 //        path = "out/worldsAnimated/" + date + "/SpaceViewMutantHoney/";
+//        path = "out/worldsAnimated/" + date + "/SpaceViewValue/";
+//        path = "out/worldsAnimated/" + date + "/SpaceViewClassic/";
+        path = "out/worldsAnimated/" + date + "/SpaceViewPerlin/";
 //        path = "out/worldsAnimated/" + date + "/SpaceViewHoney/";
 //        path = "out/worldsAnimated/" + date + "/SpaceViewFoam/";
-        path = "out/worldsAnimated/" + date + "/SpaceViewSimplex/";
+//        path = "out/worldsAnimated/" + date + "/SpaceViewSimplex/";
 //        path = "out/worldsAnimated/" + date + "/SpaceViewRidged/";
 //        path = "out/worldsAnimated/" + date + "/SpaceViewMutantMaelstrom/";
 //        path = "out/worldsAnimated/" + date + "/HyperellipseWrithing/";
@@ -207,8 +210,11 @@ World #5, SavoryMelonAlder, completed in 64338 ms
 //        WorldMapGenerator.DEFAULT_NOISE.setFractalGain(5f);
 //        WorldMapGenerator.DEFAULT_NOISE.setFractalLacunarity(0.8f);
 //        WorldMapGenerator.DEFAULT_NOISE.setFractalGain(1.25f);
-//        VastNoise fn = new VastNoise((int) seed, 2f, VastNoise.FOAM, 1);
-        VastNoise fn = new VastNoise((int) seed, 1f, VastNoise.SIMPLEX_FRACTAL, 2);
+//        VastNoise fn = new VastNoise((int) seed, 1.5f, VastNoise.FOAM, 1);
+//        VastNoise fn = new VastNoise((int) seed, 2.0f, VastNoise.VALUE, 1);
+        VastNoise fn = new VastNoise((int) seed, 1.5f, VastNoise.PERLIN, 1);
+//        VastNoise fn = new VastNoise((int) seed, 1f, VastNoise.SIMPLEX, 1);
+//        VastNoise fn = new VastNoise((int) seed, 1f, VastNoise.SIMPLEX_FRACTAL, 2);
 //        VastNoise fn = new VastNoise((int) seed, 1.25f, VastNoise.HONEY, 1);
 
         if(FLOWING_LAND)
@@ -296,8 +302,8 @@ World #5, SavoryMelonAlder, completed in 64338 ms
 //        world = new WorldMapGenerator.TilingMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.75);
 //        world = new WorldMapGenerator.EllipticalMap(seed, width, height, noise, 1.75);
 //        world = new WorldMapGenerator.MimicMap(seed, WorldMapGenerator.DEFAULT_NOISE, 1.75);
-        world = new WorldMapGenerator.SpaceViewMap(seed, width, height, noise, 0.8);
-//        world = new WorldMapGenerator.SpaceViewMap(seed, width, height, noise, 0.5);
+        world = new WorldMapGenerator.SpaceViewMap(seed, width, height, noise, 1.0);
+//        world = new WorldMapGenerator.SpaceViewMap(seed, width, height, noise, 0.75);
 //        world = new WorldMapGenerator.RoundSideMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.75);
 //        world = new WorldMapGenerator.HyperellipticalMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 0.8, 0.03125, 2.5);
 //        world = new WorldMapGenerator.HyperellipticalMap(seed, width, height, noise, 0.5, 0.03125, 2.5);
