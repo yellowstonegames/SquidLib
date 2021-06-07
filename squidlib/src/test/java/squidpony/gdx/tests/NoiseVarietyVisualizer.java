@@ -81,22 +81,22 @@ public class NoiseVarietyVisualizer extends ApplicationAdapter {
                     case 0:
                         current2 = new Noise.LayeredSpiral2D(classic, octaves + 1, freq);
                         current3 = new Noise.LayeredSpiral3D(classic, octaves + 1, freq);
-                        current4 = new Noise.Layered4D(classic, octaves + 1, freq);
+                        current4 = new Noise.LayeredSpiral4D(classic, octaves + 1, freq);
                         break;
                     case 1:
                         current2 = new Noise.LayeredSpiral2D(foam, octaves + 1, freq);
                         current3 = new Noise.LayeredSpiral3D(foam, octaves + 1, freq);
-                        current4 = new Noise.Layered4D(foam, octaves + 1, freq);
+                        current4 = new Noise.LayeredSpiral4D(foam, octaves + 1, freq);
                         break;
                     case 2:
                         current2 = new Noise.LayeredSpiral2D(fast, octaves + 1, freq);
                         current3 = new Noise.LayeredSpiral3D(fast, octaves + 1, freq);
-                        current4 = new Noise.Layered4D(fast, octaves + 1, freq);
+                        current4 = new Noise.LayeredSpiral4D(fast, octaves + 1, freq);
                         break;
                     case 3:
                         current2 = new Noise.LayeredSpiral2D(value, octaves + 1, freq);
                         current3 = new Noise.LayeredSpiral3D(value, octaves + 1, freq);
-                        current4 = new Noise.Layered4D(value, octaves + 1, freq);
+                        current4 = new Noise.LayeredSpiral4D(value, octaves + 1, freq);
                         break;
                 }
             }
