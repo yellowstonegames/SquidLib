@@ -2938,6 +2938,11 @@ protected float rotateV6D(float x, float y, float z, float w, float u, float v){
         float amp = 1;
 
         for (int i = 1; i < octaves; i++) {
+            if(fractalSpiral){
+                final float x2 = rotateX2D(x, y);
+                final float y2 = rotateY2D(x, y);
+                x = x2; y = y2;
+            }
             x *= lacunarity;
             y *= lacunarity;
 
@@ -2956,8 +2961,8 @@ protected float rotateV6D(float x, float y, float z, float w, float u, float v){
             correction += (exp *= 0.5);
             sum += spike * exp;
             if(fractalSpiral){
-                float x2 = rotateX2D(x, y);
-                float y2 = rotateY2D(x, y);
+                final float x2 = rotateX2D(x, y);
+                final float y2 = rotateY2D(x, y);
                 x = x2; y = y2;
             }
             x *= lacunarity;
@@ -3044,6 +3049,12 @@ protected float rotateV6D(float x, float y, float z, float w, float u, float v){
         float amp = 1;
 
         for (int i = 1; i < octaves; i++) {
+            if(fractalSpiral){
+                final float x2 = rotateX3D(x, y, z);
+                final float y2 = rotateY3D(x, y, z);
+                final float z2 = rotateZ3D(x, y, z);
+                x = x2; y = y2; z = z2;
+            }
             x *= lacunarity;
             y *= lacunarity;
             z *= lacunarity;
@@ -3062,6 +3073,12 @@ protected float rotateV6D(float x, float y, float z, float w, float u, float v){
             spike = 1f - Math.abs(singlePerlin(seed + i, x, y, z));
             correction += (exp *= 0.5);
             sum += spike * exp;
+            if(fractalSpiral){
+                final float x2 = rotateX3D(x, y, z);
+                final float y2 = rotateY3D(x, y, z);
+                final float z2 = rotateZ3D(x, y, z);
+                x = x2; y = y2; z = z2;
+            }
             x *= lacunarity;
             y *= lacunarity;
             z *= lacunarity;
@@ -3206,6 +3223,13 @@ protected float rotateV6D(float x, float y, float z, float w, float u, float v){
         float amp = 1;
 
         for (int i = 1; i < octaves; i++) {
+            if(fractalSpiral){
+                final float x2 = rotateX4D(x, y, z, w);
+                final float y2 = rotateY4D(x, y, z, w);
+                final float z2 = rotateZ4D(x, y, z, w);
+                final float w2 = rotateW4D(x, y, z, w);
+                x = x2; y = y2; z = z2; w = w2;
+            }
             x *= lacunarity;
             y *= lacunarity;
             z *= lacunarity;
@@ -3225,6 +3249,13 @@ protected float rotateV6D(float x, float y, float z, float w, float u, float v){
             spike = 1f - Math.abs(singlePerlin(seed + i, x, y,  z, w));
             correction += (exp *= 0.5);
             sum += spike * exp;
+            if(fractalSpiral){
+                final float x2 = rotateX4D(x, y, z, w);
+                final float y2 = rotateY4D(x, y, z, w);
+                final float z2 = rotateZ4D(x, y, z, w);
+                final float w2 = rotateW4D(x, y, z, w);
+                x = x2; y = y2; z = z2; w = w2;
+            }
             x *= lacunarity;
             y *= lacunarity;
             z *= lacunarity;
@@ -3349,6 +3380,14 @@ protected float rotateV6D(float x, float y, float z, float w, float u, float v){
         float amp = 1;
 
         for (int i = 1; i < octaves; i++) {
+            if(fractalSpiral){
+                final float x2 = rotateX5D(x, y, z, w, u);
+                final float y2 = rotateY5D(x, y, z, w, u);
+                final float z2 = rotateZ5D(x, y, z, w, u);
+                final float w2 = rotateW5D(x, y, z, w, u);
+                final float u2 = rotateU5D(x, y, z, w, u);
+                x = x2; y = y2; z = z2; w = w2; u = u2;
+            }
             x *= lacunarity;
             y *= lacunarity;
             z *= lacunarity;
@@ -3369,6 +3408,14 @@ protected float rotateV6D(float x, float y, float z, float w, float u, float v){
             spike = 1f - Math.abs(singlePerlin(seed + i, x, y, z, w, u));
             correction += (exp *= 0.5);
             sum += spike * exp;
+            if(fractalSpiral){
+                final float x2 = rotateX5D(x, y, z, w, u);
+                final float y2 = rotateY5D(x, y, z, w, u);
+                final float z2 = rotateZ5D(x, y, z, w, u);
+                final float w2 = rotateW5D(x, y, z, w, u);
+                final float u2 = rotateU5D(x, y, z, w, u);
+                x = x2; y = y2; z = z2; w = w2; u = u2;
+            }
             x *= lacunarity;
             y *= lacunarity;
             z *= lacunarity;
@@ -3550,6 +3597,15 @@ protected float rotateV6D(float x, float y, float z, float w, float u, float v){
         float amp = 1;
 
         for (int i = 1; i < octaves; i++) {
+            if(fractalSpiral){
+                final float x2 = rotateX6D(x, y, z, w, u, v);
+                final float y2 = rotateY6D(x, y, z, w, u, v);
+                final float z2 = rotateZ6D(x, y, z, w, u, v);
+                final float w2 = rotateW6D(x, y, z, w, u, v);
+                final float u2 = rotateU6D(x, y, z, w, u, v);
+                final float v2 = rotateV6D(x, y, z, w, u, v);
+                x = x2; y = y2; z = z2; w = w2; u = u2; v = v2;
+            }
             x *= lacunarity;
             y *= lacunarity;
             z *= lacunarity;
@@ -3571,6 +3627,15 @@ protected float rotateV6D(float x, float y, float z, float w, float u, float v){
             spike = 1f - Math.abs(singlePerlin(seed + i, x, y, z, w, u, v));
             correction += (exp *= 0.5);
             sum += spike * exp;
+            if(fractalSpiral){
+                final float x2 = rotateX6D(x, y, z, w, u, v);
+                final float y2 = rotateY6D(x, y, z, w, u, v);
+                final float z2 = rotateZ6D(x, y, z, w, u, v);
+                final float w2 = rotateW6D(x, y, z, w, u, v);
+                final float u2 = rotateU6D(x, y, z, w, u, v);
+                final float v2 = rotateV6D(x, y, z, w, u, v);
+                x = x2; y = y2; z = z2; w = w2; u = u2; v = v2;
+            }
             x *= lacunarity;
             y *= lacunarity;
             z *= lacunarity;
