@@ -263,6 +263,8 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
     private int octaves = 1;
     private float lacunarity = 2f;
     private float gain = 0.5f;
+
+    private boolean fractalSpiral = true;
     private int fractalType = FBM;
 
     private float fractalBounding;
@@ -575,6 +577,23 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
     }
 
     /**
+     * Returns true if this uses a spiraling rotation as octaves are added to fractal noise.
+     * @return true if using fractal spiral mode, false otherwise
+     */
+    public boolean isFractalSpiral() {
+        return fractalSpiral;
+    }
+
+    /**
+     * Sets the fractal spiral mode on or off; if on, this uses a spiraling rotation as octaves are added to
+     * fractal noise.
+     * @param fractalSpiral true to set fractal spiral mode on, false to set it off
+     */
+    public void setFractalSpiral(boolean fractalSpiral) {
+        this.fractalSpiral = fractalSpiral;
+    }
+
+    /**
      * Gets the "sharpness" for the {@link #FOAM} and {@link #FOAM_FRACTAL} noise types, which is usually
      * around 0.25f to 2.0f, and defaults to 1.0f. High values produce extreme results more often, and
      * low values produce mid-range values more often.
@@ -855,6 +874,30 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         return xd * g.x + yd * g.y + zd * g.z + wd * g.w + ud * g.u + vd * g.v;
     }
 
+protected float rotateX2D(float x, float y){ return x * +0.6088885514347261f + y * -0.7943553508622062f; }
+protected float rotateY2D(float x, float y){ return x * +0.7943553508622062f + y * +0.6088885514347261f; }
+
+protected float rotateX3D(float x, float y, float z){ return x * +0.0227966890756033f + y * +0.6762915140143574f + z * -0.7374004675850091f; }
+protected float rotateY3D(float x, float y, float z){ return x * +0.2495309026014970f + y * +0.7103480212381728f + z * +0.6592220931706847f; }
+protected float rotateZ3D(float x, float y, float z){ return x * +0.9680388783970242f + y * -0.1990510681264026f + z * -0.1525764462988358f; }
+
+protected float rotateX4D(float x, float y, float z, float w){ return x * +0.5699478528112771f + y * +0.7369836852218905f + z * -0.0325828875824773f + w * -0.3639975881105405f; }
+protected float rotateY4D(float x, float y, float z, float w){ return x * +0.1552282348051943f + y * +0.1770952336543200f + z * -0.7097702517705363f + w * +0.6650917154025483f; }
+protected float rotateZ4D(float x, float y, float z, float w){ return x * +0.0483833371062336f + y * +0.3124109456042325f + z * +0.6948457959606478f + w * +0.6469518300143685f; }
+protected float rotateW4D(float x, float y, float z, float w){ return x * +0.8064316315440612f + y * -0.5737907885437848f + z * +0.1179845891415618f + w * +0.0904374415002696f; }
+
+protected float rotateX5D(float x, float y, float z, float w, float u){ return x * +0.1524127934921893f + y * -0.2586710352203958f + z * -0.4891826043642151f + w * +0.7663312575129502f + u * -0.2929089192051232f; }
+protected float rotateY5D(float x, float y, float z, float w, float u){ return x * -0.0716486050004579f + y * -0.5083828718253534f + z * -0.5846508329893165f + w * -0.3242340701968086f + u * +0.5400343264823232f; }
+protected float rotateZ5D(float x, float y, float z, float w, float u){ return x * +0.5391124130592424f + y * +0.4637201165727557f + z * -0.0268449575347777f + w * +0.2805630001516211f + u * +0.6471616940596671f; }
+protected float rotateW5D(float x, float y, float z, float w, float u){ return x * -0.4908590743023694f + y * -0.3159190659906883f + z * +0.4868180845277980f + w * +0.4733894151555028f + u * +0.4492456287606979f; }
+protected float rotateU5D(float x, float y, float z, float w, float u){ return x * +0.6656547456376498f + y * -0.6028584537113622f + z * +0.4289447660591045f + w * -0.0882009139887838f + u * -0.0676076855220496f; }
+
+protected float rotateX6D(float x, float y, float z, float w, float u, float v){ return x * -0.0850982316788443f + y * +0.0621411489653063f + z * +0.6423842935800755f + w * +0.5472782330246069f + u * -0.5181072879831091f + v * -0.1137065126038194f; }
+protected float rotateY6D(float x, float y, float z, float w, float u, float v){ return x * +0.1080560582151551f + y * -0.3254670556393390f + z * -0.3972292333437380f + w * +0.0964380840482216f + u * -0.5818281028726723f + v * +0.6182273380506453f; }
+protected float rotateZ6D(float x, float y, float z, float w, float u, float v){ return x * +0.2504893307323878f + y * -0.3866469165898269f + z * -0.2346647170372642f + w * +0.7374659593233097f + u * +0.4257828596124605f + v * -0.1106816328431182f; }
+protected float rotateW6D(float x, float y, float z, float w, float u, float v){ return x * +0.0990858373676681f + y * +0.4040947615164614f + z * +0.3012734241554820f + w * +0.1520113643725959f + u * +0.4036980496402723f + v * +0.7440701998573674f; }
+protected float rotateU6D(float x, float y, float z, float w, float u, float v){ return x * -0.7720417581190233f + y * -0.5265151283855897f + z * +0.1995725381386031f + w * -0.0464596713813553f + u * +0.2186511264128518f + v * +0.1990962291039879f; }
+protected float rotateV6D(float x, float y, float z, float w, float u, float v){ return x * +0.5606136879764017f + y * -0.5518123912290505f + z * +0.4997557173523122f + w * -0.3555852919481873f + u * +0.0731165180984564f + v * +0.0560452079067605f; }
 
     /**
      * After being configured with the setters in this class, such as {@link #setNoiseType(int)},
@@ -2912,6 +2955,11 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
             spike = 1f - Math.abs(singlePerlin(seed + i, x, y));
             correction += (exp *= 0.5);
             sum += spike * exp;
+            if(fractalSpiral){
+                float x2 = rotateX2D(x, y);
+                float y2 = rotateY2D(x, y);
+                x = x2; y = y2;
+            }
             x *= lacunarity;
             y *= lacunarity;
         }
