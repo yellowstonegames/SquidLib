@@ -20,12 +20,7 @@ import squidpony.squidgrid.gui.gdx.FilterBatch;
 import squidpony.squidgrid.gui.gdx.SColor;
 import squidpony.squidgrid.gui.gdx.WorldMapView;
 import squidpony.squidgrid.mapping.WorldMapGenerator;
-import squidpony.squidmath.CrossHash;
-import squidpony.squidmath.DiverRNG;
-import squidpony.squidmath.Noise;
-import squidpony.squidmath.NumberTools;
-import squidpony.squidmath.StatefulRNG;
-import squidpony.squidmath.VastNoise;
+import squidpony.squidmath.*;
 
 import java.text.DateFormat;
 import java.util.Date;
@@ -52,11 +47,14 @@ public class AnimatedWorldMapWriter extends ApplicationAdapter {
     private static final boolean MEASURE_BOUNDS = false;
     private static final boolean FLOWING_LAND = false;
     private static final boolean ALIEN_COLORS = false;
+    private static final boolean SEEDY = true;
+    private int baseSeed = 1234567890;
 
     private Thesaurus thesaurus;
     private String makeName(final Thesaurus thesaurus)
     {
-        return StringKit.capitalize(thesaurus.makePlantName(FakeLanguageGen.MALAY).replaceAll("'s", "")).replaceAll("\\W", "");
+        if(SEEDY) return String.valueOf(++baseSeed);
+        else return StringKit.capitalize(thesaurus.makePlantName(FakeLanguageGen.MALAY).replaceAll("'s", "")).replaceAll("\\W", "");
     }
 
     //    private FakeLanguageGen lang = FakeLanguageGen.randomLanguage(-1234567890L).removeAccents()
@@ -134,7 +132,7 @@ World #5, SavoryMelonAlder, completed in 64338 ms
 //        path = "out/worldsAnimated/" + date + "/SpaceViewMutantHoney/";
 //        path = "out/worldsAnimated/" + date + "/SpaceViewValue/";
 //        path = "out/worldsAnimated/" + date + "/SpaceViewClassic/";
-        path = "out/worldsAnimated/" + date + "/SpaceViewPerlinAltColor/";
+        path = "out/worldsAnimated/" + date + "/SpaceViewSeedy/";
 //        path = "out/worldsAnimated/" + date + "/SpaceViewPerlin/";
 //        path = "out/worldsAnimated/" + date + "/SpaceViewHoney/";
 //        path = "out/worldsAnimated/" + date + "/SpaceViewFoam/";
@@ -213,11 +211,44 @@ World #5, SavoryMelonAlder, completed in 64338 ms
 //        WorldMapGenerator.DEFAULT_NOISE.setFractalGain(1.25f);
 //        VastNoise fn = new VastNoise((int) seed, 1.5f, VastNoise.FOAM, 1);
 //        VastNoise fn = new VastNoise((int) seed, 2.0f, VastNoise.VALUE, 1);
-        VastNoise fn = new VastNoise((int) seed, 1.5f, VastNoise.PERLIN, 1);
+//        VastNoise fn = new VastNoise((int) seed, 1.5f, VastNoise.PERLIN, 1);
 //        VastNoise fn = new VastNoise((int) seed, 1f, VastNoise.SIMPLEX, 1);
 //        VastNoise fn = new VastNoise((int) seed, 1f, VastNoise.SIMPLEX_FRACTAL, 2);
 //        VastNoise fn = new VastNoise((int) seed, 1.25f, VastNoise.HONEY, 1);
 
+        FastNoise fn = new FastNoise((int) seed, 5f, FastNoise.CUBIC, 1);
+        /*
+                    {0xC13FA9A902A6328FL, 0x91E10DA5C79E7B1DL},
+            {0xD1B54A32D192ED03L, 0xABC98388FB8FAC03L, 0x8CB92BA72F3D8DD7L},
+            {0xDB4F0B9175AE2165L, 0xBBE0563303A4615FL, 0xA0F2EC75A1FE1575L, 0x89E182857D9ED689L},
+            {0xE19B01AA9D42C633L, 0xC6D1D6C8ED0C9631L, 0xAF36D01EF7518DBBL, 0x9A69443F36F710E7L, 0x881403B9339BD42DL},
+            {0xE60E2B722B53AEEBL, 0xCEBD76D9EDB6A8EFL, 0xB9C9AA3A51D00B65L, 0xA6F5777F6F88983FL, 0x9609C71EB7D03F7BL,
+                    0x86D516E50B04AB1BL},
+
+         */
+        fn.setPointHash(new IPointHash.IntImpl(){
+            @Override
+            public int hashWithState(int x, int y, int state) {
+                return (int) (0xC13FA9A902A6328FL * x + 0x91E10DA5C79E7B1DL * y + state);
+            }
+            @Override
+            public int hashWithState(int x, int y, int z, int state) {
+                return (int) (0xD1B54A32D192ED03L * x + 0xABC98388FB8FAC03L * y + 0x8CB92BA72F3D8DD7L * z + state);
+            }
+            @Override
+            public int hashWithState(int x, int y, int z, int w, int state) {
+                return (int) (0xDB4F0B9175AE2165L * x + 0xBBE0563303A4615FL * y + 0xA0F2EC75A1FE1575L * z + 0x89E182857D9ED689L * w + state);
+            }
+            @Override
+            public int hashWithState(int x, int y, int z, int w, int u, int state) {
+                return (int) (0xE19B01AA9D42C633L * x + 0xC6D1D6C8ED0C9631L * y + 0xAF36D01EF7518DBBL * z + 0x9A69443F36F710E7L * w + 0x881403B9339BD42DL * u + state);
+            }
+
+            @Override
+            public int hashWithState(int x, int y, int z, int w, int u, int v, int state) {
+                return (int) (0xE60E2B722B53AEEBL * x + 0xCEBD76D9EDB6A8EFL * y + 0xB9C9AA3A51D00B65L * z + 0xA6F5777F6F88983FL * w + 0x9609C71EB7D03F7BL * u + 0x86D516E50B04AB1BL * v + state);
+            }
+        });
         if(FLOWING_LAND)
             noise = new Noise.Adapted3DFrom5D(fn);
         else
@@ -303,7 +334,7 @@ World #5, SavoryMelonAlder, completed in 64338 ms
 //        world = new WorldMapGenerator.TilingMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.75);
 //        world = new WorldMapGenerator.EllipticalMap(seed, width, height, noise, 1.75);
 //        world = new WorldMapGenerator.MimicMap(seed, WorldMapGenerator.DEFAULT_NOISE, 1.75);
-        world = new WorldMapGenerator.SpaceViewMap(seed, width, height, noise, 1.0);
+        world = new WorldMapGenerator.SpaceViewMap(seed, width, height, noise, 1.3);
 //        world = new WorldMapGenerator.SpaceViewMap(seed, width, height, noise, 0.75);
 //        world = new WorldMapGenerator.RoundSideMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.75);
 //        world = new WorldMapGenerator.HyperellipticalMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 0.8, 0.03125, 2.5);
@@ -343,9 +374,14 @@ World #5, SavoryMelonAlder, completed in 64338 ms
             wmv.initialize(world.rng.nextFloat() * 0.7f - 0.35f, world.rng.nextFloat() * 0.2f - 0.1f, world.rng.nextFloat() * 0.3f - 0.15f, world.rng.nextFloat() + 0.2f);
         }
 //        wmv.generate();
-        wmv.generate(
-                1.0 + NumberTools.formCurvedDouble(world.seedA * 0x123456789ABCDEFL ^ world.seedB) * 0.1875,
-                1.0625 + DiverRNG.determineDouble(world.seedB * 0x123456789ABL ^ world.seedA) * 0.375);
+        if(SEEDY){
+            wmv.generate(1.0, 1.0625 + 0.0625 * 3);
+        }
+        else {
+            wmv.generate(
+                    1.0 + NumberTools.formCurvedDouble(world.seedA * 0x123456789ABCDEFL ^ world.seedB) * 0.1875,
+                    1.0625 + DiverRNG.determineDouble(world.seedB * 0x123456789ABL ^ world.seedA) * 0.375);
+        }
         ttg = System.currentTimeMillis() - startTime;
     }
 
@@ -354,7 +390,9 @@ World #5, SavoryMelonAlder, completed in 64338 ms
         String name = makeName(thesaurus);
         while (Gdx.files.local(path + name + ".gif").exists())
             name = makeName(thesaurus);
-        long hash = CrossHash.hash64(name);
+        long hash;
+        if(SEEDY) hash = baseSeed;
+        else hash = CrossHash.hash64(name);
         worldTime = System.currentTimeMillis();
         if(MEASURE_BOUNDS)
             bounds.clear();
