@@ -578,7 +578,11 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
 
     /**
      * Returns true if this uses a spiraling rotation as octaves are added to fractal noise.
-     * This mode defaults to false if not set.
+     * This mode affects {@link #BILLOW} and {@link #RIDGED_MULTI} fractal types, but not
+     * {@link #FBM}. It changes {@link #VALUE_FRACTAL}, {@link #CUBIC_FRACTAL},
+     * {@link #PERLIN_FRACTAL}, and {@link #SIMPLEX_FRACTAL} noise types, but not
+     * {@link #FOAM_FRACTAL} or {@link #HONEY_FRACTAL} because those show no real improvement
+     * with this on. This mode defaults to false if not set.
      * @return true if using fractal spiral mode, false otherwise
      */
     public boolean isFractalSpiral() {
@@ -587,7 +591,11 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
 
     /**
      * Sets the fractal spiral mode on or off; if on, this uses a spiraling rotation as octaves are added to
-     * fractal noise. This mode defaults to false if not set.
+     * fractal noise. This mode affects {@link #BILLOW} and {@link #RIDGED_MULTI} fractal types, but not
+     * {@link #FBM}. It changes {@link #VALUE_FRACTAL}, {@link #CUBIC_FRACTAL},
+     * {@link #PERLIN_FRACTAL}, and {@link #SIMPLEX_FRACTAL} noise types, but not
+     * {@link #FOAM_FRACTAL} or {@link #HONEY_FRACTAL} because those show no real improvement
+     * with this on. This mode defaults to false if not set.
      * @param fractalSpiral true to set fractal spiral mode on, false to set it off
      */
     public void setFractalSpiral(boolean fractalSpiral) {
@@ -1729,6 +1737,13 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         float amp = 1;
 
         for (int i = 1; i < octaves; i++) {
+            if(fractalSpiral){
+                final float x2 = rotateX4D(x, y, z, w);
+                final float y2 = rotateY4D(x, y, z, w);
+                final float z2 = rotateZ4D(x, y, z, w);
+                final float w2 = rotateW4D(x, y, z, w);
+                x = x2; y = y2; z = z2; w = w2;
+            }
             x *= lacunarity;
             y *= lacunarity;
             z *= lacunarity;
@@ -1748,6 +1763,13 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
             spike = 1f - Math.abs(singleValue(seed + i, x, y, z, w));
             correction += (exp *= 0.5);
             sum += spike * exp;
+            if(fractalSpiral){
+                final float x2 = rotateX4D(x, y, z, w);
+                final float y2 = rotateY4D(x, y, z, w);
+                final float z2 = rotateZ4D(x, y, z, w);
+                final float w2 = rotateW4D(x, y, z, w);
+                x = x2; y = y2; z = z2; w = w2;
+            }
             x *= lacunarity;
             y *= lacunarity;
             z *= lacunarity;
@@ -1881,6 +1903,14 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         float amp = 1;
 
         for (int i = 1; i < octaves; i++) {
+            if(fractalSpiral){
+                final float x2 = rotateX5D(x, y, z, w, u);
+                final float y2 = rotateY5D(x, y, z, w, u);
+                final float z2 = rotateZ5D(x, y, z, w, u);
+                final float w2 = rotateW5D(x, y, z, w, u);
+                final float u2 = rotateU5D(x, y, z, w, u);
+                x = x2; y = y2; z = z2; w = w2; u = u2;
+            }
             x *= lacunarity;
             y *= lacunarity;
             z *= lacunarity;
@@ -1901,6 +1931,14 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
             spike = 1f - Math.abs(singleValue(seed + i, x, y, z, w, u));
             correction += (exp *= 0.5);
             sum += spike * exp;
+            if(fractalSpiral){
+                final float x2 = rotateX5D(x, y, z, w, u);
+                final float y2 = rotateY5D(x, y, z, w, u);
+                final float z2 = rotateZ5D(x, y, z, w, u);
+                final float w2 = rotateW5D(x, y, z, w, u);
+                final float u2 = rotateU5D(x, y, z, w, u);
+                x = x2; y = y2; z = z2; w = w2; u = u2;
+            }
             x *= lacunarity;
             y *= lacunarity;
             z *= lacunarity;
@@ -2082,6 +2120,15 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         float amp = 1;
 
         for (int i = 1; i < octaves; i++) {
+            if(fractalSpiral){
+                final float x2 = rotateX6D(x, y, z, w, u, v);
+                final float y2 = rotateY6D(x, y, z, w, u, v);
+                final float z2 = rotateZ6D(x, y, z, w, u, v);
+                final float w2 = rotateW6D(x, y, z, w, u, v);
+                final float u2 = rotateU6D(x, y, z, w, u, v);
+                final float v2 = rotateV6D(x, y, z, w, u, v);
+                x = x2; y = y2; z = z2; w = w2; u = u2; v = v2;
+            }
             x *= lacunarity;
             y *= lacunarity;
             z *= lacunarity;
@@ -2103,6 +2150,15 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
             spike = 1f - Math.abs(singleValue(seed + i, x, y, z, w, u, v));
             correction += (exp *= 0.5);
             sum += spike * exp;
+            if(fractalSpiral){
+                final float x2 = rotateX6D(x, y, z, w, u, v);
+                final float y2 = rotateY6D(x, y, z, w, u, v);
+                final float z2 = rotateZ6D(x, y, z, w, u, v);
+                final float w2 = rotateW6D(x, y, z, w, u, v);
+                final float u2 = rotateU6D(x, y, z, w, u, v);
+                final float v2 = rotateV6D(x, y, z, w, u, v);
+                x = x2; y = y2; z = z2; w = w2; u = u2; v = v2;
+            }
             x *= lacunarity;
             y *= lacunarity;
             z *= lacunarity;
@@ -4500,20 +4556,6 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
 
         return sum * fractalBounding;
     }
-    private float singleSimplexFractalRidgedMulti(float x, float y, float z, float w) {
-        int seed = this.seed;
-        float sum = 0f, exp = 2f, correction = 0f, spike;
-        for (int i = 0; i < octaves; i++) {
-            spike = 1f - Math.abs(singleSimplex(seed + i, x, y, z, w));
-            correction += (exp *= 0.5);
-            sum += spike * exp;
-            x *= lacunarity;
-            y *= lacunarity;
-            z *= lacunarity;
-            w *= lacunarity;
-        }
-        return sum * 2f / correction - 1f;
-    }
 
     private float singleSimplexFractalBillow(float x, float y, float z, float w) {
         int seed = this.seed;
@@ -4521,6 +4563,13 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         float amp = 1;
 
         for (int i = 1; i < octaves; i++) {
+            if(fractalSpiral){
+                final float x2 = rotateX4D(x, y, z, w);
+                final float y2 = rotateY4D(x, y, z, w);
+                final float z2 = rotateZ4D(x, y, z, w);
+                final float w2 = rotateW4D(x, y, z, w);
+                x = x2; y = y2; z = z2; w = w2;
+            }
             x *= lacunarity;
             y *= lacunarity;
             z *= lacunarity;
@@ -4532,7 +4581,28 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
 
         return sum * fractalBounding;
     }
-    
+    private float singleSimplexFractalRidgedMulti(float x, float y, float z, float w) {
+        int seed = this.seed;
+        float sum = 0f, exp = 2f, correction = 0f, spike;
+        for (int i = 0; i < octaves; i++) {
+            spike = 1f - Math.abs(singleSimplex(seed + i, x, y, z, w));
+            correction += (exp *= 0.5);
+            sum += spike * exp;
+            if(fractalSpiral){
+                final float x2 = rotateX4D(x, y, z, w);
+                final float y2 = rotateY4D(x, y, z, w);
+                final float z2 = rotateZ4D(x, y, z, w);
+                final float w2 = rotateW4D(x, y, z, w);
+                x = x2; y = y2; z = z2; w = w2;
+            }
+            x *= lacunarity;
+            y *= lacunarity;
+            z *= lacunarity;
+            w *= lacunarity;
+        }
+        return sum * 2f / correction - 1f;
+    }
+
     // 5D Simplex
 
     private static final float
@@ -4726,21 +4796,6 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
 
         return sum * fractalBounding;
     }
-    private float singleSimplexFractalRidgedMulti(float x, float y, float z, float w, float u) {
-        int seed = this.seed;
-        float sum = 0f, exp = 2f, correction = 0f, spike;
-        for (int i = 0; i < octaves; i++) {
-            spike = 1f - Math.abs(singleSimplex(seed + i, x, y, z, w, u));
-            correction += (exp *= 0.5);
-            sum += spike * exp;
-            x *= lacunarity;
-            y *= lacunarity;
-            z *= lacunarity;
-            w *= lacunarity;
-            u *= lacunarity;
-        }
-        return sum * 2f / correction - 1f;
-    }
 
     private float singleSimplexFractalBillow(float x, float y, float z, float w, float u) {
         int seed = this.seed;
@@ -4748,6 +4803,14 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         float amp = 1;
 
         for (int i = 1; i < octaves; i++) {
+            if(fractalSpiral){
+                final float x2 = rotateX5D(x, y, z, w, u);
+                final float y2 = rotateY5D(x, y, z, w, u);
+                final float z2 = rotateZ5D(x, y, z, w, u);
+                final float w2 = rotateW5D(x, y, z, w, u);
+                final float u2 = rotateU5D(x, y, z, w, u);
+                x = x2; y = y2; z = z2; w = w2; u = u2;
+            }
             x *= lacunarity;
             y *= lacunarity;
             z *= lacunarity;
@@ -4761,6 +4824,29 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         return sum * fractalBounding;
     }
 
+    private float singleSimplexFractalRidgedMulti(float x, float y, float z, float w, float u) {
+        int seed = this.seed;
+        float sum = 0f, exp = 2f, correction = 0f, spike;
+        for (int i = 0; i < octaves; i++) {
+            spike = 1f - Math.abs(singleSimplex(seed + i, x, y, z, w, u));
+            correction += (exp *= 0.5);
+            sum += spike * exp;
+            if(fractalSpiral){
+                final float x2 = rotateX5D(x, y, z, w, u);
+                final float y2 = rotateY5D(x, y, z, w, u);
+                final float z2 = rotateZ5D(x, y, z, w, u);
+                final float w2 = rotateW5D(x, y, z, w, u);
+                final float u2 = rotateU5D(x, y, z, w, u);
+                x = x2; y = y2; z = z2; w = w2; u = u2;
+            }
+            x *= lacunarity;
+            y *= lacunarity;
+            z *= lacunarity;
+            w *= lacunarity;
+            u *= lacunarity;
+        }
+        return sum * 2f / correction - 1f;
+    }
 
     // 6D Simplex
 
@@ -4880,22 +4966,6 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
 
         return sum * fractalBounding;
     }
-    private float singleSimplexFractalRidgedMulti(float x, float y, float z, float w, float u, float v) {
-        int seed = this.seed;
-        float sum = 0f, exp = 2f, correction = 0f, spike;
-        for (int i = 0; i < octaves; i++) {
-            spike = 1f - Math.abs(singleSimplex(seed + i, x, y, z, w, u, v));
-            correction += (exp *= 0.5);
-            sum += spike * exp;
-            x *= lacunarity;
-            y *= lacunarity;
-            z *= lacunarity;
-            w *= lacunarity;
-            u *= lacunarity;
-            v *= lacunarity;
-        }
-        return sum * 2f / correction - 1f;
-    }
 
     private float singleSimplexFractalBillow(float x, float y, float z, float w, float u, float v) {
         int seed = this.seed;
@@ -4903,6 +4973,15 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         float amp = 1;
 
         for (int i = 1; i < octaves; i++) {
+            if(fractalSpiral){
+                final float x2 = rotateX6D(x, y, z, w, u, v);
+                final float y2 = rotateY6D(x, y, z, w, u, v);
+                final float z2 = rotateZ6D(x, y, z, w, u, v);
+                final float w2 = rotateW6D(x, y, z, w, u, v);
+                final float u2 = rotateU6D(x, y, z, w, u, v);
+                final float v2 = rotateV6D(x, y, z, w, u, v);
+                x = x2; y = y2; z = z2; w = w2; u = u2; v = v2;
+            }
             x *= lacunarity;
             y *= lacunarity;
             z *= lacunarity;
@@ -4915,6 +4994,32 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         }
 
         return sum * fractalBounding;
+    }
+
+    private float singleSimplexFractalRidgedMulti(float x, float y, float z, float w, float u, float v) {
+        int seed = this.seed;
+        float sum = 0f, exp = 2f, correction = 0f, spike;
+        for (int i = 0; i < octaves; i++) {
+            spike = 1f - Math.abs(singleSimplex(seed + i, x, y, z, w, u, v));
+            correction += (exp *= 0.5);
+            sum += spike * exp;
+            if(fractalSpiral){
+                final float x2 = rotateX6D(x, y, z, w, u, v);
+                final float y2 = rotateY6D(x, y, z, w, u, v);
+                final float z2 = rotateZ6D(x, y, z, w, u, v);
+                final float w2 = rotateW6D(x, y, z, w, u, v);
+                final float u2 = rotateU6D(x, y, z, w, u, v);
+                final float v2 = rotateV6D(x, y, z, w, u, v);
+                x = x2; y = y2; z = z2; w = w2; u = u2; v = v2;
+            }
+            x *= lacunarity;
+            y *= lacunarity;
+            z *= lacunarity;
+            w *= lacunarity;
+            u *= lacunarity;
+            v *= lacunarity;
+        }
+        return sum * 2f / correction - 1f;
     }
 
     // Cubic Noise
