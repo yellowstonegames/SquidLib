@@ -7,9 +7,9 @@ public class WarbleNoise implements Noise.Noise3D {
     }
     public WarbleNoise(long seed) {
         this.seed = seed;
-        workSeed[0] = workSeed[3] = DiverRNG.determineDouble(seed) + 0.5;
-        workSeed[1] = workSeed[4] = DiverRNG.determineDouble(seed + 1L) + 0.5;
-        workSeed[2] = workSeed[5] = DiverRNG.determineDouble(seed + 2L) + 0.5;
+        workSeed[0] = workSeed[3] = DiverRNG.determine(seed);
+        workSeed[1] = workSeed[4] = DiverRNG.determine(seed + 1L);
+        workSeed[2] = workSeed[5] = DiverRNG.determine(seed + 2L);
     }
     protected long seed;
     /**
@@ -19,13 +19,13 @@ public class WarbleNoise implements Noise.Noise3D {
      */
     public final double[] results = new double[6];
     private final double[] working = new double[18];
-    private final double[] workSeed = new double[12];
+    private final long[] workSeed = new long[12];
 
     @Override
     public double getNoise(double x, double y, double z) {
-        working[0] = working[3] = working[6] = x + NumberTools.swayRandomized(seed, z - y) * 0.5;
-        working[1] = working[4] = working[7] = y + NumberTools.swayRandomized(~seed, x - z) * 0.5;
-        working[2] = working[5] = working[8] = z + NumberTools.swayRandomized(0x9E3779B97F4A7C15L ^ seed, y - x) * 0.5;
+        working[0] = working[3] = working[6] = x;//+ NumberTools.swayRandomized(workSeed[0], z - y + 0.41) * 0.25;
+        working[1] = working[4] = working[7] = y;//+ NumberTools.swayRandomized(workSeed[1], x - z + 0.78) * 0.25;
+        working[2] = working[5] = working[8] = z;//+ NumberTools.swayRandomized(workSeed[2], y - x + 0.1) * 0.25;
         warble(3);
         warble(3);
         warble(3);
@@ -40,31 +40,37 @@ public class WarbleNoise implements Noise.Noise3D {
 
     @Override
     public double getNoiseWithSeed(double x, double y, double z, long seed) {
-        workSeed[0] = workSeed[3] = DiverRNG.determineDouble(seed) + 0.5;
-        workSeed[1] = workSeed[4] = DiverRNG.determineDouble(seed + 1L) + 0.5;
-        workSeed[2] = workSeed[5] = DiverRNG.determineDouble(seed + 2L) + 0.5;
+        workSeed[0] = workSeed[3] = DiverRNG.determine(seed);
+        workSeed[1] = workSeed[4] = DiverRNG.determine(seed + 1L);
+        workSeed[2] = workSeed[5] = DiverRNG.determine(seed + 2L);
         return getNoise(x, y, z);
     }
     private double sway(int element, int workingOffset, double seedChange) {
-        return NumberTools.sin(workSeed[element] + seedChange + working[element + 2 + workingOffset]
-                - NumberTools.cos(workSeed[element + 2] + seedChange + working[element + 1 + workingOffset])
-                + NumberTools.cos(workSeed[element + 1] + seedChange + working[element + workingOffset]));
+        return NumberTools.swayRandomized(workSeed[element], working[element + 2 + workingOffset] - seedChange
+                + NumberTools.swayRandomized(workSeed[element + 2], working[element + 1 + workingOffset] + seedChange)
+                + NumberTools.swayRandomized(workSeed[element + 1], working[element + workingOffset] + seedChange + seedChange));
     }
+//    private double sway(int element, int workingOffset, double seedChange) {
+//        return NumberTools.sin(workSeed[element] + seedChange + working[element + 2 + workingOffset]
+//                - NumberTools.sin(workSeed[element + 2] + seedChange + working[element + 1 + workingOffset])
+//                + NumberTools.sin(workSeed[element + 1] + seedChange + working[element + workingOffset]));
+//    }
     private void warble(final int size){
+        System.arraycopy(working, 0, results, 0, size);
         for (int i = 0; i < size; i++) {
-            results[i] = working[i] + sway(i, 1, 0.0);
+            results[i] += sway(i, 1, 1.1) * 0.3;
         }
         System.arraycopy(results, 0, working, 0, size);
         System.arraycopy(results, 0, working, size, size);
         System.arraycopy(results, 0, working, size + size, size);
         for (int i = 0; i < size; i++) {
-            results[i] += sway(i, 2, 1.0);
+            results[i] += sway(i, 2, 1.7) * 0.3;
         }
         System.arraycopy(results, 0, working, 0, size);
         System.arraycopy(results, 0, working, size, size);
         System.arraycopy(results, 0, working, size + size, size);
         for (int i = 0; i < size; i++) {
-            results[i] = (results[i] + sway(i, 0, 2.0)) * 0.375;
+            results[i] = (results[i] + sway(i, 0, 2.3)) * 0.3;
         }
         System.arraycopy(results, 0, working, 0, size);
         System.arraycopy(results, 0, working, size, size);
