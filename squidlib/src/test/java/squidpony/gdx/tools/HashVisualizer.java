@@ -5463,7 +5463,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("Warble3D Noise, unprocessed, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                alter3D(x + ctr, y + ctr, ctr << 1);
+                                alter3D(x + ctr, y + ctr, ctr + ctr);
                                 bright =
                                         basicPrepare(warble3D.getNoise(point3D[0], point3D[1], point3D[2])
                                         );
@@ -5475,7 +5475,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("Warble3D Noise, color, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                alter3D(x + ctr, y + ctr, ctr << 1);
+                                alter3D(x + ctr, y + ctr, ctr + ctr);
                                 warble3D.getNoise(point3D[0], point3D[1], point3D[2]);
                                 back[x][y] = floatGet(basicPrepare(warble3D.results[0]),
                                         basicPrepare(warble3D.results[1]), basicPrepare(warble3D.results[2]), 1f);

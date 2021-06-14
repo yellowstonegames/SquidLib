@@ -47,7 +47,7 @@ public class AnimatedWorldMapWriter extends ApplicationAdapter {
     private static final boolean MEASURE_BOUNDS = false;
     private static final boolean FLOWING_LAND = false;
     private static final boolean ALIEN_COLORS = false;
-    private static final boolean SEEDY = true;
+    private static final boolean SEEDY = false;
     private int baseSeed = 1234567890;
 
     private Thesaurus thesaurus;
@@ -132,10 +132,10 @@ World #5, SavoryMelonAlder, completed in 64338 ms
 //        path = "out/worldsAnimated/" + date + "/SpaceViewMutantHoney/";
 //        path = "out/worldsAnimated/" + date + "/SpaceViewValue/";
 //        path = "out/worldsAnimated/" + date + "/SpaceViewClassic/";
-        path = "out/worldsAnimated/" + date + "/SpaceViewSeedy/";
+//        path = "out/worldsAnimated/" + date + "/SpaceViewSeedy/";
 //        path = "out/worldsAnimated/" + date + "/SpaceViewPerlin/";
 //        path = "out/worldsAnimated/" + date + "/SpaceViewHoney/";
-//        path = "out/worldsAnimated/" + date + "/SpaceViewFoam/";
+        path = "out/worldsAnimated/" + date + "/SpaceViewFoam/";
 //        path = "out/worldsAnimated/" + date + "/SpaceViewSimplex/";
 //        path = "out/worldsAnimated/" + date + "/SpaceViewRidged/";
 //        path = "out/worldsAnimated/" + date + "/SpaceViewMutantMaelstrom/";
@@ -209,14 +209,14 @@ World #5, SavoryMelonAlder, completed in 64338 ms
 //        WorldMapGenerator.DEFAULT_NOISE.setFractalGain(5f);
 //        WorldMapGenerator.DEFAULT_NOISE.setFractalLacunarity(0.8f);
 //        WorldMapGenerator.DEFAULT_NOISE.setFractalGain(1.25f);
-//        VastNoise fn = new VastNoise((int) seed, 1.5f, VastNoise.FOAM, 1);
+        VastNoise fn = new VastNoise((int) seed, 1.5f, VastNoise.FOAM, 1);
 //        VastNoise fn = new VastNoise((int) seed, 2.0f, VastNoise.VALUE, 1);
 //        VastNoise fn = new VastNoise((int) seed, 1.5f, VastNoise.PERLIN, 1);
 //        VastNoise fn = new VastNoise((int) seed, 1f, VastNoise.SIMPLEX, 1);
 //        VastNoise fn = new VastNoise((int) seed, 1f, VastNoise.SIMPLEX_FRACTAL, 2);
 //        VastNoise fn = new VastNoise((int) seed, 1.25f, VastNoise.HONEY, 1);
 
-        FastNoise fn = new FastNoise((int) seed, 5f, FastNoise.CUBIC, 1);
+//        FastNoise fn = new FastNoise((int) seed, 5f, FastNoise.CUBIC, 1);
         /*
                     {0xC13FA9A902A6328FL, 0x91E10DA5C79E7B1DL},
             {0xD1B54A32D192ED03L, 0xABC98388FB8FAC03L, 0x8CB92BA72F3D8DD7L},
@@ -226,29 +226,34 @@ World #5, SavoryMelonAlder, completed in 64338 ms
                     0x86D516E50B04AB1BL},
 
          */
-        fn.setPointHash(new IPointHash.IntImpl(){
-            @Override
-            public int hashWithState(int x, int y, int state) {
-                return (int) (0xC13FA9A902A6328FL * x + 0x91E10DA5C79E7B1DL * y + state);
-            }
-            @Override
-            public int hashWithState(int x, int y, int z, int state) {
-                return (int) (0xD1B54A32D192ED03L * x + 0xABC98388FB8FAC03L * y + 0x8CB92BA72F3D8DD7L * z + state);
-            }
-            @Override
-            public int hashWithState(int x, int y, int z, int w, int state) {
-                return (int) (0xDB4F0B9175AE2165L * x + 0xBBE0563303A4615FL * y + 0xA0F2EC75A1FE1575L * z + 0x89E182857D9ED689L * w + state);
-            }
-            @Override
-            public int hashWithState(int x, int y, int z, int w, int u, int state) {
-                return (int) (0xE19B01AA9D42C633L * x + 0xC6D1D6C8ED0C9631L * y + 0xAF36D01EF7518DBBL * z + 0x9A69443F36F710E7L * w + 0x881403B9339BD42DL * u + state);
-            }
+        if(SEEDY) {
+            fn.setPointHash(new IPointHash.IntImpl() {
+                @Override
+                public int hashWithState(int x, int y, int state) {
+                    return (int) (0xC13FA9A902A6328FL * x + 0x91E10DA5C79E7B1DL * y + state);
+                }
 
-            @Override
-            public int hashWithState(int x, int y, int z, int w, int u, int v, int state) {
-                return (int) (0xE60E2B722B53AEEBL * x + 0xCEBD76D9EDB6A8EFL * y + 0xB9C9AA3A51D00B65L * z + 0xA6F5777F6F88983FL * w + 0x9609C71EB7D03F7BL * u + 0x86D516E50B04AB1BL * v + state);
-            }
-        });
+                @Override
+                public int hashWithState(int x, int y, int z, int state) {
+                    return (int) (0xD1B54A32D192ED03L * x + 0xABC98388FB8FAC03L * y + 0x8CB92BA72F3D8DD7L * z + state);
+                }
+
+                @Override
+                public int hashWithState(int x, int y, int z, int w, int state) {
+                    return (int) (0xDB4F0B9175AE2165L * x + 0xBBE0563303A4615FL * y + 0xA0F2EC75A1FE1575L * z + 0x89E182857D9ED689L * w + state);
+                }
+
+                @Override
+                public int hashWithState(int x, int y, int z, int w, int u, int state) {
+                    return (int) (0xE19B01AA9D42C633L * x + 0xC6D1D6C8ED0C9631L * y + 0xAF36D01EF7518DBBL * z + 0x9A69443F36F710E7L * w + 0x881403B9339BD42DL * u + state);
+                }
+
+                @Override
+                public int hashWithState(int x, int y, int z, int w, int u, int v, int state) {
+                    return (int) (0xE60E2B722B53AEEBL * x + 0xCEBD76D9EDB6A8EFL * y + 0xB9C9AA3A51D00B65L * z + 0xA6F5777F6F88983FL * w + 0x9609C71EB7D03F7BL * u + 0x86D516E50B04AB1BL * v + state);
+                }
+            });
+        }
         if(FLOWING_LAND)
             noise = new Noise.Adapted3DFrom5D(fn);
         else
@@ -334,8 +339,8 @@ World #5, SavoryMelonAlder, completed in 64338 ms
 //        world = new WorldMapGenerator.TilingMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.75);
 //        world = new WorldMapGenerator.EllipticalMap(seed, width, height, noise, 1.75);
 //        world = new WorldMapGenerator.MimicMap(seed, WorldMapGenerator.DEFAULT_NOISE, 1.75);
-        world = new WorldMapGenerator.SpaceViewMap(seed, width, height, noise, 1.3);
-//        world = new WorldMapGenerator.SpaceViewMap(seed, width, height, noise, 0.75);
+//        world = new WorldMapGenerator.SpaceViewMap(seed, width, height, noise, 1.3);
+        world = new WorldMapGenerator.SpaceViewMap(seed, width, height, noise, 0.75);
 //        world = new WorldMapGenerator.RoundSideMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.75);
 //        world = new WorldMapGenerator.HyperellipticalMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 0.8, 0.03125, 2.5);
 //        world = new WorldMapGenerator.HyperellipticalMap(seed, width, height, noise, 0.5, 0.03125, 2.5);

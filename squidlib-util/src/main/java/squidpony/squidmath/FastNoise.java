@@ -625,6 +625,20 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
     }
 
     /**
+     * Gets the point hash, an object implementing {@link IPointHash} that is used to take 2 or more
+     * coordinates and a seed and produce a usually-random-seeming hash value. You may want to use a
+     * flawed IPointHash (one that is not random) for artistic reasons, like
+     * {@link FlawedPointHash.QuiltHash} or {@link FlawedPointHash.CubeHash}, but these mostly work
+     * well when the noise type is {@link #CUBIC} or {@link #CUBIC_FRACTAL}.
+     * <br>
+     * The default setting is an {@link IntPointHash}.
+     * @return the current IPointHash used, such as the default {@link IntPointHash}
+     */
+    public IPointHash getPointHash() {
+        return pointHash;
+    }
+
+    /**
      * Sets the point hash, an object implementing {@link IPointHash} that is used to take 2 or more
      * coordinates and a seed and produce a usually-random-seeming hash value. You may want to use a
      * flawed IPointHash (one that is not random) for artistic reasons, like
