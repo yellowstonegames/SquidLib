@@ -23,9 +23,9 @@ public class WarbleNoise implements Noise.Noise3D {
 
     @Override
     public double getNoise(double x, double y, double z) {
-        working[0] = working[3] = working[6] = x;
-        working[1] = working[4] = working[7] = y;
-        working[2] = working[5] = working[8] = z;
+        working[0] = working[3] = working[6] = x + NumberTools.swayRandomized(seed, z - y) * 0.5;
+        working[1] = working[4] = working[7] = y + NumberTools.swayRandomized(~seed, x - z) * 0.5;
+        working[2] = working[5] = working[8] = z + NumberTools.swayRandomized(0x9E3779B97F4A7C15L ^ seed, y - x) * 0.5;
         warble(3);
         warble(3);
         warble(3);
@@ -64,7 +64,7 @@ public class WarbleNoise implements Noise.Noise3D {
         System.arraycopy(results, 0, working, size, size);
         System.arraycopy(results, 0, working, size + size, size);
         for (int i = 0; i < size; i++) {
-            results[i] = (results[i] + sway(i, 0, 2.0)) * 0.25;
+            results[i] = (results[i] + sway(i, 0, 2.0)) * 0.375;
         }
         System.arraycopy(results, 0, working, 0, size);
         System.arraycopy(results, 0, working, size, size);
