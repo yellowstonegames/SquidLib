@@ -361,6 +361,7 @@ public class WorldWildMapDemo extends ApplicationAdapter {
             }
         }
         stage.getCamera().position.set(position);
+        stage.getViewport().apply();
         // need to display the map every frame, since we clear the screen to avoid artifacts.
         putMap();
         Gdx.graphics.setTitle("Map! Took " + ttg + " ms to generate");
