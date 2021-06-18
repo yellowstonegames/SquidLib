@@ -4,10 +4,7 @@ import regexodus.*;
 import squidpony.squidmath.*;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 
 import static squidpony.Maker.makeList;
 import static squidpony.Maker.makeOM;
@@ -124,6 +121,34 @@ public class Thesaurus implements Serializable{
     }
 
     /**
+     * Prints out all of the categories this knows and then all of the terms this knows, optionally using HTML list
+     * formatting. The list formatting could be useful for Javadocs, as it is used here. Sorts and makes unique the
+     * words in each category, but does not sort categories (to preserve the similarity of some categories at close
+     * points in the order). This is probably only going to be used internally.
+     * @param listFormat if true, this will format the output as an HTML list, otherwise it will be as plain lines
+     */
+    public void printCategories(boolean listFormat){
+        String start = listFormat ? "    <li>" : "";
+        String end = listFormat ? "</li>" : "";
+        TreeSet<String> synonyms = new TreeSet<>();
+        for (int i = 0; i < categories.size(); i++) {
+            if(!categories.keyAt(i).contains("`term`")) {
+                synonyms.clear();
+                synonyms.addAll(categories.getAt(i));
+                System.out.println(start + categories.keyAt(i) + " : " + StringKit.join(", ", synonyms) + end);
+            }
+        }
+        System.out.println();
+        for (int i = 0; i < categories.size(); i++) {
+            if(categories.keyAt(i).contains("`term`")) {
+                synonyms.clear();
+                synonyms.addAll(categories.getAt(i));
+                System.out.println(start + categories.keyAt(i) + " : " + StringKit.join(", ", synonyms) + end);
+            }
+        }
+    }
+
+    /**
      * Adds several pre-made categories to this Thesaurus' known categories, but won't cause it to try to replace normal
      * words with synonyms (only categories, which contain backticks in the name). The keywords this currently knows,
      * and the words it will replace those keywords with, are:
@@ -201,10 +226,11 @@ public class Thesaurus implements Serializable{
      *     <li>lake`noun` : bog, fen, glade, lake, pond, puddle, sea, swamp</li>
      *     <li>leaf`noun` : bark, blossom, branch, bud, cress, flower, leaf, root, sap, seed, shoot, stalk, stem, thorn, twig, vine, wood, wort</li>
      *     <li>fruit`noun` : apple, banana, berry, cherry, citron, date, fig, fruit, grape, juniper, kumquat, lemon, lime, loquat, mango, melon, papaya, peach, pear, pineapple, plum, quince</li>
-     *     <li>nut`noun` : almond, bean, cashew, chestnut, coconut, hazelnut, lentil, nut, pea, peanut, pecan, walnut</li>
-     *     <li>vegetable`noun` : artichoke, asparagus, avocado, beet, broccoli, cabbage, carrot, cauliflower, celery, corn, eggplant, kale, leek, lettuce, mushroom, onion, potato, pumpkin, radish, rutabaga, spinach, taro, tomato, truffle, yam, zucchini</li>
-     *     <li>flower`noun` : amaryllis, camellia, chrysanthemum, daisy, dandelion, flower, gardenia, hibiscus, jasmine, lantana, lilac, lily, lotus, mallow, oleander, orchid, peony, petunia, phlox, rose, tulip</li>
-     *     <li>tree`noun` : alder, beech, birch, cactus, cedar, elm, hazel, juniper, larch, magnolia, mangrove, maple, oak, palm, pine, tree, willow</li>
+     *     <li>nut`noun` : almond, bean, cashew, chestnut, coconut, hazelnut, lentil, nut, pea, peanut, pecan, pistachio, walnut</li>
+     *     <li>vegetable`noun` : artichoke, asparagus, avocado, barley, beet, broccoli, cabbage, carrot, cauliflower, celery, corn, eggplant, fennel, garlic, kale, leek, lettuce, mushroom, onion, parsley, potato, pumpkin, radish, rhubarb, rice, rutabaga, spinach, taro, tomato, truffle, wheat, yam, zucchini</li>
+     *     <li>flower`noun` : amaryllis, camellia, chrysanthemum, daisy, dandelion, flower, gardenia, hibiscus, jasmine, lantana, lilac, lily, lotus, mallow, oleander, orchid, peony, petunia, phlox, plumeria, rose, tulip, yarrow</li>
+     *     <li>tree`noun` : alder, beech, birch, cactus, cedar, elm, eucalyptus, ficus, hazel, juniper, larch, magnolia, mangrove, maple, oak, palm, pine, tree, willow</li>
+     *     <li>bush`noun` : aloe, boxwood, bramble, brier, brush, bush, dogwood, fern, flax, hawthorn, hedge, hemp, holly, honeysuckle, kudzu, manzanita, mesquite, milkweed, nettle, privet, ragweed, ragwort, shrub, silkweed, sorrel, tansy, tea, thicket, thistle, tobacco</li>
      *     <li>flavor`noun` : acid, grease, salt, smoke, soap, spice, sugar</li>
      *     <li>flavor`adj` : bitter, salty, savory, smoky, sour, spicy, sweet</li>
      *     <li>color`adj` : black, blue, brown, gray, green, orange, pink, red, violet, white, yellow</li>
@@ -251,8 +277,8 @@ public class Thesaurus implements Serializable{
      * There are also terms, which typically produce multiple words procedurally and may use {@link #defaultLanguage}.
      * See {@link #makePlantName()}, {@link #makeFruitName()}, {@link #makeNutName()}, {@link #makeFlowerName()},
      * {@link #makeVegetableName()}, and {@link #makePotionDescription()} for more info and examples.
-     * <li>
-     *     <li>plant`term` : @'s color`adj`\tleaf`noun`, @'s color`adj` flower`noun`, @'s color`adj` tree`noun`, @'s flower`noun`, @'s ground`noun`\tleaf`noun`, @'s sensory`adj`-leaf`noun`, @'s shape`adj` flower`noun`, @'s tree`noun`, color`adj` flower`noun`, color`adj` flower`noun` of @, color`adj` fruit`noun` tree`noun`, color`adj` nut`noun` tree`noun`, color`adj`-leaf`noun` flower`noun`, color`adj`-vegetable`noun` tree`noun`, flavor`adj` fruit`noun` tree`noun`, flavor`adj` nut`noun` tree`noun`, flavor`noun`\tleaf`noun` tree`noun`, flower`noun` of @, ground`noun`\tflower`noun`, ground`noun`\tleaf`noun`, ground`noun`\tleaf`noun` of @, ground`noun`\tvegetable`noun`, leaf`noun` of @, sensory`adj` flower`noun` of @, sensory`adj` flower`noun`-flower`noun`, sensory`adj` tree`noun` of @, sensory`adj` tree`noun`-tree`noun`, sensory`adj`-leaf`noun` flower`noun`, sensory`adj`-leaf`noun` tree`noun`, shape`adj` flower`noun`, shape`adj`-fruit`noun` tree`noun`, shape`adj`-leaf`noun` flower`noun`, shape`adj`-leaf`noun` tree`noun`, shape`adj`-vegetable`noun` tree`noun`, vegetable`noun`-leaf`noun` tree`noun`</li>
+     * <ul>
+     *     <li>plant`term` : @'s bush`noun`, @'s bush`noun`-bush`noun`, @'s bush`noun`-tree`noun`, @'s color`adj`\tleaf`noun`, @'s color`adj` flower`noun`, @'s color`adj` tree`noun`, @'s flower`noun`, @'s flower`noun`-bush`noun`, @'s ground`noun`\tleaf`noun`, @'s sensory`adj`-leaf`noun`, @'s shape`adj` bush`noun`, @'s shape`adj` flower`noun`, @'s tree`noun`, @'s tree`noun`-bush`noun`, @'s tree`noun`-tree`noun`, bush`noun` of @, bush`noun`-bush`noun`, bush`noun`-bush`noun` of @, bush`noun`-tree`noun`, bush`noun`-tree`noun` of @, color`adj`\tleaf`noun` bush`noun`, color`adj`\tleaf`noun` tree`noun`, color`adj` bush`noun`, color`adj` flower`noun`, color`adj` flower`noun` of @, color`adj` fruit`noun` tree`noun`, color`adj` nut`noun` tree`noun`, color`adj` tree`noun`, color`adj`-leaf`noun` bush`noun`, color`adj`-leaf`noun` flower`noun`, color`adj`-leaf`noun` tree`noun`, color`adj`-vegetable`noun` tree`noun`, flavor`adj` fruit`noun` tree`noun`, flavor`adj` nut`noun` tree`noun`, flavor`noun`\tleaf`noun` tree`noun`, flower`noun` of @, flower`noun`-bush`noun`, flower`noun`-bush`noun` of @, fruit`noun` bush`noun`, fruit`noun` tree`noun`, ground`noun`\tflower`noun`, ground`noun`\tleaf`noun`, ground`noun`\tleaf`noun` of @, ground`noun`\tvegetable`noun`, leaf`noun` of @, nut`noun` bush`noun`, nut`noun` tree`noun`, sensory`adj` bush`noun`, sensory`adj` bush`noun`-bush`noun`, sensory`adj` bush`noun`-tree`noun`, sensory`adj` flower`noun` of @, sensory`adj` flower`noun`-bush`noun`, sensory`adj` flower`noun`-flower`noun`, sensory`adj` tree`noun`, sensory`adj` tree`noun` of @, sensory`adj` tree`noun`-bush`noun`, sensory`adj` tree`noun`-tree`noun`, sensory`adj`-leaf`noun` bush`noun`, sensory`adj`-leaf`noun` flower`noun`, sensory`adj`-leaf`noun` of @, sensory`adj`-leaf`noun` tree`noun`, shape`adj` bush`noun` of @, shape`adj` flower`noun`, shape`adj`-fruit`noun` tree`noun`, shape`adj`-leaf`noun` flower`noun`, shape`adj`-leaf`noun` tree`noun`, shape`adj`-vegetable`noun` tree`noun`, tree`noun`-bush`noun`, tree`noun`-bush`noun` of @, tree`noun`-tree`noun`, tree`noun`-tree`noun` of @, vegetable`noun` bush`noun`, vegetable`noun` tree`noun`, vegetable`noun`-leaf`noun` tree`noun`</li>
      *     <li>fruit`term` : @'s color`adj` fruit`noun`, @'s flavor`adj` fruit`noun`, @'s fruit`noun`, color`adj` fruit`noun`, color`adj` fruit`noun` of @, color`adj` fruit`noun`-fruit`noun`, flavor`adj` fruit`noun`, flavor`adj` fruit`noun` of @, flavor`adj` fruit`noun`-fruit`noun`, fruit`noun` of @, shape`adj` fruit`noun`, shape`adj` fruit`noun`-fruit`noun`</li>
      *     <li>nut`term` : @'s color`adj` nut`noun`, @'s flavor`adj` nut`noun`, @'s nut`noun`, color`adj` nut`noun`, color`adj` nut`noun` of @, flavor`adj` nut`noun`, nut`noun` of @, sensory`adj` nut`noun`</li>
      *     <li>vegetable`term` : @'s color`adj` vegetable`noun`, @'s flavor`adj` vegetable`noun`, @'s vegetable`noun`, @'s vegetable`noun`-vegetable`noun`, color`adj` sensory`adj` vegetable`noun`, color`adj` vegetable`noun`, color`adj` vegetable`noun` of @, color`adj` vegetable`noun`-vegetable`noun`, flavor`adj` vegetable`noun`, flavor`adj` vegetable`noun`-vegetable`noun`, sensory`adj` shape`adj` vegetable`noun`, sensory`adj` vegetable`noun`, sensory`adj` vegetable`noun`-vegetable`noun`, shape`adj` color`adj` vegetable`noun`, shape`adj` vegetable`noun`, shape`adj` vegetable`noun`-vegetable`noun`, vegetable`noun` of @</li>
@@ -1244,12 +1270,54 @@ public class Thesaurus implements Serializable{
             "sensory`adj` tree`noun` of @",
             "sensory`adj` flower`noun` of @",
             "color`adj` flower`noun` of @",
-            "@'s sensory`adj`-leaf`noun`",
             "ground`noun`\tleaf`noun`",
+            "@'s sensory`adj`-leaf`noun`",
+            "@'s bush`noun`",
+            "@'s shape`adj` bush`noun`",
+            "@'s bush`noun`-bush`noun`",
+            "@'s tree`noun`-tree`noun`",
+            "@'s tree`noun`-bush`noun`",
+            "@'s bush`noun`-tree`noun`",
+            "@'s flower`noun`-bush`noun`",
 
+            "sensory`adj`-leaf`noun` of @",
+            "bush`noun` of @",
+            "shape`adj` bush`noun` of @",
+            "bush`noun`-bush`noun` of @",
+            "tree`noun`-tree`noun` of @",
+            "tree`noun`-bush`noun` of @",
+            "bush`noun`-tree`noun` of @",
+            "flower`noun`-bush`noun` of @",
+
+            "bush`noun`-bush`noun`",
+            "tree`noun`-tree`noun`",
+            "tree`noun`-bush`noun`",
+            "bush`noun`-tree`noun`",
+            "flower`noun`-bush`noun`",
+            "sensory`adj` bush`noun`-bush`noun`",
+            "sensory`adj` tree`noun`-tree`noun`",
+            "sensory`adj` tree`noun`-bush`noun`",
+            "sensory`adj` bush`noun`-tree`noun`",
+            "sensory`adj` flower`noun`-bush`noun`",
+            "sensory`adj` bush`noun`",
+            "sensory`adj` tree`noun`",
+            "sensory`adj`-leaf`noun` bush`noun`",
+            "sensory`adj`-leaf`noun` tree`noun`",
+            "color`adj`\tleaf`noun` bush`noun`",
+            "color`adj`\tleaf`noun` tree`noun`",
+            "color`adj`-leaf`noun` bush`noun`",
+            "color`adj`-leaf`noun` tree`noun`",
+            "color`adj` bush`noun`",
+            "color`adj` tree`noun`",
             "shape`adj` flower`noun`",
             "color`adj` flower`noun`",
             "flavor`noun`\tleaf`noun` tree`noun`",
+            "fruit`noun` tree`noun`",
+            "nut`noun` tree`noun`",
+            "vegetable`noun` tree`noun`",
+            "fruit`noun` bush`noun`",
+            "nut`noun` bush`noun`",
+            "vegetable`noun` bush`noun`",
             "flavor`adj` fruit`noun` tree`noun`",
             "flavor`adj` nut`noun` tree`noun`",
             "color`adj` fruit`noun` tree`noun`",
@@ -1485,13 +1553,15 @@ public class Thesaurus implements Serializable{
             "fruit`noun`",
             makeList("fruit", "berry", "apple", "peach", "cherry", "melon", "lime", "fig", "date", "mango", "banana", "juniper", "grape", "papaya", "pear", "quince", "lemon", "kumquat", "loquat", "plum", "pineapple", "citron"),
             "nut`noun`",
-            makeList("nut", "bean", "almond", "peanut", "pecan", "walnut", "cashew", "pea", "chestnut", "hazelnut", "lentil", "coconut"),
+            makeList("nut", "bean", "almond", "peanut", "pecan", "walnut", "cashew", "pea", "chestnut", "hazelnut", "lentil", "coconut", "pistachio"),
             "vegetable`noun`",
-            makeList("carrot", "corn", "radish", "potato", "pumpkin", "zucchini", "taro", "yam", "mushroom", "spinach", "lettuce", "cabbage", "kale", "asparagus", "eggplant", "broccoli", "cauliflower", "celery", "beet", "onion", "leek", "truffle", "rutabaga", "artichoke", "avocado", "tomato"),
+            makeList("carrot", "corn", "radish", "potato", "pumpkin", "zucchini", "taro", "yam", "mushroom", "spinach", "lettuce", "cabbage", "kale", "asparagus", "eggplant", "broccoli", "cauliflower", "celery", "beet", "onion", "leek", "truffle", "rutabaga", "artichoke", "avocado", "tomato", "fennel", "garlic", "parsley", "rice", "wheat", "barley", "rhubarb"),
             "flower`noun`",
-            makeList("flower", "rose", "lilac", "orchid", "peony", "oleander", "chrysanthemum", "amaryllis", "camellia", "mallow", "lily", "gardenia", "daisy", "hibiscus", "dandelion", "jasmine", "lotus", "lantana", "phlox", "petunia", "tulip"),
+            makeList("flower", "rose", "lilac", "orchid", "peony", "oleander", "chrysanthemum", "amaryllis", "camellia", "mallow", "lily", "gardenia", "daisy", "hibiscus", "dandelion", "jasmine", "lotus", "lantana", "phlox", "petunia", "tulip", "yarrow", "plumeria"),
             "tree`noun`",
-            makeList("tree", "oak", "pine", "juniper", "maple", "beech", "birch", "larch", "willow", "alder", "cedar", "palm", "magnolia", "hazel", "cactus", "mangrove", "elm"),
+            makeList("tree", "oak", "pine", "juniper", "maple", "beech", "birch", "larch", "willow", "alder", "cedar", "palm", "magnolia", "hazel", "cactus", "mangrove", "elm", "ficus", "eucalyptus"),
+            "bush`noun`",
+            makeList("bush", "brush", "bramble", "thicket", "hedge", "shrub", "manzanita", "privet", "hawthorn", "aloe", "nettle", "thistle", "boxwood", "brier", "milkweed", "dogwood", "fern", "flax", "hemp", "holly", "kudzu", "ragweed", "ragwort", "mesquite", "sorrel", "silkweed", "tansy", "tobacco", "tea", "honeysuckle"),
             "flavor`noun`",
             makeList("sugar", "spice", "acid", "soap", "salt", "grease", "smoke"),
             "flavor`adj`",

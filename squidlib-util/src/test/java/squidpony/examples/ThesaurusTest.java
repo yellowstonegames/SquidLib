@@ -14,14 +14,15 @@ import java.util.TreeSet;
 public class ThesaurusTest {
     public static void main(String[] args) {
         Thesaurus thesaurus  = new Thesaurus(System.currentTimeMillis() >>> 25); // changes seed roughly once/9 hours
-        TreeSet<String> synonyms = new TreeSet<>();
-        int len = thesaurus.mappings.size();
-        for (int i = 0; i < len; i++) {
-            System.out.print(thesaurus.mappings.keyAt(i) + " : ");
-            synonyms.clear();
-            thesaurus.mappings.getAt(i).fillInto(synonyms);
-            System.out.println(StringKit.join(", ", synonyms));
-        }
+//        TreeSet<String> synonyms = new TreeSet<>();
+//        int len = thesaurus.mappings.size();
+//        for (int i = 0; i < len; i++) {
+//            System.out.print(thesaurus.mappings.keyAt(i) + " : ");
+//            synonyms.clear();
+//            thesaurus.mappings.getAt(i).fillInto(synonyms);
+//            System.out.println(StringKit.join(", ", synonyms));
+//        }
+        thesaurus.printCategories(true);
         System.out.println();
 //        for (int i = 0; i < 10; i++) {
 //            System.out.println(thesaurus.makeNationName(FakeLanguageGen.JAPANESE_ROMANIZED));
