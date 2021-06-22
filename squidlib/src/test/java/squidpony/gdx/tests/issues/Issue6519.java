@@ -15,8 +15,8 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 public class Issue6519 extends ApplicationAdapter {
     public static class GraphicalTerm {
-        private static final FileHandle GNUnicode = Gdx.files.classpath("7-12-serif.fnt");
-        private static final FileHandle GNUnicode_images = Gdx.files.classpath("7-12-serif.png");
+        private static final FileHandle serif = Gdx.files.classpath("7-12-serif.fnt");
+        private static final FileHandle serifImage = Gdx.files.classpath("7-12-serif.png");
         static BitmapFont font;
         public final int Height, Width;
         public final int Top;
@@ -77,7 +77,7 @@ public class Issue6519 extends ApplicationAdapter {
         }
 
         public void Create() {
-            font = new BitmapFont(GNUnicode, GNUnicode_images, false);
+            font = new BitmapFont(serif, serifImage, false);
             font.setUseIntegerPositions(false);
             setAllFixedWidth(font);
         }
