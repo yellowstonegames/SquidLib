@@ -3,4 +3,4 @@ jdk:
 install:
   - echo "Installing with Gradle"
   - chmod 755 gradlew
-  - ./gradlew clean install -x signMavenPublication
+  - ./gradlew clean install
