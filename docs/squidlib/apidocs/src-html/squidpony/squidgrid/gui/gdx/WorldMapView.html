@@ -110,257 +110,258 @@
 <span class="source-line-no">097</span><span id="line.97">    public static float emptyColor = SColor.floatGet(34 &lt;&lt; 24 | 32 &lt;&lt; 16 | 52 &lt;&lt; 8 | 255);</span>
 <span class="source-line-no">098</span><span id="line.98"></span>
 <span class="source-line-no">099</span><span id="line.99">    // water colors</span>
-<span class="source-line-no">100</span><span id="line.100">    public static float deepColor = SColor.floatGet(0 &lt;&lt; 24 | 42 &lt;&lt; 16 | 88 &lt;&lt; 8 | 255);</span>
-<span class="source-line-no">101</span><span id="line.101">    public static float shallowColor = SColor.floatGet(20 &lt;&lt; 24 | 145 &lt;&lt; 16 | 197 &lt;&lt; 8 | 255);</span>
-<span class="source-line-no">102</span><span id="line.102">    public static float foamColor = SColor.floatGet(61 &lt;&lt; 24 | 162 &lt;&lt; 16 | 215 &lt;&lt; 8 | 255);</span>
-<span class="source-line-no">103</span><span id="line.103"></span>
-<span class="source-line-no">104</span><span id="line.104">    protected float[] biomeColors = {</span>
-<span class="source-line-no">105</span><span id="line.105">            desertColor,</span>
-<span class="source-line-no">106</span><span id="line.106">            savannaColor,</span>
-<span class="source-line-no">107</span><span id="line.107">            tropicalRainforestColor,</span>
-<span class="source-line-no">108</span><span id="line.108">            grasslandColor,</span>
-<span class="source-line-no">109</span><span id="line.109">            woodlandColor,</span>
-<span class="source-line-no">110</span><span id="line.110">            seasonalForestColor,</span>
-<span class="source-line-no">111</span><span id="line.111">            temperateRainforestColor,</span>
-<span class="source-line-no">112</span><span id="line.112">            borealForestColor,</span>
-<span class="source-line-no">113</span><span id="line.113">            tundraColor,</span>
-<span class="source-line-no">114</span><span id="line.114">            iceColor,</span>
-<span class="source-line-no">115</span><span id="line.115">            beachColor,</span>
-<span class="source-line-no">116</span><span id="line.116">            rockyColor,</span>
-<span class="source-line-no">117</span><span id="line.117">            shallowColor,</span>
-<span class="source-line-no">118</span><span id="line.118">            deepColor,</span>
-<span class="source-line-no">119</span><span id="line.119">            emptyColor</span>
-<span class="source-line-no">120</span><span id="line.120">    };</span>
-<span class="source-line-no">121</span><span id="line.121"></span>
-<span class="source-line-no">122</span><span id="line.122">    public final static float[] BIOME_TABLE = {</span>
-<span class="source-line-no">123</span><span id="line.123">            //COLDEST   //COLDER      //COLD               //HOT                     //HOTTER                 //HOTTEST</span>
-<span class="source-line-no">124</span><span id="line.124">            Ice+0.85f,  Ice+0.65f,    Grassland+0.9f,      Desert+0.75f,             Desert+0.8f,             Desert+0.85f,            //DRYEST</span>
-<span class="source-line-no">125</span><span id="line.125">            Ice+0.7f,   Tundra+0.9f,  Grassland+0.6f,      Grassland+0.3f,           Desert+0.65f,            Desert+0.7f,             //DRYER</span>
-<span class="source-line-no">126</span><span id="line.126">            Ice+0.55f,  Tundra+0.7f,  Woodland+0.4f,       Woodland+0.6f,            Savanna+0.8f,            Desert+0.6f,             //DRY</span>
-<span class="source-line-no">127</span><span id="line.127">            Ice+0.4f,   Tundra+0.5f,  SeasonalForest+0.3f, SeasonalForest+0.5f,      Savanna+0.6f,            Savanna+0.4f,            //WET</span>
-<span class="source-line-no">128</span><span id="line.128">            Ice+0.2f,   Tundra+0.3f,  BorealForest+0.35f,  TemperateRainforest+0.4f, TropicalRainforest+0.6f, Savanna+0.2f,            //WETTER</span>
-<span class="source-line-no">129</span><span id="line.129">            Ice+0.0f,   BorealForest, BorealForest+0.15f,  TemperateRainforest+0.2f, TropicalRainforest+0.4f, TropicalRainforest+0.2f, //WETTEST</span>
-<span class="source-line-no">130</span><span id="line.130">            Rocky+0.9f, Rocky+0.6f,   Beach+0.4f,          Beach+0.55f,              Beach+0.75f,             Beach+0.9f,              //COASTS</span>
-<span class="source-line-no">131</span><span id="line.131">            Ice+0.3f,   Shallow+0.9f, Shallow+0.75f,       Shallow+0.6f,             Shallow+0.5f,            Shallow+0.4f,            //RIVERS</span>
-<span class="source-line-no">132</span><span id="line.132">            Ice+0.2f,   Shallow+0.9f, Shallow+0.65f,       Shallow+0.5f,             Shallow+0.4f,            Shallow+0.3f,            //LAKES</span>
-<span class="source-line-no">133</span><span id="line.133">            Ocean+0.9f, Ocean+0.75f,  Ocean+0.6f,          Ocean+0.45f,              Ocean+0.3f,              Ocean+0.15f,             //OCEANS</span>
-<span class="source-line-no">134</span><span id="line.134">            Empty                                                                                                                      //SPACE</span>
-<span class="source-line-no">135</span><span id="line.135">    };</span>
-<span class="source-line-no">136</span><span id="line.136">    public final float[] BIOME_COLOR_TABLE = new float[61], BIOME_DARK_COLOR_TABLE = new float[61];</span>
-<span class="source-line-no">137</span><span id="line.137">    </span>
-<span class="source-line-no">138</span><span id="line.138">    public void initialize()</span>
-<span class="source-line-no">139</span><span id="line.139">    {</span>
-<span class="source-line-no">140</span><span id="line.140">        initialize(0f, 0f, 0f, 1f);</span>
-<span class="source-line-no">141</span><span id="line.141">    }</span>
-<span class="source-line-no">142</span><span id="line.142">    </span>
-<span class="source-line-no">143</span><span id="line.143">    public void initialize(float hue, float saturation, float brightness, float contrast)</span>
-<span class="source-line-no">144</span><span id="line.144">    {</span>
-<span class="source-line-no">145</span><span id="line.145">        float b, diff;</span>
-<span class="source-line-no">146</span><span id="line.146">        for (int i = 0; i &lt; 60; i++) {</span>
-<span class="source-line-no">147</span><span id="line.147">            b = BIOME_TABLE[i];</span>
-<span class="source-line-no">148</span><span id="line.148">            diff = ((b % 1.0f) - 0.48f) * 0.27f * contrast;</span>
-<span class="source-line-no">149</span><span id="line.149">            BIOME_COLOR_TABLE[i] = b = SColor.toEditedFloat((diff &gt;= 0)</span>
-<span class="source-line-no">150</span><span id="line.150">                    ? SColor.lightenFloat(biomeColors[(int)b], diff)</span>
-<span class="source-line-no">151</span><span id="line.151">                    : SColor.darkenFloat(biomeColors[(int)b], -diff), hue, saturation, brightness, 0f);</span>
-<span class="source-line-no">152</span><span id="line.152">            BIOME_DARK_COLOR_TABLE[i] = SColor.darkenFloat(b, 0.08f);</span>
-<span class="source-line-no">153</span><span id="line.153">        }</span>
-<span class="source-line-no">154</span><span id="line.154">        BIOME_COLOR_TABLE[60] = BIOME_DARK_COLOR_TABLE[60] = emptyColor;</span>
-<span class="source-line-no">155</span><span id="line.155">    }</span>
-<span class="source-line-no">156</span><span id="line.156"></span>
-<span class="source-line-no">157</span><span id="line.157">    /**</span>
-<span class="source-line-no">158</span><span id="line.158">     * Initializes the colors to use for each biome (these are almost always mixed with other biome colors in practice).</span>
-<span class="source-line-no">159</span><span id="line.159">     * Each parameter may be null to use the default for an Earth-like world; otherwise it should be a libGDX</span>
-<span class="source-line-no">160</span><span id="line.160">     * {@link Color} or some subclass, like {@link SColor}. All non-null parameters should probably be fully opaque,</span>
-<span class="source-line-no">161</span><span id="line.161">     * except {@code emptyColor}, which is only used for world maps that show empty space (like a globe, as produced by</span>
-<span class="source-line-no">162</span><span id="line.162">     * {@link WorldMapGenerator.RotatingSpaceMap}).</span>
-<span class="source-line-no">163</span><span id="line.163">     * @param desertColor hot, dry, barren land; may be sandy, but many real-world deserts don't have much sand</span>
-<span class="source-line-no">164</span><span id="line.164">     * @param savannaColor hot, mostly-dry land with some parched vegetation; also called scrub or chaparral</span>
-<span class="source-line-no">165</span><span id="line.165">     * @param tropicalRainforestColor hot, extremely wet forests with dense rich vegetation</span>
-<span class="source-line-no">166</span><span id="line.166">     * @param grasslandColor prairies that are dry and usually wind-swept, but not especially hot or cold</span>
-<span class="source-line-no">167</span><span id="line.167">     * @param woodlandColor part-way between a prairie and a forest; not especially hot or cold</span>
-<span class="source-line-no">168</span><span id="line.168">     * @param seasonalForestColor forest that becomes barren in winter (deciduous trees); not especially hot or cold</span>
-<span class="source-line-no">169</span><span id="line.169">     * @param temperateRainforestColor forest that tends to be slightly warm but very wet</span>
-<span class="source-line-no">170</span><span id="line.170">     * @param borealForestColor forest that tends to be cold and very wet</span>
-<span class="source-line-no">171</span><span id="line.171">     * @param tundraColor very cold plains that still have some low-lying vegetation; also called taiga </span>
-<span class="source-line-no">172</span><span id="line.172">     * @param iceColor cold barren land covered in permafrost; also used for rivers and lakes that are frozen</span>
-<span class="source-line-no">173</span><span id="line.173">     * @param beachColor sandy or otherwise light-colored shorelines; here, these are more common in warmer places</span>
-<span class="source-line-no">174</span><span id="line.174">     * @param rockyColor rocky or otherwise rugged shorelines; here, these are more common in colder places</span>
-<span class="source-line-no">175</span><span id="line.175">     * @param shallowColor the color of very shallow water; will be mixed with {@code deepColor} to get most ocean colors</span>
-<span class="source-line-no">176</span><span id="line.176">     * @param deepColor the color of very deep water; will be mixed with {@code shallowColor} to get most ocean colors</span>
-<span class="source-line-no">177</span><span id="line.177">     * @param emptyColor the color used for empty space off the edge of the world map; may be transparent</span>
-<span class="source-line-no">178</span><span id="line.178">     */</span>
-<span class="source-line-no">179</span><span id="line.179">    public void initialize(</span>
-<span class="source-line-no">180</span><span id="line.180">            Color desertColor,</span>
-<span class="source-line-no">181</span><span id="line.181">            Color savannaColor,</span>
-<span class="source-line-no">182</span><span id="line.182">            Color tropicalRainforestColor,</span>
-<span class="source-line-no">183</span><span id="line.183">            Color grasslandColor,</span>
-<span class="source-line-no">184</span><span id="line.184">            Color woodlandColor,</span>
-<span class="source-line-no">185</span><span id="line.185">            Color seasonalForestColor,</span>
-<span class="source-line-no">186</span><span id="line.186">            Color temperateRainforestColor,</span>
-<span class="source-line-no">187</span><span id="line.187">            Color borealForestColor,</span>
-<span class="source-line-no">188</span><span id="line.188">            Color tundraColor,</span>
-<span class="source-line-no">189</span><span id="line.189">            Color iceColor,</span>
-<span class="source-line-no">190</span><span id="line.190">            Color beachColor,</span>
-<span class="source-line-no">191</span><span id="line.191">            Color rockyColor,</span>
-<span class="source-line-no">192</span><span id="line.192">            Color shallowColor,</span>
-<span class="source-line-no">193</span><span id="line.193">            Color deepColor,</span>
-<span class="source-line-no">194</span><span id="line.194">            Color emptyColor</span>
-<span class="source-line-no">195</span><span id="line.195">    )</span>
-<span class="source-line-no">196</span><span id="line.196">    {</span>
-<span class="source-line-no">197</span><span id="line.197">        biomeColors[ 0] = desertColor == null ? WorldMapView.desertColor : desertColor.toFloatBits();</span>
-<span class="source-line-no">198</span><span id="line.198">        biomeColors[ 1] = savannaColor == null ? WorldMapView.savannaColor : savannaColor.toFloatBits();</span>
-<span class="source-line-no">199</span><span id="line.199">        biomeColors[ 2] = tropicalRainforestColor == null ? WorldMapView.tropicalRainforestColor : tropicalRainforestColor.toFloatBits();</span>
-<span class="source-line-no">200</span><span id="line.200">        biomeColors[ 3] = grasslandColor == null ? WorldMapView.grasslandColor : grasslandColor.toFloatBits();</span>
-<span class="source-line-no">201</span><span id="line.201">        biomeColors[ 4] = woodlandColor == null ? WorldMapView.woodlandColor : woodlandColor.toFloatBits();</span>
-<span class="source-line-no">202</span><span id="line.202">        biomeColors[ 5] = seasonalForestColor == null ? WorldMapView.seasonalForestColor : seasonalForestColor.toFloatBits();</span>
-<span class="source-line-no">203</span><span id="line.203">        biomeColors[ 6] = temperateRainforestColor == null ? WorldMapView.temperateRainforestColor : temperateRainforestColor.toFloatBits();</span>
-<span class="source-line-no">204</span><span id="line.204">        biomeColors[ 7] = borealForestColor == null ? WorldMapView.borealForestColor : borealForestColor.toFloatBits();</span>
-<span class="source-line-no">205</span><span id="line.205">        biomeColors[ 8] = tundraColor == null ? WorldMapView.tundraColor : tundraColor.toFloatBits();</span>
-<span class="source-line-no">206</span><span id="line.206">        biomeColors[ 9] = iceColor == null ? WorldMapView.iceColor : iceColor.toFloatBits();</span>
-<span class="source-line-no">207</span><span id="line.207">        biomeColors[10] = beachColor == null ? WorldMapView.beachColor : beachColor.toFloatBits();</span>
-<span class="source-line-no">208</span><span id="line.208">        biomeColors[11] = rockyColor == null ? WorldMapView.rockyColor : rockyColor.toFloatBits();</span>
-<span class="source-line-no">209</span><span id="line.209">        biomeColors[12] = shallowColor == null ? WorldMapView.shallowColor : shallowColor.toFloatBits();</span>
-<span class="source-line-no">210</span><span id="line.210">        biomeColors[13] = deepColor == null ? WorldMapView.deepColor : deepColor.toFloatBits();</span>
-<span class="source-line-no">211</span><span id="line.211">        biomeColors[14] = emptyColor == null ? WorldMapView.emptyColor : emptyColor.toFloatBits();</span>
-<span class="source-line-no">212</span><span id="line.212">        float b, diff;</span>
-<span class="source-line-no">213</span><span id="line.213">        for (int i = 0; i &lt; 60; i++) {</span>
-<span class="source-line-no">214</span><span id="line.214">            b = BIOME_TABLE[i];</span>
-<span class="source-line-no">215</span><span id="line.215">            diff = ((b % 1.0f) - 0.48f) * 0.27f;</span>
-<span class="source-line-no">216</span><span id="line.216">            BIOME_COLOR_TABLE[i] = b = (diff &gt;= 0)</span>
-<span class="source-line-no">217</span><span id="line.217">                    ? SColor.lightenFloat(biomeColors[(int)b], diff)</span>
-<span class="source-line-no">218</span><span id="line.218">                    : SColor.darkenFloat(biomeColors[(int)b], -diff);</span>
-<span class="source-line-no">219</span><span id="line.219">            BIOME_DARK_COLOR_TABLE[i] = SColor.darkenFloat(b, 0.08f);</span>
-<span class="source-line-no">220</span><span id="line.220">        }</span>
-<span class="source-line-no">221</span><span id="line.221">        BIOME_COLOR_TABLE[60] = BIOME_DARK_COLOR_TABLE[60] = biomeColors[14];</span>
-<span class="source-line-no">222</span><span id="line.222">        biomeColors[ 0] = WorldMapView.desertColor;</span>
-<span class="source-line-no">223</span><span id="line.223">        biomeColors[ 1] = WorldMapView.savannaColor;</span>
-<span class="source-line-no">224</span><span id="line.224">        biomeColors[ 2] = WorldMapView.tropicalRainforestColor;</span>
-<span class="source-line-no">225</span><span id="line.225">        biomeColors[ 3] = WorldMapView.grasslandColor;</span>
-<span class="source-line-no">226</span><span id="line.226">        biomeColors[ 4] = WorldMapView.woodlandColor;</span>
-<span class="source-line-no">227</span><span id="line.227">        biomeColors[ 5] = WorldMapView.seasonalForestColor;</span>
-<span class="source-line-no">228</span><span id="line.228">        biomeColors[ 6] = WorldMapView.temperateRainforestColor;</span>
-<span class="source-line-no">229</span><span id="line.229">        biomeColors[ 7] = WorldMapView.borealForestColor;</span>
-<span class="source-line-no">230</span><span id="line.230">        biomeColors[ 8] = WorldMapView.tundraColor;</span>
-<span class="source-line-no">231</span><span id="line.231">        biomeColors[ 9] = WorldMapView.iceColor;</span>
-<span class="source-line-no">232</span><span id="line.232">        biomeColors[10] = WorldMapView.beachColor;</span>
-<span class="source-line-no">233</span><span id="line.233">        biomeColors[11] = WorldMapView.rockyColor;</span>
-<span class="source-line-no">234</span><span id="line.234">        biomeColors[12] = WorldMapView.shallowColor;</span>
-<span class="source-line-no">235</span><span id="line.235">        biomeColors[13] = WorldMapView.deepColor;</span>
-<span class="source-line-no">236</span><span id="line.236">        biomeColors[14] = WorldMapView.emptyColor;</span>
-<span class="source-line-no">237</span><span id="line.237">    }</span>
-<span class="source-line-no">238</span><span id="line.238"></span>
-<span class="source-line-no">239</span><span id="line.239">    /**</span>
-<span class="source-line-no">240</span><span id="line.240">     * Initializes the colors to use in some combination for all biomes, without regard for what the biome really is.</span>
-<span class="source-line-no">241</span><span id="line.241">     * There should be at least one packed float color given in similarColors, but there can be many of them.</span>
-<span class="source-line-no">242</span><span id="line.242">     * @param similarColors an array or vararg of packed float colors with at least one element</span>
-<span class="source-line-no">243</span><span id="line.243">     */</span>
-<span class="source-line-no">244</span><span id="line.244">    public void match(</span>
-<span class="source-line-no">245</span><span id="line.245">            float... similarColors</span>
-<span class="source-line-no">246</span><span id="line.246">    )</span>
-<span class="source-line-no">247</span><span id="line.247">    {</span>
-<span class="source-line-no">248</span><span id="line.248">        for (int i = 0; i &lt; 14; i++) {</span>
-<span class="source-line-no">249</span><span id="line.249">            biomeColors[i] = SColor.lerpFloatColors(similarColors[i % similarColors.length], similarColors[(i * 5 + 3) % similarColors.length], 0.5f);</span>
-<span class="source-line-no">250</span><span id="line.250">        }</span>
-<span class="source-line-no">251</span><span id="line.251">        biomeColors[14] = WorldMapView.emptyColor;</span>
-<span class="source-line-no">252</span><span id="line.252">        float b, diff;</span>
-<span class="source-line-no">253</span><span id="line.253">        for (int i = 0; i &lt; 60; i++) {</span>
-<span class="source-line-no">254</span><span id="line.254">            b = BIOME_TABLE[i];</span>
-<span class="source-line-no">255</span><span id="line.255">            diff = ((b % 1.0f) - 0.48f) * 0.27f;</span>
-<span class="source-line-no">256</span><span id="line.256">            BIOME_COLOR_TABLE[i] = b = (diff &gt;= 0)</span>
-<span class="source-line-no">257</span><span id="line.257">                    ? SColor.lightenFloat(biomeColors[(int)b], diff)</span>
-<span class="source-line-no">258</span><span id="line.258">                    : SColor.darkenFloat(biomeColors[(int)b], -diff);</span>
-<span class="source-line-no">259</span><span id="line.259">            BIOME_DARK_COLOR_TABLE[i] = SColor.darkenFloat(b, 0.08f);</span>
-<span class="source-line-no">260</span><span id="line.260">        }</span>
-<span class="source-line-no">261</span><span id="line.261">        BIOME_COLOR_TABLE[60] = BIOME_DARK_COLOR_TABLE[60] = biomeColors[14];</span>
-<span class="source-line-no">262</span><span id="line.262">        biomeColors[ 0] = WorldMapView.desertColor;</span>
-<span class="source-line-no">263</span><span id="line.263">        biomeColors[ 1] = WorldMapView.savannaColor;</span>
-<span class="source-line-no">264</span><span id="line.264">        biomeColors[ 2] = WorldMapView.tropicalRainforestColor;</span>
-<span class="source-line-no">265</span><span id="line.265">        biomeColors[ 3] = WorldMapView.grasslandColor;</span>
-<span class="source-line-no">266</span><span id="line.266">        biomeColors[ 4] = WorldMapView.woodlandColor;</span>
-<span class="source-line-no">267</span><span id="line.267">        biomeColors[ 5] = WorldMapView.seasonalForestColor;</span>
-<span class="source-line-no">268</span><span id="line.268">        biomeColors[ 6] = WorldMapView.temperateRainforestColor;</span>
-<span class="source-line-no">269</span><span id="line.269">        biomeColors[ 7] = WorldMapView.borealForestColor;</span>
-<span class="source-line-no">270</span><span id="line.270">        biomeColors[ 8] = WorldMapView.tundraColor;</span>
-<span class="source-line-no">271</span><span id="line.271">        biomeColors[ 9] = WorldMapView.iceColor;</span>
-<span class="source-line-no">272</span><span id="line.272">        biomeColors[10] = WorldMapView.beachColor;</span>
-<span class="source-line-no">273</span><span id="line.273">        biomeColors[11] = WorldMapView.rockyColor;</span>
-<span class="source-line-no">274</span><span id="line.274">        biomeColors[12] = WorldMapView.shallowColor;</span>
-<span class="source-line-no">275</span><span id="line.275">        biomeColors[13] = WorldMapView.deepColor;</span>
-<span class="source-line-no">276</span><span id="line.276">        biomeColors[14] = WorldMapView.emptyColor;</span>
-<span class="source-line-no">277</span><span id="line.277">    }</span>
-<span class="source-line-no">278</span><span id="line.278"></span>
-<span class="source-line-no">279</span><span id="line.279">    public void generate()</span>
-<span class="source-line-no">280</span><span id="line.280">    {</span>
-<span class="source-line-no">281</span><span id="line.281">//        generate(world.seedA, world.seedB, 0.9 + NumberTools.formCurvedDouble((world.seedA ^ 0x123456789ABCDL) * 0x12345689ABL ^ world.seedB) * 0.15,</span>
-<span class="source-line-no">282</span><span id="line.282">//                DiverRNG.determineDouble(world.seedB * 0x12345L + 0x54321L ^ world.seedA) * 0.2 + 1.0);</span>
-<span class="source-line-no">283</span><span id="line.283">        generate(world.seedA, world.seedB, 1.0 + NumberTools.formCurvedDouble((world.seedA ^ 0x123456789ABCDL) * 0x12345689ABL ^ world.seedB) * 0.25,</span>
-<span class="source-line-no">284</span><span id="line.284">                DiverRNG.determineDouble(world.seedB * 0x12345L + 0x54321L ^ world.seedA) * 0.375 + 1.0625);</span>
-<span class="source-line-no">285</span><span id="line.285">    }</span>
-<span class="source-line-no">286</span><span id="line.286">    public void generate(double landMod, double heatMod)</span>
-<span class="source-line-no">287</span><span id="line.287">    {</span>
-<span class="source-line-no">288</span><span id="line.288">        generate(world.seedA, world.seedB, landMod, heatMod);</span>
-<span class="source-line-no">289</span><span id="line.289">    }</span>
-<span class="source-line-no">290</span><span id="line.290">    </span>
-<span class="source-line-no">291</span><span id="line.291">    public void generate(int seedA, int seedB, double landMod, double heatMod) {</span>
-<span class="source-line-no">292</span><span id="line.292">        long seed = (long) seedB &lt;&lt; 32 | (seedA &amp; 0xFFFFFFFFL);</span>
-<span class="source-line-no">293</span><span id="line.293">        world.generate(landMod, heatMod, seed);</span>
-<span class="source-line-no">294</span><span id="line.294">        biomeMapper.makeBiomes(world);</span>
-<span class="source-line-no">295</span><span id="line.295">    }</span>
-<span class="source-line-no">296</span><span id="line.296">    public float[][] show()</span>
-<span class="source-line-no">297</span><span id="line.297">    {</span>
-<span class="source-line-no">298</span><span id="line.298">        int hc, tc, bc;</span>
-<span class="source-line-no">299</span><span id="line.299">        final int[][] heightCodeData = world.heightCodeData;</span>
-<span class="source-line-no">300</span><span id="line.300">        double[][] heightData = world.heightData;</span>
-<span class="source-line-no">301</span><span id="line.301">        int[][] heatCodeData = biomeMapper.heatCodeData;</span>
-<span class="source-line-no">302</span><span id="line.302">        int[][] biomeCodeData = biomeMapper.biomeCodeData;</span>
-<span class="source-line-no">303</span><span id="line.303"></span>
-<span class="source-line-no">304</span><span id="line.304">        for (int y = 0; y &lt; height; y++) {</span>
-<span class="source-line-no">305</span><span id="line.305">            PER_CELL:</span>
-<span class="source-line-no">306</span><span id="line.306">            for (int x = 0; x &lt; width; x++) {</span>
-<span class="source-line-no">307</span><span id="line.307">                hc = heightCodeData[x][y];</span>
-<span class="source-line-no">308</span><span id="line.308">                if(hc == 1000)</span>
-<span class="source-line-no">309</span><span id="line.309">                {</span>
-<span class="source-line-no">310</span><span id="line.310">                    colorMap[x][y] = emptyColor;</span>
-<span class="source-line-no">311</span><span id="line.311">                    continue;</span>
-<span class="source-line-no">312</span><span id="line.312">                }</span>
-<span class="source-line-no">313</span><span id="line.313">                tc = heatCodeData[x][y];</span>
-<span class="source-line-no">314</span><span id="line.314">                bc = biomeCodeData[x][y];</span>
-<span class="source-line-no">315</span><span id="line.315">                if(tc == 0)</span>
-<span class="source-line-no">316</span><span id="line.316">                {</span>
-<span class="source-line-no">317</span><span id="line.317">                    switch (hc)</span>
-<span class="source-line-no">318</span><span id="line.318">                    {</span>
-<span class="source-line-no">319</span><span id="line.319">                        case 0:</span>
-<span class="source-line-no">320</span><span id="line.320">                        case 1:</span>
-<span class="source-line-no">321</span><span id="line.321">                        case 2:</span>
-<span class="source-line-no">322</span><span id="line.322">                        case 3:</span>
-<span class="source-line-no">323</span><span id="line.323">                            colorMap[x][y] = SColor.lerpFloatColors(BIOME_COLOR_TABLE[50], BIOME_COLOR_TABLE[12],</span>
-<span class="source-line-no">324</span><span id="line.324">                                    (float) ((heightData[x][y] - -1.0) / (WorldMapGenerator.sandLower - -1.0)));</span>
-<span class="source-line-no">325</span><span id="line.325">                            continue PER_CELL;</span>
-<span class="source-line-no">326</span><span id="line.326">                        case 4:</span>
-<span class="source-line-no">327</span><span id="line.327">                            colorMap[x][y] = SColor.lerpFloatColors(BIOME_COLOR_TABLE[0], BIOME_COLOR_TABLE[12],</span>
-<span class="source-line-no">328</span><span id="line.328">                                    (float) ((heightData[x][y] - WorldMapGenerator.sandLower) / (WorldMapGenerator.sandUpper - WorldMapGenerator.sandLower)));</span>
-<span class="source-line-no">329</span><span id="line.329">                            continue PER_CELL;</span>
-<span class="source-line-no">330</span><span id="line.330">                    }</span>
-<span class="source-line-no">331</span><span id="line.331">                }</span>
-<span class="source-line-no">332</span><span id="line.332">                switch (hc) {</span>
-<span class="source-line-no">333</span><span id="line.333">                    case 0:</span>
-<span class="source-line-no">334</span><span id="line.334">                    case 1:</span>
-<span class="source-line-no">335</span><span id="line.335">                    case 2:</span>
-<span class="source-line-no">336</span><span id="line.336">                    case 3:</span>
-<span class="source-line-no">337</span><span id="line.337">                        colorMap[x][y] = SColor.lerpFloatColors(</span>
-<span class="source-line-no">338</span><span id="line.338">                                BIOME_COLOR_TABLE[56], BIOME_COLOR_TABLE[43],</span>
-<span class="source-line-no">339</span><span id="line.339">                                (MathUtils.clamp((float) (((heightData[x][y] + 0.06) * 8.0) / (WorldMapGenerator.sandLower + 1.0)), 0f, 1f)));</span>
-<span class="source-line-no">340</span><span id="line.340">                        break;</span>
-<span class="source-line-no">341</span><span id="line.341">                    default:</span>
-<span class="source-line-no">342</span><span id="line.342">                        colorMap[x][y] = SColor.lerpFloatColors(BIOME_COLOR_TABLE[biomeMapper.extractPartB(bc)],</span>
-<span class="source-line-no">343</span><span id="line.343">                                BIOME_DARK_COLOR_TABLE[biomeMapper.extractPartA(bc)], biomeMapper.extractMixAmount(bc));</span>
-<span class="source-line-no">344</span><span id="line.344">                }</span>
-<span class="source-line-no">345</span><span id="line.345">            }</span>
-<span class="source-line-no">346</span><span id="line.346">        }</span>
-<span class="source-line-no">347</span><span id="line.347">        </span>
-<span class="source-line-no">348</span><span id="line.348">        return colorMap;</span>
-<span class="source-line-no">349</span><span id="line.349">    }</span>
-<span class="source-line-no">350</span><span id="line.350">}</span>
+<span class="source-line-no">100</span><span id="line.100">    public static float deepColor = SColor.floatGet(8 &lt;&lt; 24 | 64 &lt;&lt; 16 | 76 &lt;&lt; 8 | 255);</span>
+<span class="source-line-no">101</span><span id="line.101">    public static float shallowColor = SColor.floatGet(24 &lt;&lt; 24 | 120 &lt;&lt; 16 | 128 &lt;&lt; 8 | 255);</span>
+<span class="source-line-no">102</span><span id="line.102">//    public static float shallowColor = SColor.floatGet(20 &lt;&lt; 24 | 145 &lt;&lt; 16 | 197 &lt;&lt; 8 | 255);</span>
+<span class="source-line-no">103</span><span id="line.103">    public static float foamColor = SColor.floatGet(61 &lt;&lt; 24 | 162 &lt;&lt; 16 | 215 &lt;&lt; 8 | 255);</span>
+<span class="source-line-no">104</span><span id="line.104"></span>
+<span class="source-line-no">105</span><span id="line.105">    protected float[] biomeColors = {</span>
+<span class="source-line-no">106</span><span id="line.106">            desertColor,</span>
+<span class="source-line-no">107</span><span id="line.107">            savannaColor,</span>
+<span class="source-line-no">108</span><span id="line.108">            tropicalRainforestColor,</span>
+<span class="source-line-no">109</span><span id="line.109">            grasslandColor,</span>
+<span class="source-line-no">110</span><span id="line.110">            woodlandColor,</span>
+<span class="source-line-no">111</span><span id="line.111">            seasonalForestColor,</span>
+<span class="source-line-no">112</span><span id="line.112">            temperateRainforestColor,</span>
+<span class="source-line-no">113</span><span id="line.113">            borealForestColor,</span>
+<span class="source-line-no">114</span><span id="line.114">            tundraColor,</span>
+<span class="source-line-no">115</span><span id="line.115">            iceColor,</span>
+<span class="source-line-no">116</span><span id="line.116">            beachColor,</span>
+<span class="source-line-no">117</span><span id="line.117">            rockyColor,</span>
+<span class="source-line-no">118</span><span id="line.118">            shallowColor,</span>
+<span class="source-line-no">119</span><span id="line.119">            deepColor,</span>
+<span class="source-line-no">120</span><span id="line.120">            emptyColor</span>
+<span class="source-line-no">121</span><span id="line.121">    };</span>
+<span class="source-line-no">122</span><span id="line.122"></span>
+<span class="source-line-no">123</span><span id="line.123">    public final static float[] BIOME_TABLE = {</span>
+<span class="source-line-no">124</span><span id="line.124">            //COLDEST   //COLDER      //COLD               //HOT                     //HOTTER                 //HOTTEST</span>
+<span class="source-line-no">125</span><span id="line.125">            Ice+0.85f,  Ice+0.65f,    Grassland+0.9f,      Desert+0.75f,             Desert+0.8f,             Desert+0.85f,            //DRYEST</span>
+<span class="source-line-no">126</span><span id="line.126">            Ice+0.7f,   Tundra+0.9f,  Grassland+0.6f,      Grassland+0.3f,           Desert+0.65f,            Desert+0.7f,             //DRYER</span>
+<span class="source-line-no">127</span><span id="line.127">            Ice+0.55f,  Tundra+0.7f,  Woodland+0.4f,       Woodland+0.6f,            Savanna+0.8f,            Desert+0.6f,             //DRY</span>
+<span class="source-line-no">128</span><span id="line.128">            Ice+0.4f,   Tundra+0.5f,  SeasonalForest+0.3f, SeasonalForest+0.5f,      Savanna+0.6f,            Savanna+0.4f,            //WET</span>
+<span class="source-line-no">129</span><span id="line.129">            Ice+0.2f,   Tundra+0.3f,  BorealForest+0.35f,  TemperateRainforest+0.4f, TropicalRainforest+0.6f, Savanna+0.2f,            //WETTER</span>
+<span class="source-line-no">130</span><span id="line.130">            Ice+0.0f,   BorealForest, BorealForest+0.15f,  TemperateRainforest+0.2f, TropicalRainforest+0.4f, TropicalRainforest+0.2f, //WETTEST</span>
+<span class="source-line-no">131</span><span id="line.131">            Rocky+0.9f, Rocky+0.6f,   Beach+0.4f,          Beach+0.55f,              Beach+0.75f,             Beach+0.9f,              //COASTS</span>
+<span class="source-line-no">132</span><span id="line.132">            Ice+0.3f,   Shallow+0.9f, Shallow+0.75f,       Shallow+0.6f,             Shallow+0.5f,            Shallow+0.4f,            //RIVERS</span>
+<span class="source-line-no">133</span><span id="line.133">            Ice+0.2f,   Shallow+0.9f, Shallow+0.65f,       Shallow+0.5f,             Shallow+0.4f,            Shallow+0.3f,            //LAKES</span>
+<span class="source-line-no">134</span><span id="line.134">            Ocean+0.9f, Ocean+0.75f,  Ocean+0.6f,          Ocean+0.45f,              Ocean+0.3f,              Ocean+0.15f,             //OCEANS</span>
+<span class="source-line-no">135</span><span id="line.135">            Empty                                                                                                                      //SPACE</span>
+<span class="source-line-no">136</span><span id="line.136">    };</span>
+<span class="source-line-no">137</span><span id="line.137">    public final float[] BIOME_COLOR_TABLE = new float[61], BIOME_DARK_COLOR_TABLE = new float[61];</span>
+<span class="source-line-no">138</span><span id="line.138">    </span>
+<span class="source-line-no">139</span><span id="line.139">    public void initialize()</span>
+<span class="source-line-no">140</span><span id="line.140">    {</span>
+<span class="source-line-no">141</span><span id="line.141">        initialize(0f, 0f, 0f, 1f);</span>
+<span class="source-line-no">142</span><span id="line.142">    }</span>
+<span class="source-line-no">143</span><span id="line.143">    </span>
+<span class="source-line-no">144</span><span id="line.144">    public void initialize(float hue, float saturation, float brightness, float contrast)</span>
+<span class="source-line-no">145</span><span id="line.145">    {</span>
+<span class="source-line-no">146</span><span id="line.146">        float b, diff;</span>
+<span class="source-line-no">147</span><span id="line.147">        for (int i = 0; i &lt; 60; i++) {</span>
+<span class="source-line-no">148</span><span id="line.148">            b = BIOME_TABLE[i];</span>
+<span class="source-line-no">149</span><span id="line.149">            diff = ((b % 1.0f) - 0.48f) * 0.27f * contrast;</span>
+<span class="source-line-no">150</span><span id="line.150">            BIOME_COLOR_TABLE[i] = b = SColor.toEditedFloat((diff &gt;= 0)</span>
+<span class="source-line-no">151</span><span id="line.151">                    ? SColor.lightenFloat(biomeColors[(int)b], diff)</span>
+<span class="source-line-no">152</span><span id="line.152">                    : SColor.darkenFloat(biomeColors[(int)b], -diff), hue, saturation, brightness, 0f);</span>
+<span class="source-line-no">153</span><span id="line.153">            BIOME_DARK_COLOR_TABLE[i] = SColor.darkenFloat(b, 0.08f);</span>
+<span class="source-line-no">154</span><span id="line.154">        }</span>
+<span class="source-line-no">155</span><span id="line.155">        BIOME_COLOR_TABLE[60] = BIOME_DARK_COLOR_TABLE[60] = emptyColor;</span>
+<span class="source-line-no">156</span><span id="line.156">    }</span>
+<span class="source-line-no">157</span><span id="line.157"></span>
+<span class="source-line-no">158</span><span id="line.158">    /**</span>
+<span class="source-line-no">159</span><span id="line.159">     * Initializes the colors to use for each biome (these are almost always mixed with other biome colors in practice).</span>
+<span class="source-line-no">160</span><span id="line.160">     * Each parameter may be null to use the default for an Earth-like world; otherwise it should be a libGDX</span>
+<span class="source-line-no">161</span><span id="line.161">     * {@link Color} or some subclass, like {@link SColor}. All non-null parameters should probably be fully opaque,</span>
+<span class="source-line-no">162</span><span id="line.162">     * except {@code emptyColor}, which is only used for world maps that show empty space (like a globe, as produced by</span>
+<span class="source-line-no">163</span><span id="line.163">     * {@link WorldMapGenerator.RotatingSpaceMap}).</span>
+<span class="source-line-no">164</span><span id="line.164">     * @param desertColor hot, dry, barren land; may be sandy, but many real-world deserts don't have much sand</span>
+<span class="source-line-no">165</span><span id="line.165">     * @param savannaColor hot, mostly-dry land with some parched vegetation; also called scrub or chaparral</span>
+<span class="source-line-no">166</span><span id="line.166">     * @param tropicalRainforestColor hot, extremely wet forests with dense rich vegetation</span>
+<span class="source-line-no">167</span><span id="line.167">     * @param grasslandColor prairies that are dry and usually wind-swept, but not especially hot or cold</span>
+<span class="source-line-no">168</span><span id="line.168">     * @param woodlandColor part-way between a prairie and a forest; not especially hot or cold</span>
+<span class="source-line-no">169</span><span id="line.169">     * @param seasonalForestColor forest that becomes barren in winter (deciduous trees); not especially hot or cold</span>
+<span class="source-line-no">170</span><span id="line.170">     * @param temperateRainforestColor forest that tends to be slightly warm but very wet</span>
+<span class="source-line-no">171</span><span id="line.171">     * @param borealForestColor forest that tends to be cold and very wet</span>
+<span class="source-line-no">172</span><span id="line.172">     * @param tundraColor very cold plains that still have some low-lying vegetation; also called taiga </span>
+<span class="source-line-no">173</span><span id="line.173">     * @param iceColor cold barren land covered in permafrost; also used for rivers and lakes that are frozen</span>
+<span class="source-line-no">174</span><span id="line.174">     * @param beachColor sandy or otherwise light-colored shorelines; here, these are more common in warmer places</span>
+<span class="source-line-no">175</span><span id="line.175">     * @param rockyColor rocky or otherwise rugged shorelines; here, these are more common in colder places</span>
+<span class="source-line-no">176</span><span id="line.176">     * @param shallowColor the color of very shallow water; will be mixed with {@code deepColor} to get most ocean colors</span>
+<span class="source-line-no">177</span><span id="line.177">     * @param deepColor the color of very deep water; will be mixed with {@code shallowColor} to get most ocean colors</span>
+<span class="source-line-no">178</span><span id="line.178">     * @param emptyColor the color used for empty space off the edge of the world map; may be transparent</span>
+<span class="source-line-no">179</span><span id="line.179">     */</span>
+<span class="source-line-no">180</span><span id="line.180">    public void initialize(</span>
+<span class="source-line-no">181</span><span id="line.181">            Color desertColor,</span>
+<span class="source-line-no">182</span><span id="line.182">            Color savannaColor,</span>
+<span class="source-line-no">183</span><span id="line.183">            Color tropicalRainforestColor,</span>
+<span class="source-line-no">184</span><span id="line.184">            Color grasslandColor,</span>
+<span class="source-line-no">185</span><span id="line.185">            Color woodlandColor,</span>
+<span class="source-line-no">186</span><span id="line.186">            Color seasonalForestColor,</span>
+<span class="source-line-no">187</span><span id="line.187">            Color temperateRainforestColor,</span>
+<span class="source-line-no">188</span><span id="line.188">            Color borealForestColor,</span>
+<span class="source-line-no">189</span><span id="line.189">            Color tundraColor,</span>
+<span class="source-line-no">190</span><span id="line.190">            Color iceColor,</span>
+<span class="source-line-no">191</span><span id="line.191">            Color beachColor,</span>
+<span class="source-line-no">192</span><span id="line.192">            Color rockyColor,</span>
+<span class="source-line-no">193</span><span id="line.193">            Color shallowColor,</span>
+<span class="source-line-no">194</span><span id="line.194">            Color deepColor,</span>
+<span class="source-line-no">195</span><span id="line.195">            Color emptyColor</span>
+<span class="source-line-no">196</span><span id="line.196">    )</span>
+<span class="source-line-no">197</span><span id="line.197">    {</span>
+<span class="source-line-no">198</span><span id="line.198">        biomeColors[ 0] = desertColor == null ? WorldMapView.desertColor : desertColor.toFloatBits();</span>
+<span class="source-line-no">199</span><span id="line.199">        biomeColors[ 1] = savannaColor == null ? WorldMapView.savannaColor : savannaColor.toFloatBits();</span>
+<span class="source-line-no">200</span><span id="line.200">        biomeColors[ 2] = tropicalRainforestColor == null ? WorldMapView.tropicalRainforestColor : tropicalRainforestColor.toFloatBits();</span>
+<span class="source-line-no">201</span><span id="line.201">        biomeColors[ 3] = grasslandColor == null ? WorldMapView.grasslandColor : grasslandColor.toFloatBits();</span>
+<span class="source-line-no">202</span><span id="line.202">        biomeColors[ 4] = woodlandColor == null ? WorldMapView.woodlandColor : woodlandColor.toFloatBits();</span>
+<span class="source-line-no">203</span><span id="line.203">        biomeColors[ 5] = seasonalForestColor == null ? WorldMapView.seasonalForestColor : seasonalForestColor.toFloatBits();</span>
+<span class="source-line-no">204</span><span id="line.204">        biomeColors[ 6] = temperateRainforestColor == null ? WorldMapView.temperateRainforestColor : temperateRainforestColor.toFloatBits();</span>
+<span class="source-line-no">205</span><span id="line.205">        biomeColors[ 7] = borealForestColor == null ? WorldMapView.borealForestColor : borealForestColor.toFloatBits();</span>
+<span class="source-line-no">206</span><span id="line.206">        biomeColors[ 8] = tundraColor == null ? WorldMapView.tundraColor : tundraColor.toFloatBits();</span>
+<span class="source-line-no">207</span><span id="line.207">        biomeColors[ 9] = iceColor == null ? WorldMapView.iceColor : iceColor.toFloatBits();</span>
+<span class="source-line-no">208</span><span id="line.208">        biomeColors[10] = beachColor == null ? WorldMapView.beachColor : beachColor.toFloatBits();</span>
+<span class="source-line-no">209</span><span id="line.209">        biomeColors[11] = rockyColor == null ? WorldMapView.rockyColor : rockyColor.toFloatBits();</span>
+<span class="source-line-no">210</span><span id="line.210">        biomeColors[12] = shallowColor == null ? WorldMapView.shallowColor : shallowColor.toFloatBits();</span>
+<span class="source-line-no">211</span><span id="line.211">        biomeColors[13] = deepColor == null ? WorldMapView.deepColor : deepColor.toFloatBits();</span>
+<span class="source-line-no">212</span><span id="line.212">        biomeColors[14] = emptyColor == null ? WorldMapView.emptyColor : emptyColor.toFloatBits();</span>
+<span class="source-line-no">213</span><span id="line.213">        float b, diff;</span>
+<span class="source-line-no">214</span><span id="line.214">        for (int i = 0; i &lt; 60; i++) {</span>
+<span class="source-line-no">215</span><span id="line.215">            b = BIOME_TABLE[i];</span>
+<span class="source-line-no">216</span><span id="line.216">            diff = ((b % 1.0f) - 0.48f) * 0.27f;</span>
+<span class="source-line-no">217</span><span id="line.217">            BIOME_COLOR_TABLE[i] = b = (diff &gt;= 0)</span>
+<span class="source-line-no">218</span><span id="line.218">                    ? SColor.lightenFloat(biomeColors[(int)b], diff)</span>
+<span class="source-line-no">219</span><span id="line.219">                    : SColor.darkenFloat(biomeColors[(int)b], -diff);</span>
+<span class="source-line-no">220</span><span id="line.220">            BIOME_DARK_COLOR_TABLE[i] = SColor.darkenFloat(b, 0.08f);</span>
+<span class="source-line-no">221</span><span id="line.221">        }</span>
+<span class="source-line-no">222</span><span id="line.222">        BIOME_COLOR_TABLE[60] = BIOME_DARK_COLOR_TABLE[60] = biomeColors[14];</span>
+<span class="source-line-no">223</span><span id="line.223">        biomeColors[ 0] = WorldMapView.desertColor;</span>
+<span class="source-line-no">224</span><span id="line.224">        biomeColors[ 1] = WorldMapView.savannaColor;</span>
+<span class="source-line-no">225</span><span id="line.225">        biomeColors[ 2] = WorldMapView.tropicalRainforestColor;</span>
+<span class="source-line-no">226</span><span id="line.226">        biomeColors[ 3] = WorldMapView.grasslandColor;</span>
+<span class="source-line-no">227</span><span id="line.227">        biomeColors[ 4] = WorldMapView.woodlandColor;</span>
+<span class="source-line-no">228</span><span id="line.228">        biomeColors[ 5] = WorldMapView.seasonalForestColor;</span>
+<span class="source-line-no">229</span><span id="line.229">        biomeColors[ 6] = WorldMapView.temperateRainforestColor;</span>
+<span class="source-line-no">230</span><span id="line.230">        biomeColors[ 7] = WorldMapView.borealForestColor;</span>
+<span class="source-line-no">231</span><span id="line.231">        biomeColors[ 8] = WorldMapView.tundraColor;</span>
+<span class="source-line-no">232</span><span id="line.232">        biomeColors[ 9] = WorldMapView.iceColor;</span>
+<span class="source-line-no">233</span><span id="line.233">        biomeColors[10] = WorldMapView.beachColor;</span>
+<span class="source-line-no">234</span><span id="line.234">        biomeColors[11] = WorldMapView.rockyColor;</span>
+<span class="source-line-no">235</span><span id="line.235">        biomeColors[12] = WorldMapView.shallowColor;</span>
+<span class="source-line-no">236</span><span id="line.236">        biomeColors[13] = WorldMapView.deepColor;</span>
+<span class="source-line-no">237</span><span id="line.237">        biomeColors[14] = WorldMapView.emptyColor;</span>
+<span class="source-line-no">238</span><span id="line.238">    }</span>
+<span class="source-line-no">239</span><span id="line.239"></span>
+<span class="source-line-no">240</span><span id="line.240">    /**</span>
+<span class="source-line-no">241</span><span id="line.241">     * Initializes the colors to use in some combination for all biomes, without regard for what the biome really is.</span>
+<span class="source-line-no">242</span><span id="line.242">     * There should be at least one packed float color given in similarColors, but there can be many of them.</span>
+<span class="source-line-no">243</span><span id="line.243">     * @param similarColors an array or vararg of packed float colors with at least one element</span>
+<span class="source-line-no">244</span><span id="line.244">     */</span>
+<span class="source-line-no">245</span><span id="line.245">    public void match(</span>
+<span class="source-line-no">246</span><span id="line.246">            float... similarColors</span>
+<span class="source-line-no">247</span><span id="line.247">    )</span>
+<span class="source-line-no">248</span><span id="line.248">    {</span>
+<span class="source-line-no">249</span><span id="line.249">        for (int i = 0; i &lt; 14; i++) {</span>
+<span class="source-line-no">250</span><span id="line.250">            biomeColors[i] = SColor.lerpFloatColors(similarColors[i % similarColors.length], similarColors[(i * 5 + 3) % similarColors.length], 0.5f);</span>
+<span class="source-line-no">251</span><span id="line.251">        }</span>
+<span class="source-line-no">252</span><span id="line.252">        biomeColors[14] = WorldMapView.emptyColor;</span>
+<span class="source-line-no">253</span><span id="line.253">        float b, diff;</span>
+<span class="source-line-no">254</span><span id="line.254">        for (int i = 0; i &lt; 60; i++) {</span>
+<span class="source-line-no">255</span><span id="line.255">            b = BIOME_TABLE[i];</span>
+<span class="source-line-no">256</span><span id="line.256">            diff = ((b % 1.0f) - 0.48f) * 0.27f;</span>
+<span class="source-line-no">257</span><span id="line.257">            BIOME_COLOR_TABLE[i] = b = (diff &gt;= 0)</span>
+<span class="source-line-no">258</span><span id="line.258">                    ? SColor.lightenFloat(biomeColors[(int)b], diff)</span>
+<span class="source-line-no">259</span><span id="line.259">                    : SColor.darkenFloat(biomeColors[(int)b], -diff);</span>
+<span class="source-line-no">260</span><span id="line.260">            BIOME_DARK_COLOR_TABLE[i] = SColor.darkenFloat(b, 0.08f);</span>
+<span class="source-line-no">261</span><span id="line.261">        }</span>
+<span class="source-line-no">262</span><span id="line.262">        BIOME_COLOR_TABLE[60] = BIOME_DARK_COLOR_TABLE[60] = biomeColors[14];</span>
+<span class="source-line-no">263</span><span id="line.263">        biomeColors[ 0] = WorldMapView.desertColor;</span>
+<span class="source-line-no">264</span><span id="line.264">        biomeColors[ 1] = WorldMapView.savannaColor;</span>
+<span class="source-line-no">265</span><span id="line.265">        biomeColors[ 2] = WorldMapView.tropicalRainforestColor;</span>
+<span class="source-line-no">266</span><span id="line.266">        biomeColors[ 3] = WorldMapView.grasslandColor;</span>
+<span class="source-line-no">267</span><span id="line.267">        biomeColors[ 4] = WorldMapView.woodlandColor;</span>
+<span class="source-line-no">268</span><span id="line.268">        biomeColors[ 5] = WorldMapView.seasonalForestColor;</span>
+<span class="source-line-no">269</span><span id="line.269">        biomeColors[ 6] = WorldMapView.temperateRainforestColor;</span>
+<span class="source-line-no">270</span><span id="line.270">        biomeColors[ 7] = WorldMapView.borealForestColor;</span>
+<span class="source-line-no">271</span><span id="line.271">        biomeColors[ 8] = WorldMapView.tundraColor;</span>
+<span class="source-line-no">272</span><span id="line.272">        biomeColors[ 9] = WorldMapView.iceColor;</span>
+<span class="source-line-no">273</span><span id="line.273">        biomeColors[10] = WorldMapView.beachColor;</span>
+<span class="source-line-no">274</span><span id="line.274">        biomeColors[11] = WorldMapView.rockyColor;</span>
+<span class="source-line-no">275</span><span id="line.275">        biomeColors[12] = WorldMapView.shallowColor;</span>
+<span class="source-line-no">276</span><span id="line.276">        biomeColors[13] = WorldMapView.deepColor;</span>
+<span class="source-line-no">277</span><span id="line.277">        biomeColors[14] = WorldMapView.emptyColor;</span>
+<span class="source-line-no">278</span><span id="line.278">    }</span>
+<span class="source-line-no">279</span><span id="line.279"></span>
+<span class="source-line-no">280</span><span id="line.280">    public void generate()</span>
+<span class="source-line-no">281</span><span id="line.281">    {</span>
+<span class="source-line-no">282</span><span id="line.282">//        generate(world.seedA, world.seedB, 0.9 + NumberTools.formCurvedDouble((world.seedA ^ 0x123456789ABCDL) * 0x12345689ABL ^ world.seedB) * 0.15,</span>
+<span class="source-line-no">283</span><span id="line.283">//                DiverRNG.determineDouble(world.seedB * 0x12345L + 0x54321L ^ world.seedA) * 0.2 + 1.0);</span>
+<span class="source-line-no">284</span><span id="line.284">        generate(world.seedA, world.seedB, 1.0 + NumberTools.formCurvedDouble((world.seedA ^ 0x123456789ABCDL) * 0x12345689ABL ^ world.seedB) * 0.25,</span>
+<span class="source-line-no">285</span><span id="line.285">                DiverRNG.determineDouble(world.seedB * 0x12345L + 0x54321L ^ world.seedA) * 0.375 + 1.0625);</span>
+<span class="source-line-no">286</span><span id="line.286">    }</span>
+<span class="source-line-no">287</span><span id="line.287">    public void generate(double landMod, double heatMod)</span>
+<span class="source-line-no">288</span><span id="line.288">    {</span>
+<span class="source-line-no">289</span><span id="line.289">        generate(world.seedA, world.seedB, landMod, heatMod);</span>
+<span class="source-line-no">290</span><span id="line.290">    }</span>
+<span class="source-line-no">291</span><span id="line.291">    </span>
+<span class="source-line-no">292</span><span id="line.292">    public void generate(int seedA, int seedB, double landMod, double heatMod) {</span>
+<span class="source-line-no">293</span><span id="line.293">        long seed = (long) seedB &lt;&lt; 32 | (seedA &amp; 0xFFFFFFFFL);</span>
+<span class="source-line-no">294</span><span id="line.294">        world.generate(landMod, heatMod, seed);</span>
+<span class="source-line-no">295</span><span id="line.295">        biomeMapper.makeBiomes(world);</span>
+<span class="source-line-no">296</span><span id="line.296">    }</span>
+<span class="source-line-no">297</span><span id="line.297">    public float[][] show()</span>
+<span class="source-line-no">298</span><span id="line.298">    {</span>
+<span class="source-line-no">299</span><span id="line.299">        int hc, tc, bc;</span>
+<span class="source-line-no">300</span><span id="line.300">        final int[][] heightCodeData = world.heightCodeData;</span>
+<span class="source-line-no">301</span><span id="line.301">        double[][] heightData = world.heightData;</span>
+<span class="source-line-no">302</span><span id="line.302">        int[][] heatCodeData = biomeMapper.heatCodeData;</span>
+<span class="source-line-no">303</span><span id="line.303">        int[][] biomeCodeData = biomeMapper.biomeCodeData;</span>
+<span class="source-line-no">304</span><span id="line.304"></span>
+<span class="source-line-no">305</span><span id="line.305">        for (int y = 0; y &lt; height; y++) {</span>
+<span class="source-line-no">306</span><span id="line.306">            PER_CELL:</span>
+<span class="source-line-no">307</span><span id="line.307">            for (int x = 0; x &lt; width; x++) {</span>
+<span class="source-line-no">308</span><span id="line.308">                hc = heightCodeData[x][y];</span>
+<span class="source-line-no">309</span><span id="line.309">                if(hc == 1000)</span>
+<span class="source-line-no">310</span><span id="line.310">                {</span>
+<span class="source-line-no">311</span><span id="line.311">                    colorMap[x][y] = emptyColor;</span>
+<span class="source-line-no">312</span><span id="line.312">                    continue;</span>
+<span class="source-line-no">313</span><span id="line.313">                }</span>
+<span class="source-line-no">314</span><span id="line.314">                tc = heatCodeData[x][y];</span>
+<span class="source-line-no">315</span><span id="line.315">                bc = biomeCodeData[x][y];</span>
+<span class="source-line-no">316</span><span id="line.316">                if(tc == 0)</span>
+<span class="source-line-no">317</span><span id="line.317">                {</span>
+<span class="source-line-no">318</span><span id="line.318">                    switch (hc)</span>
+<span class="source-line-no">319</span><span id="line.319">                    {</span>
+<span class="source-line-no">320</span><span id="line.320">                        case 0:</span>
+<span class="source-line-no">321</span><span id="line.321">                        case 1:</span>
+<span class="source-line-no">322</span><span id="line.322">                        case 2:</span>
+<span class="source-line-no">323</span><span id="line.323">                        case 3:</span>
+<span class="source-line-no">324</span><span id="line.324">                            colorMap[x][y] = SColor.lerpFloatColors(BIOME_COLOR_TABLE[50], BIOME_COLOR_TABLE[12],</span>
+<span class="source-line-no">325</span><span id="line.325">                                    (float) ((heightData[x][y] - -1.0) / (WorldMapGenerator.sandLower - -1.0)));</span>
+<span class="source-line-no">326</span><span id="line.326">                            continue PER_CELL;</span>
+<span class="source-line-no">327</span><span id="line.327">                        case 4:</span>
+<span class="source-line-no">328</span><span id="line.328">                            colorMap[x][y] = SColor.lerpFloatColors(BIOME_COLOR_TABLE[0], BIOME_COLOR_TABLE[12],</span>
+<span class="source-line-no">329</span><span id="line.329">                                    (float) ((heightData[x][y] - WorldMapGenerator.sandLower) / (WorldMapGenerator.sandUpper - WorldMapGenerator.sandLower)));</span>
+<span class="source-line-no">330</span><span id="line.330">                            continue PER_CELL;</span>
+<span class="source-line-no">331</span><span id="line.331">                    }</span>
+<span class="source-line-no">332</span><span id="line.332">                }</span>
+<span class="source-line-no">333</span><span id="line.333">                switch (hc) {</span>
+<span class="source-line-no">334</span><span id="line.334">                    case 0:</span>
+<span class="source-line-no">335</span><span id="line.335">                    case 1:</span>
+<span class="source-line-no">336</span><span id="line.336">                    case 2:</span>
+<span class="source-line-no">337</span><span id="line.337">                    case 3:</span>
+<span class="source-line-no">338</span><span id="line.338">                        colorMap[x][y] = SColor.lerpFloatColors(</span>
+<span class="source-line-no">339</span><span id="line.339">                                BIOME_COLOR_TABLE[56], BIOME_COLOR_TABLE[43],</span>
+<span class="source-line-no">340</span><span id="line.340">                                (MathUtils.clamp((float) (((heightData[x][y] + 0.1) * 7.0) / (WorldMapGenerator.sandLower + 1.0)), 0f, 1f)));</span>
+<span class="source-line-no">341</span><span id="line.341">                        break;</span>
+<span class="source-line-no">342</span><span id="line.342">                    default:</span>
+<span class="source-line-no">343</span><span id="line.343">                        colorMap[x][y] = SColor.lerpFloatColors(BIOME_COLOR_TABLE[biomeMapper.extractPartB(bc)],</span>
+<span class="source-line-no">344</span><span id="line.344">                                BIOME_DARK_COLOR_TABLE[biomeMapper.extractPartA(bc)], biomeMapper.extractMixAmount(bc));</span>
+<span class="source-line-no">345</span><span id="line.345">                }</span>
+<span class="source-line-no">346</span><span id="line.346">            }</span>
+<span class="source-line-no">347</span><span id="line.347">        }</span>
+<span class="source-line-no">348</span><span id="line.348">        </span>
+<span class="source-line-no">349</span><span id="line.349">        return colorMap;</span>
+<span class="source-line-no">350</span><span id="line.350">    }</span>
+<span class="source-line-no">351</span><span id="line.351">}</span>
 
 
 

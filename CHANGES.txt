@@ -1,4 +1,4 @@
-3.0.4-SNAPSHOT
+3.0.4
 Dependencies:
  - squidlib-util: RegExodus 0.1.12
  - squidlib: libGDX 1.10.0, anim8-gdx 0.2.10

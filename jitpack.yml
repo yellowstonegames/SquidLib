@@ -1,6 +1,6 @@
 jdk:
-  - openjdk15
+  - openjdk16
 install:
   - echo "Installing with Gradle"
   - chmod 755 gradlew
-  - ./gradlew clean install
+  - ./gradlew clean install -x signMavenPublication

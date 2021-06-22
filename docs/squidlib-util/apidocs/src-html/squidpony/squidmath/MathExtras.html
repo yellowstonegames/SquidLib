@@ -290,11 +290,11 @@
 <span class="source-line-no">277</span><span id="line.277">     */</span>
 <span class="source-line-no">278</span><span id="line.278">    public static long modularMultiplicativeInverse(long a)</span>
 <span class="source-line-no">279</span><span id="line.279">    {</span>
-<span class="source-line-no">280</span><span id="line.280">        long x = 2 ^ a * 3;    //  5 bits</span>
-<span class="source-line-no">281</span><span id="line.281">        x *= 2 - a * x;        // 10</span>
-<span class="source-line-no">282</span><span id="line.282">        x *= 2 - a * x;        // 20</span>
-<span class="source-line-no">283</span><span id="line.283">        x *= 2 - a * x;        // 40</span>
-<span class="source-line-no">284</span><span id="line.284">        x *= 2 - a * x;        // 80 -- 64 low bits</span>
+<span class="source-line-no">280</span><span id="line.280">        long x = 2 ^ a * 3;</span>
+<span class="source-line-no">281</span><span id="line.281">        x *= 2 - a * x;</span>
+<span class="source-line-no">282</span><span id="line.282">        x *= 2 - a * x;</span>
+<span class="source-line-no">283</span><span id="line.283">        x *= 2 - a * x;</span>
+<span class="source-line-no">284</span><span id="line.284">        x *= 2 - a * x;</span>
 <span class="source-line-no">285</span><span id="line.285">        return x;</span>
 <span class="source-line-no">286</span><span id="line.286">    }</span>
 <span class="source-line-no">287</span><span id="line.287"></span>
