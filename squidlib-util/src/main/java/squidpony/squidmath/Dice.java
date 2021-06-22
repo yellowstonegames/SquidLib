@@ -427,7 +427,28 @@ public class Dice implements Serializable {
         return prev;
     }
 
-    public IntVLA parseRollRuleInto(IntVLA into, String rollCode){
+    /**
+     * Parses the given dice roll notation in {@code rollCode} and returns the data needed to perform that roll, as an
+     * IntVLA called a roll rule here. You can roll such a roll rule with {@link #runRollRule(IntVLA)}, any number of
+     * times, and get different results on different rolls even with the same rule. This saves time spent and garbage
+     * produced parsing the roll code for each roll with {@link #roll(String)}.
+     * @param rollCode a String or other CharSequence holding dice roll notation, like "3d8+5" (see {@link #roll(String)})
+     * @return {@code into}, after the roll rule has been appended
+     */
+    public IntVLA parseRollRule(CharSequence rollCode) {
+        return parseRollRuleInto(new IntVLA(), rollCode);
+    }
+    /**
+     * Parses the given dice roll notation in {@code rollCode} and puts out the data needed to perform that roll into
+     * {@code into}, where {@code into} is usually an empty IntVLA, and is called a roll rule here. You can roll such a
+     * roll rule with {@link #runRollRule(IntVLA)}, any number of times, and get different results on different rolls
+     * even with the same rule. This saves time spent and garbage produced parsing the roll code for each roll with
+     * {@link #roll(String)}.
+     * @param into a usually-empty IntVLA that will have a roll rule appended to its contents
+     * @param rollCode a String or other CharSequence holding dice roll notation, like "3d8+5" (see {@link #roll(String)})
+     * @return {@code into}, after the roll rule has been appended
+     */
+    public IntVLA parseRollRuleInto(IntVLA into, CharSequence rollCode){
         mat2.setTarget(rollCode);
         int op = mat2.pattern().groupId("op");
         int sn = mat2.pattern().groupId("sn");
@@ -470,6 +491,13 @@ public class Dice implements Serializable {
         return into;
     }
 
+    /**
+     * Attempts to run the given roll rule stored in the given IntVLA, returning the result as if rolling the dice as it
+     * describes. You can use {@link #parseRollRule(CharSequence)} or {@link #parseRollRuleInto(IntVLA, CharSequence)}
+     * to get such a roll rule.
+     * @param rollRule an IntVLA as returned by {@link #parseRollRule(CharSequence)} or {@link #parseRollRuleInto(IntVLA, CharSequence)}
+     * @return the result of one roll of the given rule
+     */
     public int runRollRule(IntVLA rollRule) {
         if(rollRule == null || rollRule.isEmpty()) return 0;
         int currentResult, previousTotal = 0;
