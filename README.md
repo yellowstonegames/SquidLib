@@ -265,6 +265,31 @@ And if you use squidlib-extra, you also need
     <inherits name="squidlib-extra" />
 ```
 
+Building
+---
+
+Many users will only want to pull out some specific part of SquidLib and copy it into their game. This is quite
+understandable, given the size of SquidLib, and isn't discouraged at all. To do this, though, people often need to build
+and run the tests/demos in SquidLib to get an idea of what a piece of code does. This is also important if you want to
+submit a pull request to SquidLib.
+
+SquidLib currently uses Gradle to build. It had used Maven for years, but building on JitPack started to take longer and
+longer with Maven, while it is quite quick with Gradle -- builds would often time out at 20 minutes with Maven, while
+Gradle hasn't timed out yet with JitPack. The Maven build scripts can still be handy if you want to use Maven elsewhere,
+but for here, the Gradle scripts do a better job. If you use IntelliJ IDEA or possibly Android Studio, you can import
+the build.gradle file in the root of the parent project directory, and you may need to "Reload all Gradle Projects" by
+clicking the circling arrows in the upper corner of the Gradle sidebar (available by clicking "Gradle" on the right side
+of the IDEA window, or automatically done in Android Studio). No other steps should be needed now. In earlier versions
+of SquidLib, some special configuration was needed in IDEA specifically to set the `emu` folder as Excluded, but this
+should be done automatically by Gradle now. If you use Eclipse, the project should import OK if you use BuildShip Gradle
+(the default in current Eclipse, as far as I know). It may need the `emu` folder in `squidlib-util` to be excluded from
+the build, or it may be fine as-is; I don't use Eclipse. If you use NetBeans, good luck.
+
+Once imported, you can run tests via their main methods, which usually are available by the whole class in the
+`squidlib` display module, or if they are actual JUnit tests, you can run them individually or as a group.
+Many tests in `squidlib-util` look up the `squidpony.examples.TestConfiguration.PRINTING` variable to determine if they
+should print or not; this can be turned off to avoid the flood of output from some tests, but it usually defaults to on.
+
 What's Next
 ---
 
