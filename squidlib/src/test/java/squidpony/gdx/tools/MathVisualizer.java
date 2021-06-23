@@ -401,6 +401,22 @@ public class MathVisualizer extends ApplicationAdapter {
         vector[1] *= mag;
     }
 
+    /**
+     * Ported by jmelange/terefang from Mersenne Twiser code; the only difference here
+     * is where variance is applied.
+     * @param mean the center value or average
+     * @param variance how far from the mean values should spread
+     * @return a normal-distributed value with the given mean and variance
+     */
+    public double langeBoxMuller(final double mean, final double variance)
+    {
+        // Return a real number from a normal (Gaussian) distribution with given
+        // mean and variance by Box-Muller method
+        double r = Math.sqrt( -2.0 * Math.log( 1.0 - diver.nextDouble()) ) * variance;
+        double phi = (2.0 * 3.14159265358979323846264338328) * diver.nextDouble();
+        return mean + r * Math.cos(phi); // could use NumberTools.cos_(diver.nextDouble()) instead of Math.cos(phi)
+    }
+
     private static class XSP {
         private long state0;
         public XSP()
@@ -1002,11 +1018,11 @@ public class MathVisualizer extends ApplicationAdapter {
             break;
             case 16: {
                 Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
-                        " nextGaussianCountX()");
+                        " langeBoxMuller()");
                 for (int i = 0; i < 0x500000; i++) {
-                    double d = nextGaussianCountX() * 64.0 + 256.0;
-                    if (d >= 0 && d < 512)
-                        amounts[(int) d]++;
+                    double d = langeBoxMuller(256, 64.0);
+//                    if (d >= 0 && d < 512)
+                        amounts[(int) d & 511]++;
                 }
                 for (int i = 0; i < 512; i++) {
                     float color = (i & 63) == 0
