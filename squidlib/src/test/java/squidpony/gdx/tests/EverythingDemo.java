@@ -34,11 +34,13 @@ import java.util.ArrayList;
  */
 public class EverythingDemo extends ApplicationAdapter {
     private enum Phase {WAIT, PLAYER_ANIM, MONSTER_ANIM}
-    FilterBatch batch;
+    private FilterBatch batch;
     private Phase phase = Phase.WAIT;
 
     private GWTRNG rng;
     private SparseLayers display;
+    private FloatFilter[] filters;
+    private int currentFilter;
     private SquidMessageBox messageDisplay;
     private DungeonGenerator dungeonGen;
     private char[][] decoDungeon, bareDungeon, lineDungeon;
@@ -124,6 +126,62 @@ public class EverythingDemo extends ApplicationAdapter {
 
     @Override
     public void create () {
+
+
+        // for demo purposes, we allow changing the SquidColorCenter and the filter effect associated with it.
+        // next, we populate the filters array with the SquidColorCenters that will modify any colors we request
+        // of them using the filter we specify. Only one SquidColorCenter will be used at any time for foreground, and
+        // sometimes another will be used for background.
+        filters = new FloatFilter[20];
+        // MultiLerpFilter here is given two colors to tint everything toward one of; this is meant to reproduce the
+        // "Hollywood action movie poster" style of using primarily light orange (explosions) and gray-blue (metal).
+
+        filters[0] = (new FloatFilters.MultiLerpFilter(0.25f,
+                new Color[]{SColor.GAMBOGE_DYE, SColor.COLUMBIA_BLUE}
+        ));
+        filters[1] = filters[0];
+
+        // MultiLerpFilter here is given three colors to tint everything toward one of; this is meant to look bolder.
+
+        filters[2] = new FloatFilters.MultiLerpFilter(0.25f,
+                new Color[]{SColor.RED_PIGMENT, SColor.MEDIUM_BLUE, SColor.LIME_GREEN});
+        filters[3] = filters[2];
+
+        // ColorizeFilter here is given a slightly-grayish dark brown to imitate a sepia tone.
+
+        filters[4] = (new FloatFilters.ColorizeFilter(SColor.CLOVE_BROWN, 0.7f, -0.05f));
+        filters[5] = (new FloatFilters.ColorizeFilter(SColor.CLOVE_BROWN, 0.65f, 0.07f));
+
+        // HallucinateFilter makes all the colors very saturated and move even when you aren't doing anything.
+
+        filters[6] = (new FloatFilters.HallucinateFilter());
+        filters[7] = filters[6];
+
+        // SaturationFilter here is used to over-saturate the colors slightly. Background is less saturated.
+
+        filters[8] = (new FloatFilters.HSVFilter(0.35f, 0f));
+        filters[9] = (new FloatFilters.HSVFilter(0.15f, 0f));
+
+        // SaturationFilter here is used to de-saturate the colors slightly. Background is less saturated.
+
+        filters[10] = (new FloatFilters.HSVFilter(-0.3f, 0f));
+        filters[11] = (new FloatFilters.HSVFilter(-0.5f, 0f));
+
+        // WiggleFilter here is used to randomize the colors slightly.
+
+        filters[12] = (new FloatFilters.ColorizeFilter(SColor.CLOVE_BROWN, 0.6f, 0.0f));
+        filters[13] = filters[12];
+
+        // PaletteFilter here is used to limit colors to specific sets.
+
+        filters[14] = (new FloatFilters.PaletteFilter(SColor.DAWNBRINGER_16));
+        filters[15] = (new FloatFilters.PaletteFilter(SColor.DAWNBRINGER_16));
+
+        filters[16] = new FloatFilters.IdentityFilter();
+        filters[17] = filters[16];
+
+        filters[18] = (new FloatFilters.DistinctRedGreenFilter());
+        filters[19] = filters[18];
         // Gotta have a random number generator.
         // We can seed a GWTRNG, which is optimized for the HTML target, with any int or long
         // we want. You can also hash a String with CrossHash.hash64("Some seed") to get a
@@ -133,8 +191,11 @@ public class EverythingDemo extends ApplicationAdapter {
         // become possible. Here we don't seed the GWTRNG, so its seed will be random.
         rng = new GWTRNG();
 
-        //Some classes in SquidLib need access to a batch to render certain things, so it's a good idea to have one.
-        batch = new FilterBatch();
+        // The display is almost all set up, so now we can tell it to use the filtered color centers we want.
+        // 8 is unfiltered. You can change this to 0-9 to use different filters, or press 'f' in play.
+        currentFilter = 8;
+        batch = new FilterBatch(filters[currentFilter * 2]);
+
         StretchViewport mainViewport = new StretchViewport(gridWidth * cellWidth, gridHeight * cellHeight),
                 messageViewport = new StretchViewport(gridWidth * cellWidth, bonusHeight * cellHeight);
         mainViewport.setScreenBounds(0, 0, gridWidth * cellWidth, gridHeight * cellHeight);
@@ -399,6 +460,13 @@ public class EverythingDemo extends ApplicationAdapter {
                     case SquidInput.ESCAPE:
                     {
                         Gdx.app.exit();
+                        break;
+                    }
+                    case 'F':
+                    case 'f':
+                    {
+                        currentFilter = (currentFilter + 1) % 10;
+                        batch.setFilter(filters[currentFilter * 2]);
                         break;
                     }
                     case 'c': // cheat vision
