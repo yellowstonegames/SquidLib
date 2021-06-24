@@ -13,6 +13,7 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.github.tommyettinger.anim8.AnimatedGif;
 import com.github.tommyettinger.anim8.Dithered;
+import com.github.tommyettinger.anim8.PaletteReducer;
 import squidpony.FakeLanguageGen;
 import squidpony.StringKit;
 import squidpony.Thesaurus;
@@ -41,11 +42,11 @@ public class AnimatedWorldMapWriter extends ApplicationAdapter {
 //    private static final int width = 1200, height = 400; // squat
     private static final int width = 300, height = 300;
     //private static final int width = 314 * 4, height = 400;
-//    private static final int width = 512, height = 512;
+//    private static final int width = 400, height = 400;
 
     private static final int LIMIT = 5;
     private static final boolean MEASURE_BOUNDS = false;
-    private static final boolean FLOWING_LAND = false;
+    private static final boolean FLOWING_LAND = true;
     private static final boolean ALIEN_COLORS = false;
     private static final boolean SEEDY = false;
     private int baseSeed = 1234567890;
@@ -128,14 +129,14 @@ World #5, SavoryMelonAlder, completed in 64338 ms
 //        path = "out/worldsAnimated/" + date + "/Mimic/";
 //        path = "out/worldsAnimated/" + date + "/SpaceView/";
 //        path = "out/worldsAnimated/" + date + "/SpaceViewMutantClassic/";
-//        path = "out/worldsAnimated/" + date + "/SpaceViewMutantFoam/";
+        path = "out/worldsAnimated/" + date + "/SpaceViewMutantFoam/";
 //        path = "out/worldsAnimated/" + date + "/SpaceViewMutantHoney/";
 //        path = "out/worldsAnimated/" + date + "/SpaceViewValue/";
 //        path = "out/worldsAnimated/" + date + "/SpaceViewClassic/";
 //        path = "out/worldsAnimated/" + date + "/SpaceViewSeedy/";
 //        path = "out/worldsAnimated/" + date + "/SpaceViewPerlin/";
 //        path = "out/worldsAnimated/" + date + "/SpaceViewHoney/";
-        path = "out/worldsAnimated/" + date + "/SpaceViewFoam/";
+//        path = "out/worldsAnimated/" + date + "/SpaceViewFoam/";
 //        path = "out/worldsAnimated/" + date + "/SpaceViewSimplex/";
 //        path = "out/worldsAnimated/" + date + "/SpaceViewRidged/";
 //        path = "out/worldsAnimated/" + date + "/SpaceViewMutantMaelstrom/";
@@ -161,10 +162,10 @@ World #5, SavoryMelonAlder, completed in 64338 ms
         }
 
         writer = new AnimatedGif();
-        writer.setDitherAlgorithm(Dithered.DitherAlgorithm.PATTERN);
+        writer.setDitherAlgorithm(Dithered.DitherAlgorithm.SCATTER);
         writer.setFlipY(false);
-//        writer.palette = new PaletteReducer();
-//        writer.palette.setDitherStrength(1.0f);
+        writer.palette = new PaletteReducer();
+        writer.palette.setDitherStrength(0.5f);
         rng = new StatefulRNG(CrossHash.hash64(date));
         //rng.setState(rng.nextLong() + 2000L); // change addend when you need different results on the same date  
         //rng = new StatefulRNG(0L);
@@ -209,7 +210,7 @@ World #5, SavoryMelonAlder, completed in 64338 ms
 //        WorldMapGenerator.DEFAULT_NOISE.setFractalGain(5f);
 //        WorldMapGenerator.DEFAULT_NOISE.setFractalLacunarity(0.8f);
 //        WorldMapGenerator.DEFAULT_NOISE.setFractalGain(1.25f);
-        VastNoise fn = new VastNoise((int) seed, 1.5f, VastNoise.FOAM, 1);
+        VastNoise fn = new VastNoise((int) seed, 1.75f, VastNoise.FOAM, 1);
 //        VastNoise fn = new VastNoise((int) seed, 2.0f, VastNoise.VALUE, 1);
 //        VastNoise fn = new VastNoise((int) seed, 1.5f, VastNoise.PERLIN, 1);
 //        VastNoise fn = new VastNoise((int) seed, 1f, VastNoise.SIMPLEX, 1);
@@ -340,7 +341,8 @@ World #5, SavoryMelonAlder, completed in 64338 ms
 //        world = new WorldMapGenerator.EllipticalMap(seed, width, height, noise, 1.75);
 //        world = new WorldMapGenerator.MimicMap(seed, WorldMapGenerator.DEFAULT_NOISE, 1.75);
 //        world = new WorldMapGenerator.SpaceViewMap(seed, width, height, noise, 1.3);
-        world = new WorldMapGenerator.SpaceViewMap(seed, width, height, noise, 0.75);
+        world = new WorldMapGenerator.SpaceViewMap(seed, width, height, noise, 1.0);
+//        world = new WorldMapGenerator.RotatingSpaceMap(seed, width, height, noise, 1.0);
 //        world = new WorldMapGenerator.RoundSideMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.75);
 //        world = new WorldMapGenerator.HyperellipticalMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 0.8, 0.03125, 2.5);
 //        world = new WorldMapGenerator.HyperellipticalMap(seed, width, height, noise, 0.5, 0.03125, 2.5);
@@ -422,8 +424,7 @@ World #5, SavoryMelonAlder, completed in 64338 ms
 //            if(i % 5 == 4) System.out.println("Finished " + (i + 1) + " frames in " + (System.currentTimeMillis() - worldTime) + " ms");
             if(i % 36 == 35) System.out.print(((i + 1) * 10 / 36) + "% (" + (System.currentTimeMillis() - worldTime) + " ms)... ");
         }
-//        Array<Pixmap> apm = new Array<Pixmap>(pm);
-//        writer.palette.analyze(apm);
+        writer.palette.analyze(pm, pm.length, 150, 256);
         writer.write(Gdx.files.local(path + name + ".gif"), new Array<Pixmap>(pm), 30);
 
 //        Gdx.graphics.requestRendering();
