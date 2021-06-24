@@ -31,15 +31,12 @@ import java.util.Date;
 public class DetailedWorldMapWriter extends ApplicationAdapter {
 //    private static final int width = 1920, height = 1080;
 //    private static final int width = 256, height = 256; // localMimic
-//    private static final int width = 512, height = 256; // mimic, elliptical
-    private static final int width = 1024, height = 512; // mimic, elliptical
+    private static final int width = 512, height = 256; // mimic, elliptical
+//    private static final int width = 1024, height = 512; // mimic, elliptical
 //    private static final int width = 2048, height = 1024; // mimic, elliptical
 //    private static final int width = 1000, height = 1000; // space view
 //    private static final int width = 1200, height = 400; // squat
-    private static final int LIMIT = 10;
-    //private static final int width = 256, height = 128;
-    //private static final int width = 314 * 4, height = 400;
-    //private static final int width = 512, height = 512;
+    private static final int LIMIT = 5;
 
     private FilterBatch batch;
 //    private OrderedSet<String> adjective = new OrderedSet<>(256), noun = new OrderedSet<>(256);
@@ -73,6 +70,7 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
 
     @Override
     public void create() {
+        Gdx.gl.glDisable(GL20.GL_BLEND);
 //        earth.perceptualHashQuick(earthHash, workingHash);
 //        earthCount = earth.size() - voidCount;
         batch = new FilterBatch();
@@ -86,16 +84,15 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
 //        path = "out/worlds/" + date + "/SphereExpo/";
 //        path = "out/worlds/" + date + "/Ellipse/";
 //        path = "out/worlds/" + date + "/EllipseExpo/";
-//        path = "out/worlds/" + date + "/Mimic/";
+        path = "out/worlds/" + date + "/Mimic/";
 //        path = "out/worlds/" + date + "/SpaceView/";
 //        path = "out/worlds/" + date + "/Sphere_Classic/";
-        path = "out/worlds/" + date + "/Hyperellipse/";
+//        path = "out/worlds/" + date + "/Hyperellipse/";
 //        path = "out/worlds/" + date + "/HyperellipseExpo/";
 //        path = "out/worlds/" + date + "/HyperellipseQuilt/";
 //        path = "out/worlds/" + date + "/Tiling/";
 //        path = "out/worlds/" + date + "/RoundSide/";
 //        path = "out/worlds/" + date + "/Local/";
-//        path = "out/worlds/" + date + "/LocalSquat/";
 //        path = "out/worlds/" + date + "/LocalMimic/";
 //        path = "out/worlds/" + date + "/EllipseHammer/";
         
@@ -113,13 +110,13 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
 //        writer.palette = new PaletteReducer();
 //        writer.palette.setDitherStrength(1f);
         rng = new StatefulRNG(CrossHash.hash64(date));
-        //rng.setState(rng.nextLong() + 2000L); // change addend when you need different results on the same date  
+        rng.setState(rng.nextLong() + 2000L); // change addend when you need different results on the same date
         //rng = new StatefulRNG(0L);
         seed = rng.getState();
         
         thesaurus = new Thesaurus(rng);
 //        Noise.Noise3D noise = new Noise.Exponential3D(new FastNoise((int)seed, 2.75f, FastNoise.FOAM_FRACTAL, 3));
-        FastNoise noise = new FastNoise((int)seed, 2.5f, FastNoise.FOAM_FRACTAL, 3);
+        FastNoise noise = new FastNoise((int)seed, 2.0f, FastNoise.FOAM_FRACTAL, 2);
 //        FastNoise noise = new FastNoise((int)seed, 8f, FastNoise.CUBIC_FRACTAL, 1);
 //        noise.setPointHash(new FlawedPointHash.CubeHash(seed, 1 << 3));
 //        noise.setPointHash(new IPointHash.LongImpl() {
@@ -163,22 +160,26 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
 //        WorldMapGenerator.DEFAULT_NOISE.setFractalLacunarity(0.8f);
 //        WorldMapGenerator.DEFAULT_NOISE.setFractalGain(1.25f);
         
-//        world = new WorldMapGenerator.SphereMap(seed, width, height, noise, 1.0);
-//        world = new WorldMapGenerator.TilingMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.75);
-//        world = new WorldMapGenerator.EllipticalMap(seed, width, height, noise, 1.75);
-//        world = new WorldMapGenerator.MimicMap(seed, WorldMapGenerator.DEFAULT_NOISE, 1.75);
-//        world = new WorldMapGenerator.SpaceViewMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.75);
-//        world = new WorldMapGenerator.RoundSideMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.75);
-        world = new WorldMapGenerator.HyperellipticalMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.75, 0.03125, 2.5);
+//        world = new WorldMapGenerator.SphereMap(seed, width, height, noise, 2.0);
+//        world = new WorldMapGenerator.TilingMap(seed, width, height, noise, 2.0);
+//        world = new WorldMapGenerator.EllipticalMap(seed, width, height, noise, 2.0);
+        world = new WorldMapGenerator.MimicMap(seed, noise, 2.0);
+//        world = new WorldMapGenerator.SpaceViewMap(seed, width, height, noise, 2.0);
+//        world = new WorldMapGenerator.RoundSideMap(seed, width, height, noise, 2.0);
+//        world = new WorldMapGenerator.HyperellipticalMap(seed, width, height, noise, 2.0, 0.03125, 2.5);
 //        world = new WorldMapGenerator.EllipticalHammerMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.75);
-//        world = new WorldMapGenerator.LocalMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.75);
+//        world = new WorldMapGenerator.LocalMap(seed, width, height, noise, 2.0);
 //        world = new WorldMapGenerator.LocalMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 0.8);
-//        world = new WorldMapGenerator.LocalMimicMap(seed, WorldMapGenerator.DEFAULT_NOISE, 1.75);
+//        world = new WorldMapGenerator.LocalMimicMap(seed, noise, 2.0);
 //        world = new WorldMapGenerator.HyperellipticalMap(seed, width, height, noise, 0.8, 0.03125, 2.5);
         wmv = new WorldMapView(world);
 
         //generate(seed);
         rng.setState(seed);
+        for (int i = 0; i < LIMIT; i++) {
+            putMap();
+        }
+        Gdx.app.exit();
     }
 
     public void generate(final long seed)
@@ -196,10 +197,11 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
         world.rng.setState(seed);
         world.seedA = world.rng.stateA;
         world.seedB = world.rng.stateB;
+        wmv.generate(1.0, 1.25);
 //        wmv.generate();
-        wmv.generate(
-                1.0 + NumberTools.formCurvedDouble(world.seedA * 0x123456789ABCDEFL ^ world.seedB) * 0.1875,
-                1.0625 + DiverRNG.determineDouble(world.seedB * 0x123456789ABL ^ world.seedA) * 0.375);
+//        wmv.generate(
+//                1.0 + NumberTools.formCurvedDouble(world.seedA * 0x123456789ABCDEFL ^ world.seedB) * 0.1875,
+//                1.0625 + DiverRNG.determineDouble(world.seedB * 0x123456789ABL ^ world.seedA) * 0.375);
         ttg = System.currentTimeMillis() - startTime;
     }
 
@@ -341,17 +343,15 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
 //        csv.append(csv2).append(csv3).append(csv4);
 //        Gdx.files.local(path + name + ".java").writeString(csv.toString(), false);
         //if(counter >= 1000000 || jaccard >= 0.4)
-        if(counter >= LIMIT)
-                Gdx.app.exit();
     }
     @Override
     public void render() {
         // standard clear the background routine for libGDX
         //Gdx.gl.glClearColor(0f, 0f, 0f, 1.0f);
         //Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        Gdx.gl.glDisable(GL20.GL_BLEND);
+//        Gdx.gl.glDisable(GL20.GL_BLEND);
         // need to display the map every frame, since we clear the screen to avoid artifacts.
-        putMap();
+        //putMap();
         Gdx.graphics.setTitle("Map! Took " + ttg + " ms to generate");
     }
 

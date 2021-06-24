@@ -447,7 +447,7 @@ World #5, SavoryMelonAlder, completed in 64338 ms
         // standard clear the background routine for libGDX
         //Gdx.gl.glClearColor(0f, 0f, 0f, 1.0f);
         //Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        Gdx.gl.glDisable(GL20.GL_BLEND);
+//        Gdx.gl.glDisable(GL20.GL_BLEND);
         // need to display the map every frame, since we clear the screen to avoid artifacts.
 //        batch.begin();
 //        if(pm[0] != null) 
