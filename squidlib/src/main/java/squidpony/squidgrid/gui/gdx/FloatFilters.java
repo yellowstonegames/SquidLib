@@ -2,11 +2,11 @@ package squidpony.squidgrid.gui.gdx;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
+import squidpony.squidmath.MathExtras;
 import squidpony.squidmath.NumberTools;
 import com.github.tommyettinger.anim8.PaletteReducer;
 
-import static squidpony.squidgrid.gui.gdx.SColor.floatGet;
-import static squidpony.squidgrid.gui.gdx.SColor.lerpFloatColorsBlended;
+import static squidpony.squidgrid.gui.gdx.SColor.*;
 
 /**
  * Pre-made FloatFilter classes that you can use to filter colors without producing extra Color objects.
@@ -625,6 +625,28 @@ public final class FloatFilters {
         @Override
         public float alter(float color) {
             return reducer.reduceFloat(color);
+        }
+    }
+
+    public static class HallucinateFilter extends FloatFilter {
+        /**
+         * Takes a packed float color and produces a potentially-different packed float color that this FloatFilter edited.
+         *
+         * @param color a packed float color, as produced by {@link Color#toFloatBits()}
+         * @return a packed float color, as produced by {@link Color#toFloatBits()}
+         */
+        @Override
+        public float alter(float color) {
+            float t = (System.currentTimeMillis() & 0xfff) * 0x1p-12f,
+                    h = hueOfFloat(color),
+                    s = saturationOfFloat(color),
+                    v = valueOfFloat(color);
+            return floatGetHSV(
+                    (v * 4f + h + t) % 1.0f,
+                    Math.max(0f, Math.min((h + v) * 0.65f + t * 0.4f, 1f)),
+                    MathExtras.clamp((h + v + s) * 0.35f + 0.7f, 0f, 1f),
+                    alphaOfFloatF(color));
+
         }
     }
 
