@@ -2,6 +2,7 @@ package squidpony.squidgrid.gui.gdx;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
+import squidpony.squidmath.DiverRNG;
 import squidpony.squidmath.MathExtras;
 import squidpony.squidmath.NumberTools;
 import com.github.tommyettinger.anim8.PaletteReducer;
@@ -628,7 +629,18 @@ public final class FloatFilters {
         }
     }
 
+    /**
+     * A FloatFilter that makes the colors requested from it highly saturated and change in strange ways.
+     * Hue is affected by the original hue, value and a timer that increments very slowly. Saturation is affected by the
+     * original hue, value and that same timer. Value is affected by the original hue, saturation, and value. It should
+     * look unreal and disorienting, like a stereotypically-psychedelic hallucination.
+     * <br>
+     * <a href="https://i.imgur.com/mzOBD0v.gif">A short recording of this can be seen here</a>.
+     */
     public static class HallucinateFilter extends FloatFilter {
+
+        public HallucinateFilter() {
+        }
         /**
          * Takes a packed float color and produces a potentially-different packed float color that this FloatFilter edited.
          *
@@ -647,6 +659,28 @@ public final class FloatFilters {
                     MathExtras.clamp((h + v + s) * 0.35f + 0.7f, 0f, 1f),
                     alphaOfFloatF(color));
 
+        }
+    }
+
+    /**
+     * Randomly changes each color requested by up to 25% of the full range for a channel, up or down. This changes
+     * every color independently, so two requests of the same color in the same frame could easily look different.
+     */
+    public static class WiggleFilter extends FloatFilter {
+        private long state;
+        public WiggleFilter() {
+            state = DiverRNG.determine(System.currentTimeMillis());
+        }
+        /**
+         * Takes a packed float color and produces a potentially-different packed float color that this FloatFilter edited.
+         *
+         * @param color a packed float color, as produced by {@link Color#toFloatBits()}
+         * @return a packed float color, as produced by {@link Color#toFloatBits()}
+         */
+        @Override
+        public float alter(float color) {
+            int r = (int)DiverRNG.determine(++state) & 0x3F3F3F;
+            return NumberTools.intBitsToFloat((NumberTools.floatToRawIntBits(color) ^ r));
         }
     }
 
