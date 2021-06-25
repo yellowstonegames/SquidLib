@@ -663,7 +663,7 @@ public final class FloatFilters {
     }
 
     /**
-     * Randomly changes each color requested by up to 25% of the full range for a channel, up or down. This changes
+     * Randomly changes each color requested by up to 1/8 of the full range for a channel, up or down. This changes
      * every color independently, so two requests of the same color in the same frame could easily look different.
      */
     public static class WiggleFilter extends FloatFilter {
@@ -679,7 +679,7 @@ public final class FloatFilters {
          */
         @Override
         public float alter(float color) {
-            int r = (int)DiverRNG.determine(++state) & 0x3F3F3F;
+            int r = (int)DiverRNG.determine(++state) & 0x1F1F1F;
             return NumberTools.intBitsToFloat((NumberTools.floatToRawIntBits(color) ^ r));
         }
     }
