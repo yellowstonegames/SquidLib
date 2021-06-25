@@ -169,7 +169,7 @@ public class EverythingDemo extends ApplicationAdapter {
 
         // WiggleFilter here is used to randomize the colors slightly.
 
-        filters[12] = (new FloatFilters.ColorizeFilter(SColor.CLOVE_BROWN, 0.6f, 0.0f));
+        filters[12] = (new FloatFilters.WiggleFilter());
         filters[13] = filters[12];
 
         // PaletteFilter here is used to limit colors to specific sets.
@@ -177,11 +177,12 @@ public class EverythingDemo extends ApplicationAdapter {
         filters[14] = (new FloatFilters.PaletteFilter(SColor.DAWNBRINGER_16));
         filters[15] = (new FloatFilters.PaletteFilter(SColor.DAWNBRINGER_16));
 
-        filters[16] = new FloatFilters.IdentityFilter();
+        filters[16] = (new FloatFilters.DistinctRedGreenFilter());
         filters[17] = filters[16];
 
-        filters[18] = (new FloatFilters.DistinctRedGreenFilter());
+        filters[18] = new FloatFilters.IdentityFilter();
         filters[19] = filters[18];
+
         // Gotta have a random number generator.
         // We can seed a GWTRNG, which is optimized for the HTML target, with any int or long
         // we want. You can also hash a String with CrossHash.hash64("Some seed") to get a
@@ -192,8 +193,8 @@ public class EverythingDemo extends ApplicationAdapter {
         rng = new GWTRNG();
 
         // The display is almost all set up, so now we can tell it to use the filtered color centers we want.
-        // 8 is unfiltered. You can change this to 0-9 to use different filters, or press 'f' in play.
-        currentFilter = 8;
+        // 9 is unfiltered. You can change this to 0-9 to use different filters, or press 'f' in play.
+        currentFilter = 9;
         batch = new FilterBatch(filters[currentFilter * 2]);
 
         StretchViewport mainViewport = new StretchViewport(gridWidth * cellWidth, gridHeight * cellHeight),
@@ -837,7 +838,7 @@ public class EverythingDemo extends ApplicationAdapter {
     {
         Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
         config.setTitle("TsarStart");
-        config.useVsync(false);
+        config.useVsync(true);
         config.setWindowedMode(gridWidth * cellWidth, (gridHeight + bonusHeight) * cellHeight);
         config.setWindowIcon(Files.FileType.Internal, "Tentacle-128.png", "Tentacle-64.png", "Tentacle-32.png", "Tentacle-16.png");
         new Lwjgl3Application(new EverythingDemo(), config); 
