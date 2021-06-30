@@ -67,8 +67,8 @@ public class HashVisualizer extends ApplicationAdapter {
     // 4 noise
     // 5 RNG results
     private int testType = 4;
-    private static final int NOISE_LIMIT = 150;
-    private int hashMode, rngMode, noiseMode = 148, otherMode = 17;//142
+    private static final int NOISE_LIMIT = 152;
+    private int hashMode, rngMode, noiseMode = 150, otherMode = 17;//142
 
     /**
      * If you're editing the source of HashVisualizer, you can comment out one line and uncomment another to change
@@ -230,6 +230,7 @@ public class HashVisualizer extends ApplicationAdapter {
 //    private final Noise.Seamless2D seamlessFoam = new Noise.Seamless2D(new Noise.Layered4D(foamUsed, 3, 8.0), width, height);
 
     private final FastNoise fast1_2D = new FastNoise(1337, 0.03125f, FastNoise.SIMPLEX_FRACTAL, 1);
+    private final FastNoise fastWhite_2D = new FastNoise(1337, 0.03125f, FastNoise.WHITE_NOISE, 1);
     private final FastNoise fast3_2D = new FastNoise(1337, 0.03125f, FastNoise.SIMPLEX_FRACTAL, 3);
 
     private final Noise.Ridged2D classic1_lf_2D = new Noise.Ridged2D(ClassicNoise.instance, 1, 0.03125f);
@@ -237,16 +238,16 @@ public class HashVisualizer extends ApplicationAdapter {
 //    private final Noise.Layered2D classic1_lf_2D = new Noise.Layered2D(ClassicNoise.instance, 1, 1.3f);
 //    private final Noise.Layered2D classic3_lf_2D = new Noise.Layered2D(ClassicNoise.instance, 3, 1.3f);
 
-    private final FastNoise fast1_lf_2D = new FastNoise(1337, 0.03125f, FastNoise.SIMPLEX_FRACTAL, 1);
-    private final FastNoise fast3_lf_2D = new FastNoise(1337, 0.03125f, FastNoise.SIMPLEX_FRACTAL, 3);
+    private final FastNoise fast1Ridged2D = new FastNoise(1337, 0.03125f, FastNoise.SIMPLEX_FRACTAL, 1);
+    private final FastNoise fast3Ridged2D = new FastNoise(1337, 0.03125f, FastNoise.SIMPLEX_FRACTAL, 3);
 
     private final FastNoise fastPerlin1 = new FastNoise(1337, 0.03125f, FastNoise.PERLIN_FRACTAL, 1);
     private final FastNoise fastPerlin3 = new FastNoise(1337, 0.03125f, FastNoise.PERLIN_FRACTAL, 3);
     private final FastNoise fastPerlinRidged1 = new FastNoise(1337, 0.03125f, FastNoise.PERLIN_FRACTAL, 1);
     private final FastNoise fastPerlinRidged3 = new FastNoise(1337, 0.03125f, FastNoise.PERLIN_FRACTAL, 3);
     {
-        fast1_lf_2D.setFractalType(FastNoise.RIDGED_MULTI);
-        fast3_lf_2D.setFractalType(FastNoise.RIDGED_MULTI);
+        fast1Ridged2D.setFractalType(FastNoise.RIDGED_MULTI);
+        fast3Ridged2D.setFractalType(FastNoise.RIDGED_MULTI);
         fastPerlinRidged1.setFractalType(FastNoise.RIDGED_MULTI);
         fastPerlinRidged3.setFractalType(FastNoise.RIDGED_MULTI);
     }
@@ -266,14 +267,14 @@ public class HashVisualizer extends ApplicationAdapter {
     private final Noise.Ridged3D classic1_lf_3D = new Noise.Ridged3D(ClassicNoise.instance, 1, 0.03125f);
     private final Noise.Ridged3D classic3_lf_3D = new Noise.Ridged3D(ClassicNoise.instance, 3, 0.03125f);
 
-    private final FastNoise fast1_lf_3D = fast1_lf_2D;
-    private final FastNoise fast3_lf_3D = fast3_lf_2D;
+    private final FastNoise fast1_lf_3D = fast1Ridged2D;
+    private final FastNoise fast3_lf_3D = fast3Ridged2D;
     
     private final FastNoise fast1_4D = fast1_2D;
     private final FastNoise fast3_4D = fast3_2D;
 
-    private final FastNoise fast1_lf_4D = fast1_lf_2D;
-    private final FastNoise fast3_lf_4D = fast3_lf_2D;
+    private final FastNoise fast1_lf_4D = fast1Ridged2D;
+    private final FastNoise fast3_lf_4D = fast3Ridged2D;
 
     private final long
             seedX0 = linnorm.nextLong(), seedX1 = linnorm.nextLong(), seedX2 = linnorm.nextLong(), seedX3 = linnorm.nextLong(),
@@ -5482,6 +5483,30 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             }
                         }
                         break;
+                    case 150:
+                        Gdx.graphics.setTitle("Triple Star Noise, unprocessed, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bright = basicPrepare(fast1_2D.getNoiseWithSeed(x, y, 123))
+                                        + basicPrepare(fast1_2D.getNoiseWithSeed(ctr, x, 12345))
+                                        + basicPrepare(fast1_2D.getNoiseWithSeed(y, ctr, 1234567))
+                                        > 2.5 ? FLOAT_WHITE : FLOAT_BLACK;
+                                back[x][y] = bright;
+                            }
+                        }
+                        break;
+                    case 151:
+                        Gdx.graphics.setTitle("Triangular White Noise, unprocessed, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bright = basicPrepare((fastWhite_2D.getNoiseWithSeed(x & -16, y & -16, ctr & -16, 123)
+                                        + fastWhite_2D.getNoiseWithSeed(x & -16, y & -16, ctr & -16, 1234567)) * 0.5
+                                );
+                                back[x][y] = getGray(bright);
+                            }
+                        }
+                        break;
+
                 }
             }
             break;
