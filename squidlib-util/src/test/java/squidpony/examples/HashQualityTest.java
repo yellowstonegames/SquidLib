@@ -872,8 +872,10 @@ public class HashQualityTest {
         //// The Gray code moves bits around just a little, but keeps the same power-of-two upper bound.
         //// the XLCGs together only really randomize the upper bits; they don't change the lower bit at all.
         //// the last xor is just for GWT and could be omitted if not targeting JS Numbers.
-        return ((n ^ n >>> 1 ^ 0xD1B54A35) * 0x9E373 ^ 0x7F4A7C15) * 0x125493 ^ 0x91E10DA5;
-
+//        return ((n ^ n >>> 1 ^ 0xD1B54A35) * 0x9E373 ^ 0x7F4A7C15) * 0x125493 ^ 0x91E10DA5;
+//        return ((n ^ n >>> 1) * 0x9E373 ^ 0xD1B54A35) * 0x125493 ^ 0x91E10DA5;
+//        return ((x >= y ? x * (x + 2) - y : y * y + x) * 0x9E373 ^ 0xD1B54A35) * 0x125493 ^ 0x91E10DA5;
+        return (n ^ n >>> 1);
         //// Other options:
 
         //// Bijective RRLL shift, XLCG, XLCG, xor (to stay within int range on GWT)
@@ -987,10 +989,10 @@ public class HashQualityTest {
 
 //        x ^= x >> 1;
 //        y ^= y >> 1;
-//        x += 3;
-//        y += 3;
-        x = x << 1 ^ x >> 31;
-        y = y << 1 ^ y >> 31;
+        x += 3;
+        y += 3;
+//        x = x << 1 ^ x >> 31;
+//        y = y << 1 ^ y >> 31;
         return y + ((x+y) * (x+y+1) >> 1);
 //        return y ^ y >>> 1;
 
@@ -1005,6 +1007,12 @@ public class HashQualityTest {
         return z + ((z+y) * (z+y+1) >> 1);
     }
 
+    public static int balancedCantorCoord(int x, int y) {
+        final int sx = x >> 31, sy = y >> 31;
+        x ^= sx;
+        y ^= sy;
+        return (((x + y) * (x + y + 1) >>> 1) + y << 2) - sx - sy - sy;
+    }
     public static int goldCoord(int x, int y)
     {
         int s = 42;
@@ -1218,7 +1226,7 @@ public class HashQualityTest {
     @Test
     @Ignore
     public void testCoord() {
-        RNG prng = new RNG(new GoatRNG(123456789, 987654321));
+        RNG prng = new RNG(new GoatRNG(1234567890, 987654321));
         final int[] params = new int[20];// ArrayTools.range(10, 26);// new int[]{33, 65, 129, 257, 513};
         System.arraycopy(prng.randomOrdering(400), 0, params, 0, params.length);
         Arrays.sort(params);
@@ -1267,7 +1275,7 @@ public class HashQualityTest {
 //                            int x = xShuffle.next(), y = yShuffle.next();
 //                            int x = xShuffle.next() ^ -rng.next(1), y = yShuffle.next() ^ -rng.next(1);
 //                            int c = x + WIDTH + 1 + (y + HEIGHT + 1) * WIDTH;
-                            int x = i - 3, y = j - 3;
+                            int x = i - (WIDTH >>> 1), y = j - (HEIGHT >>> 1);
                             int c = i + j * WIDTH;
                             if (rng.next(3) > reduction || points.get(c)) {
                                 --SIZE;
@@ -1275,10 +1283,10 @@ public class HashQualityTest {
                             }
                             points.set(c);
                             colliderLath.add(latheCoord(x, y) & restrict);
-                            colliderSzud.add(goRogueCoord(x, y) & restrict);
+                            colliderSzud.add(balancedCantorCoord(x, y) & restrict);
                             colliderPelo.add(iphHash(x, y, 0x1337BEEF) & restrict);
-                            colliderCant.add(Coord.cantorHashCode(x, y) & restrict);
-                            colliderRoSt.add(Coord.rosenbergStrongHashCode(x, y) & restrict);
+                            colliderCant.add(cantorCoord(x, y) & restrict);
+                            colliderRoSt.add(rosenbergStrongCoord(x, y) & restrict);
                             colliderXoro.add(scratcherCoord(x, y, 0x1337BEEF) & restrict);
                             colliderObje.add(Objects.hash(x, y) & restrict);
                             
@@ -1320,7 +1328,7 @@ public class HashQualityTest {
         }
         System.out.println("Number of Coords added: " + total);
         System.out.println("TOTAL Lath collisions: " + lathTotal + " (" + (lathTotal * 100.0 / total) + "%), BEST " + lathBest + ", WORST " + lathWorst);
-        System.out.println("TOTAL GoRo collisions: " + szudTotal + " (" + (szudTotal * 100.0 / total) + "%), BEST " + szudBest + ", WORST " + szudWorst);
+        System.out.println("TOTAL BalC collisions: " + szudTotal + " (" + (szudTotal * 100.0 / total) + "%), BEST " + szudBest + ", WORST " + szudWorst);
         System.out.println("TOTAL InPo collisions: " + peloTotal + " (" + (peloTotal * 100.0 / total) + "%), BEST " + peloBest + ", WORST " + peloWorst);
         System.out.println("TOTAL Cant collisions: " + cantTotal + " (" + (cantTotal * 100.0 / total) + "%), BEST " + cantBest + ", WORST " + cantWorst);
         System.out.println("TOTAL RoSt collisions: " + rostTotal + " (" + (rostTotal * 100.0 / total) + "%), BEST " + rostBest + ", WORST " + rostWorst);
