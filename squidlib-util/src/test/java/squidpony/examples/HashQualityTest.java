@@ -1007,11 +1007,10 @@ public class HashQualityTest {
         return z + ((z+y) * (z+y+1) >> 1);
     }
 
-    public static int balancedCantorCoord(int x, int y) {
+    public static int balancedCantorCoord(final int x, final int y) {
         final int sx = x >> 31, sy = y >> 31;
-        x ^= sx;
-        y ^= sy;
-        return (((x + y) * (x + y + 1) >>> 1) + y << 2) - sx - sy - sy;
+        final int px = x ^ sx, py = y ^ sx;
+        return (((px + py) * (px + py + 1) >>> 1) + py << 2) - sx - sy - sy;
     }
     public static int goldCoord(int x, int y)
     {
