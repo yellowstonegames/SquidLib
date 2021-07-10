@@ -68,7 +68,7 @@ public class HashVisualizer extends ApplicationAdapter {
     // 5 RNG results
     private int testType = 4;
     private static final int NOISE_LIMIT = 152;
-    private int hashMode, rngMode, noiseMode = 150, otherMode = 17;//142
+    private int hashMode, rngMode, noiseMode = 54, otherMode = 17;//142
 
     /**
      * If you're editing the source of HashVisualizer, you can comment out one line and uncomment another to change
@@ -1092,6 +1092,15 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 //                        NumberTools.swayRandomized(seed, yin + 0.3f * NumberTools.swayRandomized(seed ^ 0x9E3779B97F4A7C15L, 1.3f * xin)),
 //                        NumberTools.swayRandomized(~seed, xin - 0.35f * NumberTools.swayRandomized(seed ^ 0x6C8E9CF570932BD5L, 1.2f * yin))
                 ) + 2.5f) * (3.456789f + NumberTools.swayRandomized(seed ^ 0x6C8E9CF570932BD5L, xin - yin)));// + (yin + xin)
+    }
+
+    public static double weavingNoise(double x, double y, int seed){
+        double sx = NumberTools.swayRandomized(++seed, x);
+        double sy = NumberTools.swayRandomized(++seed, y);
+        return NumberTools.swayRandomized(++seed ^ 0x9E3779B9,
+               (NumberTools.swayRandomized(~++seed, x + y * 0.5 + sy)
+              + NumberTools.swayRandomized(~++seed, y - x * 0.5 + sx)
+              ) * 4.0);
     }
 //    public static float beachNoise(int seed, float xin, float yin) 
 //    {
@@ -4029,17 +4038,28 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         }
                         break;
                     case 54:
-                        Gdx.graphics.setTitle("Jack 2D Color Noise, one octave per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("Weaving 2D Color Noise, one octave per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 back[x][y] = 
                                         floatGet(
-                                                ((float)JackNoise.instance.getNoiseWithSeed((x + ctr) * 0.03125 + 20, (y + ctr) * 0.03125 + 30, 1234) * 0.50f) + 0.50f,
-                                                ((float)JackNoise.instance.getNoiseWithSeed((x + ctr) * 0.03125 + 30, (y + ctr) * 0.03125 + 10, 54321) * 0.50f) + 0.50f,
-                                                ((float)JackNoise.instance.getNoiseWithSeed((x + ctr) * 0.03125 + 10, (y + ctr) * 0.03125 + 20, 1234321) * 0.50f) + 0.50f,
+                                                ((float)weavingNoise((x + ctr) * 0.03125 + 20, (y + ctr) * 0.03125 + 30, 1234) * 0.50f) + 0.50f,
+                                                ((float)weavingNoise((x + ctr) * 0.03125 + 30, (y + ctr) * 0.03125 + 10, 54321) * 0.50f) + 0.50f,
+                                                ((float)weavingNoise((x + ctr) * 0.03125 + 10, (y + ctr) * 0.03125 + 20, 1234321) * 0.50f) + 0.50f,
                                                 1.0f);
                             }
                         }
+//                        Gdx.graphics.setTitle("Jack 2D Color Noise, one octave per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+//                        for (int x = 0; x < width; x++) {
+//                            for (int y = 0; y < height; y++) {
+//                                back[x][y] =
+//                                        floatGet(
+//                                                ((float)JackNoise.instance.getNoiseWithSeed((x + ctr) * 0.03125 + 20, (y + ctr) * 0.03125 + 30, 1234) * 0.50f) + 0.50f,
+//                                                ((float)JackNoise.instance.getNoiseWithSeed((x + ctr) * 0.03125 + 30, (y + ctr) * 0.03125 + 10, 54321) * 0.50f) + 0.50f,
+//                                                ((float)JackNoise.instance.getNoiseWithSeed((x + ctr) * 0.03125 + 10, (y + ctr) * 0.03125 + 20, 1234321) * 0.50f) + 0.50f,
+//                                                1.0f);
+//                            }
+//                        }
 //                        Gdx.graphics.setTitle("Seeded 6D as 3D Color Noise, one octave per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
 //                        for (int x = 0; x < width; x++) {
 //                            for (int y = 0; y < height; y++) {
