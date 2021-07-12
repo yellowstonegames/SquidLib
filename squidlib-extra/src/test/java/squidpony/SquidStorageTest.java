@@ -53,7 +53,7 @@ public class SquidStorageTest extends ApplicationAdapter {
             System.out.println(store.preferences.get().values());
             StatefulRNG srng = new StatefulRNG("Hello, Storage!"), r2;
 
-            FakeLanguageGen randomLanguage = FakeLanguageGen.randomLanguage(0x1337BEEFCAFEBABEL).mix(4, FakeLanguageGen.ARABIC_ROMANIZED, 5, FakeLanguageGen.JAPANESE_ROMANIZED, 3), lang2;
+            FakeLanguageGen randomLanguage = FakeLanguageGen.randomLanguage(0x1337BEEFCAFEBABEL).mix(4, FakeLanguageGen.ARABIC_ROMANIZED, 5, FakeLanguageGen.JAPANESE_ROMANIZED, 3).addModifiers(FakeLanguageGen.Modifier.LISP), lang2;
             // with custom serializer, compresses to:
             //0#1384785347551869630@4.0~12@5.0~8@3.0
             // without custom serializer, compresses to:
@@ -95,7 +95,7 @@ public class SquidStorageTest extends ApplicationAdapter {
             System.out.println(yesCompression.preferences.get().values());
             StatefulRNG srng = new StatefulRNG("Hello, Storage!");
 
-            FakeLanguageGen randomLanguage = FakeLanguageGen.randomLanguage(0x1337BEEFCAFEBABEL).mix(4, FakeLanguageGen.ARABIC_ROMANIZED, 5, FakeLanguageGen.JAPANESE_ROMANIZED, 3);
+            FakeLanguageGen randomLanguage = FakeLanguageGen.randomLanguage(0x1337BEEFCAFEBABEL).mix(4, FakeLanguageGen.ARABIC_ROMANIZED, 5, FakeLanguageGen.JAPANESE_ROMANIZED, 3).addModifiers(FakeLanguageGen.Modifier.LISP);
 
             EnumMap<Direction, String> empty = new EnumMap<>(Direction.class);
             EnumOrderedMap<Direction, String> empty2 = new EnumOrderedMap<>();
