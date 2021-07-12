@@ -4701,10 +4701,7 @@ public class FakeLanguageGen implements Serializable {
                         sb.append('~');
                 }
             }
-            for (int i = 0; i < mods.size(); i++) {
-                sb.append('℗').append(mods.getAt(i).serializeToString());
-            }
-            return mixer.addModifiers(mods).summarize(sb.toString());
+            return mixer.summarize(sb.toString()).addModifiers(mods);
         } else
             return mixer.addModifiers(mods);
     }
@@ -4846,6 +4843,14 @@ public class FakeLanguageGen implements Serializable {
     public FakeLanguageGen addModifiers(Collection<Modifier> mods) {
         FakeLanguageGen next = copy();
         next.modifiers.addAll(mods);
+        if(next.summary != null){
+            sb.setLength(0);
+            sb.append(next.summary);
+            for (int i = 0; i < mods.size(); i++) {
+                sb.append('℗').append(next.modifiers.get(i).serializeToString());
+            }
+            next.summarize(sb.toString());
+        }
         return next;
     }
 
@@ -4860,6 +4865,14 @@ public class FakeLanguageGen implements Serializable {
     public FakeLanguageGen addModifiers(Modifier... mods) {
         FakeLanguageGen next = copy();
         Collections.addAll(next.modifiers, mods);
+        if(next.summary != null){
+            sb.setLength(0);
+            sb.append(next.summary);
+            for (int i = 0; i < mods.length; i++) {
+                sb.append('℗').append(next.modifiers.get(i).serializeToString());
+            }
+            next.summarize(sb.toString());
+        }
         return next;
     }
 
@@ -4871,6 +4884,9 @@ public class FakeLanguageGen implements Serializable {
     public FakeLanguageGen removeModifiers() {
         FakeLanguageGen next = copy();
         next.modifiers.clear();
+        if(next.summary != null){
+            next.summarize(StringKit.safeSubstring(next.summary, 0, next.summary.indexOf('℗')));
+        }
         return next;
     }
 
@@ -5021,7 +5037,7 @@ public class FakeLanguageGen implements Serializable {
                 breakIndex = (tempBreak < 0) ? data.length() : tempBreak,
                 tildeIndex = Math.min(data.indexOf('~'), breakIndex), prevTildeIndex = -1;
         if (tildeIndex < 0)
-            tildeIndex = data.length();
+            tildeIndex = breakIndex;
 
         if (snailIndex < 0)
             return ENGLISH.copy();
@@ -5030,11 +5046,11 @@ public class FakeLanguageGen implements Serializable {
             if (poundIndex >= 0 && poundIndex < snailIndex) // random case
             {
                 pairs.add(randomLanguage(Long.parseLong(data.substring(poundIndex + 1, snailIndex))));
-                pairs.add(Double.valueOf(data.substring(snailIndex + 1, tildeIndex)));
+                pairs.add(StringKit.intFromDec(data, snailIndex + 1, tildeIndex));
                 poundIndex = -1;
             } else {
                 pairs.add(registry.getAt(Integer.parseInt(data.substring(prevTildeIndex + 1, snailIndex))));
-                pairs.add(Double.valueOf(data.substring(snailIndex + 1, tildeIndex)));
+                pairs.add(StringKit.intFromDec(data, snailIndex + 1, tildeIndex));
             }
             snailIndex = data.indexOf('@', snailIndex + 1);
             if (snailIndex > breakIndex)
