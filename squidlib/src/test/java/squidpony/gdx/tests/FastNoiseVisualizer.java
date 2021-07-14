@@ -35,13 +35,14 @@ public class FastNoiseVisualizer extends ApplicationAdapter {
     private HastyPointHash hph = new HastyPointHash();
     private IntPointHash iph = new IntPointHash();
     private GoldPointHash gold = new GoldPointHash();
+    private TabularPointHash tab = new TabularPointHash();
 //    private PermPointHash pph = new PermPointHash();
     private FlawedPointHash.RugHash rug = new FlawedPointHash.RugHash(1);
     private FlawedPointHash.QuiltHash quilt = new FlawedPointHash.QuiltHash(1, 16);
     private FlawedPointHash.CubeHash cube = new FlawedPointHash.CubeHash(1, 32);
     private FlawedPointHash.FNVHash fnv = new FlawedPointHash.FNVHash(1);
-    private IPointHash[] pointHashes = new IPointHash[] {ph, hph, iph, fnv, gold, rug, quilt, cube};
-    private int hashIndex = 7;
+    private IPointHash[] pointHashes = new IPointHash[] {ph, hph, gold, iph, tab, fnv, rug, quilt, cube};
+    private int hashIndex = 3;
 
     private static final int width = 512, height = 512;
 
