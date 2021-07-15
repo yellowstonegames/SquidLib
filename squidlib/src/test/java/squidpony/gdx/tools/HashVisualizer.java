@@ -1095,14 +1095,25 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     }
 
     public static double weavingNoise(double x, double y, int seed){
-        double sx = NumberTools.swayRandomized(++seed, x);
-        double sy = NumberTools.swayRandomized(++seed, y);
-        return NumberTools.swayRandomized(++seed ^ 0x9E3779B9,
-               (NumberTools.swayRandomized(~++seed, x + y * 0.5 + sy)
-              + NumberTools.swayRandomized(~++seed, y - x * 0.5 + sx)
-              ) * 4.0);
+        double sx = NumberTools.swayRandomized(seed++, x);
+        double sy = NumberTools.swayRandomized(seed++, y);
+        return NumberTools.swayRandomized(seed++ ^ 0x9E3779B9, 4.0 * NumberTools.sin_(
+               (NumberTools.swayRandomized(~seed++, x + sy)// + y * 0.5
+              + NumberTools.swayRandomized(~seed,   y + sx)// - x * 0.5
+              ) * 0.25));
     }
-//    public static float beachNoise(int seed, float xin, float yin) 
+
+    public static double weavingNoise(double x, double y, double z, int seed){
+        double sx = NumberTools.swayRandomized(seed++, x);
+        double sy = NumberTools.swayRandomized(seed++, y);
+        double sz = NumberTools.swayRandomized(seed++, z);
+        return NumberTools.swayRandomized(seed++ ^ 0x9E3779B9, 4.0 * NumberTools.sin_(
+               (NumberTools.swayRandomized(~seed++, x + sy)
+              + NumberTools.swayRandomized(~seed++, y + sz)
+              + NumberTools.swayRandomized(~seed,   z + sx)
+              ) * (0.16666666666666666)));
+    }
+//    public static float beachNoise(int seed, float xin, float yin)
 //    {
 //        final float a = valueNoise(seed, xin + NumberTools.swayRandomized(~seed, yin) * 0.5f, yin);
 //        seed = (seed ^ 0x9E3779BD) * 0xDAB;
@@ -4073,17 +4084,24 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 //                        }
                         break;
                     case 55:
-                        Gdx.graphics.setTitle("Jack 2D Noise, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("Weaving 3D Noise, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                bright = (float)(/*Noise.seamless3D(x * 0.0625, y * 0.0625, ctr  * 0.05125,
-                                        20.0, 20.0, 20.0, 12) * 0.5
-                                        + Noise.seamless3D(x * 0.125, y * 0.125, ctr  * 0.05125,
-                                        40.0, 40.0, 20.0, 1234)
-                                        + */JackNoise.instance.getNoiseWithSeed((x + ctr) * 0.03125, (y + ctr) * 0.03125, 123456) * 0.50f) + 0.50f;
+                                bright = basicPrepare(weavingNoise(x * 0.03125, y * 0.03125, ctr * 0.05125, 123456));
                                 back[x][y] = getGray(bright);
                             }
                         }
+//                        Gdx.graphics.setTitle("Jack 2D Noise, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+//                        for (int x = 0; x < width; x++) {
+//                            for (int y = 0; y < height; y++) {
+//                                bright = (float)(/*Noise.seamless3D(x * 0.0625, y * 0.0625, ctr  * 0.05125,
+//                                        20.0, 20.0, 20.0, 12) * 0.5
+//                                        + Noise.seamless3D(x * 0.125, y * 0.125, ctr  * 0.05125,
+//                                        40.0, 40.0, 20.0, 1234)
+//                                        + */JackNoise.instance.getNoiseWithSeed((x + ctr) * 0.03125, (y + ctr) * 0.03125, 123456) * 0.50f) + 0.50f;
+//                                back[x][y] = getGray(bright);
+//                            }
+//                        }
 //                        Gdx.graphics.setTitle("Seeded 6D as 3D Noise, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
 //                        for (int x = 0; x < width; x++) {
 //                            for (int y = 0; y < height; y++) {
