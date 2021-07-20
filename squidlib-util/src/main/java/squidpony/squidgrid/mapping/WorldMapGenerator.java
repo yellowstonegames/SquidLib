@@ -5173,7 +5173,9 @@ public abstract class WorldMapGenerator implements Serializable {
     }
 
     /**
-     * The Eckert II projection, shaped like an elongated hexagon. This is a WIP.
+     * A modified version of the Eckert II projection, shaped like an elongated hexagon. This tries to keep the angles
+     * of a regular hexagon, so it could be used for a map with a hexagonal grid; Eckert II uses different angles from
+     * a regular hexagon. It looks good when its width is roughly twice its height; an 8:5 ratio seems even better.
      */
     @Beta
     public static class HexagonalMap extends WorldMapGenerator {
@@ -5379,18 +5381,19 @@ public abstract class WorldMapGenerator implements Serializable {
                     h, temp, yPos, xPos,
                     i_uw = usedWidth / (double)width,
                     i_uh = usedHeight / (double)height,
-                    th, thb, thy, lon, lat,
-                    rx = width * (0.25 * 164.0 / 180.0), irx = 1.326500428177002 / rx, hw = width * 0.5,
-                    ry = height * (0.5 * 164.0 / 180.0), iry = 1.0 / ry;
+                    th, thb, thx, thy, lon, lat,
+                    rx = width * (0.25 * 163.5 / 180.0), irx = 1.326500428177002 / rx, hw = width * 0.5,
+                    ry = height * (0.5 * 163.5 / 180.0), iry = 1.0 / ry;
 
             yPos = startY - ry;
             for (int y = 0; y < height; y++, yPos += i_uh) {
                 thy = yPos * iry;
                 thb = 2 - Math.abs(thy) / Math.sqrt(2 * 3.14159265358979323846 / 3); // alpha
                 //thb = NumberTools.asin(thy);
+                thx = 2 - 0.75 * Math.abs(thy) / Math.sqrt(2 * 3.14159265358979323846 / 3);
 //                thx = NumberTools.cos(thb);
                 //1.3265004 0.7538633073600218  1.326500428177002
-                lon = Math.sqrt(6.0 * 3.14159265358979323846) / (thb + thb);
+                lon = Math.sqrt(6.0 * 3.14159265358979323846) / (thx + thx);
 //                lon = (thx == Math.PI * 0.5 || thx == Math.PI * -0.5) ? 0x1.0p100 : irx / (0.42223820031577125 * (1.0 + thx));
                 qs = Math.signum(thy) * (4.0 - thb * thb) * (1.0 / 3.0);
 //                qs = (thb + (thx + 2.0) * thy) * 0.2800495767557787;
