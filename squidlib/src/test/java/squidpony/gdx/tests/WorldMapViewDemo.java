@@ -100,7 +100,8 @@ public class WorldMapViewDemo extends ApplicationAdapter {
 //        world = new WorldMapGenerator.SpaceViewMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 0.7);
 //        world = new WorldMapGenerator.RotatingSpaceMap(seed, width, height, new FastNoise(rng.nextInt(), 2f, FastNoise.FOAM_FRACTAL, 2), 0.7);
         //world = new WorldMapGenerator.RoundSideMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 0.8);
-        world = new WorldMapGenerator.HyperellipticalMap(seed, width, height, new FastNoise(rng.nextInt(), 2f, FastNoise.FOAM_FRACTAL, 2), 0.7, 0.0625, 2.5);
+//        world = new WorldMapGenerator.HyperellipticalMap(seed, width, height, new FastNoise(rng.nextInt(), 2f, FastNoise.FOAM_FRACTAL, 2), 0.7, 0.0625, 2.5);
+        world = new WorldMapGenerator.HexagonalMap(seed, width, height, new FastNoise(rng.nextInt(), 2f, FastNoise.FOAM_FRACTAL, 2), 0.9);
 //        world = new WorldMapGenerator.HyperellipticalMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.2, 0.0, 2.0);
 //        world = new WorldMapGenerator.SphereMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 0.6);
 //        world = new WorldMapGenerator.LocalMimicMap(seed, WorldMapGenerator.DEFAULT_NOISE, 0.65);
