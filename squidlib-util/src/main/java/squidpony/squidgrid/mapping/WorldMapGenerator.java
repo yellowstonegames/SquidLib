@@ -5382,21 +5382,18 @@ public abstract class WorldMapGenerator implements Serializable {
                     i_uw = usedWidth / (double)width,
                     i_uh = usedHeight / (double)height,
                     th, thb, thx, thy, lon, lat,
-                    rx = width * (0.25 * 163.5 / 180.0), irx = 1.326500428177002 / rx, hw = width * 0.5,
-                    ry = height * (0.5 * 163.5 / 180.0), iry = 1.0 / ry;
+                    rx = width * 0.25, irx = 1.5 / rx, hw = width * 0.5,
+                    ry = height * 0.5, iry = 1.0 / ry;
 
             yPos = startY - ry;
             for (int y = 0; y < height; y++, yPos += i_uh) {
                 thy = yPos * iry;
-                thb = 2 - Math.abs(thy) / Math.sqrt(2 * 3.14159265358979323846 / 3); // alpha
-                //thb = NumberTools.asin(thy);
-                thx = 2 - 0.75 * Math.abs(thy) / Math.sqrt(2 * 3.14159265358979323846 / 3);
-//                thx = NumberTools.cos(thb);
-                //1.3265004 0.7538633073600218  1.326500428177002
-                lon = Math.sqrt(6.0 * 3.14159265358979323846) / (thx + thx);
-//                lon = (thx == Math.PI * 0.5 || thx == Math.PI * -0.5) ? 0x1.0p100 : irx / (0.42223820031577125 * (1.0 + thx));
+                thb = 2 - Math.abs(thy) / 1.4472025091165353;
+                thx = 2 - Math.abs(thy) * (0.75 / 1.4472025091165353);
+                //1.4472025091165353 == Math.sqrt(2 * 3.14159265358979323846 / 3);
+                lon = 4.3416075273496055 / (thx + thx);
+                //4.3416075273496055 == Math.sqrt(6.0 * 3.14159265358979323846)
                 qs = Math.signum(thy) * (4.0 - thb * thb) * (1.0 / 3.0);
-//                qs = (thb + (thx + 2.0) * thy) * 0.2800495767557787;
                 lat = NumberTools.asin(qs);
 
                 qc = NumberTools.cos(lat);
