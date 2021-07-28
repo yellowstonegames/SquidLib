@@ -1,3 +1,15 @@
+3.0.5
+Dependencies:
+ - squidlib-util: RegExodus 0.1.12
+ - squidlib: libGDX 1.10.0, anim8-gdx 0.2.10
+ - squidlib-extra: libGDX 1.10.0
+Changes:
+ - FloatFilters now implements several more of the effects from Filters, such as HallucinateFilter and WiggleFilter.
+ - The new RNG types from jdkgdxds (used by SquidSquad) have been backported here, though using them in RNG could produce different results than as an EnhancedRandom from jdkgdxds.
+ - HexagonalMap is a new option for WorldMapGenerator, and could be useful for games with hex grids.
+ - BlueNoise now has "omni-tiling" noise textures it can use via getSeededOmniTiling() and getSeededTriOmniTiling(); these tile with all other textures in their group.
+
+
 3.0.4
 Dependencies:
  - squidlib-util: RegExodus 0.1.12
