@@ -55,7 +55,7 @@ public class PhantomNoise {
     }
     public PhantomNoise(long seed, int dimension, double sharpness) {
         dim = Math.max(2, dimension);
-        this.sharpness = 0.8375 * sharpness;
+        this.sharpness = 0.825 * sharpness;
         working = new double[dim+1];
         points = new double[dim+1];
         vertices = new double[dim+1][dim];
@@ -157,7 +157,9 @@ public class PhantomNoise {
             working[dim] += -0.423310825130748; // e - pi
         }
         result *= inverse;
-        return MathExtras.barronSpline(result, sharpness, 0.5) * 2.0 - 1.0;
+        final double diff = 0.5 - result;
+        final int sign = NumberTools.doubleToHighIntBits(diff) >> 31, one = sign | 1;
+        return (((result + sign)) / (Double.MIN_VALUE - sign + (result + sharpness * diff) * one) - sign - sign) - 1.0;
 //        return (result <= 0.5)
 //                ? Math.pow(result * 2, dim) - 1.0
 //                : Math.pow((result - 1) * 2, dim) * (((dim & 1) << 1) - 1) + 1.0;
@@ -184,7 +186,9 @@ public class PhantomNoise {
             working[2] += -0.423310825130748;
         }
         result *= inverse;
-        return MathExtras.barronSpline(result, sharpness, 0.5) * 2.0 - 1.0;
+        final double diff = 0.5 - result;
+        final int sign = NumberTools.doubleToHighIntBits(diff) >> 31, one = sign | 1;
+        return (((result + sign)) / (Double.MIN_VALUE - sign + (result + sharpness * diff) * one) - sign - sign) - 1.0;
         
 //        return MathExtras.barronSpline(result, dim * (2.0 + 0.5 * dim), 0.5) * 2.0 - 1.0;
         
