@@ -93,7 +93,7 @@ public final class LZSEncoding {
     public static String compressToEncodedURIComponent(String uncompressed) {
         if (uncompressed == null)
             return null;
-        return _compress(uncompressed, 6, keyStrUriSafe, 0) + '+';
+        return _compress(uncompressed, 6, keyStrUriSafe, 0);
     }
     /**
      * Decompresses a String that had been compressed with {@link #compressToEncodedURIComponent(String)}.
