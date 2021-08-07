@@ -2417,7 +2417,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         final float sharp = foamSharpness * 2.2f;
         final float diff = 0.5f - result;
         final int sign = NumberTools.floatToIntBits(diff) >> 31, one = sign | 1;
-        return (((one * 0.5f - sign) * (result + sign)) / (Float.MIN_VALUE - sign + (result + sharp * diff) * one) - sign) * 2f - 1f;
+        return (((result + sign)) / (Float.MIN_VALUE - sign + (result + sharp * diff) * one) - sign - sign) - 1f;
     }
 
     public float getFoamFractal(float x, float y) {
@@ -2588,8 +2588,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         final float sharp = foamSharpness * 3.3f;
         final float diff = 0.5f - result;
         final int sign = NumberTools.floatToIntBits(diff) >> 31, one = sign | 1;
-        return (((one * 0.5f - sign) * (result + sign)) / (Float.MIN_VALUE - sign + (result + sharp * diff) * one) - sign) * 2f - 1f;
-
+        return (((result + sign)) / (Float.MIN_VALUE - sign + (result + sharp * diff) * one) - sign - sign) - 1f;
     }
 
 
@@ -2693,7 +2692,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         final float sharp = foamSharpness * 4.4f;
         final float diff = 0.5f - result;
         final int sign = NumberTools.floatToIntBits(diff) >> 31, one = sign | 1;
-        return (((one * 0.5f - sign) * (result + sign)) / (Float.MIN_VALUE - sign + (result + sharp * diff) * one) - sign) * 2f - 1f;
+        return (((result + sign)) / (Float.MIN_VALUE - sign + (result + sharp * diff) * one) - sign - sign) - 1f;
     }
     public float getFoamFractal(float x, float y, float z, float w, float u) {
         x *= frequency;
@@ -2831,7 +2830,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         final float sharp = foamSharpness * 5.5f;
         final float diff = 0.5f - result;
         final int sign = NumberTools.floatToIntBits(diff) >> 31, one = sign | 1;
-        return (((one * 0.5f - sign) * (result + sign)) / (Float.MIN_VALUE - sign + (result + sharp * diff) * one) - sign) * 2f - 1f;
+        return (((result + sign)) / (Float.MIN_VALUE - sign + (result + sharp * diff) * one) - sign - sign) - 1f;
 
     }
     
@@ -2989,7 +2988,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         final float sharp = foamSharpness * 6.6f;
         final float diff = 0.5f - result;
         final int sign = NumberTools.floatToIntBits(diff) >> 31, one = sign | 1;
-        return (((one * 0.5f - sign) * (result + sign)) / (Float.MIN_VALUE - sign + (result + sharp * diff) * one) - sign) * 2f - 1f;
+        return (((result + sign)) / (Float.MIN_VALUE - sign + (result + sharp * diff) * one) - sign - sign) - 1f;
     }
 
     // Classic Perlin Noise
