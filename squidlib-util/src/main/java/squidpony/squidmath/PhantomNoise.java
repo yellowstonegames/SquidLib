@@ -51,11 +51,11 @@ public class PhantomNoise {
     }
 
     public PhantomNoise(long seed, int dimension) {
-        this(seed, dimension, Math.max(2, dimension));
+        this(seed, dimension, 0.825 * Math.max(2, dimension));
     }
     public PhantomNoise(long seed, int dimension, double sharpness) {
         dim = Math.max(2, dimension);
-        this.sharpness = 0.825 * sharpness;
+        this.sharpness = sharpness;
         working = new double[dim+1];
         points = new double[dim+1];
         vertices = new double[dim+1][dim];
