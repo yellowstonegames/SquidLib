@@ -34,8 +34,8 @@ public class FFTVisualizer extends ApplicationAdapter {
     private final IPointHash[] pointHashes = new IPointHash[] {iph, torus, cube, rug, quilt};
     private int hashIndex = 0;
     private static final int MODE_LIMIT = 12;
-    private int mode = 6;
-    private int dim; // this can be 0, 1, 2, or 3; add 2 to get the actual dimensions
+    private int mode = 7;
+    private int dim = 3; // this can be 0, 1, 2, or 3; add 2 to get the actual dimensions
     private int octaves = 3;
     private float freq = 0.125f;
     private float threshold = 0.5f;
