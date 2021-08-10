@@ -361,8 +361,9 @@ public class Spill implements Serializable {
             spillMap[cell.x][cell.y] = true;
             for (int d = 0; d < dirs.length; d++) {
                 Coord adj = cell.translate(dirs[d].deltaX, dirs[d].deltaY);
+                if(!adj.isWithin(width, height)) continue;
                 double h = measurement.heuristic(dirs[d]);
-                if (physicalMap[adj.x][adj.y] && !spillMap[adj.x][adj.y] && (impassable == null || !impassable.contains(adj)) && rng.nextDouble() <= 1.0 / h) {
+                if (physicalMap[adj.x][adj.y] && !spillMap[adj.x][adj.y] && (impassable == null || !impassable.contains(adj)) && rng.nextDouble(h) <= 1.0) {
                     setFresh(adj);
                 }
             }

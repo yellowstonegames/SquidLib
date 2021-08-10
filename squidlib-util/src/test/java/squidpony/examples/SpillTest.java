@@ -28,38 +28,41 @@ public class SpillTest {
             for (Measurement m : Measurement.values()) {
                 StatefulRNG rng = new StatefulRNG(0x1337deadbeefc000L);
                 DungeonGenerator dg = new DungeonGenerator(40, 40, rng);
+                char[][] dun;
+                for (int i = 0; i < 2; i++) {
+                    dun = (i == 0) ? dg.generate() : ArrayTools.fill('.', 40, 40);
+                    dg.setDungeon(dun);
+                    Spill spreader = new Spill(dun, m);
 
-                char[][] dun = dg.generate();
-                Spill spreader = new Spill(dun, m);
+                    System.out.println(dg);
 
-                System.out.println(dg);
-
-                Coord entry = dg.utility.randomFloor(dun);
-                HashSet<Coord> impassable = new HashSet<>();
-                impassable.add(Coord.get(entry.x + 2, entry.y));
-                impassable.add(Coord.get(entry.x - 2, entry.y));
-                impassable.add(Coord.get(entry.x, entry.y + 2));
-                impassable.add(Coord.get(entry.x, entry.y - 2));
-                ArrayList<Coord> ordered = spreader.start(entry, 20, impassable);
-                ordered.addAll(spreader.start(entry, 35, impassable));
-                boolean[][] sm = spreader.spillMap;
-                char[][] md = ArrayTools.copy(dun),
-                        hl = DungeonUtility.hashesToLines(dun);
-                for (int x = 0; x < md.length; x++) {
-                    for (int y = 0; y < md[x].length; y++) {
-                        char t;
-                        if (sm[x][y])
-                            t = '~';
-                        else
-                            t = hl[x][y];
-                        md[x][y] = t;
+                    Coord entry = dg.utility.randomFloor(dun);
+                    HashSet<Coord> impassable = new HashSet<>();
+                    impassable.add(Coord.get(entry.x + 2, entry.y));
+                    impassable.add(Coord.get(entry.x - 2, entry.y));
+                    impassable.add(Coord.get(entry.x, entry.y + 2));
+                    impassable.add(Coord.get(entry.x, entry.y - 2));
+                    ArrayList<Coord> ordered = spreader.start(entry, 20, impassable);
+                    ordered.addAll(spreader.start(entry, 35, impassable));
+                    boolean[][] sm = spreader.spillMap;
+                    char[][] md = ArrayTools.copy(dun),
+                            hl = DungeonUtility.hashesToLines(dun);
+                    for (int x = 0; x < md.length; x++) {
+                        for (int y = 0; y < md[x].length; y++) {
+                            char t;
+                            if (sm[x][y])
+                                t = '~';
+                            else
+                                t = hl[x][y];
+                            md[x][y] = t;
+                        }
                     }
-                }
-                md[entry.x][entry.y] = '@';
-                dg.setDungeon(md);
-                System.out.println(dg);
+                    md[entry.x][entry.y] = '@';
+                    dg.setDungeon(md);
+                    System.out.println(dg);
 
-                System.out.println();
+                    System.out.println();
+                }
             }
             for (Measurement m : Measurement.values()) {
                 StatefulRNG rng = new StatefulRNG(0x1337deadbeefc000L);
