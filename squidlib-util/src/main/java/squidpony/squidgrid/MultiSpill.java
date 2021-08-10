@@ -410,7 +410,7 @@ public class MultiSpill implements Serializable {
                     continue;
                 else
                     hasFresh = true;
-                Coord cell = currentFresh.randomItem(rng);//.toArray(new Coord[currentFresh.size()])[rng.nextInt(currentFresh.size())];
+                Coord cell = currentFresh.randomItem(rng);
 
                 spreadPattern.get(i).add(cell);
                 spillMap[cell.x][cell.y] = i;
@@ -419,8 +419,7 @@ public class MultiSpill implements Serializable {
 
                 for (int d = 0; d < dirs.length; d++) {
                     Coord adj = cell.translate(dirs[d].deltaX, dirs[d].deltaY);
-                    if(!adj.isWithin(width, height))
-                        continue;
+                    if(!adj.isWithin(width, height)) continue;
                     double h = heuristic(dirs[d]);
                     if (physicalMap[adj.x][adj.y] && !anySpillMap.contains(adj.x, adj.y) && (impassable == null || !impassable.contains(adj)) && rng.nextDouble(h) <= 1.0) {
                         setFresh(i, adj);
@@ -506,8 +505,7 @@ public class MultiSpill implements Serializable {
 
                     for (int d = 0; d < dirs.length; d++) {
                         Coord adj = cell.translate(dirs[d].deltaX, dirs[d].deltaY);
-                        if(!adj.isWithin(width, height))
-                            continue;
+                        if(!adj.isWithin(width, height)) continue;
                         double h = heuristic(dirs[d]);
                         if (physicalMap[adj.x][adj.y] && !anySpillMap.contains(adj.x, adj.y)
                                 && (impassable == null || !impassable.contains(adj))
