@@ -24,7 +24,7 @@ import java.util.Random;
  * Created by Tommy Ettinger on 1/13/2018.
  */
 public class MathVisualizer extends ApplicationAdapter {
-    private int mode = 14;
+    private int mode = 47;
     private int modes = 57;
     private FilterBatch batch;
     private SparseLayers layers;
@@ -2040,7 +2040,7 @@ public class MathVisualizer extends ApplicationAdapter {
                         float color = SColor.floatGetI(g, g, g);
                         for (int a = 0; a < 32; a++) {
                             for (int b = 0; b < 32; b++) {
-                                layers.backgrounds[256 + 8 + (x << 5) + a][256 + (y << 5) + b] = color;
+                                layers.backgrounds[256 + (x << 5) + a][256 + (y << 5) + b] = color;
                             }
                         }
                     }
@@ -2049,20 +2049,39 @@ public class MathVisualizer extends ApplicationAdapter {
             break;
             case 48: {
                 // thanks to Jonathan M, https://stackoverflow.com/a/20591835
-                Gdx.graphics.setTitle("Spiral Numbering Thing, from index");
-                for (int g = 0; g < 256; g++) {
-                    final int root = (int) (Math.sqrt(g));
-                    final int sign = -(root & 1);
-                    final int big = (root * (root + 1)) - g << 1;
-                    final int y = ((root + 1 >> 1) + sign ^ sign) + ((sign ^ sign + Math.min(big, 0)) >> 1);
-                    final int x = ((root + 1 >> 1) + sign ^ sign) - ((sign ^ sign + Math.max(big, 0)) >> 1);
-                    float color = SColor.floatGetI(g, g, g);
-                    for (int a = 0; a < 32; a++) {
-                        for (int b = 0; b < 32; b++) {
-                            layers.backgrounds[256 + 8 + (x << 5) + a][256 + (y << 5) + b] = color;
+                Gdx.graphics.setTitle("Spiral Testing Thing, from index");
+//                OUTER_LOOP:
+                for (int root = 0; root < 16; ++root) {
+                    for (int g = root * root, limit = g + root + root + 1; g < limit; g++) {
+                        if((g & 1) != 0) continue;
+                        final int sign = -(root & 1);
+                        final int big = (root * (root + 1)) - g << 1;
+                        final int y = ((root + 1 >> 1) + sign ^ sign) + ((sign ^ sign + Math.min(big, 0)) >> 1);
+                        final int x = ((root + 1 >> 1) + sign ^ sign) - ((sign ^ sign + Math.max(big, 0)) >> 1);
+                        // do stuff with x and y
+//                        if(x * y > 16) break OUTER_LOOP;
+                        float color = SColor.floatGetI(g, g, g);
+                        for (int a = 0; a < 32; a++) {
+                            for (int b = 0; b < 32; b++) {
+                                layers.backgrounds[256 + (x << 5) + a][256 + (y << 5) + b] = color;
+                            }
                         }
                     }
                 }
+//                Gdx.graphics.setTitle("Spiral Numbering Thing, from index");
+//                for (int g = 0; g < 256; g++) {
+//                    final int root = (int) (Math.sqrt(g));
+//                    final int sign = -(root & 1);
+//                    final int big = (root * (root + 1)) - g << 1;
+//                    final int y = ((root + 1 >> 1) + sign ^ sign) + ((sign ^ sign + Math.min(big, 0)) >> 1);
+//                    final int x = ((root + 1 >> 1) + sign ^ sign) - ((sign ^ sign + Math.max(big, 0)) >> 1);
+//                    float color = SColor.floatGetI(g, g, g);
+//                    for (int a = 0; a < 32; a++) {
+//                        for (int b = 0; b < 32; b++) {
+//                            layers.backgrounds[256 + (x << 5) + a][256 + (y << 5) + b] = color;
+//                        }
+//                    }
+//                }
             }
             break;
             case 49: {
