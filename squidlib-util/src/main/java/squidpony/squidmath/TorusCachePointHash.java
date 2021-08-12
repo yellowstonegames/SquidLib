@@ -35,6 +35,15 @@ public final class TorusCachePointHash extends IPointHash.IntImpl {
         }
     }
 
+    @Override
+    public void setState(long state) {
+        this.state = (int)(state ^ state >>> 32);
+        SilkRNG rng = new SilkRNG(state);
+        for (int i = 0; i < cache.length; i++) {
+            cache[i] = rng.nextInt();
+        }
+    }
+
     /**
      * Thomas Wang's 2002 integer hash.
      * @param x any int

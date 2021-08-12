@@ -36,6 +36,17 @@ public class TabularPointHash extends IPointHash.IntImpl {
     }
 
     @Override
+    public void setState(long state) {
+        super.setState(state);
+        random.setSeed(state);
+        for (int i = 0; i < table.length; i++) {
+            long r = random.nextLong();
+            table[i] = (int) r;
+            table[++i] = (int) (r >>> 32);
+        }
+    }
+
+    @Override
     public int hashWithState(int x, int y, int state) {
         return table[table[x + state & 0x1FFFF] + y & 0x1FFFF] ^ state;
     }
