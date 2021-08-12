@@ -2053,7 +2053,7 @@ public class MathVisualizer extends ApplicationAdapter {
 //                OUTER_LOOP:
                 for (int root = 0; root < 16; ++root) {
                     for (int g = root * root, limit = g + root + root + 1; g < limit; g++) {
-                        if((g & 1) != 0) continue;
+                        if((g & 1) != 0) continue; //checkerboard
                         final int sign = -(root & 1);
                         final int big = (root * (root + 1)) - g << 1;
                         final int y = ((root + 1 >> 1) + sign ^ sign) + ((sign ^ sign + Math.min(big, 0)) >> 1);

@@ -24,7 +24,7 @@ import static com.badlogic.gdx.graphics.GL20.GL_POINTS;
  */
 public class FastNoiseVisualizer extends ApplicationAdapter {
 
-    private FastNoise noise = new FastNoise(1, 0.0625f, FastNoise.CUBIC_FRACTAL, 1);
+    private FastNoise noise = new FastNoise(1, 0.125f, FastNoise.CUBIC_FRACTAL, 1);
     private int dim = 1; // this can be 0, 1, 2, 3, or 4; add 2 to get the actual dimensions
     private int octaves = 2;
     private float freq = 1f;
@@ -39,10 +39,10 @@ public class FastNoiseVisualizer extends ApplicationAdapter {
 //    private PermPointHash pph = new PermPointHash();
     private FlawedPointHash.RugHash rug = new FlawedPointHash.RugHash(1);
     private FlawedPointHash.QuiltHash quilt = new FlawedPointHash.QuiltHash(1, 16);
-    private FlawedPointHash.CubeHash cube = new FlawedPointHash.CubeHash(1, 32);
+    private FlawedPointHash.CubeHash cube = new FlawedPointHash.CubeHash(1, 64);
     private FlawedPointHash.FNVHash fnv = new FlawedPointHash.FNVHash(1);
     private IPointHash[] pointHashes = new IPointHash[] {ph, hph, gold, iph, tab, fnv, rug, quilt, cube};
-    private int hashIndex = 3;
+    private int hashIndex = 8;
 
     private static final int width = 512, height = 512;
 
@@ -143,7 +143,7 @@ public class FastNoiseVisualizer extends ApplicationAdapter {
                 switch (keycode) {
                     case W:
                         frames.clear();
-                        noise.setFrequency(0x1p-3f);
+                        noise.setFrequency(0x1p-2f);
                         for (int c = 0; c < 256; c++) {
                             Pixmap p = new Pixmap(256, 256, Pixmap.Format.RGBA8888);
                             for (int x = 0; x < 256; x++) {
