@@ -16,6 +16,7 @@ import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
 public class Issue6516 extends ApplicationAdapter {
+    final static int FloatBYTES = 4;
     final int width = 256;
     final int height = 256;
     final float[][][] data = new float[width][height][4];
@@ -33,7 +34,7 @@ public class Issue6516 extends ApplicationAdapter {
                 data[i][j][3] = 0.9f;  /* a */
             }
         }
-        dataBuf = ByteBuffer.allocateDirect( Float.BYTES * 4 * width * height)
+        dataBuf = ByteBuffer.allocateDirect( FloatBYTES * 4 * width * height)
                 .order(ByteOrder.LITTLE_ENDIAN) // actually quite important!
                 .asFloatBuffer();
         for (float[][] dat : data) { /* Float Byte size * RGBA * width * height */
