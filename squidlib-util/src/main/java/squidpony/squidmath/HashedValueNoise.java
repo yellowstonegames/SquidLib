@@ -9,13 +9,13 @@ import squidpony.annotation.Beta;
  * be faster than the Cubic mode in {@link FastNoise}, which was (prior to this class being added) the only reasonable
  * way to show the glitch effects of things like {@link FlawedPointHash.CubeHash}.
  * <br>
- * This implements Noise1D and Noise2D, and should have more dimensionality support added later. It has much
+ * This implements Noise1D, Noise2D, and Noise3D, and should have more dimensionality support added later. It has much
  * lower quality than {@link ClassicNoise}, but is structured similarly in many ways, and won't alter values obtained
  * from a point hash.
  */
 @Beta
-public class HashedValueNoise implements Noise.Noise1D, Noise.Noise2D
-//        , Noise.Noise3D, Noise.Noise4D, Noise.Noise5D, Noise.Noise6D
+public class HashedValueNoise implements Noise.Noise1D, Noise.Noise2D, Noise.Noise3D
+//       , Noise.Noise4D, Noise.Noise5D, Noise.Noise6D
 {
     public static final HashedValueNoise instance = new HashedValueNoise();
 
@@ -349,14 +349,30 @@ public class HashedValueNoise implements Noise.Noise1D, Noise.Noise2D
         hash.setState(seed);
         return getNoise(x, y);
     }
-//    @Override
-//    public double getNoise(double x, double y, double z) {
-//        return valueNoise(seed, x, y, z) * 2 - 1;
-//    }
-//    @Override
-//    public double getNoiseWithSeed(double x, double y, double z, long seed) {
-//        return valueNoise((int) (seed ^ seed >>> 32), x, y, z) * 2 - 1;
-//    }
+    @Override
+    public double getNoise(double x, double y, double z) {
+        int xFloor = x >= 0 ? (int) x : (int) x - 1;
+        x -= xFloor;
+        x *= x * x * (x * (x * 6.0 - 15.0) + 10.0);
+        int yFloor = y >= 0 ? (int) y : (int) y - 1;
+        y -= yFloor;
+        y *= y * y * (y * (y * 6.0 - 15.0) + 10.0);
+        int zFloor = z >= 0 ? (int) z : (int) z - 1;
+        z -= zFloor;
+        z *= z * z * (z * (z * 6.0 - 15.0) + 10.0);
+        return ((1 - z) *
+                ((1 - y) * ((1 - x) * hash.hash(xFloor, yFloor, zFloor) + x * hash.hash(xFloor + 1, yFloor, zFloor))
+                        + y * ((1 - x) * hash.hash(xFloor, yFloor + 1, zFloor) + x * hash.hash(xFloor + 1, yFloor + 1, zFloor)))
+                + z *
+                ((1 - y) * ((1 - x) * hash.hash(xFloor, yFloor, zFloor + 1) + x * hash.hash(xFloor + 1, yFloor, zFloor + 1))
+                        + y * ((1 - x) * hash.hash(xFloor, yFloor + 1, zFloor + 1) + x * hash.hash(xFloor + 1, yFloor + 1, zFloor + 1))))
+                * (0x1p-31);
+    }
+    @Override
+    public double getNoiseWithSeed(double x, double y, double z, long seed) {
+        hash.setState(seed);
+        return getNoise(x, y, z);
+    }
 //    @Override
 //    public double getNoise(double x, double y, double z, double w) {
 //        return valueNoise(seed, x, y, z, w) * 2 - 1;
