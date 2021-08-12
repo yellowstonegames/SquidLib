@@ -1,6 +1,10 @@
 package squidpony.gdx.tests;
 
-import com.badlogic.gdx.*;
+import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Files;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.graphics.Color;
@@ -9,9 +13,13 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import squidpony.Maker;
 import squidpony.panel.IColoredString;
-import squidpony.squidgrid.gui.gdx.*;
+import squidpony.squidgrid.gui.gdx.DefaultResources;
+import squidpony.squidgrid.gui.gdx.FilterBatch;
+import squidpony.squidgrid.gui.gdx.GDXMarkup;
+import squidpony.squidgrid.gui.gdx.SquidPanel;
+import squidpony.squidgrid.gui.gdx.TextCellFactory;
+import squidpony.squidgrid.gui.gdx.TextPanel;
 import squidpony.squidgrid.mapping.LineKit;
 import squidpony.squidmath.DiverRNG;
 import squidpony.squidmath.GreasedRegion;
@@ -45,6 +53,7 @@ public class FontTest extends ApplicationAdapter {
     private ArrayList<TextPanel> texts;
     private int index = 0;
     private static final int ZOOM = 1;
+
     @Override
     public void create() {
 
@@ -104,7 +113,7 @@ public class FontTest extends ApplicationAdapter {
 //                new TextCellFactory().fontMultiDistanceField("VeryWow-msdf.fnt", "VeryWow-msdf.png").width(6f).height(24f).initBySize().setSmoothingMultiplier(1.5f)
                 //DefaultResources.getStretchableCleanFont().initBySize(),
         };
-        for(TextCellFactory tc : factories)
+        for (TextCellFactory tc : factories)
             tc.bmpFont.setUseIntegerPositions(false);
         int sw = Gdx.graphics.getWidth(), sh = Gdx.graphics.getHeight();
         viewport = new StretchViewport(totalWidth, totalHeight);
@@ -173,15 +182,15 @@ public class FontTest extends ApplicationAdapter {
                 new SquidPanel(widths[24], heights[24], factories[24]).setTextSize(factories[24].width() + 0f * ZOOM, factories[24].height() + 0f * ZOOM),
         };
         final GDXMarkup markup = GDXMarkup.instance;
-        final ArrayList<IColoredString<Color>> samples = Maker.makeList(
-                markup.colorString("The quick brown fox jumps over the lazy dog.")
-                , markup.colorString("HAMBURGEVONS")
-                , markup.colorString("Black Sphinx Of Quartz: Judge Ye My Vow!")
-                , markup.colorString("Non-rainbow; [CW Red]r[CW Apricot]a[CW Bright Yellow]i[CW Green]n[CW Cyan]b[CW Blue]o[CW Purple]w[White]!")
-                , markup.colorString("Sun Tzu said: In the practical art of war, the best thing of all is to take the enemy's country whole and intact; to shatter and destroy it is not so good.")
-                , markup.colorString("So, too, it is better to recapture an army entire than to destroy it, to capture a regiment, a detachment or a company entire than to destroy them.")
-                , markup.colorString("Hence to fight and conquer in all your battles is not supreme excellence; supreme excellence consists in breaking the enemy's resistance without fighting.")
-        );
+        final ArrayList<IColoredString<Color>> samples = new ArrayList<>(7);
+        samples.add(markup.colorString("The quick brown fox jumps over the lazy dog."));
+        samples.add(markup.colorString("HAMBURGEVONS"));
+        samples.add(markup.colorString("Black Sphinx Of Quartz: Judge Ye My Vow!"));
+        samples.add(markup.colorString("Non-rainbow; [CW Red]r[CW Apricot]a[CW Bright Yellow]i[CW Green]n[CW Cyan]b[CW Blue]o[CW Purple]w[White]!"));
+        samples.add(markup.colorString("Sun Tzu said: In the practical art of war, the best thing of all is to take the enemy's country whole and intact; to shatter and destroy it is not so good."));
+        samples.add(markup.colorString("So, too, it is better to recapture an army entire than to destroy it, to capture a regiment, a detachment or a company entire than to destroy them."));
+        samples.add(markup.colorString("Hence to fight and conquer in all your battles is not supreme excellence; supreme excellence consists in breaking the enemy's resistance without fighting."));
+
         texts = new ArrayList<>(5);
         for (int i = 0; i < 5; i++) {
             text = new TextPanel(factories[factories.length - 5 + i]);
@@ -195,10 +204,10 @@ public class FontTest extends ApplicationAdapter {
 
         Gdx.input.setInputProcessor(new InputAdapter() {
             final DiverRNG rng = new DiverRNG(System.nanoTime());
+
             @Override
             public boolean keyUp(int keycode) {
-                if(keycode == Input.Keys.B)
-                {
+                if (keycode == Input.Keys.B) {
                     display.erase();
                     long r, h;
                     //r = determine(r);
@@ -251,8 +260,8 @@ public class FontTest extends ApplicationAdapter {
 //                    h = determine(h+1) & determine(h + 2);
                     h = GreasedRegion.approximateBits(rng, 36);
                     h &= LineKit.flipHorizontal4x4(h);
-                    display.put(4,  12, LineKit.decode4x4(r));
-                    display.put(4,  16, LineKit.decode4x4(h));
+                    display.put(4, 12, LineKit.decode4x4(r));
+                    display.put(4, 16, LineKit.decode4x4(h));
 
 //                    r = determine(r+1) & determine(r + 2);
                     r = GreasedRegion.approximateBits(rng, 12);
@@ -260,8 +269,8 @@ public class FontTest extends ApplicationAdapter {
 //                    h = determine(h+1) & determine(h + 2);
                     h = GreasedRegion.approximateBits(rng, 12);
                     h ^= LineKit.flipHorizontal4x4(h);
-                    display.put(11,  12, LineKit.decode4x4(r));
-                    display.put(11,  16, LineKit.decode4x4(h));
+                    display.put(11, 12, LineKit.decode4x4(r));
+                    display.put(11, 16, LineKit.decode4x4(h));
 
 //                    r = determine(r+1) & determine(r + 2);
                     r = GreasedRegion.approximateBits(rng, 10);
@@ -269,10 +278,9 @@ public class FontTest extends ApplicationAdapter {
 //                    h = determine(h+1) & determine(h + 2);
                     h = GreasedRegion.approximateBits(rng, 10);
                     h |= LineKit.flipHorizontal4x4(h);
-                    display.put(18,  12, LineKit.decode4x4(r));
-                    display.put(18,  16, LineKit.decode4x4(h));
-                }
-                else if(keycode == Input.Keys.SPACE || keycode == Input.Keys.ENTER) {
+                    display.put(18, 12, LineKit.decode4x4(r));
+                    display.put(18, 16, LineKit.decode4x4(h));
+                } else if (keycode == Input.Keys.SPACE || keycode == Input.Keys.ENTER) {
                     index = ((index + 1) % factories.length);
 //                    viewport = viewports[index];
                     if (index < factories.length - texts.size()) {
@@ -294,10 +302,9 @@ public class FontTest extends ApplicationAdapter {
         });
         Gdx.graphics.setTitle("SquidLib Demo: Fonts, previewing font #" + (index) + ": " + factories[index].bmpFont + " (press any key)");
 
-        if(index < factories.length - texts.size()) 
+        if (index < factories.length - texts.size())
             stage.clear();//stage.addActor(display);
-        else 
-        {
+        else {
             text = texts.get(index - factories.length + texts.size());
             stage.clear();
 //            stage.setViewport(viewport = viewports[index]);
@@ -342,8 +349,7 @@ public class FontTest extends ApplicationAdapter {
                 }
             }
             batch.end();
-        }
-        else
+        } else
             stage.draw();
     }
 
@@ -354,7 +360,8 @@ public class FontTest extends ApplicationAdapter {
 //        totalHeight = height;
         stage.getViewport().update(width, height, true);
     }
-    public static void main (String[] arg) {
+
+    public static void main(String[] arg) {
         Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
         config.setTitle("SquidLib Demo: Fonts, preview 1/25 (press any key)");
 //        config.width = totalWidth = Lwjgl3ApplicationConfiguration.getDesktopDisplayMode().width - 10;
