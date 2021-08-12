@@ -14,8 +14,8 @@ import squidpony.annotation.Beta;
  * from a point hash.
  */
 @Beta
-public class HashedValueNoise implements Noise.Noise1D, Noise.Noise2D, Noise.Noise3D
-//       , Noise.Noise4D, Noise.Noise5D, Noise.Noise6D
+public class HashedValueNoise implements Noise.Noise1D, Noise.Noise2D, Noise.Noise3D, Noise.Noise4D
+//       , Noise.Noise5D, Noise.Noise6D
 {
     public static final HashedValueNoise instance = new HashedValueNoise();
 
@@ -32,111 +32,6 @@ public class HashedValueNoise implements Noise.Noise1D, Noise.Noise2D, Noise.Noi
         this.hash = new HastyPointHash(seed);
     }
 
-//    public static double valueNoise(int seed, double x, double y)
-//    {
-//        int xFloor = x >= 0 ? (int) x : (int) x - 1;
-//        x -= xFloor;
-//        x *= x * (3 - 2 * x);
-//        int yFloor = y >= 0 ? (int) y : (int) y - 1;
-//        y -= yFloor;
-//        y *= y * (3 - 2 * y);
-//        xFloor *= 0xD1B55;
-//        yFloor *= 0xABC99;
-//        return ((1 - y) * ((1 - x) * hashPart1024(xFloor, yFloor, seed) + x * hashPart1024(xFloor + 0xD1B55, yFloor, seed))
-//                + y * ((1 - x) * hashPart1024(xFloor, yFloor + 0xABC99, seed) + x * hashPart1024(xFloor + 0xD1B55, yFloor + 0xABC99, seed)))
-//                * (0x1.0040100401004p-10);
-//    }
-//
-//    //// constants are the most significant 20 bits of constants from PhantomNoise, incremented if even
-//    //// they should normally be used for the 3D version of R2, but we only use 2 of the 3 constants
-//    //x should be premultiplied by 0xD1B55
-//    //y should be premultiplied by 0xABC99
-//    private static int hashPart1024(final int x, final int y, int s) {
-//        s += x ^ y;
-//        return (s ^ (s << 19 | s >>> 13) ^ (s << 5 | s >>> 27) ^ 0xD1B54A35) * 0x125493 >>> 22;
-//    }
-//
-//    public static double valueNoise(int seed, double x, double y, double z)
-//    {
-//        int xFloor = x >= 0 ? (int) x : (int) x - 1;
-//        x -= xFloor;
-//        x *= x * (3 - 2 * x);
-//        int yFloor = y >= 0 ? (int) y : (int) y - 1;
-//        y -= yFloor;
-//        y *= y * (3 - 2 * y);
-//        int zFloor = z >= 0 ? (int) z : (int) z - 1;
-//        z -= zFloor;
-//        z *= z * (3 - 2 * z);
-//        //0xDB4F1, 0xBBE05, 0xA0F2F
-//        xFloor *= 0xDB4F1;
-//        yFloor *= 0xBBE05;
-//        zFloor *= 0xA0F2F;
-//        return ((1 - z) *
-//                ((1 - y) * ((1 - x) * hashPart1024(xFloor, yFloor, zFloor, seed) + x * hashPart1024(xFloor + 0xDB4F1, yFloor, zFloor, seed))
-//                        + y * ((1 - x) * hashPart1024(xFloor, yFloor + 0xBBE05, zFloor, seed) + x * hashPart1024(xFloor + 0xDB4F1, yFloor + 0xBBE05, zFloor, seed)))
-//                + z *
-//                ((1 - y) * ((1 - x) * hashPart1024(xFloor, yFloor, zFloor + 0xA0F2F, seed) + x * hashPart1024(xFloor + 0xDB4F1, yFloor, zFloor + 0xA0F2F, seed))
-//                        + y * ((1 - x) * hashPart1024(xFloor, yFloor + 0xBBE05, zFloor + 0xA0F2F, seed) + x * hashPart1024(xFloor + 0xDB4F1, yFloor + 0xBBE05, zFloor + 0xA0F2F, seed)))
-//                ) * (0x1.0040100401004p-10);
-//    }
-//
-//    //// constants are the most significant 20 bits of constants from PhantomNoise, incremented if even
-//    //// they should normally be used for the 4D version of R2, but we only use 3 of the 4 constants
-//    //x should be premultiplied by 0xDB4F1
-//    //y should be premultiplied by 0xBBE05
-//    //z should be premultiplied by 0xA0F2F
-//    private static int hashPart1024(final int x, final int y, final int z, int s) {
-//        s += x ^ y ^ z;
-//        return (s ^ (s << 19 | s >>> 13) ^ (s << 5 | s >>> 27) ^ 0xD1B54A35) * 0x125493 >>> 22;
-//    }
-//
-//    public static double valueNoise(int seed, double x, double y, double z, double w)
-//    {
-//        int xFloor = x >= 0 ? (int) x : (int) x - 1;
-//        x -= xFloor;
-//        x *= x * (3 - 2 * x);
-//        int yFloor = y >= 0 ? (int) y : (int) y - 1;
-//        y -= yFloor;
-//        y *= y * (3 - 2 * y);
-//        int zFloor = z >= 0 ? (int) z : (int) z - 1;
-//        z -= zFloor;
-//        z *= z * (3 - 2 * z);
-//        int wFloor = w >= 0 ? (int) w : (int) w - 1;
-//        w -= wFloor;
-//        w *= w * (3 - 2 * w);
-//        //0xE19B1, 0xC6D1D, 0xAF36D, 0x9A695
-//        xFloor *= 0xE19B1;
-//        yFloor *= 0xC6D1D;
-//        zFloor *= 0xAF36D;
-//        wFloor *= 0x9A695;
-//        return ((1 - w) *
-//                ((1 - z) *
-//                        ((1 - y) * ((1 - x) * hashPart1024(xFloor, yFloor, zFloor, wFloor, seed) + x * hashPart1024(xFloor + 0xE19B1, yFloor, zFloor, wFloor, seed))
-//                                + y * ((1 - x) * hashPart1024(xFloor, yFloor + 0xC6D1D, zFloor, wFloor, seed) + x * hashPart1024(xFloor + 0xE19B1, yFloor + 0xC6D1D, zFloor, wFloor, seed)))
-//                        + z *
-//                        ((1 - y) * ((1 - x) * hashPart1024(xFloor, yFloor, zFloor + 0xAF36D, wFloor, seed) + x * hashPart1024(xFloor + 0xE19B1, yFloor, zFloor + 0xAF36D, wFloor, seed))
-//                                + y * ((1 - x) * hashPart1024(xFloor, yFloor + 0xC6D1D, zFloor + 0xAF36D, wFloor, seed) + x * hashPart1024(xFloor + 0xE19B1, yFloor + 0xC6D1D, zFloor + 0xAF36D, wFloor, seed))))
-//                + (w *
-//                ((1 - z) *
-//                        ((1 - y) * ((1 - x) * hashPart1024(xFloor, yFloor, zFloor, wFloor + 0x9A695, seed) + x * hashPart1024(xFloor + 0xE19B1, yFloor, zFloor, wFloor + 0x9A695, seed))
-//                                + y * ((1 - x) * hashPart1024(xFloor, yFloor + 0xC6D1D, zFloor, wFloor + 0x9A695, seed) + x * hashPart1024(xFloor + 0xE19B1, yFloor + 0xC6D1D, zFloor, wFloor + 0x9A695, seed)))
-//                        + z *
-//                        ((1 - y) * ((1 - x) * hashPart1024(xFloor, yFloor, zFloor + 0xAF36D, wFloor + 0x9A695, seed) + x * hashPart1024(xFloor + 0xE19B1, yFloor, zFloor + 0xAF36D, wFloor + 0x9A695, seed))
-//                                + y * ((1 - x) * hashPart1024(xFloor, yFloor + 0xC6D1D, zFloor + 0xAF36D, wFloor + 0x9A695, seed) + x * hashPart1024(xFloor + 0xE19B1, yFloor + 0xC6D1D, zFloor + 0xAF36D, wFloor + 0x9A695, seed)))
-//                ))) * (0x1.0040100401004p-10);
-//    }
-//
-//    //// constants are the most significant 20 bits of constants from PhantomNoise, incremented if even
-//    //// they should normally be used for the 5D version of R2, but we only use 4 of the 5 constants
-//    //x should be premultiplied by 0xE19B1
-//    //y should be premultiplied by 0xC6D1D
-//    //z should be premultiplied by 0xAF36D
-//    //w should be premultiplied by 0x9A695
-//    private static int hashPart1024(final int x, final int y, final int z, final int w, int s) {
-//        s += x ^ y ^ z ^ w;
-//        return (s ^ (s << 19 | s >>> 13) ^ (s << 5 | s >>> 27) ^ 0xD1B54A35) * 0x125493 >>> 22;
-//    }
-//
 //    public static double valueNoise(int seed, double x, double y, double z, double w, double u)
 //    {
 //        int xFloor = x >= 0 ? (int) x : (int) x - 1;
@@ -373,14 +268,41 @@ public class HashedValueNoise implements Noise.Noise1D, Noise.Noise2D, Noise.Noi
         hash.setState(seed);
         return getNoise(x, y, z);
     }
-//    @Override
-//    public double getNoise(double x, double y, double z, double w) {
-//        return valueNoise(seed, x, y, z, w) * 2 - 1;
-//    }
-//    @Override
-//    public double getNoiseWithSeed(double x, double y, double z, double w, long seed) {
-//        return valueNoise((int) (seed ^ seed >>> 32), x, y, z, w) * 2 - 1;
-//    }
+    @Override
+    public double getNoise(double x, double y, double z, double w) {
+        int xFloor = x >= 0 ? (int) x : (int) x - 1;
+        x -= xFloor;
+        x *= x * x * (x * (x * 6.0 - 15.0) + 10.0);
+        int yFloor = y >= 0 ? (int) y : (int) y - 1;
+        y -= yFloor;
+        y *= y * y * (y * (y * 6.0 - 15.0) + 10.0);
+        int zFloor = z >= 0 ? (int) z : (int) z - 1;
+        z -= zFloor;
+        z *= z * z * (z * (z * 6.0 - 15.0) + 10.0);
+        int wFloor = w >= 0 ? (int) w : (int) w - 1;
+        w -= wFloor;
+        w *= w * w * (w * (w * 6.0 - 15.0) + 10.0);
+        return ((1 - w) *
+                ((1 - z) *
+                        ((1 - y) * ((1 - x) * hash.hash(xFloor, yFloor, zFloor, wFloor) + x * hash.hash(xFloor + 1, yFloor, zFloor, wFloor))
+                                + y * ((1 - x) * hash.hash(xFloor, yFloor + 1, zFloor, wFloor) + x * hash.hash(xFloor + 1, yFloor + 1, zFloor, wFloor)))
+                        + z *
+                        ((1 - y) * ((1 - x) * hash.hash(xFloor, yFloor, zFloor + 1, wFloor) + x * hash.hash(xFloor + 1, yFloor, zFloor + 1, wFloor))
+                                + y * ((1 - x) * hash.hash(xFloor, yFloor + 1, zFloor + 1, wFloor) + x * hash.hash(xFloor + 1, yFloor + 1, zFloor + 1, wFloor))))
+                + (w *
+                ((1 - z) *
+                        ((1 - y) * ((1 - x) * hash.hash(xFloor, yFloor, zFloor, wFloor + 1) + x * hash.hash(xFloor + 1, yFloor, zFloor, wFloor + 1))
+                                + y * ((1 - x) * hash.hash(xFloor, yFloor + 1, zFloor, wFloor + 1) + x * hash.hash(xFloor + 1, yFloor + 1, zFloor, wFloor + 1)))
+                        + z *
+                        ((1 - y) * ((1 - x) * hash.hash(xFloor, yFloor, zFloor + 1, wFloor + 1) + x * hash.hash(xFloor + 1, yFloor, zFloor + 1, wFloor + 1))
+                                + y * ((1 - x) * hash.hash(xFloor, yFloor + 1, zFloor + 1, wFloor + 1) + x * hash.hash(xFloor + 1, yFloor + 1, zFloor + 1, wFloor + 1))))))
+                * (0x1p-31);
+    }
+    @Override
+    public double getNoiseWithSeed(double x, double y, double z, double w, long seed) {
+        hash.setState(seed);
+        return getNoise(x, y, z, w);
+    }
 //    @Override
 //    public double getNoise(double x, double y, double z, double w, double u) {
 //        return valueNoise(seed, x, y, z, w, u) * 2 - 1;
