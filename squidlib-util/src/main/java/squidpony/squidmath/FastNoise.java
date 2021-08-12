@@ -1179,6 +1179,18 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
                     default:
                         return singleSimplexFractalFBM(x, y, z, w);
                 }
+            case CUBIC:
+                return singleCubic(seed, x, y, z, w);
+            case CUBIC_FRACTAL:
+                switch (fractalType) {
+                    case BILLOW:
+                        return singleCubicFractalBillow(x, y, z, w);
+                    case RIDGED_MULTI:
+                        return singleCubicFractalRidgedMulti(x, y, z, w);
+                    default:
+                        return singleCubicFractalFBM(x, y, z, w);
+                }
+
 //            case CELLULAR:
 //                switch (cellularReturnType) {
 //                    case CELL_VALUE:
@@ -1509,7 +1521,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         float sum = 0f, exp = 2f, correction = 0f, spike;
         for (int i = 0; i < octaves; i++) {
             spike = 1f - Math.abs(singleValue(seed + i, x, y));
-            correction += (exp *= 0.5);
+            correction += (exp *= 0.5f);
             sum += spike * exp;
             if(fractalSpiral){
                 final float x2 = rotateX2D(x, y);
@@ -1629,7 +1641,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         float sum = 0f, exp = 2f, correction = 0f, spike;
         for (int i = 0; i < octaves; i++) {
             spike = 1f - Math.abs(singleValue(seed + i, x, y, z));
-            correction += (exp *= 0.5);
+            correction += (exp *= 0.5f);
             sum += spike * exp;
             if(fractalSpiral){
                 final float x2 = rotateX3D(x, y, z);
@@ -1775,7 +1787,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         float sum = 0f, exp = 2f, correction = 0f, spike;
         for (int i = 0; i < octaves; i++) {
             spike = 1f - Math.abs(singleValue(seed + i, x, y, z, w));
-            correction += (exp *= 0.5);
+            correction += (exp *= 0.5f);
             sum += spike * exp;
             if(fractalSpiral){
                 final float x2 = rotateX4D(x, y, z, w);
@@ -1943,7 +1955,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         float sum = 0f, exp = 2f, correction = 0f, spike;
         for (int i = 0; i < octaves; i++) {
             spike = 1f - Math.abs(singleValue(seed + i, x, y, z, w, u));
-            correction += (exp *= 0.5);
+            correction += (exp *= 0.5f);
             sum += spike * exp;
             if(fractalSpiral){
                 final float x2 = rotateX5D(x, y, z, w, u);
@@ -2162,7 +2174,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         float sum = 0f, exp = 2f, correction = 0f, spike;
         for (int i = 0; i < octaves; i++) {
             spike = 1f - Math.abs(singleValue(seed + i, x, y, z, w, u, v));
-            correction += (exp *= 0.5);
+            correction += (exp *= 0.5f);
             sum += spike * exp;
             if(fractalSpiral){
                 final float x2 = rotateX6D(x, y, z, w, u, v);
@@ -2476,7 +2488,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         float sum = 0f, exp = 2f, correction = 0f, spike;
         for (int i = 0; i < octaves; i++) {
             spike = 1f - Math.abs(singleFoam(seed + i, x, y));
-            correction += (exp *= 0.5);
+            correction += (exp *= 0.5f);
             sum += spike * exp;
             t = x;
             x = y * lacunarity;
@@ -2542,7 +2554,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         float sum = 0f, exp = 2f, correction = 0f, spike;
         for (int i = 0; i < octaves; i++) {
             spike = 1f - Math.abs(singleFoam(seed + i, x, y, z));
-            correction += (exp *= 0.5);
+            correction += (exp *= 0.5f);
             sum += spike * exp;
             x *= lacunarity;
             y *= lacunarity;
@@ -2633,7 +2645,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         float sum = 0f, exp = 2f, correction = 0f, spike;
         for (int i = 0; i < octaves; i++) {
             spike = 1f - Math.abs(singleFoam(seed + i, x, y,  z, w));
-            correction += (exp *= 0.5);
+            correction += (exp *= 0.5f);
             sum += spike * exp;
             x *= lacunarity;
             y *= lacunarity;
@@ -2756,7 +2768,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         float sum = 0f, exp = 2f, correction = 0f, spike;
         for (int i = 0; i < octaves; i++) {
             spike = 1f - Math.abs(singleFoam(seed + i, x, y, z, w, u));
-            correction += (exp *= 0.5);
+            correction += (exp *= 0.5f);
             sum += spike * exp;
             x *= lacunarity;
             y *= lacunarity;
@@ -2899,7 +2911,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         float sum = 0f, exp = 2f, correction = 0f, spike;
         for (int i = 0; i < octaves; i++) {
             spike = 1f - Math.abs(singleFoam(seed + i, x, y, z, w, u, v));
-            correction += (exp *= 0.5);
+            correction += (exp *= 0.5f);
             sum += spike * exp;
             x *= lacunarity;
             y *= lacunarity;
@@ -3050,7 +3062,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         float sum = 0f, exp = 2f, correction = 0f, spike;
         for (int i = 0; i < octaves; i++) {
             spike = 1f - Math.abs(singlePerlin(seed + i, x, y));
-            correction += (exp *= 0.5);
+            correction += (exp *= 0.5f);
             sum += spike * exp;
             if(fractalSpiral){
                 final float x2 = rotateX2D(x, y);
@@ -3163,7 +3175,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         float sum = 0f, exp = 2f, correction = 0f, spike;
         for (int i = 0; i < octaves; i++) {
             spike = 1f - Math.abs(singlePerlin(seed + i, x, y, z));
-            correction += (exp *= 0.5);
+            correction += (exp *= 0.5f);
             sum += spike * exp;
             if(fractalSpiral){
                 final float x2 = rotateX3D(x, y, z);
@@ -3339,7 +3351,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         float sum = 0f, exp = 2f, correction = 0f, spike;
         for (int i = 0; i < octaves; i++) {
             spike = 1f - Math.abs(singlePerlin(seed + i, x, y,  z, w));
-            correction += (exp *= 0.5);
+            correction += (exp *= 0.5f);
             sum += spike * exp;
             if(fractalSpiral){
                 final float x2 = rotateX4D(x, y, z, w);
@@ -3498,7 +3510,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         float sum = 0f, exp = 2f, correction = 0f, spike;
         for (int i = 0; i < octaves; i++) {
             spike = 1f - Math.abs(singlePerlin(seed + i, x, y, z, w, u));
-            correction += (exp *= 0.5);
+            correction += (exp *= 0.5f);
             sum += spike * exp;
             if(fractalSpiral){
                 final float x2 = rotateX5D(x, y, z, w, u);
@@ -3717,7 +3729,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         float sum = 0f, exp = 2f, correction = 0f, spike;
         for (int i = 0; i < octaves; i++) {
             spike = 1f - Math.abs(singlePerlin(seed + i, x, y, z, w, u, v));
-            correction += (exp *= 0.5);
+            correction += (exp *= 0.5f);
             sum += spike * exp;
             if(fractalSpiral){
                 final float x2 = rotateX6D(x, y, z, w, u, v);
@@ -3992,7 +4004,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         float sum = 0f, exp = 2f, correction = 0f, spike;
         for (int i = 0; i < octaves; i++) {
             spike = 1f - Math.abs(singleSimplex(seed + i, x, y, z));
-            correction += (exp *= 0.5);
+            correction += (exp *= 0.5f);
             sum += spike * exp;
             if(fractalSpiral){
                 final float x2 = rotateX3D(x, y, z);
@@ -4012,7 +4024,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         float sum = 0f, exp = 2f, correction = 0f, spike;
         for (int i = 0; i < octaves; i++) {
             spike = 1f - Math.abs(singleSimplex(seed + i, x, y, z));
-            correction += (exp *= 0.5);
+            correction += (exp *= 0.5f);
             sum += spike * exp;
             if(fractalSpiral){
                 final float x2 = rotateX3D(x, y, z);
@@ -4362,7 +4374,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         float sum = 0f, exp = 2f, correction = 0f, spike;
         for (int i = 0; i < octaves; i++) {
             spike = 1f - Math.abs(singleSimplex(seed + i, x, y));
-            correction += (exp *= 0.5);
+            correction += (exp *= 0.5f);
             sum += spike * exp;
             if(fractalSpiral){
                 final float x2 = rotateX2D(x, y);
@@ -4380,7 +4392,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         float sum = 0f, exp = 2f, correction = 0f, spike;
         for (int i = 0; i < octaves; i++) {
             spike = 1f - Math.abs(singleSimplex(seed + i, x, y));
-            correction += (exp *= 0.5);
+            correction += (exp *= 0.5f);
             sum += spike * exp;
             if(fractalSpiral){
                 final float x2 = rotateX2D(x, y);
@@ -4599,7 +4611,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         float sum = 0f, exp = 2f, correction = 0f, spike;
         for (int i = 0; i < octaves; i++) {
             spike = 1f - Math.abs(singleSimplex(seed + i, x, y, z, w));
-            correction += (exp *= 0.5);
+            correction += (exp *= 0.5f);
             sum += spike * exp;
             if(fractalSpiral){
                 final float x2 = rotateX4D(x, y, z, w);
@@ -4842,7 +4854,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         float sum = 0f, exp = 2f, correction = 0f, spike;
         for (int i = 0; i < octaves; i++) {
             spike = 1f - Math.abs(singleSimplex(seed + i, x, y, z, w, u));
-            correction += (exp *= 0.5);
+            correction += (exp *= 0.5f);
             sum += spike * exp;
             if(fractalSpiral){
                 final float x2 = rotateX5D(x, y, z, w, u);
@@ -5014,7 +5026,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         float sum = 0f, exp = 2f, correction = 0f, spike;
         for (int i = 0; i < octaves; i++) {
             spike = 1f - Math.abs(singleSimplex(seed + i, x, y, z, w, u, v));
-            correction += (exp *= 0.5);
+            correction += (exp *= 0.5f);
             sum += spike * exp;
             if(fractalSpiral){
                 final float x2 = rotateX6D(x, y, z, w, u, v);
@@ -5100,7 +5112,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         float sum = 0f, exp = 2f, correction = 0f, spike;
         for (int i = 0; i < octaves; i++) {
             spike = 1f - Math.abs(singleCubic(seed + i, x, y, z));
-            correction += (exp *= 0.5);
+            correction += (exp *= 0.5f);
             sum += spike * exp;
             if(fractalSpiral){
                 final float x2 = rotateX3D(x, y, z);
@@ -5119,7 +5131,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         return singleCubic(seed, x * frequency, y * frequency, z * frequency);
     }
 
-    private final static float CUBIC_3D_BOUNDING = 1 / (float) (1.5 * 1.5 * 1.5);
+    private final static float CUBIC_3D_BOUNDING = 2f / (1.5f * 1.5f * 1.5f);
 
     private float singleCubic(int seed, float x, float y, float z) {
         int x1 = fastFloor(x);
@@ -5229,7 +5241,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         float sum = 0f, exp = 2f, correction = 0f, spike;
         for (int i = 0; i < octaves; i++) {
             spike = 1f - Math.abs(singleCubic(seed + i, x, y));
-            correction += (exp *= 0.5);
+            correction += (exp *= 0.5f);
             sum += spike * exp;
             if(fractalSpiral){
                 final float x2 = rotateX2D(x, y);
@@ -5249,7 +5261,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         return singleCubic(0, x, y);
     }
 
-    private final static float CUBIC_2D_BOUNDING = 1 / 2.25f;
+    private final static float CUBIC_2D_BOUNDING = 1f / 1.5f;
 
     private float singleCubic(int seed, float x, float y) {
         int x1 = fastFloor(x);
@@ -5275,6 +5287,215 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
                 cubicLerp(valCoord2D(seed, x0, y3), valCoord2D(seed, x1, y3), valCoord2D(seed, x2, y3), valCoord2D(seed, x3, y3),
                         xs),
                 ys) * CUBIC_2D_BOUNDING;
+    }
+
+
+    public float getCubicFractal(float x, float y, float z, float w) {
+        x *= frequency;
+        y *= frequency;
+        z *= frequency;
+        w *= frequency;
+
+        switch (fractalType) {
+            case FBM:
+                return singleCubicFractalFBM(x, y, z, w);
+            case BILLOW:
+                return singleCubicFractalBillow(x, y, z, w);
+            case RIDGED_MULTI:
+                return singleCubicFractalRidgedMulti(x, y, z, w);
+            default:
+                return 0;
+        }
+    }
+
+    private float singleCubicFractalFBM(float x, float y, float z, float w) {
+        int seed = this.seed;
+        float sum = singleCubic(seed, x, y, z, w);
+        float amp = 1;
+        int i = 0;
+
+        while (++i < octaves) {
+            x *= lacunarity;
+            y *= lacunarity;
+            z *= lacunarity;
+            w *= lacunarity;
+
+            amp *= gain;
+            sum += singleCubic(++seed, x, y, z, w) * amp;
+        }
+
+        return sum * fractalBounding;
+    }
+
+    private float singleCubicFractalBillow(float x, float y, float z, float w) {
+        int seed = this.seed;
+        float sum = Math.abs(singleCubic(seed, x, y, z, w)) * 2 - 1;
+        float amp = 1;
+        int i = 0;
+
+        while (++i < octaves) {
+            x *= lacunarity;
+            y *= lacunarity;
+            z *= lacunarity;
+            w *= lacunarity;
+
+            amp *= gain;
+            sum += (Math.abs(singleCubic(++seed, x, y, z, w)) * 2 - 1) * amp;
+        }
+
+        return sum * fractalBounding;
+    }
+
+    private float singleCubicFractalRidgedMulti(float x, float y, float z, float w) {
+        int seed = this.seed;
+        float sum = 0f, exp = 2f, correction = 0f, spike;
+        for (int i = 0; i < octaves; i++) {
+            spike = 1f - Math.abs(singleCubic(seed + i, x, y, z, w));
+            correction += (exp *= 0.5f);
+            sum += spike * exp;
+            x *= lacunarity;
+            y *= lacunarity;
+            z *= lacunarity;
+        }
+        return sum * 2f / correction - 1f;
+    }
+
+    public float getCubic(float x, float y, float z, float w) {
+        return singleCubic(seed, x * frequency, y * frequency, z * frequency, w * frequency);
+    }
+
+    private final static float CUBIC_4D_BOUNDING = 1f / (1.5f * 1.5f);
+
+    private float singleCubic(int seed, float x, float y, float z, float w) {
+        int x1 = fastFloor(x);
+        int y1 = fastFloor(y);
+        int z1 = fastFloor(z);
+        int w1 = fastFloor(w);
+
+        int x0 = x1 - 1;
+        int y0 = y1 - 1;
+        int z0 = z1 - 1;
+        int w0 = w1 - 1;
+        int x2 = x1 + 1;
+        int y2 = y1 + 1;
+        int z2 = z1 + 1;
+        int w2 = w1 + 1;
+        int x3 = x1 + 2;
+        int y3 = y1 + 2;
+        int z3 = z1 + 2;
+        int w3 = w1 + 2;
+
+        float xs = x - (float) x1;
+        float ys = y - (float) y1;
+        float zs = z - (float) z1;
+        float ws = w - (float) w1;
+
+        return cubicLerp(
+                cubicLerp(
+                        cubicLerp(
+                                cubicLerp(valCoord4D(seed, x0, y0, z0, w0), valCoord4D(seed, x1, y0, z0, w0), valCoord4D(seed, x2, y0, z0, w0), valCoord4D(seed, x3, y0, z0, w0), xs),
+                                cubicLerp(valCoord4D(seed, x0, y1, z0, w0), valCoord4D(seed, x1, y1, z0, w0), valCoord4D(seed, x2, y1, z0, w0), valCoord4D(seed, x3, y1, z0, w0), xs),
+                                cubicLerp(valCoord4D(seed, x0, y2, z0, w0), valCoord4D(seed, x1, y2, z0, w0), valCoord4D(seed, x2, y2, z0, w0), valCoord4D(seed, x3, y2, z0, w0), xs),
+                                cubicLerp(valCoord4D(seed, x0, y3, z0, w0), valCoord4D(seed, x1, y3, z0, w0), valCoord4D(seed, x2, y3, z0, w0), valCoord4D(seed, x3, y3, z0, w0), xs),
+                                ys),
+                        cubicLerp(
+                                cubicLerp(valCoord4D(seed, x0, y0, z1, w0), valCoord4D(seed, x1, y0, z1, w0), valCoord4D(seed, x2, y0, z1, w0), valCoord4D(seed, x3, y0, z1, w0), xs),
+                                cubicLerp(valCoord4D(seed, x0, y1, z1, w0), valCoord4D(seed, x1, y1, z1, w0), valCoord4D(seed, x2, y1, z1, w0), valCoord4D(seed, x3, y1, z1, w0), xs),
+                                cubicLerp(valCoord4D(seed, x0, y2, z1, w0), valCoord4D(seed, x1, y2, z1, w0), valCoord4D(seed, x2, y2, z1, w0), valCoord4D(seed, x3, y2, z1, w0), xs),
+                                cubicLerp(valCoord4D(seed, x0, y3, z1, w0), valCoord4D(seed, x1, y3, z1, w0), valCoord4D(seed, x2, y3, z1, w0), valCoord4D(seed, x3, y3, z1, w0), xs),
+                                ys),
+                        cubicLerp(
+                                cubicLerp(valCoord4D(seed, x0, y0, z2, w0), valCoord4D(seed, x1, y0, z2, w0), valCoord4D(seed, x2, y0, z2, w0), valCoord4D(seed, x3, y0, z2, w0), xs),
+                                cubicLerp(valCoord4D(seed, x0, y1, z2, w0), valCoord4D(seed, x1, y1, z2, w0), valCoord4D(seed, x2, y1, z2, w0), valCoord4D(seed, x3, y1, z2, w0), xs),
+                                cubicLerp(valCoord4D(seed, x0, y2, z2, w0), valCoord4D(seed, x1, y2, z2, w0), valCoord4D(seed, x2, y2, z2, w0), valCoord4D(seed, x3, y2, z2, w0), xs),
+                                cubicLerp(valCoord4D(seed, x0, y3, z2, w0), valCoord4D(seed, x1, y3, z2, w0), valCoord4D(seed, x2, y3, z2, w0), valCoord4D(seed, x3, y3, z2, w0), xs),
+                                ys),
+                        cubicLerp(
+                                cubicLerp(valCoord4D(seed, x0, y0, z3, w0), valCoord4D(seed, x1, y0, z3, w0), valCoord4D(seed, x2, y0, z3, w0), valCoord4D(seed, x3, y0, z3, w0), xs),
+                                cubicLerp(valCoord4D(seed, x0, y1, z3, w0), valCoord4D(seed, x1, y1, z3, w0), valCoord4D(seed, x2, y1, z3, w0), valCoord4D(seed, x3, y1, z3, w0), xs),
+                                cubicLerp(valCoord4D(seed, x0, y2, z3, w0), valCoord4D(seed, x1, y2, z3, w0), valCoord4D(seed, x2, y2, z3, w0), valCoord4D(seed, x3, y2, z3, w0), xs),
+                                cubicLerp(valCoord4D(seed, x0, y3, z3, w0), valCoord4D(seed, x1, y3, z3, w0), valCoord4D(seed, x2, y3, z3, w0), valCoord4D(seed, x3, y3, z3, w0), xs),
+                                ys),
+                        zs),
+                cubicLerp(
+                        cubicLerp(
+                                cubicLerp(valCoord4D(seed, x0, y0, z0, w1), valCoord4D(seed, x1, y0, z0, w1), valCoord4D(seed, x2, y0, z0, w1), valCoord4D(seed, x3, y0, z0, w1), xs),
+                                cubicLerp(valCoord4D(seed, x0, y1, z0, w1), valCoord4D(seed, x1, y1, z0, w1), valCoord4D(seed, x2, y1, z0, w1), valCoord4D(seed, x3, y1, z0, w1), xs),
+                                cubicLerp(valCoord4D(seed, x0, y2, z0, w1), valCoord4D(seed, x1, y2, z0, w1), valCoord4D(seed, x2, y2, z0, w1), valCoord4D(seed, x3, y2, z0, w1), xs),
+                                cubicLerp(valCoord4D(seed, x0, y3, z0, w1), valCoord4D(seed, x1, y3, z0, w1), valCoord4D(seed, x2, y3, z0, w1), valCoord4D(seed, x3, y3, z0, w1), xs),
+                                ys),
+                        cubicLerp(
+                                cubicLerp(valCoord4D(seed, x0, y0, z1, w1), valCoord4D(seed, x1, y0, z1, w1), valCoord4D(seed, x2, y0, z1, w1), valCoord4D(seed, x3, y0, z1, w1), xs),
+                                cubicLerp(valCoord4D(seed, x0, y1, z1, w1), valCoord4D(seed, x1, y1, z1, w1), valCoord4D(seed, x2, y1, z1, w1), valCoord4D(seed, x3, y1, z1, w1), xs),
+                                cubicLerp(valCoord4D(seed, x0, y2, z1, w1), valCoord4D(seed, x1, y2, z1, w1), valCoord4D(seed, x2, y2, z1, w1), valCoord4D(seed, x3, y2, z1, w1), xs),
+                                cubicLerp(valCoord4D(seed, x0, y3, z1, w1), valCoord4D(seed, x1, y3, z1, w1), valCoord4D(seed, x2, y3, z1, w1), valCoord4D(seed, x3, y3, z1, w1), xs),
+                                ys),
+                        cubicLerp(
+                                cubicLerp(valCoord4D(seed, x0, y0, z2, w1), valCoord4D(seed, x1, y0, z2, w1), valCoord4D(seed, x2, y0, z2, w1), valCoord4D(seed, x3, y0, z2, w1), xs),
+                                cubicLerp(valCoord4D(seed, x0, y1, z2, w1), valCoord4D(seed, x1, y1, z2, w1), valCoord4D(seed, x2, y1, z2, w1), valCoord4D(seed, x3, y1, z2, w1), xs),
+                                cubicLerp(valCoord4D(seed, x0, y2, z2, w1), valCoord4D(seed, x1, y2, z2, w1), valCoord4D(seed, x2, y2, z2, w1), valCoord4D(seed, x3, y2, z2, w1), xs),
+                                cubicLerp(valCoord4D(seed, x0, y3, z2, w1), valCoord4D(seed, x1, y3, z2, w1), valCoord4D(seed, x2, y3, z2, w1), valCoord4D(seed, x3, y3, z2, w1), xs),
+                                ys),
+                        cubicLerp(
+                                cubicLerp(valCoord4D(seed, x0, y0, z3, w1), valCoord4D(seed, x1, y0, z3, w1), valCoord4D(seed, x2, y0, z3, w1), valCoord4D(seed, x3, y0, z3, w1), xs),
+                                cubicLerp(valCoord4D(seed, x0, y1, z3, w1), valCoord4D(seed, x1, y1, z3, w1), valCoord4D(seed, x2, y1, z3, w1), valCoord4D(seed, x3, y1, z3, w1), xs),
+                                cubicLerp(valCoord4D(seed, x0, y2, z3, w1), valCoord4D(seed, x1, y2, z3, w1), valCoord4D(seed, x2, y2, z3, w1), valCoord4D(seed, x3, y2, z3, w1), xs),
+                                cubicLerp(valCoord4D(seed, x0, y3, z3, w1), valCoord4D(seed, x1, y3, z3, w1), valCoord4D(seed, x2, y3, z3, w1), valCoord4D(seed, x3, y3, z3, w1), xs),
+                                ys),
+                        zs),
+                cubicLerp(
+                        cubicLerp(
+                                cubicLerp(valCoord4D(seed, x0, y0, z0, w2), valCoord4D(seed, x1, y0, z0, w2), valCoord4D(seed, x2, y0, z0, w2), valCoord4D(seed, x3, y0, z0, w2), xs),
+                                cubicLerp(valCoord4D(seed, x0, y1, z0, w2), valCoord4D(seed, x1, y1, z0, w2), valCoord4D(seed, x2, y1, z0, w2), valCoord4D(seed, x3, y1, z0, w2), xs),
+                                cubicLerp(valCoord4D(seed, x0, y2, z0, w2), valCoord4D(seed, x1, y2, z0, w2), valCoord4D(seed, x2, y2, z0, w2), valCoord4D(seed, x3, y2, z0, w2), xs),
+                                cubicLerp(valCoord4D(seed, x0, y3, z0, w2), valCoord4D(seed, x1, y3, z0, w2), valCoord4D(seed, x2, y3, z0, w2), valCoord4D(seed, x3, y3, z0, w2), xs),
+                                ys),
+                        cubicLerp(
+                                cubicLerp(valCoord4D(seed, x0, y0, z1, w2), valCoord4D(seed, x1, y0, z1, w2), valCoord4D(seed, x2, y0, z1, w2), valCoord4D(seed, x3, y0, z1, w2), xs),
+                                cubicLerp(valCoord4D(seed, x0, y1, z1, w2), valCoord4D(seed, x1, y1, z1, w2), valCoord4D(seed, x2, y1, z1, w2), valCoord4D(seed, x3, y1, z1, w2), xs),
+                                cubicLerp(valCoord4D(seed, x0, y2, z1, w2), valCoord4D(seed, x1, y2, z1, w2), valCoord4D(seed, x2, y2, z1, w2), valCoord4D(seed, x3, y2, z1, w2), xs),
+                                cubicLerp(valCoord4D(seed, x0, y3, z1, w2), valCoord4D(seed, x1, y3, z1, w2), valCoord4D(seed, x2, y3, z1, w2), valCoord4D(seed, x3, y3, z1, w2), xs),
+                                ys),
+                        cubicLerp(
+                                cubicLerp(valCoord4D(seed, x0, y0, z2, w2), valCoord4D(seed, x1, y0, z2, w2), valCoord4D(seed, x2, y0, z2, w2), valCoord4D(seed, x3, y0, z2, w2), xs),
+                                cubicLerp(valCoord4D(seed, x0, y1, z2, w2), valCoord4D(seed, x1, y1, z2, w2), valCoord4D(seed, x2, y1, z2, w2), valCoord4D(seed, x3, y1, z2, w2), xs),
+                                cubicLerp(valCoord4D(seed, x0, y2, z2, w2), valCoord4D(seed, x1, y2, z2, w2), valCoord4D(seed, x2, y2, z2, w2), valCoord4D(seed, x3, y2, z2, w2), xs),
+                                cubicLerp(valCoord4D(seed, x0, y3, z2, w2), valCoord4D(seed, x1, y3, z2, w2), valCoord4D(seed, x2, y3, z2, w2), valCoord4D(seed, x3, y3, z2, w2), xs),
+                                ys),
+                        cubicLerp(
+                                cubicLerp(valCoord4D(seed, x0, y0, z3, w2), valCoord4D(seed, x1, y0, z3, w2), valCoord4D(seed, x2, y0, z3, w2), valCoord4D(seed, x3, y0, z3, w2), xs),
+                                cubicLerp(valCoord4D(seed, x0, y1, z3, w2), valCoord4D(seed, x1, y1, z3, w2), valCoord4D(seed, x2, y1, z3, w2), valCoord4D(seed, x3, y1, z3, w2), xs),
+                                cubicLerp(valCoord4D(seed, x0, y2, z3, w2), valCoord4D(seed, x1, y2, z3, w2), valCoord4D(seed, x2, y2, z3, w2), valCoord4D(seed, x3, y2, z3, w2), xs),
+                                cubicLerp(valCoord4D(seed, x0, y3, z3, w2), valCoord4D(seed, x1, y3, z3, w2), valCoord4D(seed, x2, y3, z3, w2), valCoord4D(seed, x3, y3, z3, w2), xs),
+                                ys),
+                        zs),
+                cubicLerp(
+                        cubicLerp(
+                                cubicLerp(valCoord4D(seed, x0, y0, z0, w3), valCoord4D(seed, x1, y0, z0, w3), valCoord4D(seed, x2, y0, z0, w3), valCoord4D(seed, x3, y0, z0, w3), xs),
+                                cubicLerp(valCoord4D(seed, x0, y1, z0, w3), valCoord4D(seed, x1, y1, z0, w3), valCoord4D(seed, x2, y1, z0, w3), valCoord4D(seed, x3, y1, z0, w3), xs),
+                                cubicLerp(valCoord4D(seed, x0, y2, z0, w3), valCoord4D(seed, x1, y2, z0, w3), valCoord4D(seed, x2, y2, z0, w3), valCoord4D(seed, x3, y2, z0, w3), xs),
+                                cubicLerp(valCoord4D(seed, x0, y3, z0, w3), valCoord4D(seed, x1, y3, z0, w3), valCoord4D(seed, x2, y3, z0, w3), valCoord4D(seed, x3, y3, z0, w3), xs),
+                                ys),
+                        cubicLerp(
+                                cubicLerp(valCoord4D(seed, x0, y0, z1, w3), valCoord4D(seed, x1, y0, z1, w3), valCoord4D(seed, x2, y0, z1, w3), valCoord4D(seed, x3, y0, z1, w3), xs),
+                                cubicLerp(valCoord4D(seed, x0, y1, z1, w3), valCoord4D(seed, x1, y1, z1, w3), valCoord4D(seed, x2, y1, z1, w3), valCoord4D(seed, x3, y1, z1, w3), xs),
+                                cubicLerp(valCoord4D(seed, x0, y2, z1, w3), valCoord4D(seed, x1, y2, z1, w3), valCoord4D(seed, x2, y2, z1, w3), valCoord4D(seed, x3, y2, z1, w3), xs),
+                                cubicLerp(valCoord4D(seed, x0, y3, z1, w3), valCoord4D(seed, x1, y3, z1, w3), valCoord4D(seed, x2, y3, z1, w3), valCoord4D(seed, x3, y3, z1, w3), xs),
+                                ys),
+                        cubicLerp(
+                                cubicLerp(valCoord4D(seed, x0, y0, z2, w3), valCoord4D(seed, x1, y0, z2, w3), valCoord4D(seed, x2, y0, z2, w3), valCoord4D(seed, x3, y0, z2, w3), xs),
+                                cubicLerp(valCoord4D(seed, x0, y1, z2, w3), valCoord4D(seed, x1, y1, z2, w3), valCoord4D(seed, x2, y1, z2, w3), valCoord4D(seed, x3, y1, z2, w3), xs),
+                                cubicLerp(valCoord4D(seed, x0, y2, z2, w3), valCoord4D(seed, x1, y2, z2, w3), valCoord4D(seed, x2, y2, z2, w3), valCoord4D(seed, x3, y2, z2, w3), xs),
+                                cubicLerp(valCoord4D(seed, x0, y3, z2, w3), valCoord4D(seed, x1, y3, z2, w3), valCoord4D(seed, x2, y3, z2, w3), valCoord4D(seed, x3, y3, z2, w3), xs),
+                                ys),
+                        cubicLerp(
+                                cubicLerp(valCoord4D(seed, x0, y0, z3, w3), valCoord4D(seed, x1, y0, z3, w3), valCoord4D(seed, x2, y0, z3, w3), valCoord4D(seed, x3, y0, z3, w3), xs),
+                                cubicLerp(valCoord4D(seed, x0, y1, z3, w3), valCoord4D(seed, x1, y1, z3, w3), valCoord4D(seed, x2, y1, z3, w3), valCoord4D(seed, x3, y1, z3, w3), xs),
+                                cubicLerp(valCoord4D(seed, x0, y2, z3, w3), valCoord4D(seed, x1, y2, z3, w3), valCoord4D(seed, x2, y2, z3, w3), valCoord4D(seed, x3, y2, z3, w3), xs),
+                                cubicLerp(valCoord4D(seed, x0, y3, z3, w3), valCoord4D(seed, x1, y3, z3, w3), valCoord4D(seed, x2, y3, z3, w3), valCoord4D(seed, x3, y3, z3, w3), xs),
+                                ys),
+                        zs),
+                ws) * CUBIC_4D_BOUNDING;
     }
 
     // Cellular Noise
@@ -5857,7 +6078,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         float sum = 0f, exp = 2f, correction = 0f, spike;
         for (int i = 0; i < octaves; i++) {
             spike = 1f - Math.abs(singleHoney(seed + i, x, y));
-            correction += (exp *= 0.5);
+            correction += (exp *= 0.5f);
             sum += spike * exp;
             t = x;
             x = y * lacunarity;
@@ -5922,7 +6143,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         float sum = 0f, exp = 2f, correction = 0f, spike;
         for (int i = 0; i < octaves; i++) {
             spike = 1f - Math.abs(singleHoney(seed + i, x, y, z));
-            correction += (exp *= 0.5);
+            correction += (exp *= 0.5f);
             sum += spike * exp;
             x *= lacunarity;
             y *= lacunarity;
@@ -5982,7 +6203,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         float sum = 0f, exp = 2f, correction = 0f, spike;
         for (int i = 0; i < octaves; i++) {
             spike = 1f - Math.abs(singleHoney(seed + i, x, y,  z, w));
-            correction += (exp *= 0.5);
+            correction += (exp *= 0.5f);
             sum += spike * exp;
             x *= lacunarity;
             y *= lacunarity;
@@ -6062,7 +6283,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         float sum = 0f, exp = 2f, correction = 0f, spike;
         for (int i = 0; i < octaves; i++) {
             spike = 1f - Math.abs(singleHoney(seed + i, x, y, z, w, u));
-            correction += (exp *= 0.5);
+            correction += (exp *= 0.5f);
             sum += spike * exp;
             x *= lacunarity;
             y *= lacunarity;
@@ -6147,7 +6368,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         float sum = 0f, exp = 2f, correction = 0f, spike;
         for (int i = 0; i < octaves; i++) {
             spike = 1f - Math.abs(singleHoney(seed + i, x, y, z, w, u, v));
-            correction += (exp *= 0.5);
+            correction += (exp *= 0.5f);
             sum += spike * exp;
             x *= lacunarity;
             y *= lacunarity;
