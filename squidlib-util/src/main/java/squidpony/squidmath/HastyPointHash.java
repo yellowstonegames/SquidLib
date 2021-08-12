@@ -15,6 +15,18 @@ public final class HastyPointHash extends IPointHash.LongImpl {
 
     public static final HastyPointHash INSTANCE = new HastyPointHash();
 
+    public HastyPointHash() {
+        super();
+    }
+
+    public HastyPointHash(int state) {
+        super(state);
+    }
+
+    public HastyPointHash(long state) {
+        super(state);
+    }
+
     @Override
     public int hashWithState(int x, int y, int state) {
         return (int)hashAll(x, y, state);

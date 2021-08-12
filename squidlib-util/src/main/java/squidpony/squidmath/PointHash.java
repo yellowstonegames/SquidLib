@@ -18,6 +18,18 @@ public final class PointHash extends IPointHash.LongImpl
 {
     public static final PointHash INSTANCE = new PointHash();
 
+    public PointHash() {
+        super();
+    }
+
+    public PointHash(int state) {
+        super(state);
+    }
+
+    public PointHash(long state) {
+        super(state);
+    }
+
     @Override
     public int hashWithState(int x, int y, int state) {
         return (int)hashAll(x, y, state);

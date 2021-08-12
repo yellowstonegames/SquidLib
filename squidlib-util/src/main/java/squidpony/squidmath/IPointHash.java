@@ -15,6 +15,7 @@ package squidpony.squidmath;
  */
 public interface IPointHash {
     void setState(int state);
+    void setState(long state);
     int hash(int x, int y);
     int hash(int x, int y, int z);
     int hash(int x, int y, int z, int w);
@@ -44,6 +45,11 @@ public interface IPointHash {
         @Override
         public void setState(int state) {
             this.state = state;
+        }
+
+        @Override
+        public void setState(long state) {
+            this.state = (int)(state ^ state >>> 32);
         }
 
         @Override
