@@ -316,7 +316,55 @@ public interface FlawedPointHash extends IPointHash, IFlawed {
         }
 
         public long hashLongs(long x, long y, long z, long w, long s) {
-            return hashLongs(x, hashLongs(y, hashLongs(z, w, s), s), s);
+            x &= mask;
+            y &= mask;
+            z &= mask;
+            w &= mask;
+            x *= x * 0xDB4F0B9175AE2165L;
+            y *= y * 0xBBE0563303A4615FL;
+            z *= z * 0xA0F2EC75A1FE1575L;
+            w *= w * 0x89E182857D9ED689L;
+            x &= mask;
+            y &= mask;
+            z &= mask;
+            w &= mask;
+            long t;
+            if (x < y) {
+                t = x;
+                x = y;
+                y = t;
+            }
+            if(x < z){
+                t = x;
+                x = z;
+                z = t;
+            }
+            if(x < w){
+                t = x;
+                x = w;
+                w = t;
+            }
+            if(y < z){
+                t = y;
+                y = z;
+                z = t;
+            }
+            if(y < w){
+                t = y;
+                y = w;
+                w = t;
+            }
+            if(z < w){
+                t = z;
+                z = w;
+                w = t;
+            }
+            x = (x + 0x9E3779B97F4A7C15L ^ x) * (s + w);
+            y = (y + 0x9E3779B97F4A7C15L ^ y) * (x + s);
+            z = (z + 0x9E3779B97F4A7C15L ^ z) * (y + x);
+            w = (w + 0x9E3779B97F4A7C15L ^ w) * (z + y);
+            s = (s + 0x9E3779B97F4A7C15L ^ s) * (w + z);
+            return s;
         }
 
         public long hashLongs(long x, long y, long z, long w, long u, long s) {
