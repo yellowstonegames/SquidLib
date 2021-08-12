@@ -32,6 +32,10 @@ public class HashedValueNoise implements Noise.Noise1D, Noise.Noise2D, Noise.Noi
         this.hash = new HastyPointHash(seed);
     }
 
+    public HashedValueNoise(IPointHash hash){
+        this.hash = hash;
+    }
+
 //    public static double valueNoise(int seed, double x, double y, double z, double w, double u)
 //    {
 //        int xFloor = x >= 0 ? (int) x : (int) x - 1;

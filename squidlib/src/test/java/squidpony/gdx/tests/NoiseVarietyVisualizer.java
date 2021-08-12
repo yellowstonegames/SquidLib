@@ -22,7 +22,8 @@ public class NoiseVarietyVisualizer extends ApplicationAdapter {
     private ClassicNoise classic = new ClassicNoise(1234567890);
     private FastNoise foam = new FastNoise(1234567890, 2f, FastNoise.FOAM, 1);
     private FastNoise fast = new FastNoise(1234567890, 1f, FastNoise.SIMPLEX, 1);
-    private FastNoise value = new FastNoise(1234567890, 1f, FastNoise.VALUE, 1);
+    private HashedValueNoise value = new HashedValueNoise(new FlawedPointHash.CubeHash(1234567890, 32));
+//    private FastNoise value = new FastNoise(1234567890, 1f, FastNoise.VALUE, 1);
     private int noiseType = 0; // 0 for classic, 1 for wave, 2 for fast, 3 for experimental
     private int dim = 0; // this can be 0, 1, or 2; add 2 to get the actual dimensions
     private int octaves = 0;
