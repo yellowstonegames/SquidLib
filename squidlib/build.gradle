@@ -9,7 +9,7 @@ dependencies {
     api project(':squidlib-util')
     api "com.badlogicgames.gdx:gdx:$gdxVersion"
     api "com.github.tommyettinger:anim8-gdx:$anim8Version"
-    testImplementation "junit:junit:4.13.1"
+    testImplementation "junit:junit:4.13.2"
     testImplementation "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
     testImplementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
 }

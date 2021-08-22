@@ -40,14 +40,15 @@ public class AnimatedWorldMapWriter extends ApplicationAdapter {
 //    private static final int width = 2048, height = 1024; // mimic, elliptical
 //    private static final int width = 256, height = 256; // space view
 //    private static final int width = 1200, height = 400; // squat
-    private static final int width = 300, height = 300;
+    private static final int width = 350, height = 350;
+//    private static final int width = 300, height = 300;
     //private static final int width = 314 * 4, height = 400;
 //    private static final int width = 400, height = 400;
 
     private static final int LIMIT = 5;
     private static final boolean MEASURE_BOUNDS = false;
     private static final boolean FLOWING_LAND = true;
-    private static final boolean ALIEN_COLORS = false;
+    private static final boolean ALIEN_COLORS = true;
     private static final boolean SEEDY = false;
     private int baseSeed = 1234567890;
 
@@ -58,14 +59,6 @@ public class AnimatedWorldMapWriter extends ApplicationAdapter {
         else return StringKit.capitalize(thesaurus.makePlantName(FakeLanguageGen.MALAY).replaceAll("'s", "")).replaceAll("\\W", "");
     }
 
-    //    private FakeLanguageGen lang = FakeLanguageGen.randomLanguage(-1234567890L).removeAccents()
-//            .mix(FakeLanguageGen.SIMPLISH, 0.6);
-//    private FakeLanguageGen lang = FakeLanguageGen.mixAll(FakeLanguageGen.SIMPLISH, 6.0, FakeLanguageGen.FANTASY_NAME, 5.0, FakeLanguageGen.JAPANESE_ROMANIZED, 2.0);
-    //greasedWorld = new GreasedRegion(width, height);
-    //private final int voidCount = 7036;
-    //private double earthCount, worldCount, intersectionCount;
-    //private long[] earthHash = new long[4], worldHash = new long[4];
-    //private int[] workingHash = new int[256];
     private Pixmap[] pm;
     private int counter;
     private static final int cellWidth = 1, cellHeight = 1;
@@ -155,7 +148,7 @@ World #5, SavoryMelonAlder, completed in 64338 ms
         if(!Gdx.files.local(path).exists())
             Gdx.files.local(path).mkdirs();
 
-        pm = new Pixmap[360];
+        pm = new Pixmap[250];
         for (int i = 0; i < pm.length; i++) {
             pm[i] = new Pixmap(width * cellWidth, height * cellHeight, Pixmap.Format.RGBA8888);
             pm[i].setBlending(Pixmap.Blending.None);
@@ -165,7 +158,7 @@ World #5, SavoryMelonAlder, completed in 64338 ms
         writer.setDitherAlgorithm(Dithered.DitherAlgorithm.SCATTER);
         writer.setFlipY(false);
         writer.palette = new PaletteReducer();
-        writer.palette.setDitherStrength(0.5f);
+        writer.palette.setDitherStrength(0.75f);
         rng = new StatefulRNG(CrossHash.hash64(date));
         //rng.setState(rng.nextLong() + 2000L); // change addend when you need different results on the same date  
         //rng = new StatefulRNG(0L);
@@ -422,9 +415,9 @@ World #5, SavoryMelonAlder, completed in 64338 ms
                 }
             }
 //            if(i % 5 == 4) System.out.println("Finished " + (i + 1) + " frames in " + (System.currentTimeMillis() - worldTime) + " ms");
-            if(i % 36 == 35) System.out.print(((i + 1) * 10 / 36) + "% (" + (System.currentTimeMillis() - worldTime) + " ms)... ");
+            if(i % (pm.length / 10) == (pm.length / 10) - 1) System.out.print(((i + 1) * 100 / pm.length) + "% (" + (System.currentTimeMillis() - worldTime) + " ms)... ");
         }
-        writer.palette.analyze(pm, pm.length, 150, 256);
+        writer.palette.analyze(pm, pm.length, 120, 256);
         writer.write(Gdx.files.local(path + name + ".gif"), new Array<Pixmap>(pm), 30);
 
 //        Gdx.graphics.requestRendering();

@@ -11511,8 +11511,8 @@ public class SColor extends Color implements Serializable {
      * for a pixel art editor, but it is usable for lots of high-color purposes. The original palette did not have
      * names. Naming 256 colors was an ordeal, since many of these colors are well-described by the same name, even when
      * two or more can be distinguished visually from each other. Aurora is a good option as a broad-purpose palette
-     * when using {@link com.github.tommyettinger.anim8.PaletteReducer}, and it is the default there if no palette is
-     * specified. For pixel art or low-color edits of traditional art, this palette can reproduce a lot of realistic
+     * when using {@link com.github.tommyettinger.anim8.PaletteReducer}. For pixel art or low-color edits of traditional
+     * art, this palette can reproduce a lot of realistic
      * colors and slight changes on those colors, with many skin tones (mostly, these are numbered so 1 is the darkest
      * skin tone in a group and higher numbers get progressively lighter; the lightest tones are
      * {@link #AURORA_LIGHT_SKIN_9}, {@link #AURORA_PINK_SKIN_4}, {@link #AURORA_BRONZE_SKIN_4}, and
