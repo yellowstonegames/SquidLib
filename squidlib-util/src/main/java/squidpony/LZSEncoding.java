@@ -71,7 +71,7 @@ public final class LZSEncoding {
         if (compressed.isEmpty())
             return "";
         final char[] input = compressed.toCharArray();
-        return _decompress(input.length, 32, input, valStrBase64, 0);
+        return _decompress(input.length, input, valStrBase64);
     }
 
     /**
@@ -97,7 +97,7 @@ public final class LZSEncoding {
         if (compressed.isEmpty())
             return "";
         final char[] comp = compressed.toCharArray();
-        return _decompress(comp.length, 16384, comp, null, -32);
+        return _decompress(comp.length, 16384, comp, -32);
     }
 
     /**
@@ -120,7 +120,7 @@ public final class LZSEncoding {
         if (compressed == null) return null;
         if (compressed.isEmpty()) return "";
         final char[] input = compressed.toCharArray();
-        return _decompress(input.length, 32, input, valStrUriSafe, 0);
+        return _decompress(input.length, input, valStrUriSafe);
     }
 
     /**
@@ -347,19 +347,19 @@ public final class LZSEncoding {
             return null;
         if (compressed.isEmpty())
             return "";
-        return _decompress(compressed.length(), 32768, compressed.toCharArray(), null, 0);
+        return _decompress(compressed.length(), 32768, compressed.toCharArray(), 0);
     }
 
-    private static String _decompress(int length, int resetValue, char[] getNextValue, char[] modify, int offset) {
+    private static String _decompress(int length, char[] getNextValue, char[] modify) {
         if(getNextValue == null)
             return null;
         if(getNextValue.length == 0)
             return "";
         ArrayList<String> dictionary = new ArrayList<>();
-        int enlargeIn = 4, dictSize = 4, numBits = 3, position = resetValue, index = 1, resb, maxpower, power;
+        int enlargeIn = 4, dictSize = 4, numBits = 3, position = 32, index = 1, resb, maxpower, power;
         String entry, w, c;
         ArrayList<String> result = new ArrayList<>();
-        char bits, val = (modify == null) ? (char) (getNextValue[0] + offset) : modify[getNextValue[0]];
+        char bits, val = modify[getNextValue[0]];
 
         for (char i = 0; i < 3; i++) {
             dictionary.add(i, String.valueOf(i));
@@ -372,8 +372,8 @@ public final class LZSEncoding {
             resb = val & position;
             position >>= 1;
             if (position == 0) {
-                position = resetValue;
-                val = (modify == null) ? (char) (getNextValue[index++] + offset) : modify[getNextValue[index++]];
+                position = 32;
+                val = modify[getNextValue[index++]];
             }
             bits |= (resb > 0 ? 1 : 0) << power++;
         }
@@ -387,8 +387,8 @@ public final class LZSEncoding {
                     resb = val & position;
                     position >>= 1;
                     if (position == 0) {
-                        position = resetValue;
-                        val = (modify == null) ? (char) (getNextValue[index++] + offset) : modify[getNextValue[index++]];
+                        position = 32;
+                        val = modify[getNextValue[index++]];
                     }
                     bits |= (resb > 0 ? 1 : 0) << power++;
                 }
@@ -402,8 +402,8 @@ public final class LZSEncoding {
                     resb = val & position;
                     position >>= 1;
                     if (position == 0) {
-                        position = resetValue;
-                        val = (modify == null) ? (char) (getNextValue[index++] + offset) : modify[getNextValue[index++]];
+                        position = 32;
+                        val = modify[getNextValue[index++]];
                     }
                     bits |= (resb > 0 ? 1 : 0) << power++;
                 }
@@ -426,8 +426,8 @@ public final class LZSEncoding {
                 resb = val & position;
                 position >>= 1;
                 if (position == 0) {
-                    position = resetValue;
-                    val = (modify == null) ? (char) (getNextValue[index++] + offset) : modify[getNextValue[index++]];
+                    position = 32;
+                    val = modify[getNextValue[index++]];
                 }
                 cc |= (resb > 0 ? 1 : 0) << power++;
             }
@@ -440,8 +440,8 @@ public final class LZSEncoding {
                         resb = val & position;
                         position >>= 1;
                         if (position == 0) {
-                            position = resetValue;
-                            val = (modify == null) ? (char) (getNextValue[index++] + offset) : modify[getNextValue[index++]];
+                            position = 32;
+                            val = modify[getNextValue[index++]];
                         }
                         bits |= (resb > 0 ? 1 : 0) << power++;
                     }
@@ -458,8 +458,8 @@ public final class LZSEncoding {
                         resb = val & position;
                         position >>= 1;
                         if (position == 0) {
-                            position = resetValue;
-                            val = (modify == null) ? (char) (getNextValue[index++] + offset) : modify[getNextValue[index++]];
+                            position = 32;
+                            val = modify[getNextValue[index++]];
                         }
                         bits |= (resb > 0 ? 1 : 0) << power++;
                     }
@@ -504,5 +504,159 @@ public final class LZSEncoding {
 
         }
 
+    }
+    private static String _decompress(int length, int resetValue, char[] getNextValue, int offset) {
+        if(getNextValue == null)
+            return null;
+        if(getNextValue.length == 0)
+            return "";
+        ArrayList<String> dictionary = new ArrayList<>();
+        int enlargeIn = 4, dictSize = 4, numBits = 3, position = resetValue, index = 1, resb, maxpower, power;
+        String entry, w, c;
+        ArrayList<String> result = new ArrayList<>();
+        char bits, val = (char) (getNextValue[0] + offset);
+
+        for (char i = 0; i < 3; i++) {
+            dictionary.add(i, String.valueOf(i));
+        }
+
+        bits = 0;
+        maxpower = 2;
+        power = 0;
+        while (power != maxpower) {
+            resb = val & position;
+            position >>= 1;
+            if (position == 0) {
+                position = resetValue;
+                val = (char) (getNextValue[index++] + offset);
+            }
+            bits |= (resb > 0 ? 1 : 0) << power++;
+        }
+
+        switch (bits) {
+            case 0:
+                bits = 0;
+                maxpower = 8;
+                power = 0;
+                while (power != maxpower) {
+                    resb = val & position;
+                    position >>= 1;
+                    if (position == 0) {
+                        position = resetValue;
+                        val = (char) (getNextValue[index++] + offset);
+                    }
+                    bits |= (resb > 0 ? 1 : 0) << power++;
+                }
+                c = String.valueOf(bits);
+                break;
+            case 1:
+                bits = 0;
+                maxpower = 16;
+                power = 0;
+                while (power != maxpower) {
+                    resb = val & position;
+                    position >>= 1;
+                    if (position == 0) {
+                        position = resetValue;
+                        val = (char) (getNextValue[index++] + offset);
+                    }
+                    bits |= (resb > 0 ? 1 : 0) << power++;
+                }
+                c = String.valueOf(bits);
+                break;
+            default:
+                return "";
+        }
+        dictionary.add(c);
+        w = c;
+        result.add(w);
+        while (true) {
+            if (index > length) {
+                return "";
+            }
+            int cc = 0;
+            maxpower = numBits;
+            power = 0;
+            while (power != maxpower) {
+                resb = val & position;
+                position >>= 1;
+                if (position == 0) {
+                    position = resetValue;
+                    val = (char) (getNextValue[index++] + offset);
+                }
+                cc |= (resb > 0 ? 1 : 0) << power++;
+            }
+            switch (cc) {
+                case 0:
+                    bits = 0;
+                    maxpower = 8;
+                    power = 0;
+                    while (power != maxpower) {
+                        resb = val & position;
+                        position >>= 1;
+                        if (position == 0) {
+                            position = resetValue;
+                            val = (char) (getNextValue[index++] + offset);
+                        }
+                        bits |= (resb > 0 ? 1 : 0) << power++;
+                    }
+
+                    dictionary.add(String.valueOf(bits));
+                    cc = dictSize++;
+                    enlargeIn--;
+                    break;
+                case 1:
+                    bits = 0;
+                    maxpower = 16;
+                    power = 0;
+                    while (power != maxpower) {
+                        resb = val & position;
+                        position >>= 1;
+                        if (position == 0) {
+                            position = resetValue;
+                            val = (char) (getNextValue[index++] + offset);
+                        }
+                        bits |= (resb > 0 ? 1 : 0) << power++;
+                    }
+                    dictionary.add(String.valueOf(bits));
+                    cc = dictSize++;
+                    enlargeIn--;
+                    break;
+                case 2:
+                    StringBuilder sb = new StringBuilder(result.size());
+                    for (String s : result)
+                        sb.append(s);
+                    return sb.toString();
+            }
+
+            if (enlargeIn == 0) {
+                enlargeIn = 1 << numBits;
+                numBits++;
+            }
+
+            if (cc < dictionary.size() && dictionary.get(cc) != null) {
+                entry = dictionary.get(cc);
+            } else {
+                if (cc == dictSize) {
+                    entry = w + w.charAt(0);
+                } else {
+                    return "";
+                }
+            }
+            result.add(entry);
+
+            // Add w+entry[0] to the dictionary.
+            dictionary.add(w + entry.charAt(0));
+            dictSize++;
+            enlargeIn--;
+
+            w = entry;
+
+            if (enlargeIn == 0) {
+                enlargeIn = 1 << numBits;
+                numBits++;
+            }
+
+        }
     }
 }

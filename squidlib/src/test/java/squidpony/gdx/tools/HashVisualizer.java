@@ -103,6 +103,8 @@ public class HashVisualizer extends ApplicationAdapter {
     private CrossHash.Yolk yolkA, yolkA_;
     private CrossHash.Mist mist, mistA, mistB, mistC;
     private NLFSR nlfsr = new NLFSR(1);
+    private LFSR lfsr = new LFSR(1);
+    private VanDerCorputQRNG vdc = new VanDerCorputQRNG(2, 1);
     private IsaacRNG isaac = new IsaacRNG(1L);
     private OrbitRNG orbit = new OrbitRNG(1L);
     private LightRNG light = new LightRNG(1L);
