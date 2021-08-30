@@ -40,8 +40,8 @@ public class AnimatedWorldMapWriter extends ApplicationAdapter {
 //    private static final int width = 2048, height = 1024; // mimic, elliptical
 //    private static final int width = 256, height = 256; // space view
 //    private static final int width = 1200, height = 400; // squat
-    private static final int width = 350, height = 350;
-//    private static final int width = 300, height = 300;
+//    private static final int width = 350, height = 350;
+    private static final int width = 300, height = 300;
     //private static final int width = 314 * 4, height = 400;
 //    private static final int width = 400, height = 400;
 
@@ -50,6 +50,7 @@ public class AnimatedWorldMapWriter extends ApplicationAdapter {
     private static final boolean FLOWING_LAND = true;
     private static final boolean ALIEN_COLORS = true;
     private static final boolean SEEDY = false;
+    private static final int FRAMES = 300;
     private int baseSeed = 1234567890;
 
     private Thesaurus thesaurus;
@@ -121,8 +122,8 @@ World #5, SavoryMelonAlder, completed in 64338 ms
 //        path = "out/worldsAnimated/" + date + "/EllipseExpo/";
 //        path = "out/worldsAnimated/" + date + "/Mimic/";
 //        path = "out/worldsAnimated/" + date + "/SpaceView/";
-//        path = "out/worldsAnimated/" + date + "/SpaceViewMutantClassic/";
-        path = "out/worldsAnimated/" + date + "/SpaceViewMutantFoam/";
+        path = "out/worldsAnimated/" + date + "/SpaceViewMutantClassic/";
+//        path = "out/worldsAnimated/" + date + "/SpaceViewMutantFoam/";
 //        path = "out/worldsAnimated/" + date + "/SpaceViewMutantHoney/";
 //        path = "out/worldsAnimated/" + date + "/SpaceViewValue/";
 //        path = "out/worldsAnimated/" + date + "/SpaceViewClassic/";
@@ -148,7 +149,7 @@ World #5, SavoryMelonAlder, completed in 64338 ms
         if(!Gdx.files.local(path).exists())
             Gdx.files.local(path).mkdirs();
 
-        pm = new Pixmap[250];
+        pm = new Pixmap[FRAMES];
         for (int i = 0; i < pm.length; i++) {
             pm[i] = new Pixmap(width * cellWidth, height * cellHeight, Pixmap.Format.RGBA8888);
             pm[i].setBlending(Pixmap.Blending.None);
@@ -203,7 +204,8 @@ World #5, SavoryMelonAlder, completed in 64338 ms
 //        WorldMapGenerator.DEFAULT_NOISE.setFractalGain(5f);
 //        WorldMapGenerator.DEFAULT_NOISE.setFractalLacunarity(0.8f);
 //        WorldMapGenerator.DEFAULT_NOISE.setFractalGain(1.25f);
-        VastNoise fn = new VastNoise((int) seed, 1.75f, VastNoise.FOAM, 1);
+//        VastNoise fn = new VastNoise((int) seed, 1.75f, VastNoise.FOAM, 1);
+        VastNoise fn = new VastNoise((int) seed, 1.5f, VastNoise.PERLIN_FRACTAL, 2);
 //        VastNoise fn = new VastNoise((int) seed, 2.0f, VastNoise.VALUE, 1);
 //        VastNoise fn = new VastNoise((int) seed, 1.5f, VastNoise.PERLIN, 1);
 //        VastNoise fn = new VastNoise((int) seed, 1f, VastNoise.SIMPLEX, 1);
