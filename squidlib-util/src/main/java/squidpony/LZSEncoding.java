@@ -577,7 +577,7 @@ public final class LZSEncoding {
                 position = 32;
                 val = modify[getNextValue.charAt(index++)];
             }
-            bits |= (resb > 0 ? 1 : 0) << power++;
+            bits |= ((-resb) >>> 31) << power++;
         }
 
         switch (bits) {
@@ -592,7 +592,7 @@ public final class LZSEncoding {
                         position = 32;
                         val = modify[getNextValue.charAt(index++)];
                     }
-                    bits |= (resb > 0 ? 1 : 0) << power++;
+                    bits |= ((-resb) >>> 31) << power++;
                 }
                 c = String.valueOf(bits);
                 break;
@@ -607,7 +607,7 @@ public final class LZSEncoding {
                         position = 32;
                         val = modify[getNextValue.charAt(index++)];
                     }
-                    bits |= (resb > 0 ? 1 : 0) << power++;
+                    bits |= ((-resb) >>> 31) << power++;
                 }
                 c = String.valueOf(bits);
                 break;
@@ -631,7 +631,7 @@ public final class LZSEncoding {
                     position = 32;
                     val = modify[getNextValue.charAt(index++)];
                 }
-                cc |= (resb > 0 ? 1 : 0) << power++;
+                cc |= ((-resb) >>> 31) << power++;
             }
             switch (cc) {
                 case 0:
@@ -645,7 +645,7 @@ public final class LZSEncoding {
                             position = 32;
                             val = modify[getNextValue.charAt(index++)];
                         }
-                        bits |= (resb > 0 ? 1 : 0) << power++;
+                        bits |= ((-resb) >>> 31) << power++;
                     }
 
                     dictionary.add(String.valueOf(bits));
@@ -663,7 +663,7 @@ public final class LZSEncoding {
                             position = 32;
                             val = modify[getNextValue.charAt(index++)];
                         }
-                        bits |= (resb > 0 ? 1 : 0) << power++;
+                        bits |= ((-resb) >>> 31) << power++;
                     }
                     dictionary.add(String.valueOf(bits));
                     cc = dictSize++;
@@ -732,7 +732,7 @@ public final class LZSEncoding {
                 position = resetValue;
                 val = (char) (getNextValue.charAt(index++) + offset);
             }
-            bits |= (resb > 0 ? 1 : 0) << power++;
+            bits |= ((-resb) >>> 31) << power++;
         }
 
         switch (bits) {
@@ -746,7 +746,7 @@ public final class LZSEncoding {
                         position = resetValue;
                         val = (char) (getNextValue.charAt(index++) + offset);
                     }
-                    bits |= (resb > 0 ? 1 : 0) << power++;
+                    bits |= ((-resb) >>> 31) << power++;
                 }
                 c = String.valueOf(bits);
                 break;
@@ -761,7 +761,7 @@ public final class LZSEncoding {
                         position = resetValue;
                         val = (char) (getNextValue.charAt(index++) + offset);
                     }
-                    bits |= (resb > 0 ? 1 : 0) << power++;
+                    bits |= ((-resb) >>> 31) << power++;
                 }
                 c = String.valueOf(bits);
                 break;
@@ -785,7 +785,7 @@ public final class LZSEncoding {
                     position = resetValue;
                     val = (char) (getNextValue.charAt(index++) + offset);
                 }
-                cc |= (resb > 0 ? 1 : 0) << power++;
+                cc |= ((-resb) >>> 31) << power++;
             }
             switch (cc) {
                 case 0:
@@ -799,7 +799,7 @@ public final class LZSEncoding {
                             position = resetValue;
                             val = (char) (getNextValue.charAt(index++) + offset);
                         }
-                        bits |= (resb > 0 ? 1 : 0) << power++;
+                        bits |= ((-resb) >>> 31) << power++;
                     }
 
                     dictionary.add(String.valueOf(bits));
@@ -817,7 +817,7 @@ public final class LZSEncoding {
                             position = resetValue;
                             val = (char) (getNextValue.charAt(index++) + offset);
                         }
-                        bits |= (resb > 0 ? 1 : 0) << power++;
+                        bits |= ((-resb) >>> 31) << power++;
                     }
                     dictionary.add(String.valueOf(bits));
                     cc = dictSize++;
