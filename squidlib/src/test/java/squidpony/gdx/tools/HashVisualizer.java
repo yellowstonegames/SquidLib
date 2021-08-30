@@ -66,9 +66,10 @@ public class HashVisualizer extends ApplicationAdapter {
     // 3 artistic visualizations of hash functions and misc. other
     // 4 noise
     // 5 RNG results
-    private int testType = 4;
+    private int testType = 5;
     private static final int NOISE_LIMIT = 152;
-    private int hashMode, rngMode, noiseMode = 134, otherMode = 17;//142
+    private static final int RNG_LIMIT = 51;
+    private int hashMode, rngMode = 50, noiseMode = 134, otherMode = 17;//142
 
     /**
      * If you're editing the source of HashVisualizer, you can comment out one line and uncomment another to change
@@ -1586,7 +1587,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                 noiseMode = (noiseMode + NOISE_LIMIT - 1) % NOISE_LIMIT;
                                 break;
                             case 5:
-                                rngMode = (rngMode + 49) % 50;
+                                rngMode = (rngMode + RNG_LIMIT - 1) % RNG_LIMIT;
                                 break;
                             case 0:
                                 hashMode = (hashMode + 52) % 53;
@@ -1753,7 +1754,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             case 5:
                                 //mr.mul = 0x632AE59B69B3C209L;
                                 rngMode++;
-                                rngMode %= 50;
+                                rngMode %= RNG_LIMIT;
                                 break;
                             case 0:
                                 hashMode++;
@@ -6017,7 +6018,21 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         }
                         Gdx.graphics.setTitle("Starfish32RNG using next(8) at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
-
+                    case 50: {
+                        // all nextDouble() implementations here have the LSB of the mantissa set half as frequently as
+                        // a uniform distribution would produce. But, it's mostly java.util.Random that has this strange
+                        // issue... Everything else looks like uniform white noise, with no stripes.
+                        // java.util.Random looks like https://i.imgur.com/ELw3W5p.gif
+                        float counter = 0f;
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                counter += (bright = (Double.doubleToLongBits(jreRandom.nextDouble()) & 1L));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
+                            }
+                        }
+                        Gdx.graphics.setTitle(counter+"/262144 from j.u.Random using nextDouble() at " + Gdx.graphics.getFramesPerSecond() + " FPS");
+                        break;
+                    }
                 }
             }
             break;

@@ -51,9 +51,9 @@ public interface IDistribution {
         /**
          * Makes a new SimpleDistribution implementation given any IDistribution (typically one with large or infinite
          * bounds) by getting the fractional component of {@code offset} plus a result from {@code otherDistribution}.
-         * Using the offset allows distributions like {@link GaussianDistribution} to become centered halfway on 0.5,
-         * making the result of this distribution have a Gaussian-like peak on 0.5 instead of of peaking at the bounds
-         * when offset is 0.0.
+         * Using the offset allows distributions like {@link GaussianDistribution}, which are centered on 0.0, to become
+         * centered halfway on 0.5, making the result of this distribution have a Gaussian-like peak on 0.5 instead of
+         * peaking at the bounds when offset is 0.0.
          * @param otherDistribution any other IDistribution
          * @return a new anonymous implementation of SimpleDistribution that gets the fractional part of {@code otherDistribution}.
          */
@@ -72,7 +72,7 @@ public interface IDistribution {
          * Makes a new SimpleDistribution implementation given any IDistribution (typically one with large or infinite
          * bounds) by simply clamping results that are below 0 to 0 and at least 1 to 0.9999999999999999 (the largest
          * double less than 1.0 than can be represented). This will behave very oddly for distributions that are
-         * centered on 0.0.
+         * centered on 0.0; for those you probably want {@link #fractionalOffsetDistribution(IDistribution, double)}.
          * @param otherDistribution any other IDistribution
          * @return a new anonymous implementation of SimpleDistribution that clamps {@code otherDistribution} in range.
          */
