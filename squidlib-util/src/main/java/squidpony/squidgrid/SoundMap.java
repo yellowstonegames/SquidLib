@@ -370,11 +370,7 @@ public class SoundMap
 
         for (Map.Entry<Coord, Double> entry : sounds.entrySet()) {
             gradientMap[entry.getKey().x][entry.getKey().y] = entry.getValue();
-            if(fresh.containsKey(entry.getKey()) && fresh.get(entry.getKey()) > entry.getValue())
-            {
-            }
-            else
-            {
+            if (!fresh.containsKey(entry.getKey()) || fresh.get(entry.getKey()) <= entry.getValue()) {
                 fresh.put(entry.getKey(), entry.getValue());
             }
 
@@ -382,10 +378,11 @@ public class SoundMap
         int numAssigned = fresh.size();
 
         Direction[] dirs = (measurement == Measurement.MANHATTAN) ? Direction.CARDINALS : Direction.OUTWARDS;
+        OrderedMap<Coord, Double> fresh2 = new OrderedMap<>(numAssigned);
 
         while (numAssigned > 0) {
             numAssigned = 0;
-            OrderedMap<Coord, Double> fresh2 = new OrderedMap<>(fresh.size());
+            fresh2.clear();
             fresh2.putAll(fresh);
             fresh.clear();
 
@@ -422,7 +419,7 @@ public class SoundMap
     }
 
     /**
-     * Scans the dungeon using SoundMap.scan, adding any positions in extraSounds to the group of known sounds before
+     * Scans the dungeon using SoundMap.scan(), adding any positions in extraSounds to the group of known sounds before
      * scanning.  The creatures passed to this function as a Set of Points will have the loudness of all sounds at
      * their position put as the value in alerted corresponding to their Coord position.
      *
@@ -441,9 +438,9 @@ public class SoundMap
         scan();
         for(Coord critter : creatures)
         {
-            if(critter.x < 0 || critter.x >= width || critter.y < 0 || critter.y >= height)
-                continue;
-            alerted.put(Coord.get(critter.x, critter.y), gradientMap[critter.x][critter.y]);
+            if (critter.x >= 0 && critter.x < width && critter.y >= 0 && critter.y < height) {
+                alerted.put(Coord.get(critter.x, critter.y), gradientMap[critter.x][critter.y]);
+            }
         }
         return alerted;
     }
