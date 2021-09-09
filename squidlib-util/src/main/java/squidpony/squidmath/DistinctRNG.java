@@ -80,7 +80,7 @@ public final class DistinctRNG implements StatefulRandomness, SkippingRandomness
      * @return a random long between Long.MIN_VALUE and Long.MAX_VALUE (both inclusive)
      */
     @Override
-    public final long nextLong() {
+    public long nextLong() {
         long x = (state += 0x9E3779B97F4A7C15L);
         x ^= x >>> 27;
         x *= 0x3C79AC492BA7B653L;

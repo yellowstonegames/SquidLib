@@ -379,6 +379,53 @@ public class JsonConverter extends Json {
             }
         });
 
+//        json.setSerializer(EnumMap.class, new Serializer<EnumMap>() {
+//            @Override
+//            public void write(Json json, EnumMap object, Class knownType) {
+//                if(object == null)
+//                {
+//                    json.writeValue(null);
+//                    return;
+//                }
+//                try {
+//                    Field field = ClassReflection.getDeclaredField(EnumMap.class, "keyType");
+//                    field.setAccessible(true);
+//                    Class<?> clazz = (Class<?>) field.get(object);
+//                    json.writeObjectStart();
+//                    json.writeValue("c", (Object) clazz, Class.class);
+//                    json.writeArrayStart("k");
+//                    for(Object en : object.keySet()){
+//                        json.writeValue(en, clazz);
+//                    }
+//                    json.writeArrayEnd();
+//                    json.writeArrayStart("v");
+//                    for(Object v : object.values()){
+//                        json.writeValue(v, null);
+//                    }
+//                    json.writeArrayEnd();
+//                    json.writeObjectEnd();
+//                } catch (ReflectionException e) {
+//                    json.writeValue(null);
+//                    return;
+//                }
+//            }
+//
+//            @Override
+//            @SuppressWarnings("unchecked")
+//            public EnumMap read(Json json, JsonValue jsonData, Class type) {
+//                if(jsonData == null || jsonData.isNull()) return null;
+//                Class clazz = json.readValue("c", Class.class, jsonData);
+//                EnumMap em = new EnumMap(clazz);
+//                JsonValue ks = jsonData.get("k");
+//                JsonValue vs = jsonData.get("v");
+//                while (ks != null && vs != null){
+//                    em.put((Enum) json.readValue(clazz, ks), json.readValue(null, vs));
+//                    ks = ks.next();
+//                    vs = vs.next();
+//                }
+//                return em;
+//            }
+//        });
         json.setSerializer(EnumMap.class, new Serializer<EnumMap>() {
             @Override
             public void write(Json json, EnumMap object, Class knownType) {
@@ -415,8 +462,6 @@ public class JsonConverter extends Json {
                         json.readValue("e", null, jsonData),
                         json.readValue("v", null, jsonData),
                         json.readValue("r", Object[].class, jsonData)));
-                //return new OrderedMap(json.readValue(OrderedSet.class, jsonData.get("k")),
-                //        json.readValue(ArrayList.class, jsonData.get("v")), jsonData.getFloat("f"));
             }
         });
         json.setSerializer(Arrangement.class, new Serializer<Arrangement>() {

@@ -99,24 +99,23 @@ public class WobblyLine {
         }
         else if (dx == 0 || dy == 0)
         {
-            int dx2 = (dx == 0) ? dx : dy, dy2 = (dx == 0) ? dy : dx;
+            int dx2 = 0, dy2 = (dx == 0) ? dy : dx;
             if (r >= (weight * 0.5))
             {
                 r -= weight * 0.5;
-                if (r < weight * (1.0 / 6) + (1 - weight) * (1.0 / 3))
+                if (r < weight * (1.0 / 6.0) + (1 - weight) * (1.0 / 3.0))
                 {
                     dx2 = -1;
                     dy2 = 0;
                 }
-                else if (r < weight * (2.0 / 6) + (1 - weight) * (2.0 / 3))
+                else if (r < weight * (2.0 / 6.0) + (1 - weight) * (2.0 / 3.0))
                 {
                     dx2 = 1;
                     dy2 = 0;
                 }
                 else
                 {
-                    dx2 = 0;
-                    dy2 *= -1;
+                    dy2 = -dy2;
                 }
             }
             dir = Direction.getCardinalDirection(dx2, dy2);
@@ -140,7 +139,7 @@ public class WobblyLine {
             else
             {
                 dx = 0;
-                dy *= -1;
+                dy = -dy;
             }
             dir = Direction.getCardinalDirection(dx, dy);
         }
