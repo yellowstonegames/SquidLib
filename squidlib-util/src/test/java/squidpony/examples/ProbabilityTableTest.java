@@ -115,4 +115,19 @@ public class ProbabilityTableTest {
             System.out.println('\n');
         }
     }
+
+    @Test
+    public void testOnlyNested(){
+        ProbabilityTable<String> earth = new ProbabilityTable<>("earth");
+        ProbabilityTable<String> air = new ProbabilityTable<>("air");
+        ProbabilityTable<String> water = new ProbabilityTable<>("water");
+        ProbabilityTable<String> fire = new ProbabilityTable<>("fire");
+        earth.add("rock", 1).add("dirt", 1);
+        air.add("wind", 1).add("cloud", 1);
+        water.add("wave", 1).add("depths", 1);
+        fire.add("disco", 1).add("inferno", 1);
+        ProbabilityTable<String> all = new ProbabilityTable<>("aether");
+        all.add(earth, 1).add(air, 1).add(water, 1).add(fire, 1);
+        System.out.println(all.random());
+    }
 }
