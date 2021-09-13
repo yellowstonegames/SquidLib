@@ -92,7 +92,7 @@ public class ProbabilityTable<T> implements Serializable {
      * @return the chosen object or null
      */
     public T random() {
-        if (table.isEmpty()) {
+        if (table.isEmpty() && extraTable.isEmpty()) {
             return null;
         }
         int index = (int) ((total * ((long)rng.next(31))) >>> 31), sz = table.size();
