@@ -449,13 +449,19 @@ public class FFTVisualizer extends ApplicationAdapter {
             
             //// Set up an initial Fourier transform for this to invert
             for (int x = 0; x < width; x++) {
-                for (int y = 0; y < height >>> 1; y++) {
-                    norm.put(Coord.get(x, y),
-                            real[x][y] = real[width - 1 - x][height - 1 - y] = realKnown[x][y]);
-                    imag[x][y] = imag[width - 1 - x][height - 1 - y] = imagKnown[x][y];
+                for (int y = 0; y < height; y++) {
+                    norm.put(Coord.get(x, y), real[x][y] = shuffler.nextDouble());
+                    imag[x][y] = 0.0;
                  }
             }
-            
+//            for (int x = 0; x < width; x++) {
+//                for (int y = 0; y < height >>> 1; y++) {
+//                    norm.put(Coord.get(x, y),
+//                            real[x][y] = real[width - 1 - x][height - 1 - y] = realKnown[x][y]);
+//                    imag[x][y] = imag[width - 1 - x][height - 1 - y] = imagKnown[x][y];
+//                 }
+//            }
+
 //            //// This is likely incorrect... imag probably also needs some values.
 //            for (int x = 0; x < width; x++) {
 //                for (int y = 0; y < height >>> 1; y++) {
@@ -481,21 +487,15 @@ public class FFTVisualizer extends ApplicationAdapter {
             norm.shuffle(shuffler);
             norm.sortByValue(doubleComparator);
             final int ns = norm.size();
-            final double den = (ns - 1.0);
+            final double den = 1.0 / (ns - 1.0);
             for (int i = 0; i < ns; i++) {
                 final Coord co = norm.keyAt(i);
-                real[co.x][co.y] = real[width - 1 - co.x][height - 1 - co.y] = i / den;
+                real[co.x][co.y] = i * den;
+//                real[co.x][co.y] = real[width - 1 - co.x][height - 1 - co.y] = i * den;
             }
             shuffler.setState(0x1234567890ABCDEFL);
             //// done re-normalizing
-//            
-//            for (int x = 0; x < width; x++) {
-//                for (int y = 0; y < height; y++) {
-//                    bright = (float) real[x][y];
-//                    renderer.color(bright, bright, bright, 1f);
-//                    renderer.vertex(x, y, 0);
-//                }
-//            }
+
             Fft.getColors(real, imag, colors);
             for (int x = 0; x < width; x++) {
                 for (int y = 0; y < height; y++) {
