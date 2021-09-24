@@ -7,7 +7,7 @@ import java.util.SortedSet;
 /**
  * A generic method of holding a probability table to determine weighted random
  * outcomes.
- *
+ * <br>
  * The weights do not need to add up to any particular value; they will be
  * normalized when choosing a random entry. This class allows adding {@code T} items and the weights for
  * those items after the ProbabilityTable has been constructed with {@link #add(Object, int)} or
@@ -18,7 +18,7 @@ import java.util.SortedSet;
  * with {@link #add(ProbabilityTable, int)} and {@link #addAllNested(OrderedMap)}. Actually getting a
  * randomly-selected item is easy; just use {@link #random()}.
  * 
- * @see WeightedTable An alternative for when you want to track the items separately from their weights.
+ * @see WeightedTable An alternative for when you want to track the items separately from their weights, and don't need nested tables.
  * 
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  * 

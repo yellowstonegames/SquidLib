@@ -4437,25 +4437,24 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
 
         float n = 0f;
 
-        t = 0.75f - x0 * x0 - y0 * y0;
+        t = 0.5f - x0 * x0 - y0 * y0;
         if (t >= 0) {
             t *= t;
             n += t * t * gradCoord2D(seed, i, j, x0, y0);
         }
 
-        t = 0.75f - x1 * x1 - y1 * y1;
+        t = 0.5f - x1 * x1 - y1 * y1;
         if (t > 0) {
             t *= t;
             n += t * t * gradCoord2D(seed, i + i1, j + j1, x1, y1);
         }
 
-        t = 0.75f - x2 * x2 - y2 * y2;
+        t = 0.5f - x2 * x2 - y2 * y2;
         if (t > 0)  {
             t *= t;
             n += t * t * gradCoord2D(seed, i + 1, j + 1, x2, y2);
         }
-
-        return 9.11f * n;
+        return n * 99.20689070704672f; // this is 99.83685446303647 / 1.00635 ; the first number was found by kdotjpg
     }
 
     public float getSimplex(float x, float y, float z, float w) {
