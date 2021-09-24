@@ -86,8 +86,9 @@ public class NoiseRangeTest {
         long seed = DiverRNG.randomize(System.nanoTime());
         for (int i = 0; i < 10; i++) {
             seed = DiverRNG.randomize(seed + System.nanoTime());
-            for (double x = 0; x <= 32; x += 0x1.0001p-6) {
-                for (double y = 0; y <= 32; y += 0x1.0001p-6) {
+            // roughly 640,000 trials per seed
+            for (double x = -50; x < 50; x += 0x1.0001p-6) {
+                for (double y = -50; y < 50; y += 0x1.0001p-6) {
                     double n = SeededNoise.noise(x * 123.4567, y * 123.4567, seed);
                     min = Math.min(min, n);
                     max = Math.max(max, n);

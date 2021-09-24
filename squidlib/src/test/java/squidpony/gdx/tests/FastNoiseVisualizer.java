@@ -42,7 +42,7 @@ public class FastNoiseVisualizer extends ApplicationAdapter {
     private FlawedPointHash.CubeHash cube = new FlawedPointHash.CubeHash(1, 64);
     private FlawedPointHash.FNVHash fnv = new FlawedPointHash.FNVHash(1);
     private IPointHash[] pointHashes = new IPointHash[] {ph, hph, gold, iph, tab, fnv, rug, quilt, cube};
-    private int hashIndex = 8;
+    private int hashIndex = 1;
 
     private static final int width = 512, height = 512;
 
@@ -143,7 +143,7 @@ public class FastNoiseVisualizer extends ApplicationAdapter {
                 switch (keycode) {
                     case W:
                         frames.clear();
-                        noise.setFrequency(0x1p-2f);
+//                        noise.setFrequency(0x1p-2f);
                         for (int c = 0; c < 256; c++) {
                             Pixmap p = new Pixmap(256, 256, Pixmap.Format.RGBA8888);
                             for (int x = 0; x < 256; x++) {

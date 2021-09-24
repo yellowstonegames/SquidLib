@@ -3423,8 +3423,8 @@ final double v2 = + x * +1.1212273759528033 + y * -1.1036247824581010 + z * +0.9
         @Override
         public double getNoiseWithSeed(double x, final long seed) {
             x += ((seed & 0xFFFFFFFFL) ^ (seed >>> 32)) * 0x1p-24; // offset x by between 0.0 and almost 256.0
-            final long xFloor = x >= 0.0 ? (long) x : (long) x - 1, // floor of x as a long
-                    rise = 1L - ((x >= 0.0 ? (long) (x * 2.0) : (long) (x * 2.0) - 1) & 2L); // either 1 or -1
+            final long xFloor = x >= 0.0 ? (long) x : (long) x - 1L, // floor of x as a long
+                    rise = 1L - ((x >= 0.0 ? (long) (x + x) : (long) (x + x) - 1L) & 2L); // either 1 or -1
             x -= xFloor;
             // and now we flip the switch from "magic" to "more magic..."
             // this directly sets the bits that describe a double. this might seem like it should be slow; it is not.
@@ -3445,7 +3445,8 @@ final double v2 = + x * +1.1212273759528033 + y * -1.1036247824581010 + z * +0.9
 //                    0x4030000000000000L) - 20.0;
             // Quilez' quartic curve; uses the "rise" calculated earlier to determine if this is on the rising or
             // the falling side. Uses that complicated "h" as the height of the peak or valley in the middle.
-            return rise * x * (x - 1.0) * (h * x * (x - 1.0) - 1.0);
+            x *= x - 1.0;
+            return rise * x * (h * x - 1.0);
         }
 
         @Override

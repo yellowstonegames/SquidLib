@@ -78,6 +78,10 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
         defaultSeed = seed;
     }
 
+    protected static double gradCoord2D(long seed, int x, int y, double xd, double yd) {
+        final double[] g = grad2d[HastyPointHash.hash256(x, y, seed)];
+        return xd * g[0] + yd * g[1];
+    }
     /**
      * Computes the hash for a 3D int point and its dot product with a 3D double point as one step.
      * @param seed
@@ -153,6 +157,7 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
     
     protected static final double F2 = 0.36602540378443864676372317075294,
             G2 = 0.21132486540518711774542560974902,
+            H2 = G2 * 2.0,
             F3 = 1.0 / 3.0,
             G3 = 1.0 / 6.0,
             F4 = (Math.sqrt(5.0) - 1.0) * 0.25,
@@ -166,14 +171,17 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
             LIMIT6 = 0.8375;
 
     public static double noise(final double x, final double y, final long seed) {
-        final double s = (x + y) * F2;
-        final int i = fastFloor(x + s),
-                j = fastFloor(y + s);
-        final double t = (i + j) * G2,
-                X0 = i - t,
-                Y0 = j - t,
-                x0 = x - X0,
-                y0 = y - Y0;
+        double t = (x + y) * F2;
+        int i = fastFloor(x + t);
+        int j = fastFloor(y + t);
+
+        t = (i + j) * G2;
+        double X0 = i - t;
+        double Y0 = j - t;
+
+        double x0 = x - X0;
+        double y0 = y - Y0;
+
         int i1, j1;
         if (x0 > y0) {
             i1 = 1;
@@ -182,59 +190,32 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
             i1 = 0;
             j1 = 1;
         }
-        final double
-                x1 = x0 - i1 + G2,
-                y1 = y0 - j1 + G2,
-                x2 = x0 - 1 + 2 * G2,
-                y2 = y0 - 1 + 2 * G2;
-        double n = 0.0;
-        final int
-                gi0 = hash256(i, j, seed),
-                gi1 = hash256(i + i1, j + j1, seed),
-                gi2 = hash256(i + 1, j + 1, seed);
-        // Calculate the contribution from the three corners for 2D gradient
-        double t0 = 0.75 - x0 * x0 - y0 * y0;
-        if (t0 > 0) {
-            t0 *= t0;
-            n += t0 * t0 * (grad2d[gi0][0] * x0 + grad2d[gi0][1] * y0);
-        }
-        double t1 = 0.75 - x1 * x1 - y1 * y1;
-        if (t1 > 0) {
-            t1 *= t1;
-            n += t1 * t1 * (grad2d[gi1][0] * x1 + grad2d[gi1][1] * y1);
-        }
-        double t2 = 0.75 - x2 * x2 - y2 * y2;
-        if (t2 > 0)  {
-            t2 *= t2;
-            n += t2 * t2 * (grad2d[gi2][0] * x2 + grad2d[gi2][1] * y2);
-        }
-        // Add contributions from each corner to get the final noise value.
-        // The result is clamped to return values in the interval [-1,1].
-        return Math.max(-1.0, Math.min(1.0, 9.125f * n));
 
-//        double n0, n1, n2;
-//        double t0 = 0.5 - x0 * x0 - y0 * y0;
-//        if (t0 < 0)
-//            n0 = 0;
-//        else {
-//            t0 *= t0;
-//            n0 = t0 * t0 * (x0 * gradient2DLUT[h0] + y0 * gradient2DLUT[h0 | 1]);
-//        }
-//        double t1 = 0.5 - x1 * x1 - y1 * y1;
-//        if (t1 < 0)
-//            n1 = 0;
-//        else {
-//            t1 *= t1;
-//            n1 = t1 * t1 * (x1 * gradient2DLUT[h1] + y1 * gradient2DLUT[h1 | 1]);
-//        }
-//        double t2 = 0.5 - x2 * x2 - y2 * y2;
-//        if (t2 < 0)
-//            n2 = 0;
-//        else {
-//            t2 *= t2;
-//            n2 = t2 * t2 * (x2 * gradient2DLUT[h2] + y2 * gradient2DLUT[h2 | 1]);
-//        }
-//        return (70 * (n0 + n1 + n2)) * 1.42188695 + 0.001054489;
+        double x1 = x0 - i1 + G2;
+        double y1 = y0 - j1 + G2;
+        double x2 = x0 - 1 + H2;
+        double y2 = y0 - 1 + H2;
+
+        double n = 0.0;
+
+        t = 0.5 - x0 * x0 - y0 * y0;
+        if (t >= 0) {
+            t *= t;
+            n += t * t * gradCoord2D(seed, i, j, x0, y0);
+        }
+
+        t = 0.5 - x1 * x1 - y1 * y1;
+        if (t > 0) {
+            t *= t;
+            n += t * t * gradCoord2D(seed, i + i1, j + j1, x1, y1);
+        }
+
+        t = 0.5 - x2 * x2 - y2 * y2;
+        if (t > 0)  {
+            t *= t;
+            n += t * t * gradCoord2D(seed, i + 1, j + 1, x2, y2);
+        }
+        return n * 99.20689070704672; // this is 99.83685446303647 / 1.00635 ; the first number was found by kdotjpg
     }
 
     public static double noise(final double x, final double y, final double z, final long seed) {
