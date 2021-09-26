@@ -22,14 +22,15 @@ import static squidpony.squidgrid.gui.gdx.SColor.floatGet;
 public class PlasmaVisualizer extends ApplicationAdapter {
 
     private ClassicNoise classic = new ClassicNoise(1234567890);
-    private int noiseType = 0; // 0 for cosmic, that's all for now
+    private int noiseType = 0; // 0 for cosmic, 1 for warble
     private int dim = 0;
-    private float freq = (float) Math.exp(-4.0);
+    private float freq = (float) Math.pow(1.618, -4.0);
     private boolean color = false;
     private long seed = 1234567890;
     private double[] connections = new double[3];
 
     private CosmicNumbering cosmos = new CosmicNumbering(seed, connections);
+    private WarbleNoise warble = new WarbleNoise(seed);
     private ImmediateModeRenderer20 renderer;
 
     private static final int width = 512, height = 512;
@@ -68,15 +69,15 @@ public class PlasmaVisualizer extends ApplicationAdapter {
                         seed += 0x9E3779B97F4A7C15L;
                         break;
                     case MINUS:
-                        noiseType = (noiseType + 3) & 3;
+                        noiseType = (noiseType + 1) & 1;
                         break;
                     case N: // noise type
                     case EQUALS:
                     case ENTER:
-                        noiseType = (noiseType + 1) & 3;
+                        noiseType = (noiseType + 1) & 1;
                         break;
                     case F: // frequency
-                        freq = ((float) Math.exp((System.currentTimeMillis() >>> 9 & 7) - 5));
+                        freq = ((float) Math.pow(1.618, (System.currentTimeMillis() >>> 9 & 15) - 13));
                         break;
                     case C: // color
                         color = !color;
@@ -97,54 +98,86 @@ public class PlasmaVisualizer extends ApplicationAdapter {
 
     public void putMap() {
         renderer.begin(view.getCamera().combined, GL_POINTS);
-        float bright, c = ctr * 0.5f;
-        if (color) {
-            Gdx.graphics.setTitle("Cosmic 3D Color Noise at " + Gdx.graphics.getFramesPerSecond() + " FPS");
-            bright = ctr * 0x5p-8f;
-            double s0 = NumberTools.swayRandomized(0x9E3779B97F4A7C15L, bright - 1.11f) * 0.025f; //ctr * 0x5p-8f
-            double c0 = NumberTools.swayRandomized(0xC13FA9A902A6328FL, bright - 1.11f) * 0.025f; //ctr * 0x5p-8f
-            double s1 = NumberTools.swayRandomized(0xD1B54A32D192ED03L, bright + 1.41f) * 0.025f; //ctr * 0x5p-8f
-            double c1 = NumberTools.swayRandomized(0xDB4F0B9175AE2165L, bright + 1.41f) * 0.025f; //ctr * 0x5p-8f
-            double s2 = NumberTools.swayRandomized(0xE19B01AA9D42C633L, bright + 2.61f) * 0.025f; //ctr * 0x5p-8f
-            double c2 = NumberTools.swayRandomized(0xE60E2B722B53AEEBL, bright + 2.61f) * 0.025f; //ctr * 0x5p-8f
-            for (int x = 0; x < width; x++) {
-                for (int y = 0; y < height; y++) {
-                    connections[0] = ctr * 0.007 + x * c0 - y * s0;
-                    connections[1] = ctr * 0.009 - x * c1 + y * s1;
-                    connections[2] = ctr * 0.013 + x * c2 + y * s2;
+        float bright, c = ctr * freq;
+        switch (noiseType) {
+            case 0:
+                if (color) {
+                    Gdx.graphics.setTitle("Cosmic 3D Color Noise at " + Gdx.graphics.getFramesPerSecond() + " FPS");
+                    bright = c * 0x5p-8f;
+                    double s0 = NumberTools.swayRandomized(0x9E3779B97F4A7C15L, bright - 1.11f) * 0.025f; //ctr * 0x5p-8f
+                    double c0 = NumberTools.swayRandomized(0xC13FA9A902A6328FL, bright - 1.11f) * 0.025f; //ctr * 0x5p-8f
+                    double s1 = NumberTools.swayRandomized(0xD1B54A32D192ED03L, bright + 1.41f) * 0.025f; //ctr * 0x5p-8f
+                    double c1 = NumberTools.swayRandomized(0xDB4F0B9175AE2165L, bright + 1.41f) * 0.025f; //ctr * 0x5p-8f
+                    double s2 = NumberTools.swayRandomized(0xE19B01AA9D42C633L, bright + 2.61f) * 0.025f; //ctr * 0x5p-8f
+                    double c2 = NumberTools.swayRandomized(0xE60E2B722B53AEEBL, bright + 2.61f) * 0.025f; //ctr * 0x5p-8f
+                    for (int x = 0; x < width; x++) {
+                        for (int y = 0; y < height; y++) {
+                            connections[0] = c * 0.007 + x * c0 - y * s0;
+                            connections[1] = c * 0.009 - x * c1 + y * s1;
+                            connections[2] = c * 0.013 + x * c2 + y * s2;
 
-                    connections[0] = cosmos.getDoubleBase() + 0.5;
-                    connections[1] = cosmos.getDoubleBase() + 0.5;
-                    connections[2] = cosmos.getDoubleBase() + 0.5;
-                    renderer.color(NumberTools.swayTight((float) connections[0]),
-                            NumberTools.swayTight((float) connections[1]),
-                            NumberTools.swayTight((float) connections[2]), 1f);
-                    renderer.vertex(x, y, 0);
-                }
-            }
+                            connections[0] = cosmos.getDoubleBase() + 0.5;
+                            connections[1] = cosmos.getDoubleBase() + 0.5;
+                            connections[2] = cosmos.getDoubleBase() + 0.5;
+                            renderer.color(NumberTools.swayTight((float) connections[0]),
+                                    NumberTools.swayTight((float) connections[1]),
+                                    NumberTools.swayTight((float) connections[2]), 1f);
+                            renderer.vertex(x, y, 0);
+                        }
+                    }
 
-        } else {
-            Gdx.graphics.setTitle("Cosmic 3D Noise at " + Gdx.graphics.getFramesPerSecond() + " FPS");
-            bright = ctr * 0x5p-8f;
-            double s0 = NumberTools.swayRandomized(0x9E3779B97F4A7C15L, bright - 1.11f) * 0.025f; //ctr * 0x5p-8f
-            double c0 = NumberTools.swayRandomized(0xC13FA9A902A6328FL, bright - 1.11f) * 0.025f; //ctr * 0x5p-8f
-            double s1 = NumberTools.swayRandomized(0xD1B54A32D192ED03L, bright + 1.41f) * 0.025f; //ctr * 0x5p-8f
-            double c1 = NumberTools.swayRandomized(0xDB4F0B9175AE2165L, bright + 1.41f) * 0.025f; //ctr * 0x5p-8f
-            double s2 = NumberTools.swayRandomized(0xE19B01AA9D42C633L, bright + 2.61f) * 0.025f; //ctr * 0x5p-8f
-            double c2 = NumberTools.swayRandomized(0xE60E2B722B53AEEBL, bright + 2.61f) * 0.025f; //ctr * 0x5p-8f
-            for (int x = 0; x < width; x++) {
-                for (int y = 0; y < height; y++) {
-                    connections[0] = ctr * 0.007 + x * c0 - y * s0;
-                    connections[1] = ctr * 0.009 - x * c1 + y * s1;
-                    connections[2] = ctr * 0.013 + x * c2 + y * s2;
-                    connections[0] = cosmos.getDoubleBase() + 0.5;
-                    connections[1] = cosmos.getDoubleBase() + 0.5;
-                    connections[2] = cosmos.getDoubleBase() + 0.5;
-                    bright = NumberTools.swayTight((float) connections[1]);//(float)connections[1] * 4f;
-                    renderer.color(bright, bright, bright, 1f);
-                    renderer.vertex(x, y, 0);
+                } else {
+                    Gdx.graphics.setTitle("Cosmic 3D Noise at " + Gdx.graphics.getFramesPerSecond() + " FPS");
+                    bright = c * 0x5p-8f;
+                    double s0 = NumberTools.swayRandomized(0x9E3779B97F4A7C15L, bright - 1.11f) * 0.025f; //ctr * 0x5p-8f
+                    double c0 = NumberTools.swayRandomized(0xC13FA9A902A6328FL, bright - 1.11f) * 0.025f; //ctr * 0x5p-8f
+                    double s1 = NumberTools.swayRandomized(0xD1B54A32D192ED03L, bright + 1.41f) * 0.025f; //ctr * 0x5p-8f
+                    double c1 = NumberTools.swayRandomized(0xDB4F0B9175AE2165L, bright + 1.41f) * 0.025f; //ctr * 0x5p-8f
+                    double s2 = NumberTools.swayRandomized(0xE19B01AA9D42C633L, bright + 2.61f) * 0.025f; //ctr * 0x5p-8f
+                    double c2 = NumberTools.swayRandomized(0xE60E2B722B53AEEBL, bright + 2.61f) * 0.025f; //ctr * 0x5p-8f
+                    for (int x = 0; x < width; x++) {
+                        for (int y = 0; y < height; y++) {
+                            connections[0] = c * 0.007 + x * c0 - y * s0;
+                            connections[1] = c * 0.009 - x * c1 + y * s1;
+                            connections[2] = c * 0.013 + x * c2 + y * s2;
+                            connections[0] = cosmos.getDoubleBase() + 0.5;
+                            connections[1] = cosmos.getDoubleBase() + 0.5;
+                            connections[2] = cosmos.getDoubleBase() + 0.5;
+                            bright = NumberTools.swayTight((float) connections[1]);//(float)connections[1] * 4f;
+                            renderer.color(bright, bright, bright, 1f);
+                            renderer.vertex(x, y, 0);
+                        }
+                    }
                 }
-            }
+                break;
+            case 1:
+                if (color) {
+                    Gdx.graphics.setTitle("Warble3D Noise, color, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                    for (int x = 0; x < width; x++) {
+                        for (int y = 0; y < height; y++) {
+                            alter3D(x * freq + c, y * freq + c, c * freq + c);
+                            warble.getNoise(connections[0], connections[1], connections[2]);
+                            renderer.color(basicPrepare((float) warble.results[0]),
+                                    basicPrepare((float) warble.results[1]),
+                                    basicPrepare((float) warble.results[2]), 1f);
+                            renderer.vertex(x, y, 0);
+                        }
+                    }
+                }
+                else {
+                    Gdx.graphics.setTitle("Warble3D Noise at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                    for (int x = 0; x < width; x++) {
+                        for (int y = 0; y < height; y++) {
+                            alter3D(x * freq + c, y * freq + c, c * freq + c);
+                            bright =
+                                    basicPrepare(warble.getNoise(connections[0], connections[1], connections[2])
+                                    );
+                            renderer.color(bright, bright, bright, 1f);
+                            renderer.vertex(x, y, 0);
+                        }
+                    }
+                }
+                break;
         }
         renderer.end();
     }
@@ -161,6 +194,11 @@ public class PlasmaVisualizer extends ApplicationAdapter {
             ctr++;
             putMap();
         }
+    }
+    private void alter3D(double x, double y, double ctr) {
+        connections[0]  = x * 0.03125;
+        connections[1]  = y * 0.03125;
+        connections[2]  = ctr * 0.1375;
     }
 
     @Override
