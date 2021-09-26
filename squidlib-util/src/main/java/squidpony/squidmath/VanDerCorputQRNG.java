@@ -122,7 +122,7 @@ public class VanDerCorputQRNG implements StatefulRandomness, RandomnessSource, S
 
     @Override
     public int next(int bits) {
-        return (int)(nextLong()) >>> (32 - bits);
+        return (int)(nextLong() >>> (64 - bits));
     }
 
     /**
@@ -491,7 +491,9 @@ public class VanDerCorputQRNG implements StatefulRandomness, RandomnessSource, S
      * @param index any int
      * @return a double between 0.0 inclusive and 1.0 exclusive
      */
-    public static double altDetermine(long base, final int index) { return (((base = (Long.reverse(base + index) ^ 0x5851F42D4C957F2DL) * 0x14057B7EF767814BL) >>> 11) ^ (base >>> 13) ^ (base >>> 14)) * 0x1p-53; }
+    public static double altDetermine(long base, final int index) {
+        return (((base = (Long.reverse(base + index) ^ 0x5851F42D4C957F2DL) * 0x14057B7EF767814BL) >>> 11) ^ (base >>> 13) ^ (base >>> 14)) * 0x1p-53;
+    }
 //    public static double altDetermine(long base, final int index) { return ((((index * 0x5851F42D4C957F2DL + base) * 0x5851F42D4C957F2DL + base) * 0x5851F42D4C957F2DL + base) >>> 11) * 0x1p-53; }
 
     /**
