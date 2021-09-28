@@ -2,6 +2,8 @@ package squidpony.squidmath;
 
 public class WarbleNoise implements Noise.Noise3D {
 
+    private static final double[] ADJ = {-1.11, 1.41, 1.61};
+
     public WarbleNoise(){
         this(0x1234567890ABCDEFL);
     }
@@ -76,6 +78,35 @@ public class WarbleNoise implements Noise.Noise3D {
         System.arraycopy(results, 0, working, size, size);
         System.arraycopy(results, 0, working, size + size, size);
     }
+
+    public double getPowerNoise(double x, double y, double z) {
+        working[0] = working[3] = working[6] = x;
+        working[1] = working[4] = working[7] = y;
+        working[2] = working[5] = working[8] = z;
+        results[0] = z + sway(0, 2, 0.0);
+        results[1] = x + sway(1, 2, 0.0);
+        results[2] = y + sway(2, 2, 0.0);
+        System.arraycopy(results, 0, working, 0, 3);
+        System.arraycopy(results, 0, working, 3, 3);
+        System.arraycopy(results, 0, working, 6, 3);
+        warble(3);
+        warble(3);
+        warble(3);
+        for (int i = 0; i < 9; i++) {
+            working[i] *= Math.PI;
+        }
+        for (int i = 0; i < 3; i++) {
+            results[i] = sway(i, 0, 3.0);
+        }
+        return results[0];
+    }
+    public double getPowerNoiseWithSeed(double x, double y, double z, long seed) {
+        workSeed[0] = workSeed[3] = DiverRNG.determine(seed);
+        workSeed[1] = workSeed[4] = DiverRNG.determine(seed + 1L);
+        workSeed[2] = workSeed[5] = DiverRNG.determine(seed + 2L);
+        return getPowerNoise(x, y, z);
+    }
+
     /*
 const float SEED = 42.0;
 const vec3 COEFFS = fract((SEED + 23.4567) * vec3(0.8191725133961645, 0.6710436067037893, 0.5497004779019703)) + 0.5;

@@ -70,12 +70,12 @@ public class PlasmaVisualizer extends ApplicationAdapter {
                         seed += 0x9E3779B97F4A7C15L;
                         break;
                     case MINUS:
-                        noiseType = (noiseType + 1) & 1;
+                        noiseType = (noiseType + 2) % 3;
                         break;
                     case N: // noise type
                     case EQUALS:
                     case ENTER:
-                        noiseType = (noiseType + 1) & 1;
+                        noiseType = (noiseType + 1) % 3;
                         break;
                     case F: // frequency
                         freq *= UIUtils.shift() ? 1.1f : 0.9f;
@@ -174,6 +174,34 @@ public class PlasmaVisualizer extends ApplicationAdapter {
                             alter3D(x * freq + c, y * freq + c, c + c);
                             bright =
                                     basicPrepare(warble.getNoise(connections[0], connections[1], connections[2])
+                                    );
+                            renderer.color(bright, bright, bright, 1f);
+                            renderer.vertex(x, y, 0);
+                        }
+                    }
+                }
+                break;
+            case 2:
+                if (color) {
+                    Gdx.graphics.setTitle("PowerWarble3D Noise, color, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                    for (int x = 0; x < width; x++) {
+                        for (int y = 0; y < height; y++) {
+                            alter3D(x * freq + c, y * freq + c, c + c);
+                            warble.getPowerNoise(connections[0], connections[1], connections[2]);
+                            renderer.color(basicPrepare((float) warble.results[0]),
+                                    basicPrepare((float) warble.results[1]),
+                                    basicPrepare((float) warble.results[2]), 1f);
+                            renderer.vertex(x, y, 0);
+                        }
+                    }
+                }
+                else {
+                    Gdx.graphics.setTitle("PowerWarble3D Noise at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                    for (int x = 0; x < width; x++) {
+                        for (int y = 0; y < height; y++) {
+                            alter3D(x * freq + c, y * freq + c, c + c);
+                            bright =
+                                    basicPrepare(warble.getPowerNoise(connections[0], connections[1], connections[2])
                                     );
                             renderer.color(bright, bright, bright, 1f);
                             renderer.vertex(x, y, 0);
