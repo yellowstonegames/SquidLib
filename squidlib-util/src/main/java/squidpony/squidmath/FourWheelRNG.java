@@ -221,7 +221,7 @@ public final class FourWheelRNG implements RandomnessSource, Serializable {
     }
     @Override
     public String toString() {
-        return "TricycleRNG with stateA 0x" + StringKit.hex(stateA) + "L, stateB 0x" + StringKit.hex(stateB)
+        return "FourWheelRNG with stateA 0x" + StringKit.hex(stateA) + "L, stateB 0x" + StringKit.hex(stateB)
                 + "L, stateC 0x" + StringKit.hex(stateC) + "L, and stateD 0x" + StringKit.hex(stateD) + 'L';
     }
 
