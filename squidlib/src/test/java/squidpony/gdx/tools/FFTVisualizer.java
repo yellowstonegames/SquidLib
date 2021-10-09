@@ -36,7 +36,7 @@ public class FFTVisualizer extends ApplicationAdapter {
     private int hashIndex = 0;
     private static final int MODE_LIMIT = 12;
     private int mode = 7;
-    private int dim = 3; // this can be 0, 1, 2, or 3; add 2 to get the actual dimensions
+    private int dim = 2; // this can be 0, 1, 2, or 3; add 2 to get the actual dimensions
     private int octaves = 3;
     private float freq = 0.125f;
     private float threshold = 0.5f;
