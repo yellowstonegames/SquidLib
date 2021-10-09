@@ -3,6 +3,7 @@ package squidpony.gdx.tools;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.glutils.ImmediateModeRenderer20;
@@ -55,8 +56,8 @@ public class FFTVisualizer extends ApplicationAdapter {
     private long ctr = -128, startTime;
     
     private OrderedMap<Coord, Double> norm;
-    StatefulRNG shuffler;
-    
+    private StatefulRNG shuffler;
+    private Pixmap pm;
     private static final Comparator<Double> doubleComparator = new Comparator<Double>(){
         @Override
         public int compare(Double o1, Double o2) {
@@ -81,7 +82,9 @@ public class FFTVisualizer extends ApplicationAdapter {
         shuffler = new StatefulRNG(0x1234567890ABCDEFL);
         noise.setNoiseType(FastNoise.CUBIC_FRACTAL);
         noise.setPointHash(pointHashes[hashIndex]);
-        Pixmap pm = new Pixmap(Gdx.files.internal("special/BlueNoise512x512.png"));
+//        Pixmap pm = new Pixmap(Gdx.files.internal("special/BlueNoise512x512.png"));
+//        pm = new Pixmap(Gdx.files.internal("special/BlueNoiseTri256x256.png"));
+        pm = new Pixmap(Gdx.files.internal("special/BlueNoiseTri512x512.png"));
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
                 realKnown[x][y] = (pm.getPixel(x, y) >>> 24) / 255.0;
@@ -445,64 +448,70 @@ public class FFTVisualizer extends ApplicationAdapter {
                     break;
             }
         } else if(mode == 5) {
-            norm.clear();
-            
-            //// Set up an initial Fourier transform for this to invert
-            for (int x = 0; x < width; x++) {
-                for (int y = 0; y < height >>> 1; y++) {
-                    norm.put(Coord.get(x, y),
-                            real[x][y] = real[width - 1 - x][height - 1 - y] = realKnown[x][y]);
-                    imag[x][y] = imag[width - 1 - x][height - 1 - y] = imagKnown[x][y];
-                 }
-            }
-            
-//            //// This is likely incorrect... imag probably also needs some values.
+//            norm.clear();
+//
+//            //// Set up an initial Fourier transform for this to invert
 //            for (int x = 0; x < width; x++) {
 //                for (int y = 0; y < height >>> 1; y++) {
-//                    final double hx = 1.0 - Math.abs(x - width * 0.5 + 0.5) / 255.5, hy = 1.0 - (height * 0.5 - 0.5 - y) / 255.5;
-//                    final double a = Math.sqrt(hx * hx + hy * hy);
-//                    norm.put(Coord.get(x + 256 & 511, y + 256 & 511),
-//                            real[x][y] = real[width - 1 - x][height - 1 - y] = 
-//                            0x1p-8 * IntPointHash.hash256(x, y, noise.getSeed()) * MathUtils.clamp((a * a * a * (a * (a * 6.0 -15.0) + 10.0) - 0.125), 0.0, 1.0));
+//                    norm.put(Coord.get(x, y),
+//                            real[x][y] = real[width - 1 - x][height - 1 - y] = realKnown[x][y]);
+//                    imag[x][y] = imag[width - 1 - x][height - 1 - y] = imagKnown[x][y];
 //                 }
 //            }
-//            real[width >>> 1][height >>> 1] = 1.0;
-//            real[(width >>> 1)-1][(height >>> 1)] = 1.0;
-//            real[(width >>> 1)-1][(height >>> 1)-1] = 1.0;
-//            real[(width >>> 1)][(height >>> 1)-1] = 1.0;
-//            norm.put(Coord.get(width >>> 1, (height >>> 1)-1), 1.0);
-//            norm.put(Coord.get((width >>> 1) - 1, (height >>> 1)-1), 1.0);
-            
-            //// Done setting up the initial Fourier transform 
-            
-            Fft.transformWindowless2D(imag, real);
-            //// re-normalize
-
-            norm.shuffle(shuffler);
-            norm.sortByValue(doubleComparator);
-            final int ns = norm.size();
-            final double den = (ns - 1.0);
-            for (int i = 0; i < ns; i++) {
-                final Coord co = norm.keyAt(i);
-                real[co.x][co.y] = real[width - 1 - co.x][height - 1 - co.y] = i / den;
-            }
-            shuffler.setState(0x1234567890ABCDEFL);
-            //// done re-normalizing
-//            
-//            for (int x = 0; x < width; x++) {
-//                for (int y = 0; y < height; y++) {
-//                    bright = (float) real[x][y];
-//                    renderer.color(bright, bright, bright, 1f);
-//                    renderer.vertex(x, y, 0);
-//                }
+//
+////            //// This is likely incorrect... imag probably also needs some values.
+////            for (int x = 0; x < width; x++) {
+////                for (int y = 0; y < height >>> 1; y++) {
+////                    final double hx = 1.0 - Math.abs(x - width * 0.5 + 0.5) / 255.5, hy = 1.0 - (height * 0.5 - 0.5 - y) / 255.5;
+////                    final double a = Math.sqrt(hx * hx + hy * hy);
+////                    norm.put(Coord.get(x + 256 & 511, y + 256 & 511),
+////                            real[x][y] = real[width - 1 - x][height - 1 - y] =
+////                            0x1p-8 * IntPointHash.hash256(x, y, noise.getSeed()) * MathUtils.clamp((a * a * a * (a * (a * 6.0 -15.0) + 10.0) - 0.125), 0.0, 1.0));
+////                 }
+////            }
+////            real[width >>> 1][height >>> 1] = 1.0;
+////            real[(width >>> 1)-1][(height >>> 1)] = 1.0;
+////            real[(width >>> 1)-1][(height >>> 1)-1] = 1.0;
+////            real[(width >>> 1)][(height >>> 1)-1] = 1.0;
+////            norm.put(Coord.get(width >>> 1, (height >>> 1)-1), 1.0);
+////            norm.put(Coord.get((width >>> 1) - 1, (height >>> 1)-1), 1.0);
+//
+//            //// Done setting up the initial Fourier transform
+//
+//            Fft.transformWindowless2D(imag, real);
+//            //// re-normalize
+//
+//            norm.shuffle(shuffler);
+//            norm.sortByValue(doubleComparator);
+//            final int ns = norm.size();
+//            final double den = (ns - 1.0);
+//            for (int i = 0; i < ns; i++) {
+//                final Coord co = norm.keyAt(i);
+//                real[co.x][co.y] = real[width - 1 - co.x][height - 1 - co.y] = i / den;
 //            }
-            Fft.getColors(real, imag, colors);
+//            shuffler.setState(0x1234567890ABCDEFL);
+//            //// done re-normalizing
+
+            Color color = new Color(255);
+            int ic;
             for (int x = 0; x < width; x++) {
                 for (int y = 0; y < height; y++) {
-                    renderer.color(colors[x][y]);
+                    ic = pm.getPixel(x, y);
+                    real[x][y] = (ic >>> 24) / 255.0;
+                    imag[x][y] = 0;
+//                    bright = (float) real[x][y];
+                    Color.rgba8888ToColor(color, ic);
+                    renderer.color(color);
                     renderer.vertex(x, y, 0);
                 }
             }
+//            Fft.getColors(real, imag, colors);
+//            for (int x = 0; x < width; x++) {
+//                for (int y = 0; y < height; y++) {
+//                    renderer.color(colors[x][y]);
+//                    renderer.vertex(x, y, 0);
+//                }
+//            }
         }
         else if(mode == 6){
             switch (dim){
@@ -572,11 +581,23 @@ public class FFTVisualizer extends ApplicationAdapter {
                     }
                     break;
                 case 2:
+//                    for (int x = 0; x < width; x++) {
+//                        for (int y = 0; y < height; y++) {
+//                            bright = (float) (db = 0x1p-8 * (BlueNoise.getSeededTriangular(x, y, noise.getSeed()) + 128));
+//                            real[x][y] = db;
+//                            renderer.color(bright, bright, bright, 1f);
+//                            renderer.vertex(x, y, 0);
+//                        }
+//                    }
+                    Color color = new Color(255);
+                    int ic;
                     for (int x = 0; x < width; x++) {
                         for (int y = 0; y < height; y++) {
-                            bright = (float) (db = 0x1p-8 * (BlueNoise.getSeededTriangular(x, y, noise.getSeed()) + 128));
-                            real[x][y] = db;
-                            renderer.color(bright, bright, bright, 1f);
+                            ic = pm.getPixel(x, y);
+                            real[x][y] = (ic >>> 24) / 255.0;
+                            imag[x][y] = 0;
+                            Color.rgba8888ToColor(color, ic);
+                            renderer.color(color);
                             renderer.vertex(x, y, 0);
                         }
                     }
@@ -661,10 +682,20 @@ public class FFTVisualizer extends ApplicationAdapter {
                     }
                     break;
                 case 2:
+//                    for (int x = 0; x < width; x++) {
+//                        for (int y = 0; y < height; y++) {
+//                            bright = 0x1p-8 * (BlueNoise.getSeededTriangular(x, y, noise.getSeed()) + 128) <= threshold ? 1 : 0;
+//                            real[x][y] = bright;
+//                            renderer.color(bright, bright, bright, 1f);
+//                            renderer.vertex(x, y, 0);
+//                        }
+//                    }
+                    int ic;
                     for (int x = 0; x < width; x++) {
                         for (int y = 0; y < height; y++) {
-                            bright = 0x1p-8 * (BlueNoise.getSeededTriangular(x, y, noise.getSeed()) + 128) <= threshold ? 1 : 0;
-                            real[x][y] = bright;
+                            ic = pm.getPixel(x, y);
+                            real[x][y] = bright = (ic >>> 24) * 0x1p-8 <= threshold ? 1f : 0f;
+                            imag[x][y] = 0;
                             renderer.color(bright, bright, bright, 1f);
                             renderer.vertex(x, y, 0);
                         }
