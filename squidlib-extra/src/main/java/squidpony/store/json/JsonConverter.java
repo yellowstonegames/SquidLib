@@ -458,10 +458,16 @@ public class JsonConverter extends Json {
             @SuppressWarnings("unchecked")
             public EnumMap read(Json json, JsonValue jsonData, Class type) {
                 if(jsonData == null || jsonData.isNull() || jsonData.size == 0) return null;
-                return new EnumMap(Maker.makeOM(0.75f,
-                        json.readValue("e", null, jsonData),
-                        json.readValue("v", null, jsonData),
-                        json.readValue("r", Object[].class, jsonData)));
+
+                Object firstKey = json.readValue("e", null, jsonData);
+                Object firstValue = json.readValue("v", null, jsonData);
+                Object[] rest = json.readValue("r", Object[].class, jsonData);
+                HashMap base = new HashMap(rest.length + 2 >>> 1);
+                base.put(firstKey, firstValue);
+                for (int i = 1; i < rest.length; i += 2) {
+                    base.put(rest[i-1], rest[i]);
+                }
+                return new EnumMap(base);
             }
         });
         json.setSerializer(Arrangement.class, new Serializer<Arrangement>() {
