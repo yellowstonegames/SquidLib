@@ -601,7 +601,7 @@ public class BlueNoise {
     public static byte getSeededOmniTiling(final int x, final int y, final int seed) {
         final int a = x >>> 6 ^ seed >>> 6;
         final int b = y >>> 6 ^ seed >>> 12;
-        return TILE_NOISE[(seed ^ b + ((a + b) * (a + b + 1) >> 1)) & 63][(y << 6 & 0xFC0) | (x & 0x3F)];
+        return TILE_NOISE[(seed + b + ((a + b) * (a + b + 1) >> 1)) & 63][(y << 6 & 0xFC0) | (x & 0x3F)];
     }
 
     /**
@@ -622,7 +622,7 @@ public class BlueNoise {
     public static byte getSeededTriOmniTiling(final int x, final int y, final int seed) {
         final int a = x >>> 6 ^ seed >>> 6;
         final int b = y >>> 6 ^ seed >>> 12;
-        return TILE_TRI_NOISE[(seed ^ b + ((a + b) * (a + b + 1) >> 1)) & 63][(y << 6 & 0xFC0) | (x & 0x3F)];
+        return TILE_TRI_NOISE[(seed + b + ((a + b) * (a + b + 1) >> 1)) & 63][(y << 6 & 0xFC0) | (x & 0x3F)];
     }
 
     /**
