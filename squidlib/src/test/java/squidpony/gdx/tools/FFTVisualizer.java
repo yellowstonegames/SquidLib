@@ -498,7 +498,6 @@ public class FFTVisualizer extends ApplicationAdapter {
                 for (int y = 0; y < height; y++) {
                     ic = pm.getPixel(x, y);
                     real[x][y] = (ic >>> 24) / 255.0;
-                    imag[x][y] = 0;
 //                    bright = (float) real[x][y];
                     Color.rgba8888ToColor(color, ic);
                     renderer.color(color);
@@ -595,7 +594,6 @@ public class FFTVisualizer extends ApplicationAdapter {
                         for (int y = 0; y < height; y++) {
                             ic = pm.getPixel(x, y);
                             real[x][y] = (ic >>> 24) / 255.0;
-                            imag[x][y] = 0;
                             Color.rgba8888ToColor(color, ic);
                             renderer.color(color);
                             renderer.vertex(x, y, 0);
@@ -695,7 +693,6 @@ public class FFTVisualizer extends ApplicationAdapter {
                         for (int y = 0; y < height; y++) {
                             ic = pm.getPixel(x, y);
                             real[x][y] = bright = (ic >>> 24) * 0x1p-8 <= threshold ? 1f : 0f;
-                            imag[x][y] = 0;
                             renderer.color(bright, bright, bright, 1f);
                             renderer.vertex(x, y, 0);
                         }
