@@ -24,8 +24,8 @@ import java.util.Random;
  * Created by Tommy Ettinger on 1/13/2018.
  */
 public class MathVisualizer extends ApplicationAdapter {
-    private int mode = 47;
-    private int modes = 57;
+    private int mode = 57;
+    private int modes = 58;
     private FilterBatch batch;
     private SparseLayers layers;
     private InputAdapter input;
@@ -41,6 +41,7 @@ public class MathVisualizer extends ApplicationAdapter {
     private XSP xsp;
     private EditRNG edit;
     private TweakRNG tweak;
+    private KumaraswamyDistribution kd;
     private long seed = 1L;
     private long startTime;
     private double[] circleCoord = new double[2];
@@ -532,6 +533,7 @@ public class MathVisualizer extends ApplicationAdapter {
         xs128 = new RandomXS128();
         xsp = new XSP();
         tweak = new TweakRNG();
+        kd = new KumaraswamyDistribution(2.0, 5.0);
         batch = new FilterBatch();
         stage = new Stage(new StretchViewport(512, 520), batch);
         layers = new SparseLayers(512, 520, 1, 1, new TextCellFactory().includedFont());
@@ -2119,10 +2121,10 @@ public class MathVisualizer extends ApplicationAdapter {
             break;
             case 51: {
                 Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
-                        " RandomXS128, bits of random.nextDouble()");
+                        " RandomXS128, bits of differentNextExclusiveDouble()");
                 //DiverRNG diver = new DiverRNG();
                 for (int i = 0; i < 0x10000; i++) {
-                    long bits = Double.doubleToLongBits(xs128.nextDouble());
+                    long bits = Double.doubleToLongBits(((xs128.nextLong() >>> 11) + 1L) * 1.1102230246251564E-16);
                     for (int j = 0, jj = 504; j < 64; j++, jj -= 8) {
                         if (1L == (bits >>> j & 1L))
                             amounts[jj] = amounts[jj + 1] = amounts[jj + 2] = amounts[jj + 3]
@@ -2282,6 +2284,30 @@ public class MathVisualizer extends ApplicationAdapter {
                     }
                 }
                 break;
+            case 57:{
+                if(Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)) kd.setA(kd.getA() + 0.1);
+                if(Gdx.input.isKeyJustPressed(Input.Keys.LEFT)) kd.setA(kd.getA() - 0.1);
+                if(Gdx.input.isKeyJustPressed(Input.Keys.UP)) kd.setB(kd.getB() + 0.1);
+                if(Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) kd.setB(kd.getB() - 0.1);
+                Gdx.graphics.setTitle("Kumaraswamy with a="+kd.getA()+", b="+kd.getB()+" . Mode " + mode);
+                for (int i = 0; i < 0x100000; i++) {
+                    amounts[Noise.fastFloor(kd.nextDouble(rng) * 512)]++;
+                }
+                for (int i = 0; i < 512; i++) {
+                    float color = (i & 63) == 0
+                            ? -0x1.c98066p126F // CW Azure
+                            : -0x1.d08864p126F; // CW Sapphire
+                    for (int j = Math.max(0, 519 - (amounts[i] >> 4)); j < 520; j++) {
+                        layers.backgrounds[i][j] = color;
+                    }
+                }
+                for (int i = 0; i < 10; i++) {
+                    for (int j = 8; j < 520; j += 32) {
+                        layers.backgrounds[i][j] = -0x1.7677e8p125F;
+                    }
+                }
+                break;
+            }
         }
     }
 
