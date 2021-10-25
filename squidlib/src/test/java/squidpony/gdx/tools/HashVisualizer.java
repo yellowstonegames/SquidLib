@@ -122,7 +122,7 @@ public class HashVisualizer extends ApplicationAdapter {
     
     private TangleRNG tangle = new TangleRNG(1);
     
-    private XoshiroStarStar64RNG[][] randomGrid = new XoshiroStarStar64RNG[width][height];
+    private RandomnessSource[][] randomGrid = new RandomnessSource[width][height];
 
 
     private final int[] coordinates = new int[2];
@@ -1557,7 +1557,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                randomGrid[x][y] = new XoshiroStarStar64RNG(x*2+1, y*2+1, 1, 1);
+                randomGrid[x][y] = new OrbitRNG(x*2+1, y*2+1);
 //                randomGrid[x][y] = new TangleRNG(DiverRNG.randomize(x), y << 1);
             }
         }
