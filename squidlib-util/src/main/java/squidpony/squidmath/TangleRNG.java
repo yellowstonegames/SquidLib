@@ -43,7 +43,7 @@ import java.io.Serializable;
  * <br>
  * Created by Tommy Ettinger on 7/9/2018.
  */
-public final class TangleRNG implements RandomnessSource, SkippingRandomness, Serializable {
+public class TangleRNG implements RandomnessSource, SkippingRandomness, Serializable {
     private static final long serialVersionUID = 5L;
     /**
      * Can be any long value.
@@ -119,7 +119,7 @@ public final class TangleRNG implements RandomnessSource, SkippingRandomness, Se
      * @return the integer containing the appropriate number of bits
      */
     @Override
-    public final int next(final int bits) {
+    public int next(final int bits) {
         final long s = (stateA += 0xC6BC279692B5C323L);
         final long z = (s ^ s >>> 31) * (stateB += 0x9E3779B97F4A7C16L);
         return (int)(z ^ z >>> 26 ^ z >>> 6) >>> (32 - bits);
@@ -133,7 +133,7 @@ public final class TangleRNG implements RandomnessSource, SkippingRandomness, Se
      * @return a random long between Long.MIN_VALUE and Long.MAX_VALUE (both inclusive)
      */
     @Override
-    public final long nextLong() {
+    public long nextLong() {
         final long s = (stateA += 0xC6BC279692B5C323L);
         final long z = (s ^ s >>> 31) * (stateB += 0x9E3779B97F4A7C16L);
         return z ^ z >>> 26 ^ z >>> 6;
