@@ -1506,6 +1506,34 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 //        }
 //    }
 
+    private static class PangolinRNG implements RandomnessSource{
+        private long stateA, stateB;
+
+        public PangolinRNG(long stateA, long stateB) {
+            this.stateA = stateA;
+            this.stateB = stateB | 1L;
+        }
+
+        @Override
+        public int next(int bits) {
+            return (int)(nextLong() >>> 64 - bits);
+        }
+
+        @Override
+        public long nextLong() {
+            long a = (stateA += 0xC6BC279692B5C323L);
+            a ^= a >>> 31;
+            a *= (stateB += 0x9E3779B97F4A7C16L);
+            a ^= a >>> 33;
+            a *= 0xACBD2BDCA2BFF56DL;
+            return a ^ a >>> 26;
+        }
+
+        @Override
+        public RandomnessSource copy() {
+            return new PangolinRNG(stateA, stateB);
+        }
+    }
 
     @Override
     public void create() {
@@ -1557,7 +1585,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                randomGrid[x][y] = new OrbitRNG(x*2+1, y*2+1);
+                randomGrid[x][y] = new PangolinRNG(x*2+1, y*2+1);
 //                randomGrid[x][y] = new TangleRNG(DiverRNG.randomize(x), y << 1);
             }
         }
