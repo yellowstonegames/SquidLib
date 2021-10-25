@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.NumberUtils;
+import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import squidpony.ArrayTools;
@@ -2445,8 +2446,7 @@ public class MathVisualizer extends ApplicationAdapter {
     @Override
     public void render() {
         // standard clear the background routine for libGDX
-        Gdx.gl.glClearColor(1f, 1f, 1f, 1f);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        ScreenUtils.clear(1f, 1f, 1f, 1f);
         update();
         stage.draw();
     }
@@ -2454,7 +2454,7 @@ public class MathVisualizer extends ApplicationAdapter {
     public static void main (String[] arg) {
         Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
         config.setTitle("SquidLib Visualizer for Math Testing/Checking");
-        config.useVsync(false);
+        config.setResizable(false);
         config.setWindowedMode(512, 520);
         config.setWindowIcon(Files.FileType.Internal, "Tentacle-128.png", "Tentacle-64.png", "Tentacle-32.png", "Tentacle-16.png");
         new Lwjgl3Application(new MathVisualizer(), config);

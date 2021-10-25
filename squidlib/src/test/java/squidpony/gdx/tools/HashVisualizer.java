@@ -68,8 +68,8 @@ public class HashVisualizer extends ApplicationAdapter {
     // 5 RNG results
     private int testType = 5;
     private static final int NOISE_LIMIT = 152;
-    private static final int RNG_LIMIT = 51;
-    private int hashMode, rngMode = 50, noiseMode = 134, otherMode = 17;//142
+    private static final int RNG_LIMIT = 52;
+    private int hashMode, rngMode = 4, noiseMode = 134, otherMode = 17;//142
 
     /**
      * If you're editing the source of HashVisualizer, you can comment out one line and uncomment another to change
@@ -122,7 +122,7 @@ public class HashVisualizer extends ApplicationAdapter {
     
     private TangleRNG tangle = new TangleRNG(1);
     
-    private TangleRNG[][] randomGrid = new TangleRNG[64][64];
+    private RandomXS128[][] randomGrid = new RandomXS128[width][height];
 
 
     private final int[] coordinates = new int[2];
@@ -1555,9 +1555,10 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
         mistC = CrossHash.Mist.chi;
         fuzzy = new ThrustAltRNG(0xBEEFCAFEF00DCABAL);
 
-        for (int y = 0; y < 64; y++) {
-            for (int x = 0; x < 64; x++) {
-                randomGrid[x][y] = new TangleRNG(x, DiverRNG.randomize(y));
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                randomGrid[x][y] = new RandomXS128(x+1, y+1);
+//                randomGrid[x][y] = new TangleRNG(DiverRNG.randomize(x), y << 1);
             }
         }
         
@@ -5590,17 +5591,13 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("SilkRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 4:
-                        for (int x = 0; x < 64; x++) {
-                            for (int y = 0; y < 64; y++) {
-                                bright = floatGet(randomGrid[x][y].nextLong() << 8 | 255L);
-                                for (int gx = 0; gx < width; gx += 64) {
-                                    for (int gy = 0; gy < height; gy += 64) {
-                                        back[gx + x][gy + y] = bright;
-                                    }
-                                }
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                back[x][y] = floatGet(-(randomGrid[x][y].nextLong() & 1L) | 255L);
+//                                back[x][y] = floatGet(randomGrid[x][y].nextLong() << 8 | 255L);
                             }
                         }
-                        Gdx.graphics.setTitle("TangleRNG Stream Grid at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("RandomXS128 Stream Grid at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
 //                        for (int x = 0; x < width; x++) {
 //                            for (int y = 0; y < height; y++) {
@@ -6033,6 +6030,17 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             }
                         }
                         Gdx.graphics.setTitle(counter+"/262144 from j.u.Random using nextDouble() at " + Gdx.graphics.getFramesPerSecond() + " FPS");
+                        break;
+                    }
+                    case 51: {
+                        float counter = 0f;
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                counter += (bright = (Double.doubleToLongBits(gdxRandom.nextDouble()) & 1L));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
+                            }
+                        }
+                        Gdx.graphics.setTitle(counter+"/262144 from RandomXS128 using nextDouble() at " + Gdx.graphics.getFramesPerSecond() + " FPS");
                         break;
                     }
                 }
