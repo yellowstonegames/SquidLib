@@ -38,7 +38,7 @@ package squidpony.squidmath;
  * Xoshiro256** was written in 2018 by David Blackman and Sebastiano Vigna. You can consult their paper for technical details:
  * <a href="https://vigna.di.unimi.it/ftp/papers/ScrambledLinear.pdf">PDF link here</a>.
  */
-public class XoshiroStarStar64Random implements RandomnessSource {
+public class XoshiroStarStar64RNG implements RandomnessSource {
 
     /**
      * The first state; can be any long, as long as all states are not 0.
@@ -62,7 +62,7 @@ public class XoshiroStarStar64Random implements RandomnessSource {
     /**
      * Creates a new FourWheelRandom with a random state.
      */
-    public XoshiroStarStar64Random() {
+    public XoshiroStarStar64RNG() {
         this((long) ((Math.random() - 0.5) * 0x10000000000000L)
                         ^ (long) (((Math.random() - 0.5) * 2.0) * 0x8000000000000000L),
                 (long) ((Math.random() - 0.5) * 0x10000000000000L)
@@ -78,7 +78,7 @@ public class XoshiroStarStar64Random implements RandomnessSource {
      * The seed will be passed to {@link #setSeed(long)} to attempt to adequately distribute the seed randomly.
      * @param seed any {@code long} value
      */
-    public XoshiroStarStar64Random(long seed) {
+    public XoshiroStarStar64RNG(long seed) {
         setSeed(seed);
     }
 
@@ -90,7 +90,7 @@ public class XoshiroStarStar64Random implements RandomnessSource {
      * @param stateC any {@code long} value
      * @param stateD any {@code long} value
      */
-    public XoshiroStarStar64Random(long stateA, long stateB, long stateC, long stateD) {
+    public XoshiroStarStar64RNG(long stateA, long stateB, long stateC, long stateD) {
         this.stateA = stateA;
         this.stateB = stateB;
         this.stateC = stateC;
@@ -225,8 +225,8 @@ public class XoshiroStarStar64Random implements RandomnessSource {
     }
 
     @Override
-    public XoshiroStarStar64Random copy() {
-        return new XoshiroStarStar64Random(stateA, stateB, stateC, stateD);
+    public XoshiroStarStar64RNG copy() {
+        return new XoshiroStarStar64RNG(stateA, stateB, stateC, stateD);
     }
 
     @Override
@@ -236,7 +236,7 @@ public class XoshiroStarStar64Random implements RandomnessSource {
         if (o == null || getClass() != o.getClass())
             return false;
 
-        XoshiroStarStar64Random that = (XoshiroStarStar64Random)o;
+        XoshiroStarStar64RNG that = (XoshiroStarStar64RNG)o;
 
         if (stateA != that.stateA)
             return false;
