@@ -122,7 +122,7 @@ public class HashVisualizer extends ApplicationAdapter {
     
     private TangleRNG tangle = new TangleRNG(1);
     
-    private RandomXS128[][] randomGrid = new RandomXS128[width][height];
+    private TangleRNG[][] randomGrid = new TangleRNG[width][height];
 
 
     private final int[] coordinates = new int[2];
@@ -1557,7 +1557,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                randomGrid[x][y] = new RandomXS128(x+1, y+1);
+                randomGrid[x][y] = new TangleRNG(x*2+1, y*2+1);
 //                randomGrid[x][y] = new TangleRNG(DiverRNG.randomize(x), y << 1);
             }
         }
@@ -5597,7 +5597,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 //                                back[x][y] = floatGet(randomGrid[x][y].nextLong() << 8 | 255L);
                             }
                         }
-                        Gdx.graphics.setTitle("RandomXS128 Stream Grid at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("Tangle Stream Grid at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
 //                        for (int x = 0; x < width; x++) {
 //                            for (int y = 0; y < height; y++) {
