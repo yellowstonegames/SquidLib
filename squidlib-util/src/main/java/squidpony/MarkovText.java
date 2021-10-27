@@ -294,7 +294,8 @@ public class MarkovText implements Serializable {
      */
     public String serializeToString()
     {
-        return StringKit.join(" ", words) + "\t" + StringKit.join(",", pairs.keysAsArray()) + "\t" + Converters.convertArrayInt2D.stringify(processed);
+        return StringKit.join(" ", words) + "\t" + StringKit.join(",", pairs.keysAsArray()) +
+                "\t" + Converters.convertArrayInt2D.stringify(processed);
     }
 
     /**

@@ -109,7 +109,7 @@ public class StrangerRNG implements RandomnessSource, Serializable {
      * This initializes all 4 states of the generator to random values based on the given seed.
      * (2 to the 64) possible initial generator states can be produced here, all with a different
      * first value returned by {@link #nextLong()} (because {@code stateC} is guaranteed to be
-     * different for every different {@code seed}). This ensures stateB is a sufficient distance
+     * different for every non-zero {@code seed}). This ensures stateB is a sufficient distance
      * from stateA in their shared sequence, and also does some randomizing on the seed before it
      * assigns the result to stateC. This isn't an instantaneously-fast method to call like some
      * versions of setSeed(), but it shouldn't be too slow unless it is called before every
@@ -120,8 +120,8 @@ public class StrangerRNG implements RandomnessSource, Serializable {
         stateA = seed ^ 0xFA346CBFD5890825L;
         if(stateA == 0L) stateA = 0xD3833E804F4C574BL;
         stateB = jump(stateA);
-        stateC = jump(seed ^ 0x05CB93402A76F7DAL);
-        stateD = ~seed;
+        stateC = jump(stateB - seed);
+        stateD = jump(stateC + 0xC6BC279692B5C323L);
     }
 
     public long getStateA() {
