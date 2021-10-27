@@ -1585,7 +1585,8 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                randomGrid[x][y] = new PangolinRNG(x*2+1, y*2+1);
+                randomGrid[x][y] = new StrangerRNG(x ^ y << 9);
+//                randomGrid[x][y] = new PangolinRNG(x*2+1, y*2+1);
 //                randomGrid[x][y] = new TangleRNG(DiverRNG.randomize(x), y << 1);
             }
         }
@@ -5621,6 +5622,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                     case 4:
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
+//                                back[x][y] = floatGet((randomGrid[x][y].nextLong() >> 63) | 255L);
                                 back[x][y] = floatGet(-(randomGrid[x][y].nextLong() & 1L) | 255L);
 //                                back[x][y] = floatGet(randomGrid[x][y].nextLong() << 8 | 255L);
                             }
