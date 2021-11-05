@@ -29,7 +29,7 @@ import java.io.Serializable;
  * @author Sebastiano Vigna
  * @author Tommy Ettinger
  */
-public final class LightRNG implements RandomnessSource, StatefulRandomness, SkippingRandomness, Serializable
+public class LightRNG implements RandomnessSource, StatefulRandomness, SkippingRandomness, Serializable
 {
 	private static final long serialVersionUID = -374415589203474497L;
 
@@ -57,7 +57,7 @@ public final class LightRNG implements RandomnessSource, StatefulRandomness, Ski
      * @return a pseudo-random int that uses at most the specified amount of bits
      */
     @Override
-    public final int next( int bits ) {
+    public int next(int bits ) {
         long z = state += 0x9E3779B97F4A7C15L;
         z = (z ^ (z >>> 30)) * 0xBF58476D1CE4E5B9L;
         z = (z ^ (z >>> 27)) * 0x94D049BB133111EBL;
@@ -75,7 +75,7 @@ public final class LightRNG implements RandomnessSource, StatefulRandomness, Ski
      * @param bits the number of bits to be returned; if 0 or less, or if 32 or greater, can return any 32-bit int
      * @return a pseudo-random int that uses at most the specified amount of bits
      */
-    public final int compatibleNext( int bits ) {
+    public int compatibleNext(int bits ) {
         long z = state += 0x9E3779B97F4A7C15L;
         z = (z ^ (z >>> 30)) * 0xBF58476D1CE4E5B9L;
         z = (z ^ (z >>> 27)) * 0x94D049BB133111EBL;
@@ -86,7 +86,7 @@ public final class LightRNG implements RandomnessSource, StatefulRandomness, Ski
      * @return any long, all 64 bits are random
      */
     @Override
-    public final long nextLong() {
+    public long nextLong() {
         long z = state += 0x9E3779B97F4A7C15L;
         z = (z ^ (z >>> 30)) * 0xBF58476D1CE4E5B9L;
         z = (z ^ (z >>> 27)) * 0x94D049BB133111EBL;

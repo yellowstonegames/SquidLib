@@ -11,7 +11,7 @@ package squidpony.squidmath;
  * does require a lot of math on long values, and that can be quite slow on GWT. This should probably be used primarily
  * on desktop targets, and/or maybe mobile.
  */
-public final class GoldPointHash extends IPointHash.IntImpl {
+public class GoldPointHash extends IPointHash.IntImpl {
 
     public static final GoldPointHash INSTANCE = new GoldPointHash();
 

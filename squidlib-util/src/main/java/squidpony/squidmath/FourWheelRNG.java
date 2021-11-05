@@ -16,7 +16,7 @@ import java.io.Serializable;
  * <br>
  * Created by Tommy Ettinger on 7/13/2021.
  */
-public final class FourWheelRNG implements RandomnessSource, Serializable {
+public class FourWheelRNG implements RandomnessSource, Serializable {
     private static final long serialVersionUID = 0L;
     /**
      * Can be any long value.
@@ -176,7 +176,7 @@ public final class FourWheelRNG implements RandomnessSource, Serializable {
      * @return the integer containing the appropriate number of bits
      */
     @Override
-    public final int next(final int bits) {
+    public int next(final int bits) {
         final long fa = this.stateA;
         final long fb = this.stateB;
         final long fc = this.stateC;
@@ -196,7 +196,7 @@ public final class FourWheelRNG implements RandomnessSource, Serializable {
      * @return a random long between Long.MIN_VALUE and Long.MAX_VALUE (both inclusive)
      */
     @Override
-    public final long nextLong() {
+    public long nextLong() {
         final long fa = this.stateA;
         final long fb = this.stateB;
         final long fc = this.stateC;

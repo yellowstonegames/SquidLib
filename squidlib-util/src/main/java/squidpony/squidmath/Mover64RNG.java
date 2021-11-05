@@ -50,7 +50,7 @@ import squidpony.StringKit;
  * @author Mark Overton
  * @author Tommy Ettinger
  */
-public final class Mover64RNG implements RandomnessSource {
+public class Mover64RNG implements RandomnessSource {
     private long stateA, stateB;
     public Mover64RNG()
     {
@@ -109,7 +109,7 @@ public final class Mover64RNG implements RandomnessSource {
             0xA2F3FA0F0F5F6FDFL, 0x95DA83EA34697FEFL, 0xFE1541E512CBAC77L, 0xE68287CDEB9302A5L, 0xB928A0223B695207L, 0x3F9D05B291DE5A8AL, 0x5E28B275895A2C79L, 0x8E9BD22FBFD57A6CL,
     };
 
-    public final void setState(final int s) {
+    public void setState(final int s) {
         stateA = startingA[s >>> 9 & 0x7F];
         for (int i = s & 0x1FF; i > 0; i--) {
             stateA *= 0x41C64E6BL;
@@ -122,21 +122,21 @@ public final class Mover64RNG implements RandomnessSource {
         }
     }
 
-    public final int nextInt()
+    public int nextInt()
     {
         final long a = stateA * 0x41C64E6BL;
         final long b = stateB * 0x9E3779B9L;
         return (int)((stateA = (a << 28 | a >>> 36)) ^ (stateB = (b << 37 | b >>> 27)));
     }
     @Override
-    public final int next(final int bits)
+    public int next(final int bits)
     {
         final long a = stateA * 0x41C64E6BL;
         final long b = stateB * 0x9E3779B9L;
         return (int)((stateA = (a << 28 | a >>> 36)) ^ (stateB = (b << 37 | b >>> 27))) >>> (32 - bits);
     }
     @Override
-    public final long nextLong()
+    public long nextLong()
     {
         final long a = stateA * 0x41C64E6BL;
         final long b = stateB * 0x9E3779B9L;

@@ -35,7 +35,7 @@ public final class Garbler {
     }
 
     /**
-     * ThrustAltRNG.determine() in a stable form. Expects state to change by 1.
+     * An older version of ThrustAltRNG.determine() in a stable form. Expects state to change by 1.
      * @param state should change by 1
      * @return a pseudo-random long; only about 2/3 of all 64-bit values are possible
      */

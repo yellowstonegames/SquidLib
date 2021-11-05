@@ -52,7 +52,7 @@ import java.io.Serializable;
  * @author Mark Overton
  * @author Tommy Ettinger
  */
-public final class MiniMover64RNG implements RandomnessSource, Serializable {
+public class MiniMover64RNG implements RandomnessSource, Serializable {
     private static final long serialVersionUID = 2L;
     private long state;
 
@@ -95,7 +95,7 @@ public final class MiniMover64RNG implements RandomnessSource, Serializable {
      * of at least 1048575.
      * @param s all bits are used, none verbatim (0 is tolerated)
      */
-    public final void seed(final int s) {
+    public void seed(final int s) {
         long v = (s & 0x1FFFFFF) + 1L; // at least 2 to the 25 sequential seeds have periods of at least 1048575.
         for (int i = s >>> 25; i > 0; i--) {
             v = (v << 29 | v >>> 35) * 0xAC564B05L;
@@ -103,17 +103,17 @@ public final class MiniMover64RNG implements RandomnessSource, Serializable {
         state = v;
     }
 
-    public final int nextInt()
+    public int nextInt()
     {
         return (int)((state = (state << 29 | state >>> 35) * 0xAC564B05L) * 0x818102004182A025L);
     }
     @Override
-    public final int next(final int bits)
+    public int next(final int bits)
     {
         return (int)((state = (state << 29 | state >>> 35) * 0xAC564B05L) * 0x818102004182A025L) >>> (32 - bits);
     }
     @Override
-    public final long nextLong() {
+    public long nextLong() {
 
         return (state = (state << 29 | state >>> 35) * 0xAC564B05L) * 0x818102004182A025L;
 //        return (state = (state << 21 | state >>> 43) * 0x9E3779B9L) * 0x41C64E6DL; // earlier, fails some of TestU01
@@ -123,7 +123,7 @@ public final class MiniMover64RNG implements RandomnessSource, Serializable {
      * Gets a pseudo-random double between 0.0 (inclusive) and 1.0 (exclusive).
      * @return a pseudo-random double between 0.0 (inclusive) and 1.0 (exclusive)
      */
-    public final double nextDouble() {
+    public double nextDouble() {
         return ((state = (state << 29 | state >>> 35) * 0xAC564B05L) * 0x818102004182A025L & 0x1fffffffffffffL) * 0x1p-53;
     }
 
@@ -131,7 +131,7 @@ public final class MiniMover64RNG implements RandomnessSource, Serializable {
      * Gets a pseudo-random float between 0.0f (inclusive) and 1.0f (exclusive).
      * @return a pseudo-random float between 0.0f (inclusive) and 1.0f (exclusive)
      */
-    public final float nextFloat() {
+    public float nextFloat() {
         return ((state = (state << 29 | state >>> 35) * 0xAC564B05L) * 0x818102004182A025L & 0xffffffL) * 0x1p-24f;
     }
 

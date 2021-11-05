@@ -20,7 +20,7 @@ package squidpony.squidmath;
  * <a href="https://i.imgur.com/RSdUnSY.png">a diagram of the frequency magnitude of white noise</a>. This shows
  * there are effectively no significant structural artifacts in the noise when interpreted as a float.
  */
-public final class IntPointHash extends IPointHash.IntImpl {
+public class IntPointHash extends IPointHash.IntImpl {
 
     public static final IntPointHash INSTANCE = new IntPointHash();
 

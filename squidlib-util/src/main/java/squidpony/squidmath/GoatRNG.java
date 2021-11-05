@@ -30,7 +30,7 @@ import java.io.Serializable;
  * <br>
  * Created by Tommy Ettinger on 5/8/2020.
  */
-public final class GoatRNG implements RandomnessSource, Serializable {
+public class GoatRNG implements RandomnessSource, Serializable {
     private static final long serialVersionUID = 1L;
     /**
      * Can be any long value.
@@ -106,7 +106,7 @@ public final class GoatRNG implements RandomnessSource, Serializable {
      * @return the integer containing the appropriate number of bits
      */
     @Override
-    public final int next(final int bits) {
+    public int next(final int bits) {
         long s = (stateA += 0xD1342543DE82EF95L);
         s ^= s >>> 31 ^ s >>> 23;
         if(s < 0x46BC279692B5C323L) {
@@ -129,7 +129,7 @@ public final class GoatRNG implements RandomnessSource, Serializable {
      * @return a random long between Long.MIN_VALUE and Long.MAX_VALUE (both inclusive)
      */
     @Override
-    public final long nextLong() {
+    public long nextLong() {
         long s = (stateA += 0xD1342543DE82EF95L);
         s ^= s >>> 31 ^ s >>> 23;
         if(s < 0x46BC279692B5C323L) {

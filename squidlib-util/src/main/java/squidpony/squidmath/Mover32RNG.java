@@ -44,7 +44,7 @@ import squidpony.StringKit;
  * @author Mark Overton
  * @author Tommy Ettinger
  */
-public final class Mover32RNG implements RandomnessSource {
+public class Mover32RNG implements RandomnessSource {
     private int stateA, stateB;
     public Mover32RNG()
     {
@@ -103,7 +103,7 @@ public final class Mover32RNG implements RandomnessSource {
             0x702CC28B, 0xFF4C5B02, 0x2FDD78D2, 0x71FFBD4E, 0xDF4C60A4, 0x143FAB0B, 0xAD9C8EB0, 0x6F35837D,
     };
 
-    public final void setState(final int s) {
+    public void setState(final int s) {
         stateA = startingA[s >>> 9 & 0x7F];
         for (int i = s & 0x1FF; i > 0; i--) {
             stateA *= 0x89A7;
@@ -116,7 +116,7 @@ public final class Mover32RNG implements RandomnessSource {
         }
     }
 
-    public final int nextInt()
+    public int nextInt()
     {
         int y = stateA * 0x89A7;
         stateA = (y = (y << 13 | y >>> 19));
@@ -124,7 +124,7 @@ public final class Mover32RNG implements RandomnessSource {
         return (y ^ (stateB = (x << 17 | x >>> 15)));
     }
     @Override
-    public final int next(final int bits)
+    public int next(final int bits)
     {
         int y = stateA * 0x89A7;
         stateA = (y = (y << 13 | y >>> 19));
@@ -132,7 +132,7 @@ public final class Mover32RNG implements RandomnessSource {
         return (y ^ (stateB = (x << 17 | x >>> 15))) >>> (32 - bits);
     }
     @Override
-    public final long nextLong()
+    public long nextLong()
     {
         int y = stateA * 0x89A7;
         y = (y << 13 | y >>> 19);

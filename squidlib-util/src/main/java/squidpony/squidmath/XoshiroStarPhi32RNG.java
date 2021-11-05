@@ -52,7 +52,7 @@ import java.io.Serializable;
  * @author David Blackman
  * @author Tommy Ettinger (if there's a flaw, use SquidLib's or Sarong's issues and don't bother Vigna or Blackman, it's probably a mistake in SquidLib's implementation)
  */
-public final class XoshiroStarPhi32RNG implements RandomnessSource, Serializable {
+public class XoshiroStarPhi32RNG implements RandomnessSource, Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -94,7 +94,7 @@ public final class XoshiroStarPhi32RNG implements RandomnessSource, Serializable
     }
 
     @Override
-    public final int next(int bits) {
+    public int next(int bits) {
         final int result = stateB * 31;	        
         final int t = stateB << 9;
         stateC ^= stateA;
@@ -110,7 +110,7 @@ public final class XoshiroStarPhi32RNG implements RandomnessSource, Serializable
      * Can return any int, positive or negative, of any size permissible in a 32-bit signed integer.
      * @return any int, all 32 bits are random
      */
-    public final int nextInt() {
+    public int nextInt() {
         final int result = stateB * 31;
         final int t = stateB << 9;
         stateC ^= stateA;
@@ -123,7 +123,7 @@ public final class XoshiroStarPhi32RNG implements RandomnessSource, Serializable
     }
 
     @Override
-    public final long nextLong() {
+    public long nextLong() {
         int result = stateB * 31;
         int t = stateB << 9;
         stateC ^= stateA;

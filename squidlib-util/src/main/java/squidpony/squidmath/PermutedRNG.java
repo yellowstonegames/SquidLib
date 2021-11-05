@@ -48,7 +48,7 @@ import java.io.Serializable;
  * @author Tommy Ettinger
  * @see PintRNG PintRNG is similar to this algorithm but uses only 32-bit math, where possible.
  */
-public final class PermutedRNG implements RandomnessSource, StatefulRandomness, SkippingRandomness, Serializable
+public class PermutedRNG implements RandomnessSource, StatefulRandomness, SkippingRandomness, Serializable
 {
 	/** 2 raised to the 53, - 1. */
     private static final long DOUBLE_MASK = ( 1L << 53 ) - 1;
@@ -88,7 +88,7 @@ public final class PermutedRNG implements RandomnessSource, StatefulRandomness, 
      * @return a pseudo-random int with at most the specified bits
      */
     @Override
-    public final int next( final int bits ) {
+    public int next(final int bits ) {
         long p = (state = state * 0x5851F42D4C957F2DL + 0x14057B7EF767814FL);
         p = (p ^ p >>> (5 + (p >>> 59))) * 0xAEF17502108EF2D9L;
         return (int)(p ^ p >>> 43) >>> (32 - bits);
@@ -110,7 +110,7 @@ public final class PermutedRNG implements RandomnessSource, StatefulRandomness, 
      * @return any long, all 64 bits are random
      */
     @Override
-    public final long nextLong()
+    public long nextLong()
     {
         // increment  = 1442695040888963407L;
         // multiplier = 6364136223846793005L;

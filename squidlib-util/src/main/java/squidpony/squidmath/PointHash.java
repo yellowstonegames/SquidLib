@@ -14,7 +14,7 @@ package squidpony.squidmath;
  * <br>
  * This implements {@link IPointHash} and has a long it uses internally for state, exposed by {@link #getState()}.
  */
-public final class PointHash extends IPointHash.LongImpl
+public class PointHash extends IPointHash.LongImpl
 {
     public static final PointHash INSTANCE = new PointHash();
 

@@ -16,7 +16,7 @@ import java.io.Serializable;
  * <br>
  * Created by Tommy Ettinger on 7/13/2021.
  */
-public final class DistinctRNG implements StatefulRandomness, SkippingRandomness, Serializable {
+public class DistinctRNG implements StatefulRandomness, SkippingRandomness, Serializable {
     private static final long serialVersionUID = 0L;
     /**
      * Can be any long value.
@@ -63,7 +63,7 @@ public final class DistinctRNG implements StatefulRandomness, SkippingRandomness
      * @return the integer containing the appropriate number of bits
      */
     @Override
-    public final int next(final int bits) {
+    public int next(final int bits) {
         long x = (state += 0x9E3779B97F4A7C15L);
         x ^= x >>> 27;
         x *= 0x3C79AC492BA7B653L;
