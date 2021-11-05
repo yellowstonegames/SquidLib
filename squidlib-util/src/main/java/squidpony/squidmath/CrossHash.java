@@ -1935,7 +1935,7 @@ public class CrossHash {
      * multiple hashes of a single array or String as part of cuckoo hashing or similar techniques that need multiple
      * hashes for the same inputs.
      */
-    public static final class Mist implements Serializable {
+    public static class Mist implements Serializable {
         private static final long serialVersionUID = -1275284837479983271L;
 
         private transient final long l1, l2;
@@ -4092,7 +4092,7 @@ public class CrossHash {
      * instead of wrangling demon names; you can always choose an element from predefined with a 7-bit number, and there
      * are 64 numbers outside that range so you can choose any of those when a functor must be different.
      */
-    public static final class Yolk {
+    public static class Yolk {
         private final long seed;
 
         public Yolk(){
@@ -5809,7 +5809,7 @@ public class CrossHash {
      * The name curlup comes from an M.C. Escher painting of a creature, whose name translates to curl-up, that could
      * walk on six legs to climb stairs, or roll at high speeds when the conditions were right.
      */
-    public static final class Curlup {
+    public static class Curlup {
         private final long seed;
 
         public Curlup(){

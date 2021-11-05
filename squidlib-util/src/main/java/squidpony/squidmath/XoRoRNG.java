@@ -44,7 +44,7 @@ import java.io.Serializable;
  * @author David Blackman
  * @author Tommy Ettinger (if there's a flaw, use SquidLib's issues and don't bother Vigna or Blackman, it's probably a mistake in SquidLib's implementation)
  */
-public final class XoRoRNG implements RandomnessSource, Serializable {
+public class XoRoRNG implements RandomnessSource, Serializable {
 
 	private static final long DOUBLE_MASK = (1L << 53) - 1;
     private static final double NORM_53 = 1. / (1L << 53);
@@ -83,7 +83,7 @@ public final class XoRoRNG implements RandomnessSource, Serializable {
     }
 
     @Override
-    public final int next(int bits) {
+    public int next(int bits) {
         final long s0 = state0;
         long s1 = state1;
         final int result = (int)(s0 + s1) >>> (32 - bits);
@@ -94,7 +94,7 @@ public final class XoRoRNG implements RandomnessSource, Serializable {
     }
 
     @Override
-    public final long nextLong() {
+    public long nextLong() {
         final long s0 = state0;
         long s1 = state1;
         final long result = s0 + s1;

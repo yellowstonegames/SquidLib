@@ -41,7 +41,7 @@ import java.io.Serializable;
  * <br>
  * Created by Tommy Ettinger on 10/18/2017.
  */
-public final class ThrustAltRNG implements StatefulRandomness, SkippingRandomness, Serializable {
+public class ThrustAltRNG implements StatefulRandomness, SkippingRandomness, Serializable {
     private static final long serialVersionUID = 3L;
     /**
      * Can be any long value.
@@ -88,7 +88,7 @@ public final class ThrustAltRNG implements StatefulRandomness, SkippingRandomnes
      * @return the integer containing the appropriate number of bits
      */
     @Override
-    public final int next(final int bits) {
+    public int next(final int bits) {
         final long s = (state += 0x6C8E9CF570932BD5L);
         final long z = (s ^ (s >>> 25)) * (s | 0xA529L);
         return (int)(z ^ (z >>> 23)) >>> (32 - bits);
@@ -102,7 +102,7 @@ public final class ThrustAltRNG implements StatefulRandomness, SkippingRandomnes
      * @return a random long between Long.MIN_VALUE and Long.MAX_VALUE (both inclusive)
      */
     @Override
-    public final long nextLong() {
+    public long nextLong() {
         final long s = (state += 0x6C8E9CF570932BD5L);
         final long z = (s ^ (s >>> 25)) * (s | 0xA529L);
         return z ^ (z >>> 23);
@@ -117,7 +117,7 @@ public final class ThrustAltRNG implements StatefulRandomness, SkippingRandomnes
      * @return the random long generated after skipping forward or backwards by {@code advance} numbers
      */
     @Override
-    public final long skip(long advance) {
+    public long skip(long advance) {
         final long s = (state += 0x6C8E9CF570932BD5L * advance);
         final long z = (s ^ (s >>> 25)) * (s | 0xA529L);
         return z ^ (z >>> 23);

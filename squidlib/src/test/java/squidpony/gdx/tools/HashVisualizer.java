@@ -69,7 +69,7 @@ public class HashVisualizer extends ApplicationAdapter {
     private int testType = 5;
     private static final int NOISE_LIMIT = 152;
     private static final int RNG_LIMIT = 52;
-    private int hashMode, rngMode = 4, noiseMode = 134, otherMode = 17;//142
+    private int hashMode, rngMode = 4, noiseMode = 36, otherMode = 17;//142
 
     /**
      * If you're editing the source of HashVisualizer, you can comment out one line and uncomment another to change
@@ -123,6 +123,7 @@ public class HashVisualizer extends ApplicationAdapter {
     private TangleRNG tangle = new TangleRNG(1);
     
     private RandomnessSource[][] randomGrid = new RandomnessSource[width][height];
+//    private RandomXS128[][] randomGrid = new RandomXS128[width][height];
 
 
     private final int[] coordinates = new int[2];
@@ -176,22 +177,22 @@ public class HashVisualizer extends ApplicationAdapter {
     private final Noise.Ridged6D ridged6D = new Noise.Ridged6D(SeededNoise.instance, 1, 1.45); // 1.45
                                                         
     private final FastNoise thinFN = new FastNoise(1337, 1, FastNoise.SIMPLEX);
-    private final FastNoise thickFN = new FastNoise(1337, 3, FastNoise.SIMPLEX_FRACTAL);
-    private final FastNoise layeredFN = new FastNoise(1337, 1, FastNoise.SIMPLEX_FRACTAL);
+    private final FastNoise thickFN = new FastNoise(31337, 3, FastNoise.SIMPLEX_FRACTAL);
+    private final FastNoise layeredFN = new FastNoise(13371337, 1, FastNoise.SIMPLEX_FRACTAL);
 
-    private final Noise.Warped2D turb2D = new Noise.Warped2D(thinFN, 2);
-    private final Noise.Warped3D turb3D = new Noise.Warped3D(thinFN, 2);
-    private final Noise.Warped4D turb4D = new Noise.Warped4D(thinFN, 2);
-    private final Noise.Warped6D turb6D = new Noise.Warped6D(thinFN, 2);
-//    private final Noise.Turbulent2D turb2D = new Noise.Turbulent2D(SeededNoise.instance, ridged2D, 3, 2);
-//    private final Noise.Turbulent3D turb3D = new Noise.Turbulent3D(SeededNoise.instance, ridged3D, 3, 2);
-//    private final Noise.Turbulent4D turb4D = new Noise.Turbulent4D(SeededNoise.instance, ridged4D, 3, 2);
-//    private final Noise.Turbulent6D turb6D = new Noise.Turbulent6D(SeededNoise.instance, ridged6D, 3, 2);
+//    private final Noise.Warped2D turb2D = new Noise.Warped2D(thinFN, 2);
+//    private final Noise.Warped3D turb3D = new Noise.Warped3D(thinFN, 2);
+//    private final Noise.Warped4D turb4D = new Noise.Warped4D(thinFN, 2);
+//    private final Noise.Warped6D turb6D = new Noise.Warped6D(thinFN, 2);
+    private final Noise.Turbulent2D turb2D = new Noise.Turbulent2D(SeededNoise.instance, ridged2D, 3, 2);
+    private final Noise.Turbulent3D turb3D = new Noise.Turbulent3D(SeededNoise.instance, ridged3D, 3, 2);
+    private final Noise.Turbulent4D turb4D = new Noise.Turbulent4D(SeededNoise.instance, ridged4D, 3, 2);
+    private final Noise.Turbulent6D turb6D = new Noise.Turbulent6D(SeededNoise.instance, ridged6D, 3, 2);
 
-    private final Noise.Maelstrom2D slick2D = new Noise.Maelstrom2D(thickFN);
-    private final Noise.Maelstrom3D slick3D = new Noise.Maelstrom3D(thickFN);
-    private final Noise.Maelstrom4D slick4D = new Noise.Maelstrom4D(thickFN);
-    private final Noise.Maelstrom6D slick6D = new Noise.Maelstrom6D(thickFN);
+    private final Noise.Slick2D slick2D = new Noise.Slick2D(layeredFN, thinFN);
+    private final Noise.Slick3D slick3D = new Noise.Slick3D(layeredFN, thinFN);
+    private final Noise.Slick4D slick4D = new Noise.Slick4D(layeredFN, thinFN);
+    private final Noise.Slick6D slick6D = new Noise.Slick6D(layeredFN, thinFN);
 
 //    private final Noise.Ridged2D slick2D = new Noise.Ridged2D(thinFN, 2, 1.25);
 //    private final Noise.Ridged3D slick3D = new Noise.Ridged3D(thinFN, 2, 1.25);
@@ -1512,6 +1513,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
         public PangolinRNG(long stateA, long stateB) {
             this.stateA = stateA;
             this.stateB = stateB | 1L;
+//            this.stateB = (stateB << 16 & 0xFFFFFFFF0000L);
         }
 
         @Override
@@ -1521,12 +1523,21 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 
         @Override
         public long nextLong() {
-            long a = (stateA += 0xC6BC279692B5C323L);
+            long b = (stateB += 0xB69E1722EB5C42CAL);
+            long a = (stateA += 0xC6BC279692B5C323L) + b;
             a ^= a >>> 31;
-            a *= (stateB += 0x9E3779B97F4A7C16L);
-            a ^= a >>> 33;
-            a *= 0xACBD2BDCA2BFF56DL;
-            return a ^ a >>> 26;
+            a *= b;
+//            a *= b;
+//            a ^= a >>> 1;
+//            a *= 0xD1342543DE82EF95L;
+            return (a ^ a >>> 26);
+
+//            long a = (stateA += 0xC6BC279692B5C323L);
+//            a ^= a >>> 31;
+//            a *= (stateB += 0x9E3779B97F4A7C16L);
+//            a ^= a >>> 33;
+//            a *= 0xACBD2BDCA2BFF56DL;
+//            return a ^ a >>> 26;
         }
 
         @Override
@@ -1585,8 +1596,10 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                randomGrid[x][y] = new StrangerRNG(x ^ y << 9);
-//                randomGrid[x][y] = new PangolinRNG(x*2+1, y*2+1);
+                randomGrid[x][y] = new TricycleRNG(x+1, y+1, x+1);
+//                randomGrid[x][y] = new XoshiroStarStar64RNG(x ^ y << 9);
+//                randomGrid[x][y] = new RandomXS128(x+1, y+1);
+//                randomGrid[x][y] = new RandomXS128(x*2+1, y*2+1);
 //                randomGrid[x][y] = new TangleRNG(DiverRNG.randomize(x), y << 1);
             }
         }
@@ -5623,7 +5636,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
 //                                back[x][y] = floatGet((randomGrid[x][y].nextLong() >> 63) | 255L);
-                                back[x][y] = floatGet(-(randomGrid[x][y].nextLong() & 1L) | 255L);
+                                back[x][y] = floatGet(-(randomGrid[x][y].nextLong() >>> 1 & 1L) | 255L);
 //                                back[x][y] = floatGet(randomGrid[x][y].nextLong() << 8 | 255L);
                             }
                         }

@@ -28,7 +28,7 @@ import java.io.Serializable;
  * <br>
  * Created by Tommy Ettinger on 3/29/2020.
  */
-public final class GearRNG implements RandomnessSource, Serializable {
+public class GearRNG implements RandomnessSource, Serializable {
     private static final long serialVersionUID = 5L;
     /**
      * Can be any long value.
@@ -105,7 +105,7 @@ public final class GearRNG implements RandomnessSource, Serializable {
      * @return the integer containing the appropriate number of bits
      */
     @Override
-    public final int next(final int bits) {
+    public int next(final int bits) {
         final long s = (stateA += 0xC6BC279692B5C323L);
         final long z = ((s < 0x800000006F17146DL) ? stateB : (stateB += 0x9479D2858AF899E6L)) * (s ^ s >>> 31);
         return (int)(z ^ z >>> 25) >>> (32 - bits);
@@ -119,7 +119,7 @@ public final class GearRNG implements RandomnessSource, Serializable {
      * @return a random long between Long.MIN_VALUE and Long.MAX_VALUE (both inclusive)
      */
     @Override
-    public final long nextLong() {
+    public long nextLong() {
         final long s = (stateA += 0xC6BC279692B5C323L);
         final long z = ((s < 0x800000006F17146DL) ? stateB : (stateB += 0x9479D2858AF899E6L)) * (s ^ s >>> 31);
         return z ^ z >>> 25;

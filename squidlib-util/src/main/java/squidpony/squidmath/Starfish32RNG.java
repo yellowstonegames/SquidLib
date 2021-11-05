@@ -51,7 +51,7 @@ import java.io.Serializable;
  * @author David Blackman
  * @author Tommy Ettinger (if there's a flaw, use SquidLib's or Sarong's issues and don't bother Vigna or Blackman, it's probably a mistake in SquidLib's implementation)
  */
-public final class Starfish32RNG implements StatefulRandomness, Serializable {
+public class Starfish32RNG implements StatefulRandomness, Serializable {
 
     private static final long serialVersionUID = 2L;
 
@@ -90,7 +90,7 @@ public final class Starfish32RNG implements StatefulRandomness, Serializable {
     }
     
     @Override
-    public final int next(int bits) {
+    public int next(int bits) {
         final int s0 = stateA;
         final int s1 = stateB ^ s0;
         final int result = s0 * 31;
@@ -103,7 +103,7 @@ public final class Starfish32RNG implements StatefulRandomness, Serializable {
      * Can return any int, positive or negative, of any size permissible in a 32-bit signed integer.
      * @return any int, all 32 bits are random
      */
-    public final int nextInt() {
+    public int nextInt() {
         final int s0 = stateA;
         final int s1 = stateB ^ s0;
         final int result = s0 * 31;
@@ -113,7 +113,7 @@ public final class Starfish32RNG implements StatefulRandomness, Serializable {
     }
 
     @Override
-    public final long nextLong() {
+    public long nextLong() {
         int s0 = stateA;
         int s1 = stateB ^ s0;
         final int high = s0 * 31;

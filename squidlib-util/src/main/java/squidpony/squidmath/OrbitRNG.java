@@ -25,7 +25,7 @@ import java.io.Serializable;
  * <br>
  * Created by Tommy Ettinger on 7/9/2018.
  */
-public final class OrbitRNG implements RandomnessSource, Serializable {
+public class OrbitRNG implements RandomnessSource, Serializable {
     private static final long serialVersionUID = 4L;
     /**
      * Can be any long value.
@@ -99,7 +99,7 @@ public final class OrbitRNG implements RandomnessSource, Serializable {
      * @return the integer containing the appropriate number of bits
      */
     @Override
-    public final int next(final int bits) {
+    public int next(final int bits) {
         final long s = (stateA += 0x6C8E9CF570932BD5L);
         if(s == 0L)
             stateB += 0x9E3779B97F4A7C15L;
@@ -115,7 +115,7 @@ public final class OrbitRNG implements RandomnessSource, Serializable {
      * @return a random long between Long.MIN_VALUE and Long.MAX_VALUE (both inclusive)
      */
     @Override
-    public final long nextLong() {
+    public long nextLong() {
         final long s = (stateA += 0x6C8E9CF570932BD5L);
         if(s == 0L)
             stateB += 0x9E3779B97F4A7C15L;

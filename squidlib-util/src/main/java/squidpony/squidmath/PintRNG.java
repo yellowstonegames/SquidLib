@@ -25,7 +25,7 @@ import java.io.Serializable;
  * <br>
  * Created by Tommy Ettinger on 11/15/2016.
  */
-public final class PintRNG implements RandomnessSource, StatefulRandomness, Serializable {
+public class PintRNG implements RandomnessSource, StatefulRandomness, Serializable {
 
     /** 2 raised to the 53, - 1. */
     private static final long DOUBLE_MASK = ( 1L << 53 ) - 1;

@@ -39,7 +39,7 @@ import java.io.Serializable;
  * @author Tommy Ettinger (if there's a flaw, use SquidLib's or Sarong's issues and don't bother Vigna or Blackman, it's probably a mistake in SquidLib's implementation)
  * @see Lathe32RNG A related generator that implements StatefulRandomness and has very similar speed
  */
-public final class Oriole32RNG implements RandomnessSource, Serializable {
+public class Oriole32RNG implements RandomnessSource, Serializable {
 
     private static final long serialVersionUID = 2L;
 
@@ -83,7 +83,7 @@ public final class Oriole32RNG implements RandomnessSource, Serializable {
     }
 
     @Override
-    public final int next(int bits) {
+    public int next(int bits) {
         final int s0 = stateA;
         int s1 = stateB;
         final int result = s0 + s1;
@@ -97,7 +97,7 @@ public final class Oriole32RNG implements RandomnessSource, Serializable {
      * Can return any int, positive or negative, of any size permissible in a 32-bit signed integer.
      * @return any int, all 32 bits are random
      */
-    public final int nextInt() {
+    public int nextInt() {
         final int s0 = stateA;
         int s1 = stateB;
         final int result = s0 + s1;
@@ -108,7 +108,7 @@ public final class Oriole32RNG implements RandomnessSource, Serializable {
     }
 
     @Override
-    public final long nextLong() {
+    public long nextLong() {
         final int s0 = stateA;
         int s1 = stateB;
         final int high = s0 + s1;

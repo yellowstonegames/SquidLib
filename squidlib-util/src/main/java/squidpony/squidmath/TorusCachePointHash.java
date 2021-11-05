@@ -6,7 +6,7 @@ package squidpony.squidmath;
  * no greater than 1024. This implementation stores 6 caches of 1024 numbers each, where each cache is used for a
  * different dimension, and XORs the values along with the seed before running through Thomas Wang's integer hash.
  */
-public final class TorusCachePointHash extends IPointHash.IntImpl {
+public class TorusCachePointHash extends IPointHash.IntImpl {
 
     protected final int[] cache;
     protected int wrap = 63;
