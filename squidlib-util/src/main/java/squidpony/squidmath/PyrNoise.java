@@ -56,7 +56,7 @@ public class PyrNoise implements Noise.Noise2D, Noise.Noise3D,
                 yFloor += STEPY << 1;
             }
             ya *= 2.0;
-            return (ya * ((1 - x) * hashPart1024(xFloor, yFloor, seed) + x * hashPart1024(xFloor + STEPX, yFloor, seed))
+            return (ya * ((1 - x) * hashPart1024(xFloor, yFloor, seed) + x * hashPart1024(xFloor + STEPX + STEPX, yFloor, seed))
                     + (1 - ya) * cap) * (0x1.0040100401004p-10);
         }
         else {
@@ -65,7 +65,7 @@ public class PyrNoise implements Noise.Noise2D, Noise.Noise3D,
                 xFloor += STEPX << 1;
             }
             xa *= 2.0;
-            return (xa * ((1 - y) * hashPart1024(xFloor, yFloor, seed) + y * hashPart1024(xFloor, yFloor + STEPY, seed))
+            return (xa * ((1 - y) * hashPart1024(xFloor, yFloor, seed) + y * hashPart1024(xFloor, yFloor + STEPY + STEPY, seed))
                     + (1 - xa) * cap) * (0x1.0040100401004p-10);
         }
     }
