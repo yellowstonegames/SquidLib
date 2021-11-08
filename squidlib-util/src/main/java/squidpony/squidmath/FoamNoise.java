@@ -1,6 +1,6 @@
 package squidpony.squidmath;
 
-import static squidpony.squidmath.ValueNoise.valueNoise;
+import static squidpony.squidmath.PyrNoise.valueNoise;
 
 /**
  * An unusual continuous noise generator that tends to produce organic-looking forms, currently supporting 2D, 3D, 4D
