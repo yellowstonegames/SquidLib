@@ -1,71 +1,74 @@
 package squidpony.squidmath;
 
+import squidpony.annotation.Beta;
+
 /**
- * A low-quality continuous noise generator with strong grid artifacts, this is nonetheless useful as a building block.
- * This implements Noise1D, Noise2D, Noise3D, Noise4D, Noise5D, and Noise6D, and could have more dimensionality support
- * added later. It has much lower quality than {@link ClassicNoise}, but is structured similarly in many ways, and
- * should be a little faster.
+ * A low-quality continuous noise generator with strong artifacts, meant to be used as a building block.
+ * This bases its implementation on {@link ValueNoise}, and its static methods are still called
+ * {@link #valueNoise(int, double, double)}; this is almost entirely meant as an optimization for value noise.
+ * Instead of hashing all 2-to-the-D points, where D is the dimensionality, this hashes half of those points
+ * (like the square base of a pyramid) and interpolates that with one point in the center of the cube value
+ * noise would have used (like the cap or point of a pyramid).
  * <br>
  * Note: the {@link #valueNoise(int, double, double)} methods in this class return results in the range of 0.0 to 1.0,
  * while the {@link #getNoise(double, double)} and {@link #getNoiseWithSeed(double, double, long)} methods use the Noise
  * class default range of -1.0 to 1.0.
- * @see FoamNoise FoamNoise produces high-quality noise by combining a few rotated results of ValueNoise with domain warping.
- * @see PhantomNoise PhantomNoise doesn't use this class directly, but does have its own way of generating arbitrary-dimensional value noise.
  */
-public class ValueNoise implements Noise.Noise1D, Noise.Noise2D, Noise.Noise3D,
+@Beta
+public class PyrNoise implements Noise.Noise2D, Noise.Noise3D,
         Noise.Noise4D, Noise.Noise5D, Noise.Noise6D {
-    public static final ValueNoise instance = new ValueNoise();
-    
+    public static final PyrNoise instance = new PyrNoise();
+
     public int seed = 0xD1CEBEEF;
-    public ValueNoise() {
+    public PyrNoise() {
     }
 
-    public ValueNoise(int seed) {
+    public PyrNoise(int seed) {
         this.seed = seed;
     }
 
-    public ValueNoise(long seed) {
+    public PyrNoise(long seed) {
         this.seed = (int) (seed ^ seed >>> 32);
-    }
-
-    public static double valueNoise(int seed, double x) {
-        final int STEPX = 0x9E377;
-        int xFloor = x >= 0 ? (int) x : (int) x - 1;
-        x -= xFloor;
-        x *= x * (3 - 2 * x);
-        xFloor *= STEPX;
-        seed ^= seed >>> 17;
-        return ((1 - x) * hashPart1024(xFloor, seed) + x * hashPart1024(xFloor + STEPX, seed))
-                * (0x1.0040100401004p-10);
-    }
-
-    /**
-     * Doesn't need anything special, makes a 10-bit hash.
-     * @param x any int, doesn't need to be premultiplied.
-     * @param s state, any int
-     * @return a mediocre 10-bit hash
-     */
-    private static int hashPart1024(final int x, int s) {
-        s *= ((x ^ x >>> 12) | 1);
-        s += (x ^ x >>> 16) * 0xAC451;
-        return (s >>> 3 ^ s >>> 10) & 0x3FF;
     }
 
     public static double valueNoise(int seed, double x, double y)
     {
         final int STEPX = 0xD1B55;
         final int STEPY = 0xABC99;
-        int xFloor = x >= 0 ? (int) x : (int) x - 1;
+        int xFloor = (x >= 0 ? (int) x : (int) x - 1) & -2;
         x -= xFloor;
+        x *= 0.5;
         x *= x * (3 - 2 * x);
-        int yFloor = y >= 0 ? (int) y : (int) y - 1;
+        int yFloor = (y >= 0 ? (int) y : (int) y - 1) & -2;
         y -= yFloor;
+        y *= 0.5;
         y *= y * (3 - 2 * y);
         xFloor *= STEPX;
         yFloor *= STEPY;
-        return ((1 - y) * ((1 - x) * hashPart1024(xFloor, yFloor, seed) + x * hashPart1024(xFloor + STEPX, yFloor, seed))
-                + y * ((1 - x) * hashPart1024(xFloor, yFloor + STEPY, seed) + x * hashPart1024(xFloor + STEPX, yFloor + STEPY, seed)))
-                * (0x1.0040100401004p-10);
+        xFloor <<= 1;
+        yFloor <<= 1;
+        final int cap = hashPart1024(xFloor + STEPX, yFloor + STEPY, seed);
+        double xd = x - 0.5;
+        double yd = y - 0.5;
+        double xa = Math.abs(xd);
+        double ya = Math.abs(yd);
+        if(xa < ya){
+            // flat base, cap points up or down
+            if(yd > 0){
+                yFloor += (STEPY << 1);
+            }
+            ya *= 2.0;
+            return (ya * ((1 - x) * hashPart1024(xFloor, yFloor, seed) + x * hashPart1024(xFloor + STEPX, yFloor, seed))
+                    + (1 - ya) * cap) * (0x1.0040100401004p-10);
+        }
+        else {
+            // vertical base, cap points left or right
+            if(xd > 0){
+                xFloor += STEPX << 1;
+            }
+            return (xa * ((1 - y) * hashPart1024(xFloor, yFloor, seed) + y * hashPart1024(xFloor, yFloor + STEPY, seed))
+                    + (1 - xa) * cap) * (0x1.0040100401004p-10);
+        }
     }
 
     /**
@@ -369,16 +372,6 @@ public class ValueNoise implements Noise.Noise1D, Noise.Noise2D, Noise.Noise3D,
     private static int hashPart1024(final int x, final int y, final int z, final int w, final int u, final int v, int s) {
         s += x ^ y ^ z ^ w ^ u ^ v;
         return (s ^ (s << 19 | s >>> 13) ^ (s << 5 | s >>> 27) ^ 0xD1B54A35) * 0x125493 >>> 22;
-    }
-
-    @Override
-    public double getNoise(double x) {
-        return valueNoise(seed, x) * 2 - 1;
-    }
-
-    @Override
-    public double getNoiseWithSeed(double x, long seed) {
-        return valueNoise((int) (seed ^ seed >>> 32), x) * 2 - 1;
     }
 
     @Override
