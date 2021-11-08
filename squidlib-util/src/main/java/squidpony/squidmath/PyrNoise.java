@@ -38,11 +38,9 @@ public class PyrNoise implements Noise.Noise2D, Noise.Noise3D,
         int xFloor = (x >= 0 ? (int) x : (int) x - 1) & -2;
         x -= xFloor;
         x *= 0.5;
-        x *= x * (3 - 2 * x);
         int yFloor = (y >= 0 ? (int) y : (int) y - 1) & -2;
         y -= yFloor;
         y *= 0.5;
-        y *= y * (3 - 2 * y);
         xFloor *= STEPX;
         yFloor *= STEPY;
         final int cap = hashPart1024(xFloor + STEPX, yFloor + STEPY, seed);
@@ -55,6 +53,8 @@ public class PyrNoise implements Noise.Noise2D, Noise.Noise3D,
             if(yd > 0){
                 yFloor += STEPY << 1;
             }
+            x = ((x - 0.5) / ya + 1.0) * 0.5;
+            x *= x * (3 - 2 * x);
             ya *= 2.0;
             return (ya * ((1 - x) * hashPart1024(xFloor, yFloor, seed) + x * hashPart1024(xFloor + STEPX + STEPX, yFloor, seed))
                     + (1 - ya) * cap) * (0x1.0040100401004p-10);
@@ -64,6 +64,8 @@ public class PyrNoise implements Noise.Noise2D, Noise.Noise3D,
             if(xd > 0){
                 xFloor += STEPX << 1;
             }
+            y = ((y - 0.5) / xa + 1.0) * 0.5;
+            y *= y * (3 - 2 * y);
             xa *= 2.0;
             return (xa * ((1 - y) * hashPart1024(xFloor, yFloor, seed) + y * hashPart1024(xFloor, yFloor + STEPY + STEPY, seed))
                     + (1 - xa) * cap) * (0x1.0040100401004p-10);
