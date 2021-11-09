@@ -25,7 +25,7 @@ public class NoiseVarietyVisualizer extends ApplicationAdapter {
     private PyrNoise pyr = new PyrNoise(1234567890);
 //    private HashedValueNoise value = new HashedValueNoise(new FlawedPointHash.CubeHash(1234567890, 32));
 //    private FastNoise value = new FastNoise(1234567890, 1f, FastNoise.VALUE, 1);
-    private int noiseType = 0; // 0 for classic, 1 for wave, 2 for fast, 3 for experimental
+    private int noiseType = 3; // 0 for classic, 1 for wave, 2 for fast, 3 for experimental
     private int dim = 0; // this can be 0, 1, or 2; add 2 to get the actual dimensions
     private int octaves = 0;
     private float freq = (float) Math.exp(-4.0);
@@ -188,6 +188,7 @@ public class NoiseVarietyVisualizer extends ApplicationAdapter {
             }
         };
         Gdx.input.setInputProcessor(input);
+        refresh();
     }
 
     public void putMap() {
