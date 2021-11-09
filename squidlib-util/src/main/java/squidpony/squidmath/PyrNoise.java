@@ -57,13 +57,23 @@ public class PyrNoise implements Noise.Noise2D, Noise.Noise3D,
 //            x = (xd / ya + 1.0) * 0.5;
 //            x = 1.0 - x;
             x += ya - 0.5;
-            ya *= 2.0;
+            ya += ya;
             x /= ya;
-            x *= x * (3 - 2 * x);
+//            x *= x * (3 - 2 * x);
+            ya *= ya * (3 - 2 * ya);
+//            ya = Math.sqrt(ya);
+
+//            ya = (ya - 0.5);
+//            ya = (ya * ya * ya + 0.125) * 4.0;
+
 //            ya = 0.5 - ya;
 //            ya *= ya * 4.0;
 //            ya = 1.0 - ya;
-            ya *= ya * (3 - 2 * ya);
+//            if(x < 0 || x > 1)
+//                System.out.println("x is out of bounds in a horizontal-base pyr: " + x);
+//            if(ya < 0 || ya > 1)
+//                System.out.println("ya is out of bounds in a horizontal-base pyr: " + ya);
+
             double cc = (1 - ya) * cap;
             return ((1 - x) * (ya * hashPart1024(xFloor, yFloor, seed) + cc)
                     + x * (ya * hashPart1024(xFloor + STEPX + STEPX, yFloor, seed) + cc))
@@ -79,13 +89,23 @@ public class PyrNoise implements Noise.Noise2D, Noise.Noise3D,
 //            y = (yd / xa + 1.0) * 0.5;
 //            y = 1.0 - y;
             y += xa - 0.5;
-            xa *= 2.0;
+            xa += xa;
             y /= xa;
-            y *= y * (3 - 2 * y);
+//            y *= y * (3 - 2 * y);
+            xa *= xa * (3 - 2 * xa);
+//            xa = Math.sqrt(xa);
+
+//            xa = (xa - 0.5);
+//            xa = (xa * xa * xa + 0.125) * 4.0;
+
 //            xa = 0.5 - xa;
 //            xa *= xa * 4.0;
 //            xa = 1.0 - xa;
-            xa *= xa * (3 - 2 * xa);
+//            if(y < 0 || y > 1)
+//                System.out.println("y is out of bounds in a vertical-base pyr: " + y);
+//            if(xa < 0 || xa > 1)
+//                System.out.println("xa is out of bounds in a vertical-base pyr: " + xa);
+
             double cc = (1 - xa) * cap;
             return ((1 - y) * (xa * hashPart1024(xFloor, yFloor, seed) + cc)
                     + y * (xa * hashPart1024(xFloor, yFloor + STEPY + STEPY, seed) + cc)) * (0x1.0040100401004p-10);
