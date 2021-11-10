@@ -28,116 +28,122 @@
 <span class="source-line-no">015</span><span id="line.15"> */</span>
 <span class="source-line-no">016</span><span id="line.16">public interface IPointHash {</span>
 <span class="source-line-no">017</span><span id="line.17">    void setState(int state);</span>
-<span class="source-line-no">018</span><span id="line.18">    int hash(int x, int y);</span>
-<span class="source-line-no">019</span><span id="line.19">    int hash(int x, int y, int z);</span>
-<span class="source-line-no">020</span><span id="line.20">    int hash(int x, int y, int z, int w);</span>
-<span class="source-line-no">021</span><span id="line.21">    int hash(int x, int y, int z, int w, int u);</span>
-<span class="source-line-no">022</span><span id="line.22">    int hash(int x, int y, int z, int w, int u, int v);</span>
-<span class="source-line-no">023</span><span id="line.23">    int hashWithState(int x, int y, int state);</span>
-<span class="source-line-no">024</span><span id="line.24">    int hashWithState(int x, int y, int z, int state);</span>
-<span class="source-line-no">025</span><span id="line.25">    int hashWithState(int x, int y, int z, int w, int state);</span>
-<span class="source-line-no">026</span><span id="line.26">    int hashWithState(int x, int y, int z, int w, int u, int state);</span>
-<span class="source-line-no">027</span><span id="line.27">    int hashWithState(int x, int y, int z, int w, int u, int v, int state);</span>
-<span class="source-line-no">028</span><span id="line.28"></span>
-<span class="source-line-no">029</span><span id="line.29">    /**</span>
-<span class="source-line-no">030</span><span id="line.30">     * A convenience abstract class to implement IPointHash when you have an int for state. Subclasses will need to</span>
-<span class="source-line-no">031</span><span id="line.31">     * implement {@link #hashWithState(int, int, int)},  {@link #hashWithState(int, int, int, int)},</span>
-<span class="source-line-no">032</span><span id="line.32">     * {@link #hashWithState(int, int, int, int, int)}, and  {@link #hashWithState(int, int, int, int, int, int, int)}.</span>
-<span class="source-line-no">033</span><span id="line.33">     * They can optionally override {@link #setState(int)}, and can at their discretion provide an accessor for the</span>
-<span class="source-line-no">034</span><span id="line.34">     * protected int {@link #state}.</span>
-<span class="source-line-no">035</span><span id="line.35">     */</span>
-<span class="source-line-no">036</span><span id="line.36">    abstract class IntImpl implements IPointHash {</span>
-<span class="source-line-no">037</span><span id="line.37">        protected int state = 42;</span>
-<span class="source-line-no">038</span><span id="line.38">        public IntImpl(){</span>
-<span class="source-line-no">039</span><span id="line.39">        }</span>
-<span class="source-line-no">040</span><span id="line.40">        public IntImpl(int state){</span>
-<span class="source-line-no">041</span><span id="line.41">            this.state = state;</span>
-<span class="source-line-no">042</span><span id="line.42">        }</span>
-<span class="source-line-no">043</span><span id="line.43"></span>
-<span class="source-line-no">044</span><span id="line.44">        @Override</span>
-<span class="source-line-no">045</span><span id="line.45">        public void setState(int state) {</span>
-<span class="source-line-no">046</span><span id="line.46">            this.state = state;</span>
-<span class="source-line-no">047</span><span id="line.47">        }</span>
-<span class="source-line-no">048</span><span id="line.48"></span>
-<span class="source-line-no">049</span><span id="line.49">        @Override</span>
-<span class="source-line-no">050</span><span id="line.50">        public int hash(int x, int y) {</span>
-<span class="source-line-no">051</span><span id="line.51">            return hashWithState(x, y, state);</span>
-<span class="source-line-no">052</span><span id="line.52">        }</span>
-<span class="source-line-no">053</span><span id="line.53"></span>
-<span class="source-line-no">054</span><span id="line.54">        @Override</span>
-<span class="source-line-no">055</span><span id="line.55">        public int hash(int x, int y, int z) {</span>
-<span class="source-line-no">056</span><span id="line.56">            return hashWithState(x, y, z, state);</span>
-<span class="source-line-no">057</span><span id="line.57">        }</span>
-<span class="source-line-no">058</span><span id="line.58"></span>
-<span class="source-line-no">059</span><span id="line.59">        @Override</span>
-<span class="source-line-no">060</span><span id="line.60">        public int hash(int x, int y, int z, int w) {</span>
-<span class="source-line-no">061</span><span id="line.61">            return hashWithState(x, y, z, w, state);</span>
-<span class="source-line-no">062</span><span id="line.62">        }</span>
-<span class="source-line-no">063</span><span id="line.63"></span>
-<span class="source-line-no">064</span><span id="line.64">        @Override</span>
-<span class="source-line-no">065</span><span id="line.65">        public int hash(int x, int y, int z, int w, int u) {</span>
-<span class="source-line-no">066</span><span id="line.66">            return hashWithState(x, y, z, w, u, state);</span>
-<span class="source-line-no">067</span><span id="line.67">        }</span>
-<span class="source-line-no">068</span><span id="line.68"></span>
-<span class="source-line-no">069</span><span id="line.69">        @Override</span>
-<span class="source-line-no">070</span><span id="line.70">        public int hash(int x, int y, int z, int w, int u, int v) {</span>
-<span class="source-line-no">071</span><span id="line.71">            return hashWithState(x, y, z, w, u, v, state);</span>
-<span class="source-line-no">072</span><span id="line.72">        }</span>
-<span class="source-line-no">073</span><span id="line.73">    }</span>
-<span class="source-line-no">074</span><span id="line.74">    /**</span>
-<span class="source-line-no">075</span><span id="line.75">     * A convenience abstract class to implement IPointHash when you have a long for state. Subclasses will need to</span>
-<span class="source-line-no">076</span><span id="line.76">     * implement {@link #hashWithState(int, int, int)},  {@link #hashWithState(int, int, int, int)},</span>
-<span class="source-line-no">077</span><span id="line.77">     * {@link #hashWithState(int, int, int, int, int)}, {@link #hashWithState(int, int, int, int, int, int)}, an</span>
-<span class="source-line-no">078</span><span id="line.78">     * {@link #hashWithState(int, int, int, int, int, int, int)}.</span>
-<span class="source-line-no">079</span><span id="line.79">     * They can optionally override {@link #setState(int)} or {@link #setState(long)}, and can at their discretion</span>
-<span class="source-line-no">080</span><span id="line.80">     * provide an accessor for the protected long {@link #state}.</span>
-<span class="source-line-no">081</span><span id="line.81">     */</span>
-<span class="source-line-no">082</span><span id="line.82">    abstract class LongImpl implements IPointHash {</span>
-<span class="source-line-no">083</span><span id="line.83">        protected long state = 42;</span>
-<span class="source-line-no">084</span><span id="line.84">        public LongImpl(){</span>
-<span class="source-line-no">085</span><span id="line.85">            setState(42);</span>
-<span class="source-line-no">086</span><span id="line.86">        }</span>
-<span class="source-line-no">087</span><span id="line.87">        public LongImpl(int state){</span>
-<span class="source-line-no">088</span><span id="line.88">            setState(state);</span>
-<span class="source-line-no">089</span><span id="line.89">        }</span>
-<span class="source-line-no">090</span><span id="line.90">        public LongImpl(long state){</span>
-<span class="source-line-no">091</span><span id="line.91">            setState(state);</span>
+<span class="source-line-no">018</span><span id="line.18">    void setState(long state);</span>
+<span class="source-line-no">019</span><span id="line.19">    int hash(int x, int y);</span>
+<span class="source-line-no">020</span><span id="line.20">    int hash(int x, int y, int z);</span>
+<span class="source-line-no">021</span><span id="line.21">    int hash(int x, int y, int z, int w);</span>
+<span class="source-line-no">022</span><span id="line.22">    int hash(int x, int y, int z, int w, int u);</span>
+<span class="source-line-no">023</span><span id="line.23">    int hash(int x, int y, int z, int w, int u, int v);</span>
+<span class="source-line-no">024</span><span id="line.24">    int hashWithState(int x, int y, int state);</span>
+<span class="source-line-no">025</span><span id="line.25">    int hashWithState(int x, int y, int z, int state);</span>
+<span class="source-line-no">026</span><span id="line.26">    int hashWithState(int x, int y, int z, int w, int state);</span>
+<span class="source-line-no">027</span><span id="line.27">    int hashWithState(int x, int y, int z, int w, int u, int state);</span>
+<span class="source-line-no">028</span><span id="line.28">    int hashWithState(int x, int y, int z, int w, int u, int v, int state);</span>
+<span class="source-line-no">029</span><span id="line.29"></span>
+<span class="source-line-no">030</span><span id="line.30">    /**</span>
+<span class="source-line-no">031</span><span id="line.31">     * A convenience abstract class to implement IPointHash when you have an int for state. Subclasses will need to</span>
+<span class="source-line-no">032</span><span id="line.32">     * implement {@link #hashWithState(int, int, int)},  {@link #hashWithState(int, int, int, int)},</span>
+<span class="source-line-no">033</span><span id="line.33">     * {@link #hashWithState(int, int, int, int, int)}, and  {@link #hashWithState(int, int, int, int, int, int, int)}.</span>
+<span class="source-line-no">034</span><span id="line.34">     * They can optionally override {@link #setState(int)}, and can at their discretion provide an accessor for the</span>
+<span class="source-line-no">035</span><span id="line.35">     * protected int {@link #state}.</span>
+<span class="source-line-no">036</span><span id="line.36">     */</span>
+<span class="source-line-no">037</span><span id="line.37">    abstract class IntImpl implements IPointHash {</span>
+<span class="source-line-no">038</span><span id="line.38">        protected int state = 42;</span>
+<span class="source-line-no">039</span><span id="line.39">        public IntImpl(){</span>
+<span class="source-line-no">040</span><span id="line.40">        }</span>
+<span class="source-line-no">041</span><span id="line.41">        public IntImpl(int state){</span>
+<span class="source-line-no">042</span><span id="line.42">            this.state = state;</span>
+<span class="source-line-no">043</span><span id="line.43">        }</span>
+<span class="source-line-no">044</span><span id="line.44"></span>
+<span class="source-line-no">045</span><span id="line.45">        @Override</span>
+<span class="source-line-no">046</span><span id="line.46">        public void setState(int state) {</span>
+<span class="source-line-no">047</span><span id="line.47">            this.state = state;</span>
+<span class="source-line-no">048</span><span id="line.48">        }</span>
+<span class="source-line-no">049</span><span id="line.49"></span>
+<span class="source-line-no">050</span><span id="line.50">        @Override</span>
+<span class="source-line-no">051</span><span id="line.51">        public void setState(long state) {</span>
+<span class="source-line-no">052</span><span id="line.52">            this.state = (int)(state ^ state &gt;&gt;&gt; 32);</span>
+<span class="source-line-no">053</span><span id="line.53">        }</span>
+<span class="source-line-no">054</span><span id="line.54"></span>
+<span class="source-line-no">055</span><span id="line.55">        @Override</span>
+<span class="source-line-no">056</span><span id="line.56">        public int hash(int x, int y) {</span>
+<span class="source-line-no">057</span><span id="line.57">            return hashWithState(x, y, state);</span>
+<span class="source-line-no">058</span><span id="line.58">        }</span>
+<span class="source-line-no">059</span><span id="line.59"></span>
+<span class="source-line-no">060</span><span id="line.60">        @Override</span>
+<span class="source-line-no">061</span><span id="line.61">        public int hash(int x, int y, int z) {</span>
+<span class="source-line-no">062</span><span id="line.62">            return hashWithState(x, y, z, state);</span>
+<span class="source-line-no">063</span><span id="line.63">        }</span>
+<span class="source-line-no">064</span><span id="line.64"></span>
+<span class="source-line-no">065</span><span id="line.65">        @Override</span>
+<span class="source-line-no">066</span><span id="line.66">        public int hash(int x, int y, int z, int w) {</span>
+<span class="source-line-no">067</span><span id="line.67">            return hashWithState(x, y, z, w, state);</span>
+<span class="source-line-no">068</span><span id="line.68">        }</span>
+<span class="source-line-no">069</span><span id="line.69"></span>
+<span class="source-line-no">070</span><span id="line.70">        @Override</span>
+<span class="source-line-no">071</span><span id="line.71">        public int hash(int x, int y, int z, int w, int u) {</span>
+<span class="source-line-no">072</span><span id="line.72">            return hashWithState(x, y, z, w, u, state);</span>
+<span class="source-line-no">073</span><span id="line.73">        }</span>
+<span class="source-line-no">074</span><span id="line.74"></span>
+<span class="source-line-no">075</span><span id="line.75">        @Override</span>
+<span class="source-line-no">076</span><span id="line.76">        public int hash(int x, int y, int z, int w, int u, int v) {</span>
+<span class="source-line-no">077</span><span id="line.77">            return hashWithState(x, y, z, w, u, v, state);</span>
+<span class="source-line-no">078</span><span id="line.78">        }</span>
+<span class="source-line-no">079</span><span id="line.79">    }</span>
+<span class="source-line-no">080</span><span id="line.80">    /**</span>
+<span class="source-line-no">081</span><span id="line.81">     * A convenience abstract class to implement IPointHash when you have a long for state. Subclasses will need to</span>
+<span class="source-line-no">082</span><span id="line.82">     * implement {@link #hashWithState(int, int, int)},  {@link #hashWithState(int, int, int, int)},</span>
+<span class="source-line-no">083</span><span id="line.83">     * {@link #hashWithState(int, int, int, int, int)}, {@link #hashWithState(int, int, int, int, int, int)}, an</span>
+<span class="source-line-no">084</span><span id="line.84">     * {@link #hashWithState(int, int, int, int, int, int, int)}.</span>
+<span class="source-line-no">085</span><span id="line.85">     * They can optionally override {@link #setState(int)} or {@link #setState(long)}, and can at their discretion</span>
+<span class="source-line-no">086</span><span id="line.86">     * provide an accessor for the protected long {@link #state}.</span>
+<span class="source-line-no">087</span><span id="line.87">     */</span>
+<span class="source-line-no">088</span><span id="line.88">    abstract class LongImpl implements IPointHash {</span>
+<span class="source-line-no">089</span><span id="line.89">        protected long state = 42;</span>
+<span class="source-line-no">090</span><span id="line.90">        public LongImpl(){</span>
+<span class="source-line-no">091</span><span id="line.91">            setState(42);</span>
 <span class="source-line-no">092</span><span id="line.92">        }</span>
-<span class="source-line-no">093</span><span id="line.93"></span>
-<span class="source-line-no">094</span><span id="line.94">        @Override</span>
-<span class="source-line-no">095</span><span id="line.95">        public void setState(int state) {</span>
-<span class="source-line-no">096</span><span id="line.96">            this.state = state;</span>
-<span class="source-line-no">097</span><span id="line.97">        }</span>
-<span class="source-line-no">098</span><span id="line.98">        </span>
-<span class="source-line-no">099</span><span id="line.99">        public void setState(long state){</span>
-<span class="source-line-no">100</span><span id="line.100">            this.state = state;</span>
-<span class="source-line-no">101</span><span id="line.101">        }</span>
-<span class="source-line-no">102</span><span id="line.102"></span>
-<span class="source-line-no">103</span><span id="line.103">        @Override</span>
-<span class="source-line-no">104</span><span id="line.104">        public int hash(int x, int y) {</span>
-<span class="source-line-no">105</span><span id="line.105">            return hashWithState(x, y, (int) (state ^ state &gt;&gt;&gt; 32));</span>
-<span class="source-line-no">106</span><span id="line.106">        }</span>
-<span class="source-line-no">107</span><span id="line.107"></span>
-<span class="source-line-no">108</span><span id="line.108">        @Override</span>
-<span class="source-line-no">109</span><span id="line.109">        public int hash(int x, int y, int z) {</span>
-<span class="source-line-no">110</span><span id="line.110">            return hashWithState(x, y, z, (int) (state ^ state &gt;&gt;&gt; 32));</span>
-<span class="source-line-no">111</span><span id="line.111">        }</span>
-<span class="source-line-no">112</span><span id="line.112"></span>
-<span class="source-line-no">113</span><span id="line.113">        @Override</span>
-<span class="source-line-no">114</span><span id="line.114">        public int hash(int x, int y, int z, int w) {</span>
-<span class="source-line-no">115</span><span id="line.115">            return hashWithState(x, y, z, w, (int) (state ^ state &gt;&gt;&gt; 32));</span>
-<span class="source-line-no">116</span><span id="line.116">        }</span>
-<span class="source-line-no">117</span><span id="line.117"></span>
-<span class="source-line-no">118</span><span id="line.118">        @Override</span>
-<span class="source-line-no">119</span><span id="line.119">        public int hash(int x, int y, int z, int w, int u) {</span>
-<span class="source-line-no">120</span><span id="line.120">            return hashWithState(x, y, z, w, u, (int) (state ^ state &gt;&gt;&gt; 32));</span>
-<span class="source-line-no">121</span><span id="line.121">        }</span>
-<span class="source-line-no">122</span><span id="line.122">        @Override</span>
-<span class="source-line-no">123</span><span id="line.123">        public int hash(int x, int y, int z, int w, int u, int v) {</span>
-<span class="source-line-no">124</span><span id="line.124">            return hashWithState(x, y, z, w, u, v, (int) (state ^ state &gt;&gt;&gt; 32));</span>
-<span class="source-line-no">125</span><span id="line.125">        }</span>
-<span class="source-line-no">126</span><span id="line.126">    }</span>
-<span class="source-line-no">127</span><span id="line.127">}</span>
+<span class="source-line-no">093</span><span id="line.93">        public LongImpl(int state){</span>
+<span class="source-line-no">094</span><span id="line.94">            setState(state);</span>
+<span class="source-line-no">095</span><span id="line.95">        }</span>
+<span class="source-line-no">096</span><span id="line.96">        public LongImpl(long state){</span>
+<span class="source-line-no">097</span><span id="line.97">            setState(state);</span>
+<span class="source-line-no">098</span><span id="line.98">        }</span>
+<span class="source-line-no">099</span><span id="line.99"></span>
+<span class="source-line-no">100</span><span id="line.100">        @Override</span>
+<span class="source-line-no">101</span><span id="line.101">        public void setState(int state) {</span>
+<span class="source-line-no">102</span><span id="line.102">            this.state = state;</span>
+<span class="source-line-no">103</span><span id="line.103">        }</span>
+<span class="source-line-no">104</span><span id="line.104">        </span>
+<span class="source-line-no">105</span><span id="line.105">        public void setState(long state){</span>
+<span class="source-line-no">106</span><span id="line.106">            this.state = state;</span>
+<span class="source-line-no">107</span><span id="line.107">        }</span>
+<span class="source-line-no">108</span><span id="line.108"></span>
+<span class="source-line-no">109</span><span id="line.109">        @Override</span>
+<span class="source-line-no">110</span><span id="line.110">        public int hash(int x, int y) {</span>
+<span class="source-line-no">111</span><span id="line.111">            return hashWithState(x, y, (int) (state ^ state &gt;&gt;&gt; 32));</span>
+<span class="source-line-no">112</span><span id="line.112">        }</span>
+<span class="source-line-no">113</span><span id="line.113"></span>
+<span class="source-line-no">114</span><span id="line.114">        @Override</span>
+<span class="source-line-no">115</span><span id="line.115">        public int hash(int x, int y, int z) {</span>
+<span class="source-line-no">116</span><span id="line.116">            return hashWithState(x, y, z, (int) (state ^ state &gt;&gt;&gt; 32));</span>
+<span class="source-line-no">117</span><span id="line.117">        }</span>
+<span class="source-line-no">118</span><span id="line.118"></span>
+<span class="source-line-no">119</span><span id="line.119">        @Override</span>
+<span class="source-line-no">120</span><span id="line.120">        public int hash(int x, int y, int z, int w) {</span>
+<span class="source-line-no">121</span><span id="line.121">            return hashWithState(x, y, z, w, (int) (state ^ state &gt;&gt;&gt; 32));</span>
+<span class="source-line-no">122</span><span id="line.122">        }</span>
+<span class="source-line-no">123</span><span id="line.123"></span>
+<span class="source-line-no">124</span><span id="line.124">        @Override</span>
+<span class="source-line-no">125</span><span id="line.125">        public int hash(int x, int y, int z, int w, int u) {</span>
+<span class="source-line-no">126</span><span id="line.126">            return hashWithState(x, y, z, w, u, (int) (state ^ state &gt;&gt;&gt; 32));</span>
+<span class="source-line-no">127</span><span id="line.127">        }</span>
+<span class="source-line-no">128</span><span id="line.128">        @Override</span>
+<span class="source-line-no">129</span><span id="line.129">        public int hash(int x, int y, int z, int w, int u, int v) {</span>
+<span class="source-line-no">130</span><span id="line.130">            return hashWithState(x, y, z, w, u, v, (int) (state ^ state &gt;&gt;&gt; 32));</span>
+<span class="source-line-no">131</span><span id="line.131">        }</span>
+<span class="source-line-no">132</span><span id="line.132">    }</span>
+<span class="source-line-no">133</span><span id="line.133">}</span>
 
 
 

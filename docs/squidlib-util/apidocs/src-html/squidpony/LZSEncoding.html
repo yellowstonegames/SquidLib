@@ -40,7 +40,7 @@
 <span class="source-line-no">027</span><span id="line.27"> */</span>
 <span class="source-line-no">028</span><span id="line.28">public final class LZSEncoding {</span>
 <span class="source-line-no">029</span><span id="line.29"></span>
-<span class="source-line-no">030</span><span id="line.30">    private LZSEncoding() {};</span>
+<span class="source-line-no">030</span><span id="line.30">    private LZSEncoding() {}</span>
 <span class="source-line-no">031</span><span id="line.31">    private static final char[] keyStrBase64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=".toCharArray(),</span>
 <span class="source-line-no">032</span><span id="line.32">            keyStrUriSafe = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+-$".toCharArray(),</span>
 <span class="source-line-no">033</span><span id="line.33">            valStrBase64 = new char[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,</span>
@@ -59,7 +59,7 @@
 <span class="source-line-no">046</span><span id="line.46">    public static String compressToBase64(String uncompressed) {</span>
 <span class="source-line-no">047</span><span id="line.47">        if (uncompressed == null)</span>
 <span class="source-line-no">048</span><span id="line.48">            return null;</span>
-<span class="source-line-no">049</span><span id="line.49">        String res = _compress(uncompressed, 6, keyStrBase64, 0);</span>
+<span class="source-line-no">049</span><span id="line.49">        String res = _compress(uncompressed, 6, keyStrBase64);</span>
 <span class="source-line-no">050</span><span id="line.50">        switch (res.length() &amp; 3) { // To produce valid Base64</span>
 <span class="source-line-no">051</span><span id="line.51">            default: // When could this happen ?</span>
 <span class="source-line-no">052</span><span id="line.52">            case 0:</span>
@@ -81,444 +81,792 @@
 <span class="source-line-no">068</span><span id="line.68">    public static String decompressFromBase64(String compressed) {</span>
 <span class="source-line-no">069</span><span id="line.69">        if (compressed == null)</span>
 <span class="source-line-no">070</span><span id="line.70">            return null;</span>
-<span class="source-line-no">071</span><span id="line.71">        if (compressed.isEmpty())</span>
+<span class="source-line-no">071</span><span id="line.71">        if (compressed.length() == 0)</span>
 <span class="source-line-no">072</span><span id="line.72">            return "";</span>
-<span class="source-line-no">073</span><span id="line.73">        final char[] input = compressed.toCharArray();</span>
-<span class="source-line-no">074</span><span id="line.74">        return _decompress(input.length, 32, input, valStrBase64, 0);</span>
-<span class="source-line-no">075</span><span id="line.75">    }</span>
-<span class="source-line-no">076</span><span id="line.76"></span>
-<span class="source-line-no">077</span><span id="line.77">    /**</span>
-<span class="source-line-no">078</span><span id="line.78">     * Compresses a String using the properties of UTF-16 encoding to store approximately 15 bits of LZW-compressed text</span>
-<span class="source-line-no">079</span><span id="line.79">     * in each 2-byte Unicode character, which does particularly well with ASCII text and can be smaller than UTF-8 in</span>
-<span class="source-line-no">080</span><span id="line.80">     * some cases, especially where each char must be stored as UTF-16, e.g. Java Strings or browser-based LocalStorage.</span>
-<span class="source-line-no">081</span><span id="line.81">     * @param uncompressed an uncompressed String to encode</span>
-<span class="source-line-no">082</span><span id="line.82">     * @return the encoded, compressed String</span>
-<span class="source-line-no">083</span><span id="line.83">     */</span>
-<span class="source-line-no">084</span><span id="line.84">    public static String compressToUTF16(String uncompressed) {</span>
-<span class="source-line-no">085</span><span id="line.85">        if (uncompressed == null)</span>
-<span class="source-line-no">086</span><span id="line.86">            return null;</span>
-<span class="source-line-no">087</span><span id="line.87">        return _compress(uncompressed, 15, null, 32) + " ";</span>
-<span class="source-line-no">088</span><span id="line.88">    }</span>
-<span class="source-line-no">089</span><span id="line.89">    /**</span>
-<span class="source-line-no">090</span><span id="line.90">     * Decompresses a String that had been compressed with {@link #compressToUTF16(String)}.</span>
-<span class="source-line-no">091</span><span id="line.91">     * @param compressed a UTF16-encoded (as by {@link #compressToUTF16(String)}), compressed String</span>
-<span class="source-line-no">092</span><span id="line.92">     * @return the original uncompressed version of the String</span>
-<span class="source-line-no">093</span><span id="line.93">     */</span>
-<span class="source-line-no">094</span><span id="line.94">    public static String decompressFromUTF16(String compressed) {</span>
-<span class="source-line-no">095</span><span id="line.95">        if (compressed == null)</span>
-<span class="source-line-no">096</span><span id="line.96">            return null;</span>
-<span class="source-line-no">097</span><span id="line.97">        if (compressed.isEmpty())</span>
-<span class="source-line-no">098</span><span id="line.98">            return "";</span>
-<span class="source-line-no">099</span><span id="line.99">        final char[] comp = compressed.toCharArray();</span>
-<span class="source-line-no">100</span><span id="line.100">        return _decompress(comp.length, 16384, comp, null, -32);</span>
-<span class="source-line-no">101</span><span id="line.101">    }</span>
-<span class="source-line-no">102</span><span id="line.102"></span>
-<span class="source-line-no">103</span><span id="line.103">    /**</span>
-<span class="source-line-no">104</span><span id="line.104">     * Compress a String using LZ-String encoding but only using valid URI component characters ('A'-'Z', 'a'-'z',</span>
-<span class="source-line-no">105</span><span id="line.105">     * '0'-'9', '+', '-', and possibly '$').</span>
-<span class="source-line-no">106</span><span id="line.106">     * @param uncompressed an uncompressed String to encode</span>
-<span class="source-line-no">107</span><span id="line.107">     * @return the encoded, compressed String</span>
-<span class="source-line-no">108</span><span id="line.108">     */</span>
-<span class="source-line-no">109</span><span id="line.109">    public static String compressToEncodedURIComponent(String uncompressed) {</span>
-<span class="source-line-no">110</span><span id="line.110">        if (uncompressed == null)</span>
-<span class="source-line-no">111</span><span id="line.111">            return null;</span>
-<span class="source-line-no">112</span><span id="line.112">        return _compress(uncompressed, 6, keyStrUriSafe, 0) + '+';</span>
-<span class="source-line-no">113</span><span id="line.113">    }</span>
-<span class="source-line-no">114</span><span id="line.114">    /**</span>
-<span class="source-line-no">115</span><span id="line.115">     * Decompresses a String that had been compressed with {@link #compressToEncodedURIComponent(String)}.</span>
-<span class="source-line-no">116</span><span id="line.116">     * @param compressed a URI-encoded, compressed String</span>
-<span class="source-line-no">117</span><span id="line.117">     * @return the original uncompressed version of the String</span>
-<span class="source-line-no">118</span><span id="line.118">     */</span>
-<span class="source-line-no">119</span><span id="line.119">    public static String decompressFromEncodedURIComponent(String compressed) {</span>
-<span class="source-line-no">120</span><span id="line.120">        if (compressed == null) return null;</span>
-<span class="source-line-no">121</span><span id="line.121">        if (compressed.isEmpty()) return "";</span>
-<span class="source-line-no">122</span><span id="line.122">        final char[] input = compressed.toCharArray();</span>
-<span class="source-line-no">123</span><span id="line.123">        return _decompress(input.length, 32, input, valStrUriSafe, 0);</span>
-<span class="source-line-no">124</span><span id="line.124">    }</span>
-<span class="source-line-no">125</span><span id="line.125"></span>
-<span class="source-line-no">126</span><span id="line.126">    /**</span>
-<span class="source-line-no">127</span><span id="line.127">     * Compresses a String as tightly as possible by using 16 bits of each 16-bit character, which can infrequently</span>
-<span class="source-line-no">128</span><span id="line.128">     * result in invalid UTF-16 codepoints, but that may not matter for all applications.</span>
-<span class="source-line-no">129</span><span id="line.129">     * @param uncompressed an uncompressed String to encode</span>
-<span class="source-line-no">130</span><span id="line.130">     * @return the encoded, compressed String</span>
-<span class="source-line-no">131</span><span id="line.131">     */</span>
-<span class="source-line-no">132</span><span id="line.132">    public static String compress(String uncompressed) {</span>
-<span class="source-line-no">133</span><span id="line.133">        return _compress(uncompressed, 16, null, 0);</span>
-<span class="source-line-no">134</span><span id="line.134">    }</span>
-<span class="source-line-no">135</span><span id="line.135"></span>
-<span class="source-line-no">136</span><span id="line.136">    private static String _compress(String uncompressedStr, int bitsPerChar, char[] getCharFromInt, int offset) {</span>
-<span class="source-line-no">137</span><span id="line.137">        if (uncompressedStr == null) return null;</span>
-<span class="source-line-no">138</span><span id="line.138">        if (uncompressedStr.isEmpty()) return "";</span>
-<span class="source-line-no">139</span><span id="line.139">        int i, value;</span>
-<span class="source-line-no">140</span><span id="line.140">        HashMap&lt;String, Integer&gt; context_dictionary = new HashMap&lt;&gt;();</span>
-<span class="source-line-no">141</span><span id="line.141">        HashSet&lt;String&gt; context_dictionaryToCreate = new HashSet&lt;&gt;();</span>
-<span class="source-line-no">142</span><span id="line.142">        String context_c;</span>
-<span class="source-line-no">143</span><span id="line.143">        String context_wc;</span>
-<span class="source-line-no">144</span><span id="line.144">        String context_w = "";</span>
-<span class="source-line-no">145</span><span id="line.145">        int context_enlargeIn = 2; // Compensate for the first entry which should not count</span>
-<span class="source-line-no">146</span><span id="line.146">        int context_dictSize = 3;</span>
-<span class="source-line-no">147</span><span id="line.147">        int context_numBits = 2;</span>
-<span class="source-line-no">148</span><span id="line.148">        StringBuilder context_data = new StringBuilder(uncompressedStr.length() &gt;&gt;&gt; 1);</span>
-<span class="source-line-no">149</span><span id="line.149">        int context_data_val = 0;</span>
-<span class="source-line-no">150</span><span id="line.150">        int context_data_position = 0;</span>
-<span class="source-line-no">151</span><span id="line.151">        int ii;</span>
-<span class="source-line-no">152</span><span id="line.152"></span>
-<span class="source-line-no">153</span><span id="line.153">        char[] uncompressed = uncompressedStr.toCharArray();</span>
-<span class="source-line-no">154</span><span id="line.154">        for (ii = 0; ii &lt; uncompressed.length; ii++) {</span>
-<span class="source-line-no">155</span><span id="line.155">            context_c = String.valueOf(uncompressed[ii]);</span>
-<span class="source-line-no">156</span><span id="line.156">            if (!context_dictionary.containsKey(context_c)) {</span>
-<span class="source-line-no">157</span><span id="line.157">                context_dictionary.put(context_c, context_dictSize++);</span>
-<span class="source-line-no">158</span><span id="line.158">                context_dictionaryToCreate.add(context_c);</span>
-<span class="source-line-no">159</span><span id="line.159">            }</span>
-<span class="source-line-no">160</span><span id="line.160"></span>
-<span class="source-line-no">161</span><span id="line.161">            context_wc = context_w + context_c;</span>
-<span class="source-line-no">162</span><span id="line.162">            if (context_dictionary.containsKey(context_wc)) {</span>
-<span class="source-line-no">163</span><span id="line.163">                context_w = context_wc;</span>
-<span class="source-line-no">164</span><span id="line.164">            } else {</span>
-<span class="source-line-no">165</span><span id="line.165">                if (context_dictionaryToCreate.contains(context_w)) {</span>
-<span class="source-line-no">166</span><span id="line.166">                    if ((value = context_w.charAt(0)) &lt; 256) {</span>
-<span class="source-line-no">167</span><span id="line.167">                        for (i = 0; i &lt; context_numBits; i++) {</span>
-<span class="source-line-no">168</span><span id="line.168">                            context_data_val = (context_data_val &lt;&lt; 1);</span>
-<span class="source-line-no">169</span><span id="line.169">                            if (context_data_position == bitsPerChar - 1) {</span>
-<span class="source-line-no">170</span><span id="line.170">                                context_data_position = 0;</span>
-<span class="source-line-no">171</span><span id="line.171">                                context_data.append((char) (((getCharFromInt == null) ? context_data_val : getCharFromInt[context_data_val]) + offset));</span>
-<span class="source-line-no">172</span><span id="line.172">                                context_data_val = 0;</span>
-<span class="source-line-no">173</span><span id="line.173">                            } else {</span>
-<span class="source-line-no">174</span><span id="line.174">                                context_data_position++;</span>
-<span class="source-line-no">175</span><span id="line.175">                            }</span>
-<span class="source-line-no">176</span><span id="line.176">                        }</span>
-<span class="source-line-no">177</span><span id="line.177">                        for (i = 0; i &lt; 8; i++) {</span>
-<span class="source-line-no">178</span><span id="line.178">                            context_data_val = (context_data_val &lt;&lt; 1) | (value &amp; 1);</span>
-<span class="source-line-no">179</span><span id="line.179">                            if (context_data_position == bitsPerChar - 1) {</span>
-<span class="source-line-no">180</span><span id="line.180">                                context_data_position = 0;</span>
-<span class="source-line-no">181</span><span id="line.181">                                context_data.append((char) (((getCharFromInt == null) ? context_data_val : getCharFromInt[context_data_val]) + offset));</span>
-<span class="source-line-no">182</span><span id="line.182">                                context_data_val = 0;</span>
-<span class="source-line-no">183</span><span id="line.183">                            } else {</span>
-<span class="source-line-no">184</span><span id="line.184">                                context_data_position++;</span>
-<span class="source-line-no">185</span><span id="line.185">                            }</span>
-<span class="source-line-no">186</span><span id="line.186">                            value &gt;&gt;= 1;</span>
-<span class="source-line-no">187</span><span id="line.187">                        }</span>
-<span class="source-line-no">188</span><span id="line.188">                    } else {</span>
-<span class="source-line-no">189</span><span id="line.189">                        value = 1;</span>
-<span class="source-line-no">190</span><span id="line.190">                        for (i = 0; i &lt; context_numBits; i++) {</span>
-<span class="source-line-no">191</span><span id="line.191">                            context_data_val = (context_data_val &lt;&lt; 1) | value;</span>
-<span class="source-line-no">192</span><span id="line.192">                            if (context_data_position == bitsPerChar - 1) {</span>
-<span class="source-line-no">193</span><span id="line.193">                                context_data_position = 0;</span>
-<span class="source-line-no">194</span><span id="line.194">                                context_data.append((char) (((getCharFromInt == null) ? context_data_val : getCharFromInt[context_data_val]) + offset));</span>
-<span class="source-line-no">195</span><span id="line.195">                                context_data_val = 0;</span>
-<span class="source-line-no">196</span><span id="line.196">                            } else {</span>
-<span class="source-line-no">197</span><span id="line.197">                                context_data_position++;</span>
-<span class="source-line-no">198</span><span id="line.198">                            }</span>
-<span class="source-line-no">199</span><span id="line.199">                            value = 0;</span>
-<span class="source-line-no">200</span><span id="line.200">                        }</span>
-<span class="source-line-no">201</span><span id="line.201">                        value = context_w.charAt(0);</span>
-<span class="source-line-no">202</span><span id="line.202">                        for (i = 0; i &lt; 16; i++) {</span>
-<span class="source-line-no">203</span><span id="line.203">                            context_data_val = (context_data_val &lt;&lt; 1) | (value &amp; 1);</span>
-<span class="source-line-no">204</span><span id="line.204">                            if (context_data_position == bitsPerChar - 1) {</span>
-<span class="source-line-no">205</span><span id="line.205">                                context_data_position = 0;</span>
-<span class="source-line-no">206</span><span id="line.206">                                context_data.append((char) (((getCharFromInt == null) ? context_data_val : getCharFromInt[context_data_val]) + offset));</span>
-<span class="source-line-no">207</span><span id="line.207">                                context_data_val = 0;</span>
-<span class="source-line-no">208</span><span id="line.208">                            } else {</span>
-<span class="source-line-no">209</span><span id="line.209">                                context_data_position++;</span>
-<span class="source-line-no">210</span><span id="line.210">                            }</span>
-<span class="source-line-no">211</span><span id="line.211">                            value &gt;&gt;= 1;</span>
-<span class="source-line-no">212</span><span id="line.212">                        }</span>
-<span class="source-line-no">213</span><span id="line.213">                    }</span>
-<span class="source-line-no">214</span><span id="line.214">                    context_enlargeIn--;</span>
-<span class="source-line-no">215</span><span id="line.215">                    if (context_enlargeIn == 0) {</span>
-<span class="source-line-no">216</span><span id="line.216">                        context_enlargeIn = 1 &lt;&lt; context_numBits++;</span>
-<span class="source-line-no">217</span><span id="line.217">                    }</span>
-<span class="source-line-no">218</span><span id="line.218">                    context_dictionaryToCreate.remove(context_w);</span>
-<span class="source-line-no">219</span><span id="line.219">                } else {</span>
-<span class="source-line-no">220</span><span id="line.220">                    value = context_dictionary.get(context_w);</span>
-<span class="source-line-no">221</span><span id="line.221">                    for (i = 0; i &lt; context_numBits; i++) {</span>
-<span class="source-line-no">222</span><span id="line.222">                        context_data_val = (context_data_val &lt;&lt; 1) | (value &amp; 1);</span>
-<span class="source-line-no">223</span><span id="line.223">                        if (context_data_position == bitsPerChar - 1) {</span>
-<span class="source-line-no">224</span><span id="line.224">                            context_data_position = 0;</span>
-<span class="source-line-no">225</span><span id="line.225">                            context_data.append((char) (((getCharFromInt == null) ? context_data_val : getCharFromInt[context_data_val]) + offset));</span>
-<span class="source-line-no">226</span><span id="line.226">                            context_data_val = 0;</span>
-<span class="source-line-no">227</span><span id="line.227">                        } else {</span>
-<span class="source-line-no">228</span><span id="line.228">                            context_data_position++;</span>
-<span class="source-line-no">229</span><span id="line.229">                        }</span>
-<span class="source-line-no">230</span><span id="line.230">                        value &gt;&gt;= 1;</span>
-<span class="source-line-no">231</span><span id="line.231">                    }</span>
-<span class="source-line-no">232</span><span id="line.232"></span>
-<span class="source-line-no">233</span><span id="line.233">                }</span>
-<span class="source-line-no">234</span><span id="line.234">                context_enlargeIn--;</span>
-<span class="source-line-no">235</span><span id="line.235">                if (context_enlargeIn == 0) {</span>
-<span class="source-line-no">236</span><span id="line.236">                    context_enlargeIn = 1 &lt;&lt; context_numBits++;</span>
-<span class="source-line-no">237</span><span id="line.237">                }</span>
-<span class="source-line-no">238</span><span id="line.238">                // Add wc to the dictionary.</span>
-<span class="source-line-no">239</span><span id="line.239">                context_dictionary.put(context_wc, context_dictSize++);</span>
-<span class="source-line-no">240</span><span id="line.240">                context_w = context_c;</span>
-<span class="source-line-no">241</span><span id="line.241">            }</span>
-<span class="source-line-no">242</span><span id="line.242">        }</span>
-<span class="source-line-no">243</span><span id="line.243"></span>
-<span class="source-line-no">244</span><span id="line.244">        // Output the code for w.</span>
-<span class="source-line-no">245</span><span id="line.245">        if (!context_w.isEmpty()) {</span>
-<span class="source-line-no">246</span><span id="line.246">            if (context_dictionaryToCreate.contains(context_w)) {</span>
-<span class="source-line-no">247</span><span id="line.247">                if (context_w.charAt(0) &lt; 256) {</span>
-<span class="source-line-no">248</span><span id="line.248">                    for (i = 0; i &lt; context_numBits; i++) {</span>
-<span class="source-line-no">249</span><span id="line.249">                        context_data_val = (context_data_val &lt;&lt; 1);</span>
-<span class="source-line-no">250</span><span id="line.250">                        if (context_data_position == bitsPerChar - 1) {</span>
-<span class="source-line-no">251</span><span id="line.251">                            context_data_position = 0;</span>
-<span class="source-line-no">252</span><span id="line.252">                            context_data.append((char) (((getCharFromInt == null) ? context_data_val : getCharFromInt[context_data_val]) + offset));</span>
-<span class="source-line-no">253</span><span id="line.253">                            context_data_val = 0;</span>
-<span class="source-line-no">254</span><span id="line.254">                        } else {</span>
-<span class="source-line-no">255</span><span id="line.255">                            context_data_position++;</span>
-<span class="source-line-no">256</span><span id="line.256">                        }</span>
-<span class="source-line-no">257</span><span id="line.257">                    }</span>
-<span class="source-line-no">258</span><span id="line.258">                    value = context_w.charAt(0);</span>
-<span class="source-line-no">259</span><span id="line.259">                    for (i = 0; i &lt; 8; i++) {</span>
-<span class="source-line-no">260</span><span id="line.260">                        context_data_val = (context_data_val &lt;&lt; 1) | (value &amp; 1);</span>
-<span class="source-line-no">261</span><span id="line.261">                        if (context_data_position == bitsPerChar - 1) {</span>
-<span class="source-line-no">262</span><span id="line.262">                            context_data_position = 0;</span>
-<span class="source-line-no">263</span><span id="line.263">                            context_data.append((char) (((getCharFromInt == null) ? context_data_val : getCharFromInt[context_data_val]) + offset));</span>
-<span class="source-line-no">264</span><span id="line.264">                            context_data_val = 0;</span>
-<span class="source-line-no">265</span><span id="line.265">                        } else {</span>
-<span class="source-line-no">266</span><span id="line.266">                            context_data_position++;</span>
-<span class="source-line-no">267</span><span id="line.267">                        }</span>
-<span class="source-line-no">268</span><span id="line.268">                        value &gt;&gt;= 1;</span>
-<span class="source-line-no">269</span><span id="line.269">                    }</span>
-<span class="source-line-no">270</span><span id="line.270">                } else {</span>
-<span class="source-line-no">271</span><span id="line.271">                    value = 1;</span>
-<span class="source-line-no">272</span><span id="line.272">                    for (i = 0; i &lt; context_numBits; i++) {</span>
-<span class="source-line-no">273</span><span id="line.273">                        context_data_val = (context_data_val &lt;&lt; 1) | value;</span>
-<span class="source-line-no">274</span><span id="line.274">                        if (context_data_position == bitsPerChar - 1) {</span>
-<span class="source-line-no">275</span><span id="line.275">                            context_data_position = 0;</span>
-<span class="source-line-no">276</span><span id="line.276">                            context_data.append((char) (((getCharFromInt == null) ? context_data_val : getCharFromInt[context_data_val]) + offset));</span>
-<span class="source-line-no">277</span><span id="line.277">                            context_data_val = 0;</span>
-<span class="source-line-no">278</span><span id="line.278">                        } else {</span>
-<span class="source-line-no">279</span><span id="line.279">                            context_data_position++;</span>
-<span class="source-line-no">280</span><span id="line.280">                        }</span>
-<span class="source-line-no">281</span><span id="line.281">                        value = 0;</span>
-<span class="source-line-no">282</span><span id="line.282">                    }</span>
-<span class="source-line-no">283</span><span id="line.283">                    value = context_w.charAt(0);</span>
-<span class="source-line-no">284</span><span id="line.284">                    for (i = 0; i &lt; 16; i++) {</span>
-<span class="source-line-no">285</span><span id="line.285">                        context_data_val = (context_data_val &lt;&lt; 1) | (value &amp; 1);</span>
-<span class="source-line-no">286</span><span id="line.286">                        if (context_data_position == bitsPerChar - 1) {</span>
-<span class="source-line-no">287</span><span id="line.287">                            context_data_position = 0;</span>
-<span class="source-line-no">288</span><span id="line.288">                            context_data.append((char) (((getCharFromInt == null) ? context_data_val : getCharFromInt[context_data_val]) + offset));</span>
-<span class="source-line-no">289</span><span id="line.289">                            context_data_val = 0;</span>
-<span class="source-line-no">290</span><span id="line.290">                        } else {</span>
-<span class="source-line-no">291</span><span id="line.291">                            context_data_position++;</span>
-<span class="source-line-no">292</span><span id="line.292">                        }</span>
-<span class="source-line-no">293</span><span id="line.293">                        value &gt;&gt;= 1;</span>
-<span class="source-line-no">294</span><span id="line.294">                    }</span>
-<span class="source-line-no">295</span><span id="line.295">                }</span>
-<span class="source-line-no">296</span><span id="line.296"></span>
-<span class="source-line-no">297</span><span id="line.297">                context_dictionaryToCreate.remove(context_w);</span>
-<span class="source-line-no">298</span><span id="line.298">            } else {</span>
-<span class="source-line-no">299</span><span id="line.299">                value = context_dictionary.get(context_w);</span>
-<span class="source-line-no">300</span><span id="line.300">                for (i = 0; i &lt; context_numBits; i++) {</span>
-<span class="source-line-no">301</span><span id="line.301">                    context_data_val = (context_data_val &lt;&lt; 1) | (value &amp; 1);</span>
-<span class="source-line-no">302</span><span id="line.302">                    if (context_data_position == bitsPerChar - 1) {</span>
-<span class="source-line-no">303</span><span id="line.303">                        context_data_position = 0;</span>
-<span class="source-line-no">304</span><span id="line.304">                        context_data.append((char) (((getCharFromInt == null) ? context_data_val : getCharFromInt[context_data_val]) + offset));</span>
-<span class="source-line-no">305</span><span id="line.305">                        context_data_val = 0;</span>
-<span class="source-line-no">306</span><span id="line.306">                    } else {</span>
-<span class="source-line-no">307</span><span id="line.307">                        context_data_position++;</span>
-<span class="source-line-no">308</span><span id="line.308">                    }</span>
-<span class="source-line-no">309</span><span id="line.309">                    value &gt;&gt;= 1;</span>
-<span class="source-line-no">310</span><span id="line.310">                }</span>
+<span class="source-line-no">073</span><span id="line.73">        return _decompress(compressed.length(), compressed, valStrBase64);</span>
+<span class="source-line-no">074</span><span id="line.74">    }</span>
+<span class="source-line-no">075</span><span id="line.75"></span>
+<span class="source-line-no">076</span><span id="line.76">    /**</span>
+<span class="source-line-no">077</span><span id="line.77">     * Compresses a String using the properties of UTF-16 encoding to store approximately 15 bits of LZW-compressed text</span>
+<span class="source-line-no">078</span><span id="line.78">     * in each 2-byte Unicode character, which does particularly well with ASCII text and can be smaller than UTF-8 in</span>
+<span class="source-line-no">079</span><span id="line.79">     * some cases, especially where each char must be stored as UTF-16, e.g. Java Strings or browser-based LocalStorage.</span>
+<span class="source-line-no">080</span><span id="line.80">     * @param uncompressed an uncompressed String to encode</span>
+<span class="source-line-no">081</span><span id="line.81">     * @return the encoded, compressed String</span>
+<span class="source-line-no">082</span><span id="line.82">     */</span>
+<span class="source-line-no">083</span><span id="line.83">    public static String compressToUTF16(String uncompressed) {</span>
+<span class="source-line-no">084</span><span id="line.84">        if (uncompressed == null)</span>
+<span class="source-line-no">085</span><span id="line.85">            return null;</span>
+<span class="source-line-no">086</span><span id="line.86">        return _compress(uncompressed, 15, 32) + " ";</span>
+<span class="source-line-no">087</span><span id="line.87">    }</span>
+<span class="source-line-no">088</span><span id="line.88">    /**</span>
+<span class="source-line-no">089</span><span id="line.89">     * Decompresses a String that had been compressed with {@link #compressToUTF16(String)}.</span>
+<span class="source-line-no">090</span><span id="line.90">     * @param compressed a UTF16-encoded (as by {@link #compressToUTF16(String)}), compressed String</span>
+<span class="source-line-no">091</span><span id="line.91">     * @return the original uncompressed version of the String</span>
+<span class="source-line-no">092</span><span id="line.92">     */</span>
+<span class="source-line-no">093</span><span id="line.93">    public static String decompressFromUTF16(String compressed) {</span>
+<span class="source-line-no">094</span><span id="line.94">        if (compressed == null)</span>
+<span class="source-line-no">095</span><span id="line.95">            return null;</span>
+<span class="source-line-no">096</span><span id="line.96">        if (compressed.length() == 0)</span>
+<span class="source-line-no">097</span><span id="line.97">            return "";</span>
+<span class="source-line-no">098</span><span id="line.98">        return _decompress(compressed.length(), 16384, compressed, -32);</span>
+<span class="source-line-no">099</span><span id="line.99">    }</span>
+<span class="source-line-no">100</span><span id="line.100"></span>
+<span class="source-line-no">101</span><span id="line.101">    /**</span>
+<span class="source-line-no">102</span><span id="line.102">     * Compress a String using LZ-String encoding but only using valid URI component characters ('A'-'Z', 'a'-'z',</span>
+<span class="source-line-no">103</span><span id="line.103">     * '0'-'9', '+', '-', and possibly '$').</span>
+<span class="source-line-no">104</span><span id="line.104">     * @param uncompressed an uncompressed String to encode</span>
+<span class="source-line-no">105</span><span id="line.105">     * @return the encoded, compressed String</span>
+<span class="source-line-no">106</span><span id="line.106">     */</span>
+<span class="source-line-no">107</span><span id="line.107">    public static String compressToEncodedURIComponent(String uncompressed) {</span>
+<span class="source-line-no">108</span><span id="line.108">        if (uncompressed == null)</span>
+<span class="source-line-no">109</span><span id="line.109">            return null;</span>
+<span class="source-line-no">110</span><span id="line.110">        return _compress(uncompressed, 6, keyStrUriSafe);</span>
+<span class="source-line-no">111</span><span id="line.111">    }</span>
+<span class="source-line-no">112</span><span id="line.112">    /**</span>
+<span class="source-line-no">113</span><span id="line.113">     * Decompresses a String that had been compressed with {@link #compressToEncodedURIComponent(String)}.</span>
+<span class="source-line-no">114</span><span id="line.114">     * @param compressed a URI-encoded, compressed String</span>
+<span class="source-line-no">115</span><span id="line.115">     * @return the original uncompressed version of the String</span>
+<span class="source-line-no">116</span><span id="line.116">     */</span>
+<span class="source-line-no">117</span><span id="line.117">    public static String decompressFromEncodedURIComponent(String compressed) {</span>
+<span class="source-line-no">118</span><span id="line.118">        if (compressed == null) return null;</span>
+<span class="source-line-no">119</span><span id="line.119">        if (compressed.length() == 0) return "";</span>
+<span class="source-line-no">120</span><span id="line.120">        return _decompress(compressed.length(), compressed, valStrUriSafe);</span>
+<span class="source-line-no">121</span><span id="line.121">    }</span>
+<span class="source-line-no">122</span><span id="line.122"></span>
+<span class="source-line-no">123</span><span id="line.123">    /**</span>
+<span class="source-line-no">124</span><span id="line.124">     * Compresses a String as tightly as possible by using 16 bits of each 16-bit character, which can infrequently</span>
+<span class="source-line-no">125</span><span id="line.125">     * result in invalid UTF-16 codepoints, but that may not matter for all applications.</span>
+<span class="source-line-no">126</span><span id="line.126">     * @param uncompressed an uncompressed String to encode</span>
+<span class="source-line-no">127</span><span id="line.127">     * @return the encoded, compressed String</span>
+<span class="source-line-no">128</span><span id="line.128">     */</span>
+<span class="source-line-no">129</span><span id="line.129">    public static String compress(String uncompressed) {</span>
+<span class="source-line-no">130</span><span id="line.130">        return _compress(uncompressed, 16, 0);</span>
+<span class="source-line-no">131</span><span id="line.131">    }</span>
+<span class="source-line-no">132</span><span id="line.132"></span>
+<span class="source-line-no">133</span><span id="line.133">    private static String _compress(String uncompressedStr, int bitsPerChar, char[] getCharFromInt) {</span>
+<span class="source-line-no">134</span><span id="line.134">        if (uncompressedStr == null) return null;</span>
+<span class="source-line-no">135</span><span id="line.135">        if (uncompressedStr.isEmpty()) return "";</span>
+<span class="source-line-no">136</span><span id="line.136">        int i, value;</span>
+<span class="source-line-no">137</span><span id="line.137">        HashMap&lt;String, Integer&gt; context_dictionary = new HashMap&lt;&gt;(256, 0.5f);</span>
+<span class="source-line-no">138</span><span id="line.138">        HashSet&lt;String&gt; context_dictionaryToCreate = new HashSet&lt;&gt;(256, 0.5f);</span>
+<span class="source-line-no">139</span><span id="line.139">        String context_c;</span>
+<span class="source-line-no">140</span><span id="line.140">        String context_wc;</span>
+<span class="source-line-no">141</span><span id="line.141">        String context_w = "";</span>
+<span class="source-line-no">142</span><span id="line.142">        int context_enlargeIn = 2; // Compensate for the first entry which should not count</span>
+<span class="source-line-no">143</span><span id="line.143">        int context_dictSize = 3;</span>
+<span class="source-line-no">144</span><span id="line.144">        int context_numBits = 2;</span>
+<span class="source-line-no">145</span><span id="line.145">        StringBuilder context_data = new StringBuilder(uncompressedStr.length() &gt;&gt;&gt; 1);</span>
+<span class="source-line-no">146</span><span id="line.146">        int context_data_val = 0;</span>
+<span class="source-line-no">147</span><span id="line.147">        int context_data_position = 0;</span>
+<span class="source-line-no">148</span><span id="line.148">        int ii;</span>
+<span class="source-line-no">149</span><span id="line.149"></span>
+<span class="source-line-no">150</span><span id="line.150">        int uncompressedLength = uncompressedStr.length();</span>
+<span class="source-line-no">151</span><span id="line.151">        for (ii = 0; ii &lt; uncompressedLength; ii++) {</span>
+<span class="source-line-no">152</span><span id="line.152">            context_c = String.valueOf(uncompressedStr.charAt(ii));</span>
+<span class="source-line-no">153</span><span id="line.153">            if (!context_dictionary.containsKey(context_c)) {</span>
+<span class="source-line-no">154</span><span id="line.154">                context_dictionary.put(context_c, context_dictSize++);</span>
+<span class="source-line-no">155</span><span id="line.155">                context_dictionaryToCreate.add(context_c);</span>
+<span class="source-line-no">156</span><span id="line.156">            }</span>
+<span class="source-line-no">157</span><span id="line.157"></span>
+<span class="source-line-no">158</span><span id="line.158">            context_wc = context_w + context_c;</span>
+<span class="source-line-no">159</span><span id="line.159">            if (context_dictionary.containsKey(context_wc)) {</span>
+<span class="source-line-no">160</span><span id="line.160">                context_w = context_wc;</span>
+<span class="source-line-no">161</span><span id="line.161">            } else {</span>
+<span class="source-line-no">162</span><span id="line.162">                if (context_dictionaryToCreate.contains(context_w)) {</span>
+<span class="source-line-no">163</span><span id="line.163">                    if ((value = context_w.charAt(0)) &lt; 256) {</span>
+<span class="source-line-no">164</span><span id="line.164">                        for (i = 0; i &lt; context_numBits; i++) {</span>
+<span class="source-line-no">165</span><span id="line.165">                            context_data_val = (context_data_val &lt;&lt; 1);</span>
+<span class="source-line-no">166</span><span id="line.166">                            if (context_data_position == bitsPerChar - 1) {</span>
+<span class="source-line-no">167</span><span id="line.167">                                context_data_position = 0;</span>
+<span class="source-line-no">168</span><span id="line.168">                                context_data.append(getCharFromInt[context_data_val]);</span>
+<span class="source-line-no">169</span><span id="line.169">                                context_data_val = 0;</span>
+<span class="source-line-no">170</span><span id="line.170">                            } else {</span>
+<span class="source-line-no">171</span><span id="line.171">                                context_data_position++;</span>
+<span class="source-line-no">172</span><span id="line.172">                            }</span>
+<span class="source-line-no">173</span><span id="line.173">                        }</span>
+<span class="source-line-no">174</span><span id="line.174">                        for (i = 0; i &lt; 8; i++) {</span>
+<span class="source-line-no">175</span><span id="line.175">                            context_data_val = (context_data_val &lt;&lt; 1) | (value &amp; 1);</span>
+<span class="source-line-no">176</span><span id="line.176">                            if (context_data_position == bitsPerChar - 1) {</span>
+<span class="source-line-no">177</span><span id="line.177">                                context_data_position = 0;</span>
+<span class="source-line-no">178</span><span id="line.178">                                context_data.append(getCharFromInt[context_data_val]);</span>
+<span class="source-line-no">179</span><span id="line.179">                                context_data_val = 0;</span>
+<span class="source-line-no">180</span><span id="line.180">                            } else {</span>
+<span class="source-line-no">181</span><span id="line.181">                                context_data_position++;</span>
+<span class="source-line-no">182</span><span id="line.182">                            }</span>
+<span class="source-line-no">183</span><span id="line.183">                            value &gt;&gt;= 1;</span>
+<span class="source-line-no">184</span><span id="line.184">                        }</span>
+<span class="source-line-no">185</span><span id="line.185">                    } else {</span>
+<span class="source-line-no">186</span><span id="line.186">                        value = 1;</span>
+<span class="source-line-no">187</span><span id="line.187">                        for (i = 0; i &lt; context_numBits; i++) {</span>
+<span class="source-line-no">188</span><span id="line.188">                            context_data_val = (context_data_val &lt;&lt; 1) | value;</span>
+<span class="source-line-no">189</span><span id="line.189">                            if (context_data_position == bitsPerChar - 1) {</span>
+<span class="source-line-no">190</span><span id="line.190">                                context_data_position = 0;</span>
+<span class="source-line-no">191</span><span id="line.191">                                context_data.append(getCharFromInt[context_data_val]);</span>
+<span class="source-line-no">192</span><span id="line.192">                                context_data_val = 0;</span>
+<span class="source-line-no">193</span><span id="line.193">                            } else {</span>
+<span class="source-line-no">194</span><span id="line.194">                                context_data_position++;</span>
+<span class="source-line-no">195</span><span id="line.195">                            }</span>
+<span class="source-line-no">196</span><span id="line.196">                            value = 0;</span>
+<span class="source-line-no">197</span><span id="line.197">                        }</span>
+<span class="source-line-no">198</span><span id="line.198">                        value = context_w.charAt(0);</span>
+<span class="source-line-no">199</span><span id="line.199">                        for (i = 0; i &lt; 16; i++) {</span>
+<span class="source-line-no">200</span><span id="line.200">                            context_data_val = (context_data_val &lt;&lt; 1) | (value &amp; 1);</span>
+<span class="source-line-no">201</span><span id="line.201">                            if (context_data_position == bitsPerChar - 1) {</span>
+<span class="source-line-no">202</span><span id="line.202">                                context_data_position = 0;</span>
+<span class="source-line-no">203</span><span id="line.203">                                context_data.append(getCharFromInt[context_data_val]);</span>
+<span class="source-line-no">204</span><span id="line.204">                                context_data_val = 0;</span>
+<span class="source-line-no">205</span><span id="line.205">                            } else {</span>
+<span class="source-line-no">206</span><span id="line.206">                                context_data_position++;</span>
+<span class="source-line-no">207</span><span id="line.207">                            }</span>
+<span class="source-line-no">208</span><span id="line.208">                            value &gt;&gt;= 1;</span>
+<span class="source-line-no">209</span><span id="line.209">                        }</span>
+<span class="source-line-no">210</span><span id="line.210">                    }</span>
+<span class="source-line-no">211</span><span id="line.211">                    context_enlargeIn--;</span>
+<span class="source-line-no">212</span><span id="line.212">                    if (context_enlargeIn == 0) {</span>
+<span class="source-line-no">213</span><span id="line.213">                        context_enlargeIn = 1 &lt;&lt; context_numBits++;</span>
+<span class="source-line-no">214</span><span id="line.214">                    }</span>
+<span class="source-line-no">215</span><span id="line.215">                    context_dictionaryToCreate.remove(context_w);</span>
+<span class="source-line-no">216</span><span id="line.216">                } else {</span>
+<span class="source-line-no">217</span><span id="line.217">                    value = context_dictionary.get(context_w);</span>
+<span class="source-line-no">218</span><span id="line.218">                    for (i = 0; i &lt; context_numBits; i++) {</span>
+<span class="source-line-no">219</span><span id="line.219">                        context_data_val = (context_data_val &lt;&lt; 1) | (value &amp; 1);</span>
+<span class="source-line-no">220</span><span id="line.220">                        if (context_data_position == bitsPerChar - 1) {</span>
+<span class="source-line-no">221</span><span id="line.221">                            context_data_position = 0;</span>
+<span class="source-line-no">222</span><span id="line.222">                            context_data.append(getCharFromInt[context_data_val]);</span>
+<span class="source-line-no">223</span><span id="line.223">                            context_data_val = 0;</span>
+<span class="source-line-no">224</span><span id="line.224">                        } else {</span>
+<span class="source-line-no">225</span><span id="line.225">                            context_data_position++;</span>
+<span class="source-line-no">226</span><span id="line.226">                        }</span>
+<span class="source-line-no">227</span><span id="line.227">                        value &gt;&gt;= 1;</span>
+<span class="source-line-no">228</span><span id="line.228">                    }</span>
+<span class="source-line-no">229</span><span id="line.229"></span>
+<span class="source-line-no">230</span><span id="line.230">                }</span>
+<span class="source-line-no">231</span><span id="line.231">                context_enlargeIn--;</span>
+<span class="source-line-no">232</span><span id="line.232">                if (context_enlargeIn == 0) {</span>
+<span class="source-line-no">233</span><span id="line.233">                    context_enlargeIn = 1 &lt;&lt; context_numBits++;</span>
+<span class="source-line-no">234</span><span id="line.234">                }</span>
+<span class="source-line-no">235</span><span id="line.235">                // Add wc to the dictionary.</span>
+<span class="source-line-no">236</span><span id="line.236">                context_dictionary.put(context_wc, context_dictSize++);</span>
+<span class="source-line-no">237</span><span id="line.237">                context_w = context_c;</span>
+<span class="source-line-no">238</span><span id="line.238">            }</span>
+<span class="source-line-no">239</span><span id="line.239">        }</span>
+<span class="source-line-no">240</span><span id="line.240"></span>
+<span class="source-line-no">241</span><span id="line.241">        // Output the code for w.</span>
+<span class="source-line-no">242</span><span id="line.242">        if (!context_w.isEmpty()) {</span>
+<span class="source-line-no">243</span><span id="line.243">            if (context_dictionaryToCreate.contains(context_w)) {</span>
+<span class="source-line-no">244</span><span id="line.244">                if (context_w.charAt(0) &lt; 256) {</span>
+<span class="source-line-no">245</span><span id="line.245">                    for (i = 0; i &lt; context_numBits; i++) {</span>
+<span class="source-line-no">246</span><span id="line.246">                        context_data_val = (context_data_val &lt;&lt; 1);</span>
+<span class="source-line-no">247</span><span id="line.247">                        if (context_data_position == bitsPerChar - 1) {</span>
+<span class="source-line-no">248</span><span id="line.248">                            context_data_position = 0;</span>
+<span class="source-line-no">249</span><span id="line.249">                            context_data.append(getCharFromInt[context_data_val]);</span>
+<span class="source-line-no">250</span><span id="line.250">                            context_data_val = 0;</span>
+<span class="source-line-no">251</span><span id="line.251">                        } else {</span>
+<span class="source-line-no">252</span><span id="line.252">                            context_data_position++;</span>
+<span class="source-line-no">253</span><span id="line.253">                        }</span>
+<span class="source-line-no">254</span><span id="line.254">                    }</span>
+<span class="source-line-no">255</span><span id="line.255">                    value = context_w.charAt(0);</span>
+<span class="source-line-no">256</span><span id="line.256">                    for (i = 0; i &lt; 8; i++) {</span>
+<span class="source-line-no">257</span><span id="line.257">                        context_data_val = (context_data_val &lt;&lt; 1) | (value &amp; 1);</span>
+<span class="source-line-no">258</span><span id="line.258">                        if (context_data_position == bitsPerChar - 1) {</span>
+<span class="source-line-no">259</span><span id="line.259">                            context_data_position = 0;</span>
+<span class="source-line-no">260</span><span id="line.260">                            context_data.append(getCharFromInt[context_data_val]);</span>
+<span class="source-line-no">261</span><span id="line.261">                            context_data_val = 0;</span>
+<span class="source-line-no">262</span><span id="line.262">                        } else {</span>
+<span class="source-line-no">263</span><span id="line.263">                            context_data_position++;</span>
+<span class="source-line-no">264</span><span id="line.264">                        }</span>
+<span class="source-line-no">265</span><span id="line.265">                        value &gt;&gt;= 1;</span>
+<span class="source-line-no">266</span><span id="line.266">                    }</span>
+<span class="source-line-no">267</span><span id="line.267">                } else {</span>
+<span class="source-line-no">268</span><span id="line.268">                    value = 1;</span>
+<span class="source-line-no">269</span><span id="line.269">                    for (i = 0; i &lt; context_numBits; i++) {</span>
+<span class="source-line-no">270</span><span id="line.270">                        context_data_val = (context_data_val &lt;&lt; 1) | value;</span>
+<span class="source-line-no">271</span><span id="line.271">                        if (context_data_position == bitsPerChar - 1) {</span>
+<span class="source-line-no">272</span><span id="line.272">                            context_data_position = 0;</span>
+<span class="source-line-no">273</span><span id="line.273">                            context_data.append(getCharFromInt[context_data_val]);</span>
+<span class="source-line-no">274</span><span id="line.274">                            context_data_val = 0;</span>
+<span class="source-line-no">275</span><span id="line.275">                        } else {</span>
+<span class="source-line-no">276</span><span id="line.276">                            context_data_position++;</span>
+<span class="source-line-no">277</span><span id="line.277">                        }</span>
+<span class="source-line-no">278</span><span id="line.278">                        value = 0;</span>
+<span class="source-line-no">279</span><span id="line.279">                    }</span>
+<span class="source-line-no">280</span><span id="line.280">                    value = context_w.charAt(0);</span>
+<span class="source-line-no">281</span><span id="line.281">                    for (i = 0; i &lt; 16; i++) {</span>
+<span class="source-line-no">282</span><span id="line.282">                        context_data_val = (context_data_val &lt;&lt; 1) | (value &amp; 1);</span>
+<span class="source-line-no">283</span><span id="line.283">                        if (context_data_position == bitsPerChar - 1) {</span>
+<span class="source-line-no">284</span><span id="line.284">                            context_data_position = 0;</span>
+<span class="source-line-no">285</span><span id="line.285">                            context_data.append(getCharFromInt[context_data_val]);</span>
+<span class="source-line-no">286</span><span id="line.286">                            context_data_val = 0;</span>
+<span class="source-line-no">287</span><span id="line.287">                        } else {</span>
+<span class="source-line-no">288</span><span id="line.288">                            context_data_position++;</span>
+<span class="source-line-no">289</span><span id="line.289">                        }</span>
+<span class="source-line-no">290</span><span id="line.290">                        value &gt;&gt;= 1;</span>
+<span class="source-line-no">291</span><span id="line.291">                    }</span>
+<span class="source-line-no">292</span><span id="line.292">                }</span>
+<span class="source-line-no">293</span><span id="line.293"></span>
+<span class="source-line-no">294</span><span id="line.294">                context_dictionaryToCreate.remove(context_w);</span>
+<span class="source-line-no">295</span><span id="line.295">            } else {</span>
+<span class="source-line-no">296</span><span id="line.296">                value = context_dictionary.get(context_w);</span>
+<span class="source-line-no">297</span><span id="line.297">                for (i = 0; i &lt; context_numBits; i++) {</span>
+<span class="source-line-no">298</span><span id="line.298">                    context_data_val = (context_data_val &lt;&lt; 1) | (value &amp; 1);</span>
+<span class="source-line-no">299</span><span id="line.299">                    if (context_data_position == bitsPerChar - 1) {</span>
+<span class="source-line-no">300</span><span id="line.300">                        context_data_position = 0;</span>
+<span class="source-line-no">301</span><span id="line.301">                        context_data.append(getCharFromInt[context_data_val]);</span>
+<span class="source-line-no">302</span><span id="line.302">                        context_data_val = 0;</span>
+<span class="source-line-no">303</span><span id="line.303">                    } else {</span>
+<span class="source-line-no">304</span><span id="line.304">                        context_data_position++;</span>
+<span class="source-line-no">305</span><span id="line.305">                    }</span>
+<span class="source-line-no">306</span><span id="line.306">                    value &gt;&gt;= 1;</span>
+<span class="source-line-no">307</span><span id="line.307">                }</span>
+<span class="source-line-no">308</span><span id="line.308"></span>
+<span class="source-line-no">309</span><span id="line.309">            }</span>
+<span class="source-line-no">310</span><span id="line.310">        }</span>
 <span class="source-line-no">311</span><span id="line.311"></span>
-<span class="source-line-no">312</span><span id="line.312">            }</span>
-<span class="source-line-no">313</span><span id="line.313">        }</span>
-<span class="source-line-no">314</span><span id="line.314"></span>
-<span class="source-line-no">315</span><span id="line.315">        // Mark the end of the stream</span>
-<span class="source-line-no">316</span><span id="line.316">        value = 2;</span>
-<span class="source-line-no">317</span><span id="line.317">        for (i = 0; i &lt; context_numBits; i++) {</span>
-<span class="source-line-no">318</span><span id="line.318">            context_data_val = (context_data_val &lt;&lt; 1) | (value &amp; 1);</span>
-<span class="source-line-no">319</span><span id="line.319">            if (context_data_position == bitsPerChar - 1) {</span>
-<span class="source-line-no">320</span><span id="line.320">                context_data_position = 0;</span>
-<span class="source-line-no">321</span><span id="line.321">                context_data.append((char) (((getCharFromInt == null) ? context_data_val : getCharFromInt[context_data_val]) + offset));</span>
-<span class="source-line-no">322</span><span id="line.322">                context_data_val = 0;</span>
-<span class="source-line-no">323</span><span id="line.323">            } else {</span>
-<span class="source-line-no">324</span><span id="line.324">                context_data_position++;</span>
-<span class="source-line-no">325</span><span id="line.325">            }</span>
-<span class="source-line-no">326</span><span id="line.326">            value &gt;&gt;= 1;</span>
-<span class="source-line-no">327</span><span id="line.327">        }</span>
-<span class="source-line-no">328</span><span id="line.328"></span>
-<span class="source-line-no">329</span><span id="line.329">        // Flush the last char</span>
-<span class="source-line-no">330</span><span id="line.330">        while (true) {</span>
-<span class="source-line-no">331</span><span id="line.331">            context_data_val = (context_data_val &lt;&lt; 1);</span>
-<span class="source-line-no">332</span><span id="line.332">            if (context_data_position == bitsPerChar - 1) {</span>
-<span class="source-line-no">333</span><span id="line.333">                context_data.append((char) (((getCharFromInt == null) ? context_data_val : getCharFromInt[context_data_val]) + offset));</span>
-<span class="source-line-no">334</span><span id="line.334">                break;</span>
-<span class="source-line-no">335</span><span id="line.335">            } else</span>
-<span class="source-line-no">336</span><span id="line.336">                context_data_position++;</span>
-<span class="source-line-no">337</span><span id="line.337">        }</span>
-<span class="source-line-no">338</span><span id="line.338">        return context_data.toString();</span>
-<span class="source-line-no">339</span><span id="line.339">    }</span>
-<span class="source-line-no">340</span><span id="line.340">    /**</span>
-<span class="source-line-no">341</span><span id="line.341">     * Decompresses a String that had been compressed with {@link #compress(String)}.</span>
-<span class="source-line-no">342</span><span id="line.342">     * @param compressed a compressed String using the default encoding from {@link #compress(String)}</span>
-<span class="source-line-no">343</span><span id="line.343">     * @return the original uncompressed version of the String</span>
-<span class="source-line-no">344</span><span id="line.344">     */</span>
-<span class="source-line-no">345</span><span id="line.345">    public static String decompress(final String compressed) {</span>
-<span class="source-line-no">346</span><span id="line.346">        if (compressed == null)</span>
-<span class="source-line-no">347</span><span id="line.347">            return null;</span>
-<span class="source-line-no">348</span><span id="line.348">        if (compressed.isEmpty())</span>
-<span class="source-line-no">349</span><span id="line.349">            return "";</span>
-<span class="source-line-no">350</span><span id="line.350">        return _decompress(compressed.length(), 32768, compressed.toCharArray(), null, 0);</span>
-<span class="source-line-no">351</span><span id="line.351">    }</span>
-<span class="source-line-no">352</span><span id="line.352"></span>
-<span class="source-line-no">353</span><span id="line.353">    private static String _decompress(int length, int resetValue, char[] getNextValue, char[] modify, int offset) {</span>
-<span class="source-line-no">354</span><span id="line.354">        if(getNextValue == null)</span>
-<span class="source-line-no">355</span><span id="line.355">            return null;</span>
-<span class="source-line-no">356</span><span id="line.356">        if(getNextValue.length == 0)</span>
-<span class="source-line-no">357</span><span id="line.357">            return "";</span>
-<span class="source-line-no">358</span><span id="line.358">        ArrayList&lt;String&gt; dictionary = new ArrayList&lt;&gt;();</span>
-<span class="source-line-no">359</span><span id="line.359">        int enlargeIn = 4, dictSize = 4, numBits = 3, position = resetValue, index = 1, resb, maxpower, power;</span>
-<span class="source-line-no">360</span><span id="line.360">        String entry, w, c;</span>
-<span class="source-line-no">361</span><span id="line.361">        ArrayList&lt;String&gt; result = new ArrayList&lt;&gt;();</span>
-<span class="source-line-no">362</span><span id="line.362">        char bits, val = (modify == null) ? (char) (getNextValue[0] + offset) : modify[getNextValue[0]];</span>
-<span class="source-line-no">363</span><span id="line.363"></span>
-<span class="source-line-no">364</span><span id="line.364">        for (char i = 0; i &lt; 3; i++) {</span>
-<span class="source-line-no">365</span><span id="line.365">            dictionary.add(i, String.valueOf(i));</span>
-<span class="source-line-no">366</span><span id="line.366">        }</span>
-<span class="source-line-no">367</span><span id="line.367"></span>
-<span class="source-line-no">368</span><span id="line.368">        bits = 0;</span>
-<span class="source-line-no">369</span><span id="line.369">        maxpower = 2;</span>
-<span class="source-line-no">370</span><span id="line.370">        power = 0;</span>
-<span class="source-line-no">371</span><span id="line.371">        while (power != maxpower) {</span>
-<span class="source-line-no">372</span><span id="line.372">            resb = val &amp; position;</span>
-<span class="source-line-no">373</span><span id="line.373">            position &gt;&gt;= 1;</span>
-<span class="source-line-no">374</span><span id="line.374">            if (position == 0) {</span>
-<span class="source-line-no">375</span><span id="line.375">                position = resetValue;</span>
-<span class="source-line-no">376</span><span id="line.376">                val = (modify == null) ? (char) (getNextValue[index++] + offset) : modify[getNextValue[index++]];</span>
-<span class="source-line-no">377</span><span id="line.377">            }</span>
-<span class="source-line-no">378</span><span id="line.378">            bits |= (resb &gt; 0 ? 1 : 0) &lt;&lt; power++;</span>
-<span class="source-line-no">379</span><span id="line.379">        }</span>
-<span class="source-line-no">380</span><span id="line.380"></span>
-<span class="source-line-no">381</span><span id="line.381">        switch (bits) {</span>
-<span class="source-line-no">382</span><span id="line.382">            case 0:</span>
-<span class="source-line-no">383</span><span id="line.383">                bits = 0;</span>
-<span class="source-line-no">384</span><span id="line.384">                maxpower = 8;</span>
-<span class="source-line-no">385</span><span id="line.385">                power = 0;</span>
-<span class="source-line-no">386</span><span id="line.386">                while (power != maxpower) {</span>
-<span class="source-line-no">387</span><span id="line.387">                    resb = val &amp; position;</span>
-<span class="source-line-no">388</span><span id="line.388">                    position &gt;&gt;= 1;</span>
-<span class="source-line-no">389</span><span id="line.389">                    if (position == 0) {</span>
-<span class="source-line-no">390</span><span id="line.390">                        position = resetValue;</span>
-<span class="source-line-no">391</span><span id="line.391">                        val = (modify == null) ? (char) (getNextValue[index++] + offset) : modify[getNextValue[index++]];</span>
-<span class="source-line-no">392</span><span id="line.392">                    }</span>
-<span class="source-line-no">393</span><span id="line.393">                    bits |= (resb &gt; 0 ? 1 : 0) &lt;&lt; power++;</span>
-<span class="source-line-no">394</span><span id="line.394">                }</span>
-<span class="source-line-no">395</span><span id="line.395">                c = String.valueOf(bits);</span>
-<span class="source-line-no">396</span><span id="line.396">                break;</span>
-<span class="source-line-no">397</span><span id="line.397">            case 1:</span>
-<span class="source-line-no">398</span><span id="line.398">                bits = 0;</span>
-<span class="source-line-no">399</span><span id="line.399">                maxpower = 16;</span>
-<span class="source-line-no">400</span><span id="line.400">                power = 0;</span>
-<span class="source-line-no">401</span><span id="line.401">                while (power != maxpower) {</span>
-<span class="source-line-no">402</span><span id="line.402">                    resb = val &amp; position;</span>
-<span class="source-line-no">403</span><span id="line.403">                    position &gt;&gt;= 1;</span>
-<span class="source-line-no">404</span><span id="line.404">                    if (position == 0) {</span>
-<span class="source-line-no">405</span><span id="line.405">                        position = resetValue;</span>
-<span class="source-line-no">406</span><span id="line.406">                        val = (modify == null) ? (char) (getNextValue[index++] + offset) : modify[getNextValue[index++]];</span>
-<span class="source-line-no">407</span><span id="line.407">                    }</span>
-<span class="source-line-no">408</span><span id="line.408">                    bits |= (resb &gt; 0 ? 1 : 0) &lt;&lt; power++;</span>
-<span class="source-line-no">409</span><span id="line.409">                }</span>
-<span class="source-line-no">410</span><span id="line.410">                c = String.valueOf(bits);</span>
-<span class="source-line-no">411</span><span id="line.411">                break;</span>
-<span class="source-line-no">412</span><span id="line.412">            default:</span>
-<span class="source-line-no">413</span><span id="line.413">                return "";</span>
-<span class="source-line-no">414</span><span id="line.414">        }</span>
-<span class="source-line-no">415</span><span id="line.415">        dictionary.add(c);</span>
-<span class="source-line-no">416</span><span id="line.416">        w = c;</span>
-<span class="source-line-no">417</span><span id="line.417">        result.add(w);</span>
-<span class="source-line-no">418</span><span id="line.418">        while (true) {</span>
-<span class="source-line-no">419</span><span id="line.419">            if (index &gt; length) {</span>
-<span class="source-line-no">420</span><span id="line.420">                return "";</span>
-<span class="source-line-no">421</span><span id="line.421">            }</span>
-<span class="source-line-no">422</span><span id="line.422">            int cc = 0;</span>
-<span class="source-line-no">423</span><span id="line.423">            maxpower = numBits;</span>
-<span class="source-line-no">424</span><span id="line.424">            power = 0;</span>
-<span class="source-line-no">425</span><span id="line.425">            while (power != maxpower) {</span>
-<span class="source-line-no">426</span><span id="line.426">                resb = val &amp; position;</span>
-<span class="source-line-no">427</span><span id="line.427">                position &gt;&gt;= 1;</span>
-<span class="source-line-no">428</span><span id="line.428">                if (position == 0) {</span>
-<span class="source-line-no">429</span><span id="line.429">                    position = resetValue;</span>
-<span class="source-line-no">430</span><span id="line.430">                    val = (modify == null) ? (char) (getNextValue[index++] + offset) : modify[getNextValue[index++]];</span>
-<span class="source-line-no">431</span><span id="line.431">                }</span>
-<span class="source-line-no">432</span><span id="line.432">                cc |= (resb &gt; 0 ? 1 : 0) &lt;&lt; power++;</span>
-<span class="source-line-no">433</span><span id="line.433">            }</span>
-<span class="source-line-no">434</span><span id="line.434">            switch (cc) {</span>
-<span class="source-line-no">435</span><span id="line.435">                case 0:</span>
-<span class="source-line-no">436</span><span id="line.436">                    bits = 0;</span>
-<span class="source-line-no">437</span><span id="line.437">                    maxpower = 8;</span>
-<span class="source-line-no">438</span><span id="line.438">                    power = 0;</span>
-<span class="source-line-no">439</span><span id="line.439">                    while (power != maxpower) {</span>
-<span class="source-line-no">440</span><span id="line.440">                        resb = val &amp; position;</span>
-<span class="source-line-no">441</span><span id="line.441">                        position &gt;&gt;= 1;</span>
-<span class="source-line-no">442</span><span id="line.442">                        if (position == 0) {</span>
-<span class="source-line-no">443</span><span id="line.443">                            position = resetValue;</span>
-<span class="source-line-no">444</span><span id="line.444">                            val = (modify == null) ? (char) (getNextValue[index++] + offset) : modify[getNextValue[index++]];</span>
-<span class="source-line-no">445</span><span id="line.445">                        }</span>
-<span class="source-line-no">446</span><span id="line.446">                        bits |= (resb &gt; 0 ? 1 : 0) &lt;&lt; power++;</span>
-<span class="source-line-no">447</span><span id="line.447">                    }</span>
-<span class="source-line-no">448</span><span id="line.448"></span>
-<span class="source-line-no">449</span><span id="line.449">                    dictionary.add(String.valueOf(bits));</span>
-<span class="source-line-no">450</span><span id="line.450">                    cc = dictSize++;</span>
-<span class="source-line-no">451</span><span id="line.451">                    enlargeIn--;</span>
-<span class="source-line-no">452</span><span id="line.452">                    break;</span>
-<span class="source-line-no">453</span><span id="line.453">                case 1:</span>
-<span class="source-line-no">454</span><span id="line.454">                    bits = 0;</span>
-<span class="source-line-no">455</span><span id="line.455">                    maxpower = 16;</span>
-<span class="source-line-no">456</span><span id="line.456">                    power = 0;</span>
-<span class="source-line-no">457</span><span id="line.457">                    while (power != maxpower) {</span>
-<span class="source-line-no">458</span><span id="line.458">                        resb = val &amp; position;</span>
-<span class="source-line-no">459</span><span id="line.459">                        position &gt;&gt;= 1;</span>
-<span class="source-line-no">460</span><span id="line.460">                        if (position == 0) {</span>
-<span class="source-line-no">461</span><span id="line.461">                            position = resetValue;</span>
-<span class="source-line-no">462</span><span id="line.462">                            val = (modify == null) ? (char) (getNextValue[index++] + offset) : modify[getNextValue[index++]];</span>
-<span class="source-line-no">463</span><span id="line.463">                        }</span>
-<span class="source-line-no">464</span><span id="line.464">                        bits |= (resb &gt; 0 ? 1 : 0) &lt;&lt; power++;</span>
-<span class="source-line-no">465</span><span id="line.465">                    }</span>
-<span class="source-line-no">466</span><span id="line.466">                    dictionary.add(String.valueOf(bits));</span>
-<span class="source-line-no">467</span><span id="line.467">                    cc = dictSize++;</span>
-<span class="source-line-no">468</span><span id="line.468">                    enlargeIn--;</span>
-<span class="source-line-no">469</span><span id="line.469">                    break;</span>
-<span class="source-line-no">470</span><span id="line.470">                case 2:</span>
-<span class="source-line-no">471</span><span id="line.471">                    StringBuilder sb = new StringBuilder(result.size());</span>
-<span class="source-line-no">472</span><span id="line.472">                    for (String s : result)</span>
-<span class="source-line-no">473</span><span id="line.473">                        sb.append(s);</span>
-<span class="source-line-no">474</span><span id="line.474">                    return sb.toString();</span>
-<span class="source-line-no">475</span><span id="line.475">            }</span>
-<span class="source-line-no">476</span><span id="line.476"></span>
-<span class="source-line-no">477</span><span id="line.477">            if (enlargeIn == 0) {</span>
-<span class="source-line-no">478</span><span id="line.478">                enlargeIn = 1 &lt;&lt; numBits;</span>
-<span class="source-line-no">479</span><span id="line.479">                numBits++;</span>
-<span class="source-line-no">480</span><span id="line.480">            }</span>
-<span class="source-line-no">481</span><span id="line.481"></span>
-<span class="source-line-no">482</span><span id="line.482">            if (cc &lt; dictionary.size() &amp;&amp; dictionary.get(cc) != null) {</span>
-<span class="source-line-no">483</span><span id="line.483">                entry = dictionary.get(cc);</span>
-<span class="source-line-no">484</span><span id="line.484">            } else {</span>
-<span class="source-line-no">485</span><span id="line.485">                if (cc == dictSize) {</span>
-<span class="source-line-no">486</span><span id="line.486">                    entry = w + w.charAt(0);</span>
-<span class="source-line-no">487</span><span id="line.487">                } else {</span>
-<span class="source-line-no">488</span><span id="line.488">                    return "";</span>
-<span class="source-line-no">489</span><span id="line.489">                }</span>
-<span class="source-line-no">490</span><span id="line.490">            }</span>
-<span class="source-line-no">491</span><span id="line.491">            result.add(entry);</span>
-<span class="source-line-no">492</span><span id="line.492"></span>
-<span class="source-line-no">493</span><span id="line.493">            // Add w+entry[0] to the dictionary.</span>
-<span class="source-line-no">494</span><span id="line.494">            dictionary.add(w + entry.charAt(0));</span>
-<span class="source-line-no">495</span><span id="line.495">            dictSize++;</span>
-<span class="source-line-no">496</span><span id="line.496">            enlargeIn--;</span>
-<span class="source-line-no">497</span><span id="line.497"></span>
-<span class="source-line-no">498</span><span id="line.498">            w = entry;</span>
-<span class="source-line-no">499</span><span id="line.499"></span>
-<span class="source-line-no">500</span><span id="line.500">            if (enlargeIn == 0) {</span>
-<span class="source-line-no">501</span><span id="line.501">                enlargeIn = 1 &lt;&lt; numBits;</span>
-<span class="source-line-no">502</span><span id="line.502">                numBits++;</span>
-<span class="source-line-no">503</span><span id="line.503">            }</span>
-<span class="source-line-no">504</span><span id="line.504"></span>
-<span class="source-line-no">505</span><span id="line.505">        }</span>
-<span class="source-line-no">506</span><span id="line.506"></span>
-<span class="source-line-no">507</span><span id="line.507">    }</span>
-<span class="source-line-no">508</span><span id="line.508">}</span>
+<span class="source-line-no">312</span><span id="line.312">        // Mark the end of the stream</span>
+<span class="source-line-no">313</span><span id="line.313">        value = 2;</span>
+<span class="source-line-no">314</span><span id="line.314">        for (i = 0; i &lt; context_numBits; i++) {</span>
+<span class="source-line-no">315</span><span id="line.315">            context_data_val = (context_data_val &lt;&lt; 1) | (value &amp; 1);</span>
+<span class="source-line-no">316</span><span id="line.316">            if (context_data_position == bitsPerChar - 1) {</span>
+<span class="source-line-no">317</span><span id="line.317">                context_data_position = 0;</span>
+<span class="source-line-no">318</span><span id="line.318">                context_data.append(getCharFromInt[context_data_val]);</span>
+<span class="source-line-no">319</span><span id="line.319">                context_data_val = 0;</span>
+<span class="source-line-no">320</span><span id="line.320">            } else {</span>
+<span class="source-line-no">321</span><span id="line.321">                context_data_position++;</span>
+<span class="source-line-no">322</span><span id="line.322">            }</span>
+<span class="source-line-no">323</span><span id="line.323">            value &gt;&gt;= 1;</span>
+<span class="source-line-no">324</span><span id="line.324">        }</span>
+<span class="source-line-no">325</span><span id="line.325"></span>
+<span class="source-line-no">326</span><span id="line.326">        // Flush the last char</span>
+<span class="source-line-no">327</span><span id="line.327">        while (true) {</span>
+<span class="source-line-no">328</span><span id="line.328">            context_data_val = (context_data_val &lt;&lt; 1);</span>
+<span class="source-line-no">329</span><span id="line.329">            if (context_data_position == bitsPerChar - 1) {</span>
+<span class="source-line-no">330</span><span id="line.330">                context_data.append(getCharFromInt[context_data_val]);</span>
+<span class="source-line-no">331</span><span id="line.331">                break;</span>
+<span class="source-line-no">332</span><span id="line.332">            } else</span>
+<span class="source-line-no">333</span><span id="line.333">                context_data_position++;</span>
+<span class="source-line-no">334</span><span id="line.334">        }</span>
+<span class="source-line-no">335</span><span id="line.335">        return context_data.toString();</span>
+<span class="source-line-no">336</span><span id="line.336">    }</span>
+<span class="source-line-no">337</span><span id="line.337"></span>
+<span class="source-line-no">338</span><span id="line.338">    private static String _compress(String uncompressedStr, int bitsPerChar, int offset) {</span>
+<span class="source-line-no">339</span><span id="line.339">        if (uncompressedStr == null) return null;</span>
+<span class="source-line-no">340</span><span id="line.340">        if (uncompressedStr.isEmpty()) return "";</span>
+<span class="source-line-no">341</span><span id="line.341">        int i, value;</span>
+<span class="source-line-no">342</span><span id="line.342">        HashMap&lt;String, Integer&gt; context_dictionary = new HashMap&lt;&gt;(256, 0.5f);</span>
+<span class="source-line-no">343</span><span id="line.343">        HashSet&lt;String&gt; context_dictionaryToCreate = new HashSet&lt;&gt;(256, 0.5f);</span>
+<span class="source-line-no">344</span><span id="line.344">        String context_c;</span>
+<span class="source-line-no">345</span><span id="line.345">        String context_wc;</span>
+<span class="source-line-no">346</span><span id="line.346">        String context_w = "";</span>
+<span class="source-line-no">347</span><span id="line.347">        int context_enlargeIn = 2; // Compensate for the first entry which should not count</span>
+<span class="source-line-no">348</span><span id="line.348">        int context_dictSize = 3;</span>
+<span class="source-line-no">349</span><span id="line.349">        int context_numBits = 2;</span>
+<span class="source-line-no">350</span><span id="line.350">        StringBuilder context_data = new StringBuilder(uncompressedStr.length() &gt;&gt;&gt; 1);</span>
+<span class="source-line-no">351</span><span id="line.351">        int context_data_val = 0;</span>
+<span class="source-line-no">352</span><span id="line.352">        int context_data_position = 0;</span>
+<span class="source-line-no">353</span><span id="line.353">        int ii;</span>
+<span class="source-line-no">354</span><span id="line.354"></span>
+<span class="source-line-no">355</span><span id="line.355">        int uncompressedLength = uncompressedStr.length();</span>
+<span class="source-line-no">356</span><span id="line.356">        for (ii = 0; ii &lt; uncompressedLength; ii++) {</span>
+<span class="source-line-no">357</span><span id="line.357">            context_c = String.valueOf(uncompressedStr.charAt(ii));</span>
+<span class="source-line-no">358</span><span id="line.358">            if (!context_dictionary.containsKey(context_c)) {</span>
+<span class="source-line-no">359</span><span id="line.359">                context_dictionary.put(context_c, context_dictSize++);</span>
+<span class="source-line-no">360</span><span id="line.360">                context_dictionaryToCreate.add(context_c);</span>
+<span class="source-line-no">361</span><span id="line.361">            }</span>
+<span class="source-line-no">362</span><span id="line.362"></span>
+<span class="source-line-no">363</span><span id="line.363">            context_wc = context_w + context_c;</span>
+<span class="source-line-no">364</span><span id="line.364">            if (context_dictionary.containsKey(context_wc)) {</span>
+<span class="source-line-no">365</span><span id="line.365">                context_w = context_wc;</span>
+<span class="source-line-no">366</span><span id="line.366">            } else {</span>
+<span class="source-line-no">367</span><span id="line.367">                if (context_dictionaryToCreate.contains(context_w)) {</span>
+<span class="source-line-no">368</span><span id="line.368">                    if ((value = context_w.charAt(0)) &lt; 256) {</span>
+<span class="source-line-no">369</span><span id="line.369">                        for (i = 0; i &lt; context_numBits; i++) {</span>
+<span class="source-line-no">370</span><span id="line.370">                            context_data_val = (context_data_val &lt;&lt; 1);</span>
+<span class="source-line-no">371</span><span id="line.371">                            if (context_data_position == bitsPerChar - 1) {</span>
+<span class="source-line-no">372</span><span id="line.372">                                context_data_position = 0;</span>
+<span class="source-line-no">373</span><span id="line.373">                                context_data.append((char) (context_data_val + offset));</span>
+<span class="source-line-no">374</span><span id="line.374">                                context_data_val = 0;</span>
+<span class="source-line-no">375</span><span id="line.375">                            } else {</span>
+<span class="source-line-no">376</span><span id="line.376">                                context_data_position++;</span>
+<span class="source-line-no">377</span><span id="line.377">                            }</span>
+<span class="source-line-no">378</span><span id="line.378">                        }</span>
+<span class="source-line-no">379</span><span id="line.379">                        for (i = 0; i &lt; 8; i++) {</span>
+<span class="source-line-no">380</span><span id="line.380">                            context_data_val = (context_data_val &lt;&lt; 1) | (value &amp; 1);</span>
+<span class="source-line-no">381</span><span id="line.381">                            if (context_data_position == bitsPerChar - 1) {</span>
+<span class="source-line-no">382</span><span id="line.382">                                context_data_position = 0;</span>
+<span class="source-line-no">383</span><span id="line.383">                                context_data.append((char) (context_data_val + offset));</span>
+<span class="source-line-no">384</span><span id="line.384">                                context_data_val = 0;</span>
+<span class="source-line-no">385</span><span id="line.385">                            } else {</span>
+<span class="source-line-no">386</span><span id="line.386">                                context_data_position++;</span>
+<span class="source-line-no">387</span><span id="line.387">                            }</span>
+<span class="source-line-no">388</span><span id="line.388">                            value &gt;&gt;= 1;</span>
+<span class="source-line-no">389</span><span id="line.389">                        }</span>
+<span class="source-line-no">390</span><span id="line.390">                    } else {</span>
+<span class="source-line-no">391</span><span id="line.391">                        value = 1;</span>
+<span class="source-line-no">392</span><span id="line.392">                        for (i = 0; i &lt; context_numBits; i++) {</span>
+<span class="source-line-no">393</span><span id="line.393">                            context_data_val = (context_data_val &lt;&lt; 1) | value;</span>
+<span class="source-line-no">394</span><span id="line.394">                            if (context_data_position == bitsPerChar - 1) {</span>
+<span class="source-line-no">395</span><span id="line.395">                                context_data_position = 0;</span>
+<span class="source-line-no">396</span><span id="line.396">                                context_data.append((char) (context_data_val + offset));</span>
+<span class="source-line-no">397</span><span id="line.397">                                context_data_val = 0;</span>
+<span class="source-line-no">398</span><span id="line.398">                            } else {</span>
+<span class="source-line-no">399</span><span id="line.399">                                context_data_position++;</span>
+<span class="source-line-no">400</span><span id="line.400">                            }</span>
+<span class="source-line-no">401</span><span id="line.401">                            value = 0;</span>
+<span class="source-line-no">402</span><span id="line.402">                        }</span>
+<span class="source-line-no">403</span><span id="line.403">                        value = context_w.charAt(0);</span>
+<span class="source-line-no">404</span><span id="line.404">                        for (i = 0; i &lt; 16; i++) {</span>
+<span class="source-line-no">405</span><span id="line.405">                            context_data_val = (context_data_val &lt;&lt; 1) | (value &amp; 1);</span>
+<span class="source-line-no">406</span><span id="line.406">                            if (context_data_position == bitsPerChar - 1) {</span>
+<span class="source-line-no">407</span><span id="line.407">                                context_data_position = 0;</span>
+<span class="source-line-no">408</span><span id="line.408">                                context_data.append((char) (context_data_val + offset));</span>
+<span class="source-line-no">409</span><span id="line.409">                                context_data_val = 0;</span>
+<span class="source-line-no">410</span><span id="line.410">                            } else {</span>
+<span class="source-line-no">411</span><span id="line.411">                                context_data_position++;</span>
+<span class="source-line-no">412</span><span id="line.412">                            }</span>
+<span class="source-line-no">413</span><span id="line.413">                            value &gt;&gt;= 1;</span>
+<span class="source-line-no">414</span><span id="line.414">                        }</span>
+<span class="source-line-no">415</span><span id="line.415">                    }</span>
+<span class="source-line-no">416</span><span id="line.416">                    context_enlargeIn--;</span>
+<span class="source-line-no">417</span><span id="line.417">                    if (context_enlargeIn == 0) {</span>
+<span class="source-line-no">418</span><span id="line.418">                        context_enlargeIn = 1 &lt;&lt; context_numBits++;</span>
+<span class="source-line-no">419</span><span id="line.419">                    }</span>
+<span class="source-line-no">420</span><span id="line.420">                    context_dictionaryToCreate.remove(context_w);</span>
+<span class="source-line-no">421</span><span id="line.421">                } else {</span>
+<span class="source-line-no">422</span><span id="line.422">                    value = context_dictionary.get(context_w);</span>
+<span class="source-line-no">423</span><span id="line.423">                    for (i = 0; i &lt; context_numBits; i++) {</span>
+<span class="source-line-no">424</span><span id="line.424">                        context_data_val = (context_data_val &lt;&lt; 1) | (value &amp; 1);</span>
+<span class="source-line-no">425</span><span id="line.425">                        if (context_data_position == bitsPerChar - 1) {</span>
+<span class="source-line-no">426</span><span id="line.426">                            context_data_position = 0;</span>
+<span class="source-line-no">427</span><span id="line.427">                            context_data.append((char) (context_data_val + offset));</span>
+<span class="source-line-no">428</span><span id="line.428">                            context_data_val = 0;</span>
+<span class="source-line-no">429</span><span id="line.429">                        } else {</span>
+<span class="source-line-no">430</span><span id="line.430">                            context_data_position++;</span>
+<span class="source-line-no">431</span><span id="line.431">                        }</span>
+<span class="source-line-no">432</span><span id="line.432">                        value &gt;&gt;= 1;</span>
+<span class="source-line-no">433</span><span id="line.433">                    }</span>
+<span class="source-line-no">434</span><span id="line.434"></span>
+<span class="source-line-no">435</span><span id="line.435">                }</span>
+<span class="source-line-no">436</span><span id="line.436">                context_enlargeIn--;</span>
+<span class="source-line-no">437</span><span id="line.437">                if (context_enlargeIn == 0) {</span>
+<span class="source-line-no">438</span><span id="line.438">                    context_enlargeIn = 1 &lt;&lt; context_numBits++;</span>
+<span class="source-line-no">439</span><span id="line.439">                }</span>
+<span class="source-line-no">440</span><span id="line.440">                // Add wc to the dictionary.</span>
+<span class="source-line-no">441</span><span id="line.441">                context_dictionary.put(context_wc, context_dictSize++);</span>
+<span class="source-line-no">442</span><span id="line.442">                context_w = context_c;</span>
+<span class="source-line-no">443</span><span id="line.443">            }</span>
+<span class="source-line-no">444</span><span id="line.444">        }</span>
+<span class="source-line-no">445</span><span id="line.445"></span>
+<span class="source-line-no">446</span><span id="line.446">        // Output the code for w.</span>
+<span class="source-line-no">447</span><span id="line.447">        if (!context_w.isEmpty()) {</span>
+<span class="source-line-no">448</span><span id="line.448">            if (context_dictionaryToCreate.contains(context_w)) {</span>
+<span class="source-line-no">449</span><span id="line.449">                if (context_w.charAt(0) &lt; 256) {</span>
+<span class="source-line-no">450</span><span id="line.450">                    for (i = 0; i &lt; context_numBits; i++) {</span>
+<span class="source-line-no">451</span><span id="line.451">                        context_data_val = (context_data_val &lt;&lt; 1);</span>
+<span class="source-line-no">452</span><span id="line.452">                        if (context_data_position == bitsPerChar - 1) {</span>
+<span class="source-line-no">453</span><span id="line.453">                            context_data_position = 0;</span>
+<span class="source-line-no">454</span><span id="line.454">                            context_data.append((char) (context_data_val + offset));</span>
+<span class="source-line-no">455</span><span id="line.455">                            context_data_val = 0;</span>
+<span class="source-line-no">456</span><span id="line.456">                        } else {</span>
+<span class="source-line-no">457</span><span id="line.457">                            context_data_position++;</span>
+<span class="source-line-no">458</span><span id="line.458">                        }</span>
+<span class="source-line-no">459</span><span id="line.459">                    }</span>
+<span class="source-line-no">460</span><span id="line.460">                    value = context_w.charAt(0);</span>
+<span class="source-line-no">461</span><span id="line.461">                    for (i = 0; i &lt; 8; i++) {</span>
+<span class="source-line-no">462</span><span id="line.462">                        context_data_val = (context_data_val &lt;&lt; 1) | (value &amp; 1);</span>
+<span class="source-line-no">463</span><span id="line.463">                        if (context_data_position == bitsPerChar - 1) {</span>
+<span class="source-line-no">464</span><span id="line.464">                            context_data_position = 0;</span>
+<span class="source-line-no">465</span><span id="line.465">                            context_data.append((char) (context_data_val + offset));</span>
+<span class="source-line-no">466</span><span id="line.466">                            context_data_val = 0;</span>
+<span class="source-line-no">467</span><span id="line.467">                        } else {</span>
+<span class="source-line-no">468</span><span id="line.468">                            context_data_position++;</span>
+<span class="source-line-no">469</span><span id="line.469">                        }</span>
+<span class="source-line-no">470</span><span id="line.470">                        value &gt;&gt;= 1;</span>
+<span class="source-line-no">471</span><span id="line.471">                    }</span>
+<span class="source-line-no">472</span><span id="line.472">                } else {</span>
+<span class="source-line-no">473</span><span id="line.473">                    value = 1;</span>
+<span class="source-line-no">474</span><span id="line.474">                    for (i = 0; i &lt; context_numBits; i++) {</span>
+<span class="source-line-no">475</span><span id="line.475">                        context_data_val = (context_data_val &lt;&lt; 1) | value;</span>
+<span class="source-line-no">476</span><span id="line.476">                        if (context_data_position == bitsPerChar - 1) {</span>
+<span class="source-line-no">477</span><span id="line.477">                            context_data_position = 0;</span>
+<span class="source-line-no">478</span><span id="line.478">                            context_data.append((char) (context_data_val + offset));</span>
+<span class="source-line-no">479</span><span id="line.479">                            context_data_val = 0;</span>
+<span class="source-line-no">480</span><span id="line.480">                        } else {</span>
+<span class="source-line-no">481</span><span id="line.481">                            context_data_position++;</span>
+<span class="source-line-no">482</span><span id="line.482">                        }</span>
+<span class="source-line-no">483</span><span id="line.483">                        value = 0;</span>
+<span class="source-line-no">484</span><span id="line.484">                    }</span>
+<span class="source-line-no">485</span><span id="line.485">                    value = context_w.charAt(0);</span>
+<span class="source-line-no">486</span><span id="line.486">                    for (i = 0; i &lt; 16; i++) {</span>
+<span class="source-line-no">487</span><span id="line.487">                        context_data_val = (context_data_val &lt;&lt; 1) | (value &amp; 1);</span>
+<span class="source-line-no">488</span><span id="line.488">                        if (context_data_position == bitsPerChar - 1) {</span>
+<span class="source-line-no">489</span><span id="line.489">                            context_data_position = 0;</span>
+<span class="source-line-no">490</span><span id="line.490">                            context_data.append((char) (context_data_val + offset));</span>
+<span class="source-line-no">491</span><span id="line.491">                            context_data_val = 0;</span>
+<span class="source-line-no">492</span><span id="line.492">                        } else {</span>
+<span class="source-line-no">493</span><span id="line.493">                            context_data_position++;</span>
+<span class="source-line-no">494</span><span id="line.494">                        }</span>
+<span class="source-line-no">495</span><span id="line.495">                        value &gt;&gt;= 1;</span>
+<span class="source-line-no">496</span><span id="line.496">                    }</span>
+<span class="source-line-no">497</span><span id="line.497">                }</span>
+<span class="source-line-no">498</span><span id="line.498"></span>
+<span class="source-line-no">499</span><span id="line.499">                context_dictionaryToCreate.remove(context_w);</span>
+<span class="source-line-no">500</span><span id="line.500">            } else {</span>
+<span class="source-line-no">501</span><span id="line.501">                value = context_dictionary.get(context_w);</span>
+<span class="source-line-no">502</span><span id="line.502">                for (i = 0; i &lt; context_numBits; i++) {</span>
+<span class="source-line-no">503</span><span id="line.503">                    context_data_val = (context_data_val &lt;&lt; 1) | (value &amp; 1);</span>
+<span class="source-line-no">504</span><span id="line.504">                    if (context_data_position == bitsPerChar - 1) {</span>
+<span class="source-line-no">505</span><span id="line.505">                        context_data_position = 0;</span>
+<span class="source-line-no">506</span><span id="line.506">                        context_data.append((char) (context_data_val + offset));</span>
+<span class="source-line-no">507</span><span id="line.507">                        context_data_val = 0;</span>
+<span class="source-line-no">508</span><span id="line.508">                    } else {</span>
+<span class="source-line-no">509</span><span id="line.509">                        context_data_position++;</span>
+<span class="source-line-no">510</span><span id="line.510">                    }</span>
+<span class="source-line-no">511</span><span id="line.511">                    value &gt;&gt;= 1;</span>
+<span class="source-line-no">512</span><span id="line.512">                }</span>
+<span class="source-line-no">513</span><span id="line.513"></span>
+<span class="source-line-no">514</span><span id="line.514">            }</span>
+<span class="source-line-no">515</span><span id="line.515">        }</span>
+<span class="source-line-no">516</span><span id="line.516"></span>
+<span class="source-line-no">517</span><span id="line.517">        // Mark the end of the stream</span>
+<span class="source-line-no">518</span><span id="line.518">        value = 2;</span>
+<span class="source-line-no">519</span><span id="line.519">        for (i = 0; i &lt; context_numBits; i++) {</span>
+<span class="source-line-no">520</span><span id="line.520">            context_data_val = (context_data_val &lt;&lt; 1) | (value &amp; 1);</span>
+<span class="source-line-no">521</span><span id="line.521">            if (context_data_position == bitsPerChar - 1) {</span>
+<span class="source-line-no">522</span><span id="line.522">                context_data_position = 0;</span>
+<span class="source-line-no">523</span><span id="line.523">                context_data.append((char) (context_data_val + offset));</span>
+<span class="source-line-no">524</span><span id="line.524">                context_data_val = 0;</span>
+<span class="source-line-no">525</span><span id="line.525">            } else {</span>
+<span class="source-line-no">526</span><span id="line.526">                context_data_position++;</span>
+<span class="source-line-no">527</span><span id="line.527">            }</span>
+<span class="source-line-no">528</span><span id="line.528">            value &gt;&gt;= 1;</span>
+<span class="source-line-no">529</span><span id="line.529">        }</span>
+<span class="source-line-no">530</span><span id="line.530"></span>
+<span class="source-line-no">531</span><span id="line.531">        // Flush the last char</span>
+<span class="source-line-no">532</span><span id="line.532">        while (true) {</span>
+<span class="source-line-no">533</span><span id="line.533">            context_data_val = (context_data_val &lt;&lt; 1);</span>
+<span class="source-line-no">534</span><span id="line.534">            if (context_data_position == bitsPerChar - 1) {</span>
+<span class="source-line-no">535</span><span id="line.535">                context_data.append((char) (context_data_val + offset));</span>
+<span class="source-line-no">536</span><span id="line.536">                break;</span>
+<span class="source-line-no">537</span><span id="line.537">            } else</span>
+<span class="source-line-no">538</span><span id="line.538">                context_data_position++;</span>
+<span class="source-line-no">539</span><span id="line.539">        }</span>
+<span class="source-line-no">540</span><span id="line.540">        return context_data.toString();</span>
+<span class="source-line-no">541</span><span id="line.541">    }</span>
+<span class="source-line-no">542</span><span id="line.542">    /**</span>
+<span class="source-line-no">543</span><span id="line.543">     * Decompresses a String that had been compressed with {@link #compress(String)}.</span>
+<span class="source-line-no">544</span><span id="line.544">     * @param compressed a compressed String using the default encoding from {@link #compress(String)}</span>
+<span class="source-line-no">545</span><span id="line.545">     * @return the original uncompressed version of the String</span>
+<span class="source-line-no">546</span><span id="line.546">     */</span>
+<span class="source-line-no">547</span><span id="line.547">    public static String decompress(final String compressed) {</span>
+<span class="source-line-no">548</span><span id="line.548">        if (compressed == null)</span>
+<span class="source-line-no">549</span><span id="line.549">            return null;</span>
+<span class="source-line-no">550</span><span id="line.550">        if (compressed.length() == 0)</span>
+<span class="source-line-no">551</span><span id="line.551">            return "";</span>
+<span class="source-line-no">552</span><span id="line.552">        return _decompress(compressed.length(), 32768, compressed, 0);</span>
+<span class="source-line-no">553</span><span id="line.553">    }</span>
+<span class="source-line-no">554</span><span id="line.554"></span>
+<span class="source-line-no">555</span><span id="line.555">    private static String _decompress(int length, String getNextValue, char[] modify) {</span>
+<span class="source-line-no">556</span><span id="line.556">        if(getNextValue == null)</span>
+<span class="source-line-no">557</span><span id="line.557">            return null;</span>
+<span class="source-line-no">558</span><span id="line.558">        if(getNextValue.length() == 0)</span>
+<span class="source-line-no">559</span><span id="line.559">            return "";</span>
+<span class="source-line-no">560</span><span id="line.560">        ArrayList&lt;String&gt; dictionary = new ArrayList&lt;&gt;();</span>
+<span class="source-line-no">561</span><span id="line.561">        int enlargeIn = 4, dictSize = 4, numBits = 3, position = 32, index = 1, resb, maxpower, power;</span>
+<span class="source-line-no">562</span><span id="line.562">        String entry, w, c;</span>
+<span class="source-line-no">563</span><span id="line.563">        StringBuilder sb = new StringBuilder(getNextValue.length());</span>
+<span class="source-line-no">564</span><span id="line.564">        char bits, val = modify[getNextValue.charAt(0)];</span>
+<span class="source-line-no">565</span><span id="line.565"></span>
+<span class="source-line-no">566</span><span id="line.566">        for (char i = 0; i &lt; 3; i++) {</span>
+<span class="source-line-no">567</span><span id="line.567">            dictionary.add(i, String.valueOf(i));</span>
+<span class="source-line-no">568</span><span id="line.568">        }</span>
+<span class="source-line-no">569</span><span id="line.569"></span>
+<span class="source-line-no">570</span><span id="line.570">        bits = 0;</span>
+<span class="source-line-no">571</span><span id="line.571">        maxpower = 2;</span>
+<span class="source-line-no">572</span><span id="line.572">        power = 0;</span>
+<span class="source-line-no">573</span><span id="line.573">        while (power != maxpower) {</span>
+<span class="source-line-no">574</span><span id="line.574">            resb = val &amp; position;</span>
+<span class="source-line-no">575</span><span id="line.575">            position &gt;&gt;= 1;</span>
+<span class="source-line-no">576</span><span id="line.576">            if (position == 0) {</span>
+<span class="source-line-no">577</span><span id="line.577">                position = 32;</span>
+<span class="source-line-no">578</span><span id="line.578">                val = modify[getNextValue.charAt(index++)];</span>
+<span class="source-line-no">579</span><span id="line.579">            }</span>
+<span class="source-line-no">580</span><span id="line.580">            bits |= ((-resb) &gt;&gt;&gt; 31) &lt;&lt; power++;</span>
+<span class="source-line-no">581</span><span id="line.581">        }</span>
+<span class="source-line-no">582</span><span id="line.582"></span>
+<span class="source-line-no">583</span><span id="line.583">        switch (bits) {</span>
+<span class="source-line-no">584</span><span id="line.584">            case 0:</span>
+<span class="source-line-no">585</span><span id="line.585">                maxpower = 8;</span>
+<span class="source-line-no">586</span><span id="line.586">                power = 0;</span>
+<span class="source-line-no">587</span><span id="line.587">                while (power != maxpower) {</span>
+<span class="source-line-no">588</span><span id="line.588">                    resb = val &amp; position;</span>
+<span class="source-line-no">589</span><span id="line.589">                    position &gt;&gt;= 1;</span>
+<span class="source-line-no">590</span><span id="line.590">                    if (position == 0) {</span>
+<span class="source-line-no">591</span><span id="line.591">                        position = 32;</span>
+<span class="source-line-no">592</span><span id="line.592">                        val = modify[getNextValue.charAt(index++)];</span>
+<span class="source-line-no">593</span><span id="line.593">                    }</span>
+<span class="source-line-no">594</span><span id="line.594">                    bits |= ((-resb) &gt;&gt;&gt; 31) &lt;&lt; power++;</span>
+<span class="source-line-no">595</span><span id="line.595">                }</span>
+<span class="source-line-no">596</span><span id="line.596">                c = String.valueOf(bits);</span>
+<span class="source-line-no">597</span><span id="line.597">                break;</span>
+<span class="source-line-no">598</span><span id="line.598">            case 1:</span>
+<span class="source-line-no">599</span><span id="line.599">                bits = 0;</span>
+<span class="source-line-no">600</span><span id="line.600">                maxpower = 16;</span>
+<span class="source-line-no">601</span><span id="line.601">                power = 0;</span>
+<span class="source-line-no">602</span><span id="line.602">                while (power != maxpower) {</span>
+<span class="source-line-no">603</span><span id="line.603">                    resb = val &amp; position;</span>
+<span class="source-line-no">604</span><span id="line.604">                    position &gt;&gt;= 1;</span>
+<span class="source-line-no">605</span><span id="line.605">                    if (position == 0) {</span>
+<span class="source-line-no">606</span><span id="line.606">                        position = 32;</span>
+<span class="source-line-no">607</span><span id="line.607">                        val = modify[getNextValue.charAt(index++)];</span>
+<span class="source-line-no">608</span><span id="line.608">                    }</span>
+<span class="source-line-no">609</span><span id="line.609">                    bits |= ((-resb) &gt;&gt;&gt; 31) &lt;&lt; power++;</span>
+<span class="source-line-no">610</span><span id="line.610">                }</span>
+<span class="source-line-no">611</span><span id="line.611">                c = String.valueOf(bits);</span>
+<span class="source-line-no">612</span><span id="line.612">                break;</span>
+<span class="source-line-no">613</span><span id="line.613">            default:</span>
+<span class="source-line-no">614</span><span id="line.614">                return "";</span>
+<span class="source-line-no">615</span><span id="line.615">        }</span>
+<span class="source-line-no">616</span><span id="line.616">        dictionary.add(c);</span>
+<span class="source-line-no">617</span><span id="line.617">        w = c;</span>
+<span class="source-line-no">618</span><span id="line.618">        sb.append(w);</span>
+<span class="source-line-no">619</span><span id="line.619">        while (true) {</span>
+<span class="source-line-no">620</span><span id="line.620">            if (index &gt; length) {</span>
+<span class="source-line-no">621</span><span id="line.621">                return "";</span>
+<span class="source-line-no">622</span><span id="line.622">            }</span>
+<span class="source-line-no">623</span><span id="line.623">            int cc = 0;</span>
+<span class="source-line-no">624</span><span id="line.624">            maxpower = numBits;</span>
+<span class="source-line-no">625</span><span id="line.625">            power = 0;</span>
+<span class="source-line-no">626</span><span id="line.626">            while (power != maxpower) {</span>
+<span class="source-line-no">627</span><span id="line.627">                resb = val &amp; position;</span>
+<span class="source-line-no">628</span><span id="line.628">                position &gt;&gt;= 1;</span>
+<span class="source-line-no">629</span><span id="line.629">                if (position == 0) {</span>
+<span class="source-line-no">630</span><span id="line.630">                    position = 32;</span>
+<span class="source-line-no">631</span><span id="line.631">                    val = modify[getNextValue.charAt(index++)];</span>
+<span class="source-line-no">632</span><span id="line.632">                }</span>
+<span class="source-line-no">633</span><span id="line.633">                cc |= ((-resb) &gt;&gt;&gt; 31) &lt;&lt; power++;</span>
+<span class="source-line-no">634</span><span id="line.634">            }</span>
+<span class="source-line-no">635</span><span id="line.635">            switch (cc) {</span>
+<span class="source-line-no">636</span><span id="line.636">                case 0:</span>
+<span class="source-line-no">637</span><span id="line.637">                    bits = 0;</span>
+<span class="source-line-no">638</span><span id="line.638">                    maxpower = 8;</span>
+<span class="source-line-no">639</span><span id="line.639">                    power = 0;</span>
+<span class="source-line-no">640</span><span id="line.640">                    while (power != maxpower) {</span>
+<span class="source-line-no">641</span><span id="line.641">                        resb = val &amp; position;</span>
+<span class="source-line-no">642</span><span id="line.642">                        position &gt;&gt;= 1;</span>
+<span class="source-line-no">643</span><span id="line.643">                        if (position == 0) {</span>
+<span class="source-line-no">644</span><span id="line.644">                            position = 32;</span>
+<span class="source-line-no">645</span><span id="line.645">                            val = modify[getNextValue.charAt(index++)];</span>
+<span class="source-line-no">646</span><span id="line.646">                        }</span>
+<span class="source-line-no">647</span><span id="line.647">                        bits |= ((-resb) &gt;&gt;&gt; 31) &lt;&lt; power++;</span>
+<span class="source-line-no">648</span><span id="line.648">                    }</span>
+<span class="source-line-no">649</span><span id="line.649"></span>
+<span class="source-line-no">650</span><span id="line.650">                    dictionary.add(String.valueOf(bits));</span>
+<span class="source-line-no">651</span><span id="line.651">                    cc = dictSize++;</span>
+<span class="source-line-no">652</span><span id="line.652">                    enlargeIn--;</span>
+<span class="source-line-no">653</span><span id="line.653">                    break;</span>
+<span class="source-line-no">654</span><span id="line.654">                case 1:</span>
+<span class="source-line-no">655</span><span id="line.655">                    bits = 0;</span>
+<span class="source-line-no">656</span><span id="line.656">                    maxpower = 16;</span>
+<span class="source-line-no">657</span><span id="line.657">                    power = 0;</span>
+<span class="source-line-no">658</span><span id="line.658">                    while (power != maxpower) {</span>
+<span class="source-line-no">659</span><span id="line.659">                        resb = val &amp; position;</span>
+<span class="source-line-no">660</span><span id="line.660">                        position &gt;&gt;= 1;</span>
+<span class="source-line-no">661</span><span id="line.661">                        if (position == 0) {</span>
+<span class="source-line-no">662</span><span id="line.662">                            position = 32;</span>
+<span class="source-line-no">663</span><span id="line.663">                            val = modify[getNextValue.charAt(index++)];</span>
+<span class="source-line-no">664</span><span id="line.664">                        }</span>
+<span class="source-line-no">665</span><span id="line.665">                        bits |= ((-resb) &gt;&gt;&gt; 31) &lt;&lt; power++;</span>
+<span class="source-line-no">666</span><span id="line.666">                    }</span>
+<span class="source-line-no">667</span><span id="line.667">                    dictionary.add(String.valueOf(bits));</span>
+<span class="source-line-no">668</span><span id="line.668">                    cc = dictSize++;</span>
+<span class="source-line-no">669</span><span id="line.669">                    enlargeIn--;</span>
+<span class="source-line-no">670</span><span id="line.670">                    break;</span>
+<span class="source-line-no">671</span><span id="line.671">                case 2:</span>
+<span class="source-line-no">672</span><span id="line.672">                    return sb.toString();</span>
+<span class="source-line-no">673</span><span id="line.673">            }</span>
+<span class="source-line-no">674</span><span id="line.674"></span>
+<span class="source-line-no">675</span><span id="line.675">            if (enlargeIn == 0) {</span>
+<span class="source-line-no">676</span><span id="line.676">                enlargeIn = 1 &lt;&lt; numBits;</span>
+<span class="source-line-no">677</span><span id="line.677">                numBits++;</span>
+<span class="source-line-no">678</span><span id="line.678">            }</span>
+<span class="source-line-no">679</span><span id="line.679"></span>
+<span class="source-line-no">680</span><span id="line.680">            if (cc &lt; dictionary.size() &amp;&amp; dictionary.get(cc) != null) {</span>
+<span class="source-line-no">681</span><span id="line.681">                entry = dictionary.get(cc);</span>
+<span class="source-line-no">682</span><span id="line.682">            } else {</span>
+<span class="source-line-no">683</span><span id="line.683">                if (cc == dictSize) {</span>
+<span class="source-line-no">684</span><span id="line.684">                    entry = w + w.charAt(0);</span>
+<span class="source-line-no">685</span><span id="line.685">                } else {</span>
+<span class="source-line-no">686</span><span id="line.686">                    return "";</span>
+<span class="source-line-no">687</span><span id="line.687">                }</span>
+<span class="source-line-no">688</span><span id="line.688">            }</span>
+<span class="source-line-no">689</span><span id="line.689">            sb.append(entry);</span>
+<span class="source-line-no">690</span><span id="line.690"></span>
+<span class="source-line-no">691</span><span id="line.691">            // Add w+entry[0] to the dictionary.</span>
+<span class="source-line-no">692</span><span id="line.692">            dictionary.add(w + entry.charAt(0));</span>
+<span class="source-line-no">693</span><span id="line.693">            dictSize++;</span>
+<span class="source-line-no">694</span><span id="line.694">            enlargeIn--;</span>
+<span class="source-line-no">695</span><span id="line.695"></span>
+<span class="source-line-no">696</span><span id="line.696">            w = entry;</span>
+<span class="source-line-no">697</span><span id="line.697"></span>
+<span class="source-line-no">698</span><span id="line.698">            if (enlargeIn == 0) {</span>
+<span class="source-line-no">699</span><span id="line.699">                enlargeIn = 1 &lt;&lt; numBits;</span>
+<span class="source-line-no">700</span><span id="line.700">                numBits++;</span>
+<span class="source-line-no">701</span><span id="line.701">            }</span>
+<span class="source-line-no">702</span><span id="line.702"></span>
+<span class="source-line-no">703</span><span id="line.703">        }</span>
+<span class="source-line-no">704</span><span id="line.704"></span>
+<span class="source-line-no">705</span><span id="line.705">    }</span>
+<span class="source-line-no">706</span><span id="line.706">    private static String _decompress(int length, int resetValue, String getNextValue, int offset) {</span>
+<span class="source-line-no">707</span><span id="line.707">        if(getNextValue == null)</span>
+<span class="source-line-no">708</span><span id="line.708">            return null;</span>
+<span class="source-line-no">709</span><span id="line.709">        if(getNextValue.length() == 0)</span>
+<span class="source-line-no">710</span><span id="line.710">            return "";</span>
+<span class="source-line-no">711</span><span id="line.711">        ArrayList&lt;String&gt; dictionary = new ArrayList&lt;&gt;();</span>
+<span class="source-line-no">712</span><span id="line.712">        int enlargeIn = 4, dictSize = 4, numBits = 3, position = resetValue, index = 1, resb, maxpower, power;</span>
+<span class="source-line-no">713</span><span id="line.713">        String entry, w, c;</span>
+<span class="source-line-no">714</span><span id="line.714">        StringBuilder sb = new StringBuilder(getNextValue.length());</span>
+<span class="source-line-no">715</span><span id="line.715">        char bits, val = (char) (getNextValue.charAt(0) + offset);</span>
+<span class="source-line-no">716</span><span id="line.716"></span>
+<span class="source-line-no">717</span><span id="line.717">        for (char i = 0; i &lt; 3; i++) {</span>
+<span class="source-line-no">718</span><span id="line.718">            dictionary.add(i, String.valueOf(i));</span>
+<span class="source-line-no">719</span><span id="line.719">        }</span>
+<span class="source-line-no">720</span><span id="line.720"></span>
+<span class="source-line-no">721</span><span id="line.721">        bits = 0;</span>
+<span class="source-line-no">722</span><span id="line.722">        maxpower = 2;</span>
+<span class="source-line-no">723</span><span id="line.723">        power = 0;</span>
+<span class="source-line-no">724</span><span id="line.724">        while (power != maxpower) {</span>
+<span class="source-line-no">725</span><span id="line.725">            resb = val &amp; position;</span>
+<span class="source-line-no">726</span><span id="line.726">            position &gt;&gt;= 1;</span>
+<span class="source-line-no">727</span><span id="line.727">            if (position == 0) {</span>
+<span class="source-line-no">728</span><span id="line.728">                position = resetValue;</span>
+<span class="source-line-no">729</span><span id="line.729">                val = (char) (getNextValue.charAt(index++) + offset);</span>
+<span class="source-line-no">730</span><span id="line.730">            }</span>
+<span class="source-line-no">731</span><span id="line.731">            bits |= ((-resb) &gt;&gt;&gt; 31) &lt;&lt; power++;</span>
+<span class="source-line-no">732</span><span id="line.732">        }</span>
+<span class="source-line-no">733</span><span id="line.733"></span>
+<span class="source-line-no">734</span><span id="line.734">        switch (bits) {</span>
+<span class="source-line-no">735</span><span id="line.735">            case 0:</span>
+<span class="source-line-no">736</span><span id="line.736">                maxpower = 8;</span>
+<span class="source-line-no">737</span><span id="line.737">                power = 0;</span>
+<span class="source-line-no">738</span><span id="line.738">                while (power != maxpower) {</span>
+<span class="source-line-no">739</span><span id="line.739">                    resb = val &amp; position;</span>
+<span class="source-line-no">740</span><span id="line.740">                    position &gt;&gt;= 1;</span>
+<span class="source-line-no">741</span><span id="line.741">                    if (position == 0) {</span>
+<span class="source-line-no">742</span><span id="line.742">                        position = resetValue;</span>
+<span class="source-line-no">743</span><span id="line.743">                        val = (char) (getNextValue.charAt(index++) + offset);</span>
+<span class="source-line-no">744</span><span id="line.744">                    }</span>
+<span class="source-line-no">745</span><span id="line.745">                    bits |= ((-resb) &gt;&gt;&gt; 31) &lt;&lt; power++;</span>
+<span class="source-line-no">746</span><span id="line.746">                }</span>
+<span class="source-line-no">747</span><span id="line.747">                c = String.valueOf(bits);</span>
+<span class="source-line-no">748</span><span id="line.748">                break;</span>
+<span class="source-line-no">749</span><span id="line.749">            case 1:</span>
+<span class="source-line-no">750</span><span id="line.750">                bits = 0;</span>
+<span class="source-line-no">751</span><span id="line.751">                maxpower = 16;</span>
+<span class="source-line-no">752</span><span id="line.752">                power = 0;</span>
+<span class="source-line-no">753</span><span id="line.753">                while (power != maxpower) {</span>
+<span class="source-line-no">754</span><span id="line.754">                    resb = val &amp; position;</span>
+<span class="source-line-no">755</span><span id="line.755">                    position &gt;&gt;= 1;</span>
+<span class="source-line-no">756</span><span id="line.756">                    if (position == 0) {</span>
+<span class="source-line-no">757</span><span id="line.757">                        position = resetValue;</span>
+<span class="source-line-no">758</span><span id="line.758">                        val = (char) (getNextValue.charAt(index++) + offset);</span>
+<span class="source-line-no">759</span><span id="line.759">                    }</span>
+<span class="source-line-no">760</span><span id="line.760">                    bits |= ((-resb) &gt;&gt;&gt; 31) &lt;&lt; power++;</span>
+<span class="source-line-no">761</span><span id="line.761">                }</span>
+<span class="source-line-no">762</span><span id="line.762">                c = String.valueOf(bits);</span>
+<span class="source-line-no">763</span><span id="line.763">                break;</span>
+<span class="source-line-no">764</span><span id="line.764">            default:</span>
+<span class="source-line-no">765</span><span id="line.765">                return "";</span>
+<span class="source-line-no">766</span><span id="line.766">        }</span>
+<span class="source-line-no">767</span><span id="line.767">        dictionary.add(c);</span>
+<span class="source-line-no">768</span><span id="line.768">        w = c;</span>
+<span class="source-line-no">769</span><span id="line.769">        sb.append(w);</span>
+<span class="source-line-no">770</span><span id="line.770">        while (true) {</span>
+<span class="source-line-no">771</span><span id="line.771">            if (index &gt; length) {</span>
+<span class="source-line-no">772</span><span id="line.772">                return "";</span>
+<span class="source-line-no">773</span><span id="line.773">            }</span>
+<span class="source-line-no">774</span><span id="line.774">            int cc = 0;</span>
+<span class="source-line-no">775</span><span id="line.775">            maxpower = numBits;</span>
+<span class="source-line-no">776</span><span id="line.776">            power = 0;</span>
+<span class="source-line-no">777</span><span id="line.777">            while (power != maxpower) {</span>
+<span class="source-line-no">778</span><span id="line.778">                resb = val &amp; position;</span>
+<span class="source-line-no">779</span><span id="line.779">                position &gt;&gt;= 1;</span>
+<span class="source-line-no">780</span><span id="line.780">                if (position == 0) {</span>
+<span class="source-line-no">781</span><span id="line.781">                    position = resetValue;</span>
+<span class="source-line-no">782</span><span id="line.782">                    val = (char) (getNextValue.charAt(index++) + offset);</span>
+<span class="source-line-no">783</span><span id="line.783">                }</span>
+<span class="source-line-no">784</span><span id="line.784">                cc |= ((-resb) &gt;&gt;&gt; 31) &lt;&lt; power++;</span>
+<span class="source-line-no">785</span><span id="line.785">            }</span>
+<span class="source-line-no">786</span><span id="line.786">            switch (cc) {</span>
+<span class="source-line-no">787</span><span id="line.787">                case 0:</span>
+<span class="source-line-no">788</span><span id="line.788">                    bits = 0;</span>
+<span class="source-line-no">789</span><span id="line.789">                    maxpower = 8;</span>
+<span class="source-line-no">790</span><span id="line.790">                    power = 0;</span>
+<span class="source-line-no">791</span><span id="line.791">                    while (power != maxpower) {</span>
+<span class="source-line-no">792</span><span id="line.792">                        resb = val &amp; position;</span>
+<span class="source-line-no">793</span><span id="line.793">                        position &gt;&gt;= 1;</span>
+<span class="source-line-no">794</span><span id="line.794">                        if (position == 0) {</span>
+<span class="source-line-no">795</span><span id="line.795">                            position = resetValue;</span>
+<span class="source-line-no">796</span><span id="line.796">                            val = (char) (getNextValue.charAt(index++) + offset);</span>
+<span class="source-line-no">797</span><span id="line.797">                        }</span>
+<span class="source-line-no">798</span><span id="line.798">                        bits |= ((-resb) &gt;&gt;&gt; 31) &lt;&lt; power++;</span>
+<span class="source-line-no">799</span><span id="line.799">                    }</span>
+<span class="source-line-no">800</span><span id="line.800"></span>
+<span class="source-line-no">801</span><span id="line.801">                    dictionary.add(String.valueOf(bits));</span>
+<span class="source-line-no">802</span><span id="line.802">                    cc = dictSize++;</span>
+<span class="source-line-no">803</span><span id="line.803">                    enlargeIn--;</span>
+<span class="source-line-no">804</span><span id="line.804">                    break;</span>
+<span class="source-line-no">805</span><span id="line.805">                case 1:</span>
+<span class="source-line-no">806</span><span id="line.806">                    bits = 0;</span>
+<span class="source-line-no">807</span><span id="line.807">                    maxpower = 16;</span>
+<span class="source-line-no">808</span><span id="line.808">                    power = 0;</span>
+<span class="source-line-no">809</span><span id="line.809">                    while (power != maxpower) {</span>
+<span class="source-line-no">810</span><span id="line.810">                        resb = val &amp; position;</span>
+<span class="source-line-no">811</span><span id="line.811">                        position &gt;&gt;= 1;</span>
+<span class="source-line-no">812</span><span id="line.812">                        if (position == 0) {</span>
+<span class="source-line-no">813</span><span id="line.813">                            position = resetValue;</span>
+<span class="source-line-no">814</span><span id="line.814">                            val = (char) (getNextValue.charAt(index++) + offset);</span>
+<span class="source-line-no">815</span><span id="line.815">                        }</span>
+<span class="source-line-no">816</span><span id="line.816">                        bits |= ((-resb) &gt;&gt;&gt; 31) &lt;&lt; power++;</span>
+<span class="source-line-no">817</span><span id="line.817">                    }</span>
+<span class="source-line-no">818</span><span id="line.818">                    dictionary.add(String.valueOf(bits));</span>
+<span class="source-line-no">819</span><span id="line.819">                    cc = dictSize++;</span>
+<span class="source-line-no">820</span><span id="line.820">                    enlargeIn--;</span>
+<span class="source-line-no">821</span><span id="line.821">                    break;</span>
+<span class="source-line-no">822</span><span id="line.822">                case 2:</span>
+<span class="source-line-no">823</span><span id="line.823">                    return sb.toString();</span>
+<span class="source-line-no">824</span><span id="line.824">            }</span>
+<span class="source-line-no">825</span><span id="line.825"></span>
+<span class="source-line-no">826</span><span id="line.826">            if (enlargeIn == 0) {</span>
+<span class="source-line-no">827</span><span id="line.827">                enlargeIn = 1 &lt;&lt; numBits;</span>
+<span class="source-line-no">828</span><span id="line.828">                numBits++;</span>
+<span class="source-line-no">829</span><span id="line.829">            }</span>
+<span class="source-line-no">830</span><span id="line.830"></span>
+<span class="source-line-no">831</span><span id="line.831">            if (cc &lt; dictionary.size() &amp;&amp; dictionary.get(cc) != null) {</span>
+<span class="source-line-no">832</span><span id="line.832">                entry = dictionary.get(cc);</span>
+<span class="source-line-no">833</span><span id="line.833">            } else {</span>
+<span class="source-line-no">834</span><span id="line.834">                if (cc == dictSize) {</span>
+<span class="source-line-no">835</span><span id="line.835">                    entry = w + w.charAt(0);</span>
+<span class="source-line-no">836</span><span id="line.836">                } else {</span>
+<span class="source-line-no">837</span><span id="line.837">                    return "";</span>
+<span class="source-line-no">838</span><span id="line.838">                }</span>
+<span class="source-line-no">839</span><span id="line.839">            }</span>
+<span class="source-line-no">840</span><span id="line.840">            sb.append(entry);</span>
+<span class="source-line-no">841</span><span id="line.841"></span>
+<span class="source-line-no">842</span><span id="line.842">            // Add w+entry[0] to the dictionary.</span>
+<span class="source-line-no">843</span><span id="line.843">            dictionary.add(w + entry.charAt(0));</span>
+<span class="source-line-no">844</span><span id="line.844">            dictSize++;</span>
+<span class="source-line-no">845</span><span id="line.845">            enlargeIn--;</span>
+<span class="source-line-no">846</span><span id="line.846"></span>
+<span class="source-line-no">847</span><span id="line.847">            w = entry;</span>
+<span class="source-line-no">848</span><span id="line.848"></span>
+<span class="source-line-no">849</span><span id="line.849">            if (enlargeIn == 0) {</span>
+<span class="source-line-no">850</span><span id="line.850">                enlargeIn = 1 &lt;&lt; numBits;</span>
+<span class="source-line-no">851</span><span id="line.851">                numBits++;</span>
+<span class="source-line-no">852</span><span id="line.852">            }</span>
+<span class="source-line-no">853</span><span id="line.853"></span>
+<span class="source-line-no">854</span><span id="line.854">        }</span>
+<span class="source-line-no">855</span><span id="line.855">    }</span>
+<span class="source-line-no">856</span><span id="line.856">}</span>
 
 
 

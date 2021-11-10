@@ -41,7 +41,7 @@
 <span class="source-line-no">028</span><span id="line.28"> * &lt;br&gt;</span>
 <span class="source-line-no">029</span><span id="line.29"> * Created by Tommy Ettinger on 3/29/2020.</span>
 <span class="source-line-no">030</span><span id="line.30"> */</span>
-<span class="source-line-no">031</span><span id="line.31">public final class GearRNG implements RandomnessSource, Serializable {</span>
+<span class="source-line-no">031</span><span id="line.31">public class GearRNG implements RandomnessSource, Serializable {</span>
 <span class="source-line-no">032</span><span id="line.32">    private static final long serialVersionUID = 5L;</span>
 <span class="source-line-no">033</span><span id="line.33">    /**</span>
 <span class="source-line-no">034</span><span id="line.34">     * Can be any long value.</span>
@@ -118,7 +118,7 @@
 <span class="source-line-no">105</span><span id="line.105">     * @return the integer containing the appropriate number of bits</span>
 <span class="source-line-no">106</span><span id="line.106">     */</span>
 <span class="source-line-no">107</span><span id="line.107">    @Override</span>
-<span class="source-line-no">108</span><span id="line.108">    public final int next(final int bits) {</span>
+<span class="source-line-no">108</span><span id="line.108">    public int next(final int bits) {</span>
 <span class="source-line-no">109</span><span id="line.109">        final long s = (stateA += 0xC6BC279692B5C323L);</span>
 <span class="source-line-no">110</span><span id="line.110">        final long z = ((s &lt; 0x800000006F17146DL) ? stateB : (stateB += 0x9479D2858AF899E6L)) * (s ^ s &gt;&gt;&gt; 31);</span>
 <span class="source-line-no">111</span><span id="line.111">        return (int)(z ^ z &gt;&gt;&gt; 25) &gt;&gt;&gt; (32 - bits);</span>
@@ -132,7 +132,7 @@
 <span class="source-line-no">119</span><span id="line.119">     * @return a random long between Long.MIN_VALUE and Long.MAX_VALUE (both inclusive)</span>
 <span class="source-line-no">120</span><span id="line.120">     */</span>
 <span class="source-line-no">121</span><span id="line.121">    @Override</span>
-<span class="source-line-no">122</span><span id="line.122">    public final long nextLong() {</span>
+<span class="source-line-no">122</span><span id="line.122">    public long nextLong() {</span>
 <span class="source-line-no">123</span><span id="line.123">        final long s = (stateA += 0xC6BC279692B5C323L);</span>
 <span class="source-line-no">124</span><span id="line.124">        final long z = ((s &lt; 0x800000006F17146DL) ? stateB : (stateB += 0x9479D2858AF899E6L)) * (s ^ s &gt;&gt;&gt; 31);</span>
 <span class="source-line-no">125</span><span id="line.125">        return z ^ z &gt;&gt;&gt; 25;</span>

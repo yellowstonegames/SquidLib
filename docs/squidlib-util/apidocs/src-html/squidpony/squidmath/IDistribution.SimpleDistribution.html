@@ -64,9 +64,9 @@
 <span class="source-line-no">051</span><span id="line.51">        /**</span>
 <span class="source-line-no">052</span><span id="line.52">         * Makes a new SimpleDistribution implementation given any IDistribution (typically one with large or infinite</span>
 <span class="source-line-no">053</span><span id="line.53">         * bounds) by getting the fractional component of {@code offset} plus a result from {@code otherDistribution}.</span>
-<span class="source-line-no">054</span><span id="line.54">         * Using the offset allows distributions like {@link GaussianDistribution} to become centered halfway on 0.5,</span>
-<span class="source-line-no">055</span><span id="line.55">         * making the result of this distribution have a Gaussian-like peak on 0.5 instead of of peaking at the bounds</span>
-<span class="source-line-no">056</span><span id="line.56">         * when offset is 0.0.</span>
+<span class="source-line-no">054</span><span id="line.54">         * Using the offset allows distributions like {@link GaussianDistribution}, which are centered on 0.0, to become</span>
+<span class="source-line-no">055</span><span id="line.55">         * centered halfway on 0.5, making the result of this distribution have a Gaussian-like peak on 0.5 instead of</span>
+<span class="source-line-no">056</span><span id="line.56">         * peaking at the bounds when offset is 0.0.</span>
 <span class="source-line-no">057</span><span id="line.57">         * @param otherDistribution any other IDistribution</span>
 <span class="source-line-no">058</span><span id="line.58">         * @return a new anonymous implementation of SimpleDistribution that gets the fractional part of {@code otherDistribution}.</span>
 <span class="source-line-no">059</span><span id="line.59">         */</span>
@@ -85,7 +85,7 @@
 <span class="source-line-no">072</span><span id="line.72">         * Makes a new SimpleDistribution implementation given any IDistribution (typically one with large or infinite</span>
 <span class="source-line-no">073</span><span id="line.73">         * bounds) by simply clamping results that are below 0 to 0 and at least 1 to 0.9999999999999999 (the largest</span>
 <span class="source-line-no">074</span><span id="line.74">         * double less than 1.0 than can be represented). This will behave very oddly for distributions that are</span>
-<span class="source-line-no">075</span><span id="line.75">         * centered on 0.0.</span>
+<span class="source-line-no">075</span><span id="line.75">         * centered on 0.0; for those you probably want {@link #fractionalOffsetDistribution(IDistribution, double)}.</span>
 <span class="source-line-no">076</span><span id="line.76">         * @param otherDistribution any other IDistribution</span>
 <span class="source-line-no">077</span><span id="line.77">         * @return a new anonymous implementation of SimpleDistribution that clamps {@code otherDistribution} in range.</span>
 <span class="source-line-no">078</span><span id="line.78">         */</span>

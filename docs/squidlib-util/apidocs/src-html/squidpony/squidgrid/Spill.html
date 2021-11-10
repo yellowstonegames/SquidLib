@@ -374,18 +374,19 @@
 <span class="source-line-no">361</span><span id="line.361">            spillMap[cell.x][cell.y] = true;</span>
 <span class="source-line-no">362</span><span id="line.362">            for (int d = 0; d &lt; dirs.length; d++) {</span>
 <span class="source-line-no">363</span><span id="line.363">                Coord adj = cell.translate(dirs[d].deltaX, dirs[d].deltaY);</span>
-<span class="source-line-no">364</span><span id="line.364">                double h = measurement.heuristic(dirs[d]);</span>
-<span class="source-line-no">365</span><span id="line.365">                if (physicalMap[adj.x][adj.y] &amp;&amp; !spillMap[adj.x][adj.y] &amp;&amp; (impassable == null || !impassable.contains(adj)) &amp;&amp; rng.nextDouble() &lt;= 1.0 / h) {</span>
-<span class="source-line-no">366</span><span id="line.366">                    setFresh(adj);</span>
-<span class="source-line-no">367</span><span id="line.367">                }</span>
-<span class="source-line-no">368</span><span id="line.368">            }</span>
-<span class="source-line-no">369</span><span id="line.369">            fresh.remove(cell);</span>
-<span class="source-line-no">370</span><span id="line.370">        }</span>
-<span class="source-line-no">371</span><span id="line.371">        filled = spreadPattern.size();</span>
-<span class="source-line-no">372</span><span id="line.372">        return spreadPattern;</span>
-<span class="source-line-no">373</span><span id="line.373">    }</span>
-<span class="source-line-no">374</span><span id="line.374"></span>
-<span class="source-line-no">375</span><span id="line.375">}</span>
+<span class="source-line-no">364</span><span id="line.364">                if(!adj.isWithin(width, height)) continue;</span>
+<span class="source-line-no">365</span><span id="line.365">                double h = measurement.heuristic(dirs[d]);</span>
+<span class="source-line-no">366</span><span id="line.366">                if (physicalMap[adj.x][adj.y] &amp;&amp; !spillMap[adj.x][adj.y] &amp;&amp; (impassable == null || !impassable.contains(adj)) &amp;&amp; rng.nextDouble(h) &lt;= 1.0) {</span>
+<span class="source-line-no">367</span><span id="line.367">                    setFresh(adj);</span>
+<span class="source-line-no">368</span><span id="line.368">                }</span>
+<span class="source-line-no">369</span><span id="line.369">            }</span>
+<span class="source-line-no">370</span><span id="line.370">            fresh.remove(cell);</span>
+<span class="source-line-no">371</span><span id="line.371">        }</span>
+<span class="source-line-no">372</span><span id="line.372">        filled = spreadPattern.size();</span>
+<span class="source-line-no">373</span><span id="line.373">        return spreadPattern;</span>
+<span class="source-line-no">374</span><span id="line.374">    }</span>
+<span class="source-line-no">375</span><span id="line.375"></span>
+<span class="source-line-no">376</span><span id="line.376">}</span>
 
 
 

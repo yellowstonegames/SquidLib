@@ -61,7 +61,7 @@
 <span class="source-line-no">048</span><span id="line.48"> * @author Tommy Ettinger</span>
 <span class="source-line-no">049</span><span id="line.49"> * @see PintRNG PintRNG is similar to this algorithm but uses only 32-bit math, where possible.</span>
 <span class="source-line-no">050</span><span id="line.50"> */</span>
-<span class="source-line-no">051</span><span id="line.51">public final class PermutedRNG implements RandomnessSource, StatefulRandomness, SkippingRandomness, Serializable</span>
+<span class="source-line-no">051</span><span id="line.51">public class PermutedRNG implements RandomnessSource, StatefulRandomness, SkippingRandomness, Serializable</span>
 <span class="source-line-no">052</span><span id="line.52">{</span>
 <span class="source-line-no">053</span><span id="line.53">        /** 2 raised to the 53, - 1. */</span>
 <span class="source-line-no">054</span><span id="line.54">    private static final long DOUBLE_MASK = ( 1L &lt;&lt; 53 ) - 1;</span>
@@ -101,7 +101,7 @@
 <span class="source-line-no">088</span><span id="line.88">     * @return a pseudo-random int with at most the specified bits</span>
 <span class="source-line-no">089</span><span id="line.89">     */</span>
 <span class="source-line-no">090</span><span id="line.90">    @Override</span>
-<span class="source-line-no">091</span><span id="line.91">    public final int next( final int bits ) {</span>
+<span class="source-line-no">091</span><span id="line.91">    public int next(final int bits ) {</span>
 <span class="source-line-no">092</span><span id="line.92">        long p = (state = state * 0x5851F42D4C957F2DL + 0x14057B7EF767814FL);</span>
 <span class="source-line-no">093</span><span id="line.93">        p = (p ^ p &gt;&gt;&gt; (5 + (p &gt;&gt;&gt; 59))) * 0xAEF17502108EF2D9L;</span>
 <span class="source-line-no">094</span><span id="line.94">        return (int)(p ^ p &gt;&gt;&gt; 43) &gt;&gt;&gt; (32 - bits);</span>
@@ -123,7 +123,7 @@
 <span class="source-line-no">110</span><span id="line.110">     * @return any long, all 64 bits are random</span>
 <span class="source-line-no">111</span><span id="line.111">     */</span>
 <span class="source-line-no">112</span><span id="line.112">    @Override</span>
-<span class="source-line-no">113</span><span id="line.113">    public final long nextLong()</span>
+<span class="source-line-no">113</span><span id="line.113">    public long nextLong()</span>
 <span class="source-line-no">114</span><span id="line.114">    {</span>
 <span class="source-line-no">115</span><span id="line.115">        // increment  = 1442695040888963407L;</span>
 <span class="source-line-no">116</span><span id="line.116">        // multiplier = 6364136223846793005L;</span>

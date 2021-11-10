@@ -74,7 +74,7 @@
 <span class="source-line-no">061</span><span id="line.61"> * @author David Blackman</span>
 <span class="source-line-no">062</span><span id="line.62"> * @author Tommy Ettinger (if there's a flaw, use SquidLib's or Sarong's issues and don't bother Vigna or Blackman, it's probably a mistake in SquidLib's implementation)</span>
 <span class="source-line-no">063</span><span id="line.63"> */</span>
-<span class="source-line-no">064</span><span id="line.64">public final class Lathe32RNG implements StatefulRandomness, Serializable {</span>
+<span class="source-line-no">064</span><span id="line.64">public class Lathe32RNG implements StatefulRandomness, Serializable {</span>
 <span class="source-line-no">065</span><span id="line.65"></span>
 <span class="source-line-no">066</span><span id="line.66">    private static final long serialVersionUID = 2L;</span>
 <span class="source-line-no">067</span><span id="line.67"></span>
@@ -113,7 +113,7 @@
 <span class="source-line-no">100</span><span id="line.100">    }</span>
 <span class="source-line-no">101</span><span id="line.101">    </span>
 <span class="source-line-no">102</span><span id="line.102">    @Override</span>
-<span class="source-line-no">103</span><span id="line.103">    public final int next(int bits) {</span>
+<span class="source-line-no">103</span><span id="line.103">    public int next(int bits) {</span>
 <span class="source-line-no">104</span><span id="line.104">        final int s0 = stateA;</span>
 <span class="source-line-no">105</span><span id="line.105">        int s1 = stateB;</span>
 <span class="source-line-no">106</span><span id="line.106">        final int result = s0 + s1;</span>
@@ -127,7 +127,7 @@
 <span class="source-line-no">114</span><span id="line.114">     * Can return any int, positive or negative, of any size permissible in a 32-bit signed integer.</span>
 <span class="source-line-no">115</span><span id="line.115">     * @return any int, all 32 bits are random</span>
 <span class="source-line-no">116</span><span id="line.116">     */</span>
-<span class="source-line-no">117</span><span id="line.117">    public final int nextInt() {</span>
+<span class="source-line-no">117</span><span id="line.117">    public int nextInt() {</span>
 <span class="source-line-no">118</span><span id="line.118">        final int s0 = stateA;</span>
 <span class="source-line-no">119</span><span id="line.119">        int s1 = stateB;</span>
 <span class="source-line-no">120</span><span id="line.120">        final int result = s0 + s1;</span>
@@ -138,7 +138,7 @@
 <span class="source-line-no">125</span><span id="line.125">    }</span>
 <span class="source-line-no">126</span><span id="line.126"></span>
 <span class="source-line-no">127</span><span id="line.127">    @Override</span>
-<span class="source-line-no">128</span><span id="line.128">    public final long nextLong() {</span>
+<span class="source-line-no">128</span><span id="line.128">    public long nextLong() {</span>
 <span class="source-line-no">129</span><span id="line.129">        final int s0 = stateA;</span>
 <span class="source-line-no">130</span><span id="line.130">        int s1 = stateB;</span>
 <span class="source-line-no">131</span><span id="line.131">        final int high = s0 + s1;</span>

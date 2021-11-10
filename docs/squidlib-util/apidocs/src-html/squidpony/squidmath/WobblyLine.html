@@ -112,75 +112,74 @@
 <span class="source-line-no">099</span><span id="line.99">        }</span>
 <span class="source-line-no">100</span><span id="line.100">        else if (dx == 0 || dy == 0)</span>
 <span class="source-line-no">101</span><span id="line.101">        {</span>
-<span class="source-line-no">102</span><span id="line.102">            int dx2 = (dx == 0) ? dx : dy, dy2 = (dx == 0) ? dy : dx;</span>
+<span class="source-line-no">102</span><span id="line.102">            int dx2 = 0, dy2 = (dx == 0) ? dy : dx;</span>
 <span class="source-line-no">103</span><span id="line.103">            if (r &gt;= (weight * 0.5))</span>
 <span class="source-line-no">104</span><span id="line.104">            {</span>
 <span class="source-line-no">105</span><span id="line.105">                r -= weight * 0.5;</span>
-<span class="source-line-no">106</span><span id="line.106">                if (r &lt; weight * (1.0 / 6) + (1 - weight) * (1.0 / 3))</span>
+<span class="source-line-no">106</span><span id="line.106">                if (r &lt; weight * (1.0 / 6.0) + (1 - weight) * (1.0 / 3.0))</span>
 <span class="source-line-no">107</span><span id="line.107">                {</span>
 <span class="source-line-no">108</span><span id="line.108">                    dx2 = -1;</span>
 <span class="source-line-no">109</span><span id="line.109">                    dy2 = 0;</span>
 <span class="source-line-no">110</span><span id="line.110">                }</span>
-<span class="source-line-no">111</span><span id="line.111">                else if (r &lt; weight * (2.0 / 6) + (1 - weight) * (2.0 / 3))</span>
+<span class="source-line-no">111</span><span id="line.111">                else if (r &lt; weight * (2.0 / 6.0) + (1 - weight) * (2.0 / 3.0))</span>
 <span class="source-line-no">112</span><span id="line.112">                {</span>
 <span class="source-line-no">113</span><span id="line.113">                    dx2 = 1;</span>
 <span class="source-line-no">114</span><span id="line.114">                    dy2 = 0;</span>
 <span class="source-line-no">115</span><span id="line.115">                }</span>
 <span class="source-line-no">116</span><span id="line.116">                else</span>
 <span class="source-line-no">117</span><span id="line.117">                {</span>
-<span class="source-line-no">118</span><span id="line.118">                    dx2 = 0;</span>
-<span class="source-line-no">119</span><span id="line.119">                    dy2 *= -1;</span>
-<span class="source-line-no">120</span><span id="line.120">                }</span>
-<span class="source-line-no">121</span><span id="line.121">            }</span>
-<span class="source-line-no">122</span><span id="line.122">            dir = Direction.getCardinalDirection(dx2, dy2);</span>
-<span class="source-line-no">123</span><span id="line.123"></span>
-<span class="source-line-no">124</span><span id="line.124">        }</span>
-<span class="source-line-no">125</span><span id="line.125">        else</span>
-<span class="source-line-no">126</span><span id="line.126">        {</span>
-<span class="source-line-no">127</span><span id="line.127">            if (r &lt; weight * 0.5)</span>
-<span class="source-line-no">128</span><span id="line.128">            {</span>
-<span class="source-line-no">129</span><span id="line.129">                dy = 0;</span>
-<span class="source-line-no">130</span><span id="line.130">            }</span>
-<span class="source-line-no">131</span><span id="line.131">            else if (r &lt; weight)</span>
-<span class="source-line-no">132</span><span id="line.132">            {</span>
-<span class="source-line-no">133</span><span id="line.133">                dx = 0;</span>
-<span class="source-line-no">134</span><span id="line.134">            }</span>
-<span class="source-line-no">135</span><span id="line.135">            else if (r &lt; weight + (1 - weight) * 0.5)</span>
-<span class="source-line-no">136</span><span id="line.136">            {</span>
-<span class="source-line-no">137</span><span id="line.137">                dx *= -1;</span>
-<span class="source-line-no">138</span><span id="line.138">                dy = 0;</span>
-<span class="source-line-no">139</span><span id="line.139">            }</span>
-<span class="source-line-no">140</span><span id="line.140">            else</span>
-<span class="source-line-no">141</span><span id="line.141">            {</span>
-<span class="source-line-no">142</span><span id="line.142">                dx = 0;</span>
-<span class="source-line-no">143</span><span id="line.143">                dy *= -1;</span>
-<span class="source-line-no">144</span><span id="line.144">            }</span>
-<span class="source-line-no">145</span><span id="line.145">            dir = Direction.getCardinalDirection(dx, dy);</span>
-<span class="source-line-no">146</span><span id="line.146">        }</span>
-<span class="source-line-no">147</span><span id="line.147">        if(currentX + dir.deltaX &lt;= 0 || currentX + dir.deltaX &gt;= width - 1) {</span>
-<span class="source-line-no">148</span><span id="line.148">            if (currentY &lt; targetY) dir = Direction.DOWN;</span>
-<span class="source-line-no">149</span><span id="line.149">            else if (currentY &gt; targetY) dir = Direction.UP;</span>
-<span class="source-line-no">150</span><span id="line.150">        }</span>
-<span class="source-line-no">151</span><span id="line.151">        else if(currentY + dir.deltaY &lt;= 0 || currentY + dir.deltaY &gt;= height - 1) {</span>
-<span class="source-line-no">152</span><span id="line.152">            if (currentX &lt; targetX) dir = Direction.RIGHT;</span>
-<span class="source-line-no">153</span><span id="line.153">            else if (currentX &gt; targetX) dir = Direction.LEFT;</span>
-<span class="source-line-no">154</span><span id="line.154">        }</span>
-<span class="source-line-no">155</span><span id="line.155">        return dir;</span>
-<span class="source-line-no">156</span><span id="line.156">    }</span>
-<span class="source-line-no">157</span><span id="line.157"></span>
-<span class="source-line-no">158</span><span id="line.158">    /**</span>
-<span class="source-line-no">159</span><span id="line.159">     * Draws a line from start to end using the Drunkard's Walk algorithm. Returns a List of Coord in order.</span>
-<span class="source-line-no">160</span><span id="line.160">     * @param start starting point</span>
-<span class="source-line-no">161</span><span id="line.161">     * @param end ending point</span>
-<span class="source-line-no">162</span><span id="line.162">     * @param width maximum map width</span>
-<span class="source-line-no">163</span><span id="line.163">     * @param height maximum map height</span>
-<span class="source-line-no">164</span><span id="line.164">     * @return List of Coord, including start and end and all points walked between</span>
-<span class="source-line-no">165</span><span id="line.165">     */</span>
-<span class="source-line-no">166</span><span id="line.166">    public static ArrayList&lt;Coord&gt; line(Coord start, Coord end, int width, int height)</span>
-<span class="source-line-no">167</span><span id="line.167">    {</span>
-<span class="source-line-no">168</span><span id="line.168">        return line(start.x, start.y, end.x, end.y, width, height);</span>
-<span class="source-line-no">169</span><span id="line.169">    }</span>
-<span class="source-line-no">170</span><span id="line.170">}</span>
+<span class="source-line-no">118</span><span id="line.118">                    dy2 = -dy2;</span>
+<span class="source-line-no">119</span><span id="line.119">                }</span>
+<span class="source-line-no">120</span><span id="line.120">            }</span>
+<span class="source-line-no">121</span><span id="line.121">            dir = Direction.getCardinalDirection(dx2, dy2);</span>
+<span class="source-line-no">122</span><span id="line.122"></span>
+<span class="source-line-no">123</span><span id="line.123">        }</span>
+<span class="source-line-no">124</span><span id="line.124">        else</span>
+<span class="source-line-no">125</span><span id="line.125">        {</span>
+<span class="source-line-no">126</span><span id="line.126">            if (r &lt; weight * 0.5)</span>
+<span class="source-line-no">127</span><span id="line.127">            {</span>
+<span class="source-line-no">128</span><span id="line.128">                dy = 0;</span>
+<span class="source-line-no">129</span><span id="line.129">            }</span>
+<span class="source-line-no">130</span><span id="line.130">            else if (r &lt; weight)</span>
+<span class="source-line-no">131</span><span id="line.131">            {</span>
+<span class="source-line-no">132</span><span id="line.132">                dx = 0;</span>
+<span class="source-line-no">133</span><span id="line.133">            }</span>
+<span class="source-line-no">134</span><span id="line.134">            else if (r &lt; weight + (1 - weight) * 0.5)</span>
+<span class="source-line-no">135</span><span id="line.135">            {</span>
+<span class="source-line-no">136</span><span id="line.136">                dx *= -1;</span>
+<span class="source-line-no">137</span><span id="line.137">                dy = 0;</span>
+<span class="source-line-no">138</span><span id="line.138">            }</span>
+<span class="source-line-no">139</span><span id="line.139">            else</span>
+<span class="source-line-no">140</span><span id="line.140">            {</span>
+<span class="source-line-no">141</span><span id="line.141">                dx = 0;</span>
+<span class="source-line-no">142</span><span id="line.142">                dy = -dy;</span>
+<span class="source-line-no">143</span><span id="line.143">            }</span>
+<span class="source-line-no">144</span><span id="line.144">            dir = Direction.getCardinalDirection(dx, dy);</span>
+<span class="source-line-no">145</span><span id="line.145">        }</span>
+<span class="source-line-no">146</span><span id="line.146">        if(currentX + dir.deltaX &lt;= 0 || currentX + dir.deltaX &gt;= width - 1) {</span>
+<span class="source-line-no">147</span><span id="line.147">            if (currentY &lt; targetY) dir = Direction.DOWN;</span>
+<span class="source-line-no">148</span><span id="line.148">            else if (currentY &gt; targetY) dir = Direction.UP;</span>
+<span class="source-line-no">149</span><span id="line.149">        }</span>
+<span class="source-line-no">150</span><span id="line.150">        else if(currentY + dir.deltaY &lt;= 0 || currentY + dir.deltaY &gt;= height - 1) {</span>
+<span class="source-line-no">151</span><span id="line.151">            if (currentX &lt; targetX) dir = Direction.RIGHT;</span>
+<span class="source-line-no">152</span><span id="line.152">            else if (currentX &gt; targetX) dir = Direction.LEFT;</span>
+<span class="source-line-no">153</span><span id="line.153">        }</span>
+<span class="source-line-no">154</span><span id="line.154">        return dir;</span>
+<span class="source-line-no">155</span><span id="line.155">    }</span>
+<span class="source-line-no">156</span><span id="line.156"></span>
+<span class="source-line-no">157</span><span id="line.157">    /**</span>
+<span class="source-line-no">158</span><span id="line.158">     * Draws a line from start to end using the Drunkard's Walk algorithm. Returns a List of Coord in order.</span>
+<span class="source-line-no">159</span><span id="line.159">     * @param start starting point</span>
+<span class="source-line-no">160</span><span id="line.160">     * @param end ending point</span>
+<span class="source-line-no">161</span><span id="line.161">     * @param width maximum map width</span>
+<span class="source-line-no">162</span><span id="line.162">     * @param height maximum map height</span>
+<span class="source-line-no">163</span><span id="line.163">     * @return List of Coord, including start and end and all points walked between</span>
+<span class="source-line-no">164</span><span id="line.164">     */</span>
+<span class="source-line-no">165</span><span id="line.165">    public static ArrayList&lt;Coord&gt; line(Coord start, Coord end, int width, int height)</span>
+<span class="source-line-no">166</span><span id="line.166">    {</span>
+<span class="source-line-no">167</span><span id="line.167">        return line(start.x, start.y, end.x, end.y, width, height);</span>
+<span class="source-line-no">168</span><span id="line.168">    }</span>
+<span class="source-line-no">169</span><span id="line.169">}</span>
 
 
 

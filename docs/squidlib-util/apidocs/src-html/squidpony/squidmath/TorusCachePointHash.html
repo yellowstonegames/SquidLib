@@ -19,7 +19,7 @@
 <span class="source-line-no">006</span><span id="line.6"> * no greater than 1024. This implementation stores 6 caches of 1024 numbers each, where each cache is used for a</span>
 <span class="source-line-no">007</span><span id="line.7"> * different dimension, and XORs the values along with the seed before running through Thomas Wang's integer hash.</span>
 <span class="source-line-no">008</span><span id="line.8"> */</span>
-<span class="source-line-no">009</span><span id="line.9">public final class TorusCachePointHash extends IPointHash.IntImpl {</span>
+<span class="source-line-no">009</span><span id="line.9">public class TorusCachePointHash extends IPointHash.IntImpl {</span>
 <span class="source-line-no">010</span><span id="line.10"></span>
 <span class="source-line-no">011</span><span id="line.11">    protected final int[] cache;</span>
 <span class="source-line-no">012</span><span id="line.12">    protected int wrap = 63;</span>
@@ -48,50 +48,59 @@
 <span class="source-line-no">035</span><span id="line.35">        }</span>
 <span class="source-line-no">036</span><span id="line.36">    }</span>
 <span class="source-line-no">037</span><span id="line.37"></span>
-<span class="source-line-no">038</span><span id="line.38">    /**</span>
-<span class="source-line-no">039</span><span id="line.39">     * Thomas Wang's 2002 integer hash.</span>
-<span class="source-line-no">040</span><span id="line.40">     * @param x any int</span>
-<span class="source-line-no">041</span><span id="line.41">     * @return a usually different and very-scrambled int</span>
-<span class="source-line-no">042</span><span id="line.42">     */</span>
-<span class="source-line-no">043</span><span id="line.43">    public static int determineInt(int x){</span>
-<span class="source-line-no">044</span><span id="line.44">        x += ~(x &lt;&lt; 15);</span>
-<span class="source-line-no">045</span><span id="line.45">        x ^= x &gt;&gt;&gt; 10;</span>
-<span class="source-line-no">046</span><span id="line.46">        x += x &lt;&lt; 3;</span>
-<span class="source-line-no">047</span><span id="line.47">        x ^= x &gt;&gt;&gt; 6;</span>
-<span class="source-line-no">048</span><span id="line.48">        x += ~(x &lt;&lt; 11);</span>
-<span class="source-line-no">049</span><span id="line.49">        x ^= x &gt;&gt;&gt; 16;</span>
-<span class="source-line-no">050</span><span id="line.50">        return x;</span>
-<span class="source-line-no">051</span><span id="line.51">    }</span>
-<span class="source-line-no">052</span><span id="line.52"></span>
-<span class="source-line-no">053</span><span id="line.53">    @Override</span>
-<span class="source-line-no">054</span><span id="line.54">    public int hashWithState(int x, int y, int state) {</span>
-<span class="source-line-no">055</span><span id="line.55">        return determineInt(state ^ cache[(x &amp; wrap)] ^ cache[(y &amp; wrap) + 1024]);</span>
-<span class="source-line-no">056</span><span id="line.56">    }</span>
-<span class="source-line-no">057</span><span id="line.57"></span>
-<span class="source-line-no">058</span><span id="line.58">    @Override</span>
-<span class="source-line-no">059</span><span id="line.59">    public int hashWithState(int x, int y, int z, int state) {</span>
-<span class="source-line-no">060</span><span id="line.60">        return determineInt(state ^ cache[(x &amp; wrap)] ^ cache[(y &amp; wrap) + 1024] ^ cache[(z &amp; wrap) + 2048]);</span>
-<span class="source-line-no">061</span><span id="line.61">    }</span>
-<span class="source-line-no">062</span><span id="line.62"></span>
-<span class="source-line-no">063</span><span id="line.63">    @Override</span>
-<span class="source-line-no">064</span><span id="line.64">    public int hashWithState(int x, int y, int z, int w, int state) {</span>
-<span class="source-line-no">065</span><span id="line.65">        return determineInt(state ^ cache[(x &amp; wrap)] ^ cache[(y &amp; wrap) + 1024] ^ cache[(z &amp; wrap) + 2048]</span>
-<span class="source-line-no">066</span><span id="line.66">                ^ cache[(w &amp; wrap) + 3072]);</span>
-<span class="source-line-no">067</span><span id="line.67">    }</span>
-<span class="source-line-no">068</span><span id="line.68"></span>
-<span class="source-line-no">069</span><span id="line.69">    @Override</span>
-<span class="source-line-no">070</span><span id="line.70">    public int hashWithState(int x, int y, int z, int w, int u, int state) {</span>
-<span class="source-line-no">071</span><span id="line.71">        return determineInt(state ^ cache[(x &amp; wrap)] ^ cache[(y &amp; wrap) + 1024] ^ cache[(z &amp; wrap) + 2048]</span>
-<span class="source-line-no">072</span><span id="line.72">                ^ cache[(w &amp; wrap) + 3072] ^ cache[(u &amp; wrap) + 4096]);</span>
-<span class="source-line-no">073</span><span id="line.73">    }</span>
-<span class="source-line-no">074</span><span id="line.74"></span>
-<span class="source-line-no">075</span><span id="line.75">    @Override</span>
-<span class="source-line-no">076</span><span id="line.76">    public int hashWithState(int x, int y, int z, int w, int u, int v, int state) {</span>
-<span class="source-line-no">077</span><span id="line.77">        return determineInt(state ^ cache[(x &amp; wrap)] ^ cache[(y &amp; wrap) + 1024] ^ cache[(z &amp; wrap) + 2048]</span>
-<span class="source-line-no">078</span><span id="line.78">                ^ cache[(w &amp; wrap) + 3072] ^ cache[(u &amp; wrap) + 4096] ^ cache[(v &amp; wrap) + 5120]);</span>
-<span class="source-line-no">079</span><span id="line.79"></span>
-<span class="source-line-no">080</span><span id="line.80">    }</span>
-<span class="source-line-no">081</span><span id="line.81">}</span>
+<span class="source-line-no">038</span><span id="line.38">    @Override</span>
+<span class="source-line-no">039</span><span id="line.39">    public void setState(long state) {</span>
+<span class="source-line-no">040</span><span id="line.40">        this.state = (int)(state ^ state &gt;&gt;&gt; 32);</span>
+<span class="source-line-no">041</span><span id="line.41">        SilkRNG rng = new SilkRNG(state);</span>
+<span class="source-line-no">042</span><span id="line.42">        for (int i = 0; i &lt; cache.length; i++) {</span>
+<span class="source-line-no">043</span><span id="line.43">            cache[i] = rng.nextInt();</span>
+<span class="source-line-no">044</span><span id="line.44">        }</span>
+<span class="source-line-no">045</span><span id="line.45">    }</span>
+<span class="source-line-no">046</span><span id="line.46"></span>
+<span class="source-line-no">047</span><span id="line.47">    /**</span>
+<span class="source-line-no">048</span><span id="line.48">     * Thomas Wang's 2002 integer hash.</span>
+<span class="source-line-no">049</span><span id="line.49">     * @param x any int</span>
+<span class="source-line-no">050</span><span id="line.50">     * @return a usually different and very-scrambled int</span>
+<span class="source-line-no">051</span><span id="line.51">     */</span>
+<span class="source-line-no">052</span><span id="line.52">    public static int determineInt(int x){</span>
+<span class="source-line-no">053</span><span id="line.53">        x += ~(x &lt;&lt; 15);</span>
+<span class="source-line-no">054</span><span id="line.54">        x ^= x &gt;&gt;&gt; 10;</span>
+<span class="source-line-no">055</span><span id="line.55">        x += x &lt;&lt; 3;</span>
+<span class="source-line-no">056</span><span id="line.56">        x ^= x &gt;&gt;&gt; 6;</span>
+<span class="source-line-no">057</span><span id="line.57">        x += ~(x &lt;&lt; 11);</span>
+<span class="source-line-no">058</span><span id="line.58">        x ^= x &gt;&gt;&gt; 16;</span>
+<span class="source-line-no">059</span><span id="line.59">        return x;</span>
+<span class="source-line-no">060</span><span id="line.60">    }</span>
+<span class="source-line-no">061</span><span id="line.61"></span>
+<span class="source-line-no">062</span><span id="line.62">    @Override</span>
+<span class="source-line-no">063</span><span id="line.63">    public int hashWithState(int x, int y, int state) {</span>
+<span class="source-line-no">064</span><span id="line.64">        return determineInt(state ^ cache[(x &amp; wrap)] ^ cache[(y &amp; wrap) + 1024]);</span>
+<span class="source-line-no">065</span><span id="line.65">    }</span>
+<span class="source-line-no">066</span><span id="line.66"></span>
+<span class="source-line-no">067</span><span id="line.67">    @Override</span>
+<span class="source-line-no">068</span><span id="line.68">    public int hashWithState(int x, int y, int z, int state) {</span>
+<span class="source-line-no">069</span><span id="line.69">        return determineInt(state ^ cache[(x &amp; wrap)] ^ cache[(y &amp; wrap) + 1024] ^ cache[(z &amp; wrap) + 2048]);</span>
+<span class="source-line-no">070</span><span id="line.70">    }</span>
+<span class="source-line-no">071</span><span id="line.71"></span>
+<span class="source-line-no">072</span><span id="line.72">    @Override</span>
+<span class="source-line-no">073</span><span id="line.73">    public int hashWithState(int x, int y, int z, int w, int state) {</span>
+<span class="source-line-no">074</span><span id="line.74">        return determineInt(state ^ cache[(x &amp; wrap)] ^ cache[(y &amp; wrap) + 1024] ^ cache[(z &amp; wrap) + 2048]</span>
+<span class="source-line-no">075</span><span id="line.75">                ^ cache[(w &amp; wrap) + 3072]);</span>
+<span class="source-line-no">076</span><span id="line.76">    }</span>
+<span class="source-line-no">077</span><span id="line.77"></span>
+<span class="source-line-no">078</span><span id="line.78">    @Override</span>
+<span class="source-line-no">079</span><span id="line.79">    public int hashWithState(int x, int y, int z, int w, int u, int state) {</span>
+<span class="source-line-no">080</span><span id="line.80">        return determineInt(state ^ cache[(x &amp; wrap)] ^ cache[(y &amp; wrap) + 1024] ^ cache[(z &amp; wrap) + 2048]</span>
+<span class="source-line-no">081</span><span id="line.81">                ^ cache[(w &amp; wrap) + 3072] ^ cache[(u &amp; wrap) + 4096]);</span>
+<span class="source-line-no">082</span><span id="line.82">    }</span>
+<span class="source-line-no">083</span><span id="line.83"></span>
+<span class="source-line-no">084</span><span id="line.84">    @Override</span>
+<span class="source-line-no">085</span><span id="line.85">    public int hashWithState(int x, int y, int z, int w, int u, int v, int state) {</span>
+<span class="source-line-no">086</span><span id="line.86">        return determineInt(state ^ cache[(x &amp; wrap)] ^ cache[(y &amp; wrap) + 1024] ^ cache[(z &amp; wrap) + 2048]</span>
+<span class="source-line-no">087</span><span id="line.87">                ^ cache[(w &amp; wrap) + 3072] ^ cache[(u &amp; wrap) + 4096] ^ cache[(v &amp; wrap) + 5120]);</span>
+<span class="source-line-no">088</span><span id="line.88"></span>
+<span class="source-line-no">089</span><span id="line.89">    }</span>
+<span class="source-line-no">090</span><span id="line.90">}</span>
 
 
 

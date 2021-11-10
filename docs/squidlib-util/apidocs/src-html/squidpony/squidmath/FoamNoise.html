@@ -99,7 +99,7 @@
 <span class="source-line-no">086</span><span id="line.86">        //xin = x * 0.283662 + y * -0.958924; // sin and cos of 5</span>
 <span class="source-line-no">087</span><span id="line.87">        //yin = x * 0.958924 + y * 0.283662;</span>
 <span class="source-line-no">088</span><span id="line.88">        final double c = valueNoise(seed, xin + b, yin);</span>
-<span class="source-line-no">089</span><span id="line.89">        final double result = a * 0.3125 + (b + c) * 0.34375;</span>
+<span class="source-line-no">089</span><span id="line.89">        final double result = (a + b + c) * 0.3333333333333333;</span>
 <span class="source-line-no">090</span><span id="line.90">//        return result * result * (6.0 - 4.0 * result) - 1.0;</span>
 <span class="source-line-no">091</span><span id="line.91">//        return (result &lt;= 0.5)</span>
 <span class="source-line-no">092</span><span id="line.92">//                ? (result * result * 4.0) - 1.0</span>
@@ -107,7 +107,7 @@
 <span class="source-line-no">094</span><span id="line.94">        final double sharp = sharpness * 2.2;</span>
 <span class="source-line-no">095</span><span id="line.95">        final double diff = 0.5 - result;</span>
 <span class="source-line-no">096</span><span id="line.96">        final int sign = NumberTools.doubleToHighIntBits(diff) &gt;&gt; 31, one = sign | 1;</span>
-<span class="source-line-no">097</span><span id="line.97">        return ((( 0.5 * one - sign) * (result + sign)) / (Double.MIN_VALUE - sign + (result + sharp * diff) * one) - sign) * 2.0 - 1.0;</span>
+<span class="source-line-no">097</span><span id="line.97">        return (((result + sign)) / (Double.MIN_VALUE - sign + (result + sharp * diff) * one) - sign - sign) - 1.0;</span>
 <span class="source-line-no">098</span><span id="line.98">    }</span>
 <span class="source-line-no">099</span><span id="line.99">    </span>
 <span class="source-line-no">100</span><span id="line.100">    /*</span>
@@ -181,7 +181,7 @@
 <span class="source-line-no">168</span><span id="line.168">        final double sharp = sharpness * 3.3;</span>
 <span class="source-line-no">169</span><span id="line.169">        final double diff = 0.5 - result;</span>
 <span class="source-line-no">170</span><span id="line.170">        final int sign = NumberTools.doubleToHighIntBits(diff) &gt;&gt; 31, one = sign | 1;</span>
-<span class="source-line-no">171</span><span id="line.171">        return ((( 0.5 * one - sign) * (result + sign)) / (Double.MIN_VALUE - sign + (result + sharp * diff) * one) - sign) * 2.0 - 1.0;</span>
+<span class="source-line-no">171</span><span id="line.171">        return (((result + sign)) / (Double.MIN_VALUE - sign + (result + sharp * diff) * one) - sign - sign) - 1.0;</span>
 <span class="source-line-no">172</span><span id="line.172"></span>
 <span class="source-line-no">173</span><span id="line.173">    }</span>
 <span class="source-line-no">174</span><span id="line.174"></span>
@@ -251,7 +251,7 @@
 <span class="source-line-no">238</span><span id="line.238">        final double sharp = sharpness * 4.4;</span>
 <span class="source-line-no">239</span><span id="line.239">        final double diff = 0.5 - result;</span>
 <span class="source-line-no">240</span><span id="line.240">        final int sign = NumberTools.doubleToHighIntBits(diff) &gt;&gt; 31, one = sign | 1;</span>
-<span class="source-line-no">241</span><span id="line.241">        return ((( 0.5 * one - sign) * (result + sign)) / (Double.MIN_VALUE - sign + (result + sharp * diff) * one) - sign) * 2.0 - 1.0;</span>
+<span class="source-line-no">241</span><span id="line.241">        return (((result + sign)) / (Double.MIN_VALUE - sign + (result + sharp * diff) * one) - sign - sign) - 1.0;</span>
 <span class="source-line-no">242</span><span id="line.242">    }</span>
 <span class="source-line-no">243</span><span id="line.243">    public double foamNoise(final double x, final double y, final double z,</span>
 <span class="source-line-no">244</span><span id="line.244">                                   final double w, final double u, int seed) {</span>
@@ -321,7 +321,7 @@
 <span class="source-line-no">308</span><span id="line.308">        final double sharp = sharpness * 5.5;</span>
 <span class="source-line-no">309</span><span id="line.309">        final double diff = 0.5 - result;</span>
 <span class="source-line-no">310</span><span id="line.310">        final int sign = NumberTools.doubleToHighIntBits(diff) &gt;&gt; 31, one = sign | 1;</span>
-<span class="source-line-no">311</span><span id="line.311">        return ((( 0.5 * one - sign) * (result + sign)) / (Double.MIN_VALUE - sign + (result + sharp * diff) * one) - sign) * 2.0 - 1.0;</span>
+<span class="source-line-no">311</span><span id="line.311">        return (((result + sign)) / (Double.MIN_VALUE - sign + (result + sharp * diff) * one) - sign - sign) - 1.0;</span>
 <span class="source-line-no">312</span><span id="line.312">    }</span>
 <span class="source-line-no">313</span><span id="line.313"></span>
 <span class="source-line-no">314</span><span id="line.314">    public double foamNoise(final double x, final double y, final double z,</span>
@@ -408,7 +408,7 @@
 <span class="source-line-no">395</span><span id="line.395">        final double sharp = sharpness * 6.6;</span>
 <span class="source-line-no">396</span><span id="line.396">        final double diff = 0.5 - result;</span>
 <span class="source-line-no">397</span><span id="line.397">        final int sign = NumberTools.doubleToHighIntBits(diff) &gt;&gt; 31, one = sign | 1;</span>
-<span class="source-line-no">398</span><span id="line.398">        return ((( 0.5 * one - sign) * (result + sign)) / (Double.MIN_VALUE - sign + (result + sharp * diff) * one) - sign) * 2.0 - 1.0;</span>
+<span class="source-line-no">398</span><span id="line.398">        return (((result + sign)) / (Double.MIN_VALUE - sign + (result + sharp * diff) * one) - sign - sign) - 1.0;</span>
 <span class="source-line-no">399</span><span id="line.399">    }</span>
 <span class="source-line-no">400</span><span id="line.400"></span>
 <span class="source-line-no">401</span><span id="line.401">    @Override</span>

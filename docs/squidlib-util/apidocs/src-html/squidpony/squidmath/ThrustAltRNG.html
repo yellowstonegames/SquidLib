@@ -54,7 +54,7 @@
 <span class="source-line-no">041</span><span id="line.41"> * &lt;br&gt;</span>
 <span class="source-line-no">042</span><span id="line.42"> * Created by Tommy Ettinger on 10/18/2017.</span>
 <span class="source-line-no">043</span><span id="line.43"> */</span>
-<span class="source-line-no">044</span><span id="line.44">public final class ThrustAltRNG implements StatefulRandomness, SkippingRandomness, Serializable {</span>
+<span class="source-line-no">044</span><span id="line.44">public class ThrustAltRNG implements StatefulRandomness, SkippingRandomness, Serializable {</span>
 <span class="source-line-no">045</span><span id="line.45">    private static final long serialVersionUID = 3L;</span>
 <span class="source-line-no">046</span><span id="line.46">    /**</span>
 <span class="source-line-no">047</span><span id="line.47">     * Can be any long value.</span>
@@ -101,7 +101,7 @@
 <span class="source-line-no">088</span><span id="line.88">     * @return the integer containing the appropriate number of bits</span>
 <span class="source-line-no">089</span><span id="line.89">     */</span>
 <span class="source-line-no">090</span><span id="line.90">    @Override</span>
-<span class="source-line-no">091</span><span id="line.91">    public final int next(final int bits) {</span>
+<span class="source-line-no">091</span><span id="line.91">    public int next(final int bits) {</span>
 <span class="source-line-no">092</span><span id="line.92">        final long s = (state += 0x6C8E9CF570932BD5L);</span>
 <span class="source-line-no">093</span><span id="line.93">        final long z = (s ^ (s &gt;&gt;&gt; 25)) * (s | 0xA529L);</span>
 <span class="source-line-no">094</span><span id="line.94">        return (int)(z ^ (z &gt;&gt;&gt; 23)) &gt;&gt;&gt; (32 - bits);</span>
@@ -115,7 +115,7 @@
 <span class="source-line-no">102</span><span id="line.102">     * @return a random long between Long.MIN_VALUE and Long.MAX_VALUE (both inclusive)</span>
 <span class="source-line-no">103</span><span id="line.103">     */</span>
 <span class="source-line-no">104</span><span id="line.104">    @Override</span>
-<span class="source-line-no">105</span><span id="line.105">    public final long nextLong() {</span>
+<span class="source-line-no">105</span><span id="line.105">    public long nextLong() {</span>
 <span class="source-line-no">106</span><span id="line.106">        final long s = (state += 0x6C8E9CF570932BD5L);</span>
 <span class="source-line-no">107</span><span id="line.107">        final long z = (s ^ (s &gt;&gt;&gt; 25)) * (s | 0xA529L);</span>
 <span class="source-line-no">108</span><span id="line.108">        return z ^ (z &gt;&gt;&gt; 23);</span>
@@ -130,7 +130,7 @@
 <span class="source-line-no">117</span><span id="line.117">     * @return the random long generated after skipping forward or backwards by {@code advance} numbers</span>
 <span class="source-line-no">118</span><span id="line.118">     */</span>
 <span class="source-line-no">119</span><span id="line.119">    @Override</span>
-<span class="source-line-no">120</span><span id="line.120">    public final long skip(long advance) {</span>
+<span class="source-line-no">120</span><span id="line.120">    public long skip(long advance) {</span>
 <span class="source-line-no">121</span><span id="line.121">        final long s = (state += 0x6C8E9CF570932BD5L * advance);</span>
 <span class="source-line-no">122</span><span id="line.122">        final long z = (s ^ (s &gt;&gt;&gt; 25)) * (s | 0xA529L);</span>
 <span class="source-line-no">123</span><span id="line.123">        return z ^ (z &gt;&gt;&gt; 23);</span>

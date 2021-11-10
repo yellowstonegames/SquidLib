@@ -43,7 +43,7 @@
 <span class="source-line-no">030</span><span id="line.30"> * &lt;br&gt;</span>
 <span class="source-line-no">031</span><span id="line.31"> * Created by Tommy Ettinger on 5/8/2020.</span>
 <span class="source-line-no">032</span><span id="line.32"> */</span>
-<span class="source-line-no">033</span><span id="line.33">public final class GoatRNG implements RandomnessSource, Serializable {</span>
+<span class="source-line-no">033</span><span id="line.33">public class GoatRNG implements RandomnessSource, Serializable {</span>
 <span class="source-line-no">034</span><span id="line.34">    private static final long serialVersionUID = 1L;</span>
 <span class="source-line-no">035</span><span id="line.35">    /**</span>
 <span class="source-line-no">036</span><span id="line.36">     * Can be any long value.</span>
@@ -119,7 +119,7 @@
 <span class="source-line-no">106</span><span id="line.106">     * @return the integer containing the appropriate number of bits</span>
 <span class="source-line-no">107</span><span id="line.107">     */</span>
 <span class="source-line-no">108</span><span id="line.108">    @Override</span>
-<span class="source-line-no">109</span><span id="line.109">    public final int next(final int bits) {</span>
+<span class="source-line-no">109</span><span id="line.109">    public int next(final int bits) {</span>
 <span class="source-line-no">110</span><span id="line.110">        long s = (stateA += 0xD1342543DE82EF95L);</span>
 <span class="source-line-no">111</span><span id="line.111">        s ^= s &gt;&gt;&gt; 31 ^ s &gt;&gt;&gt; 23;</span>
 <span class="source-line-no">112</span><span id="line.112">        if(s &lt; 0x46BC279692B5C323L) {</span>
@@ -142,7 +142,7 @@
 <span class="source-line-no">129</span><span id="line.129">     * @return a random long between Long.MIN_VALUE and Long.MAX_VALUE (both inclusive)</span>
 <span class="source-line-no">130</span><span id="line.130">     */</span>
 <span class="source-line-no">131</span><span id="line.131">    @Override</span>
-<span class="source-line-no">132</span><span id="line.132">    public final long nextLong() {</span>
+<span class="source-line-no">132</span><span id="line.132">    public long nextLong() {</span>
 <span class="source-line-no">133</span><span id="line.133">        long s = (stateA += 0xD1342543DE82EF95L);</span>
 <span class="source-line-no">134</span><span id="line.134">        s ^= s &gt;&gt;&gt; 31 ^ s &gt;&gt;&gt; 23;</span>
 <span class="source-line-no">135</span><span id="line.135">        if(s &lt; 0x46BC279692B5C323L) {</span>

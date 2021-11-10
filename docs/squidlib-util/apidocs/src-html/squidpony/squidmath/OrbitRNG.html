@@ -38,7 +38,7 @@
 <span class="source-line-no">025</span><span id="line.25"> * &lt;br&gt;</span>
 <span class="source-line-no">026</span><span id="line.26"> * Created by Tommy Ettinger on 7/9/2018.</span>
 <span class="source-line-no">027</span><span id="line.27"> */</span>
-<span class="source-line-no">028</span><span id="line.28">public final class OrbitRNG implements RandomnessSource, Serializable {</span>
+<span class="source-line-no">028</span><span id="line.28">public class OrbitRNG implements RandomnessSource, Serializable {</span>
 <span class="source-line-no">029</span><span id="line.29">    private static final long serialVersionUID = 4L;</span>
 <span class="source-line-no">030</span><span id="line.30">    /**</span>
 <span class="source-line-no">031</span><span id="line.31">     * Can be any long value.</span>
@@ -112,7 +112,7 @@
 <span class="source-line-no">099</span><span id="line.99">     * @return the integer containing the appropriate number of bits</span>
 <span class="source-line-no">100</span><span id="line.100">     */</span>
 <span class="source-line-no">101</span><span id="line.101">    @Override</span>
-<span class="source-line-no">102</span><span id="line.102">    public final int next(final int bits) {</span>
+<span class="source-line-no">102</span><span id="line.102">    public int next(final int bits) {</span>
 <span class="source-line-no">103</span><span id="line.103">        final long s = (stateA += 0x6C8E9CF570932BD5L);</span>
 <span class="source-line-no">104</span><span id="line.104">        if(s == 0L)</span>
 <span class="source-line-no">105</span><span id="line.105">            stateB += 0x9E3779B97F4A7C15L;</span>
@@ -128,7 +128,7 @@
 <span class="source-line-no">115</span><span id="line.115">     * @return a random long between Long.MIN_VALUE and Long.MAX_VALUE (both inclusive)</span>
 <span class="source-line-no">116</span><span id="line.116">     */</span>
 <span class="source-line-no">117</span><span id="line.117">    @Override</span>
-<span class="source-line-no">118</span><span id="line.118">    public final long nextLong() {</span>
+<span class="source-line-no">118</span><span id="line.118">    public long nextLong() {</span>
 <span class="source-line-no">119</span><span id="line.119">        final long s = (stateA += 0x6C8E9CF570932BD5L);</span>
 <span class="source-line-no">120</span><span id="line.120">        if(s == 0L)</span>
 <span class="source-line-no">121</span><span id="line.121">            stateB += 0x9E3779B97F4A7C15L;</span>

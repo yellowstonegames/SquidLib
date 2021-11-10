@@ -1523,14 +1523,14 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 
         @Override
         public long nextLong() {
-            long b = (stateB += 0xB69E1722EB5C42CAL);
-            long a = (stateA += 0xC6BC279692B5C323L) + b;
-            a ^= a >>> 31;
-            a *= b;
+//            long b = (stateB += 0xB69E1722EB5C42CAL);
+//            long a = (stateA += 0xC6BC279692B5C323L) + b;
+//            a ^= a >>> 31;
 //            a *= b;
-//            a ^= a >>> 1;
-//            a *= 0xD1342543DE82EF95L;
-            return (a ^ a >>> 26);
+////            a *= b;
+////            a ^= a >>> 1;
+////            a *= 0xD1342543DE82EF95L;
+//            return (a ^ a >>> 26);
 
 //            long a = (stateA += 0xC6BC279692B5C323L);
 //            a ^= a >>> 31;
@@ -1538,7 +1538,12 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 //            a ^= a >>> 33;
 //            a *= 0xACBD2BDCA2BFF56DL;
 //            return a ^ a >>> 26;
+
+            long a = stateB & (stateA += 0xC6BC279692B5C323L);
+            a = (a ^ a >>> 31) * (stateA | (stateB += 0x9E3779B97F4A7C16L));
+            return (a ^ a >>> 26);
         }
+//            a *= 0xACBD2BDCA2BFF56DL;
 
         @Override
         public RandomnessSource copy() {
@@ -1596,7 +1601,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                randomGrid[x][y] = new TricycleRNG(x+1, y+1, x+1);
+                randomGrid[x][y] = new PangolinRNG(x*2+1, y*2+1);
 //                randomGrid[x][y] = new XoshiroStarStar64RNG(x ^ y << 9);
 //                randomGrid[x][y] = new RandomXS128(x+1, y+1);
 //                randomGrid[x][y] = new RandomXS128(x*2+1, y*2+1);
@@ -5636,7 +5641,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
 //                                back[x][y] = floatGet((randomGrid[x][y].nextLong() >> 63) | 255L);
-                                back[x][y] = floatGet(-(randomGrid[x][y].nextLong() >>> 1 & 1L) | 255L);
+                                back[x][y] = floatGet(-(randomGrid[x][y].nextLong() & 1L) | 255L);
 //                                back[x][y] = floatGet(randomGrid[x][y].nextLong() << 8 | 255L);
                             }
                         }
@@ -6767,7 +6772,8 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
         Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
         config.setTitle("SquidLib Test: Hash Visualization");
         config.setWindowedMode(width, height);
-        config.useVsync(false);
+        config.useVsync(true);
+        config.setForegroundFPS(2);
         config.setWindowIcon(Files.FileType.Internal, "Tentacle-128.png", "Tentacle-64.png", "Tentacle-32.png", "Tentacle-16.png");
         new Lwjgl3Application(new HashVisualizer(), config);
     }

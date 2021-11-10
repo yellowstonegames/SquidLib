@@ -45,7 +45,7 @@
 <span class="source-line-no">032</span><span id="line.32"> * @author David Blackman</span>
 <span class="source-line-no">033</span><span id="line.33"> * @author Tommy Ettinger (if there's a flaw, use SquidLib's issues and don't bother Vigna or Blackman, the algorithm here has been adjusted from their work)</span>
 <span class="source-line-no">034</span><span id="line.34"> */</span>
-<span class="source-line-no">035</span><span id="line.35">public final class GWTRNG extends AbstractRNG implements IStatefulRNG, Serializable {</span>
+<span class="source-line-no">035</span><span id="line.35">public class GWTRNG extends AbstractRNG implements IStatefulRNG, Serializable {</span>
 <span class="source-line-no">036</span><span id="line.36">    private static final long serialVersionUID = 3L;</span>
 <span class="source-line-no">037</span><span id="line.37"></span>
 <span class="source-line-no">038</span><span id="line.38">    public int stateA, stateB;</span>
@@ -101,7 +101,7 @@
 <span class="source-line-no">088</span><span id="line.88">     * @return a random number that fits in the specified number of bits</span>
 <span class="source-line-no">089</span><span id="line.89">     */</span>
 <span class="source-line-no">090</span><span id="line.90">    @Override</span>
-<span class="source-line-no">091</span><span id="line.91">    public final int next(int bits) {</span>
+<span class="source-line-no">091</span><span id="line.91">    public int next(int bits) {</span>
 <span class="source-line-no">092</span><span id="line.92">        final int s0 = stateA;</span>
 <span class="source-line-no">093</span><span id="line.93">        final int s1 = stateB ^ s0;</span>
 <span class="source-line-no">094</span><span id="line.94">        final int result = s0 * 31;</span>
@@ -116,7 +116,7 @@
 <span class="source-line-no">103</span><span id="line.103">     * @return a 32-bit random int.</span>
 <span class="source-line-no">104</span><span id="line.104">     */</span>
 <span class="source-line-no">105</span><span id="line.105">    @Override</span>
-<span class="source-line-no">106</span><span id="line.106">    public final int nextInt() {</span>
+<span class="source-line-no">106</span><span id="line.106">    public int nextInt() {</span>
 <span class="source-line-no">107</span><span id="line.107">        final int s0 = stateA;</span>
 <span class="source-line-no">108</span><span id="line.108">        final int s1 = stateB ^ s0;</span>
 <span class="source-line-no">109</span><span id="line.109">        final int result = s0 * 31;</span>
@@ -132,7 +132,7 @@
 <span class="source-line-no">119</span><span id="line.119">     * @return the found number</span>
 <span class="source-line-no">120</span><span id="line.120">     */</span>
 <span class="source-line-no">121</span><span id="line.121">    @Override</span>
-<span class="source-line-no">122</span><span id="line.122">    public final int nextInt(final int bound) {</span>
+<span class="source-line-no">122</span><span id="line.122">    public int nextInt(final int bound) {</span>
 <span class="source-line-no">123</span><span id="line.123">        final int s0 = stateA;</span>
 <span class="source-line-no">124</span><span id="line.124">        final int s1 = stateB ^ s0;</span>
 <span class="source-line-no">125</span><span id="line.125">        final int result = s0 * 31;</span>
@@ -147,7 +147,7 @@
 <span class="source-line-no">134</span><span id="line.134">     * @return a 64-bit random long.</span>
 <span class="source-line-no">135</span><span id="line.135">     */</span>
 <span class="source-line-no">136</span><span id="line.136">    @Override</span>
-<span class="source-line-no">137</span><span id="line.137">    public final long nextLong() {</span>
+<span class="source-line-no">137</span><span id="line.137">    public long nextLong() {</span>
 <span class="source-line-no">138</span><span id="line.138">        int s0 = stateA;</span>
 <span class="source-line-no">139</span><span id="line.139">        int s1 = stateB ^ s0;</span>
 <span class="source-line-no">140</span><span id="line.140">        final int high = s0 * 31;</span>
@@ -168,7 +168,7 @@
 <span class="source-line-no">155</span><span id="line.155">     * @return a random boolean.</span>
 <span class="source-line-no">156</span><span id="line.156">     */</span>
 <span class="source-line-no">157</span><span id="line.157">    @Override</span>
-<span class="source-line-no">158</span><span id="line.158">    public final boolean nextBoolean() {</span>
+<span class="source-line-no">158</span><span id="line.158">    public boolean nextBoolean() {</span>
 <span class="source-line-no">159</span><span id="line.159">        final int s0 = stateA;</span>
 <span class="source-line-no">160</span><span id="line.160">        final int s1 = stateB ^ s0;</span>
 <span class="source-line-no">161</span><span id="line.161">        stateA = (s0 &lt;&lt; 26 | s0 &gt;&gt;&gt; 6) ^ s1 ^ (s1 &lt;&lt; 9);</span>
@@ -183,7 +183,7 @@
 <span class="source-line-no">170</span><span id="line.170">     * @return a double between 0.0 (inclusive) and 0.9999999999999999 (inclusive)</span>
 <span class="source-line-no">171</span><span id="line.171">     */</span>
 <span class="source-line-no">172</span><span id="line.172">    @Override</span>
-<span class="source-line-no">173</span><span id="line.173">    public final double nextDouble() {</span>
+<span class="source-line-no">173</span><span id="line.173">    public double nextDouble() {</span>
 <span class="source-line-no">174</span><span id="line.174">        int s0 = stateA;</span>
 <span class="source-line-no">175</span><span id="line.175">        int s1 = stateB ^ s0;</span>
 <span class="source-line-no">176</span><span id="line.176">        final int high = s0 * 31;</span>
@@ -204,7 +204,7 @@
 <span class="source-line-no">191</span><span id="line.191">     * @return a float between 0f (inclusive) and 0.99999994f (inclusive)</span>
 <span class="source-line-no">192</span><span id="line.192">     */</span>
 <span class="source-line-no">193</span><span id="line.193">    @Override</span>
-<span class="source-line-no">194</span><span id="line.194">    public final float nextFloat() {</span>
+<span class="source-line-no">194</span><span id="line.194">    public float nextFloat() {</span>
 <span class="source-line-no">195</span><span id="line.195">        final int s0 = stateA;</span>
 <span class="source-line-no">196</span><span id="line.196">        final int s1 = stateB ^ s0;</span>
 <span class="source-line-no">197</span><span id="line.197">        final int result = s0 * 31;</span>

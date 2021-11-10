@@ -307,46 +307,47 @@
 <span class="source-line-no">294</span><span id="line.294">     */</span>
 <span class="source-line-no">295</span><span id="line.295">    public String serializeToString()</span>
 <span class="source-line-no">296</span><span id="line.296">    {</span>
-<span class="source-line-no">297</span><span id="line.297">        return StringKit.join(" ", words) + "\t" + StringKit.join(",", pairs.keysAsArray()) + "\t" + Converters.convertArrayInt2D.stringify(processed);</span>
-<span class="source-line-no">298</span><span id="line.298">    }</span>
-<span class="source-line-no">299</span><span id="line.299"></span>
-<span class="source-line-no">300</span><span id="line.300">    /**</span>
-<span class="source-line-no">301</span><span id="line.301">     * Recreates an already-analyzed MarkovText given a String produced by {@link #serializeToString()}.</span>
-<span class="source-line-no">302</span><span id="line.302">     * @param data a String returned by {@link #serializeToString()}</span>
-<span class="source-line-no">303</span><span id="line.303">     * @return a MarkovText that is ready to generate text with {@link #chain(long)}</span>
-<span class="source-line-no">304</span><span id="line.304">     */</span>
-<span class="source-line-no">305</span><span id="line.305">    public static MarkovText deserializeFromString(String data)</span>
-<span class="source-line-no">306</span><span id="line.306">    {</span>
-<span class="source-line-no">307</span><span id="line.307">        int split = data.indexOf('\t');</span>
-<span class="source-line-no">308</span><span id="line.308">        MarkovText markov = new MarkovText();</span>
-<span class="source-line-no">309</span><span id="line.309">        markov.words = StringKit.split(data.substring(0, split), " ");</span>
-<span class="source-line-no">310</span><span id="line.310">        int[] arr = Converters.convertArrayInt.restore(data.substring(split+1, split = data.indexOf('\t', split + 1)));</span>
-<span class="source-line-no">311</span><span id="line.311">        markov.pairs = new IntIntOrderedMap(arr, ArrayTools.range(arr.length));</span>
-<span class="source-line-no">312</span><span id="line.312">        markov.processed = Converters.convertArrayInt2D.restore(data.substring(split + 1));</span>
-<span class="source-line-no">313</span><span id="line.313">        return markov;</span>
-<span class="source-line-no">314</span><span id="line.314">    }</span>
-<span class="source-line-no">315</span><span id="line.315"></span>
-<span class="source-line-no">316</span><span id="line.316">    /**</span>
-<span class="source-line-no">317</span><span id="line.317">     * Copies the String array {@link #words} and the 2D jagged int array {@link #processed} into a new MarkovText.</span>
-<span class="source-line-no">318</span><span id="line.318">     * None of the arrays will be equivalent references, but the Strings (being immutable) will be the same objects in</span>
-<span class="source-line-no">319</span><span id="line.319">     * both MarkovText instances. This is primarily useful with {@link #changeNames(NaturalLanguageCipher)}, which can</span>
-<span class="source-line-no">320</span><span id="line.320">     * produce several variants on names given several initial copies produced with this method.</span>
-<span class="source-line-no">321</span><span id="line.321">     * @return a copy of this MarkovText</span>
-<span class="source-line-no">322</span><span id="line.322">     */</span>
-<span class="source-line-no">323</span><span id="line.323">    public MarkovText copy()</span>
-<span class="source-line-no">324</span><span id="line.324">    {</span>
-<span class="source-line-no">325</span><span id="line.325">        MarkovText other = new MarkovText();</span>
-<span class="source-line-no">326</span><span id="line.326">        other.words = new String[words.length];</span>
-<span class="source-line-no">327</span><span id="line.327">        System.arraycopy(words, 0, other.words, 0, words.length);</span>
-<span class="source-line-no">328</span><span id="line.328">        other.processed = new int[processed.length][];</span>
-<span class="source-line-no">329</span><span id="line.329">        int len;</span>
-<span class="source-line-no">330</span><span id="line.330">        for (int i = 0; i &lt; processed.length; i++) {</span>
-<span class="source-line-no">331</span><span id="line.331">            other.processed[i] = new int[len = processed[i].length];</span>
-<span class="source-line-no">332</span><span id="line.332">            System.arraycopy(processed[i], 0, other.processed[i], 0, len);</span>
-<span class="source-line-no">333</span><span id="line.333">        }</span>
-<span class="source-line-no">334</span><span id="line.334">        return other;</span>
-<span class="source-line-no">335</span><span id="line.335">    }</span>
-<span class="source-line-no">336</span><span id="line.336">}</span>
+<span class="source-line-no">297</span><span id="line.297">        return StringKit.join(" ", words) + "\t" + StringKit.join(",", pairs.keysAsArray()) +</span>
+<span class="source-line-no">298</span><span id="line.298">                "\t" + Converters.convertArrayInt2D.stringify(processed);</span>
+<span class="source-line-no">299</span><span id="line.299">    }</span>
+<span class="source-line-no">300</span><span id="line.300"></span>
+<span class="source-line-no">301</span><span id="line.301">    /**</span>
+<span class="source-line-no">302</span><span id="line.302">     * Recreates an already-analyzed MarkovText given a String produced by {@link #serializeToString()}.</span>
+<span class="source-line-no">303</span><span id="line.303">     * @param data a String returned by {@link #serializeToString()}</span>
+<span class="source-line-no">304</span><span id="line.304">     * @return a MarkovText that is ready to generate text with {@link #chain(long)}</span>
+<span class="source-line-no">305</span><span id="line.305">     */</span>
+<span class="source-line-no">306</span><span id="line.306">    public static MarkovText deserializeFromString(String data)</span>
+<span class="source-line-no">307</span><span id="line.307">    {</span>
+<span class="source-line-no">308</span><span id="line.308">        int split = data.indexOf('\t');</span>
+<span class="source-line-no">309</span><span id="line.309">        MarkovText markov = new MarkovText();</span>
+<span class="source-line-no">310</span><span id="line.310">        markov.words = StringKit.split(data.substring(0, split), " ");</span>
+<span class="source-line-no">311</span><span id="line.311">        int[] arr = Converters.convertArrayInt.restore(data.substring(split+1, split = data.indexOf('\t', split + 1)));</span>
+<span class="source-line-no">312</span><span id="line.312">        markov.pairs = new IntIntOrderedMap(arr, ArrayTools.range(arr.length));</span>
+<span class="source-line-no">313</span><span id="line.313">        markov.processed = Converters.convertArrayInt2D.restore(data.substring(split + 1));</span>
+<span class="source-line-no">314</span><span id="line.314">        return markov;</span>
+<span class="source-line-no">315</span><span id="line.315">    }</span>
+<span class="source-line-no">316</span><span id="line.316"></span>
+<span class="source-line-no">317</span><span id="line.317">    /**</span>
+<span class="source-line-no">318</span><span id="line.318">     * Copies the String array {@link #words} and the 2D jagged int array {@link #processed} into a new MarkovText.</span>
+<span class="source-line-no">319</span><span id="line.319">     * None of the arrays will be equivalent references, but the Strings (being immutable) will be the same objects in</span>
+<span class="source-line-no">320</span><span id="line.320">     * both MarkovText instances. This is primarily useful with {@link #changeNames(NaturalLanguageCipher)}, which can</span>
+<span class="source-line-no">321</span><span id="line.321">     * produce several variants on names given several initial copies produced with this method.</span>
+<span class="source-line-no">322</span><span id="line.322">     * @return a copy of this MarkovText</span>
+<span class="source-line-no">323</span><span id="line.323">     */</span>
+<span class="source-line-no">324</span><span id="line.324">    public MarkovText copy()</span>
+<span class="source-line-no">325</span><span id="line.325">    {</span>
+<span class="source-line-no">326</span><span id="line.326">        MarkovText other = new MarkovText();</span>
+<span class="source-line-no">327</span><span id="line.327">        other.words = new String[words.length];</span>
+<span class="source-line-no">328</span><span id="line.328">        System.arraycopy(words, 0, other.words, 0, words.length);</span>
+<span class="source-line-no">329</span><span id="line.329">        other.processed = new int[processed.length][];</span>
+<span class="source-line-no">330</span><span id="line.330">        int len;</span>
+<span class="source-line-no">331</span><span id="line.331">        for (int i = 0; i &lt; processed.length; i++) {</span>
+<span class="source-line-no">332</span><span id="line.332">            other.processed[i] = new int[len = processed[i].length];</span>
+<span class="source-line-no">333</span><span id="line.333">            System.arraycopy(processed[i], 0, other.processed[i], 0, len);</span>
+<span class="source-line-no">334</span><span id="line.334">        }</span>
+<span class="source-line-no">335</span><span id="line.335">        return other;</span>
+<span class="source-line-no">336</span><span id="line.336">    }</span>
+<span class="source-line-no">337</span><span id="line.337">}</span>
 
 
 

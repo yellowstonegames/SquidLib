@@ -61,7 +61,7 @@
 <span class="source-line-no">048</span><span id="line.48"> * probably would pass much more if I gave it more days to run).</span>
 <span class="source-line-no">049</span><span id="line.49"> * @author Tommy Ettinger</span>
 <span class="source-line-no">050</span><span id="line.50"> */</span>
-<span class="source-line-no">051</span><span id="line.51">public final class LinnormRNG implements RandomnessSource, StatefulRandomness, Serializable {</span>
+<span class="source-line-no">051</span><span id="line.51">public class LinnormRNG implements RandomnessSource, StatefulRandomness, Serializable {</span>
 <span class="source-line-no">052</span><span id="line.52"></span>
 <span class="source-line-no">053</span><span id="line.53">    private static final long serialVersionUID = 153186732328748834L;</span>
 <span class="source-line-no">054</span><span id="line.54"></span>
@@ -92,7 +92,7 @@
 <span class="source-line-no">079</span><span id="line.79">    }</span>
 <span class="source-line-no">080</span><span id="line.80"></span>
 <span class="source-line-no">081</span><span id="line.81">    @Override</span>
-<span class="source-line-no">082</span><span id="line.82">    public final int next(int bits)</span>
+<span class="source-line-no">082</span><span id="line.82">    public int next(int bits)</span>
 <span class="source-line-no">083</span><span id="line.83">    {</span>
 <span class="source-line-no">084</span><span id="line.84">        long z = (state = state * 0x369DEA0F31A53F85L + 1L);</span>
 <span class="source-line-no">085</span><span id="line.85">        z = (z ^ z &gt;&gt;&gt; 23 ^ z &gt;&gt;&gt; 47) * 0xAEF17502108EF2D9L;</span>
@@ -105,7 +105,7 @@
 <span class="source-line-no">092</span><span id="line.92">     * @return any long, all 64 bits are random</span>
 <span class="source-line-no">093</span><span id="line.93">     */</span>
 <span class="source-line-no">094</span><span id="line.94">    @Override</span>
-<span class="source-line-no">095</span><span id="line.95">    public final long nextLong() {</span>
+<span class="source-line-no">095</span><span id="line.95">    public long nextLong() {</span>
 <span class="source-line-no">096</span><span id="line.96">        long z = (state = state * 0x369DEA0F31A53F85L + 1L);</span>
 <span class="source-line-no">097</span><span id="line.97">        z = (z ^ z &gt;&gt;&gt; 23 ^ z &gt;&gt;&gt; 47) * 0xAEF17502108EF2D9L;</span>
 <span class="source-line-no">098</span><span id="line.98">        return (z ^ z &gt;&gt;&gt; 25);</span>
@@ -128,7 +128,7 @@
 <span class="source-line-no">115</span><span id="line.115">     *</span>
 <span class="source-line-no">116</span><span id="line.116">     * @return any int, all 32 bits are random</span>
 <span class="source-line-no">117</span><span id="line.117">     */</span>
-<span class="source-line-no">118</span><span id="line.118">    public final int nextInt() {</span>
+<span class="source-line-no">118</span><span id="line.118">    public int nextInt() {</span>
 <span class="source-line-no">119</span><span id="line.119">        long z = (state = state * 0x369DEA0F31A53F85L + 1L);</span>
 <span class="source-line-no">120</span><span id="line.120">        z = (z ^ z &gt;&gt;&gt; 23 ^ z &gt;&gt;&gt; 47) * 0xAEF17502108EF2D9L;</span>
 <span class="source-line-no">121</span><span id="line.121">        return (int)(z ^ z &gt;&gt;&gt; 25);</span>
@@ -141,7 +141,7 @@
 <span class="source-line-no">128</span><span id="line.128">     * @param bound the upper bound; should be positive</span>
 <span class="source-line-no">129</span><span id="line.129">     * @return a random int between 0 (inclusive) and bound (exclusive)</span>
 <span class="source-line-no">130</span><span id="line.130">     */</span>
-<span class="source-line-no">131</span><span id="line.131">    public final int nextInt(final int bound) {</span>
+<span class="source-line-no">131</span><span id="line.131">    public int nextInt(final int bound) {</span>
 <span class="source-line-no">132</span><span id="line.132">        long z = (state = state * 0x369DEA0F31A53F85L + 1L);</span>
 <span class="source-line-no">133</span><span id="line.133">        z = (z ^ z &gt;&gt;&gt; 23 ^ z &gt;&gt;&gt; 47) * 0xAEF17502108EF2D9L;</span>
 <span class="source-line-no">134</span><span id="line.134">        return (int)((bound * ((z ^ z &gt;&gt;&gt; 25) &amp; 0xFFFFFFFFL)) &gt;&gt; 32);</span>
@@ -154,7 +154,7 @@
 <span class="source-line-no">141</span><span id="line.141">     * @param outer the outer bound, exclusive, can be positive or negative, should be greater than inner</span>
 <span class="source-line-no">142</span><span id="line.142">     * @return a random int between inner (inclusive) and outer (exclusive)</span>
 <span class="source-line-no">143</span><span id="line.143">     */</span>
-<span class="source-line-no">144</span><span id="line.144">    public final int nextInt(final int inner, final int outer) {</span>
+<span class="source-line-no">144</span><span id="line.144">    public int nextInt(final int inner, final int outer) {</span>
 <span class="source-line-no">145</span><span id="line.145">        return inner + nextInt(outer - inner);</span>
 <span class="source-line-no">146</span><span id="line.146">    }</span>
 <span class="source-line-no">147</span><span id="line.147"></span>
@@ -197,7 +197,7 @@
 <span class="source-line-no">184</span><span id="line.184">     * @param upper the upper bound, exclusive, can be positive or negative</span>
 <span class="source-line-no">185</span><span id="line.185">     * @return a random long that may be equal to lower and will otherwise be between lower and upper</span>
 <span class="source-line-no">186</span><span id="line.186">     */</span>
-<span class="source-line-no">187</span><span id="line.187">    public final long nextLong(final long lower, final long upper) {</span>
+<span class="source-line-no">187</span><span id="line.187">    public long nextLong(final long lower, final long upper) {</span>
 <span class="source-line-no">188</span><span id="line.188">        return lower + nextLong(upper - lower);</span>
 <span class="source-line-no">189</span><span id="line.189">    }</span>
 <span class="source-line-no">190</span><span id="line.190"></span>
@@ -206,7 +206,7 @@
 <span class="source-line-no">193</span><span id="line.193">     *</span>
 <span class="source-line-no">194</span><span id="line.194">     * @return a random double at least equal to 0.0 and less than 1.0</span>
 <span class="source-line-no">195</span><span id="line.195">     */</span>
-<span class="source-line-no">196</span><span id="line.196">    public final double nextDouble() {</span>
+<span class="source-line-no">196</span><span id="line.196">    public double nextDouble() {</span>
 <span class="source-line-no">197</span><span id="line.197">        long z = (state = state * 0x369DEA0F31A53F85L + 1L);</span>
 <span class="source-line-no">198</span><span id="line.198">        z = (z ^ z &gt;&gt;&gt; 23 ^ z &gt;&gt;&gt; 47) * 0xAEF17502108EF2D9L;</span>
 <span class="source-line-no">199</span><span id="line.199">        return ((z ^ z &gt;&gt;&gt; 25) &amp; 0x1FFFFFFFFFFFFFL) * 0x1p-53;</span>
@@ -220,7 +220,7 @@
 <span class="source-line-no">207</span><span id="line.207">     * @param outer the exclusive outer bound, can be negative</span>
 <span class="source-line-no">208</span><span id="line.208">     * @return a random double between 0.0 (inclusive) and outer (exclusive)</span>
 <span class="source-line-no">209</span><span id="line.209">     */</span>
-<span class="source-line-no">210</span><span id="line.210">    public final double nextDouble(final double outer) {</span>
+<span class="source-line-no">210</span><span id="line.210">    public double nextDouble(final double outer) {</span>
 <span class="source-line-no">211</span><span id="line.211">        long z = (state = state * 0x369DEA0F31A53F85L + 1L);</span>
 <span class="source-line-no">212</span><span id="line.212">        z = (z ^ z &gt;&gt;&gt; 23 ^ z &gt;&gt;&gt; 47) * 0xAEF17502108EF2D9L;</span>
 <span class="source-line-no">213</span><span id="line.213">        return ((z ^ z &gt;&gt;&gt; 25) &amp; 0x1FFFFFFFFFFFFFL) * 0x1p-53 * outer;</span>
@@ -231,7 +231,7 @@
 <span class="source-line-no">218</span><span id="line.218">     *</span>
 <span class="source-line-no">219</span><span id="line.219">     * @return a random float at least equal to 0.0 and less than 1.0</span>
 <span class="source-line-no">220</span><span id="line.220">     */</span>
-<span class="source-line-no">221</span><span id="line.221">    public final float nextFloat() {</span>
+<span class="source-line-no">221</span><span id="line.221">    public float nextFloat() {</span>
 <span class="source-line-no">222</span><span id="line.222">        long z = (state = state * 0x369DEA0F31A53F85L + 1L);</span>
 <span class="source-line-no">223</span><span id="line.223">        return ((z ^ z &gt;&gt;&gt; 23 ^ z &gt;&gt;&gt; 47) * 0xAEF17502108EF2D9L &gt;&gt;&gt; 40) * 0x1p-24f;</span>
 <span class="source-line-no">224</span><span id="line.224">    }</span>
@@ -242,7 +242,7 @@
 <span class="source-line-no">229</span><span id="line.229">     *</span>
 <span class="source-line-no">230</span><span id="line.230">     * @return a random true or false value.</span>
 <span class="source-line-no">231</span><span id="line.231">     */</span>
-<span class="source-line-no">232</span><span id="line.232">    public final boolean nextBoolean() {</span>
+<span class="source-line-no">232</span><span id="line.232">    public boolean nextBoolean() {</span>
 <span class="source-line-no">233</span><span id="line.233">        long z = (state = state * 0x369DEA0F31A53F85L + 1L);</span>
 <span class="source-line-no">234</span><span id="line.234">        return ((z ^ z &gt;&gt;&gt; 23 ^ z &gt;&gt;&gt; 47) * 0xAEF17502108EF2D9L) &lt; 0;</span>
 <span class="source-line-no">235</span><span id="line.235">    }</span>
@@ -253,7 +253,7 @@
 <span class="source-line-no">240</span><span id="line.240">     *</span>
 <span class="source-line-no">241</span><span id="line.241">     * @param bytes a byte array that will have its contents overwritten with random bytes.</span>
 <span class="source-line-no">242</span><span id="line.242">     */</span>
-<span class="source-line-no">243</span><span id="line.243">    public final void nextBytes(final byte[] bytes) {</span>
+<span class="source-line-no">243</span><span id="line.243">    public void nextBytes(final byte[] bytes) {</span>
 <span class="source-line-no">244</span><span id="line.244">        int i = bytes.length, n;</span>
 <span class="source-line-no">245</span><span id="line.245">        while (i != 0) {</span>
 <span class="source-line-no">246</span><span id="line.246">            n = Math.min(i, 8);</span>
@@ -267,7 +267,7 @@
 <span class="source-line-no">254</span><span id="line.254">     * @param seed the seed to use for this LinnormRNG, as if it was constructed with this seed.</span>
 <span class="source-line-no">255</span><span id="line.255">     */</span>
 <span class="source-line-no">256</span><span id="line.256">    @Override</span>
-<span class="source-line-no">257</span><span id="line.257">    public final void setState(final long seed) {</span>
+<span class="source-line-no">257</span><span id="line.257">    public void setState(final long seed) {</span>
 <span class="source-line-no">258</span><span id="line.258">        state = seed;</span>
 <span class="source-line-no">259</span><span id="line.259">    }</span>
 <span class="source-line-no">260</span><span id="line.260"></span>
@@ -277,7 +277,7 @@
 <span class="source-line-no">264</span><span id="line.264">     * @return the current seed of this LinnormRNG, changed once per call to nextLong()</span>
 <span class="source-line-no">265</span><span id="line.265">     */</span>
 <span class="source-line-no">266</span><span id="line.266">    @Override</span>
-<span class="source-line-no">267</span><span id="line.267">    public final long getState() {</span>
+<span class="source-line-no">267</span><span id="line.267">    public long getState() {</span>
 <span class="source-line-no">268</span><span id="line.268">        return state;</span>
 <span class="source-line-no">269</span><span id="line.269">    }</span>
 <span class="source-line-no">270</span><span id="line.270"></span>

@@ -63,7 +63,7 @@
 <span class="source-line-no">050</span><span id="line.50"> * @author Mark Overton</span>
 <span class="source-line-no">051</span><span id="line.51"> * @author Tommy Ettinger</span>
 <span class="source-line-no">052</span><span id="line.52"> */</span>
-<span class="source-line-no">053</span><span id="line.53">public final class Mover64RNG implements RandomnessSource {</span>
+<span class="source-line-no">053</span><span id="line.53">public class Mover64RNG implements RandomnessSource {</span>
 <span class="source-line-no">054</span><span id="line.54">    private long stateA, stateB;</span>
 <span class="source-line-no">055</span><span id="line.55">    public Mover64RNG()</span>
 <span class="source-line-no">056</span><span id="line.56">    {</span>
@@ -122,7 +122,7 @@
 <span class="source-line-no">109</span><span id="line.109">            0xA2F3FA0F0F5F6FDFL, 0x95DA83EA34697FEFL, 0xFE1541E512CBAC77L, 0xE68287CDEB9302A5L, 0xB928A0223B695207L, 0x3F9D05B291DE5A8AL, 0x5E28B275895A2C79L, 0x8E9BD22FBFD57A6CL,</span>
 <span class="source-line-no">110</span><span id="line.110">    };</span>
 <span class="source-line-no">111</span><span id="line.111"></span>
-<span class="source-line-no">112</span><span id="line.112">    public final void setState(final int s) {</span>
+<span class="source-line-no">112</span><span id="line.112">    public void setState(final int s) {</span>
 <span class="source-line-no">113</span><span id="line.113">        stateA = startingA[s &gt;&gt;&gt; 9 &amp; 0x7F];</span>
 <span class="source-line-no">114</span><span id="line.114">        for (int i = s &amp; 0x1FF; i &gt; 0; i--) {</span>
 <span class="source-line-no">115</span><span id="line.115">            stateA *= 0x41C64E6BL;</span>
@@ -135,21 +135,21 @@
 <span class="source-line-no">122</span><span id="line.122">        }</span>
 <span class="source-line-no">123</span><span id="line.123">    }</span>
 <span class="source-line-no">124</span><span id="line.124"></span>
-<span class="source-line-no">125</span><span id="line.125">    public final int nextInt()</span>
+<span class="source-line-no">125</span><span id="line.125">    public int nextInt()</span>
 <span class="source-line-no">126</span><span id="line.126">    {</span>
 <span class="source-line-no">127</span><span id="line.127">        final long a = stateA * 0x41C64E6BL;</span>
 <span class="source-line-no">128</span><span id="line.128">        final long b = stateB * 0x9E3779B9L;</span>
 <span class="source-line-no">129</span><span id="line.129">        return (int)((stateA = (a &lt;&lt; 28 | a &gt;&gt;&gt; 36)) ^ (stateB = (b &lt;&lt; 37 | b &gt;&gt;&gt; 27)));</span>
 <span class="source-line-no">130</span><span id="line.130">    }</span>
 <span class="source-line-no">131</span><span id="line.131">    @Override</span>
-<span class="source-line-no">132</span><span id="line.132">    public final int next(final int bits)</span>
+<span class="source-line-no">132</span><span id="line.132">    public int next(final int bits)</span>
 <span class="source-line-no">133</span><span id="line.133">    {</span>
 <span class="source-line-no">134</span><span id="line.134">        final long a = stateA * 0x41C64E6BL;</span>
 <span class="source-line-no">135</span><span id="line.135">        final long b = stateB * 0x9E3779B9L;</span>
 <span class="source-line-no">136</span><span id="line.136">        return (int)((stateA = (a &lt;&lt; 28 | a &gt;&gt;&gt; 36)) ^ (stateB = (b &lt;&lt; 37 | b &gt;&gt;&gt; 27))) &gt;&gt;&gt; (32 - bits);</span>
 <span class="source-line-no">137</span><span id="line.137">    }</span>
 <span class="source-line-no">138</span><span id="line.138">    @Override</span>
-<span class="source-line-no">139</span><span id="line.139">    public final long nextLong()</span>
+<span class="source-line-no">139</span><span id="line.139">    public long nextLong()</span>
 <span class="source-line-no">140</span><span id="line.140">    {</span>
 <span class="source-line-no">141</span><span id="line.141">        final long a = stateA * 0x41C64E6BL;</span>
 <span class="source-line-no">142</span><span id="line.142">        final long b = stateB * 0x9E3779B9L;</span>

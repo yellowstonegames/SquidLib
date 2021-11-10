@@ -65,7 +65,7 @@
 <span class="source-line-no">052</span><span id="line.52"> * @author Mark Overton</span>
 <span class="source-line-no">053</span><span id="line.53"> * @author Tommy Ettinger</span>
 <span class="source-line-no">054</span><span id="line.54"> */</span>
-<span class="source-line-no">055</span><span id="line.55">public final class MiniMover64RNG implements RandomnessSource, Serializable {</span>
+<span class="source-line-no">055</span><span id="line.55">public class MiniMover64RNG implements RandomnessSource, Serializable {</span>
 <span class="source-line-no">056</span><span id="line.56">    private static final long serialVersionUID = 2L;</span>
 <span class="source-line-no">057</span><span id="line.57">    private long state;</span>
 <span class="source-line-no">058</span><span id="line.58"></span>
@@ -108,7 +108,7 @@
 <span class="source-line-no">095</span><span id="line.95">     * of at least 1048575.</span>
 <span class="source-line-no">096</span><span id="line.96">     * @param s all bits are used, none verbatim (0 is tolerated)</span>
 <span class="source-line-no">097</span><span id="line.97">     */</span>
-<span class="source-line-no">098</span><span id="line.98">    public final void seed(final int s) {</span>
+<span class="source-line-no">098</span><span id="line.98">    public void seed(final int s) {</span>
 <span class="source-line-no">099</span><span id="line.99">        long v = (s &amp; 0x1FFFFFF) + 1L; // at least 2 to the 25 sequential seeds have periods of at least 1048575.</span>
 <span class="source-line-no">100</span><span id="line.100">        for (int i = s &gt;&gt;&gt; 25; i &gt; 0; i--) {</span>
 <span class="source-line-no">101</span><span id="line.101">            v = (v &lt;&lt; 29 | v &gt;&gt;&gt; 35) * 0xAC564B05L;</span>
@@ -116,17 +116,17 @@
 <span class="source-line-no">103</span><span id="line.103">        state = v;</span>
 <span class="source-line-no">104</span><span id="line.104">    }</span>
 <span class="source-line-no">105</span><span id="line.105"></span>
-<span class="source-line-no">106</span><span id="line.106">    public final int nextInt()</span>
+<span class="source-line-no">106</span><span id="line.106">    public int nextInt()</span>
 <span class="source-line-no">107</span><span id="line.107">    {</span>
 <span class="source-line-no">108</span><span id="line.108">        return (int)((state = (state &lt;&lt; 29 | state &gt;&gt;&gt; 35) * 0xAC564B05L) * 0x818102004182A025L);</span>
 <span class="source-line-no">109</span><span id="line.109">    }</span>
 <span class="source-line-no">110</span><span id="line.110">    @Override</span>
-<span class="source-line-no">111</span><span id="line.111">    public final int next(final int bits)</span>
+<span class="source-line-no">111</span><span id="line.111">    public int next(final int bits)</span>
 <span class="source-line-no">112</span><span id="line.112">    {</span>
 <span class="source-line-no">113</span><span id="line.113">        return (int)((state = (state &lt;&lt; 29 | state &gt;&gt;&gt; 35) * 0xAC564B05L) * 0x818102004182A025L) &gt;&gt;&gt; (32 - bits);</span>
 <span class="source-line-no">114</span><span id="line.114">    }</span>
 <span class="source-line-no">115</span><span id="line.115">    @Override</span>
-<span class="source-line-no">116</span><span id="line.116">    public final long nextLong() {</span>
+<span class="source-line-no">116</span><span id="line.116">    public long nextLong() {</span>
 <span class="source-line-no">117</span><span id="line.117"></span>
 <span class="source-line-no">118</span><span id="line.118">        return (state = (state &lt;&lt; 29 | state &gt;&gt;&gt; 35) * 0xAC564B05L) * 0x818102004182A025L;</span>
 <span class="source-line-no">119</span><span id="line.119">//        return (state = (state &lt;&lt; 21 | state &gt;&gt;&gt; 43) * 0x9E3779B9L) * 0x41C64E6DL; // earlier, fails some of TestU01</span>
@@ -136,7 +136,7 @@
 <span class="source-line-no">123</span><span id="line.123">     * Gets a pseudo-random double between 0.0 (inclusive) and 1.0 (exclusive).</span>
 <span class="source-line-no">124</span><span id="line.124">     * @return a pseudo-random double between 0.0 (inclusive) and 1.0 (exclusive)</span>
 <span class="source-line-no">125</span><span id="line.125">     */</span>
-<span class="source-line-no">126</span><span id="line.126">    public final double nextDouble() {</span>
+<span class="source-line-no">126</span><span id="line.126">    public double nextDouble() {</span>
 <span class="source-line-no">127</span><span id="line.127">        return ((state = (state &lt;&lt; 29 | state &gt;&gt;&gt; 35) * 0xAC564B05L) * 0x818102004182A025L &amp; 0x1fffffffffffffL) * 0x1p-53;</span>
 <span class="source-line-no">128</span><span id="line.128">    }</span>
 <span class="source-line-no">129</span><span id="line.129"></span>
@@ -144,7 +144,7 @@
 <span class="source-line-no">131</span><span id="line.131">     * Gets a pseudo-random float between 0.0f (inclusive) and 1.0f (exclusive).</span>
 <span class="source-line-no">132</span><span id="line.132">     * @return a pseudo-random float between 0.0f (inclusive) and 1.0f (exclusive)</span>
 <span class="source-line-no">133</span><span id="line.133">     */</span>
-<span class="source-line-no">134</span><span id="line.134">    public final float nextFloat() {</span>
+<span class="source-line-no">134</span><span id="line.134">    public float nextFloat() {</span>
 <span class="source-line-no">135</span><span id="line.135">        return ((state = (state &lt;&lt; 29 | state &gt;&gt;&gt; 35) * 0xAC564B05L) * 0x818102004182A025L &amp; 0xffffffL) * 0x1p-24f;</span>
 <span class="source-line-no">136</span><span id="line.136">    }</span>
 <span class="source-line-no">137</span><span id="line.137"></span>

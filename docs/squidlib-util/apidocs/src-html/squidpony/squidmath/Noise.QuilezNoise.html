@@ -3436,8 +3436,8 @@
 <span class="source-line-no">3423</span><span id="line.3423">        @Override</span>
 <span class="source-line-no">3424</span><span id="line.3424">        public double getNoiseWithSeed(double x, final long seed) {</span>
 <span class="source-line-no">3425</span><span id="line.3425">            x += ((seed &amp; 0xFFFFFFFFL) ^ (seed &gt;&gt;&gt; 32)) * 0x1p-24; // offset x by between 0.0 and almost 256.0</span>
-<span class="source-line-no">3426</span><span id="line.3426">            final long xFloor = x &gt;= 0.0 ? (long) x : (long) x - 1, // floor of x as a long</span>
-<span class="source-line-no">3427</span><span id="line.3427">                    rise = 1L - ((x &gt;= 0.0 ? (long) (x * 2.0) : (long) (x * 2.0) - 1) &amp; 2L); // either 1 or -1</span>
+<span class="source-line-no">3426</span><span id="line.3426">            final long xFloor = x &gt;= 0.0 ? (long) x : (long) x - 1L, // floor of x as a long</span>
+<span class="source-line-no">3427</span><span id="line.3427">                    rise = 1L - ((x &gt;= 0.0 ? (long) (x + x) : (long) (x + x) - 1L) &amp; 2L); // either 1 or -1</span>
 <span class="source-line-no">3428</span><span id="line.3428">            x -= xFloor;</span>
 <span class="source-line-no">3429</span><span id="line.3429">            // and now we flip the switch from "magic" to "more magic..."</span>
 <span class="source-line-no">3430</span><span id="line.3430">            // this directly sets the bits that describe a double. this might seem like it should be slow; it is not.</span>
@@ -3458,402 +3458,403 @@
 <span class="source-line-no">3445</span><span id="line.3445">//                    0x4030000000000000L) - 20.0;</span>
 <span class="source-line-no">3446</span><span id="line.3446">            // Quilez' quartic curve; uses the "rise" calculated earlier to determine if this is on the rising or</span>
 <span class="source-line-no">3447</span><span id="line.3447">            // the falling side. Uses that complicated "h" as the height of the peak or valley in the middle.</span>
-<span class="source-line-no">3448</span><span id="line.3448">            return rise * x * (x - 1.0) * (h * x * (x - 1.0) - 1.0);</span>
-<span class="source-line-no">3449</span><span id="line.3449">        }</span>
-<span class="source-line-no">3450</span><span id="line.3450"></span>
-<span class="source-line-no">3451</span><span id="line.3451">        @Override</span>
-<span class="source-line-no">3452</span><span id="line.3452">        public double getNoise(double x, double y) {</span>
-<span class="source-line-no">3453</span><span id="line.3453">            return getNoiseWithSeed(x, y, seed);</span>
-<span class="source-line-no">3454</span><span id="line.3454">        }</span>
-<span class="source-line-no">3455</span><span id="line.3455"></span>
-<span class="source-line-no">3456</span><span id="line.3456">        @Override</span>
-<span class="source-line-no">3457</span><span id="line.3457">        public double getNoiseWithSeed(double x, double y, long seed) {</span>
-<span class="source-line-no">3458</span><span id="line.3458">            double n = 0.0;</span>
-<span class="source-line-no">3459</span><span id="line.3459">            for (int i = 0; i &lt; 4; i++) {</span>
-<span class="source-line-no">3460</span><span id="line.3460">                seed += 0x9E3779B97F4A7C15L;</span>
-<span class="source-line-no">3461</span><span id="line.3461">                double xEdit = x += (((seed &amp; 0x55555555L) | (seed &gt;&gt;&gt; 32 &amp; 0xAAAAAAAAL))) * 0x1p-29 + 0.5698402909980532;</span>
-<span class="source-line-no">3462</span><span id="line.3462">                double yEdit = y += (((seed &amp; 0xAAAAAAAAL) | (seed &gt;&gt;&gt; 32 &amp; 0x55555555L))) * 0x1p-29 + 0.7548776662466927;</span>
-<span class="source-line-no">3463</span><span id="line.3463">                final long</span>
-<span class="source-line-no">3464</span><span id="line.3464">                        xFloor = xEdit &gt;= 0.0 ? (long) xEdit : (long) xEdit - 1,</span>
-<span class="source-line-no">3465</span><span id="line.3465">                        yFloor = yEdit &gt;= 0.0 ? (long) yEdit : (long) yEdit - 1;</span>
-<span class="source-line-no">3466</span><span id="line.3466">                xEdit -= xFloor;</span>
-<span class="source-line-no">3467</span><span id="line.3467">                yEdit -= yFloor;</span>
-<span class="source-line-no">3468</span><span id="line.3468">                xEdit *= (xEdit - 1.0);</span>
-<span class="source-line-no">3469</span><span id="line.3469">                yEdit *= (yEdit - 1.0);</span>
-<span class="source-line-no">3470</span><span id="line.3470">                final double m = (xEdit + yEdit) * 0.5;</span>
-<span class="source-line-no">3471</span><span id="line.3471">                final double h = NumberTools.longBitsToDouble(HastyPointHash.hashAll(xFloor, yFloor, seed) &gt;&gt;&gt; 12 | 0x4040000000000000L) - 52.0;</span>
-<span class="source-line-no">3472</span><span id="line.3472">//            final double i = NumberTools.longBitsToDouble((~seed + yFloor ^ 0x9E3779B97F4A7C15L) * 0xD1B54A32D192ED03L &gt;&gt;&gt; 12 | 0x4030000000000000L) - 24.0;</span>
-<span class="source-line-no">3473</span><span id="line.3473">                n += (m * (h * m - 1.0));</span>
-<span class="source-line-no">3474</span><span id="line.3474">            }</span>
-<span class="source-line-no">3475</span><span id="line.3475">            return n * 0.25;</span>
-<span class="source-line-no">3476</span><span id="line.3476">////                    cerp(</span>
-<span class="source-line-no">3477</span><span id="line.3477">//                    0.5 * (</span>
-<span class="source-line-no">3478</span><span id="line.3478">//                            (xRise * m * (h * m - 1.0)) +</span>
-<span class="source-line-no">3479</span><span id="line.3479">//                            (yRise * m * (i * m - 1.0))</span>
-<span class="source-line-no">3480</span><span id="line.3480">//                    );</span>
-<span class="source-line-no">3481</span><span id="line.3481">//                            //, 0.5 + (y - x) * 0.5);</span>
-<span class="source-line-no">3482</span><span id="line.3482">        }</span>
-<span class="source-line-no">3483</span><span id="line.3483"></span>
-<span class="source-line-no">3484</span><span id="line.3484">    }</span>
-<span class="source-line-no">3485</span><span id="line.3485"></span>
-<span class="source-line-no">3486</span><span id="line.3486">    /*</span>
-<span class="source-line-no">3487</span><span id="line.3487">2x2:</span>
-<span class="source-line-no">3488</span><span id="line.3488">final double x2 = + x * +0.6088885514347261 + y * -0.7943553508622062;</span>
-<span class="source-line-no">3489</span><span id="line.3489">final double y2 = + x * +0.7943553508622062 + y * +0.6088885514347261;</span>
-<span class="source-line-no">3490</span><span id="line.3490"></span>
-<span class="source-line-no">3491</span><span id="line.3491">3x3:</span>
-<span class="source-line-no">3492</span><span id="line.3492">final double x2 = + x * +0.0227966890756033 + y * +0.6762915140143574 + z * -0.7374004675850091;</span>
-<span class="source-line-no">3493</span><span id="line.3493">final double y2 = + x * +0.2495309026014970 + y * +0.7103480212381728 + z * +0.6592220931706847;</span>
-<span class="source-line-no">3494</span><span id="line.3494">final double z2 = + x * +0.9680388783970242 + y * -0.1990510681264026 + z * -0.1525764462988358;</span>
-<span class="source-line-no">3495</span><span id="line.3495"></span>
-<span class="source-line-no">3496</span><span id="line.3496">4x4:</span>
-<span class="source-line-no">3497</span><span id="line.3497">final double x2 = + x * +0.5699478528112771 + y * +0.7369836852218905 + z * -0.0325828875824773 + w * -0.3639975881105405;</span>
-<span class="source-line-no">3498</span><span id="line.3498">final double y2 = + x * +0.1552282348051943 + y * +0.1770952336543200 + z * -0.7097702517705363 + w * +0.6650917154025483;</span>
-<span class="source-line-no">3499</span><span id="line.3499">final double z2 = + x * +0.0483833371062336 + y * +0.3124109456042325 + z * +0.6948457959606478 + w * +0.6469518300143685;</span>
-<span class="source-line-no">3500</span><span id="line.3500">final double w2 = + x * +0.8064316315440612 + y * -0.5737907885437848 + z * +0.1179845891415618 + w * +0.0904374415002696;</span>
-<span class="source-line-no">3501</span><span id="line.3501"></span>
-<span class="source-line-no">3502</span><span id="line.3502">5x5:</span>
-<span class="source-line-no">3503</span><span id="line.3503">final double x2 = + x * +0.1524127934921893 + y * -0.2586710352203958 + z * -0.4891826043642151 + w * +0.7663312575129502 + u * -0.2929089192051232;</span>
-<span class="source-line-no">3504</span><span id="line.3504">final double y2 = + x * -0.0716486050004579 + y * -0.5083828718253534 + z * -0.5846508329893165 + w * -0.3242340701968086 + u * +0.5400343264823232;</span>
-<span class="source-line-no">3505</span><span id="line.3505">final double z2 = + x * +0.5391124130592424 + y * +0.4637201165727557 + z * -0.0268449575347777 + w * +0.2805630001516211 + u * +0.6471616940596671;</span>
-<span class="source-line-no">3506</span><span id="line.3506">final double w2 = + x * -0.4908590743023694 + y * -0.3159190659906883 + z * +0.4868180845277980 + w * +0.4733894151555028 + u * +0.4492456287606979;</span>
-<span class="source-line-no">3507</span><span id="line.3507">final double u2 = + x * +0.6656547456376498 + y * -0.6028584537113622 + z * +0.4289447660591045 + w * -0.0882009139887838 + u * -0.0676076855220496;</span>
-<span class="source-line-no">3508</span><span id="line.3508"></span>
-<span class="source-line-no">3509</span><span id="line.3509">6x6:</span>
-<span class="source-line-no">3510</span><span id="line.3510">final double x2 = + x * -0.0850982316788443 + y * +0.0621411489653063 + z * +0.6423842935800755 + w * +0.5472782330246069 + u * -0.5181072879831091 + v * -0.1137065126038194;</span>
-<span class="source-line-no">3511</span><span id="line.3511">final double y2 = + x * +0.1080560582151551 + y * -0.3254670556393390 + z * -0.3972292333437380 + w * +0.0964380840482216 + u * -0.5818281028726723 + v * +0.6182273380506453;</span>
-<span class="source-line-no">3512</span><span id="line.3512">final double z2 = + x * +0.2504893307323878 + y * -0.3866469165898269 + z * -0.2346647170372642 + w * +0.7374659593233097 + u * +0.4257828596124605 + v * -0.1106816328431182;</span>
-<span class="source-line-no">3513</span><span id="line.3513">final double w2 = + x * +0.0990858373676681 + y * +0.4040947615164614 + z * +0.3012734241554820 + w * +0.1520113643725959 + u * +0.4036980496402723 + v * +0.7440701998573674;</span>
-<span class="source-line-no">3514</span><span id="line.3514">final double u2 = + x * -0.7720417581190233 + y * -0.5265151283855897 + z * +0.1995725381386031 + w * -0.0464596713813553 + u * +0.2186511264128518 + v * +0.1990962291039879;</span>
-<span class="source-line-no">3515</span><span id="line.3515">final double v2 = + x * +0.5606136879764017 + y * -0.5518123912290505 + z * +0.4997557173523122 + w * -0.3555852919481873 + u * +0.0731165180984564 + v * +0.0560452079067605;</span>
-<span class="source-line-no">3516</span><span id="line.3516"></span>
-<span class="source-line-no">3517</span><span id="line.3517">     */</span>
-<span class="source-line-no">3518</span><span id="line.3518"></span>
-<span class="source-line-no">3519</span><span id="line.3519">    public static class LayeredSpiral2D implements Noise2D {</span>
-<span class="source-line-no">3520</span><span id="line.3520">        protected int octaves;</span>
-<span class="source-line-no">3521</span><span id="line.3521">        protected Noise2D basis;</span>
-<span class="source-line-no">3522</span><span id="line.3522">        public double frequency;</span>
-<span class="source-line-no">3523</span><span id="line.3523">        public double lacunarity;</span>
-<span class="source-line-no">3524</span><span id="line.3524">        public LayeredSpiral2D() {</span>
-<span class="source-line-no">3525</span><span id="line.3525">            this(SeededNoise.instance);</span>
-<span class="source-line-no">3526</span><span id="line.3526">        }</span>
-<span class="source-line-no">3527</span><span id="line.3527"></span>
-<span class="source-line-no">3528</span><span id="line.3528">        public LayeredSpiral2D(Noise2D basis) {</span>
-<span class="source-line-no">3529</span><span id="line.3529">            this(basis, 2);</span>
-<span class="source-line-no">3530</span><span id="line.3530">        }</span>
-<span class="source-line-no">3531</span><span id="line.3531"></span>
-<span class="source-line-no">3532</span><span id="line.3532">        public LayeredSpiral2D(Noise2D basis, final int octaves) {</span>
-<span class="source-line-no">3533</span><span id="line.3533">            this(basis, octaves, 1.0);</span>
-<span class="source-line-no">3534</span><span id="line.3534">        }</span>
-<span class="source-line-no">3535</span><span id="line.3535">        public LayeredSpiral2D(Noise2D basis, final int octaves, double frequency) {</span>
-<span class="source-line-no">3536</span><span id="line.3536">            this(basis, octaves, frequency, 0.5);</span>
-<span class="source-line-no">3537</span><span id="line.3537">        }</span>
-<span class="source-line-no">3538</span><span id="line.3538">        public LayeredSpiral2D(Noise2D basis, final int octaves, double frequency, double lacunarity) {</span>
-<span class="source-line-no">3539</span><span id="line.3539">            this.basis = basis;</span>
-<span class="source-line-no">3540</span><span id="line.3540">            this.frequency = frequency;</span>
-<span class="source-line-no">3541</span><span id="line.3541">            this.octaves = Math.max(1, Math.min(63, octaves));</span>
-<span class="source-line-no">3542</span><span id="line.3542">            this.lacunarity = lacunarity;</span>
-<span class="source-line-no">3543</span><span id="line.3543">        }</span>
-<span class="source-line-no">3544</span><span id="line.3544"></span>
-<span class="source-line-no">3545</span><span id="line.3545">        @Override</span>
-<span class="source-line-no">3546</span><span id="line.3546">        public double getNoise(double x, double y) {</span>
-<span class="source-line-no">3547</span><span id="line.3547">            x *= frequency;</span>
-<span class="source-line-no">3548</span><span id="line.3548">            y *= frequency;</span>
-<span class="source-line-no">3549</span><span id="line.3549">            int s = 1;</span>
-<span class="source-line-no">3550</span><span id="line.3550">            double n = 0.0;</span>
-<span class="source-line-no">3551</span><span id="line.3551">            for (int o = 0; o &lt; octaves; o++, s &lt;&lt;= 1) {</span>
-<span class="source-line-no">3552</span><span id="line.3552">                n += basis.getNoise(x, y) * s;</span>
-<span class="source-line-no">3553</span><span id="line.3553">                final double x2 = + x * +0.6088885514347261 + y * -0.7943553508622062;</span>
-<span class="source-line-no">3554</span><span id="line.3554">                final double y2 = + x * +0.7943553508622062 + y * +0.6088885514347261;</span>
-<span class="source-line-no">3555</span><span id="line.3555">                x = x2 * lacunarity + (o&lt;&lt;6); y = y2 * lacunarity + (o&lt;&lt;6);</span>
-<span class="source-line-no">3556</span><span id="line.3556">            }</span>
-<span class="source-line-no">3557</span><span id="line.3557">            return n / ((1 &lt;&lt; octaves) - 1.0);</span>
-<span class="source-line-no">3558</span><span id="line.3558">        }</span>
-<span class="source-line-no">3559</span><span id="line.3559"></span>
-<span class="source-line-no">3560</span><span id="line.3560">        @Override</span>
-<span class="source-line-no">3561</span><span id="line.3561">        public double getNoiseWithSeed(double x, double y, long seed) {</span>
-<span class="source-line-no">3562</span><span id="line.3562">            x *= frequency;</span>
-<span class="source-line-no">3563</span><span id="line.3563">            y *= frequency;</span>
-<span class="source-line-no">3564</span><span id="line.3564">            int s = 1;</span>
-<span class="source-line-no">3565</span><span id="line.3565">            double n = 0.0;</span>
-<span class="source-line-no">3566</span><span id="line.3566">            for (int o = 0; o &lt; octaves; o++, s &lt;&lt;= 1) {</span>
-<span class="source-line-no">3567</span><span id="line.3567">                n += basis.getNoiseWithSeed(x, y, (seed += 0x9E3779B97F4A7C15L)) * s;</span>
-<span class="source-line-no">3568</span><span id="line.3568">                final double x2 = + x * +0.6088885514347261 + y * -0.7943553508622062;</span>
-<span class="source-line-no">3569</span><span id="line.3569">                final double y2 = + x * +0.7943553508622062 + y * +0.6088885514347261;</span>
-<span class="source-line-no">3570</span><span id="line.3570">                x = x2 * lacunarity + (o&lt;&lt;6); y = y2 * lacunarity + (o&lt;&lt;6);</span>
-<span class="source-line-no">3571</span><span id="line.3571">            }</span>
-<span class="source-line-no">3572</span><span id="line.3572">            return n / ((1 &lt;&lt; octaves) - 1.0);</span>
-<span class="source-line-no">3573</span><span id="line.3573">        }</span>
-<span class="source-line-no">3574</span><span id="line.3574">    }</span>
-<span class="source-line-no">3575</span><span id="line.3575"></span>
-<span class="source-line-no">3576</span><span id="line.3576">    public static class LayeredSpiral3D implements Noise3D {</span>
-<span class="source-line-no">3577</span><span id="line.3577">        protected int octaves;</span>
-<span class="source-line-no">3578</span><span id="line.3578">        protected Noise3D basis;</span>
-<span class="source-line-no">3579</span><span id="line.3579">        public double frequency;</span>
-<span class="source-line-no">3580</span><span id="line.3580">        public double lacunarity;</span>
-<span class="source-line-no">3581</span><span id="line.3581">        public LayeredSpiral3D() {</span>
-<span class="source-line-no">3582</span><span id="line.3582">            this(SeededNoise.instance);</span>
-<span class="source-line-no">3583</span><span id="line.3583">        }</span>
-<span class="source-line-no">3584</span><span id="line.3584"></span>
-<span class="source-line-no">3585</span><span id="line.3585">        public LayeredSpiral3D(Noise3D basis) {</span>
-<span class="source-line-no">3586</span><span id="line.3586">            this(basis, 2);</span>
-<span class="source-line-no">3587</span><span id="line.3587">        }</span>
-<span class="source-line-no">3588</span><span id="line.3588"></span>
-<span class="source-line-no">3589</span><span id="line.3589">        public LayeredSpiral3D(Noise3D basis, final int octaves) {</span>
-<span class="source-line-no">3590</span><span id="line.3590">            this(basis, octaves, 1.0);</span>
-<span class="source-line-no">3591</span><span id="line.3591">        }</span>
-<span class="source-line-no">3592</span><span id="line.3592">        public LayeredSpiral3D(Noise3D basis, final int octaves, double frequency) {</span>
-<span class="source-line-no">3593</span><span id="line.3593">            this(basis, octaves, frequency, 0.5);</span>
-<span class="source-line-no">3594</span><span id="line.3594">        }</span>
-<span class="source-line-no">3595</span><span id="line.3595">        public LayeredSpiral3D(Noise3D basis, final int octaves, double frequency, double lacunarity) {</span>
-<span class="source-line-no">3596</span><span id="line.3596">            this.basis = basis;</span>
-<span class="source-line-no">3597</span><span id="line.3597">            this.frequency = frequency;</span>
-<span class="source-line-no">3598</span><span id="line.3598">            this.octaves = Math.max(1, Math.min(63, octaves));</span>
-<span class="source-line-no">3599</span><span id="line.3599">            this.lacunarity = lacunarity;</span>
-<span class="source-line-no">3600</span><span id="line.3600">        }</span>
-<span class="source-line-no">3601</span><span id="line.3601"></span>
-<span class="source-line-no">3602</span><span id="line.3602">        @Override</span>
-<span class="source-line-no">3603</span><span id="line.3603">        public double getNoise(double x, double y, double z) {</span>
-<span class="source-line-no">3604</span><span id="line.3604">            x *= frequency;</span>
-<span class="source-line-no">3605</span><span id="line.3605">            y *= frequency;</span>
-<span class="source-line-no">3606</span><span id="line.3606">            z *= frequency;</span>
-<span class="source-line-no">3607</span><span id="line.3607">            int s = 1;</span>
-<span class="source-line-no">3608</span><span id="line.3608">            double n = 0.0;</span>
-<span class="source-line-no">3609</span><span id="line.3609">            for (int o = 0; o &lt; octaves; o++, s &lt;&lt;= 1) {</span>
-<span class="source-line-no">3610</span><span id="line.3610">                n += basis.getNoise(x, y, z) * s;</span>
-<span class="source-line-no">3611</span><span id="line.3611">                final double x2 = + x * +0.0227966890756033 + y * +0.6762915140143574 + z * -0.7374004675850091;</span>
-<span class="source-line-no">3612</span><span id="line.3612">                final double y2 = + x * +0.2495309026014970 + y * +0.7103480212381728 + z * +0.6592220931706847;</span>
-<span class="source-line-no">3613</span><span id="line.3613">                final double z2 = + x * +0.9680388783970242 + y * -0.1990510681264026 + z * -0.1525764462988358;</span>
-<span class="source-line-no">3614</span><span id="line.3614">                x = x2 * lacunarity + (o&lt;&lt;6); y = y2 * lacunarity + (o&lt;&lt;6); z = z2 * lacunarity + (o&lt;&lt;6);</span>
-<span class="source-line-no">3615</span><span id="line.3615">            }</span>
-<span class="source-line-no">3616</span><span id="line.3616">            return n / ((1 &lt;&lt; octaves) - 1.0);</span>
-<span class="source-line-no">3617</span><span id="line.3617">        }</span>
-<span class="source-line-no">3618</span><span id="line.3618"></span>
-<span class="source-line-no">3619</span><span id="line.3619">        @Override</span>
-<span class="source-line-no">3620</span><span id="line.3620">        public double getNoiseWithSeed(double x, double y, double z, long seed) {</span>
-<span class="source-line-no">3621</span><span id="line.3621">            x *= frequency;</span>
-<span class="source-line-no">3622</span><span id="line.3622">            y *= frequency;</span>
-<span class="source-line-no">3623</span><span id="line.3623">            z *= frequency;</span>
-<span class="source-line-no">3624</span><span id="line.3624">            int s = 1;</span>
-<span class="source-line-no">3625</span><span id="line.3625">            double n = 0.0;</span>
-<span class="source-line-no">3626</span><span id="line.3626">            for (int o = 0; o &lt; octaves; o++, s &lt;&lt;= 1) {</span>
-<span class="source-line-no">3627</span><span id="line.3627">                n += basis.getNoiseWithSeed(x, y, z, (seed += 0x9E3779B97F4A7C15L)) * s;</span>
-<span class="source-line-no">3628</span><span id="line.3628">                final double x2 = + x * +0.0227966890756033 + y * +0.6762915140143574 + z * -0.7374004675850091;</span>
-<span class="source-line-no">3629</span><span id="line.3629">                final double y2 = + x * +0.2495309026014970 + y * +0.7103480212381728 + z * +0.6592220931706847;</span>
-<span class="source-line-no">3630</span><span id="line.3630">                final double z2 = + x * +0.9680388783970242 + y * -0.1990510681264026 + z * -0.1525764462988358;</span>
-<span class="source-line-no">3631</span><span id="line.3631">                x = x2 * lacunarity + (o&lt;&lt;6); y = y2 * lacunarity + (o&lt;&lt;6); z = z2 * lacunarity + (o&lt;&lt;6);</span>
-<span class="source-line-no">3632</span><span id="line.3632">            }</span>
-<span class="source-line-no">3633</span><span id="line.3633">            return n / ((1 &lt;&lt; octaves) - 1.0);</span>
-<span class="source-line-no">3634</span><span id="line.3634">        }</span>
-<span class="source-line-no">3635</span><span id="line.3635">    }</span>
-<span class="source-line-no">3636</span><span id="line.3636"></span>
-<span class="source-line-no">3637</span><span id="line.3637">    public static class LayeredSpiral4D implements Noise4D {</span>
-<span class="source-line-no">3638</span><span id="line.3638">        protected int octaves;</span>
-<span class="source-line-no">3639</span><span id="line.3639">        protected Noise4D basis;</span>
-<span class="source-line-no">3640</span><span id="line.3640">        public double frequency;</span>
-<span class="source-line-no">3641</span><span id="line.3641">        public double lacunarity;</span>
-<span class="source-line-no">3642</span><span id="line.3642">        public LayeredSpiral4D() {</span>
-<span class="source-line-no">3643</span><span id="line.3643">            this(SeededNoise.instance);</span>
-<span class="source-line-no">3644</span><span id="line.3644">        }</span>
-<span class="source-line-no">3645</span><span id="line.3645"></span>
-<span class="source-line-no">3646</span><span id="line.3646">        public LayeredSpiral4D(Noise4D basis) {</span>
-<span class="source-line-no">3647</span><span id="line.3647">            this(basis, 2);</span>
-<span class="source-line-no">3648</span><span id="line.3648">        }</span>
-<span class="source-line-no">3649</span><span id="line.3649"></span>
-<span class="source-line-no">3650</span><span id="line.3650">        public LayeredSpiral4D(Noise4D basis, final int octaves) {</span>
-<span class="source-line-no">3651</span><span id="line.3651">            this(basis, octaves, 1.0);</span>
-<span class="source-line-no">3652</span><span id="line.3652">        }</span>
-<span class="source-line-no">3653</span><span id="line.3653">        public LayeredSpiral4D(Noise4D basis, final int octaves, double frequency) {</span>
-<span class="source-line-no">3654</span><span id="line.3654">            this(basis, octaves, frequency, 0.5);</span>
-<span class="source-line-no">3655</span><span id="line.3655">        }</span>
-<span class="source-line-no">3656</span><span id="line.3656">        public LayeredSpiral4D(Noise4D basis, final int octaves, double frequency, double lacunarity) {</span>
-<span class="source-line-no">3657</span><span id="line.3657">            this.basis = basis;</span>
-<span class="source-line-no">3658</span><span id="line.3658">            this.frequency = frequency;</span>
-<span class="source-line-no">3659</span><span id="line.3659">            this.octaves = Math.max(1, Math.min(63, octaves));</span>
-<span class="source-line-no">3660</span><span id="line.3660">            this.lacunarity = lacunarity;</span>
-<span class="source-line-no">3661</span><span id="line.3661">        }</span>
-<span class="source-line-no">3662</span><span id="line.3662"></span>
-<span class="source-line-no">3663</span><span id="line.3663">        @Override</span>
-<span class="source-line-no">3664</span><span id="line.3664">        public double getNoise(double x, double y, double z, double w) {</span>
-<span class="source-line-no">3665</span><span id="line.3665">            x *= frequency;</span>
-<span class="source-line-no">3666</span><span id="line.3666">            y *= frequency;</span>
-<span class="source-line-no">3667</span><span id="line.3667">            z *= frequency;</span>
-<span class="source-line-no">3668</span><span id="line.3668">            w *= frequency;</span>
-<span class="source-line-no">3669</span><span id="line.3669">            int s = 1;</span>
-<span class="source-line-no">3670</span><span id="line.3670">            double n = 0.0;</span>
-<span class="source-line-no">3671</span><span id="line.3671">            for (int o = 0; o &lt; octaves; o++, s &lt;&lt;= 1) {</span>
-<span class="source-line-no">3672</span><span id="line.3672">                n += basis.getNoise(x, y, z, w) * s;</span>
-<span class="source-line-no">3673</span><span id="line.3673">                final double x2 = + x * +0.5699478528112771 + y * +0.7369836852218905 + z * -0.0325828875824773 + w * -0.3639975881105405;</span>
-<span class="source-line-no">3674</span><span id="line.3674">                final double y2 = + x * +0.1552282348051943 + y * +0.1770952336543200 + z * -0.7097702517705363 + w * +0.6650917154025483;</span>
-<span class="source-line-no">3675</span><span id="line.3675">                final double z2 = + x * +0.0483833371062336 + y * +0.3124109456042325 + z * +0.6948457959606478 + w * +0.6469518300143685;</span>
-<span class="source-line-no">3676</span><span id="line.3676">                final double w2 = + x * +0.8064316315440612 + y * -0.5737907885437848 + z * +0.1179845891415618 + w * +0.0904374415002696;</span>
-<span class="source-line-no">3677</span><span id="line.3677">                x = x2 * lacunarity + (o&lt;&lt;6); y = y2 * lacunarity + (o&lt;&lt;6); z = z2 * lacunarity + (o&lt;&lt;6);  w = w2 * lacunarity + (o&lt;&lt;6);</span>
-<span class="source-line-no">3678</span><span id="line.3678">            }</span>
-<span class="source-line-no">3679</span><span id="line.3679">            return n / ((1 &lt;&lt; octaves) - 1.0);</span>
-<span class="source-line-no">3680</span><span id="line.3680">        }</span>
-<span class="source-line-no">3681</span><span id="line.3681"></span>
-<span class="source-line-no">3682</span><span id="line.3682">        @Override</span>
-<span class="source-line-no">3683</span><span id="line.3683">        public double getNoiseWithSeed(double x, double y, double z, double w, long seed) {</span>
-<span class="source-line-no">3684</span><span id="line.3684">            x *= frequency;</span>
-<span class="source-line-no">3685</span><span id="line.3685">            y *= frequency;</span>
-<span class="source-line-no">3686</span><span id="line.3686">            z *= frequency;</span>
-<span class="source-line-no">3687</span><span id="line.3687">            w *= frequency;</span>
-<span class="source-line-no">3688</span><span id="line.3688">            int s = 1;</span>
-<span class="source-line-no">3689</span><span id="line.3689">            double n = 0.0;</span>
-<span class="source-line-no">3690</span><span id="line.3690">            for (int o = 0; o &lt; octaves; o++, s &lt;&lt;= 1) {</span>
-<span class="source-line-no">3691</span><span id="line.3691">                n += basis.getNoiseWithSeed(x, y, z, w, (seed += 0x9E3779B97F4A7C15L)) * s;</span>
-<span class="source-line-no">3692</span><span id="line.3692">                final double x2 = + x * +0.5699478528112771 + y * +0.7369836852218905 + z * -0.0325828875824773 + w * -0.3639975881105405;</span>
-<span class="source-line-no">3693</span><span id="line.3693">                final double y2 = + x * +0.1552282348051943 + y * +0.1770952336543200 + z * -0.7097702517705363 + w * +0.6650917154025483;</span>
-<span class="source-line-no">3694</span><span id="line.3694">                final double z2 = + x * +0.0483833371062336 + y * +0.3124109456042325 + z * +0.6948457959606478 + w * +0.6469518300143685;</span>
-<span class="source-line-no">3695</span><span id="line.3695">                final double w2 = + x * +0.8064316315440612 + y * -0.5737907885437848 + z * +0.1179845891415618 + w * +0.0904374415002696;</span>
-<span class="source-line-no">3696</span><span id="line.3696">                x = x2 * lacunarity + (o&lt;&lt;6); y = y2 * lacunarity + (o&lt;&lt;6); z = z2 * lacunarity + (o&lt;&lt;6);  w = w2 * lacunarity + (o&lt;&lt;6);</span>
-<span class="source-line-no">3697</span><span id="line.3697">            }</span>
-<span class="source-line-no">3698</span><span id="line.3698">            return n / ((1 &lt;&lt; octaves) - 1.0);</span>
-<span class="source-line-no">3699</span><span id="line.3699">        }</span>
-<span class="source-line-no">3700</span><span id="line.3700">    }</span>
-<span class="source-line-no">3701</span><span id="line.3701">    public static class LayeredSpiral5D implements Noise5D {</span>
-<span class="source-line-no">3702</span><span id="line.3702">        protected int octaves;</span>
-<span class="source-line-no">3703</span><span id="line.3703">        protected Noise5D basis;</span>
-<span class="source-line-no">3704</span><span id="line.3704">        public double frequency;</span>
-<span class="source-line-no">3705</span><span id="line.3705">        public double lacunarity;</span>
-<span class="source-line-no">3706</span><span id="line.3706">        public LayeredSpiral5D() {</span>
-<span class="source-line-no">3707</span><span id="line.3707">            this(SeededNoise.instance);</span>
-<span class="source-line-no">3708</span><span id="line.3708">        }</span>
-<span class="source-line-no">3709</span><span id="line.3709"></span>
-<span class="source-line-no">3710</span><span id="line.3710">        public LayeredSpiral5D(Noise5D basis) {</span>
-<span class="source-line-no">3711</span><span id="line.3711">            this(basis, 2);</span>
-<span class="source-line-no">3712</span><span id="line.3712">        }</span>
-<span class="source-line-no">3713</span><span id="line.3713"></span>
-<span class="source-line-no">3714</span><span id="line.3714">        public LayeredSpiral5D(Noise5D basis, final int octaves) {</span>
-<span class="source-line-no">3715</span><span id="line.3715">            this(basis, octaves, 1.0);</span>
-<span class="source-line-no">3716</span><span id="line.3716">        }</span>
-<span class="source-line-no">3717</span><span id="line.3717">        public LayeredSpiral5D(Noise5D basis, final int octaves, double frequency) {</span>
-<span class="source-line-no">3718</span><span id="line.3718">            this(basis, octaves, frequency, 0.5);</span>
-<span class="source-line-no">3719</span><span id="line.3719">        }</span>
-<span class="source-line-no">3720</span><span id="line.3720">        public LayeredSpiral5D(Noise5D basis, final int octaves, double frequency, double lacunarity) {</span>
-<span class="source-line-no">3721</span><span id="line.3721">            this.basis = basis;</span>
-<span class="source-line-no">3722</span><span id="line.3722">            this.frequency = frequency;</span>
-<span class="source-line-no">3723</span><span id="line.3723">            this.octaves = Math.max(1, Math.min(63, octaves));</span>
-<span class="source-line-no">3724</span><span id="line.3724">            this.lacunarity = lacunarity;</span>
-<span class="source-line-no">3725</span><span id="line.3725">        }</span>
-<span class="source-line-no">3726</span><span id="line.3726"></span>
-<span class="source-line-no">3727</span><span id="line.3727">        @Override</span>
-<span class="source-line-no">3728</span><span id="line.3728">        public double getNoise(double x, double y, double z, double w, double u) {</span>
-<span class="source-line-no">3729</span><span id="line.3729">            x *= frequency;</span>
-<span class="source-line-no">3730</span><span id="line.3730">            y *= frequency;</span>
-<span class="source-line-no">3731</span><span id="line.3731">            z *= frequency;</span>
-<span class="source-line-no">3732</span><span id="line.3732">            w *= frequency;</span>
-<span class="source-line-no">3733</span><span id="line.3733">            u *= frequency;</span>
-<span class="source-line-no">3734</span><span id="line.3734">            int s = 1;</span>
-<span class="source-line-no">3735</span><span id="line.3735">            double n = 0.0;</span>
-<span class="source-line-no">3736</span><span id="line.3736">            for (int o = 0; o &lt; octaves; o++, s &lt;&lt;= 1) {</span>
-<span class="source-line-no">3737</span><span id="line.3737">                n += basis.getNoise(x, y, z, w, u) * s;</span>
-<span class="source-line-no">3738</span><span id="line.3738">                final double x2 = + x * +0.1524127934921893 + y * -0.2586710352203958 + z * -0.4891826043642151 + w * +0.7663312575129502 + u * -0.2929089192051232;</span>
-<span class="source-line-no">3739</span><span id="line.3739">                final double y2 = + x * -0.0716486050004579 + y * -0.5083828718253534 + z * -0.5846508329893165 + w * -0.3242340701968086 + u * +0.5400343264823232;</span>
-<span class="source-line-no">3740</span><span id="line.3740">                final double z2 = + x * +0.5391124130592424 + y * +0.4637201165727557 + z * -0.0268449575347777 + w * +0.2805630001516211 + u * +0.6471616940596671;</span>
-<span class="source-line-no">3741</span><span id="line.3741">                final double w2 = + x * -0.4908590743023694 + y * -0.3159190659906883 + z * +0.4868180845277980 + w * +0.4733894151555028 + u * +0.4492456287606979;</span>
-<span class="source-line-no">3742</span><span id="line.3742">                final double u2 = + x * +0.6656547456376498 + y * -0.6028584537113622 + z * +0.4289447660591045 + w * -0.0882009139887838 + u * -0.0676076855220496;</span>
-<span class="source-line-no">3743</span><span id="line.3743">                x = x2 * lacunarity + (o&lt;&lt;6); y = y2 * lacunarity + (o&lt;&lt;6); z = z2 * lacunarity + (o&lt;&lt;6);  w = w2 * lacunarity + (o&lt;&lt;6); u = u2 * lacunarity + (o&lt;&lt;6);</span>
-<span class="source-line-no">3744</span><span id="line.3744">            }</span>
-<span class="source-line-no">3745</span><span id="line.3745">            return n / ((1 &lt;&lt; octaves) - 1.0);</span>
-<span class="source-line-no">3746</span><span id="line.3746">        }</span>
-<span class="source-line-no">3747</span><span id="line.3747"></span>
-<span class="source-line-no">3748</span><span id="line.3748">        @Override</span>
-<span class="source-line-no">3749</span><span id="line.3749">        public double getNoiseWithSeed(double x, double y, double z, double w, double u, long seed) {</span>
-<span class="source-line-no">3750</span><span id="line.3750">            x *= frequency;</span>
-<span class="source-line-no">3751</span><span id="line.3751">            y *= frequency;</span>
-<span class="source-line-no">3752</span><span id="line.3752">            z *= frequency;</span>
-<span class="source-line-no">3753</span><span id="line.3753">            w *= frequency;</span>
-<span class="source-line-no">3754</span><span id="line.3754">            u *= frequency;</span>
-<span class="source-line-no">3755</span><span id="line.3755">            int s = 1;</span>
-<span class="source-line-no">3756</span><span id="line.3756">            double n = 0.0;</span>
-<span class="source-line-no">3757</span><span id="line.3757">            for (int o = 0; o &lt; octaves; o++, s &lt;&lt;= 1) {</span>
-<span class="source-line-no">3758</span><span id="line.3758">                n += basis.getNoiseWithSeed(x, y, z, w, u, (seed += 0x9E3779B97F4A7C15L)) * s;</span>
-<span class="source-line-no">3759</span><span id="line.3759">                final double x2 = + x * +0.1524127934921893 + y * -0.2586710352203958 + z * -0.4891826043642151 + w * +0.7663312575129502 + u * -0.2929089192051232;</span>
-<span class="source-line-no">3760</span><span id="line.3760">                final double y2 = + x * -0.0716486050004579 + y * -0.5083828718253534 + z * -0.5846508329893165 + w * -0.3242340701968086 + u * +0.5400343264823232;</span>
-<span class="source-line-no">3761</span><span id="line.3761">                final double z2 = + x * +0.5391124130592424 + y * +0.4637201165727557 + z * -0.0268449575347777 + w * +0.2805630001516211 + u * +0.6471616940596671;</span>
-<span class="source-line-no">3762</span><span id="line.3762">                final double w2 = + x * -0.4908590743023694 + y * -0.3159190659906883 + z * +0.4868180845277980 + w * +0.4733894151555028 + u * +0.4492456287606979;</span>
-<span class="source-line-no">3763</span><span id="line.3763">                final double u2 = + x * +0.6656547456376498 + y * -0.6028584537113622 + z * +0.4289447660591045 + w * -0.0882009139887838 + u * -0.0676076855220496;</span>
-<span class="source-line-no">3764</span><span id="line.3764">                x = x2 * lacunarity + (o&lt;&lt;6); y = y2 * lacunarity + (o&lt;&lt;6); z = z2 * lacunarity + (o&lt;&lt;6);  w = w2 * lacunarity + (o&lt;&lt;6); u = u2 * lacunarity + (o&lt;&lt;6);</span>
-<span class="source-line-no">3765</span><span id="line.3765">            }</span>
-<span class="source-line-no">3766</span><span id="line.3766">            return n / ((1 &lt;&lt; octaves) - 1.0);</span>
-<span class="source-line-no">3767</span><span id="line.3767">        }</span>
-<span class="source-line-no">3768</span><span id="line.3768">    }</span>
-<span class="source-line-no">3769</span><span id="line.3769"></span>
-<span class="source-line-no">3770</span><span id="line.3770">    public static class LayeredSpiral6D implements Noise6D {</span>
-<span class="source-line-no">3771</span><span id="line.3771">        protected int octaves;</span>
-<span class="source-line-no">3772</span><span id="line.3772">        protected Noise6D basis;</span>
-<span class="source-line-no">3773</span><span id="line.3773">        public double frequency;</span>
-<span class="source-line-no">3774</span><span id="line.3774">        public double lacunarity;</span>
-<span class="source-line-no">3775</span><span id="line.3775">        public LayeredSpiral6D() {</span>
-<span class="source-line-no">3776</span><span id="line.3776">            this(SeededNoise.instance);</span>
-<span class="source-line-no">3777</span><span id="line.3777">        }</span>
-<span class="source-line-no">3778</span><span id="line.3778"></span>
-<span class="source-line-no">3779</span><span id="line.3779">        public LayeredSpiral6D(Noise6D basis) {</span>
-<span class="source-line-no">3780</span><span id="line.3780">            this(basis, 2);</span>
-<span class="source-line-no">3781</span><span id="line.3781">        }</span>
-<span class="source-line-no">3782</span><span id="line.3782"></span>
-<span class="source-line-no">3783</span><span id="line.3783">        public LayeredSpiral6D(Noise6D basis, final int octaves) {</span>
-<span class="source-line-no">3784</span><span id="line.3784">            this(basis, octaves, 1.0);</span>
-<span class="source-line-no">3785</span><span id="line.3785">        }</span>
-<span class="source-line-no">3786</span><span id="line.3786">        public LayeredSpiral6D(Noise6D basis, final int octaves, double frequency) {</span>
-<span class="source-line-no">3787</span><span id="line.3787">            this(basis, octaves, frequency, 0.5);</span>
-<span class="source-line-no">3788</span><span id="line.3788">        }</span>
-<span class="source-line-no">3789</span><span id="line.3789">        public LayeredSpiral6D(Noise6D basis, final int octaves, double frequency, double lacunarity) {</span>
-<span class="source-line-no">3790</span><span id="line.3790">            this.basis = basis;</span>
-<span class="source-line-no">3791</span><span id="line.3791">            this.frequency = frequency;</span>
-<span class="source-line-no">3792</span><span id="line.3792">            this.octaves = Math.max(1, Math.min(63, octaves));</span>
-<span class="source-line-no">3793</span><span id="line.3793">            this.lacunarity = lacunarity;</span>
-<span class="source-line-no">3794</span><span id="line.3794">        }</span>
-<span class="source-line-no">3795</span><span id="line.3795"></span>
-<span class="source-line-no">3796</span><span id="line.3796">        @Override</span>
-<span class="source-line-no">3797</span><span id="line.3797">        public double getNoise(double x, double y, double z, double w, double u, double v) {</span>
-<span class="source-line-no">3798</span><span id="line.3798">            x *= frequency;</span>
-<span class="source-line-no">3799</span><span id="line.3799">            y *= frequency;</span>
-<span class="source-line-no">3800</span><span id="line.3800">            z *= frequency;</span>
-<span class="source-line-no">3801</span><span id="line.3801">            w *= frequency;</span>
-<span class="source-line-no">3802</span><span id="line.3802">            u *= frequency;</span>
-<span class="source-line-no">3803</span><span id="line.3803">            v *= frequency;</span>
-<span class="source-line-no">3804</span><span id="line.3804">            int s = 1;</span>
-<span class="source-line-no">3805</span><span id="line.3805">            double n = 0.0;</span>
-<span class="source-line-no">3806</span><span id="line.3806">            for (int o = 0; o &lt; octaves; o++, s &lt;&lt;= 1) {</span>
-<span class="source-line-no">3807</span><span id="line.3807">                n += basis.getNoise(x, y, z, w, u, v) * s;</span>
-<span class="source-line-no">3808</span><span id="line.3808">                final double x2 = + x * -0.0850982316788443 + y * +0.0621411489653063 + z * +0.6423842935800755 + w * +0.5472782330246069 + u * -0.5181072879831091 + v * -0.1137065126038194;</span>
-<span class="source-line-no">3809</span><span id="line.3809">                final double y2 = + x * +0.1080560582151551 + y * -0.3254670556393390 + z * -0.3972292333437380 + w * +0.0964380840482216 + u * -0.5818281028726723 + v * +0.6182273380506453;</span>
-<span class="source-line-no">3810</span><span id="line.3810">                final double z2 = + x * +0.2504893307323878 + y * -0.3866469165898269 + z * -0.2346647170372642 + w * +0.7374659593233097 + u * +0.4257828596124605 + v * -0.1106816328431182;</span>
-<span class="source-line-no">3811</span><span id="line.3811">                final double w2 = + x * +0.0990858373676681 + y * +0.4040947615164614 + z * +0.3012734241554820 + w * +0.1520113643725959 + u * +0.4036980496402723 + v * +0.7440701998573674;</span>
-<span class="source-line-no">3812</span><span id="line.3812">                final double u2 = + x * -0.7720417581190233 + y * -0.5265151283855897 + z * +0.1995725381386031 + w * -0.0464596713813553 + u * +0.2186511264128518 + v * +0.1990962291039879;</span>
-<span class="source-line-no">3813</span><span id="line.3813">                final double v2 = + x * +0.5606136879764017 + y * -0.5518123912290505 + z * +0.4997557173523122 + w * -0.3555852919481873 + u * +0.0731165180984564 + v * +0.0560452079067605;</span>
-<span class="source-line-no">3814</span><span id="line.3814">                x = x2 * lacunarity + (o&lt;&lt;6); y = y2 * lacunarity + (o&lt;&lt;6); z = z2 * lacunarity + (o&lt;&lt;6);  w = w2 * lacunarity + (o&lt;&lt;6); u = u2 * lacunarity + (o&lt;&lt;6); v = v2 * lacunarity + (o&lt;&lt;6);</span>
-<span class="source-line-no">3815</span><span id="line.3815">            }</span>
-<span class="source-line-no">3816</span><span id="line.3816">            return n / ((1 &lt;&lt; octaves) - 1.0);</span>
-<span class="source-line-no">3817</span><span id="line.3817">        }</span>
-<span class="source-line-no">3818</span><span id="line.3818"></span>
-<span class="source-line-no">3819</span><span id="line.3819">        @Override</span>
-<span class="source-line-no">3820</span><span id="line.3820">        public double getNoiseWithSeed(double x, double y, double z, double w, double u, double v, long seed) {</span>
-<span class="source-line-no">3821</span><span id="line.3821">            x *= frequency;</span>
-<span class="source-line-no">3822</span><span id="line.3822">            y *= frequency;</span>
-<span class="source-line-no">3823</span><span id="line.3823">            z *= frequency;</span>
-<span class="source-line-no">3824</span><span id="line.3824">            w *= frequency;</span>
-<span class="source-line-no">3825</span><span id="line.3825">            u *= frequency;</span>
-<span class="source-line-no">3826</span><span id="line.3826">            v *= frequency;</span>
-<span class="source-line-no">3827</span><span id="line.3827">            int s = 1;</span>
-<span class="source-line-no">3828</span><span id="line.3828">            double n = 0.0;</span>
-<span class="source-line-no">3829</span><span id="line.3829">            for (int o = 0; o &lt; octaves; o++, s &lt;&lt;= 1) {</span>
-<span class="source-line-no">3830</span><span id="line.3830">                n += basis.getNoiseWithSeed(x, y, z, w, u, v, (seed += 0x9E3779B97F4A7C15L)) * s;</span>
-<span class="source-line-no">3831</span><span id="line.3831">                final double x2 = + x * -0.0850982316788443 + y * +0.0621411489653063 + z * +0.6423842935800755 + w * +0.5472782330246069 + u * -0.5181072879831091 + v * -0.1137065126038194;</span>
-<span class="source-line-no">3832</span><span id="line.3832">                final double y2 = + x * +0.1080560582151551 + y * -0.3254670556393390 + z * -0.3972292333437380 + w * +0.0964380840482216 + u * -0.5818281028726723 + v * +0.6182273380506453;</span>
-<span class="source-line-no">3833</span><span id="line.3833">                final double z2 = + x * +0.2504893307323878 + y * -0.3866469165898269 + z * -0.2346647170372642 + w * +0.7374659593233097 + u * +0.4257828596124605 + v * -0.1106816328431182;</span>
-<span class="source-line-no">3834</span><span id="line.3834">                final double w2 = + x * +0.0990858373676681 + y * +0.4040947615164614 + z * +0.3012734241554820 + w * +0.1520113643725959 + u * +0.4036980496402723 + v * +0.7440701998573674;</span>
-<span class="source-line-no">3835</span><span id="line.3835">                final double u2 = + x * -0.7720417581190233 + y * -0.5265151283855897 + z * +0.1995725381386031 + w * -0.0464596713813553 + u * +0.2186511264128518 + v * +0.1990962291039879;</span>
-<span class="source-line-no">3836</span><span id="line.3836">                final double v2 = + x * +0.5606136879764017 + y * -0.5518123912290505 + z * +0.4997557173523122 + w * -0.3555852919481873 + u * +0.0731165180984564 + v * +0.0560452079067605;</span>
-<span class="source-line-no">3837</span><span id="line.3837">                x = x2 * lacunarity + (o&lt;&lt;6); y = y2 * lacunarity + (o&lt;&lt;6); z = z2 * lacunarity + (o&lt;&lt;6);  w = w2 * lacunarity + (o&lt;&lt;6); u = u2 * lacunarity + (o&lt;&lt;6); v = v2 * lacunarity + (o&lt;&lt;6);</span>
-<span class="source-line-no">3838</span><span id="line.3838"></span>
-<span class="source-line-no">3839</span><span id="line.3839">            }</span>
-<span class="source-line-no">3840</span><span id="line.3840">            return n / ((1 &lt;&lt; octaves) - 1.0);</span>
-<span class="source-line-no">3841</span><span id="line.3841">        }</span>
-<span class="source-line-no">3842</span><span id="line.3842">    }</span>
-<span class="source-line-no">3843</span><span id="line.3843">}</span>
+<span class="source-line-no">3448</span><span id="line.3448">            x *= x - 1.0;</span>
+<span class="source-line-no">3449</span><span id="line.3449">            return rise * x * (h * x - 1.0);</span>
+<span class="source-line-no">3450</span><span id="line.3450">        }</span>
+<span class="source-line-no">3451</span><span id="line.3451"></span>
+<span class="source-line-no">3452</span><span id="line.3452">        @Override</span>
+<span class="source-line-no">3453</span><span id="line.3453">        public double getNoise(double x, double y) {</span>
+<span class="source-line-no">3454</span><span id="line.3454">            return getNoiseWithSeed(x, y, seed);</span>
+<span class="source-line-no">3455</span><span id="line.3455">        }</span>
+<span class="source-line-no">3456</span><span id="line.3456"></span>
+<span class="source-line-no">3457</span><span id="line.3457">        @Override</span>
+<span class="source-line-no">3458</span><span id="line.3458">        public double getNoiseWithSeed(double x, double y, long seed) {</span>
+<span class="source-line-no">3459</span><span id="line.3459">            double n = 0.0;</span>
+<span class="source-line-no">3460</span><span id="line.3460">            for (int i = 0; i &lt; 4; i++) {</span>
+<span class="source-line-no">3461</span><span id="line.3461">                seed += 0x9E3779B97F4A7C15L;</span>
+<span class="source-line-no">3462</span><span id="line.3462">                double xEdit = x += (((seed &amp; 0x55555555L) | (seed &gt;&gt;&gt; 32 &amp; 0xAAAAAAAAL))) * 0x1p-29 + 0.5698402909980532;</span>
+<span class="source-line-no">3463</span><span id="line.3463">                double yEdit = y += (((seed &amp; 0xAAAAAAAAL) | (seed &gt;&gt;&gt; 32 &amp; 0x55555555L))) * 0x1p-29 + 0.7548776662466927;</span>
+<span class="source-line-no">3464</span><span id="line.3464">                final long</span>
+<span class="source-line-no">3465</span><span id="line.3465">                        xFloor = xEdit &gt;= 0.0 ? (long) xEdit : (long) xEdit - 1,</span>
+<span class="source-line-no">3466</span><span id="line.3466">                        yFloor = yEdit &gt;= 0.0 ? (long) yEdit : (long) yEdit - 1;</span>
+<span class="source-line-no">3467</span><span id="line.3467">                xEdit -= xFloor;</span>
+<span class="source-line-no">3468</span><span id="line.3468">                yEdit -= yFloor;</span>
+<span class="source-line-no">3469</span><span id="line.3469">                xEdit *= (xEdit - 1.0);</span>
+<span class="source-line-no">3470</span><span id="line.3470">                yEdit *= (yEdit - 1.0);</span>
+<span class="source-line-no">3471</span><span id="line.3471">                final double m = (xEdit + yEdit) * 0.5;</span>
+<span class="source-line-no">3472</span><span id="line.3472">                final double h = NumberTools.longBitsToDouble(HastyPointHash.hashAll(xFloor, yFloor, seed) &gt;&gt;&gt; 12 | 0x4040000000000000L) - 52.0;</span>
+<span class="source-line-no">3473</span><span id="line.3473">//            final double i = NumberTools.longBitsToDouble((~seed + yFloor ^ 0x9E3779B97F4A7C15L) * 0xD1B54A32D192ED03L &gt;&gt;&gt; 12 | 0x4030000000000000L) - 24.0;</span>
+<span class="source-line-no">3474</span><span id="line.3474">                n += (m * (h * m - 1.0));</span>
+<span class="source-line-no">3475</span><span id="line.3475">            }</span>
+<span class="source-line-no">3476</span><span id="line.3476">            return n * 0.25;</span>
+<span class="source-line-no">3477</span><span id="line.3477">////                    cerp(</span>
+<span class="source-line-no">3478</span><span id="line.3478">//                    0.5 * (</span>
+<span class="source-line-no">3479</span><span id="line.3479">//                            (xRise * m * (h * m - 1.0)) +</span>
+<span class="source-line-no">3480</span><span id="line.3480">//                            (yRise * m * (i * m - 1.0))</span>
+<span class="source-line-no">3481</span><span id="line.3481">//                    );</span>
+<span class="source-line-no">3482</span><span id="line.3482">//                            //, 0.5 + (y - x) * 0.5);</span>
+<span class="source-line-no">3483</span><span id="line.3483">        }</span>
+<span class="source-line-no">3484</span><span id="line.3484"></span>
+<span class="source-line-no">3485</span><span id="line.3485">    }</span>
+<span class="source-line-no">3486</span><span id="line.3486"></span>
+<span class="source-line-no">3487</span><span id="line.3487">    /*</span>
+<span class="source-line-no">3488</span><span id="line.3488">2x2:</span>
+<span class="source-line-no">3489</span><span id="line.3489">final double x2 = + x * +0.6088885514347261 + y * -0.7943553508622062;</span>
+<span class="source-line-no">3490</span><span id="line.3490">final double y2 = + x * +0.7943553508622062 + y * +0.6088885514347261;</span>
+<span class="source-line-no">3491</span><span id="line.3491"></span>
+<span class="source-line-no">3492</span><span id="line.3492">3x3:</span>
+<span class="source-line-no">3493</span><span id="line.3493">final double x2 = + x * +0.0227966890756033 + y * +0.6762915140143574 + z * -0.7374004675850091;</span>
+<span class="source-line-no">3494</span><span id="line.3494">final double y2 = + x * +0.2495309026014970 + y * +0.7103480212381728 + z * +0.6592220931706847;</span>
+<span class="source-line-no">3495</span><span id="line.3495">final double z2 = + x * +0.9680388783970242 + y * -0.1990510681264026 + z * -0.1525764462988358;</span>
+<span class="source-line-no">3496</span><span id="line.3496"></span>
+<span class="source-line-no">3497</span><span id="line.3497">4x4:</span>
+<span class="source-line-no">3498</span><span id="line.3498">final double x2 = + x * +0.5699478528112771 + y * +0.7369836852218905 + z * -0.0325828875824773 + w * -0.3639975881105405;</span>
+<span class="source-line-no">3499</span><span id="line.3499">final double y2 = + x * +0.1552282348051943 + y * +0.1770952336543200 + z * -0.7097702517705363 + w * +0.6650917154025483;</span>
+<span class="source-line-no">3500</span><span id="line.3500">final double z2 = + x * +0.0483833371062336 + y * +0.3124109456042325 + z * +0.6948457959606478 + w * +0.6469518300143685;</span>
+<span class="source-line-no">3501</span><span id="line.3501">final double w2 = + x * +0.8064316315440612 + y * -0.5737907885437848 + z * +0.1179845891415618 + w * +0.0904374415002696;</span>
+<span class="source-line-no">3502</span><span id="line.3502"></span>
+<span class="source-line-no">3503</span><span id="line.3503">5x5:</span>
+<span class="source-line-no">3504</span><span id="line.3504">final double x2 = + x * +0.1524127934921893 + y * -0.2586710352203958 + z * -0.4891826043642151 + w * +0.7663312575129502 + u * -0.2929089192051232;</span>
+<span class="source-line-no">3505</span><span id="line.3505">final double y2 = + x * -0.0716486050004579 + y * -0.5083828718253534 + z * -0.5846508329893165 + w * -0.3242340701968086 + u * +0.5400343264823232;</span>
+<span class="source-line-no">3506</span><span id="line.3506">final double z2 = + x * +0.5391124130592424 + y * +0.4637201165727557 + z * -0.0268449575347777 + w * +0.2805630001516211 + u * +0.6471616940596671;</span>
+<span class="source-line-no">3507</span><span id="line.3507">final double w2 = + x * -0.4908590743023694 + y * -0.3159190659906883 + z * +0.4868180845277980 + w * +0.4733894151555028 + u * +0.4492456287606979;</span>
+<span class="source-line-no">3508</span><span id="line.3508">final double u2 = + x * +0.6656547456376498 + y * -0.6028584537113622 + z * +0.4289447660591045 + w * -0.0882009139887838 + u * -0.0676076855220496;</span>
+<span class="source-line-no">3509</span><span id="line.3509"></span>
+<span class="source-line-no">3510</span><span id="line.3510">6x6:</span>
+<span class="source-line-no">3511</span><span id="line.3511">final double x2 = + x * -0.0850982316788443 + y * +0.0621411489653063 + z * +0.6423842935800755 + w * +0.5472782330246069 + u * -0.5181072879831091 + v * -0.1137065126038194;</span>
+<span class="source-line-no">3512</span><span id="line.3512">final double y2 = + x * +0.1080560582151551 + y * -0.3254670556393390 + z * -0.3972292333437380 + w * +0.0964380840482216 + u * -0.5818281028726723 + v * +0.6182273380506453;</span>
+<span class="source-line-no">3513</span><span id="line.3513">final double z2 = + x * +0.2504893307323878 + y * -0.3866469165898269 + z * -0.2346647170372642 + w * +0.7374659593233097 + u * +0.4257828596124605 + v * -0.1106816328431182;</span>
+<span class="source-line-no">3514</span><span id="line.3514">final double w2 = + x * +0.0990858373676681 + y * +0.4040947615164614 + z * +0.3012734241554820 + w * +0.1520113643725959 + u * +0.4036980496402723 + v * +0.7440701998573674;</span>
+<span class="source-line-no">3515</span><span id="line.3515">final double u2 = + x * -0.7720417581190233 + y * -0.5265151283855897 + z * +0.1995725381386031 + w * -0.0464596713813553 + u * +0.2186511264128518 + v * +0.1990962291039879;</span>
+<span class="source-line-no">3516</span><span id="line.3516">final double v2 = + x * +0.5606136879764017 + y * -0.5518123912290505 + z * +0.4997557173523122 + w * -0.3555852919481873 + u * +0.0731165180984564 + v * +0.0560452079067605;</span>
+<span class="source-line-no">3517</span><span id="line.3517"></span>
+<span class="source-line-no">3518</span><span id="line.3518">     */</span>
+<span class="source-line-no">3519</span><span id="line.3519"></span>
+<span class="source-line-no">3520</span><span id="line.3520">    public static class LayeredSpiral2D implements Noise2D {</span>
+<span class="source-line-no">3521</span><span id="line.3521">        protected int octaves;</span>
+<span class="source-line-no">3522</span><span id="line.3522">        protected Noise2D basis;</span>
+<span class="source-line-no">3523</span><span id="line.3523">        public double frequency;</span>
+<span class="source-line-no">3524</span><span id="line.3524">        public double lacunarity;</span>
+<span class="source-line-no">3525</span><span id="line.3525">        public LayeredSpiral2D() {</span>
+<span class="source-line-no">3526</span><span id="line.3526">            this(SeededNoise.instance);</span>
+<span class="source-line-no">3527</span><span id="line.3527">        }</span>
+<span class="source-line-no">3528</span><span id="line.3528"></span>
+<span class="source-line-no">3529</span><span id="line.3529">        public LayeredSpiral2D(Noise2D basis) {</span>
+<span class="source-line-no">3530</span><span id="line.3530">            this(basis, 2);</span>
+<span class="source-line-no">3531</span><span id="line.3531">        }</span>
+<span class="source-line-no">3532</span><span id="line.3532"></span>
+<span class="source-line-no">3533</span><span id="line.3533">        public LayeredSpiral2D(Noise2D basis, final int octaves) {</span>
+<span class="source-line-no">3534</span><span id="line.3534">            this(basis, octaves, 1.0);</span>
+<span class="source-line-no">3535</span><span id="line.3535">        }</span>
+<span class="source-line-no">3536</span><span id="line.3536">        public LayeredSpiral2D(Noise2D basis, final int octaves, double frequency) {</span>
+<span class="source-line-no">3537</span><span id="line.3537">            this(basis, octaves, frequency, 0.5);</span>
+<span class="source-line-no">3538</span><span id="line.3538">        }</span>
+<span class="source-line-no">3539</span><span id="line.3539">        public LayeredSpiral2D(Noise2D basis, final int octaves, double frequency, double lacunarity) {</span>
+<span class="source-line-no">3540</span><span id="line.3540">            this.basis = basis;</span>
+<span class="source-line-no">3541</span><span id="line.3541">            this.frequency = frequency;</span>
+<span class="source-line-no">3542</span><span id="line.3542">            this.octaves = Math.max(1, Math.min(63, octaves));</span>
+<span class="source-line-no">3543</span><span id="line.3543">            this.lacunarity = lacunarity;</span>
+<span class="source-line-no">3544</span><span id="line.3544">        }</span>
+<span class="source-line-no">3545</span><span id="line.3545"></span>
+<span class="source-line-no">3546</span><span id="line.3546">        @Override</span>
+<span class="source-line-no">3547</span><span id="line.3547">        public double getNoise(double x, double y) {</span>
+<span class="source-line-no">3548</span><span id="line.3548">            x *= frequency;</span>
+<span class="source-line-no">3549</span><span id="line.3549">            y *= frequency;</span>
+<span class="source-line-no">3550</span><span id="line.3550">            int s = 1;</span>
+<span class="source-line-no">3551</span><span id="line.3551">            double n = 0.0;</span>
+<span class="source-line-no">3552</span><span id="line.3552">            for (int o = 0; o &lt; octaves; o++, s &lt;&lt;= 1) {</span>
+<span class="source-line-no">3553</span><span id="line.3553">                n += basis.getNoise(x, y) * s;</span>
+<span class="source-line-no">3554</span><span id="line.3554">                final double x2 = + x * +0.6088885514347261 + y * -0.7943553508622062;</span>
+<span class="source-line-no">3555</span><span id="line.3555">                final double y2 = + x * +0.7943553508622062 + y * +0.6088885514347261;</span>
+<span class="source-line-no">3556</span><span id="line.3556">                x = x2 * lacunarity + (o&lt;&lt;6); y = y2 * lacunarity + (o&lt;&lt;6);</span>
+<span class="source-line-no">3557</span><span id="line.3557">            }</span>
+<span class="source-line-no">3558</span><span id="line.3558">            return n / ((1 &lt;&lt; octaves) - 1.0);</span>
+<span class="source-line-no">3559</span><span id="line.3559">        }</span>
+<span class="source-line-no">3560</span><span id="line.3560"></span>
+<span class="source-line-no">3561</span><span id="line.3561">        @Override</span>
+<span class="source-line-no">3562</span><span id="line.3562">        public double getNoiseWithSeed(double x, double y, long seed) {</span>
+<span class="source-line-no">3563</span><span id="line.3563">            x *= frequency;</span>
+<span class="source-line-no">3564</span><span id="line.3564">            y *= frequency;</span>
+<span class="source-line-no">3565</span><span id="line.3565">            int s = 1;</span>
+<span class="source-line-no">3566</span><span id="line.3566">            double n = 0.0;</span>
+<span class="source-line-no">3567</span><span id="line.3567">            for (int o = 0; o &lt; octaves; o++, s &lt;&lt;= 1) {</span>
+<span class="source-line-no">3568</span><span id="line.3568">                n += basis.getNoiseWithSeed(x, y, (seed += 0x9E3779B97F4A7C15L)) * s;</span>
+<span class="source-line-no">3569</span><span id="line.3569">                final double x2 = + x * +0.6088885514347261 + y * -0.7943553508622062;</span>
+<span class="source-line-no">3570</span><span id="line.3570">                final double y2 = + x * +0.7943553508622062 + y * +0.6088885514347261;</span>
+<span class="source-line-no">3571</span><span id="line.3571">                x = x2 * lacunarity + (o&lt;&lt;6); y = y2 * lacunarity + (o&lt;&lt;6);</span>
+<span class="source-line-no">3572</span><span id="line.3572">            }</span>
+<span class="source-line-no">3573</span><span id="line.3573">            return n / ((1 &lt;&lt; octaves) - 1.0);</span>
+<span class="source-line-no">3574</span><span id="line.3574">        }</span>
+<span class="source-line-no">3575</span><span id="line.3575">    }</span>
+<span class="source-line-no">3576</span><span id="line.3576"></span>
+<span class="source-line-no">3577</span><span id="line.3577">    public static class LayeredSpiral3D implements Noise3D {</span>
+<span class="source-line-no">3578</span><span id="line.3578">        protected int octaves;</span>
+<span class="source-line-no">3579</span><span id="line.3579">        protected Noise3D basis;</span>
+<span class="source-line-no">3580</span><span id="line.3580">        public double frequency;</span>
+<span class="source-line-no">3581</span><span id="line.3581">        public double lacunarity;</span>
+<span class="source-line-no">3582</span><span id="line.3582">        public LayeredSpiral3D() {</span>
+<span class="source-line-no">3583</span><span id="line.3583">            this(SeededNoise.instance);</span>
+<span class="source-line-no">3584</span><span id="line.3584">        }</span>
+<span class="source-line-no">3585</span><span id="line.3585"></span>
+<span class="source-line-no">3586</span><span id="line.3586">        public LayeredSpiral3D(Noise3D basis) {</span>
+<span class="source-line-no">3587</span><span id="line.3587">            this(basis, 2);</span>
+<span class="source-line-no">3588</span><span id="line.3588">        }</span>
+<span class="source-line-no">3589</span><span id="line.3589"></span>
+<span class="source-line-no">3590</span><span id="line.3590">        public LayeredSpiral3D(Noise3D basis, final int octaves) {</span>
+<span class="source-line-no">3591</span><span id="line.3591">            this(basis, octaves, 1.0);</span>
+<span class="source-line-no">3592</span><span id="line.3592">        }</span>
+<span class="source-line-no">3593</span><span id="line.3593">        public LayeredSpiral3D(Noise3D basis, final int octaves, double frequency) {</span>
+<span class="source-line-no">3594</span><span id="line.3594">            this(basis, octaves, frequency, 0.5);</span>
+<span class="source-line-no">3595</span><span id="line.3595">        }</span>
+<span class="source-line-no">3596</span><span id="line.3596">        public LayeredSpiral3D(Noise3D basis, final int octaves, double frequency, double lacunarity) {</span>
+<span class="source-line-no">3597</span><span id="line.3597">            this.basis = basis;</span>
+<span class="source-line-no">3598</span><span id="line.3598">            this.frequency = frequency;</span>
+<span class="source-line-no">3599</span><span id="line.3599">            this.octaves = Math.max(1, Math.min(63, octaves));</span>
+<span class="source-line-no">3600</span><span id="line.3600">            this.lacunarity = lacunarity;</span>
+<span class="source-line-no">3601</span><span id="line.3601">        }</span>
+<span class="source-line-no">3602</span><span id="line.3602"></span>
+<span class="source-line-no">3603</span><span id="line.3603">        @Override</span>
+<span class="source-line-no">3604</span><span id="line.3604">        public double getNoise(double x, double y, double z) {</span>
+<span class="source-line-no">3605</span><span id="line.3605">            x *= frequency;</span>
+<span class="source-line-no">3606</span><span id="line.3606">            y *= frequency;</span>
+<span class="source-line-no">3607</span><span id="line.3607">            z *= frequency;</span>
+<span class="source-line-no">3608</span><span id="line.3608">            int s = 1;</span>
+<span class="source-line-no">3609</span><span id="line.3609">            double n = 0.0;</span>
+<span class="source-line-no">3610</span><span id="line.3610">            for (int o = 0; o &lt; octaves; o++, s &lt;&lt;= 1) {</span>
+<span class="source-line-no">3611</span><span id="line.3611">                n += basis.getNoise(x, y, z) * s;</span>
+<span class="source-line-no">3612</span><span id="line.3612">                final double x2 = + x * +0.0227966890756033 + y * +0.6762915140143574 + z * -0.7374004675850091;</span>
+<span class="source-line-no">3613</span><span id="line.3613">                final double y2 = + x * +0.2495309026014970 + y * +0.7103480212381728 + z * +0.6592220931706847;</span>
+<span class="source-line-no">3614</span><span id="line.3614">                final double z2 = + x * +0.9680388783970242 + y * -0.1990510681264026 + z * -0.1525764462988358;</span>
+<span class="source-line-no">3615</span><span id="line.3615">                x = x2 * lacunarity + (o&lt;&lt;6); y = y2 * lacunarity + (o&lt;&lt;6); z = z2 * lacunarity + (o&lt;&lt;6);</span>
+<span class="source-line-no">3616</span><span id="line.3616">            }</span>
+<span class="source-line-no">3617</span><span id="line.3617">            return n / ((1 &lt;&lt; octaves) - 1.0);</span>
+<span class="source-line-no">3618</span><span id="line.3618">        }</span>
+<span class="source-line-no">3619</span><span id="line.3619"></span>
+<span class="source-line-no">3620</span><span id="line.3620">        @Override</span>
+<span class="source-line-no">3621</span><span id="line.3621">        public double getNoiseWithSeed(double x, double y, double z, long seed) {</span>
+<span class="source-line-no">3622</span><span id="line.3622">            x *= frequency;</span>
+<span class="source-line-no">3623</span><span id="line.3623">            y *= frequency;</span>
+<span class="source-line-no">3624</span><span id="line.3624">            z *= frequency;</span>
+<span class="source-line-no">3625</span><span id="line.3625">            int s = 1;</span>
+<span class="source-line-no">3626</span><span id="line.3626">            double n = 0.0;</span>
+<span class="source-line-no">3627</span><span id="line.3627">            for (int o = 0; o &lt; octaves; o++, s &lt;&lt;= 1) {</span>
+<span class="source-line-no">3628</span><span id="line.3628">                n += basis.getNoiseWithSeed(x, y, z, (seed += 0x9E3779B97F4A7C15L)) * s;</span>
+<span class="source-line-no">3629</span><span id="line.3629">                final double x2 = + x * +0.0227966890756033 + y * +0.6762915140143574 + z * -0.7374004675850091;</span>
+<span class="source-line-no">3630</span><span id="line.3630">                final double y2 = + x * +0.2495309026014970 + y * +0.7103480212381728 + z * +0.6592220931706847;</span>
+<span class="source-line-no">3631</span><span id="line.3631">                final double z2 = + x * +0.9680388783970242 + y * -0.1990510681264026 + z * -0.1525764462988358;</span>
+<span class="source-line-no">3632</span><span id="line.3632">                x = x2 * lacunarity + (o&lt;&lt;6); y = y2 * lacunarity + (o&lt;&lt;6); z = z2 * lacunarity + (o&lt;&lt;6);</span>
+<span class="source-line-no">3633</span><span id="line.3633">            }</span>
+<span class="source-line-no">3634</span><span id="line.3634">            return n / ((1 &lt;&lt; octaves) - 1.0);</span>
+<span class="source-line-no">3635</span><span id="line.3635">        }</span>
+<span class="source-line-no">3636</span><span id="line.3636">    }</span>
+<span class="source-line-no">3637</span><span id="line.3637"></span>
+<span class="source-line-no">3638</span><span id="line.3638">    public static class LayeredSpiral4D implements Noise4D {</span>
+<span class="source-line-no">3639</span><span id="line.3639">        protected int octaves;</span>
+<span class="source-line-no">3640</span><span id="line.3640">        protected Noise4D basis;</span>
+<span class="source-line-no">3641</span><span id="line.3641">        public double frequency;</span>
+<span class="source-line-no">3642</span><span id="line.3642">        public double lacunarity;</span>
+<span class="source-line-no">3643</span><span id="line.3643">        public LayeredSpiral4D() {</span>
+<span class="source-line-no">3644</span><span id="line.3644">            this(SeededNoise.instance);</span>
+<span class="source-line-no">3645</span><span id="line.3645">        }</span>
+<span class="source-line-no">3646</span><span id="line.3646"></span>
+<span class="source-line-no">3647</span><span id="line.3647">        public LayeredSpiral4D(Noise4D basis) {</span>
+<span class="source-line-no">3648</span><span id="line.3648">            this(basis, 2);</span>
+<span class="source-line-no">3649</span><span id="line.3649">        }</span>
+<span class="source-line-no">3650</span><span id="line.3650"></span>
+<span class="source-line-no">3651</span><span id="line.3651">        public LayeredSpiral4D(Noise4D basis, final int octaves) {</span>
+<span class="source-line-no">3652</span><span id="line.3652">            this(basis, octaves, 1.0);</span>
+<span class="source-line-no">3653</span><span id="line.3653">        }</span>
+<span class="source-line-no">3654</span><span id="line.3654">        public LayeredSpiral4D(Noise4D basis, final int octaves, double frequency) {</span>
+<span class="source-line-no">3655</span><span id="line.3655">            this(basis, octaves, frequency, 0.5);</span>
+<span class="source-line-no">3656</span><span id="line.3656">        }</span>
+<span class="source-line-no">3657</span><span id="line.3657">        public LayeredSpiral4D(Noise4D basis, final int octaves, double frequency, double lacunarity) {</span>
+<span class="source-line-no">3658</span><span id="line.3658">            this.basis = basis;</span>
+<span class="source-line-no">3659</span><span id="line.3659">            this.frequency = frequency;</span>
+<span class="source-line-no">3660</span><span id="line.3660">            this.octaves = Math.max(1, Math.min(63, octaves));</span>
+<span class="source-line-no">3661</span><span id="line.3661">            this.lacunarity = lacunarity;</span>
+<span class="source-line-no">3662</span><span id="line.3662">        }</span>
+<span class="source-line-no">3663</span><span id="line.3663"></span>
+<span class="source-line-no">3664</span><span id="line.3664">        @Override</span>
+<span class="source-line-no">3665</span><span id="line.3665">        public double getNoise(double x, double y, double z, double w) {</span>
+<span class="source-line-no">3666</span><span id="line.3666">            x *= frequency;</span>
+<span class="source-line-no">3667</span><span id="line.3667">            y *= frequency;</span>
+<span class="source-line-no">3668</span><span id="line.3668">            z *= frequency;</span>
+<span class="source-line-no">3669</span><span id="line.3669">            w *= frequency;</span>
+<span class="source-line-no">3670</span><span id="line.3670">            int s = 1;</span>
+<span class="source-line-no">3671</span><span id="line.3671">            double n = 0.0;</span>
+<span class="source-line-no">3672</span><span id="line.3672">            for (int o = 0; o &lt; octaves; o++, s &lt;&lt;= 1) {</span>
+<span class="source-line-no">3673</span><span id="line.3673">                n += basis.getNoise(x, y, z, w) * s;</span>
+<span class="source-line-no">3674</span><span id="line.3674">                final double x2 = + x * +0.5699478528112771 + y * +0.7369836852218905 + z * -0.0325828875824773 + w * -0.3639975881105405;</span>
+<span class="source-line-no">3675</span><span id="line.3675">                final double y2 = + x * +0.1552282348051943 + y * +0.1770952336543200 + z * -0.7097702517705363 + w * +0.6650917154025483;</span>
+<span class="source-line-no">3676</span><span id="line.3676">                final double z2 = + x * +0.0483833371062336 + y * +0.3124109456042325 + z * +0.6948457959606478 + w * +0.6469518300143685;</span>
+<span class="source-line-no">3677</span><span id="line.3677">                final double w2 = + x * +0.8064316315440612 + y * -0.5737907885437848 + z * +0.1179845891415618 + w * +0.0904374415002696;</span>
+<span class="source-line-no">3678</span><span id="line.3678">                x = x2 * lacunarity + (o&lt;&lt;6); y = y2 * lacunarity + (o&lt;&lt;6); z = z2 * lacunarity + (o&lt;&lt;6);  w = w2 * lacunarity + (o&lt;&lt;6);</span>
+<span class="source-line-no">3679</span><span id="line.3679">            }</span>
+<span class="source-line-no">3680</span><span id="line.3680">            return n / ((1 &lt;&lt; octaves) - 1.0);</span>
+<span class="source-line-no">3681</span><span id="line.3681">        }</span>
+<span class="source-line-no">3682</span><span id="line.3682"></span>
+<span class="source-line-no">3683</span><span id="line.3683">        @Override</span>
+<span class="source-line-no">3684</span><span id="line.3684">        public double getNoiseWithSeed(double x, double y, double z, double w, long seed) {</span>
+<span class="source-line-no">3685</span><span id="line.3685">            x *= frequency;</span>
+<span class="source-line-no">3686</span><span id="line.3686">            y *= frequency;</span>
+<span class="source-line-no">3687</span><span id="line.3687">            z *= frequency;</span>
+<span class="source-line-no">3688</span><span id="line.3688">            w *= frequency;</span>
+<span class="source-line-no">3689</span><span id="line.3689">            int s = 1;</span>
+<span class="source-line-no">3690</span><span id="line.3690">            double n = 0.0;</span>
+<span class="source-line-no">3691</span><span id="line.3691">            for (int o = 0; o &lt; octaves; o++, s &lt;&lt;= 1) {</span>
+<span class="source-line-no">3692</span><span id="line.3692">                n += basis.getNoiseWithSeed(x, y, z, w, (seed += 0x9E3779B97F4A7C15L)) * s;</span>
+<span class="source-line-no">3693</span><span id="line.3693">                final double x2 = + x * +0.5699478528112771 + y * +0.7369836852218905 + z * -0.0325828875824773 + w * -0.3639975881105405;</span>
+<span class="source-line-no">3694</span><span id="line.3694">                final double y2 = + x * +0.1552282348051943 + y * +0.1770952336543200 + z * -0.7097702517705363 + w * +0.6650917154025483;</span>
+<span class="source-line-no">3695</span><span id="line.3695">                final double z2 = + x * +0.0483833371062336 + y * +0.3124109456042325 + z * +0.6948457959606478 + w * +0.6469518300143685;</span>
+<span class="source-line-no">3696</span><span id="line.3696">                final double w2 = + x * +0.8064316315440612 + y * -0.5737907885437848 + z * +0.1179845891415618 + w * +0.0904374415002696;</span>
+<span class="source-line-no">3697</span><span id="line.3697">                x = x2 * lacunarity + (o&lt;&lt;6); y = y2 * lacunarity + (o&lt;&lt;6); z = z2 * lacunarity + (o&lt;&lt;6);  w = w2 * lacunarity + (o&lt;&lt;6);</span>
+<span class="source-line-no">3698</span><span id="line.3698">            }</span>
+<span class="source-line-no">3699</span><span id="line.3699">            return n / ((1 &lt;&lt; octaves) - 1.0);</span>
+<span class="source-line-no">3700</span><span id="line.3700">        }</span>
+<span class="source-line-no">3701</span><span id="line.3701">    }</span>
+<span class="source-line-no">3702</span><span id="line.3702">    public static class LayeredSpiral5D implements Noise5D {</span>
+<span class="source-line-no">3703</span><span id="line.3703">        protected int octaves;</span>
+<span class="source-line-no">3704</span><span id="line.3704">        protected Noise5D basis;</span>
+<span class="source-line-no">3705</span><span id="line.3705">        public double frequency;</span>
+<span class="source-line-no">3706</span><span id="line.3706">        public double lacunarity;</span>
+<span class="source-line-no">3707</span><span id="line.3707">        public LayeredSpiral5D() {</span>
+<span class="source-line-no">3708</span><span id="line.3708">            this(SeededNoise.instance);</span>
+<span class="source-line-no">3709</span><span id="line.3709">        }</span>
+<span class="source-line-no">3710</span><span id="line.3710"></span>
+<span class="source-line-no">3711</span><span id="line.3711">        public LayeredSpiral5D(Noise5D basis) {</span>
+<span class="source-line-no">3712</span><span id="line.3712">            this(basis, 2);</span>
+<span class="source-line-no">3713</span><span id="line.3713">        }</span>
+<span class="source-line-no">3714</span><span id="line.3714"></span>
+<span class="source-line-no">3715</span><span id="line.3715">        public LayeredSpiral5D(Noise5D basis, final int octaves) {</span>
+<span class="source-line-no">3716</span><span id="line.3716">            this(basis, octaves, 1.0);</span>
+<span class="source-line-no">3717</span><span id="line.3717">        }</span>
+<span class="source-line-no">3718</span><span id="line.3718">        public LayeredSpiral5D(Noise5D basis, final int octaves, double frequency) {</span>
+<span class="source-line-no">3719</span><span id="line.3719">            this(basis, octaves, frequency, 0.5);</span>
+<span class="source-line-no">3720</span><span id="line.3720">        }</span>
+<span class="source-line-no">3721</span><span id="line.3721">        public LayeredSpiral5D(Noise5D basis, final int octaves, double frequency, double lacunarity) {</span>
+<span class="source-line-no">3722</span><span id="line.3722">            this.basis = basis;</span>
+<span class="source-line-no">3723</span><span id="line.3723">            this.frequency = frequency;</span>
+<span class="source-line-no">3724</span><span id="line.3724">            this.octaves = Math.max(1, Math.min(63, octaves));</span>
+<span class="source-line-no">3725</span><span id="line.3725">            this.lacunarity = lacunarity;</span>
+<span class="source-line-no">3726</span><span id="line.3726">        }</span>
+<span class="source-line-no">3727</span><span id="line.3727"></span>
+<span class="source-line-no">3728</span><span id="line.3728">        @Override</span>
+<span class="source-line-no">3729</span><span id="line.3729">        public double getNoise(double x, double y, double z, double w, double u) {</span>
+<span class="source-line-no">3730</span><span id="line.3730">            x *= frequency;</span>
+<span class="source-line-no">3731</span><span id="line.3731">            y *= frequency;</span>
+<span class="source-line-no">3732</span><span id="line.3732">            z *= frequency;</span>
+<span class="source-line-no">3733</span><span id="line.3733">            w *= frequency;</span>
+<span class="source-line-no">3734</span><span id="line.3734">            u *= frequency;</span>
+<span class="source-line-no">3735</span><span id="line.3735">            int s = 1;</span>
+<span class="source-line-no">3736</span><span id="line.3736">            double n = 0.0;</span>
+<span class="source-line-no">3737</span><span id="line.3737">            for (int o = 0; o &lt; octaves; o++, s &lt;&lt;= 1) {</span>
+<span class="source-line-no">3738</span><span id="line.3738">                n += basis.getNoise(x, y, z, w, u) * s;</span>
+<span class="source-line-no">3739</span><span id="line.3739">                final double x2 = + x * +0.1524127934921893 + y * -0.2586710352203958 + z * -0.4891826043642151 + w * +0.7663312575129502 + u * -0.2929089192051232;</span>
+<span class="source-line-no">3740</span><span id="line.3740">                final double y2 = + x * -0.0716486050004579 + y * -0.5083828718253534 + z * -0.5846508329893165 + w * -0.3242340701968086 + u * +0.5400343264823232;</span>
+<span class="source-line-no">3741</span><span id="line.3741">                final double z2 = + x * +0.5391124130592424 + y * +0.4637201165727557 + z * -0.0268449575347777 + w * +0.2805630001516211 + u * +0.6471616940596671;</span>
+<span class="source-line-no">3742</span><span id="line.3742">                final double w2 = + x * -0.4908590743023694 + y * -0.3159190659906883 + z * +0.4868180845277980 + w * +0.4733894151555028 + u * +0.4492456287606979;</span>
+<span class="source-line-no">3743</span><span id="line.3743">                final double u2 = + x * +0.6656547456376498 + y * -0.6028584537113622 + z * +0.4289447660591045 + w * -0.0882009139887838 + u * -0.0676076855220496;</span>
+<span class="source-line-no">3744</span><span id="line.3744">                x = x2 * lacunarity + (o&lt;&lt;6); y = y2 * lacunarity + (o&lt;&lt;6); z = z2 * lacunarity + (o&lt;&lt;6);  w = w2 * lacunarity + (o&lt;&lt;6); u = u2 * lacunarity + (o&lt;&lt;6);</span>
+<span class="source-line-no">3745</span><span id="line.3745">            }</span>
+<span class="source-line-no">3746</span><span id="line.3746">            return n / ((1 &lt;&lt; octaves) - 1.0);</span>
+<span class="source-line-no">3747</span><span id="line.3747">        }</span>
+<span class="source-line-no">3748</span><span id="line.3748"></span>
+<span class="source-line-no">3749</span><span id="line.3749">        @Override</span>
+<span class="source-line-no">3750</span><span id="line.3750">        public double getNoiseWithSeed(double x, double y, double z, double w, double u, long seed) {</span>
+<span class="source-line-no">3751</span><span id="line.3751">            x *= frequency;</span>
+<span class="source-line-no">3752</span><span id="line.3752">            y *= frequency;</span>
+<span class="source-line-no">3753</span><span id="line.3753">            z *= frequency;</span>
+<span class="source-line-no">3754</span><span id="line.3754">            w *= frequency;</span>
+<span class="source-line-no">3755</span><span id="line.3755">            u *= frequency;</span>
+<span class="source-line-no">3756</span><span id="line.3756">            int s = 1;</span>
+<span class="source-line-no">3757</span><span id="line.3757">            double n = 0.0;</span>
+<span class="source-line-no">3758</span><span id="line.3758">            for (int o = 0; o &lt; octaves; o++, s &lt;&lt;= 1) {</span>
+<span class="source-line-no">3759</span><span id="line.3759">                n += basis.getNoiseWithSeed(x, y, z, w, u, (seed += 0x9E3779B97F4A7C15L)) * s;</span>
+<span class="source-line-no">3760</span><span id="line.3760">                final double x2 = + x * +0.1524127934921893 + y * -0.2586710352203958 + z * -0.4891826043642151 + w * +0.7663312575129502 + u * -0.2929089192051232;</span>
+<span class="source-line-no">3761</span><span id="line.3761">                final double y2 = + x * -0.0716486050004579 + y * -0.5083828718253534 + z * -0.5846508329893165 + w * -0.3242340701968086 + u * +0.5400343264823232;</span>
+<span class="source-line-no">3762</span><span id="line.3762">                final double z2 = + x * +0.5391124130592424 + y * +0.4637201165727557 + z * -0.0268449575347777 + w * +0.2805630001516211 + u * +0.6471616940596671;</span>
+<span class="source-line-no">3763</span><span id="line.3763">                final double w2 = + x * -0.4908590743023694 + y * -0.3159190659906883 + z * +0.4868180845277980 + w * +0.4733894151555028 + u * +0.4492456287606979;</span>
+<span class="source-line-no">3764</span><span id="line.3764">                final double u2 = + x * +0.6656547456376498 + y * -0.6028584537113622 + z * +0.4289447660591045 + w * -0.0882009139887838 + u * -0.0676076855220496;</span>
+<span class="source-line-no">3765</span><span id="line.3765">                x = x2 * lacunarity + (o&lt;&lt;6); y = y2 * lacunarity + (o&lt;&lt;6); z = z2 * lacunarity + (o&lt;&lt;6);  w = w2 * lacunarity + (o&lt;&lt;6); u = u2 * lacunarity + (o&lt;&lt;6);</span>
+<span class="source-line-no">3766</span><span id="line.3766">            }</span>
+<span class="source-line-no">3767</span><span id="line.3767">            return n / ((1 &lt;&lt; octaves) - 1.0);</span>
+<span class="source-line-no">3768</span><span id="line.3768">        }</span>
+<span class="source-line-no">3769</span><span id="line.3769">    }</span>
+<span class="source-line-no">3770</span><span id="line.3770"></span>
+<span class="source-line-no">3771</span><span id="line.3771">    public static class LayeredSpiral6D implements Noise6D {</span>
+<span class="source-line-no">3772</span><span id="line.3772">        protected int octaves;</span>
+<span class="source-line-no">3773</span><span id="line.3773">        protected Noise6D basis;</span>
+<span class="source-line-no">3774</span><span id="line.3774">        public double frequency;</span>
+<span class="source-line-no">3775</span><span id="line.3775">        public double lacunarity;</span>
+<span class="source-line-no">3776</span><span id="line.3776">        public LayeredSpiral6D() {</span>
+<span class="source-line-no">3777</span><span id="line.3777">            this(SeededNoise.instance);</span>
+<span class="source-line-no">3778</span><span id="line.3778">        }</span>
+<span class="source-line-no">3779</span><span id="line.3779"></span>
+<span class="source-line-no">3780</span><span id="line.3780">        public LayeredSpiral6D(Noise6D basis) {</span>
+<span class="source-line-no">3781</span><span id="line.3781">            this(basis, 2);</span>
+<span class="source-line-no">3782</span><span id="line.3782">        }</span>
+<span class="source-line-no">3783</span><span id="line.3783"></span>
+<span class="source-line-no">3784</span><span id="line.3784">        public LayeredSpiral6D(Noise6D basis, final int octaves) {</span>
+<span class="source-line-no">3785</span><span id="line.3785">            this(basis, octaves, 1.0);</span>
+<span class="source-line-no">3786</span><span id="line.3786">        }</span>
+<span class="source-line-no">3787</span><span id="line.3787">        public LayeredSpiral6D(Noise6D basis, final int octaves, double frequency) {</span>
+<span class="source-line-no">3788</span><span id="line.3788">            this(basis, octaves, frequency, 0.5);</span>
+<span class="source-line-no">3789</span><span id="line.3789">        }</span>
+<span class="source-line-no">3790</span><span id="line.3790">        public LayeredSpiral6D(Noise6D basis, final int octaves, double frequency, double lacunarity) {</span>
+<span class="source-line-no">3791</span><span id="line.3791">            this.basis = basis;</span>
+<span class="source-line-no">3792</span><span id="line.3792">            this.frequency = frequency;</span>
+<span class="source-line-no">3793</span><span id="line.3793">            this.octaves = Math.max(1, Math.min(63, octaves));</span>
+<span class="source-line-no">3794</span><span id="line.3794">            this.lacunarity = lacunarity;</span>
+<span class="source-line-no">3795</span><span id="line.3795">        }</span>
+<span class="source-line-no">3796</span><span id="line.3796"></span>
+<span class="source-line-no">3797</span><span id="line.3797">        @Override</span>
+<span class="source-line-no">3798</span><span id="line.3798">        public double getNoise(double x, double y, double z, double w, double u, double v) {</span>
+<span class="source-line-no">3799</span><span id="line.3799">            x *= frequency;</span>
+<span class="source-line-no">3800</span><span id="line.3800">            y *= frequency;</span>
+<span class="source-line-no">3801</span><span id="line.3801">            z *= frequency;</span>
+<span class="source-line-no">3802</span><span id="line.3802">            w *= frequency;</span>
+<span class="source-line-no">3803</span><span id="line.3803">            u *= frequency;</span>
+<span class="source-line-no">3804</span><span id="line.3804">            v *= frequency;</span>
+<span class="source-line-no">3805</span><span id="line.3805">            int s = 1;</span>
+<span class="source-line-no">3806</span><span id="line.3806">            double n = 0.0;</span>
+<span class="source-line-no">3807</span><span id="line.3807">            for (int o = 0; o &lt; octaves; o++, s &lt;&lt;= 1) {</span>
+<span class="source-line-no">3808</span><span id="line.3808">                n += basis.getNoise(x, y, z, w, u, v) * s;</span>
+<span class="source-line-no">3809</span><span id="line.3809">                final double x2 = + x * -0.0850982316788443 + y * +0.0621411489653063 + z * +0.6423842935800755 + w * +0.5472782330246069 + u * -0.5181072879831091 + v * -0.1137065126038194;</span>
+<span class="source-line-no">3810</span><span id="line.3810">                final double y2 = + x * +0.1080560582151551 + y * -0.3254670556393390 + z * -0.3972292333437380 + w * +0.0964380840482216 + u * -0.5818281028726723 + v * +0.6182273380506453;</span>
+<span class="source-line-no">3811</span><span id="line.3811">                final double z2 = + x * +0.2504893307323878 + y * -0.3866469165898269 + z * -0.2346647170372642 + w * +0.7374659593233097 + u * +0.4257828596124605 + v * -0.1106816328431182;</span>
+<span class="source-line-no">3812</span><span id="line.3812">                final double w2 = + x * +0.0990858373676681 + y * +0.4040947615164614 + z * +0.3012734241554820 + w * +0.1520113643725959 + u * +0.4036980496402723 + v * +0.7440701998573674;</span>
+<span class="source-line-no">3813</span><span id="line.3813">                final double u2 = + x * -0.7720417581190233 + y * -0.5265151283855897 + z * +0.1995725381386031 + w * -0.0464596713813553 + u * +0.2186511264128518 + v * +0.1990962291039879;</span>
+<span class="source-line-no">3814</span><span id="line.3814">                final double v2 = + x * +0.5606136879764017 + y * -0.5518123912290505 + z * +0.4997557173523122 + w * -0.3555852919481873 + u * +0.0731165180984564 + v * +0.0560452079067605;</span>
+<span class="source-line-no">3815</span><span id="line.3815">                x = x2 * lacunarity + (o&lt;&lt;6); y = y2 * lacunarity + (o&lt;&lt;6); z = z2 * lacunarity + (o&lt;&lt;6);  w = w2 * lacunarity + (o&lt;&lt;6); u = u2 * lacunarity + (o&lt;&lt;6); v = v2 * lacunarity + (o&lt;&lt;6);</span>
+<span class="source-line-no">3816</span><span id="line.3816">            }</span>
+<span class="source-line-no">3817</span><span id="line.3817">            return n / ((1 &lt;&lt; octaves) - 1.0);</span>
+<span class="source-line-no">3818</span><span id="line.3818">        }</span>
+<span class="source-line-no">3819</span><span id="line.3819"></span>
+<span class="source-line-no">3820</span><span id="line.3820">        @Override</span>
+<span class="source-line-no">3821</span><span id="line.3821">        public double getNoiseWithSeed(double x, double y, double z, double w, double u, double v, long seed) {</span>
+<span class="source-line-no">3822</span><span id="line.3822">            x *= frequency;</span>
+<span class="source-line-no">3823</span><span id="line.3823">            y *= frequency;</span>
+<span class="source-line-no">3824</span><span id="line.3824">            z *= frequency;</span>
+<span class="source-line-no">3825</span><span id="line.3825">            w *= frequency;</span>
+<span class="source-line-no">3826</span><span id="line.3826">            u *= frequency;</span>
+<span class="source-line-no">3827</span><span id="line.3827">            v *= frequency;</span>
+<span class="source-line-no">3828</span><span id="line.3828">            int s = 1;</span>
+<span class="source-line-no">3829</span><span id="line.3829">            double n = 0.0;</span>
+<span class="source-line-no">3830</span><span id="line.3830">            for (int o = 0; o &lt; octaves; o++, s &lt;&lt;= 1) {</span>
+<span class="source-line-no">3831</span><span id="line.3831">                n += basis.getNoiseWithSeed(x, y, z, w, u, v, (seed += 0x9E3779B97F4A7C15L)) * s;</span>
+<span class="source-line-no">3832</span><span id="line.3832">                final double x2 = + x * -0.0850982316788443 + y * +0.0621411489653063 + z * +0.6423842935800755 + w * +0.5472782330246069 + u * -0.5181072879831091 + v * -0.1137065126038194;</span>
+<span class="source-line-no">3833</span><span id="line.3833">                final double y2 = + x * +0.1080560582151551 + y * -0.3254670556393390 + z * -0.3972292333437380 + w * +0.0964380840482216 + u * -0.5818281028726723 + v * +0.6182273380506453;</span>
+<span class="source-line-no">3834</span><span id="line.3834">                final double z2 = + x * +0.2504893307323878 + y * -0.3866469165898269 + z * -0.2346647170372642 + w * +0.7374659593233097 + u * +0.4257828596124605 + v * -0.1106816328431182;</span>
+<span class="source-line-no">3835</span><span id="line.3835">                final double w2 = + x * +0.0990858373676681 + y * +0.4040947615164614 + z * +0.3012734241554820 + w * +0.1520113643725959 + u * +0.4036980496402723 + v * +0.7440701998573674;</span>
+<span class="source-line-no">3836</span><span id="line.3836">                final double u2 = + x * -0.7720417581190233 + y * -0.5265151283855897 + z * +0.1995725381386031 + w * -0.0464596713813553 + u * +0.2186511264128518 + v * +0.1990962291039879;</span>
+<span class="source-line-no">3837</span><span id="line.3837">                final double v2 = + x * +0.5606136879764017 + y * -0.5518123912290505 + z * +0.4997557173523122 + w * -0.3555852919481873 + u * +0.0731165180984564 + v * +0.0560452079067605;</span>
+<span class="source-line-no">3838</span><span id="line.3838">                x = x2 * lacunarity + (o&lt;&lt;6); y = y2 * lacunarity + (o&lt;&lt;6); z = z2 * lacunarity + (o&lt;&lt;6);  w = w2 * lacunarity + (o&lt;&lt;6); u = u2 * lacunarity + (o&lt;&lt;6); v = v2 * lacunarity + (o&lt;&lt;6);</span>
+<span class="source-line-no">3839</span><span id="line.3839"></span>
+<span class="source-line-no">3840</span><span id="line.3840">            }</span>
+<span class="source-line-no">3841</span><span id="line.3841">            return n / ((1 &lt;&lt; octaves) - 1.0);</span>
+<span class="source-line-no">3842</span><span id="line.3842">        }</span>
+<span class="source-line-no">3843</span><span id="line.3843">    }</span>
+<span class="source-line-no">3844</span><span id="line.3844">}</span>
 
 
 

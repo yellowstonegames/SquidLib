@@ -135,7 +135,7 @@
 <span class="source-line-no">122</span><span id="line.122"></span>
 <span class="source-line-no">123</span><span id="line.123">    @Override</span>
 <span class="source-line-no">124</span><span id="line.124">    public int next(int bits) {</span>
-<span class="source-line-no">125</span><span id="line.125">        return (int)(nextLong()) &gt;&gt;&gt; (32 - bits);</span>
+<span class="source-line-no">125</span><span id="line.125">        return (int)(nextLong() &gt;&gt;&gt; (64 - bits));</span>
 <span class="source-line-no">126</span><span id="line.126">    }</span>
 <span class="source-line-no">127</span><span id="line.127"></span>
 <span class="source-line-no">128</span><span id="line.128">    /**</span>
@@ -504,102 +504,104 @@
 <span class="source-line-no">491</span><span id="line.491">     * @param index any int</span>
 <span class="source-line-no">492</span><span id="line.492">     * @return a double between 0.0 inclusive and 1.0 exclusive</span>
 <span class="source-line-no">493</span><span id="line.493">     */</span>
-<span class="source-line-no">494</span><span id="line.494">    public static double altDetermine(long base, final int index) { return (((base = (Long.reverse(base + index) ^ 0x5851F42D4C957F2DL) * 0x14057B7EF767814BL) &gt;&gt;&gt; 11) ^ (base &gt;&gt;&gt; 13) ^ (base &gt;&gt;&gt; 14)) * 0x1p-53; }</span>
-<span class="source-line-no">495</span><span id="line.495">//    public static double altDetermine(long base, final int index) { return ((((index * 0x5851F42D4C957F2DL + base) * 0x5851F42D4C957F2DL + base) * 0x5851F42D4C957F2DL + base) &gt;&gt;&gt; 11) * 0x1p-53; }</span>
-<span class="source-line-no">496</span><span id="line.496"></span>
-<span class="source-line-no">497</span><span id="line.497">    /**</span>
-<span class="source-line-no">498</span><span id="line.498">     * A quasi-random number generator of doubles between 0.0 inclusive and 1.0 exclusive, but that has issues when it</span>
-<span class="source-line-no">499</span><span id="line.499">     * would be used like a Halton sequence. Only ideal in 1D, this produces well-separated points that are aligned to</span>
-<span class="source-line-no">500</span><span id="line.500">     * parallel hyperplanes when called with different bases and each base used as an axis for more than 1 dimension.</span>
-<span class="source-line-no">501</span><span id="line.501">     * This can produce points with more separation in 2D than a Halton sequence can, but not often. Two bases that do</span>
-<span class="source-line-no">502</span><span id="line.502">     * this when used together are the ints 0xDE4DBEEF and 0x1337D00D (or in decimal, -565330193 and 322424845; note</span>
-<span class="source-line-no">503</span><span id="line.503">     * that 0xDE4DBEEF is a negative integer); they were tried as a gimmick but nothing else turned out better. They do</span>
-<span class="source-line-no">504</span><span id="line.504">     * still produce points on parallel lines, and like all bases, never points between those lines.</span>
-<span class="source-line-no">505</span><span id="line.505">     * &lt;br&gt;</span>
-<span class="source-line-no">506</span><span id="line.506">     * Note, the source of this method is one line, and you may see benefits from copying that code into the call-site</span>
-<span class="source-line-no">507</span><span id="line.507">     * with minor modifications. This returns</span>
-<span class="source-line-no">508</span><span id="line.508">     * {@code (((base * Integer.reverse(index)) &lt;&lt; 21) &amp; 0x1fffffffffffffL) * 0x1p-53;}, where base is a long and index</span>
-<span class="source-line-no">509</span><span id="line.509">     * is an int (as in the method signature). The multiplier 0x1p-53 is a very small hexadecimal double literal, using</span>
-<span class="source-line-no">510</span><span id="line.510">     * the same syntax as other parts of SquidLib use for packed floats; using this helps avoid precision loss. If you</span>
-<span class="source-line-no">511</span><span id="line.511">     * want a range larger than 0.0 to 1.0, you can change the multiplier {@code 0x1p-53} to some other constant, like</span>
-<span class="source-line-no">512</span><span id="line.512">     * declaring {@code final double upTo100 = 0x1p-53 * 100.0} before some code that wants quasi-random numbers between</span>
-<span class="source-line-no">513</span><span id="line.513">     * 0.0 inclusive and 100.0 exclusive, then using</span>
-<span class="source-line-no">514</span><span id="line.514">     * {@code (((base * Integer.reverse(index)) &lt;&lt; 21) &amp; 0x1fffffffffffffL) * upTo100;} to get those numbers. It isn't</span>
-<span class="source-line-no">515</span><span id="line.515">     * precise to use this technique to get numbers with an upper bound less than 1.0, because 0x1p-53 is about as small</span>
-<span class="source-line-no">516</span><span id="line.516">     * as a double can get with precision intact. In that case, you can use</span>
-<span class="source-line-no">517</span><span id="line.517">     * {@code (((base * Integer.reverse(index)) &lt;&lt; 8) &amp; 0xffffffffffL) * smallBound;} where smallBound has been declared</span>
-<span class="source-line-no">518</span><span id="line.518">     * as {@code final double smallBound = 0x1p-40 * 0.05;} (where 0.05 can be switched out for any double between</span>
-<span class="source-line-no">519</span><span id="line.519">     * 1.0/8192.0 and 1.0).</span>
-<span class="source-line-no">520</span><span id="line.520">     * @param base any odd long; the most significant 21 bits (except the sign bit) are effectively ignored</span>
-<span class="source-line-no">521</span><span id="line.521">     * @param index any int; if 0 this will return 0</span>
-<span class="source-line-no">522</span><span id="line.522">     * @return a double between 0.0 inclusive and 1.0 exclusive</span>
-<span class="source-line-no">523</span><span id="line.523">     */</span>
-<span class="source-line-no">524</span><span id="line.524">    public static double planarDetermine(long base, final int index) { return ((base * Integer.reverse(index) &lt;&lt; 21) &amp; 0x1fffffffffffffL) * 0x1p-53; }</span>
-<span class="source-line-no">525</span><span id="line.525"></span>
-<span class="source-line-no">526</span><span id="line.526">    /**</span>
-<span class="source-line-no">527</span><span id="line.527">     * Samples a quasi-random Coord sequence that is almost unique to the given seed, getting a Coord with x between</span>
-<span class="source-line-no">528</span><span id="line.528">     * xOffset (inclusive) and width + xOffset (exclusive), y between yOffset (inclusive) and height + yOffset</span>
-<span class="source-line-no">529</span><span id="line.529">     * (exclusive). The seed is "almost" unique because even seeds are discouraged; there is an identical sequence for</span>
-<span class="source-line-no">530</span><span id="line.530">     * every even seed produced by some odd seed. This generates a not-very random number, reverses its bits as other</span>
-<span class="source-line-no">531</span><span id="line.531">     * methods in this class do, then treats that single 32-bit int as two coordinates on a Z-order curve to get</span>
-<span class="source-line-no">532</span><span id="line.532">     * separate x and y from them. In practice these Coords are very well-dispersed if only a small amount are sampled</span>
-<span class="source-line-no">533</span><span id="line.533">     * and all the index values are close-by, and get closer together as more are sampled. Unlike the Halton sequence,</span>
-<span class="source-line-no">534</span><span id="line.534">     * this has very different results with different seeds (Halton only allows bases to be changed), and doesn't</span>
-<span class="source-line-no">535</span><span id="line.535">     * involve any division, modulus, conditionals, or loops.</span>
-<span class="source-line-no">536</span><span id="line.536">     * @param seed an int seed that should be an odd number</span>
-<span class="source-line-no">537</span><span id="line.537">     * @param width the width of the area this can cover</span>
-<span class="source-line-no">538</span><span id="line.538">     * @param height the height of the area this can cover</span>
-<span class="source-line-no">539</span><span id="line.539">     * @param xOffset the lowest x-coordinate this can produce, and also added to width to get the upper bound on x</span>
-<span class="source-line-no">540</span><span id="line.540">     * @param yOffset the lowest y-coordinate this can produce, and also added to height to get the upper bound on y</span>
-<span class="source-line-no">541</span><span id="line.541">     * @param index the index in the sequence, almost always a positive int that increases by 1 with each call</span>
-<span class="source-line-no">542</span><span id="line.542">     * @return a Coord between (xOffset, yOffset) inclusive and (width+xOffset, height+yOffset) exclusive</span>
-<span class="source-line-no">543</span><span id="line.543">     */</span>
-<span class="source-line-no">544</span><span id="line.544">    public static Coord haltoid(int seed, int width, int height, int xOffset, int yOffset, int index)</span>
-<span class="source-line-no">545</span><span id="line.545">    {</span>
-<span class="source-line-no">546</span><span id="line.546">        int morton = GreasedRegion.disperseBits(Integer.reverse((seed * 0x2C9277B5 | 1) * (index + 1)));</span>
-<span class="source-line-no">547</span><span id="line.547">        return Coord.get((int)(width * ((morton &amp; 0xffff) * 0x1p-16)) + xOffset, (int)(((morton &gt;&gt;&gt; 16) * 0x1p-16) * height) + yOffset);</span>
-<span class="source-line-no">548</span><span id="line.548">    }</span>
-<span class="source-line-no">549</span><span id="line.549">    /**</span>
-<span class="source-line-no">550</span><span id="line.550">     * Martin Roberts' "unreasonably effective" quasi-random int sequence based on the golden ratio.</span>
-<span class="source-line-no">551</span><span id="line.551">     * See &lt;a href="http://extremelearning.com.au/unreasonable-effectiveness-of-quasirandom-sequences/"&gt;his blog&lt;/a&gt; for</span>
-<span class="source-line-no">552</span><span id="line.552">     * more detailed info, but this can be summarized as being extremely good at separating outputs at the expense of</span>
-<span class="source-line-no">553</span><span id="line.553">     * seeming less random. Produces an int between offset (inclusive) and offset + span (exclusive), with the int at</span>
-<span class="source-line-no">554</span><span id="line.554">     * each {@code index} likely to be different for at least {@code span / 4} indices (very low spans may offer less of</span>
-<span class="source-line-no">555</span><span id="line.555">     * a guarantee).</span>
-<span class="source-line-no">556</span><span id="line.556">     * &lt;br&gt;</span>
-<span class="source-line-no">557</span><span id="line.557">     * Note, use {@link #roberts(int, int, int, int, int)} for 2D points and this method for 1D values; the same</span>
-<span class="source-line-no">558</span><span id="line.558">     * properties won't be preserved if you use a 1D Roberts sequence in 2D.</span>
-<span class="source-line-no">559</span><span id="line.559">     * @param span the size of the range this can return</span>
-<span class="source-line-no">560</span><span id="line.560">     * @param offset the minimum value this can return</span>
-<span class="source-line-no">561</span><span id="line.561">     * @param index the index of the int in the 1D Roberts sequence; should be greater than 0, but not required to be</span>
-<span class="source-line-no">562</span><span id="line.562">     * @return an int between offset inclusive and offset+span exclusive</span>
-<span class="source-line-no">563</span><span id="line.563">     */</span>
-<span class="source-line-no">564</span><span id="line.564">    public static int roberts(int span, int offset, int index)</span>
-<span class="source-line-no">565</span><span id="line.565">    {</span>
-<span class="source-line-no">566</span><span id="line.566">        return (int)((index * 0x9E3779B9L &amp; 0xFFFFFFFFL) * span &gt;&gt;&gt; 32) + offset;</span>
-<span class="source-line-no">567</span><span id="line.567">    }</span>
-<span class="source-line-no">568</span><span id="line.568">    </span>
-<span class="source-line-no">569</span><span id="line.569">    /**</span>
-<span class="source-line-no">570</span><span id="line.570">     * Martin Roberts' "unreasonably effective" quasi-random point sequence based on a 2D analogue to the golden ratio.</span>
-<span class="source-line-no">571</span><span id="line.571">     * See &lt;a href="http://extremelearning.com.au/unreasonable-effectiveness-of-quasirandom-sequences/"&gt;his blog&lt;/a&gt; for</span>
-<span class="source-line-no">572</span><span id="line.572">     * more detailed info, but this can be summarized as being extremely good at separating points at the expense of</span>
-<span class="source-line-no">573</span><span id="line.573">     * seeming less random. Produces a Coord with x between xOffset (inclusive) and xOffset + width (exclusive), and y</span>
-<span class="source-line-no">574</span><span id="line.574">     * between yOffset (inclusive) and yOffset + height (exclusive), with the Coord at each {@code index} likely to be</span>
-<span class="source-line-no">575</span><span id="line.575">     * different for at least {@code width * height / 4} indices (very low sizes may offer less of a guarantee).</span>
-<span class="source-line-no">576</span><span id="line.576">     * @param width the x-size of the space this can place a Coord</span>
-<span class="source-line-no">577</span><span id="line.577">     * @param height the y-size of the space this can place a Coord</span>
-<span class="source-line-no">578</span><span id="line.578">     * @param xOffset the minimum x-position of a Coord</span>
-<span class="source-line-no">579</span><span id="line.579">     * @param yOffset the minimum y-position of a Coord</span>
-<span class="source-line-no">580</span><span id="line.580">     * @param index the index of the Coord in the 2D Roberts sequence; should be greater than 0, but not required to be</span>
-<span class="source-line-no">581</span><span id="line.581">     * @return a Coord with x,y between xOffset,yOffset inclusive and xOffset+width,yOffset+height exclusive</span>
-<span class="source-line-no">582</span><span id="line.582">     */</span>
-<span class="source-line-no">583</span><span id="line.583">    public static Coord roberts(int width, int height, int xOffset, int yOffset, int index)</span>
-<span class="source-line-no">584</span><span id="line.584">    {</span>
-<span class="source-line-no">585</span><span id="line.585">        return Coord.get(</span>
-<span class="source-line-no">586</span><span id="line.586">        (int)((index * 0xC13FA9A9L &amp; 0xFFFFFFFFL) * width  &gt;&gt;&gt; 32) + xOffset,</span>
-<span class="source-line-no">587</span><span id="line.587">        (int)((index * 0x91E10DA5L &amp; 0xFFFFFFFFL) * height &gt;&gt;&gt; 32) + yOffset);</span>
-<span class="source-line-no">588</span><span id="line.588">    }</span>
-<span class="source-line-no">589</span><span id="line.589">}</span>
+<span class="source-line-no">494</span><span id="line.494">    public static double altDetermine(long base, final int index) {</span>
+<span class="source-line-no">495</span><span id="line.495">        return (((base = (Long.reverse(base + index) ^ 0x5851F42D4C957F2DL) * 0x14057B7EF767814BL) &gt;&gt;&gt; 11) ^ (base &gt;&gt;&gt; 13) ^ (base &gt;&gt;&gt; 14)) * 0x1p-53;</span>
+<span class="source-line-no">496</span><span id="line.496">    }</span>
+<span class="source-line-no">497</span><span id="line.497">//    public static double altDetermine(long base, final int index) { return ((((index * 0x5851F42D4C957F2DL + base) * 0x5851F42D4C957F2DL + base) * 0x5851F42D4C957F2DL + base) &gt;&gt;&gt; 11) * 0x1p-53; }</span>
+<span class="source-line-no">498</span><span id="line.498"></span>
+<span class="source-line-no">499</span><span id="line.499">    /**</span>
+<span class="source-line-no">500</span><span id="line.500">     * A quasi-random number generator of doubles between 0.0 inclusive and 1.0 exclusive, but that has issues when it</span>
+<span class="source-line-no">501</span><span id="line.501">     * would be used like a Halton sequence. Only ideal in 1D, this produces well-separated points that are aligned to</span>
+<span class="source-line-no">502</span><span id="line.502">     * parallel hyperplanes when called with different bases and each base used as an axis for more than 1 dimension.</span>
+<span class="source-line-no">503</span><span id="line.503">     * This can produce points with more separation in 2D than a Halton sequence can, but not often. Two bases that do</span>
+<span class="source-line-no">504</span><span id="line.504">     * this when used together are the ints 0xDE4DBEEF and 0x1337D00D (or in decimal, -565330193 and 322424845; note</span>
+<span class="source-line-no">505</span><span id="line.505">     * that 0xDE4DBEEF is a negative integer); they were tried as a gimmick but nothing else turned out better. They do</span>
+<span class="source-line-no">506</span><span id="line.506">     * still produce points on parallel lines, and like all bases, never points between those lines.</span>
+<span class="source-line-no">507</span><span id="line.507">     * &lt;br&gt;</span>
+<span class="source-line-no">508</span><span id="line.508">     * Note, the source of this method is one line, and you may see benefits from copying that code into the call-site</span>
+<span class="source-line-no">509</span><span id="line.509">     * with minor modifications. This returns</span>
+<span class="source-line-no">510</span><span id="line.510">     * {@code (((base * Integer.reverse(index)) &lt;&lt; 21) &amp; 0x1fffffffffffffL) * 0x1p-53;}, where base is a long and index</span>
+<span class="source-line-no">511</span><span id="line.511">     * is an int (as in the method signature). The multiplier 0x1p-53 is a very small hexadecimal double literal, using</span>
+<span class="source-line-no">512</span><span id="line.512">     * the same syntax as other parts of SquidLib use for packed floats; using this helps avoid precision loss. If you</span>
+<span class="source-line-no">513</span><span id="line.513">     * want a range larger than 0.0 to 1.0, you can change the multiplier {@code 0x1p-53} to some other constant, like</span>
+<span class="source-line-no">514</span><span id="line.514">     * declaring {@code final double upTo100 = 0x1p-53 * 100.0} before some code that wants quasi-random numbers between</span>
+<span class="source-line-no">515</span><span id="line.515">     * 0.0 inclusive and 100.0 exclusive, then using</span>
+<span class="source-line-no">516</span><span id="line.516">     * {@code (((base * Integer.reverse(index)) &lt;&lt; 21) &amp; 0x1fffffffffffffL) * upTo100;} to get those numbers. It isn't</span>
+<span class="source-line-no">517</span><span id="line.517">     * precise to use this technique to get numbers with an upper bound less than 1.0, because 0x1p-53 is about as small</span>
+<span class="source-line-no">518</span><span id="line.518">     * as a double can get with precision intact. In that case, you can use</span>
+<span class="source-line-no">519</span><span id="line.519">     * {@code (((base * Integer.reverse(index)) &lt;&lt; 8) &amp; 0xffffffffffL) * smallBound;} where smallBound has been declared</span>
+<span class="source-line-no">520</span><span id="line.520">     * as {@code final double smallBound = 0x1p-40 * 0.05;} (where 0.05 can be switched out for any double between</span>
+<span class="source-line-no">521</span><span id="line.521">     * 1.0/8192.0 and 1.0).</span>
+<span class="source-line-no">522</span><span id="line.522">     * @param base any odd long; the most significant 21 bits (except the sign bit) are effectively ignored</span>
+<span class="source-line-no">523</span><span id="line.523">     * @param index any int; if 0 this will return 0</span>
+<span class="source-line-no">524</span><span id="line.524">     * @return a double between 0.0 inclusive and 1.0 exclusive</span>
+<span class="source-line-no">525</span><span id="line.525">     */</span>
+<span class="source-line-no">526</span><span id="line.526">    public static double planarDetermine(long base, final int index) { return ((base * Integer.reverse(index) &lt;&lt; 21) &amp; 0x1fffffffffffffL) * 0x1p-53; }</span>
+<span class="source-line-no">527</span><span id="line.527"></span>
+<span class="source-line-no">528</span><span id="line.528">    /**</span>
+<span class="source-line-no">529</span><span id="line.529">     * Samples a quasi-random Coord sequence that is almost unique to the given seed, getting a Coord with x between</span>
+<span class="source-line-no">530</span><span id="line.530">     * xOffset (inclusive) and width + xOffset (exclusive), y between yOffset (inclusive) and height + yOffset</span>
+<span class="source-line-no">531</span><span id="line.531">     * (exclusive). The seed is "almost" unique because even seeds are discouraged; there is an identical sequence for</span>
+<span class="source-line-no">532</span><span id="line.532">     * every even seed produced by some odd seed. This generates a not-very random number, reverses its bits as other</span>
+<span class="source-line-no">533</span><span id="line.533">     * methods in this class do, then treats that single 32-bit int as two coordinates on a Z-order curve to get</span>
+<span class="source-line-no">534</span><span id="line.534">     * separate x and y from them. In practice these Coords are very well-dispersed if only a small amount are sampled</span>
+<span class="source-line-no">535</span><span id="line.535">     * and all the index values are close-by, and get closer together as more are sampled. Unlike the Halton sequence,</span>
+<span class="source-line-no">536</span><span id="line.536">     * this has very different results with different seeds (Halton only allows bases to be changed), and doesn't</span>
+<span class="source-line-no">537</span><span id="line.537">     * involve any division, modulus, conditionals, or loops.</span>
+<span class="source-line-no">538</span><span id="line.538">     * @param seed an int seed that should be an odd number</span>
+<span class="source-line-no">539</span><span id="line.539">     * @param width the width of the area this can cover</span>
+<span class="source-line-no">540</span><span id="line.540">     * @param height the height of the area this can cover</span>
+<span class="source-line-no">541</span><span id="line.541">     * @param xOffset the lowest x-coordinate this can produce, and also added to width to get the upper bound on x</span>
+<span class="source-line-no">542</span><span id="line.542">     * @param yOffset the lowest y-coordinate this can produce, and also added to height to get the upper bound on y</span>
+<span class="source-line-no">543</span><span id="line.543">     * @param index the index in the sequence, almost always a positive int that increases by 1 with each call</span>
+<span class="source-line-no">544</span><span id="line.544">     * @return a Coord between (xOffset, yOffset) inclusive and (width+xOffset, height+yOffset) exclusive</span>
+<span class="source-line-no">545</span><span id="line.545">     */</span>
+<span class="source-line-no">546</span><span id="line.546">    public static Coord haltoid(int seed, int width, int height, int xOffset, int yOffset, int index)</span>
+<span class="source-line-no">547</span><span id="line.547">    {</span>
+<span class="source-line-no">548</span><span id="line.548">        int morton = GreasedRegion.disperseBits(Integer.reverse((seed * 0x2C9277B5 | 1) * (index + 1)));</span>
+<span class="source-line-no">549</span><span id="line.549">        return Coord.get((int)(width * ((morton &amp; 0xffff) * 0x1p-16)) + xOffset, (int)(((morton &gt;&gt;&gt; 16) * 0x1p-16) * height) + yOffset);</span>
+<span class="source-line-no">550</span><span id="line.550">    }</span>
+<span class="source-line-no">551</span><span id="line.551">    /**</span>
+<span class="source-line-no">552</span><span id="line.552">     * Martin Roberts' "unreasonably effective" quasi-random int sequence based on the golden ratio.</span>
+<span class="source-line-no">553</span><span id="line.553">     * See &lt;a href="http://extremelearning.com.au/unreasonable-effectiveness-of-quasirandom-sequences/"&gt;his blog&lt;/a&gt; for</span>
+<span class="source-line-no">554</span><span id="line.554">     * more detailed info, but this can be summarized as being extremely good at separating outputs at the expense of</span>
+<span class="source-line-no">555</span><span id="line.555">     * seeming less random. Produces an int between offset (inclusive) and offset + span (exclusive), with the int at</span>
+<span class="source-line-no">556</span><span id="line.556">     * each {@code index} likely to be different for at least {@code span / 4} indices (very low spans may offer less of</span>
+<span class="source-line-no">557</span><span id="line.557">     * a guarantee).</span>
+<span class="source-line-no">558</span><span id="line.558">     * &lt;br&gt;</span>
+<span class="source-line-no">559</span><span id="line.559">     * Note, use {@link #roberts(int, int, int, int, int)} for 2D points and this method for 1D values; the same</span>
+<span class="source-line-no">560</span><span id="line.560">     * properties won't be preserved if you use a 1D Roberts sequence in 2D.</span>
+<span class="source-line-no">561</span><span id="line.561">     * @param span the size of the range this can return</span>
+<span class="source-line-no">562</span><span id="line.562">     * @param offset the minimum value this can return</span>
+<span class="source-line-no">563</span><span id="line.563">     * @param index the index of the int in the 1D Roberts sequence; should be greater than 0, but not required to be</span>
+<span class="source-line-no">564</span><span id="line.564">     * @return an int between offset inclusive and offset+span exclusive</span>
+<span class="source-line-no">565</span><span id="line.565">     */</span>
+<span class="source-line-no">566</span><span id="line.566">    public static int roberts(int span, int offset, int index)</span>
+<span class="source-line-no">567</span><span id="line.567">    {</span>
+<span class="source-line-no">568</span><span id="line.568">        return (int)((index * 0x9E3779B9L &amp; 0xFFFFFFFFL) * span &gt;&gt;&gt; 32) + offset;</span>
+<span class="source-line-no">569</span><span id="line.569">    }</span>
+<span class="source-line-no">570</span><span id="line.570">    </span>
+<span class="source-line-no">571</span><span id="line.571">    /**</span>
+<span class="source-line-no">572</span><span id="line.572">     * Martin Roberts' "unreasonably effective" quasi-random point sequence based on a 2D analogue to the golden ratio.</span>
+<span class="source-line-no">573</span><span id="line.573">     * See &lt;a href="http://extremelearning.com.au/unreasonable-effectiveness-of-quasirandom-sequences/"&gt;his blog&lt;/a&gt; for</span>
+<span class="source-line-no">574</span><span id="line.574">     * more detailed info, but this can be summarized as being extremely good at separating points at the expense of</span>
+<span class="source-line-no">575</span><span id="line.575">     * seeming less random. Produces a Coord with x between xOffset (inclusive) and xOffset + width (exclusive), and y</span>
+<span class="source-line-no">576</span><span id="line.576">     * between yOffset (inclusive) and yOffset + height (exclusive), with the Coord at each {@code index} likely to be</span>
+<span class="source-line-no">577</span><span id="line.577">     * different for at least {@code width * height / 4} indices (very low sizes may offer less of a guarantee).</span>
+<span class="source-line-no">578</span><span id="line.578">     * @param width the x-size of the space this can place a Coord</span>
+<span class="source-line-no">579</span><span id="line.579">     * @param height the y-size of the space this can place a Coord</span>
+<span class="source-line-no">580</span><span id="line.580">     * @param xOffset the minimum x-position of a Coord</span>
+<span class="source-line-no">581</span><span id="line.581">     * @param yOffset the minimum y-position of a Coord</span>
+<span class="source-line-no">582</span><span id="line.582">     * @param index the index of the Coord in the 2D Roberts sequence; should be greater than 0, but not required to be</span>
+<span class="source-line-no">583</span><span id="line.583">     * @return a Coord with x,y between xOffset,yOffset inclusive and xOffset+width,yOffset+height exclusive</span>
+<span class="source-line-no">584</span><span id="line.584">     */</span>
+<span class="source-line-no">585</span><span id="line.585">    public static Coord roberts(int width, int height, int xOffset, int yOffset, int index)</span>
+<span class="source-line-no">586</span><span id="line.586">    {</span>
+<span class="source-line-no">587</span><span id="line.587">        return Coord.get(</span>
+<span class="source-line-no">588</span><span id="line.588">        (int)((index * 0xC13FA9A9L &amp; 0xFFFFFFFFL) * width  &gt;&gt;&gt; 32) + xOffset,</span>
+<span class="source-line-no">589</span><span id="line.589">        (int)((index * 0x91E10DA5L &amp; 0xFFFFFFFFL) * height &gt;&gt;&gt; 32) + yOffset);</span>
+<span class="source-line-no">590</span><span id="line.590">    }</span>
+<span class="source-line-no">591</span><span id="line.591">}</span>
 
 
 

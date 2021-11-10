@@ -57,7 +57,7 @@
 <span class="source-line-no">044</span><span id="line.44"> * @author David Blackman</span>
 <span class="source-line-no">045</span><span id="line.45"> * @author Tommy Ettinger (if there's a flaw, use SquidLib's issues and don't bother Vigna or Blackman, it's probably a mistake in SquidLib's implementation)</span>
 <span class="source-line-no">046</span><span id="line.46"> */</span>
-<span class="source-line-no">047</span><span id="line.47">public final class XoRoRNG implements RandomnessSource, Serializable {</span>
+<span class="source-line-no">047</span><span id="line.47">public class XoRoRNG implements RandomnessSource, Serializable {</span>
 <span class="source-line-no">048</span><span id="line.48"></span>
 <span class="source-line-no">049</span><span id="line.49">        private static final long DOUBLE_MASK = (1L &lt;&lt; 53) - 1;</span>
 <span class="source-line-no">050</span><span id="line.50">    private static final double NORM_53 = 1. / (1L &lt;&lt; 53);</span>
@@ -96,7 +96,7 @@
 <span class="source-line-no">083</span><span id="line.83">    }</span>
 <span class="source-line-no">084</span><span id="line.84"></span>
 <span class="source-line-no">085</span><span id="line.85">    @Override</span>
-<span class="source-line-no">086</span><span id="line.86">    public final int next(int bits) {</span>
+<span class="source-line-no">086</span><span id="line.86">    public int next(int bits) {</span>
 <span class="source-line-no">087</span><span id="line.87">        final long s0 = state0;</span>
 <span class="source-line-no">088</span><span id="line.88">        long s1 = state1;</span>
 <span class="source-line-no">089</span><span id="line.89">        final int result = (int)(s0 + s1) &gt;&gt;&gt; (32 - bits);</span>
@@ -107,7 +107,7 @@
 <span class="source-line-no">094</span><span id="line.94">    }</span>
 <span class="source-line-no">095</span><span id="line.95"></span>
 <span class="source-line-no">096</span><span id="line.96">    @Override</span>
-<span class="source-line-no">097</span><span id="line.97">    public final long nextLong() {</span>
+<span class="source-line-no">097</span><span id="line.97">    public long nextLong() {</span>
 <span class="source-line-no">098</span><span id="line.98">        final long s0 = state0;</span>
 <span class="source-line-no">099</span><span id="line.99">        long s1 = state1;</span>
 <span class="source-line-no">100</span><span id="line.100">        final long result = s0 + s1;</span>

@@ -383,84 +383,81 @@
 <span class="source-line-no">370</span><span id="line.370"></span>
 <span class="source-line-no">371</span><span id="line.371">        for (Map.Entry&lt;Coord, Double&gt; entry : sounds.entrySet()) {</span>
 <span class="source-line-no">372</span><span id="line.372">            gradientMap[entry.getKey().x][entry.getKey().y] = entry.getValue();</span>
-<span class="source-line-no">373</span><span id="line.373">            if(fresh.containsKey(entry.getKey()) &amp;&amp; fresh.get(entry.getKey()) &gt; entry.getValue())</span>
-<span class="source-line-no">374</span><span id="line.374">            {</span>
+<span class="source-line-no">373</span><span id="line.373">            if (!fresh.containsKey(entry.getKey()) || fresh.get(entry.getKey()) &lt;= entry.getValue()) {</span>
+<span class="source-line-no">374</span><span id="line.374">                fresh.put(entry.getKey(), entry.getValue());</span>
 <span class="source-line-no">375</span><span id="line.375">            }</span>
-<span class="source-line-no">376</span><span id="line.376">            else</span>
-<span class="source-line-no">377</span><span id="line.377">            {</span>
-<span class="source-line-no">378</span><span id="line.378">                fresh.put(entry.getKey(), entry.getValue());</span>
-<span class="source-line-no">379</span><span id="line.379">            }</span>
-<span class="source-line-no">380</span><span id="line.380"></span>
-<span class="source-line-no">381</span><span id="line.381">        }</span>
-<span class="source-line-no">382</span><span id="line.382">        int numAssigned = fresh.size();</span>
-<span class="source-line-no">383</span><span id="line.383"></span>
-<span class="source-line-no">384</span><span id="line.384">        Direction[] dirs = (measurement == Measurement.MANHATTAN) ? Direction.CARDINALS : Direction.OUTWARDS;</span>
-<span class="source-line-no">385</span><span id="line.385"></span>
-<span class="source-line-no">386</span><span id="line.386">        while (numAssigned &gt; 0) {</span>
-<span class="source-line-no">387</span><span id="line.387">            numAssigned = 0;</span>
-<span class="source-line-no">388</span><span id="line.388">            OrderedMap&lt;Coord, Double&gt; fresh2 = new OrderedMap&lt;&gt;(fresh.size());</span>
-<span class="source-line-no">389</span><span id="line.389">            fresh2.putAll(fresh);</span>
-<span class="source-line-no">390</span><span id="line.390">            fresh.clear();</span>
-<span class="source-line-no">391</span><span id="line.391"></span>
-<span class="source-line-no">392</span><span id="line.392">            for (Map.Entry&lt;Coord, Double&gt; cell : fresh2.entrySet()) {</span>
-<span class="source-line-no">393</span><span id="line.393">                if(cell.getValue() &lt;= 1) //We shouldn't assign values lower than 1.</span>
-<span class="source-line-no">394</span><span id="line.394">                    continue;</span>
-<span class="source-line-no">395</span><span id="line.395">                for (int d = 0; d &lt; dirs.length; d++) {</span>
-<span class="source-line-no">396</span><span id="line.396">                    Coord adj = cell.getKey().translate(dirs[d].deltaX, dirs[d].deltaY);</span>
-<span class="source-line-no">397</span><span id="line.397">                    if(adj.x &lt; 0 || adj.x &gt;= width || adj.y &lt; 0 || adj.y &gt;= height)</span>
-<span class="source-line-no">398</span><span id="line.398">                        continue;</span>
-<span class="source-line-no">399</span><span id="line.399">                    if(physicalMap[cell.getKey().x][cell.getKey().y] == WALL &amp;&amp; physicalMap[adj.x][adj.y] == WALL)</span>
-<span class="source-line-no">400</span><span id="line.400">                        continue;</span>
-<span class="source-line-no">401</span><span id="line.401">                    if (gradientMap[cell.getKey().x][cell.getKey().y] &gt; gradientMap[adj.x][adj.y] + 1) {</span>
-<span class="source-line-no">402</span><span id="line.402">                        double v = cell.getValue() - 1 - ((physicalMap[adj.x][adj.y] == WALL) ? 1 : 0);</span>
-<span class="source-line-no">403</span><span id="line.403">                        if (v &gt; 0) {</span>
-<span class="source-line-no">404</span><span id="line.404">                            gradientMap[adj.x][adj.y] = v;</span>
-<span class="source-line-no">405</span><span id="line.405">                            fresh.put(Coord.get(adj.x, adj.y), v);</span>
-<span class="source-line-no">406</span><span id="line.406">                            ++numAssigned;</span>
-<span class="source-line-no">407</span><span id="line.407">                        }</span>
-<span class="source-line-no">408</span><span id="line.408">                    }</span>
-<span class="source-line-no">409</span><span id="line.409">                }</span>
-<span class="source-line-no">410</span><span id="line.410">            }</span>
-<span class="source-line-no">411</span><span id="line.411">        }</span>
-<span class="source-line-no">412</span><span id="line.412"></span>
-<span class="source-line-no">413</span><span id="line.413">        for (int y = 0; y &lt; height; y++) {</span>
-<span class="source-line-no">414</span><span id="line.414">            for (int x = 0; x &lt; width; x++) {</span>
-<span class="source-line-no">415</span><span id="line.415">                if (physicalMap[x][y] == WALL) {</span>
-<span class="source-line-no">416</span><span id="line.416">                    gradientMap[x][y] = WALL;</span>
-<span class="source-line-no">417</span><span id="line.417">                }</span>
-<span class="source-line-no">418</span><span id="line.418">            }</span>
-<span class="source-line-no">419</span><span id="line.419">        }</span>
+<span class="source-line-no">376</span><span id="line.376"></span>
+<span class="source-line-no">377</span><span id="line.377">        }</span>
+<span class="source-line-no">378</span><span id="line.378">        int numAssigned = fresh.size();</span>
+<span class="source-line-no">379</span><span id="line.379"></span>
+<span class="source-line-no">380</span><span id="line.380">        Direction[] dirs = (measurement == Measurement.MANHATTAN) ? Direction.CARDINALS : Direction.OUTWARDS;</span>
+<span class="source-line-no">381</span><span id="line.381">        OrderedMap&lt;Coord, Double&gt; fresh2 = new OrderedMap&lt;&gt;(numAssigned);</span>
+<span class="source-line-no">382</span><span id="line.382"></span>
+<span class="source-line-no">383</span><span id="line.383">        while (numAssigned &gt; 0) {</span>
+<span class="source-line-no">384</span><span id="line.384">            numAssigned = 0;</span>
+<span class="source-line-no">385</span><span id="line.385">            fresh2.clear();</span>
+<span class="source-line-no">386</span><span id="line.386">            fresh2.putAll(fresh);</span>
+<span class="source-line-no">387</span><span id="line.387">            fresh.clear();</span>
+<span class="source-line-no">388</span><span id="line.388"></span>
+<span class="source-line-no">389</span><span id="line.389">            for (Map.Entry&lt;Coord, Double&gt; cell : fresh2.entrySet()) {</span>
+<span class="source-line-no">390</span><span id="line.390">                if(cell.getValue() &lt;= 1) //We shouldn't assign values lower than 1.</span>
+<span class="source-line-no">391</span><span id="line.391">                    continue;</span>
+<span class="source-line-no">392</span><span id="line.392">                for (int d = 0; d &lt; dirs.length; d++) {</span>
+<span class="source-line-no">393</span><span id="line.393">                    Coord adj = cell.getKey().translate(dirs[d].deltaX, dirs[d].deltaY);</span>
+<span class="source-line-no">394</span><span id="line.394">                    if(adj.x &lt; 0 || adj.x &gt;= width || adj.y &lt; 0 || adj.y &gt;= height)</span>
+<span class="source-line-no">395</span><span id="line.395">                        continue;</span>
+<span class="source-line-no">396</span><span id="line.396">                    if(physicalMap[cell.getKey().x][cell.getKey().y] == WALL &amp;&amp; physicalMap[adj.x][adj.y] == WALL)</span>
+<span class="source-line-no">397</span><span id="line.397">                        continue;</span>
+<span class="source-line-no">398</span><span id="line.398">                    if (gradientMap[cell.getKey().x][cell.getKey().y] &gt; gradientMap[adj.x][adj.y] + 1) {</span>
+<span class="source-line-no">399</span><span id="line.399">                        double v = cell.getValue() - 1 - ((physicalMap[adj.x][adj.y] == WALL) ? 1 : 0);</span>
+<span class="source-line-no">400</span><span id="line.400">                        if (v &gt; 0) {</span>
+<span class="source-line-no">401</span><span id="line.401">                            gradientMap[adj.x][adj.y] = v;</span>
+<span class="source-line-no">402</span><span id="line.402">                            fresh.put(Coord.get(adj.x, adj.y), v);</span>
+<span class="source-line-no">403</span><span id="line.403">                            ++numAssigned;</span>
+<span class="source-line-no">404</span><span id="line.404">                        }</span>
+<span class="source-line-no">405</span><span id="line.405">                    }</span>
+<span class="source-line-no">406</span><span id="line.406">                }</span>
+<span class="source-line-no">407</span><span id="line.407">            }</span>
+<span class="source-line-no">408</span><span id="line.408">        }</span>
+<span class="source-line-no">409</span><span id="line.409"></span>
+<span class="source-line-no">410</span><span id="line.410">        for (int y = 0; y &lt; height; y++) {</span>
+<span class="source-line-no">411</span><span id="line.411">            for (int x = 0; x &lt; width; x++) {</span>
+<span class="source-line-no">412</span><span id="line.412">                if (physicalMap[x][y] == WALL) {</span>
+<span class="source-line-no">413</span><span id="line.413">                    gradientMap[x][y] = WALL;</span>
+<span class="source-line-no">414</span><span id="line.414">                }</span>
+<span class="source-line-no">415</span><span id="line.415">            }</span>
+<span class="source-line-no">416</span><span id="line.416">        }</span>
+<span class="source-line-no">417</span><span id="line.417"></span>
+<span class="source-line-no">418</span><span id="line.418">        return gradientMap;</span>
+<span class="source-line-no">419</span><span id="line.419">    }</span>
 <span class="source-line-no">420</span><span id="line.420"></span>
-<span class="source-line-no">421</span><span id="line.421">        return gradientMap;</span>
-<span class="source-line-no">422</span><span id="line.422">    }</span>
-<span class="source-line-no">423</span><span id="line.423"></span>
-<span class="source-line-no">424</span><span id="line.424">    /**</span>
-<span class="source-line-no">425</span><span id="line.425">     * Scans the dungeon using SoundMap.scan, adding any positions in extraSounds to the group of known sounds before</span>
-<span class="source-line-no">426</span><span id="line.426">     * scanning.  The creatures passed to this function as a Set of Points will have the loudness of all sounds at</span>
-<span class="source-line-no">427</span><span id="line.427">     * their position put as the value in alerted corresponding to their Coord position.</span>
-<span class="source-line-no">428</span><span id="line.428">     *</span>
-<span class="source-line-no">429</span><span id="line.429">     * @param creatures</span>
-<span class="source-line-no">430</span><span id="line.430">     * @param extraSounds</span>
-<span class="source-line-no">431</span><span id="line.431">     * @return</span>
-<span class="source-line-no">432</span><span id="line.432">     */</span>
-<span class="source-line-no">433</span><span id="line.433">    public OrderedMap&lt;Coord, Double&gt; findAlerted(Set&lt;Coord&gt; creatures, Map&lt;Coord, Double&gt; extraSounds) {</span>
-<span class="source-line-no">434</span><span id="line.434">        if(!initialized) return null;</span>
-<span class="source-line-no">435</span><span id="line.435">        alerted = new OrderedMap&lt;&gt;(creatures.size());</span>
-<span class="source-line-no">436</span><span id="line.436"></span>
-<span class="source-line-no">437</span><span id="line.437">        resetMap();</span>
-<span class="source-line-no">438</span><span id="line.438">        for (Map.Entry&lt;Coord, Double&gt; sound : extraSounds.entrySet()) {</span>
-<span class="source-line-no">439</span><span id="line.439">            setSound(sound.getKey(), sound.getValue());</span>
-<span class="source-line-no">440</span><span id="line.440">        }</span>
-<span class="source-line-no">441</span><span id="line.441">        scan();</span>
-<span class="source-line-no">442</span><span id="line.442">        for(Coord critter : creatures)</span>
-<span class="source-line-no">443</span><span id="line.443">        {</span>
-<span class="source-line-no">444</span><span id="line.444">            if(critter.x &lt; 0 || critter.x &gt;= width || critter.y &lt; 0 || critter.y &gt;= height)</span>
-<span class="source-line-no">445</span><span id="line.445">                continue;</span>
-<span class="source-line-no">446</span><span id="line.446">            alerted.put(Coord.get(critter.x, critter.y), gradientMap[critter.x][critter.y]);</span>
-<span class="source-line-no">447</span><span id="line.447">        }</span>
-<span class="source-line-no">448</span><span id="line.448">        return alerted;</span>
-<span class="source-line-no">449</span><span id="line.449">    }</span>
-<span class="source-line-no">450</span><span id="line.450">}</span>
+<span class="source-line-no">421</span><span id="line.421">    /**</span>
+<span class="source-line-no">422</span><span id="line.422">     * Scans the dungeon using SoundMap.scan(), adding any positions in extraSounds to the group of known sounds before</span>
+<span class="source-line-no">423</span><span id="line.423">     * scanning.  The creatures passed to this function as a Set of Points will have the loudness of all sounds at</span>
+<span class="source-line-no">424</span><span id="line.424">     * their position put as the value in alerted corresponding to their Coord position.</span>
+<span class="source-line-no">425</span><span id="line.425">     *</span>
+<span class="source-line-no">426</span><span id="line.426">     * @param creatures</span>
+<span class="source-line-no">427</span><span id="line.427">     * @param extraSounds</span>
+<span class="source-line-no">428</span><span id="line.428">     * @return</span>
+<span class="source-line-no">429</span><span id="line.429">     */</span>
+<span class="source-line-no">430</span><span id="line.430">    public OrderedMap&lt;Coord, Double&gt; findAlerted(Set&lt;Coord&gt; creatures, Map&lt;Coord, Double&gt; extraSounds) {</span>
+<span class="source-line-no">431</span><span id="line.431">        if(!initialized) return null;</span>
+<span class="source-line-no">432</span><span id="line.432">        alerted = new OrderedMap&lt;&gt;(creatures.size());</span>
+<span class="source-line-no">433</span><span id="line.433"></span>
+<span class="source-line-no">434</span><span id="line.434">        resetMap();</span>
+<span class="source-line-no">435</span><span id="line.435">        for (Map.Entry&lt;Coord, Double&gt; sound : extraSounds.entrySet()) {</span>
+<span class="source-line-no">436</span><span id="line.436">            setSound(sound.getKey(), sound.getValue());</span>
+<span class="source-line-no">437</span><span id="line.437">        }</span>
+<span class="source-line-no">438</span><span id="line.438">        scan();</span>
+<span class="source-line-no">439</span><span id="line.439">        for(Coord critter : creatures)</span>
+<span class="source-line-no">440</span><span id="line.440">        {</span>
+<span class="source-line-no">441</span><span id="line.441">            if (critter.x &gt;= 0 &amp;&amp; critter.x &lt; width &amp;&amp; critter.y &gt;= 0 &amp;&amp; critter.y &lt; height) {</span>
+<span class="source-line-no">442</span><span id="line.442">                alerted.put(Coord.get(critter.x, critter.y), gradientMap[critter.x][critter.y]);</span>
+<span class="source-line-no">443</span><span id="line.443">            }</span>
+<span class="source-line-no">444</span><span id="line.444">        }</span>
+<span class="source-line-no">445</span><span id="line.445">        return alerted;</span>
+<span class="source-line-no">446</span><span id="line.446">    }</span>
+<span class="source-line-no">447</span><span id="line.447">}</span>
 
 
 

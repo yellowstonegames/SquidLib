@@ -27,721 +27,733 @@
 <span class="source-line-no">014</span><span id="line.14"> * &lt;br&gt;</span>
 <span class="source-line-no">015</span><span id="line.15"> * This implements {@link IPointHash} and has a long it uses internally for state, exposed by {@link #getState()}.</span>
 <span class="source-line-no">016</span><span id="line.16"> */</span>
-<span class="source-line-no">017</span><span id="line.17">public final class PointHash extends IPointHash.LongImpl</span>
+<span class="source-line-no">017</span><span id="line.17">public class PointHash extends IPointHash.LongImpl</span>
 <span class="source-line-no">018</span><span id="line.18">{</span>
 <span class="source-line-no">019</span><span id="line.19">    public static final PointHash INSTANCE = new PointHash();</span>
 <span class="source-line-no">020</span><span id="line.20"></span>
-<span class="source-line-no">021</span><span id="line.21">    @Override</span>
-<span class="source-line-no">022</span><span id="line.22">    public int hashWithState(int x, int y, int state) {</span>
-<span class="source-line-no">023</span><span id="line.23">        return (int)hashAll(x, y, state);</span>
-<span class="source-line-no">024</span><span id="line.24">    }</span>
-<span class="source-line-no">025</span><span id="line.25"></span>
-<span class="source-line-no">026</span><span id="line.26">    @Override</span>
-<span class="source-line-no">027</span><span id="line.27">    public int hashWithState(int x, int y, int z, int state) {</span>
-<span class="source-line-no">028</span><span id="line.28">        return (int)hashAll(x, y, z, state);</span>
-<span class="source-line-no">029</span><span id="line.29">    }</span>
-<span class="source-line-no">030</span><span id="line.30"></span>
-<span class="source-line-no">031</span><span id="line.31">    @Override</span>
-<span class="source-line-no">032</span><span id="line.32">    public int hashWithState(int x, int y, int z, int w, int state) {</span>
-<span class="source-line-no">033</span><span id="line.33">        return (int)hashAll(x, y, z, w, state);</span>
-<span class="source-line-no">034</span><span id="line.34">    }</span>
-<span class="source-line-no">035</span><span id="line.35"></span>
-<span class="source-line-no">036</span><span id="line.36">    @Override</span>
-<span class="source-line-no">037</span><span id="line.37">    public int hashWithState(int x, int y, int z, int w, int u, int state) {</span>
-<span class="source-line-no">038</span><span id="line.38">        return (int)hashAll(x, y, z, w, u, state);</span>
-<span class="source-line-no">039</span><span id="line.39">    }</span>
-<span class="source-line-no">040</span><span id="line.40">    @Override</span>
-<span class="source-line-no">041</span><span id="line.41">    public int hashWithState(int x, int y, int z, int w, int u, int v, int state) {</span>
-<span class="source-line-no">042</span><span id="line.42">        return (int)hashAll(x, y, z, w, u, v, state);</span>
-<span class="source-line-no">043</span><span id="line.43">    }</span>
-<span class="source-line-no">044</span><span id="line.44"></span>
-<span class="source-line-no">045</span><span id="line.45">    public long getState(){</span>
-<span class="source-line-no">046</span><span id="line.46">        return state;</span>
-<span class="source-line-no">047</span><span id="line.47">    }</span>
-<span class="source-line-no">048</span><span id="line.48"></span>
-<span class="source-line-no">049</span><span id="line.49">    /**</span>
-<span class="source-line-no">050</span><span id="line.50">     * If it's important for some usage that one bit of change in any parameters cause roughly 50% of all bits in</span>
-<span class="source-line-no">051</span><span id="line.51">     * the result to change, then you can call this on the output of any hashAll() overload to improve the bit</span>
-<span class="source-line-no">052</span><span id="line.52">     * avalanche qualities.</span>
-<span class="source-line-no">053</span><span id="line.53">     * @param state the output of hashAll() in this class</span>
-<span class="source-line-no">054</span><span id="line.54">     * @return a significantly-mixed-around long obtained from state</span>
-<span class="source-line-no">055</span><span id="line.55">     */</span>
-<span class="source-line-no">056</span><span id="line.56">    public static long avalanche(long state)</span>
-<span class="source-line-no">057</span><span id="line.57">    {</span>
-<span class="source-line-no">058</span><span id="line.58">        state = (state ^ state &gt;&gt;&gt; 33) * 0xFF51AFD7ED558CCDL;</span>
-<span class="source-line-no">059</span><span id="line.59">        return (state ^ state &gt;&gt;&gt; 33) * 0xC4CEB9FE1A85EC53L;</span>
-<span class="source-line-no">060</span><span id="line.60">    }</span>
+<span class="source-line-no">021</span><span id="line.21">    public PointHash() {</span>
+<span class="source-line-no">022</span><span id="line.22">        super();</span>
+<span class="source-line-no">023</span><span id="line.23">    }</span>
+<span class="source-line-no">024</span><span id="line.24"></span>
+<span class="source-line-no">025</span><span id="line.25">    public PointHash(int state) {</span>
+<span class="source-line-no">026</span><span id="line.26">        super(state);</span>
+<span class="source-line-no">027</span><span id="line.27">    }</span>
+<span class="source-line-no">028</span><span id="line.28"></span>
+<span class="source-line-no">029</span><span id="line.29">    public PointHash(long state) {</span>
+<span class="source-line-no">030</span><span id="line.30">        super(state);</span>
+<span class="source-line-no">031</span><span id="line.31">    }</span>
+<span class="source-line-no">032</span><span id="line.32"></span>
+<span class="source-line-no">033</span><span id="line.33">    @Override</span>
+<span class="source-line-no">034</span><span id="line.34">    public int hashWithState(int x, int y, int state) {</span>
+<span class="source-line-no">035</span><span id="line.35">        return (int)hashAll(x, y, state);</span>
+<span class="source-line-no">036</span><span id="line.36">    }</span>
+<span class="source-line-no">037</span><span id="line.37"></span>
+<span class="source-line-no">038</span><span id="line.38">    @Override</span>
+<span class="source-line-no">039</span><span id="line.39">    public int hashWithState(int x, int y, int z, int state) {</span>
+<span class="source-line-no">040</span><span id="line.40">        return (int)hashAll(x, y, z, state);</span>
+<span class="source-line-no">041</span><span id="line.41">    }</span>
+<span class="source-line-no">042</span><span id="line.42"></span>
+<span class="source-line-no">043</span><span id="line.43">    @Override</span>
+<span class="source-line-no">044</span><span id="line.44">    public int hashWithState(int x, int y, int z, int w, int state) {</span>
+<span class="source-line-no">045</span><span id="line.45">        return (int)hashAll(x, y, z, w, state);</span>
+<span class="source-line-no">046</span><span id="line.46">    }</span>
+<span class="source-line-no">047</span><span id="line.47"></span>
+<span class="source-line-no">048</span><span id="line.48">    @Override</span>
+<span class="source-line-no">049</span><span id="line.49">    public int hashWithState(int x, int y, int z, int w, int u, int state) {</span>
+<span class="source-line-no">050</span><span id="line.50">        return (int)hashAll(x, y, z, w, u, state);</span>
+<span class="source-line-no">051</span><span id="line.51">    }</span>
+<span class="source-line-no">052</span><span id="line.52">    @Override</span>
+<span class="source-line-no">053</span><span id="line.53">    public int hashWithState(int x, int y, int z, int w, int u, int v, int state) {</span>
+<span class="source-line-no">054</span><span id="line.54">        return (int)hashAll(x, y, z, w, u, v, state);</span>
+<span class="source-line-no">055</span><span id="line.55">    }</span>
+<span class="source-line-no">056</span><span id="line.56"></span>
+<span class="source-line-no">057</span><span id="line.57">    public long getState(){</span>
+<span class="source-line-no">058</span><span id="line.58">        return state;</span>
+<span class="source-line-no">059</span><span id="line.59">    }</span>
+<span class="source-line-no">060</span><span id="line.60"></span>
 <span class="source-line-no">061</span><span id="line.61">    /**</span>
-<span class="source-line-no">062</span><span id="line.62">     *</span>
-<span class="source-line-no">063</span><span id="line.63">     * @param x</span>
-<span class="source-line-no">064</span><span id="line.64">     * @param y</span>
-<span class="source-line-no">065</span><span id="line.65">     * @param state</span>
-<span class="source-line-no">066</span><span id="line.66">     * @return 64-bit hash of the x,y point with the given state</span>
+<span class="source-line-no">062</span><span id="line.62">     * If it's important for some usage that one bit of change in any parameters cause roughly 50% of all bits in</span>
+<span class="source-line-no">063</span><span id="line.63">     * the result to change, then you can call this on the output of any hashAll() overload to improve the bit</span>
+<span class="source-line-no">064</span><span id="line.64">     * avalanche qualities.</span>
+<span class="source-line-no">065</span><span id="line.65">     * @param state the output of hashAll() in this class</span>
+<span class="source-line-no">066</span><span id="line.66">     * @return a significantly-mixed-around long obtained from state</span>
 <span class="source-line-no">067</span><span id="line.67">     */</span>
-<span class="source-line-no">068</span><span id="line.68">    public static long hashAll(long x, long y, long state)</span>
+<span class="source-line-no">068</span><span id="line.68">    public static long avalanche(long state)</span>
 <span class="source-line-no">069</span><span id="line.69">    {</span>
-<span class="source-line-no">070</span><span id="line.70">        state *= 0x9E3779B97F4A7C15L;</span>
-<span class="source-line-no">071</span><span id="line.71">        long other = 0x60642E2A34326F15L;</span>
-<span class="source-line-no">072</span><span id="line.72">        state ^= (other += (x ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
-<span class="source-line-no">073</span><span id="line.73">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
-<span class="source-line-no">074</span><span id="line.74">        state ^= (other += (y ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
-<span class="source-line-no">075</span><span id="line.75">        state -= ((state &lt;&lt; 54 | state &gt;&gt;&gt; 10) + (other ^ other &gt;&gt;&gt; 29)) * 0x94D049BB133111EBL;</span>
-<span class="source-line-no">076</span><span id="line.76">        return state ^ state &gt;&gt;&gt; 31;</span>
-<span class="source-line-no">077</span><span id="line.77">        </span>
-<span class="source-line-no">078</span><span id="line.78">//            return ((x = ((x *= 0x6C8E9CF570932BD5L) ^ x &gt;&gt;&gt; 26 ^ 0x9183A1F4F348E683L) * (</span>
-<span class="source-line-no">079</span><span id="line.79">//                    ((y = ((y *= 0x6C8E9CF570932BD5L) ^ y &gt;&gt;&gt; 26 ^ 0x9183A1F4F348E683L) * (</span>
-<span class="source-line-no">080</span><span id="line.80">//                            state * 0x9E3779B97F4A7C15L </span>
-<span class="source-line-no">081</span><span id="line.81">//                                    | 1L)) ^ y &gt;&gt;&gt; 24) </span>
-<span class="source-line-no">082</span><span id="line.82">//                            | 1L)) ^ x &gt;&gt;&gt; 24);</span>
-<span class="source-line-no">083</span><span id="line.83"></span>
-<span class="source-line-no">084</span><span id="line.84">//            state = (state ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL | 1L;</span>
-<span class="source-line-no">085</span><span id="line.85">//            x *= state;</span>
-<span class="source-line-no">086</span><span id="line.86">//            y *= state;</span>
-<span class="source-line-no">087</span><span id="line.87">//            return state ^ (x &lt;&lt; 26 | x &gt;&gt;&gt; 38) + (y &lt;&lt; 23 | y &gt;&gt;&gt; 41);</span>
-<span class="source-line-no">088</span><span id="line.88"></span>
-<span class="source-line-no">089</span><span id="line.89">//        return ((x = ((x *= 0x6C8E9CF570932BD5L) ^ x &gt;&gt;&gt; 26 ^ 0x9183A1F4F348E683L) * (</span>
-<span class="source-line-no">090</span><span id="line.90">//                ((y = ((y *= 0x6C8E9CF570932BD5L) ^ y &gt;&gt;&gt; 26 ^ 0x9183A1F4F348E683L) * (</span>
-<span class="source-line-no">091</span><span id="line.91">//                                        state * 0x9E3779B97F4A7C15L</span>
-<span class="source-line-no">092</span><span id="line.92">//                                | 1L)) ^ y &gt;&gt;&gt; 24)</span>
-<span class="source-line-no">093</span><span id="line.93">//                        | 1L)) ^ x &gt;&gt;&gt; 24);</span>
-<span class="source-line-no">094</span><span id="line.94"></span>
-<span class="source-line-no">095</span><span id="line.95">//            return (x = ((x *= 0x6C8E9CF570932BD5L) ^ x &gt;&gt;&gt; 26) * (state = state * 0x9E3779B97F4A7C15L | 1L)) ^ x &gt;&gt;&gt; 24</span>
-<span class="source-line-no">096</span><span id="line.96">//                    ^ (y = ((y *= 0x5851F42D4C957F2DL) ^ y &gt;&gt;&gt; 26) * state) ^ y &gt;&gt;&gt; 24;</span>
-<span class="source-line-no">097</span><span id="line.97">//            return ((state = ((state = x ^ ((state += 0x9E3779B97F4A7C15L ^ y) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL) ^ state &gt;&gt;&gt; 31)</span>
-<span class="source-line-no">098</span><span id="line.98">//                    ^ ((state = ((state = y ^ ((state += 0x9E3779B97F4A7C15L ^ x) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL) ^ state &gt;&gt;&gt; 31);</span>
-<span class="source-line-no">099</span><span id="line.99">        //state *= 0x352E9CF570932BDDL;</span>
-<span class="source-line-no">100</span><span id="line.100">//            return (((state = ((state += 0x6C8E9CD570932BD5L ^ x) ^ (state &gt;&gt;&gt; 25)) * ((y ^ state) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)) ^</span>
-<span class="source-line-no">101</span><span id="line.101">//                    ((state = ((state += 0x6C8E9CD570932BD5L ^ y) ^ (state &gt;&gt;&gt; 25)) * ((x ^ state) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)));</span>
-<span class="source-line-no">102</span><span id="line.102">    }</span>
-<span class="source-line-no">103</span><span id="line.103"></span>
-<span class="source-line-no">104</span><span id="line.104">    /**</span>
-<span class="source-line-no">105</span><span id="line.105">     *</span>
-<span class="source-line-no">106</span><span id="line.106">     * @param x</span>
-<span class="source-line-no">107</span><span id="line.107">     * @param y</span>
-<span class="source-line-no">108</span><span id="line.108">     * @param z</span>
-<span class="source-line-no">109</span><span id="line.109">     * @param state</span>
-<span class="source-line-no">110</span><span id="line.110">     * @return 64-bit hash of the x,y,z point with the given state</span>
-<span class="source-line-no">111</span><span id="line.111">     */</span>
-<span class="source-line-no">112</span><span id="line.112">    public static long hashAll(long x, long y, long z, long state)</span>
-<span class="source-line-no">113</span><span id="line.113">    {</span>
-<span class="source-line-no">114</span><span id="line.114">        state *= 0x9E3779B97F4A7C15L;</span>
-<span class="source-line-no">115</span><span id="line.115">        long other = 0x60642E2A34326F15L;</span>
-<span class="source-line-no">116</span><span id="line.116">        state ^= (other += (x ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
-<span class="source-line-no">117</span><span id="line.117">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
-<span class="source-line-no">118</span><span id="line.118">        state ^= (other += (y ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
-<span class="source-line-no">119</span><span id="line.119">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
-<span class="source-line-no">120</span><span id="line.120">        state ^= (other += (z ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
-<span class="source-line-no">121</span><span id="line.121">        state -= ((state &lt;&lt; 54 | state &gt;&gt;&gt; 10) + (other ^ other &gt;&gt;&gt; 29)) * 0x94D049BB133111EBL;</span>
-<span class="source-line-no">122</span><span id="line.122">        return state ^ state &gt;&gt;&gt; 31;</span>
-<span class="source-line-no">123</span><span id="line.123"></span>
-<span class="source-line-no">124</span><span id="line.124">//            return (x = ((x *= 0x6C8E9CF570932BD5L) ^ x &gt;&gt;&gt; 26) * (state = state * 0x9E3779B97F4A7C15L | 1L)) ^ x &gt;&gt;&gt; 24</span>
-<span class="source-line-no">125</span><span id="line.125">//                    ^ (y = ((y *= 0x5851F42D4C957F2DL) ^ y &gt;&gt;&gt; 26) * state) ^ y &gt;&gt;&gt; 24</span>
-<span class="source-line-no">126</span><span id="line.126">//                    ^ (z = ((z *= 0xAEF17502108EF2D9L) ^ z &gt;&gt;&gt; 26) * state) ^ z &gt;&gt;&gt; 24;</span>
-<span class="source-line-no">127</span><span id="line.127"></span>
-<span class="source-line-no">128</span><span id="line.128">//            return ((state = ((state = x ^ ((state += 0x9E3779B97F4A7C15L ^ y) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL) ^ state &gt;&gt;&gt; 31)</span>
-<span class="source-line-no">129</span><span id="line.129">//                    ^ ((state = ((state = y ^ ((state += 0x9E3779B97F4A7C15L ^ z) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL) ^ state &gt;&gt;&gt; 31)</span>
-<span class="source-line-no">130</span><span id="line.130">//                    ^ ((state = ((state = z ^ ((state += 0x9E3779B97F4A7C15L ^ x) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL) ^ state &gt;&gt;&gt; 31)</span>
-<span class="source-line-no">131</span><span id="line.131">//                    ;</span>
-<span class="source-line-no">132</span><span id="line.132"></span>
-<span class="source-line-no">133</span><span id="line.133">        //state *= 0x352E9CF570932BDDL;</span>
-<span class="source-line-no">134</span><span id="line.134">//            return (((state = ((state += 0x6C8E9CD570932BD5L ^ x) ^ (state &gt;&gt;&gt; 25)) * ((state ^ y) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)) ^</span>
-<span class="source-line-no">135</span><span id="line.135">//                    ((state = ((state += 0x6C8E9CD570932BD5L ^ y) ^ (state &gt;&gt;&gt; 25)) * ((state ^ z) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)) ^</span>
-<span class="source-line-no">136</span><span id="line.136">//                    ((state = ((state += 0x6C8E9CD570932BD5L ^ z) ^ (state &gt;&gt;&gt; 25)) * ((state ^ x) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)));</span>
-<span class="source-line-no">137</span><span id="line.137">    }</span>
-<span class="source-line-no">138</span><span id="line.138"></span>
-<span class="source-line-no">139</span><span id="line.139">    /**</span>
-<span class="source-line-no">140</span><span id="line.140">     *</span>
-<span class="source-line-no">141</span><span id="line.141">     * @param x</span>
-<span class="source-line-no">142</span><span id="line.142">     * @param y</span>
-<span class="source-line-no">143</span><span id="line.143">     * @param z</span>
-<span class="source-line-no">144</span><span id="line.144">     * @param w</span>
-<span class="source-line-no">145</span><span id="line.145">     * @param state</span>
-<span class="source-line-no">146</span><span id="line.146">     * @return 64-bit hash of the x,y,z,w point with the given state</span>
-<span class="source-line-no">147</span><span id="line.147">     */</span>
-<span class="source-line-no">148</span><span id="line.148">    public static long hashAll(long x, long y, long z, long w, long state)</span>
-<span class="source-line-no">149</span><span id="line.149">    {</span>
-<span class="source-line-no">150</span><span id="line.150">        state *= 0x9E3779B97F4A7C15L;</span>
-<span class="source-line-no">151</span><span id="line.151">        long other = 0x60642E2A34326F15L;</span>
-<span class="source-line-no">152</span><span id="line.152">        state ^= (other += (x ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
-<span class="source-line-no">153</span><span id="line.153">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
-<span class="source-line-no">154</span><span id="line.154">        state ^= (other += (y ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
-<span class="source-line-no">155</span><span id="line.155">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
-<span class="source-line-no">156</span><span id="line.156">        state ^= (other += (z ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
-<span class="source-line-no">157</span><span id="line.157">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
-<span class="source-line-no">158</span><span id="line.158">        state ^= (other += (w ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
-<span class="source-line-no">159</span><span id="line.159">        state -= ((state &lt;&lt; 54 | state &gt;&gt;&gt; 10) + (other ^ other &gt;&gt;&gt; 29)) * 0x94D049BB133111EBL;</span>
-<span class="source-line-no">160</span><span id="line.160">        return state ^ state &gt;&gt;&gt; 31;</span>
-<span class="source-line-no">161</span><span id="line.161"></span>
-<span class="source-line-no">162</span><span id="line.162">//            return (x = ((x *= 0x6C8E9CF570932BD5L) ^ x &gt;&gt;&gt; 26) * (state = state * 0x9E3779B97F4A7C15L | 1L)) ^ x &gt;&gt;&gt; 24</span>
-<span class="source-line-no">163</span><span id="line.163">//                    ^ (y = ((y *= 0x5851F42D4C957F2DL) ^ y &gt;&gt;&gt; 26) * state) ^ y &gt;&gt;&gt; 24</span>
-<span class="source-line-no">164</span><span id="line.164">//                    ^ (z = ((z *= 0xAEF17502108EF2D9L) ^ z &gt;&gt;&gt; 26) * state) ^ z &gt;&gt;&gt; 24</span>
-<span class="source-line-no">165</span><span id="line.165">//                    ^ (w = ((w *= 0x94D049BB133111EBL) ^ w &gt;&gt;&gt; 26) * state) ^ w &gt;&gt;&gt; 24;</span>
-<span class="source-line-no">166</span><span id="line.166"></span>
-<span class="source-line-no">167</span><span id="line.167">//            return ((state = ((state = x ^ ((state += 0x9E3779B97F4A7C15L ^ y) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL) ^ state &gt;&gt;&gt; 31)</span>
-<span class="source-line-no">168</span><span id="line.168">//                    ^ ((state = ((state = y ^ ((state += 0x9E3779B97F4A7C15L ^ z) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL) ^ state &gt;&gt;&gt; 31)</span>
-<span class="source-line-no">169</span><span id="line.169">//                    ^ ((state = ((state = z ^ ((state += 0x9E3779B97F4A7C15L ^ w) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL) ^ state &gt;&gt;&gt; 31)</span>
-<span class="source-line-no">170</span><span id="line.170">//                    ^ ((state = ((state = w ^ ((state += 0x9E3779B97F4A7C15L ^ x) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL) ^ state &gt;&gt;&gt; 31)</span>
-<span class="source-line-no">171</span><span id="line.171">//                    ;</span>
-<span class="source-line-no">172</span><span id="line.172"></span>
-<span class="source-line-no">173</span><span id="line.173">        //state *= 0x352E9CF570932BDDL;</span>
-<span class="source-line-no">174</span><span id="line.174">//            return (((state = ((state += 0x6C8E9CD570932BD5L ^ x) ^ (state &gt;&gt;&gt; 25)) * ((state ^ y) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)) ^</span>
-<span class="source-line-no">175</span><span id="line.175">//                    ((state = ((state += 0x6C8E9CD570932BD5L ^ y) ^ (state &gt;&gt;&gt; 25)) * ((state ^ z) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)) ^</span>
-<span class="source-line-no">176</span><span id="line.176">//                    ((state = ((state += 0x6C8E9CD570932BD5L ^ z) ^ (state &gt;&gt;&gt; 25)) * ((state ^ w) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)) ^</span>
-<span class="source-line-no">177</span><span id="line.177">//                    ((state = ((state += 0x6C8E9CD570932BD5L ^ w) ^ (state &gt;&gt;&gt; 25)) * ((state ^ x) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)));</span>
-<span class="source-line-no">178</span><span id="line.178">    }</span>
-<span class="source-line-no">179</span><span id="line.179"></span>
-<span class="source-line-no">180</span><span id="line.180">    /**</span>
-<span class="source-line-no">181</span><span id="line.181">     *</span>
-<span class="source-line-no">182</span><span id="line.182">     * @param x</span>
-<span class="source-line-no">183</span><span id="line.183">     * @param y</span>
-<span class="source-line-no">184</span><span id="line.184">     * @param z</span>
-<span class="source-line-no">185</span><span id="line.185">     * @param w</span>
-<span class="source-line-no">186</span><span id="line.186">     * @param u</span>
-<span class="source-line-no">187</span><span id="line.187">     * @param state</span>
-<span class="source-line-no">188</span><span id="line.188">     * @return 64-bit hash of the x,y,z,w,u point with the given state</span>
-<span class="source-line-no">189</span><span id="line.189">     */</span>
-<span class="source-line-no">190</span><span id="line.190">    public static long hashAll(long x, long y, long z, long w, long u, long state)</span>
-<span class="source-line-no">191</span><span id="line.191">    {</span>
-<span class="source-line-no">192</span><span id="line.192">        state *= 0x9E3779B97F4A7C15L;</span>
-<span class="source-line-no">193</span><span id="line.193">        long other = 0x60642E2A34326F15L;</span>
-<span class="source-line-no">194</span><span id="line.194">        state ^= (other += (x ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
-<span class="source-line-no">195</span><span id="line.195">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
-<span class="source-line-no">196</span><span id="line.196">        state ^= (other += (y ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
-<span class="source-line-no">197</span><span id="line.197">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
-<span class="source-line-no">198</span><span id="line.198">        state ^= (other += (z ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
-<span class="source-line-no">199</span><span id="line.199">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
-<span class="source-line-no">200</span><span id="line.200">        state ^= (other += (w ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
-<span class="source-line-no">201</span><span id="line.201">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
-<span class="source-line-no">202</span><span id="line.202">        state ^= (other += (u ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
-<span class="source-line-no">203</span><span id="line.203">        state -= ((state &lt;&lt; 54 | state &gt;&gt;&gt; 10) + (other ^ other &gt;&gt;&gt; 29)) * 0x94D049BB133111EBL;</span>
-<span class="source-line-no">204</span><span id="line.204">        return state ^ state &gt;&gt;&gt; 31;</span>
-<span class="source-line-no">205</span><span id="line.205">    }</span>
-<span class="source-line-no">206</span><span id="line.206">    /**</span>
-<span class="source-line-no">207</span><span id="line.207">     *</span>
-<span class="source-line-no">208</span><span id="line.208">     * @param x</span>
-<span class="source-line-no">209</span><span id="line.209">     * @param y</span>
-<span class="source-line-no">210</span><span id="line.210">     * @param z</span>
-<span class="source-line-no">211</span><span id="line.211">     * @param w</span>
-<span class="source-line-no">212</span><span id="line.212">     * @param u</span>
-<span class="source-line-no">213</span><span id="line.213">     * @param v</span>
-<span class="source-line-no">214</span><span id="line.214">     * @param state</span>
-<span class="source-line-no">215</span><span id="line.215">     * @return 64-bit hash of the x,y,z,w,u,v point with the given state</span>
-<span class="source-line-no">216</span><span id="line.216">     */</span>
-<span class="source-line-no">217</span><span id="line.217">    public static long hashAll(long x, long y, long z, long w, long u, long v, long state)</span>
-<span class="source-line-no">218</span><span id="line.218">    {</span>
-<span class="source-line-no">219</span><span id="line.219">        state *= 0x9E3779B97F4A7C15L;</span>
-<span class="source-line-no">220</span><span id="line.220">        long other = 0x60642E2A34326F15L;</span>
-<span class="source-line-no">221</span><span id="line.221">        state ^= (other += (x ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
-<span class="source-line-no">222</span><span id="line.222">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
-<span class="source-line-no">223</span><span id="line.223">        state ^= (other += (y ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
-<span class="source-line-no">224</span><span id="line.224">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
-<span class="source-line-no">225</span><span id="line.225">        state ^= (other += (z ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
-<span class="source-line-no">226</span><span id="line.226">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
-<span class="source-line-no">227</span><span id="line.227">        state ^= (other += (w ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
-<span class="source-line-no">228</span><span id="line.228">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
-<span class="source-line-no">229</span><span id="line.229">        state ^= (other += (u ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
-<span class="source-line-no">230</span><span id="line.230">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
-<span class="source-line-no">231</span><span id="line.231">        state ^= (other += (v ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
-<span class="source-line-no">232</span><span id="line.232">        state -= ((state &lt;&lt; 54 | state &gt;&gt;&gt; 10) + (other ^ other &gt;&gt;&gt; 29)) * 0x94D049BB133111EBL;</span>
-<span class="source-line-no">233</span><span id="line.233">        return state ^ state &gt;&gt;&gt; 31;</span>
-<span class="source-line-no">234</span><span id="line.234"></span>
-<span class="source-line-no">235</span><span id="line.235">//            return (x = ((x *= 0x6C8E9CF570932BD5L) ^ x &gt;&gt;&gt; 26) * (state = state * 0x9E3779B97F4A7C15L | 1L)) ^ x &gt;&gt;&gt; 24</span>
-<span class="source-line-no">236</span><span id="line.236">//                    ^ (y = ((y *= 0x5851F42D4C957F2DL) ^ y &gt;&gt;&gt; 26) * state) ^ y &gt;&gt;&gt; 24</span>
-<span class="source-line-no">237</span><span id="line.237">//                    ^ (z = ((z *= 0xAEF17502108EF2D9L) ^ z &gt;&gt;&gt; 26) * state) ^ z &gt;&gt;&gt; 24</span>
-<span class="source-line-no">238</span><span id="line.238">//                    ^ (w = ((w *= 0x94D049BB133111EBL) ^ w &gt;&gt;&gt; 26) * state) ^ w &gt;&gt;&gt; 24</span>
-<span class="source-line-no">239</span><span id="line.239">//                    ^ (u = ((u *= 0xBF58476D1CE4E5B9L) ^ u &gt;&gt;&gt; 26) * state) ^ u &gt;&gt;&gt; 24</span>
-<span class="source-line-no">240</span><span id="line.240">//                    ^ (v = ((v *= 0xC6BC279692B5CC85L) ^ v &gt;&gt;&gt; 26) * state) ^ v &gt;&gt;&gt; 24;</span>
-<span class="source-line-no">241</span><span id="line.241"></span>
-<span class="source-line-no">242</span><span id="line.242">//            return ((state = ((state = x ^ ((state += 0x9E3779B97F4A7C15L ^ y) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL) ^ state &gt;&gt;&gt; 31)</span>
-<span class="source-line-no">243</span><span id="line.243">//                    ^ ((state = ((state = y ^ ((state += 0x9E3779B97F4A7C15L ^ z) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL) ^ state &gt;&gt;&gt; 31)</span>
-<span class="source-line-no">244</span><span id="line.244">//                    ^ ((state = ((state = z ^ ((state += 0x9E3779B97F4A7C15L ^ w) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL) ^ state &gt;&gt;&gt; 31)</span>
-<span class="source-line-no">245</span><span id="line.245">//                    ^ ((state = ((state = w ^ ((state += 0x9E3779B97F4A7C15L ^ u) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL) ^ state &gt;&gt;&gt; 31)</span>
-<span class="source-line-no">246</span><span id="line.246">//                    ^ ((state = ((state = u ^ ((state += 0x9E3779B97F4A7C15L ^ v) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL) ^ state &gt;&gt;&gt; 31)</span>
-<span class="source-line-no">247</span><span id="line.247">//                    ^ ((state = ((state = v ^ ((state += 0x9E3779B97F4A7C15L ^ x) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL) ^ state &gt;&gt;&gt; 31)</span>
-<span class="source-line-no">248</span><span id="line.248">//                    ;</span>
-<span class="source-line-no">249</span><span id="line.249"></span>
-<span class="source-line-no">250</span><span id="line.250">        //state *= 0x352E9CF570932BDDL;</span>
-<span class="source-line-no">251</span><span id="line.251">//            return (((state = ((state += 0x6C8E9CD570932BD5L ^ x) ^ (state &gt;&gt;&gt; 25)) * ((state ^ y) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)) ^</span>
-<span class="source-line-no">252</span><span id="line.252">//                    ((state = ((state += 0x6C8E9CD570932BD5L ^ y) ^ (state &gt;&gt;&gt; 25)) * ((state ^ z) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)) ^</span>
-<span class="source-line-no">253</span><span id="line.253">//                    ((state = ((state += 0x6C8E9CD570932BD5L ^ z) ^ (state &gt;&gt;&gt; 25)) * ((state ^ w) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)) ^</span>
-<span class="source-line-no">254</span><span id="line.254">//                    ((state = ((state += 0x6C8E9CD570932BD5L ^ w) ^ (state &gt;&gt;&gt; 25)) * ((state ^ u) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)) ^</span>
-<span class="source-line-no">255</span><span id="line.255">//                    ((state = ((state += 0x6C8E9CD570932BD5L ^ u) ^ (state &gt;&gt;&gt; 25)) * ((state ^ v) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)) ^</span>
-<span class="source-line-no">256</span><span id="line.256">//                    ((state = ((state += 0x6C8E9CD570932BD5L ^ v) ^ (state &gt;&gt;&gt; 25)) * ((state ^ x) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)));</span>
-<span class="source-line-no">257</span><span id="line.257">    }</span>
-<span class="source-line-no">258</span><span id="line.258">    /**</span>
-<span class="source-line-no">259</span><span id="line.259">     *</span>
-<span class="source-line-no">260</span><span id="line.260">     * @param x</span>
-<span class="source-line-no">261</span><span id="line.261">     * @param y</span>
-<span class="source-line-no">262</span><span id="line.262">     * @param state</span>
-<span class="source-line-no">263</span><span id="line.263">     * @return 8-bit hash of the x,y point with the given state</span>
-<span class="source-line-no">264</span><span id="line.264">     */         </span>
-<span class="source-line-no">265</span><span id="line.265">    public static int hash256(long x, long y, long state) {</span>
-<span class="source-line-no">266</span><span id="line.266">        state *= 0x9E3779B97F4A7C15L;</span>
-<span class="source-line-no">267</span><span id="line.267">        long other = 0x60642E2A34326F15L;</span>
-<span class="source-line-no">268</span><span id="line.268">        state ^= (other += (x ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
-<span class="source-line-no">269</span><span id="line.269">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
-<span class="source-line-no">270</span><span id="line.270">        state ^= (other += (y ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
-<span class="source-line-no">271</span><span id="line.271">        return (int)(state - ((state &lt;&lt; 54 | state &gt;&gt;&gt; 10) + (other ^ other &gt;&gt;&gt; 29)) * 0x94D049BB133111EBL &gt;&gt;&gt; 56);</span>
-<span class="source-line-no">272</span><span id="line.272"></span>
-<span class="source-line-no">273</span><span id="line.273">//            return (int) (((((x *= 0x6C8E9CF570932BD5L) ^ x &gt;&gt;&gt; 26) * (state = state * 0x9E3779B97F4A7C15L | 1L))</span>
-<span class="source-line-no">274</span><span id="line.274">//                    ^ (((y *= 0x5851F42D4C957F2DL) ^ y &gt;&gt;&gt; 26) * state)) &gt;&gt;&gt; 56);</span>
-<span class="source-line-no">275</span><span id="line.275"></span>
-<span class="source-line-no">276</span><span id="line.276">//                return (int) ((</span>
-<span class="source-line-no">277</span><span id="line.277">//                    ((state = ((state = x ^ ((state += 0x9E3779B97F4A7C15L ^ y) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL))</span>
-<span class="source-line-no">278</span><span id="line.278">//                    ^ ((((state = y ^ ((state += 0x9E3779B97F4A7C15L ^ x) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL))</span>
-<span class="source-line-no">279</span><span id="line.279">//            ) &gt;&gt;&gt; 56);</span>
-<span class="source-line-no">280</span><span id="line.280"></span>
-<span class="source-line-no">281</span><span id="line.281">        //state *= 0x352E9CF570932BDDL;</span>
-<span class="source-line-no">282</span><span id="line.282">//            return (int) ((((state = ((state += 0x6C8E9CD570932BD5L ^ x) ^ (state &gt;&gt;&gt; 25)) * ((y ^ state) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)) ^</span>
-<span class="source-line-no">283</span><span id="line.283">//                    (((state += 0x6C8E9CD570932BD5L ^ y) ^ (state &gt;&gt;&gt; 25)) * ((x ^ state) | 0xA529L))) &gt;&gt;&gt; 56);</span>
-<span class="source-line-no">284</span><span id="line.284">    }</span>
-<span class="source-line-no">285</span><span id="line.285">    /**</span>
-<span class="source-line-no">286</span><span id="line.286">     *</span>
-<span class="source-line-no">287</span><span id="line.287">     * @param x</span>
-<span class="source-line-no">288</span><span id="line.288">     * @param y</span>
-<span class="source-line-no">289</span><span id="line.289">     * @param z</span>
-<span class="source-line-no">290</span><span id="line.290">     * @param state</span>
-<span class="source-line-no">291</span><span id="line.291">     * @return 8-bit hash of the x,y,z point with the given state</span>
-<span class="source-line-no">292</span><span id="line.292">     */</span>
-<span class="source-line-no">293</span><span id="line.293">    public static int hash256(long x, long y, long z, long state)</span>
-<span class="source-line-no">294</span><span id="line.294">    {</span>
-<span class="source-line-no">295</span><span id="line.295">        state *= 0x9E3779B97F4A7C15L;</span>
-<span class="source-line-no">296</span><span id="line.296">        long other = 0x60642E2A34326F15L;</span>
-<span class="source-line-no">297</span><span id="line.297">        state ^= (other += (x ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
-<span class="source-line-no">298</span><span id="line.298">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
-<span class="source-line-no">299</span><span id="line.299">        state ^= (other += (y ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
-<span class="source-line-no">300</span><span id="line.300">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
-<span class="source-line-no">301</span><span id="line.301">        state ^= (other += (z ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
-<span class="source-line-no">302</span><span id="line.302">        return (int)(state - ((state &lt;&lt; 54 | state &gt;&gt;&gt; 10) + (other ^ other &gt;&gt;&gt; 29)) * 0x94D049BB133111EBL &gt;&gt;&gt; 56);</span>
-<span class="source-line-no">303</span><span id="line.303"></span>
-<span class="source-line-no">304</span><span id="line.304">//            return (int) (((((x *= 0x6C8E9CF570932BD5L) ^ x &gt;&gt;&gt; 26) * (state = state * 0x9E3779B97F4A7C15L | 1L))</span>
-<span class="source-line-no">305</span><span id="line.305">//                    ^ (((y *= 0x5851F42D4C957F2DL) ^ y &gt;&gt;&gt; 26) * state)</span>
-<span class="source-line-no">306</span><span id="line.306">//                    ^ (((z *= 0xAEF17502108EF2D9L) ^ z &gt;&gt;&gt; 26) * state)</span>
-<span class="source-line-no">307</span><span id="line.307">//            ) &gt;&gt;&gt; 56);</span>
-<span class="source-line-no">308</span><span id="line.308"></span>
-<span class="source-line-no">309</span><span id="line.309">//            return (int) ((</span>
-<span class="source-line-no">310</span><span id="line.310">//                    ((state = ((state = x ^ ((state += 0x9E3779B97F4A7C15L ^ y) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL))</span>
-<span class="source-line-no">311</span><span id="line.311">//                            ^ ((state = ((state = y ^ ((state += 0x9E3779B97F4A7C15L ^ z) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL))</span>
-<span class="source-line-no">312</span><span id="line.312">//                            ^ ((((state = z ^ ((state += 0x9E3779B97F4A7C15L ^ x) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL))</span>
-<span class="source-line-no">313</span><span id="line.313">//            ) &gt;&gt;&gt; 56);</span>
-<span class="source-line-no">314</span><span id="line.314"></span>
-<span class="source-line-no">315</span><span id="line.315">        //state *= 0x352E9CF570932BDDL;</span>
-<span class="source-line-no">316</span><span id="line.316">//            return (int) ((((state = ((state += 0x6C8E9CD570932BD5L ^ x) ^ (state &gt;&gt;&gt; 25)) * ((state ^ y) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)) ^</span>
-<span class="source-line-no">317</span><span id="line.317">//                    ((state = ((state += 0x6C8E9CD570932BD5L ^ y) ^ (state &gt;&gt;&gt; 25)) * ((state ^ z) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)) ^</span>
-<span class="source-line-no">318</span><span id="line.318">//                    (((state += 0x6C8E9CD570932BD5L ^ z) ^ (state &gt;&gt;&gt; 25)) * ((state ^ x) | 0xA529L))) &gt;&gt;&gt; 56);</span>
-<span class="source-line-no">319</span><span id="line.319">    }</span>
-<span class="source-line-no">320</span><span id="line.320">    /**</span>
-<span class="source-line-no">321</span><span id="line.321">     *</span>
-<span class="source-line-no">322</span><span id="line.322">     * @param x</span>
-<span class="source-line-no">323</span><span id="line.323">     * @param y</span>
-<span class="source-line-no">324</span><span id="line.324">     * @param z</span>
-<span class="source-line-no">325</span><span id="line.325">     * @param w</span>
-<span class="source-line-no">326</span><span id="line.326">     * @param state</span>
-<span class="source-line-no">327</span><span id="line.327">     * @return 8-bit hash of the x,y,z,w point with the given state</span>
-<span class="source-line-no">328</span><span id="line.328">     */</span>
-<span class="source-line-no">329</span><span id="line.329">    public static int hash256(long x, long y, long z, long w, long state)</span>
-<span class="source-line-no">330</span><span id="line.330">    {</span>
-<span class="source-line-no">331</span><span id="line.331">        state *= 0x9E3779B97F4A7C15L;</span>
-<span class="source-line-no">332</span><span id="line.332">        long other = 0x60642E2A34326F15L;</span>
-<span class="source-line-no">333</span><span id="line.333">        state ^= (other += (x ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
-<span class="source-line-no">334</span><span id="line.334">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
-<span class="source-line-no">335</span><span id="line.335">        state ^= (other += (y ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
-<span class="source-line-no">336</span><span id="line.336">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
-<span class="source-line-no">337</span><span id="line.337">        state ^= (other += (z ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
-<span class="source-line-no">338</span><span id="line.338">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
-<span class="source-line-no">339</span><span id="line.339">        state ^= (other += (w ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
-<span class="source-line-no">340</span><span id="line.340">        return (int)(state - ((state &lt;&lt; 54 | state &gt;&gt;&gt; 10) + (other ^ other &gt;&gt;&gt; 29)) * 0x94D049BB133111EBL &gt;&gt;&gt; 56);</span>
-<span class="source-line-no">341</span><span id="line.341"></span>
-<span class="source-line-no">342</span><span id="line.342">//            return (int) (((((x *= 0x6C8E9CF570932BD5L) ^ x &gt;&gt;&gt; 26) * (state = state * 0x9E3779B97F4A7C15L | 1L))</span>
-<span class="source-line-no">343</span><span id="line.343">//                    ^ (((y *= 0x5851F42D4C957F2DL) ^ y &gt;&gt;&gt; 26) * state)</span>
-<span class="source-line-no">344</span><span id="line.344">//                    ^ (((z *= 0xAEF17502108EF2D9L) ^ z &gt;&gt;&gt; 26) * state)</span>
-<span class="source-line-no">345</span><span id="line.345">//                    ^ (((w *= 0x94D049BB133111EBL) ^ w &gt;&gt;&gt; 26) * state)</span>
-<span class="source-line-no">346</span><span id="line.346">//            ) &gt;&gt;&gt; 56);</span>
-<span class="source-line-no">347</span><span id="line.347"></span>
-<span class="source-line-no">348</span><span id="line.348">//            return (int) ((</span>
-<span class="source-line-no">349</span><span id="line.349">//                    ((state = ((state = x ^ ((state += 0x9E3779B97F4A7C15L ^ y) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL))</span>
-<span class="source-line-no">350</span><span id="line.350">//                            ^ ((state = ((state = y ^ ((state += 0x9E3779B97F4A7C15L ^ z) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL))</span>
-<span class="source-line-no">351</span><span id="line.351">//                            ^ ((state = ((state = z ^ ((state += 0x9E3779B97F4A7C15L ^ w) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL))</span>
-<span class="source-line-no">352</span><span id="line.352">//                            ^ ((((state = w ^ ((state += 0x9E3779B97F4A7C15L ^ x) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL))</span>
-<span class="source-line-no">353</span><span id="line.353">        //state *= 0x352E9CF570932BDDL;</span>
-<span class="source-line-no">354</span><span id="line.354">//            return (int) ((((state = ((state += 0x6C8E9CD570932BD5L ^ x) ^ (state &gt;&gt;&gt; 25)) * ((state ^ y) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)) ^</span>
-<span class="source-line-no">355</span><span id="line.355">//                    ((state = ((state += 0x6C8E9CD570932BD5L ^ y) ^ (state &gt;&gt;&gt; 25)) * ((state ^ z) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)) ^</span>
-<span class="source-line-no">356</span><span id="line.356">//                    ((state = ((state += 0x6C8E9CD570932BD5L ^ z) ^ (state &gt;&gt;&gt; 25)) * ((state ^ w) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)) ^</span>
-<span class="source-line-no">357</span><span id="line.357">//                    (((state += 0x6C8E9CD570932BD5L ^ w) ^ (state &gt;&gt;&gt; 25)) * ((state ^ x) | 0xA529L))) &gt;&gt;&gt; 56);</span>
-<span class="source-line-no">358</span><span id="line.358">    }</span>
-<span class="source-line-no">359</span><span id="line.359">    /**</span>
-<span class="source-line-no">360</span><span id="line.360">     *</span>
-<span class="source-line-no">361</span><span id="line.361">     * @param x</span>
-<span class="source-line-no">362</span><span id="line.362">     * @param y</span>
-<span class="source-line-no">363</span><span id="line.363">     * @param z</span>
-<span class="source-line-no">364</span><span id="line.364">     * @param w</span>
-<span class="source-line-no">365</span><span id="line.365">     * @param u</span>
-<span class="source-line-no">366</span><span id="line.366">     * @param v</span>
-<span class="source-line-no">367</span><span id="line.367">     * @param state</span>
-<span class="source-line-no">368</span><span id="line.368">     * @return 8-bit hash of the x,y,z,w,u,v point with the given state</span>
-<span class="source-line-no">369</span><span id="line.369">     */</span>
-<span class="source-line-no">370</span><span id="line.370">    public static int hash256(long x, long y, long z, long w, long u, long v, long state)</span>
-<span class="source-line-no">371</span><span id="line.371">    {</span>
-<span class="source-line-no">372</span><span id="line.372">        state *= 0x9E3779B97F4A7C15L;</span>
-<span class="source-line-no">373</span><span id="line.373">        long other = 0x60642E2A34326F15L;</span>
-<span class="source-line-no">374</span><span id="line.374">        state ^= (other += (x ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
-<span class="source-line-no">375</span><span id="line.375">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
-<span class="source-line-no">376</span><span id="line.376">        state ^= (other += (y ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
-<span class="source-line-no">377</span><span id="line.377">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
-<span class="source-line-no">378</span><span id="line.378">        state ^= (other += (z ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
-<span class="source-line-no">379</span><span id="line.379">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
-<span class="source-line-no">380</span><span id="line.380">        state ^= (other += (w ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
-<span class="source-line-no">381</span><span id="line.381">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
-<span class="source-line-no">382</span><span id="line.382">        state ^= (other += (u ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
-<span class="source-line-no">383</span><span id="line.383">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
-<span class="source-line-no">384</span><span id="line.384">        state ^= (other += (v ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
-<span class="source-line-no">385</span><span id="line.385">        return (int)(state - ((state &lt;&lt; 54 | state &gt;&gt;&gt; 10) + (other ^ other &gt;&gt;&gt; 29)) * 0x94D049BB133111EBL &gt;&gt;&gt; 56);</span>
-<span class="source-line-no">386</span><span id="line.386"></span>
-<span class="source-line-no">387</span><span id="line.387">//            return (int) (((((x *= 0x6C8E9CF570932BD5L) ^ x &gt;&gt;&gt; 26) * (state = state * 0x9E3779B97F4A7C15L | 1L))</span>
-<span class="source-line-no">388</span><span id="line.388">//                    ^ (((y *= 0x5851F42D4C957F2DL) ^ y &gt;&gt;&gt; 26) * state)</span>
-<span class="source-line-no">389</span><span id="line.389">//                    ^ (((z *= 0xAEF17502108EF2D9L) ^ z &gt;&gt;&gt; 26) * state)</span>
-<span class="source-line-no">390</span><span id="line.390">//                    ^ (((w *= 0x94D049BB133111EBL) ^ w &gt;&gt;&gt; 26) * state)</span>
-<span class="source-line-no">391</span><span id="line.391">//                    ^ (((u *= 0xBF58476D1CE4E5B9L) ^ u &gt;&gt;&gt; 26) * state)</span>
-<span class="source-line-no">392</span><span id="line.392">//                    ^ (((v *= 0xC6BC279692B5CC85L) ^ v &gt;&gt;&gt; 26) * state)</span>
-<span class="source-line-no">393</span><span id="line.393">//            ) &gt;&gt;&gt; 56);</span>
-<span class="source-line-no">394</span><span id="line.394"></span>
-<span class="source-line-no">395</span><span id="line.395">//            return (int) ((</span>
-<span class="source-line-no">396</span><span id="line.396">//                    ((state = ((state = x ^ ((state += 0x9E3779B97F4A7C15L ^ y) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL))</span>
-<span class="source-line-no">397</span><span id="line.397">//                            ^ ((state = ((state = y ^ ((state += 0x9E3779B97F4A7C15L ^ z) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL))</span>
-<span class="source-line-no">398</span><span id="line.398">//                            ^ ((state = ((state = z ^ ((state += 0x9E3779B97F4A7C15L ^ w) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL))</span>
-<span class="source-line-no">399</span><span id="line.399">//                            ^ ((state = ((state = w ^ ((state += 0x9E3779B97F4A7C15L ^ u) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL))</span>
-<span class="source-line-no">400</span><span id="line.400">//                            ^ ((state = ((state = u ^ ((state += 0x9E3779B97F4A7C15L ^ v) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL))</span>
-<span class="source-line-no">401</span><span id="line.401">//                            ^ ((((state = v ^ ((state += 0x9E3779B97F4A7C15L ^ x) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL))</span>
-<span class="source-line-no">402</span><span id="line.402">//            ) &gt;&gt;&gt; 56);</span>
-<span class="source-line-no">403</span><span id="line.403"></span>
-<span class="source-line-no">404</span><span id="line.404">        //state *= 0x352E9CF570932BDDL;</span>
-<span class="source-line-no">405</span><span id="line.405">//            return (int) ((((state = ((state += 0x6C8E9CD570932BD5L ^ x) ^ (state &gt;&gt;&gt; 25)) * ((state ^ y) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)) ^</span>
-<span class="source-line-no">406</span><span id="line.406">//                    ((state = ((state += 0x6C8E9CD570932BD5L ^ y) ^ (state &gt;&gt;&gt; 25)) * ((state ^ z) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)) ^</span>
-<span class="source-line-no">407</span><span id="line.407">//                    ((state = ((state += 0x6C8E9CD570932BD5L ^ z) ^ (state &gt;&gt;&gt; 25)) * ((state ^ w) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)) ^</span>
-<span class="source-line-no">408</span><span id="line.408">//                    ((state = ((state += 0x6C8E9CD570932BD5L ^ z) ^ (state &gt;&gt;&gt; 25)) * ((state ^ w) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)) ^</span>
-<span class="source-line-no">409</span><span id="line.409">//                    ((state = ((state += 0x6C8E9CD570932BD5L ^ u) ^ (state &gt;&gt;&gt; 25)) * ((state ^ v) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)) ^</span>
-<span class="source-line-no">410</span><span id="line.410">//                    (((state += 0x6C8E9CD570932BD5L ^ v) ^ (state &gt;&gt;&gt; 25)) * ((state ^ x) | 0xA529L))) &gt;&gt;&gt; 56);</span>
-<span class="source-line-no">411</span><span id="line.411">    }</span>
-<span class="source-line-no">412</span><span id="line.412">    /**</span>
-<span class="source-line-no">413</span><span id="line.413">     *</span>
-<span class="source-line-no">414</span><span id="line.414">     * @param x</span>
-<span class="source-line-no">415</span><span id="line.415">     * @param y</span>
-<span class="source-line-no">416</span><span id="line.416">     * @param state</span>
-<span class="source-line-no">417</span><span id="line.417">     * @return 5-bit hash of the x,y point with the given state</span>
-<span class="source-line-no">418</span><span id="line.418">     */</span>
-<span class="source-line-no">419</span><span id="line.419">    public static int hash32(long x, long y, long state)</span>
-<span class="source-line-no">420</span><span id="line.420">    {</span>
-<span class="source-line-no">421</span><span id="line.421">        state *= 0x9E3779B97F4A7C15L;</span>
-<span class="source-line-no">422</span><span id="line.422">        long other = 0x60642E2A34326F15L;</span>
-<span class="source-line-no">423</span><span id="line.423">        state ^= (other += (x ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
-<span class="source-line-no">424</span><span id="line.424">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
-<span class="source-line-no">425</span><span id="line.425">        state ^= (other += (y ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
-<span class="source-line-no">426</span><span id="line.426">        return (int)(state - ((state &lt;&lt; 54 | state &gt;&gt;&gt; 10) + (other ^ other &gt;&gt;&gt; 29)) * 0x94D049BB133111EBL &gt;&gt;&gt; 59);</span>
-<span class="source-line-no">427</span><span id="line.427">        </span>
-<span class="source-line-no">428</span><span id="line.428">//            return (int) (((((x *= 0x6C8E9CF570932BD5L) ^ x &gt;&gt;&gt; 26) * (state = state * 0x9E3779B97F4A7C15L | 1L))</span>
-<span class="source-line-no">429</span><span id="line.429">//                    ^ (((y *= 0x5851F42D4C957F2DL) ^ y &gt;&gt;&gt; 26) * state)</span>
-<span class="source-line-no">430</span><span id="line.430">//            ) &gt;&gt;&gt; 59);</span>
-<span class="source-line-no">431</span><span id="line.431"></span>
-<span class="source-line-no">432</span><span id="line.432">//            return (int) ((</span>
-<span class="source-line-no">433</span><span id="line.433">//                    ((state = ((state = x ^ ((state += 0x9E3779B97F4A7C15L ^ y) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL))</span>
-<span class="source-line-no">434</span><span id="line.434">//                            ^ ((((state = y ^ ((state += 0x9E3779B97F4A7C15L ^ x) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL))</span>
-<span class="source-line-no">435</span><span id="line.435">//            ) &gt;&gt;&gt; 59);</span>
-<span class="source-line-no">436</span><span id="line.436"></span>
-<span class="source-line-no">437</span><span id="line.437">        //state *= 0x352E9CF570932BDDL;</span>
-<span class="source-line-no">438</span><span id="line.438">//            return (int) ((((state = ((state += 0x6C8E9CD570932BD5L ^ x) ^ (state &gt;&gt;&gt; 25)) * ((state ^ y) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)) ^</span>
-<span class="source-line-no">439</span><span id="line.439">//                    (((state += 0x6C8E9CD570932BD5L ^ y) ^ (state &gt;&gt;&gt; 25)) * ((state ^ x) | 0xA529L))) &gt;&gt;&gt; 59);</span>
-<span class="source-line-no">440</span><span id="line.440">    }</span>
-<span class="source-line-no">441</span><span id="line.441">    /**</span>
-<span class="source-line-no">442</span><span id="line.442">     *</span>
-<span class="source-line-no">443</span><span id="line.443">     * @param x</span>
-<span class="source-line-no">444</span><span id="line.444">     * @param y</span>
-<span class="source-line-no">445</span><span id="line.445">     * @param z</span>
-<span class="source-line-no">446</span><span id="line.446">     * @param state</span>
-<span class="source-line-no">447</span><span id="line.447">     * @return 5-bit hash of the x,y,z point with the given state</span>
-<span class="source-line-no">448</span><span id="line.448">     */</span>
-<span class="source-line-no">449</span><span id="line.449">    public static int hash32(long x, long y, long z, long state)</span>
-<span class="source-line-no">450</span><span id="line.450">    {</span>
-<span class="source-line-no">451</span><span id="line.451">        state *= 0x9E3779B97F4A7C15L;</span>
-<span class="source-line-no">452</span><span id="line.452">        long other = 0x60642E2A34326F15L;</span>
-<span class="source-line-no">453</span><span id="line.453">        state ^= (other += (x ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
-<span class="source-line-no">454</span><span id="line.454">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
-<span class="source-line-no">455</span><span id="line.455">        state ^= (other += (y ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
-<span class="source-line-no">456</span><span id="line.456">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
-<span class="source-line-no">457</span><span id="line.457">        state ^= (other += (z ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
-<span class="source-line-no">458</span><span id="line.458">        return (int)(state - ((state &lt;&lt; 54 | state &gt;&gt;&gt; 10) + (other ^ other &gt;&gt;&gt; 29)) * 0x94D049BB133111EBL &gt;&gt;&gt; 59);</span>
-<span class="source-line-no">459</span><span id="line.459"></span>
-<span class="source-line-no">460</span><span id="line.460">//            return (int) (((((x *= 0x6C8E9CF570932BD5L) ^ x &gt;&gt;&gt; 26) * (state = state * 0x9E3779B97F4A7C15L | 1L))</span>
-<span class="source-line-no">461</span><span id="line.461">//                    ^ (((y *= 0x5851F42D4C957F2DL) ^ y &gt;&gt;&gt; 26) * state)</span>
-<span class="source-line-no">462</span><span id="line.462">//                    ^ (((z *= 0xAEF17502108EF2D9L) ^ z &gt;&gt;&gt; 26) * state)</span>
-<span class="source-line-no">463</span><span id="line.463">//            ) &gt;&gt;&gt; 59);</span>
-<span class="source-line-no">464</span><span id="line.464"></span>
-<span class="source-line-no">465</span><span id="line.465">//            return (int) ((</span>
-<span class="source-line-no">466</span><span id="line.466">//                    ((state = ((state = x ^ ((state += 0x9E3779B97F4A7C15L ^ y) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL))</span>
-<span class="source-line-no">467</span><span id="line.467">//                            ^ ((state = ((state = y ^ ((state += 0x9E3779B97F4A7C15L ^ z) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL))</span>
-<span class="source-line-no">468</span><span id="line.468">//                            ^ ((((state = z ^ ((state += 0x9E3779B97F4A7C15L ^ x) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL))</span>
-<span class="source-line-no">469</span><span id="line.469">//            ) &gt;&gt;&gt; 59);</span>
-<span class="source-line-no">470</span><span id="line.470"></span>
-<span class="source-line-no">471</span><span id="line.471">        //state *= 0x352E9CF570932BDDL;</span>
-<span class="source-line-no">472</span><span id="line.472">//            return (int) ((((state = ((state += 0x6C8E9CD570932BD5L ^ x) ^ (state &gt;&gt;&gt; 25)) * ((state ^ y - z) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)) ^</span>
-<span class="source-line-no">473</span><span id="line.473">//                    ((state = ((state += 0x6C8E9CD570932BD5L ^ y) ^ (state &gt;&gt;&gt; 25)) * ((state ^ z - x) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)) ^</span>
-<span class="source-line-no">474</span><span id="line.474">//                    (((state += 0x6C8E9CD570932BD5L ^ z) ^ (state &gt;&gt;&gt; 25)) * ((state ^ x - y) | 0xA529L))) &gt;&gt;&gt; 59);</span>
-<span class="source-line-no">475</span><span id="line.475">    }</span>
-<span class="source-line-no">476</span><span id="line.476">    /**</span>
-<span class="source-line-no">477</span><span id="line.477">     *</span>
-<span class="source-line-no">478</span><span id="line.478">     * @param x</span>
-<span class="source-line-no">479</span><span id="line.479">     * @param y</span>
-<span class="source-line-no">480</span><span id="line.480">     * @param z</span>
-<span class="source-line-no">481</span><span id="line.481">     * @param w</span>
-<span class="source-line-no">482</span><span id="line.482">     * @param state</span>
-<span class="source-line-no">483</span><span id="line.483">     * @return 5-bit hash of the x,y,z,w point with the given state</span>
-<span class="source-line-no">484</span><span id="line.484">     */</span>
-<span class="source-line-no">485</span><span id="line.485">    public static int hash32(long x, long y, long z, long w, long state)</span>
-<span class="source-line-no">486</span><span id="line.486">    {</span>
-<span class="source-line-no">487</span><span id="line.487">        state *= 0x9E3779B97F4A7C15L;</span>
-<span class="source-line-no">488</span><span id="line.488">        long other = 0x60642E2A34326F15L;</span>
-<span class="source-line-no">489</span><span id="line.489">        state ^= (other += (x ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
-<span class="source-line-no">490</span><span id="line.490">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
-<span class="source-line-no">491</span><span id="line.491">        state ^= (other += (y ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
-<span class="source-line-no">492</span><span id="line.492">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
-<span class="source-line-no">493</span><span id="line.493">        state ^= (other += (z ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
-<span class="source-line-no">494</span><span id="line.494">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
-<span class="source-line-no">495</span><span id="line.495">        state ^= (other += (w ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
-<span class="source-line-no">496</span><span id="line.496">        return (int)(state - ((state &lt;&lt; 54 | state &gt;&gt;&gt; 10) + (other ^ other &gt;&gt;&gt; 29)) * 0x94D049BB133111EBL &gt;&gt;&gt; 59);</span>
-<span class="source-line-no">497</span><span id="line.497"></span>
-<span class="source-line-no">498</span><span id="line.498">//            return (int) (((((x *= 0x6C8E9CF570932BD5L) ^ x &gt;&gt;&gt; 26) * (state = state * 0x9E3779B97F4A7C15L | 1L))</span>
-<span class="source-line-no">499</span><span id="line.499">//                    ^ (((y *= 0x5851F42D4C957F2DL) ^ y &gt;&gt;&gt; 26) * state)</span>
-<span class="source-line-no">500</span><span id="line.500">//                    ^ (((z *= 0xAEF17502108EF2D9L) ^ z &gt;&gt;&gt; 26) * state)</span>
-<span class="source-line-no">501</span><span id="line.501">//                    ^ (((w *= 0x94D049BB133111EBL) ^ w &gt;&gt;&gt; 26) * state)</span>
-<span class="source-line-no">502</span><span id="line.502">//            ) &gt;&gt;&gt; 59);</span>
-<span class="source-line-no">503</span><span id="line.503"></span>
-<span class="source-line-no">504</span><span id="line.504">//            return (int) ((</span>
-<span class="source-line-no">505</span><span id="line.505">//                    ((state = ((state = x ^ ((state += 0x9E3779B97F4A7C15L ^ y) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL))</span>
-<span class="source-line-no">506</span><span id="line.506">//                            ^ ((state = ((state = y ^ ((state += 0x9E3779B97F4A7C15L ^ z) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL))</span>
-<span class="source-line-no">507</span><span id="line.507">//                            ^ ((state = ((state = z ^ ((state += 0x9E3779B97F4A7C15L ^ w) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL))</span>
-<span class="source-line-no">508</span><span id="line.508">//                            ^ ((((state = w ^ ((state += 0x9E3779B97F4A7C15L ^ x) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL))</span>
-<span class="source-line-no">509</span><span id="line.509">//            ) &gt;&gt;&gt; 59);</span>
-<span class="source-line-no">510</span><span id="line.510"></span>
-<span class="source-line-no">511</span><span id="line.511">        //state *= 0x352E9CF570932BDDL;</span>
-<span class="source-line-no">512</span><span id="line.512">//            return (int) ((((state = ((state += 0x6C8E9CD570932BD5L ^ x) ^ (state &gt;&gt;&gt; 25)) * ((state ^ y) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)) ^</span>
-<span class="source-line-no">513</span><span id="line.513">//                    ((state = ((state += 0x6C8E9CD570932BD5L ^ y) ^ (state &gt;&gt;&gt; 25)) * ((state ^ z) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)) ^</span>
-<span class="source-line-no">514</span><span id="line.514">//                    ((state = ((state += 0x6C8E9CD570932BD5L ^ z) ^ (state &gt;&gt;&gt; 25)) * ((state ^ w) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)) ^</span>
-<span class="source-line-no">515</span><span id="line.515">//                    (((state += 0x6C8E9CD570932BD5L ^ w) ^ (state &gt;&gt;&gt; 25)) * ((state ^ x) | 0xA529L))) &gt;&gt;&gt; 59);</span>
-<span class="source-line-no">516</span><span id="line.516">    }</span>
-<span class="source-line-no">517</span><span id="line.517">    /**</span>
-<span class="source-line-no">518</span><span id="line.518">     *</span>
-<span class="source-line-no">519</span><span id="line.519">     * @param x</span>
-<span class="source-line-no">520</span><span id="line.520">     * @param y</span>
-<span class="source-line-no">521</span><span id="line.521">     * @param z</span>
-<span class="source-line-no">522</span><span id="line.522">     * @param w</span>
-<span class="source-line-no">523</span><span id="line.523">     * @param u</span>
-<span class="source-line-no">524</span><span id="line.524">     * @param v</span>
-<span class="source-line-no">525</span><span id="line.525">     * @param state</span>
-<span class="source-line-no">526</span><span id="line.526">     * @return 5-bit hash of the x,y,z,w,u,v point with the given state</span>
-<span class="source-line-no">527</span><span id="line.527">     */</span>
-<span class="source-line-no">528</span><span id="line.528">    public static int hash32(long x, long y, long z, long w, long u, long v, long state)</span>
-<span class="source-line-no">529</span><span id="line.529">    {</span>
-<span class="source-line-no">530</span><span id="line.530">        state *= 0x9E3779B97F4A7C15L;</span>
-<span class="source-line-no">531</span><span id="line.531">        long other = 0x60642E2A34326F15L;</span>
-<span class="source-line-no">532</span><span id="line.532">        state ^= (other += (x ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
-<span class="source-line-no">533</span><span id="line.533">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
-<span class="source-line-no">534</span><span id="line.534">        state ^= (other += (y ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
-<span class="source-line-no">535</span><span id="line.535">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
-<span class="source-line-no">536</span><span id="line.536">        state ^= (other += (z ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
-<span class="source-line-no">537</span><span id="line.537">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
-<span class="source-line-no">538</span><span id="line.538">        state ^= (other += (w ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
-<span class="source-line-no">539</span><span id="line.539">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
-<span class="source-line-no">540</span><span id="line.540">        state ^= (other += (u ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
-<span class="source-line-no">541</span><span id="line.541">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
-<span class="source-line-no">542</span><span id="line.542">        state ^= (other += (v ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
-<span class="source-line-no">543</span><span id="line.543">        return (int)(state - ((state &lt;&lt; 54 | state &gt;&gt;&gt; 10) + (other ^ other &gt;&gt;&gt; 29)) * 0x94D049BB133111EBL &gt;&gt;&gt; 59);</span>
-<span class="source-line-no">544</span><span id="line.544"></span>
-<span class="source-line-no">545</span><span id="line.545">//            return (int) (((((x *= 0x6C8E9CF570932BD5L) ^ x &gt;&gt;&gt; 26) * (state = state * 0x9E3779B97F4A7C15L | 1L))</span>
-<span class="source-line-no">546</span><span id="line.546">//                    ^ (((y *= 0x5851F42D4C957F2DL) ^ y &gt;&gt;&gt; 26) * state)</span>
-<span class="source-line-no">547</span><span id="line.547">//                    ^ (((z *= 0xAEF17502108EF2D9L) ^ z &gt;&gt;&gt; 26) * state)</span>
-<span class="source-line-no">548</span><span id="line.548">//                    ^ (((w *= 0x94D049BB133111EBL) ^ w &gt;&gt;&gt; 26) * state)</span>
-<span class="source-line-no">549</span><span id="line.549">//                    ^ (((u *= 0xBF58476D1CE4E5B9L) ^ u &gt;&gt;&gt; 26) * state)</span>
-<span class="source-line-no">550</span><span id="line.550">//                    ^ (((v *= 0xC6BC279692B5CC85L) ^ v &gt;&gt;&gt; 26) * state)</span>
-<span class="source-line-no">551</span><span id="line.551">//            ) &gt;&gt;&gt; 59);</span>
-<span class="source-line-no">552</span><span id="line.552"></span>
-<span class="source-line-no">553</span><span id="line.553">//            return (int) ((</span>
-<span class="source-line-no">554</span><span id="line.554">//                    ((state = ((state = x ^ ((state += 0x9E3779B97F4A7C15L ^ y) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL))</span>
-<span class="source-line-no">555</span><span id="line.555">//                            ^ ((state = ((state = y ^ ((state += 0x9E3779B97F4A7C15L ^ z) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL))</span>
-<span class="source-line-no">556</span><span id="line.556">//                            ^ ((state = ((state = z ^ ((state += 0x9E3779B97F4A7C15L ^ w) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL))</span>
-<span class="source-line-no">557</span><span id="line.557">//                            ^ ((state = ((state = w ^ ((state += 0x9E3779B97F4A7C15L ^ u) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL))</span>
-<span class="source-line-no">558</span><span id="line.558">//                            ^ ((state = ((state = u ^ ((state += 0x9E3779B97F4A7C15L ^ v) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL))</span>
-<span class="source-line-no">559</span><span id="line.559">//                            ^ ((((state = v ^ ((state += 0x9E3779B97F4A7C15L ^ x) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL))</span>
-<span class="source-line-no">560</span><span id="line.560">//            ) &gt;&gt;&gt; 59);</span>
-<span class="source-line-no">561</span><span id="line.561"></span>
-<span class="source-line-no">562</span><span id="line.562">        //state *= 0x352E9CF570932BDDL;</span>
-<span class="source-line-no">563</span><span id="line.563">//            return (int) ((((state = ((state += 0x6C8E9CD570932BD5L ^ x) ^ (state &gt;&gt;&gt; 25)) * ((state ^ y) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)) ^</span>
-<span class="source-line-no">564</span><span id="line.564">//                    ((state = ((state += 0x6C8E9CD570932BD5L ^ y) ^ (state &gt;&gt;&gt; 25)) * ((state ^ z) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)) ^</span>
-<span class="source-line-no">565</span><span id="line.565">//                    ((state = ((state += 0x6C8E9CD570932BD5L ^ z) ^ (state &gt;&gt;&gt; 25)) * ((state ^ w) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)) ^</span>
-<span class="source-line-no">566</span><span id="line.566">//                    ((state = ((state += 0x6C8E9CD570932BD5L ^ z) ^ (state &gt;&gt;&gt; 25)) * ((state ^ w) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)) ^</span>
-<span class="source-line-no">567</span><span id="line.567">//                    ((state = ((state += 0x6C8E9CD570932BD5L ^ u) ^ (state &gt;&gt;&gt; 25)) * ((state ^ v) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)) ^</span>
-<span class="source-line-no">568</span><span id="line.568">//                    (((state += 0x6C8E9CD570932BD5L ^ v) ^ (state &gt;&gt;&gt; 25)) * ((state ^ x) | 0xA529L))) &gt;&gt;&gt; 59);</span>
-<span class="source-line-no">569</span><span id="line.569">    }</span>
-<span class="source-line-no">570</span><span id="line.570"></span>
-<span class="source-line-no">571</span><span id="line.571">    /**</span>
-<span class="source-line-no">572</span><span id="line.572">     *</span>
-<span class="source-line-no">573</span><span id="line.573">     * @param x</span>
-<span class="source-line-no">574</span><span id="line.574">     * @param y</span>
-<span class="source-line-no">575</span><span id="line.575">     * @param state</span>
-<span class="source-line-no">576</span><span id="line.576">     * @return 6-bit hash of the x,y point with the given state</span>
-<span class="source-line-no">577</span><span id="line.577">     */</span>
-<span class="source-line-no">578</span><span id="line.578">    public static int hash64(long x, long y, long state)</span>
-<span class="source-line-no">579</span><span id="line.579">    {</span>
-<span class="source-line-no">580</span><span id="line.580">        state *= 0x9E3779B97F4A7C15L;</span>
-<span class="source-line-no">581</span><span id="line.581">        long other = 0x60642E2A34326F15L;</span>
-<span class="source-line-no">582</span><span id="line.582">        state ^= (other += (x ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
-<span class="source-line-no">583</span><span id="line.583">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
-<span class="source-line-no">584</span><span id="line.584">        state ^= (other += (y ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
-<span class="source-line-no">585</span><span id="line.585">        return (int)(state - ((state &lt;&lt; 54 | state &gt;&gt;&gt; 10) + (other ^ other &gt;&gt;&gt; 29)) * 0x94D049BB133111EBL &gt;&gt;&gt; 58);</span>
-<span class="source-line-no">586</span><span id="line.586"></span>
-<span class="source-line-no">587</span><span id="line.587">//            return (int) (((((x *= 0x6C8E9CF570932BD5L) ^ x &gt;&gt;&gt; 26) * (state = state * 0x9E3779B97F4A7C15L | 1L))</span>
-<span class="source-line-no">588</span><span id="line.588">//                    ^ (((y *= 0x5851F42D4C957F2DL) ^ y &gt;&gt;&gt; 26) * state)</span>
-<span class="source-line-no">589</span><span id="line.589">//            ) &gt;&gt;&gt; 58);</span>
-<span class="source-line-no">590</span><span id="line.590"></span>
-<span class="source-line-no">591</span><span id="line.591">//            return (int) ((</span>
-<span class="source-line-no">592</span><span id="line.592">//                    ((state = ((state = x ^ ((state += 0x9E3779B97F4A7C15L ^ y) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL))</span>
-<span class="source-line-no">593</span><span id="line.593">//                            ^ ((((state = y ^ ((state += 0x9E3779B97F4A7C15L ^ x) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL))</span>
-<span class="source-line-no">594</span><span id="line.594">//            ) &gt;&gt;&gt; 58);</span>
-<span class="source-line-no">595</span><span id="line.595"></span>
-<span class="source-line-no">596</span><span id="line.596"></span>
-<span class="source-line-no">597</span><span id="line.597">        //state *= 0x352E9CF570932BDDL;</span>
-<span class="source-line-no">598</span><span id="line.598">//            return (int) ((((state = ((state += 0x6C8E9CD570932BD5L ^ x) ^ (state &gt;&gt;&gt; 25)) * ((state ^ y) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)) ^</span>
-<span class="source-line-no">599</span><span id="line.599">//                    (((state += 0x6C8E9CD570932BD5L ^ y) ^ (state &gt;&gt;&gt; 25)) * ((state ^ x) | 0xA529L))) &gt;&gt;&gt; 58);</span>
-<span class="source-line-no">600</span><span id="line.600">    }</span>
-<span class="source-line-no">601</span><span id="line.601">    /**</span>
-<span class="source-line-no">602</span><span id="line.602">     *</span>
-<span class="source-line-no">603</span><span id="line.603">     * @param x</span>
-<span class="source-line-no">604</span><span id="line.604">     * @param y</span>
-<span class="source-line-no">605</span><span id="line.605">     * @param z</span>
-<span class="source-line-no">606</span><span id="line.606">     * @param state</span>
-<span class="source-line-no">607</span><span id="line.607">     * @return 6-bit hash of the x,y,z point with the given state</span>
-<span class="source-line-no">608</span><span id="line.608">     */</span>
-<span class="source-line-no">609</span><span id="line.609">    public static int hash64(long x, long y, long z, long state)</span>
-<span class="source-line-no">610</span><span id="line.610">    {</span>
-<span class="source-line-no">611</span><span id="line.611">        state *= 0x9E3779B97F4A7C15L;</span>
-<span class="source-line-no">612</span><span id="line.612">        long other = 0x60642E2A34326F15L;</span>
-<span class="source-line-no">613</span><span id="line.613">        state ^= (other += (x ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
-<span class="source-line-no">614</span><span id="line.614">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
-<span class="source-line-no">615</span><span id="line.615">        state ^= (other += (y ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
-<span class="source-line-no">616</span><span id="line.616">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
-<span class="source-line-no">617</span><span id="line.617">        state ^= (other += (z ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
-<span class="source-line-no">618</span><span id="line.618">        return (int)(state - ((state &lt;&lt; 54 | state &gt;&gt;&gt; 10) + (other ^ other &gt;&gt;&gt; 29)) * 0x94D049BB133111EBL &gt;&gt;&gt; 58);</span>
-<span class="source-line-no">619</span><span id="line.619"></span>
-<span class="source-line-no">620</span><span id="line.620">//            return (int) (((((x *= 0x6C8E9CF570932BD5L) ^ x &gt;&gt;&gt; 26) * (state = state * 0x9E3779B97F4A7C15L | 1L))</span>
-<span class="source-line-no">621</span><span id="line.621">//                    ^ (((y *= 0x5851F42D4C957F2DL) ^ y &gt;&gt;&gt; 26) * state)</span>
-<span class="source-line-no">622</span><span id="line.622">//                    ^ (((z *= 0xAEF17502108EF2D9L) ^ z &gt;&gt;&gt; 26) * state)</span>
-<span class="source-line-no">623</span><span id="line.623">//            ) &gt;&gt;&gt; 58);</span>
-<span class="source-line-no">624</span><span id="line.624"></span>
-<span class="source-line-no">625</span><span id="line.625">//            return (int) ((</span>
-<span class="source-line-no">626</span><span id="line.626">//                    ((state = ((state = x ^ ((state += 0x9E3779B97F4A7C15L ^ y) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL))</span>
-<span class="source-line-no">627</span><span id="line.627">//                            ^ ((state = ((state = y ^ ((state += 0x9E3779B97F4A7C15L ^ z) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL))</span>
-<span class="source-line-no">628</span><span id="line.628">//                            ^ ((((state = z ^ ((state += 0x9E3779B97F4A7C15L ^ x) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL))</span>
-<span class="source-line-no">629</span><span id="line.629">//            ) &gt;&gt;&gt; 58);</span>
-<span class="source-line-no">630</span><span id="line.630"></span>
-<span class="source-line-no">631</span><span id="line.631">        //state *= 0x352E9CF570932BDDL;</span>
-<span class="source-line-no">632</span><span id="line.632">//            return (int) ((((state = ((state += 0x6C8E9CD570932BD5L ^ x) ^ (state &gt;&gt;&gt; 25)) * ((state ^ y - z) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)) ^</span>
-<span class="source-line-no">633</span><span id="line.633">//                    ((state = ((state += 0x6C8E9CD570932BD5L ^ y) ^ (state &gt;&gt;&gt; 25)) * ((state ^ z - x) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)) ^</span>
-<span class="source-line-no">634</span><span id="line.634">//                    (((state += 0x6C8E9CD570932BD5L ^ z) ^ (state &gt;&gt;&gt; 25)) * ((state ^ x - y) | 0xA529L))) &gt;&gt;&gt; 58);</span>
-<span class="source-line-no">635</span><span id="line.635">    }</span>
-<span class="source-line-no">636</span><span id="line.636">    /**</span>
-<span class="source-line-no">637</span><span id="line.637">     *</span>
-<span class="source-line-no">638</span><span id="line.638">     * @param x</span>
-<span class="source-line-no">639</span><span id="line.639">     * @param y</span>
-<span class="source-line-no">640</span><span id="line.640">     * @param z</span>
-<span class="source-line-no">641</span><span id="line.641">     * @param w</span>
-<span class="source-line-no">642</span><span id="line.642">     * @param state</span>
-<span class="source-line-no">643</span><span id="line.643">     * @return 6-bit hash of the x,y,z,w point with the given state</span>
-<span class="source-line-no">644</span><span id="line.644">     */</span>
-<span class="source-line-no">645</span><span id="line.645">    public static int hash64(long x, long y, long z, long w, long state)</span>
-<span class="source-line-no">646</span><span id="line.646">    {</span>
-<span class="source-line-no">647</span><span id="line.647">        state *= 0x9E3779B97F4A7C15L;</span>
-<span class="source-line-no">648</span><span id="line.648">        long other = 0x60642E2A34326F15L;</span>
-<span class="source-line-no">649</span><span id="line.649">        state ^= (other += (x ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
-<span class="source-line-no">650</span><span id="line.650">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
-<span class="source-line-no">651</span><span id="line.651">        state ^= (other += (y ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
-<span class="source-line-no">652</span><span id="line.652">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
-<span class="source-line-no">653</span><span id="line.653">        state ^= (other += (z ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
-<span class="source-line-no">654</span><span id="line.654">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
-<span class="source-line-no">655</span><span id="line.655">        state ^= (other += (w ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
-<span class="source-line-no">656</span><span id="line.656">        return (int)(state - ((state &lt;&lt; 54 | state &gt;&gt;&gt; 10) + (other ^ other &gt;&gt;&gt; 29)) * 0x94D049BB133111EBL &gt;&gt;&gt; 58);</span>
-<span class="source-line-no">657</span><span id="line.657"></span>
-<span class="source-line-no">658</span><span id="line.658">//            return (int) (((((x *= 0x6C8E9CF570932BD5L) ^ x &gt;&gt;&gt; 26) * (state = state * 0x9E3779B97F4A7C15L | 1L))</span>
-<span class="source-line-no">659</span><span id="line.659">//                    ^ (((y *= 0x5851F42D4C957F2DL) ^ y &gt;&gt;&gt; 26) * state)</span>
-<span class="source-line-no">660</span><span id="line.660">//                    ^ (((z *= 0xAEF17502108EF2D9L) ^ z &gt;&gt;&gt; 26) * state)</span>
-<span class="source-line-no">661</span><span id="line.661">//                    ^ (((w *= 0x94D049BB133111EBL) ^ w &gt;&gt;&gt; 26) * state)</span>
-<span class="source-line-no">662</span><span id="line.662">//            ) &gt;&gt;&gt; 58);</span>
-<span class="source-line-no">663</span><span id="line.663"></span>
-<span class="source-line-no">664</span><span id="line.664">//            return (int) ((</span>
-<span class="source-line-no">665</span><span id="line.665">//                    ((state = ((state = x ^ ((state += 0x9E3779B97F4A7C15L ^ y) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL))</span>
-<span class="source-line-no">666</span><span id="line.666">//                            ^ ((state = ((state = y ^ ((state += 0x9E3779B97F4A7C15L ^ z) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL))</span>
-<span class="source-line-no">667</span><span id="line.667">//                            ^ ((state = ((state = z ^ ((state += 0x9E3779B97F4A7C15L ^ w) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL))</span>
-<span class="source-line-no">668</span><span id="line.668">//                            ^ ((((state = w ^ ((state += 0x9E3779B97F4A7C15L ^ x) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL))</span>
-<span class="source-line-no">669</span><span id="line.669">//            ) &gt;&gt;&gt; 58);</span>
-<span class="source-line-no">670</span><span id="line.670"></span>
-<span class="source-line-no">671</span><span id="line.671">        //state *= 0x352E9CF570932BDDL;</span>
-<span class="source-line-no">672</span><span id="line.672">//            return (int) ((((state = ((state += 0x6C8E9CD570932BD5L ^ x) ^ (state &gt;&gt;&gt; 25)) * ((state ^ y) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)) ^</span>
-<span class="source-line-no">673</span><span id="line.673">//                    ((state = ((state += 0x6C8E9CD570932BD5L ^ y) ^ (state &gt;&gt;&gt; 25)) * ((state ^ z) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)) ^</span>
-<span class="source-line-no">674</span><span id="line.674">//                    ((state = ((state += 0x6C8E9CD570932BD5L ^ z) ^ (state &gt;&gt;&gt; 25)) * ((state ^ w) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)) ^</span>
-<span class="source-line-no">675</span><span id="line.675">//                    (((state += 0x6C8E9CD570932BD5L ^ w) ^ (state &gt;&gt;&gt; 25)) * ((state ^ x) | 0xA529L))) &gt;&gt;&gt; 58);</span>
-<span class="source-line-no">676</span><span id="line.676">    }</span>
-<span class="source-line-no">677</span><span id="line.677">    /**</span>
-<span class="source-line-no">678</span><span id="line.678">     *</span>
-<span class="source-line-no">679</span><span id="line.679">     * @param x</span>
-<span class="source-line-no">680</span><span id="line.680">     * @param y</span>
-<span class="source-line-no">681</span><span id="line.681">     * @param z</span>
-<span class="source-line-no">682</span><span id="line.682">     * @param w</span>
-<span class="source-line-no">683</span><span id="line.683">     * @param u</span>
-<span class="source-line-no">684</span><span id="line.684">     * @param v</span>
-<span class="source-line-no">685</span><span id="line.685">     * @param state</span>
-<span class="source-line-no">686</span><span id="line.686">     * @return 6-bit hash of the x,y,z,w,u,v point with the given state</span>
-<span class="source-line-no">687</span><span id="line.687">     */</span>
-<span class="source-line-no">688</span><span id="line.688">    public static int hash64(long x, long y, long z, long w, long u, long v, long state)</span>
-<span class="source-line-no">689</span><span id="line.689">    {</span>
-<span class="source-line-no">690</span><span id="line.690">        state *= 0x9E3779B97F4A7C15L;</span>
-<span class="source-line-no">691</span><span id="line.691">        long other = 0x60642E2A34326F15L;</span>
-<span class="source-line-no">692</span><span id="line.692">        state ^= (other += (x ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
-<span class="source-line-no">693</span><span id="line.693">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
-<span class="source-line-no">694</span><span id="line.694">        state ^= (other += (y ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
-<span class="source-line-no">695</span><span id="line.695">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
-<span class="source-line-no">696</span><span id="line.696">        state ^= (other += (z ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
-<span class="source-line-no">697</span><span id="line.697">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
-<span class="source-line-no">698</span><span id="line.698">        state ^= (other += (w ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
-<span class="source-line-no">699</span><span id="line.699">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
-<span class="source-line-no">700</span><span id="line.700">        state ^= (other += (u ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
-<span class="source-line-no">701</span><span id="line.701">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
-<span class="source-line-no">702</span><span id="line.702">        state ^= (other += (v ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
-<span class="source-line-no">703</span><span id="line.703">        return (int)(state - ((state &lt;&lt; 54 | state &gt;&gt;&gt; 10) + (other ^ other &gt;&gt;&gt; 29)) * 0x94D049BB133111EBL &gt;&gt;&gt; 58);</span>
-<span class="source-line-no">704</span><span id="line.704"></span>
-<span class="source-line-no">705</span><span id="line.705">//            return (int) (((((x *= 0x6C8E9CF570932BD5L) ^ x &gt;&gt;&gt; 26) * (state = state * 0x9E3779B97F4A7C15L | 1L))</span>
-<span class="source-line-no">706</span><span id="line.706">//                    ^ (((y *= 0x5851F42D4C957F2DL) ^ y &gt;&gt;&gt; 26) * state)</span>
-<span class="source-line-no">707</span><span id="line.707">//                    ^ (((z *= 0xAEF17502108EF2D9L) ^ z &gt;&gt;&gt; 26) * state)</span>
-<span class="source-line-no">708</span><span id="line.708">//                    ^ (((w *= 0x94D049BB133111EBL) ^ w &gt;&gt;&gt; 26) * state)</span>
-<span class="source-line-no">709</span><span id="line.709">//                    ^ (((u *= 0xBF58476D1CE4E5B9L) ^ u &gt;&gt;&gt; 26) * state)</span>
-<span class="source-line-no">710</span><span id="line.710">//                    ^ (((v *= 0xC6BC279692B5CC85L) ^ v &gt;&gt;&gt; 26) * state)</span>
-<span class="source-line-no">711</span><span id="line.711">//            ) &gt;&gt;&gt; 58);</span>
-<span class="source-line-no">712</span><span id="line.712"></span>
-<span class="source-line-no">713</span><span id="line.713">//            return (int) ((</span>
-<span class="source-line-no">714</span><span id="line.714">//                    ((state = ((state = x ^ ((state += 0x9E3779B97F4A7C15L ^ y) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL))</span>
-<span class="source-line-no">715</span><span id="line.715">//                            ^ ((state = ((state = y ^ ((state += 0x9E3779B97F4A7C15L ^ z) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL))</span>
-<span class="source-line-no">716</span><span id="line.716">//                            ^ ((state = ((state = z ^ ((state += 0x9E3779B97F4A7C15L ^ w) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL))</span>
-<span class="source-line-no">717</span><span id="line.717">//                            ^ ((state = ((state = w ^ ((state += 0x9E3779B97F4A7C15L ^ u) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL))</span>
-<span class="source-line-no">718</span><span id="line.718">//                            ^ ((state = ((state = u ^ ((state += 0x9E3779B97F4A7C15L ^ v) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL))</span>
-<span class="source-line-no">719</span><span id="line.719">//                            ^ ((((state = v ^ ((state += 0x9E3779B97F4A7C15L ^ x) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL))</span>
-<span class="source-line-no">720</span><span id="line.720">//            ) &gt;&gt;&gt; 58);</span>
-<span class="source-line-no">721</span><span id="line.721"></span>
-<span class="source-line-no">722</span><span id="line.722">        //state *= 0x352E9CF570932BDDL;</span>
-<span class="source-line-no">723</span><span id="line.723">//            return (int) ((((state = ((state += 0x6C8E9CD570932BD5L ^ x) ^ (state &gt;&gt;&gt; 25)) * ((state ^ y) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)) ^</span>
-<span class="source-line-no">724</span><span id="line.724">//                    ((state = ((state += 0x6C8E9CD570932BD5L ^ y) ^ (state &gt;&gt;&gt; 25)) * ((state ^ z) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)) ^</span>
-<span class="source-line-no">725</span><span id="line.725">//                    ((state = ((state += 0x6C8E9CD570932BD5L ^ z) ^ (state &gt;&gt;&gt; 25)) * ((state ^ w) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)) ^</span>
-<span class="source-line-no">726</span><span id="line.726">//                    ((state = ((state += 0x6C8E9CD570932BD5L ^ z) ^ (state &gt;&gt;&gt; 25)) * ((state ^ w) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)) ^</span>
-<span class="source-line-no">727</span><span id="line.727">//                    ((state = ((state += 0x6C8E9CD570932BD5L ^ u) ^ (state &gt;&gt;&gt; 25)) * ((state ^ v) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)) ^</span>
-<span class="source-line-no">728</span><span id="line.728">//                    (((state += 0x6C8E9CD570932BD5L ^ v) ^ (state &gt;&gt;&gt; 25)) * ((state ^ x) | 0xA529L))) &gt;&gt;&gt; 58);</span>
-<span class="source-line-no">729</span><span id="line.729">    }</span>
-<span class="source-line-no">730</span><span id="line.730"></span>
-<span class="source-line-no">731</span><span id="line.731">}</span>
+<span class="source-line-no">070</span><span id="line.70">        state = (state ^ state &gt;&gt;&gt; 33) * 0xFF51AFD7ED558CCDL;</span>
+<span class="source-line-no">071</span><span id="line.71">        return (state ^ state &gt;&gt;&gt; 33) * 0xC4CEB9FE1A85EC53L;</span>
+<span class="source-line-no">072</span><span id="line.72">    }</span>
+<span class="source-line-no">073</span><span id="line.73">    /**</span>
+<span class="source-line-no">074</span><span id="line.74">     *</span>
+<span class="source-line-no">075</span><span id="line.75">     * @param x</span>
+<span class="source-line-no">076</span><span id="line.76">     * @param y</span>
+<span class="source-line-no">077</span><span id="line.77">     * @param state</span>
+<span class="source-line-no">078</span><span id="line.78">     * @return 64-bit hash of the x,y point with the given state</span>
+<span class="source-line-no">079</span><span id="line.79">     */</span>
+<span class="source-line-no">080</span><span id="line.80">    public static long hashAll(long x, long y, long state)</span>
+<span class="source-line-no">081</span><span id="line.81">    {</span>
+<span class="source-line-no">082</span><span id="line.82">        state *= 0x9E3779B97F4A7C15L;</span>
+<span class="source-line-no">083</span><span id="line.83">        long other = 0x60642E2A34326F15L;</span>
+<span class="source-line-no">084</span><span id="line.84">        state ^= (other += (x ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
+<span class="source-line-no">085</span><span id="line.85">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
+<span class="source-line-no">086</span><span id="line.86">        state ^= (other += (y ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
+<span class="source-line-no">087</span><span id="line.87">        state -= ((state &lt;&lt; 54 | state &gt;&gt;&gt; 10) + (other ^ other &gt;&gt;&gt; 29)) * 0x94D049BB133111EBL;</span>
+<span class="source-line-no">088</span><span id="line.88">        return state ^ state &gt;&gt;&gt; 31;</span>
+<span class="source-line-no">089</span><span id="line.89">        </span>
+<span class="source-line-no">090</span><span id="line.90">//            return ((x = ((x *= 0x6C8E9CF570932BD5L) ^ x &gt;&gt;&gt; 26 ^ 0x9183A1F4F348E683L) * (</span>
+<span class="source-line-no">091</span><span id="line.91">//                    ((y = ((y *= 0x6C8E9CF570932BD5L) ^ y &gt;&gt;&gt; 26 ^ 0x9183A1F4F348E683L) * (</span>
+<span class="source-line-no">092</span><span id="line.92">//                            state * 0x9E3779B97F4A7C15L </span>
+<span class="source-line-no">093</span><span id="line.93">//                                    | 1L)) ^ y &gt;&gt;&gt; 24) </span>
+<span class="source-line-no">094</span><span id="line.94">//                            | 1L)) ^ x &gt;&gt;&gt; 24);</span>
+<span class="source-line-no">095</span><span id="line.95"></span>
+<span class="source-line-no">096</span><span id="line.96">//            state = (state ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL | 1L;</span>
+<span class="source-line-no">097</span><span id="line.97">//            x *= state;</span>
+<span class="source-line-no">098</span><span id="line.98">//            y *= state;</span>
+<span class="source-line-no">099</span><span id="line.99">//            return state ^ (x &lt;&lt; 26 | x &gt;&gt;&gt; 38) + (y &lt;&lt; 23 | y &gt;&gt;&gt; 41);</span>
+<span class="source-line-no">100</span><span id="line.100"></span>
+<span class="source-line-no">101</span><span id="line.101">//        return ((x = ((x *= 0x6C8E9CF570932BD5L) ^ x &gt;&gt;&gt; 26 ^ 0x9183A1F4F348E683L) * (</span>
+<span class="source-line-no">102</span><span id="line.102">//                ((y = ((y *= 0x6C8E9CF570932BD5L) ^ y &gt;&gt;&gt; 26 ^ 0x9183A1F4F348E683L) * (</span>
+<span class="source-line-no">103</span><span id="line.103">//                                        state * 0x9E3779B97F4A7C15L</span>
+<span class="source-line-no">104</span><span id="line.104">//                                | 1L)) ^ y &gt;&gt;&gt; 24)</span>
+<span class="source-line-no">105</span><span id="line.105">//                        | 1L)) ^ x &gt;&gt;&gt; 24);</span>
+<span class="source-line-no">106</span><span id="line.106"></span>
+<span class="source-line-no">107</span><span id="line.107">//            return (x = ((x *= 0x6C8E9CF570932BD5L) ^ x &gt;&gt;&gt; 26) * (state = state * 0x9E3779B97F4A7C15L | 1L)) ^ x &gt;&gt;&gt; 24</span>
+<span class="source-line-no">108</span><span id="line.108">//                    ^ (y = ((y *= 0x5851F42D4C957F2DL) ^ y &gt;&gt;&gt; 26) * state) ^ y &gt;&gt;&gt; 24;</span>
+<span class="source-line-no">109</span><span id="line.109">//            return ((state = ((state = x ^ ((state += 0x9E3779B97F4A7C15L ^ y) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL) ^ state &gt;&gt;&gt; 31)</span>
+<span class="source-line-no">110</span><span id="line.110">//                    ^ ((state = ((state = y ^ ((state += 0x9E3779B97F4A7C15L ^ x) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL) ^ state &gt;&gt;&gt; 31);</span>
+<span class="source-line-no">111</span><span id="line.111">        //state *= 0x352E9CF570932BDDL;</span>
+<span class="source-line-no">112</span><span id="line.112">//            return (((state = ((state += 0x6C8E9CD570932BD5L ^ x) ^ (state &gt;&gt;&gt; 25)) * ((y ^ state) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)) ^</span>
+<span class="source-line-no">113</span><span id="line.113">//                    ((state = ((state += 0x6C8E9CD570932BD5L ^ y) ^ (state &gt;&gt;&gt; 25)) * ((x ^ state) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)));</span>
+<span class="source-line-no">114</span><span id="line.114">    }</span>
+<span class="source-line-no">115</span><span id="line.115"></span>
+<span class="source-line-no">116</span><span id="line.116">    /**</span>
+<span class="source-line-no">117</span><span id="line.117">     *</span>
+<span class="source-line-no">118</span><span id="line.118">     * @param x</span>
+<span class="source-line-no">119</span><span id="line.119">     * @param y</span>
+<span class="source-line-no">120</span><span id="line.120">     * @param z</span>
+<span class="source-line-no">121</span><span id="line.121">     * @param state</span>
+<span class="source-line-no">122</span><span id="line.122">     * @return 64-bit hash of the x,y,z point with the given state</span>
+<span class="source-line-no">123</span><span id="line.123">     */</span>
+<span class="source-line-no">124</span><span id="line.124">    public static long hashAll(long x, long y, long z, long state)</span>
+<span class="source-line-no">125</span><span id="line.125">    {</span>
+<span class="source-line-no">126</span><span id="line.126">        state *= 0x9E3779B97F4A7C15L;</span>
+<span class="source-line-no">127</span><span id="line.127">        long other = 0x60642E2A34326F15L;</span>
+<span class="source-line-no">128</span><span id="line.128">        state ^= (other += (x ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
+<span class="source-line-no">129</span><span id="line.129">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
+<span class="source-line-no">130</span><span id="line.130">        state ^= (other += (y ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
+<span class="source-line-no">131</span><span id="line.131">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
+<span class="source-line-no">132</span><span id="line.132">        state ^= (other += (z ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
+<span class="source-line-no">133</span><span id="line.133">        state -= ((state &lt;&lt; 54 | state &gt;&gt;&gt; 10) + (other ^ other &gt;&gt;&gt; 29)) * 0x94D049BB133111EBL;</span>
+<span class="source-line-no">134</span><span id="line.134">        return state ^ state &gt;&gt;&gt; 31;</span>
+<span class="source-line-no">135</span><span id="line.135"></span>
+<span class="source-line-no">136</span><span id="line.136">//            return (x = ((x *= 0x6C8E9CF570932BD5L) ^ x &gt;&gt;&gt; 26) * (state = state * 0x9E3779B97F4A7C15L | 1L)) ^ x &gt;&gt;&gt; 24</span>
+<span class="source-line-no">137</span><span id="line.137">//                    ^ (y = ((y *= 0x5851F42D4C957F2DL) ^ y &gt;&gt;&gt; 26) * state) ^ y &gt;&gt;&gt; 24</span>
+<span class="source-line-no">138</span><span id="line.138">//                    ^ (z = ((z *= 0xAEF17502108EF2D9L) ^ z &gt;&gt;&gt; 26) * state) ^ z &gt;&gt;&gt; 24;</span>
+<span class="source-line-no">139</span><span id="line.139"></span>
+<span class="source-line-no">140</span><span id="line.140">//            return ((state = ((state = x ^ ((state += 0x9E3779B97F4A7C15L ^ y) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL) ^ state &gt;&gt;&gt; 31)</span>
+<span class="source-line-no">141</span><span id="line.141">//                    ^ ((state = ((state = y ^ ((state += 0x9E3779B97F4A7C15L ^ z) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL) ^ state &gt;&gt;&gt; 31)</span>
+<span class="source-line-no">142</span><span id="line.142">//                    ^ ((state = ((state = z ^ ((state += 0x9E3779B97F4A7C15L ^ x) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL) ^ state &gt;&gt;&gt; 31)</span>
+<span class="source-line-no">143</span><span id="line.143">//                    ;</span>
+<span class="source-line-no">144</span><span id="line.144"></span>
+<span class="source-line-no">145</span><span id="line.145">        //state *= 0x352E9CF570932BDDL;</span>
+<span class="source-line-no">146</span><span id="line.146">//            return (((state = ((state += 0x6C8E9CD570932BD5L ^ x) ^ (state &gt;&gt;&gt; 25)) * ((state ^ y) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)) ^</span>
+<span class="source-line-no">147</span><span id="line.147">//                    ((state = ((state += 0x6C8E9CD570932BD5L ^ y) ^ (state &gt;&gt;&gt; 25)) * ((state ^ z) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)) ^</span>
+<span class="source-line-no">148</span><span id="line.148">//                    ((state = ((state += 0x6C8E9CD570932BD5L ^ z) ^ (state &gt;&gt;&gt; 25)) * ((state ^ x) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)));</span>
+<span class="source-line-no">149</span><span id="line.149">    }</span>
+<span class="source-line-no">150</span><span id="line.150"></span>
+<span class="source-line-no">151</span><span id="line.151">    /**</span>
+<span class="source-line-no">152</span><span id="line.152">     *</span>
+<span class="source-line-no">153</span><span id="line.153">     * @param x</span>
+<span class="source-line-no">154</span><span id="line.154">     * @param y</span>
+<span class="source-line-no">155</span><span id="line.155">     * @param z</span>
+<span class="source-line-no">156</span><span id="line.156">     * @param w</span>
+<span class="source-line-no">157</span><span id="line.157">     * @param state</span>
+<span class="source-line-no">158</span><span id="line.158">     * @return 64-bit hash of the x,y,z,w point with the given state</span>
+<span class="source-line-no">159</span><span id="line.159">     */</span>
+<span class="source-line-no">160</span><span id="line.160">    public static long hashAll(long x, long y, long z, long w, long state)</span>
+<span class="source-line-no">161</span><span id="line.161">    {</span>
+<span class="source-line-no">162</span><span id="line.162">        state *= 0x9E3779B97F4A7C15L;</span>
+<span class="source-line-no">163</span><span id="line.163">        long other = 0x60642E2A34326F15L;</span>
+<span class="source-line-no">164</span><span id="line.164">        state ^= (other += (x ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
+<span class="source-line-no">165</span><span id="line.165">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
+<span class="source-line-no">166</span><span id="line.166">        state ^= (other += (y ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
+<span class="source-line-no">167</span><span id="line.167">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
+<span class="source-line-no">168</span><span id="line.168">        state ^= (other += (z ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
+<span class="source-line-no">169</span><span id="line.169">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
+<span class="source-line-no">170</span><span id="line.170">        state ^= (other += (w ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
+<span class="source-line-no">171</span><span id="line.171">        state -= ((state &lt;&lt; 54 | state &gt;&gt;&gt; 10) + (other ^ other &gt;&gt;&gt; 29)) * 0x94D049BB133111EBL;</span>
+<span class="source-line-no">172</span><span id="line.172">        return state ^ state &gt;&gt;&gt; 31;</span>
+<span class="source-line-no">173</span><span id="line.173"></span>
+<span class="source-line-no">174</span><span id="line.174">//            return (x = ((x *= 0x6C8E9CF570932BD5L) ^ x &gt;&gt;&gt; 26) * (state = state * 0x9E3779B97F4A7C15L | 1L)) ^ x &gt;&gt;&gt; 24</span>
+<span class="source-line-no">175</span><span id="line.175">//                    ^ (y = ((y *= 0x5851F42D4C957F2DL) ^ y &gt;&gt;&gt; 26) * state) ^ y &gt;&gt;&gt; 24</span>
+<span class="source-line-no">176</span><span id="line.176">//                    ^ (z = ((z *= 0xAEF17502108EF2D9L) ^ z &gt;&gt;&gt; 26) * state) ^ z &gt;&gt;&gt; 24</span>
+<span class="source-line-no">177</span><span id="line.177">//                    ^ (w = ((w *= 0x94D049BB133111EBL) ^ w &gt;&gt;&gt; 26) * state) ^ w &gt;&gt;&gt; 24;</span>
+<span class="source-line-no">178</span><span id="line.178"></span>
+<span class="source-line-no">179</span><span id="line.179">//            return ((state = ((state = x ^ ((state += 0x9E3779B97F4A7C15L ^ y) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL) ^ state &gt;&gt;&gt; 31)</span>
+<span class="source-line-no">180</span><span id="line.180">//                    ^ ((state = ((state = y ^ ((state += 0x9E3779B97F4A7C15L ^ z) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL) ^ state &gt;&gt;&gt; 31)</span>
+<span class="source-line-no">181</span><span id="line.181">//                    ^ ((state = ((state = z ^ ((state += 0x9E3779B97F4A7C15L ^ w) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL) ^ state &gt;&gt;&gt; 31)</span>
+<span class="source-line-no">182</span><span id="line.182">//                    ^ ((state = ((state = w ^ ((state += 0x9E3779B97F4A7C15L ^ x) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL) ^ state &gt;&gt;&gt; 31)</span>
+<span class="source-line-no">183</span><span id="line.183">//                    ;</span>
+<span class="source-line-no">184</span><span id="line.184"></span>
+<span class="source-line-no">185</span><span id="line.185">        //state *= 0x352E9CF570932BDDL;</span>
+<span class="source-line-no">186</span><span id="line.186">//            return (((state = ((state += 0x6C8E9CD570932BD5L ^ x) ^ (state &gt;&gt;&gt; 25)) * ((state ^ y) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)) ^</span>
+<span class="source-line-no">187</span><span id="line.187">//                    ((state = ((state += 0x6C8E9CD570932BD5L ^ y) ^ (state &gt;&gt;&gt; 25)) * ((state ^ z) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)) ^</span>
+<span class="source-line-no">188</span><span id="line.188">//                    ((state = ((state += 0x6C8E9CD570932BD5L ^ z) ^ (state &gt;&gt;&gt; 25)) * ((state ^ w) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)) ^</span>
+<span class="source-line-no">189</span><span id="line.189">//                    ((state = ((state += 0x6C8E9CD570932BD5L ^ w) ^ (state &gt;&gt;&gt; 25)) * ((state ^ x) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)));</span>
+<span class="source-line-no">190</span><span id="line.190">    }</span>
+<span class="source-line-no">191</span><span id="line.191"></span>
+<span class="source-line-no">192</span><span id="line.192">    /**</span>
+<span class="source-line-no">193</span><span id="line.193">     *</span>
+<span class="source-line-no">194</span><span id="line.194">     * @param x</span>
+<span class="source-line-no">195</span><span id="line.195">     * @param y</span>
+<span class="source-line-no">196</span><span id="line.196">     * @param z</span>
+<span class="source-line-no">197</span><span id="line.197">     * @param w</span>
+<span class="source-line-no">198</span><span id="line.198">     * @param u</span>
+<span class="source-line-no">199</span><span id="line.199">     * @param state</span>
+<span class="source-line-no">200</span><span id="line.200">     * @return 64-bit hash of the x,y,z,w,u point with the given state</span>
+<span class="source-line-no">201</span><span id="line.201">     */</span>
+<span class="source-line-no">202</span><span id="line.202">    public static long hashAll(long x, long y, long z, long w, long u, long state)</span>
+<span class="source-line-no">203</span><span id="line.203">    {</span>
+<span class="source-line-no">204</span><span id="line.204">        state *= 0x9E3779B97F4A7C15L;</span>
+<span class="source-line-no">205</span><span id="line.205">        long other = 0x60642E2A34326F15L;</span>
+<span class="source-line-no">206</span><span id="line.206">        state ^= (other += (x ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
+<span class="source-line-no">207</span><span id="line.207">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
+<span class="source-line-no">208</span><span id="line.208">        state ^= (other += (y ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
+<span class="source-line-no">209</span><span id="line.209">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
+<span class="source-line-no">210</span><span id="line.210">        state ^= (other += (z ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
+<span class="source-line-no">211</span><span id="line.211">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
+<span class="source-line-no">212</span><span id="line.212">        state ^= (other += (w ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
+<span class="source-line-no">213</span><span id="line.213">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
+<span class="source-line-no">214</span><span id="line.214">        state ^= (other += (u ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
+<span class="source-line-no">215</span><span id="line.215">        state -= ((state &lt;&lt; 54 | state &gt;&gt;&gt; 10) + (other ^ other &gt;&gt;&gt; 29)) * 0x94D049BB133111EBL;</span>
+<span class="source-line-no">216</span><span id="line.216">        return state ^ state &gt;&gt;&gt; 31;</span>
+<span class="source-line-no">217</span><span id="line.217">    }</span>
+<span class="source-line-no">218</span><span id="line.218">    /**</span>
+<span class="source-line-no">219</span><span id="line.219">     *</span>
+<span class="source-line-no">220</span><span id="line.220">     * @param x</span>
+<span class="source-line-no">221</span><span id="line.221">     * @param y</span>
+<span class="source-line-no">222</span><span id="line.222">     * @param z</span>
+<span class="source-line-no">223</span><span id="line.223">     * @param w</span>
+<span class="source-line-no">224</span><span id="line.224">     * @param u</span>
+<span class="source-line-no">225</span><span id="line.225">     * @param v</span>
+<span class="source-line-no">226</span><span id="line.226">     * @param state</span>
+<span class="source-line-no">227</span><span id="line.227">     * @return 64-bit hash of the x,y,z,w,u,v point with the given state</span>
+<span class="source-line-no">228</span><span id="line.228">     */</span>
+<span class="source-line-no">229</span><span id="line.229">    public static long hashAll(long x, long y, long z, long w, long u, long v, long state)</span>
+<span class="source-line-no">230</span><span id="line.230">    {</span>
+<span class="source-line-no">231</span><span id="line.231">        state *= 0x9E3779B97F4A7C15L;</span>
+<span class="source-line-no">232</span><span id="line.232">        long other = 0x60642E2A34326F15L;</span>
+<span class="source-line-no">233</span><span id="line.233">        state ^= (other += (x ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
+<span class="source-line-no">234</span><span id="line.234">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
+<span class="source-line-no">235</span><span id="line.235">        state ^= (other += (y ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
+<span class="source-line-no">236</span><span id="line.236">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
+<span class="source-line-no">237</span><span id="line.237">        state ^= (other += (z ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
+<span class="source-line-no">238</span><span id="line.238">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
+<span class="source-line-no">239</span><span id="line.239">        state ^= (other += (w ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
+<span class="source-line-no">240</span><span id="line.240">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
+<span class="source-line-no">241</span><span id="line.241">        state ^= (other += (u ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
+<span class="source-line-no">242</span><span id="line.242">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
+<span class="source-line-no">243</span><span id="line.243">        state ^= (other += (v ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
+<span class="source-line-no">244</span><span id="line.244">        state -= ((state &lt;&lt; 54 | state &gt;&gt;&gt; 10) + (other ^ other &gt;&gt;&gt; 29)) * 0x94D049BB133111EBL;</span>
+<span class="source-line-no">245</span><span id="line.245">        return state ^ state &gt;&gt;&gt; 31;</span>
+<span class="source-line-no">246</span><span id="line.246"></span>
+<span class="source-line-no">247</span><span id="line.247">//            return (x = ((x *= 0x6C8E9CF570932BD5L) ^ x &gt;&gt;&gt; 26) * (state = state * 0x9E3779B97F4A7C15L | 1L)) ^ x &gt;&gt;&gt; 24</span>
+<span class="source-line-no">248</span><span id="line.248">//                    ^ (y = ((y *= 0x5851F42D4C957F2DL) ^ y &gt;&gt;&gt; 26) * state) ^ y &gt;&gt;&gt; 24</span>
+<span class="source-line-no">249</span><span id="line.249">//                    ^ (z = ((z *= 0xAEF17502108EF2D9L) ^ z &gt;&gt;&gt; 26) * state) ^ z &gt;&gt;&gt; 24</span>
+<span class="source-line-no">250</span><span id="line.250">//                    ^ (w = ((w *= 0x94D049BB133111EBL) ^ w &gt;&gt;&gt; 26) * state) ^ w &gt;&gt;&gt; 24</span>
+<span class="source-line-no">251</span><span id="line.251">//                    ^ (u = ((u *= 0xBF58476D1CE4E5B9L) ^ u &gt;&gt;&gt; 26) * state) ^ u &gt;&gt;&gt; 24</span>
+<span class="source-line-no">252</span><span id="line.252">//                    ^ (v = ((v *= 0xC6BC279692B5CC85L) ^ v &gt;&gt;&gt; 26) * state) ^ v &gt;&gt;&gt; 24;</span>
+<span class="source-line-no">253</span><span id="line.253"></span>
+<span class="source-line-no">254</span><span id="line.254">//            return ((state = ((state = x ^ ((state += 0x9E3779B97F4A7C15L ^ y) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL) ^ state &gt;&gt;&gt; 31)</span>
+<span class="source-line-no">255</span><span id="line.255">//                    ^ ((state = ((state = y ^ ((state += 0x9E3779B97F4A7C15L ^ z) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL) ^ state &gt;&gt;&gt; 31)</span>
+<span class="source-line-no">256</span><span id="line.256">//                    ^ ((state = ((state = z ^ ((state += 0x9E3779B97F4A7C15L ^ w) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL) ^ state &gt;&gt;&gt; 31)</span>
+<span class="source-line-no">257</span><span id="line.257">//                    ^ ((state = ((state = w ^ ((state += 0x9E3779B97F4A7C15L ^ u) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL) ^ state &gt;&gt;&gt; 31)</span>
+<span class="source-line-no">258</span><span id="line.258">//                    ^ ((state = ((state = u ^ ((state += 0x9E3779B97F4A7C15L ^ v) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL) ^ state &gt;&gt;&gt; 31)</span>
+<span class="source-line-no">259</span><span id="line.259">//                    ^ ((state = ((state = v ^ ((state += 0x9E3779B97F4A7C15L ^ x) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL) ^ state &gt;&gt;&gt; 31)</span>
+<span class="source-line-no">260</span><span id="line.260">//                    ;</span>
+<span class="source-line-no">261</span><span id="line.261"></span>
+<span class="source-line-no">262</span><span id="line.262">        //state *= 0x352E9CF570932BDDL;</span>
+<span class="source-line-no">263</span><span id="line.263">//            return (((state = ((state += 0x6C8E9CD570932BD5L ^ x) ^ (state &gt;&gt;&gt; 25)) * ((state ^ y) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)) ^</span>
+<span class="source-line-no">264</span><span id="line.264">//                    ((state = ((state += 0x6C8E9CD570932BD5L ^ y) ^ (state &gt;&gt;&gt; 25)) * ((state ^ z) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)) ^</span>
+<span class="source-line-no">265</span><span id="line.265">//                    ((state = ((state += 0x6C8E9CD570932BD5L ^ z) ^ (state &gt;&gt;&gt; 25)) * ((state ^ w) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)) ^</span>
+<span class="source-line-no">266</span><span id="line.266">//                    ((state = ((state += 0x6C8E9CD570932BD5L ^ w) ^ (state &gt;&gt;&gt; 25)) * ((state ^ u) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)) ^</span>
+<span class="source-line-no">267</span><span id="line.267">//                    ((state = ((state += 0x6C8E9CD570932BD5L ^ u) ^ (state &gt;&gt;&gt; 25)) * ((state ^ v) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)) ^</span>
+<span class="source-line-no">268</span><span id="line.268">//                    ((state = ((state += 0x6C8E9CD570932BD5L ^ v) ^ (state &gt;&gt;&gt; 25)) * ((state ^ x) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)));</span>
+<span class="source-line-no">269</span><span id="line.269">    }</span>
+<span class="source-line-no">270</span><span id="line.270">    /**</span>
+<span class="source-line-no">271</span><span id="line.271">     *</span>
+<span class="source-line-no">272</span><span id="line.272">     * @param x</span>
+<span class="source-line-no">273</span><span id="line.273">     * @param y</span>
+<span class="source-line-no">274</span><span id="line.274">     * @param state</span>
+<span class="source-line-no">275</span><span id="line.275">     * @return 8-bit hash of the x,y point with the given state</span>
+<span class="source-line-no">276</span><span id="line.276">     */         </span>
+<span class="source-line-no">277</span><span id="line.277">    public static int hash256(long x, long y, long state) {</span>
+<span class="source-line-no">278</span><span id="line.278">        state *= 0x9E3779B97F4A7C15L;</span>
+<span class="source-line-no">279</span><span id="line.279">        long other = 0x60642E2A34326F15L;</span>
+<span class="source-line-no">280</span><span id="line.280">        state ^= (other += (x ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
+<span class="source-line-no">281</span><span id="line.281">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
+<span class="source-line-no">282</span><span id="line.282">        state ^= (other += (y ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
+<span class="source-line-no">283</span><span id="line.283">        return (int)(state - ((state &lt;&lt; 54 | state &gt;&gt;&gt; 10) + (other ^ other &gt;&gt;&gt; 29)) * 0x94D049BB133111EBL &gt;&gt;&gt; 56);</span>
+<span class="source-line-no">284</span><span id="line.284"></span>
+<span class="source-line-no">285</span><span id="line.285">//            return (int) (((((x *= 0x6C8E9CF570932BD5L) ^ x &gt;&gt;&gt; 26) * (state = state * 0x9E3779B97F4A7C15L | 1L))</span>
+<span class="source-line-no">286</span><span id="line.286">//                    ^ (((y *= 0x5851F42D4C957F2DL) ^ y &gt;&gt;&gt; 26) * state)) &gt;&gt;&gt; 56);</span>
+<span class="source-line-no">287</span><span id="line.287"></span>
+<span class="source-line-no">288</span><span id="line.288">//                return (int) ((</span>
+<span class="source-line-no">289</span><span id="line.289">//                    ((state = ((state = x ^ ((state += 0x9E3779B97F4A7C15L ^ y) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL))</span>
+<span class="source-line-no">290</span><span id="line.290">//                    ^ ((((state = y ^ ((state += 0x9E3779B97F4A7C15L ^ x) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL))</span>
+<span class="source-line-no">291</span><span id="line.291">//            ) &gt;&gt;&gt; 56);</span>
+<span class="source-line-no">292</span><span id="line.292"></span>
+<span class="source-line-no">293</span><span id="line.293">        //state *= 0x352E9CF570932BDDL;</span>
+<span class="source-line-no">294</span><span id="line.294">//            return (int) ((((state = ((state += 0x6C8E9CD570932BD5L ^ x) ^ (state &gt;&gt;&gt; 25)) * ((y ^ state) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)) ^</span>
+<span class="source-line-no">295</span><span id="line.295">//                    (((state += 0x6C8E9CD570932BD5L ^ y) ^ (state &gt;&gt;&gt; 25)) * ((x ^ state) | 0xA529L))) &gt;&gt;&gt; 56);</span>
+<span class="source-line-no">296</span><span id="line.296">    }</span>
+<span class="source-line-no">297</span><span id="line.297">    /**</span>
+<span class="source-line-no">298</span><span id="line.298">     *</span>
+<span class="source-line-no">299</span><span id="line.299">     * @param x</span>
+<span class="source-line-no">300</span><span id="line.300">     * @param y</span>
+<span class="source-line-no">301</span><span id="line.301">     * @param z</span>
+<span class="source-line-no">302</span><span id="line.302">     * @param state</span>
+<span class="source-line-no">303</span><span id="line.303">     * @return 8-bit hash of the x,y,z point with the given state</span>
+<span class="source-line-no">304</span><span id="line.304">     */</span>
+<span class="source-line-no">305</span><span id="line.305">    public static int hash256(long x, long y, long z, long state)</span>
+<span class="source-line-no">306</span><span id="line.306">    {</span>
+<span class="source-line-no">307</span><span id="line.307">        state *= 0x9E3779B97F4A7C15L;</span>
+<span class="source-line-no">308</span><span id="line.308">        long other = 0x60642E2A34326F15L;</span>
+<span class="source-line-no">309</span><span id="line.309">        state ^= (other += (x ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
+<span class="source-line-no">310</span><span id="line.310">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
+<span class="source-line-no">311</span><span id="line.311">        state ^= (other += (y ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
+<span class="source-line-no">312</span><span id="line.312">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
+<span class="source-line-no">313</span><span id="line.313">        state ^= (other += (z ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
+<span class="source-line-no">314</span><span id="line.314">        return (int)(state - ((state &lt;&lt; 54 | state &gt;&gt;&gt; 10) + (other ^ other &gt;&gt;&gt; 29)) * 0x94D049BB133111EBL &gt;&gt;&gt; 56);</span>
+<span class="source-line-no">315</span><span id="line.315"></span>
+<span class="source-line-no">316</span><span id="line.316">//            return (int) (((((x *= 0x6C8E9CF570932BD5L) ^ x &gt;&gt;&gt; 26) * (state = state * 0x9E3779B97F4A7C15L | 1L))</span>
+<span class="source-line-no">317</span><span id="line.317">//                    ^ (((y *= 0x5851F42D4C957F2DL) ^ y &gt;&gt;&gt; 26) * state)</span>
+<span class="source-line-no">318</span><span id="line.318">//                    ^ (((z *= 0xAEF17502108EF2D9L) ^ z &gt;&gt;&gt; 26) * state)</span>
+<span class="source-line-no">319</span><span id="line.319">//            ) &gt;&gt;&gt; 56);</span>
+<span class="source-line-no">320</span><span id="line.320"></span>
+<span class="source-line-no">321</span><span id="line.321">//            return (int) ((</span>
+<span class="source-line-no">322</span><span id="line.322">//                    ((state = ((state = x ^ ((state += 0x9E3779B97F4A7C15L ^ y) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL))</span>
+<span class="source-line-no">323</span><span id="line.323">//                            ^ ((state = ((state = y ^ ((state += 0x9E3779B97F4A7C15L ^ z) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL))</span>
+<span class="source-line-no">324</span><span id="line.324">//                            ^ ((((state = z ^ ((state += 0x9E3779B97F4A7C15L ^ x) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL))</span>
+<span class="source-line-no">325</span><span id="line.325">//            ) &gt;&gt;&gt; 56);</span>
+<span class="source-line-no">326</span><span id="line.326"></span>
+<span class="source-line-no">327</span><span id="line.327">        //state *= 0x352E9CF570932BDDL;</span>
+<span class="source-line-no">328</span><span id="line.328">//            return (int) ((((state = ((state += 0x6C8E9CD570932BD5L ^ x) ^ (state &gt;&gt;&gt; 25)) * ((state ^ y) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)) ^</span>
+<span class="source-line-no">329</span><span id="line.329">//                    ((state = ((state += 0x6C8E9CD570932BD5L ^ y) ^ (state &gt;&gt;&gt; 25)) * ((state ^ z) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)) ^</span>
+<span class="source-line-no">330</span><span id="line.330">//                    (((state += 0x6C8E9CD570932BD5L ^ z) ^ (state &gt;&gt;&gt; 25)) * ((state ^ x) | 0xA529L))) &gt;&gt;&gt; 56);</span>
+<span class="source-line-no">331</span><span id="line.331">    }</span>
+<span class="source-line-no">332</span><span id="line.332">    /**</span>
+<span class="source-line-no">333</span><span id="line.333">     *</span>
+<span class="source-line-no">334</span><span id="line.334">     * @param x</span>
+<span class="source-line-no">335</span><span id="line.335">     * @param y</span>
+<span class="source-line-no">336</span><span id="line.336">     * @param z</span>
+<span class="source-line-no">337</span><span id="line.337">     * @param w</span>
+<span class="source-line-no">338</span><span id="line.338">     * @param state</span>
+<span class="source-line-no">339</span><span id="line.339">     * @return 8-bit hash of the x,y,z,w point with the given state</span>
+<span class="source-line-no">340</span><span id="line.340">     */</span>
+<span class="source-line-no">341</span><span id="line.341">    public static int hash256(long x, long y, long z, long w, long state)</span>
+<span class="source-line-no">342</span><span id="line.342">    {</span>
+<span class="source-line-no">343</span><span id="line.343">        state *= 0x9E3779B97F4A7C15L;</span>
+<span class="source-line-no">344</span><span id="line.344">        long other = 0x60642E2A34326F15L;</span>
+<span class="source-line-no">345</span><span id="line.345">        state ^= (other += (x ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
+<span class="source-line-no">346</span><span id="line.346">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
+<span class="source-line-no">347</span><span id="line.347">        state ^= (other += (y ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
+<span class="source-line-no">348</span><span id="line.348">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
+<span class="source-line-no">349</span><span id="line.349">        state ^= (other += (z ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
+<span class="source-line-no">350</span><span id="line.350">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
+<span class="source-line-no">351</span><span id="line.351">        state ^= (other += (w ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
+<span class="source-line-no">352</span><span id="line.352">        return (int)(state - ((state &lt;&lt; 54 | state &gt;&gt;&gt; 10) + (other ^ other &gt;&gt;&gt; 29)) * 0x94D049BB133111EBL &gt;&gt;&gt; 56);</span>
+<span class="source-line-no">353</span><span id="line.353"></span>
+<span class="source-line-no">354</span><span id="line.354">//            return (int) (((((x *= 0x6C8E9CF570932BD5L) ^ x &gt;&gt;&gt; 26) * (state = state * 0x9E3779B97F4A7C15L | 1L))</span>
+<span class="source-line-no">355</span><span id="line.355">//                    ^ (((y *= 0x5851F42D4C957F2DL) ^ y &gt;&gt;&gt; 26) * state)</span>
+<span class="source-line-no">356</span><span id="line.356">//                    ^ (((z *= 0xAEF17502108EF2D9L) ^ z &gt;&gt;&gt; 26) * state)</span>
+<span class="source-line-no">357</span><span id="line.357">//                    ^ (((w *= 0x94D049BB133111EBL) ^ w &gt;&gt;&gt; 26) * state)</span>
+<span class="source-line-no">358</span><span id="line.358">//            ) &gt;&gt;&gt; 56);</span>
+<span class="source-line-no">359</span><span id="line.359"></span>
+<span class="source-line-no">360</span><span id="line.360">//            return (int) ((</span>
+<span class="source-line-no">361</span><span id="line.361">//                    ((state = ((state = x ^ ((state += 0x9E3779B97F4A7C15L ^ y) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL))</span>
+<span class="source-line-no">362</span><span id="line.362">//                            ^ ((state = ((state = y ^ ((state += 0x9E3779B97F4A7C15L ^ z) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL))</span>
+<span class="source-line-no">363</span><span id="line.363">//                            ^ ((state = ((state = z ^ ((state += 0x9E3779B97F4A7C15L ^ w) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL))</span>
+<span class="source-line-no">364</span><span id="line.364">//                            ^ ((((state = w ^ ((state += 0x9E3779B97F4A7C15L ^ x) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL))</span>
+<span class="source-line-no">365</span><span id="line.365">        //state *= 0x352E9CF570932BDDL;</span>
+<span class="source-line-no">366</span><span id="line.366">//            return (int) ((((state = ((state += 0x6C8E9CD570932BD5L ^ x) ^ (state &gt;&gt;&gt; 25)) * ((state ^ y) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)) ^</span>
+<span class="source-line-no">367</span><span id="line.367">//                    ((state = ((state += 0x6C8E9CD570932BD5L ^ y) ^ (state &gt;&gt;&gt; 25)) * ((state ^ z) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)) ^</span>
+<span class="source-line-no">368</span><span id="line.368">//                    ((state = ((state += 0x6C8E9CD570932BD5L ^ z) ^ (state &gt;&gt;&gt; 25)) * ((state ^ w) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)) ^</span>
+<span class="source-line-no">369</span><span id="line.369">//                    (((state += 0x6C8E9CD570932BD5L ^ w) ^ (state &gt;&gt;&gt; 25)) * ((state ^ x) | 0xA529L))) &gt;&gt;&gt; 56);</span>
+<span class="source-line-no">370</span><span id="line.370">    }</span>
+<span class="source-line-no">371</span><span id="line.371">    /**</span>
+<span class="source-line-no">372</span><span id="line.372">     *</span>
+<span class="source-line-no">373</span><span id="line.373">     * @param x</span>
+<span class="source-line-no">374</span><span id="line.374">     * @param y</span>
+<span class="source-line-no">375</span><span id="line.375">     * @param z</span>
+<span class="source-line-no">376</span><span id="line.376">     * @param w</span>
+<span class="source-line-no">377</span><span id="line.377">     * @param u</span>
+<span class="source-line-no">378</span><span id="line.378">     * @param v</span>
+<span class="source-line-no">379</span><span id="line.379">     * @param state</span>
+<span class="source-line-no">380</span><span id="line.380">     * @return 8-bit hash of the x,y,z,w,u,v point with the given state</span>
+<span class="source-line-no">381</span><span id="line.381">     */</span>
+<span class="source-line-no">382</span><span id="line.382">    public static int hash256(long x, long y, long z, long w, long u, long v, long state)</span>
+<span class="source-line-no">383</span><span id="line.383">    {</span>
+<span class="source-line-no">384</span><span id="line.384">        state *= 0x9E3779B97F4A7C15L;</span>
+<span class="source-line-no">385</span><span id="line.385">        long other = 0x60642E2A34326F15L;</span>
+<span class="source-line-no">386</span><span id="line.386">        state ^= (other += (x ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
+<span class="source-line-no">387</span><span id="line.387">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
+<span class="source-line-no">388</span><span id="line.388">        state ^= (other += (y ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
+<span class="source-line-no">389</span><span id="line.389">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
+<span class="source-line-no">390</span><span id="line.390">        state ^= (other += (z ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
+<span class="source-line-no">391</span><span id="line.391">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
+<span class="source-line-no">392</span><span id="line.392">        state ^= (other += (w ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
+<span class="source-line-no">393</span><span id="line.393">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
+<span class="source-line-no">394</span><span id="line.394">        state ^= (other += (u ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
+<span class="source-line-no">395</span><span id="line.395">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
+<span class="source-line-no">396</span><span id="line.396">        state ^= (other += (v ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
+<span class="source-line-no">397</span><span id="line.397">        return (int)(state - ((state &lt;&lt; 54 | state &gt;&gt;&gt; 10) + (other ^ other &gt;&gt;&gt; 29)) * 0x94D049BB133111EBL &gt;&gt;&gt; 56);</span>
+<span class="source-line-no">398</span><span id="line.398"></span>
+<span class="source-line-no">399</span><span id="line.399">//            return (int) (((((x *= 0x6C8E9CF570932BD5L) ^ x &gt;&gt;&gt; 26) * (state = state * 0x9E3779B97F4A7C15L | 1L))</span>
+<span class="source-line-no">400</span><span id="line.400">//                    ^ (((y *= 0x5851F42D4C957F2DL) ^ y &gt;&gt;&gt; 26) * state)</span>
+<span class="source-line-no">401</span><span id="line.401">//                    ^ (((z *= 0xAEF17502108EF2D9L) ^ z &gt;&gt;&gt; 26) * state)</span>
+<span class="source-line-no">402</span><span id="line.402">//                    ^ (((w *= 0x94D049BB133111EBL) ^ w &gt;&gt;&gt; 26) * state)</span>
+<span class="source-line-no">403</span><span id="line.403">//                    ^ (((u *= 0xBF58476D1CE4E5B9L) ^ u &gt;&gt;&gt; 26) * state)</span>
+<span class="source-line-no">404</span><span id="line.404">//                    ^ (((v *= 0xC6BC279692B5CC85L) ^ v &gt;&gt;&gt; 26) * state)</span>
+<span class="source-line-no">405</span><span id="line.405">//            ) &gt;&gt;&gt; 56);</span>
+<span class="source-line-no">406</span><span id="line.406"></span>
+<span class="source-line-no">407</span><span id="line.407">//            return (int) ((</span>
+<span class="source-line-no">408</span><span id="line.408">//                    ((state = ((state = x ^ ((state += 0x9E3779B97F4A7C15L ^ y) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL))</span>
+<span class="source-line-no">409</span><span id="line.409">//                            ^ ((state = ((state = y ^ ((state += 0x9E3779B97F4A7C15L ^ z) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL))</span>
+<span class="source-line-no">410</span><span id="line.410">//                            ^ ((state = ((state = z ^ ((state += 0x9E3779B97F4A7C15L ^ w) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL))</span>
+<span class="source-line-no">411</span><span id="line.411">//                            ^ ((state = ((state = w ^ ((state += 0x9E3779B97F4A7C15L ^ u) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL))</span>
+<span class="source-line-no">412</span><span id="line.412">//                            ^ ((state = ((state = u ^ ((state += 0x9E3779B97F4A7C15L ^ v) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL))</span>
+<span class="source-line-no">413</span><span id="line.413">//                            ^ ((((state = v ^ ((state += 0x9E3779B97F4A7C15L ^ x) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL))</span>
+<span class="source-line-no">414</span><span id="line.414">//            ) &gt;&gt;&gt; 56);</span>
+<span class="source-line-no">415</span><span id="line.415"></span>
+<span class="source-line-no">416</span><span id="line.416">        //state *= 0x352E9CF570932BDDL;</span>
+<span class="source-line-no">417</span><span id="line.417">//            return (int) ((((state = ((state += 0x6C8E9CD570932BD5L ^ x) ^ (state &gt;&gt;&gt; 25)) * ((state ^ y) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)) ^</span>
+<span class="source-line-no">418</span><span id="line.418">//                    ((state = ((state += 0x6C8E9CD570932BD5L ^ y) ^ (state &gt;&gt;&gt; 25)) * ((state ^ z) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)) ^</span>
+<span class="source-line-no">419</span><span id="line.419">//                    ((state = ((state += 0x6C8E9CD570932BD5L ^ z) ^ (state &gt;&gt;&gt; 25)) * ((state ^ w) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)) ^</span>
+<span class="source-line-no">420</span><span id="line.420">//                    ((state = ((state += 0x6C8E9CD570932BD5L ^ z) ^ (state &gt;&gt;&gt; 25)) * ((state ^ w) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)) ^</span>
+<span class="source-line-no">421</span><span id="line.421">//                    ((state = ((state += 0x6C8E9CD570932BD5L ^ u) ^ (state &gt;&gt;&gt; 25)) * ((state ^ v) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)) ^</span>
+<span class="source-line-no">422</span><span id="line.422">//                    (((state += 0x6C8E9CD570932BD5L ^ v) ^ (state &gt;&gt;&gt; 25)) * ((state ^ x) | 0xA529L))) &gt;&gt;&gt; 56);</span>
+<span class="source-line-no">423</span><span id="line.423">    }</span>
+<span class="source-line-no">424</span><span id="line.424">    /**</span>
+<span class="source-line-no">425</span><span id="line.425">     *</span>
+<span class="source-line-no">426</span><span id="line.426">     * @param x</span>
+<span class="source-line-no">427</span><span id="line.427">     * @param y</span>
+<span class="source-line-no">428</span><span id="line.428">     * @param state</span>
+<span class="source-line-no">429</span><span id="line.429">     * @return 5-bit hash of the x,y point with the given state</span>
+<span class="source-line-no">430</span><span id="line.430">     */</span>
+<span class="source-line-no">431</span><span id="line.431">    public static int hash32(long x, long y, long state)</span>
+<span class="source-line-no">432</span><span id="line.432">    {</span>
+<span class="source-line-no">433</span><span id="line.433">        state *= 0x9E3779B97F4A7C15L;</span>
+<span class="source-line-no">434</span><span id="line.434">        long other = 0x60642E2A34326F15L;</span>
+<span class="source-line-no">435</span><span id="line.435">        state ^= (other += (x ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
+<span class="source-line-no">436</span><span id="line.436">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
+<span class="source-line-no">437</span><span id="line.437">        state ^= (other += (y ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
+<span class="source-line-no">438</span><span id="line.438">        return (int)(state - ((state &lt;&lt; 54 | state &gt;&gt;&gt; 10) + (other ^ other &gt;&gt;&gt; 29)) * 0x94D049BB133111EBL &gt;&gt;&gt; 59);</span>
+<span class="source-line-no">439</span><span id="line.439">        </span>
+<span class="source-line-no">440</span><span id="line.440">//            return (int) (((((x *= 0x6C8E9CF570932BD5L) ^ x &gt;&gt;&gt; 26) * (state = state * 0x9E3779B97F4A7C15L | 1L))</span>
+<span class="source-line-no">441</span><span id="line.441">//                    ^ (((y *= 0x5851F42D4C957F2DL) ^ y &gt;&gt;&gt; 26) * state)</span>
+<span class="source-line-no">442</span><span id="line.442">//            ) &gt;&gt;&gt; 59);</span>
+<span class="source-line-no">443</span><span id="line.443"></span>
+<span class="source-line-no">444</span><span id="line.444">//            return (int) ((</span>
+<span class="source-line-no">445</span><span id="line.445">//                    ((state = ((state = x ^ ((state += 0x9E3779B97F4A7C15L ^ y) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL))</span>
+<span class="source-line-no">446</span><span id="line.446">//                            ^ ((((state = y ^ ((state += 0x9E3779B97F4A7C15L ^ x) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL))</span>
+<span class="source-line-no">447</span><span id="line.447">//            ) &gt;&gt;&gt; 59);</span>
+<span class="source-line-no">448</span><span id="line.448"></span>
+<span class="source-line-no">449</span><span id="line.449">        //state *= 0x352E9CF570932BDDL;</span>
+<span class="source-line-no">450</span><span id="line.450">//            return (int) ((((state = ((state += 0x6C8E9CD570932BD5L ^ x) ^ (state &gt;&gt;&gt; 25)) * ((state ^ y) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)) ^</span>
+<span class="source-line-no">451</span><span id="line.451">//                    (((state += 0x6C8E9CD570932BD5L ^ y) ^ (state &gt;&gt;&gt; 25)) * ((state ^ x) | 0xA529L))) &gt;&gt;&gt; 59);</span>
+<span class="source-line-no">452</span><span id="line.452">    }</span>
+<span class="source-line-no">453</span><span id="line.453">    /**</span>
+<span class="source-line-no">454</span><span id="line.454">     *</span>
+<span class="source-line-no">455</span><span id="line.455">     * @param x</span>
+<span class="source-line-no">456</span><span id="line.456">     * @param y</span>
+<span class="source-line-no">457</span><span id="line.457">     * @param z</span>
+<span class="source-line-no">458</span><span id="line.458">     * @param state</span>
+<span class="source-line-no">459</span><span id="line.459">     * @return 5-bit hash of the x,y,z point with the given state</span>
+<span class="source-line-no">460</span><span id="line.460">     */</span>
+<span class="source-line-no">461</span><span id="line.461">    public static int hash32(long x, long y, long z, long state)</span>
+<span class="source-line-no">462</span><span id="line.462">    {</span>
+<span class="source-line-no">463</span><span id="line.463">        state *= 0x9E3779B97F4A7C15L;</span>
+<span class="source-line-no">464</span><span id="line.464">        long other = 0x60642E2A34326F15L;</span>
+<span class="source-line-no">465</span><span id="line.465">        state ^= (other += (x ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
+<span class="source-line-no">466</span><span id="line.466">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
+<span class="source-line-no">467</span><span id="line.467">        state ^= (other += (y ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
+<span class="source-line-no">468</span><span id="line.468">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
+<span class="source-line-no">469</span><span id="line.469">        state ^= (other += (z ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
+<span class="source-line-no">470</span><span id="line.470">        return (int)(state - ((state &lt;&lt; 54 | state &gt;&gt;&gt; 10) + (other ^ other &gt;&gt;&gt; 29)) * 0x94D049BB133111EBL &gt;&gt;&gt; 59);</span>
+<span class="source-line-no">471</span><span id="line.471"></span>
+<span class="source-line-no">472</span><span id="line.472">//            return (int) (((((x *= 0x6C8E9CF570932BD5L) ^ x &gt;&gt;&gt; 26) * (state = state * 0x9E3779B97F4A7C15L | 1L))</span>
+<span class="source-line-no">473</span><span id="line.473">//                    ^ (((y *= 0x5851F42D4C957F2DL) ^ y &gt;&gt;&gt; 26) * state)</span>
+<span class="source-line-no">474</span><span id="line.474">//                    ^ (((z *= 0xAEF17502108EF2D9L) ^ z &gt;&gt;&gt; 26) * state)</span>
+<span class="source-line-no">475</span><span id="line.475">//            ) &gt;&gt;&gt; 59);</span>
+<span class="source-line-no">476</span><span id="line.476"></span>
+<span class="source-line-no">477</span><span id="line.477">//            return (int) ((</span>
+<span class="source-line-no">478</span><span id="line.478">//                    ((state = ((state = x ^ ((state += 0x9E3779B97F4A7C15L ^ y) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL))</span>
+<span class="source-line-no">479</span><span id="line.479">//                            ^ ((state = ((state = y ^ ((state += 0x9E3779B97F4A7C15L ^ z) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL))</span>
+<span class="source-line-no">480</span><span id="line.480">//                            ^ ((((state = z ^ ((state += 0x9E3779B97F4A7C15L ^ x) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL))</span>
+<span class="source-line-no">481</span><span id="line.481">//            ) &gt;&gt;&gt; 59);</span>
+<span class="source-line-no">482</span><span id="line.482"></span>
+<span class="source-line-no">483</span><span id="line.483">        //state *= 0x352E9CF570932BDDL;</span>
+<span class="source-line-no">484</span><span id="line.484">//            return (int) ((((state = ((state += 0x6C8E9CD570932BD5L ^ x) ^ (state &gt;&gt;&gt; 25)) * ((state ^ y - z) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)) ^</span>
+<span class="source-line-no">485</span><span id="line.485">//                    ((state = ((state += 0x6C8E9CD570932BD5L ^ y) ^ (state &gt;&gt;&gt; 25)) * ((state ^ z - x) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)) ^</span>
+<span class="source-line-no">486</span><span id="line.486">//                    (((state += 0x6C8E9CD570932BD5L ^ z) ^ (state &gt;&gt;&gt; 25)) * ((state ^ x - y) | 0xA529L))) &gt;&gt;&gt; 59);</span>
+<span class="source-line-no">487</span><span id="line.487">    }</span>
+<span class="source-line-no">488</span><span id="line.488">    /**</span>
+<span class="source-line-no">489</span><span id="line.489">     *</span>
+<span class="source-line-no">490</span><span id="line.490">     * @param x</span>
+<span class="source-line-no">491</span><span id="line.491">     * @param y</span>
+<span class="source-line-no">492</span><span id="line.492">     * @param z</span>
+<span class="source-line-no">493</span><span id="line.493">     * @param w</span>
+<span class="source-line-no">494</span><span id="line.494">     * @param state</span>
+<span class="source-line-no">495</span><span id="line.495">     * @return 5-bit hash of the x,y,z,w point with the given state</span>
+<span class="source-line-no">496</span><span id="line.496">     */</span>
+<span class="source-line-no">497</span><span id="line.497">    public static int hash32(long x, long y, long z, long w, long state)</span>
+<span class="source-line-no">498</span><span id="line.498">    {</span>
+<span class="source-line-no">499</span><span id="line.499">        state *= 0x9E3779B97F4A7C15L;</span>
+<span class="source-line-no">500</span><span id="line.500">        long other = 0x60642E2A34326F15L;</span>
+<span class="source-line-no">501</span><span id="line.501">        state ^= (other += (x ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
+<span class="source-line-no">502</span><span id="line.502">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
+<span class="source-line-no">503</span><span id="line.503">        state ^= (other += (y ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
+<span class="source-line-no">504</span><span id="line.504">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
+<span class="source-line-no">505</span><span id="line.505">        state ^= (other += (z ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
+<span class="source-line-no">506</span><span id="line.506">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
+<span class="source-line-no">507</span><span id="line.507">        state ^= (other += (w ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
+<span class="source-line-no">508</span><span id="line.508">        return (int)(state - ((state &lt;&lt; 54 | state &gt;&gt;&gt; 10) + (other ^ other &gt;&gt;&gt; 29)) * 0x94D049BB133111EBL &gt;&gt;&gt; 59);</span>
+<span class="source-line-no">509</span><span id="line.509"></span>
+<span class="source-line-no">510</span><span id="line.510">//            return (int) (((((x *= 0x6C8E9CF570932BD5L) ^ x &gt;&gt;&gt; 26) * (state = state * 0x9E3779B97F4A7C15L | 1L))</span>
+<span class="source-line-no">511</span><span id="line.511">//                    ^ (((y *= 0x5851F42D4C957F2DL) ^ y &gt;&gt;&gt; 26) * state)</span>
+<span class="source-line-no">512</span><span id="line.512">//                    ^ (((z *= 0xAEF17502108EF2D9L) ^ z &gt;&gt;&gt; 26) * state)</span>
+<span class="source-line-no">513</span><span id="line.513">//                    ^ (((w *= 0x94D049BB133111EBL) ^ w &gt;&gt;&gt; 26) * state)</span>
+<span class="source-line-no">514</span><span id="line.514">//            ) &gt;&gt;&gt; 59);</span>
+<span class="source-line-no">515</span><span id="line.515"></span>
+<span class="source-line-no">516</span><span id="line.516">//            return (int) ((</span>
+<span class="source-line-no">517</span><span id="line.517">//                    ((state = ((state = x ^ ((state += 0x9E3779B97F4A7C15L ^ y) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL))</span>
+<span class="source-line-no">518</span><span id="line.518">//                            ^ ((state = ((state = y ^ ((state += 0x9E3779B97F4A7C15L ^ z) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL))</span>
+<span class="source-line-no">519</span><span id="line.519">//                            ^ ((state = ((state = z ^ ((state += 0x9E3779B97F4A7C15L ^ w) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL))</span>
+<span class="source-line-no">520</span><span id="line.520">//                            ^ ((((state = w ^ ((state += 0x9E3779B97F4A7C15L ^ x) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL))</span>
+<span class="source-line-no">521</span><span id="line.521">//            ) &gt;&gt;&gt; 59);</span>
+<span class="source-line-no">522</span><span id="line.522"></span>
+<span class="source-line-no">523</span><span id="line.523">        //state *= 0x352E9CF570932BDDL;</span>
+<span class="source-line-no">524</span><span id="line.524">//            return (int) ((((state = ((state += 0x6C8E9CD570932BD5L ^ x) ^ (state &gt;&gt;&gt; 25)) * ((state ^ y) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)) ^</span>
+<span class="source-line-no">525</span><span id="line.525">//                    ((state = ((state += 0x6C8E9CD570932BD5L ^ y) ^ (state &gt;&gt;&gt; 25)) * ((state ^ z) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)) ^</span>
+<span class="source-line-no">526</span><span id="line.526">//                    ((state = ((state += 0x6C8E9CD570932BD5L ^ z) ^ (state &gt;&gt;&gt; 25)) * ((state ^ w) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)) ^</span>
+<span class="source-line-no">527</span><span id="line.527">//                    (((state += 0x6C8E9CD570932BD5L ^ w) ^ (state &gt;&gt;&gt; 25)) * ((state ^ x) | 0xA529L))) &gt;&gt;&gt; 59);</span>
+<span class="source-line-no">528</span><span id="line.528">    }</span>
+<span class="source-line-no">529</span><span id="line.529">    /**</span>
+<span class="source-line-no">530</span><span id="line.530">     *</span>
+<span class="source-line-no">531</span><span id="line.531">     * @param x</span>
+<span class="source-line-no">532</span><span id="line.532">     * @param y</span>
+<span class="source-line-no">533</span><span id="line.533">     * @param z</span>
+<span class="source-line-no">534</span><span id="line.534">     * @param w</span>
+<span class="source-line-no">535</span><span id="line.535">     * @param u</span>
+<span class="source-line-no">536</span><span id="line.536">     * @param v</span>
+<span class="source-line-no">537</span><span id="line.537">     * @param state</span>
+<span class="source-line-no">538</span><span id="line.538">     * @return 5-bit hash of the x,y,z,w,u,v point with the given state</span>
+<span class="source-line-no">539</span><span id="line.539">     */</span>
+<span class="source-line-no">540</span><span id="line.540">    public static int hash32(long x, long y, long z, long w, long u, long v, long state)</span>
+<span class="source-line-no">541</span><span id="line.541">    {</span>
+<span class="source-line-no">542</span><span id="line.542">        state *= 0x9E3779B97F4A7C15L;</span>
+<span class="source-line-no">543</span><span id="line.543">        long other = 0x60642E2A34326F15L;</span>
+<span class="source-line-no">544</span><span id="line.544">        state ^= (other += (x ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
+<span class="source-line-no">545</span><span id="line.545">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
+<span class="source-line-no">546</span><span id="line.546">        state ^= (other += (y ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
+<span class="source-line-no">547</span><span id="line.547">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
+<span class="source-line-no">548</span><span id="line.548">        state ^= (other += (z ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
+<span class="source-line-no">549</span><span id="line.549">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
+<span class="source-line-no">550</span><span id="line.550">        state ^= (other += (w ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
+<span class="source-line-no">551</span><span id="line.551">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
+<span class="source-line-no">552</span><span id="line.552">        state ^= (other += (u ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
+<span class="source-line-no">553</span><span id="line.553">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
+<span class="source-line-no">554</span><span id="line.554">        state ^= (other += (v ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
+<span class="source-line-no">555</span><span id="line.555">        return (int)(state - ((state &lt;&lt; 54 | state &gt;&gt;&gt; 10) + (other ^ other &gt;&gt;&gt; 29)) * 0x94D049BB133111EBL &gt;&gt;&gt; 59);</span>
+<span class="source-line-no">556</span><span id="line.556"></span>
+<span class="source-line-no">557</span><span id="line.557">//            return (int) (((((x *= 0x6C8E9CF570932BD5L) ^ x &gt;&gt;&gt; 26) * (state = state * 0x9E3779B97F4A7C15L | 1L))</span>
+<span class="source-line-no">558</span><span id="line.558">//                    ^ (((y *= 0x5851F42D4C957F2DL) ^ y &gt;&gt;&gt; 26) * state)</span>
+<span class="source-line-no">559</span><span id="line.559">//                    ^ (((z *= 0xAEF17502108EF2D9L) ^ z &gt;&gt;&gt; 26) * state)</span>
+<span class="source-line-no">560</span><span id="line.560">//                    ^ (((w *= 0x94D049BB133111EBL) ^ w &gt;&gt;&gt; 26) * state)</span>
+<span class="source-line-no">561</span><span id="line.561">//                    ^ (((u *= 0xBF58476D1CE4E5B9L) ^ u &gt;&gt;&gt; 26) * state)</span>
+<span class="source-line-no">562</span><span id="line.562">//                    ^ (((v *= 0xC6BC279692B5CC85L) ^ v &gt;&gt;&gt; 26) * state)</span>
+<span class="source-line-no">563</span><span id="line.563">//            ) &gt;&gt;&gt; 59);</span>
+<span class="source-line-no">564</span><span id="line.564"></span>
+<span class="source-line-no">565</span><span id="line.565">//            return (int) ((</span>
+<span class="source-line-no">566</span><span id="line.566">//                    ((state = ((state = x ^ ((state += 0x9E3779B97F4A7C15L ^ y) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL))</span>
+<span class="source-line-no">567</span><span id="line.567">//                            ^ ((state = ((state = y ^ ((state += 0x9E3779B97F4A7C15L ^ z) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL))</span>
+<span class="source-line-no">568</span><span id="line.568">//                            ^ ((state = ((state = z ^ ((state += 0x9E3779B97F4A7C15L ^ w) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL))</span>
+<span class="source-line-no">569</span><span id="line.569">//                            ^ ((state = ((state = w ^ ((state += 0x9E3779B97F4A7C15L ^ u) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL))</span>
+<span class="source-line-no">570</span><span id="line.570">//                            ^ ((state = ((state = u ^ ((state += 0x9E3779B97F4A7C15L ^ v) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL))</span>
+<span class="source-line-no">571</span><span id="line.571">//                            ^ ((((state = v ^ ((state += 0x9E3779B97F4A7C15L ^ x) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL))</span>
+<span class="source-line-no">572</span><span id="line.572">//            ) &gt;&gt;&gt; 59);</span>
+<span class="source-line-no">573</span><span id="line.573"></span>
+<span class="source-line-no">574</span><span id="line.574">        //state *= 0x352E9CF570932BDDL;</span>
+<span class="source-line-no">575</span><span id="line.575">//            return (int) ((((state = ((state += 0x6C8E9CD570932BD5L ^ x) ^ (state &gt;&gt;&gt; 25)) * ((state ^ y) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)) ^</span>
+<span class="source-line-no">576</span><span id="line.576">//                    ((state = ((state += 0x6C8E9CD570932BD5L ^ y) ^ (state &gt;&gt;&gt; 25)) * ((state ^ z) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)) ^</span>
+<span class="source-line-no">577</span><span id="line.577">//                    ((state = ((state += 0x6C8E9CD570932BD5L ^ z) ^ (state &gt;&gt;&gt; 25)) * ((state ^ w) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)) ^</span>
+<span class="source-line-no">578</span><span id="line.578">//                    ((state = ((state += 0x6C8E9CD570932BD5L ^ z) ^ (state &gt;&gt;&gt; 25)) * ((state ^ w) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)) ^</span>
+<span class="source-line-no">579</span><span id="line.579">//                    ((state = ((state += 0x6C8E9CD570932BD5L ^ u) ^ (state &gt;&gt;&gt; 25)) * ((state ^ v) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)) ^</span>
+<span class="source-line-no">580</span><span id="line.580">//                    (((state += 0x6C8E9CD570932BD5L ^ v) ^ (state &gt;&gt;&gt; 25)) * ((state ^ x) | 0xA529L))) &gt;&gt;&gt; 59);</span>
+<span class="source-line-no">581</span><span id="line.581">    }</span>
+<span class="source-line-no">582</span><span id="line.582"></span>
+<span class="source-line-no">583</span><span id="line.583">    /**</span>
+<span class="source-line-no">584</span><span id="line.584">     *</span>
+<span class="source-line-no">585</span><span id="line.585">     * @param x</span>
+<span class="source-line-no">586</span><span id="line.586">     * @param y</span>
+<span class="source-line-no">587</span><span id="line.587">     * @param state</span>
+<span class="source-line-no">588</span><span id="line.588">     * @return 6-bit hash of the x,y point with the given state</span>
+<span class="source-line-no">589</span><span id="line.589">     */</span>
+<span class="source-line-no">590</span><span id="line.590">    public static int hash64(long x, long y, long state)</span>
+<span class="source-line-no">591</span><span id="line.591">    {</span>
+<span class="source-line-no">592</span><span id="line.592">        state *= 0x9E3779B97F4A7C15L;</span>
+<span class="source-line-no">593</span><span id="line.593">        long other = 0x60642E2A34326F15L;</span>
+<span class="source-line-no">594</span><span id="line.594">        state ^= (other += (x ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
+<span class="source-line-no">595</span><span id="line.595">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
+<span class="source-line-no">596</span><span id="line.596">        state ^= (other += (y ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
+<span class="source-line-no">597</span><span id="line.597">        return (int)(state - ((state &lt;&lt; 54 | state &gt;&gt;&gt; 10) + (other ^ other &gt;&gt;&gt; 29)) * 0x94D049BB133111EBL &gt;&gt;&gt; 58);</span>
+<span class="source-line-no">598</span><span id="line.598"></span>
+<span class="source-line-no">599</span><span id="line.599">//            return (int) (((((x *= 0x6C8E9CF570932BD5L) ^ x &gt;&gt;&gt; 26) * (state = state * 0x9E3779B97F4A7C15L | 1L))</span>
+<span class="source-line-no">600</span><span id="line.600">//                    ^ (((y *= 0x5851F42D4C957F2DL) ^ y &gt;&gt;&gt; 26) * state)</span>
+<span class="source-line-no">601</span><span id="line.601">//            ) &gt;&gt;&gt; 58);</span>
+<span class="source-line-no">602</span><span id="line.602"></span>
+<span class="source-line-no">603</span><span id="line.603">//            return (int) ((</span>
+<span class="source-line-no">604</span><span id="line.604">//                    ((state = ((state = x ^ ((state += 0x9E3779B97F4A7C15L ^ y) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL))</span>
+<span class="source-line-no">605</span><span id="line.605">//                            ^ ((((state = y ^ ((state += 0x9E3779B97F4A7C15L ^ x) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL))</span>
+<span class="source-line-no">606</span><span id="line.606">//            ) &gt;&gt;&gt; 58);</span>
+<span class="source-line-no">607</span><span id="line.607"></span>
+<span class="source-line-no">608</span><span id="line.608"></span>
+<span class="source-line-no">609</span><span id="line.609">        //state *= 0x352E9CF570932BDDL;</span>
+<span class="source-line-no">610</span><span id="line.610">//            return (int) ((((state = ((state += 0x6C8E9CD570932BD5L ^ x) ^ (state &gt;&gt;&gt; 25)) * ((state ^ y) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)) ^</span>
+<span class="source-line-no">611</span><span id="line.611">//                    (((state += 0x6C8E9CD570932BD5L ^ y) ^ (state &gt;&gt;&gt; 25)) * ((state ^ x) | 0xA529L))) &gt;&gt;&gt; 58);</span>
+<span class="source-line-no">612</span><span id="line.612">    }</span>
+<span class="source-line-no">613</span><span id="line.613">    /**</span>
+<span class="source-line-no">614</span><span id="line.614">     *</span>
+<span class="source-line-no">615</span><span id="line.615">     * @param x</span>
+<span class="source-line-no">616</span><span id="line.616">     * @param y</span>
+<span class="source-line-no">617</span><span id="line.617">     * @param z</span>
+<span class="source-line-no">618</span><span id="line.618">     * @param state</span>
+<span class="source-line-no">619</span><span id="line.619">     * @return 6-bit hash of the x,y,z point with the given state</span>
+<span class="source-line-no">620</span><span id="line.620">     */</span>
+<span class="source-line-no">621</span><span id="line.621">    public static int hash64(long x, long y, long z, long state)</span>
+<span class="source-line-no">622</span><span id="line.622">    {</span>
+<span class="source-line-no">623</span><span id="line.623">        state *= 0x9E3779B97F4A7C15L;</span>
+<span class="source-line-no">624</span><span id="line.624">        long other = 0x60642E2A34326F15L;</span>
+<span class="source-line-no">625</span><span id="line.625">        state ^= (other += (x ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
+<span class="source-line-no">626</span><span id="line.626">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
+<span class="source-line-no">627</span><span id="line.627">        state ^= (other += (y ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
+<span class="source-line-no">628</span><span id="line.628">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
+<span class="source-line-no">629</span><span id="line.629">        state ^= (other += (z ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
+<span class="source-line-no">630</span><span id="line.630">        return (int)(state - ((state &lt;&lt; 54 | state &gt;&gt;&gt; 10) + (other ^ other &gt;&gt;&gt; 29)) * 0x94D049BB133111EBL &gt;&gt;&gt; 58);</span>
+<span class="source-line-no">631</span><span id="line.631"></span>
+<span class="source-line-no">632</span><span id="line.632">//            return (int) (((((x *= 0x6C8E9CF570932BD5L) ^ x &gt;&gt;&gt; 26) * (state = state * 0x9E3779B97F4A7C15L | 1L))</span>
+<span class="source-line-no">633</span><span id="line.633">//                    ^ (((y *= 0x5851F42D4C957F2DL) ^ y &gt;&gt;&gt; 26) * state)</span>
+<span class="source-line-no">634</span><span id="line.634">//                    ^ (((z *= 0xAEF17502108EF2D9L) ^ z &gt;&gt;&gt; 26) * state)</span>
+<span class="source-line-no">635</span><span id="line.635">//            ) &gt;&gt;&gt; 58);</span>
+<span class="source-line-no">636</span><span id="line.636"></span>
+<span class="source-line-no">637</span><span id="line.637">//            return (int) ((</span>
+<span class="source-line-no">638</span><span id="line.638">//                    ((state = ((state = x ^ ((state += 0x9E3779B97F4A7C15L ^ y) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL))</span>
+<span class="source-line-no">639</span><span id="line.639">//                            ^ ((state = ((state = y ^ ((state += 0x9E3779B97F4A7C15L ^ z) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL))</span>
+<span class="source-line-no">640</span><span id="line.640">//                            ^ ((((state = z ^ ((state += 0x9E3779B97F4A7C15L ^ x) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL))</span>
+<span class="source-line-no">641</span><span id="line.641">//            ) &gt;&gt;&gt; 58);</span>
+<span class="source-line-no">642</span><span id="line.642"></span>
+<span class="source-line-no">643</span><span id="line.643">        //state *= 0x352E9CF570932BDDL;</span>
+<span class="source-line-no">644</span><span id="line.644">//            return (int) ((((state = ((state += 0x6C8E9CD570932BD5L ^ x) ^ (state &gt;&gt;&gt; 25)) * ((state ^ y - z) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)) ^</span>
+<span class="source-line-no">645</span><span id="line.645">//                    ((state = ((state += 0x6C8E9CD570932BD5L ^ y) ^ (state &gt;&gt;&gt; 25)) * ((state ^ z - x) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)) ^</span>
+<span class="source-line-no">646</span><span id="line.646">//                    (((state += 0x6C8E9CD570932BD5L ^ z) ^ (state &gt;&gt;&gt; 25)) * ((state ^ x - y) | 0xA529L))) &gt;&gt;&gt; 58);</span>
+<span class="source-line-no">647</span><span id="line.647">    }</span>
+<span class="source-line-no">648</span><span id="line.648">    /**</span>
+<span class="source-line-no">649</span><span id="line.649">     *</span>
+<span class="source-line-no">650</span><span id="line.650">     * @param x</span>
+<span class="source-line-no">651</span><span id="line.651">     * @param y</span>
+<span class="source-line-no">652</span><span id="line.652">     * @param z</span>
+<span class="source-line-no">653</span><span id="line.653">     * @param w</span>
+<span class="source-line-no">654</span><span id="line.654">     * @param state</span>
+<span class="source-line-no">655</span><span id="line.655">     * @return 6-bit hash of the x,y,z,w point with the given state</span>
+<span class="source-line-no">656</span><span id="line.656">     */</span>
+<span class="source-line-no">657</span><span id="line.657">    public static int hash64(long x, long y, long z, long w, long state)</span>
+<span class="source-line-no">658</span><span id="line.658">    {</span>
+<span class="source-line-no">659</span><span id="line.659">        state *= 0x9E3779B97F4A7C15L;</span>
+<span class="source-line-no">660</span><span id="line.660">        long other = 0x60642E2A34326F15L;</span>
+<span class="source-line-no">661</span><span id="line.661">        state ^= (other += (x ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
+<span class="source-line-no">662</span><span id="line.662">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
+<span class="source-line-no">663</span><span id="line.663">        state ^= (other += (y ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
+<span class="source-line-no">664</span><span id="line.664">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
+<span class="source-line-no">665</span><span id="line.665">        state ^= (other += (z ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
+<span class="source-line-no">666</span><span id="line.666">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
+<span class="source-line-no">667</span><span id="line.667">        state ^= (other += (w ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
+<span class="source-line-no">668</span><span id="line.668">        return (int)(state - ((state &lt;&lt; 54 | state &gt;&gt;&gt; 10) + (other ^ other &gt;&gt;&gt; 29)) * 0x94D049BB133111EBL &gt;&gt;&gt; 58);</span>
+<span class="source-line-no">669</span><span id="line.669"></span>
+<span class="source-line-no">670</span><span id="line.670">//            return (int) (((((x *= 0x6C8E9CF570932BD5L) ^ x &gt;&gt;&gt; 26) * (state = state * 0x9E3779B97F4A7C15L | 1L))</span>
+<span class="source-line-no">671</span><span id="line.671">//                    ^ (((y *= 0x5851F42D4C957F2DL) ^ y &gt;&gt;&gt; 26) * state)</span>
+<span class="source-line-no">672</span><span id="line.672">//                    ^ (((z *= 0xAEF17502108EF2D9L) ^ z &gt;&gt;&gt; 26) * state)</span>
+<span class="source-line-no">673</span><span id="line.673">//                    ^ (((w *= 0x94D049BB133111EBL) ^ w &gt;&gt;&gt; 26) * state)</span>
+<span class="source-line-no">674</span><span id="line.674">//            ) &gt;&gt;&gt; 58);</span>
+<span class="source-line-no">675</span><span id="line.675"></span>
+<span class="source-line-no">676</span><span id="line.676">//            return (int) ((</span>
+<span class="source-line-no">677</span><span id="line.677">//                    ((state = ((state = x ^ ((state += 0x9E3779B97F4A7C15L ^ y) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL))</span>
+<span class="source-line-no">678</span><span id="line.678">//                            ^ ((state = ((state = y ^ ((state += 0x9E3779B97F4A7C15L ^ z) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL))</span>
+<span class="source-line-no">679</span><span id="line.679">//                            ^ ((state = ((state = z ^ ((state += 0x9E3779B97F4A7C15L ^ w) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL))</span>
+<span class="source-line-no">680</span><span id="line.680">//                            ^ ((((state = w ^ ((state += 0x9E3779B97F4A7C15L ^ x) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL))</span>
+<span class="source-line-no">681</span><span id="line.681">//            ) &gt;&gt;&gt; 58);</span>
+<span class="source-line-no">682</span><span id="line.682"></span>
+<span class="source-line-no">683</span><span id="line.683">        //state *= 0x352E9CF570932BDDL;</span>
+<span class="source-line-no">684</span><span id="line.684">//            return (int) ((((state = ((state += 0x6C8E9CD570932BD5L ^ x) ^ (state &gt;&gt;&gt; 25)) * ((state ^ y) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)) ^</span>
+<span class="source-line-no">685</span><span id="line.685">//                    ((state = ((state += 0x6C8E9CD570932BD5L ^ y) ^ (state &gt;&gt;&gt; 25)) * ((state ^ z) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)) ^</span>
+<span class="source-line-no">686</span><span id="line.686">//                    ((state = ((state += 0x6C8E9CD570932BD5L ^ z) ^ (state &gt;&gt;&gt; 25)) * ((state ^ w) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)) ^</span>
+<span class="source-line-no">687</span><span id="line.687">//                    (((state += 0x6C8E9CD570932BD5L ^ w) ^ (state &gt;&gt;&gt; 25)) * ((state ^ x) | 0xA529L))) &gt;&gt;&gt; 58);</span>
+<span class="source-line-no">688</span><span id="line.688">    }</span>
+<span class="source-line-no">689</span><span id="line.689">    /**</span>
+<span class="source-line-no">690</span><span id="line.690">     *</span>
+<span class="source-line-no">691</span><span id="line.691">     * @param x</span>
+<span class="source-line-no">692</span><span id="line.692">     * @param y</span>
+<span class="source-line-no">693</span><span id="line.693">     * @param z</span>
+<span class="source-line-no">694</span><span id="line.694">     * @param w</span>
+<span class="source-line-no">695</span><span id="line.695">     * @param u</span>
+<span class="source-line-no">696</span><span id="line.696">     * @param v</span>
+<span class="source-line-no">697</span><span id="line.697">     * @param state</span>
+<span class="source-line-no">698</span><span id="line.698">     * @return 6-bit hash of the x,y,z,w,u,v point with the given state</span>
+<span class="source-line-no">699</span><span id="line.699">     */</span>
+<span class="source-line-no">700</span><span id="line.700">    public static int hash64(long x, long y, long z, long w, long u, long v, long state)</span>
+<span class="source-line-no">701</span><span id="line.701">    {</span>
+<span class="source-line-no">702</span><span id="line.702">        state *= 0x9E3779B97F4A7C15L;</span>
+<span class="source-line-no">703</span><span id="line.703">        long other = 0x60642E2A34326F15L;</span>
+<span class="source-line-no">704</span><span id="line.704">        state ^= (other += (x ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
+<span class="source-line-no">705</span><span id="line.705">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
+<span class="source-line-no">706</span><span id="line.706">        state ^= (other += (y ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
+<span class="source-line-no">707</span><span id="line.707">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
+<span class="source-line-no">708</span><span id="line.708">        state ^= (other += (z ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
+<span class="source-line-no">709</span><span id="line.709">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
+<span class="source-line-no">710</span><span id="line.710">        state ^= (other += (w ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
+<span class="source-line-no">711</span><span id="line.711">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
+<span class="source-line-no">712</span><span id="line.712">        state ^= (other += (u ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
+<span class="source-line-no">713</span><span id="line.713">        state = (state &lt;&lt; 54 | state &gt;&gt;&gt; 10);</span>
+<span class="source-line-no">714</span><span id="line.714">        state ^= (other += (v ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);</span>
+<span class="source-line-no">715</span><span id="line.715">        return (int)(state - ((state &lt;&lt; 54 | state &gt;&gt;&gt; 10) + (other ^ other &gt;&gt;&gt; 29)) * 0x94D049BB133111EBL &gt;&gt;&gt; 58);</span>
+<span class="source-line-no">716</span><span id="line.716"></span>
+<span class="source-line-no">717</span><span id="line.717">//            return (int) (((((x *= 0x6C8E9CF570932BD5L) ^ x &gt;&gt;&gt; 26) * (state = state * 0x9E3779B97F4A7C15L | 1L))</span>
+<span class="source-line-no">718</span><span id="line.718">//                    ^ (((y *= 0x5851F42D4C957F2DL) ^ y &gt;&gt;&gt; 26) * state)</span>
+<span class="source-line-no">719</span><span id="line.719">//                    ^ (((z *= 0xAEF17502108EF2D9L) ^ z &gt;&gt;&gt; 26) * state)</span>
+<span class="source-line-no">720</span><span id="line.720">//                    ^ (((w *= 0x94D049BB133111EBL) ^ w &gt;&gt;&gt; 26) * state)</span>
+<span class="source-line-no">721</span><span id="line.721">//                    ^ (((u *= 0xBF58476D1CE4E5B9L) ^ u &gt;&gt;&gt; 26) * state)</span>
+<span class="source-line-no">722</span><span id="line.722">//                    ^ (((v *= 0xC6BC279692B5CC85L) ^ v &gt;&gt;&gt; 26) * state)</span>
+<span class="source-line-no">723</span><span id="line.723">//            ) &gt;&gt;&gt; 58);</span>
+<span class="source-line-no">724</span><span id="line.724"></span>
+<span class="source-line-no">725</span><span id="line.725">//            return (int) ((</span>
+<span class="source-line-no">726</span><span id="line.726">//                    ((state = ((state = x ^ ((state += 0x9E3779B97F4A7C15L ^ y) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL))</span>
+<span class="source-line-no">727</span><span id="line.727">//                            ^ ((state = ((state = y ^ ((state += 0x9E3779B97F4A7C15L ^ z) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL))</span>
+<span class="source-line-no">728</span><span id="line.728">//                            ^ ((state = ((state = z ^ ((state += 0x9E3779B97F4A7C15L ^ w) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL))</span>
+<span class="source-line-no">729</span><span id="line.729">//                            ^ ((state = ((state = w ^ ((state += 0x9E3779B97F4A7C15L ^ u) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL))</span>
+<span class="source-line-no">730</span><span id="line.730">//                            ^ ((state = ((state = u ^ ((state += 0x9E3779B97F4A7C15L ^ v) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL))</span>
+<span class="source-line-no">731</span><span id="line.731">//                            ^ ((((state = v ^ ((state += 0x9E3779B97F4A7C15L ^ x) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL))</span>
+<span class="source-line-no">732</span><span id="line.732">//            ) &gt;&gt;&gt; 58);</span>
+<span class="source-line-no">733</span><span id="line.733"></span>
+<span class="source-line-no">734</span><span id="line.734">        //state *= 0x352E9CF570932BDDL;</span>
+<span class="source-line-no">735</span><span id="line.735">//            return (int) ((((state = ((state += 0x6C8E9CD570932BD5L ^ x) ^ (state &gt;&gt;&gt; 25)) * ((state ^ y) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)) ^</span>
+<span class="source-line-no">736</span><span id="line.736">//                    ((state = ((state += 0x6C8E9CD570932BD5L ^ y) ^ (state &gt;&gt;&gt; 25)) * ((state ^ z) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)) ^</span>
+<span class="source-line-no">737</span><span id="line.737">//                    ((state = ((state += 0x6C8E9CD570932BD5L ^ z) ^ (state &gt;&gt;&gt; 25)) * ((state ^ w) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)) ^</span>
+<span class="source-line-no">738</span><span id="line.738">//                    ((state = ((state += 0x6C8E9CD570932BD5L ^ z) ^ (state &gt;&gt;&gt; 25)) * ((state ^ w) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)) ^</span>
+<span class="source-line-no">739</span><span id="line.739">//                    ((state = ((state += 0x6C8E9CD570932BD5L ^ u) ^ (state &gt;&gt;&gt; 25)) * ((state ^ v) | 0xA529L)) ^ (state &gt;&gt;&gt; 22)) ^</span>
+<span class="source-line-no">740</span><span id="line.740">//                    (((state += 0x6C8E9CD570932BD5L ^ v) ^ (state &gt;&gt;&gt; 25)) * ((state ^ x) | 0xA529L))) &gt;&gt;&gt; 58);</span>
+<span class="source-line-no">741</span><span id="line.741">    }</span>
+<span class="source-line-no">742</span><span id="line.742"></span>
+<span class="source-line-no">743</span><span id="line.743">}</span>
 
 
 

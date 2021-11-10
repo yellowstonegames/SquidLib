@@ -423,7 +423,7 @@
 <span class="source-line-no">410</span><span id="line.410">                    continue;</span>
 <span class="source-line-no">411</span><span id="line.411">                else</span>
 <span class="source-line-no">412</span><span id="line.412">                    hasFresh = true;</span>
-<span class="source-line-no">413</span><span id="line.413">                Coord cell = currentFresh.randomItem(rng);//.toArray(new Coord[currentFresh.size()])[rng.nextInt(currentFresh.size())];</span>
+<span class="source-line-no">413</span><span id="line.413">                Coord cell = currentFresh.randomItem(rng);</span>
 <span class="source-line-no">414</span><span id="line.414"></span>
 <span class="source-line-no">415</span><span id="line.415">                spreadPattern.get(i).add(cell);</span>
 <span class="source-line-no">416</span><span id="line.416">                spillMap[cell.x][cell.y] = i;</span>
@@ -432,130 +432,128 @@
 <span class="source-line-no">419</span><span id="line.419"></span>
 <span class="source-line-no">420</span><span id="line.420">                for (int d = 0; d &lt; dirs.length; d++) {</span>
 <span class="source-line-no">421</span><span id="line.421">                    Coord adj = cell.translate(dirs[d].deltaX, dirs[d].deltaY);</span>
-<span class="source-line-no">422</span><span id="line.422">                    if(!adj.isWithin(width, height))</span>
-<span class="source-line-no">423</span><span id="line.423">                        continue;</span>
-<span class="source-line-no">424</span><span id="line.424">                    double h = heuristic(dirs[d]);</span>
-<span class="source-line-no">425</span><span id="line.425">                    if (physicalMap[adj.x][adj.y] &amp;&amp; !anySpillMap.contains(adj.x, adj.y) &amp;&amp; (impassable == null || !impassable.contains(adj)) &amp;&amp; rng.nextDouble(h) &lt;= 1.0) {</span>
-<span class="source-line-no">426</span><span id="line.426">                        setFresh(i, adj);</span>
-<span class="source-line-no">427</span><span id="line.427">                    }</span>
-<span class="source-line-no">428</span><span id="line.428">                }</span>
-<span class="source-line-no">429</span><span id="line.429">                currentFresh.remove(cell);</span>
-<span class="source-line-no">430</span><span id="line.430">                anyFreshMap.remove(cell.x, cell.y);</span>
-<span class="source-line-no">431</span><span id="line.431">            }</span>
-<span class="source-line-no">432</span><span id="line.432">        }</span>
-<span class="source-line-no">433</span><span id="line.433">        return spreadPattern;</span>
-<span class="source-line-no">434</span><span id="line.434">    }</span>
-<span class="source-line-no">435</span><span id="line.435"></span>
-<span class="source-line-no">436</span><span id="line.436">    /**</span>
-<span class="source-line-no">437</span><span id="line.437">     * Recalculate the spillMap and return the spreadPattern. The cell corresponding to a key in entries will be true,</span>
-<span class="source-line-no">438</span><span id="line.438">     * the cells near each of those will be true if chosen at random from all passable cells adjacent to a</span>
-<span class="source-line-no">439</span><span id="line.439">     * filled (true) cell, and all other cells will be false. This takes a total number of cells to attempt</span>
-<span class="source-line-no">440</span><span id="line.440">     * to fill (the volume parameter), which can be negative to simply fill the whole map, and will fill less if it has</span>
-<span class="source-line-no">441</span><span id="line.441">     * completely exhausted all passable cells from all sources in entries. It uses the values in entries to determine</span>
-<span class="source-line-no">442</span><span id="line.442">     * whether it should advance from a particular key in that step or not; this choice is pseudo-random. If you have</span>
-<span class="source-line-no">443</span><span id="line.443">     * some values that are at or near 1.0 and some values that are closer to 0.0, you should expect the keys for the</span>
-<span class="source-line-no">444</span><span id="line.444">     * higher values to spread further out than the keys associated with lower values.</span>
-<span class="source-line-no">445</span><span id="line.445">     * &lt;br&gt;</span>
-<span class="source-line-no">446</span><span id="line.446">     * If the measurement this Spill uses is anything other than MANHATTAN, you can expect many gaps in the first</span>
-<span class="source-line-no">447</span><span id="line.447">     * filled area.  Subsequent calls to start() with the same entry and a higher volume will expand the area</span>
-<span class="source-line-no">448</span><span id="line.448">     * of the Spill, and are likely to fill any gaps after a few subsequent calls. Increasing the volume slowly</span>
-<span class="source-line-no">449</span><span id="line.449">     * is the best way to ensure that gaps only exist on the very edge if you use a non-MANHATTAN measurement.</span>
-<span class="source-line-no">450</span><span id="line.450">     * &lt;br&gt;</span>
-<span class="source-line-no">451</span><span id="line.451">     * The intended purpose for this method is filling contiguous areas of dungeon with certain terrain features, but it</span>
-<span class="source-line-no">452</span><span id="line.452">     * has plenty of other uses as well.</span>
-<span class="source-line-no">453</span><span id="line.453">     * @param entries key: the first cell for each spiller to spread from. value: the bias toward advancing this key;</span>
-<span class="source-line-no">454</span><span id="line.454">     *                1.0 will always advance, 0.0 will never advance beyond the key, in between will randomly choose</span>
-<span class="source-line-no">455</span><span id="line.455">     * @param volume the total number of cells to attempt to fill; if negative will fill the whole map.</span>
-<span class="source-line-no">456</span><span id="line.456">     * @param impassable a Collection, ideally a Set or GreasedRegion, holding Coord items representing the locations of</span>
-<span class="source-line-no">457</span><span id="line.457">     *                   moving obstacles to a fill that cannot be moved through; null means no obstacles exist.</span>
-<span class="source-line-no">458</span><span id="line.458">     * @return an ArrayList of Points that this will enter, in order starting with entry at index 0, until it</span>
-<span class="source-line-no">459</span><span id="line.459">     * reaches its volume or fills its boundaries completely.</span>
-<span class="source-line-no">460</span><span id="line.460">     */</span>
-<span class="source-line-no">461</span><span id="line.461">    public ArrayList&lt;ArrayList&lt;Coord&gt;&gt; start(OrderedMap&lt;Coord, Double&gt; entries, int volume, Collection&lt;Coord&gt; impassable) {</span>
-<span class="source-line-no">462</span><span id="line.462">        if(!initialized || entries == null) return null;</span>
-<span class="source-line-no">463</span><span id="line.463">        if(volume &lt; 0)</span>
-<span class="source-line-no">464</span><span id="line.464">            volume = Integer.MAX_VALUE;</span>
-<span class="source-line-no">465</span><span id="line.465">        int sz = entries.size();</span>
-<span class="source-line-no">466</span><span id="line.466">        ArrayList&lt;Coord&gt; spillers = new ArrayList&lt;&gt;(entries.keySet());</span>
-<span class="source-line-no">467</span><span id="line.467">        ArrayList&lt;Double&gt;</span>
-<span class="source-line-no">468</span><span id="line.468">                biases = new ArrayList&lt;&gt;(sz);</span>
-<span class="source-line-no">469</span><span id="line.469">        spreadPattern = new ArrayList&lt;&gt;(sz);</span>
-<span class="source-line-no">470</span><span id="line.470">        fresh.clear();</span>
-<span class="source-line-no">471</span><span id="line.471">        filled = 0;</span>
-<span class="source-line-no">472</span><span id="line.472">        boolean hasFresh = false;</span>
-<span class="source-line-no">473</span><span id="line.473">        for (short i = 0; i &lt; sz; i++) {</span>
-<span class="source-line-no">474</span><span id="line.474">            spreadPattern.add(new ArrayList&lt;Coord&gt;(128));</span>
-<span class="source-line-no">475</span><span id="line.475">            OrderedSet&lt;Coord&gt; os = new OrderedSet&lt;Coord&gt;(128);</span>
-<span class="source-line-no">476</span><span id="line.476">            fresh.add(os);</span>
-<span class="source-line-no">477</span><span id="line.477">            Coord c = spillers.get(i);</span>
-<span class="source-line-no">478</span><span id="line.478">            Double d = entries.getAt(i);</span>
-<span class="source-line-no">479</span><span id="line.479">            biases.add(d);</span>
-<span class="source-line-no">480</span><span id="line.480">            if (d &lt;= 0.0001 || c.x &lt; 0 || c.y &lt; 0)</span>
-<span class="source-line-no">481</span><span id="line.481">                continue;</span>
-<span class="source-line-no">482</span><span id="line.482">            spillMap[c.x][c.y] = i;</span>
-<span class="source-line-no">483</span><span id="line.483">            if (impassable == null || !impassable.contains(c)) {</span>
-<span class="source-line-no">484</span><span id="line.484">                os.add(c);</span>
-<span class="source-line-no">485</span><span id="line.485">                hasFresh = true;</span>
-<span class="source-line-no">486</span><span id="line.486">            }</span>
-<span class="source-line-no">487</span><span id="line.487">        }</span>
-<span class="source-line-no">488</span><span id="line.488"></span>
-<span class="source-line-no">489</span><span id="line.489">        Direction[] dirs = (measurement == Measurement.MANHATTAN) ? Direction.CARDINALS : Direction.OUTWARDS;</span>
-<span class="source-line-no">490</span><span id="line.490"></span>
-<span class="source-line-no">491</span><span id="line.491">        while (hasFresh &amp;&amp; filled &lt; volume) {</span>
-<span class="source-line-no">492</span><span id="line.492">            hasFresh = false;</span>
-<span class="source-line-no">493</span><span id="line.493">            for (short i = 0; i &lt; spillers.size() &amp;&amp; filled &lt; volume; i++) {</span>
-<span class="source-line-no">494</span><span id="line.494">                OrderedSet&lt;Coord&gt; currentFresh = fresh.get(i);</span>
-<span class="source-line-no">495</span><span id="line.495">                if(currentFresh.isEmpty())</span>
-<span class="source-line-no">496</span><span id="line.496">                    continue;</span>
-<span class="source-line-no">497</span><span id="line.497">                else</span>
-<span class="source-line-no">498</span><span id="line.498">                    hasFresh = true;</span>
-<span class="source-line-no">499</span><span id="line.499">                if(rng.nextDouble() &lt; biases.get(i)) {</span>
-<span class="source-line-no">500</span><span id="line.500">                    Coord cell = currentFresh.randomItem(rng);</span>
-<span class="source-line-no">501</span><span id="line.501">                    spreadPattern.get(i).add(cell);</span>
-<span class="source-line-no">502</span><span id="line.502">                    spillMap[cell.x][cell.y] = i;</span>
-<span class="source-line-no">503</span><span id="line.503">                    filled++;</span>
-<span class="source-line-no">504</span><span id="line.504">                    anySpillMap.insert(cell.x, cell.y);</span>
+<span class="source-line-no">422</span><span id="line.422">                    if(!adj.isWithin(width, height)) continue;</span>
+<span class="source-line-no">423</span><span id="line.423">                    double h = heuristic(dirs[d]);</span>
+<span class="source-line-no">424</span><span id="line.424">                    if (physicalMap[adj.x][adj.y] &amp;&amp; !anySpillMap.contains(adj.x, adj.y) &amp;&amp; (impassable == null || !impassable.contains(adj)) &amp;&amp; rng.nextDouble(h) &lt;= 1.0) {</span>
+<span class="source-line-no">425</span><span id="line.425">                        setFresh(i, adj);</span>
+<span class="source-line-no">426</span><span id="line.426">                    }</span>
+<span class="source-line-no">427</span><span id="line.427">                }</span>
+<span class="source-line-no">428</span><span id="line.428">                currentFresh.remove(cell);</span>
+<span class="source-line-no">429</span><span id="line.429">                anyFreshMap.remove(cell.x, cell.y);</span>
+<span class="source-line-no">430</span><span id="line.430">            }</span>
+<span class="source-line-no">431</span><span id="line.431">        }</span>
+<span class="source-line-no">432</span><span id="line.432">        return spreadPattern;</span>
+<span class="source-line-no">433</span><span id="line.433">    }</span>
+<span class="source-line-no">434</span><span id="line.434"></span>
+<span class="source-line-no">435</span><span id="line.435">    /**</span>
+<span class="source-line-no">436</span><span id="line.436">     * Recalculate the spillMap and return the spreadPattern. The cell corresponding to a key in entries will be true,</span>
+<span class="source-line-no">437</span><span id="line.437">     * the cells near each of those will be true if chosen at random from all passable cells adjacent to a</span>
+<span class="source-line-no">438</span><span id="line.438">     * filled (true) cell, and all other cells will be false. This takes a total number of cells to attempt</span>
+<span class="source-line-no">439</span><span id="line.439">     * to fill (the volume parameter), which can be negative to simply fill the whole map, and will fill less if it has</span>
+<span class="source-line-no">440</span><span id="line.440">     * completely exhausted all passable cells from all sources in entries. It uses the values in entries to determine</span>
+<span class="source-line-no">441</span><span id="line.441">     * whether it should advance from a particular key in that step or not; this choice is pseudo-random. If you have</span>
+<span class="source-line-no">442</span><span id="line.442">     * some values that are at or near 1.0 and some values that are closer to 0.0, you should expect the keys for the</span>
+<span class="source-line-no">443</span><span id="line.443">     * higher values to spread further out than the keys associated with lower values.</span>
+<span class="source-line-no">444</span><span id="line.444">     * &lt;br&gt;</span>
+<span class="source-line-no">445</span><span id="line.445">     * If the measurement this Spill uses is anything other than MANHATTAN, you can expect many gaps in the first</span>
+<span class="source-line-no">446</span><span id="line.446">     * filled area.  Subsequent calls to start() with the same entry and a higher volume will expand the area</span>
+<span class="source-line-no">447</span><span id="line.447">     * of the Spill, and are likely to fill any gaps after a few subsequent calls. Increasing the volume slowly</span>
+<span class="source-line-no">448</span><span id="line.448">     * is the best way to ensure that gaps only exist on the very edge if you use a non-MANHATTAN measurement.</span>
+<span class="source-line-no">449</span><span id="line.449">     * &lt;br&gt;</span>
+<span class="source-line-no">450</span><span id="line.450">     * The intended purpose for this method is filling contiguous areas of dungeon with certain terrain features, but it</span>
+<span class="source-line-no">451</span><span id="line.451">     * has plenty of other uses as well.</span>
+<span class="source-line-no">452</span><span id="line.452">     * @param entries key: the first cell for each spiller to spread from. value: the bias toward advancing this key;</span>
+<span class="source-line-no">453</span><span id="line.453">     *                1.0 will always advance, 0.0 will never advance beyond the key, in between will randomly choose</span>
+<span class="source-line-no">454</span><span id="line.454">     * @param volume the total number of cells to attempt to fill; if negative will fill the whole map.</span>
+<span class="source-line-no">455</span><span id="line.455">     * @param impassable a Collection, ideally a Set or GreasedRegion, holding Coord items representing the locations of</span>
+<span class="source-line-no">456</span><span id="line.456">     *                   moving obstacles to a fill that cannot be moved through; null means no obstacles exist.</span>
+<span class="source-line-no">457</span><span id="line.457">     * @return an ArrayList of Points that this will enter, in order starting with entry at index 0, until it</span>
+<span class="source-line-no">458</span><span id="line.458">     * reaches its volume or fills its boundaries completely.</span>
+<span class="source-line-no">459</span><span id="line.459">     */</span>
+<span class="source-line-no">460</span><span id="line.460">    public ArrayList&lt;ArrayList&lt;Coord&gt;&gt; start(OrderedMap&lt;Coord, Double&gt; entries, int volume, Collection&lt;Coord&gt; impassable) {</span>
+<span class="source-line-no">461</span><span id="line.461">        if(!initialized || entries == null) return null;</span>
+<span class="source-line-no">462</span><span id="line.462">        if(volume &lt; 0)</span>
+<span class="source-line-no">463</span><span id="line.463">            volume = Integer.MAX_VALUE;</span>
+<span class="source-line-no">464</span><span id="line.464">        int sz = entries.size();</span>
+<span class="source-line-no">465</span><span id="line.465">        ArrayList&lt;Coord&gt; spillers = new ArrayList&lt;&gt;(entries.keySet());</span>
+<span class="source-line-no">466</span><span id="line.466">        ArrayList&lt;Double&gt;</span>
+<span class="source-line-no">467</span><span id="line.467">                biases = new ArrayList&lt;&gt;(sz);</span>
+<span class="source-line-no">468</span><span id="line.468">        spreadPattern = new ArrayList&lt;&gt;(sz);</span>
+<span class="source-line-no">469</span><span id="line.469">        fresh.clear();</span>
+<span class="source-line-no">470</span><span id="line.470">        filled = 0;</span>
+<span class="source-line-no">471</span><span id="line.471">        boolean hasFresh = false;</span>
+<span class="source-line-no">472</span><span id="line.472">        for (short i = 0; i &lt; sz; i++) {</span>
+<span class="source-line-no">473</span><span id="line.473">            spreadPattern.add(new ArrayList&lt;Coord&gt;(128));</span>
+<span class="source-line-no">474</span><span id="line.474">            OrderedSet&lt;Coord&gt; os = new OrderedSet&lt;Coord&gt;(128);</span>
+<span class="source-line-no">475</span><span id="line.475">            fresh.add(os);</span>
+<span class="source-line-no">476</span><span id="line.476">            Coord c = spillers.get(i);</span>
+<span class="source-line-no">477</span><span id="line.477">            Double d = entries.getAt(i);</span>
+<span class="source-line-no">478</span><span id="line.478">            biases.add(d);</span>
+<span class="source-line-no">479</span><span id="line.479">            if (d &lt;= 0.0001 || c.x &lt; 0 || c.y &lt; 0)</span>
+<span class="source-line-no">480</span><span id="line.480">                continue;</span>
+<span class="source-line-no">481</span><span id="line.481">            spillMap[c.x][c.y] = i;</span>
+<span class="source-line-no">482</span><span id="line.482">            if (impassable == null || !impassable.contains(c)) {</span>
+<span class="source-line-no">483</span><span id="line.483">                os.add(c);</span>
+<span class="source-line-no">484</span><span id="line.484">                hasFresh = true;</span>
+<span class="source-line-no">485</span><span id="line.485">            }</span>
+<span class="source-line-no">486</span><span id="line.486">        }</span>
+<span class="source-line-no">487</span><span id="line.487"></span>
+<span class="source-line-no">488</span><span id="line.488">        Direction[] dirs = (measurement == Measurement.MANHATTAN) ? Direction.CARDINALS : Direction.OUTWARDS;</span>
+<span class="source-line-no">489</span><span id="line.489"></span>
+<span class="source-line-no">490</span><span id="line.490">        while (hasFresh &amp;&amp; filled &lt; volume) {</span>
+<span class="source-line-no">491</span><span id="line.491">            hasFresh = false;</span>
+<span class="source-line-no">492</span><span id="line.492">            for (short i = 0; i &lt; spillers.size() &amp;&amp; filled &lt; volume; i++) {</span>
+<span class="source-line-no">493</span><span id="line.493">                OrderedSet&lt;Coord&gt; currentFresh = fresh.get(i);</span>
+<span class="source-line-no">494</span><span id="line.494">                if(currentFresh.isEmpty())</span>
+<span class="source-line-no">495</span><span id="line.495">                    continue;</span>
+<span class="source-line-no">496</span><span id="line.496">                else</span>
+<span class="source-line-no">497</span><span id="line.497">                    hasFresh = true;</span>
+<span class="source-line-no">498</span><span id="line.498">                if(rng.nextDouble() &lt; biases.get(i)) {</span>
+<span class="source-line-no">499</span><span id="line.499">                    Coord cell = currentFresh.randomItem(rng);</span>
+<span class="source-line-no">500</span><span id="line.500">                    spreadPattern.get(i).add(cell);</span>
+<span class="source-line-no">501</span><span id="line.501">                    spillMap[cell.x][cell.y] = i;</span>
+<span class="source-line-no">502</span><span id="line.502">                    filled++;</span>
+<span class="source-line-no">503</span><span id="line.503">                    anySpillMap.insert(cell.x, cell.y);</span>
+<span class="source-line-no">504</span><span id="line.504"></span>
 <span class="source-line-no">505</span><span id="line.505"></span>
-<span class="source-line-no">506</span><span id="line.506"></span>
-<span class="source-line-no">507</span><span id="line.507">                    for (int d = 0; d &lt; dirs.length; d++) {</span>
-<span class="source-line-no">508</span><span id="line.508">                        Coord adj = cell.translate(dirs[d].deltaX, dirs[d].deltaY);</span>
-<span class="source-line-no">509</span><span id="line.509">                        if(!adj.isWithin(width, height))</span>
-<span class="source-line-no">510</span><span id="line.510">                            continue;</span>
-<span class="source-line-no">511</span><span id="line.511">                        double h = heuristic(dirs[d]);</span>
-<span class="source-line-no">512</span><span id="line.512">                        if (physicalMap[adj.x][adj.y] &amp;&amp; !anySpillMap.contains(adj.x, adj.y)</span>
-<span class="source-line-no">513</span><span id="line.513">                                &amp;&amp; (impassable == null || !impassable.contains(adj))</span>
-<span class="source-line-no">514</span><span id="line.514">                                &amp;&amp; rng.nextDouble(h) &lt;= 1.0) {</span>
-<span class="source-line-no">515</span><span id="line.515">                            setFresh(i, adj);</span>
-<span class="source-line-no">516</span><span id="line.516">                        }</span>
-<span class="source-line-no">517</span><span id="line.517">                    }</span>
-<span class="source-line-no">518</span><span id="line.518">                    currentFresh.remove(cell);</span>
-<span class="source-line-no">519</span><span id="line.519">                    anyFreshMap.remove(cell.x, cell.y);</span>
-<span class="source-line-no">520</span><span id="line.520">                }</span>
-<span class="source-line-no">521</span><span id="line.521">            }</span>
-<span class="source-line-no">522</span><span id="line.522">        }</span>
-<span class="source-line-no">523</span><span id="line.523">        return spreadPattern;</span>
-<span class="source-line-no">524</span><span id="line.524">    }</span>
-<span class="source-line-no">525</span><span id="line.525"></span>
-<span class="source-line-no">526</span><span id="line.526">    private static final double root2 = Math.sqrt(2.0);</span>
-<span class="source-line-no">527</span><span id="line.527">    private double heuristic(Direction target) {</span>
-<span class="source-line-no">528</span><span id="line.528">        switch (measurement) {</span>
-<span class="source-line-no">529</span><span id="line.529">            case MANHATTAN:</span>
-<span class="source-line-no">530</span><span id="line.530">            case CHEBYSHEV:</span>
-<span class="source-line-no">531</span><span id="line.531">                return 1.0;</span>
-<span class="source-line-no">532</span><span id="line.532">            case EUCLIDEAN:</span>
-<span class="source-line-no">533</span><span id="line.533">                switch (target) {</span>
-<span class="source-line-no">534</span><span id="line.534">                    case DOWN_LEFT:</span>
-<span class="source-line-no">535</span><span id="line.535">                    case DOWN_RIGHT:</span>
-<span class="source-line-no">536</span><span id="line.536">                    case UP_LEFT:</span>
-<span class="source-line-no">537</span><span id="line.537">                    case UP_RIGHT:</span>
-<span class="source-line-no">538</span><span id="line.538">                        return root2;</span>
-<span class="source-line-no">539</span><span id="line.539">                    default:</span>
-<span class="source-line-no">540</span><span id="line.540">                        return  1.0;</span>
-<span class="source-line-no">541</span><span id="line.541">                }</span>
-<span class="source-line-no">542</span><span id="line.542">        }</span>
-<span class="source-line-no">543</span><span id="line.543">        return 1.0;</span>
-<span class="source-line-no">544</span><span id="line.544">    }</span>
-<span class="source-line-no">545</span><span id="line.545">}</span>
+<span class="source-line-no">506</span><span id="line.506">                    for (int d = 0; d &lt; dirs.length; d++) {</span>
+<span class="source-line-no">507</span><span id="line.507">                        Coord adj = cell.translate(dirs[d].deltaX, dirs[d].deltaY);</span>
+<span class="source-line-no">508</span><span id="line.508">                        if(!adj.isWithin(width, height)) continue;</span>
+<span class="source-line-no">509</span><span id="line.509">                        double h = heuristic(dirs[d]);</span>
+<span class="source-line-no">510</span><span id="line.510">                        if (physicalMap[adj.x][adj.y] &amp;&amp; !anySpillMap.contains(adj.x, adj.y)</span>
+<span class="source-line-no">511</span><span id="line.511">                                &amp;&amp; (impassable == null || !impassable.contains(adj))</span>
+<span class="source-line-no">512</span><span id="line.512">                                &amp;&amp; rng.nextDouble(h) &lt;= 1.0) {</span>
+<span class="source-line-no">513</span><span id="line.513">                            setFresh(i, adj);</span>
+<span class="source-line-no">514</span><span id="line.514">                        }</span>
+<span class="source-line-no">515</span><span id="line.515">                    }</span>
+<span class="source-line-no">516</span><span id="line.516">                    currentFresh.remove(cell);</span>
+<span class="source-line-no">517</span><span id="line.517">                    anyFreshMap.remove(cell.x, cell.y);</span>
+<span class="source-line-no">518</span><span id="line.518">                }</span>
+<span class="source-line-no">519</span><span id="line.519">            }</span>
+<span class="source-line-no">520</span><span id="line.520">        }</span>
+<span class="source-line-no">521</span><span id="line.521">        return spreadPattern;</span>
+<span class="source-line-no">522</span><span id="line.522">    }</span>
+<span class="source-line-no">523</span><span id="line.523"></span>
+<span class="source-line-no">524</span><span id="line.524">    private static final double root2 = Math.sqrt(2.0);</span>
+<span class="source-line-no">525</span><span id="line.525">    private double heuristic(Direction target) {</span>
+<span class="source-line-no">526</span><span id="line.526">        switch (measurement) {</span>
+<span class="source-line-no">527</span><span id="line.527">            case MANHATTAN:</span>
+<span class="source-line-no">528</span><span id="line.528">            case CHEBYSHEV:</span>
+<span class="source-line-no">529</span><span id="line.529">                return 1.0;</span>
+<span class="source-line-no">530</span><span id="line.530">            case EUCLIDEAN:</span>
+<span class="source-line-no">531</span><span id="line.531">                switch (target) {</span>
+<span class="source-line-no">532</span><span id="line.532">                    case DOWN_LEFT:</span>
+<span class="source-line-no">533</span><span id="line.533">                    case DOWN_RIGHT:</span>
+<span class="source-line-no">534</span><span id="line.534">                    case UP_LEFT:</span>
+<span class="source-line-no">535</span><span id="line.535">                    case UP_RIGHT:</span>
+<span class="source-line-no">536</span><span id="line.536">                        return root2;</span>
+<span class="source-line-no">537</span><span id="line.537">                    default:</span>
+<span class="source-line-no">538</span><span id="line.538">                        return  1.0;</span>
+<span class="source-line-no">539</span><span id="line.539">                }</span>
+<span class="source-line-no">540</span><span id="line.540">        }</span>
+<span class="source-line-no">541</span><span id="line.541">        return 1.0;</span>
+<span class="source-line-no">542</span><span id="line.542">    }</span>
+<span class="source-line-no">543</span><span id="line.543">}</span>
 
 
 

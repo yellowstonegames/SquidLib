@@ -65,7 +65,7 @@
 <span class="source-line-no">052</span><span id="line.52"> * @author David Blackman</span>
 <span class="source-line-no">053</span><span id="line.53"> * @author Tommy Ettinger (if there's a flaw, use SquidLib's or Sarong's issues and don't bother Vigna or Blackman, it's probably a mistake in SquidLib's implementation)</span>
 <span class="source-line-no">054</span><span id="line.54"> */</span>
-<span class="source-line-no">055</span><span id="line.55">public final class XoshiroStarPhi32RNG implements RandomnessSource, Serializable {</span>
+<span class="source-line-no">055</span><span id="line.55">public class XoshiroStarPhi32RNG implements RandomnessSource, Serializable {</span>
 <span class="source-line-no">056</span><span id="line.56"></span>
 <span class="source-line-no">057</span><span id="line.57">    private static final long serialVersionUID = 1L;</span>
 <span class="source-line-no">058</span><span id="line.58"></span>
@@ -107,7 +107,7 @@
 <span class="source-line-no">094</span><span id="line.94">    }</span>
 <span class="source-line-no">095</span><span id="line.95"></span>
 <span class="source-line-no">096</span><span id="line.96">    @Override</span>
-<span class="source-line-no">097</span><span id="line.97">    public final int next(int bits) {</span>
+<span class="source-line-no">097</span><span id="line.97">    public int next(int bits) {</span>
 <span class="source-line-no">098</span><span id="line.98">        final int result = stateB * 31;         </span>
 <span class="source-line-no">099</span><span id="line.99">        final int t = stateB &lt;&lt; 9;</span>
 <span class="source-line-no">100</span><span id="line.100">        stateC ^= stateA;</span>
@@ -123,7 +123,7 @@
 <span class="source-line-no">110</span><span id="line.110">     * Can return any int, positive or negative, of any size permissible in a 32-bit signed integer.</span>
 <span class="source-line-no">111</span><span id="line.111">     * @return any int, all 32 bits are random</span>
 <span class="source-line-no">112</span><span id="line.112">     */</span>
-<span class="source-line-no">113</span><span id="line.113">    public final int nextInt() {</span>
+<span class="source-line-no">113</span><span id="line.113">    public int nextInt() {</span>
 <span class="source-line-no">114</span><span id="line.114">        final int result = stateB * 31;</span>
 <span class="source-line-no">115</span><span id="line.115">        final int t = stateB &lt;&lt; 9;</span>
 <span class="source-line-no">116</span><span id="line.116">        stateC ^= stateA;</span>
@@ -136,7 +136,7 @@
 <span class="source-line-no">123</span><span id="line.123">    }</span>
 <span class="source-line-no">124</span><span id="line.124"></span>
 <span class="source-line-no">125</span><span id="line.125">    @Override</span>
-<span class="source-line-no">126</span><span id="line.126">    public final long nextLong() {</span>
+<span class="source-line-no">126</span><span id="line.126">    public long nextLong() {</span>
 <span class="source-line-no">127</span><span id="line.127">        int result = stateB * 31;</span>
 <span class="source-line-no">128</span><span id="line.128">        int t = stateB &lt;&lt; 9;</span>
 <span class="source-line-no">129</span><span id="line.129">        stateC ^= stateA;</span>
