@@ -59,7 +59,7 @@ public class PyrNoise implements Noise.Noise2D, Noise.Noise3D,
             x += ya - 0.5;
             ya += ya;
             x /= ya;
-//            x *= x * (3 - 2 * x);
+            x *= x * (3 - 2 * x);
             ya *= ya * (3 - 2 * ya);
 //            ya = Math.sqrt(ya);
 
@@ -74,25 +74,25 @@ public class PyrNoise implements Noise.Noise2D, Noise.Noise3D,
 //            if(ya < 0 || ya > 1)
 //                System.out.println("ya is out of bounds in a horizontal-base pyr: " + ya);
 
-            double cc = (1 - ya) * cap;
-            return ((1 - x) * (ya * hashPart1024(xFloor, yFloor, seed) + cc)
-                    + x * (ya * hashPart1024(xFloor + STEPX + STEPX, yFloor, seed) + cc))
-                    * (0x1.0040100401004p-10);
-//            return (ya * ((1 - x) * hashPart1024(xFloor, yFloor, seed) + x * hashPart1024(xFloor + STEPX + STEPX, yFloor, seed))
-//                    + (1 - ya) * cap) * (0x1.0040100401004p-10);
+//            double cc = (1 - ya) * cap;
+//            return ((1 - x) * (ya * hashPart1024(xFloor, yFloor, seed) + cc)
+//                    + x * (ya * hashPart1024(xFloor + STEPX + STEPX, yFloor, seed) + cc))
+//                    * (0x1.0040100401004p-10);
+
+            return (ya * ((1 - x) * hashPart1024(xFloor, yFloor, seed) + x * hashPart1024(xFloor + STEPX + STEPX, yFloor, seed))
+                    + (1 - ya) * cap) * (0x1.0040100401004p-10);
         }
         else {
             // vertical base, cap points left or right
             if(xd >= 0){
                 xFloor += STEPX << 1;
             }
-//            y = (yd / xa + 1.0) * 0.5;
-//            y = 1.0 - y;
             y += xa - 0.5;
             xa += xa;
             y /= xa;
-//            y *= y * (3 - 2 * y);
+            y *= y * (3 - 2 * y);
             xa *= xa * (3 - 2 * xa);
+
 //            xa = Math.sqrt(xa);
 
 //            xa = (xa - 0.5);
@@ -106,11 +106,11 @@ public class PyrNoise implements Noise.Noise2D, Noise.Noise3D,
 //            if(xa < 0 || xa > 1)
 //                System.out.println("xa is out of bounds in a vertical-base pyr: " + xa);
 
-            double cc = (1 - xa) * cap;
-            return ((1 - y) * (xa * hashPart1024(xFloor, yFloor, seed) + cc)
-                    + y * (xa * hashPart1024(xFloor, yFloor + STEPY + STEPY, seed) + cc)) * (0x1.0040100401004p-10);
-//            return (xa * ((1 - y) * hashPart1024(xFloor, yFloor, seed) + y * hashPart1024(xFloor, yFloor + STEPY + STEPY, seed))
-//                    + (1 - xa) * cap) * (0x1.0040100401004p-10);
+//            double cc = (1 - xa) * cap;
+//            return ((1 - y) * (xa * hashPart1024(xFloor, yFloor, seed) + cc)
+//                    + y * (xa * hashPart1024(xFloor, yFloor + STEPY + STEPY, seed) + cc)) * (0x1.0040100401004p-10);
+            return (xa * ((1 - y) * hashPart1024(xFloor, yFloor, seed) + y * hashPart1024(xFloor, yFloor + STEPY + STEPY, seed))
+                    + (1 - xa) * cap) * (0x1.0040100401004p-10);
         }
     }
 
