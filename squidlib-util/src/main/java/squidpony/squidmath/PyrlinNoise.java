@@ -4,47 +4,38 @@ import squidpony.annotation.Beta;
 
 /**
  * A low-quality continuous noise generator with strong artifacts, meant to be used as a building block.
- * This bases its implementation on {@link ValueNoise}, and its static methods are still called
- * {@link #valueNoise(int, double, double)}; this is almost entirely meant as an optimization for value noise.
- * Instead of hashing all 2-to-the-D points, where D is the dimensionality, this hashes half of those points
- * (like the square base of a pyramid) and interpolates that with one point in the center of the cube value
- * noise would have used (like the cap or point of a pyramid).
+ * This bases its implementation on {@link ClassicNoise}; this is almost entirely meant as an optimization for Classic
+ * Perlin noise. Instead of hashing all 2-to-the-D points, where D is the dimensionality, this hashes half of those
+ * points (like the square base of a pyramid), gets gradient vectors as ClassicNoise does, and interpolates that with
+ * the gradient vector of one point in the center of the cube Classic noise would have used (like the cap or point of a
+ * pyramid).
  * <br>
- * Note: the {@link #valueNoise(int, double, double)} methods in this class return results in the range of 0.0 to 1.0,
+ * Note: the {@link #valueNoise(long, double, double)} methods in this class return results in the range of 0.0 to 1.0,
  * while the {@link #getNoise(double, double)} and {@link #getNoiseWithSeed(double, double, long)} methods use the Noise
  * class default range of -1.0 to 1.0.
  */
 @Beta
-public class PyrNoise implements Noise.Noise2D, Noise.Noise3D,
+public class PyrlinNoise extends ClassicNoise implements Noise.Noise2D, Noise.Noise3D,
         Noise.Noise4D, Noise.Noise5D, Noise.Noise6D {
-    public static final PyrNoise instance = new PyrNoise();
+    public static final PyrlinNoise instance = new PyrlinNoise();
 
-    public int seed = 0xD1CEBEEF;
-    public PyrNoise() {
+    public PyrlinNoise() {
     }
 
-    public PyrNoise(int seed) {
+    public PyrlinNoise(long seed) {
         this.seed = seed;
     }
 
-    public PyrNoise(long seed) {
-        this.seed = (int) (seed ^ seed >>> 32);
-    }
-
-    public static double valueNoise(int seed, double x, double y)
+    public static double valueNoise(long seed, double x, double y)
     {
-        final int STEPX = 0xD1B55;
-        final int STEPY = 0xABC99;
         int xFloor = (x >= 0 ? (int) x : (int) x - 1) & -2;
         x -= xFloor;
         x *= 0.5;
         int yFloor = (y >= 0 ? (int) y : (int) y - 1) & -2;
         y -= yFloor;
         y *= 0.5;
-        xFloor *= STEPX;
-        yFloor *= STEPY;
-        final int cap = hashPart1024(xFloor + STEPX, yFloor + STEPY, seed);
-        if(x == 0.5 && y == 0.5) return cap * (0x1.0040100401004p-10);
+        double cap = gradCoord2D(seed, xFloor + 1, yFloor + 1, x - 0.5, y - 0.5);
+        if(x == 0.5 && y == 0.5) return cap;
         double xd = x - 0.5;
         double yd = y - 0.5;
         double xa = Math.abs(xd);
@@ -52,7 +43,7 @@ public class PyrNoise implements Noise.Noise2D, Noise.Noise3D,
         if(xa < ya){
             // flat base, cap points up or down
             if(yd >= 0){
-                yFloor += STEPY << 1;
+                yFloor += 2;
             }
 //            x = (xd / ya + 1.0) * 0.5;
 //            x = 1.0 - x;
@@ -76,18 +67,21 @@ public class PyrNoise implements Noise.Noise2D, Noise.Noise3D,
 //            if(ya < 0 || ya > 1)
 //                System.out.println("ya is out of bounds in a horizontal-base pyr: " + ya);
 
-//            double cc = (1 - ya) * cap;
+            double cc = (1 - ya) * cap;
 //            return ((1 - x) * (ya * hashPart1024(xFloor, yFloor, seed) + cc)
 //                    + x * (ya * hashPart1024(xFloor + STEPX + STEPX, yFloor, seed) + cc))
 //                    * (0x1.0040100401004p-10);
-
-            return (ya * ((1 - x) * hashPart1024(xFloor, yFloor, seed) + x * hashPart1024(xFloor + STEPX + STEPX, yFloor, seed))
-                    + (1 - ya) * cap) * (0x1.0040100401004p-10);
+            return (((1 - x) * (ya * gradCoord2D(seed, xFloor, yFloor, x, ya)) + cc)
+                    + x * (ya * gradCoord2D(seed, xFloor + 2, yFloor, x - 1, ya) + cc)) * 0.7;
+//            return (ya * ((1 - x) * gradCoord2D(seed, xFloor, yFloor, x, ya) + x * gradCoord2D(seed, xFloor + 2, yFloor, 1 - x, ya))
+//                    + (1 - ya) * cap);
+//            return (ya * ((1 - x) * hashPart1024(xFloor, yFloor, seed) + x * hashPart1024(xFloor + STEPX + STEPX, yFloor, seed))
+//                    + (1 - ya) * cap) * (0x1.0040100401004p-10);
         }
         else {
             // vertical base, cap points left or right
             if(xd >= 0){
-                xFloor += STEPX << 1;
+                xFloor += 2;
             }
             y += xa - 0.5;
             xa += xa;
@@ -110,11 +104,16 @@ public class PyrNoise implements Noise.Noise2D, Noise.Noise3D,
 //            if(xa < 0 || xa > 1)
 //                System.out.println("xa is out of bounds in a vertical-base pyr: " + xa);
 
-//            double cc = (1 - xa) * cap;
+            double cc = (1 - xa) * cap;
 //            return ((1 - y) * (xa * hashPart1024(xFloor, yFloor, seed) + cc)
 //                    + y * (xa * hashPart1024(xFloor, yFloor + STEPY + STEPY, seed) + cc)) * (0x1.0040100401004p-10);
-            return (xa * ((1 - y) * hashPart1024(xFloor, yFloor, seed) + y * hashPart1024(xFloor, yFloor + STEPY + STEPY, seed))
-                    + (1 - xa) * cap) * (0x1.0040100401004p-10);
+
+            return (((1 - y) * (xa * gradCoord2D(seed, xFloor, yFloor, xa, y)) + cc)
+                    + y * (xa * gradCoord2D(seed, xFloor, yFloor + 2, xa, y - 1) + cc)) * 0.7;
+//            return (xa * ((1 - y) * gradCoord2D(seed, xFloor, yFloor, xa, y) + y * gradCoord2D(seed, xFloor, yFloor + 2, xa, y - 1))
+//                    + (1 - xa) * cap);
+//            return (xa * ((1 - y) * hashPart1024(xFloor, yFloor, seed) + y * hashPart1024(xFloor, yFloor + 2, seed))
+//                    + (1 - xa) * cap) * (0x1.0040100401004p-10);
         }
     }
 
@@ -423,42 +422,10 @@ public class PyrNoise implements Noise.Noise2D, Noise.Noise3D,
 
     @Override
     public double getNoise(double x, double y) {
-        return valueNoise(seed, x, y) * 2 - 1;
+        return valueNoise(seed, x, y);
     }
     @Override
     public double getNoiseWithSeed(double x, double y, long seed) {
-        return valueNoise((int) (seed ^ seed >>> 32), x, y) * 2 - 1;
-    }
-    @Override
-    public double getNoise(double x, double y, double z) {
-        return valueNoise(seed, x, y, z) * 2 - 1;
-    }
-    @Override
-    public double getNoiseWithSeed(double x, double y, double z, long seed) {
-        return valueNoise((int) (seed ^ seed >>> 32), x, y, z) * 2 - 1;
-    }
-    @Override
-    public double getNoise(double x, double y, double z, double w) {
-        return valueNoise(seed, x, y, z, w) * 2 - 1;
-    }
-    @Override
-    public double getNoiseWithSeed(double x, double y, double z, double w, long seed) {
-        return valueNoise((int) (seed ^ seed >>> 32), x, y, z, w) * 2 - 1;
-    }
-    @Override
-    public double getNoise(double x, double y, double z, double w, double u) {
-        return valueNoise(seed, x, y, z, w, u) * 2 - 1;
-    }
-    @Override
-    public double getNoiseWithSeed(double x, double y, double z, double w, double u, long seed) {
-        return valueNoise((int) (seed ^ seed >>> 32), x, y, z, w, u) * 2 - 1;
-    }
-    @Override
-    public double getNoise(double x, double y, double z, double w, double u, double v) {
-        return valueNoise(seed, x, y, z, w, u, v) * 2 - 1;
-    }
-    @Override
-    public double getNoiseWithSeed(double x, double y, double z, double w, double u, double v, long seed) {
-        return valueNoise((int) (seed ^ seed >>> 32), x, y, z, w, u, v) * 2 - 1;
+        return valueNoise(seed, x, y);
     }
 }
