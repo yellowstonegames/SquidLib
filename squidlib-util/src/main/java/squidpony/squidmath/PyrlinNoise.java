@@ -42,9 +42,7 @@ public class PyrlinNoise extends ClassicNoise implements Noise.Noise2D, Noise.No
         double ya = Math.abs(yd);
         if(xa < ya){
             // flat base, cap points up or down
-            if(yd >= 0){
-                yFloor += 2;
-            }
+
 //            x = (xd / ya + 1.0) * 0.5;
 //            x = 1.0 - x;
             x += ya - 0.5;
@@ -54,6 +52,9 @@ public class PyrlinNoise extends ClassicNoise implements Noise.Noise2D, Noise.No
 //            ya *= ya * (3 - 2 * ya);
             x = Noise.extreme(x);
             ya = Noise.extreme(ya);
+            if(yd >= 0){
+                yFloor += 2;
+            }
 //            ya = Math.sqrt(ya);
 
 //            ya = (ya - 0.5);
@@ -71,8 +72,8 @@ public class PyrlinNoise extends ClassicNoise implements Noise.Noise2D, Noise.No
 //            return ((1 - x) * (ya * hashPart1024(xFloor, yFloor, seed) + cc)
 //                    + x * (ya * hashPart1024(xFloor + STEPX + STEPX, yFloor, seed) + cc))
 //                    * (0x1.0040100401004p-10);
-            return (((1 - x) * (ya * gradCoord2D(seed, xFloor, yFloor, x, ya)) + cc)
-                    + x * (ya * gradCoord2D(seed, xFloor + 2, yFloor, x - 1, ya) + cc)) * 0.7;
+            return (((1 - x) * (ya * gradCoord2D(seed, xFloor, yFloor, x, 1 - ya) + cc))
+                    + x * (ya * gradCoord2D(seed, xFloor + 2, yFloor, x - 1, 1 - ya) + cc)) * 0.7;
 //            return (ya * ((1 - x) * gradCoord2D(seed, xFloor, yFloor, x, ya) + x * gradCoord2D(seed, xFloor + 2, yFloor, 1 - x, ya))
 //                    + (1 - ya) * cap);
 //            return (ya * ((1 - x) * hashPart1024(xFloor, yFloor, seed) + x * hashPart1024(xFloor + STEPX + STEPX, yFloor, seed))
@@ -80,9 +81,6 @@ public class PyrlinNoise extends ClassicNoise implements Noise.Noise2D, Noise.No
         }
         else {
             // vertical base, cap points left or right
-            if(xd >= 0){
-                xFloor += 2;
-            }
             y += xa - 0.5;
             xa += xa;
             y /= xa;
@@ -90,6 +88,9 @@ public class PyrlinNoise extends ClassicNoise implements Noise.Noise2D, Noise.No
 //            xa *= xa * (3 - 2 * xa);
             y = Noise.extreme(y);
             xa = Noise.extreme(xa);
+            if(xd >= 0){
+                xFloor += 2;
+            }
 
 //            xa = Math.sqrt(xa);
 
@@ -108,8 +109,8 @@ public class PyrlinNoise extends ClassicNoise implements Noise.Noise2D, Noise.No
 //            return ((1 - y) * (xa * hashPart1024(xFloor, yFloor, seed) + cc)
 //                    + y * (xa * hashPart1024(xFloor, yFloor + STEPY + STEPY, seed) + cc)) * (0x1.0040100401004p-10);
 
-            return (((1 - y) * (xa * gradCoord2D(seed, xFloor, yFloor, xa, y)) + cc)
-                    + y * (xa * gradCoord2D(seed, xFloor, yFloor + 2, xa, y - 1) + cc)) * 0.7;
+            return (((1 - y) * (xa * gradCoord2D(seed, xFloor, yFloor, 1 - xa, y) + cc))
+                    + y * (xa * gradCoord2D(seed, xFloor, yFloor + 2, 1 - xa, y - 1) + cc)) * 0.7;
 //            return (xa * ((1 - y) * gradCoord2D(seed, xFloor, yFloor, xa, y) + y * gradCoord2D(seed, xFloor, yFloor + 2, xa, y - 1))
 //                    + (1 - xa) * cap);
 //            return (xa * ((1 - y) * hashPart1024(xFloor, yFloor, seed) + y * hashPart1024(xFloor, yFloor + 2, seed))
