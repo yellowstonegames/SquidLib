@@ -31,6 +31,9 @@ public class PyrNoise implements Noise.Noise2D, Noise.Noise3D,
         this.seed = (int) (seed ^ seed >>> 32);
     }
 
+    protected static double quintic(double a){
+        return a * (a * a * (a * (a * 6f - 15f) + 10f));
+    }
     public static double valueNoise(int seed, double x, double y)
     {
         final int STEPX = 0xD1B55;
@@ -59,8 +62,10 @@ public class PyrNoise implements Noise.Noise2D, Noise.Noise3D,
             x += ya - 0.5;
             ya += ya;
             x /= ya;
-            x *= x * (3 - 2 * x);
-            ya *= ya * (3 - 2 * ya);
+//            x *= x * (3 - 2 * x);
+//            ya *= ya * (3 - 2 * ya);
+            x = quintic(x);
+            ya = quintic(ya);
 //            ya = Math.sqrt(ya);
 
 //            ya = (ya - 0.5);
@@ -90,8 +95,10 @@ public class PyrNoise implements Noise.Noise2D, Noise.Noise3D,
             y += xa - 0.5;
             xa += xa;
             y /= xa;
-            y *= y * (3 - 2 * y);
-            xa *= xa * (3 - 2 * xa);
+//            y *= y * (3 - 2 * y);
+//            xa *= xa * (3 - 2 * xa);
+            y = quintic(y);
+            xa = quintic(xa);
 
 //            xa = Math.sqrt(xa);
 
