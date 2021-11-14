@@ -1539,9 +1539,26 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 //            a *= 0xACBD2BDCA2BFF56DL;
 //            return a ^ a >>> 26;
 
-            long a = stateB & (stateA += 0xC6BC279692B5C323L);
-            a = (a ^ a >>> 31) * (stateA | (stateB += 0x9E3779B97F4A7C16L));
-            return (a ^ a >>> 26);
+//            long a = stateB & (stateA += 0xC6BC279692B5C323L);
+//            a = (a ^ a >>> 31) * (stateA | (stateB += 0x9E3779B97F4A7C16L));
+//            return (a ^ a >>> 26);
+//(stateB << 1 ^ ((stateB >> 63) & 0x000000000000001BL))
+
+            // Seems to work really well; we still need to see how it does in PractRand.
+            // This does randomize the seed grid quite well, and keeps TangleRNG's strong points.
+            long z = (stateA += 0xC6BC279692B5C323L) * (stateB += 0x9E3779B97F4A7C16L);
+            z = (z ^ z >>> 31) * 0xACBD2BDCA2BFF56DL;
+            return z ^ z >>> 26;
+
+//            // The image shows a 512x512 grid of lousy random number generators, and each frame advances all generators
+//            // by one step. stateA is seeded with x * 2 + 1, and stateB is seeded with y * 2 + 1. Only the lowest bit is
+//            // shown (black for 0, white for 1). stateA updates every frame. stateB is (unintentionally) never updated.
+//            long z = (stateA += 0xC6BC279692B5C323L) ^ (stateB << 1 ^ ((stateB >> 63) & 0x000000000000001BL));
+////            z = (z ^ z >>> 23 ^ z >>> 47) * 0xAEF17502108EF2D9L; // same as just multiplying, pretty much.
+////            z *= 0xACBD2BDCA2BFF56DL; // very bad, pure-artifact checkerboard-y pattern.
+//            z *= 0xAEF17502108EF2D9L;   // no idea why this constant and the 25 below it are "magic"
+//            return z ^ z >>> 25;        // 26 also works, but is smaller. others don't work well, so far.
+
         }
 //            a *= 0xACBD2BDCA2BFF56DL;
 
