@@ -20,12 +20,12 @@ import static com.badlogic.gdx.graphics.GL20.GL_POINTS;
 public class NoiseVarietyVisualizer extends ApplicationAdapter {
 
     private ClassicNoise classic = new ClassicNoise(1234567890);
-    private PyrlinNoise pyrlin = new PyrlinNoise(1234567890);
+    private FoamyNoise classicky = new FoamyNoise(classic);
+    private FoamyNoise seedy = new FoamyNoise(SeededNoise.instance);
     private FoamNoise foam = new FoamNoise(1234567890);
-    private PyrNoise pyr = new PyrNoise(1234567890);
 //    private HashedValueNoise value = new HashedValueNoise(new FlawedPointHash.CubeHash(1234567890, 32));
 //    private FastNoise value = new FastNoise(1234567890, 1f, FastNoise.VALUE, 1);
-    private int noiseType = 3; // 0 for classic, 1 for wave, 2 for fast, 3 for experimental
+    private int noiseType = 0; // 0 for classic, 1 for wave, 2 for fast, 3 for experimental
     private int dim = 0; // this can be 0, 1, or 2; add 2 to get the actual dimensions
     private int octaves = 0;
     private float freq = (float) Math.exp(-4.0);
@@ -61,19 +61,19 @@ public class NoiseVarietyVisualizer extends ApplicationAdapter {
                         current4 = new Noise.Layered4D(classic, octaves + 1, freq);
                         break;
                     case 1:
-                        current2 = new Noise.Layered2D(pyrlin, octaves + 1, freq);
-                        current3 = new Noise.Layered3D(pyrlin, octaves + 1, freq);
-                        current4 = new Noise.Layered4D(pyrlin, octaves + 1, freq);
+                        current2 = new Noise.Layered2D(classicky, octaves + 1, freq);
+                        current3 = new Noise.Layered3D(classicky, octaves + 1, freq);
+                        current4 = new Noise.Layered4D(classicky, octaves + 1, freq);
                         break;
                     case 2:
+                        current2 = new Noise.Layered2D(seedy, octaves + 1, freq);
+                        current3 = new Noise.Layered3D(seedy, octaves + 1, freq);
+                        current4 = new Noise.Layered4D(seedy, octaves + 1, freq);
+                        break;
+                    case 3:
                         current2 = new Noise.Layered2D(foam, octaves + 1, freq);
                         current3 = new Noise.Layered3D(foam, octaves + 1, freq);
                         current4 = new Noise.Layered4D(foam, octaves + 1, freq);
-                        break;
-                    case 3:
-                        current2 = new Noise.Layered2D(pyr, octaves + 1, freq);
-                        current3 = new Noise.Layered3D(pyr, octaves + 1, freq);
-                        current4 = new Noise.Layered4D(pyr, octaves + 1, freq);
                         break;
                 }
             }
@@ -86,19 +86,19 @@ public class NoiseVarietyVisualizer extends ApplicationAdapter {
                         current4 = new Noise.LayeredSpiral4D(classic, octaves + 1, freq);
                         break;
                     case 1:
-                        current2 = new Noise.LayeredSpiral2D(pyrlin, octaves + 1, freq);
-                        current3 = new Noise.LayeredSpiral3D(pyrlin, octaves + 1, freq);
-                        current4 = new Noise.LayeredSpiral4D(pyrlin, octaves + 1, freq);
+                        current2 = new Noise.LayeredSpiral2D(classicky, octaves + 1, freq);
+                        current3 = new Noise.LayeredSpiral3D(classicky, octaves + 1, freq);
+                        current4 = new Noise.LayeredSpiral4D(classicky, octaves + 1, freq);
                         break;
                     case 2:
+                        current2 = new Noise.LayeredSpiral2D(seedy, octaves + 1, freq);
+                        current3 = new Noise.LayeredSpiral3D(seedy, octaves + 1, freq);
+                        current4 = new Noise.LayeredSpiral4D(seedy, octaves + 1, freq);
+                        break;
+                    case 3:
                         current2 = new Noise.LayeredSpiral2D(foam, octaves + 1, freq);
                         current3 = new Noise.LayeredSpiral3D(foam, octaves + 1, freq);
                         current4 = new Noise.LayeredSpiral4D(foam, octaves + 1, freq);
-                        break;
-                    case 3:
-                        current2 = new Noise.LayeredSpiral2D(pyr, octaves + 1, freq);
-                        current3 = new Noise.LayeredSpiral3D(pyr, octaves + 1, freq);
-                        current4 = new Noise.LayeredSpiral4D(pyr, octaves + 1, freq);
                         break;
                 }
             }
@@ -111,19 +111,19 @@ public class NoiseVarietyVisualizer extends ApplicationAdapter {
                         current4 = new Noise.Ridged4D(classic, octaves + 1, freq);
                         break;
                     case 1:
-                        current2 = new Noise.Ridged2D(pyrlin, octaves + 1, freq);
-                        current3 = new Noise.Ridged3D(pyrlin, octaves + 1, freq);
-                        current4 = new Noise.Ridged4D(pyrlin, octaves + 1, freq);
+                        current2 = new Noise.Ridged2D(classicky, octaves + 1, freq);
+                        current3 = new Noise.Ridged3D(classicky, octaves + 1, freq);
+                        current4 = new Noise.Ridged4D(classicky, octaves + 1, freq);
                         break;
                     case 2:
+                        current2 = new Noise.Ridged2D(seedy, octaves + 1, freq);
+                        current3 = new Noise.Ridged3D(seedy, octaves + 1, freq);
+                        current4 = new Noise.Ridged4D(seedy, octaves + 1, freq);
+                        break;
+                    case 3:
                         current2 = new Noise.Ridged2D(foam, octaves + 1, freq);
                         current3 = new Noise.Ridged3D(foam, octaves + 1, freq);
                         current4 = new Noise.Ridged4D(foam, octaves + 1, freq);
-                        break;
-                    case 3:
-                        current2 = new Noise.Ridged2D(pyr, octaves + 1, freq);
-                        current3 = new Noise.Ridged3D(pyr, octaves + 1, freq);
-                        current4 = new Noise.Ridged4D(pyr, octaves + 1, freq);
                         break;
                 }
             }
