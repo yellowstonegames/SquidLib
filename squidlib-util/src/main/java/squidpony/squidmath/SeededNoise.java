@@ -67,7 +67,7 @@ import static squidpony.squidmath.Noise.fastFloor;
  */
 public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, Noise.Noise5D, Noise.Noise6D {
     
-    protected final long defaultSeed;
+    public long defaultSeed;
     public static final SeededNoise instance = new SeededNoise();
 
     public SeededNoise() {
