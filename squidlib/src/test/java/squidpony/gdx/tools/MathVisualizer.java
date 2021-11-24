@@ -25,7 +25,7 @@ import java.util.Random;
  * Created by Tommy Ettinger on 1/13/2018.
  */
 public class MathVisualizer extends ApplicationAdapter {
-    private int mode = 57;
+    private int mode = 51;
     private int modes = 58;
     private FilterBatch batch;
     private SparseLayers layers;
@@ -1025,7 +1025,7 @@ public class MathVisualizer extends ApplicationAdapter {
                 for (int i = 0; i < 0x500000; i++) {
                     double d = langeBoxMuller(256, 64.0);
 //                    if (d >= 0 && d < 512)
-                        amounts[(int) d & 511]++;
+                    amounts[(int) d & 511]++;
                 }
                 for (int i = 0; i < 512; i++) {
                     float color = (i & 63) == 0
@@ -2056,7 +2056,7 @@ public class MathVisualizer extends ApplicationAdapter {
 //                OUTER_LOOP:
                 for (int root = 0; root < 16; ++root) {
                     for (int g = root * root, limit = g + root + root + 1; g < limit; g++) {
-                        if((g & 1) != 0) continue; //checkerboard
+                        if ((g & 1) != 0) continue; //checkerboard
                         final int sign = -(root & 1);
                         final int big = (root * (root + 1)) - g << 1;
                         final int y = ((root + 1 >> 1) + sign ^ sign) + ((sign ^ sign + Math.min(big, 0)) >> 1);
@@ -2181,12 +2181,11 @@ public class MathVisualizer extends ApplicationAdapter {
             break;
             case 53: {
                 Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
-                        " RandomXS128, bits of nextFloat()");
-                //DiverRNG diver = new DiverRNG();
+                        " RandomXS128, bits of nextExclusiveDoubleNoCTZ()");
                 for (int i = 0; i < 0x10000; i++) {
-                    int bits = Float.floatToIntBits(xs128.nextFloat());
-                    for (int j = 0, jj = 504 - 128; j < 32; j++, jj -= 8) {
-                        if (1 == (bits >>> j & 1))
+                    long bits = Double.doubleToLongBits(nextExclusiveDoubleNoCTZ());
+                    for (int j = 0, jj = 504; j < 64; j++, jj -= 8) {
+                        if (1L == (bits >>> j & 1L))
                             amounts[jj] = amounts[jj + 1] = amounts[jj + 2] = amounts[jj + 3]
                                     = amounts[jj + 4] = amounts[jj + 5] = ++amounts[jj + 6];
                     }
@@ -2208,6 +2207,35 @@ public class MathVisualizer extends ApplicationAdapter {
                     }
                 }
             }
+//                Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
+//                        " RandomXS128, bits of nextFloat()");
+//                //DiverRNG diver = new DiverRNG();
+//                for (int i = 0; i < 0x10000; i++) {
+//                    int bits = Float.floatToIntBits(xs128.nextFloat());
+//                    for (int j = 0, jj = 504 - 128; j < 32; j++, jj -= 8) {
+//                        if (1 == (bits >>> j & 1))
+//                            amounts[jj] = amounts[jj + 1] = amounts[jj + 2] = amounts[jj + 3]
+//                                    = amounts[jj + 4] = amounts[jj + 5] = ++amounts[jj + 6];
+//                    }
+//                }
+//                for (int i = 0; i < 512; i++) {
+//                    if ((i & 7) == 3) {
+//                        for (int j = 510 - (amounts[i] >> 8); j < 520; j++) {
+//                            layers.backgrounds[i][j] = -0x1.c98066p126F;
+//                        }
+//                    } else {
+//                        for (int j = 519 - (amounts[i] >> 8); j < 520; j++) {
+//                            layers.backgrounds[i][j] = -0x1.d08864p126F;
+//                        }
+//                    }
+//                }
+//                for (int i = 0; i < 10; i++) {
+//                    for (int j = 8; j < 520; j += 32) {
+//                        layers.backgrounds[i][j] = -0x1.7677e8p125F;
+//                    }
+//                }
+//            }
+//        }
             break;
             case 54: {
                 Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
@@ -2327,6 +2355,18 @@ public class MathVisualizer extends ApplicationAdapter {
         final long bits = MathUtils.random.nextLong();
         return NumberUtils.longBitsToDouble(1022L - Long.numberOfTrailingZeros(bits) << 52
                 | bits >>> 12);
+    }
+
+    /**
+     * This version was adapted from jdkgdxds' code for ShaiRandom to use (it's in C# and targets older versions, so it
+     * doesn't have the luxury of Long.numberOfTrailingZeros() ). CTZ is the count trailing zeros instruction that
+     * Long.numberOfTrailingZeros() compiles to.
+     * @return a random uniform double between 0 and 1 (both exclusive, unlike most nextDouble() implementations)
+     */
+    public static double nextExclusiveDoubleNoCTZ(){
+        final long bits = MathUtils.random.nextLong();
+//        return Double.longBitsToDouble((0x7C10000000000000L + (Double.doubleToRawLongBits(0x80000000000003FFL | bits) & 0xFFF0000000000000L)) | (~bits & 0x000FFFFFFFFFFFFFL));
+        return NumberUtils.longBitsToDouble((0x7C10000000000000L + (NumberUtils.doubleToLongBits(0x8000000000000001L | bits) & 0xFFF0000000000000L)) | (~bits & 0x000FFFFFFFFFFFFFL));
     }
     /**
      * This is a simplified version of <a href="https://allendowney.com/research/rand/">this
