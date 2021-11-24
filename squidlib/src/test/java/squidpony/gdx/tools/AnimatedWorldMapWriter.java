@@ -48,9 +48,9 @@ public class AnimatedWorldMapWriter extends ApplicationAdapter {
     private static final int LIMIT = 5;
     private static final boolean MEASURE_BOUNDS = false;
     private static final boolean FLOWING_LAND = true;
-    private static final boolean ALIEN_COLORS = true;
+    private static final boolean ALIEN_COLORS = false;
     private static final boolean SEEDY = false;
-    private static final int FRAMES = 300;
+    private static final int FRAMES = 180;
     private int baseSeed = 1234567890;
 
     private Thesaurus thesaurus;
@@ -122,10 +122,11 @@ World #5, SavoryMelonAlder, completed in 64338 ms
 //        path = "out/worldsAnimated/" + date + "/EllipseExpo/";
 //        path = "out/worldsAnimated/" + date + "/Mimic/";
 //        path = "out/worldsAnimated/" + date + "/SpaceView/";
-        path = "out/worldsAnimated/" + date + "/SpaceViewMutantClassic/";
+//        path = "out/worldsAnimated/" + date + "/SpaceViewMutantClassic/";
 //        path = "out/worldsAnimated/" + date + "/SpaceViewMutantFoam/";
 //        path = "out/worldsAnimated/" + date + "/SpaceViewMutantHoney/";
 //        path = "out/worldsAnimated/" + date + "/SpaceViewValue/";
+        path = "out/worldsAnimated/" + date + "/SpaceViewValue/";
 //        path = "out/worldsAnimated/" + date + "/SpaceViewClassic/";
 //        path = "out/worldsAnimated/" + date + "/SpaceViewSeedy/";
 //        path = "out/worldsAnimated/" + date + "/SpaceViewPerlin/";
@@ -205,8 +206,8 @@ World #5, SavoryMelonAlder, completed in 64338 ms
 //        WorldMapGenerator.DEFAULT_NOISE.setFractalLacunarity(0.8f);
 //        WorldMapGenerator.DEFAULT_NOISE.setFractalGain(1.25f);
 //        VastNoise fn = new VastNoise((int) seed, 1.75f, VastNoise.FOAM, 1);
-        VastNoise fn = new VastNoise((int) seed, 1.5f, VastNoise.PERLIN_FRACTAL, 2);
-//        VastNoise fn = new VastNoise((int) seed, 2.0f, VastNoise.VALUE, 1);
+//        VastNoise fn = new VastNoise((int) seed, 1.5f, VastNoise.PERLIN_FRACTAL, 2);
+        VastNoise fn = new VastNoise((int) seed, 2.0f, VastNoise.VALUE, 1);
 //        VastNoise fn = new VastNoise((int) seed, 1.5f, VastNoise.PERLIN, 1);
 //        VastNoise fn = new VastNoise((int) seed, 1f, VastNoise.SIMPLEX, 1);
 //        VastNoise fn = new VastNoise((int) seed, 1f, VastNoise.SIMPLEX_FRACTAL, 2);
@@ -250,6 +251,7 @@ World #5, SavoryMelonAlder, completed in 64338 ms
                 }
             });
         }
+        fn.setFractalSpiral(true);
         if(FLOWING_LAND)
             noise = new Noise.Adapted3DFrom5D(fn);
         else
