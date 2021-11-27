@@ -1,3 +1,5 @@
+package test;
+
 /*
 This is a port of the file rand/normal.go from
 https://github.com/golang/exp , which uses the following license:
@@ -30,8 +32,6 @@ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package squidpony.squidmath;
-
 /**
  * An IDistribution that produces double results with a Gaussian (normal) distribution. This means it has no limits in
  * any direction, but is much more likely to produce results close to 0. This now uses the Box-Muller Transform (it
@@ -40,23 +40,37 @@ package squidpony.squidmath;
  * logarithm calculations, but it only needs to calculate every other number, and it uses a fixed amount of calls to
  * {@link IRNG#nextDouble()} (for every pair of outputs, it makes two calls to nextDouble()).
  * <br>
+ * No argument constructor gives a mean of 0 and standard deviation and variance of 1 for N(0,1) that Z Score tables
+ * are built around.
+ * <br>
  * Created by Tommy Ettinger on 11/23/2019, rewritten on 7/30/2020.
  */
 public class GaussianDistribution implements IDistribution {
     
     public static final GaussianDistribution instance = new GaussianDistribution();
-    
     private double cachedNext = 0.0;
     private boolean needsMore = true;
+    private final double mu;
+    private final double sigma;
+    
+    public GaussianDistribution() {
+    	this.mu = 0;
+    	this.sigma = 1;
+    }
+    
+    public GaussianDistribution(double mean, double standardDeviation) {
+    	this.mu = mean;
+    	this.sigma = standardDeviation;
+    }
     
     @Override
     public double nextDouble(IRNG rng) {
         if(needsMore ^= true)
             return cachedNext;
-        final double mul = Math.sqrt(-2.0 * Math.log(1.0 - rng.nextDouble()));
+        final double mul = sigma * Math.sqrt(-2.0 * Math.log(1.0 - rng.nextDouble()));
         final double variate = rng.nextDouble();
-        cachedNext = mul * NumberTools.cos_(variate);
-        return mul * NumberTools.sin_(variate);
+        cachedNext = mul * NumberTools.cos_(variate) + mu;
+        return mul * NumberTools.sin_(variate) + mu;
     }
 
     /**
