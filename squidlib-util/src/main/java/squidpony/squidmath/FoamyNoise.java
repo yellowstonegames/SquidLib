@@ -51,6 +51,15 @@ public class FoamyNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
         n6 = noise;
         this.seed = noise.defaultSeed;
     }
+
+    public FoamyNoise(WeavingNoise noise){
+        n2 = noise;
+        n3 = noise;
+        n4 = noise;
+        n5 = noise;
+        n6 = noise;
+        this.seed = noise.seed;
+    }
     public FoamyNoise(FastNoise noise){
         n2 = noise;
         n3 = noise;

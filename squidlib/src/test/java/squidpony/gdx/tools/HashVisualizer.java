@@ -8,6 +8,7 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.math.RandomXS128;
+import com.badlogic.gdx.utils.NumberUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import squidpony.ArrayTools;
@@ -66,10 +67,10 @@ public class HashVisualizer extends ApplicationAdapter {
     // 3 artistic visualizations of hash functions and misc. other
     // 4 noise
     // 5 RNG results
-    private int testType = 5;
+    private int testType = 4;
     private static final int NOISE_LIMIT = 152;
     private static final int RNG_LIMIT = 52;
-    private int hashMode, rngMode = 4, noiseMode = 36, otherMode = 17;//142
+    private int hashMode, rngMode = 4, noiseMode = 54, otherMode = 17;//142
 
     /**
      * If you're editing the source of HashVisualizer, you can comment out one line and uncomment another to change
@@ -1098,24 +1099,46 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                 ) + 2.5f) * (3.456789f + NumberTools.swayRandomized(seed ^ 0x6C8E9CF570932BD5L, xin - yin)));// + (yin + xin)
     }
 
+    /**
+     * Produces output in the -0.5 to 0.5 range; otherwise like {@link NumberTools#swayRandomized(int, double)} but
+     * using quintic interpolation instead of Hermite.
+     * @param seed any int
+     * @param value distance of 1D noise to travel
+     * @return a noise value between -0.5 and 0.5, both inclusive
+     */
+    public static double swayRandomizedQuintic(final int seed, double value)
+    {
+        final int floor = value >= 0.0 ? (int) value : (int) value - 1;
+        int z = seed + floor;
+        final double start = (((z = (z ^ 0xD1B54A35) * 0x1D2BC3)) * ((z ^ z >>> 15) | 0xFFE00001) ^ z ^ z << 11) * 0x0.ffffffp-31,
+                end = (((z = (seed + floor + 1 ^ 0xD1B54A35) * 0x1D2BC3)) * ((z ^ z >>> 15) | 0xFFE00001) ^ z ^ z << 11) * 0x0.ffffffp-31;
+        value -= floor;
+        value *= value * value * (value * (value * 3f - 7.5f) + 5f);
+        return (0.5 - value) * start + value * end;
+    }
+
     public static double weavingNoise(double x, double y, int seed){
-        double sx = NumberTools.swayRandomized(seed++, x);
-        double sy = NumberTools.swayRandomized(seed++, y);
-        return NumberTools.swayRandomized(seed++ ^ 0x9E3779B9, 4.0 * NumberTools.sin_(
-               (NumberTools.swayRandomized(~seed++, x + sy)// + y * 0.5
-              + NumberTools.swayRandomized(~seed,   y + sx)// - x * 0.5
-              ) * 0.25));
+        double sx = swayRandomizedQuintic(seed, x);
+        double sy = swayRandomizedQuintic(seed + 101, y);
+        return MathExtras.barronSpline(NumberTools.swayTight((sx + sy - swayRandomizedQuintic(seed - 101, x + y))), 0.333, 0.5) * 2 - 1;
+//        return NumberTools.swayRandomized(seed++ ^ 0x9E3779B9, 4.0 * NumberTools.sin_(
+//               (NumberTools.swayRandomized(~seed++, x + sy)// + y * 0.5
+//              + NumberTools.swayRandomized(~seed,   y + sx)// - x * 0.5
+//              ) * 0.25));
     }
 
     public static double weavingNoise(double x, double y, double z, int seed){
-        double sx = NumberTools.swayRandomized(seed++, x);
-        double sy = NumberTools.swayRandomized(seed++, y);
-        double sz = NumberTools.swayRandomized(seed++, z);
-        return NumberTools.swayRandomized(seed++ ^ 0x9E3779B9, 4.0 * NumberTools.sin_(
-               (NumberTools.swayRandomized(~seed++, x + sy)
-              + NumberTools.swayRandomized(~seed++, y + sz)
-              + NumberTools.swayRandomized(~seed,   z + sx)
-              ) * (0.16666666666666666)));
+        double sx = swayRandomizedQuintic(seed, x - z);
+        double sy = swayRandomizedQuintic(seed + 101, y - x);
+        double sz = swayRandomizedQuintic(seed + 202, z - y);
+        return MathExtras.barronSpline(NumberTools.swayTight((sx + sy + sz - swayRandomizedQuintic(seed - 101, x + y + z)))
+                , 0.333, 0.5) * 2 - 1;
+
+//        return NumberTools.swayRandomized(seed++ ^ 0x9E3779B9, 4.0 * NumberTools.sin_(
+//               (NumberTools.swayRandomized(~seed++, x + sy)
+//              + NumberTools.swayRandomized(~seed++, y + sz)
+//              + NumberTools.swayRandomized(~seed,   z + sx)
+//              ) * (0.16666666666666666)));
     }
 //    public static float beachNoise(int seed, float xin, float yin)
 //    {
@@ -1260,11 +1283,24 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
         s ^= s << 8;
         return s >>> 10 & 0x3FF;
     }
+    /**
+     * Like {@link Math#floor(double)}, but takes a float and returns an int.
+     * Doesn't consider "weird floats" like INFINITY and NaN. This method will only properly floor
+     * floats from {@code -16384} to {@code Float.MAX_VALUE - 16384}.
+     * <br>
+     * Taken from libGDX MathUtils.
+     * @param t the float to find the floor for
+     * @return the floor of t, as an int
+     */
+    public static int fastFloor(float t) {
+        return ((int)(t + 0x1p14) - 0x4000);
+    }
 
     public static float baseSway(int seed, float value)
     {
         //int fast floor
-        final int floor = value >= 0f ? (int) value : (int) value - 1;
+        final int floor = ((int)(value + 0x1p14) - 0x4000);
+//        final int floor = value >= 0f ? (int) value : (int) value - 1;
         //basic XLCG adjustment to the seed; makes small-scale wavering stronger
         seed = seed * 0x9E37B ^ 0xD1B54A35; 
         //get start and end for interpolation, each from -1 to 1. These are either "peaks" or "valleys"
@@ -4121,11 +4157,11 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 back[x][y] = 
-                                        floatGet(
-                                                ((float)weavingNoise((x + ctr) * 0.03125 + 20, (y + ctr) * 0.03125 + 30, 1234) * 0.50f) + 0.50f,
-                                                ((float)weavingNoise((x + ctr) * 0.03125 + 30, (y + ctr) * 0.03125 + 10, 54321) * 0.50f) + 0.50f,
-                                                ((float)weavingNoise((x + ctr) * 0.03125 + 10, (y + ctr) * 0.03125 + 20, 1234321) * 0.50f) + 0.50f,
-                                                1.0f);
+                                        getGray(basicPrepare(weavingNoise((x + ctr) * 0.03125, (y + ctr) * 0.03125, 1234)));
+//                                                ((float)weavingNoise((x + ctr) * 0.03125 + 20, (y + ctr) * 0.03125 + 30, 1234) * 0.50f) + 0.50f,
+//                                                ((float)weavingNoise((x + ctr) * 0.03125 + 30, (y + ctr) * 0.03125 + 10, 54321) * 0.50f) + 0.50f,
+//                                                ((float)weavingNoise((x + ctr) * 0.03125 + 10, (y + ctr) * 0.03125 + 20, 1234321) * 0.50f) + 0.50f,
+//                                                1.0f);
                             }
                         }
 //                        Gdx.graphics.setTitle("Jack 2D Color Noise, one octave per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
