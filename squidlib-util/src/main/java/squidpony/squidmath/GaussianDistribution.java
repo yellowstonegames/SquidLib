@@ -40,8 +40,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * logarithm calculations, but it only needs to calculate every other number, and it uses a fixed amount of calls to
  * {@link IRNG#nextDouble()} (for every pair of outputs, it makes two calls to nextDouble()).
  * <br>
- * No argument constructor gives a mean of 0 and standard deviation and variance of 1 for N(0,1) that Z Score tables
- * are built around.
+ * No argument constructor gives a mean of 0 and standard deviation and variance of 1 for an N(0,1) distribution
+ * that Z Score tables are built around.
  * <br>
  * Created by Tommy Ettinger on 11/23/2019, rewritten on 7/30/2020.
  */
@@ -53,11 +53,19 @@ public class GaussianDistribution implements IDistribution {
     private final double mu;
     private final double sigma;
     
+    /**
+     * Creates a Gaussian (normal) distribution with mean of 0 and standard deviation and variance of 1.
+     * This N(0,1) probability distribution is what Z Score tables are built around.
+     */
     public GaussianDistribution() {
     	this.mu = 0;
     	this.sigma = 1;
     }
     
+    /**
+     * Creates a Gaussian (normal) distribution with specified mean and standard deviation.
+     * In statistics, this means providing the mu and sigma, respectively, for an N(mu, sigma^2) distribution.
+     */
     public GaussianDistribution(double mean, double standardDeviation) {
     	this.mu = mean;
     	this.sigma = standardDeviation;
