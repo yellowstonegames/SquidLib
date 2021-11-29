@@ -3428,7 +3428,7 @@ final double v2 = + x * +1.1212273759528033 + y * -1.1036247824581010 + z * +0.9
             x -= xFloor;
             // and now we flip the switch from "magic" to "more magic..."
             // this directly sets the bits that describe a double. this might seem like it should be slow; it is not.
-            // seed and xFloor are XORed to roughly mix them together; adding would work too probably.
+            // seed and xFloor are XORed to roughly mix them together; adding would work too, probably.
             // the two huge longs don't really matter except for their last digits:
             // the one that uses ^ must end in 5 or D (both hex) 
             // the one that uses * must end in 3 or B (both hex)

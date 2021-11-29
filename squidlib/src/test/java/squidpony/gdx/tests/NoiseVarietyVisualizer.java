@@ -19,10 +19,10 @@ import static com.badlogic.gdx.graphics.GL20.GL_POINTS;
  */
 public class NoiseVarietyVisualizer extends ApplicationAdapter {
 
-    private ClassicNoise classic = new ClassicNoise(1234567890);
-    private FoamyNoise classicky = new FoamyNoise(classic);
-    private FoamyNoise weaving = new FoamyNoise(WeavingNoise.instance);
-    private FoamNoise foam = new FoamNoise(1234567890);
+    private FoamyNoise simplexy = new FoamyNoise(new SeededNoise(1234567890));
+    private WeavingNoise weave = new WeavingNoise(-12345L);
+    private FoamyNoise weavy = new FoamyNoise(new WeavingNoise(1234567890));
+    private FoamyNoise foam = new FoamyNoise(new ValueNoise(1234567890));
 //    private HashedValueNoise value = new HashedValueNoise(new FlawedPointHash.CubeHash(1234567890, 32));
 //    private FastNoise value = new FastNoise(1234567890, 1f, FastNoise.VALUE, 1);
     private int noiseType = 0; // 0 for classic, 1 for wave, 2 for fast, 3 for experimental
@@ -32,9 +32,9 @@ public class NoiseVarietyVisualizer extends ApplicationAdapter {
     private int alternate = 0;
     private long seed = 1234567890;
 
-    private Noise.Noise2D current2 = new Noise.Layered2D(classic, octaves + 1, freq);
-    private Noise.Noise3D current3 = new Noise.Layered3D(classic, octaves + 1, freq);
-    private Noise.Noise4D current4 = new Noise.Layered4D(classic, octaves + 1, freq);
+    private Noise.Noise2D current2 = new Noise.Layered2D(simplexy, octaves + 1, freq);
+    private Noise.Noise3D current3 = new Noise.Layered3D(simplexy, octaves + 1, freq);
+    private Noise.Noise4D current4 = new Noise.Layered4D(simplexy, octaves + 1, freq);
 
     private ImmediateModeRenderer20 renderer;
 
@@ -56,19 +56,19 @@ public class NoiseVarietyVisualizer extends ApplicationAdapter {
             case 0: {
                 switch (noiseType) {
                     case 0:
-                        current2 = new Noise.Layered2D(classic, octaves + 1, freq);
-                        current3 = new Noise.Layered3D(classic, octaves + 1, freq);
-                        current4 = new Noise.Layered4D(classic, octaves + 1, freq);
+                        current2 = new Noise.Layered2D(simplexy, octaves + 1, freq);
+                        current3 = new Noise.Layered3D(simplexy, octaves + 1, freq);
+                        current4 = new Noise.Layered4D(simplexy, octaves + 1, freq);
                         break;
                     case 1:
-                        current2 = new Noise.Layered2D(classicky, octaves + 1, freq);
-                        current3 = new Noise.Layered3D(classicky, octaves + 1, freq);
-                        current4 = new Noise.Layered4D(classicky, octaves + 1, freq);
+                        current2 = new Noise.Layered2D(weave, octaves + 1, freq);
+                        current3 = new Noise.Layered3D(weave, octaves + 1, freq);
+                        current4 = new Noise.Layered4D(weave, octaves + 1, freq);
                         break;
                     case 2:
-                        current2 = new Noise.Layered2D(weaving, octaves + 1, freq);
-                        current3 = new Noise.Layered3D(weaving, octaves + 1, freq);
-                        current4 = new Noise.Layered4D(weaving, octaves + 1, freq);
+                        current2 = new Noise.Layered2D(weavy, octaves + 1, freq);
+                        current3 = new Noise.Layered3D(weavy, octaves + 1, freq);
+                        current4 = new Noise.Layered4D(weavy, octaves + 1, freq);
                         break;
                     case 3:
                         current2 = new Noise.Layered2D(foam, octaves + 1, freq);
@@ -81,19 +81,19 @@ public class NoiseVarietyVisualizer extends ApplicationAdapter {
             case 1: {
                 switch (noiseType) {
                     case 0:
-                        current2 = new Noise.LayeredSpiral2D(classic, octaves + 1, freq);
-                        current3 = new Noise.LayeredSpiral3D(classic, octaves + 1, freq);
-                        current4 = new Noise.LayeredSpiral4D(classic, octaves + 1, freq);
+                        current2 = new Noise.LayeredSpiral2D(simplexy, octaves + 1, freq);
+                        current3 = new Noise.LayeredSpiral3D(simplexy, octaves + 1, freq);
+                        current4 = new Noise.LayeredSpiral4D(simplexy, octaves + 1, freq);
                         break;
                     case 1:
-                        current2 = new Noise.LayeredSpiral2D(classicky, octaves + 1, freq);
-                        current3 = new Noise.LayeredSpiral3D(classicky, octaves + 1, freq);
-                        current4 = new Noise.LayeredSpiral4D(classicky, octaves + 1, freq);
+                        current2 = new Noise.LayeredSpiral2D(weave, octaves + 1, freq);
+                        current3 = new Noise.LayeredSpiral3D(weave, octaves + 1, freq);
+                        current4 = new Noise.LayeredSpiral4D(weave, octaves + 1, freq);
                         break;
                     case 2:
-                        current2 = new Noise.LayeredSpiral2D(weaving, octaves + 1, freq);
-                        current3 = new Noise.LayeredSpiral3D(weaving, octaves + 1, freq);
-                        current4 = new Noise.LayeredSpiral4D(weaving, octaves + 1, freq);
+                        current2 = new Noise.LayeredSpiral2D(weavy, octaves + 1, freq);
+                        current3 = new Noise.LayeredSpiral3D(weavy, octaves + 1, freq);
+                        current4 = new Noise.LayeredSpiral4D(weavy, octaves + 1, freq);
                         break;
                     case 3:
                         current2 = new Noise.LayeredSpiral2D(foam, octaves + 1, freq);
@@ -106,19 +106,19 @@ public class NoiseVarietyVisualizer extends ApplicationAdapter {
             case 2: {
                 switch (noiseType) {
                     case 0:
-                        current2 = new Noise.Ridged2D(classic, octaves + 1, freq);
-                        current3 = new Noise.Ridged3D(classic, octaves + 1, freq);
-                        current4 = new Noise.Ridged4D(classic, octaves + 1, freq);
+                        current2 = new Noise.Ridged2D(simplexy, octaves + 1, freq);
+                        current3 = new Noise.Ridged3D(simplexy, octaves + 1, freq);
+                        current4 = new Noise.Ridged4D(simplexy, octaves + 1, freq);
                         break;
                     case 1:
-                        current2 = new Noise.Ridged2D(classicky, octaves + 1, freq);
-                        current3 = new Noise.Ridged3D(classicky, octaves + 1, freq);
-                        current4 = new Noise.Ridged4D(classicky, octaves + 1, freq);
+                        current2 = new Noise.Ridged2D(weave, octaves + 1, freq);
+                        current3 = new Noise.Ridged3D(weave, octaves + 1, freq);
+                        current4 = new Noise.Ridged4D(weave, octaves + 1, freq);
                         break;
                     case 2:
-                        current2 = new Noise.Ridged2D(weaving, octaves + 1, freq);
-                        current3 = new Noise.Ridged3D(weaving, octaves + 1, freq);
-                        current4 = new Noise.Ridged4D(weaving, octaves + 1, freq);
+                        current2 = new Noise.Ridged2D(weavy, octaves + 1, freq);
+                        current3 = new Noise.Ridged3D(weavy, octaves + 1, freq);
+                        current4 = new Noise.Ridged4D(weavy, octaves + 1, freq);
                         break;
                     case 3:
                         current2 = new Noise.Ridged2D(foam, octaves + 1, freq);
@@ -218,7 +218,7 @@ public class NoiseVarietyVisualizer extends ApplicationAdapter {
                 case 2:
                     for (int x = 0; x < width; x++) {
                         for (int y = 0; y < height; y++) {
-                            bright = basicPrepare(current4.getNoiseWithSeed(x, y, ctr, 0x1p-4f * (x + y - ctr), seed));
+                            bright = basicPrepare(current4.getNoiseWithSeed(x, y, ctr, 0.125f * (x + y - ctr), seed));
                             renderer.color(bright, bright, bright, 1f);
                             renderer.vertex(x, y, 0);
                         }
