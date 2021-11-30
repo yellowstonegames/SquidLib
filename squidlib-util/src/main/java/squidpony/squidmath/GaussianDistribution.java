@@ -1,5 +1,3 @@
-package test;
-
 /*
 This is a port of the file rand/normal.go from
 https://github.com/golang/exp , which uses the following license:
@@ -32,6 +30,7 @@ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+package squidpony.squidmath;
 /**
  * An IDistribution that produces double results with a Gaussian (normal) distribution. This means it has no limits in
  * any direction, but is much more likely to produce results close to 0. This now uses the Box-Muller Transform (it
@@ -41,7 +40,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * {@link IRNG#nextDouble()} (for every pair of outputs, it makes two calls to nextDouble()).
  * <br>
  * No argument constructor gives a mean of 0 and standard deviation and variance of 1 for an N(0,1) distribution
- * that Z Score tables are built around.
+ * that Z Score tables are built around. The two-argument constructor allows specifying a different mean and standard
+ * deviation. In statistics, mean is also called mu, and standard deviation is sigma squared.
  * <br>
  * Created by Tommy Ettinger on 11/23/2019, rewritten on 7/30/2020.
  */
@@ -55,7 +55,7 @@ public class GaussianDistribution implements IDistribution {
     
     /**
      * Creates a Gaussian (normal) distribution with mean of 0 and standard deviation and variance of 1.
-     * This N(0,1) probability distribution is what Z Score tables are built around.
+     * This N(0, 1) probability distribution is what Z Score tables are built around.
      */
     public GaussianDistribution() {
     	this.mu = 0;
@@ -64,7 +64,9 @@ public class GaussianDistribution implements IDistribution {
     
     /**
      * Creates a Gaussian (normal) distribution with specified mean and standard deviation.
-     * In statistics, this means providing the mu and sigma, respectively, for an N(mu, sigma^2) distribution.
+     * In statistics, this means providing the mu and sigma, respectively, for an N(mu, pow(sigma, 2)) distribution.
+     * @param mean (equivalent to mu) the value at the center of the distribution; also the most common result
+     * @param standardDeviation (equivalent to sigma squared) how far and often values should spread out away from the mean
      */
     public GaussianDistribution(double mean, double standardDeviation) {
     	this.mu = mean;
