@@ -46,7 +46,7 @@ public class WeavingNoise implements Noise.Noise2D, Noise.Noise3D,
     }
 
     public static double formDouble(long bits){
-        return NumberTools.longBitsToDouble(1022L - Long.numberOfTrailingZeros(bits) << 52 | bits & 0x800FFFFFFFFFFFFFL);
+        return NumberTools.longBitsToDouble(1022L - Long.numberOfTrailingZeros(bits) << 52 | (bits & 0x800FFFFFFFFFFFFFL));
 
     }
 
@@ -61,11 +61,15 @@ public class WeavingNoise implements Noise.Noise2D, Noise.Noise3D,
     {
 //        x += seed * 0x1p-24;
         final int floor = x >= 0.0 ? (int) x : (int) x - 1;
-        int z = seed + floor;
+        long z = (seed + floor) * 0xACBD2BDCA2BFF56DL;
 //        final double start = NumberTools.longBitsToDouble(((z ^ 0x9E3779B97F4A7C15L) * 0xD1B54A32D192ED03L >>> 12) | 0x4000000000000000L) - 3.0,
 //                end = NumberTools.longBitsToDouble(((z + 1 ^ 0x9E3779B97F4A7C15L) * 0xD1B54A32D192ED03L >>> 12) | 0x4000000000000000L) - 3.0;
-        final double start = formDouble(((z ^ 0x9E3779B97F4A7C15L) * 0xD1B54A32D192ED03L >> 12)),
-                end = formDouble(((z + 1 ^ 0x9E3779B97F4A7C15L) * 0xD1B54A32D192ED03L >> 12));
+        final double start = formDouble(z),
+                end = formDouble(z + 0xACBD2BDCA2BFF56DL);
+//        final double start = formDouble((z << 1 ^ 0xD1B54A32D192ED03L) * Long.rotateLeft(z, 14)),
+//                end = formDouble(((z += 0xACBD2BDCA2BFF56DL) << 1 ^ 0xD1B54A32D192ED03L) * Long.rotateLeft(z, 14));
+//        final double start = formDouble(((z ^ 0x9E3779B97F4A7C15L) * 0xD1B54A32D192ED03L)),
+//                end = formDouble(((z + 0xACBD2BDCA2BFF56DL ^ 0x9E3779B97F4A7C15L) * 0xD1B54A32D192ED03L));
 //        final double start = (((z = (z ^ 0xD1B54A35) * 0x1D2BC3)) * ((z ^ z >>> 15) | 0xFFE00001) ^ z ^ z << 11) * 0x0.ffffffp-31,
 //                end = (((z = (seed + floor + 1 ^ 0xD1B54A35) * 0x1D2BC3)) * ((z ^ z >>> 15) | 0xFFE00001) ^ z ^ z << 11) * 0x0.ffffffp-31;
         x -= floor;
@@ -89,17 +93,22 @@ public class WeavingNoise implements Noise.Noise2D, Noise.Noise3D,
 //        final long xFloor = Noise.longFloor(x), rise = 1L - (Noise.longFloor(x + x) & 2L);
 //        x -= xFloor;
 //        x *= x - 1.0;
-//        final double h = NumberTools.longBitsToDouble((seed ^ xFloor ^ 0x9E3779B97F4A7C15L) * 0xD1B54A32D192ED03L >>> 12 | 0x4040000000000000L) - 52.0;
-//        return rise * x * (h * x - 1.0);
+//        final double h = NumberTools.longBitsToDouble((seed ^ xFloor ^ 0x9E3779B97F4A7C15L) * 0xD1B54A32D192ED03L >>> 12 | 0x4030000000000000L) - 26.0;
+//        return rise * x * (h * x - 0.5);
+////        final double h = NumberTools.longBitsToDouble((seed ^ xFloor ^ 0x9E3779B97F4A7C15L) * 0xD1B54A32D192ED03L >>> 12 | 0x4040000000000000L) - 52.0;
+////        return rise * x * (h * x - 1.0);
 //    }
 
     public static double valueNoise(int seed, double x, double y)
     {
         double sx = valueNoise(seed, x);
         double sy = valueNoise(seed + 1010101, y + sx);
+//        return valueNoise(seed - 1010101, 4 * (sx + x - sy + y)) + valueNoise(seed - 2020202, 4 * (sy + x - sx - y));
         return //MathExtras.barronSpline(
-                swayTight(~seed, (sx + sy - valueNoise(seed - 101, x + y + sy)))
-                //, 0.333, 0.5)
+                swayTight(~seed, (sx + sy -
+                        valueNoise(seed - 1010101, x + y + sy)
+                ))
+//                //, 0.333, 0.5)
                 ;
     }
 
@@ -109,7 +118,7 @@ public class WeavingNoise implements Noise.Noise2D, Noise.Noise3D,
         double sy = valueNoise(seed + 1010101, y - x + sx);
         double sz = valueNoise(seed + 2020202, z - y + sy);
         return //MathExtras.barronSpline(
-                swayTight(~seed, (sx + sy + sz - valueNoise(seed - 101, x + y + z + sz)))
+                swayTight(~seed, (sx + sy + sz - valueNoise(seed - 1010101, x + y + z + sz)))
 //                , 0.333, 0.5)
                 ;
     }
@@ -121,7 +130,7 @@ public class WeavingNoise implements Noise.Noise2D, Noise.Noise3D,
         double sz = valueNoise(seed + 2020202, z - y + sy);
         double sw = valueNoise(seed + 3030303, w - z + sz);
         return //MathExtras.barronSpline(
-                swayTight(~seed, (sx + sy + sz + sw - valueNoise(seed - 101, x + y + z + w + sw)))
+                swayTight(~seed, (sx + sy + sz + sw - valueNoise(seed - 1010101, x + y + z + w + sw)))
 //                , 0.333, 0.5)
         ;
     }
@@ -134,7 +143,7 @@ public class WeavingNoise implements Noise.Noise2D, Noise.Noise3D,
         double sw = valueNoise(seed + 3030303, w - z + sz);
         double su = valueNoise(seed + 4040404, u - w + sw);
         return //MathExtras.barronSpline(
-                swayTight(~seed, (sx + sy + sz + sw + su - valueNoise(seed - 101, x + y + z + w + u + su)))
+                swayTight(~seed, (sx + sy + sz + sw + su - valueNoise(seed - 1010101, x + y + z + w + u + su)))
 //                , 0.333, 0.5)
                 ;
     }
@@ -148,7 +157,7 @@ public class WeavingNoise implements Noise.Noise2D, Noise.Noise3D,
         double su = valueNoise(seed + 4040404, u - w + sw);
         double sv = valueNoise(seed + 5050505, v - u + su);
         return //MathExtras.barronSpline(
-                swayTight(~seed, (sx + sy + sz + sw + su + sv - valueNoise(seed - 101, x + y + z + w + u + v + sv)))
+                swayTight(~seed, (sx + sy + sz + sw + su + sv - valueNoise(seed - 1010101, x + y + z + w + u + v + sv)))
 //                , 0.333, 0.5)
         ;
     }

@@ -2365,8 +2365,8 @@ public class MathVisualizer extends ApplicationAdapter {
      */
     public static double nextExclusiveDoubleNoCTZ(){
         final long bits = MathUtils.random.nextLong();
-//        return Double.longBitsToDouble((0x7C10000000000000L + (Double.doubleToRawLongBits(0x80000000000003FFL | bits) & 0xFFF0000000000000L)) | (~bits & 0x000FFFFFFFFFFFFFL));
-        return NumberUtils.longBitsToDouble((0x7C10000000000000L + (NumberUtils.doubleToLongBits(0x8000000000000001L | bits) & 0xFFF0000000000000L)) | (~bits & 0x000FFFFFFFFFFFFFL));
+        return Double.longBitsToDouble((0x7C10000000000000L + (Double.doubleToRawLongBits(0x80000000000003FFL | bits) & 0xFFF0000000000000L)) | (~bits & 0x000FFFFFFFFFFFFFL));
+//        return NumberUtils.longBitsToDouble((0x7C10000000000000L + (NumberUtils.doubleToLongBits(0x8000000000000001L | bits) & 0xFFF0000000000000L)) | (~bits & 0x000FFFFFFFFFFFFFL));
     }
     /**
      * This is a simplified version of <a href="https://allendowney.com/research/rand/">this
@@ -2381,8 +2381,7 @@ public class MathVisualizer extends ApplicationAdapter {
      */
     public static float nextExclusiveFloat(){
         final long bits = MathUtils.random.nextLong();
-        return NumberUtils.intBitsToFloat(126 - Long.numberOfTrailingZeros(bits) << 23
-                | (int)(bits >>> 41));
+        return NumberUtils.intBitsToFloat(126 - Long.numberOfTrailingZeros(bits) << 23 | (int)(bits >>> 41));
     }
 
     private double acbrt(double r)
