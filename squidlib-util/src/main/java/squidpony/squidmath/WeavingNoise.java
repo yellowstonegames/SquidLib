@@ -47,7 +47,15 @@ public class WeavingNoise implements Noise.Noise2D, Noise.Noise3D,
 
     public static double formDouble(long bits){
         return NumberTools.longBitsToDouble(1022L - Long.numberOfTrailingZeros(bits) << 52 | (bits & 0x800FFFFFFFFFFFFFL));
+    }
 
+    /**
+     * Range: -255.9999999999999 to 255.9999999999999 .
+     * @param bits
+     * @return
+     */
+    public static double formLargeDouble(long bits){
+        return NumberTools.longBitsToDouble(1023L - Long.numberOfTrailingZeros(bits ^ bits >>> 32) << 52 | (bits & 0x800FFFFFFFFFFFFFL));
     }
 
     /**
@@ -77,6 +85,23 @@ public class WeavingNoise implements Noise.Noise2D, Noise.Noise3D,
         return (0.5 - x) * start + x * end;
     }
 
+    public static double rawNoise(final int seed, double x)
+    {
+        final int floor = x >= 0.0 ? (int) x : (int) x - 1;
+        long z = (seed + floor) * 0xACBD2BDCA2BFF56DL;
+        final double start = formLargeDouble(z),
+                end = formLargeDouble(z + 0xACBD2BDCA2BFF56DL);
+//        final double start = formDouble((z << 1 ^ 0xD1B54A32D192ED03L) * Long.rotateLeft(z, 14)),
+//                end = formDouble(((z += 0xACBD2BDCA2BFF56DL) << 1 ^ 0xD1B54A32D192ED03L) * Long.rotateLeft(z, 14));
+//        final double start = formDouble(((z ^ 0x9E3779B97F4A7C15L) * 0xD1B54A32D192ED03L)),
+//                end = formDouble(((z + 0xACBD2BDCA2BFF56DL ^ 0x9E3779B97F4A7C15L) * 0xD1B54A32D192ED03L));
+//        final double start = (((z = (z ^ 0xD1B54A35) * 0x1D2BC3)) * ((z ^ z >>> 15) | 0xFFE00001) ^ z ^ z << 11) * 0x0.ffffffp-31,
+//                end = (((z = (seed + floor + 1 ^ 0xD1B54A35) * 0x1D2BC3)) * ((z ^ z >>> 15) | 0xFFE00001) ^ z ^ z << 11) * 0x0.ffffffp-31;
+        x -= floor;
+//        x = MathExtras.barronSpline(x - floor, 2.0, 0.5);
+        return (1.0 - x) * start + x * end;
+    }
+
 //    public static double valueNoise(final int seed, double x)
 //    {
 //        final int floor = x >= 0.0 ? (int) x : (int) x - 1;
@@ -101,13 +126,11 @@ public class WeavingNoise implements Noise.Noise2D, Noise.Noise3D,
 
     public static double valueNoise(int seed, double x, double y)
     {
-        double sx = valueNoise(seed, x);
-        double sy = valueNoise(seed + 1010101, y + sx);
+        double sx = rawNoise(seed, x);
+        double sy = rawNoise(seed + 1010101, y);
 //        return valueNoise(seed - 1010101, 4 * (sx + x - sy + y)) + valueNoise(seed - 2020202, 4 * (sy + x - sx - y));
         return //MathExtras.barronSpline(
-                swayTight(~seed, (sx + sy -
-                        valueNoise(seed - 1010101, x + y + sy)
-                ))
+                NumberTools.sway(sx + sy) * (2.0 / Math.PI)
 //                //, 0.333, 0.5)
                 ;
     }
