@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.glutils.ImmediateModeRenderer20;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.NumberUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.github.tommyettinger.anim8.AnimatedGif;
@@ -24,8 +25,9 @@ import static com.badlogic.gdx.graphics.GL20.GL_POINTS;
  */
 public class OpenSimplexNoiseVisualizer extends ApplicationAdapter {
 
-    private OpenSimplex2F osf = new OpenSimplex2F();
-    private OpenSimplex2S oss = new OpenSimplex2S();
+    private OpenSimplexNoise osn = new OpenSimplexNoise(1234567890);
+    private OpenSimplex2F osf = new OpenSimplex2F(1234567890);
+    private OpenSimplex2S oss = new OpenSimplex2S(1234567890);
     private FastNoise fast = new FastNoise(1234567890, 1f, FastNoise.SIMPLEX, 1);
     private int noiseType = 0; // 0 for osf, 1 for oss, 2 for fast, 3 for experimental
     private int dim = 0; // this can be 0, 1, or 2; add 2 to get the actual dimensions
@@ -67,11 +69,16 @@ public class OpenSimplexNoiseVisualizer extends ApplicationAdapter {
                     current4 = new Noise.Ridged4D(oss, octaves + 1, freq);
                     break;
                 case 2:
-                case 3:
                     current2 = new Noise.Ridged2D(fast, octaves + 1, freq);
                     current3 = new Noise.Ridged3D(fast, octaves + 1, freq);
                     current4 = new Noise.Ridged4D(fast, octaves + 1, freq);
                     break;
+                case 3:
+                    current2 = new Noise.Ridged2D(osn, octaves + 1, freq);
+                    current3 = new Noise.Ridged3D(osn, octaves + 1, freq);
+                    current4 = new Noise.Ridged4D(osn, octaves + 1, freq);
+                    break;
+
             }
         }
         else {
@@ -87,14 +94,20 @@ public class OpenSimplexNoiseVisualizer extends ApplicationAdapter {
                     current4 = new Noise.Layered4D(oss, octaves + 1, freq);
                     break;
                 case 2:
-                case 3:
                     current2 = new Noise.Layered2D(fast, octaves + 1, freq);
                     current3 = new Noise.Layered3D(fast, octaves + 1, freq);
                     current4 = new Noise.Layered4D(fast, octaves + 1, freq);
                     break;
+                case 3:
+                    current2 = new Noise.Layered2D(osn, octaves + 1, freq);
+                    current3 = new Noise.Layered3D(osn, octaves + 1, freq);
+                    current4 = new Noise.Layered4D(osn, octaves + 1, freq);
+                    break;
+
             }
         }
     }
+
     @Override
     public void create() {
         renderer = new ImmediateModeRenderer20(width * height, false, true, 0);
