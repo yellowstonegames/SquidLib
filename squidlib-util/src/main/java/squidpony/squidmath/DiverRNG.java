@@ -57,8 +57,7 @@ public class DiverRNG implements StatefulRandomness, Serializable {
      * Creates a new generator seeded using Math.random.
      */
     public DiverRNG() {
-        this((long) ((Math.random() - 0.5) * 0x10000000000000L)
-                ^ (long) (((Math.random() - 0.5) * 2.0) * 0x8000000000000000L));
+        this((long) ((Math.random() - 0.5) * 0x1p52) ^ (long) ((Math.random() - 0.5) * 0x1p64));
     }
 
     public DiverRNG(final long seed) {

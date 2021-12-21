@@ -126,12 +126,12 @@ World #5, SavoryMelonAlder, completed in 64338 ms
 //        path = "out/worldsAnimated/" + date + "/SpaceViewMutantFoam/";
 //        path = "out/worldsAnimated/" + date + "/SpaceViewMutantHoney/";
 //        path = "out/worldsAnimated/" + date + "/SpaceViewValue/";
-        path = "out/worldsAnimated/" + date + "/SpaceViewValue/";
+//        path = "out/worldsAnimated/" + date + "/SpaceViewValue/";
 //        path = "out/worldsAnimated/" + date + "/SpaceViewClassic/";
 //        path = "out/worldsAnimated/" + date + "/SpaceViewSeedy/";
 //        path = "out/worldsAnimated/" + date + "/SpaceViewPerlin/";
 //        path = "out/worldsAnimated/" + date + "/SpaceViewHoney/";
-//        path = "out/worldsAnimated/" + date + "/SpaceViewFoam/";
+        path = "out/worldsAnimated/" + date + "/SpaceViewFoam/";
 //        path = "out/worldsAnimated/" + date + "/SpaceViewSimplex/";
 //        path = "out/worldsAnimated/" + date + "/SpaceViewRidged/";
 //        path = "out/worldsAnimated/" + date + "/SpaceViewMutantMaelstrom/";
@@ -157,10 +157,10 @@ World #5, SavoryMelonAlder, completed in 64338 ms
         }
 
         writer = new AnimatedGif();
-        writer.setDitherAlgorithm(Dithered.DitherAlgorithm.SCATTER);
+        writer.setDitherAlgorithm(Dithered.DitherAlgorithm.NEUE);
         writer.setFlipY(false);
-        writer.palette = new PaletteReducer();
-        writer.palette.setDitherStrength(0.75f);
+//        writer.palette = new PaletteReducer();
+//        writer.palette.setDitherStrength(0.75f);
         rng = new StatefulRNG(CrossHash.hash64(date));
         //rng.setState(rng.nextLong() + 2000L); // change addend when you need different results on the same date  
         //rng = new StatefulRNG(0L);
@@ -205,14 +205,14 @@ World #5, SavoryMelonAlder, completed in 64338 ms
 //        WorldMapGenerator.DEFAULT_NOISE.setFractalGain(5f);
 //        WorldMapGenerator.DEFAULT_NOISE.setFractalLacunarity(0.8f);
 //        WorldMapGenerator.DEFAULT_NOISE.setFractalGain(1.25f);
-//        VastNoise fn = new VastNoise((int) seed, 1.75f, VastNoise.FOAM, 1);
+        VastNoise fn = new VastNoise((int) seed, 1.75f, VastNoise.FOAM, 1);
 //        VastNoise fn = new VastNoise((int) seed, 1.5f, VastNoise.PERLIN_FRACTAL, 2);
-        VastNoise fn = new VastNoise((int) seed, 2.0f, VastNoise.VALUE, 1);
+//        VastNoise fn = new VastNoise((int) seed, 2.0f, VastNoise.VALUE, 1);
 //        VastNoise fn = new VastNoise((int) seed, 1.5f, VastNoise.PERLIN, 1);
 //        VastNoise fn = new VastNoise((int) seed, 1f, VastNoise.SIMPLEX, 1);
 //        VastNoise fn = new VastNoise((int) seed, 1f, VastNoise.SIMPLEX_FRACTAL, 2);
 //        VastNoise fn = new VastNoise((int) seed, 1.25f, VastNoise.HONEY, 1);
-
+        fn.setInterpolation(FastNoise.QUINTIC);
 //        FastNoise fn = new FastNoise((int) seed, 5f, FastNoise.CUBIC, 1);
         /*
                     {0xC13FA9A902A6328FL, 0x91E10DA5C79E7B1DL},
@@ -227,27 +227,27 @@ World #5, SavoryMelonAlder, completed in 64338 ms
             fn.setPointHash(new IPointHash.IntImpl() {
                 @Override
                 public int hashWithState(int x, int y, int state) {
-                    return (int) (0xC13FA9A902A6328FL * x + 0x91E10DA5C79E7B1DL * y + state);
+                    return (int) (0xC13FA9A902A6328FL * x + 0x91E10DA5C79E7B1DL * y >>> 32) + state;
                 }
 
                 @Override
                 public int hashWithState(int x, int y, int z, int state) {
-                    return (int) (0xD1B54A32D192ED03L * x + 0xABC98388FB8FAC03L * y + 0x8CB92BA72F3D8DD7L * z + state);
+                    return (int) (0xD1B54A32D192ED03L * x + 0xABC98388FB8FAC03L * y + 0x8CB92BA72F3D8DD7L * z >>> 32) + state;
                 }
 
                 @Override
                 public int hashWithState(int x, int y, int z, int w, int state) {
-                    return (int) (0xDB4F0B9175AE2165L * x + 0xBBE0563303A4615FL * y + 0xA0F2EC75A1FE1575L * z + 0x89E182857D9ED689L * w + state);
+                    return (int) (0xDB4F0B9175AE2165L * x + 0xBBE0563303A4615FL * y + 0xA0F2EC75A1FE1575L * z + 0x89E182857D9ED689L * w >>> 32) + state;
                 }
 
                 @Override
                 public int hashWithState(int x, int y, int z, int w, int u, int state) {
-                    return (int) (0xE19B01AA9D42C633L * x + 0xC6D1D6C8ED0C9631L * y + 0xAF36D01EF7518DBBL * z + 0x9A69443F36F710E7L * w + 0x881403B9339BD42DL * u + state);
+                    return (int) (0xE19B01AA9D42C633L * x + 0xC6D1D6C8ED0C9631L * y + 0xAF36D01EF7518DBBL * z + 0x9A69443F36F710E7L * w + 0x881403B9339BD42DL * u >>> 32) + state;
                 }
 
                 @Override
                 public int hashWithState(int x, int y, int z, int w, int u, int v, int state) {
-                    return (int) (0xE60E2B722B53AEEBL * x + 0xCEBD76D9EDB6A8EFL * y + 0xB9C9AA3A51D00B65L * z + 0xA6F5777F6F88983FL * w + 0x9609C71EB7D03F7BL * u + 0x86D516E50B04AB1BL * v + state);
+                    return (int) (0xE60E2B722B53AEEBL * x + 0xCEBD76D9EDB6A8EFL * y + 0xB9C9AA3A51D00B65L * z + 0xA6F5777F6F88983FL * w + 0x9609C71EB7D03F7BL * u + 0x86D516E50B04AB1BL * v >>> 32) + state;
                 }
             });
         }
@@ -403,8 +403,8 @@ World #5, SavoryMelonAlder, completed in 64338 ms
         for (int i = 0; i < pm.length; i++) {
             double angle = (Math.PI * 2.0 / pm.length) * i;
             if(FLOWING_LAND) {
-                ((Noise.Adapted3DFrom5D)noise).w = NumberTools.cos(angle) * 0.3125;
-                ((Noise.Adapted3DFrom5D)noise).u = NumberTools.sin(angle) * 0.3125;
+                ((Noise.Adapted3DFrom5D)noise).w = Math.cos(angle) * 0.3125;
+                ((Noise.Adapted3DFrom5D)noise).u = Math.sin(angle) * 0.3125;
             }
             world.setCenterLongitude(angle);
             generate(hash);
@@ -421,8 +421,8 @@ World #5, SavoryMelonAlder, completed in 64338 ms
 //            if(i % 5 == 4) System.out.println("Finished " + (i + 1) + " frames in " + (System.currentTimeMillis() - worldTime) + " ms");
             if(i % (pm.length / 10) == (pm.length / 10) - 1) System.out.print(((i + 1) * 100 / pm.length) + "% (" + (System.currentTimeMillis() - worldTime) + " ms)... ");
         }
-        writer.palette.analyze(pm, pm.length, 120, 256);
-        writer.write(Gdx.files.local(path + name + ".gif"), new Array<Pixmap>(pm), 30);
+//        writer.palette.analyze(pm, pm.length, 120, 256);
+        writer.write(Gdx.files.local(path + name + ".gif"), new Array<Pixmap>(pm), 20);
 
 //        Gdx.graphics.requestRendering();
         

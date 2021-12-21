@@ -25,7 +25,7 @@ import java.util.Random;
  * Created by Tommy Ettinger on 1/13/2018.
  */
 public class MathVisualizer extends ApplicationAdapter {
-    private int mode = 51;
+    private int mode = 0;
     private int modes = 58;
     private FilterBatch batch;
     private SparseLayers layers;
@@ -573,13 +573,14 @@ public class MathVisualizer extends ApplicationAdapter {
                 Gdx.graphics.setTitle("Math Visualizer: Mode " + mode);
                 //DiverRNG diver = new DiverRNG();
                 for (int i = 0; i < 0x1000000; i++) {
-                    amounts[Noise.fastFloor(NumberTools.formCurvedFloat(diver.nextLong()) * 256 + 256)]++;
+                    amounts[Noise.fastFloor(hashFloat(i, i) * 256 + 256)]++;
+//                    amounts[Noise.fastFloor(NumberTools.formCurvedFloat(diver.nextLong()) * 256 + 256)]++;
                 }
                 for (int i = 0; i < 512; i++) {
                     float color = (i & 63) == 0
                             ? -0x1.c98066p126F // CW Azure
                             : -0x1.d08864p126F; // CW Sapphire
-                    for (int j = 519 - (amounts[i] >> 8); j < 520; j++) {
+                    for (int j = Math.max(0, 519 - (amounts[i] >> 8)); j < 520; j++) {
                         layers.backgrounds[i][j] = color;
                     }
                 }
@@ -2383,7 +2384,10 @@ public class MathVisualizer extends ApplicationAdapter {
         final long bits = MathUtils.random.nextLong();
         return NumberUtils.intBitsToFloat(126 - Long.numberOfTrailingZeros(bits) << 23 | (int)(bits >>> 41));
     }
-
+    public static float hashFloat(float x, float y) {
+        long state = 0xC13FA9A902A6328FL * NumberUtils.floatToIntBits(x) + 0x91E10DA5C79E7B1DL * NumberUtils.floatToIntBits(y);
+        return ((((state = ((state ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L)) ^ state >>> 27) * 0xAEF17502108EF2D9L) >> 40) * 0x1p-23f;
+    }
     private double acbrt(double r)
     {
         double a = 1.4774329094 - 0.8414323527/(r+0.7387320679),

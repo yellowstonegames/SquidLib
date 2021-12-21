@@ -70,7 +70,7 @@ public class HashVisualizer extends ApplicationAdapter {
     private int testType = 4;
     private static final int NOISE_LIMIT = 152;
     private static final int RNG_LIMIT = 52;
-    private int hashMode, rngMode = 4, noiseMode = 54, otherMode = 17;//142
+    private int hashMode, rngMode = 22, noiseMode = 106, otherMode = 17;//142
 
     /**
      * If you're editing the source of HashVisualizer, you can comment out one line and uncomment another to change
@@ -1298,32 +1298,31 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 
     public static float baseSway(int seed, float value)
     {
-        //int fast floor
+        //int fast floor, from libGDX
         final int floor = ((int)(value + 0x1p14) - 0x4000);
-//        final int floor = value >= 0f ? (int) value : (int) value - 1;
         //basic XLCG adjustment to the seed; makes small-scale wavering stronger
         seed = seed * 0x9E37B ^ 0xD1B54A35; 
         //get start and end for interpolation, each from -1 to 1. These are either "peaks" or "valleys"
-        //uses another XLCG step (backwards), then gets the low 20 bits, multiplies to get them into 0-2 range, etc.
+        //RNG magic to hash the current and next floor
         final float start = (((seed += floor) ^ 0xD0E89D2D) * 0x1D2473 & 0xFFFFF) * 0x0.FFFFFp-19f - 1f,
                 end = ((seed + 1 ^ 0xD0E89D2D) * 0x1D2473 & 0xFFFFF) * 0x0.FFFFFp-19f - 1f;
         //similar to GLSL's fract()
         value -= floor;
-        //cubic interpolation
+        //Hermite interpolation
         value *= value * (3 - 2 * value);
         //interpolate between start and end, using cubic to make it curve smoothly
         return (1 - value) * start + value * end;
     }
-
     /**
      * Returns smooth 1D noise between -1 and 1.
+     * @param seed any int; should not change for a given river
+     * @param value a float that should change gradually, by smaller steps than 0.2 probably
      */
     public static float riverSway(int seed, float value)
     {
         return riverSway(seed, seed ^ 0x9E3779B9, seed ^ 0x7F4A7C15, seed ^ 0x6C8E9CF5, value);
     }
-
-    public static float riverSway(int seedA, int seedB, int seedC, int seedD, float value)
+    private static float riverSway(int seedA, int seedB, int seedC, int seedD, float value)
     {
         final float a = baseSway(seedA, value);
         //each previous result is added to a scaled-down version of value
@@ -6826,7 +6825,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
         config.setTitle("SquidLib Test: Hash Visualization");
         config.setWindowedMode(width, height);
         config.useVsync(true);
-        config.setForegroundFPS(2);
+        config.setForegroundFPS(60);
         config.setWindowIcon(Files.FileType.Internal, "Tentacle-128.png", "Tentacle-64.png", "Tentacle-32.png", "Tentacle-16.png");
         new Lwjgl3Application(new HashVisualizer(), config);
     }
