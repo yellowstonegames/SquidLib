@@ -33,18 +33,28 @@ public class WeavingNoise implements Noise.Noise2D, Noise.Noise3D,
 
     public static double swayTight(int seed, double x)
     {
-        long floor = (x >= 0.0 ? (long) x : (long) x - 1L);
-        x -= floor;
-        floor &= 1L;
-        return (MathExtras.barronSpline(x, 1.5, 0.5) * (-floor | 1L) + floor) * 2 - 1;
+//        x += seed * 0x1.9E377p-24;
+//        long floor = (x >= 0.0 ? (long) x : (long) x - 1L);
+//        x -= floor;
+//        floor &= 1L;
+////        return (MathExtras.barronSpline(x, 1.5, 0.5) * (-floor | 1L) + floor) * 2 - 1;
+//        x *= x * x * (x * (x * 6f - 15f) + 10f);
+//        return (x * (-floor | 1L) + floor) * 2 - 1;
 //        x += seed * 0x1p-24;
-//        final long xFloor = Noise.longFloor(x), rise = 1L - (Noise.longFloor(x + x) & 2L);
-//        x -= xFloor;
-//        x *= x - 1.0;
-//        final double h = NumberTools.longBitsToDouble((seed ^ xFloor ^ 0x9E3779B97F4A7C15L) * 0xD1B54A32D192ED03L >>> 12 | 0x4040000000000000L) - 52.0;
-//        return rise * x * (h * x - 1.0);
+        final long xFloor = Noise.longFloor(x), rise = 1L - (Noise.longFloor(x + x) & 2L);
+        long bits = (seed ^ xFloor ^ 0x9E3779B97F4A7C15L) * 0xD1B54A32D192ED03L;
+        x -= xFloor;
+        x *= x - 1.0;
+//        final double h = NumberTools.longBitsToDouble(1026L - Long.numberOfTrailingZeros(bits) << 52 | (bits & 0x800FFFFFFFFFFFFFL)) - 4.0;
+        final double h = NumberTools.longBitsToDouble(bits >>> 12 | 0x4040000000000000L) - 52.0;
+        return Math.copySign(x * (h * x - 1.0), rise);
     }
 
+    /**
+     * Range: -1 to 1 exclusive, with a hole around 0.0 (just barely).
+     * @param bits
+     * @return
+     */
     public static double formDouble(long bits){
         return NumberTools.longBitsToDouble(1022L - Long.numberOfTrailingZeros(bits) << 52 | (bits & 0x800FFFFFFFFFFFFFL));
     }
@@ -69,7 +79,7 @@ public class WeavingNoise implements Noise.Noise2D, Noise.Noise3D,
     {
 //        x += seed * 0x1p-24;
         final int floor = x >= 0.0 ? (int) x : (int) x - 1;
-        long z = (seed + floor) * 0xACBD2BDCA2BFF56DL;
+        long z = seed * 0xD1B54A32D192ED03L + floor * 0xACBD2BDCA2BFF56DL;
 //        final double start = NumberTools.longBitsToDouble(((z ^ 0x9E3779B97F4A7C15L) * 0xD1B54A32D192ED03L >>> 12) | 0x4000000000000000L) - 3.0,
 //                end = NumberTools.longBitsToDouble(((z + 1 ^ 0x9E3779B97F4A7C15L) * 0xD1B54A32D192ED03L >>> 12) | 0x4000000000000000L) - 3.0;
         final double start = formDouble(z),
@@ -85,10 +95,28 @@ public class WeavingNoise implements Noise.Noise2D, Noise.Noise3D,
         return (0.5 - x) * start + x * end;
     }
 
+    /**
+     * Produces output in the -0.5 to 0.5 range; otherwise like {@link NumberTools#swayRandomized(int, double)} but
+     * using quintic interpolation instead of Hermite.
+     * @param seed any int
+     * @param x distance of 1D noise to travel
+     * @return a noise value between -0.5 and 0.5, both inclusive
+     */
+    public static double valueNoise1(final int seed, double x)
+    {
+        final int floor = x >= 0.0 ? (int) x : (int) x - 1;
+        long z = seed * 0xD1B54A32D192ED03L + floor * 0xACBD2BDCA2BFF56DL;
+        final double start = formDouble(z),
+                end = formDouble(z + 0xACBD2BDCA2BFF56DL);
+        x -= floor;
+        x *= x * x * (x * (x * 6f - 15f) + 10f);
+        return (1.0 - x) * start + x * end;
+    }
+
     public static double rawNoise(final int seed, double x)
     {
         final int floor = x >= 0.0 ? (int) x : (int) x - 1;
-        long z = (seed + floor) * 0xACBD2BDCA2BFF56DL;
+        long z = seed * 0xD1B54A32D192ED03L + floor * 0xACBD2BDCA2BFF56DL;
         final double start = formLargeDouble(z),
                 end = formLargeDouble(z + 0xACBD2BDCA2BFF56DL);
 //        final double start = formDouble((z << 1 ^ 0xD1B54A32D192ED03L) * Long.rotateLeft(z, 14)),
@@ -99,6 +127,7 @@ public class WeavingNoise implements Noise.Noise2D, Noise.Noise3D,
 //                end = (((z = (seed + floor + 1 ^ 0xD1B54A35) * 0x1D2BC3)) * ((z ^ z >>> 15) | 0xFFE00001) ^ z ^ z << 11) * 0x0.ffffffp-31;
         x -= floor;
 //        x = MathExtras.barronSpline(x - floor, 2.0, 0.5);
+        x *= x * x * (x * (x * 6f - 15f) + 10f);
         return (1.0 - x) * start + x * end;
     }
 
@@ -126,63 +155,54 @@ public class WeavingNoise implements Noise.Noise2D, Noise.Noise3D,
 
     public static double valueNoise(int seed, double x, double y)
     {
-        double sx = rawNoise(seed, x);
-        double sy = rawNoise(seed + 1010101, y);
-//        return valueNoise(seed - 1010101, 4 * (sx + x - sy + y)) + valueNoise(seed - 2020202, 4 * (sy + x - sx - y));
-        return //MathExtras.barronSpline(
-                NumberTools.sway(sx + sy) * (2.0 / Math.PI)
-//                //, 0.333, 0.5)
-                ;
+//        double sx = rawNoise(seed, x);
+//        double sy = rawNoise(seed + 1010101, y);
+////        return valueNoise(seed - 1010101, 4 * (sx + x - sy + y)) + valueNoise(seed - 2020202, 4 * (sy + x - sx - y));
+//        return //MathExtras.barronSpline(
+//                NumberTools.sway(sx + sy)// * (2.0 / Math.PI)
+////                //, 0.333, 0.5)
+//                ;
+        double sx = valueNoise1(seed, x - y * 0.618);
+        double sy = valueNoise1(seed + 1010101, y - x * 0.618);
+        return valueNoise1(~seed, (sx + sy) - valueNoise1(seed - 1010101, x + y));
     }
 
     public static double valueNoise(int seed, double x, double y, double z)
     {
-        double sx = valueNoise(seed, x - z);
-        double sy = valueNoise(seed + 1010101, y - x + sx);
-        double sz = valueNoise(seed + 2020202, z - y + sy);
-        return //MathExtras.barronSpline(
-                swayTight(~seed, (sx + sy + sz - valueNoise(seed - 1010101, x + y + z + sz)))
-//                , 0.333, 0.5)
-                ;
+        double sx = valueNoise1(seed, x - z * 0.618);
+        double sy = valueNoise1(seed + 1010101, y - x * 0.618);
+        double sz = valueNoise1(seed + 2020202, z - y * 0.618);
+        return valueNoise1(~seed, (sx + sy + sz) - valueNoise1(seed - 1010101, x + y + z));
     }
 
     public static double valueNoise(int seed, double x, double y, double z, double w)
     {
-        double sx = valueNoise(seed, x - w);
-        double sy = valueNoise(seed + 1010101, y - x + sx);
-        double sz = valueNoise(seed + 2020202, z - y + sy);
-        double sw = valueNoise(seed + 3030303, w - z + sz);
-        return //MathExtras.barronSpline(
-                swayTight(~seed, (sx + sy + sz + sw - valueNoise(seed - 1010101, x + y + z + w + sw)))
-//                , 0.333, 0.5)
-        ;
+        double sx = valueNoise1(seed, x - w * 0.618);
+        double sy = valueNoise1(seed + 1010101, y - x * 0.618);
+        double sz = valueNoise1(seed + 2020202, z - y * 0.618);
+        double sw = valueNoise1(seed + 3030303, w - z * 0.618);
+        return valueNoise1(~seed, (sx + sy + sz + sw - valueNoise1(seed - 1010101, x + y + z + w)));
     }
 
     public static double valueNoise(int seed, double x, double y, double z, double w, double u)
     {
-        double sx = valueNoise(seed, x - u);
-        double sy = valueNoise(seed + 1010101, y - x + sx);
-        double sz = valueNoise(seed + 2020202, z - y + sy);
-        double sw = valueNoise(seed + 3030303, w - z + sz);
-        double su = valueNoise(seed + 4040404, u - w + sw);
-        return //MathExtras.barronSpline(
-                swayTight(~seed, (sx + sy + sz + sw + su - valueNoise(seed - 1010101, x + y + z + w + u + su)))
-//                , 0.333, 0.5)
-                ;
+        double sx = valueNoise1(seed, x - u);
+        double sy = valueNoise1(seed + 1010101, y - x + sx);
+        double sz = valueNoise1(seed + 2020202, z - y + sy);
+        double sw = valueNoise1(seed + 3030303, w - z + sz);
+        double su = valueNoise1(seed + 4040404, u - w + sw);
+        return valueNoise1(~seed, (sx + sy + sz + sw + su - valueNoise(seed - 1010101, x + y + z + w + u + su)));
     }
 
     public static double valueNoise(int seed, double x, double y, double z, double w, double u, double v)
     {
-        double sx = valueNoise(seed, x - v);
-        double sy = valueNoise(seed + 1010101, y - x + sx);
-        double sz = valueNoise(seed + 2020202, z - y + sy);
-        double sw = valueNoise(seed + 3030303, w - z + sz);
-        double su = valueNoise(seed + 4040404, u - w + sw);
-        double sv = valueNoise(seed + 5050505, v - u + su);
-        return //MathExtras.barronSpline(
-                swayTight(~seed, (sx + sy + sz + sw + su + sv - valueNoise(seed - 1010101, x + y + z + w + u + v + sv)))
-//                , 0.333, 0.5)
-        ;
+        double sx = valueNoise1(seed, x - v);
+        double sy = valueNoise1(seed + 1010101, y - x + sx);
+        double sz = valueNoise1(seed + 2020202, z - y + sy);
+        double sw = valueNoise1(seed + 3030303, w - z + sz);
+        double su = valueNoise1(seed + 4040404, u - w + sw);
+        double sv = valueNoise1(seed + 5050505, v - u + su);
+        return swayTight(~seed, (sx + sy + sz + sw + su + sv - valueNoise(seed - 1010101, x + y + z + w + u + v + sv)));
     }
 
     @Override
