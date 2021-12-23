@@ -6,7 +6,7 @@ buildscript {
         gradlePluginPortal()
     }
     dependencies {
-        classpath 'com.vanniktech:gradle-maven-publish-plugin:0.17.0'
+        classpath 'com.vanniktech:gradle-maven-publish-plugin:0.18.0'
     }
 }
 
@@ -50,7 +50,7 @@ subprojects {
     [compileJava, compileTestJava, javadoc]*.exclude("emu")
 
     javadoc.options.source("7")
-    ((StandardJavadocDocletOptions)javadoc.options).linkSource(true)
+    ((StandardJavadocDocletOptions)javadoc.options).linkSource(false)
     ((StandardJavadocDocletOptions)javadoc.options).noTimestamp(true)
     ((StandardJavadocDocletOptions)javadoc.options).use(true)
     ((StandardJavadocDocletOptions)javadoc.options).bottom("Copyright &#169; Eben Howard 2012&#x2013;2021. All rights reserved.")
