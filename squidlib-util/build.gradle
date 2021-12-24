@@ -2,12 +2,14 @@
 ext.projectName = 'squidlib-util'
 eclipse.project.name = ext.projectName
 
-compileJava.exclude("emu")
-javadoc.exclude("emu")
+idea.module.excludeDirs += [file("src/main/java/emu/")]
+[compileJava, compileTestJava, javadoc]*.exclude("emu")
 
 dependencies {
     api "com.github.tommyettinger:regexodus:$regexodusVersion"
     testImplementation "junit:junit:4.13.2"
+    testRuntimeOnly "org.junit.vintage:junit-vintage-engine:5.8.2"
+
 }
 
 jar {
