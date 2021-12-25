@@ -13,16 +13,16 @@ import java.io.Serializable;
  * possible results. You can go back to the previous item with {@link #previous()}, which is allowed to go earlier than
  * the first result generated (it will jump back to what is effectively the previous shuffled sequence). You can restart
  * the sequence with {@link #restart()} to use the same sequence over again (which doesn't make much sense here, since
- * this makes many sequences by re-shuffling), or {@link #restart(int)} to use a different seed (the bound is fixed).
+ * this makes many sequences by re-shuffling), or {@link #restart(long)} to use a different seed (the bound is fixed).
  * <br>
- * This differs from the version in Alan Wolfe's example code and blog post; it uses a very different round function,
- * and it only uses 2 rounds of it (instead of 4). Wolfe's round function is MurmurHash2, but as far as I can tell the
- * version he uses doesn't have anything like MurmurHash3's fmix32() to adequately avalanche bits, and since all keys
- * are small keys with the usage of MurmurHash2 in his code, avalanche is the most important thing. It's also perfectly
- * fine to use irreversible operations in a Feistel network round function, and I do that since it seems to improve
- * randomness slightly. The {@link #round(int, int)} method used here acts like SilkRNG's way of mixing two states, but
- * here changed to be irreversible and unbalanced (which is fine here). Using 4 rounds turns out to be overkill in this
- * case. This also uses a different seed for each round.
+ * This differs from the version in Alan Wolfe's example code and blog post; it uses a very different round function.
+ * Wolfe's round function is MurmurHash2, but as far as I can tell the version he uses doesn't have anything like
+ * MurmurHash3's fmix32() to adequately avalanche bits, and since all keys are small keys with the usage of MurmurHash2
+ * in his code, avalanche is the most important thing. It's also perfectly fine to use irreversible operations in a
+ * Feistel network round function, and I do that since it seems to improve randomness slightly. The
+ * {@link #round(long, long)} method used here reuses the {@link CrossHash.Water#wow(long, long)}
+ * method; it acts like an unbalanced, irreversible PRNG with two states, and that turns out to be just fine for a
+ * Feistel network. This also uses a different seed for each round.
  * <br>
  * This class extends {@link LowStorageShuffler}, changing it from producing a unique set of ints once, to producing
  * many sets of ints one after the next.
@@ -32,8 +32,8 @@ import java.io.Serializable;
  * @author Tommy Ettinger
  */
 public class ShuffledIntSequence extends LowStorageShuffler implements Serializable {
-    private static final long serialVersionUID = 1L;
-    protected int seed;
+    private static final long serialVersionUID = 2L;
+    protected long seed;
     /**
      * Constructs a ShuffledIntSequence with a random seed and a bound of 10.
      */
@@ -55,7 +55,7 @@ public class ShuffledIntSequence extends LowStorageShuffler implements Serializa
      * @param bound how many distinct ints this can return
      * @param seed any int; will be used to get several seeds used internally
      */
-    public ShuffledIntSequence(int bound, int seed)
+    public ShuffledIntSequence(int bound, long seed)
     {
         super(bound, seed);
         this.seed = seed;
@@ -71,7 +71,7 @@ public class ShuffledIntSequence extends LowStorageShuffler implements Serializa
         int r = super.next();
         if(r == -1)
         {
-            restart(seed = seed + 0x9E3779B9 | 0);
+            restart(seed += 0x9E3779B97F4A7C15L);
             return super.next();
         }
         return r;
@@ -96,7 +96,7 @@ public class ShuffledIntSequence extends LowStorageShuffler implements Serializa
                 if (shuffleIndex < bound)
                     return shuffleIndex;
             }
-            restart(seed = seed - 0x9E3779B9 | 0);
+            restart(seed -= 0x9E3779B97F4A7C15L);
             index = pow4;
         }
         return -1;
@@ -108,7 +108,7 @@ public class ShuffledIntSequence extends LowStorageShuffler implements Serializa
      * @param seed any int; will be used to get several seeds used internally
      */
     @Override
-    public void restart(int seed)
+    public void restart(long seed)
     {
         super.restart(seed);
         this.seed = seed;

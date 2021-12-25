@@ -1,6 +1,11 @@
 package squidpony.squidmath;
 
+import squidpony.StringKit;
+
 import java.io.Serializable;
+
+import static squidpony.squidmath.CrossHash.Water.*;
+import static squidpony.squidmath.DiverRNG.randomize;
 
 /**
  * Gets a sequence of distinct pseudo-random ints (typically used as indices) from 0 to some bound, without storing all
@@ -11,17 +16,17 @@ import java.io.Serializable;
  * to get the next distinct int in the shuffled ordering; next() will return -1 if there are no more distinct ints (if
  * {@link #bound} items have already been returned). You can go back to the previous item with {@link #previous()},
  * which similarly returns -1 if it can't go earlier in the sequence. You can restart the sequence with
- * {@link #restart()} to use the same sequence over again, or {@link #restart(int)} to use a different seed (the bound
+ * {@link #restart()} to use the same sequence over again, or {@link #restart(long)} to use a different seed (the bound
  * is fixed).
  * <br>
- * This differs from the version in Alan Wolfe's example code and blog post; it uses a very different round function,
- * and it only uses 2 rounds of it (instead of 4). Wolfe's round function is MurmurHash2, but as far as I can tell the
- * version he uses doesn't have anything like MurmurHash3's fmix32() to adequately avalanche bits, and since all keys
- * are small keys with the usage of MurmurHash2 in his code, avalanche is the most important thing. It's also perfectly
- * fine to use irreversible operations in a Feistel network round function, and I do that since it seems to improve
- * randomness slightly. The {@link #round(int, int)} method used here acts like an unbalanced, irreversible PRNG with
- * two states, and that turns out to be just fine for a Feistel network. Using 4 rounds turns out to be overkill in this
- * case. This also uses a different seed for each round.
+ * This differs from the version in Alan Wolfe's example code and blog post; it uses a very different round function.
+ * Wolfe's round function is MurmurHash2, but as far as I can tell the version he uses doesn't have anything like
+ * MurmurHash3's fmix32() to adequately avalanche bits, and since all keys are small keys with the usage of MurmurHash2
+ * in his code, avalanche is the most important thing. It's also perfectly fine to use irreversible operations in a
+ * Feistel network round function, and I do that since it seems to improve randomness slightly. The
+ * {@link #round(long, long)} method used here reuses the {@link CrossHash.Water#wow(long, long)}
+ * method; it acts like an unbalanced, irreversible PRNG with two states, and that turns out to be just fine for a
+ * Feistel network. This also uses a different seed for each round.
  * <br>
  * This class is similar to {@link ShuffledIntSequence}, which extends this class and uses different
  * behavior so it "re-shuffles" the results when all results have been produced.
@@ -31,10 +36,10 @@ import java.io.Serializable;
  * @author Tommy Ettinger
  */
 public class LowStorageShuffler implements Serializable {
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 2L;
     public final int bound;
     protected int index, pow4, halfBits, leftMask, rightMask;
-    protected int key0, key1;//, key2, key3;
+    protected long key0, key1, key2, key3;
 
     /**
      * Constructs a LowStorageShuffler with a random seed and a bound of 10.
@@ -56,7 +61,7 @@ public class LowStorageShuffler implements Serializable {
      * @param bound how many distinct ints this can return
      * @param seed any int; will be used to get several seeds used internally
      */
-    public LowStorageShuffler(int bound, int seed)
+    public LowStorageShuffler(int bound, long seed)
     {
         // initialize our state
         this.bound = bound;
@@ -125,74 +130,25 @@ public class LowStorageShuffler implements Serializable {
     }
 
     /**
-     * Used to rearrange the bits of seeds this is given in a way that should partly randomize them.
-     * A high-quality 32-bit input, 32-bit output unary hash is pretty hard to find.
-     * @param z any int
-     * @return a pseudo-random but deterministic change of z
-     */
-    public static int determine(int z)
-    {
-        return (z = ((z = ((z = (z ^ 0xC1C64E6D) * 0xDAB) ^ z >>> 13 ^ 0x9E3779B9) * 0x7FFFF) ^ z >>> 12) * 0x1FFFF) ^ z >>> 15;
-
-    }    
-    /**
      * Starts the sequence over, but can change the seed (completely changing the sequence). If {@code seed} is the same
      * as the seed given in the constructor, this will use the same sequence, acting like {@link #restart()}.
      * @param seed any int; will be used to get several seeds used internally
      */
-    public void restart(int seed)
+    public void restart(long seed)
     {
         index = 0;
-        key0 = determine(seed ^ 0xDE4D * ~bound);
-        key1 = determine(key0 ^ 0xBA55 * bound);
-        key0 ^= determine(~key1 ^ 0xBEEF * bound);
-        key1 ^= determine(~key0 ^ 0x1337 * bound);
+        key0 = randomize(0xD1B54A32D192ED03L ^ seed + b3);
+        key1 = randomize(0xD1B54A32D192ED03L ^ seed ^ b4);
+        key2 = randomize(0xD1B54A32D192ED03L ^ seed - b1);
+        key3 = randomize(0xD1B54A32D192ED03L ^ seed ^ b2);
     }
-
-    /**
-     * An irreversible mixing function that seems to give good results; GWT-compatible.
-     * This is similar to {@link SilkRNG}'s way of combining two states, but because this doesn't need to be reversible
-     * or even evenly distributed, it has been significantly simplified. It uses one int multiplication, two additions,
-     * two subtractions, two XORs, two unsigned right shifts, and one signed right shift. 
-     * @param data the data being ciphered
-     * @param seed the current seed
-     * @return the ciphered data
-     */
-    public static int round(int data, int seed)
+    public static int round(long data, long seed)
     {
-        final int s = seed + data;
-        final int x = (s ^ s >>> 17) * (seed - data + 0x9E3779BB >> 12) - s;
-        return x ^ x >>> 15;
-        
-        ////used earlier, similar to Coord.xoroHashCode(int, int)
-        //seed ^= data * 0xBCFD;
-        //seed ^= (data << 13 | data >>> 19) ^ (seed << 5) ^ (seed << 28 | seed >>> 4);
-        //data ^= (seed << 11 | seed >>> 21) * 0xC6D5;
-        //return data ^ (data << 25 | data >>> 7);
-
-//        seed ^= data * 0xC6D5 + 0xB531A935;
-//        data ^= seed * 0xBCFD + 0x41C64E6D;
-//        seed ^= data * 0xACED;
-//        data ^= seed * 0xBA55;
-//        data += data >>> 21;
-//        seed += seed >>> 22;
-//        data += data << 8;
-//        seed += seed << 5;
-//        return data ^ seed;
-
-//        data += data >>> 21;
-//        seed += seed >>> 22;
-//        data += data << 8;
-//        seed += seed << 5;
-//        data += data >>> 16;
-//        seed += seed >>> 13;
-//        data += data << 9;
-//        seed += seed << 11;
-//        return data ^ seed;
+        return (int) (wow(data + b1, seed - b2));
     }
 
     /**
-     * Encodes an index with a 2-round Feistel network. It is possible that someone would want to override this method
+     * Encodes an index with a 4-round Feistel network. It is possible that someone would want to override this method
      * to use more or less rounds, but there must always be an even number.
      * @param index the index to cipher; must be between 0 and {@link #pow4}, inclusive
      * @return the ciphered index, which might not be less than bound but will be less than or equal to {@link #pow4}
@@ -202,23 +158,94 @@ public class LowStorageShuffler implements Serializable {
         // break our index into the left and right half
         int left = (index & leftMask) >>> halfBits;
         int right = (index & rightMask);
-        // do 2 Feistel rounds
-        int newRight = left ^ (round(right, key0) & rightMask);
+        // do 4 Feistel rounds
+        int newRight;
+        newRight = left + round(right, key0) & rightMask;
         left = right;
         right = newRight;
-        newRight = left ^ (round(right, key1) & rightMask);
-//        left = right;
-//        right = newRight;
-//        newRight = left ^ (round(right, key2) & rightMask);
-//        left = right;
-//        right = newRight;
-//        newRight = left ^ (round(right, key3) & rightMask);
-
-//        left = right;
-//        right = newRight;
+        newRight = left + round(right, key1) & rightMask;
+        left = right;
+        right = newRight;
+        newRight = left + round(right, key2) & rightMask;
+        left = right;
+        right = newRight;
+        newRight = left + round(right, key3) & rightMask;
 
         // put the left and right back together to form the encrypted index
-//        return left << halfBits | right;
         return right << halfBits | newRight;
+    }
+
+    /**
+     * Fully copies this LowStorageShuffler, including its current index in its sequence and internal seeds.
+     * @return an exact copy of this LowStorageShuffler
+     */
+    public LowStorageShuffler copy() {
+        LowStorageShuffler next = new LowStorageShuffler(bound, 0);
+        next.index = index;
+        next.key0 = key0;
+        next.key1 = key1;
+        next.key2 = key2;
+        next.key3 = key3;
+        return next;
+    }
+
+    public String serializeToString() {
+        StringBuilder sb = new StringBuilder("`");
+        StringKit.appendHex(sb, bound);
+        sb.append('~');
+        StringKit.appendHex(sb, index);
+        sb.append('~');
+        StringKit.appendHex(sb, key0);
+        sb.append('~');
+        StringKit.appendHex(sb, key1);
+        sb.append('~');
+        StringKit.appendHex(sb, key2);
+        sb.append('~');
+        StringKit.appendHex(sb, key3);
+        return sb.append('`').toString();
+    }
+
+    public static LowStorageShuffler deserializeFromString(String data) {
+        if(data.length() < 9) return null;
+        int idx = 0;
+        int bound = StringKit.intFromHex(data, idx + 1, idx = data.indexOf('~', idx + 1));
+        int index = StringKit.intFromHex(data, idx + 1, idx = data.indexOf('~', idx + 1));
+        long key0 = StringKit.longFromHex(data, idx + 1, idx = data.indexOf('~', idx + 1));
+        long key1 = StringKit.longFromHex(data, idx + 1, idx = data.indexOf('~', idx + 1));
+        long key2 = StringKit.longFromHex(data, idx + 1, idx = data.indexOf('~', idx + 1));
+        long key3 = StringKit.longFromHex(data, idx + 1, data.indexOf('`', idx + 1));
+        LowStorageShuffler is = new LowStorageShuffler(bound, 0);
+        is.index = index;
+        is.key0 = key0;
+        is.key1 = key1;
+        is.key2 = key2;
+        is.key3 = key3;
+        return is;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        LowStorageShuffler that = (LowStorageShuffler) o;
+
+        if (bound != that.bound) return false;
+        if (index != that.index) return false;
+        if (key0 != that.key0) return false;
+        if (key1 != that.key1) return false;
+        if (key2 != that.key2) return false;
+        return key3 == that.key3;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = bound;
+        result = 31 * result + index;
+        result = 31 * result + (int) (key0 ^ (key0 >>> 32));
+        result = 31 * result + (int) (key1 ^ (key1 >>> 32));
+        result = 31 * result + (int) (key2 ^ (key2 >>> 32));
+        result = 31 * result + (int) (key3 ^ (key3 >>> 32));
+        return result;
     }
 }
