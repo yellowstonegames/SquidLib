@@ -8,6 +8,8 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import static squidpony.squidmath.LowStorageShuffler.round;
+
 /**
  * A helper class for implementing {@link IRNG} without so much busy-work.
  * You need to provide implementations for the abstract methods {@link #nextInt()}, {@link #next(int)},
@@ -477,7 +479,7 @@ public abstract class AbstractRNG implements IRNG {
     /**
      * Gets a random portion of data (an array), assigns that portion to output (an array) so that it fills as much as
      * it can, and then returns output. Will only use a given position in the given data at most once; uses a Feistel
-     * Network to accomplish this without allocations. Internally, makes 2 calls to {@link #nextInt()}, regardless of
+     * Network to accomplish this without allocations. Internally, makes 4 calls to {@link #nextLong()}, regardless of
      * the data being randomized.
      * <br>
      * Uses approximately the same code as {@link LowStorageShuffler}, but without any object or array allocations.
@@ -498,7 +500,7 @@ public abstract class AbstractRNG implements IRNG {
         final int halfBits = Integer.bitCount(pow4) >>> 1;
         final int rightMask = pow4 >>> halfBits;
         final int leftMask = pow4 ^ rightMask;
-        final int key0 = nextInt(), key1 = nextInt();
+        final long key0 = nextLong(), key1 = nextLong(), key2 = nextLong(), key3 = nextLong();
         int index = 0;
         for (int i = 0; i < n; i++) {
             int shuffleIndex;
@@ -509,10 +511,17 @@ public abstract class AbstractRNG implements IRNG {
                 int left = (index & leftMask) >>> halfBits;
                 int right = (index & rightMask);
                 // do 2 Feistel rounds
-                int newRight = left ^ (LowStorageShuffler.round(right, key0) & rightMask);
+                int newRight;
+                newRight = left + round(right, key0) & rightMask;
                 left = right;
                 right = newRight;
-                newRight = left ^ (LowStorageShuffler.round(right, key1) & rightMask);
+                newRight = left + round(right, key1) & rightMask;
+                left = right;
+                right = newRight;
+                newRight = left + round(right, key2) & rightMask;
+                left = right;
+                right = newRight;
+                newRight = left + round(right, key3) & rightMask;
                 shuffleIndex = right << halfBits | newRight;
                 index++;
 
