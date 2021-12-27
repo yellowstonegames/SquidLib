@@ -122,7 +122,7 @@ World #5, SavoryMelonAlder, completed in 64338 ms
 //        path = "out/worldsAnimated/" + date + "/EllipseExpo/";
 //        path = "out/worldsAnimated/" + date + "/Mimic/";
 //        path = "out/worldsAnimated/" + date + "/SpaceView/";
-//        path = "out/worldsAnimated/" + date + "/SpaceViewMutantClassic/";
+        path = "out/worldsAnimated/" + date + "/SpaceViewMutantClassic/";
 //        path = "out/worldsAnimated/" + date + "/SpaceViewMutantFoam/";
 //        path = "out/worldsAnimated/" + date + "/SpaceViewMutantHoney/";
 //        path = "out/worldsAnimated/" + date + "/SpaceViewValue/";
@@ -131,7 +131,7 @@ World #5, SavoryMelonAlder, completed in 64338 ms
 //        path = "out/worldsAnimated/" + date + "/SpaceViewSeedy/";
 //        path = "out/worldsAnimated/" + date + "/SpaceViewPerlin/";
 //        path = "out/worldsAnimated/" + date + "/SpaceViewHoney/";
-        path = "out/worldsAnimated/" + date + "/SpaceViewFoam/";
+//        path = "out/worldsAnimated/" + date + "/SpaceViewFoam/";
 //        path = "out/worldsAnimated/" + date + "/SpaceViewSimplex/";
 //        path = "out/worldsAnimated/" + date + "/SpaceViewRidged/";
 //        path = "out/worldsAnimated/" + date + "/SpaceViewMutantMaelstrom/";
@@ -205,10 +205,11 @@ World #5, SavoryMelonAlder, completed in 64338 ms
 //        WorldMapGenerator.DEFAULT_NOISE.setFractalGain(5f);
 //        WorldMapGenerator.DEFAULT_NOISE.setFractalLacunarity(0.8f);
 //        WorldMapGenerator.DEFAULT_NOISE.setFractalGain(1.25f);
-        VastNoise fn = new VastNoise((int) seed, 1.75f, VastNoise.FOAM, 1);
-//        VastNoise fn = new VastNoise((int) seed, 1.5f, VastNoise.PERLIN_FRACTAL, 2);
+//        VastNoise fn = new VastNoise((int) seed, 1.75f, VastNoise.FOAM, 1);
+        VastNoise fn = new VastNoise((int) seed, 1.5f, VastNoise.PERLIN_FRACTAL, 3);
 //        VastNoise fn = new VastNoise((int) seed, 2.0f, VastNoise.VALUE, 1);
 //        VastNoise fn = new VastNoise((int) seed, 1.5f, VastNoise.PERLIN, 1);
+        fn.setFractalSpiral(true);
 //        VastNoise fn = new VastNoise((int) seed, 1f, VastNoise.SIMPLEX, 1);
 //        VastNoise fn = new VastNoise((int) seed, 1f, VastNoise.SIMPLEX_FRACTAL, 2);
 //        VastNoise fn = new VastNoise((int) seed, 1.25f, VastNoise.HONEY, 1);
@@ -338,7 +339,7 @@ World #5, SavoryMelonAlder, completed in 64338 ms
 //        world = new WorldMapGenerator.EllipticalMap(seed, width, height, noise, 1.75);
 //        world = new WorldMapGenerator.MimicMap(seed, WorldMapGenerator.DEFAULT_NOISE, 1.75);
 //        world = new WorldMapGenerator.SpaceViewMap(seed, width, height, noise, 1.3);
-        world = new WorldMapGenerator.SpaceViewMap(seed, width, height, noise, 1.0);
+        world = new WorldMapGenerator.SpaceViewMap(seed, width, height, noise, 0.4);
 //        world = new WorldMapGenerator.RotatingSpaceMap(seed, width, height, noise, 1.0);
 //        world = new WorldMapGenerator.RoundSideMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.75);
 //        world = new WorldMapGenerator.HyperellipticalMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 0.8, 0.03125, 2.5);
