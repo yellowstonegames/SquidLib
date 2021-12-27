@@ -31,7 +31,7 @@ public class WeavingNoise implements Noise.Noise2D, Noise.Noise3D,
         this.seed = (int) (seed ^ seed >>> 32);
     }
 
-    public static double swayTight(int seed, double x)
+    public static double swayTight(long seed, double x)
     {
 //        x += seed * 0x1.9E377p-24;
 //        long floor = (x >= 0.0 ? (long) x : (long) x - 1L);
@@ -64,25 +64,26 @@ public class WeavingNoise implements Noise.Noise2D, Noise.Noise3D,
 
     /**
      * Range: -255.9999999999999 to 255.9999999999999 .
-     * @param bits
+     * @param state
      * @return
      */
-    public static double formLargeDouble(long bits){
-        return NumberTools.longBitsToDouble(1023L - Long.numberOfTrailingZeros(bits ^ bits >>> 32) << 52 | (bits & 0x800FFFFFFFFFFFFFL));
+    public static double formLargeDouble(long state){
+        state = (state = (state ^ state >>> 27 ^ 0x9E3779B97F4A7C15L) * 0xD1B54A32D192ED03L) ^ state >>> 25;
+        return NumberTools.longBitsToDouble(1023L - Long.numberOfTrailingZeros(state) << 52 | (state & 0x800FFFFFFFFFFFFFL));
     }
 
     /**
-     * Produces output in the -0.5 to 0.5 range; otherwise like {@link NumberTools#swayRandomized(int, double)} but
+     * Produces output in the -1 to 1 range; otherwise like {@link NumberTools#swayRandomized(int, double)} but
      * using quintic interpolation instead of Hermite.
      * @param seed any int
      * @param x distance of 1D noise to travel
-     * @return a noise value between -0.5 and 0.5, both inclusive
+     * @return a noise value between -1 and 1, both inclusive
      */
     public static double valueNoise(final long seed, double x)
     {
-        x += seed * 0x1p-62;
+        x += seed * 0x1p-58;
         final int floor = x >= 0.0 ? (int) x : (int) x - 1;
-        long z = floor * 0xACBD2BDCA2BFF56DL;
+        long z = (seed + floor) * 0xACBD2BDCA2BFF56DL;
 
         final double start = formDouble(z),
                 end = formDouble(z + 0xACBD2BDCA2BFF56DL);
@@ -108,7 +109,7 @@ public class WeavingNoise implements Noise.Noise2D, Noise.Noise3D,
     }
 
     /**
-     * Produces output in the -0.5 to 0.5 range; otherwise like {@link NumberTools#swayRandomized(int, double)} but
+     * Produces output in the -1 to 1 range; otherwise like {@link NumberTools#swayRandomized(int, double)} but
      * using quintic interpolation instead of Hermite.
      * @param seed any int
      * @param x distance of 1D noise to travel
@@ -116,8 +117,9 @@ public class WeavingNoise implements Noise.Noise2D, Noise.Noise3D,
      */
     public static double valueNoise1(long seed, double x)
     {
+        x += seed * 0x1p-58;
         final int floor = x >= 0.0 ? (int) x : (int) x - 1;
-        long z = seed + floor * 0xACBD2BDCA2BFF56DL;
+        long z = (seed + floor) * 0xACBD2BDCA2BFF56DL;
 
         final double start = formDouble(z),
                 end = formDouble(z + 0xACBD2BDCA2BFF56DL);
@@ -166,6 +168,21 @@ public class WeavingNoise implements Noise.Noise2D, Noise.Noise3D,
 ////        return rise * x * (h * x - 1.0);
 //    }
 
+    /*
+    vec3 swayRandomized(vec3 seed, vec3 value)
+{
+    return sin(seed.xyz + value.zxy - cos(seed.zxy + value.yzx) + cos(seed.yzx + value.xyz));
+}
+     */
+
+    public static double wobble(int seed, double x, double y){
+        double sx = (swayTight(~seed, formLargeDouble(seed) + x)) * 5,
+                sy = (swayTight(seed, formLargeDouble(seed+1010101010101010101L) + y)) * 5;
+        return (MathExtras.barronSpline(valueNoise(seed - 1010101010101010101L, (sx * sy)) * 0.5 + 0.5, 2.222, 0.5) - 0.5) * 2.0;
+//        double sx = formLargeDouble(seed), sy = formLargeDouble(seed+1010101010101010101L);
+//        return valueNoise(seed, sx + sy + x + y - valueNoise(~seed, sy - x + y) + valueNoise(~seed, sx - y + x));
+    }
+
     public static double valueNoise(int seed, double x, double y)
     {
 //        double sx = rawNoise(seed, x);
@@ -175,9 +192,12 @@ public class WeavingNoise implements Noise.Noise2D, Noise.Noise3D,
 //                NumberTools.sway(sx + sy)// * (2.0 / Math.PI)
 ////                //, 0.333, 0.5)
 //                ;
-        double sx = valueNoise1(seed, x - y * 0.618);
-        double sy = valueNoise1(seed + (1010101010101010101L    ), y - x * 0.618);
-        return valueNoise(~seed, (sx + sy - valueNoise1(seed - 1010101010101010101L, (x + y))));
+//        return wobble(seed, x, y);
+//        return wobble(seed, x + wobble(~seed, y, -x), y - wobble(~seed, -y, x));
+        double sd = valueNoise1(seed - 1010101010101010101L, x + y);
+        double sx = valueNoise1(seed, x - sd);
+        double sy = valueNoise1(seed + (1010101010101010101L    ), y - sx);
+        return valueNoise(~seed, (sx + sy - valueNoise1(seed ^ 1010101010101010101L, sd - x - y)));
     }
 
     public static double valueNoise(int seed, double x, double y, double z)
@@ -199,23 +219,23 @@ public class WeavingNoise implements Noise.Noise2D, Noise.Noise3D,
 
     public static double valueNoise(int seed, double x, double y, double z, double w, double u)
     {
-        double sx = valueNoise1(seed, x - u);
-        double sy = valueNoise1(seed + (1010101010101010101L    ), y - x + sx);
-        double sz = valueNoise1(seed + (1010101010101010101L * 2), z - y + sy);
-        double sw = valueNoise1(seed + (1010101010101010101L * 3), w - z + sz);
-        double su = valueNoise1(seed + (1010101010101010101L * 4), u - w + sw);
-        return valueNoise1(~seed, (sx + sy + sz + sw + su - valueNoise1(seed - 1010101010101010101L, x + y + z + w + u + su)));
+        double sx = valueNoise1(seed, x - u * 0.618);
+        double sy = valueNoise1(seed + (1010101010101010101L    ), y - x * 0.618);
+        double sz = valueNoise1(seed + (1010101010101010101L * 2), z - y * 0.618);
+        double sw = valueNoise1(seed + (1010101010101010101L * 3), w - z * 0.618);
+        double su = valueNoise1(seed + (1010101010101010101L * 4), u - w * 0.618);
+        return valueNoise1(~seed, (sx + sy + sz + sw + su - valueNoise1(seed - 1010101010101010101L, x + y + z + w + u)));
     }
 
     public static double valueNoise(int seed, double x, double y, double z, double w, double u, double v)
     {
-        double sx = valueNoise1(seed, x - v);
-        double sy = valueNoise1(seed + (1010101010101010101L    ), y - x + sx);
-        double sz = valueNoise1(seed + (1010101010101010101L * 2), z - y + sy);
-        double sw = valueNoise1(seed + (1010101010101010101L * 3), w - z + sz);
-        double su = valueNoise1(seed + (1010101010101010101L * 4), u - w + sw);
-        double sv = valueNoise1(seed + (1010101010101010101L * 5), v - u + su);
-        return valueNoise(~seed, (sx + sy + sz + sw + su + sv - valueNoise1(seed - 1010101010101010101L, x + y + z + w + u + v + sv)));
+        double sx = valueNoise1(seed, x - v * 0.618);
+        double sy = valueNoise1(seed + (1010101010101010101L    ), y - x * 0.618);
+        double sz = valueNoise1(seed + (1010101010101010101L * 2), z - y * 0.618);
+        double sw = valueNoise1(seed + (1010101010101010101L * 3), w - z * 0.618);
+        double su = valueNoise1(seed + (1010101010101010101L * 4), u - w * 0.618);
+        double sv = valueNoise1(seed + (1010101010101010101L * 5), v - u * 0.618);
+        return valueNoise(~seed, (sx + sy + sz + sw + su + sv - valueNoise1(seed - 1010101010101010101L, x + y + z + w + u + v)));
     }
 
     @Override
