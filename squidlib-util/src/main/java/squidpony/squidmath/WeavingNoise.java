@@ -194,10 +194,11 @@ public class WeavingNoise implements Noise.Noise2D, Noise.Noise3D,
 //                ;
 //        return wobble(seed, x, y);
 //        return wobble(seed, x + wobble(~seed, y, -x), y - wobble(~seed, -y, x));
-        double sd = valueNoise1(seed - 1010101010101010101L, x + y);
+        double sd = valueNoise1(seed - (1010101010101010101L * 2), (x - y) * 0.707);
+        double se = valueNoise1(seed - 1010101010101010101L, (x + y) * 0.707);
         double sx = valueNoise1(seed, x - sd);
-        double sy = valueNoise1(seed + (1010101010101010101L    ), y - sx);
-        return valueNoise(~seed, (sx + sy - valueNoise1(seed ^ 1010101010101010101L, sd - x - y)));
+        double sy = valueNoise1(seed + (1010101010101010101L    ), y - se);
+        return (MathExtras.barronSpline((sx * sy + sd * se) * 0.25 + 0.5, 4.0, 0.5) - 0.5) * 2.0;
     }
 
     public static double valueNoise(int seed, double x, double y, double z)
