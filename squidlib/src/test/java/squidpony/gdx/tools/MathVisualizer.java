@@ -25,7 +25,7 @@ import java.util.Random;
  * Created by Tommy Ettinger on 1/13/2018.
  */
 public class MathVisualizer extends ApplicationAdapter {
-    private int mode = 0;
+    private int mode = 53;
     private int modes = 58;
     private FilterBatch batch;
     private SparseLayers layers;
@@ -2181,40 +2181,12 @@ public class MathVisualizer extends ApplicationAdapter {
             }
             break;
             case 53: {
-                Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
-                        " RandomXS128, bits of nextExclusiveDoubleNoCTZ()");
-                for (int i = 0; i < 0x10000; i++) {
-                    long bits = Double.doubleToLongBits(nextExclusiveDoubleNoCTZ());
-                    for (int j = 0, jj = 504; j < 64; j++, jj -= 8) {
-                        if (1L == (bits >>> j & 1L))
-                            amounts[jj] = amounts[jj + 1] = amounts[jj + 2] = amounts[jj + 3]
-                                    = amounts[jj + 4] = amounts[jj + 5] = ++amounts[jj + 6];
-                    }
-                }
-                for (int i = 0; i < 512; i++) {
-                    if ((i & 7) == 3) {
-                        for (int j = 510 - (amounts[i] >> 8); j < 520; j++) {
-                            layers.backgrounds[i][j] = -0x1.c98066p126F;
-                        }
-                    } else {
-                        for (int j = 519 - (amounts[i] >> 8); j < 520; j++) {
-                            layers.backgrounds[i][j] = -0x1.d08864p126F;
-                        }
-                    }
-                }
-                for (int i = 0; i < 10; i++) {
-                    for (int j = 8; j < 520; j += 32) {
-                        layers.backgrounds[i][j] = -0x1.7677e8p125F;
-                    }
-                }
-            }
 //                Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
-//                        " RandomXS128, bits of nextFloat()");
-//                //DiverRNG diver = new DiverRNG();
+//                        " RandomXS128, bits of nextExclusiveDoubleNoCTZ()");
 //                for (int i = 0; i < 0x10000; i++) {
-//                    int bits = Float.floatToIntBits(xs128.nextFloat());
-//                    for (int j = 0, jj = 504 - 128; j < 32; j++, jj -= 8) {
-//                        if (1 == (bits >>> j & 1))
+//                    long bits = Double.doubleToLongBits(nextExclusiveDoubleNoCTZ());
+//                    for (int j = 0, jj = 504; j < 64; j++, jj -= 8) {
+//                        if (1L == (bits >>> j & 1L))
 //                            amounts[jj] = amounts[jj + 1] = amounts[jj + 2] = amounts[jj + 3]
 //                                    = amounts[jj + 4] = amounts[jj + 5] = ++amounts[jj + 6];
 //                    }
@@ -2236,7 +2208,34 @@ public class MathVisualizer extends ApplicationAdapter {
 //                    }
 //                }
 //            }
-//        }
+                Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
+                        " RandomXS128, bits of nextFloat()");
+                //DiverRNG diver = new DiverRNG();
+                for (int i = 0; i < 0x10000; i++) {
+                    int bits = Float.floatToIntBits(xs128.nextFloat());
+                    for (int j = 0, jj = 504 - 128; j < 32; j++, jj -= 8) {
+                        if (1 == (bits >>> j & 1))
+                            amounts[jj] = amounts[jj + 1] = amounts[jj + 2] = amounts[jj + 3]
+                                    = amounts[jj + 4] = amounts[jj + 5] = ++amounts[jj + 6];
+                    }
+                }
+                for (int i = 0; i < 512; i++) {
+                    if ((i & 7) == 3) {
+                        for (int j = 510 - (amounts[i] >> 8); j < 520; j++) {
+                            layers.backgrounds[i][j] = -0x1.c98066p126F;
+                        }
+                    } else {
+                        for (int j = 519 - (amounts[i] >> 8); j < 520; j++) {
+                            layers.backgrounds[i][j] = -0x1.d08864p126F;
+                        }
+                    }
+                }
+                for (int i = 0; i < 10; i++) {
+                    for (int j = 8; j < 520; j += 32) {
+                        layers.backgrounds[i][j] = -0x1.7677e8p125F;
+                    }
+                }
+            }
             break;
             case 54: {
                 Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +

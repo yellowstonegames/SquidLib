@@ -84,10 +84,10 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
 //        path = "out/worlds/" + date + "/SphereExpo/";
 //        path = "out/worlds/" + date + "/Ellipse/";
 //        path = "out/worlds/" + date + "/EllipseExpo/";
-        path = "out/worlds/" + date + "/Mimic/";
+//        path = "out/worlds/" + date + "/Mimic/";
 //        path = "out/worlds/" + date + "/SpaceView/";
 //        path = "out/worlds/" + date + "/Sphere_Classic/";
-//        path = "out/worlds/" + date + "/Hyperellipse/";
+        path = "out/worlds/" + date + "/Hyperellipse/";
 //        path = "out/worlds/" + date + "/HyperellipseExpo/";
 //        path = "out/worlds/" + date + "/HyperellipseQuilt/";
 //        path = "out/worlds/" + date + "/Tiling/";
@@ -163,10 +163,10 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
 //        world = new WorldMapGenerator.SphereMap(seed, width, height, noise, 2.0);
 //        world = new WorldMapGenerator.TilingMap(seed, width, height, noise, 2.0);
 //        world = new WorldMapGenerator.EllipticalMap(seed, width, height, noise, 2.0);
-        world = new WorldMapGenerator.MimicMap(seed, noise, 2.0);
+//        world = new WorldMapGenerator.MimicMap(seed, noise, 2.0);
 //        world = new WorldMapGenerator.SpaceViewMap(seed, width, height, noise, 2.0);
 //        world = new WorldMapGenerator.RoundSideMap(seed, width, height, noise, 2.0);
-//        world = new WorldMapGenerator.HyperellipticalMap(seed, width, height, noise, 2.0, 0.03125, 2.5);
+        world = new WorldMapGenerator.HyperellipticalMap(seed, width, height, noise, 2.0, 0.03125, 2.5);
 //        world = new WorldMapGenerator.EllipticalHammerMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.75);
 //        world = new WorldMapGenerator.LocalMap(seed, width, height, noise, 2.0);
 //        world = new WorldMapGenerator.LocalMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 0.8);
@@ -197,7 +197,7 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
         world.rng.setState(seed);
         world.seedA = world.rng.stateA;
         world.seedB = world.rng.stateB;
-        wmv.generate(1.0, 1.25);
+        wmv.generate(1.0 + world.seedA * 0x1p-67, 1.25 + world.seedB * 0x1p-67);
 //        wmv.generate();
 //        wmv.generate(
 //                1.0 + NumberTools.formCurvedDouble(world.seedA * 0x123456789ABCDEFL ^ world.seedB) * 0.1875,
