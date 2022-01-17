@@ -6828,8 +6828,23 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      */
     public String toCompressedString()
     {
+        return LZSEncoding.compressToUTF16(appendPackedString(new StringBuilder(width * height >> 3)).toString());
+
+    }
+    /**
+     * Packs this GreasedRegion using a Hilbert Curve RLE algorithm and appends the result into {@code packing}.
+     * Uses {@link CoordPacker}'s algorithm and data to compress this GreasedRegion in 256x128 blocks, storing the
+     * CoordPacker-like data as chars with values from 256 to 33023 (a concept also used in {@link LZSEncoding}),
+     * and using ASCII semicolons to separate them or store other info (just width and height, which are given first as
+     * 16 hex digits). This does not compress the resulting StringBuilder further, to allow external code options for
+     * how it wants to compress the String (such as with {@link squidpony.LZSPlus#compress(String, long[])} to garble
+     * the compressed result, or some stronger compression like LZ4, ZStd, or Zopfli).
+     * @param packing a StringBuilder that will be appended to
+     * @return a String that could be used to reconstruct this GreasedRegion using {@link #decompress(String)}
+     */
+    public StringBuilder appendPackedString(StringBuilder packing)
+    {
         CoordPacker.init();
-        StringBuilder packing = new StringBuilder(width * height >> 3);
         StringKit.appendHex(packing, width);
         StringKit.appendHex(packing, height);
         final int chunksX = width + 255 >> 8, chunksY = height + 127 >> 7;
@@ -6878,7 +6893,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                     packing.append((char) (skip + 256));
             }
         }
-        return LZSEncoding.compressToUTF16(packing.toString());
+        return packing;
     }
 
     /**
@@ -6891,10 +6906,20 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      */
     public static GreasedRegion decompress(String compressed)
     {
+        return unpackString(LZSEncoding.decompressFromUTF16(compressed));
+    }
+    /**
+     * Unpacks a String returned by {@link #appendPackedString(StringBuilder)}, returning a new GreasedRegion with
+     * identical width, height, and contents to the GreasedRegion before packing. This unpacks the
+     * {@link CoordPacker}-type Hilbert Curve RLE data to get the original GreasedRegion back.
+     * @param packed a String that was packed by {@link #appendPackedString(StringBuilder)}, without changes
+     * @return a new copy of the GreasedRegion that was previously packed
+     */
+    public static GreasedRegion unpackString(String packed)
+    {
         CoordPacker.init();
         GreasedRegion target;
-        compressed = LZSEncoding.decompressFromUTF16(compressed);
-        final int width = StringKit.intFromHex(compressed), height = StringKit.intFromHex(compressed, 8, 16);
+        final int width = StringKit.intFromHex(packed), height = StringKit.intFromHex(packed, 8, 16);
         target = new GreasedRegion(width, height);
         final int chunksX = width + 255 >> 8, chunksY = height + 127 >> 7;
         int startPack = 16, endPack, idx;//, hy;
@@ -6902,25 +6927,22 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         for (int bigX = 0, baseX = 0; bigX < chunksX; bigX++, baseX += 256) {
             for (int bigY = 0, baseY = 0; bigY < chunksY; bigY++, baseY += 128) {
                 ++startPack;
-                endPack = compressed.indexOf(';', startPack);
-                if(endPack < 0) endPack = compressed.length();
+                endPack = packed.indexOf(';', startPack);
+                if(endPack < 0) endPack = packed.length();
                 on = false;
                 idx = 0;
                 for(int p = startPack; p < endPack; p++, on = !on) {
                     if (on) {
-                        for (int toSkip = idx + (compressed.charAt(p) - 256); idx < toSkip && idx < 0x8000; idx++) {
+                        for (int toSkip = idx + (packed.charAt(p) - 256); idx < toSkip && idx < 0x8000; idx++) {
                             target.insert(CoordPacker.hilbertX[idx] + baseX, CoordPacker.hilbertY[idx] + baseY);
-                            //hy = CoordPacker.hilbertY[idx] + baseY;
-                            //target.data[(CoordPacker.hilbertX[idx] + baseX) * target.ySections + (hy >> 6)] |= 1L << (hy & 63);
                         }
                     } else {
-                        idx += compressed.charAt(p) - 256;
+                        idx += packed.charAt(p) - 256;
                     }
                 }
                 startPack = endPack;
             }
         }
-//        target.tallied = false;
         return target;
     }
 
