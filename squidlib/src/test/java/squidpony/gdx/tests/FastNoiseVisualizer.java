@@ -39,7 +39,7 @@ public class FastNoiseVisualizer extends ApplicationAdapter {
 //    private PermPointHash pph = new PermPointHash();
     private FlawedPointHash.RugHash rug = new FlawedPointHash.RugHash(1);
     private FlawedPointHash.QuiltHash quilt = new FlawedPointHash.QuiltHash(1, 16);
-    private FlawedPointHash.CubeHash cube = new FlawedPointHash.CubeHash(1, 64);
+    private FlawedPointHash.CubeHash cube = new FlawedPointHash.CubeHash(1, 32);
     private FlawedPointHash.FNVHash fnv = new FlawedPointHash.FNVHash(1);
     private IPointHash[] pointHashes = new IPointHash[] {ph, hph, gold, iph, tab, fnv, rug, quilt, cube};
     private int hashIndex = 1;
@@ -143,13 +143,13 @@ public class FastNoiseVisualizer extends ApplicationAdapter {
                 switch (keycode) {
                     case W:
                         frames.clear();
-//                        noise.setFrequency(0x1p-2f);
-                        for (int c = 0; c < 256; c++) {
-                            Pixmap p = new Pixmap(256, 256, Pixmap.Format.RGBA8888);
-                            for (int x = 0; x < 256; x++) {
-                                for (int y = 0; y < 256; y++) {
+                        noise.setFrequency(0x1p-2f);
+                        for (int c = 0; c < 128; c++) {
+                            Pixmap p = new Pixmap(128, 128, Pixmap.Format.RGBA8888);
+                            for (int x = 0; x < 128; x++) {
+                                for (int y = 0; y < 128; y++) {
                                     float color = basicPrepare(noise.getConfiguredNoise(x, y, c));
-//                                    color *= color * 0.8125f;
+                                    color *= color;
                                     p.setColor(color, color, color, 1f);
                                     p.drawPixel(x, y);
                                 }
@@ -157,7 +157,7 @@ public class FastNoiseVisualizer extends ApplicationAdapter {
                             frames.add(p);
                         }
                         Gdx.files.local("out/").mkdirs();
-                        gif.write(Gdx.files.local("out/cube" + System.currentTimeMillis() + ".gif"), frames, 12);
+                        gif.write(Gdx.files.local("out/cube" + System.currentTimeMillis() + ".gif"), frames, 10);
                         break;
                     case P: //pause
                         keepGoing = !keepGoing;
