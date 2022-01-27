@@ -1155,7 +1155,8 @@ public class DijkstraMap implements Serializable {
         resetMap();
         Coord start2 = start;
         int xShift = width / 6, yShift = height / 6;
-        while (physicalMap[start.x][start.y] >= WALL && frustration < 50) {
+        int frustration = 0;
+        while (physicalMap[start.x][start.y] >= WALL && frustration++ < 50) {
             start2 = Coord.get(Math.min(Math.max(1, start.x + rng.nextInt(1 + xShift * 2) - xShift), width - 2),
                     Math.min(Math.max(1, start.y + rng.nextInt(1 + yShift * 2) - yShift), height - 2));
         }
@@ -1240,10 +1241,6 @@ public class DijkstraMap implements Serializable {
         }
         Coord currentPos = findNearest(start, targets);
         while (true) {
-            if (frustration > 500) {
-                path.clear();
-                break;
-            }
             double best = gradientMap[currentPos.x][currentPos.y];
             appendDirToShuffle(rng);
             int choice = 0;
@@ -1262,16 +1259,13 @@ public class DijkstraMap implements Serializable {
 
             if (best >= gradientMap[currentPos.x][currentPos.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] > FLOOR) {
                 cutShort = true;
-                frustration = 0;
                 return new ArrayList<>(path);
             }
             currentPos = currentPos.translate(dirs[choice].deltaX, dirs[choice].deltaY);
             if (gradientMap[currentPos.x][currentPos.y] == 0)
                 break;
             path.add(currentPos);
-            frustration++;
         }
-        frustration = 0;
         cutShort = false;
         Collections.reverse(path);
         return new ArrayList<>(path);
@@ -1877,9 +1871,9 @@ public class DijkstraMap implements Serializable {
             currentPos = currentPos.translate(dirs[choice].deltaX, dirs[choice].deltaY);
             path.add(currentPos);
             paidLength += costMap[currentPos.x][currentPos.y];
-            frustration++;
             if (paidLength > length - 1.0) {
                 if (onlyPassable != null && onlyPassable.contains(currentPos)) {
+                    frustration++;
                     tempSet.clear();
                     tempSet.addAll(impassable2);
                     tempSet.add(currentPos);
@@ -2135,10 +2129,9 @@ public class DijkstraMap implements Serializable {
             currentPos = currentPos.translate(dirs[choice].deltaX, dirs[choice].deltaY);
             path.add(Coord.get(currentPos.x, currentPos.y));
             paidLength += costMap[currentPos.x][currentPos.y];
-            frustration++;
             if (paidLength > moveLength - 1.0) {
-
                 if (onlyPassable != null && onlyPassable.contains(currentPos)) {
+                    frustration++;
                     tempSet.clear();
                     tempSet.addAll(impassable2);
                     tempSet.add(currentPos);
@@ -2450,9 +2443,9 @@ public class DijkstraMap implements Serializable {
             currentPos = currentPos.translate(dirs[choice].deltaX, dirs[choice].deltaY);
             path.add(currentPos);
             paidLength += costMap[currentPos.x][currentPos.y];
-            frustration++;
             if (paidLength > moveLength - 1.0) {
                 if (friends.contains(currentPos)) {
+                    frustration++;
                     tempSet.clear();
                     tempSet.addAll(impassable2);
                     tempSet.add(currentPos);
@@ -2707,10 +2700,10 @@ public class DijkstraMap implements Serializable {
                     break;
             }
             path.add(currentPos);
-            frustration++;
             paidLength += costMap[currentPos.x][currentPos.y];
             if (paidLength > length - 1.0) {
                 if (onlyPassable != null && onlyPassable.contains(currentPos)) {
+                    frustration++;
                     tempSet.clear();
                     tempSet.addAll(impassable2);
                     tempSet.add(currentPos);
@@ -2825,9 +2818,9 @@ public class DijkstraMap implements Serializable {
 
             path.add(currentPos);
             paidLength += costMap[currentPos.x][currentPos.y];
-            frustration++;
             if (paidLength > length - 1.0) {
                 if (onlyPassable != null && onlyPassable.contains(currentPos)) {
+                    frustration++;
                     tempSet.clear();
                     tempSet.addAll(impassable2);
                     tempSet.add(currentPos);
@@ -2968,10 +2961,10 @@ public class DijkstraMap implements Serializable {
             }
             currentPos = currentPos.translate(dirs[choice].deltaX, dirs[choice].deltaY);
             path.add(currentPos);
-            frustration++;
             paidLength += costMap[currentPos.x][currentPos.y];
             if (paidLength > moveLength - 1.0) {
                 if (onlyPassable != null && onlyPassable.contains(currentPos)) {
+                    frustration++;
                     tempSet.clear();
                     tempSet.addAll(impassable2);
                     tempSet.add(currentPos);
@@ -3115,10 +3108,10 @@ public class DijkstraMap implements Serializable {
             currentPos = currentPos.translate(dirs[choice].deltaX, dirs[choice].deltaY);
 
             path.add(currentPos);
-            frustration++;
             paidLength += costMap[currentPos.x][currentPos.y];
             if (paidLength > moveLength - 1.0) {
                 if (onlyPassable != null && onlyPassable.contains(currentPos)) {
+                    frustration++;
                     tempSet.clear();
                     tempSet.addAll(impassable2);
                     tempSet.add(currentPos);
@@ -3245,10 +3238,10 @@ public class DijkstraMap implements Serializable {
                     break;
             }
             path.add(currentPos);
-            frustration++;
             paidLength += costMap[currentPos.x][currentPos.y];
             if (paidLength > length - 1.0) {
                 if (onlyPassable != null && onlyPassable.contains(currentPos)) {
+                    frustration++;
                     tempSet.clear();
                     tempSet.addAll(impassable2);
                     tempSet.add(currentPos);
@@ -3319,10 +3312,6 @@ public class DijkstraMap implements Serializable {
 
         }
         while (true) {
-            if (frustration > 2000) {
-                path.clear();
-                break;
-            }
             double best = gradientMap[currentPos.x][currentPos.y];
             appendDirToShuffle(rng);
             int choice = 0;
@@ -3341,7 +3330,6 @@ public class DijkstraMap implements Serializable {
 
             if (best >= gradientMap[currentPos.x][currentPos.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] > FLOOR) {
                 cutShort = true;
-                frustration = 0;
                 if(buffer == null)
                     return new ArrayList<>(path);
                 else
@@ -3352,13 +3340,11 @@ public class DijkstraMap implements Serializable {
             }
             currentPos = currentPos.translate(dirs[choice].deltaX, dirs[choice].deltaY);
             path.add(0, currentPos);
-            frustration++;
 
             if (gradientMap[currentPos.x][currentPos.y] == 0)
                 break;
         }
         cutShort = false;
-        frustration = 0;
         if(buffer == null)
             return new ArrayList<>(path);
         else
