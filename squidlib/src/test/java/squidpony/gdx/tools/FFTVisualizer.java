@@ -34,9 +34,9 @@ public class FFTVisualizer extends ApplicationAdapter {
 //    private FlawedPointHash.FNVHash fnv = new FlawedPointHash.FNVHash(1);
     private final IPointHash[] pointHashes = new IPointHash[] {iph, torus, cube, rug, quilt};
     private int hashIndex = 0;
-    private static final int MODE_LIMIT = 12;
-    private int mode = 7;
-    private int dim = 2; // this can be 0, 1, 2, or 3; add 2 to get the actual dimensions
+    private static final int MODE_LIMIT = 13;
+    private int mode = 12;
+    private int dim = 2; // this can be 0, 1, 2, 3, or 4; add 2 to get the actual dimensions
     private int octaves = 3;
     private float freq = 0.125f;
     private float threshold = 0.5f;
@@ -54,6 +54,7 @@ public class FFTVisualizer extends ApplicationAdapter {
     
     private Viewport view;
     private long ctr = -128, startTime;
+    private float changeZ = 0f, changeW = 0f, changeU = 0f, changeV = 0f;
     
     private OrderedMap<Coord, Double> norm;
     private StatefulRNG shuffler;
@@ -128,12 +129,12 @@ public class FFTVisualizer extends ApplicationAdapter {
                         quilt.setState(s);
                         break;
                     case N: // noise type
-                        if(mode == 0) 
+                        if(mode == 0 || mode >= 12)
                             noise.setNoiseType((noise.getNoiseType() + 1) % 14);
                         break;
                     case ENTER:
                     case D: //dimension
-                        dim = (dim + 1) & 3;
+                        dim = (dim + 1) % 5;
                         break;
                     case F: // frequency
                         noise.setFrequency((float) Math.sin(freq += 0.125f) * 0.05f + 0.06f);
@@ -224,6 +225,20 @@ public class FFTVisualizer extends ApplicationAdapter {
                             yy = y * 0.5f;
                             bright = basicPrepare(noise.getConfiguredNoise(
                                     c + xx, xx - c, yy - c,
+                                    c - yy, xx + yy));
+                            real[x][y] = bright;
+                            renderer.color(bright, bright, bright, 1f);
+                            renderer.vertex(x, y, 0);
+                        }
+                    }
+                    break;
+                case 4:
+                    for (int x = 0; x < width; x++) {
+                        xx = x * 0.5f;
+                        for (int y = 0; y < height; y++) {
+                            yy = y * 0.5f;
+                            bright = basicPrepare(noise.getConfiguredNoise(
+                                    c + xx, xx - c, yy - c,
                                     c - yy, xx + yy, yy - xx));
                             real[x][y] = bright;
                             renderer.color(bright, bright, bright, 1f);
@@ -272,7 +287,7 @@ public class FFTVisualizer extends ApplicationAdapter {
                         }
                     }
                     break;
-                case 3:
+                default:
                     for (int x = 0; x < width; x++) {
                         for (int y = 0; y < height; y++) {
                             bright = (float) (db = 0x1p-8 * castle256(x, y, noise.getSeed()));
@@ -348,7 +363,7 @@ public class FFTVisualizer extends ApplicationAdapter {
                         }
                     }
                     break;
-                case 3:
+                default:
                     for (int x = 0; x < width; x++) {
                         for (int y = 0; y < height; y++) {
                             bright = (float) (db = 0x1p-32 * (0xFFFFFFFFL & rug.hash(x, y, ct, 1, 11, 111)));
@@ -392,7 +407,7 @@ public class FFTVisualizer extends ApplicationAdapter {
                         }
                     }
                     break;
-                case 3:
+                default:
                     for (int x = 0; x < width; x++) {
                         for (int y = 0; y < height; y++) {
                             bright = (float) (db = 0x1p-32 * (0xFFFFFFFFL & quilt.hash(x, y, ct, 1, 11, 111)));
@@ -436,7 +451,7 @@ public class FFTVisualizer extends ApplicationAdapter {
                         }
                     }
                     break;
-                case 3:
+                default:
                     for (int x = 0; x < width; x++) {
                         for (int y = 0; y < height; y++) {
                             bright = (float) (db = 0x1p-32 * ((cube.hash(x, y, ct, 1, 11, 111))&0xFFFFFFFFL));
@@ -545,7 +560,7 @@ public class FFTVisualizer extends ApplicationAdapter {
                         }
                     }
                     break;
-                case 3:
+                default:
                     for (int x = 0; x < width; x++) {
                         for (int y = 0; y < height; y++) {
                             bright = (float) (db = 0x1p-8 * (BlueNoise.getSeededOmniTiling(x, y, noise.getSeed()) + 128));
@@ -600,7 +615,7 @@ public class FFTVisualizer extends ApplicationAdapter {
                         }
                     }
                     break;
-                case 3:
+                default:
                     for (int x = 0; x < width; x++) {
                         for (int y = 0; y < height; y++) {
                             bright = (float) (db = 0x1p-8 * (BlueNoise.getSeededTriOmniTiling(x, y, noise.getSeed()) + 128));
@@ -645,7 +660,7 @@ public class FFTVisualizer extends ApplicationAdapter {
                         }
                     }
                     break;
-                case 3:
+                default:
                     for (int x = 0; x < width; x++) {
                         for (int y = 0; y < height; y++) {
                             bright = 0x1p-8 * (BlueNoise.getSeededOmniTiling(x, y, noise.getSeed()) + 128) <= threshold ? 1 : 0;
@@ -698,7 +713,7 @@ public class FFTVisualizer extends ApplicationAdapter {
                         }
                     }
                     break;
-                case 3:
+                default:
                     for (int x = 0; x < width; x++) {
                         for (int y = 0; y < height; y++) {
                             bright = 0x1p-8 * (BlueNoise.getSeededTriOmniTiling(x, y, noise.getSeed()) + 128) <= threshold ? 1 : 0;
@@ -755,6 +770,64 @@ public class FFTVisualizer extends ApplicationAdapter {
                         }
                     }
 
+            }
+        } else if(mode == 12) {
+            switch (dim) {
+                case 0:
+                    changeZ += Gdx.graphics.getDeltaTime() * 10f;
+                    for (int x = 0; x < width; x++) {
+                        for (int y = 0; y < height; y++) {
+                            bright = basicPrepare(noise.getConfiguredNoise(x, y, changeZ, changeW));
+                            real[x][y] = bright;
+                            renderer.color(bright, bright, bright, 1f);
+                            renderer.vertex(x, y, 0);
+                        }
+                    }
+                    break;
+                case 1:
+                    changeW += Gdx.graphics.getDeltaTime() * 10f;
+                    for (int x = 0; x < width; x++) {
+                        for (int y = 0; y < height; y++) {
+                            bright = basicPrepare(noise.getConfiguredNoise(x, y, changeZ, changeW));
+                            real[x][y] = bright;
+                            renderer.color(bright, bright, bright, 1f);
+                            renderer.vertex(x, y, 0);
+                        }
+                    }
+                    break;
+                case 2:
+                    changeZ += Gdx.graphics.getDeltaTime() * 10f;
+                    for (int x = 0; x < width; x++) {
+                        for (int y = 0; y < height; y++) {
+                            bright = basicPrepare(noise.getConfiguredNoise(x, y, changeZ, changeW, changeU));
+                            real[x][y] = bright;
+                            renderer.color(bright, bright, bright, 1f);
+                            renderer.vertex(x, y, 0);
+                        }
+                    }
+                    break;
+                case 3:
+                    changeW += Gdx.graphics.getDeltaTime() * 10f;
+                    for (int x = 0; x < width; x++) {
+                        for (int y = 0; y < height; y++) {
+                            bright = basicPrepare(noise.getConfiguredNoise(x, y, changeZ, changeW, changeU));
+                            real[x][y] = bright;
+                            renderer.color(bright, bright, bright, 1f);
+                            renderer.vertex(x, y, 0);
+                        }
+                    }
+                    break;
+                case 4:
+                    changeU += Gdx.graphics.getDeltaTime() * 10f;
+                    for (int x = 0; x < width; x++) {
+                        for (int y = 0; y < height; y++) {
+                            bright = basicPrepare(noise.getConfiguredNoise(x, y, changeZ, changeW, changeU));
+                            real[x][y] = bright;
+                            renderer.color(bright, bright, bright, 1f);
+                            renderer.vertex(x, y, 0);
+                        }
+                    }
+                    break;
             }
         }
 
