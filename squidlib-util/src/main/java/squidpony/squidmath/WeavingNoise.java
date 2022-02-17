@@ -18,6 +18,8 @@ package squidpony.squidmath;
 
 import squidpony.annotation.Beta;
 
+import static squidpony.squidmath.SeededNoise.grad2d;
+
 /**
  * A low-quality continuous noise generator with strong artifacts, meant to be used as a building block.
  * This bases its implementation on {@link ValueNoise}, and its static methods are still called
@@ -146,9 +148,9 @@ public class WeavingNoise implements Noise.Noise2D, Noise.Noise3D,
 
     public static double rawNoise(final long seed, double n)
     {
-        n += formDouble(seed);
+//        n += formDouble(seed);
         final long floor = (n >= 0.0 ? (long) n : (long) n - 1L);
-        long z = (0x9E3779B97F4A7C15L ^ seed) * 0xD1B54A32D192ED03L + floor * 0xACBD2BDCA2BFF56DL;
+        long z = (0x9E3779B97F4A7C15L ^ seed) + floor * 0xACBD2BDCA2BFF56DL;
         final double start = formTightDouble(z),
                 end = formTightDouble(z + 0xACBD2BDCA2BFF56DL);
 //        final double start = formDouble((z << 1 ^ 0xD1B54A32D192ED03L) * Long.rotateLeft(z, 14)),
@@ -160,7 +162,7 @@ public class WeavingNoise implements Noise.Noise2D, Noise.Noise3D,
         n -= floor;
 //        x = MathExtras.barronSpline(x - floor, 2.0, 0.5);
         n *= n * n * (n * (n * 6f - 15f) + 10f);
-        return (1.0 - n) * start + n * end + 1.0;
+        return (1.0 - n) * start + n * end;
     }
 
 //    public static double valueNoise(final int seed, double x)
@@ -212,16 +214,25 @@ public class WeavingNoise implements Noise.Noise2D, Noise.Noise3D,
 //        return wobble(seed, x, y);
 //        return wobble(seed, x + wobble(~seed, y, -x), y - wobble(~seed, -y, x));
 
-        long sx = (NumberTools.doubleToRawLongBits(rawNoise(seed, x)) & 0x000FFFFFFFFFFFFFL);
-        long sy = (NumberTools.doubleToRawLongBits(rawNoise(seed + 1010101010101010101L, y)) & 0x000FFFFFFFFFFFFFL);
-        double tight = NumberTools.longBitsToDouble((sx + sy >>> 1) | 0x3FF0000000000000L) - 1.0;
+//        long sx = (NumberTools.doubleToRawLongBits(rawNoise(seed, x)) & 0x000FFFFFFFFFFFFFL);
+//        long sy = (NumberTools.doubleToRawLongBits(rawNoise(seed + 1010101010101010101L, y)) & 0x000FFFFFFFFFFFFFL);
+//        double tight = NumberTools.longBitsToDouble((sx + sy >>> 1) | 0x3FF0000000000000L) - 1.0;
 
 //        double sd = valueNoise1(seed - (1010101010101010101L * 2), (x - y) * 0.707);
 //        double se = valueNoise1(seed - 1010101010101010101L, (x + y) * 0.707);
 //        double sx = valueNoise1(seed, x - sd);
 //        double sy = valueNoise1(seed + (1010101010101010101L    ), y - se);
 //        return (MathExtras.barronSpline((sx * sy + sd * se) * 0.25 + 0.5, 4.0, 0.5) - 0.5) * 2.0;
-        return (MathExtras.barronSpline(tight, 4.0, 0.5) - 0.5) * 2.0;
+//        return (MathExtras.barronSpline(tight, 4.0, 0.5) - 0.5) * 2.0;
+        int h0 = seed << 1 & 510;
+        double g0 = rawNoise(h0, grad2d[h0] * x + grad2d[h0+1] * y);
+        int h1 = seed >>> 7 & 510;
+        double g1 = rawNoise(h1, grad2d[h1] * x + grad2d[h1+1] * y);
+        int h2 = seed >>> 15 & 510;
+        double g2 = rawNoise(h2, grad2d[h2] * x + grad2d[h2+1] * y);
+        int h3 = seed >>> 23 & 510;
+        double g3 = rawNoise(h3, grad2d[h3] * x + grad2d[h3+1] * y);
+        return (MathExtras.barronSpline((g0 + g1 + g2 + g3) * 0.25, 3.5, 0.5) - 0.5) * 2.0;
     }
 
     public static double valueNoise(int seed, double x, double y, double z)
