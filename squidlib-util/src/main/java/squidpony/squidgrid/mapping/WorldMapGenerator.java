@@ -2743,7 +2743,7 @@ public abstract class WorldMapGenerator implements Serializable {
      */
     public static class SpaceViewMap extends WorldMapGenerator {
         //        protected static final double terrainFreq = 1.65, terrainRidgedFreq = 1.8, heatFreq = 2.1, moistureFreq = 2.125, otherFreq = 3.375, riverRidgedFreq = 21.7;
-        protected static final double terrainFreq = 1.45, terrainRidgedFreq = 2.6, heatFreq = 2.1, moistureFreq = 2.125, otherFreq = 3.375;
+        protected static final double terrainFreq = 1.45, terrainRidgedFreq = 0.845, heatFreq = 2.1, moistureFreq = 2.125, otherFreq = 3.375;
         protected double minHeat0 = Double.POSITIVE_INFINITY, maxHeat0 = Double.NEGATIVE_INFINITY,
                 minHeat1 = Double.POSITIVE_INFINITY, maxHeat1 = Double.NEGATIVE_INFINITY,
                 minWet0 = Double.POSITIVE_INFINITY, maxWet0 = Double.NEGATIVE_INFINITY;
@@ -2859,7 +2859,7 @@ public abstract class WorldMapGenerator implements Serializable {
             zPositions = new double[width][height];
             edges = new int[height << 1];
             terrainRidged = new Noise.Maelstrom3D(new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 10), terrainFreq));
-            terrainBasic = new Noise.Scaled3D(noiseGenerator,  terrainRidgedFreq * 0.325); 
+            terrainBasic = new Noise.Scaled3D(noiseGenerator,  terrainRidgedFreq);
             heat = new Noise.Scaled3D(noiseGenerator, heatFreq);
             moisture = new Noise.Scaled3D(noiseGenerator, moistureFreq); 
             otherRidged = new Noise.Maelstrom3D(new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 6), otherFreq));

@@ -3296,16 +3296,15 @@ final double v2 = + x * +1.1212273759528033 + y * -1.1036247824581010 + z * +0.9
             return NumberTools.swayRandomized(seed, x);
         }
     }
-    public static class Sway2D implements Noise2D
-    {
+    public static class Sway2D implements Noise2D {
         public static final Sway2D instance = new Sway2D();
         public long seed;
-        public Sway2D()
-        {
+
+        public Sway2D() {
             seed = 12345L;
         }
-        public Sway2D(long seed)
-        {
+
+        public Sway2D(long seed) {
             this.seed = seed;
         }
 
@@ -3346,10 +3345,10 @@ final double v2 = + x * +1.1212273759528033 + y * -1.1036247824581010 + z * +0.9
 //                    x1y0 = (int) (endX + startY >>> 56),
 //                    x0y1 = (int) (startX + endY >>> 56),
 //                    x1y1 = (int) (endX + endY >>> 56);
-            final int x0y0 = HastyPointHash.hash256(floorX, floorY, seed),
-                    x1y0 = HastyPointHash.hash256(floorX+1, floorY, seed),
-                    x0y1 = HastyPointHash.hash256(floorX, floorY+1, seed),
-                    x1y1 = HastyPointHash.hash256(floorX+1, floorY+1, seed);
+            final int x0y0 = HastyPointHash.hash256(floorX, floorY, seed) << 1,
+                    x1y0 = HastyPointHash.hash256(floorX + 1, floorY, seed) << 1,
+                    x0y1 = HastyPointHash.hash256(floorX, floorY + 1, seed) << 1,
+                    x1y1 = HastyPointHash.hash256(floorX + 1, floorY + 1, seed) << 1;
             x -= floorX;
             y -= floorY;
 //            x *= x * (3.0 - 2.0 * x);
@@ -3366,10 +3365,10 @@ final double v2 = + x * +1.1212273759528033 + y * -1.1036247824581010 + z * +0.9
 //                    + (ix * SeededNoise.phiGrad2[x0y1][0] + y * SeededNoise.phiGrad2[x0y1][1])
 //                    + (x * SeededNoise.phiGrad2[x1y1][0] + y * SeededNoise.phiGrad2[x1y1][1])
 //            );
-            return ((SeededNoise.grad2d[x0y0][0] + SeededNoise.grad2d[x0y0][1]) * (ix * iy)
-                    + (SeededNoise.grad2d[x1y0][0] + SeededNoise.grad2d[x1y0][1]) * (x * iy)
-                    + (SeededNoise.grad2d[x0y1][0] + SeededNoise.grad2d[x0y1][1]) * (ix * y)
-                    + (SeededNoise.grad2d[x1y1][0] + SeededNoise.grad2d[x1y1][1]) * (x * y)
+            return ((SeededNoise.grad2d[x0y0] + SeededNoise.grad2d[x0y0 + 1]) * (ix * iy)
+                    + (SeededNoise.grad2d[x1y0] + SeededNoise.grad2d[x1y0 + 1]) * (x * iy)
+                    + (SeededNoise.grad2d[x0y1] + SeededNoise.grad2d[x0y1 + 1]) * (ix * y)
+                    + (SeededNoise.grad2d[x1y1] + SeededNoise.grad2d[x1y1 + 1]) * (x * y)
             ) * 0.7071067811865475;
 //            long xf = x >= 0.0 ? (long) x : (long) x - 1L;
 //            long yf = y >= 0.0 ? (long) y : (long) y - 1L;

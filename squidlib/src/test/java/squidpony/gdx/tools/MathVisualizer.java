@@ -190,7 +190,7 @@ public class MathVisualizer extends ApplicationAdapter {
             p =       1.0103004648645343977 + p * w;
             p =       4.8499064014085844221 + p * w;
         } else {
-            // this branch does not appears in the original code, it
+            // this branch does not appear in the original code, it
             // was added because the previous branch does not handle
             // x = +/-1 correctly. In this case, w is positive infinity
             // and as the first coefficient (-2.71e-11) is negative.

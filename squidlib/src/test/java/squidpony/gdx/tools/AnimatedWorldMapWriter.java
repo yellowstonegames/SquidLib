@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.IntMap;
+import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.github.tommyettinger.anim8.AnimatedGif;
@@ -122,9 +123,9 @@ World #5, SavoryMelonAlder, completed in 64338 ms
 //        path = "out/worldsAnimated/" + date + "/EllipseExpo/";
 //        path = "out/worldsAnimated/" + date + "/Mimic/";
 //        path = "out/worldsAnimated/" + date + "/SpaceView/";
-        path = "out/worldsAnimated/" + date + "/SpaceViewMutantClassic/";
-//        path = "out/worldsAnimated/" + date + "/SpaceViewMutantFoam/";
-//        path = "out/worldsAnimated/" + date + "/SpaceViewMutantHoney/";
+        path = "out/worldsAnimated/" + date + "/SpaceViewFlowingClassic/";
+//        path = "out/worldsAnimated/" + date + "/SpaceViewFlowingFoam/";
+//        path = "out/worldsAnimated/" + date + "/SpaceViewFlowingHoney/";
 //        path = "out/worldsAnimated/" + date + "/SpaceViewValue/";
 //        path = "out/worldsAnimated/" + date + "/SpaceViewValue/";
 //        path = "out/worldsAnimated/" + date + "/SpaceViewClassic/";
@@ -205,11 +206,11 @@ World #5, SavoryMelonAlder, completed in 64338 ms
 //        WorldMapGenerator.DEFAULT_NOISE.setFractalGain(5f);
 //        WorldMapGenerator.DEFAULT_NOISE.setFractalLacunarity(0.8f);
 //        WorldMapGenerator.DEFAULT_NOISE.setFractalGain(1.25f);
-//        VastNoise fn = new VastNoise((int) seed, 1.75f, VastNoise.FOAM, 1);
-        VastNoise fn = new VastNoise((int) seed, 1.5f, VastNoise.PERLIN_FRACTAL, 3);
+        VastNoise fn = new VastNoise((int) seed, 1.4f, VastNoise.FOAM_FRACTAL, 1);
+//        VastNoise fn = new VastNoise((int) seed, 1f, VastNoise.PERLIN_FRACTAL, 2);
 //        VastNoise fn = new VastNoise((int) seed, 2.0f, VastNoise.VALUE, 1);
 //        VastNoise fn = new VastNoise((int) seed, 1.5f, VastNoise.PERLIN, 1);
-        fn.setFractalSpiral(true);
+//        fn.setFractalSpiral(true);
 //        VastNoise fn = new VastNoise((int) seed, 1f, VastNoise.SIMPLEX, 1);
 //        VastNoise fn = new VastNoise((int) seed, 1f, VastNoise.SIMPLEX_FRACTAL, 2);
 //        VastNoise fn = new VastNoise((int) seed, 1.25f, VastNoise.HONEY, 1);
@@ -339,7 +340,7 @@ World #5, SavoryMelonAlder, completed in 64338 ms
 //        world = new WorldMapGenerator.EllipticalMap(seed, width, height, noise, 1.75);
 //        world = new WorldMapGenerator.MimicMap(seed, WorldMapGenerator.DEFAULT_NOISE, 1.75);
 //        world = new WorldMapGenerator.SpaceViewMap(seed, width, height, noise, 1.3);
-        world = new WorldMapGenerator.SpaceViewMap(seed, width, height, noise, 0.4);
+        world = new WorldMapGenerator.SpaceViewMap(seed, width, height, noise, 0.5);
 //        world = new WorldMapGenerator.RotatingSpaceMap(seed, width, height, noise, 1.0);
 //        world = new WorldMapGenerator.RoundSideMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.75);
 //        world = new WorldMapGenerator.HyperellipticalMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 0.8, 0.03125, 2.5);
@@ -362,7 +363,7 @@ World #5, SavoryMelonAlder, completed in 64338 ms
 
     public void generate(final long seed)
     {
-        long startTime = System.currentTimeMillis();
+        long startTime = TimeUtils.millis();
         //randomizeColors(seed);
 //        world.generate(1, 1.125, seed); // mimic of Earth favors too-cold planets
 //        dbm.makeBiomes(world);
@@ -387,7 +388,7 @@ World #5, SavoryMelonAlder, completed in 64338 ms
                     1.0 + NumberTools.formCurvedDouble(world.seedA * 0x123456789ABCDEFL ^ world.seedB) * 0.1875,
                     1.0625 + DiverRNG.determineDouble(world.seedB * 0x123456789ABL ^ world.seedA) * 0.375);
         }
-        ttg = System.currentTimeMillis() - startTime;
+        ttg = TimeUtils.timeSinceMillis(startTime);
     }
 
     public void putMap() {
@@ -409,7 +410,7 @@ World #5, SavoryMelonAlder, completed in 64338 ms
             }
             world.setCenterLongitude(angle);
             generate(hash);
-            wmv.getBiomeMapper().makeBiomes(world);
+//            wmv.getBiomeMapper().makeBiomes(world);
             float[][] cm = wmv.show();
             pm[i].setColor(SColor.DB_INK);
             pm[i].fill();

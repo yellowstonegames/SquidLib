@@ -42,33 +42,33 @@ public class NoiseRangeTest {
                         x2 = x0 - 1 + 2 * G2,
                         y2 = y0 - 1 + 2 * G2;
                 double n;
-                for (int gi0 = 0; gi0 < 256; gi0++) {
+                for (int gi0 = 0; gi0 < 512; gi0+=2) {
                     double t0 = threshold - x0 * x0 - y0 * y0;
                     if (t0 > 0) {
                         t0 *= t0;
-                        n = t0 * t0 * (grad2d[gi0][0] * x0 + grad2d[gi0][1] * y0);
+                        n = t0 * t0 * (grad2d[gi0] * x0 + grad2d[gi0+1] * y0);
 
                         min0 = Math.min(n, min0);
                         max0 = Math.max(n, max0);
                     }
                 }
 
-                for (int gi1 = 0; gi1 < 256; gi1++) {
+                for (int gi1 = 0; gi1 < 512; gi1+=2) {
                     double t1 = threshold - x1 * x1 - y1 * y1;
                     if (t1 > 0) {
                         t1 *= t1;
-                        n = t1 * t1 * (grad2d[gi1][0] * x1 + grad2d[gi1][1] * y1);
+                        n = t1 * t1 * (grad2d[gi1] * x1 + grad2d[gi1+1] * y1);
 
                         min1 = Math.min(n, min1);
                         max1 = Math.max(n, max1);
                     }
                 }
 
-                for (int gi2 = 0; gi2 < 256; gi2++) {
+                for (int gi2 = 0; gi2 < 512; gi2+=2) {
                     double t2 = threshold - x2 * x2 - y2 * y2;
                     if (t2 > 0)  {
                         t2 *= t2;
-                        n = t2 * t2 * (grad2d[gi2][0] * x2 + grad2d[gi2][1] * y2);
+                        n = t2 * t2 * (grad2d[gi2] * x2 + grad2d[gi2+1] * y2);
 
                         min2 = Math.min(n, min2);
                         max2 = Math.max(n, max2);
