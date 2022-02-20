@@ -227,11 +227,12 @@ public class WeavingNoise implements Noise.Noise2D, Noise.Noise3D,
         int h0 = seed << 1 & 510;
         double g0 = rawNoise(h0, grad2d[h0] * x + grad2d[h0+1] * y);
         int h1 = seed >>> 7 & 510;
-        double g1 = rawNoise(h1, grad2d[h1] * x + grad2d[h1+1] * y);
+        double g1 = rawNoise(h1, (grad2d[h1]) * x + grad2d[h1+1] * y-g0*3);
         int h2 = seed >>> 15 & 510;
-        double g2 = rawNoise(h2, grad2d[h2] * x + grad2d[h2+1] * y);
+        double g2 = rawNoise(h2, (grad2d[h2]) * x + grad2d[h2+1] * y-g1*3);
         int h3 = seed >>> 23 & 510;
-        double g3 = rawNoise(h3, grad2d[h3] * x + grad2d[h3+1] * y);
+        double g3 = rawNoise(h3, (grad2d[h3]) * x + grad2d[h3+1] * y-g2*3);
+//        return (MathExtras.barronSpline((g1 + g3) * 0.5, 3.5, 0.5) - 0.5) * 2.0;
         return (MathExtras.barronSpline((g0 + g1 + g2 + g3) * 0.25, 3.5, 0.5) - 0.5) * 2.0;
     }
 
