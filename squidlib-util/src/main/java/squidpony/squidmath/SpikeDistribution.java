@@ -46,13 +46,13 @@ public class SpikeDistribution implements IDistribution {
     }
 
     /**
-     * Gets the upper bound of the distribution, which is 1, exclusive.
+     * Gets the upper bound of the distribution, which is {@link #EXCLUSIVE_ONE}.
      *
      * @return the upper bound of the distribution
      */
     @Override
     public double getUpperBound() {
-        return 1.0;
+        return EXCLUSIVE_ONE;
     }
 
     /**

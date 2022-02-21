@@ -29,23 +29,37 @@ public interface IDistribution {
     /**
      * Gets a double between {@link #getLowerBound()} and {@link #getUpperBound()} that obeys this distribution.
      * @param rng an IRNG, such as {@link RNG} or {@link GWTRNG}, that this will get one or more random numbers from
-     * @return a double within the range of {@link #getLowerBound()} and {@link #getUpperBound()}
+     * @return a double within the range of {@link #getLowerBound()} and {@link #getUpperBound()}, both inclusive
      */
     double nextDouble(IRNG rng);
 
     /**
-     * Gets the lower bound of the distribution. The documentation should specify whether the bound is inclusive or
-     * exclusive; if unspecified, it can be assumed to be inclusive (like {@link IRNG#nextDouble()}).
-     * @return the lower bound of the distribution
+     * Gets the lower inclusive bound of the distribution. If the bound is exclusive above 0.0, then this will be
+     * {@link #EXCLUSIVE_ZERO}.
+     * @return the lower inclusive bound of the distribution
      */
     double getLowerBound();
     /**
-     * Gets the upper bound of the distribution. The documentation should specify whether the bound is inclusive or
-     * exclusive; if unspecified, it can be assumed to be exclusive (like {@link IRNG#nextDouble()}).
-     * @return the upper bound of the distribution
+     * Gets the upper inclusive bound of the distribution. If the bound is exclusive below 1.0, like
+     * {@link IRNG#nextDouble()}), then this will be {@link #EXCLUSIVE_ONE}.
+     * @return the upper inclusive bound of the distribution
      */
     double getUpperBound();
-    
+
+    /**
+     * A double that is greater than 0.0 by the smallest representable amount. Equivalent to {@link Double#MIN_VALUE}.
+     */
+    double EXCLUSIVE_ZERO = Double.MIN_VALUE;
+    /**
+     * A double that is less than 1.0 by the smallest representable amount. Equivalent to {@code 0.9999999999999999}.
+     */
+    double EXCLUSIVE_ONE = 0.9999999999999999;
+
+    /**
+     * An abstract IDistribution that always has a lower bound of 0.0 and an upper bound of {@link #EXCLUSIVE_ONE},
+     * matching the bounds of {@link IRNG#nextDouble()}. This provides methods to create SimpleDistribution instances
+     * from arbitrary IDistribution instances.
+     */
     abstract class SimpleDistribution implements IDistribution {
 
         /**
@@ -97,7 +111,7 @@ public interface IDistribution {
             return new SimpleDistribution() {
                 @Override
                 public double nextDouble(IRNG rng) {
-                    return Math.max(0.0, Math.min(0.9999999999999999, otherDistribution.nextDouble(rng)));
+                    return Math.max(0.0, Math.min(EXCLUSIVE_ONE, otherDistribution.nextDouble(rng)));
                 }
             };
         }
@@ -113,13 +127,13 @@ public interface IDistribution {
         }
 
         /**
-         * Gets the upper exclusive bound of the distribution, which is 1.0.
+         * Gets the upper inclusive bound of the distribution, which is 0.9999999999999999 ({@link #EXCLUSIVE_ONE}).
          *
-         * @return the upper exclusive bound of the distribution, 1.0
+         * @return the upper inclusive bound of the distribution, 0.9999999999999999
          */
         @Override
         public double getUpperBound() {
-            return 1.0;
+            return EXCLUSIVE_ONE;
         }
     }
 }
