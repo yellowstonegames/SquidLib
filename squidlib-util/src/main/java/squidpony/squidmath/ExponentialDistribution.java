@@ -65,4 +65,14 @@ public class ExponentialDistribution implements IDistribution {
     public double getUpperBound() {
         return i_lambda < 0.0 ? 0.0 : Double.POSITIVE_INFINITY;
     }
+
+    /**
+     * Gets the mean value of this distribution (1.0 / lambda).
+     * @return the mean value of this distribution (1.0 / lambda)
+     */
+    @Override
+    public double getMean(){
+        return i_lambda;
+    }
+
 }

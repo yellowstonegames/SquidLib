@@ -630,6 +630,7 @@ public class SquidPanel extends Group implements IPackedColorPanel {
         put(x, y, '\0', color);
     }
 
+    @Override
     public void put(int x, int y, float encodedColor) {
         put(x, y, '\0', encodedColor);
     }
@@ -699,6 +700,7 @@ public class SquidPanel extends Group implements IPackedColorPanel {
      * @param c
      * @param encodedColor a float color as produced by {@link SColor#floatGet(float, float, float, float)}
      */
+    @Override
     public void put(int x, int y, char c, float encodedColor) {
         if (x < 0 || x >= contents.length || y < 0 || y >= contents[0].length) {
             return;//skip if out of bounds

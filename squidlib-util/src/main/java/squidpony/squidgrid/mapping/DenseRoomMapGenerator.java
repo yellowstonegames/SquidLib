@@ -55,6 +55,7 @@ public class DenseRoomMapGenerator implements IDungeonGenerator {
         environment = new int[this.width][this.height];
     }
 
+    @Override
     public char[][] getDungeon() {
         return map;
     }
@@ -63,6 +64,7 @@ public class DenseRoomMapGenerator implements IDungeonGenerator {
      * Should produce a crowded arrangement of rectangular rooms that overlap with each other.
      * @return a 2D char array for the map of densely-packed rectangular rooms.
      */
+    @Override
     public char[][] generate()
     {
         //ArrayList<short[]> regions = new ArrayList<>();

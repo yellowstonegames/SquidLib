@@ -102,34 +102,44 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
         return xd * grad5d[hash] + yd * grad5d[hash + 1] + zd * grad5d[hash + 2] + wd * grad5d[hash + 3] + ud * grad5d[hash + 4];
     }
 
+    @Override
     public double getNoise(final double x, final double y) {
         return noise(x, y, defaultSeed);
     }
+    @Override
     public double getNoise(final double x, final double y, final double z) {
         return noise(x, y, z, defaultSeed);
     }
+    @Override
     public double getNoise(final double x, final double y, final double z, final double w) {
         return noise(x, y, z, w, defaultSeed);
     }
+    @Override
     public double getNoise(final double x, final double y, final double z, final double w, final double u) {
         return noise(x, y, z, w, u, defaultSeed);
     }
+    @Override
     public double getNoise(final double x, final double y, final double z, final double w, final double u, final double v) {
         return noise(x, y, z, w, u, v, defaultSeed);
     }
 
+    @Override
     public double getNoiseWithSeed(final double x, final double y, final long seed) {
         return noise(x, y, seed);
     }
+    @Override
     public double getNoiseWithSeed(final double x, final double y, final double z, final long seed) {
         return noise(x, y, z, seed);
     }
+    @Override
     public double getNoiseWithSeed(final double x, final double y, final double z, final double w, final long seed) {
         return noise(x, y, z, w, seed);
     }
+    @Override
     public double getNoiseWithSeed(final double x, final double y, final double z, final double w, final double u, final long seed) {
         return noise(x, y, z, w, u, seed);
     }
+    @Override
     public double getNoiseWithSeed(final double x, final double y, final double z, final double w, final double u, final double v, final long seed) {
         return noise(x, y, z, w, u, v, seed);
     }

@@ -36,4 +36,13 @@ public class BathtubDistribution extends IDistribution.SimpleDistribution implem
         d = d * d * d + 1.0;
         return d - (int)d;
     }
+
+    /**
+     * Gets the mean value of this distribution (0.5).
+     * @return the mean value of this distribution (0.5)
+     */
+    @Override
+    public double getMean(){
+        return 0.5;
+    }
 }

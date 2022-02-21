@@ -82,6 +82,7 @@ public class DividedMazeGenerator implements IDungeonGenerator {
      *
      * @return
      */
+    @Override
     public char[][] generate() {
         map = ArrayTools.fill('.', width, height);
 

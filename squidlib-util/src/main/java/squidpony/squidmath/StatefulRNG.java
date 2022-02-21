@@ -80,6 +80,7 @@ public class StatefulRNG extends RNG implements Serializable, IStatefulRNG {
      * Get a long that can be used to reproduce the sequence of random numbers this object will generate starting now.
      * @return a long that can be used as state.
      */
+    @Override
     public long getState()
     {
         return ((StatefulRandomness)random).getState();
@@ -90,6 +91,7 @@ public class StatefulRNG extends RNG implements Serializable, IStatefulRNG {
      * produces based on the state.
      * @param state a long, which typically should not be 0 (some implementations may tolerate a state of 0, however).
      */
+    @Override
     public void setState(long state)
     {
         ((StatefulRandomness)random).setState(state);

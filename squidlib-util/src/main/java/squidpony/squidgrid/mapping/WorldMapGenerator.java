@@ -1379,6 +1379,7 @@ public abstract class WorldMapGenerator implements Serializable {
             maxWet0 = other.maxWet0;
         }
 
+        @Override
         protected void regenerate(int startX, int startY, int usedWidth, int usedHeight,
                                   double landMod, double heatMod, int stateA, int stateB)
         {
@@ -1762,6 +1763,7 @@ public abstract class WorldMapGenerator implements Serializable {
             zPositions = ArrayTools.copy(other.zPositions);
         }
 
+        @Override
         protected void regenerate(int startX, int startY, int usedWidth, int usedHeight,
                                   double landMod, double heatMod, int stateA, int stateB)
         {
@@ -2137,6 +2139,7 @@ public abstract class WorldMapGenerator implements Serializable {
             return Math.max(0, Math.min(y, height - 1));
         }
 
+        @Override
         protected void regenerate(int startX, int startY, int usedWidth, int usedHeight,
                                   double landMod, double heatMod, int stateA, int stateB)
         {
@@ -2516,6 +2519,7 @@ public abstract class WorldMapGenerator implements Serializable {
             return Math.max(0, Math.min(y, height - 1));
         }
 
+        @Override
         protected void regenerate(int startX, int startY, int usedWidth, int usedHeight,
                                   double landMod, double heatMod, int stateA, int stateB)
         {
@@ -2903,6 +2907,7 @@ public abstract class WorldMapGenerator implements Serializable {
 
         //private static final double root2 = Math.sqrt(2.0), inverseRoot2 = 1.0 / root2, halfInverseRoot2 = 0.5 / root2;
 
+        @Override
         protected void regenerate(int startX, int startY, int usedWidth, int usedHeight,
                                   double landMod, double heatMod, int stateA, int stateB)
         {
@@ -3264,6 +3269,7 @@ public abstract class WorldMapGenerator implements Serializable {
             return Math.max(0, Math.min(y, height - 1));
         }
 
+        @Override
         protected void regenerate(int startX, int startY, int usedWidth, int usedHeight,
                                   double landMod, double heatMod, int stateA, int stateB)
         {
@@ -3689,6 +3695,7 @@ public abstract class WorldMapGenerator implements Serializable {
             return Coord.get(wrapX(xx, yy), wrapY(xx, yy));
         }
 
+        @Override
         protected void regenerate(int startX, int startY, int usedWidth, int usedHeight,
                                   double landMod, double heatMod, int stateA, int stateB)
         {
@@ -4065,6 +4072,7 @@ public abstract class WorldMapGenerator implements Serializable {
             return Math.max(0, Math.min(y, height - 1));
         }
 
+        @Override
         protected void regenerate(int startX, int startY, int usedWidth, int usedHeight,
                                   double landMod, double heatMod, int stateA, int stateB)
         {
@@ -4513,6 +4521,7 @@ public abstract class WorldMapGenerator implements Serializable {
 
         }
 
+        @Override
         protected void regenerate(int startX, int startY, int usedWidth, int usedHeight,
                                   double landMod, double heatMod, int stateA, int stateB)
         {
@@ -4718,6 +4727,7 @@ public abstract class WorldMapGenerator implements Serializable {
             return Math.max(0, Math.min(y, height - 1));
         }
         
+        @Override
         protected void regenerate(int startX, int startY, int usedWidth, int usedHeight,
                                   double landMod, double heatMod, int stateA, int stateB)
         {
@@ -5010,6 +5020,7 @@ public abstract class WorldMapGenerator implements Serializable {
 
 
 
+        @Override
         protected void regenerate(int startX, int startY, int usedWidth, int usedHeight,
                                   double landMod, double heatMod, int stateA, int stateB)
         {
@@ -5360,6 +5371,7 @@ public abstract class WorldMapGenerator implements Serializable {
             return Math.max(0, Math.min(y, height - 1));
         }
 
+        @Override
         protected void regenerate(int startX, int startY, int usedWidth, int usedHeight,
                                   double landMod, double heatMod, int stateA, int stateB)
         {

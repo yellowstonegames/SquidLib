@@ -198,6 +198,7 @@ public class ImageSquidPanel extends SquidPanel {
      * @param parentAlpha This can be assumed to be 1.0f if you don't know it
      * @param ae The AnimatedEntity to draw; the position to draw ae is stored inside it.
      */
+    @Override
     public void drawActor(Batch batch, float parentAlpha, AnimatedEntity ae)
     {
         drawActor(batch, parentAlpha, ae.actor);
@@ -209,6 +210,7 @@ public class ImageSquidPanel extends SquidPanel {
      * @param parentAlpha This can be assumed to be 1.0f if you don't know it
      * @param ac The Actor to draw; the position to draw ac is modified and reset based on some fields of this object
      */
+    @Override
     public void drawActor(Batch batch, float parentAlpha, Actor ac)
     {
         float prevX = ac.getX(), prevY = ac.getY();
@@ -227,6 +229,7 @@ public class ImageSquidPanel extends SquidPanel {
 		return defaultForeground;
 	}
 
+    @Override
     public AnimatedEntity getAnimatedEntityByCell(int x, int y) {
         for(AnimatedEntity ae : animatedEntities)
         {
@@ -244,6 +247,7 @@ public class ImageSquidPanel extends SquidPanel {
      * @param color
      * @return
      */
+    @Override
     public AnimatedEntity animateActor(int x, int y, char c, Color color)
     {
         return animateActor(x, y, false, c, color);
@@ -259,6 +263,7 @@ public class ImageSquidPanel extends SquidPanel {
      * @param color
      * @return
      */
+    @Override
     public AnimatedEntity animateActor(int x, int y, boolean doubleWidth, char c, Color color)
     {
         TextureRegion tr = imageMap.get(c);
@@ -280,6 +285,7 @@ public class ImageSquidPanel extends SquidPanel {
      * @param color
      * @return
      */
+    @Override
     public AnimatedEntity animateActor(int x, int y, String s, Color color)
     {
         return animateActor(x, y, false, s, color);
@@ -295,6 +301,7 @@ public class ImageSquidPanel extends SquidPanel {
      * @param color
      * @return
      */
+    @Override
     public AnimatedEntity animateActor(int x, int y, boolean doubleWidth, String s, Color color)
     {
         Actor a = textFactory.makeActor(s, color);
@@ -314,6 +321,7 @@ public class ImageSquidPanel extends SquidPanel {
      * @param colors
      * @return
      */
+    @Override
     public AnimatedEntity animateActor(int x, int y, boolean doubleWidth, String s, Collection<Color> colors)
     {
         return animateActor(x, y, doubleWidth, s, colors, 2f);
@@ -329,6 +337,7 @@ public class ImageSquidPanel extends SquidPanel {
      * @param loopTime
      * @return
      */
+    @Override
     public AnimatedEntity animateActor(int x, int y, boolean doubleWidth, String s, Collection<Color> colors, float loopTime)
     {
         Actor a = textFactory.makeActor(s, colors, loopTime, doubleWidth);
@@ -386,6 +395,7 @@ public class ImageSquidPanel extends SquidPanel {
      * @param loopTime
      * @return
      */
+    @Override
     public AnimatedEntity directionMarker(int x, int y, boolean doubleWidth, Collection<Color> colors, float loopTime)
     {
         Actor a = textFactory.makeDirectionMarker(colors, loopTime, doubleWidth);
@@ -395,6 +405,7 @@ public class ImageSquidPanel extends SquidPanel {
         animatedEntities.add(ae);
         return ae;
     }
+    @Override
     public AnimatedEntity directionMarker(int x, int y, boolean doubleWidth, Color color)
     {
         Actor a = textFactory.makeDirectionMarker(color);
@@ -440,6 +451,7 @@ public class ImageSquidPanel extends SquidPanel {
      * @param texture
      * @return
      */
+    @Override
     public AnimatedEntity animateActor(int x, int y, TextureRegion texture)
     {
         return animateActor(x, y, false, texture, Color.WHITE);
@@ -463,6 +475,7 @@ public class ImageSquidPanel extends SquidPanel {
      * @param color
      * @return
      */
+    @Override
     public AnimatedEntity animateActor(int x, int y, TextureRegion texture, Color color)
     {
         return animateActor(x, y, false, texture, color);
@@ -486,6 +499,7 @@ public class ImageSquidPanel extends SquidPanel {
      * @param texture
      * @return
      */
+    @Override
     public AnimatedEntity animateActor(int x, int y, boolean doubleWidth, TextureRegion texture)
     {
         return animateActor(x, y, doubleWidth, texture, Color.WHITE);
@@ -514,6 +528,7 @@ public class ImageSquidPanel extends SquidPanel {
      * @param color
      * @return
      */
+    @Override
     public AnimatedEntity animateActor(int x, int y, boolean doubleWidth, TextureRegion texture, Color color){
         return animateActor(x, y, doubleWidth, texture, color, "");
     }
@@ -552,6 +567,7 @@ public class ImageSquidPanel extends SquidPanel {
      * @param colors
      * @return
      */
+    @Override
     public AnimatedEntity animateActor(int x, int y, boolean doubleWidth, TextureRegion texture, Collection<Color> colors){
         return animateActor(x, y, doubleWidth, texture, colors, 2f);
     }
@@ -565,6 +581,7 @@ public class ImageSquidPanel extends SquidPanel {
      * @param colors
      * @return
      */
+    @Override
     public AnimatedEntity animateActor(int x, int y, boolean doubleWidth, TextureRegion texture, Collection<Color> colors, float loopTime) {
         return animateActor(x, y, doubleWidth, texture, colors, loopTime, "");
     }
@@ -604,6 +621,7 @@ public class ImageSquidPanel extends SquidPanel {
      * @param texture
      * @return
      */
+    @Override
     public AnimatedEntity animateActor(int x, int y, boolean doubleWidth, boolean stretch, TextureRegion texture)
     {
         Actor a = (stretch)
@@ -634,6 +652,7 @@ public class ImageSquidPanel extends SquidPanel {
      * @param color
      * @return
      */
+    @Override
     public AnimatedEntity animateActor(int x, int y, boolean doubleWidth, boolean stretch, TextureRegion texture, Color color) {
 
         Actor a = (stretch)
@@ -662,7 +681,8 @@ public class ImageSquidPanel extends SquidPanel {
 	 * @throws NullPointerException
 	 *             If {@code scc} is {@code null}.
 	 */
-	public void setColorCenter(IColorCenter<Color> scc) {
+	@Override
+    public void setColorCenter(IColorCenter<Color> scc) {
 	    super.setColorCenter(scc);
 	}
 
@@ -678,6 +698,7 @@ public class ImageSquidPanel extends SquidPanel {
      * both normal SquidPanels and ImageSquidPanels.
      * @return a StringBuilder representation of this SquidPanel's data that can be passed later to {@link #setFromSnapshot(StringBuilder, int, int, int, int)} or converted to String and passed to its overload
      */
+    @Override
     public StringBuilder getSnapshot()
     {
         return getSnapshot(0, 0, gridWidth, gridHeight);
@@ -700,6 +721,7 @@ public class ImageSquidPanel extends SquidPanel {
      * @param height how tall the snapshot area should be; y positions from startY to startY + height - 1 will be used
      * @return a StringBuilder representation of this SquidPanel's data that can be passed later to {@link #setFromSnapshot(StringBuilder, int, int, int, int)} or converted to String and passed to its overload
      */
+    @Override
     public StringBuilder getSnapshot(int startX, int startY, int width, int height) {
         width = Math.min(gridWidth - startX, width);
         height = Math.min(gridHeight - startY, height);
@@ -723,6 +745,7 @@ public class ImageSquidPanel extends SquidPanel {
      * @param snapshot a StringBuilder in a special format as produced by {@link #getSnapshot(int, int, int, int)}
      * @return this after setting, for chaining
      */
+    @Override
     public ImageSquidPanel setFromSnapshot(StringBuilder snapshot)
     {
         return setFromSnapshot(snapshot, 0, 0, -1, -1);
@@ -736,6 +759,7 @@ public class ImageSquidPanel extends SquidPanel {
      * @param putY where to start placing the data from the snapshot, y position
      * @return this after setting, for chaining
      */
+    @Override
     public ImageSquidPanel setFromSnapshot(StringBuilder snapshot, int putX, int putY)
     {
         return setFromSnapshot(snapshot, putX, putY, -1, -1);
@@ -753,6 +777,7 @@ public class ImageSquidPanel extends SquidPanel {
      * @param limitHeight if negative, uses all of snapshot's height as possible, otherwise restricts the height allowed
      * @return this after setting, for chaining
      */
+    @Override
     public ImageSquidPanel setFromSnapshot(StringBuilder snapshot, int putX, int putY, int limitWidth, int limitHeight)
     {
         if(putX >= gridWidth || putY >= gridHeight || snapshot == null || snapshot.length() < 4) return this;
@@ -791,6 +816,7 @@ public class ImageSquidPanel extends SquidPanel {
      * @param snapshot a String in a special format as produced by {@link #getSnapshot(int, int, int, int)}
      * @return this after setting, for chaining
      */
+    @Override
     public ImageSquidPanel setFromSnapshot(String snapshot)
     {
         return setFromSnapshot(snapshot, 0, 0, -1, -1);
@@ -806,6 +832,7 @@ public class ImageSquidPanel extends SquidPanel {
      * @param putY where to start placing the data from the snapshot, y position
      * @return this after setting, for chaining
      */
+    @Override
     public ImageSquidPanel setFromSnapshot(String snapshot, int putX, int putY)
     {
         return setFromSnapshot(snapshot, putX, putY, -1, -1);
@@ -827,6 +854,7 @@ public class ImageSquidPanel extends SquidPanel {
      * @return this after setting, for chaining
      */
 
+    @Override
     public ImageSquidPanel setFromSnapshot(String snapshot, int putX, int putY, int limitWidth, int limitHeight)
     {
         if(putX >= gridWidth || putY >= gridHeight || snapshot == null || snapshot.length() < 4) return this;

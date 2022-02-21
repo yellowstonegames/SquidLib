@@ -13,6 +13,7 @@ import java.util.regex.Pattern;
  * Created by Tommy Ettinger on 4/25/2019.
  */
 public class WordsInBook extends ApplicationAdapter {
+    @Override
     public void create() {
         System.out.println("Starting up...");
         String book = Gdx.files.internal("bible_no_numbers.txt").readString("UTF8");

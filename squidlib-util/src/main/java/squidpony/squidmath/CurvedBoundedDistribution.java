@@ -57,4 +57,13 @@ public class CurvedBoundedDistribution extends IDistribution.SimpleDistribution 
         }
         return sum * i_degree;
     }
+
+    /**
+     * Gets the mean value of this distribution (0.5).
+     * @return the mean value of this distribution (0.5)
+     */
+    @Override
+    public double getMean(){
+        return 0.5;
+    }
 }

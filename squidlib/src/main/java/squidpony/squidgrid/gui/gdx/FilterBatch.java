@@ -1158,6 +1158,7 @@ public class FilterBatch implements Batch {
         return !blendingDisabled;
     }
 
+    @Override
     public boolean isDrawing () {
         return drawing;
     }

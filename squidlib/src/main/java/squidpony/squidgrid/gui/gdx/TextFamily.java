@@ -38,6 +38,7 @@ public class TextFamily extends TextCellFactory {
     /**
      * How many styles are supported by this TextCellFactory; always 4 in TextFamily.
      */
+    @Override
     public int supportedStyles() {
         return 4;
     }

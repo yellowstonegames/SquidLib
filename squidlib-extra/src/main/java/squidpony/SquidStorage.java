@@ -117,6 +117,7 @@ public class SquidStorage extends JsonStorage {
      * @param o the Object to prepare to store
      * @return this for chaining
      */
+    @Override
     public SquidStorage put(String innerName, Object o)
     {
         super.put(innerName, o);
@@ -133,6 +134,7 @@ public class SquidStorage extends JsonStorage {
      * @param outerName one of the two Strings needed to retrieve any of the objects in the current group
      * @return this for chaining
      */
+    @Override
     public SquidStorage store(String outerName)
     {
         super.store(outerName);
@@ -144,6 +146,7 @@ public class SquidStorage extends JsonStorage {
      * useful for finding particularly problematic objects that require unnecessary space when serialized.
      * @return a String that previews what would be stored permanently when {@link #store(String)} is called
      */
+    @Override
     public String show()
     {
         return super.show();
@@ -153,6 +156,7 @@ public class SquidStorage extends JsonStorage {
      * Clears the current group of objects; recommended if you intend to store under multiple outerName keys.
      * @return this for chaining
      */
+    @Override
     public SquidStorage clear()
     {
         super.clear();
@@ -166,6 +170,7 @@ public class SquidStorage extends JsonStorage {
      * @param innerName the String key used to put an object in the current group with {@link #put(String, Object)}
      * @return this for chaining
      */
+    @Override
     public SquidStorage remove(String innerName)
     {
         super.remove(innerName);
@@ -183,6 +188,7 @@ public class SquidStorage extends JsonStorage {
      * @param <T> the type of the value to retrieve; if type was {@code RNG.class}, this would be {@code RNG}
      * @return the retrieved value if successful, or null otherwise
      */
+    @Override
     public <T> T get(String outerName, String innerName, Class<T> type)
     {
         return super.get(outerName, innerName, type);
@@ -195,6 +201,7 @@ public class SquidStorage extends JsonStorage {
      * yield inaccurate sizes on other platforms that save Preferences data differently.
      * @return the size, in bytes, of the already-stored preferences
      */
+    @Override
     public int preferencesSize()
     {
         return super.preferencesSize();

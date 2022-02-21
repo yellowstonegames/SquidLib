@@ -186,6 +186,7 @@ public class GapShuffler<T> implements Iterator<T>, Iterable<T>, Serializable {
      * Iterator or Iterable of type T.
      * @return the next element in the infinite sequence
      */
+    @Override
     public T next() {
         int size = elements.size();
         if(size == 1)

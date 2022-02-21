@@ -203,6 +203,7 @@ public class DeckRNG extends StatefulRNG implements Serializable {
      * @param coll the Collection to get an element from; remember, Map does not implement Collection
      * @return the randomly selected element
      */
+    @Override
     public <T> T getRandomElement(Collection<T> coll) {
         if (coll.size() <= 0) {
             return null;

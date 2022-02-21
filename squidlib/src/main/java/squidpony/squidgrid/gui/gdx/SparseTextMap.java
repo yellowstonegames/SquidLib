@@ -827,6 +827,7 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
         return buffer.toString();
     }
 
+    @Override
     public Iterator<Entry> iterator() {
         return entries();
     }
@@ -956,6 +957,7 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
         /**
          * Note the same entry instance is returned each time this method is called.
          */
+        @Override
         public Entry next() {
             if (!hasNext) throw new NoSuchElementException();
             if (!valid) throw new GdxRuntimeException("#iterator() cannot be used nested.");
@@ -976,15 +978,18 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
             return entry;
         }
 
+        @Override
         public boolean hasNext() {
             if (!valid) throw new GdxRuntimeException("#iterator() cannot be used nested.");
             return hasNext;
         }
 
+        @Override
         public Iterator<Entry> iterator() {
             return this;
         }
 
+        @Override
         public void remove () {
             if (currentIndex < 0)
                 throw new IllegalStateException("next must be called before remove.");

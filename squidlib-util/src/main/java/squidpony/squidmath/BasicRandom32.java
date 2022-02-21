@@ -57,6 +57,7 @@ public class BasicRandom32 extends Random implements RandomnessSource, Serializa
         state = (seed ^ 0x41C64E6D) * 0x9E373 ^ (seed >>> 16);
     }
 
+    @Override
     public final long nextLong() {
         int y = state * 0xBCFD;
         y = (y << 17 | y >>> 15);
@@ -73,10 +74,12 @@ public class BasicRandom32 extends Random implements RandomnessSource, Serializa
      * @param bits the number of bits to get, from 1 to 32
      * @return an int with at most the specified bits
      */
+    @Override
     public final int next(final int bits) {
         final int y = state * 0xBCFD;
         return (state = (y << 17 | y >>> 15)) >>> (32 - bits);
     }
+    @Override
     public final int nextInt() {
         final int y = state * 0xBCFD;
         return (state = (y << 17 | y >>> 15));
@@ -92,6 +95,7 @@ public class BasicRandom32 extends Random implements RandomnessSource, Serializa
      * @param bound the outer bound (exclusive), should be positive
      * @return the found number
      */
+    @Override
     public int nextInt(final int bound) {
         return (int) ((bound * (nextInt() & 0xFFFFFFFFL)) >> 32);
     }
@@ -194,6 +198,7 @@ public class BasicRandom32 extends Random implements RandomnessSource, Serializa
         return elements;
     }
 
+    @Override
     public BasicRandom32 copy() {
         BasicRandom32 sr = new BasicRandom32();
         sr.state = state;

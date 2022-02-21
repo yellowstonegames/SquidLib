@@ -47,6 +47,12 @@ public interface IDistribution {
     double getUpperBound();
 
     /**
+     * Gets the mean value of this distribution.
+     * @return the mean value of this distribution
+     */
+    double getMean();
+
+    /**
      * A double that is greater than 0.0 by the smallest representable amount. Equivalent to {@link Double#MIN_VALUE}.
      */
     double EXCLUSIVE_ZERO = Double.MIN_VALUE;
@@ -134,6 +140,16 @@ public interface IDistribution {
         @Override
         public double getUpperBound() {
             return EXCLUSIVE_ONE;
+        }
+
+        /**
+         * Gets the mean value of this distribution, which by default is {@link Double#NaN}. Implementing classes are
+         * strongly advised to override this and provide a meaningful estimate (at least) of the mean.
+         * @return the mean value of this distribution (by default, {@link Double#NaN})
+         */
+        @Override
+        public double getMean(){
+            return Double.NaN;
         }
     }
 }

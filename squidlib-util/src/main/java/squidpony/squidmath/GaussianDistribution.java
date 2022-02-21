@@ -84,4 +84,13 @@ public class GaussianDistribution implements IDistribution {
     public double getUpperBound() {
         return Double.POSITIVE_INFINITY;
     }
+
+    /**
+     * Gets the mean value of this distribution (mu).
+     * @return the mean value of this distribution (mu)
+     */
+    @Override
+    public double getMean(){
+        return mu;
+    }
 }

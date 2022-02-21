@@ -814,6 +814,7 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
      * @param c the char to place
      * @param foreground the color to use for c; if 0f, this call does nothing
      */
+    @Override
     public void put(int x, int y, char c, float foreground)
     {
         if(x < 0 || x >= gridWidth || y < 0 || y >= gridHeight || foreground == 0f)
@@ -983,6 +984,7 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
      * @param y where to change the background color, y-coordinate
      * @param color the Color to change to; if null will be considered fully transparent
      */
+    @Override
     public void put(int x, int y, Color color)
     {
         put(x, y, color == null ? 0f : scc.filter(color).toFloatBits());
@@ -996,6 +998,7 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
      * @param y where to change the background color, y-coordinate
      * @param color the color, as an encoded float, to change to; may be transparent, and considers 0f a valid color
      */
+    @Override
     public void put(int x, int y, float color)
     {
         if(x < 0 || x >= gridWidth || y < 0 || y >= gridHeight)

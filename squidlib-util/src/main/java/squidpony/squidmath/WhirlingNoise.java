@@ -189,6 +189,7 @@ public class WhirlingNoise extends SeededNoise implements Noise.Noise2D, Noise.N
      * @param y Y input
      * @return noise from -1.0 to 1.0, inclusive
      */
+    @Override
     public double getNoise(final double x, final double y) {
         return noise(x, y, defaultSeed);
     }
@@ -201,6 +202,7 @@ public class WhirlingNoise extends SeededNoise implements Noise.Noise2D, Noise.N
      * @param seed will completely alter the shape of the noise if changed between calls
      * @return noise from -1.0 to 1.0, inclusive
      */
+    @Override
     public double getNoiseWithSeed(final double x, final double y, final long seed) {
         return noise(x, y, seed);
     }
@@ -212,6 +214,7 @@ public class WhirlingNoise extends SeededNoise implements Noise.Noise2D, Noise.N
      * @param z Z input
      * @return noise from -1.0 to 1.0, inclusive
      */
+    @Override
     public double getNoise(final double x, final double y, final double z) {
         return noise(x, y, z, defaultSeed);
     }
@@ -224,6 +227,7 @@ public class WhirlingNoise extends SeededNoise implements Noise.Noise2D, Noise.N
      * @param seed will completely alter the shape of the noise if changed between calls
      * @return noise from -1.0 to 1.0, inclusive
      */
+    @Override
     public double getNoiseWithSeed(final double x, final double y, final double z, final long seed) {
         return noise(x, y, z, seed);
     }
@@ -237,6 +241,7 @@ public class WhirlingNoise extends SeededNoise implements Noise.Noise2D, Noise.N
      * @param w W input (fourth-dimension)
      * @return noise from -1.0 to 1.0, inclusive
      */
+    @Override
     public double getNoise(final double x, final double y, final double z, final double w) {
         return noise(x, y, z, w, defaultSeed);
     }
@@ -249,6 +254,7 @@ public class WhirlingNoise extends SeededNoise implements Noise.Noise2D, Noise.N
      * @param seed will completely alter the shape of the noise if changed between calls
      * @return noise from -1.0 to 1.0, inclusive
      */
+    @Override
     public double getNoiseWithSeed(final double x, final double y, final double z, final double w, final long seed) {
         return noise(x, y, z, w, seed);
     }

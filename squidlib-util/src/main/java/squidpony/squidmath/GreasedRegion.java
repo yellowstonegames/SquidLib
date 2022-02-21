@@ -2766,6 +2766,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * @param y the y offset to translate by; can be negative
      * @return this for chaining
      */
+    @Override
     public GreasedRegion translate(int x, int y) {
         GreasedRegion result = this;
         if (width < 1 || ySections <= 0 || (x == 0 && y == 0)) {
@@ -4876,6 +4877,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
     }
 
 
+    @Override
     public int size()
     {
         if(!tallied)

@@ -191,6 +191,7 @@ public class ModularMapGenerator implements IDungeonGenerator {
      *
      * @return a char[][] map, or null.
      */
+    @Override
     public char[][] getDungeon() {
         return map;
     }
@@ -205,6 +206,7 @@ public class ModularMapGenerator implements IDungeonGenerator {
         return DungeonUtility.simplifyDungeon(map);
     }
 
+    @Override
     public char[][] generate() {
         MapModule mm, mm2;
         int xPos, yPos, categorySize = 32, alteredSize = (categorySize * 3) >>> 1, bits = 5, ctr;

@@ -109,6 +109,7 @@ public interface ICellVisible {
             return symbol;
         }
 
+        @Override
         public void setSymbol(char symbol) {
             this.symbol = symbol;
         }
@@ -118,6 +119,7 @@ public interface ICellVisible {
             return packedColor;
         }
 
+        @Override
         public void setPackedColor(float packedColor) {
             this.packedColor = packedColor;
         }

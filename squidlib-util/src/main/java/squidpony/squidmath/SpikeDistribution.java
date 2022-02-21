@@ -56,6 +56,15 @@ public class SpikeDistribution implements IDistribution {
     }
 
     /**
+     * Gets the mean value of this distribution (0.0).
+     * @return the mean value of this distribution (0.0)
+     */
+    @Override
+    public double getMean(){
+        return 0.0;
+    }
+
+    /**
      * A variant on SpikeDistribution that has its range shrunk and moved from {@code [-1,1)} to {@code [0,1)}. It is a
      * {@link squidpony.squidmath.IDistribution.SimpleDistribution}, and the spike is centered on 0.5.
      */
@@ -71,6 +80,14 @@ public class SpikeDistribution implements IDistribution {
         public double nextDouble(IRNG rng) {
             final double d = (rng.nextDouble() - 0.5) * 2.0;
             return d * d * d * 0.5 + 0.5;
+        }
+        /**
+         * Gets the mean value of this distribution (0.5).
+         * @return the mean value of this distribution (0.5)
+         */
+        @Override
+        public double getMean(){
+            return 0.5;
         }
     }
 }

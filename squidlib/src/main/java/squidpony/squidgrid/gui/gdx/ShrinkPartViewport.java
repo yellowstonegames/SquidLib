@@ -58,6 +58,7 @@ public class ShrinkPartViewport extends ScalingViewport {
         apply(true);
     }
 
+    @Override
     public Scaling getScaling () {
         return Scaling.stretch;
     }

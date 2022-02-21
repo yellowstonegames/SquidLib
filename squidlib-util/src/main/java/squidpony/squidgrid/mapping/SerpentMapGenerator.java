@@ -310,6 +310,7 @@ public class SerpentMapGenerator implements IDungeonGenerator {
      * @return a char[][] where '#' is a wall and '.' is a floor or corridor; x first y second
      * @see MixedGenerator
      */
+    @Override
     public char[][] generate() {
         return mix.generate();
     }
@@ -335,6 +336,7 @@ public class SerpentMapGenerator implements IDungeonGenerator {
         return mix.getEnvironment();
     }
 
+    @Override
     public char[][] getDungeon() {
         return mix.getDungeon();
     }

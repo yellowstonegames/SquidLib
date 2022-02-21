@@ -72,18 +72,23 @@ public class JackNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, N
         defaultSeed = seed;
     }
     
+    @Override
     public double getNoise(final double x, final double y) {
         return getNoiseWithSeed(x, y, defaultSeed);
     }
+    @Override
     public double getNoise(final double x, final double y, final double z) {
         return getNoiseWithSeed(x, y, z, defaultSeed);
     }
+    @Override
     public double getNoise(final double x, final double y, final double z, final double w) {
         return getNoiseWithSeed(x, y, z, w, defaultSeed);
     }
+    @Override
     public double getNoise(final double x, final double y, final double z, final double w, final double u) {
         return getNoiseWithSeed(x, y, z, w, u, defaultSeed);
     }
+    @Override
     public double getNoise(final double x, final double y, final double z, final double w, final double u, final double v) {
         return getNoiseWithSeed(x, y, z, w, u, v, defaultSeed);
     }
@@ -123,6 +128,7 @@ public class JackNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, N
             G6 = (7.0 - Math.sqrt(7.0)) / (6.0 * 7.0),//F6 / (1.0 + 6.0 * F6),
             LIMIT6 = 0.8375;
 
+    @Override
     public double getNoiseWithSeed(final double x, final double y, final long seed) {
         final double s = (x + y) * F2;
         final int i = fastFloor(x + s),
@@ -191,6 +197,7 @@ public class JackNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, N
 //        return (70 * (n0 + n1 + n2)) * 1.42188695 + 0.001054489;
     }
 
+    @Override
     public double getNoiseWithSeed(final double x, final double y, final double z, final long seed) {
         double n = 0.0;
         final double s = (x + y + z) * F3;
@@ -288,6 +295,7 @@ public class JackNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, N
         return NumberTools.sin_(n * 0x1p-53); 
     }
 
+    @Override
     public double getNoiseWithSeed(final double x, final double y, final double z, final double w, final long seed) {
         double n = 0.0;
         final double s = (x + y + z + w) * F4;
@@ -370,6 +378,7 @@ public class JackNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, N
      * @param seed long value that should completely change the noise if it changes even slightly
      * @return a continuous noise value between -1.0 and 1.0, both inclusive
      */
+    @Override
     public double getNoiseWithSeed(final double x, final double y, final double z, final double w, final double u, final long seed) {
         double n0, n1, n2, n3, n4, n5;
         double t = (x + y + z + w + u) * F5;
@@ -528,8 +537,9 @@ public class JackNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, N
     private final double[] m = {0, 0, 0, 0, 0, 0}, cellDist = {0, 0, 0, 0, 0, 0};
     private final int[] distOrder = {0, 0, 0, 0, 0, 0}, intLoc = {0, 0, 0, 0, 0, 0};
 
+    @Override
     public double getNoiseWithSeed(final double x, final double y, final double z,
-                               final double w, final double u, final double v, final long seed) {
+                                   final double w, final double u, final double v, final long seed) {
         final double s = (x + y + z + w + u + v) * F6;
 
         final int skewX = fastFloor(x + s), skewY = fastFloor(y + s), skewZ = fastFloor(z + s),

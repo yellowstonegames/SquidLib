@@ -660,6 +660,7 @@ public interface IColorCenter<T> {
          * @param change the degree to change closer to end; a change of 0.0f produces start, 1.0f produces end
          * @return a new T between start and end
 		 */
+		@Override
 		public T lerp(T start, T end, float change)
 		{
 			if(start == null || end == null)
@@ -681,6 +682,7 @@ public interface IColorCenter<T> {
 		 * @param color the color T to desaturate (will not be modified)
 		 * @return the grayscale version of color
 		 */
+		@Override
 		public T desaturated(T color)
 		{
 			int f = (int)Math.min(255, getRed(color) * 0.299f + getGreen(color) * 0.587f + getBlue(color) * 0.114f);
@@ -694,6 +696,7 @@ public interface IColorCenter<T> {
 		 * @param degree a float between 0.0f and 1.0f; more makes it less colorful
 		 * @return the desaturated (and if a filter is used, also filtered) new color T
 		 */
+		@Override
 		public T desaturate(T color, float degree)
 		{
 			return lerp(color, desaturated(color), degree);
@@ -705,7 +708,8 @@ public interface IColorCenter<T> {
          * @param color the color T to saturate (will not be modified)
          * @return the saturated version of color
          */
-        public T saturated(T color)
+        @Override
+		public T saturated(T color)
         {
             return getHSV(getHue(color), 1f, getValue(color), getAlpha(color));
         }
@@ -717,6 +721,7 @@ public interface IColorCenter<T> {
 		 * @param degree a float between 0.0f and 1.0f; more makes it more colorful
 		 * @return the saturated (and if a filter is used, also filtered) new color
 		 */
+		@Override
 		public T saturate(T color, float degree)
 		{
 			return lerp(color, saturated(color), degree);

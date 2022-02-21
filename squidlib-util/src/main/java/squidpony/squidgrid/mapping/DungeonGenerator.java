@@ -113,6 +113,7 @@ public class DungeonGenerator implements IDungeonGenerator {
      * dungeon may be null if generate() or setDungeon() have not been called.
      * @return a char[][] dungeon, or null.
      */
+    @Override
     public char[][] getDungeon() {
         return dungeon;
     }
@@ -469,6 +470,7 @@ public class DungeonGenerator implements IDungeonGenerator {
      * Also sets the fields stairsUp and stairsDown to two randomly chosen, distant, connected, walkable cells.
      * @return a char[][] dungeon
      */
+    @Override
     public char[][] generate() {
         return generate(TilesetType.DEFAULT_DUNGEON);
     }

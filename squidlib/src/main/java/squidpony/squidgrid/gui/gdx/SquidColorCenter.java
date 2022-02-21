@@ -709,6 +709,7 @@ public class SquidColorCenter implements IColorCenter<Color> {
      * @param toColor the color to end on, included in the gradient
      * @return a 16-element ArrayList composed of the blending steps from fromColor to toColor
      */
+    @Override
     public ArrayList<Color> gradient(Color fromColor, Color toColor)
     {
         ArrayList<Color> colors = new ArrayList<>(16);
@@ -726,6 +727,7 @@ public class SquidColorCenter implements IColorCenter<Color> {
      * @param steps the number of elements to use in the gradient
      * @return an ArrayList composed of the blending steps from fromColor to toColor, with length equal to steps
      */
+    @Override
     public ArrayList<Color> gradient(Color fromColor, Color toColor, int steps)
     {
         return gradient(fromColor, toColor, steps, Interpolation.linear);

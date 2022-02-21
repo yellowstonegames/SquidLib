@@ -170,6 +170,7 @@ public class ClassicRogueMapGenerator implements IDungeonGenerator{
      * for closed doors, does not generate open doors).
      * @return a 2D char array version of the map
      */
+    @Override
     public char[][] generate()
     {
         initRooms();
@@ -181,6 +182,7 @@ public class ClassicRogueMapGenerator implements IDungeonGenerator{
         return dungeon;
     }
 
+    @Override
     public char[][] getDungeon() {
         return dungeon;
     }

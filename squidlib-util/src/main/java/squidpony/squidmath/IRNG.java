@@ -43,6 +43,7 @@ public interface IRNG extends RandomnessSource {
      * @param bits an int between 1 and 32, both inclusive
      * @return a random number that fits in the specified number of bits
      */
+    @Override
     int next(int bits);
 
     /**
@@ -66,6 +67,7 @@ public interface IRNG extends RandomnessSource {
      *
      * @return a 64-bit random long.
      */
+    @Override
     long nextLong();
     
     /**

@@ -30,15 +30,18 @@ public class PackedColorAction extends TemporalAction {
     private Color color;
     private float end;
 
+    @Override
     protected void begin () {
         if (color == null) color = target.getColor();
         start = color.toFloatBits();
     }
 
+    @Override
     protected void update (float percent) {
         Color.abgr8888ToColor(color, SColor.lerpFloatColors(start, end, percent));
     }
 
+    @Override
     public void reset () {
         super.reset();
         color = null;

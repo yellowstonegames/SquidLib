@@ -879,6 +879,7 @@ se$->z
         {
             this.vocabulary = vocabulary;
         }
+        @Override
         public void appendSubstitution(MatchResult match, TextBuffer dest) {
             String translated = match.group(0);
             if(translated == null) {

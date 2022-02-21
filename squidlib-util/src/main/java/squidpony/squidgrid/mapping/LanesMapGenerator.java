@@ -273,6 +273,7 @@ public class LanesMapGenerator implements IDungeonGenerator {
      * @see MixedGenerator
      * @return a char[][] where '#' is a wall and '.' is a floor or corridor; x first y second
      */
+    @Override
     public char[][] generate()
     {
         return mix.generate();
@@ -298,6 +299,7 @@ public class LanesMapGenerator implements IDungeonGenerator {
         return mix.getEnvironment();
     }
 
+    @Override
     public char[][] getDungeon() {
         return mix.getDungeon();
     }

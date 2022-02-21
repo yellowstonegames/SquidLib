@@ -118,6 +118,7 @@ public interface IPointHash {
             this.state = state;
         }
         
+        @Override
         public void setState(long state){
             this.state = state;
         }

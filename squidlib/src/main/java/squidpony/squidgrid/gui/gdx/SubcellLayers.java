@@ -554,6 +554,7 @@ public class SubcellLayers extends SparseLayers {
      * @param width  the width of the area to change the color on, in subcells (3 subcells to one cell horizontally)
      * @param height the height of the area to change the color on, in subcells (3 subcells to one cell vertically)
      */
+    @Override
     public void fillArea(float color, int x, int y, int width, int height) {
         if (x < 0) {
             width += x;
@@ -608,6 +609,7 @@ public class SubcellLayers extends SparseLayers {
      * @param duration how long the total "round-trip" transition should take in seconds
      * @param postRunnable a Runnable to execute after the tint completes; may be null to do nothing.
      */
+    @Override
     public void tint(final float delay, final int x, final int y, final float encodedColor, float duration,
             /* @Nullable */ Runnable postRunnable) {
         if(x < 0 || x >= gridWidth || y < 0 || y >= gridHeight)

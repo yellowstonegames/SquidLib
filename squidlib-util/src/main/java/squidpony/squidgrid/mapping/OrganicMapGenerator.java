@@ -71,6 +71,7 @@ public class OrganicMapGenerator implements IDungeonGenerator {
      * Should produce an organic, cave-like map.
      * @return a 2D char array for the map that should be organic-looking.
      */
+    @Override
     public char[][] generate() {
         noise.setSeed(rng.nextInt());
         double[][] noiseMap = new double[width][height];
@@ -141,6 +142,7 @@ public class OrganicMapGenerator implements IDungeonGenerator {
         return environment;
     }
 
+    @Override
     public char[][] getDungeon() {
         return map;
     }

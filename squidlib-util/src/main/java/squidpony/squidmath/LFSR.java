@@ -160,6 +160,7 @@ public class LFSR implements StatefulRandomness, Serializable {
      * Sets the seed of this generator using one long, running that through LightRNG's algorithm twice to get the state.
      * @param seed the number to use as the seed
      */
+    @Override
     public void setState(final long seed) {
         if(seed == 0)
             state = -1L;

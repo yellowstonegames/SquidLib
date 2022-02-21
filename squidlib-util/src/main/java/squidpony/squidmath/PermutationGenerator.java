@@ -498,22 +498,26 @@ public class PermutationGenerator<T> implements Iterable<List<T>>, Serializable
      * @return An iterator.
      * @since 1.1
      */
+    @Override
     public Iterator<List<T>> iterator()
     {
         return new Iterator<List<T>>()
         {
+            @Override
             public boolean hasNext()
             {
                 return hasMore();
             }
 
 
+            @Override
             public List<T> next()
             {
                 return nextPermutationAsList();
             }
 
 
+            @Override
             public void remove()
             {
                 throw new UnsupportedOperationException("Iterator does not support removal.");

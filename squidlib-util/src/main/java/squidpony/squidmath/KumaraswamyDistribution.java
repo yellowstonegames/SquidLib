@@ -57,4 +57,17 @@ public class KumaraswamyDistribution extends IDistribution.SimpleDistribution im
     public double nextDouble(IRNG rng) {
         return Math.pow(1.0 - Math.pow(1.0 - rng.nextDouble(), b), a);
     }
+
+    /**
+     * Gets the mean value of this distribution.
+     * <br>
+     * Note that this particular implementation does some potentially-heavy calculations, and if the a and b parameters
+     * are unchanged, then this should be cached instead of repeatedly calculating it.
+     * @return the mean value of this distribution
+     */
+    @Override
+    public double getMean(){
+        final double b = 1.0 / this.b;
+        return (MathExtras.factorial(a) * MathExtras.gamma(b) / b) / MathExtras.factorial(a + b);
+    }
 }

@@ -374,6 +374,7 @@ public class MixedGenerator implements IDungeonGenerator {
      * each other to determine how frequently to use a given carver type.
      * @return a char[][] where '#' is a wall and '.' is a floor or corridor; x first y second
      */
+    @Override
     public char[][] generate()
     {
         if(carvers[0] <= 0 && carvers[1] <= 0 && carvers[2] <= 0 && carvers[3] <= 0 && carvers[4] <= 0)
@@ -536,6 +537,7 @@ public class MixedGenerator implements IDungeonGenerator {
         return dungeon;
     }
 
+    @Override
     public char[][] getDungeon() {
         return dungeon;
     }
