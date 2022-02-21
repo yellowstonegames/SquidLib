@@ -434,4 +434,31 @@ public final class MathExtras
         final int f = NumberTools.doubleToHighIntBits(d) >> 31, n = f | 1;
         return ((turning * n - f) * (x + f)) / (Double.MIN_VALUE - f + (x + shape * d) * n) - f;
     }
+
+    /**
+     * A close approximation to the gamma function for positive doubles, using an algorithm by T. J. Stieltjes.
+     * <a href="http://www.luschny.de/math/factorial/approx/SimpleCases.html">Source here</a>. This is exactly
+     * equivalent to {@code MathExtras.factorial(x - 1.0)}.
+     * @param x a real number; should usually be positive
+     * @return the approximate gamma of the given x
+     */
+    public static double gamma(double x) {
+        return factorial(x - 1.0);
+    }
+
+    /**
+     * A close approximation to the factorial function for real numbers, using an algorithm by T. J. Stieltjes.
+     * <a href="http://www.luschny.de/math/factorial/approx/SimpleCases.html">Source here</a>.
+     * @param x a real number
+     * @return the generalized factorial of the given x
+     */
+    public static double factorial(double x) {
+        double y = x + 1.0;
+        long p = 1;
+        for (; y < 7; y++)
+            p *= y;
+        double r = Math.exp(y * Math.log(y) - y + 1.0 / (12.0 * y + 2.0 / (5.0 * y + 53.0 / (42.0 * y))));
+        if (x < 7.0) r /= p;
+        return r * Math.sqrt(6.283185307179586 / y);
+    }
 }
