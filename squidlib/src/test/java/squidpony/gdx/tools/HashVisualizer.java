@@ -67,10 +67,10 @@ public class HashVisualizer extends ApplicationAdapter {
     // 3 artistic visualizations of hash functions and misc. other
     // 4 noise
     // 5 RNG results
-    private int testType = 4;
+    private int testType = 5;
     private static final int NOISE_LIMIT = 152;
     private static final int RNG_LIMIT = 52;
-    private int hashMode, rngMode = 22, noiseMode = 106, otherMode = 17;//142
+    private int hashMode, rngMode = 4, noiseMode = 106, otherMode = 17;//142
 
     /**
      * If you're editing the source of HashVisualizer, you can comment out one line and uncomment another to change
@@ -1579,11 +1579,18 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 //            return (a ^ a >>> 26);
 //(stateB << 1 ^ ((stateB >> 63) & 0x000000000000001BL))
 
-            // Seems to work really well; we still need to see how it does in PractRand.
+            // Seems to work really well; we still need to see how it does in PractRand in full.
+            // So far, so good, though; 1TB with no anomalies.
             // This does randomize the seed grid quite well, and keeps TangleRNG's strong points.
+//            long z = (stateA += 0xC6BC279692B5C323L) * (stateB += 0x9E3779B97F4A7C16L);
+//            z = (z ^ z >>> 31) * 0xD1342543DE82EF95L;
+//            return z ^ z >>> 26;
+
+            // Similar to above, but only uses one multiply (two rotates and two more XORs though).
             long z = (stateA += 0xC6BC279692B5C323L) * (stateB += 0x9E3779B97F4A7C16L);
-            z = (z ^ z >>> 31) * 0xACBD2BDCA2BFF56DL;
-            return z ^ z >>> 26;
+            z ^= Long.rotateLeft(z, 39) ^ Long.rotateLeft(z, 14);
+            return z ^ z >>> 26 ^ z >>> 7;
+
 
 //            // The image shows a 512x512 grid of lousy random number generators, and each frame advances all generators
 //            // by one step. stateA is seeded with x * 2 + 1, and stateB is seeded with y * 2 + 1. Only the lowest bit is
@@ -1657,7 +1664,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 //                randomGrid[x][y] = new XoshiroStarStar64RNG(x ^ y << 9);
 //                randomGrid[x][y] = new RandomXS128(x+1, y+1);
 //                randomGrid[x][y] = new RandomXS128(x*2+1, y*2+1);
-//                randomGrid[x][y] = new TangleRNG(DiverRNG.randomize(x), y << 1);
+//                randomGrid[x][y] = new TangleRNG(x*2+1, y*2+1);
             }
         }
         

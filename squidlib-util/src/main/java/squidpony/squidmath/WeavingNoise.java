@@ -224,16 +224,25 @@ public class WeavingNoise implements Noise.Noise2D, Noise.Noise3D,
 //        double sy = valueNoise1(seed + (1010101010101010101L    ), y - se);
 //        return (MathExtras.barronSpline((sx * sy + sd * se) * 0.25 + 0.5, 4.0, 0.5) - 0.5) * 2.0;
 //        return (MathExtras.barronSpline(tight, 4.0, 0.5) - 0.5) * 2.0;
+
+//        // decent but has strong line artifacts
+//        int h0 = seed << 1 & 510;
+//        double g0 = rawNoise(h0, grad2d[h0] * x + grad2d[h0+1] * y);
+//        int h1 = seed >>> 7 & 510;
+//        double g1 = rawNoise(h1, (grad2d[h1]) * x + grad2d[h1+1] * y-g0*3);
+//        int h2 = seed >>> 15 & 510;
+//        double g2 = rawNoise(h2, (grad2d[h2]) * x + grad2d[h2+1] * y-g1*3);
+//        int h3 = seed >>> 23 & 510;
+//        double g3 = rawNoise(h3, (grad2d[h3]) * x + grad2d[h3+1] * y-g2*3);
+//        return (MathExtras.barronSpline((g0 + g1 + g2 + g3) * 0.25, 3.5, 0.5) - 0.5) * 2.0;
+        seed *= 0x9E377;
         int h0 = seed << 1 & 510;
-        double g0 = rawNoise(h0, grad2d[h0] * x + grad2d[h0+1] * y);
         int h1 = seed >>> 7 & 510;
-        double g1 = rawNoise(h1, (grad2d[h1]) * x + grad2d[h1+1] * y-g0*3);
-        int h2 = seed >>> 15 & 510;
-        double g2 = rawNoise(h2, (grad2d[h2]) * x + grad2d[h2+1] * y-g1*3);
-        int h3 = seed >>> 23 & 510;
-        double g3 = rawNoise(h3, (grad2d[h3]) * x + grad2d[h3+1] * y-g2*3);
-//        return (MathExtras.barronSpline((g1 + g3) * 0.5, 3.5, 0.5) - 0.5) * 2.0;
-        return (MathExtras.barronSpline((g0 + g1 + g2 + g3) * 0.25, 3.5, 0.5) - 0.5) * 2.0;
+        double nx = rawNoise(seed ^ 0xC13FA9A902A6328FL, grad2d[h0] * x + grad2d[h0+1] * y);
+        double ny = rawNoise(seed ^ 0x91E10DA5C79E7B1DL, grad2d[h1] * y + grad2d[h1+1] * x);
+        double cx = rawNoise(seed ^ ~0xC13FA9A902A6328FL, x) - ny;
+        double cy = rawNoise(seed ^ ~0x91E10DA5C79E7B1DL, y) - nx;
+        return (MathExtras.barronSpline((cx * cy) * 0.5 + 0.5, 8.0, 0.5) - 0.5) * 2.0;
     }
 
     public static double valueNoise(int seed, double x, double y, double z)
