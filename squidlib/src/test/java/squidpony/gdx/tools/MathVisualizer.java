@@ -25,7 +25,7 @@ import java.util.Random;
  * Created by Tommy Ettinger on 1/13/2018.
  */
 public class MathVisualizer extends ApplicationAdapter {
-    private int mode = 53;
+    private int mode = 57;
     private int modes = 58;
     private FilterBatch batch;
     private SparseLayers layers;
@@ -2318,7 +2318,9 @@ public class MathVisualizer extends ApplicationAdapter {
                 if(Gdx.input.isKeyJustPressed(Input.Keys.LEFT)) kd.setA(kd.getA() - 0.1);
                 if(Gdx.input.isKeyJustPressed(Input.Keys.UP)) kd.setB(kd.getB() + 0.1);
                 if(Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) kd.setB(kd.getB() - 0.1);
-                Gdx.graphics.setTitle("Kumaraswamy with a="+kd.getA()+", b="+kd.getB()+" . Mode " + mode);
+                Gdx.graphics.setTitle(
+                        String.format("Kumaraswamy with a=%1.5f, a=%1.5f, mean=%1.5f. Mode %d", kd.getA(), kd.getB(), kd.getMean(), mode)
+                );
                 for (int i = 0; i < 0x100000; i++) {
                     amounts[Noise.fastFloor(kd.nextDouble(rng) * 512)]++;
                 }

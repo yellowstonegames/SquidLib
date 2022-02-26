@@ -68,6 +68,6 @@ public class KumaraswamyDistribution extends IDistribution.SimpleDistribution im
     @Override
     public double getMean(){
         final double b = 1.0 / this.b;
-        return (MathExtras.factorial(a) * MathExtras.gamma(b) / b) / MathExtras.factorial(a + b);
+        return (MathExtras.factorial(a) * MathExtras.gamma(b) * b) / MathExtras.factorial(a + b);
     }
 }
