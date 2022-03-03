@@ -67,10 +67,10 @@ public class HashVisualizer extends ApplicationAdapter {
     // 3 artistic visualizations of hash functions and misc. other
     // 4 noise
     // 5 RNG results
-    private int testType = 5;
+    private int testType = 1;
     private static final int NOISE_LIMIT = 152;
     private static final int RNG_LIMIT = 52;
-    private int hashMode, rngMode = 4, noiseMode = 106, otherMode = 17;//142
+    private int hashMode = 9, rngMode = 4, noiseMode = 106, otherMode = 17;//142
 
     /**
      * If you're editing the source of HashVisualizer, you can comment out one line and uncomment another to change
@@ -1610,6 +1610,11 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
         }
     }
 
+    public static long microHash(long x, long y, long s) {
+        s += (y + s + (x + s + 0x9E3779B97F4A7C15L) * 0xABC98388FB8FAC03L) * 0x8CB92BA72F3D8DD7L;
+        return ((s = (s ^ s >>> 20) * 0xF1357AEA2E62A9C5L) ^ s >>> 41);
+    }
+
     @Override
     public void create() {
         CoordPacker.init();
@@ -2095,7 +2100,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 //code = -(Noise.HastyPointHash.hashAll(x, y, 123) & 1L) | 255L;
                                 //code = Noise.HastyPointHash.hashAll(x, y, 123) << 8 | 255L;
-                                back[x][y] = (HastyPointHash.hashAll(x, y, 123L) & 1L) == 0 ? FLOAT_BLACK : FLOAT_WHITE;//floatGet(code);
+                                back[x][y] = (HastyPointHash.hashAll(x, y, ctr) & 1L) == 0 ? FLOAT_BLACK : FLOAT_WHITE;//floatGet(code);
                             }
                         }
                         break;
@@ -2105,7 +2110,8 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 //code = -(Noise.PointHash.hashAll(x, y, 123L) & 1L) | 255L;
                                 //code = Noise.PointHash.hashAll(x, y, 123L) >>> 24 | 255L;
-                                back[x][y] = (PointHash.hashAll(x, y, 123L) & 1L) == 0 ? FLOAT_BLACK : FLOAT_WHITE;//floatGet(code);
+//                                back[x][y] = (PointHash.hashAll(x, y, ctr) & 1L) == 0 ? FLOAT_BLACK : FLOAT_WHITE;//floatGet(code);
+                                back[x][y] = (microHash(x, y, ctr) & 1L) == 0 ? FLOAT_BLACK : FLOAT_WHITE;//floatGet(code);
                             }
                         }
                         break;
@@ -6832,7 +6838,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
         config.setTitle("SquidLib Test: Hash Visualization");
         config.setWindowedMode(width, height);
         config.useVsync(true);
-        config.setForegroundFPS(60);
+        config.setForegroundFPS(15);
         config.setWindowIcon(Files.FileType.Internal, "Tentacle-128.png", "Tentacle-64.png", "Tentacle-32.png", "Tentacle-16.png");
         new Lwjgl3Application(new HashVisualizer(), config);
     }

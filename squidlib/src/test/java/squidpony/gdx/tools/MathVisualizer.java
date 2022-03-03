@@ -2318,12 +2318,15 @@ public class MathVisualizer extends ApplicationAdapter {
                 if(Gdx.input.isKeyJustPressed(Input.Keys.LEFT)) kd.setA(kd.getA() - 0.1);
                 if(Gdx.input.isKeyJustPressed(Input.Keys.UP)) kd.setB(kd.getB() + 0.1);
                 if(Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) kd.setB(kd.getB() - 0.1);
-                Gdx.graphics.setTitle(
-                        String.format("Kumaraswamy with a=%1.5f, a=%1.5f, mean=%1.5f. Mode %d", kd.getA(), kd.getB(), kd.getMean(), mode)
-                );
+                double avg = 0.0, curr;
                 for (int i = 0; i < 0x100000; i++) {
-                    amounts[Noise.fastFloor(kd.nextDouble(rng) * 512)]++;
+                    amounts[Noise.fastFloor((curr = kd.nextDouble(rng)) * 512)]++;
+                    avg += curr;
                 }
+                avg *= 0x1p-20;
+                Gdx.graphics.setTitle(
+                        String.format("Kumaraswamy; a=%1.4f, b=%1.4f, mean=%1.4f, avg=%1.4f", kd.getA(), kd.getB(), kd.getMean(), avg)
+                );
                 for (int i = 0; i < 512; i++) {
                     float color = (i & 63) == 0
                             ? -0x1.c98066p126F // CW Azure
