@@ -1612,7 +1612,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 
     public static long microHash(long x, long y, long s) {
         s += (y + s + (x + s + 0x9E3779B97F4A7C15L) * 0xABC98388FB8FAC03L) * 0x8CB92BA72F3D8DD7L;
-        return ((s = (s ^ s >>> 20) * 0xF1357AEA2E62A9C5L) ^ s >>> 41);
+        return ((s = (s ^ s >>> 20 ^ s >>> 37) * 0xF1357AEA2E62A9C5L) ^ s >>> 53);
     }
 
     @Override

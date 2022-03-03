@@ -17,7 +17,7 @@
 package squidpony.squidmath;
 
 /**
- * A group of similar methods for getting hashes of points based on long coordinates in 2, 3, 4, or 6 dimensions and
+ * A group of similar methods for getting hashes of points based on long coordinates in 2, 3, 4, 5, or 6 dimensions and
  * a long for state; like {@link PointHash} but faster and maybe not as high-quality. This implementation has
  * high enough quality to be useful as a source of random numbers based on positions, but would likely not be a good
  * option in a hash table (or at least not as good as the tailored implementation of {@link Coord#hashCode()}, for
