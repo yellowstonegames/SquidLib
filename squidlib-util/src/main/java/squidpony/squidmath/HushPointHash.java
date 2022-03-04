@@ -16,8 +16,6 @@
 
 package squidpony.squidmath;
 
-import squidpony.annotation.Beta;
-
 /**
  * A group of similar methods for getting hashes of points based on long coordinates in 2, 3, 4, 5, or 6 dimensions and
  * a long for state; this is mostly meant as an optimization of {@link HastyPointHash}. This implementation has
@@ -26,7 +24,6 @@ import squidpony.annotation.Beta;
  * <br>
  * This implements {@link IPointHash} and has a long it uses internally for state, exposed by {@link #getState()}.
  */
-@Beta
 public class HushPointHash extends IPointHash.LongImpl {
 
     public static final HushPointHash INSTANCE = new HushPointHash();

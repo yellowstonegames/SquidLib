@@ -70,7 +70,7 @@ public class HashVisualizer extends ApplicationAdapter {
     private int testType = 1;
     private static final int NOISE_LIMIT = 152;
     private static final int RNG_LIMIT = 52;
-    private int hashMode = 9, rngMode = 4, noiseMode = 106, otherMode = 17;//142
+    private int hashMode = 1, rngMode = 4, noiseMode = 106, otherMode = 17;//142
 
     /**
      * If you're editing the source of HashVisualizer, you can comment out one line and uncomment another to change
@@ -1992,13 +1992,20 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 //                                //back[x][y] = (water64(x, y) >>> extra & 1L) == 0L ? FLOAT_BLACK : FLOAT_WHITE;
 //                            }
 //                        }
-                        extra = System.nanoTime() >>> 30 & 31;
-                        Gdx.graphics.setTitle("Modified Rosenberg-Strong Hash on length 2, bit " + extra);
+                        extra = System.nanoTime() >>> 30 & 63;
+                        Gdx.graphics.setTitle("HushPointHash on length 2, bit " + extra);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                back[x][y] = (rosenbergStrongCoord(x, y) >>> extra & 1) == 0 ? FLOAT_BLACK : FLOAT_WHITE;//floatGet(code);
+                                back[x][y] = (HushPointHash.hashAll(x, y, 123) >>> extra & 1) == 0 ? FLOAT_BLACK : FLOAT_WHITE;//floatGet(code);
                             }
                         }
+//                        extra = System.nanoTime() >>> 30 & 31;
+//                        Gdx.graphics.setTitle("Modified Rosenberg-Strong Hash on length 2, bit " + extra);
+//                        for (int x = 0; x < width; x++) {
+//                            for (int y = 0; y < height; y++) {
+//                                back[x][y] = (rosenbergStrongCoord(x, y) >>> extra & 1) == 0 ? FLOAT_BLACK : FLOAT_WHITE;//floatGet(code);
+//                            }
+//                        }
 
 //                        Gdx.graphics.setTitle("QuadHash on index");
 //                        for (int x = 0, i = 0; x < width; x++) {
@@ -2111,7 +2118,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                 //code = -(Noise.PointHash.hashAll(x, y, 123L) & 1L) | 255L;
                                 //code = Noise.PointHash.hashAll(x, y, 123L) >>> 24 | 255L;
 //                                back[x][y] = (PointHash.hashAll(x, y, ctr) & 1L) == 0 ? FLOAT_BLACK : FLOAT_WHITE;//floatGet(code);
-                                back[x][y] = (microHash(x, y, ctr) & 1L) == 0 ? FLOAT_BLACK : FLOAT_WHITE;//floatGet(code);
+                                back[x][y] = (HushPointHash.hashAll(x, y, ctr) & 1L) == 0 ? FLOAT_BLACK : FLOAT_WHITE;//floatGet(code);
                             }
                         }
                         break;
