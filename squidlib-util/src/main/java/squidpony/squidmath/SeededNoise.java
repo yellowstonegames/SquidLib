@@ -328,7 +328,6 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
     }
 
     public static double noise(final double x, final double y, final double z, final double w, final long seed) {
-        double n = 0.0;
         final double s = (x + y + z + w) * F4;
         final int i = fastFloor(x + s), j = fastFloor(y + s), k = fastFloor(z + s), l = fastFloor(w + s);
         final double[] gradient4DLUT = grad4d;
@@ -370,38 +369,38 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
                 y4 = y0 - 1 + 4 * G4,
                 z4 = z0 - 1 + 4 * G4,
                 w4 = w0 - 1 + 4 * G4;
-        final int h0 = (hash256(i, j, k, l, seed) & 0xFC),
-                h1 = (hash256(i + i1, j + j1, k + k1, l + l1, seed) & 0xFC),
-                h2 = (hash256(i + i2, j + j2, k + k2, l + l2, seed) & 0xFC),
-                h3 = (hash256(i + i3, j + j3, k + k3, l + l3, seed) & 0xFC),
-                h4 = (hash256(i + 1, j + 1, k + 1, l + 1, seed) & 0xFC);
+        double n0 = 0.0, n1 = 0.0, n2 = 0.0, n3 = 0.0, n4 = 0.0;
         double t0 = LIMIT4 - x0 * x0 - y0 * y0 - z0 * z0 - w0 * w0;
         if(t0 > 0) {
+            final int h0 = (hash256(i, j, k, l, seed) & 0xFC);
             t0 *= t0;
-            n += t0 * t0 * (x0 * gradient4DLUT[h0] + y0 * gradient4DLUT[h0 | 1] + z0 * gradient4DLUT[h0 | 2] + w0 * gradient4DLUT[h0 | 3]);
+            n0 = t0 * t0 * (x0 * gradient4DLUT[h0] + y0 * gradient4DLUT[h0 | 1] + z0 * gradient4DLUT[h0 | 2] + w0 * gradient4DLUT[h0 | 3]);
         }
         double t1 = LIMIT4 - x1 * x1 - y1 * y1 - z1 * z1 - w1 * w1;
         if (t1 > 0) {
+            final int h1 = (hash256(i + i1, j + j1, k + k1, l + l1, seed) & 0xFC);
             t1 *= t1;
-            n += t1 * t1 * (x1 * gradient4DLUT[h1] + y1 * gradient4DLUT[h1 | 1] + z1 * gradient4DLUT[h1 | 2] + w1 * gradient4DLUT[h1 | 3]);
+            n1 = t1 * t1 * (x1 * gradient4DLUT[h1] + y1 * gradient4DLUT[h1 | 1] + z1 * gradient4DLUT[h1 | 2] + w1 * gradient4DLUT[h1 | 3]);
         }
         double t2 = LIMIT4 - x2 * x2 - y2 * y2 - z2 * z2 - w2 * w2;
         if (t2 > 0) {
+            final int h2 = (hash256(i + i2, j + j2, k + k2, l + l2, seed) & 0xFC);
             t2 *= t2;
-            n += t2 * t2 * (x2 * gradient4DLUT[h2] + y2 * gradient4DLUT[h2 | 1] + z2 * gradient4DLUT[h2 | 2] + w2 * gradient4DLUT[h2 | 3]);
+            n2 = t2 * t2 * (x2 * gradient4DLUT[h2] + y2 * gradient4DLUT[h2 | 1] + z2 * gradient4DLUT[h2 | 2] + w2 * gradient4DLUT[h2 | 3]);
         }
         double t3 = LIMIT4 - x3 * x3 - y3 * y3 - z3 * z3 - w3 * w3;
         if (t3 > 0) {
+            final int h3 = (hash256(i + i3, j + j3, k + k3, l + l3, seed) & 0xFC);
             t3 *= t3;
-            n += t3 * t3 * (x3 * gradient4DLUT[h3] + y3 * gradient4DLUT[h3 | 1] + z3 * gradient4DLUT[h3 | 2] + w3 * gradient4DLUT[h3 | 3]);
+            n3 = t3 * t3 * (x3 * gradient4DLUT[h3] + y3 * gradient4DLUT[h3 | 1] + z3 * gradient4DLUT[h3 | 2] + w3 * gradient4DLUT[h3 | 3]);
         }
         double t4 = LIMIT4 - x4 * x4 - y4 * y4 - z4 * z4 - w4 * w4;
         if (t4 > 0) {
+            final int h4 = (hash256(i + 1, j + 1, k + 1, l + 1, seed) & 0xFC);
             t4 *= t4;
-            n += t4 * t4 * (x4 * gradient4DLUT[h4] + y4 * gradient4DLUT[h4 | 1] + z4 * gradient4DLUT[h4 | 2] + w4 * gradient4DLUT[h4 | 3]);
+            n4 = t4 * t4 * (x4 * gradient4DLUT[h4] + y4 * gradient4DLUT[h4 | 1] + z4 * gradient4DLUT[h4 | 2] + w4 * gradient4DLUT[h4 | 3]);
         }
-        //return NumberTools.bounce(5.0 + 41.0 * n);
-        return Math.max(-1.0, Math.min(1.0, 14.75 * n));
+        return Math.max(-1.0, Math.min(1.0, 14.75 * (n0 + n1 + n2 + n3 + n4)));
     }
 
     /**
@@ -633,11 +632,10 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
             if (tc > 0) {
                 final int h = hash256(intLoc[0], intLoc[1], intLoc[2], intLoc[3],
                         intLoc[4], intLoc[5], seed) * 6;
-                final double gr = gradient6DLUT[h] * m[0] + gradient6DLUT[h + 1] * m[1]
-                        + gradient6DLUT[h + 2] * m[2] + gradient6DLUT[h + 3] * m[3]
-                        + gradient6DLUT[h + 4] * m[4] + gradient6DLUT[h + 5] * m[5];
                 tc *= tc;
-                n += gr * tc * tc;
+                n += tc * tc * (gradient6DLUT[h] * m[0] + gradient6DLUT[h + 1] * m[1]
+                        + gradient6DLUT[h + 2] * m[2] + gradient6DLUT[h + 3] * m[3]
+                        + gradient6DLUT[h + 4] * m[4] + gradient6DLUT[h + 5] * m[5]);
             }
             skewOffset += G6;
         }
