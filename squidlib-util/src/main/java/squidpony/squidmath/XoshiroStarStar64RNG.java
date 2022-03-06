@@ -200,27 +200,29 @@ public class XoshiroStarStar64RNG implements RandomnessSource {
 
     @Override
     public long nextLong() {
-        final long result = Long.rotateLeft(stateB * 5, 7) * 9;
-        final long t = stateB << 17;
+        long t = stateB * 5;
+        final long result = (t << 7 | t >>> 57) * 9;
+        t = stateB << 17;
         stateC ^= stateA;
         stateD ^= stateB;
         stateB ^= stateC;
         stateA ^= stateD;
         stateC ^= t;
-        stateD = Long.rotateLeft(stateD, 45);
+        stateD = (stateD << 45 | stateD >>> 19);
         return result;
     }
 
     @Override
     public int next(int bits) {
-        final long result = Long.rotateLeft(stateB * 5, 7) * 9;
-        final long t = stateB << 17;
+        long t = stateB * 5;
+        final long result = (t << 7 | t >>> 57) * 9;
+        t = stateB << 17;
         stateC ^= stateA;
         stateD ^= stateB;
         stateB ^= stateC;
         stateA ^= stateD;
         stateC ^= t;
-        stateD = Long.rotateLeft(stateD, 45);
+        stateD = (stateD << 45 | stateD >>> 19);
         return (int)(result >>> 64 - bits);
     }
 

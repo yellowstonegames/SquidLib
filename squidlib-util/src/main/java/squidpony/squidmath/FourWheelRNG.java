@@ -184,44 +184,42 @@ public class FourWheelRNG implements RandomnessSource, Serializable {
         this.stateD = stateD;
     }
 
-    /**
-     * Using this method, any algorithm that might use the built-in Java Random
-     * can interface with this randomness source.
-     *
-     * @param bits the number of bits to be returned
-     * @return the integer containing the appropriate number of bits
-     */
-    @Override
-    public int next(final int bits) {
-        final long fa = this.stateA;
-        final long fb = this.stateB;
-        final long fc = this.stateC;
-        final long fd = this.stateD;
-        this.stateA = 0xD1342543DE82EF95L * fd;
-        this.stateB = fa + 0xC6BC279692B5C323L;
-        this.stateC = Long.rotateLeft(fb, 47) - fd;
-        this.stateD = fb ^ fc;
-        return (int)fd >>> (32 - bits);
-    }
-    /**
-     * Using this method, any algorithm that needs to efficiently generate more
-     * than 32 bits of random data can interface with this randomness source.
-     * <p>
-     * Get a random long between Long.MIN_VALUE and Long.MAX_VALUE (both inclusive).
-     *
-     * @return a random long between Long.MIN_VALUE and Long.MAX_VALUE (both inclusive)
-     */
     @Override
     public long nextLong() {
-        final long fa = this.stateA;
-        final long fb = this.stateB;
-        final long fc = this.stateC;
-        final long fd = this.stateD;
-        this.stateA = 0xD1342543DE82EF95L * fd;
-        this.stateB = fa + 0xC6BC279692B5C323L;
-        this.stateC = Long.rotateLeft(fb, 47) - fd;
-        this.stateD = fb ^ fc;
+        final long fa = stateA;
+        final long fb = stateB;
+        final long fc = stateC;
+        final long fd = stateD;
+        stateA = 0xD1342543DE82EF95L * fd;
+        stateB = fa + 0xC6BC279692B5C323L;
+        stateC = (fb << 47 | fb >>> 17) - fd;
+        stateD = fb ^ fc;
         return fd;
+    }
+
+    public long previousLong() {
+        final long fa = stateA;
+        final long fb = stateB;
+        final long fd = stateD;
+        stateD = 0x572B5EE77A54E3BDL * fa;
+        final long fc = stateC + stateD;
+        stateA = fb - 0xC6BC279692B5C323L;
+        stateB = (fc >>> 47 | fc << 17);
+        stateC = fd ^ stateB;
+        return 0x572B5EE77A54E3BDL * stateA;
+    }
+
+    @Override
+    public int next(int bits) {
+        final long fa = stateA;
+        final long fb = stateB;
+        final long fc = stateC;
+        final long fd = stateD;
+        stateA = 0xD1342543DE82EF95L * fd;
+        stateB = fa + 0xC6BC279692B5C323L;
+        stateC = (fb << 47 | fb >>> 17) - fd;
+        stateD = fb ^ fc;
+        return (int)fd >>> (32 - bits);
     }
 
     /**

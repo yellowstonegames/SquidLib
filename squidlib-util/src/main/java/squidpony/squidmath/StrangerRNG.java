@@ -228,44 +228,52 @@ public class StrangerRNG implements RandomnessSource, Serializable {
         this.stateD = stateD;
     }
 
-    /**
-     * Using this method, any algorithm that might use the built-in Java Random
-     * can interface with this randomness source.
-     *
-     * @param bits the number of bits to be returned
-     * @return the integer containing the appropriate number of bits
-     */
-    @Override
-    public int next(final int bits) {
-        final long fa = this.stateA;
-        final long fb = this.stateB;
-        final long fc = this.stateC;
-        final long fd = this.stateD;
-        this.stateA = fb ^ fb << 7;
-        this.stateB = fa ^ fa >>> 9;
-        this.stateC = Long.rotateLeft(fd, 39) - fb;
-        this.stateD = fa - fc + 0xC6BC279692B5C323L;
-        return (int)fc >>> (32 - bits);
-    }
-    /**
-     * Using this method, any algorithm that needs to efficiently generate more
-     * than 32 bits of random data can interface with this randomness source.
-     * <p>
-     * Get a random long between Long.MIN_VALUE and Long.MAX_VALUE (both inclusive).
-     *
-     * @return a random long between Long.MIN_VALUE and Long.MAX_VALUE (both inclusive)
-     */
     @Override
     public long nextLong() {
-        final long fa = this.stateA;
-        final long fb = this.stateB;
-        final long fc = this.stateC;
-        final long fd = this.stateD;
-        this.stateA = fb ^ fb << 7;
-        this.stateB = fa ^ fa >>> 9;
-        this.stateC = Long.rotateLeft(fd, 39) - fb;
-        this.stateD = fa - fc + 0xC6BC279692B5C323L;
+        final long fa = stateA;
+        final long fb = stateB;
+        final long fc = stateC;
+        final long fd = stateD;
+        stateA = fb ^ fb << 7;
+        stateB = fa ^ fa >>> 9;
+        stateC = (fd << 39 | fd >>> 25) - fb;
+        stateD = fa - fc + 0xC6BC279692B5C323L;
         return fc;
+    }
+
+    public long previousLong() {
+        final long fa = stateA;
+        final long fb = stateB;
+        final long fd = stateD;
+        long t = fb ^ fb >>> 9;
+        t ^= t >>> 18;
+        t ^= t >>> 36;
+        long m = fa ^ fa << 7;
+        m ^= m << 14;
+        m ^= m << 28;
+        m ^= m << 56;
+        stateA = t;
+        final long fc = stateC + m;
+        stateB = m;
+        stateC = t - fd + 0xC6BC279692B5C323L;
+        stateD = (fc >>> 39 | fc << 25);
+        t = m ^ m >>> 9;
+        t ^= t >>> 18;
+        t ^= t >>> 36;
+        return t - stateD + 0xC6BC279692B5C323L;
+    }
+
+    @Override
+    public int next(int bits) {
+        final long fa = stateA;
+        final long fb = stateB;
+        final long fc = stateC;
+        final long fd = stateD;
+        stateA = fb ^ fb << 7;
+        stateB = fa ^ fa >>> 9;
+        stateC = (fd << 39 | fd >>> 25) - fb;
+        stateD = fa - fc + 0xC6BC279692B5C323L;
+        return (int)fc >>> (32 - bits);
     }
 
     /**

@@ -187,44 +187,45 @@ public class TrimRNG implements RandomnessSource, Serializable {
         this.stateD = stateD;
     }
 
-    /**
-     * Using this method, any algorithm that might use the built-in Java Random
-     * can interface with this randomness source.
-     *
-     * @param bits the number of bits to be returned
-     * @return the integer containing the appropriate number of bits
-     */
-    @Override
-    public int next(final int bits) {
-        final long fa = this.stateA;
-        final long fb = this.stateB;
-        final long fc = this.stateC;
-        final long fd = this.stateD;
-        this.stateA = Long.rotateLeft(fb + fc, 37);
-        this.stateB = Long.rotateLeft(fc ^ fd, 26);
-        this.stateC = fa + fb;
-        this.stateD = fd + 0x9E3779B97F4A7C15L;
-        return (int)fc >>> (32 - bits);
-    }
-    /**
-     * Using this method, any algorithm that needs to efficiently generate more
-     * than 32 bits of random data can interface with this randomness source.
-     * <p>
-     * Get a random long between Long.MIN_VALUE and Long.MAX_VALUE (both inclusive).
-     *
-     * @return a random long between Long.MIN_VALUE and Long.MAX_VALUE (both inclusive)
-     */
     @Override
     public long nextLong() {
-        final long fa = this.stateA;
-        final long fb = this.stateB;
-        final long fc = this.stateC;
-        final long fd = this.stateD;
-        this.stateA = Long.rotateLeft(fb + fc, 37);
-        this.stateB = Long.rotateLeft(fc ^ fd, 26);
-        this.stateC = fa + fb;
-        this.stateD = fd + 0x9E3779B97F4A7C15L;
+        final long fa = stateA;
+        final long fb = stateB;
+        final long fc = stateC;
+        final long fd = stateD;
+        final long bc = fb + fc, cd = fc ^ fd;
+        stateA = (bc << 35 | bc >>> 29);
+        stateB = (cd << 46 | cd >>> 18);
+        stateC = fa + fb;
+        stateD = fd + 0x06A0F81D3D2E35EFL;
         return fc;
+    }
+
+    public long previousLong() {
+        final long fa = stateA;
+        final long fb = stateB;
+        final long fc = stateC;
+        stateD -= 0x06A0F81D3D2E35EFL;
+        long t = (fb >>> 46 | fb << 18);
+        stateC = t ^ stateD;
+        t = (fa >>> 35 | fa << 29);
+        stateB = t - stateC;
+        stateA = fc - stateB;
+        return (stateB >>> 46 | stateB << 18) ^ stateD - 0x06A0F81D3D2E35EFL;
+    }
+
+    @Override
+    public int next(int bits) {
+        final long fa = stateA;
+        final long fb = stateB;
+        final long fc = stateC;
+        final long fd = stateD;
+        final long bc = fb + fc, cd = fc ^ fd;
+        stateA = (bc << 35 | bc >>> 29);
+        stateB = (cd << 46 | cd >>> 18);
+        stateC = fa + fb;
+        stateD = fd + 0x06A0F81D3D2E35EFL;
+        return (int)fc >>> (32 - bits);
     }
 
     /**
