@@ -16,6 +16,8 @@
 
 package squidpony.squidmath;
 
+import java.io.Serializable;
+
 /**
  * A random number generator that is fairly fast and guarantees 4-dimensional equidistribution (with the exception of the
  * quartet with four zeroes in a row, every quartet of long results is produced exactly once over the period). It has a
@@ -38,7 +40,8 @@ package squidpony.squidmath;
  * Xoshiro256** was written in 2018 by David Blackman and Sebastiano Vigna. You can consult their paper for technical details:
  * <a href="https://vigna.di.unimi.it/ftp/papers/ScrambledLinear.pdf">PDF link here</a>.
  */
-public class XoshiroStarStar64RNG implements RandomnessSource {
+public class XoshiroStarStar64RNG implements RandomnessSource, Serializable {
+    private static final long serialVersionUID = 0L;
 
     /**
      * The first state; can be any long, as long as all states are not 0.

@@ -67,10 +67,10 @@ public class HashVisualizer extends ApplicationAdapter {
     // 3 artistic visualizations of hash functions and misc. other
     // 4 noise
     // 5 RNG results
-    private int testType = 1;
+    private int testType = 5;
     private static final int NOISE_LIMIT = 152;
     private static final int RNG_LIMIT = 52;
-    private int hashMode = 1, rngMode = 4, noiseMode = 106, otherMode = 17;//142
+    private int hashMode = 9, rngMode = 4, noiseMode = 106, otherMode = 17;//142
 
     /**
      * If you're editing the source of HashVisualizer, you can comment out one line and uncomment another to change
@@ -1665,7 +1665,8 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                randomGrid[x][y] = new PangolinRNG(x*2+1, y*2+1);
+                randomGrid[x][y] = new RomuTrioRNG(x*2+1, y*2+1, 1);
+//                randomGrid[x][y] = new PangolinRNG(x*2+1, y*2+1);
 //                randomGrid[x][y] = new XoshiroStarStar64RNG(x ^ y << 9);
 //                randomGrid[x][y] = new RandomXS128(x+1, y+1);
 //                randomGrid[x][y] = new RandomXS128(x*2+1, y*2+1);
