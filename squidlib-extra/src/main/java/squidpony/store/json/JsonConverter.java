@@ -603,5 +603,28 @@ public class JsonConverter extends Json {
                 return FakeLanguageGen.deserializeFromString(jsonData.asString());
             }
         });
+        json.setSerializer(Class.class, new Serializer<Class>() {
+            @Override
+            public void write(Json json, Class object, Class knownType) {
+                if(object == null)
+                {
+                    json.writeValue(null);
+                    return;
+                }
+                json.writeValue(object.getName());
+            }
+
+            @Override
+            public Class read(Json json, JsonValue jsonData, Class type) {
+                if(jsonData != null && !jsonData.isNull())
+                {
+                    try {
+                        return ClassReflection.forName(jsonData.asString());
+                    } catch (ReflectionException ignored) {
+                    }
+                }
+                return null;
+            }
+        });
     }
 }
