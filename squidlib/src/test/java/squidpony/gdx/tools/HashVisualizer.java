@@ -67,10 +67,10 @@ public class HashVisualizer extends ApplicationAdapter {
     // 3 artistic visualizations of hash functions and misc. other
     // 4 noise
     // 5 RNG results
-    private int testType = 5;
+    private int testType = 1;
     private static final int NOISE_LIMIT = 152;
     private static final int RNG_LIMIT = 52;
-    private int hashMode = 9, rngMode = 4, noiseMode = 106, otherMode = 17;//142
+    private int hashMode = 1, rngMode = 4, noiseMode = 106, otherMode = 17;//142
 
     /**
      * If you're editing the source of HashVisualizer, you can comment out one line and uncomment another to change
@@ -1994,10 +1994,10 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 //                            }
 //                        }
                         extra = System.nanoTime() >>> 30 & 63;
-                        Gdx.graphics.setTitle("HushPointHash on length 2, bit " + extra);
+                        Gdx.graphics.setTitle("HappyPointHash on length 2, bit " + extra);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                back[x][y] = (HushPointHash.hashAll(x, y, 123) >>> extra & 1) == 0 ? FLOAT_BLACK : FLOAT_WHITE;//floatGet(code);
+                                back[x][y] = (HappyPointHash.hashAll(x, y, 123) >>> extra & 1) == 0 ? FLOAT_BLACK : FLOAT_WHITE;//floatGet(code);
                             }
                         }
 //                        extra = System.nanoTime() >>> 30 & 31;
@@ -2025,7 +2025,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 //                            }
 //                        }
                         break;
-                    case 2:
+                    case 10: // OUT OF ORDER FOR A REASON
                         extra = System.nanoTime() >>> 30 & 31;
                         Gdx.graphics.setTitle("Alternate Rosenberg-Strong Hash on length 2, bit " + extra);
                         for (int x = 0; x < width; x++) {
@@ -2112,14 +2112,14 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             }
                         }
                         break;
-                    case 10:
-                        Gdx.graphics.setTitle("PointHash on length 2, low bits");
+                    case 2: // OUT OF ORDER FOR A REASON
+                        Gdx.graphics.setTitle("HappyPointHash on length 2, low bits");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 //code = -(Noise.PointHash.hashAll(x, y, 123L) & 1L) | 255L;
                                 //code = Noise.PointHash.hashAll(x, y, 123L) >>> 24 | 255L;
 //                                back[x][y] = (PointHash.hashAll(x, y, ctr) & 1L) == 0 ? FLOAT_BLACK : FLOAT_WHITE;//floatGet(code);
-                                back[x][y] = (HushPointHash.hashAll(x, y, ctr) & 1L) == 0 ? FLOAT_BLACK : FLOAT_WHITE;//floatGet(code);
+                                back[x][y] = (HappyPointHash.hashAll(x, y, ctr) & 1L) == 0 ? FLOAT_BLACK : FLOAT_WHITE;//floatGet(code);
                             }
                         }
                         break;

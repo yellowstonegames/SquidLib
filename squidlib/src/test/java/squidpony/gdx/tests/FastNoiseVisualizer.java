@@ -50,7 +50,7 @@ public class FastNoiseVisualizer extends ApplicationAdapter {
     private int ctr = -256;
     private boolean keepGoing = true;
     
-    private PNG8 png;
+    private AnimatedGif gif;
     private Array<Pixmap> frames = new Array<>(128);
 
     public static float basicPrepare(float n)
@@ -65,10 +65,10 @@ public class FastNoiseVisualizer extends ApplicationAdapter {
         view = new ScreenViewport();
         noise.setPointHash(pointHashes[8]);
         noise.setFractalType(FastNoise.RIDGED_MULTI);
-        png = new PNG8();
-        png.setDitherAlgorithm(Dithered.DitherAlgorithm.NEUE);
-        png.setFlipY(false);
-        png.palette = new PaletteReducer(new int[] {
+        gif = new AnimatedGif();
+        gif.setDitherAlgorithm(Dithered.DitherAlgorithm.NEUE);
+        gif.setFlipY(false);
+        gif.palette = new PaletteReducer(new int[] {
 //                0x00000000, 0x000000FF, 0xFFFFFFFF,
                 0,
                 0x081820ff,
@@ -151,7 +151,7 @@ public class FastNoiseVisualizer extends ApplicationAdapter {
             public boolean keyDown(int keycode) {
                 switch (keycode) {
                     case W:
-                        Pixmap text = new Pixmap(Gdx.files.local("squidlib/etc/BlackMagic.png"));
+//                        Pixmap text = new Pixmap(Gdx.files.local("squidlib/etc/BlackMagic.png"));
                         frames.clear();
                         noise.setFrequency(0x1p-3f);
                         for (int c = 0; c < 64; c+=2) {
@@ -164,11 +164,11 @@ public class FastNoiseVisualizer extends ApplicationAdapter {
                                     p.drawPixel(x, y);
                                 }
                             }
-                            p.drawPixmap(text, 0, 0);
+//                            p.drawPixmap(text, 0, 0);
                             frames.add(p);
                         }
                         Gdx.files.local("out/").mkdirs();
-                        png.write(Gdx.files.local("out/cube" + System.currentTimeMillis() + ".png"), frames, 10);
+                        gif.write(Gdx.files.local("out/cube" + System.currentTimeMillis() + ".gif"), frames, 10);
                         for(Pixmap p : frames)
                             p.dispose();
                         break;
