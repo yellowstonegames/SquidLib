@@ -21,20 +21,27 @@ public class NoiseVarietyVisualizer extends ApplicationAdapter {
 
     private FoamyNoise simplexy = new FoamyNoise(new SeededNoise(1234567890));
     private WeavingNoise weave = new WeavingNoise(-12345L);
+    private UnifiedNoise unified = new UnifiedNoise(-12345L);
+    private SeededNoise seeded = new SeededNoise(-12345L);
+
+    private Noise.Noise2D[] noises2 = {simplexy, weave, unified, seeded};
+    private Noise.Noise3D[] noises3 = {simplexy, weave, unified, seeded};
+    private Noise.Noise4D[] noises4 = {simplexy, weave, unified, seeded};
+
     private FoamyNoise weavy = new FoamyNoise(new WeavingNoise(1234567890));
     private FoamyNoise foam = new FoamyNoise(new ValueNoise(1234567890));
 //    private HashedValueNoise value = new HashedValueNoise(new FlawedPointHash.CubeHash(1234567890, 32));
 //    private FastNoise value = new FastNoise(1234567890, 1f, FastNoise.VALUE, 1);
-    private int noiseType = 1; // 0 for classic, 1 for wave, 2 for fast, 3 for experimental
+    private int noiseType = 2; // 0 for classic, 1 for wave, 2 for fast, 3 for experimental
     private int dim = 0; // this can be 0, 1, or 2; add 2 to get the actual dimensions
     private int octaves = 0;
     private float freq = (float) Math.exp(-4.0);
     private int alternate = 0;
     private long seed = 1234567890;
 
-    private Noise.Noise2D current2 = new Noise.Layered2D(simplexy, octaves + 1, freq);
-    private Noise.Noise3D current3 = new Noise.Layered3D(simplexy, octaves + 1, freq);
-    private Noise.Noise4D current4 = new Noise.Layered4D(simplexy, octaves + 1, freq);
+    private Noise.Noise2D current2 = new Noise.Layered2D(noises2[noiseType], octaves + 1, freq);
+    private Noise.Noise3D current3 = new Noise.Layered3D(noises3[noiseType], octaves + 1, freq);
+    private Noise.Noise4D current4 = new Noise.Layered4D(noises4[noiseType], octaves + 1, freq);
 
     private ImmediateModeRenderer20 renderer;
 
@@ -54,78 +61,21 @@ public class NoiseVarietyVisualizer extends ApplicationAdapter {
     private void refresh() {
         switch (alternate) {
             case 0: {
-                switch (noiseType) {
-                    case 0:
-                        current2 = new Noise.Layered2D(simplexy, octaves + 1, freq);
-                        current3 = new Noise.Layered3D(simplexy, octaves + 1, freq);
-                        current4 = new Noise.Layered4D(simplexy, octaves + 1, freq);
-                        break;
-                    case 1:
-                        current2 = new Noise.Layered2D(weave, octaves + 1, freq);
-                        current3 = new Noise.Layered3D(weave, octaves + 1, freq);
-                        current4 = new Noise.Layered4D(weave, octaves + 1, freq);
-                        break;
-                    case 2:
-                        current2 = new Noise.Layered2D(weavy, octaves + 1, freq);
-                        current3 = new Noise.Layered3D(weavy, octaves + 1, freq);
-                        current4 = new Noise.Layered4D(weavy, octaves + 1, freq);
-                        break;
-                    case 3:
-                        current2 = new Noise.Layered2D(foam, octaves + 1, freq);
-                        current3 = new Noise.Layered3D(foam, octaves + 1, freq);
-                        current4 = new Noise.Layered4D(foam, octaves + 1, freq);
-                        break;
-                }
+                current2 = new Noise.Layered2D(noises2[noiseType], octaves + 1, freq);
+                current3 = new Noise.Layered3D(noises3[noiseType], octaves + 1, freq);
+                current4 = new Noise.Layered4D(noises4[noiseType], octaves + 1, freq);
             }
             break;
             case 1: {
-                switch (noiseType) {
-                    case 0:
-                        current2 = new Noise.LayeredSpiral2D(simplexy, octaves + 1, freq);
-                        current3 = new Noise.LayeredSpiral3D(simplexy, octaves + 1, freq);
-                        current4 = new Noise.LayeredSpiral4D(simplexy, octaves + 1, freq);
-                        break;
-                    case 1:
-                        current2 = new Noise.LayeredSpiral2D(weave, octaves + 1, freq);
-                        current3 = new Noise.LayeredSpiral3D(weave, octaves + 1, freq);
-                        current4 = new Noise.LayeredSpiral4D(weave, octaves + 1, freq);
-                        break;
-                    case 2:
-                        current2 = new Noise.LayeredSpiral2D(weavy, octaves + 1, freq);
-                        current3 = new Noise.LayeredSpiral3D(weavy, octaves + 1, freq);
-                        current4 = new Noise.LayeredSpiral4D(weavy, octaves + 1, freq);
-                        break;
-                    case 3:
-                        current2 = new Noise.LayeredSpiral2D(foam, octaves + 1, freq);
-                        current3 = new Noise.LayeredSpiral3D(foam, octaves + 1, freq);
-                        current4 = new Noise.LayeredSpiral4D(foam, octaves + 1, freq);
-                        break;
-                }
+                current2 = new Noise.LayeredSpiral2D(noises2[noiseType], octaves + 1, freq);
+                current3 = new Noise.LayeredSpiral3D(noises3[noiseType], octaves + 1, freq);
+                current4 = new Noise.LayeredSpiral4D(noises4[noiseType], octaves + 1, freq);
             }
             break;
             case 2: {
-                switch (noiseType) {
-                    case 0:
-                        current2 = new Noise.Ridged2D(simplexy, octaves + 1, freq);
-                        current3 = new Noise.Ridged3D(simplexy, octaves + 1, freq);
-                        current4 = new Noise.Ridged4D(simplexy, octaves + 1, freq);
-                        break;
-                    case 1:
-                        current2 = new Noise.Ridged2D(weave, octaves + 1, freq);
-                        current3 = new Noise.Ridged3D(weave, octaves + 1, freq);
-                        current4 = new Noise.Ridged4D(weave, octaves + 1, freq);
-                        break;
-                    case 2:
-                        current2 = new Noise.Ridged2D(weavy, octaves + 1, freq);
-                        current3 = new Noise.Ridged3D(weavy, octaves + 1, freq);
-                        current4 = new Noise.Ridged4D(weavy, octaves + 1, freq);
-                        break;
-                    case 3:
-                        current2 = new Noise.Ridged2D(foam, octaves + 1, freq);
-                        current3 = new Noise.Ridged3D(foam, octaves + 1, freq);
-                        current4 = new Noise.Ridged4D(foam, octaves + 1, freq);
-                        break;
-                }
+                current2 = new Noise.Ridged2D(noises2[noiseType], octaves + 1, freq);
+                current3 = new Noise.Ridged3D(noises3[noiseType], octaves + 1, freq);
+                current4 = new Noise.Ridged4D(noises4[noiseType], octaves + 1, freq);
             }
             break;
 

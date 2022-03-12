@@ -126,28 +126,7 @@ public class UnifiedNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D
     public double getNoiseWithSeed(final double x, final double y, final double z, final double w, final double u, final double v, final long seed) {
         return noise(x, y, z, w, u, v, seed);
     }
-    
-    /**
-     * Used by {@link #noise(double, double, double, double, long)} to look up the vertices of the 4D triangle analogue.
-     */
-    protected static final int[] SIMPLEX_4D = {0, 1, 3, 7, 0, 1, 7, 3,
-            0, 0, 0, 0, 0, 3, 7, 1, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 1, 3, 7, 0, 0, 3, 1, 7, 0, 0, 0, 0,
-            0, 7, 1, 3, 0, 7, 3, 1, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 1, 7, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 0, 7, 0, 0, 0, 0,
-            1, 7, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            3, 7, 0, 1, 3, 7, 1, 0, 1, 0, 3, 7, 1, 0, 7, 3,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 7, 1,
-            0, 0, 0, 0, 3, 1, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 1, 7, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 1, 3, 7, 0, 3, 1,
-            0, 0, 0, 0, 7, 1, 3, 0, 3, 1, 0, 7, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 7, 1, 0, 3, 0, 0, 0, 0,
-            7, 3, 0, 1, 7, 3, 1, 0};
-    
+
     protected static final double F2 = 0.36602540378443864676372317075294,
             G2 = 0.21132486540518711774542560974902,
             H2 = G2 * 2.0,
@@ -414,14 +393,14 @@ public class UnifiedNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D
         else n4 = 0;
 
         // debug code, for finding what constant should be used for 14.75
-        final double ret =  (n0 + n1 + n2 + n3 + n4) * 14.75;
-        if(ret < -1 || ret > 1) {
-            System.out.println(ret + " is out of bounds! seed=" + seed + ", x=" + x + ", y=" + y + ", z=" + z + ", w=" + w);
-            return ret * -0.5;
-        }
-        return ret;
+//        final double ret =  (n0 + n1 + n2 + n3 + n4) * (14.7279);
+//        if(ret < -1 || ret > 1) {
+//            System.out.println(ret + " is out of bounds! seed=" + seed + ", x=" + x + ", y=" + y + ", z=" + z + ", w=" + w);
+//            return ret * -0.5;
+//        }
+//        return ret;
         // normal return code
-//        return (n0 + n1 + n2 + n3 + n4) * 14.75;
+        return (n0 + n1 + n2 + n3 + n4) * 14.7279;
     }
 
     /**
