@@ -51,29 +51,19 @@ import static squidpony.squidmath.HastyPointHash.hash256;
 import static squidpony.squidmath.Noise.fastFloor;
 
 /**
- * Simplex noise functions, in 2D, 3D, 4D, 5D, and 6D, with 4D and 6D as options for generating seamlessly-tiling noise
- * using {@link Noise#seamless2D(double[][], long, int, Noise.Noise4D)} and/or
- * {@link Noise#seamless3D(double[][][], long, int, Noise.Noise6D)}. All functions can take a long seed that should
- * significantly change the pattern of noise produced. Incorporates code from Joise; the full library is available at
- * https://github.com/SudoPlayGames/Joise , and this class adds rather significant optimization in a few methods,
- * especially 6D noise. Joise is derived from the Accidental Noise Library, available in C++ at
- * http://accidentalnoise.sourceforge.net/index.html . Both Joise and ANL have many features that SquidLib has not (yet)
- * incorporated, but now that SquidLib has seamless noise, that's a nice feature that would have needed Joise before.
- * This also supplies 5D noise, which doesn't have an immediate application like taking 6D noise and making 3D seamless
- * noise, but still has plenty of uses. <a href="http://yellowstonegames.github.io/SquidLib/AnimatedChangingGlobe.gif">This
- * world GIF</a> was made using 5D noise, for instance, using a cycle through the 4th and 5th dimensions to alter the
- * globe in a way that loops. You'd probably find yourself mostly using 2D through 4D, though, with 4D useful for 3D
- * shapes that change linearly over time.
+ * Simplex noise functions, in 2D, 3D, 4D, 5D, and 6D, based on {@link SeededNoise} but implemented more similarly
+ * internally for 4D, 5D, and 6D noise. Marked Beta and expected to be removed (either merged into SeededNoise or
+ * deleted entirely, depending on how this performs).
  */
-public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, Noise.Noise5D, Noise.Noise6D {
-    
-    public long defaultSeed;
-    public static final SeededNoise instance = new SeededNoise();
+public class UnifiedNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, Noise.Noise5D, Noise.Noise6D {
 
-    public SeededNoise() {
+    public long defaultSeed;
+    public static final UnifiedNoise instance = new UnifiedNoise();
+
+    public UnifiedNoise() {
         defaultSeed = 0x1337BEEF2A22L;
     }
-    public SeededNoise(long seed)
+    public UnifiedNoise(long seed)
     {
         defaultSeed = seed;
     }
@@ -84,13 +74,6 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
     }
     /**
      * Computes the hash for a 3D int point and its dot product with a 3D double point as one step.
-     * @param seed
-     * @param x
-     * @param y
-     * @param z
-     * @param xd
-     * @param yd
-     * @param zd
      * @return a double between -1.2571 and 1.2571, exclusive
      */
     protected static double gradCoord3D(long seed, int x, int y, int z, double xd, double yd, double zd) {
@@ -328,79 +311,117 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
     }
 
     public static double noise(final double x, final double y, final double z, final double w, final long seed) {
-        final double s = (x + y + z + w) * F4;
-        final int i = fastFloor(x + s), j = fastFloor(y + s), k = fastFloor(z + s), l = fastFloor(w + s);
-        final double[] gradient4DLUT = grad4d;
-        final double t = (i + j + k + l) * G4,
-                X0 = i - t,
-                Y0 = j - t,
-                Z0 = k - t,
-                W0 = l - t,
-                x0 = x - X0,
-                y0 = y - Y0,
-                z0 = z - Z0,
-                w0 = w - W0;
-        final int c = (x0 > y0 ? 128 : 0) | (x0 > z0 ? 64 : 0) | (y0 > z0 ? 32 : 0) | (x0 > w0 ? 16 : 0) | (y0 > w0 ? 8 : 0) | (z0 > w0 ? 4 : 0);
-        final int i1 = SIMPLEX_4D[c] >>> 2,
-                j1 = SIMPLEX_4D[c | 1] >>> 2,
-                k1 = SIMPLEX_4D[c | 2] >>> 2,
-                l1 = SIMPLEX_4D[c | 3] >>> 2,
-                i2 = SIMPLEX_4D[c] >>> 1 & 1,
-                j2 = SIMPLEX_4D[c | 1] >>> 1 & 1,
-                k2 = SIMPLEX_4D[c | 2] >>> 1 & 1,
-                l2 = SIMPLEX_4D[c | 3] >>> 1 & 1,
-                i3 = SIMPLEX_4D[c] & 1,
-                j3 = SIMPLEX_4D[c | 1] & 1,
-                k3 = SIMPLEX_4D[c | 2] & 1,
-                l3 = SIMPLEX_4D[c | 3] & 1;
-        final double x1 = x0 - i1 + G4,
-                y1 = y0 - j1 + G4,
-                z1 = z0 - k1 + G4,
-                w1 = w0 - l1 + G4,
-                x2 = x0 - i2 + 2 * G4,
-                y2 = y0 - j2 + 2 * G4,
-                z2 = z0 - k2 + 2 * G4,
-                w2 = w0 - l2 + 2 * G4,
-                x3 = x0 - i3 + 3 * G4,
-                y3 = y0 - j3 + 3 * G4,
-                z3 = z0 - k3 + 3 * G4,
-                w3 = w0 - l3 + 3 * G4,
-                x4 = x0 - 1 + 4 * G4,
-                y4 = y0 - 1 + 4 * G4,
-                z4 = z0 - 1 + 4 * G4,
-                w4 = w0 - 1 + 4 * G4;
-        double n0 = 0.0, n1 = 0.0, n2 = 0.0, n3 = 0.0, n4 = 0.0;
+        double n0, n1, n2, n3, n4;
+        double[] gradient4DLUT = grad4d;
+        double t = (x + y + z + w) * F4;
+        int i = fastFloor(x + t);
+        int j = fastFloor(y + t);
+        int k = fastFloor(z + t);
+        int l = fastFloor(w + t);
+        t = (i + j + k + l) * G4;
+        double X0 = i - t;
+        double Y0 = j - t;
+        double Z0 = k - t;
+        double W0 = l - t;
+        double x0 = x - X0;
+        double y0 = y - Y0;
+        double z0 = z - Z0;
+        double w0 = w - W0;
+
+        int rankx = 0;
+        int ranky = 0;
+        int rankz = 0;
+        int rankw = 0;
+
+        if (x0 > y0) rankx++; else ranky++;
+        if (x0 > z0) rankx++; else rankz++;
+        if (x0 > w0) rankx++; else rankw++;
+
+        if (y0 > z0) ranky++; else rankz++;
+        if (y0 > w0) ranky++; else rankw++;
+
+        if (z0 > w0) rankz++; else rankw++;
+
+        int i1 = 2 - rankx >>> 31;
+        int j1 = 2 - ranky >>> 31;
+        int k1 = 2 - rankz >>> 31;
+        int l1 = 2 - rankw >>> 31;
+
+        int i2 = 1 - rankx >>> 31;
+        int j2 = 1 - ranky >>> 31;
+        int k2 = 1 - rankz >>> 31;
+        int l2 = 1 - rankw >>> 31;
+
+        int i3 = -rankx >>> 31;
+        int j3 = -ranky >>> 31;
+        int k3 = -rankz >>> 31;
+        int l3 = -rankw >>> 31;
+
+        double x1 = x0 - i1 + G4;
+        double y1 = y0 - j1 + G4;
+        double z1 = z0 - k1 + G4;
+        double w1 = w0 - l1 + G4;
+
+        double x2 = x0 - i2 + 2 * G4;
+        double y2 = y0 - j2 + 2 * G4;
+        double z2 = z0 - k2 + 2 * G4;
+        double w2 = w0 - l2 + 2 * G4;
+
+        double x3 = x0 - i3 + 3 * G4;
+        double y3 = y0 - j3 + 3 * G4;
+        double z3 = z0 - k3 + 3 * G4;
+        double w3 = w0 - l3 + 3 * G4;
+
+        double x4 = x0 - 1 + 4 * G4;
+        double y4 = y0 - 1 + 4 * G4;
+        double z4 = z0 - 1 + 4 * G4;
+        double w4 = w0 - 1 + 4 * G4;
+
         double t0 = LIMIT4 - x0 * x0 - y0 * y0 - z0 * z0 - w0 * w0;
         if(t0 > 0) {
             final int h0 = (hash256(i, j, k, l, seed) & 0xFC);
             t0 *= t0;
             n0 = t0 * t0 * (x0 * gradient4DLUT[h0] + y0 * gradient4DLUT[h0 | 1] + z0 * gradient4DLUT[h0 | 2] + w0 * gradient4DLUT[h0 | 3]);
         }
+        else n0 = 0;
         double t1 = LIMIT4 - x1 * x1 - y1 * y1 - z1 * z1 - w1 * w1;
         if (t1 > 0) {
             final int h1 = (hash256(i + i1, j + j1, k + k1, l + l1, seed) & 0xFC);
             t1 *= t1;
             n1 = t1 * t1 * (x1 * gradient4DLUT[h1] + y1 * gradient4DLUT[h1 | 1] + z1 * gradient4DLUT[h1 | 2] + w1 * gradient4DLUT[h1 | 3]);
         }
+        else n1 = 0;
         double t2 = LIMIT4 - x2 * x2 - y2 * y2 - z2 * z2 - w2 * w2;
         if (t2 > 0) {
             final int h2 = (hash256(i + i2, j + j2, k + k2, l + l2, seed) & 0xFC);
             t2 *= t2;
             n2 = t2 * t2 * (x2 * gradient4DLUT[h2] + y2 * gradient4DLUT[h2 | 1] + z2 * gradient4DLUT[h2 | 2] + w2 * gradient4DLUT[h2 | 3]);
         }
+        else n2 = 0;
         double t3 = LIMIT4 - x3 * x3 - y3 * y3 - z3 * z3 - w3 * w3;
         if (t3 > 0) {
             final int h3 = (hash256(i + i3, j + j3, k + k3, l + l3, seed) & 0xFC);
             t3 *= t3;
             n3 = t3 * t3 * (x3 * gradient4DLUT[h3] + y3 * gradient4DLUT[h3 | 1] + z3 * gradient4DLUT[h3 | 2] + w3 * gradient4DLUT[h3 | 3]);
         }
+        else n3 = 0;
         double t4 = LIMIT4 - x4 * x4 - y4 * y4 - z4 * z4 - w4 * w4;
         if (t4 > 0) {
             final int h4 = (hash256(i + 1, j + 1, k + 1, l + 1, seed) & 0xFC);
             t4 *= t4;
             n4 = t4 * t4 * (x4 * gradient4DLUT[h4] + y4 * gradient4DLUT[h4 | 1] + z4 * gradient4DLUT[h4 | 2] + w4 * gradient4DLUT[h4 | 3]);
         }
-        return Math.max(-1.0, Math.min(1.0, 14.75 * (n0 + n1 + n2 + n3 + n4)));
+        else n4 = 0;
+
+        // debug code, for finding what constant should be used for 14.75
+        final double ret =  (n0 + n1 + n2 + n3 + n4) * 14.75;
+        if(ret < -1 || ret > 1) {
+            System.out.println(ret + " is out of bounds! seed=" + seed + ", x=" + x + ", y=" + y + ", z=" + z + ", w=" + w);
+            return ret * -0.5;
+        }
+        return ret;
+        // normal return code
+//        return (n0 + n1 + n2 + n3 + n4) * 14.75;
     }
 
     /**
@@ -578,7 +599,7 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
 
         final int skewX = fastFloor(x + s), skewY = fastFloor(y + s), skewZ = fastFloor(z + s),
                 skewW = fastFloor(w + s), skewU = fastFloor(u + s), skewV = fastFloor(v + s);
-        final double[] m = mShared, cellDist = cellDistShared, gradient6DLUT = SeededNoise.grad6d;
+        final double[] m = mShared, cellDist = cellDistShared, gradient6DLUT = UnifiedNoise.grad6d;
         final int[] distOrder = distOrderShared,
                 intLoc = intLocShared;
         intLoc[0] = skewX;
