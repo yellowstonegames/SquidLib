@@ -8,6 +8,7 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ImmediateModeRenderer20;
+import com.badlogic.gdx.utils.NumberUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import squidpony.squidmath.*;
@@ -19,14 +20,16 @@ import static com.badlogic.gdx.graphics.GL20.GL_POINTS;
  */
 public class NoiseVarietyVisualizer extends ApplicationAdapter {
 
-    private FoamyNoise simplexy = new FoamyNoise(new SeededNoise(1234567890));
+    private FoamNoise real = new FoamNoise(-12345L);
     private WeavingNoise weave = new WeavingNoise(-12345L);
     private UnifiedNoise unified = new UnifiedNoise(-12345L);
     private SeededNoise seeded = new SeededNoise(-12345L);
 
-    private Noise.Noise2D[] noises2 = {simplexy, weave, unified, seeded};
-    private Noise.Noise3D[] noises3 = {simplexy, weave, unified, seeded};
-    private Noise.Noise4D[] noises4 = {simplexy, weave, unified, seeded};
+    private Noise.Noise2D[] noises2 = {real, weave, unified, seeded};
+    private Noise.Noise3D[] noises3 = {real, weave, unified, seeded};
+    private Noise.Noise4D[] noises4 = {real, weave, unified, seeded};
+    private Noise.Noise5D[] noises5 = {real, weave, unified, seeded};
+    private Noise.Noise6D[] noises6 = {real, weave, unified, seeded};
 
     private FoamyNoise weavy = new FoamyNoise(new WeavingNoise(1234567890));
     private FoamyNoise foam = new FoamyNoise(new ValueNoise(1234567890));
@@ -41,7 +44,9 @@ public class NoiseVarietyVisualizer extends ApplicationAdapter {
 
     private Noise.Noise2D current2 = new Noise.Layered2D(noises2[noiseType], octaves + 1, freq);
     private Noise.Noise3D current3 = new Noise.Layered3D(noises3[noiseType], octaves + 1, freq);
-    private Noise.Noise4D current4 = new Noise.Layered4D(noises4[noiseType], octaves + 1, freq);
+    private Noise.Noise4D current4 = new Noise.Layered4D(noises4[noiseType], octaves + 1, freq * 256);
+    private Noise.Noise5D current5 = new Noise.Layered5D(noises5[noiseType], octaves + 1, freq * 256);
+    private Noise.Noise6D current6 = new Noise.Layered6D(noises6[noiseType], octaves + 1, freq * 256);
 
     private ImmediateModeRenderer20 renderer;
 
@@ -63,19 +68,25 @@ public class NoiseVarietyVisualizer extends ApplicationAdapter {
             case 0: {
                 current2 = new Noise.Layered2D(noises2[noiseType], octaves + 1, freq);
                 current3 = new Noise.Layered3D(noises3[noiseType], octaves + 1, freq);
-                current4 = new Noise.Layered4D(noises4[noiseType], octaves + 1, freq);
+                current4 = new Noise.Layered4D(noises4[noiseType], octaves + 1, freq * 256);
+                current5 = new Noise.Layered5D(noises5[noiseType], octaves + 1, freq * 256);
+                current6 = new Noise.Layered6D(noises6[noiseType], octaves + 1, freq * 256);
             }
             break;
             case 1: {
                 current2 = new Noise.LayeredSpiral2D(noises2[noiseType], octaves + 1, freq);
                 current3 = new Noise.LayeredSpiral3D(noises3[noiseType], octaves + 1, freq);
-                current4 = new Noise.LayeredSpiral4D(noises4[noiseType], octaves + 1, freq);
+                current4 = new Noise.LayeredSpiral4D(noises4[noiseType], octaves + 1, freq * 256);
+                current5 = new Noise.LayeredSpiral5D(noises5[noiseType], octaves + 1, freq * 256);
+                current6 = new Noise.LayeredSpiral6D(noises6[noiseType], octaves + 1, freq * 256);
             }
             break;
             case 2: {
                 current2 = new Noise.Ridged2D(noises2[noiseType], octaves + 1, freq);
                 current3 = new Noise.Ridged3D(noises3[noiseType], octaves + 1, freq);
-                current4 = new Noise.Ridged4D(noises4[noiseType], octaves + 1, freq);
+                current4 = new Noise.Ridged4D(noises4[noiseType], octaves + 1, freq * 256);
+                current5 = new Noise.Ridged5D(noises5[noiseType], octaves + 1, freq * 256);
+                current6 = new Noise.Ridged6D(noises6[noiseType], octaves + 1, freq * 256);
             }
             break;
 
@@ -110,7 +121,7 @@ public class NoiseVarietyVisualizer extends ApplicationAdapter {
                         noiseType = (noiseType + 1) & 3;
                         break;
                     case D: //dimension
-                        dim = (dim + 1) % 3;
+                        dim = (dim + 1) % 5;
                         break;
                     case F: // frequency
                         freq = ((float) Math.exp((System.currentTimeMillis() >>> 9 & 7) - 5));
@@ -144,7 +155,7 @@ public class NoiseVarietyVisualizer extends ApplicationAdapter {
     public void putMap() {
         renderer.begin(view.getCamera().combined, GL_POINTS);
         float bright, c = ctr * 0.5f;
-        if(true) {
+//        if(true) {
 //        if(noiseType != 3) {
             switch (dim) {
                 case 0:
@@ -167,52 +178,77 @@ public class NoiseVarietyVisualizer extends ApplicationAdapter {
                     break;
                 case 2:
                     for (int x = 0; x < width; x++) {
+                        double cx = NumberTools.cos_((x + c) * 0x1p-9), sx = NumberTools.sin_((x + c) * 0x1p-9);
                         for (int y = 0; y < height; y++) {
-                            bright = basicPrepare(current4.getNoiseWithSeed(x, y, ctr, 0.125f * (x + y - ctr), seed));
+                            bright = basicPrepare(current4.getNoiseWithSeed(cx, sx,
+                                    NumberTools.cos_((y - c) * 0x1p-9), NumberTools.sin_((y - c) * 0x1p-9), seed));
+                            renderer.color(bright, bright, bright, 1f);
+                            renderer.vertex(x, y, 0);
+                        }
+                    }
+                    break;
+                case 3:
+                    for (int x = 0; x < width; x++) {
+                        double cx = NumberTools.cos_((x) * 0x1p-9), sx = NumberTools.sin_((x) * 0x1p-9);
+                        for (int y = 0; y < height; y++) {
+                            bright = basicPrepare(current5.getNoiseWithSeed(cx, sx,
+                                    NumberTools.cos_((y) * 0x1p-9), NumberTools.sin_((y) * 0x1p-9), c * 0x1p-8, seed));
+                            renderer.color(bright, bright, bright, 1f);
+                            renderer.vertex(x, y, 0);
+                        }
+                    }
+                    break;
+                case 4:
+                    double ct = NumberTools.cos_((c) * 0x1p-9), st = NumberTools.sin_((c) * 0x1p-9);
+                    for (int x = 0; x < width; x++) {
+                        double cx = NumberTools.cos_((x) * 0x1p-9), sx = NumberTools.sin_((x) * 0x1p-9);
+                        for (int y = 0; y < height; y++) {
+                            bright = basicPrepare(current6.getNoiseWithSeed(cx, sx,
+                                    NumberTools.cos_((y) * 0x1p-9), NumberTools.sin_((y) * 0x1p-9), ct, st, seed));
                             renderer.color(bright, bright, bright, 1f);
                             renderer.vertex(x, y, 0);
                         }
                     }
                     break;
             }
-        }
-        else {
-            switch (dim) {
-                case 0:
-                    for (int x = 0; x < width; x++) {
-                        for (int y = 0; y < height; y++) {
-                            final double bump = current2.getNoiseWithSeed((x + ctr) * 0.25, (y+ctr) * 0.25, ~seed);
-                            bright = (float) (Math.pow(2.0 - 2.0 * Math.abs(current2.getNoiseWithSeed(x + ctr, y + ctr, seed)),
-                                    1.25 + 0.75 * bump) + bump * 0.5 + 0.5) * 0.2f;
-                            renderer.color(bright, bright, bright, 1f);
-                            renderer.vertex(x, y, 0);
-                        }
-                    }
-                    break;
-                case 1:
-                    for (int x = 0; x < width; x++) {
-                        for (int y = 0; y < height; y++) {
-                            final double bump = current3.getNoiseWithSeed(x * 0.25, y * 0.25, c * 0.25, ~seed);
-                            bright = (float) (Math.pow(2.0 - 2.0 * Math.abs(current3.getNoiseWithSeed(x, y, c, seed)),
-                                    1.25 + 0.75 * bump) + bump * 0.5 + 0.5) * 0.2f;
-                            renderer.color(bright, bright, bright, 1f);
-                            renderer.vertex(x, y, 0);
-                        }
-                    }
-                    break;
-                case 2:
-                    for (int x = 0; x < width; x++) {
-                        for (int y = 0; y < height; y++) {
-                            final double bump = current4.getNoiseWithSeed(x * 0.25, y * 0.25, ctr * 0.25, 0x1p-6 * (x + y - ctr), ~seed);
-                            bright = (float) (Math.pow(2.0 - 2.0 * Math.abs(current4.getNoiseWithSeed(x, y, ctr, 0x1p-4f * (x + y - ctr), seed)),
-                                    1.25 + 0.75 * bump) + bump * 0.5 + 0.5) * 0.2f;
-                            renderer.color(bright, bright, bright, 1f);
-                            renderer.vertex(x, y, 0);
-                        }
-                    }
-                    break;
-            }
-        }
+//        }
+//        else {
+//            switch (dim) {
+//                case 0:
+//                    for (int x = 0; x < width; x++) {
+//                        for (int y = 0; y < height; y++) {
+//                            final double bump = current2.getNoiseWithSeed((x + ctr) * 0.25, (y+ctr) * 0.25, ~seed);
+//                            bright = (float) (Math.pow(2.0 - 2.0 * Math.abs(current2.getNoiseWithSeed(x + ctr, y + ctr, seed)),
+//                                    1.25 + 0.75 * bump) + bump * 0.5 + 0.5) * 0.2f;
+//                            renderer.color(bright, bright, bright, 1f);
+//                            renderer.vertex(x, y, 0);
+//                        }
+//                    }
+//                    break;
+//                case 1:
+//                    for (int x = 0; x < width; x++) {
+//                        for (int y = 0; y < height; y++) {
+//                            final double bump = current3.getNoiseWithSeed(x * 0.25, y * 0.25, c * 0.25, ~seed);
+//                            bright = (float) (Math.pow(2.0 - 2.0 * Math.abs(current3.getNoiseWithSeed(x, y, c, seed)),
+//                                    1.25 + 0.75 * bump) + bump * 0.5 + 0.5) * 0.2f;
+//                            renderer.color(bright, bright, bright, 1f);
+//                            renderer.vertex(x, y, 0);
+//                        }
+//                    }
+//                    break;
+//                case 2:
+//                    for (int x = 0; x < width; x++) {
+//                        for (int y = 0; y < height; y++) {
+//                            final double bump = current4.getNoiseWithSeed(x * 0.25, y * 0.25, ctr * 0.25, 0x1p-6 * (x + y - ctr), ~seed);
+//                            bright = (float) (Math.pow(2.0 - 2.0 * Math.abs(current4.getNoiseWithSeed(x, y, ctr, 0x1p-4f * (x + y - ctr), seed)),
+//                                    1.25 + 0.75 * bump) + bump * 0.5 + 0.5) * 0.2f;
+//                            renderer.color(bright, bright, bright, 1f);
+//                            renderer.vertex(x, y, 0);
+//                        }
+//                    }
+//                    break;
+//            }
+//        }
         renderer.end();
 
     }
