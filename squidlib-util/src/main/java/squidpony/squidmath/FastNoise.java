@@ -4971,9 +4971,6 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
 
     // 6D Simplex
 
-    private final transient float[] m = {0, 0, 0, 0, 0, 0}, cellDist = {0, 0, 0, 0, 0, 0};
-    private final transient int[] distOrder = {0, 0, 0, 0, 0, 0}, intLoc = {0, 0, 0, 0, 0, 0};
-
     private static final float
             F6 = (float) ((Math.sqrt(7.0) - 1.0) / 6.0),
             G6 = F6 / (1f + 6f * F6),
@@ -4981,68 +4978,254 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
 
 
     public float singleSimplex(int seed, float x, float y, float z, float w, float u, float v) {
-        final float s = (x + y + z + w + u + v) * F6;
+        float n0, n1, n2, n3, n4, n5, n6;
+        float t = (x + y + z + w + u + v) * F6;
+        int i = fastFloor(x + t);
+        int j = fastFloor(y + t);
+        int k = fastFloor(z + t);
+        int l = fastFloor(w + t);
+        int h = fastFloor(u + t);
+        int g = fastFloor(v + t);
+        t = (i + j + k + l + h + g) * G6;
+        float X0 = i - t;
+        float Y0 = j - t;
+        float Z0 = k - t;
+        float W0 = l - t;
+        float U0 = h - t;
+        float V0 = g - t;
+        float x0 = x - X0;
+        float y0 = y - Y0;
+        float z0 = z - Z0;
+        float w0 = w - W0;
+        float u0 = u - U0;
+        float v0 = v - V0;
 
-        final int skewX = fastFloor(x + s), skewY = fastFloor(y + s), skewZ = fastFloor(z + s),
-                skewW = fastFloor(w + s), skewU = fastFloor(u + s), skewV = fastFloor(v + s);
-        intLoc[0] = skewX;
-        intLoc[1] = skewY;
-        intLoc[2] = skewZ;
-        intLoc[3] = skewW;
-        intLoc[4] = skewU;
-        intLoc[5] = skewV;
+        int rankx = 0;
+        int ranky = 0;
+        int rankz = 0;
+        int rankw = 0;
+        int ranku = 0;
+        int rankv = 0;
 
-        final float unskew = (skewX + skewY + skewZ + skewW + skewU + skewV) * G6;
-        cellDist[0] = x - skewX + unskew;
-        cellDist[1] = y - skewY + unskew;
-        cellDist[2] = z - skewZ + unskew;
-        cellDist[3] = w - skewW + unskew;
-        cellDist[4] = u - skewU + unskew;
-        cellDist[5] = v - skewV + unskew;
+        if (x0 > y0) rankx++; else ranky++;
+        if (x0 > z0) rankx++; else rankz++;
+        if (x0 > w0) rankx++; else rankw++;
+        if (x0 > u0) rankx++; else ranku++;
+        if (x0 > v0) rankx++; else rankv++;
 
-        int o0 = (cellDist[0]<cellDist[1]?1:0)+(cellDist[0]<cellDist[2]?1:0)+(cellDist[0]<cellDist[3]?1:0)+(cellDist[0]<cellDist[4]?1:0)+(cellDist[0]<cellDist[5]?1:0);
-        int o1 = (cellDist[1]<=cellDist[0]?1:0)+(cellDist[1]<cellDist[2]?1:0)+(cellDist[1]<cellDist[3]?1:0)+(cellDist[1]<cellDist[4]?1:0)+(cellDist[1]<cellDist[5]?1:0);
-        int o2 = (cellDist[2]<=cellDist[0]?1:0)+(cellDist[2]<=cellDist[1]?1:0)+(cellDist[2]<cellDist[3]?1:0)+(cellDist[2]<cellDist[4]?1:0)+(cellDist[2]<cellDist[5]?1:0);
-        int o3 = (cellDist[3]<=cellDist[0]?1:0)+(cellDist[3]<=cellDist[1]?1:0)+(cellDist[3]<=cellDist[2]?1:0)+(cellDist[3]<cellDist[4]?1:0)+(cellDist[3]<cellDist[5]?1:0);
-        int o4 = (cellDist[4]<=cellDist[0]?1:0)+(cellDist[4]<=cellDist[1]?1:0)+(cellDist[4]<=cellDist[2]?1:0)+(cellDist[4]<=cellDist[3]?1:0)+(cellDist[4]<cellDist[5]?1:0);
-        int o5 = 15-(o0+o1+o2+o3+o4);
+        if (y0 > z0) ranky++; else rankz++;
+        if (y0 > w0) ranky++; else rankw++;
+        if (y0 > u0) ranky++; else ranku++;
+        if (y0 > v0) ranky++; else rankv++;
 
-        distOrder[o0]=0;
-        distOrder[o1]=1;
-        distOrder[o2]=2;
-        distOrder[o3]=3;
-        distOrder[o4]=4;
-        distOrder[o5]=5;
+        if (z0 > w0) rankz++; else rankw++;
+        if (z0 > u0) rankz++; else ranku++;
+        if (z0 > v0) rankz++; else rankv++;
 
-        float n = 0;
-        float skewOffset = 0;
+        if (w0 > u0) rankw++; else ranku++;
+        if (w0 > v0) rankw++; else rankv++;
 
-        for (int c = -1; c < 6; c++) {
-            if (c != -1) intLoc[distOrder[c]]++;
+        if (u0 > v0) ranku++; else rankv++;
 
-            m[0] = cellDist[0] - (intLoc[0] - skewX) + skewOffset;
-            m[1] = cellDist[1] - (intLoc[1] - skewY) + skewOffset;
-            m[2] = cellDist[2] - (intLoc[2] - skewZ) + skewOffset;
-            m[3] = cellDist[3] - (intLoc[3] - skewW) + skewOffset;
-            m[4] = cellDist[4] - (intLoc[4] - skewU) + skewOffset;
-            m[5] = cellDist[5] - (intLoc[5] - skewV) + skewOffset;
+        int i1 = 4 - rankx >>> 31;
+        int j1 = 4 - ranky >>> 31;
+        int k1 = 4 - rankz >>> 31;
+        int l1 = 4 - rankw >>> 31;
+        int h1 = 4 - ranku >>> 31;
+        int g1 = 4 - rankv >>> 31;
 
-            float tc = LIMIT6;
+        int i2 = 3 - rankx >>> 31;
+        int j2 = 3 - ranky >>> 31;
+        int k2 = 3 - rankz >>> 31;
+        int l2 = 3 - rankw >>> 31;
+        int h2 = 3 - ranku >>> 31;
+        int g2 = 3 - rankv >>> 31;
 
-            for (int d = 0; d < 6; d++) {
-                tc -= m[d] * m[d];
-            }
+        int i3 = 2 - rankx >>> 31;
+        int j3 = 2 - ranky >>> 31;
+        int k3 = 2 - rankz >>> 31;
+        int l3 = 2 - rankw >>> 31;
+        int h3 = 2 - ranku >>> 31;
+        int g3 = 2 - rankv >>> 31;
 
-            if (tc > 0) { 
-                tc *= tc;
-                n += gradCoord6D(seed, intLoc[0], intLoc[1], intLoc[2], intLoc[3], intLoc[4], intLoc[5],
-                        m[0], m[1], m[2], m[3], m[4], m[5]) * tc * tc;
-            }
-            skewOffset += G6;
+        int i4 = 1 - rankx >>> 31;
+        int j4 = 1 - ranky >>> 31;
+        int k4 = 1 - rankz >>> 31;
+        int l4 = 1 - rankw >>> 31;
+        int h4 = 1 - ranku >>> 31;
+        int g4 = 1 - rankv >>> 31;
+
+        int i5 = -rankx >>> 31;
+        int j5 = -ranky >>> 31;
+        int k5 = -rankz >>> 31;
+        int l5 = -rankw >>> 31;
+        int h5 = -ranku >>> 31;
+        int g5 = -rankv >>> 31;
+
+        float x1 = x0 - i1 + G6;
+        float y1 = y0 - j1 + G6;
+        float z1 = z0 - k1 + G6;
+        float w1 = w0 - l1 + G6;
+        float u1 = u0 - h1 + G6;
+        float v1 = v0 - g1 + G6;
+
+        float x2 = x0 - i2 + 2 * G6;
+        float y2 = y0 - j2 + 2 * G6;
+        float z2 = z0 - k2 + 2 * G6;
+        float w2 = w0 - l2 + 2 * G6;
+        float u2 = u0 - h2 + 2 * G6;
+        float v2 = v0 - g2 + 2 * G6;
+
+        float x3 = x0 - i3 + 3 * G6;
+        float y3 = y0 - j3 + 3 * G6;
+        float z3 = z0 - k3 + 3 * G6;
+        float w3 = w0 - l3 + 3 * G6;
+        float u3 = u0 - h3 + 3 * G6;
+        float v3 = v0 - g3 + 3 * G6;
+
+        float x4 = x0 - i4 + 4 * G6;
+        float y4 = y0 - j4 + 4 * G6;
+        float z4 = z0 - k4 + 4 * G6;
+        float w4 = w0 - l4 + 4 * G6;
+        float u4 = u0 - h4 + 4 * G6;
+        float v4 = v0 - g4 + 4 * G6;
+
+        float x5 = x0 - i5 + 5 * G6;
+        float y5 = y0 - j5 + 5 * G6;
+        float z5 = z0 - k5 + 5 * G6;
+        float w5 = w0 - l5 + 5 * G6;
+        float u5 = u0 - h5 + 5 * G6;
+        float v5 = v0 - g5 + 5 * G6;
+
+        float x6 = x0 - 1 + 6 * G6;
+        float y6 = y0 - 1 + 6 * G6;
+        float z6 = z0 - 1 + 6 * G6;
+        float w6 = w0 - 1 + 6 * G6;
+        float u6 = u0 - 1 + 6 * G6;
+        float v6 = v0 - 1 + 6 * G6;
+
+        n0 = LIMIT6 - x0 * x0 - y0 * y0 - z0 * z0 - w0 * w0 - u0 * u0 - v0 * v0;
+        if (n0 <= 0f) n0 = 0f;
+        else
+        {
+            n0 *= n0;
+            n0 *= n0 * gradCoord6D(seed, i, j, k, l, h, g, x0, y0, z0, w0, u0, v0);
         }
-        return 7.5f * n;
+
+        n1 = LIMIT6 - x1 * x1 - y1 * y1 - z1 * z1 - w1 * w1 - u1 * u1 - v1 * v1;
+        if (n1 <= 0f) n1 = 0f;
+        else
+        {
+            n1 *= n1;
+            n1 *= n1 * gradCoord6D(seed, i + i1, j + j1, k + k1, l + l1, h + h1, g + g1, x1, y1, z1, w1, u1, v1);
+        }
+
+        n2 = LIMIT6 - x2 * x2 - y2 * y2 - z2 * z2 - w2 * w2 - u2 * u2 - v2 * v2;
+        if (n2 <= 0f) n2 = 0f;
+        else
+        {
+            n2 *= n2;
+            n2 *= n2 * gradCoord6D(seed, i + i2, j + j2, k + k2, l + l2, h + h2, g + g2, x2, y2, z2, w2, u2, v2);
+        }
+
+        n3 = LIMIT6 - x3 * x3 - y3 * y3 - z3 * z3 - w3 * w3 - u3 * u3 - v3 * v3;
+        if (n3 <= 0f) n3 = 0f;
+        else
+        {
+            n3 *= n3;
+            n3 *= n3 * gradCoord6D(seed, i + i3, j + j3, k + k3, l + l3, h + h3, g + g3, x3, y3, z3, w3, u3, v3);
+        }
+
+        n4 = LIMIT6 - x4 * x4 - y4 * y4 - z4 * z4 - w4 * w4 - u4 * u4 - v4 * v4;
+        if (n4 <= 0f) n4 = 0f;
+        else
+        {
+            n4 *= n4;
+            n4 *= n4 * gradCoord6D(seed, i + i4, j + j4, k + k4, l + l4, h + h4, g + g4, x4, y4, z4, w4, u4, v4);
+        }
+
+        n5 = LIMIT6 - x5 * x5 - y5 * y5 - z5 * z5 - w5 * w5 - u5 * u5 - v5 * v5;
+        if (n5 <= 0f) n5 = 0f;
+        else
+        {
+            n5 *= n5;
+            n5 *= n5 * gradCoord6D(seed, i + i5, j + j5, k + k5, l + l5, h + h5, g + g5, x5, y5, z5, w5, u5, v5);
+        }
+
+        n6 = LIMIT6 - x6 * x6 - y6 * y6 - z6 * z6 - w6 * w6 - u6 * u6 - v6 * v6;
+        if (n6 <= 0f) n6 = 0f;
+        else
+        {
+            n6 *= n6;
+            n6 *= n6 * gradCoord6D(seed, i + 1, j + 1, k + 1, l + 1, h + 1, g + 1, x6, y6, z6, w6, u6, v6);
+        }
+
+        return  (n0 + n1 + n2 + n3 + n4 + n5 + n6) * 7.5f;
 
     }
+//    public float singleSimplex(int seed, float x, float y, float z, float w, float u, float v) {
+//        final float s = (x + y + z + w + u + v) * F6;
+//
+//        final int skewX = fastFloor(x + s), skewY = fastFloor(y + s), skewZ = fastFloor(z + s),
+//                skewW = fastFloor(w + s), skewU = fastFloor(u + s), skewV = fastFloor(v + s);
+//        intLoc[0] = skewX;
+//        intLoc[1] = skewY;
+//        intLoc[2] = skewZ;
+//        intLoc[3] = skewW;
+//        intLoc[4] = skewU;
+//        intLoc[5] = skewV;
+//
+//        final float unskew = (skewX + skewY + skewZ + skewW + skewU + skewV) * G6;
+//        cellDist[0] = x - skewX + unskew;
+//        cellDist[1] = y - skewY + unskew;
+//        cellDist[2] = z - skewZ + unskew;
+//        cellDist[3] = w - skewW + unskew;
+//        cellDist[4] = u - skewU + unskew;
+//        cellDist[5] = v - skewV + unskew;
+//
+//        int o0 = (cellDist[0]<cellDist[1]?1:0)+(cellDist[0]<cellDist[2]?1:0)+(cellDist[0]<cellDist[3]?1:0)+(cellDist[0]<cellDist[4]?1:0)+(cellDist[0]<cellDist[5]?1:0);
+//        int o1 = (cellDist[1]<=cellDist[0]?1:0)+(cellDist[1]<cellDist[2]?1:0)+(cellDist[1]<cellDist[3]?1:0)+(cellDist[1]<cellDist[4]?1:0)+(cellDist[1]<cellDist[5]?1:0);
+//        int o2 = (cellDist[2]<=cellDist[0]?1:0)+(cellDist[2]<=cellDist[1]?1:0)+(cellDist[2]<cellDist[3]?1:0)+(cellDist[2]<cellDist[4]?1:0)+(cellDist[2]<cellDist[5]?1:0);
+//        int o3 = (cellDist[3]<=cellDist[0]?1:0)+(cellDist[3]<=cellDist[1]?1:0)+(cellDist[3]<=cellDist[2]?1:0)+(cellDist[3]<cellDist[4]?1:0)+(cellDist[3]<cellDist[5]?1:0);
+//        int o4 = (cellDist[4]<=cellDist[0]?1:0)+(cellDist[4]<=cellDist[1]?1:0)+(cellDist[4]<=cellDist[2]?1:0)+(cellDist[4]<=cellDist[3]?1:0)+(cellDist[4]<cellDist[5]?1:0);
+//        int o5 = 15-(o0+o1+o2+o3+o4);
+//
+//        distOrder[o0]=0;
+//        distOrder[o1]=1;
+//        distOrder[o2]=2;
+//        distOrder[o3]=3;
+//        distOrder[o4]=4;
+//        distOrder[o5]=5;
+//
+//        float n = 0;
+//        float skewOffset = 0;
+//
+//        for (int c = -1; c < 6; c++) {
+//            if (c != -1) intLoc[distOrder[c]]++;
+//
+//            m[0] = cellDist[0] - (intLoc[0] - skewX) + skewOffset;
+//            m[1] = cellDist[1] - (intLoc[1] - skewY) + skewOffset;
+//            m[2] = cellDist[2] - (intLoc[2] - skewZ) + skewOffset;
+//            m[3] = cellDist[3] - (intLoc[3] - skewW) + skewOffset;
+//            m[4] = cellDist[4] - (intLoc[4] - skewU) + skewOffset;
+//            m[5] = cellDist[5] - (intLoc[5] - skewV) + skewOffset;
+//
+//            float tc = LIMIT6;
+//
+//            for (int d = 0; d < 6; d++) {
+//                tc -= m[d] * m[d];
+//            }
+//
+//            if (tc > 0) {
+//                tc *= tc;
+//                n += gradCoord6D(seed, intLoc[0], intLoc[1], intLoc[2], intLoc[3], intLoc[4], intLoc[5],
+//                        m[0], m[1], m[2], m[3], m[4], m[5]) * tc * tc;
+//            }
+//            skewOffset += G6;
+//        }
+//        return 7.5f * n;
+//
+//    }
 
     public float getSimplex(float x, float y, float z, float w, float u, float v) {
         return singleSimplex(seed, x * frequency, y * frequency, z * frequency, w * frequency, u * frequency, v * frequency);

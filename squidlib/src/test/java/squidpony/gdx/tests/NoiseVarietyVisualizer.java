@@ -21,7 +21,7 @@ import static com.badlogic.gdx.graphics.GL20.GL_POINTS;
 public class NoiseVarietyVisualizer extends ApplicationAdapter {
 
     private FoamNoise real = new FoamNoise(-12345L);
-    private WeavingNoise weave = new WeavingNoise(-12345L);
+    private FastNoise weave = new FastNoise(-12345, 1f);
     private UnifiedNoise unified = new UnifiedNoise(-12345L);
     private SeededNoise seeded = new SeededNoise(-12345L);
 
