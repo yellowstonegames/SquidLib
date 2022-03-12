@@ -704,8 +704,8 @@ public class UnifiedNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D
         {
             final int hash = hash256(i, j, k, l, h, g, seed) * 6;
             n0 *= n0;
-            n0 *= n0 * (gradient6DLUT[hash] * x0 + gradient6DLUT[hash] * y0 + gradient6DLUT[hash] * z0 +
-                    gradient6DLUT[hash] * w0 + gradient6DLUT[hash] * u0 + gradient6DLUT[hash] * v0);
+            n0 *= n0 * (gradient6DLUT[hash] * x0 + gradient6DLUT[hash + 1] * y0 + gradient6DLUT[hash + 2] * z0 +
+                    gradient6DLUT[hash + 3] * w0 + gradient6DLUT[hash + 4] * u0 + gradient6DLUT[hash + 5] * v0);
         }
 
         n1 = LIMIT6 - x1 * x1 - y1 * y1 - z1 * z1 - w1 * w1 - u1 * u1 - v1 * v1;
@@ -714,8 +714,8 @@ public class UnifiedNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D
         {
             final int hash = hash256(i + i1, j + j1, k + k1, l + l1, h + h1, g + g1, seed) * 6;
             n1 *= n1;
-            n1 *= n1 * (gradient6DLUT[hash] * x1 + gradient6DLUT[hash] * y1 + gradient6DLUT[hash] * z1 +
-                    gradient6DLUT[hash] * w1 + gradient6DLUT[hash] * u1 + gradient6DLUT[hash] * v1);
+            n1 *= n1 * (gradient6DLUT[hash] * x1 + gradient6DLUT[hash + 1] * y1 + gradient6DLUT[hash + 2] * z1 +
+                    gradient6DLUT[hash + 3] * w1 + gradient6DLUT[hash + 4] * u1 + gradient6DLUT[hash + 5] * v1);
         }
         
         n2 = LIMIT6 - x2 * x2 - y2 * y2 - z2 * z2 - w2 * w2 - u2 * u2 - v2 * v2;
@@ -724,8 +724,8 @@ public class UnifiedNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D
         {
             final int hash = hash256(i + i2, j + j2, k + k2, l + l2, h + h2, g + g2, seed) * 6;
             n2 *= n2;
-            n2 *= n2 * (gradient6DLUT[hash] * x2 + gradient6DLUT[hash] * y2 + gradient6DLUT[hash] * z2 +
-                    gradient6DLUT[hash] * w2 + gradient6DLUT[hash] * u2 + gradient6DLUT[hash] * v2);
+            n2 *= n2 * (gradient6DLUT[hash] * x2 + gradient6DLUT[hash + 1] * y2 + gradient6DLUT[hash + 2] * z2 +
+                    gradient6DLUT[hash + 3] * w2 + gradient6DLUT[hash + 4] * u2 + gradient6DLUT[hash + 5] * v2);
         }
 
         n3 = LIMIT6 - x3 * x3 - y3 * y3 - z3 * z3 - w3 * w3 - u3 * u3 - v3 * v3;
@@ -734,8 +734,8 @@ public class UnifiedNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D
         {
             final int hash = hash256(i + i3, j + j3, k + k3, l + l3, h + h3, g + g3, seed) * 6;
             n3 *= n3;
-            n3 *= n3 * (gradient6DLUT[hash] * x3 + gradient6DLUT[hash] * y3 + gradient6DLUT[hash] * z3 +
-                    gradient6DLUT[hash] * w3 + gradient6DLUT[hash] * u3 + gradient6DLUT[hash] * v3);
+            n3 *= n3 * (gradient6DLUT[hash] * x3 + gradient6DLUT[hash + 1] * y3 + gradient6DLUT[hash + 2] * z3 +
+                    gradient6DLUT[hash + 3] * w3 + gradient6DLUT[hash + 4] * u3 + gradient6DLUT[hash + 5] * v3);
         }
 
         n4 = LIMIT6 - x4 * x4 - y4 * y4 - z4 * z4 - w4 * w4 - u4 * u4 - v4 * v4;
@@ -744,8 +744,8 @@ public class UnifiedNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D
         {
             final int hash = hash256(i + i4, j + j4, k + k4, l + l4, h + h4, g + g4, seed) * 6;
             n4 *= n4;
-            n4 *= n4 * (gradient6DLUT[hash] * x4 + gradient6DLUT[hash] * y4 + gradient6DLUT[hash] * z4 +
-                    gradient6DLUT[hash] * w4 + gradient6DLUT[hash] * u4 + gradient6DLUT[hash] * v4);
+            n4 *= n4 * (gradient6DLUT[hash] * x4 + gradient6DLUT[hash + 1] * y4 + gradient6DLUT[hash + 2] * z4 +
+                    gradient6DLUT[hash + 3] * w4 + gradient6DLUT[hash + 4] * u4 + gradient6DLUT[hash + 5] * v4);
         }
 
         n5 = LIMIT6 - x5 * x5 - y5 * y5 - z5 * z5 - w5 * w5 - u5 * u5 - v5 * v5;
@@ -754,8 +754,8 @@ public class UnifiedNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D
         {
             final int hash = hash256(i + i5, j + j5, k + k5, l + l5, h + h5, g + g5, seed) * 6;
             n5 *= n5;
-            n5 *= n5 * (gradient6DLUT[hash] * x5 + gradient6DLUT[hash] * y5 + gradient6DLUT[hash] * z5 +
-                    gradient6DLUT[hash] * w5 + gradient6DLUT[hash] * u5 + gradient6DLUT[hash] * v5);
+            n5 *= n5 * (gradient6DLUT[hash] * x5 + gradient6DLUT[hash + 1] * y5 + gradient6DLUT[hash + 2] * z5 +
+                    gradient6DLUT[hash + 3] * w5 + gradient6DLUT[hash + 4] * u5 + gradient6DLUT[hash + 5] * v5);
         }
 
         n6 = LIMIT6 - x6 * x6 - y6 * y6 - z6 * z6 - w6 * w6 - u6 * u6 - v6 * v6;
@@ -764,8 +764,8 @@ public class UnifiedNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D
         {
             final int hash = hash256(i + 1, j + 1, k + 1, l + 1, h + 1, g + 1, seed) * 6;
             n6 *= n6;
-            n6 *= n6 * (gradient6DLUT[hash] * x6 + gradient6DLUT[hash] * y6 + gradient6DLUT[hash] * z6 +
-                    gradient6DLUT[hash] * w6 + gradient6DLUT[hash] * u6 + gradient6DLUT[hash] * v6);
+            n6 *= n6 * (gradient6DLUT[hash] * x6 + gradient6DLUT[hash + 1] * y6 + gradient6DLUT[hash + 2] * z6 +
+                    gradient6DLUT[hash + 3] * w6 + gradient6DLUT[hash + 4] * u6 + gradient6DLUT[hash + 5] * v6);
         }
 
         return  (n0 + n1 + n2 + n3 + n4 + n5 + n6) * 7.5;
