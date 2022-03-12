@@ -285,7 +285,7 @@ public class UnifiedNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D
         }
         // Add contributions from each corner to get the final noise value.
         // The result is clamped to stay just inside [-1,1]
-        return Math.max(-1.0, Math.min(1.0, 31.5 * n));
+        return 31.5 * n;
         //return (32.0 * n) * 1.25086885 + 0.0003194984;
     }
 

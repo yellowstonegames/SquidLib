@@ -3820,7 +3820,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         return sum * 2f / correction - 1f;
     }
 
-    // Simplex Noise
+    // 2D Simplex
 
     public float getSimplexFractal(float x, float y) {
         x *= frequency;
@@ -4089,6 +4089,10 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         return singleSimplex(seed, x * frequency, y * frequency);
     }
 
+    public static final float F2f = 0.3660254f;
+    public static final float G2f = 0.21132487f;
+    public static final float H2f = 0.42264974f;
+
     public float singleSimplex(int seed, float x, float y) {
         float t = (x + y) * F2f;
         int i = fastFloor(x + t);
@@ -4136,6 +4140,8 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         }
         return n * 99.20689070704672f; // this is 99.83685446303647 / 1.00635 ; the first number was found by kdotjpg
     }
+
+    // 3D Simplex
 
     public float getSimplexFractal(float x, float y, float z) {
         x *= frequency;
@@ -4435,6 +4441,9 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         return singleSimplex(seed, x * frequency, y * frequency, z * frequency);
     }
 
+    public static final float F3f = 0.33333334f;
+    public static final float G3f = 0.16666667f;
+
     public float singleSimplex(int seed, float x, float y, float z) {
         float t = (x + y + z) * F3f;
         int i = fastFloor(x + t);
@@ -4539,94 +4548,8 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         return 31.5f * n;
     }
 
-    public float getSimplex(float x, float y, float z, float w) {
-        return singleSimplex(seed, x * frequency, y * frequency, z * frequency, w * frequency);
-    }
+    // 4D Simplex
 
-    public float singleSimplex(int seed, float x, float y, float z, float w) {
-        float n = 0f;
-        float t = (x + y + z + w) * F4f;
-        int i = fastFloor(x + t);
-        int j = fastFloor(y + t);
-        int k = fastFloor(z + t);
-        int l = fastFloor(w + t);
-        t = (i + j + k + l) * G4f;
-        final float X0 = i - t;
-        final float Y0 = j - t;
-        final float Z0 = k - t;
-        final float W0 = l - t;
-        final float x0 = x - X0;
-        final float y0 = y - Y0;
-        final float z0 = z - Z0;
-        final float w0 = w - W0;
-
-        final int[] SIMPLEX_4D = FastNoise.SIMPLEX_4D;
-        final int c = (x0 > y0 ? 128 : 0) | (x0 > z0 ? 64 : 0) | (y0 > z0 ? 32 : 0) | (x0 > w0 ? 16 : 0) | (y0 > w0 ? 8 : 0) | (z0 > w0 ? 4 : 0);
-        final int ip = SIMPLEX_4D[c];
-        final int jp = SIMPLEX_4D[c + 1];
-        final int kp = SIMPLEX_4D[c + 2];
-        final int lp = SIMPLEX_4D[c + 3];
-
-        final int i1 = ip >> 2;
-        final int i2 = ip >> 1 & 1;
-        final int i3 = ip & 1;
-        final int j1 = jp >> 2;
-        final int j2 = jp >> 1 & 1;
-        final int j3 = jp & 1;
-        final int k1 = kp >> 2;
-        final int k2 = kp >> 1 & 1;
-        final int k3 = kp & 1;
-        final int l1 = lp >> 2;
-        final int l2 = lp >> 1 & 1;
-        final int l3 = lp & 1;
-
-        final float x1 = x0 - i1 + G4f;
-        final float y1 = y0 - j1 + G4f;
-        final float z1 = z0 - k1 + G4f;
-        final float w1 = w0 - l1 + G4f;
-        final float x2 = x0 - i2 + 2 * G4f;
-        final float y2 = y0 - j2 + 2 * G4f;
-        final float z2 = z0 - k2 + 2 * G4f;
-        final float w2 = w0 - l2 + 2 * G4f;
-        final float x3 = x0 - i3 + 3 * G4f;
-        final float y3 = y0 - j3 + 3 * G4f;
-        final float z3 = z0 - k3 + 3 * G4f;
-        final float w3 = w0 - l3 + 3 * G4f;
-        final float x4 = x0 - 1 + 4 * G4f;
-        final float y4 = y0 - 1 + 4 * G4f;
-        final float z4 = z0 - 1 + 4 * G4f;
-        final float w4 = w0 - 1 + 4 * G4f;
-
-        t = 0.75f - x0 * x0 - y0 * y0 - z0 * z0 - w0 * w0;
-        if (t > 0) {
-            t *= t;
-            n = t * t * gradCoord4D(seed, i, j, k, l, x0, y0, z0, w0);
-        }
-        t = 0.75f - x1 * x1 - y1 * y1 - z1 * z1 - w1 * w1;
-        if (t > 0) {
-            t *= t;
-            n += t * t * gradCoord4D(seed, i + i1, j + j1, k + k1, l + l1, x1, y1, z1, w1);
-        }
-        t = 0.75f - x2 * x2 - y2 * y2 - z2 * z2 - w2 * w2;
-        if (t > 0) {
-            t *= t;
-            n += t * t * gradCoord4D(seed, i + i2, j + j2, k + k2, l + l2, x2, y2, z2, w2);
-        }
-        t = 0.75f - x3 * x3 - y3 * y3 - z3 * z3 - w3 * w3;
-        if (t > 0) {
-            t *= t;
-            n += t * t * gradCoord4D(seed, i + i3, j + j3, k + k3, l + l3, x3, y3, z3, w3);
-        }
-        t = 0.75f - x4 * x4 - y4 * y4 - z4 * z4 - w4 * w4;
-        if (t > 0) {
-            t *= t;
-            n += t * t * gradCoord4D(seed, i + 1, j + 1, k + 1, l + 1, x4, y4, z4, w4);
-        }
-
-        return 4.9f * n;
-    }
-
-    // Simplex Noise
     public float getSimplexFractal(float x, float y, float z, float w) {
         x *= frequency;
         y *= frequency;
@@ -4714,6 +4637,120 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
             w *= lacunarity;
         }
         return sum * 2f / correction - 1f;
+    }
+
+    public float getSimplex(float x, float y, float z, float w) {
+        return singleSimplex(seed, x * frequency, y * frequency, z * frequency, w * frequency);
+    }
+
+    public static final float F4f = (float) ((2.23606797 - 1.0) / 4.0);
+    public static final float G4f = (float) ((5.0 - 2.23606797) / 20.0);
+    public static final float LIMIT4 = 0.62f;
+
+    public float singleSimplex(int seed, float x, float y, float z, float w) {
+        float n0, n1, n2, n3, n4;
+        float[] gradient4DLUT = grad4f;
+        float t = (x + y + z + w) * F4f;
+        int i = fastFloor(x + t);
+        int j = fastFloor(y + t);
+        int k = fastFloor(z + t);
+        int l = fastFloor(w + t);
+        t = (i + j + k + l) * G4f;
+        float X0 = i - t;
+        float Y0 = j - t;
+        float Z0 = k - t;
+        float W0 = l - t;
+        float x0 = x - X0;
+        float y0 = y - Y0;
+        float z0 = z - Z0;
+        float w0 = w - W0;
+
+        int rankx = 0;
+        int ranky = 0;
+        int rankz = 0;
+        int rankw = 0;
+
+        if (x0 > y0) rankx++; else ranky++;
+        if (x0 > z0) rankx++; else rankz++;
+        if (x0 > w0) rankx++; else rankw++;
+
+        if (y0 > z0) ranky++; else rankz++;
+        if (y0 > w0) ranky++; else rankw++;
+
+        if (z0 > w0) rankz++; else rankw++;
+
+        int i1 = 2 - rankx >>> 31;
+        int j1 = 2 - ranky >>> 31;
+        int k1 = 2 - rankz >>> 31;
+        int l1 = 2 - rankw >>> 31;
+
+        int i2 = 1 - rankx >>> 31;
+        int j2 = 1 - ranky >>> 31;
+        int k2 = 1 - rankz >>> 31;
+        int l2 = 1 - rankw >>> 31;
+
+        int i3 = -rankx >>> 31;
+        int j3 = -ranky >>> 31;
+        int k3 = -rankz >>> 31;
+        int l3 = -rankw >>> 31;
+
+        float x1 = x0 - i1 + G4f;
+        float y1 = y0 - j1 + G4f;
+        float z1 = z0 - k1 + G4f;
+        float w1 = w0 - l1 + G4f;
+
+        float x2 = x0 - i2 + 2 * G4f;
+        float y2 = y0 - j2 + 2 * G4f;
+        float z2 = z0 - k2 + 2 * G4f;
+        float w2 = w0 - l2 + 2 * G4f;
+
+        float x3 = x0 - i3 + 3 * G4f;
+        float y3 = y0 - j3 + 3 * G4f;
+        float z3 = z0 - k3 + 3 * G4f;
+        float w3 = w0 - l3 + 3 * G4f;
+
+        float x4 = x0 - 1 + 4 * G4f;
+        float y4 = y0 - 1 + 4 * G4f;
+        float z4 = z0 - 1 + 4 * G4f;
+        float w4 = w0 - 1 + 4 * G4f;
+
+        float t0 = LIMIT4 - x0 * x0 - y0 * y0 - z0 * z0 - w0 * w0;
+        if(t0 > 0) {
+            final int h0 = (hash256(i, j, k, l, seed) & 0xFC);
+            t0 *= t0;
+            n0 = t0 * t0 * (x0 * gradient4DLUT[h0] + y0 * gradient4DLUT[h0 | 1] + z0 * gradient4DLUT[h0 | 2] + w0 * gradient4DLUT[h0 | 3]);
+        }
+        else n0 = 0;
+        float t1 = LIMIT4 - x1 * x1 - y1 * y1 - z1 * z1 - w1 * w1;
+        if (t1 > 0) {
+            final int h1 = (hash256(i + i1, j + j1, k + k1, l + l1, seed) & 0xFC);
+            t1 *= t1;
+            n1 = t1 * t1 * (x1 * gradient4DLUT[h1] + y1 * gradient4DLUT[h1 | 1] + z1 * gradient4DLUT[h1 | 2] + w1 * gradient4DLUT[h1 | 3]);
+        }
+        else n1 = 0;
+        float t2 = LIMIT4 - x2 * x2 - y2 * y2 - z2 * z2 - w2 * w2;
+        if (t2 > 0) {
+            final int h2 = (hash256(i + i2, j + j2, k + k2, l + l2, seed) & 0xFC);
+            t2 *= t2;
+            n2 = t2 * t2 * (x2 * gradient4DLUT[h2] + y2 * gradient4DLUT[h2 | 1] + z2 * gradient4DLUT[h2 | 2] + w2 * gradient4DLUT[h2 | 3]);
+        }
+        else n2 = 0;
+        float t3 = LIMIT4 - x3 * x3 - y3 * y3 - z3 * z3 - w3 * w3;
+        if (t3 > 0) {
+            final int h3 = (hash256(i + i3, j + j3, k + k3, l + l3, seed) & 0xFC);
+            t3 *= t3;
+            n3 = t3 * t3 * (x3 * gradient4DLUT[h3] + y3 * gradient4DLUT[h3 | 1] + z3 * gradient4DLUT[h3 | 2] + w3 * gradient4DLUT[h3 | 3]);
+        }
+        else n3 = 0;
+        float t4 = LIMIT4 - x4 * x4 - y4 * y4 - z4 * z4 - w4 * w4;
+        if (t4 > 0) {
+            final int h4 = (hash256(i + 1, j + 1, k + 1, l + 1, seed) & 0xFC);
+            t4 *= t4;
+            n4 = t4 * t4 * (x4 * gradient4DLUT[h4] + y4 * gradient4DLUT[h4 | 1] + z4 * gradient4DLUT[h4 | 2] + w4 * gradient4DLUT[h4 | 3]);
+        }
+        else n4 = 0;
+
+        return (n0 + n1 + n2 + n3 + n4) * 14.7279f;
     }
 
     // 5D Simplex
@@ -5163,69 +5200,6 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         return  (n0 + n1 + n2 + n3 + n4 + n5 + n6) * 7.5f;
 
     }
-//    public float singleSimplex(int seed, float x, float y, float z, float w, float u, float v) {
-//        final float s = (x + y + z + w + u + v) * F6;
-//
-//        final int skewX = fastFloor(x + s), skewY = fastFloor(y + s), skewZ = fastFloor(z + s),
-//                skewW = fastFloor(w + s), skewU = fastFloor(u + s), skewV = fastFloor(v + s);
-//        intLoc[0] = skewX;
-//        intLoc[1] = skewY;
-//        intLoc[2] = skewZ;
-//        intLoc[3] = skewW;
-//        intLoc[4] = skewU;
-//        intLoc[5] = skewV;
-//
-//        final float unskew = (skewX + skewY + skewZ + skewW + skewU + skewV) * G6;
-//        cellDist[0] = x - skewX + unskew;
-//        cellDist[1] = y - skewY + unskew;
-//        cellDist[2] = z - skewZ + unskew;
-//        cellDist[3] = w - skewW + unskew;
-//        cellDist[4] = u - skewU + unskew;
-//        cellDist[5] = v - skewV + unskew;
-//
-//        int o0 = (cellDist[0]<cellDist[1]?1:0)+(cellDist[0]<cellDist[2]?1:0)+(cellDist[0]<cellDist[3]?1:0)+(cellDist[0]<cellDist[4]?1:0)+(cellDist[0]<cellDist[5]?1:0);
-//        int o1 = (cellDist[1]<=cellDist[0]?1:0)+(cellDist[1]<cellDist[2]?1:0)+(cellDist[1]<cellDist[3]?1:0)+(cellDist[1]<cellDist[4]?1:0)+(cellDist[1]<cellDist[5]?1:0);
-//        int o2 = (cellDist[2]<=cellDist[0]?1:0)+(cellDist[2]<=cellDist[1]?1:0)+(cellDist[2]<cellDist[3]?1:0)+(cellDist[2]<cellDist[4]?1:0)+(cellDist[2]<cellDist[5]?1:0);
-//        int o3 = (cellDist[3]<=cellDist[0]?1:0)+(cellDist[3]<=cellDist[1]?1:0)+(cellDist[3]<=cellDist[2]?1:0)+(cellDist[3]<cellDist[4]?1:0)+(cellDist[3]<cellDist[5]?1:0);
-//        int o4 = (cellDist[4]<=cellDist[0]?1:0)+(cellDist[4]<=cellDist[1]?1:0)+(cellDist[4]<=cellDist[2]?1:0)+(cellDist[4]<=cellDist[3]?1:0)+(cellDist[4]<cellDist[5]?1:0);
-//        int o5 = 15-(o0+o1+o2+o3+o4);
-//
-//        distOrder[o0]=0;
-//        distOrder[o1]=1;
-//        distOrder[o2]=2;
-//        distOrder[o3]=3;
-//        distOrder[o4]=4;
-//        distOrder[o5]=5;
-//
-//        float n = 0;
-//        float skewOffset = 0;
-//
-//        for (int c = -1; c < 6; c++) {
-//            if (c != -1) intLoc[distOrder[c]]++;
-//
-//            m[0] = cellDist[0] - (intLoc[0] - skewX) + skewOffset;
-//            m[1] = cellDist[1] - (intLoc[1] - skewY) + skewOffset;
-//            m[2] = cellDist[2] - (intLoc[2] - skewZ) + skewOffset;
-//            m[3] = cellDist[3] - (intLoc[3] - skewW) + skewOffset;
-//            m[4] = cellDist[4] - (intLoc[4] - skewU) + skewOffset;
-//            m[5] = cellDist[5] - (intLoc[5] - skewV) + skewOffset;
-//
-//            float tc = LIMIT6;
-//
-//            for (int d = 0; d < 6; d++) {
-//                tc -= m[d] * m[d];
-//            }
-//
-//            if (tc > 0) {
-//                tc *= tc;
-//                n += gradCoord6D(seed, intLoc[0], intLoc[1], intLoc[2], intLoc[3], intLoc[4], intLoc[5],
-//                        m[0], m[1], m[2], m[3], m[4], m[5]) * tc * tc;
-//            }
-//            skewOffset += G6;
-//        }
-//        return 7.5f * n;
-//
-//    }
 
     public float getSimplex(float x, float y, float z, float w, float u, float v) {
         return singleSimplex(seed, x * frequency, y * frequency, z * frequency, w * frequency, u * frequency, v * frequency);
@@ -6677,16 +6651,6 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
     }
 
 
-
-
-    public static final float F2f = 0.3660254f;
-    public static final float G2f = 0.21132487f;
-    public static final float H2f = 0.42264974f;
-    public static final float F3f = 0.33333334f;
-    public static final float G3f = 0.16666667f;
-
-    public static final float F4f = (float) ((2.23606797 - 1.0) / 4.0);
-    public static final float G4f = (float) ((5.0 - 2.23606797) / 20.0);
 
     /**
      * Simple container class that holds 2 floats.
