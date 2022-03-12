@@ -568,78 +568,207 @@ public class UnifiedNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D
 //            return 1.0;
 //        }
 //        return t;
-    
-    private static final double[] mShared = {0, 0, 0, 0, 0, 0}, cellDistShared = {0, 0, 0, 0, 0, 0};
-    private static final int[] distOrderShared = {0, 0, 0, 0, 0, 0}, intLocShared = {0, 0, 0, 0, 0, 0};
 
     public static double noise(final double x, final double y, final double z,
                                final double w, final double u, final double v, final long seed) {
-        final double s = (x + y + z + w + u + v) * F6;
+        double[] gradient6DLUT = grad6d;
+        double n0, n1, n2, n3, n4, n5, n6;
+        double t = (x + y + z + w + u + v) * F6;
+        int i = fastFloor(x + t);
+        int j = fastFloor(y + t);
+        int k = fastFloor(z + t);
+        int l = fastFloor(w + t);
+        int h = fastFloor(u + t);
+        int g = fastFloor(v + t);
+        t = (i + j + k + l + h + g) * G6;
+        double X0 = i - t;
+        double Y0 = j - t;
+        double Z0 = k - t;
+        double W0 = l - t;
+        double U0 = h - t;
+        double V0 = g - t;
+        double x0 = x - X0;
+        double y0 = y - Y0;
+        double z0 = z - Z0;
+        double w0 = w - W0;
+        double u0 = u - U0;
+        double v0 = v - V0;
 
-        final int skewX = fastFloor(x + s), skewY = fastFloor(y + s), skewZ = fastFloor(z + s),
-                skewW = fastFloor(w + s), skewU = fastFloor(u + s), skewV = fastFloor(v + s);
-        final double[] m = mShared, cellDist = cellDistShared, gradient6DLUT = UnifiedNoise.grad6d;
-        final int[] distOrder = distOrderShared,
-                intLoc = intLocShared;
-        intLoc[0] = skewX;
-        intLoc[1] = skewY;
-        intLoc[2] = skewZ;
-        intLoc[3] = skewW;
-        intLoc[4] = skewU;
-        intLoc[5] = skewV;
+        int rankx = 0;
+        int ranky = 0;
+        int rankz = 0;
+        int rankw = 0;
+        int ranku = 0;
+        int rankv = 0;
 
-        final double unskew = (skewX + skewY + skewZ + skewW + skewU + skewV) * G6;
-        cellDist[0] = x - skewX + unskew;
-        cellDist[1] = y - skewY + unskew;
-        cellDist[2] = z - skewZ + unskew;
-        cellDist[3] = w - skewW + unskew;
-        cellDist[4] = u - skewU + unskew;
-        cellDist[5] = v - skewV + unskew;
+        if (x0 > y0) rankx++; else ranky++;
+        if (x0 > z0) rankx++; else rankz++;
+        if (x0 > w0) rankx++; else rankw++;
+        if (x0 > u0) rankx++; else ranku++;
+        if (x0 > v0) rankx++; else rankv++;
 
-        int o0 = (cellDist[0]<cellDist[1]?1:0)+(cellDist[0]<cellDist[2]?1:0)+(cellDist[0]<cellDist[3]?1:0)+(cellDist[0]<cellDist[4]?1:0)+(cellDist[0]<cellDist[5]?1:0);
-        int o1 = (cellDist[1]<=cellDist[0]?1:0)+(cellDist[1]<cellDist[2]?1:0)+(cellDist[1]<cellDist[3]?1:0)+(cellDist[1]<cellDist[4]?1:0)+(cellDist[1]<cellDist[5]?1:0);
-        int o2 = (cellDist[2]<=cellDist[0]?1:0)+(cellDist[2]<=cellDist[1]?1:0)+(cellDist[2]<cellDist[3]?1:0)+(cellDist[2]<cellDist[4]?1:0)+(cellDist[2]<cellDist[5]?1:0);
-        int o3 = (cellDist[3]<=cellDist[0]?1:0)+(cellDist[3]<=cellDist[1]?1:0)+(cellDist[3]<=cellDist[2]?1:0)+(cellDist[3]<cellDist[4]?1:0)+(cellDist[3]<cellDist[5]?1:0);
-        int o4 = (cellDist[4]<=cellDist[0]?1:0)+(cellDist[4]<=cellDist[1]?1:0)+(cellDist[4]<=cellDist[2]?1:0)+(cellDist[4]<=cellDist[3]?1:0)+(cellDist[4]<cellDist[5]?1:0);
-        int o5 = 15-(o0+o1+o2+o3+o4);
+        if (y0 > z0) ranky++; else rankz++;
+        if (y0 > w0) ranky++; else rankw++;
+        if (y0 > u0) ranky++; else ranku++;
+        if (y0 > v0) ranky++; else rankv++;
 
-        distOrder[o0]=0;
-        distOrder[o1]=1;
-        distOrder[o2]=2;
-        distOrder[o3]=3;
-        distOrder[o4]=4;
-        distOrder[o5]=5;
+        if (z0 > w0) rankz++; else rankw++;
+        if (z0 > u0) rankz++; else ranku++;
+        if (z0 > v0) rankz++; else rankv++;
 
-        double n = 0;
-        double skewOffset = 0;
+        if (w0 > u0) rankw++; else ranku++;
+        if (w0 > v0) rankw++; else rankv++;
 
-        for (int c = -1; c < 6; c++) {
-            if (c != -1) intLoc[distOrder[c]]++;
+        if (u0 > v0) ranku++; else rankv++;
 
-            m[0] = cellDist[0] - (intLoc[0] - skewX) + skewOffset;
-            m[1] = cellDist[1] - (intLoc[1] - skewY) + skewOffset;
-            m[2] = cellDist[2] - (intLoc[2] - skewZ) + skewOffset;
-            m[3] = cellDist[3] - (intLoc[3] - skewW) + skewOffset;
-            m[4] = cellDist[4] - (intLoc[4] - skewU) + skewOffset;
-            m[5] = cellDist[5] - (intLoc[5] - skewV) + skewOffset;
+        int i1 = 4 - rankx >>> 31;
+        int j1 = 4 - ranky >>> 31;
+        int k1 = 4 - rankz >>> 31;
+        int l1 = 4 - rankw >>> 31;
+        int h1 = 4 - ranku >>> 31;
+        int g1 = 4 - rankv >>> 31;
 
-            double tc = LIMIT6;
+        int i2 = 3 - rankx >>> 31;
+        int j2 = 3 - ranky >>> 31;
+        int k2 = 3 - rankz >>> 31;
+        int l2 = 3 - rankw >>> 31;
+        int h2 = 3 - ranku >>> 31;
+        int g2 = 3 - rankv >>> 31;
 
-            for (int d = 0; d < 6; d++) {
-                tc -= m[d] * m[d];
-            }
+        int i3 = 2 - rankx >>> 31;
+        int j3 = 2 - ranky >>> 31;
+        int k3 = 2 - rankz >>> 31;
+        int l3 = 2 - rankw >>> 31;
+        int h3 = 2 - ranku >>> 31;
+        int g3 = 2 - rankv >>> 31;
 
-            if (tc > 0) {
-                final int h = hash256(intLoc[0], intLoc[1], intLoc[2], intLoc[3],
-                        intLoc[4], intLoc[5], seed) * 6;
-                tc *= tc;
-                n += tc * tc * (gradient6DLUT[h] * m[0] + gradient6DLUT[h + 1] * m[1]
-                        + gradient6DLUT[h + 2] * m[2] + gradient6DLUT[h + 3] * m[3]
-                        + gradient6DLUT[h + 4] * m[4] + gradient6DLUT[h + 5] * m[5]);
-            }
-            skewOffset += G6;
+        int i4 = 1 - rankx >>> 31;
+        int j4 = 1 - ranky >>> 31;
+        int k4 = 1 - rankz >>> 31;
+        int l4 = 1 - rankw >>> 31;
+        int h4 = 1 - ranku >>> 31;
+        int g4 = 1 - rankv >>> 31;
+
+        int i5 = -rankx >>> 31;
+        int j5 = -ranky >>> 31;
+        int k5 = -rankz >>> 31;
+        int l5 = -rankw >>> 31;
+        int h5 = -ranku >>> 31;
+        int g5 = -rankv >>> 31;
+
+        double x1 = x0 - i1 + G6;
+        double y1 = y0 - j1 + G6;
+        double z1 = z0 - k1 + G6;
+        double w1 = w0 - l1 + G6;
+        double u1 = u0 - h1 + G6;
+        double v1 = v0 - g1 + G6;
+
+        double x2 = x0 - i2 + 2 * G6;
+        double y2 = y0 - j2 + 2 * G6;
+        double z2 = z0 - k2 + 2 * G6;
+        double w2 = w0 - l2 + 2 * G6;
+        double u2 = u0 - h2 + 2 * G6;
+        double v2 = v0 - g2 + 2 * G6;
+
+        double x3 = x0 - i3 + 3 * G6;
+        double y3 = y0 - j3 + 3 * G6;
+        double z3 = z0 - k3 + 3 * G6;
+        double w3 = w0 - l3 + 3 * G6;
+        double u3 = u0 - h3 + 3 * G6;
+        double v3 = v0 - g3 + 3 * G6;
+
+        double x4 = x0 - i4 + 4 * G6;
+        double y4 = y0 - j4 + 4 * G6;
+        double z4 = z0 - k4 + 4 * G6;
+        double w4 = w0 - l4 + 4 * G6;
+        double u4 = u0 - h4 + 4 * G6;
+        double v4 = v0 - g4 + 4 * G6;
+
+        double x5 = x0 - i5 + 5 * G6;
+        double y5 = y0 - j5 + 5 * G6;
+        double z5 = z0 - k5 + 5 * G6;
+        double w5 = w0 - l5 + 5 * G6;
+        double u5 = u0 - h5 + 5 * G6;
+        double v5 = v0 - g5 + 5 * G6;
+
+        double x6 = x0 - 1 + 6 * G6;
+        double y6 = y0 - 1 + 6 * G6;
+        double z6 = z0 - 1 + 6 * G6;
+        double w6 = w0 - 1 + 6 * G6;
+        double u6 = u0 - 1 + 6 * G6;
+        double v6 = v0 - 1 + 6 * G6;
+
+        n0 = LIMIT6 - x0 * x0 - y0 * y0 - z0 * z0 - w0 * w0 - u0 * u0 - v0 * v0;
+        if (n0 <= 0.0) n0 = 0.0;
+        else
+        {
+            final int hash = hash256(i, j, k, l, h, g, seed) * 6;
+            n0 *= n0;
+            n0 *= n0 * (gradient6DLUT[hash] * x0 + gradient6DLUT[hash] * y0 + gradient6DLUT[hash] * z0 +
+                    gradient6DLUT[hash] * w0 + gradient6DLUT[hash] * u0 + gradient6DLUT[hash] * v0);
         }
-        return 7.5f * n;
+
+        n1 = LIMIT6 - x1 * x1 - y1 * y1 - z1 * z1 - w1 * w1 - u1 * u1 - v1 * v1;
+        if (n1 <= 0.0) n1 = 0.0;
+        else
+        {
+            final int hash = hash256(i + i1, j + j1, k + k1, l + l1, h + h1, g + g1, seed) * 6;
+            n1 *= n1;
+            n1 *= n1 * (gradient6DLUT[hash] * x1 + gradient6DLUT[hash] * y1 + gradient6DLUT[hash] * z1 +
+                    gradient6DLUT[hash] * w1 + gradient6DLUT[hash] * u1 + gradient6DLUT[hash] * v1);
+        }
+        
+        n2 = LIMIT6 - x2 * x2 - y2 * y2 - z2 * z2 - w2 * w2 - u2 * u2 - v2 * v2;
+        if (n2 <= 0.0) n2 = 0.0;
+        else
+        {
+            final int hash = hash256(i + i2, j + j2, k + k2, l + l2, h + h2, g + g2, seed) * 6;
+            n2 *= n2;
+            n2 *= n2 * (gradient6DLUT[hash] * x2 + gradient6DLUT[hash] * y2 + gradient6DLUT[hash] * z2 +
+                    gradient6DLUT[hash] * w2 + gradient6DLUT[hash] * u2 + gradient6DLUT[hash] * v2);
+        }
+
+        n3 = LIMIT6 - x3 * x3 - y3 * y3 - z3 * z3 - w3 * w3 - u3 * u3 - v3 * v3;
+        if (n3 <= 0.0) n3 = 0.0;
+        else
+        {
+            final int hash = hash256(i + i3, j + j3, k + k3, l + l3, h + h3, g + g3, seed) * 6;
+            n3 *= n3;
+            n3 *= n3 * (gradient6DLUT[hash] * x3 + gradient6DLUT[hash] * y3 + gradient6DLUT[hash] * z3 +
+                    gradient6DLUT[hash] * w3 + gradient6DLUT[hash] * u3 + gradient6DLUT[hash] * v3);
+        }
+
+        n4 = LIMIT6 - x4 * x4 - y4 * y4 - z4 * z4 - w4 * w4 - u4 * u4 - v4 * v4;
+        if (n4 <= 0.0) n4 = 0.0;
+        else
+        {
+            final int hash = hash256(i + i4, j + j4, k + k4, l + l4, h + h4, g + g4, seed) * 6;
+            n4 *= n4;
+            n4 *= n4 * (gradient6DLUT[hash] * x4 + gradient6DLUT[hash] * y4 + gradient6DLUT[hash] * z4 +
+                    gradient6DLUT[hash] * w4 + gradient6DLUT[hash] * u4 + gradient6DLUT[hash] * v4);
+        }
+
+        n5 = LIMIT6 - x5 * x5 - y5 * y5 - z5 * z5 - w5 * w5 - u5 * u5 - v5 * v5;
+        if (n5 <= 0.0) n5 = 0.0;
+        else
+        {
+            final int hash = hash256(i + i5, j + j5, k + k5, l + l5, h + h5, g + g5, seed) * 6;
+            n5 *= n5;
+            n5 *= n5 * (gradient6DLUT[hash] * x5 + gradient6DLUT[hash] * y5 + gradient6DLUT[hash] * z5 +
+                    gradient6DLUT[hash] * w5 + gradient6DLUT[hash] * u5 + gradient6DLUT[hash] * v5);
+        }
+
+        n6 = LIMIT6 - x6 * x6 - y6 * y6 - z6 * z6 - w6 * w6 - u6 * u6 - v6 * v6;
+        if (n6 <= 0.0) n6 = 0.0;
+        else
+        {
+            final int hash = hash256(i + 1, j + 1, k + 1, l + 1, h + 1, g + 1, seed) * 6;
+            n6 *= n6;
+            n6 *= n6 * (gradient6DLUT[hash] * x6 + gradient6DLUT[hash] * y6 + gradient6DLUT[hash] * z6 +
+                    gradient6DLUT[hash] * w6 + gradient6DLUT[hash] * u6 + gradient6DLUT[hash] * v6);
+        }
+
+        return  (n0 + n1 + n2 + n3 + n4 + n5 + n6) * 7.5;
     }
 
     /**
