@@ -49,7 +49,7 @@ package squidpony.squidmath;
 
 import squidpony.annotation.Beta;
 
-import static squidpony.squidmath.HastyPointHash.*;
+import static squidpony.squidmath.HappyPointHash.*;
 import static squidpony.squidmath.Noise.fastFloor;
 
 /**
@@ -151,26 +151,29 @@ public class JackNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, N
                 y1 = y0 - j1 + G2,
                 x2 = x0 - 1 + 2 * G2,
                 y2 = y0 - 1 + 2 * G2;
-        double n = 0.0;
-        // Calculate the contribution from the three corners for 2D gradient
-        double t0 = 0.75 - x0 * x0 - y0 * y0;
-        if (t0 > 0) {
-            t0 *= t0;
-            n += t0 * t0 * (hashAll(i, j, seed) >> 10);
+        double n0, n1, n2;
+
+        n0 = 0.5 - x0 * x0 - y0 * y0;
+        if (n0 > 0) {
+            n0 *= n0;
+            n0 *= n0 * (hashAll(seed, i, j) >> 11);
         }
-        double t1 = 0.75 - x1 * x1 - y1 * y1;
-        if (t1 > 0) {
-            t1 *= t1;
-            n += t1 * t1 * (hashAll(i + i1, j + j1, seed) >> 10);
+        else n0 = 0.0;
+
+        n1 = 0.5 - x1 * x1 - y1 * y1;
+        if (n1 > 0) {
+            n1 *= n1;
+            n1 *= n1 * (hashAll(seed, i + i1, j + j1) >> 11);
         }
-        double t2 = 0.75 - x2 * x2 - y2 * y2;
-        if (t2 > 0)  {
-            t2 *= t2;
-            n += t2 * t2 * (hashAll(i + 1, j + 1, seed) >> 10);
+        else n1 = 0.0;
+
+        n2 = 0.5 - x2 * x2 - y2 * y2;
+        if (n2 > 0)  {
+            n2 *= n2;
+            n2 *= n2 * (hashAll(seed, i + 1, j + 1) >> 11);
         }
-        // Use sin_, which takes an argument in turns rather than radians, to wrap values
-        return NumberTools.sin_(n * 0x1p-53);
-//        return 9.11 * n;
+        else n2 = 0.0;
+        return ((n0 + n1 + n2) * (0x1p-48));
 
 //        double n0, n1, n2;
 //        double t0 = 0.5 - x0 * x0 - y0 * y0;
@@ -271,28 +274,28 @@ public class JackNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, N
         double z3 = z0 - 0.5;
 
         // Calculate the contribution from the four corners
-        double t0 = 0.75 - x0 * x0 - y0 * y0 - z0 * z0;
+        double t0 = 0.6 - x0 * x0 - y0 * y0 - z0 * z0;
         if (t0 > 0) {
             t0 *= t0;
-            n += t0 * t0 * (hashAll(i, j, k, seed) >> 10);
+            n += t0 * t0 * (hashAll(i, j, k, seed) >> 11);
         }
-        double t1 = 0.75 - x1 * x1 - y1 * y1 - z1 * z1;
+        double t1 = 0.6 - x1 * x1 - y1 * y1 - z1 * z1;
         if (t1 > 0) {
             t1 *= t1;
-            n += t1 * t1 * (hashAll(i + i1, j + j1, k + k1, seed) >> 10);
+            n += t1 * t1 * (hashAll(i + i1, j + j1, k + k1, seed) >> 11);
         }
-        double t2 = 0.75 - x2 * x2 - y2 * y2 - z2 * z2;
+        double t2 = 0.6 - x2 * x2 - y2 * y2 - z2 * z2;
         if (t2 > 0) {
             t2 *= t2;
-            n += t2 * t2 * (hashAll(i + i2, j + j2, k + k2, seed) >> 10);
+            n += t2 * t2 * (hashAll(i + i2, j + j2, k + k2, seed) >> 11);
         }
-        double t3 = 0.75 - x3 * x3 - y3 * y3 - z3 * z3;
+        double t3 = 0.6 - x3 * x3 - y3 * y3 - z3 * z3;
         if (t3 > 0) {
             t3 *= t3;
-            n += t3 * t3 * (hashAll(i + 1, j + 1, k + 1, seed) >> 10);
+            n += t3 * t3 * (hashAll(i + 1, j + 1, k + 1, seed) >> 11);
         }
         // Use sin_, which takes an argument in turns rather than radians, to wrap values
-        return NumberTools.sin_(n * 0x1p-53); 
+        return (n * 0x0.Fp-49);
     }
 
     @Override

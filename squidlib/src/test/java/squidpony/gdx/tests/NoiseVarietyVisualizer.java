@@ -8,7 +8,6 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ImmediateModeRenderer20;
-import com.badlogic.gdx.utils.NumberUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import squidpony.squidmath.*;
@@ -20,16 +19,16 @@ import static com.badlogic.gdx.graphics.GL20.GL_POINTS;
  */
 public class NoiseVarietyVisualizer extends ApplicationAdapter {
 
-    private FoamNoise real = new FoamNoise(-12345L);
+    private JackNoise jack = new JackNoise(-12345L);
     private FastNoise weave = new FastNoise(-12345, 1f);
     private UnifiedNoise unified = new UnifiedNoise(-12345L);
     private SeededNoise seeded = new SeededNoise(-12345L);
 
-    private Noise.Noise2D[] noises2 = {real, weave, unified, seeded};
-    private Noise.Noise3D[] noises3 = {real, weave, unified, seeded};
-    private Noise.Noise4D[] noises4 = {real, weave, unified, seeded};
-    private Noise.Noise5D[] noises5 = {real, weave, unified, seeded};
-    private Noise.Noise6D[] noises6 = {real, weave, unified, seeded};
+    private Noise.Noise2D[] noises2 = {jack, weave, unified, seeded};
+    private Noise.Noise3D[] noises3 = {jack, weave, unified, seeded};
+    private Noise.Noise4D[] noises4 = {jack, weave, unified, seeded};
+    private Noise.Noise5D[] noises5 = {jack, weave, unified, seeded};
+    private Noise.Noise6D[] noises6 = {jack, weave, unified, seeded};
 
     private FoamyNoise weavy = new FoamyNoise(new WeavingNoise(1234567890));
     private FoamyNoise foam = new FoamyNoise(new ValueNoise(1234567890));

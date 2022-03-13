@@ -168,30 +168,33 @@ public class UnifiedNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D
         double x2 = x0 - 1 + H2;
         double y2 = y0 - 1 + H2;
 
-        double n = 0.0;
+        double n0, n1, n2;
 
-        t = 0.5 - x0 * x0 - y0 * y0;
-        if (t >= 0) {
-            t *= t;
-            n += t * t * gradCoord2D(seed, i, j, x0, y0);
+        n0 = 0.5 - x0 * x0 - y0 * y0;
+        if (n0 > 0) {
+            n0 *= n0;
+            n0 *= n0 * gradCoord2D(seed, i, j, x0, y0);
         }
+        else n0 = 0.0;
 
-        t = 0.5 - x1 * x1 - y1 * y1;
-        if (t > 0) {
-            t *= t;
-            n += t * t * gradCoord2D(seed, i + i1, j + j1, x1, y1);
+        n1 = 0.5 - x1 * x1 - y1 * y1;
+        if (n1 > 0) {
+            n1 *= n1;
+            n1 *= n1 * gradCoord2D(seed, i + i1, j + j1, x1, y1);
         }
+        else n1 = 0.0;
 
-        t = 0.5 - x2 * x2 - y2 * y2;
-        if (t > 0)  {
-            t *= t;
-            n += t * t * gradCoord2D(seed, i + 1, j + 1, x2, y2);
+        n2 = 0.5 - x2 * x2 - y2 * y2;
+        if (n2 > 0)  {
+            n2 *= n2;
+            n2 *= n2 * gradCoord2D(seed, i + 1, j + 1, x2, y2);
         }
-        return n * 99.20689070704672; // this is 99.83685446303647 / 1.00635 ; the first number was found by kdotjpg
+        else n2 = 0.0;
+
+        return (n0 + n1 + n2) * 99.20689070704672; // this is 99.83685446303647 / 1.00635 ; the first number was found by kdotjpg
     }
 
     public static double noise(final double x, final double y, final double z, final long seed) {
-        double n = 0.0;
         final double s = (x + y + z) * F3;
         final int i = fastFloor(x + s),
                 j = fastFloor(y + s),
@@ -263,29 +266,36 @@ public class UnifiedNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D
         double z3 = z0 - 0.5;
 
         // Calculate the contribution from the four corners
-        double t0 = 0.6 - x0 * x0 - y0 * y0 - z0 * z0;
-        if (t0 > 0) {
-            t0 *= t0;
-            n += t0 * t0 * gradCoord3D(seed, i, j, k, x0, y0, z0);
+        double n0 = 0.6 - x0 * x0 - y0 * y0 - z0 * z0;
+        if (n0 > 0) {
+            n0 *= n0;
+            n0 *= n0 * gradCoord3D(seed, i, j, k, x0, y0, z0);
         }
-        double t1 = 0.6 - x1 * x1 - y1 * y1 - z1 * z1;
-        if (t1 > 0) {
-            t1 *= t1;
-            n += t1 * t1 * gradCoord3D(seed, i + i1, j + j1, k + k1, x1, y1, z1);
+        else n0 = 0.0;
+
+        double n1 = 0.6 - x1 * x1 - y1 * y1 - z1 * z1;
+        if (n1 > 0) {
+            n1 *= n1;
+            n1 *= n1 * gradCoord3D(seed, i + i1, j + j1, k + k1, x1, y1, z1);
         }
-        double t2 = 0.6 - x2 * x2 - y2 * y2 - z2 * z2;
-        if (t2 > 0) {
-            t2 *= t2;
-            n += t2 * t2 * gradCoord3D(seed, i + i2, j + j2, k + k2, x2, y2, z2);
+        else n1 = 0.0;
+
+        double n2 = 0.6 - x2 * x2 - y2 * y2 - z2 * z2;
+        if (n2 > 0) {
+            n2 *= n2;
+            n2 *= n2 * gradCoord3D(seed, i + i2, j + j2, k + k2, x2, y2, z2);
         }
-        double t3 = 0.6 - x3 * x3 - y3 * y3 - z3 * z3;
-        if (t3 > 0) {
-            t3 *= t3;
-            n += t3 * t3 * gradCoord3D(seed, i + 1, j + 1, k + 1, x3, y3, z3);
+        else n2 = 0.0;
+        double n3 = 0.6 - x3 * x3 - y3 * y3 - z3 * z3;
+        if (n3 > 0) {
+            n3 *= n3;
+            n3 *= n3 * gradCoord3D(seed, i + 1, j + 1, k + 1, x3, y3, z3);
         }
+        else n3 = 0.0;
+
         // Add contributions from each corner to get the final noise value.
         // The result is clamped to stay just inside [-1,1]
-        return 31.5 * n;
+        return 31.5 * (n0 + n1 + n2 + n3);
         //return (32.0 * n) * 1.25086885 + 0.0003194984;
     }
 
