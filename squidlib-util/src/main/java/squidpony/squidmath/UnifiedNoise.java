@@ -778,7 +778,7 @@ public class UnifiedNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D
                     gradient6DLUT[hash + 3] * w6 + gradient6DLUT[hash + 4] * u6 + gradient6DLUT[hash + 5] * v6);
         }
 
-        return  (n0 + n1 + n2 + n3 + n4 + n5 + n6) * 7.5;
+        return  (n0 + n1 + n2 + n3 + n4 + n5 + n6) * 7.499;
     }
 
     /**

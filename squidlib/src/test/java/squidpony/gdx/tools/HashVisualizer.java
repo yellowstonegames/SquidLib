@@ -67,7 +67,7 @@ public class HashVisualizer extends ApplicationAdapter {
     // 3 artistic visualizations of hash functions and misc. other
     // 4 noise
     // 5 RNG results
-    private int testType = 1;
+    private int testType = 4;
     private static final int NOISE_LIMIT = 152;
     private static final int RNG_LIMIT = 52;
     private int hashMode = 1, rngMode = 4, noiseMode = 106, otherMode = 17;//142
@@ -6846,7 +6846,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
         config.setTitle("SquidLib Test: Hash Visualization");
         config.setWindowedMode(width, height);
         config.useVsync(true);
-        config.setForegroundFPS(15);
+        config.setForegroundFPS(60);
         config.setWindowIcon(Files.FileType.Internal, "Tentacle-128.png", "Tentacle-64.png", "Tentacle-32.png", "Tentacle-16.png");
         new Lwjgl3Application(new HashVisualizer(), config);
     }

@@ -5195,7 +5195,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
             n6 *= n6 * gradCoord6D(seed, i + 1, j + 1, k + 1, l + 1, h + 1, g + 1, x6, y6, z6, w6, u6, v6);
         }
 
-        return  (n0 + n1 + n2 + n3 + n4 + n5 + n6) * 7.5f;
+        return  (n0 + n1 + n2 + n3 + n4 + n5 + n6) * 7.499f;
 
     }
 
