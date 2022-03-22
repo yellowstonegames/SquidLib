@@ -21,7 +21,7 @@ package squidpony.squidmath;
  * See <a href="https://en.wikipedia.org/wiki/Kumaraswamy_distribution">Wikipedia's
  * article on this distribution</a> for more.
  */
-public class KumaraswamyDistribution extends IDistribution.SimpleDistribution implements IDistribution {
+public class KumaraswamyDistribution implements IDistribution {
     public static final KumaraswamyDistribution instance = new KumaraswamyDistribution(2.0, 2.0);
 
     /**
@@ -45,6 +45,16 @@ public class KumaraswamyDistribution extends IDistribution.SimpleDistribution im
     public KumaraswamyDistribution(double a, double b) {
         this.a = 1.0/a;
         this.b = 1.0/b;
+    }
+
+    @Override
+    public double getLowerBound() {
+        return 0.0;
+    }
+
+    @Override
+    public double getUpperBound() {
+        return 1.0;
     }
 
     /**
