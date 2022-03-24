@@ -630,4 +630,7 @@ public class ValueNoise implements Noise.Noise1D, Noise.Noise2D, Noise.Noise3D,
     public double getNoiseWithSeed(double x, double y, double z, double w, double u, double v, long seed) {
         return valueNoise((int) (seed ^ seed >>> 32), x, y, z, w, u, v) * 2 - 1;
     }
+    public double getNoiseWithSeed(double x, double y, double z, double w, double u, double v, double m, long seed) {
+        return valueNoise((int) (seed ^ seed >>> 32), x, y, z, w, u, v, m) * 2 - 1;
+    }
 }

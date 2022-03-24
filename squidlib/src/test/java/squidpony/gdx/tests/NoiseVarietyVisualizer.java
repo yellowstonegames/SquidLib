@@ -25,14 +25,14 @@ public class NoiseVarietyVisualizer extends ApplicationAdapter {
     private SeededNoise seeded = new SeededNoise(-12345L);
 
     private OctopusNoise octo = new OctopusNoise(1234567890);
-    private OctopusNoise octoS = new OctopusNoise(unified);
     private FoamNoise foam = new FoamNoise(1234567890);
+    private ValueNoise value = new ValueNoise(1234567890);
 
-    private Noise.Noise2D[] noises2 = {octo, simplex, octoS, foam};
-    private Noise.Noise3D[] noises3 = {octo, simplex, octoS, foam};
-    private Noise.Noise4D[] noises4 = {octo, simplex, octoS, foam};
-    private Noise.Noise5D[] noises5 = {octo, simplex, octoS, foam};
-    private Noise.Noise6D[] noises6 = {octo, simplex, octoS, foam};
+    private Noise.Noise2D[] noises2 = {octo, foam, simplex, value};
+    private Noise.Noise3D[] noises3 = {octo, foam, simplex, value};
+    private Noise.Noise4D[] noises4 = {octo, foam, simplex, value};
+    private Noise.Noise5D[] noises5 = {octo, foam, simplex, value};
+    private Noise.Noise6D[] noises6 = {octo, foam, simplex, value};
 
 //    private HashedValueNoise value = new HashedValueNoise(new FlawedPointHash.CubeHash(1234567890, 32));
 //    private FastNoise value = new FastNoise(1234567890, 1f, FastNoise.VALUE, 1);
