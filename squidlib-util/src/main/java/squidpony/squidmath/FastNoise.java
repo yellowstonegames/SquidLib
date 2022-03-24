@@ -228,7 +228,29 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
      * <br>
      * This is meant to be used with {@link #setNoiseType(int)}.
      */
-    HONEY_FRACTAL = 13;
+    HONEY_FRACTAL = 13,
+    /**
+     * A kind of noise that allows extra configuration via {@link #setMutation(float)}, producing small changes when the
+     * mutation value is similar, or large changes if it is very different. This contrasts with changes to the seed,
+     * which almost always cause large changes for any difference in seed. The implementation here is the same as
+     * {@link #FOAM} with one more dimension, which is filled by the mutation value.
+     * <br>
+     * <a href="https://i.imgur.com/4ZC9h5t.png">Noise sample at left, FFT at right.</a>
+     * <br>
+     * This is meant to be used with {@link #setNoiseType(int)}.
+     */
+    MUTANT = 14,
+    /**
+     * A kind of noise that allows extra configuration via {@link #setMutation(float)}, producing small changes when the
+     * mutation value is similar, or large changes if it is very different. This contrasts with changes to the seed,
+     * which almost always cause large changes for any difference in seed. The implementation here is the same as
+     * {@link #FOAM_FRACTAL} with one more dimension, which is filled by the mutation value.
+     * <br>
+     * <a href="https://i.imgur.com/4ZC9h5t.png">Noise sample at left, FFT at right.</a>
+     * <br>
+     * This is meant to be used with {@link #setNoiseType(int)}.
+     */
+    MUTANT_FRACTAL = 15;
 
     /**
      * Simple linear interpolation. May result in artificial-looking noise.
@@ -401,6 +423,10 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
      */
     protected float foamSharpness = 1f;
 
+    /**
+     * @see #getMutation()
+     */
+    protected float mutation = 0f;
 
     /**
      * @see #getPointHash()
@@ -564,7 +590,8 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
     /**
      * Changes the interpolation method used to smooth between noise values, using one of the following constants from
      * this class (lowest to highest quality): {@link #LINEAR} (0), {@link #HERMITE} (1), or {@link #QUINTIC} (2). If
-     * this is not called, it defaults to HERMITE. This is used in Value, Perlin, and Position Perturbing.
+     * this is not called, it defaults to HERMITE. This is used in Value, Perlin, and Position Perturbing, and because
+     * it is used in Value, that makes it also apply to Foam, Honey, and Mutant.
      * @param interpolation an int (0, 1, or 2) corresponding to a constant from this class for an interpolation type
      */
     public void setInterpolation(int interpolation) {
@@ -588,9 +615,11 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
      * {@link #VALUE} (0), {@link #VALUE_FRACTAL} (1), {@link #PERLIN} (2), {@link #PERLIN_FRACTAL} (3),
      * {@link #SIMPLEX} (4), {@link #SIMPLEX_FRACTAL} (5), {@link #CELLULAR} (6), {@link #WHITE_NOISE} (7),
      * {@link #CUBIC} (8), {@link #CUBIC_FRACTAL} (9), {@link #FOAM} (10), {@link #FOAM_FRACTAL} (11), {@link #HONEY}
-     * (12), or {@link #HONEY_FRACTAL} (13).
-     * If this isn't called, getConfiguredNoise() will default to SIMPLEX_FRACTAL.
-     * @param noiseType an int from 0 to 13 corresponding to a constant from this class for a noise type
+     * (12), {@link #HONEY_FRACTAL} (13), {@link #MUTANT} (14), or {@link #MUTANT_FRACTAL} (15).
+     * If this isn't called, getConfiguredNoise() will default to SIMPLEX_FRACTAL. Note that if you have a fractal noise
+     * type, you can get the corresponding non-fractal noise type by subtracting 1 from the constant this returns. The
+     * reverse is not always true, because Cellular and White Noise have no fractal version.
+     * @param noiseType an int from 0 to 15 corresponding to a constant from this class for a noise type
      */
     public void setNoiseType(int noiseType) {
         this.noiseType = noiseType;
@@ -769,7 +798,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
      * This mode affects {@link #BILLOW} and {@link #RIDGED_MULTI} fractal types, but not
      * {@link #FBM}. It changes {@link #VALUE_FRACTAL}, {@link #CUBIC_FRACTAL},
      * {@link #PERLIN_FRACTAL}, and {@link #SIMPLEX_FRACTAL} noise types, but not
-     * {@link #FOAM_FRACTAL} or {@link #HONEY_FRACTAL} because those show no real improvement
+     * {@link #FOAM_FRACTAL}, {@link #MUTANT_FRACTAL}, or {@link #HONEY_FRACTAL} because those show no real improvement
      * with this on. This mode defaults to false if not set.
      * @return true if using fractal spiral mode, false otherwise
      */
@@ -782,7 +811,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
      * fractal noise. This mode affects {@link #BILLOW} and {@link #RIDGED_MULTI} fractal types, but not
      * {@link #FBM}. It changes {@link #VALUE_FRACTAL}, {@link #CUBIC_FRACTAL},
      * {@link #PERLIN_FRACTAL}, and {@link #SIMPLEX_FRACTAL} noise types, but not
-     * {@link #FOAM_FRACTAL} or {@link #HONEY_FRACTAL} because those show no real improvement
+     * {@link #FOAM_FRACTAL}, {@link #MUTANT_FRACTAL}, or {@link #HONEY_FRACTAL} because those show no real improvement
      * with this on. This mode defaults to false if not set.
      * @param fractalSpiral true to set fractal spiral mode on, false to set it off
      */
@@ -791,7 +820,8 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
     }
 
     /**
-     * Gets the "sharpness" for the {@link #FOAM} and {@link #FOAM_FRACTAL} noise types, which is usually
+     * Gets the "sharpness" for the {@link #FOAM}, {@link #FOAM_FRACTAL}, {@link #MUTANT}, and {@link #MUTANT_FRACTAL}
+     * noise types, which is usually
      * around 0.25f to 2.0f, and defaults to 1.0f. High values produce extreme results more often, and
      * low values produce mid-range values more often.
      * @return the current "sharpness" {@link #FOAM} and {@link #FOAM_FRACTAL} noise types
@@ -801,15 +831,34 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
     }
 
     /**
-     * Only used with {@link #FOAM} and {@link #FOAM_FRACTAL} noise types, this affects how often the
-     * noise will produce very high and very low results (more often with high values of foamSharpness),
-     * as opposed to mid-range (more often with low values of foamSharpness).
+     * Only used with {@link #FOAM}, {@link #FOAM_FRACTAL}, {@link #MUTANT}, and {@link #MUTANT_FRACTAL} noise types,
+     * this affects how often the noise will produce very high and very low results (more often with high values of
+     * foamSharpness, such as 1.25 to 2.0),
+     * as opposed to mid-range (more often with low values of foamSharpness, such as 0.25 to 0.75).
      * <br>
      * This defaults to 1.0f if not set.
      * @param foamSharpness higher results (above 1) tend to produce extremes, lower results (below 1) produce mid-range
      */
     public void setFoamSharpness(float foamSharpness) {
         this.foamSharpness = foamSharpness;
+    }
+
+    /**
+     * Gets the mutation value used by {@link #MUTANT} and {@link #MUTANT_FRACTAL} noise types, which allows making
+     * small changes to the result when the mutation values are slightly different.
+     * @return the current mutation value, which can be any finite float
+     */
+    public float getMutation() {
+        return mutation;
+    }
+
+    /**
+     * Sets the mutation value used by {@link #MUTANT} and {@link #MUTANT_FRACTAL} noise types, which can be any finite
+     * float. Small changes to the mutation value cause small changes in the result, unlike changes to the seed.
+     * @param mutation the mutation value to use, which can be any finite float
+     */
+    public void setMutation(float mutation) {
+        this.mutation = mutation;
     }
 
     /**
@@ -1145,6 +1194,17 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
                     default:
                         return singleFoamFractalFBM(x, y);
                 }
+            case MUTANT:
+                return singleFoam(seed, x, y, mutation);
+            case MUTANT_FRACTAL:
+                switch (fractalType) {
+                    case BILLOW:
+                        return singleFoamFractalBillow(x, y, mutation);
+                    case RIDGED_MULTI:
+                        return singleFoamFractalRidgedMulti(x, y, mutation);
+                    default:
+                        return singleFoamFractalFBM(x, y, mutation);
+                }
             case HONEY:
                 return singleHoney(seed, x, y);
             case HONEY_FRACTAL:
@@ -1239,6 +1299,17 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
                         return singleFoamFractalRidgedMulti(x, y, z);
                     default:
                         return singleFoamFractalFBM(x, y, z);
+                }
+            case MUTANT:
+                return singleFoam(seed, x, y, z, mutation);
+            case MUTANT_FRACTAL:
+                switch (fractalType) {
+                    case BILLOW:
+                        return singleFoamFractalBillow(x, y, z, mutation);
+                    case RIDGED_MULTI:
+                        return singleFoamFractalRidgedMulti(x, y, z, mutation);
+                    default:
+                        return singleFoamFractalFBM(x, y, z, mutation);
                 }
             case HONEY:
                 return singleHoney(seed, x, y, z);
@@ -1336,6 +1407,17 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
                     default:
                         return singleFoamFractalFBM(x, y, z, w);
                 }
+            case MUTANT:
+                return singleFoam(seed, x, y, z, w, mutation);
+            case MUTANT_FRACTAL:
+                switch (fractalType) {
+                    case BILLOW:
+                        return singleFoamFractalBillow(x, y, z, w, mutation);
+                    case RIDGED_MULTI:
+                        return singleFoamFractalRidgedMulti(x, y, z, w, mutation);
+                    default:
+                        return singleFoamFractalFBM(x, y, z, w, mutation);
+                }
             case HONEY:
                 return singleHoney(seed, x, y, z, w);
             case HONEY_FRACTAL:
@@ -1427,6 +1509,17 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
                     default:
                         return singleFoamFractalFBM(x, y, z, w, u);
                 }
+            case MUTANT:
+                return singleFoam(seed, x, y, z, w, u, mutation);
+            case MUTANT_FRACTAL:
+                switch (fractalType) {
+                    case BILLOW:
+                        return singleFoamFractalBillow(x, y, z, w, u, mutation);
+                    case RIDGED_MULTI:
+                        return singleFoamFractalRidgedMulti(x, y, z, w, u, mutation);
+                    default:
+                        return singleFoamFractalFBM(x, y, z, w, u, mutation);
+                }
             case HONEY:
                 return singleHoney(seed, x, y, z, w, u);
             case HONEY_FRACTAL:
@@ -1507,6 +1600,17 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
                         return singleFoamFractalRidgedMulti(x, y, z, w, u, v);
                     default:
                         return singleFoamFractalFBM(x, y, z, w, u, v);
+                }
+            case MUTANT:
+                return singleFoam(seed, x, y, z, w, u, v, mutation);
+            case MUTANT_FRACTAL:
+                switch (fractalType) {
+                    case BILLOW:
+                        return singleFoamFractalBillow(x, y, z, w, u, v, mutation);
+                    case RIDGED_MULTI:
+                        return singleFoamFractalRidgedMulti(x, y, z, w, u, v, mutation);
+                    default:
+                        return singleFoamFractalFBM(x, y, z, w, u, v, mutation);
                 }
             case HONEY:
                 return singleHoney(seed, x, y, z, w, u, v);
@@ -1642,6 +1746,17 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         return (s ^ (s << 19 | s >>> 13) ^ (s << 5 | s >>> 27) ^ 0xD1B54A35) * 0x125493 >> 22;
     }
 
+    //x should be premultiplied by 0xEBEDF
+    //y should be premultiplied by 0xD96EB
+    //z should be premultiplied by 0xC862B
+    //w should be premultiplied by 0xB8ACD
+    //u should be premultiplied by 0xAA323
+    //v should be premultiplied by 0x9CDA5
+    //m should be premultiplied by 0x908E3
+    private static int hashPart1024(final int x, final int y, final int z, final int w, final int u, final int v, final int m, int s) {
+        s += x ^ y ^ z ^ w ^ u ^ v ^ m;
+        return (s ^ (s << 19 | s >>> 13) ^ (s << 5 | s >>> 27) ^ 0xD1B54A35) * 0x125493 >> 22;
+    }
 
     public float getValueFractal(float x, float y) {
         x *= frequency;
@@ -2615,6 +2730,173 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         ) * 0x1p-10f + 0.5f;
     }
 
+    protected float valueNoise(int seed, float x, float y, float z, float w, float u, float v, float m) {
+        int xFloor = x >= 0 ? (int) x : (int) x - 1;
+        x -= xFloor;
+        x *= x * (3 - 2 * x);
+        int yFloor = y >= 0 ? (int) y : (int) y - 1;
+        y -= yFloor;
+        y *= y * (3 - 2 * y);
+        int zFloor = z >= 0 ? (int) z : (int) z - 1;
+        z -= zFloor;
+        z *= z * (3 - 2 * z);
+        int wFloor = w >= 0 ? (int) w : (int) w - 1;
+        w -= wFloor;
+        w *= w * (3 - 2 * w);
+        int uFloor = u >= 0 ? (int) u : (int) u - 1;
+        u -= uFloor;
+        u *= u * (3 - 2 * u);
+        int vFloor = v >= 0 ? (int) v : (int) v - 1;
+        v -= vFloor;
+        v *= v * (3 - 2 * v);
+        int mFloor = m >= 0 ? (int) m : (int) m - 1;
+        m -= mFloor;
+        m *= m * (3 - 2 * m);
+        xFloor *= 0xEBEDF;
+        yFloor *= 0xD96EB;
+        zFloor *= 0xC862B;
+        wFloor *= 0xB8ACD;
+        uFloor *= 0xAA323;
+        vFloor *= 0x9CDA5;
+        mFloor *= 0x908E3;
+        return
+                ((1 - m) *
+                        ((1 - v) *
+                                ((1 - u) *
+                                        ((1 - w) *
+                                                ((1 - z) *
+                                                        ((1 - y) * ((1 - x) * hashPart1024(xFloor, yFloor, zFloor, wFloor, uFloor, vFloor, mFloor, seed) + x * hashPart1024(xFloor + 0xEBEDF, yFloor, zFloor, wFloor, uFloor, vFloor, mFloor, seed))
+                                                                + y * ((1 - x) * hashPart1024(xFloor, yFloor + 0xD96EB, zFloor, wFloor, uFloor, vFloor, mFloor, seed) + x * hashPart1024(xFloor + 0xEBEDF, yFloor + 0xD96EB, zFloor, wFloor, uFloor, vFloor, mFloor, seed)))
+                                                        + z *
+                                                        ((1 - y) * ((1 - x) * hashPart1024(xFloor, yFloor, zFloor + 0xC862B, wFloor, uFloor, vFloor, mFloor, seed) + x * hashPart1024(xFloor + 0xEBEDF, yFloor, zFloor + 0xC862B, wFloor, uFloor, vFloor, mFloor, seed))
+                                                                + y * ((1 - x) * hashPart1024(xFloor, yFloor + 0xD96EB, zFloor + 0xC862B, wFloor, uFloor, vFloor, mFloor, seed) + x * hashPart1024(xFloor + 0xEBEDF, yFloor + 0xD96EB, zFloor + 0xC862B, wFloor, uFloor, vFloor, mFloor, seed))))
+                                                + (w *
+                                                ((1 - z) *
+                                                        ((1 - y) * ((1 - x) * hashPart1024(xFloor, yFloor, zFloor, wFloor + 0xB8ACD, uFloor, vFloor, mFloor, seed) + x * hashPart1024(xFloor + 0xEBEDF, yFloor, zFloor, wFloor + 0xB8ACD, uFloor, vFloor, mFloor, seed))
+                                                                + y * ((1 - x) * hashPart1024(xFloor, yFloor + 0xD96EB, zFloor, wFloor + 0xB8ACD, uFloor, vFloor, mFloor, seed) + x * hashPart1024(xFloor + 0xEBEDF, yFloor + 0xD96EB, zFloor, wFloor + 0xB8ACD, uFloor, vFloor, mFloor, seed)))
+                                                        + z *
+                                                        ((1 - y) * ((1 - x) * hashPart1024(xFloor, yFloor, zFloor + 0xC862B, wFloor + 0xB8ACD, uFloor, vFloor, mFloor, seed) + x * hashPart1024(xFloor + 0xEBEDF, yFloor, zFloor + 0xC862B, wFloor + 0xB8ACD, uFloor, vFloor, mFloor, seed))
+                                                                + y * ((1 - x) * hashPart1024(xFloor, yFloor + 0xD96EB, zFloor + 0xC862B, wFloor + 0xB8ACD, uFloor, vFloor, mFloor, seed) + x * hashPart1024(xFloor + 0xEBEDF, yFloor + 0xD96EB, zFloor + 0xC862B, wFloor + 0xB8ACD, uFloor, vFloor, mFloor, seed)))
+                                                )))
+                                        + (u *
+                                        ((1 - w) *
+                                                ((1 - z) *
+                                                        ((1 - y) * ((1 - x) * hashPart1024(xFloor, yFloor, zFloor, wFloor, uFloor + 0xAA323, vFloor, mFloor, seed) + x * hashPart1024(xFloor + 0xEBEDF, yFloor, zFloor, wFloor, uFloor + 0xAA323, vFloor, mFloor, seed))
+                                                                + y * ((1 - x) * hashPart1024(xFloor, yFloor + 0xD96EB, zFloor, wFloor, uFloor + 0xAA323, vFloor, mFloor, seed) + x * hashPart1024(xFloor + 0xEBEDF, yFloor + 0xD96EB, zFloor, wFloor, uFloor + 0xAA323, vFloor, mFloor, seed)))
+                                                        + z *
+                                                        ((1 - y) * ((1 - x) * hashPart1024(xFloor, yFloor, zFloor + 0xC862B, wFloor, uFloor + 0xAA323, vFloor, mFloor, seed) + x * hashPart1024(xFloor + 0xEBEDF, yFloor, zFloor + 0xC862B, wFloor, uFloor + 0xAA323, vFloor, mFloor, seed))
+                                                                + y * ((1 - x) * hashPart1024(xFloor, yFloor + 0xD96EB, zFloor + 0xC862B, wFloor, uFloor + 0xAA323, vFloor, mFloor, seed) + x * hashPart1024(xFloor + 0xEBEDF, yFloor + 0xD96EB, zFloor + 0xC862B, wFloor, uFloor + 0xAA323, vFloor, mFloor, seed))))
+                                                + (w *
+                                                ((1 - z) *
+                                                        ((1 - y) * ((1 - x) * hashPart1024(xFloor, yFloor, zFloor, wFloor + 0xB8ACD, uFloor + 0xAA323, vFloor, mFloor, seed) + x * hashPart1024(xFloor + 0xEBEDF, yFloor, zFloor, wFloor + 0xB8ACD, uFloor + 0xAA323, vFloor, mFloor, seed))
+                                                                + y * ((1 - x) * hashPart1024(xFloor, yFloor + 0xD96EB, zFloor, wFloor + 0xB8ACD, uFloor + 0xAA323, vFloor, mFloor, seed) + x * hashPart1024(xFloor + 0xEBEDF, yFloor + 0xD96EB, zFloor, wFloor + 0xB8ACD, uFloor + 0xAA323, vFloor, mFloor, seed)))
+                                                        + z *
+                                                        ((1 - y) * ((1 - x) * hashPart1024(xFloor, yFloor, zFloor + 0xC862B, wFloor + 0xB8ACD, uFloor + 0xAA323, vFloor, mFloor, seed) + x * hashPart1024(xFloor + 0xEBEDF, yFloor, zFloor + 0xC862B, wFloor + 0xB8ACD, uFloor + 0xAA323, vFloor, mFloor, seed))
+                                                                + y * ((1 - x) * hashPart1024(xFloor, yFloor + 0xD96EB, zFloor + 0xC862B, wFloor + 0xB8ACD, uFloor + 0xAA323, vFloor, mFloor, seed) + x * hashPart1024(xFloor + 0xEBEDF, yFloor + 0xD96EB, zFloor + 0xC862B, wFloor + 0xB8ACD, uFloor + 0xAA323, vFloor, mFloor, seed)))
+                                                )))))
+                                + (v *
+                                ((1 - u) *
+                                        ((1 - w) *
+                                                ((1 - z) *
+                                                        ((1 - y) * ((1 - x) * hashPart1024(xFloor, yFloor, zFloor, wFloor, uFloor, vFloor + 0x9CDA5, mFloor, seed) + x * hashPart1024(xFloor + 0xEBEDF, yFloor, zFloor, wFloor, uFloor, vFloor + 0x9CDA5, mFloor, seed))
+                                                                + y * ((1 - x) * hashPart1024(xFloor, yFloor + 0xD96EB, zFloor, wFloor, uFloor, vFloor + 0x9CDA5, mFloor, seed) + x * hashPart1024(xFloor + 0xEBEDF, yFloor + 0xD96EB, zFloor, wFloor, uFloor, vFloor + 0x9CDA5, mFloor, seed)))
+                                                        + z *
+                                                        ((1 - y) * ((1 - x) * hashPart1024(xFloor, yFloor, zFloor + 0xC862B, wFloor, uFloor, vFloor + 0x9CDA5, mFloor, seed) + x * hashPart1024(xFloor + 0xEBEDF, yFloor, zFloor + 0xC862B, wFloor, uFloor, vFloor + 0x9CDA5, mFloor, seed))
+                                                                + y * ((1 - x) * hashPart1024(xFloor, yFloor + 0xD96EB, zFloor + 0xC862B, wFloor, uFloor, vFloor + 0x9CDA5, mFloor, seed) + x * hashPart1024(xFloor + 0xEBEDF, yFloor + 0xD96EB, zFloor + 0xC862B, wFloor, uFloor, vFloor + 0x9CDA5, mFloor, seed))))
+                                                + (w *
+                                                ((1 - z) *
+                                                        ((1 - y) * ((1 - x) * hashPart1024(xFloor, yFloor, zFloor, wFloor + 0xB8ACD, uFloor, vFloor + 0x9CDA5, mFloor, seed) + x * hashPart1024(xFloor + 0xEBEDF, yFloor, zFloor, wFloor + 0xB8ACD, uFloor, vFloor + 0x9CDA5, mFloor, seed))
+                                                                + y * ((1 - x) * hashPart1024(xFloor, yFloor + 0xD96EB, zFloor, wFloor + 0xB8ACD, uFloor, vFloor + 0x9CDA5, mFloor, seed) + x * hashPart1024(xFloor + 0xEBEDF, yFloor + 0xD96EB, zFloor, wFloor + 0xB8ACD, uFloor, vFloor + 0x9CDA5, mFloor, seed)))
+                                                        + z *
+                                                        ((1 - y) * ((1 - x) * hashPart1024(xFloor, yFloor, zFloor + 0xC862B, wFloor + 0xB8ACD, uFloor, vFloor + 0x9CDA5, mFloor, seed) + x * hashPart1024(xFloor + 0xEBEDF, yFloor, zFloor + 0xC862B, wFloor + 0xB8ACD, uFloor, vFloor + 0x9CDA5, mFloor, seed))
+                                                                + y * ((1 - x) * hashPart1024(xFloor, yFloor + 0xD96EB, zFloor + 0xC862B, wFloor + 0xB8ACD, uFloor, vFloor + 0x9CDA5, mFloor, seed) + x * hashPart1024(xFloor + 0xEBEDF, yFloor + 0xD96EB, zFloor + 0xC862B, wFloor + 0xB8ACD, uFloor, vFloor + 0x9CDA5, mFloor, seed)))
+                                                )))
+                                        + (u *
+                                        ((1 - w) *
+                                                ((1 - z) *
+                                                        ((1 - y) * ((1 - x) * hashPart1024(xFloor, yFloor, zFloor, wFloor, uFloor + 0xAA323, vFloor + 0x9CDA5, mFloor, seed) + x * hashPart1024(xFloor + 0xEBEDF, yFloor, zFloor, wFloor, uFloor + 0xAA323, vFloor + 0x9CDA5, mFloor, seed))
+                                                                + y * ((1 - x) * hashPart1024(xFloor, yFloor + 0xD96EB, zFloor, wFloor, uFloor + 0xAA323, vFloor + 0x9CDA5, mFloor, seed) + x * hashPart1024(xFloor + 0xEBEDF, yFloor + 0xD96EB, zFloor, wFloor, uFloor + 0xAA323, vFloor + 0x9CDA5, mFloor, seed)))
+                                                        + z *
+                                                        ((1 - y) * ((1 - x) * hashPart1024(xFloor, yFloor, zFloor + 0xC862B, wFloor, uFloor + 0xAA323, vFloor + 0x9CDA5, mFloor, seed) + x * hashPart1024(xFloor + 0xEBEDF, yFloor, zFloor + 0xC862B, wFloor, uFloor + 0xAA323, vFloor + 0x9CDA5, mFloor, seed))
+                                                                + y * ((1 - x) * hashPart1024(xFloor, yFloor + 0xD96EB, zFloor + 0xC862B, wFloor, uFloor + 0xAA323, vFloor + 0x9CDA5, mFloor, seed) + x * hashPart1024(xFloor + 0xEBEDF, yFloor + 0xD96EB, zFloor + 0xC862B, wFloor, uFloor + 0xAA323, vFloor + 0x9CDA5, mFloor, seed))))
+                                                + (w *
+                                                ((1 - z) *
+                                                        ((1 - y) * ((1 - x) * hashPart1024(xFloor, yFloor, zFloor, wFloor + 0xB8ACD, uFloor + 0xAA323, vFloor + 0x9CDA5, mFloor, seed) + x * hashPart1024(xFloor + 0xEBEDF, yFloor, zFloor, wFloor + 0xB8ACD, uFloor + 0xAA323, vFloor + 0x9CDA5, mFloor, seed))
+                                                                + y * ((1 - x) * hashPart1024(xFloor, yFloor + 0xD96EB, zFloor, wFloor + 0xB8ACD, uFloor + 0xAA323, vFloor + 0x9CDA5, mFloor, seed) + x * hashPart1024(xFloor + 0xEBEDF, yFloor + 0xD96EB, zFloor, wFloor + 0xB8ACD, uFloor + 0xAA323, vFloor + 0x9CDA5, mFloor, seed)))
+                                                        + z *
+                                                        ((1 - y) * ((1 - x) * hashPart1024(xFloor, yFloor, zFloor + 0xC862B, wFloor + 0xB8ACD, uFloor + 0xAA323, vFloor + 0x9CDA5, mFloor, seed) + x * hashPart1024(xFloor + 0xEBEDF, yFloor, zFloor + 0xC862B, wFloor + 0xB8ACD, uFloor + 0xAA323, vFloor + 0x9CDA5, mFloor, seed))
+                                                                + y * ((1 - x) * hashPart1024(xFloor, yFloor + 0xD96EB, zFloor + 0xC862B, wFloor + 0xB8ACD, uFloor + 0xAA323, vFloor + 0x9CDA5, mFloor, seed) + x * hashPart1024(xFloor + 0xEBEDF, yFloor + 0xD96EB, zFloor + 0xC862B, wFloor + 0xB8ACD, uFloor + 0xAA323, vFloor + 0x9CDA5, mFloor, seed)))
+                                                )))))))
+                        + (m *
+                        ((1 - v) *
+                                ((1 - u) *
+                                        ((1 - w) *
+                                                ((1 - z) *
+                                                        ((1 - y) * ((1 - x) * hashPart1024(xFloor, yFloor, zFloor, wFloor, uFloor, vFloor, mFloor + 0x908E3, seed) + x * hashPart1024(xFloor + 0xEBEDF, yFloor, zFloor, wFloor, uFloor, vFloor, mFloor + 0x908E3, seed))
+                                                                + y * ((1 - x) * hashPart1024(xFloor, yFloor + 0xD96EB, zFloor, wFloor, uFloor, vFloor, mFloor + 0x908E3, seed) + x * hashPart1024(xFloor + 0xEBEDF, yFloor + 0xD96EB, zFloor, wFloor, uFloor, vFloor, mFloor + 0x908E3, seed)))
+                                                        + z *
+                                                        ((1 - y) * ((1 - x) * hashPart1024(xFloor, yFloor, zFloor + 0xC862B, wFloor, uFloor, vFloor, mFloor + 0x908E3, seed) + x * hashPart1024(xFloor + 0xEBEDF, yFloor, zFloor + 0xC862B, wFloor, uFloor, vFloor, mFloor + 0x908E3, seed))
+                                                                + y * ((1 - x) * hashPart1024(xFloor, yFloor + 0xD96EB, zFloor + 0xC862B, wFloor, uFloor, vFloor, mFloor + 0x908E3, seed) + x * hashPart1024(xFloor + 0xEBEDF, yFloor + 0xD96EB, zFloor + 0xC862B, wFloor, uFloor, vFloor, mFloor + 0x908E3, seed))))
+                                                + (w *
+                                                ((1 - z) *
+                                                        ((1 - y) * ((1 - x) * hashPart1024(xFloor, yFloor, zFloor, wFloor + 0xB8ACD, uFloor, vFloor, mFloor + 0x908E3, seed) + x * hashPart1024(xFloor + 0xEBEDF, yFloor, zFloor, wFloor + 0xB8ACD, uFloor, vFloor, mFloor + 0x908E3, seed))
+                                                                + y * ((1 - x) * hashPart1024(xFloor, yFloor + 0xD96EB, zFloor, wFloor + 0xB8ACD, uFloor, vFloor, mFloor + 0x908E3, seed) + x * hashPart1024(xFloor + 0xEBEDF, yFloor + 0xD96EB, zFloor, wFloor + 0xB8ACD, uFloor, vFloor, mFloor + 0x908E3, seed)))
+                                                        + z *
+                                                        ((1 - y) * ((1 - x) * hashPart1024(xFloor, yFloor, zFloor + 0xC862B, wFloor + 0xB8ACD, uFloor, vFloor, mFloor + 0x908E3, seed) + x * hashPart1024(xFloor + 0xEBEDF, yFloor, zFloor + 0xC862B, wFloor + 0xB8ACD, uFloor, vFloor, mFloor + 0x908E3, seed))
+                                                                + y * ((1 - x) * hashPart1024(xFloor, yFloor + 0xD96EB, zFloor + 0xC862B, wFloor + 0xB8ACD, uFloor, vFloor, mFloor + 0x908E3, seed) + x * hashPart1024(xFloor + 0xEBEDF, yFloor + 0xD96EB, zFloor + 0xC862B, wFloor + 0xB8ACD, uFloor, vFloor, mFloor + 0x908E3, seed)))
+                                                )))
+                                        + (u *
+                                        ((1 - w) *
+                                                ((1 - z) *
+                                                        ((1 - y) * ((1 - x) * hashPart1024(xFloor, yFloor, zFloor, wFloor, uFloor + 0xAA323, vFloor, mFloor + 0x908E3, seed) + x * hashPart1024(xFloor + 0xEBEDF, yFloor, zFloor, wFloor, uFloor + 0xAA323, vFloor, mFloor + 0x908E3, seed))
+                                                                + y * ((1 - x) * hashPart1024(xFloor, yFloor + 0xD96EB, zFloor, wFloor, uFloor + 0xAA323, vFloor, mFloor + 0x908E3, seed) + x * hashPart1024(xFloor + 0xEBEDF, yFloor + 0xD96EB, zFloor, wFloor, uFloor + 0xAA323, vFloor, mFloor + 0x908E3, seed)))
+                                                        + z *
+                                                        ((1 - y) * ((1 - x) * hashPart1024(xFloor, yFloor, zFloor + 0xC862B, wFloor, uFloor + 0xAA323, vFloor, mFloor + 0x908E3, seed) + x * hashPart1024(xFloor + 0xEBEDF, yFloor, zFloor + 0xC862B, wFloor, uFloor + 0xAA323, vFloor, mFloor + 0x908E3, seed))
+                                                                + y * ((1 - x) * hashPart1024(xFloor, yFloor + 0xD96EB, zFloor + 0xC862B, wFloor, uFloor + 0xAA323, vFloor, mFloor + 0x908E3, seed) + x * hashPart1024(xFloor + 0xEBEDF, yFloor + 0xD96EB, zFloor + 0xC862B, wFloor, uFloor + 0xAA323, vFloor, mFloor + 0x908E3, seed))))
+                                                + (w *
+                                                ((1 - z) *
+                                                        ((1 - y) * ((1 - x) * hashPart1024(xFloor, yFloor, zFloor, wFloor + 0xB8ACD, uFloor + 0xAA323, vFloor, mFloor + 0x908E3, seed) + x * hashPart1024(xFloor + 0xEBEDF, yFloor, zFloor, wFloor + 0xB8ACD, uFloor + 0xAA323, vFloor, mFloor + 0x908E3, seed))
+                                                                + y * ((1 - x) * hashPart1024(xFloor, yFloor + 0xD96EB, zFloor, wFloor + 0xB8ACD, uFloor + 0xAA323, vFloor, mFloor + 0x908E3, seed) + x * hashPart1024(xFloor + 0xEBEDF, yFloor + 0xD96EB, zFloor, wFloor + 0xB8ACD, uFloor + 0xAA323, vFloor, mFloor + 0x908E3, seed)))
+                                                        + z *
+                                                        ((1 - y) * ((1 - x) * hashPart1024(xFloor, yFloor, zFloor + 0xC862B, wFloor + 0xB8ACD, uFloor + 0xAA323, vFloor, mFloor + 0x908E3, seed) + x * hashPart1024(xFloor + 0xEBEDF, yFloor, zFloor + 0xC862B, wFloor + 0xB8ACD, uFloor + 0xAA323, vFloor, mFloor + 0x908E3, seed))
+                                                                + y * ((1 - x) * hashPart1024(xFloor, yFloor + 0xD96EB, zFloor + 0xC862B, wFloor + 0xB8ACD, uFloor + 0xAA323, vFloor, mFloor + 0x908E3, seed) + x * hashPart1024(xFloor + 0xEBEDF, yFloor + 0xD96EB, zFloor + 0xC862B, wFloor + 0xB8ACD, uFloor + 0xAA323, vFloor, mFloor + 0x908E3, seed)))
+                                                )))))
+                                + (v *
+                                ((1 - u) *
+                                        ((1 - w) *
+                                                ((1 - z) *
+                                                        ((1 - y) * ((1 - x) * hashPart1024(xFloor, yFloor, zFloor, wFloor, uFloor, vFloor + 0x9CDA5, mFloor + 0x908E3, seed) + x * hashPart1024(xFloor + 0xEBEDF, yFloor, zFloor, wFloor, uFloor, vFloor + 0x9CDA5, mFloor + 0x908E3, seed))
+                                                                + y * ((1 - x) * hashPart1024(xFloor, yFloor + 0xD96EB, zFloor, wFloor, uFloor, vFloor + 0x9CDA5, mFloor + 0x908E3, seed) + x * hashPart1024(xFloor + 0xEBEDF, yFloor + 0xD96EB, zFloor, wFloor, uFloor, vFloor + 0x9CDA5, mFloor + 0x908E3, seed)))
+                                                        + z *
+                                                        ((1 - y) * ((1 - x) * hashPart1024(xFloor, yFloor, zFloor + 0xC862B, wFloor, uFloor, vFloor + 0x9CDA5, mFloor + 0x908E3, seed) + x * hashPart1024(xFloor + 0xEBEDF, yFloor, zFloor + 0xC862B, wFloor, uFloor, vFloor + 0x9CDA5, mFloor + 0x908E3, seed))
+                                                                + y * ((1 - x) * hashPart1024(xFloor, yFloor + 0xD96EB, zFloor + 0xC862B, wFloor, uFloor, vFloor + 0x9CDA5, mFloor + 0x908E3, seed) + x * hashPart1024(xFloor + 0xEBEDF, yFloor + 0xD96EB, zFloor + 0xC862B, wFloor, uFloor, vFloor + 0x9CDA5, mFloor + 0x908E3, seed))))
+                                                + (w *
+                                                ((1 - z) *
+                                                        ((1 - y) * ((1 - x) * hashPart1024(xFloor, yFloor, zFloor, wFloor + 0xB8ACD, uFloor, vFloor + 0x9CDA5, mFloor + 0x908E3, seed) + x * hashPart1024(xFloor + 0xEBEDF, yFloor, zFloor, wFloor + 0xB8ACD, uFloor, vFloor + 0x9CDA5, mFloor + 0x908E3, seed))
+                                                                + y * ((1 - x) * hashPart1024(xFloor, yFloor + 0xD96EB, zFloor, wFloor + 0xB8ACD, uFloor, vFloor + 0x9CDA5, mFloor + 0x908E3, seed) + x * hashPart1024(xFloor + 0xEBEDF, yFloor + 0xD96EB, zFloor, wFloor + 0xB8ACD, uFloor, vFloor + 0x9CDA5, mFloor + 0x908E3, seed)))
+                                                        + z *
+                                                        ((1 - y) * ((1 - x) * hashPart1024(xFloor, yFloor, zFloor + 0xC862B, wFloor + 0xB8ACD, uFloor, vFloor + 0x9CDA5, mFloor + 0x908E3, seed) + x * hashPart1024(xFloor + 0xEBEDF, yFloor, zFloor + 0xC862B, wFloor + 0xB8ACD, uFloor, vFloor + 0x9CDA5, mFloor + 0x908E3, seed))
+                                                                + y * ((1 - x) * hashPart1024(xFloor, yFloor + 0xD96EB, zFloor + 0xC862B, wFloor + 0xB8ACD, uFloor, vFloor + 0x9CDA5, mFloor + 0x908E3, seed) + x * hashPart1024(xFloor + 0xEBEDF, yFloor + 0xD96EB, zFloor + 0xC862B, wFloor + 0xB8ACD, uFloor, vFloor + 0x9CDA5, mFloor + 0x908E3, seed)))
+                                                )))
+                                        + (u *
+                                        ((1 - w) *
+                                                ((1 - z) *
+                                                        ((1 - y) * ((1 - x) * hashPart1024(xFloor, yFloor, zFloor, wFloor, uFloor + 0xAA323, vFloor + 0x9CDA5, mFloor + 0x908E3, seed) + x * hashPart1024(xFloor + 0xEBEDF, yFloor, zFloor, wFloor, uFloor + 0xAA323, vFloor + 0x9CDA5, mFloor + 0x908E3, seed))
+                                                                + y * ((1 - x) * hashPart1024(xFloor, yFloor + 0xD96EB, zFloor, wFloor, uFloor + 0xAA323, vFloor + 0x9CDA5, mFloor + 0x908E3, seed) + x * hashPart1024(xFloor + 0xEBEDF, yFloor + 0xD96EB, zFloor, wFloor, uFloor + 0xAA323, vFloor + 0x9CDA5, mFloor + 0x908E3, seed)))
+                                                        + z *
+                                                        ((1 - y) * ((1 - x) * hashPart1024(xFloor, yFloor, zFloor + 0xC862B, wFloor, uFloor + 0xAA323, vFloor + 0x9CDA5, mFloor + 0x908E3, seed) + x * hashPart1024(xFloor + 0xEBEDF, yFloor, zFloor + 0xC862B, wFloor, uFloor + 0xAA323, vFloor + 0x9CDA5, mFloor + 0x908E3, seed))
+                                                                + y * ((1 - x) * hashPart1024(xFloor, yFloor + 0xD96EB, zFloor + 0xC862B, wFloor, uFloor + 0xAA323, vFloor + 0x9CDA5, mFloor + 0x908E3, seed) + x * hashPart1024(xFloor + 0xEBEDF, yFloor + 0xD96EB, zFloor + 0xC862B, wFloor, uFloor + 0xAA323, vFloor + 0x9CDA5, mFloor + 0x908E3, seed))))
+                                                + (w *
+                                                ((1 - z) *
+                                                        ((1 - y) * ((1 - x) * hashPart1024(xFloor, yFloor, zFloor, wFloor + 0xB8ACD, uFloor + 0xAA323, vFloor + 0x9CDA5, mFloor + 0x908E3, seed) + x * hashPart1024(xFloor + 0xEBEDF, yFloor, zFloor, wFloor + 0xB8ACD, uFloor + 0xAA323, vFloor + 0x9CDA5, mFloor + 0x908E3, seed))
+                                                                + y * ((1 - x) * hashPart1024(xFloor, yFloor + 0xD96EB, zFloor, wFloor + 0xB8ACD, uFloor + 0xAA323, vFloor + 0x9CDA5, mFloor + 0x908E3, seed) + x * hashPart1024(xFloor + 0xEBEDF, yFloor + 0xD96EB, zFloor, wFloor + 0xB8ACD, uFloor + 0xAA323, vFloor + 0x9CDA5, mFloor + 0x908E3, seed)))
+                                                        + z *
+                                                        ((1 - y) * ((1 - x) * hashPart1024(xFloor, yFloor, zFloor + 0xC862B, wFloor + 0xB8ACD, uFloor + 0xAA323, vFloor + 0x9CDA5, mFloor + 0x908E3, seed) + x * hashPart1024(xFloor + 0xEBEDF, yFloor, zFloor + 0xC862B, wFloor + 0xB8ACD, uFloor + 0xAA323, vFloor + 0x9CDA5, mFloor + 0x908E3, seed))
+                                                                + y * ((1 - x) * hashPart1024(xFloor, yFloor + 0xD96EB, zFloor + 0xC862B, wFloor + 0xB8ACD, uFloor + 0xAA323, vFloor + 0x9CDA5, mFloor + 0x908E3, seed) + x * hashPart1024(xFloor + 0xEBEDF, yFloor + 0xD96EB, zFloor + 0xC862B, wFloor + 0xB8ACD, uFloor + 0xAA323, vFloor + 0x9CDA5, mFloor + 0x908E3, seed)))
+                                                ))))))))
+                ) * 0x1p-10f + 0.5f;
+    }
+
     // Foam Noise
 
     public float getFoam(float x, float y) {
@@ -3214,6 +3496,153 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         final float sharp = foamSharpness * 6.6f;
         final float diff = 0.5f - result;
         final int sign = NumberTools.floatToIntBits(diff) >> 31, one = sign | 1;
+        return (((result + sign)) / (Float.MIN_VALUE - sign + (result + sharp * diff) * one) - sign - sign) - 1f;
+    }
+
+    private float singleFoamFractalFBM(float x, float y, float z, float w, float u, float v, float m) {
+        int seed = this.seed;
+        float sum = singleFoam(seed, x, y, z, w, u, v, m);
+        float amp = 1;
+
+        for (int i = 1; i < octaves; i++) {
+            x *= lacunarity;
+            y *= lacunarity;
+            z *= lacunarity;
+            w *= lacunarity;
+            u *= lacunarity;
+            v *= lacunarity;
+            m *= lacunarity;
+
+            amp *= gain;
+            sum += singleFoam(++seed, x, y, z, w, u, v, m) * amp;
+        }
+
+        return sum * fractalBounding;
+    }
+
+    private float singleFoamFractalBillow(float x, float y, float z, float w, float u, float v, float m) {
+        int seed = this.seed;
+        float sum = Math.abs(singleFoam(seed, x, y, z, w, u, v, m)) * 2 - 1;
+        float amp = 1;
+
+        for (int i = 1; i < octaves; i++) {
+            x *= lacunarity;
+            y *= lacunarity;
+            z *= lacunarity;
+            w *= lacunarity;
+            u *= lacunarity;
+            v *= lacunarity;
+            m *= lacunarity;
+
+            amp *= gain;
+            sum += (Math.abs(singleFoam(++seed, x, y, z, w, u, v, m)) * 2 - 1) * amp;
+        }
+
+        return sum * fractalBounding;
+    }
+
+    private float singleFoamFractalRidgedMulti(float x, float y, float z, float w, float u, float v, float m) {
+        int seed = this.seed;
+        float sum = 0f, exp = 2f, correction = 0f, spike;
+        for (int i = 0; i < octaves; i++) {
+            spike = 1f - Math.abs(singleFoam(seed + i, x, y, z, w, u, v, m));
+            correction += (exp *= 0.5f);
+            sum += spike * exp;
+            x *= lacunarity;
+            y *= lacunarity;
+            z *= lacunarity;
+            w *= lacunarity;
+            u *= lacunarity;
+            v *= lacunarity;
+            m *= lacunarity;
+        }
+        return sum * 2f / correction - 1f;
+    }
+
+    public float singleFoam(int seed, float x, float y, float z, float w, float u, float v, float m) {
+        final float p0 = x;
+        final float p1 = x * -0.14285714285714285f + y * +0.9897433186107870f;
+        final float p2 = x * -0.14285714285714285f + y * -0.1649572197684645f + z * +0.97590007294853320f;
+        final float p3 = x * -0.14285714285714285f + y * -0.1649572197684645f + z * -0.19518001458970663f + w * +0.95618288746751490f;
+        final float p4 = x * -0.14285714285714285f + y * -0.1649572197684645f + z * -0.19518001458970663f + w * -0.23904572186687872f + u * +0.92582009977255150f;
+        final float p5 = x * -0.14285714285714285f + y * -0.1649572197684645f + z * -0.19518001458970663f + w * -0.23904572186687872f + u * -0.30860669992418377f + v * +0.8728715609439696f;
+        final float p6 = x * -0.14285714285714285f + y * -0.1649572197684645f + z * -0.19518001458970663f + w * -0.23904572186687872f + u * -0.30860669992418377f + v * -0.4364357804719847f + m * +0.7559289460184545f;
+        final float p7 = x * -0.14285714285714285f + y * -0.1649572197684645f + z * -0.19518001458970663f + w * -0.23904572186687872f + u * -0.30860669992418377f + v * -0.4364357804719847f + m * -0.7559289460184544f;
+        float xin = p0;
+        float yin = p6;
+        float zin = p3;
+        float win = p7;
+        float uin = p1;
+        float vin = p4;
+        float min = p5;
+        final float a = valueNoise(seed, xin, yin, zin, win, uin, vin, min);
+        seed += 0x9E377;
+        xin = p2;
+        yin = p3;
+        zin = p0;
+        win = p4;
+        uin = p6;
+        vin = p5;
+        min = p7;
+        final float b = valueNoise(seed, xin + a, yin, zin, win, uin, vin, min);
+        seed += 0x9E377;
+        xin = p1;
+        yin = p2;
+        zin = p4;
+        win = p3;
+        uin = p5;
+        vin = p7;
+        min = p6;
+        final float c = valueNoise(seed, xin + b, yin, zin, win, uin, vin, min);
+        seed += 0x9E377;
+        xin = p7;
+        yin = p0;
+        zin = p2;
+        win = p5;
+        uin = p4;
+        vin = p6;
+        min = p1;
+        final float d = valueNoise(seed, xin + c, yin, zin, win, uin, vin, min);
+        seed += 0x9E377;
+        xin = p3;
+        yin = p1;
+        zin = p5;
+        win = p6;
+        uin = p7;
+        vin = p0;
+        min = p2;
+        final float e = valueNoise(seed, xin + d, yin, zin, win, uin, vin, min);
+        seed += 0x9E377;
+        xin = p4;
+        yin = p7;
+        zin = p6;
+        win = p2;
+        uin = p0;
+        vin = p1;
+        min = p3;
+        final float f = valueNoise(seed, xin + e, yin, zin, win, uin, vin, min);
+        seed += 0x9E377;
+        xin = p5;
+        yin = p4;
+        zin = p7;
+        win = p1;
+        uin = p2;
+        vin = p3;
+        min = p0;
+        final float g = valueNoise(seed, xin + f, yin, zin, win, uin, vin, min);
+        seed += 0x9E377;
+        xin = p6;
+        yin = p5;
+        zin = p1;
+        win = p0;
+        uin = p3;
+        vin = p2;
+        min = p4;
+        final float h = valueNoise(seed, xin + g, yin, zin, win, uin, vin, min);
+        final float result = (a + b + c + d + e + f + g + h) * 0.125f;
+        final float sharp = foamSharpness * 7.7f;
+        final float diff = 0.5f - result;
+        final int sign = NumberTools.floatToRawIntBits(diff) >> 31, one = sign | 1;
         return (((result + sign)) / (Float.MIN_VALUE - sign + (result + sharp * diff) * one) - sign - sign) - 1f;
     }
 
