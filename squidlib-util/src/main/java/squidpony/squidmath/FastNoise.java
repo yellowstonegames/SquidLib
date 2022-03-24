@@ -156,9 +156,11 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
     WHITE_NOISE = 7,
     /**
      * A simple kind of noise that gets a random float for each vertex of a square or cube, and interpolates between all
-     * of them to get a smoothly changing value (using cubic interpolation, also called {@link #HERMITE}, of course).
+     * of them to get a smoothly changing value using... uh... some kind of cubic or bicubic interpolation, the
+     * documentation for <a href="https://github.com/jobtalle/CubicNoise">CubicNoise</> is not specific.
      * If you're changing the point hashing algorithm with {@link #setPointHash(IPointHash)}, you should usually use
-     * this or {@link #CUBIC_FRACTAL} if you want to see any aesthetically-desirable artifacts in the hash.
+     * this or {@link #CUBIC_FRACTAL} if you want to see any aesthetically-desirable artifacts in the hash. This
+     * supports 2D, 3D, and 4D, currently.
      * <br>
      * <a href="https://i.imgur.com/foV90pn.png">Noise sample at left, FFT at right.</a>
      * <br>
@@ -167,10 +169,11 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
     CUBIC = 8,
     /**
      * A simple kind of noise that gets a random float for each vertex of a square or cube, and interpolates between all
-     * of them to get a smoothly changing value (using cubic interpolation, also called {@link #HERMITE}, of course).
+     * of them to get a smoothly changing value using... uh... some kind of cubic or bicubic interpolation, the
+     * documentation for <a href="https://github.com/jobtalle/CubicNoise">CubicNoise</> is not specific.
      * This version can use {@link #setFractalType(int)}, {@link #setFractalOctaves(int)}, and more.
-     * If you're changing the point hashing algorithm with {@link #setPointHash(IPointHash)}, you should usually use
-     * this or {@link #CUBIC} if you want to see any aesthetically-desirable artifacts in the hash.
+     * If you're changing the point hashing algorithm with {@link #setPointHash(IPointHash)}, you must use this or
+     * {@link #CUBIC} to see the effects of an artifact-laden point hash. This supports 2D, 3D, and 4D, currently.
      * <br>
      * <a href="https://i.imgur.com/foV90pn.png">Noise sample at left, FFT at right.</a>
      * <br>
@@ -247,36 +250,162 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
      */
     public static final int QUINTIC = 2;
 
-    public static final int FBM = 0, BILLOW = 1, RIDGED_MULTI = 2;
 
-    public static final int EUCLIDEAN = 0, MANHATTAN = 1, NATURAL = 2;
+    /**
+     * "Standard" layered octaves of noise, where each octave has a different frequency and weight.
+     * Tends to look cloudy with more octaves, and generally like a natural process.
+     * <br>
+     * Meant to be used with {@link #setFractalType(int)}.
+     */
+    public static final int FBM = 0;
+    /**
+     * A less common way to layer octaves of noise, where most results are biased toward higher values,
+     * but "valleys" show up filled with much lower values.
+     * This probably has some good uses in 3D or higher noise, but it isn't used too frequently.
+     * <br>
+     * Meant to be used with {@link #setFractalType(int)}.
+     */
+    public static final int BILLOW = 1;
+    /**
+     * A way to layer octaves of noise so most values are biased toward low values but "ridges" of high
+     * values run across the noise. This can be a good way of highlighting the least-natural aspects of
+     * some kinds of noise; {@link #PERLIN_FRACTAL} has mostly ridges along 45-degree angles,
+     * {@link #SIMPLEX_FRACTAL} has many ridges along a triangular grid, and so on. {@link #FOAM_FRACTAL}
+     * and {@link #HONEY_FRACTAL} do well with this mode, though, and look something like lightning or
+     * bubbling fluids, respectively. Using FOAM or HONEY will have this look natural, but PERLIN in
+     * particular will look unnatural if the grid is visible.
+     * <br>
+     * Meant to be used with {@link #setFractalType(int)}.
+     */
+    public static final int RIDGED_MULTI = 2;
 
-    public static final int CELL_VALUE = 0, NOISE_LOOKUP = 1, DISTANCE = 2, DISTANCE_2 = 3,
-            DISTANCE_2_ADD = 4, DISTANCE_2_SUB = 5, DISTANCE_2_MUL = 6, DISTANCE_2_DIV = 7;
+    /**
+     * Measures distances "as the crow flies."
+     * All points at an equal distance from the origin form a circle.
+     * Used only with {@link #CELLULAR} noise.
+     * Meant to be used with {@link #setCellularDistanceFunction(int)}.
+     */
+    public static final int EUCLIDEAN = 0;
+    /**
+     * Measures distances on a grid, as if allowing only orthogonal movement (with no diagonals).
+     * All points at an equal distance from the origin form a diamond shape.
+     * Used only with {@link #CELLULAR} noise.
+     * Meant to be used with {@link #setCellularDistanceFunction(int)}.
+     */
+    public static final int MANHATTAN = 1;
+    /**
+     * Measures distances with an approximation of Euclidean distance that's not 100% accurate.
+     * All points at an equal distance from the origin form a rough octagon.
+     * Used only with {@link #CELLULAR} noise.
+     * Meant to be used with {@link #setCellularDistanceFunction(int)}.
+     */
+    public static final int NATURAL = 2;
 
-    private int seed;
+    /**
+     * Meant to be used with {@link #setCellularReturnType(int)}.
+     */
+    public static final int CELL_VALUE = 0;
+    /**
+     * Meant to be used with {@link #setCellularReturnType(int)}. Note that this does not allow configuring an extra
+     * Noise value to use for lookup (anymore); it always uses 3 octaves of {@link #SIMPLEX_FRACTAL} with {@link #FBM}.
+     */
+    public static final int NOISE_LOOKUP = 1;
+    /**
+     * Meant to be used with {@link #setCellularReturnType(int)}.
+     */
+    public static final int DISTANCE = 2;
+    /**
+     * Meant to be used with {@link #setCellularReturnType(int)}.
+     */
+    public static final int DISTANCE_2 = 3;
+    /**
+     * Meant to be used with {@link #setCellularReturnType(int)}.
+     */
+    public static final int DISTANCE_2_ADD = 4;
+    /**
+     * Meant to be used with {@link #setCellularReturnType(int)}.
+     */
+    public static final int DISTANCE_2_SUB = 5;
+    /**
+     * Meant to be used with {@link #setCellularReturnType(int)}.
+     */
+    public static final int DISTANCE_2_MUL = 6;
+    /**
+     * Meant to be used with {@link #setCellularReturnType(int)}.
+     */
+    public static final int DISTANCE_2_DIV = 7;
+
+    /**
+     * @see #getSeed()
+     */
+    protected int seed;
+
+    /**
+     * @see #getFrequency()
+     */
     protected float frequency = 0.03125f;
+
+    /**
+     * @see #getInterpolation()
+     */
     protected int interpolation = HERMITE;
-    
-    private int noiseType = SIMPLEX_FRACTAL;
 
-    private int octaves = 1;
-    private float lacunarity = 2f;
-    private float gain = 0.5f;
+    /**
+     * @see #getNoiseType()
+     */
+    protected int noiseType = SIMPLEX_FRACTAL;
 
-    private boolean fractalSpiral = false;
-    private int fractalType = FBM;
+    /**
+     * @see #getFractalOctaves()
+     */
+    protected int octaves = 1;
+
+    /**
+     * @see #getFractalLacunarity()
+     */
+    protected float lacunarity = 2f;
+    /**
+     * @see #getFractalGain()
+     */
+    protected float gain = 0.5f;
+    /**
+     * @see #getFractalType()
+     */
+    protected int fractalType = FBM;
 
     private float fractalBounding;
 
-    private int cellularDistanceFunction = EUCLIDEAN;
-    private int cellularReturnType = CELL_VALUE;
+    /**
+     * @see #getCellularDistanceFunction()
+     */
+    protected int cellularDistanceFunction = EUCLIDEAN;
+
+    /**
+     * @see #getCellularReturnType()
+     */
+    protected int cellularReturnType = CELL_VALUE;
+
+    /**
+     * @see #isFractalSpiral()
+     */
+    protected boolean fractalSpiral = false;
+
     private FastNoise cellularNoiseLookup;
-    private float gradientPerturbAmp = 1f / 0.45f;
+    /**
+     * @see #getGradientPerturbAmp()
+     */
+    protected float gradientPerturbAmp = 1f / 0.45f;
 
-    private float foamSharpness = 1f;
+    /**
+     * @see #getFoamSharpness()
+     */
+    protected float foamSharpness = 1f;
 
-    private IPointHash pointHash = new IntPointHash();
+
+    /**
+     * @see #getPointHash()
+     */
+    protected IPointHash pointHash = new IntPointHash();
 
     /**
      * A publicly available FastNoise object with seed 1337, frequency 1.0f/32.0f, 1 octave of Simplex noise using
@@ -439,12 +568,23 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
      * @param interpolation an int (0, 1, or 2) corresponding to a constant from this class for an interpolation type
      */
     public void setInterpolation(int interpolation) {
-        this.interpolation = interpolation;
+        this.interpolation = Math.min(Math.max(interpolation, 0), 2);
     }
-    
+
     /**
-     * Sets the default type of noise returned by {@link #getConfiguredNoise(float, float)}, using one of the following constants
-     * in this class:
+     * Gets the constant corresponding to the interpolation method used to smooth between noise values. This is always
+     * one of the constants {@link #LINEAR} (0), {@link #HERMITE} (1), or {@link #QUINTIC} (2). If this is not called,
+     * it defaults to HERMITE. This is used in Value, Perlin, and Position Perturbing, and because it is used in Value,
+     * that makes it also apply to Foam, Honey, and Mutant.
+     * @return an int (0, 1, or 2) corresponding to a constant from this class for an interpolation type
+     */
+    public int getInterpolation() {
+        return interpolation;
+    }
+
+    /**
+     * Sets the default type of noise returned by {@link #getConfiguredNoise(float, float)}, using one of the following
+     * constants in this class:
      * {@link #VALUE} (0), {@link #VALUE_FRACTAL} (1), {@link #PERLIN} (2), {@link #PERLIN_FRACTAL} (3),
      * {@link #SIMPLEX} (4), {@link #SIMPLEX_FRACTAL} (5), {@link #CELLULAR} (6), {@link #WHITE_NOISE} (7),
      * {@link #CUBIC} (8), {@link #CUBIC_FRACTAL} (9), {@link #FOAM} (10), {@link #FOAM_FRACTAL} (11), {@link #HONEY}
@@ -457,14 +597,16 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
     }
 
     /**
-     * Gets the default type of noise returned by {@link #getConfiguredNoise(float, float)}, using one of the following constants
-     * in this class:
+     * Gets the default type of noise returned by {@link #getConfiguredNoise(float, float)}, using one of the following
+     * constants in this class:
      * {@link #VALUE} (0), {@link #VALUE_FRACTAL} (1), {@link #PERLIN} (2), {@link #PERLIN_FRACTAL} (3),
      * {@link #SIMPLEX} (4), {@link #SIMPLEX_FRACTAL} (5), {@link #CELLULAR} (6), {@link #WHITE_NOISE} (7),
      * {@link #CUBIC} (8), {@link #CUBIC_FRACTAL} (9), {@link #FOAM} (10), {@link #FOAM_FRACTAL} (11), {@link #HONEY}
-     * (12), or {@link #HONEY_FRACTAL} (13).
-     * The default is SIMPLEX_FRACTAL.
-     * @return the noise type as a code, from 0 to 13 inclusive
+     * (12), {@link #HONEY_FRACTAL} (13), {@link #MUTANT} (14), or {@link #MUTANT_FRACTAL} (15).
+     * The default is SIMPLEX_FRACTAL. Note that if you have a fractal noise type, you can get the corresponding
+     * non-fractal noise type by subtracting 1 from the constant this returns. The reverse is not always true, because
+     * Cellular and White Noise have no fractal version.
+     * @return the noise type as a code, from 0 to 15 inclusive
      */
     public int getNoiseType()
     {
@@ -500,6 +642,15 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
     }
 
     /**
+     * Gets the octave lacunarity for all fractal noise types.
+     * Lacunarity is a multiplicative change to frequency between octaves. If this wasn't changed, it defaults to 2.
+     * @return a float that will be used for the lacunarity of fractal noise types; commonly 2.0 or 0.5
+     */
+    public float getFractalLacunarity() {
+        return lacunarity;
+    }
+
+    /**
      * Sets the octave gain for all fractal noise types.
      * If this isn't called, it defaults to 0.5.
      * @param gain the gain between octaves, as a float
@@ -507,6 +658,16 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
     public void setFractalGain(float gain) {
         this.gain = gain;
         calculateFractalBounding();
+    }
+
+    /**
+     * Sets the octave gain for all fractal noise types.
+     * This is typically related to {@link #getFractalLacunarity()}, with gain falling as lacunarity rises.
+     * If this wasn't changed, it defaults to 0.5.
+     * @return the gain between octaves, as a float
+     */
+    public float getFractalGain() {
+        return gain;
     }
 
     /**
@@ -529,6 +690,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
     {
         return fractalType;
     }
+
     /**
      * Sets the distance function used in cellular noise calculations, allowing an int argument corresponding to one of
      * the following constants from this class: {@link #EUCLIDEAN} (0), {@link #MANHATTAN} (1), or {@link #NATURAL} (2).
@@ -538,28 +700,44 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
     public void setCellularDistanceFunction(int cellularDistanceFunction) {
         this.cellularDistanceFunction = cellularDistanceFunction;
     }
-    // Sets
-    // Note: NoiseLookup requires another FastNoise object be set with setCellularNoiseLookup() to function
-    // Default: CellValue
+
+    /**
+     * Gets the distance function used in cellular noise calculations, as an int constant from this class:
+     * {@link #EUCLIDEAN} (0), {@link #MANHATTAN} (1), or {@link #NATURAL} (2). If this wasn't changed, it will use
+     * EUCLIDEAN.
+     * @return an int that can be 0, 1, or 2, corresponding to a constant from this class
+     */
+    public int getCellularDistanceFunction() {
+        return cellularDistanceFunction;
+    }
 
     /**
      * Sets the return type from cellular noise calculations, allowing an int argument corresponding to one of the
      * following constants from this class: {@link #CELL_VALUE} (0), {@link #NOISE_LOOKUP} (1), {@link #DISTANCE} (2),
      * {@link #DISTANCE_2} (3), {@link #DISTANCE_2_ADD} (4), {@link #DISTANCE_2_SUB} (5), {@link #DISTANCE_2_MUL} (6),
      * or {@link #DISTANCE_2_DIV} (7). If this isn't called, it will use CELL_VALUE.
-     * @param cellularReturnType
+     * @param cellularReturnType a constant from this class (see above JavaDoc)
      */
     public void setCellularReturnType(int cellularReturnType) {
         this.cellularReturnType = cellularReturnType;
     }
 
-    // FastNoise used to calculate a cell value if cellular return type is NoiseLookup
-    // The lookup value is acquired through getConfiguredNoise() so ensure you setNoiseType() on the noise lookup, value, gradient or simplex is recommended
+    /**
+     * Gets the return type from cellular noise calculations, corresponding to a constant from this class:
+     * {@link #CELL_VALUE} (0), {@link #NOISE_LOOKUP} (1), {@link #DISTANCE} (2), {@link #DISTANCE_2} (3),
+     * {@link #DISTANCE_2_ADD} (4), {@link #DISTANCE_2_SUB} (5), {@link #DISTANCE_2_MUL} (6), or
+     * {@link #DISTANCE_2_DIV} (7). If this wasn't changed, it will use CELL_VALUE.
+     * @return a constant from this class representing a type of cellular noise calculation
+     */
+    public int getCellularReturnType() {
+        return cellularReturnType;
+    }
 
     /**
      * Sets the FastNoise used to calculate a cell value if cellular return type is {@link #NOISE_LOOKUP}.
      * There is no default value; this must be called if using noise lookup to set the noise to a non-null value.
-     * The lookup value is acquired through getConfiguredNoise() so ensure you setNoiseType() on the noise lookup. Value, Foam, Perlin, or Simplex is recommended.
+     * The lookup value is acquired through getConfiguredNoise(), so ensure you setNoiseType() on the noise lookup.
+     * Value, Foam, Honey, Perlin, and Simplex are all suggested; White Noise and Cellular are not.
      * @param noise another FastNoise object that should be configured already
      */
     public void setCellularNoiseLookup(FastNoise noise) {
@@ -573,7 +751,17 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
      * @param gradientPerturbAmp the maximum perturb distance from the original location when using relevant methods
      */
     public void setGradientPerturbAmp(float gradientPerturbAmp) {
-        this.gradientPerturbAmp = gradientPerturbAmp / (float) 0.45;
+        this.gradientPerturbAmp = gradientPerturbAmp / 0.45f;
+    }
+
+    /**
+     * Gets the maximum perturb distance from original location when using {@link #gradientPerturb2(float[])},
+     * {@link #gradientPerturb3(float[])}, {@link #gradientPerturbFractal2(float[])}, or
+     * {@link #gradientPerturbFractal3(float[])}; the default is 1.0.
+     * @return the maximum perturb distance from the original location when using relevant methods
+     */
+    public float getGradientPerturbAmp(){
+        return gradientPerturbAmp * 0.45f;
     }
 
     /**
@@ -926,8 +1114,8 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
      * After being configured with the setters in this class, such as {@link #setNoiseType(int)},
      * {@link #setFrequency(float)}, {@link #setFractalOctaves(int)}, and {@link #setFractalType(int)}, among others,
      * you can call this method to get the particular variety of noise you specified, in 2D.
-     * @param x
-     * @param y
+     * @param x x position, as a float; the range this should have depends on {@link #getFrequency()}
+     * @param y y position, as a float; the range this should have depends on {@link #getFrequency()}
      * @return noise as a float from -1f to 1f
      */
     public float getConfiguredNoise(float x, float y) {
@@ -1019,9 +1207,9 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
      * After being configured with the setters in this class, such as {@link #setNoiseType(int)},
      * {@link #setFrequency(float)}, {@link #setFractalOctaves(int)}, and {@link #setFractalType(int)}, among others,
      * you can call this method to get the particular variety of noise you specified, in 3D.
-     * @param x
-     * @param y
-     * @param z
+     * @param x x position, as a float; the range this should have depends on {@link #getFrequency()}
+     * @param y y position, as a float; the range this should have depends on {@link #getFrequency()}
+     * @param z z position, as a float; the range this should have depends on {@link #getFrequency()}
      * @return noise as a float from -1f to 1f
      */
     public float getConfiguredNoise(float x, float y, float z) {
@@ -1113,10 +1301,10 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
      * After being configured with the setters in this class, such as {@link #setNoiseType(int)},
      * {@link #setFrequency(float)}, {@link #setFractalOctaves(int)}, and {@link #setFractalType(int)}, among others,
      * you can call this method to get the particular variety of noise you specified, in 4D.
-     * @param x
-     * @param y
-     * @param z
-     * @param w
+     * @param x x position, as a float; the range this should have depends on {@link #getFrequency()}
+     * @param y y position, as a float; the range this should have depends on {@link #getFrequency()}
+     * @param z z position, as a float; the range this should have depends on {@link #getFrequency()}
+     * @param w w position, as a float; the range this should have depends on {@link #getFrequency()}
      * @return noise as a float from -1f to 1f
      */
     public float getConfiguredNoise(float x, float y, float z, float w) {
@@ -1179,6 +1367,8 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
                     default:
                         return singleSimplexFractalFBM(x, y, z, w);
                 }
+            case WHITE_NOISE:
+                return getWhiteNoise(x, y, z, w);
             case CUBIC:
                 return singleCubic(seed, x, y, z, w);
             case CUBIC_FRACTAL:
@@ -1191,17 +1381,6 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
                         return singleCubicFractalFBM(x, y, z, w);
                 }
 
-//            case CELLULAR:
-//                switch (cellularReturnType) {
-//                    case CELL_VALUE:
-//                    case NOISE_LOOKUP:
-//                    case DISTANCE:
-//                        return singleCellular(x, y, z);
-//                    default:
-//                        return singleCellular2Edge(x, y, z);
-//                }
-            case WHITE_NOISE:
-                return getWhiteNoise(x, y, z, w);
             default:
                 return singleSimplex(seed, x, y, z, w);
         }
@@ -1211,11 +1390,11 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
      * After being configured with the setters in this class, such as {@link #setNoiseType(int)},
      * {@link #setFrequency(float)}, {@link #setFractalOctaves(int)}, and {@link #setFractalType(int)}, among others,
      * you can call this method to get the particular variety of noise you specified, in 5D.
-     * @param x
-     * @param y
-     * @param z
-     * @param w
-     * @param u
+     * @param x x position, as a float; the range this should have depends on {@link #getFrequency()}
+     * @param y y position, as a float; the range this should have depends on {@link #getFrequency()}
+     * @param z z position, as a float; the range this should have depends on {@link #getFrequency()}
+     * @param w w position, as a float; the range this should have depends on {@link #getFrequency()}
+     * @param u u position, as a float; the range this should have depends on {@link #getFrequency()}
      * @return noise as a float from -1f to 1f
      */
     public float getConfiguredNoise(float x, float y, float z, float w, float u) {
@@ -1290,12 +1469,12 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
      * After being configured with the setters in this class, such as {@link #setNoiseType(int)},
      * {@link #setFrequency(float)}, {@link #setFractalOctaves(int)}, and {@link #setFractalType(int)}, among others,
      * you can call this method to get the particular variety of noise you specified, in 6D.
-     * @param x
-     * @param y
-     * @param z
-     * @param w
-     * @param u
-     * @param v
+     * @param x x position, as a float; the range this should have depends on {@link #getFrequency()}
+     * @param y y position, as a float; the range this should have depends on {@link #getFrequency()}
+     * @param z z position, as a float; the range this should have depends on {@link #getFrequency()}
+     * @param w w position, as a float; the range this should have depends on {@link #getFrequency()}
+     * @param u u position, as a float; the range this should have depends on {@link #getFrequency()}
+     * @param v v position, as a float; the range this should have depends on {@link #getFrequency()}
      * @return noise as a float from -1f to 1f
      */
     public float getConfiguredNoise(float x, float y, float z, float w, float u, float v) {
