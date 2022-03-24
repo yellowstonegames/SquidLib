@@ -20,21 +20,22 @@ import static com.badlogic.gdx.graphics.GL20.GL_POINTS;
 public class NoiseVarietyVisualizer extends ApplicationAdapter {
 
     private JackNoise jack = new JackNoise(-12345L);
-    private FastNoise weave = new FastNoise(-12345, 1f);
+    private FastNoise simplex = new FastNoise(-12345, 1f, FastNoise.SIMPLEX_FRACTAL, 1);
     private UnifiedNoise unified = new UnifiedNoise(-12345L);
     private SeededNoise seeded = new SeededNoise(-12345L);
 
-    private Noise.Noise2D[] noises2 = {jack, weave, unified, seeded};
-    private Noise.Noise3D[] noises3 = {jack, weave, unified, seeded};
-    private Noise.Noise4D[] noises4 = {jack, weave, unified, seeded};
-    private Noise.Noise5D[] noises5 = {jack, weave, unified, seeded};
-    private Noise.Noise6D[] noises6 = {jack, weave, unified, seeded};
+    private OctopusNoise octo = new OctopusNoise(1234567890);
+    private FoamNoise foam = new FoamNoise(1234567890);
 
-    private FoamyNoise weavy = new FoamyNoise(new WeavingNoise(1234567890));
-    private FoamyNoise foam = new FoamyNoise(new ValueNoise(1234567890));
+    private Noise.Noise2D[] noises2 = {octo, simplex, unified, foam};
+    private Noise.Noise3D[] noises3 = {octo, simplex, unified, foam};
+    private Noise.Noise4D[] noises4 = {octo, simplex, unified, foam};
+    private Noise.Noise5D[] noises5 = {octo, simplex, unified, foam};
+    private Noise.Noise6D[] noises6 = {octo, simplex, unified, foam};
+
 //    private HashedValueNoise value = new HashedValueNoise(new FlawedPointHash.CubeHash(1234567890, 32));
 //    private FastNoise value = new FastNoise(1234567890, 1f, FastNoise.VALUE, 1);
-    private int noiseType = 2; // 0 for classic, 1 for wave, 2 for fast, 3 for experimental
+    private int noiseType = 0; // 0 for classic, 1 for wave, 2 for fast, 3 for experimental
     private int dim = 0; // this can be 0, 1, or 2; add 2 to get the actual dimensions
     private int octaves = 0;
     private float freq = (float) Math.exp(-4.0);
