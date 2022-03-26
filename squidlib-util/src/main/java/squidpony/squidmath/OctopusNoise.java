@@ -18,8 +18,6 @@ package squidpony.squidmath;
 
 import squidpony.annotation.Beta;
 
-import static squidpony.squidmath.ValueNoise.valueNoise;
-
 /**
  * Experimenting with something like {@link FoamNoise} but using fewer value noise calls. Work in progress.
  */
@@ -27,95 +25,105 @@ import static squidpony.squidmath.ValueNoise.valueNoise;
 public class OctopusNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, Noise.Noise5D, Noise.Noise6D {
     public static final OctopusNoise instance = new OctopusNoise();
 
-    public ValueNoise n;
+    public FastNoise n;
     public OctopusNoise() {
-        n = new ValueNoise();
+        n = new FastNoise(0x12345678, 0x1p-5f, FastNoise.VALUE, 1);
+        n.setInterpolation(FastNoise.QUINTIC);
     }
 
     public OctopusNoise(int seed) {
-        this();
-        n.seed = seed;
+        n = new FastNoise(seed, 0x1p-5f, FastNoise.VALUE, 1);
+        n.setInterpolation(FastNoise.QUINTIC);
     }
 
     public OctopusNoise(long seed) {
-        this();
-        n.seed = (int) (seed ^ seed >>> 32);
+        n = new FastNoise((int) (seed ^ seed >>> 32), 0x1p-5f, FastNoise.VALUE, 1);
+        n.setInterpolation(FastNoise.QUINTIC);
     }
 
-    public double octopusNoise(final double x, final double y, long seed) {
-        final double a = 0.333 * UnifiedNoise.noise(x, y, seed);
+    public float octopusNoise(final float x, final float y, int seed) {
+        final float a = n.singleValue(seed, x, y) * 0.333f + 0.5f;
         seed = (seed * 0xDAB ^ 0x9E3779BD);
-        final double b = n.getNoiseWithSeed(x + y + a, x - y + a, a, seed);
+        final float b = n.singleValue(seed, x - a, y - a, a);
         return b;
     }
 
-    public double octopusNoise(final double x, final double y, final double z, long seed) {
-        final double a = 0.333 * UnifiedNoise.noise(x, y, z, seed);
+    public float octopusNoise(final float x, final float y, final float z, int seed) {
+        final float a = n.singleValue(seed, x, y, z) * 0.333f + 0.5f;
         seed = (seed * 0xDAB ^ 0x9E3779BD);
-        final double b = n.getNoiseWithSeed(x + y + a, x - y + a, z - a, a, seed);
+        final float b = n.singleValue(seed, x - a, y - a, z - a, a);
+//        final float b = n.singleValue(seed, x - a * NumberTools.swayRandomized(++seed, a - x + 0.1), y - a * NumberTools.swayRandomized(++seed, a - y + 0.2), z - a * NumberTools.swayRandomized(++seed, a - z + 0.3), seed);
+//        final float b = n.singleValue(seed, x - NumberTools.swayRandomized(++seed, y - z + 0.1), y - NumberTools.swayRandomized(++seed, z - x + 0.2), z - NumberTools.swayRandomized(++seed, x - y + 0.3), seed);
+        return b;
+//        float t = (a - b) * 0.25 + 0.5;
+//        t *= t * (3.0 - 2.0 * t);
+////        t *= t * t * (t * (t * 6 - 15) + 10);
+//        return (t - 0.5) * 2.0;
+    }
+
+    public float octopusNoise(final float x, final float y, final float z, final float w, int seed) {
+        final float a = n.singleValue(seed, x, y, z, w, seed) * 0.333f + 0.5f;
+        seed = (seed * 0xDAB ^ 0x9E3779BD);
+        final float b = n.singleValue(seed, x - a, y - a, z - a, w - a, a);
+        return b;
+//        float t = (a + b) * 0.25 + 0.5;
+//        t *= t * (3.0 - 2.0 * t);
+//        return (t - 0.5) * 2.0;
+    }
+    public float octopusNoise(final float x, final float y, final float z,
+                               final float w, final float u, int seed) {
+        final float a = n.singleValue(seed, x, y, z, w, u) * 0.333f + 0.5f;
+        seed = (seed * 0xDAB ^ 0x9E3779BD);
+        final float b = n.singleValue(seed, x - a, y - a, z - a, w - a, u - a, a);
         return b;
     }
 
-    public double octopusNoise(final double x, final double y, final double z, final double w, long seed) {
-        final double a = 0.333 * UnifiedNoise.noise(x, y, z, w, seed);
+    public float octopusNoise(final float x, final float y, final float z,
+                               final float w, final float u, final float v, int seed) {
+        final float a = n.singleValue(seed, x, y, z, w, u, v) * 0.333f + 0.5f;
         seed = (seed * 0xDAB ^ 0x9E3779BD);
-        final double b = n.getNoiseWithSeed(x + y + a, x - y + a, z - a, w - a, a, seed);
-        return b;
-    }
-    public double octopusNoise(final double x, final double y, final double z,
-                               final double w, final double u, long seed) {
-        final double a = 0.333 * UnifiedNoise.noise(x, y, z, w, u, seed);
-        seed = (seed * 0xDAB ^ 0x9E3779BD);
-        final double b = n.getNoiseWithSeed(x + y + a, x - y + a, z - a, w - a, u - a, a, seed);
-        return b;
-    }
-
-    public double octopusNoise(final double x, final double y, final double z,
-                               final double w, final double u, final double v, long seed) {
-        final double a = 0.333 * UnifiedNoise.noise(x, y, z, w, u, v, seed);
-        seed = (seed * 0xDAB ^ 0x9E3779BD);
-        final double b = n.getNoiseWithSeed(x + y + a, x - y + a, z - a, w - a, u - a, v - a, a, seed);
+        final float b = n.singleValue(seed, x - a, y - a, z - a, w - a, u - a, v - a, a);
         return b;
     }
 
     @Override
     public double getNoise(double x, double y) {
-        return octopusNoise(x, y, n.seed);
+        return octopusNoise((float)x, (float)y, n.seed);
     }
     @Override
     public double getNoiseWithSeed(double x, double y, long seed) {
-        return octopusNoise(x, y, (int) (seed ^ seed >>> 32));
+        return octopusNoise((float)x, (float)y, (int) (seed ^ seed >>> 32));
     }
     @Override
     public double getNoise(double x, double y, double z) {
-        return octopusNoise(x, y, z, n.seed);
+        return octopusNoise((float)x, (float)y, (float)z, n.seed);
     }
     @Override
     public double getNoiseWithSeed(double x, double y, double z, long seed) {
-        return octopusNoise(x, y, z, (int) (seed ^ seed >>> 32));
+        return octopusNoise((float)x, (float)y, (float)z, (int) (seed ^ seed >>> 32));
     }
     @Override
     public double getNoise(double x, double y, double z, double w) {
-        return octopusNoise(x, y, z, w, n.seed);
+        return octopusNoise((float)x, (float)y, (float)z, (float)w, n.seed);
     }
     @Override
     public double getNoiseWithSeed(double x, double y, double z, double w, long seed) {
-        return octopusNoise(x, y, z, w, (int) (seed ^ seed >>> 32));
+        return octopusNoise((float)x, (float)y, (float)z, (float)w, (int) (seed ^ seed >>> 32));
     }
     @Override
     public double getNoise(double x, double y, double z, double w, double u) {
-        return octopusNoise(x, y, z, w, u, n.seed);
+        return octopusNoise((float)x, (float)y, (float)z, (float)w, (float)u, n.seed);
     }
     @Override
     public double getNoiseWithSeed(double x, double y, double z, double w, double u, long seed) {
-        return octopusNoise(x, y, z, w, u, (int) (seed ^ seed >>> 32));
+        return octopusNoise((float)x, (float)y, (float)z, (float)w, (float)u, (int) (seed ^ seed >>> 32));
     }
     @Override
     public double getNoise(double x, double y, double z, double w, double u, double v) {
-        return octopusNoise(x, y, z, w, u, v, n.seed);
+        return octopusNoise((float)x, (float)y, (float)z, (float)w, (float)u, (float)v, n.seed);
     }
     @Override
     public double getNoiseWithSeed(double x, double y, double z, double w, double u, double v, long seed) {
-        return octopusNoise(x, y, z, w, u, v, (int) (seed ^ seed >>> 32));
+        return octopusNoise((float)x, (float)y, (float)z, (float)w, (float)u, (float)v, (int) (seed ^ seed >>> 32));
     }
 }
