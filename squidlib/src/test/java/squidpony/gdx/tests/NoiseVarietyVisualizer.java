@@ -27,12 +27,13 @@ public class NoiseVarietyVisualizer extends ApplicationAdapter {
     private OctopusNoise octo = new OctopusNoise(1234567890);
     private FoamNoise foam = new FoamNoise(1234567890);
     private ValueNoise value = new ValueNoise(1234567890);
+    private LumpNoise lump = new LumpNoise(1234567890);
 
-    private Noise.Noise2D[] noises2 = {octo, foam, simplex, value};
-    private Noise.Noise3D[] noises3 = {octo, foam, simplex, value};
-    private Noise.Noise4D[] noises4 = {octo, foam, simplex, value};
-    private Noise.Noise5D[] noises5 = {octo, foam, simplex, value};
-    private Noise.Noise6D[] noises6 = {octo, foam, simplex, value};
+    private Noise.Noise2D[] noises2 = {octo, foam, simplex, value, lump};
+    private Noise.Noise3D[] noises3 = {octo, foam, simplex, value, lump};
+    private Noise.Noise4D[] noises4 = {octo, foam, simplex, value, lump};
+    private Noise.Noise5D[] noises5 = {octo, foam, simplex, value, lump};
+    private Noise.Noise6D[] noises6 = {octo, foam, simplex, value, lump};
 
 //    private HashedValueNoise value = new HashedValueNoise(new FlawedPointHash.CubeHash(1234567890, 32));
 //    private FastNoise value = new FastNoise(1234567890, 1f, FastNoise.VALUE, 1);
@@ -114,12 +115,12 @@ public class NoiseVarietyVisualizer extends ApplicationAdapter {
                         seed += 0x9E3779B97F4A7C15L;
                         break;
                     case MINUS:
-                        noiseType = (noiseType + 3) & 3;
+                        noiseType = (noiseType + 4) % 5;
                         break;
                     case N: // noise type
                     case EQUALS:
                     case ENTER:
-                        noiseType = (noiseType + 1) & 3;
+                        noiseType = (noiseType + 1)  % 5;
                         break;
                     case D: //dimension
                         dim = (dim + 1) % 5;
