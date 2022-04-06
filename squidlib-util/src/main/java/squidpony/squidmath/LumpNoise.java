@@ -151,9 +151,9 @@ public class LumpNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, N
 //            LIMIT5 = 0.8,
 //            LIMIT6 = 0.9375;
 
-    protected static final double HARSH = 2.5;
+    public double harshness = 2.5;
 
-    public static double noise(final double x, final double y, final long seed) {
+    public double noise(final double x, final double y, final long seed) {
         double t = (x + y) * F2;
         int i = fastFloor(x + t);
         int j = fastFloor(y + t);
@@ -202,11 +202,11 @@ public class LumpNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, N
         }
         else n2 = 0.0;
 
-        double ex = Math.exp((n0 + n1 + n2) * 100.0 * HARSH);
+        double ex = Math.exp((n0 + n1 + n2) * 100.0 * harshness);
         return (ex - 1.0) / (ex + 1.0);
     }
 
-    public static double noise(final double x, final double y, final double z, final long seed) {
+    public double noise(final double x, final double y, final double z, final long seed) {
         final double s = (x + y + z) * F3;
         final int i = fastFloor(x + s),
                 j = fastFloor(y + s),
@@ -305,11 +305,11 @@ public class LumpNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, N
         }
         else n3 = 0.0;
 
-        double ex = Math.exp((n0 + n1 + n2 + n3) * 45.0 * HARSH);
+        double ex = Math.exp((n0 + n1 + n2 + n3) * 45.0 * harshness);
         return (ex - 1.0) / (ex + 1.0);
     }
 
-    public static double noise(final double x, final double y, final double z, final double w, final long seed) {
+    public double noise(final double x, final double y, final double z, final double w, final long seed) {
         double n0, n1, n2, n3, n4;
         double[] gradient4DLUT = grad4d;
         double t = (x + y + z + w) * F4;
@@ -420,7 +420,7 @@ public class LumpNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, N
 //        }
 //        return ret;
         // normal return code
-        double ex = Math.exp((n0 + n1 + n2 + n3 + n4) * 15.0 * HARSH);
+        double ex = Math.exp((n0 + n1 + n2 + n3 + n4) * 15.0 * harshness);
         return (ex - 1.0) / (ex + 1.0);
 
     }
@@ -436,7 +436,7 @@ public class LumpNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, N
      * @param seed long value that should completely change the noise if it changes even slightly
      * @return a continuous noise value between -1.0 and 1.0, both inclusive
      */
-    public static double noise(final double x, final double y, final double z, final double w, final double u, final long seed) {
+    public double noise(final double x, final double y, final double z, final double w, final double u, final long seed) {
         double n0, n1, n2, n3, n4, n5;
         double t = (x + y + z + w + u) * F5;
         int i = fastFloor(x + t);
@@ -578,7 +578,7 @@ public class LumpNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, N
             n5 = t * t * gradCoord5D(seed, i + 1, j + 1, k + 1, l + 1, h + 1, x5, y5, z5, w5, u5);
         }
 
-        double ex = Math.exp((n0 + n1 + n2 + n3 + n4 + n5) * 15.0 * HARSH);
+        double ex = Math.exp((n0 + n1 + n2 + n3 + n4 + n5) * 15.0 * harshness);
         return (ex - 1.0) / (ex + 1.0);
     }
 //        t = (n0 + n1 + n2 + n3 + n4 + n5) * 10.0;
@@ -592,7 +592,7 @@ public class LumpNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, N
 //        }
 //        return t;
 
-    public static double noise(final double x, final double y, final double z,
+    public double noise(final double x, final double y, final double z,
                                final double w, final double u, final double v, final long seed) {
         double[] gradient6DLUT = grad6d;
         double n0, n1, n2, n3, n4, n5, n6;
@@ -791,7 +791,7 @@ public class LumpNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, N
                     gradient6DLUT[hash + 3] * w6 + gradient6DLUT[hash + 4] * u6 + gradient6DLUT[hash + 5] * v6);
         }
 
-        double ex = Math.exp((n0 + n1 + n2 + n3 + n4 + n5 + n6) * 25.0 * HARSH);
+        double ex = Math.exp((n0 + n1 + n2 + n3 + n4 + n5 + n6) * 25.0 * harshness);
         return (ex - 1.0) / (ex + 1.0);
 
     }

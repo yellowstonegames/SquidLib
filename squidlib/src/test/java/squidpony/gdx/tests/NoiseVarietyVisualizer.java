@@ -28,12 +28,13 @@ public class NoiseVarietyVisualizer extends ApplicationAdapter {
     private FoamNoise foam = new FoamNoise(1234567890);
     private ValueNoise value = new ValueNoise(1234567890);
     private LumpNoise lump = new LumpNoise(1234567890);
+    private WeavingNoise weave = new WeavingNoise(1234567890);
 
-    private Noise.Noise2D[] noises2 = {octo, foam, simplex, value, lump};
-    private Noise.Noise3D[] noises3 = {octo, foam, simplex, value, lump};
-    private Noise.Noise4D[] noises4 = {octo, foam, simplex, value, lump};
-    private Noise.Noise5D[] noises5 = {octo, foam, simplex, value, lump};
-    private Noise.Noise6D[] noises6 = {octo, foam, simplex, value, lump};
+    private Noise.Noise2D[] noises2 = {weave, foam, simplex, value, lump};
+    private Noise.Noise3D[] noises3 = {weave, foam, simplex, value, lump};
+    private Noise.Noise4D[] noises4 = {weave, foam, simplex, value, lump};
+    private Noise.Noise5D[] noises5 = {weave, foam, simplex, value, lump};
+    private Noise.Noise6D[] noises6 = {weave, foam, simplex, value, lump};
 
 //    private HashedValueNoise value = new HashedValueNoise(new FlawedPointHash.CubeHash(1234567890, 32));
 //    private FastNoise value = new FastNoise(1234567890, 1f, FastNoise.VALUE, 1);
@@ -140,6 +141,12 @@ public class NoiseVarietyVisualizer extends ApplicationAdapter {
                         break;
                     case K: // sKip
                         ctr += 1000;
+                        break;
+                    case LEFT_BRACKET:
+                        System.out.println("Harshness: " + (lump.harshness *= 0.9));
+                        break;
+                    case RIGHT_BRACKET:
+                        System.out.println("Harshness: " + (lump.harshness /= 0.9));
                         break;
                     case Q:
                     case ESCAPE: {
