@@ -258,11 +258,15 @@ public class WeavingNoise implements Noise.Noise2D, Noise.Noise3D,
 //        double cx = rawNoise(seed ^ ~0xC13FA9A902A6328FL, x) - ny;
 //        double cy = rawNoise(seed ^ ~0x91E10DA5C79E7B1DL, y) - nx;
 //        return (MathExtras.barronSpline((cx * cy) * 0.5 + 0.5, 8.0, 0.5) - 0.5) * 2.0;
-
-        final double a = rawNoise(seed, x);
-        final double b = rawNoise(seed ^ 1010101010101010101L     , x * -0.5 + y * 0.8660254037844386 + a);
-        final double c = rawNoise(seed ^ 1010101010101010101L * 2L, x * -0.5 + y * -0.8660254037844387 - a + b);
-        return (MathExtras.barronSpline((a + b + c) * (1.0 / 3.0), 2.2, 0.5) - 0.5) * 2.0;
+        double a, b;
+        a = UnifiedNoise.noise(x, y, seed);
+        double xx = swayQuartic(seed ^ 101010101    , x * 0.25) * 2.0;
+        double yy = swayQuartic(seed ^ 101010101 * 2, y * 0.25) * 2.0;
+        double ca = NumberTools.cos_(a), sa = NumberTools.sin_(a);
+        b = ValueNoise.valueNoise(seed ^ 101010101 * 3, xx * ca + yy * sa, xx * -sa + yy * ca);
+//        c = rawNoise(seed ^ 1010101010101010101L * 2L, x * NumberTools.cos_(b) + y * NumberTools.sin_(b));
+        return (b - 0.5) * 2.0;
+//        return (MathExtras.barronSpline((a + b + c) * (1.0 / 3.0), 2.2, 0.5) - 0.5) * 2.0;
     }
 
     public static double valueNoise(int seed, double x, double y, double z)
