@@ -19,7 +19,8 @@ package squidpony.squidgrid.gui.gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import squidpony.ArrayTools;
-import squidpony.squidmath.SeededNoise;
+
+import static squidpony.squidmath.UnifiedNoise.noise;
 
 /**
  * Created by Tommy Ettinger on 7/9/2017.
@@ -1220,13 +1221,13 @@ public class MapUtility {
                         lights[i][j] = -10;
                         break;
                     case ',':
-                        lights[i][j] = (int) (85 * (SeededNoise.noise(i * 0.16, j * 0.16, frame * 0.05, 1234567) * 0.55 - 0.7));
+                        lights[i][j] = (int) (85 * (noise(i * 0.16, j * 0.16, frame * 0.05, 1234567) * 0.55 - 0.7));
                         break;
                     case '~':
-                        lights[i][j] = (int) (100 * (SeededNoise.noise(i * 0.16, j * 0.16, frame * 0.05, 1234567) * 0.4 - 0.65));
+                        lights[i][j] = (int) (100 * (noise(i * 0.16, j * 0.16, frame * 0.05, 1234567) * 0.4 - 0.65));
                         break;
                     case '"':
-                        lights[i][j] = (int) (95 * (SeededNoise.noise(i * 0.16, j * 0.16, frame * 0.05, 123456789) * 0.3 - 1.5));
+                        lights[i][j] = (int) (95 * (noise(i * 0.16, j * 0.16, frame * 0.05, 123456789) * 0.3 - 1.5));
                         break;
                     case '^':
                         lights[i][j] = 40;
@@ -1303,22 +1304,22 @@ public class MapUtility {
                         lights[i][j] = -10;
                         break;
                     case ',':
-                        lights[i][j] = (int) (85 * (SeededNoise.noise(i * 0.16, j * 0.16, frame * 0.05, 1234567) * 0.55 - 0.7));
+                        lights[i][j] = (int) (85 * (noise(i * 0.16, j * 0.16, frame * 0.05, 1234567) * 0.55 - 0.7));
                         break;
                     case '~':
-                        lights[i][j] = (int) (100 * (SeededNoise.noise(i * 0.16, j * 0.16, frame * 0.05, 1234567) * 0.4 - 0.65));
+                        lights[i][j] = (int) (100 * (noise(i * 0.16, j * 0.16, frame * 0.05, 1234567) * 0.4 - 0.65));
                         break;
                     case '"':
-                        lights[i][j] = (int) (95 * (SeededNoise.noise(i * 0.16, j * 0.16, frame * 0.05, 123456789) * 0.3 - 1.5));
+                        lights[i][j] = (int) (95 * (noise(i * 0.16, j * 0.16, frame * 0.05, 123456789) * 0.3 - 1.5));
                         break;
                     case '^':
                         lights[i][j] = 40;
                         break;
                     default:
                         if (map[i][j] == deepLiquid)
-                            lights[i][j] = (int) (180 * (SeededNoise.noise(i * 0.46, j * 0.46, frame * 0.041, 987654321) * 0.45 - 0.7));
+                            lights[i][j] = (int) (180 * (noise(i * 0.46, j * 0.46, frame * 0.041, 987654321) * 0.45 - 0.7));
                         else if (map[i][j] == shallowLiquid)
-                            lights[i][j] = (int) (110 * (SeededNoise.noise(i * 0.56, j * 0.56, frame * 0.061, 987654321) * 0.4 - 0.65));
+                            lights[i][j] = (int) (110 * (noise(i * 0.56, j * 0.56, frame * 0.061, 987654321) * 0.4 - 0.65));
                         else lights[i][j] = 0;
                 }
             }

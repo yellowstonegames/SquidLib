@@ -25,7 +25,7 @@ import squidpony.ArrayTools;
 import squidpony.IColorCenter;
 import squidpony.squidgrid.Direction;
 import squidpony.squidmath.OrderedSet;
-import squidpony.squidmath.SeededNoise;
+import squidpony.squidmath.UnifiedNoise;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -128,7 +128,7 @@ public class SquidLayers extends Group {
     }
     /**
      * Alters the lightnesses that affect the background colors, accepting a parameter for
-     * animation frame if rippling water and waving grass using {@link SeededNoise} are desired. It may make sense to
+     * animation frame if rippling water and waving grass using {@link UnifiedNoise} are desired. It may make sense to
      * pass some fraction of the current time, as given by {@link System#currentTimeMillis()}, instead of a frame.
      * Does not allocate a new 2D int array like {@link MapUtility#generateLightnessModifiers(char[][])} or its
      * equivalent in DungeonUtility, and directly mutates the lightness data. You can use the {@link #lightnesses} field
@@ -141,7 +141,7 @@ public class SquidLayers extends Group {
 
     /**
      * Alters the lightnesses that affect the background colors, accepting a parameter for
-     * animation frame if rippling water and waving grass using {@link SeededNoise} are desired. It may make sense to
+     * animation frame if rippling water and waving grass using {@link UnifiedNoise} are desired. It may make sense to
      * pass some fraction of the current time, as given by {@link System#currentTimeMillis()}, instead of a frame.
      * Does not allocate a new 2D int array like {@link MapUtility#generateLightnessModifiers(char[][])} or its
      * equivalent in DungeonUtility, and directly mutates the lightness data. You can use the {@link #lightnesses} field
@@ -157,12 +157,15 @@ public class SquidLayers extends Group {
     }
     /**
      * Alters the lightnesses that affect the background colors, accepting a parameter for
-     * animation frame if rippling water and waving grass using {@link SeededNoise} are desired. It may make sense to
+     * animation frame if rippling water and waving grass using {@link UnifiedNoise} are desired. It may make sense to
      * pass some fraction of the current time, as given by {@link System#currentTimeMillis()}, instead of a frame.
      * Also allows additional chars to be treated like deep and shallow water regarding the ripple animation.
      * Does not allocate a new 2D int array like {@link MapUtility#generateLightnessModifiers(char[][])} or its
      * equivalent in DungeonUtility, and directly mutates the lightness data. You can use the {@link #lightnesses} field
      * to access the 2D array directly, where you can make further modifications to the lighting.
+     * <br>
+     * This is a thin wrapper around {@link MapUtility#fillLightnessModifiers(int[][], char[][], double, char, char)}.
+     *
      * @param frame         a counter that typically should increase by between 10.0 and 20.0 each second; higher numbers make
      *                      water and grass move more, and 0.013 multiplied by the current time in milliseconds works well
      *                      as long as only the smaller digits of the time are used; this can be accomplished with
@@ -172,59 +175,7 @@ public class SquidLayers extends Group {
      * @return a 2D array of lightness values from -255 to 255 but usually close to 0; can be passed to SquidLayers
      */
     public SquidLayers autoLight (double frame, char deepLiquid, char shallowLiquid) {
-        final char[][] map = foregroundPanel.contents;
-        final int w = getTotalWidth(), h = getTotalHeight();
-        for (int i = 0; i < w; i++) {
-            for (int j = 0; j < h; j++) {
-                switch (map[i][j]) {
-                    case '\1':
-                    case '├':
-                    case '┤':
-                    case '┴':
-                    case '┬':
-                    case '┌':
-                    case '┐':
-                    case '└':
-                    case '┘':
-                    case '│':
-                    case '─':
-                    case '┼':
-                    case '#':
-                        lightnesses[i][j] = 30;
-                        break;
-                    case '.':
-                    case ' ':
-                    case '\u0006':
-                        lightnesses[i][j] = 0;
-                        break;
-                    case ':':
-                        lightnesses[i][j] = -15;
-                        break;
-                    case '+':
-                    case '/':
-                        lightnesses[i][j] = -10;
-                        break;
-                    case ',':
-                        lightnesses[i][j] = (int) (85 * (SeededNoise.noise(i * 0.16, j * 0.16, frame * 0.05, 1234567) * 0.55 - 0.7));
-                        break;
-                    case '~':
-                        lightnesses[i][j] = (int) (100 * (SeededNoise.noise(i * 0.16, j * 0.16, frame * 0.05, 1234567) * 0.4 - 0.65));
-                        break;
-                    case '"':
-                        lightnesses[i][j] = (int) (95 * (SeededNoise.noise(i * 0.16, j * 0.16, frame * 0.05, 123456789) * 0.3 - 1.5));
-                        break;
-                    case '^':
-                        lightnesses[i][j] = 40;
-                        break;
-                    default:
-                        if (map[i][j] == deepLiquid)
-                            lightnesses[i][j] = (int) (180 * (SeededNoise.noise(i * 0.46, j * 0.46, frame * 0.041, 987654321) * 0.45 - 0.7));
-                        else if (map[i][j] == shallowLiquid)
-                            lightnesses[i][j] = (int) (110 * (SeededNoise.noise(i * 0.56, j * 0.56, frame * 0.061, 987654321) * 0.4 - 0.65));
-                        else lightnesses[i][j] = 0;
-                }
-            }
-        }
+        MapUtility.fillLightnessModifiers(lightnesses, foregroundPanel.contents, frame, deepLiquid, shallowLiquid);
         return this;
     }
 
@@ -249,8 +200,8 @@ public class SquidLayers extends Group {
      * This uses a default font that is not supplied in the JAR library of SquidLib; you need two files to use it if it
      * does not render correctly:
      * <ul>
-     * <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/Inconsolata-LGC-Custom-distance.fnt</li>
-     * <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/Inconsolata-LGC-Custom-distance.png</li>
+     * <li><a href="https://github.com/yellowstonegames/SquidLib/blob/master/assets/Inconsolata-LGC-Custom-distance.fnt">Inconsolata-LGC-Custom-distance.fnt</a></li>
+     * <li><a href="https://github.com/yellowstonegames/SquidLib/blob/master/assets/Inconsolata-LGC-Custom-distance.png">Inconsolata-LGC-Custom-distance.png</a></li>
      * </ul>
      */
     public SquidLayers() {
@@ -264,8 +215,8 @@ public class SquidLayers extends Group {
      * This uses a default font that is not supplied in the JAR library of SquidLib; you need two files to use it if it
      * does not render correctly:
      * <ul>
-     * <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/Inconsolata-LGC-Custom-distance.fnt</li>
-     * <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/Inconsolata-LGC-Custom-distance.png</li>
+     * <li><a href="https://github.com/yellowstonegames/SquidLib/blob/master/assets/Inconsolata-LGC-Custom-distance.fnt">Inconsolata-LGC-Custom-distance.fnt</a></li>
+     * <li><a href="https://github.com/yellowstonegames/SquidLib/blob/master/assets/Inconsolata-LGC-Custom-distance.png">Inconsolata-LGC-Custom-distance.png</a></li>
      * </ul>
      *
      * @param gridWidth  in grid cells
@@ -283,8 +234,8 @@ public class SquidLayers extends Group {
      * This uses a default font that is not supplied in the JAR library of SquidLib; you need two files to use it if it
      * does not render correctly:
      * <ul>
-     * <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/Inconsolata-LGC-Custom-distance.fnt</li>
-     * <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/Inconsolata-LGC-Custom-distance.png</li>
+     * <li><a href="https://github.com/yellowstonegames/SquidLib/blob/master/assets/Inconsolata-LGC-Custom-distance.fnt">Inconsolata-LGC-Custom-distance.fnt</a></li>
+     * <li><a href="https://github.com/yellowstonegames/SquidLib/blob/master/assets/Inconsolata-LGC-Custom-distance.png">Inconsolata-LGC-Custom-distance.png</a></li>
      * </ul>
      *
      * @param gridWidth  in grid cells
@@ -351,8 +302,8 @@ public class SquidLayers extends Group {
      * This uses a default font that is not supplied in the JAR library of SquidLib; you need two files to use it if it
      * does not render correctly:
      * <ul>
-     * <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/Inconsolata-LGC-Custom-distance.fnt</li>
-     * <li>https://github.com/yellowstonegames/SquidLib/blob/master/assets/Inconsolata-LGC-Custom-distance.png</li>
+     * <li><a href="https://github.com/yellowstonegames/SquidLib/blob/master/assets/Inconsolata-LGC-Custom-distance.fnt">Inconsolata-LGC-Custom-distance.fnt</a></li>
+     * <li><a href="https://github.com/yellowstonegames/SquidLib/blob/master/assets/Inconsolata-LGC-Custom-distance.png">Inconsolata-LGC-Custom-distance.png</a></li>
      * </ul>
      *
      * @param gridWidth     in grid cells

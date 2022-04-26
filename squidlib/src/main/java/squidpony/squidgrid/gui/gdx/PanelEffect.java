@@ -29,10 +29,11 @@ import squidpony.squidmath.Coord;
 import squidpony.squidmath.DiverRNG;
 import squidpony.squidmath.GreasedRegion;
 import squidpony.squidmath.NumberTools;
-import squidpony.squidmath.SeededNoise;
 
 import java.util.Arrays;
 import java.util.List;
+
+import static squidpony.squidmath.UnifiedNoise.*;
 
 /**
  * Various special effects that can be applied to a {@link SquidPanel} or {@link SparseLayers} as an
@@ -287,7 +288,7 @@ public abstract class PanelEffect extends TemporalAction{
                 c = affected.get(i);
                 if((light = (float) lightMap[c.x][c.y]) <= 0.0)// || 0.6 * (lightMap[c.x][c.y] + percent) < 0.25)
                     continue;
-                f = (float)SeededNoise.noise(c.x * 1.5, c.y * 1.5, percent * 5, seed)
+                f = (float) noise(c.x * 1.5, c.y * 1.5, percent * 5, seed)
                         * 0.17f + percent * 1.2f;
                 if(f < 0f || 0.5 * light + f < 0.4)
                     continue;
@@ -575,7 +576,7 @@ public abstract class PanelEffect extends TemporalAction{
                 c = affected.get(i);
                 if(lightMap[c.x][c.y] <= 0.0)// || 0.6 * (lightMap[c.x][c.y] + percent) < 0.25)
                     continue;
-                f = (float)SeededNoise.noise(c.x * 1.5, c.y * 1.5, percent * 5, seed)
+                f = (float) noise(c.x * 1.5, c.y * 1.5, percent * 5, seed)
                         * 0.17f + percent * 1.2f;
                 if(f < 0f || 0.5 * lightMap[c.x][c.y] + f < 0.4)
                     continue;
@@ -632,7 +633,7 @@ public abstract class PanelEffect extends TemporalAction{
                 c = affected.get(i);
                 if((light = (float) lightMap[c.x][c.y]) <= 0f)// || 0.6 * (lightMap[c.x][c.y] + percent) < 0.25)
                     continue;
-                f = (float)SeededNoise.noise(c.x * 0.3, c.y * 0.3, percent * 1.3, seed)
+                f = (float) noise(c.x * 0.3, c.y * 0.3, percent * 1.3, seed)
                         * 0.498f + 0.4999f;
                 target.blend(c.x, c.y,
                         SColor.lerpFloatColors(colors[(int) (f * colors.length)],
