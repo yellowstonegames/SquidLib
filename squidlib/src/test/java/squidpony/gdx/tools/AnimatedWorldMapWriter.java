@@ -48,7 +48,7 @@ public class AnimatedWorldMapWriter extends ApplicationAdapter {
 
     private static final int LIMIT = 5;
     private static final boolean MEASURE_BOUNDS = false;
-    private static final boolean FLOWING_LAND = true;
+    private static final boolean FLOWING_LAND = false;
     private static final boolean ALIEN_COLORS = false;
     private static final boolean SEEDY = false;
     private static final int FRAMES = 180;
@@ -123,7 +123,8 @@ World #5, SavoryMelonAlder, completed in 64338 ms
 //        path = "out/worldsAnimated/" + date + "/EllipseExpo/";
 //        path = "out/worldsAnimated/" + date + "/Mimic/";
 //        path = "out/worldsAnimated/" + date + "/SpaceView/";
-        path = "out/worldsAnimated/" + date + "/SpaceViewFlowingClassic/";
+        path = "out/worldsAnimated/" + date + "/SpaceViewFoam/";
+//        path = "out/worldsAnimated/" + date + "/SpaceViewFlowingClassic/";
 //        path = "out/worldsAnimated/" + date + "/SpaceViewFlowingFoam/";
 //        path = "out/worldsAnimated/" + date + "/SpaceViewFlowingHoney/";
 //        path = "out/worldsAnimated/" + date + "/SpaceViewValue/";
@@ -340,7 +341,7 @@ World #5, SavoryMelonAlder, completed in 64338 ms
 //        world = new WorldMapGenerator.EllipticalMap(seed, width, height, noise, 1.75);
 //        world = new WorldMapGenerator.MimicMap(seed, WorldMapGenerator.DEFAULT_NOISE, 1.75);
 //        world = new WorldMapGenerator.SpaceViewMap(seed, width, height, noise, 1.3);
-        world = new WorldMapGenerator.SpaceViewMap(seed, width, height, noise, 0.5);
+        world = new WorldMapGenerator.SpaceViewMap(seed, width, height, noise, 0.8);
 //        world = new WorldMapGenerator.RotatingSpaceMap(seed, width, height, noise, 1.0);
 //        world = new WorldMapGenerator.RoundSideMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.75);
 //        world = new WorldMapGenerator.HyperellipticalMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 0.8, 0.03125, 2.5);
@@ -386,7 +387,7 @@ World #5, SavoryMelonAlder, completed in 64338 ms
         else {
             wmv.generate(
                     1.0 + NumberTools.formCurvedDouble(world.seedA * 0x123456789ABCDEFL ^ world.seedB) * 0.1875,
-                    1.0625 + DiverRNG.determineDouble(world.seedB * 0x123456789ABL ^ world.seedA) * 0.375);
+                    1.1 + DiverRNG.determineDouble(world.seedB * 0x123456789ABL ^ world.seedA) * 0.375);
         }
         ttg = TimeUtils.timeSinceMillis(startTime);
     }

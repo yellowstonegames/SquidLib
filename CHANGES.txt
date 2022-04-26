@@ -1,7 +1,7 @@
 3.0.5
 Dependencies:
  - squidlib-util: RegExodus 0.1.13
- - squidlib: libGDX 1.10.0, anim8-gdx 0.3.5
+ - squidlib: libGDX 1.10.0, anim8-gdx 0.3.6
  - squidlib-extra: libGDX 1.10.0
 Changes:
  - FloatFilters now implements several more of the effects from Filters, such as HallucinateFilter and WiggleFilter.
