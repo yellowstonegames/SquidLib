@@ -8,7 +8,13 @@ Changes:
  - The new RNG types from jdkgdxds (used by SquidSquad) have been backported here, though using them in RNG could produce different results than as an EnhancedRandom from jdkgdxds.
  - HexagonalMap is a new option for WorldMapGenerator, and could be useful for games with hex grids.
  - BlueNoise now has "omni-tiling" noise textures it can use via getSeededOmniTiling() and getSeededTriOmniTiling(); these tile with all other textures in their group.
-
+ - Various additions to noise functionality:
+   - The new HappyPointHash is slightly faster and simpler than the previous-best HastyPointHash for long inputs.
+   - UnifiedNoise cleans up the internals of SeededNoise in higher dimensions, and also uses HappyPointHash.
+   - LumpNoise acts just like UnifiedNoise, but has configurable `harshness` that affects how starkly it changes from low to high.
+   - Various experimental noise functions will probably be removed, such as FoalNoise, PyrNoise, PyrlinNoise, and WeavingNoise.
+ - The IDistribution interface is now more explicit about its upper and lower bounds, and can provide a way to get the mean result.
+ - KumaraswamyDistribution is a simple parameterizable distribution that can imitate the PDF/CDF of various other distributions.
 
 3.0.4
 Dependencies:

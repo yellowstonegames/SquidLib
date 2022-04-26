@@ -71,10 +71,23 @@ public class TrimRNG implements RandomnessSource, Serializable {
                         ^ (long) ((Math.random() - 0.5) * 0x1p64));
     }
 
+    /**
+     * Creates a new generator by passing the seed to {@link #setSeed(long)}.
+     * @param seed any long
+     */
     public TrimRNG(long seed) {
         setSeed(seed);
     }
 
+    /**
+     * Creates a new generator by specifying each state exactly. All values are acceptable.
+     * Be advised that seedC will be returned without change by the first call to {@link #nextLong()} (if that is the
+     * first call made to this TrimRNG); it will change for the next call.
+     * @param seedA any long
+     * @param seedB any long
+     * @param seedC any long; will be returned as-is by the first call to {@link #nextLong()} unless something else is called first
+     * @param seedD any long
+     */
     public TrimRNG(final long seedA, final long seedB, long seedC, long seedD) {
         stateA = seedA;
         stateB = seedB;
@@ -82,7 +95,7 @@ public class TrimRNG implements RandomnessSource, Serializable {
         stateD = seedD;
     }
     /**
-     * This initializes all 3 states of the generator to random values based on the given seed.
+     * This initializes all 4 states of the generator to random values based on the given seed.
      * (2 to the 64) possible initial generator states can be produced here, all with a different
      * first value returned by {@link #nextLong()} (because {@code stateC} is guaranteed to be
      * different for every different {@code seed}).
@@ -162,6 +175,7 @@ public class TrimRNG implements RandomnessSource, Serializable {
 
     /**
      * Set the "C" part of the internal state with a long.
+     * The first time {@link #nextLong()} is called, this value will be returned as-is; it will change on later calls.
      *
      * @param stateC any 64-bit long
      */
@@ -193,11 +207,12 @@ public class TrimRNG implements RandomnessSource, Serializable {
         final long fb = stateB;
         final long fc = stateC;
         final long fd = stateD;
-        final long bc = fb + fc, cd = fc ^ fd;
-        stateA = (bc << 35 | bc >>> 29);
-        stateB = (cd << 46 | cd >>> 18);
-        stateC = fa + fb;
-        stateD = fd + 0x06A0F81D3D2E35EFL;
+        final long bc = fb ^ fc;
+        final long cd = fc ^ fd;
+        stateA = (bc << 57 | bc >>> 7);
+        stateB = (cd << 18 | cd >>> 46);
+        stateC = fa + bc;
+        stateD = fd + 0xDE916ABCC965815BL;
         return fc;
     }
 
@@ -205,13 +220,13 @@ public class TrimRNG implements RandomnessSource, Serializable {
         final long fa = stateA;
         final long fb = stateB;
         final long fc = stateC;
-        stateD -= 0x06A0F81D3D2E35EFL;
-        long t = (fb >>> 46 | fb << 18);
+        stateD -= 0xDE916ABCC965815BL;
+        long t = (fb >>> 18 | fb << 46);
         stateC = t ^ stateD;
-        t = (fa >>> 35 | fa << 29);
-        stateB = t - stateC;
-        stateA = fc - stateB;
-        return (stateB >>> 46 | stateB << 18) ^ stateD - 0x06A0F81D3D2E35EFL;
+        t = (fa >>> 57 | fa << 7);
+        stateB = t ^ stateC;
+        stateA = fc - t;
+        return (stateB >>> 18 | stateB << 46) ^ stateD - 0xDE916ABCC965815BL;
     }
 
     @Override
@@ -220,11 +235,12 @@ public class TrimRNG implements RandomnessSource, Serializable {
         final long fb = stateB;
         final long fc = stateC;
         final long fd = stateD;
-        final long bc = fb + fc, cd = fc ^ fd;
-        stateA = (bc << 35 | bc >>> 29);
-        stateB = (cd << 46 | cd >>> 18);
-        stateC = fa + fb;
-        stateD = fd + 0x06A0F81D3D2E35EFL;
+        final long bc = fb ^ fc;
+        final long cd = fc ^ fd;
+        stateA = (bc << 57 | bc >>> 7);
+        stateB = (cd << 18 | cd >>> 46);
+        stateC = fa + bc;
+        stateD = fd + 0xDE916ABCC965815BL;
         return (int)fc >>> (32 - bits);
     }
 

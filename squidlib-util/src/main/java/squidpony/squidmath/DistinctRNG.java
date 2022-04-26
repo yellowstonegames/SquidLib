@@ -51,7 +51,7 @@ public class DistinctRNG implements StatefulRandomness, SkippingRandomness, Seri
     }
 
     /**
-     * This initializes all 3 states of the generator to random values based on the given seed.
+     * This initializes the 1 state of the generator to random values based on the given seed.
      * (2 to the 64) possible initial generator states can be produced here, all with a different
      * first value returned by {@link #nextLong()} (because {@code stateA} is guaranteed to be
      * different for every different {@code seed}).

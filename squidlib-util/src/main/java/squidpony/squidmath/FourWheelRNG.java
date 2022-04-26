@@ -79,7 +79,7 @@ public class FourWheelRNG implements RandomnessSource, Serializable {
         stateD = seedD;
     }
     /**
-     * This initializes all 3 states of the generator to random values based on the given seed.
+     * This initializes all 4 states of the generator to random values based on the given seed.
      * (2 to the 64) possible initial generator states can be produced here, all with a different
      * first value returned by {@link #nextLong()} (because {@code stateD} is guaranteed to be
      * different for every different {@code seed}).
