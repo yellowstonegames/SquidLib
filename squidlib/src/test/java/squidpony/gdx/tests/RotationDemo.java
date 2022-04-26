@@ -25,7 +25,6 @@ import squidpony.squidgrid.mapping.SerpentMapGenerator;
 import squidpony.squidmath.*;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class RotationDemo extends ApplicationAdapter {
     private enum Phase {WAIT, PLAYER_ANIM, MONSTER_ANIM}
@@ -82,11 +81,11 @@ public class RotationDemo extends ApplicationAdapter {
     /**
      * In number of cells
      */
-    private static final int width = 80;
+    private static final int gridWidth = 80;
     /**
      * In number of cells
      */
-    private static final int height = 25;
+    private static final int gridHeight = 25;
 
     /**
      * Number of cells high for the TextPanel.
@@ -100,7 +99,7 @@ public class RotationDemo extends ApplicationAdapter {
      * The pixel height of a cell
      */
     private static final int cellHeight = 28;
-    private VisualInput input;
+    private SquidInput input;
     private boolean[][] seen;
     private int health = 9;
     private SquidColorCenter fgCenter, bgCenter;
@@ -116,7 +115,7 @@ public class RotationDemo extends ApplicationAdapter {
     private Viewport viewport;
     private float currentZoomX = 1f, currentZoomY = 1f;
 
-    public static final Adjacency adjacency = new Adjacency.RotationAdjacency(width, height, Measurement.EUCLIDEAN);
+    public static final Adjacency adjacency = new Adjacency.RotationAdjacency(gridWidth, gridHeight, Measurement.EUCLIDEAN);
     @Override
     public void create() {
         // gotta have a random number generator. We seed a LightRNG with any long we want, then pass that to an RNG.
@@ -143,20 +142,20 @@ public class RotationDemo extends ApplicationAdapter {
 
         // Creates a layered series of text grids in a SquidLayers object, using the previously set-up textFactory and
         // SquidColorCenters.
-        display = new SquidLayers(width, height, cellWidth, cellHeight,
+        display = new SquidLayers(gridWidth, gridHeight, cellWidth, cellHeight,
                 textFactory.copy(), bgCenter, fgCenter);//.addExtraLayer();
         //display.getBackgroundLayer().setOnlyRenderEven(true);
 
         display.setAnimationDuration(0.1f);
         TextCellFactory font = DefaultResources.getCrispPrintFamily().initBySize();//.height(cellHeight).width(23)
         messagePanel = new TextPanel(font);
-        viewport = new StretchViewport(width * cellWidth, (height + 4) * font.actualCellHeight);
+        viewport = new StretchViewport(gridWidth * cellWidth, (gridHeight + 4) * font.actualCellHeight);
         stage = new Stage(viewport, batch);
         messages = new ArrayList<>(32);
-        messagePanel.initShared(cellWidth * width, font.actualCellHeight * 4, messages);
+        messagePanel.initShared(cellWidth * gridWidth, font.actualCellHeight * 4, messages);
         //messagePanel.getScrollPane().setHeight(font.actualCellHeight * 4);
         messagePanel.getScrollPane().setStyle(new ScrollPane.ScrollPaneStyle());
-        messagePanel.getScrollPane().setBounds(0, 0, cellWidth * width, font.actualCellHeight * 4);
+        messagePanel.getScrollPane().setBounds(0, 0, cellWidth * gridWidth, font.actualCellHeight * 4);
         //These need to have their positions set before adding any entities if there is an offset involved.
 //        messagePanel.setBounds(0, 0, cellWidth * width, cellHeight * 4);
         display.setPosition(0, cellHeight * 4);
@@ -166,13 +165,13 @@ public class RotationDemo extends ApplicationAdapter {
                 "Use ? for help, or q to quit."));
         messagePanel.scrollToEdge(false);
 
-        dungeonGen = new SectionDungeonGenerator(width, height, rng);
+        dungeonGen = new SectionDungeonGenerator(gridWidth, gridHeight, rng);
         dungeonGen.addWater(0, 25, 6);
         dungeonGen.addGrass(DungeonUtility.CAVE_FLOOR, 20);
         dungeonGen.addBoulders(0, 7);
         dungeonGen.addDoors(18, false);
         dungeonGen.addLake(20, '£', '¢');
-        SerpentMapGenerator serpent = new SerpentMapGenerator(width, height, rng);
+        SerpentMapGenerator serpent = new SerpentMapGenerator(gridWidth, gridHeight, rng);
         serpent.putCaveCarvers(1);
         serpent.putWalledBoxRoomCarvers(2);
         serpent.putWalledRoundRoomCarvers(2);
@@ -259,7 +258,7 @@ public class RotationDemo extends ApplicationAdapter {
         // here we simply fill the contents of display with our dungeon (but we don't set the actual colors yet).
         ArrayTools.insert(decoDungeon, display.getForegroundLayer().contents, 0, 0);
         display.autoLight((System.currentTimeMillis() & 0xFFFFFFL) * 0.013, '£', '¢');
-        seen = new boolean[width][height];
+        seen = new boolean[gridWidth][gridHeight];
         /*
         lang = FakeLanguageGen.RUSSIAN_AUTHENTIC.sentence(rng, 4, 6, new String[]{",", ",", ",", " -"},
                 new String[]{"..."}, 0.25);
@@ -278,7 +277,7 @@ public class RotationDemo extends ApplicationAdapter {
         // You can also set up a series of future moves by clicking within FOV range, using mouseMoved to determine the
         // path to the mouse position with a DijkstraMap (called playerToCursor), and using touchUp to actually trigger
         // the event when someone clicks.
-        input = new VisualInput(new SquidInput.KeyHandler() {
+        input = new SquidInput(new SquidInput.KeyHandler() {
             @Override
             public void handle(char key, boolean alt, boolean ctrl, boolean shift) {
                 switch (key) {
@@ -359,7 +358,7 @@ public class RotationDemo extends ApplicationAdapter {
                     }
                 }
             }
-        }, new SquidMouse(cellWidth, cellHeight, width, height, 0, 0, new InputAdapter() {
+        }, new SquidMouse(cellWidth, cellHeight, gridWidth, gridHeight, 0, 0, new InputAdapter() {
 
             // if the user clicks within FOV range and there are no awaitedMoves queued up, generate toCursor if it
             // hasn't been generated already by mouseMoved, then copy it over to awaitedMoves.
@@ -397,10 +396,10 @@ public class RotationDemo extends ApplicationAdapter {
             }
         }));
         //set this to true to test visual input on desktop
-        input.forceButtons = false;
+//        input.forceButtons = false;
         input.setRepeatGap(Long.MAX_VALUE);
         //actions to give names to in the visual input menu
-        input.init("filter", "??? help?", "quit");
+//        input.init("filter", "??? help?", "quit");
         // ABSOLUTELY NEEDED TO HANDLE INPUT
         Gdx.input.setInputProcessor(new InputMultiplexer(stage, input));
         // and then add display and messagePanel, our two visual components, to the list of things that act in Stage.
@@ -422,7 +421,7 @@ public class RotationDemo extends ApplicationAdapter {
         if (health <= 0) return;
         int oldX = player.entity.gridX, oldY = player.entity.gridY,
                 newX = adjacency.extractX(pos), newY = adjacency.extractY(pos);
-        if (newX >= 0 && newY >= 0 && newX < width && newY < height
+        if (newX >= 0 && newY >= 0 && newX < gridWidth && newY < gridHeight
                 && bareDungeon[newX][newY] != '#') {
             // '+' is a door.
             if (lineDungeon[newX][newY] == '+') {
@@ -595,8 +594,8 @@ public class RotationDemo extends ApplicationAdapter {
         text.add(helping2);
         text.add(helping3);
 
-        final float w = width * cellWidth, aw = helping3.length() * cellWidth * 0.8f;
-        final float h = height * cellHeight, ah = cellHeight * 9f;
+        final float w = gridWidth * cellWidth, aw = helping3.length() * cellWidth * 0.8f;
+        final float h = gridHeight * cellHeight, ah = cellHeight * 9f;
         tp.init(aw, ah, text);
         a = tp.getScrollPane();
         final float x = (w - aw) / 2f;
@@ -620,8 +619,8 @@ public class RotationDemo extends ApplicationAdapter {
 
     public void putMap() {
         boolean overlapping;
-        for (int i = 0; i < width; i++) {
-            for (int j = 0; j < height; j++) {
+        for (int i = 0; i < gridWidth; i++) {
+            for (int j = 0; j < gridHeight; j++) {
                 overlapping = monsters.containsKey(adjacency.composite(i, j, 0, 0) >>> 3) || (player.entity.gridX == i && player.entity.gridY == j);
                 // if we see it now, we remember the cell and show a lit cell based on the fovmap value (between 0.0
                 // and 1.0), with 1.0 being almost pure white at +215 lightness and 0.0 being rather dark at -105.
@@ -657,10 +656,10 @@ public class RotationDemo extends ApplicationAdapter {
         if (health <= 0) {
             // still need to display the map, then write over it with a message.
             putMap();
-            display.putBoxedString(width / 2 - 18, height / 2 - 10, "   THE TSAR WILL HAVE YOUR HEAD!    ");
-            display.putBoxedString(width / 2 - 18, height / 2 - 5, "      AS THE OLD SAYING GOES,       ");
-            display.putBoxedString(width / 2 - lang.length() / 2, height / 2, lang);
-            display.putBoxedString(width / 2 - 18, height / 2 + 5, "             q to quit.             ");
+            display.putBoxedString(gridWidth / 2 - 18, gridHeight / 2 - 10, "   THE TSAR WILL HAVE YOUR HEAD!    ");
+            display.putBoxedString(gridWidth / 2 - 18, gridHeight / 2 - 5, "      AS THE OLD SAYING GOES,       ");
+            display.putBoxedString(gridWidth / 2 - lang.length() / 2, gridHeight / 2, lang);
+            display.putBoxedString(gridWidth / 2 - 18, gridHeight / 2 + 5, "             q to quit.             ");
 
             // because we return early, we still need to draw.
             stage.draw();
@@ -671,7 +670,7 @@ public class RotationDemo extends ApplicationAdapter {
         }
         // need to display the map every frame, since we clear the screen to avoid artifacts.
         putMap();
-        display.put(width >> 1, 0, Character.forDigit(health, 10), SColor.DARK_PINK);
+        display.put(gridWidth >> 1, 0, Character.forDigit(health, 10), SColor.DARK_PINK);
 
         // if the user clicked, we have a list of moves to perform.
         if (awaitedMoves.size != 0) {
@@ -753,26 +752,50 @@ public class RotationDemo extends ApplicationAdapter {
 
     @Override
     public void resize(int width, int height) {
+//        super.resize(width, height);
+//
+//        // message box won't respond to clicks on the far right if the stage hasn't been updated with a larger size
+//        currentZoomX = (float)width / gridWidth;
+//        // total new screen height in pixels divided by total number of rows on the screen
+//        currentZoomY = (float) height / (gridHeight + bonusHeight);
+//        // message box should be given updated bounds since I don't think it will do this automatically
+//        messagePanel.getScrollPane().setBounds(0, 0, width, currentZoomY * bonusHeight);
+//        // SquidMouse turns screen positions to cell positions, and needs to be told that cell sizes have changed
+////        input.reinitialize(currentZoomX, currentZoomY, RotationDemo.gridWidth, RotationDemo.gridHeight, 0, 0, width, height);
+//
+//        // the viewports are updated separately so each doesn't interfere with the other's drawn area.
+//        currentZoomX = cellWidth / currentZoomX;
+//        currentZoomY = cellHeight / currentZoomY;
+////        input.update(width, height, true);
+//        stage.getViewport().update(width, height, true);
         super.resize(width, height);
 
         // message box won't respond to clicks on the far right if the stage hasn't been updated with a larger size
-        currentZoomX = (float)width / RotationDemo.width;
+        float currentZoomX = (float)width / gridWidth;
         // total new screen height in pixels divided by total number of rows on the screen
-        currentZoomY = (float) height / (RotationDemo.height + RotationDemo.bonusHeight);
+        float currentZoomY = (float)height / (gridHeight + bonusHeight);
         // message box should be given updated bounds since I don't think it will do this automatically
-        messagePanel.getScrollPane().setBounds(0, 0, width, currentZoomY * RotationDemo.bonusHeight);
+        messagePanel.getScrollPane().setBounds(0, 0, width, currentZoomY * bonusHeight);
         // SquidMouse turns screen positions to cell positions, and needs to be told that cell sizes have changed
-        input.reinitialize(currentZoomX, currentZoomY, RotationDemo.width, RotationDemo.height, 0, 0, width, height);
-        currentZoomX = cellWidth / currentZoomX;
-        currentZoomY = cellHeight / currentZoomY;
-        input.update(width, height, true);
-        stage.getViewport().update(width, height, true);
+        // a quirk of how the camera works requires the mouse to be offset by half a cell if the width or height is odd
+        // (gridWidth & 1) is 1 if gridWidth is odd or 0 if it is even; it's good to know and faster than using % , plus
+        // in some other cases it has useful traits (x % 2 can be 0, 1, or -1 depending on whether x is negative, while
+        // x & 1 will always be 0 or 1).
+        input.getMouse().reinitialize(currentZoomX, currentZoomY, gridWidth, gridHeight,
+                0, (gridHeight & 1) * (int) (currentZoomY));        // the viewports are updated separately so each doesn't interfere with the other's drawn area.
+        stage.getViewport().update(width, height, false);
+        // we also set the bounds of that drawn area here for each viewport.
+        stage.getViewport().setScreenBounds(0, 0, width, (int) messagePanel.getScrollPane().getHeight());
+        // we did this for the language viewport, now again for the main viewport
+        stage.getViewport().update(width, height, false);
+        stage.getViewport().setScreenBounds(0, (int) messagePanel.getScrollPane().getHeight(),
+                width, height - (int) messagePanel.getScrollPane().getHeight());
     }
     public static void main (String[] arg) {
         Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
         config.setTitle("SquidLib Demo: Rotation in Pathfinding");
-        config.useVsync(false);
-        config.setWindowedMode(width * cellWidth, height * cellHeight);
+        config.useVsync(true);
+        config.setWindowedMode(gridWidth * cellWidth, gridHeight * cellHeight);
         config.setWindowIcon(Files.FileType.Internal, "Tentacle-128.png", "Tentacle-64.png", "Tentacle-32.png", "Tentacle-16.png");
         new Lwjgl3Application(new RotationDemo(), config);
     }
