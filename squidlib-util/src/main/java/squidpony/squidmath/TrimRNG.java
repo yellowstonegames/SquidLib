@@ -36,7 +36,7 @@ import java.io.Serializable;
  * Created by Tommy Ettinger on 12/20/2021.
  */
 public class TrimRNG implements RandomnessSource, Serializable {
-    private static final long serialVersionUID = 0L;
+    private static final long serialVersionUID = 1L;
     /**
      * Can be any long value.
      */
@@ -81,11 +81,9 @@ public class TrimRNG implements RandomnessSource, Serializable {
 
     /**
      * Creates a new generator by specifying each state exactly. All values are acceptable.
-     * Be advised that seedC will be returned without change by the first call to {@link #nextLong()} (if that is the
-     * first call made to this TrimRNG); it will change for the next call.
      * @param seedA any long
      * @param seedB any long
-     * @param seedC any long; will be returned as-is by the first call to {@link #nextLong()} unless something else is called first
+     * @param seedC any long
      * @param seedD any long
      */
     public TrimRNG(final long seedA, final long seedB, long seedC, long seedD) {
@@ -97,35 +95,20 @@ public class TrimRNG implements RandomnessSource, Serializable {
     /**
      * This initializes all 4 states of the generator to random values based on the given seed.
      * (2 to the 64) possible initial generator states can be produced here, all with a different
-     * first value returned by {@link #nextLong()} (because {@code stateC} is guaranteed to be
-     * different for every different {@code seed}).
+     * first value returned by {@link #nextLong()}.
      * @param seed the initial seed; may be any long
      */
     public void setSeed(long seed) {
-        long x = (seed += 0x9E3779B97F4A7C15L);
-        x ^= x >>> 27;
-        x *= 0x3C79AC492BA7B653L;
-        x ^= x >>> 33;
-        x *= 0x1C69B3F74AC4AE35L;
-        stateA = x ^ x >>> 27;
-        x = (seed += 0x9E3779B97F4A7C15L);
-        x ^= x >>> 27;
-        x *= 0x3C79AC492BA7B653L;
-        x ^= x >>> 33;
-        x *= 0x1C69B3F74AC4AE35L;
-        stateB = x ^ x >>> 27;
-        x = (seed += 0x9E3779B97F4A7C15L);
-        x ^= x >>> 27;
-        x *= 0x3C79AC492BA7B653L;
-        x ^= x >>> 33;
-        x *= 0x1C69B3F74AC4AE35L;
-        stateC = x ^ x >>> 27;
-        x = (seed + 0x9E3779B97F4A7C15L);
-        x ^= x >>> 27;
-        x *= 0x3C79AC492BA7B653L;
-        x ^= x >>> 33;
-        x *= 0x1C69B3F74AC4AE35L;
-        stateD = x ^ x >>> 27;
+//        seed -= seed << 31;
+//        seed ^= seed >>> 29;
+//        seed += seed << 16;
+//        seed ^= seed >>> 30;
+//        seed -= seed << 19;
+//        seed ^= seed >>> 29;
+        stateA = seed ^ 0xC6BC279692B5C323L;
+        stateB = ~seed;
+        stateC = seed ^ ~0xC6BC279692B5C323L;
+        stateD = seed;
     }
 
     /**
@@ -175,7 +158,6 @@ public class TrimRNG implements RandomnessSource, Serializable {
 
     /**
      * Set the "C" part of the internal state with a long.
-     * The first time {@link #nextLong()} is called, this value will be returned as-is; it will change on later calls.
      *
      * @param stateC any 64-bit long
      */
@@ -213,7 +195,7 @@ public class TrimRNG implements RandomnessSource, Serializable {
         stateB = (cd << 18 | cd >>> 46);
         stateC = fa + bc;
         stateD = fd + 0xDE916ABCC965815BL;
-        return fc;
+        return stateC;
     }
 
     public long previousLong() {
@@ -226,7 +208,7 @@ public class TrimRNG implements RandomnessSource, Serializable {
         t = (fa >>> 57 | fa << 7);
         stateB = t ^ stateC;
         stateA = fc - t;
-        return (stateB >>> 18 | stateB << 46) ^ stateD - 0xDE916ABCC965815BL;
+        return stateC;
     }
 
     @Override
@@ -241,13 +223,13 @@ public class TrimRNG implements RandomnessSource, Serializable {
         stateB = (cd << 18 | cd >>> 46);
         stateC = fa + bc;
         stateD = fd + 0xDE916ABCC965815BL;
-        return (int)fc >>> (32 - bits);
+        return (int)stateC >>> (32 - bits);
     }
 
     /**
      * Produces a copy of this RandomnessSource that, if next() and/or nextLong() are called on this object and the
      * copy, both will generate the same sequence of random numbers from the point copy() was called. This just need to
-     * copy the state so it isn't shared, usually, and produce a new value with the same exact state.
+     * copy the state so that it isn't shared, usually, and produce a new value with the same exact state.
      *
      * @return a copy of this RandomnessSource
      */
