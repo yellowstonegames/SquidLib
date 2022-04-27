@@ -67,10 +67,10 @@ public class HashVisualizer extends ApplicationAdapter {
     // 3 artistic visualizations of hash functions and misc. other
     // 4 noise
     // 5 RNG results
-    private int testType = 4;
+    private int testType = 5;
     private static final int NOISE_LIMIT = 152;
     private static final int RNG_LIMIT = 52;
-    private int hashMode = 1, rngMode = 4, noiseMode = 106, otherMode = 17;//142
+    private int hashMode = 1, rngMode = 5, noiseMode = 106, otherMode = 17;//142
 
     /**
      * If you're editing the source of HashVisualizer, you can comment out one line and uncomment another to change
@@ -1665,7 +1665,8 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                randomGrid[x][y] = new RomuTrioRNG(x*2+1, y*2+1, 1);
+                randomGrid[x][y] = new TrimRNG(x ^ y << 9);
+//                randomGrid[x][y] = new RomuTrioRNG(x*2+1, y*2+1, 1);
 //                randomGrid[x][y] = new PangolinRNG(x*2+1, y*2+1);
 //                randomGrid[x][y] = new XoshiroStarStar64RNG(x ^ y << 9);
 //                randomGrid[x][y] = new RandomXS128(x+1, y+1);
@@ -5718,7 +5719,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 //                                back[x][y] = floatGet(randomGrid[x][y].nextLong() << 8 | 255L);
                             }
                         }
-                        Gdx.graphics.setTitle("Tangle Stream Grid at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("RNG Stream Grid at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
 //                        for (int x = 0; x < width; x++) {
 //                            for (int y = 0; y < height; y++) {
@@ -5729,14 +5730,24 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 //                        Gdx.graphics.setTitle("XoRoRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
 //                        break;
                     case 5:
+                        extra = System.nanoTime() >>> 30 & 63;
+                        Gdx.graphics.setTitle("RNG Grid, bit " + extra);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                code = permuted.nextLong() | 255L;
-                                back[x][y] = floatGet(code);
+                                ((TrimRNG)randomGrid[x][y]).setSeed(x ^ y << 9);
+                                back[x][y] = (randomGrid[x][y].nextLong() >>> extra & 1L) == 0 ? FLOAT_BLACK : FLOAT_WHITE;//floatGet(code);
                             }
                         }
-                        Gdx.graphics.setTitle("PermutedRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
+
+//                        for (int x = 0; x < width; x++) {
+//                            for (int y = 0; y < height; y++) {
+//                                code = permuted.nextLong() | 255L;
+//                                back[x][y] = floatGet(code);
+//                            }
+//                        }
+//                        Gdx.graphics.setTitle("PermutedRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+//                        break;
                     case 6:
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
