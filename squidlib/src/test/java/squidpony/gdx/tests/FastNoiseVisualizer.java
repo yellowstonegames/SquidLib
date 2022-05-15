@@ -23,7 +23,7 @@ import static com.badlogic.gdx.graphics.GL20.GL_POINTS;
 public class FastNoiseVisualizer extends ApplicationAdapter {
 
     private FastNoise noise = new FastNoise(1, 0.125f, FastNoise.CUBIC_FRACTAL, 1);
-    private int dim = 1; // this can be 0, 1, 2, 3, or 4; add 2 to get the actual dimensions
+    private int dim = 2; // this can be 0, 1, 2, 3, or 4; add 2 to get the actual dimensions
     private int octaves = 2;
     private float freq = 1f;
     private boolean inverse;
@@ -53,18 +53,24 @@ public class FastNoiseVisualizer extends ApplicationAdapter {
     private AnimatedGif gif;
     private Array<Pixmap> frames = new Array<>(128);
 
-    public static float basicPrepare(float n)
+    private float lowest = 0.5f, highest = 0.5f;
+
+    public float basicPrepare(float n)
     {
 //        return Math.max(0f, n);
-        return n * 0.5f + 0.5f;
+//        return n * 0.5f + 0.5f;
+        float r = (float) n * 0.5f + 0.5f;
+        if(r < lowest) System.out.println("New lowest: " + (lowest = r));
+        else if(r > highest) System.out.println("New highest: " + (highest = r));
+        return r;
     }
 
     @Override
     public void create() {
         renderer = new ImmediateModeRenderer20(width * height, false, true, 0);
         view = new ScreenViewport();
-        noise.setPointHash(pointHashes[8]);
-        noise.setFractalType(FastNoise.RIDGED_MULTI);
+        noise.setPointHash(pointHashes[7]);
+//        noise.setFractalType(FastNoise.RIDGED_MULTI);
         gif = new AnimatedGif();
         gif.setDitherAlgorithm(Dithered.DitherAlgorithm.NEUE);
         gif.setFlipY(false);

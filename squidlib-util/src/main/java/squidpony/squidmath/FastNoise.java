@@ -6288,7 +6288,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         return singleCubic(seed, x * frequency, y * frequency, z * frequency);
     }
 
-    private final static float CUBIC_3D_BOUNDING = 2f / (1.5f * 1.5f * 1.5f);
+    private final static float CUBIC_3D_BOUNDING = 1f / (1.125f * 1.5f * 1.5f);
 
     private float singleCubic(int seed, float x, float y, float z) {
         int x1 = fastFloor(x);

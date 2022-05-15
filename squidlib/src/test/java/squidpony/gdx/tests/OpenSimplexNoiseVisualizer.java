@@ -7,16 +7,13 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.glutils.ImmediateModeRenderer20;
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.NumberUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.github.tommyettinger.anim8.AnimatedGif;
-import com.github.tommyettinger.anim8.Dithered;
-import com.github.tommyettinger.anim8.PaletteReducer;
-import squidpony.squidmath.*;
+import squidpony.squidmath.FastNoise;
+import squidpony.squidmath.Noise;
+import squidpony.squidmath.OpenSimplex2F;
+import squidpony.squidmath.OpenSimplex2S;
 
 import static com.badlogic.gdx.Input.Keys.*;
 import static com.badlogic.gdx.graphics.GL20.GL_POINTS;
@@ -50,7 +47,7 @@ public class OpenSimplexNoiseVisualizer extends ApplicationAdapter {
     private int ctr = -256;
     private boolean keepGoing = true;
 
-    public static float basicPrepare(double n)
+    public float basicPrepare(double n)
     {
         return (float) n * 0.5f + 0.5f;
     }
