@@ -31,6 +31,7 @@ public class FastNoiseVisualizer extends ApplicationAdapter {
     
     private PointHash ph = new PointHash();
     private HastyPointHash hph = new HastyPointHash();
+    private HappyPointHash haph = new HappyPointHash();
     private IntPointHash iph = new IntPointHash();
     private GoldPointHash gold = new GoldPointHash();
     private TabularPointHash tab = new TabularPointHash();
@@ -39,8 +40,8 @@ public class FastNoiseVisualizer extends ApplicationAdapter {
     private FlawedPointHash.QuiltHash quilt = new FlawedPointHash.QuiltHash(1, 16);
     private FlawedPointHash.CubeHash cube = new FlawedPointHash.CubeHash(1, 16);
     private FlawedPointHash.FNVHash fnv = new FlawedPointHash.FNVHash(1);
-    private IPointHash[] pointHashes = new IPointHash[] {ph, hph, gold, iph, tab, fnv, rug, quilt, cube};
-    private int hashIndex = 1;
+    private IPointHash[] pointHashes = new IPointHash[] {ph, hph, haph, gold, iph, tab, fnv, rug, quilt, cube};
+    private int hashIndex = 2;
 
     private static final int width = 512, height = 512;
 
@@ -58,18 +59,18 @@ public class FastNoiseVisualizer extends ApplicationAdapter {
     public float basicPrepare(float n)
     {
 //        return Math.max(0f, n);
-//        return n * 0.5f + 0.5f;
-        float r = (float) n * 0.5f + 0.5f;
-        if(r < lowest) System.out.println("New lowest: " + (lowest = r));
-        else if(r > highest) System.out.println("New highest: " + (highest = r));
-        return r;
+        return n * 0.5f + 0.5f;
+//        float r = (float) n * 0.5f + 0.5f;
+//        if(r < lowest) System.out.println("New lowest: " + (lowest = r));
+//        else if(r > highest) System.out.println("New highest: " + (highest = r));
+//        return r;
     }
 
     @Override
     public void create() {
         renderer = new ImmediateModeRenderer20(width * height, false, true, 0);
         view = new ScreenViewport();
-        noise.setPointHash(pointHashes[7]);
+        noise.setPointHash(pointHashes[hashIndex]);
 //        noise.setFractalType(FastNoise.RIDGED_MULTI);
         gif = new AnimatedGif();
         gif.setDitherAlgorithm(Dithered.DitherAlgorithm.NEUE);
