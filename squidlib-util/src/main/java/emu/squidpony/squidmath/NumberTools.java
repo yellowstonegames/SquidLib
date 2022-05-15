@@ -353,13 +353,12 @@ public class NumberTools {
 
     public static double sin(double radians)
     {
-        radians = radians * 0.6366197723675814;
+        radians *= 0.6366197723675814;
         final long floor = (radians >= 0.0 ? (long) radians : (long) radians - 1L) & -2L;
         radians -= floor;
         radians *= 2.0 - radians;
         return radians * (-0.775 - 0.225 * radians) * ((floor & 2L) - 1L);
     }
-
     public static double cos(double radians)
     {
         radians = radians * 0.6366197723675814 + 1.0;
@@ -368,43 +367,38 @@ public class NumberTools {
         radians *= 2.0 - radians;
         return radians * (-0.775 - 0.225 * radians) * ((floor & 2L) - 1L);
     }
-
     public static float sin(float radians)
     {
-        radians = radians * 0.6366197723675814f;
-        final int floor = (radians >= 0.0 ? (int) radians : (int) radians - 1) & -2;
+        radians *= 0.6366197723675814f;
+        final int floor = (radians >= 0f ? (int) radians : (int) radians - 1) & -2;
         radians -= floor;
         radians *= 2f - radians;
         return radians * (-0.775f - 0.225f * radians) * ((floor & 2) - 1);
     }
-
     public static float cos(float radians)
     {
         radians = radians * 0.6366197723675814f + 1f;
-        final int floor = (radians >= 0.0 ? (int) radians : (int) radians - 1) & -2;
+        final int floor = (radians >= 0f ? (int) radians : (int) radians - 1) & -2;
         radians -= floor;
         radians *= 2f - radians;
         return radians * (-0.775f - 0.225f * radians) * ((floor & 2) - 1);
     }
-
     public static float sinDegrees(float degrees)
     {
         degrees = degrees * 0.011111111111111112f;
-        final int floor = (degrees >= 0.0 ? (int) degrees : (int) degrees - 1) & -2;
+        final int floor = (degrees >= 0.f ? (int) degrees : (int) degrees - 1) & -2;
         degrees -= floor;
         degrees *= 2f - degrees;
         return degrees * (-0.775f - 0.225f * degrees) * ((floor & 2) - 1);
     }
-
     public static float cosDegrees(float degrees)
     {
         degrees = degrees * 0.011111111111111112f + 1f;
-        final int floor = (degrees >= 0.0 ? (int) degrees : (int) degrees - 1) & -2;
+        final int floor = (degrees >= 0f ? (int) degrees : (int) degrees - 1) & -2;
         degrees -= floor;
         degrees *= 2f - degrees;
         return degrees * (-0.775f - 0.225f * degrees) * ((floor & 2) - 1);
     }
-
     public static double sin_(double turns)
     {
         turns *= 4.0;
@@ -424,18 +418,18 @@ public class NumberTools {
     public static float sin_(float turns)
     {
         turns *= 4f;
-        final long floor = (turns >= 0.0 ? (long) turns : (long) turns - 1L) & -2L;
+        final int floor = (turns >= 0f ? (int) turns : (int) turns - 1) & -2;
         turns -= floor;
         turns *= 2f - turns;
-        return turns * (-0.775f - 0.225f * turns) * ((floor & 2L) - 1L);
+        return turns * (-0.775f - 0.225f * turns) * ((floor & 2) - 1);
     }
     public static float cos_(float turns)
     {
         turns = turns * 4f + 1f;
-        final long floor = (turns >= 0.0 ? (long) turns : (long) turns - 1L) & -2L;
+        final int floor = (turns >= 0f ? (int) turns : (int) turns - 1) & -2;
         turns -= floor;
         turns *= 2f - turns;
-        return turns * (-0.775f - 0.225f * turns) * ((floor & 2L) - 1L);
+        return turns * (-0.775f - 0.225f * turns) * ((floor & 2) - 1);
     }
     public static double atan(final double i) {
         final double n = Math.min(Math.abs(i), Double.MAX_VALUE);
