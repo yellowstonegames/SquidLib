@@ -1088,23 +1088,23 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
     }
 
     private float valCoord2D(int seed, int x, int y) {
-        return (hashAll(x, y, seed) >> 7) * 0x1.0p-24f;
+        return (hashAll(x, y, seed)) * 0x1.0p-31f;
     }
 
     private float valCoord3D(int seed, int x, int y, int z) {
-        return (hashAll(x, y, z, seed) >> 7) * 0x1.0p-24f;
+        return (hashAll(x, y, z, seed)) * 0x1.0p-31f;
     }
 
     private float valCoord4D(int seed, int x, int y, int z, int w) {
-        return (hashAll(x, y, z, w, seed) >> 7) * 0x1.0p-24f;
+        return (hashAll(x, y, z, w, seed)) * 0x1.0p-31f;
     }
 
     private float valCoord5D(int seed, int x, int y, int z, int w, int u) {
-        return (hashAll(x, y, z, w, u, seed) >> 7) * 0x1.0p-24f;
+        return (hashAll(x, y, z, w, u, seed)) * 0x1.0p-31f;
     }
 
     private float valCoord6D(int seed, int x, int y, int z, int w, int u, int v) {
-        return (hashAll(x, y, z, w, u, v, seed) >> 7) * 0x1.0p-24f;
+        return (hashAll(x, y, z, w, u, v, seed)) * 0x1.0p-31f;
     }
 
     protected float gradCoord2D(int seed, int x, int y, float xd, float yd) {
