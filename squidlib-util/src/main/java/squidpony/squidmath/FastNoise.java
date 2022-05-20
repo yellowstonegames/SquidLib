@@ -6177,7 +6177,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         return singleCubic(0, x, y);
     }
 
-    private final static float CUBIC_2D_BOUNDING = 1f / 1.5f;
+    private final static float CUBIC_2D_BOUNDING = 1f / (1.5f * 1.5f);
 
     private float singleCubic(int seed, float x, float y) {
         int x1 = fastFloor(x);
@@ -6193,7 +6193,9 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         float xs = x - (float) x1;
         float ys = y - (float) y1;
 
-        return cubicLerp(
+        float e = (float)Math.pow(4.0f,
+//        return
+                cubicLerp(
                 cubicLerp(valCoord2D(seed, x0, y0), valCoord2D(seed, x1, y0), valCoord2D(seed, x2, y0), valCoord2D(seed, x3, y0),
                         xs),
                 cubicLerp(valCoord2D(seed, x0, y1), valCoord2D(seed, x1, y1), valCoord2D(seed, x2, y1), valCoord2D(seed, x3, y1),
@@ -6202,7 +6204,11 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
                         xs),
                 cubicLerp(valCoord2D(seed, x0, y3), valCoord2D(seed, x1, y3), valCoord2D(seed, x2, y3), valCoord2D(seed, x3, y3),
                         xs),
-                ys) * CUBIC_2D_BOUNDING;
+                ys)
+        );
+        return (e - 1.0f) / (e + 1.0f);
+//                * CUBIC_2D_BOUNDING;
+
     }
 
     public float getCubicFractal(float x, float y, float z) {
@@ -6288,7 +6294,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         return singleCubic(seed, x * frequency, y * frequency, z * frequency);
     }
 
-    private final static float CUBIC_3D_BOUNDING = 1f / (1.125f * 1.5f * 1.5f);
+    private final static float CUBIC_3D_BOUNDING = 1f / (1.5f * 1.5f * 1.5f);
 
     private float singleCubic(int seed, float x, float y, float z) {
         int x1 = fastFloor(x);
@@ -6309,7 +6315,9 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         float ys = y - (float) y1;
         float zs = z - (float) z1;
 
-        return cubicLerp(
+        float e = (float)Math.pow(4.0f,
+//        return
+                cubicLerp(
                 cubicLerp(
                         cubicLerp(valCoord3D(seed, x0, y0, z0), valCoord3D(seed, x1, y0, z0), valCoord3D(seed, x2, y0, z0), valCoord3D(seed, x3, y0, z0), xs),
                         cubicLerp(valCoord3D(seed, x0, y1, z0), valCoord3D(seed, x1, y1, z0), valCoord3D(seed, x2, y1, z0), valCoord3D(seed, x3, y1, z0), xs),
@@ -6334,7 +6342,11 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
                         cubicLerp(valCoord3D(seed, x0, y2, z3), valCoord3D(seed, x1, y2, z3), valCoord3D(seed, x2, y2, z3), valCoord3D(seed, x3, y2, z3), xs),
                         cubicLerp(valCoord3D(seed, x0, y3, z3), valCoord3D(seed, x1, y3, z3), valCoord3D(seed, x2, y3, z3), valCoord3D(seed, x3, y3, z3), xs),
                         ys),
-                zs) * CUBIC_3D_BOUNDING;
+                zs)
+        );
+        return (e - 1.0f) / (e + 1.0f);
+//                * CUBIC_3D_BOUNDING;
+
     }
 
     public float getCubicFractal(float x, float y, float z, float w) {
@@ -6411,7 +6423,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         return singleCubic(seed, x * frequency, y * frequency, z * frequency, w * frequency);
     }
 
-    private final static float CUBIC_4D_BOUNDING = 1.0625f / (1.5f * 1.5f * 1.5f);
+    private final static float CUBIC_4D_BOUNDING = 1.0f / (1.5f * 1.5f * 1.5f * 1.5f);
 
     private float singleCubic(int seed, float x, float y, float z, float w) {
         int x1 = fastFloor(x);
@@ -6437,7 +6449,9 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         float zs = z - (float) z1;
         float ws = w - (float) w1;
 
-        return cubicLerp(
+        float e = (float)Math.pow(4.0f,
+//        return
+                cubicLerp(
                 cubicLerp(
                         cubicLerp(
                                 cubicLerp(valCoord4D(seed, x0, y0, z0, w0), valCoord4D(seed, x1, y0, z0, w0), valCoord4D(seed, x2, y0, z0, w0), valCoord4D(seed, x3, y0, z0, w0), xs),
@@ -6542,7 +6556,11 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
                                 cubicLerp(valCoord4D(seed, x0, y3, z3, w3), valCoord4D(seed, x1, y3, z3, w3), valCoord4D(seed, x2, y3, z3, w3), valCoord4D(seed, x3, y3, z3, w3), xs),
                                 ys),
                         zs),
-                ws) * CUBIC_4D_BOUNDING;
+                ws)
+        );
+        return (e - 1.0f) / (e + 1.0f);
+//                * CUBIC_4D_BOUNDING;
+
     }
 
     // Cellular Noise
