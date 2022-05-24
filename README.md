@@ -146,7 +146,7 @@ Core of SquidLib:
 </dependency>
 ```
 
-Optional Text-Based Display (depends on libGDX 1.9.12 and anim8-gdx 0.2.4)
+Optional Text-Based Display (depends on libGDX 1.10.0 and anim8-gdx 0.2.10)
 ```
 <dependency>
     <groupId>com.squidpony</groupId>
@@ -155,7 +155,7 @@ Optional Text-Based Display (depends on libGDX 1.9.12 and anim8-gdx 0.2.4)
 </dependency>
 ```
 
-Optional Serialization Support (depends on libGDX 1.9.12)
+Optional Serialization Support (depends on libGDX 1.10.0)
 ```
 <dependency>
     <groupId>com.squidpony</groupId>
@@ -181,7 +181,7 @@ Optional Serialization Support
 api 'com.squidpony:squidlib-extra:3.0.4'
 ```
 
-If you want the latest version of SquidLib, which uses libGDX 1.9.12 and either GWT 2.8.2 or GWT 2.9.0 (if you use GWT),
+If you want the latest version of SquidLib, which uses libGDX 1.11.0 and either GWT 2.8.2 or GWT 2.9.0 (if you use GWT),
 you can use JitPack to build the latest commit on-demand. It needs an additional repository, which is this for Maven:
 
 ```
@@ -198,32 +198,32 @@ Or this for Gradle, which if you used SquidSetup, would be in the repositories b
 maven { url "https://jitpack.io" }
 ```
 
-Then the dependencies would be this for Maven (the first is needed, the others are optional); replace `2b577109cc`
+Then the dependencies would be this for Maven (the first is needed, the others are optional); replace `f8f2590cc6`
 with any short commit from GitHub:
 
 ```
 	<dependency>
-	    <groupId>com.github.SquidPony.SquidLib</groupId>
+	    <groupId>com.github.yellowstonegames.SquidLib</groupId>
 	    <artifactId>squidlib-util</artifactId>
-	    <version>2b577109cc</version>
+	    <version>f8f2590cc6</version>
 	</dependency>
 	<dependency>
-	    <groupId>com.github.SquidPony.SquidLib</groupId>
+	    <groupId>com.github.yellowstonegames.SquidLib</groupId>
 	    <artifactId>squidlib</artifactId>
-	    <version>2b577109cc</version>
+	    <version>f8f2590cc6</version>
 	</dependency>
 	<dependency>
-	    <groupId>com.github.SquidPony.SquidLib</groupId>
+	    <groupId>com.github.yellowstonegames.SquidLib</groupId>
 	    <artifactId>squidlib-extra</artifactId>
-	    <version>2b577109cc</version>
+	    <version>f8f2590cc6</version>
 	</dependency>
 ```
 
-Or this for Gradle (the first two are needed, the others are optional); replace `2b577109cc` with any short commit from GitHub:
+Or this for Gradle (the first two are needed, the others are optional); replace `f8f2590cc6` with any short commit from GitHub:
 ```
-    api "com.github.SquidPony.SquidLib:squidlib-util:2b577109cc"
-    api "com.github.SquidPony.SquidLib:squidlib:2b577109cc"
-    api "com.github.SquidPony.SquidLib:squidlib-extra:2b577109cc"
+    api "com.github.yellowstonegames.SquidLib:squidlib-util:f8f2590cc6"
+    api "com.github.yellowstonegames.SquidLib:squidlib:f8f2590cc6"
+    api "com.github.yellowstonegames.SquidLib:squidlib-extra:f8f2590cc6"
 ```
 
 If you use GWT, you should probably use SquidSetup to configure the project, since there's a lot of places where
@@ -232,15 +232,15 @@ regexodus 0.1.10 (because `squidlib-util` needs it) and possibly anim8-gdx 0.2.4
 is only needed if you depend on `squidlib`). The sources dependencies look like this for Gradle (I haven't really tried
 with Maven):
 ```
-    implementation "com.github.SquidPony.SquidLib:squidlib-util:2b577109cc:sources"
+    implementation "com.github.yellowstonegames.SquidLib:squidlib-util:f8f2590cc6:sources"
     // above depends on this:
-    implementation "com.github.tommyettinger:regexodus:0.1.10:sources"
+    implementation "com.github.tommyettinger:regexodus:0.1.13:sources"
 
-    implementation "com.github.SquidPony.SquidLib:squidlib:2b577109cc:sources"
+    implementation "com.github.yellowstonegames.SquidLib:squidlib:f8f2590cc6:sources"
     // above depends on this:
-    implementation "com.github.tommyettinger:anim8-gdx:0.2.4:sources"
+    implementation "com.github.tommyettinger:anim8-gdx:0.3.6:sources"
 
-    implementation "com.github.SquidPony.SquidLib:squidlib-extra:2b577109cc:sources"
+    implementation "com.github.yellowstonegames.SquidLib:squidlib-extra:f8f2590cc6:sources"
 }
 ```
 

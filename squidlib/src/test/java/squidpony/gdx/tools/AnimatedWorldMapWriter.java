@@ -7,6 +7,7 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.IntMap;
 import com.badlogic.gdx.utils.TimeUtils;
@@ -48,7 +49,7 @@ public class AnimatedWorldMapWriter extends ApplicationAdapter {
 
     private static final int LIMIT = 5;
     private static final boolean MEASURE_BOUNDS = false;
-    private static final boolean FLOWING_LAND = false;
+    private static final boolean FLOWING_LAND = true;
     private static final boolean ALIEN_COLORS = false;
     private static final boolean SEEDY = false;
     private static final int FRAMES = 180;
@@ -215,7 +216,7 @@ World #5, SavoryMelonAlder, completed in 64338 ms
 //        VastNoise fn = new VastNoise((int) seed, 1f, VastNoise.SIMPLEX, 1);
 //        VastNoise fn = new VastNoise((int) seed, 1f, VastNoise.SIMPLEX_FRACTAL, 2);
 //        VastNoise fn = new VastNoise((int) seed, 1.25f, VastNoise.HONEY, 1);
-        fn.setInterpolation(FastNoise.QUINTIC);
+        fn.setInterpolation(FastNoise.HERMITE);
 //        FastNoise fn = new FastNoise((int) seed, 5f, FastNoise.CUBIC, 1);
         /*
                     {0xC13FA9A902A6328FL, 0x91E10DA5C79E7B1DL},
@@ -421,6 +422,7 @@ World #5, SavoryMelonAlder, completed in 64338 ms
                     pm[i].drawPixel(x, y, NumberTools.floatToReversedIntBits(cm[x][y]));
                 }
             }
+            PixmapIO.writePNG(Gdx.files.local("out/worldsFlat/" + name + "/globe_" + i + ".png"), pm[i]);
 //            if(i % 5 == 4) System.out.println("Finished " + (i + 1) + " frames in " + (System.currentTimeMillis() - worldTime) + " ms");
             if(i % (pm.length / 10) == (pm.length / 10) - 1) System.out.print(((i + 1) * 100 / pm.length) + "% (" + (System.currentTimeMillis() - worldTime) + " ms)... ");
         }
