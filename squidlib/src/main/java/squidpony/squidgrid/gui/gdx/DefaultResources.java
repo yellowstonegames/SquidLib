@@ -21,7 +21,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.LifecycleListener;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.DistanceFieldFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
@@ -85,7 +84,7 @@ public class DefaultResources implements LifecycleListener {
             smooth1, smooth2, smoothSquare,
             square1, square2,
             unicode1, unicode2,
-            arial15, tiny, lessTiny,
+            lsans15, tiny, lessTiny,
             sevenTwelve, computerSaysNo, cozette, cozetteOutlined;
 
     private TextCellFactory distanceNarrow, distanceSquare, typewriterDistanceNarrow,
@@ -399,21 +398,21 @@ public class DefaultResources implements LifecycleListener {
     }
 
     /**
-     * Gets the one font guaranteed to be included in libGDX, which is Arial at size 15 px.
-     * @return the BitmapFont representing Arial.ttf at size 15 px
+     * Gets the one font guaranteed to be included in libGDX, which is Liberation Sans at size 15 px.
+     * @return the BitmapFont representing LiberationSans.ttf at size 15 px
      */
     public static BitmapFont getIncludedFont()
     {
         initialize();
-        if(instance.arial15 == null)
+        if(instance.lsans15 == null)
         {
             try {
-                instance.arial15 = new BitmapFont();
+                instance.lsans15 = new BitmapFont();
                 //instance.narrow1.getData().padBottom = instance.narrow1.getDescent();
             } catch (Exception ignored) {
             }
         }
-        return copyFont(instance.arial15);
+        return copyFont(instance.lsans15);
     }
     /**
      * Returns a 12x12px, stretched but curvaceous font as an embedded resource. Caches it for later calls.
@@ -2200,9 +2199,9 @@ public class DefaultResources implements LifecycleListener {
      */
     @Override
     public void dispose() {
-        if(arial15 != null) {
-            arial15.dispose();
-            arial15 = null;
+        if(lsans15 != null) {
+            lsans15.dispose();
+            lsans15 = null;
         }
         if(narrow1 != null) {
             narrow1.dispose();
