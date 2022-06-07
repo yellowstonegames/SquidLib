@@ -533,7 +533,7 @@ public class MathVisualizer extends ApplicationAdapter {
         kd = new KumaraswamyDistribution(2.0, 5.0);
         batch = new FilterBatch();
         stage = new Stage(new StretchViewport(512, 520), batch);
-        layers = new SparseLayers(512, 520, 1, 1, new TextCellFactory().font(DefaultResources.getDefaultNarrowFont()));
+        layers = new SparseLayers(512, 520, 1, 1, new TextCellFactory().includedFont());
         layers.setDefaultForeground(SColor.WHITE);
         input = new InputAdapter(){
             @Override

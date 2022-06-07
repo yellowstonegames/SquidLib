@@ -280,13 +280,8 @@ public class TextCellFactory implements Disposable {
      */
     public TextCellFactory initBySize() {
         if(bmpFont == null)
-            bmpFont = DefaultResources.getIncludedFont();
-        BitmapFont.Glyph g = bmpFont.getData().missingGlyph;
-        if(g != null)
         {
-            block = new TextureRegion(bmpFont.getRegion(), g.srcX + 1, g.srcY + 1, 1, 1);
-        }
-        else {
+            bmpFont = DefaultResources.getIncludedFont();
             Pixmap temp = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
             temp.setColor(Color.WHITE);
             temp.fill();
@@ -294,6 +289,20 @@ public class TextCellFactory implements Disposable {
             white.draw(temp, 0, 0);
             block = new TextureRegion(white);
             temp.dispose();
+        }
+        else {
+            BitmapFont.Glyph g = bmpFont.getData().missingGlyph;
+            if (g != null) {
+                block = new TextureRegion(bmpFont.getRegion(), g.srcX + 1, g.srcY + 1, 1, 1);
+            } else {
+                Pixmap temp = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+                temp.setColor(Color.WHITE);
+                temp.fill();
+                Texture white = new Texture(1, 1, Pixmap.Format.RGBA8888);
+                white.draw(temp, 0, 0);
+                block = new TextureRegion(white);
+                temp.dispose();
+            }
         }
         if(msdf)
         {
@@ -586,18 +595,22 @@ public class TextCellFactory implements Disposable {
         return this;
     }
     /**
-     * Sets this factory to use the one font included with libGDX, which is Arial at size 15 px. Does it correctly
-     * display when used in a grid? Probably not as well as you'd hope. You should probably get some of the assets that
-     * accompany SquidLib, and can be downloaded directly from GitHub (not available as one monolithic jar via Maven
-     * Central, but that lets you pick and choose individual assets). Get a .fnt and its matching .png file from
-     * https://github.com/yellowstonegames/SquidLib/tree/master/assets and you can pass them to {@link #font(String)} or
-     * {@link #fontDistanceField(String, String)}.
+     * Sets this factory to use the one font included with libGDX, which is Liberation Sans at size 15 px. Does it
+     * correctly display when used in a grid? Probably not as well as you'd hope. You should probably get some assets
+     * that accompany SquidLib, and can be downloaded directly from GitHub (not available as one monolithic jar via
+     * Maven Central, but that lets you pick and choose individual assets). Get a .fnt and its matching .png file from
+     * <a href="https://github.com/yellowstonegames/SquidLib/tree/master/assets">SquidLib's repo</a> and you can pass
+     * them to {@link #font(String)}, {@link #fontDistanceField(String, String)}, or
+     * {@link #fontMultiDistanceField(String, String)}.
+     * <br>
+     * Internally, this assigns null to {@link #bmpFont}, so when the appropriate init method ({@link #initByFont()} or
+     * {@link #initBySize()}) is called, lsans-15 will be loaded using {@link DefaultResources#getIncludedFont()}.
      *
      * @return this factory for method chaining
      */
     public TextCellFactory includedFont()
     {
-        bmpFont = DefaultResources.getIncludedFont();
+        bmpFont = null;
         return this;
     }/**
      * Sets this factory to use a default 12x24 font that supports Latin, Greek, Cyrillic, and many more, including
