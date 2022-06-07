@@ -3,7 +3,6 @@ package squidpony.gdx.tools;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -12,10 +11,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import squidpony.ArrayTools;
-import squidpony.squidgrid.gui.gdx.FilterBatch;
-import squidpony.squidgrid.gui.gdx.SColor;
-import squidpony.squidgrid.gui.gdx.SparseLayers;
-import squidpony.squidgrid.gui.gdx.TextCellFactory;
+import squidpony.squidgrid.gui.gdx.*;
 import squidpony.squidmath.*;
 
 import java.util.Arrays;
@@ -25,7 +21,7 @@ import java.util.Random;
  * Created by Tommy Ettinger on 1/13/2018.
  */
 public class MathVisualizer extends ApplicationAdapter {
-    private int mode = 57;
+    private int mode = 48;
     private int modes = 58;
     private FilterBatch batch;
     private SparseLayers layers;
@@ -537,7 +533,7 @@ public class MathVisualizer extends ApplicationAdapter {
         kd = new KumaraswamyDistribution(2.0, 5.0);
         batch = new FilterBatch();
         stage = new Stage(new StretchViewport(512, 520), batch);
-        layers = new SparseLayers(512, 520, 1, 1, new TextCellFactory().includedFont());
+        layers = new SparseLayers(512, 520, 1, 1, new TextCellFactory().font(DefaultResources.getDefaultNarrowFont()));
         layers.setDefaultForeground(SColor.WHITE);
         input = new InputAdapter(){
             @Override
@@ -2055,23 +2051,25 @@ public class MathVisualizer extends ApplicationAdapter {
                 // thanks to Jonathan M, https://stackoverflow.com/a/20591835
                 Gdx.graphics.setTitle("Spiral Testing Thing, from index");
 //                OUTER_LOOP:
-                for (int root = 0; root < 16; ++root) {
-                    for (int g = root * root, limit = g + root + root + 1; g < limit; g++) {
-                        if ((g & 1) != 0) continue; //checkerboard
+//                for (int root = 0; root < 16; ++root) {
+                    for (int index = 0; index < 256; ++index) {
+//                    for (int index = root * root, limit = index + root + root + 1; index < limit; index++) {
+//                        if ((index & 1) != 0) continue; //checkerboard
+                        int root = (int)Math.sqrt(index);
                         final int sign = -(root & 1);
-                        final int big = (root * (root + 1)) - g << 1;
+                        final int big = (root * (root + 1)) - index << 1;
                         final int y = ((root + 1 >> 1) + sign ^ sign) + ((sign ^ sign + Math.min(big, 0)) >> 1);
                         final int x = ((root + 1 >> 1) + sign ^ sign) - ((sign ^ sign + Math.max(big, 0)) >> 1);
                         // do stuff with x and y
 //                        if(x * y > 16) break OUTER_LOOP;
-                        float color = SColor.floatGetI(g, g, g);
+                        float color = SColor.floatGetI(index, index, index);
                         for (int a = 0; a < 32; a++) {
                             for (int b = 0; b < 32; b++) {
                                 layers.backgrounds[256 + (x << 5) + a][256 + (y << 5) + b] = color;
                             }
                         }
                     }
-                }
+//                }
 //                Gdx.graphics.setTitle("Spiral Numbering Thing, from index");
 //                for (int g = 0; g < 256; g++) {
 //                    final int root = (int) (Math.sqrt(g));
