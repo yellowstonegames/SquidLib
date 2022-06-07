@@ -1,8 +1,8 @@
 3.0.5
 Dependencies:
  - squidlib-util: RegExodus 0.1.13
- - squidlib: libGDX 1.10.0, anim8-gdx 0.3.6
- - squidlib-extra: libGDX 1.10.0
+ - squidlib: libGDX 1.11.0, anim8-gdx 0.3.7
+ - squidlib-extra: libGDX 1.11.0
 Changes:
  - FloatFilters now implements several more of the effects from Filters, such as HallucinateFilter and WiggleFilter.
  - The new RNG types from jdkgdxds (used by SquidSquad) have been backported here, though using them in RNG could produce different results than as an EnhancedRandom from jdkgdxds.
@@ -15,6 +15,7 @@ Changes:
    - Various experimental noise functions will probably be removed, such as FoalNoise, PyrNoise, PyrlinNoise, and WeavingNoise.
  - The IDistribution interface is now more explicit about its upper and lower bounds, and can provide a way to get the mean result.
  - KumaraswamyDistribution is a simple parameterizable distribution that can imitate the PDF/CDF of various other distributions.
+ - TextCellFactory has adapted to the changes in the default font in libGDX 1.11.0, and functions correctly now when using the lsans-15 font included in libGDX.
 
 3.0.4
 Dependencies:

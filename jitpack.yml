@@ -1,5 +1,3 @@
-jdk:
-  - openjdk16
 install:
   - echo "Installing with Gradle"
   - chmod 755 gradlew

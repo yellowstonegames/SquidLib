@@ -229,20 +229,8 @@ public class TextCellFactory implements Disposable {
      */
     public TextCellFactory initByFont() {
         if(bmpFont == null)
-            bmpFont = DefaultResources.getIncludedFont();
-        fitAll();
-        lineHeight = bmpFont.getLineHeight();
-        height = (lineHeight);
-        descent = bmpFont.getDescent();
-
-        actualCellWidth = width;
-        actualCellHeight = height;
-        BitmapFont.Glyph g = bmpFont.getData().missingGlyph;
-        if(g != null)
         {
-            block = new TextureRegion(bmpFont.getRegion(), g.srcX + 1, g.srcY + 1, 1, 1);
-        }
-        else {
+            bmpFont = DefaultResources.getIncludedFont();
             Pixmap temp = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
             temp.setColor(Color.WHITE);
             temp.fill();
@@ -251,6 +239,26 @@ public class TextCellFactory implements Disposable {
             block = new TextureRegion(white);
             temp.dispose();
         }
+        else {
+            BitmapFont.Glyph g = bmpFont.getData().missingGlyph;
+            if (g != null) {
+                block = new TextureRegion(bmpFont.getRegion(), g.srcX + 1, g.srcY + 1, 1, 1);
+            } else {
+                Pixmap temp = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+                temp.setColor(Color.WHITE);
+                temp.fill();
+                Texture white = new Texture(1, 1, Pixmap.Format.RGBA8888);
+                white.draw(temp, 0, 0);
+                block = new TextureRegion(white);
+                temp.dispose();
+            }
+        }
+        fitAll();
+        height = lineHeight = bmpFont.getLineHeight();
+        descent = bmpFont.getDescent();
+
+        actualCellWidth = width;
+        actualCellHeight = height;
         style = new Label.LabelStyle(bmpFont, null);
         BitmapFont.Glyph dg = bmpFont.getData().getGlyph(directionGlyph);
         if(dg != null)
