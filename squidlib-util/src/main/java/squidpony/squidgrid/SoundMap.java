@@ -17,8 +17,6 @@
 package squidpony.squidgrid;
 
 import squidpony.squidmath.Coord;
-import squidpony.squidmath.GWTRNG;
-import squidpony.squidmath.IRNG;
 import squidpony.squidmath.OrderedMap;
 
 import java.util.Map;
@@ -76,10 +74,6 @@ public class SoundMap
      */
     public OrderedMap<Coord, Double> sounds;
     private OrderedMap<Coord, Double> fresh;
-    /**
-     * The RNG used to decide which one of multiple equally-short paths to take.
-     */
-    public IRNG rng;
 
     private boolean initialized;
     /**
@@ -87,18 +81,6 @@ public class SoundMap
      * initialize() method before using this class.
      */
     public SoundMap() {
-        rng = new GWTRNG();
-        alerted = new OrderedMap<>();
-        fresh = new OrderedMap<>();
-        sounds = new OrderedMap<>();
-    }
-
-    /**
-     * Construct a SoundMap without a level to actually scan. This constructor allows you to specify an RNG before it is
-     * used. If you use this constructor, you must call an initialize() method before using this class.
-     */
-    public SoundMap(IRNG random) {
-        rng = random;
         alerted = new OrderedMap<>();
         fresh = new OrderedMap<>();
         sounds = new OrderedMap<>();
@@ -109,7 +91,6 @@ public class SoundMap
      * @param level
      */
     public SoundMap(final double[][] level) {
-        rng = new GWTRNG();
         alerted = new OrderedMap<>();
         fresh = new OrderedMap<>();
         sounds = new OrderedMap<>();
@@ -121,7 +102,6 @@ public class SoundMap
      * @param measurement
      */
     public SoundMap(final double[][] level, Measurement measurement) {
-        rng = new GWTRNG();
         this.measurement = measurement;
         alerted = new OrderedMap<>();
         fresh = new OrderedMap<>();
@@ -138,7 +118,6 @@ public class SoundMap
      * @param level
      */
     public SoundMap(final char[][] level) {
-        rng = new GWTRNG();
         alerted = new OrderedMap<>();
         fresh = new OrderedMap<>();
         sounds = new OrderedMap<>();
@@ -153,7 +132,6 @@ public class SoundMap
      * @param level
      */
     public SoundMap(final char[][] level, char alternateWall) {
-        rng = new GWTRNG();
         alerted = new OrderedMap<>();
         fresh = new OrderedMap<>();
         sounds = new OrderedMap<>();
@@ -170,7 +148,6 @@ public class SoundMap
      * @param measurement
      */
     public SoundMap(final char[][] level, Measurement measurement) {
-        rng = new GWTRNG();
         this.measurement = measurement;
         alerted = new OrderedMap<>();
         fresh = new OrderedMap<>();
@@ -445,7 +422,8 @@ public class SoundMap
      */
     public OrderedMap<Coord, Double> findAlerted(Set<Coord> creatures, Map<Coord, Double> extraSounds) {
         if(!initialized) return null;
-        alerted = new OrderedMap<>(creatures.size());
+        alerted.clear();
+        alerted.ensureCapacity(creatures.size());
 
         resetMap();
         for (Map.Entry<Coord, Double> sound : extraSounds.entrySet()) {
