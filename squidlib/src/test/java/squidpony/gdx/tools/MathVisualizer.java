@@ -2062,7 +2062,8 @@ public class MathVisualizer extends ApplicationAdapter {
                         final int x = ((root + 1 >> 1) + sign ^ sign) - ((sign ^ sign + Math.max(big, 0)) >> 1);
                         // do stuff with x and y
 //                        if(x * y > 16) break OUTER_LOOP;
-                        float color = SColor.floatGetI(index, index, index);
+                        int c = (int)(index - (System.currentTimeMillis() >>> 4) & 255);
+                        float color = SColor.floatGetI(c, c, c);
                         for (int a = 0; a < 32; a++) {
                             for (int b = 0; b < 32; b++) {
                                 layers.backgrounds[256 + (x << 5) + a][256 + (y << 5) + b] = color;

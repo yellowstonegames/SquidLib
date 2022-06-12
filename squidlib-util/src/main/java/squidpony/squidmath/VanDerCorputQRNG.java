@@ -567,7 +567,7 @@ public class VanDerCorputQRNG implements StatefulRandomness, RandomnessSource, S
     /**
      * Martin Roberts' "unreasonably effective" quasi-random int sequence based on the golden ratio.
      * See <a href="http://extremelearning.com.au/unreasonable-effectiveness-of-quasirandom-sequences/">his blog</a> for
-     * more detailed info, but this can be summarized as being extremely good at separating outputs at the expense of
+     * more detailed info, but this can be summarized as being excellent at separating outputs at the expense of
      * seeming less random. Produces an int between offset (inclusive) and offset + span (exclusive), with the int at
      * each {@code index} likely to be different for at least {@code span / 4} indices (very low spans may offer less of
      * a guarantee).
@@ -587,7 +587,7 @@ public class VanDerCorputQRNG implements StatefulRandomness, RandomnessSource, S
     /**
      * Martin Roberts' "unreasonably effective" quasi-random point sequence based on a 2D analogue to the golden ratio.
      * See <a href="http://extremelearning.com.au/unreasonable-effectiveness-of-quasirandom-sequences/">his blog</a> for
-     * more detailed info, but this can be summarized as being extremely good at separating points at the expense of
+     * more detailed info, but this can be summarized as being excellent at separating points at the expense of
      * seeming less random. Produces a Coord with x between xOffset (inclusive) and xOffset + width (exclusive), and y
      * between yOffset (inclusive) and yOffset + height (exclusive), with the Coord at each {@code index} likely to be
      * different for at least {@code width * height / 4} indices (very low sizes may offer less of a guarantee).

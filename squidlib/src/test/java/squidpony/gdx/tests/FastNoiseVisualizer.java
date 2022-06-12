@@ -219,8 +219,8 @@ public class FastNoiseVisualizer extends ApplicationAdapter {
                         noise.setFractalOctaves((octaves = octaves + 7 & 7) + 1);
                         break;
                     case COMMA: // foam sharpness
-                        noise.setFoamSharpness(NumberTools.sinDegrees((System.currentTimeMillis() & 0xFFFF) * 0x1p-4f) * 0.875f + 1.125f);
-                        System.out.println(noise.getFoamSharpness());
+                        noise.setSharpness(NumberTools.sinDegrees((System.currentTimeMillis() & 0xFFFF) * 0x1p-4f) * 0.875f + 1.125f);
+                        System.out.println(noise.getSharpness());
                         break;
                     case I: // inverse mode
                         if (inverse = !inverse) {
