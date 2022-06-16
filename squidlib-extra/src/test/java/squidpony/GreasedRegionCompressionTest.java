@@ -14,10 +14,10 @@ import java.util.Arrays;
  * <br>
  * <pre>
  * Earth Map
- * Base size   : 18839
- * LZS size    : 3794
- * Custom size : 2376
- * Both size   : 1142
+ * Base size   : 19379
+ * LZS size    : 4064
+ * Custom size : 1405
+ * Both size   : 2292
  * LZ correct? true
  * Custom correct? true
  * Both correct? true
@@ -27,23 +27,29 @@ import java.util.Arrays;
  * Both correct? true
  *
  * Heat Map
- * Base size   : 509295
- * LZS size    : 62308
- * Custom size : 216391
- * Both size   : 43248
+ * Base size   : 515572 / 131080 uncompressed bytes: 3.9332621299969484
+ * LZS size    : 57816 / 131080 uncompressed bytes: 0.44107415318889226
+ * Custom size : 167815 / 131080 uncompressed bytes: 1.2802487030820873
+ * Both size   : 37508 / 131080 uncompressed bytes: 0.2861458651205371
+ * BSE size    : 45896 / 131080 uncompressed bytes: 0.3501373207201709
+ * BSELZS size : 70418 / 131080 uncompressed bytes: 0.5372139151663107
  * LZ correct? true
  * Custom correct? true
  * Both correct? true
+ * BSE correct? true
+ * BSELZS correct? true
  * Reading in written Heat files...
  * LZ correct? true
  * Custom correct? true
  * Both correct? true
+ * BSE correct? true
+ * BSELZS correct? true
  *
  * Australia Map
  * Base size   : 8517
  * LZS size    : 1622
- * Custom size : 806
- * Both size   : 434
+ * Custom size : 434
+ * Both size   : 683
  * LZ correct? true
  * Custom correct? true
  * Both correct? true
@@ -53,8 +59,10 @@ import java.util.Arrays;
  * Both correct? true
  * </pre>
  * <br>
- * I'm quite surprised that re-compressing the GreasedRegions (shown on the "Both" rows) works so well.
- * The Heat entries in the middle use GridCompression to compress a 2D byte array, instead of a GreasedRegion.
+ * Custom mode calls {@link GreasedRegion#toCompressedString()}, which uses Hilbert Curve RLE compression followed by
+ * LZ-String compression. This does worse when LZ-String is applied again in Both mode, because compressing data twice
+ * in the same way generally doesn't work. For the heat map, this uses {@link GridCompression#compress(byte[][])}, which
+ * does not apply LZ-String encoding, so using Both mode works well there (it only applies LZ-String once there).
  * <br>
  * Created by Tommy Ettinger on 9/17/2016.
  */
