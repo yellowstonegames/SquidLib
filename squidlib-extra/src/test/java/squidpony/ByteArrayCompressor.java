@@ -31,7 +31,29 @@ public class ByteArrayCompressor extends ApplicationAdapter {
             byte[] noise = BlueNoise.ALT_NOISE[i];
             sb.append("decompress(").append('"').append(ByteStringEncoding.compress(noise).replaceAll("([\"\\\\])", "\\\\$1")).append('"').append("),\n");
         }
-        sb.append("};");
+        sb.append("};\n");
+
+        sb.append("public static final byte[][] TRI_NOISE = new byte[][]{\n");
+        for (int i = 0; i < 64; i++) {
+            byte[] noise = BlueNoise.TRI_NOISE[i];
+            sb.append("decompress(").append('"').append(ByteStringEncoding.compress(noise).replaceAll("([\"\\\\])", "\\\\$1")).append('"').append("),\n");
+        }
+        sb.append("};\n");
+
+        sb.append("public static final byte[][] TILE_NOISE = new byte[][]{\n");
+        for (int i = 0; i < 64; i++) {
+            byte[] noise = BlueNoise.TILE_NOISE[i];
+            sb.append("decompress(").append('"').append(ByteStringEncoding.compress(noise).replaceAll("([\"\\\\])", "\\\\$1")).append('"').append("),\n");
+        }
+        sb.append("};\n");
+
+        sb.append("public static final byte[][] TILE_TRI_NOISE = new byte[][]{\n");
+        for (int i = 0; i < 64; i++) {
+            byte[] noise = BlueNoise.TILE_TRI_NOISE[i];
+            sb.append("decompress(").append('"').append(ByteStringEncoding.compress(noise).replaceAll("([\"\\\\])", "\\\\$1")).append('"').append("),\n");
+        }
+        sb.append("};\n");
+
         String s = sb.toString();
 
         System.out.println(s);
