@@ -18,7 +18,7 @@ package squidpony;
 
 import squidpony.annotation.Beta;
 
-import java.nio.charset.StandardCharsets;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -36,6 +36,14 @@ import java.util.HashSet;
 @Beta
 public final class ByteStringEncoding {
     private ByteStringEncoding(){}
+
+    private static final String[] BYTE_STRINGS = new String[256];
+
+    static {
+        for (int i = 0; i < 256; i++) {
+            BYTE_STRINGS[i] = Character.toString((char) i);
+        }
+    }
 
     public static String compress(byte[] uncompressed) {
         if (uncompressed == null) return null;
@@ -56,7 +64,7 @@ public final class ByteStringEncoding {
         int ii;
 
         for (ii = 0; ii < uncompressed.length; ii++) {
-            context_c = new String(uncompressed, ii, 1, StandardCharsets.ISO_8859_1);
+            context_c = BYTE_STRINGS[uncompressed[ii] & 255];
             if (!context_dictionary.containsKey(context_c)) {
                 context_dictionary.put(context_c, context_dictSize++);
                 context_dictionaryToCreate.add(context_c);
@@ -351,7 +359,12 @@ public final class ByteStringEncoding {
                     for (int i = 0, n = result.size(); i < n; i++) {
                         sb.append(result.get(i));
                     }
-                    return sb.toString().getBytes(StandardCharsets.ISO_8859_1);
+                    try {
+                        return sb.toString().getBytes("ISO-8859-1");
+                    } catch (UnsupportedEncodingException e) {
+                        return null; // should never happen, unless you're deep in the crazy mines.
+                    }
+//                    return sb.toString().getBytes(StandardCharsets.ISO_8859_1);
             }
 
             if (enlargeIn == 0) {
