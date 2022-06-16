@@ -16,24 +16,21 @@
 
 package squidpony;
 
-import squidpony.annotation.Beta;
-
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
 /**
- * An experimental variant on LZSEncoding to encode byte arrays to compressed Strings, and decode them back. This always
- * uses UTF-16-safe encoding, which means it does not use half of all possible chars in the compressed Strings but makes
+ * A variant on LZSEncoding to encode byte arrays to compressed Strings, and decode them back. This always uses
+ * UTF-16-safe encoding, which means it does not use one bit of each char in the compressed Strings but makes
  * sure the Strings are valid UTF-16 (so they can be written to and read from file more safely).
  * <br>
- * This class does work, since it can read back what it writes, but it still hasn't been strenuously tested, and it
- * could probably be optimized a lot.
+ * Like almost all of SquidLib, this class is not thread-safe. It reuses internal data structures rather than repeatedly
+ * re-creating them, which strongly helps its single-threaded performance.
  * <br>
  * Created by Tommy Ettinger on 1/11/2020.
  */
-@Beta
 public final class ByteStringEncoding {
     private ByteStringEncoding(){}
 
@@ -45,42 +42,48 @@ public final class ByteStringEncoding {
         }
     }
 
+    private static final HashMap<String, Integer> contextDictionary = new HashMap<>(256, 0.5f);
+    private static final HashSet<String> contextDictionaryToCreate = new HashSet<>(256, 0.5f);
+    private static final ArrayList<String> allStrings = new ArrayList<>(256);
+    private static final StringBuilder sb = new StringBuilder(1024);
+
     public static String compress(byte[] uncompressed) {
         if (uncompressed == null) return null;
         if (uncompressed.length == 0) return "";
         final int bitsPerChar = 15, offset = 32;
         int i, value;
-        HashMap<String, Integer> context_dictionary = new HashMap<>();
-        HashSet<String> context_dictionaryToCreate = new HashSet<>();
         String context_c;
         String context_wc;
         String context_w = "";
         int context_enlargeIn = 2; // Compensate for the first entry which should not count
         int context_dictSize = 3;
         int context_numBits = 2;
-        StringBuilder context_data = new StringBuilder(uncompressed.length >>> 1);
         int context_data_val = 0;
         int context_data_position = 0;
         int ii;
 
+        contextDictionary.clear();
+        contextDictionaryToCreate.clear();
+        sb.setLength(0);
+
         for (ii = 0; ii < uncompressed.length; ii++) {
             context_c = BYTE_STRINGS[uncompressed[ii] & 255];
-            if (!context_dictionary.containsKey(context_c)) {
-                context_dictionary.put(context_c, context_dictSize++);
-                context_dictionaryToCreate.add(context_c);
+            if (!contextDictionary.containsKey(context_c)) {
+                contextDictionary.put(context_c, context_dictSize++);
+                contextDictionaryToCreate.add(context_c);
             }
 
             context_wc = context_w + context_c;
-            if (context_dictionary.containsKey(context_wc)) {
+            if (contextDictionary.containsKey(context_wc)) {
                 context_w = context_wc;
             } else {
-                if (context_dictionaryToCreate.contains(context_w)) {
+                if (contextDictionaryToCreate.contains(context_w)) {
                     value = (context_w.charAt(0) & 255);
                     for (i = 0; i < context_numBits; i++) {
                         context_data_val = (context_data_val << 1);
                         if (context_data_position == bitsPerChar - 1) {
                             context_data_position = 0;
-                            context_data.append((char) (context_data_val + offset));
+                            sb.append((char) (context_data_val + offset));
                             context_data_val = 0;
                         } else {
                             context_data_position++;
@@ -90,7 +93,7 @@ public final class ByteStringEncoding {
                         context_data_val = (context_data_val << 1) | (value & 1);
                         if (context_data_position == bitsPerChar - 1) {
                             context_data_position = 0;
-                            context_data.append((char) (context_data_val + offset));
+                            sb.append((char) (context_data_val + offset));
                             context_data_val = 0;
                         } else {
                             context_data_position++;
@@ -101,14 +104,14 @@ public final class ByteStringEncoding {
                     if (context_enlargeIn == 0) {
                         context_enlargeIn = 1 << context_numBits++;
                     }
-                    context_dictionaryToCreate.remove(context_w);
+                    contextDictionaryToCreate.remove(context_w);
                 } else {
-                    value = context_dictionary.get(context_w);
+                    value = contextDictionary.get(context_w);
                     for (i = 0; i < context_numBits; i++) {
                         context_data_val = (context_data_val << 1) | (value & 1);
                         if (context_data_position == bitsPerChar - 1) {
                             context_data_position = 0;
-                            context_data.append((char) (context_data_val + offset));
+                            sb.append((char) (context_data_val + offset));
                             context_data_val = 0;
                         } else {
                             context_data_position++;
@@ -122,20 +125,20 @@ public final class ByteStringEncoding {
                     context_enlargeIn = 1 << context_numBits++;
                 }
                 // Add wc to the dictionary.
-                context_dictionary.put(context_wc, context_dictSize++);
+                contextDictionary.put(context_wc, context_dictSize++);
                 context_w = context_c;
             }
         }
 
         // Output the code for w.
         if (!context_w.isEmpty()) {
-            if (context_dictionaryToCreate.contains(context_w)) {
+            if (contextDictionaryToCreate.contains(context_w)) {
 //                if (context_w.charAt(0) < 256) {
                 for (i = 0; i < context_numBits; i++) {
                     context_data_val = (context_data_val << 1);
                     if (context_data_position == bitsPerChar - 1) {
                         context_data_position = 0;
-                        context_data.append((char) (context_data_val + offset));
+                        sb.append((char) (context_data_val + offset));
                         context_data_val = 0;
                     } else {
                         context_data_position++;
@@ -146,48 +149,21 @@ public final class ByteStringEncoding {
                     context_data_val = (context_data_val << 1) | (value & 1);
                     if (context_data_position == bitsPerChar - 1) {
                         context_data_position = 0;
-                        context_data.append((char) (context_data_val + offset));
+                        sb.append((char) (context_data_val + offset));
                         context_data_val = 0;
                     } else {
                         context_data_position++;
                     }
                     value >>= 1;
                 }
-//                } else {
-//                    value = 1;
-//                    for (i = 0; i < context_numBits; i++) {
-//                        context_data_val = (context_data_val << 1) | value;
-//                        if (context_data_position == bitsPerChar - 1) {
-//                            context_data_position = 0;
-//                            context_data.append((char) (context_data_val + offset));
-//                            context_data_val = 0;
-//                        } else {
-//                            context_data_position++;
-//                        }
-//                        value = 0;
-//                    }
-//                    value = context_w.charAt(0);
-//                    for (i = 0; i < 16; i++) {
-//                        context_data_val = (context_data_val << 1) | (value & 1);
-//                        if (context_data_position == bitsPerChar - 1) {
-//                            context_data_position = 0;
-//                            context_data.append((char) (context_data_val + offset));
-//                            context_data_val = 0;
-//                        } else {
-//                            context_data_position++;
-//                        }
-//                        value >>= 1;
-//                    }
-//                }
-
-                context_dictionaryToCreate.remove(context_w);
+                contextDictionaryToCreate.remove(context_w);
             } else {
-                value = context_dictionary.get(context_w);
+                value = contextDictionary.get(context_w);
                 for (i = 0; i < context_numBits; i++) {
                     context_data_val = (context_data_val << 1) | (value & 1);
                     if (context_data_position == bitsPerChar - 1) {
                         context_data_position = 0;
-                        context_data.append((char) (context_data_val + offset));
+                        sb.append((char) (context_data_val + offset));
                         context_data_val = 0;
                     } else {
                         context_data_position++;
@@ -204,7 +180,7 @@ public final class ByteStringEncoding {
             context_data_val = (context_data_val << 1) | (value & 1);
             if (context_data_position == bitsPerChar - 1) {
                 context_data_position = 0;
-                context_data.append((char) (context_data_val + offset));
+                sb.append((char) (context_data_val + offset));
                 context_data_val = 0;
             } else {
                 context_data_position++;
@@ -216,13 +192,13 @@ public final class ByteStringEncoding {
         while (true) {
             context_data_val = (context_data_val << 1);
             if (context_data_position == bitsPerChar - 1) {
-                context_data.append((char) (context_data_val + offset));
+                sb.append((char) (context_data_val + offset));
                 break;
             } else
                 context_data_position++;
         }
-        context_data.append(' ');
-        return context_data.toString();
+        sb.append(' ');
+        return sb.toString();
     }
 
     public static byte[] decompress(String compressed) {
@@ -230,17 +206,15 @@ public final class ByteStringEncoding {
             return null;
         if (compressed.isEmpty())
             return new byte[0];
-        final char[] getNextValue = compressed.toCharArray();
-        final int length = getNextValue.length, resetValue = 16384, offset = -32;
-        ArrayList<String> dictionary = new ArrayList<>();
-        int enlargeIn = 4, dictSize = 4, numBits = 3, position = resetValue, index = 1, resb, maxpower, power,
-                resultLength = 0;
+        final int length = compressed.length(), resetValue = 16384, offset = -32;
+        int enlargeIn = 4, dictSize = 4, numBits = 3, position = resetValue, index = 1, resb, maxpower, power;
         String entry, w, c;
-        ArrayList<String> result = new ArrayList<>();
-        char bits, val = (char) (getNextValue[0] + offset);
+        sb.setLength(0);
+        char bits, val = (char) (compressed.charAt(0) + offset);
 
-        for (char i = 0; i < 3; i++) {
-            dictionary.add(i, String.valueOf(i));
+        allStrings.clear();
+        for (int i = 0; i < 3; i++) {
+            allStrings.add(i, BYTE_STRINGS[i]);
         }
 
         bits = 0;
@@ -251,7 +225,7 @@ public final class ByteStringEncoding {
             position >>= 1;
             if (position == 0) {
                 position = resetValue;
-                val = (char) (getNextValue[index++] + offset);
+                val = (char) (compressed.charAt(index++) + offset);
             }
             bits |= (resb > 0 ? 1 : 0) << power++;
         }
@@ -266,11 +240,11 @@ public final class ByteStringEncoding {
                     position >>= 1;
                     if (position == 0) {
                         position = resetValue;
-                        val = (char) (getNextValue[index++] + offset);
+                        val = (char) (compressed.charAt(index++) + offset);
                     }
                     bits |= (resb > 0 ? 1 : 0) << power++;
                 }
-                c = String.valueOf(bits);
+                c = BYTE_STRINGS[bits];
                 break;
             case 1:
                 bits = 0;
@@ -281,7 +255,7 @@ public final class ByteStringEncoding {
                     position >>= 1;
                     if (position == 0) {
                         position = resetValue;
-                        val = (char) (getNextValue[index++] + offset);
+                        val = (char) (compressed.charAt(index++) + offset);
                     }
                     bits |= (resb > 0 ? 1 : 0) << power++;
                 }
@@ -290,10 +264,9 @@ public final class ByteStringEncoding {
             default:
                 return new byte[0];
         }
-        dictionary.add(c);
+        allStrings.add(c);
         w = c;
-        result.add(w);
-        resultLength += w.length();
+        sb.append(w);
         while (true) {
             if (index > length) {
                 return new byte[0];
@@ -306,7 +279,7 @@ public final class ByteStringEncoding {
                 position >>= 1;
                 if (position == 0) {
                     position = resetValue;
-                    val = (char) (getNextValue[index++] + offset);
+                    val = (char) (compressed.charAt(index++) + offset);
                 }
                 cc |= (resb > 0 ? 1 : 0) << power++;
             }
@@ -320,12 +293,12 @@ public final class ByteStringEncoding {
                         position >>= 1;
                         if (position == 0) {
                             position = resetValue;
-                            val = (char) (getNextValue[index++] + offset);
+                            val = (char) (compressed.charAt(index++) + offset);
                         }
                         bits |= (resb > 0 ? 1 : 0) << power++;
                     }
 
-                    dictionary.add(String.valueOf(bits));
+                    allStrings.add(BYTE_STRINGS[bits]);
                     cc = dictSize++;
                     enlargeIn--;
                     break;
@@ -338,32 +311,21 @@ public final class ByteStringEncoding {
                         position >>= 1;
                         if (position == 0) {
                             position = resetValue;
-                            val = (char) (getNextValue[index++] + offset);
+                            val = (char) (compressed.charAt(index++) + offset);
                         }
                         bits |= (resb > 0 ? 1 : 0) << power++;
                     }
-                    dictionary.add(String.valueOf(bits));
+                    allStrings.add(String.valueOf(bits));
                     cc = dictSize++;
                     enlargeIn--;
                     break;
                 case 2:
-//                    byte[] bytes = new byte[resultLength];
-//                    String r;
-//                    for (int i = 0, p = 0, n = result.size(); i < n; i++) {
-//                        r = result.get(i);
-//                        System.arraycopy(r.getBytes(StandardCharsets.ISO_8859_1), 0, bytes, p, r.length());
-//                        p += r.length();
-//                    }
-//                    return bytes;
-                    StringBuilder sb = new StringBuilder(resultLength);
-                    for (int i = 0, n = result.size(); i < n; i++) {
-                        sb.append(result.get(i));
-                    }
                     try {
                         return sb.toString().getBytes("ISO-8859-1");
                     } catch (UnsupportedEncodingException e) {
                         return null; // should never happen, unless you're deep in the crazy mines.
                     }
+                    // this is a possible alternative, but StandardCharsets may add to startup time if loaded early.
 //                    return sb.toString().getBytes(StandardCharsets.ISO_8859_1);
             }
 
@@ -372,8 +334,8 @@ public final class ByteStringEncoding {
                 numBits++;
             }
 
-            if (cc < dictionary.size() && dictionary.get(cc) != null) {
-                entry = dictionary.get(cc);
+            if (cc < allStrings.size() && allStrings.get(cc) != null) {
+                entry = allStrings.get(cc);
             } else {
                 if (cc == dictSize) {
                     entry = w + w.charAt(0);
@@ -381,11 +343,10 @@ public final class ByteStringEncoding {
                     return new byte[0];
                 }
             }
-            result.add(entry);
-            resultLength += entry.length();
+            sb.append(entry);
 
             // Add w+entry[0] to the dictionary.
-            dictionary.add(w + entry.charAt(0));
+            allStrings.add(w + entry.charAt(0));
             dictSize++;
             enlargeIn--;
 
@@ -395,9 +356,6 @@ public final class ByteStringEncoding {
                 enlargeIn = 1 << numBits;
                 numBits++;
             }
-
         }
-
     }
-
 }
