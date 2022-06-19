@@ -18,7 +18,13 @@ package squidpony.squidgrid;
 
 import squidpony.ArrayTools;
 import squidpony.squidgrid.mapping.DungeonUtility;
-import squidpony.squidmath.*;
+import squidpony.squidmath.Coord;
+import squidpony.squidmath.CrossHash;
+import squidpony.squidmath.GreasedRegion;
+import squidpony.squidmath.MathExtras;
+import squidpony.squidmath.Noise;
+import squidpony.squidmath.NumberTools;
+import squidpony.squidmath.OrderedSet;
 
 import java.io.Serializable;
 import java.util.*;
@@ -577,6 +583,76 @@ public class FOV implements Serializable {
         
         return light;
     }
+
+    /**
+     * Calculates which cells have line of sight from the given x, y coordinates.
+     * Assigns to, and returns, a light GreasedRegion where the false or "off" indicates
+     * "not in line of sight" and true or "on" indicated "in line of sight,"
+     * though this doesn't mean a cell is actually visible if there's no light
+     * in that cell. Always uses Shadow FOV, which allows this method to
+     * be static since it doesn't need to keep any state around, and can reuse the
+     * state the user gives it via the {@code light} parameter. The values in light
+     * are always cleared before this is run, because prior state can make this give
+     * incorrect results. The given {@code blockingMap} only considers cells to
+     * block light if they are true or "on".
+     * <br>
+     * The starting point for the calculation is considered to be at the center
+     * of the origin cell.
+     *
+     * @param blockingMap the grid of which cells block light ("on" cells are blocking)
+     * @param light the grid of cells to assign to; will be cleared before modifying
+     * @param startX        the horizontal component of the starting location
+     * @param startY        the vertical component of the starting location
+     * @return the computed light grid, which is the same 2D array as the value assigned to {@code light}
+     */
+    public static GreasedRegion reuseLOS(GreasedRegion blockingMap, GreasedRegion light, int startX, int startY)
+    {
+        return reuseLOS(blockingMap, light, startX, startY, 0, 0, light.width, light.height);
+    }
+    /**
+     * Calculates which cells have line of sight from the given x, y coordinates.
+     * Assigns to, and returns, a light GreasedRegion where the false or "off" indicates
+     * "not in line of sight" and true or "on" indicated "in line of sight,"
+     * though this doesn't mean a cell is actually visible if there's no light
+     * in that cell. Always uses Shadow FOV, which allows this method to
+     * be static since it doesn't need to keep any state around, and can reuse the
+     * state the user gives it via the {@code light} parameter. The values in light
+     * are always cleared before this is run, because prior state can make this give
+     * incorrect results. The given {@code blockingMap} only considers cells to
+     * block light if they are true or "on".
+     * <br>
+     * The starting point for the calculation is considered to be at the center
+     * of the origin cell.
+     *
+     * @param blockingMap the grid of which cells block light ("on" cells are blocking)
+     * @param light the grid of cells to assign to; will be cleared before modifying
+     * @param startX the horizontal component of the starting location
+     * @param startY the vertical component of the starting location
+     * @param minX inclusive lowest x position to assign to or process in {@code light}
+     * @param minY inclusive lowest y position to assign to or process in {@code light}
+     * @param maxX exclusive highest x position to assign to or process in {@code light}
+     * @param maxY exclusive highest y position to assign to or process in {@code light}
+     * @return the computed light grid, which is the same 2D array as the value assigned to {@code light}
+     */
+    public static GreasedRegion reuseLOS(GreasedRegion blockingMap, GreasedRegion light, int startX, int startY,
+                                  int minX, int minY, int maxX, int maxY)
+    {
+        float radius = (maxX - minX) + (maxY - minY);
+        light.clear();
+        light.insert(startX, startY);//make the starting space full power
+
+        shadowCastBinary(1, 1.0f, 0.0f, 0, 1, 1, 0, radius, startX, startY, light, blockingMap, minX, minY, maxX, maxY);
+        shadowCastBinary(1, 1.0f, 0.0f, 1, 0, 0, 1, radius, startX, startY, light, blockingMap, minX, minY, maxX, maxY);
+        shadowCastBinary(1, 1.0f, 0.0f, 0, 1, -1, 0, radius, startX, startY, light, blockingMap, minX, minY, maxX, maxY);
+        shadowCastBinary(1, 1.0f, 0.0f, 1, 0, 0, -1, radius, startX, startY, light, blockingMap, minX, minY, maxX, maxY);
+        shadowCastBinary(1, 1.0f, 0.0f, 0, -1, -1, 0, radius, startX, startY, light, blockingMap, minX, minY, maxX, maxY);
+        shadowCastBinary(1, 1.0f, 0.0f, -1, 0, 0, -1, radius, startX, startY, light, blockingMap, minX, minY, maxX, maxY);
+        shadowCastBinary(1, 1.0f, 0.0f, 0, -1, 1, 0, radius, startX, startY, light, blockingMap, minX, minY, maxX, maxY);
+        shadowCastBinary(1, 1.0f, 0.0f, -1, 0, 0, 1, radius, startX, startY, light, blockingMap, minX, minY, maxX, maxY);
+
+        return light;
+    }
+
     /**
      * Calculates the Field Of View for the provided map from the given x, y
      * coordinates, lighting at the given angle in  degrees and covering a span
@@ -968,6 +1044,48 @@ public class FOV implements Serializable {
                         blocked = true;
                         shadowCastBinary(distance + 1, start, leftSlope, xx, xy, yx, yy, radius, startx, starty, decay,
                                 lightMap, map, radiusStrategy, minX, minY, maxX, maxY);
+                        newStart = rightSlope;
+                    }
+                }
+            }
+        }
+    }
+    private static void shadowCastBinary(int row, float start, float end, int xx, int xy, int yx, int yy,
+                                         float radius, int startx, int starty, GreasedRegion lightMap,
+                                         GreasedRegion map,
+                                         int minX, int minY, int maxX, int maxY) {
+        if (start < end)
+            return;
+        float newStart = 0;
+        boolean blocked = false;
+        for (int distance = row; distance <= radius && distance < maxX - minX + maxY - minY && !blocked; distance++) {
+            int deltaY = -distance;
+            for (int deltaX = -distance; deltaX <= 0; deltaX++) {
+                int currentX = startx + deltaX * xx + deltaY * xy;
+                int currentY = starty + deltaX * yx + deltaY * yy;
+                float leftSlope = (deltaX - 0.5f) / (deltaY + 0.5f);
+                float rightSlope = (deltaX + 0.5f) / (deltaY - 0.5f);
+
+                if (!(currentX >= minX && currentY >= minY && currentX < maxX && currentY < maxY) || start < rightSlope) {
+                    continue;
+                } else if (end > leftSlope) {
+                    break;
+                }
+
+                lightMap.insert(currentX, currentY);
+
+                if (blocked) { //previous cell was a blocking one
+                    if (map.contains(currentX, currentY)) {//hit a wall
+                        newStart = rightSlope;
+                    } else {
+                        blocked = false;
+                        start = newStart;
+                    }
+                } else {
+                    if (map.contains(currentX, currentY) && distance < radius) {//hit a wall within sight line
+                        blocked = true;
+                        shadowCastBinary(distance + 1, start, leftSlope, xx, xy, yx, yy, radius, startx, starty,
+                                lightMap, map, minX, minY, maxX, maxY);
                         newStart = rightSlope;
                     }
                 }
