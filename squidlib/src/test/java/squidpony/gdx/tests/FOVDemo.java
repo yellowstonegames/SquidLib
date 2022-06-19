@@ -480,7 +480,7 @@ public class FOVDemo extends ApplicationAdapter {
                     case 'f':
                     case 'F':
                     {
-                        fovType = (fovType + 1) % 7;
+                        fovType = (fovType + (ctrl ? 7 : 1)) % 8;
                         break;
                     }
                 }
@@ -658,6 +658,8 @@ public class FOVDemo extends ApplicationAdapter {
             case 6:
                 FOV.reuseBurstFOV(resistance, visible, 3, player.x, player.y, 9.0, Radius.CIRCLE);
                 break;
+            case 7:
+                FOV.reuseFOVSymmetrical(resistance, visible, player.x, player.y, 9.0, Radius.CIRCLE);
         }
         // This is just like the constructor used earlier, but affects an existing GreasedRegion without making
         // a new one just for this movement.
@@ -813,6 +815,7 @@ public class FOVDemo extends ApplicationAdapter {
         Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
         config.setTitle("SquidLib FOV Demo");
         config.useVsync(false); // set to true if your computer starts to melt.
+        config.setForegroundFPS(0);
         config.setWindowedMode(gridWidth * cellWidth, (gridHeight + bonusHeight) * cellHeight);
         config.setWindowIcon(Files.FileType.Internal, "Tentacle-128.png", "Tentacle-64.png", "Tentacle-32.png", "Tentacle-16.png");
         new Lwjgl3Application(new FOVDemo(), config);

@@ -436,7 +436,7 @@ public class LightingHandler implements Serializable {
             if(!noticeable.contains(pos))
                 continue;
             radiance = lights.getAt(i);
-            FOV.reuseFOV(resistances, tempFOV, pos.x, pos.y, radiance.currentRange());
+            FOV.reuseFOVSymmetrical(resistances, tempFOV, pos.x, pos.y, radiance.currentRange(), radiusStrategy);
             mixColoredLighting(radiance.flare, radiance.color);
         }
     }
@@ -470,7 +470,7 @@ public class LightingHandler implements Serializable {
         for (int i = 0; i < sz; i++) {
             pos = lights.keyAt(i);
             radiance = lights.getAt(i);
-            FOV.reuseFOV(resistances, tempFOV, pos.x, pos.y, radiance.currentRange());
+            FOV.reuseFOVSymmetrical(resistances, tempFOV, pos.x, pos.y, radiance.currentRange(), radiusStrategy);
             mixColoredLighting(radiance.flare, radiance.color);
         }
         for (int x = 0; x < width; x++) {
@@ -488,7 +488,7 @@ public class LightingHandler implements Serializable {
      * {@link #update()} and before each call to {@link #draw(float[][])}, but other code may be between the calls
      * and may affect the lighting in customized ways.
      * @param pos the position of the light effect
-     * @param radiance the Radiance to update standalone, which does not need to be already added to this 
+     * @param radiance the Radiance to update standalone, which does not need to be already added to this
      */
     public void updateUI(Coord pos, Radiance radiance)
     {
@@ -503,11 +503,11 @@ public class LightingHandler implements Serializable {
      * and may affect the lighting in customized ways.
      * @param lightX the x-position of the light effect
      * @param lightY the y-position of the light effect
-     * @param radiance the Radiance to update standalone, which does not need to be already added to this 
+     * @param radiance the Radiance to update standalone, which does not need to be already added to this
      */
     public void updateUI(int lightX, int lightY, Radiance radiance)
     {
-        FOV.reuseFOV(resistances, tempFOV, lightX, lightY, radiance.currentRange());
+        FOV.reuseFOVSymmetrical(resistances, tempFOV, lightX, lightY, radiance.currentRange(), radiusStrategy);
         mixColoredLighting(radiance.flare, radiance.color);
     }
 
@@ -525,7 +525,7 @@ public class LightingHandler implements Serializable {
     /**
      * Given a SquidPanel that should be only solid blocks (such as the background of a SquidLayers) and a position for
      * the viewer (typically the player), fills the SquidPanel with different colors based on what lights are present in
-     * line of sight of the viewer and the various flickering or pulsing effects that Radiance light sources can do. 
+     * line of sight of the viewer and the various flickering or pulsing effects that Radiance light sources can do.
      * Given a SquidPanel that should be only solid blocks (such as the background of a SquidLayers), fills the
      * SquidPanel with different colors based on what lights are present in line of sight of the viewer and the various
      * flicker or strobe effects that Radiance light sources can do. You should usually call {@link #update()}
@@ -621,7 +621,7 @@ public class LightingHandler implements Serializable {
         maxX = MathUtils.clamp(maxX, 0, width);
         minY = MathUtils.clamp(minY, 0, height);
         maxY = MathUtils.clamp(maxY, 0, height);
-        FOV.reuseFOV(resistances, fovResult, viewerX, viewerY, viewerRange, radiusStrategy);
+        FOV.reuseFOVSymmetrical(resistances, fovResult, viewerX, viewerY, viewerRange, radiusStrategy);
         SColor.eraseColoredLighting(colorLighting);
         final int sz = lights.size();
         float maxRange = 0, range;
@@ -629,8 +629,8 @@ public class LightingHandler implements Serializable {
         for (int i = 0; i < sz; i++) {
             pos = lights.keyAt(i);
             range = lights.getAt(i).range;
-            if(range > maxRange && 
-                    pos.x + range >= minX && pos.x - range < maxX && pos.y + range >= minY && pos.y - range < maxY) 
+            if(range > maxRange &&
+                    pos.x + range >= minX && pos.x - range < maxX && pos.y + range >= minY && pos.y - range < maxY)
                 maxRange = range;
         }
         FOV.reuseLOS(resistances, losResult, viewerX, viewerY, minX, minY, maxX, maxY);
@@ -640,7 +640,7 @@ public class LightingHandler implements Serializable {
             if(!noticeable.contains(pos))
                 continue;
             radiance = lights.getAt(i);
-            FOV.reuseFOV(resistances, tempFOV, pos.x, pos.y, radiance.range);
+            FOV.reuseFOVSymmetrical(resistances, tempFOV, pos.x, pos.y, radiance.range, radiusStrategy);
             mixColoredLighting(radiance.flare, radiance.color);
         }
         for (int x = Math.max(0, minX); x < maxX && x < width; x++) {
