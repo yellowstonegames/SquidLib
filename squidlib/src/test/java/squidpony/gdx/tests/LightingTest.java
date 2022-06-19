@@ -12,7 +12,14 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import squidpony.squidgrid.Direction;
 import squidpony.squidgrid.FOV;
 import squidpony.squidgrid.Radius;
-import squidpony.squidgrid.gui.gdx.*;
+import squidpony.squidgrid.gui.gdx.AnimatedEntity;
+import squidpony.squidgrid.gui.gdx.DefaultResources;
+import squidpony.squidgrid.gui.gdx.FilterBatch;
+import squidpony.squidgrid.gui.gdx.LightingHandler;
+import squidpony.squidgrid.gui.gdx.MapUtility;
+import squidpony.squidgrid.gui.gdx.Radiance;
+import squidpony.squidgrid.gui.gdx.SColor;
+import squidpony.squidgrid.gui.gdx.SquidLayers;
 import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidgrid.mapping.FlowingCaveGenerator;
 import squidpony.squidgrid.mapping.SectionDungeonGenerator;
@@ -73,15 +80,21 @@ public class LightingTest extends ApplicationAdapter{
 //        org.putCaveCarvers(1);
         SectionDungeonGenerator gen = new SectionDungeonGenerator(gridWidth, gridHeight, rng);
 //        gen.addMaze(10);
-//        gen.addBoulders(0, 8);
+        gen.addBoulders(0, 8);
         FlowingCaveGenerator org = new FlowingCaveGenerator(gridWidth, gridHeight, TilesetType.ROUND_ROOMS_DIAGONAL_CORRIDORS, rng);
         map = org.generate();
         map = gen.generate(map, org.getEnvironment());
         displayedMap = DungeonUtility.hashesToLines(map, true);
-        SColor.LIMITED_PALETTE[0] = SColor.DB_GRAPHITE;
-        SColor.LIMITED_PALETTE[2] = SColor.DB_CAPPUCCINO;
+//        SColor.LIMITED_PALETTE[0] = SColor.DB_GRAPHITE;
+        SColor.LIMITED_PALETTE[2] = SColor.DB_CHESTNUT;
         fgColors = MapUtility.generateDefaultColors(map);
-        bgColors = MapUtility.generateDefaultBGColors(map);
+        bgColors = new Color[gridWidth][gridHeight];
+        for (int x = 0; x < gridWidth; x++) {
+            for (int y = 0; y < gridHeight; y++) {
+                if(displayedMap[x][y] == ' ') bgColors[x][y] = SColor.CW_ALMOST_BLACK;
+                else bgColors[x][y] = SColor.DB_GRAPHITE;
+            }
+        }
         resMap = DungeonUtility.generateResistances(map);
         lighting = new LightingHandler(resMap, SColor.FLOAT_BLACK, Radius.CIRCLE, Double.POSITIVE_INFINITY);
         GreasedRegion packed = new GreasedRegion(gen.getBareDungeon(), '.');
@@ -129,7 +142,7 @@ public class LightingTest extends ApplicationAdapter{
                 rng.shuffle(Direction.CARDINALS, dirs);
                 for (Direction d : dirs) {
                     alter = pt.translate(d);
-                    if (map[alter.x][alter.y] == '.') {
+                    if (map[alter.x][alter.y] == '.' && !lighting.lights.containsKey(alter)) {
                         lighting.moveLight(pt, alter);
                         pt = alter;
                         points[i] = pt;
