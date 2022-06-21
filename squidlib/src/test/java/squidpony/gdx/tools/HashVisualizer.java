@@ -7,6 +7,7 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.utils.NumberUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -67,10 +68,10 @@ public class HashVisualizer extends ApplicationAdapter {
     // 3 artistic visualizations of hash functions and misc. other
     // 4 noise
     // 5 RNG results
-    private int testType = 5;
+    private int testType = 4;
     private static final int NOISE_LIMIT = 152;
     private static final int RNG_LIMIT = 52;
-    private int hashMode = 1, rngMode = 5, noiseMode = 106, otherMode = 17;//142
+    private int hashMode = 1, rngMode = 5, noiseMode = 54, otherMode = 17;//142
 
     /**
      * If you're editing the source of HashVisualizer, you can comment out one line and uncomment another to change
@@ -971,9 +972,19 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
         return ((out & 0x100) != 0) ? ~out & 0xff : out & 0xff;
     }
 
-    public static double trigNoise(final double x, final double y, final int seed)
+    public static float trigNoisePass(final float x, float y, final int seed)
     {
-        return NumberTools.bounce(Math.sin(x * 3 - y + seed) + Math.sin(y * 3 - x + seed) + Math.cos(x + y + seed));
+//        return NumberTools.bounce(Math.sin(x * 3 - y + seed) + Math.sin(y * 3 - x + seed) + Math.cos(x + y + seed));
+        // see https://www.desmos.com/calculator/nnxddyngfg
+        y *= 0.03125f;
+        return MathUtils.sin(seed + MathUtils.sin(y+1)+MathUtils.cos(y+2)
+                +MathUtils.cos(x)+MathUtils.sin(y+3)*x-MathUtils.sin(MathUtils.cos(y+4)*x));
+//        return NumberTools.swayRandomized(seed, x * (MathUtils.sin(x+1)+MathUtils.cos(y+2))
+//                +y * 2f * NumberTools.swayRandomized(~seed, MathUtils.sin(y+3)-MathUtils.cos(x+4)));
+    }
+    public static float trigNoise(final float x, final float y, final int seed)
+    {
+        return (trigNoisePass(x, y, seed) + trigNoisePass(202+y, 101-x, seed ^ 111111)) * 0.5f;
     }
     public static double trigNoise(final double ox, final double oy, final double oz, final int seed)
     {
@@ -4174,11 +4185,11 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         }
                         break;
                     case 54:
-                        Gdx.graphics.setTitle("Weaving 2D Color Noise, one octave per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("TrigNoisePass 2D, one octave per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 back[x][y] = 
-                                        getGray(basicPrepare(weavingNoise((x + ctr) * 0.03125, (y + ctr) * 0.03125, 1234)));
+                                        getGray(basicPrepare(trigNoisePass((x + ctr) * 0.03125f, (y + ctr) * 0.03125f, 1234)));
 //                                                ((float)weavingNoise((x + ctr) * 0.03125 + 20, (y + ctr) * 0.03125 + 30, 1234) * 0.50f) + 0.50f,
 //                                                ((float)weavingNoise((x + ctr) * 0.03125 + 30, (y + ctr) * 0.03125 + 10, 54321) * 0.50f) + 0.50f,
 //                                                ((float)weavingNoise((x + ctr) * 0.03125 + 10, (y + ctr) * 0.03125 + 20, 1234321) * 0.50f) + 0.50f,
@@ -4209,11 +4220,11 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 //                        }
                         break;
                     case 55:
-                        Gdx.graphics.setTitle("Weaving 3D Noise, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("TrigNoise 2D, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                bright = basicPrepare(weavingNoise(x * 0.03125, y * 0.03125, ctr * 0.05125, 123456));
-                                back[x][y] = getGray(bright);
+//                                bright = basicPrepare(weavingNoise(x * 0.03125, y * 0.03125, ctr * 0.05125, 123456));
+                                back[x][y] = getGray(basicPrepare(trigNoise((x + ctr) * 0.03125f, (y + ctr) * 0.03125f, 1234)));
                             }
                         }
 //                        Gdx.graphics.setTitle("Jack 2D Noise, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");

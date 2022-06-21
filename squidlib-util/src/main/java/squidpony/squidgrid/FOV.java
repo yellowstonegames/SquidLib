@@ -704,6 +704,23 @@ public class FOV implements Serializable {
 
     /**
      * Like the {@link #reuseFOV(double[][], double[][], int, int, double, Radius)} method, but this uses Ripple FOV
+     * with a tightness/looseness equal to 2. Other parameters are similar; you
+     * can get a resistance map from {@link #generateResistances(char[][])}, {@code light} will be modified and returned
+     * (it will be overwritten, but its size should be the same as the resistance map), there's a starting x,y position,
+     * a radius in cells, and a {@link Radius} enum constant to choose the distance measurement.
+     * @param resistanceMap probably calculated with {@link #generateResistances(char[][])}; 1.0 blocks light, 0.0 allows it
+     * @param light will be overwritten! Should be initialized with the same size as {@code resistanceMap}
+     * @param x starting x position to look from
+     * @param y starting y position to look from
+     * @param radius the distance to extend from the starting x,y position
+     * @param radiusTechnique how to measure distance; typically {@link Radius#CIRCLE}.
+     * @return {@code light}, after writing the FOV map into it; 1.0 is fully lit and 0.0 is unseen
+     */
+    public static double[][] reuseRippleFOV(double[][] resistanceMap, double[][] light, int x, int y, double radius, Radius radiusTechnique) {
+        return reuseRippleFOV(resistanceMap, light, 2, x, y, radius, radiusTechnique);
+    }
+    /**
+     * Like the {@link #reuseFOV(double[][], double[][], int, int, double, Radius)} method, but this uses Ripple FOV
      * with a configurable tightness/looseness (between 1, tightest, and 6, loosest). Other parameters are similar; you
      * can get a resistance map from {@link #generateResistances(char[][])}, {@code light} will be modified and returned
      * (it will be overwritten, but its size should be the same as the resistance map), there's a starting x,y position,
