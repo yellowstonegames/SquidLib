@@ -140,7 +140,7 @@ public class PhantomNoise {
         for (int i = 0; i < 4; i++) {
             temp = 1.0;
             
-            bit = i;
+            bit = i & 1;
             temp *= bit + (1|-bit) * working[0];
             hashFloors[0] = floors[0] - bit;
             
@@ -195,8 +195,9 @@ public class PhantomNoise {
         for (int i = 0; i <= 2; i++) {
             for (int j = 0, d = 0; j < 2; j++, d++) {
                 if(d == i) d++;
-                working[j] = points[d] + warp;
+                working[j] = points[d];
             }
+            working[0] += warp;
             warp = valueNoise2D();
             result += warp;
             working[2] += -0.423310825130748;

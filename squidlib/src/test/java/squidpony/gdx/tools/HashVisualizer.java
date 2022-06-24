@@ -9,7 +9,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.RandomXS128;
-import com.badlogic.gdx.utils.NumberUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import squidpony.ArrayTools;
@@ -71,7 +70,7 @@ public class HashVisualizer extends ApplicationAdapter {
     private int testType = 4;
     private static final int NOISE_LIMIT = 152;
     private static final int RNG_LIMIT = 52;
-    private int hashMode = 1, rngMode = 5, noiseMode = 54, otherMode = 17;//142
+    private int hashMode = 1, rngMode = 5, noiseMode = 142, otherMode = 17;//142
 
     /**
      * If you're editing the source of HashVisualizer, you can comment out one line and uncomment another to change
@@ -5563,8 +5562,10 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("Phantom 2D Noise, unprocessed, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
+                                alter2D(x, y, ctr);
                                 bright =
-                                        basicPrepare(phantom2D.getNoise(alter2D(x, y, ctr))
+                                        basicPrepare(phantom2D.getNoise2D(point2D[0], point2D[1])
+//                                        basicPrepare(phantom2D.getNoise()
 //                                        basicPrepare(phantom2D.getNoise(point2D[0], point2D[1])
                                         );
                                 back[x][y] = getGray(bright);
