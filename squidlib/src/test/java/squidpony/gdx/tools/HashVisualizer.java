@@ -70,7 +70,7 @@ public class HashVisualizer extends ApplicationAdapter {
     private int testType = 4;
     private static final int NOISE_LIMIT = 152;
     private static final int RNG_LIMIT = 52;
-    private int hashMode = 1, rngMode = 5, noiseMode = 142, otherMode = 17;//142
+    private int hashMode = 1, rngMode = 5, noiseMode = 106, otherMode = 17;//142
 
     /**
      * If you're editing the source of HashVisualizer, you can comment out one line and uncomment another to change
@@ -1358,6 +1358,92 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                 NumberTools.sway(alter1 + value * alter4)) * 0.25f;
     }
 
+    /**
+     * A mix of the smooth transitions of a sine wave with (seeded) random peaks and valleys between -1.0 and
+     * 1.0 (both exclusive). The pattern this will produce will be completely different if the seed changes, and it is
+     * suitable for 1D noise. Uses a simple method of cubic interpolation between random values, where a random value is
+     * used without modification when given an integer for {@code value}. Note that this uses a different type of
+     * interpolation than a sine wave would, and the shape here uses cubic interpolation.
+     * @param seed a long seed that will determine the pattern of peaks and valleys this will generate as value changes; this should not change between calls
+     * @param value a double that typically changes slowly, by less than 1.0, with direction changes at integer inputs
+     * @return a pseudo-random double between -1.0 and 1.0 (both exclusive), smoothly changing with value
+     */
+    public static double wiggle(long seed, double value)
+    {
+        final long floor = value >= 0.0 ? (long) value : (long) value - 1L; // the closest long that is less than value
+        // gets a random start and endpoint. there's a sequence of start and end values for each seed, and changing the
+        // seed changes the start and end values unpredictably (so use the same seed for one curving line).
+        seed += floor * 0x6C8E9CF570932BD5L;
+        final long z = seed + 0x6C8E9CF570932BD5L;
+        final double start = ((seed ^ seed >>> 31) * 0xF1357AEA2E62A9C5L) * 0x0.fffffffffffffbp-63,
+                end = ((z ^ z >>> 31) * 0xF1357AEA2E62A9C5L) * 0x0.fffffffffffffbp-63;
+        // gets the fractional part of value
+        value -= floor;
+        // cubic interpolation to smooth the curve
+        value *= value * (3.0 - 2.0 * value);
+        // interpolate between start and end based on how far we are between the start and end points of this section
+        return (1.0 - value) * start + value * end;
+    }
+
+    /**
+     * A mix of the smooth transitions of a sine wave with (seeded) random peaks and valleys between -1f and
+     * 1f (both exclusive). The pattern this will produce will be completely different if the seed changes, and it is
+     * suitable for 1D noise. Uses a simple method of cubic interpolation between random values, where a random value is
+     * used without modification when given an integer for {@code value}. Note that this uses a different type of
+     * interpolation than a sine wave would, and the shape here uses cubic interpolation.
+     * @param seed a long seed that will determine the pattern of peaks and valleys this will generate as value changes; this should not change between calls
+     * @param value a float that typically changes slowly, by less than 2.0, with direction changes at integer inputs
+     * @return a pseudo-random float between -1f and 1f (both exclusive), smoothly changing with value
+     */
+    public static float wiggle(long seed, float value)
+    {
+        final long floor = value >= 0f ? (long) value : (long) value - 1L;
+        seed += floor * 0x6C8E9CF570932BD5L;
+        final long z = seed + 0x6C8E9CF570932BD5L;
+        final float start = ((seed ^ seed >>> 31) * 0xF1357AEA2E62A9C5L) * 0x0.ffffffp-63f,
+                end = ((z ^ z >>> 31) * 0xF1357AEA2E62A9C5L) * 0x0.ffffffp-63f;
+        value -= floor;
+        value *= value * (3f - 2f * value);
+        return (1f - value) * start + value * end;
+    }
+
+    /**
+     * A variant on {@link #wiggle(long, double)} that takes an int seed instead of a long, and is optimized for
+     * usage on GWT. Like the version with a long seed, this uses cubic interpolation between random peak or valley
+     * points; only the method of generating those random peaks and valleys has changed.
+     * @param seed an int seed that will determine the pattern of peaks and valleys this will generate as value changes; this should not change between calls
+     * @param value a double that typically changes slowly, by less than 2.0, with direction changes at integer inputs
+     * @return a pseudo-random double between -1.0 and 1.0 (both exclusive), smoothly changing with value
+     */
+    public static double wiggle(int seed, double value)
+    {
+        final int floor = value >= 0.0 ? (int) value : (int) value - 1;
+        int z = seed += floor * 0xBE56D;
+        final double start = (((z = (z ^ 0xD1B54A35) * 0x1D2BC3) ^ z >>> 16 ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) * 0x0.ffffffffp-31,
+                end = (((z = (seed + 0xBE56D ^ 0xD1B54A35) * 0x1D2BC3) ^ z >>> 16 ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) * 0x0.ffffffffp-31;
+        value -= floor;
+        value *= value * (3.0 - 2.0 * value);
+        return (1.0 - value) * start + value * end;
+    }
+
+    /**
+     * A variant on {@link #wiggle(long, float)} that takes an int seed instead of a long, and is optimized for
+     * usage on GWT. Like the version with a long seed, this uses cubic interpolation between random peak or valley
+     * points; only the method of generating those random peaks and valleys has changed.
+     * @param seed an int seed that will determine the pattern of peaks and valleys this will generate as value changes; this should not change between calls
+     * @param value a float that typically changes slowly, by less than 2.0, with direction changes at integer inputs
+     * @return a pseudo-random float between -1f and 1f (both exclusive), smoothly changing with value
+     */
+    public static float wiggle(int seed, float value)
+    {
+        final int floor = value >= 0f ? (int) value : (int) value - 1;
+        int z = seed += floor * 0xBE56D;
+        final float start = (((z = (z ^ 0xD1B54A35) * 0x1D2BC3) ^ z >>> 16 ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) * 0x0.ffffffp-31f,
+                end = (((z = (seed + 0xBE56D ^ 0xD1B54A35) * 0x1D2BC3) ^ z >>> 16 ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) * 0x0.ffffffp-31f;
+        value -= floor;
+        value *= value * (3 - 2 * value);
+        return (1 - value) * start + value * end;
+    }
 
 
 //        final long
@@ -4898,60 +4984,62 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 //                        back[509][256 + iBright] =  bright;
 //                        back[509][257 + iBright] =  bright;
 //                    }
-//                        Gdx.graphics.setTitle("SwayRandomized 1D Noise Battle, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
-                        Gdx.graphics.setTitle("1D noise for terrain, at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("SwayRandomized 1D Noise Battle, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+//                        Gdx.graphics.setTitle("1D noise for terrain, at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int i = 0; i < width - 1; i++)
                             System.arraycopy(back[i+1], 0, back[i], 0, width);
                         Arrays.fill(back[width - 1], FLOAT_WHITE);
-                        //if((ctr & 3) == 0)
-                        {
-//                            bright = SColor.floatGetHSV(ctr * 0x1.44cbc89p-8f, 0.75f, 1, 1);
-//                            iBright = (int) (NumberTools.swayRandomized(0L, ctr * 0x1p-7f) * 240f);
-//                            back[almost][255 + iBright] =  bright;
-//                            back[almost][256 + iBright] =  bright;
-//                            back[almost][257 + iBright] =  bright;
-//
-//                            back[510][255 + iBright] =  bright;
-//                            back[510][256 + iBright] =  bright;
-//                            back[510][257 + iBright] =  bright;
-//
-//                            back[509][255 + iBright] =  bright;
-//                            back[509][256 + iBright] =  bright;
-//                            back[509][257 + iBright] =  bright;
 
-//                            bright = SColor.floatGetHSV(ctr * 0x1.44cbc89p-8f, 1, 0.7f, 1);
-//                            iBright = (int) (basic1D.getNoise(ctr * 0x1p-7f) * 240f);
-                            iBright = (int)((257+ctr) * 0x1.44cbc89p-8f) % BLUE_GREEN_SERIES.length; 
-                            bright = lerpFloatColors(BLUE_GREEN_SERIES[iBright].toFloatBits(),
-                                    BLUE_GREEN_SERIES[(iBright + 1) % BLUE_GREEN_SERIES.length].toFloatBits(),
-                                    (257+ctr) * 0x1.44cbc89p-8f - (int)((257+ctr) * 0x1.44cbc89p-8f));
-                            iBright = (int) (riverSway(0, ctr * 0x3p-9f)  * 0x.fp0f * half);
-                            back[width - 1][half - 1 + iBright] =  bright;
-                            back[width - 1][half + 0 + iBright] =  bright;
-                            back[width - 1][half + 1 + iBright] =  bright;
-
-                            back[width - 2][half - 1 + iBright] =  bright;
-                            back[width - 2][half + 0 + iBright] =  bright;
-                            back[width - 2][half + 1 + iBright] =  bright;
-
-                            back[width - 3][half - 1 + iBright] =  bright;
-                            back[width - 3][half + 0 + iBright] =  bright;
-                            back[width - 3][half + 1 + iBright] =  bright;
-
-//                            bright = SColor.floatGetHSV(ctr * 0x1.44cbc89p-8f, 0.4f, 1f, 1);
-//                            iBright = (int) (swayRandomized3(0, ctr * 0x1p-7f) * 240f);
-//                            back[almost][255 + iBright] =  bright;
-//                            back[almost][256 + iBright] =  bright;
-//                            back[almost][257 + iBright] =  bright;
+//                        iBright = (int)((257+ctr) * 0x1.44cbc89p-8f) % BLUE_GREEN_SERIES.length;
+//                        bright = lerpFloatColors(BLUE_GREEN_SERIES[iBright].toFloatBits(),
+//                                BLUE_GREEN_SERIES[(iBright + 1) % BLUE_GREEN_SERIES.length].toFloatBits(),
+//                                (257+ctr) * 0x1.44cbc89p-8f - (int)((257+ctr) * 0x1.44cbc89p-8f));
+//                        iBright = (int) (riverSway(0, ctr * 0x3p-9f)  * 0x.fp0f * half);
+//                        back[width - 1][half - 1 + iBright] =  bright;
+//                        back[width - 1][half + 0 + iBright] =  bright;
+//                        back[width - 1][half + 1 + iBright] =  bright;
 //
-//                            back[510][255 + iBright] =  bright;
-//                            back[510][256 + iBright] =  bright;
-//                            back[510][257 + iBright] =  bright;
+//                        back[width - 2][half - 1 + iBright] =  bright;
+//                        back[width - 2][half + 0 + iBright] =  bright;
+//                        back[width - 2][half + 1 + iBright] =  bright;
 //
-//                            back[509][255 + iBright] =  bright;
-//                            back[509][256 + iBright] =  bright;
-//                            back[509][257 + iBright] =  bright;
-                        }
+//                        back[width - 3][half - 1 + iBright] =  bright;
+//                        back[width - 3][half + 0 + iBright] =  bright;
+//                        back[width - 3][half + 1 + iBright] =  bright;
+
+                    {
+                        int quart = half >> 1;
+                        iBright = (int) ((257 + ctr) * 0x1.44cbc89p-8f) % BLUE_GREEN_SERIES.length;
+                        bright = lerpFloatColors(BLUE_GREEN_SERIES[iBright].toFloatBits(),
+                                BLUE_GREEN_SERIES[(iBright + 1) % BLUE_GREEN_SERIES.length].toFloatBits(),
+                                (257 + ctr) * 0x1.44cbc89p-8f - (int) ((257 + ctr) * 0x1.44cbc89p-8f));
+                        iBright = (int) (swayRandomized(123, ctr * 0x3p-8f) * 0x.fp0f * quart);
+                        back[width - 1][quart - 1 + iBright] = bright;
+                        back[width - 1][quart + 0 + iBright] = bright;
+                        back[width - 1][quart + 1 + iBright] = bright;
+                        back[width - 2][quart - 1 + iBright] = bright;
+                        back[width - 2][quart + 0 + iBright] = bright;
+                        back[width - 2][quart + 1 + iBright] = bright;
+                        back[width - 3][quart - 1 + iBright] = bright;
+                        back[width - 3][quart + 0 + iBright] = bright;
+                        back[width - 3][quart + 1 + iBright] = bright;
+
+                        iBright = (int) ((257 + ctr) * 0x1.44cbc89p-8f) % RED_SERIES.length;
+                        bright = lerpFloatColors(RED_SERIES[iBright].toFloatBits(),
+                                RED_SERIES[(iBright + 1) % RED_SERIES.length].toFloatBits(),
+                                (257 + ctr) * 0x1.44cbc89p-8f - (int) ((257 + ctr) * 0x1.44cbc89p-8f));
+                        iBright = (int) (wiggle(123, ctr * 0x3p-8f) * 0x.fp0f * quart);
+                        quart += half;
+                        back[width - 1][quart - 1 + iBright] = bright;
+                        back[width - 1][quart + 0 + iBright] = bright;
+                        back[width - 1][quart + 1 + iBright] = bright;
+                        back[width - 2][quart - 1 + iBright] = bright;
+                        back[width - 2][quart + 0 + iBright] = bright;
+                        back[width - 2][quart + 1 + iBright] = bright;
+                        back[width - 3][quart - 1 + iBright] = bright;
+                        back[width - 3][quart + 0 + iBright] = bright;
+                        back[width - 3][quart + 1 + iBright] = bright;
+                    }
                         break;
                     case 107:
                         Gdx.graphics.setTitle("Quilez1D Noise, 1 octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
