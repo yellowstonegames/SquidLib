@@ -1373,10 +1373,9 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
         final long floor = value >= 0.0 ? (long) value : (long) value - 1L; // the closest long that is less than value
         // gets a random start and endpoint. there's a sequence of start and end values for each seed, and changing the
         // seed changes the start and end values unpredictably (so use the same seed for one curving line).
-        seed += floor * 0x6C8E9CF570932BD5L;
-        final long z = seed + 0x6C8E9CF570932BD5L;
-        final double start = ((seed ^ seed >>> 31) * 0xF1357AEA2E62A9C5L) * 0x0.fffffffffffffbp-63,
-                end = ((z ^ z >>> 31) * 0xF1357AEA2E62A9C5L) * 0x0.fffffffffffffbp-63;
+        final long z = seed + floor * 0x6C8E9CF570932BD5L;
+        final double start = ((z ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5C323L ^ 0x9E3779B97F4A7C15L) * 0x0.fffffffffffffbp-31,
+                end = ((z + 0x6C8E9CF570932BD5L ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5C323L ^ 0x9E3779B97F4A7C15L) * 0x0.fffffffffffffbp-31;
         // gets the fractional part of value
         value -= floor;
         // cubic interpolation to smooth the curve
@@ -1398,10 +1397,9 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     public static float wiggle(long seed, float value)
     {
         final long floor = value >= 0f ? (long) value : (long) value - 1L;
-        seed += floor * 0x6C8E9CF570932BD5L;
-        final long z = seed + 0x6C8E9CF570932BD5L;
-        final float start = ((seed ^ seed >>> 31) * 0xF1357AEA2E62A9C5L) * 0x0.ffffffp-63f,
-                end = ((z ^ z >>> 31) * 0xF1357AEA2E62A9C5L) * 0x0.ffffffp-63f;
+        final long z = seed + floor * 0x6C8E9CF570932BD5L;
+        final float start = ((z ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5C323L ^ 0x9E3779B97F4A7C15L) * 0x0.ffffffp-63f,
+                end = ((z + 0x6C8E9CF570932BD5L ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5C323L ^ 0x9E3779B97F4A7C15L) * 0x0.ffffffp-63f;
         value -= floor;
         value *= value * (3f - 2f * value);
         return (1f - value) * start + value * end;
@@ -1418,9 +1416,9 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     public static double wiggle(int seed, double value)
     {
         final int floor = value >= 0.0 ? (int) value : (int) value - 1;
-        int z = seed += floor * 0xBE56D;
-        final double start = (((z = (z ^ 0xD1B54A35) * 0x1D2BC3) ^ z >>> 16 ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) * 0x0.ffffffffp-31,
-                end = (((z = (seed + 0xBE56D ^ 0xD1B54A35) * 0x1D2BC3) ^ z >>> 16 ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) * 0x0.ffffffffp-31;
+        int z = seed + floor * 0xBE56D;
+        final double start = ((z ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) * 0x0.fffffffffffffbp-31,
+                end = ((z + 0xBE56D ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) * 0x0.fffffffffffffbp-31;
         value -= floor;
         value *= value * (3.0 - 2.0 * value);
         return (1.0 - value) * start + value * end;
@@ -1437,14 +1435,13 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     public static float wiggle(int seed, float value)
     {
         final int floor = value >= 0f ? (int) value : (int) value - 1;
-        int z = seed += floor * 0xBE56D;
-        final float start = (((z = (z ^ 0xD1B54A35) * 0x1D2BC3) ^ z >>> 16 ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) * 0x0.ffffffp-31f,
-                end = (((z = (seed + 0xBE56D ^ 0xD1B54A35) * 0x1D2BC3) ^ z >>> 16 ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) * 0x0.ffffffp-31f;
+        int z = seed + floor * 0xBE56D;
+        final float start = ((z ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) * 0x0.ffffffp-31f,
+                end = ((z + 0xBE56D ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) * 0x0.ffffffp-31f;
         value -= floor;
         value *= value * (3 - 2 * value);
         return (1 - value) * start + value * end;
     }
-
 
 //        final long
 //                sx = Double.doubleToLongBits(x + (x < 0.0 ? -2.0 : 2.0)), mx = sx << ((sx >>> 52 & 0x7FFL) - 0x400L),
@@ -5013,32 +5010,61 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         bright = lerpFloatColors(BLUE_GREEN_SERIES[iBright].toFloatBits(),
                                 BLUE_GREEN_SERIES[(iBright + 1) % BLUE_GREEN_SERIES.length].toFloatBits(),
                                 (257 + ctr) * 0x1.44cbc89p-8f - (int) ((257 + ctr) * 0x1.44cbc89p-8f));
-                        iBright = (int) (swayRandomized(123, ctr * 0x3p-8f) * 0x.fp0f * quart);
-                        back[width - 1][quart - 1 + iBright] = bright;
-                        back[width - 1][quart + 0 + iBright] = bright;
-                        back[width - 1][quart + 1 + iBright] = bright;
-                        back[width - 2][quart - 1 + iBright] = bright;
-                        back[width - 2][quart + 0 + iBright] = bright;
-                        back[width - 2][quart + 1 + iBright] = bright;
-                        back[width - 3][quart - 1 + iBright] = bright;
-                        back[width - 3][quart + 0 + iBright] = bright;
-                        back[width - 3][quart + 1 + iBright] = bright;
+                        iBright = (int) (swayRandomized(123, ctr * 0x3p-8f) * 0x.fp0f * half);
+                        back[width - 1][half - 1 + iBright] = bright;
+                        back[width - 1][half + 0 + iBright] = bright;
+                        back[width - 1][half + 1 + iBright] = bright;
+                        back[width - 2][half - 1 + iBright] = bright;
+                        back[width - 2][half + 0 + iBright] = bright;
+                        back[width - 2][half + 1 + iBright] = bright;
+                        back[width - 3][half - 1 + iBright] = bright;
+                        back[width - 3][half + 0 + iBright] = bright;
+                        back[width - 3][half + 1 + iBright] = bright;
 
                         iBright = (int) ((257 + ctr) * 0x1.44cbc89p-8f) % RED_SERIES.length;
                         bright = lerpFloatColors(RED_SERIES[iBright].toFloatBits(),
                                 RED_SERIES[(iBright + 1) % RED_SERIES.length].toFloatBits(),
                                 (257 + ctr) * 0x1.44cbc89p-8f - (int) ((257 + ctr) * 0x1.44cbc89p-8f));
-                        iBright = (int) (wiggle(123, ctr * 0x3p-8f) * 0x.fp0f * quart);
-                        quart += half;
-                        back[width - 1][quart - 1 + iBright] = bright;
-                        back[width - 1][quart + 0 + iBright] = bright;
-                        back[width - 1][quart + 1 + iBright] = bright;
-                        back[width - 2][quart - 1 + iBright] = bright;
-                        back[width - 2][quart + 0 + iBright] = bright;
-                        back[width - 2][quart + 1 + iBright] = bright;
-                        back[width - 3][quart - 1 + iBright] = bright;
-                        back[width - 3][quart + 0 + iBright] = bright;
-                        back[width - 3][quart + 1 + iBright] = bright;
+                        iBright = (int) (wiggle(123, ctr * 0x3p-8f) * 0x.fp0f * half);
+                        back[width - 1][half - 1 + iBright] = bright;
+                        back[width - 1][half + 0 + iBright] = bright;
+                        back[width - 1][half + 1 + iBright] = bright;
+                        back[width - 2][half - 1 + iBright] = bright;
+                        back[width - 2][half + 0 + iBright] = bright;
+                        back[width - 2][half + 1 + iBright] = bright;
+                        back[width - 3][half - 1 + iBright] = bright;
+                        back[width - 3][half + 0 + iBright] = bright;
+                        back[width - 3][half + 1 + iBright] = bright;
+
+                        iBright = (int) ((257 + ctr) * 0x1.44cbc89p-8f) % YELLOW_SERIES.length;
+                        bright = lerpFloatColors(YELLOW_SERIES[iBright].toFloatBits(),
+                                YELLOW_SERIES[(iBright + 1) % YELLOW_SERIES.length].toFloatBits(),
+                                (257 + ctr) * 0x1.44cbc89p-8f - (int) ((257 + ctr) * 0x1.44cbc89p-8f));
+                        iBright = (int) (wiggle(123L, ctr * 0x3p-8f) * 0x.fp0f * half);
+                        back[width - 1][half - 1 + iBright] = bright;
+                        back[width - 1][half + 0 + iBright] = bright;
+                        back[width - 1][half + 1 + iBright] = bright;
+                        back[width - 2][half - 1 + iBright] = bright;
+                        back[width - 2][half + 0 + iBright] = bright;
+                        back[width - 2][half + 1 + iBright] = bright;
+                        back[width - 3][half - 1 + iBright] = bright;
+                        back[width - 3][half + 0 + iBright] = bright;
+                        back[width - 3][half + 1 + iBright] = bright;
+
+                        iBright = (int) ((257 + ctr) * 0x1.44cbc89p-8f) % VIOLET_SERIES.length;
+                        bright = lerpFloatColors(VIOLET_SERIES[iBright].toFloatBits(),
+                                VIOLET_SERIES[(iBright + 1) % VIOLET_SERIES.length].toFloatBits(),
+                                (257 + ctr) * 0x1.44cbc89p-8f - (int) ((257 + ctr) * 0x1.44cbc89p-8f));
+                        iBright = (int) (baseSway(123, ctr * 0x3p-8f) * 0x.fp0f * half);
+                        back[width - 1][half - 1 + iBright] = bright;
+                        back[width - 1][half + 0 + iBright] = bright;
+                        back[width - 1][half + 1 + iBright] = bright;
+                        back[width - 2][half - 1 + iBright] = bright;
+                        back[width - 2][half + 0 + iBright] = bright;
+                        back[width - 2][half + 1 + iBright] = bright;
+                        back[width - 3][half - 1 + iBright] = bright;
+                        back[width - 3][half + 0 + iBright] = bright;
+                        back[width - 3][half + 1 + iBright] = bright;
                     }
                         break;
                     case 107:
