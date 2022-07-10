@@ -98,7 +98,7 @@ public class LOS implements Serializable {
     private ArrayDeque<Coord> lastPath = new ArrayDeque<>();
     private int type;
     private double[][] resistanceMap;
-    private int startx, starty, targetx, targety;
+    private int startX, startY, targetX, targetY;
     private Elias elias;
     private LOS los1, los2;
     /**
@@ -202,10 +202,10 @@ public class LOS implements Serializable {
     public boolean isReachable(double[][] resistanceMap, int startx, int starty, int targetx, int targety, Radius radiusStrategy) {
         if(resistanceMap.length < 1) return false;
         this.resistanceMap = resistanceMap;
-        this.startx = startx;
-        this.starty = starty;
-        this.targetx = targetx;
-        this.targety = targety;
+        this.startX = startx;
+        this.startY = starty;
+        this.targetX = targetx;
+        this.targetY = targety;
         switch (type) {
             case BRESENHAM:
                 return bresenhamReachable(radiusStrategy);
@@ -274,10 +274,10 @@ public class LOS implements Serializable {
                 resistanceMap[x][y] = (walls[x][y] == '#') ? 1.0 : 0.0;
             }
         }
-        this.startx = startx;
-        this.starty = starty;
-        this.targetx = targetx;
-        this.targety = targety;
+        this.startX = startx;
+        this.startY = starty;
+        this.targetX = targetx;
+        this.targetY = targety;
 
         return brushReachable(radiusStrategy, spread);
     }
@@ -298,10 +298,10 @@ public class LOS implements Serializable {
     public boolean spreadReachable(double[][] resistanceMap, int startx, int starty, int targetx, int targety, Radius radiusStrategy, int spread) {
         if(resistanceMap.length < 1) return false;
         this.resistanceMap = resistanceMap;
-        this.startx = startx;
-        this.starty = starty;
-        this.targetx = targetx;
-        this.targety = targety;
+        this.startX = startx;
+        this.startY = starty;
+        this.targetX = targetx;
+        this.targetY = targety;
 
         return brushReachable(radiusStrategy, spread);
     }
@@ -338,11 +338,11 @@ public class LOS implements Serializable {
     }
 */
     private boolean bresenhamReachable(Radius radiusStrategy) {
-        Coord[] path = Bresenham.line2D_(startx, starty, targetx, targety);
+        Coord[] path = Bresenham.line2D_(startX, startY, targetX, targetY);
         lastPath.clear();
-        double rad = radiusStrategy.radius(startx, starty, targetx, targety);
+        double rad = radiusStrategy.radius(startX, startY, targetX, targetY);
         if(rad == 0.0) {
-            lastPath.add(Coord.get(startx, starty));
+            lastPath.add(Coord.get(startX, startY));
             return true; // already at the point; we can see our own feet just fine!
         }
         double decay = 1 / rad;
@@ -351,13 +351,13 @@ public class LOS implements Serializable {
         for (int i = 0; i < path.length; i++) {
             p = path[i];
             lastPath.offer(p);
-            if (p.x == targetx && p.y == targety) {
+            if (p.x == targetX && p.y == targetY) {
                 return true;//reached the end
             }
-            if (p.x != startx || p.y != starty) {//don't discount the start location even if on resistant cell
+            if (p.x != startX || p.y != startY) {//don't discount the start location even if on resistant cell
                 currentForce -= resistanceMap[p.x][p.y];
             }
-            double r = radiusStrategy.radius(startx, starty, p.x, p.y);
+            double r = radiusStrategy.radius(startX, startY, p.x, p.y);
             if (currentForce - (r * decay) <= 0) {
                 return false;//too much resistance
             }
@@ -366,11 +366,11 @@ public class LOS implements Serializable {
     }
 
     private boolean orthoReachable(Radius radiusStrategy) {
-        Coord[] path = OrthoLine.line_(startx, starty, targetx, targety);
+        Coord[] path = OrthoLine.line_(startX, startY, targetX, targetY);
         lastPath.clear();
-        double rad = radiusStrategy.radius(startx, starty, targetx, targety);
+        double rad = radiusStrategy.radius(startX, startY, targetX, targetY);
         if(rad == 0.0) {
-            lastPath.add(Coord.get(startx, starty));
+            lastPath.add(Coord.get(startX, startY));
             return true; // already at the point; we can see our own feet just fine!
         }
         double decay = 1.0 / rad;
@@ -379,13 +379,13 @@ public class LOS implements Serializable {
         for (int i = 0; i < path.length; i++) {
             p = path[i];
             lastPath.offer(p);
-            if (p.x == targetx && p.y == targety) {
+            if (p.x == targetX && p.y == targetY) {
                 return true;//reached the end
             }
-            if (p.x != startx || p.y != starty) {//don't discount the start location even if on resistant cell
+            if (p.x != startX || p.y != startY) {//don't discount the start location even if on resistant cell
                 currentForce -= resistanceMap[p.x][p.y];
             }
-            double r = radiusStrategy.radius(startx, starty, p.x, p.y);
+            double r = radiusStrategy.radius(startX, startY, p.x, p.y);
             if (currentForce - (r * decay) <= 0) {
                 return false;//too much resistance
             }
@@ -394,11 +394,11 @@ public class LOS implements Serializable {
     }
 
     private boolean ddaReachable(Radius radiusStrategy) {
-        Coord[] path = DDALine.line_(startx, starty, targetx, targety);
+        Coord[] path = DDALine.line_(startX, startY, targetX, targetY);
         lastPath.clear();
-        double rad = radiusStrategy.radius(startx, starty, targetx, targety);
+        double rad = radiusStrategy.radius(startX, startY, targetX, targetY);
         if(rad == 0.0) {
-            lastPath.add(Coord.get(startx, starty));
+            lastPath.add(Coord.get(startX, startY));
             return true; // already at the point; we can see our own feet just fine!
         }
         double decay = 1 / rad;
@@ -406,14 +406,14 @@ public class LOS implements Serializable {
         Coord p;
         for (int i = 0; i < path.length; i++) {
             p = path[i];
-            if (p.x == targetx && p.y == targety) {
+            if (p.x == targetX && p.y == targetY) {
                 lastPath.offer(p);
                 return true;//reached the end
             }
-            if (p.x != startx || p.y != starty) {//don't discount the start location even if on resistant cell
+            if (p.x != startX || p.y != startY) {//don't discount the start location even if on resistant cell
                 currentForce -= resistanceMap[p.x][p.y];
             }
-            double r = radiusStrategy.radius(startx, starty, p.x, p.y);
+            double r = radiusStrategy.radius(startX, startY, p.x, p.y);
             if (currentForce - (r * decay) <= 0) {
                 return false;//too much resistance
             }
@@ -424,7 +424,7 @@ public class LOS implements Serializable {
 
     private boolean thickReachable(Radius radiusStrategy) {
         lastPath.clear();
-        double dist = radiusStrategy.radius(startx, starty, targetx, targety);
+        double dist = radiusStrategy.radius(startX, startY, targetX, targetY);
         double decay = 1.0 / dist; // note: decay can be positive infinity if dist is 0; this is actually OK
         OrderedSet<Coord> visited = new OrderedSet<>((int) dist + 3);
         List<List<Coord>> paths = new ArrayList<>(4);
@@ -435,10 +435,10 @@ public class LOS implements Serializable {
         paths.add(DDALine.line(startx, starty, targetx, targety, 0xffff, 0xffff));
         */
         // halfway between the center and a corner
-        paths.add(DDALine.line(startx, starty, targetx, targety, 0x3fff, 0x3fff));
-        paths.add(DDALine.line(startx, starty, targetx, targety, 0x3fff, 0xbfff));
-        paths.add(DDALine.line(startx, starty, targetx, targety, 0xbfff, 0x3fff));
-        paths.add(DDALine.line(startx, starty, targetx, targety, 0xbfff, 0xbfff));
+        paths.add(DDALine.line(startX, startY, targetX, targetY, 0x3fff, 0x3fff));
+        paths.add(DDALine.line(startX, startY, targetX, targetY, 0x3fff, 0xbfff));
+        paths.add(DDALine.line(startX, startY, targetX, targetY, 0xbfff, 0x3fff));
+        paths.add(DDALine.line(startX, startY, targetX, targetY, 0xbfff, 0xbfff));
 
         int length = Math.max(paths.get(0).size(), Math.max(paths.get(1).size(),
                 Math.max(paths.get(2).size(), paths.get(3).size())));
@@ -451,15 +451,15 @@ public class LOS implements Serializable {
                 if(d < path.size() && go[pc])
                     p = path.get(d);
                 else continue;
-                if (p.x == targetx && p.y == targety) {
+                if (p.x == targetX && p.y == targetY) {
                     visited.add(p);
                     lastPath.addAll(visited);
                     return true;//reached the end
                 }
-                if (p.x != startx || p.y != starty) {//don't discount the start location even if on resistant cell
+                if (p.x != startX || p.y != startY) {//don't discount the start location even if on resistant cell
                     forces[pc] -= resistanceMap[p.x][p.y];
                 }
-                double r = radiusStrategy.radius(startx, starty, p.x, p.y);
+                double r = radiusStrategy.radius(startX, startY, p.x, p.y);
                 if (forces[pc] - (r * decay) <= 0) {
                     go[pc] = false;
                     continue;//too much resistance
@@ -473,15 +473,15 @@ public class LOS implements Serializable {
 
     private boolean brushReachable(Radius radiusStrategy, int spread) {
         lastPath.clear();
-        double dist = radiusStrategy.radius(startx, starty, targetx, targety) + spread * 2;
+        double dist = radiusStrategy.radius(startX, startY, targetX, targetY) + spread * 2;
         OrderedSet<Coord> visited = new OrderedSet<>((int) (dist + 3) * spread);
 //        List<List<Coord>> paths = new ArrayList<>((int) (radiusStrategy.volume2D(spread) * 1.25));
 //        int length = 0;
 //        List<Coord> currentPath;
-        int sx = startx, sy = starty, tx = targetx, ty = targety;
+        int sx = startX, sy = startY, tx = targetX, ty = targetY;
         for (int i = -spread; i <= spread; i++) {
-            startx = sx + i;
-            targetx = tx + i;
+            startX = sx + i;
+            targetX = tx + i;
             for (int j = -spread; j <= spread; j++) {
                 if(radiusStrategy.inRange(sx, sy, sx + i, sy + j, 0, spread)
                         && sx + i >= 0 && sy + j >= 0
@@ -490,8 +490,8 @@ public class LOS implements Serializable {
                         && tx + i < resistanceMap.length && ty + j < resistanceMap[0].length) {
 //                    for (int q = 0x3fff; q < 0xffff; q += 0x8000) {
 //                        for (int r = 0x3fff; r < 0xffff; r += 0x8000) {
-                            starty = sy + j;
-                            targety = ty + j;
+                            startY = sy + j;
+                            targetY = ty + j;
                             if(ddaReachable(radiusStrategy))
                                 visited.addAll(lastPath);
 //                            currentPath = DDALine.line(startx+i, starty+j, targetx+i, targety+j, q, r);
@@ -537,42 +537,43 @@ public class LOS implements Serializable {
 
     private boolean rayReachable(Radius radiusStrategy) {
         lastPath.clear();//save path for later retrieval
-        if (startx == targetx && starty == targety) {//already there!
-            lastPath.add(Coord.get(startx, starty));
+        if (startX == targetX && startY == targetY) {//already there!
+            lastPath.add(Coord.get(startX, startY));
             return true;
         }
 
         int width = resistanceMap.length;
         int height = resistanceMap[0].length;
 
-        Coord end = Coord.get(targetx, targety);
+        int endX = targetX,
+                endY = targetY;
         //find out which direction to step, on each axis
-        int stepX = targetx == startx ? 0 : (targetx - startx >> 31 | 1), // signum with less converting to/from float
-                stepY = targety == starty ? 0 : (targety - starty >> 31 | 1);
+        int stepX = targetX == startX ? 0 : (targetX - startX >> 31 | 1), // signum with less converting to/from float
+                stepY = targetY == startY ? 0 : (targetY - startY >> 31 | 1);
 
-        int deltaY = Math.abs(targetx - startx),
-                deltaX = Math.abs(targety - starty);
+        int deltaY = Math.abs(targetX - startX),
+                deltaX = Math.abs(targetY - startY);
 
-        int testX = startx,
-                testY = starty;
+        int testX = startX,
+                testY = startY;
 
         int maxX = deltaX,
                 maxY = deltaY;
 
-        while (testX >= 0 && testX < width && testY >= 0 && testY < height && (testX != targetx || testY != targety)) {
+        while (testX >= 0 && testX < width && testY >= 0 && testY < height && (testX != targetX || testY != targetY)) {
             lastPath.add(Coord.get(testX, testY));
             if (maxY - maxX > deltaX) {
                 maxX += deltaX;
                 testX += stepX;
                 if (resistanceMap[testX][testY] >= 1f) {
-                    end = Coord.get(testX, testY);
+                    endX = testX; endY = testY;
                     break;
                 }
             } else if (maxX - maxY > deltaY) {
                 maxY += deltaY;
                 testY += stepY;
                 if (resistanceMap[testX][testY] >= 1f) {
-                    end = Coord.get(testX, testY);
+                    endX = testX; endY = testY;
                     break;
                 }
             } else {//directly on diagonal, move both full step
@@ -581,20 +582,20 @@ public class LOS implements Serializable {
                 maxX += deltaX;
                 testX += stepX;
                 if (resistanceMap[testX][testY] >= 1f) {
-                    end = Coord.get(testX, testY);
+                    endX = testX; endY = testY;
                     break;
                 }
             }
-            if (radiusStrategy.radius(testX, testY, startx, starty) > radiusStrategy.radius(startx, starty, end.x, end.y)) {//went too far
+            if (radiusStrategy.radius(testX, testY, startX, startY) > radiusStrategy.radius(startX, startY, endX, endY)) {//went too far
                 break;
             }
         }
 
-        if (end.x >= 0 && end.x < width && end.y >= 0 && end.y < height) {
-            lastPath.add(Coord.get(end.x, end.y));
+        if (endX >= 0 && endX < width && endY >= 0 && endY < height) {
+            lastPath.add(Coord.get(endX, endY));
         }
 
-        return end.x == targetx && end.y == targety;
+        return endX == targetX && endY == targetY;
     }
 
     private boolean eliasReachable(Radius radiusStrategy) {
@@ -604,7 +605,7 @@ public class LOS implements Serializable {
             los1 = new LOS(BRESENHAM);
             los2 = new LOS(BRESENHAM);
         }
-        final ArrayList<Coord> ePath = elias.line(startx, starty, targetx, targety);
+        final ArrayList<Coord> ePath = elias.line(startX, startY, targetX, targetY);
 //        // very similar to RNG.shuffleInPlace(); this may be handy for getting an early shortcut return
 //        final int n = ePath.size();
 //        long state = 0x58476D1CE4E5B9BFL;
@@ -616,9 +617,9 @@ public class LOS implements Serializable {
         {
             //if a non-solid midpoint on the path can see both the start and end, consider the two ends to be able to see each other
             if (resistanceMap[p.x][p.y] < 1
-                    && radiusStrategy.radius(startx, starty, p.x, p.y) <= radiusStrategy.radius(startx, starty, targetx, targety)
-                    && los1.isReachable(resistanceMap, p.x, p.y, targetx, targety, radiusStrategy)
-                    && los2.isReachable(resistanceMap, startx, starty, p.x, p.y, radiusStrategy)) {
+                    && radiusStrategy.radius(startX, startY, p.x, p.y) <= radiusStrategy.radius(startX, startY, targetX, targetY)
+                    && los1.isReachable(resistanceMap, p.x, p.y, targetX, targetY, radiusStrategy)
+                    && los2.isReachable(resistanceMap, startX, startY, p.x, p.y, radiusStrategy)) {
 
                 //record actual sight path used
                 lastPath.clear();
