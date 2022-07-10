@@ -16,6 +16,8 @@
 
 package squidpony.squidmath;
 
+import squidpony.squidgrid.mapping.DungeonUtility;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -99,6 +101,192 @@ public class OrthoLine {
     public static Coord[] line_(Coord start, Coord end)
     {
         return line_(start.x, start.y, end.x, end.y);
+    }
+    /**
+     * Checks whether the starting point can see the target point, using the {@code resistanceMap}
+     * to determine whether the line of sight is obstructed, and filling the list of cells along the line of sight into
+     * {@code buffer}. {@code resistanceMap} must not be null; it can be initialized in the same way as FOV's resistance
+     * maps can with {@link DungeonUtility#generateResistances(char[][])} or {@link DungeonUtility#generateSimpleResistances(char[][])}.
+     * {@code buffer} may be null (in which case a temporary ArrayList is allocated, which can be wasteful), or may be
+     * an existing ArrayList of Coord (which will be cleared if it has any contents). If the starting point can see the
+     * target point, this returns true and buffer will contain all Coord points along the line of sight; otherwise this
+     * returns false and buffer will only contain up to and including the point that blocked the line of sight.
+     * @param start the starting point
+     * @param target the target point
+     * @param resistanceMap a resistance map as produced by {@link DungeonUtility#generateResistances(char[][])}; 0 is visible and 1 is blocked
+     * @param buffer an ArrayList of Coord that will be reused and cleared if not null; will be modified
+     * @return true if the starting point can see the target point; false otherwise
+     */
+    public static boolean reachable(Coord start, Coord target, double[][] resistanceMap,
+                                    ArrayList<Coord> buffer){
+        return reachable(start.x, start.y, target.x, target.y, 0x7FFFFFFF, resistanceMap, buffer);
+    }
+    /**
+     * Checks whether the starting point can see the target point, using the {@code resistanceMap}
+     * to determine whether the line of sight is obstructed, and filling the list of cells along the line of sight into
+     * {@code buffer}. {@code resistanceMap} must not be null; it can be initialized in the same way as FOV's resistance
+     * maps can with {@link DungeonUtility#generateResistances(char[][])} or {@link DungeonUtility#generateSimpleResistances(char[][])}.
+     * {@code buffer} may be null (in which case a temporary ArrayList is allocated, which can be wasteful), or may be
+     * an existing ArrayList of Coord (which will be cleared if it has any contents). If the starting point can see the
+     * target point, this returns true and buffer will contain all Coord points along the line of sight; otherwise this
+     * returns false and buffer will only contain up to and including the point that blocked the line of sight.
+     * @param startX the x-coordinate of the starting point
+     * @param startY  the y-coordinate of the starting point
+     * @param targetX the x-coordinate of the target point
+     * @param targetY  the y-coordinate of the target point
+     * @param resistanceMap a resistance map as produced by {@link DungeonUtility#generateResistances(char[][])}; 0 is visible and 1 is blocked
+     * @param buffer an ArrayList of Coord that will be reused and cleared if not null; will be modified
+     * @return true if the starting point can see the target point; false otherwise
+     */
+    public static boolean reachable(int startX, int startY, int targetX, int targetY,
+                                    double[][] resistanceMap, ArrayList<Coord> buffer){
+        return reachable(startX, startY, targetX, targetY, 0x7FFFFFFF, resistanceMap, buffer);
+    }
+    /**
+     * Checks whether the starting point can see the target point, using the {@code maxLength} and {@code resistanceMap}
+     * to determine whether the line of sight is obstructed, and filling the list of cells along the line of sight into
+     * {@code buffer}. {@code resistanceMap} must not be null; it can be initialized in the same way as FOV's resistance
+     * maps can with {@link DungeonUtility#generateResistances(char[][])} or {@link DungeonUtility#generateSimpleResistances(char[][])}.
+     * {@code buffer} may be null (in which case a temporary ArrayList is allocated, which can be wasteful), or may be
+     * an existing ArrayList of Coord (which will be cleared if it has any contents). If the starting point can see the
+     * target point, this returns true and buffer will contain all Coord points along the line of sight; otherwise this
+     * returns false and buffer will only contain up to and including the point that blocked the line of sight.
+     * @param startX the x-coordinate of the starting point
+     * @param startY  the y-coordinate of the starting point
+     * @param targetX the x-coordinate of the target point
+     * @param targetY  the y-coordinate of the target point
+     * @param maxLength the maximum permitted length of a line of sight
+     * @param resistanceMap a resistance map as produced by {@link DungeonUtility#generateResistances(char[][])}; 0 is visible and 1 is blocked
+     * @param buffer an ArrayList of Coord that will be reused and cleared if not null; will be modified
+     * @return true if the starting point can see the target point; false otherwise
+     */
+    public static boolean reachable(int startX, int startY, int targetX, int targetY, int maxLength,
+                                    double[][] resistanceMap, ArrayList<Coord> buffer) {
+        int dx = targetX - startX, dy = targetY - startY, nx = Math.abs(dx), ny = Math.abs(dy);
+        int signX = dx >> 31 | 1, signY = dy >> 31 | 1, x = startX, y = startY;
+
+        int dist = nx + ny;
+        if(buffer == null) {
+            buffer = new ArrayList<>(dist + 1);
+        }
+        else {
+            buffer.clear();
+        }
+        if(maxLength <= 0) return false;
+
+        if(startX == targetX && startY == targetY) {
+            buffer.add(Coord.get(startX, startY));
+            return true; // already at the point; we can see our own feet just fine!
+        }
+        double decay = 1.0 / dist;
+        double currentForce = 1.0;
+
+        for (int ix = 0, iy = 0; (ix <= nx || iy <= ny) && buffer.size() < maxLength; ) {
+            buffer.add(Coord.get(x, y));
+            if (x == targetX && y == targetY) {
+                return true;
+            }
+
+            if (x != startX || y != startY) { //don't discount the start location even if on resistant cell
+                currentForce -= resistanceMap[x][y];
+            }
+            currentForce -= decay;
+            if (currentForce <= -0.001) {
+                return false; //too much resistance
+            }
+
+            if ((0.5 + ix) / nx < (0.5 + iy) / ny) {
+                x += signX;
+                ix++;
+            } else {
+                y += signY;
+                iy++;
+            }
+        }
+        return false;//never got to the target point
+    }
+    /**
+     * Checks whether the starting point can see the target point, using the {@code resistanceMap} to determine whether
+     * the line of sight is obstructed, without storing the line of points along the way. {@code resistanceMap} must not
+     * be null; it can be initialized in the same way as FOV's resistance maps can with
+     * {@link DungeonUtility#generateResistances(char[][])} or {@link DungeonUtility#generateSimpleResistances(char[][])}. If the starting
+     * point can see the target point, this returns true; otherwise this returns false.
+     * @param start the starting point
+     * @param target the target point
+     * @param resistanceMap a resistance map as produced by {@link DungeonUtility#generateResistances(char[][])}; 0 is visible and 1 is blocked
+     * @return true if the starting point can see the target point; false otherwise
+     */
+    public static boolean reachable(Coord start, Coord target, double[][] resistanceMap){
+        return reachable(start.x, start.y, target.x, target.y, 0x7FFFFFFF, resistanceMap);
+    }
+    /**
+     * Checks whether the starting point can see the target point, using the {@code resistanceMap} to determine whether
+     * the line of sight is obstructed, without storing the line of points along the way. {@code resistanceMap} must not
+     * be null; it can be initialized in the same way as FOV's resistance maps can with
+     * {@link DungeonUtility#generateResistances(char[][])} or {@link DungeonUtility#generateSimpleResistances(char[][])}. If the starting
+     * point can see the target point, this returns true; otherwise this returns false.
+     * @param startX the x-coordinate of the starting point
+     * @param startY  the y-coordinate of the starting point
+     * @param targetX the x-coordinate of the target point
+     * @param targetY  the y-coordinate of the target point
+     * @param resistanceMap a resistance map as produced by {@link DungeonUtility#generateResistances(char[][])}; 0 is visible and 1 is blocked
+     * @return true if the starting point can see the target point; false otherwise
+     */
+    public static boolean reachable(int startX, int startY, int targetX, int targetY,
+                                    double[][] resistanceMap){
+        return reachable(startX, startY, targetX, targetY, 0x7FFFFFFF, resistanceMap);
+    }
+    /**
+     * Checks whether the starting point can see the target point, using the {@code maxLength} and {@code resistanceMap}
+     * to determine whether the line of sight is obstructed, without storing the line of points along the way.
+     * {@code resistanceMap} must not be null; it can be initialized in the same way as FOV's resistance maps can with
+     * {@link DungeonUtility#generateResistances(char[][])} or {@link DungeonUtility#generateSimpleResistances(char[][])}. If the starting
+     * point can see the target point, this returns true; otherwise this returns false.
+     * @param startX the x-coordinate of the starting point
+     * @param startY  the y-coordinate of the starting point
+     * @param targetX the x-coordinate of the target point
+     * @param targetY  the y-coordinate of the target point
+     * @param maxLength the maximum permitted length of a line of sight
+     * @param resistanceMap a resistance map as produced by {@link DungeonUtility#generateResistances(char[][])}; 0 is visible and 1 is blocked
+     * @return true if the starting point can see the target point; false otherwise
+     */
+    public static boolean reachable(int startX, int startY, int targetX, int targetY, int maxLength,
+                                    double[][] resistanceMap) {
+        if(maxLength <= 0) return false;
+
+        int dx = targetX - startX, dy = targetY - startY, nx = Math.abs(dx), ny = Math.abs(dy);
+        int signX = dx >> 31 | 1, signY = dy >> 31 | 1, x = startX, y = startY;
+
+        int dist = nx + ny, traveled = 0;
+        if(startX == targetX && startY == targetY) {
+            return true; // already at the point; we can see our own feet just fine!
+        }
+        double decay = 1.0 / dist;
+        double currentForce = 1.0;
+
+        for (int ix = 0, iy = 0; (ix <= nx || iy <= ny) && traveled < maxLength; ) {
+            ++traveled;
+            if (x == targetX && y == targetY) {
+                return true;
+            }
+
+            if (x != startX || y != startY) { //don't discount the start location even if on resistant cell
+                currentForce -= resistanceMap[x][y];
+            }
+            currentForce -= decay;
+            if (currentForce <= -0.001) {
+                return false; //too much resistance
+            }
+
+            if ((0.5 + ix) / nx < (0.5 + iy) / ny) {
+                x += signX;
+                ix++;
+            } else {
+                y += signY;
+                iy++;
+            }
+        }
+        return false;//never got to the target point
     }
 
     /**
