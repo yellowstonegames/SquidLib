@@ -18,16 +18,12 @@ package squidpony.squidgrid;
 
 import squidpony.ArrayTools;
 import squidpony.squidgrid.mapping.DungeonUtility;
-import squidpony.squidmath.Coord;
-import squidpony.squidmath.CrossHash;
-import squidpony.squidmath.GreasedRegion;
-import squidpony.squidmath.MathExtras;
-import squidpony.squidmath.Noise;
-import squidpony.squidmath.NumberTools;
-import squidpony.squidmath.OrderedSet;
+import squidpony.squidmath.*;
 
 import java.io.Serializable;
 import java.util.*;
+
+import static squidpony.squidmath.OrthoLine.reachable;
 
 /**
  * This class provides methods for calculating Field of View in grids. Field of
@@ -444,80 +440,342 @@ public class FOV implements Serializable {
      */
     public static double[][] reuseFOVSymmetrical(double[][] resistanceMap, double[][] light, int startX, int startY, double radius, Radius radiusTechnique)
     {
-        double decay = 1.0 / radius;
+        double decay = 1.0/ radius;
         ArrayTools.fill(light, 0);
         light[startX][startY] = Math.min(1.0, radius);//make the starting space full power unless radius is tiny
 
-
-        shadowCast(0, 1, 1, 0, radius, startX, startY, decay, light, resistanceMap, radiusTechnique);
-        for (int row = 0; row <= radius + 1.0; row++) {
-            for (int col = Math.max(1,row); col <= radius + 1.0; col++) {
-                if(startX - col >= 0 && startY - row >= 0 && resistanceMap[startX - col][startY - row] < 1.0 &&
-                        !shadowCastCheck(1, 1.0, 0.0, 0, -1, -1, 0, radius, startX - col, startY - row, decay, light, resistanceMap, radiusTechnique, 0, 0, light.length, light[0].length, startX, startY))
-                    light[startX - col][startY - row] = 0.0;
-            }
-        }
-        shadowCast(1, 0, 0, 1, radius, startX, startY, decay, light, resistanceMap, radiusTechnique);
-        for (int col = 0; col <= radius + 1.0; col++) {
-            for (int row = Math.max(1,col); row <= radius + 1.0; row++) {
-                if(startX - col >= 0 && startY - row >= 0 && resistanceMap[startX - col][startY - row] < 1.0 &&
-                        !shadowCastCheck(1, 1.0, 0.0, -1, 0, 0, -1, radius, startX - col, startY - row, decay, light, resistanceMap, radiusTechnique, 0, 0, light.length, light[0].length, startX, startY))
-                    light[startX - col][startY - row] = 0.0;
-            }
-        }
-
-        shadowCast(0, 1, -1, 0, radius, startX, startY, decay, light, resistanceMap, radiusTechnique);
-        for (int row = 0; row <= radius + 1.0; row++) {
-            for (int col = Math.max(1,row); col <= radius + 1.0; col++) {
-                if(startX - col >= 0 && startY + row < light[0].length &&  resistanceMap[startX - col][startY + row] < 1.0 &&
-                        !shadowCastCheck(1, 1.0, 0.0, 0, -1, 1, 0, radius, startX - col, startY + row, decay, light, resistanceMap, radiusTechnique, 0, 0, light.length, light[0].length, startX, startY))
-                    light[startX - col][startY + row] = 0.0;
-            }
-        }
-        shadowCast(1, 0, 0, -1, radius, startX, startY, decay, light, resistanceMap, radiusTechnique);
-        for (int col = 0; col <= radius + 1.0; col++) {
-            for (int row = Math.max(1,col); row <= radius + 1.0; row++) {
-                if(startX - col >= 0 && startY + row < light[0].length && resistanceMap[startX - col][startY + row] < 1.0 &&
-                        !shadowCastCheck(1, 1.0, 0.0, -1, 0, 0, 1, radius, startX - col, startY + row, decay, light, resistanceMap, radiusTechnique, 0, 0, light.length, light[0].length, startX, startY))
-                    light[startX - col][startY + row] = 0.0;
-            }
-        }
-
-        shadowCast(0, -1, -1, 0, radius, startX, startY, decay, light, resistanceMap, radiusTechnique);
-        for (int row = 0; row <= radius + 1.0; row++) {
-            for (int col = Math.max(1,row); col <= radius + 1.0; col++) {
-                if(startX + col < light.length && startY + row < light[0].length && resistanceMap[startX + col][startY + row] < 1.0 &&
-                        !shadowCastCheck(1, 1.0, 0.0, 0, 1, 1, 0, radius, startX + col, startY + row, decay, light, resistanceMap, radiusTechnique, 0, 0, light.length, light[0].length, startX, startY))
-                    light[startX + col][startY + row] = 0.0;
-            }
-        }
-        shadowCast(-1, 0, 0, -1, radius, startX, startY, decay, light, resistanceMap, radiusTechnique);
-        for (int col = 0; col <= radius + 1.0; col++) {
-            for (int row = Math.max(1,col); row <= radius + 1.0; row++) {
-                if(startX + col < light.length && startY + row < light[0].length && resistanceMap[startX + col][startY + row] < 1.0 &&
-                        !shadowCastCheck(1, 1.0, 0.0, 1, 0, 0, 1, radius, startX + col, startY + row, decay, light, resistanceMap, radiusTechnique, 0, 0, light.length, light[0].length, startX, startY))
-                    light[startX + col][startY + row] = 0.0;
-            }
-        }
-
-        shadowCast(0, -1, 1, 0, radius, startX, startY, decay, light, resistanceMap, radiusTechnique);
-        for (int row = 0; row <= radius + 1.0 && startY + row < light[0].length; row++) {
-            for (int col = Math.max(1,row); col <= radius + 1.0; col++) {
-                if(startX + col < light.length && startY - row >= 0 && resistanceMap[startX + col][startY - row] < 1.0 &&
-                        !shadowCastCheck(1, 1.0, 0.0, 0, 1, -1, 0, radius, startX + col, startY - row, decay, light, resistanceMap, radiusTechnique, 0, 0, light.length, light[0].length, startX, startY))
-                    light[startX + col][startY - row] = 0.0;
-            }
-        }
-        shadowCast(-1, 0, 0, 1, radius, startX, startY, decay, light, resistanceMap, radiusTechnique);
-        for (int col = 0; col <= radius + 1.0; col++) {
-            for (int row = Math.max(1,col); row <= radius + 1.0; row++) {
-                if(startX + col < light.length && startY - row >= 0 && resistanceMap[startX + col][startY - row] < 1.0 &&
-                        !shadowCastCheck(1, 1.0, 0.0, 1, 0, 0, -1, radius, startX + col, startY - row, decay, light, resistanceMap, radiusTechnique, 0, 0, light.length, light[0].length, startX, startY))
-                    light[startX + col][startY - row] = 0.0;
-            }
-        }
+        final int width = light.length, height = light[0].length;
+        shadowCastSymmetrical(1, 1.0, 0.0,  0,  1,  1,  0, radius, startX, startY, decay, light, resistanceMap, radiusTechnique, 0, 0, width, height);
+        shadowCastSymmetrical(1, 1.0, 0.0,  1,  0,  0,  1, radius, startX, startY, decay, light, resistanceMap, radiusTechnique, 0, 0, width, height);
+        shadowCastSymmetrical(1, 1.0, 0.0,  0,  1, -1,  0, radius, startX, startY, decay, light, resistanceMap, radiusTechnique, 0, 0, width, height);
+        shadowCastSymmetrical(1, 1.0, 0.0,  1,  0,  0, -1, radius, startX, startY, decay, light, resistanceMap, radiusTechnique, 0, 0, width, height);
+        shadowCastSymmetrical(1, 1.0, 0.0,  0, -1, -1,  0, radius, startX, startY, decay, light, resistanceMap, radiusTechnique, 0, 0, width, height);
+        shadowCastSymmetrical(1, 1.0, 0.0, -1,  0,  0, -1, radius, startX, startY, decay, light, resistanceMap, radiusTechnique, 0, 0, width, height);
+        shadowCastSymmetrical(1, 1.0, 0.0,  0, -1,  1,  0, radius, startX, startY, decay, light, resistanceMap, radiusTechnique, 0, 0, width, height);
+        shadowCastSymmetrical(1, 1.0, 0.0, -1,  0,  0,  1, radius, startX, startY, decay, light, resistanceMap, radiusTechnique, 0, 0, width, height);
         return light;
     }
+
+    private static void shadowCastSymmetrical(int row, double start, double end, int xx, int xy, int yx, int yy,
+                                              double radius, int startX, int startY, double decay, double[][] lightMap,
+                                              double[][] map, Radius radiusStrategy,
+                                              int minX, int minY, int maxX, int maxY) {
+        double newStart = 0;
+        if (start < end) {
+            return;
+        }
+
+        boolean blocked = false;
+        for (int distance = row; distance <= radius && distance < maxX - minX + maxY - minY && !blocked; distance++) {
+            int deltaY = -distance;
+            for (int deltaX = -distance; deltaX <= 0; deltaX++) {
+                int currentX = startX + deltaX * xx + deltaY * xy;
+                int currentY = startY + deltaX * yx + deltaY * yy;
+                double leftSlope = (deltaX - 0.5) / (deltaY + 0.5);
+                double rightSlope = (deltaX + 0.5) / (deltaY - 0.5);
+
+                if (!(currentX >= minX && currentY >= minY && currentX < maxX && currentY < maxY) || start < rightSlope) {
+                    continue;
+                } else if (end > leftSlope) {
+                    break;
+                }
+                double deltaRadius = radiusStrategy.radius(deltaX, deltaY);
+                //check if it's within the light-able area and light if needed and mutually reachable
+                if (deltaRadius <= radius && (reachable(startX, startY, currentX, currentY, map)
+                        && reachable(currentX, currentY, startX, startY, map))) {
+                    lightMap[currentX][currentY] = 1.0f - decay * deltaRadius;
+                }
+
+                if (blocked) { //previous cell was a blocking one
+                    if (map[currentX][currentY] >= 1) {//hit a wall
+                        newStart = rightSlope;
+                    } else {
+                        blocked = false;
+                        start = newStart;
+                    }
+                } else {
+                    if (map[currentX][currentY] >= 1 && distance < radius) {//hit a wall within sight line
+                        blocked = true;
+                        shadowCastSymmetrical(distance + 1, start, leftSlope, xx, xy, yx, yy, radius, startX, startY, decay,
+                                lightMap, map, radiusStrategy, minX, minY, maxX, maxY);
+                        newStart = rightSlope;
+                    }
+                }
+            }
+        }
+    }
+
+    public static double[][] reuseFOVLinear(double[][] resistanceMap, double[][] light, int startX, int startY, double radius, Radius radiusTechnique, LOS los)
+    {
+        double decay = 1.0/ radius;
+        ArrayTools.fill(light, 0);
+        light[startX][startY] = Math.min(1.0, radius);//make the starting space full power unless radius is tiny
+
+        final int width = light.length, height = light[0].length;
+        shadowCastLinear(1, 1.0, 0.0,  0,  1,  1,  0, radius, startX, startY, decay, light, resistanceMap, radiusTechnique, 0, 0, width, height, los);
+        shadowCastLinear(1, 1.0, 0.0,  1,  0,  0,  1, radius, startX, startY, decay, light, resistanceMap, radiusTechnique, 0, 0, width, height, los);
+        shadowCastLinear(1, 1.0, 0.0,  0,  1, -1,  0, radius, startX, startY, decay, light, resistanceMap, radiusTechnique, 0, 0, width, height, los);
+        shadowCastLinear(1, 1.0, 0.0,  1,  0,  0, -1, radius, startX, startY, decay, light, resistanceMap, radiusTechnique, 0, 0, width, height, los);
+        shadowCastLinear(1, 1.0, 0.0,  0, -1, -1,  0, radius, startX, startY, decay, light, resistanceMap, radiusTechnique, 0, 0, width, height, los);
+        shadowCastLinear(1, 1.0, 0.0, -1,  0,  0, -1, radius, startX, startY, decay, light, resistanceMap, radiusTechnique, 0, 0, width, height, los);
+        shadowCastLinear(1, 1.0, 0.0,  0, -1,  1,  0, radius, startX, startY, decay, light, resistanceMap, radiusTechnique, 0, 0, width, height, los);
+        shadowCastLinear(1, 1.0, 0.0, -1,  0,  0,  1, radius, startX, startY, decay, light, resistanceMap, radiusTechnique, 0, 0, width, height, los);
+        return light;
+    }
+
+    private static void shadowCastLinear(int row, double start, double end, int xx, int xy, int yx, int yy,
+                                              double radius, int startX, int startY, double decay, double[][] lightMap,
+                                              double[][] map, Radius radiusStrategy,
+                                              int minX, int minY, int maxX, int maxY, LOS los) {
+        double newStart = 0;
+        if (start < end) {
+            return;
+        }
+
+        boolean blocked = false;
+        for (int distance = row; distance <= radius && distance < maxX - minX + maxY - minY && !blocked; distance++) {
+            int deltaY = -distance;
+            for (int deltaX = -distance; deltaX <= 0; deltaX++) {
+                int currentX = startX + deltaX * xx + deltaY * xy;
+                int currentY = startY + deltaX * yx + deltaY * yy;
+                double leftSlope = (deltaX - 0.5) / (deltaY + 0.5);
+                double rightSlope = (deltaX + 0.5) / (deltaY - 0.5);
+
+                if (!(currentX >= minX && currentY >= minY && currentX < maxX && currentY < maxY) || start < rightSlope) {
+                    continue;
+                } else if (end > leftSlope) {
+                    break;
+                }
+                double deltaRadius = radiusStrategy.radius(deltaX, deltaY);
+                //check if it's within the light-able area and light if needed and mutually reachable
+                if (deltaRadius <= radius && (los.isReachable(map, startX, startY, currentX, currentY)
+                        && los.isReachable(map, currentX, currentY, startX, startY))) {
+                    lightMap[currentX][currentY] = 1.0f - decay * deltaRadius;
+                }
+
+                if (blocked) { //previous cell was a blocking one
+                    if (map[currentX][currentY] >= 1) {//hit a wall
+                        newStart = rightSlope;
+                    } else {
+                        blocked = false;
+                        start = newStart;
+                    }
+                } else {
+                    if (map[currentX][currentY] >= 1 && distance < radius) {//hit a wall within sight line
+                        blocked = true;
+                        shadowCastLinear(distance + 1, start, leftSlope, xx, xy, yx, yy, radius, startX, startY, decay,
+                                lightMap, map, radiusStrategy, minX, minY, maxX, maxY, los);
+                        newStart = rightSlope;
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Checks whether the starting point can see the target point, using the {@code maxLength} and {@code resistanceMap}
+     * to determine whether the line of sight is obstructed, without storing the line of points along the way.
+     * {@code resistanceMap} must not be null; it can be initialized in the same way as FOV's resistance maps can with
+     * {@link DungeonUtility#generateResistances(char[][])} or {@link DungeonUtility#generateSimpleResistances(char[][])}. If the starting
+     * point can see the target point, this returns true; otherwise this returns false.
+     * @param startX the x-coordinate of the starting point
+     * @param startY  the y-coordinate of the starting point
+     * @param targetX the x-coordinate of the target point
+     * @param targetY  the y-coordinate of the target point
+     * @param resistanceMap a resistance map as produced by {@link DungeonUtility#generateResistances(char[][])}; 0 is visible and 1 is blocked
+     * @return true if the starting point can see the target point; false otherwise
+     */
+    public static boolean reachable(int startX, int startY, int targetX, int targetY,
+                                    double[][] resistanceMap) {
+        if(startX == targetX && startY == targetY) {
+            return true; // already at the point; we can see our own feet just fine!
+        }
+
+        int width = resistanceMap.length;
+        int height = resistanceMap[0].length;
+
+        int endX = targetX,
+                endY = targetY;
+        //find out which direction to step, on each axis
+        int stepX = targetX == startX ? 0 : (targetX - startX >> 31 | 1), // signum with less converting to/from float
+                stepY = targetY == startY ? 0 : (targetY - startY >> 31 | 1);
+
+        int deltaY = Math.abs(targetX - startX),
+                deltaX = Math.abs(targetY - startY);
+        int dist = deltaX + deltaY;
+        double decay = 1.0 / dist;
+        double currentForce = 1.0;
+        double maxLength = Math.abs(endX - startX) + Math.abs(endY - startY);
+
+        int x = startX,
+                y = startY;
+
+        int maxX = deltaX,
+                maxY = deltaY;
+
+        while (x >= 0 && x < width && y >= 0 && y < height && (x != targetX || y != targetY)) {
+            if (maxY - maxX > deltaX) {
+                maxX += deltaX;
+                x += stepX;
+
+                if (x != startX || y != startY) { //don't discount the start location even if on resistant cell
+                    currentForce -= resistanceMap[x][y];
+                }
+                currentForce -= decay;
+                if (currentForce <= -0.001) {
+                    endX = x; endY = y;
+                    break;
+                }
+            } else if (maxX - maxY > deltaY) {
+                maxY += deltaY;
+                y += stepY;
+                if (x != startX || y != startY) { //don't discount the start location even if on resistant cell
+                    currentForce -= resistanceMap[x][y];
+                }
+                currentForce -= decay;
+                if (currentForce <= -0.001) {
+                    endX = x; endY = y;
+                    break;
+                }
+            } else {//directly on diagonal, move both full step
+                maxY += deltaY;
+                y += stepY;
+                maxX += deltaX;
+                x += stepX;
+                if (x != startX || y != startY) { //don't discount the start location even if on resistant cell
+                    currentForce -= resistanceMap[x][y];
+                }
+                currentForce -= decay;
+                if (currentForce <= -0.001) {
+                    endX = x; endY = y;
+                    break;
+                }
+            }
+            if (Math.abs(x - startX) + Math.abs(y - startY) > maxLength) {//went too far
+                break;
+            }
+        }
+
+        return endX == targetX && endY == targetY;
+    }
+
+    public static boolean reachablePermissive(int startX, int startY, int targetX, int targetY,
+                                    double[][] resistanceMap) {
+        if(startX == targetX && startY == targetY) {
+            return true; // already at the point; we can see our own feet just fine!
+        }
+
+        int width = resistanceMap.length;
+        int height = resistanceMap[0].length;
+
+        //find out which direction to step, on each axis
+        int stepX = targetX == startX ? 0 : (targetX - startX >> 31 | 1), // signum with less converting to/from float
+                stepY = targetY == startY ? 0 : (targetY - startY >> 31 | 1);
+
+        int deltaY = Math.abs(targetX - startX),
+                deltaX = Math.abs(targetY - startY);
+        int maxLength = deltaX + deltaY;
+        double currentForce = 1.0;
+
+        int x = startX,
+                y = startY;
+
+        int maxX = deltaX,
+                maxY = deltaY;
+
+        while (x >= 0 && x < width && y >= 0 && y < height && (x != targetX || y != targetY)) {
+            if (maxY - maxX > deltaX) {
+                maxX += deltaX;
+                x += stepX;
+
+                if (x != startX || y != startY) { //don't discount the start location even if on resistant cell
+                    currentForce -= resistanceMap[x][y];
+                }
+                if (currentForce <= -0.001) {
+//                    endX = x; endY = y;
+                    break;
+                }
+            } else if (maxX - maxY > deltaY) {
+                maxY += deltaY;
+                y += stepY;
+                if (x != startX || y != startY) { //don't discount the start location even if on resistant cell
+                    currentForce -= resistanceMap[x][y];
+                }
+                if (currentForce <= -0.001) {
+//                    endX = x; endY = y;
+                    break;
+                }
+            } else {//directly on diagonal, move both full step
+                maxY += deltaY;
+                y += stepY;
+                maxX += deltaX;
+                x += stepX;
+                if (x != startX || y != startY) { //don't discount the start location even if on resistant cell
+                    currentForce -= resistanceMap[x][y];
+                }
+                if (currentForce <= -0.001) {
+//                    endX = x; endY = y;
+                    break;
+                }
+            }
+            if (Math.abs(x - startX) + Math.abs(y - startY) > maxLength) {//went too far
+                break;
+            }
+        }
+
+        return Math.abs(x - targetX) <= 1 && Math.abs(y - targetY) <= 1;
+    }
+
+    /**
+     * Checks whether the starting point can see the target point, using the {@code maxLength} and {@code resistanceMap}
+     * to determine whether the line of sight is obstructed, without storing the line of points along the way.
+     * {@code resistanceMap} must not be null; it can be initialized in the same way as FOV's resistance maps can with
+     * {@link DungeonUtility#generateResistances(char[][])} or {@link DungeonUtility#generateSimpleResistances(char[][])}. If the starting
+     * point can see the target point, this returns true; otherwise this returns false.
+     * @param startX the x-coordinate of the starting point
+     * @param startY  the y-coordinate of the starting point
+     * @param targetX the x-coordinate of the target point
+     * @param targetY  the y-coordinate of the target point
+     * @param resistanceMap a resistance map as produced by {@link DungeonUtility#generateResistances(char[][])}; 0 is visible and 1 is blocked
+     * @return true if the starting point can see the target point; false otherwise
+     */
+    public static boolean reachableOrtho(int startX, int startY, int targetX, int targetY,
+                                    double[][] resistanceMap) {
+        int dx = targetX - startX, dy = targetY - startY, nx = Math.abs(dx), ny = Math.abs(dy);
+        int signX = dx >> 31 | 1, signY = dy >> 31 | 1, x = startX, y = startY;
+
+        int dist = nx + ny;
+        if(startX == targetX && startY == targetY) {
+            return true; // already at the point; we can see our own feet just fine!
+        }
+        double decay = 1.0 / dist;
+        double currentForce = 1.0;
+
+        for (int ix = 0, iy = 0; (ix <= nx || iy <= ny); ) {
+            if (x == targetX && y == targetY) {
+                return true;
+            }
+
+            if (x != startX || y != startY) { //don't discount the start location even if on resistant cell
+                currentForce -= resistanceMap[x][y];
+            }
+            currentForce -= decay;
+            if (currentForce <= -0.001) {
+                return false; //too much resistance
+            }
+
+            if ((0.5 + ix) / nx < (0.5 + iy) / ny) {
+                x += signX;
+                ix++;
+            } else {
+                y += signY;
+                iy++;
+            }
+        }
+        return false;//never got to the target point
+    }
+
+
     /**
      * Calculates which cells have line of sight from the given x, y coordinates.
      * Assigns to, and returns, a light map where the values
