@@ -54,7 +54,7 @@ subprojects {
     ((StandardJavadocDocletOptions)javadoc.options).linkSource(false)
     ((StandardJavadocDocletOptions)javadoc.options).noTimestamp(true)
     ((StandardJavadocDocletOptions)javadoc.options).use(true)
-    ((StandardJavadocDocletOptions)javadoc.options).bottom("Copyright &#169; Eben Howard 2012&#x2013;2021. All rights reserved.")
+    ((StandardJavadocDocletOptions)javadoc.options).bottom("Copyright &#169; Eben Howard 2012&#x2013;2022. All rights reserved.")
     javadoc.destinationDir = file("../docs/$name/apidocs")
 
 }
@@ -74,7 +74,7 @@ if (JavaVersion.current().isJava8Compatible()) {
 if(JavaVersion.current().isJava9Compatible()) {
     allprojects {
         tasks.withType(JavaCompile) {
-            options.release.set(7)
+            options.release.set(8)
         }
     }
 }
