@@ -61,13 +61,21 @@ public class EasySimplexNoise {
         return getNoiseWithSeed(x, seed);
     }
 
-    public double getNoiseWithSeed(double x, long seed) {
-        final long floor = x >= 0.0 ? (long) x : (long) x - 1L;
-        final double start = (((seed += floor * 0x6C8E9CF570932BD5L) ^ (seed >>> 25)) * (seed | 0xA529L)) * 0x0.fffffffffffffbp-63,
-                end = (((seed += 0x6C8E9CF570932BD5L) ^ (seed >>> 25)) * (seed | 0xA529L)) * 0x0.fffffffffffffbp-63;
-        x -= floor;
-        x *= x * (3.0 - 2.0 * x);
-        return (1.0 - x) * start + x * end;
+    public double getNoiseWithSeed(double value, long seed)
+    {
+        long floor = (long) Math.floor(value);
+        // the closest long that is less than value
+        // gets a random start and endpoint. there's a sequence of start and end values for each seed, and changing the
+        // seed changes the start and end values unpredictably (so use the same seed for one curving line).
+        final long z = seed + floor * 0x6C8E9CF570932BD5L;
+        final double start = ((z ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5C323L ^ 0x9E3779B97F4A7C15L) * 0x0.fffffffffffffbp-63,
+                end = ((z + 0x6C8E9CF570932BD5L ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5C323L ^ 0x9E3779B97F4A7C15L) * 0x0.fffffffffffffbp-63;
+        // gets the fractional part of value
+        value -= floor;
+        // cubic interpolation to smooth the curve
+        value *= value * (3.0 - 2.0 * value);
+        // interpolate between start and end based on how far we are between the start and end points of this section
+        return (1.0 - value) * start + value * end;
     }
 
     public static final double F2f = 0.3660254;

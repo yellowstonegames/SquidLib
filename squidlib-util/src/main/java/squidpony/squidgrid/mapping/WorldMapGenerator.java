@@ -156,7 +156,7 @@ public abstract class WorldMapGenerator implements Serializable {
     protected static double removeExcess(double radians)
     {
         radians *= 0.6366197723675814;
-        final int floor = (radians >= 0.0 ? (int) radians : (int) radians - 1);
+        final int floor = (Noise.fastFloor(radians));
         return (radians - (floor & -2) - ((floor & 1) << 1)) * (Math.PI);
 //        if(radians < -Math.PI || radians > Math.PI)
 //            System.out.println("UH OH, radians produced: " + radians);
@@ -4463,8 +4463,8 @@ public abstract class WorldMapGenerator implements Serializable {
 
                     qs = lat * 0.6366197723675814;
                     qc = qs + 1.0;
-                    int sf = (qs >= 0.0 ? (int) qs : (int) qs - 1) & -2;
-                    int cf = (qc >= 0.0 ? (int) qc : (int) qc - 1) & -2;
+                    int sf = (Noise.fastFloor(qs)) & -2;
+                    int cf = (Noise.fastFloor(qc)) & -2;
                     qs -= sf;
                     qc -= cf;
                     qs *= 2.0 - qs;
@@ -4475,8 +4475,8 @@ public abstract class WorldMapGenerator implements Serializable {
 
                     ps = lon * 0.6366197723675814;
                     pc = ps + 1.0;
-                    sf = (ps >= 0.0 ? (int) ps : (int) ps - 1) & -2;
-                    cf = (pc >= 0.0 ? (int) pc : (int) pc - 1) & -2;
+                    sf = (Noise.fastFloor(ps)) & -2;
+                    cf = (Noise.fastFloor(pc)) & -2;
                     ps -= sf;
                     pc -= cf;
                     ps *= 2.0 - ps;

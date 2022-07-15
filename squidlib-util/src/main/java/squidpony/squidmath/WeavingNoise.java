@@ -50,7 +50,7 @@ public class WeavingNoise implements Noise.Noise2D, Noise.Noise3D,
     public static double swayQuartic(long seed, double x)
     {
 //        x += seed * 0x1.9E377p-24;
-//        long floor = (x >= 0.0 ? (long) x : (long) x - 1L);
+//        long floor = ((long) Math.floor(x));
 //        x -= floor;
 //        floor &= 1L;
 ////        return (MathExtras.barronSpline(x, 1.5, 0.5) * (-floor | 1L) + floor) * 2 - 1;
@@ -108,7 +108,8 @@ public class WeavingNoise implements Noise.Noise2D, Noise.Noise3D,
     public static double valueNoise(final long seed, double x)
     {
         x += seed * 0x1p-58;
-        final int floor = x >= 0.0 ? (int) x : (int) x - 1;
+        long floor = (long) x;
+        if(floor > x) --floor;
         long z = (seed + floor) * 0xACBD2BDCA2BFF56DL;
 
         final double start = formRandomDouble(z),
@@ -144,7 +145,7 @@ public class WeavingNoise implements Noise.Noise2D, Noise.Noise3D,
     public static double valueNoise1(long seed, double x)
     {
         x += seed * 0x1p-58;
-        final int floor = x >= 0.0 ? (int) x : (int) x - 1;
+        final long floor = (long) Math.floor(x);
         long z = (seed + floor) * 0xACBD2BDCA2BFF56DL;
 
         final double start = formRandomDouble(z),
@@ -157,7 +158,7 @@ public class WeavingNoise implements Noise.Noise2D, Noise.Noise3D,
     public static double rawNoise(final long seed, double n)
     {
 //        n += formDouble(seed);
-        final long floor = (n >= 0.0 ? (long) n : (long) n - 1L);
+        final long floor = ((long) Math.floor(n));
         long z = (0x9E3779B97F4A7C15L ^ seed) + floor * 0xACBD2BDCA2BFF56DL;
         final double start = formRandomTightDouble(z),
                 end = formRandomTightDouble(z + 0xACBD2BDCA2BFF56DL);

@@ -169,10 +169,10 @@ public class VastNoise extends FastNoise {
 	}
 	@Override
 	protected float valueNoise (int seed, float x, float y) {
-		int xFloor = x >= 0 ? (int) x : (int) x - 1;
+		int xFloor = Noise.fastFloor(x);
 		x -= xFloor;
 		x *= x * (3 - 2 * x);
-		int yFloor = y >= 0 ? (int) y : (int) y - 1;
+		int yFloor = Noise.fastFloor(y);
 		y -= yFloor;
 		y *= y * (3 - 2 * y);
 		return ((1 - y) * ((1 - x) * hash256(xFloor, yFloor, seed) + x * hash256(xFloor + 1, yFloor, seed))
@@ -183,13 +183,13 @@ public class VastNoise extends FastNoise {
 	@Override
 	protected float valueNoise (int seed, float x, float y, float z)
 	{
-		int xFloor = x >= 0 ? (int) x : (int) x - 1;
+		int xFloor = Noise.fastFloor(x);
 		x -= xFloor;
 		x *= x * (3 - 2 * x);
-		int yFloor = y >= 0 ? (int) y : (int) y - 1;
+		int yFloor = Noise.fastFloor(y);
 		y -= yFloor;
 		y *= y * (3 - 2 * y);
-		int zFloor = z >= 0 ? (int) z : (int) z - 1;
+		int zFloor = Noise.fastFloor(z);
 		z -= zFloor;
 		z *= z * (3 - 2 * z);
 		return ((1 - z) *
@@ -204,16 +204,16 @@ public class VastNoise extends FastNoise {
 	@Override
 	protected float valueNoise(int seed, float x, float y, float z, float w)
 	{
-		int xFloor = x >= 0 ? (int) x : (int) x - 1;
+		int xFloor = Noise.fastFloor(x);
 		x -= xFloor;
 		x *= x * (3 - 2 * x);
-		int yFloor = y >= 0 ? (int) y : (int) y - 1;
+		int yFloor = Noise.fastFloor(y);
 		y -= yFloor;
 		y *= y * (3 - 2 * y);
-		int zFloor = z >= 0 ? (int) z : (int) z - 1;
+		int zFloor = Noise.fastFloor(z);
 		z -= zFloor;
 		z *= z * (3 - 2 * z);
-		int wFloor = w >= 0 ? (int) w : (int) w - 1;
+		int wFloor = Noise.fastFloor(w);
 		w -= wFloor;
 		w *= w * (3 - 2 * w);
 		return ((1 - w) *
@@ -235,19 +235,19 @@ public class VastNoise extends FastNoise {
 	
 	@Override
 	protected float valueNoise(int seed, float x, float y, float z, float w, float u) {
-		int xFloor = x >= 0 ? (int) x : (int) x - 1;
+		int xFloor = Noise.fastFloor(x);
 		x -= xFloor;
 		x *= x * (3 - 2 * x);
-		int yFloor = y >= 0 ? (int) y : (int) y - 1;
+		int yFloor = Noise.fastFloor(y);
 		y -= yFloor;
 		y *= y * (3 - 2 * y);
-		int zFloor = z >= 0 ? (int) z : (int) z - 1;
+		int zFloor = Noise.fastFloor(z);
 		z -= zFloor;
 		z *= z * (3 - 2 * z);
-		int wFloor = w >= 0 ? (int) w : (int) w - 1;
+		int wFloor = Noise.fastFloor(w);
 		w -= wFloor;
 		w *= w * (3 - 2 * w);
-		int uFloor = u >= 0 ? (int) u : (int) u - 1;
+		int uFloor = Noise.fastFloor(u);
 		u -= uFloor;
 		u *= u * (3 - 2 * u);
 		return ((1 - u) *
@@ -287,22 +287,22 @@ public class VastNoise extends FastNoise {
 	
 	@Override
 	protected float valueNoise(int seed, float x, float y, float z, float w, float u, float v) {
-		int xFloor = x >= 0 ? (int) x : (int) x - 1;
+		int xFloor = Noise.fastFloor(x);
 		x -= xFloor;
 		x *= x * (3 - 2 * x);
-		int yFloor = y >= 0 ? (int) y : (int) y - 1;
+		int yFloor = Noise.fastFloor(y);
 		y -= yFloor;
 		y *= y * (3 - 2 * y);
-		int zFloor = z >= 0 ? (int) z : (int) z - 1;
+		int zFloor = Noise.fastFloor(z);
 		z -= zFloor;
 		z *= z * (3 - 2 * z);
-		int wFloor = w >= 0 ? (int) w : (int) w - 1;
+		int wFloor = Noise.fastFloor(w);
 		w -= wFloor;
 		w *= w * (3 - 2 * w);
-		int uFloor = u >= 0 ? (int) u : (int) u - 1;
+		int uFloor = Noise.fastFloor(u);
 		u -= uFloor;
 		u *= u * (3 - 2 * u);
-		int vFloor = v >= 0 ? (int) v : (int) v - 1;
+		int vFloor = Noise.fastFloor(v);
 		v -= vFloor;
 		v *= v * (3 - 2 * v);
 		return ((1 - v) *

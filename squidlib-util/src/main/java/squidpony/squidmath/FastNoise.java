@@ -1077,20 +1077,9 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         return r;
     }
 
-    protected static int fastFloor(float f) {
-        return (f >= 0 ? (int) f : (int) f - 1);
-    }
-
-
-    protected static int fastRound(float f) {
-        return (f >= 0) ? (int) (f + 0.5f) : (int) (f - 0.5f);
-    }
-
-
     private static float lerp(float a, float b, float t) {
         return a + t * (b - a);
     }
-
 
     protected static float hermiteInterpolator(float t) {
         return t * t * (3 - 2 * t);
@@ -1868,9 +1857,9 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
 
 
     public float singleValue (int seed, float x, float y) {
-        int xFloor = x >= 0 ? (int) x : (int) x - 1;
+        int xFloor = Noise.fastFloor(x);
         x -= xFloor;
-        int yFloor = y >= 0 ? (int) y : (int) y - 1;
+        int yFloor = Noise.fastFloor(y);
         y -= yFloor;
         switch (interpolation) {
             case HERMITE:
@@ -1897,10 +1886,10 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
      * @return noise from 0 to 1.
      */
     protected float valueNoise (int seed, float x, float y) {
-        int xFloor = x >= 0 ? (int) x : (int) x - 1;
+        int xFloor = Noise.fastFloor(x);
         x -= xFloor;
         x *= x * (3 - 2 * x);
-        int yFloor = y >= 0 ? (int) y : (int) y - 1;
+        int yFloor = Noise.fastFloor(y);
         y -= yFloor;
         y *= y * (3 - 2 * y);
         xFloor *= 0xD1B55;
@@ -1995,11 +1984,11 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
     }
 
     public float singleValue(int seed, float x, float y, float z) {
-        int xFloor = x >= 0 ? (int) x : (int) x - 1;
+        int xFloor = Noise.fastFloor(x);
         x -= xFloor;
-        int yFloor = y >= 0 ? (int) y : (int) y - 1;
+        int yFloor = Noise.fastFloor(y);
         y -= yFloor;
-        int zFloor = z >= 0 ? (int) z : (int) z - 1;
+        int zFloor = Noise.fastFloor(z);
         z -= zFloor;
         switch (interpolation) {
             case HERMITE:
@@ -2035,13 +2024,13 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
      */
     protected float valueNoise(int seed, float x, float y, float z)
     {
-        int xFloor = x >= 0 ? (int) x : (int) x - 1;
+        int xFloor = Noise.fastFloor(x);
         x -= xFloor;
         x *= x * (3 - 2 * x);
-        int yFloor = y >= 0 ? (int) y : (int) y - 1;
+        int yFloor = Noise.fastFloor(y);
         y -= yFloor;
         y *= y * (3 - 2 * y);
-        int zFloor = z >= 0 ? (int) z : (int) z - 1;
+        int zFloor = Noise.fastFloor(z);
         z -= zFloor;
         z *= z * (3 - 2 * z);
         //0xDB4F1, 0xBBE05, 0xA0F2F
@@ -2150,13 +2139,13 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
     }
 
     public float singleValue(int seed, float x, float y, float z, float w) {
-        int xFloor = x >= 0 ? (int) x : (int) x - 1;
+        int xFloor = Noise.fastFloor(x);
         x -= xFloor;
-        int yFloor = y >= 0 ? (int) y : (int) y - 1;
+        int yFloor = Noise.fastFloor(y);
         y -= yFloor;
-        int zFloor = z >= 0 ? (int) z : (int) z - 1;
+        int zFloor = Noise.fastFloor(z);
         z -= zFloor;
-        int wFloor = w >= 0 ? (int) w : (int) w - 1;
+        int wFloor = Noise.fastFloor(w);
         w -= wFloor;
         switch (interpolation) {
             case HERMITE:
@@ -2195,16 +2184,16 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
     }
     protected float valueNoise(int seed, float x, float y, float z, float w)
     {
-        int xFloor = x >= 0 ? (int) x : (int) x - 1;
+        int xFloor = Noise.fastFloor(x);
         x -= xFloor;
         x *= x * (3 - 2 * x);
-        int yFloor = y >= 0 ? (int) y : (int) y - 1;
+        int yFloor = Noise.fastFloor(y);
         y -= yFloor;
         y *= y * (3 - 2 * y);
-        int zFloor = z >= 0 ? (int) z : (int) z - 1;
+        int zFloor = Noise.fastFloor(z);
         z -= zFloor;
         z *= z * (3 - 2 * z);
-        int wFloor = w >= 0 ? (int) w : (int) w - 1;
+        int wFloor = Noise.fastFloor(w);
         w -= wFloor;
         w *= w * (3 - 2 * w);
         //0xE19B1, 0xC6D1D, 0xAF36D, 0x9A695
@@ -2328,15 +2317,15 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
     }
 
     public float singleValue(int seed, float x, float y, float z, float w, float u) {
-        int xFloor = x >= 0 ? (int) x : (int) x - 1;
+        int xFloor = Noise.fastFloor(x);
         x -= xFloor;
-        int yFloor = y >= 0 ? (int) y : (int) y - 1;
+        int yFloor = Noise.fastFloor(y);
         y -= yFloor;
-        int zFloor = z >= 0 ? (int) z : (int) z - 1;
+        int zFloor = Noise.fastFloor(z);
         z -= zFloor;
-        int wFloor = w >= 0 ? (int) w : (int) w - 1;
+        int wFloor = Noise.fastFloor(w);
         w -= wFloor;
-        int uFloor = u >= 0 ? (int) u : (int) u - 1;
+        int uFloor = Noise.fastFloor(u);
         u -= uFloor;
         switch (interpolation) {
             case HERMITE:
@@ -2396,19 +2385,19 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
     }
 
     protected float valueNoise(int seed, float x, float y, float z, float w, float u) {
-        int xFloor = x >= 0 ? (int) x : (int) x - 1;
+        int xFloor = Noise.fastFloor(x);
         x -= xFloor;
         x *= x * (3 - 2 * x);
-        int yFloor = y >= 0 ? (int) y : (int) y - 1;
+        int yFloor = Noise.fastFloor(y);
         y -= yFloor;
         y *= y * (3 - 2 * y);
-        int zFloor = z >= 0 ? (int) z : (int) z - 1;
+        int zFloor = Noise.fastFloor(z);
         z -= zFloor;
         z *= z * (3 - 2 * z);
-        int wFloor = w >= 0 ? (int) w : (int) w - 1;
+        int wFloor = Noise.fastFloor(w);
         w -= wFloor;
         w *= w * (3 - 2 * w);
-        int uFloor = u >= 0 ? (int) u : (int) u - 1;
+        int uFloor = Noise.fastFloor(u);
         u -= uFloor;
         u *= u * (3 - 2 * u);
         //0xE60E3, 0xCEBD7, 0xB9C9B, 0xA6F57, 0x9609D, 0x86D51
@@ -2558,17 +2547,17 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
     }
 
     public float singleValue(int seed, float x, float y, float z, float w, float u, float v) {
-        int xFloor = x >= 0 ? (int) x : (int) x - 1;
+        int xFloor = Noise.fastFloor(x);
         x -= xFloor;
-        int yFloor = y >= 0 ? (int) y : (int) y - 1;
+        int yFloor = Noise.fastFloor(y);
         y -= yFloor;
-        int zFloor = z >= 0 ? (int) z : (int) z - 1;
+        int zFloor = Noise.fastFloor(z);
         z -= zFloor;
-        int wFloor = w >= 0 ? (int) w : (int) w - 1;
+        int wFloor = Noise.fastFloor(w);
         w -= wFloor;
-        int uFloor = u >= 0 ? (int) u : (int) u - 1;
+        int uFloor = Noise.fastFloor(u);
         u -= uFloor;
-        int vFloor = v >= 0 ? (int) v : (int) v - 1;
+        int vFloor = Noise.fastFloor(v);
         v -= vFloor;
         switch (interpolation) {
             case HERMITE:
@@ -2665,22 +2654,22 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
     }
 
     protected float valueNoise(int seed, float x, float y, float z, float w, float u, float v) {
-        int xFloor = x >= 0 ? (int) x : (int) x - 1;
+        int xFloor = Noise.fastFloor(x);
         x -= xFloor;
         x *= x * (3 - 2 * x);
-        int yFloor = y >= 0 ? (int) y : (int) y - 1;
+        int yFloor = Noise.fastFloor(y);
         y -= yFloor;
         y *= y * (3 - 2 * y);
-        int zFloor = z >= 0 ? (int) z : (int) z - 1;
+        int zFloor = Noise.fastFloor(z);
         z -= zFloor;
         z *= z * (3 - 2 * z);
-        int wFloor = w >= 0 ? (int) w : (int) w - 1;
+        int wFloor = Noise.fastFloor(w);
         w -= wFloor;
         w *= w * (3 - 2 * w);
-        int uFloor = u >= 0 ? (int) u : (int) u - 1;
+        int uFloor = Noise.fastFloor(u);
         u -= uFloor;
         u *= u * (3 - 2 * u);
-        int vFloor = v >= 0 ? (int) v : (int) v - 1;
+        int vFloor = Noise.fastFloor(v);
         v -= vFloor;
         v *= v * (3 - 2 * v);
         //0xE95E1, 0xD4BC7, 0xC1EDB, 0xB0C8B, 0xA1279, 0x92E85
@@ -2760,19 +2749,19 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
     }
 
     public float singleValue(int seed, float x, float y, float z, float w, float u, float v, float m) {
-        int xFloor = x >= 0 ? (int) x : (int) x - 1;
+        int xFloor = Noise.fastFloor(x);
         x -= xFloor;
-        int yFloor = y >= 0 ? (int) y : (int) y - 1;
+        int yFloor = Noise.fastFloor(y);
         y -= yFloor;
-        int zFloor = z >= 0 ? (int) z : (int) z - 1;
+        int zFloor = Noise.fastFloor(z);
         z -= zFloor;
-        int wFloor = w >= 0 ? (int) w : (int) w - 1;
+        int wFloor = Noise.fastFloor(w);
         w -= wFloor;
-        int uFloor = u >= 0 ? (int) u : (int) u - 1;
+        int uFloor = Noise.fastFloor(u);
         u -= uFloor;
-        int vFloor = v >= 0 ? (int) v : (int) v - 1;
+        int vFloor = Noise.fastFloor(v);
         v -= vFloor;
-        int mFloor = m >= 0 ? (int) m : (int) m - 1;
+        int mFloor = Noise.fastFloor(m);
         m -= mFloor;
         switch (interpolation) {
             case HERMITE:
@@ -2940,25 +2929,25 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
     }
 
     protected float valueNoise(int seed, float x, float y, float z, float w, float u, float v, float m) {
-        int xFloor = x >= 0 ? (int) x : (int) x - 1;
+        int xFloor = Noise.fastFloor(x);
         x -= xFloor;
         x *= x * (3 - 2 * x);
-        int yFloor = y >= 0 ? (int) y : (int) y - 1;
+        int yFloor = Noise.fastFloor(y);
         y -= yFloor;
         y *= y * (3 - 2 * y);
-        int zFloor = z >= 0 ? (int) z : (int) z - 1;
+        int zFloor = Noise.fastFloor(z);
         z -= zFloor;
         z *= z * (3 - 2 * z);
-        int wFloor = w >= 0 ? (int) w : (int) w - 1;
+        int wFloor = Noise.fastFloor(w);
         w -= wFloor;
         w *= w * (3 - 2 * w);
-        int uFloor = u >= 0 ? (int) u : (int) u - 1;
+        int uFloor = Noise.fastFloor(u);
         u -= uFloor;
         u *= u * (3 - 2 * u);
-        int vFloor = v >= 0 ? (int) v : (int) v - 1;
+        int vFloor = Noise.fastFloor(v);
         v -= vFloor;
         v *= v * (3 - 2 * v);
-        int mFloor = m >= 0 ? (int) m : (int) m - 1;
+        int mFloor = Noise.fastFloor(m);
         m -= mFloor;
         m *= m * (3 - 2 * m);
         xFloor *= 0xEBEDF;
@@ -3937,8 +3926,8 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
     }
 
     private float singlePerlin(int seed, float x, float y) {
-        int x0 = fastFloor(x);
-        int y0 = fastFloor(y);
+        int x0 = Noise.fastFloor(x);
+        int y0 = Noise.fastFloor(y);
         int x1 = x0 + 1;
         int y1 = y0 + 1;
 
@@ -4058,9 +4047,9 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
     }
 
     private float singlePerlin(int seed, float x, float y, float z) {
-        int x0 = fastFloor(x);
-        int y0 = fastFloor(y);
-        int z0 = fastFloor(z);
+        int x0 = Noise.fastFloor(x);
+        int y0 = Noise.fastFloor(y);
+        int z0 = Noise.fastFloor(z);
         int x1 = x0 + 1;
         int y1 = y0 + 1;
         int z1 = z0 + 1;
@@ -4107,10 +4096,10 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
     }
 
     private float singlePerlin(int seed, float x, float y, float z, float w) {
-        int x0 = fastFloor(x);
-        int y0 = fastFloor(y);
-        int z0 = fastFloor(z);
-        int w0 = fastFloor(w);
+        int x0 = Noise.fastFloor(x);
+        int y0 = Noise.fastFloor(y);
+        int z0 = Noise.fastFloor(z);
+        int w0 = Noise.fastFloor(w);
         int x1 = x0 + 1;
         int y1 = y0 + 1;
         int z1 = z0 + 1;
@@ -4245,11 +4234,11 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
 //    public float minBound = -1f, maxBound = 1f;
     
     private float singlePerlin(int seed, float x, float y, float z, float w, float u) {
-        int x0 = fastFloor(x);
-        int y0 = fastFloor(y);
-        int z0 = fastFloor(z);
-        int w0 = fastFloor(w);
-        int u0 = fastFloor(u);
+        int x0 = Noise.fastFloor(x);
+        int y0 = Noise.fastFloor(y);
+        int z0 = Noise.fastFloor(z);
+        int w0 = Noise.fastFloor(w);
+        int u0 = Noise.fastFloor(u);
         int x1 = x0 + 1;
         int y1 = y0 + 1;
         int z1 = z0 + 1;
@@ -4420,12 +4409,12 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
     }
 
     private float singlePerlin(int seed, float x, float y, float z, float w, float u, float v) {
-        int x0 = fastFloor(x);
-        int y0 = fastFloor(y);
-        int z0 = fastFloor(z);
-        int w0 = fastFloor(w);
-        int u0 = fastFloor(u);
-        int v0 = fastFloor(v);
+        int x0 = Noise.fastFloor(x);
+        int y0 = Noise.fastFloor(y);
+        int z0 = Noise.fastFloor(z);
+        int w0 = Noise.fastFloor(w);
+        int u0 = Noise.fastFloor(u);
+        int v0 = Noise.fastFloor(v);
         int x1 = x0 + 1;
         int y1 = y0 + 1;
         int z1 = z0 + 1;
@@ -4912,8 +4901,8 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
 
     public float singleSimplex(int seed, float x, float y) {
         float t = (x + y) * F2f;
-        int i = fastFloor(x + t);
-        int j = fastFloor(y + t);
+        int i = Noise.fastFloor(x + t);
+        int j = Noise.fastFloor(y + t);
 
         t = (i + j) * G2f;
         float X0 = i - t;
@@ -5263,9 +5252,9 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
 
     public float singleSimplex(int seed, float x, float y, float z) {
         float t = (x + y + z) * F3f;
-        int i = fastFloor(x + t);
-        int j = fastFloor(y + t);
-        int k = fastFloor(z + t);
+        int i = Noise.fastFloor(x + t);
+        int j = Noise.fastFloor(y + t);
+        int k = Noise.fastFloor(z + t);
 
         t = (i + j + k) * G3f;
         float x0 = x - (i - t);
@@ -5467,10 +5456,10 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
     public float singleSimplex(int seed, float x, float y, float z, float w) {
         float[] gradient4DLUT = grad4f;
         float skew = (x + y + z + w) * F4f;
-        int i = fastFloor(x + skew);
-        int j = fastFloor(y + skew);
-        int k = fastFloor(z + skew);
-        int l = fastFloor(w + skew);
+        int i = Noise.fastFloor(x + skew);
+        int j = Noise.fastFloor(y + skew);
+        int k = Noise.fastFloor(z + skew);
+        int l = Noise.fastFloor(w + skew);
         float unskew = (i + j + k + l) * G4f;
         float X0 = i - unskew;
         float Y0 = j - unskew;
@@ -5578,11 +5567,11 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
 
     public float singleSimplex(int seed, float x, float y, float z, float w, float u) {
         float t = (x + y + z + w + u) * F5;
-        int i = fastFloor(x + t);
-        int j = fastFloor(y + t);
-        int k = fastFloor(z + t);
-        int l = fastFloor(w + t);
-        int h = fastFloor(u + t);
+        int i = Noise.fastFloor(x + t);
+        int j = Noise.fastFloor(y + t);
+        int k = Noise.fastFloor(z + t);
+        int l = Noise.fastFloor(w + t);
+        int h = Noise.fastFloor(u + t);
         t = (i + j + k + l + h) * G5;
         float X0 = i - t;
         float Y0 = j - t;
@@ -5832,12 +5821,12 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
     public float singleSimplex(int seed, float x, float y, float z, float w, float u, float v) {
         float n0, n1, n2, n3, n4, n5, n6;
         float t = (x + y + z + w + u + v) * F6;
-        int i = fastFloor(x + t);
-        int j = fastFloor(y + t);
-        int k = fastFloor(z + t);
-        int l = fastFloor(w + t);
-        int h = fastFloor(u + t);
-        int g = fastFloor(v + t);
+        int i = Noise.fastFloor(x + t);
+        int j = Noise.fastFloor(y + t);
+        int k = Noise.fastFloor(z + t);
+        int l = Noise.fastFloor(w + t);
+        int h = Noise.fastFloor(u + t);
+        int g = Noise.fastFloor(v + t);
         t = (i + j + k + l + h + g) * G6;
         float X0 = i - t;
         float Y0 = j - t;
@@ -6207,8 +6196,8 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
     }
 
     private float singleCubic(int seed, float x, float y) {
-        int x1 = fastFloor(x);
-        int y1 = fastFloor(y);
+        int x1 = Noise.fastFloor(x);
+        int y1 = Noise.fastFloor(y);
 
         int x0 = x1 - 1;
         int y0 = y1 - 1;
@@ -6319,9 +6308,9 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
     }
 
     private float singleCubic(int seed, float x, float y, float z) {
-        int x1 = fastFloor(x);
-        int y1 = fastFloor(y);
-        int z1 = fastFloor(z);
+        int x1 = Noise.fastFloor(x);
+        int y1 = Noise.fastFloor(y);
+        int z1 = Noise.fastFloor(z);
 
         int x0 = x1 - 1;
         int y0 = y1 - 1;
@@ -6443,10 +6432,10 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
     }
 
     private float singleCubic(int seed, float x, float y, float z, float w) {
-        int x1 = fastFloor(x);
-        int y1 = fastFloor(y);
-        int z1 = fastFloor(z);
-        int w1 = fastFloor(w);
+        int x1 = Noise.fastFloor(x);
+        int y1 = Noise.fastFloor(y);
+        int z1 = Noise.fastFloor(z);
+        int w1 = Noise.fastFloor(w);
 
         int x0 = x1 - 1;
         int y0 = y1 - 1;
@@ -6596,9 +6585,9 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
     }
 
     private float singleCellular(float x, float y, float z) {
-        int xr = fastRound(x);
-        int yr = fastRound(y);
-        int zr = fastRound(z);
+        int xr = Math.round(x);
+        int yr = Math.round(y);
+        int zr = Math.round(z);
 
         float distance = 999999;
         int xc = 0, yc = 0, zc = 0;
@@ -6688,9 +6677,9 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
     }
 
     private float singleCellular2Edge(float x, float y, float z) {
-        int xr = fastRound(x);
-        int yr = fastRound(y);
-        int zr = fastRound(z);
+        int xr = Math.round(x);
+        int yr = Math.round(y);
+        int zr = Math.round(z);
 
         float distance = 999999;
         float distance2 = 999999;
@@ -6785,8 +6774,8 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
     }
 
     private float singleCellular(float x, float y) {
-        int xr = fastRound(x);
-        int yr = fastRound(y);
+        int xr = Math.round(x);
+        int yr = Math.round(y);
 
         float distance = 999999;
         int xc = 0, yc = 0;
@@ -6865,8 +6854,8 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
     }
 
     private float singleCellular2Edge(float x, float y) {
-        int xr = fastRound(x);
-        int yr = fastRound(y);
+        int xr = Math.round(x);
+        int yr = Math.round(y);
 
         float distance = 999999;
         float distance2 = 999999;
@@ -6959,9 +6948,9 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         float yf = v3[1] * frequency;
         float zf = v3[2] * frequency;
 
-        int x0 = fastFloor(xf);
-        int y0 = fastFloor(yf);
-        int z0 = fastFloor(zf);
+        int x0 = Noise.fastFloor(xf);
+        int y0 = Noise.fastFloor(yf);
+        int z0 = Noise.fastFloor(zf);
         int x1 = x0 + 1;
         int y1 = y0 + 1;
         int z1 = z0 + 1;
@@ -7045,8 +7034,8 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         float xf = v2[0] * frequency;
         float yf = v2[1] * frequency;
 
-        int x0 = fastFloor(xf);
-        int y0 = fastFloor(yf);
+        int x0 = Noise.fastFloor(xf);
+        int y0 = Noise.fastFloor(yf);
         int x1 = x0 + 1;
         int y1 = y0 + 1;
 

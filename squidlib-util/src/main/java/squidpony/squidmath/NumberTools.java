@@ -217,7 +217,7 @@ public final class NumberTools {
      */
     public static double zigzag(double value)
     {
-        long floor = (value >= 0.0 ? (long) value : (long) value - 1L);
+        long floor = ((long) Math.floor(value));
         value -= floor;
         floor = (-(floor & 1L) | 1L);
         return value * (floor << 1) - floor;
@@ -237,7 +237,8 @@ public final class NumberTools {
      */
     public static float zigzag(float value)
     {
-        int floor = (value >= 0f ? (int) value : (int) value - 1);
+        int floor = (int)value;
+        if(floor > value) --floor;
         value -= floor;
         floor = (-(floor & 1) | 1);
         return value * (floor << 1) - floor;
@@ -258,7 +259,7 @@ public final class NumberTools {
      */
     public static double sway(double value)
     {
-        long floor = (value >= 0.0 ? (long) value : (long) value - 1L);
+        long floor = ((long) Math.floor(value));
         value -= floor;
         floor = (-(floor & 1L) | 1L);
         return value * value * value * (value * (value * 6.0 - 15.0) + 10.0) * (floor << 1) - floor;
@@ -279,7 +280,8 @@ public final class NumberTools {
      */
     public static float sway(float value)
     {
-        int floor = (value >= 0f ? (int) value : (int) value - 1);
+        int floor = (int)value;
+        if(floor > value) --floor;
         value -= floor;
         floor = (-(floor & 1) | 1);
         return value * value * value * (value * (value * 6f - 15f) + 10f) * (floor << 1) - floor;
@@ -301,7 +303,7 @@ public final class NumberTools {
      */
     public static double swayCubic(double value)
     {
-        long floor = (value >= 0.0 ? (long) value : (long) value - 1L);
+        long floor = ((long) Math.floor(value));
         value -= floor;
         floor = (-(floor & 1L) | 1L);
         return value * value * (3.0 - value * 2.0) * (floor << 1) - floor;
@@ -323,7 +325,8 @@ public final class NumberTools {
      */
     public static float swayCubic(float value)
     {
-        int floor = (value >= 0f ? (int) value : (int) value - 1);
+        int floor = (int)value;
+        if(floor > value) --floor;
         value -= floor;
         floor = (-(floor & 1) | 1);
         return value * value * (3f - value * 2f) * (floor << 1) - floor;
@@ -348,7 +351,8 @@ public final class NumberTools {
      */
     public static float swayTight(float value)
     {
-        int floor = (value >= 0f ? (int) value : (int) value - 1);
+        int floor = (int)value;
+        if(floor > value) --floor;
         value -= floor;
         floor &= 1;
         return value * value * value * (value * (value * 6f - 15f) + 10f) * (-floor | 1) + floor;
@@ -373,7 +377,7 @@ public final class NumberTools {
      */
     public static double swayTight(double value)
     {
-        long floor = (value >= 0.0 ? (long) value : (long) value - 1L);
+        long floor = ((long) Math.floor(value));
         value -= floor;
         floor &= 1L;
         return value * value * value * (value * (value * 6.0 - 15.0) + 10.0) * (-floor | 1L) + floor;
@@ -396,7 +400,7 @@ public final class NumberTools {
      */
     public static double swayRandomized(long seed, double value)
     {
-        final long floor = value >= 0.0 ? (long) value : (long) value - 1L; // the closest long that is less than value
+        final long floor = (long) Math.floor(value); // the closest long that is less than value
         // gets a random start and endpoint. there's a sequence of start and end values for each seed, and changing the
         // seed changes the start and end values unpredictably (so use the same seed for one curving line).
         final double start = (((seed += floor * 0x6C8E9CF570932BD5L) ^ (seed >>> 25)) * (seed | 0xA529L)) * 0x0.fffffffffffffbp-63,
@@ -426,7 +430,8 @@ public final class NumberTools {
      */
     public static float swayRandomized(long seed, float value)
     {
-        final long floor = value >= 0f ? (long) value : (long) value - 1L;
+        long floor = (long) value;
+        if(floor > value) --floor;
         final float start = (((seed += floor * 0x6C8E9CF570932BD5L) ^ (seed >>> 25)) * (seed | 0xA529L)) * 0x0.ffffffp-63f,
                 end = (((seed += 0x6C8E9CF570932BD5L) ^ (seed >>> 25)) * (seed | 0xA529L)) * 0x0.ffffffp-63f;
         value -= floor;
@@ -444,7 +449,7 @@ public final class NumberTools {
      */
     public static double swayRandomized(final int seed, double value)
     {
-        final int floor = value >= 0.0 ? (int) value : (int) value - 1;
+        final int floor = (int) Math.floor(value);
         int z = seed + floor;
         final double start = (((z = (z ^ 0xD1B54A35) * 0x1D2BC3)) * ((z ^ z >>> 15) | 0xFFE00001) ^ z ^ z << 11) * 0x0.ffffffp-31,
                 end = (((z = (seed + floor + 1 ^ 0xD1B54A35) * 0x1D2BC3)) * ((z ^ z >>> 15) | 0xFFE00001) ^ z ^ z << 11) * 0x0.ffffffp-31;
@@ -463,7 +468,8 @@ public final class NumberTools {
      */
     public static float swayRandomized(final int seed, float value)
     {
-        final int floor = value >= 0f ? (int) value : (int) value - 1;
+        int floor = (int) value;
+        if(floor > value) --floor;
         int z = seed + floor;
         final float start = (((z = (z ^ 0xD1B54A35) * 0x102473) ^ (z << 11 | z >>> 21) ^ (z << 19 | z >>> 13)) * ((z ^ z >>> 15) | 0xFFE00001) ^ z) * 0x0.ffffffp-31f,
                 end = (((z = (seed + floor + 1 ^ 0xD1B54A35) * 0x102473) ^ (z << 11 | z >>> 21) ^ (z << 19 | z >>> 13)) * ((z ^ z >>> 15) | 0xFFE00001) ^ z) * 0x0.ffffffp-31f;
@@ -486,7 +492,8 @@ public final class NumberTools {
      */
     public static float swayAngleRandomized(long seed, float value)
     {
-        final long floor = value >= 0f ? (long) value : (long) value - 1L;
+        long floor = (long) value;
+        if(floor > value) --floor;
         float start = (((seed += floor * 0x6C8E9CF570932BD5L) ^ (seed >>> 25)) * (seed | 0xA529L) >>> 1) * 0x0.ffffffp-62f,
                 end = (((seed += 0x6C8E9CF570932BD5L) ^ (seed >>> 25)) * (seed | 0xA529L) >>> 1) * 0x0.ffffffp-62f;
         value -= floor;
@@ -853,7 +860,7 @@ public final class NumberTools {
     public static double sin(double radians)
     {
         radians *= 0.6366197723675814;
-        final long floor = (radians >= 0.0 ? (long) radians : (long) radians - 1L) & -2L;
+        final long floor = ((long) Math.floor(radians)) & -2L;
         radians -= floor;
         radians *= 2.0 - radians;
         return radians * (-0.775 - 0.225 * radians) * ((floor & 2L) - 1L);
@@ -889,7 +896,7 @@ public final class NumberTools {
     public static double cos(double radians)
     {
         radians = radians * 0.6366197723675814 + 1.0;
-        final long floor = (radians >= 0.0 ? (long) radians : (long) radians - 1L) & -2L;
+        final long floor = ((long) Math.floor(radians)) & -2L;
         radians -= floor;
         radians *= 2.0 - radians;
         return radians * (-0.775 - 0.225 * radians) * ((floor & 2L) - 1L);
@@ -926,7 +933,9 @@ public final class NumberTools {
     public static float sin(float radians)
     {
         radians *= 0.6366197723675814f;
-        final int floor = (radians >= 0f ? (int) radians : (int) radians - 1) & -2;
+        int floor = (int)radians;
+        if(floor > radians) --floor;
+        floor &= -2;
         radians -= floor;
         radians *= 2f - radians;
         return radians * (-0.775f - 0.225f * radians) * ((floor & 2) - 1);
@@ -963,7 +972,9 @@ public final class NumberTools {
     public static float cos(float radians)
     {
         radians = radians * 0.6366197723675814f + 1f;
-        final int floor = (radians >= 0f ? (int) radians : (int) radians - 1) & -2;
+        int floor = (int)radians;
+        if(floor > radians) --floor;
+        floor &= -2;
         radians -= floor;
         radians *= 2f - radians;
         return radians * (-0.775f - 0.225f * radians) * ((floor & 2) - 1);
@@ -999,7 +1010,9 @@ public final class NumberTools {
     public static float sinDegrees(float degrees)
     {
         degrees = degrees * 0.011111111111111112f;
-        final int floor = (degrees >= 0.f ? (int) degrees : (int) degrees - 1) & -2;
+        int floor = (int)degrees;
+        if(floor > degrees) --floor;
+        floor &= -2;
         degrees -= floor;
         degrees *= 2f - degrees;
         return degrees * (-0.775f - 0.225f * degrees) * ((floor & 2) - 1);
@@ -1036,7 +1049,9 @@ public final class NumberTools {
     public static float cosDegrees(float degrees)
     {
         degrees = degrees * 0.011111111111111112f + 1f;
-        final int floor = (degrees >= 0f ? (int) degrees : (int) degrees - 1) & -2;
+        int floor = (int)degrees;
+        if(floor > degrees) --floor;
+        floor &= -2;
         degrees -= floor;
         degrees *= 2f - degrees;
         return degrees * (-0.775f - 0.225f * degrees) * ((floor & 2) - 1);
@@ -1067,7 +1082,7 @@ public final class NumberTools {
     public static double sin_(double turns)
     {
         turns *= 4.0;
-        final long floor = (turns >= 0.0 ? (long) turns : (long) turns - 1L) & -2L;
+        final long floor = ((long) Math.floor(turns)) & -2L;
         turns -= floor;
         turns *= 2.0 - turns;
         return turns * (-0.775 - 0.225 * turns) * ((floor & 2L) - 1L);
@@ -1098,7 +1113,7 @@ public final class NumberTools {
     public static double cos_(double turns)
     {
         turns = turns * 4.0 + 1.0;
-        final long floor = (turns >= 0.0 ? (long) turns : (long) turns - 1L) & -2L;
+        final long floor = ((long) Math.floor(turns)) & -2L;
         turns -= floor;
         turns *= 2.0 - turns;
         return turns * (-0.775 - 0.225 * turns) * ((floor & 2L) - 1L);
@@ -1130,7 +1145,9 @@ public final class NumberTools {
     public static float sin_(float turns)
     {
         turns *= 4f;
-        final int floor = (turns >= 0f ? (int) turns : (int) turns - 1) & -2;
+        int floor = (int)turns;
+        if(floor > turns) --floor;
+        floor &= -2;
         turns -= floor;
         turns *= 2f - turns;
         return turns * (-0.775f - 0.225f * turns) * ((floor & 2) - 1);
@@ -1162,7 +1179,9 @@ public final class NumberTools {
     public static float cos_(float turns)
     {
         turns = turns * 4f + 1f;
-        final int floor = (turns >= 0f ? (int) turns : (int) turns - 1) & -2;
+        int floor = (int)turns;
+        if(floor > turns) --floor;
+        floor &= -2;
         turns -= floor;
         turns *= 2f - turns;
         return turns * (-0.775f - 0.225f * turns) * ((floor & 2) - 1);

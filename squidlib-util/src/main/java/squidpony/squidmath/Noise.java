@@ -27,31 +27,40 @@ public class Noise {
     /**
      * Like {@link Math#floor}, but returns a long.
      * Doesn't consider "weird doubles" like INFINITY and NaN.
+     * This is only faster than {@code (int)Math.floor(t)} on Java 8 for supported desktop platforms.
      *
      * @param t the double to find the floor for
      * @return the floor of t, as a long
      */
-    public static long longFloor(double t) {
-        return t >= 0.0 ? (long) t : (long) t - 1L;
+    public static long longFloor(final double t) {
+        final long z = (long) t;
+        return t < z ? z - 1L : z;
     }
+
     /**
      * Like {@link Math#floor(double)}, but takes a float and returns a long.
      * Doesn't consider "weird floats" like INFINITY and NaN.
+     * This is only faster than {@code (int)Math.floor(t)} on Java 8 for supported desktop platforms.
      *
      * @param t the double to find the floor for
      * @return the floor of t, as a long
      */
-    public static long longFloor(float t) {
-        return t >= 0f ? (long) t : (long) t - 1L;
+    public static long longFloor(final float t) {
+        final long z = (long) t;
+        return t < z ? z - 1L : z;
     }
+
     /**
      * Like {@link Math#floor(double)} , but returns an int.
      * Doesn't consider "weird doubles" like INFINITY and NaN.
+     * This is only faster than {@code (int)Math.floor(t)} on Java 8 for supported desktop platforms.
+     *
      * @param t the float to find the floor for
      * @return the floor of t, as an int
      */
-    public static int fastFloor(double t) {
-        return t >= 0.0 ? (int) t : (int) t - 1;
+    public static int fastFloor(final double t) {
+        final int z = (int) t;
+        return t < z ? z - 1 : z;
     }
     /**
      * Like {@link Math#floor(double)}, but takes a float and returns an int.
@@ -59,26 +68,34 @@ public class Noise {
      * @param t the float to find the floor for
      * @return the floor of t, as an int
      */
-    public static int fastFloor(float t) {
-        return t >= 0f ? (int) t : (int) t - 1;
+    public static int fastFloor(final float t) {
+        final int z = (int) t;
+        return t < z ? z - 1 : z;
     }
     /**
      * Like {@link Math#ceil(double)}, but returns an int.
      * Doesn't consider "weird doubles" like INFINITY and NaN.
+     * This is only faster than {@code (int)Math.ceil(t)} on Java 8 for supported desktop platforms.
+     *
      * @param t the float to find the ceiling for
      * @return the ceiling of t, as an int
      */
-    public static int fastCeil(double t) {
-        return t >= 0.0 ? -(int) -t + 1: -(int)-t;
+    public static int fastCeil(final double t) {
+        final int z = (int) t;
+        return t > z ? z + 1 : z;
     }
+
     /**
      * Like {@link Math#ceil(double)}, but takes a float and returns an int.
      * Doesn't consider "weird floats" like INFINITY and NaN.
+     * This is only faster than {@code (int)Math.ceil(t)} on Java 8 for supported desktop platforms.
+     *
      * @param t the float to find the ceiling for
      * @return the ceiling of t, as an int
      */
-    public static int fastCeil(float t) {
-        return t >= 0f ? -(int) -t + 1: -(int)-t;
+    public static int fastCeil(final float t) {
+        final int z = (int) t;
+        return t > z ? z + 1 : z;
     }
 
     /**
@@ -108,7 +125,7 @@ public class Noise {
     public static float cerp(final float start, final float end, float a) {
         return (1f - (a *= a * (3f - 2f * a))) * start + a * end;
     }
-    /*
+    /**
      * Quintic-interpolates between start and end (valid doubles), with a between 0 (yields start) and 1 (yields end).
      * Will smoothly transition toward start or end as a approaches 0 or 1, respectively.
      * @param start a valid double, as in, not infinite or NaN
@@ -119,7 +136,7 @@ public class Noise {
     public static double querp(final double start, final double end, double a){
         return (1.0 - (a *= a * a * (a * (a * 6.0 - 15.0) + 10.0))) * start + a * end;
     }
-    /*
+    /**
      * Quintic-interpolates between start and end (valid floats), with a between 0 (yields start) and 1 (yields end).
      * Will smoothly transition toward start or end as a approaches 0 or 1, respectively.
      * @param start a valid float, as in, not infinite or NaN
@@ -130,7 +147,6 @@ public class Noise {
     public static float querp(final float start, final float end, float a){
         return (1f - (a *= a * a * (a * (a * 6f - 15f) + 10f))) * start + a * end;
     }
-
 
     /**
      * Linear-interpolates between start and end (valid doubles), with a between 0 (yields start) and 1 (yields end).
@@ -3255,7 +3271,7 @@ final double v2 = + x * +1.1212273759528033 + y * -1.1036247824581010 + z * +0.9
         }
         public static double cubicSway(double value)
         {
-            long floor = (value >= 0.0 ? (long) value : (long) value - 1L);
+            long floor = (long) Math.floor(value);
             value -= floor;
             floor = (-(floor & 1L) | 1L);
             return value * value * (3.0 - 2.0 * value) * (floor << 1) - floor;
@@ -3333,8 +3349,9 @@ final double v2 = + x * +1.1212273759528033 + y * -1.1036247824581010 + z * +0.9
 //                    + NumberTools.swayRandomized(seed + 0xABC98388FB8FAC03L, x * 0.5 + y * 1.5) * adjust1
 //                    + NumberTools.swayRandomized(seed + 0x8CB92BA72F3D8DD7L, x - y) * adjust2 
 //                    ) * 0.75 + 0.5);
-            final long floorX = x >= 0.0 ? (long) x : (long) x - 1L,
-                    floorY = y >= 0.0 ? (long) y : (long) y - 1L;
+            long floorX = (long) Math.floor(x);
+            long floorY = (long) Math.floor(y);
+
 //            long seedX = seed * 0xC13FA9A902A6328FL + floorX * 0x91E10DA5C79E7B1DL,
 //                    seedY = seed * 0x91E10DA5C79E7B1DL + floorY * 0xC13FA9A902A6328FL;
 //            final long startX = ((seedX ^ (seedX >>> 25)) * (seedX | 0xA529L)),
@@ -3370,8 +3387,8 @@ final double v2 = + x * +1.1212273759528033 + y * -1.1036247824581010 + z * +0.9
                     + (SeededNoise.grad2d[x0y1] + SeededNoise.grad2d[x0y1 + 1]) * (ix * y)
                     + (SeededNoise.grad2d[x1y1] + SeededNoise.grad2d[x1y1 + 1]) * (x * y)
             ) * 0.7071067811865475;
-//            long xf = x >= 0.0 ? (long) x : (long) x - 1L;
-//            long yf = y >= 0.0 ? (long) y : (long) y - 1L;
+//            long xf = (long) Math.floor(x);
+//            long yf = (long) Math.floor(y);
 //            long s = ((0x91E10DA5C79E7B1DL ^ seed ^ yf)) * 0xC13FA9A902A6328FL, s2 = ((0x91E10DA5C79E7B1DL ^ seed ^ yf + 1L)) * 0xC13FA9A902A6328FL;
 //            double xSmall = x - xf;
 //            //, 0xABC98388FB8FAC03L, 0x8CB92BA72F3D8DD7L
@@ -3438,9 +3455,9 @@ final double v2 = + x * +1.1212273759528033 + y * -1.1036247824581010 + z * +0.9
         @Override
         public double getNoiseWithSeed(double x, final long seed) {
             x += ((seed & 0xFFFFFFFFL) ^ (seed >>> 32)) * 0x1p-24; // offset x by between 0.0 and almost 256.0
-            final long xFloor = x >= 0.0 ? (long) x : (long) x - 1L, // floor of x as a long
-                    rise = 1L - ((x >= 0.0 ? (long) (x + x) : (long) (x + x) - 1L) & 2L); // either 1 or -1
-            x -= xFloor;
+            long floorX = (long) Math.floor(x);
+            final long rise = 1L - ((x >= 0.0 ? (long) (x + x) : (long) (x + x) - 1L) & 2L); // either 1 or -1
+            x -= floorX;
             // and now we flip the switch from "magic" to "more magic..."
             // this directly sets the bits that describe a double. this might seem like it should be slow; it is not.
             // seed and xFloor are XORed to roughly mix them together; adding would work too, probably.
@@ -3455,7 +3472,7 @@ final double v2 = + x * +1.1212273759528033 + y * -1.1036247824581010 + z * +0.9
             // we bitwise OR with 0x4030000000000000L, which is the exponent section for a double between 16.0 and 32.0.
             // we work our magic and convert the bits to double.
             // subtracting 24.0 takes the range to -4.0 to 12.0, where we want it (Quilez used this).
-            final double h = NumberTools.longBitsToDouble((seed ^ xFloor ^ 0x9E3779B97F4A7C15L) * 0xD1B54A32D192ED03L >>> 12 | 
+            final double h = NumberTools.longBitsToDouble((seed ^ floorX ^ 0x9E3779B97F4A7C15L) * 0xD1B54A32D192ED03L >>> 12 |
                       0x4040000000000000L) - 52.0;
 //                    0x4030000000000000L) - 20.0;
             // Quilez' quartic curve; uses the "rise" calculated earlier to determine if this is on the rising or
@@ -3477,8 +3494,8 @@ final double v2 = + x * +1.1212273759528033 + y * -1.1036247824581010 + z * +0.9
                 double xEdit = x += (((seed & 0x55555555L) | (seed >>> 32 & 0xAAAAAAAAL))) * 0x1p-29 + 0.5698402909980532;
                 double yEdit = y += (((seed & 0xAAAAAAAAL) | (seed >>> 32 & 0x55555555L))) * 0x1p-29 + 0.7548776662466927;
                 final long
-                        xFloor = xEdit >= 0.0 ? (long) xEdit : (long) xEdit - 1,
-                        yFloor = yEdit >= 0.0 ? (long) yEdit : (long) yEdit - 1;
+                        xFloor = (long) Math.floor(xEdit),
+                        yFloor = (long) Math.floor(yEdit);
                 xEdit -= xFloor;
                 yEdit -= yFloor;
                 xEdit *= (xEdit - 1.0);

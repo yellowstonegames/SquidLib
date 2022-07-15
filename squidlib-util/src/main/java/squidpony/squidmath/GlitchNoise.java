@@ -26,7 +26,7 @@ public class GlitchNoise implements Noise.Noise1D, Noise.Noise2D, Noise.Noise3D,
     public static final GlitchNoise instance = new GlitchNoise();
     public static double zigzagRandomized(long seed, double value)
     {
-        final long floor = value >= 0.0 ? (long) value : (long) value - 1L;
+        final long floor = (long) Math.floor(value);
         final double start = (((seed += floor * 0x6C8E9CF570932BD5L) ^ (seed >>> 25)) * (seed | 0xA529L)) * 0x0.fffffffffffffbp-62,
                 end = (((seed += 0x6C8E9CF570932BD5L) ^ (seed >>> 25)) * (seed | 0xA529L)) * 0x0.fffffffffffffbp-62;
         value -= floor;

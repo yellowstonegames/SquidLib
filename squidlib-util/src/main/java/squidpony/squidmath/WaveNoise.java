@@ -47,7 +47,7 @@ public class WaveNoise implements Noise2D, Noise3D, Noise4D, Noise5D, Noise6D {
      */
     protected static double zigzagTight(double value)
     {
-        long floor = (value >= 0.0 ? (long) value : (long) value - 1L);
+        long floor = ((long) Math.floor(value));
         value -= floor;
         floor &= 1L;
         return value * (-floor | 1L) + floor;

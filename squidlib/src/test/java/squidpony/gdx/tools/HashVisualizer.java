@@ -758,7 +758,8 @@ public class HashVisualizer extends ApplicationAdapter {
      */
     public static float fract(final float a)
     {
-        return a - (a >= 0f ? (int) a : (int) a - 1);
+        int floor = (int)a;
+        return floor > a ? a - floor - a : a - floor;
     }
 
     /**
@@ -774,7 +775,7 @@ public class HashVisualizer extends ApplicationAdapter {
     {
         x *= 15.718281828459045f;
         x = (x + 0.5718281828459045f + seed) * ((seed + (x % 0.141592653589793f)) * 27.61803398875f + 4.718281828459045f);
-        return x - (x >= 0f ? (int) x : (int) x - 1);
+        return fract(x);
     }
     /**
      * Hash of 2 float inputs (this will tolerate most floats) with a seed between 0.0 (inclusive) and 1.0 (exclusive),
@@ -1088,7 +1089,8 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
      */
     public static float swayRandomizedTight(long seed, float value)
     {
-        final long floor = value >= 0f ? (long) value : (long) value - 1L;
+        long floor = (long) value;
+        if(floor > value) --floor;
         final float start = (((seed += floor * 0x6C8E9CF570932BD5L) ^ (seed >> 25) * (seed * 0x369DEA0F31A53F85L >>> 39))) * 0x0.ffffffp-63f,
                 end = (((seed += 0x6C8E9CF570932BD5L) ^ (seed >> 25) * (seed * 0x369DEA0F31A53F85L >>> 39))) * 0x0.ffffffp-63f;
 //        System.out.printf("start %f, end %f, seed %016X\n", start, end, seed);
@@ -1118,7 +1120,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
      */
     public static double swayRandomizedQuintic(final int seed, double value)
     {
-        final int floor = value >= 0.0 ? (int) value : (int) value - 1;
+        final int floor = (int) Math.floor(value);
         int z = seed + floor;
         final double start = (((z = (z ^ 0xD1B54A35) * 0x1D2BC3)) * ((z ^ z >>> 15) | 0xFFE00001) ^ z ^ z << 11) * 0x0.ffffffp-31,
                 end = (((z = (seed + floor + 1 ^ 0xD1B54A35) * 0x1D2BC3)) * ((z ^ z >>> 15) | 0xFFE00001) ^ z ^ z << 11) * 0x0.ffffffp-31;
@@ -1245,54 +1247,54 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 //        return ((1f - ay) * ((1f - ax) * x0y0 + ax * x1y0) + ay * ((1f - ax) * x0y1 + ax * x1y1));
     }
 
-    public static float foamNoise(int seed, final float x, final float y) {
-        float xin = x * 0.540302f + y * 0.841471f; // sin and cos of 1
-        float yin = x * -0.841471f + y * 0.540302f;
-        final float a = valueNoise(seed, xin + NumberTools.swayRandomized(~seed, yin) * 0.5f, yin);
-        seed = (seed ^ 0x9E3779BD) * 0xDAB;
-        seed ^= seed >>> 14;
-        xin = x * -0.989992f + y * 0.141120f; // sin and cos of 3
-        yin = x * -0.141120f + y * -0.989992f;
-        final float b = valueNoise(seed, xin + NumberTools.swayRandomized(~seed, yin - a) * 0.5f, yin + a);
-        seed = (seed ^ 0x9E3779BD) * 0xDAB;
-        seed ^= seed >>> 14;
-        xin = x * 0.283662f + y * -0.958924f; // sin and cos of 5
-        yin = x * 0.958924f + y * 0.283662f;
-        final float c = valueNoise(seed, xin + NumberTools.swayRandomized(~seed, yin + b) * 0.5f, yin - b);
-        final float result = (a + b) * 0.3125f + c * 0.375f;
-        return result * result * (3f - 2f * result);
-    }
-
-    public static float valueNoise(int seed, float x, float y)
-    {
-        int xFloor = x >= 0f ? (int) x : (int) x - 1;
-        x -= xFloor;
-        x *= x * (3 - 2 * x);
-        int yFloor = y >= 0f ? (int) y : (int) y - 1;
-        y -= yFloor;
-        y *= y * (3 - 2 * y);
-        xFloor *= 0xD1B55;
-        yFloor *= 0xABC99;
-        return ((1f - y) * ((1f - x) * hashPart1024(xFloor, yFloor, seed) + x * hashPart1024(xFloor + 0xD1B55, yFloor, seed))
-                + y * ((1f - x) * hashPart1024(xFloor, yFloor + 0xABC99, seed) + x * hashPart1024(xFloor + 0xD1B55, yFloor + 0xABC99, seed))) * 0x1.010102p-10f;
-    }
-
-    //x should be premultiplied by 0xD1B55
-    //y should be premultiplied by 0xABC99
-    private static int hashPart1024(final int x, final int y, int s) {
-        s += x ^ y;
-        s ^= s << 8;
-        return s >>> 10 & 0x3FF;
-    }
-
-    //x should be premultiplied by 0xD1B55
-    //y should be premultiplied by 0xABC99
-    //z should be premultiplied by 0x8CB93
-    private static int hashPart1024(final int x, final int y, final int z, int s) {
-        s += x ^ y ^ z;
-        s ^= s << 8;
-        return s >>> 10 & 0x3FF;
-    }
+//    public static float foamNoise(int seed, final float x, final float y) {
+//        float xin = x * 0.540302f + y * 0.841471f; // sin and cos of 1
+//        float yin = x * -0.841471f + y * 0.540302f;
+//        final float a = valueNoise(seed, xin + NumberTools.swayRandomized(~seed, yin) * 0.5f, yin);
+//        seed = (seed ^ 0x9E3779BD) * 0xDAB;
+//        seed ^= seed >>> 14;
+//        xin = x * -0.989992f + y * 0.141120f; // sin and cos of 3
+//        yin = x * -0.141120f + y * -0.989992f;
+//        final float b = valueNoise(seed, xin + NumberTools.swayRandomized(~seed, yin - a) * 0.5f, yin + a);
+//        seed = (seed ^ 0x9E3779BD) * 0xDAB;
+//        seed ^= seed >>> 14;
+//        xin = x * 0.283662f + y * -0.958924f; // sin and cos of 5
+//        yin = x * 0.958924f + y * 0.283662f;
+//        final float c = valueNoise(seed, xin + NumberTools.swayRandomized(~seed, yin + b) * 0.5f, yin - b);
+//        final float result = (a + b) * 0.3125f + c * 0.375f;
+//        return result * result * (3f - 2f * result);
+//    }
+//
+//    public static float valueNoise(int seed, float x, float y)
+//    {
+//        int xFloor = x >= 0f ? (int) x : (int) x - 1;
+//        x -= xFloor;
+//        x *= x * (3 - 2 * x);
+//        int yFloor = y >= 0f ? (int) y : (int) y - 1;
+//        y -= yFloor;
+//        y *= y * (3 - 2 * y);
+//        xFloor *= 0xD1B55;
+//        yFloor *= 0xABC99;
+//        return ((1f - y) * ((1f - x) * hashPart1024(xFloor, yFloor, seed) + x * hashPart1024(xFloor + 0xD1B55, yFloor, seed))
+//                + y * ((1f - x) * hashPart1024(xFloor, yFloor + 0xABC99, seed) + x * hashPart1024(xFloor + 0xD1B55, yFloor + 0xABC99, seed))) * 0x1.010102p-10f;
+//    }
+//
+//    //x should be premultiplied by 0xD1B55
+//    //y should be premultiplied by 0xABC99
+//    private static int hashPart1024(final int x, final int y, int s) {
+//        s += x ^ y;
+//        s ^= s << 8;
+//        return s >>> 10 & 0x3FF;
+//    }
+//
+//    //x should be premultiplied by 0xD1B55
+//    //y should be premultiplied by 0xABC99
+//    //z should be premultiplied by 0x8CB93
+//    private static int hashPart1024(final int x, final int y, final int z, int s) {
+//        s += x ^ y ^ z;
+//        s ^= s << 8;
+//        return s >>> 10 & 0x3FF;
+//    }
     /**
      * Like {@link Math#floor(double)}, but takes a float and returns an int.
      * Doesn't consider "weird floats" like INFINITY and NaN. This method will only properly floor
@@ -1370,7 +1372,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
      */
     public static double wiggle(long seed, double value)
     {
-        final long floor = value >= 0.0 ? (long) value : (long) value - 1L; // the closest long that is less than value
+        final long floor = (long) Math.floor(value); // the closest long that is less than value
         // gets a random start and endpoint. there's a sequence of start and end values for each seed, and changing the
         // seed changes the start and end values unpredictably (so use the same seed for one curving line).
         final long z = seed + floor * 0x6C8E9CF570932BD5L;
@@ -1396,7 +1398,8 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
      */
     public static float wiggle(long seed, float value)
     {
-        final long floor = value >= 0f ? (long) value : (long) value - 1L;
+        long floor = (long) value;
+        if(floor > value) --floor;
         final long z = seed + floor * 0x6C8E9CF570932BD5L;
         final float start = ((z ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5C323L ^ 0x9E3779B97F4A7C15L) * 0x0.ffffffp-63f,
                 end = ((z + 0x6C8E9CF570932BD5L ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5C323L ^ 0x9E3779B97F4A7C15L) * 0x0.ffffffp-63f;
@@ -1434,7 +1437,8 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
      */
     public static float wiggle(int seed, float value)
     {
-        final int floor = value >= 0f ? (int) value : (int) value - 1;
+        int floor = (int) value;
+        if(floor > value) --floor;
         int z = seed + floor * 0xBE56D;
         final float start = ((z ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) * 0x0.ffffffp-31f,
                 end = ((z + 0xBE56D ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) * 0x0.ffffffp-31f;
@@ -5217,7 +5221,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("Experimental Noise 2D, 1 octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                bright = foamNoise(-999999, (x + ctr) * 0.03125f, (y + ctr) * 0.03125f);
+                                bright = basicPrepare(FastNoise.instance.singleFoam(-999999, (x + ctr) * 0.03125f, (y + ctr) * 0.03125f));
 //                                bright = prepare((
 //                                        beachNoise(-999999, (x + ctr) * 0.03125f, (y + ctr) * 0.03125f) +
 //                                        beachNoise(9999, (y + ctr) * 0.03125f - 1.618f, (x + ctr) * 0.03125f - 1.618f)) * 0.375f
