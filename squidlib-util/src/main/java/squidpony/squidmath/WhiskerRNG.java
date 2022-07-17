@@ -21,19 +21,19 @@ import squidpony.StringKit;
 import java.io.Serializable;
 
 /**
- * A RandomnessSource with four {@code long} states that changes its state with complex ways it can connect states to
- * other states. This has been backported from jdkgdxds, which got this from SquidSquad originally. This generator has
- * an unknown period that is statistically extremely likely to be very long (more than 2 to the 64), and no combinations
- * of states are known that put it in a bad starting state or one with a shorter period. It is an extremely fast
- * generator on Java 16 and newer, and is almost the fastest generator here when running on HotSpot Java 16. The newer,
- * very-similar {@link WhiskerRNG} is 10% to 20% faster. FourWheelRNG has passed 64TB of PractRand testing with no
- * anomalies, and 4PB of hwd testing. It does fail one test (Remortality) after hundreds of PB of tested data.
+ * A RandomnessSource with four {@code long} states performs very few operations per random number, and can often
+ * perform those operations as instruction-parallel. This has been backported from juniper, which is related to jdkgdxds
+ * and SquidSquad. This generator has an unknown period that is statistically extremely likely to be very long (more
+ * than 2 to the 64), and no combinations of states are known that put it in a bad starting state or one with a shorter
+ * period. It is an extremely fast generator on Java 16 and newer, and is probably the fastest generator here when
+ * running on HotSpot Java 16 (10% to 20% faster than the very-similar {@link FourWheelRNG}, the previous fastest
+ * generator). It has passed 64TB of PractRand testing with no anomalies.
  * <br>
- * FourWheel, it's got four states and it rolls changes between them.
+ * It's called Whisker because my very-bewhiskered cat Eddie was meowing at me while I tried to finish it.
  * <br>
- * Created by Tommy Ettinger on 7/13/2021.
+ * Created by Tommy Ettinger on 7/16/2022.
  */
-public class FourWheelRNG implements RandomnessSource, Serializable {
+public class WhiskerRNG implements RandomnessSource, Serializable {
     private static final long serialVersionUID = 0L;
     /**
      * Can be any long value.
@@ -58,7 +58,7 @@ public class FourWheelRNG implements RandomnessSource, Serializable {
     /**
      * Creates a new generator seeded using Math.random.
      */
-    public FourWheelRNG() {
+    public WhiskerRNG() {
         this((long) ((Math.random() - 0.5) * 0x10000000000000L)
                 ^ (long) (((Math.random() - 0.5) * 2.0) * 0x8000000000000000L),
                 (long) ((Math.random() - 0.5) * 0x10000000000000L)
@@ -69,48 +69,35 @@ public class FourWheelRNG implements RandomnessSource, Serializable {
                 ^ (long) (((Math.random() - 0.5) * 2.0) * 0x8000000000000000L));
     }
 
-    public FourWheelRNG(long seed) {
+    public WhiskerRNG(long seed) {
         setSeed(seed);
     }
 
-    public FourWheelRNG(final long seedA, final long seedB, long seedC, long seedD) {
+    public WhiskerRNG(final long seedA, final long seedB, long seedC, long seedD) {
         stateA = seedA;
         stateB = seedB;
         stateC = seedC;
         stateD = seedD;
     }
+
     /**
      * This initializes all 4 states of the generator to random values based on the given seed.
-     * (2 to the 64) possible initial generator states can be produced here, all with a different
-     * first value returned by {@link #nextLong()} (because {@code stateD} is guaranteed to be
-     * different for every different {@code seed}).
+     * (2 to the 64) possible initial generator states can be produced here.
+     *
      * @param seed the initial seed; may be any long
      */
-    public void setSeed(long seed) {
-        long x = (seed += 0x9E3779B97F4A7C15L);
-        x ^= x >>> 27;
-        x *= 0x3C79AC492BA7B653L;
-        x ^= x >>> 33;
-        x *= 0x1C69B3F74AC4AE35L;
-        stateA = x ^ x >>> 27;
-        x = (seed += 0x9E3779B97F4A7C15L);
-        x ^= x >>> 27;
-        x *= 0x3C79AC492BA7B653L;
-        x ^= x >>> 33;
-        x *= 0x1C69B3F74AC4AE35L;
-        stateB = x ^ x >>> 27;
-        x = (seed += 0x9E3779B97F4A7C15L);
-        x ^= x >>> 27;
-        x *= 0x3C79AC492BA7B653L;
-        x ^= x >>> 33;
-        x *= 0x1C69B3F74AC4AE35L;
-        stateC = x ^ x >>> 27;
-        x = (seed + 0x9E3779B97F4A7C15L);
-        x ^= x >>> 27;
-        x *= 0x3C79AC492BA7B653L;
-        x ^= x >>> 33;
-        x *= 0x1C69B3F74AC4AE35L;
-        stateD = x ^ x >>> 27;
+    public void setSeed (long seed) {
+        stateA = seed ^ 0xC6BC279692B5C323L;
+        stateB = seed ^ ~0xC6BC279692B5C323L;
+        seed ^= seed >>> 32;
+        seed *= 0xBEA225F9EB34556DL;
+        seed ^= seed >>> 29;
+        seed *= 0xBEA225F9EB34556DL;
+        seed ^= seed >>> 32;
+        seed *= 0xBEA225F9EB34556DL;
+        seed ^= seed >>> 29;
+        stateC = ~seed;
+        stateD = seed;
     }
 
     /**
@@ -186,57 +173,55 @@ public class FourWheelRNG implements RandomnessSource, Serializable {
     }
 
     @Override
-    public long nextLong() {
+    public long nextLong () {
         final long fa = stateA;
         final long fb = stateB;
         final long fc = stateC;
         final long fd = stateD;
-        stateA = 0xD1342543DE82EF95L * fd;
-        stateB = fa + 0xC6BC279692B5C323L;
-        stateC = (fb << 47 | fb >>> 17) - fd;
-        stateD = fb ^ fc;
-        return fd;
+        stateA = fd * 0xF1357AEA2E62A9C5L; // Considered good by Steele and Vigna, https://arxiv.org/abs/2001.05304v1
+        stateB = (fa << 44 | fa >>> 20);
+        stateC = fb + 0x9E3779B97F4A7C15L; // 2 to the 64 divided by the golden ratio
+        return stateD = fa ^ fc;
     }
 
-    public long previousLong() {
+    public long previousLong () {
         final long fa = stateA;
         final long fb = stateB;
+        final long fc = stateC;
         final long fd = stateD;
-        stateD = 0x572B5EE77A54E3BDL * fa;
-        final long fc = stateC + stateD;
-        stateA = fb - 0xC6BC279692B5C323L;
-        stateB = (fc >>> 47 | fc << 17);
-        stateC = fd ^ stateB;
-        return 0x572B5EE77A54E3BDL * stateA;
+        stateA = (fb >>> 44 | fb << 20);
+        stateB = fc - 0x9E3779B97F4A7C15L;
+        stateC = stateA ^ fd;
+        return stateD = fa * 0x781494A55DAAED0DL; // modular multiplicative inverse of 0xF1357AEA2E62A9C5L
     }
 
     @Override
-    public int next(int bits) {
+    public int next (int bits) {
         final long fa = stateA;
         final long fb = stateB;
         final long fc = stateC;
         final long fd = stateD;
-        stateA = 0xD1342543DE82EF95L * fd;
-        stateB = fa + 0xC6BC279692B5C323L;
-        stateC = (fb << 47 | fb >>> 17) - fd;
-        stateD = fb ^ fc;
-        return (int)fd >>> (32 - bits);
+        stateA = fd * 0xF1357AEA2E62A9C5L;
+        stateB = (fa << 44 | fa >>> 20);
+        stateC = fb + 0x9E3779B97F4A7C15L;
+        return (int)(stateD = fa ^ fc) >>> (32 - bits);
     }
 
     /**
-     * Produces a copy of this FourWheelRNG that, if next() and/or nextLong() are called on this object and the
+     * Produces a copy of this WhiskerRNG that, if next() and/or nextLong() are called on this object and the
      * copy, both will generate the same sequence of random numbers from the point copy() was called. This just need to
      * copy the state so that it isn't shared, usually, and produce a new value with the same exact state.
      *
-     * @return a copy of this FourWheelRNG
+     * @return a copy of this WhiskerRNG
      */
     @Override
-    public FourWheelRNG copy() {
-        return new FourWheelRNG(stateA, stateB, stateC, stateD);
+    public WhiskerRNG copy() {
+        return new WhiskerRNG(stateA, stateB, stateC, stateD);
     }
+    
     @Override
     public String toString() {
-        return "FourWheelRNG with stateA 0x" + StringKit.hex(stateA) + "L, stateB 0x" + StringKit.hex(stateB)
+        return "WhiskerRNG with stateA 0x" + StringKit.hex(stateA) + "L, stateB 0x" + StringKit.hex(stateB)
                 + "L, stateC 0x" + StringKit.hex(stateC) + "L, and stateD 0x" + StringKit.hex(stateD) + 'L';
     }
 
@@ -245,30 +230,14 @@ public class FourWheelRNG implements RandomnessSource, Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        FourWheelRNG fourWheelRNG = (FourWheelRNG) o;
+        WhiskerRNG whiskerRNG = (WhiskerRNG) o;
 
-        return stateA == fourWheelRNG.stateA && stateB == fourWheelRNG.stateB && stateC == fourWheelRNG.stateC
-                && stateD == fourWheelRNG.stateD;
+        return stateA == whiskerRNG.stateA && stateB == whiskerRNG.stateB && stateC == whiskerRNG.stateC
+                && stateD == whiskerRNG.stateD;
     }
 
     @Override
     public int hashCode() {
         return (int) (9689L * (stateA ^ (stateA >>> 32)) + 421L * (stateB ^ (stateB >>> 32)) + 29L * (stateC ^ (stateC >>> 32)) + (stateD ^ stateD >>> 32));
     }
-    
-//    public static void main(String[] args)
-//    {
-//        /*
-//        cd target/classes
-//        java -XX:+UnlockDiagnosticVMOptions -XX:+PrintAssembly sarong/ThrustAltRNG > ../../thrustalt_asm.txt
-//         */
-//        long seed = 1L;
-//        ThrustAltRNG rng = new ThrustAltRNG(seed);
-//
-//        for (int i = 0; i < 1000000007; i++) {
-//            seed += rng.nextLong();
-//        }
-//        System.out.println(seed);
-//    }
-
 }
