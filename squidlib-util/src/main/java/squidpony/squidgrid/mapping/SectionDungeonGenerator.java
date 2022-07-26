@@ -155,6 +155,7 @@ public class SectionDungeonGenerator implements IDungeonGenerator{
     public DungeonUtility utility;
     protected int height, width;
     public Coord stairsUp, stairsDown;
+    public boolean markStairsUp, markStairsDown;
     public StatefulRNG rng;
     protected long rebuildSeed;
     protected boolean seedFixed;
@@ -598,6 +599,26 @@ public class SectionDungeonGenerator implements IDungeonGenerator{
     }
 
     /**
+     * Enables drawing stairs up, as '&lt;', and stairs down, as '&gt;', when a map is generated.
+     * @return this SectionDungeonGenerator; can be chained
+     */
+    public SectionDungeonGenerator addStairs() {
+        return addStairs(true, true);
+    }
+
+    /**
+     * Potentially enables drawing stairs up, as '&lt;', and stairs down, as '&gt;', when a map is generated.
+     * @param up if true, stairs up will be marked as '&lt;'; if false, no up stairs will be marked
+     * @param down if true, stairs down will be marked as '&gt;'; if false, no down stairs will be marked
+     * @return this SectionDungeonGenerator; can be chained
+     */
+    public SectionDungeonGenerator addStairs(boolean up, boolean down){
+        markStairsUp = up;
+        markStairsDown = down;
+        return this;
+    }
+
+    /**
      * Removes any door, water, or trap insertion effects that this DungeonGenerator would put in future dungeons.
      * @return this DungeonGenerator, with all effects removed. Can be chained.
      */
@@ -949,6 +970,7 @@ public class SectionDungeonGenerator implements IDungeonGenerator{
         ArrayList<char[][]> rm = finder.findRooms(),
                 cr = finder.findCorridors(),
                 cv = finder.findCaves();
+
         char[][] roomMap = innerGenerate(RoomFinder.merge(rm, width, height), roomFX),
                 allCorridors = RoomFinder.merge(cr, width, height),
                 corridorMap = innerGenerate(allCorridors, corridorFX),
@@ -992,6 +1014,10 @@ public class SectionDungeonGenerator implements IDungeonGenerator{
             }
         }
         placement = new Placement(finder);
+        if(markStairsUp)
+            dungeon[stairsUp.x][stairsUp.y] = '<';
+        if(markStairsDown)
+            dungeon[stairsDown.x][stairsDown.y] = '>';
         return dungeon;
 
     }

@@ -346,6 +346,7 @@ public class DungeonGenerator implements IDungeonGenerator {
     public DungeonGenerator addStairs() {
         return addStairs(true, true);
     }
+
     /**
      * Potentially enables drawing stairs up, as '&lt;', and stairs down, as '&gt;', when a map is generated.
      * @param up if true, stairs up will be marked as '&lt;'; if false, no up stairs will be marked
@@ -357,6 +358,7 @@ public class DungeonGenerator implements IDungeonGenerator {
         markStairsDown = down;
         return this;
     }
+
     /**
      * Removes any door, water, or trap insertion effects that this DungeonGenerator would put in future dungeons.
      * @return this DungeonGenerator, with all effects removed. Can be chained.

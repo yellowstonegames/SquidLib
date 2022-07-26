@@ -15,21 +15,18 @@
  */
 
 package squidpony.issues;
-import squidpony.squidgrid.mapping.ConnectingMapGenerator;
-import squidpony.squidgrid.mapping.DungeonGenerator;
-import squidpony.squidgrid.mapping.DungeonUtility;
-import squidpony.squidgrid.mapping.IDungeonGenerator;
+import squidpony.squidgrid.mapping.*;
 import squidpony.squidmath.RNG;
 
 public class SmallDungeonTest {
 
     public static void main(String[] args) {
-        IDungeonGenerator gen = new ConnectingMapGenerator(11, 11, 1, 1, new RNG(), 1, 0.5);
+        ConnectingMapGenerator gen = new ConnectingMapGenerator(11, 11, 1, 1, new RNG(), 1, 0.5);
 
         char[][] generated = gen.generate();
-        DungeonGenerator dg = new DungeonGenerator(11, 11);
+        SectionDungeonGenerator dg = new SectionDungeonGenerator(11, 11);
         dg.addStairs();
-        generated = dg.generate(generated);
+        generated = dg.generate(generated, gen.getEnvironment());
 
         DungeonUtility.debugPrint(generated);
     }
