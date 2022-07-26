@@ -102,6 +102,7 @@ public class DungeonGenerator implements IDungeonGenerator {
     public DungeonUtility utility;
     protected int height, width;
     public Coord stairsUp, stairsDown;
+    public boolean markStairsUp, markStairsDown;
     public IStatefulRNG rng;
     protected long rebuildSeed;
     protected boolean seedFixed;
@@ -338,6 +339,24 @@ public class DungeonGenerator implements IDungeonGenerator {
         return this;
     }
 
+    /**
+     * Enables drawing stairs up, as '&lt;', and stairs down, as '&gt;', when a map is generated.
+     * @return this DungeonGenerator; can be chained
+     */
+    public DungeonGenerator addStairs() {
+        return addStairs(true, true);
+    }
+    /**
+     * Potentially enables drawing stairs up, as '&lt;', and stairs down, as '&gt;', when a map is generated.
+     * @param up if true, stairs up will be marked as '&lt;'; if false, no up stairs will be marked
+     * @param down if true, stairs down will be marked as '&gt;'; if false, no down stairs will be marked
+     * @return this DungeonGenerator; can be chained
+     */
+    public DungeonGenerator addStairs(boolean up, boolean down){
+        markStairsUp = up;
+        markStairsDown = down;
+        return this;
+    }
     /**
      * Removes any door, water, or trap insertion effects that this DungeonGenerator would put in future dungeons.
      * @return this DungeonGenerator, with all effects removed. Can be chained.
@@ -605,6 +624,11 @@ public class DungeonGenerator implements IDungeonGenerator {
 
     private char[][] innerGenerate(char[][] map)
     {
+        if(markStairsUp)
+            map[stairsUp.x][stairsUp.y] = '<';
+        if(markStairsDown)
+            map[stairsDown.x][stairsDown.y] = '>';
+
         OrderedSet<Coord> doorways;
         OrderedSet<Coord> hazards = new OrderedSet<>();
         Coord temp;
@@ -805,7 +829,6 @@ public class DungeonGenerator implements IDungeonGenerator {
                 hazards.remove(entry);
             }
         }
-
         dungeon = map;
         return map;
 
