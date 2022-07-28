@@ -21,8 +21,8 @@ import java.util.Random;
  * Created by Tommy Ettinger on 1/13/2018.
  */
 public class MathVisualizer extends ApplicationAdapter {
-    private int mode = 48;
-    private int modes = 58;
+    private int mode = 58;
+    private int modes = 59;
     private FilterBatch batch;
     private SparseLayers layers;
     private InputAdapter input;
@@ -517,11 +517,15 @@ public class MathVisualizer extends ApplicationAdapter {
         return state >>> 1 ^ (-(state & 1) & 0xB400);
     }
 
+    public static int serpentinePair(int x, int y) {
+        return (x >= y) ? (((x & 1) == 1) ? x * x + y : x * (x + 2) - y) : (((y & 1) == 1) ? y * (y + 2) - x : y * y + x);
+    }
 
     @Override
     public void create() {
         startTime = TimeUtils.millis();
         Coord.expandPoolTo(512, 512);
+        CoordPacker.init();
         diver = new DiverRNG(1234567890L);
         rng = new MoonwalkRNG(1234567890);
         seed = DiverRNG.determine(12345L);
@@ -2341,6 +2345,67 @@ public class MathVisualizer extends ApplicationAdapter {
                 }
                 break;
             }
+            case 58: {
+                Gdx.graphics.setTitle("Hilbert Blue Thing, from position");
+                for (int x = 0; x < 256; x++) {
+                    for (int y = 0; y < 256; y++) {
+                        int index;
+                        double inc = (Math.PI - Math.E), t;// 0.6180339887498949 , 1.6180339887498949
+                        float bright, color;
+                        index = CoordPacker.posToHilbert(x, y);
+                        t = 0.5 + index * inc;
+                        bright = (float) (t - (long) t);
+                        color = SColor.floatGet(bright, bright, bright, 1f);
+                        layers.backgrounds[y][511 - x] = color;
+                        index += 256;
+                        t = 0.5 + index * inc;
+                        bright = (float) (t - (long) t);
+                        color = SColor.floatGet(bright, bright, bright, 1f);
+                        layers.backgrounds[x][y] = color;
+                        index += 256;
+                        t = 0.5 + index * inc;
+                        bright = (float) (t - (long) t);
+                        color = SColor.floatGet(bright, bright, bright, 1f);
+                        layers.backgrounds[x + 256][y] = color;
+                        index += 256;
+                        t = 0.5 + index * inc;
+                        bright = (float) (t - (long) t);
+                        color = SColor.floatGet(bright, bright, bright, 1f);
+                        layers.backgrounds[511 - y][256 + x] = color;
+                    }
+                }
+//                // thanks to Jonathan M, https://stackoverflow.com/a/20591835
+//                Gdx.graphics.setTitle("Spiral Blue Thing, from index");
+//                for (int index = 0; index < 0x40000; ++index) {
+//                    double t = 0.5 + index * 0.6180339887498949;
+//                    float bright = (float) (t - (long)t);
+//
+//                    int root = (int)Math.sqrt(index);
+//                    final int sign = -(root & 1);
+//                    final int big = (root * (root + 1)) - index << 1;
+//                    final int y = ((root + 1 >> 1) + sign ^ sign) + ((sign ^ sign + Math.min(big, 0)) >> 1);
+//                    final int x = ((root + 1 >> 1) + sign ^ sign) - ((sign ^ sign + Math.max(big, 0)) >> 1);
+//
+//                    float color = SColor.floatGet(bright, bright, bright, 1f);
+//                    layers.backgrounds[256 + x][256 + y] = color;
+//                }
+//                }
+//                Gdx.graphics.setTitle("Spiral Numbering Thing, from index");
+//                for (int g = 0; g < 256; g++) {
+//                    final int root = (int) (Math.sqrt(g));
+//                    final int sign = -(root & 1);
+//                    final int big = (root * (root + 1)) - g << 1;
+//                    final int y = ((root + 1 >> 1) + sign ^ sign) + ((sign ^ sign + Math.min(big, 0)) >> 1);
+//                    final int x = ((root + 1 >> 1) + sign ^ sign) - ((sign ^ sign + Math.max(big, 0)) >> 1);
+//                    float color = SColor.floatGetI(g, g, g);
+//                    for (int a = 0; a < 32; a++) {
+//                        for (int b = 0; b < 32; b++) {
+//                            layers.backgrounds[256 + (x << 5) + a][256 + (y << 5) + b] = color;
+//                        }
+//                    }
+//                }
+            }
+            break;
         }
     }
 
