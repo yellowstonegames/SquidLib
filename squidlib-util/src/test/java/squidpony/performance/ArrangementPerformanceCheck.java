@@ -9,7 +9,7 @@ import squidpony.squidmath.OrderedSet;
  * Testing the speed of Arrangement when a lot of items are in use.
  * Created by Tommy Ettinger on 5/19/2017.
  */
-public class ArrangementRace {
+public class ArrangementPerformanceCheck {
     @Test
     @Ignore
     public void checkArrangement()

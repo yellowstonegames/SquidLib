@@ -15,8 +15,9 @@ public class PerfTest {
 	// TODO add more tests when appropriate here
 	private static final AbstractPerformanceTest[] tests = new AbstractPerformanceTest[] {
 //			new FOVLOSPerformanceTest(),
-			new DijkstraPerformanceTest(),
-			new WaypointPerformanceTest()
+//			new DijkstraPerformanceTest(),
+//			new WaypointPerformanceTest(),
+			new DungeonGeneratorPerformanceTest()
 	};
 
 	public static void main(String[] args) throws InterruptedException, ExecutionException {
