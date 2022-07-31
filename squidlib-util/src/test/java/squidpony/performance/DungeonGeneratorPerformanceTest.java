@@ -28,7 +28,7 @@ import squidpony.squidmath.*;
  *
  */
 final class DungeonGeneratorPerformanceTest extends AbstractPerformanceTest {
-	public static final int SIZE = 1000;
+	public static final int SIZE = 500;
 	public DungeonGeneratorPerformanceTest() {
 		Coord.expandPoolTo(SIZE, SIZE);
 		createThreadList();
@@ -48,14 +48,14 @@ final class DungeonGeneratorPerformanceTest extends AbstractPerformanceTest {
 	private static final class Test extends AbstractPerformanceUnit {
 
 		private IDungeonGenerator gen;
-		private DungeonGenerator dg;
+		private TimedSectionDungeonGenerator dg;
 		private RNG rng;
 
 		public Test(int size, RNG rng) {
 			this.rng = rng;
 //			gen = new GrowingTreeMazeGenerator(size, size, rng); // Task took 2539.5 ms on average
 //			gen = new ConnectingMapGenerator(size, size, 1, 1, rng, 1, 0.5); // Task took 1248.90625 ms on average
-			dg = new DungeonGenerator(size, size, rng);
+			dg = new TimedSectionDungeonGenerator(size, size, rng);
 		}
 
 		@Override

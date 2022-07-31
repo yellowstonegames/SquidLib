@@ -86,7 +86,7 @@ public class RoomFinder {
      */
     public RoomFinder(char[][] dungeon)
     {
-        if(dungeon.length <= 0)
+        if(dungeon.length == 0)
             return;
         width = dungeon.length;
         height = dungeon[0].length;
@@ -143,7 +143,7 @@ public class RoomFinder {
      */
     public RoomFinder(char[][] dungeon, int environmentKind)
     {
-        if(dungeon.length <= 0)
+        if(dungeon.length == 0)
             return;
         width = dungeon.length;
         height = dungeon[0].length;
