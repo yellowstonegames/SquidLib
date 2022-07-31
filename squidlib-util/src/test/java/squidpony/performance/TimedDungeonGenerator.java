@@ -14,16 +14,20 @@
  *  limitations under the License.
  */
 
-package squidpony.squidgrid.mapping;
+package squidpony.performance;
 
 import squidpony.squidai.DijkstraMap;
 import squidpony.squidgrid.Measurement;
+import squidpony.squidgrid.mapping.DungeonUtility;
+import squidpony.squidgrid.mapping.IDungeonGenerator;
 import squidpony.squidgrid.mapping.styled.DungeonBoneGen;
 import squidpony.squidgrid.mapping.styled.TilesetType;
 import squidpony.squidmath.*;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.EnumMap;
+import java.util.Map;
 
 /**
  * The primary way to create a more-complete dungeon, layering different effects and modifications on top of
@@ -56,12 +60,14 @@ import java.util.EnumMap;
  * no more than 1.1% different from the percentage you request for any effects. If you need to reproduce dungeons with
  * the same seed and get the same (imprecise) results as before this change, it's probably not possible unless you save
  * the previously-generated char[][] dungeons, since several other things may have changed as well.
- * @see squidpony.squidgrid.mapping.DungeonUtility this class exposes a DungeonUtility member; DungeonUtility also has many useful static methods
+ * @see DungeonUtility this class exposes a DungeonUtility member; DungeonUtility also has many useful static methods
  *
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  * @author Tommy Ettinger - https://github.com/tommyettinger
  */
-public class DungeonGenerator implements IDungeonGenerator {
+public class TimedDungeonGenerator implements IDungeonGenerator {
+    public final OrderedMap<String, Long> TIMING = new OrderedMap<>();
+
     /**
      * The effects that can be applied to this dungeon. More may be added in future releases.
      */
@@ -164,7 +170,7 @@ public class DungeonGenerator implements IDungeonGenerator {
     /**
      * Make a DungeonGenerator with a GWTRNG using a random seed, height 40, and width 40.
      */
-    public DungeonGenerator()
+    public TimedDungeonGenerator()
     {
         rng = new GWTRNG();
         gen = new DungeonBoneGen(rng);
@@ -184,7 +190,7 @@ public class DungeonGenerator implements IDungeonGenerator {
      * @param width The width of the dungeon in cells
      * @param height The height of the dungeon in cells
      */
-    public DungeonGenerator(int width, int height)
+    public TimedDungeonGenerator(int width, int height)
     {
     	this(width, height, new GWTRNG());
     }
@@ -200,7 +206,7 @@ public class DungeonGenerator implements IDungeonGenerator {
      * @param rng The RNG to use for all purposes in this class; if it is a StatefulRNG, then it will be used as-is,
      *            but if it is not a StatefulRNG, a new StatefulRNG will be used, randomly seeded by this parameter
      */
-    public DungeonGenerator(int width, int height, IRNG rng)
+    public TimedDungeonGenerator(int width, int height, IRNG rng)
     {
         Coord.expandPoolTo(width, height);
         this.rng = (rng instanceof IStatefulRNG) ? (IStatefulRNG) rng : new GWTRNG(rng.nextLong());
@@ -216,7 +222,7 @@ public class DungeonGenerator implements IDungeonGenerator {
      * Copies all fields from copying and makes a new DungeonGenerator.
      * @param copying the DungeonGenerator to copy
      */
-    public DungeonGenerator(DungeonGenerator copying)
+    public TimedDungeonGenerator(TimedDungeonGenerator copying)
     {
         rng = new GWTRNG(copying.rng.getState());
         gen = new DungeonBoneGen(rng);
@@ -239,7 +245,7 @@ public class DungeonGenerator implements IDungeonGenerator {
      * @param percentage the percentage of floor cells to fill with water
      * @return this DungeonGenerator; can be chained
      */
-    public DungeonGenerator addWater(int percentage)
+    public TimedDungeonGenerator addWater(int percentage)
     {
         if(percentage < 0) percentage = 0;
         if(percentage > 100) percentage = 100;
@@ -258,7 +264,7 @@ public class DungeonGenerator implements IDungeonGenerator {
      * @param islandSpacing if greater than 1, islands will be placed randomly this many cells apart.
      * @return this DungeonGenerator; can be chained
      */
-    public DungeonGenerator addWater(int percentage, int islandSpacing)
+    public TimedDungeonGenerator addWater(int percentage, int islandSpacing)
     {
         if(percentage < 0) percentage = 0;
         if(percentage > 100) percentage = 100;
@@ -279,7 +285,7 @@ public class DungeonGenerator implements IDungeonGenerator {
      * @param percentage the percentage of floor cells to fill with grass
      * @return this DungeonGenerator; can be chained
      */
-    public DungeonGenerator addGrass(int percentage)
+    public TimedDungeonGenerator addGrass(int percentage)
     {
         if(percentage < 0) percentage = 0;
         if(percentage > 100) percentage = 100;
@@ -293,7 +299,7 @@ public class DungeonGenerator implements IDungeonGenerator {
      * @param percentage the percentage of floor cells not adjacent to walls to fill with boulders.
      * @return this DungeonGenerator; can be chained
      */
-    public DungeonGenerator addBoulders(int percentage)
+    public TimedDungeonGenerator addBoulders(int percentage)
     {
         if(percentage < 0) percentage = 0;
         if(percentage > 100) percentage = 100;
@@ -312,7 +318,7 @@ public class DungeonGenerator implements IDungeonGenerator {
      *                    one-cell-wide openings should receive doors. Usually, this should be true.
      * @return this DungeonGenerator; can be chained
      */
-    public DungeonGenerator addDoors(int percentage, boolean doubleDoors)
+    public TimedDungeonGenerator addDoors(int percentage, boolean doubleDoors)
     {
         if(percentage < 0) percentage = 0;
         if(percentage > 100) percentage = 100;
@@ -330,7 +336,7 @@ public class DungeonGenerator implements IDungeonGenerator {
      *                   the dungeon floor is meant to be a kill screen or minefield.
      * @return this DungeonGenerator; can be chained
      */
-    public DungeonGenerator addTraps(int percentage)
+    public TimedDungeonGenerator addTraps(int percentage)
     {
         if(percentage < 0) percentage = 0;
         if(percentage > 100) percentage = 100;
@@ -343,7 +349,7 @@ public class DungeonGenerator implements IDungeonGenerator {
      * Enables drawing stairs up, as '&lt;', and stairs down, as '&gt;', when a map is generated.
      * @return this DungeonGenerator; can be chained
      */
-    public DungeonGenerator addStairs() {
+    public TimedDungeonGenerator addStairs() {
         return addStairs(true, true);
     }
 
@@ -353,7 +359,7 @@ public class DungeonGenerator implements IDungeonGenerator {
      * @param down if true, stairs down will be marked as '&gt;'; if false, no down stairs will be marked
      * @return this DungeonGenerator; can be chained
      */
-    public DungeonGenerator addStairs(boolean up, boolean down){
+    public TimedDungeonGenerator addStairs(boolean up, boolean down){
         markStairsUp = up;
         markStairsDown = down;
         return this;
@@ -363,7 +369,7 @@ public class DungeonGenerator implements IDungeonGenerator {
      * Removes any door, water, or trap insertion effects that this DungeonGenerator would put in future dungeons.
      * @return this DungeonGenerator, with all effects removed. Can be chained.
      */
-    public DungeonGenerator clearEffects()
+    public TimedDungeonGenerator clearEffects()
     {
         fx.clear();
         return this;
@@ -503,7 +509,7 @@ public class DungeonGenerator implements IDungeonGenerator {
      * provide vertical passage. Use the addDoors, addWater, addGrass, and addTraps methods of this class to request
      * these in the generated map.
      * Also sets the fields stairsUp and stairsDown to two randomly chosen, distant, connected, walkable cells.
-     * @see squidpony.squidgrid.mapping.styled.TilesetType
+     * @see TilesetType
      * @param kind a TilesetType enum value, such as TilesetType.DEFAULT_DUNGEON
      * @return a char[][] dungeon
      */
@@ -534,6 +540,8 @@ public class DungeonGenerator implements IDungeonGenerator {
      */
     public char[][] generate(char[][] baseDungeon)
     {
+        TIMING.clear();
+        long startTime = System.currentTimeMillis();
         if(!seedFixed)
         {
             rebuildSeed = rng.getState();
@@ -558,6 +566,7 @@ public class DungeonGenerator implements IDungeonGenerator {
             dijkstra.scan(null, null);
             frustrated++;
         }while (dijkstra.getMappedCount() < width + height && frustrated < 8);
+        TIMING.put("frustration", TIMING.getOrDefault("frustration", 0L) + frustrated);
         if(frustrated >= 8)
         {
             return generate();
@@ -577,7 +586,7 @@ public class DungeonGenerator implements IDungeonGenerator {
         }
         stairsDown = new GreasedRegion(dijkstra.gradientMap, maxDijkstra * 0.7,
                 DijkstraMap.FLOOR).singleRandom(rng);
-
+        TIMING.put("outer", System.currentTimeMillis() - startTime);
         return innerGenerate(map);
     }
 
@@ -626,6 +635,7 @@ public class DungeonGenerator implements IDungeonGenerator {
 
     private char[][] innerGenerate(char[][] map)
     {
+        long startTime = System.currentTimeMillis();
         if(markStairsUp)
             map[stairsUp.x][stairsUp.y] = '<';
         if(markStairsDown)
@@ -666,6 +676,7 @@ public class DungeonGenerator implements IDungeonGenerator {
         if(fx.containsKey(FillEffect.TRAPS)) {
             trapFill = fx.get(FillEffect.TRAPS);
         }
+        long doorStart = System.currentTimeMillis();
 
         OrderedSet<Coord> obstacles = new OrderedSet<>(floorCount * doorFill >>> 10);
         if(doorFill > 0)
@@ -703,6 +714,8 @@ public class DungeonGenerator implements IDungeonGenerator {
                 doorways.remove(entry);
             }
         }
+        TIMING.put("doors", System.currentTimeMillis() - doorStart);
+        long boulderStart = System.currentTimeMillis();
         if (boulderFill > 0.0) {
             /*
             short[] floor = pack(map, '.');
@@ -719,8 +732,9 @@ public class DungeonGenerator implements IDungeonGenerator {
                 map[t.x][t.y] = '#';
             }
         }
+        TIMING.put("boulders", System.currentTimeMillis() - boulderStart);
 
-
+        long trapStart = System.currentTimeMillis();
         if(trapFill > 0) {
             for (int x = 1; x < map.length - 1; x++) {
                 for (int y = 1; y < map[x].length - 1; y++) {
@@ -740,6 +754,9 @@ public class DungeonGenerator implements IDungeonGenerator {
                 }
             }
         }
+        TIMING.put("traps", System.currentTimeMillis() - trapStart);
+        long waterGrassStart = System.currentTimeMillis();
+
         GreasedRegion floors = new GreasedRegion(map, '.'), working = new GreasedRegion(width, height);
         floorCount = floors.size();
         float waterRate = waterFill / 100.0f, grassRate = grassFill / 100.0f;
@@ -830,6 +847,13 @@ public class DungeonGenerator implements IDungeonGenerator {
                 map[entry.x][entry.y] = '^';
                 hazards.remove(entry);
             }
+        }
+        TIMING.put("water & grass", System.currentTimeMillis() - waterGrassStart);
+        TIMING.put("inner", System.currentTimeMillis() - startTime);
+
+        TIMING.sortByValue(Comparator.reverseOrder());
+        for(Map.Entry<String, Long> e : TIMING.entrySet()){
+            System.out.println(e.getKey() + ": " + e.getValue() + " ms");
         }
         dungeon = map;
         return map;
