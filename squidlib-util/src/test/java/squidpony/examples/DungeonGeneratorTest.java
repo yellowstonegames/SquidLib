@@ -362,7 +362,7 @@ public class DungeonGeneratorTest {
         dungeonGenerator = new DungeonGenerator(30, 30, rng);
         //dungeonGenerator.addDoors(10, false);
         rng.setState(2252637788195L);
-        PacMazeGenerator pac = new PacMazeGenerator(30, 30, rng);
+        PacMazeGenerator pac = new PacMazeGenerator(30, 30, 1, 1, rng);
         map = pac.generate();
         dungeonGenerator.generate(map);
 
@@ -370,8 +370,12 @@ public class DungeonGeneratorTest {
         sdungeon[dungeonGenerator.stairsUp.x][dungeonGenerator.stairsUp.y] = '<';
         sdungeon[dungeonGenerator.stairsDown.x][dungeonGenerator.stairsDown.y] = '>';
 
-        dungeonGenerator.setDungeon(DungeonUtility.doubleWidth(
-                DungeonUtility.hashesToLines(sdungeon)));
+        dungeonGenerator.setDungeon(
+//                DungeonUtility.doubleWidth(
+                sdungeon
+//                DungeonUtility.hashesToLines(sdungeon)
+//        )
+        );
         System.out.println(dungeonGenerator);
 
         System.out.println("------------------------------------------------------------");

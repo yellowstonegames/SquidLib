@@ -28,6 +28,7 @@ import squidpony.squidmath.IRNG;
 public class PacMazeGenerator {
     public IRNG rng;
     public int width, height;
+    public int wallBreadth = 2, passageBreadth = 1, combinedBreadth = wallBreadth + passageBreadth;
     private GreasedRegion map;
     private int[][] env;
     private char[][] maze;
@@ -48,6 +49,15 @@ public class PacMazeGenerator {
         this.rng = rng;
     }
 
+    public PacMazeGenerator(int width, int height, int wallBreadth, int passageBreadth, IRNG rng) {
+        this.height = height;
+        this.width = width;
+        this.wallBreadth = wallBreadth;
+        this.passageBreadth = passageBreadth;
+        this.combinedBreadth = wallBreadth + passageBreadth;
+        this.rng = rng;
+    }
+
     private static final byte[] //unbiased_connections = new byte[]{3, 5, 6, 7, 9, 10, 11, 12, 13, 14, 15},
             connections = new byte[]{
             3, 5, 6, 9, 10, 12,/*
@@ -61,22 +71,28 @@ public class PacMazeGenerator {
     private static final int connections_length = connections.length;
 
     private void write(GreasedRegion m, int x, int y, int xOffset, int yOffset) {
-        int nx = x * 3 + xOffset + 1, ny = y * 3 + yOffset + 1;
+        int nx = x * combinedBreadth + xOffset + 1, ny = y * combinedBreadth + yOffset + 1;
         m.insert(nx, ny);
+    }
+
+    private void writeRect(GreasedRegion m, int x, int y, int endX, int endY, int xOffset, int yOffset) {
+        int startX = Math.min(x, endX);
+        int startY = Math.min(y, endY);
+        int nx = startX * combinedBreadth + xOffset + 1, ny = startY * combinedBreadth + yOffset + 1;
+        m.insertRectangle(nx, ny, Math.max(x, endX) - startX, Math.max(y, endY) - startY);
     }
 
     public GreasedRegion create() {
         map = new GreasedRegion(width, height);
-        byte[][] conns = new byte[(width + 2) / 3][(height + 2) / 3];
-        int xOff = (width % 3 == 1) ? -1 : 0, yOff = (height % 3 == 1) ? -1 : 0;
-        for (int x = 0; x < (width + 2) / 3; x++) {
-            for (int y = 0; y < (height + 2) / 3; y++) {
+        byte[][] conns = new byte[(width + combinedBreadth - 1) / combinedBreadth][(height + combinedBreadth - 1) / combinedBreadth];
+        int xOff = (width % combinedBreadth == 1) ? -1 : 0, yOff = (height % combinedBreadth == 1) ? -1 : 0;
+        for (int x = 0; x < (width + combinedBreadth - 1) / combinedBreadth; x++) {
+            for (int y = 0; y < (height + combinedBreadth - 1) / combinedBreadth; y++) {
                 conns[x][y] = connections[rng.nextInt(connections_length)];
             }
         }
-        for (int x = 0; x < (width + 2) / 3; x++) {
-            for (int y = 0; y < (height + 2) / 3; y++) {
-                write(map, x, y, xOff, yOff);
+        for (int x = 0; x < (width + combinedBreadth - 1) / combinedBreadth; x++) {
+            for (int y = 0; y < (height + combinedBreadth - 1) / combinedBreadth; y++) {
                 if (x > 0 && ((conns[x - 1][y] & 1) != 0 || (conns[x][y] & 2) != 0)) {
                     conns[x - 1][y] |= 1;
                     conns[x][y] |= 2;
@@ -96,11 +112,11 @@ public class PacMazeGenerator {
             }
         }
 
-        for (int x = 1; x < (width - 1) / 3; x++) {
-            for (int y = 1; y < (height - 1) / 3; y++) {
+        for (int x = 1; x < (width - 1) / combinedBreadth; x++) {
+            for (int y = 1; y < (height - 1) / combinedBreadth; y++) {
                 if (Integer.bitCount(conns[x][y]) >= 4) {
                     //byte temp = connections[rng.nextInt(connections_length)];
-                    int temp = 1 << rng.nextInt(4);
+                    int temp = 1 << rng.next(2);
                     conns[x][y] ^= temp;
                     if ((temp & 2) != 0) conns[x - 1][y] ^= 1;
                     else if ((temp & 1) != 0) conns[x + 1][y] ^= 2;
@@ -109,17 +125,41 @@ public class PacMazeGenerator {
                 }
             }
         }
-        for (int x = 0; x < (width + 2) / 3; x++) {
-            for (int y = 0; y < (height + 2) / 3; y++) {
+        for (int x = 0; x < (width + combinedBreadth - 1) / combinedBreadth; x++) {
+            for (int y = 0; y < (height + combinedBreadth - 1) / combinedBreadth; y++) {
                 write(map, x, y, xOff, yOff);
                 if (x > 0 && (conns[x][y] & 2) != 0)
-                    write(map, x, y, xOff - 1, yOff);
+                {
+                    for (int w = 1; w <= wallBreadth; w++) {
+                        for (int p = 0; p < passageBreadth; p++) {
+                            write(map, x, y, xOff - w, yOff + p);
+                        }
+                    }
+                }
                 if (x < conns.length - 1 && (conns[x][y] & 1) != 0)
-                    write(map, x, y, xOff + 1, yOff);
+                {
+                    for (int w = 1; w <= wallBreadth; w++) {
+                        for (int p = 0; p < passageBreadth; p++) {
+                            write(map, x, y, xOff + w, yOff + p);
+                        }
+                    }
+                }
                 if (y > 0 && (conns[x][y] & 8) != 0)
-                    write(map, x, y, xOff, yOff - 1);
+                {
+                    for (int w = 1; w <= wallBreadth; w++) {
+                        for (int p = 0; p < passageBreadth; p++) {
+                            write(map, x, y, xOff + p, yOff - w);
+                        }
+                    }
+                }
                 if (y < conns[0].length - 1 && (conns[x][y] & 4) != 0)
-                    write(map, x, y, xOff, yOff + 1);
+                {
+                    for (int w = 1; w <= wallBreadth; w++) {
+                        for (int p = 0; p < passageBreadth; p++) {
+                            write(map, x, y, xOff + p, yOff + w);
+                        }
+                    }
+                }
             }
         }
         map.removeEdges();
