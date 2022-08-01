@@ -28,7 +28,8 @@ import squidpony.squidmath.IRNG;
 public class PacMazeGenerator {
     public IRNG rng;
     public int width, height;
-    public int wallBreadth = 2, passageBreadth = 1, combinedBreadth = wallBreadth + passageBreadth;
+    public int wallBreadth = 2, passageBreadth = 1;
+    private int combinedBreadth = wallBreadth + passageBreadth;
     private GreasedRegion map;
     private int[][] env;
     private char[][] maze;
@@ -49,6 +50,14 @@ public class PacMazeGenerator {
         this.rng = rng;
     }
 
+    /**
+     *
+     * @param width the x-size of the maze map to produce
+     * @param height the y-size of the maze map to produce
+     * @param wallBreadth how thick wall sections should be; defaults to 2
+     * @param passageBreadth how broad passages should be; defaults to 1
+     * @param rng an IRNG, such as a {@link squidpony.squidmath.RNG}, which can be seeded
+     */
     public PacMazeGenerator(int width, int height, int wallBreadth, int passageBreadth, IRNG rng) {
         this.height = height;
         this.width = width;
@@ -127,7 +136,11 @@ public class PacMazeGenerator {
         }
         for (int x = 0; x < (width + combinedBreadth - 1) / combinedBreadth; x++) {
             for (int y = 0; y < (height + combinedBreadth - 1) / combinedBreadth; y++) {
-                write(map, x, y, xOff, yOff);
+                for (int i = 0; i < passageBreadth; i++) {
+                    for (int j = 0; j < passageBreadth; j++) {
+                        write(map, x, y, xOff+i, yOff+j);
+                    }
+                }
                 if (x > 0 && (conns[x][y] & 2) != 0)
                 {
                     for (int w = 1; w <= wallBreadth; w++) {
