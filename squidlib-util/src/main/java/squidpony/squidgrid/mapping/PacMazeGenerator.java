@@ -18,6 +18,7 @@ package squidpony.squidgrid.mapping;
 
 import squidpony.ArrayTools;
 import squidpony.squidmath.GWTRNG;
+import squidpony.squidmath.GreasedRegion;
 import squidpony.squidmath.IRNG;
 
 /**
@@ -27,7 +28,7 @@ import squidpony.squidmath.IRNG;
 public class PacMazeGenerator {
     public IRNG rng;
     public int width, height;
-    private boolean[][] map;
+    private GreasedRegion map;
     private int[][] env;
     private char[][] maze;
 
@@ -59,17 +60,13 @@ public class PacMazeGenerator {
     };
     private static final int connections_length = connections.length;
 
-    private boolean write(boolean[][] m, int x, int y, int xOffset, int yOffset, boolean value) {
+    private void write(GreasedRegion m, int x, int y, int xOffset, int yOffset) {
         int nx = x * 3 + xOffset + 1, ny = y * 3 + yOffset + 1;
-        if (nx >= 0 && nx < m.length && ny >= 0 && ny < m[nx].length) {
-            m[nx][ny] = value;
-            return true;
-        }
-        return false;
+        m.insert(nx, ny);
     }
 
-    public boolean[][] create() {
-        map = new boolean[width][height];
+    public GreasedRegion create() {
+        map = new GreasedRegion(width, height);
         byte[][] conns = new byte[(width + 2) / 3][(height + 2) / 3];
         int xOff = (width % 3 == 1) ? -1 : 0, yOff = (height % 3 == 1) ? -1 : 0;
         for (int x = 0; x < (width + 2) / 3; x++) {
@@ -79,7 +76,7 @@ public class PacMazeGenerator {
         }
         for (int x = 0; x < (width + 2) / 3; x++) {
             for (int y = 0; y < (height + 2) / 3; y++) {
-                write(map, x, y, xOff, yOff, true);
+                write(map, x, y, xOff, yOff);
                 if (x > 0 && ((conns[x - 1][y] & 1) != 0 || (conns[x][y] & 2) != 0)) {
                     conns[x - 1][y] |= 1;
                     conns[x][y] |= 2;
@@ -114,27 +111,18 @@ public class PacMazeGenerator {
         }
         for (int x = 0; x < (width + 2) / 3; x++) {
             for (int y = 0; y < (height + 2) / 3; y++) {
-                write(map, x, y, xOff, yOff, true);
+                write(map, x, y, xOff, yOff);
                 if (x > 0 && (conns[x][y] & 2) != 0)
-                    write(map, x, y, xOff - 1, yOff, true);
+                    write(map, x, y, xOff - 1, yOff);
                 if (x < conns.length - 1 && (conns[x][y] & 1) != 0)
-                    write(map, x, y, xOff + 1, yOff, true);
+                    write(map, x, y, xOff + 1, yOff);
                 if (y > 0 && (conns[x][y] & 8) != 0)
-                    write(map, x, y, xOff, yOff - 1, true);
+                    write(map, x, y, xOff, yOff - 1);
                 if (y < conns[0].length - 1 && (conns[x][y] & 4) != 0)
-                    write(map, x, y, xOff, yOff + 1, true);
+                    write(map, x, y, xOff, yOff + 1);
             }
         }
-        int upperY = height - 1;
-        int upperX = width - 1;
-        for (int i = 0; i < width; i++) {
-            map[i][0] = false;
-            map[i][upperY] = false;
-        }
-        for (int i = 0; i < height; i++) {
-            map[0][i] = false;
-            map[upperX][i] = false;
-        }
+        map.removeEdges();
         return map;
     }
 
@@ -144,8 +132,8 @@ public class PacMazeGenerator {
         env = new int[width][height];
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
-                maze[x][y] = map[x][y] ? '.' : '#';
-                env[x][y] = map[x][y] ? DungeonUtility.CORRIDOR_FLOOR : DungeonUtility.CORRIDOR_WALL;
+                maze[x][y] = map.contains(x, y) ? '.' : '#';
+                env[x][y] = map.contains(x, y) ? DungeonUtility.CORRIDOR_FLOOR : DungeonUtility.CORRIDOR_WALL;
             }
         }
 
@@ -163,9 +151,9 @@ public class PacMazeGenerator {
      *
      * @return a 2D boolean array; true is passable and false is not.
      */
-    public boolean[][] getMap() {
+    public GreasedRegion getMap() {
         if (map == null)
-            return new boolean[width][height];
+            return new GreasedRegion(width, height);
         return map;
     }
 
