@@ -1,6 +1,9 @@
 package squidpony.gdx.tools;
 
-import com.badlogic.gdx.*;
+import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Files;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.graphics.Color;
@@ -35,8 +38,8 @@ public class FFTVisualizer extends ApplicationAdapter {
     private final IPointHash[] pointHashes = new IPointHash[] {iph, torus, cube, rug, quilt};
     private int hashIndex = 0;
     private static final int MODE_LIMIT = 13;
-    private int mode = 12;
-    private int dim = 2; // this can be 0, 1, 2, 3, or 4; add 2 to get the actual dimensions
+    private int mode = 6;
+    private int dim = 0; // this can be 0, 1, 2, 3, or 4; add 2 to get the actual dimensions
     private int octaves = 3;
     private float freq = 0.125f;
     private float threshold = 0.5f;
@@ -79,6 +82,7 @@ public class FFTVisualizer extends ApplicationAdapter {
     @Override
     public void create() {
         Coord.expandPoolTo(width, height);
+        CoordPacker.init();
         norm = new OrderedMap<>(width * height, 0.75f);
         shuffler = new StatefulRNG(0x1234567890ABCDEFL);
         noise.setNoiseType(FastNoise.CUBIC_FRACTAL);
@@ -507,15 +511,13 @@ public class FFTVisualizer extends ApplicationAdapter {
 //            shuffler.setState(0x1234567890ABCDEFL);
 //            //// done re-normalizing
 
-            Color color = new Color(255);
             int ic;
             for (int x = 0; x < width; x++) {
                 for (int y = 0; y < height; y++) {
                     ic = pm.getPixel(x, y);
                     real[x][y] = (ic >>> 24) / 255.0;
 //                    bright = (float) real[x][y];
-                    Color.rgba8888ToColor(color, ic);
-                    renderer.color(color);
+                    renderer.color(NumberTools.reversedIntBitsToFloat(ic & -2));
                     renderer.vertex(x, y, 0);
                 }
             }
@@ -530,12 +532,30 @@ public class FFTVisualizer extends ApplicationAdapter {
         else if(mode == 6){
             switch (dim){
                 case 0:
-                    for (int x = 0; x < width; x++) {
-                        for (int y = 0; y < height; y++) {
-                            bright = (float) (db = 0x1p-8 * (BlueNoise.get(x, y, ALT_NOISE[noise.getSeed() & 63]) + 128));
-                            real[x][y] = db;
+                    final long mul = 0x9E3779B97F4A7C15L;
+                    for (int x = 0; x < 256 && x + x < width; x++) {
+                        for (int y = 0; y < 256 && y + y < height; y++) {
+                            int index;
+                            index = CoordPacker.posToHilbert(x, y);
+                            bright = (1f / 255f) * (index * mul >>> 56);
+                            real[y][511 - x] = bright;
+                            renderer.color(bright, bright, bright, 1f);
+                            renderer.vertex(y, 511 - x, 0);
+                            index += 256;
+                            bright = (1f / 255f) * (index * mul >>> 56);
+                            real[x][y] = bright;
                             renderer.color(bright, bright, bright, 1f);
                             renderer.vertex(x, y, 0);
+                            index += 256;
+                            bright = (1f / 255f) * (index * mul >>> 56);
+                            real[x + 256][y] = bright;
+                            renderer.color(bright, bright, bright, 1f);
+                            renderer.vertex(x + 256, y, 0);
+                            index += 256;
+                            bright = (1f / 255f) * (index * mul >>> 56);
+                            real[511 - y][256 + x] = bright;
+                            renderer.color(bright, bright, bright, 1f);
+                            renderer.vertex(511 - y, 256 + x, 0);
                         }
                     }
                     break;
@@ -543,7 +563,7 @@ public class FFTVisualizer extends ApplicationAdapter {
                     for (int x = 0; x < width; x++) {
                         for (int y = 0; y < height; y++) {
 //                            bright = (float) (db = 0x1p-8 * (BlueNoise.getSeeded(x, y, noise.getSeed()) + 128));
-                            bright = (float) (db = 0x1p-8 * (BlueNoise.getChosen(x, y, noise.getSeed()) + 128));
+                            bright = (float) (db = (1f / 255f) * (BlueNoise.getChosen(x, y, noise.getSeed()) + 128));
                             real[x][y] = db;
                             renderer.color(bright, bright, bright, 1f);
                             renderer.vertex(x, y, 0);
@@ -553,7 +573,7 @@ public class FFTVisualizer extends ApplicationAdapter {
                 case 2:
                     for (int x = 0; x < width; x++) {
                         for (int y = 0; y < height; y++) {
-                            bright = (float) (db = 0x1p-8 * (getSeededOmniTiling(x, y, noise.getSeed()) + 128));
+                            bright = (float) (db = (1f / 255f) * (getSeededOmniTiling(x, y, noise.getSeed()) + 128));
                             real[x][y] = db;
                             renderer.color(bright, bright, bright, 1f);
                             renderer.vertex(x, y, 0);
@@ -563,7 +583,7 @@ public class FFTVisualizer extends ApplicationAdapter {
                 default:
                     for (int x = 0; x < width; x++) {
                         for (int y = 0; y < height; y++) {
-                            bright = (float) (db = 0x1p-8 * (BlueNoise.getSeededOmniTiling(x, y, noise.getSeed()) + 128));
+                            bright = (float) (db = (1f / 255f) * (BlueNoise.getSeededOmniTiling(x, y, noise.getSeed()) + 128));
                             real[x][y] = db;
                             renderer.color(bright, bright, bright, 1f);
                             renderer.vertex(x, y, 0);
@@ -630,12 +650,31 @@ public class FFTVisualizer extends ApplicationAdapter {
         else if(mode == 8){
             switch (dim){
                 case 0:
-                    for (int x = 0; x < width; x++) {
-                        for (int y = 0; y < height; y++) {
-                            bright = 0x1p-8f * (BlueNoise.get(x, y, ALT_NOISE[noise.getSeed() & 63]) + 128) <= threshold ? 1 : 0;
+                    final long mul = 0x9E3779B97F4A7C15L;
+                    for (int x = 0; x < 256 && x + x < width; x++) {
+                        for (int y = 0; y < 256 && y + y < height; y++) {
+                            int index;
+                            float color;
+                            index = CoordPacker.posToHilbert(x, y);
+                            bright = (1f / 255f) * (index * mul >>> 56) <= threshold ? 1 : 0;
+                            real[y][511 - x] = bright;
+                            renderer.color(bright, bright, bright, 1f);
+                            renderer.vertex(y, 511 - x, 0);
+                            index += 256;
+                            bright = (1f / 255f) * (index * mul >>> 56) <= threshold ? 1 : 0;
                             real[x][y] = bright;
                             renderer.color(bright, bright, bright, 1f);
                             renderer.vertex(x, y, 0);
+                            index += 256;
+                            bright = (1f / 255f) * (index * mul >>> 56) <= threshold ? 1 : 0;
+                            real[x + 256][y] = bright;
+                            renderer.color(bright, bright, bright, 1f);
+                            renderer.vertex(x + 256, y, 0);
+                            index += 256;
+                            bright = (1f / 255f) * (index * mul >>> 56) <= threshold ? 1 : 0;
+                            real[511 - y][256 + x] = bright;
+                            renderer.color(bright, bright, bright, 1f);
+                            renderer.vertex(511 - y, 256 + x, 0);
                         }
                     }
                     break;
@@ -643,7 +682,7 @@ public class FFTVisualizer extends ApplicationAdapter {
                     for (int x = 0; x < width; x++) {
                         for (int y = 0; y < height; y++) {
 //                            bright = 0x1p-8 * (BlueNoise.getSeeded(x, y, noise.getSeed()) + 128) <= threshold ? 1 : 0;
-                            bright = 0x1p-8 * (BlueNoise.getChosen(x, y, noise.getSeed()) + 128) <= threshold ? 1 : 0;
+                            bright = (1f / 255f) * (BlueNoise.getChosen(x, y, noise.getSeed()) + 128) <= threshold ? 1 : 0;
                             real[x][y] = bright;
                             renderer.color(bright, bright, bright, 1f);
                             renderer.vertex(x, y, 0);
@@ -653,7 +692,7 @@ public class FFTVisualizer extends ApplicationAdapter {
                 case 2:
                     for (int x = 0; x < width; x++) {
                         for (int y = 0; y < height; y++) {
-                            bright = 0x1p-8 * (getSeededOmniTiling(x, y, noise.getSeed()) + 128) <= threshold ? 1 : 0;
+                            bright = (1f / 255f) * (getSeededOmniTiling(x, y, noise.getSeed()) + 128) <= threshold ? 1 : 0;
                             real[x][y] = bright;
                             renderer.color(bright, bright, bright, 1f);
                             renderer.vertex(x, y, 0);
@@ -663,7 +702,7 @@ public class FFTVisualizer extends ApplicationAdapter {
                 default:
                     for (int x = 0; x < width; x++) {
                         for (int y = 0; y < height; y++) {
-                            bright = 0x1p-8 * (BlueNoise.getSeededOmniTiling(x, y, noise.getSeed()) + 128) <= threshold ? 1 : 0;
+                            bright = (1f / 255f) * (BlueNoise.getSeededOmniTiling(x, y, noise.getSeed()) + 128) <= threshold ? 1 : 0;
                             real[x][y] = bright;
                             renderer.color(bright, bright, bright, 1f);
                             renderer.vertex(x, y, 0);
