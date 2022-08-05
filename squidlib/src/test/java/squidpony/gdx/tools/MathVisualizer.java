@@ -11,7 +11,10 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import squidpony.ArrayTools;
-import squidpony.squidgrid.gui.gdx.*;
+import squidpony.squidgrid.gui.gdx.FilterBatch;
+import squidpony.squidgrid.gui.gdx.SColor;
+import squidpony.squidgrid.gui.gdx.SparseLayers;
+import squidpony.squidgrid.gui.gdx.TextCellFactory;
 import squidpony.squidmath.*;
 
 import java.util.Arrays;
@@ -2347,33 +2350,40 @@ public class MathVisualizer extends ApplicationAdapter {
             }
             case 58: {
                 Gdx.graphics.setTitle("Hilbert Blue Thing, from position");
+                final int shift = 56;// (int)(System.currentTimeMillis() >>> 11 & 7) + 1;
+                final long mul = PhantomNoise.goldenLong[0][0], inc = 0L;//(System.currentTimeMillis() >>> 3) << 53;
                 for (int x = 0; x < 256; x++) {
                     for (int y = 0; y < 256; y++) {
                         int index;
-                        double inc = (Math.PI - Math.E), t;// 0.6180339887498949 , 1.6180339887498949
-                        float bright, color;
+//                        double inc = (Math.PI - Math.E), t;// 0.6180339887498949 , 1.6180339887498949
+                        int bright;
+                        float color;
                         index = CoordPacker.posToHilbert(x, y);
-                        t = 0.5 + index * inc;
-                        bright = (float) (t - (long) t);
-                        color = SColor.floatGet(bright, bright, bright, 1f);
+                        amounts[bright = (int) ((index * mul + inc) >>> shift & 255)]++;
+                        color = SColor.floatGetI(bright, bright, bright);
                         layers.backgrounds[y][511 - x] = color;
                         index += 256;
-                        t = 0.5 + index * inc;
-                        bright = (float) (t - (long) t);
-                        color = SColor.floatGet(bright, bright, bright, 1f);
+                        amounts[bright = (int) ((index * mul + inc) >>> shift & 255)]++;
+                        color = SColor.floatGetI(bright, bright, bright);
                         layers.backgrounds[x][y] = color;
                         index += 256;
-                        t = 0.5 + index * inc;
-                        bright = (float) (t - (long) t);
-                        color = SColor.floatGet(bright, bright, bright, 1f);
+                        amounts[bright = (int) ((index * mul + inc) >>> shift & 255)]++;
+                        color = SColor.floatGetI(bright, bright, bright);
                         layers.backgrounds[x + 256][y] = color;
                         index += 256;
-                        t = 0.5 + index * inc;
-                        bright = (float) (t - (long) t);
-                        color = SColor.floatGet(bright, bright, bright, 1f);
+                        amounts[bright = (int) ((index * mul + inc) >>> shift & 255)]++;
+                        color = SColor.floatGetI(bright, bright, bright);
                         layers.backgrounds[511 - y][256 + x] = color;
                     }
                 }
+//                for (int i = 0; i < 256;) {
+//                    if(amounts[i] != 1024) break;
+//                    if(++i == 256) {
+//                        System.out.println("WORKING INC: " + inc);
+//                        Gdx.app.exit();
+//                    }
+//                }
+
 //                // thanks to Jonathan M, https://stackoverflow.com/a/20591835
 //                Gdx.graphics.setTitle("Spiral Blue Thing, from index");
 //                for (int index = 0; index < 0x40000; ++index) {
