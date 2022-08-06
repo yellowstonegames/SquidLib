@@ -28,7 +28,7 @@ import squidpony.squidmath.*;
  *
  */
 final class DungeonGeneratorPerformanceTest extends AbstractPerformanceTest {
-	public static final int SIZE = 500;
+	public static final int SIZE = 1000;
 	public DungeonGeneratorPerformanceTest() {
 		Coord.expandPoolTo(SIZE, SIZE);
 		createThreadList();
@@ -54,16 +54,17 @@ final class DungeonGeneratorPerformanceTest extends AbstractPerformanceTest {
 		public Test(int size, RNG rng) {
 			this.rng = rng;
 //			gen = new GrowingTreeMazeGenerator(size, size, rng); // Task took 2539.5 ms on average
-//			gen = new ConnectingMapGenerator(size, size, 1, 1, rng, 1, 0.5); // Task took 1248.90625 ms on average
-			dg = new TimedSectionDungeonGenerator(size, size, rng);
+//			gen = new ConnectingMapGenerator(size, size, 1, 1, rng, 1, 0.5); // Task took 1217.96875 ms on average
+			gen = new PacMazeGenerator(size, size, 1, 1, rng); // Task took 24.0625 ms on average
+//			dg = new TimedSectionDungeonGenerator(size, size, rng);
 		}
 
 		@Override
 		protected void doWork() {
-//			char[][] map = gen.generate();
+			char[][] map = gen.generate();
 //			dg.generate(map);
-			dg.generate(TilesetType.DEFAULT_DUNGEON); // Task took 285.3125 ms on average
-			dg.addStairs();
+//			dg.generate(TilesetType.DEFAULT_DUNGEON); // Task took 285.3125 ms on average
+//			dg.addStairs();
 //			System.out.println("Up: " + dg.stairsUp + ", Down: " + dg.stairsDown);
 /*
 			DijkstraMap dm = new DijkstraMap(map, rng);

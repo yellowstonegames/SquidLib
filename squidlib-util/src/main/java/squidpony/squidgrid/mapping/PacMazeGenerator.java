@@ -25,7 +25,7 @@ import squidpony.squidmath.IRNG;
  * Meant to produce the sort of narrow, looping, not-quite-maze-like passages found in a certain famous early arcade game.
  * Created by Tommy Ettinger on 3/30/2016.
  */
-public class PacMazeGenerator {
+public class PacMazeGenerator implements IDungeonGenerator {
     public IRNG rng;
     public int width, height;
     public int wallBreadth = 2, passageBreadth = 1;
