@@ -66,13 +66,21 @@ public class OpenSimplex2F implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4
 	private static final float RSQUARED_3D = 0.6f;
 	private static final float RSQUARED_4D = 0.6f;
 
-	protected long seed;
+	public long seed;
 
 	public OpenSimplex2F() {
 		this(0x1337BEEFBAB1E5L);
 	}
 
 	public OpenSimplex2F(long seed){
+		this.seed = seed;
+	}
+
+	public long getSeed() {
+		return seed;
+	}
+
+	public void setSeed(long seed) {
 		this.seed = seed;
 	}
 
