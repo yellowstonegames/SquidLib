@@ -588,7 +588,6 @@ public abstract class PanelEffect extends TemporalAction{
                 target.put(c.x, c.y, choices[DiverRNG.determineBounded(tick + i, clen)], color);
             }
         }
-
     }
     public static class PulseEffect extends ExplosionEffect
     {
@@ -1010,7 +1009,7 @@ public abstract class PanelEffect extends TemporalAction{
             Radius.inCircle(centers[0].x, centers[0].y, radius, false, validCells.width, validCells.height, affected);
             int len = affected.size();
             Coord c;
-            float f, light;
+            float light;
             Coord prev = centers[0];
             for (int i = 0; i < 16; i++) {
                 centers[i] = centers[i].interpolate(end, adjust(percent, i));
@@ -1046,11 +1045,10 @@ public abstract class PanelEffect extends TemporalAction{
 
 
     public static Interpolation fastInSlowMidFastOut = new Interpolation() {
-        private final float value = 2, power = 3;
         @Override
         public float apply(float a) {
-            if (a <= 0.5f) return (1 - ((float)Math.pow(value, -power * (a * 2)) - 0.125f) * 1.1428572f) * 0.5f;
-            return (1 + (float) Math.pow(value, power * (a * 2 - 2)) - 0.25f) * 0.5714286f;
+            if (a <= 0.5f) return (1 - ((float)Math.pow(2f, -3f * (a * 2)) - 0.125f) * 1.1428572f) * 0.5f;
+            return (1 + (float) Math.pow(2f, 3f * (a * 2 - 2)) - 0.25f) * 0.5714286f;
         }
     };
 
