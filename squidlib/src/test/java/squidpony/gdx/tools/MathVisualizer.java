@@ -24,8 +24,8 @@ import java.util.Random;
  * Created by Tommy Ettinger on 1/13/2018.
  */
 public class MathVisualizer extends ApplicationAdapter {
-    private int mode = 59;
-    private int modes = 65;
+    private int mode = 63;
+    private int modes = 66;
     private FilterBatch batch;
     private SparseLayers layers;
     private InputAdapter input;
@@ -306,6 +306,36 @@ public class MathVisualizer extends ApplicationAdapter {
 
             return (ei + (-0.344845 * mf + 2.024658) * mf - 1.674873) * 0.43436558031807954;
     }
+
+    /**
+     * Returns the tangent in turns, using a Padé approximant.
+     * Based on <a href="https://math.stackexchange.com/a/4453027">this Stack Exchange answer</a>.
+     *
+     * @param turns an angle in turns, where 0 to 1 is one rotation
+     * @return a double approximation of tan()
+     */
+    public static double tanTurns(double turns) {
+        turns += turns;
+        turns += 0.5;
+        turns -= Math.floor(turns);
+        turns -= 0.5;
+        turns *= Math.PI;
+        final double x2 = turns * turns, x4 = x2 * x2;
+        return turns * ((0.0010582010582010583) * x4 - (0.1111111111111111) * x2 + 1.0)
+                / ((0.015873015873015872) * x4 - (0.4444444444444444) * x2 + 1.0);
+    }
+
+    public static double cauchian() {
+        double u = nextExclusiveDouble() - 0.5;
+        double turns = u + 0.5;
+        turns -= Math.floor(turns);
+        turns -= 0.5;
+        turns *= Math.PI;
+        final double x2 = turns * turns, x4 = x2 * x2;
+        return turns * ((0.0010582010582010583) * x4 - (0.1111111111111111) * x2 + 1.0)
+                / ((0.015873015873015872) * x4 - (0.4444444444444444) * x2 + 1.0);
+    }
+
 
     public void insideBallBoxMuller(final double[] vector)
     {
@@ -2454,6 +2484,30 @@ public class MathVisualizer extends ApplicationAdapter {
             }
             break;
             case 64: {
+                Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
+                        " cauchian()");
+                for (int i = 0; i < 0x500000; i++) {
+                    //((System.currentTimeMillis() >>> 4 & 255L) + 64L)
+                    double d = cauchian() * (202.0/256.0) * 64.0 + 256.0; // 0x1.94p-1 is
+                    if (d >= 0 && d < 512)
+                        amounts[(int) d]++;
+                }
+                for (int i = 0; i < 512; i++) {
+                    float color = (i & 63) == 0
+                            ? -0x1.c98066p126F // CW Azure
+                            : -0x1.d08864p126F; // CW Sapphire
+                    for (int j = Math.max(0, 519 - (amounts[i] >> 7)); j < 520; j++) {
+                        layers.backgrounds[i][j] = color;
+                    }
+                }
+                for (int i = 0; i < 10; i++) {
+                    for (int j = 8; j < 520; j += 32) {
+                        layers.backgrounds[i][j] = -0x1.7677e8p125F;
+                    }
+                }
+            }
+            break;
+            case 65: {
                 Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
                         " fastLogitGaussian()");
                 for (int i = 0; i < 0x500000; i++) {
