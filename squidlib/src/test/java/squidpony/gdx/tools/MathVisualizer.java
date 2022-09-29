@@ -285,6 +285,28 @@ public class MathVisualizer extends ApplicationAdapter {
         return Math.log(p / (1.0 - p)) * 0.6266570686577501;
     }
 
+    /**
+     * Flawed, but maybe could be made to work somehow. Credit to
+     * <a href="https://tech.ebayinc.com/engineering/fast-approximate-logarithms-part-i-the-basics/">eBay Tech</a> and
+     * <a href="https://gist.github.com/Jacajack/3397dbb8ff22a27dd47c832998edd608">this Gist by Jacajack</a>.
+     * @return a very rough approximation of a logistic distributed variable
+     */
+    private double fastLogitGaussian() {
+        final double p = nextExclusiveDouble(), d = p / (1.0 - p);
+            // Extract exponent and mantissa
+            long xi = NumberTools.doubleToLongBits(d);
+            long ei = ( ( xi >>> 52 ) & 0x7ffL ) - 1023L; // Exponent
+            long mi = xi & 0x000FFFFFFFFFFFFFL;           // Mantissa
+
+            // Real mantissa value
+            double mf = 1.0 + mi * ( 1.0 / 0x000FFFFFFFFFFFFFL );
+
+            // Denormal numbers (optional)
+             if ( ei == -1023 ) mf = mi * (1.0 / 0x000FFFFFFFFFFFFFL);
+
+            return (ei + (-0.344845 * mf + 2.024658) * mf - 1.674873) * 0.43436558031807954;
+    }
+
     public void insideBallBoxMuller(final double[] vector)
     {
         double mag = 0.0;
@@ -2433,9 +2455,9 @@ public class MathVisualizer extends ApplicationAdapter {
             break;
             case 64: {
                 Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
-                        " erfGaussian()");
+                        " fastLogitGaussian()");
                 for (int i = 0; i < 0x500000; i++) {
-                    double d = erfGaussian() * 64.0 + 256.0;
+                    double d = fastLogitGaussian() * 64.0 + 256.0;
                     if (d >= 0 && d < 512)
                         amounts[(int) d]++;
                 }
