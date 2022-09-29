@@ -16,10 +16,7 @@ public class MimicFillTest {
     {
         //seed is, in base 36, the number SQUIDLIB
         DiverRNG light = new DiverRNG(2252637788195L);
-        RNG rng;
-        //rng = new RNG(thunder);
-        //rng = new RNG(light);
-        rng = new RNG(light);
+        RNG rng = new RNG(light);
         boolean[][] result;
         boolean[] solo;
         long time1d = 0L, time2d = 0L, time, junk = 0L;

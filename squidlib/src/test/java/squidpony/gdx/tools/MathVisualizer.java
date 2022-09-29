@@ -24,8 +24,8 @@ import java.util.Random;
  * Created by Tommy Ettinger on 1/13/2018.
  */
 public class MathVisualizer extends ApplicationAdapter {
-    private int mode = 58;
-    private int modes = 59;
+    private int mode = 59;
+    private int modes = 65;
     private FilterBatch batch;
     private SparseLayers layers;
     private InputAdapter input;
@@ -202,10 +202,13 @@ public class MathVisualizer extends ApplicationAdapter {
 
         return p * x;
     }
-    
-    
+
+    /**
+     * This is scaled incorrectly; don't use it until we figure out the right scale.
+     * @return an incorrect approximation of a random Gaussian variable
+     */
     public double erfGaussian(){
-        return erfInv(rng.nextDouble() * 2.0 - 1.0);
+        return erfInv(nextExclusiveDouble() * 2.0 - 1.0);
     }
     
     public final float editedCurve()
@@ -277,6 +280,10 @@ public class MathVisualizer extends ApplicationAdapter {
 		return 0x1.fb760cp-35 * ((Long.bitCount(rng.nextLong()) - 32L << 32) + (u1 & 0xFFFFFFFFL) - (u1 >>> 32));
 	}
 
+    private double logitGaussian() {
+        final double p = nextExclusiveDouble();
+        return Math.log(p / (1.0 - p)) * 0.6266570686577501;
+    }
 
     public void insideBallBoxMuller(final double[] vector)
     {
@@ -413,9 +420,9 @@ public class MathVisualizer extends ApplicationAdapter {
     {
         // Return a real number from a normal (Gaussian) distribution with given
         // mean and variance by Box-Muller method
-        double r = Math.sqrt( -2.0 * Math.log( 1.0 - diver.nextDouble()) ) * variance;
-        double phi = (2.0 * 3.14159265358979323846264338328) * diver.nextDouble();
-        return mean + r * Math.cos(phi); // could use NumberTools.cos_(diver.nextDouble()) instead of Math.cos(phi)
+        double r = Math.sqrt( -2.0 * Math.log( nextExclusiveDouble() ) ) * variance;
+//        double phi = (2.0 * 3.14159265358979323846264338328) * nextExclusiveDouble();
+        return mean + r * NumberTools.cos_(nextExclusiveDouble()); // could use NumberTools.cos_(diver.nextDouble()) instead of Math.cos(phi)
     }
 
     private static class XSP {
@@ -917,7 +924,8 @@ public class MathVisualizer extends ApplicationAdapter {
                 }
             }
             break;
-            case 14: {
+            case 14:
+            case 59: {
                 Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
                         " nextGaussian()");
                 for (int i = 0; i < 0x500000; i++) {
@@ -978,7 +986,8 @@ public class MathVisualizer extends ApplicationAdapter {
 //                }
             }
             break;
-            case 15: {
+            case 15:
+            case 60: {
                 Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
                         " probit");
                 for (int i = 0; i < 0x500000; i++) {
@@ -1023,7 +1032,8 @@ public class MathVisualizer extends ApplicationAdapter {
 
             }
             break;
-            case 16: {
+            case 16:
+            case 61: {
                 Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
                         " langeBoxMuller()");
                 for (int i = 0; i < 0x500000; i++) {
@@ -1128,7 +1138,8 @@ public class MathVisualizer extends ApplicationAdapter {
 //                }
             }
             break;
-            case 17: {
+            case 17:
+            case 62: {
                 Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
                         " nextGaussianCountX3()");
                 for (int i = 0; i < 0x500000; i++) {
@@ -1149,25 +1160,6 @@ public class MathVisualizer extends ApplicationAdapter {
                         layers.backgrounds[i][j] = -0x1.7677e8p125F;
                     }
                 }
-
-//                Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
-//                        " MathUtils.random(0x0FFFFFFFFFFFFFFFL) & 0x1FFL // UH OH");
-//                for (int i = 0; i < 0x1000000; i++) {
-//                    amounts[(int) (MathUtils.random(0x0FFFFFFFFFFFFFFFL) & 0x1FFL)]++;
-//                }
-//                for (int i = 0; i < 512; i++) {
-//                    float color = (i & 63) == 0
-//                            ? -0x1.c98066p126F // CW Azure
-//                            : -0x1.d08864p126F; // CW Sapphire
-//                    for (int j = Math.max(0, 519 - (amounts[i] >> 8)); j < 520; j++) {
-//                        layers.backgrounds[i][j] = color;
-//                    }
-//                }
-//                for (int i = 0; i < 10; i++) {
-//                    for (int j = 8; j < 520; j += 32) {
-//                        layers.backgrounds[i][j] = -0x1.7677e8p125F;
-//                    }
-//                }
             }
             break;
             case 18: {
@@ -2416,6 +2408,53 @@ public class MathVisualizer extends ApplicationAdapter {
 //                }
             }
             break;
+            case 63: {
+                Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
+                        " logitGaussian()");
+                for (int i = 0; i < 0x500000; i++) {
+                    double d = logitGaussian() * 64.0 + 256.0;
+                    if (d >= 0 && d < 512)
+                        amounts[(int) d]++;
+                }
+                for (int i = 0; i < 512; i++) {
+                    float color = (i & 63) == 0
+                            ? -0x1.c98066p126F // CW Azure
+                            : -0x1.d08864p126F; // CW Sapphire
+                    for (int j = Math.max(0, 519 - (amounts[i] >> 7)); j < 520; j++) {
+                        layers.backgrounds[i][j] = color;
+                    }
+                }
+                for (int i = 0; i < 10; i++) {
+                    for (int j = 8; j < 520; j += 32) {
+                        layers.backgrounds[i][j] = -0x1.7677e8p125F;
+                    }
+                }
+            }
+            break;
+            case 64: {
+                Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
+                        " erfGaussian()");
+                for (int i = 0; i < 0x500000; i++) {
+                    double d = erfGaussian() * 64.0 + 256.0;
+                    if (d >= 0 && d < 512)
+                        amounts[(int) d]++;
+                }
+                for (int i = 0; i < 512; i++) {
+                    float color = (i & 63) == 0
+                            ? -0x1.c98066p126F // CW Azure
+                            : -0x1.d08864p126F; // CW Sapphire
+                    for (int j = Math.max(0, 519 - (amounts[i] >> 7)); j < 520; j++) {
+                        layers.backgrounds[i][j] = color;
+                    }
+                }
+                for (int i = 0; i < 10; i++) {
+                    for (int j = 8; j < 520; j += 32) {
+                        layers.backgrounds[i][j] = -0x1.7677e8p125F;
+                    }
+                }
+            }
+            break;
+
         }
     }
 
@@ -2432,8 +2471,7 @@ public class MathVisualizer extends ApplicationAdapter {
      */
     public static double nextExclusiveDouble(){
         final long bits = MathUtils.random.nextLong();
-        return NumberUtils.longBitsToDouble(1022L - Long.numberOfTrailingZeros(bits) << 52
-                | bits >>> 12);
+        return NumberUtils.longBitsToDouble(1022L - Long.numberOfTrailingZeros(bits) << 52 | bits >>> 12);
     }
 
     /**
