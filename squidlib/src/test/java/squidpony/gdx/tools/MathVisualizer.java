@@ -24,7 +24,7 @@ import java.util.Random;
  * Created by Tommy Ettinger on 1/13/2018.
  */
 public class MathVisualizer extends ApplicationAdapter {
-    private int mode = 63;
+    private int mode = 15;
     private int modes = 66;
     private FilterBatch batch;
     private SparseLayers layers;
@@ -45,6 +45,8 @@ public class MathVisualizer extends ApplicationAdapter {
     private long seed = 1L;
     private long startTime;
     private double[] circleCoord = new double[2];
+
+    private static final double ROOT_2 = Math.sqrt(2.0);
 
     private double twist(double input) {
         return (input = input * 0.5 + 1.0) - (int)input;
@@ -209,6 +211,22 @@ public class MathVisualizer extends ApplicationAdapter {
      */
     public double erfGaussian(){
         return erfInv(nextExclusiveDouble() * 2.0 - 1.0);
+    }
+
+    /**
+     * Error function from Abramowitz and Stegun, 1964; equation 7.1.27 .
+     * See <a href="https://en.wikipedia.org/wiki/Error_function#Approximation_with_elementary_functions">Wikipedia</a>.
+     * @param x any finite double
+     * @return a double between -1 and 1, inclusive
+     */
+    public double erf(final double x) {
+        final double a1 = 0.0705230784, a2 = 0.0422820123, a3 = 0.0092705272, a4 = 0.0001520143, a5 = 0.0002765672, a6 = 0.0000430638;
+        final double sign = Math.signum(x), y1 = sign * x, y2 = x * x, y3 = y1 * y2, y4 = y2 * y2, y5 = y2 * y3, y6 = y3 * y3;
+        double n = 1.0 + a1 * y1 + a2 * y2 + a3 * y3 + a4 * y4 + a5 * y5 + a6 * y6;
+        n *= n;
+        n *= n;
+        n *= n;
+        return sign * (1.0 - 1.0 / (n * n));
     }
     
     public final float editedCurve()
@@ -1038,7 +1056,30 @@ public class MathVisualizer extends ApplicationAdapter {
 //                }
             }
             break;
-            case 15:
+            case 15: {
+                Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
+                        " erf(probit)");
+                for (int i = 0; i < 0x500000; i++) {
+                    double d = erf(MathExtras.probit(nextExclusiveDouble()) / ROOT_2) * 255.0 + 256.0;
+                    if (d >= 0 && d < 512)
+                        amounts[(int) d]++;
+                }
+                for (int i = 0; i < 512; i++) {
+                    float color = (i & 63) == 0
+                            ? -0x1.c98066p126F // CW Azure
+                            : -0x1.d08864p126F; // CW Sapphire
+                    for (int j = Math.max(0, 519 - (amounts[i] >> 7)); j < 520; j++) {
+                        layers.backgrounds[i][j] = color;
+                    }
+                }
+                for (int i = 0; i < 10; i++) {
+                    for (int j = 8; j < 520; j += 32) {
+                        layers.backgrounds[i][j] = -0x1.7677e8p125F;
+                    }
+                }
+
+            }
+            break;
             case 60: {
                 Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
                         " probit");
@@ -2099,20 +2140,16 @@ public class MathVisualizer extends ApplicationAdapter {
             }
             break;
             case 48: {
-                // thanks to Jonathan M, https://stackoverflow.com/a/20591835
                 Gdx.graphics.setTitle("Spiral Testing Thing, from index");
-//                OUTER_LOOP:
-//                for (int root = 0; root < 16; ++root) {
-                    for (int index = 0; index < 256; ++index) {
-//                    for (int index = root * root, limit = index + root + root + 1; index < limit; index++) {
+                // thanks to Jonathan M, https://stackoverflow.com/a/20591835
+                for (int root = 0; root < 16; ++root) {
+                    for (int index = root * root, limit = index + root + root + 1; index < limit; index++) {
 //                        if ((index & 1) != 0) continue; //checkerboard
-                        int root = (int)Math.sqrt(index);
                         final int sign = -(root & 1);
                         final int big = (root * (root + 1)) - index << 1;
                         final int y = ((root + 1 >> 1) + sign ^ sign) + ((sign ^ sign + Math.min(big, 0)) >> 1);
                         final int x = ((root + 1 >> 1) + sign ^ sign) - ((sign ^ sign + Math.max(big, 0)) >> 1);
                         // do stuff with x and y
-//                        if(x * y > 16) break OUTER_LOOP;
                         int c = (int)(index - (System.currentTimeMillis() >>> 4) & 255);
                         float color = SColor.floatGetI(c, c, c);
                         for (int a = 0; a < 32; a++) {
@@ -2121,7 +2158,7 @@ public class MathVisualizer extends ApplicationAdapter {
                             }
                         }
                     }
-//                }
+                }
 //                Gdx.graphics.setTitle("Spiral Numbering Thing, from index");
 //                for (int g = 0; g < 256; g++) {
 //                    final int root = (int) (Math.sqrt(g));
