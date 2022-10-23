@@ -221,14 +221,30 @@ public class MathVisualizer extends ApplicationAdapter {
      */
     public double erf(final double x) {
         final double a1 = 0.0705230784, a2 = 0.0422820123, a3 = 0.0092705272, a4 = 0.0001520143, a5 = 0.0002765672, a6 = 0.0000430638;
-        final double sign = Math.signum(x), y1 = sign * x, y2 = x * x, y3 = y1 * y2, y4 = y2 * y2, y5 = y2 * y3, y6 = y3 * y3;
+        final double sign = Math.signum(x), y1 = sign * x, y2 = y1 * y1, y3 = y1 * y2, y4 = y2 * y2, y5 = y2 * y3, y6 = y3 * y3;
         double n = 1.0 + a1 * y1 + a2 * y2 + a3 * y3 + a4 * y4 + a5 * y5 + a6 * y6;
         n *= n;
         n *= n;
         n *= n;
         return sign * (1.0 - 1.0 / (n * n));
     }
-    
+
+    /**
+     * Inverse to the probit function; equivalent to scaled erf(x) from Abramowitz and Stegun, 1964; equation 7.1.27 .
+     * See <a href="https://en.wikipedia.org/wiki/Error_function#Approximation_with_elementary_functions">Wikipedia</a>.
+     * @param x any finite double
+     * @return a double between 0 and 1, inclusive
+     */
+    public double probitInverse(final double x) {
+        final double a1 = 0.0705230784, a2 = 0.0422820123, a3 = 0.0092705272, a4 = 0.0001520143, a5 = 0.0002765672, a6 = 0.0000430638;
+        final double sign = Math.signum(x), y1 = sign * x * 0.7071067811865475, y2 = y1 * y1, y3 = y1 * y2, y4 = y2 * y2, y5 = y2 * y3, y6 = y3 * y3;
+        double n = 1.0 + a1 * y1 + a2 * y2 + a3 * y3 + a4 * y4 + a5 * y5 + a6 * y6;
+        n *= n;
+        n *= n;
+        n *= n;
+        return sign * (0.5 - 0.5 / (n * n)) + 0.5;
+    }
+
     public final float editedCurve()
     {
         long r = diver.nextLong(), s = diver.nextLong();
@@ -1060,7 +1076,8 @@ public class MathVisualizer extends ApplicationAdapter {
                 Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
                         " erf(probit)");
                 for (int i = 0; i < 0x500000; i++) {
-                    double d = erf(MathExtras.probit(nextExclusiveDouble()) / ROOT_2) * 255.0 + 256.0;
+                    double d = probitInverse(MathExtras.probit(nextExclusiveDouble())) * 511.0;
+//                    double d = erf(MathExtras.probit(nextExclusiveDouble()) / ROOT_2) * 255.0 + 256.0;
                     if (d >= 0 && d < 512)
                         amounts[(int) d]++;
                 }
@@ -1690,8 +1707,8 @@ public class MathVisualizer extends ApplicationAdapter {
                     float color = (i & 63) == 0
                             ? -0x1.c98066p126F // CW Azure
                             : -0x1.d08864p126F; // CW Sapphire
-                    for (int j = Math.max(0, 520 - (amounts[i] >>> 8)); j < 520; j++) {
-                        layers.backgrounds[i + 8][j] = color;
+                    for (int j = Math.max(0, 519 - (amounts[i] >>> 8)); j < 520; j++) {
+                        layers.backgrounds[i][j] = color;
                     }
                 }
                 for (int j = 510, jj = 0; j >= 0; j -= 10, jj = (jj + 1) % 5) {
@@ -1711,8 +1728,8 @@ public class MathVisualizer extends ApplicationAdapter {
                     float color = (i & 63) == 0
                             ? -0x1.c98066p126F // CW Azure
                             : -0x1.d08864p126F; // CW Sapphire
-                    for (int j = Math.max(0, 520 - (amounts[i] / 50)); j < 520; j++) {
-                        layers.backgrounds[i + 8][j] = color;
+                    for (int j = Math.max(0, 519 - (amounts[i] / 50)); j < 520; j++) {
+                        layers.backgrounds[i][j] = color;
                     }
                 }
                 for (int j = 510, jj = 0; j >= 0; j -= 10, jj = (jj + 1) % 5) {
@@ -1735,8 +1752,8 @@ public class MathVisualizer extends ApplicationAdapter {
                     float color = (i & 63) == 0
                             ? -0x1.c98066p126F // CW Azure
                             : -0x1.d08864p126F; // CW Sapphire
-                    for (int j = Math.max(0, 520 - (amounts[i] / 50)); j < 520; j++) {
-                        layers.backgrounds[i + 8][j] = color;
+                    for (int j = Math.max(0, 519 - (amounts[i] / 50)); j < 520; j++) {
+                        layers.backgrounds[i][j] = color;
                     }
                 }
                 for (int j = 510, jj = 0; j >= 0; j -= 10, jj = (jj + 1) % 5) {
@@ -1761,8 +1778,8 @@ public class MathVisualizer extends ApplicationAdapter {
                     float color = (i & 63) == 0
                             ? -0x1.c98066p126F // CW Azure
                             : -0x1.d08864p126F; // CW Sapphire
-                    for (int j = Math.max(0, 520 - (amounts[i] / 50)); j < 520; j++) {
-                        layers.backgrounds[i + 8][j] = color;
+                    for (int j = Math.max(0, 519 - (amounts[i] / 50)); j < 520; j++) {
+                        layers.backgrounds[i][j] = color;
                     }
                 }
                 for (int j = 510, jj = 0; j >= 0; j -= 10, jj = (jj + 1) % 5) {
@@ -1787,8 +1804,8 @@ public class MathVisualizer extends ApplicationAdapter {
                     float color = (i & 63) == 0
                             ? -0x1.c98066p126F // CW Azure
                             : -0x1.d08864p126F; // CW Sapphire
-                    for (int j = Math.max(0, 520 - (amounts[i] / 50)); j < 520; j++) {
-                        layers.backgrounds[i + 8][j] = color;
+                    for (int j = Math.max(0, 519 - (amounts[i] / 50)); j < 520; j++) {
+                        layers.backgrounds[i][j] = color;
                     }
                 }
                 for (int j = 510, jj = 0; j >= 0; j -= 10, jj = (jj + 1) % 5) {
@@ -1813,8 +1830,8 @@ public class MathVisualizer extends ApplicationAdapter {
                     float color = (i & 63) == 0
                             ? -0x1.c98066p126F // CW Azure
                             : -0x1.d08864p126F; // CW Sapphire
-                    for (int j = Math.max(0, 520 - (amounts[i] / 50)); j < 520; j++) {
-                        layers.backgrounds[i + 8][j] = color;
+                    for (int j = Math.max(0, 519 - (amounts[i] / 50)); j < 520; j++) {
+                        layers.backgrounds[i][j] = color;
                     }
                 }
                 for (int j = 510, jj = 0; j >= 0; j -= 10, jj = (jj + 1) % 5) {
@@ -1857,8 +1874,8 @@ public class MathVisualizer extends ApplicationAdapter {
                     float color = (i & 63) == 0
                             ? -0x1.c98066p126F // CW Azure
                             : -0x1.d08864p126F; // CW Sapphire
-                    for (int j = Math.max(0, 520 - (amounts[i] / 50)); j < 520; j++) {
-                        layers.backgrounds[i + 8][j] = color;
+                    for (int j = Math.max(0, 519 - (amounts[i] / 50)); j < 520; j++) {
+                        layers.backgrounds[i][j] = color;
                     }
                 }
                 for (int j = 510, jj = 0; j >= 0; j -= 10, jj = (jj + 1) % 5) {
@@ -1879,8 +1896,8 @@ public class MathVisualizer extends ApplicationAdapter {
                     float color = (i & 63) == 0
                             ? -0x1.c98066p126F // CW Azure
                             : -0x1.d08864p126F; // CW Sapphire
-                    for (int j = Math.max(0, 520 - (amounts[i] / 50)); j < 520; j++) {
-                        layers.backgrounds[i + 8][j] = color;
+                    for (int j = Math.max(0, 519 - (amounts[i] / 50)); j < 520; j++) {
+                        layers.backgrounds[i][j] = color;
                     }
                 }
                 for (int j = 510, jj = 0; j >= 0; j -= 10, jj = (jj + 1) % 5) {
@@ -1959,8 +1976,8 @@ public class MathVisualizer extends ApplicationAdapter {
                     float color = (i & 63) == 0
                             ? -0x1.c98066p126F // CW Azure
                             : -0x1.d08864p126F; // CW Sapphire
-                    for (int j = Math.max(0, 520 - (int) Math.round(dAmounts[i] * 100.0)); j < 520; j++) {
-                        layers.backgrounds[i + 8][j] = color;
+                    for (int j = Math.max(0, 519 - (int) Math.round(dAmounts[i] * 100.0)); j < 520; j++) {
+                        layers.backgrounds[i][j] = color;
                     }
                 }
                 for (int j = 510, jj = 0; j >= 0; j -= 10, jj = (jj + 1) % 5) {
@@ -1980,8 +1997,8 @@ public class MathVisualizer extends ApplicationAdapter {
                     float color = (i & 63) == 0
                             ? -0x1.c98066p126F // CW Azure
                             : -0x1.d08864p126F; // CW Sapphire
-                    for (int j = Math.max(0, 520 - (int) Math.round(dAmounts[i] * 100.0)); j < 520; j++) {
-                        layers.backgrounds[i + 8][j] = color;
+                    for (int j = Math.max(0, 519 - (int) Math.round(dAmounts[i] * 100.0)); j < 520; j++) {
+                        layers.backgrounds[i][j] = color;
                     }
                 }
                 for (int j = 510, jj = 0; j >= 0; j -= 10, jj = (jj + 1) % 5) {
@@ -2001,8 +2018,8 @@ public class MathVisualizer extends ApplicationAdapter {
                     float color = (i & 63) == 0
                             ? -0x1.c98066p126F // CW Azure
                             : -0x1.d08864p126F; // CW Sapphire
-                    for (int j = Math.max(0, 520 - (int) Math.round(dAmounts[i] * Math.PI * 200.0)); j < 520; j++) {
-                        layers.backgrounds[i + 8][j] = color;
+                    for (int j = Math.max(0, 519 - (int) Math.round(dAmounts[i] * Math.PI * 200.0)); j < 520; j++) {
+                        layers.backgrounds[i][j] = color;
                     }
                 }
                 for (int j = 510, jj = 0; j >= 0; j -= 10, jj = (jj + 1) % 5) {
@@ -2021,8 +2038,8 @@ public class MathVisualizer extends ApplicationAdapter {
                     float color = (i & 63) == 0
                             ? -0x1.c98066p126F // CW Azure
                             : -0x1.d08864p126F; // CW Sapphire
-                    for (int j = Math.max(0, 520 - (int) Math.round(dAmounts[i] * Math.PI * 200.0)); j < 520; j++) {
-                        layers.backgrounds[i + 8][j] = color;
+                    for (int j = Math.max(0, 519 - (int) Math.round(dAmounts[i] * Math.PI * 200.0)); j < 520; j++) {
+                        layers.backgrounds[i][j] = color;
                     }
                 }
                 for (int j = 510, jj = 0; j >= 0; j -= 10, jj = (jj + 1) % 5) {
@@ -2042,8 +2059,8 @@ public class MathVisualizer extends ApplicationAdapter {
                     float color = (i & 63) == 0
                             ? -0x1.c98066p126F // CW Azure
                             : -0x1.d08864p126F; // CW Sapphire
-                    for (int j = Math.max(0, 520 - (int) Math.round(dAmounts[i] * 100.0)); j < 520; j++) {
-                        layers.backgrounds[i + 8][j] = color;
+                    for (int j = Math.max(0, 519 - (int) Math.round(dAmounts[i] * 100.0)); j < 520; j++) {
+                        layers.backgrounds[i][j] = color;
                     }
                 }
                 for (int j = 510, jj = 0; j >= 0; j -= 10, jj = (jj + 1) % 5) {
@@ -2063,8 +2080,8 @@ public class MathVisualizer extends ApplicationAdapter {
                     float color = (i & 63) == 0
                             ? -0x1.c98066p126F // CW Azure
                             : -0x1.d08864p126F; // CW Sapphire
-                    for (int j = Math.max(0, 520 - (int) Math.round(dAmounts[i] * 100.0)); j < 520; j++) {
-                        layers.backgrounds[i + 8][j] = color;
+                    for (int j = Math.max(0, 519 - (int) Math.round(dAmounts[i] * 100.0)); j < 520; j++) {
+                        layers.backgrounds[i][j] = color;
                     }
                 }
                 for (int j = 510, jj = 0; j >= 0; j -= 10, jj = (jj + 1) % 5) {
@@ -2084,8 +2101,8 @@ public class MathVisualizer extends ApplicationAdapter {
                     float color = (i & 63) == 0
                             ? -0x1.c98066p126F // CW Azure
                             : -0x1.d08864p126F; // CW Sapphire
-                    for (int j = Math.max(0, 520 - (int) Math.round(dAmounts[i] * Math.PI * 200.0)); j < 520; j++) {
-                        layers.backgrounds[i + 8][j] = color;
+                    for (int j = Math.max(0, 519 - (int) Math.round(dAmounts[i] * Math.PI * 200.0)); j < 520; j++) {
+                        layers.backgrounds[i][j] = color;
                     }
                 }
                 for (int j = 510, jj = 0; j >= 0; j -= 10, jj = (jj + 1) % 5) {
@@ -2104,8 +2121,8 @@ public class MathVisualizer extends ApplicationAdapter {
                     float color = (i & 63) == 0
                             ? -0x1.c98066p126F // CW Azure
                             : -0x1.d08864p126F; // CW Sapphire
-                    for (int j = Math.max(0, 520 - (int) Math.round(dAmounts[i] * Math.PI * 200.0)); j < 520; j++) {
-                        layers.backgrounds[i + 8][j] = color;
+                    for (int j = Math.max(0, 519 - (int) Math.round(dAmounts[i] * Math.PI * 200.0)); j < 520; j++) {
+                        layers.backgrounds[i][j] = color;
                     }
                 }
                 for (int j = 510, jj = 0; j >= 0; j -= 10, jj = (jj + 1) % 5) {
