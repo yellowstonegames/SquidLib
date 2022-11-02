@@ -67,10 +67,10 @@ public class HashVisualizer extends ApplicationAdapter {
     // 3 artistic visualizations of hash functions and misc. other
     // 4 noise
     // 5 RNG results
-    private int testType = 4;
+    private int testType = 1;
     private static final int NOISE_LIMIT = 152;
     private static final int RNG_LIMIT = 52;
-    private int hashMode = 1, rngMode = 5, noiseMode = 106, otherMode = 17;//142
+    private int hashMode = 9, rngMode = 5, noiseMode = 106, otherMode = 17;//142
 
     /**
      * If you're editing the source of HashVisualizer, you can comment out one line and uncomment another to change
@@ -750,6 +750,11 @@ public class HashVisualizer extends ApplicationAdapter {
 //        return n ^ n << 7 ^ n << 23 ^ n >>> 11 ^ n >>> 23;
     }
 
+    public static int scratcherPointHash(final int x, final int y, final int n) {
+//        final int h = (((x * 0x7C735) + (y * 0x75915) - n ^ 0xD1B54A35) * 0x9E373 ^ 0x91E10DA5) * 0x125493;
+        final int h = (((x * 0x1827F5) + (y * 0x123C21) - n ^ 0xD1B54A35) * 0x9E373 ^ 0x91E10DA5) * 0x125493;
+        return h ^ h >>> 11 ^ h >>> 21;
+    }
 
     /**
      * Gets the fractional component of a float. For compatibility with GLSL, which has this built in.
@@ -2201,12 +2206,15 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         }
                         break;
                     case 9:
-                        Gdx.graphics.setTitle("HastyPointHash on length 2, low bits");
+//                        Gdx.graphics.setTitle("HastyPointHash on length 2, low bits");
+                        Gdx.graphics.setTitle("ScratcherPointHash on length 2, low bits");
+                        extra = System.nanoTime() >>> 30 & 31;
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 //code = -(Noise.HastyPointHash.hashAll(x, y, 123) & 1L) | 255L;
                                 //code = Noise.HastyPointHash.hashAll(x, y, 123) << 8 | 255L;
-                                back[x][y] = (HastyPointHash.hashAll(x, y, ctr) & 1L) == 0 ? FLOAT_BLACK : FLOAT_WHITE;//floatGet(code);
+//                                back[x][y] = (HastyPointHash.hashAll(x, y, ctr) & 1L) == 0 ? FLOAT_BLACK : FLOAT_WHITE;//floatGet(code);
+                                back[x][y] = (scratcherPointHash(x, y, 123) >>> extra & 1) == 0 ? FLOAT_BLACK : FLOAT_WHITE;//floatGet(code);
                             }
                         }
                         break;

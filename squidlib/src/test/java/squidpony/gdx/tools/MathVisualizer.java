@@ -362,7 +362,7 @@ public class MathVisualizer extends ApplicationAdapter {
     public static double cauchian() {
         double u = nextExclusiveDouble() - 0.5;
         double turns = u + 0.5;
-        turns -= Math.floor(turns);
+        turns -= (int)(turns);
         turns -= 0.5;
         turns *= Math.PI;
         final double x2 = turns * turns, x4 = x2 * x2;

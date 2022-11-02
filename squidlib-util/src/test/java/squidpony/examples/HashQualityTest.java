@@ -39,7 +39,7 @@ Sip collisions, 32-bit: 141
 Lit collisions, 32-bit: 124
 
  */
-@Ignore
+//@Ignore
 public class HashQualityTest {
     public static int jdkHash(char[] data, int start, int end)
     {
@@ -1142,33 +1142,10 @@ public class HashQualityTest {
         y *= 0x632BE5AB;
         return ((x + y) >>> ((x & 15) ^ (y & 15))) * 0x85157AF5;
     }
-    public static int scratcherCoord(int x, int y, int n) {
-        /*
-    const uvec2 m = uvec2(0xA0F2EC75u, 0x91E10DA5u); //0xd1342543de82ef95L, 0xf7c2ebc08f67f2b5L
-    const uvec2 a = uvec2(0x1b873593u, 0xcc9e2d51u); //0xa812d533b278e4adL, 0x9c8f2d355d1346b5L
-    p = p * m + a;
-    uint u = p.x + p.y;
-    u ^= u >> 16u;
-    u = u * 0x9E3779BDu;
-    return u ^ u >> 6u ^ u >> 26u;
-         */
-        //(n << 13 | n >>> 19) ^ (n << 29 | n >>> 3) ^
-//        n += (x * 0x7C735) + (y * 0x75915);
-//        return (n >>> ((x & 15) ^ (y & 15))) * 0x9E373;
-        n ^= (((x * 0x7C735) + (y * 0x75915) - n ^ 0xD1B54A35) * 0x9E373 ^ 0x91E10DA5) * 0x125493;
-        return n ^ n >>> 16;
-//        n += (x * 0xFAAE1A75) + (y * 0xEE5C155D);
-//        return (n >>> ((x & 15) ^ (y & 15))) * 0x93D765DD;
-
-        //n += y + ((x + y) * (x + y + 1) >>> 1);
-//        n = (n ^ n >>> 15) * 0x9E373;
-//        n = (n ^ n >>> 15) * 0x7C8A5;
-//        return n ^ n >>> 16;
-
-//        n ^= (x * 0x7C8A5) + (y * 0x7E57D);
-//        n ^= n >>> 16;
-//        n *= 0x9E375;
-//        return n ^ n >>> 16;
+    public static int scratcherCoord(final int x, final int y, final int n) {
+//        final int h = (((x * 0x7C735) + (y * 0x75915) - n ^ 0xD1B54A35) * 0x9E373 ^ 0x91E10DA5) * 0x125493;
+        final int h = (((x * 0x1827F5) + (y * 0x123C21) - n ^ 0xD1B54A35) * 0x9E373 ^ 0x91E10DA5) * 0x125493;
+        return h ^ h >>> 11 ^ h >>> 21;
     }
 
     public static int iphHash(int x, int y, int s) {
@@ -1222,8 +1199,8 @@ public class HashQualityTest {
      * TOTAL GoRo collisions: 19922851 (22.60143369692838%), BEST 1, WORST 49420
      * TOTAL Obje collisions: 69577617 (78.9321717768093%), BEST 0, WORST 141151
      */
+    //@Ignore
     @Test
-    @Ignore
     public void testCoord() {
         RNG prng = new RNG(new GoatRNG(1234567890, 987654321));
         final int[] params = new int[20];// ArrayTools.range(10, 26);// new int[]{33, 65, 129, 257, 513};
