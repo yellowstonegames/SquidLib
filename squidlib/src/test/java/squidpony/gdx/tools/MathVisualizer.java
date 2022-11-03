@@ -24,7 +24,7 @@ import java.util.Random;
  * Created by Tommy Ettinger on 1/13/2018.
  */
 public class MathVisualizer extends ApplicationAdapter {
-    private int mode = 15;
+    private int mode = 51;
     private int modes = 66;
     private FilterBatch batch;
     private SparseLayers layers;
@@ -339,6 +339,10 @@ public class MathVisualizer extends ApplicationAdapter {
              if ( ei == -1023 ) mf = mi * (1.0 / 0x000FFFFFFFFFFFFFL);
 
             return (ei + (-0.344845 * mf + 2.024658) * mf - 1.674873) * 0.43436558031807954;
+    }
+
+    private double inclusiveDouble() {
+        return (MathUtils.random.nextLong()|0x8000000000000000L) * 0x1p-63 + 1.0;
     }
 
     /**
@@ -2227,10 +2231,9 @@ public class MathVisualizer extends ApplicationAdapter {
             break;
             case 51: {
                 Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
-                        " RandomXS128, bits of differentNextExclusiveDouble()");
-                //DiverRNG diver = new DiverRNG();
+                        " RandomXS128, bits of inclusiveDouble() at " + Gdx.graphics.getFramesPerSecond() + " FPS");
                 for (int i = 0; i < 0x10000; i++) {
-                    long bits = Double.doubleToLongBits(((xs128.nextLong() >>> 11) + 1L) * 1.1102230246251564E-16);
+                    long bits = Double.doubleToLongBits(inclusiveDouble());
                     for (int j = 0, jj = 504; j < 64; j++, jj -= 8) {
                         if (1L == (bits >>> j & 1L))
                             amounts[jj] = amounts[jj + 1] = amounts[jj + 2] = amounts[jj + 3]
@@ -2253,11 +2256,38 @@ public class MathVisualizer extends ApplicationAdapter {
                         layers.backgrounds[i][j] = -0x1.7677e8p125F;
                     }
                 }
+//                Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
+//                        " RandomXS128, bits of differentNextExclusiveDouble()");
+//                //DiverRNG diver = new DiverRNG();
+//                for (int i = 0; i < 0x10000; i++) {
+//                    long bits = Double.doubleToLongBits(((xs128.nextLong() >>> 11) + 1L) * 1.1102230246251564E-16);
+//                    for (int j = 0, jj = 504; j < 64; j++, jj -= 8) {
+//                        if (1L == (bits >>> j & 1L))
+//                            amounts[jj] = amounts[jj + 1] = amounts[jj + 2] = amounts[jj + 3]
+//                                    = amounts[jj + 4] = amounts[jj + 5] = ++amounts[jj + 6];
+//                    }
+//                }
+//                for (int i = 0; i < 512; i++) {
+//                    if ((i & 7) == 3) {
+//                        for (int j = 510 - (amounts[i] >> 8); j < 520; j++) {
+//                            layers.backgrounds[i][j] = -0x1.c98066p126F;
+//                        }
+//                    } else {
+//                        for (int j = 519 - (amounts[i] >> 8); j < 520; j++) {
+//                            layers.backgrounds[i][j] = -0x1.d08864p126F;
+//                        }
+//                    }
+//                }
+//                for (int i = 0; i < 10; i++) {
+//                    for (int j = 8; j < 520; j += 32) {
+//                        layers.backgrounds[i][j] = -0x1.7677e8p125F;
+//                    }
+//                }
             }
             break;
             case 52: {
                 Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
-                        " RandomXS128, bits of nextExclusiveDouble()");
+                        " RandomXS128, bits of nextExclusiveDouble() at " + Gdx.graphics.getFramesPerSecond() + " FPS");
                 for (int i = 0; i < 0x10000; i++) {
                     long bits = Double.doubleToLongBits(nextExclusiveDouble());
                     for (int j = 0, jj = 504; j < 64; j++, jj -= 8) {
@@ -2313,7 +2343,7 @@ public class MathVisualizer extends ApplicationAdapter {
 //                }
 //            }
                 Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
-                        " RandomXS128, bits of nextFloat()");
+                        " RandomXS128, bits of nextFloat() at " + Gdx.graphics.getFramesPerSecond() + " FPS");
                 //DiverRNG diver = new DiverRNG();
                 for (int i = 0; i < 0x10000; i++) {
                     int bits = Float.floatToIntBits(xs128.nextFloat());
@@ -2343,7 +2373,7 @@ public class MathVisualizer extends ApplicationAdapter {
             break;
             case 54: {
                 Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
-                        " RandomXS128, bits of nextExclusiveFloat()");
+                        " RandomXS128, bits of nextExclusiveFloat() at " + Gdx.graphics.getFramesPerSecond() + " FPS");
                 for (int i = 0; i < 0x10000; i++) {
                     int bits = Float.floatToIntBits(nextExclusiveFloat());
                     for (int j = 0, jj = 504 - 128; j < 32; j++, jj -= 8) {

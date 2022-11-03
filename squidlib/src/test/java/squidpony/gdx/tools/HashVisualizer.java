@@ -2214,7 +2214,8 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                 //code = -(Noise.HastyPointHash.hashAll(x, y, 123) & 1L) | 255L;
                                 //code = Noise.HastyPointHash.hashAll(x, y, 123) << 8 | 255L;
 //                                back[x][y] = (HastyPointHash.hashAll(x, y, ctr) & 1L) == 0 ? FLOAT_BLACK : FLOAT_WHITE;//floatGet(code);
-                                back[x][y] = (scratcherPointHash(x, y, 123) >>> extra & 1) == 0 ? FLOAT_BLACK : FLOAT_WHITE;//floatGet(code);
+//                                back[x][y] = (scratcherPointHash(x, y, 123) >>> extra & 1) == 0 ? FLOAT_BLACK : FLOAT_WHITE;//floatGet(code);
+                                back[x][y] = (IntPointHash.hashAll(x, y, 123) >>> extra & 1) == 0 ? FLOAT_BLACK : FLOAT_WHITE;//floatGet(code);
                             }
                         }
                         break;
