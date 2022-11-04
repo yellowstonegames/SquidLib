@@ -207,6 +207,39 @@ public class WhiskerRNG implements RandomnessSource, Serializable {
         return (int)(stateD = fa ^ fc) >>> (32 - bits);
     }
 
+    public double nextDouble() {
+        final long fa = stateA;
+        final long fb = stateB;
+        final long fc = stateC;
+        final long fd = stateD;
+        stateA = fd * 0xF1357AEA2E62A9C5L; // Considered good by Steele and Vigna, https://arxiv.org/abs/2001.05304v1
+        stateB = (fa << 44 | fa >>> 20);
+        stateC = fb + 0x9E3779B97F4A7C15L; // 2 to the 64 divided by the golden ratio
+        return ((stateD = fa ^ fc) & 0x1FFFFFFFFFFFFFL) * 0x1p-53;
+    }
+
+    public double nextFloat() {
+        final long fa = stateA;
+        final long fb = stateB;
+        final long fc = stateC;
+        final long fd = stateD;
+        stateA = fd * 0xF1357AEA2E62A9C5L; // Considered good by Steele and Vigna, https://arxiv.org/abs/2001.05304v1
+        stateB = (fa << 44 | fa >>> 20);
+        stateC = fb + 0x9E3779B97F4A7C15L; // 2 to the 64 divided by the golden ratio
+        return ((stateD = fa ^ fc) & 0xFFFFFFL) * 0x1p-24f;
+    }
+
+    public int nextInt(final int bound) {
+        final long fa = stateA;
+        final long fb = stateB;
+        final long fc = stateC;
+        final long fd = stateD;
+        stateA = fd * 0xF1357AEA2E62A9C5L; // Considered good by Steele and Vigna, https://arxiv.org/abs/2001.05304v1
+        stateB = (fa << 44 | fa >>> 20);
+        stateC = fb + 0x9E3779B97F4A7C15L; // 2 to the 64 divided by the golden ratio
+        return (int)((bound * ((stateD = fa ^ fc) & 0xFFFFFFFFL)) >> 32);
+    }
+
     /**
      * Produces a copy of this WhiskerRNG that, if next() and/or nextLong() are called on this object and the
      * copy, both will generate the same sequence of random numbers from the point copy() was called. This just need to

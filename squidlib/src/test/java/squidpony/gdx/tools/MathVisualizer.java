@@ -32,7 +32,7 @@ public class MathVisualizer extends ApplicationAdapter {
     private Stage stage;
     private int[] amounts = new int[512];
     private double[] dAmounts = new double[512];
-    private DiverRNG diver;
+    private WhiskerRNG whisker;
     private MoonwalkRNG rng;
     private boolean hasGauss;
     private double followingGauss;
@@ -68,16 +68,16 @@ public class MathVisualizer extends ApplicationAdapter {
     {
         double v1, v2, v3;
         do {
-            v1 = 2 * diver.nextDouble() - 1; // between -1 and 1
-            v2 = 2 * diver.nextDouble() - 1; // between -1 and 1
-            v3 = 2 * diver.nextDouble() - 1; // between -1 and 1
+            v1 = 2 * whisker.nextDouble() - 1; // between -1 and 1
+            v2 = 2 * whisker.nextDouble() - 1; // between -1 and 1
+            v3 = 2 * whisker.nextDouble() - 1; // between -1 and 1
         } while (v1 * v1 + v2 * v2 + v3 * v3 > 1);
         vector[0] = v1;
         vector[1] = v2;
     }
     public final float fastGaussian()
     {
-        long a = diver.nextLong(), b = diver.nextLong();
+        long a = whisker.nextLong(), b = whisker.nextLong();
         a = (a & 0x0003FF003FF003FFL) +     ((a & 0x0FFC00FFC00FFC00L) >>> 10);
         b = (b & 0x0003FF003FF003FFL) +     ((b & 0x0FFC00FFC00FFC00L) >>> 10);
         a = (a & 0x000000007FF007FFL) +     ((a & 0x0007FF0000000000L) >>> 40);
@@ -247,7 +247,7 @@ public class MathVisualizer extends ApplicationAdapter {
 
     public final float editedCurve()
     {
-        long r = diver.nextLong(), s = diver.nextLong();
+        long r = whisker.nextLong(), s = whisker.nextLong();
         return ((r >>> 56) - (r >>> 48 & 255) + (r >>> 40 & 255) - (r >>> 32 & 255) + (r >>> 24 & 255) - (r >>> 16 & 255) + (r >>> 8 & 255) - (r & 255)) * 0x1p-8f
                 + ((s >>> 48) - (s >>> 32 & 65535) + (s >>> 16 & 65535) - (s & 65535)) * 0x1p-16f;
 //        final long r = diver.nextLong(), s = diver.nextLong();
@@ -342,7 +342,24 @@ public class MathVisualizer extends ApplicationAdapter {
     }
 
     private double inclusiveDouble() {
-        return (MathUtils.random.nextLong()|0x8000000000000000L) * 0x1p-63 + 1.0;
+        // the simplest, dumbest way of getting a double in [0.0,1.0]
+//        return (MathUtils.random.nextLong()|0x8000000000000000L) * 0x1p-63 + 1.0;
+        // generate a bounded long between 0 and 0x1p53 inclusive, then multiply by 0x1p-53
+        final long rand = MathUtils.random.nextLong();
+        final long bound = 0x20000000000001L;
+        final long randLow = rand & 0xFFFFFFFFL;
+        final long randHigh = (rand >>> 32);
+        final long boundHigh = (bound >>> 32);
+        return ((randLow * boundHigh >>> 32) + randHigh * boundHigh) * 0x1p-53;
+    }
+
+    private double inclusiveDouble2() {
+        //make sure to flip the "more magic" switch before operating ;)
+        final long bits = whisker.nextLong();
+        //generates an exclusive double normally, then adds 0x1p-12 to intentionally incur precision loss, and subtracts
+        //0x1p-12 to bring it back to the [0.0,1.0] range. rounding the lowest exclusive value, 0x1p-65, takes it to 0.0
+        //while the highest exclusive value, 0x1.fffffffffffffp-1, gets rounded to 1.0 . the mantissa bits are fair!
+        return NumberUtils.longBitsToDouble(1022L - Long.numberOfTrailingZeros(bits) << 52 | bits >>> 12) + 0x1p-12 - 0x1p-12;
     }
 
     /**
@@ -380,9 +397,9 @@ public class MathVisualizer extends ApplicationAdapter {
         double mag = 0.0;
         double v1, v2, v3, s;
         do {
-            v1 = 2 * diver.nextDouble() - 1; // between -1 and 1
-            v2 = 2 * diver.nextDouble() - 1; // between -1 and 1
-            v3 = 2 * diver.nextDouble() - 1; // between -1 and 1
+            v1 = 2 * whisker.nextDouble() - 1; // between -1 and 1
+            v2 = 2 * whisker.nextDouble() - 1; // between -1 and 1
+            v3 = 2 * whisker.nextDouble() - 1; // between -1 and 1
             s = v1 * v1 + v2 * v2 + v3 * v3;
         } while (s > 1 || s == 0);
         double multiplier = Math.sqrt(-2 * Math.log(s) / s);
@@ -396,7 +413,7 @@ public class MathVisualizer extends ApplicationAdapter {
             return;
         }
         else
-            mag = Math.cbrt(diver.nextDouble()) / Math.sqrt(mag);
+            mag = Math.cbrt(whisker.nextDouble()) / Math.sqrt(mag);
         vector[0] *= mag;
         vector[1] *= mag;
     }
@@ -411,14 +428,14 @@ public class MathVisualizer extends ApplicationAdapter {
             return;
         }
         else
-            mag = Math.cbrt(diver.nextDouble()) / Math.sqrt(mag);
+            mag = Math.cbrt(whisker.nextDouble()) / Math.sqrt(mag);
         vector[0] *= mag;
         vector[1] *= mag;
     }
     public void insideBallExponential(final double[] vector)
     {
         double v1 = nextGaussian(), v2 = nextGaussian(), v3 = nextGaussian();
-        double mag = v1 * v1 + v2 * v2 + v3 * v3 - 2.0 * Math.log(diver.nextDouble());
+        double mag = v1 * v1 + v2 * v2 + v3 * v3 - 2.0 * Math.log(whisker.nextDouble());
         if(mag == 0.0)
         {
             vector[0] = 0.0;
@@ -433,7 +450,7 @@ public class MathVisualizer extends ApplicationAdapter {
     public void insideBallExponentialFast(final double[] vector) {
         double v1 = fastGaussian(), v2 = fastGaussian(), v3 = fastGaussian();//, sq = diver.nextDouble() * diver.nextDouble();
 //        double mag = v1 * v1 + v2 * v2 + v3 * v3 + 1.0 / (1.0 - diver.nextDouble() * diver.nextDouble()) - 0.25;
-        double mag = v1 * v1 + v2 * v2 + v3 * v3 - 2.0 * Math.log(diver.nextDouble());
+        double mag = v1 * v1 + v2 * v2 + v3 * v3 - 2.0 * Math.log(whisker.nextDouble());
         if (mag == 0.0) {
             vector[0] = 0.0;
             vector[1] = 0.0;
@@ -448,8 +465,8 @@ public class MathVisualizer extends ApplicationAdapter {
     }
     public void onSphereTrig(final double[] vector)
     {
-        double theta = diver.nextDouble();
-        double d = diver.nextDouble();
+        double theta = whisker.nextDouble();
+        double d = whisker.nextDouble();
         double phi = NumberTools.acos_(d * 2.0 - 1.0);
         double sinPhi = NumberTools.sin_(phi);
 
@@ -462,8 +479,8 @@ public class MathVisualizer extends ApplicationAdapter {
         double mag = 0.0;
         double v1, v2, s;
         do {
-            v1 = 2 * diver.nextDouble() - 1; // between -1 and 1
-            v2 = 2 * diver.nextDouble() - 1; // between -1 and 1
+            v1 = 2 * whisker.nextDouble() - 1; // between -1 and 1
+            v2 = 2 * whisker.nextDouble() - 1; // between -1 and 1
             s = v1 * v1 + v2 * v2;
         } while (s > 1 || s == 0);
         double multiplier = Math.sqrt(-2 * Math.log(s) / s);
@@ -477,7 +494,7 @@ public class MathVisualizer extends ApplicationAdapter {
             return;
         }
         else
-            mag = Math.sqrt(diver.nextDouble()) / Math.sqrt(mag);
+            mag = Math.sqrt(whisker.nextDouble()) / Math.sqrt(mag);
         vector[0] *= mag;
         vector[1] *= mag;
     }
@@ -494,7 +511,7 @@ public class MathVisualizer extends ApplicationAdapter {
             return;
         }
         else
-            mag = Math.sqrt(diver.nextDouble()) / Math.sqrt(mag);
+            mag = Math.sqrt(whisker.nextDouble()) / Math.sqrt(mag);
         vector[0] *= mag;
         vector[1] *= mag;
     }
@@ -626,7 +643,7 @@ public class MathVisualizer extends ApplicationAdapter {
         startTime = TimeUtils.millis();
         Coord.expandPoolTo(512, 512);
         CoordPacker.init();
-        diver = new DiverRNG(1234567890L);
+        whisker = new WhiskerRNG(1234567890L);
         rng = new MoonwalkRNG(1234567890);
         seed = DiverRNG.determine(12345L);
         bias = new RandomBias();
@@ -695,7 +712,7 @@ public class MathVisualizer extends ApplicationAdapter {
                 Gdx.graphics.setTitle("Math Visualizer: Mode " + mode);
                 //DiverRNG diver = new DiverRNG();
                 for (int i = 0; i < 0x1000000; i++) {
-                    amounts[Noise.fastFloor(twist(NumberTools.formCurvedFloat(diver.nextLong())) * 512)]++;
+                    amounts[Noise.fastFloor(twist(NumberTools.formCurvedFloat(whisker.nextLong())) * 512)]++;
                 }
                 for (int i = 0; i < 512; i++) {
                     float color = (i & 63) == 0 ? -0x1.c98066p126F : -0x1.d08864p126F;
@@ -714,9 +731,9 @@ public class MathVisualizer extends ApplicationAdapter {
                 Gdx.graphics.setTitle("Math Visualizer: Mode " + mode);
                 //DiverRNG diver = new DiverRNG();
                 for (int i = 0; i < 0x1000000; i++) {
-                    amounts[Noise.fastFloor(twist(NumberTools.formDouble(diver.nextLong()) *
-                            NumberTools.formDouble(diver.nextLong()) - NumberTools.formDouble(diver.nextLong()) *
-                            NumberTools.formDouble(diver.nextLong())) * 512)]++;
+                    amounts[Noise.fastFloor(twist(NumberTools.formDouble(whisker.nextLong()) *
+                            NumberTools.formDouble(whisker.nextLong()) - NumberTools.formDouble(whisker.nextLong()) *
+                            NumberTools.formDouble(whisker.nextLong())) * 512)]++;
                 }
                 for (int i = 0; i < 512; i++) {
                     float color = (i & 63) == 0 ? -0x1.c98066p126F : -0x1.d08864p126F;
@@ -736,7 +753,7 @@ public class MathVisualizer extends ApplicationAdapter {
                 //DiverRNG diver = new DiverRNG();
                 long state;
                 for (int i = 0; i < 0x1000000; i++) {
-                    state = diver.nextLong();
+                    state = whisker.nextLong();
                     amounts[Noise.fastFloor((NumberTools.formFloat((int) state) * 0.5 +
                             (NumberTools.formFloat((int) (state >>> 20)) + NumberTools.formFloat((int) (state >>> 41))) * 0.25) * 512)]++;
                 }
@@ -841,9 +858,9 @@ public class MathVisualizer extends ApplicationAdapter {
                 long centrality = NumberTools.doubleToLongBits(1.625) & 0xfffffffffffffL;
                 double offset = 0.15, range = 0.6;
                 for (int i = 0; i < 0x1000000; i++) {
-                    amounts[Noise.fastFloor(((diver.nextLong() & 0xfffffffffffffL) * 0x1p-54 + offset + range * ((centrality > (diver.nextLong() & 0xfffffffffffffL) ?
-                            ((diver.nextLong() & 0xfffffffffffffL) - (diver.nextLong() & 0xfffffffffffffL)) * 0x1p-53 + 0.5 :
-                            twist(((diver.nextLong() & 0xfffffffffffffL) - (diver.nextLong() & 0xfffffffffffffL)) * 0x1p-52)))) * 512)]++;
+                    amounts[Noise.fastFloor(((whisker.nextLong() & 0xfffffffffffffL) * 0x1p-54 + offset + range * ((centrality > (whisker.nextLong() & 0xfffffffffffffL) ?
+                            ((whisker.nextLong() & 0xfffffffffffffL) - (whisker.nextLong() & 0xfffffffffffffL)) * 0x1p-53 + 0.5 :
+                            twist(((whisker.nextLong() & 0xfffffffffffffL) - (whisker.nextLong() & 0xfffffffffffffL)) * 0x1p-52)))) * 512)]++;
                 }
                 for (int i = 0; i < 512; i++) {
                     float color = (i & 63) == 0 ? -0x1.c98066p126F : -0x1.d08864p126F;
@@ -866,9 +883,9 @@ public class MathVisualizer extends ApplicationAdapter {
                 long centrality = NumberTools.doubleToLongBits(1.375) & 0xfffffffffffffL;
                 double offset = 0.15, range = 0.6;
                 for (int i = 0; i < 0x1000000; i++) {
-                    amounts[Noise.fastFloor(((diver.nextLong() & 0xfffffffffffffL) * 0x1p-54 + offset + range * ((centrality > (diver.nextLong() & 0xfffffffffffffL) ?
-                            ((diver.nextLong() & 0xfffffffffffffL) - (diver.nextLong() & 0xfffffffffffffL)) * 0x1p-53 + 0.5 :
-                            twist(((diver.nextLong() & 0xfffffffffffffL) - (diver.nextLong() & 0xfffffffffffffL)) * 0x1p-52)))) * 512)]++;
+                    amounts[Noise.fastFloor(((whisker.nextLong() & 0xfffffffffffffL) * 0x1p-54 + offset + range * ((centrality > (whisker.nextLong() & 0xfffffffffffffL) ?
+                            ((whisker.nextLong() & 0xfffffffffffffL) - (whisker.nextLong() & 0xfffffffffffffL)) * 0x1p-53 + 0.5 :
+                            twist(((whisker.nextLong() & 0xfffffffffffffL) - (whisker.nextLong() & 0xfffffffffffffL)) * 0x1p-52)))) * 512)]++;
                 }
                 for (int i = 0; i < 512; i++) {
                     float color = (i & 63) == 0 ? -0x1.c98066p126F : -0x1.d08864p126F;
@@ -889,7 +906,7 @@ public class MathVisualizer extends ApplicationAdapter {
                 Gdx.graphics.setTitle("s=" + s + ", t=" + t);
                 //DiverRNG diver = new DiverRNG();
                 for (int i = 0; i < 0x100000; i++) {
-                    amounts[(int) (MathExtras.barronSpline(diver.nextFloat(), s, t) * 511.999)]++;
+                    amounts[(int) (MathExtras.barronSpline(whisker.nextFloat(), s, t) * 511.999)]++;
                 }
                 for (int i = 0; i < 512; i++) {
                     float color = (i & 63) == 0
@@ -912,7 +929,7 @@ public class MathVisualizer extends ApplicationAdapter {
                 Gdx.graphics.setTitle("s=" + s + ", t=" + t);
                 //DiverRNG diver = new DiverRNG();
                 for (int i = 0; i < 0x100000; i++) {
-                    amounts[(int) (MathExtras.barronSpline(diver.nextFloat(), s, t) * 511.999)]++;
+                    amounts[(int) (MathExtras.barronSpline(whisker.nextFloat(), s, t) * 511.999)]++;
                 }
                 for (int i = 0; i < 512; i++) {
                     float color = (i & 63) == 0
@@ -997,7 +1014,7 @@ public class MathVisualizer extends ApplicationAdapter {
                         " DiverRNG, random.nextInt(0x200)");
                 //DiverRNG diver = new DiverRNG();
                 for (int i = 0; i < 0x1000000; i++) {
-                    amounts[diver.nextInt(512)]++;
+                    amounts[whisker.nextInt(512)]++;
                 }
                 for (int i = 0; i < 512; i++) {
                     float color = (i & 63) == 0
@@ -1725,8 +1742,8 @@ public class MathVisualizer extends ApplicationAdapter {
             case 32: {
                 Gdx.graphics.setTitle("atan2_ random, uniform points at " + Gdx.graphics.getFramesPerSecond());
                 for (int i = 1; i <= 0x100000; i++) {
-                    amounts[(int) (NumberTools.atan2_(diver.nextFloat() - 0.5f,
-                            diver.nextFloat() - 0.5f) * 512f)]++;   // SquidLib's no-LUT way
+                    amounts[(int) (NumberTools.atan2_(whisker.nextFloat() - 0.5f,
+                            whisker.nextFloat() - 0.5f) * 512f)]++;   // SquidLib's no-LUT way
                 }
                 for (int i = 0; i < 512; i++) {
                     float color = (i & 63) == 0
@@ -1747,7 +1764,7 @@ public class MathVisualizer extends ApplicationAdapter {
                 Gdx.graphics.setTitle("atan2_ random, first quadrant points at " + Gdx.graphics.getFramesPerSecond());
 //                Gdx.graphics.setTitle("atan2_ random, triangular points at " + Gdx.graphics.getFramesPerSecond());
                 for (int i = 1; i <= 0x100000; i++) {
-                    amounts[(int) (NumberTools.atan2_(diver.nextFloat() * 0.5f, diver.nextFloat() * 0.5f) * 2047.99f)]++;
+                    amounts[(int) (NumberTools.atan2_(whisker.nextFloat() * 0.5f, whisker.nextFloat() * 0.5f) * 2047.99f)]++;
 //                    long r = DiverRNG.randomize(i);
 //                    amounts[(int) (NumberTools.atan2_((r & 0xFFFF) - (r >>> 16 & 0xFFFF),
 //                            (r >>> 32 & 0xFFFF) - (r >>> 48 & 0xFFFF)) * 512f)]++;
@@ -1770,11 +1787,11 @@ public class MathVisualizer extends ApplicationAdapter {
             case 34: {
                 Gdx.graphics.setTitle("atan2_ random, less-biased, inverted triangular at " + Gdx.graphics.getFramesPerSecond());
                 for (int i = 1; i <= 0x100000; i++) {
-                    long r = diver.nextLong();
+                    long r = whisker.nextLong();
                     double a = (((r & 0xFFF) + (r >>> 12 & 0xFFF) & 0xFFF) - 0x7FF.8p0) * 0x1p-13,
                             b = (((r >>> 24 & 0xFFF) + (r >>> 36 & 0xFFF) & 0xFFF) - 0x7FF.8p0) * 0x1p-13;
                     amounts[(int) (NumberTools.atan2_(Math.cbrt(a),
-                            Math.cbrt(b)) * 385.0 + (diver.nextLong() & 127))]++;
+                            Math.cbrt(b)) * 385.0 + (whisker.nextLong() & 127))]++;
 //                    amounts[(int)(NumberTools.atan2_((r & 0xFF) + (r >>> 8 & 0xFF) - (r >>> 16 & 0xFF) - (r >>> 24 & 0xFF),
 //                            (r >>> 32 & 0xFF) + (r >>> 40 & 0xFF) - (r >>> 48 & 0xFF) - (r >>> 56)) * 512f)]++;
                 }
@@ -1796,11 +1813,11 @@ public class MathVisualizer extends ApplicationAdapter {
             case 35: {
                 Gdx.graphics.setTitle("atan2_ random, biased-toward-center, inverted triangular at " + Gdx.graphics.getFramesPerSecond());
                 for (int i = 1; i <= 0x100000; i++) {
-                    long r = diver.nextLong();
+                    long r = whisker.nextLong();
                     double a = (((r & 0xFFF) + (r >>> 12 & 0xFFF) & 0xFFF) - 0x7FF.8p0) * 0x1p-13,
                             b = (((r >>> 24 & 0xFFFF) + (r >>> 36 & 0xFFF) & 0xFFF) - 0xBFF.8p0) * 0x1p-13;
                     amounts[(int) (NumberTools.atan2_(Math.cbrt(a),
-                            Math.cbrt(b)) * 385.0 + (diver.nextLong() & 127))]++;
+                            Math.cbrt(b)) * 385.0 + (whisker.nextLong() & 127))]++;
 //                    amounts[(int)(NumberTools.atan2_((r & 0xFF) + (r >>> 8 & 0xFF) - (r >>> 16 & 0xFF) - (r >>> 24 & 0xFF),
 //                            (r >>> 32 & 0xFF) + (r >>> 40 & 0xFF) - (r >>> 48 & 0xFF) - (r >>> 56)) * 512f)]++;
                 }
@@ -1822,11 +1839,11 @@ public class MathVisualizer extends ApplicationAdapter {
             case 36: {
                 Gdx.graphics.setTitle("atan2_ random, biased-toward-extreme at " + Gdx.graphics.getFramesPerSecond());
                 for (int i = 1; i <= 0x100000; i++) {
-                    long r = diver.nextLong();
+                    long r = whisker.nextLong();
                     double a = (((r & 0xFFF) + (r >>> 12 & 0xFFF) & 0xFFF) - 0x7FF.8p0) * 0x1p-13,
                             b = (((r >>> 24 & 0xFFF) + (r >>> 36 & 0xFFF) & 0xFFF) - 0x3FF.8p0) * 0x1p-13;
                     amounts[(int) (NumberTools.atan2_(Math.cbrt(a),
-                            Math.cbrt(b)) * 385.0 + (diver.nextLong() & 0x7F))]++;
+                            Math.cbrt(b)) * 385.0 + (whisker.nextLong() & 0x7F))]++;
 //                    amounts[(int)(NumberTools.atan2_((r & 0xFF) + (r >>> 8 & 0xFF) - (r >>> 16 & 0xFF) - (r >>> 24 & 0xFF),
 //                            (r >>> 32 & 0xFF) + (r >>> 40 & 0xFF) - (r >>> 48 & 0xFF) - (r >>> 56)) * 512f)]++;
                 }
@@ -1849,7 +1866,7 @@ public class MathVisualizer extends ApplicationAdapter {
                 float tm = (TimeUtils.timeSinceMillis(startTime) * 7 & 0xFFFF) * 0x1p-17f;
                 Gdx.graphics.setTitle("atan2_ random, bias value " + tm + ", at " + Gdx.graphics.getFramesPerSecond());
                 for (int i = 1; i <= 0x100000; i++) {
-                    long r = diver.nextLong();
+                    long r = whisker.nextLong();
                     amounts[(int) ((NumberTools.sin_((r & 0xFFFL) * 0x1p-12f) * tm
                             + ((r >>> 16 & 0xFFFL) - (r >>> 28 & 0xFFFL) + (r >>> 40 & 0xFFFL) - (r >>> 52)) * 0x1p-13f * (0.5f - tm)
 //                    + (NumberTools.asin_((r >>> 32 & 0xFFFF) * 0x1p-16f) - NumberTools.asin_((r >>> 48) * 0x1p-16f)) * (2f - tm)
@@ -2199,7 +2216,7 @@ public class MathVisualizer extends ApplicationAdapter {
             case 49: {
                 Gdx.graphics.setTitle("Jitter Test at " + Gdx.graphics.getFramesPerSecond() + " FPS");
                 int x, y;
-                long r = diver.nextLong(), s = diver.nextLong();
+                long r = whisker.nextLong(), s = whisker.nextLong();
                 float color = SColor.FLOAT_BLACK;
                 for (int j = 0; j < 10000; j++) {
 //                    x = Noise.fastFloor(Math.cbrt(((short)r) * ((short)(r >>> 16)) * 0x1p-32) * 250 + 260);
@@ -2287,9 +2304,9 @@ public class MathVisualizer extends ApplicationAdapter {
             break;
             case 52: {
                 Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
-                        " RandomXS128, bits of nextExclusiveDouble() at " + Gdx.graphics.getFramesPerSecond() + " FPS");
+                        " RandomXS128, bits of inclusiveDouble2() at " + Gdx.graphics.getFramesPerSecond() + " FPS");
                 for (int i = 0; i < 0x10000; i++) {
-                    long bits = Double.doubleToLongBits(nextExclusiveDouble());
+                    long bits = Double.doubleToLongBits(inclusiveDouble2());
                     for (int j = 0, jj = 504; j < 64; j++, jj -= 8) {
                         if (1L == (bits >>> j & 1L))
                             amounts[jj] = amounts[jj + 1] = amounts[jj + 2] = amounts[jj + 3]
@@ -2312,6 +2329,32 @@ public class MathVisualizer extends ApplicationAdapter {
                         layers.backgrounds[i][j] = -0x1.7677e8p125F;
                     }
                 }
+//                Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
+//                        " RandomXS128, bits of nextExclusiveDouble() at " + Gdx.graphics.getFramesPerSecond() + " FPS");
+//                for (int i = 0; i < 0x10000; i++) {
+//                    long bits = Double.doubleToLongBits(nextExclusiveDouble());
+//                    for (int j = 0, jj = 504; j < 64; j++, jj -= 8) {
+//                        if (1L == (bits >>> j & 1L))
+//                            amounts[jj] = amounts[jj + 1] = amounts[jj + 2] = amounts[jj + 3]
+//                                    = amounts[jj + 4] = amounts[jj + 5] = ++amounts[jj + 6];
+//                    }
+//                }
+//                for (int i = 0; i < 512; i++) {
+//                    if ((i & 7) == 3) {
+//                        for (int j = 510 - (amounts[i] >> 8); j < 520; j++) {
+//                            layers.backgrounds[i][j] = -0x1.c98066p126F;
+//                        }
+//                    } else {
+//                        for (int j = 519 - (amounts[i] >> 8); j < 520; j++) {
+//                            layers.backgrounds[i][j] = -0x1.d08864p126F;
+//                        }
+//                    }
+//                }
+//                for (int i = 0; i < 10; i++) {
+//                    for (int j = 8; j < 520; j += 32) {
+//                        layers.backgrounds[i][j] = -0x1.7677e8p125F;
+//                    }
+//                }
             }
             break;
             case 53: {
