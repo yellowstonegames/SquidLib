@@ -361,6 +361,10 @@ public class MathVisualizer extends ApplicationAdapter {
         //while the highest exclusive value, 0x1.fffffffffffffp-1, gets rounded to 1.0 . the mantissa bits are fair!
         return NumberUtils.longBitsToDouble(1022L - Long.numberOfTrailingZeros(bits) << 52 | bits >>> 12) + 0x1p-12 - 0x1p-12;
     }
+    public float inclusiveFloat2 () {
+        final long bits = whisker.nextLong();
+        return NumberUtils.intBitsToFloat(126 - Long.numberOfTrailingZeros(bits) << 23 | (int)(bits >>> 41)) + 0x1p-22f - 0x1p-22f;
+    }
 
     /**
      * Returns the tangent in turns, using a Padé approximant.
@@ -2385,6 +2389,34 @@ public class MathVisualizer extends ApplicationAdapter {
 //                    }
 //                }
 //            }
+
+//                Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
+//                        " RandomXS128, bits of nextExclusiveFloat() at " + Gdx.graphics.getFramesPerSecond() + " FPS");
+//                for (int i = 0; i < 0x10000; i++) {
+//                    int bits = Float.floatToIntBits(nextExclusiveFloat());
+//                    for (int j = 0, jj = 504 - 128; j < 32; j++, jj -= 8) {
+//                        if (1 == (bits >>> j & 1))
+//                            amounts[jj] = amounts[jj + 1] = amounts[jj + 2] = amounts[jj + 3]
+//                                    = amounts[jj + 4] = amounts[jj + 5] = ++amounts[jj + 6];
+//                    }
+//                }
+//                for (int i = 0; i < 512; i++) {
+//                    if ((i & 7) == 3) {
+//                        for (int j = 510 - (amounts[i] >> 8); j < 520; j++) {
+//                            layers.backgrounds[i][j] = -0x1.c98066p126F;
+//                        }
+//                    } else {
+//                        for (int j = 519 - (amounts[i] >> 8); j < 520; j++) {
+//                            layers.backgrounds[i][j] = -0x1.d08864p126F;
+//                        }
+//                    }
+//                }
+//                for (int i = 0; i < 10; i++) {
+//                    for (int j = 8; j < 520; j += 32) {
+//                        layers.backgrounds[i][j] = -0x1.7677e8p125F;
+//                    }
+//                }
+
                 Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
                         " RandomXS128, bits of nextFloat() at " + Gdx.graphics.getFramesPerSecond() + " FPS");
                 //DiverRNG diver = new DiverRNG();
@@ -2416,9 +2448,9 @@ public class MathVisualizer extends ApplicationAdapter {
             break;
             case 54: {
                 Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
-                        " RandomXS128, bits of nextExclusiveFloat() at " + Gdx.graphics.getFramesPerSecond() + " FPS");
+                        " RandomXS128, bits of inclusiveFloat2() at " + Gdx.graphics.getFramesPerSecond() + " FPS");
                 for (int i = 0; i < 0x10000; i++) {
-                    int bits = Float.floatToIntBits(nextExclusiveFloat());
+                    int bits = Float.floatToIntBits(inclusiveFloat2());
                     for (int j = 0, jj = 504 - 128; j < 32; j++, jj -= 8) {
                         if (1 == (bits >>> j & 1))
                             amounts[jj] = amounts[jj + 1] = amounts[jj + 2] = amounts[jj + 3]
