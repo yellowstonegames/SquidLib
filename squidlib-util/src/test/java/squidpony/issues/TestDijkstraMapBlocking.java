@@ -66,10 +66,13 @@ public class TestDijkstraMapBlocking {
         DijkstraMap dm = new DijkstraMap(map, Measurement.EUCLIDEAN, new MoonwalkRNG(123L));
         dm.setBlockingRequirement(2);
         ArrayList<Coord> path = new ArrayList<>(16);
-        dm.setGoal(3, 3);
-        dm.partialScan(10, null);
-        debugPrint(dm);
-        dm.findPathPreScanned(path, Coord.get(5, 5));
+//        dm.setGoal(3, 3);
+//        dm.partialScan(10, null);
+//        debugPrint(dm);
+//        dm.findPathPreScanned(path, Coord.get(5, 5));
+
+        dm.findPath(path, 10, 10, null, null, Coord.get(4, 4), Coord.get(5, 5));
+
         char ch = '0';
         for(Coord c : path) {
             map[c.x][c.y] = ch++;

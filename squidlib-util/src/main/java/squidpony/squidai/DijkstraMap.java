@@ -1846,9 +1846,19 @@ public class DijkstraMap implements Serializable {
             int choice = 0;
 
             for (int d = 0; d <= measurement.directionCount(); d++) {
-                Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
-                if(!pt.isWithin(width, height))
+                int adjX = currentPos.x + dirs[d].deltaX;
+                int adjY = currentPos.y + dirs[d].deltaY;
+                if (adjX < 0 || adjY < 0 || adjX >= width || adjY >= height)
+                    /* Outside the map */
                     continue;
+                if (dirs[d].isDiagonal() && blockingRequirement > 0) // diagonal
+                {
+                    if ((gradientMap[adjX][currentPos.y] > FLOOR ? 1 : 0)
+                            + (gradientMap[currentPos.x][adjY] > FLOOR ? 1 : 0)
+                            >= blockingRequirement)
+                        continue;
+                }
+                Coord pt = Coord.get(adjX, adjY);
                 if (gradientMap[pt.x][pt.y] < best && !impassable2.contains(pt)) {
                     if (dirs[choice] == Direction.NONE || !path.contains(pt)) {
                         best = gradientMap[pt.x][pt.y];
@@ -3311,7 +3321,7 @@ public class DijkstraMap implements Serializable {
             }
 
         }
-        while (true) {
+        do {
             double best = gradientMap[currentPos.x][currentPos.y];
             appendDirToShuffle(rng);
             int choice = 0;
@@ -3322,9 +3332,9 @@ public class DijkstraMap implements Serializable {
                 if (adjX < 0 || adjY < 0 || adjX >= width || adjY >= height)
                     /* Outside the map */
                     continue;
-                if(dirs[d].isDiagonal() && blockingRequirement > 0) // diagonal
+                if (dirs[d].isDiagonal() && blockingRequirement > 0) // diagonal
                 {
-                    if((gradientMap[adjX][currentPos.y] > FLOOR ? 1 : 0)
+                    if ((gradientMap[adjX][currentPos.y] > FLOOR ? 1 : 0)
                             + (gradientMap[currentPos.x][adjY] > FLOOR ? 1 : 0)
                             >= blockingRequirement)
                         continue;
@@ -3340,10 +3350,9 @@ public class DijkstraMap implements Serializable {
 
             if (best >= gradientMap[currentPos.x][currentPos.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] > FLOOR) {
                 cutShort = true;
-                if(buffer == null)
+                if (buffer == null)
                     return new ArrayList<>(path);
-                else
-                {
+                else {
                     buffer.addAll(path);
                     return buffer;
                 }
@@ -3351,9 +3360,7 @@ public class DijkstraMap implements Serializable {
             currentPos = currentPos.translate(dirs[choice].deltaX, dirs[choice].deltaY);
             path.add(0, currentPos);
 
-            if (gradientMap[currentPos.x][currentPos.y] == 0)
-                break;
-        }
+        } while (gradientMap[currentPos.x][currentPos.y] != 0);
         cutShort = false;
         if(buffer == null)
             return new ArrayList<>(path);
