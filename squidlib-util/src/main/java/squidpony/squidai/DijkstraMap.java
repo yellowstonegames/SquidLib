@@ -1245,10 +1245,20 @@ public class DijkstraMap implements Serializable {
             appendDirToShuffle(rng);
             int choice = 0;
 
-            for (int d = 0; d < measurement.directionCount() + 1; d++) {
-                Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
-                if(!pt.isWithin(width, height))
+            for (int d = 0; d <= measurement.directionCount(); d++) {
+                int adjX = currentPos.x + dirs[d].deltaX;
+                int adjY = currentPos.y + dirs[d].deltaY;
+                if (adjX < 0 || adjY < 0 || adjX >= width || adjY >= height)
+                    /* Outside the map */
                     continue;
+                if (dirs[d].isDiagonal() && blockingRequirement > 0) // diagonal
+                {
+                    if ((gradientMap[adjX][currentPos.y] > FLOOR ? 1 : 0)
+                            + (gradientMap[currentPos.x][adjY] > FLOOR ? 1 : 0)
+                            >= blockingRequirement)
+                        continue;
+                }
+                Coord pt = Coord.get(adjX, adjY);
                 if (gradientMap[pt.x][pt.y] < best) {
                     if (dirs[choice] == Direction.NONE || !path.contains(pt)) {
                         best = gradientMap[pt.x][pt.y];
@@ -2114,9 +2124,19 @@ public class DijkstraMap implements Serializable {
             int choice = 0;
 
             for (int d = 0; d <= measurement.directionCount(); d++) {
-                Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
-                if(!pt.isWithin(width, height))
+                int adjX = currentPos.x + dirs[d].deltaX;
+                int adjY = currentPos.y + dirs[d].deltaY;
+                if (adjX < 0 || adjY < 0 || adjX >= width || adjY >= height)
+                    /* Outside the map */
                     continue;
+                if (dirs[d].isDiagonal() && blockingRequirement > 0) // diagonal
+                {
+                    if ((gradientMap[adjX][currentPos.y] > FLOOR ? 1 : 0)
+                            + (gradientMap[currentPos.x][adjY] > FLOOR ? 1 : 0)
+                            >= blockingRequirement)
+                        continue;
+                }
+                Coord pt = Coord.get(adjX, adjY);
                 if (gradientMap[pt.x][pt.y] < best  && !impassable2.contains(pt)) {
                     if (dirs[choice] == Direction.NONE || !path.contains(pt)) {
                         best = gradientMap[pt.x][pt.y];
@@ -2419,9 +2439,19 @@ public class DijkstraMap implements Serializable {
             int choice = 0;
 
             for (int d = 0; d <= measurement.directionCount(); d++) {
-                Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
-                if(!pt.isWithin(width, height))
+                int adjX = currentPos.x + dirs[d].deltaX;
+                int adjY = currentPos.y + dirs[d].deltaY;
+                if (adjX < 0 || adjY < 0 || adjX >= width || adjY >= height)
+                    /* Outside the map */
                     continue;
+                if (dirs[d].isDiagonal() && blockingRequirement > 0) // diagonal
+                {
+                    if ((gradientMap[adjX][currentPos.y] > FLOOR ? 1 : 0)
+                            + (gradientMap[currentPos.x][adjY] > FLOOR ? 1 : 0)
+                            >= blockingRequirement)
+                        continue;
+                }
+                Coord pt = Coord.get(adjX, adjY);
                 if (gradientMap[pt.x][pt.y] < best && !impassable2.contains(pt)) {
                     if (dirs[choice] == Direction.NONE || !path.contains(pt)) {
                         best = gradientMap[pt.x][pt.y];
@@ -2682,9 +2712,19 @@ public class DijkstraMap implements Serializable {
             int choice = 0;
 
             for (int d = 0; d <= measurement.directionCount(); d++) {
-                Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
-                if(!pt.isWithin(width, height))
+                int adjX = currentPos.x + dirs[d].deltaX;
+                int adjY = currentPos.y + dirs[d].deltaY;
+                if (adjX < 0 || adjY < 0 || adjX >= width || adjY >= height)
+                    /* Outside the map */
                     continue;
+                if (dirs[d].isDiagonal() && blockingRequirement > 0) // diagonal
+                {
+                    if ((gradientMap[adjX][currentPos.y] > FLOOR ? 1 : 0)
+                            + (gradientMap[currentPos.x][adjY] > FLOOR ? 1 : 0)
+                            >= blockingRequirement)
+                        continue;
+                }
+                Coord pt = Coord.get(adjX, adjY);
                 if (gradientMap[pt.x][pt.y] < best && !impassable2.contains(pt)) {
                     if (dirs[choice] == Direction.NONE || !path.contains(pt)) {
                         best = gradientMap[pt.x][pt.y];
