@@ -74,7 +74,7 @@ public class MatrixWork {
     public static void main(String[] args){
         final double lac = 1.0; // lacunarity; 1.0 for layered, 2.0 for ridged.
 
-        final String dimNames = "xyzwuv";
+        final String dimNames = "xyzwuvm";
         double gold = PhantomNoise.goldenDouble[0][0] * 3.0,
                 cg = NumberTools.cos_(gold), sg = NumberTools.sin_(gold);
         double[][] seed = new double[][] {
@@ -90,7 +90,7 @@ public class MatrixWork {
             System.out.println(';');
         }
         System.out.println();
-        for (int d = 3; d <= 6; d++) {
+        for (int d = 3; d <= 7; d++) {
             double[][] L = new double[d][d], R = new double[d][d], W = new double[d][d];
             gold = PhantomNoise.goldenDouble[d-2][0] * 3.0;
             cg = NumberTools.cos_(gold);

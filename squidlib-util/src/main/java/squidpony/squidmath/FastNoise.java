@@ -1152,6 +1152,13 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         return xd * g.x + yd * g.y + zd * g.z + wd * g.w + ud * g.u + vd * g.v;
     }
 
+    // The rotation methods below work in a specific dimensionality n (like rotateX2D, which works in 2D, so n is 2 there).
+    // Each takes n parameters for an n-dimensional point, and uses them to get the value for one component at a time of
+    // a new n-dimensional point. These each use a fixed rotation (there is no way to change how much these rotate a
+    // point), but each dimensionality rotates differently.
+    // To take a 2D point "alpha" and produce a rotated 2D point "beta," you would call:
+    // beta.x = rotateX2D(alpha.x, alpha.y); beta.y = rotateY2D(alpha.x, alpha.y);
+
     protected float rotateX2D(float x, float y){ return x * +0.6088885514347261f + y * -0.7943553508622062f; }
     protected float rotateY2D(float x, float y){ return x * +0.7943553508622062f + y * +0.6088885514347261f; }
 
@@ -1176,6 +1183,14 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
     protected float rotateW6D(float x, float y, float z, float w, float u, float v){ return x * +0.0990858373676681f + y * +0.4040947615164614f + z * +0.3012734241554820f + w * +0.1520113643725959f + u * +0.4036980496402723f + v * +0.7440701998573674f; }
     protected float rotateU6D(float x, float y, float z, float w, float u, float v){ return x * -0.7720417581190233f + y * -0.5265151283855897f + z * +0.1995725381386031f + w * -0.0464596713813553f + u * +0.2186511264128518f + v * +0.1990962291039879f; }
     protected float rotateV6D(float x, float y, float z, float w, float u, float v){ return x * +0.5606136879764017f + y * -0.5518123912290505f + z * +0.4997557173523122f + w * -0.3555852919481873f + u * +0.0731165180984564f + v * +0.0560452079067605f; }
+
+    protected float rotateX7D(float x, float y, float z, float w, float u, float v, float m){ return x * -0.0056246451693253f + y * +0.2208551678461124f + z * -0.0568956770971728f + w * -0.6432848816359004f + u * -0.3348708518986324f + v * +0.6496998046598708f + m * -0.0687675146270736f; }
+    protected float rotateY7D(float x, float y, float z, float w, float u, float v, float m){ return x * +0.0159667398563612f + y * -0.3708057332823732f + z * -0.0255290165081347f + w * -0.1074204597656161f + u * -0.6966577799927093f + v * -0.2848524769688026f + m * +0.5374576476886094f; }
+    protected float rotateZ7D(float x, float y, float z, float w, float u, float v, float m){ return x * +0.0089215457766600f + y * -0.3451906379293453f + z * +0.3653420930191292f + w * +0.5084714165020501f + u * -0.3967137045018020f + v * +0.4026281835802747f + m * -0.4199529479045513f; }
+    protected float rotateW7D(float x, float y, float z, float w, float u, float v, float m){ return x * +0.0389034073294095f + y * -0.5202531080058671f + z * -0.5396631178057520f + w * +0.1521217441742421f + u * +0.3144183583432352f + v * +0.4756642075085537f + m * +0.3037334167449179f; }
+    protected float rotateU7D(float x, float y, float z, float w, float u, float v, float m){ return x * -0.0120867392478421f + y * +0.2988470721412648f + z * +0.5341516385009615f + w * +0.2333218272366783f + u * +0.1612453247801415f + v * +0.3296939247342339f + m * +0.6629005534068590f; }
+    protected float rotateV7D(float x, float y, float z, float w, float u, float v, float m){ return x * -0.8755449392648650f + y * -0.3094947987824562f + z * +0.2386200725428088f + w * -0.2303379633118088f + u * +0.1687924564004422f + v * -0.0239773671533026f + m * -0.0167628366708356f; }
+    protected float rotateM7D(float x, float y, float z, float w, float u, float v, float m){ return x * +0.4820384791758567f + y * -0.4914996236160800f + z * +0.4837833759906052f + w * -0.4381443982669666f + u * +0.3117477166617179f + v * -0.0641025039100050f + m * -0.0491357938317362f; }
 
     /**
      * After being configured with the setters in this class, such as {@link #setNoiseType(int)},
