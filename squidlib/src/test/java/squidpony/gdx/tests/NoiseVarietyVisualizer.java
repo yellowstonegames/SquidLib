@@ -22,6 +22,7 @@ public class NoiseVarietyVisualizer extends ApplicationAdapter {
     private JackNoise jack = new JackNoise(-12345L);
     private FastNoise simplex = new FastNoise(-12345, 1f, FastNoise.SIMPLEX_FRACTAL, 1);
     private UnifiedNoise unified = new UnifiedNoise(-12345L);
+    private ClassicNoise classic = new ClassicNoise(-12345L);
     private SeededNoise seeded = new SeededNoise(-12345L);
 
     private OctopusNoise octo = new OctopusNoise(1234567890);
@@ -30,11 +31,11 @@ public class NoiseVarietyVisualizer extends ApplicationAdapter {
     private LumpNoise lump = new LumpNoise(1234567890);
     private WeavingNoise weave = new WeavingNoise(1234567890);
 
-    private Noise.Noise2D[] noises2 = {weave, foam, simplex, value, lump};
-    private Noise.Noise3D[] noises3 = {weave, foam, simplex, value, lump};
-    private Noise.Noise4D[] noises4 = {weave, foam, simplex, value, lump};
-    private Noise.Noise5D[] noises5 = {weave, foam, simplex, value, lump};
-    private Noise.Noise6D[] noises6 = {weave, foam, simplex, value, lump};
+    private Noise.Noise2D[] noises2 = {weave, foam, simplex, value, classic};
+    private Noise.Noise3D[] noises3 = {weave, foam, simplex, value, classic};
+    private Noise.Noise4D[] noises4 = {weave, foam, simplex, value, classic};
+    private Noise.Noise5D[] noises5 = {weave, foam, simplex, value, classic};
+    private Noise.Noise6D[] noises6 = {weave, foam, simplex, value, classic};
 
 //    private HashedValueNoise value = new HashedValueNoise(new FlawedPointHash.CubeHash(1234567890, 32));
 //    private FastNoise value = new FastNoise(1234567890, 1f, FastNoise.VALUE, 1);

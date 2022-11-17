@@ -208,8 +208,8 @@ World #5, SavoryMelonAlder, completed in 64338 ms
 //        WorldMapGenerator.DEFAULT_NOISE.setFractalGain(5f);
 //        WorldMapGenerator.DEFAULT_NOISE.setFractalLacunarity(0.8f);
 //        WorldMapGenerator.DEFAULT_NOISE.setFractalGain(1.25f);
-        VastNoise fn = new VastNoise((int) seed, 1.4f, VastNoise.FOAM_FRACTAL, 1);
-//        VastNoise fn = new VastNoise((int) seed, 1f, VastNoise.PERLIN_FRACTAL, 2);
+//        VastNoise fn = new VastNoise((int) seed, 1.4f, VastNoise.FOAM_FRACTAL, 1);
+        VastNoise fn = new VastNoise((int) seed, 1f, VastNoise.PERLIN_FRACTAL, 2);
 //        VastNoise fn = new VastNoise((int) seed, 2.0f, VastNoise.VALUE, 1);
 //        VastNoise fn = new VastNoise((int) seed, 1.5f, VastNoise.PERLIN, 1);
 //        fn.setFractalSpiral(true);

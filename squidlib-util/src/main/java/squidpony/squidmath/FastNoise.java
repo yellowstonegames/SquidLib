@@ -6438,6 +6438,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
             x *= lacunarity;
             y *= lacunarity;
             z *= lacunarity;
+            w *= lacunarity;
         }
         return sum * 2f / correction - 1f;
     }
