@@ -218,7 +218,7 @@ public class WhiskerRNG implements RandomnessSource, Serializable {
         return ((stateD = fa ^ fc) & 0x1FFFFFFFFFFFFFL) * 0x1p-53;
     }
 
-    public double nextFloat() {
+    public float nextFloat() {
         final long fa = stateA;
         final long fb = stateB;
         final long fc = stateC;

@@ -650,7 +650,7 @@ public class FFTVisualizer extends ApplicationAdapter {
         else if(mode == 8){
             switch (dim){
                 case 0:
-                    final long mul = 0x9E3779B97F4A7C15L;
+                    final long mul = 0x9E3779B97F4A7C17L;
                     for (int x = 0; x < 256 && x + x < width; x++) {
                         for (int y = 0; y < 256 && y + y < height; y++) {
                             int index;
