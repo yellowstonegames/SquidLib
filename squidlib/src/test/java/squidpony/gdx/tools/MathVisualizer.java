@@ -2840,15 +2840,43 @@ public class MathVisualizer extends ApplicationAdapter {
         final long bits = whisker.nextLong();
         return NumberUtils.intBitsToFloat(126 - Long.numberOfTrailingZeros(bits) << 23 | (int)(bits >>> 41));
     }
-
+    /**
+     * Gets a random double that may be positive or negative, but cannot be 0, and always has a magnitude less than 1.
+     * <br>
+     * This is a modified version of <a href="https://allendowney.com/research/rand/">this
+     * algorithm by Allen Downey</a>. This version can return double values between -0.9999999999999999 and
+     * -5.421010862427522E-20, as well as between 2.710505431213761E-20 and 0.9999999999999999, or -0x1.fffffffffffffp-1
+     * to -0x1.0p-64 as well as between 0x1.0p-65 and 0x1.fffffffffffffp-1 in hex notation. It cannot return -1, 0 or 1.
+     * It has much more uniform bit distribution across its mantissa/significand bits than {@link Random#nextDouble()},
+     * especially when the result of nextDouble() is expanded to the -1.0 to 1.0 range (such as with
+     * {@code 2.0 * (nextDouble() - 0.5)}). Where the given example code is unable to produce a "1" bit for its lowest
+     * bit of mantissa (the least significant bits numerically, but potentially important for some uses), this has
+     * approximately the same likelihood of producing a "1" bit for any positions in the mantissa, and also equal odds
+     * for the sign bit.
+     * @return a random uniform double between -1 and 1 with a tiny hole around 0 (all exclusive)
+     */
     public double nextExclusiveSignedDouble(){
         final long bits = whisker.nextLong();
-        return NumberUtils.longBitsToDouble(1022L - Long.numberOfLeadingZeros(bits * 0xD1B54A32D192ED03L) << 52 | (bits & 0x800FFFFFFFFFFFFFL));
+        return NumberUtils.longBitsToDouble(1022L - Long.numberOfLeadingZeros(bits) << 52 | ((bits << 63 | bits >>> 1) & 0x800FFFFFFFFFFFFFL));
     }
 
+    /**
+     * Gets a random float that may be positive or negative, but cannot be 0, and always has a magnitude less than 1.
+     * <br>
+     * This is a modified version of <a href="https://allendowney.com/research/rand/">this
+     * algorithm by Allen Downey</a>. This version can return double values between -0.99999994 and -1.1641532E-10, as
+     * well as between 2.7105054E-20 and 0.99999994, or -0x1.fffffep-1 to -0x1.0p-33 as well as between 0x1.0p-65 and
+     * 0x1.fffffep-1 in hex notation. It cannot return -1, 0 or 1. It has much more uniform bit distribution across its
+     * mantissa/significand bits than {@link Random#nextDouble()}, especially when the result of nextDouble() is
+     * expanded to the -1.0 to 1.0 range (such as with {@code 2.0 * (nextDouble() - 0.5)}). Where the given example code
+     * is unable to produce a "1" bit for its lowest bit of mantissa (the least significant bits numerically, but
+     * potentially important for some uses), this has approximately the same likelihood of producing a "1" bit for any
+     * positions in the mantissa, and also equal odds for the sign bit.
+     * @return a random uniform double between -1 and 1 with a tiny hole around 0 (all exclusive)
+     */
     public float nextExclusiveSignedFloat(){
         final long bits = whisker.nextLong();
-        return NumberUtils.intBitsToFloat(126 - Long.numberOfLeadingZeros(bits * 0xD1B54A32D192ED03L) << 23 | ((int)bits & 0x807FFFFF));
+        return NumberUtils.intBitsToFloat(126 - Long.numberOfLeadingZeros(bits) << 23 | ((int)bits & 0x807FFFFF));
     }
 
 
