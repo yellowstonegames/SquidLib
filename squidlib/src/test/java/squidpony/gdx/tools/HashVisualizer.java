@@ -62,15 +62,15 @@ import static squidpony.squidmath.NumberTools.swayTight;
  * Created by Tommy Ettinger on 8/20/2016.
  */
 public class HashVisualizer extends ApplicationAdapter {
-    // 0 commonly used hashes
-    // 1 variants on Mist and other hashes
-    // 3 artistic visualizations of hash functions and misc. other
-    // 4 noise
-    // 5 RNG results
-    private int testType = 1;
+    // 0: commonly used hashes
+    // 1: variants on Mist and other hashes
+    // 3: artistic visualizations of hash functions and misc. other
+    // 4: noise
+    // 5: RNG results
+    private int testType = 5;
     private static final int NOISE_LIMIT = 152;
     private static final int RNG_LIMIT = 52;
-    private int hashMode = 9, rngMode = 5, noiseMode = 106, otherMode = 17;//142
+    private int hashMode = 9, rngMode = 4, noiseMode = 106, otherMode = 17;//142
 
     /**
      * If you're editing the source of HashVisualizer, you can comment out one line and uncomment another to change
@@ -1717,6 +1717,47 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
         return ((s = (s ^ s >>> 20 ^ s >>> 37) * 0xF1357AEA2E62A9C5L) ^ s >>> 53);
     }
 
+    public static class ThrumRNG implements RandomnessSource {
+        long stateA, stateB;
+        public ThrumRNG() {
+            this((long) ((Math.random() - 0.5) * 0x10000000000000L)
+                            ^ (long) (((Math.random() - 0.5) * 2.0) * 0x8000000000000000L),
+                    (long) ((Math.random() - 0.5) * 0x10000000000000L)
+                            ^ (long) (((Math.random() - 0.5) * 2.0) * 0x8000000000000000L));
+        }
+
+        public ThrumRNG(long seed) {
+            this(seed = (seed = ((seed = (((seed * 0x632BE59BD9B4E019L) ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L)) ^ seed >>> 27) * 0xAEF17502108EF2D9L) ^ seed >>> 25,
+                    (seed = ((seed = (((seed * 0x632BE59BD9B4E019L) ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L)) ^ seed >>> 27) * 0xAEF17502108EF2D9L) ^ seed >>> 25);
+        }
+
+        public ThrumRNG(final long seedA, final long seedB) {
+            stateA = seedA == 0 ? -1L : seedA;
+            stateB = seedB | 1L;
+        }
+
+        @Override
+        public int next(int bits) {
+            long s = stateA += 0xC6BC279692B5C323L;
+            s = (s ^ s >>> 31) * (stateB += 0x9E3779B97F4A7C16L);
+            s = (s ^ s >>> 30) * stateB;
+            return (int)(s ^ s >>> 31) >>> 32 - bits;
+        }
+
+        @Override
+        public long nextLong() {
+            long s = stateA += 0xC6BC279692B5C323L;
+            s = (s ^ s >>> 31) * (stateB += 0x9E3779B97F4A7C16L);
+            s = (s ^ s >>> 30) * stateB;
+            return s ^ s >>> 31;
+        }
+
+        @Override
+        public RandomnessSource copy() {
+            return new ThrumRNG(stateA, stateB);
+        }
+    }
+
     @Override
     public void create() {
         CoordPacker.init();
@@ -1767,13 +1808,14 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                randomGrid[x][y] = new TrimRNG(x ^ y << 9);
+//                randomGrid[x][y] = new TrimRNG(x ^ y << 9);
 //                randomGrid[x][y] = new RomuTrioRNG(x*2+1, y*2+1, 1);
 //                randomGrid[x][y] = new PangolinRNG(x*2+1, y*2+1);
 //                randomGrid[x][y] = new XoshiroStarStar64RNG(x ^ y << 9);
 //                randomGrid[x][y] = new RandomXS128(x+1, y+1);
 //                randomGrid[x][y] = new RandomXS128(x*2+1, y*2+1);
 //                randomGrid[x][y] = new TangleRNG(x*2+1, y*2+1);
+                randomGrid[x][y] = new ThrumRNG(x*2+1, y*2+1);
             }
         }
         
@@ -5873,7 +5915,8 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("RNG Grid, bit " + extra);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                ((TrimRNG)randomGrid[x][y]).setSeed(x ^ y << 9);
+                                ((ThrumRNG)randomGrid[x][y]).stateA = ((x << 10 ^ y << 1)|1);
+                                ((ThrumRNG)randomGrid[x][y]).stateB = ((x << 10 ^ y << 1)|1);
                                 back[x][y] = (randomGrid[x][y].nextLong() >>> extra & 1L) == 0 ? FLOAT_BLACK : FLOAT_WHITE;//floatGet(code);
                             }
                         }

@@ -2840,6 +2840,7 @@ public class MathVisualizer extends ApplicationAdapter {
         final long bits = whisker.nextLong();
         return NumberUtils.intBitsToFloat(126 - Long.numberOfTrailingZeros(bits) << 23 | (int)(bits >>> 41));
     }
+
     /**
      * Gets a random double that may be positive or negative, but cannot be 0, and always has a magnitude less than 1.
      * <br>
@@ -2878,8 +2879,6 @@ public class MathVisualizer extends ApplicationAdapter {
         final long bits = whisker.nextLong();
         return NumberUtils.intBitsToFloat(126 - Long.numberOfLeadingZeros(bits) << 23 | ((int)bits & 0x807FFFFF));
     }
-
-
 
     public static float hashFloat(float x, float y) {
         long state = 0xC13FA9A902A6328FL * NumberUtils.floatToIntBits(x) + 0x91E10DA5C79E7B1DL * NumberUtils.floatToIntBits(y);
