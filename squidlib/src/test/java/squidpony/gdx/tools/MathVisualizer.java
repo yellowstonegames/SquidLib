@@ -25,7 +25,7 @@ import java.util.Random;
  */
 public class MathVisualizer extends ApplicationAdapter {
     private int mode = 66;
-    private int modes = 69;
+    private int modes = 70;
     private FilterBatch batch;
     private SparseLayers layers;
     private InputAdapter input;
@@ -2878,6 +2878,45 @@ public class MathVisualizer extends ApplicationAdapter {
                 for (int i = 0; i < 0x40000; i++) {
                     double x = cauchian();
                     double y = cauchian();
+                    double mag = 64.0 / Math.sqrt(x * x + y * y);
+                    x = x * mag;
+                    y = y * mag;
+                    double d = NumberTools.atan2_(y, x) * 256.0;
+                    if (d >= 0 && d < 512)
+                        amounts[(int) d]++;
+                }
+                double[] angle = new double[2];
+                int x, y;
+                float color;
+                for (int t = 0; t < 256; t++) {
+                    angle[0] = MathUtils.cosDeg(t * 1.40625f);
+                    angle[1] = MathUtils.sinDeg(t * 1.40625f);
+                    color = (t & 4) == 4
+                            ? -0x1.c98066p126F
+                            : -0x1.d08864p126F;
+                    for (int j = Math.min(250, amounts[t] >> 2+1 & -4); j >= 128; j -= 4) {
+                        x = Noise.fastFloor(angle[0] * j + 260);
+                        y = Noise.fastFloor(angle[1] * j + 260);
+                        layers.backgrounds[x][y] = color;
+                        layers.backgrounds[x + 1][y] = color;
+                        layers.backgrounds[x - 1][y] = color;
+                        layers.backgrounds[x][y + 1] = color;
+                        layers.backgrounds[x][y - 1] = color;
+                    }
+                    for (int j = Math.min(amounts[t] >> 2+1 & -4, 128); j >= 32; j -= 4) {
+                        x = Noise.fastFloor(angle[0] * j + 260);
+                        y = Noise.fastFloor(angle[1] * j + 260);
+                        layers.backgrounds[x][y] = color;
+                    }
+                }
+            }
+            break;
+            case 69: {
+                Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
+                        " circle normalizing uniform");
+                for (int i = 0; i < 0x40000; i++) {
+                    double x = (whisker.nextDouble() - 0.5) * 2.0;
+                    double y = (whisker.nextDouble() - 0.5) * 2.0;
                     double mag = 64.0 / Math.sqrt(x * x + y * y);
                     x = x * mag;
                     y = y * mag;
