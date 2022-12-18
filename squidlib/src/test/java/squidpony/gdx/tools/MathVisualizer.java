@@ -24,8 +24,8 @@ import java.util.Random;
  * Created by Tommy Ettinger on 1/13/2018.
  */
 public class MathVisualizer extends ApplicationAdapter {
-    private int mode = 51;
-    private int modes = 66;
+    private int mode = 66;
+    private int modes = 69;
     private FilterBatch batch;
     private SparseLayers layers;
     private InputAdapter input;
@@ -2752,7 +2752,7 @@ public class MathVisualizer extends ApplicationAdapter {
                         " cauchian()");
                 for (int i = 0; i < 0x500000; i++) {
                     //((System.currentTimeMillis() >>> 4 & 255L) + 64L)
-                    double d = cauchian() * (202.0/256.0) * 64.0 + 256.0; // 0x1.94p-1 is
+                    double d = cauchian() * (202.0/256.0) * 64.0 + 256.0;
                     if (d >= 0 && d < 512)
                         amounts[(int) d]++;
                 }
@@ -2790,6 +2790,123 @@ public class MathVisualizer extends ApplicationAdapter {
                 for (int i = 0; i < 10; i++) {
                     for (int j = 8; j < 520; j += 32) {
                         layers.backgrounds[i][j] = -0x1.7677e8p125F;
+                    }
+                }
+            }
+            break;
+            case 66: {
+                Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
+                        " circle normalizing Gaussian");
+                for (int i = 0; i < 0x40000; i++) {
+                    double x = nextGaussian();
+                    double y = nextGaussian();
+                    double mag = 64.0 / Math.sqrt(x * x + y * y);
+                    x = x * mag;
+                    y = y * mag;
+                    double d = NumberTools.atan2_(y, x) * 256.0;
+                    if (d >= 0 && d < 512)
+                        amounts[(int) d]++;
+                }
+                double[] angle = new double[2];
+                int x, y;
+                float color;
+                for (int t = 0; t < 256; t++) {
+                    angle[0] = MathUtils.cosDeg(t * 1.40625f);
+                    angle[1] = MathUtils.sinDeg(t * 1.40625f);
+                    color = (t & 4) == 4
+                            ? -0x1.c98066p126F
+                            : -0x1.d08864p126F;
+                    for (int j = Math.min(250, amounts[t] >> 2+1 & -4); j >= 128; j -= 4) {
+                        x = Noise.fastFloor(angle[0] * j + 260);
+                        y = Noise.fastFloor(angle[1] * j + 260);
+                        layers.backgrounds[x][y] = color;
+                        layers.backgrounds[x + 1][y] = color;
+                        layers.backgrounds[x - 1][y] = color;
+                        layers.backgrounds[x][y + 1] = color;
+                        layers.backgrounds[x][y - 1] = color;
+                    }
+                    for (int j = Math.min(amounts[t] >> 2+1 & -4, 128); j >= 32; j -= 4) {
+                        x = Noise.fastFloor(angle[0] * j + 260);
+                        y = Noise.fastFloor(angle[1] * j + 260);
+                        layers.backgrounds[x][y] = color;
+                    }
+                }
+            }
+            break;
+            case 67: {
+                Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
+                        " circle normalizing binomial");
+                for (int i = 0; i < 0x40000; i++) {
+                    double x = logitGaussian();
+                    double y = logitGaussian();
+                    double mag = 64.0 / Math.sqrt(x * x + y * y);
+                    x = x * mag;
+                    y = y * mag;
+                    double d = NumberTools.atan2_(y, x) * 256.0;
+                    if (d >= 0 && d < 512)
+                        amounts[(int) d]++;
+                }
+                double[] angle = new double[2];
+                int x, y;
+                float color;
+                for (int t = 0; t < 256; t++) {
+                    angle[0] = MathUtils.cosDeg(t * 1.40625f);
+                    angle[1] = MathUtils.sinDeg(t * 1.40625f);
+                    color = (t & 4) == 4
+                            ? -0x1.c98066p126F
+                            : -0x1.d08864p126F;
+                    for (int j = Math.min(250, amounts[t] >> 2+1 & -4); j >= 128; j -= 4) {
+                        x = Noise.fastFloor(angle[0] * j + 260);
+                        y = Noise.fastFloor(angle[1] * j + 260);
+                        layers.backgrounds[x][y] = color;
+                        layers.backgrounds[x + 1][y] = color;
+                        layers.backgrounds[x - 1][y] = color;
+                        layers.backgrounds[x][y + 1] = color;
+                        layers.backgrounds[x][y - 1] = color;
+                    }
+                    for (int j = Math.min(amounts[t] >> 2+1 & -4, 128); j >= 32; j -= 4) {
+                        x = Noise.fastFloor(angle[0] * j + 260);
+                        y = Noise.fastFloor(angle[1] * j + 260);
+                        layers.backgrounds[x][y] = color;
+                    }
+                }
+            }
+            break;
+            case 68: {
+                Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
+                        " circle normalizing Cauchy");
+                for (int i = 0; i < 0x40000; i++) {
+                    double x = cauchian();
+                    double y = cauchian();
+                    double mag = 64.0 / Math.sqrt(x * x + y * y);
+                    x = x * mag;
+                    y = y * mag;
+                    double d = NumberTools.atan2_(y, x) * 256.0;
+                    if (d >= 0 && d < 512)
+                        amounts[(int) d]++;
+                }
+                double[] angle = new double[2];
+                int x, y;
+                float color;
+                for (int t = 0; t < 256; t++) {
+                    angle[0] = MathUtils.cosDeg(t * 1.40625f);
+                    angle[1] = MathUtils.sinDeg(t * 1.40625f);
+                    color = (t & 4) == 4
+                            ? -0x1.c98066p126F
+                            : -0x1.d08864p126F;
+                    for (int j = Math.min(250, amounts[t] >> 2+1 & -4); j >= 128; j -= 4) {
+                        x = Noise.fastFloor(angle[0] * j + 260);
+                        y = Noise.fastFloor(angle[1] * j + 260);
+                        layers.backgrounds[x][y] = color;
+                        layers.backgrounds[x + 1][y] = color;
+                        layers.backgrounds[x - 1][y] = color;
+                        layers.backgrounds[x][y + 1] = color;
+                        layers.backgrounds[x][y - 1] = color;
+                    }
+                    for (int j = Math.min(amounts[t] >> 2+1 & -4, 128); j >= 32; j -= 4) {
+                        x = Noise.fastFloor(angle[0] * j + 260);
+                        y = Noise.fastFloor(angle[1] * j + 260);
+                        layers.backgrounds[x][y] = color;
                     }
                 }
             }
