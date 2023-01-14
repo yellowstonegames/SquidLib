@@ -70,7 +70,7 @@ public class HashVisualizer extends ApplicationAdapter {
     private int testType = 5;
     private static final int NOISE_LIMIT = 152;
     private static final int RNG_LIMIT = 52;
-    private int hashMode = 9, rngMode = 4, noiseMode = 106, otherMode = 17;//142
+    private int hashMode = 9, rngMode = 1, noiseMode = 106, otherMode = 17;//142
 
     /**
      * If you're editing the source of HashVisualizer, you can comment out one line and uncomment another to change
@@ -120,9 +120,37 @@ public class HashVisualizer extends ApplicationAdapter {
     private LinnormRNG linnorm = new LinnormRNG(1L);
     private ThrustAltRNG ta = new ThrustAltRNG(1L);
     private Starfish32RNG starfish = new Starfish32RNG(1L);
-    
+
     private TangleRNG tangle = new TangleRNG(1);
-    
+
+    private StatefulRandomness xqom = new StatefulRandomness() {
+        public long state = 0;
+        @Override
+        public long getState() {
+            return state;
+        }
+
+        @Override
+        public void setState(long state) {
+            this.state = state;
+        }
+
+        @Override
+        public RandomnessSource copy() {
+            return this;
+        }
+
+        @Override
+        public int next(int bits) {
+            return (int)(state = (state ^ (state * state | 5)) * 3) & (-1 >>> 32 - bits);
+        }
+
+        @Override
+        public long nextLong() {
+            return state = (state ^ (state * state | 5)) * 3;
+        }
+    };
+
     private RandomnessSource[][] randomGrid = new RandomnessSource[width][height];
 //    private RandomXS128[][] randomGrid = new RandomXS128[width][height];
 
@@ -3565,7 +3593,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("ColorNoise 2D at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                back[x][y] = 
+                                back[x][y] =
                                         ColorNoise.instance.colorNoise(x * 0.0625f + 20f + ctr * 0.05f, y * 0.0625f + 30f + ctr * 0.05f, 1234);
                             }
                         }
@@ -3574,7 +3602,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("ColorNoise 3D at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                back[x][y] = 
+                                back[x][y] =
                                         ColorNoise.instance.colorNoise(x * 0.05f + 20f, y * 0.05f + 30f, ctr * 0.05f, 1234);
                             }
                         }
@@ -3808,7 +3836,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("Seeded Seamless 3D Color Noise, three octaves per channel at " + Gdx.graphics.getFramesPerSecond() + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                back[x][y] = 
+                                back[x][y] =
                                         floatGet(
                                                 basicPrepare(Noise.seamless3D(seeded, x, y, ctr, 128.0, 128.0, 128.0, 1234567890L)),
                                                 basicPrepare(Noise.seamless3D(seeded, x, y, ctr, 128.0, 128.0, 128.0, 9092929090L)),
@@ -3863,7 +3891,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("Foam 7D as 3D Color Noise, one octave per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                back[x][y] = 
+                                back[x][y] =
                                         floatGet(
                                                 ((float)phantom7D_A.getNoise(alter7D(~x, y, ~ctr)) * 0.50f) + 0.50f,
                                                 ((float)phantom7D_B.getNoise(alter7D(~x, ~y, ctr)) * 0.50f) + 0.50f,
@@ -3892,7 +3920,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("Seeded Seamless 2D Color Noise, three octaves per channel at " + Gdx.graphics.getFramesPerSecond() + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                back[x][y] = 
+                                back[x][y] =
                                         floatGet(
                                                 (float) (seamless[0][0][x+ctr & 63][y+ctr & 63] * 0.5 + 0.5),
                                                 (float) (seamless[1][0][x+ctr & 63][y+ctr & 63] * 0.5 + 0.5),
@@ -3916,7 +3944,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("Seeded 4D as 3D Color Noise, one octave per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                back[x][y] = 
+                                back[x][y] =
                                         floatGet(
                                                 ((float)SeededNoise.noise(x * 0.03125 + 20, y * 0.03125 + 30, ctr * 0.05125 + 10, 0,1234) * 0.50f) + 0.50f,
                                                 ((float)SeededNoise.noise(x * 0.03125 + 30, y * 0.03125 + 10, ctr * 0.05125 + 20, 0,54321) * 0.50f) + 0.50f,
@@ -3944,7 +3972,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("Seeded 3D Color Noise, one octave per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                back[x][y] = 
+                                back[x][y] =
                                         floatGet(
                                                 ((float)SeededNoise.noise(x * 0.03125 + 20, y * 0.03125 + 30, ctr * 0.05125 + 10, 1234) * 0.50f) + 0.50f,
                                                 ((float)SeededNoise.noise(x * 0.03125 + 30, y * 0.03125 + 10, ctr * 0.05125 + 20, 54321) * 0.50f) + 0.50f,
@@ -3971,7 +3999,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("Seeded 2D Color Noise, three octaves per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                back[x][y] = 
+                                back[x][y] =
                                         floatGet(
                                                 (float)(SeededNoise.noise(x * 0.03125 + 20 + ctr * 0.05125, y * 0.03125 + 30 + ctr * 0.05125, 1234) * 0.5 + 0.5),
                                                 (float)(SeededNoise.noise(x * 0.03125 + 30 + ctr * 0.05125, y * 0.03125 + 10 + ctr * 0.05125, 54321) * 0.5 + 0.5),
@@ -3999,7 +4027,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("Whirling Ridged 3D Color Noise, two octaves per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                back[x][y] = 
+                                back[x][y] =
                                         floatGet(
                                                 ((float)ridged3D.getNoiseWithSeed(x * 0.03125 + 20, y * 0.03125 + 30, ctr * 0.05125 + 10, 1234) * 0.50f) + 0.50f,
                                                 ((float)ridged3D.getNoiseWithSeed(x * 0.03125 + 30, y * 0.03125 + 10, ctr * 0.05125 + 20, 54321) * 0.50f) + 0.50f,
@@ -4026,7 +4054,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("Seeded Ridged 2D Color Noise, two octaves per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                back[x][y] = 
+                                back[x][y] =
                                         floatGet(
                                                 (float)(ridged2D.getNoiseWithSeed(x * 0.03125 + 20 + ctr * 0.05125, y * 0.03125 + 30 + ctr * 0.05125, 1234) * 0.5 + 0.5),
                                                 (float)(ridged2D.getNoiseWithSeed(x * 0.03125 + 30 + ctr * 0.05125, y * 0.03125 + 10 + ctr * 0.05125, 54321) * 0.5 + 0.5),
@@ -4053,7 +4081,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("Whirling Turbulent Seamless 3D Color Noise at " + Gdx.graphics.getFramesPerSecond() + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                back[x][y] = 
+                                back[x][y] =
                                         floatGet(
                                                 (float) (seamless[0][ctr & 63][x & 63][y & 63] * 0.5 + 0.5),
                                                 (float) (seamless[1][ctr & 63][x & 63][y & 63] * 0.5 + 0.5),
@@ -4076,7 +4104,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("Whirling Turbulent Seamless 2D Color Noise at " + Gdx.graphics.getFramesPerSecond() + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                back[x][y] = 
+                                back[x][y] =
                                         floatGet(
                                                 (float) (seamless[0][0][x+ctr & 63][y+ctr & 63] * 0.5 + 0.5),
                                                 (float) (seamless[1][0][x+ctr & 63][y+ctr & 63] * 0.5 + 0.5),
@@ -4144,7 +4172,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("Whirling Turbulent 3D Color Noise at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                back[x][y] = 
+                                back[x][y] =
                                         floatGet(
                                                 ((float)turb3D.getNoiseWithSeed(x * 0.03125, y * 0.03125, ctr * 0.05125, 1234) * 0.50f) + 0.50f,
                                                 ((float)turb3D.getNoiseWithSeed(x * 0.03125, y * 0.03125, ctr * 0.05125, 54321) * 0.50f) + 0.50f,
@@ -4172,7 +4200,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("Turbulent 2D Color Noise at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                back[x][y] = 
+                                back[x][y] =
                                         floatGet(
                                                 (float)(turb2D.getNoiseWithSeed(x * 0.03125 + 20 + ctr * 0.05125, y * 0.03125 + 30 + ctr * 0.05125, 1234) * 0.5 + 0.5),
                                                 (float)(turb2D.getNoiseWithSeed(x * 0.03125 + 30 + ctr * 0.05125, y * 0.03125 + 10 + ctr * 0.05125, 54321) * 0.5 + 0.5),
@@ -4200,7 +4228,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("Seeded Slick 3D Color Noise at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                back[x][y] = 
+                                back[x][y] =
                                         floatGet(
                                                 ((float)slick3D.getNoiseWithSeed(x * 0.03125, y * 0.03125, ctr * 0.05125, 1234) * 0.50f) + 0.50f,
                                                 ((float)slick3D.getNoiseWithSeed(x * 0.03125, y * 0.03125, ctr * 0.05125, 54321) * 0.50f) + 0.50f,
@@ -4227,7 +4255,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("Seeded Slick 2D Color Noise at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                back[x][y] = 
+                                back[x][y] =
                                         floatGet(
                                                 (float)(slick2D.getNoiseWithSeed(x * 0.03125 + 20 + ctr * 0.05125, y * 0.03125 + 30 + ctr * 0.05125, 1234) * 0.5 + 0.5),
                                                 (float)(slick2D.getNoiseWithSeed(x * 0.03125 + 30 + ctr * 0.05125, y * 0.03125 + 10 + ctr * 0.05125, 54321) * 0.5 + 0.5),
@@ -4255,7 +4283,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("Seeded Ridged Seamless 3D Color Noise at " + Gdx.graphics.getFramesPerSecond() + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                back[x][y] = 
+                                back[x][y] =
                                         floatGet(
                                                 (float) (seamless[0][ctr & 63][x & 63][y & 63] * 0.5 + 0.5),
                                                 (float) (seamless[1][ctr & 63][x & 63][y & 63] * 0.5 + 0.5),
@@ -4277,7 +4305,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("Seeded Ridged Seamless 2D Color Noise at " + Gdx.graphics.getFramesPerSecond() + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                back[x][y] = 
+                                back[x][y] =
                                         floatGet(
                                                 (float) (seamless[0][0][x+ctr & 63][y+ctr & 63] * 0.5 + 0.5),
                                                 (float) (seamless[1][0][x+ctr & 63][y+ctr & 63] * 0.5 + 0.5),
@@ -4301,7 +4329,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("Seeded Seamless 3D Color Noise, three octaves per channel at " + Gdx.graphics.getFramesPerSecond() + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                back[x][y] = 
+                                back[x][y] =
                                         floatGet(
                                                 (float) (seamless[0][ctr & 63][x & 63][y & 63] * 0.5 + 0.5),
                                                 (float) (seamless[1][ctr & 63][x & 63][y & 63] * 0.5 + 0.5),
@@ -4325,7 +4353,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("TrigNoisePass 2D, one octave per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                back[x][y] = 
+                                back[x][y] =
                                         getGray(basicPrepare(trigNoisePass((x + ctr) * 0.03125f, (y + ctr) * 0.03125f, 1234)));
 //                                                ((float)weavingNoise((x + ctr) * 0.03125 + 20, (y + ctr) * 0.03125 + 30, 1234) * 0.50f) + 0.50f,
 //                                                ((float)weavingNoise((x + ctr) * 0.03125 + 30, (y + ctr) * 0.03125 + 10, 54321) * 0.50f) + 0.50f,
@@ -4568,7 +4596,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                back[x][y] = 
+                                back[x][y] =
                                         floatGet(fillField3DR[0][x][y] * 0.25f + 0.5f, fillField3DG[0][x][y] * 0.25f + 0.5f, fillField3DB[0][x][y] * 0.25f + 0.5f, 1f)
                                 ;
                             }
@@ -4584,13 +4612,13 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = fillField3DG[0][x][y] * 0.0625f + 0.5f;
-                                back[x][y] = 
+                                back[x][y] =
                                         getGray(bright)
                                 ;
                             }
                         }
                         break;
-                  
+
                     case 74:
                         Gdx.graphics.setTitle("Glitch 2D Noise at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
@@ -4663,11 +4691,11 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                 connections[0] = ctr * 0.007 + x * c0 - y * s0;
                                 connections[1] = ctr * 0.009 - x * c1 + y * s1;
                                 connections[2] = ctr * 0.013 + x * c2 + y * s2;
-                                
+
                                 connections[0] = cosmos.getDoubleBase() + 0.5;
                                 connections[1] = cosmos.getDoubleBase() + 0.5;
                                 connections[2] = cosmos.getDoubleBase() + 0.5;
-                                back[x][y] = 
+                                back[x][y] =
                                         floatGet(
                                                 NumberTools.swayTight((float)connections[0]), //(float)connections[0] * 4f,
                                                 NumberTools.swayTight((float)connections[1]), //(float)connections[1] * 4f,
@@ -4827,7 +4855,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("Mitchell 2D Color Noise, one octave per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                back[x][y] = 
+                                back[x][y] =
                                         floatGet(
                                                 basicPrepare(mitchell.arbitraryNoise(seedX0, x * 0.11125f + ctr * 0.11125f + 20, y * 0.11125f + ctr * 0.11125f + 30.12345f)),
                                                 basicPrepare(mitchell.arbitraryNoise(seedX1, x * 0.11125f + ctr * 0.11125f + 30, y * 0.11125f + ctr * 0.11125f + 10.23456f)),
@@ -4849,7 +4877,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("Mitchell 3D Color Noise, one octave per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                back[x][y] = 
+                                back[x][y] =
                                         floatGet(
                                                 basicPrepare(mitchell.arbitraryNoise(seedX0, x * 0.11125f + 20, y * 0.11125f + 30, ctr * 0.11125f + 10)),
                                                 basicPrepare(mitchell.arbitraryNoise(seedX1, x * 0.11125f + 30, y * 0.11125f + 10, ctr * 0.11125f + 20)),
@@ -4872,7 +4900,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("Mitchell 4D Color Noise, one octave per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                back[x][y] = 
+                                back[x][y] =
                                         floatGet(
                                                 basicPrepare(mitchell.arbitraryNoise(seedX0, x * 0.11125f + 20, y * 0.11125f + 30, ctr * 0.13125f + 10, NumberTools.sway((x + y + ctr) * 0.0191f) + (x + y + ctr + 31.337) * 0.0311125f)),
                                                 basicPrepare(mitchell.arbitraryNoise(seedX1, x * 0.11125f + 30, y * 0.11125f + 10, ctr * 0.13125f + 20, NumberTools.sway((x + y + ctr) * 0.0191f) + (x + y + ctr + 42.337) * 0.0311125f)),
@@ -4895,7 +4923,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("Mitchell 6D Color Noise, one octave per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                back[x][y] = 
+                                back[x][y] =
                                         floatGet(
                                                 basicPrepare(mitchell.arbitraryNoise(seedX0, x * 0.071125f + 20, y * 0.071125f + 30, ctr * 0.072125f + 10, (NumberTools.sway((x + y) * 0.021f) + ctr + 31.337) * 0.072511125f, (NumberTools.sway((ctr - x) * 0.1681f) + ctr + y + 1.2) * 0.07811125f, (NumberTools.sway((y + ctr) * 0.191828) - ctr + x + 2.8) * 0.07611125f)),
                                                 basicPrepare(mitchell.arbitraryNoise(seedX1, x * 0.071125f + 30, y * 0.071125f + 10, ctr * 0.072125f + 20, (NumberTools.sway((x + y) * 0.021f) + ctr + 42.337) * 0.072511125f, (NumberTools.sway((ctr - x) * 0.1681f) + ctr + y + 1.6) * 0.07811125f, (NumberTools.sway((y + ctr) * 0.191828) - ctr + x + 2.3) * 0.07611125f)),
@@ -5036,29 +5064,31 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 //                        back[509][256 + iBright] =  bright;
 //                        back[509][257 + iBright] =  bright;
 //                    }
-                        Gdx.graphics.setTitle("SwayRandomized 1D Noise Battle, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
-//                        Gdx.graphics.setTitle("1D noise for terrain, at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+//                        Gdx.graphics.setTitle("SwayRandomized 1D Noise Battle, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("1D noise for terrain, at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int i = 0; i < width - 1; i++)
                             System.arraycopy(back[i+1], 0, back[i], 0, width);
                         Arrays.fill(back[width - 1], FLOAT_WHITE);
+                    {
+                        iBright = (int) ((257 + ctr) * 0x1.44cbc89p-8f) % BLUE_GREEN_SERIES.length;
+                        bright = lerpFloatColors(BLUE_GREEN_SERIES[iBright].toFloatBits(),
+                                BLUE_GREEN_SERIES[(iBright + 1) % BLUE_GREEN_SERIES.length].toFloatBits(),
+                                (257 + ctr) * 0x1.44cbc89p-8f - (int) ((257 + ctr) * 0x1.44cbc89p-8f));
+                        iBright = (int) (riverSway(0, ctr * 0x3p-9f) * 0x.fp0f * half);
+                        back[width - 1][half - 1 + iBright] = bright;
+                        back[width - 1][half + 0 + iBright] = bright;
+                        back[width - 1][half + 1 + iBright] = bright;
 
-//                        iBright = (int)((257+ctr) * 0x1.44cbc89p-8f) % BLUE_GREEN_SERIES.length;
-//                        bright = lerpFloatColors(BLUE_GREEN_SERIES[iBright].toFloatBits(),
-//                                BLUE_GREEN_SERIES[(iBright + 1) % BLUE_GREEN_SERIES.length].toFloatBits(),
-//                                (257+ctr) * 0x1.44cbc89p-8f - (int)((257+ctr) * 0x1.44cbc89p-8f));
-//                        iBright = (int) (riverSway(0, ctr * 0x3p-9f)  * 0x.fp0f * half);
-//                        back[width - 1][half - 1 + iBright] =  bright;
-//                        back[width - 1][half + 0 + iBright] =  bright;
-//                        back[width - 1][half + 1 + iBright] =  bright;
-//
-//                        back[width - 2][half - 1 + iBright] =  bright;
-//                        back[width - 2][half + 0 + iBright] =  bright;
-//                        back[width - 2][half + 1 + iBright] =  bright;
-//
-//                        back[width - 3][half - 1 + iBright] =  bright;
-//                        back[width - 3][half + 0 + iBright] =  bright;
-//                        back[width - 3][half + 1 + iBright] =  bright;
+                        back[width - 2][half - 1 + iBright] = bright;
+                        back[width - 2][half + 0 + iBright] = bright;
+                        back[width - 2][half + 1 + iBright] = bright;
 
+                        back[width - 3][half - 1 + iBright] = bright;
+                        back[width - 3][half + 0 + iBright] = bright;
+                        back[width - 3][half + 1 + iBright] = bright;
+                    }
+
+                    if(false)
                     {
                         int quart = half >> 1;
                         iBright = (int) ((257 + ctr) * 0x1.44cbc89p-8f) % BLUE_GREEN_SERIES.length;
@@ -5866,22 +5896,41 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("java.util.Random at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 1:
+                        extra = System.nanoTime() >>> 30 & 63;
+                        Gdx.graphics.setTitle("XQOM grayscale, bit " + extra);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                code = mm64.nextLong() | 255L;
-                                back[x][y] = floatGet(code);
+                                code = xqom.nextLong();
+                                code ^= code >>> 32;
+                                iBright = (int) Long.rotateRight(code, (int)extra) & 255;
+                                back[x][y] = floatGetI(iBright, iBright, iBright);
                             }
                         }
-                        Gdx.graphics.setTitle("MiniMover64RNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+//                        Gdx.graphics.setTitle("XQOM at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+//                        for (int x = 0; x < width; x++) {
+//                            for (int y = 0; y < height; y++) {
+//                                code = mm64.nextLong() | 255L;
+//                                back[x][y] = floatGet(code);
+//                            }
+//                        }
+//                        Gdx.graphics.setTitle("MiniMover64RNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 2:
+                        extra = System.nanoTime() >>> 30 & 63;
+                        Gdx.graphics.setTitle("XQOM, bit " + extra);
+                        xqom.setState(0L);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                code = light.nextLong() | 255L;
-                                back[x][y] = floatGet(code);
+                                back[x][y] = (xqom.nextLong() >>> extra & 1L) == 0 ? FLOAT_BLACK : FLOAT_WHITE;//floatGet(code);
                             }
                         }
-                        Gdx.graphics.setTitle("LightRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+//                        for (int x = 0; x < width; x++) {
+//                            for (int y = 0; y < height; y++) {
+//                                code = light.nextLong() | 255L;
+//                                back[x][y] = floatGet(code);
+//                            }
+//                        }
+//                        Gdx.graphics.setTitle("LightRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 3:
                         for (int x = 0; x < width; x++) {

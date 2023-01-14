@@ -2,8 +2,8 @@
 ext.projectName = 'squidlib-util'
 eclipse.project.name = ext.projectName
 
-idea.module.excludeDirs += [file("src/main/java/emu/")]
-[compileJava, compileTestJava, javadoc]*.exclude("emu")
+idea.module.excludeDirs += [file("src/main/java/squidpony/emu/")]
+[compileJava, compileTestJava, javadoc]*.exclude("squidpony/emu")
 
 dependencies {
     api "com.github.tommyettinger:regexodus:$regexodusVersion"

@@ -1,1 +1,0 @@
-packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"squidpony"},{"l":"squidpony.squidmath"},{"l":"squidpony.store.json"},{"l":"squidpony.store.text"}];updateSearchResults();
