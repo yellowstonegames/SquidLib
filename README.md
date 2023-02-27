@@ -114,7 +114,7 @@ You can browse the **JavaDocs** of the stable 3.0.0 release here:
   - [Docs for squidlib-util](http://yellowstonegames.github.io/SquidLib/v3-0-0/squidlib-util/apidocs/index.html)
   - [Docs for squidlib](http://yellowstonegames.github.io/SquidLib/v3-0-0/squidlib/apidocs/index.html)
   - [Docs for squidlib-extra](http://yellowstonegames.github.io/SquidLib/v3-0-0/squidlib-extra/apidocs/index.html)
-\
+
 The docs here are updated whenever the project is rebuilt fully, which only coincides with releases occasionally.
 
 Download
@@ -234,11 +234,11 @@ with Maven):
 ```
     implementation "com.github.yellowstonegames.SquidLib:squidlib-util:f8f2590cc6:sources"
     // above depends on this:
-    implementation "com.github.tommyettinger:regexodus:0.1.14:sources"
+    implementation "com.github.tommyettinger:regexodus:0.1.15:sources"
 
     implementation "com.github.yellowstonegames.SquidLib:squidlib:f8f2590cc6:sources"
     // above depends on this:
-    implementation "com.github.tommyettinger:anim8-gdx:0.3.12:sources"
+    implementation "com.github.tommyettinger:anim8-gdx:0.3.13:sources"
 
     implementation "com.github.yellowstonegames.SquidLib:squidlib-extra:f8f2590cc6:sources"
 }

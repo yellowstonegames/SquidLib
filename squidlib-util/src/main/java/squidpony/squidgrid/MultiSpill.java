@@ -57,13 +57,13 @@ public class MultiSpill implements Serializable {
      */
     public boolean[][] physicalMap;
     /**
-     * The cells that are filled by the a spiller with index n when it reaches its volume or limits will be equal to n;
+     * The cells that are filled by a spiller with index n when it reaches its volume or limits will be equal to n;
      * others will be -1.
      */
     public short[][] spillMap;
 
     /**
-     * The cells that are filled by the any spiller will be true, others will be false.
+     * The cells that are filled by any spiller will be true, others will be false.
      */
     protected GreasedRegion anySpillMap,
 

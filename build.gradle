@@ -28,11 +28,24 @@ allprojects {
 configure(subprojects) {
     apply plugin: 'java-library'
     apply plugin: 'com.vanniktech.maven.publish'
-    sourceCompatibility = 1.8
-    targetCompatibility = 1.8
-    compileJava {
+
+	compileJava {
         options.incremental = true
-    }
+		sourceCompatibility = 7
+		targetCompatibility = 7
+		if (JavaVersion.current().isJava9Compatible()) {
+			options.release.set(7)
+		}
+	}
+	
+	compileTestJava {
+        options.incremental = true
+		sourceCompatibility = 8
+		targetCompatibility = 8
+		if (JavaVersion.current().isJava9Compatible()) {
+			options.release.set(8)
+		}
+	}
 }
 
 subprojects {
@@ -68,13 +81,6 @@ if (JavaVersion.current().isJava8Compatible()) {
             // https://discuss.gradle.org/t/passing-arguments-to-compiler-and-javadoc/1661
             options.addStringOption('Xdoclint:none,-missing', '-quiet')
             options.tags('apiNote:a:"API Note"', 'implSpec:a:"Implementation Requirements"', 'implNote:a:"Implementation Note"')
-        }
-    }
-}
-if(JavaVersion.current().isJava9Compatible()) {
-    allprojects {
-        tasks.withType(JavaCompile) {
-            options.release.set(8)
         }
     }
 }
