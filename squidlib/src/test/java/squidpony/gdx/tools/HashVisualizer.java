@@ -1828,15 +1828,34 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
          */
         @Override
         public long nextLong() {
-            long x = stateA += 0xC13FA9A902A6328FL;//1;
-            long y = stateB += 0x91E10DA5C79E7B1DL;//3;
+            // Adds an odd constant, period is 2 to the 64 on its own.
+            long x = stateA += 0x9E3779B97F4A7C15L;
+            // The constant doesn't seem to matter as long as it is large and odd.
+//            long x = stateA += 0xC13FA9A902A6328FL;
+            // Using only very small constants show correlation between starting states.
+//            long x = stateA += 1L; // NO.
+            // This may add -1 or 0, depending on the value x has.
+            // This should add -1 on 6148914691236517205 out of the 18446744073709551616 states x can have.
+            // Because y depends on x, and has a different value every time x finishes a cycle of 2 to the 64
+            // states up until all of y's states have been exhausted, this has a total period of 2 to the 128.
+            long y = stateB += (x + (x >>> 1)) >> 63;
+            // This is like the above setting for y, but adds 0x91E10DA5C79E7B1DL instead of -1.
+//            long y = stateB += (x + (x >>> 1)) >> 63 & 0x91E10DA5C79E7B1DL;
+
+            // Big scrambler.
+            // Each step does a xor-rotate-xor-rotate on one variable and adds the result to the other variable.
+            // These alternate in pairs.
+            // The rotations on each line should pipeline and execute simultaneously on most PC hardware.
             x += (y ^ (y << 11 | y >>> -11) ^ (y << 50 | y >>> -50));
             y += (x ^ (x << 46 | x >>> -46) ^ (x << 21 | x >>> -21));
             x += (y ^ (y <<  5 | y >>> -5 ) ^ (y << 14 | y >>> -14));
             y += (x ^ (x << 25 | x >>> -25) ^ (x << 41 | x >>> -41));
             x += (y ^ (y << 53 | y >>> -53) ^ (y << 3  | y >>> -3 ));
             y += (x ^ (x << 31 | x >>> -31) ^ (x << 37 | x >>> -37));
-            return x ^ y;
+            // y is the last updated variable, and returning just y seems rather random.
+            return y;
+            // Other versions have used this, and it may be more robust.
+//            return x ^ y;
         }
 
         /**
