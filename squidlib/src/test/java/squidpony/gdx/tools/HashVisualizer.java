@@ -70,7 +70,7 @@ public class HashVisualizer extends ApplicationAdapter {
     private int testType = 5;
     private static final int NOISE_LIMIT = 152;
     private static final int RNG_LIMIT = 52;
-    private int hashMode = 9, rngMode = 1, noiseMode = 106, otherMode = 17;//142
+    private int hashMode = 9, rngMode = 4, noiseMode = 106, otherMode = 17;//142
 
     /**
      * If you're editing the source of HashVisualizer, you can comment out one line and uncomment another to change
@@ -1786,6 +1786,72 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
         }
     }
 
+    public static class WrangleRNG implements RandomnessSource {
+        long stateA, stateB;
+
+        public WrangleRNG() {
+            this((long) ((Math.random() - 0.5) * 0x10000000000000L)
+                            ^ (long) (((Math.random() - 0.5) * 2.0) * 0x8000000000000000L),
+                    (long) ((Math.random() - 0.5) * 0x10000000000000L)
+                            ^ (long) (((Math.random() - 0.5) * 2.0) * 0x8000000000000000L));
+        }
+
+        public WrangleRNG(long seed) {
+            this(seed = (seed = ((seed = (((seed * 0x632BE59BD9B4E019L) ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L)) ^ seed >>> 27) * 0xAEF17502108EF2D9L) ^ seed >>> 25,
+                    (seed = ((seed = (((seed * 0x632BE59BD9B4E019L) ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L)) ^ seed >>> 27) * 0xAEF17502108EF2D9L) ^ seed >>> 25);
+        }
+
+        public WrangleRNG(final long seedA, final long seedB) {
+            stateA = seedA;
+            stateB = seedB;
+        }
+
+        /**
+         * Using this method, any algorithm that might use the built-in Java Random
+         * can interface with this randomness source.
+         *
+         * @param bits the number of bits to be returned
+         * @return the integer containing the appropriate number of bits
+         */
+        @Override
+        public int next(int bits) {
+            return (int)nextLong() >>> -bits;
+        }
+
+        /**
+         * Using this method, any algorithm that needs to efficiently generate more
+         * than 32 bits of random data can interface with this randomness source.
+         * <p>
+         * Get a random long between Long.MIN_VALUE and Long.MAX_VALUE (both inclusive).
+         *
+         * @return a random long between Long.MIN_VALUE and Long.MAX_VALUE (both inclusive)
+         */
+        @Override
+        public long nextLong() {
+            long x = stateA += 0xC13FA9A902A6328FL;//1;
+            long y = stateB += 0x91E10DA5C79E7B1DL;//3;
+            x += (y ^ (y << 11 | y >>> -11) ^ (y << 50 | y >>> -50));
+            y += (x ^ (x << 46 | x >>> -46) ^ (x << 21 | x >>> -21));
+            x += (y ^ (y <<  5 | y >>> -5 ) ^ (y << 14 | y >>> -14));
+            y += (x ^ (x << 25 | x >>> -25) ^ (x << 41 | x >>> -41));
+            x += (y ^ (y << 53 | y >>> -53) ^ (y << 3  | y >>> -3 ));
+            y += (x ^ (x << 31 | x >>> -31) ^ (x << 37 | x >>> -37));
+            return x ^ y;
+        }
+
+        /**
+         * Produces a copy of this RandomnessSource that, if next() and/or nextLong() are called on this object and the
+         * copy, both will generate the same sequence of random numbers from the point copy() was called. This just needs to
+         * copy the state so that it isn't shared, usually, and produce a new value with the same exact state.
+         *
+         * @return a copy of this RandomnessSource
+         */
+        @Override
+        public WrangleRNG copy() {
+            return new WrangleRNG(stateA, stateB);
+        }
+    }
+
     @Override
     public void create() {
         CoordPacker.init();
@@ -1843,7 +1909,9 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 //                randomGrid[x][y] = new RandomXS128(x+1, y+1);
 //                randomGrid[x][y] = new RandomXS128(x*2+1, y*2+1);
 //                randomGrid[x][y] = new TangleRNG(x*2+1, y*2+1);
-                randomGrid[x][y] = new ThrumRNG(x*2+1, y*2+1);
+//                randomGrid[x][y] = new ThrumRNG(x*2+1, y*2+1);
+//                randomGrid[x][y] = new WrangleRNG(x*2+1, y*2+1);
+                randomGrid[x][y] = new WrangleRNG(x, y);
             }
         }
         
@@ -5964,8 +6032,8 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("RNG Grid, bit " + extra);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                ((ThrumRNG)randomGrid[x][y]).stateA = ((x << 10 ^ y << 1)|1);
-                                ((ThrumRNG)randomGrid[x][y]).stateB = ((x << 10 ^ y << 1)|1);
+                                ((WrangleRNG)randomGrid[x][y]).stateA = x;
+                                ((WrangleRNG)randomGrid[x][y]).stateB = y;
                                 back[x][y] = (randomGrid[x][y].nextLong() >>> extra & 1L) == 0 ? FLOAT_BLACK : FLOAT_WHITE;//floatGet(code);
                             }
                         }
