@@ -1712,7 +1712,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
             // Seems to work really well; we still need to see how it does in PractRand in full.
             // So far, so good, though; 1TB with no anomalies.
             // This does randomize the seed grid quite well, and keeps TangleRNG's strong points.
-//            long z = (stateA += 0xC6BC279692B5C323L) * (stateB += 0x9E3779B97F4A7C16L);
+//            long z =  (stateA += 0xC6BC279692B5C323L) * (stateB += 0x9E3779B97F4A7C16L);
 //            z = (z ^ z >>> 31) * 0xD1342543DE82EF95L;
 //            return z ^ z >>> 26;
 
@@ -1829,16 +1829,18 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
         @Override
         public long nextLong() {
             // Adds an odd constant, period is 2 to the 64 on its own.
-            long x = stateA += 0x9E3779B97F4A7C15L;
+//            long x = stateA += 0x9E3779B97F4A7C15L;
             // The constant doesn't seem to matter as long as it is large and odd.
-//            long x = stateA += 0xC13FA9A902A6328FL;
+            long x = stateA += 0xC13FA9A902A6328FL;
+            long y = stateB += 0x91E10DA5C79E7B1DL;
             // Using only very small constants show correlation between starting states.
 //            long x = stateA += 1L; // NO.
+//            long y = stateB -= 1L; // NO.
             // This may add -1 or 0, depending on the value x has.
             // This should add -1 on 6148914691236517205 out of the 18446744073709551616 states x can have.
             // Because y depends on x, and has a different value every time x finishes a cycle of 2 to the 64
             // states up until all of y's states have been exhausted, this has a total period of 2 to the 128.
-            long y = stateB += (x + (x >>> 1)) >> 63;
+//            long y = stateB += (x + (x >>> 1)) >> 63;
             // This is like the above setting for y, but adds 0x91E10DA5C79E7B1DL instead of -1.
 //            long y = stateB += (x + (x >>> 1)) >> 63 & 0x91E10DA5C79E7B1DL;
 
@@ -1853,9 +1855,9 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
             x += (y ^ (y << 53 | y >>> -53) ^ (y << 3  | y >>> -3 ));
             y += (x ^ (x << 31 | x >>> -31) ^ (x << 37 | x >>> -37));
             // y is the last updated variable, and returning just y seems rather random.
-            return y;
+//            return y;
             // Other versions have used this, and it may be more robust.
-//            return x ^ y;
+            return x ^ y;
         }
 
         /**
@@ -1868,6 +1870,70 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
         @Override
         public WrangleRNG copy() {
             return new WrangleRNG(stateA, stateB);
+        }
+    }
+
+    public static class JadeRNG implements RandomnessSource {
+        long stateA, stateB;
+
+        public JadeRNG() {
+            this((long) ((Math.random() - 0.5) * 0x10000000000000L)
+                            ^ (long) (((Math.random() - 0.5) * 2.0) * 0x8000000000000000L),
+                    (long) ((Math.random() - 0.5) * 0x10000000000000L)
+                            ^ (long) (((Math.random() - 0.5) * 2.0) * 0x8000000000000000L));
+        }
+
+        public JadeRNG(long seed) {
+            this(seed = (seed = ((seed = (((seed * 0x632BE59BD9B4E019L) ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L)) ^ seed >>> 27) * 0xAEF17502108EF2D9L) ^ seed >>> 25,
+                    (seed = ((seed = (((seed * 0x632BE59BD9B4E019L) ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L)) ^ seed >>> 27) * 0xAEF17502108EF2D9L) ^ seed >>> 25);
+        }
+
+        public JadeRNG(final long seedA, final long seedB) {
+            stateA = seedA;
+            stateB = seedB;
+        }
+
+        /**
+         * Using this method, any algorithm that might use the built-in Java Random
+         * can interface with this randomness source.
+         *
+         * @param bits the number of bits to be returned
+         * @return the integer containing the appropriate number of bits
+         */
+        @Override
+        public int next(int bits) {
+            return (int)nextLong() >>> -bits;
+        }
+
+        /**
+         * Using this method, any algorithm that needs to efficiently generate more
+         * than 32 bits of random data can interface with this randomness source.
+         * <p>
+         * Get a random long between Long.MIN_VALUE and Long.MAX_VALUE (both inclusive).
+         *
+         * @return a random long between Long.MIN_VALUE and Long.MAX_VALUE (both inclusive)
+         */
+        @Override
+        public long nextLong() {
+            long x = stateA += 0xC13FA9A902A6328FL;
+            long y = stateB += 0x91E10DA5C79E7B1DL;
+            x *= (y ^ 0xC6BC279692B5C323L) | 1L;
+            y *= (x ^ 0xD1342543DE82EF95L) | 1L;
+//            x *= (y ^ (y << 11 | y >>> -11) ^ (y << 50 | y >>> -50)) | 1L;
+//            y *= (x ^ (x << 31 | x >>> -31) ^ (x << 37 | x >>> -37)) | 1L;
+            return y ^ y >>> 31;
+        }
+
+        /**
+         * Produces a copy of this RandomnessSource that, if next() and/or nextLong() are called on this object and the
+         * copy, both will generate the same sequence of random numbers from the point copy() was called. This just needs to
+         * copy the state so that it isn't shared, usually, and produce a new value with the same exact state.
+         *
+         * @return a copy of this RandomnessSource
+         */
+        @Override
+        public JadeRNG copy() {
+            return new JadeRNG(stateA, stateB);
         }
     }
 
@@ -1930,7 +1996,8 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 //                randomGrid[x][y] = new TangleRNG(x*2+1, y*2+1);
 //                randomGrid[x][y] = new ThrumRNG(x*2+1, y*2+1);
 //                randomGrid[x][y] = new WrangleRNG(x*2+1, y*2+1);
-                randomGrid[x][y] = new WrangleRNG(x, y);
+//                randomGrid[x][y] = new WrangleRNG(x, y);
+                randomGrid[x][y] = new JadeRNG(x, y);
             }
         }
         
@@ -6051,8 +6118,8 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("RNG Grid, bit " + extra);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                ((WrangleRNG)randomGrid[x][y]).stateA = x;
-                                ((WrangleRNG)randomGrid[x][y]).stateB = y;
+                                ((JadeRNG)randomGrid[x][y]).stateA = x;
+                                ((JadeRNG)randomGrid[x][y]).stateB = y;
                                 back[x][y] = (randomGrid[x][y].nextLong() >>> extra & 1L) == 0 ? FLOAT_BLACK : FLOAT_WHITE;//floatGet(code);
                             }
                         }
