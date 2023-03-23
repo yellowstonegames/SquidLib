@@ -208,6 +208,13 @@ public class FontTest extends ApplicationAdapter {
             @Override
             public boolean keyUp(int keycode) {
                 if (keycode == Input.Keys.B) {
+                    index = 0;
+                    tcf = factories[index];
+                    display = displays[index];
+                    stage.clear();
+                    stage.setViewport(viewport);
+                    stage.addActor(display);
+
                     display.erase();
                     long r, h;
                     //r = determine(r);

@@ -1984,7 +1984,7 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
      */
     public void recallToGrid(TextCellFactory.Glyph glyph)
     {
-        layers.get(0).place(gridX(glyph.getY()), gridY(glyph.getY()), glyph.shown, glyph.getPackedColor());
+        layers.get(0).place(gridX(glyph.getX()), gridY(glyph.getY()), glyph.shown, glyph.getPackedColor());
         glyphs.remove(glyph);
     }
 
@@ -1996,7 +1996,7 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
     public void recallToGrid(TextCellFactory.Glyph glyph, int layer)
     {
         layer = mapping.get(layer, 0);
-        layers.get(layer).place(gridX(glyph.getY()), gridY(glyph.getY()), glyph.shown, glyph.getPackedColor());
+        layers.get(layer).place(gridX(glyph.getX()), gridY(glyph.getY()), glyph.shown, glyph.getPackedColor());
         glyphs.remove(glyph);
     }
 

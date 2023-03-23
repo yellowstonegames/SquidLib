@@ -1917,11 +1917,12 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
         public long nextLong() {
             long x = stateA += 0xC13FA9A902A6328FL;
             long y = stateB += 0x91E10DA5C79E7B1DL;
-            x *= (y ^ 0xC6BC279692B5C323L) | 1L;
-            y *= (x ^ 0xD1342543DE82EF95L) | 1L;
-//            x *= (y ^ (y << 11 | y >>> -11) ^ (y << 50 | y >>> -50)) | 1L;
-//            y *= (x ^ (x << 31 | x >>> -31) ^ (x << 37 | x >>> -37)) | 1L;
+            x *= (y ^ (y << 11 | y >>> -11) ^ (y << 50 | y >>> -50)) | 1L;
+            y *= (x ^ (x << 31 | x >>> -31) ^ (x << 37 | x >>> -37)) | 1L;
             return y ^ y >>> 31;
+
+//            x *= (y ^ 0xC6BC279692B5C323L) | 1L;
+//            y *= (x ^ 0xD1342543DE82EF95L) | 1L;
         }
 
         /**
