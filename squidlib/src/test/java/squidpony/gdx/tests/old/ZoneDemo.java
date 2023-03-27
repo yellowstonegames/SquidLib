@@ -58,6 +58,8 @@ public class ZoneDemo extends ApplicationAdapter {
         TextCellFactory tcf = DefaultResources.getCrispSlabFont().addSwap('.', ' ');
         crispVariableWidth = DefaultResources.getCrispPrintFamily();
         display = new SquidLayers(width, height, cellWidth, cellHeight, tcf);
+        tcf.tweakHeight(cellHeight+2);
+        tcf.initBySize();
         screenWidth = width * cellWidth;
         screenHeight = height * cellHeight;
         display.setAnimationDuration(0.2f);
@@ -103,7 +105,7 @@ public class ZoneDemo extends ApplicationAdapter {
         influenceColors = new Color[centers.length];
         centerEntities = new AnimatedEntity[centers.length];
         for (int i = 0; i < centers.length; i++) {
-            float hue = i * 1.0f / centers.length, sat = rng.nextFloat() * 0.2f + 0.8f,
+            float hue = i / (float)centers.length, sat = rng.nextFloat() * 0.2f + 0.8f,
                     val = rng.nextFloat() * 0.3f + 0.7f;
             influenceH[i] = hue;
             influenceS[i] = sat;

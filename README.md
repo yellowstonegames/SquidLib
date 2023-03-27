@@ -146,7 +146,7 @@ Core of SquidLib:
 </dependency>
 ```
 
-Optional Text-Based Display (depends on libGDX 1.10.0 and anim8-gdx 0.2.10)
+Optional Text-Based Display (depends on libGDX 1.11.0 and anim8-gdx 0.3.13)
 ```
 <dependency>
     <groupId>com.squidpony</groupId>
@@ -155,7 +155,7 @@ Optional Text-Based Display (depends on libGDX 1.10.0 and anim8-gdx 0.2.10)
 </dependency>
 ```
 
-Optional Serialization Support (depends on libGDX 1.10.0)
+Optional Serialization Support (depends on libGDX 1.11.0)
 ```
 <dependency>
     <groupId>com.squidpony</groupId>
@@ -228,7 +228,7 @@ Or this for Gradle (the first two are needed, the others are optional); replace 
 
 If you use GWT, you should probably use SquidSetup to configure the project, since there's a lot of places where
 Maven or Gradle with GWT gets tricky. GWT needs the sources for all dependencies, but also needs the sources for
-regexodus 0.1.10 (because `squidlib-util` needs it) and possibly anim8-gdx 0.2.4 (because `squidlib` needs it; anim8-gdx
+regexodus 0.1.15 (because `squidlib-util` needs it) and possibly anim8-gdx 0.3.13 (because `squidlib` needs it; anim8-gdx
 is only needed if you depend on `squidlib`). The sources dependencies look like this for Gradle (I haven't really tried
 with Maven):
 ```
@@ -295,20 +295,22 @@ What's Next
 
 The road to 3.0.0 was long and winding; libGDX support was added midway between the 2.x and 3.x releases, and by 3.0.0,
 libGDX has established itself as the way to go (and definitely not Swing). Keeping backwards compatibility is a primary
-focus of the 3.x series now that it's stable. But looking ahead, to the 4.x (or whatever it will be called) version, we
+focus of the 3.x series now that it's stable. But looking ahead, to the 4.x version, we
 can benefit from large breaking changes that aim to simplify usage of the library. That's where
 [SquidSquad](https://github.com/yellowstonegames/SquidSquad) comes in. It's SquidLib, but split up substantially more to
 address a feature that's been requested for years; you won't need dependencies on unrelated parts of the library, and
 hopefully you will be able to depend on just the parts you use. SquidSquad is also simplified in some ways; its data
 structures are shared with [jdkgdxds](https://github.com/tommyettinger/jdkgdxds), making it easier to share a dependency
-on common data structures, and it doesn't have an RNG class of its own (it relies on the LaserRandom class from
-jdkgdxds, which is nearly identical to TangleRNG here). SquidSquad is still at an early stage, and it isn't usable for
-much yet (as of this writing, it only just gained an equivalent to TextCellFactory, and still doesn't have an equivalent
-to SparseLayers, though it can generate dungeons and imitation-language text). Some bugfixes have already been
-backported from SquidSquad to SquidLib; a long-standing bug in SerpentMapGenerator, for instance, was fixed in
-SquidSquad and that fix brought here. SquidSquad's scope is meant to be a little smaller, and to be spread across more
-libraries if possible. Since releasing 3.0.0 took about 5 years, I hope SquidSquad becomes stable more quickly!
+on common data structures, and it doesn't have an RNG class of its own (it relies on the EnhancedRandom classes from
+[juniper](https://github.com/tommyettinger/juniper), which is like using StatefulRNG here).
 
+SquidSquad just has its first alpha release, `4.0.0-alpha1`, and it should be usable now, even though docs are lacking.
+Most features in SquidLib are present in SquidSquad, with a few exceptions that should hopefully be filled soon:
+Techniques haven't been ported, MultiSpill isn't exactly present in the same way (Spill incorporates some of it), and
+the String serialization code in ObText, StringConvert, and Converters won't be ported. Some bugfixes have
+already been backported from SquidSquad to SquidLib; a long-standing bug in SerpentMapGenerator, for instance, was fixed
+in SquidSquad and that fix brought here. SquidSquad's scope is meant to be a little smaller, and to be spread across
+more libraries if possible. Since releasing 3.0.0 took about 5 years, I hope SquidSquad becomes stable more quickly!
 
 Credits
 ---
