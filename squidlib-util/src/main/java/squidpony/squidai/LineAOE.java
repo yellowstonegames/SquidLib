@@ -388,14 +388,14 @@ public class LineAOE implements AOE, Serializable {
                 for (int i = 0; i < ts.length; ++i) {
                     qualityMap[x][y] += compositeMap[i][x][y];
                     if(compositeMap[i][x][y] < 99999.0 && i < 63)
-                        bits |= 1 << i;
+                        bits |= 1L << i;
                 }
                 if(qualityMap[x][y] < bestQuality)
                 {
                     ArrayList<Coord> ap = new ArrayList<>();
 
                     for (int i = 0; i < ts.length && i < 63; ++i) {
-                        if((bits & (1 << i)) != 0)
+                        if((bits & (1L << i)) != 0)
                             ap.add(ts[i]);
                     }
                     if(ap.size() > 0) {
@@ -409,7 +409,7 @@ public class LineAOE implements AOE, Serializable {
                     ArrayList<Coord> ap = new ArrayList<>();
 
                     for (int i = 0; i < ts.length && i < 63; ++i) {
-                        if((bits & (1 << i)) != 0)
+                        if((bits & (1L << i)) != 0)
                             ap.add(ts[i]);
                     }
 
@@ -584,23 +584,23 @@ public class LineAOE implements AOE, Serializable {
                 for (int i = 0; i < pts.length; ++i) {
                     qualityMap[x][y] += compositeMap[i][x][y];
                     if(compositeMap[i][x][y] < 399999.0 && i < 63)
-                        pbits |= 1 << i;
+                        pbits |= 1L << i;
                 }
                 for (int i = pts.length; i < totalTargets; ++i) {
                     qualityMap[x][y] += compositeMap[i][x][y];
                     if(compositeMap[i][x][y] < 99999.0 && i < 63)
-                        lbits |= 1 << i;
+                        lbits |= 1L << i;
                 }
                 if(qualityMap[x][y] < bestQuality)
                 {
                     ArrayList<Coord> ap = new ArrayList<>();
 
                     for (int i = 0; i < pts.length && i < 63; ++i) {
-                        if((pbits & (1 << i)) != 0)
+                        if((pbits & (1L << i)) != 0)
                             ap.add(pts[i]);
                     }
                     for (int i = pts.length; i < totalTargets && i < 63; ++i) {
-                        if((lbits & (1 << i)) != 0)
+                        if((lbits & (1L << i)) != 0)
                             ap.add(lts[i - pts.length]);
                     }
 
@@ -614,7 +614,7 @@ public class LineAOE implements AOE, Serializable {
                     ArrayList<Coord> ap = new ArrayList<>();
 
                     for (int i = 0; i < pts.length && i < 63; ++i) {
-                        if ((pbits & (1 << i)) != 0) {
+                        if ((pbits & (1L << i)) != 0) {
                             ap.add(pts[i]);
                             ap.add(pts[i]);
                             ap.add(pts[i]);
@@ -622,7 +622,7 @@ public class LineAOE implements AOE, Serializable {
                         }
                     }
                     for (int i = pts.length; i < totalTargets && i < 63; ++i) {
-                        if ((lbits & (1 << i)) != 0)
+                        if ((lbits & (1L << i)) != 0)
                             ap.add(lts[i - pts.length]);
                     }
 
