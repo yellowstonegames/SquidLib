@@ -11641,7 +11641,7 @@ public class SColor extends Color implements Serializable {
      * <br>
      * You can use some of the utility methods in this class to get colors from this with a good distribution, including
      * {@link #randomColorWheel(IRNG, int, int)}, {@link #indexedColorWheel(int, int, int)}, and the overloads of those
-     * methods with less parameters. If those methods fit your needs, you don't need to read the next section.
+     * methods with fewer parameters. If those methods fit your needs, you don't need to read the next section.
      * <br>
      * This is organized the way it is to allow efficient random color fetching when you know what brightness and
      * saturation you want. Example code for this given an {@link IRNG} called {@code rng}, with brightness and
@@ -11875,12 +11875,7 @@ public class SColor extends Color implements Serializable {
      */
     public static SColor randomColorWheel(IRNG rng, int bright, int sat)
     {
-        bright = 2 - bright;
-        bright &= 0x3;
-        sat &= 0x3;
-        bright %= 3;
-        sat %= 3;
-        return COLOR_WHEEL_PALETTE_REDUCED[rng.next(4) * 9 + 3 * bright + sat];
+        return COLOR_WHEEL_PALETTE_REDUCED[rng.next(4) * 9 + 3 * ((2 - bright & 3) % 3) + ((sat & 3) % 3)];
     }
 
     /**
@@ -11905,14 +11900,7 @@ public class SColor extends Color implements Serializable {
      */
     public static SColor indexedColorWheel(int idx, int bright, int sat)
     {
-        idx *= 7;
-        idx &= 0xf;
-        bright = 2 - bright;
-        bright &= 0x3;
-        sat &= 0x3;
-        bright %= 3;
-        sat %= 3;
-        return COLOR_WHEEL_PALETTE_REDUCED[idx * 9 + 3 * bright + sat];
+        return COLOR_WHEEL_PALETTE_REDUCED[(idx * 7 & 15) * 9 + 3 * ((2 - bright & 3) % 3) + ((sat & 3) % 3)];
     }
     /**
      * Gets a color by a shuffled index from the palette {@link #COLOR_WHEEL_PALETTE_REDUCED}, with the specified
@@ -11926,9 +11914,7 @@ public class SColor extends Color implements Serializable {
     public static SColor indexedColorWheel(int idx, int sat)
     {
         idx *= 497;
-        sat &= 0xf;
-        sat %= 3;
-        return COLOR_WHEEL_PALETTE_REDUCED[(idx % 48 ^ (idx >> 2 & 3)) * 3 + sat];
+        return COLOR_WHEEL_PALETTE_REDUCED[(idx % 48 ^ (idx >> 2 & 3)) * 3 + (sat & 15) % 3];
     }
 
     /**
@@ -11971,7 +11957,7 @@ public class SColor extends Color implements Serializable {
      */
     public static GapShuffler<SColor> randomColorSequence(CharSequence seed, int bright, int sat)
     {
-        return new GapShuffler<>(COLOR_WHEEL_PALETTES[((2 - bright) * 3 + sat) % 9], seed);
+        return new GapShuffler<>(COLOR_WHEEL_PALETTES[((2 - bright) * 3 + sat & 15) % 9], seed);
     }
     /**
      * Returns an infinite Iterator (also an Iterable) over different colors from {@link #COLOR_WHEEL_PALETTE}, with
@@ -12000,7 +11986,7 @@ public class SColor extends Color implements Serializable {
      */
     public static GapShuffler<SColor> randomColorSequence(IRNG rng, int bright, int sat)
     {
-        return new GapShuffler<>(COLOR_WHEEL_PALETTES[((2 - bright) * 3 + sat) % 9], rng);
+        return new GapShuffler<>(COLOR_WHEEL_PALETTES[((2 - bright) * 3 + sat & 15) % 9], rng);
     }
     /**
      * Returns an infinite Iterator (also an Iterable) over different colors from {@link #COLOR_WHEEL_PALETTE}, with
@@ -12028,7 +12014,7 @@ public class SColor extends Color implements Serializable {
      */
     public static GapShuffler<SColor> randomColorSequence(int bright, int sat)
     {
-        return new GapShuffler<>(COLOR_WHEEL_PALETTES[((2 - bright) * 3 + sat) % 9]);
+        return new GapShuffler<>(COLOR_WHEEL_PALETTES[((2 - bright) * 3 + sat & 15) % 9]);
     }
 
     /**

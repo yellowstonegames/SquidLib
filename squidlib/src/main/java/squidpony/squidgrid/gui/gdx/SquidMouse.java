@@ -27,9 +27,9 @@ import com.badlogic.gdx.math.MathUtils;
  * to a given InputProcessor after converting to cell-based grid coordinates
  * instead of pixel-based screen coordinates. It also passes off scroll events
  * to the InputProcessor without additional changes.
- *
- * This class is meant to be used as a wrapper to your own mouse InputProcessor,
- * it simply converts the coordinates from UI Component x,y to Grid based x,y
+ * <br>
+ * This class is meant to be used as a wrapper to your own mouse InputProcessor;
+ * it simply converts the coordinates from screen-space x,y to grid-based x,y .
  *
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  * @author Tommy Ettinger

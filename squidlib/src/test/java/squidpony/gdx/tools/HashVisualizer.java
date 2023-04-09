@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.RandomXS128;
+import com.badlogic.gdx.scenes.scene2d.utils.UIUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import squidpony.ArrayTools;
@@ -340,7 +341,7 @@ public class HashVisualizer extends ApplicationAdapter {
     private final float[] gradientF = new float[256], bumpF = new float[256], grayscaleF = new float[256];
     
     private int ctr = -256;
-    private boolean keepGoing = true;
+    private boolean keepGoing = false;
 
     private double total;
     public static double toDouble(long n) {
@@ -1832,7 +1833,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 //            long x = stateA += 0x9E3779B97F4A7C15L;
             // The constant doesn't seem to matter as long as it is large and odd.
             long x = stateA += 0xC13FA9A902A6328FL;
-            long y = stateB += 0x91E10DA5C79E7B1DL;
+            long y = stateB += 0x91E10DA5C79E7B1DL + ((x|0xAEF17502108EF2DAL-x)>>>63);
             // Using only very small constants show correlation between starting states.
 //            long x = stateA += 1L; // NO.
 //            long y = stateB -= 1L; // NO.
@@ -1848,16 +1849,16 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
             // Each step does a xor-rotate-xor-rotate on one variable and adds the result to the other variable.
             // These alternate in pairs.
             // The rotations on each line should pipeline and execute simultaneously on most PC hardware.
-            x += (y ^ (y << 11 | y >>> -11) ^ (y << 50 | y >>> -50));
-            y += (x ^ (x << 46 | x >>> -46) ^ (x << 21 | x >>> -21));
-            x += (y ^ (y <<  5 | y >>> -5 ) ^ (y << 14 | y >>> -14));
-            y += (x ^ (x << 25 | x >>> -25) ^ (x << 41 | x >>> -41));
-            x += (y ^ (y << 53 | y >>> -53) ^ (y << 3  | y >>> -3 ));
-            y += (x ^ (x << 31 | x >>> -31) ^ (x << 37 | x >>> -37));
-            // y is the last updated variable, and returning just y seems rather random.
-//            return y;
-            // Other versions have used this, and it may be more robust.
-            return x ^ y;
+            x += (y ^ (y << 11 | y >>> 64-11) ^ (y << 50 | y >>> 64-50));
+            y += (x ^ (x << 46 | x >>> 64-46) ^ (x << 21 | x >>> 64-21));
+            x += (y ^ (y <<  5 | y >>> 64-5 ) ^ (y << 14 | y >>> 64-14));
+            y += (x ^ (x << 25 | x >>> 64-25) ^ (x << 41 | x >>> 64-41));
+            x += (y ^ (y << 53 | y >>> 64-53) ^ (y << 3  | y >>> 64-3 ));
+            y += (x ^ (x << 31 | x >>> 64-31) ^ (x << 37 | x >>> 64-37));
+//             y is the last updated variable, and returning just y seems rather random.
+            return y;
+//             Other versions have used this, and it may be more robust.
+//            return x ^ y;
         }
 
         /**
@@ -1997,8 +1998,8 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 //                randomGrid[x][y] = new TangleRNG(x*2+1, y*2+1);
 //                randomGrid[x][y] = new ThrumRNG(x*2+1, y*2+1);
 //                randomGrid[x][y] = new WrangleRNG(x*2+1, y*2+1);
-//                randomGrid[x][y] = new WrangleRNG(x, y);
-                randomGrid[x][y] = new JadeRNG(x, y);
+                randomGrid[x][y] = new WrangleRNG(x, y);
+//                randomGrid[x][y] = new JadeRNG(x, y);
             }
         }
         
@@ -2045,9 +2046,11 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                 otherMode = (otherMode + 20) % 21;
                                 break;
                         }
+                        putMap();
                         break;
                     case 'u':
                     case 'U':
+                    case '=':
                     case SquidInput.ENTER:
                         switch (testType) {
                             case 4:
@@ -6119,8 +6122,8 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("RNG Grid, bit " + extra);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                ((JadeRNG)randomGrid[x][y]).stateA = x;
-                                ((JadeRNG)randomGrid[x][y]).stateB = y;
+                                ((WrangleRNG)randomGrid[x][y]).stateA = x;
+                                ((WrangleRNG)randomGrid[x][y]).stateB = y;
                                 back[x][y] = (randomGrid[x][y].nextLong() >>> extra & 1L) == 0 ? FLOAT_BLACK : FLOAT_WHITE;//floatGet(code);
                             }
                         }

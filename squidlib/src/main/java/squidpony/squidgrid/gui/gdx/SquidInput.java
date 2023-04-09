@@ -16,7 +16,11 @@
 
 package squidpony.squidgrid.gui.gdx;
 
-import com.badlogic.gdx.*;
+import com.badlogic.gdx.ApplicationListener;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.IntIntMap;
 import com.badlogic.gdx.utils.TimeUtils;
@@ -28,7 +32,7 @@ import squidpony.squidmath.IntVLA;
  * Mouse input and a user implementation of the SquidInput.KeyHandler interface to react to keys represented as chars
  * and the modifiers those keys were pressed with, any of alt, ctrl, and/or shift. Not all keys are representable by
  * default in unicode, so symbolic representations are stored in constants in this class, and are passed to
- * {@link KeyHandler#handle(char, boolean, boolean, boolean)} as chars like DOWN_ARROW or its value, '\u2193'. Shift
+ * {@link KeyHandler#handle(char, boolean, boolean, boolean)} as chars like DOWN_ARROW or its value, '\u005Cu2193'. Shift
  * modifies the input as it would on a QWERTY keyboard, and the exact mapping is documented in
  * {@link #fromCode(int, boolean)} as well. This class handles mouse input immediately, but stores keypresses in a
  * queue, storing all key events and allowing them to be processed one at a time using {@link #next()} or all at once
@@ -66,7 +70,7 @@ public class SquidInput extends InputAdapter {
         /**
          * The only method you need to implement yourself in KeyHandler, this should react to keys such as
          * 'a' (produced by pressing the A key while not holding Shift), 'E' (produced by pressing the E key while
-         * holding Shift), and '\u2190' (left arrow in unicode, also available as a constant in SquidInput, produced by
+         * holding Shift), and '\u005Cu2190' (left arrow in Unicode, also available as a constant in SquidInput, produced by
          * pressing the left arrow key even though that key does not have a default unicode representation). Capital
          * letters will be capitalized when they are passed to this, but they may or may not have the shift argument as
          * true depending on how this method was called. Symbols that may be produced by holding Shift and pressing a
@@ -225,7 +229,7 @@ public class SquidInput extends InputAdapter {
      * sent between users even if they play different games). If you really want a custom filename, or to load the
      * keymap from a larger user profile, you can give the contents to {@link #keyMappingFromString(String)} on a
      * SquidInput after construction.
-     * @param keyHandler must implement the SquidInput.KeyHandler interface so it can handle() key input.
+     * @param keyHandler must implement the SquidInput.KeyHandler interface, so it can handle() key input.
      * @param mouse a SquidMouse instance that will be used for handling mouse input.
      * @param ignoreInput true if this should ignore input initially, false if it should process input normally.
      */
@@ -880,204 +884,204 @@ public class SquidInput extends InputAdapter {
     /**
      * Left arrow key. If numpadDirections is enabled, this will also be sent by Numpad 4.
      */
-    public static final char LEFT_ARROW = '\u2190';
+    public static final char LEFT_ARROW = '←';
     /**
      * Up arrow key. If numpadDirections is enabled, this will also be sent by Numpad 8.
      */
-    public static final char UP_ARROW = '\u2191';
+    public static final char UP_ARROW = '↑';
     /**
      * Down arrow key. If numpadDirections is enabled, this will also be sent by Numpad 6.
      */
-    public static final char RIGHT_ARROW = '\u2192';
+    public static final char RIGHT_ARROW = '→';
     /**
      * Down arrow key. If numpadDirections is enabled, this will also be sent by Numpad 2.
      */
-    public static final char DOWN_ARROW = '\u2193';
+    public static final char DOWN_ARROW = '↓';
     /**
      * Not typically a dedicated key, but if numpadDirections is enabled, this will be sent by Numpad 1.
      */
-    public static final char DOWN_LEFT_ARROW = '\u2199';
+    public static final char DOWN_LEFT_ARROW = '↙';
     /**
      * Not typically a dedicated key, but if numpadDirections is enabled, this will be sent by Numpad 3.
      */
-    public static final char DOWN_RIGHT_ARROW = '\u2198';
+    public static final char DOWN_RIGHT_ARROW = '↘';
     /**
      * Not typically a dedicated key, but if numpadDirections is enabled, this will be sent by Numpad 9.
      */
-    public static final char UP_RIGHT_ARROW = '\u2197';
+    public static final char UP_RIGHT_ARROW = '↗';
     /**
      * Not typically a dedicated key, but if numpadDirections is enabled, this will be sent by Numpad 7.
      */
-    public static final char UP_LEFT_ARROW = '\u2196';
+    public static final char UP_LEFT_ARROW = '↖';
     /**
      * Not typically a dedicated key, but if numpadDirections is enabled, this will be sent by Numpad 5.
      */
-    public static final char CENTER_ARROW = '\u21BA';
+    public static final char CENTER_ARROW = '↺';
     /**
      * Not typically a dedicated key, but if numpadDirections is enabled, this will be sent by Numpad 0.
      *
      * Intended for games that might need up a jump or crouch button on the numpad that supplants movement.
      */
-    public static final char VERTICAL_ARROW = '\u2195';
+    public static final char VERTICAL_ARROW = '↕';
     /**
      * Enter key, also called Return key. Used to start a new line of text or confirm entries in forms.
      */
-    public static final char ENTER = '\u21B5';
+    public static final char ENTER = '↵';
     /**
      * Tab key. Used for entering horizontal spacing, such as indentation, but also often to cycle between menu items.
      */
-    public static final char TAB = '\u21B9';
+    public static final char TAB = '↹';
     /**
      * Backspace key on most PC keyboards; Delete key on Mac keyboards. Used to delete the previous character.
      */
-    public static final char BACKSPACE = '\u2280';
+    public static final char BACKSPACE = '⊀';
     /**
      * Delete key on most PC keyboards; no equivalent on some (all?) Mac keyboards. Used to delete the next character.
      *
      * Not present on some laptop keyboards and some (all?) Mac keyboards.
      */
-    public static final char FORWARD_DELETE = '\u2281';
+    public static final char FORWARD_DELETE = '⊁';
     /**
      * Insert key. Not recommended for common use because it could affect other application behavior.
      *
      * Not present on some laptop keyboards.
      */
-    public static final char INSERT = '\u2208';
+    public static final char INSERT = '∈';
     /**
      * Page Down key.
      *
      * Not present on some laptop keyboards.
      */
-    public static final char PAGE_DOWN = '\u22A4';
+    public static final char PAGE_DOWN = '⊤';
     /**
      * Page Up key.
      *
      * Not present on some laptop keyboards.
      */
-    public static final char PAGE_UP = '\u22A5';
+    public static final char PAGE_UP = '⊥';
     /**
      * Home key (commonly used for moving a cursor to start of line).
      *
      * Not present on some laptop keyboards.
      */
-    public static final char HOME = '\u2302';
+    public static final char HOME = '⌂';
     /**
      * End key (commonly used for moving a cursor to end of line).
      *
      * Not present on some laptop keyboards.
      */
-    public static final char END = '\u2623';
+    public static final char END = '☣';
     /**
      * Esc or Escape key
      */
-    public static final char ESCAPE = '\u2620';
+    public static final char ESCAPE = '☠';
 
     /**
      * Function key F1
      */
-    public static final char F1 = '\u2460';
+    public static final char F1 = '①';
     /**
      * Function key F2
      */
-    public static final char F2 = '\u2461';
+    public static final char F2 = '②';
     /**
      * Function key F3
      */
-    public static final char F3 = '\u2462';
+    public static final char F3 = '③';
     /**
      * Function key F4
      */
-    public static final char F4 = '\u2463';
+    public static final char F4 = '④';
     /**
      * Function key F5
      */
-    public static final char F5 = '\u2464';
+    public static final char F5 = '⑤';
     /**
      * Function key F6
      */
-    public static final char F6 = '\u2465';
+    public static final char F6 = '⑥';
     /**
      * Function key F7
      */
-    public static final char F7 = '\u2466';
+    public static final char F7 = '⑦';
     /**
      * Function key F8
      */
-    public static final char F8 = '\u2467';
+    public static final char F8 = '⑧';
     /**
      * Function key F9
      */
-    public static final char F9 = '\u2468';
+    public static final char F9 = '⑨';
     /**
      * Function key F10
      */
-    public static final char F10 = '\u2469';
+    public static final char F10 = '⑩';
     /**
      * Function key F11
      */
-    public static final char F11 = '\u246A';
+    public static final char F11 = '⑪';
     /**
      * Function key F12
      */
-    public static final char F12 = '\u246B';
+    public static final char F12 = '⑫';
 
     /**
      * Gamepad A button.
      */
-    public static final char GAMEPAD_A = '\u24b6';
+    public static final char GAMEPAD_A = 'Ⓐ';
     /**
      * Gamepad B button.
      */
-    public static final char GAMEPAD_B = '\u24b7';
+    public static final char GAMEPAD_B = 'Ⓑ';
     /**
      * Gamepad C button.
      */
-    public static final char GAMEPAD_C = '\u24b8';
+    public static final char GAMEPAD_C = 'Ⓒ';
     /**
      * Gamepad X button.
      */
-    public static final char GAMEPAD_X = '\u24cd';
+    public static final char GAMEPAD_X = 'Ⓧ';
     /**
      * Gamepad Y button.
      */
-    public static final char GAMEPAD_Y = '\u24ce';
+    public static final char GAMEPAD_Y = 'Ⓨ';
     /**
      * Gamepad Z button.
      */
-    public static final char GAMEPAD_Z = '\u24cf';
+    public static final char GAMEPAD_Z = 'Ⓩ';
 
     /**
      * Gamepad L1 button.
      */
-    public static final char GAMEPAD_L1 = '\u24c1';
+    public static final char GAMEPAD_L1 = 'Ⓛ';
     /**
      * Gamepad L2 button.
      */
-    public static final char GAMEPAD_L2 = '\u24db';
+    public static final char GAMEPAD_L2 = 'ⓛ';
     /**
      * Gamepad R1 button.
      */
-    public static final char GAMEPAD_R1 = '\u24c7';
+    public static final char GAMEPAD_R1 = 'Ⓡ';
     /**
      * Gamepad R2 button.
      */
-    public static final char GAMEPAD_R2 = '\u24e1';
+    public static final char GAMEPAD_R2 = 'ⓡ';
     /**
      * Gamepad Left Thumb button.
      */
-    public static final char GAMEPAD_LEFT_THUMB = '\u24a7';
+    public static final char GAMEPAD_LEFT_THUMB = '⒧';
     /**
      * Gamepad Right Thumb button.
      */
-    public static final char GAMEPAD_RIGHT_THUMB = '\u24ad';
+    public static final char GAMEPAD_RIGHT_THUMB = '⒭';
     /**
      * Gamepad Start button.
      */
-    public static final char GAMEPAD_START = '\u2713';
+    public static final char GAMEPAD_START = '✓';
     /**
      * Gamepad Select button.
      */
-    public static final char GAMEPAD_SELECT = '\u261C';
+    public static final char GAMEPAD_SELECT = '☜';
 
 
 }
