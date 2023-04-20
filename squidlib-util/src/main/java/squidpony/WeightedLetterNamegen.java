@@ -512,7 +512,10 @@ public class WeightedLetterNamegen {
      */
     private boolean validateGrouping(CharSequence name) {
         for (int i = 2; i < name.length(); i++) {
-            if (name.charAt(i) == name.charAt(i - 1) && name.charAt(i) == name.charAt(i - 2)) {
+            char c0 = name.charAt(i);
+            char c1 = name.charAt(i-1);
+            char c2 = name.charAt(i-2);
+            if ((c0 == c1 && c0 == c2) || !(isVowel(c0) || isVowel(c1) || isVowel(c2))) {
                 return false;
             }
         }
@@ -537,6 +540,7 @@ public class WeightedLetterNamegen {
             case 'i':
             case 'o':
             case 'u':
+            case 'y':
                 return true;
             default:
                 return false;
