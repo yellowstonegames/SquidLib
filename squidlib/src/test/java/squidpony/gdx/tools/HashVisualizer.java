@@ -1375,31 +1375,47 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
         long n = seed + floor * 0xABC98388FB8FAC03L;
         long o = seed + floor * 0x8CB92BA72F3D8DD7L;
 
-//        final float a = ((m ^ (n << 21 | n >>> 43) ^ (o << 50 | o >>> 14)) >> 40) * 0x0.FFFFFEp-23f;
         final float a = ((m ^ n ^ o) >> 40) * 5.2981893E-8f; //5.2981893E-8f == 0x0.FFFFFEp-23f * 0.4444444f
         m += 0xD1B54A32D192ED03L;
         n += 0xABC98388FB8FAC03L;
         o += 0x8CB92BA72F3D8DD7L;
-//        final float b = ((m ^ (n << 21 | n >>> 43) ^ (o << 50 | o >>> 14)) >> 40) * 0x0.FFFFFEp-23f;
         final float b = ((m ^ n ^ o) >> 40) * 5.2981893E-8f; //5.2981893E-8f == 0x0.FFFFFEp-23f * 0.4444444f
         m += 0xD1B54A32D192ED03L;
         n += 0xABC98388FB8FAC03L;
         o += 0x8CB92BA72F3D8DD7L;
-//        final float c = ((m ^ (n << 21 | n >>> 43) ^ (o << 50 | o >>> 14)) >> 40) * 0x0.FFFFFEp-23f;
         final float c = ((m ^ n ^ o) >> 40) * 5.2981893E-8f; //5.2981893E-8f == 0x0.FFFFFEp-23f * 0.4444444f
         m += 0xD1B54A32D192ED03L;
         n += 0xABC98388FB8FAC03L;
         o += 0x8CB92BA72F3D8DD7L;
-//        final float d = ((m ^ (n << 21 | n >>> 43) ^ (o << 50 | o >>> 14)) >> 40) * 0x0.FFFFFEp-23f;
         final float d = ((m ^ n ^ o) >> 40) * 5.2981893E-8f; //5.2981893E-8f == 0x0.FFFFFEp-23f * 0.4444444f
 
-//        final float start = (((seed += floor) ^ 0xD0E89D2D) * 0x1D2473 & 0xFFFFF) * 0x0.FFFFFp-19f - 1f,
-//                end = ((seed + 1 ^ 0xD0E89D2D) * 0x1D2473 & 0xFFFFF) * 0x0.FFFFFp-19f - 1f;
-        //similar to GLSL's fract()
         t -= floor;
         final float p = (d - c) - (a - b);
         return (t * (t * t * p + t * ((a - b) - p) + (c - a)) + b);
     }
+
+    /**
+     * Sway using bicubic interpolation between 4 points (the two integers before t and the two after).
+     * @param seed any int
+     * @param t a distance traveled; should change by less than 1 between calls, and should be less than about 10000
+     * @return a smoothly-interpolated swaying value between -1 and 1
+     */
+    public static float bcSway2(int seed, float t)
+    {
+        //int fast floor, from libGDX
+        final int floor = ((int)(t + 0x1p14) - 0x4000);
+        long s = seed + 0x9E3779B97F4A7C15L + floor;
+
+        final float a = (DiverRNG.determine(s) >> 40) * 5.2981893E-8f; //5.2981893E-8f == 0x0.FFFFFEp-23f * 0.4444444f
+        final float b = (DiverRNG.determine(s + 1L) >> 40) * 5.2981893E-8f; //5.2981893E-8f == 0x0.FFFFFEp-23f * 0.4444444f
+        final float c = (DiverRNG.determine(s + 2L) >> 40) * 5.2981893E-8f; //5.2981893E-8f == 0x0.FFFFFEp-23f * 0.4444444f
+        final float d = (DiverRNG.determine(s + 3L) >> 40) * 5.2981893E-8f; //5.2981893E-8f == 0x0.FFFFFEp-23f * 0.4444444f
+
+        t -= floor;
+        final float p = (d - c) - (a - b);
+        return (t * (t * t * p + t * ((a - b) - p) + (c - a)) + b);
+    }
+
     /**
      * Returns smooth 1D noise between -1 and 1.
      * @param seed any int; should not change for a given river
@@ -5324,6 +5340,21 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 //                        back[width - 3][half - 1 + iBright] = bright;
 //                        back[width - 3][half + 0 + iBright] = bright;
 //                        back[width - 3][half + 1 + iBright] = bright;
+
+                        iBright = (int) ((257 + ctr) * 0x1.44cbc89p-8f) % RED_SERIES.length;
+                        bright = lerpFloatColors(RED_SERIES[iBright].toFloatBits(),
+                                RED_SERIES[(iBright + 1) % RED_SERIES.length].toFloatBits(),
+                                (257 + ctr) * 0x1.44cbc89p-8f - (int) ((257 + ctr) * 0x1.44cbc89p-8f));
+                        iBright = (int) (bcSway2(123, ctr * 0x3p-8f) * 0x.fp0f * half);
+                        back[width - 1][half - 1 + iBright] = bright;
+                        back[width - 1][half + 0 + iBright] = bright;
+                        back[width - 1][half + 1 + iBright] = bright;
+                        back[width - 2][half - 1 + iBright] = bright;
+                        back[width - 2][half + 0 + iBright] = bright;
+                        back[width - 2][half + 1 + iBright] = bright;
+                        back[width - 3][half - 1 + iBright] = bright;
+                        back[width - 3][half + 0 + iBright] = bright;
+                        back[width - 3][half + 1 + iBright] = bright;
 
                         iBright = (int) ((257 + ctr) * 0x1.44cbc89p-8f) % YELLOW_SERIES.length;
                         bright = lerpFloatColors(YELLOW_SERIES[iBright].toFloatBits(),
