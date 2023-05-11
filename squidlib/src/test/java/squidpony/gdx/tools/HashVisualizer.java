@@ -68,7 +68,7 @@ public class HashVisualizer extends ApplicationAdapter {
     // 3: artistic visualizations of hash functions and misc. other
     // 4: noise
     // 5: RNG results
-    private int testType = 5;
+    private int testType = 4;
     private static final int NOISE_LIMIT = 152;
     private static final int RNG_LIMIT = 52;
     private int hashMode = 9, rngMode = 4, noiseMode = 106, otherMode = 17;//142
@@ -341,7 +341,7 @@ public class HashVisualizer extends ApplicationAdapter {
     private final float[] gradientF = new float[256], bumpF = new float[256], grayscaleF = new float[256];
     
     private int ctr = -256;
-    private boolean keepGoing = false;
+    private boolean keepGoing = true;
 
     private double total;
     public static double toDouble(long n) {
@@ -1359,6 +1359,47 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
         //interpolate between start and end, using cubic to make it curve smoothly
         return (1 - value) * start + value * end;
     }
+
+    /**
+     * Sway using bicubic interpolation between 4 points (the two integers before t and the two after).
+     * @param seed any long
+     * @param t a distance traveled; should change by less than 1 between calls, and should be less than about 10000
+     * @return a smoothly-interpolated swaying value between -1 and 1
+     */
+    public static float bcSway(long seed, float t)
+    {
+        //int fast floor, from libGDX
+        final int floor = ((int)(t + 0x1p14) - 0x4000);
+        seed = seed * 0xD1342543DE82EF95L + 0x9E3779B97F4A7C15L;
+        long m = seed + floor * 0xD1B54A32D192ED03L;
+        long n = seed + floor * 0xABC98388FB8FAC03L;
+        long o = seed + floor * 0x8CB92BA72F3D8DD7L;
+
+//        final float a = ((m ^ (n << 21 | n >>> 43) ^ (o << 50 | o >>> 14)) >> 40) * 0x0.FFFFFEp-23f;
+        final float a = ((m ^ n ^ o) >> 40) * 5.2981893E-8f; //5.2981893E-8f == 0x0.FFFFFEp-23f * 0.4444444f
+        m += 0xD1B54A32D192ED03L;
+        n += 0xABC98388FB8FAC03L;
+        o += 0x8CB92BA72F3D8DD7L;
+//        final float b = ((m ^ (n << 21 | n >>> 43) ^ (o << 50 | o >>> 14)) >> 40) * 0x0.FFFFFEp-23f;
+        final float b = ((m ^ n ^ o) >> 40) * 5.2981893E-8f; //5.2981893E-8f == 0x0.FFFFFEp-23f * 0.4444444f
+        m += 0xD1B54A32D192ED03L;
+        n += 0xABC98388FB8FAC03L;
+        o += 0x8CB92BA72F3D8DD7L;
+//        final float c = ((m ^ (n << 21 | n >>> 43) ^ (o << 50 | o >>> 14)) >> 40) * 0x0.FFFFFEp-23f;
+        final float c = ((m ^ n ^ o) >> 40) * 5.2981893E-8f; //5.2981893E-8f == 0x0.FFFFFEp-23f * 0.4444444f
+        m += 0xD1B54A32D192ED03L;
+        n += 0xABC98388FB8FAC03L;
+        o += 0x8CB92BA72F3D8DD7L;
+//        final float d = ((m ^ (n << 21 | n >>> 43) ^ (o << 50 | o >>> 14)) >> 40) * 0x0.FFFFFEp-23f;
+        final float d = ((m ^ n ^ o) >> 40) * 5.2981893E-8f; //5.2981893E-8f == 0x0.FFFFFEp-23f * 0.4444444f
+
+//        final float start = (((seed += floor) ^ 0xD0E89D2D) * 0x1D2473 & 0xFFFFF) * 0x0.FFFFFp-19f - 1f,
+//                end = ((seed + 1 ^ 0xD0E89D2D) * 0x1D2473 & 0xFFFFF) * 0x0.FFFFFp-19f - 1f;
+        //similar to GLSL's fract()
+        t -= floor;
+        final float p = (d - c) - (a - b);
+        return (t * (t * t * p + t * ((a - b) - p) + (c - a)) + b);
+    }
     /**
      * Returns smooth 1D noise between -1 and 1.
      * @param seed any int; should not change for a given river
@@ -1566,6 +1607,11 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     private static float interpolate(final float start, final float end, final float a)
     {
         return (1f - a) * start + a * end;
+    }
+
+    private static float bicubicLerp(float a, float b, float c, float d, float t) {
+        float p = (d - c) - (a - b);
+        return t * (t * t * p + t * ((a - b) - p) + (c - a)) + b;
     }
 
     public static float prepare(double n)
@@ -5227,6 +5273,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int i = 0; i < width - 1; i++)
                             System.arraycopy(back[i+1], 0, back[i], 0, width);
                         Arrays.fill(back[width - 1], FLOAT_WHITE);
+                        if(false)
                     {
                         iBright = (int) ((257 + ctr) * 0x1.44cbc89p-8f) % BLUE_GREEN_SERIES.length;
                         bright = lerpFloatColors(BLUE_GREEN_SERIES[iBright].toFloatBits(),
@@ -5246,44 +5293,43 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         back[width - 3][half + 1 + iBright] = bright;
                     }
 
-                    if(false)
+                    if(true)
                     {
-                        int quart = half >> 1;
-                        iBright = (int) ((257 + ctr) * 0x1.44cbc89p-8f) % BLUE_GREEN_SERIES.length;
-                        bright = lerpFloatColors(BLUE_GREEN_SERIES[iBright].toFloatBits(),
-                                BLUE_GREEN_SERIES[(iBright + 1) % BLUE_GREEN_SERIES.length].toFloatBits(),
-                                (257 + ctr) * 0x1.44cbc89p-8f - (int) ((257 + ctr) * 0x1.44cbc89p-8f));
-                        iBright = (int) (swayRandomized(123, ctr * 0x3p-8f) * 0x.fp0f * half);
-                        back[width - 1][half - 1 + iBright] = bright;
-                        back[width - 1][half + 0 + iBright] = bright;
-                        back[width - 1][half + 1 + iBright] = bright;
-                        back[width - 2][half - 1 + iBright] = bright;
-                        back[width - 2][half + 0 + iBright] = bright;
-                        back[width - 2][half + 1 + iBright] = bright;
-                        back[width - 3][half - 1 + iBright] = bright;
-                        back[width - 3][half + 0 + iBright] = bright;
-                        back[width - 3][half + 1 + iBright] = bright;
-
-                        iBright = (int) ((257 + ctr) * 0x1.44cbc89p-8f) % RED_SERIES.length;
-                        bright = lerpFloatColors(RED_SERIES[iBright].toFloatBits(),
-                                RED_SERIES[(iBright + 1) % RED_SERIES.length].toFloatBits(),
-                                (257 + ctr) * 0x1.44cbc89p-8f - (int) ((257 + ctr) * 0x1.44cbc89p-8f));
-                        iBright = (int) (wiggle(123, ctr * 0x3p-8f) * 0x.fp0f * half);
-                        back[width - 1][half - 1 + iBright] = bright;
-                        back[width - 1][half + 0 + iBright] = bright;
-                        back[width - 1][half + 1 + iBright] = bright;
-                        back[width - 2][half - 1 + iBright] = bright;
-                        back[width - 2][half + 0 + iBright] = bright;
-                        back[width - 2][half + 1 + iBright] = bright;
-                        back[width - 3][half - 1 + iBright] = bright;
-                        back[width - 3][half + 0 + iBright] = bright;
-                        back[width - 3][half + 1 + iBright] = bright;
+//                        iBright = (int) ((257 + ctr) * 0x1.44cbc89p-8f) % BLUE_GREEN_SERIES.length;
+//                        bright = lerpFloatColors(BLUE_GREEN_SERIES[iBright].toFloatBits(),
+//                                BLUE_GREEN_SERIES[(iBright + 1) % BLUE_GREEN_SERIES.length].toFloatBits(),
+//                                (257 + ctr) * 0x1.44cbc89p-8f - (int) ((257 + ctr) * 0x1.44cbc89p-8f));
+//                        iBright = (int) (swayRandomized(123, ctr * 0x3p-8f) * 0x.fp0f * half);
+//                        back[width - 1][half - 1 + iBright] = bright;
+//                        back[width - 1][half + 0 + iBright] = bright;
+//                        back[width - 1][half + 1 + iBright] = bright;
+//                        back[width - 2][half - 1 + iBright] = bright;
+//                        back[width - 2][half + 0 + iBright] = bright;
+//                        back[width - 2][half + 1 + iBright] = bright;
+//                        back[width - 3][half - 1 + iBright] = bright;
+//                        back[width - 3][half + 0 + iBright] = bright;
+//                        back[width - 3][half + 1 + iBright] = bright;
+//
+//                        iBright = (int) ((257 + ctr) * 0x1.44cbc89p-8f) % RED_SERIES.length;
+//                        bright = lerpFloatColors(RED_SERIES[iBright].toFloatBits(),
+//                                RED_SERIES[(iBright + 1) % RED_SERIES.length].toFloatBits(),
+//                                (257 + ctr) * 0x1.44cbc89p-8f - (int) ((257 + ctr) * 0x1.44cbc89p-8f));
+//                        iBright = (int) (wiggle(123, ctr * 0x3p-8f) * 0x.fp0f * half);
+//                        back[width - 1][half - 1 + iBright] = bright;
+//                        back[width - 1][half + 0 + iBright] = bright;
+//                        back[width - 1][half + 1 + iBright] = bright;
+//                        back[width - 2][half - 1 + iBright] = bright;
+//                        back[width - 2][half + 0 + iBright] = bright;
+//                        back[width - 2][half + 1 + iBright] = bright;
+//                        back[width - 3][half - 1 + iBright] = bright;
+//                        back[width - 3][half + 0 + iBright] = bright;
+//                        back[width - 3][half + 1 + iBright] = bright;
 
                         iBright = (int) ((257 + ctr) * 0x1.44cbc89p-8f) % YELLOW_SERIES.length;
                         bright = lerpFloatColors(YELLOW_SERIES[iBright].toFloatBits(),
                                 YELLOW_SERIES[(iBright + 1) % YELLOW_SERIES.length].toFloatBits(),
                                 (257 + ctr) * 0x1.44cbc89p-8f - (int) ((257 + ctr) * 0x1.44cbc89p-8f));
-                        iBright = (int) (wiggle(123L, ctr * 0x3p-8f) * 0x.fp0f * half);
+                        iBright = (int) (bcSway(123L, ctr * 0x3p-8f) * 0x.fp0f * half);
                         back[width - 1][half - 1 + iBright] = bright;
                         back[width - 1][half + 0 + iBright] = bright;
                         back[width - 1][half + 1 + iBright] = bright;

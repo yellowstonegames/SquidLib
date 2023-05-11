@@ -88,14 +88,6 @@ public class ClassicNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D
         return xd * grad6d[hash] + yd * grad6d[hash + 1] + zd * grad6d[hash + 2]
                 + wd * grad6d[hash + 3] + ud * grad6d[hash + 4] + vd * grad6d[hash + 5];
     }
-    
-    
-//    protected static double gradCoord2DJitter(long seed, int x, int y,
-//                                              double xd, double yd) {
-//        final int hash = ((int)(((seed ^= 0xB4C4D * x ^ 0xEE2C3 * y) ^ seed >>> 13) * (seed)));
-//        final double[] grad = phiGrad2[hash >>> 24], jitter = phiGrad2[hash >>> 16 & 0xFF];
-//        return (xd + jitter[0] * 0.5) * grad[0] + (yd + jitter[1] * 0.5) * grad[1];
-//    }
 
     @Override
     public double getNoise(final double x, final double y) {
@@ -110,14 +102,13 @@ public class ClassicNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D
                 x0 = fastFloor(x),
                 y0 = fastFloor(y);
         final double xf = x - x0, yf = y - y0;
-        final double xa = Noise.emphasize(xf), ya = Noise.emphasize(yf);
-//        final double res =
+
+        final double xa = xf * xf * xf * (xf * (xf * 6.0 - 15.0) + 10.0);
+        final double ya = yf * yf * yf * (yf * (yf * 6.0 - 15.0) + 10.0);
         return
                 Noise.emphasizeSigned(lerp(lerp(gradCoord2D(seed, x0, y0, xf, yf), gradCoord2D(seed, x0+1, y0, xf - 1, yf), xa),
                                 lerp(gradCoord2D(seed, x0, y0+1, xf, yf-1), gradCoord2D(seed, x0+1, y0+1, xf - 1, yf - 1), xa),
                                 ya) * 1.4142);//* 0.875;// * 1.4142;
-//        if(res < -1.0 || res > 1.0) System.out.println(res);
-//        return res;
     }
 
     @Override
@@ -135,8 +126,10 @@ public class ClassicNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D
                 y0 = fastFloor(y),
                 z0 = fastFloor(z);
         final double xf = x - x0, yf = y - y0, zf = z - z0;
-        final double xa = Noise.emphasize(xf), ya = Noise.emphasize(yf), za = Noise.emphasize(zf);
-//        final double res =
+
+        final double xa = xf * xf * xf * (xf * (xf * 6.0 - 15.0) + 10.0);
+        final double ya = yf * yf * yf * (yf * (yf * 6.0 - 15.0) + 10.0);
+        final double za = zf * zf * zf * (zf * (zf * 6.0 - 15.0) + 10.0);
          return
                  Noise.emphasizeSigned(
                          lerp(
@@ -161,8 +154,6 @@ public class ClassicNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D
                                                  xa),
                                          ya),
                                  za) * 1.0625);
-//        if(res < -1 || res > 1) System.out.println(res);
-//        return res;
     }
 
     @Override
@@ -182,8 +173,11 @@ public class ClassicNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D
                 z0 = fastFloor(z),
                 w0 = fastFloor(w);
         final double xf = x - x0, yf = y - y0, zf = z - z0, wf = w - w0;
-        final double xa = Noise.emphasize(xf), ya = Noise.emphasize(yf), za = Noise.emphasize(zf), wa = Noise.emphasize(wf);
-//        final double res =
+
+        final double xa = xf * xf * xf * (xf * (xf * 6.0 - 15.0) + 10.0);
+        final double ya = yf * yf * yf * (yf * (yf * 6.0 - 15.0) + 10.0);
+        final double za = zf * zf * zf * (zf * (zf * 6.0 - 15.0) + 10.0);
+        final double wa = wf * wf * wf * (wf * (wf * 6.0 - 15.0) + 10.0);
         return
                 Noise.emphasizeSigned(
                         lerp(
@@ -232,8 +226,6 @@ public class ClassicNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D
                                                 ya),
                                         za),
                                 wa) * 0.555);
-//        if(res < -1 || res > 1) System.out.println(res);
-//        return res;
     }
 
 
@@ -256,20 +248,12 @@ public class ClassicNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D
                 w0 = fastFloor(w),
                 u0 = fastFloor(u);
         final double xf = x - x0, yf = y - y0, zf = z - z0, wf = w - w0, uf = u - u0;
-        //ad * ad * ad * (ad * (ad * 6.0 - 15.0) + 10.0)
+
         final double xa = xf * xf * xf * (xf * (xf * 6.0 - 15.0) + 10.0);
         final double ya = yf * yf * yf * (yf * (yf * 6.0 - 15.0) + 10.0);
         final double za = zf * zf * zf * (zf * (zf * 6.0 - 15.0) + 10.0);
         final double wa = wf * wf * wf * (wf * (wf * 6.0 - 15.0) + 10.0);
         final double ua = uf * uf * uf * (uf * (uf * 6.0 - 15.0) + 10.0);
-//
-//        final double xa = xf * xf * (3.0 - 2.0 * xf);
-//        final double ya = yf * yf * (3.0 - 2.0 * yf);
-//        final double za = zf * zf * (3.0 - 2.0 * zf);
-//        final double wa = wf * wf * (3.0 - 2.0 * wf);
-//        final double ua = uf * uf * (3.0 - 2.0 * uf);
-//
-//        final double res =
         return
                 Noise.emphasizeSigned(
                 lerp(lerp(
@@ -333,8 +317,6 @@ public class ClassicNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D
                                         za),
                                 wa),
                         ua) * 0.7777777 );
-//        if(res < -1 || res > 1) System.out.println(res);
-//        return res;
     }
 
     @Override
@@ -364,7 +346,6 @@ public class ClassicNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D
         final double wa = wf * wf * wf * (wf * (wf * 6.0 - 15.0) + 10.0);
         final double ua = uf * uf * uf * (uf * (uf * 6.0 - 15.0) + 10.0);
         final double va = vf * vf * vf * (vf * (vf * 6.0 - 15.0) + 10.0);
-//        final double res =
         return Noise.emphasizeSigned(
                 lerp(
                         lerp(
@@ -492,7 +473,5 @@ public class ClassicNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D
                                         wa),
                                 ua),
                         va) * 1.61);
-//        if(res < -1 || res > 1) System.out.println(res);
-//        return res;
     }
 }

@@ -72,9 +72,9 @@ public class FakeLanguageGen implements Serializable {
     private static final OrderedMap<String, FakeLanguageGen> registry = new OrderedMap<>(64, Hashers.caseInsensitiveStringHasher);
     protected String summary;
     protected String name = "Nameless Language";
-    private static final transient StringBuilder sb = new StringBuilder(20);
-    private static final transient StringBuilder ender = new StringBuilder(12);
-    private static final transient StringBuilder ssb = new StringBuilder(80);
+    private static final StringBuilder sb = new StringBuilder(20);
+    private static final StringBuilder ender = new StringBuilder(12);
+    private static final StringBuilder ssb = new StringBuilder(80);
     /**
      * A pattern String that will match any vowel FakeLanguageGen can produce out-of-the-box, including Latin, Greek,
      * and Cyrillic; for use when a String will be interpreted as a regex (as in {@link FakeLanguageGen.Alteration}).
@@ -98,9 +98,8 @@ public class FakeLanguageGen implements Serializable {
      * {@link FakeLanguageGen.Alteration}).
      */
     anyConsonantCluster = anyConsonant + '+';
-    protected static final Pattern repeats = Pattern.compile("(.)\\1+"),
-            vowelClusters = Pattern.compile(anyVowelCluster, REFlags.IGNORE_CASE | REFlags.UNICODE),
-            consonantClusters = Pattern.compile(anyConsonantCluster, REFlags.IGNORE_CASE | REFlags.UNICODE);
+    protected static final Pattern repeats = Pattern.compile("(.)\\1+");
+    protected static final Pattern vowelClusters = Pattern.compile(anyVowelCluster, REFlags.IGNORE_CASE | REFlags.UNICODE);
     //latin
     //àáâãäåæāăąǻǽaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőœǿoùúûüũūŭůűųuýÿŷỳybcçćĉċčdþðďđfgĝğġģhĥħjĵȷkķlĺļľŀłmnñńņňŋpqrŕŗřsśŝşšștţťțvwŵẁẃẅxyýÿŷỳzźżž
     //ÀÁÂÃÄÅÆĀĂĄǺǼAÈÉÊËĒĔĖĘĚEÌÍÎÏĨĪĬĮIIÒÓÔÕÖØŌŎŐŒǾOÙÚÛÜŨŪŬŮŰŲUÝŸŶỲYBCÇĆĈĊČDÞÐĎĐFGĜĞĠĢHĤĦJĴȷKĶLĹĻĽĿŁMNÑŃŅŇŊPQRŔŖŘSŚŜŞŠȘTŢŤȚVWŴẀẂẄXYÝŸŶỲZŹŻŽṚṜḶḸḌṬṄṆṢṂḤ
@@ -826,9 +825,10 @@ public class FakeLanguageGen implements Serializable {
      * languages when using this or any of the generators. Many fantasy tropes come from older literature written with
      * major cultural biases, and real-world cultural elements can be much more interesting to players than yet another
      * depiction of a "jungle savage" with stereotypical traits. Consider drawing from existing lists of real-world
-     * technological discoveries, like https://en.wikipedia.org/wiki/History_of_science_and_technology_in_Africa , for
-     * inspiration when world-building; though some groups may not have developed agriculture by early medieval times,
-     * their neighbors may be working iron and studying astronomy just a short distance away.
+     * technological discoveries, like
+     * <a href="https://en.wikipedia.org/wiki/History_of_science_and_technology_in_Africa">this list on Wikipedia</a>,
+     * for inspiration when world-building; though some groups may not have developed agriculture by early medieval
+     * times, their neighbors may be working iron and studying astronomy just a short distance away.
      * <br>
      * Kondueyu; ma mpiyamdabota mise-mise nizakwaja alamsa amja, homa nkajupomba.
      */
@@ -5092,7 +5092,7 @@ public class FakeLanguageGen implements Serializable {
 
     public static class Modifier implements Serializable {
         private static final long serialVersionUID = 1734863678490422371L;
-        private transient static final StringBuilder modSB = new StringBuilder(32);
+        private static final StringBuilder modSB = new StringBuilder(32);
         public final Alteration[] alterations;
 
         public Modifier() {
