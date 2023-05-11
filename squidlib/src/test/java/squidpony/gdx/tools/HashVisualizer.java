@@ -1417,6 +1417,28 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     }
 
     /**
+     * Sway using bicubic interpolation between 4 points (the two integers before t and the two after).
+     * @param seed any int
+     * @param t a distance traveled; should change by less than 1 between calls, and should be less than about 10000
+     * @return a smoothly-interpolated swaying value between -1 and 1
+     */
+    // BAD, don't use without further changes. This repeatedly rises for several values, then drops once, then rises...
+    public static float bcSway3(int seed, float t)
+    {
+        final int floor = ((int)(t + 0x1p14) - 0x4000);
+        long s = seed + 0x9E3779B97F4A7C15L + floor * 0xD1342543DE82EF95L;
+
+        final float a = ((s) >> 40) * 5.2981893E-8f; //5.2981893E-8f == 0x0.FFFFFEp-23f * 0.4444444f
+        final float b = ((s + 0xD1342543DE82EF95L) >> 40) * 5.2981893E-8f; //5.2981893E-8f == 0x0.FFFFFEp-23f * 0.4444444f
+        final float c = ((s + 0xA2684A87BD05DF2AL) >> 40) * 5.2981893E-8f; //5.2981893E-8f == 0x0.FFFFFEp-23f * 0.4444444f
+        final float d = ((s + 0x739C6FCB9B88CEBFL) >> 40) * 5.2981893E-8f; //5.2981893E-8f == 0x0.FFFFFEp-23f * 0.4444444f
+
+        t -= floor;
+        final float p = (d - c) - (a - b);
+        return (t * (t * t * p + t * ((a - b) - p) + (c - a)) + b);
+    }
+
+    /**
      * Returns smooth 1D noise between -1 and 1.
      * @param seed any int; should not change for a given river
      * @param value a float that should change gradually, by smaller steps than 0.2 probably
@@ -5340,6 +5362,21 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 //                        back[width - 3][half - 1 + iBright] = bright;
 //                        back[width - 3][half + 0 + iBright] = bright;
 //                        back[width - 3][half + 1 + iBright] = bright;
+
+                        iBright = (int) ((257 + ctr) * 0x1.44cbc89p-8f) % BLUE_GREEN_SERIES.length;
+                        bright = lerpFloatColors(BLUE_GREEN_SERIES[iBright].toFloatBits(),
+                                BLUE_GREEN_SERIES[(iBright + 1) % BLUE_GREEN_SERIES.length].toFloatBits(),
+                                (257 + ctr) * 0x1.44cbc89p-8f - (int) ((257 + ctr) * 0x1.44cbc89p-8f));
+                        iBright = (int) (bcSway3(123, ctr * 0x3p-8f) * 0x.fp0f * half);
+                        back[width - 1][half - 1 + iBright] = bright;
+                        back[width - 1][half + 0 + iBright] = bright;
+                        back[width - 1][half + 1 + iBright] = bright;
+                        back[width - 2][half - 1 + iBright] = bright;
+                        back[width - 2][half + 0 + iBright] = bright;
+                        back[width - 2][half + 1 + iBright] = bright;
+                        back[width - 3][half - 1 + iBright] = bright;
+                        back[width - 3][half + 0 + iBright] = bright;
+                        back[width - 3][half + 1 + iBright] = bright;
 
                         iBright = (int) ((257 + ctr) * 0x1.44cbc89p-8f) % RED_SERIES.length;
                         bright = lerpFloatColors(RED_SERIES[iBright].toFloatBits(),
