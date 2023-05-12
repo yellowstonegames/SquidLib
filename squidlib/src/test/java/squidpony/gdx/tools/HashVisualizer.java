@@ -1361,35 +1361,41 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     }
 
     /**
-     * Sway using bicubic interpolation between 4 points (the two integers before t and the two after).
-     * @param seed any long
+     * Sway smoothly using bicubic interpolation between 4 points (the two integers before t and the two after).
+     * This pretty much never produces steep changes between peaks and valleys; this may make it more useful for things
+     * like generating terrain that can be walked across in a side-scrolling game.
+     * @param seed any int
      * @param t a distance traveled; should change by less than 1 between calls, and should be less than about 10000
      * @return a smoothly-interpolated swaying value between -1 and 1
      */
-    public static float bcSway(long seed, float t)
+    public static float bcSway(int seed, float t)
     {
-        //int fast floor, from libGDX
+        // int fast floor, from libGDX
         final int floor = ((int)(t + 0x1p14) - 0x4000);
-        seed = seed * 0xD1342543DE82EF95L + 0x9E3779B97F4A7C15L;
-        long m = seed + floor * 0xD1B54A32D192ED03L;
-        long n = seed + floor * 0xABC98388FB8FAC03L;
-        long o = seed + floor * 0x8CB92BA72F3D8DD7L;
+        // what we add here ensures that at the very least, the upper half will have some non-zero bits.
+        long s = seed + 0x9E3779B97F4A7C15L;
+        // this is, somewhat surprisingly, a bijection, and can be reversed. 2 to the 32 s-values are possible.
+        s ^= (s << 21 | s >>> 43) ^ (s << 50 | s >>> 14);
+        long m = (s + floor) * 0xD1B54A32D192ED03L;
+        long n = (s + floor) * 0xABC98388FB8FAC03L;
+        long o = (s + floor) * 0x8CB92BA72F3D8DD7L;
 
-        final float a = ((m ^ n ^ o) >> 40) * 5.2981893E-8f; //5.2981893E-8f == 0x0.FFFFFEp-23f * 0.4444444f
+        final float a = (m ^ n ^ o) * 4.8186754E-20f; //4.8186754E-20f == 0x0.FFFFFFp-63f * 0.4444444f
         m += 0xD1B54A32D192ED03L;
         n += 0xABC98388FB8FAC03L;
         o += 0x8CB92BA72F3D8DD7L;
-        final float b = ((m ^ n ^ o) >> 40) * 5.2981893E-8f; //5.2981893E-8f == 0x0.FFFFFEp-23f * 0.4444444f
+        final float b = (m ^ n ^ o) * 4.8186754E-20f; //4.8186754E-20f == 0x0.FFFFFFp-63f * 0.4444444f
         m += 0xD1B54A32D192ED03L;
         n += 0xABC98388FB8FAC03L;
         o += 0x8CB92BA72F3D8DD7L;
-        final float c = ((m ^ n ^ o) >> 40) * 5.2981893E-8f; //5.2981893E-8f == 0x0.FFFFFEp-23f * 0.4444444f
+        final float c = (m ^ n ^ o) * 4.8186754E-20f; //4.8186754E-20f == 0x0.FFFFFFp-63f * 0.4444444f
         m += 0xD1B54A32D192ED03L;
         n += 0xABC98388FB8FAC03L;
         o += 0x8CB92BA72F3D8DD7L;
-        final float d = ((m ^ n ^ o) >> 40) * 5.2981893E-8f; //5.2981893E-8f == 0x0.FFFFFEp-23f * 0.4444444f
+        final float d = (m ^ n ^ o) * 4.8186754E-20f; //4.8186754E-20f == 0x0.FFFFFFp-63f * 0.4444444f
 
         t -= floor;
+        // this is bicubic interpolation, inlined
         final float p = (d - c) - (a - b);
         return (t * (t * t * p + t * ((a - b) - p) + (c - a)) + b);
     }
@@ -5363,21 +5369,6 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 //                        back[width - 3][half + 0 + iBright] = bright;
 //                        back[width - 3][half + 1 + iBright] = bright;
 
-                        iBright = (int) ((257 + ctr) * 0x1.44cbc89p-8f) % BLUE_GREEN_SERIES.length;
-                        bright = lerpFloatColors(BLUE_GREEN_SERIES[iBright].toFloatBits(),
-                                BLUE_GREEN_SERIES[(iBright + 1) % BLUE_GREEN_SERIES.length].toFloatBits(),
-                                (257 + ctr) * 0x1.44cbc89p-8f - (int) ((257 + ctr) * 0x1.44cbc89p-8f));
-                        iBright = (int) (bcSway3(123, ctr * 0x3p-8f) * 0x.fp0f * half);
-                        back[width - 1][half - 1 + iBright] = bright;
-                        back[width - 1][half + 0 + iBright] = bright;
-                        back[width - 1][half + 1 + iBright] = bright;
-                        back[width - 2][half - 1 + iBright] = bright;
-                        back[width - 2][half + 0 + iBright] = bright;
-                        back[width - 2][half + 1 + iBright] = bright;
-                        back[width - 3][half - 1 + iBright] = bright;
-                        back[width - 3][half + 0 + iBright] = bright;
-                        back[width - 3][half + 1 + iBright] = bright;
-
                         iBright = (int) ((257 + ctr) * 0x1.44cbc89p-8f) % RED_SERIES.length;
                         bright = lerpFloatColors(RED_SERIES[iBright].toFloatBits(),
                                 RED_SERIES[(iBright + 1) % RED_SERIES.length].toFloatBits(),
@@ -5397,7 +5388,22 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         bright = lerpFloatColors(YELLOW_SERIES[iBright].toFloatBits(),
                                 YELLOW_SERIES[(iBright + 1) % YELLOW_SERIES.length].toFloatBits(),
                                 (257 + ctr) * 0x1.44cbc89p-8f - (int) ((257 + ctr) * 0x1.44cbc89p-8f));
-                        iBright = (int) (bcSway(123L, ctr * 0x3p-8f) * 0x.fp0f * half);
+                        iBright = (int) (bcSway(123, ctr * 0x3p-8f) * 0x.fp0f * half);
+                        back[width - 1][half - 1 + iBright] = bright;
+                        back[width - 1][half + 0 + iBright] = bright;
+                        back[width - 1][half + 1 + iBright] = bright;
+                        back[width - 2][half - 1 + iBright] = bright;
+                        back[width - 2][half + 0 + iBright] = bright;
+                        back[width - 2][half + 1 + iBright] = bright;
+                        back[width - 3][half - 1 + iBright] = bright;
+                        back[width - 3][half + 0 + iBright] = bright;
+                        back[width - 3][half + 1 + iBright] = bright;
+
+                        iBright = (int) ((257 + ctr) * 0x1.44cbc89p-8f) % BLUE_GREEN_SERIES.length;
+                        bright = lerpFloatColors(BLUE_GREEN_SERIES[iBright].toFloatBits(),
+                                BLUE_GREEN_SERIES[(iBright + 1) % BLUE_GREEN_SERIES.length].toFloatBits(),
+                                (257 + ctr) * 0x1.44cbc89p-8f - (int) ((257 + ctr) * 0x1.44cbc89p-8f));
+                        iBright = (int) (bcSway(124, ctr * 0x3p-8f) * 0x.fp0f * half);
                         back[width - 1][half - 1 + iBright] = bright;
                         back[width - 1][half + 0 + iBright] = bright;
                         back[width - 1][half + 1 + iBright] = bright;
