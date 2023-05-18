@@ -75,10 +75,14 @@ public class PyrNoise implements Noise.Noise2D, Noise.Noise3D,
             x += ya - 0.5;
             ya += ya;
             x /= ya;
+            // Cubic
 //            x *= x * (3 - 2 * x);
 //            ya *= ya * (3 - 2 * ya);
-            x = Noise.extreme(x);
-            ya = Noise.extreme(ya);
+
+            // Quintic
+//            x = Noise.extreme(x);
+//            ya = Noise.extreme(ya);
+
 //            ya = Math.sqrt(ya);
 
 //            ya = (ya - 0.5);
@@ -97,6 +101,7 @@ public class PyrNoise implements Noise.Noise2D, Noise.Noise3D,
 //                    + x * (ya * hashPart1024(xFloor + STEPX + STEPX, yFloor, seed) + cc))
 //                    * (0x1.0040100401004p-10);
 
+//            ya *= ya;
             return (ya * ((1 - x) * hashPart1024(xFloor, yFloor, seed) + x * hashPart1024(xFloor + STEPX + STEPX, yFloor, seed))
                     + (1 - ya) * cap) * (0x1.0040100401004p-10);
         }
@@ -108,10 +113,14 @@ public class PyrNoise implements Noise.Noise2D, Noise.Noise3D,
             y += xa - 0.5;
             xa += xa;
             y /= xa;
+
+            // Cubic
 //            y *= y * (3 - 2 * y);
 //            xa *= xa * (3 - 2 * xa);
-            y = Noise.extreme(y);
-            xa = Noise.extreme(xa);
+
+            // Quintic
+//            y = Noise.extreme(y);
+//            xa = Noise.extreme(xa);
 
 //            xa = Math.sqrt(xa);
 
@@ -129,6 +138,7 @@ public class PyrNoise implements Noise.Noise2D, Noise.Noise3D,
 //            double cc = (1 - xa) * cap;
 //            return ((1 - y) * (xa * hashPart1024(xFloor, yFloor, seed) + cc)
 //                    + y * (xa * hashPart1024(xFloor, yFloor + STEPY + STEPY, seed) + cc)) * (0x1.0040100401004p-10);
+//            xa *= xa;
             return (xa * ((1 - y) * hashPart1024(xFloor, yFloor, seed) + y * hashPart1024(xFloor, yFloor + STEPY + STEPY, seed))
                     + (1 - xa) * cap) * (0x1.0040100401004p-10);
         }

@@ -30,16 +30,17 @@ public class NoiseVarietyVisualizer extends ApplicationAdapter {
     private ValueNoise value = new ValueNoise(1234567890);
     private LumpNoise lump = new LumpNoise(1234567890);
     private WeavingNoise weave = new WeavingNoise(1234567890);
+    private PyrNoise pyr = new PyrNoise(1234567890);
 
-    private Noise.Noise2D[] noises2 = {weave, foam, simplex, value, classic};
-    private Noise.Noise3D[] noises3 = {weave, foam, simplex, value, classic};
-    private Noise.Noise4D[] noises4 = {weave, foam, simplex, value, classic};
-    private Noise.Noise5D[] noises5 = {weave, foam, simplex, value, classic};
-    private Noise.Noise6D[] noises6 = {weave, foam, simplex, value, classic};
+    private Noise.Noise2D[] noises2 = {weave, foam, simplex, value, classic, pyr, octo, lump};
+    private Noise.Noise3D[] noises3 = {weave, foam, simplex, value, classic, pyr, octo, lump};
+    private Noise.Noise4D[] noises4 = {weave, foam, simplex, value, classic, pyr, octo, lump};
+    private Noise.Noise5D[] noises5 = {weave, foam, simplex, value, classic, pyr, octo, lump};
+    private Noise.Noise6D[] noises6 = {weave, foam, simplex, value, classic, pyr, octo, lump};
 
 //    private HashedValueNoise value = new HashedValueNoise(new FlawedPointHash.CubeHash(1234567890, 32));
 //    private FastNoise value = new FastNoise(1234567890, 1f, FastNoise.VALUE, 1);
-    private int noiseType = 0; // 0 for classic, 1 for wave, 2 for fast, 3 for experimental
+    private int noiseType = 5; // 0 for classic, 1 for wave, 2 for fast, 3 for experimental
     private int dim = 0; // this can be 0, 1, or 2; add 2 to get the actual dimensions
     private int octaves = 0;
     private float freq = (float) Math.exp(-4.0);
@@ -117,12 +118,12 @@ public class NoiseVarietyVisualizer extends ApplicationAdapter {
                         seed += 0x9E3779B97F4A7C15L;
                         break;
                     case MINUS:
-                        noiseType = (noiseType + 4) % 5;
+                        noiseType = (noiseType + 7) % 8;
                         break;
                     case N: // noise type
                     case EQUALS:
                     case ENTER:
-                        noiseType = (noiseType + 1)  % 5;
+                        noiseType = (noiseType + 1) % 8;
                         break;
                     case D: //dimension
                         dim = (dim + 1) % 5;
