@@ -38,7 +38,7 @@ public class SparseLightingDemo2 extends ApplicationAdapter{
     private StatefulRNG rng;
     private Stage stage;
     private FilterBatch batch;
-    private ArrayList<Color> colors, mColors;
+    private ArrayList<Color> colors;
     private int colorIndex;
     private Coord[] points;
     private int[] offsets;
@@ -62,7 +62,6 @@ public class SparseLightingDemo2 extends ApplicationAdapter{
         //layers.setTextSize(cellWidth + 1, cellHeight + 2);
         //colors = DefaultResources.getSCC().rainbow(0.2f, 1.0f, 144);
         colors = DefaultResources.getSCC().rainbow(0.85f, 1.0f, 512);
-        mColors = DefaultResources.getSCC().loopingGradient(SColor.BLACK, SColor.WHITE, 523);
         //colors.addAll(DefaultResources.getSCC().zigzagGradient(Color.MAGENTA, Color.RED, 200));
         //PacMazeGenerator maze = new PacMazeGenerator(gridWidth, gridHeight, rng);
         //OrganicMapGenerator org = new OrganicMapGenerator(gridWidth, gridHeight, rng);

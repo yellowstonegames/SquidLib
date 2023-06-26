@@ -6,7 +6,7 @@ import squidpony.StringKit;
 import squidpony.Thesaurus;
 import squidpony.squidmath.GWTRNG;
 
-import java.util.TreeSet;
+import java.math.BigInteger;
 
 /**
  * Created by Tommy Ettinger on 5/23/2016.
@@ -98,6 +98,11 @@ public class ThesaurusTest {
                 System.out.println("Mnemonic(" + j + "), encoding " + StringKit.hex(a) + ": "+ words + ", decoding to " + StringKit.hex(m[j].fromWordMnemonic(words)));
             }
         }
+        System.out.println();
+        System.out.println("Noun count:  " + m[0].allNouns.size() + ", Adjective count: " + m[0].allAdjectives.size());
+        System.out.println("Max size:    " + BigInteger.valueOf(m[0].allNouns.size()).pow(4).multiply(BigInteger.valueOf(m[0].allAdjectives.size()).pow(4)).multiply(BigInteger.valueOf(4L)));
+        System.out.println("Needs to be: " + new BigInteger("10000000000000000", 16));
+        System.out.println();
         text.setLength(0);
         for (int i = 0; i < 60; i++) {
             text.append("vegetable`term`, ");
