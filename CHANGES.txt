@@ -1,3 +1,25 @@
+3.0.7-SNAPSHOT
+Dependencies:
+ - squidlib-util: RegExodus 0.1.15
+ - squidlib: libGDX 1.12.0, anim8-gdx 0.4.0
+ - squidlib-extra: libGDX 1.12.0
+Changes:
+ - A bug in SparseLayers was fixed that affected recallToGrid().
+ - A long-standing bug in AOE code and CoordPacker was fixed that involved bitwise stuff (ints used where longs should have been instead).
+
+3.0.6
+Dependencies:
+ - squidlib-util: RegExodus 0.1.14
+ - squidlib: libGDX 1.11.0, anim8-gdx 0.3.12
+ - squidlib-extra: libGDX 1.11.0
+Changes:
+ - There's a lot of small updates here, but most of them only changed tests.
+ - A very long-standing bug in DijkstraMap has been fixed; it affected how corners blocked (or didn't) movement.
+ - Another bug was fixed in 4D ridged cubic noise using FastNoise, where I think it ignored the w axis.
+ - 2D PhantomNoise using noise2D() was badly broken and now works.
+ - The change to using lsans-15.png in libGDX is handled now in TextCellFactory.
+ - There's probably a few more small things...
+
 3.0.5
 Dependencies:
  - squidlib-util: RegExodus 0.1.13

@@ -80,8 +80,8 @@ public class PyrNoise implements Noise.Noise2D, Noise.Noise3D,
 //            ya *= ya * (3 - 2 * ya);
 
             // Quintic
-//            x = Noise.extreme(x);
-//            ya = Noise.extreme(ya);
+            x = Noise.extreme(x);
+            ya = Noise.extreme(ya);
 
 //            ya = Math.sqrt(ya);
 
@@ -119,8 +119,8 @@ public class PyrNoise implements Noise.Noise2D, Noise.Noise3D,
 //            xa *= xa * (3 - 2 * xa);
 
             // Quintic
-//            y = Noise.extreme(y);
-//            xa = Noise.extreme(xa);
+            y = Noise.extreme(y);
+            xa = Noise.extreme(xa);
 
 //            xa = Math.sqrt(xa);
 
