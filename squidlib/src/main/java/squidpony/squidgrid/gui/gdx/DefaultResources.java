@@ -378,7 +378,7 @@ public class DefaultResources implements LifecycleListener {
 
     private static DefaultResources instance;
 
-    static BitmapFont copyFont(BitmapFont font)
+    public static BitmapFont copyFont(BitmapFont font)
     {
         if(font == null) return new BitmapFont();
         return new BitmapFont(new BitmapFont.BitmapFontData(font.getData().getFontFile(), false),

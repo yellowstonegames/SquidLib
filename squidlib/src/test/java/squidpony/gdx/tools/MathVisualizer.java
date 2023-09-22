@@ -24,7 +24,7 @@ import java.util.Random;
  * Created by Tommy Ettinger on 1/13/2018.
  */
 public class MathVisualizer extends ApplicationAdapter {
-    private int mode = 66;
+    private int mode = 52;
     private int modes = 70;
     private FilterBatch batch;
     private SparseLayers layers;
@@ -2268,9 +2268,9 @@ public class MathVisualizer extends ApplicationAdapter {
             break;
             case 51: {
                 Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
-                        " Whisker, bits of 2.0*(nextDouble()-0.5) at " + Gdx.graphics.getFramesPerSecond() + " FPS");
+                        " Whisker, bits of nextDouble() at " + Gdx.graphics.getFramesPerSecond() + " FPS");
                 for (int i = 0; i < 0x10000; i++) {
-                    long bits = Double.doubleToLongBits(2.0*(whisker.nextDouble()-0.5));
+                    long bits = Double.doubleToLongBits(whisker.nextDouble());
                     for (int j = 0, jj = 504; j < 64; j++, jj -= 8) {
                         if (1L == (bits >>> j & 1L))
                             amounts[jj] = amounts[jj + 1] = amounts[jj + 2] = amounts[jj + 3]
@@ -2293,6 +2293,36 @@ public class MathVisualizer extends ApplicationAdapter {
                         layers.backgrounds[i][j] = -0x1.7677e8p125F;
                     }
                 }
+
+
+//                Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
+//                        " Whisker, bits of 2.0*(nextDouble()-0.5) at " + Gdx.graphics.getFramesPerSecond() + " FPS");
+//                for (int i = 0; i < 0x10000; i++) {
+//                    long bits = Double.doubleToLongBits(2.0*(whisker.nextDouble()-0.5));
+//                    for (int j = 0, jj = 504; j < 64; j++, jj -= 8) {
+//                        if (1L == (bits >>> j & 1L))
+//                            amounts[jj] = amounts[jj + 1] = amounts[jj + 2] = amounts[jj + 3]
+//                                    = amounts[jj + 4] = amounts[jj + 5] = ++amounts[jj + 6];
+//                    }
+//                }
+//                for (int i = 0; i < 512; i++) {
+//                    if ((i & 7) == 3) {
+//                        for (int j = 510 - (amounts[i] >> 8); j < 520; j++) {
+//                            layers.backgrounds[i][j] = -0x1.c98066p126F;
+//                        }
+//                    } else {
+//                        for (int j = 519 - (amounts[i] >> 8); j < 520; j++) {
+//                            layers.backgrounds[i][j] = -0x1.d08864p126F;
+//                        }
+//                    }
+//                }
+//                for (int i = 0; i < 10; i++) {
+//                    for (int j = 8; j < 520; j += 32) {
+//                        layers.backgrounds[i][j] = -0x1.7677e8p125F;
+//                    }
+//                }
+
+
 //                Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
 //                        " RandomXS128, bits of inclusiveDouble() at " + Gdx.graphics.getFramesPerSecond() + " FPS");
 //                for (int i = 0; i < 0x10000; i++) {
@@ -2349,32 +2379,33 @@ public class MathVisualizer extends ApplicationAdapter {
             }
             break;
             case 52: {
-                Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
-                        " Whisker, bits of nextExclusiveSignedDouble() at " + Gdx.graphics.getFramesPerSecond() + " FPS");
-                for (int i = 0; i < 0x10000; i++) {
-                    long bits = Double.doubleToLongBits(nextExclusiveSignedDouble());
-                    for (int j = 0, jj = 504; j < 64; j++, jj -= 8) {
-                        if (1L == (bits >>> j & 1L))
-                            amounts[jj] = amounts[jj + 1] = amounts[jj + 2] = amounts[jj + 3]
-                                    = amounts[jj + 4] = amounts[jj + 5] = ++amounts[jj + 6];
-                    }
-                }
-                for (int i = 0; i < 512; i++) {
-                    if ((i & 7) == 3) {
-                        for (int j = 510 - (amounts[i] >> 8); j < 520; j++) {
-                            layers.backgrounds[i][j] = -0x1.c98066p126F;
-                        }
-                    } else {
-                        for (int j = 519 - (amounts[i] >> 8); j < 520; j++) {
-                            layers.backgrounds[i][j] = -0x1.d08864p126F;
-                        }
-                    }
-                }
-                for (int i = 0; i < 10; i++) {
-                    for (int j = 8; j < 520; j += 32) {
-                        layers.backgrounds[i][j] = -0x1.7677e8p125F;
-                    }
-                }
+//                Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
+//                        " Whisker, bits of nextExclusiveSignedDouble() at " + Gdx.graphics.getFramesPerSecond() + " FPS");
+//                for (int i = 0; i < 0x10000; i++) {
+//                    long bits = Double.doubleToLongBits(nextExclusiveSignedDouble());
+//                    for (int j = 0, jj = 504; j < 64; j++, jj -= 8) {
+//                        if (1L == (bits >>> j & 1L))
+//                            amounts[jj] = amounts[jj + 1] = amounts[jj + 2] = amounts[jj + 3]
+//                                    = amounts[jj + 4] = amounts[jj + 5] = ++amounts[jj + 6];
+//                    }
+//                }
+//                for (int i = 0; i < 512; i++) {
+//                    if ((i & 7) == 3) {
+//                        for (int j = 510 - (amounts[i] >> 8); j < 520; j++) {
+//                            layers.backgrounds[i][j] = -0x1.c98066p126F;
+//                        }
+//                    } else {
+//                        for (int j = 519 - (amounts[i] >> 8); j < 520; j++) {
+//                            layers.backgrounds[i][j] = -0x1.d08864p126F;
+//                        }
+//                    }
+//                }
+//                for (int i = 0; i < 10; i++) {
+//                    for (int j = 8; j < 520; j += 32) {
+//                        layers.backgrounds[i][j] = -0x1.7677e8p125F;
+//                    }
+//                }
+
 //                Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
 //                        " RandomXS128, bits of inclusiveDouble2() at " + Gdx.graphics.getFramesPerSecond() + " FPS");
 //                for (int i = 0; i < 0x10000; i++) {
@@ -2401,6 +2432,7 @@ public class MathVisualizer extends ApplicationAdapter {
 //                        layers.backgrounds[i][j] = -0x1.7677e8p125F;
 //                    }
 //                }
+
 //                Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
 //                        " RandomXS128, bits of nextExclusiveDouble() at " + Gdx.graphics.getFramesPerSecond() + " FPS");
 //                for (int i = 0; i < 0x10000; i++) {
@@ -2427,6 +2459,34 @@ public class MathVisualizer extends ApplicationAdapter {
 //                        layers.backgrounds[i][j] = -0x1.7677e8p125F;
 //                    }
 //                }
+
+                Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
+                        " RandomXS128, bits of mantissa-twiddling at " + Gdx.graphics.getFramesPerSecond() + " FPS");
+                for (int i = 0; i < 0x10000; i++) {
+                    int bits = Float.floatToIntBits(Float.intBitsToFloat(0x7F << 23 | xs128.nextInt() >>> 9) - 1f);
+                    for (int j = 0, jj = 504 - 128; j < 32; j++, jj -= 8) {
+                        if (1 == (bits >>> j & 1))
+                            amounts[jj] = amounts[jj + 1] = amounts[jj + 2] = amounts[jj + 3]
+                                    = amounts[jj + 4] = amounts[jj + 5] = ++amounts[jj + 6];
+                    }
+                }
+                for (int i = 0; i < 512; i++) {
+                    if ((i & 7) == 3) {
+                        for (int j = 510 - (amounts[i] >> 8); j < 520; j++) {
+                            layers.backgrounds[i][j] = -0x1.c98066p126F;
+                        }
+                    } else {
+                        for (int j = 519 - (amounts[i] >> 8); j < 520; j++) {
+                            layers.backgrounds[i][j] = -0x1.d08864p126F;
+                        }
+                    }
+                }
+                for (int i = 0; i < 10; i++) {
+                    for (int j = 8; j < 520; j += 32) {
+                        layers.backgrounds[i][j] = -0x1.7677e8p125F;
+                    }
+                }
+
             }
             break;
             case 53: {
@@ -2458,10 +2518,39 @@ public class MathVisualizer extends ApplicationAdapter {
 //                }
 //            }
 
+    //Float.intBitsToFloat(0x7F << 23 | xs128.nextInt() >>> 9) - 1f;
+                Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
+                        " RandomXS128, bits of nextExclusiveFloat() at " + Gdx.graphics.getFramesPerSecond() + " FPS");
+                for (int i = 0; i < 0x10000; i++) {
+                    int bits = Float.floatToIntBits(nextExclusiveFloat());
+                    for (int j = 0, jj = 504 - 128; j < 32; j++, jj -= 8) {
+                        if (1 == (bits >>> j & 1))
+                            amounts[jj] = amounts[jj + 1] = amounts[jj + 2] = amounts[jj + 3]
+                                    = amounts[jj + 4] = amounts[jj + 5] = ++amounts[jj + 6];
+                    }
+                }
+                for (int i = 0; i < 512; i++) {
+                    if ((i & 7) == 3) {
+                        for (int j = 510 - (amounts[i] >> 8); j < 520; j++) {
+                            layers.backgrounds[i][j] = -0x1.c98066p126F;
+                        }
+                    } else {
+                        for (int j = 519 - (amounts[i] >> 8); j < 520; j++) {
+                            layers.backgrounds[i][j] = -0x1.d08864p126F;
+                        }
+                    }
+                }
+                for (int i = 0; i < 10; i++) {
+                    for (int j = 8; j < 520; j += 32) {
+                        layers.backgrounds[i][j] = -0x1.7677e8p125F;
+                    }
+                }
+
 //                Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
-//                        " RandomXS128, bits of nextExclusiveFloat() at " + Gdx.graphics.getFramesPerSecond() + " FPS");
+//                        " Whisker, bits of 2f*(nextFloat()-0.5f) at " + Gdx.graphics.getFramesPerSecond() + " FPS");
+//                //DiverRNG diver = new DiverRNG();
 //                for (int i = 0; i < 0x10000; i++) {
-//                    int bits = Float.floatToIntBits(nextExclusiveFloat());
+//                    int bits = Float.floatToIntBits(2f * (whisker.nextFloat() - 0.5f));
 //                    for (int j = 0, jj = 504 - 128; j < 32; j++, jj -= 8) {
 //                        if (1 == (bits >>> j & 1))
 //                            amounts[jj] = amounts[jj + 1] = amounts[jj + 2] = amounts[jj + 3]
@@ -2485,33 +2574,6 @@ public class MathVisualizer extends ApplicationAdapter {
 //                    }
 //                }
 
-                Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
-                        " Whisker, bits of 2f*(nextFloat()-0.5f) at " + Gdx.graphics.getFramesPerSecond() + " FPS");
-                //DiverRNG diver = new DiverRNG();
-                for (int i = 0; i < 0x10000; i++) {
-                    int bits = Float.floatToIntBits(2f * (whisker.nextFloat() - 0.5f));
-                    for (int j = 0, jj = 504 - 128; j < 32; j++, jj -= 8) {
-                        if (1 == (bits >>> j & 1))
-                            amounts[jj] = amounts[jj + 1] = amounts[jj + 2] = amounts[jj + 3]
-                                    = amounts[jj + 4] = amounts[jj + 5] = ++amounts[jj + 6];
-                    }
-                }
-                for (int i = 0; i < 512; i++) {
-                    if ((i & 7) == 3) {
-                        for (int j = 510 - (amounts[i] >> 8); j < 520; j++) {
-                            layers.backgrounds[i][j] = -0x1.c98066p126F;
-                        }
-                    } else {
-                        for (int j = 519 - (amounts[i] >> 8); j < 520; j++) {
-                            layers.backgrounds[i][j] = -0x1.d08864p126F;
-                        }
-                    }
-                }
-                for (int i = 0; i < 10; i++) {
-                    for (int j = 8; j < 520; j += 32) {
-                        layers.backgrounds[i][j] = -0x1.7677e8p125F;
-                    }
-                }
 //                Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
 //                        " RandomXS128, bits of nextFloat() at " + Gdx.graphics.getFramesPerSecond() + " FPS");
 //                //DiverRNG diver = new DiverRNG();
@@ -2543,9 +2605,9 @@ public class MathVisualizer extends ApplicationAdapter {
             break;
             case 54: {
                 Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
-                        " Whisker, bits of nextExclusiveSignedFloat() at " + Gdx.graphics.getFramesPerSecond() + " FPS");
+                        " RandomXS128, bits of nextFloat() at " + Gdx.graphics.getFramesPerSecond() + " FPS");
                 for (int i = 0; i < 0x10000; i++) {
-                    int bits = Float.floatToIntBits(nextExclusiveSignedFloat());
+                    int bits = Float.floatToIntBits((xs128.nextInt() >>> 8) * 0x1p-24f);
                     for (int j = 0, jj = 504 - 128; j < 32; j++, jj -= 8) {
                         if (1 == (bits >>> j & 1))
                             amounts[jj] = amounts[jj + 1] = amounts[jj + 2] = amounts[jj + 3]
@@ -2568,6 +2630,34 @@ public class MathVisualizer extends ApplicationAdapter {
                         layers.backgrounds[i][j] = -0x1.7677e8p125F;
                     }
                 }
+
+//                Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
+//                        " Whisker, bits of nextExclusiveSignedFloat() at " + Gdx.graphics.getFramesPerSecond() + " FPS");
+//                for (int i = 0; i < 0x10000; i++) {
+//                    int bits = Float.floatToIntBits(nextExclusiveSignedFloat());
+//                    for (int j = 0, jj = 504 - 128; j < 32; j++, jj -= 8) {
+//                        if (1 == (bits >>> j & 1))
+//                            amounts[jj] = amounts[jj + 1] = amounts[jj + 2] = amounts[jj + 3]
+//                                    = amounts[jj + 4] = amounts[jj + 5] = ++amounts[jj + 6];
+//                    }
+//                }
+//                for (int i = 0; i < 512; i++) {
+//                    if ((i & 7) == 3) {
+//                        for (int j = 510 - (amounts[i] >> 8); j < 520; j++) {
+//                            layers.backgrounds[i][j] = -0x1.c98066p126F;
+//                        }
+//                    } else {
+//                        for (int j = 519 - (amounts[i] >> 8); j < 520; j++) {
+//                            layers.backgrounds[i][j] = -0x1.d08864p126F;
+//                        }
+//                    }
+//                }
+//                for (int i = 0; i < 10; i++) {
+//                    for (int j = 8; j < 520; j += 32) {
+//                        layers.backgrounds[i][j] = -0x1.7677e8p125F;
+//                    }
+//                }
+
 //                Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
 //                        " RandomXS128, bits of inclusiveFloat2() at " + Gdx.graphics.getFramesPerSecond() + " FPS");
 //                for (int i = 0; i < 0x10000; i++) {
