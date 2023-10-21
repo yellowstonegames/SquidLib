@@ -26,9 +26,8 @@ import java.util.ArrayList;
  * Because of the way this line is calculated, endpoints may be swapped and
  * therefore the list may not be in start-to-end order.
  * <br>
- * Based on work by Hugo Elias at
- * http://freespace.virgin.net/hugo.elias/graphics/x_wuline.htm which is in turn
- * based on work by Wu.
+ * <a href="http://freespace.virgin.net/hugo.elias/graphics/x_wuline.htm">Based on work by Hugo Elias</a>
+ * which is in turn based on work by Wu.
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
 public class Elias implements Serializable {
@@ -115,11 +114,6 @@ public class Elias implements Serializable {
 
     private double trunc(double x) {
         return (int)x;
-//        if (x < 0) {
-//            return Math.ceil(x);
-//        } else {
-//            return Math.floor(x);
-//        }
     }
 
     private double frac(double x) {

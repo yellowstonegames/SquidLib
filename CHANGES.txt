@@ -1,11 +1,13 @@
 3.0.7-SNAPSHOT
 Dependencies:
  - squidlib-util: RegExodus 0.1.15
- - squidlib: libGDX 1.12.0, anim8-gdx 0.4.0
+ - squidlib: libGDX 1.12.0, anim8-gdx 0.4.2
  - squidlib-extra: libGDX 1.12.0
 Changes:
+ - BREAKING CHANGE, DEVELOPERS ONLY: Building SquidLib now requires your Java version to be between 11 and 19, inclusive. This does not affect library consumers.
  - A bug in SparseLayers was fixed that affected recallToGrid().
  - A long-standing bug in AOE code and CoordPacker was fixed that involved bitwise stuff (ints used where longs should have been instead).
+ - Lots of Gradle changes, including an update to Gradle 8.4 and an update to the Vanniktech Maven Publish Plugin.
 
 3.0.6
 Dependencies:

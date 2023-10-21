@@ -279,7 +279,10 @@ Gradle hasn't timed out yet with JitPack. The Maven build scripts can still be h
 but for here, the Gradle scripts do a better job. If you use IntelliJ IDEA or possibly Android Studio, you can import
 the build.gradle file in the root of the parent project directory, and you may need to "Reload all Gradle Projects" by
 clicking the circling arrows in the upper corner of the Gradle sidebar (available by clicking "Gradle" on the right side
-of the IDEA window, or automatically done in Android Studio). No other steps should be needed now. In earlier versions
+of the IDEA window, or automatically done in Android Studio). You may need to configure the project to use a recent JVM,
+Java 11 or newer. Java 17 is recommended; Java 20 and up aren't supported because SquidLib is still compatible with Java
+7, and starting in 20, Java isn't able to compile any code with Java 7 compatibility. No other steps should be needed.
+In earlier versions
 of SquidLib, some special configuration was needed in IDEA specifically to set the `emu` folder as Excluded, but this
 should be done automatically by Gradle now. If you use Eclipse, the project should import OK if you use BuildShip Gradle
 (the default in current Eclipse, as far as I know). It may need the `emu` folder in `squidlib-util` to be excluded from

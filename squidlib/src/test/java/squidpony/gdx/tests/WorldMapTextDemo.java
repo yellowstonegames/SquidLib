@@ -45,8 +45,6 @@ public class WorldMapTextDemo extends ApplicationAdapter {
             ' ', //empty space
             //'■', //active city
             '□', //empty city
-
-
     };
 //public static final char[]  terrainChars = {
 //        '.', //sand
