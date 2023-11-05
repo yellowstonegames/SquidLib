@@ -739,9 +739,8 @@ public class SparseDemo2 extends ApplicationAdapter {
         stage.getViewport().apply(false);
         // stage has its own batch and must be explicitly told to draw().
         batch.setProjectionMatrix(stage.getCamera().combined);
-        screenPosition.set(cellWidth * 25, 0);
+        screenPosition.set(Gdx.graphics.getBackBufferWidth() * 25f / gridWidth, 0);
         stage.screenToStageCoordinates(screenPosition);
-
         stage.getRoot().draw(batch, 1);
         int drawCalls = glp.getDrawCalls();
         int textureBindings = glp.getTextureBindings();
@@ -757,7 +756,7 @@ public class SparseDemo2 extends ApplicationAdapter {
                 .append(", Max Sprites: ").append(batch.maxSpritesInBatch)
                 .append(",\nTexture Binds: ").append(textureBindings)
                 .append(", Shader Switches: ").append(switches);
-        screenPosition.set(cellWidth * gridWidth * 0.5f, cellHeight);
+        screenPosition.set(Gdx.graphics.getBackBufferWidth() * 0.5f, cellHeight);
         stage.screenToStageCoordinates(screenPosition);
         display.font.draw(batch, tempSB, screenPosition.x, screenPosition.y);
 

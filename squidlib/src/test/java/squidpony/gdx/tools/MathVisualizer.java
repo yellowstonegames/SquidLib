@@ -2576,7 +2576,6 @@ public class MathVisualizer extends ApplicationAdapter {
 
 //                Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
 //                        " RandomXS128, bits of nextFloat() at " + Gdx.graphics.getFramesPerSecond() + " FPS");
-//                //DiverRNG diver = new DiverRNG();
 //                for (int i = 0; i < 0x10000; i++) {
 //                    int bits = Float.floatToIntBits(xs128.nextFloat());
 //                    for (int j = 0, jj = 504 - 128; j < 32; j++, jj -= 8) {

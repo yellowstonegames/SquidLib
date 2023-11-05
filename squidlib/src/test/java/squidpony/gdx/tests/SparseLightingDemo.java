@@ -699,7 +699,7 @@ public class SparseLightingDemo extends ApplicationAdapter {
         stage.getViewport().apply(false);
         // stage has its own batch and must be explicitly told to draw().
         batch.setProjectionMatrix(stage.getCamera().combined);
-        screenPosition.set(cellWidth * 6, cellHeight);
+        screenPosition.set(Gdx.graphics.getBackBufferWidth() * 6f / gridWidth, cellHeight);
         stage.screenToStageCoordinates(screenPosition);
         batch.begin();
         stage.getRoot().draw(batch, 1);

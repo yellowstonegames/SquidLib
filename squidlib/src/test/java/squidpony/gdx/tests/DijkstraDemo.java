@@ -25,13 +25,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This is a small, not-overly-simple demo that presents some important features of SquidLib and shows a faster,
- * cleaner, and more recently-introduced way of displaying the map and other text. Features include dungeon map
- * generation, field of view, pathfinding (to the mouse position), simplex noise (used for a flickering torch effect),
- * language generation/ciphering, a colorful glow effect, and ever-present random number generation (with a seed).
- * You can increase the size of the map on most target platforms (but GWT struggles with large... anything) by
- * changing gridHeight and gridWidth to affect the visible area or bigWidth and bigHeight to adjust the size of the
- * dungeon you can move through, with the camera following your '@' symbol.
+ * Shows a rainbow gradient radiating outward from the mouse position and to the player, an {@code '@'} sign.
+ * Moving the mouse updates the gradient, which could help in visualizing how DijkstraMap works.
  */
 public class DijkstraDemo extends ApplicationAdapter {
     // FilterBatch is almost the same as SpriteBatch
@@ -473,7 +468,7 @@ public class DijkstraDemo extends ApplicationAdapter {
         stage.getViewport().apply(false);
         // stage has its own batch and must be explicitly told to draw().
         batch.setProjectionMatrix(stage.getCamera().combined);
-        screenPosition.set(cellWidth * 12, cellHeight);
+        screenPosition.set(Gdx.graphics.getBackBufferWidth() * 12f / gridWidth, cellHeight);
         stage.screenToStageCoordinates(screenPosition);
         batch.begin();
         stage.getRoot().draw(batch, 1);
