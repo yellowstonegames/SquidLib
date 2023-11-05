@@ -699,13 +699,16 @@ public class SparseLightingDemo extends ApplicationAdapter {
         stage.getViewport().apply(false);
         // stage has its own batch and must be explicitly told to draw().
         batch.setProjectionMatrix(stage.getCamera().combined);
-        screenPosition.set(Gdx.graphics.getBackBufferWidth() * 6f / gridWidth, cellHeight);
+        screenPosition.set(Gdx.graphics.getBackBufferWidth() * 32f / gridWidth, cellHeight);
         stage.screenToStageCoordinates(screenPosition);
         batch.begin();
         stage.getRoot().draw(batch, 1);
-        display.font.draw(batch, Gdx.graphics.getFramesPerSecond() + " FPS", screenPosition.x, screenPosition.y);
+        String text = "Running at FPS: " + Gdx.graphics.getFramesPerSecond() + " with max sprites: " + batch.maxSpritesInBatch;
+        display.font.draw(batch, text
+                + "\nWindow dimensions: " + Gdx.graphics.getBackBufferWidth() + "x" + Gdx.graphics.getBackBufferHeight(),
+                screenPosition.x, screenPosition.y);
         batch.end();
-        Gdx.graphics.setTitle("SparseLayers Demo running at FPS: " + Gdx.graphics.getFramesPerSecond() + " with max sprites: " + batch.maxSpritesInBatch);
+        Gdx.graphics.setTitle(text);
     }
 
     @Override
