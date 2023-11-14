@@ -99,7 +99,8 @@ public class MarkovChar implements Serializable {
             pair = pair << 16 | (current & 0xFFFF);
             if(pair == 1)
                 continue;
-            post = pairs.putIfAbsent(pair, pairs.size());
+            pairs.putIfAbsent(pair, pairs.size()); // used putIfAbsent()'s incorrect behavior before
+            post = pairs.get(pair);
             if(working.size() != pairs.size())
             {
                 working.add(new IntVLA(16));

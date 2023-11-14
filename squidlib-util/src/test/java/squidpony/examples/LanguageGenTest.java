@@ -468,6 +468,7 @@ public class LanguageGenTest {
 //                    + ", " + FakeLanguageGen.SIMPLISH.word(rng, true, rng.betweenWeighted(1, rng.between(1, 4), 3)) + " " + FakeLanguageGen.SIMPLISH.word(rng, true, rng.betweenWeighted(1, 4, 3)));
         }
     }
+
     @Test
     public void testMarkovText() {
         if (!TestConfiguration.PRINTING) return;
@@ -503,6 +504,7 @@ public class LanguageGenTest {
             System.out.println(markovText.chain(++seed, 100 + (i * 2)));
         }
     }
+
     @Test
     public void testMarkovObject() {
         if (!TestConfiguration.PRINTING) return;

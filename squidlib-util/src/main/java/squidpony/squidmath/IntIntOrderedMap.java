@@ -2222,9 +2222,8 @@ public class IntIntOrderedMap implements Serializable, Cloneable {
      */
     public int putIfAbsent(int key, int value) {
         if(containsKey(key))
-            return get(key);         
-        put(key, value);
-        return value;
+            return get(key);
+        return put(key, value);
     }
 
     /**

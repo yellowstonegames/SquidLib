@@ -2156,9 +2156,8 @@ public class IntDoubleOrderedMap implements Serializable, Cloneable {
      */
     public double putIfAbsent(int key, double value) {
         if(containsKey(key))
-            return get(key);         
-        put(key, value);
-        return value;
+            return get(key);
+        return put(key, value);
     }
 
     /**
