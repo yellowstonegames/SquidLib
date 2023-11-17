@@ -91,7 +91,6 @@ public class MarkovText implements Serializable {
         body.add(EXCLAMATION);
         body.add(QUESTION);
         body.add(ELLIPSIS);
-//        working.add(new IntVLA(links));
 
         matcher.setTarget(corpus);
         int current, pair = 0, pre = 0, post;
@@ -305,7 +304,7 @@ public class MarkovText implements Serializable {
     /**
      * Returns a representation of this MarkovText as a String; use {@link #deserializeFromString(String)} to get a
      * MarkovText back from this String. The {@link #words} and {@link #processed} fields must have been given values by
-     * either direct assignment, calling {@link #analyze(CharSequence)}, or building this MarkovTest with the
+     * either direct assignment, calling {@link #analyze(CharSequence)}, or building this MarkovText with the
      * aforementioned deserializeToString method. Uses spaces to separate words and a tab to separate the two fields.
      * @return a String that can be used to store the analyzed words and frequencies in this MarkovText
      */
