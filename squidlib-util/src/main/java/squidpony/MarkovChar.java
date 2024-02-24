@@ -80,8 +80,8 @@ public class MarkovChar implements Serializable {
         Arrangement<Character> body = new Arrangement<>((clen >> 4) + 5);
         pairs = new IntIntOrderedMap(clen / 5 + 5);
         ArrayList<IntVLA> working = new ArrayList<>(clen / 5 + 5);
-        body.add(INITIAL);
         working.add(new IntVLA(128));
+        body.add(INITIAL);
         pairs.put(0, 0);
         body.add(END);
 
@@ -252,7 +252,6 @@ public class MarkovChar implements Serializable {
             {
                 break;
             }
-            
         }
         return sb.toString();
     }

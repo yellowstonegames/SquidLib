@@ -855,18 +855,18 @@ public class HashQualityTest {
         ////boustrophedonic variant; winds in a serpentine, always-connected path
 //        int n;
 //        if(x >= y) {
-//            if((x & 1) == 1)
-//                n = x * x + y;
-//            else
+//            if((x & 1) == 0)
 //                n = x * (x + 2) - y;
+//            else
+//                n = x * x + y;
 //        }
 //        else {
-//            if((y & 1) == 1)
-//                n = y * (y + 2) - x;
-//            else
+//            if((y & 1) == 0)
 //                n = y * y + x;
+//            else
+//                n = y * (y + 2) - x;
 //        }
-        //return (x >= y) ? (((x & 1) == 1) ? x * x + y : x * (x + 2) - y) : (((y & 1) == 1) ? y * (y + 2) - x : y * y + x);
+//        return (x >= y) ? (((x & 1) == 0) ? x * (x + 2) - y : x * x + y) : (((y & 1) == 0) ? y * y + x : y * (y + 2) - x);
         
         //// Gray code, XLCG, XLCG, xor (to stay within int range on GWT).
         //// The Gray code moves bits around just a little, but keeps the same power-of-two upper bound.

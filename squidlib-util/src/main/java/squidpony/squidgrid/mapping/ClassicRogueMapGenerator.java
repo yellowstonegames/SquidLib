@@ -165,7 +165,7 @@ public class ClassicRogueMapGenerator implements IDungeonGenerator{
 
     /**
      * Builds and returns a map in the Classic Rogue style, returned as a 2D char array.
-     *
+     * <br>
      * Only includes rooms ('.' for floor and '#' for walls), corridors (using the same chars as rooms) and doors ('+'
      * for closed doors, does not generate open doors).
      * @return a 2D char array version of the map
@@ -410,13 +410,13 @@ public class ClassicRogueMapGenerator implements IDungeonGenerator{
                 break;
             case DOWN:
                 x = rng.between(room.x + 1, room.x + room.width);
-                y = room.y - 1;
+                y = room.y + room.height;
                 dungeon[x][y] = '+';
                 p = Coord.get(x, y + 1);
                 break;
             case UP:
                 x = rng.between(room.x + 1, room.x + room.width);
-                y = room.y + room.height;
+                y = room.y - 1;
                 dungeon[x][y] = '+';
                 p = Coord.get(x, y - 1);
                 break;

@@ -24,7 +24,7 @@ import java.util.Random;
  * Created by Tommy Ettinger on 1/13/2018.
  */
 public class MathVisualizer extends ApplicationAdapter {
-    private int mode = 52;
+    private int mode = 47;
     private int modes = 70;
     private FilterBatch batch;
     private SparseLayers layers;
