@@ -4334,6 +4334,10 @@ public class FakeLanguageGen implements Serializable {
                            double midPunctuationFrequency, int maxChars) {
         if(maxChars < 0)
             return sentence(rng, minWords, maxWords, midPunctuation, endPunctuation, midPunctuationFrequency);
+        if(maxChars == 0)
+            return "";
+        if (maxChars < 4)
+            return "!";
         if (minWords < 1)
             minWords = 1;
         if (minWords > maxWords)
@@ -4341,11 +4345,11 @@ public class FakeLanguageGen implements Serializable {
         if (midPunctuationFrequency > 1.0) {
             midPunctuationFrequency = 1.0 / midPunctuationFrequency;
         }
-        if (maxChars < 4)
-            return "!";
         if (maxChars <= 5 * minWords) {
-            minWords = 1;
+            minWords = maxChars / 6;
         }
+        // If maxWords is less than minWords, this sets it to minWords; otherwise, a random value between the two.
+        maxWords = minWords + rng.nextInt(maxWords + 1 - minWords);
         int frustration = 0;
         ssb.setLength(0); 
         ssb.ensureCapacity(maxChars);
@@ -4368,12 +4372,12 @@ public class FakeLanguageGen implements Serializable {
             if (frustration >= 50) break;
             ssb.append(' ').append(next);
         }
-        for (int i = minWords; i < maxWords && ssb.length() < maxChars - 7 && rng.nextInt(2 * maxWords) > i && frustration < 50; i++) {
-            if (rng.nextDouble() < midPunctuationFrequency && ssb.length() < maxChars - 3) {
+        for (int i = minWords; i < maxWords && ssb.length() < maxChars - 7 && frustration < 50; i++) {
+            if (rng.nextDouble() < midPunctuationFrequency && ssb.length() < maxChars - 2) {
                 ssb.append(rng.getRandomElement(midPunctuation));
             }
             next = word(rng, false);
-            while (ssb.length() + next.length() >= maxChars - 2 && frustration < 50) {
+            while (ssb.length() + next.length() >= maxChars - 1 && frustration < 50) {
                 next = word(rng, false);
                 frustration++;
             }

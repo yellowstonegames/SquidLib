@@ -10,6 +10,7 @@ import squidpony.NaturalLanguageCipher;
 import squidpony.StringKit;
 import squidpony.WeightedLetterNamegen;
 import squidpony.squidmath.CrossHash;
+import squidpony.squidmath.GWTRNG;
 import squidpony.squidmath.IStatefulRNG;
 import squidpony.squidmath.StatefulRNG;
 
@@ -27,7 +28,7 @@ public class LanguageGenTest {
 
         for (int len = 25; len <= 100; len += 25) {
 
-            IStatefulRNG random = new StatefulRNG(0xf00df00L);
+            IStatefulRNG random = new StatefulRNG(new GWTRNG(0xFEEDFA7CA7L));
             FakeLanguageGen[] languages = new FakeLanguageGen[16];
             for (int i = 0; i < 16; i++) {
                 languages[i] = FakeLanguageGen.randomLanguage(random.nextLong());//.addAccents(0.8, 0.6);
@@ -35,7 +36,7 @@ public class LanguageGenTest {
             final String[] mid = {",", ",", ",", ";"}, end = {".", ".", ".", "!", "?", "..."};
             double totalLength = 0.0;
             String[] sentences = new String[64];
-            int minWords = len / 9 + 10, maxWords = minWords+1;
+            int minWords = len / 9 + 1, maxWords = minWords+1;
             for (int i = 0; i < sentences.length; i++) {
                 String s = languages[i & 15].sentence(random.nextLong(), minWords, maxWords, mid, end, 0.2, len);
                 totalLength += s.length();
