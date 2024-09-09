@@ -10,9 +10,8 @@ import squidpony.NaturalLanguageCipher;
 import squidpony.StringKit;
 import squidpony.WeightedLetterNamegen;
 import squidpony.squidmath.CrossHash;
-import squidpony.squidmath.GWTRNG;
-import squidpony.squidmath.IStatefulRNG;
 import squidpony.squidmath.StatefulRNG;
+import squidpony.squidmath.XoshiroStarStar64RNG;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,7 +27,7 @@ public class LanguageGenTest {
 
         for (int len = 25; len <= 100; len += 25) {
 
-            IStatefulRNG random = new StatefulRNG(new GWTRNG(0xFEEDFA7CA7L));
+            StatefulRNG random = new StatefulRNG(new XoshiroStarStar64RNG(0xFEDCBA9876543210L));
             FakeLanguageGen[] languages = new FakeLanguageGen[16];
             for (int i = 0; i < 16; i++) {
                 languages[i] = FakeLanguageGen.randomLanguage(random.nextLong());//.addAccents(0.8, 0.6);
@@ -74,7 +73,7 @@ public class LanguageGenTest {
 //                            "                Array.Empty<string>(), new int[]{1, 2}, new double[]{5, 3}, 0.45, 0.45, 0.0, 0.0, null, true).Register(\"" + name + "\");\n");
 //        }
 //        System.out.println();
-        IStatefulRNG rng = new StatefulRNG(0xf00df00L);
+        StatefulRNG rng = new StatefulRNG(0xf00df00L);
 
         for (int langi = 0; langi < FakeLanguageGen.registered.length; langi++) {
             FakeLanguageGen flg = FakeLanguageGen.registered[langi];

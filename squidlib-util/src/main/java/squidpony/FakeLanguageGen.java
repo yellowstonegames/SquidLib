@@ -4346,7 +4346,7 @@ public class FakeLanguageGen implements Serializable {
             midPunctuationFrequency = 1.0 / midPunctuationFrequency;
         }
         if (maxChars <= 5 * minWords) {
-            minWords = maxChars / 6;
+            minWords = maxChars / 7 + 1;
         }
         // If maxWords is less than minWords, this sets it to minWords; otherwise, a random value between the two.
         maxWords = minWords + rng.nextInt(maxWords + 1 - minWords);
@@ -4365,7 +4365,7 @@ public class FakeLanguageGen implements Serializable {
                 ssb.append(rng.getRandomElement(midPunctuation));
             }
             next = word(rng, false);
-            while (ssb.length() + next.length() >= maxChars - 2 && frustration < 50) {
+            while (ssb.length() + next.length() >= maxChars - 1 && frustration < 50) {
                 next = word(rng, false);
                 frustration++;
             }
