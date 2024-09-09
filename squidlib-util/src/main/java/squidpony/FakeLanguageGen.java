@@ -4345,7 +4345,6 @@ public class FakeLanguageGen implements Serializable {
             return "!";
         if (maxChars <= 5 * minWords) {
             minWords = 1;
-            maxWords = 1;
         }
         int frustration = 0;
         ssb.setLength(0); 

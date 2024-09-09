@@ -22,6 +22,34 @@ import java.util.List;
  */
 public class LanguageGenTest {
     @Test
+    public void testSentence() {
+        if (!TestConfiguration.PRINTING) return;
+
+        for (int len = 25; len <= 100; len += 25) {
+
+            IStatefulRNG random = new StatefulRNG(0xf00df00L);
+            FakeLanguageGen[] languages = new FakeLanguageGen[16];
+            for (int i = 0; i < 16; i++) {
+                languages[i] = FakeLanguageGen.randomLanguage(random.nextLong());//.addAccents(0.8, 0.6);
+            }
+            final String[] mid = {",", ",", ",", ";"}, end = {".", ".", ".", "!", "?", "..."};
+            double totalLength = 0.0;
+            String[] sentences = new String[64];
+            int minWords = len / 9 + 10, maxWords = minWords+1;
+            for (int i = 0; i < sentences.length; i++) {
+                String s = languages[i & 15].sentence(random.nextLong(), minWords, maxWords, mid, end, 0.2, len);
+                totalLength += s.length();
+                sentences[i] = s;
+            }
+            System.out.println("\nAverage char[] or word length is " + (totalLength / sentences.length) + " with len " + len + ":\n");
+            System.out.println("Using minWords: " + minWords + ", maxWords: " + maxWords);
+            for (String sentence : sentences) {
+                System.out.println(sentence + " " + sentence.length());
+            }
+        }
+    }
+
+    @Test
     public void testOutput() {
         if(!TestConfiguration.PRINTING) return;
 
