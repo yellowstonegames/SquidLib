@@ -6,7 +6,7 @@ buildscript {
         gradlePluginPortal()
     }
     dependencies {
-        classpath 'com.vanniktech:gradle-maven-publish-plugin:0.25.3'
+        classpath 'com.vanniktech:gradle-maven-publish-plugin:0.29.0'
     }
 }
 
@@ -67,7 +67,7 @@ subprojects {
     ((StandardJavadocDocletOptions)javadoc.options).linkSource(false)
     ((StandardJavadocDocletOptions)javadoc.options).noTimestamp(true)
     ((StandardJavadocDocletOptions)javadoc.options).use(true)
-    ((StandardJavadocDocletOptions)javadoc.options).bottom("Copyright &#169; Eben Howard 2012&#x2013;2022. All rights reserved.")
+    ((StandardJavadocDocletOptions)javadoc.options).bottom("Copyright &#169; Eben Howard 2012&#x2013;2024. All rights reserved.")
     javadoc.destinationDir = file("../docs/$name/apidocs")
 
 }
